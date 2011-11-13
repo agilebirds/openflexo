@@ -23,19 +23,17 @@ import org.openflexo.foundation.ie.dm.IEDataModification;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class MenuItemRemoved extends IEDataModification
-{
+public class MenuItemRemoved extends IEDataModification {
 
-    /**
-     * @param propertyName
-     * @param oldValue
-     * @param newValue
-     */
-    public MenuItemRemoved(Object oldValue)
-    {
-        super("MenuItemRemoved", oldValue, oldValue);
-    }
+	/**
+	 * @param propertyName
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public MenuItemRemoved(Object oldValue) {
+		super("MenuItemRemoved", oldValue, oldValue);
+	}
 
 }

@@ -19,11 +19,8 @@
  */
 package org.openflexo.drm.dm;
 
-
-public class DocResourceCenterIsSaved extends DRMDataModification
-{
-    public DocResourceCenterIsSaved()
-    {
-        super(null, null);
-    }
+public class DocResourceCenterIsSaved extends DRMDataModification {
+	public DocResourceCenterIsSaved() {
+		super(null, null);
+	}
 }

@@ -33,7 +33,6 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.wkf.action.WKFCut;
@@ -42,51 +41,43 @@ public class WKFCutInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	WKFCutInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(WKFCut.actionType,actionInitializer);
+	WKFCutInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(WKFCut.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<WKFCut> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<WKFCut> getDefaultInitializer() {
 		return new FlexoActionInitializer<WKFCut>() {
-            @Override
-			public boolean run(ActionEvent e, WKFCut action)
-            {
-                return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_cut_those_objects"));
-            }
-        };
+			@Override
+			public boolean run(ActionEvent e, WKFCut action) {
+				return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_cut_those_objects"));
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<WKFCut> getDefaultFinalizer() 
-	{
+	@Override
+	protected FlexoActionFinalizer<WKFCut> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<WKFCut>() {
-            @Override
-			public boolean run(ActionEvent e, WKFCut action)
-            {
-                getControllerActionInitializer().getWKFSelectionManager().performSelectionCut();
-                return true;
-           }
-        };
+			@Override
+			public boolean run(ActionEvent e, WKFCut action) {
+				getControllerActionInitializer().getWKFSelectionManager().performSelectionCut();
+				return true;
+			}
+		};
 	}
 
- 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	@Override
+	protected Icon getEnabledIcon() {
 		return IconLibrary.CUT_ICON;
 	}
 
 	@Override
-	protected KeyStroke getShortcut() 
-	{
+	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(KeyEvent.VK_X, FlexoCst.META_MASK);
 	}
 

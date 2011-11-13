@@ -25,55 +25,48 @@ import org.openflexo.foundation.ie.cl.TabComponentDefinition;
 import org.openflexo.foundation.wkf.node.ActionNode;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 
-
 /**
  * @author gpolet
  * @deprecated
  */
 @Deprecated
-public class TabActionInstance extends TabComponentInstance
-{
-    /**
-     * @param component
-     * @deprecated
-     */
-    @Deprecated
-	public TabActionInstance(TabComponentDefinition component, ActionNode node)
-    {
-        super(component, node);
-        setActionNode(node);
-    }
+public class TabActionInstance extends TabComponentInstance {
+	/**
+	 * @param component
+	 * @deprecated
+	 */
+	@Deprecated
+	public TabActionInstance(TabComponentDefinition component, ActionNode node) {
+		super(component, node);
+		setActionNode(node);
+	}
 
-    public TabActionInstance(FlexoProcessBuilder builder)
-    {
-        super(builder);
-    }
+	public TabActionInstance(FlexoProcessBuilder builder) {
+		super(builder);
+	}
 
-    public TabComponentDefinition getTabComponentDefinition()
-    {
-        return getComponentDefinition();
-    }
+	public TabComponentDefinition getTabComponentDefinition() {
+		return getComponentDefinition();
+	}
 
-    @Override
-    public String getFullyQualifiedName()
-    {
-        return "TAB_OPERATION_COMPONENT_INSTANCE." + getComponentDefinition().getName();
-    }
+	@Override
+	public String getFullyQualifiedName() {
+		return "TAB_OPERATION_COMPONENT_INSTANCE." + getComponentDefinition().getName();
+	}
 
-    /**
-     * Overrides getClassNameKey
-     *
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-    public String getClassNameKey()
-    {
-        return "tab_action_component_instance";
-    }
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "tab_action_component_instance";
+	}
 
 	@Override
 	public String getContextIdentifier() {
-		return "action: "+getActionNode().getName();
+		return "action: " + getActionNode().getName();
 	}
 
 	@Override

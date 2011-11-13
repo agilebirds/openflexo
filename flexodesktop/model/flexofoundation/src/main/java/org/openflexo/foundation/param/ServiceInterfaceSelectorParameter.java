@@ -25,7 +25,6 @@ import org.openflexo.foundation.wkf.ws.PortRegistery;
 import org.openflexo.foundation.wkf.ws.ServiceInterface;
 import org.openflexo.inspector.widget.DenaliWidget;
 
-
 /*
  * selector of either a ServiceInterface, either a Process (defaultServiceInterface),
  * either a defaultServiceInterface (=portRegistry)
@@ -34,40 +33,37 @@ import org.openflexo.inspector.widget.DenaliWidget;
 public class ServiceInterfaceSelectorParameter extends ParameterDefinition<WKFObject> {
 
 	private ProcessSelectingConditional _processSelectingConditional;
-	
-    public ServiceInterfaceSelectorParameter(String name, String label, FlexoProcess defaultValue)
-    {
-        super(name,label,defaultValue);
-        addParameter("className","org.openflexo.components.widget.ServiceInterfaceInspectorWidget");
-        _processSelectingConditional = null;
-    }
-    
-   @Override
-public String getWidgetName() 
-   {
-        return DenaliWidget.CUSTOM;
-    }
 
-   public boolean isAcceptableProcess(FlexoProcess process){
-	   if (_processSelectingConditional != null) return _processSelectingConditional.isSelectable(process);
-	   return true;
-   }
-   public boolean isAcceptableProcess(PortRegistery apt){
-	   return true;
-   }
-   
-   public boolean isAcceptableProcess(ServiceInterface anObject) 
-   {		
-	   return true;
-   }
+	public ServiceInterfaceSelectorParameter(String name, String label, FlexoProcess defaultValue) {
+		super(name, label, defaultValue);
+		addParameter("className", "org.openflexo.components.widget.ServiceInterfaceInspectorWidget");
+		_processSelectingConditional = null;
+	}
 
-   public void setProcessSelectingConditional(ProcessSelectingConditional processSelectingConditional) 
-   {
-       _processSelectingConditional = processSelectingConditional;
-   }
-   
-   public abstract static class ProcessSelectingConditional
-   {
-       public abstract boolean isSelectable(FlexoProcess process);
-   }
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.CUSTOM;
+	}
+
+	public boolean isAcceptableProcess(FlexoProcess process) {
+		if (_processSelectingConditional != null)
+			return _processSelectingConditional.isSelectable(process);
+		return true;
+	}
+
+	public boolean isAcceptableProcess(PortRegistery apt) {
+		return true;
+	}
+
+	public boolean isAcceptableProcess(ServiceInterface anObject) {
+		return true;
+	}
+
+	public void setProcessSelectingConditional(ProcessSelectingConditional processSelectingConditional) {
+		_processSelectingConditional = processSelectingConditional;
+	}
+
+	public abstract static class ProcessSelectingConditional {
+		public abstract boolean isSelectable(FlexoProcess process);
+	}
 }

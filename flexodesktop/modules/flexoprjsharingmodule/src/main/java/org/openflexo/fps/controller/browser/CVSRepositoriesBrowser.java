@@ -29,15 +29,13 @@ import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.fps.CVSRepositoryList;
 import org.openflexo.fps.controller.FPSController;
 
-
 /**
  * Browser for Code Generator module
  * 
  * @author sguerin
  * 
  */
-public class CVSRepositoriesBrowser extends FPSBrowser implements FlexoObserver
-{
+public class CVSRepositoriesBrowser extends FPSBrowser implements FlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(CVSRepositoriesBrowser.class.getPackage().getName());
 
@@ -51,27 +49,23 @@ public class CVSRepositoriesBrowser extends FPSBrowser implements FlexoObserver
 	// ================================
 	// ==========================================================================
 
-	public CVSRepositoriesBrowser(FPSController controller)
-	{
-		super(makeDefaultBrowserConfiguration(controller.getRepositories()),controller);
+	public CVSRepositoriesBrowser(FPSController controller) {
+		super(makeDefaultBrowserConfiguration(controller.getRepositories()), controller);
 		update();
 	}
 
-	public CVSRepositoriesBrowser(CVSRepositoryList repositories)
-	{
+	public CVSRepositoriesBrowser(CVSRepositoryList repositories) {
 		super(makeDefaultBrowserConfiguration(repositories));
 		update();
 	}
 
 	@Override
-	public void update(FlexoObservable o, DataModification arg)
-	{
+	public void update(FlexoObservable o, DataModification arg) {
 		if (logger.isLoggable(Level.FINE))
 			logger.fine("CVSRepositoriesBrowser update");
 	}
 
-	public static BrowserConfiguration makeDefaultBrowserConfiguration(CVSRepositoryList repositories)
-	{
+	public static BrowserConfiguration makeDefaultBrowserConfiguration(CVSRepositoryList repositories) {
 		BrowserConfiguration returned = new CVSRepositoriesBrowserConfiguration(repositories);
 		return returned;
 	}

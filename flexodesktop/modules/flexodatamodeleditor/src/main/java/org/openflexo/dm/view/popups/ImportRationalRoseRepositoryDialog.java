@@ -29,47 +29,41 @@ import org.openflexo.foundation.dm.action.ImportRationalRoseRepository;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.view.FlexoFrame;
 
-
 /**
  * Popup allowing to choose and import a RationalRose file (*.mdl)
  * 
  * @author sguerin
  * 
  */
-public class ImportRationalRoseRepositoryDialog extends AskNewRepositoryDialog
-{
+public class ImportRationalRoseRepositoryDialog extends AskNewRepositoryDialog {
 
-    public ImportRationalRoseRepositoryDialog(ImportRationalRoseRepository flexoAction, FlexoFrame owner)
-    {
-        super(flexoAction,owner);
-    }
-    
-    public static int displayDialog(ImportRationalRoseRepository flexoAction, FlexoProject project,
-            FlexoFrame owner)
-    {
-        flexoAction.setProject(project);
-        ImportRationalRoseRepositoryDialog dialog = new ImportRationalRoseRepositoryDialog(flexoAction, owner);
-        return dialog.getStatus();
-    }
+	public ImportRationalRoseRepositoryDialog(ImportRationalRoseRepository flexoAction, FlexoFrame owner) {
+		super(flexoAction, owner);
+	}
 
-    @Override
-	protected void init()
-    {
-        choicePanel = new JPanel();
-        choicePanel.setLayout(new GridLayout(2, 2));
-        choicePanel.add(rationalRoseRepositoryButton);
-        choicePanel.add(rationalRoseRepositorySelector);
-        JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT,0,5));
-        p.add(packageNameLabel);
-        choicePanel.add(p);
-        p = new JPanel(new FlowLayout(FlowLayout.LEFT,0,5));
-        packageName.setColumns(25);
-        packageName.setText(_flexoAction.getProject().getPrefix()+".rational.rose");
-        p.add(packageName);
-        choicePanel.add(p);
-        choicePanel.validate();
-        rationalRoseRepositoryButton.setSelected(true);
-        selectRepositoryType(CreateDMRepository.RATIONAL_ROSE_REPOSITORY);
-   }
+	public static int displayDialog(ImportRationalRoseRepository flexoAction, FlexoProject project, FlexoFrame owner) {
+		flexoAction.setProject(project);
+		ImportRationalRoseRepositoryDialog dialog = new ImportRationalRoseRepositoryDialog(flexoAction, owner);
+		return dialog.getStatus();
+	}
+
+	@Override
+	protected void init() {
+		choicePanel = new JPanel();
+		choicePanel.setLayout(new GridLayout(2, 2));
+		choicePanel.add(rationalRoseRepositoryButton);
+		choicePanel.add(rationalRoseRepositorySelector);
+		JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 5));
+		p.add(packageNameLabel);
+		choicePanel.add(p);
+		p = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 5));
+		packageName.setColumns(25);
+		packageName.setText(_flexoAction.getProject().getPrefix() + ".rational.rose");
+		p.add(packageName);
+		choicePanel.add(p);
+		choicePanel.validate();
+		rationalRoseRepositoryButton.setSelected(true);
+		selectRepositoryType(CreateDMRepository.RATIONAL_ROSE_REPOSITORY);
+	}
 
 }

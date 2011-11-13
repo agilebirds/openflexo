@@ -19,17 +19,14 @@
  */
 package org.openflexo.fps.automerge;
 
-
 /**
- * Utility class used to define AutomaticMergeResolvingModel for the
- * MergedDocumentType for each ResourceType.
+ * Utility class used to define AutomaticMergeResolvingModel for the MergedDocumentType for each ResourceType.
  * 
  * @author sylvain
  */
 public class AutomergeInitializer {
 
-	public static void initialize()
-	{
+	public static void initialize() {
 		RMAutomergeInitializer.initialize();
 		ProcessAutomergeInitializer.initialize();
 		WOXMLAutomergeInitializer.initialize();

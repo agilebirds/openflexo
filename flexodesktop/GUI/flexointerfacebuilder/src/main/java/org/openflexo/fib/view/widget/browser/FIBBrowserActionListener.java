@@ -38,143 +38,126 @@ import org.openflexo.fib.model.FIBBrowserAction.FIBAddAction;
 import org.openflexo.fib.model.FIBBrowserAction.FIBCustomAction;
 import org.openflexo.fib.model.FIBBrowserAction.FIBRemoveAction;
 
+public class FIBBrowserActionListener implements ActionListener, BindingEvaluationContext, Observer {
 
-public class FIBBrowserActionListener implements ActionListener,BindingEvaluationContext, Observer
-{
+	private static final Logger logger = Logger.getLogger(FIBBrowserActionListener.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(FIBBrowserActionListener.class.getPackage().getName());
+	private FIBBrowserAction browserAction;
 
-    private FIBBrowserAction browserAction;
+	private Object model;
 
-   private Object model;
+	private FIBBrowserModel browserModel;
+	private FIBController controller;
 
-    private FIBBrowserModel browserModel;
-    private FIBController controller;
+	public FIBBrowserActionListener(FIBBrowserAction browserAction, FIBBrowserModel browserModel, FIBController controller) {
+		super();
+		this.controller = controller;
+		this.browserAction = browserAction;
+		selectedObject = null;
+		this.browserModel = browserModel;
+		browserAction.addObserver(this);
+	}
 
-    public FIBBrowserActionListener(FIBBrowserAction browserAction, FIBBrowserModel browserModel, FIBController controller)
-    {
-        super();
-        this.controller = controller;
-        this.browserAction = browserAction;
-        selectedObject = null;
-        this.browserModel = browserModel;
-        browserAction.addObserver(this);
-    }
-    
-    public void delete()
-    {
-    	browserAction.deleteObserver(this);
-    	this.controller = null;
-    	this.browserAction = null;
-    	selectedObject = null;
-        this.browserModel = null;
-    }
-    
-    @Override
-	public void update(Observable o, Object arg)
-    {
-    	if (arg instanceof FIBAttributeNotification && o == browserAction) {
-    		FIBAttributeNotification dataModification = (FIBAttributeNotification)arg;
-    		if (dataModification.getAttribute() == FIBTableAction.Parameters.method
-    				|| dataModification.getAttribute() == FIBTableAction.Parameters.isAvailable) {
-    			browserModel.getWidget().updateBrowser();
-    		}
-    	}
-    }
+	public void delete() {
+		browserAction.deleteObserver(this);
+		this.controller = null;
+		this.browserAction = null;
+		selectedObject = null;
+		this.browserModel = null;
+	}
 
-    public FIBController getController()
-	{
+	@Override
+	public void update(Observable o, Object arg) {
+		if (arg instanceof FIBAttributeNotification && o == browserAction) {
+			FIBAttributeNotification dataModification = (FIBAttributeNotification) arg;
+			if (dataModification.getAttribute() == FIBTableAction.Parameters.method
+					|| dataModification.getAttribute() == FIBTableAction.Parameters.isAvailable) {
+				browserModel.getWidget().updateBrowser();
+			}
+		}
+	}
+
+	public FIBController getController() {
 		return controller;
 	}
-    
-    public boolean isAddAction() 
-    {
-    	return browserAction instanceof FIBAddAction;
-     }
-    
-    public boolean isRemoveAction() 
-    {
-    	return browserAction instanceof FIBRemoveAction;
-    }
-    
-    public boolean isCustomAction() 
-    {
-    	return browserAction instanceof FIBCustomAction;
-    }
-    
-    public boolean isStatic() 
-    {
-    	return isCustomAction() && ((FIBCustomAction)browserAction).isStatic;
-    }
-    
-    public boolean isActive(Object selectedObject)
-    {
-    	if (isRemoveAction() && selectedObject == null) {
-    	   	return false;
-    	}
-    	if (browserAction.getIsAvailable() != null 
-    			&& browserAction.getIsAvailable().isValid()) {
-    		this.selectedObject = selectedObject;
-    		Object returned = browserAction.getIsAvailable().getBindingValue(this);
-    		if (returned == null) return false;
-    		if (TypeUtils.isBoolean(returned.getClass())) return (Boolean)returned;
-     	}
-    	return true;
-   }
 
- 
-    protected void performAction(Object selectedObject)
-    {
-       	if (browserAction.getMethod() != null 
-       			&& browserAction.getMethod().isValid()) {
-       		logger.fine("Perform action "+browserAction.getName()+" method "+browserAction.getMethod());
-       		logger.fine("controller="+getController()+" of "+getController().getClass().getSimpleName());
-       		this.selectedObject = selectedObject;
-       		final Object newObject = browserAction.getMethod().getBindingValue(this);
-       		//browserModel.fireTableDataChanged();
-       		//browserModel.getBrowserWidget().updateWidgetFromModel();
-       		SwingUtilities.invokeLater(new Runnable() {
+	public boolean isAddAction() {
+		return browserAction instanceof FIBAddAction;
+	}
+
+	public boolean isRemoveAction() {
+		return browserAction instanceof FIBRemoveAction;
+	}
+
+	public boolean isCustomAction() {
+		return browserAction instanceof FIBCustomAction;
+	}
+
+	public boolean isStatic() {
+		return isCustomAction() && ((FIBCustomAction) browserAction).isStatic;
+	}
+
+	public boolean isActive(Object selectedObject) {
+		if (isRemoveAction() && selectedObject == null) {
+			return false;
+		}
+		if (browserAction.getIsAvailable() != null && browserAction.getIsAvailable().isValid()) {
+			this.selectedObject = selectedObject;
+			Object returned = browserAction.getIsAvailable().getBindingValue(this);
+			if (returned == null)
+				return false;
+			if (TypeUtils.isBoolean(returned.getClass()))
+				return (Boolean) returned;
+		}
+		return true;
+	}
+
+	protected void performAction(Object selectedObject) {
+		if (browserAction.getMethod() != null && browserAction.getMethod().isValid()) {
+			logger.fine("Perform action " + browserAction.getName() + " method " + browserAction.getMethod());
+			logger.fine("controller=" + getController() + " of " + getController().getClass().getSimpleName());
+			this.selectedObject = selectedObject;
+			final Object newObject = browserAction.getMethod().getBindingValue(this);
+			// browserModel.fireTableDataChanged();
+			// browserModel.getBrowserWidget().updateWidgetFromModel();
+			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-		      		browserModel.getBrowserWidget().setSelectedObject(newObject);
+					browserModel.getBrowserWidget().setSelectedObject(newObject);
 				}
 			});
-        	}
-    }
-    
-    @Override
-	public void actionPerformed(ActionEvent e)
-    {
-    	performAction(getSelectedObject());
-     }
+		}
+	}
 
-    public Object getSelectedObject()
-    {
-        return selectedObject;
-    }
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		performAction(getSelectedObject());
+	}
 
-    public void setSelectedObject(Object selectedObject)
-    {
-        this.selectedObject = selectedObject;
-    }
+	public Object getSelectedObject() {
+		return selectedObject;
+	}
 
-    public Object getModel()
-    {
-        return model;
-    }
+	public void setSelectedObject(Object selectedObject) {
+		this.selectedObject = selectedObject;
+	}
 
-    public void setModel(Object model)
-    {
-    	this.model = model;
-    }
-	
-    protected Object selectedObject;
-    
-    @Override
-	public Object getValue(BindingVariable variable) 
-    {
-		if (variable.getVariableName().equals("selected")) return selectedObject;
-		else return getController().getValue(variable);
-    }
+	public Object getModel() {
+		return model;
+	}
+
+	public void setModel(Object model) {
+		this.model = model;
+	}
+
+	protected Object selectedObject;
+
+	@Override
+	public Object getValue(BindingVariable variable) {
+		if (variable.getVariableName().equals("selected"))
+			return selectedObject;
+		else
+			return getController().getValue(variable);
+	}
 
 }

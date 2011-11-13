@@ -33,43 +33,37 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
-public class RefreshTemplatesInitializer extends ActionInitializer { 
+public class RefreshTemplatesInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	RefreshTemplatesInitializer(GeneratorControllerActionInitializer actionInitializer)
-	{
-		super(RefreshTemplates.actionType,actionInitializer);
+	RefreshTemplatesInitializer(GeneratorControllerActionInitializer actionInitializer) {
+		super(RefreshTemplates.actionType, actionInitializer);
 	}
 
 	@Override
-	protected GeneratorControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (GeneratorControllerActionInitializer)super.getControllerActionInitializer();
+	protected GeneratorControllerActionInitializer getControllerActionInitializer() {
+		return (GeneratorControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<RefreshTemplates> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<RefreshTemplates> getDefaultInitializer() {
 		return new FlexoActionInitializer<RefreshTemplates>() {
 			@Override
-			public boolean run(ActionEvent e, RefreshTemplates action)
-			{
+			public boolean run(ActionEvent e, RefreshTemplates action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<RefreshTemplates> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<RefreshTemplates> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RefreshTemplates>() {
 			@Override
-			public boolean run(ActionEvent e, RefreshTemplates action)
-			{
+			public boolean run(ActionEvent e, RefreshTemplates action) {
 				// Chaque refresh doit faire un clear du cache des TemplateLocator de tous les project generator
-				for (Enumeration<ProjectGenerator> en = getControllerActionInitializer().getGeneratorController().getProjectGenerators(); en.hasMoreElements();) {
+				for (Enumeration<ProjectGenerator> en = getControllerActionInitializer().getGeneratorController().getProjectGenerators(); en
+						.hasMoreElements();) {
 					en.nextElement().getTemplateLocator().notifyTemplateModified();
 				}
 				return true;
@@ -78,14 +72,12 @@ public class RefreshTemplatesInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return IconLibrary.REFRESH_ICON;
 	}
 
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return IconLibrary.REFRESH_DISABLED_ICON;
 	}
 

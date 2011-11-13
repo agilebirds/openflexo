@@ -29,7 +29,6 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -40,34 +39,27 @@ public class RemoveGeneratedCodeRepositoryInitializer extends ActionInitializer 
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	RemoveGeneratedCodeRepositoryInitializer(SGControllerActionInitializer actionInitializer)
-	{
-		super(RemoveGeneratedCodeRepository.actionType,actionInitializer);
+	RemoveGeneratedCodeRepositoryInitializer(SGControllerActionInitializer actionInitializer) {
+		super(RemoveGeneratedCodeRepository.actionType, actionInitializer);
 	}
 
 	@Override
-	protected SGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (SGControllerActionInitializer)super.getControllerActionInitializer();
+	protected SGControllerActionInitializer getControllerActionInitializer() {
+		return (SGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<RemoveGeneratedCodeRepository> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<RemoveGeneratedCodeRepository> getDefaultInitializer() {
 		return new FlexoActionInitializer<RemoveGeneratedCodeRepository>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveGeneratedCodeRepository action)
-			{
-				CheckboxParameter deleteFiles = new CheckboxParameter("deleteFiles","also_delete_files_on_disk",false);
-				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(
-						getProject(), 
-						null,
-						action.getLocalizedName(), FlexoLocalization.localizedForKey("would_you_really_like_to_remove_this_generated_code_repository"), deleteFiles);
+			public boolean run(ActionEvent e, RemoveGeneratedCodeRepository action) {
+				CheckboxParameter deleteFiles = new CheckboxParameter("deleteFiles", "also_delete_files_on_disk", false);
+				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null, action.getLocalizedName(),
+						FlexoLocalization.localizedForKey("would_you_really_like_to_remove_this_generated_code_repository"), deleteFiles);
 				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 					action.setDeleteFiles(deleteFiles.getValue());
 					return true;
-				}
-				else {
+				} else {
 					return false;
 				}
 			}
@@ -75,20 +67,17 @@ public class RemoveGeneratedCodeRepositoryInitializer extends ActionInitializer 
 	}
 
 	@Override
-	protected FlexoActionFinalizer<RemoveGeneratedCodeRepository> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<RemoveGeneratedCodeRepository> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RemoveGeneratedCodeRepository>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveGeneratedCodeRepository action)
-			{
+			public boolean run(ActionEvent e, RemoveGeneratedCodeRepository action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return IconLibrary.DELETE_ICON;
 	}
 

@@ -24,51 +24,45 @@ import org.openflexo.generator.ie.ComponentGenerator;
 
 /**
  * @author nid
- *
+ * 
  */
-public class StaticComponentGenerator extends ComponentGenerator
-{
+public class StaticComponentGenerator extends ComponentGenerator {
 	private String templateNamePrefix;
-	
-	public StaticComponentGenerator(ProjectGenerator projectGenerator, String templateNamePrefix, String componentGeneratedName)
-    {
-        super(projectGenerator, null, componentGeneratedName);
-        this.templateNamePrefix = templateNamePrefix;
-    }
-	
+
+	public StaticComponentGenerator(ProjectGenerator projectGenerator, String templateNamePrefix, String componentGeneratedName) {
+		super(projectGenerator, null, componentGeneratedName);
+		this.templateNamePrefix = templateNamePrefix;
+	}
+
 	/**
 	 * @see org.openflexo.generator.ie.ComponentGenerator#getJavaTemplate()
 	 */
 	@Override
-	public String getJavaTemplate()
-	{
+	public String getJavaTemplate() {
 		return templateNamePrefix + ".java.vm";
 	}
-	
+
 	/**
 	 * @see org.openflexo.generator.ie.ComponentGenerator#getWodTemplate()
 	 */
 	@Override
-	public String getWodTemplate()
-	{
+	public String getWodTemplate() {
 		return templateNamePrefix + ".wod.vm";
 	}
-	
+
 	/**
 	 * @see org.openflexo.generator.ie.ComponentGenerator#getHtmlTemplate()
 	 */
 	@Override
-	public String getHtmlTemplate()
-	{
+	public String getHtmlTemplate() {
 		return templateNamePrefix + ".html.vm";
 	}
-	
+
 	/**
 	 * @see org.openflexo.generator.ie.ComponentGenerator#getApiTemplate()
 	 */
 	@Override
-	public String getApiTemplate()
-	{
+	public String getApiTemplate() {
 		return templateNamePrefix + ".api.vm";
 	}
 }

@@ -28,21 +28,18 @@ public class RoundRectangleWithTwoPointsConstruction extends RoundRectangleConst
 	public PointConstruction pointConstruction1;
 	public PointConstruction pointConstruction2;
 
-	public RoundRectangleWithTwoPointsConstruction()
-	{
+	public RoundRectangleWithTwoPointsConstruction() {
 		super();
 	}
 
-	public RoundRectangleWithTwoPointsConstruction(PointConstruction pointConstruction1, PointConstruction pointConstruction2)
-	{
+	public RoundRectangleWithTwoPointsConstruction(PointConstruction pointConstruction1, PointConstruction pointConstruction2) {
 		super();
 		this.pointConstruction1 = pointConstruction1;
 		this.pointConstruction2 = pointConstruction2;
 	}
 
 	@Override
-	protected FGERoundRectangle computeData()
-	{
+	protected FGERoundRectangle computeData() {
 		FGEPoint p1 = pointConstruction1.getPoint();
 		FGEPoint p2 = pointConstruction2.getPoint();
 
@@ -50,24 +47,23 @@ public class RoundRectangleWithTwoPointsConstruction extends RoundRectangleConst
 		p.x = Math.min(p1.x, p2.x);
 		p.y = Math.min(p1.y, p2.y);
 
-		double width = Math.abs(p1.x-p2.x);
-		double height = Math.abs(p1.y-p2.y);
+		double width = Math.abs(p1.x - p2.x);
+		double height = Math.abs(p1.y - p2.y);
 
-		return new FGERoundRectangle(p.x,p.y,width,height,getArcWidth(),getArcHeight(),(getIsFilled()?Filling.FILLED:Filling.NOT_FILLED));
+		return new FGERoundRectangle(p.x, p.y, width, height, getArcWidth(), getArcHeight(), (getIsFilled() ? Filling.FILLED
+				: Filling.NOT_FILLED));
 	}
 
 	@Override
-	public String toString()
-	{
-		return "RoundRectangleWithTwoPointsConstruction[\n"+"> "+pointConstruction1.toString()+"\n> "+pointConstruction2.toString()+"\n]";
+	public String toString() {
+		return "RoundRectangleWithTwoPointsConstruction[\n" + "> " + pointConstruction1.toString() + "\n> " + pointConstruction2.toString()
+				+ "\n]";
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
+	public GeometricConstruction[] getDepends() {
 		GeometricConstruction[] returned = { pointConstruction1, pointConstruction2 };
 		return returned;
 	}
-
 
 }

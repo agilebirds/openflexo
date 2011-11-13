@@ -77,14 +77,14 @@ public abstract class FlexoExternalMain {
 						resourcePath = resourcePath.substring(1);
 					}
 					if (resourcePath.endsWith("\"")) {
-						resourcePath = resourcePath.substring(0,resourcePath.length()-1);
+						resourcePath = resourcePath.substring(0, resourcePath.length() - 1);
 					}
 				} else if (args[i].equals(DEV_ARGUMENT)) {
 					isDev = true;
 				}
 			}
 		}
-		if (resourcePath==null && !isDev) {
+		if (resourcePath == null && !isDev) {
 			throw new MissingArgumentException(RESOURCE_PATH_ARGUMENT_PREFIX);
 		}
 		ToolBox.setPlatform();
@@ -95,12 +95,12 @@ public abstract class FlexoExternalMain {
 		initializeLoggingManager();
 		if (!isDev) {
 			if (logger.isLoggable(Level.INFO)) {
-				logger.info("PreferredResourcePath is set to "+ResourceLocator.getPreferredResourcePath().getAbsolutePath());
+				logger.info("PreferredResourcePath is set to " + ResourceLocator.getPreferredResourcePath().getAbsolutePath());
 			}
 		}
 		FlexoObject.initialize();
 		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Launching "+getName()+"...");
+			logger.info("Launching " + getName() + "...");
 		}
 		GeneralPreferences.setFavoriteModuleName(Module.WKF_MODULE.getName());
 		ModuleLoader.initializeModules(UserType.getUserTypeNamed("DEVELOPPER")/*, false*/);
@@ -127,10 +127,11 @@ public abstract class FlexoExternalMain {
 		}
 	}
 
-	protected void handleActionFailed(FlexoAction<?,? extends FlexoModelObject,? extends FlexoModelObject> action, File fileToOpen) {
-		if (fileToOpen!=null) {
+	protected void handleActionFailed(FlexoAction<?, ? extends FlexoModelObject, ? extends FlexoModelObject> action, File fileToOpen) {
+		if (fileToOpen != null) {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Action " + action.getLocalizedName() + " could not be performed on project at " + fileToOpen.getAbsolutePath());
+				logger.warning("Action " + action.getLocalizedName() + " could not be performed on project at "
+						+ fileToOpen.getAbsolutePath());
 			}
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
@@ -138,18 +139,18 @@ public abstract class FlexoExternalMain {
 			}
 		}
 		reportMessage("Action " + action.getLocalizedName() + " could not be performed");
-		if (action.getThrownException()!=null) {
+		if (action.getThrownException() != null) {
 			action.getThrownException().printStackTrace();
 		}
 		cleanUp();
-		if (getExitCode()==0) {
+		if (getExitCode() == 0) {
 			System.exit(FLEXO_ACTION_FAILED);
 		} else {
 			System.exit(getExitCode());
 		}
 	}
 
-	protected void handleActionFailed(FlexoAction<?,? extends FlexoModelObject,? extends FlexoModelObject> action) {
+	protected void handleActionFailed(FlexoAction<?, ? extends FlexoModelObject, ? extends FlexoModelObject> action) {
 		handleActionFailed(action, null);
 	}
 
@@ -159,7 +160,7 @@ public abstract class FlexoExternalMain {
 		} catch (MissingArgumentException e) {
 			e.printStackTrace();
 			cleanUp();
-			if (getExitCode()==0) {
+			if (getExitCode() == 0) {
 				System.exit(MISSING_ARGUMENT);
 			} else {
 				System.exit(getExitCode());
@@ -235,7 +236,7 @@ public abstract class FlexoExternalMain {
 				}
 			}
 
-		},"Timeout thread");
+		}, "Timeout thread");
 		timeout.start();
 		try {
 			A main = builderClass.newInstance();
@@ -246,7 +247,7 @@ public abstract class FlexoExternalMain {
 				mem = null;
 				e.printStackTrace();
 				if (logger.isLoggable(Level.SEVERE)) {
-					logger.severe("An unexpected exception occured in "+main.getName()+". Returning now.");
+					logger.severe("An unexpected exception occured in " + main.getName() + ". Returning now.");
 				}
 				try {
 					main.cleanUp();
@@ -259,7 +260,7 @@ public abstract class FlexoExternalMain {
 				mem = null;
 				e.printStackTrace();
 				if (logger.isLoggable(Level.SEVERE)) {
-					logger.severe("An unexpected ERROR occured in "+main.getName()+". Returning now.");
+					logger.severe("An unexpected ERROR occured in " + main.getName() + ". Returning now.");
 				}
 				try {
 					main.cleanUp();
@@ -282,22 +283,18 @@ public abstract class FlexoExternalMain {
 	}
 
 	/**
-	 * Search recursively and return a project directory in the
-	 * <code>root</code> directory. The strategy is the following, it first
-	 * looks for a file ending with .rmxml in the current directory, if non can
-	 * be found, it searches within the directory of the current level and so
-	 * on.
-	 *
-	 * @param root -
-	 *            the root directory in which to search.
-	 * @return the project directory if a project can be found within the
-	 *         <code>root</code> directory. If several projects are located in
-	 *         that directory, the returned value is uncertain (depending on how
-	 *         the method listFiles() returns the sub-directories of
+	 * Search recursively and return a project directory in the <code>root</code> directory. The strategy is the following, it first looks
+	 * for a file ending with .rmxml in the current directory, if non can be found, it searches within the directory of the current level
+	 * and so on.
+	 * 
+	 * @param root
+	 *            - the root directory in which to search.
+	 * @return the project directory if a project can be found within the <code>root</code> directory. If several projects are located in
+	 *         that directory, the returned value is uncertain (depending on how the method listFiles() returns the sub-directories of
 	 *         <code>root</code>).
 	 */
 	public static File searchProjectDirectory(File root) {
-		if (root==null || !root.exists() || !root.isDirectory()) {
+		if (root == null || !root.exists() || !root.isDirectory()) {
 			return null;
 		}
 		Vector<File> founds = new Vector<File>();
@@ -312,19 +309,19 @@ public abstract class FlexoExternalMain {
 			File file = f[i];
 			if (file.isDirectory()) {
 				File found = searchProjectDirectory(file);
-				if (found!=null) {
+				if (found != null) {
 					founds.add(found);
 				}
 			}
 		}
-		if (founds.size()==0) {
+		if (founds.size() == 0) {
 			return null;
-		} else if (founds.size()==1) {
+		} else if (founds.size() == 1) {
 			return founds.firstElement();
 		} else {
 			File ret = founds.firstElement();
 			for (File file : founds) {
-				if (file.getAbsolutePath().length()<ret.getAbsolutePath().length()) {
+				if (file.getAbsolutePath().length() < ret.getAbsolutePath().length()) {
 					ret = file;
 				}
 			}

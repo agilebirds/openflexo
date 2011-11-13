@@ -21,5 +21,4 @@ public class AddToInformedRoleInitializer extends AddToXRoleInitializer<AddToInf
 		return activity.getAvailableInformedRoles();
 	}
 
-
 }

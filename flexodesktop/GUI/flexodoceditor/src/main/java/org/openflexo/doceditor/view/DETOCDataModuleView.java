@@ -28,7 +28,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-
 import org.openflexo.doceditor.controller.DEController;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
@@ -59,7 +58,8 @@ public class DETOCDataModuleView extends JPanel implements ModuleView<TOCData>, 
 		_controller = controller;
 		_gc.addObserver(this);
 		topPanel = new JPanel(new BorderLayout(0, 20));
-		topPanel.add(new JLabel(FlexoLocalization.localizedForKey("doc_editor_introduction_text"), SwingConstants.CENTER), BorderLayout.NORTH);
+		topPanel.add(new JLabel(FlexoLocalization.localizedForKey("doc_editor_introduction_text"), SwingConstants.CENTER),
+				BorderLayout.NORTH);
 		topPanel.add(panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 50)), BorderLayout.CENTER);
 		add(topPanel);
 		validate();

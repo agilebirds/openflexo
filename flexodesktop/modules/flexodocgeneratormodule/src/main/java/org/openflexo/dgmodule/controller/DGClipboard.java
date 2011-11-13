@@ -25,20 +25,16 @@ import javax.swing.JMenuItem;
 
 import org.openflexo.doceditor.controller.DEClipboard;
 
-
 /**
- * DGClipboard is intented to be the object working with the DGSelectionManager
- * and storing copied, cut and pasted objects. 
+ * DGClipboard is intented to be the object working with the DGSelectionManager and storing copied, cut and pasted objects.
  * 
  * @author gpolet
  */
-public class DGClipboard extends DEClipboard
-{
+public class DGClipboard extends DEClipboard {
 
-    private static final Logger logger = Logger.getLogger(DGClipboard.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DGClipboard.class.getPackage().getName());
 
-    public DGClipboard(DGSelectionManager aSelectionManager, JMenuItem copyMenuItem, JMenuItem pasteMenuItem, JMenuItem cutMenuItem)
-    {
-        super(aSelectionManager, copyMenuItem, pasteMenuItem, cutMenuItem);
-    }
- }
+	public DGClipboard(DGSelectionManager aSelectionManager, JMenuItem copyMenuItem, JMenuItem pasteMenuItem, JMenuItem cutMenuItem) {
+		super(aSelectionManager, copyMenuItem, pasteMenuItem, cutMenuItem);
+	}
+}

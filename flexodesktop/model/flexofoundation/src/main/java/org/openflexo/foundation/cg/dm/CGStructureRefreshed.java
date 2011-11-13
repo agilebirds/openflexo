@@ -19,12 +19,8 @@
  */
 package org.openflexo.foundation.cg.dm;
 
-
-
-public class CGStructureRefreshed extends CGDataModification
-{
-    public CGStructureRefreshed()
-    {
-        super(null,null);
-    }
+public class CGStructureRefreshed extends CGDataModification {
+	public CGStructureRefreshed() {
+		super(null, null);
+	}
 }

@@ -36,186 +36,152 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.diff.DiffPanel;
 import org.openflexo.toolbox.TokenMarkerStyle;
 
-
 public class DiffCodeDisplayer extends CodeDisplayer {
 
 	private static final Logger logger = Logger.getLogger(DiffCodeDisplayer.class.getPackage().getName());
 
-	//protected DiffCodeDisplayerComponent _component;
-	public DiffCodeDisplayer(CVSFile cvsFile, FPSController controller)
-	{
-		super(cvsFile,controller);
-	}
-	
-	@Override
-	public JComponent getComponent()
-	{
-		return (JComponent)_component;
+	// protected DiffCodeDisplayerComponent _component;
+	public DiffCodeDisplayer(CVSFile cvsFile, FPSController controller) {
+		super(cvsFile, controller);
 	}
 
-	protected interface DiffCodeDisplayerComponent extends CodeDisplayerComponent
-	{
+	@Override
+	public JComponent getComponent() {
+		return (JComponent) _component;
+	}
+
+	protected interface DiffCodeDisplayerComponent extends CodeDisplayerComponent {
 		@Override
 		public void update();
 	}
 
 	@Override
-	protected CodeDisplayerComponent buildComponent()
-	{
+	protected CodeDisplayerComponent buildComponent() {
 		if (!getFileFormat().isBinary()) {
 			return _component = new ASCIIFileDiffCodeDisplayer();
-		}
-		else {
+		} else {
 			return super.buildComponent();
 		}
 	}
-	
+
 	@Override
-	public void update()
-	{
+	public void update() {
 		if (_component != null) {
 			_component.update();
 		}
 	}
-	
-	public String getContentOnRepository()
-	{
+
+	public String getContentOnRepository() {
 		String returned = getCVSFile().getContentOnRepository();
 		if (returned == null) {
-			return FlexoLocalization.localizedForKey("unable_to_retrieve_remote_content_for")
-			+" "+getCVSFile().getFile().getAbsolutePath()+" - "+getCVSFile().getRepositoryRevision();
+			return FlexoLocalization.localizedForKey("unable_to_retrieve_remote_content_for") + " "
+					+ getCVSFile().getFile().getAbsolutePath() + " - " + getCVSFile().getRepositoryRevision();
 		} else {
 			return returned;
 		}
 	}
 
-	protected class ASCIIFileDiffCodeDisplayer extends JPanel implements DiffCodeDisplayerComponent
-	{
+	protected class ASCIIFileDiffCodeDisplayer extends JPanel implements DiffCodeDisplayerComponent {
 		protected DiffPanel _diffPanel;
 		protected DiffReport _diffReport;
-		
-		protected ASCIIFileDiffCodeDisplayer()
-		{
+
+		protected ASCIIFileDiffCodeDisplayer() {
 			super(new BorderLayout());
 			update();
 		}
-		
+
 		@Override
-		public void setEditable(boolean isEditable)
-		{
+		public void setEditable(boolean isEditable) {
 			// Not editable anyway
 		}
-		
+
 		@Override
-		public void setEditedContent(CVSFile file) 
-		{
+		public void setEditedContent(CVSFile file) {
 			// Not editable anyway
 		}
-		
+
 		@Override
-		public String getEditedContent() 
-		{
+		public String getEditedContent() {
 			// Interface: this component is not supposed to be editable
 			return null;
 		}
-		
+
 		@Override
-		public void update()
-		{
+		public void update() {
 			removeAll();
 			String leftLabel = FlexoLocalization.localizedForKey("file_on_disk");
 			if (getCVSFile().getStatus() == CVSStatus.LocallyModified) {
-				leftLabel += " "+FlexoLocalization.localizedForKey("based_on_revision")+" "+getCVSFile().getRevision();
-			}
-			else if (getCVSFile().getStatus() == CVSStatus.MarkedAsMerged) {
-				leftLabel += " ("+FlexoLocalization.localizedForKey("merge_of")+" "
-				+getCVSFile().getRevisionOnWhichContentOnDiskBeforeMergeWasBasedOn()
-				+" "+FlexoLocalization.localizedForKey("and")+" "+getCVSFile().getRevision()+")";
-			}
-			else {
-				leftLabel += (getCVSFile().getRevision()!=null?" - "+getCVSFile().getRevision():"");
+				leftLabel += " " + FlexoLocalization.localizedForKey("based_on_revision") + " " + getCVSFile().getRevision();
+			} else if (getCVSFile().getStatus() == CVSStatus.MarkedAsMerged) {
+				leftLabel += " (" + FlexoLocalization.localizedForKey("merge_of") + " "
+						+ getCVSFile().getRevisionOnWhichContentOnDiskBeforeMergeWasBasedOn() + " "
+						+ FlexoLocalization.localizedForKey("and") + " " + getCVSFile().getRevision() + ")";
+			} else {
+				leftLabel += (getCVSFile().getRevision() != null ? " - " + getCVSFile().getRevision() : "");
 			}
 			String rightLabel = FlexoLocalization.localizedForKey("remote_file_on_cvs_repository")
-			+(getCVSFile().getRepositoryRevision()!=null?" - "+getCVSFile().getRepositoryRevision():"");
+					+ (getCVSFile().getRepositoryRevision() != null ? " - " + getCVSFile().getRepositoryRevision() : "");
 			boolean isLeftOriented = true;
 			if (getCVSFile().getStatus() == CVSStatus.LocallyModified) {
-				_diffReport = ComputeDiff.diff(getContentOnDisk(),getContentOnRepository());
-			}
-			else if (getCVSFile().getStatus() == CVSStatus.MarkedAsMerged) {
-				_diffReport = ComputeDiff.diff(getContentOnDisk(),getContentOnRepository());
-			}
-			else if (getCVSFile().getStatus() == CVSStatus.RemotelyModified) {
-				_diffReport = ComputeDiff.diff(getContentOnDisk(),getContentOnRepository());
-			}
-			else if (getCVSFile().getStatus() == CVSStatus.LocallyAdded) {
-				_diffReport = ComputeDiff.diff(getContentOnDisk(),FlexoLocalization.localizedForKey("locally_added_file"));
-			}
-			else if (getCVSFile().getStatus() == CVSStatus.LocallyRemoved) {
-				_diffReport = ComputeDiff.diff(FlexoLocalization.localizedForKey("locally_removed_file"),getContentOnRepository());
-			}
-			else if (getCVSFile().getStatus() == CVSStatus.RemotelyRemoved) {
-				_diffReport = ComputeDiff.diff(getContentOnDisk(),FlexoLocalization.localizedForKey("remotely_removed_file"));
-			}
-			else if (getCVSFile().getStatus() == CVSStatus.RemotelyAdded) {
-				_diffReport = ComputeDiff.diff(FlexoLocalization.localizedForKey("remotely_added_file"),getContentOnRepository());
-			}
-			else {
-				logger.warning("I should never access here: status="+getCVSFile().getStatus());
+				_diffReport = ComputeDiff.diff(getContentOnDisk(), getContentOnRepository());
+			} else if (getCVSFile().getStatus() == CVSStatus.MarkedAsMerged) {
+				_diffReport = ComputeDiff.diff(getContentOnDisk(), getContentOnRepository());
+			} else if (getCVSFile().getStatus() == CVSStatus.RemotelyModified) {
+				_diffReport = ComputeDiff.diff(getContentOnDisk(), getContentOnRepository());
+			} else if (getCVSFile().getStatus() == CVSStatus.LocallyAdded) {
+				_diffReport = ComputeDiff.diff(getContentOnDisk(), FlexoLocalization.localizedForKey("locally_added_file"));
+			} else if (getCVSFile().getStatus() == CVSStatus.LocallyRemoved) {
+				_diffReport = ComputeDiff.diff(FlexoLocalization.localizedForKey("locally_removed_file"), getContentOnRepository());
+			} else if (getCVSFile().getStatus() == CVSStatus.RemotelyRemoved) {
+				_diffReport = ComputeDiff.diff(getContentOnDisk(), FlexoLocalization.localizedForKey("remotely_removed_file"));
+			} else if (getCVSFile().getStatus() == CVSStatus.RemotelyAdded) {
+				_diffReport = ComputeDiff.diff(FlexoLocalization.localizedForKey("remotely_added_file"), getContentOnRepository());
+			} else {
+				logger.warning("I should never access here: status=" + getCVSFile().getStatus());
 				return;
 			}
-			_diffPanel = new DiffPanel(
-					_diffReport,
-					getTokenMarkerStyle(),
-					leftLabel,
-					rightLabel,
-					FlexoLocalization.localizedForKey("no_structural_changes"),
-					isLeftOriented);
-            _diffPanel.validate();
-			add(_diffPanel,BorderLayout.CENTER);
+			_diffPanel = new DiffPanel(_diffReport, getTokenMarkerStyle(), leftLabel, rightLabel,
+					FlexoLocalization.localizedForKey("no_structural_changes"), isLeftOriented);
+			_diffPanel.validate();
+			add(_diffPanel, BorderLayout.CENTER);
 			validate();
 		}
-		
-		protected TokenMarkerStyle getTokenMarkerStyle()
-		{
+
+		protected TokenMarkerStyle getTokenMarkerStyle() {
 			return DefaultMergedDocumentType.getMergedDocumentType(getFileFormat()).getStyle();
 		}
-		
+
 		@Override
-		public void addToFocusListener(FocusListener aFocusListener) 
-		{
+		public void addToFocusListener(FocusListener aFocusListener) {
 			_diffPanel.getLeftTextArea().addFocusListener(aFocusListener);
 			_diffPanel.getRightTextArea().addFocusListener(aFocusListener);
 		}
 	}
 
-	public int getChangesCount()
-	{
+	public int getChangesCount() {
 		if (_component instanceof ASCIIFileDiffCodeDisplayer) {
-			return ((ASCIIFileDiffCodeDisplayer)_component)._diffReport.getChanges().size();
+			return ((ASCIIFileDiffCodeDisplayer) _component)._diffReport.getChanges().size();
 		}
 		return 0;
 	}
 
-	public int getAdditionChangeCount()
-	{
+	public int getAdditionChangeCount() {
 		if (_component instanceof ASCIIFileDiffCodeDisplayer) {
-			return ((ASCIIFileDiffCodeDisplayer)_component)._diffReport.getAdditionChangeCount();
+			return ((ASCIIFileDiffCodeDisplayer) _component)._diffReport.getAdditionChangeCount();
 		}
 		return 0;
 	}
-			
-	public int getRemovalChangeCount()
-	{
+
+	public int getRemovalChangeCount() {
 		if (_component instanceof ASCIIFileDiffCodeDisplayer) {
-			return ((ASCIIFileDiffCodeDisplayer)_component)._diffReport.getRemovalChangeCount();
+			return ((ASCIIFileDiffCodeDisplayer) _component)._diffReport.getRemovalChangeCount();
 		}
 		return 0;
 	}
-			
-	public int getModificationChangeCount()
-	{
+
+	public int getModificationChangeCount() {
 		if (_component instanceof ASCIIFileDiffCodeDisplayer) {
-			return ((ASCIIFileDiffCodeDisplayer)_component)._diffReport.getModificationChangeCount();
+			return ((ASCIIFileDiffCodeDisplayer) _component)._diffReport.getModificationChangeCount();
 		}
 		return 0;
 	}

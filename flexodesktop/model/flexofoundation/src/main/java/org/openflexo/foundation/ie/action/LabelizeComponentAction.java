@@ -42,63 +42,57 @@ public class LabelizeComponentAction extends FlexoAction<LabelizeComponentAction
 
 {
 
-    protected static final Logger logger = Logger.getLogger(LabelizeComponentAction.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(LabelizeComponentAction.class.getPackage().getName());
 
-    public static FlexoActionType<LabelizeComponentAction, ComponentDefinition, ComponentDefinition> actionType = new FlexoActionType<LabelizeComponentAction, ComponentDefinition, ComponentDefinition>("labelize_component", FlexoActionType.defaultGroup) {
+	public static FlexoActionType<LabelizeComponentAction, ComponentDefinition, ComponentDefinition> actionType = new FlexoActionType<LabelizeComponentAction, ComponentDefinition, ComponentDefinition>(
+			"labelize_component", FlexoActionType.defaultGroup) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public LabelizeComponentAction makeNewAction(ComponentDefinition focusedObject, Vector<ComponentDefinition> globalSelection, FlexoEditor editor)
-        {
-            return new LabelizeComponentAction(focusedObject, globalSelection,editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public LabelizeComponentAction makeNewAction(ComponentDefinition focusedObject, Vector<ComponentDefinition> globalSelection,
+				FlexoEditor editor) {
+			return new LabelizeComponentAction(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(ComponentDefinition object, Vector<ComponentDefinition> globalSelection)
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(ComponentDefinition object, Vector<ComponentDefinition> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(ComponentDefinition object, Vector<ComponentDefinition> globalSelection)
-        {
-            return object instanceof TopComponentContainer || object instanceof OperationComponentDefinition
-                    || object instanceof PopupComponentDefinition || object instanceof TabComponentDefinition;
-        }
+		@Override
+		protected boolean isEnabledForSelection(ComponentDefinition object, Vector<ComponentDefinition> globalSelection) {
+			return object instanceof TopComponentContainer || object instanceof OperationComponentDefinition
+					|| object instanceof PopupComponentDefinition || object instanceof TabComponentDefinition;
+		}
 
-    };
+	};
 
-    protected LabelizeComponentAction(ComponentDefinition focusedObject, Vector<ComponentDefinition> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	protected LabelizeComponentAction(ComponentDefinition focusedObject, Vector<ComponentDefinition> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    private IEWOComponent component;
+	private IEWOComponent component;
 
-    @Override
-	protected void doAction(Object context)
-    {
-        Vector v=component.getAllEmbeddedIEObjects();
-        makeFlexoProgress(FlexoLocalization.localizedForKey("setting_label"), v.size());
-        for(Object o:v) 
-        {
-            if (o instanceof IEWidget)
-                if (((IEWidget)o).getLabel()==null || ((IEWidget)o).getLabel().length()==0)
-                    ((IEWidget)o).setLabel(((IEWidget)o).getCalculatedLabel());
-            setProgress(FlexoLocalization.localizedForKey("setting_label"));
-        }
-    }
+	@Override
+	protected void doAction(Object context) {
+		Vector v = component.getAllEmbeddedIEObjects();
+		makeFlexoProgress(FlexoLocalization.localizedForKey("setting_label"), v.size());
+		for (Object o : v) {
+			if (o instanceof IEWidget)
+				if (((IEWidget) o).getLabel() == null || ((IEWidget) o).getLabel().length() == 0)
+					((IEWidget) o).setLabel(((IEWidget) o).getCalculatedLabel());
+			setProgress(FlexoLocalization.localizedForKey("setting_label"));
+		}
+	}
 
-    public IEWOComponent getComponent()
-    {
-        return component;
-    }
+	public IEWOComponent getComponent() {
+		return component;
+	}
 
-    public void setComponent(IEWOComponent component)
-    {
-        this.component = component;
-    }
+	public void setComponent(IEWOComponent component) {
+		this.component = component;
+	}
 
 }

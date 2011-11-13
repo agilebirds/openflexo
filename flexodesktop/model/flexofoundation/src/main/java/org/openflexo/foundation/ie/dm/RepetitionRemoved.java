@@ -21,19 +21,16 @@ package org.openflexo.foundation.ie.dm;
 
 import org.openflexo.foundation.ie.operator.RepetitionOperator;
 
-public class RepetitionRemoved extends IEDataModification
-{
+public class RepetitionRemoved extends IEDataModification {
 
-    private RepetitionOperator _tr;
+	private RepetitionOperator _tr;
 
-    public RepetitionRemoved(RepetitionOperator insertedTR)
-    {
-        super(insertedTR, null);
-        _tr = insertedTR;
-    }
+	public RepetitionRemoved(RepetitionOperator insertedTR) {
+		super(insertedTR, null);
+		_tr = insertedTR;
+	}
 
-    public RepetitionOperator getRepetition()
-    {
-        return _tr;
-    }
+	public RepetitionOperator getRepetition() {
+		return _tr;
+	}
 }

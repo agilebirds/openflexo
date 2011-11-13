@@ -19,160 +19,165 @@
  */
 package org.openflexo.diff;
 
-public interface DelimitingMethod
-{
+public interface DelimitingMethod {
 	public String getDelimiters();
-	
+
 	public String getNonSignifiantDelimiters();
 
 	public String getName();
-	
+
 	public static final String DEFAULT_NON_SIGNIFIANT_DELIMS = "\t\n\r\f ";
 
-	public static final DelimitingMethod LINES = new DelimitingMethod() 
-	{
+	public static final DelimitingMethod LINES = new DelimitingMethod() {
 		private static final String LINES_DELIMS = "\r\n";
 
 		@Override
 		public String getDelimiters() {
 			return LINES_DELIMS;
 		}
+
 		@Override
 		public String getNonSignifiantDelimiters() {
 			return DEFAULT_NON_SIGNIFIANT_DELIMS;
-		}		
+		}
 
 		@Override
 		public String getName() {
 			return "LINES";
-		}		
+		}
 	};
 
-	public static final DelimitingMethod DEFAULT = new DelimitingMethod() 
-	{
+	public static final DelimitingMethod DEFAULT = new DelimitingMethod() {
 		private static final String DEFAULT_DELIMS = "\t\n\r\f ";
 
 		@Override
 		public String getDelimiters() {
 			return DEFAULT_DELIMS;
 		}
+
 		@Override
 		public String getNonSignifiantDelimiters() {
 			return DEFAULT_NON_SIGNIFIANT_DELIMS;
-		}		
+		}
 
 		@Override
 		public String getName() {
 			return "DEFAULT";
-		}		
+		}
 	};
 
-	public static final DelimitingMethod XML = new DelimitingMethod() 
-	{
-		private static final String XML_DELIMS = "\t\n\r\f=<>?/ "+'"';
-		
+	public static final DelimitingMethod XML = new DelimitingMethod() {
+		private static final String XML_DELIMS = "\t\n\r\f=<>?/ " + '"';
+
 		@Override
 		public String getDelimiters() {
 			return XML_DELIMS;
 		}
+
 		@Override
 		public String getNonSignifiantDelimiters() {
 			return DEFAULT_NON_SIGNIFIANT_DELIMS;
-		}		
+		}
+
 		@Override
 		public String getName() {
 			return "XML";
-		}		
+		}
 	};
 
-	public static final DelimitingMethod HTML = new DelimitingMethod() 
-	{
-		private static final String HTML_DELIMS = "\t\n\r\f=<>?/ "+'"';
-		
+	public static final DelimitingMethod HTML = new DelimitingMethod() {
+		private static final String HTML_DELIMS = "\t\n\r\f=<>?/ " + '"';
+
 		@Override
 		public String getDelimiters() {
 			return HTML_DELIMS;
 		}
+
 		@Override
 		public String getNonSignifiantDelimiters() {
 			return DEFAULT_NON_SIGNIFIANT_DELIMS;
-		}		
+		}
+
 		@Override
 		public String getName() {
 			return "HTML";
-		}		
+		}
 	};
 
-	public static final DelimitingMethod PLIST = new DelimitingMethod() 
-	{
-		private static final String PLIST_DELIMS = "\t\n\r\f:={} "+'"';
-		
+	public static final DelimitingMethod PLIST = new DelimitingMethod() {
+		private static final String PLIST_DELIMS = "\t\n\r\f:={} " + '"';
+
 		@Override
 		public String getDelimiters() {
 			return PLIST_DELIMS;
 		}
+
 		@Override
 		public String getNonSignifiantDelimiters() {
 			return DEFAULT_NON_SIGNIFIANT_DELIMS;
-		}		
+		}
+
 		@Override
 		public String getName() {
 			return "PLIST";
-		}		
+		}
 	};
 
-	public static final DelimitingMethod JAVA = new DelimitingMethod() 
-	{
-		private static final String JAVA_DELIMS = "\t\n\r\f=.,;?<>()[]{}+-/!&*| "+'"';
-		
+	public static final DelimitingMethod JAVA = new DelimitingMethod() {
+		private static final String JAVA_DELIMS = "\t\n\r\f=.,;?<>()[]{}+-/!&*| " + '"';
+
 		@Override
 		public String getDelimiters() {
 			return JAVA_DELIMS;
 		}
+
 		@Override
 		public String getNonSignifiantDelimiters() {
 			return DEFAULT_NON_SIGNIFIANT_DELIMS;
-		}		
+		}
+
 		@Override
 		public String getName() {
 			return "JAVA";
-		}		
+		}
 	};
 
-	public static final DelimitingMethod TEX = new DelimitingMethod() 
-	{
-		private static final String JAVA_DELIMS = "\t\n\r\f=\\{}:[]%& "+'"';
-		
+	public static final DelimitingMethod TEX = new DelimitingMethod() {
+		private static final String JAVA_DELIMS = "\t\n\r\f=\\{}:[]%& " + '"';
+
 		@Override
 		public String getDelimiters() {
 			return JAVA_DELIMS;
 		}
+
 		@Override
 		public String getNonSignifiantDelimiters() {
 			return DEFAULT_NON_SIGNIFIANT_DELIMS;
-		}		
+		}
+
 		@Override
 		public String getName() {
 			return "TEX";
-		}		
+		}
 	};
 
-	public static final DelimitingMethod SQL = new DelimitingMethod() 
-	{
+	public static final DelimitingMethod SQL = new DelimitingMethod() {
 		private static final String JAVA_DELIMS = "\t\n\r\f=(); ";
-		
+
 		@Override
 		public String getDelimiters() {
 			return JAVA_DELIMS;
 		}
+
 		@Override
 		public String getNonSignifiantDelimiters() {
 			return DEFAULT_NON_SIGNIFIANT_DELIMS;
-		}		
+		}
+
 		@Override
 		public String getName() {
 			return "SQL";
-		}		
+		}
 	};
 
 }

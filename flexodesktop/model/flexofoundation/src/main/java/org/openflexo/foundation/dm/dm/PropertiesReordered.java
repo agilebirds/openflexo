@@ -26,11 +26,9 @@ import org.openflexo.foundation.dm.DMEntity;
  * 
  * @author sguerin
  */
-public class PropertiesReordered extends DMDataModification
-{
+public class PropertiesReordered extends DMDataModification {
 
-    public PropertiesReordered(DMEntity entity)
-    {
-        super(null, null);
-    }
+	public PropertiesReordered(DMEntity entity) {
+		super(null, null);
+	}
 }

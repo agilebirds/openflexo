@@ -303,8 +303,8 @@ public abstract class FlexoWysiwyg extends HTMLEditor {
 			try {
 				loadExternalStyleSheet(cssFile.toURL().toString());
 			} catch (Exception e) {
-				logger.log(Level.WARNING,
-						"Could not load the external style sheet '" + cssFile.getPath() + "'. Use level fine for stacktrace");
+				logger.log(Level.WARNING, "Could not load the external style sheet '" + cssFile.getPath()
+						+ "'. Use level fine for stacktrace");
 				if (logger.isLoggable(Level.FINE)) {
 					logger.log(Level.FINE, "Stacktrace : ", e);
 				}
@@ -461,8 +461,8 @@ public abstract class FlexoWysiwyg extends HTMLEditor {
 		final File documentBaseFolder = getDocumentBaseFolder();
 		if (documentBaseFolder != null && getLinkedObjectsFolderName() != null) { // means there is a support for the inserted Objects
 			getFileDialog().setSelectedFile(documentBaseFolder);
-			boolean crappyFixRequired = getFileDialog().getSelectedFile() == null || !getFileDialog().getSelectedFile().equals(
-					documentBaseFolder);
+			boolean crappyFixRequired = getFileDialog().getSelectedFile() == null
+					|| !getFileDialog().getSelectedFile().equals(documentBaseFolder);
 			JFileChooser fileChooser = null;
 			if (crappyFixRequired) {
 				fileChooser = getFileDialog();

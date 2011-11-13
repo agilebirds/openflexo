@@ -30,37 +30,35 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-
 /**
  * Represents an inspector entry (a data related to an edition pattern which can be inspected)
  * 
  * @author sylvain
- *
+ * 
  */
-public abstract class InspectorEntry extends ViewPointObject implements Bindable  {
+public abstract class InspectorEntry extends ViewPointObject implements Bindable {
 
 	static final Logger logger = Logger.getLogger(InspectorEntry.class.getPackage().getName());
 
-	
 	public static BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);
 	private BindingDefinition DATA;
-	
-	public BindingDefinition getDataBindingDefinition()
-	{
+
+	public BindingDefinition getDataBindingDefinition() {
 		if (DATA == null) {
 			DATA = new BindingDefinition("data", getDefaultDataClass(), BindingDefinitionType.GET_SET, false) {
 				@Override
 				public BindingDefinitionType getBindingDefinitionType() {
-					if (getIsReadOnly()) return BindingDefinitionType.GET;
-					else return BindingDefinitionType.GET_SET;
+					if (getIsReadOnly())
+						return BindingDefinitionType.GET;
+					else
+						return BindingDefinitionType.GET_SET;
 				}
 			};
 		}
 		return DATA;
 	}
 
-	public BindingDefinition getConditionalBindingDefinition()
-	{
+	public BindingDefinition getConditionalBindingDefinition() {
 		return CONDITIONAL;
 	}
 
@@ -68,34 +66,33 @@ public abstract class InspectorEntry extends ViewPointObject implements Bindable
 	private String name;
 	private String label;
 	private boolean readOnly;
-	
+
 	private ViewPointDataBinding data;
 	private ViewPointDataBinding conditional;
-	
-	public InspectorEntry() 
-	{
+
+	public InspectorEntry() {
 		super();
 	}
 
 	public abstract Class getDefaultDataClass();
-	
+
 	public abstract String getWidgetName();
-	
+
 	@Override
 	public String getInspectorName() {
 		return null;
 	}
 
 	@Override
-	public ViewPoint getCalc() 
-	{
-		if (getEditionPattern() != null) return getEditionPattern().getCalc();
+	public ViewPoint getCalc() {
+		if (getEditionPattern() != null)
+			return getEditionPattern().getCalc();
 		return null;
 	}
 
-	public EditionPattern getEditionPattern() 
-	{
-		if (getInspector() != null) return getInspector().getEditionPattern();
+	public EditionPattern getEditionPattern() {
+		if (getInspector() != null)
+			return getInspector().getEditionPattern();
 		return null;
 	}
 
@@ -103,28 +100,22 @@ public abstract class InspectorEntry extends ViewPointObject implements Bindable
 		return inspector;
 	}
 
-
 	public void setInspector(EditionPatternInspector inspector) {
 		this.inspector = inspector;
 	}
-
 
 	public String getLabel() {
 		return label;
 	}
 
-
-	public void setLabel(String label) 
-	{
+	public void setLabel(String label) {
 		this.label = label;
 	}
 
-
-	public boolean isSingleEntry()
-	{
+	public boolean isSingleEntry() {
 		return true;
 	}
-	
+
 	@Override
 	public String getName() {
 		return name;
@@ -142,48 +133,40 @@ public abstract class InspectorEntry extends ViewPointObject implements Bindable
 	public void setIsReadOnly(boolean readOnly) {
 		this.readOnly = readOnly;
 	}
-	
-	public ViewPointDataBinding getData() 
-	{
-		if (data == null) data = new ViewPointDataBinding(this,InspectorEntryBindingAttribute.data,getDataBindingDefinition());
+
+	public ViewPointDataBinding getData() {
+		if (data == null)
+			data = new ViewPointDataBinding(this, InspectorEntryBindingAttribute.data, getDataBindingDefinition());
 		return data;
 	}
 
-	public void setData(ViewPointDataBinding data) 
-	{
+	public void setData(ViewPointDataBinding data) {
 		data.setOwner(this);
 		data.setBindingAttribute(InspectorEntryBindingAttribute.data);
 		data.setBindingDefinition(getDataBindingDefinition());
 		this.data = data;
 	}
-	
-	public ViewPointDataBinding getConditional() 
-	{
-		if (conditional == null) conditional = new ViewPointDataBinding(this,InspectorEntryBindingAttribute.conditional,CONDITIONAL);
+
+	public ViewPointDataBinding getConditional() {
+		if (conditional == null)
+			conditional = new ViewPointDataBinding(this, InspectorEntryBindingAttribute.conditional, CONDITIONAL);
 		return conditional;
 	}
 
-	public void setConditional(ViewPointDataBinding conditional) 
-	{
+	public void setConditional(ViewPointDataBinding conditional) {
 		conditional.setOwner(this);
 		conditional.setBindingAttribute(InspectorEntryBindingAttribute.conditional);
 		conditional.setBindingDefinition(CONDITIONAL);
 		this.conditional = conditional;
 	}
-	
 
-	public static enum InspectorEntryBindingAttribute implements InspectorBindingAttribute
-	{
-		data,
-		conditional
+	public static enum InspectorEntryBindingAttribute implements InspectorBindingAttribute {
+		data, conditional
 	}
 
 	@Override
-	public BindingModel getBindingModel() 
-	{
+	public BindingModel getBindingModel() {
 		return getInspector().getBindingModel();
 	}
-	
-
 
 }

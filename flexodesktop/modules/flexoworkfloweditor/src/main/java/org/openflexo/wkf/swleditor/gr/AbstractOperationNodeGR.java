@@ -27,50 +27,43 @@ import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
-
 public abstract class AbstractOperationNodeGR extends FlexoNodeGR<OperationNode> {
 
-	public AbstractOperationNodeGR(OperationNode object, ShapeType shapeType, SwimmingLaneRepresentation aDrawing,boolean isInPalet)
-	{
-		super(object, shapeType, aDrawing,isInPalet);
+	public AbstractOperationNodeGR(OperationNode object, ShapeType shapeType, SwimmingLaneRepresentation aDrawing, boolean isInPalet) {
+		super(object, shapeType, aDrawing, isInPalet);
 		setLayer(OPERATION_LAYER);
 		updatePropertiesFromWKFPreferences();
 	}
 
 	@Override
-	int getTopBorder() 
-	{
+	int getTopBorder() {
 		return (isInPalette ? super.getTopBorder() : REQUIRED_SPACE_ON_TOP_FOR_CLOSING_BOX);
 	}
-	
+
 	@Override
-	int getBottomBorder() 
-	{
+	int getBottomBorder() {
 		return super.getBottomBorder();
 	}
 
 	@Override
-	int getLeftBorder() 
-	{
+	int getLeftBorder() {
 		return super.getLeftBorder();
 	}
-	
+
 	@Override
-	int getRightBorder() 
-	{
+	int getRightBorder() {
 		return super.getRightBorder();
 	}
-	
 
-	public OperationNode getOperationNode()
-	{
+	public OperationNode getOperationNode() {
 		return getDrawable();
 	}
 
 	@Override
-	public void updatePropertiesFromWKFPreferences()
-	{
+	public void updatePropertiesFromWKFPreferences() {
 		super.updatePropertiesFromWKFPreferences();
-		setTextStyle(TextStyle.makeTextStyle(Color.BLACK, getWorkflow()!=null?getWorkflow().getOperationFont(WKFPreferences.getOperationNodeFont()).getFont():WKFPreferences.getOperationNodeFont().getFont()));
+		setTextStyle(TextStyle.makeTextStyle(Color.BLACK,
+				getWorkflow() != null ? getWorkflow().getOperationFont(WKFPreferences.getOperationNodeFont()).getFont() : WKFPreferences
+						.getOperationNodeFont().getFont()));
 	}
 }

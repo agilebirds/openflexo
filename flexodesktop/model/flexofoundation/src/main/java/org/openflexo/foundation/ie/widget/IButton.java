@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.ie.widget;
 
-
 public interface IButton extends IWidget {
 
 }

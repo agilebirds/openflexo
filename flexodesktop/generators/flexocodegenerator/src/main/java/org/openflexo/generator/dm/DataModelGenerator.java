@@ -35,13 +35,11 @@ import org.openflexo.generator.ProjectGenerator;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.logging.FlexoLogger;
 
-
 /**
  * @author gpolet
  * 
  */
-public class DataModelGenerator extends MetaGenerator<DMModel, CGRepository>
-{
+public class DataModelGenerator extends MetaGenerator<DMModel, CGRepository> {
 
 	private static final Logger logger = FlexoLogger.getLogger(DataModelGenerator.class.getPackage().getName());
 
@@ -49,9 +47,8 @@ public class DataModelGenerator extends MetaGenerator<DMModel, CGRepository>
 	private Hashtable<DMEntity, ProcessInstanceClassGenerator> piGenerators;
 	private Hashtable<DMEntity, ProcessBusinessDataClassGenerator> processBusinessDataGenerators;
 	private Hashtable<DMEntity, CustomClassGenerator> customClassGenerators;
-	
-	public DataModelGenerator(ProjectGenerator projectGenerator)
-	{
+
+	public DataModelGenerator(ProjectGenerator projectGenerator) {
 		super(projectGenerator, projectGenerator.getProject().getDataModel());
 		eomodelGenerators = new Hashtable<DMEOModel, EOModelGenerator>();
 		piGenerators = new Hashtable<DMEntity, ProcessInstanceClassGenerator>();
@@ -60,8 +57,7 @@ public class DataModelGenerator extends MetaGenerator<DMModel, CGRepository>
 	}
 
 	@Override
-	public Logger getGeneratorLogger()
-	{
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
@@ -69,20 +65,22 @@ public class DataModelGenerator extends MetaGenerator<DMModel, CGRepository>
 	public ProjectGenerator getProjectGenerator() {
 		return (ProjectGenerator) super.getProjectGenerator();
 	}
+
 	/**
-	 * This method is very important, because it is the way we must identify or build all resources
-	 * involved in code generation. After this list has been built, we just let ResourceManager do the work.
+	 * This method is very important, because it is the way we must identify or build all resources involved in code generation. After this
+	 * list has been built, we just let ResourceManager do the work.
 	 * 
-	 * @param repository: repository where resources should be retrieved or built
-	 * @param resources: the list of resources we must retrieve or build
+	 * @param repository
+	 *            : repository where resources should be retrieved or built
+	 * @param resources
+	 *            : the list of resources we must retrieve or build
 	 */
 	@Override
-	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) 
-	{
+	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
 		Hashtable<DMEOModel, EOModelGenerator> newEomodelGenerators = new Hashtable<DMEOModel, EOModelGenerator>();
 		Hashtable<DMEntity, ProcessInstanceClassGenerator> newPiGenerators = new Hashtable<DMEntity, ProcessInstanceClassGenerator>();
 		Hashtable<DMEntity, CustomClassGenerator> newCustomClassGenerators = new Hashtable<DMEntity, CustomClassGenerator>();
-		
+
 		int i = 0;
 		for (ProjectDatabaseRepository dbRepository : projectGenerator.getProject().getDataModel().getProjectDatabaseRepositories()) {
 			for (DMEOModel eoModel : dbRepository.getOrderedDMEOModels()) {
@@ -95,36 +93,36 @@ public class DataModelGenerator extends MetaGenerator<DMModel, CGRepository>
 			for (DMEOModel eoModel : dbRepository.getOrderedDMEOModels()) {
 				EOModelGenerator generatorForEOModel = getGeneratorForEOModel(eoModel);
 				newEomodelGenerators.put(eoModel, generatorForEOModel);
-				generatorForEOModel.buildResourcesAndSetGenerators(repository,resources);
+				generatorForEOModel.buildResourcesAndSetGenerators(repository, resources);
 			}
 		}
-		
+
 		for (ProjectRepository projectRepository : dataModel.getProjectRepositories()) {
 			for (DMEntity entity : projectRepository.getEntities().values()) {
 				CustomClassGenerator generatorForProjectEntity = getGeneratorForProjectEntity(entity);
-				newCustomClassGenerators.put(entity,generatorForProjectEntity);
-				generatorForProjectEntity.buildResourcesAndSetGenerators(repository,resources);
+				newCustomClassGenerators.put(entity, generatorForProjectEntity);
+				generatorForProjectEntity.buildResourcesAndSetGenerators(repository, resources);
 			}
 		}
-		
+
 		for (DMEntity entity : projectGenerator.getProject().getDataModel().getProcessInstanceRepository().getEntities().values()) {
 			ProcessInstanceClassGenerator generatorForProcessInstanceEntity = getGeneratorForProcessInstanceEntity(entity);
 			newPiGenerators.put(entity, generatorForProcessInstanceEntity);
-			generatorForProcessInstanceEntity.buildResourcesAndSetGenerators(repository,resources);
+			generatorForProcessInstanceEntity.buildResourcesAndSetGenerators(repository, resources);
 		}
-		
+
 		processBusinessDataGenerators.clear();
 		for (DMEntity entity : projectGenerator.getProject().getDataModel().getProcessBusinessDataRepository().getEntities().values()) {
 			ProcessBusinessDataClassGenerator generatorForProcessBusinessDataEntity = getGeneratorForProcessBusinessDataEntity(entity);
 			processBusinessDataGenerators.put(entity, generatorForProcessBusinessDataEntity);
 			generatorForProcessBusinessDataEntity.buildResourcesAndSetGenerators(repository, resources);
 		}
-		
+
 		// Frees memory!
 		eomodelGenerators.clear();
 		customClassGenerators.clear();
 		piGenerators.clear();
-		
+
 		eomodelGenerators = newEomodelGenerators;
 		customClassGenerators = newCustomClassGenerators;
 		piGenerators = newPiGenerators;
@@ -136,31 +134,30 @@ public class DataModelGenerator extends MetaGenerator<DMModel, CGRepository>
 		}
 		return eomodelGenerators.get(eoModel);
 	}
-	
+
 	private ProcessInstanceClassGenerator getGeneratorForProcessInstanceEntity(DMEntity entity) {
 		if (piGenerators.get(entity) == null) {
 			piGenerators.put(entity, new ProcessInstanceClassGenerator(getProjectGenerator(), entity));
 		}
 		return piGenerators.get(entity);
 	}
-	
+
 	private ProcessBusinessDataClassGenerator getGeneratorForProcessBusinessDataEntity(DMEntity entity) {
 		if (processBusinessDataGenerators.get(entity) == null) {
 			processBusinessDataGenerators.put(entity, new ProcessBusinessDataClassGenerator(getProjectGenerator(), entity));
 		}
 		return processBusinessDataGenerators.get(entity);
 	}
-	
+
 	private CustomClassGenerator getGeneratorForProjectEntity(DMEntity entity) {
 		if (customClassGenerators.get(entity) == null) {
 			customClassGenerators.put(entity, new CustomClassGenerator(getProjectGenerator(), entity));
 		}
 		return customClassGenerators.get(entity);
 	}
-	
+
 	@Override
-	public void generate(boolean forceRegenerate) throws GenerationException
-	{
+	public void generate(boolean forceRegenerate) throws GenerationException {
 		int i = 0;
 		for (ProjectDatabaseRepository dbRepository : projectGenerator.getProject().getDataModel().getProjectDatabaseRepositories()) {
 			for (DMEOModel eoModel : dbRepository.getOrderedDMEOModels()) {
@@ -175,24 +172,22 @@ public class DataModelGenerator extends MetaGenerator<DMModel, CGRepository>
 				getGeneratorForEOModel(eoModel).generate(forceRegenerate);
 			}
 		}
-		
+
 		for (ProjectRepository projectRepository : dataModel.getProjectRepositories()) {
 			for (DMEntity entity : projectRepository.getEntities().values()) {
 				getGeneratorForProjectEntity(entity).generate(forceRegenerate);
 			}
 		}
-		
+
 		for (DMEntity entity : projectGenerator.getProject().getDataModel().getProcessInstanceRepository().getEntities().values()) {
 			getGeneratorForProcessInstanceEntity(entity).generate(forceRegenerate);
 		}
-		
+
 		stopGeneration();
 	}
 
-	public DMModel getDataModel()
-	{
+	public DMModel getDataModel() {
 		return getObject();
 	}
-
 
 }

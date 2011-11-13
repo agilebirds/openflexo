@@ -33,99 +33,84 @@ import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
 import org.openflexo.toolbox.ToolBox;
 
-
-public class CalcDrawingConnectorGR extends ConnectorGraphicalRepresentation<ExampleDrawingConnector> implements GraphicalFlexoObserver,CalcDrawingShemaConstants {
+public class CalcDrawingConnectorGR extends ConnectorGraphicalRepresentation<ExampleDrawingConnector> implements GraphicalFlexoObserver,
+		CalcDrawingShemaConstants {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(CalcDrawingConnectorGR.class.getPackage().getName());
 
 	/**
-	 * Constructor invoked during deserialization
-	 * DO NOT use it
+	 * Constructor invoked during deserialization DO NOT use it
 	 */
-	public CalcDrawingConnectorGR()
-	{
-		super(ConnectorType.LINE,null,null,null,null);
+	public CalcDrawingConnectorGR() {
+		super(ConnectorType.LINE, null, null, null, null);
 	}
 
-	public CalcDrawingConnectorGR(ExampleDrawingConnector aConnector, Drawing<?> aDrawing) 
-	{
-		super(ConnectorType.LINE,
-				aDrawing != null ? (ShapeGraphicalRepresentation<?>)aDrawing.getGraphicalRepresentation(aConnector.getStartShape()) : null,
-				aDrawing != null ? (ShapeGraphicalRepresentation<?>)aDrawing.getGraphicalRepresentation(aConnector.getEndShape()) : null,
-				aConnector, aDrawing);
+	public CalcDrawingConnectorGR(ExampleDrawingConnector aConnector, Drawing<?> aDrawing) {
+		super(ConnectorType.LINE, aDrawing != null ? (ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(aConnector
+				.getStartShape()) : null, aDrawing != null ? (ShapeGraphicalRepresentation<?>) aDrawing
+				.getGraphicalRepresentation(aConnector.getEndShape()) : null, aConnector, aDrawing);
 
-		setStartObject((ShapeGraphicalRepresentation<?>)aDrawing.getGraphicalRepresentation(aConnector.getStartShape()));
-		setEndObject((ShapeGraphicalRepresentation<?>)aDrawing.getGraphicalRepresentation(aConnector.getEndShape()));
+		setStartObject((ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(aConnector.getStartShape()));
+		setEndObject((ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(aConnector.getEndShape()));
 
 		addToMouseClickControls(new CalcDrawingShemaController.ShowContextualMenuControl());
-		if (ToolBox.getPLATFORM()!=ToolBox.MACOS) {
+		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
 			addToMouseClickControls(new CalcDrawingShemaController.ShowContextualMenuControl(true));
 		}
 
-		if (aConnector != null) aConnector.addObserver(this);
+		if (aConnector != null)
+			aConnector.addObserver(this);
 
 	}
 
 	@Override
-	public void delete()
-	{
-		if (getDrawable() != null) getDrawable().deleteObserver(this);
+	public void delete() {
+		if (getDrawable() != null)
+			getDrawable().deleteObserver(this);
 		super.delete();
 	}
 
 	@Override
-	public CalcDrawingShemaRepresentation getDrawing() 
-	{
-		return (CalcDrawingShemaRepresentation)super.getDrawing();
+	public CalcDrawingShemaRepresentation getDrawing() {
+		return (CalcDrawingShemaRepresentation) super.getDrawing();
 	}
-	
-	public ExampleDrawingConnector getCalcDrawingConnector()
-	{
+
+	public ExampleDrawingConnector getCalcDrawingConnector() {
 		return getDrawable();
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getCalcDrawingConnector()) {
 			if (dataModification instanceof NameChanged) {
-				//logger.info("received NameChanged notification");
+				// logger.info("received NameChanged notification");
 				notifyChange(org.openflexo.fge.GraphicalRepresentation.Parameters.text);
-				//setText(getText());
+				// setText(getText());
 			}
 		}
 	}
 
 	@Override
-	public String getText()
-	{
+	public String getText() {
 		if (getCalcDrawingConnector() != null)
 			return getCalcDrawingConnector().getName();
 		return null;
 	}
 
 	@Override
-	public void setTextNoNotification(String text) 
-	{
+	public void setTextNoNotification(String text) {
 		if (getCalcDrawingConnector() != null)
 			getCalcDrawingConnector().setName(text);
 	}
-	
+
 	@Override
-	public void notifyObservers(Object arg)
-	{
+	public void notifyObservers(Object arg) {
 		super.notifyObservers(arg);
-		if (arg instanceof FGENotification
-				&& ((FGENotification)arg).isModelNotification()
-				&& getDrawing() != null 
-				&& !getDrawing().ignoreNotifications()
-				&& getCalcDrawingConnector() != null
+		if (arg instanceof FGENotification && ((FGENotification) arg).isModelNotification() && getDrawing() != null
+				&& !getDrawing().ignoreNotifications() && getCalcDrawingConnector() != null
 				&& !getCalcDrawingConnector().getShema().ignoreNotifications())
 			getCalcDrawingConnector().setChanged();
 	}
-	
-
-
 
 }

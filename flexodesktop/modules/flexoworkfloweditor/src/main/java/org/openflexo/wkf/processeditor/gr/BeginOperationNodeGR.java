@@ -30,18 +30,16 @@ import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 import org.openflexo.wkf.swleditor.SWLEditorConstants;
 
-
 public class BeginOperationNodeGR extends AbstractOperationNodeGR {
 
 	private ForegroundStyle foreground;
 	private BackgroundStyle background;
 
 	private ForegroundStyle painterForeground;
-	//private BackgroundStyle painterBackground;
 
+	// private BackgroundStyle painterBackground;
 
-	public BeginOperationNodeGR(OperationNode operationNode, ProcessRepresentation aDrawing, boolean isInPalet)
-	{
+	public BeginOperationNodeGR(OperationNode operationNode, ProcessRepresentation aDrawing, boolean isInPalet) {
 		super(operationNode, ShapeType.CIRCLE, aDrawing, isInPalet);
 
 		// Important: width is different from height here to avoid connector blinking when editing layout
@@ -60,12 +58,11 @@ public class BeginOperationNodeGR extends AbstractOperationNodeGR {
 
 		painterForeground = ForegroundStyle.makeStyle(Color.DARK_GRAY);
 		painterForeground.setLineWidth(2.0);
-		//painterBackground = BackgroundStyle.makeColoredBackground(Color.DARK_GRAY);
+		// painterBackground = BackgroundStyle.makeColoredBackground(Color.DARK_GRAY);
 
 		setShapePainter(new ShapePainter() {
 			@Override
-			public void paintShape(FGEShapeGraphics g)
-			{
+			public void paintShape(FGEShapeGraphics g) {
 				g.useForegroundStyle(painterForeground);
 				g.drawCircle(0.2, 0.2, 0.6, 0.6);
 			}
@@ -76,8 +73,7 @@ public class BeginOperationNodeGR extends AbstractOperationNodeGR {
 	 * Overriden to implement defaut automatic layout
 	 */
 	@Override
-	public double _getDefaultX()
-	{
+	public double _getDefaultX() {
 		return 0;
 	}
 
@@ -85,27 +81,22 @@ public class BeginOperationNodeGR extends AbstractOperationNodeGR {
 	 * Overriden to implement defaut automatic layout
 	 */
 	@Override
-	public double _getDefaultY()
-	{
-		return (getOperationNode().getParentPetriGraph().getIndexForBeginNode(getOperationNode()) * 50)+DEFAULT_BEGIN_Y_OFFSET;
+	public double _getDefaultY() {
+		return (getOperationNode().getParentPetriGraph().getIndexForBeginNode(getOperationNode()) * 50) + DEFAULT_BEGIN_Y_OFFSET;
 	}
 
 	@Override
-	public double getDefaultLabelX() 
-	{
+	public double getDefaultLabelX() {
 		if (getModel().hasLabelLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR))
 			return getModel().getLabelLocation(SWLEditorConstants.SWIMMING_LANE_EDITOR).getX();
-		return getLeftBorder()+15;
+		return getLeftBorder() + 15;
 	}
 
 	@Override
-	public double getDefaultLabelY() 
-	{
+	public double getDefaultLabelY() {
 		if (getModel().hasLabelLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR))
 			return getModel().getLabelLocation(SWLEditorConstants.SWIMMING_LANE_EDITOR).getY();
-		return getTopBorder()+40;
+		return getTopBorder() + 40;
 	}
-
-
 
 }

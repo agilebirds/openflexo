@@ -24,51 +24,42 @@ import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
 import org.openflexo.fge.geomedit.construction.BandConstruction;
 import org.openflexo.fge.geomedit.gr.BandGraphicalRepresentation;
 
-
 public class Band extends GeometricObject<FGEBand> {
 
 	private BandGraphicalRepresentation graphicalRepresentation;
-	
+
 	// Called for LOAD
-	public Band(GeomEditBuilder builder)
-	{
+	public Band(GeomEditBuilder builder) {
 		super(builder);
 	}
-	
-	public Band(GeometricSet set, BandConstruction construction) 
-	{
+
+	public Band(GeometricSet set, BandConstruction construction) {
 		super(set, construction);
-		graphicalRepresentation = new BandGraphicalRepresentation(this,set.getEditedDrawing());
+		graphicalRepresentation = new BandGraphicalRepresentation(this, set.getEditedDrawing());
 	}
-	
+
 	@Override
-	public BandGraphicalRepresentation getGraphicalRepresentation()
-	{
+	public BandGraphicalRepresentation getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
 
-	public void setGraphicalRepresentation(BandGraphicalRepresentation aGR)
-	{
+	public void setGraphicalRepresentation(BandGraphicalRepresentation aGR) {
 		aGR.setDrawable(this);
 		graphicalRepresentation = aGR;
 	}
-	
+
 	@Override
-	public BandConstruction getConstruction()
-	{
-		return (BandConstruction)super.getConstruction();
+	public BandConstruction getConstruction() {
+		return (BandConstruction) super.getConstruction();
 	}
 
-	public void setConstruction(BandConstruction bandConstruction)
-	{
+	public void setConstruction(BandConstruction bandConstruction) {
 		_setConstruction(bandConstruction);
 	}
 
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return "Band.inspector";
 	}
-
 
 }

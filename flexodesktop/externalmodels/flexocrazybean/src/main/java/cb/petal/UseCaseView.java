@@ -18,57 +18,58 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents UseCaseView object
- *
+ * 
  * @version $Id: UseCaseView.java,v 1.3 2011/09/12 11:46:48 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class UseCaseView extends QuiduView implements Qualified {
-  static final long serialVersionUID = 8100428687661863064L;
+	static final long serialVersionUID = 8100428687661863064L;
 
-  public UseCaseView(PetalNode parent, Collection params, int tag) {
-    super(parent, "UseCaseView", params, tag);
-  }
+	public UseCaseView(PetalNode parent, Collection params, int tag) {
+		super(parent, "UseCaseView", params, tag);
+	}
 
-  /**
-   * @param name String like "Logical View::University::Professor"
-   */
-  @Override
-public void setQualifiedNameParameter(String name) {
-    params.set(0, name);
-  }
+	/**
+	 * @param name
+	 *            String like "Logical View::University::Professor"
+	 */
+	@Override
+	public void setQualifiedNameParameter(String name) {
+		params.set(0, name);
+	}
 
-  @Override
-public String getQualifiedNameParameter() {
-    return (String)params.get(0);
-  }
+	@Override
+	public String getQualifiedNameParameter() {
+		return (String) params.get(0);
+	}
 
-  public UseCaseView() {
-    super("UseCaseView");
-  }
+	public UseCaseView() {
+		super("UseCaseView");
+	}
 
-  public ItemLabel getLabel() {
-    return (ItemLabel)getProperty("label");
-  }
+	public ItemLabel getLabel() {
+		return (ItemLabel) getProperty("label");
+	}
 
-  public void setLabel(ItemLabel o) {
-    defineProperty("label", o);
-  }
+	public void setLabel(ItemLabel o) {
+		defineProperty("label", o);
+	}
 
-  public ItemLabel getStereotype() {
-    return (ItemLabel)getProperty("stereotype");
-  }
+	public ItemLabel getStereotype() {
+		return (ItemLabel) getProperty("stereotype");
+	}
 
-  public void setStereotype(ItemLabel o) {
-    defineProperty("stereotype", o);
-  }
+	public void setStereotype(ItemLabel o) {
+		defineProperty("stereotype", o);
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }
-

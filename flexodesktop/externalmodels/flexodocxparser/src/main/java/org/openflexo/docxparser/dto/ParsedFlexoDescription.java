@@ -27,23 +27,19 @@ import org.openflexo.docxparser.dto.api.IParsedFlexoDescription;
 import org.openflexo.docxparser.dto.api.IParsedFlexoObject;
 import org.openflexo.docxparser.dto.api.IParsedHtml;
 
-
-public class ParsedFlexoDescription implements IParsedFlexoDescription
-{
+public class ParsedFlexoDescription implements IParsedFlexoDescription {
 	private IParsedFlexoObject flexoObject;
 	private Map<String, IParsedHtml> htmlDescriptionsByTarget;
 
-	public ParsedFlexoDescription(IParsedFlexoObject flexoObject)
-	{
+	public ParsedFlexoDescription(IParsedFlexoObject flexoObject) {
 		this.flexoObject = flexoObject;
 		this.flexoObject.setParsedFlexoDescription(this);
 		this.htmlDescriptionsByTarget = new HashMap<String, IParsedHtml>();
 	}
 
 	@Override
-	public void addHtmlDescription(String target, IParsedHtml html)
-	{
-		htmlDescriptionsByTarget.put(target!=null?target:"", html);
+	public void addHtmlDescription(String target, IParsedHtml html) {
+		htmlDescriptionsByTarget.put(target != null ? target : "", html);
 	}
 
 	/**
@@ -51,20 +47,17 @@ public class ParsedFlexoDescription implements IParsedFlexoDescription
 	 * @return the ParsedHtmlDescription associated to the target if any, null otherwise.
 	 */
 	@Override
-	public IParsedHtml getHtmlDescription(String target)
-	{
-		return htmlDescriptionsByTarget.get(target!=null?target:"");
+	public IParsedHtml getHtmlDescription(String target) {
+		return htmlDescriptionsByTarget.get(target != null ? target : "");
 	}
 
 	@Override
-	public Set<String> getAllTargets()
-	{
+	public Set<String> getAllTargets() {
 		return htmlDescriptionsByTarget.keySet();
 	}
 
 	@Override
-	public IParsedFlexoObject getParsedFlexoObject()
-	{
+	public IParsedFlexoObject getParsedFlexoObject() {
 		return flexoObject;
 	}
 }

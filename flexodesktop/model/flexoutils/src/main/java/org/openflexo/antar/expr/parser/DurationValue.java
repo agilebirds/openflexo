@@ -23,47 +23,40 @@ import org.openflexo.toolbox.Duration;
 
 public class DurationValue extends Value {
 
-    private Duration _value;
-    
-    public static DurationValue createDurationValue(Duration value)
-    {
-        return new DurationValue(value);
-    }
- 
-    public DurationValue (Duration value)
-    {
-        super();
-        _value = value;
-    }
-    
-    public Duration getDurationValue() 
-    {
-        return _value;
-    }
-    
-    @Override
-	public String getStringValue() 
-    {
-        return _value.toString();
-    }
-    
-    @Override
-	public String toString()
-    {
-        return getPrefix()+"Duration["+_value+"]";
-    }
+	private Duration _value;
 
-    public String getSerializationValue()
-    {
-        return "$\""+_value+"\"";
-    }
+	public static DurationValue createDurationValue(Duration value) {
+		return new DurationValue(value);
+	}
 
-   @Override
-public boolean equals (Object obj)
-    {
-        if (obj instanceof DurationValue) {
-            return getDurationValue().equals(((DurationValue)obj).getDurationValue());
-        }
-        return super.equals(obj);
-    }
+	public DurationValue(Duration value) {
+		super();
+		_value = value;
+	}
+
+	public Duration getDurationValue() {
+		return _value;
+	}
+
+	@Override
+	public String getStringValue() {
+		return _value.toString();
+	}
+
+	@Override
+	public String toString() {
+		return getPrefix() + "Duration[" + _value + "]";
+	}
+
+	public String getSerializationValue() {
+		return "$\"" + _value + "\"";
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof DurationValue) {
+			return getDurationValue().equals(((DurationValue) obj).getDurationValue());
+		}
+		return super.equals(obj);
+	}
 }

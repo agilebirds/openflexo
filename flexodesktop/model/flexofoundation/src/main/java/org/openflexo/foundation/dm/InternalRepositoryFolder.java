@@ -26,78 +26,73 @@ import java.util.logging.Logger;
 
 public class InternalRepositoryFolder extends DMRepositoryFolder {
 
-    static final Logger logger = Logger.getLogger(InternalRepositoryFolder.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(InternalRepositoryFolder.class.getPackage().getName());
 
-    /**
-     * Default constructor
-     */
-    public InternalRepositoryFolder(DMModel dmModel)
-    {
-        super(dmModel);
-     }
+	/**
+	 * Default constructor
+	 */
+	public InternalRepositoryFolder(DMModel dmModel) {
+		super(dmModel);
+	}
 
-    @Override
-	public int getRepositoriesCount() 
-    {
-        return 7;
-    }
+	@Override
+	public int getRepositoriesCount() {
+		return 7;
+	}
 
-    @Override
-	public DMRepository getRepositoryAtIndex(int index) 
-    {
-        switch (index) {
-        case 0:
-            return getDMModel().getJDKRepository();
-        case 1:
-            return getDMModel().getWORepository();
-        case 2:
-            return getDMModel().getProcessInstanceRepository();
-        case 3:
-            return getDMModel().getProcessBusinessDataRepository();
-        case 4:
-        	return getDMModel().getComponentRepository();
-        case 5:
-        	return getDMModel().getExecutionModelRepository();
-        case 6:
-            return getDMModel().getEOPrototypeRepository();
-        default:
-            logger.warning("Index out of range: "+index);
-            return null;
-        }
-     }
+	@Override
+	public DMRepository getRepositoryAtIndex(int index) {
+		switch (index) {
+		case 0:
+			return getDMModel().getJDKRepository();
+		case 1:
+			return getDMModel().getWORepository();
+		case 2:
+			return getDMModel().getProcessInstanceRepository();
+		case 3:
+			return getDMModel().getProcessBusinessDataRepository();
+		case 4:
+			return getDMModel().getComponentRepository();
+		case 5:
+			return getDMModel().getExecutionModelRepository();
+		case 6:
+			return getDMModel().getEOPrototypeRepository();
+		default:
+			logger.warning("Index out of range: " + index);
+			return null;
+		}
+	}
 
-    /**
-     * Overrides getSpecificActionListForThatClass
-     * @see org.openflexo.foundation.dm.DMObject#getSpecificActionListForThatClass()
-     */
-    @Override
-	protected Vector getSpecificActionListForThatClass()
-    {
-        Vector v = super.getSpecificActionListForThatClass();
-        //v.add(CreateDMRepository.actionType);
-        return v;
-    }
-    
-    @Override
-	public String getName() 
-    {
-        return "internal_repositories";
-     }
+	/**
+	 * Overrides getSpecificActionListForThatClass
+	 * 
+	 * @see org.openflexo.foundation.dm.DMObject#getSpecificActionListForThatClass()
+	 */
+	@Override
+	protected Vector getSpecificActionListForThatClass() {
+		Vector v = super.getSpecificActionListForThatClass();
+		// v.add(CreateDMRepository.actionType);
+		return v;
+	}
 
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return getDMModel().getFullyQualifiedName()+".INTERNAL_REPOSITORY_FOLDER";
-    }
+	@Override
+	public String getName() {
+		return "internal_repositories";
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return getName();
-    }
-    
+	@Override
+	public String getFullyQualifiedName() {
+		return getDMModel().getFullyQualifiedName() + ".INTERNAL_REPOSITORY_FOLDER";
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return getName();
+	}
+
 }

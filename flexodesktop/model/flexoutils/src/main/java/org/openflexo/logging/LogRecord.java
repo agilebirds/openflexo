@@ -26,149 +26,139 @@ import org.openflexo.kvc.KVCObject;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLSerializable;
 
-
 /**
  * This class is used to encode a simple log record in Flexo
  * 
  * @author sguerin
  */
-public class LogRecord extends KVCObject implements XMLSerializable
-{
+public class LogRecord extends KVCObject implements XMLSerializable {
 
-    public Date date;
+	public Date date;
 
-    public long millis;
+	public long millis;
 
-    public long sequence;
+	public long sequence;
 
-    public String logger;
+	public String logger;
 
-    public String className;
+	public String className;
 
-    public String methodName;
+	public String methodName;
 
-    public int threadId;
+	public int threadId;
 
-    public String message;
+	public String message;
 
-    public String level;
+	public String level;
 
-    public StackTraceElement[] stackTrace;
+	public StackTraceElement[] stackTrace;
 
-    protected String _dateAsString = null;
+	protected String _dateAsString = null;
 
-    protected String _classAsString = null;
+	protected String _classAsString = null;
 
-    protected String _millisAsString = null;
+	protected String _millisAsString = null;
 
-    protected String _sequenceAsString = null;
+	protected String _sequenceAsString = null;
 
-    protected String _threadAsString = null;
+	protected String _threadAsString = null;
 
-    public boolean isUnhandledException = false;
+	public boolean isUnhandledException = false;
 
-    public LogRecord()
-    {
-        super();
-    }
+	public LogRecord() {
+		super();
+	}
 
-    public LogRecord(java.util.logging.LogRecord record)
-    {
-        super();
-        date = new Date();
-        millis = record.getMillis();
-        sequence = record.getSequenceNumber();
-        logger = record.getLoggerName();
-        className = record.getSourceClassName();
-        methodName = record.getSourceMethodName();
-        threadId = record.getThreadID();
-        message = record.getMessage();
-        if(message!=null)message = message.intern();
-        level = record.getLevel().toString();
-        if(FlexoLoggingManager.getKeepLogTrace())stackTrace = (new Exception()).getStackTrace();
-        isUnhandledException = false;
-    }
+	public LogRecord(java.util.logging.LogRecord record) {
+		super();
+		date = new Date();
+		millis = record.getMillis();
+		sequence = record.getSequenceNumber();
+		logger = record.getLoggerName();
+		className = record.getSourceClassName();
+		methodName = record.getSourceMethodName();
+		threadId = record.getThreadID();
+		message = record.getMessage();
+		if (message != null)
+			message = message.intern();
+		level = record.getLevel().toString();
+		if (FlexoLoggingManager.getKeepLogTrace())
+			stackTrace = (new Exception()).getStackTrace();
+		isUnhandledException = false;
+	}
 
-    public LogRecord(java.util.logging.LogRecord record, Exception e)
-    {
-        this(record);
-        stackTrace = e.getStackTrace();
-        className = stackTrace[0].getClassName();
-        methodName = stackTrace[0].getMethodName();
-        isUnhandledException = true;
-    }
+	public LogRecord(java.util.logging.LogRecord record, Exception e) {
+		this(record);
+		stackTrace = e.getStackTrace();
+		className = stackTrace[0].getClassName();
+		methodName = stackTrace[0].getMethodName();
+		isUnhandledException = true;
+	}
 
-    public String dateAsString()
-    {
-        if (_dateAsString == null) {
-        	String dateFormat = StringEncoder.getDefaultInstance()._getDateFormat();
-            StringEncoder.getDefaultInstance()._setDateFormat("HH:mm:ss dd/MM");
-            _dateAsString = StringEncoder.getDefaultInstance()._getDateRepresentation(date);
-            StringEncoder.getDefaultInstance()._setDateFormat(dateFormat);
-        }
-        return _dateAsString;
-    }
+	public String dateAsString() {
+		if (_dateAsString == null) {
+			String dateFormat = StringEncoder.getDefaultInstance()._getDateFormat();
+			StringEncoder.getDefaultInstance()._setDateFormat("HH:mm:ss dd/MM");
+			_dateAsString = StringEncoder.getDefaultInstance()._getDateRepresentation(date);
+			StringEncoder.getDefaultInstance()._setDateFormat(dateFormat);
+		}
+		return _dateAsString;
+	}
 
-    public String classAsString()
-    {
-        if ((_classAsString == null) && (className != null)) {
-            StringTokenizer st = new StringTokenizer(className, ".");
-            while (st.hasMoreTokens()) {
-                _classAsString = st.nextToken();
-            }
-        }
-        return _classAsString;
-    }
+	public String classAsString() {
+		if ((_classAsString == null) && (className != null)) {
+			StringTokenizer st = new StringTokenizer(className, ".");
+			while (st.hasMoreTokens()) {
+				_classAsString = st.nextToken();
+			}
+		}
+		return _classAsString;
+	}
 
-    public String millisAsString()
-    {
-        if (_millisAsString == null) {
-            _millisAsString = StringEncoder.encodeLong(millis);
-        }
-        return _millisAsString;
-    }
+	public String millisAsString() {
+		if (_millisAsString == null) {
+			_millisAsString = StringEncoder.encodeLong(millis);
+		}
+		return _millisAsString;
+	}
 
-    public String sequenceAsString()
-    {
-        if (_sequenceAsString == null) {
-            _sequenceAsString = StringEncoder.encodeLong(sequence);
-        }
-        return _sequenceAsString;
-    }
+	public String sequenceAsString() {
+		if (_sequenceAsString == null) {
+			_sequenceAsString = StringEncoder.encodeLong(sequence);
+		}
+		return _sequenceAsString;
+	}
 
-    public String threadAsString()
-    {
-        if (_threadAsString == null) {
-            _threadAsString = StringEncoder.encodeLong(threadId);
-        }
-        return _threadAsString;
-    }
+	public String threadAsString() {
+		if (_threadAsString == null) {
+			_threadAsString = StringEncoder.encodeLong(threadId);
+		}
+		return _threadAsString;
+	}
 
-    public String getStackTraceAsString()
-    {
-        String returned = "";
-        if (stackTrace != null) {
-            int beginAt;
-            if (isUnhandledException) {
-                beginAt = 0;
-            } else {
-                beginAt = 6;
-            }
-            for (int i = beginAt; i < stackTrace.length; i++) {
-                returned += ("\tat " + stackTrace[i] + "\n");
-            }
-        } else if (_stackTraceAsString != null) {
-            returned = _stackTraceAsString;
-        } else {
-            returned = "StackTrace not available";
-        }
-        return returned;
-    }
+	public String getStackTraceAsString() {
+		String returned = "";
+		if (stackTrace != null) {
+			int beginAt;
+			if (isUnhandledException) {
+				beginAt = 0;
+			} else {
+				beginAt = 6;
+			}
+			for (int i = beginAt; i < stackTrace.length; i++) {
+				returned += ("\tat " + stackTrace[i] + "\n");
+			}
+		} else if (_stackTraceAsString != null) {
+			returned = _stackTraceAsString;
+		} else {
+			returned = "StackTrace not available";
+		}
+		return returned;
+	}
 
-    private String _stackTraceAsString;
+	private String _stackTraceAsString;
 
-    public void setStackTraceAsString(String aString)
-    {
-        _stackTraceAsString = aString;
-    }
+	public void setStackTraceAsString(String aString) {
+		_stackTraceAsString = aString;
+	}
 }

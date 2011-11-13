@@ -21,11 +21,8 @@ package org.openflexo.foundation.ontology.dm;
 
 import org.openflexo.foundation.ontology.OntologyDataProperty;
 
-
-public class OntologyDataPropertyInserted extends OEDataModification
-{
-    public OntologyDataPropertyInserted(OntologyDataProperty property)
-    {
-        super(null, property);
-     }
+public class OntologyDataPropertyInserted extends OEDataModification {
+	public OntologyDataPropertyInserted(OntologyDataProperty property) {
+		super(null, property);
+	}
 }

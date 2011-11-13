@@ -33,60 +33,54 @@ import junit.framework.TestCase;
 
 public class TestOperations extends TestCase {
 
-	static FGERectangle r1 = new FGERectangle(0,4,8,8,Filling.FILLED);
-	static FGERectangle r2 = new FGERectangle(4,1,3,5,Filling.FILLED);
-	static FGERectangle r3 = new FGERectangle(6,0,3,7,Filling.FILLED);
-	static FGERectangle r4 = new FGERectangle(9,0,2,7,Filling.FILLED);
-	static FGERectangle r5 = new FGERectangle(5,2,10,6,Filling.FILLED);
-	static FGERectangle r6 = new FGERectangle(12,4,2,2,Filling.FILLED);
-	
+	static FGERectangle r1 = new FGERectangle(0, 4, 8, 8, Filling.FILLED);
+	static FGERectangle r2 = new FGERectangle(4, 1, 3, 5, Filling.FILLED);
+	static FGERectangle r3 = new FGERectangle(6, 0, 3, 7, Filling.FILLED);
+	static FGERectangle r4 = new FGERectangle(9, 0, 2, 7, Filling.FILLED);
+	static FGERectangle r5 = new FGERectangle(5, 2, 10, 6, Filling.FILLED);
+	static FGERectangle r6 = new FGERectangle(12, 4, 2, 2, Filling.FILLED);
+
 	static FGEArea r7;
 	static FGEArea r8;
 	static FGEArea r9;
 	static FGEArea r10;
-	
-	public void test1()
-	{
-		r7 = FGEUnionArea.makeUnion(r3,r4);
-		System.out.println("r7: "+r7);
-		assertEquals(new FGERectangle(6,0,5,7,Filling.FILLED),r7);
+
+	public void test1() {
+		r7 = FGEUnionArea.makeUnion(r3, r4);
+		System.out.println("r7: " + r7);
+		assertEquals(new FGERectangle(6, 0, 5, 7, Filling.FILLED), r7);
 	}
-	
-	public void test2()
-	{
-		r8 = FGEUnionArea.makeUnion(r2,FGEUnionArea.makeUnion(r3,r4));
-		System.out.println("r8: "+r8);
-		assertEquals(new FGEUnionArea(r2,r7),r8);
+
+	public void test2() {
+		r8 = FGEUnionArea.makeUnion(r2, FGEUnionArea.makeUnion(r3, r4));
+		System.out.println("r8: " + r8);
+		assertEquals(new FGEUnionArea(r2, r7), r8);
 	}
-	
-	public void test3()
-	{
-		assertEquals(new FGEEmptyArea(),FGESubstractionArea.makeSubstraction(r6,r5,false));
-		//assertEquals(r1,FGESubstractionArea.makeSubstraction(r1,r6,false));
-		r9 = FGESubstractionArea.makeSubstraction(r5,r6,false);
-		System.out.println("r9: "+r9);
-		assertEquals(new FGESubstractionArea(r5,r6,false),r9);
+
+	public void test3() {
+		assertEquals(new FGEEmptyArea(), FGESubstractionArea.makeSubstraction(r6, r5, false));
+		// assertEquals(r1,FGESubstractionArea.makeSubstraction(r1,r6,false));
+		r9 = FGESubstractionArea.makeSubstraction(r5, r6, false);
+		System.out.println("r9: " + r9);
+		assertEquals(new FGESubstractionArea(r5, r6, false), r9);
 	}
-	
-	public void test4()
-	{
-		r10 = FGEIntersectionArea.makeIntersection(r1,FGEUnionArea.makeUnion(r3,r4),FGESubstractionArea.makeSubstraction(r5,r6,false));
-		System.out.println("r10: "+r10);
-		assertEquals(new FGERectangle(6,4,2,3,Filling.FILLED),r10);
+
+	public void test4() {
+		r10 = FGEIntersectionArea.makeIntersection(r1, FGEUnionArea.makeUnion(r3, r4), FGESubstractionArea.makeSubstraction(r5, r6, false));
+		System.out.println("r10: " + r10);
+		assertEquals(new FGERectangle(6, 4, 2, 3, Filling.FILLED), r10);
 	}
-	
-	public void test5()
-	{
-		FGEEllips ellips1 = new FGEEllips(0,0,3,3,Filling.FILLED);
-		FGEEllips ellips2 = new FGEEllips(5,1,3,3,Filling.FILLED);
+
+	public void test5() {
+		FGEEllips ellips1 = new FGEEllips(0, 0, 3, 3, Filling.FILLED);
+		FGEEllips ellips2 = new FGEEllips(5, 1, 3, 3, Filling.FILLED);
 		FGEArea area1 = ellips1.getOrthogonalPerspectiveArea(SimplifiedCardinalDirection.EAST);
 		FGEArea area2 = ellips2.getOrthogonalPerspectiveArea(SimplifiedCardinalDirection.WEST);
-		
-		System.out.println("area1="+area1);
-		System.out.println("area2="+area2);
-		System.out.println("intersect="+area1.intersect(area2));
-		
+
+		System.out.println("area1=" + area1);
+		System.out.println("area2=" + area2);
+		System.out.println("intersect=" + area1.intersect(area2));
+
 	}
-	
 
 }

@@ -18,6 +18,7 @@
  *
  */
 package org.openflexo.rational;
+
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,8 +30,6 @@ import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 
-
-
 public class TestRRImport extends FlexoTestCase {
 
 	private static final Logger logger = FlexoLogger.getLogger(TestRRImport.class.getPackage().getName());
@@ -38,21 +37,22 @@ public class TestRRImport extends FlexoTestCase {
 	private static final File firstModel = new FileResource("aom_ed4.mdl");
 	private static final File secondModel = new FileResource("IAABOM Sample.mdl");
 
-
 	public TestRRImport(String name) {
 		super(name);
 	}
 
 	public void testRationalRoseImport() throws Exception {
 		FlexoEditor editor = createProject("TestRationalRoseImport");
-		ImportRationalRoseRepository importRR = ImportRationalRoseRepository.actionType.makeNewAction(editor.getProject().getDataModel(), null, editor);
+		ImportRationalRoseRepository importRR = ImportRationalRoseRepository.actionType.makeNewAction(editor.getProject().getDataModel(),
+				null, editor);
 		importRR.setRationalRoseFile(firstModel);
 		importRR.setRationalRosePackageName("aom.ed4");
 		importRR.setNewRepositoryName(firstModel.getName());
 		importRR.doAction();
 		assertTrue(importRR.hasActionExecutionSucceeded());
 		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Imported "+importRR.getNewRepository().getEntities().size()+" entities into "+importRR.getRationalRosePackageName());
+			logger.info("Imported " + importRR.getNewRepository().getEntities().size() + " entities into "
+					+ importRR.getRationalRosePackageName());
 		}
 		importRR = ImportRationalRoseRepository.actionType.makeNewAction(editor.getProject().getDataModel(), null, editor);
 		importRR.setRationalRoseFile(secondModel);
@@ -61,7 +61,8 @@ public class TestRRImport extends FlexoTestCase {
 		importRR.doAction();
 		assertTrue(importRR.hasActionExecutionSucceeded());
 		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Imported "+importRR.getNewRepository().getEntities().size()+" entities into "+importRR.getRationalRosePackageName());
+			logger.info("Imported " + importRR.getNewRepository().getEntities().size() + " entities into "
+					+ importRR.getRationalRosePackageName());
 		}
 		editor.getProject().close();
 		FileUtils.deleteDir(editor.getProject().getProjectDirectory());

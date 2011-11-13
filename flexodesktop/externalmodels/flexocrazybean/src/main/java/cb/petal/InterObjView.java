@@ -18,65 +18,66 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents InterObjView object
- *
+ * 
  * @version $Id: InterObjView.java,v 1.3 2011/09/12 11:46:48 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class InterObjView extends QuiduView {
-  public InterObjView(PetalNode parent, Collection params, int tag) {
-    super(parent, "InterObjView", params, tag);
-  }
+	public InterObjView(PetalNode parent, Collection params, int tag) {
+		super(parent, "InterObjView", params, tag);
+	}
 
-  public InterObjView() {
-    super("InterObjView");
-  }
+	public InterObjView() {
+		super("InterObjView");
+	}
 
-  public ItemLabel getLabel() {
-    return (ItemLabel)getProperty("label");
-  }
+	public ItemLabel getLabel() {
+		return (ItemLabel) getProperty("label");
+	}
 
-  public void setLabel(ItemLabel o) {
-    defineProperty("label", o);
-  }
+	public void setLabel(ItemLabel o) {
+		defineProperty("label", o);
+	}
 
-  public int getIconHeight() {
-    return getPropertyAsInteger("icon_height");
-  }
+	public int getIconHeight() {
+		return getPropertyAsInteger("icon_height");
+	}
 
-  public void setIconHeight(int o) {
-    defineProperty("icon_height", o);
-  }
+	public void setIconHeight(int o) {
+		defineProperty("icon_height", o);
+	}
 
-  public int getIconWidth() {
-    return getPropertyAsInteger("icon_width");
-  }
+	public int getIconWidth() {
+		return getPropertyAsInteger("icon_width");
+	}
 
-  public void setIconWidth(int o) {
-    defineProperty("icon_width", o);
-  }
+	public void setIconWidth(int o) {
+		defineProperty("icon_width", o);
+	}
 
-  public int getAnnotation() {
-    return getPropertyAsInteger("annotation");
-  }
+	public int getAnnotation() {
+		return getPropertyAsInteger("annotation");
+	}
 
-  public void setAnnotation(int o) {
-    defineProperty("annotation", o);
-  }
+	public void setAnnotation(int o) {
+		defineProperty("annotation", o);
+	}
 
-  public FocusOfControl getFocusOfControl() {
-    return (FocusOfControl)getProperty("Focus_Of_Control");
-  }
+	public FocusOfControl getFocusOfControl() {
+		return (FocusOfControl) getProperty("Focus_Of_Control");
+	}
 
-  public void setFocusOfControl(FocusOfControl o) {
-    defineProperty("Focus_Of_Control", o);
-  }
+	public void setFocusOfControl(FocusOfControl o) {
+		defineProperty("Focus_Of_Control", o);
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

@@ -25,7 +25,6 @@ import org.openflexo.xml.diff3.MergeActionType;
 import org.openflexo.xml.diff3.MergeAttributeAction;
 import org.openflexo.xml.diff3.UnresolvedAttributesConflict;
 
-
 public class OldestDate extends MergeAttributeRule {
 
 	public OldestDate(UnresolvedAttributesConflict conflict) {
@@ -35,27 +34,28 @@ public class OldestDate extends MergeAttributeRule {
 
 	@Override
 	public boolean canBeApplyed() {
-		return ("lastAcceptingDate".equals(_conflict.attributeName())
-				|| "lastGenerationCheckedDate".equals(_conflict.attributeName())
-				|| "lastModelReinjectingDate".equals(_conflict.attributeName())
-				|| "lastImportDate".equals(_conflict.attributeName())
-				|| "lastGenerationDate".equals(_conflict.attributeName())
-		) && 
-		(_conflict.getRootElementName().equals("Project"));
+		return ("lastAcceptingDate".equals(_conflict.attributeName()) || "lastGenerationCheckedDate".equals(_conflict.attributeName())
+				|| "lastModelReinjectingDate".equals(_conflict.attributeName()) || "lastImportDate".equals(_conflict.attributeName()) || "lastGenerationDate"
+					.equals(_conflict.attributeName())) && (_conflict.getRootElementName().equals("Project"));
 	}
 
 	@Override
 	public MergeAttributeAction getAction() {
-		if(_action==null){
+		if (_action == null) {
 			Date date1 = MergeUtils.dateFromString(_conflict.value1());
 			Date date2 = MergeUtils.dateFromString(_conflict.value2());
 			String reply = null;
-			if(date1==null)reply = MergeUtils.dateToString(date1);
-			else if(date2 == null) reply = MergeUtils.dateToString(date2);
-			else if(date1.after(date2)) reply = MergeUtils.dateToString(date2);
-			else reply = MergeUtils.dateToString(date1);
-			
-			_action = new MergeAttributeAction(_conflict.getConflictIndex(),MergeActionType.UPDATE,_conflict.attributeName(),reply,_conflict.getMergedElement());
+			if (date1 == null)
+				reply = MergeUtils.dateToString(date1);
+			else if (date2 == null)
+				reply = MergeUtils.dateToString(date2);
+			else if (date1.after(date2))
+				reply = MergeUtils.dateToString(date2);
+			else
+				reply = MergeUtils.dateToString(date1);
+
+			_action = new MergeAttributeAction(_conflict.getConflictIndex(), MergeActionType.UPDATE, _conflict.attributeName(), reply,
+					_conflict.getMergedElement());
 		}
 		return _action;
 	}

@@ -36,105 +36,94 @@ import org.openflexo.wse.controller.WSESelectionManager;
 import org.openflexo.wse.model.WSEFolderTableModel;
 import org.openflexo.wse.model.WSEServiceTableModel;
 
-
 /**
  * View allowing to represent/edit a DMModel object
  * 
  * @author sguerin
  * 
  */
-public class WSELibraryView extends WSEView<FlexoWSLibrary>
-{
+public class WSELibraryView extends WSEView<FlexoWSLibrary> {
 
-    private static final Logger logger = Logger.getLogger(WSELibraryView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(WSELibraryView.class.getPackage().getName());
 
-    private WSETabularView wsFoldersTable;
-    private WSEFolderTableModel wsFoldersTableModel;
+	private WSETabularView wsFoldersTable;
+	private WSEFolderTableModel wsFoldersTableModel;
 
-    private WSETabularView wsServicesTable;
-    private WSEServiceTableModel wsServicesTableModel;
+	private WSETabularView wsServicesTable;
+	private WSEServiceTableModel wsServicesTableModel;
 
-    public WSELibraryView(FlexoWSLibrary model, WSEController controller)
-    {
-        super(model, controller, "ws_library");
+	public WSELibraryView(FlexoWSLibrary model, WSEController controller) {
+		super(model, controller, "ws_library");
 
-        addAction(new TabularViewAction(CreateNewWebService.actionType,"ws_add_webservice", controller.getEditor()) {
-            @Override
-			protected Vector getGlobalSelection()
-            {
-                return getViewSelection();
-            }
+		addAction(new TabularViewAction(CreateNewWebService.actionType, "ws_add_webservice", controller.getEditor()) {
+			@Override
+			protected Vector getGlobalSelection() {
+				return getViewSelection();
+			}
 
-            @Override
-			protected FlexoModelObject getFocusedObject() 
-            {
-                return getWSLibrary();
-            }           
-        });
-    /*    addAction(new TabularViewAction(UpdateDMRepository.actionType) {
-            protected Vector getGlobalSelection()
-            {
-                return getViewSelection();
-            }
+			@Override
+			protected FlexoModelObject getFocusedObject() {
+				return getWSLibrary();
+			}
+		});
+		/*    addAction(new TabularViewAction(UpdateDMRepository.actionType) {
+		        protected Vector getGlobalSelection()
+		        {
+		            return getViewSelection();
+		        }
 
-            protected FlexoModelObject getFocusedObject() 
-            {
-                return getSelectedWSFolder();
-            }           
-        });*/
-       addAction(new TabularViewAction(WSDelete.actionType,"delete_webservice", controller.getEditor()) {
-            @Override
-			protected Vector getGlobalSelection()
-            {
-                 return getViewSelection();
-            }
+		        protected FlexoModelObject getFocusedObject() 
+		        {
+		            return getSelectedWSFolder();
+		        }           
+		    });*/
+		addAction(new TabularViewAction(WSDelete.actionType, "delete_webservice", controller.getEditor()) {
+			@Override
+			protected Vector getGlobalSelection() {
+				return getViewSelection();
+			}
 
-            @Override
-			protected FlexoModelObject getFocusedObject() 
-            {
-                return null;
-            }           
-        });
-        finalizeBuilding();
-    }
+			@Override
+			protected FlexoModelObject getFocusedObject() {
+				return null;
+			}
+		});
+		finalizeBuilding();
+	}
 
-    @Override
-	protected JComponent buildContentPane()
-    {
-        FlexoWSLibrary model = getWSLibrary();
-        wsFoldersTableModel = new WSEFolderTableModel(model, getWSEController().getProject());
-        wsFoldersTable = new WSETabularView(getWSEController(),wsFoldersTableModel,3);
-        addToMasterTabularView(wsFoldersTable);
-        wsServicesTableModel = new WSEServiceTableModel(null, getWSEController().getProject(), true);
-        wsServicesTable = new WSETabularView(getWSEController(), wsServicesTableModel,10);
-        addToSlaveTabularView(wsServicesTable, wsFoldersTable);
+	@Override
+	protected JComponent buildContentPane() {
+		FlexoWSLibrary model = getWSLibrary();
+		wsFoldersTableModel = new WSEFolderTableModel(model, getWSEController().getProject());
+		wsFoldersTable = new WSETabularView(getWSEController(), wsFoldersTableModel, 3);
+		addToMasterTabularView(wsFoldersTable);
+		wsServicesTableModel = new WSEServiceTableModel(null, getWSEController().getProject(), true);
+		wsServicesTable = new WSETabularView(getWSEController(), wsServicesTableModel, 10);
+		addToSlaveTabularView(wsServicesTable, wsFoldersTable);
 
-        return new JSplitPane(JSplitPane.VERTICAL_SPLIT, wsFoldersTable, wsServicesTable);
-        
-    }
+		return new JSplitPane(JSplitPane.VERTICAL_SPLIT, wsFoldersTable, wsServicesTable);
 
-    public FlexoWSLibrary getWSLibrary()
-    {
-        return getModelObject();
-    }
+	}
 
-    public WSFolder getSelectedWSFolder()
-    {
-        WSESelectionManager sm = getWSEController().getWSESelectionManager();
-        Vector selection = sm.getSelection();
-        if ((selection.size() == 1) && (selection.firstElement() instanceof WSFolder)) {
-            return (WSFolder) selection.firstElement();
-        }
-        return null;
-    }
+	public FlexoWSLibrary getWSLibrary() {
+		return getModelObject();
+	}
 
-    public WSETabularView getWSFoldersTable() {
-        return wsFoldersTable;
-    }
+	public WSFolder getSelectedWSFolder() {
+		WSESelectionManager sm = getWSEController().getWSESelectionManager();
+		Vector selection = sm.getSelection();
+		if ((selection.size() == 1) && (selection.firstElement() instanceof WSFolder)) {
+			return (WSFolder) selection.firstElement();
+		}
+		return null;
+	}
 
-    public WSETabularView getWSServicesTable() {
-        return wsServicesTable;
-    }
+	public WSETabularView getWSFoldersTable() {
+		return wsFoldersTable;
+	}
 
- 
+	public WSETabularView getWSServicesTable() {
+		return wsServicesTable;
+	}
+
 }

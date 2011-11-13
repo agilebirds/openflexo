@@ -24,18 +24,15 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 
-
 /**
  * @author bmangez
- *
- * <B>Class Description</B>
+ * 
+ *         <B>Class Description</B>
  */
-public abstract class IEElement extends BrowserElement
-{
+public abstract class IEElement extends BrowserElement {
 
-    public IEElement(FlexoModelObject widget, BrowserElementType browserElementType, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(widget, browserElementType, browser, parent);
-    }
+	public IEElement(FlexoModelObject widget, BrowserElementType browserElementType, ProjectBrowser browser, BrowserElement parent) {
+		super(widget, browserElementType, browser, parent);
+	}
 
 }

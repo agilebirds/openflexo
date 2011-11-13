@@ -26,34 +26,32 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.ws.client.PPMWebService.PPMProcess;
 
-
 public class FlexoImportedProcessLibraryDelta {
-	
+
 	public interface DeltaVisitor {
 		public void visit(ProcessDelta process);
 	}
-	
+
 	public class ProcessDelta {
 		/**
-		 * Various states:
-		 * 1. Classical one, fiProcess and ppmProcess are both not null: it means that fiProcess was imported and ppmProcess is its refreshed version (either updated or not)
-		 * 2. fiProcess is null but not ppmProcess: it means that there is a new process
-		 * 3. fiProcess is not null but ppmProcess is null: it means that the process has been deleted on the server
-		 * 4. fiProcess and ppmProcess are null: it means that this delta is the dummy root delta which maps the imported process library 
+		 * Various states: 1. Classical one, fiProcess and ppmProcess are both not null: it means that fiProcess was imported and ppmProcess
+		 * is its refreshed version (either updated or not) 2. fiProcess is null but not ppmProcess: it means that there is a new process 3.
+		 * fiProcess is not null but ppmProcess is null: it means that the process has been deleted on the server 4. fiProcess and
+		 * ppmProcess are null: it means that this delta is the dummy root delta which maps the imported process library
 		 */
 		private FlexoProcess fiProcess;
 		private PPMProcess ppmProcess;
-		
+
 		private ProcessDelta parent;
 		private Vector<ProcessDelta> subProcesses;
 		private DeltaStatus status;
-		
+
 		public ProcessDelta(FlexoProcess fiProcess, PPMProcess ppmProcess) {
 			this.fiProcess = fiProcess;
 			this.ppmProcess = ppmProcess;
 			subProcesses = new Vector<ProcessDelta>();
 		}
-		
+
 		public void addToSubProcesses(ProcessDelta processDelta) {
 			subProcesses.add(processDelta);
 			// We set a parent delta, only if we are not the dummy root delta
@@ -65,23 +63,23 @@ public class FlexoImportedProcessLibraryDelta {
 		 * @return
 		 */
 		public boolean isDummyRoot() {
-			return fiProcess==null && ppmProcess==null;
+			return fiProcess == null && ppmProcess == null;
 		}
-		
+
 		public void visit(DeltaVisitor visitor) {
 			visit(visitor, false);
 		}
-		
+
 		public void visit(DeltaVisitor visitor, boolean isTopDown) {
 			for (ProcessDelta delta : subProcesses) {
 				if (!isTopDown) {
 					// First we visit the children, then the father
-					delta.visit(visitor,isTopDown);
+					delta.visit(visitor, isTopDown);
 				}
 				visitor.visit(delta);
 				if (isTopDown) {
 					// We visit the children after their father
-					delta.visit(visitor,isTopDown);
+					delta.visit(visitor, isTopDown);
 				}
 			}
 		}
@@ -97,7 +95,7 @@ public class FlexoImportedProcessLibraryDelta {
 		public DeltaStatus getStatus() {
 			return status;
 		}
-		
+
 		public void setStatus(DeltaStatus status) {
 			this.status = status;
 		}
@@ -113,26 +111,27 @@ public class FlexoImportedProcessLibraryDelta {
 	public FlexoImportedProcessLibraryDelta(FlexoWorkflow library, PPMProcess[] updatedProcesses) {
 		delta = computeDiff(null, null, library.getImportedProcesses(), updatedProcesses);
 	}
-	
+
 	public void visit(DeltaVisitor visitor) {
 		delta.visit(visitor);
 	}
-	
+
 	public void visit(DeltaVisitor visitor, boolean isTopDown) {
 		delta.visit(visitor, isTopDown);
 	}
-	
-	private ProcessDelta computeDiff(FlexoProcess fiProcess, PPMProcess current, Vector<FlexoProcess> originalChildren, PPMProcess[] newChildren) {
+
+	private ProcessDelta computeDiff(FlexoProcess fiProcess, PPMProcess current, Vector<FlexoProcess> originalChildren,
+			PPMProcess[] newChildren) {
 		// New delta
 		ProcessDelta delta = new ProcessDelta(fiProcess, current);
-		
+
 		// Create a copy of vectors
 		Vector<FlexoProcess> originalChildrenCopy;
-		if (originalChildren!=null)
+		if (originalChildren != null)
 			originalChildrenCopy = new Vector<FlexoProcess>(originalChildren);
 		else
 			originalChildrenCopy = new Vector<FlexoProcess>();
-		
+
 		// Iterate on the new list
 		if (newChildren != null) {
 			for (PPMProcess p : newChildren) {
@@ -160,12 +159,12 @@ public class FlexoImportedProcessLibraryDelta {
 			}
 		}
 		// 4. All processes left in the copy of the original have been deleted
-		for(FlexoProcess fip:originalChildrenCopy) {
+		for (FlexoProcess fip : originalChildrenCopy) {
 			ProcessDelta computedDiff = computeDiff(fip, null, fip.getSubProcesses(), new PPMProcess[0]);
 			computedDiff.setStatus(DeltaStatus.DELETED);
 			delta.addToSubProcesses(computedDiff);
 		}
 		return delta;
 	}
-	
+
 }

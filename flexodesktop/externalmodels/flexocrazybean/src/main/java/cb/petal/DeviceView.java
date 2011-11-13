@@ -18,41 +18,42 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents DeviceView object
- *
+ * 
  * @version $Id: DeviceView.java,v 1.3 2011/09/12 11:46:49 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class DeviceView extends QuiduView {
-  public DeviceView(PetalNode parent, Collection params, int tag) {
-    super(parent, "DeviceView", params, tag);
-  }
+	public DeviceView(PetalNode parent, Collection params, int tag) {
+		super(parent, "DeviceView", params, tag);
+	}
 
-  public DeviceView() {
-    super("DeviceView");
-  }
+	public DeviceView() {
+		super("DeviceView");
+	}
 
-  public ItemLabel getLabel() {
-    return (ItemLabel)getProperty("label");
-  }
+	public ItemLabel getLabel() {
+		return (ItemLabel) getProperty("label");
+	}
 
-  public void setLabel(ItemLabel o) {
-    defineProperty("label", o);
-  }
+	public void setLabel(ItemLabel o) {
+		defineProperty("label", o);
+	}
 
-  public int getAnnotation() {
-    return getPropertyAsInteger("annotation");
-  }
+	public int getAnnotation() {
+		return getPropertyAsInteger("annotation");
+	}
 
-  public void setAnnotation(int o) {
-    defineProperty("annotation", o);
-  }
+	public void setAnnotation(int o) {
+		defineProperty("annotation", o);
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

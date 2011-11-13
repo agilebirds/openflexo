@@ -38,38 +38,34 @@ public class DeleteRowInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeleteRowInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(DeleteRow.actionType,actionInitializer);
+	DeleteRowInitializer(IEControllerActionInitializer actionInitializer) {
+		super(DeleteRow.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<DeleteRow> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<DeleteRow> getDefaultInitializer() {
 		return new FlexoActionInitializer<DeleteRow>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteRow action)
-			{
+			public boolean run(ActionEvent e, DeleteRow action) {
 				IEHTMLTableWidget table = null;
 				if (action.getFocusedObject() instanceof IETDWidget) {
 					table = ((IETDWidget) action.getFocusedObject()).htmlTable();
 				} else if (action.getFocusedObject() instanceof IESequenceWidget) {
 					table = ((IESequenceWidget) action.getFocusedObject()).htmlTable();
 				} else if (action.getFocusedObject() instanceof IETRWidget)
-				    table = ((IETRWidget)action.getFocusedObject()).getParentTable();
+					table = ((IETRWidget) action.getFocusedObject()).getParentTable();
 				if (table != null && table.getRowCount() == 1) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("cannot_delete_last_row"));
 					return false;
 				}
-				if (getModule().isActive() && table != null && table.getRowCount() > 1){
+				if (getModule().isActive() && table != null && table.getRowCount() > 1) {
 					return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_delete_those_objects"));
-				}else{
+				} else {
 					return false;
 				}
 
@@ -78,12 +74,10 @@ public class DeleteRowInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<DeleteRow> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<DeleteRow> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DeleteRow>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteRow action)
-			{
+			public boolean run(ActionEvent e, DeleteRow action) {
 				return true;
 			}
 		};

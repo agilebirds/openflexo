@@ -28,11 +28,10 @@ import org.openflexo.localization.FlexoLocalization;
  * @author sguerin
  * 
  */
-public class ProjectResourcesReviewerBeforeExiting extends AskForSaveResources
-{
+public class ProjectResourcesReviewerBeforeExiting extends AskForSaveResources {
 
-    public ProjectResourcesReviewerBeforeExiting(FlexoProject project)
-    {
-        super(FlexoLocalization.localizedForKey("exiting_flexo"), "save_and_exit", "exit_without_saving", project.getLoadedStorageResources());
-    }
+	public ProjectResourcesReviewerBeforeExiting(FlexoProject project) {
+		super(FlexoLocalization.localizedForKey("exiting_flexo"), "save_and_exit", "exit_without_saving", project
+				.getLoadedStorageResources());
+	}
 }

@@ -24,21 +24,19 @@ import junit.framework.TestSuite;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class AllCGTests
-{
+public class AllCGTests {
 
-    public static Test suite()
-    {
-        TestSuite suite = new TestSuite("Tests for Code Generator");
-         //$JUnit-BEGIN$
-        suite.addTestSuite(TestCG.class);
-        suite.addTestSuite(TestCG2.class);
-        suite.addTestSuite(TestRoundTrip.class);
-        //suite.addTestSuite(TestWar.class);
-         //$JUnit-END$
-        return suite;
-    }
+	public static Test suite() {
+		TestSuite suite = new TestSuite("Tests for Code Generator");
+		// $JUnit-BEGIN$
+		suite.addTestSuite(TestCG.class);
+		suite.addTestSuite(TestCG2.class);
+		suite.addTestSuite(TestRoundTrip.class);
+		// suite.addTestSuite(TestWar.class);
+		// $JUnit-END$
+		return suite;
+	}
 
 }

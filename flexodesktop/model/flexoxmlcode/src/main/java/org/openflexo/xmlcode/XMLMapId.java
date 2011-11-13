@@ -30,177 +30,167 @@ import org.w3c.dom.NodeList;
 
 public class XMLMapId {
 
-    private Vector _mapEntryList;
-    private String _description;
-    
-    public XMLMapId(Node mapIdNode, XMLMapping anXMLMapping) throws InvalidModelException
-    {
+	private Vector _mapEntryList;
+	private String _description;
 
-        super();
+	public XMLMapId(Node mapIdNode, XMLMapping anXMLMapping) throws InvalidModelException {
 
-        Node tempAttribute;
-        NamedNodeMap attributes;
-        
-         NodeList propertiesNodeList;
-        Node tempNode;
+		super();
 
-        if (!(mapIdNode.getNodeName().equals(XMLMapping.mapIdLabel))) {
-            throw new InvalidModelException("Invalid tag '" + mapIdNode.getNodeName() + "' found in model file");
-        } 
+		Node tempAttribute;
+		NamedNodeMap attributes;
 
-        attributes = mapIdNode.getAttributes();
-        for (int i = 0; i < attributes.getLength(); i++) {
-            tempAttribute = attributes.item(i);
-            /*if (tempAttribute.getNodeName().equals(XMLMapping.nameLabel)) {
-                nameIsSpecified = true;
-                name = tempAttribute.getNodeValue();
-            } else {
-                throw new InvalidModelException("Invalid attribute '" + tempAttribute.getNodeName() + "' found in model file for tag 'entity'");
-            }*/
-        }
+		NodeList propertiesNodeList;
+		Node tempNode;
 
-        _mapEntryList = new Vector();
-        
-        propertiesNodeList = mapIdNode.getChildNodes();
-        for (int i = 0; i < propertiesNodeList.getLength(); i++) {
-            tempNode = propertiesNodeList.item(i);
-            if (tempNode.getNodeType() == Node.ELEMENT_NODE) {
-                if (tempNode.getNodeName().equals(XMLMapping.descriptionLabel)) {
-                    if ((tempNode.getChildNodes().getLength() == 1) && (tempNode.getFirstChild().getNodeType() == Node.TEXT_NODE)) {
-                        setDescription(tempNode.getFirstChild().getNodeValue());
-                        //System.out.println("Description = "+getDescription());
-                    }
-                } else if (tempNode.getNodeName().equals(XMLMapping.mapLabel)) {
-                    MapEntry newMapEntry = new MapEntry(tempNode);
-                    _mapEntryList.add(newMapEntry);
-                    //System.out.println("Register map entry "+newMapEntry.getEntityClass()+" and "+newMapEntry.getKeyValueProperty().getName());
-                } else {
-                    throw new InvalidModelException("Invalid tag '" + tempNode.getNodeName() + "' found in model file for tag 'entity'");
-                }
-            } else if (tempNode.getNodeType() == Node.TEXT_NODE) {
-                // Non significative text will be simply ignored
-                if (tempNode.getNodeValue().trim().length() > 0) {
-                    throw new InvalidModelException("Invalid text found in model file");
-                }
-            } else if (tempNode.getNodeType() == Node.ATTRIBUTE_NODE) {
-                // Simply ignore it
-            } else if (tempNode.getNodeType() == Node.COMMENT_NODE) {
-                // Simply ignore it
-            } else {
-                throw new InvalidModelException("Invalid xml tag found as child of 'mapId' tag in model file");
-            }
-        }
+		if (!(mapIdNode.getNodeName().equals(XMLMapping.mapIdLabel))) {
+			throw new InvalidModelException("Invalid tag '" + mapIdNode.getNodeName() + "' found in model file");
+		}
 
-        if (_mapEntryList.size() == 0) {
-            throw new InvalidModelException("No identifier mapping defined");
-        }
- 
-    }
-    
-    public String getDescription() 
-    {
-        return _description;
-    }
+		attributes = mapIdNode.getAttributes();
+		for (int i = 0; i < attributes.getLength(); i++) {
+			tempAttribute = attributes.item(i);
+			/*if (tempAttribute.getNodeName().equals(XMLMapping.nameLabel)) {
+			    nameIsSpecified = true;
+			    name = tempAttribute.getNodeValue();
+			} else {
+			    throw new InvalidModelException("Invalid attribute '" + tempAttribute.getNodeName() + "' found in model file for tag 'entity'");
+			}*/
+		}
 
-    public void setDescription(String description) 
-    {
-        _description = description;
-    }
+		_mapEntryList = new Vector();
 
-    public class MapEntry 
-    {
-        private Class entityClass;
-        private SingleKeyValueProperty keyValueProperty;
-        private String entityClassName;
-        private String identifierAccessorName;
-                
-        public MapEntry(Node mapEntryNode) throws InvalidModelException
-        {
+		propertiesNodeList = mapIdNode.getChildNodes();
+		for (int i = 0; i < propertiesNodeList.getLength(); i++) {
+			tempNode = propertiesNodeList.item(i);
+			if (tempNode.getNodeType() == Node.ELEMENT_NODE) {
+				if (tempNode.getNodeName().equals(XMLMapping.descriptionLabel)) {
+					if ((tempNode.getChildNodes().getLength() == 1) && (tempNode.getFirstChild().getNodeType() == Node.TEXT_NODE)) {
+						setDescription(tempNode.getFirstChild().getNodeValue());
+						// System.out.println("Description = "+getDescription());
+					}
+				} else if (tempNode.getNodeName().equals(XMLMapping.mapLabel)) {
+					MapEntry newMapEntry = new MapEntry(tempNode);
+					_mapEntryList.add(newMapEntry);
+					// System.out.println("Register map entry "+newMapEntry.getEntityClass()+" and "+newMapEntry.getKeyValueProperty().getName());
+				} else {
+					throw new InvalidModelException("Invalid tag '" + tempNode.getNodeName() + "' found in model file for tag 'entity'");
+				}
+			} else if (tempNode.getNodeType() == Node.TEXT_NODE) {
+				// Non significative text will be simply ignored
+				if (tempNode.getNodeValue().trim().length() > 0) {
+					throw new InvalidModelException("Invalid text found in model file");
+				}
+			} else if (tempNode.getNodeType() == Node.ATTRIBUTE_NODE) {
+				// Simply ignore it
+			} else if (tempNode.getNodeType() == Node.COMMENT_NODE) {
+				// Simply ignore it
+			} else {
+				throw new InvalidModelException("Invalid xml tag found as child of 'mapId' tag in model file");
+			}
+		}
 
-            super();
+		if (_mapEntryList.size() == 0) {
+			throw new InvalidModelException("No identifier mapping defined");
+		}
 
-            Node tempAttribute;
-            NamedNodeMap attributes;
-            
-            if (!(mapEntryNode.getNodeName().equals(XMLMapping.mapLabel))) {
-                throw new InvalidModelException("Invalid tag '" + mapEntryNode.getNodeName() + "' found in model file");
-            } 
+	}
 
-            attributes = mapEntryNode.getAttributes();
-            for (int i = 0; i < attributes.getLength(); i++) {
-                tempAttribute = attributes.item(i);
-                if (tempAttribute.getNodeName().equals(XMLMapping.entityClassLabel)) {
-                     entityClassName = tempAttribute.getNodeValue();
-                } else if (tempAttribute.getNodeName().equals(XMLMapping.identifierAccessorLabel)) {
-                    identifierAccessorName = tempAttribute.getNodeValue();
-                } else {
-                    throw new InvalidModelException("Invalid attribute '" + tempAttribute.getNodeName() + "' found in model file for tag 'entity'");
-                }
-            }
+	public String getDescription() {
+		return _description;
+	}
 
-            try {
-                entityClass = Class.forName(entityClassName);
-            } catch (ClassNotFoundException e) {
-                throw new InvalidModelException("Class " + entityClassName + " not found.");
-            }
-            
-            keyValueProperty = new SingleKeyValueProperty(entityClass, identifierAccessorName, false);
- 
-        }
+	public void setDescription(String description) {
+		_description = description;
+	}
 
-        public Class getEntityClass()
-        {
-            return entityClass;
-        }
+	public class MapEntry {
+		private Class entityClass;
+		private SingleKeyValueProperty keyValueProperty;
+		private String entityClassName;
+		private String identifierAccessorName;
 
-        public SingleKeyValueProperty getKeyValueProperty() 
-        {
-            return keyValueProperty;
-        }
+		public MapEntry(Node mapEntryNode) throws InvalidModelException {
 
-    }
+			super();
 
-    private Hashtable mapEntriesForClass = new Hashtable();
-    
-    private MapEntry mapEntryForClass (Class aClass) throws NoMapIdEntryException
-    {
-        MapEntry returned = (MapEntry)mapEntriesForClass.get(aClass);
-        if (returned == null) {
-            for (Enumeration en=_mapEntryList.elements(); en.hasMoreElements();) {
-                MapEntry next = (MapEntry)en.nextElement();
-                if (next.getEntityClass().isAssignableFrom(aClass)) {
-                    // May match
-                    if ((returned == null) 
-                            || (returned.getEntityClass().isAssignableFrom(next.getEntityClass()))) {
-                        returned = next;
-                    }
-                }
-            }
-            if (returned == null) {
-                throw new NoMapIdEntryException("Could not find identifier map entry for "+aClass);
-            }
-            //System.out.println("MapEntry for "+aClass+" is "+returned);
-            mapEntriesForClass.put(aClass, returned);
-        }
-        return returned;
-    }
-    
-    public String getIdentifierAsStringForObject (XMLSerializable object) throws NoMapIdEntryException
-    {
-        SingleKeyValueProperty kvProperty = mapEntryForClass(object.getClass()).getKeyValueProperty();
-        return KeyValueDecoder.valueForKey(object, kvProperty, StringEncoder.getDefaultInstance());
-    }
-    
-    public String getIdentifierAsStringForObject (XMLSerializable object, StringEncoder stringEncoder) throws NoMapIdEntryException
-    {
-        SingleKeyValueProperty kvProperty = mapEntryForClass(object.getClass()).getKeyValueProperty();
-        return KeyValueDecoder.valueForKey(object, kvProperty, stringEncoder);
-    }
-    
-    public static class NoMapIdEntryException extends Exception {
-    	
-    	public NoMapIdEntryException(String message) {
+			Node tempAttribute;
+			NamedNodeMap attributes;
+
+			if (!(mapEntryNode.getNodeName().equals(XMLMapping.mapLabel))) {
+				throw new InvalidModelException("Invalid tag '" + mapEntryNode.getNodeName() + "' found in model file");
+			}
+
+			attributes = mapEntryNode.getAttributes();
+			for (int i = 0; i < attributes.getLength(); i++) {
+				tempAttribute = attributes.item(i);
+				if (tempAttribute.getNodeName().equals(XMLMapping.entityClassLabel)) {
+					entityClassName = tempAttribute.getNodeValue();
+				} else if (tempAttribute.getNodeName().equals(XMLMapping.identifierAccessorLabel)) {
+					identifierAccessorName = tempAttribute.getNodeValue();
+				} else {
+					throw new InvalidModelException("Invalid attribute '" + tempAttribute.getNodeName()
+							+ "' found in model file for tag 'entity'");
+				}
+			}
+
+			try {
+				entityClass = Class.forName(entityClassName);
+			} catch (ClassNotFoundException e) {
+				throw new InvalidModelException("Class " + entityClassName + " not found.");
+			}
+
+			keyValueProperty = new SingleKeyValueProperty(entityClass, identifierAccessorName, false);
+
+		}
+
+		public Class getEntityClass() {
+			return entityClass;
+		}
+
+		public SingleKeyValueProperty getKeyValueProperty() {
+			return keyValueProperty;
+		}
+
+	}
+
+	private Hashtable mapEntriesForClass = new Hashtable();
+
+	private MapEntry mapEntryForClass(Class aClass) throws NoMapIdEntryException {
+		MapEntry returned = (MapEntry) mapEntriesForClass.get(aClass);
+		if (returned == null) {
+			for (Enumeration en = _mapEntryList.elements(); en.hasMoreElements();) {
+				MapEntry next = (MapEntry) en.nextElement();
+				if (next.getEntityClass().isAssignableFrom(aClass)) {
+					// May match
+					if ((returned == null) || (returned.getEntityClass().isAssignableFrom(next.getEntityClass()))) {
+						returned = next;
+					}
+				}
+			}
+			if (returned == null) {
+				throw new NoMapIdEntryException("Could not find identifier map entry for " + aClass);
+			}
+			// System.out.println("MapEntry for "+aClass+" is "+returned);
+			mapEntriesForClass.put(aClass, returned);
+		}
+		return returned;
+	}
+
+	public String getIdentifierAsStringForObject(XMLSerializable object) throws NoMapIdEntryException {
+		SingleKeyValueProperty kvProperty = mapEntryForClass(object.getClass()).getKeyValueProperty();
+		return KeyValueDecoder.valueForKey(object, kvProperty, StringEncoder.getDefaultInstance());
+	}
+
+	public String getIdentifierAsStringForObject(XMLSerializable object, StringEncoder stringEncoder) throws NoMapIdEntryException {
+		SingleKeyValueProperty kvProperty = mapEntryForClass(object.getClass()).getKeyValueProperty();
+		return KeyValueDecoder.valueForKey(object, kvProperty, stringEncoder);
+	}
+
+	public static class NoMapIdEntryException extends Exception {
+
+		public NoMapIdEntryException(String message) {
 			super(message);
 		}
-    }
+	}
 }

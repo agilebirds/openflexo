@@ -33,99 +33,89 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.logging.FlexoLogger;
 
-public abstract class IEOperator extends IEWidget implements InspectableObject
-{
+public abstract class IEOperator extends IEWidget implements InspectableObject {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = FlexoLogger.getLogger(IEOperator.class
-			.getPackage().getName());
+	private static final Logger logger = FlexoLogger.getLogger(IEOperator.class.getPackage().getName());
 
-    private IESequence operatedSequence;
+	private IESequence operatedSequence;
 
+	public IEOperator(IEWOComponent wo, IESequence parent, FlexoProject project) {
+		super(wo, parent, project);
+		operatedSequence = parent;
+	}
 
-    public IEOperator(IEWOComponent wo, IESequence parent, FlexoProject project)
-    {
-        super(wo, parent, project);
-        operatedSequence = parent;
-    }
+	@Override
+	public void performOnDeleteOperations() {
+		operatedSequence.resetOperator();
+		operatedSequence.unwrap();
+		super.performOnDeleteOperations();
+	}
 
-    @Override
-    public void performOnDeleteOperations() {
-        operatedSequence.resetOperator();
-        operatedSequence.unwrap();
-    	super.performOnDeleteOperations();
-    }
-    
-    @Override
-	public Vector<IObject> getEmbeddedIEObjects()
-    {
-        return new Vector<IObject>();
-    }
+	@Override
+	public Vector<IObject> getEmbeddedIEObjects() {
+		return new Vector<IObject>();
+	}
 
-    @Override
-	public int getIndex()
-    {
-        return 0;
-    }
+	@Override
+	public int getIndex() {
+		return 0;
+	}
 
-    @Override
-	public void setIndex(int i)
-    {
+	@Override
+	public void setIndex(int i) {
 
-    }
+	}
 
-    public IESequence getOperatedSequence()
-    {
-        return operatedSequence;
-    }
+	public IESequence getOperatedSequence() {
+		return operatedSequence;
+	}
 
-    public boolean isLastOperator()
-    {
-        return true;
-    }
+	public boolean isLastOperator() {
+		return true;
+	}
 
-    public void setOperatedSequence(IESequence opSeq)
-    {
-        this.operatedSequence = opSeq;
-        setParent(opSeq);
-        setChanged();
-        notifyObservers(new IEDataModification("operatedSequence", null, opSeq));
-    }
+	public void setOperatedSequence(IESequence opSeq) {
+		this.operatedSequence = opSeq;
+		setParent(opSeq);
+		setChanged();
+		notifyObservers(new IEDataModification("operatedSequence", null, opSeq));
+	}
 
-    @Override
-    public String getWidgetType() {
-    	String cls = getClass().getSimpleName();
-    	if (cls.startsWith("IE"))
-    		cls = cls.substring("IE".length());
-    	if (cls.endsWith("Operator"))
-    		cls = cls.substring(0,cls.length()-"Operator".length());
-    	return cls;
-    }
-    
-    /**
+	@Override
+	public String getWidgetType() {
+		String cls = getClass().getSimpleName();
+		if (cls.startsWith("IE"))
+			cls = cls.substring("IE".length());
+		if (cls.endsWith("Operator"))
+			cls = cls.substring(0, cls.length() - "Operator".length());
+		return cls;
+	}
+
+	/**
      * 
      */
-    public void notifyWidgetRemoval(IWidget w)
-    {
-        setChanged();
-        notifyObservers(new IEDataModification("widgetRemoval", w, null));
-    }
+	public void notifyWidgetRemoval(IWidget w) {
+		setChanged();
+		notifyObservers(new IEDataModification("widgetRemoval", w, null));
+	}
 
-    public void notifyWidgetInsertion(IWidget w)
-    {
-        setChanged();
-        notifyObservers(new IEDataModification("widgetInsertion", null,w));
-    }
+	public void notifyWidgetInsertion(IWidget w) {
+		setChanged();
+		notifyObservers(new IEDataModification("widgetInsertion", null, w));
+	}
 
-    @Override
-    public boolean areComponentInstancesValid() {
-    	return true; //Always
-    }
-    
-    @Override
-    public void removeInvalidComponentInstances() {
-    	// Nothing to do here
-    }
-    public abstract ListType getListType();
-    public abstract void setListType(ListType lt);
+	@Override
+	public boolean areComponentInstancesValid() {
+		return true; // Always
+	}
+
+	@Override
+	public void removeInvalidComponentInstances() {
+		// Nothing to do here
+	}
+
+	public abstract ListType getListType();
+
+	public abstract void setListType(ListType lt);
 }

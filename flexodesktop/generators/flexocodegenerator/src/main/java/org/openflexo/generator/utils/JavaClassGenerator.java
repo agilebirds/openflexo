@@ -46,113 +46,110 @@ import org.openflexo.logging.FlexoLogger;
  * @author gpolet
  * 
  */
-public abstract class JavaClassGenerator extends FlexoResourceGenerator<DMEntity, GeneratedTextResource>
-{
+public abstract class JavaClassGenerator extends FlexoResourceGenerator<DMEntity, GeneratedTextResource> {
 	private static final Logger logger = FlexoLogger.getLogger(JavaClassGenerator.class.getPackage().getName());
-    protected JavaFileResource javaResource;
-    private DMEntity _entity;
-    private String _entityClassName;
-    private String _entityPackageName;
-    
-    protected JavaClassGenerator(ProjectGenerator projectGenerator, String entityClassName, String entityPackageName)
-    {
-        this(projectGenerator, null);
-        _entityClassName = entityClassName;
-        _entityPackageName = entityPackageName;
-    }
-    
-    protected JavaClassGenerator(ProjectGenerator projectGenerator, DMEntity entity)
-    {
-        super(projectGenerator, entity);
-        _entity = entity;
-    }
+	protected JavaFileResource javaResource;
+	private DMEntity _entity;
+	private String _entityClassName;
+	private String _entityPackageName;
 
-    public final DMEntity getEntity(){
-    	return _entity;
-    }
-    
-    public final String getEntityClassName(){
-    	if(getEntity()!=null){
-    		return getEntity().getEntityClassName();
-    	}
-    	return _entityClassName;
-    }
-    
-    public final String getEntityPackageName(){
-    	if(getEntity() != null && getEntity().getPackage() != null){
-    		return getEntity().getPackage().getJavaStringRepresentation();
-    	}
-    	return _entityPackageName;
-    }
-    
-    public final String getEntityFolderPath(){
-    	if(getEntity()!=null){
-    		return getEntity().getPathForPackage();
-    	}
-    	return getEntityPackageName().replace('.','/');
-    }
-    
+	protected JavaClassGenerator(ProjectGenerator projectGenerator, String entityClassName, String entityPackageName) {
+		this(projectGenerator, null);
+		_entityClassName = entityClassName;
+		_entityPackageName = entityPackageName;
+	}
+
+	protected JavaClassGenerator(ProjectGenerator projectGenerator, DMEntity entity) {
+		super(projectGenerator, entity);
+		_entity = entity;
+	}
+
+	public final DMEntity getEntity() {
+		return _entity;
+	}
+
+	public final String getEntityClassName() {
+		if (getEntity() != null) {
+			return getEntity().getEntityClassName();
+		}
+		return _entityClassName;
+	}
+
+	public final String getEntityPackageName() {
+		if (getEntity() != null && getEntity().getPackage() != null) {
+			return getEntity().getPackage().getJavaStringRepresentation();
+		}
+		return _entityPackageName;
+	}
+
+	public final String getEntityFolderPath() {
+		if (getEntity() != null) {
+			return getEntity().getPathForPackage();
+		}
+		return getEntityPackageName().replace('.', '/');
+	}
+
 	@Override
-	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) 
-	{
-    	javaResource  = (UtilJavaFileResource)resourceForKeyWithCGFile(ResourceType.JAVA_FILE, GeneratorUtils.nameForRepositoryAndIdentifier(repository, getIdentifier()));
+	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
+		javaResource = (UtilJavaFileResource) resourceForKeyWithCGFile(ResourceType.JAVA_FILE,
+				GeneratorUtils.nameForRepositoryAndIdentifier(repository, getIdentifier()));
 		if (javaResource == null) {
 			javaResource = GeneratedFileResourceFactory.createNewUtilJavaFileResource(repository, this);
-		}
-		else {
+		} else {
 			javaResource.setGenerator(this);
 		}
-		resources.add(javaResource);		
+		resources.add(javaResource);
 	}
-	
-    @Override
-    public final void generate(boolean forceRegenerate)
-    {
-       	if (!forceRegenerate && !needsGeneration()) return;
-    	try {
-    		startGeneration();
-    		String javaCode = merge(getTemplateName(),defaultContext());
-    		javaAppendingException = null;
-    		if (getEntity()!=null)
-        		try {
-    				javaCode = JavaCodeMerger.mergeJavaCode(javaCode,getEntity(),javaResource);
-        		} catch (JavaParseException e) {
-        			javaAppendingException = new JavaAppendingException(this, getEntity().getFullQualifiedName(), e);
-        			logger.warning("Could not parse generated code. Escape java merge.");
-        		}
-    		try {
-               _javaFormattingException = null;
-               //logger.info("Avant formattage: "+javaCode);
-   				javaCode = GeneratorFormatter.formatJavaCode(javaCode,getEntityPackageName(),getEntityClassName(),this,getProject());
-               //logger.info("Apres formattage: "+javaCode);
-            } catch (JavaFormattingException javaFormattingException) {
-               _javaFormattingException = javaFormattingException;
-            }
 
-            generatedCode = new GeneratedTextResource(getEntityClassName()+".java", javaCode);
-     	} catch (GenerationException e) {
-    		setGenerationException(e);
-    	} catch (Exception e) {
-    		setGenerationException(new UnexpectedExceptionOccuredException(e,getProjectGenerator()));
-    	} finally {
-    		stopGeneration();
-    	}
-    }
+	@Override
+	public final void generate(boolean forceRegenerate) {
+		if (!forceRegenerate && !needsGeneration())
+			return;
+		try {
+			startGeneration();
+			String javaCode = merge(getTemplateName(), defaultContext());
+			javaAppendingException = null;
+			if (getEntity() != null)
+				try {
+					javaCode = JavaCodeMerger.mergeJavaCode(javaCode, getEntity(), javaResource);
+				} catch (JavaParseException e) {
+					javaAppendingException = new JavaAppendingException(this, getEntity().getFullQualifiedName(), e);
+					logger.warning("Could not parse generated code. Escape java merge.");
+				}
+			try {
+				_javaFormattingException = null;
+				// logger.info("Avant formattage: "+javaCode);
+				javaCode = GeneratorFormatter.formatJavaCode(javaCode, getEntityPackageName(), getEntityClassName(), this, getProject());
+				// logger.info("Apres formattage: "+javaCode);
+			} catch (JavaFormattingException javaFormattingException) {
+				_javaFormattingException = javaFormattingException;
+			}
 
-    @Override
-    public GeneratedTextResource getGeneratedCode() {
-    	if (generatedCode==null && javaResource!=null && javaResource.getJavaFile()!=null && javaResource.getJavaFile().hasLastAcceptedContent()) {
-    		generatedCode = new GeneratedTextResource(getEntityClassName(), javaResource.getJavaFile().getLastAcceptedContent());
-    	}
-    	return generatedCode;
-    }
-    
-    public abstract String getTemplateName();
+			generatedCode = new GeneratedTextResource(getEntityClassName() + ".java", javaCode);
+		} catch (GenerationException e) {
+			setGenerationException(e);
+		} catch (Exception e) {
+			setGenerationException(new UnexpectedExceptionOccuredException(e, getProjectGenerator()));
+		} finally {
+			stopGeneration();
+		}
+	}
+
+	@Override
+	public GeneratedTextResource getGeneratedCode() {
+		if (generatedCode == null && javaResource != null && javaResource.getJavaFile() != null
+				&& javaResource.getJavaFile().hasLastAcceptedContent()) {
+			generatedCode = new GeneratedTextResource(getEntityClassName(), javaResource.getJavaFile().getLastAcceptedContent());
+		}
+		return generatedCode;
+	}
+
+	public abstract String getTemplateName();
 
 	public abstract void rebuildDependanciesForResource(JavaFileResource resource);
-    
-    @Override
-	public final String getIdentifier(){
-    	return getEntityPackageName()+(getEntityPackageName().length()>0?".":"")+getEntityClassName();
-    }
+
+	@Override
+	public final String getIdentifier() {
+		return getEntityPackageName() + (getEntityPackageName().length() > 0 ? "." : "") + getEntityClassName();
+	}
 }

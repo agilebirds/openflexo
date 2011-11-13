@@ -41,77 +41,67 @@ import org.openflexo.foundation.wkf.node.PetriGraphNode;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class WKFSelectAllInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	WKFSelectAllInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(WKFSelectAll.actionType,actionInitializer);
-	}
-	
-	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
-	}
-	
-	@Override
-	protected FlexoActionInitializer<WKFSelectAll> getDefaultInitializer() 
-	{
-		return new FlexoActionInitializer<WKFSelectAll>() {
-            @Override
-			public boolean run(ActionEvent e, WKFSelectAll action)
-            {
-            	return true;
-             }
-        };
+	WKFSelectAllInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(WKFSelectAll.actionType, actionInitializer);
 	}
 
 	@Override
-	protected FlexoActionFinalizer<WKFSelectAll> getDefaultFinalizer() 
-	{
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
+	}
+
+	@Override
+	protected FlexoActionInitializer<WKFSelectAll> getDefaultInitializer() {
+		return new FlexoActionInitializer<WKFSelectAll>() {
+			@Override
+			public boolean run(ActionEvent e, WKFSelectAll action) {
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected FlexoActionFinalizer<WKFSelectAll> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<WKFSelectAll>() {
 			@Override
-			public boolean run(ActionEvent e, WKFSelectAll action)
-			{
+			public boolean run(ActionEvent e, WKFSelectAll action) {
 				if (action.getFocusedObject() instanceof WKFObject) {
 
-					WKFObject focused = (WKFObject)action.getFocusedObject();
+					WKFObject focused = (WKFObject) action.getFocusedObject();
 					FlexoPetriGraph pg = null;
 					if (focused instanceof FlexoProcess) {
-						pg = ((FlexoProcess)focused).getActivityPetriGraph();
+						pg = ((FlexoProcess) focused).getActivityPetriGraph();
+					} else if (focused instanceof FatherNode) {
+						pg = ((FatherNode) focused).getContainedPetriGraph();
+					} else if (focused instanceof FlexoPetriGraph) {
+						pg = (FlexoPetriGraph) focused;
 					}
-					else if (focused instanceof FatherNode) {
-						pg = ((FatherNode)focused).getContainedPetriGraph();
-					}     	
-					else if (focused instanceof FlexoPetriGraph) {
-						pg = (FlexoPetriGraph)focused;
-					}     	
 					if (pg != null) {
 						Vector<PetriGraphNode> newSelection = pg.getNodes();
 						getControllerActionInitializer().getWKFSelectionManager().setSelectedObjects(newSelection);
 						return true;
-					} 
+					}
 					return false;
 				}
 
 				else if (action.getFocusedObject() instanceof WorkflowModelObject) {
 
-					WorkflowModelObject focused = (WorkflowModelObject)action.getFocusedObject();
+					WorkflowModelObject focused = (WorkflowModelObject) action.getFocusedObject();
 					RoleList rl = null;
 					if (focused instanceof Role) {
-						rl = ((Role)focused).getRoleList();
+						rl = ((Role) focused).getRoleList();
+					} else if (focused instanceof RoleList) {
+						rl = (RoleList) focused;
 					}
-					else if (focused instanceof RoleList) {
-						rl = (RoleList)focused;
-					}     	
 					if (rl != null) {
 						Vector<Role> newSelection = rl.getRoles();
 						getControllerActionInitializer().getWKFSelectionManager().setSelectedObjects(newSelection);
 						return true;
-					} 
+					}
 					return false;
 				}
 				return false;
@@ -120,8 +110,7 @@ public class WKFSelectAllInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected KeyStroke getShortcut() 
-	{
+	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(KeyEvent.VK_A, FlexoCst.META_MASK);
 	}
 

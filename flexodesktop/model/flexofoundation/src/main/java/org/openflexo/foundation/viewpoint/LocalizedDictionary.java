@@ -32,65 +32,55 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
 import org.openflexo.localization.LocalizedDelegate;
 
-
 public class LocalizedDictionary extends ViewPointObject implements LocalizedDelegate {
 
 	private static final Logger logger = Logger.getLogger(LocalizedDictionary.class.getPackage().getName());
 
 	private ViewPoint _calc;
 	private Vector<LocalizedEntry> _entries;
-	private final Hashtable<Language,Hashtable<String,String>> _values;
+	private final Hashtable<Language, Hashtable<String, String>> _values;
 	private Vector<DynamicEntry> dynamicEntries = null;
 
-	public LocalizedDictionary() 
-	{
+	public LocalizedDictionary() {
 		_entries = new Vector<LocalizedEntry>();
-		_values = new Hashtable<Language, Hashtable<String,String>>();
+		_values = new Hashtable<Language, Hashtable<String, String>>();
 	}
 
 	@Override
-	public ViewPoint getCalc() 
-	{
+	public ViewPoint getCalc() {
 		return _calc;
 	}
 
-	public void setCalc(ViewPoint calc) 
-	{
+	public void setCalc(ViewPoint calc) {
 		_calc = calc;
 	}
-	
-	
-	public Vector<LocalizedEntry> getEntries() 
-	{
+
+	public Vector<LocalizedEntry> getEntries() {
 		return _entries;
 	}
 
-	public void setEntries(Vector<LocalizedEntry> someEntries) 
-	{
+	public void setEntries(Vector<LocalizedEntry> someEntries) {
 		_entries = someEntries;
 	}
 
-	public void addToEntries(LocalizedEntry entry) 
-	{
+	public void addToEntries(LocalizedEntry entry) {
 		entry.setLocalizedDictionary(this);
 		_entries.add(entry);
-		logger.fine("Add entry key:"+entry.getKey()+" lang="+entry.getLanguage()+" value:"+entry.getValue());
+		logger.fine("Add entry key:" + entry.getKey() + " lang=" + entry.getLanguage() + " value:" + entry.getValue());
 		Language lang = Language.retrieveLanguage(entry.getLanguage());
 		if (lang == null) {
-			logger.warning("Undefined language: "+entry.getLanguage());
+			logger.warning("Undefined language: " + entry.getLanguage());
 			return;
 		}
 		getDictForLang(lang).put(entry.getKey(), entry.getValue());
 	}
-	
-	public void removeFromEntries(LocalizedEntry entry)
-	{
+
+	public void removeFromEntries(LocalizedEntry entry) {
 		entry.setLocalizedDictionary(null);
 		_entries.remove(entry);
 	}
 
-	private LocalizedEntry getEntry(Language language, String key)
-	{
+	private LocalizedEntry getEntry(Language language, String key) {
 		for (LocalizedEntry entry : getEntries()) {
 			if ((Language.retrieveLanguage(entry.getLanguage()) == language) && key.equals(entry.getKey())) {
 				return entry;
@@ -98,14 +88,13 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 		}
 		return null;
 	}
-	
-	private Hashtable<String,String> getDictForLang(Language lang)
-	{
-		Hashtable<String,String> dict = _values.get(lang);
+
+	private Hashtable<String, String> getDictForLang(Language lang) {
+		Hashtable<String, String> dict = _values.get(lang);
 		if (dict == null) {
-			dict = new Hashtable<String,String>();
+			dict = new Hashtable<String, String>();
 			_values.put(lang, dict);
-		}		
+		}
 		return dict;
 	}
 
@@ -115,81 +104,69 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 		return null;
 	}
 
-	public String getDefaultValue(String key, Language language)
-	{
-		//logger.info("Searched default value for key "+key+" return "+FlexoLocalization.localizedForKey(key));
-		return FlexoLocalization.localizedForKeyAndLanguage(key,language,false,false);
+	public String getDefaultValue(String key, Language language) {
+		// logger.info("Searched default value for key "+key+" return "+FlexoLocalization.localizedForKey(key));
+		return FlexoLocalization.localizedForKeyAndLanguage(key, language, false, false);
 	}
-	
+
 	@Override
-	public String localizedForKeyAndLanguage(String key, Language language) 
-	{
-		//if (isSearchingNewEntries) logger.info("-------> called localizedForKeyAndLanguage() key="+key+" lang="+language);
+	public String localizedForKeyAndLanguage(String key, Language language) {
+		// if (isSearchingNewEntries) logger.info("-------> called localizedForKeyAndLanguage() key="+key+" lang="+language);
 		String returned = getDictForLang(language).get(key);
 		if (returned == null) {
-			String defaultValue = getDefaultValue(key,language);
-			if (handleNewEntry(key,language)) {
+			String defaultValue = getDefaultValue(key, language);
+			if (handleNewEntry(key, language)) {
 				if (!key.equals(defaultValue)) {
 					addToEntries(new LocalizedEntry(this, key, language.getName(), defaultValue));
-					logger.fine("Calc LocalizedDictionary: store value "+defaultValue+" for key "+key+" for language "+language);
+					logger.fine("Calc LocalizedDictionary: store value " + defaultValue + " for key " + key + " for language " + language);
+				} else {
+					getDictForLang(language).put(key, defaultValue);
+					logger.fine("Calc LocalizedDictionary: undefined value for key " + key + " for language " + language);
 				}
-				else {
-					getDictForLang(language).put(key,defaultValue);
-					logger.fine("Calc LocalizedDictionary: undefined value for key "+key+" for language "+language);
-				}
-				//dynamicEntries = null;
+				// dynamicEntries = null;
 			}
 			return defaultValue;
 		}
 		return returned;
 	}
 
-
-	public void setLocalizedForKeyAndLanguage(String key, String value,
-			Language language)
-	{
-		getDictForLang(language).put(key,value);
-		LocalizedEntry entry = getEntry(language,key);
+	public void setLocalizedForKeyAndLanguage(String key, String value, Language language) {
+		getDictForLang(language).put(key, value);
+		LocalizedEntry entry = getEntry(language, key);
 		if (entry == null) {
-			addToEntries(new LocalizedEntry(this,key,language.getName(),value));
-		}
-		else {
+			addToEntries(new LocalizedEntry(this, key, language.getName(), value));
+		} else {
 			entry.setValue(value);
 		}
 	}
 
 	private boolean handleNewEntry = false;
-	
+
 	@Override
-	public boolean handleNewEntry(String key, Language language) 
-	{
+	public boolean handleNewEntry(String key, Language language) {
 		return handleNewEntry;
 	}
-	
-	public class DynamicEntry
-	{
+
+	public class DynamicEntry {
 		private String key;
-		
-		public DynamicEntry(String aKey)
-		{
+
+		public DynamicEntry(String aKey) {
 			key = aKey;
 		}
-		
-		public String getKey()
-		{
+
+		public String getKey() {
 			return key;
 		}
 
-		public void setKey(String aNewKey)
-		{
+		public void setKey(String aNewKey) {
 			String oldKey = key;
 			for (Language l : Language.availableValues()) {
 				String oldValue = _values.get(l).get(oldKey);
 				_values.get(l).remove(oldKey);
 				if (oldValue != null) {
-					_values.get(l).put(aNewKey,oldValue);
+					_values.get(l).put(aNewKey, oldValue);
 				}
-				LocalizedEntry e = getEntry(l,oldKey);
+				LocalizedEntry e = getEntry(l, oldKey);
 				if (e != null) {
 					e.setKey(aNewKey);
 				}
@@ -197,42 +174,40 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 			key = aNewKey;
 		}
 
-		public String getEnglish()
-		{
+		public String getEnglish() {
 			return localizedForKeyAndLanguage(key, Language.ENGLISH);
 		}
-		public void setEnglish(String value)
-		{
+
+		public void setEnglish(String value) {
 			setLocalizedForKeyAndLanguage(key, value, Language.ENGLISH);
 		}
-		public String getFrench()
-		{
+
+		public String getFrench() {
 			return localizedForKeyAndLanguage(key, Language.FRENCH);
 		}
-		public void setFrench(String value)
-		{
+
+		public void setFrench(String value) {
 			setLocalizedForKeyAndLanguage(key, value, Language.FRENCH);
 		}
-		public String getDutch()
-		{
+
+		public String getDutch() {
 			return localizedForKeyAndLanguage(key, Language.DUTCH);
 		}
-		public void setDutch(String value)
-		{
+
+		public void setDutch(String value) {
 			setLocalizedForKeyAndLanguage(key, value, Language.DUTCH);
 		}
+
 		@Override
-		public String toString()
-		{
-			return "(key="+key+"{en="+getEnglish()+";fr="+getFrench()+";du="+getDutch()+"})";
+		public String toString() {
+			return "(key=" + key + "{en=" + getEnglish() + ";fr=" + getFrench() + ";du=" + getDutch() + "})";
 		}
 
 	}
 
 	// This method is really not efficient, but only called in the context of locales editor
 	// This issue is not really severe.
-	private Vector<String> buildAllKeys()
-	{
+	private Vector<String> buildAllKeys() {
 		Vector<String> returned = new Vector<String>();
 		for (Language l : _values.keySet()) {
 			for (String key : _values.get(l).keySet()) {
@@ -243,30 +218,27 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 		}
 		return returned;
 	}
-	
+
 	// This method is really not efficient, but only called in the context of locales editor
 	// Impact of this issue is not really severe.
-	public Vector<DynamicEntry> getDynamicEntries()
-	{
+	public Vector<DynamicEntry> getDynamicEntries() {
 		if (dynamicEntries == null) {
 			dynamicEntries = new Vector<DynamicEntry>();
 			for (String key : buildAllKeys()) {
 				dynamicEntries.add(new DynamicEntry(key));
 			}
-			Collections.sort(dynamicEntries,new Comparator<DynamicEntry>() {
+			Collections.sort(dynamicEntries, new Comparator<DynamicEntry>() {
 				@Override
-				public int compare(DynamicEntry o1, DynamicEntry o2)
-				{
-					return Collator.getInstance().compare(o1.key,o2.key);
+				public int compare(DynamicEntry o1, DynamicEntry o2) {
+					return Collator.getInstance().compare(o1.key, o2.key);
 				}
 			});
 		}
 		return dynamicEntries;
 	}
-	
-	private DynamicEntry getDynamicEntry(String key)
-	{
-		if (key==null) {
+
+	private DynamicEntry getDynamicEntry(String key) {
+		if (key == null) {
 			return null;
 		}
 		for (DynamicEntry entry : getDynamicEntries()) {
@@ -276,33 +248,30 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 		}
 		return null;
 	}
-	
-	public void refresh()
-	{
-		logger.fine("Refresh called on FIBLocalizedDictionary "+Integer.toHexString(hashCode()));
+
+	public void refresh() {
+		logger.fine("Refresh called on FIBLocalizedDictionary " + Integer.toHexString(hashCode()));
 		dynamicEntries = null;
 		setChanged();
 		notifyObservers();
 	}
 
-	public DynamicEntry addEntry()
-	{
+	public DynamicEntry addEntry() {
 		String newKey = "key";
 		Vector<String> allKeys = buildAllKeys();
 		boolean keyAlreadyExists = allKeys.contains(newKey);
 		int index = 1;
 		while (keyAlreadyExists) {
-			newKey = "key"+index;
+			newKey = "key" + index;
 			keyAlreadyExists = allKeys.contains(newKey);
 			index++;
 		}
-		addToEntries(new LocalizedEntry(this,newKey,FlexoLocalization.getCurrentLanguage().getName(),newKey));
-		refresh();		
+		addToEntries(new LocalizedEntry(this, newKey, FlexoLocalization.getCurrentLanguage().getName(), newKey));
+		refresh();
 		return getDynamicEntry(newKey);
 	}
-	
-	public void deleteEntry(DynamicEntry entry)
-	{
+
+	public void deleteEntry(DynamicEntry entry) {
 		for (Language l : Language.availableValues()) {
 			_values.get(l).remove(entry.getKey());
 			LocalizedEntry e = getEntry(l, entry.getKey());
@@ -313,8 +282,7 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 		refresh();
 	}
 
-	public void searchNewEntries()
-	{
+	public void searchNewEntries() {
 		logger.info("Search new entries");
 		for (EditionPattern ep : getCalc().getEditionPatterns()) {
 			checkAndRegisterLocalized(ep.getName());
@@ -332,17 +300,15 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 		getCalc().setChanged();
 		getCalc().notifyObservers();
 	}
-	
-	private void checkAndRegisterLocalized(String key)
-	{
+
+	private void checkAndRegisterLocalized(String key) {
 		handleNewEntry = true;
 		localizedForKeyAndLanguage(key, FlexoLocalization.getCurrentLanguage());
 		handleNewEntry = false;
 	}
-	
+
 	@Override
-	public BindingModel getBindingModel() 
-	{
+	public BindingModel getBindingModel() {
 		return getCalc().getBindingModel();
 	}
 }

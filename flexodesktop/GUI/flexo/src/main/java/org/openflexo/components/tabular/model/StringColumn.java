@@ -24,61 +24,53 @@ import javax.swing.table.TableCellRenderer;
 
 import org.openflexo.foundation.FlexoModelObject;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public abstract class StringColumn<D extends FlexoModelObject> extends AbstractColumn<D,String>
-{
+public abstract class StringColumn<D extends FlexoModelObject> extends AbstractColumn<D, String> {
 
-    public StringColumn(String title, int defaultWidth)
-    {
-        this(title, defaultWidth, true);
-    }
+	public StringColumn(String title, int defaultWidth) {
+		this(title, defaultWidth, true);
+	}
 
-    public StringColumn(String title, int defaultWidth, boolean isResizable)
-    {
-        this(title, defaultWidth, isResizable, true);
-    }
+	public StringColumn(String title, int defaultWidth, boolean isResizable) {
+		this(title, defaultWidth, isResizable, true);
+	}
 
-    public StringColumn(String title, int defaultWidth, boolean isResizable, boolean displayTitle)
-    {
-        super(title, defaultWidth, isResizable, displayTitle);
-    }
+	public StringColumn(String title, int defaultWidth, boolean isResizable, boolean displayTitle) {
+		super(title, defaultWidth, isResizable, displayTitle);
+	}
 
-    @Override
-	public Class getValueClass()
-    {
-        return String.class;
-    }
+	@Override
+	public Class getValueClass() {
+		return String.class;
+	}
 
-    @Override
-	public String getValueFor(D object)
-    {
-        return getValue(object);
-    }
+	@Override
+	public String getValueFor(D object) {
+		return getValue(object);
+	}
 
-    /**
-     * Overrides getCellRenderer
-     * @see org.openflexo.components.tabular.model.AbstractColumn#getCellRenderer()
-     */
-    @Override
-	public TableCellRenderer getCellRenderer()
-    {
-        TableCellRenderer r= super.getCellRenderer();
-        if (r instanceof JComponent)
-            ((JComponent)r).setToolTipText(getLocalizedTooltip());
-        return r;
-    }
-    
-    public abstract String getValue(D object);
+	/**
+	 * Overrides getCellRenderer
+	 * 
+	 * @see org.openflexo.components.tabular.model.AbstractColumn#getCellRenderer()
+	 */
+	@Override
+	public TableCellRenderer getCellRenderer() {
+		TableCellRenderer r = super.getCellRenderer();
+		if (r instanceof JComponent)
+			((JComponent) r).setToolTipText(getLocalizedTooltip());
+		return r;
+	}
 
-    @Override
-	public String toString()
-    {
-        return "StringColumn " + "@" + Integer.toHexString(hashCode());
-    }
+	public abstract String getValue(D object);
+
+	@Override
+	public String toString() {
+		return "StringColumn " + "@" + Integer.toHexString(hashCode());
+	}
 }

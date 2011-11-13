@@ -37,47 +37,42 @@ import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.icon.IconMarker;
 import org.openflexo.localization.FlexoLocalization;
 
-public class GeneratedDocFileElement extends DGBrowserElement
-{
-	public GeneratedDocFileElement(CGFile file, ProjectBrowser browser, BrowserElement parent)
-	{
-		super(file, BrowserElementType.GENERATED_CODE_FILE, browser,parent);
+public class GeneratedDocFileElement extends DGBrowserElement {
+	public GeneratedDocFileElement(CGFile file, ProjectBrowser browser, BrowserElement parent) {
+		super(file, BrowserElementType.GENERATED_CODE_FILE, browser, parent);
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
-		if ((getFile()!=null) && (getFile().getRepository()!=null) && getFile().getRepository().getManageHistory()
-				&& (getFile().getResource()!=null) && getFile().getResource().isLoaded() && (getFile().getResource().getGeneratedResourceData() instanceof AbstractGeneratedFile)) {
-			for (CGFileReleaseVersion releaseVersion :
-				((AbstractGeneratedFile)getFile().getResource().getGeneratedResourceData()).getHistory().getReleasesVersion()) {
+	protected void buildChildrenVector() {
+		if ((getFile() != null) && (getFile().getRepository() != null) && getFile().getRepository().getManageHistory()
+				&& (getFile().getResource() != null) && getFile().getResource().isLoaded()
+				&& (getFile().getResource().getGeneratedResourceData() instanceof AbstractGeneratedFile)) {
+			for (CGFileReleaseVersion releaseVersion : ((AbstractGeneratedFile) getFile().getResource().getGeneratedResourceData())
+					.getHistory().getReleasesVersion()) {
 				addToChilds(releaseVersion);
 			}
 		}
 	}
 
 	@Override
-	public String getName()
-	{
-		String returned = getFile().getFileName()
-		+(getFile().isEdited()?"["+FlexoLocalization.localizedForKey("edited")+"]":"");
+	public String getName() {
+		String returned = getFile().getFileName() + (getFile().isEdited() ? "[" + FlexoLocalization.localizedForKey("edited") + "]" : "");
 		if (logger.isLoggable(Level.FINE)) {
 			if (getFile() instanceof AbstractCGFile) {
-				if (((AbstractCGFile)getFile()).getGenerationException() != null) {
+				if (((AbstractCGFile) getFile()).getGenerationException() != null) {
 					returned += "[ERROR]";
 				}
 			}
-			returned += "/"+getResource().getGenerationStatus().toString();
+			returned += "/" + getResource().getGenerationStatus().toString();
 			if (getResource().needsGeneration()) {
-				returned += "<"+getResource().getNeedsUpdateReason();
+				returned += "<" + getResource().getNeedsUpdateReason();
 			}
 		}
 		return returned;
 	}
 
 	@Override
-	public ImageIcon getBaseIcon()
-	{
+	public ImageIcon getBaseIcon() {
 		ImageIcon returned = FilesIconLibrary.smallIconForFileFormat(getFile().getFileFormat());
 		if (returned == null) {
 			returned = super.getBaseIcon();
@@ -85,19 +80,17 @@ public class GeneratedDocFileElement extends DGBrowserElement
 		return returned;
 	}
 
-	public CGFile getFile()
-	{
-		return (CGFile)getObject();
+	public CGFile getFile() {
+		return (CGFile) getObject();
 	}
 
-	public CGRepositoryFileResource getResource()
-	{
+	public CGRepositoryFileResource getResource() {
 		return getFile().getResource();
 	}
 
 	@Override
-	protected Vector<IconMarker> getMarkers(){
-		if(getFile().getMarkedAsDoNotGenerate()){
+	protected Vector<IconMarker> getMarkers() {
+		if (getFile().getMarkedAsDoNotGenerate()) {
 			Vector<IconMarker> markers = new Vector<IconMarker>();
 			markers.add(GeneratorIconLibrary.DO_NOT_GENERATE);
 			return markers;

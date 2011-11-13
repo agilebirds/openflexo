@@ -27,75 +27,64 @@ import org.openflexo.inspector.InspectorWidgetConfiguration;
 import org.openflexo.inspector.model.TabModel;
 
 /**
- * Controller dedicated to preferences: there is only one instance of this
- * controller
- *
+ * Controller dedicated to preferences: there is only one instance of this controller
+ * 
  * @author sguerin
  */
-public class AskParametersController implements AbstractController
-{
+public class AskParametersController implements AbstractController {
 
 	private static AskParametersController _current;
-	//private InspectorWidgetConfiguration inspectorConfiguration;
 
-	private AskParametersController()
-	{
+	// private InspectorWidgetConfiguration inspectorConfiguration;
+
+	private AskParametersController() {
 		super();
 	}
 
-	protected static AskParametersController createInstance()
-	{
+	protected static AskParametersController createInstance() {
 		_current = new AskParametersController();
 		return _current;
 	}
 
-	public static AskParametersController instance()
-	{
+	public static AskParametersController instance() {
 		if (_current == null) {
 			createInstance();
 		}
 		return _current;
 	}
 
-	public static boolean hasInstance()
-	{
+	public static boolean hasInstance() {
 		return (_current != null);
 	}
 
 	@Override
-	public InspectorDelegate getDelegate()
-	{
+	public InspectorDelegate getDelegate() {
 		// Handle object with key-value coding
 		return null;
 	}
 
 	@Override
-	public HelpDelegate getHelpDelegate()
-	{
+	public HelpDelegate getHelpDelegate() {
 		// No help for this kind of controller
 		return null;
 	}
 
-	public void notifiedActiveTabChange(String newActiveTabName)
-	{
+	public void notifiedActiveTabChange(String newActiveTabName) {
 		// Dont care
 	}
 
 	@Override
-	public void notifiedInspectedObjectChange(InspectableObject newInspectedObject)
-	{
+	public void notifiedInspectedObjectChange(InspectableObject newInspectedObject) {
 		// Dont care
 	}
 
 	@Override
-	public boolean isTabPanelVisible(TabModel tab, InspectableObject inspectable)
-	{
+	public boolean isTabPanelVisible(TabModel tab, InspectableObject inspectable) {
 		return true;
 	}
 
 	@Override
-	public InspectorWidgetConfiguration getConfiguration()
-	{
+	public InspectorWidgetConfiguration getConfiguration() {
 		/*if(inspectorConfiguration == null)
 			inspectorConfiguration = new InspectorWidgetConfiguration() {
 

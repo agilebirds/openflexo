@@ -38,79 +38,70 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
 public class CreateDMEOEntityInitializer extends ActionInitializer {
 
 	static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CreateDMEOEntityInitializer(DMControllerActionInitializer actionInitializer)
-	{
-		super(CreateDMEOEntity.actionType,actionInitializer);
+	CreateDMEOEntityInitializer(DMControllerActionInitializer actionInitializer) {
+		super(CreateDMEOEntity.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected DMControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DMControllerActionInitializer)super.getControllerActionInitializer();
+	protected DMControllerActionInitializer getControllerActionInitializer() {
+		return (DMControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<CreateDMEOEntity> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<CreateDMEOEntity> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateDMEOEntity>() {
-            @Override
-			public boolean run(ActionEvent e, CreateDMEOEntity action)
-            {
-                return true;
-            }
-        };
-	}
-
-     @Override
-	protected FlexoActionFinalizer<CreateDMEOEntity> getDefaultFinalizer() 
-	{
-		return new FlexoActionFinalizer<CreateDMEOEntity>() {
-            @Override
-			public boolean run(ActionEvent e, CreateDMEOEntity action)
-            {
-                if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getRepository()) {
-                    if (logger.isLoggable(Level.FINE))
-                        logger.fine("Finalizer for CreateDMEOEntity in DMEORepositoryView");
-                    DMEORepositoryView repView = (DMEORepositoryView)getControllerActionInitializer().getDMController().getCurrentEditedObjectView();
-                    repView.getEoModelTable().selectObject(action.getDMEOModel());
-                    repView.getEoEntityTable().selectObject(action.getNewEntity());
-                } else if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getDMEOModel()) {
-                    if (logger.isLoggable(Level.FINE))
-                        logger.fine("Finalizer for CreateDMEOEntity in DMPackageView");
-                    DMEOModelView eomodelView = (DMEOModelView)getControllerActionInitializer().getDMController().getCurrentEditedObjectView();
-                    eomodelView.getEoEntityTable().selectObject(action.getNewEntity());
-                }
-                return true;
-          }
-        };
-	}
-
-     @Override
- 	protected FlexoExceptionHandler<CreateDMEOEntity> getDefaultExceptionHandler() 
- 	{
- 		return new FlexoExceptionHandler<CreateDMEOEntity>() {
- 			@Override
-			public boolean handleException(FlexoException exception, CreateDMEOEntity action) {
-                if (exception instanceof EOAccessException) {
-                    FlexoController.showError(exception.getMessage());
-                    return true;
-                }
-                return false;
+			@Override
+			public boolean run(ActionEvent e, CreateDMEOEntity action) {
+				return true;
 			}
-        };
- 	}
-
+		};
+	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected FlexoActionFinalizer<CreateDMEOEntity> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<CreateDMEOEntity>() {
+			@Override
+			public boolean run(ActionEvent e, CreateDMEOEntity action) {
+				if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getRepository()) {
+					if (logger.isLoggable(Level.FINE))
+						logger.fine("Finalizer for CreateDMEOEntity in DMEORepositoryView");
+					DMEORepositoryView repView = (DMEORepositoryView) getControllerActionInitializer().getDMController()
+							.getCurrentEditedObjectView();
+					repView.getEoModelTable().selectObject(action.getDMEOModel());
+					repView.getEoEntityTable().selectObject(action.getNewEntity());
+				} else if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getDMEOModel()) {
+					if (logger.isLoggable(Level.FINE))
+						logger.fine("Finalizer for CreateDMEOEntity in DMPackageView");
+					DMEOModelView eomodelView = (DMEOModelView) getControllerActionInitializer().getDMController()
+							.getCurrentEditedObjectView();
+					eomodelView.getEoEntityTable().selectObject(action.getNewEntity());
+				}
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected FlexoExceptionHandler<CreateDMEOEntity> getDefaultExceptionHandler() {
+		return new FlexoExceptionHandler<CreateDMEOEntity>() {
+			@Override
+			public boolean handleException(FlexoException exception, CreateDMEOEntity action) {
+				if (exception instanceof EOAccessException) {
+					FlexoController.showError(exception.getMessage());
+					return true;
+				}
+				return false;
+			}
+		};
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
 		return DMEIconLibrary.DM_EOENTITY_ICON;
 	}
- 
 
 }

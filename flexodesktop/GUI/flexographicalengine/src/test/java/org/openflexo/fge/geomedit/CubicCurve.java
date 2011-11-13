@@ -24,49 +24,41 @@ import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
 import org.openflexo.fge.geomedit.construction.CubicCurveConstruction;
 import org.openflexo.fge.geomedit.gr.CubicCurveGraphicalRepresentation;
 
-
 public class CubicCurve extends GeometricObject<FGECubicCurve> {
 
 	private CubicCurveGraphicalRepresentation graphicalRepresentation;
-	
+
 	// Called for LOAD
-	public CubicCurve(GeomEditBuilder builder)
-	{
+	public CubicCurve(GeomEditBuilder builder) {
 		super(builder);
 	}
-	
-	public CubicCurve(GeometricSet set, CubicCurveConstruction construction) 
-	{
+
+	public CubicCurve(GeometricSet set, CubicCurveConstruction construction) {
 		super(set, construction);
-		graphicalRepresentation = new CubicCurveGraphicalRepresentation(this,set.getEditedDrawing());
+		graphicalRepresentation = new CubicCurveGraphicalRepresentation(this, set.getEditedDrawing());
 	}
 
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return "QuadCurve.inspector";
 	}
 
 	@Override
-	public CubicCurveGraphicalRepresentation getGraphicalRepresentation()
-	{
+	public CubicCurveGraphicalRepresentation getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
 
-	public void setGraphicalRepresentation(CubicCurveGraphicalRepresentation aGR)
-	{
+	public void setGraphicalRepresentation(CubicCurveGraphicalRepresentation aGR) {
 		aGR.setDrawable(this);
 		graphicalRepresentation = aGR;
 	}
 
 	@Override
-	public CubicCurveConstruction getConstruction()
-	{
-		return (CubicCurveConstruction)super.getConstruction();
+	public CubicCurveConstruction getConstruction() {
+		return (CubicCurveConstruction) super.getConstruction();
 	}
 
-	public void setConstruction(CubicCurveConstruction pointConstruction)
-	{
+	public void setConstruction(CubicCurveConstruction pointConstruction) {
 		_setConstruction(pointConstruction);
 	}
 

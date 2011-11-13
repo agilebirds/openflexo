@@ -25,25 +25,21 @@ import org.apache.velocity.VelocityContext;
 import org.openflexo.foundation.rm.cg.JavaFileResource;
 import org.openflexo.generator.ProjectGenerator;
 
-
 /**
  * @author bmangez
  * 
  */
-public class UtilGenerator extends JavaClassGenerator
-{
+public class UtilGenerator extends JavaClassGenerator {
 
 	private static final String TEMPLATE_NAME = "Util.java.vm";
 	private static final Logger logger = Logger.getLogger(UtilGenerator.class.getPackage().getName());
 
-	public UtilGenerator(ProjectGenerator projectGenerator)
-	{
-		super(projectGenerator,projectGenerator.getPrefix()+"Util","");
+	public UtilGenerator(ProjectGenerator projectGenerator) {
+		super(projectGenerator, projectGenerator.getPrefix() + "Util", "");
 	}
 
 	@Override
-	public Logger getGeneratorLogger()
-	{
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
@@ -53,19 +49,19 @@ public class UtilGenerator extends JavaClassGenerator
 		vc.put("PREFIX", getPrefix());
 		return vc;
 	}
-	
-    /**
-     * Overrides rebuildDependanciesForResource
-     * @see org.openflexo.generator.utils.JavaClassGenerator#rebuildDependanciesForResource(JavaFileResource)
-     */
-    @Override
-    public void rebuildDependanciesForResource(JavaFileResource resource)
-    {
-        
-    }
-    
-    @Override
-    public String getTemplateName() {
-    	return TEMPLATE_NAME;
-    }
+
+	/**
+	 * Overrides rebuildDependanciesForResource
+	 * 
+	 * @see org.openflexo.generator.utils.JavaClassGenerator#rebuildDependanciesForResource(JavaFileResource)
+	 */
+	@Override
+	public void rebuildDependanciesForResource(JavaFileResource resource) {
+
+	}
+
+	@Override
+	public String getTemplateName() {
+		return TEMPLATE_NAME;
+	}
 }

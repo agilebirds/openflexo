@@ -26,44 +26,34 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.icon.JavaIconLibrary;
 import org.openflexo.javaparser.FJPJavaMethod;
 
-
-public class JavaMethodElement extends JavaBrowserElementWithModifiers
-{
-	public JavaMethodElement(FJPJavaMethod aMethod, JavaParserBrowser browser, BrowserElement parent)
-	{
-		super(aMethod, BrowserElementType.METHOD, browser,parent);
+public class JavaMethodElement extends JavaBrowserElementWithModifiers {
+	public JavaMethodElement(FJPJavaMethod aMethod, JavaParserBrowser browser, BrowserElement parent) {
+		super(aMethod, BrowserElementType.METHOD, browser, parent);
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
+	protected void buildChildrenVector() {
 	}
 
-	public FJPJavaMethod getJavaMethod()
-	{
-		return (FJPJavaMethod)getObject();
+	public FJPJavaMethod getJavaMethod() {
+		return (FJPJavaMethod) getObject();
 	}
 
 	@Override
-	public ImageIcon getBaseIcon()
-	{
+	public ImageIcon getBaseIcon() {
 		if (getJavaMethod().isPublic()) {
 			return JavaIconLibrary.FJP_METHOD_PUBLIC_ICON;
-		}
-		else if (getJavaMethod().isProtected()) {
+		} else if (getJavaMethod().isProtected()) {
 			return JavaIconLibrary.FJP_METHOD_PROTECTED_ICON;
-		}
-		else if (getJavaMethod().isPrivate()) {
+		} else if (getJavaMethod().isPrivate()) {
 			return JavaIconLibrary.FJP_METHOD_PRIVATE_ICON;
-		}
-		else {
+		} else {
 			return JavaIconLibrary.FJP_METHOD_DEFAULT_ICON;
 		}
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return getJavaMethod().getSimplifiedCallSignature();
 	}
 }

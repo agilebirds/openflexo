@@ -42,7 +42,6 @@ import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.ie.view.controller.dnd.IEDTListener;
 import org.openflexo.toolbox.ToolBox;
 
-
 public class DropTableZone extends IEPanel implements IEContainer, Layoutable {
 
 	private IEWOComponentView _componentView;
@@ -73,8 +72,8 @@ public class DropTableZone extends IEPanel implements IEContainer, Layoutable {
 			public void mouseClicked(MouseEvent e) {
 				if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 					if (e.getClickCount() == 2 && previousEvent != null) {
-						if (previousEvent.getClickCount() == 1 && previousEvent.getComponent() == e.getComponent() && previousEvent
-								.getButton() != e.getButton()) {
+						if (previousEvent.getClickCount() == 1 && previousEvent.getComponent() == e.getComponent()
+								&& previousEvent.getButton() != e.getButton()) {
 							e = new MouseEvent(e.getComponent(), e.getID(), e.getWhen(), e.getModifiers(), e.getX(), e.getY(), 1,
 									e.isPopupTrigger());
 						}

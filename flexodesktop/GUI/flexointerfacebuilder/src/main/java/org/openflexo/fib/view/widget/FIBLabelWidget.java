@@ -28,83 +28,73 @@ import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBLabel;
 import org.openflexo.fib.view.FIBWidgetView;
 
-
-public class FIBLabelWidget extends FIBWidgetView<FIBLabel,JLabel,String>
-{
+public class FIBLabelWidget extends FIBWidgetView<FIBLabel, JLabel, String> {
 	private static final Logger logger = Logger.getLogger(FIBLabelWidget.class.getPackage().getName());
 
-    private JLabel labelWidget;
+	private JLabel labelWidget;
 
-     public FIBLabelWidget(FIBLabel model, FIBController controller)
-    {
-        super(model,controller);
-        if (model.getData().isValid()) labelWidget = new JLabel(" ");
-        else labelWidget = new JLabel();
-        updateFont();
-        updateAlign();
-        updateLabel();
-        //updatePreferredSize();
-        
-    }
+	public FIBLabelWidget(FIBLabel model, FIBController controller) {
+		super(model, controller);
+		if (model.getData().isValid())
+			labelWidget = new JLabel(" ");
+		else
+			labelWidget = new JLabel();
+		updateFont();
+		updateAlign();
+		updateLabel();
+		// updatePreferredSize();
 
-     @Override
-	public synchronized boolean updateWidgetFromModel()
-    {
-        if (modelUpdating)
-            return false;
-        widgetUpdating = true;
-        updateLabel();
-        widgetUpdating = false;
-        return false;
-     }
-
-    /**
-     * Update the model given the actual state of the widget
-     */
-    @Override
-	public synchronized boolean updateModelFromWidget()
-    {
-    	// Read only component
-    	return false;
-    }
+	}
 
 	@Override
-	public JLabel getJComponent() 
-	{
+	public synchronized boolean updateWidgetFromModel() {
+		if (modelUpdating)
+			return false;
+		widgetUpdating = true;
+		updateLabel();
+		widgetUpdating = false;
+		return false;
+	}
+
+	/**
+	 * Update the model given the actual state of the widget
+	 */
+	@Override
+	public synchronized boolean updateModelFromWidget() {
+		// Read only component
+		return false;
+	}
+
+	@Override
+	public JLabel getJComponent() {
 		return labelWidget;
 	}
 
 	@Override
-	public JLabel getDynamicJComponent()
-	{
+	public JLabel getDynamicJComponent() {
 		return labelWidget;
 	}
 
-	protected void updateAlign()
-	{
+	protected void updateAlign() {
 		labelWidget.setHorizontalAlignment(getWidget().getAlign().getAlign());
 	}
-	
-	protected void updateLabel()
-	{
+
+	protected void updateLabel() {
 		if (getWidget().getData().isValid()) {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
-				public void run()
-				{
-					if (getWidget() != null) 
-						labelWidget.setText(getWidget().getLocalize()?getLocalized(getValue()):getValue());
+				public void run() {
+					if (getWidget() != null)
+						labelWidget.setText(getWidget().getLocalize() ? getLocalized(getValue()) : getValue());
 				}
 			});
-		}
-		else {
-			labelWidget.setText(getWidget().getLocalize()?getLocalized(getWidget().getLabel()):getWidget().getLabel());
+		} else {
+			labelWidget.setText(getWidget().getLocalize() ? getLocalized(getWidget().getLabel()) : getWidget().getLabel());
 		}
 	}
-	
+
 	@Override
-	public void updateLanguage()
-	{
+	public void updateLanguage() {
 		super.updateLanguage();
 		updateLabel();
 	}

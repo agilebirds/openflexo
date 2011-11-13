@@ -26,7 +26,6 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 
-
 import org.openflexo.dre.DocSubmissionReportDialog;
 import org.openflexo.drm.action.ImportDocSubmissionReport;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -41,68 +40,62 @@ public class ImportDocSubmissionReportInitializer extends ActionInitializer {
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	ImportDocSubmissionReportInitializer(DREControllerActionInitializer actionInitializer)
-	{
-		super(ImportDocSubmissionReport.actionType,actionInitializer);
-	}
-	
-	@Override
-	protected DREControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DREControllerActionInitializer)super.getControllerActionInitializer();
-	}
-	
-	@Override
-	protected FlexoActionInitializer<ImportDocSubmissionReport> getDefaultInitializer() 
-	{
-		return new FlexoActionInitializer<ImportDocSubmissionReport>() {
-            @Override
-			public boolean run(ActionEvent e, ImportDocSubmissionReport action)
-            {
-                 if (action.getDocSubmissionReportFile() == null) {
-                    JFileChooser chooser = new JFileChooser();
-                    chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                    chooser.setDialogTitle(FlexoLocalization.localizedForKey("please_select_a_file"));
-                    chooser.setFileFilter(new FileFilter() {
-                        @Override
-						public boolean accept(File f) {
-                            return f.getName().endsWith(".dsr");
-                        }
-                       @Override
-					public String getDescription() {
-                            return FlexoLocalization.localizedForKey("doc_submission_report_files");
-                        }
-                        
-                    });  
-                    if ((chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) 
-                            && (chooser.getSelectedFile() != null)) {
-                        action.setDocSubmissionReportFile(chooser.getSelectedFile());
-                    } else {
-                        return false;
-                    }
-                }
-                if (action.getDocSubmissionReport() == null) {
-                    FlexoController.showError(FlexoLocalization.localizedForKey("could_not_open_file"));
-                    return false;
-                }                
-                DocSubmissionReportDialog dialog = new DocSubmissionReportDialog(action.getDocSubmissionReport());
-                action.setActionsToImport(dialog.getSelectedActions());
-                return true;
-            }
-        };
+	ImportDocSubmissionReportInitializer(DREControllerActionInitializer actionInitializer) {
+		super(ImportDocSubmissionReport.actionType, actionInitializer);
 	}
 
-     @Override
-	protected FlexoActionFinalizer<ImportDocSubmissionReport> getDefaultFinalizer() 
-	{
-		return new FlexoActionFinalizer<ImportDocSubmissionReport>() {
-            @Override
-			public boolean run(ActionEvent e, ImportDocSubmissionReport action)
-            {
-                FlexoController.notify(FlexoLocalization.localizedForKey("import_completed"));
-                return true;
-           }
-        };
+	@Override
+	protected DREControllerActionInitializer getControllerActionInitializer() {
+		return (DREControllerActionInitializer) super.getControllerActionInitializer();
 	}
-    
+
+	@Override
+	protected FlexoActionInitializer<ImportDocSubmissionReport> getDefaultInitializer() {
+		return new FlexoActionInitializer<ImportDocSubmissionReport>() {
+			@Override
+			public boolean run(ActionEvent e, ImportDocSubmissionReport action) {
+				if (action.getDocSubmissionReportFile() == null) {
+					JFileChooser chooser = new JFileChooser();
+					chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+					chooser.setDialogTitle(FlexoLocalization.localizedForKey("please_select_a_file"));
+					chooser.setFileFilter(new FileFilter() {
+						@Override
+						public boolean accept(File f) {
+							return f.getName().endsWith(".dsr");
+						}
+
+						@Override
+						public String getDescription() {
+							return FlexoLocalization.localizedForKey("doc_submission_report_files");
+						}
+
+					});
+					if ((chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) && (chooser.getSelectedFile() != null)) {
+						action.setDocSubmissionReportFile(chooser.getSelectedFile());
+					} else {
+						return false;
+					}
+				}
+				if (action.getDocSubmissionReport() == null) {
+					FlexoController.showError(FlexoLocalization.localizedForKey("could_not_open_file"));
+					return false;
+				}
+				DocSubmissionReportDialog dialog = new DocSubmissionReportDialog(action.getDocSubmissionReport());
+				action.setActionsToImport(dialog.getSelectedActions());
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected FlexoActionFinalizer<ImportDocSubmissionReport> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<ImportDocSubmissionReport>() {
+			@Override
+			public boolean run(ActionEvent e, ImportDocSubmissionReport action) {
+				FlexoController.notify(FlexoLocalization.localizedForKey("import_completed"));
+				return true;
+			}
+		};
+	}
+
 }

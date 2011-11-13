@@ -30,27 +30,23 @@ package org.openflexo.xmlcode;
  * @see XMLCoder
  * @see XMLDecoder
  */
-public class InvalidModelException extends RuntimeException
-{
+public class InvalidModelException extends RuntimeException {
 
-    /**
-     * Creates a new <code>InvalidModelException</code> instance.
-     * 
-     */
-    public InvalidModelException()
-    {
-        super();
-    }
+	/**
+	 * Creates a new <code>InvalidModelException</code> instance.
+	 * 
+	 */
+	public InvalidModelException() {
+		super();
+	}
 
-    /**
-     * Creates a new <code>InvalidModelException</code> instance, given a
-     * message <code>aMessage</code>
-     * 
-     * @param aMessage
-     *            a <code>String</code> value
-     */
-    public InvalidModelException(String aMessage)
-    {
-        super(aMessage);
-    }
+	/**
+	 * Creates a new <code>InvalidModelException</code> instance, given a message <code>aMessage</code>
+	 * 
+	 * @param aMessage
+	 *            a <code>String</code> value
+	 */
+	public InvalidModelException(String aMessage) {
+		super(aMessage);
+	}
 }

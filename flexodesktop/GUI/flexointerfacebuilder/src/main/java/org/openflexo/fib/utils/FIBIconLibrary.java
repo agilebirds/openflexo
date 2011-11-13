@@ -9,7 +9,7 @@ import org.openflexo.toolbox.ImageIconResource;
  * Utility class containing all icons used in FIB
  * 
  * @author sylvain
- *
+ * 
  */
 public class FIBIconLibrary {
 
@@ -26,7 +26,7 @@ public class FIBIconLibrary {
 	public static final ImageIcon BROWSER_FILTERS_ICON = new ImageIconResource("Icons/GUI/BrowserFilters.gif");
 	public static final ImageIcon BROWSER_FILTERS_DISABLED_ICON = new ImageIconResource("Icons/GUI/BrowserFiltersDisabled.gif");
 	public static final ImageIcon BROWSER_FILTERS_SELECTED_ICON = new ImageIconResource("Icons/GUI/BrowserFiltersSelected.gif");
-	
+
 	public static final ImageIcon ROUND_PANEL_BORDER = new ImageIconResource("Icons/GUI/RoundPanelBorder.png");
 	public static final ImageIcon ROUND_PANEL_BORDER_TOP_LEFT = new ImageIconResource("Icons/GUI/RoundPanelBorderTopLeft.png");
 	public static final ImageIcon ROUND_PANEL_BORDER_TOP_RIGHT = new ImageIconResource("Icons/GUI/RoundPanelBorderTopRight.png");
@@ -44,11 +44,14 @@ public class FIBIconLibrary {
 	public static final ImageIcon ENUM_ICON = new ImageIconResource("Icons/ClassSelector/Enumeration.gif");
 
 	// Icons used in BindingSelector
-	public static final ImageIcon ARROW_RIGHT_ICON = new ImageIcon((new FileResource("Icons/BindingSelector/SmallArrowRight.gif")).getAbsolutePath());
-	public static final ImageIcon CONNECTED_ICON = new ImageIcon((new FileResource("Icons/BindingSelector/Connected.gif")).getAbsolutePath());
+	public static final ImageIcon ARROW_RIGHT_ICON = new ImageIcon(
+			(new FileResource("Icons/BindingSelector/SmallArrowRight.gif")).getAbsolutePath());
+	public static final ImageIcon CONNECTED_ICON = new ImageIcon(
+			(new FileResource("Icons/BindingSelector/Connected.gif")).getAbsolutePath());
 	public static final ImageIcon METHOD_ICON = new ImageIconResource("Icons/BindingSelector/Method.gif");
 	public static final ImageIcon TOGGLE_ARROW_BOTTOM_ICON = new ImageIconResource("Icons/BindingSelector/toggleArrowBottom.gif");
-	public static final ImageIcon TOGGLE_ARROW_BOTTOM_SELECTED_ICON = new ImageIconResource("Icons/BindingSelector/toggleArrowBottomSelected.gif");
+	public static final ImageIcon TOGGLE_ARROW_BOTTOM_SELECTED_ICON = new ImageIconResource(
+			"Icons/BindingSelector/toggleArrowBottomSelected.gif");
 	public static final ImageIcon TOGGLE_ARROW_TOP_ICON = new ImageIconResource("Icons/BindingSelector/toggleArrowTop.gif");
 	public static final ImageIcon TOGGLE_ARROW_TOP_SELECTED_ICON = new ImageIconResource("Icons/BindingSelector/toggleArrowTopSelected.gif");
 	public static final ImageIcon OK_ICON = new ImageIconResource("Icons/BindingSelector/OK.gif");
@@ -65,7 +68,8 @@ public class FIBIconLibrary {
 	public static final ImageIcon LESS_THAN_ICON = new ImageIconResource("Icons/BindingSelector/Operators/LessThan.gif");
 	public static final ImageIcon LESS_THAN_OR_EQUALS_ICON = new ImageIconResource("Icons/BindingSelector/Operators/LessThanOrEquals.gif");
 	public static final ImageIcon GREATER_THAN_ICON = new ImageIconResource("Icons/BindingSelector/Operators/GreaterThan.gif");
-	public static final ImageIcon GREATER_THAN_OR_EQUALS_ICON = new ImageIconResource("Icons/BindingSelector/Operators/GreaterThanOrEquals.gif");
+	public static final ImageIcon GREATER_THAN_OR_EQUALS_ICON = new ImageIconResource(
+			"Icons/BindingSelector/Operators/GreaterThanOrEquals.gif");
 	public static final ImageIcon AND_ICON = new ImageIconResource("Icons/BindingSelector/Operators/AND.gif");
 	public static final ImageIcon OR_ICON = new ImageIconResource("Icons/BindingSelector/Operators/OR.gif");
 	public static final ImageIcon NOT_ICON = new ImageIconResource("Icons/BindingSelector/Operators/NOT.gif");
@@ -79,8 +83,6 @@ public class FIBIconLibrary {
 	public static final ImageIcon ATAN_ICON = new ImageIconResource("Icons/BindingSelector/Operators/ATan.gif");
 	public static final ImageIcon POWER_ICON = new ImageIconResource("Icons/BindingSelector/Operators/Power.gif");
 	public static final ImageIcon SQRT_ICON = new ImageIconResource("Icons/BindingSelector/Operators/SQRT.gif");
-
-
 
 	// Misc
 	public static final ImageIconResource LOCALIZATION_ICON = new ImageIconResource("Resources/CED/LocalizationIcon.gif");

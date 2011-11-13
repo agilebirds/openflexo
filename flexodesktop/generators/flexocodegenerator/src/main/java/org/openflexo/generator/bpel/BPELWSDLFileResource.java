@@ -37,145 +37,132 @@ import org.openflexo.generator.rm.GenerationAvailableFileResource;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileFormat;
 
-
 /**
  * @author sylvain
  * 
  */
-public class BPELWSDLFileResource extends TextFileResource<BPELWSDLFileGenerator, CGTextFile> implements GenerationAvailableFileResource, FlexoObserver
-{
-    public static Logger logger = FlexoLogger.getLogger(BPELWSDLFileResource.class.getPackage().getName());
-
-    /**
-     * @param builder
-     */
-    public BPELWSDLFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
-
-    /**
-     * @param aProject
-     */
-    public BPELWSDLFileResource(FlexoProject aProject)
-    {
-    	super(aProject);
-    }
-
-    public static String nameForRepositoryAndIdentifier(GenerationRepository repository, String identifier)
-    {
-    	return repository.getName()+".BPEL_WSDL."+identifier;
-    }
-
-    protected String getIdentifier() 
-    {
-    	if (getGenerator() != null) {
-			return getGenerator().getIdentifier();
-		}
-    	return null;
-    }
-
-    @Override
-	public String getFileName() 
-    {
-    	if (getGenerator() != null) {
-			return getGenerator().getFileName();
-		}
-    	return null;
-    }
-
-    @Override
-	protected BPELWSDLFile createGeneratedResourceData()
-    {
-    	return new BPELWSDLFile(getFile(),this);
-    }
-    
-
-    @Override
-	public BPELWSDLFile getGeneratedResourceData()
-    {
-    	return (BPELWSDLFile)super.getGeneratedResourceData();
-    }
-
-    /**
-     * Overrides getFileFormat
-     * @see org.openflexo.foundation.rm.cg.TextFileResource#getFileFormat()
-     */
-    @Override
-    public FileFormat getResourceFormat()
-    {
-        return FileFormat.WSDL;
-    }
-    
-    /**
-     * Overrides getResourceType
-     * @see org.openflexo.foundation.rm.cg.TextFileResource#getResourceType()
-     */
-    @Override
-    public ResourceType getResourceType()
-    {
-        return ResourceType.WSDL;
-    }
-    
-    /**
-     * Overrides update
-     * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable, org.openflexo.foundation.DataModification)
-     */
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-    {
-    	// TODO: is it required for BPEL ???
-        /*if (observable==getGenerator().getObject()) {
-            if (dataModification.propertyName()!=null && dataModification.equals("dontGenerate")) {
-                if (getGenerator().getObject().getDontGenerate()) {
-                    logger.info("Handle dont generate for object");
-                    setGenerator(null);
-                    getCGFile().setMarkedForDeletion(true);
-                    getCGFile().getRepository().refresh();
-                }
-            }
-        }*/
-    }
-
-    public void registerObserverWhenRequired()
-    {
-       	// TODO: is it required for BPEL ???
-    	/*if ((!isObserverRegistered) && (getEntity() != null)) {
-    		isObserverRegistered = true;
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("*** addObserver "+getFileName()+" for "+getEntity());
-    		getEntity().addObserver(this);
-    	}*/
-    }
-
-    /**
-     * Implements the dependancy model of BPEL
-     * WSDL file depends of DataModel and related webservice
-     */
-    @Override
-    public void rebuildDependancies() {
-    	super.rebuildDependancies();
-        addToDependantResources(getProject().getFlexoDMResource());
-        addToDependantResources(getGenerator().getWebService().getFlexoResource());
-    }
+public class BPELWSDLFileResource extends TextFileResource<BPELWSDLFileGenerator, CGTextFile> implements GenerationAvailableFileResource,
+		FlexoObserver {
+	public static Logger logger = FlexoLogger.getLogger(BPELWSDLFileResource.class.getPackage().getName());
 
 	/**
-     * Return dependancy computing between this resource, and an other resource,
-     * asserting that this resource is contained in this resource's dependant resources
-     * 
-     * @param resource
-	 * @param dependancyScheme
-     * @return
-     */
+	 * @param builder
+	 */
+	public BPELWSDLFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
+
+	/**
+	 * @param aProject
+	 */
+	public BPELWSDLFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
+
+	public static String nameForRepositoryAndIdentifier(GenerationRepository repository, String identifier) {
+		return repository.getName() + ".BPEL_WSDL." + identifier;
+	}
+
+	protected String getIdentifier() {
+		if (getGenerator() != null) {
+			return getGenerator().getIdentifier();
+		}
+		return null;
+	}
+
 	@Override
-	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate)
-	{
+	public String getFileName() {
+		if (getGenerator() != null) {
+			return getGenerator().getFileName();
+		}
+		return null;
+	}
+
+	@Override
+	protected BPELWSDLFile createGeneratedResourceData() {
+		return new BPELWSDLFile(getFile(), this);
+	}
+
+	@Override
+	public BPELWSDLFile getGeneratedResourceData() {
+		return (BPELWSDLFile) super.getGeneratedResourceData();
+	}
+
+	/**
+	 * Overrides getFileFormat
+	 * 
+	 * @see org.openflexo.foundation.rm.cg.TextFileResource#getFileFormat()
+	 */
+	@Override
+	public FileFormat getResourceFormat() {
+		return FileFormat.WSDL;
+	}
+
+	/**
+	 * Overrides getResourceType
+	 * 
+	 * @see org.openflexo.foundation.rm.cg.TextFileResource#getResourceType()
+	 */
+	@Override
+	public ResourceType getResourceType() {
+		return ResourceType.WSDL;
+	}
+
+	/**
+	 * Overrides update
+	 * 
+	 * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable,
+	 *      org.openflexo.foundation.DataModification)
+	 */
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		// TODO: is it required for BPEL ???
+		/*if (observable==getGenerator().getObject()) {
+		    if (dataModification.propertyName()!=null && dataModification.equals("dontGenerate")) {
+		        if (getGenerator().getObject().getDontGenerate()) {
+		            logger.info("Handle dont generate for object");
+		            setGenerator(null);
+		            getCGFile().setMarkedForDeletion(true);
+		            getCGFile().getRepository().refresh();
+		        }
+		    }
+		}*/
+	}
+
+	public void registerObserverWhenRequired() {
+		// TODO: is it required for BPEL ???
+		/*if ((!isObserverRegistered) && (getEntity() != null)) {
+			isObserverRegistered = true;
+		    if (logger.isLoggable(Level.FINE))
+		        logger.fine("*** addObserver "+getFileName()+" for "+getEntity());
+			getEntity().addObserver(this);
+		}*/
+	}
+
+	/**
+	 * Implements the dependancy model of BPEL WSDL file depends of DataModel and related webservice
+	 */
+	@Override
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
+		addToDependantResources(getProject().getFlexoDMResource());
+		addToDependantResources(getGenerator().getWebService().getFlexoResource());
+	}
+
+	/**
+	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this
+	 * resource's dependant resources
+	 * 
+	 * @param resource
+	 * @param dependancyScheme
+	 * @return
+	 */
+	@Override
+	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate) {
 		if (resource instanceof TemplateLocator) {
-			return ((TemplateLocator)resource).needsUpdateForResource(this);
+			return ((TemplateLocator) resource).needsUpdateForResource(this);
 		}
 		return super.optimisticallyDependsOf(resource, requestDate);
 	}
 
-
 }
-

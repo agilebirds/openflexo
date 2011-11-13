@@ -33,29 +33,26 @@ import org.openflexo.view.controller.FlexoFIBController;
  * 
  * @author Nicolas Daniels
  */
-public class HibernateEnumContainerView extends FIBModuleView<HibernateEnumContainer>
-{
+public class HibernateEnumContainerView extends FIBModuleView<HibernateEnumContainer> {
 	public static String HIBERNATE_ENUM_CONTAINER_VIEW_FIB_RESOURCE_PATH = "/Hibernate/Fib/EnumContainerView.fib";
 
 	private FlexoPerspective<? super HibernateEnumContainer> declaredPerspective;
-	
-	public HibernateEnumContainerView(HibernateEnumContainer hibernateEnumContainer, SGController controller, FlexoPerspective<? super HibernateEnumContainer> perspective)
-    {
-		super(hibernateEnumContainer, controller, HIBERNATE_ENUM_CONTAINER_VIEW_FIB_RESOURCE_PATH);
-        declaredPerspective = perspective;
-    }
 
-    @Override
-    public SGController getFlexoController()
-    {
-    	return (SGController)super.getFlexoController();
-    }
-    
+	public HibernateEnumContainerView(HibernateEnumContainer hibernateEnumContainer, SGController controller,
+			FlexoPerspective<? super HibernateEnumContainer> perspective) {
+		super(hibernateEnumContainer, controller, HIBERNATE_ENUM_CONTAINER_VIEW_FIB_RESOURCE_PATH);
+		declaredPerspective = perspective;
+	}
+
 	@Override
-	public FlexoPerspective<? super HibernateEnumContainer> getPerspective()
-    {
-    	return declaredPerspective;
-    }
+	public SGController getFlexoController() {
+		return (SGController) super.getFlexoController();
+	}
+
+	@Override
+	public FlexoPerspective<? super HibernateEnumContainer> getPerspective() {
+		return declaredPerspective;
+	}
 
 	/**
 	 * {@inheritDoc}

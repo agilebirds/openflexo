@@ -32,92 +32,83 @@ import javax.swing.table.TableCellRenderer;
 
 import org.openflexo.inspector.InspectableObject;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public abstract class EditableStringColumn extends StringColumn implements EditableColumn
-{
-	
+public abstract class EditableStringColumn extends StringColumn implements EditableColumn {
+
 	private DefaultCellEditor editor;
 
-    public EditableStringColumn(String title, int defaultWidth)
-    {
-        super(title, defaultWidth);
-    }
+	public EditableStringColumn(String title, int defaultWidth) {
+		super(title, defaultWidth);
+	}
 
-    public EditableStringColumn(String title, int defaultWidth, boolean isResizable)
-    {
-        this(title, defaultWidth, isResizable, true);
-    }
+	public EditableStringColumn(String title, int defaultWidth, boolean isResizable) {
+		this(title, defaultWidth, isResizable, true);
+	}
 
-    public EditableStringColumn(String title, int defaultWidth, boolean isResizable, boolean displayTitle)
-    {
-        super(title, defaultWidth, isResizable, displayTitle);
-    }
+	public EditableStringColumn(String title, int defaultWidth, boolean isResizable, boolean displayTitle) {
+		super(title, defaultWidth, isResizable, displayTitle);
+	}
 
-    public EditableStringColumn(String title, int defaultWidth, boolean isResizable, boolean displayTitle, String font)
-    {
-        super(title, defaultWidth, isResizable, displayTitle, font);
-    }
+	public EditableStringColumn(String title, int defaultWidth, boolean isResizable, boolean displayTitle, String font) {
+		super(title, defaultWidth, isResizable, displayTitle, font);
+	}
 
-    @Override
-	public boolean isCellEditableFor(InspectableObject object)
-    {
-        return true;
-    }
-    
-    @Override
-    public boolean requireCellRenderer() {
-    	return true;
-    }
+	@Override
+	public boolean isCellEditableFor(InspectableObject object) {
+		return true;
+	}
 
-    @Override
-    public TableCellRenderer getCellRenderer() {
-    	return getDefaultTableCellRenderer();
-    }
-    
-    @Override
-    public boolean requireCellEditor() {
-    	return true;
-    }
-    
-    @Override
-    public TableCellEditor getCellEditor() {
-    	if(editor==null) {
-    		editor = new DefaultCellEditor(new JTextField()) {
-    			@Override
-    			public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-    				final JTextField textfield = (JTextField)super.getTableCellEditorComponent(table, value, isSelected, row, column);
-    				textfield.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-    				SwingUtilities.invokeLater(new Runnable(){
-    					@Override
+	@Override
+	public boolean requireCellRenderer() {
+		return true;
+	}
+
+	@Override
+	public TableCellRenderer getCellRenderer() {
+		return getDefaultTableCellRenderer();
+	}
+
+	@Override
+	public boolean requireCellEditor() {
+		return true;
+	}
+
+	@Override
+	public TableCellEditor getCellEditor() {
+		if (editor == null) {
+			editor = new DefaultCellEditor(new JTextField()) {
+				@Override
+				public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+					final JTextField textfield = (JTextField) super.getTableCellEditorComponent(table, value, isSelected, row, column);
+					textfield.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+					SwingUtilities.invokeLater(new Runnable() {
+						@Override
 						public void run() {
-    						textfield.selectAll();
-    					}
-    				});
-    				return textfield;
-    			}
-    		};
-    	}
-    	return editor;
-    }
-    
-    @Override
-	public void setValueFor(InspectableObject object, Object value)
-    {
-        setValue(object, (String) value);
-        notifyValueChangedFor(object);
-   }
+							textfield.selectAll();
+						}
+					});
+					return textfield;
+				}
+			};
+		}
+		return editor;
+	}
 
-    public abstract void setValue(InspectableObject object, String aValue);
+	@Override
+	public void setValueFor(InspectableObject object, Object value) {
+		setValue(object, (String) value);
+		notifyValueChangedFor(object);
+	}
 
-    @Override
-	public String toString()
-    {
-        return "EditableStringColumn " + "[" + getTitle() + "]" + Integer.toHexString(hashCode());
-    }
+	public abstract void setValue(InspectableObject object, String aValue);
+
+	@Override
+	public String toString() {
+		return "EditableStringColumn " + "[" + getTitle() + "]" + Integer.toHexString(hashCode());
+	}
 }

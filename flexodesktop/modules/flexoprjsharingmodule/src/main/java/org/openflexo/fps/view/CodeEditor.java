@@ -23,26 +23,21 @@ import org.openflexo.fps.CVSFile;
 import org.openflexo.fps.CVSFile.FileContentEditor;
 import org.openflexo.fps.controller.FPSController;
 
+public class CodeEditor extends CodeDisplayer implements FileContentEditor {
 
-public class CodeEditor extends CodeDisplayer implements FileContentEditor
-{
-
-	public CodeEditor(CVSFile cvsFile, FPSController controller)
-	{
-		super(cvsFile,controller);
+	public CodeEditor(CVSFile cvsFile, FPSController controller) {
+		super(cvsFile, controller);
 		_component.setEditable(true);
 		setEditedContent(getCVSFile());
 	}
 
 	@Override
-	public String getEditedContent() 
-	{
+	public String getEditedContent() {
 		return _component.getEditedContent();
 	}
 
 	@Override
-	public void setEditedContent(CVSFile file) 
-	{
+	public void setEditedContent(CVSFile file) {
 		_component.setEditedContent(file);
 	}
 

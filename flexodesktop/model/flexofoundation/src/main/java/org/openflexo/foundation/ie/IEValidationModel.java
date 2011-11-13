@@ -42,85 +42,82 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class IEValidationModel extends ValidationModel
-{
+public class IEValidationModel extends ValidationModel {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(IEValidationModel.class.getPackage().getName());
 
-    public IEValidationModel(FlexoProject project)
-    {
-        this(project,project.getTargetType());
-    }
-    
-    public IEValidationModel(FlexoProject project, TargetType targetType)
-    {
-        super(project,targetType);
-        registerRule(new FlexoComponentFolder.RootFolderMustHaveAPrefix());
-        registerRule(new IEHyperlinkWidget.HyperlinkUrlMustHaveAnUrl());
-        
-        registerRule(new RequiredBindingValidationRule<IEEditableTextWidget>(IEEditableTextWidget.class,"bindingValue","bindingValueDefinition"));
-        registerRule(new RequiredBindingValidationRule<IEStringWidget>(IEStringWidget.class,"bindingValue","bindingValueDefinition"));
-        registerRule(new RequiredBindingValidationRule<RepetitionOperator>(RepetitionOperator.class,"bindingItem","bindingItemDefinition"));
-        registerRule(new IEAbstractListWidget.DropdownMustDefineABindingList());
-        registerRule(new RequiredBindingValidationRule<IECheckBoxWidget>(IECheckBoxWidget.class,"bindingChecked","bindingCheckedDefinition"));
-        registerRule(new RequiredBindingValidationRule<ConditionalOperator>(ConditionalOperator.class,"bindingConditional","bindingConditionalDefinition"));
-        registerRule(new IEPopupComponent.PopupRequiresAConfirmOrCancelButtonRule());
-        
-        registerRule(new ComponentInstance.DefinedBindingsMustBeValid());
-        registerRule(new ComponentInstance.MandatoryBindingsMustHaveAValue());
+	public IEValidationModel(FlexoProject project) {
+		this(project, project.getTargetType());
+	}
 
-        registerRule(new IEAbstractListWidget.DropdownMustDefineABindingSelection());
-        registerRule(new IEAbstractListWidget.DropDownWithKeyValueMustDefineADomain());
-        registerRule(new IELabelWidget.LabelDontHaveDoubleDoubleDot());
-        registerRule(new IELabelWidget.LabelHaveAtLeastOneDoubleDot());
-        registerRule(new IELabelWidget.NoWhiteSpaceBeforeDoubleDot());
-        registerRule(new IEButtonWidget.DateAssistantPopupMustBeLinkedWithADateTextField());
-        registerRule(new IEButtonWidget.SearchButtonMustBeOfTypeSearch());
-        registerRule(new IEButtonWidget.EmailButtonMustBeOfTypeEmail());
-        registerRule(new FlexoItemMenu.RootItemMustBeBound());
-        registerRule(new FlexoItemMenu.MenuMustDefineAnOperation());
-        registerRule(new IEWOComponent.ComponentCannotHaveTwoListWithSameName());
-        registerRule(new RepetitionOperator.ListMustHaveAName());
-        registerRule(new RepetitionOperator.RawRowRepetitionCanNotContainEditableField());
-        registerRule(new IETextFieldWidget.ExampleValueMustMatchFieldType());
-        registerRule(new ComponentDefinition.BindingsMustDefineType());
-        registerRule(new IEHeaderWidget.HeaderMustBeInATableContainingARepetition());
-        registerRule(new IERadioButtonWidget.RadioButtonMustBeAllInTheSameRepetition());
-        registerRule(new IERadioButtonWidget.RadioButtonReloadOnChange());
-        registerRule(new IECheckBoxWidget.RadioButtonReloadOnChange());
-        // Notify that the validation model is complete and that inheritance
-        // computation could be performed
-        update();
-    }
+	public IEValidationModel(FlexoProject project, TargetType targetType) {
+		super(project, targetType);
+		registerRule(new FlexoComponentFolder.RootFolderMustHaveAPrefix());
+		registerRule(new IEHyperlinkWidget.HyperlinkUrlMustHaveAnUrl());
 
-    /**
-     * Return a boolean indicating if validation of supplied object must be
-     * notified
-     * 
-     * @param next
-     * @return a boolean
-     */
-    @Override
-	protected boolean shouldNotifyValidation(Validable next)
-    {
-        return next instanceof IEWOComponent;
-    }
+		registerRule(new RequiredBindingValidationRule<IEEditableTextWidget>(IEEditableTextWidget.class, "bindingValue",
+				"bindingValueDefinition"));
+		registerRule(new RequiredBindingValidationRule<IEStringWidget>(IEStringWidget.class, "bindingValue", "bindingValueDefinition"));
+		registerRule(new RequiredBindingValidationRule<RepetitionOperator>(RepetitionOperator.class, "bindingItem", "bindingItemDefinition"));
+		registerRule(new IEAbstractListWidget.DropdownMustDefineABindingList());
+		registerRule(new RequiredBindingValidationRule<IECheckBoxWidget>(IECheckBoxWidget.class, "bindingChecked",
+				"bindingCheckedDefinition"));
+		registerRule(new RequiredBindingValidationRule<ConditionalOperator>(ConditionalOperator.class, "bindingConditional",
+				"bindingConditionalDefinition"));
+		registerRule(new IEPopupComponent.PopupRequiresAConfirmOrCancelButtonRule());
 
-    /**
-     * Overrides fixAutomaticallyIfOneFixProposal
-     * @see org.openflexo.foundation.validation.ValidationModel#fixAutomaticallyIfOneFixProposal()
-     */
-    @Override
-    public boolean fixAutomaticallyIfOneFixProposal()
-    {
-        return false;
-}
+		registerRule(new ComponentInstance.DefinedBindingsMustBeValid());
+		registerRule(new ComponentInstance.MandatoryBindingsMustHaveAValue());
+
+		registerRule(new IEAbstractListWidget.DropdownMustDefineABindingSelection());
+		registerRule(new IEAbstractListWidget.DropDownWithKeyValueMustDefineADomain());
+		registerRule(new IELabelWidget.LabelDontHaveDoubleDoubleDot());
+		registerRule(new IELabelWidget.LabelHaveAtLeastOneDoubleDot());
+		registerRule(new IELabelWidget.NoWhiteSpaceBeforeDoubleDot());
+		registerRule(new IEButtonWidget.DateAssistantPopupMustBeLinkedWithADateTextField());
+		registerRule(new IEButtonWidget.SearchButtonMustBeOfTypeSearch());
+		registerRule(new IEButtonWidget.EmailButtonMustBeOfTypeEmail());
+		registerRule(new FlexoItemMenu.RootItemMustBeBound());
+		registerRule(new FlexoItemMenu.MenuMustDefineAnOperation());
+		registerRule(new IEWOComponent.ComponentCannotHaveTwoListWithSameName());
+		registerRule(new RepetitionOperator.ListMustHaveAName());
+		registerRule(new RepetitionOperator.RawRowRepetitionCanNotContainEditableField());
+		registerRule(new IETextFieldWidget.ExampleValueMustMatchFieldType());
+		registerRule(new ComponentDefinition.BindingsMustDefineType());
+		registerRule(new IEHeaderWidget.HeaderMustBeInATableContainingARepetition());
+		registerRule(new IERadioButtonWidget.RadioButtonMustBeAllInTheSameRepetition());
+		registerRule(new IERadioButtonWidget.RadioButtonReloadOnChange());
+		registerRule(new IECheckBoxWidget.RadioButtonReloadOnChange());
+		// Notify that the validation model is complete and that inheritance
+		// computation could be performed
+		update();
+	}
+
+	/**
+	 * Return a boolean indicating if validation of supplied object must be notified
+	 * 
+	 * @param next
+	 * @return a boolean
+	 */
+	@Override
+	protected boolean shouldNotifyValidation(Validable next) {
+		return next instanceof IEWOComponent;
+	}
+
+	/**
+	 * Overrides fixAutomaticallyIfOneFixProposal
+	 * 
+	 * @see org.openflexo.foundation.validation.ValidationModel#fixAutomaticallyIfOneFixProposal()
+	 */
+	@Override
+	public boolean fixAutomaticallyIfOneFixProposal() {
+		return false;
+	}
 }

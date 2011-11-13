@@ -39,40 +39,37 @@ import org.openflexo.view.menu.EditMenu;
 import org.openflexo.view.menu.FlexoMenuItem;
 import org.openflexo.wkf.controller.WKFController;
 
-
 /**
  * 'Edit' menu
  * 
  * @author sguerin
  */
-public class WKFEditMenu extends EditMenu
-{
+public class WKFEditMenu extends EditMenu {
 
-    private static final Logger logger = Logger.getLogger(WKFEditMenu.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(WKFEditMenu.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance Variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance Variables
+	// =========================
+	// ==========================================================================
 
-    protected WKFController _wkfController;
+	protected WKFController _wkfController;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public WKFEditMenu(WKFController controller)
-    {
-        super(controller);
-        _wkfController = controller;
-        //addSeparator();
-        add(cutItem = new FlexoMenuItem(WKFCut.actionType, getController()));
-        add(copyItem = new FlexoMenuItem(WKFCopy.actionType, getController()));
-        add(pasteItem = new FlexoMenuItem(WKFPaste.actionType, getController()));
-        add(deleteItem = new FlexoMenuItem(WKFDelete.actionType, getController()));
-        deleteItem.getInputMap().put(KeyStroke.getKeyStroke((char)FlexoCst.DELETE_KEY_CODE),"doClick");
-        add(selectAllItem = new FlexoMenuItem(WKFSelectAll.actionType, getController()));
-    }
+	public WKFEditMenu(WKFController controller) {
+		super(controller);
+		_wkfController = controller;
+		// addSeparator();
+		add(cutItem = new FlexoMenuItem(WKFCut.actionType, getController()));
+		add(copyItem = new FlexoMenuItem(WKFCopy.actionType, getController()));
+		add(pasteItem = new FlexoMenuItem(WKFPaste.actionType, getController()));
+		add(deleteItem = new FlexoMenuItem(WKFDelete.actionType, getController()));
+		deleteItem.getInputMap().put(KeyStroke.getKeyStroke((char) FlexoCst.DELETE_KEY_CODE), "doClick");
+		add(selectAllItem = new FlexoMenuItem(WKFSelectAll.actionType, getController()));
+	}
 
 }

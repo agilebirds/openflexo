@@ -22,10 +22,9 @@ package org.openflexo.sg.formatter.exception;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.toolbox.FileFormat;
 
-
 /**
  * @author Nicolas Daniels
- *
+ * 
  */
 @SuppressWarnings("serial")
 public class FormattingException extends GenerationException {

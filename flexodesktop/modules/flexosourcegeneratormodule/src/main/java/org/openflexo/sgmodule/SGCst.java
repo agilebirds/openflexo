@@ -24,40 +24,39 @@ import java.io.File;
 
 import org.openflexo.toolbox.FileResource;
 
-
 /**
  * Constants used by the Source Generator module.
  * 
  * @author sylvain
  */
-public class SGCst
-{
+public class SGCst {
 
-    public static String SG_MODULE_VERSION = "0.0.1";
+	public static String SG_MODULE_VERSION = "0.0.1";
 
-    public static String SG_MODULE_SHORT_NAME = "SG";
+	public static String SG_MODULE_SHORT_NAME = "SG";
 
-    public static String SG_MODULE_NAME = "sg_module_name";
+	public static String SG_MODULE_NAME = "sg_module_name";
 
-    public static String SG_MODULE_DESCRIPTION = "sg_module_name_description";
+	public static String SG_MODULE_DESCRIPTION = "sg_module_name_description";
 
-    public static final int MINIMUM_BROWSER_VIEW_WIDTH = 240;
-    public static final int MINIMUM_BROWSER_VIEW_HEIGHT = 0;
-    public static final int PREFERRED_BROWSER_VIEW_WIDTH = 240;
-    public static final int PREFERRED_BROWSER_VIEW_HEIGHT = 240;
+	public static final int MINIMUM_BROWSER_VIEW_WIDTH = 240;
+	public static final int MINIMUM_BROWSER_VIEW_HEIGHT = 0;
+	public static final int PREFERRED_BROWSER_VIEW_WIDTH = 240;
+	public static final int PREFERRED_BROWSER_VIEW_HEIGHT = 240;
 
-    public static int DEFAULT_MAINFRAME_WIDTH = 850;
-    public static int DEFAULT_MAINFRAME_HEIGHT = 600;
+	public static int DEFAULT_MAINFRAME_WIDTH = 850;
+	public static int DEFAULT_MAINFRAME_HEIGHT = 600;
 
-    public static final Font HEADER_FONT = new Font("Verdana", Font.BOLD, 14);
-    public static final Font SUB_TITLE_FONT = new Font("Verdana", Font.ITALIC, 10);
-    public static final Font NORMAL_FONT = new Font("Verdana", Font.PLAIN, 11);
+	public static final Font HEADER_FONT = new Font("Verdana", Font.BOLD, 14);
+	public static final Font SUB_TITLE_FONT = new Font("Verdana", Font.ITALIC, 10);
+	public static final Font NORMAL_FONT = new Font("Verdana", Font.PLAIN, 11);
 
-    // Main views
-    public static File IMPLEMENTATION_MODEL_VIEW_FIB = new FileResource("Fib/ImplementationModelView.fib");
- 
-    // Dialogs
-    public static File CREATE_IMPLEMENTATION_MODEL_DIALOG_FIB = new FileResource("Fib/Dialog/CreateImplementationModelDialog.fib");
-	public static File CREATE_TECHNOLOGY_MODULE_IMPLEMENTATION_DIALOG_FIB = new FileResource("Fib/Dialog/CreateTechnologyModuleImplementationDialog.fib");
-    public static File CREATE_SOURCE_REPOSITORY_DIALOG_FIB = new FileResource("Fib/Dialog/CreateSourceRepositoryDialog.fib");
+	// Main views
+	public static File IMPLEMENTATION_MODEL_VIEW_FIB = new FileResource("Fib/ImplementationModelView.fib");
+
+	// Dialogs
+	public static File CREATE_IMPLEMENTATION_MODEL_DIALOG_FIB = new FileResource("Fib/Dialog/CreateImplementationModelDialog.fib");
+	public static File CREATE_TECHNOLOGY_MODULE_IMPLEMENTATION_DIALOG_FIB = new FileResource(
+			"Fib/Dialog/CreateTechnologyModuleImplementationDialog.fib");
+	public static File CREATE_SOURCE_REPOSITORY_DIALOG_FIB = new FileResource("Fib/Dialog/CreateSourceRepositoryDialog.fib");
 }

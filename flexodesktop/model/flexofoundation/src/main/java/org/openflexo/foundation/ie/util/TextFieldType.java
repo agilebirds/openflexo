@@ -29,194 +29,186 @@ import org.openflexo.xmlcode.StringEncoder.Converter;
  * @author sguerin
  * 
  */
-public enum TextFieldType implements StringConvertable
-{
+public enum TextFieldType implements StringConvertable {
 
-	TEXT("Text"),
-	DATE("Date"),
-	INTEGER("Integer"),
-	FLOAT("Float"),
-	DOUBLE("Double"),
-	KEYVALUE("KeyValue"),
-	STATUS_LIST("StatusList");
-	
-	
+	TEXT("Text"), DATE("Date"), INTEGER("Integer"), FLOAT("Float"), DOUBLE("Double"), KEYVALUE("KeyValue"), STATUS_LIST("StatusList");
+
 	private final String name;
 
-	public String getName(){
+	public String getName() {
 		return name;
 	}
-	
-	TextFieldType(String _name){
+
+	TextFieldType(String _name) {
 		this.name = _name;
 	}
-	
+
 	@Override
 	public Converter getConverter() {
 		return textFieldTypeConverter;
 	}
-	
-	public static final StringEncoder.EnumerationConverter<TextFieldType> textFieldTypeConverter = new StringEncoder.EnumerationConverter<TextFieldType>(TextFieldType.class,"getName");
 
-	
+	public static final StringEncoder.EnumerationConverter<TextFieldType> textFieldTypeConverter = new StringEncoder.EnumerationConverter<TextFieldType>(
+			TextFieldType.class, "getName");
+
 	/*
 	
-    private static final Logger logger = Logger.getLogger(TextFieldType.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(TextFieldType.class.getPackage().getName());
 
-    public static final TextFieldType TEXT = new TextType();
+	public static final TextFieldType TEXT = new TextType();
 
-    public static final TextFieldType DATE = new DateType();
+	public static final TextFieldType DATE = new DateType();
 
-    public static final TextFieldType INTEGER = new IntegerType();
+	public static final TextFieldType INTEGER = new IntegerType();
 
-    public static final TextFieldType FLOAT = new FloatType();
-    
-    public static final TextFieldType DOUBLE = new DoubleType();
+	public static final TextFieldType FLOAT = new FloatType();
+	
+	public static final TextFieldType DOUBLE = new DoubleType();
 
-    public static final TextFieldType KEYVALUE = new KeyValueType();
-    
-    public static final TextFieldType STATUS_LIST = new StatusListType();
+	public static final TextFieldType KEYVALUE = new KeyValueType();
+	
+	public static final TextFieldType STATUS_LIST = new StatusListType();
 
-    public static final StringEncoder.Converter textFieldTypeConverter = new Converter(TextFieldType.class) {
+	public static final StringEncoder.Converter textFieldTypeConverter = new Converter(TextFieldType.class) {
 
-        public Object convertFromString(String value)
-        {
-            return get(value);
-        }
+	    public Object convertFromString(String value)
+	    {
+	        return get(value);
+	    }
 
-        public String convertToString(Object value)
-        {
-            return ((TextFieldType) value).getName();
-        }
+	    public String convertToString(Object value)
+	    {
+	        return ((TextFieldType) value).getName();
+	    }
 
-    };
+	};
 
-    public static class TextType extends TextFieldType implements Serializable
-    {
-        protected TextType()
-        {
-        }
+	public static class TextType extends TextFieldType implements Serializable
+	{
+	    protected TextType()
+	    {
+	    }
 
-        public String getName()
-        {
-            return "Text";
-        }
-    }
+	    public String getName()
+	    {
+	        return "Text";
+	    }
+	}
 
-    public static class DateType extends TextFieldType implements Serializable
-    {
-        protected DateType()
-        {
-        }
+	public static class DateType extends TextFieldType implements Serializable
+	{
+	    protected DateType()
+	    {
+	    }
 
-        public String getName()
-        {
-            return "Date";
-        }
-    }
+	    public String getName()
+	    {
+	        return "Date";
+	    }
+	}
 
-    public static class IntegerType extends TextFieldType implements Serializable
-    {
-        protected IntegerType()
-        {
-        }
+	public static class IntegerType extends TextFieldType implements Serializable
+	{
+	    protected IntegerType()
+	    {
+	    }
 
-        public String getName()
-        {
-            return "Integer";
-        }
-    }
+	    public String getName()
+	    {
+	        return "Integer";
+	    }
+	}
 
-    public static class FloatType extends TextFieldType implements Serializable
-    {
-        protected FloatType()
-        {
-        }
+	public static class FloatType extends TextFieldType implements Serializable
+	{
+	    protected FloatType()
+	    {
+	    }
 
-        public String getName()
-        {
-            return "Float";
-        }
-    }
+	    public String getName()
+	    {
+	        return "Float";
+	    }
+	}
 
-    public static class DoubleType extends TextFieldType implements Serializable
-    {
-        protected DoubleType()
-        {
-        }
+	public static class DoubleType extends TextFieldType implements Serializable
+	{
+	    protected DoubleType()
+	    {
+	    }
 
-        public String getName()
-        {
-            return "Double";
-        }
-    }
+	    public String getName()
+	    {
+	        return "Double";
+	    }
+	}
 
-    public static class KeyValueType extends TextFieldType implements Serializable
-    {
-        protected KeyValueType()
-        {
-        }
+	public static class KeyValueType extends TextFieldType implements Serializable
+	{
+	    protected KeyValueType()
+	    {
+	    }
 
-        public String getName()
-        {
-            return "KeyValue";
-        }
-    }
-    
-    public static class StatusListType extends TextFieldType implements Serializable
-    {
-        protected StatusListType()
-        {
-        }
+	    public String getName()
+	    {
+	        return "KeyValue";
+	    }
+	}
+	
+	public static class StatusListType extends TextFieldType implements Serializable
+	{
+	    protected StatusListType()
+	    {
+	    }
 
-        public String getName()
-        {
-            return "StatusList";
-        }
-    }
+	    public String getName()
+	    {
+	        return "StatusList";
+	    }
+	}
 
-    public abstract String getName();
+	public abstract String getName();
 
-    public static TextFieldType get(String typeName)
-    {
-        for (Enumeration e = availableValues().elements(); e.hasMoreElements();) {
-            TextFieldType temp = (TextFieldType) e.nextElement();
-            if (temp.getName().equals(typeName)) {
-                return temp;
-            }
-        }
+	public static TextFieldType get(String typeName)
+	{
+	    for (Enumeration e = availableValues().elements(); e.hasMoreElements();) {
+	        TextFieldType temp = (TextFieldType) e.nextElement();
+	        if (temp.getName().equals(typeName)) {
+	            return temp;
+	        }
+	    }
 
-        if (logger.isLoggable(Level.WARNING))
-            logger.warning("Could not find ListType named " + typeName);
-        return null;
-    }
+	    if (logger.isLoggable(Level.WARNING))
+	        logger.warning("Could not find ListType named " + typeName);
+	    return null;
+	}
 
-    private static final Vector<TextFieldType> _availableValues = new Vector<TextFieldType>();
-    private static final Vector<TextFieldType> _availableValuesForTextField = new Vector<TextFieldType>();
+	private static final Vector<TextFieldType> _availableValues = new Vector<TextFieldType>();
+	private static final Vector<TextFieldType> _availableValuesForTextField = new Vector<TextFieldType>();
 
-    public Vector<TextFieldType> getAvailableValues()
-    {
-        if (_availableValues.size()==0) {
-            _availableValues.add(TEXT);
-            _availableValues.add(DATE);
-            _availableValues.add(INTEGER);
-            _availableValues.add(FLOAT);
-            _availableValues.add(DOUBLE);
-            _availableValues.add(KEYVALUE);
-            _availableValues.add(STATUS_LIST);
-        }
-        return _availableValues;
-    }
+	public Vector<TextFieldType> getAvailableValues()
+	{
+	    if (_availableValues.size()==0) {
+	        _availableValues.add(TEXT);
+	        _availableValues.add(DATE);
+	        _availableValues.add(INTEGER);
+	        _availableValues.add(FLOAT);
+	        _availableValues.add(DOUBLE);
+	        _availableValues.add(KEYVALUE);
+	        _availableValues.add(STATUS_LIST);
+	    }
+	    return _availableValues;
+	}
 
-    public StringEncoder.Converter getConverter()
-    {
-        return textFieldTypeConverter;
-    }
+	public StringEncoder.Converter getConverter()
+	{
+	    return textFieldTypeConverter;
+	}
 
-    public static Vector availableValues()
-    {
-        return TEXT.getAvailableValues();
-    }
+	public static Vector availableValues()
+	{
+	    return TEXT.getAvailableValues();
+	}
 
 	public static Vector availableFieldTypeForTextField() {
 		if (_availableValuesForTextField.size()==0) {
@@ -224,9 +216,9 @@ public enum TextFieldType implements StringConvertable
 			_availableValuesForTextField.add(DATE);
 			_availableValuesForTextField.add(INTEGER);
 			_availableValuesForTextField.add(FLOAT);
-            _availableValuesForTextField.add(DOUBLE);
-        }
-        return _availableValuesForTextField;
+	        _availableValuesForTextField.add(DOUBLE);
+	    }
+	    return _availableValuesForTextField;
 	}
 	*/
 }

@@ -25,29 +25,24 @@ import org.openflexo.foundation.rm.cg.WOFileResource;
 import org.openflexo.foundation.xml.GeneratedCodeBuilder;
 import org.openflexo.generator.file.AbstractCGFile;
 
-
 public class CGWOFile extends AbstractCGFile {
 
-    public CGWOFile(GeneratedCodeBuilder builder)
-    {
-        this(builder.generatedCode);
-        initializeDeserialization(builder);
-     }
-    
-    public CGWOFile(GeneratedOutput generatedCode)
-    {
-        super(generatedCode);  
-    }
+	public CGWOFile(GeneratedCodeBuilder builder) {
+		this(builder.generatedCode);
+		initializeDeserialization(builder);
+	}
 
-    public CGWOFile(CGRepository repository, WOFileResource resource)
-    {
-        super(repository,resource);
-    }
+	public CGWOFile(GeneratedOutput generatedCode) {
+		super(generatedCode);
+	}
+
+	public CGWOFile(CGRepository repository, WOFileResource resource) {
+		super(repository, resource);
+	}
 
 	@Override
-	public WOFileResource getResource() 
-	{
-		return (WOFileResource)super.getResource();
+	public WOFileResource getResource() {
+		return (WOFileResource) super.getResource();
 	}
 
 }

@@ -31,9 +31,7 @@ import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.wkf.view.doc.WKFDocumentationView;
 
-
-public class DocumentationPerspective extends FlexoPerspective<FlexoProcess>
-{
+public class DocumentationPerspective extends FlexoPerspective<FlexoProcess> {
 
 	/**
 	 * 
@@ -42,84 +40,74 @@ public class DocumentationPerspective extends FlexoPerspective<FlexoProcess>
 
 	/**
 	 * @param name
-	 * @param controller TODO
+	 * @param controller
+	 *            TODO
 	 */
-	public DocumentationPerspective(WKFController controller, String name)
-	{
+	public DocumentationPerspective(WKFController controller, String name) {
 		super(name);
 		_controller = controller;
 	}
 
 	/**
 	 * Overrides getIcon
-	 *
+	 * 
 	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
-	public ImageIcon getActiveIcon()
-	{
+	public ImageIcon getActiveIcon() {
 		return IconLibrary.LIST_PERSPECTIVE_ACTIVE_ICON;
 	}
 
 	/**
 	 * Overrides getSelectedIcon
-	 *
+	 * 
 	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
 	 */
 	@Override
-	public ImageIcon getSelectedIcon()
-	{
+	public ImageIcon getSelectedIcon() {
 		return IconLibrary.LIST_PERSPECTIVE_SELECTED_ICON;
 	}
 
 	@Override
-	public boolean isAlwaysVisible() 
-	{
+	public boolean isAlwaysVisible() {
 		return true;
 	}
 
 	@Override
-	public FlexoProcess getDefaultObject(FlexoModelObject proposedObject) 
-	{
-		if (proposedObject instanceof WKFObject) return ((WKFObject)proposedObject).getProcess();
+	public FlexoProcess getDefaultObject(FlexoModelObject proposedObject) {
+		if (proposedObject instanceof WKFObject)
+			return ((WKFObject) proposedObject).getProcess();
 		return _controller.getProject().getRootFlexoProcess();
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) 
-	{
-		return object instanceof FlexoProcess && !((FlexoProcess)object).isImported();
+	public boolean hasModuleViewForObject(FlexoModelObject object) {
+		return object instanceof FlexoProcess && !((FlexoProcess) object).isImported();
 	}
 
 	@Override
-	public ModuleView<FlexoProcess> createModuleViewForObject(FlexoProcess process, FlexoController controller)
-	{
-		return new WKFDocumentationView(process, (WKFController)controller);
+	public ModuleView<FlexoProcess> createModuleViewForObject(FlexoProcess process, FlexoController controller) {
+		return new WKFDocumentationView(process, (WKFController) controller);
 	}
 
-    @Override
-    public boolean doesPerspectiveControlLeftView() 
-    {
-    	return true;
-    }
+	@Override
+	public boolean doesPerspectiveControlLeftView() {
+		return true;
+	}
 
-    @Override
-    public JComponent getLeftView() 
-    {
-    	return _controller.getWorkflowProcessBrowserViews();
-    }
+	@Override
+	public JComponent getLeftView() {
+		return _controller.getWorkflowProcessBrowserViews();
+	}
 
-    @Override
-    public boolean doesPerspectiveControlRightView() 
-    {
-    	return true;
-    }
+	@Override
+	public boolean doesPerspectiveControlRightView() {
+		return true;
+	}
 
-    @Override
-    public JComponent getRightView() 
-    {
-    	return _controller.getDisconnectedDocInspectorPanel();
-    }
-    
+	@Override
+	public JComponent getRightView() {
+		return _controller.getDisconnectedDocInspectorPanel();
+	}
 
 }

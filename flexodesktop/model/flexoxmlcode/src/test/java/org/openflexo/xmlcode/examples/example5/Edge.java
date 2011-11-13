@@ -22,44 +22,39 @@ package org.openflexo.xmlcode.examples.example5;
 import org.openflexo.xmlcode.XMLSerializable;
 
 /**
- * Class <code>Edge</code> is intented to represent an oriented edge object in
- * XML coding/decoding example.
+ * Class <code>Edge</code> is intented to represent an oriented edge object in XML coding/decoding example.
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  */
-public abstract class Edge implements XMLSerializable
-{
+public abstract class Edge implements XMLSerializable {
 
-    public Node originNode;
-    public PreCondition destinationPreCondition;
+	public Node originNode;
+	public PreCondition destinationPreCondition;
 
-    public int identifier;
+	public int identifier;
 
-    public Edge()
-    {
-        super();
-        originNode = null;
-        destinationPreCondition = null;
-    }
+	public Edge() {
+		super();
+		originNode = null;
+		destinationPreCondition = null;
+	}
 
-    public Edge(int anIdentifier, Node origin, PreCondition destination)
-    {
-        this();
-        originNode = origin;
-        destinationPreCondition = destination;
-        origin.outgoingEdges.add(this);
-        destination.incomingEdges.add(this);
-        identifier = anIdentifier;
-    }
+	public Edge(int anIdentifier, Node origin, PreCondition destination) {
+		this();
+		originNode = origin;
+		destinationPreCondition = destination;
+		origin.outgoingEdges.add(this);
+		destination.incomingEdges.add(this);
+		identifier = anIdentifier;
+	}
 
-    @Override
-	public String toString()
-    {
-        String returned = " [ "+shortClassName()+": "+identifier+" from ";
-        returned += (originNode == null ? null : originNode.toShortString()) + " to ";
-        returned += (destinationPreCondition == null ? null : destinationPreCondition.toShortString()) + " ] ";
-        return returned;
-    }
+	@Override
+	public String toString() {
+		String returned = " [ " + shortClassName() + ": " + identifier + " from ";
+		returned += (originNode == null ? null : originNode.toShortString()) + " to ";
+		returned += (destinationPreCondition == null ? null : destinationPreCondition.toShortString()) + " ] ";
+		return returned;
+	}
 
-    public abstract String shortClassName();
+	public abstract String shortClassName();
 }

@@ -39,86 +39,78 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileFormat;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class ApplicationConfProdGenerator extends MetaFileGenerator
-{
-    private static final String TEMPLATE_NAME = "Application.conf.PROD.vm";
+public class ApplicationConfProdGenerator extends MetaFileGenerator {
+	private static final String TEMPLATE_NAME = "Application.conf.PROD.vm";
 
 	private static final Logger logger = FlexoLogger.getLogger(ApplicationConfProdGenerator.class.getPackage().getName());
 
-    public static final String IDENTIFIER = "APPLICATION_CONF_PROD";
+	public static final String IDENTIFIER = "APPLICATION_CONF_PROD";
 
-    /**
-     * @param aProject
-     */
-    public ApplicationConfProdGenerator(ProjectGenerator projectGenerator)
-    {
-        super(projectGenerator, FileFormat.TEXT, ResourceType.TEXT_FILE, "Application.conf.PROD", IDENTIFIER);
-    }
+	/**
+	 * @param aProject
+	 */
+	public ApplicationConfProdGenerator(ProjectGenerator projectGenerator) {
+		super(projectGenerator, FileFormat.TEXT, ResourceType.TEXT_FILE, "Application.conf.PROD", IDENTIFIER);
+	}
 
 	@Override
-    public Logger getGeneratorLogger()
-	{
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
-    /**
+	/**
      *
      */
-    @Override
-    public void generate(boolean forceRegenerate)
-    {
-       	if (!forceRegenerate && !needsGeneration()) {
+	@Override
+	public void generate(boolean forceRegenerate) {
+		if (!forceRegenerate && !needsGeneration()) {
 			return;
 		}
-    	try {
-    		refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating")+ " "+getIdentifier(),false);
-    		startGeneration();
-    		if (logger.isLoggable(Level.INFO)) {
-				logger.info("Generating "+getFileName());
+		try {
+			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + getIdentifier(), false);
+			startGeneration();
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Generating " + getFileName());
 			}
-    		VelocityContext velocityContext = defaultContext();
-    		String generated = merge(TEMPLATE_NAME, velocityContext);
-    		generatedCode = new GeneratedTextResource(getFileName(), generated);
-    		stopGeneration();
-    	} catch (GenerationException e) {
-    		setGenerationException(e);
-    	} catch (Exception e) {
-    		setGenerationException(new UnexpectedExceptionOccuredException(e,getProjectGenerator()));
-    	}
-    }
-
-    @Override
-    public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources)
-	{
-		// PList file
-    	textResource = (ApplicationConfProdResource) resourceForKeyWithCGFile(ResourceType.TEXT_FILE,
-    			GeneratorUtils.nameForRepositoryAndIdentifier(repository, getIdentifier()));
-        if (textResource == null) {
-            textResource = GeneratedFileResourceFactory.createApplicationConfProdFileResource(repository, this);
-            textResource.setGenerator(this);
-            logger.info("Created HELP resource " + textResource.getName());
-        } else {
-            textResource.setGenerator(this);
-            logger.info("Successfully retrieved HELP FILE resource " + textResource.getName());
-        }
-        ((ApplicationConfProdResource)textResource).registerObserverWhenRequired();
-        resources.add(textResource);
-    }
+			VelocityContext velocityContext = defaultContext();
+			String generated = merge(TEMPLATE_NAME, velocityContext);
+			generatedCode = new GeneratedTextResource(getFileName(), generated);
+			stopGeneration();
+		} catch (GenerationException e) {
+			setGenerationException(e);
+		} catch (Exception e) {
+			setGenerationException(new UnexpectedExceptionOccuredException(e, getProjectGenerator()));
+		}
+	}
 
 	@Override
-	public String getRelativePath()
-	{
+	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
+		// PList file
+		textResource = (ApplicationConfProdResource) resourceForKeyWithCGFile(ResourceType.TEXT_FILE,
+				GeneratorUtils.nameForRepositoryAndIdentifier(repository, getIdentifier()));
+		if (textResource == null) {
+			textResource = GeneratedFileResourceFactory.createApplicationConfProdFileResource(repository, this);
+			textResource.setGenerator(this);
+			logger.info("Created HELP resource " + textResource.getName());
+		} else {
+			textResource.setGenerator(this);
+			logger.info("Successfully retrieved HELP FILE resource " + textResource.getName());
+		}
+		((ApplicationConfProdResource) textResource).registerObserverWhenRequired();
+		resources.add(textResource);
+	}
+
+	@Override
+	public String getRelativePath() {
 		return "";
 	}
 
 	@Override
-	public CGSymbolicDirectory getSymbolicDirectory(CGRepository repository)
-	{
+	public CGSymbolicDirectory getSymbolicDirectory(CGRepository repository) {
 		return repository.getProjectSymbolicDirectory();
 	}
 

@@ -23,84 +23,71 @@ import java.util.logging.Logger;
 
 import org.openflexo.fib.model.FIBComponent.DependancyLoopException;
 
-
-
 public class FIBDependancy extends FIBModelObject {
 
 	private static final Logger logger = Logger.getLogger(FIBDependancy.class.getPackage().getName());
 
 	// Owner depends of masterComponent
-	
+
 	private FIBComponent owner;
 	private FIBComponent masterComponent;
 	private String masterComponentName;
 
-	public static enum Parameters implements FIBModelAttribute
-	{
-		owner,
-		masterComponent;
+	public static enum Parameters implements FIBModelAttribute {
+		owner, masterComponent;
 	}
 
 	@Override
-	public FIBComponent getRootComponent()
-	{
+	public FIBComponent getRootComponent() {
 		return owner.getRootComponent();
 	}
 
-	public FIBComponent getOwner()
-	{
+	public FIBComponent getOwner() {
 		return owner;
 	}
 
-	public void setOwner(FIBComponent owner)
-	{
-		FIBAttributeNotification<FIBComponent> notification = requireChange(
-				Parameters.owner, owner);
+	public void setOwner(FIBComponent owner) {
+		FIBAttributeNotification<FIBComponent> notification = requireChange(Parameters.owner, owner);
 		if (notification != null) {
 			this.owner = owner;
 			hasChanged(notification);
 		}
 	}
 
-	public FIBComponent getMasterComponent()
-	{
+	public FIBComponent getMasterComponent() {
 		return masterComponent;
 	}
 
-	public void setMasterComponent(FIBComponent masterComponent)
-	{
-		FIBAttributeNotification<FIBComponent> notification = requireChange(
-				Parameters.masterComponent, masterComponent);
+	public void setMasterComponent(FIBComponent masterComponent) {
+		FIBAttributeNotification<FIBComponent> notification = requireChange(Parameters.masterComponent, masterComponent);
 		if (notification != null) {
 			this.masterComponent = masterComponent;
 			try {
 				getOwner().declareDependantOf(masterComponent);
 			} catch (DependancyLoopException e) {
-				logger.warning("DependancyLoopException raised while applying explicit dependancy for "+getOwner()+" and "+getMasterComponent()+" message: "+e.getMessage());
+				logger.warning("DependancyLoopException raised while applying explicit dependancy for " + getOwner() + " and "
+						+ getMasterComponent() + " message: " + e.getMessage());
 			}
 			hasChanged(notification);
 		}
 	}
 
-	public FIBDependancy()
-	{
+	public FIBDependancy() {
 		super();
 	}
-	
-	public String getMasterComponentName()
-	{
-		if (getMasterComponent() != null) return getMasterComponent().getName();
+
+	public String getMasterComponentName() {
+		if (getMasterComponent() != null)
+			return getMasterComponent().getName();
 		return masterComponentName;
 	}
 
-	public void setMasterComponentName(String masterComponentName)
-	{
+	public void setMasterComponentName(String masterComponentName) {
 		this.masterComponentName = masterComponentName;
 	}
 
 	@Override
-	public void finalizeDeserialization()
-	{
+	public void finalizeDeserialization() {
 		super.finalizeDeserialization();
 		setMasterComponent(getRootComponent().getComponentNamed(masterComponentName));
 	}

@@ -34,79 +34,68 @@ import org.openflexo.generator.AbstractProjectGenerator;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.file.AbstractCGFile;
 
-
-public class MarkAsMergedAllTrivialMergableFiles extends MultipleFileGCAction<MarkAsMergedAllTrivialMergableFiles>
-{
+public class MarkAsMergedAllTrivialMergableFiles extends MultipleFileGCAction<MarkAsMergedAllTrivialMergableFiles> {
 
 	private static final Logger logger = Logger.getLogger(MarkAsMergedAllTrivialMergableFiles.class.getPackage().getName());
 
-	public static final MultipleFileGCActionType<MarkAsMergedAllTrivialMergableFiles> actionType 
-	= new MultipleFileGCActionType<MarkAsMergedAllTrivialMergableFiles> ("mark_as_merged_all_trivially_mergable_files",
-			MERGE_MENU, MARK_GROUP2,FlexoActionType.NORMAL_ACTION_TYPE) 
-	{
+	public static final MultipleFileGCActionType<MarkAsMergedAllTrivialMergableFiles> actionType = new MultipleFileGCActionType<MarkAsMergedAllTrivialMergableFiles>(
+			"mark_as_merged_all_trivially_mergable_files", MERGE_MENU, MARK_GROUP2, FlexoActionType.NORMAL_ACTION_TYPE) {
 		/**
-         * Factory method
-         */
-        @Override
-		public MarkAsMergedAllTrivialMergableFiles makeNewAction(CGObject repository, Vector<CGObject> globalSelection, FlexoEditor editor) 
-        {
-            return new MarkAsMergedAllTrivialMergableFiles(repository, globalSelection, editor);
-        }
-		
-        @Override
-		protected boolean accept (AbstractCGFile file)
-        {
-        	return ((file.getResource() != null)
-        			&& file.getGenerationStatus() == GenerationStatus.ConflictingUnMerged
-        			&& (!file.needsMemoryGeneration()));
-         }
+		 * Factory method
+		 */
+		@Override
+		public MarkAsMergedAllTrivialMergableFiles makeNewAction(CGObject repository, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return new MarkAsMergedAllTrivialMergableFiles(repository, globalSelection, editor);
+		}
+
+		@Override
+		protected boolean accept(AbstractCGFile file) {
+			return ((file.getResource() != null) && file.getGenerationStatus() == GenerationStatus.ConflictingUnMerged && (!file
+					.needsMemoryGeneration()));
+		}
 
 	};
-	
-    static {
-        FlexoModelObject.addActionForClass (MarkAsMergedAllTrivialMergableFiles.actionType, CGObject.class);
-    }
-    
-    MarkAsMergedAllTrivialMergableFiles (CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
 
-    @Override
-	protected void doAction(Object context) throws GenerationException, SaveResourceException, FlexoException
-    {
-    	logger.info ("Mark files as merged");
-       	
-       	AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();
-    	pg.setAction(this);
- 
-    	GenerationRepository repository = getRepository();
-    	
-     	for (AbstractCGFile file : getTrivialMergableFiles()) {
-     		file.setMarkedAsMerged(true);
-     	}
+	static {
+		FlexoModelObject.addActionForClass(MarkAsMergedAllTrivialMergableFiles.actionType, CGObject.class);
+	}
+
+	MarkAsMergedAllTrivialMergableFiles(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) throws GenerationException, SaveResourceException, FlexoException {
+		logger.info("Mark files as merged");
+
+		AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();
+		pg.setAction(this);
+
+		GenerationRepository repository = getRepository();
+
+		for (AbstractCGFile file : getTrivialMergableFiles()) {
+			file.setMarkedAsMerged(true);
+		}
 
 		// Refreshing repository
-     	repository.refresh();
+		repository.refresh();
 
-    }
-    
-    private Vector<AbstractCGFile> _trivialMergableFiles;
+	}
 
-    public Vector<AbstractCGFile> getTrivialMergableFiles()
-    {
-    	if (_trivialMergableFiles == null) {
-    		_trivialMergableFiles = new Vector<AbstractCGFile>();
-        	for (AbstractCGFile file : getSelectedCGFilesOnWhyCurrentActionShouldApply()) {
-         		if (file.isTriviallyMergable())
-         			_trivialMergableFiles.add(file);
-         	}
-    	}
-    	return _trivialMergableFiles;
-    }
+	private Vector<AbstractCGFile> _trivialMergableFiles;
 
-	public void setTrivialMergableFiles(Vector<AbstractCGFile> trivialMergableFiles)
-	{
+	public Vector<AbstractCGFile> getTrivialMergableFiles() {
+		if (_trivialMergableFiles == null) {
+			_trivialMergableFiles = new Vector<AbstractCGFile>();
+			for (AbstractCGFile file : getSelectedCGFilesOnWhyCurrentActionShouldApply()) {
+				if (file.isTriviallyMergable())
+					_trivialMergableFiles.add(file);
+			}
+		}
+		return _trivialMergableFiles;
+	}
+
+	public void setTrivialMergableFiles(Vector<AbstractCGFile> trivialMergableFiles) {
 		_trivialMergableFiles = trivialMergableFiles;
 	}
 
@@ -114,5 +103,5 @@ public class MarkAsMergedAllTrivialMergableFiles extends MultipleFileGCAction<Ma
 		// TODO Auto-generated method stub
 		return false;
 	}
-    
+
 }

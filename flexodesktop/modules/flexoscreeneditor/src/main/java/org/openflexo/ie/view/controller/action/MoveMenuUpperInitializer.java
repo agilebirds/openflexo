@@ -29,29 +29,24 @@ import org.openflexo.foundation.ie.menu.action.MoveMenuUpperLevel;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class MoveMenuUpperInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	MoveMenuUpperInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(MoveMenuUpperLevel.actionType,actionInitializer);
+	MoveMenuUpperInitializer(IEControllerActionInitializer actionInitializer) {
+		super(MoveMenuUpperLevel.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<MoveMenuUpperLevel> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<MoveMenuUpperLevel> getDefaultInitializer() {
 		return new FlexoActionInitializer<MoveMenuUpperLevel>() {
 			@Override
-			public boolean run(ActionEvent e, MoveMenuUpperLevel action)
-			{
+			public boolean run(ActionEvent e, MoveMenuUpperLevel action) {
 				boolean doable = false;
 				if (action.getFocusedObject() instanceof FlexoItemMenu) {
 					FlexoItemMenu item = (FlexoItemMenu) action.getFocusedObject();
@@ -65,16 +60,13 @@ public class MoveMenuUpperInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<MoveMenuUpperLevel> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<MoveMenuUpperLevel> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<MoveMenuUpperLevel>() {
 			@Override
-			public boolean run(ActionEvent e, MoveMenuUpperLevel action)
-			{
+			public boolean run(ActionEvent e, MoveMenuUpperLevel action) {
 				return true;
 			}
 		};
 	}
-
 
 }

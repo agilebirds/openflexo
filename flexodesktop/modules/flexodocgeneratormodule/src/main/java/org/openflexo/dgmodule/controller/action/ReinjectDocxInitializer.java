@@ -38,37 +38,30 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-public class ReinjectDocxInitializer extends ActionInitializer<ReinjectDocx, CGObject, CGObject>
-{
+public class ReinjectDocxInitializer extends ActionInitializer<ReinjectDocx, CGObject, CGObject> {
 
 	protected static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	ReinjectDocxInitializer(DGControllerActionInitializer actionInitializer)
-	{
+	ReinjectDocxInitializer(DGControllerActionInitializer actionInitializer) {
 		super(ReinjectDocx.actionType, actionInitializer);
 	}
 
 	@Override
-	protected DGControllerActionInitializer getControllerActionInitializer()
-	{
+	protected DGControllerActionInitializer getControllerActionInitializer() {
 		return (DGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<ReinjectDocx> getDefaultInitializer()
-	{
-		return new FlexoActionInitializer<ReinjectDocx>()
-		{
+	protected FlexoActionInitializer<ReinjectDocx> getDefaultInitializer() {
+		return new FlexoActionInitializer<ReinjectDocx>() {
 			@Override
-			public boolean run(ActionEvent e, ReinjectDocx action)
-			{
+			public boolean run(ActionEvent e, ReinjectDocx action) {
 				FlexoFileChooser fileChooser = new FlexoFileChooser(SwingUtilities.getWindowAncestor(getController().getMainPane()));
 				fileChooser.setFileFilterAsString("*.docx");
 				fileChooser.setDialogType(JFileChooser.CUSTOM_DIALOG);
 				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 				int returnVal = fileChooser.showDialog(FlexoLocalization.localizedForKey("select"));
-				if (returnVal == JFileChooser.APPROVE_OPTION)
-				{
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					action.setDocxToReinject(fileChooser.getSelectedFile());
 					return true;
 				}
@@ -79,36 +72,45 @@ public class ReinjectDocxInitializer extends ActionInitializer<ReinjectDocx, CGO
 	}
 
 	@Override
-	protected FlexoActionFinalizer<ReinjectDocx> getDefaultFinalizer()
-	{
-		return new FlexoActionFinalizer<ReinjectDocx>()
-		{
+	protected FlexoActionFinalizer<ReinjectDocx> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<ReinjectDocx>() {
 			@Override
-			public boolean run(ActionEvent e, ReinjectDocx action)
-			{
-				FlexoController.notify(FlexoLocalization.localizedForKey("reinject_docx_succeed") + "\n" + 
-						FlexoLocalization.localizedForKey("number_of_updated_description") + ": " + action.getNumberOfDescriptionUpdated() + "\n" +
-						FlexoLocalization.localizedForKey("number_of_updated_name") + ": " + action.getNumberOfNameUpdated() + "\n" +
-						FlexoLocalization.localizedForKey("number_of_updated_tocentry_title") + ": " + action.getNumberOfTocEntryTitleUpdated() + "\n" +
-						FlexoLocalization.localizedForKey("number_of_updated_tocentry_content") + ": " + action.getNumberOfTocEntryContentUpdated() + "\n" +
-						FlexoLocalization.localizedForKey("number_of_not_found_object") + ": " + action.getNumberOfObjectNotFound() +
-						(action.hasError()?"\n" + FlexoLocalization.localizedForKey("reinject_docx_warnings") + ":\n" + action.getErrorReport():"")
-						);
+			public boolean run(ActionEvent e, ReinjectDocx action) {
+				FlexoController.notify(FlexoLocalization.localizedForKey("reinject_docx_succeed")
+						+ "\n"
+						+ FlexoLocalization.localizedForKey("number_of_updated_description")
+						+ ": "
+						+ action.getNumberOfDescriptionUpdated()
+						+ "\n"
+						+ FlexoLocalization.localizedForKey("number_of_updated_name")
+						+ ": "
+						+ action.getNumberOfNameUpdated()
+						+ "\n"
+						+ FlexoLocalization.localizedForKey("number_of_updated_tocentry_title")
+						+ ": "
+						+ action.getNumberOfTocEntryTitleUpdated()
+						+ "\n"
+						+ FlexoLocalization.localizedForKey("number_of_updated_tocentry_content")
+						+ ": "
+						+ action.getNumberOfTocEntryContentUpdated()
+						+ "\n"
+						+ FlexoLocalization.localizedForKey("number_of_not_found_object")
+						+ ": "
+						+ action.getNumberOfObjectNotFound()
+						+ (action.hasError() ? "\n" + FlexoLocalization.localizedForKey("reinject_docx_warnings") + ":\n"
+								+ action.getErrorReport() : ""));
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoExceptionHandler<ReinjectDocx> getDefaultExceptionHandler()
-	{
-		return new FlexoExceptionHandler<ReinjectDocx>()
-		{
+	protected FlexoExceptionHandler<ReinjectDocx> getDefaultExceptionHandler() {
+		return new FlexoExceptionHandler<ReinjectDocx>() {
 			@Override
-			public boolean handleException(FlexoException exception, ReinjectDocx action)
-			{
+			public boolean handleException(FlexoException exception, ReinjectDocx action) {
 				getControllerActionInitializer().getDGController().disposeProgressWindow();
-				
+
 				FlexoController.notify(FlexoLocalization.localizedForKey("reinject_docx_failed") + ":\n" + exception.getLocalizedMessage());
 				logger.log(Level.SEVERE, exception.getMessage(), exception);
 				return false;

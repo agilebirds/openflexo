@@ -23,12 +23,11 @@ import org.openflexo.fge.geom.area.FGEBand;
 
 public abstract class BandConstruction extends GeometricConstruction<FGEBand> {
 
-	public final FGEBand getBand()
-	{
+	public final FGEBand getBand() {
 		return getData();
 	}
 
 	@Override
 	protected abstract FGEBand computeData();
-	
+
 }

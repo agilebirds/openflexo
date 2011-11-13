@@ -40,120 +40,110 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.listener.FlexoActionButton;
 
-
 /**
  * @author sylvain
  */
-public class GeneratedDocModuleView extends JPanel implements ModuleView<GeneratedOutput>, FlexoObserver, FlexoActionSource
-{
+public class GeneratedDocModuleView extends JPanel implements ModuleView<GeneratedOutput>, FlexoObserver, FlexoActionSource {
 	private GeneratedOutput _gc;
 	private DGController _controller;
-    private JComponent addDGRepositoryButton;
-    private JComponent addTOCRepositoryButton;
-    private JPanel panel;
-    
-    public GeneratedDocModuleView(GeneratedOutput gc, DGController controller)
-    {
-        super(new BorderLayout());
-        _gc = gc;
-		_controller = controller;
-        _gc.addObserver(this);
-        panel = new JPanel(new FlowLayout(FlowLayout.CENTER,0,50));
-        add(panel);
-        validate();
-        updateView();
-    }
+	private JComponent addDGRepositoryButton;
+	private JComponent addTOCRepositoryButton;
+	private JPanel panel;
 
-    private void updateView()
-    {
-    	if (addTOCRepositoryButton!=null)
-    		panel.remove(addTOCRepositoryButton);
-    	if (addDGRepositoryButton!=null)
-    		panel.remove(addDGRepositoryButton);
-        panel.add(addTOCRepositoryButton = new FlexoActionButton(AddTOCRepository.actionType,this,_controller.getEditor()), BorderLayout.CENTER);
-        panel.add(addDGRepositoryButton = new FlexoActionButton(AddGeneratedCodeRepository.actionType,this,_controller.getEditor()), BorderLayout.CENTER);
-        panel.validate();
-        panel.repaint();
-    }
+	public GeneratedDocModuleView(GeneratedOutput gc, DGController controller) {
+		super(new BorderLayout());
+		_gc = gc;
+		_controller = controller;
+		_gc.addObserver(this);
+		panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 50));
+		add(panel);
+		validate();
+		updateView();
+	}
+
+	private void updateView() {
+		if (addTOCRepositoryButton != null)
+			panel.remove(addTOCRepositoryButton);
+		if (addDGRepositoryButton != null)
+			panel.remove(addDGRepositoryButton);
+		panel.add(addTOCRepositoryButton = new FlexoActionButton(AddTOCRepository.actionType, this, _controller.getEditor()),
+				BorderLayout.CENTER);
+		panel.add(addDGRepositoryButton = new FlexoActionButton(AddGeneratedCodeRepository.actionType, this, _controller.getEditor()),
+				BorderLayout.CENTER);
+		panel.validate();
+		panel.repaint();
+	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		updateView();
 	}
 
 	@Override
-	public void deleteModuleView()
-    {
+	public void deleteModuleView() {
 		_controller.removeModuleView(this);
 		_gc.deleteObserver(this);
-        addDGRepositoryButton = null;
-        panel=null;
+		addDGRepositoryButton = null;
+		panel = null;
 	}
 
 	@Override
-	public FlexoPerspective<FlexoModelObject> getPerspective() 
-	{
+	public FlexoPerspective<FlexoModelObject> getPerspective() {
 		return _controller.CODE_GENERATOR_PERSPECTIVE;
 	}
 
 	@Override
-	public GeneratedOutput getRepresentedObject() 
-	{
+	public GeneratedOutput getRepresentedObject() {
 		return _gc;
 	}
 
 	@Override
-	public void willHide() 
-	{
+	public void willHide() {
 	}
 
 	@Override
-	public void willShow()
-	{
+	public void willShow() {
 	}
 
 	/**
-	 * Returns flag indicating if this view is itself responsible for scroll management
-	 * When not, Flexo will manage it's own scrollbar for you
+	 * Returns flag indicating if this view is itself responsible for scroll management When not, Flexo will manage it's own scrollbar for
+	 * you
 	 * 
 	 * @return
 	 */
 	@Override
-	public boolean isAutoscrolled() 
-	{
+	public boolean isAutoscrolled() {
 		return true;
 	}
 
-    /**
-     * Overrides getEditor
-     * @see org.openflexo.foundation.action.FlexoActionSource#getEditor()
-     */
-    @Override
-	public FlexoEditor getEditor()
-    {
-        return _controller.getEditor();
-    }
+	/**
+	 * Overrides getEditor
+	 * 
+	 * @see org.openflexo.foundation.action.FlexoActionSource#getEditor()
+	 */
+	@Override
+	public FlexoEditor getEditor() {
+		return _controller.getEditor();
+	}
 
-    /**
-     * Overrides getFocusedObject
-     * @see org.openflexo.foundation.action.FlexoActionSource#getFocusedObject()
-     */
-    @Override
-	public FlexoModelObject getFocusedObject()
-    {
-        return _gc;
-    }
+	/**
+	 * Overrides getFocusedObject
+	 * 
+	 * @see org.openflexo.foundation.action.FlexoActionSource#getFocusedObject()
+	 */
+	@Override
+	public FlexoModelObject getFocusedObject() {
+		return _gc;
+	}
 
-    /**
-     * Overrides getGlobalSelection
-     * @see org.openflexo.foundation.action.FlexoActionSource#getGlobalSelection()
-     */
-    @Override
-	public Vector getGlobalSelection()
-    {
-        return null;
-    }
-
+	/**
+	 * Overrides getGlobalSelection
+	 * 
+	 * @see org.openflexo.foundation.action.FlexoActionSource#getGlobalSelection()
+	 */
+	@Override
+	public Vector getGlobalSelection() {
+		return null;
+	}
 
 }

@@ -37,16 +37,14 @@ import org.openflexo.fib.controller.FIBSelectable;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBList;
 
-public class FIBListWidget extends FIBMultipleValueWidget<FIBList,JList,Object> implements FIBSelectable
-{
+public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object> implements FIBSelectable {
 
 	static final Logger logger = Logger.getLogger(FIBListWidget.class.getPackage().getName());
 
 	protected JList _list;
 
-	public FIBListWidget(FIBList model, FIBController controller)
-	{
-		super(model,controller);
+	public FIBListWidget(FIBList model, FIBController controller) {
+		super(model, controller);
 
 		Object[] listData = { "Item1", "Item2", "Item3" };
 		_list = new JList(listData);
@@ -54,36 +52,34 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList,JList,Object> 
 		_list.setSelectionMode(model.getSelectionMode().getMode());
 
 		_list.setVisibleRowCount(model.getVisibleRowCount());
-		//_list.setPrototypeCellValue("0123456789012345");
+		// _list.setPrototypeCellValue("0123456789012345");
 		_list.setFixedCellHeight(model.getRowHeight());
 
 		_list.setLayoutOrientation(model.getLayoutOrientation().getSwingValue());
-		
+
 		_list.addFocusListener(this);
 
 		_list.setBorder(BorderFactory.createEtchedBorder());
 
-		//_list.setMinimumSize(new Dimension(60,60));
-		//_list.setPreferredSize(new Dimension(60,60));
+		// _list.setMinimumSize(new Dimension(60,60));
+		// _list.setPreferredSize(new Dimension(60,60));
 		_list.revalidate();
 		_list.repaint();
 
 		updateListModelWhenRequired();
-		
+
 		updateFont();
 	}
 
-
 	@Override
-	public synchronized boolean updateWidgetFromModel()
-	{
-		if (getWidget().getData() != null && notEquals(getValue(),_list.getSelectedValue())) {
+	public synchronized boolean updateWidgetFromModel() {
+		if (getWidget().getData() != null && notEquals(getValue(), _list.getSelectedValue())) {
 
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("updateWidgetFromModel()");
 			}
 			widgetUpdating = true;
-			//updateList();
+			// updateList();
 			_list.setSelectedValue(getValue(), true);
 			widgetUpdating = false;
 			return true;
@@ -95,9 +91,8 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList,JList,Object> 
 	 * Update the model given the actual state of the widget
 	 */
 	@Override
-	public synchronized boolean updateModelFromWidget()
-	{
-		if (notEquals(getValue(),_list.getSelectedValue())) {
+	public synchronized boolean updateModelFromWidget() {
+		if (notEquals(getValue(), _list.getSelectedValue())) {
 			modelUpdating = true;
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("updateModelFromWidget with " + _list.getSelectedValue());
@@ -112,46 +107,39 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList,JList,Object> 
 	}
 
 	@Override
-	public FIBListModel getListModel()
-	{
-		return (FIBListModel)super.getListModel();
+	public FIBListModel getListModel() {
+		return (FIBListModel) super.getListModel();
 	}
 
-	protected synchronized void updateList()
-	{
+	protected synchronized void updateList() {
 		if (listModel == null) {
 			updateListModelWhenRequired();
-		}
-		else {
-			_list.getSelectionModel().removeListSelectionListener((FIBListModel)listModel);
+		} else {
+			_list.getSelectionModel().removeListSelectionListener((FIBListModel) listModel);
 			listModel = new FIBListModel();
-			setListModel((FIBListModel)listModel);
+			setListModel((FIBListModel) listModel);
 		}
 	}
 
-
 	@Override
-	protected FIBListModel updateListModelWhenRequired()
-	{
+	protected FIBListModel updateListModelWhenRequired() {
 		if (listModel == null) {
 			listModel = new FIBListModel();
-			setListModel((FIBListModel)listModel);
-		}
-		else {
+			setListModel((FIBListModel) listModel);
+		} else {
 			FIBListModel newListModel = new FIBListModel();
 			if (!newListModel.equals(listModel)) {
-				_list.getSelectionModel().removeListSelectionListener((FIBListModel)listModel);
+				_list.getSelectionModel().removeListSelectionListener((FIBListModel) listModel);
 				listModel = newListModel;
-				setListModel((FIBListModel)listModel);
+				setListModel((FIBListModel) listModel);
 			}
 		}
-		return (FIBListModel)listModel;
+		return (FIBListModel) listModel;
 	}
 
 	private FIBListModel oldListModel = null;
-	
-	private void setListModel(FIBListModel aListModel)
-	{
+
+	private void setListModel(FIBListModel aListModel) {
 		widgetUpdating = true;
 		if (oldListModel != null) {
 			_list.getSelectionModel().removeListSelectionListener(oldListModel);
@@ -174,7 +162,7 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList,JList,Object> 
 			objectToSelect = _list.getModel().getElementAt(0);
 		}
 		if (objectToSelect != null) {
-			for ( int i=0; i<_list.getModel().getSize(); i++) {
+			for (int i = 0; i < _list.getModel().getSize(); i++) {
 				if (_list.getModel().getElementAt(i) == objectToSelect) {
 					final int index = i;
 					SwingUtilities.invokeLater(new Runnable() {
@@ -186,7 +174,7 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList,JList,Object> 
 				}
 			}
 		}
-		
+
 		/*if (getWidget().getAutoSelectFirstRow() && _list.getModel().getSize() > 0) {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
@@ -197,25 +185,21 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList,JList,Object> 
 		}*/
 	}
 
-	protected class FIBListModel extends FIBMultipleValueModel implements ListSelectionListener
-	{
+	protected class FIBListModel extends FIBMultipleValueModel implements ListSelectionListener {
 		private Object selectedObject;
 		private Vector<Object> selection;
 
-		public FIBListModel()
-		{
+		public FIBListModel() {
 			super();
 			selectedObject = null;
 			selection = new Vector<Object>();
 		}
 
-		public Object getSelectedObject()
-		{
+		public Object getSelectedObject() {
 			return selectedObject;
 		}
 
-		public Vector<Object> getSelection()
-		{
+		public Vector<Object> getSelection() {
 			return selection;
 		}
 
@@ -242,7 +226,7 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList,JList,Object> 
 			if (!getListSelectionModel().isSelectedIndex(leadIndex)) {
 				leadIndex = getListSelectionModel().getAnchorSelectionIndex();
 			}
-			while (!getListSelectionModel().isSelectedIndex(leadIndex) && i<=getListSelectionModel().getMaxSelectionIndex()) {
+			while (!getListSelectionModel().isSelectedIndex(leadIndex) && i <= getListSelectionModel().getMaxSelectionIndex()) {
 				leadIndex = i;
 				i++;
 			}
@@ -251,7 +235,7 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList,JList,Object> 
 
 			Vector<Object> oldSelection = selection;
 			selection = new Vector<Object>();
-			for (i=getListSelectionModel().getMinSelectionIndex(); i<=getListSelectionModel().getMaxSelectionIndex(); i++) {
+			for (i = getListSelectionModel().getMinSelectionIndex(); i <= getListSelectionModel().getMaxSelectionIndex(); i++) {
 				if (getListSelectionModel().isSelectedIndex(i)) {
 					selection.add(getElementAt(i));
 				}
@@ -263,8 +247,8 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList,JList,Object> 
 			notifyDynamicModelChanged();
 
 			if (getComponent().getSelected().isValid()) {
-				logger.fine("Sets SELECTED binding with "+selectedObject);
-				getComponent().getSelected().setBindingValue(selectedObject,getController());
+				logger.fine("Sets SELECTED binding with " + selectedObject);
+				getComponent().getSelected().setBindingValue(selectedObject, getController());
 			}
 
 			updateFont();
@@ -273,196 +257,167 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList,JList,Object> 
 				getController().updateSelection(FIBListWidget.this, oldSelection, selection);
 			}
 
-			logger.fine((isFocused() ? "LEADER" : "SECONDARY")+" Selected is "+selectedObject);
-			logger.fine((isFocused() ? "LEADER" : "SECONDARY")+" Selection is "+selection);
+			logger.fine((isFocused() ? "LEADER" : "SECONDARY") + " Selected is " + selectedObject);
+			logger.fine((isFocused() ? "LEADER" : "SECONDARY") + " Selection is " + selection);
 
 		}
 
 		private boolean ignoreNotifications = false;
 
-		public void addToSelectionNoNotification(Object o)
-		{
+		public void addToSelectionNoNotification(Object o) {
 			int index = indexOf(o);
 			ignoreNotifications = true;
-			getListSelectionModel().addSelectionInterval(index,index);
+			getListSelectionModel().addSelectionInterval(index, index);
 			ignoreNotifications = false;
 		}
 
-		public void removeFromSelectionNoNotification(Object o)
-		{
+		public void removeFromSelectionNoNotification(Object o) {
 			int index = indexOf(o);
 			ignoreNotifications = true;
-			getListSelectionModel().removeSelectionInterval(index,index);
+			getListSelectionModel().removeSelectionInterval(index, index);
 			ignoreNotifications = false;
 		}
 
-		public void resetSelectionNoNotification()
-		{
+		public void resetSelectionNoNotification() {
 			ignoreNotifications = true;
 			getListSelectionModel().clearSelection();
 			ignoreNotifications = false;
 		}
 
-		public void addToSelection(Object o)
-		{
+		public void addToSelection(Object o) {
 			int index = indexOf(o);
-			getListSelectionModel().addSelectionInterval(index,index);
+			getListSelectionModel().addSelectionInterval(index, index);
 		}
 
-		public void removeFromSelection(Object o)
-		{
+		public void removeFromSelection(Object o) {
 			int index = indexOf(o);
-			getListSelectionModel().removeSelectionInterval(index,index);
+			getListSelectionModel().removeSelectionInterval(index, index);
 		}
 
-		public void resetSelection()
-		{
+		public void resetSelection() {
 			getListSelectionModel().clearSelection();
 		}
 
 	}
 
-	public ListSelectionModel getListSelectionModel()
-	{
+	public ListSelectionModel getListSelectionModel() {
 		return _list.getSelectionModel();
 	}
 
 	@Override
-	public JList getJComponent()
-	{
+	public JList getJComponent() {
 		return _list;
 	}
 
 	@Override
-	public JList getDynamicJComponent()
-	{
+	public JList getDynamicJComponent() {
 		return _list;
 	}
 
 	@Override
-	public void updateFont()
-	{
+	public void updateFont() {
 		super.updateFont();
 		_list.setFont(getFont());
 	}
 
 	@Override
-	public FIBListDynamicModel createDynamicModel()
-	{
+	public FIBListDynamicModel createDynamicModel() {
 		return new FIBListDynamicModel(null);
 	}
 
 	@Override
-	public FIBListDynamicModel getDynamicModel()
-	{
-		return (FIBListDynamicModel)super.getDynamicModel();
+	public FIBListDynamicModel getDynamicModel() {
+		return (FIBListDynamicModel) super.getDynamicModel();
 	}
 
 	@Override
-	public boolean mayRepresent(Object o)
-	{
+	public boolean mayRepresent(Object o) {
 		return getListModel().indexOf(o) > -1;
 	}
 
 	@Override
-	public void objectAddedToSelection(Object o)
-	{
+	public void objectAddedToSelection(Object o) {
 		getListModel().addToSelectionNoNotification(o);
 	}
 
 	@Override
-	public void objectRemovedFromSelection(Object o)
-	{
+	public void objectRemovedFromSelection(Object o) {
 		getListModel().removeFromSelectionNoNotification(o);
 	}
 
 	@Override
-	public void selectionResetted()
-	{
+	public void selectionResetted() {
 		getListModel().resetSelectionNoNotification();
 	}
 
 	@Override
-	public void addToSelection(Object o)
-	{
+	public void addToSelection(Object o) {
 		getListModel().addToSelection(o);
 	}
 
 	@Override
-	public void removeFromSelection(Object o)
-	{
+	public void removeFromSelection(Object o) {
 		getListModel().removeFromSelection(o);
 	}
 
 	@Override
-	public void resetSelection()
-	{
+	public void resetSelection() {
 		getListModel().resetSelection();
 	}
 
 	@Override
-	public Object getSelectedObject()
-	{
+	public Object getSelectedObject() {
 		return getListModel().getSelectedObject();
 	}
 
 	@Override
-	public Vector<Object> getSelection()
-	{
+	public Vector<Object> getSelection() {
 		return getListModel().getSelection();
 	}
 
 	@Override
-	public boolean synchronizedWithSelection()
-	{
+	public boolean synchronizedWithSelection() {
 		return getWidget().getBoundToSelectionManager();
 	}
 
-	public boolean isLastFocusedSelectable()
-	{
+	public boolean isLastFocusedSelectable() {
 		return getController().getLastFocusedSelectable() == this;
 	}
 
 	private FIBListCellRenderer listCellRenderer;
 
 	@Override
-	public FIBListCellRenderer getListCellRenderer()
-	{
+	public FIBListCellRenderer getListCellRenderer() {
 		if (listCellRenderer == null) {
 			listCellRenderer = new FIBListCellRenderer();
 		}
 		return listCellRenderer;
 	}
 
-	protected class FIBListCellRenderer extends FIBMultipleValueCellRenderer
-	{
-		public FIBListCellRenderer()
-		{
-			//Dimension s = getJComponent().getSize();
-			//setPreferredSize(new Dimension(100,getWidget().getRowHeight()));
+	protected class FIBListCellRenderer extends FIBMultipleValueCellRenderer {
+		public FIBListCellRenderer() {
+			// Dimension s = getJComponent().getSize();
+			// setPreferredSize(new Dimension(100,getWidget().getRowHeight()));
 		}
 
 		@Override
-		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
-		{
-			FIBListCellRenderer label = (FIBListCellRenderer) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			//((JComponent)label).setPreferredSize(new Dimension(label.getWidth(),getWidget().getRowHeight()));
+		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+			FIBListCellRenderer label = (FIBListCellRenderer) super.getListCellRendererComponent(list, value, index, isSelected,
+					cellHasFocus);
+			// ((JComponent)label).setPreferredSize(new Dimension(label.getWidth(),getWidget().getRowHeight()));
 
 			if (isSelected) {
 				if (isLastFocusedSelectable()) {
 					setForeground(getWidget().getTextSelectionColor());
 					setBackground(getWidget().getBackgroundSelectionColor());
-				}
-				else {
+				} else {
 					setForeground(getWidget().getTextNonSelectionColor());
 					setBackground(getWidget().getBackgroundSecondarySelectionColor());
 				}
-			}
-			else {
+			} else {
 				if (!isEnabled()) {
 					setForeground(FIBComponent.DISABLED_COLOR);
-				}
-				else {
+				} else {
 					setForeground(getWidget().getTextNonSelectionColor());
 				}
 				setBackground(getWidget().getBackgroundNonSelectionColor());

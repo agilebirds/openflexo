@@ -30,11 +30,9 @@ import javax.swing.JRadioButton;
  * @author sguerin
  * 
  */
-public class JRadioButtonWithIcon extends JRadioButton
-{
+public class JRadioButtonWithIcon extends JRadioButton {
 
-	public JRadioButtonWithIcon(String text, File iconFile, boolean selected)
-	{
+	public JRadioButtonWithIcon(String text, File iconFile, boolean selected) {
 		super();
 		// Define an HTML fragment with an icon on the left and text on the
 		// right.
@@ -42,7 +40,7 @@ public class JRadioButtonWithIcon extends JRadioButton
 		String label = null;
 		try {
 			label = "<html><table cellpadding=0><tr><td><img src=\""
-					// The location of the icon
+			// The location of the icon
 					+ iconFile.toURI().toURL() + "\"></td><td width="
 
 					// The gap, in pixels, between icon and text
@@ -58,8 +56,7 @@ public class JRadioButtonWithIcon extends JRadioButton
 		setSelected(selected);
 	}
 
-	public JRadioButtonWithIcon(String text, File iconFile)
-	{
+	public JRadioButtonWithIcon(String text, File iconFile) {
 		this(text, iconFile, false);
 	}
 }

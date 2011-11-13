@@ -39,7 +39,6 @@ import org.openflexo.swing.merge.MergePanelElements;
 import org.openflexo.swing.merge.MergePanelElements.ComparePanel;
 import org.openflexo.toolbox.TokenMarkerStyle;
 
-
 public class CVSMergeEditor extends JLayeredPane {
 
 	private static final Logger logger = Logger.getLogger(CVSMergeEditor.class.getPackage().getName());
@@ -49,18 +48,16 @@ public class CVSMergeEditor extends JLayeredPane {
 	private MergePanelElements.FilterChangeList changesList;
 	private ComparePanel comparePanel;
 	private JPanel controlPanel;
-	
-	public CVSMergeEditor(IMerge merge, TokenMarkerStyle style, String leftLabel, String rightLabel, String mergeLabel, String noChangeLabel)
-	{
+
+	public CVSMergeEditor(IMerge merge, TokenMarkerStyle style, String leftLabel, String rightLabel, String mergeLabel, String noChangeLabel) {
 		super();
 		_report = merge;
-		
+
 		setLayout(new BorderLayout());
-		
-		mergePanelElements = new MergePanelElements(merge,style,noChangeLabel) {
+
+		mergePanelElements = new MergePanelElements(merge, style, noChangeLabel) {
 			@Override
-			protected String localizedForKey(String key)
-			{
+			protected String localizedForKey(String key) {
 				return FlexoLocalization.localizedForKey(key);
 			}
 		};
@@ -70,29 +67,28 @@ public class CVSMergeEditor extends JLayeredPane {
 		JScrollPane mergeTextArea = mergePanelElements.getMergePanel();
 
 		JPanel northPanel = new JPanel(new BorderLayout());
-		
+
 		JPanel northEastPanel = new JPanel(new BorderLayout());
-		
-		northEastPanel.add(mergeTextArea,BorderLayout.CENTER);
+
+		northEastPanel.add(mergeTextArea, BorderLayout.CENTER);
 		if (mergeLabel != null) {
-			northEastPanel.add(new JLabel(mergeLabel,SwingConstants.CENTER),BorderLayout.NORTH);
+			northEastPanel.add(new JLabel(mergeLabel, SwingConstants.CENTER), BorderLayout.NORTH);
 		}
-		northPanel.add(changesList,BorderLayout.WEST);
-		northPanel.add(northEastPanel,BorderLayout.CENTER);
-		
+		northPanel.add(changesList, BorderLayout.WEST);
+		northPanel.add(northEastPanel, BorderLayout.CENTER);
+
 		JPanel southPanel = new JPanel(new BorderLayout());
-		southPanel.add(comparePanel,BorderLayout.CENTER);
+		southPanel.add(comparePanel, BorderLayout.CENTER);
 		if ((leftLabel != null) || (rightLabel != null)) {
-			JPanel labelPanels = new JPanel(new GridLayout(1,2));
-			JLabel _leftLabel = new JLabel (leftLabel,SwingConstants.CENTER);
-			JLabel _rightLabel = new JLabel (rightLabel,SwingConstants.CENTER);
+			JPanel labelPanels = new JPanel(new GridLayout(1, 2));
+			JLabel _leftLabel = new JLabel(leftLabel, SwingConstants.CENTER);
+			JLabel _rightLabel = new JLabel(rightLabel, SwingConstants.CENTER);
 			labelPanels.add(_leftLabel);
 			labelPanels.add(_rightLabel);
-			southPanel.add(labelPanels,BorderLayout.NORTH);
+			southPanel.add(labelPanels, BorderLayout.NORTH);
 		}
 
-		
-		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,northPanel,southPanel);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, northPanel, southPanel);
 		Dimension dim = northPanel.getPreferredSize();
 		dim.height = 300;
 		northPanel.setPreferredSize(dim);
@@ -101,45 +97,41 @@ public class CVSMergeEditor extends JLayeredPane {
 		southPanel.setPreferredSize(dim2);
 		splitPane.setDividerLocation(0.5);
 		splitPane.setResizeWeight(0.5);
-		
-		add(splitPane,BorderLayout.CENTER);
-		
+
+		add(splitPane, BorderLayout.CENTER);
+
 		controlPanel = mergePanelElements.getControlPanel();
-		add(controlPanel,BorderLayout.SOUTH);
+		add(controlPanel, BorderLayout.SOUTH);
 
 		validate();
-		
+
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				if (_report.getChanges().size() > 0) {
 					mergePanelElements.selectChange(_report.getChanges().firstElement());
 				}
-			}			
+			}
 		});
 	}
-	
-	public boolean isEditable() 
-	{
+
+	public boolean isEditable() {
 		return mergePanelElements.isEditable();
 	}
 
-	public void setEditable(boolean editable)
-	{
+	public void setEditable(boolean editable) {
 		mergePanelElements.setEditable(editable);
 		revalidate();
 		repaint();
 	}
 
-	public void addToFocusListener(FocusListener aFocusListener) 
-	{
+	public void addToFocusListener(FocusListener aFocusListener) {
 		mergePanelElements.getLeftTextArea().addFocusListener(aFocusListener);
 		mergePanelElements.getRightTextArea().addFocusListener(aFocusListener);
 		mergePanelElements.getMergeTextArea().addFocusListener(aFocusListener);
 	}
 
-	public void setFirstVisibleLine(int firstVisibleLine) 
-	{
+	public void setFirstVisibleLine(int firstVisibleLine) {
 		mergePanelElements.getMergeTextArea().scrollTo(firstVisibleLine, 0);
 		mergePanelElements.getRightTextArea().scrollTo(firstVisibleLine, 0);
 		mergePanelElements.getLeftTextArea().scrollTo(firstVisibleLine, 0);

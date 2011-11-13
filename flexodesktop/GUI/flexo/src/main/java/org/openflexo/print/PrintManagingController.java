@@ -27,15 +27,15 @@ import org.openflexo.view.FlexoFrame;
  * @author sguerin
  * 
  */
- public interface PrintManagingController {
+public interface PrintManagingController {
 
-     /**
-      * Return the SelectionManager this controller is working with
-      * 
-      * @return
-      */
-     public PrintManager getPrintManager();
+	/**
+	 * Return the SelectionManager this controller is working with
+	 * 
+	 * @return
+	 */
+	public PrintManager getPrintManager();
 
-     public FlexoFrame getFlexoFrame();
+	public FlexoFrame getFlexoFrame();
 
 }

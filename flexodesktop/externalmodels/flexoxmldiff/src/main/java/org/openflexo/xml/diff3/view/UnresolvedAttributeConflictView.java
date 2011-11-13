@@ -26,33 +26,31 @@ import javax.swing.JPanel;
 
 import org.openflexo.xml.diff3.UnresolvedAttributesConflict;
 
-
 public class UnresolvedAttributeConflictView extends UnresolvedConflictView {
-	
+
 	private JPanel _choicePanel;
 	private JPanel _descriptionPanel;
-	
-	
+
 	public UnresolvedAttributeConflictView(UnresolvedAttributesConflict model) {
 		super(model);
 	}
 
 	@Override
-	public UnresolvedAttributesConflict getModel(){
-		return (UnresolvedAttributesConflict)super.getModel();
+	public UnresolvedAttributesConflict getModel() {
+		return (UnresolvedAttributesConflict) super.getModel();
 	}
-	
+
 	@Override
 	public JPanel getChoicePane() {
 		refreshChoicePanel();
 		return _choicePanel;
 	}
-	
+
 	@Override
-	public void refreshChoicePanel(){
-		if(_choicePanel==null){
+	public void refreshChoicePanel() {
+		if (_choicePanel == null) {
 			_choicePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		}else{
+		} else {
 			_choicePanel.removeAll();
 			_choicePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		}
@@ -68,13 +66,12 @@ public class UnresolvedAttributeConflictView extends UnresolvedConflictView {
 		}
 		_choicePanel.validate();
 	}
-	
-	
+
 	@Override
 	public JPanel getDescriptionPane() {
-		if(_descriptionPanel==null){
+		if (_descriptionPanel == null) {
 			_descriptionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-			_descriptionPanel.add(new JLabel(getModel().attributeName()+" of "+getModel().elementName()));
+			_descriptionPanel.add(new JLabel(getModel().attributeName() + " of " + getModel().elementName()));
 		}
 		return _descriptionPanel;
 	}

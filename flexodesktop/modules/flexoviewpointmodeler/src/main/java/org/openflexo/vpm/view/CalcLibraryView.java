@@ -31,40 +31,32 @@ import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.controller.CEDController;
 import org.openflexo.vpm.controller.ViewPointPerspective;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class CalcLibraryView extends FIBModuleView<ViewPointLibrary> implements FIBMouseClickListener
-{
+public class CalcLibraryView extends FIBModuleView<ViewPointLibrary> implements FIBMouseClickListener {
 
-	public CalcLibraryView(ViewPointLibrary viewPointLibrary, CEDController controller)
-	{
-		super(viewPointLibrary,controller,CEDCst.CALC_LIBRARY_VIEW_FIB);        
+	public CalcLibraryView(ViewPointLibrary viewPointLibrary, CEDController controller) {
+		super(viewPointLibrary, controller, CEDCst.CALC_LIBRARY_VIEW_FIB);
 	}
 
 	@Override
-	public CEDController getFlexoController()
-	{
-		return (CEDController)super.getFlexoController();
+	public CEDController getFlexoController() {
+		return (CEDController) super.getFlexoController();
 	}
 
 	@Override
-	public ViewPointPerspective getPerspective() 
-	{
+	public ViewPointPerspective getPerspective() {
 		return getFlexoController().VIEW_POINT_PERSPECTIVE;
 	}
 
- 	@Override
-	public void mouseClicked(FIBComponentDynamicModel data, int clickCount)
-	{
-		if (data instanceof FIBTableDynamicModel
-				&& ((FIBTableDynamicModel)data).selected instanceof FlexoModelObject
-				&& clickCount == 2) {
-			FlexoModelObject o = (FlexoModelObject)((FIBTableDynamicModel)data).selected;
+	@Override
+	public void mouseClicked(FIBComponentDynamicModel data, int clickCount) {
+		if (data instanceof FIBTableDynamicModel && ((FIBTableDynamicModel) data).selected instanceof FlexoModelObject && clickCount == 2) {
+			FlexoModelObject o = (FlexoModelObject) ((FIBTableDynamicModel) data).selected;
 			if (o instanceof ViewPoint || o instanceof EditionPattern) {
 				getFlexoController().selectAndFocusObject(o);
 			}

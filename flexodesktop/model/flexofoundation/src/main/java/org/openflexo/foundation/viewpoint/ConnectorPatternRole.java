@@ -14,98 +14,81 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole {
 	private Object artifactFromGraphicalRepresentation;
 	private Object artifactToGraphicalRepresentation;
 
-
-    @Override
-	public PatternRoleType getType()
-	{
+	@Override
+	public PatternRoleType getType() {
 		return PatternRoleType.Connector;
 	}
 
-
 	@Override
-	public String getPreciseType()
-	{
+	public String getPreciseType() {
 		return FlexoLocalization.localizedForKey("connector");
 	}
 
 	@Override
-	public Object getGraphicalRepresentation() 
-	{
+	public Object getGraphicalRepresentation() {
 		return _graphicalRepresentation;
 	}
 
 	@Override
-	public void setGraphicalRepresentation(Object graphicalRepresentation) 
-	{
+	public void setGraphicalRepresentation(Object graphicalRepresentation) {
 		_graphicalRepresentation = graphicalRepresentation;
 		setChanged();
 		notifyObservers(new GraphicalRepresentationChanged(this, graphicalRepresentation));
 	}
-	
+
 	// No notification
 	@Override
-	public void _setGraphicalRepresentationNoNotification(Object graphicalRepresentation) 
-	{
+	public void _setGraphicalRepresentationNoNotification(Object graphicalRepresentation) {
 		_graphicalRepresentation = graphicalRepresentation;
 	}
-	
-	public Object getArtifactFromGraphicalRepresentation() 
-	{
+
+	public Object getArtifactFromGraphicalRepresentation() {
 		return artifactFromGraphicalRepresentation;
 	}
 
-	public void setArtifactFromGraphicalRepresentation(
-			Object artifactFromGraphicalRepresentation) 
-	{
+	public void setArtifactFromGraphicalRepresentation(Object artifactFromGraphicalRepresentation) {
 		this.artifactFromGraphicalRepresentation = artifactFromGraphicalRepresentation;
 		setChanged();
 		notifyObservers(new GraphicalRepresentationChanged(this, artifactFromGraphicalRepresentation));
 	}
 
-	public Object getArtifactToGraphicalRepresentation()
-	{
+	public Object getArtifactToGraphicalRepresentation() {
 		return artifactToGraphicalRepresentation;
 	}
 
-	public void setArtifactToGraphicalRepresentation(
-			Object artifactToGraphicalRepresentation) 
-	{
+	public void setArtifactToGraphicalRepresentation(Object artifactToGraphicalRepresentation) {
 		this.artifactToGraphicalRepresentation = artifactToGraphicalRepresentation;
 		setChanged();
 		notifyObservers(new GraphicalRepresentationChanged(this, artifactToGraphicalRepresentation));
 	}
-	
-	public ShapePatternRole getStartShape()
-	{
+
+	public ShapePatternRole getStartShape() {
 		for (EditionScheme es : getEditionPattern().getEditionSchemes()) {
 			for (EditionAction action : es.getActions()) {
 				if ((action.getPatternRole() == this) && (action instanceof AddConnector)) {
-					AddConnector addConnector = (AddConnector)action;
+					AddConnector addConnector = (AddConnector) action;
 					for (PatternRole r : getEditionPattern().getPatternRoles()) {
-						if ((r instanceof ShapePatternRole)
-								&& (addConnector.getFromShape() != null) 
+						if ((r instanceof ShapePatternRole) && (addConnector.getFromShape() != null)
 								&& addConnector.getFromShape().toString().equals(r.getPatternRoleName())) {
-							return (ShapePatternRole)r;
+							return (ShapePatternRole) r;
 						}
 					}
 				}
 			}
 		}
-			
+
 		return null;
 	}
 
-	public ShapePatternRole getEndShape()
-	{
+	public ShapePatternRole getEndShape() {
 		for (EditionScheme es : getEditionPattern().getEditionSchemes()) {
 			for (EditionAction action : es.getActions()) {
 				if ((action.getPatternRole() == this) && (action instanceof AddConnector)) {
-					AddConnector addConnector = (AddConnector)action;
+					AddConnector addConnector = (AddConnector) action;
 					for (PatternRole r : getEditionPattern().getPatternRoles()) {
-						if ((r instanceof ShapePatternRole)
-								&& (addConnector.getToShape() != null) 
+						if ((r instanceof ShapePatternRole) && (addConnector.getToShape() != null)
 								&& addConnector.getToShape().toString().equals(r.getPatternRoleName())) {
-							return (ShapePatternRole)r;
+							return (ShapePatternRole) r;
 						}
 					}
 				}
@@ -114,11 +97,10 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole {
 
 		return null;
 	}
-	
+
 	@Override
-	public Class<?> getAccessedClass()
-	{
+	public Class<?> getAccessedClass() {
 		return ViewConnector.class;
 	}
-	
+
 }

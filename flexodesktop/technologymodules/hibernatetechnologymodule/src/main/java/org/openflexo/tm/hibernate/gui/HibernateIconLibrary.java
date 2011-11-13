@@ -15,18 +15,22 @@ import org.openflexo.tm.hibernate.impl.HibernateModel;
 import org.openflexo.tm.hibernate.impl.HibernateRelationship;
 
 /**
- *
+ * 
  * @author Nicolas Daniels
  */
 public class HibernateIconLibrary {
 
-	public static final ImageIcon REPOSITORY_ICON = new ImageIcon(HibernateIconLibrary.class.getResource("/Hibernate/Icons/SmallRepository.gif"));
+	public static final ImageIcon REPOSITORY_ICON = new ImageIcon(
+			HibernateIconLibrary.class.getResource("/Hibernate/Icons/SmallRepository.gif"));
 	public static final ImageIcon MODEL_ICON = new ImageIcon(HibernateIconLibrary.class.getResource("/Hibernate/Icons/SmallModel.gif"));
 	public static final ImageIcon ENTITY_ICON = new ImageIcon(HibernateIconLibrary.class.getResource("/Hibernate/Icons/SmallEntity.gif"));
-	public static final ImageIcon ATTRIBUTE_ICON = new ImageIcon(HibernateIconLibrary.class.getResource("/Hibernate/Icons/SmallAttribute.gif"));
-	public static final ImageIcon RELATIONSHIP_ICON = new ImageIcon(HibernateIconLibrary.class.getResource("/Hibernate/Icons/SmallRelationship.gif"));
+	public static final ImageIcon ATTRIBUTE_ICON = new ImageIcon(
+			HibernateIconLibrary.class.getResource("/Hibernate/Icons/SmallAttribute.gif"));
+	public static final ImageIcon RELATIONSHIP_ICON = new ImageIcon(
+			HibernateIconLibrary.class.getResource("/Hibernate/Icons/SmallRelationship.gif"));
 
-	public static final ImageIcon ENUMCONTAINER_ICON = new ImageIcon(HibernateIconLibrary.class.getResource("/Hibernate/Icons/SmallEnumContainer.gif"));
+	public static final ImageIcon ENUMCONTAINER_ICON = new ImageIcon(
+			HibernateIconLibrary.class.getResource("/Hibernate/Icons/SmallEnumContainer.gif"));
 	public static final ImageIcon ENUM_ICON = new ImageIcon(HibernateIconLibrary.class.getResource("/Hibernate/Icons/SmallEnum.gif"));
 
 	/**

@@ -22,19 +22,16 @@ package org.openflexo.components.browser.view;
 import java.util.EventListener;
 
 /**
- * The listener interface for receiving browser action events. The class that is
- * interested in processing an action event implements this interface, and the
- * object created with that class is registered with a component, using the
- * ProjectBrowser's addBrowserActionListener method. When the borwser action
- * event occurs, that object's browserActionPerformed method is invoked.
+ * The listener interface for receiving browser action events. The class that is interested in processing an action event implements this
+ * interface, and the object created with that class is registered with a component, using the ProjectBrowser's addBrowserActionListener
+ * method. When the borwser action event occurs, that object's browserActionPerformed method is invoked.
  * 
  * @author sguerin
  * @deprecated
  * 
  */
 @Deprecated
-public interface BrowserActionListener extends EventListener
-{
-    public void browserActionPerformed(BrowserActionEvent event);
+public interface BrowserActionListener extends EventListener {
+	public void browserActionPerformed(BrowserActionEvent event);
 
 }

@@ -36,48 +36,48 @@ public class CEDSetPropertyInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-    public CEDSetPropertyInitializer(ControllerActionInitializer actionInitializer)
-	{
-		super(SetPropertyAction.actionType,actionInitializer);
+	public CEDSetPropertyInitializer(ControllerActionInitializer actionInitializer) {
+		super(SetPropertyAction.actionType, actionInitializer);
 	}
 
 	@Override
-	protected FlexoActionInitializer<SetPropertyAction> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<SetPropertyAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<SetPropertyAction>() {
 			@Override
-			public boolean run(ActionEvent e, SetPropertyAction action)
-			{
-				return action.getFocusedObject()!=null;
+			public boolean run(ActionEvent e, SetPropertyAction action) {
+				return action.getFocusedObject() != null;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<SetPropertyAction> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<SetPropertyAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<SetPropertyAction>() {
 			@Override
-			public boolean run(ActionEvent e, SetPropertyAction action)
-			{
+			public boolean run(ActionEvent e, SetPropertyAction action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-    protected FlexoExceptionHandler<SetPropertyAction> getDefaultExceptionHandler() 
-    {
-        return new FlexoExceptionHandler<SetPropertyAction>() {
-            @Override
-			public boolean handleException(FlexoException exception, SetPropertyAction action) 
-            {
-                exception.printStackTrace();
-                FlexoController.notify(FlexoLocalization.localizedForKey("could_not_set_property")+" "+(action.getLocalizedPropertyName()!=null?"'"+action.getLocalizedPropertyName() +"' ":"")+ FlexoLocalization.localizedForKey("to")+" "+(action.getValue()==null||action.getValue().equals("")?FlexoLocalization.localizedForKey("empty_value"):action.getValue())
-                        +(exception.getLocalizedMessage()!=null?"\n("+FlexoLocalization.localizedForKey("details: ")+ exception.getLocalizedMessage()+")":""));
-                return true;
-            }
-        };
-    }
+	protected FlexoExceptionHandler<SetPropertyAction> getDefaultExceptionHandler() {
+		return new FlexoExceptionHandler<SetPropertyAction>() {
+			@Override
+			public boolean handleException(FlexoException exception, SetPropertyAction action) {
+				exception.printStackTrace();
+				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_set_property")
+						+ " "
+						+ (action.getLocalizedPropertyName() != null ? "'" + action.getLocalizedPropertyName() + "' " : "")
+						+ FlexoLocalization.localizedForKey("to")
+						+ " "
+						+ (action.getValue() == null || action.getValue().equals("") ? FlexoLocalization.localizedForKey("empty_value")
+								: action.getValue())
+						+ (exception.getLocalizedMessage() != null ? "\n(" + FlexoLocalization.localizedForKey("details: ")
+								+ exception.getLocalizedMessage() + ")" : ""));
+				return true;
+			}
+		};
+	}
 
 }

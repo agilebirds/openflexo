@@ -45,30 +45,25 @@ public class IESetPropertyInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-    public IESetPropertyInitializer(ControllerActionInitializer actionInitializer)
-	{
-		super(SetPropertyAction.actionType,actionInitializer);
+	public IESetPropertyInitializer(ControllerActionInitializer actionInitializer) {
+		super(SetPropertyAction.actionType, actionInitializer);
 	}
 
 	@Override
-	protected FlexoActionInitializer<SetPropertyAction> getDefaultInitializer()
-	{
+	protected FlexoActionInitializer<SetPropertyAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<SetPropertyAction>() {
 			@Override
-			public boolean run(ActionEvent e, SetPropertyAction action)
-			{
-				return action.getFocusedObject()!=null;
+			public boolean run(ActionEvent e, SetPropertyAction action) {
+				return action.getFocusedObject() != null;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<SetPropertyAction> getDefaultFinalizer()
-	{
+	protected FlexoActionFinalizer<SetPropertyAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<SetPropertyAction>() {
 			@Override
-			public boolean run(ActionEvent e, SetPropertyAction action)
-			{
+			public boolean run(ActionEvent e, SetPropertyAction action) {
 				/*if ((action.getKey().equals("listType")||action.getKey().equals("fetchObjects")) && action.getFocusedObject() instanceof RepetitionOperator) {
 					RepetitionOperator rep = (RepetitionOperator)action.getFocusedObject();
 					rep.getBindingItemDefinition();// Refresh the definition if needed
@@ -85,13 +80,15 @@ public class IESetPropertyInitializer extends ActionInitializer {
 
 				}*/
 				if (action.getKey().equals("hyperlinkType") && action.getFocusedObject() instanceof IEHyperlinkWidget) {
-					IEHyperlinkWidget link = ((IEHyperlinkWidget)action.getFocusedObject());
+					IEHyperlinkWidget link = ((IEHyperlinkWidget) action.getFocusedObject());
 					HyperlinkType type = (HyperlinkType) action.getPreviousValue();
-					if (type!=null && link.getHyperlinkType()!=type) {
+					if (type != null && link.getHyperlinkType() != type) {
 						if (type.isDisplayAction()) {
-							if (link.getHyperlinkType()==HyperlinkType.FLEXOACTION) {
-								if (link.getAllActionNodesLinkedToThisButton().size()>0) {
-									if (FlexoController.confirm(FlexoLocalization.localizedForKey("there_were_some_actions_bound_to_this_link_would_you_like_to_set_as_flexo_action"))) {
+							if (link.getHyperlinkType() == HyperlinkType.FLEXOACTION) {
+								if (link.getAllActionNodesLinkedToThisButton().size() > 0) {
+									if (FlexoController
+											.confirm(FlexoLocalization
+													.localizedForKey("there_were_some_actions_bound_to_this_link_would_you_like_to_set_as_flexo_action"))) {
 										for (ActionNode node : link.getAllActionNodesLinkedToThisButton()) {
 											SetPropertyAction set = SetPropertyAction.actionType.makeNewAction(node, null, getEditor());
 											set.setKey("actionType");
@@ -101,8 +98,9 @@ public class IESetPropertyInitializer extends ActionInitializer {
 									}
 								}
 							} else {
-								if (link.getAllActionNodesLinkedToThisButton().size()>0) {
-									if (FlexoController.confirm(FlexoLocalization.localizedForKey("there_were_some_actions_bound_to_this_link_would_you_like_to_delete_them"))) {
+								if (link.getAllActionNodesLinkedToThisButton().size() > 0) {
+									if (FlexoController.confirm(FlexoLocalization
+											.localizedForKey("there_were_some_actions_bound_to_this_link_would_you_like_to_delete_them"))) {
 										Vector<WKFObject> obj = new Vector<WKFObject>();
 										obj.addAll(link.getAllActionNodesLinkedToThisButton());
 										WKFDelete del = WKFDelete.actionType.makeNewAction(obj.firstElement(), obj, getEditor());
@@ -111,9 +109,11 @@ public class IESetPropertyInitializer extends ActionInitializer {
 								}
 							}
 						} else if (type.isFlexoAction()) {
-							if (link.getHyperlinkType()==HyperlinkType.DISPLAYACTION) {
-								if (link.getAllActionNodesLinkedToThisButton().size()>0) {
-									if (FlexoController.confirm(FlexoLocalization.localizedForKey("there_were_some_actions_bound_to_this_link_would_you_like_to_set_as_display_action"))) {
+							if (link.getHyperlinkType() == HyperlinkType.DISPLAYACTION) {
+								if (link.getAllActionNodesLinkedToThisButton().size() > 0) {
+									if (FlexoController
+											.confirm(FlexoLocalization
+													.localizedForKey("there_were_some_actions_bound_to_this_link_would_you_like_to_set_as_display_action"))) {
 										for (ActionNode node : link.getAllActionNodesLinkedToThisButton()) {
 											SetPropertyAction set = SetPropertyAction.actionType.makeNewAction(node, null, getEditor());
 											set.setKey("actionType");
@@ -123,8 +123,9 @@ public class IESetPropertyInitializer extends ActionInitializer {
 									}
 								}
 							} else {
-								if (link.getAllActionNodesLinkedToThisButton().size()>0) {
-									if (FlexoController.confirm(FlexoLocalization.localizedForKey("there_were_some_actions_bound_to_this_link_would_you_like_to_delete_them"))) {
+								if (link.getAllActionNodesLinkedToThisButton().size() > 0) {
+									if (FlexoController.confirm(FlexoLocalization
+											.localizedForKey("there_were_some_actions_bound_to_this_link_would_you_like_to_delete_them"))) {
 										Vector<WKFObject> obj = new Vector<WKFObject>();
 										obj.addAll(link.getAllActionNodesLinkedToThisButton());
 										WKFDelete del = WKFDelete.actionType.makeNewAction(obj.firstElement(), obj, getEditor());
@@ -142,24 +143,30 @@ public class IESetPropertyInitializer extends ActionInitializer {
 	}
 
 	@Override
-    protected FlexoExceptionHandler<SetPropertyAction> getDefaultExceptionHandler()
-    {
-        return new FlexoExceptionHandler<SetPropertyAction>() {
-            @Override
-			public boolean handleException(final FlexoException exception, final SetPropertyAction action)
-            {
-                exception.printStackTrace();
-                // GPO: We push the notification to later so that the action can keep on going. This is important so that inspector widgets can refresh themselves
-                SwingUtilities.invokeLater(new Runnable(){
-                	@Override
+	protected FlexoExceptionHandler<SetPropertyAction> getDefaultExceptionHandler() {
+		return new FlexoExceptionHandler<SetPropertyAction>() {
+			@Override
+			public boolean handleException(final FlexoException exception, final SetPropertyAction action) {
+				exception.printStackTrace();
+				// GPO: We push the notification to later so that the action can keep on going. This is important so that inspector widgets
+				// can refresh themselves
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
 					public void run() {
-                		FlexoController.notify(FlexoLocalization.localizedForKey("could_not_set_property")+" "+(action.getLocalizedPropertyName()!=null?"'"+action.getLocalizedPropertyName() +"' ":"")+ FlexoLocalization.localizedForKey("to")+" "+(action.getValue()==null||action.getValue().equals("")?FlexoLocalization.localizedForKey("empty_value"):action.getValue())
-                				+(exception.getLocalizedMessage()!=null?"\n("+FlexoLocalization.localizedForKey("details: ")+ exception.getLocalizedMessage()+")":""));
-                	}
-                });
-                return true;
-            }
-        };
-    }
+						FlexoController.notify(FlexoLocalization.localizedForKey("could_not_set_property")
+								+ " "
+								+ (action.getLocalizedPropertyName() != null ? "'" + action.getLocalizedPropertyName() + "' " : "")
+								+ FlexoLocalization.localizedForKey("to")
+								+ " "
+								+ (action.getValue() == null || action.getValue().equals("") ? FlexoLocalization
+										.localizedForKey("empty_value") : action.getValue())
+								+ (exception.getLocalizedMessage() != null ? "\n(" + FlexoLocalization.localizedForKey("details: ")
+										+ exception.getLocalizedMessage() + ")" : ""));
+					}
+				});
+				return true;
+			}
+		};
+	}
 
 }

@@ -34,47 +34,38 @@ import java.awt.RenderingHints;
  * 
  * @author benoit
  */
-public class DrawUtils
-{
+public class DrawUtils {
 
-    public static void turnOnAntiAlising(Graphics2D g)
-    {
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-    }
+	public static void turnOnAntiAlising(Graphics2D g) {
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+	}
 
-    public static void turnOffAntiAliasing(Graphics2D g)
-    {
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-    }
+	public static void turnOffAntiAliasing(Graphics2D g) {
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+	}
 
-    public static void setRenderDefault(Graphics2D g)
-    {
-        g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_DEFAULT);
-    }
+	public static void setRenderDefault(Graphics2D g) {
+		g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_DEFAULT);
+	}
 
-    public static void setRenderQuality(Graphics2D g)
-    {
-        g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-    }
+	public static void setRenderQuality(Graphics2D g) {
+		g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+	}
 
-    public static void setRenderSpeed(Graphics2D g)
-    {
-        g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
-    }
+	public static void setRenderSpeed(Graphics2D g) {
+		g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
+	}
 
-    public static void setColorRenderDefault(Graphics2D g)
-    {
-        g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_DEFAULT);
-    }
+	public static void setColorRenderDefault(Graphics2D g) {
+		g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_DEFAULT);
+	}
 
-    public static void setColorRenderQuality(Graphics2D g)
-    {
-        g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
-    }
+	public static void setColorRenderQuality(Graphics2D g) {
+		g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+	}
 
-    public static void setColorRenderSpeed(Graphics2D g)
-    {
-        g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_SPEED);
-    }
+	public static void setColorRenderSpeed(Graphics2D g) {
+		g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_SPEED);
+	}
 
 }

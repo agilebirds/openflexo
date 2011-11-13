@@ -24,63 +24,59 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.dkv.Value;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class DKVValueElement extends BrowserElement
-{
+public class DKVValueElement extends BrowserElement {
 
-    /**
-     * @param object
-     * @param elementType
-     * @param browser
-     */
-    public DKVValueElement(Value object, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(object, BrowserElementType.DKV_VALUE, browser, parent);
-    }
+	/**
+	 * @param object
+	 * @param elementType
+	 * @param browser
+	 */
+	public DKVValueElement(Value object, ProjectBrowser browser, BrowserElement parent) {
+		super(object, BrowserElementType.DKV_VALUE, browser, parent);
+	}
 
-    /**
-     * Overrides getName
-     * @see org.openflexo.components.browser.BrowserElement#getName()
-     */
-    @Override
-	public String getName()
-    {
-        return ((Value)getObject()).getDisplayString();
-    }
+	/**
+	 * Overrides getName
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#getName()
+	 */
+	@Override
+	public String getName() {
+		return ((Value) getObject()).getDisplayString();
+	}
 
-    /**
-     * Overrides isNameEditable
-     * @see org.openflexo.components.browser.BrowserElement#isNameEditable()
-     */
-    @Override
-	public boolean isNameEditable()
-    {
-        return true;
-    }
+	/**
+	 * Overrides isNameEditable
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#isNameEditable()
+	 */
+	@Override
+	public boolean isNameEditable() {
+		return true;
+	}
 
-    /**
-     * Overrides setName
-     * @see org.openflexo.components.browser.BrowserElement#setName(java.lang.String)
-     */
-    @Override
-	public void setName(String aName)
-    {
-        ((Value)getObject()).setValue(aName);
-    }
+	/**
+	 * Overrides setName
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#setName(java.lang.String)
+	 */
+	@Override
+	public void setName(String aName) {
+		((Value) getObject()).setValue(aName);
+	}
 
-    /**
-     * Overrides buildChildrenVector
-     *
-     * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
-     */
-    @Override
-	protected void buildChildrenVector()
-    {
+	/**
+	 * Overrides buildChildrenVector
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
+	 */
+	@Override
+	protected void buildChildrenVector() {
 
-    }
+	}
 
 }

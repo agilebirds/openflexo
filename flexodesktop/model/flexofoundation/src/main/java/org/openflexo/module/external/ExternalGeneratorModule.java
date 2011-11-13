@@ -23,22 +23,21 @@ import java.util.Map;
 
 import org.openflexo.foundation.rm.FlexoProject;
 
-
 /**
  * External view of the Generator Module
  * 
  * @author sguerin
  */
-public interface ExternalGeneratorModule extends ExternalModule
-{
+public interface ExternalGeneratorModule extends ExternalModule {
 
-    // public void setPreferedOutputDirectory (File f);
+	// public void setPreferedOutputDirectory (File f);
 
 	/**
 	 * SGU: what's that ?
+	 * 
 	 * @deprecated
 	 */
-    @Deprecated
+	@Deprecated
 	public String generateCode(FlexoProject project, String templateName, Map replacement);
 
 }

@@ -27,7 +27,7 @@ import org.openflexo.toolbox.ImageIconResource;
  * Utility class containing all icons used in context of DGModule
  * 
  * @author sylvain
- *
+ * 
  */
 public class DGIconLibrary extends GeneratorIconLibrary {
 
@@ -43,7 +43,6 @@ public class DGIconLibrary extends GeneratorIconLibrary {
 	public static final ImageIcon DG_DGP_SELECTED_ICON = new ImageIconResource("Icons/DG/DGPerspective_S.gif");
 	public static final ImageIcon DG_DGP_ACTIVE_ICON = new ImageIconResource("Icons/DG/DGPerspective_A.gif");
 
-
 	public static final ImageIcon GENERATED_DOC_ICON = new ImageIconResource("Icons/DG/GeneratedDoc.gif");
 	public static final ImageIcon GENERATE_PDF = new ImageIconResource("Icons/DG/GeneratePDF.gif");
 	public static final ImageIcon GENERATE_DOCX = new ImageIconResource("Icons/DG/GenerateDOCX.gif");
@@ -56,5 +55,4 @@ public class DGIconLibrary extends GeneratorIconLibrary {
 	public static final ImageIcon SYMBOLIC_FOLDER_ICON = new ImageIconResource("Icons/DG/prj_obj.gif");
 	public static final ImageIcon TARGET_FOLDER_ICON = new ImageIconResource("Icons/DG/TargetFolder.gif");
 
-    
 }

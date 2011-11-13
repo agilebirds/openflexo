@@ -34,62 +34,56 @@ import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class CreateDMEntityInitializer extends ActionInitializer {
 
 	static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CreateDMEntityInitializer(DMControllerActionInitializer actionInitializer)
-	{
-		super(CreateDMEntity.actionType,actionInitializer);
+	CreateDMEntityInitializer(DMControllerActionInitializer actionInitializer) {
+		super(CreateDMEntity.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected DMControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DMControllerActionInitializer)super.getControllerActionInitializer();
+	protected DMControllerActionInitializer getControllerActionInitializer() {
+		return (DMControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<CreateDMEntity> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<CreateDMEntity> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateDMEntity>() {
-            @Override
-			public boolean run(ActionEvent e, CreateDMEntity action)
-            {
-            	return true;
-            }
-        };
-	}
-
-     @Override
-	protected FlexoActionFinalizer<CreateDMEntity> getDefaultFinalizer() 
-	{
-		return new FlexoActionFinalizer<CreateDMEntity>() {
-            @Override
-			public boolean run(ActionEvent e, CreateDMEntity action)
-            {
-                if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getRepository()) {
-                    if (logger.isLoggable(Level.FINE))
-                        logger.fine("Finalizer for CreateDMEntity in DMRepositoryView");
-                    DMRepositoryView repView = (DMRepositoryView)getControllerActionInitializer().getDMController().getCurrentEditedObjectView();
-                    repView.getPackageTable().selectObject(action.getPackage());
-                    repView.getEntityTable().selectObject(action.getNewEntity());
-                } else if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getPackage()) {
-                    if (logger.isLoggable(Level.FINE))
-                        logger.fine("Finalizer for CreateDMEntity in DMPackageView");
-                    DMPackageView packageView = (DMPackageView)getControllerActionInitializer().getDMController().getCurrentEditedObjectView();
-                    packageView.getEntityTable().selectObject(action.getNewEntity());
-                }
-                return true;
-           }
-        };
+			@Override
+			public boolean run(ActionEvent e, CreateDMEntity action) {
+				return true;
+			}
+		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected FlexoActionFinalizer<CreateDMEntity> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<CreateDMEntity>() {
+			@Override
+			public boolean run(ActionEvent e, CreateDMEntity action) {
+				if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getRepository()) {
+					if (logger.isLoggable(Level.FINE))
+						logger.fine("Finalizer for CreateDMEntity in DMRepositoryView");
+					DMRepositoryView repView = (DMRepositoryView) getControllerActionInitializer().getDMController()
+							.getCurrentEditedObjectView();
+					repView.getPackageTable().selectObject(action.getPackage());
+					repView.getEntityTable().selectObject(action.getNewEntity());
+				} else if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getPackage()) {
+					if (logger.isLoggable(Level.FINE))
+						logger.fine("Finalizer for CreateDMEntity in DMPackageView");
+					DMPackageView packageView = (DMPackageView) getControllerActionInitializer().getDMController()
+							.getCurrentEditedObjectView();
+					packageView.getEntityTable().selectObject(action.getNewEntity());
+				}
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
 		return DMEIconLibrary.DM_ENTITY_ICON;
 	}
- 
+
 }

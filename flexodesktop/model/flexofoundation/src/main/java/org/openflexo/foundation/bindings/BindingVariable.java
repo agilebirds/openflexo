@@ -31,136 +31,119 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.xmlcode.XMLMapping;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class BindingVariable extends FlexoModelObject implements Typed
-{
+public class BindingVariable extends FlexoModelObject implements Typed {
 
-    private DMModel _dataModel;
+	private DMModel _dataModel;
 
-    private Bindable _container;
+	private Bindable _container;
 
-    private String variableName;
+	private String variableName;
 
-    private DMType _type;
-    
-    public BindingVariable(Bindable container, DMModel dataModel, String description)
-    {
-        super(dataModel.getProject(), description);
-        _dataModel = dataModel;
-        _container = container;
-    }
-    
-    public Bindable getContainer(){
-    	return _container;
-    }
+	private DMType _type;
 
-    @Override
-	public FlexoProject getProject()
-    {
-        return _dataModel.getProject();
-    }
+	public BindingVariable(Bindable container, DMModel dataModel, String description) {
+		super(dataModel.getProject(), description);
+		_dataModel = dataModel;
+		_container = container;
+	}
 
-    @Override
-	public XMLMapping getXMLMapping()
-    {
-        return ((FlexoModelObject) _container).getXMLMapping();
-    }
+	public Bindable getContainer() {
+		return _container;
+	}
 
-    @Override
-	public XMLStorageResourceData getXMLResourceData()
-    {
-    	if (_container!=null)
-    		return ((FlexoModelObject) _container).getXMLResourceData();
-    	return null;
-    }
+	@Override
+	public FlexoProject getProject() {
+		return _dataModel.getProject();
+	}
 
-    @Override
-	public DMType getType()
-    {
-        return _type;
-    }
+	@Override
+	public XMLMapping getXMLMapping() {
+		return ((FlexoModelObject) _container).getXMLMapping();
+	}
 
-    @Override
-	public void setType(DMType type)
-    {
-    	if ((type == null && _type != null) || (type != null && !type.equals(_type))) {
-    		DMType oldType = _type;
-    		if (oldType != null) {
-    			oldType.removeFromTypedWithThisType(this);
-    		}
-    		_type = type;
-    		if (type != null) {
-    			type.addToTypedWithThisType(this);
-    		}
-    		//setChanged();
-    	}
-    }
+	@Override
+	public XMLStorageResourceData getXMLResourceData() {
+		if (_container != null)
+			return ((FlexoModelObject) _container).getXMLResourceData();
+		return null;
+	}
 
-    public String getVariableName()
-    {
-        return variableName;
-    }
+	@Override
+	public DMType getType() {
+		return _type;
+	}
 
-    public void setVariableName(String aVariableName)
-    {
-        this.variableName = aVariableName;
-        //setChanged();
-    }
+	@Override
+	public void setType(DMType type) {
+		if ((type == null && _type != null) || (type != null && !type.equals(_type))) {
+			DMType oldType = _type;
+			if (oldType != null) {
+				oldType.removeFromTypedWithThisType(this);
+			}
+			_type = type;
+			if (type != null) {
+				type.addToTypedWithThisType(this);
+			}
+			// setChanged();
+		}
+	}
 
-    public String getTypeName()
-    {
-        if (getType() != null) {
-            return getType().getStringRepresentation();
-        }
-        return null;
-    }
+	public String getVariableName() {
+		return variableName;
+	}
 
-    public void setTypeName(String aFullQualifiedName)
-    {
-        setType(DMType.makeResolvedDMType(_dataModel.getDMEntity(aFullQualifiedName)));
-    }
+	public void setVariableName(String aVariableName) {
+		this.variableName = aVariableName;
+		// setChanged();
+	}
 
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return "BINDING_VARIABLE." + getVariableName() + "." + getTypeName();
-    }
-    
-    @Override
-	public String toString()
-    {
-    	return getFullyQualifiedName();
-    }
-    
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "binding_variable";
-    }
-    
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-    {
-    	if (dataModification instanceof DMEntityClassNameChanged && observable == getType().getBaseEntity()) {
-    		// do nothing : no cached code
-      	}
-    	else if (dataModification instanceof EntityDeleted && observable == getType().getBaseEntity()) {
-    		// do nothing : no cached code
-    	}
-     }
-   
-    public String getJavaAccess()
-    {
-    	return "get"+getVariableName().substring(0,1).toUpperCase()+getVariableName().substring(1)+"()";
-    }
+	public String getTypeName() {
+		if (getType() != null) {
+			return getType().getStringRepresentation();
+		}
+		return null;
+	}
+
+	public void setTypeName(String aFullQualifiedName) {
+		setType(DMType.makeResolvedDMType(_dataModel.getDMEntity(aFullQualifiedName)));
+	}
+
+	@Override
+	public String getFullyQualifiedName() {
+		return "BINDING_VARIABLE." + getVariableName() + "." + getTypeName();
+	}
+
+	@Override
+	public String toString() {
+		return getFullyQualifiedName();
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "binding_variable";
+	}
+
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (dataModification instanceof DMEntityClassNameChanged && observable == getType().getBaseEntity()) {
+			// do nothing : no cached code
+		} else if (dataModification instanceof EntityDeleted && observable == getType().getBaseEntity()) {
+			// do nothing : no cached code
+		}
+	}
+
+	public String getJavaAccess() {
+		return "get" + getVariableName().substring(0, 1).toUpperCase() + getVariableName().substring(1) + "()";
+	}
 }

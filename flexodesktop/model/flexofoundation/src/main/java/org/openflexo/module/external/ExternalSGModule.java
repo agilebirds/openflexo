@@ -19,16 +19,12 @@
  */
 package org.openflexo.module.external;
 
-
 /**
- * External view of the module.
- * Declare here all features that you want to be available from outside
- * of this module.
- * Put here as less methods as possible.
+ * External view of the module. Declare here all features that you want to be available from outside of this module. Put here as less
+ * methods as possible.
  * 
  * @author sylvain
  */
-public interface ExternalSGModule extends ExternalModule
-{
+public interface ExternalSGModule extends ExternalModule {
 
 }

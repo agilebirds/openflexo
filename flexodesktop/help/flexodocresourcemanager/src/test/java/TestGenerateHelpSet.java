@@ -24,23 +24,20 @@ import junit.framework.TestCase;
 
 public class TestGenerateHelpSet extends TestCase {
 
-    public void setup()
-    {
-        DocResourceManager.instance();
-    }
+	public void setup() {
+		DocResourceManager.instance();
+	}
 
-    public void teardown()
-    {
-        
-    }
-    
-    public void testGenerate()
-    {
-        GenerateHelpSet action = GenerateHelpSet.actionType.makeNewAction(null,null, null);
-        // A refaire aussi
-        //action.setTitle(FlexoLocalization.localizedForKey("help_for_flexo_tool_set"));
-        //action.setLanguage((Language)DocResourceManager.instance().getDocResourceCenter().getLanguages().firstElement());
-        action.setNote("none");
-        action.doAction();
-    }
+	public void teardown() {
+
+	}
+
+	public void testGenerate() {
+		GenerateHelpSet action = GenerateHelpSet.actionType.makeNewAction(null, null, null);
+		// A refaire aussi
+		// action.setTitle(FlexoLocalization.localizedForKey("help_for_flexo_tool_set"));
+		// action.setLanguage((Language)DocResourceManager.instance().getDocResourceCenter().getLanguages().firstElement());
+		action.setNote("none");
+		action.doAction();
+	}
 }

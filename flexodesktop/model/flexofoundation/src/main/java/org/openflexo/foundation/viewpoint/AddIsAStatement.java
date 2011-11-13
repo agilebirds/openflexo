@@ -28,54 +28,46 @@ import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-
-
 public class AddIsAStatement extends AddStatement<IsAStatementPatternRole> {
 
 	private static final Logger logger = Logger.getLogger(AddIsAStatement.class.getPackage().getName());
 
 	public AddIsAStatement() {
 	}
-	
+
 	@Override
-	public EditionActionType getEditionActionType()
-	{
+	public EditionActionType getEditionActionType() {
 		return EditionActionType.AddIsAStatement;
 	}
-	
-	public OntologyObject getPropertyFather(EditionSchemeAction action)
-	{
-		return (OntologyObject)getFather().getBindingValue(action);
+
+	public OntologyObject getPropertyFather(EditionSchemeAction action) {
+		return (OntologyObject) getFather().getBindingValue(action);
 	}
-	
+
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.VPM.ADD_IS_A_PROPERTY_INSPECTOR;
 	}
 
 	private ViewPointDataBinding father;
-	
+
 	private BindingDefinition FATHER = new BindingDefinition("father", OntologyObject.class, BindingDefinitionType.GET, false);
-	
-	public BindingDefinition getFatherBindingDefinition()
-	{
+
+	public BindingDefinition getFatherBindingDefinition() {
 		return FATHER;
 	}
 
-	public ViewPointDataBinding getFather() 
-	{
-		if (father == null) father = new ViewPointDataBinding(this,EditionActionBindingAttribute.father,getFatherBindingDefinition());
+	public ViewPointDataBinding getFather() {
+		if (father == null)
+			father = new ViewPointDataBinding(this, EditionActionBindingAttribute.father, getFatherBindingDefinition());
 		return father;
 	}
 
-	public void setFather(ViewPointDataBinding father) 
-	{
+	public void setFather(ViewPointDataBinding father) {
 		father.setOwner(this);
 		father.setBindingAttribute(EditionActionBindingAttribute.father);
 		father.setBindingDefinition(getFatherBindingDefinition());
 		this.father = father;
 	}
 
-		
 }

@@ -3,7 +3,6 @@
  */
 package org.openflexo.foundation.sg.implmodel.event;
 
-
 /**
  * Represents a source generator model object deletion.
  * 

@@ -27,8 +27,8 @@ import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.imported.action.RefreshImportedObjectAction;
 import org.openflexo.view.controller.FlexoController;
 
-
-public class FlexoWSExceptionHandler<A extends RefreshImportedObjectAction<A, FlexoModelObject, FlexoModelObject>> extends FlexoExceptionHandler<A> {
+public class FlexoWSExceptionHandler<A extends RefreshImportedObjectAction<A, FlexoModelObject, FlexoModelObject>> extends
+		FlexoExceptionHandler<A> {
 
 	private FlexoController controller;
 
@@ -42,10 +42,10 @@ public class FlexoWSExceptionHandler<A extends RefreshImportedObjectAction<A, Fl
 			return true;
 		}
 		if (exception instanceof FlexoRemoteException) {
-			getController().handleWSException(((FlexoRemoteException)exception).getCause());
+			getController().handleWSException(((FlexoRemoteException) exception).getCause());
 			return false;
 		} else if (exception instanceof FlexoServiceException) {
-			getController().handleWSException(((FlexoServiceException)exception).getCause());
+			getController().handleWSException(((FlexoServiceException) exception).getCause());
 			return false;
 		}
 		return false;

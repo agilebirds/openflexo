@@ -38,45 +38,39 @@ import org.openflexo.foundation.wkf.node.SelfExecutableActivityNode;
 import org.openflexo.foundation.wkf.node.SelfExecutableNode;
 import org.openflexo.foundation.wkf.node.SelfExecutableOperationNode;
 
+public class CreatePetriGraph extends FlexoUndoableAction<CreatePetriGraph, FatherNode, WKFObject> {
 
-public class CreatePetriGraph extends FlexoUndoableAction<CreatePetriGraph,FatherNode,WKFObject> 
-{
+	private static final Logger logger = Logger.getLogger(CreatePetriGraph.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(CreatePetriGraph.class.getPackage().getName());
+	public static FlexoActionType<CreatePetriGraph, FatherNode, WKFObject> actionType = new FlexoActionType<CreatePetriGraph, FatherNode, WKFObject>(
+			"create_petri_graph", FlexoActionType.defaultGroup) {
 
-    public static FlexoActionType<CreatePetriGraph,FatherNode,WKFObject> actionType = new FlexoActionType<CreatePetriGraph,FatherNode,WKFObject> ("create_petri_graph",FlexoActionType.defaultGroup) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public CreatePetriGraph makeNewAction(FatherNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+			return new CreatePetriGraph(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public CreatePetriGraph makeNewAction(FatherNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) 
-        {
-            return new CreatePetriGraph(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FatherNode object, Vector<WKFObject> globalSelection) {
+			return false; // Action is never visible but always active.
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FatherNode object, Vector<WKFObject> globalSelection) 
-        {
-            return false; // Action is never visible but always active.
-        }
+		@Override
+		protected boolean isEnabledForSelection(FatherNode object, Vector<WKFObject> globalSelection) {
+			return object.getContainedPetriGraph() == null;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FatherNode object, Vector<WKFObject> globalSelection) 
-        {
-            return object.getContainedPetriGraph() == null;
-        }
-                
-    };
-    
-    CreatePetriGraph (FatherNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	};
 
-    @Override
-	protected void doAction(Object context) 
-    {
+	CreatePetriGraph(FatherNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) {
 		FatherNode node = getFocusedObject();
 		if (node instanceof SelfExecutableNode) {
 			if (logger.isLoggable(Level.WARNING))
@@ -91,7 +85,7 @@ public class CreatePetriGraph extends FlexoUndoableAction<CreatePetriGraph,Fathe
 		} else {
 			if (node.getContainedPetriGraph() == null) {
 				logger.info("CreatePetriGraph");
-				if (node instanceof AbstractActivityNode && ((AbstractActivityNode)node).mightHaveOperationPetriGraph()) {
+				if (node instanceof AbstractActivityNode && ((AbstractActivityNode) node).mightHaveOperationPetriGraph()) {
 					newPetriGraph = new OperationPetriGraph((AbstractActivityNode) node);
 					((AbstractActivityNode) node).setOperationPetriGraph((OperationPetriGraph) newPetriGraph);
 				} else if (node instanceof OperationNode) {
@@ -100,31 +94,28 @@ public class CreatePetriGraph extends FlexoUndoableAction<CreatePetriGraph,Fathe
 				}
 			}
 		}
-		if (newPetriGraph!=null) {
+		if (newPetriGraph != null) {
 			objectCreated("NEW_PETRI_GRAPH", newPetriGraph);
 			objectCreated("NEW_BEGIN_NODE", newPetriGraph.getAllBeginNodes().firstElement());
 			objectCreated("NEW_END_NODE", newPetriGraph.getAllEndNodes().firstElement());
 		}
 	}
-    
-    @Override
-	protected void undoAction(Object context) 
-    {
+
+	@Override
+	protected void undoAction(Object context) {
 		logger.info("CreatePetriGraph: UNDO");
 		newPetriGraph.delete();
-    }
+	}
 
-    @Override
-	protected void redoAction(Object context)
-    {
+	@Override
+	protected void redoAction(Object context) {
 		logger.info("CreatePetriGraph: REDO");
-        doAction(context);
-   }
+		doAction(context);
+	}
 
-    private FlexoPetriGraph newPetriGraph = null;
+	private FlexoPetriGraph newPetriGraph = null;
 
-	public FlexoPetriGraph getNewPetriGraph() 
-	{
+	public FlexoPetriGraph getNewPetriGraph() {
 		return newPetriGraph;
 	}
 

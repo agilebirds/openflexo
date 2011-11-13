@@ -24,41 +24,38 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dkv.Domain;
 import org.openflexo.foundation.rm.FlexoProject;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class DKVDomainModel extends AbstractModel<Domain,FlexoModelObject>
-{
+public class DKVDomainModel extends AbstractModel<Domain, FlexoModelObject> {
 
-    /**
-     * @param model
-     * @param project
-     */
-    public DKVDomainModel(Domain model, FlexoProject project)
-    {
-        super(model, project);
-    }
+	/**
+	 * @param model
+	 * @param project
+	 */
+	public DKVDomainModel(Domain model, FlexoProject project) {
+		super(model, project);
+	}
 
-    /**
-     * Overrides elementAt
-     * @see org.openflexo.components.tabular.model.AbstractModel#elementAt(int)
-     */
-    @Override
-    public FlexoModelObject elementAt(int row)
-    {
-        return getModel().getKeys().elementAt(row);
-    }
+	/**
+	 * Overrides elementAt
+	 * 
+	 * @see org.openflexo.components.tabular.model.AbstractModel#elementAt(int)
+	 */
+	@Override
+	public FlexoModelObject elementAt(int row) {
+		return getModel().getKeys().elementAt(row);
+	}
 
-    /**
-     * Overrides getRowCount
-     * @see org.openflexo.components.tabular.model.AbstractModel#getRowCount()
-     */
-    @Override
-    public int getRowCount()
-    {
-        return getModel().getKeys().size();
-    }
+	/**
+	 * Overrides getRowCount
+	 * 
+	 * @see org.openflexo.components.tabular.model.AbstractModel#getRowCount()
+	 */
+	@Override
+	public int getRowCount() {
+		return getModel().getKeys().size();
+	}
 
 }

@@ -25,7 +25,7 @@ import java.util.Vector;
 public interface CVSContainer {
 
 	public SharedProject getSharedProject();
-	
+
 	public abstract CVSStatus getDerivedStatus();
 
 	public abstract void notifyStatusChanged(CVSAbstractFile file);
@@ -33,20 +33,20 @@ public interface CVSContainer {
 	public Vector<CVSDirectory> getDirectories();
 
 	public void setDirectories(Vector<CVSDirectory> directories);
-	
+
 	public void addToDirectories(CVSDirectory aDirectory);
-	
+
 	public void removeFromDirectories(CVSDirectory aDirectory);
-	
+
 	public Vector<CVSFile> getFiles();
 
 	public void setFiles(Vector<CVSFile> files);
-	
+
 	public void addToFiles(CVSFile aFile);
-	
+
 	public void removeFromFiles(CVSFile aFile);
 
 	public boolean isRegistered(File aFile);
-	
+
 	public CVSAbstractFile getCVSAbstractFile(File aFile);
 }

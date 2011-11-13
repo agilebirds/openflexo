@@ -18,25 +18,26 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents ConnectionView object
- *
+ * 
  * @version $Id: ConnectionView.java,v 1.3 2011/09/12 11:46:47 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class ConnectionView extends QuiduView {
-  public ConnectionView(PetalNode parent, Collection params, int tag) {
-    super(parent, "ConnectionView", params, tag);
-  }
+	public ConnectionView(PetalNode parent, Collection params, int tag) {
+		super(parent, "ConnectionView", params, tag);
+	}
 
-  public ConnectionView() {
-    super("ConnectionView");
-  }
+	public ConnectionView() {
+		super("ConnectionView");
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

@@ -41,7 +41,6 @@ import org.openflexo.sg.file.SGJavaFileResource;
 import org.openflexo.sg.generationdef.FileEntry;
 import org.openflexo.sg.utils.JavaCodeMerger;
 
-
 /**
  * @author sylvain
  */
@@ -134,7 +133,8 @@ public class SGJavaClassGenerator extends SGGenerator<DMEntity, GeneratedTextRes
 
 	@Override
 	public GeneratedTextResource getGeneratedCode() {
-		if (generatedCode == null && javaResource != null && javaResource.getJavaFile() != null && javaResource.getJavaFile().hasLastAcceptedContent()) {
+		if (generatedCode == null && javaResource != null && javaResource.getJavaFile() != null
+				&& javaResource.getJavaFile().hasLastAcceptedContent()) {
 			generatedCode = new GeneratedTextResource(getEntityClassName(), javaResource.getJavaFile().getLastAcceptedContent());
 		}
 		return generatedCode;

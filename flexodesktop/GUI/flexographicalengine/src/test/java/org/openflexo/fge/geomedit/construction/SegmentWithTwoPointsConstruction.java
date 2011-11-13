@@ -25,37 +25,32 @@ public class SegmentWithTwoPointsConstruction extends SegmentConstruction {
 
 	public PointConstruction pointConstruction1;
 	public PointConstruction pointConstruction2;
-	
-	public SegmentWithTwoPointsConstruction() 
-	{
+
+	public SegmentWithTwoPointsConstruction() {
 		super();
 	}
-	
-	public SegmentWithTwoPointsConstruction(PointConstruction pointConstruction1, PointConstruction pointConstruction2) 
-	{
+
+	public SegmentWithTwoPointsConstruction(PointConstruction pointConstruction1, PointConstruction pointConstruction2) {
 		this();
 		this.pointConstruction1 = pointConstruction1;
 		this.pointConstruction2 = pointConstruction2;
 	}
-	
+
 	@Override
-	protected FGESegment computeData()
-	{
-		return new FGESegment(pointConstruction1.getPoint(),pointConstruction2.getPoint());
+	protected FGESegment computeData() {
+		return new FGESegment(pointConstruction1.getPoint(), pointConstruction2.getPoint());
 	}
 
 	@Override
-	public String toString()
-	{
-		return "SegmentWithTwoPointsConstruction[\n"+"> "+pointConstruction1.toString()+"\n> "+pointConstruction2.toString()+"\n]";
+	public String toString() {
+		return "SegmentWithTwoPointsConstruction[\n" + "> " + pointConstruction1.toString() + "\n> " + pointConstruction2.toString()
+				+ "\n]";
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
+	public GeometricConstruction[] getDepends() {
 		GeometricConstruction[] returned = { pointConstruction1, pointConstruction2 };
 		return returned;
 	}
-
 
 }

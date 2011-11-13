@@ -24,39 +24,33 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ws.InternalWSService;
 
+public class InternalWSServiceElement extends BrowserElement {
 
+	/**
+	 * @param object
+	 * @param elementType
+	 * @param browser
+	 */
+	public InternalWSServiceElement(InternalWSService object, ProjectBrowser browser, BrowserElement parent) {
+		super(object, BrowserElementType.INTERNAL_WS_SERVICE, browser, parent);
+	}
 
-public class InternalWSServiceElement extends BrowserElement
-{
+	/**
+	 * Overrides buildChildrenVector
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
+	 */
+	@Override
+	protected void buildChildrenVector() {
+		InternalWSService g = (InternalWSService) getObject();
+		addToChilds(g.getWSPortTypeFolder());
+		addToChilds(g.getWSRepositoryFolder());
+	}
 
-    /**
-     * @param object
-     * @param elementType
-     * @param browser
-     */
-    public InternalWSServiceElement(InternalWSService object, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(object, BrowserElementType.INTERNAL_WS_SERVICE, browser, parent);
-    }
-
-    /**
-     * Overrides buildChildrenVector
-     *
-     * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
-     */
-    @Override
-	protected void buildChildrenVector()
-    {
-        InternalWSService g = (InternalWSService) getObject();
-        addToChilds(g.getWSPortTypeFolder());
-        addToChilds(g.getWSRepositoryFolder());
-    }
-
-    @Override
+	@Override
 	public String getName() {
-    	// TODO Auto-generated method stub
-    		return ((InternalWSService)getObject()).getName();
-    }
-
+		// TODO Auto-generated method stub
+		return ((InternalWSService) getObject()).getName();
+	}
 
 }

@@ -24,11 +24,10 @@ package org.openflexo.foundation.ie.widget;
  * 
  * @author bmangez
  */
-public interface ButtonContainerInterface
-{
+public interface ButtonContainerInterface {
 
-    public int getButtonIndex(IEWidget button);
+	public int getButtonIndex(IEWidget button);
 
-    public void removeButton(IEWidget button);
+	public void removeButton(IEWidget button);
 
 }

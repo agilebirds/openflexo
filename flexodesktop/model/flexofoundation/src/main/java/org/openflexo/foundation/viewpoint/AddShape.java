@@ -28,32 +28,27 @@ import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-
 public class AddShape extends AddShemaElementAction<ShapePatternRole> {
 
 	private static final Logger logger = Logger.getLogger(AddShape.class.getPackage().getName());
 
 	public AddShape() {
 	}
-	
+
 	@Override
-	public EditionActionType getEditionActionType()
-	{
+	public EditionActionType getEditionActionType() {
 		return EditionActionType.AddShape;
 	}
-	
+
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.VPM.ADD_SHAPE_INSPECTOR;
 	}
 
-	
-	public ViewObject getContainer(EditionSchemeAction action)
-	{
-		return (ViewObject)getContainer().getBindingValue(action);
+	public ViewObject getContainer(EditionSchemeAction action) {
+		return (ViewObject) getContainer().getBindingValue(action);
 	}
-	
+
 	@Override
 	public ShapePatternRole getPatternRole() {
 		try {
@@ -64,38 +59,33 @@ public class AddShape extends AddShemaElementAction<ShapePatternRole> {
 			return null;
 		}
 	}
-	
+
 	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
 	// Need to be fixed in KeyValueProperty.java
 	@Override
-	public void setPatternRole(ShapePatternRole patternRole) 
-	{
+	public void setPatternRole(ShapePatternRole patternRole) {
 		super.setPatternRole(patternRole);
 	}
-	
+
 	private ViewPointDataBinding container;
-	
+
 	private BindingDefinition CONTAINER = new BindingDefinition("container", ViewObject.class, BindingDefinitionType.GET, false);
-	
-	public BindingDefinition getContainerBindingDefinition()
-	{
+
+	public BindingDefinition getContainerBindingDefinition() {
 		return CONTAINER;
 	}
 
-	public ViewPointDataBinding getContainer() 
-	{
-		if (container == null) container = new ViewPointDataBinding(this,EditionActionBindingAttribute.container,getContainerBindingDefinition());
+	public ViewPointDataBinding getContainer() {
+		if (container == null)
+			container = new ViewPointDataBinding(this, EditionActionBindingAttribute.container, getContainerBindingDefinition());
 		return container;
 	}
 
-	public void setContainer(ViewPointDataBinding container) 
-	{
+	public void setContainer(ViewPointDataBinding container) {
 		container.setOwner(this);
 		container.setBindingAttribute(EditionActionBindingAttribute.container);
 		container.setBindingDefinition(getContainerBindingDefinition());
 		this.container = container;
 	}
-
-
 
 }

@@ -21,11 +21,9 @@ package org.openflexo.foundation.ie.dm;
 
 import org.openflexo.foundation.ie.util.TextFieldClass;
 
-public class IETextFieldCssClassChange extends IEDataModification
-{
+public class IETextFieldCssClassChange extends IEDataModification {
 
-    public IETextFieldCssClassChange(TextFieldClass css)
-    {
-        super(null, css);
-    }
+	public IETextFieldCssClassChange(TextFieldClass css) {
+		super(null, css);
+	}
 }

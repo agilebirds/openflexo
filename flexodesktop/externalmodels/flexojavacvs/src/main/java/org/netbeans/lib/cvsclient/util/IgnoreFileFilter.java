@@ -22,20 +22,19 @@ package org.netbeans.lib.cvsclient.util;
 import java.io.File;
 
 /**
- * interface for recognizing if the local files are to be ignored.
- * Implements the functionality of the .cvsignore files..
- *
- * @author  Milos Kleint
+ * interface for recognizing if the local files are to be ignored. Implements the functionality of the .cvsignore files..
+ * 
+ * @author Milos Kleint
  */
 public interface IgnoreFileFilter {
 
-    /**
-     * A file is checked against the patterns in the filter.
-     * If any of these matches, the file should be ignored.
-     *
-     * @param directory is a file object that refers to the directory the file resides in.
-     * @param noneCvsFile is the name of the file to be checked.
-     */
-    boolean shouldBeIgnored(File directory, String noneCvsFile);
+	/**
+	 * A file is checked against the patterns in the filter. If any of these matches, the file should be ignored.
+	 * 
+	 * @param directory
+	 *            is a file object that refers to the directory the file resides in.
+	 * @param noneCvsFile
+	 *            is the name of the file to be checked.
+	 */
+	boolean shouldBeIgnored(File directory, String noneCvsFile);
 }
-

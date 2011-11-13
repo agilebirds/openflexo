@@ -24,53 +24,46 @@ import java.util.Vector;
 
 import org.openflexo.xmlcode.XMLSerializable;
 
-
 /**
- * Class <code>Node</code> is intented to represent a graph's node object in
- * XML coding/decoding example.
+ * Class <code>Node</code> is intented to represent a graph's node object in XML coding/decoding example.
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  */
-public class Node implements XMLSerializable
-{
+public class Node implements XMLSerializable {
 
-    public Vector preConditions;
-    public Vector outgoingEdges;
-    public Graph graph;
+	public Vector preConditions;
+	public Vector outgoingEdges;
+	public Graph graph;
 
-    public int identifier;
+	public int identifier;
 
-    public Node()
-    {
-        super();
-         outgoingEdges = new Vector();
-        preConditions = new Vector();
-    }
+	public Node() {
+		super();
+		outgoingEdges = new Vector();
+		preConditions = new Vector();
+	}
 
-    public Node(int anIdentifier, Graph aGraph)
-    {
-        this();
-        identifier = anIdentifier;
-        graph = aGraph;
-        graph.nodes.add(this);
-    }
+	public Node(int anIdentifier, Graph aGraph) {
+		this();
+		identifier = anIdentifier;
+		graph = aGraph;
+		graph.nodes.add(this);
+	}
 
-    public String toShortString()
-    {
-        return "Node:" + identifier;
-    }
+	public String toShortString() {
+		return "Node:" + identifier;
+	}
 
-    @Override
-	public String toString()
-    {
-        String returned = toShortString() + "\n";
-        for (Enumeration e = preConditions.elements(); e.hasMoreElements();) {
-            returned += e.nextElement().toString()+"\n";
-        }
-        for (Enumeration e = outgoingEdges.elements(); e.hasMoreElements();) {
-            returned += e.nextElement().toString()+"\n";
-        }
-        return returned;
-    }
+	@Override
+	public String toString() {
+		String returned = toShortString() + "\n";
+		for (Enumeration e = preConditions.elements(); e.hasMoreElements();) {
+			returned += e.nextElement().toString() + "\n";
+		}
+		for (Enumeration e = outgoingEdges.elements(); e.hasMoreElements();) {
+			returned += e.nextElement().toString() + "\n";
+		}
+		return returned;
+	}
 
 }

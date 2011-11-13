@@ -28,62 +28,64 @@ import org.openflexo.logging.FlexoLogger;
 
 public class InternalWSFolder extends WSFolder {
 
-    private static final Logger logger = FlexoLogger.getLogger(InternalWSFolder.class.getPackage()
-            .getName());
-    /**
-     * @param dl
-     */
-    public InternalWSFolder(FlexoWSLibrary dl)
-    {
-        super(dl);
-    }
+	private static final Logger logger = FlexoLogger.getLogger(InternalWSFolder.class.getPackage().getName());
 
-    public Vector getInternalWSServices() {
-        return getWSLibrary().getInternalWSServices();
-    }
-    @Override
-	public Vector getWSServices(){
-    		return getInternalWSServices();
-    }
-    
-    /**
-     * Overrides getFullyQualifiedName
-     * @see org.openflexo.foundation.FlexoModelObject#getFullyQualifiedName()
-     */
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return "INTERNAL_WS_FOLDER";
-    }
-    
-    @Override
+	/**
+	 * @param dl
+	 */
+	public InternalWSFolder(FlexoWSLibrary dl) {
+		super(dl);
+	}
+
+	public Vector getInternalWSServices() {
+		return getWSLibrary().getInternalWSServices();
+	}
+
+	@Override
+	public Vector getWSServices() {
+		return getInternalWSServices();
+	}
+
+	/**
+	 * Overrides getFullyQualifiedName
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getFullyQualifiedName()
+	 */
+	@Override
+	public String getFullyQualifiedName() {
+		return "INTERNAL_WS_FOLDER";
+	}
+
+	@Override
 	public String getLocalizedDescription() {
 		return FlexoLocalization.localizedForKey("ws_internal_folder_description");
-    }
-    
-    @Override
+	}
+
+	@Override
 	public String getName() {
-    	   
-    	return "ws_internal_ws_folder";
-    }
-    
-    @Override
-	public String getLocalizedName(){
-    		return FlexoLocalization.localizedForKey(getName());
-    }
-    
-    @Override
-	public void delete(){
-    		if (logger.isLoggable(Level.INFO)) logger.info("implements delete on InternalWSFolder");
-    }
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return getName();
-    }
-    
+
+		return "ws_internal_ws_folder";
+	}
+
+	@Override
+	public String getLocalizedName() {
+		return FlexoLocalization.localizedForKey(getName());
+	}
+
+	@Override
+	public void delete() {
+		if (logger.isLoggable(Level.INFO))
+			logger.info("implements delete on InternalWSFolder");
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return getName();
+	}
+
 }

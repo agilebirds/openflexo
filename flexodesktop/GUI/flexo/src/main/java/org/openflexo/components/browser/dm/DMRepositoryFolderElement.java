@@ -24,18 +24,15 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.dm.DMRepositoryFolder;
 
-
 public class DMRepositoryFolderElement extends DMElement {
 
-    public DMRepositoryFolderElement(DMRepositoryFolder object, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(object, BrowserElementType.DM_REPOSITORY_FOLDER, browser,parent);
-    }
+	public DMRepositoryFolderElement(DMRepositoryFolder object, ProjectBrowser browser, BrowserElement parent) {
+		super(object, BrowserElementType.DM_REPOSITORY_FOLDER, browser, parent);
+	}
 
-   @Override
-public boolean isNameEditable()
-   {
-        return false;
-    }
+	@Override
+	public boolean isNameEditable() {
+		return false;
+	}
 
 }

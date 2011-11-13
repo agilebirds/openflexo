@@ -38,7 +38,6 @@ import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.toolbox.EmptyVector;
 
-
 /**
  * container for bindings in a ServiceOperation. a ServiceMessageBindings is roughly a Vector of ServiceMessageEntryBindings So containing
  * bindings related to 1 MessageDefinition, either an InputMessageDefinition, or an OutputMessageDefinition.
@@ -290,7 +289,6 @@ public abstract class ServiceMessageBindings extends WKFObject implements Bindab
 	public abstract class DynamicBindingModel extends BindingModel {
 		// Vector bindingVariables = vector of MessageEntries. of ServiceMessageDefinition !!!
 		// constructed dynamically from MessageDefinition.
-
 
 		@SuppressWarnings("hiding")
 		private final Logger logger = Logger.getLogger(ServiceMessageBindings.DynamicBindingModel.class.getPackage().getName());

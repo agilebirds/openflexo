@@ -24,24 +24,25 @@ import org.openflexo.xmlcode.XMLSerializable;
 public interface FlexoImportableObject extends XMLSerializable {
 
 	public boolean isImported();
-	
+
 	public boolean isDeletedOnServer();
-	
+
 	public void setIsDeletedOnServer(boolean isDeletedOnServer);
-	
+
 	public String getName();
-	
-	public void setName(String name) throws Exception; // the exception is here only for compatibility with the definition of setName() in FlexoProcess and should therefore not be used by other sub-classes!
-	
+
+	public void setName(String name) throws Exception; // the exception is here only for compatibility with the definition of setName() in
+														// FlexoProcess and should therefore not be used by other sub-classes!
+
 	public String getURI();
-	
+
 	public void setURI(String aURI);
-	
+
 	public String getVersionURI();
-	
+
 	public void setVersionURI(String aURI);
-	
+
 	public String getURIFromSourceObject();
-	
+
 	public void setURIFromSourceObject(String uri);
 }

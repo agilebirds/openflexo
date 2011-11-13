@@ -34,104 +34,91 @@ import org.openflexo.foundation.dm.LoadableDMEntity;
 import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference;
 import org.openflexo.localization.FlexoLocalization;
 
-public class UpdateDMRepository extends FlexoAction 
-{
+public class UpdateDMRepository extends FlexoAction {
 
-    private static final Logger logger = Logger.getLogger(UpdateDMRepository.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(UpdateDMRepository.class.getPackage().getName());
 
-    public static FlexoActionType actionType = new FlexoActionType ("update_repository",FlexoActionType.defaultGroup) {
+	public static FlexoActionType actionType = new FlexoActionType("update_repository", FlexoActionType.defaultGroup) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) 
-        {
-            return new UpdateDMRepository(focusedObject, globalSelection,editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new UpdateDMRepository(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return ((object != null) 
-                    && (object instanceof DMRepository)
-                    && (((DMRepository)object).isUpdatable()));
-        }
-                
-    };
-    
-    UpdateDMRepository (FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return ((object != null) && (object instanceof DMRepository) && (((DMRepository) object).isUpdatable()));
+		}
 
-     private DMRepository _repository;
-     private DMSet _updatedSet;
+	};
 
-     public DMSet getUpdatedSet()
-     {
-         if ((_updatedSet == null) && (getRepository() instanceof ExternalRepository)) {
-             _updatedSet = new DMSet(getRepository().getProject(),(ExternalRepository)getRepository(),false,null);
-         }
-         return _updatedSet;
-     }
+	UpdateDMRepository(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-     public void setUpdatedSet(DMSet updatedSet)
-     {
-         _updatedSet = updatedSet;
-     }
+	private DMRepository _repository;
+	private DMSet _updatedSet;
 
-     @Override
-	protected void doAction(Object context) 
-     {
-    	 
-         makeFlexoProgress(FlexoLocalization
-                 .localizedForKey("updating_repository"), 3);
-         setProgress(FlexoLocalization
-                 .localizedForKey("updating_classes"));
-         
-         logger.info("repository = "+getRepository());
-         logger.info("getUpdatedSet() = "+getUpdatedSet());
-         logger.info("getUpdatedSet().getSelectedObjects() = "+getUpdatedSet().getSelectedObjects());
-         resetSecondaryProgress(getUpdatedSet().getSelectedObjects().size());
-         
-         for (Enumeration en=getUpdatedSet().getSelectedObjects().elements(); en.hasMoreElements();) {
-             FlexoModelObject next = (FlexoModelObject)en.nextElement();
-             if (next instanceof ClassReference) {
-                 ClassReference classReference = (ClassReference)next;
-                 setSecondaryProgress(FlexoLocalization.localizedForKey("updating")+" "+classReference.getName());
-                 LoadableDMEntity entity = (LoadableDMEntity)getRepository().getDMEntity(classReference.getPackageName(),classReference.getName());
-                 if (entity != null) {
-                     logger.info("Update entity for "+classReference.getReferencedClass());
-                    entity.update(getUpdatedSet().getImportGetOnlyProperties(),getUpdatedSet().getImportMethods());
-                 }
-                 else if (classReference.getReferencedClass() != null) {
-                     logger.info("Create entity for "+classReference.getReferencedClass());
-                     LoadableDMEntity.createLoadableDMEntity(classReference.getReferencedClass(),getRepository().getDMModel(), getUpdatedSet().getImportGetOnlyProperties(),getUpdatedSet().getImportMethods());
-                 }
-             }
-         }
-         setProgress(FlexoLocalization
-                 .localizedForKey("updating_classes_done"));
-         
-         hideFlexoProgress();
-         
-     }
-    
-    public DMRepository getRepository() 
-    {
-        if (_repository == null) {
-            if ((getFocusedObject() != null) && (getFocusedObject() instanceof DMRepository)) {
-                _repository = (DMRepository)getFocusedObject();
-             }           
-        }
-        return _repository;
-    }
+	public DMSet getUpdatedSet() {
+		if ((_updatedSet == null) && (getRepository() instanceof ExternalRepository)) {
+			_updatedSet = new DMSet(getRepository().getProject(), (ExternalRepository) getRepository(), false, null);
+		}
+		return _updatedSet;
+	}
+
+	public void setUpdatedSet(DMSet updatedSet) {
+		_updatedSet = updatedSet;
+	}
+
+	@Override
+	protected void doAction(Object context) {
+
+		makeFlexoProgress(FlexoLocalization.localizedForKey("updating_repository"), 3);
+		setProgress(FlexoLocalization.localizedForKey("updating_classes"));
+
+		logger.info("repository = " + getRepository());
+		logger.info("getUpdatedSet() = " + getUpdatedSet());
+		logger.info("getUpdatedSet().getSelectedObjects() = " + getUpdatedSet().getSelectedObjects());
+		resetSecondaryProgress(getUpdatedSet().getSelectedObjects().size());
+
+		for (Enumeration en = getUpdatedSet().getSelectedObjects().elements(); en.hasMoreElements();) {
+			FlexoModelObject next = (FlexoModelObject) en.nextElement();
+			if (next instanceof ClassReference) {
+				ClassReference classReference = (ClassReference) next;
+				setSecondaryProgress(FlexoLocalization.localizedForKey("updating") + " " + classReference.getName());
+				LoadableDMEntity entity = (LoadableDMEntity) getRepository().getDMEntity(classReference.getPackageName(),
+						classReference.getName());
+				if (entity != null) {
+					logger.info("Update entity for " + classReference.getReferencedClass());
+					entity.update(getUpdatedSet().getImportGetOnlyProperties(), getUpdatedSet().getImportMethods());
+				} else if (classReference.getReferencedClass() != null) {
+					logger.info("Create entity for " + classReference.getReferencedClass());
+					LoadableDMEntity.createLoadableDMEntity(classReference.getReferencedClass(), getRepository().getDMModel(),
+							getUpdatedSet().getImportGetOnlyProperties(), getUpdatedSet().getImportMethods());
+				}
+			}
+		}
+		setProgress(FlexoLocalization.localizedForKey("updating_classes_done"));
+
+		hideFlexoProgress();
+
+	}
+
+	public DMRepository getRepository() {
+		if (_repository == null) {
+			if ((getFocusedObject() != null) && (getFocusedObject() instanceof DMRepository)) {
+				_repository = (DMRepository) getFocusedObject();
+			}
+		}
+		return _repository;
+	}
 
 }

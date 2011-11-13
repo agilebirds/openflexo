@@ -31,44 +31,44 @@ public class FGESteppedDimensionConstraint {
 	private double hStep = 1.0;
 	private double vStep = 1.0;
 
-	public FGESteppedDimensionConstraint(double hStep,double vStep) {
+	public FGESteppedDimensionConstraint(double hStep, double vStep) {
 		this.hStep = hStep;
 		this.vStep = vStep;
 	}
 
 	public FGEDimension getNearestDimension(FGEDimension dimension, double minWidth, double maxWidth, double minHeight, double maxHeight) {
 		FGEDimension d = dimension.clone();
-		if (minWidth>maxWidth) {
+		if (minWidth > maxWidth) {
 			if (logger.isLoggable(Level.WARNING))
-				logger.warning("Cannot proceed with minWidth>maxWidth: "+minWidth+" "+maxWidth);
+				logger.warning("Cannot proceed with minWidth>maxWidth: " + minWidth + " " + maxWidth);
 			return d;
 		}
-		if (minHeight>maxHeight) {
+		if (minHeight > maxHeight) {
 			if (logger.isLoggable(Level.WARNING))
-				logger.warning("Cannot proceed with minHeight>maxHeight: "+minHeight+" "+maxHeight);
+				logger.warning("Cannot proceed with minHeight>maxHeight: " + minHeight + " " + maxHeight);
 			return d;
 		}
-		if (d.width>maxWidth)
+		if (d.width > maxWidth)
 			d.width = maxWidth;
-		if (d.height>maxHeight)
-			d.height  = maxHeight;
-		if (d.width<minWidth)
+		if (d.height > maxHeight)
+			d.height = maxHeight;
+		if (d.width < minWidth)
 			d.width = minWidth;
-		if (d.height<minHeight)
-			d.height  = minWidth;
-		double lWidth = Math.floor(d.width/hStep)*hStep;
-		double uWidth = lWidth+hStep;
+		if (d.height < minHeight)
+			d.height = minWidth;
+		double lWidth = Math.floor(d.width / hStep) * hStep;
+		double uWidth = lWidth + hStep;
 		double width = 0.0;
-		if ((Math.abs(lWidth-d.width)>Math.abs(uWidth-d.width) && uWidth<maxWidth)||lWidth<minWidth)
+		if ((Math.abs(lWidth - d.width) > Math.abs(uWidth - d.width) && uWidth < maxWidth) || lWidth < minWidth)
 			width = uWidth;
 		else
 			width = lWidth;
 		d.width = width;
 
-		double lHeight = Math.floor(d.height/vStep)*vStep;
-		double uHeight = lHeight+vStep;
+		double lHeight = Math.floor(d.height / vStep) * vStep;
+		double uHeight = lHeight + vStep;
 		double height = 0.0;
-		if ((Math.abs(lHeight-d.height)>Math.abs(uHeight-d.height) && uHeight<maxHeight)||lHeight<minHeight)
+		if ((Math.abs(lHeight - d.height) > Math.abs(uHeight - d.height) && uHeight < maxHeight) || lHeight < minHeight)
 			height = uHeight;
 		else
 			height = lHeight;
@@ -87,8 +87,7 @@ public class FGESteppedDimensionConstraint {
 	@Override
 	public boolean equals(Object object) {
 		if (object instanceof FGESteppedDimensionConstraint)
-			return ((FGESteppedDimensionConstraint)object).hStep==hStep
-				&& ((FGESteppedDimensionConstraint)object).vStep==vStep;
+			return ((FGESteppedDimensionConstraint) object).hStep == hStep && ((FGESteppedDimensionConstraint) object).vStep == vStep;
 		return false;
 	}
 

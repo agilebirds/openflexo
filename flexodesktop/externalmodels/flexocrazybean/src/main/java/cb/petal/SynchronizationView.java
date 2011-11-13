@@ -18,25 +18,26 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents SynchronizationView object
- *
+ * 
  * @version $Id: SynchronizationView.java,v 1.3 2011/09/12 11:46:48 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class SynchronizationView extends View {
-  public SynchronizationView(PetalNode parent, Collection params, int tag) {
-    super(parent, "SynchronizationView", params, tag);
-  }
+	public SynchronizationView(PetalNode parent, Collection params, int tag) {
+		super(parent, "SynchronizationView", params, tag);
+	}
 
-  public SynchronizationView() {
-    super("SynchronizationView");
-  }
+	public SynchronizationView() {
+		super("SynchronizationView");
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

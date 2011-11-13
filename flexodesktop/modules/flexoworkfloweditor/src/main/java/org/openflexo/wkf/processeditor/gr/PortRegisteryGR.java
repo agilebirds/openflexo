@@ -31,40 +31,32 @@ import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
 public class PortRegisteryGR extends ContainerGR<PortRegistery> {
 
-
-
-	public PortRegisteryGR(PortRegistery object, ProcessRepresentation aDrawing) 
-	{
-		super(object, aDrawing,PORT_REGISTRY_PG_COLOR, OPERATION_PG_BACK_COLOR);
+	public PortRegisteryGR(PortRegistery object, ProcessRepresentation aDrawing) {
+		super(object, aDrawing, PORT_REGISTRY_PG_COLOR, OPERATION_PG_BACK_COLOR);
 		setLayer(ACTIVITY_PG_LAYER);
 	}
-	
-	public PortRegistery getPortRegistery()
-	{
+
+	public PortRegistery getPortRegistery() {
 		return getDrawable();
 	}
-	
+
 	@Override
-	public String getLabel()
-	{
+	public String getLabel() {
 		return FlexoLocalization.localizedForKey("port_registery");
 	}
 
 	@Override
-	public void closingRequested() 
-	{
-		OpenPortRegistery.actionType.makeNewAction(getPortRegistery().getProcess(),null,getDrawing().getEditor()).doAction();
-        // Is now performed by receiving notification
-        // getDrawing().updateGraphicalObjectsHierarchy();
+	public void closingRequested() {
+		OpenPortRegistery.actionType.makeNewAction(getPortRegistery().getProcess(), null, getDrawing().getEditor()).doAction();
+		// Is now performed by receiving notification
+		// getDrawing().updateGraphicalObjectsHierarchy();
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification) 
-	{
-		//logger.info(">>>>>>>>>>>  Notified "+dataModification+" for "+observable);
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		// logger.info(">>>>>>>>>>>  Notified "+dataModification+" for "+observable);
 		if (observable == getModel()) {
-			if ((dataModification instanceof PortInserted)
-					|| (dataModification instanceof PortRemoved)) {
+			if ((dataModification instanceof PortInserted) || (dataModification instanceof PortRemoved)) {
 				getDrawing().updateGraphicalObjectsHierarchy();
 				notifyShapeNeedsToBeRedrawn();
 				notifyObjectMoved();
@@ -81,8 +73,7 @@ public class PortRegisteryGR extends ContainerGR<PortRegistery> {
 	 * Overriden to implement defaut automatic layout
 	 */
 	@Override
-	public double getDefaultX()
-	{
+	public double getDefaultX() {
 		return 150;
 	}
 
@@ -90,8 +81,7 @@ public class PortRegisteryGR extends ContainerGR<PortRegistery> {
 	 * Overriden to implement defaut automatic layout
 	 */
 	@Override
-	public double getDefaultY()
-	{
+	public double getDefaultY() {
 		return 60;
 	}
 
@@ -99,17 +89,15 @@ public class PortRegisteryGR extends ContainerGR<PortRegistery> {
 	 * Overriden to implement defaut automatic layout
 	 */
 	@Override
-	public double getDefaultWidth() 
-	{
+	public double getDefaultWidth() {
 		return 80;
 	}
-	
+
 	/**
 	 * Overriden to implement defaut automatic layout
 	 */
 	@Override
-	public double getDefaultHeight()
-	{
+	public double getDefaultHeight() {
 		return 20;
 	}
 

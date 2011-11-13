@@ -25,38 +25,32 @@ public class BandWithTwoLinesConstruction extends BandConstruction {
 
 	public LineConstruction lineConstruction1;
 	public LineConstruction lineConstruction2;
-	
-	public BandWithTwoLinesConstruction() 
-	{
+
+	public BandWithTwoLinesConstruction() {
 		super();
 	}
-	
-	public BandWithTwoLinesConstruction(LineConstruction aLineConstruction1, LineConstruction aLineConstruction2) 
-	{
+
+	public BandWithTwoLinesConstruction(LineConstruction aLineConstruction1, LineConstruction aLineConstruction2) {
 		this();
 		this.lineConstruction1 = aLineConstruction1;
 		this.lineConstruction2 = aLineConstruction2;
 	}
-	
+
 	@Override
-	protected FGEBand computeData()
-	{
-		FGEBand returned = new FGEBand(lineConstruction1.getLine(),lineConstruction2.getLine());
+	protected FGEBand computeData() {
+		FGEBand returned = new FGEBand(lineConstruction1.getLine(), lineConstruction2.getLine());
 		return returned;
 	}
 
 	@Override
-	public String toString()
-	{
-		return "BandWithTwoLinesConstruction[\n"+"> "+lineConstruction1.toString()+"\n> "+lineConstruction2.toString()+"\n]";
+	public String toString() {
+		return "BandWithTwoLinesConstruction[\n" + "> " + lineConstruction1.toString() + "\n> " + lineConstruction2.toString() + "\n]";
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
+	public GeometricConstruction[] getDepends() {
 		GeometricConstruction[] returned = { lineConstruction1, lineConstruction2 };
 		return returned;
 	}
-
 
 }

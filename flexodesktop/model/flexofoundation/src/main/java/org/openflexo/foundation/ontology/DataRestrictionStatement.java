@@ -28,14 +28,13 @@ public abstract class DataRestrictionStatement extends RestrictionStatement {
 
 	private static final Logger logger = Logger.getLogger(DataRestrictionStatement.class.getPackage().getName());
 
-	public DataRestrictionStatement(OntologyObject subject, Statement s, Restriction r)
-	{
-		super(subject,s,r);
+	public DataRestrictionStatement(OntologyObject subject, Statement s, Restriction r) {
+		super(subject, s, r);
 	}
-	
+
 	public abstract OntologicDataType getDataRange();
-	
+
 	@Override
-	public abstract OntologyDataProperty getProperty(); 
+	public abstract OntologyDataProperty getProperty();
 
 }

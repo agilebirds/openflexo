@@ -21,17 +21,14 @@ package org.openflexo.foundation.wkf.dm;
 
 import org.openflexo.foundation.wkf.RoleSpecialization;
 
-public class RoleSpecializationRemoved extends WKFDataModification
-{
+public class RoleSpecializationRemoved extends WKFDataModification {
 
-	public RoleSpecializationRemoved(RoleSpecialization removedRoleSpecialization)
-    {
-        super("roleSpecialization", removedRoleSpecialization, null);
-    }
-	
-	public RoleSpecialization getRemovedRoleSpecialization()
-	{
-		return (RoleSpecialization)oldValue();
+	public RoleSpecializationRemoved(RoleSpecialization removedRoleSpecialization) {
+		super("roleSpecialization", removedRoleSpecialization, null);
+	}
+
+	public RoleSpecialization getRemovedRoleSpecialization() {
+		return (RoleSpecialization) oldValue();
 	}
 
 }

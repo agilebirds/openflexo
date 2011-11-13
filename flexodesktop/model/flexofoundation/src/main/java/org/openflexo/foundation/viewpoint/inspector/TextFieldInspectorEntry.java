@@ -23,19 +23,17 @@ package org.openflexo.foundation.viewpoint.inspector;
  * Represents an inspector entry for a text field
  * 
  * @author sylvain
- *
+ * 
  */
 public class TextFieldInspectorEntry extends InspectorEntry {
 
 	@Override
-	public Class getDefaultDataClass()
-	{
+	public Class getDefaultDataClass() {
 		return String.class;
 	}
 
 	@Override
-	public String getWidgetName() 
-	{
+	public String getWidgetName() {
 		return "TextField";
 	}
 }

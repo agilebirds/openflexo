@@ -29,26 +29,23 @@ import org.openflexo.foundation.wkf.MetricsDefinition;
 import org.openflexo.foundation.wkf.MetricsValue;
 import org.openflexo.foundation.wkf.WKFObject;
 
+public abstract class AddMetricsValue<A extends AddMetricsValue<A, T>, T extends WKFObject> extends FlexoAction<A, T, WKFObject> {
 
-public abstract class AddMetricsValue<A extends AddMetricsValue<A,T>, T extends WKFObject> extends FlexoAction<A,T,WKFObject> 
-{
-
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(AddMetricsValue.class.getPackage().getName());
-    
-    private MetricsDefinition metricsDefinition;
-    
-    AddMetricsValue (FlexoActionType actionType, T focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
 
-    protected MetricsValue createMetricsValue() {
-    	MetricsValue mv = new MetricsValue(getFocusedObject().getProcess());
-    	mv.setMetricsDefinition(getMetricsDefinition());
-    	return mv;
-    }
-    
+	private MetricsDefinition metricsDefinition;
+
+	AddMetricsValue(FlexoActionType actionType, T focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	protected MetricsValue createMetricsValue() {
+		MetricsValue mv = new MetricsValue(getFocusedObject().getProcess());
+		mv.setMetricsDefinition(getMetricsDefinition());
+		return mv;
+	}
+
 	public MetricsDefinition getMetricsDefinition() {
 		return metricsDefinition;
 	}
@@ -56,5 +53,5 @@ public abstract class AddMetricsValue<A extends AddMetricsValue<A,T>, T extends 
 	public void setMetricsDefinition(MetricsDefinition metricsDefinition) {
 		this.metricsDefinition = metricsDefinition;
 	}
-       
+
 }

@@ -42,7 +42,6 @@ import org.openflexo.ws.client.PPMWebService.PPMRole;
 import org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException;
 import org.openflexo.ws.client.PPMWebService.PPMWebService_PortType;
 
-
 public class TestImportedProcesses extends FlexoTestCase {
 
 	private final class PPMWebServiceMock implements PPMWebService_PortType {
@@ -54,8 +53,7 @@ public class TestImportedProcesses extends FlexoTestCase {
 		}
 
 		@Override
-		public PPMProcess[] getProcesses(String login, String md5Password) throws RemoteException,
-		PPMWebServiceAuthentificationException {
+		public PPMProcess[] getProcesses(String login, String md5Password) throws RemoteException, PPMWebServiceAuthentificationException {
 			return null;
 		}
 
@@ -66,34 +64,32 @@ public class TestImportedProcesses extends FlexoTestCase {
 
 		@Override
 		public byte[] getScreenshoot(String login, String md5Password, String processVersionURI) throws RemoteException,
-		PPMWebServiceAuthentificationException {
+				PPMWebServiceAuthentificationException {
 			return null;
 		}
 
 		@Override
 		public PPMProcess[] refreshProcesses(String login, String md5Password, String[] uris) throws RemoteException,
-		PPMWebServiceAuthentificationException {
+				PPMWebServiceAuthentificationException {
 			return processes.toArray(new PPMProcess[processes.size()]);
 		}
 
 		@Override
 		public PPMRole[] refreshRoles(String login, String md5Password, String[] uris) throws RemoteException,
-		PPMWebServiceAuthentificationException {
+				PPMWebServiceAuthentificationException {
 			return null;
 		}
 
 		@Override
-		public CLProjectDescriptor[] getAvailableProjects(String login,
-				String md5Password) throws RemoteException,
+		public CLProjectDescriptor[] getAvailableProjects(String login, String md5Password) throws RemoteException,
 				PPMWebServiceAuthentificationException {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
-		public String uploadPrj(CLProjectDescriptor targetProject,
-				DataHandler zip, String uploadComment, String login)
-						throws RemoteException, PPMWebServiceAuthentificationException {
+		public String uploadPrj(CLProjectDescriptor targetProject, DataHandler zip, String uploadComment, String login)
+				throws RemoteException, PPMWebServiceAuthentificationException {
 			// TODO Auto-generated method stub
 			return null;
 		}
@@ -119,7 +115,7 @@ public class TestImportedProcesses extends FlexoTestCase {
 
 		@Override
 		public void visit(ProcessDelta delta) {
-			if (checker!=null) {
+			if (checker != null) {
 				checker.checkDelta(delta);
 			}
 			visitedProcessCount++;
@@ -128,14 +124,14 @@ public class TestImportedProcesses extends FlexoTestCase {
 	}
 
 	private static String generateRandomProcessURI(FlexoProject project) {
-		return project.getURI()+"fmo/FlexoProcessGPO_"+new Random().nextLong();
+		return project.getURI() + "fmo/FlexoProcessGPO_" + new Random().nextLong();
 	}
 
 	private static PPMProcess createProcessWithName(String name, FlexoProject project) {
 		PPMProcess p = new PPMProcess();
 		p.setName(name);
 		p.setUri(generateRandomProcessURI(project));
-		p.setVersionUri(p.getUri()+generateRandomProcessURI(project));
+		p.setVersionUri(p.getUri() + generateRandomProcessURI(project));
 		return p;
 	}
 
@@ -147,7 +143,7 @@ public class TestImportedProcesses extends FlexoTestCase {
 		p.setTechnicalDescription("Using Word will get you mad, using Latex will take you forever to understand");
 		p.setUserManualDescription("Use a good old-fashioned typewriter");
 		PPMProcess[] sub = new PPMProcess[2];
-		sub[0] = createProcessWithName("Review book",project);
+		sub[0] = createProcessWithName("Review book", project);
 		sub[0].setGeneralDescription("Read the book and make comments");
 		sub[0].setBusinessDescription("Many stuffs to do");
 		sub[0].setTechnicalDescription("There are a hundred ways to do that");
@@ -172,22 +168,22 @@ public class TestImportedProcesses extends FlexoTestCase {
 
 	private static PPMProcess createPPMProcesses2(FlexoProject project, String name, int count, int depth) {
 		String suffix = null;
-		if (depth==0) {
+		if (depth == 0) {
 			suffix = "Root";
-		} else if (depth==1) {
+		} else if (depth == 1) {
 			suffix = "Son";
 		} else {
 			suffix = "GreatSon";
-			for (int i=2;i<depth;i++) {
-				suffix = "Great"+suffix;
+			for (int i = 2; i < depth; i++) {
+				suffix = "Great" + suffix;
 			}
 		}
-		PPMProcess p = createProcessWithName(name+suffix, project);
+		PPMProcess p = createProcessWithName(name + suffix, project);
 		p.setUri(generateRandomProcessURI(project));
-		p.setVersionUri(p.getUri()+generateRandomProcessURI(project));
-		if (depth+1<count) {
+		p.setVersionUri(p.getUri() + generateRandomProcessURI(project));
+		if (depth + 1 < count) {
 			PPMProcess[] sub = new PPMProcess[1];
-			sub[0] = createPPMProcesses2(project, name, count, depth+1);
+			sub[0] = createPPMProcesses2(project, name, count, depth + 1);
 			sub[0].setParentProcess(p);
 			p.setSubProcesses(sub);
 		} else {
@@ -240,30 +236,31 @@ public class TestImportedProcesses extends FlexoTestCase {
 		FlexoProject project = editor.getProject();
 
 		// First we try without changing anything
-		RefreshImportedProcessAction refresh = RefreshImportedProcessAction.actionType.makeNewAction(project.getFlexoWorkflow(), null, editor);
+		RefreshImportedProcessAction refresh = RefreshImportedProcessAction.actionType.makeNewAction(project.getFlexoWorkflow(), null,
+				editor);
 		refresh.setWebService(new PPMWebServiceMock(importedProcesses));
 		refresh.doAction();
 		assertTrue(refresh.hasActionExecutionSucceeded());
-		RefreshProcessDeltaVisitor visitor = new RefreshProcessDeltaVisitor(new DeltaChecker(){
+		RefreshProcessDeltaVisitor visitor = new RefreshProcessDeltaVisitor(new DeltaChecker() {
 			@Override
 			public void checkDelta(ProcessDelta delta) {
 				assertEquals(DeltaStatus.UNCHANGED, delta.getStatus());
 			}
 		});
 		refresh.getLibraryDelta().visit(visitor);
-		assertEquals(4,visitor.getVisitedProcessCount());
+		assertEquals(4, visitor.getVisitedProcessCount());
 
 		// Then we change a single attribute and check that we have one update
 		final PPMProcess updatedProcess = importedProcesses.firstElement();
-		updatedProcess.setName(updatedProcess.getName()+"coucou");
+		updatedProcess.setName(updatedProcess.getName() + "coucou");
 		refresh = RefreshImportedProcessAction.actionType.makeNewAction(project.getFlexoWorkflow(), null, editor);
 		refresh.setWebService(new PPMWebServiceMock(importedProcesses));
 		refresh.doAction();
 		assertTrue(refresh.hasActionExecutionSucceeded());
-		visitor = new RefreshProcessDeltaVisitor(new DeltaChecker(){
+		visitor = new RefreshProcessDeltaVisitor(new DeltaChecker() {
 			@Override
 			public void checkDelta(ProcessDelta delta) {
-				if (delta.getPPMProcess()==updatedProcess) {
+				if (delta.getPPMProcess() == updatedProcess) {
 					assertEquals(DeltaStatus.UPDATED, delta.getStatus());
 				} else {
 					assertEquals(DeltaStatus.UNCHANGED, delta.getStatus());
@@ -271,14 +268,14 @@ public class TestImportedProcesses extends FlexoTestCase {
 			}
 		});
 		refresh.getLibraryDelta().visit(visitor);
-		assertEquals(4,visitor.getVisitedProcessCount());
+		assertEquals(4, visitor.getVisitedProcessCount());
 
 		// Then we change the structure to see that we have one process deleted and another added
 		final PPMProcess childProcess = updatedProcess.getSubProcesses()[0];
 		childProcess.setParentProcess(null);
-		PPMProcess[] subs = new PPMProcess[updatedProcess.getSubProcesses().length-1];
-		for (int i=1;i<updatedProcess.getSubProcesses().length;i++){
-			subs[i-1]=updatedProcess.getSubProcesses()[i];
+		PPMProcess[] subs = new PPMProcess[updatedProcess.getSubProcesses().length - 1];
+		for (int i = 1; i < updatedProcess.getSubProcesses().length; i++) {
+			subs[i - 1] = updatedProcess.getSubProcesses()[i];
 		}
 		updatedProcess.setSubProcesses(subs);
 		importedProcesses.add(childProcess);
@@ -286,16 +283,17 @@ public class TestImportedProcesses extends FlexoTestCase {
 		refresh.setWebService(new PPMWebServiceMock(importedProcesses));
 		refresh.doAction();
 		assertTrue(refresh.hasActionExecutionSucceeded());
-		visitor = new RefreshProcessDeltaVisitor(new DeltaChecker(){
+		visitor = new RefreshProcessDeltaVisitor(new DeltaChecker() {
 			@Override
 			public void checkDelta(ProcessDelta delta) {
-				if (delta.getPPMProcess()==updatedProcess) {
+				if (delta.getPPMProcess() == updatedProcess) {
 					assertEquals(DeltaStatus.UPDATED, delta.getStatus());
-				} else if (delta.getPPMProcess()==childProcess) {
-					assertEquals(DeltaStatus.NEW,delta.getStatus());
-				} else if (delta.getFiProcess()!=null && delta.getFiProcess().getURI().equals(childProcess.getUri()) && delta.getPPMProcess()==null) {
+				} else if (delta.getPPMProcess() == childProcess) {
+					assertEquals(DeltaStatus.NEW, delta.getStatus());
+				} else if (delta.getFiProcess() != null && delta.getFiProcess().getURI().equals(childProcess.getUri())
+						&& delta.getPPMProcess() == null) {
 					assertEquals(DeltaStatus.DELETED, delta.getStatus());
-					//assertTrue(delta.getFiProcess().isDeleted());
+					// assertTrue(delta.getFiProcess().isDeleted());
 					assertNull(delta.getFiProcess().getParentProcess());
 					// Tests delta parenting
 					assertNotNull(delta.getParent());// Parent delta should not be null for child processes
@@ -305,7 +303,7 @@ public class TestImportedProcesses extends FlexoTestCase {
 			}
 		});
 		refresh.getLibraryDelta().visit(visitor);
-		assertEquals(5,visitor.getVisitedProcessCount());// Here we have 5 because of the four already imported + the new one!
+		assertEquals(5, visitor.getVisitedProcessCount());// Here we have 5 because of the four already imported + the new one!
 		verifyImportedProcesses(project, importedProcesses);
 		project.save();
 		project.close();
@@ -319,10 +317,11 @@ public class TestImportedProcesses extends FlexoTestCase {
 		refresh.setWebService(new PPMWebServiceMock(importedProcesses));
 		refresh.doAction();
 		assertTrue(refresh.hasActionExecutionSucceeded());
-		visitor = new RefreshProcessDeltaVisitor(new DeltaChecker(){
+		visitor = new RefreshProcessDeltaVisitor(new DeltaChecker() {
 			@Override
 			public void checkDelta(ProcessDelta delta) {
-				if (delta.getFiProcess()!=null && delta.getFiProcess().getURI().equals(childProcess.getUri()) && delta.getPPMProcess()==null) {
+				if (delta.getFiProcess() != null && delta.getFiProcess().getURI().equals(childProcess.getUri())
+						&& delta.getPPMProcess() == null) {
 					assertEquals(DeltaStatus.DELETED, delta.getStatus());
 					assertTrue(delta.getFiProcess().isDeletedOnServer());
 					assertNotNull(project2.getFlexoWorkflow().getImportedProcessWithURI(childProcess.getUri()));
@@ -332,7 +331,7 @@ public class TestImportedProcesses extends FlexoTestCase {
 			}
 		});
 		refresh.getLibraryDelta().visit(visitor);
-		assertEquals(4,visitor.getVisitedProcessCount());
+		assertEquals(4, visitor.getVisitedProcessCount());
 		verifyImportedProcesses(project, importedProcesses);
 
 		// Let's try to see if we 'undelete' a process on the server, the model updates the flag properly
@@ -341,10 +340,10 @@ public class TestImportedProcesses extends FlexoTestCase {
 		refresh.setWebService(new PPMWebServiceMock(importedProcesses));
 		refresh.doAction();
 		assertTrue(refresh.hasActionExecutionSucceeded());
-		visitor = new RefreshProcessDeltaVisitor(new DeltaChecker(){
+		visitor = new RefreshProcessDeltaVisitor(new DeltaChecker() {
 			@Override
 			public void checkDelta(ProcessDelta delta) {
-				if (delta.getPPMProcess()==childProcess) {
+				if (delta.getPPMProcess() == childProcess) {
 					assertEquals(DeltaStatus.UPDATED, delta.getStatus());
 					assertFalse(delta.getFiProcess().isDeletedOnServer());
 					// Tests delta parenting
@@ -355,7 +354,7 @@ public class TestImportedProcesses extends FlexoTestCase {
 			}
 		});
 		refresh.getLibraryDelta().visit(visitor);
-		assertEquals(4,visitor.getVisitedProcessCount());
+		assertEquals(4, visitor.getVisitedProcessCount());
 		verifyImportedProcesses(project, importedProcesses);
 
 		project.save();
@@ -368,8 +367,8 @@ public class TestImportedProcesses extends FlexoTestCase {
 		verifyImportedProcesses(project, importedProcesses);
 
 		Vector<PPMProcess> importedProcess2 = new Vector<PPMProcess>();
-		final PPMProcess firstProcess = createPPMProcesses2(project,"FirstProcess", 10, 0);
-		final PPMProcess secondProcess = createPPMProcesses2(project,"SecondProcess", 5, 0);
+		final PPMProcess firstProcess = createPPMProcesses2(project, "FirstProcess", 10, 0);
+		final PPMProcess secondProcess = createPPMProcesses2(project, "SecondProcess", 5, 0);
 		importedProcess2.add(firstProcess);
 		importedProcess2.add(secondProcess);
 		ImportProcessesAction importProcesses = ImportProcessesAction.actionType.makeNewAction(project.getFlexoWorkflow(), null, editor);
@@ -378,16 +377,16 @@ public class TestImportedProcesses extends FlexoTestCase {
 		assertTrue(importProcesses.hasActionExecutionSucceeded());
 		assertEquals(2, importProcesses.getImportReport().getProperlyImported().size());
 
-		RefreshImportedProcessAction refresh = RefreshImportedProcessAction.actionType.makeNewAction(project.getFlexoWorkflow(), null, editor);
+		RefreshImportedProcessAction refresh = RefreshImportedProcessAction.actionType.makeNewAction(project.getFlexoWorkflow(), null,
+				editor);
 		refresh.setWebService(new PPMWebServiceMock(importedProcesses));
 		refresh.doAction();
 		assertTrue(refresh.hasActionExecutionSucceeded());
-		RefreshProcessDeltaVisitor visitor = new RefreshProcessDeltaVisitor(new DeltaChecker(){
+		RefreshProcessDeltaVisitor visitor = new RefreshProcessDeltaVisitor(new DeltaChecker() {
 			@Override
 			public void checkDelta(ProcessDelta delta) {
 				FlexoProcess rootParent = getTopLevelParent(delta.getFiProcess());
-				if (rootParent.getURI().equals(firstProcess.getUri())
-						|| rootParent.getURI().equals(secondProcess.getUri())) {
+				if (rootParent.getURI().equals(firstProcess.getUri()) || rootParent.getURI().equals(secondProcess.getUri())) {
 					assertEquals(DeltaStatus.DELETED, delta.getStatus());
 					assertTrue(delta.getFiProcess().isDeletedOnServer());
 					assertFalse(delta.getFiProcess().isDeleted());
@@ -398,11 +397,12 @@ public class TestImportedProcesses extends FlexoTestCase {
 			}
 		});
 		refresh.getLibraryDelta().visit(visitor);
-		assertEquals(15+4,visitor.getVisitedProcessCount());
+		assertEquals(15 + 4, visitor.getVisitedProcessCount());
 
 		FlexoProcess firstImportedProcess = project.getWorkflow().getImportedProcessWithURI(firstProcess.getUri());
 		FlexoProcess secondImportedProcess = project.getWorkflow().getImportedProcessWithURI(secondProcess.getUri());
-		ConvertIntoLocalProcess convert = ConvertIntoLocalProcess.actionType.makeNewAction(firstImportedProcess.getSubProcesses().firstElement(), null, editor);
+		ConvertIntoLocalProcess convert = ConvertIntoLocalProcess.actionType.makeNewAction(firstImportedProcess.getSubProcesses()
+				.firstElement(), null, editor);
 		convert.doAction();
 		assertFalse(convert.hasActionExecutionSucceeded());// Here we check that sub-processes cannot be converted
 
@@ -416,13 +416,7 @@ public class TestImportedProcesses extends FlexoTestCase {
 		FlexoEditor editor = createProject("Test import process hierarchy changes");
 		FlexoProject project = editor.getProject();
 		/**
-		 *  3 roots: A, B and C
-		 * -A
-		 * 	|--> E
-		 * -B
-		 *  |
-		 * -C
-		 *  |--> D
+		 * 3 roots: A, B and C -A |--> E -B | -C |--> D
 		 */
 		final PPMProcess a = createProcessWithName("A", project);
 		final PPMProcess b = createProcessWithName("B", project);
@@ -431,10 +425,10 @@ public class TestImportedProcesses extends FlexoTestCase {
 		final PPMProcess e = createProcessWithName("E", project);
 
 		e.setParentProcess(a);
-		a.setSubProcesses(new PPMProcess[]{e});
+		a.setSubProcesses(new PPMProcess[] { e });
 
 		d.setParentProcess(c);
-		c.setSubProcesses(new PPMProcess[]{d});
+		c.setSubProcesses(new PPMProcess[] { d });
 
 		Vector<PPMProcess> processToImport = new Vector<PPMProcess>();
 		processToImport.add(a);
@@ -446,16 +440,10 @@ public class TestImportedProcesses extends FlexoTestCase {
 		assertTrue(importProcesses.hasActionExecutionSucceeded());
 
 		/**
-		 *  2 roots: A and C (B is moved under E!)
-		 * -A
-		 * 	|--> E
-		 *  |    |-->B
-		 *  |
-		 * -C
-		 *  |--> D
+		 * 2 roots: A and C (B is moved under E!) -A |--> E | |-->B | -C |--> D
 		 */
 		b.setParentProcess(e);
-		e.setSubProcesses(new PPMProcess[]{b});
+		e.setSubProcesses(new PPMProcess[] { b });
 
 		processToImport.clear();
 		processToImport.add(c);
@@ -473,22 +461,22 @@ public class TestImportedProcesses extends FlexoTestCase {
 		processToImport.clear();
 		processToImport.add(a);
 		processToImport.add(c);
-		RefreshImportedProcessAction refresh = RefreshImportedProcessAction.actionType.makeNewAction(project.getFlexoWorkflow(), null, editor);
+		RefreshImportedProcessAction refresh = RefreshImportedProcessAction.actionType.makeNewAction(project.getFlexoWorkflow(), null,
+				editor);
 		refresh.setWebService(new PPMWebServiceMock(processToImport));
 		refresh.doAction();
 		assertTrue(refresh.hasActionExecutionSucceeded());
-		RefreshProcessDeltaVisitor visitor = new RefreshProcessDeltaVisitor(new DeltaChecker(){
+		RefreshProcessDeltaVisitor visitor = new RefreshProcessDeltaVisitor(new DeltaChecker() {
 			@Override
 			public void checkDelta(ProcessDelta delta) {
-				if (delta.getPPMProcess()==c
-						|| delta.getPPMProcess()==d) {
-					assertEquals(DeltaStatus.UNCHANGED,delta.getStatus());
-				} else if (delta.getPPMProcess()==b) {
-					assertEquals(DeltaStatus.NEW,delta.getStatus());
-				} else if (delta.getPPMProcess()==a || delta.getPPMProcess()==e) {
-					assertEquals(DeltaStatus.UPDATED,delta.getStatus());
+				if (delta.getPPMProcess() == c || delta.getPPMProcess() == d) {
+					assertEquals(DeltaStatus.UNCHANGED, delta.getStatus());
+				} else if (delta.getPPMProcess() == b) {
+					assertEquals(DeltaStatus.NEW, delta.getStatus());
+				} else if (delta.getPPMProcess() == a || delta.getPPMProcess() == e) {
+					assertEquals(DeltaStatus.UPDATED, delta.getStatus());
 				} else if (delta.getFiProcess().getURI().equals(b.getUri())) {
-					assertEquals(DeltaStatus.DELETED,delta.getStatus());
+					assertEquals(DeltaStatus.DELETED, delta.getStatus());
 					assertFalse(delta.getFiProcess().isDeleted());// B has moved!
 					assertFalse(delta.getFiProcess().getFlexoResource().isDeleted());
 				}
@@ -510,9 +498,7 @@ public class TestImportedProcesses extends FlexoTestCase {
 		FlexoEditor editor = createProject("Test import process hierarchy changes");
 		FlexoProject project = editor.getProject();
 		/**
-		 *  2 roots: A, B
-		 * -A
-		 * -B
+		 * 2 roots: A, B -A -B
 		 */
 		final PPMProcess a = createProcessWithName("A", project);
 		final PPMProcess b = createProcessWithName("B", project);
@@ -527,33 +513,31 @@ public class TestImportedProcesses extends FlexoTestCase {
 		assertTrue(importProcesses.hasActionExecutionSucceeded());
 
 		/**
-		 *  1 root: A
-		 * -A
-		 * 	|--> C
-		 *  |    |-->B
+		 * 1 root: A -A |--> C | |-->B
 		 */
 		b.setParentProcess(c);
-		c.setSubProcesses(new PPMProcess[]{b});
+		c.setSubProcesses(new PPMProcess[] { b });
 		c.setParentProcess(a);
-		a.setSubProcesses(new PPMProcess[]{c});
+		a.setSubProcesses(new PPMProcess[] { c });
 
 		processToImport.clear();
 		processToImport.add(a);
 		FlexoProcess processA = project.getFlexoWorkflow().getRecursivelyImportedProcessWithURI(a.getUri());
 		FlexoProcess processB = project.getFlexoWorkflow().getRecursivelyImportedProcessWithURI(b.getUri());
-		RefreshImportedProcessAction refresh = RefreshImportedProcessAction.actionType.makeNewAction(project.getFlexoWorkflow(), null, editor);
+		RefreshImportedProcessAction refresh = RefreshImportedProcessAction.actionType.makeNewAction(project.getFlexoWorkflow(), null,
+				editor);
 		refresh.setWebService(new PPMWebServiceMock(processToImport));
 		refresh.doAction();
 		assertTrue(refresh.hasActionExecutionSucceeded());
-		RefreshProcessDeltaVisitor visitor = new RefreshProcessDeltaVisitor(new DeltaChecker(){
+		RefreshProcessDeltaVisitor visitor = new RefreshProcessDeltaVisitor(new DeltaChecker() {
 			@Override
 			public void checkDelta(ProcessDelta delta) {
-				if (delta.getPPMProcess()==b ||delta.getPPMProcess()==c) {
-					assertEquals(DeltaStatus.NEW,delta.getStatus());
-				} else if (delta.getPPMProcess()==a) {
-					assertEquals(DeltaStatus.UPDATED,delta.getStatus());
+				if (delta.getPPMProcess() == b || delta.getPPMProcess() == c) {
+					assertEquals(DeltaStatus.NEW, delta.getStatus());
+				} else if (delta.getPPMProcess() == a) {
+					assertEquals(DeltaStatus.UPDATED, delta.getStatus());
 				} else if (delta.getFiProcess().getURI().equals(b.getUri())) {
-					assertEquals(DeltaStatus.DELETED,delta.getStatus());
+					assertEquals(DeltaStatus.DELETED, delta.getStatus());
 					assertFalse(delta.getFiProcess().isDeleted());// B has moved!
 					assertFalse(delta.getFiProcess().getFlexoResource().isDeleted());
 				}
@@ -579,12 +563,7 @@ public class TestImportedProcesses extends FlexoTestCase {
 		FlexoEditor editor = createProject("Test import process hierarchy changes");
 		FlexoProject project = editor.getProject();
 		/**
-		 *  2 roots: A, E
-		 * -A
-		 * 	|--> B
-		 *  |    |-->C
-		 *  |    	 |-->D
-		 * -E
+		 * 2 roots: A, E -A |--> B | |-->C | |-->D -E
 		 */
 		final PPMProcess a = createProcessWithName("A", project);
 		final PPMProcess b = createProcessWithName("B", project);
@@ -593,11 +572,11 @@ public class TestImportedProcesses extends FlexoTestCase {
 		final PPMProcess e = createProcessWithName("E", project);
 		Vector<PPMProcess> processToImport = new Vector<PPMProcess>();
 		b.setParentProcess(a);
-		a.setSubProcesses(new PPMProcess[]{b});
+		a.setSubProcesses(new PPMProcess[] { b });
 		c.setParentProcess(b);
-		b.setSubProcesses(new PPMProcess[]{c});
+		b.setSubProcesses(new PPMProcess[] { c });
 		d.setParentProcess(c);
-		c.setSubProcesses(new PPMProcess[]{d});
+		c.setSubProcesses(new PPMProcess[] { d });
 
 		processToImport.add(a);
 		processToImport.add(e);
@@ -618,19 +597,16 @@ public class TestImportedProcesses extends FlexoTestCase {
 		checkParenthood(processC, processD);
 
 		/**
-		 *  2 roots: A, E
-		 * -A
-		 * 	|--> B
-		 * -E
-		 *  |-->C
+		 * 2 roots: A, E -A |--> B -E |-->C
 		 */
 		b.setSubProcesses(null);
 		c.setSubProcesses(null);
 
 		c.setParentProcess(e);
-		e.setSubProcesses(new PPMProcess[]{c});
+		e.setSubProcesses(new PPMProcess[] { c });
 
-		RefreshImportedProcessAction refresh = RefreshImportedProcessAction.actionType.makeNewAction(project.getFlexoWorkflow(), null, editor);
+		RefreshImportedProcessAction refresh = RefreshImportedProcessAction.actionType.makeNewAction(project.getFlexoWorkflow(), null,
+				editor);
 		refresh.setWebService(new PPMWebServiceMock(processToImport));
 		refresh.doAction();
 		assertTrue(refresh.hasActionExecutionSucceeded());
@@ -672,8 +648,8 @@ public class TestImportedProcesses extends FlexoTestCase {
 	 * @param child
 	 */
 	private void checkNonParenthood(FlexoProcess parent, FlexoProcess child) {
-		assertFalse(parent==child.getParentProcess());
-		assertFalse(parent.getProcessNode()==child.getProcessNode().getFatherProcessNode());
+		assertFalse(parent == child.getParentProcess());
+		assertFalse(parent.getProcessNode() == child.getProcessNode().getFatherProcessNode());
 		assertFalse(parent.getSubProcesses().contains(child));
 		assertFalse(parent.getProcessNode().getSubProcesses().contains(child.getProcessNode()));
 	}
@@ -682,7 +658,7 @@ public class TestImportedProcesses extends FlexoTestCase {
 		assertNotNull(project.getFlexoWorkflow().getImportedProcessWithURI(sourcePPMProcess.getUri()));
 		assertTrue(processToConvert.getURI().equals(sourcePPMProcess.getUri()));
 		assertTrue(processToConvert.getVersionURI().equals(sourcePPMProcess.getVersionUri()));
-		//Converting first process
+		// Converting first process
 		ConvertIntoLocalProcess convert = ConvertIntoLocalProcess.actionType.makeNewAction(processToConvert, null, editor);
 		convert.doAction();
 		assertTrue(convert.hasActionExecutionSucceeded());
@@ -697,7 +673,7 @@ public class TestImportedProcesses extends FlexoTestCase {
 		assertNotNull(processToConvert.getActivityPetriGraph());
 		assertNotNull(processToConvert.getProcessDMEntity());
 		assertFalse(processToConvert.isImported());
-		for(FlexoProcess p:processToConvert.getSubProcesses()) {
+		for (FlexoProcess p : processToConvert.getSubProcesses()) {
 			checkConvertedProcesses(p);
 		}
 	}
@@ -708,7 +684,7 @@ public class TestImportedProcesses extends FlexoTestCase {
 	 */
 	private void verifyImportedProcesses(FlexoProject project, Vector<PPMProcess> processesToImport) {
 		assertEquals(processesToImport.size(), project.getFlexoWorkflow().getNotDeletedImportedProcesses().size());
-		for(PPMProcess p:processesToImport) {
+		for (PPMProcess p : processesToImport) {
 			FlexoProcess process = project.getFlexoWorkflow().getImportedProcessWithURI(p.getUri());
 			assertNull(process.getActivityPetriGraph());
 			assertNull(process.getPortRegistery());
@@ -718,25 +694,25 @@ public class TestImportedProcesses extends FlexoTestCase {
 			assertTrue(process.isImported());
 			assertTrue(process.isEquivalentTo(p));
 			assertEquals(process.getProcessNode().getSubProcesses().size(), process.getSubProcesses().size());
-			if (p.getSubProcesses()!=null) {
+			if (p.getSubProcesses() != null) {
 				assertEquals(p.getSubProcesses().length, process.getSubProcesses().size());
 			} else {
 				assertEquals(0, process.getSubProcesses().size());
 			}
 		}
 		// Check equivalencies
-		for(FlexoProcess p:project.getFlexoWorkflow().getImportedProcesses()) {
+		for (FlexoProcess p : project.getFlexoWorkflow().getImportedProcesses()) {
 			if (!p.isDeletedOnServer()) { // Deleted objects on server cannot be equal to their equivalent PPM object
 				// Including children
-				assertTrue(p.isEquivalentTo(p.getEquivalentPPMProcess(true),true));
+				assertTrue(p.isEquivalentTo(p.getEquivalentPPMProcess(true), true));
 				// Excluding children
-				assertTrue(p.isEquivalentTo(p.getEquivalentPPMProcess(false),false));
+				assertTrue(p.isEquivalentTo(p.getEquivalentPPMProcess(false), false));
 			}
 		}
 	}
 
 	protected FlexoProcess getTopLevelParent(FlexoProcess p) {
-		if (p.getParentProcess()==null) {
+		if (p.getParentProcess() == null) {
 			return p;
 		} else {
 			return getTopLevelParent(p.getParentProcess());

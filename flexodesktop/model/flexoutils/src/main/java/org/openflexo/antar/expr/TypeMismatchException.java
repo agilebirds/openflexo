@@ -28,71 +28,64 @@ public class TypeMismatchException extends Exception {
 	private EvaluationType leftSuppliedType;
 	private EvaluationType rightSuppliedType;
 	private EvaluationType[] expectedTypes;
-	
+
 	private String message;
-	
-	public TypeMismatchException (UnaryOperator operator, EvaluationType suppliedType, EvaluationType... expectedTypes)
-	{
+
+	public TypeMismatchException(UnaryOperator operator, EvaluationType suppliedType, EvaluationType... expectedTypes) {
 		super();
 		concernedOperator = operator;
 		this.suppliedType = suppliedType;
 		this.expectedTypes = expectedTypes;
-		message = "TypeMismatchException on operator "+operator.getName()+" : supplied type is "+suppliedType+" while expected type(s) is(are) "+typesAsString(expectedTypes);
+		message = "TypeMismatchException on operator " + operator.getName() + " : supplied type is " + suppliedType
+				+ " while expected type(s) is(are) " + typesAsString(expectedTypes);
 	}
-	
-	public TypeMismatchException (BinaryOperator operator, EvaluationType leftSuppliedType, EvaluationType rightSuppliedType, EvaluationType... expectedTypes)
-	{
+
+	public TypeMismatchException(BinaryOperator operator, EvaluationType leftSuppliedType, EvaluationType rightSuppliedType,
+			EvaluationType... expectedTypes) {
 		super();
 		concernedOperator = operator;
 		this.leftSuppliedType = leftSuppliedType;
 		this.rightSuppliedType = rightSuppliedType;
 		this.expectedTypes = expectedTypes;
-		message = "TypeMismatchException on operator "+operator.getName()+" : supplied types are "+leftSuppliedType+" and "+rightSuppliedType+" while expected type(s) is(are) "+typesAsString(expectedTypes);
+		message = "TypeMismatchException on operator " + operator.getName() + " : supplied types are " + leftSuppliedType + " and "
+				+ rightSuppliedType + " while expected type(s) is(are) " + typesAsString(expectedTypes);
 	}
-	
+
 	@Override
-	public String getMessage()
-	{
+	public String getMessage() {
 		return message;
 	}
-	
+
 	@Override
-	public String getLocalizedMessage()
-	{
+	public String getLocalizedMessage() {
 		if (concernedOperator instanceof BinaryOperator)
-			return FlexoLocalization.localizedForKeyWithParams("type_mismatch_on_operator_($0)_supplied_types_are_($1)_and_($2)_while_expected_types_are_($3)", 
-					concernedOperator.getLocalizedName(),
-					leftSuppliedType.getLocalizedName(),
-					rightSuppliedType.getLocalizedName(),
+			return FlexoLocalization.localizedForKeyWithParams(
+					"type_mismatch_on_operator_($0)_supplied_types_are_($1)_and_($2)_while_expected_types_are_($3)",
+					concernedOperator.getLocalizedName(), leftSuppliedType.getLocalizedName(), rightSuppliedType.getLocalizedName(),
 					typesAsString(expectedTypes));
 		else
-			return FlexoLocalization.localizedForKeyWithParams("type_mismatch_on_operator_($0)_supplied_type_is_($1)_while_expected_types_are_($2)", 
-					concernedOperator.getLocalizedName(),
-					suppliedType.getLocalizedName(),
-					typesAsString(expectedTypes));
+			return FlexoLocalization.localizedForKeyWithParams(
+					"type_mismatch_on_operator_($0)_supplied_type_is_($1)_while_expected_types_are_($2)",
+					concernedOperator.getLocalizedName(), suppliedType.getLocalizedName(), typesAsString(expectedTypes));
 	}
-	
-	public String getHTMLLocalizedMessage()
-	{
+
+	public String getHTMLLocalizedMessage() {
 		if (concernedOperator instanceof BinaryOperator)
-			return FlexoLocalization.localizedForKeyWithParams("<html>type_mismatch_on_operator_($0)<br>supplied_types_are_($1)_and_($2)<br>while_expected_types_are_($3)</html>", 
-					concernedOperator.getLocalizedName(),
-					leftSuppliedType.getLocalizedName(),
-					rightSuppliedType.getLocalizedName(),
+			return FlexoLocalization.localizedForKeyWithParams(
+					"<html>type_mismatch_on_operator_($0)<br>supplied_types_are_($1)_and_($2)<br>while_expected_types_are_($3)</html>",
+					concernedOperator.getLocalizedName(), leftSuppliedType.getLocalizedName(), rightSuppliedType.getLocalizedName(),
 					typesAsString(expectedTypes));
 		else
-			return FlexoLocalization.localizedForKeyWithParams("<html>type_mismatch_on_operator_($0)<br>supplied_type_is_($1)<br>while_expected_types_are_($2)</html>", 
-					concernedOperator.getLocalizedName(),
-					suppliedType.getLocalizedName(),
-					typesAsString(expectedTypes));
+			return FlexoLocalization.localizedForKeyWithParams(
+					"<html>type_mismatch_on_operator_($0)<br>supplied_type_is_($1)<br>while_expected_types_are_($2)</html>",
+					concernedOperator.getLocalizedName(), suppliedType.getLocalizedName(), typesAsString(expectedTypes));
 	}
-	
-	private String typesAsString(EvaluationType... types)
-	{
+
+	private String typesAsString(EvaluationType... types) {
 		StringBuffer sb = new StringBuffer();
 		boolean isFirst = true;
 		for (EvaluationType t : types) {
-			sb.append((isFirst?t.getLocalizedName():","+t.getLocalizedName()));
+			sb.append((isFirst ? t.getLocalizedName() : "," + t.getLocalizedName()));
 			isFirst = false;
 		}
 		return sb.toString();

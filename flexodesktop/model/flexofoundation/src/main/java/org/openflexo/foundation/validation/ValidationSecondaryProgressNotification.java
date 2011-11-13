@@ -25,19 +25,16 @@ package org.openflexo.foundation.validation;
  * @author sguerin
  * 
  */
-public class ValidationSecondaryProgressNotification extends ValidationNotification
-{
-    private ValidationRule _rule;
+public class ValidationSecondaryProgressNotification extends ValidationNotification {
+	private ValidationRule _rule;
 
-    public ValidationSecondaryProgressNotification(Validable validatedObject, ValidationRule rule)
-    {
-        super(validatedObject);
-        _rule = rule;
-    }
+	public ValidationSecondaryProgressNotification(Validable validatedObject, ValidationRule rule) {
+		super(validatedObject);
+		_rule = rule;
+	}
 
-    public ValidationRule getValidationRule()
-    {
-        return _rule;
-    }
+	public ValidationRule getValidationRule() {
+		return _rule;
+	}
 
 }

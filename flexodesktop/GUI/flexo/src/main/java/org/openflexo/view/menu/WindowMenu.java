@@ -521,7 +521,7 @@ public class WindowMenu extends FlexoMenu {
 			logger.fine("ADD to loadable Module : " + module.getName());
 		JMenuItem menuItem = new JMenuItem(new LoadModuleAction(module));
 		menuItem.setText(FlexoLocalization.localizedForKey(module.getName(), menuItem));
-			menuItem.setIcon(module.getSmallIcon());
+		menuItem.setIcon(module.getSmallIcon());
 		loadWindowMenu.add(menuItem);
 		_loadWindowMenuItems.put(module, menuItem);
 		return menuItem;

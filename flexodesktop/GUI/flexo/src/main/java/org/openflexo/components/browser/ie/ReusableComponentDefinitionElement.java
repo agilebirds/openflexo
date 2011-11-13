@@ -24,22 +24,19 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ie.cl.ReusableComponentDefinition;
 
+public class ReusableComponentDefinitionElement extends ComponentElement {
 
-public class ReusableComponentDefinitionElement extends ComponentElement
-{
+	/**
+	 * @param widget
+	 * @param browser
+	 */
+	public ReusableComponentDefinitionElement(ReusableComponentDefinition reusable, ProjectBrowser browser, BrowserElement parent) {
+		super(reusable, BrowserElementType.REUSABLE_COMPONENT, browser, parent);
+	}
 
-    /**
-     * @param widget
-     * @param browser
-     */
-    public ReusableComponentDefinitionElement(ReusableComponentDefinition reusable, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(reusable, BrowserElementType.REUSABLE_COMPONENT, browser,parent);
-    }
-
-    @Override
-    public ReusableComponentDefinition getComponentDefinition() {
-    	return (ReusableComponentDefinition) super.getComponentDefinition();
-    }
+	@Override
+	public ReusableComponentDefinition getComponentDefinition() {
+		return (ReusableComponentDefinition) super.getComponentDefinition();
+	}
 
 }

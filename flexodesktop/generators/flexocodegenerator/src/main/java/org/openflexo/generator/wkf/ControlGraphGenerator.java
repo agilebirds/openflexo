@@ -35,69 +35,68 @@ import org.openflexo.generator.rm.GeneratedFileResourceFactory;
 import org.openflexo.generator.utils.JavaClassGenerator;
 import org.openflexo.logging.FlexoLogger;
 
-public class ControlGraphGenerator extends JavaClassGenerator{
+public class ControlGraphGenerator extends JavaClassGenerator {
 
 	protected Logger logger = FlexoLogger.getLogger(ControlGraphGenerator.class.getPackage().getName());
 
-    private static final String TEMLPATE_NAME = "ControlGraph.java.vm";
-    
-    private FlexoProcess _process;
+	private static final String TEMLPATE_NAME = "ControlGraph.java.vm";
 
-	public ControlGraphGenerator(ProjectGenerator projectGenerator,FlexoProcess process) {
-		super(projectGenerator,process.getExecutionClassName(),process.getExecutionGroupName());
+	private FlexoProcess _process;
+
+	public ControlGraphGenerator(ProjectGenerator projectGenerator, FlexoProcess process) {
+		super(projectGenerator, process.getExecutionClassName(), process.getExecutionGroupName());
 		_process = process;
 	}
-	
-	public FlexoProcess getProcess(){
+
+	public FlexoProcess getProcess() {
 		return _process;
 	}
-	
-    @Override
-	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources)
-	{
+
+	@Override
+	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
 		// Java file
-    	javaResource  = (JavaFileResource)resourceForKeyWithCGFile(ResourceType.JAVA_FILE, GeneratorUtils.nameForRepositoryAndIdentifier(repository, getIdentifier()));
+		javaResource = (JavaFileResource) resourceForKeyWithCGFile(ResourceType.JAVA_FILE,
+				GeneratorUtils.nameForRepositoryAndIdentifier(repository, getIdentifier()));
 		if (javaResource == null) {
-			javaResource = GeneratedFileResourceFactory.createNewProcessorJavaFileResourceForProcess(repository,this);
-		}
-		else {
+			javaResource = GeneratedFileResourceFactory.createNewProcessorJavaFileResourceForProcess(repository, this);
+		} else {
 			javaResource.setGenerator(this);
 		}
 		javaResource.registerObserverWhenRequired();
 		resources.add(javaResource);
 	}
 
-    @Override
-    protected VelocityContext defaultContext() {
-    	VelocityContext vc = super.defaultContext();
-    	vc.put("code", getRefreshedCode());
-    	return vc;
-    }
-    
+	@Override
+	protected VelocityContext defaultContext() {
+		VelocityContext vc = super.defaultContext();
+		vc.put("code", getRefreshedCode());
+		return vc;
+	}
+
 	@Override
 	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
-	public String getRefreshedCode(){
+	public String getRefreshedCode() {
 		getProcess().getExecution().refresh();
 		return getProcess().getExecution().getFormattedCode();
 	}
 
-	public String getClassName(){
+	public String getClassName() {
 		return getProcess().getExecutionClassName();
 	}
-	
-	public String getPackageName(){
+
+	public String getPackageName() {
 		return getProcess().getExecutionGroupName();
 	}
 
 	@Override
 	public void rebuildDependanciesForResource(JavaFileResource resource) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	@Override
 	public String getTemplateName() {
 		return TEMLPATE_NAME;

@@ -23,7 +23,6 @@
 // Generated on: 2008.02.08 at 10:43:57 AM CET 
 //
 
-
 package org.oasis_open.docs.wsbpel._2_0.process.executable;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -32,11 +31,12 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for tImport complex type.
+ * <p>
+ * Java class for tImport complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="tImport">
@@ -54,90 +54,79 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tImport")
-public class TImport
-    extends TExtensibleElements
-{
+public class TImport extends TExtensibleElements {
 
-    @XmlAttribute
-    @XmlSchemaType(name = "anyURI")
-    protected String namespace;
-    @XmlAttribute
-    @XmlSchemaType(name = "anyURI")
-    protected String location;
-    @XmlAttribute(required = true)
-    @XmlSchemaType(name = "anyURI")
-    protected String importType;
+	@XmlAttribute
+	@XmlSchemaType(name = "anyURI")
+	protected String namespace;
+	@XmlAttribute
+	@XmlSchemaType(name = "anyURI")
+	protected String location;
+	@XmlAttribute(required = true)
+	@XmlSchemaType(name = "anyURI")
+	protected String importType;
 
-    /**
-     * Gets the value of the namespace property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getNamespace() {
-        return namespace;
-    }
+	/**
+	 * Gets the value of the namespace property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getNamespace() {
+		return namespace;
+	}
 
-    /**
-     * Sets the value of the namespace property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setNamespace(String value) {
-        this.namespace = value;
-    }
+	/**
+	 * Sets the value of the namespace property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setNamespace(String value) {
+		this.namespace = value;
+	}
 
-    /**
-     * Gets the value of the location property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getLocation() {
-        return location;
-    }
+	/**
+	 * Gets the value of the location property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getLocation() {
+		return location;
+	}
 
-    /**
-     * Sets the value of the location property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setLocation(String value) {
-        this.location = value;
-    }
+	/**
+	 * Sets the value of the location property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setLocation(String value) {
+		this.location = value;
+	}
 
-    /**
-     * Gets the value of the importType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getImportType() {
-        return importType;
-    }
+	/**
+	 * Gets the value of the importType property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getImportType() {
+		return importType;
+	}
 
-    /**
-     * Sets the value of the importType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setImportType(String value) {
-        this.importType = value;
-    }
+	/**
+	 * Sets the value of the importType property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setImportType(String value) {
+		this.importType = value;
+	}
 
 }

@@ -19,20 +19,16 @@
  */
 package org.openflexo.foundation.ws.dm;
 
+public class WSRepositoryAdded extends WSDataModification {
 
-
-public class WSRepositoryAdded extends WSDataModification
-{
-
-    /**
-     * @param modificationType
-     * @param propertyName
-     * @param oldValue
-     * @param newValue
-     */
-    public WSRepositoryAdded(Object newValue)
-    {
-        super( null, newValue);
-    }
+	/**
+	 * @param modificationType
+	 * @param propertyName
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public WSRepositoryAdded(Object newValue) {
+		super(null, newValue);
+	}
 
 }

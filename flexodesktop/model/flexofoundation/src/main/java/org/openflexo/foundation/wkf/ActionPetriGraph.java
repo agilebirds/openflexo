@@ -39,229 +39,215 @@ import org.openflexo.logging.FlexoLogger;
  * @author sguerin
  * 
  */
-public final class ActionPetriGraph extends FlexoPetriGraph
-{
+public final class ActionPetriGraph extends FlexoPetriGraph {
 
-    @SuppressWarnings("unused")
-	private static final Logger logger = FlexoLogger.getLogger(ActionPetriGraph.class.getPackage()
-            .getName());
+	@SuppressWarnings("unused")
+	private static final Logger logger = FlexoLogger.getLogger(ActionPetriGraph.class.getPackage().getName());
 
-    //private OperationNode _operationNode;
+	// private OperationNode _operationNode;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    /**
-     * Constructor used during deserialization
-     */
-    public ActionPetriGraph(FlexoProcessBuilder builder)
-    {
-        this(builder.process);
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor used during deserialization
+	 */
+	public ActionPetriGraph(FlexoProcessBuilder builder) {
+		this(builder.process);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Default constructor
-     */
-    public ActionPetriGraph(FlexoProcess process)
-    {
-        super(process);
-    }
+	/**
+	 * Default constructor
+	 */
+	public ActionPetriGraph(FlexoProcess process) {
+		super(process);
+	}
 
-    /**
-     * Contructor to use in case of a GUI action petri graph creation
-     */
-    public ActionPetriGraph(OperationNode node)
-    {
-        super(node.getProcess());
-        node.setContainedPetriGraph(this);
- 
-        ActionNode begin = createNewBeginNode();
-        ActionNode end = createNewEndNode();
-        if (node.isBeginNode() || node.isEndNode()||node.isSelfExecutableNode()) {
-            createTokenEdge(begin, end);
-        }
-    }
+	/**
+	 * Contructor to use in case of a GUI action petri graph creation
+	 */
+	public ActionPetriGraph(OperationNode node) {
+		super(node.getProcess());
+		node.setContainedPetriGraph(this);
 
-    public static ActionPetriGraph createNewActionPetriGraph(SelfExecutableActionNode selfExecActionNode)
-    {
-    	ActionPetriGraph returned = new ActionPetriGraph(selfExecActionNode.getProcess());
-    	selfExecActionNode.setExecutionPetriGraph(returned);
-        returned.createNewBeginNode();
-        returned.createNewEndNode();
-        return returned;
-    }
+		ActionNode begin = createNewBeginNode();
+		ActionNode end = createNewEndNode();
+		if (node.isBeginNode() || node.isEndNode() || node.isSelfExecutableNode()) {
+			createTokenEdge(begin, end);
+		}
+	}
 
-    public static ActionPetriGraph createNewActionPetriGraph(LOOPOperator loopOperator)
-    {
-    	ActionPetriGraph returned = new ActionPetriGraph(loopOperator.getProcess());
-        loopOperator.setExecutionPetriGraph(returned);
-        returned.createNewBeginNode();
-        returned.createNewEndNode();
-        return returned;
-    }
+	public static ActionPetriGraph createNewActionPetriGraph(SelfExecutableActionNode selfExecActionNode) {
+		ActionPetriGraph returned = new ActionPetriGraph(selfExecActionNode.getProcess());
+		selfExecActionNode.setExecutionPetriGraph(returned);
+		returned.createNewBeginNode();
+		returned.createNewEndNode();
+		return returned;
+	}
 
+	public static ActionPetriGraph createNewActionPetriGraph(LOOPOperator loopOperator) {
+		ActionPetriGraph returned = new ActionPetriGraph(loopOperator.getProcess());
+		loopOperator.setExecutionPetriGraph(returned);
+		returned.createNewBeginNode();
+		returned.createNewEndNode();
+		return returned;
+	}
 
-    @Override
-	public ActionNode createNewBeginNode()
-    {
-        return createNewBeginNode(null);
-    }
+	@Override
+	public ActionNode createNewBeginNode() {
+		return createNewBeginNode(null);
+	}
 
-    @Override
-	public ActionNode createNewBeginNode(String nodeName)
-    {
-        ActionNode beginNode = new ActionNode(getProcess());
-        beginNode.setNodeType(NodeType.BEGIN);
-        beginNode.setDontGenerate(true);
-        beginNode.setNodeName(getProcess().findNextInitialName(
-                nodeName == null ? beginNode.getDefaultName() : nodeName, getOperationNode()));
-        //beginNode.setNodeLabelPosX(25);
-        //beginNode.setNodeLabelPosY(50);
+	@Override
+	public ActionNode createNewBeginNode(String nodeName) {
+		ActionNode beginNode = new ActionNode(getProcess());
+		beginNode.setNodeType(NodeType.BEGIN);
+		beginNode.setDontGenerate(true);
+		beginNode.setNodeName(getProcess()
+				.findNextInitialName(nodeName == null ? beginNode.getDefaultName() : nodeName, getOperationNode()));
+		// beginNode.setNodeLabelPosX(25);
+		// beginNode.setNodeLabelPosY(50);
 
-        // TODO: following must be put in finalizer of CreatePetriGraph action
-        /*beginNode.setX(30,WKFRepresentableObject.BASIC_PROCESS_EDITOR);
-        beginNode.setY(10+80 * getAllBeginNodes().size(),WKFRepresentableObject.BASIC_PROCESS_EDITOR);
-        beginNode.setLabelX(25, WKFRepresentableObject.BASIC_PROCESS_EDITOR);
-        beginNode.setLabelY(50, WKFRepresentableObject.BASIC_PROCESS_EDITOR);
-        beginNode.setX(30,WKFRepresentableObject.SWIMMING_LANE_EDITOR);
-        beginNode.setY(10+80 * getAllBeginNodes().size(),WKFRepresentableObject.SWIMMING_LANE_EDITOR);
-        beginNode.setLabelX(25, WKFRepresentableObject.SWIMMING_LANE_EDITOR);
-        beginNode.setLabelY(50, WKFRepresentableObject.SWIMMING_LANE_EDITOR);*/
+		// TODO: following must be put in finalizer of CreatePetriGraph action
+		/*beginNode.setX(30,WKFRepresentableObject.BASIC_PROCESS_EDITOR);
+		beginNode.setY(10+80 * getAllBeginNodes().size(),WKFRepresentableObject.BASIC_PROCESS_EDITOR);
+		beginNode.setLabelX(25, WKFRepresentableObject.BASIC_PROCESS_EDITOR);
+		beginNode.setLabelY(50, WKFRepresentableObject.BASIC_PROCESS_EDITOR);
+		beginNode.setX(30,WKFRepresentableObject.SWIMMING_LANE_EDITOR);
+		beginNode.setY(10+80 * getAllBeginNodes().size(),WKFRepresentableObject.SWIMMING_LANE_EDITOR);
+		beginNode.setLabelX(25, WKFRepresentableObject.SWIMMING_LANE_EDITOR);
+		beginNode.setLabelY(50, WKFRepresentableObject.SWIMMING_LANE_EDITOR);*/
 
-        addToNodes(beginNode);
-        return beginNode;
-    }
+		addToNodes(beginNode);
+		return beginNode;
+	}
 
-    @Override
-	public ActionNode createNewEndNode()
-    {
-        return createNewEndNode(null);
-    }
+	@Override
+	public ActionNode createNewEndNode() {
+		return createNewEndNode(null);
+	}
 
-    @Override
-	public ActionNode createNewEndNode(String nodeName)
-    {
-        ActionNode endNode = new ActionNode(getProcess());
-        endNode.setNodeType(NodeType.END);
-        endNode.setDontGenerate(true);
-        endNode.setNodeName(getProcess().findNextInitialName(
-                nodeName == null ? endNode.getDefaultName() : nodeName, getOperationNode()));
-        //endNode.setNodeLabelPosX(25);
-        //endNode.setNodeLabelPosY(50);
+	@Override
+	public ActionNode createNewEndNode(String nodeName) {
+		ActionNode endNode = new ActionNode(getProcess());
+		endNode.setNodeType(NodeType.END);
+		endNode.setDontGenerate(true);
+		endNode.setNodeName(getProcess().findNextInitialName(nodeName == null ? endNode.getDefaultName() : nodeName, getOperationNode()));
+		// endNode.setNodeLabelPosX(25);
+		// endNode.setNodeLabelPosY(50);
 
-        // TODO: following must be put in finalizer of CreatePetriGraph action
-        /*endNode.setX(200,WKFRepresentableObject.BASIC_PROCESS_EDITOR);
-        endNode.setY(10+80 * getAllEndNodes().size(),WKFRepresentableObject.BASIC_PROCESS_EDITOR);
-        endNode.setLabelX(25, WKFRepresentableObject.BASIC_PROCESS_EDITOR);
-        endNode.setLabelY(50, WKFRepresentableObject.BASIC_PROCESS_EDITOR);
-        endNode.setX(200,WKFRepresentableObject.SWIMMING_LANE_EDITOR);
-        endNode.setY(10+80 * getAllBeginNodes().size(),WKFRepresentableObject.SWIMMING_LANE_EDITOR);
-        endNode.setLabelX(25, WKFRepresentableObject.SWIMMING_LANE_EDITOR);
-        endNode.setLabelY(50, WKFRepresentableObject.SWIMMING_LANE_EDITOR);*/
+		// TODO: following must be put in finalizer of CreatePetriGraph action
+		/*endNode.setX(200,WKFRepresentableObject.BASIC_PROCESS_EDITOR);
+		endNode.setY(10+80 * getAllEndNodes().size(),WKFRepresentableObject.BASIC_PROCESS_EDITOR);
+		endNode.setLabelX(25, WKFRepresentableObject.BASIC_PROCESS_EDITOR);
+		endNode.setLabelY(50, WKFRepresentableObject.BASIC_PROCESS_EDITOR);
+		endNode.setX(200,WKFRepresentableObject.SWIMMING_LANE_EDITOR);
+		endNode.setY(10+80 * getAllBeginNodes().size(),WKFRepresentableObject.SWIMMING_LANE_EDITOR);
+		endNode.setLabelX(25, WKFRepresentableObject.SWIMMING_LANE_EDITOR);
+		endNode.setLabelY(50, WKFRepresentableObject.SWIMMING_LANE_EDITOR);*/
 
-        addToNodes(endNode);
-         return endNode;
-    }
-    
-    public ActionNode createNewNormalNode()
-    {
-        return createNewNormalNode(null);
-    }
+		addToNodes(endNode);
+		return endNode;
+	}
 
-    public ActionNode createNewNormalNode(String nodeName)
-    {
-    	ActionNode newNode = new ActionNode(getProcess());
-    	newNode.setNodeType(NodeType.NORMAL);
-    	newNode.setActionType(ActionType.FLEXO_ACTION);
-    	newNode.setDontGenerate(true);
-    	newNode.setNodeName(getProcess().findNextInitialName(nodeName == null ? newNode.getDefaultName() : nodeName));
-    	addToNodes(newNode);
-    	return newNode;
-    }
+	public ActionNode createNewNormalNode() {
+		return createNewNormalNode(null);
+	}
 
-    /**
-     * Returns the level of this Petri Graph (which is {@link FlexoLevel.ACTION}).
-     * 
-     * @see org.openflexo.foundation.wkf.LevelledObject#getLevel()
-     */
-    @Override
-	public FlexoLevel getLevel()
-    {
-        return FlexoLevel.ACTION;
-    }
+	public ActionNode createNewNormalNode(String nodeName) {
+		ActionNode newNode = new ActionNode(getProcess());
+		newNode.setNodeType(NodeType.NORMAL);
+		newNode.setActionType(ActionType.FLEXO_ACTION);
+		newNode.setDontGenerate(true);
+		newNode.setNodeName(getProcess().findNextInitialName(nodeName == null ? newNode.getDefaultName() : nodeName));
+		addToNodes(newNode);
+		return newNode;
+	}
 
-    /**
-     * Returns all the action nodes that are contained 
-     * @return
-     */
-    public Vector<ActionNode> getAllActionNodes() {
-    	return getAllNodesOfClass(ActionNode.class);
-    }
-    
-    /**
-	 * Returns all the Action nodes that are in this petrigraph and the ones embedded by LOOPOperator and SelfExecutableNode.
-	 * This is done recursively on all nodes.
+	/**
+	 * Returns the level of this Petri Graph (which is {@link FlexoLevel.ACTION}).
+	 * 
+	 * @see org.openflexo.foundation.wkf.LevelledObject#getLevel()
+	 */
+	@Override
+	public FlexoLevel getLevel() {
+		return FlexoLevel.ACTION;
+	}
+
+	/**
+	 * Returns all the action nodes that are contained
+	 * 
+	 * @return
+	 */
+	public Vector<ActionNode> getAllActionNodes() {
+		return getAllNodesOfClass(ActionNode.class);
+	}
+
+	/**
+	 * Returns all the Action nodes that are in this petrigraph and the ones embedded by LOOPOperator and SelfExecutableNode. This is done
+	 * recursively on all nodes.
+	 * 
 	 * @return all the action nodes embedded in this petri graph.
 	 */
-    public Vector<ActionNode> getAllEmbeddedActionNodes() {
-    	return getAllEmbeddedNodesOfClass(ActionNode.class);
-    }
+	public Vector<ActionNode> getAllEmbeddedActionNodes() {
+		return getAllEmbeddedNodesOfClass(ActionNode.class);
+	}
 
-    /**
-     * Returns a sorted vector of all the Action nodes that are in this petrigraph and the ones embedded by LOOPOperator and SelfExecutableNode.
-     * This is done recursively on all nodes.
-     * @return a sorted vector of all the action nodes embedded in this petri graph.
-     */
-    public Vector<ActionNode> getAllEmbeddedSortedActionNodes() {
-    	return getAllEmbeddedSortedNodesOfClass(ActionNode.class);
-    }
-    
-    /**
-     * Overrides createBeginNode
-     * 
-     * @see org.openflexo.foundation.wkf.FlexoPetriGraph#createBeginNode(String)
-     */
-    @Override
-	public FlexoNode createBeginNode(String context)
-    {
-        return createNewBeginNode(context);
-    }
+	/**
+	 * Returns a sorted vector of all the Action nodes that are in this petrigraph and the ones embedded by LOOPOperator and
+	 * SelfExecutableNode. This is done recursively on all nodes.
+	 * 
+	 * @return a sorted vector of all the action nodes embedded in this petri graph.
+	 */
+	public Vector<ActionNode> getAllEmbeddedSortedActionNodes() {
+		return getAllEmbeddedSortedNodesOfClass(ActionNode.class);
+	}
 
-    /**
-     * Overrides createEndNode
-     * 
-     * @see org.openflexo.foundation.wkf.FlexoPetriGraph#createEndNode(String)
-     */
-    @Override
-	public FlexoNode createEndNode(String context)
-    {
-        return createNewEndNode(context);
-    }
+	/**
+	 * Overrides createBeginNode
+	 * 
+	 * @see org.openflexo.foundation.wkf.FlexoPetriGraph#createBeginNode(String)
+	 */
+	@Override
+	public FlexoNode createBeginNode(String context) {
+		return createNewBeginNode(context);
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "action_petri_graph";
-    }
-    
-    /**
-     * Recursively looks for the root operation node of this petri graph
-     * @return
-     */
-    public OperationNode getOperationNode() {
-    	if (getContainer() instanceof OperationNode) {
-    		return (OperationNode) getContainer();
-    	} else if (getContainer() instanceof PetriGraphNode) {
-    		return ((PetriGraphNode)getContainer()).getOperationNode();
-    	} else
-    		return null;
-    }
+	/**
+	 * Overrides createEndNode
+	 * 
+	 * @see org.openflexo.foundation.wkf.FlexoPetriGraph#createEndNode(String)
+	 */
+	@Override
+	public FlexoNode createEndNode(String context) {
+		return createNewEndNode(context);
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "action_petri_graph";
+	}
+
+	/**
+	 * Recursively looks for the root operation node of this petri graph
+	 * 
+	 * @return
+	 */
+	public OperationNode getOperationNode() {
+		if (getContainer() instanceof OperationNode) {
+			return (OperationNode) getContainer();
+		} else if (getContainer() instanceof PetriGraphNode) {
+			return ((PetriGraphNode) getContainer()).getOperationNode();
+		} else
+			return null;
+	}
 
 }

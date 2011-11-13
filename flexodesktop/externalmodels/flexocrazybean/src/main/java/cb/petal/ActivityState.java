@@ -18,35 +18,36 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents ActivityState object
- *
+ * 
  * @version $Id: ActivityState.java,v 1.3 2011/09/12 11:46:47 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class ActivityState extends QuidObject implements Named {
-  public ActivityState(PetalNode parent, Collection params) {
-    super(parent, "ActivityState", params);
-  }
+	public ActivityState(PetalNode parent, Collection params) {
+		super(parent, "ActivityState", params);
+	}
 
-  public ActivityState() {
-    super("ActivityState");
-  }
+	public ActivityState() {
+		super("ActivityState");
+	}
 
-  @Override
-public void setNameParameter(String o) {
-    params.set(0, o);
-  }
+	@Override
+	public void setNameParameter(String o) {
+		params.set(0, o);
+	}
 
-  @Override
-public String getNameParameter() {
-    return (String)params.get(0);
-  }
+	@Override
+	public String getNameParameter() {
+		return (String) params.get(0);
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

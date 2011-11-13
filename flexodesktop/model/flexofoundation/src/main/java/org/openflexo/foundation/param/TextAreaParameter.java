@@ -23,22 +23,19 @@ import org.openflexo.inspector.widget.DenaliWidget;
 
 public class TextAreaParameter extends ParameterDefinition<String> {
 
-    public TextAreaParameter(String name, String label, String defaultValue)
-    {
-        super(name,label,defaultValue);
-    }
-    
-    public TextAreaParameter(String name, String label, String defaultValue, int cols, int rows)
-    {
-        this(name,label,defaultValue);
-        addParameter("columns",String.valueOf(cols));
-        addParameter("rows",String.valueOf(rows));
-   }
-    
-   @Override
-public String getWidgetName() 
-   {
-        return DenaliWidget.TEXT_AREA;
-    }
+	public TextAreaParameter(String name, String label, String defaultValue) {
+		super(name, label, defaultValue);
+	}
+
+	public TextAreaParameter(String name, String label, String defaultValue, int cols, int rows) {
+		this(name, label, defaultValue);
+		addParameter("columns", String.valueOf(cols));
+		addParameter("rows", String.valueOf(rows));
+	}
+
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.TEXT_AREA;
+	}
 
 }

@@ -24,18 +24,15 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.wkf.node.ANDOperator;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class OperatorAndElement extends OperatorNodeElement
-{
+public class OperatorAndElement extends OperatorNodeElement {
 
-    public OperatorAndElement(ANDOperator node, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(node, BrowserElementType.OPERATOR_AND_NODE, browser,parent);
-    }
+	public OperatorAndElement(ANDOperator node, ProjectBrowser browser, BrowserElement parent) {
+		super(node, BrowserElementType.OPERATOR_AND_NODE, browser, parent);
+	}
 }

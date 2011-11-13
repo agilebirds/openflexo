@@ -40,148 +40,134 @@ import org.openflexo.wse.model.WSEPortTypeTableModel;
 import org.openflexo.wse.model.WSERepositoryTableModel;
 import org.openflexo.wse.model.WSEServiceTableModel;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class WSEInternalWSFolderView extends WSEView<InternalWSFolder>
-{
+public class WSEInternalWSFolderView extends WSEView<InternalWSFolder> {
 
-    private static final Logger logger = Logger.getLogger(WSEInternalWSFolderView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(WSEInternalWSFolderView.class.getPackage().getName());
 
-    private WSEServiceTableModel serviceTableModel;
-    protected WSETabularView serviceTable;
+	private WSEServiceTableModel serviceTableModel;
+	protected WSETabularView serviceTable;
 
-    private WSEPortTypeTableModel portTypeTableModel;
-    protected WSETabularView portTypeTable;
+	private WSEPortTypeTableModel portTypeTableModel;
+	protected WSETabularView portTypeTable;
 
-    private WSERepositoryTableModel repositoryTableModel;
-    protected WSETabularView repositoryTable;
+	private WSERepositoryTableModel repositoryTableModel;
+	protected WSETabularView repositoryTable;
 
+	public WSEInternalWSFolderView(InternalWSFolder folder, WSEController controller) {
+		super(folder, controller, folder.getLocalizedName());
+		addAction(new TabularViewAction(CreateNewWebService.actionType, "ws_add_webservice", controller.getEditor()) {
+			@Override
+			protected Vector getGlobalSelection() {
+				return getViewSelection();
+			}
 
-    public WSEInternalWSFolderView(InternalWSFolder folder, WSEController controller)
-    {
-        super(folder, controller, folder.getLocalizedName());
-        addAction(new TabularViewAction(CreateNewWebService.actionType,"ws_add_webservice", controller.getEditor()) {
-            @Override
-			protected Vector getGlobalSelection()
-            {
-                return getViewSelection();
-            }
+			@Override
+			protected FlexoModelObject getFocusedObject() {
+				return getWSFolder();
+			}
+		});
+		/*    addAction(new TabularViewAction(UpdateDMRepository.actionType) {
+		        protected Vector getGlobalSelection()
+		        {
+		            return getViewSelection();
+		        }
 
-            @Override
-			protected FlexoModelObject getFocusedObject() 
-            {
-                return getWSFolder();
-            }           
-        });
-    /*    addAction(new TabularViewAction(UpdateDMRepository.actionType) {
-            protected Vector getGlobalSelection()
-            {
-                return getViewSelection();
-            }
+		        protected FlexoModelObject getFocusedObject() 
+		        {
+		            return getSelectedWSFolder();
+		        }           
+		    });*/
+		addAction(new TabularViewAction(WSDelete.actionType, "delete_webservice", controller.getEditor()) {
+			@Override
+			protected Vector getGlobalSelection() {
+				return getViewSelection();
+			}
 
-            protected FlexoModelObject getFocusedObject() 
-            {
-                return getSelectedWSFolder();
-            }           
-        });*/
-       addAction(new TabularViewAction(WSDelete.actionType,"delete_webservice", controller.getEditor()) {
-            @Override
-			protected Vector getGlobalSelection()
-            {
-                 return getViewSelection();
-            }
+			@Override
+			protected FlexoModelObject getFocusedObject() {
+				return null;
+			}
+		});
+		finalizeBuilding();
+	}
 
-            @Override
-			protected FlexoModelObject getFocusedObject() 
-            {
-                return null;
-            }           
-        });
-        finalizeBuilding();
-    }
+	@Override
+	protected JComponent buildContentPane() {
+		serviceTableModel = new WSEServiceTableModel(getWSFolder(), getWSEController().getProject(), false);
+		addToMasterTabularView(serviceTable = new WSETabularView(getWSEController(), serviceTableModel, 5));
 
-    @Override
-	protected JComponent buildContentPane()
-    {
-        serviceTableModel = new WSEServiceTableModel(getWSFolder(), getWSEController().getProject(), false);
-        addToMasterTabularView(serviceTable = new WSETabularView(getWSEController(), serviceTableModel, 5));
+		portTypeTableModel = new WSEPortTypeTableModel(null, getWSEController().getProject(), false);
+		addToSlaveTabularView(portTypeTable = new WSETabularView(getWSEController(), portTypeTableModel, 6), serviceTable);
 
-        portTypeTableModel = new WSEPortTypeTableModel(null, getWSEController().getProject(), false);
-        addToSlaveTabularView(portTypeTable = new WSETabularView(getWSEController(), portTypeTableModel, 6),serviceTable);
+		repositoryTableModel = new WSERepositoryTableModel(null, getWSEController().getProject());
+		addToSlaveTabularView(repositoryTable = new WSETabularView(getWSEController(), repositoryTableModel, 6), serviceTable);
 
-        repositoryTableModel = new WSERepositoryTableModel(null, getWSEController().getProject());
-        addToSlaveTabularView(repositoryTable = new WSETabularView(getWSEController(), repositoryTableModel, 6),serviceTable);
+		return new JSplitPane(JSplitPane.VERTICAL_SPLIT, serviceTable, new JSplitPane(JSplitPane.VERTICAL_SPLIT, portTypeTable,
+				repositoryTable));
+	}
 
-        return new JSplitPane(JSplitPane.VERTICAL_SPLIT, serviceTable, new JSplitPane(JSplitPane.VERTICAL_SPLIT,portTypeTable,repositoryTable));
-    }
+	public InternalWSFolder getWSFolder() {
+		return getModelObject();
+	}
 
-    public InternalWSFolder getWSFolder()
-    {
-        return getModelObject();
-    }
-   
-     
+	public WSService getSelectedWSService() {
+		WSESelectionManager sm = getWSEController().getWSESelectionManager();
+		Vector selection = sm.getSelection();
+		if ((selection.size() == 1) && (selection.firstElement() instanceof WSService)) {
+			return (WSService) selection.firstElement();
+		}
+		if (getSelectedPortType() != null) {
+			WSService ws = getWSFolder().getParentOfServiceInterface(getSelectedPortType());
+			if (ws != null)
+				return ws;
+		}
+		if (getSelectedWSDLRepository() != null) {
+			WSRepository wsr = getWSFolder().getWSRepositoryNamed(getSelectedWSDLRepository().getName());
+			if (wsr != null)
+				return wsr.getWSService();
+		}
 
-    public WSService getSelectedWSService()
-    {
-        WSESelectionManager sm = getWSEController().getWSESelectionManager();
-        Vector selection = sm.getSelection();
-        if ((selection.size() == 1) && (selection.firstElement() instanceof WSService)) {
-            return (WSService) selection.firstElement();
-        }
-        if (getSelectedPortType() != null) {
-            WSService ws = getWSFolder().getParentOfServiceInterface(getSelectedPortType());
-    			if(ws !=null) return ws;
-        }
-        if (getSelectedWSDLRepository() != null) {
-        		WSRepository wsr = getWSFolder().getWSRepositoryNamed(getSelectedWSDLRepository().getName());
-            if(wsr!=null) return wsr.getWSService();
-        }
-        
-        return null;
-    }
+		return null;
+	}
 
-    public ServiceInterface getSelectedServiceInterface(){
-    	return getSelectedPortType();
-    }
-    public ServiceInterface getSelectedPortType()
-    {
-        WSESelectionManager sm = getWSEController().getWSESelectionManager();
-        Vector selection = sm.getSelection();
-        if ((selection.size() == 1) && (selection.firstElement() instanceof ServiceInterface)) {
-            return (ServiceInterface) selection.firstElement();
-        }
-        return null;
-    }
+	public ServiceInterface getSelectedServiceInterface() {
+		return getSelectedPortType();
+	}
 
-    public WSDLRepository getSelectedWSDLRepository()
-    {
-        WSESelectionManager sm = getWSEController().getWSESelectionManager();
-        Vector selection = sm.getSelection();
-        if ((selection.size() == 1) && (selection.firstElement() instanceof WSDLRepository)) {
-            return (WSDLRepository) selection.firstElement();
-        }
-        return null;
-    }
+	public ServiceInterface getSelectedPortType() {
+		WSESelectionManager sm = getWSEController().getWSESelectionManager();
+		Vector selection = sm.getSelection();
+		if ((selection.size() == 1) && (selection.firstElement() instanceof ServiceInterface)) {
+			return (ServiceInterface) selection.firstElement();
+		}
+		return null;
+	}
 
-    public WSETabularView getServiceTable() 
-    {
-        return serviceTable;
-    }
+	public WSDLRepository getSelectedWSDLRepository() {
+		WSESelectionManager sm = getWSEController().getWSESelectionManager();
+		Vector selection = sm.getSelection();
+		if ((selection.size() == 1) && (selection.firstElement() instanceof WSDLRepository)) {
+			return (WSDLRepository) selection.firstElement();
+		}
+		return null;
+	}
 
-    public WSETabularView getPortTypeTable() 
-    {
-        return portTypeTable;
-    }
+	public WSETabularView getServiceTable() {
+		return serviceTable;
+	}
 
-    public WSETabularView getRepositoryTable() 
-    {
-        return repositoryTable;
-    }
+	public WSETabularView getPortTypeTable() {
+		return portTypeTable;
+	}
+
+	public WSETabularView getRepositoryTable() {
+		return repositoryTable;
+	}
 
 }

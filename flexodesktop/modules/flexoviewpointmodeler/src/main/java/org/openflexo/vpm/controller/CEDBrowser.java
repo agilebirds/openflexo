@@ -26,73 +26,69 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.foundation.FlexoModelObject;
 
-
 /**
  * Browser in OntologyEditor module
  * 
  * @author yourname
  * 
  */
-public abstract class CEDBrowser extends ProjectBrowser
-{
+public abstract class CEDBrowser extends ProjectBrowser {
 
-    protected static final Logger logger = Logger.getLogger(CEDBrowser.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(CEDBrowser.class.getPackage().getName());
 
-    // ================================================
-    // ================= Variables  ===================
-    // ================================================
+	// ================================================
+	// ================= Variables ===================
+	// ================================================
 
-    protected CEDController _controller;
+	protected CEDController _controller;
 
-    // ================================================
-    // ================ Constructor ===================
-    // ================================================
+	// ================================================
+	// ================ Constructor ===================
+	// ================================================
 
-    public CEDBrowser(CEDController controller)
-    {
-        super(controller.getEditor(), controller.getSelectionManager() /* Remove this parameter if you don't want browser synchronized with selection */);
-        _controller = controller;
-        update();
-    }
+	public CEDBrowser(CEDController controller) {
+		super(controller.getEditor(), controller.getSelectionManager() /* Remove this parameter if you don't want browser synchronized with selection */);
+		_controller = controller;
+		update();
+	}
 
-    @Override
-	public void configure()
-    {
-    	setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.SHOW);
-    	setFilterStatus(BrowserElementType.PROJECT_ONTOLOGY, BrowserFilterStatus.SHOW);
-    	setFilterStatus(BrowserElementType.IMPORTED_ONTOLOGY, BrowserFilterStatus.SHOW);
+	@Override
+	public void configure() {
+		setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.SHOW);
+		setFilterStatus(BrowserElementType.PROJECT_ONTOLOGY, BrowserFilterStatus.SHOW);
+		setFilterStatus(BrowserElementType.IMPORTED_ONTOLOGY, BrowserFilterStatus.SHOW);
 		setFilterStatus(BrowserElementType.ONTOLOGY_CLASS, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
 		setFilterStatus(BrowserElementType.ONTOLOGY_INDIVIDUAL, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
 		setFilterStatus(BrowserElementType.ONTOLOGY_DATA_PROPERTY, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
 		setFilterStatus(BrowserElementType.ONTOLOGY_OBJECT_PROPERTY, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
- 
-    	setFilterStatus(BrowserElementType.CALC_LIBRARY, BrowserFilterStatus.SHOW);
-    	setFilterStatus(BrowserElementType.ONTOLOGY_CALC, BrowserFilterStatus.SHOW);
+
+		setFilterStatus(BrowserElementType.CALC_LIBRARY, BrowserFilterStatus.SHOW);
+		setFilterStatus(BrowserElementType.ONTOLOGY_CALC, BrowserFilterStatus.SHOW);
 
 		setFilterStatus(BrowserElementType.OE_SHEMA_LIBRARY, BrowserFilterStatus.SHOW);
 		setFilterStatus(BrowserElementType.OE_SHEMA_FOLDER, BrowserFilterStatus.SHOW);
 		setFilterStatus(BrowserElementType.OE_SHEMA_DEFINITION, BrowserFilterStatus.SHOW);
-		setFilterStatus(BrowserElementType.OE_SHEMA,BrowserFilterStatus.SHOW);
-		setFilterStatus(BrowserElementType.OE_SHAPE,BrowserFilterStatus.SHOW);
-		setFilterStatus(BrowserElementType.OE_CONNECTOR,BrowserFilterStatus.SHOW);
-    	
-    	setFilterStatus(BrowserElementType.WORKFLOW, BrowserFilterStatus.HIDE);
-    	setFilterStatus(BrowserElementType.PROCESS, BrowserFilterStatus.HIDE);
-    	setFilterStatus(BrowserElementType.COMPONENT_LIBRARY, BrowserFilterStatus.HIDE);
-    	setFilterStatus(BrowserElementType.COMPONENT_FOLDER, BrowserFilterStatus.HIDE);
-    	setFilterStatus(BrowserElementType.COMPONENT, BrowserFilterStatus.HIDE);
-    	setFilterStatus(BrowserElementType.DM_MODEL, BrowserFilterStatus.HIDE);
-    	setFilterStatus(BrowserElementType.DKV_MODEL, BrowserFilterStatus.HIDE);
-    	setFilterStatus(BrowserElementType.MENU_ITEM, BrowserFilterStatus.HIDE);
-    	setFilterStatus(BrowserElementType.WS_LIBRARY, BrowserFilterStatus.HIDE);
-    	setFilterStatus(BrowserElementType.IMPORTED_PROCESS_LIBRARY, BrowserFilterStatus.HIDE);
-    }
+		setFilterStatus(BrowserElementType.OE_SHEMA, BrowserFilterStatus.SHOW);
+		setFilterStatus(BrowserElementType.OE_SHAPE, BrowserFilterStatus.SHOW);
+		setFilterStatus(BrowserElementType.OE_CONNECTOR, BrowserFilterStatus.SHOW);
 
-    @Override
-	public FlexoModelObject getDefaultRootObject()
-    {
-        // Defines here what is the represented root objet (ex workflow for WKF, FlexoComponentLibrary for IE, DataModelEditor for DME, etc...)
-        return getProject();
-    }
+		setFilterStatus(BrowserElementType.WORKFLOW, BrowserFilterStatus.HIDE);
+		setFilterStatus(BrowserElementType.PROCESS, BrowserFilterStatus.HIDE);
+		setFilterStatus(BrowserElementType.COMPONENT_LIBRARY, BrowserFilterStatus.HIDE);
+		setFilterStatus(BrowserElementType.COMPONENT_FOLDER, BrowserFilterStatus.HIDE);
+		setFilterStatus(BrowserElementType.COMPONENT, BrowserFilterStatus.HIDE);
+		setFilterStatus(BrowserElementType.DM_MODEL, BrowserFilterStatus.HIDE);
+		setFilterStatus(BrowserElementType.DKV_MODEL, BrowserFilterStatus.HIDE);
+		setFilterStatus(BrowserElementType.MENU_ITEM, BrowserFilterStatus.HIDE);
+		setFilterStatus(BrowserElementType.WS_LIBRARY, BrowserFilterStatus.HIDE);
+		setFilterStatus(BrowserElementType.IMPORTED_PROCESS_LIBRARY, BrowserFilterStatus.HIDE);
+	}
+
+	@Override
+	public FlexoModelObject getDefaultRootObject() {
+		// Defines here what is the represented root objet (ex workflow for WKF, FlexoComponentLibrary for IE, DataModelEditor for DME,
+		// etc...)
+		return getProject();
+	}
 
 }

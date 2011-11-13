@@ -24,13 +24,18 @@ import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMProperty;
 import org.openflexo.foundation.dm.DuplicateMethodSignatureException;
 
-public interface JavaMethodParser
-{
+public interface JavaMethodParser {
 	public ParsedJavadoc parseJavadocForMethod(String methodCode, DMModel dataModel) throws JavaParseException;
+
 	public ParsedJavaMethod parseMethod(String methodCode, DMModel dataModel) throws JavaParseException;
+
 	public void updateWith(DMMethod method, ParsedJavaMethod javaMethod) throws DuplicateMethodSignatureException;
+
 	public void updateGetterWith(DMProperty property, ParsedJavaMethod javaMethod) throws DuplicateMethodSignatureException;
+
 	public void updateSetterWith(DMProperty property, ParsedJavaMethod javaMethod) throws DuplicateMethodSignatureException;
+
 	public void updateAdditionAccessorWith(DMProperty property, ParsedJavaMethod javaMethod) throws DuplicateMethodSignatureException;
+
 	public void updateRemovalAccessorWith(DMProperty property, ParsedJavaMethod javaMethod) throws DuplicateMethodSignatureException;
 }

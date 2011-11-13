@@ -23,19 +23,16 @@ package org.openflexo.xmlcode.examples.example1;
 import org.openflexo.xmlcode.XMLSerializable;
 
 /**
- * Class <code>Role</code> is intented to represent a Role object in XML
- * coding/decoding example.
+ * Class <code>Role</code> is intented to represent a Role object in XML coding/decoding example.
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  */
-public class Role implements XMLSerializable
-{
+public class Role implements XMLSerializable {
 
-    public String roleName;
+	public String roleName;
 
-    @Override
-	public String toString()
-    {
-        return "Role (roleName=" + roleName + ")";
-    }
+	@Override
+	public String toString() {
+		return "Role (roleName=" + roleName + ")";
+	}
 }

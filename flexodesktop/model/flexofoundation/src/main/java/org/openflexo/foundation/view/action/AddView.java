@@ -39,136 +39,118 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
-public class AddView extends FlexoAction<AddView,ViewLibraryObject,ViewLibraryObject> 
-{
+public class AddView extends FlexoAction<AddView, ViewLibraryObject, ViewLibraryObject> {
 
-    private static final Logger logger = Logger.getLogger(AddView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(AddView.class.getPackage().getName());
 
-    public static FlexoActionType<AddView,ViewLibraryObject,ViewLibraryObject> actionType 
-    = new FlexoActionType<AddView,ViewLibraryObject,ViewLibraryObject> (
-    		"create_view",
-    		FlexoActionType.newMenu,
-    		FlexoActionType.defaultGroup,
-    		FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<AddView, ViewLibraryObject, ViewLibraryObject> actionType = new FlexoActionType<AddView, ViewLibraryObject, ViewLibraryObject>(
+			"create_view", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public AddView makeNewAction(ViewLibraryObject focusedObject, Vector<ViewLibraryObject> globalSelection, FlexoEditor editor) 
-        {
-            return new AddView(focusedObject, globalSelection, editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public AddView makeNewAction(ViewLibraryObject focusedObject, Vector<ViewLibraryObject> globalSelection, FlexoEditor editor) {
+			return new AddView(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(ViewLibraryObject object, Vector<ViewLibraryObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(ViewLibraryObject object, Vector<ViewLibraryObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(ViewLibraryObject object, Vector<ViewLibraryObject> globalSelection) 
-        {
-            return (object instanceof ViewFolder 
-            		|| object instanceof ViewDefinition
-            		|| object instanceof ViewLibrary);
-        }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (AddView.actionType, ViewLibrary.class);
-        FlexoModelObject.addActionForClass (AddView.actionType, ViewFolder.class);
-        FlexoModelObject.addActionForClass (AddView.actionType, ViewDefinition.class);
-    }
-    
+		@Override
+		protected boolean isEnabledForSelection(ViewLibraryObject object, Vector<ViewLibraryObject> globalSelection) {
+			return (object instanceof ViewFolder || object instanceof ViewDefinition || object instanceof ViewLibrary);
+		}
 
-    
-     private ViewDefinition _newShema;
+	};
 
-     private ViewFolder _folder;
+	static {
+		FlexoModelObject.addActionForClass(AddView.actionType, ViewLibrary.class);
+		FlexoModelObject.addActionForClass(AddView.actionType, ViewFolder.class);
+		FlexoModelObject.addActionForClass(AddView.actionType, ViewDefinition.class);
+	}
 
-     public boolean useViewPoint = true;
-     public String newViewName;
-     public ViewPoint calc;       
-    
-    
-	AddView (ViewLibraryObject focusedObject, Vector<ViewLibraryObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	private ViewDefinition _newShema;
 
-    @Override
-	protected void doAction(Object context) throws DuplicateResourceException,NotImplementedException,InvalidParameterException, DuplicateShemaNameException
-    {
-       	logger.info ("Add shema");  	
-    	
-    	if (getFolder() == null) {
-    		throw new InvalidParameterException("folder is undefined");
-    	}
-    	if (StringUtils.isEmpty(newViewName)) {
-    		throw new InvalidParameterException("shema name is undefined");
-    	}
-    	if (getProject().getShemaLibrary().getShemaNamed(newViewName)!=null)
-    		throw new DuplicateShemaNameException(newViewName);
+	private ViewFolder _folder;
 
-    	_newShema = new ViewDefinition(newViewName, getFolder().getShemaLibrary(), getFolder(), getProject(),true);
-       	if (useViewPoint) _newShema.setCalc(calc);
-       	logger.info ("Added view "+_newShema+" for project "+_newShema.getProject());
-    	// Creates the resource here
-    	_newShema.getShemaResource();
-    }
+	public boolean useViewPoint = true;
+	public String newViewName;
+	public ViewPoint calc;
 
-     public FlexoProject getProject()
-    {
-    	if (getFocusedObject() != null) return getFocusedObject().getProject();
-    	return null;
-    }
-    
-    public ViewDefinition getNewShema() 
-    {
-        return _newShema;
-    }
+	AddView(ViewLibraryObject focusedObject, Vector<ViewLibraryObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    public ViewLibrary getShemaLibrary()
-    {
-    	if (getFocusedObject() != null) return getFocusedObject().getShemaLibrary();
-    	return null;
-    }
-    
-	public ViewFolder getFolder()
-	{
+	@Override
+	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException,
+			DuplicateShemaNameException {
+		logger.info("Add shema");
+
+		if (getFolder() == null) {
+			throw new InvalidParameterException("folder is undefined");
+		}
+		if (StringUtils.isEmpty(newViewName)) {
+			throw new InvalidParameterException("shema name is undefined");
+		}
+		if (getProject().getShemaLibrary().getShemaNamed(newViewName) != null)
+			throw new DuplicateShemaNameException(newViewName);
+
+		_newShema = new ViewDefinition(newViewName, getFolder().getShemaLibrary(), getFolder(), getProject(), true);
+		if (useViewPoint)
+			_newShema.setCalc(calc);
+		logger.info("Added view " + _newShema + " for project " + _newShema.getProject());
+		// Creates the resource here
+		_newShema.getShemaResource();
+	}
+
+	public FlexoProject getProject() {
+		if (getFocusedObject() != null)
+			return getFocusedObject().getProject();
+		return null;
+	}
+
+	public ViewDefinition getNewShema() {
+		return _newShema;
+	}
+
+	public ViewLibrary getShemaLibrary() {
+		if (getFocusedObject() != null)
+			return getFocusedObject().getShemaLibrary();
+		return null;
+	}
+
+	public ViewFolder getFolder() {
 		if (_folder == null) {
-		   if ((getFocusedObject() != null) && (getFocusedObject() instanceof ViewDefinition)) {
-            	_folder = ((ViewDefinition)getFocusedObject()).getFolder();
-            } else if ((getFocusedObject() != null) && (getFocusedObject() instanceof ViewFolder)) {
-            	_folder = (ViewFolder)getFocusedObject();
-            } else if ((getFocusedObject() != null) && (getFocusedObject() instanceof ViewLibrary)) {
-            	_folder = ((ViewLibrary)getFocusedObject()).getRootFolder();
-            }
+			if ((getFocusedObject() != null) && (getFocusedObject() instanceof ViewDefinition)) {
+				_folder = ((ViewDefinition) getFocusedObject()).getFolder();
+			} else if ((getFocusedObject() != null) && (getFocusedObject() instanceof ViewFolder)) {
+				_folder = (ViewFolder) getFocusedObject();
+			} else if ((getFocusedObject() != null) && (getFocusedObject() instanceof ViewLibrary)) {
+				_folder = ((ViewLibrary) getFocusedObject()).getRootFolder();
+			}
 
 		}
 		return _folder;
 	}
 
-	public void setFolder(ViewFolder folder) 
-	{
+	public void setFolder(ViewFolder folder) {
 		_folder = folder;
 	}
 
 	public String errorMessage;
-	
-	public boolean isValid()
-	{
+
+	public boolean isValid() {
 		if (getFolder() == null) {
 			errorMessage = FlexoLocalization.localizedForKey("no_folder_defined");
 			return false;
-		}
-		else if (calc == null && useViewPoint) {
+		} else if (calc == null && useViewPoint) {
 			errorMessage = FlexoLocalization.localizedForKey("no_view_point_selected");
 			return false;
 		}
-    	if (StringUtils.isEmpty(newViewName)) {
+		if (StringUtils.isEmpty(newViewName)) {
 			errorMessage = FlexoLocalization.localizedForKey("no_view_name_defined");
 			return false;
 		}

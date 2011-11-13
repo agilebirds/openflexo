@@ -19,11 +19,9 @@
  */
 package org.openflexo.foundation.ie.dm;
 
-public class DisplayNeedUpdate extends IEDataModification
-{
+public class DisplayNeedUpdate extends IEDataModification {
 
-    public DisplayNeedUpdate()
-    {
-        super(null, null);
-    }
+	public DisplayNeedUpdate() {
+		super(null, null);
+	}
 }

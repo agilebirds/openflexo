@@ -20,22 +20,20 @@
 package org.netbeans.lib.cvsclient.command;
 
 /**
- * Extended Builder interface. If implemented it's means
- * that farmework must call this interface {@link #parseBytes}
- * instead of {@link Builder#parseLine}.
- *
+ * Extended Builder interface. If implemented it's means that farmework must call this interface {@link #parseBytes} instead of
+ * {@link Builder#parseLine}.
+ * 
  * @author Petr Kuzel
  */
 public interface BinaryBuilder {
 
-    /**
-     * Raw binary data from stream. One <tt>Mbinary</tt>
-     * is typicaly splitted into several chunks.
-     *
-     * @param chunk one data chunk. It must be cloned
-     * if builer wants to retain data after finishing
-     * this callback.
-     * @param len defines valid data length 
-     */
-    void parseBytes(byte[] chunk, int len);
+	/**
+	 * Raw binary data from stream. One <tt>Mbinary</tt> is typicaly splitted into several chunks.
+	 * 
+	 * @param chunk
+	 *            one data chunk. It must be cloned if builer wants to retain data after finishing this callback.
+	 * @param len
+	 *            defines valid data length
+	 */
+	void parseBytes(byte[] chunk, int len);
 }

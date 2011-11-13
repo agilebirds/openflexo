@@ -37,86 +37,81 @@ import org.openflexo.logging.FlexoLogger;
 
 /**
  * @author sylvain
- *
+ * 
  */
-public class OperationComponentWOFileResource extends ComponentWOFileResource<PageComponentGenerator> implements OperationComponentFileResource, FlexoObserver
-{
-    protected static final Logger logger = FlexoLogger.getLogger(OperationComponentWOFileResource.class.getPackage().getName());
+public class OperationComponentWOFileResource extends ComponentWOFileResource<PageComponentGenerator> implements
+		OperationComponentFileResource, FlexoObserver {
+	protected static final Logger logger = FlexoLogger.getLogger(OperationComponentWOFileResource.class.getPackage().getName());
 
-    public void registerObserverWhenRequired()
-    {
-    	if ((!isObserverRegistered) && (getComponentDefinition() != null)) {
-    		isObserverRegistered = true;
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("*** addObserver "+getFileName()+" for "+getComponentDefinition());
-    		getComponentDefinition().addObserver(this);
-    	}
-    }
-
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-	public void rebuildDependancies()
-    {
-        super.rebuildDependancies();
-    	if (getGenerator() != null) {
-    		for (ComponentInstance ci : getGenerator().getComponentDefinition().getComponentInstances()) {
-    			if (ci instanceof OperationComponentInstance)
-    				addToDependantResources(((OperationComponentInstance)ci).getOperationNode().getProcess().getFlexoResource());
-    		}
-    	}
-    }
-
-    /**
-     * @param builder
-     */
-    public OperationComponentWOFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
-
-    /**
-     * @param aProject
-     */
-    public OperationComponentWOFileResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
+	public void registerObserverWhenRequired() {
+		if ((!isObserverRegistered) && (getComponentDefinition() != null)) {
+			isObserverRegistered = true;
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("*** addObserver " + getFileName() + " for " + getComponentDefinition());
+			getComponentDefinition().addObserver(this);
+		}
+	}
 
 	/**
-     * Return dependancy computing between this resource, and an other resource,
-     * asserting that this resource is contained in this resource's dependant resources
-     *
-     * @param resource
-	 * @param dependancyScheme
-     * @return
-     */
+	 * Rebuild resource dependancies for this resource
+	 */
 	@Override
-	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate)
-	{
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
+		if (getGenerator() != null) {
+			for (ComponentInstance ci : getGenerator().getComponentDefinition().getComponentInstances()) {
+				if (ci instanceof OperationComponentInstance)
+					addToDependantResources(((OperationComponentInstance) ci).getOperationNode().getProcess().getFlexoResource());
+			}
+		}
+	}
+
+	/**
+	 * @param builder
+	 */
+	public OperationComponentWOFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
+
+	/**
+	 * @param aProject
+	 */
+	public OperationComponentWOFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
+
+	/**
+	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this
+	 * resource's dependant resources
+	 * 
+	 * @param resource
+	 * @param dependancyScheme
+	 * @return
+	 */
+	@Override
+	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate) {
 		if (resource instanceof FlexoProcessResource) {
-			FlexoProcessResource processRes = (FlexoProcessResource)resource;
+			FlexoProcessResource processRes = (FlexoProcessResource) resource;
 			if (processRes.isLoaded()) {
 				FlexoProcess concernedProcess = processRes.getResourceData();
 				if (getGenerator() != null) {
 					boolean iCanBeOptimistic = true;
 					for (ComponentInstance ci : getGenerator().getComponentDefinition().getComponentInstances()) {
 						if (ci instanceof OperationComponentInstance) {
-							OperationNode operationNode = ((OperationComponentInstance)ci).getOperationNode();
+							OperationNode operationNode = ((OperationComponentInstance) ci).getOperationNode();
 							if (operationNode.getProcess() == concernedProcess) {
 								if (!operationNode.getLastUpdate().before(requestDate)) {
 									iCanBeOptimistic = false;
 								}
 							}
 						}
-		    		}
-		    		if (iCanBeOptimistic) return false;
-		    	}
+					}
+					if (iCanBeOptimistic)
+						return false;
+				}
 			}
 		}
 		return super.optimisticallyDependsOf(resource, requestDate);
 	}
-
 
 }

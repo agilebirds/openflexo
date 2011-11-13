@@ -28,110 +28,92 @@ import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.rm.FlexoProject;
 
-
 /**
  * Widget allowing to select an Ontology Individual while browsing the ontology library
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class OntologyIndividualSelector extends AbstractBrowserSelector<OntologyIndividual>
-{
+public class OntologyIndividualSelector extends AbstractBrowserSelector<OntologyIndividual> {
 
-    protected static final String EMPTY_STRING = "";
-    protected String STRING_REPRESENTATION_WHEN_NULL = EMPTY_STRING;
+	protected static final String EMPTY_STRING = "";
+	protected String STRING_REPRESENTATION_WHEN_NULL = EMPTY_STRING;
 
-    private OntologyLibrary ontologyLibrary;
+	private OntologyLibrary ontologyLibrary;
 
-    public OntologyIndividualSelector(OntologyIndividual object)
-    {
-        super(null, object, OntologyIndividual.class);
-    }
+	public OntologyIndividualSelector(OntologyIndividual object) {
+		super(null, object, OntologyIndividual.class);
+	}
 
-    public OntologyIndividualSelector(OntologyLibrary ontologyLibrary, OntologyIndividual object, int cols)
-    {
-        super(null, object, OntologyIndividual.class, cols);
-        setOntologyLibrary(ontologyLibrary);
-    }
+	public OntologyIndividualSelector(OntologyLibrary ontologyLibrary, OntologyIndividual object, int cols) {
+		super(null, object, OntologyIndividual.class, cols);
+		setOntologyLibrary(ontologyLibrary);
+	}
 
-    public OntologyLibrary getOntologyLibrary()
-    {
-    	return ontologyLibrary;
-    }
+	public OntologyLibrary getOntologyLibrary() {
+		return ontologyLibrary;
+	}
 
-    public void setOntologyLibrary(OntologyLibrary ontologyLibrary)
-    {
-    	this.ontologyLibrary = ontologyLibrary;
-    }
+	public void setOntologyLibrary(OntologyLibrary ontologyLibrary) {
+		this.ontologyLibrary = ontologyLibrary;
+	}
 
+	@Override
+	protected OntologyIndividualSelectorPanel makeCustomPanel(OntologyIndividual editedObject) {
+		return new OntologyIndividualSelectorPanel();
+	}
 
-    @Override
-	protected OntologyIndividualSelectorPanel makeCustomPanel(OntologyIndividual editedObject)
-    {
-        return new OntologyIndividualSelectorPanel();
-    }
+	@Override
+	public String renderedString(OntologyIndividual editedObject) {
+		if (editedObject != null) {
+			return editedObject.getName();
+		}
+		return STRING_REPRESENTATION_WHEN_NULL;
+	}
 
-    @Override
-	public String renderedString(OntologyIndividual editedObject)
-    {
-        if (editedObject != null) {
-            return editedObject.getName();
-        }
-        return STRING_REPRESENTATION_WHEN_NULL;
-    }
+	protected class OntologyIndividualSelectorPanel extends AbstractSelectorPanel<OntologyIndividual> {
+		protected OntologyIndividualSelectorPanel() {
+			super(OntologyIndividualSelector.this);
+		}
 
-    protected class OntologyIndividualSelectorPanel extends AbstractSelectorPanel<OntologyIndividual>
-    {
-        protected OntologyIndividualSelectorPanel()
-        {
-            super(OntologyIndividualSelector.this);
-        }
+		@Override
+		protected ProjectBrowser createBrowser(FlexoProject project) {
+			return new OntologyBrowser();
+		}
 
-        @Override
-		protected ProjectBrowser createBrowser(FlexoProject project)
-        {
-            return new OntologyBrowser();
-        }
+	}
 
-    }
+	protected class OntologyBrowser extends ProjectBrowser {
 
-    protected class OntologyBrowser extends ProjectBrowser
-    {
+		protected OntologyBrowser() {
+			super((getOntologyLibrary() != null ? getOntologyLibrary().getProject() : null), false);
+			init();
+		}
 
-        protected OntologyBrowser()
-        {
-            super((getOntologyLibrary()!=null?getOntologyLibrary().getProject():null), false);
-            init();
-        }
+		@Override
+		public void configure() {
+			setFilterStatus(BrowserElementType.ONTOLOGY_CLASS, BrowserFilterStatus.SHOW);
+			setFilterStatus(BrowserElementType.ONTOLOGY_INDIVIDUAL, BrowserFilterStatus.SHOW);
+			setFilterStatus(BrowserElementType.ONTOLOGY_DATA_PROPERTY, BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.ONTOLOGY_OBJECT_PROPERTY, BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.ONTOLOGY_STATEMENT, BrowserFilterStatus.HIDE);
+			setOEViewMode(OEViewMode.FullHierarchy);
+		}
 
-        @Override
-		public void configure()
-        {
-     		setFilterStatus(BrowserElementType.ONTOLOGY_CLASS, BrowserFilterStatus.SHOW);
-    		setFilterStatus(BrowserElementType.ONTOLOGY_INDIVIDUAL, BrowserFilterStatus.SHOW);
-    		setFilterStatus(BrowserElementType.ONTOLOGY_DATA_PROPERTY, BrowserFilterStatus.HIDE);
-    		setFilterStatus(BrowserElementType.ONTOLOGY_OBJECT_PROPERTY, BrowserFilterStatus.HIDE);
-    		setFilterStatus(BrowserElementType.ONTOLOGY_STATEMENT, BrowserFilterStatus.HIDE);
-        	setOEViewMode(OEViewMode.FullHierarchy);
-        }
+		@Override
+		public FlexoModelObject getDefaultRootObject() {
+			if (getOntologyLibrary() != null)
+				return getOntologyLibrary().getRootClass();
+			return null;
+		}
+	}
 
-        @Override
-		public FlexoModelObject getDefaultRootObject()
-        {
-        	if (getOntologyLibrary() != null)
-        		return getOntologyLibrary().getRootClass();
-        	return null;
-        }
-     }
+	public void setNullStringRepresentation(String aString) {
+		STRING_REPRESENTATION_WHEN_NULL = aString;
+	}
 
-    public void setNullStringRepresentation(String aString)
-    {
-        STRING_REPRESENTATION_WHEN_NULL = aString;
-    }
-
-    public void setOntologyClass(OntologyClass aClass)
-    {
-    	super.setRootObject(aClass);
-    }
+	public void setOntologyClass(OntologyClass aClass) {
+		super.setRootObject(aClass);
+	}
 
 }

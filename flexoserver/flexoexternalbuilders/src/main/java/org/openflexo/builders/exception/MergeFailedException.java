@@ -1,11 +1,11 @@
 package org.openflexo.builders.exception;
+
 import java.util.Vector;
 
 import org.openflexo.fps.CVSFile;
 
 /**
- * This exception is thrown whenever the merge cannot be fully completed.
- * Conflicting files can be retrieved from this exception.
+ * This exception is thrown whenever the merge cannot be fully completed. Conflicting files can be retrieved from this exception.
  * 
  * @author gpolet
  * 
@@ -37,10 +37,10 @@ public class MergeFailedException extends FlexoRunException {
 
 	@Override
 	public String getMessage() {
-		StringBuilder  sb = new StringBuilder();
+		StringBuilder sb = new StringBuilder();
 		for (CVSFile cvsFile : conflictingFiles) {
 			sb.append(cvsFile.getFileName()).append(", ");
 		}
-		return "The following files were in conflict: "+sb.toString();
+		return "The following files were in conflict: " + sb.toString();
 	}
 }

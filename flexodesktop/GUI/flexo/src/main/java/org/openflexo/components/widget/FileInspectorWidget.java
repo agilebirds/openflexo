@@ -32,99 +32,88 @@ import org.openflexo.inspector.model.PropertyModel;
 import org.openflexo.inspector.widget.WidgetFocusListener;
 import org.openflexo.swing.FileSelector;
 
-
 /**
  * widget for selecting a file in the file system...
  * 
  * @author Denis VANVYVE
  * 
  */
-public class FileInspectorWidget extends CustomInspectorWidget<File>
-{
+public class FileInspectorWidget extends CustomInspectorWidget<File> {
 
-    static final Logger logger = Logger.getLogger(FileInspectorWidget.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(FileInspectorWidget.class.getPackage().getName());
 
-    FileSelector _selector;
+	FileSelector _selector;
 
-    public FileInspectorWidget(PropertyModel model, AbstractController controller)
-    {
-        super(model,controller);
-        _selector = new FileSelector() {
-            @Override
-			public void setEditedFile(File aFile)
-            {
-                super.setEditedObject(aFile);
-                updateModelFromWidget();
-            }
-        };
-        getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
-            @Override
-			public void focusGained(FocusEvent arg0)
-            {
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("Focus gained in " + getClass().getName());
-                super.focusGained(arg0);
-                _selector.getTextField().requestFocus();
-                _selector.getTextField().selectAll();
-            }
+	public FileInspectorWidget(PropertyModel model, AbstractController controller) {
+		super(model, controller);
+		_selector = new FileSelector() {
+			@Override
+			public void setEditedFile(File aFile) {
+				super.setEditedObject(aFile);
+				updateModelFromWidget();
+			}
+		};
+		getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				if (logger.isLoggable(Level.FINE))
+					logger.fine("Focus gained in " + getClass().getName());
+				super.focusGained(arg0);
+				_selector.getTextField().requestFocus();
+				_selector.getTextField().selectAll();
+			}
 
-            @Override
-			public void focusLost(FocusEvent arg0)
-            {
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("Focus lost in " + getClass().getName());
-                super.focusLost(arg0);
-            }
-        });
-    }
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				if (logger.isLoggable(Level.FINE))
+					logger.fine("Focus lost in " + getClass().getName());
+				super.focusLost(arg0);
+			}
+		});
+	}
 
-    @Override
-	public synchronized void updateWidgetFromModel()
-    {
-        _selector.setEditedObject(getObjectValue());
-        _selector.setRevertValue(getObjectValue());
-    }
+	@Override
+	public synchronized void updateWidgetFromModel() {
+		_selector.setEditedObject(getObjectValue());
+		_selector.setRevertValue(getObjectValue());
+	}
 
-    /**
-     * Update the model given the actual state of the widget
-     */
-    @Override
-	public synchronized void updateModelFromWidget()
-    {
-    	if (logger.isLoggable(Level.INFO)) logger.info("FileSelector getEditedObject: "+_selector.getEditedObject());
-        setObjectValue(_selector.getEditedObject());
-    	super.updateModelFromWidget();
-   }
+	/**
+	 * Update the model given the actual state of the widget
+	 */
+	@Override
+	public synchronized void updateModelFromWidget() {
+		if (logger.isLoggable(Level.INFO))
+			logger.info("FileSelector getEditedObject: " + _selector.getEditedObject());
+		setObjectValue(_selector.getEditedObject());
+		super.updateModelFromWidget();
+	}
 
-    @Override
-	public JComponent getDynamicComponent()
-    {
-        return _selector;
-    }
+	@Override
+	public JComponent getDynamicComponent() {
+		return _selector;
+	}
 
-    @Override
-	public void setProject(FlexoProject aProject)
-    {
-        super.setProject(aProject);
-    }
+	@Override
+	public void setProject(FlexoProject aProject) {
+		super.setProject(aProject);
+	}
 
-    @Override
-	public Class getDefaultType()
-    {
-        return File.class;
-    }
+	@Override
+	public Class getDefaultType() {
+		return File.class;
+	}
 
-    @Override
-    public void fireEditingCanceled() 
-    {
-    	if (_selector != null) _selector.closePopup();
-    }
-    
-    @Override
-    public void fireEditingStopped()     
-    {
-    	if (_selector != null) _selector.closePopup();
-    }
+	@Override
+	public void fireEditingCanceled() {
+		if (_selector != null)
+			_selector.closePopup();
+	}
 
+	@Override
+	public void fireEditingStopped() {
+		if (_selector != null)
+			_selector.closePopup();
+	}
 
 }

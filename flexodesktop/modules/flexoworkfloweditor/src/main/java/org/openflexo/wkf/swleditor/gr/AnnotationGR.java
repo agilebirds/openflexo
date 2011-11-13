@@ -39,29 +39,28 @@ import org.openflexo.foundation.wkf.FlexoLevel;
 import org.openflexo.foundation.wkf.WKFAnnotation;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
-
 public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 
 	private static final Logger logger = Logger.getLogger(AnnotationGR.class.getPackage().getName());
 
 	private static final double SMALL_EDGE = 0.1;
 
-	private static final FGEPoint[] INCOMING_ANNOTATION_BORDER=new FGEPoint[]{ new FGEPoint(SMALL_EDGE,0), new FGEPoint(0,0), new FGEPoint(0,1), new FGEPoint(SMALL_EDGE,1)};
-	private static final FGEPoint[] OUTGOING_ANNOTATION_BORDER=new FGEPoint[]{ new FGEPoint(1-SMALL_EDGE,0), new FGEPoint(1,0), new FGEPoint(1,1), new FGEPoint(1-SMALL_EDGE,1)};
-	//private boolean isUpdatingPosition = false;
+	private static final FGEPoint[] INCOMING_ANNOTATION_BORDER = new FGEPoint[] { new FGEPoint(SMALL_EDGE, 0), new FGEPoint(0, 0),
+			new FGEPoint(0, 1), new FGEPoint(SMALL_EDGE, 1) };
+	private static final FGEPoint[] OUTGOING_ANNOTATION_BORDER = new FGEPoint[] { new FGEPoint(1 - SMALL_EDGE, 0), new FGEPoint(1, 0),
+			new FGEPoint(1, 1), new FGEPoint(1 - SMALL_EDGE, 1) };
 
-	public AnnotationGR(WKFAnnotation annotation, SwimmingLaneRepresentation aDrawing)
-	{
+	// private boolean isUpdatingPosition = false;
+
+	public AnnotationGR(WKFAnnotation annotation, SwimmingLaneRepresentation aDrawing) {
 		super(annotation, ShapeType.RECTANGLE, aDrawing);
-		int offset = annotation.isBoundingBox()?2:0;
+		int offset = annotation.isBoundingBox() ? 2 : 0;
 		if (getDrawable().getLevel() == FlexoLevel.ACTIVITY) {
-			setLayer(ACTIVITY_LAYER-offset);
-		}
-		else if (getDrawable().getLevel() == FlexoLevel.OPERATION) {
-			setLayer(OPERATION_LAYER-offset);
-		}
-		else if (getDrawable().getLevel() == FlexoLevel.ACTION) {
-			setLayer(ACTION_LAYER-offset);
+			setLayer(ACTIVITY_LAYER - offset);
+		} else if (getDrawable().getLevel() == FlexoLevel.OPERATION) {
+			setLayer(OPERATION_LAYER - offset);
+		} else if (getDrawable().getLevel() == FlexoLevel.ACTION) {
+			setLayer(ACTION_LAYER - offset);
 		}
 		setShapePainter(new ShapePainter() {
 
@@ -71,9 +70,9 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 					if (getAnnotation().hasIncomingAssociations() || getAnnotation().hasOutgoingAssociations()) {
 						g.setDefaultForeground(ForegroundStyle.makeDefault());
 						g.useDefaultForegroundStyle();
-						for (int i = 0; i < INCOMING_ANNOTATION_BORDER.length-1; i++) {
+						for (int i = 0; i < INCOMING_ANNOTATION_BORDER.length - 1; i++) {
 							FGEPoint p1 = INCOMING_ANNOTATION_BORDER[i];
-							FGEPoint p2 = INCOMING_ANNOTATION_BORDER[i+1];
+							FGEPoint p2 = INCOMING_ANNOTATION_BORDER[i + 1];
 							g.drawLine(p1, p2);
 						}
 					}
@@ -91,8 +90,7 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 		});
 	}
 
-	public WKFAnnotation getAnnotation()
-	{
+	public WKFAnnotation getAnnotation() {
 		return getDrawable();
 	}
 
@@ -121,12 +119,13 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 				found = true;
 				while (en.hasMoreElements()) {
 					GraphicalRepresentation<?> gr = en.nextElement();
-					if (gr instanceof AnnotationGR && ((AnnotationGR)gr).getDrawable().isBoundingBox()) {
-						AnnotationGR rgr =  (AnnotationGR) gr;
+					if (gr instanceof AnnotationGR && ((AnnotationGR) gr).getDrawable().isBoundingBox()) {
+						AnnotationGR rgr = (AnnotationGR) gr;
 						if (rgr != this) {
 							if (rgr.hasLocation()) {
 								java.awt.Rectangle viewBounds = gr.getViewBounds(1.0);
-								if (viewBounds.intersects(new java.awt.Rectangle((int)attemptX,(int) attemptY, (int) getWidth(), (int) getHeight()))) {
+								if (viewBounds.intersects(new java.awt.Rectangle((int) attemptX, (int) attemptY, (int) getWidth(),
+										(int) getHeight()))) {
 									// The attempt location intersects with another one, let's move forward
 									found = false;
 									if (viewBounds.x + viewBounds.width + getWidth() > getDrawingGraphicalRepresentation().getWidth()) {
@@ -169,8 +168,7 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 	}
 
 	@Override
-	public void updatePropertiesFromWKFPreferences()
-	{
+	public void updatePropertiesFromWKFPreferences() {
 		super.updatePropertiesFromWKFPreferences();
 		if (getAnnotation().isAnnotation()) {
 			setBackground(BackgroundStyle.makeEmptyBackground());
@@ -181,19 +179,17 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 			setAdjustMaximalWidthToLabelWidth(true);
 			setAdjustMaximalHeightToLabelHeight(true);
 			setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
-		}
-		else {
+		} else {
 			if (getAnnotation().getIsSolidBackground()) {
 				setBackground(BackgroundStyle.makeColoredBackground(getAnnotation().getBackgroundColor()));
-			}
-			else {
+			} else {
 				setBackground(BackgroundStyle.makeEmptyBackground());
 			}
 			if (getAnnotation().getDashStyle() == null) {
 				getAnnotation().setDashStyle(DashStyle.DOT_LINES_DASHES);
 			}
-			setForeground(ForegroundStyle.makeStyle(getAnnotation().getBorderColor(), 1.0f, (DashStyle)getAnnotation().getDashStyle()));
-			((Rectangle)getShape()).setIsRounded(getAnnotation().getIsRounded());
+			setForeground(ForegroundStyle.makeStyle(getAnnotation().getBorderColor(), 1.0f, (DashStyle) getAnnotation().getDashStyle()));
+			((Rectangle) getShape()).setIsRounded(getAnnotation().getIsRounded());
 			setIsFloatingLabel(true);
 			setAdjustMinimalWidthToLabelWidth(false);
 			setAdjustMinimalHeightToLabelHeight(false);
@@ -204,7 +200,7 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 		if (getAnnotation().getTextAlignment() == null) {
 			getAnnotation().setTextAlignment(GraphicalRepresentation.TextAlignment.CENTER);
 		}
-		setTextAlignment((TextAlignment)getAnnotation().getTextAlignment());
+		setTextAlignment((TextAlignment) getAnnotation().getTextAlignment());
 	}
 
 }

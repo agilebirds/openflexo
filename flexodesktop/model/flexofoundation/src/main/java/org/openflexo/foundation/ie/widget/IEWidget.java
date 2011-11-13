@@ -89,7 +89,6 @@ import org.openflexo.toolbox.DateUtils;
 import org.openflexo.toolbox.EmptyVector;
 import org.openflexo.toolbox.ToolBox;
 
-
 public abstract class IEWidget extends IEAbstractWidget implements InspectableObject, DeletableObject, /* Serializable, */Validable,
 		Bindable, Indexable, IWidget {
 	private static final Logger logger = Logger.getLogger(IEWidget.class.getPackage().getName());
@@ -859,10 +858,10 @@ public abstract class IEWidget extends IEAbstractWidget implements InspectableOb
 				return null;
 			}
 		} /*
-		 * else { if (!(getParent() instanceof IESequenceTopComponent)) if (logger.isLoggable(Level.WARNING))
-		 * logger.warning("widgets located within a " + getParent().getClass().getName() + " are not capable to find their label"); return
-		 * null; }
-		 */
+			* else { if (!(getParent() instanceof IESequenceTopComponent)) if (logger.isLoggable(Level.WARNING))
+			* logger.warning("widgets located within a " + getParent().getClass().getName() + " are not capable to find their label"); return
+			* null; }
+			*/
 		return null;
 	}
 

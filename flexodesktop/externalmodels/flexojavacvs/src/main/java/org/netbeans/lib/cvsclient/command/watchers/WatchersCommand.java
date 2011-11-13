@@ -31,137 +31,132 @@ import org.netbeans.lib.cvsclient.event.TerminationEvent;
 import org.netbeans.lib.cvsclient.request.CommandRequest;
 
 /**
- * The watchers command looks up who is watching this file,
- * who is interested in it.
- *
+ * The watchers command looks up who is watching this file, who is interested in it.
+ * 
  * @author Milos Kleint
  * @author Thomas Singer
  */
 public class WatchersCommand extends BasicCommand {
-    /**
-     * Construct a new watchers command.
-     */
-    public WatchersCommand() {
-        resetCVSCommand();
-    }
+	/**
+	 * Construct a new watchers command.
+	 */
+	public WatchersCommand() {
+		resetCVSCommand();
+	}
 
-    /**
-     * Creates and returns the WatchersBuilder.
-     *
-     * @param eventMan the event manager used to receive events.
-     */
-    @Override
+	/**
+	 * Creates and returns the WatchersBuilder.
+	 * 
+	 * @param eventMan
+	 *            the event manager used to receive events.
+	 */
+	@Override
 	public Builder createBuilder(EventManager eventManager) {
-        return new WatchersBuilder(eventManager, getLocalDirectory());
-    }
+		return new WatchersBuilder(eventManager, getLocalDirectory());
+	}
 
-    /**
-     * Executes this command.
-     *
-     * @param client the client services object that provides any necessary
-     *               services to this command, including the ability to actually
-     *               process all the requests
-     */
-    @Override
-	public void execute(ClientServices client, EventManager eventManager)
-            throws CommandException, AuthenticationException {
-        client.ensureConnection();
+	/**
+	 * Executes this command.
+	 * 
+	 * @param client
+	 *            the client services object that provides any necessary services to this command, including the ability to actually process
+	 *            all the requests
+	 */
+	@Override
+	public void execute(ClientServices client, EventManager eventManager) throws CommandException, AuthenticationException {
+		client.ensureConnection();
 
-        super.execute(client, eventManager);
+		super.execute(client, eventManager);
 
-        try {
-            addRequestForWorkingDirectory(client);
-            addArgumentRequests();
-            addRequest(CommandRequest.WATCHERS);
+		try {
+			addRequestForWorkingDirectory(client);
+			addArgumentRequests();
+			addRequest(CommandRequest.WATCHERS);
 
-            client.processRequests(requests);
-        }
-        catch (CommandException ex) {
-            throw ex;
-        }
-        catch (Exception ex) {
-            throw new CommandException(ex, ex.getLocalizedMessage());
-        }
-        finally {
-            requests.clear();
-        }
-    }
+			client.processRequests(requests);
+		} catch (CommandException ex) {
+			throw ex;
+		} catch (Exception ex) {
+			throw new CommandException(ex, ex.getLocalizedMessage());
+		} finally {
+			requests.clear();
+		}
+	}
 
-    /**
-     * called when server responses with "ok" or "error", (when the command finishes)
-     */
-    @Override
+	/**
+	 * called when server responses with "ok" or "error", (when the command finishes)
+	 */
+	@Override
 	public void commandTerminated(TerminationEvent e) {
-        if (builder != null) {
-            builder.outputDone();
-        }
-    }
+		if (builder != null) {
+			builder.outputDone();
+		}
+	}
 
-    /**
-     * This method returns how the command would looklike when typed on the command line.
-     * Each command is responsible for constructing this information.
-     * @returns <command's name> [<parameters>] files/dirs. Example: checkout -p CvsCommand.java
-     */
-    @Override
+	/**
+	 * This method returns how the command would looklike when typed on the command line. Each command is responsible for constructing this
+	 * information.
+	 * 
+	 * @returns <command's name> [<parameters>] files/dirs. Example: checkout -p CvsCommand.java
+	 */
+	@Override
 	public String getCVSCommand() {
-        StringBuffer toReturn = new StringBuffer("watchers "); //NOI18N
-        toReturn.append(getCVSArguments());
-        File[] files = getFiles();
-        if (files != null) {
-            for (int index = 0; index < files.length; index++) {
-                toReturn.append(files[index].getName());
-                toReturn.append(' ');
-            }
-        }
-        return toReturn.toString();
-    }
+		StringBuffer toReturn = new StringBuffer("watchers "); // NOI18N
+		toReturn.append(getCVSArguments());
+		File[] files = getFiles();
+		if (files != null) {
+			for (int index = 0; index < files.length; index++) {
+				toReturn.append(files[index].getName());
+				toReturn.append(' ');
+			}
+		}
+		return toReturn.toString();
+	}
 
-    /**
-     * takes the arguments and sets the command. To be mainly
-     * used for automatic settings (like parsing the .cvsrc file)
-     * @return true if the option (switch) was recognized and set
-     */
-    @Override
+	/**
+	 * takes the arguments and sets the command. To be mainly used for automatic settings (like parsing the .cvsrc file)
+	 * 
+	 * @return true if the option (switch) was recognized and set
+	 */
+	@Override
 	public boolean setCVSCommand(char opt, String optArg) {
-        if (opt == 'R') {
-            setRecursive(true);
-        }
-        else if (opt == 'l') {
-            setRecursive(false);
-        }
-        else {
-            return false;
-        }
-        return true;
-    }
+		if (opt == 'R') {
+			setRecursive(true);
+		} else if (opt == 'l') {
+			setRecursive(false);
+		} else {
+			return false;
+		}
+		return true;
+	}
 
-    /**
-     * String returned by this method defines which options are available for this particular command
-     */
-    @Override
+	/**
+	 * String returned by this method defines which options are available for this particular command
+	 */
+	@Override
 	public String getOptString() {
-        return "Rl"; //NOI18N
-    }
+		return "Rl"; // NOI18N
+	}
 
-    /**
-     * resets all switches in the command. After calling this method,
-     * the command should have no switches defined and should behave defaultly.
-     */
-    @Override
+	/**
+	 * resets all switches in the command. After calling this method, the command should have no switches defined and should behave
+	 * defaultly.
+	 */
+	@Override
 	public void resetCVSCommand() {
-        setRecursive(true);
-    }
+		setRecursive(true);
+	}
 
-    /**
-     * Returns the arguments of the command in the command-line style.
-     * Similar to getCVSCommand() however without the files and command's name
-     */
-    @Override
+	/**
+	 * Returns the arguments of the command in the command-line style. Similar to getCVSCommand() however without the files and command's
+	 * name
+	 */
+	@Override
 	public String getCVSArguments() {
-        StringBuffer toReturn = new StringBuffer();
-        if (!isRecursive()) {
-            toReturn.append("-l "); //NOI18N
-        }
-        return toReturn.toString();
-    }
+		StringBuffer toReturn = new StringBuffer();
+		if (!isRecursive()) {
+			toReturn.append("-l "); // NOI18N
+		}
+		return toReturn.toString();
+	}
 }

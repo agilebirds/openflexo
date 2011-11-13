@@ -35,92 +35,87 @@ import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.external.ExternalGeneratorModule;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
-
 /**
  * Data Model Editor module
- *
+ * 
  * @author sguerin
  */
-public class GeneratorModule extends FlexoModule implements ExternalGeneratorModule
-{
+public class GeneratorModule extends FlexoModule implements ExternalGeneratorModule {
 
 	private static final Logger logger = Logger.getLogger(GeneratorModule.class.getPackage().getName());
-	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[]{Inspectors.GENERATORS,Inspectors.CG};
+	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.GENERATORS, Inspectors.CG };
+
 	/**
-	 * The 'main' method of module allow to launch this module as a
-	 * single-module application
-	 *
+	 * The 'main' method of module allow to launch this module as a single-module application
+	 * 
 	 * @param args
 	 */
-	public static void main(String[] args) throws Exception
-	{
+	public static void main(String[] args) throws Exception {
 		FlexoLoggingManager.initialize();
 		FlexoApplication.initialize();
 		ModuleLoader.initializeSingleModule(Module.CG_MODULE);
 	}
 
-	public GeneratorModule(InteractiveFlexoEditor projectEditor) throws Exception
-	{
+	public GeneratorModule(InteractiveFlexoEditor projectEditor) throws Exception {
 		super(projectEditor);
-		setFlexoController(new GeneratorController(projectEditor,this));
+		setFlexoController(new GeneratorController(projectEditor, this));
 		GeneratorPreferences.init(getGeneratorController());
-		if (getProject().getGeneratedCode().getGeneratedRepositories().size()==0) {
+		if (getProject().getGeneratedCode().getGeneratedRepositories().size() == 0) {
 			getGeneratorController().setCurrentEditedObjectAsModuleView(getProject().getGeneratedCode());
 			getGeneratorController().selectAndFocusObject(getProject().getGeneratedCode());
 		} else {
-			getGeneratorController().setCurrentEditedObjectAsModuleView(getProject().getGeneratedCode().getGeneratedRepositories().firstElement());
+			getGeneratorController().setCurrentEditedObjectAsModuleView(
+					getProject().getGeneratedCode().getGeneratedRepositories().firstElement());
 			getGeneratorController().selectAndFocusObject(getProject().getGeneratedCode().getGeneratedRepositories().firstElement());
 		}
 	}
 
 	@Override
-	public InspectorGroup[] getInspectorGroups()
-	{
+	public InspectorGroup[] getInspectorGroups() {
 		return inspectorGroups;
 	}
 
-	public GeneratorController getGeneratorController()
-	{
+	public GeneratorController getGeneratorController() {
 		return (GeneratorController) getFlexoController();
 	}
 
 	/**
 	 * SGU: what's that ?
+	 * 
 	 * @deprecated
 	 */
-	 @Override
-	 @Deprecated
-	 public String generateCode(FlexoProject project, String templateName, Map replacement)
-	 {
-		 logger.warning("deprecated ?");
-		 /*try {
-			return Generator.generateCode(project, templateName, replacement);
+	@Override
+	@Deprecated
+	public String generateCode(FlexoProject project, String templateName, Map replacement) {
+		logger.warning("deprecated ?");
+		/*try {
+		return Generator.generateCode(project, templateName, replacement);
 		} catch (TemplateReplacementException e) {
-			e.printStackTrace();
-			return null;
+		e.printStackTrace();
+		return null;
 		}*/
-		 return "deprecated";
-	 }
+		return "deprecated";
+	}
 
-	 /**
-	  * Overrides getDefaultObjectToSelect
-	  * @see org.openflexo.module.FlexoModule#getDefaultObjectToSelect()
-	  */
-	 @Override
-	 public FlexoModelObject getDefaultObjectToSelect()
-	 {
-		 return getProject().getGeneratedCode();
-	 }
+	/**
+	 * Overrides getDefaultObjectToSelect
+	 * 
+	 * @see org.openflexo.module.FlexoModule#getDefaultObjectToSelect()
+	 */
+	@Override
+	public FlexoModelObject getDefaultObjectToSelect() {
+		return getProject().getGeneratedCode();
+	}
 
-	 /**
-	  * Overrides moduleWillClose
-	  * @see org.openflexo.module.FlexoModule#moduleWillClose()
-	  */
-	 @Override
-	 public void moduleWillClose()
-	 {
-		 super.moduleWillClose();
-		 getProject().getGeneratedCode().setFactory(null);
-		 GeneratorPreferences.reset();
-	 }
+	/**
+	 * Overrides moduleWillClose
+	 * 
+	 * @see org.openflexo.module.FlexoModule#moduleWillClose()
+	 */
+	@Override
+	public void moduleWillClose() {
+		super.moduleWillClose();
+		getProject().getGeneratedCode().setFactory(null);
+		GeneratorPreferences.reset();
+	}
 }

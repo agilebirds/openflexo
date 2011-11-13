@@ -31,70 +31,66 @@ import javax.swing.JPanel;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.FlexoController;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class AvailablePerspectives extends JPanel
-{
-	   protected static final Logger logger = Logger.getLogger(AvailablePerspectives.class.getPackage().getName());
+public class AvailablePerspectives extends JPanel {
+	protected static final Logger logger = Logger.getLogger(AvailablePerspectives.class.getPackage().getName());
 
-	   protected final FlexoController controller;
+	protected final FlexoController controller;
 
-    private Hashtable<FlexoPerspective<?>,FlexoPerspectiveView> views;
+	private Hashtable<FlexoPerspective<?>, FlexoPerspectiveView> views;
 
-    /**
+	/**
      *
      */
-    public AvailablePerspectives(FlexoController controller)
-    {
-        super(new FlowLayout(FlowLayout.CENTER, 0, 0));
-        this.controller = controller;
-        views = new Hashtable<FlexoPerspective<?>,FlexoPerspectiveView>();
+	public AvailablePerspectives(FlexoController controller) {
+		super(new FlowLayout(FlowLayout.CENTER, 0, 0));
+		this.controller = controller;
+		views = new Hashtable<FlexoPerspective<?>, FlexoPerspectiveView>();
 
-        Enumeration<FlexoPerspective<?>> en = controller.getPerspectives().elements();
-        while (en.hasMoreElements()) {
-            FlexoPerspective<?> p = en.nextElement();
-            FlexoPerspectiveView view = new FlexoPerspectiveView(controller, this, p);
-            add(view);
-            views.put(p, view);
+		Enumeration<FlexoPerspective<?>> en = controller.getPerspectives().elements();
+		while (en.hasMoreElements()) {
+			FlexoPerspective<?> p = en.nextElement();
+			FlexoPerspectiveView view = new FlexoPerspectiveView(controller, this, p);
+			add(view);
+			views.put(p, view);
 
-        }
+		}
 
-        validate();
-        repaint();
-    }
+		validate();
+		repaint();
+	}
 
-    public void refresh()
-    {
-        Vector<FlexoPerspective<?>> displayedPerspective = new Vector<FlexoPerspective<?>>();
-        removeAll();
-        add(new JLabel(IconLibrary.NAVIGATION_CLOSE_LEFT));
-        Enumeration<FlexoPerspective<?>> en = controller.getPerspectives().elements();
-        while (en.hasMoreElements()) {
-            FlexoPerspective<?> p = en.nextElement();
-            FlexoPerspectiveView v = views.get(p);
-            if (v == null){
-            	views.put(p, v = new FlexoPerspectiveView(controller,this,p));
-            }
-            if (p.isAlwaysVisible() || controller.hasViewForObjectAndPerspective(controller.getCurrentDisplayedObjectAsModuleView(), p)) {
-                if (displayedPerspective.size()>1) {
-                    JLabel s = new JLabel(IconLibrary.NAVIGATION_SPACER);
-                    s.setSize(IconLibrary.NAVIGATION_SPACER.getIconWidth(), IconLibrary.NAVIGATION_SPACER.getIconHeight());
-                    add(s);
-                }
-                displayedPerspective.add(p);
-                add(v);
-                v.refresh();
-            }
-        }
-        add(new JLabel(IconLibrary.NAVIGATION_CLOSE_RIGHT));
-        if (displayedPerspective.size()<2) {
-            removeAll();
-            setVisible(false);
-        } else {
-            setVisible(true);
-        }
-    }
+	public void refresh() {
+		Vector<FlexoPerspective<?>> displayedPerspective = new Vector<FlexoPerspective<?>>();
+		removeAll();
+		add(new JLabel(IconLibrary.NAVIGATION_CLOSE_LEFT));
+		Enumeration<FlexoPerspective<?>> en = controller.getPerspectives().elements();
+		while (en.hasMoreElements()) {
+			FlexoPerspective<?> p = en.nextElement();
+			FlexoPerspectiveView v = views.get(p);
+			if (v == null) {
+				views.put(p, v = new FlexoPerspectiveView(controller, this, p));
+			}
+			if (p.isAlwaysVisible() || controller.hasViewForObjectAndPerspective(controller.getCurrentDisplayedObjectAsModuleView(), p)) {
+				if (displayedPerspective.size() > 1) {
+					JLabel s = new JLabel(IconLibrary.NAVIGATION_SPACER);
+					s.setSize(IconLibrary.NAVIGATION_SPACER.getIconWidth(), IconLibrary.NAVIGATION_SPACER.getIconHeight());
+					add(s);
+				}
+				displayedPerspective.add(p);
+				add(v);
+				v.refresh();
+			}
+		}
+		add(new JLabel(IconLibrary.NAVIGATION_CLOSE_RIGHT));
+		if (displayedPerspective.size() < 2) {
+			removeAll();
+			setVisible(false);
+		} else {
+			setVisible(true);
+		}
+	}
 }

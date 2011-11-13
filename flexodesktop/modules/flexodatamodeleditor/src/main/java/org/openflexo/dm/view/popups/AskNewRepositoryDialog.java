@@ -61,8 +61,7 @@ import org.openflexo.view.controller.FlexoController;
  * @author sguerin
  * 
  */
-public class AskNewRepositoryDialog extends FlexoDialog implements ActionListener
-{
+public class AskNewRepositoryDialog extends FlexoDialog implements ActionListener {
 
 	public static final File EXTERNAL_REPOSITORY_ICON_FILE = new FileResource("Icons/Model/DM/SmallExternalRepository.gif");
 
@@ -76,7 +75,7 @@ public class AskNewRepositoryDialog extends FlexoDialog implements ActionListene
 
 	protected FileSelector externalRepositorySelector;
 
-	//protected FileSelector denaliFoundationRepositorySelector;
+	// protected FileSelector denaliFoundationRepositorySelector;
 
 	protected FileSelector rationalRoseRepositorySelector;
 
@@ -86,13 +85,12 @@ public class AskNewRepositoryDialog extends FlexoDialog implements ActionListene
 
 	protected int returnedStatus = CANCEL;
 
-
 	protected JPanel choicePanel;
 
 	protected JRadioButton projectRepositoryButton;
 	protected JRadioButton projectDatabaseRepositoryButton;
 	protected JRadioButton externalRepositoryButton;
-	//protected JRadioButton denaliFoundationRepositoryButton;
+	// protected JRadioButton denaliFoundationRepositoryButton;
 	protected JRadioButton externalDatabaseRepositoryButton;
 	protected JRadioButton rationalRoseRepositoryButton;
 	protected JRadioButton thesaurusRepositoryButton;
@@ -111,12 +109,11 @@ public class AskNewRepositoryDialog extends FlexoDialog implements ActionListene
 	private static final boolean isRationalRoseCreationAllowed = true;/*ModuleLoader.isDevelopperRelease() || ModuleLoader.isMaintainerRelease();*/
 	private String _preselectedType;
 
-	public AskNewRepositoryDialog(CreateDMRepository flexoAction, FlexoFrame owner){
-		this(flexoAction,owner,flexoAction.getRepositoryType());
+	public AskNewRepositoryDialog(CreateDMRepository flexoAction, FlexoFrame owner) {
+		this(flexoAction, owner, flexoAction.getRepositoryType());
 	}
 
-	public AskNewRepositoryDialog(CreateDMRepository flexoAction, FlexoFrame owner, String preselectedType)
-	{
+	public AskNewRepositoryDialog(CreateDMRepository flexoAction, FlexoFrame owner, String preselectedType) {
 		super(owner);
 		_preselectedType = preselectedType;
 		_flexoFrame = owner;
@@ -126,39 +123,34 @@ public class AskNewRepositoryDialog extends FlexoDialog implements ActionListene
 		getContentPane().setLayout(new BorderLayout());
 
 		// Create the radio buttons.
-		projectRepositoryButton = new JRadioButtonWithIcon(FlexoLocalization
-				.localizedForKey("project_repository"), DM_REPOSITORY_ICON_FILE, true);
+		projectRepositoryButton = new JRadioButtonWithIcon(FlexoLocalization.localizedForKey("project_repository"),
+				DM_REPOSITORY_ICON_FILE, true);
 		projectRepositoryButton.addActionListener(this);
 		projectRepositoryButton.setActionCommand(CreateDMRepository.PROJECT_REPOSITORY);
 
-		projectDatabaseRepositoryButton = new JRadioButtonWithIcon(FlexoLocalization
-				.localizedForKey("project_database_repository"), DM_EOREPOSITORY_ICON_FILE);
+		projectDatabaseRepositoryButton = new JRadioButtonWithIcon(FlexoLocalization.localizedForKey("project_database_repository"),
+				DM_EOREPOSITORY_ICON_FILE);
 		projectDatabaseRepositoryButton.addActionListener(this);
-		projectDatabaseRepositoryButton
-		.setActionCommand(CreateDMRepository.PROJECT_DATABASE_REPOSITORY);
+		projectDatabaseRepositoryButton.setActionCommand(CreateDMRepository.PROJECT_DATABASE_REPOSITORY);
 
-		externalRepositoryButton = new JRadioButtonWithIcon(FlexoLocalization
-				.localizedForKey("external_repository"), EXTERNAL_REPOSITORY_ICON_FILE);
+		externalRepositoryButton = new JRadioButtonWithIcon(FlexoLocalization.localizedForKey("external_repository"),
+				EXTERNAL_REPOSITORY_ICON_FILE);
 		externalRepositoryButton.addActionListener(this);
 		externalRepositoryButton.setActionCommand(CreateDMRepository.EXTERNAL_REPOSITORY);
 
-		externalRepositorySelector = new FileSelector(_lastVisitedJarDirectory,
-				new FileFilter() {
+		externalRepositorySelector = new FileSelector(_lastVisitedJarDirectory, new FileFilter() {
 			@Override
-			public boolean accept(File f)
-			{
+			public boolean accept(File f) {
 				return f.isDirectory() || f.getName().endsWith(".jar");
 			}
 
 			@Override
-			public String getDescription()
-			{
+			public String getDescription() {
 				return FlexoLocalization.localizedForKey("jar_files");
 			}
 		}) {
 			@Override
-			public void fireEditedObjectChanged()
-			{
+			public void fireEditedObjectChanged() {
 				super.fireEditedObjectChanged();
 				if (getEditedObject() != null && newRepositoryNameTF != null) {
 					newRepositoryNameTF.setText(getEditedObject().getName());
@@ -170,49 +162,48 @@ public class AskNewRepositoryDialog extends FlexoDialog implements ActionListene
 		};
 
 		/*denaliFoundationRepositoryButton = new JRadioButtonWithIcon(
-                FlexoLocalization.localizedForKey("denali_foundation_repository"),
-                DM_EOREPOSITORY_ICON_FILE);
-        denaliFoundationRepositoryButton.addActionListener(this);
-        denaliFoundationRepositoryButton
-                .setActionCommand(CreateDMRepository.DENALI_FOUNDATION_REPOSITORY);
+		        FlexoLocalization.localizedForKey("denali_foundation_repository"),
+		        DM_EOREPOSITORY_ICON_FILE);
+		denaliFoundationRepositoryButton.addActionListener(this);
+		denaliFoundationRepositoryButton
+		        .setActionCommand(CreateDMRepository.DENALI_FOUNDATION_REPOSITORY);
 
-        denaliFoundationRepositorySelector = (new FileSelector(new FileResource(
-                "Library/DenaliFoundationRepositories"), new FileFilter() {
-            public boolean accept(File f)
-            {
-                return ((f.isDirectory()) && (f.getName().endsWith(".dmrepository")));
-            }
+		denaliFoundationRepositorySelector = (new FileSelector(new FileResource(
+		        "Library/DenaliFoundationRepositories"), new FileFilter() {
+		    public boolean accept(File f)
+		    {
+		        return ((f.isDirectory()) && (f.getName().endsWith(".dmrepository")));
+		    }
 
-            public String getDescription()
-            {
-                return FlexoLocalization.localizedForKey("denali_foundation_repositories");
-            }
-        }, JFileChooser.DIRECTORIES_ONLY) {
-            public void fireEditedObjectChanged()
-            {
-                super.fireEditedObjectChanged();
-                if ((getEditedObject() != null) && (getEditedObject() instanceof File)
-                        && (newRepositoryNameTF != null)) {
-                    String newSelectedName = ((File) getEditedObject()).getName();
-                    String newName = null;
-                    if (newSelectedName.indexOf(".dmrepository") > 0) {
-                        newName = newSelectedName.substring(0, newSelectedName
-                                .indexOf(".dmrepository"));
-                    } else {
-                        newName = newSelectedName;
-                    }
-                    newRepositoryNameTF.setText(newName);
-                }
-                denaliFoundationRepositoryButton.setSelected(true);
-                selectRepositoryType(CreateDMRepository.DENALI_FOUNDATION_REPOSITORY);
-            }
-        });*/
+		    public String getDescription()
+		    {
+		        return FlexoLocalization.localizedForKey("denali_foundation_repositories");
+		    }
+		}, JFileChooser.DIRECTORIES_ONLY) {
+		    public void fireEditedObjectChanged()
+		    {
+		        super.fireEditedObjectChanged();
+		        if ((getEditedObject() != null) && (getEditedObject() instanceof File)
+		                && (newRepositoryNameTF != null)) {
+		            String newSelectedName = ((File) getEditedObject()).getName();
+		            String newName = null;
+		            if (newSelectedName.indexOf(".dmrepository") > 0) {
+		                newName = newSelectedName.substring(0, newSelectedName
+		                        .indexOf(".dmrepository"));
+		            } else {
+		                newName = newSelectedName;
+		            }
+		            newRepositoryNameTF.setText(newName);
+		        }
+		        denaliFoundationRepositoryButton.setSelected(true);
+		        selectRepositoryType(CreateDMRepository.DENALI_FOUNDATION_REPOSITORY);
+		    }
+		});*/
 
-		externalDatabaseRepositoryButton = new JRadioButtonWithIcon(FlexoLocalization
-				.localizedForKey("external_database_repository"), DM_EOREPOSITORY_ICON_FILE);
+		externalDatabaseRepositoryButton = new JRadioButtonWithIcon(FlexoLocalization.localizedForKey("external_database_repository"),
+				DM_EOREPOSITORY_ICON_FILE);
 		externalDatabaseRepositoryButton.addActionListener(this);
-		externalDatabaseRepositoryButton
-		.setActionCommand(CreateDMRepository.EXTERNAL_DATABASE_REPOSITORY);
+		externalDatabaseRepositoryButton.setActionCommand(CreateDMRepository.EXTERNAL_DATABASE_REPOSITORY);
 		packageNameLabel = new JLabel(FlexoLocalization.localizedForKey("package_name"));
 		packageName = new JTextField();
 		/*
@@ -223,37 +214,31 @@ public class AskNewRepositoryDialog extends FlexoDialog implements ActionListene
 		 * public String getDescription() { return
 		 * FlexoLocalization.localizedForKey("EOMODEL files"); } });
 		 */
-		if(isRationalRoseCreationAllowed){
-			rationalRoseRepositoryButton = new JRadioButtonWithIcon(
-					FlexoLocalization.localizedForKey("rational_rose_repository"),
+		if (isRationalRoseCreationAllowed) {
+			rationalRoseRepositoryButton = new JRadioButtonWithIcon(FlexoLocalization.localizedForKey("rational_rose_repository"),
 					DM_REPOSITORY_ICON_FILE);
 			rationalRoseRepositoryButton.addActionListener(this);
-			rationalRoseRepositoryButton
-			.setActionCommand(CreateDMRepository.RATIONAL_ROSE_REPOSITORY);
+			rationalRoseRepositoryButton.setActionCommand(CreateDMRepository.RATIONAL_ROSE_REPOSITORY);
 
 			rationalRoseRepositorySelector = new FileSelector(ResourceLocator.getUserHomeDirectory(), new FileFilter() {
 				@Override
-				public boolean accept(File f)
-				{
+				public boolean accept(File f) {
 					return f.isDirectory() || f.getName().endsWith(".mdl");
 				}
 
 				@Override
-				public String getDescription()
-				{
+				public String getDescription() {
 					return FlexoLocalization.localizedForKey("rational_rose_file");
 				}
 			}, JFileChooser.FILES_ONLY) {
 				@Override
-				public void fireEditedObjectChanged()
-				{
+				public void fireEditedObjectChanged() {
 					super.fireEditedObjectChanged();
 					if (getEditedObject() != null && newRepositoryNameTF != null) {
 						String newSelectedName = getEditedObject().getName();
 						String newName = null;
 						if (newSelectedName.indexOf(".mdl") > 0) {
-							newName = newSelectedName.substring(0, newSelectedName
-									.indexOf(".mdl"));
+							newName = newSelectedName.substring(0, newSelectedName.indexOf(".mdl"));
 						} else {
 							newName = newSelectedName;
 						}
@@ -265,25 +250,24 @@ public class AskNewRepositoryDialog extends FlexoDialog implements ActionListene
 			};
 		}
 
-		if(isThesaurusCreationAllowed){
-			thesaurusRepositoryButton = new JRadioButtonWithIcon(FlexoLocalization
-					.localizedForKey("thesaurus_repository"), DM_REPOSITORY_ICON_FILE);
+		if (isThesaurusCreationAllowed) {
+			thesaurusRepositoryButton = new JRadioButtonWithIcon(FlexoLocalization.localizedForKey("thesaurus_repository"),
+					DM_REPOSITORY_ICON_FILE);
 			thesaurusRepositoryButton.addActionListener(this);
 			thesaurusRepositoryButton.setActionCommand(CreateDMRepository.THESAURUS_REPOSITORY);
 			thesaurusRepositoryButton.setEnabled(false);
 
-			thesaurusDatabaseRepositoryButton = new JRadioButtonWithIcon(FlexoLocalization
-					.localizedForKey("thesaurus_database_repository"), DM_REPOSITORY_ICON_FILE);
+			thesaurusDatabaseRepositoryButton = new JRadioButtonWithIcon(
+					FlexoLocalization.localizedForKey("thesaurus_database_repository"), DM_REPOSITORY_ICON_FILE);
 			thesaurusDatabaseRepositoryButton.addActionListener(this);
-			thesaurusDatabaseRepositoryButton
-			.setActionCommand(CreateDMRepository.THESAURUS_DATABASE_REPOSITORY);
+			thesaurusDatabaseRepositoryButton.setActionCommand(CreateDMRepository.THESAURUS_DATABASE_REPOSITORY);
 			thesaurusDatabaseRepositoryButton.setEnabled(false);
 		}
 		ActionListener focusActionListener = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() instanceof JRadioButton) {
-					if (newRepositoryNameTF.getText()==null || newRepositoryNameTF.getText().trim().length()==0) {
+					if (newRepositoryNameTF.getText() == null || newRepositoryNameTF.getText().trim().length() == 0) {
 						newRepositoryNameTF.requestFocus();
 					} else {
 						confirmButton.requestFocus();
@@ -297,24 +281,24 @@ public class AskNewRepositoryDialog extends FlexoDialog implements ActionListene
 		group.add(projectRepositoryButton);
 		group.add(projectDatabaseRepositoryButton);
 		group.add(externalRepositoryButton);
-		//group.add(denaliFoundationRepositoryButton);
+		// group.add(denaliFoundationRepositoryButton);
 		group.add(externalDatabaseRepositoryButton);
-		if(isRationalRoseCreationAllowed) {
+		if (isRationalRoseCreationAllowed) {
 			group.add(rationalRoseRepositoryButton);
 		}
-		if(isThesaurusCreationAllowed){
+		if (isThesaurusCreationAllowed) {
 			group.add(thesaurusRepositoryButton);
 			group.add(thesaurusDatabaseRepositoryButton);
 		}
 		projectRepositoryButton.addActionListener(focusActionListener);
 		projectDatabaseRepositoryButton.addActionListener(focusActionListener);
 		externalRepositoryButton.addActionListener(focusActionListener);
-		//group.add(denaliFoundationRepositoryButton);
+		// group.add(denaliFoundationRepositoryButton);
 		externalDatabaseRepositoryButton.addActionListener(focusActionListener);
-		if(isRationalRoseCreationAllowed) {
+		if (isRationalRoseCreationAllowed) {
 			rationalRoseRepositoryButton.addActionListener(focusActionListener);
 		}
-		if(isThesaurusCreationAllowed){
+		if (isThesaurusCreationAllowed) {
 			thesaurusRepositoryButton.addActionListener(focusActionListener);
 			thesaurusDatabaseRepositoryButton.addActionListener(focusActionListener);
 		}
@@ -322,8 +306,7 @@ public class AskNewRepositoryDialog extends FlexoDialog implements ActionListene
 		newRepositoryNameTF.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				performConfirm();
 			}
 
@@ -359,20 +342,18 @@ public class AskNewRepositoryDialog extends FlexoDialog implements ActionListene
 
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				returnedStatus = CANCEL;
 				dispose();
 			}
 		});
 		confirmButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				performConfirm();
 			}
 		});
-		if (ToolBox.getPLATFORM()==ToolBox.MACOS) {
+		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 			controlPanel.add(cancelButton);
 			controlPanel.add(confirmButton);
 		} else {
@@ -397,105 +378,96 @@ public class AskNewRepositoryDialog extends FlexoDialog implements ActionListene
 		setVisible(true);
 	}
 
-	private boolean isUndefinedOrProjectRepository(){
-		return _preselectedType==null || _preselectedType.equals(CreateDMRepository.PROJECT_REPOSITORY);
+	private boolean isUndefinedOrProjectRepository() {
+		return _preselectedType == null || _preselectedType.equals(CreateDMRepository.PROJECT_REPOSITORY);
 	}
 
-	private boolean isUndefinedOrProjectDBRepository(){
-		return _preselectedType==null || _preselectedType.equals(CreateDMRepository.PROJECT_DATABASE_REPOSITORY);
+	private boolean isUndefinedOrProjectDBRepository() {
+		return _preselectedType == null || _preselectedType.equals(CreateDMRepository.PROJECT_DATABASE_REPOSITORY);
 	}
 
-	private boolean isUndefinedOrExternalRepository(){
-		return _preselectedType==null || _preselectedType.equals(CreateDMRepository.EXTERNAL_REPOSITORY);
-	}
-	private boolean isUndefinedOrExternalDBRepository(){
-		return _preselectedType==null || _preselectedType.equals(CreateDMRepository.EXTERNAL_DATABASE_REPOSITORY);
+	private boolean isUndefinedOrExternalRepository() {
+		return _preselectedType == null || _preselectedType.equals(CreateDMRepository.EXTERNAL_REPOSITORY);
 	}
 
-	private boolean isUndefinedOrThesaurusRepository(){
-		return _preselectedType==null || _preselectedType.equals(CreateDMRepository.THESAURUS_REPOSITORY);
+	private boolean isUndefinedOrExternalDBRepository() {
+		return _preselectedType == null || _preselectedType.equals(CreateDMRepository.EXTERNAL_DATABASE_REPOSITORY);
 	}
 
-	protected void init()
-	{
+	private boolean isUndefinedOrThesaurusRepository() {
+		return _preselectedType == null || _preselectedType.equals(CreateDMRepository.THESAURUS_REPOSITORY);
+	}
+
+	protected void init() {
 		choicePanel = new JPanel();
-		int lineCount =  _preselectedType==null?4:1;
-		if(_preselectedType==null){
-			if(isThesaurusCreationAllowed) {
-				lineCount=lineCount+2;
+		int lineCount = _preselectedType == null ? 4 : 1;
+		if (_preselectedType == null) {
+			if (isThesaurusCreationAllowed) {
+				lineCount = lineCount + 2;
 			}
 		}
 		choicePanel.setLayout(new GridLayout(lineCount, 2));
-		if(isUndefinedOrProjectRepository()){
+		if (isUndefinedOrProjectRepository()) {
 			choicePanel.add(projectRepositoryButton);
 			choicePanel.add(new JPanel());
 		}
-		if(isUndefinedOrProjectDBRepository()){
+		if (isUndefinedOrProjectDBRepository()) {
 			choicePanel.add(projectDatabaseRepositoryButton);
 			choicePanel.add(new JPanel());
 		}
-		if(isUndefinedOrExternalRepository()){
+		if (isUndefinedOrExternalRepository()) {
 			choicePanel.add(externalRepositoryButton);
 			choicePanel.add(externalRepositorySelector);
 		}
-		//choicePanel.add(denaliFoundationRepositoryButton);
-		//choicePanel.add(denaliFoundationRepositorySelector);
-		if(isUndefinedOrExternalDBRepository()){
+		// choicePanel.add(denaliFoundationRepositoryButton);
+		// choicePanel.add(denaliFoundationRepositorySelector);
+		if (isUndefinedOrExternalDBRepository()) {
 			choicePanel.add(externalDatabaseRepositoryButton);
 			choicePanel.add(new JPanel()/* externalDatabaseRepositorySelector */);
 		}
-		//choicePanel.add(rationalRoseRepositoryButton);
-		//choicePanel.add(rationalRoseRepositorySelector);
-		if(isThesaurusCreationAllowed){
-			if(isUndefinedOrThesaurusRepository()){
+		// choicePanel.add(rationalRoseRepositoryButton);
+		// choicePanel.add(rationalRoseRepositorySelector);
+		if (isThesaurusCreationAllowed) {
+			if (isUndefinedOrThesaurusRepository()) {
 				choicePanel.add(thesaurusRepositoryButton);
 				choicePanel.add(new JPanel());
 				choicePanel.add(thesaurusDatabaseRepositoryButton);
 				choicePanel.add(new JPanel());
 			}
 		}
-		if(_preselectedType==null) {
+		if (_preselectedType == null) {
 			selectRepositoryType(CreateDMRepository.PROJECT_REPOSITORY);
 		} else {
 			selectRepositoryType(_preselectedType);
 		}
 	}
 
-	public void performConfirm()
-	{
+	public void performConfirm() {
 		if (checkRepositoryOKForCreation()) {
 			returnedStatus = VALIDATE;
 			dispose();
 		}
 		if (returnedStatus == VALIDATE) {
 			/*            if (_flexoAction.getRepositoryType().equals(CreateDMRepository.RATIONAL_ROSE_REPOSITORY)) {
-                String newPackageName = FlexoController.askForStringMatchingPattern(FlexoLocalization.localizedForKey("please_enter_a_package_name"),DMRegExp.PACKAGE_NAME_PATTERN,FlexoLocalization.localizedForKey("must_start_with_a_letter_followed_by_any_letter_or_number"));
-                _flexoAction.setRationalRosePackageName(newPackageName);
-            }*/
+			    String newPackageName = FlexoController.askForStringMatchingPattern(FlexoLocalization.localizedForKey("please_enter_a_package_name"),DMRegExp.PACKAGE_NAME_PATTERN,FlexoLocalization.localizedForKey("must_start_with_a_letter_followed_by_any_letter_or_number"));
+			    _flexoAction.setRationalRosePackageName(newPackageName);
+			}*/
 			if (_flexoAction.getRepositoryType().equals(CreateDMRepository.EXTERNAL_REPOSITORY)) {
 				File jarFile = externalRepositorySelector.getEditedFile();
 				if (jarFile != null) {
-					_flexoAction.makeFlexoProgress(FlexoLocalization
-							.localizedForKey("scanning")
-							+ " " + jarFile.getName(), 2);
+					_flexoAction.makeFlexoProgress(FlexoLocalization.localizedForKey("scanning") + " " + jarFile.getName(), 2);
 					/*for (Enumeration en=ExternalRepository.getContainedClasses(jarFile,_flexoAction.getFlexoProgress()); en.hasMoreElements();) {
-                       System.out.println("Choose or not : "+en.nextElement());
-                   }*/
-					SelectClassesPopup popup
-					= new SelectClassesPopup(FlexoLocalization.localizedForKey("importing")+" "+jarFile.getName(),
-							FlexoLocalization.localizedForKey("please_select_classes_to_import"),
-							FlexoLocalization.localizedForKey("select_class_for_jar_import_description"),
-							jarFile,
-							_flexoAction.getProject(),
-							_flexoFrame ,
-							_flexoAction.getFlexoProgress());
+					   System.out.println("Choose or not : "+en.nextElement());
+					}*/
+					SelectClassesPopup popup = new SelectClassesPopup(FlexoLocalization.localizedForKey("importing") + " "
+							+ jarFile.getName(), FlexoLocalization.localizedForKey("please_select_classes_to_import"),
+							FlexoLocalization.localizedForKey("select_class_for_jar_import_description"), jarFile,
+							_flexoAction.getProject(), _flexoFrame, _flexoAction.getFlexoProgress());
 					_flexoAction.hideFlexoProgress();
 					popup.setVisible(true);
-					if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE
-							&& popup.getDMSet().getSelectedObjects().size() > 0) {
+					if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getDMSet().getSelectedObjects().size() > 0) {
 						_flexoAction.setImportedClassSet(popup.getDMSet());
-					}
-					else {
+					} else {
 						returnedStatus = CANCEL;
 					}
 				}
@@ -506,49 +478,38 @@ public class AskNewRepositoryDialog extends FlexoDialog implements ActionListene
 	/** Listens to the radio buttons. */
 
 	@Override
-	public void actionPerformed(ActionEvent e)
-	{
+	public void actionPerformed(ActionEvent e) {
 		selectRepositoryType(e.getActionCommand());
 	}
 
-	protected void selectRepositoryType(String repType)
-	{
+	protected void selectRepositoryType(String repType) {
 		_flexoAction.setRepositoryType(repType);
 		if (repType.equals(CreateDMRepository.PROJECT_REPOSITORY)) {
-			repositoryDescriptionTA.setText(FlexoLocalization
-					.localizedForKey("project_repository_description"));
+			repositoryDescriptionTA.setText(FlexoLocalization.localizedForKey("project_repository_description"));
 			projectRepositoryButton.setSelected(true);
 		} else if (repType.equals(CreateDMRepository.PROJECT_DATABASE_REPOSITORY)) {
-			repositoryDescriptionTA.setText(FlexoLocalization
-					.localizedForKey("project_database_repository_description"));
+			repositoryDescriptionTA.setText(FlexoLocalization.localizedForKey("project_database_repository_description"));
 			projectDatabaseRepositoryButton.setSelected(true);
 		} else if (repType.equals(CreateDMRepository.EXTERNAL_REPOSITORY)) {
-			repositoryDescriptionTA.setText(FlexoLocalization
-					.localizedForKey("external_repository_description"));
+			repositoryDescriptionTA.setText(FlexoLocalization.localizedForKey("external_repository_description"));
 			externalRepositoryButton.setSelected(true);
 		} else if (repType.equals(CreateDMRepository.DENALI_FOUNDATION_REPOSITORY)) {
-			repositoryDescriptionTA.setText(FlexoLocalization
-					.localizedForKey("denali_foundation_repository_description"));
+			repositoryDescriptionTA.setText(FlexoLocalization.localizedForKey("denali_foundation_repository_description"));
 		} else if (repType.equals(CreateDMRepository.EXTERNAL_DATABASE_REPOSITORY)) {
-			repositoryDescriptionTA.setText(FlexoLocalization
-					.localizedForKey("external_database_repository_description"));
+			repositoryDescriptionTA.setText(FlexoLocalization.localizedForKey("external_database_repository_description"));
 			externalDatabaseRepositoryButton.setSelected(true);
 		} else if (repType.equals(CreateDMRepository.RATIONAL_ROSE_REPOSITORY)) {
-			repositoryDescriptionTA.setText(FlexoLocalization
-					.localizedForKey("rational_rose_repository_description"));
+			repositoryDescriptionTA.setText(FlexoLocalization.localizedForKey("rational_rose_repository_description"));
 		} else if (repType.equals(CreateDMRepository.THESAURUS_REPOSITORY)) {
-			repositoryDescriptionTA.setText(FlexoLocalization
-					.localizedForKey("thesaurus_repository_description"));
+			repositoryDescriptionTA.setText(FlexoLocalization.localizedForKey("thesaurus_repository_description"));
 			thesaurusRepositoryButton.setSelected(true);
 		} else if (repType.equals(CreateDMRepository.THESAURUS_DATABASE_REPOSITORY)) {
-			repositoryDescriptionTA.setText(FlexoLocalization
-					.localizedForKey("thesaurus_database_repository_description"));
+			repositoryDescriptionTA.setText(FlexoLocalization.localizedForKey("thesaurus_database_repository_description"));
 			thesaurusDatabaseRepositoryButton.setSelected(true);
 		}
 	}
 
-	protected boolean checkRepositoryOKForCreation()
-	{
+	protected boolean checkRepositoryOKForCreation() {
 		String newRepositoryName = newRepositoryNameTF.getText();
 		if (newRepositoryName == null || newRepositoryName.trim().equals("")) {
 			FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_a_valid_name"));
@@ -560,8 +521,7 @@ public class AskNewRepositoryDialog extends FlexoDialog implements ActionListene
 			return false;
 		}
 		if (_flexoAction.getProject().getDataModel().getRepositoryNamed(newRepositoryName) != null) {
-			FlexoController.showError(FlexoLocalization
-					.localizedForKey("repository_already_registered"));
+			FlexoController.showError(FlexoLocalization.localizedForKey("repository_already_registered"));
 			return false;
 		}
 		if (currentChoice.equals(CreateDMRepository.PROJECT_REPOSITORY)) {
@@ -575,65 +535,61 @@ public class AskNewRepositoryDialog extends FlexoDialog implements ActionListene
 				_flexoAction.setJarFile(newJarFile);
 				return true;
 			} else {
-				FlexoController.showError(FlexoLocalization
-						.localizedForKey("please_supply_a_valid_jar_file"));
+				FlexoController.showError(FlexoLocalization.localizedForKey("please_supply_a_valid_jar_file"));
 				return false;
 			}
 		} /*else if (currentChoice.equals(CreateDMRepository.DENALI_FOUNDATION_REPOSITORY)) {
-            File newDenaliFoundationRepositoryFile = denaliFoundationRepositorySelector
-                    .getEditedFile();
-            if (newDenaliFoundationRepositoryFile != null) {
-                _flexoAction.setDenaliFoundationRepositoryFile(newDenaliFoundationRepositoryFile);
-                return true;
-            } else {
-                FlexoController.showError(FlexoLocalization
-                        .localizedForKey("please_supply_a_valid_directory"));
-                return false;
-            }
-        } */else if (currentChoice.equals(CreateDMRepository.EXTERNAL_DATABASE_REPOSITORY)) {
-        	// FlexoController.showError(FlexoLocalization.localizedForKey("not_implemented_yet"));
-        	return true;
-        } else if (currentChoice.equals(CreateDMRepository.RATIONAL_ROSE_REPOSITORY)) {
-        	File rrFile = rationalRoseRepositorySelector.getEditedFile();
-        	if (rrFile != null && rrFile.exists() && rrFile.isFile()) {
-        		if (packageName.getText()!=null && packageName.getText().matches(DMRegExp.PACKAGE_NAME_REGEXP)) {
-        			_flexoAction.setRationalRoseFile(rrFile);
-        			_flexoAction.setRationalRosePackageName(packageName.getText());
-        			// DONT DO IT HERE, OTHERWISE DEADLOCK IN SWING !!!!
-        			// Wait after dispose() !!!!
-        			//String newPackageName = FlexoController.askForStringMatchingPattern(FlexoLocalization.localizedForKey("please_enter_a_package_name"),DMRegExp.PACKAGE_NAME_PATTERN,FlexoLocalization.localizedForKey("must_start_with_a_letter_followed_by_any_letter_or_number"));
-        			//_flexoAction.setRationalRosePackageName(newPackageName);
-        			return true;
-        		} else {
-        			FlexoController.showError(FlexoLocalization
-        					.localizedForKey("package_must_start_with_a_letter_followed_by_any_letter_or_number"));
-        			return false;
-        		}
-        	} else {
-        		FlexoController.showError(FlexoLocalization
-        				.localizedForKey("please_supply_a_valid_mdl_file"));
-        		return false;
-        	}
-        } else if (currentChoice.equals(CreateDMRepository.THESAURUS_REPOSITORY)) {
-        	FlexoController.showError(FlexoLocalization.localizedForKey("not_implemented_yet"));
-        	return false;
-        } else if (currentChoice.equals(CreateDMRepository.THESAURUS_DATABASE_REPOSITORY)) {
-        	FlexoController.showError(FlexoLocalization.localizedForKey("not_implemented_yet"));
-        	return false;
-        }
+			  File newDenaliFoundationRepositoryFile = denaliFoundationRepositorySelector
+			          .getEditedFile();
+			  if (newDenaliFoundationRepositoryFile != null) {
+			      _flexoAction.setDenaliFoundationRepositoryFile(newDenaliFoundationRepositoryFile);
+			      return true;
+			  } else {
+			      FlexoController.showError(FlexoLocalization
+			              .localizedForKey("please_supply_a_valid_directory"));
+			      return false;
+			  }
+			} */else if (currentChoice.equals(CreateDMRepository.EXTERNAL_DATABASE_REPOSITORY)) {
+			// FlexoController.showError(FlexoLocalization.localizedForKey("not_implemented_yet"));
+			return true;
+		} else if (currentChoice.equals(CreateDMRepository.RATIONAL_ROSE_REPOSITORY)) {
+			File rrFile = rationalRoseRepositorySelector.getEditedFile();
+			if (rrFile != null && rrFile.exists() && rrFile.isFile()) {
+				if (packageName.getText() != null && packageName.getText().matches(DMRegExp.PACKAGE_NAME_REGEXP)) {
+					_flexoAction.setRationalRoseFile(rrFile);
+					_flexoAction.setRationalRosePackageName(packageName.getText());
+					// DONT DO IT HERE, OTHERWISE DEADLOCK IN SWING !!!!
+					// Wait after dispose() !!!!
+					// String newPackageName =
+					// FlexoController.askForStringMatchingPattern(FlexoLocalization.localizedForKey("please_enter_a_package_name"),DMRegExp.PACKAGE_NAME_PATTERN,FlexoLocalization.localizedForKey("must_start_with_a_letter_followed_by_any_letter_or_number"));
+					// _flexoAction.setRationalRosePackageName(newPackageName);
+					return true;
+				} else {
+					FlexoController.showError(FlexoLocalization
+							.localizedForKey("package_must_start_with_a_letter_followed_by_any_letter_or_number"));
+					return false;
+				}
+			} else {
+				FlexoController.showError(FlexoLocalization.localizedForKey("please_supply_a_valid_mdl_file"));
+				return false;
+			}
+		} else if (currentChoice.equals(CreateDMRepository.THESAURUS_REPOSITORY)) {
+			FlexoController.showError(FlexoLocalization.localizedForKey("not_implemented_yet"));
+			return false;
+		} else if (currentChoice.equals(CreateDMRepository.THESAURUS_DATABASE_REPOSITORY)) {
+			FlexoController.showError(FlexoLocalization.localizedForKey("not_implemented_yet"));
+			return false;
+		}
 		return false;
 	}
 
-	protected int getStatus()
-	{
+	protected int getStatus() {
 		return returnedStatus;
 	}
 
 	protected CreateDMRepository _flexoAction;
 
-	public static int displayDialog(CreateDMRepository flexoAction, FlexoProject project,
-			FlexoFrame owner)
-	{
+	public static int displayDialog(CreateDMRepository flexoAction, FlexoProject project, FlexoFrame owner) {
 		flexoAction.setProject(project);
 		AskNewRepositoryDialog dialog = new AskNewRepositoryDialog(flexoAction, owner);
 		return dialog.getStatus();

@@ -45,44 +45,44 @@ public class ApplicationData {
 			ModuleLoader.initializeModules(UserType.MAINTAINER/*, false*/);
 		}
 	}
-	
-	private ModuleLoader getModuleLoader()
-	{
+
+	private ModuleLoader getModuleLoader() {
 		return ModuleLoader.instance();
 	}
-	
-	public Vector<Module> getAvailableModules() 
-	{
-		return ModuleLoader.availableModules(); 
+
+	public Vector<Module> getAvailableModules() {
+		return ModuleLoader.availableModules();
 	}
-	
-	public UserType getUserType()
-	{
+
+	public UserType getUserType() {
 		return ModuleLoader.getUserType();
 	}
 
-	public String getVersion()
-	{
-		return "Version " + FlexoCst.BUSINESS_APPLICATION_VERSION+ " (build " + FlexoCst.BUILD_ID+")";
+	public String getVersion() {
+		return "Version " + FlexoCst.BUSINESS_APPLICATION_VERSION + " (build " + FlexoCst.BUILD_ID + ")";
 	}
-	
+
 	public Vector<File> getLastOpenedProjects() {
 		return GeneralPreferences.getLastOpenedProjects();
 	}
 
-	public ImageIcon getProjectIcon()
-	{
+	public ImageIcon getProjectIcon() {
 		return IconLibrary.OPENFLEXO_NOTEXT_16;
 	}
 
-	public ImageIcon getOpenflexoIcon()
-	{
+	public ImageIcon getOpenflexoIcon() {
 		return IconLibrary.OPENFLEXO_NOTEXT_64;
 	}
 
-	public ImageIcon getOpenflexoTextIcon()
-	{
+	public ImageIcon getOpenflexoTextIcon() {
 		return IconLibrary.OPENFLEXO_TEXT_SMALL_ICON;
 	}
 
+	public Module getFavoriteModule() {
+		return Module.getModule(GeneralPreferences.getFavoriteModuleName());
+	}
+
+	public void setFavoriteModule(Module aModule) {
+		GeneralPreferences.setFavoriteModuleName(aModule.getName());
+	}
 }

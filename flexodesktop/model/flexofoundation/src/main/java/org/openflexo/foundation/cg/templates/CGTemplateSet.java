@@ -33,7 +33,6 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.toolbox.StringUtils;
 
-
 public abstract class CGTemplateSet extends CGTemplateObject {
 
 	protected static final Logger logger = Logger.getLogger(CGTemplateSet.class.getPackage().getName());
@@ -119,9 +118,9 @@ public abstract class CGTemplateSet extends CGTemplateObject {
 
 			for (String templateRelativePath : previousKnownTemplates) {
 				CGTemplate template = templates.get(templateRelativePath);
-				if (template == null)
-				{
-					continue; // GPO: see bug 1007011 (this should not happen because I prevented recursion from happening with flag isUpdating, but I leave this just to be really sure that no NPE
+				if (template == null) {
+					continue; // GPO: see bug 1007011 (this should not happen because I prevented recursion from happening with flag
+								// isUpdating, but I leave this just to be really sure that no NPE
 				}
 				// will occur)
 				if (!template.isDeleted()) {

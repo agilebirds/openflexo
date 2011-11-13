@@ -32,40 +32,45 @@ import javax.swing.SwingUtilities;
 public class MouseResizer implements MouseListener, MouseMotionListener {
 
 	private static final int RESIZE_ZONE_WIDTH = 3;
-	
+
 	private Component component;
 	private MouseResizerDelegate delegate;
 	private Cursor previousCursor;
 	private ResizeMode mode;
-	
+
 	private Point pressedPoint;
 	private Point lastDraggedPoint;
 
 	private ResizeMode[] modesToUse;
-	
+
 	public enum ResizeMode {
-		NORTH,SOUTH,WEST,EAST,NORTH_EAST,NORTH_WEST,SOUTH_WEST,SOUTH_EAST, NONE;
+		NORTH, SOUTH, WEST, EAST, NORTH_EAST, NORTH_WEST, SOUTH_WEST, SOUTH_EAST, NONE;
 	}
-	
+
 	public interface MouseResizerDelegate {
 		/**
 		 * This method is invoked as the mouse is being dragged.
+		 * 
 		 * @param deltaX
 		 * @param deltaY
 		 */
-		public void resizeDirectlyBy(int deltaX,int deltaY);
+		public void resizeDirectlyBy(int deltaX, int deltaY);
+
 		/**
 		 * This method is invoked when the mouse is released.
-		 * @param deltaX the total distance on the X-axis performed by the mouse
-		 * @param deltaY the total distance on the Y-axis performed by the mouse
+		 * 
+		 * @param deltaX
+		 *            the total distance on the X-axis performed by the mouse
+		 * @param deltaY
+		 *            the total distance on the Y-axis performed by the mouse
 		 */
-		public void resizeBy(int deltaX,int deltaY);
+		public void resizeBy(int deltaX, int deltaY);
 	}
-	
+
 	public MouseResizer(Component component, MouseResizerDelegate delegate) {
-		this(component, delegate, (ResizeMode[])null);
+		this(component, delegate, (ResizeMode[]) null);
 	}
-	
+
 	public MouseResizer(Component component, MouseResizerDelegate delegate, ResizeMode... modesToUse) {
 		this.component = component;
 		this.delegate = delegate;
@@ -74,7 +79,7 @@ public class MouseResizer implements MouseListener, MouseMotionListener {
 		component.addMouseListener(this);
 		component.addMouseMotionListener(this);
 	}
-	
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// Nothing to do
@@ -82,13 +87,13 @@ public class MouseResizer implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		if (mode==ResizeMode.NONE)
+		if (mode == ResizeMode.NONE)
 			updateCursor(e);
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		if (mode==ResizeMode.NONE)
+		if (mode == ResizeMode.NONE)
 			resetCursor();
 	}
 
@@ -120,15 +125,15 @@ public class MouseResizer implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		if (mode==ResizeMode.NONE)
+		if (mode == ResizeMode.NONE)
 			return;
-		if (lastDraggedPoint==null)
-			notifyResizeDirectlyBy(e.getX()-pressedPoint.x, e.getY()-pressedPoint.y);
+		if (lastDraggedPoint == null)
+			notifyResizeDirectlyBy(e.getX() - pressedPoint.x, e.getY() - pressedPoint.y);
 		else
-			notifyResizeDirectlyBy(e.getX()-lastDraggedPoint.x, e.getY()-lastDraggedPoint.y);
-		notifyResizeBy(e.getX()-pressedPoint.x, e.getY()-pressedPoint.y);
+			notifyResizeDirectlyBy(e.getX() - lastDraggedPoint.x, e.getY() - lastDraggedPoint.y);
+		notifyResizeBy(e.getX() - pressedPoint.x, e.getY() - pressedPoint.y);
 		mode = ResizeMode.NONE;
-		if (e.getComponent()!=component)
+		if (e.getComponent() != component)
 			resetCursor();
 		pressedPoint = null;
 		lastDraggedPoint = null;
@@ -137,22 +142,22 @@ public class MouseResizer implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		if (mode==ResizeMode.NONE)
+		if (mode == ResizeMode.NONE)
 			return;
-		if (lastDraggedPoint==null)
-			notifyResizeDirectlyBy(e.getX()-pressedPoint.x, e.getY()-pressedPoint.y);
+		if (lastDraggedPoint == null)
+			notifyResizeDirectlyBy(e.getX() - pressedPoint.x, e.getY() - pressedPoint.y);
 		else
-			notifyResizeDirectlyBy(e.getX()-lastDraggedPoint.x, e.getY()-lastDraggedPoint.y);
+			notifyResizeDirectlyBy(e.getX() - lastDraggedPoint.x, e.getY() - lastDraggedPoint.y);
 		lastDraggedPoint = e.getPoint();
 		e.consume();
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		if (mode==ResizeMode.NONE)
+		if (mode == ResizeMode.NONE)
 			updateCursor(e);
 	}
-	
+
 	private void notifyResizeDirectlyBy(int deltaX, int deltaY) {
 		switch (mode) {
 		case NORTH:
@@ -171,7 +176,7 @@ public class MouseResizer implements MouseListener, MouseMotionListener {
 			delegate.resizeDirectlyBy(deltaX, -deltaY);
 			break;
 		case NORTH_WEST:
-			delegate.resizeDirectlyBy(-deltaX, -deltaY);			
+			delegate.resizeDirectlyBy(-deltaX, -deltaY);
 			break;
 		case SOUTH_EAST:
 			delegate.resizeDirectlyBy(deltaX, deltaY);
@@ -183,7 +188,7 @@ public class MouseResizer implements MouseListener, MouseMotionListener {
 			break;
 		}
 	}
-	
+
 	private void notifyResizeBy(int deltaX, int deltaY) {
 		switch (mode) {
 		case NORTH:
@@ -202,7 +207,7 @@ public class MouseResizer implements MouseListener, MouseMotionListener {
 			delegate.resizeBy(deltaX, -deltaY);
 			break;
 		case NORTH_WEST:
-			delegate.resizeBy(-deltaX, -deltaY);			
+			delegate.resizeBy(-deltaX, -deltaY);
 			break;
 		case SOUTH_EAST:
 			delegate.resizeBy(deltaX, deltaY);
@@ -214,37 +219,37 @@ public class MouseResizer implements MouseListener, MouseMotionListener {
 			break;
 		}
 	}
-	
+
 	private void resetCursor() {
-		if (previousCursor!=null && mode==ResizeMode.NONE) {
+		if (previousCursor != null && mode == ResizeMode.NONE) {
 			setCursorForComponentAndHierarchy(component, previousCursor);
 			previousCursor = null;
 		}
 	}
-	
+
 	private void updateCursor(MouseEvent e) {
 		if (isWithinResizeZone(e)) {
 			previousCursor = Cursor.getDefaultCursor();
 			Cursor cursor = null;
 			if (isInNorthZone(e)) {
-				cursor=Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR);
+				cursor = Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR);
 			} else if (isInSouthZone(e)) {
-				cursor=Cursor.getPredefinedCursor(Cursor.S_RESIZE_CURSOR);
+				cursor = Cursor.getPredefinedCursor(Cursor.S_RESIZE_CURSOR);
 			} else if (isInWestZone(e)) {
-				cursor=Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR);
+				cursor = Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR);
 			} else if (isInEastZone(e)) {
-				cursor=Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR);
+				cursor = Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR);
 			} else if (isInNorthWestZone(e)) {
-				cursor=Cursor.getPredefinedCursor(Cursor.NW_RESIZE_CURSOR);
+				cursor = Cursor.getPredefinedCursor(Cursor.NW_RESIZE_CURSOR);
 			} else if (isInNorthEastZone(e)) {
-				cursor=Cursor.getPredefinedCursor(Cursor.NE_RESIZE_CURSOR);
+				cursor = Cursor.getPredefinedCursor(Cursor.NE_RESIZE_CURSOR);
 			} else if (isInSouthWestZone(e)) {
-				cursor=Cursor.getPredefinedCursor(Cursor.SW_RESIZE_CURSOR);
+				cursor = Cursor.getPredefinedCursor(Cursor.SW_RESIZE_CURSOR);
 			} else if (isInSouthEastZone(e)) {
-				cursor=Cursor.getPredefinedCursor(Cursor.SE_RESIZE_CURSOR);
+				cursor = Cursor.getPredefinedCursor(Cursor.SE_RESIZE_CURSOR);
 			}
-			if (cursor!=null) {
-				setCursorForComponentAndHierarchy(component,cursor);
+			if (cursor != null) {
+				setCursorForComponentAndHierarchy(component, cursor);
 			}
 		} else
 			resetCursor();
@@ -255,10 +260,10 @@ public class MouseResizer implements MouseListener, MouseMotionListener {
 	}
 
 	private boolean isWithinResizeZone(MouseEvent e) {
-		return (e.getX()>=-RESIZE_ZONE_WIDTH && e.getX()<=RESIZE_ZONE_WIDTH)
-		||(e.getY()>=-RESIZE_ZONE_WIDTH && e.getY()<=RESIZE_ZONE_WIDTH)
-		||(e.getX()<=getComponentWidth()+RESIZE_ZONE_WIDTH && e.getX()>=getComponentWidth()-RESIZE_ZONE_WIDTH) 
-		||(e.getY()<=getComponentHeight()+RESIZE_ZONE_WIDTH && e.getY()>=getComponentHeight()-RESIZE_ZONE_WIDTH); 
+		return (e.getX() >= -RESIZE_ZONE_WIDTH && e.getX() <= RESIZE_ZONE_WIDTH)
+				|| (e.getY() >= -RESIZE_ZONE_WIDTH && e.getY() <= RESIZE_ZONE_WIDTH)
+				|| (e.getX() <= getComponentWidth() + RESIZE_ZONE_WIDTH && e.getX() >= getComponentWidth() - RESIZE_ZONE_WIDTH)
+				|| (e.getY() <= getComponentHeight() + RESIZE_ZONE_WIDTH && e.getY() >= getComponentHeight() - RESIZE_ZONE_WIDTH);
 	}
 
 	/**
@@ -274,45 +279,58 @@ public class MouseResizer implements MouseListener, MouseMotionListener {
 	protected int getComponentWidth() {
 		return component.getWidth();
 	}
-	
+
 	private boolean isInNorthZone(MouseEvent e) {
-		return e.getY()>=-RESIZE_ZONE_WIDTH && e.getY()<=RESIZE_ZONE_WIDTH && e.getX()>RESIZE_ZONE_WIDTH && e.getX()<getComponentWidth()-RESIZE_ZONE_WIDTH && isUsable(ResizeMode.NORTH);
+		return e.getY() >= -RESIZE_ZONE_WIDTH && e.getY() <= RESIZE_ZONE_WIDTH && e.getX() > RESIZE_ZONE_WIDTH
+				&& e.getX() < getComponentWidth() - RESIZE_ZONE_WIDTH && isUsable(ResizeMode.NORTH);
 	}
+
 	private boolean isInSouthZone(MouseEvent e) {
-		return e.getY()>=getComponentHeight()-RESIZE_ZONE_WIDTH && e.getY()<=getComponentHeight()+RESIZE_ZONE_WIDTH && e.getX()>RESIZE_ZONE_WIDTH && e.getX()<getComponentWidth()-RESIZE_ZONE_WIDTH && isUsable(ResizeMode.SOUTH);
+		return e.getY() >= getComponentHeight() - RESIZE_ZONE_WIDTH && e.getY() <= getComponentHeight() + RESIZE_ZONE_WIDTH
+				&& e.getX() > RESIZE_ZONE_WIDTH && e.getX() < getComponentWidth() - RESIZE_ZONE_WIDTH && isUsable(ResizeMode.SOUTH);
 	}
-	
+
 	private boolean isInWestZone(MouseEvent e) {
-		return e.getX()>=-RESIZE_ZONE_WIDTH && e.getX()<=RESIZE_ZONE_WIDTH && e.getY()>RESIZE_ZONE_WIDTH && e.getY()<getComponentHeight()-RESIZE_ZONE_WIDTH  && isUsable(ResizeMode.WEST);
+		return e.getX() >= -RESIZE_ZONE_WIDTH && e.getX() <= RESIZE_ZONE_WIDTH && e.getY() > RESIZE_ZONE_WIDTH
+				&& e.getY() < getComponentHeight() - RESIZE_ZONE_WIDTH && isUsable(ResizeMode.WEST);
 	}
+
 	private boolean isInEastZone(MouseEvent e) {
-		return e.getX()>=getComponentWidth()-RESIZE_ZONE_WIDTH && e.getX()<=getComponentWidth()+RESIZE_ZONE_WIDTH && e.getY()>RESIZE_ZONE_WIDTH && e.getY()<getComponentHeight()-RESIZE_ZONE_WIDTH && isUsable(ResizeMode.EAST);
+		return e.getX() >= getComponentWidth() - RESIZE_ZONE_WIDTH && e.getX() <= getComponentWidth() + RESIZE_ZONE_WIDTH
+				&& e.getY() > RESIZE_ZONE_WIDTH && e.getY() < getComponentHeight() - RESIZE_ZONE_WIDTH && isUsable(ResizeMode.EAST);
 	}
-	
+
 	private boolean isInNorthWestZone(MouseEvent e) {
-		return e.getX()>=-RESIZE_ZONE_WIDTH && e.getX()<=RESIZE_ZONE_WIDTH && e.getY()>=-RESIZE_ZONE_WIDTH && e.getY()<=RESIZE_ZONE_WIDTH  && isUsable(ResizeMode.NORTH_WEST); 
+		return e.getX() >= -RESIZE_ZONE_WIDTH && e.getX() <= RESIZE_ZONE_WIDTH && e.getY() >= -RESIZE_ZONE_WIDTH
+				&& e.getY() <= RESIZE_ZONE_WIDTH && isUsable(ResizeMode.NORTH_WEST);
 	}
+
 	private boolean isInNorthEastZone(MouseEvent e) {
-		return e.getX()>=getComponentWidth()-RESIZE_ZONE_WIDTH && e.getX()<=getComponentWidth()+RESIZE_ZONE_WIDTH && e.getY()>=-RESIZE_ZONE_WIDTH && e.getY()<=RESIZE_ZONE_WIDTH  && isUsable(ResizeMode.NORTH_EAST); 
+		return e.getX() >= getComponentWidth() - RESIZE_ZONE_WIDTH && e.getX() <= getComponentWidth() + RESIZE_ZONE_WIDTH
+				&& e.getY() >= -RESIZE_ZONE_WIDTH && e.getY() <= RESIZE_ZONE_WIDTH && isUsable(ResizeMode.NORTH_EAST);
 	}
-	
+
 	private boolean isInSouthWestZone(MouseEvent e) {
-		return e.getY()>=getComponentHeight()-RESIZE_ZONE_WIDTH && e.getY()<=getComponentHeight()+RESIZE_ZONE_WIDTH && e.getX()>=-RESIZE_ZONE_WIDTH && e.getX()<=RESIZE_ZONE_WIDTH  && isUsable(ResizeMode.SOUTH_WEST); 
+		return e.getY() >= getComponentHeight() - RESIZE_ZONE_WIDTH && e.getY() <= getComponentHeight() + RESIZE_ZONE_WIDTH
+				&& e.getX() >= -RESIZE_ZONE_WIDTH && e.getX() <= RESIZE_ZONE_WIDTH && isUsable(ResizeMode.SOUTH_WEST);
 	}
+
 	private boolean isInSouthEastZone(MouseEvent e) {
-		return e.getY()>=getComponentHeight()-RESIZE_ZONE_WIDTH && e.getY()<=getComponentHeight()+RESIZE_ZONE_WIDTH && e.getX()>=getComponentWidth()-RESIZE_ZONE_WIDTH && e.getX()<=getComponentWidth()+RESIZE_ZONE_WIDTH && isUsable(ResizeMode.SOUTH_EAST);
+		return e.getY() >= getComponentHeight() - RESIZE_ZONE_WIDTH && e.getY() <= getComponentHeight() + RESIZE_ZONE_WIDTH
+				&& e.getX() >= getComponentWidth() - RESIZE_ZONE_WIDTH && e.getX() <= getComponentWidth() + RESIZE_ZONE_WIDTH
+				&& isUsable(ResizeMode.SOUTH_EAST);
 	}
 
 	private boolean isUsable(ResizeMode mode) {
-		if (modesToUse==null)
+		if (modesToUse == null)
 			return true;
 		for (int i = 0; i < modesToUse.length; i++) {
-			if (mode==modesToUse[i])
+			if (mode == modesToUse[i])
 				return true;
 		}
 		return false;
 	}
-	
+
 	public ResizeMode getMode() {
 		return mode;
 	}

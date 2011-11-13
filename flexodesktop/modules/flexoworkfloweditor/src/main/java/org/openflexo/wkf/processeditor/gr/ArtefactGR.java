@@ -44,7 +44,6 @@ import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 import org.openflexo.wkf.swleditor.SWLEditorConstants;
 
-
 public class ArtefactGR<O extends WKFArtefact> extends WKFNodeGR<O> {
 
 	private static final Logger logger = Logger.getLogger(ArtefactGR.class.getPackage().getName());

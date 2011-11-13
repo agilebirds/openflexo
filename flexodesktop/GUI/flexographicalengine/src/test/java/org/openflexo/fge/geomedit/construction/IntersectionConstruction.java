@@ -30,26 +30,23 @@ public class IntersectionConstruction extends GeometricConstruction<FGEArea> {
 	private static final Logger logger = FlexoLogger.getLogger(IntersectionConstruction.class.getPackage().getName());
 
 	public Vector<ObjectReference<? extends FGEArea>> objectConstructions;
-	
-	public IntersectionConstruction() 
-	{
+
+	public IntersectionConstruction() {
 		super();
 		objectConstructions = new Vector<ObjectReference<? extends FGEArea>>();
 	}
-	
-	public IntersectionConstruction(Vector<ObjectReference<? extends FGEArea>> someGeometricConstructions) 
-	{
+
+	public IntersectionConstruction(Vector<ObjectReference<? extends FGEArea>> someGeometricConstructions) {
 		this();
 		this.objectConstructions.addAll(someGeometricConstructions);
 	}
-	
+
 	@Override
-	protected FGEArea computeData()
-	{
+	protected FGEArea computeData() {
 		FGEArea o1 = objectConstructions.get(0).getData();
 		FGEArea o2 = objectConstructions.get(1).getData();
 		FGEArea returned = o1.intersect(o2);
-		logger.info("Intersection between "+o1+" and "+o2+" gives "+returned);
+		logger.info("Intersection between " + o1 + " and " + o2 + " gives " + returned);
 		if (returned == null) {
 			(new Exception("Unexpected intersection")).printStackTrace();
 		}
@@ -57,23 +54,20 @@ public class IntersectionConstruction extends GeometricConstruction<FGEArea> {
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("IntersectionConstruction[\n");
 		for (GeometricConstruction c : objectConstructions) {
-			sb.append("> "+c.toString()+"\n");
+			sb.append("> " + c.toString() + "\n");
 		}
-		sb.append("-> "+getData()+"\n");
+		sb.append("-> " + getData() + "\n");
 		sb.append("]");
 		return sb.toString();
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
+	public GeometricConstruction[] getDepends() {
 		return objectConstructions.toArray(new GeometricConstruction[objectConstructions.size()]);
 	}
-
 
 }

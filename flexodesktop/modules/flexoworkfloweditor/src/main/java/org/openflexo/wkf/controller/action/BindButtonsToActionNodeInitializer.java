@@ -36,88 +36,80 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.wkf.view.popups.AssociateActionsWithButtons;
 
-
 public class BindButtonsToActionNodeInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	BindButtonsToActionNodeInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(BindButtonsToActionNode.actionType,actionInitializer);
+	BindButtonsToActionNodeInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(BindButtonsToActionNode.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionFinalizer<BindButtonsToActionNode> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<BindButtonsToActionNode> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<BindButtonsToActionNode>() {
 			@Override
-			public boolean run(ActionEvent e, BindButtonsToActionNode action)
-			{
+			public boolean run(ActionEvent e, BindButtonsToActionNode action) {
 				OperationNode node = action.getFocusedObject();
-				if (node.getActionPetriGraph() != null && !node.getActionPetriGraph().getIsVisible()){
+				if (node.getActionPetriGraph() != null && !node.getActionPetriGraph().getIsVisible()) {
 					node.getActionPetriGraph().setIsVisible(true);
-		        }
+				}
 				return true;
 			}
 		};
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<BindButtonsToActionNode> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<BindButtonsToActionNode> getDefaultInitializer() {
 		return new FlexoActionInitializer<BindButtonsToActionNode>() {
-            @Override
-			public boolean run(ActionEvent e, BindButtonsToActionNode action)
-            {
-                OperationNode node = action.getFocusedObject();
-                action.setOperationNode(node);
-                Iterator i = node.getAllActionNodes().iterator();
-                Vector<ActionNode> actions = new Vector<ActionNode>();
-                while (i.hasNext()) {
-                    ActionNode element = (ActionNode) i.next();
-                    if (!element.isBeginNode() && !element.isEndNode())
-                        actions.add(element);
-                }
-                Vector b = node.getComponentInstance().getComponentDefinition().getWOComponent().getAllButtonInterface();
-                i = b.iterator();
-                Vector<IEHyperlinkWidget> buttons = new Vector<IEHyperlinkWidget>();
-                while (i.hasNext()) {
-                	IEHyperlinkWidget w = (IEHyperlinkWidget) i.next();
-                    if (w.hasActionType())
-                        buttons.add(w);
-                }
-                if (buttons.size() > 0) {
-                	if (node.getContainedPetriGraph()==null || !node.getContainedPetriGraph().getIsVisible())
-                		OpenActionLevel.actionType.makeNewAction(node, null, action.getEditor()).doAction();
-                    if (logger.isLoggable(Level.INFO))
-                        logger.info("Some buttons require an associated flexo action");
-                    AssociateActionsWithButtons associator = new AssociateActionsWithButtons(buttons, actions, node,
-                    		action.getException());
-                    associator.setVisible(true);
-                    int retval = associator.getButtonPressed();
-                    action.setActions(associator.getActions());
-                    action.setAssociations(associator.getAssociations());
-                    action.setInsertActionNode(associator.getInsertActionNode());
-                    action.setCleanActions(associator.isCleanActions());
-                    action.setButtons(buttons);
-                    if (retval == AssociateActionsWithButtons.OK)
-                    	action.setRetval(BindButtonsToActionNode.OK);
-                    else if (retval == AssociateActionsWithButtons.IGNORE)
-                    	action.setRetval(BindButtonsToActionNode.IGNORE);
-                    else
-                    	action.setRetval(BindButtonsToActionNode.CANCEL);
-                    return true;
-                } else if (logger.isLoggable(Level.INFO))
-                    logger.info("There are no buttons that require an action");
-                return false;
-            }
-        };
+			@Override
+			public boolean run(ActionEvent e, BindButtonsToActionNode action) {
+				OperationNode node = action.getFocusedObject();
+				action.setOperationNode(node);
+				Iterator i = node.getAllActionNodes().iterator();
+				Vector<ActionNode> actions = new Vector<ActionNode>();
+				while (i.hasNext()) {
+					ActionNode element = (ActionNode) i.next();
+					if (!element.isBeginNode() && !element.isEndNode())
+						actions.add(element);
+				}
+				Vector b = node.getComponentInstance().getComponentDefinition().getWOComponent().getAllButtonInterface();
+				i = b.iterator();
+				Vector<IEHyperlinkWidget> buttons = new Vector<IEHyperlinkWidget>();
+				while (i.hasNext()) {
+					IEHyperlinkWidget w = (IEHyperlinkWidget) i.next();
+					if (w.hasActionType())
+						buttons.add(w);
+				}
+				if (buttons.size() > 0) {
+					if (node.getContainedPetriGraph() == null || !node.getContainedPetriGraph().getIsVisible())
+						OpenActionLevel.actionType.makeNewAction(node, null, action.getEditor()).doAction();
+					if (logger.isLoggable(Level.INFO))
+						logger.info("Some buttons require an associated flexo action");
+					AssociateActionsWithButtons associator = new AssociateActionsWithButtons(buttons, actions, node, action.getException());
+					associator.setVisible(true);
+					int retval = associator.getButtonPressed();
+					action.setActions(associator.getActions());
+					action.setAssociations(associator.getAssociations());
+					action.setInsertActionNode(associator.getInsertActionNode());
+					action.setCleanActions(associator.isCleanActions());
+					action.setButtons(buttons);
+					if (retval == AssociateActionsWithButtons.OK)
+						action.setRetval(BindButtonsToActionNode.OK);
+					else if (retval == AssociateActionsWithButtons.IGNORE)
+						action.setRetval(BindButtonsToActionNode.IGNORE);
+					else
+						action.setRetval(BindButtonsToActionNode.CANCEL);
+					return true;
+				} else if (logger.isLoggable(Level.INFO))
+					logger.info("There are no buttons that require an action");
+				return false;
+			}
+		};
 	}
 
 }

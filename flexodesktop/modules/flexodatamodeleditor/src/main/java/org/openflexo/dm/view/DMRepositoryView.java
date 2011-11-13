@@ -39,142 +39,129 @@ import org.openflexo.foundation.dm.action.CreateDMEntity;
 import org.openflexo.foundation.dm.action.CreateDMPackage;
 import org.openflexo.foundation.dm.action.DMDelete;
 
-
 /**
  * View allowing to represent/edit a DMRepository object
  * 
  * @author sguerin
  * 
  */
-public class DMRepositoryView extends DMView<DMRepository>
-{
+public class DMRepositoryView extends DMView<DMRepository> {
 
-    private DMPackageTableModel packageTableModel;
+	private DMPackageTableModel packageTableModel;
 
-    protected DMTabularView packageTable;
+	protected DMTabularView packageTable;
 
-    private DMEntityTableModel entityTableModel;
+	private DMEntityTableModel entityTableModel;
 
-    protected DMTabularView entityTable;
+	protected DMTabularView entityTable;
 
-    public DMRepositoryView(DMRepository repository, DMController controller)
-    {
-        super(repository, controller, "repository_($name)");
-        addAction(new TabularViewAction(CreateDMPackage.actionType,controller.getEditor()) {
-            @Override
-			protected Vector getGlobalSelection()
-            {
-                return getViewSelection();
-            }
+	public DMRepositoryView(DMRepository repository, DMController controller) {
+		super(repository, controller, "repository_($name)");
+		addAction(new TabularViewAction(CreateDMPackage.actionType, controller.getEditor()) {
+			@Override
+			protected Vector getGlobalSelection() {
+				return getViewSelection();
+			}
 
-            @Override
-			protected FlexoModelObject getFocusedObject() 
-            {
-                return getDMRepository();
-            }           
-        });
-        addAction(new TabularViewAction(CreateDMEntity.actionType,controller.getEditor()) {
-            @Override
-			protected Vector getGlobalSelection()
-            {
-                return getViewSelection();
-            }
+			@Override
+			protected FlexoModelObject getFocusedObject() {
+				return getDMRepository();
+			}
+		});
+		addAction(new TabularViewAction(CreateDMEntity.actionType, controller.getEditor()) {
+			@Override
+			protected Vector getGlobalSelection() {
+				return getViewSelection();
+			}
 
-            @Override
-			protected FlexoModelObject getFocusedObject() 
-            {
-                return getSelectedDMPackage();
-            }           
-        });
-        addAction(new TabularViewAction(DMDelete.actionType,controller.getEditor()) {
-            @Override
-			protected Vector getGlobalSelection()
-            {
-                 return getViewSelection();
-            }
+			@Override
+			protected FlexoModelObject getFocusedObject() {
+				return getSelectedDMPackage();
+			}
+		});
+		addAction(new TabularViewAction(DMDelete.actionType, controller.getEditor()) {
+			@Override
+			protected Vector getGlobalSelection() {
+				return getViewSelection();
+			}
 
-            @Override
-			protected FlexoModelObject getFocusedObject() 
-            {
-                return null;
-            }           
-        });
-        finalizeBuilding();
-    }
+			@Override
+			protected FlexoModelObject getFocusedObject() {
+				return null;
+			}
+		});
+		finalizeBuilding();
+	}
 
-    @Override
-	protected JComponent buildContentPane()
-    {
-        DMRepository repository = getDMObject();
-        if (repository.isReadOnly())
-            packageTableModel = new DMReadOnlyPackageTableModel(repository,getDMController().getProject());
-        else 
-            packageTableModel = new DMPackageTableModel(repository, getDMController().getProject());
-        addToMasterTabularView(packageTable = new DMTabularView(getDMController(), packageTableModel, 10));
-        if (repository.isReadOnly())
-            entityTableModel = new DMReadOnlyEntityTableModel(null, getDMController().getProject());
-        else
-            entityTableModel = new DMEntityTableModel(null, getDMController().getProject());
-        addToSlaveTabularView(entityTable = new DMTabularView(getDMController(), entityTableModel, 15),packageTable);
+	@Override
+	protected JComponent buildContentPane() {
+		DMRepository repository = getDMObject();
+		if (repository.isReadOnly())
+			packageTableModel = new DMReadOnlyPackageTableModel(repository, getDMController().getProject());
+		else
+			packageTableModel = new DMPackageTableModel(repository, getDMController().getProject());
+		addToMasterTabularView(packageTable = new DMTabularView(getDMController(), packageTableModel, 10));
+		if (repository.isReadOnly())
+			entityTableModel = new DMReadOnlyEntityTableModel(null, getDMController().getProject());
+		else
+			entityTableModel = new DMEntityTableModel(null, getDMController().getProject());
+		addToSlaveTabularView(entityTable = new DMTabularView(getDMController(), entityTableModel, 15), packageTable);
 
-        return new JSplitPane(JSplitPane.VERTICAL_SPLIT, packageTable, entityTable);
-    }
+		return new JSplitPane(JSplitPane.VERTICAL_SPLIT, packageTable, entityTable);
+	}
 
-    public DMRepository getDMRepository()
-    {
-        return getDMObject();
-    }
+	public DMRepository getDMRepository() {
+		return getDMObject();
+	}
 
-    public DMPackage getSelectedDMPackage()
-    {
-        DMSelectionManager sm = getDMController().getDMSelectionManager();
-        Vector selection = sm.getSelection();
-        if ((selection.size() == 1) && (selection.firstElement() instanceof DMPackage)) {
-            return (DMPackage) selection.firstElement();
-        }
-        if (getSelectedDMEntity() != null) {
-            return getSelectedDMEntity().getPackage();
-        }
-        return null;
-    }
+	public DMPackage getSelectedDMPackage() {
+		DMSelectionManager sm = getDMController().getDMSelectionManager();
+		Vector selection = sm.getSelection();
+		if ((selection.size() == 1) && (selection.firstElement() instanceof DMPackage)) {
+			return (DMPackage) selection.firstElement();
+		}
+		if (getSelectedDMEntity() != null) {
+			return getSelectedDMEntity().getPackage();
+		}
+		return null;
+	}
 
-    public DMEntity getSelectedDMEntity()
-    {
-        DMSelectionManager sm = getDMController().getDMSelectionManager();
-        Vector selection = sm.getSelection();
-        if ((selection.size() == 1) && (selection.firstElement() instanceof DMEntity)) {
-            return (DMEntity) selection.firstElement();
-        }
-        return null;
-    }
+	public DMEntity getSelectedDMEntity() {
+		DMSelectionManager sm = getDMController().getDMSelectionManager();
+		Vector selection = sm.getSelection();
+		if ((selection.size() == 1) && (selection.firstElement() instanceof DMEntity)) {
+			return (DMEntity) selection.firstElement();
+		}
+		return null;
+	}
 
-    public DMTabularView getEntityTable() {
-        return entityTable;
-    }
+	public DMTabularView getEntityTable() {
+		return entityTable;
+	}
 
-    public DMTabularView getPackageTable() {
-        return packageTable;
-    }
+	public DMTabularView getPackageTable() {
+		return packageTable;
+	}
 
-    /**
-     * Overrides willShow
-     * @see org.openflexo.view.ModuleView#willShow()
-     */
-    @Override
-	public void willShow()
-    {
-        // TODO Auto-generated method stub
-        
-    }
+	/**
+	 * Overrides willShow
+	 * 
+	 * @see org.openflexo.view.ModuleView#willShow()
+	 */
+	@Override
+	public void willShow() {
+		// TODO Auto-generated method stub
 
-    /**
-     * Overrides willHide
-     * @see org.openflexo.view.ModuleView#willHide()
-     */
-    @Override
-	public void willHide()
-    {
-        // TODO Auto-generated method stub
-        
-    }
+	}
+
+	/**
+	 * Overrides willHide
+	 * 
+	 * @see org.openflexo.view.ModuleView#willHide()
+	 */
+	@Override
+	public void willHide() {
+		// TODO Auto-generated method stub
+
+	}
 }

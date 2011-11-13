@@ -38,125 +38,119 @@ import org.openflexo.view.controller.FlexoController;
  * 
  * @author sguerin
  */
-public class NewProjectComponent extends ProjectChooserComponent
-{
+public class NewProjectComponent extends ProjectChooserComponent {
 
-    private static final Logger logger = Logger.getLogger(OpenProjectComponent.class.getPackage()
-            .getName());
+	private static final Logger logger = Logger.getLogger(OpenProjectComponent.class.getPackage().getName());
 
-    protected NewProjectComponent(Frame owner)
-    {
-        super(owner);
-        setApproveButtonText(FlexoLocalization.localizedForKey("create"));
-    }
+	protected NewProjectComponent(Frame owner) {
+		super(owner);
+		setApproveButtonText(FlexoLocalization.localizedForKey("create"));
+	}
 
-    public static File getProjectDirectory() throws ProjectLoadingCancelledException
-    {
-    	return getProjectDirectory(FlexoFrame.getActiveFrame());
-    }
-    
-    public static File getProjectDirectory(Frame owner) throws ProjectLoadingCancelledException
-    {
-        NewProjectComponent chooser = new NewProjectComponent(owner);
-        File newProjectDir = null;
-        int returnVal = chooser.showSaveDialog();
-        if (returnVal == JFileChooser.CANCEL_OPTION)
-            return null;
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            if (isValidProjectName(chooser.getSelectedFile().getName())) {
-                newProjectDir = chooser.getSelectedFile();
-                File newFileDir = chooser.getSelectedFile().getParentFile();
-                AdvancedPrefs.setLastVisitedDirectory(newFileDir);
-                if (!newProjectDir.getName().toLowerCase().endsWith(".prj")) {
-                    newProjectDir = new File(newProjectDir.getAbsolutePath() + ".prj");
-                }
-                if (!newProjectDir.exists()) {
-                    newProjectDir.mkdir();
-                } else {
-                    if (!FlexoController.confirmWithWarning(FlexoLocalization
-                            .localizedForKey("project_already_exists_do_you_want_to_replace_it")))
-                        newProjectDir=null;
-                }
-            } else {
-                if (logger.isLoggable(Level.WARNING))
-                    logger
-                            .warning("Invalid project name. The following characters are not allowed: "
-                                    + FileUtils.BAD_CHARACTERS_FOR_FILE_NAME_REG_EXP);
-                FlexoController.notify(FlexoLocalization
-                        .localizedForKey("project_name_cannot_contain_\\___&_#_{_}_[_]_%_~"));
-            }
-        } else {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("No project specified !");
-            throw new ProjectLoadingCancelledException();
-        }
-        return newProjectDir;
-    }
+	public static File getProjectDirectory() throws ProjectLoadingCancelledException {
+		return getProjectDirectory(FlexoFrame.getActiveFrame());
+	}
 
-    /**
-     * @param absolutePath
-     * @return
-     */
-    public static boolean isValidProjectName(String fileName)
-    {
-        boolean notEmpty = fileName != null && fileName.trim().length() > 0;
-        if(!notEmpty) return false;
-        boolean containsInvalidChar = FileUtils.BAD_CHARACTERS_FOR_FILE_NAME_PATTERN.matcher(fileName).find();
-        if(containsInvalidChar) return false;
-        boolean isTooSmall = fileName.trim().length()<3;
-        if(isTooSmall)return false;
-        String firstChar = fileName.trim().substring(0,1);
-        try{
-        	int test = new Integer(firstChar);
-        	return false;
-        }catch(Exception e){
-        	
-        }
-        return true;
-    }
+	public static File getProjectDirectory(Frame owner) throws ProjectLoadingCancelledException {
+		NewProjectComponent chooser = new NewProjectComponent(owner);
+		File newProjectDir = null;
+		int returnVal = chooser.showSaveDialog();
+		if (returnVal == JFileChooser.CANCEL_OPTION)
+			return null;
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			if (isValidProjectName(chooser.getSelectedFile().getName())) {
+				newProjectDir = chooser.getSelectedFile();
+				File newFileDir = chooser.getSelectedFile().getParentFile();
+				AdvancedPrefs.setLastVisitedDirectory(newFileDir);
+				if (!newProjectDir.getName().toLowerCase().endsWith(".prj")) {
+					newProjectDir = new File(newProjectDir.getAbsolutePath() + ".prj");
+				}
+				if (!newProjectDir.exists()) {
+					newProjectDir.mkdir();
+				} else {
+					if (!FlexoController.confirmWithWarning(FlexoLocalization
+							.localizedForKey("project_already_exists_do_you_want_to_replace_it")))
+						newProjectDir = null;
+				}
+			} else {
+				if (logger.isLoggable(Level.WARNING))
+					logger.warning("Invalid project name. The following characters are not allowed: "
+							+ FileUtils.BAD_CHARACTERS_FOR_FILE_NAME_REG_EXP);
+				FlexoController.notify(FlexoLocalization.localizedForKey("project_name_cannot_contain_\\___&_#_{_}_[_]_%_~"));
+			}
+		} else {
+			if (logger.isLoggable(Level.WARNING))
+				logger.warning("No project specified !");
+			throw new ProjectLoadingCancelledException();
+		}
+		return newProjectDir;
+	}
 
-    public static void main(String []args) 
-    {
-        String s = "cou\\cou";
-        if (isValidProjectName(s)) {
-            System.err.println("Error for "+s);
-        }
-        s="cou|couc";
-        if (isValidProjectName(s)) {
-            System.err.println("Error for "+s);
-        }
-        s="cou/couc";
-        if (isValidProjectName(s)) {
-            System.err.println("Error for "+s);
-        }
-        s="cou?couc";
-        if (isValidProjectName(s)) {
-            System.err.println("Error for "+s);
-        }
-        s="cou:couc";
-        if (isValidProjectName(s)) {
-            System.err.println("Error for "+s);
-        }
-        s="cou\"couc";
-        if (isValidProjectName(s)) {
-            System.err.println("Error for "+s);
-        }
-        s="cou*couc";
-        if (isValidProjectName(s)) {
-            System.err.println("Error for "+s);
-        }
-        s="cou?couc";
-        if (isValidProjectName(s)) {
-            System.err.println("Error for "+s);
-        }
-        s="cou<couc";
-        if (isValidProjectName(s)) {
-            System.err.println("Error for "+s);
-        }
-        s="cou>couc";
-        if (isValidProjectName(s)) {
-            System.err.println("Error for "+s);
-        }
-    }
-    
+	/**
+	 * @param absolutePath
+	 * @return
+	 */
+	public static boolean isValidProjectName(String fileName) {
+		boolean notEmpty = fileName != null && fileName.trim().length() > 0;
+		if (!notEmpty)
+			return false;
+		boolean containsInvalidChar = FileUtils.BAD_CHARACTERS_FOR_FILE_NAME_PATTERN.matcher(fileName).find();
+		if (containsInvalidChar)
+			return false;
+		boolean isTooSmall = fileName.trim().length() < 3;
+		if (isTooSmall)
+			return false;
+		String firstChar = fileName.trim().substring(0, 1);
+		try {
+			int test = new Integer(firstChar);
+			return false;
+		} catch (Exception e) {
+
+		}
+		return true;
+	}
+
+	public static void main(String[] args) {
+		String s = "cou\\cou";
+		if (isValidProjectName(s)) {
+			System.err.println("Error for " + s);
+		}
+		s = "cou|couc";
+		if (isValidProjectName(s)) {
+			System.err.println("Error for " + s);
+		}
+		s = "cou/couc";
+		if (isValidProjectName(s)) {
+			System.err.println("Error for " + s);
+		}
+		s = "cou?couc";
+		if (isValidProjectName(s)) {
+			System.err.println("Error for " + s);
+		}
+		s = "cou:couc";
+		if (isValidProjectName(s)) {
+			System.err.println("Error for " + s);
+		}
+		s = "cou\"couc";
+		if (isValidProjectName(s)) {
+			System.err.println("Error for " + s);
+		}
+		s = "cou*couc";
+		if (isValidProjectName(s)) {
+			System.err.println("Error for " + s);
+		}
+		s = "cou?couc";
+		if (isValidProjectName(s)) {
+			System.err.println("Error for " + s);
+		}
+		s = "cou<couc";
+		if (isValidProjectName(s)) {
+			System.err.println("Error for " + s);
+		}
+		s = "cou>couc";
+		if (isValidProjectName(s)) {
+			System.err.println("Error for " + s);
+		}
+	}
+
 }

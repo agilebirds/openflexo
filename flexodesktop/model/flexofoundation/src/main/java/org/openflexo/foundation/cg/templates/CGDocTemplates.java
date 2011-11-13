@@ -24,12 +24,11 @@ import java.util.Vector;
 import org.openflexo.foundation.TargetType;
 import org.openflexo.foundation.rm.FlexoProject;
 
-
 public class CGDocTemplates extends CGTemplates {
 
 	public CGDocTemplates(FlexoProject project, Vector<TargetType> availableTargets) {
 		super(project, availableTargets);
-        _applicationRepository = new ApplicationDGTemplateRepository(this, availableTargets);
+		_applicationRepository = new ApplicationDGTemplateRepository(this, availableTargets);
 		update();
 	}
 

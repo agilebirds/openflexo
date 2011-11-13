@@ -30,33 +30,29 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.view.FGEView;
 
-
-public class SelectionAction extends MouseClickControlAction
-{
+public class SelectionAction extends MouseClickControlAction {
 	@Override
-	public MouseClickControlActionType getActionType()
-	{
+	public MouseClickControlActionType getActionType() {
 		return MouseClickControlActionType.SELECTION;
 	}
 
 	@Override
-	public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event)
-	{
-		if (controller.getDrawingView() == null) return false;
-		
+	public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
+		if (controller.getDrawingView() == null)
+			return false;
+
 		if (graphicalRepresentation.getIsSelectable()) {
-			if (logger.isLoggable(Level.FINE)) logger.fine("Select "+graphicalRepresentation);		
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("Select " + graphicalRepresentation);
 			controller.setSelectedObject(graphicalRepresentation);
-			if (controller.getDrawingView() == null) return false;
+			if (controller.getDrawingView() == null)
+				return false;
 			FGEView<?> view = controller.getDrawingView().viewForObject(graphicalRepresentation);
-			Point newPoint = SwingUtilities.convertPoint(
-					(Component)event.getSource(), 
-					event.getPoint(), 
-					(Component)view);
-			controller.setLastClickedPoint(new FGEPoint(newPoint.x/controller.getScale(),newPoint.y/controller.getScale()));
+			Point newPoint = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), (Component) view);
+			controller.setLastClickedPoint(new FGEPoint(newPoint.x / controller.getScale(), newPoint.y / controller.getScale()));
 			controller.setLastSelectedGR(graphicalRepresentation);
 			return false;
-		}
-		else return false;
+		} else
+			return false;
 	}
 }

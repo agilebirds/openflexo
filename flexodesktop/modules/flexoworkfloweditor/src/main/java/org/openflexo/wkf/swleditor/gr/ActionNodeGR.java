@@ -30,14 +30,12 @@ import org.openflexo.wkf.processeditor.ProcessEditorConstants;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 import org.openflexo.wkf.utils.ActionNodeShapePainter;
 
-
 public class ActionNodeGR extends AbstractActionNodeGR {
 
 	private ForegroundStyle foreground;
 	private BackgroundStyle background;
 
-	public ActionNodeGR(ActionNode actionNode, SwimmingLaneRepresentation aDrawing,boolean isInPalet)
-	{
+	public ActionNodeGR(ActionNode actionNode, SwimmingLaneRepresentation aDrawing, boolean isInPalet) {
 		super(actionNode, aDrawing, isInPalet);
 
 		setWidth(30);
@@ -69,17 +67,17 @@ public class ActionNodeGR extends AbstractActionNodeGR {
 			}
 		}
 		else {*/
-			foreground = ForegroundStyle.makeStyle(Color.RED);
-			foreground.setLineWidth(0.6);
-			background = BackgroundStyle.makeColoredBackground(getMainBgColor());
-		//}
+		foreground = ForegroundStyle.makeStyle(Color.RED);
+		foreground.setLineWidth(0.6);
+		background = BackgroundStyle.makeColoredBackground(getMainBgColor());
+		// }
 		setForeground(foreground);
 		setBackground(background);
 	}
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (dataModification.propertyName()!=null && dataModification.propertyName().equals("actionType")) {
+		if (dataModification.propertyName() != null && dataModification.propertyName().equals("actionType")) {
 			updateImageBackground();
 		}
 		super.update(observable, dataModification);
@@ -89,37 +87,32 @@ public class ActionNodeGR extends AbstractActionNodeGR {
 	 * Overriden to implement defaut automatic layout
 	 */
 	@Override
-	public double _getDefaultX()
-	{
+	public double _getDefaultX() {
 		int index = getActionNode().getParentPetriGraph().getIndexForNormalNode(getActionNode());
-		return (index % 4 ) * 50 + 50;
+		return (index % 4) * 50 + 50;
 	}
 
 	/**
 	 * Overriden to implement defaut automatic layout
 	 */
 	@Override
-	public double _getDefaultY()
-	{
+	public double _getDefaultY() {
 		int index = getActionNode().getParentPetriGraph().getIndexForNormalNode(getActionNode());
-		return (index / 4 ) * 50;
+		return (index / 4) * 50;
 	}
 
 	@Override
-	public double getDefaultLabelX() 
-	{
+	public double getDefaultLabelX() {
 		if (getModel().hasLabelLocationForContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR))
 			return getModel().getLabelLocation(ProcessEditorConstants.BASIC_PROCESS_EDITOR).getX();
-		return getLeftBorder()+15;
+		return getLeftBorder() + 15;
 	}
 
 	@Override
-	public double getDefaultLabelY() 
-	{
+	public double getDefaultLabelY() {
 		if (getModel().hasLabelLocationForContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR))
 			return getModel().getLabelLocation(ProcessEditorConstants.BASIC_PROCESS_EDITOR).getY();
-		return getTopBorder()+40;
+		return getTopBorder() + 40;
 	}
-
 
 }

@@ -28,22 +28,19 @@ import org.openflexo.inspector.selection.InspectorSelection;
 import org.openflexo.inspector.selection.UniqueSelection;
 import org.openflexo.swing.WindowSynchronizer;
 
-
 /**
  * Inspector window
  * 
  * @author bmangez
  */
-public class InspectorWindow extends JDialog implements InspectingWidget
-{
+public class InspectorWindow extends JDialog implements InspectingWidget {
 
 	private static final WindowSynchronizer inspectorWindowSynchronizer = new WindowSynchronizer();
 
 	private InspectorController _controller;
 	private InspectorTabbedPanel _content;
 
-	protected InspectorWindow(JFrame frame, InspectorController controller)
-	{
+	protected InspectorWindow(JFrame frame, InspectorController controller) {
 		super(frame);
 		setDefaultCloseOperation(HIDE_ON_CLOSE);
 		_controller = controller;
@@ -69,47 +66,39 @@ public class InspectorWindow extends JDialog implements InspectingWidget
 	}
 
 	@Override
-	public void newSelection(InspectorSelection selection)
-	{
+	public void newSelection(InspectorSelection selection) {
 		_content.newSelection(selection);
-		if ((selection instanceof UniqueSelection) && (_content.currentTabPanel!=null)) {
+		if ((selection instanceof UniqueSelection) && (_content.currentTabPanel != null)) {
 			updateTitle(_content.currentTabPanel);
-		}
-		else {
+		} else {
 			updateTitle();
 		}
 	}
 
-	private void updateTitle()
-	{
+	private void updateTitle() {
 		updateTitle(null);
 	}
 
-	private void updateTitle(InspectorModelView currentTabPanel)
-	{
+	private void updateTitle(InspectorModelView currentTabPanel) {
 		setTitle(getController().getWindowTitle(currentTabPanel));
 	}
 
 	@Override
-	public InspectorController getController()
-	{
+	public InspectorController getController() {
 		return _controller;
 	}
 
 	@Override
-	public void notifiedInspectedObjectChange(InspectableObject newInspectedObject)
-	{
+	public void notifiedInspectedObjectChange(InspectableObject newInspectedObject) {
 		_content.notifiedInspectedObjectChange(newInspectedObject);
 	}
 
 	@Override
-	public void notifiedActiveTabChange(String newActiveTabName)
-	{
+	public void notifiedActiveTabChange(String newActiveTabName) {
 		_content.notifiedActiveTabChange(newActiveTabName);
 	}
 
-	public InspectorTabbedPanel getContent()
-	{
+	public InspectorTabbedPanel getContent() {
 		return _content;
 	}
 

@@ -32,44 +32,36 @@ import org.openflexo.sgmodule.view.CGTemplateFileModuleView;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class SaveCustomTemplateFileInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	SaveCustomTemplateFileInitializer(SGControllerActionInitializer actionInitializer)
-	{
-		super(SaveCustomTemplateFile.actionType,actionInitializer);
+	SaveCustomTemplateFileInitializer(SGControllerActionInitializer actionInitializer) {
+		super(SaveCustomTemplateFile.actionType, actionInitializer);
 	}
 
 	@Override
-	protected SGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (SGControllerActionInitializer)super.getControllerActionInitializer();
+	protected SGControllerActionInitializer getControllerActionInitializer() {
+		return (SGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<SaveCustomTemplateFile> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<SaveCustomTemplateFile> getDefaultInitializer() {
 		return new FlexoActionInitializer<SaveCustomTemplateFile>() {
 			@Override
-			public boolean run(ActionEvent e, SaveCustomTemplateFile action)
-			{
+			public boolean run(ActionEvent e, SaveCustomTemplateFile action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<SaveCustomTemplateFile> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<SaveCustomTemplateFile> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<SaveCustomTemplateFile>() {
 			@Override
-			public boolean run(ActionEvent e, SaveCustomTemplateFile action)
-			{
-				if ((action.getInvoker() == null) 
-						|| !(action.getInvoker() instanceof CGTemplateFileModuleView)
-						|| !(((CGTemplateFileModuleView)action.getInvoker()).isOpenedInSeparateWindow())) {
+			public boolean run(ActionEvent e, SaveCustomTemplateFile action) {
+				if ((action.getInvoker() == null) || !(action.getInvoker() instanceof CGTemplateFileModuleView)
+						|| !(((CGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow())) {
 					getControllerActionInitializer().getSGController().selectAndFocusObject(action.getFocusedObject());
 				}
 				return true;
@@ -78,14 +70,12 @@ public class SaveCustomTemplateFileInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return IconLibrary.SAVE_ICON;
 	}
 
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return IconLibrary.SAVE_DISABLED_ICON;
 	}
 

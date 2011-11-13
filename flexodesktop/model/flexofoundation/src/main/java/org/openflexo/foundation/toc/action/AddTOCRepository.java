@@ -35,25 +35,22 @@ import org.openflexo.localization.FlexoLocalization;
 
 public class AddTOCRepository extends FlexoAction<AddTOCRepository, FlexoModelObject, TOCObject> {
 
-	public static final FlexoActionType<AddTOCRepository, FlexoModelObject, TOCObject> actionType
-	= new FlexoActionType<AddTOCRepository, FlexoModelObject, TOCObject>("add_toc", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
+	public static final FlexoActionType<AddTOCRepository, FlexoModelObject, TOCObject> actionType = new FlexoActionType<AddTOCRepository, FlexoModelObject, TOCObject>(
+			"add_toc", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object,
-				Vector<TOCObject> globalSelection) {
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<TOCObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object,
-				Vector<TOCObject> globalSelection) {
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<TOCObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public AddTOCRepository makeNewAction(FlexoModelObject focusedObject,
-				Vector<TOCObject> globalSelection, FlexoEditor editor) {
-			return new AddTOCRepository(focusedObject,globalSelection,editor);
+		public AddTOCRepository makeNewAction(FlexoModelObject focusedObject, Vector<TOCObject> globalSelection, FlexoEditor editor) {
+			return new AddTOCRepository(focusedObject, globalSelection, editor);
 		}
 
 	};
@@ -73,20 +70,19 @@ public class AddTOCRepository extends FlexoAction<AddTOCRepository, FlexoModelOb
 		this.tocTemplate = tocTemplate;
 	}
 
-	protected AddTOCRepository(FlexoModelObject focusedObject,
-			Vector<TOCObject> globalSelection, FlexoEditor editor){
-		super(actionType,focusedObject,globalSelection,editor);
+	protected AddTOCRepository(FlexoModelObject focusedObject, Vector<TOCObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
 
 	}
 
 	@Override
 	protected void doAction(Object context) throws FlexoException {
-		if (getRepositoryName()==null || getRepositoryName().trim().length()==0)
-			throw new InvalidArgumentException(FlexoLocalization.localizedForKey("name_cannot_be_empty"),"name_cannot_be_empty");
+		if (getRepositoryName() == null || getRepositoryName().trim().length() == 0)
+			throw new InvalidArgumentException(FlexoLocalization.localizedForKey("name_cannot_be_empty"), "name_cannot_be_empty");
 		String attempt = getRepositoryName();
 		int i = 1;
-		while (getData().getRepositoryWithTitle(attempt)!=null)
-			attempt=getRepositoryName()+"-"+i++;
+		while (getData().getRepositoryWithTitle(attempt) != null)
+			attempt = getRepositoryName() + "-" + i++;
 		newRepository = new TOCRepository(getData(), getDocType(), getTocTemplate());
 		newRepository.setTitle(attempt);
 		getData().addToRepositories(newRepository);

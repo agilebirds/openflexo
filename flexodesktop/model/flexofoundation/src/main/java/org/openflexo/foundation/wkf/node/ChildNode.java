@@ -27,13 +27,12 @@ import org.openflexo.xmlcode.XMLSerializable;
  * @author sguerin
  * 
  */
-public interface ChildNode extends XMLSerializable
-{
+public interface ChildNode extends XMLSerializable {
 
-    public FatherNode getFather();
+	public FatherNode getFather();
 
-    public boolean isBeginNode();
+	public boolean isBeginNode();
 
-    public boolean isEndNode();
+	public boolean isEndNode();
 
 }

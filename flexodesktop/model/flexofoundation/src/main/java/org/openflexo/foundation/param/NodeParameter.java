@@ -23,52 +23,45 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.wkf.node.AbstractNode;
 import org.openflexo.inspector.widget.DenaliWidget;
 
-
 public class NodeParameter extends ParameterDefinition<AbstractNode> {
 
-    private NodeSelectingConditional _nodeSelectingConditional;
-    
-    public NodeParameter(String name, String label, AbstractNode defaultValue)
-    {
-        super(name,label,defaultValue);
-        addParameter("className","org.openflexo.components.widget.NodeInspectorWidget");
-        _nodeSelectingConditional = null;
-    }
-    
-   @Override
-public String getWidgetName() 
-   {
-        return DenaliWidget.CUSTOM;
-    }
+	private NodeSelectingConditional _nodeSelectingConditional;
 
-   private FlexoModelObject _rootObject;
+	public NodeParameter(String name, String label, AbstractNode defaultValue) {
+		super(name, label, defaultValue);
+		addParameter("className", "org.openflexo.components.widget.NodeInspectorWidget");
+		_nodeSelectingConditional = null;
+	}
 
-   public void setRootObject(FlexoModelObject rootObject)
-   {
-	   _rootObject = rootObject;
-	   addParameter("root", "params."+getName()+".rootObject");
-   }
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.CUSTOM;
+	}
 
-   public FlexoModelObject getRootObject() 
-   {
-	   return _rootObject;
-   }
+	private FlexoModelObject _rootObject;
 
-   public boolean isAcceptableNode(AbstractNode aNode) 
-   {
-	   if (_nodeSelectingConditional != null) return _nodeSelectingConditional.isSelectable(aNode);
-	   return true;
-   }
+	public void setRootObject(FlexoModelObject rootObject) {
+		_rootObject = rootObject;
+		addParameter("root", "params." + getName() + ".rootObject");
+	}
 
-   public void setNodeSelectingConditional(NodeSelectingConditional nodeSelectingConditional) 
-   {
-	   _nodeSelectingConditional = nodeSelectingConditional;
-	   addParameter("isSelectable", "params."+getName()+".isAcceptableNode");
-   }
+	public FlexoModelObject getRootObject() {
+		return _rootObject;
+	}
 
-   public abstract static class NodeSelectingConditional
-   {
-	   public abstract boolean isSelectable(AbstractNode node);
-   }
+	public boolean isAcceptableNode(AbstractNode aNode) {
+		if (_nodeSelectingConditional != null)
+			return _nodeSelectingConditional.isSelectable(aNode);
+		return true;
+	}
+
+	public void setNodeSelectingConditional(NodeSelectingConditional nodeSelectingConditional) {
+		_nodeSelectingConditional = nodeSelectingConditional;
+		addParameter("isSelectable", "params." + getName() + ".isAcceptableNode");
+	}
+
+	public abstract static class NodeSelectingConditional {
+		public abstract boolean isSelectable(AbstractNode node);
+	}
 
 }

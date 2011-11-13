@@ -37,7 +37,6 @@ import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 
-
 public class AddCustomTemplateRepository extends FlexoAction<AddCustomTemplateRepository, CGTemplates, CGTemplateObject> {
 
 	private static final Logger logger = Logger.getLogger(AddCustomTemplateRepository.class.getPackage().getName());
@@ -83,12 +82,11 @@ public class AddCustomTemplateRepository extends FlexoAction<AddCustomTemplateRe
 	}
 
 	@Override
-	protected void doAction(Object context) throws DuplicateCodeRepositoryNameException, InvalidFileNameException, DuplicateResourceException 
-	{
-		if (getFocusedObject().getTemplates().getCustomCGTemplateRepositoryForName(
-				getNewCustomTemplatesRepositoryName()) != null
+	protected void doAction(Object context) throws DuplicateCodeRepositoryNameException, InvalidFileNameException,
+			DuplicateResourceException {
+		if (getFocusedObject().getTemplates().getCustomCGTemplateRepositoryForName(getNewCustomTemplatesRepositoryName()) != null
 				|| getFocusedObject().getProject().resourceForFileName(getNewCustomTemplatesRepositoryDirectory()) != null) {
-			throw new DuplicateResourceException(ResourceType.CUSTOM_TEMPLATES+"."+getNewCustomTemplatesRepositoryName());
+			throw new DuplicateResourceException(ResourceType.CUSTOM_TEMPLATES + "." + getNewCustomTemplatesRepositoryName());
 		}
 
 		logger.info("Add CustomTemplateRepository " + getFocusedObject());

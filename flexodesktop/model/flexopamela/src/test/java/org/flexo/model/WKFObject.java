@@ -8,10 +8,8 @@ import org.openflexo.model.annotations.IntegrityConstraints;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
 
-@ModelEntity(isAbstract=true)
-@IntegrityConstraints({
-	@IntegrityConstraint("process != null")
-})
+@ModelEntity(isAbstract = true)
+@IntegrityConstraints({ @IntegrityConstraint("process != null") })
 public interface WKFObject extends FlexoModelObject {
 
 	public static final String PROCESS = "process";
@@ -20,10 +18,10 @@ public interface WKFObject extends FlexoModelObject {
 	@CloningStrategy(StrategyType.IGNORE)
 	public FlexoProcess getProcess();
 
-	@Setter(value=PROCESS)
+	@Setter(value = PROCESS)
 	public void setProcess(FlexoProcess aProcess);
 
 	@Override
-	@Setter(value=FlexoModelObject.FLEXO_ID)
+	@Setter(value = FlexoModelObject.FLEXO_ID)
 	public void setFlexoID(String flexoID);
 }

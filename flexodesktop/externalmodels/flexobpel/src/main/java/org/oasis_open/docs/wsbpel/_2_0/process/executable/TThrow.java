@@ -23,7 +23,6 @@
 // Generated on: 2008.02.08 at 10:43:57 AM CET 
 //
 
-
 package org.oasis_open.docs.wsbpel._2_0.process.executable;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -34,11 +33,12 @@ import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import javax.xml.namespace.QName;
 
-
 /**
- * <p>Java class for tThrow complex type.
+ * <p>
+ * Java class for tThrow complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="tThrow">
@@ -55,62 +55,54 @@ import javax.xml.namespace.QName;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tThrow")
-public class TThrow
-    extends TActivity
-{
+public class TThrow extends TActivity {
 
-    @XmlAttribute(required = true)
-    protected QName faultName;
-    @XmlAttribute
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String faultVariable;
+	@XmlAttribute(required = true)
+	protected QName faultName;
+	@XmlAttribute
+	@XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+	protected String faultVariable;
 
-    /**
-     * Gets the value of the faultName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QName }
-     *     
-     */
-    public QName getFaultName() {
-        return faultName;
-    }
+	/**
+	 * Gets the value of the faultName property.
+	 * 
+	 * @return possible object is {@link QName }
+	 * 
+	 */
+	public QName getFaultName() {
+		return faultName;
+	}
 
-    /**
-     * Sets the value of the faultName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QName }
-     *     
-     */
-    public void setFaultName(QName value) {
-        this.faultName = value;
-    }
+	/**
+	 * Sets the value of the faultName property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link QName }
+	 * 
+	 */
+	public void setFaultName(QName value) {
+		this.faultName = value;
+	}
 
-    /**
-     * Gets the value of the faultVariable property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getFaultVariable() {
-        return faultVariable;
-    }
+	/**
+	 * Gets the value of the faultVariable property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getFaultVariable() {
+		return faultVariable;
+	}
 
-    /**
-     * Sets the value of the faultVariable property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setFaultVariable(String value) {
-        this.faultVariable = value;
-    }
+	/**
+	 * Sets the value of the faultVariable property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setFaultVariable(String value) {
+		this.faultVariable = value;
+	}
 
 }

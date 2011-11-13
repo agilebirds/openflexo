@@ -27,39 +27,37 @@ import org.openflexo.localization.FlexoLocalization;
  * @author sguerin
  * 
  */
-public class FlexoException extends Exception
-{
+public class FlexoException extends Exception {
 
 	// key used for localized messages, in FlexoLocalization
 	private String _localizationKey;
-	
-	public FlexoException(){
+
+	public FlexoException() {
 		super();
 	}
-	
-	public FlexoException(String message){
+
+	public FlexoException(String message) {
 		super(message);
 	}
-	
-	public FlexoException(String message,Exception e){
-		super(message,e);
+
+	public FlexoException(String message, Exception e) {
+		super(message, e);
 	}
-	
-	public FlexoException(String message, String localizationKey){
+
+	public FlexoException(String message, String localizationKey) {
 		super(message);
 		_localizationKey = localizationKey;
 	}
-	
-	public String getLocalizationKey()
-	{
+
+	public String getLocalizationKey() {
 		return _localizationKey;
 	}
-	
+
 	@Override
-	public String getLocalizedMessage()
-	{
-		if (_localizationKey == null) return getMessage();
+	public String getLocalizedMessage() {
+		if (_localizationKey == null)
+			return getMessage();
 		return FlexoLocalization.localizedForKey(_localizationKey);
 	}
-	
+
 }

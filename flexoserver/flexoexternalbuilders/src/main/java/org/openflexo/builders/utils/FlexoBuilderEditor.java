@@ -64,8 +64,7 @@ public class FlexoBuilderEditor extends InteractiveFlexoEditor implements Projec
 			if (projectDocGenerator == null) {
 				try {
 
-					switch(repository.getFormat())
-					{
+					switch (repository.getFormat()) {
 					case LATEX:
 						projectDocGenerator = new ProjectDocLatexGenerator(this.getProject(), (DGRepository) repository);
 						break;
@@ -104,14 +103,12 @@ public class FlexoBuilderEditor extends InteractiveFlexoEditor implements Projec
 	}
 
 	@Override
-	public  FlexoActionEnableCondition getEnableConditionFor(
-			FlexoActionType actionType) {
+	public FlexoActionEnableCondition getEnableConditionFor(FlexoActionType actionType) {
 		return null;
 	}
 
 	@Override
-	public FlexoActionInitializer getInitializerFor(FlexoActionType actionType)
-	{
+	public FlexoActionInitializer getInitializerFor(FlexoActionType actionType) {
 		FlexoActionType _localActionType = actionType;
 		if (_localActionType.equals(ValidateProject.actionType)) {
 			return new FlexoActionInitializer<FlexoAction>() {
@@ -127,14 +124,12 @@ public class FlexoBuilderEditor extends InteractiveFlexoEditor implements Projec
 	}
 
 	@Override
-	public  FlexoActionFinalizer getFinalizerFor(
-			FlexoActionType actionType) {
+	public FlexoActionFinalizer getFinalizerFor(FlexoActionType actionType) {
 		return null;
 	}
 
 	@Override
-	public FlexoExceptionHandler getExceptionHandlerFor(FlexoActionType actionType)
-	{
+	public FlexoExceptionHandler getExceptionHandlerFor(FlexoActionType actionType) {
 		return null;
 	}
 

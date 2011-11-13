@@ -25,26 +25,24 @@ import java.util.Vector;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.utils.FlexoCSS;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public interface ButtonedWidgetInterface extends IWidget
-{
-    public Enumeration<IEHyperlinkWidget> buttonWidgets();
-    
-    public void insertButtonAtIndex(IEHyperlinkWidget button, int index);
-    
-    public void removeButton(IEHyperlinkWidget button);
-    
-    public void addObserver(FlexoObserver observer);
-    
-    public void deleteObserver(FlexoObserver observer);
-    
-    public FlexoCSS getFlexoCSS();
-    
-    public IESequenceWidget getSequenceWidget();
-    
-    public Vector<IEHyperlinkWidget> getAllButtons();
+public interface ButtonedWidgetInterface extends IWidget {
+	public Enumeration<IEHyperlinkWidget> buttonWidgets();
+
+	public void insertButtonAtIndex(IEHyperlinkWidget button, int index);
+
+	public void removeButton(IEHyperlinkWidget button);
+
+	public void addObserver(FlexoObserver observer);
+
+	public void deleteObserver(FlexoObserver observer);
+
+	public FlexoCSS getFlexoCSS();
+
+	public IESequenceWidget getSequenceWidget();
+
+	public Vector<IEHyperlinkWidget> getAllButtons();
 }

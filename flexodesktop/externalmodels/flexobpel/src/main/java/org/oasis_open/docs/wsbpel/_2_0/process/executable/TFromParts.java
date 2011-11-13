@@ -23,7 +23,6 @@
 // Generated on: 2008.02.08 at 10:43:57 AM CET 
 //
 
-
 package org.oasis_open.docs.wsbpel._2_0.process.executable;
 
 import java.util.ArrayList;
@@ -34,11 +33,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for tFromParts complex type.
+ * <p>
+ * Java class for tFromParts complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="tFromParts">
@@ -55,43 +55,37 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tFromParts", propOrder = {
-    "fromPart"
-})
-public class TFromParts
-    extends TExtensibleElements
-{
+@XmlType(name = "tFromParts", propOrder = { "fromPart" })
+public class TFromParts extends TExtensibleElements {
 
-    @XmlElement(required = true)
-    protected List<TFromPart> fromPart;
+	@XmlElement(required = true)
+	protected List<TFromPart> fromPart;
 
-    /**
-     * Gets the value of the fromPart property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the fromPart property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getFromPart().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link TFromPart }
-     * 
-     * 
-     */
-    public List<TFromPart> getFromPart() {
-        if (fromPart == null) {
-            fromPart = new ArrayList<TFromPart>();
-        }
-        return this.fromPart;
-    }
+	/**
+	 * Gets the value of the fromPart property.
+	 * 
+	 * <p>
+	 * This accessor method returns a reference to the live list, not a snapshot. Therefore any modification you make to the returned list
+	 * will be present inside the JAXB object. This is why there is not a <CODE>set</CODE> method for the fromPart property.
+	 * 
+	 * <p>
+	 * For example, to add a new item, do as follows:
+	 * 
+	 * <pre>
+	 * getFromPart().add(newItem);
+	 * </pre>
+	 * 
+	 * 
+	 * <p>
+	 * Objects of the following type(s) are allowed in the list {@link TFromPart }
+	 * 
+	 * 
+	 */
+	public List<TFromPart> getFromPart() {
+		if (fromPart == null) {
+			fromPart = new ArrayList<TFromPart>();
+		}
+		return this.fromPart;
+	}
 
 }

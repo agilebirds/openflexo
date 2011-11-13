@@ -33,12 +33,13 @@ import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import javax.xml.namespace.QName;
 
-
 /**
- * <p>Java class for tRole complex type.
- *
- * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * <p>
+ * Java class for tRole complex type.
+ * 
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
+ * 
  * <pre>
  * &lt;complexType name="tRole">
  *   &lt;complexContent>
@@ -49,64 +50,58 @@ import javax.xml.namespace.QName;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tRole")
 public class TRole extends TExtensibleElements {
-    @XmlAttribute(required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "NCName")
-    protected String name;
-    @XmlAttribute(required = true)
-    protected QName portType;
+	@XmlAttribute(required = true)
+	@XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+	@XmlSchemaType(name = "NCName")
+	protected String name;
+	@XmlAttribute(required = true)
+	protected QName portType;
 
-    /**
-     * Gets the value of the name property.
-     *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *
-     */
-    public String getName() {
-        return name;
-    }
+	/**
+	 * Gets the value of the name property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * Sets the value of the name property.
-     *
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
+	/**
+	 * Sets the value of the name property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setName(String value) {
+		this.name = value;
+	}
 
-    /**
-     * Gets the value of the portType property.
-     *
-     * @return
-     *     possible object is
-     *     {@link QName }
-     *
-     */
-    public QName getPortType() {
-        return portType;
-    }
+	/**
+	 * Gets the value of the portType property.
+	 * 
+	 * @return possible object is {@link QName }
+	 * 
+	 */
+	public QName getPortType() {
+		return portType;
+	}
 
-    /**
-     * Sets the value of the portType property.
-     *
-     * @param value
-     *     allowed object is
-     *     {@link QName }
-     *
-     */
-    public void setPortType(QName value) {
-        this.portType = value;
-    }
+	/**
+	 * Sets the value of the portType property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link QName }
+	 * 
+	 */
+	public void setPortType(QName value) {
+		this.portType = value;
+	}
 }

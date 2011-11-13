@@ -30,9 +30,7 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.model.TabModel;
 import org.openflexo.xmlcode.XMLMapping;
 
-
-public class ParametersModel extends TemporaryFlexoModelObject implements InspectableObject
-{
+public class ParametersModel extends TemporaryFlexoModelObject implements InspectableObject {
 
 	static final Logger logger = Logger.getLogger(ParametersModel.class.getPackage().getName());
 
@@ -41,189 +39,169 @@ public class ParametersModel extends TemporaryFlexoModelObject implements Inspec
 
 	private FlexoProject _project;
 
-	public ParametersModel(FlexoProject project, ParameterDefinition[] params)
-    {
-        super();
-        _project = project;
-        _parameters = new Hashtable();
-        _tabModel = new TabModel();
-        _tabModel.name = "Parameters";
-       for (int i=0; i<params.length; i++) {
-           ParameterDefinition next = params[i];
-            _parameters.put(params[i].getName(),params[i]);
-            next.getPropertyModel().constraint=i;
-             _tabModel.setPropertyForKey(next.getPropertyModel(),next.getName());
-       }
-       _params = new ParamsModel();
-       _specialObjects = new Hashtable<String,Object>();
-     }
-    
-    public ParameterDefinition parameterForKey (String aKey)
-    {
-        return (ParameterDefinition)_parameters.get(aKey);
-    }
-    
-    private ParamsModel _params;
-    
-    public ParamsModel getParams()
-    {
-     return _params;   
-    }
-    
-    public void setParams(ParamsModel model)
-    {
-     // interface  
-    }
-    
-    protected class ParamsModel extends FlexoObject
-    {
-        @Override
-		public Object objectForKey(String key)
-        {
-            return parameterForKey (key);
-         }
-     }
-    
-    private Hashtable<String,Object> _specialObjects;
-    
-    /**
-     * Adds an objects to "special" objects in order to be access through KV-coding in inspector definitions
-     * @param anObject
-     * @param aKey
-     */
-    public void addObjectForKey(Object anObject, String aKey)
-    {
-    	_specialObjects.put(aKey, anObject);
-    }
-    
-    // Objects interface
+	public ParametersModel(FlexoProject project, ParameterDefinition[] params) {
+		super();
+		_project = project;
+		_parameters = new Hashtable();
+		_tabModel = new TabModel();
+		_tabModel.name = "Parameters";
+		for (int i = 0; i < params.length; i++) {
+			ParameterDefinition next = params[i];
+			_parameters.put(params[i].getName(), params[i]);
+			next.getPropertyModel().constraint = i;
+			_tabModel.setPropertyForKey(next.getPropertyModel(), next.getName());
+		}
+		_params = new ParamsModel();
+		_specialObjects = new Hashtable<String, Object>();
+	}
 
-    @Override
-	public Object objectForKey(String key)
-    {
-        ParameterDefinition param = parameterForKey (key);
-        if (param != null) {
-            return param.getValue();
-        }
-        else if (_specialObjects.get(key) != null) {
-        	return _specialObjects.get(key);
-        }
-        else return super.objectForKey(key);
-    }
+	public ParameterDefinition parameterForKey(String aKey) {
+		return (ParameterDefinition) _parameters.get(aKey);
+	}
 
-    @Override
-	public void setObjectForKey(Object value, String key)
-    {
-        ParameterDefinition param = parameterForKey (key);
-        if (param != null) {
-            param.setValue(value);
-        }
-        else {
-            super.setObjectForKey(value,key);
-        }
-    }
+	private ParamsModel _params;
 
-    @Override
-	public boolean booleanValueForKey(String key)
-    {
-        ParameterDefinition param = parameterForKey (key);
-        if (param != null) {
-            return param.getBooleanValue();
-        }
-        else return super.booleanValueForKey(key);
-    }
+	public ParamsModel getParams() {
+		return _params;
+	}
 
-    @Override
-	public void setBooleanValueForKey(boolean value, String key)   
-    {
-        ParameterDefinition param = parameterForKey (key);
-        if (param != null) {
-             param.setBooleanValue(value);
-        }
-        else {
-            super.setBooleanValueForKey(value,key);
-        }
-     }
+	public void setParams(ParamsModel model) {
+		// interface
+	}
 
-    @Override
-	public int integerValueForKey(String key)
-    {
-        ParameterDefinition param = parameterForKey (key);
-        if (param != null) {
-            return param.getIntegerValue();
-        }
-        else return super.integerValueForKey(key);
-        
-    }
-    
-     @Override
-	public void setIntegerValueForKey(int value, String key)
-     {
-         ParameterDefinition param = parameterForKey (key);
-         if (param != null) {
-              param.setIntegerValue(value);
-         }
-         else {
-             super.setIntegerValueForKey(value,key);
-         }
+	protected class ParamsModel extends FlexoObject {
+		@Override
+		public Object objectForKey(String key) {
+			return parameterForKey(key);
+		}
+	}
 
-     }
+	private Hashtable<String, Object> _specialObjects;
 
-   // Retrieving type
+	/**
+	 * Adds an objects to "special" objects in order to be access through KV-coding in inspector definitions
+	 * 
+	 * @param anObject
+	 * @param aKey
+	 */
+	public void addObjectForKey(Object anObject, String aKey) {
+		_specialObjects.put(aKey, anObject);
+	}
 
-    @Override
-	public Class getTypeForKey(String key)
-    {
-        ParameterDefinition param = parameterForKey (key);
-        if ((param != null) && (param.getValue() != null)) {
-            return param.getValue().getClass();
-        }
-        return null;
-       
-    }
+	// Objects interface
 
-    @Override
-	public String getInspectorName() 
-    {
-        return null;
-    }
+	@Override
+	public Object objectForKey(String key) {
+		ParameterDefinition param = parameterForKey(key);
+		if (param != null) {
+			return param.getValue();
+		} else if (_specialObjects.get(key) != null) {
+			return _specialObjects.get(key);
+		} else
+			return super.objectForKey(key);
+	}
 
-    private TabModel _tabModel = null;
-    
-    public TabModel getTabModel() 
-    {
-         return _tabModel;
-    }
+	@Override
+	public void setObjectForKey(Object value, String key) {
+		ParameterDefinition param = parameterForKey(key);
+		if (param != null) {
+			param.setValue(value);
+		} else {
+			super.setObjectForKey(value, key);
+		}
+	}
 
-    @Override
-	public FlexoProject getProject()
-    {
-        return _project;
-    }
+	@Override
+	public boolean booleanValueForKey(String key) {
+		ParameterDefinition param = parameterForKey(key);
+		if (param != null) {
+			return param.getBooleanValue();
+		} else
+			return super.booleanValueForKey(key);
+	}
 
-    @Override
+	@Override
+	public void setBooleanValueForKey(boolean value, String key) {
+		ParameterDefinition param = parameterForKey(key);
+		if (param != null) {
+			param.setBooleanValue(value);
+		} else {
+			super.setBooleanValueForKey(value, key);
+		}
+	}
+
+	@Override
+	public int integerValueForKey(String key) {
+		ParameterDefinition param = parameterForKey(key);
+		if (param != null) {
+			return param.getIntegerValue();
+		} else
+			return super.integerValueForKey(key);
+
+	}
+
+	@Override
+	public void setIntegerValueForKey(int value, String key) {
+		ParameterDefinition param = parameterForKey(key);
+		if (param != null) {
+			param.setIntegerValue(value);
+		} else {
+			super.setIntegerValueForKey(value, key);
+		}
+
+	}
+
+	// Retrieving type
+
+	@Override
+	public Class getTypeForKey(String key) {
+		ParameterDefinition param = parameterForKey(key);
+		if ((param != null) && (param.getValue() != null)) {
+			return param.getValue().getClass();
+		}
+		return null;
+
+	}
+
+	@Override
+	public String getInspectorName() {
+		return null;
+	}
+
+	private TabModel _tabModel = null;
+
+	public TabModel getTabModel() {
+		return _tabModel;
+	}
+
+	@Override
+	public FlexoProject getProject() {
+		return _project;
+	}
+
+	@Override
 	public String getFullyQualifiedName() {
-         return null;
-    }
+		return null;
+	}
 
-    @Override
+	@Override
 	public XMLMapping getXMLMapping() {
-        return null;
-    }
+		return null;
+	}
 
-    @Override
+	@Override
 	public XMLStorageResourceData getXMLResourceData() {
-        return null;
-    }
-    
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "parameter_model";
-    }
-    
+		return null;
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "parameter_model";
+	}
+
 }

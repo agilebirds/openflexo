@@ -1,4 +1,3 @@
-
 /*
  * (c) Copyright 2010-2011 AgileBirds
  *
@@ -38,171 +37,158 @@ import org.openflexo.foundation.wkf.ws.ServiceMessageDefinition;
 import org.openflexo.foundation.wkf.ws.ServiceOperation;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 
-
 /**
  * Edge linking a PortMap to a Node
  * 
  * @author sguerin
  * 
  */
-public final class ExternalMessageOutEdge extends ExternalMessageEdge<FlexoPortMap, Node> implements PortMapExit
-{
+public final class ExternalMessageOutEdge extends ExternalMessageEdge<FlexoPortMap, Node> implements PortMapExit {
 
-    private static final Logger logger = Logger.getLogger(ExternalMessageOutEdge.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ExternalMessageOutEdge.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    /**
-     * Constructor used during deserialization
-     */
-    public ExternalMessageOutEdge(FlexoProcessBuilder builder)
-    {
-        this(builder.process);
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor used during deserialization
+	 */
+	public ExternalMessageOutEdge(FlexoProcessBuilder builder) {
+		this(builder.process);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Default constructor
-     */
-    public ExternalMessageOutEdge(FlexoProcess process)
-    {
-        super(process);
-    }
+	/**
+	 * Default constructor
+	 */
+	public ExternalMessageOutEdge(FlexoProcess process) {
+		super(process);
+	}
 
-    /**
-     * Constructor with start port, next precondition and process
-     */
-    public ExternalMessageOutEdge(FlexoPortMap startPortMap, Node endPre, FlexoProcess process) throws InvalidEdgeException
-    {
-        this(process);
-        if (endPre.getNode().getProcess() == process && startPortMap.getProcess() == process) {
-        	setStartNode(startPortMap);
-            setEndNode(endPre);
-        } else {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Inconsistent data while building ExternalMessageOutEdge !");
-            throw new InvalidEdgeException(this);
-        }
-        if (!isEdgeValid()) {
-        	resetStartAndEndNode();
-            throw new InvalidEdgeException(this);
-        }
-    }
+	/**
+	 * Constructor with start port, next precondition and process
+	 */
+	public ExternalMessageOutEdge(FlexoPortMap startPortMap, Node endPre, FlexoProcess process) throws InvalidEdgeException {
+		this(process);
+		if (endPre.getNode().getProcess() == process && startPortMap.getProcess() == process) {
+			setStartNode(startPortMap);
+			setEndNode(endPre);
+		} else {
+			if (logger.isLoggable(Level.WARNING))
+				logger.warning("Inconsistent data while building ExternalMessageOutEdge !");
+			throw new InvalidEdgeException(this);
+		}
+		if (!isEdgeValid()) {
+			resetStartAndEndNode();
+			throw new InvalidEdgeException(this);
+		}
+	}
 
-    /**
-     * Constructor with start port, next precondition
-     */
-    public ExternalMessageOutEdge(FlexoPortMap startPortMap, Node endPre) throws InvalidEdgeException
-    {
-        this(startPortMap, endPre, startPortMap.getProcess());
-    }
+	/**
+	 * Constructor with start port, next precondition
+	 */
+	public ExternalMessageOutEdge(FlexoPortMap startPortMap, Node endPre) throws InvalidEdgeException {
+		this(startPortMap, endPre, startPortMap.getProcess());
+	}
 
-    @Override
-	public String getInspectorName()
-    {
-        return Inspectors.WKF.EXTERNAL_MESSAGE_OUT_EDGE_INSPECTOR;
-    }
+	@Override
+	public String getInspectorName() {
+		return Inspectors.WKF.EXTERNAL_MESSAGE_OUT_EDGE_INSPECTOR;
+	}
 
-    @Override
-	public PortMapRegistery getPortMapRegistery()
-    {
-        if (getStartNode() != null) {
-            return getStartNode().getPortMapRegistery();
-        }
-        return null;
-    }
+	@Override
+	public PortMapRegistery getPortMapRegistery() {
+		if (getStartNode() != null) {
+			return getStartNode().getPortMapRegistery();
+		}
+		return null;
+	}
 
-    // ==========================================================================
-    // ============================= Validation
-    // =================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Validation
+	// =================================
+	// ==========================================================================
 
-    @Override
-	public boolean isEdgeValid()
-    {
-        // Such edges are valid if and only if they link to a FlexoPortMap a
-        // FlexoNode
-        // which is located in the same ACTIVITY petri graph where the
-        // SubProcessNode
-        // is located
+	@Override
+	public boolean isEdgeValid() {
+		// Such edges are valid if and only if they link to a FlexoPortMap a
+		// FlexoNode
+		// which is located in the same ACTIVITY petri graph where the
+		// SubProcessNode
+		// is located
 
-        if (getStartNode() == null || getEndNode() == null || !getStartNode().isOutputPort())
-            return false;
+		if (getStartNode() == null || getEndNode() == null || !getStartNode().isOutputPort())
+			return false;
 
-        if (getEndNode() instanceof FlexoPreCondition) {
-        	FlexoPetriGraph pg = getPortMapRegistery().getSubProcessNode().getParentPetriGraph();
-        	if (getEndNode().getNode() != null) {
-        		return (((FlexoPreCondition)getEndNode()).getAttachedNode().getActivityPetriGraph() == pg);
-        	}
-        	return false;
-        }
-        return true;
-    }
+		if (getEndNode() instanceof FlexoPreCondition) {
+			FlexoPetriGraph pg = getPortMapRegistery().getSubProcessNode().getParentPetriGraph();
+			if (getEndNode().getNode() != null) {
+				return (((FlexoPreCondition) getEndNode()).getAttachedNode().getActivityPetriGraph() == pg);
+			}
+			return false;
+		}
+		return true;
+	}
 
-    public static class ExternalMessageOutEdgeMustBeValid extends ValidationRule<ExternalMessageOutEdgeMustBeValid,ExternalMessageOutEdge>
-    {
-        public ExternalMessageOutEdgeMustBeValid()
-        {
-            super(ExternalMessageOutEdge.class, "external_message_out_edge_must_be_valid");
-        }
+	public static class ExternalMessageOutEdgeMustBeValid extends ValidationRule<ExternalMessageOutEdgeMustBeValid, ExternalMessageOutEdge> {
+		public ExternalMessageOutEdgeMustBeValid() {
+			super(ExternalMessageOutEdge.class, "external_message_out_edge_must_be_valid");
+		}
 
-        @Override
-		public ValidationIssue<ExternalMessageOutEdgeMustBeValid,ExternalMessageOutEdge> applyValidation(ExternalMessageOutEdge edge)
-        {
-            if (!edge.isEdgeValid()) {
-                ValidationError<ExternalMessageOutEdgeMustBeValid,ExternalMessageOutEdge> error = new ValidationError<ExternalMessageOutEdgeMustBeValid,ExternalMessageOutEdge>(this, edge, "external_message_out_edge_is_not_valid");
-                error.addToFixProposals(new DeletionFixProposal<ExternalMessageOutEdgeMustBeValid,ExternalMessageOutEdge>("delete_this_message_edge"));
-                return error;
-            }
-            return null;
-        }
+		@Override
+		public ValidationIssue<ExternalMessageOutEdgeMustBeValid, ExternalMessageOutEdge> applyValidation(ExternalMessageOutEdge edge) {
+			if (!edge.isEdgeValid()) {
+				ValidationError<ExternalMessageOutEdgeMustBeValid, ExternalMessageOutEdge> error = new ValidationError<ExternalMessageOutEdgeMustBeValid, ExternalMessageOutEdge>(
+						this, edge, "external_message_out_edge_is_not_valid");
+				error.addToFixProposals(new DeletionFixProposal<ExternalMessageOutEdgeMustBeValid, ExternalMessageOutEdge>(
+						"delete_this_message_edge"));
+				return error;
+			}
+			return null;
+		}
 
-    }
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "external_message_out_edge";
-    }
-    
-    @Override
-	public ServiceOperation getServiceOperation()
-    {
-    	if (getStartNode() != null) {
-    		return getStartNode().getOperation();
-    	}
-    	return null;
-    }
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "external_message_out_edge";
+	}
 
-    @Override
-	public ServiceMessageDefinition getInputMessageDefinition()
-    {
-     	return null;
-    }
+	@Override
+	public ServiceOperation getServiceOperation() {
+		if (getStartNode() != null) {
+			return getStartNode().getOperation();
+		}
+		return null;
+	}
 
-    @Override
-	public ServiceMessageDefinition getOutputMessageDefinition()
-    {
-    	if (getServiceOperation()!=null && isOutputPort()) {
-    		return getServiceOperation().getOutputMessageDefinition();
-    	}
-    	return null;
-    }
+	@Override
+	public ServiceMessageDefinition getInputMessageDefinition() {
+		return null;
+	}
 
-    @Override
-    public Class<FlexoPortMap> getStartNodeClass() {
-    	return FlexoPortMap.class;
-    }
-    
-    @Override
-    public Class<Node> getEndNodeClass() {
-    	return Node.class;
-    }
+	@Override
+	public ServiceMessageDefinition getOutputMessageDefinition() {
+		if (getServiceOperation() != null && isOutputPort()) {
+			return getServiceOperation().getOutputMessageDefinition();
+		}
+		return null;
+	}
+
+	@Override
+	public Class<FlexoPortMap> getStartNodeClass() {
+		return FlexoPortMap.class;
+	}
+
+	@Override
+	public Class<Node> getEndNodeClass() {
+		return Node.class;
+	}
 }

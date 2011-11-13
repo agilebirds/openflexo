@@ -24,34 +24,30 @@ import org.openflexo.foundation.rm.cg.GenerationStatus;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class GenerationStatusModification extends CGDataModification
-{
-    
-    private GenerationStatus oldStatus;
-    
-    private GenerationStatus newStatus;
+public class GenerationStatusModification extends CGDataModification {
 
-    /**
-     * @param oldStatus
-     * @param newStatus
-     */
-    public GenerationStatusModification(GenerationStatus oldStatus, GenerationStatus newStatus)
-    {
-        super(oldStatus, newStatus);
-        this.oldStatus = oldStatus;
-        this.newStatus = newStatus;
-    }
+	private GenerationStatus oldStatus;
 
-    public GenerationStatus getNewStatus()
-    {
-        return newStatus;
-    }
+	private GenerationStatus newStatus;
 
-    public GenerationStatus getOldStatus()
-    {
-        return oldStatus;
-    }
+	/**
+	 * @param oldStatus
+	 * @param newStatus
+	 */
+	public GenerationStatusModification(GenerationStatus oldStatus, GenerationStatus newStatus) {
+		super(oldStatus, newStatus);
+		this.oldStatus = oldStatus;
+		this.newStatus = newStatus;
+	}
+
+	public GenerationStatus getNewStatus() {
+		return newStatus;
+	}
+
+	public GenerationStatus getOldStatus() {
+		return oldStatus;
+	}
 
 }

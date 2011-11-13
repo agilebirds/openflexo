@@ -238,11 +238,11 @@ public class FlexoApplication {
 						if (exception instanceof InvalidParametersException) {
 							message = "InvalidParametersException: " + exception.getMessage() + ". Edit a bug report ?";
 						} else if (exception instanceof NotImplementedException) {
-							message = FlexoLocalization.localizedForKey("feature_not_implemented:_") + exception.getMessage() + " " + FlexoLocalization
-									.localizedForKey("would_you_like_to_send_a_report");
+							message = FlexoLocalization.localizedForKey("feature_not_implemented:_") + exception.getMessage() + " "
+									+ FlexoLocalization.localizedForKey("would_you_like_to_send_a_report");
 						} else {
-							message = FlexoLocalization.localizedForKey("unexpected_exception_occured") + " " + FlexoLocalization
-									.localizedForKey("would_you_like_to_send_a_report");
+							message = FlexoLocalization.localizedForKey("unexpected_exception_occured") + " "
+									+ FlexoLocalization.localizedForKey("would_you_like_to_send_a_report");
 						}
 					} catch (RuntimeException e3) {// This catch is here in case the localization layer has crashed
 						e3.printStackTrace();
@@ -360,8 +360,9 @@ public class FlexoApplication {
 
 			// if the bug came from the FileChooser (Windows or Metal)
 			// or the AquaDirectoryModel, ignore it.
-			if (bug instanceof NullPointerException && (msg.indexOf("MetalFileChooserUI") != -1 || msg.indexOf("WindowsFileChooserUI") != -1 || msg
-					.indexOf("AquaDirectoryModel") != -1)) {
+			if (bug instanceof NullPointerException
+					&& (msg.indexOf("MetalFileChooserUI") != -1 || msg.indexOf("WindowsFileChooserUI") != -1 || msg
+							.indexOf("AquaDirectoryModel") != -1)) {
 				return true;
 			}
 

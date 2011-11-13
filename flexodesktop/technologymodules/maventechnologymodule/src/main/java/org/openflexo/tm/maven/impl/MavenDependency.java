@@ -44,8 +44,10 @@ public class MavenDependency {
 	 * Creates a dependency with the specified name and version.<br/>
 	 * groupId and artifactId will be the specified name.
 	 * 
-	 * @param name groupId and artifactId name.
-	 * @param version the dependence version.
+	 * @param name
+	 *            groupId and artifactId name.
+	 * @param version
+	 *            the dependence version.
 	 */
 	public MavenDependency(String name, String version) {
 		this(name, name, version);
@@ -54,8 +56,10 @@ public class MavenDependency {
 	/**
 	 * Creates a dependency with the specified name and version.
 	 * 
-	 * @param name groupId and artifactId name.
-	 * @param version the dependence version.
+	 * @param name
+	 *            groupId and artifactId name.
+	 * @param version
+	 *            the dependence version.
 	 */
 	public MavenDependency(String groupId, String artifactId, String version) {
 		this.groupId = groupId;
@@ -66,9 +70,12 @@ public class MavenDependency {
 	/**
 	 * Creates a dependency with the specified name, scope and version.<br/>
 	 * 
-	 * @param scope the scope of this dependency (build, test, provided...)
-	 * @param name groupId and artifactId name.
-	 * @param version the dependence version.
+	 * @param scope
+	 *            the scope of this dependency (build, test, provided...)
+	 * @param name
+	 *            groupId and artifactId name.
+	 * @param version
+	 *            the dependence version.
 	 */
 	public MavenDependency(String groupId, String artifactId, String version, String scope) {
 		this(groupId, artifactId, version);

@@ -26,5 +26,5 @@ public interface ModelReinjectableFile {
 	public boolean needsModelReinjection();
 
 	public DMEntity getModelEntity();
-	
+
 }

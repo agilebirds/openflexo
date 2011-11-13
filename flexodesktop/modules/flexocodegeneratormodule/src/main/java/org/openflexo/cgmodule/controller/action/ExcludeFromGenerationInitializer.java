@@ -25,20 +25,17 @@ import org.openflexo.generator.action.ExcludeFromGeneration;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class ExcludeFromGenerationInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	ExcludeFromGenerationInitializer(GeneratorControllerActionInitializer actionInitializer)
-	{
-		super(ExcludeFromGeneration.actionType,actionInitializer);
+	ExcludeFromGenerationInitializer(GeneratorControllerActionInitializer actionInitializer) {
+		super(ExcludeFromGeneration.actionType, actionInitializer);
 	}
 
 	@Override
-	protected GeneratorControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (GeneratorControllerActionInitializer)super.getControllerActionInitializer();
+	protected GeneratorControllerActionInitializer getControllerActionInitializer() {
+		return (GeneratorControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 }

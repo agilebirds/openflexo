@@ -31,55 +31,46 @@ import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class DismissUnchangedGeneratedFilesInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DismissUnchangedGeneratedFilesInitializer(DGControllerActionInitializer actionInitializer)
-	{
-		super(DismissUnchangedGeneratedFiles.actionType,actionInitializer);
+	DismissUnchangedGeneratedFilesInitializer(DGControllerActionInitializer actionInitializer) {
+		super(DismissUnchangedGeneratedFiles.actionType, actionInitializer);
 	}
 
 	@Override
-	protected DGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DGControllerActionInitializer)super.getControllerActionInitializer();
+	protected DGControllerActionInitializer getControllerActionInitializer() {
+		return (DGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<DismissUnchangedGeneratedFiles> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<DismissUnchangedGeneratedFiles> getDefaultInitializer() {
 		return new FlexoActionInitializer<DismissUnchangedGeneratedFiles>() {
 			@Override
-			public boolean run(ActionEvent e, DismissUnchangedGeneratedFiles action)
-			{
+			public boolean run(ActionEvent e, DismissUnchangedGeneratedFiles action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<DismissUnchangedGeneratedFiles> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<DismissUnchangedGeneratedFiles> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DismissUnchangedGeneratedFiles>() {
 			@Override
-			public boolean run(ActionEvent e, DismissUnchangedGeneratedFiles action)
-			{
+			public boolean run(ActionEvent e, DismissUnchangedGeneratedFiles action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return GeneratorIconLibrary.DISMISS_UNCHANGED_ICON;
 	}
 
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return GeneratorIconLibrary.DISMISS_UNCHANGED_DISABLED_ICON;
 	}
 

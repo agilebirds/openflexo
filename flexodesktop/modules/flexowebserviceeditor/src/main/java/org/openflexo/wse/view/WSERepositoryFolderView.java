@@ -30,87 +30,80 @@ import org.openflexo.wse.controller.WSEController;
 import org.openflexo.wse.controller.WSESelectionManager;
 import org.openflexo.wse.model.WSERepositoryTableModel;
 
-
 /**
  * View allowing to represent/edit a DMRepositoryFolder object
  * 
  * @author sguerin
  * 
  */
-public class WSERepositoryFolderView extends WSEView<WSRepositoryFolder>
-{
+public class WSERepositoryFolderView extends WSEView<WSRepositoryFolder> {
 
-    private static final Logger logger = Logger.getLogger(WSERepositoryFolderView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(WSERepositoryFolderView.class.getPackage().getName());
 
-    private WSETabularView repositoriesTable;
-    private WSERepositoryTableModel repositoriesTableModel;
+	private WSETabularView repositoriesTable;
+	private WSERepositoryTableModel repositoriesTableModel;
 
-    public WSERepositoryFolderView(WSRepositoryFolder repositoryList, WSEController controller)
-    {
-        super(repositoryList, controller, repositoryList.getName());
-     /*   addAction(new TabularViewAction(CreateDMRepository.actionType,"add_repository") {
-            protected Vector getGlobalSelection()
-            {
-                return getViewSelection();
-            }
+	public WSERepositoryFolderView(WSRepositoryFolder repositoryList, WSEController controller) {
+		super(repositoryList, controller, repositoryList.getName());
+		/*   addAction(new TabularViewAction(CreateDMRepository.actionType,"add_repository") {
+		       protected Vector getGlobalSelection()
+		       {
+		           return getViewSelection();
+		       }
 
-            protected FlexoModelObject getFocusedObject() 
-            {
-                return getWSRepositoryFolder();
-            }           
-        });
-        addAction(new TabularViewAction(UpdateDMRepository.actionType) {
-            protected Vector getGlobalSelection()
-            {
-                return getViewSelection();
-            }
+		       protected FlexoModelObject getFocusedObject() 
+		       {
+		           return getWSRepositoryFolder();
+		       }           
+		   });
+		   addAction(new TabularViewAction(UpdateDMRepository.actionType) {
+		       protected Vector getGlobalSelection()
+		       {
+		           return getViewSelection();
+		       }
 
-            protected FlexoModelObject getFocusedObject() 
-            {
-                return getSelectedDMRepository();
-            }           
-        });
-       addAction(new TabularViewAction(DMDelete.actionType,"delete_repository") {
-            protected Vector getGlobalSelection()
-            {
-                 return getViewSelection();
-            }
+		       protected FlexoModelObject getFocusedObject() 
+		       {
+		           return getSelectedDMRepository();
+		       }           
+		   });
+		  addAction(new TabularViewAction(DMDelete.actionType,"delete_repository") {
+		       protected Vector getGlobalSelection()
+		       {
+		            return getViewSelection();
+		       }
 
-            protected FlexoModelObject getFocusedObject() 
-            {
-                return null;
-            }           
-        });*/
-        finalizeBuilding();
-    }
+		       protected FlexoModelObject getFocusedObject() 
+		       {
+		           return null;
+		       }           
+		   });*/
+		finalizeBuilding();
+	}
 
-    @Override
-	protected JComponent buildContentPane()
-    {
-        repositoriesTableModel = new WSERepositoryTableModel(getWSRepositoryFolder().getWSGroup(), getWSEController().getProject());
-        addToMasterTabularView(repositoriesTable = new WSETabularView(getWSEController(), repositoriesTableModel,15));
+	@Override
+	protected JComponent buildContentPane() {
+		repositoriesTableModel = new WSERepositoryTableModel(getWSRepositoryFolder().getWSGroup(), getWSEController().getProject());
+		addToMasterTabularView(repositoriesTable = new WSETabularView(getWSEController(), repositoriesTableModel, 15));
 
-        return repositoriesTable;
-    }
+		return repositoriesTable;
+	}
 
-    public WSRepositoryFolder getWSRepositoryFolder()
-    {
-        return getModelObject();
-    }
+	public WSRepositoryFolder getWSRepositoryFolder() {
+		return getModelObject();
+	}
 
-    public DMRepository getSelectedDMRepository()
-    {
-        WSESelectionManager sm = getWSEController().getWSESelectionManager();
-        Vector selection = sm.getSelection();
-        if ((selection.size() == 1) && (selection.firstElement() instanceof DMRepository)) {
-            return (DMRepository) selection.firstElement();
-        }
-        return null;
-    }
+	public DMRepository getSelectedDMRepository() {
+		WSESelectionManager sm = getWSEController().getWSESelectionManager();
+		Vector selection = sm.getSelection();
+		if ((selection.size() == 1) && (selection.firstElement() instanceof DMRepository)) {
+			return (DMRepository) selection.firstElement();
+		}
+		return null;
+	}
 
-    public WSETabularView getRepositoriesTable() 
-    {
-        return repositoriesTable;
-    }
+	public WSETabularView getRepositoriesTable() {
+		return repositoriesTable;
+	}
 
 }

@@ -23,15 +23,13 @@ import org.openflexo.foundation.utils.FlexoColor;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class TextColorChanged extends WKFDataModification
-{
-    /**
+public class TextColorChanged extends WKFDataModification {
+	/**
      * 
      */
-    public TextColorChanged(FlexoColor oldColor, FlexoColor newColor)
-    {
-        super("textColor", oldColor, newColor);
-    }
+	public TextColorChanged(FlexoColor oldColor, FlexoColor newColor) {
+		super("textColor", oldColor, newColor);
+	}
 }

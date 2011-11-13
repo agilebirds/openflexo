@@ -27,12 +27,10 @@ import org.openflexo.foundation.wkf.edge.WKFAssociation;
  * @author gpolet
  * 
  */
-public class AssociationRemoved extends WKFDataModification
-{
+public class AssociationRemoved extends WKFDataModification {
 
-    public AssociationRemoved(WKFAssociation removedAssociation)
-    {
-        super(removedAssociation, null);
-    }
+	public AssociationRemoved(WKFAssociation removedAssociation) {
+		super(removedAssociation, null);
+	}
 
 }

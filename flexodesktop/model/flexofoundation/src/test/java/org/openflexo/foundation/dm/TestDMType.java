@@ -114,8 +114,8 @@ public class TestDMType extends FlexoDMTestCase {
 		}
 
 		for (TypeVariable tv : f.getType().getTypeParameters()) {
-			logger.info("TypeVariable: " + tv + " " + tv.getBounds() + " " + tv.getName() + " GD='" + tv.getGenericDeclaration() + "' class=" + tv
-					.getClass().getSimpleName());
+			logger.info("TypeVariable: " + tv + " " + tv.getBounds() + " " + tv.getName() + " GD='" + tv.getGenericDeclaration()
+					+ "' class=" + tv.getClass().getSimpleName());
 			for (java.lang.reflect.Type t : tv.getBounds()) {
 				logger.info("Bound=" + t + " t=" + t.getClass().getSimpleName());
 			}
@@ -125,8 +125,8 @@ public class TestDMType extends FlexoDMTestCase {
 
 		Class test5Class = FlexoAction.class;
 		for (TypeVariable tv : test5Class.getTypeParameters()) {
-			logger.info("TypeVariable: " + tv + " " + tv.getBounds() + " " + tv.getName() + " GD='" + tv.getGenericDeclaration() + "' class=" + tv
-					.getClass().getSimpleName());
+			logger.info("TypeVariable: " + tv + " " + tv.getBounds() + " " + tv.getName() + " GD='" + tv.getGenericDeclaration()
+					+ "' class=" + tv.getClass().getSimpleName());
 			for (java.lang.reflect.Type t : tv.getBounds()) {
 				logger.info("Bound=" + t + " t=" + t.getClass().getSimpleName());
 			}
@@ -433,14 +433,14 @@ public class TestDMType extends FlexoDMTestCase {
 		}
 		ClassReference vectorClass = dmSet.getClassReference(Vector.class);
 		for (PropertyReference pr : vectorClass.getProperties()) {
-			if (pr.getName().equals("size") || pr.getName().equals("firstElement") || pr.getName().equals("lastElement") || pr.getName()
-					.equals("elements") || pr.getName().equals("isEmpty")) {
+			if (pr.getName().equals("size") || pr.getName().equals("firstElement") || pr.getName().equals("lastElement")
+					|| pr.getName().equals("elements") || pr.getName().equals("isEmpty")) {
 				dmSet.addToSelectedObjects(pr);
 			}
 		}
 		for (MethodReference mr : vectorClass.getMethods()) {
-			if (mr.getSignature().equals("add(E)") || mr.getSignature().equals("add(int,E)") || mr.getSignature().equals("elementAt(int)") || mr
-					.getSignature().equals("remove(java.lang.Object)")) {
+			if (mr.getSignature().equals("add(E)") || mr.getSignature().equals("add(int,E)") || mr.getSignature().equals("elementAt(int)")
+					|| mr.getSignature().equals("remove(java.lang.Object)")) {
 				dmSet.addToSelectedObjects(mr);
 			}
 		}

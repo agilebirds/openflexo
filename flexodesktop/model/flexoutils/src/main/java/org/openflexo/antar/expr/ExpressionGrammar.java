@@ -19,7 +19,6 @@
  */
 package org.openflexo.antar.expr;
 
-
 public interface ExpressionGrammar {
 
 	public abstract UnaryOperator[] getAllSupportedUnaryOperators();
@@ -29,6 +28,5 @@ public interface ExpressionGrammar {
 	public abstract String getSymbol(Operator operator) throws OperatorNotSupportedException;
 
 	public abstract String getAlternativeSymbol(Operator operator) throws OperatorNotSupportedException;
-
 
 }

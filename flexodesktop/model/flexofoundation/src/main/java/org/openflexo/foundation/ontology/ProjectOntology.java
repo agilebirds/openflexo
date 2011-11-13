@@ -51,64 +51,61 @@ public class ProjectOntology extends FlexoOntology implements StorageResourceDat
 
 	private FlexoProject _project;
 	private FlexoProjectOntologyResource _resource;
-	
-	   /**
-     * Creates and returns a newly created data model with resource management
-     * (creates the resource)
-     *
-     * @return a newly created DMModel
-     */
-    public static ProjectOntology createNewProjectOntology(FlexoProject project)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("createNewProjectOntology(), project=" + project);
-        logger.info("-------------> Create ontology for "+project.getProjectName());
-        File owlFile = ProjectRestructuration.getExpectedProjectOntologyFile(project, project.getProjectName());
-        FlexoProjectFile ontologyFile = new FlexoProjectFile(owlFile, project);
 
-        ProjectOntology newProjectOntology = createProjectOntology(project.getURI(),owlFile,project.getProjectOntologyLibrary());
+	/**
+	 * Creates and returns a newly created data model with resource management (creates the resource)
+	 * 
+	 * @return a newly created DMModel
+	 */
+	public static ProjectOntology createNewProjectOntology(FlexoProject project) {
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("createNewProjectOntology(), project=" + project);
+		logger.info("-------------> Create ontology for " + project.getProjectName());
+		File owlFile = ProjectRestructuration.getExpectedProjectOntologyFile(project, project.getProjectName());
+		FlexoProjectFile ontologyFile = new FlexoProjectFile(owlFile, project);
 
-        FlexoProjectOntologyResource ontologyRes;
-        try {
-        	ontologyRes = new FlexoProjectOntologyResource(project, newProjectOntology, ontologyFile);
-        } catch (InvalidFileNameException e) {
-        	e.printStackTrace();
-        	if (logger.isLoggable(Level.SEVERE))
-        		logger.severe("This should not happen: invalid file "+ontologyFile);
-        	return null;
-        } catch (DuplicateResourceException e) {
-        	e.printStackTrace();
-        	if (logger.isLoggable(Level.SEVERE))
-        		logger.severe("This should not happen: DuplicateResourceException for "+ontologyFile);
-        	return null;
-  		}
-        //newDMModel.initializeDefaultRepositories(dmRes);
-        try {
-            //dmRes.saveResourceData();
-            project.registerResource(ontologyRes);
-        } catch (Exception e1) {
-            // Warns about the exception
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
-            e1.printStackTrace();
-        }
- 
-        try {
-        	ontologyRes.saveResourceData();
-         } catch (Exception e1) {
-            // Warns about the exception
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
-            e1.printStackTrace();
-        }
+		ProjectOntology newProjectOntology = createProjectOntology(project.getURI(), owlFile, project.getProjectOntologyLibrary());
 
-        return newProjectOntology;
-    }
+		FlexoProjectOntologyResource ontologyRes;
+		try {
+			ontologyRes = new FlexoProjectOntologyResource(project, newProjectOntology, ontologyFile);
+		} catch (InvalidFileNameException e) {
+			e.printStackTrace();
+			if (logger.isLoggable(Level.SEVERE))
+				logger.severe("This should not happen: invalid file " + ontologyFile);
+			return null;
+		} catch (DuplicateResourceException e) {
+			e.printStackTrace();
+			if (logger.isLoggable(Level.SEVERE))
+				logger.severe("This should not happen: DuplicateResourceException for " + ontologyFile);
+			return null;
+		}
+		// newDMModel.initializeDefaultRepositories(dmRes);
+		try {
+			// dmRes.saveResourceData();
+			project.registerResource(ontologyRes);
+		} catch (Exception e1) {
+			// Warns about the exception
+			if (logger.isLoggable(Level.WARNING))
+				logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
+			e1.printStackTrace();
+		}
 
- 	private static ProjectOntology createProjectOntology(String anURI, File owlFile, ProjectOntologyLibrary ontologyLibrary) 
-	{
+		try {
+			ontologyRes.saveResourceData();
+		} catch (Exception e1) {
+			// Warns about the exception
+			if (logger.isLoggable(Level.WARNING))
+				logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
+			e1.printStackTrace();
+		}
+
+		return newProjectOntology;
+	}
+
+	private static ProjectOntology createProjectOntology(String anURI, File owlFile, ProjectOntologyLibrary ontologyLibrary) {
 		ProjectOntology returned = new ProjectOntology(anURI, owlFile, ontologyLibrary);
-		
+
 		Model base = ModelFactory.createDefaultModel();
 		returned.ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, ontologyLibrary, base);
 		returned.ontModel.createOntology(anURI);
@@ -117,120 +114,106 @@ public class ProjectOntology extends FlexoOntology implements StorageResourceDat
 		return returned;
 	}
 
-	protected ProjectOntology(String anURI, File owlFile, ProjectOntologyLibrary ontologyLibrary) 
-	{
+	protected ProjectOntology(String anURI, File owlFile, ProjectOntologyLibrary ontologyLibrary) {
 		super(anURI, owlFile, ontologyLibrary);
 		_project = ontologyLibrary.getProject();
 	}
 
-	
 	@Override
-	public boolean getIsReadOnly()
-	{
+	public boolean getIsReadOnly() {
 		return false;
 	}
-	
+
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return FlexoLocalization.localizedForKey("project_ontology");
 	}
 
 	@Override
-	public FlexoProjectOntologyResource getFlexoResource() 
-	{
+	public FlexoProjectOntologyResource getFlexoResource() {
 		return _resource;
 	}
 
 	@Override
-	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException 
-	{
-		_resource = (FlexoProjectOntologyResource)resource;
+	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
+		_resource = (FlexoProjectOntologyResource) resource;
 	}
 
 	@Override
-	public void save() throws SaveResourceException 
-	{
+	public void save() throws SaveResourceException {
 		getFlexoResource().saveResourceData();
 	}
 
 	@Override
-	public FlexoProject getProject()
-	{
+	public FlexoProject getProject() {
 		return _project;
 	}
 
 	@Override
-	public void setProject(FlexoProject aProject)
-	{
+	public void setProject(FlexoProject aProject) {
 		_project = aProject;
 	}
 
 	@Override
-	public String getClassNameKey() 
-	{
+	public String getClassNameKey() {
 		return "project_ontology";
 	}
 
 	@Override
-	public String getDescription() 
-	{
+	public String getDescription() {
 		return FlexoLocalization.localizedForKey("project_ontology");
 	}
 
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.VE.PROJECT_ONTOLOGY_INSPECTOR;
 	}
-	
+
 	@Override
-	public String getDisplayableDescription()
-	{
-		return "Ontology of project "+getProject().getName();
+	public String getDisplayableDescription() {
+		return "Ontology of project " + getProject().getName();
 	}
 
-
-	private void pourNePasOublier() 
-	{
+	private void pourNePasOublier() {
 		String FLEXO_CONCEPTS_URI = "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl";
-		String FLEXO_MODEL_OBJECT = FLEXO_CONCEPTS_URI+"#FlexoModelObject";
-		String LINKED_TO_MODEL_PROPERTY = FLEXO_CONCEPTS_URI+"#linkedToModel";
-		String CLASS_NAME_PROPERTY = FLEXO_CONCEPTS_URI+"#className";
-		String FLEXO_ID_PROPERTY = FLEXO_CONCEPTS_URI+"#flexoID";
-		String RESOURCE_NAME_PROPERTY = FLEXO_CONCEPTS_URI+"#resourceName";
+		String FLEXO_MODEL_OBJECT = FLEXO_CONCEPTS_URI + "#FlexoModelObject";
+		String LINKED_TO_MODEL_PROPERTY = FLEXO_CONCEPTS_URI + "#linkedToModel";
+		String CLASS_NAME_PROPERTY = FLEXO_CONCEPTS_URI + "#className";
+		String FLEXO_ID_PROPERTY = FLEXO_CONCEPTS_URI + "#flexoID";
+		String RESOURCE_NAME_PROPERTY = FLEXO_CONCEPTS_URI + "#resourceName";
 
 		String BOT_URI = "http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl";
-		String COMPANY_NAME = BOT_URI+"#companyName";
+		String COMPANY_NAME = BOT_URI + "#companyName";
 
 		String BOT_EDITOR_URI = "http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl";
-		String BOT_COMPANY = BOT_EDITOR_URI+"#BOTCompany";
-		
+		String BOT_COMPANY = BOT_EDITOR_URI + "#BOTCompany";
+
 		OntModel ontModel = getProject().getProjectOntology().getOntModel();
-		
-		OntClass fooClass = ontModel.createClass(getProject().getProjectOntology().getOntologyURI()+"#"+"foo");
-		OntClass foo2Class = ontModel.createClass(getProject().getProjectOntology().getOntologyURI()+"#"+"foo2");
+
+		OntClass fooClass = ontModel.createClass(getProject().getProjectOntology().getOntologyURI() + "#" + "foo");
+		OntClass foo2Class = ontModel.createClass(getProject().getProjectOntology().getOntologyURI() + "#" + "foo2");
 		foo2Class.addComment("Test de commentaire", "FR");
 		foo2Class.addComment("Comment test", "EN");
 		foo2Class.addSuperClass(fooClass);
-	
+
 		FlexoProcess process = getProject().getWorkflow().getRootFlexoProcess();
 		OntClass flexoModelObject = ontModel.getOntClass(FLEXO_MODEL_OBJECT);
 		ObjectProperty linkedToModelProperty = ontModel.getObjectProperty(LINKED_TO_MODEL_PROPERTY);
 		DatatypeProperty classNameProperty = ontModel.getDatatypeProperty(CLASS_NAME_PROPERTY);
 		DatatypeProperty flexoIDProperty = ontModel.getDatatypeProperty(FLEXO_ID_PROPERTY);
 		DatatypeProperty resourceNameProperty = ontModel.getDatatypeProperty(RESOURCE_NAME_PROPERTY);
-		
-		Individual myRootFlexoProcess = ontModel.createIndividual(getProject().getProjectOntology().getURI()+"#MyRootProcess", flexoModelObject);
-		myRootFlexoProcess.addProperty(classNameProperty,process.getClass().getName());
-		myRootFlexoProcess.addProperty(flexoIDProperty,process.getSerializationIdentifier());
-		myRootFlexoProcess.addProperty(resourceNameProperty,process.getFlexoResource().getFullyQualifiedName());
-		
+
+		Individual myRootFlexoProcess = ontModel.createIndividual(getProject().getProjectOntology().getURI() + "#MyRootProcess",
+				flexoModelObject);
+		myRootFlexoProcess.addProperty(classNameProperty, process.getClass().getName());
+		myRootFlexoProcess.addProperty(flexoIDProperty, process.getSerializationIdentifier());
+		myRootFlexoProcess.addProperty(resourceNameProperty, process.getFlexoResource().getFullyQualifiedName());
+
 		OntClass botCompany = ontModel.getOntClass(BOT_COMPANY);
 		DatatypeProperty companyNameProperty = ontModel.getDatatypeProperty(COMPANY_NAME);
-		Individual agileBirdsCompany = ontModel.createIndividual(getProject().getProjectOntology().getURI()+"#AgileBirds", botCompany);
-		agileBirdsCompany.addProperty(companyNameProperty,"Agile Birds S.A.");
-		
+		Individual agileBirdsCompany = ontModel.createIndividual(getProject().getProjectOntology().getURI() + "#AgileBirds", botCompany);
+		agileBirdsCompany.addProperty(companyNameProperty, "Agile Birds S.A.");
+
 		agileBirdsCompany.addProperty(linkedToModelProperty, myRootFlexoProcess);
 	}
 

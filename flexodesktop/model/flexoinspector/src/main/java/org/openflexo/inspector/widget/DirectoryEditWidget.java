@@ -30,25 +30,22 @@ import org.openflexo.localization.FlexoLocalization;
 /**
  * @author sguerin
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
+ *         TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
  */
-public class DirectoryEditWidget extends FileEditWidget
-{
+public class DirectoryEditWidget extends FileEditWidget {
 
-    public DirectoryEditWidget(PropertyModel model, AbstractController controller)
-    {
-        super(model,controller);
-    }
+	public DirectoryEditWidget(PropertyModel model, AbstractController controller) {
+		super(model, controller);
+	}
 
-    @Override
-	protected void configureFileChooser(FlexoFileChooser chooser)
-    {
-    	chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-    	chooser.setDialogTitle(title==null?FlexoLocalization.localizedForKey("select_directory"):FlexoLocalization.localizedForKey(title));
-    	chooser.setFileFilterAsString(filter);
-    	chooser.setDialogType(mode);
-    	System.setProperty("apple.awt.fileDialogForDirectories", "true");
-    }
+	@Override
+	protected void configureFileChooser(FlexoFileChooser chooser) {
+		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		chooser.setDialogTitle(title == null ? FlexoLocalization.localizedForKey("select_directory") : FlexoLocalization
+				.localizedForKey(title));
+		chooser.setFileFilterAsString(filter);
+		chooser.setDialogType(mode);
+		System.setProperty("apple.awt.fileDialogForDirectories", "true");
+	}
 
 }

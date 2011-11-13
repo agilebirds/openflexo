@@ -41,19 +41,16 @@ public abstract class EventNodeExecution<E extends EventNode> extends ControlGra
 
 	private E eventNode;
 
-	public static ControlGraphBuilder getExecutionNodeBuilder (EventNode eventNode) throws NotSupportedException, InvalidModelException
-	{
+	public static ControlGraphBuilder getExecutionNodeBuilder(EventNode eventNode) throws NotSupportedException, InvalidModelException {
 		if (TriggerType.MESSAGE.equals(eventNode.getTrigger()) && !eventNode.getIsCatching()) {
 			return new MailOutExecution(eventNode);
 		}
 
-
-		throw new NotSupportedException("Dont know what to do with a "+eventNode.getClass().getSimpleName());
+		throw new NotSupportedException("Dont know what to do with a " + eventNode.getClass().getSimpleName());
 
 	}
 
-	public static ControlGraph executeNode (EventNode evenNode, boolean interprocedural) throws NotSupportedException, InvalidModelException
-	{
+	public static ControlGraph executeNode(EventNode evenNode, boolean interprocedural) throws NotSupportedException, InvalidModelException {
 		ControlGraphBuilder cgBuilder = getExecutionNodeBuilder(evenNode);
 
 		if (cgBuilder != null) {
@@ -61,40 +58,36 @@ public abstract class EventNodeExecution<E extends EventNode> extends ControlGra
 			if (interprocedural) {
 				Procedure procedure = cgBuilder.makeProcedure();
 				ProcedureCall returned = new ProcedureCall(procedure);
-				returned.appendHeaderComment("Event "+evenNode.getName()+" is executing",true);
+				returned.appendHeaderComment("Event " + evenNode.getName() + " is executing", true);
 				return returned;
 			} else {
 				ControlGraph returned = cgBuilder.makeControlGraph(interprocedural);
-				returned.appendHeaderComment("Event "+evenNode.getName()+" is executing",true);
+				returned.appendHeaderComment("Event " + evenNode.getName() + " is executing", true);
 				return returned;
 			}
-		}
-		else {
-			throw new NotSupportedException("Dont know what to do with a "+evenNode);
+		} else {
+			throw new NotSupportedException("Dont know what to do with a " + evenNode);
 		}
 
 	}
 
-	protected EventNodeExecution(E eventNode)
-	{
+	protected EventNodeExecution(E eventNode) {
 		super();
 		this.eventNode = eventNode;
 	}
 
-
 	@Override
-	protected ControlGraph makeControlGraph(boolean interprocedural) throws InvalidModelException,NotSupportedException {
-		return makeSequentialControlGraph(makeSpecificControlGraph(interprocedural),
-										  makeCommonPostludeControlGraph(interprocedural));
+	protected ControlGraph makeControlGraph(boolean interprocedural) throws InvalidModelException, NotSupportedException {
+		return makeSequentialControlGraph(makeSpecificControlGraph(interprocedural), makeCommonPostludeControlGraph(interprocedural));
 	}
 
-	protected abstract ControlGraph makeSpecificControlGraph(boolean interprocedural) throws InvalidModelException,NotSupportedException;
+	protected abstract ControlGraph makeSpecificControlGraph(boolean interprocedural) throws InvalidModelException, NotSupportedException;
 
-	protected ControlGraph makeCommonPostludeControlGraph(boolean interprocedural)  throws InvalidModelException,NotSupportedException {
+	protected ControlGraph makeCommonPostludeControlGraph(boolean interprocedural) throws InvalidModelException, NotSupportedException {
 		Vector<ControlGraph> sendTokensStatements = new Vector<ControlGraph>();
 
 		for (FlexoPostCondition edge : getEventNode().getOutgoingPostConditions()) {
-			sendTokensStatements.add(SendToken.sendToken(edge,interprocedural));
+			sendTokensStatements.add(SendToken.sendToken(edge, interprocedural));
 		}
 
 		ControlGraph SEND_TOKENS = makeFlowControlGraph(sendTokensStatements);
@@ -103,37 +96,32 @@ public abstract class EventNodeExecution<E extends EventNode> extends ControlGra
 
 		for (FlexoPostCondition edge : getEventNode().getOutgoingPostConditions()) {
 			if (edge instanceof ExternalMessageInEdge) {
-				sendMessagesStatements.add(SendMessage.sendMessage((ExternalMessageInEdge)edge,interprocedural));
+				sendMessagesStatements.add(SendMessage.sendMessage((ExternalMessageInEdge) edge, interprocedural));
 			}
 		}
 
 		ControlGraph SEND_MESSAGES = makeFlowControlGraph(sendMessagesStatements);
 
-		ControlGraph returned = makeSequentialControlGraph(
-				SEND_MESSAGES,
-				SEND_TOKENS);
+		ControlGraph returned = makeSequentialControlGraph(SEND_MESSAGES, SEND_TOKENS);
 
 		return returned;
 	}
 
 	@Override
-	protected String getProcedureName()
-	{
-		return "executeEvent_"+ToolBox.capitalize(ToolBox.getJavaName(getEventNode().getName()))+"_"+getEventNode().getFlexoID();
+	protected String getProcedureName() {
+		return "executeEvent_" + ToolBox.capitalize(ToolBox.getJavaName(getEventNode().getName())) + "_" + getEventNode().getFlexoID();
 	}
 
-	public E getEventNode()
-	{
+	public E getEventNode() {
 		return eventNode;
 	}
 
 	@Override
-	protected String getProcedureComment()
-	{
+	protected String getProcedureComment() {
 		StringBuffer returned = new StringBuffer();
-		returned.append(FlexoLocalization.localizedForKeyWithParams("this_method_represents_code_to_be_executed_when_event_($0)_is_executed",getEventNode().getName()));
+		returned.append(FlexoLocalization.localizedForKeyWithParams(
+				"this_method_represents_code_to_be_executed_when_event_($0)_is_executed", getEventNode().getName()));
 		return returned.toString();
 	}
-
 
 }

@@ -32,48 +32,48 @@ public class SchemaStructure {
 	 *   -> all the types defined in a given namespace. Types are representer by their XML Element Object
 	 *   -> the dependencies between one namespace and another. This is needed to know which namespace declaration must be spcified. 
 	 */
-	private Hashtable<String,Vector<Element>> ht=new Hashtable<String, Vector<Element>>();
-	private Hashtable<String, Vector<String>> dependencies=new Hashtable<String,Vector<String>>();
-	
-	
-	public void addElementInNamespace(String namespace,Element el) {
+	private Hashtable<String, Vector<Element>> ht = new Hashtable<String, Vector<Element>>();
+	private Hashtable<String, Vector<String>> dependencies = new Hashtable<String, Vector<String>>();
+
+	public void addElementInNamespace(String namespace, Element el) {
 		if (!ht.containsKey(namespace)) {
 			ht.put(namespace, new Vector<Element>());
 		}
-			ht.get(namespace).add(el);
+		ht.get(namespace).add(el);
 	}
-	
+
 	public Vector<Element> getSchemaDefinition(Document doc) {
-		Vector<Element> toReturn=new Vector<Element>();
-		
-		Enumeration<String> en=ht.keys();
+		Vector<Element> toReturn = new Vector<Element>();
+
+		Enumeration<String> en = ht.keys();
 		while (en.hasMoreElements()) {
-			String currentNS=en.nextElement();
-			Vector<Element> currentVector=ht.get(currentNS);
-			Element el=doc.createElementNS("http://www.w3.org/2001/XMLSchema", "schema");
-			for (Element currentEl:currentVector) {
+			String currentNS = en.nextElement();
+			Vector<Element> currentVector = ht.get(currentNS);
+			Element el = doc.createElementNS("http://www.w3.org/2001/XMLSchema", "schema");
+			for (Element currentEl : currentVector) {
 				el.appendChild(currentEl);
 			}
 			el.setAttribute("targetNamespace", currentNS);
 			el.setAttribute("xmlns", "http://www.w3.org/2001/XMLSchema");
 			toReturn.add(el);
 		}
-		
+
 		return toReturn;
 	}
-	
-	public void addNamespaceDependency(String dependant,String target) {
-		if (dependant.equals(target)) return;
+
+	public void addNamespaceDependency(String dependant, String target) {
+		if (dependant.equals(target))
+			return;
 		if (!dependencies.containsKey(dependant)) {
 			dependencies.put(dependant, new Vector<String>());
 		}
 		dependencies.get(dependant).add(target);
 	}
-	
+
 	public Vector<String> getNamespaceDependency(String namespace) {
-		if (dependencies.containsKey(namespace)) return dependencies.get(namespace);
+		if (dependencies.containsKey(namespace))
+			return dependencies.get(namespace);
 		return new Vector<String>();
 	}
-	
-	
+
 }

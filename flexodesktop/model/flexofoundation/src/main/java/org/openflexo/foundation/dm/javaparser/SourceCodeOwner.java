@@ -25,18 +25,26 @@ import org.openflexo.foundation.dm.DuplicateMethodSignatureException;
 
 /**
  * To be implemented by all Object that are owner of an AbstractSourceCode
+ * 
  * @author bmangez
- *
+ * 
  */
 public interface SourceCodeOwner {
 
 	public void setChanged();
+
 	public void notifyObservers(DataModification dm);
+
 	public void notifyObserversAsReentrantModification(DataModification dm);
+
 	public boolean isSerializing();
+
 	public boolean isDeserializing();
+
 	public DMModel getDMModel();
+
 	public boolean codeIsComputable();
+
 	public void resetSourceCode() throws ParserNotInstalledException, DuplicateMethodSignatureException;
-	
+
 }

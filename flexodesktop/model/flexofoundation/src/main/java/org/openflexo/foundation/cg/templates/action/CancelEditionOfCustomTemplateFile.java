@@ -30,56 +30,48 @@ import org.openflexo.foundation.cg.DuplicateCodeRepositoryNameException;
 import org.openflexo.foundation.cg.templates.CGTemplateFile;
 import org.openflexo.foundation.cg.templates.CGTemplateObject;
 
+public class CancelEditionOfCustomTemplateFile extends FlexoAction<CancelEditionOfCustomTemplateFile, CGTemplateFile, CGTemplateObject> {
 
-public class CancelEditionOfCustomTemplateFile extends FlexoAction<CancelEditionOfCustomTemplateFile, CGTemplateFile, CGTemplateObject>
-{
-
-    private static final Logger logger = Logger.getLogger(CancelEditionOfCustomTemplateFile.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(CancelEditionOfCustomTemplateFile.class.getPackage().getName());
 
 	public static FlexoActionType<CancelEditionOfCustomTemplateFile, CGTemplateFile, CGTemplateObject> actionType = new FlexoActionType<CancelEditionOfCustomTemplateFile, CGTemplateFile, CGTemplateObject>(
 			"cancel_template_edition", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
+		/**
+		 * Factory method
+		 */
 		@Override
-		public CancelEditionOfCustomTemplateFile makeNewAction(CGTemplateFile focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor)
-        {
-            return new CancelEditionOfCustomTemplateFile(focusedObject, globalSelection, editor);
-        }
+		public CancelEditionOfCustomTemplateFile makeNewAction(CGTemplateFile focusedObject, Vector<CGTemplateObject> globalSelection,
+				FlexoEditor editor) {
+			return new CancelEditionOfCustomTemplateFile(focusedObject, globalSelection, editor);
+		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGTemplateFile object, Vector<CGTemplateObject> globalSelection)
-        {
-            return ((object != null) && (object.isCustomTemplate()));
-       }
+		protected boolean isVisibleForSelection(CGTemplateFile object, Vector<CGTemplateObject> globalSelection) {
+			return ((object != null) && (object.isCustomTemplate()));
+		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGTemplateFile object, Vector<CGTemplateObject> globalSelection)
-        {
-            return ((object != null) && (object.isCustomTemplate()) && (object.isEdited()));
-       }
-                
-    };
-    
-    static {
+		protected boolean isEnabledForSelection(CGTemplateFile object, Vector<CGTemplateObject> globalSelection) {
+			return ((object != null) && (object.isCustomTemplate()) && (object.isEdited()));
+		}
+
+	};
+
+	static {
 		FlexoModelObject.addActionForClass(CancelEditionOfCustomTemplateFile.actionType, CGTemplateFile.class);
-    }
-    
+	}
 
-    
-	CancelEditionOfCustomTemplateFile(CGTemplateFile focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	CancelEditionOfCustomTemplateFile(CGTemplateFile focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    @Override
-	protected void doAction(Object context) throws DuplicateCodeRepositoryNameException
-    {
-    	logger.info ("Cancel edition of customTemplateFile "+getFocusedObject());
-    	if (getFocusedObject() != null) {
-    		getFocusedObject().cancelEdition();
-     	}
-     }
+	@Override
+	protected void doAction(Object context) throws DuplicateCodeRepositoryNameException {
+		logger.info("Cancel edition of customTemplateFile " + getFocusedObject());
+		if (getFocusedObject() != null) {
+			getFocusedObject().cancelEdition();
+		}
+	}
 
 }

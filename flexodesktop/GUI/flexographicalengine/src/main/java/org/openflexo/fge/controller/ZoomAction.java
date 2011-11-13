@@ -30,14 +30,12 @@ import org.openflexo.fge.geom.FGELine;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 
-
 public class ZoomAction extends MouseDragControlAction {
 
 	private Point startPoint;
 	private double initialScale;
 	private static final double PIXEL_TO_PERCENT = 0.005;
 	private FGELine refLine;
-
 
 	@Override
 	public MouseDragControlActionType getActionType() {
@@ -46,31 +44,35 @@ public class ZoomAction extends MouseDragControlAction {
 
 	@Override
 	public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
-		Point currentMousePositionInDrawingView = SwingUtilities.convertPoint((Component)event.getSource(), event.getPoint(), controller.getDrawingView());
-		SimplifiedCardinalDirection card = FGEPoint.getSimplifiedOrientation(new FGEPoint(startPoint), new FGEPoint(currentMousePositionInDrawingView));
+		Point currentMousePositionInDrawingView = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
+				controller.getDrawingView());
+		SimplifiedCardinalDirection card = FGEPoint.getSimplifiedOrientation(new FGEPoint(startPoint), new FGEPoint(
+				currentMousePositionInDrawingView));
 		boolean isPositive = true;
 		double distance = 0.0;
 		switch (card) {
-		case NORTH: case WEST:
+		case NORTH:
+		case WEST:
 			isPositive = false;
 			break;
 		}
-		// We compute a distance to this refline instead of a distance to the start point so that that there is no gap when going from positive to negative
+		// We compute a distance to this refline instead of a distance to the start point so that that there is no gap when going from
+		// positive to negative
 		distance = refLine.ptLineDist(currentMousePositionInDrawingView);
 		double newScale = initialScale;
 		if (isPositive)
-			newScale+=distance*PIXEL_TO_PERCENT;
+			newScale += distance * PIXEL_TO_PERCENT;
 		else
-			newScale-=distance*PIXEL_TO_PERCENT;
+			newScale -= distance * PIXEL_TO_PERCENT;
 		controller.setScale(newScale);
 		return true;
 	}
 
 	@Override
 	public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
-		startPoint = SwingUtilities.convertPoint((Component)event.getSource(), event.getPoint(), controller.getDrawingView());
+		startPoint = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), controller.getDrawingView());
 		// Virtual line that goes through the start point and its orientation is NORTH_EAST (or SOUTH_WEST, it's the same)
-		refLine = new FGELine(new FGEPoint(startPoint),new FGEPoint(startPoint.x+1, startPoint.y-1));
+		refLine = new FGELine(new FGEPoint(startPoint), new FGEPoint(startPoint.x + 1, startPoint.y - 1));
 		initialScale = controller.getScale();
 		return true;
 	}

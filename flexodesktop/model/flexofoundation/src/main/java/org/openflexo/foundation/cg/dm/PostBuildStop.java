@@ -19,22 +19,19 @@
  */
 package org.openflexo.foundation.cg.dm;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class PostBuildStop extends CGDataModification
-{
+public class PostBuildStop extends CGDataModification {
 
-    /**
-     * @param modificationType
-     * @param oldValue
-     * @param newValue
-     */
-    public PostBuildStop()
-    {
-        super(null, null);
-    }
+	/**
+	 * @param modificationType
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public PostBuildStop() {
+		super(null, null);
+	}
 
 }

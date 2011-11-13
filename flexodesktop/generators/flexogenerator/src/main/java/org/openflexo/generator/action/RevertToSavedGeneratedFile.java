@@ -29,56 +29,47 @@ import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.generator.file.AbstractCGFile;
 
+public class RevertToSavedGeneratedFile extends GCAction<RevertToSavedGeneratedFile, CGFile> {
 
-public class RevertToSavedGeneratedFile extends GCAction<RevertToSavedGeneratedFile,CGFile>
-{
+	private static final Logger logger = Logger.getLogger(RevertToSavedGeneratedFile.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(RevertToSavedGeneratedFile.class.getPackage().getName());
+	public static FlexoActionType<RevertToSavedGeneratedFile, CGFile, CGObject> actionType = new FlexoActionType<RevertToSavedGeneratedFile, CGFile, CGObject>(
+			"revert_to_saved_file", EDITION_MENU, FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-    public static FlexoActionType<RevertToSavedGeneratedFile,CGFile,CGObject> actionType 
-    = new FlexoActionType<RevertToSavedGeneratedFile,CGFile,CGObject> (
-    		"revert_to_saved_file",EDITION_MENU,FlexoActionType.defaultGroup,FlexoActionType.NORMAL_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public RevertToSavedGeneratedFile makeNewAction(CGFile focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return new RevertToSavedGeneratedFile(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public RevertToSavedGeneratedFile makeNewAction(CGFile focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) 
-        {
-            return new RevertToSavedGeneratedFile(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(CGFile object, Vector<CGObject> globalSelection) {
+			return (object instanceof AbstractCGFile);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(CGFile object, Vector<CGObject> globalSelection) 
-        {
-            return (object instanceof AbstractCGFile);
-        }
+		@Override
+		protected boolean isEnabledForSelection(CGFile object, Vector<CGObject> globalSelection) {
+			return ((object != null) && (object.hasVersionOnDisk()) && (object.isEdited()));
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(CGFile object, Vector<CGObject> globalSelection) 
-        {
-            return ((object != null) && (object.hasVersionOnDisk()) && (object.isEdited()));
-       }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (RevertToSavedGeneratedFile.actionType, CGFile.class);
-    }
-    
+	};
 
-    RevertToSavedGeneratedFile (CGFile focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	static {
+		FlexoModelObject.addActionForClass(RevertToSavedGeneratedFile.actionType, CGFile.class);
+	}
 
-    @Override
-	protected void doAction(Object context)
-    {
-    	logger.info ("Revert to saved file "+getFocusedObject().getFileName());
-    	if (getFocusedObject() != null) {
-    		getFocusedObject().revertToSaved();
-     	}
-     }
-	
+	RevertToSavedGeneratedFile(CGFile focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) {
+		logger.info("Revert to saved file " + getFocusedObject().getFileName());
+		if (getFocusedObject() != null) {
+			getFocusedObject().revertToSaved();
+		}
+	}
+
 }

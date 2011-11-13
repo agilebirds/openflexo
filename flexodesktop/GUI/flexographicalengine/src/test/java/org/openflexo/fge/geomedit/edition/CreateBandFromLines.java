@@ -25,38 +25,30 @@ import org.openflexo.fge.geomedit.GeomEditController;
 import org.openflexo.fge.geomedit.construction.BandWithTwoLinesConstruction;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
 
-
-
 public class CreateBandFromLines extends Edition {
-	
+
 	public CreateBandFromLines(GeomEditController controller) {
-		super("Create band from lines",controller);
-		inputs.add(new ObtainLine("Select first line",controller));
-		inputs.add(new ObtainLine("Select second line",controller));
+		super("Create band from lines", controller);
+		inputs.add(new ObtainLine("Select first line", controller));
+		inputs.add(new ObtainLine("Select second line", controller));
 	}
-	
+
 	@Override
-	public void performEdition()
-	{
-		ObtainLine l1 = (ObtainLine)inputs.get(0);
-		ObtainLine l2 = (ObtainLine)inputs.get(1);
-		
-		addObject (new Band(
-				getController().getDrawing().getModel(),
-				new BandWithTwoLinesConstruction(l1.getConstruction(),l2.getConstruction())));
+	public void performEdition() {
+		ObtainLine l1 = (ObtainLine) inputs.get(0);
+		ObtainLine l2 = (ObtainLine) inputs.get(1);
+
+		addObject(new Band(getController().getDrawing().getModel(), new BandWithTwoLinesConstruction(l1.getConstruction(),
+				l2.getConstruction())));
 
 	}
-	
+
 	@Override
-	public void paintEdition(FGEDrawingGraphics graphics,FGEPoint lastMouseLocation)
-	{
+	public void paintEdition(FGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		if (currentStep == 0) {
 			// Nothing to draw
-		}
-		else if (currentStep == 1) {
+		} else if (currentStep == 1) {
 			// Nothing to draw
 		}
 	}
 }
-
-

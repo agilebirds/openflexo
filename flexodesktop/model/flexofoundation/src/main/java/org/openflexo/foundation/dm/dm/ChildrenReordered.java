@@ -26,11 +26,9 @@ import org.openflexo.foundation.dm.DMObject;
  * 
  * @author sguerin
  */
-public class ChildrenReordered extends DMDataModification
-{
+public class ChildrenReordered extends DMDataModification {
 
-    public ChildrenReordered(DMObject object)
-    {
-        super(null, null);
-    }
+	public ChildrenReordered(DMObject object) {
+		super(null, null);
+	}
 }

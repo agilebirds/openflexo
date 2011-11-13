@@ -23,24 +23,22 @@ import java.util.regex.Pattern;
 
 import org.openflexo.foundation.ie.IERegExp;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class DMRegExp
-{
-    public static final String PACKAGE_NAME_REGEXP = "[_a-zA-Z][_a-zA-Z0-9]*(\\.[_a-zA-Z][_a-zA-Z0-9]*)*";
-    
-    public static final Pattern PACKAGE_NAME_PATTERN = Pattern.compile(PACKAGE_NAME_REGEXP);
-    
-    public static final Pattern ENTITY_NAME_PATTERN = IERegExp.JAVA_CLASS_NAME_PATTERN;
-    
-    public static final String METHOD_NAME_REGEXP = "[_a-zA-Z][_a-zA-Z0-9]*";
-    
-    public static final Pattern METHOD_NAME_PATTERN = Pattern.compile(METHOD_NAME_REGEXP);
-    
-    public static final Pattern ATTRIBUTE_NAME_PATTERN = METHOD_NAME_PATTERN;
-    
-    public static final Pattern RELATION_SHIP_NAME_PATTERN = METHOD_NAME_PATTERN;
+public class DMRegExp {
+	public static final String PACKAGE_NAME_REGEXP = "[_a-zA-Z][_a-zA-Z0-9]*(\\.[_a-zA-Z][_a-zA-Z0-9]*)*";
+
+	public static final Pattern PACKAGE_NAME_PATTERN = Pattern.compile(PACKAGE_NAME_REGEXP);
+
+	public static final Pattern ENTITY_NAME_PATTERN = IERegExp.JAVA_CLASS_NAME_PATTERN;
+
+	public static final String METHOD_NAME_REGEXP = "[_a-zA-Z][_a-zA-Z0-9]*";
+
+	public static final Pattern METHOD_NAME_PATTERN = Pattern.compile(METHOD_NAME_REGEXP);
+
+	public static final Pattern ATTRIBUTE_NAME_PATTERN = METHOD_NAME_PATTERN;
+
+	public static final Pattern RELATION_SHIP_NAME_PATTERN = METHOD_NAME_PATTERN;
 }

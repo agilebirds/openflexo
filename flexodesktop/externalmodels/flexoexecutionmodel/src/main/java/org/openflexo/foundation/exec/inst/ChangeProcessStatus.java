@@ -22,16 +22,14 @@ package org.openflexo.foundation.exec.inst;
 import org.openflexo.foundation.wkf.Status;
 import org.openflexo.toolbox.ToolBox;
 
-
 public class ChangeProcessStatus extends CustomInstruction {
 
 	private Status status;
-	
-	public ChangeProcessStatus (Status newStatus)
-	{
+
+	public ChangeProcessStatus(Status newStatus) {
 		super();
 		this.status = newStatus;
-		setInlineComment("Change current ProcessInstance status to "+status.getName());
+		setInlineComment("Change current ProcessInstance status to " + status.getName());
 	}
 
 	public Status getStatus() {
@@ -39,26 +37,21 @@ public class ChangeProcessStatus extends CustomInstruction {
 	}
 
 	@Override
-	public String toString()
-	{
-		return "[ChangeProcessStatus:"+status.getName()+"]";
-	}
-	
-	@Override
-	public String getJavaStringRepresentation() 
-	{
-		return "setStatus("+"Status."+ToolBox.cleanStringForJava(status.getName())+");";
+	public String toString() {
+		return "[ChangeProcessStatus:" + status.getName() + "]";
 	}
 
 	@Override
-	public ChangeProcessStatus clone()
-	{
+	public String getJavaStringRepresentation() {
+		return "setStatus(" + "Status." + ToolBox.cleanStringForJava(status.getName()) + ");";
+	}
+
+	@Override
+	public ChangeProcessStatus clone() {
 		ChangeProcessStatus returned = new ChangeProcessStatus(status);
 		returned.setHeaderComment(getHeaderComment());
 		returned.setInlineComment(getInlineComment());
 		return returned;
 	}
-	
-
 
 }

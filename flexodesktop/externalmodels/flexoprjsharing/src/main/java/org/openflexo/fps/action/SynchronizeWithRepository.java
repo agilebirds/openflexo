@@ -32,62 +32,54 @@ import org.openflexo.fps.FlexoAuthentificationException;
 import org.openflexo.fps.SharedProject;
 import org.openflexo.localization.FlexoLocalization;
 
-public class SynchronizeWithRepository extends CVSAction<SynchronizeWithRepository,SharedProject> 
-{
+public class SynchronizeWithRepository extends CVSAction<SynchronizeWithRepository, SharedProject> {
 
-    private static final Logger logger = Logger.getLogger(SynchronizeWithRepository.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(SynchronizeWithRepository.class.getPackage().getName());
 
-    public static FlexoActionType<SynchronizeWithRepository,SharedProject,FPSObject> actionType 
-    = new FlexoActionType<SynchronizeWithRepository,SharedProject,FPSObject> 
-    ("synchronize_with_repository",SYNCHRONIZE_GROUP,FlexoActionType.NORMAL_ACTION_TYPE) {
+	public static FlexoActionType<SynchronizeWithRepository, SharedProject, FPSObject> actionType = new FlexoActionType<SynchronizeWithRepository, SharedProject, FPSObject>(
+			"synchronize_with_repository", SYNCHRONIZE_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public SynchronizeWithRepository makeNewAction(SharedProject focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) 
-        {
-            return new SynchronizeWithRepository(focusedObject, globalSelection, editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public SynchronizeWithRepository makeNewAction(SharedProject focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {
+			return new SynchronizeWithRepository(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(SharedProject object, Vector<FPSObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(SharedProject object, Vector<FPSObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(SharedProject object, Vector<FPSObject> globalSelection) 
-        {
-            return (object!=null);
-        }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (actionType, SharedProject.class);
-    }
- 
-      SynchronizeWithRepository (SharedProject focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor)
-    {
-    	super(actionType, focusedObject, globalSelection, editor);
-    }
+		@Override
+		protected boolean isEnabledForSelection(SharedProject object, Vector<FPSObject> globalSelection) {
+			return (object != null);
+		}
 
-    @Override
-	protected void doAction(Object context) throws IOFlexoException, FlexoAuthentificationException
-    {
-    	makeFlexoProgress(FlexoLocalization.localizedForKey("synchronize_with_repository"), 6);
-    	getFocusedObject().synchronizeWithRepository(getFlexoProgress());
-    	waitRevisionRetrivingResponses();
-    	hideFlexoProgress();
-    }
+	};
 
-    private static final long TIME_OUT = 10000; // 10 s
-    private long lastReception;
-    
-    private synchronized void waitRevisionRetrivingResponses()
-    {
-    	Vector<CVSFile> filesBeingRetrieved = new Vector<CVSFile>();
+	static {
+		FlexoModelObject.addActionForClass(actionType, SharedProject.class);
+	}
+
+	SynchronizeWithRepository(SharedProject focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) throws IOFlexoException, FlexoAuthentificationException {
+		makeFlexoProgress(FlexoLocalization.localizedForKey("synchronize_with_repository"), 6);
+		getFocusedObject().synchronizeWithRepository(getFlexoProgress());
+		waitRevisionRetrivingResponses();
+		hideFlexoProgress();
+	}
+
+	private static final long TIME_OUT = 10000; // 10 s
+	private long lastReception;
+
+	private synchronized void waitRevisionRetrivingResponses() {
+		Vector<CVSFile> filesBeingRetrieved = new Vector<CVSFile>();
 		for (CVSFile f : getFocusedObject().getAllCVSFiles()) {
 			if (f.getStatus().isConflicting()) {
 				filesBeingRetrieved.add(f);
@@ -95,43 +87,42 @@ public class SynchronizeWithRepository extends CVSAction<SynchronizeWithReposito
 		}
 
 		setProgress(FlexoLocalization.localizedForKey("waiting_for_revision_retrieving"));
-    	resetSecondaryProgress(filesBeingRetrieved.size());
-    	
-    	lastReception = System.currentTimeMillis();
-    	timeOutReceived = false;
-    	
-    	while (filesBeingRetrieved.size() > 0 
-    			&& System.currentTimeMillis()-lastReception < TIME_OUT) {
-    		synchronized(this) {
-    			try {
+		resetSecondaryProgress(filesBeingRetrieved.size());
+
+		lastReception = System.currentTimeMillis();
+		timeOutReceived = false;
+
+		while (filesBeingRetrieved.size() > 0 && System.currentTimeMillis() - lastReception < TIME_OUT) {
+			synchronized (this) {
+				try {
 					wait(100);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-    		}
-    		for (CVSFile f : (Vector<CVSFile>)filesBeingRetrieved.clone()) {
-    			if (!f.isReceivingContentOnRepository() 
-    					&& !f.isReceivingOriginalContent()) {
-    				filesBeingRetrieved.remove(f);
-    			   	lastReception = System.currentTimeMillis();
-    		    	setSecondaryProgress(FlexoLocalization.localizedForKey("received_response_for")+" "+f.getFile().getName());
-    			}
-	  		}
-    	}
-    	if (filesBeingRetrieved.size() > 0) {
-    		timeOutReceived = true;
-    		logger.warning("Commit finished with time-out expired: still waiting for "+filesBeingRetrieved.size()+" files");
-    	}
-    	
-     }
+			}
+			for (CVSFile f : (Vector<CVSFile>) filesBeingRetrieved.clone()) {
+				if (!f.isReceivingContentOnRepository() && !f.isReceivingOriginalContent()) {
+					filesBeingRetrieved.remove(f);
+					lastReception = System.currentTimeMillis();
+					setSecondaryProgress(FlexoLocalization.localizedForKey("received_response_for") + " " + f.getFile().getName());
+				}
+			}
+		}
+		if (filesBeingRetrieved.size() > 0) {
+			timeOutReceived = true;
+			logger.warning("Commit finished with time-out expired: still waiting for " + filesBeingRetrieved.size() + " files");
+		}
 
-    @Override
-	public boolean hasActionExecutionSucceeded ()
-    {
-    	if (timeOutReceived) return false;
-    	else return super.hasActionExecutionSucceeded();
-    }
-    
-    private boolean timeOutReceived;
+	}
 
- }
+	@Override
+	public boolean hasActionExecutionSucceeded() {
+		if (timeOutReceived)
+			return false;
+		else
+			return super.hasActionExecutionSucceeded();
+	}
+
+	private boolean timeOutReceived;
+
+}

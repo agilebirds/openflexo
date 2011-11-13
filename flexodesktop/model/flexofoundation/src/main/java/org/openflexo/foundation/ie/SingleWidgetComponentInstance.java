@@ -29,55 +29,47 @@ import org.openflexo.foundation.ie.cl.SingleWidgetComponentDefinition;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 import org.openflexo.toolbox.EmptyVector;
 
-
 /**
  * @author bmangez
- * @deprecated
- * <B>Class Description</B>
+ * @deprecated <B>Class Description</B>
  */
 @Deprecated
-public class SingleWidgetComponentInstance extends PartialComponentInstance implements DeletableObject, Serializable
-{
+public class SingleWidgetComponentInstance extends PartialComponentInstance implements DeletableObject, Serializable {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(SingleWidgetComponentInstance.class.getPackage().getName());
 
-    public SingleWidgetComponentInstance(SingleWidgetComponentDefinition component, IEWOComponent container)
-    {
-        super(component, container);
-    }
+	public SingleWidgetComponentInstance(SingleWidgetComponentDefinition component, IEWOComponent container) {
+		super(component, container);
+	}
 
-    public SingleWidgetComponentInstance(FlexoComponentBuilder builder)
-    {
-        super(builder);
-    }
+	public SingleWidgetComponentInstance(FlexoComponentBuilder builder) {
+		super(builder);
+	}
 
-    @Override
-	public Vector<FlexoModelObject> getAllEmbeddedDeleted()
-    {
-        return EmptyVector.EMPTY_VECTOR(FlexoModelObject.class);
-    }
+	@Override
+	public Vector<FlexoModelObject> getAllEmbeddedDeleted() {
+		return EmptyVector.EMPTY_VECTOR(FlexoModelObject.class);
+	}
 
-    @Override
-    public boolean isDeleted()
-    {
-        return isDeleted;
-    }
+	@Override
+	public boolean isDeleted() {
+		return isDeleted;
+	}
 
-    @Override
-    public String getFullyQualifiedName()
-    {
-        return "SingleWidgetInstance_" + getComponentDefinition().getComponentName();
-    }
+	@Override
+	public String getFullyQualifiedName() {
+		return "SingleWidgetInstance_" + getComponentDefinition().getComponentName();
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-    public String getClassNameKey()
-    {
-        return "single_widget_component_instance";
-    }
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "single_widget_component_instance";
+	}
 
 }

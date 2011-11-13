@@ -25,13 +25,12 @@ import org.openflexo.foundation.rm.GeneratedResourceData;
 
 public interface GenerationAvailableFile extends GeneratedResourceData {
 
-	public IFlexoResourceGenerator getGenerator(); 
+	public IFlexoResourceGenerator getGenerator();
 
 	@Override
 	public void generate() throws FlexoException;
-	
+
 	@Override
 	public void regenerate() throws FlexoException;
 
-	
 }

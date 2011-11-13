@@ -26,41 +26,35 @@ import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewFolder;
 import org.openflexo.foundation.view.ViewLibrary;
 
-
 /**
  * Browser element representing the ontology library
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class ShemaLibraryElement extends BrowserElement
-{
+public class ShemaLibraryElement extends BrowserElement {
 
-    protected ShemaLibraryElement(ViewLibrary library, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(library, BrowserElementType.OE_SHEMA_LIBRARY, browser, parent);
-    }
+	protected ShemaLibraryElement(ViewLibrary library, ProjectBrowser browser, BrowserElement parent) {
+		super(library, BrowserElementType.OE_SHEMA_LIBRARY, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-       	for (ViewFolder subFolder : getShemaLibrary().getRootFolder().getSubFolders()) {
-       		addToChilds(subFolder);
-       	}
-       	for (ViewDefinition def : getShemaLibrary().getRootFolder().getShemas()) {
-       		addToChilds(def);
-       	}
-     }
+	@Override
+	protected void buildChildrenVector() {
+		for (ViewFolder subFolder : getShemaLibrary().getRootFolder().getSubFolders()) {
+			addToChilds(subFolder);
+		}
+		for (ViewDefinition def : getShemaLibrary().getRootFolder().getShemas()) {
+			addToChilds(def);
+		}
+	}
 
-    @Override
-	public String getName()
-    {
-        return getProject().getProjectName();
-    }
+	@Override
+	public String getName() {
+		return getProject().getProjectName();
+	}
 
-    protected ViewLibrary getShemaLibrary()
-    {
-        return (ViewLibrary) getObject();
-    }
+	protected ViewLibrary getShemaLibrary() {
+		return (ViewLibrary) getObject();
+	}
 
 }

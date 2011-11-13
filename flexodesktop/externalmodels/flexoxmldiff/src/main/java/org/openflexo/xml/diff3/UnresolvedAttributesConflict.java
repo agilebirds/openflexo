@@ -28,56 +28,65 @@ public class UnresolvedAttributesConflict extends UnresolvedConflict {
 	private Attribute _attribute2;
 	private Element _sourceElement;
 	private Element _mergedElement;
-	public UnresolvedAttributesConflict(XMLDiff3 merge,Element element, Attribute attribute1, Attribute attribute2,Element mergedElement) {
-		super(merge,0);
+
+	public UnresolvedAttributesConflict(XMLDiff3 merge, Element element, Attribute attribute1, Attribute attribute2, Element mergedElement) {
+		super(merge, 0);
 		_sourceElement = element;
 		_mergedElement = mergedElement;
 		_attribute1 = attribute1;
 		_attribute2 = attribute2;
 	}
 
-	public Element getMergedElement(){
+	public Element getMergedElement() {
 		return _mergedElement;
 	}
-	public String elementName(){
+
+	public String elementName() {
 		return _sourceElement.getName();
 	}
 
-	public Element getRootSourceElement(){
+	public Element getRootSourceElement() {
 		return _sourceElement.getDocument().getRootElement();
 	}
-	public String getRootElementName(){
+
+	public String getRootElementName() {
 		return getRootSourceElement().getName();
 	}
-	public String attributeName(){
-		return _attribute1!=null?_attribute1.getName():_attribute2.getName();
+
+	public String attributeName() {
+		return _attribute1 != null ? _attribute1.getName() : _attribute2.getName();
 	}
-	public String originalValue(){
+
+	public String originalValue() {
 		return _sourceElement.getAttributeValue(attributeName());
 	}
-	public String value1(){
-		if(_attribute1==null)return null;
+
+	public String value1() {
+		if (_attribute1 == null)
+			return null;
 		return _attribute1.getValue();
 	}
-	public String value2(){
-		if(_attribute2==null)return null;
+
+	public String value2() {
+		if (_attribute2 == null)
+			return null;
 		return _attribute2.getValue();
 	}
+
 	@Override
-	public String toString(){
-		return "Unresolved conflict on attribute "+attributeName()+" of element "+_sourceElement.getName()+"(id="+_sourceElement.getAttributeValue("id")+")\n"+
-				"\toriginalValue = '"+originalValue()+"'\n"+
-				"\tfirst update = '"+value1()+"'\n"+
-				"\tsecond update = '"+value2()+"'";
+	public String toString() {
+		return "Unresolved conflict on attribute " + attributeName() + " of element " + _sourceElement.getName() + "(id="
+				+ _sourceElement.getAttributeValue("id") + ")\n" + "\toriginalValue = '" + originalValue() + "'\n" + "\tfirst update = '"
+				+ value1() + "'\n" + "\tsecond update = '" + value2() + "'";
 	}
 
 	@Override
 	protected MergeAction buildDiscardYourChangeAction() {
-		return new MergeAttributeAction(getConflictIndex(),MergeActionType.INSERT,attributeName(),value1(),_mergedElement);
+		return new MergeAttributeAction(getConflictIndex(), MergeActionType.INSERT, attributeName(), value1(), _mergedElement);
 	}
 
 	@Override
 	protected MergeAction buildKeepYourChangeAction() {
-		return new MergeAttributeAction(getConflictIndex(),MergeActionType.INSERT,attributeName(),value2(),_mergedElement);
+		return new MergeAttributeAction(getConflictIndex(), MergeActionType.INSERT, attributeName(), value2(), _mergedElement);
 	}
 }

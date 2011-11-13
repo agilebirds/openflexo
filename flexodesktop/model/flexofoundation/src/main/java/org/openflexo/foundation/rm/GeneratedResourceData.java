@@ -23,17 +23,13 @@ import java.io.File;
 
 import org.openflexo.foundation.FlexoException;
 
-
-
 /**
- * This interface is implemented by all classes which represents generated data related to
- * a given FlexoImportedResource
+ * This interface is implemented by all classes which represents generated data related to a given FlexoImportedResource
  * 
  * @author sguerin
  * 
  */
-public interface GeneratedResourceData extends FlexoResourceData
-{
+public interface GeneratedResourceData extends FlexoResourceData {
 	/**
 	 * Return the resource related to this object
 	 * 
@@ -43,8 +39,8 @@ public interface GeneratedResourceData extends FlexoResourceData
 	public FlexoGeneratedResource getFlexoResource();
 
 	public void writeToFile(File aFile) throws FlexoException;
-    
-    public void generate() throws FlexoException;
-    
-    public void regenerate() throws FlexoException;
+
+	public void generate() throws FlexoException;
+
+	public void regenerate() throws FlexoException;
 }

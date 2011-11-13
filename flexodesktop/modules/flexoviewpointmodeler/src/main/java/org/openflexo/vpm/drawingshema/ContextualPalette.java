@@ -49,78 +49,70 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 	private static final Logger logger = Logger.getLogger(ContextualPalette.class.getPackage().getName());
 
 	private ViewPointPalette _calcPalette;
-	
-	public ContextualPalette(ViewPointPalette viewPointPalette)
-	{
-		super((int)((DrawingGraphicalRepresentation)viewPointPalette.getGraphicalRepresentation()).getWidth(),
-				(int)((DrawingGraphicalRepresentation)viewPointPalette.getGraphicalRepresentation()).getHeight(),
-				viewPointPalette.getName());
-		
+
+	public ContextualPalette(ViewPointPalette viewPointPalette) {
+		super((int) ((DrawingGraphicalRepresentation) viewPointPalette.getGraphicalRepresentation()).getWidth(),
+				(int) ((DrawingGraphicalRepresentation) viewPointPalette.getGraphicalRepresentation()).getHeight(), viewPointPalette
+						.getName());
+
 		_calcPalette = viewPointPalette;
-		
+
 		for (ViewPointPaletteElement element : viewPointPalette.getElements()) {
 			addElement(makePaletteElement(element));
 		}
-		
+
 		makePalettePanel();
 		getPaletteView().revalidate();
-		
+
 		viewPointPalette.addObserver(this);
 	}
-	
+
 	@Override
-	public void update(FlexoObservable observable,
-			DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == _calcPalette) {
 			if (dataModification instanceof CalcPaletteElementInserted) {
 				logger.info("Notified new Palette Element added");
-				CalcPaletteElementInserted dm = (CalcPaletteElementInserted)dataModification;
+				CalcPaletteElementInserted dm = (CalcPaletteElementInserted) dataModification;
 				ContextualPaletteElement e = makePaletteElement(dm.newValue());
 				addElement(e);
 				e.getGraphicalRepresentation().notifyObjectHierarchyHasBeenUpdated();
 				DrawingView<PaletteDrawing> oldPaletteView = getPaletteView();
 				updatePalette();
-				getController().updatePalette(_calcPalette,oldPaletteView);
-			}
-			else if (dataModification instanceof CalcPaletteElementRemoved) {
+				getController().updatePalette(_calcPalette, oldPaletteView);
+			} else if (dataModification instanceof CalcPaletteElementRemoved) {
 				logger.info("Notified new Palette Element removed");
-				CalcPaletteElementRemoved dm = (CalcPaletteElementRemoved)dataModification;
+				CalcPaletteElementRemoved dm = (CalcPaletteElementRemoved) dataModification;
 				ContextualPaletteElement e = getContextualPaletteElement(dm.oldValue());
 				removeElement(e);
 				DrawingView<PaletteDrawing> oldPaletteView = getPaletteView();
 				updatePalette();
-				getController().updatePalette(_calcPalette,oldPaletteView);
+				getController().updatePalette(_calcPalette, oldPaletteView);
 			}
 		}
 	}
-	
-	protected ContextualPaletteElement getContextualPaletteElement(ViewPointPaletteElement element)
-	{
+
+	protected ContextualPaletteElement getContextualPaletteElement(ViewPointPaletteElement element) {
 		for (PaletteElement e : elements) {
-			if (e instanceof ContextualPaletteElement 
-					&& ((ContextualPaletteElement)e).viewPointPaletteElement == element) 
-				return (ContextualPaletteElement)e;
+			if (e instanceof ContextualPaletteElement && ((ContextualPaletteElement) e).viewPointPaletteElement == element)
+				return (ContextualPaletteElement) e;
 		}
 		return null;
 
 	}
-	
+
 	@Override
-	public CalcDrawingShemaController getController()
-	{
-		return (CalcDrawingShemaController)super.getController();
+	public CalcDrawingShemaController getController() {
+		return (CalcDrawingShemaController) super.getController();
 	}
-	
-	private Vector<DropScheme> getAvailableDropSchemes(EditionPattern pattern, GraphicalRepresentation target) 
-	{
+
+	private Vector<DropScheme> getAvailableDropSchemes(EditionPattern pattern, GraphicalRepresentation target) {
 		Vector<DropScheme> returned = new Vector<DropScheme>();
 		for (DropScheme dropScheme : pattern.getDropSchemes()) {
 			if (dropScheme.isTopTarget() && target instanceof DrawingGraphicalRepresentation) {
 				returned.add(dropScheme);
 			}
 			if (target.getDrawable() instanceof ViewShape) {
-				ViewShape targetShape = (ViewShape)target.getDrawable();
+				ViewShape targetShape = (ViewShape) target.getDrawable();
 				if (dropScheme.isValidTarget(targetShape.getEditionPattern())) {
 					returned.add(dropScheme);
 				}
@@ -129,36 +121,32 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 		return returned;
 	}
 
-	private ContextualPaletteElement makePaletteElement(final ViewPointPaletteElement element) 
-	{
+	private ContextualPaletteElement makePaletteElement(final ViewPointPaletteElement element) {
 		return new ContextualPaletteElement(element);
 	}
 
-	protected class ContextualPaletteElement implements PaletteElement
-	{
+	protected class ContextualPaletteElement implements PaletteElement {
 		private ViewPointPaletteElement viewPointPaletteElement;
 		private PaletteElementGraphicalRepresentation gr;
-		
-		public ContextualPaletteElement(ViewPointPaletteElement aPaletteElement)
-		{
+
+		public ContextualPaletteElement(ViewPointPaletteElement aPaletteElement) {
 			viewPointPaletteElement = aPaletteElement;
-			gr  = new PaletteElementGraphicalRepresentation((ShapeGraphicalRepresentation)viewPointPaletteElement.getGraphicalRepresentation(),null,getPaletteDrawing());
+			gr = new PaletteElementGraphicalRepresentation(
+					(ShapeGraphicalRepresentation) viewPointPaletteElement.getGraphicalRepresentation(), null, getPaletteDrawing());
 			gr.setText(aPaletteElement.getName());
 			gr.setDrawable(this);
 		}
-		
+
 		@Override
-		public boolean acceptDragging(GraphicalRepresentation target)
-		{
+		public boolean acceptDragging(GraphicalRepresentation target) {
 			return target instanceof CalcDrawingShemaGR || target instanceof CalcDrawingShapeGR;
 		}
 
 		@Override
-		public boolean elementDragged(GraphicalRepresentation containerGR, FGEPoint dropLocation)
-		{
+		public boolean elementDragged(GraphicalRepresentation containerGR, FGEPoint dropLocation) {
 			if (containerGR.getDrawable() instanceof ExampleDrawingObject) {
 
-				ExampleDrawingObject container = (ExampleDrawingObject)containerGR.getDrawable();
+				ExampleDrawingObject container = (ExampleDrawingObject) containerGR.getDrawable();
 
 				ShapeGraphicalRepresentation<?> shapeGR = getGraphicalRepresentation().clone();
 				shapeGR.setIsSelectable(true);
@@ -166,15 +154,17 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 				shapeGR.setIsReadOnly(false);
 				shapeGR.setLocationConstraints(LocationConstraints.FREELY_MOVABLE);
 				shapeGR.setLocation(dropLocation);
-				shapeGR.setLayer(containerGR.getLayer()+1);
+				shapeGR.setLayer(containerGR.getLayer() + 1);
 				shapeGR.setAllowToLeaveBounds(true);
 
-				AddExampleDrawingShape action = AddExampleDrawingShape.actionType.makeNewAction(container, null, getController().getCEDController().getEditor());
+				AddExampleDrawingShape action = AddExampleDrawingShape.actionType.makeNewAction(container, null, getController()
+						.getCEDController().getEditor());
 				action.graphicalRepresentation = shapeGR;
 				action.newShapeName = shapeGR.getText();
-				if (action.newShapeName == null) action.newShapeName = FlexoLocalization.localizedForKey("shape");
-				//action.nameSetToNull = true;
-				//action.setNewShapeName(FlexoLocalization.localizedForKey("unnamed"));
+				if (action.newShapeName == null)
+					action.newShapeName = FlexoLocalization.localizedForKey("shape");
+				// action.nameSetToNull = true;
+				// action.setNewShapeName(FlexoLocalization.localizedForKey("unnamed"));
 
 				action.doAction();
 				return action.hasActionExecutionSucceeded();
@@ -184,17 +174,15 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 		}
 
 		@Override
-		public PaletteElementGraphicalRepresentation getGraphicalRepresentation()
-		{
+		public PaletteElementGraphicalRepresentation getGraphicalRepresentation() {
 			return gr;
-		}		
-		
+		}
+
 		@Override
-		public DrawingPalette getPalette()
-		{
+		public DrawingPalette getPalette() {
 			return ContextualPalette.this;
 		}
 
 	}
-	
+
 }

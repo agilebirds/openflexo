@@ -35,7 +35,6 @@ import org.openflexo.properties.FlexoProperties;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.controller.FlexoController;
 
-
 public class LoggingConfigurationWindow {
 
 	RadioButtonListParameter<String> logConfigType;
@@ -106,8 +105,9 @@ public class LoggingConfigurationWindow {
 				new AskParametersDialog.ValidationCondition() {
 					@Override
 					public boolean isValid(ParametersModel model) {
-						if (logConfigType.getValue().equals(FlexoLocalization.localizedForKey("use_a_custom_log_config")) && (customFileChooser
-								.getValue() == null || !customFileChooser.getValue().exists() || !customFileChooser.getValue().canRead())) {
+						if (logConfigType.getValue().equals(FlexoLocalization.localizedForKey("use_a_custom_log_config"))
+								&& (customFileChooser.getValue() == null || !customFileChooser.getValue().exists() || !customFileChooser
+										.getValue().canRead())) {
 							errorMessage = FlexoLocalization.localizedForKey("please_select_a_readable_file");
 							return false;
 						}

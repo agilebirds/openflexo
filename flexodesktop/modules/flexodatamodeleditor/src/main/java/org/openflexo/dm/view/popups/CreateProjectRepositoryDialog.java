@@ -28,38 +28,32 @@ import org.openflexo.foundation.dm.action.CreateProjectRepository;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.view.FlexoFrame;
 
-
 /**
  * Popup allowing to create a project repository
  * 
  * @author sguerin
  * 
  */
-public class CreateProjectRepositoryDialog extends AskNewRepositoryDialog
-{
+public class CreateProjectRepositoryDialog extends AskNewRepositoryDialog {
 
-    public CreateProjectRepositoryDialog(CreateProjectRepository flexoAction, FlexoFrame owner)
-    {
-        super(flexoAction,owner);
-    }
-    
-    public static int displayDialog(CreateProjectRepository flexoAction, FlexoProject project,
-    		FlexoFrame owner)
-    {
-        flexoAction.setProject(project);
-        CreateProjectRepositoryDialog dialog = new CreateProjectRepositoryDialog(flexoAction, owner);
-        return dialog.getStatus();
-    }
+	public CreateProjectRepositoryDialog(CreateProjectRepository flexoAction, FlexoFrame owner) {
+		super(flexoAction, owner);
+	}
 
-    @Override
-	protected void init()
-    {
-        choicePanel = new JPanel();
-        choicePanel.setLayout(new GridLayout(1, 2));
-        choicePanel.add(projectRepositoryButton);
-        choicePanel.add(new JPanel());
-        projectRepositoryButton.setSelected(true);
-       selectRepositoryType(CreateDMRepository.PROJECT_REPOSITORY);
-   }
+	public static int displayDialog(CreateProjectRepository flexoAction, FlexoProject project, FlexoFrame owner) {
+		flexoAction.setProject(project);
+		CreateProjectRepositoryDialog dialog = new CreateProjectRepositoryDialog(flexoAction, owner);
+		return dialog.getStatus();
+	}
+
+	@Override
+	protected void init() {
+		choicePanel = new JPanel();
+		choicePanel.setLayout(new GridLayout(1, 2));
+		choicePanel.add(projectRepositoryButton);
+		choicePanel.add(new JPanel());
+		projectRepositoryButton.setSelected(true);
+		selectRepositoryType(CreateDMRepository.PROJECT_REPOSITORY);
+	}
 
 }

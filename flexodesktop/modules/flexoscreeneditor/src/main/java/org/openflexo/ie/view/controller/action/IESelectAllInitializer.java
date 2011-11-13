@@ -37,54 +37,47 @@ import org.openflexo.foundation.ie.action.IESelectAll;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class IESelectAllInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	IESelectAllInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(IESelectAll.actionType,actionInitializer);
+	IESelectAllInitializer(IEControllerActionInitializer actionInitializer) {
+		super(IESelectAll.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<IESelectAll> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<IESelectAll> getDefaultInitializer() {
 		return new FlexoActionInitializer<IESelectAll>() {
 			@Override
-			public boolean run(ActionEvent e, IESelectAll action)
-			{
+			public boolean run(ActionEvent e, IESelectAll action) {
 				return true;
 			}
 		};
 	}
-	
+
 	@Override
 	protected FlexoActionEnableCondition getEnableCondition() {
-		return new FlexoActionEnableCondition<IESelectAll,IEObject,IEObject>() {
+		return new FlexoActionEnableCondition<IESelectAll, IEObject, IEObject>() {
 
 			@Override
-			public boolean isEnabled(FlexoActionType<IESelectAll,IEObject,IEObject> actionType, IEObject object,
+			public boolean isEnabled(FlexoActionType<IESelectAll, IEObject, IEObject> actionType, IEObject object,
 					Vector<IEObject> globalSelection, FlexoEditor editor) {
 				return false;
 			}
-			
+
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<IESelectAll> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<IESelectAll> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<IESelectAll>() {
 			@Override
-			public boolean run(ActionEvent e, IESelectAll action)
-			{
+			public boolean run(ActionEvent e, IESelectAll action) {
 				getControllerActionInitializer().getIESelectionManager().performSelectionSelectAll();
 				return true;
 			}
@@ -92,8 +85,7 @@ public class IESelectAllInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected KeyStroke getShortcut()
-	{
+	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(KeyEvent.VK_A, FlexoCst.META_MASK);
 	}
 

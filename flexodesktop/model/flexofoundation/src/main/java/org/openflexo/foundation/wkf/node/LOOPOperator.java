@@ -39,7 +39,6 @@ import org.openflexo.localization.FlexoLocalization;
 
 public class LOOPOperator extends CommonOutputOperatorNode {
 
-
 	private LoopType loopType = LoopType.WHILE;
 
 	public static final String CONDITION = "condition";
@@ -49,13 +48,13 @@ public class LOOPOperator extends CommonOutputOperatorNode {
 	private BindingValue _iterator;
 
 	public static final String BEGIN_VALUE = "beginValue";
-	private AbstractBinding _beginValue = new IntegerStaticBinding(BEGIN_VALUE_BINDING_DEFINITION(),this,0);
+	private AbstractBinding _beginValue = new IntegerStaticBinding(BEGIN_VALUE_BINDING_DEFINITION(), this, 0);
 
 	public static final String END_VALUE = "endValue";
-	private AbstractBinding _endValue = new IntegerStaticBinding(BEGIN_VALUE_BINDING_DEFINITION(),this,10);;
+	private AbstractBinding _endValue = new IntegerStaticBinding(BEGIN_VALUE_BINDING_DEFINITION(), this, 10);;
 
 	public static final String INCREMENT_VALUE = "incrementValue";
-	private AbstractBinding _incrementValue = new IntegerStaticBinding(BEGIN_VALUE_BINDING_DEFINITION(),this,1);
+	private AbstractBinding _incrementValue = new IntegerStaticBinding(BEGIN_VALUE_BINDING_DEFINITION(), this, 1);
 
 	public static final String ITERATION_COLLECTION = "iterationCollection";
 	private AbstractBinding _iterationCollection;
@@ -63,17 +62,14 @@ public class LOOPOperator extends CommonOutputOperatorNode {
 	public static final String COLLECTION_ITEM = "collectionItem";
 	private BindingValue _collectionItem;
 
-
-	public static final String getTypeName()
-    {
-        return "LOOPOPERATOR";
-    }
+	public static final String getTypeName() {
+		return "LOOPOPERATOR";
+	}
 
 	/**
 	 * Constructor used during deserialization
 	 */
-	public LOOPOperator(FlexoProcessBuilder builder)
-	{
+	public LOOPOperator(FlexoProcessBuilder builder) {
 		this(builder.process);
 		initializeDeserialization(builder);
 	}
@@ -81,8 +77,7 @@ public class LOOPOperator extends CommonOutputOperatorNode {
 	/**
 	 * Default constructor
 	 */
-	public LOOPOperator(FlexoProcess process)
-	{
+	public LOOPOperator(FlexoProcess process) {
 		super(process);
 	}
 
@@ -92,40 +87,34 @@ public class LOOPOperator extends CommonOutputOperatorNode {
 	}
 
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return Inspectors.WKF.OPERATOR_LOOP_INSPECTOR;
 	}
 
 	private FlexoPetriGraph _executionPetriGraph = null;
 
-	public boolean hasExecutionPetriGraph()
-	{
+	public boolean hasExecutionPetriGraph() {
 		return _executionPetriGraph != null;
 	}
 
-	public FlexoPetriGraph getExecutionPetriGraph()
-	{
+	public FlexoPetriGraph getExecutionPetriGraph() {
 		return _executionPetriGraph;
 	}
 
-	public void setExecutionPetriGraph(FlexoPetriGraph executionPetriGraph)
-	{
+	public void setExecutionPetriGraph(FlexoPetriGraph executionPetriGraph) {
 		_executionPetriGraph = executionPetriGraph;
 		_executionPetriGraph.setContainer(this, FlexoProcess.EXECUTION_CONTEXT);
 		setChanged();
 		notifyObservers(new PetriGraphSet(executionPetriGraph));
 	}
 
-	public AbstractBinding getCondition()
-	{
+	public AbstractBinding getCondition() {
 		if (isBeingCloned())
 			return null;
 		return _condition;
 	}
 
-	public void setCondition(AbstractBinding condition)
-	{
+	public void setCondition(AbstractBinding condition) {
 		AbstractBinding oldBindingValue = _condition;
 		_condition = condition;
 		if (_condition != null) {
@@ -136,15 +125,13 @@ public class LOOPOperator extends CommonOutputOperatorNode {
 		notifyObservers(new WKFAttributeDataModification(CONDITION, oldBindingValue, condition));
 	}
 
-	public BindingValue getIterator()
-	{
+	public BindingValue getIterator() {
 		if (isBeingCloned())
 			return null;
 		return _iterator;
 	}
 
-	public void setIterator(BindingValue iterator)
-	{
+	public void setIterator(BindingValue iterator) {
 		AbstractBinding oldBindingValue = _iterator;
 		_iterator = iterator;
 		if (_iterator != null) {
@@ -155,15 +142,13 @@ public class LOOPOperator extends CommonOutputOperatorNode {
 		notifyObservers(new WKFAttributeDataModification(ITERATOR, oldBindingValue, iterator));
 	}
 
-	public AbstractBinding getBeginValue()
-	{
+	public AbstractBinding getBeginValue() {
 		if (isBeingCloned())
 			return null;
 		return _beginValue;
 	}
 
-	public void setBeginValue(AbstractBinding beginValue)
-	{
+	public void setBeginValue(AbstractBinding beginValue) {
 		AbstractBinding oldBindingValue = _beginValue;
 		_beginValue = beginValue;
 		if (_beginValue != null) {
@@ -174,15 +159,13 @@ public class LOOPOperator extends CommonOutputOperatorNode {
 		notifyObservers(new WKFAttributeDataModification(BEGIN_VALUE, oldBindingValue, beginValue));
 	}
 
-	public AbstractBinding getEndValue()
-	{
+	public AbstractBinding getEndValue() {
 		if (isBeingCloned())
 			return null;
 		return _endValue;
 	}
 
-	public void setEndValue(AbstractBinding endValue)
-	{
+	public void setEndValue(AbstractBinding endValue) {
 		AbstractBinding oldBindingValue = _endValue;
 		_endValue = endValue;
 		if (_endValue != null) {
@@ -193,15 +176,13 @@ public class LOOPOperator extends CommonOutputOperatorNode {
 		notifyObservers(new WKFAttributeDataModification(END_VALUE, oldBindingValue, endValue));
 	}
 
-	public AbstractBinding getIncrementValue()
-	{
+	public AbstractBinding getIncrementValue() {
 		if (isBeingCloned())
 			return null;
 		return _incrementValue;
 	}
 
-	public void setIncrementValue(AbstractBinding incrementValue)
-	{
+	public void setIncrementValue(AbstractBinding incrementValue) {
 		AbstractBinding oldBindingValue = _incrementValue;
 		_incrementValue = incrementValue;
 		if (_incrementValue != null) {
@@ -212,15 +193,13 @@ public class LOOPOperator extends CommonOutputOperatorNode {
 		notifyObservers(new WKFAttributeDataModification(INCREMENT_VALUE, oldBindingValue, incrementValue));
 	}
 
-	public AbstractBinding getIterationCollection()
-	{
+	public AbstractBinding getIterationCollection() {
 		if (isBeingCloned())
 			return null;
 		return _iterationCollection;
 	}
 
-	public void setIterationCollection(AbstractBinding iterationCollection)
-	{
+	public void setIterationCollection(AbstractBinding iterationCollection) {
 		AbstractBinding oldBindingValue = _iterationCollection;
 		_iterationCollection = iterationCollection;
 		if (_iterationCollection != null) {
@@ -231,15 +210,13 @@ public class LOOPOperator extends CommonOutputOperatorNode {
 		notifyObservers(new WKFAttributeDataModification(ITERATION_COLLECTION, oldBindingValue, iterationCollection));
 	}
 
-	public BindingValue getCollectionItem()
-	{
+	public BindingValue getCollectionItem() {
 		if (isBeingCloned())
 			return null;
 		return _collectionItem;
 	}
 
-	public void setCollectionItem(BindingValue collectionItem)
-	{
+	public void setCollectionItem(BindingValue collectionItem) {
 		AbstractBinding oldBindingValue = _collectionItem;
 		_collectionItem = collectionItem;
 		if (_collectionItem != null) {
@@ -250,78 +227,73 @@ public class LOOPOperator extends CommonOutputOperatorNode {
 		notifyObservers(new WKFAttributeDataModification(COLLECTION_ITEM, oldBindingValue, collectionItem));
 	}
 
-	public WKFBindingDefinition CONDITION_BINDING_DEFINITION()
-	{
+	public WKFBindingDefinition CONDITION_BINDING_DEFINITION() {
 		if (getProject() != null) {
-			WKFBindingDefinition returned = WKFBindingDefinition.get(this, CONDITION, Boolean.class,BindingDefinitionType.GET,false);
+			WKFBindingDefinition returned = WKFBindingDefinition.get(this, CONDITION, Boolean.class, BindingDefinitionType.GET, false);
 			if (logger.isLoggable(Level.FINE))
-				logger.fine("Returned WKFBindingDefinition : "+returned);
+				logger.fine("Returned WKFBindingDefinition : " + returned);
 			return returned;
 		}
 		return null;
 	}
 
-	public WKFBindingDefinition ITERATOR_BINDING_DEFINITION()
-	{
+	public WKFBindingDefinition ITERATOR_BINDING_DEFINITION() {
 		if (getProject() != null) {
-			WKFBindingDefinition returned = WKFBindingDefinition.get(this, ITERATOR, Number.class,BindingDefinitionType.GET_SET,false);
+			WKFBindingDefinition returned = WKFBindingDefinition.get(this, ITERATOR, Number.class, BindingDefinitionType.GET_SET, false);
 			if (logger.isLoggable(Level.FINE))
-				logger.fine("Returned WKFBindingDefinition : "+returned);
+				logger.fine("Returned WKFBindingDefinition : " + returned);
 			return returned;
 		}
 		return null;
 	}
 
-	public WKFBindingDefinition BEGIN_VALUE_BINDING_DEFINITION()
-	{
+	public WKFBindingDefinition BEGIN_VALUE_BINDING_DEFINITION() {
 		if (getProject() != null) {
-			WKFBindingDefinition returned = WKFBindingDefinition.get(this, BEGIN_VALUE, Number.class,BindingDefinitionType.GET,false);
+			WKFBindingDefinition returned = WKFBindingDefinition.get(this, BEGIN_VALUE, Number.class, BindingDefinitionType.GET, false);
 			if (logger.isLoggable(Level.FINE))
-				logger.fine("Returned WKFBindingDefinition : "+returned);
+				logger.fine("Returned WKFBindingDefinition : " + returned);
 			return returned;
 		}
 		return null;
 	}
 
-	public WKFBindingDefinition END_VALUE_BINDING_DEFINITION()
-	{
+	public WKFBindingDefinition END_VALUE_BINDING_DEFINITION() {
 		if (getProject() != null) {
-			WKFBindingDefinition returned = WKFBindingDefinition.get(this, END_VALUE, Number.class,BindingDefinitionType.GET,false);
+			WKFBindingDefinition returned = WKFBindingDefinition.get(this, END_VALUE, Number.class, BindingDefinitionType.GET, false);
 			if (logger.isLoggable(Level.FINE))
-				logger.fine("Returned WKFBindingDefinition : "+returned);
+				logger.fine("Returned WKFBindingDefinition : " + returned);
 			return returned;
 		}
 		return null;
 	}
 
-	public WKFBindingDefinition INCREMENT_VALUE_BINDING_DEFINITION()
-	{
+	public WKFBindingDefinition INCREMENT_VALUE_BINDING_DEFINITION() {
 		if (getProject() != null) {
-			WKFBindingDefinition returned = WKFBindingDefinition.get(this, INCREMENT_VALUE, Number.class,BindingDefinitionType.GET,false);
+			WKFBindingDefinition returned = WKFBindingDefinition.get(this, INCREMENT_VALUE, Number.class, BindingDefinitionType.GET, false);
 			if (logger.isLoggable(Level.FINE))
-				logger.fine("Returned WKFBindingDefinition : "+returned);
+				logger.fine("Returned WKFBindingDefinition : " + returned);
 			return returned;
 		}
 		return null;
 	}
 
-	public WKFBindingDefinition ITERATION_COLLECTION_BINDING_DEFINITION()
-	{
+	public WKFBindingDefinition ITERATION_COLLECTION_BINDING_DEFINITION() {
 		if (getProject() != null) {
-			WKFBindingDefinition returned = WKFBindingDefinition.get(this, ITERATION_COLLECTION, List.class,BindingDefinitionType.GET,false);
+			WKFBindingDefinition returned = WKFBindingDefinition.get(this, ITERATION_COLLECTION, List.class, BindingDefinitionType.GET,
+					false);
 			if (logger.isLoggable(Level.FINE))
-				logger.fine("Returned WKFBindingDefinition : "+returned);
+				logger.fine("Returned WKFBindingDefinition : " + returned);
 			return returned;
 		}
 		return null;
 	}
 
-	public WKFBindingDefinition COLLECTION_ITEM_BINDING_DEFINITION()
-	{
+	public WKFBindingDefinition COLLECTION_ITEM_BINDING_DEFINITION() {
 		if (getProject() != null) {
-			WKFBindingDefinition returned = WKFBindingDefinition.get(this, COLLECTION_ITEM, Object.class,BindingDefinitionType.GET_SET,false);
+			WKFBindingDefinition returned = WKFBindingDefinition.get(this, COLLECTION_ITEM, Object.class, BindingDefinitionType.GET_SET,
+					false);
 			if (logger.isLoggable(Level.FINE))
-				logger.fine("Returned WKFBindingDefinition : "+returned);
+				logger.fine("Returned WKFBindingDefinition : " + returned);
 			return returned;
 		}
 		return null;
@@ -331,21 +303,19 @@ public class LOOPOperator extends CommonOutputOperatorNode {
 		return loopType;
 	}
 
-	public void setLoopType(LoopType loopType)
-	{
+	public void setLoopType(LoopType loopType) {
 		if (this.loopType != loopType) {
 			LoopType oldValue = loopType;
 			this.loopType = loopType;
 			setChanged();
-			notifyObservers(new WKFAttributeDataModification("loopType",oldValue,loopType));
+			notifyObservers(new WKFAttributeDataModification("loopType", oldValue, loopType));
 		}
 	}
 
 	@Override
-	public Vector<WKFObject> getAllEmbeddedWKFObjects()
-	{
+	public Vector<WKFObject> getAllEmbeddedWKFObjects() {
 		Vector<WKFObject> returned = super.getAllEmbeddedWKFObjects();
-		if (getExecutionPetriGraph()!=null)
+		if (getExecutionPetriGraph() != null)
 			returned.addAll(getExecutionPetriGraph().getAllEmbeddedWKFObjects());
 		return returned;
 	}

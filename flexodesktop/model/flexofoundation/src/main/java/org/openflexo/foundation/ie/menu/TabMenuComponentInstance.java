@@ -26,53 +26,46 @@ import org.openflexo.foundation.ie.TabComponentInstance;
 import org.openflexo.foundation.ie.cl.TabComponentDefinition;
 import org.openflexo.foundation.xml.FlexoNavigationMenuBuilder;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class TabMenuComponentInstance extends TabComponentInstance
-{
+public class TabMenuComponentInstance extends TabComponentInstance {
 
-    /**
-     * @param component
-     */
-    public TabMenuComponentInstance(TabComponentDefinition component, FlexoItemMenu itemMenu)
-    {
-        super(component, itemMenu);
-        setItemMenu(itemMenu);
-    }
+	/**
+	 * @param component
+	 */
+	public TabMenuComponentInstance(TabComponentDefinition component, FlexoItemMenu itemMenu) {
+		super(component, itemMenu);
+		setItemMenu(itemMenu);
+	}
 
-    public TabMenuComponentInstance(FlexoNavigationMenuBuilder builder)
-    {
-        super(builder);
-    }
+	public TabMenuComponentInstance(FlexoNavigationMenuBuilder builder) {
+		super(builder);
+	}
 
-    public TabComponentDefinition getTabComponentDefinition()
-    {
-        return getComponentDefinition();
-    }
+	public TabComponentDefinition getTabComponentDefinition() {
+		return getComponentDefinition();
+	}
 
-    @Override
-    public String getFullyQualifiedName()
-    {
-        return "TAB_MENU_COMPONENT_INSTANCE." + getComponentDefinition().getName();
-    }
+	@Override
+	public String getFullyQualifiedName() {
+		return "TAB_MENU_COMPONENT_INSTANCE." + getComponentDefinition().getName();
+	}
 
-    /**
-     * Overrides getClassNameKey
-     *
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-    public String getClassNameKey()
-    {
-        return "tab_menu_component_instance";
-    }
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "tab_menu_component_instance";
+	}
 
 	@Override
 	public String getContextIdentifier() {
-		return "Menu: "+getItemMenu().getMenuLabel();
+		return "Menu: " + getItemMenu().getMenuLabel();
 	}
 
 	@Override

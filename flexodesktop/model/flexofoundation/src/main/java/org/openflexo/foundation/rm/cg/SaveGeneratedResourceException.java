@@ -25,29 +25,25 @@ import org.openflexo.foundation.rm.SaveResourceException;
 /**
  * 
  */
-public class SaveGeneratedResourceException extends SaveResourceException
-{
+public class SaveGeneratedResourceException extends SaveResourceException {
 
 	private String _message = null;
-	
-    /**
-     * @param fileResource
-     */
-    public SaveGeneratedResourceException(FlexoGeneratedResource fileResource,  String message)
-    {
-        super(fileResource);
-        _message = message;
-   }
 
-    @Override
-	public String getMessage()
-    {
-    	if (_message != null) {
-    		return _message;
-    	}
-    	else {
-    		return super.getMessage();
-    	}
-    }
+	/**
+	 * @param fileResource
+	 */
+	public SaveGeneratedResourceException(FlexoGeneratedResource fileResource, String message) {
+		super(fileResource);
+		_message = message;
+	}
+
+	@Override
+	public String getMessage() {
+		if (_message != null) {
+			return _message;
+		} else {
+			return super.getMessage();
+		}
+	}
 
 }

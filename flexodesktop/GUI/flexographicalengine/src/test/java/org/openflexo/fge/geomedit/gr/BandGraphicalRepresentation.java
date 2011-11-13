@@ -25,19 +25,15 @@ import org.openflexo.fge.geomedit.GeometricDrawing;
 import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
 import org.openflexo.xmlcode.XMLSerializable;
 
-
-public class BandGraphicalRepresentation extends GeometricObjectGraphicalRepresentation<FGEBand,Band> implements XMLSerializable 
-{
+public class BandGraphicalRepresentation extends GeometricObjectGraphicalRepresentation<FGEBand, Band> implements XMLSerializable {
 	// Called for LOAD
-	public BandGraphicalRepresentation(GeomEditBuilder builder)
-	{
-		this(null,builder.drawing);
+	public BandGraphicalRepresentation(GeomEditBuilder builder) {
+		this(null, builder.drawing);
 		initializeDeserialization();
 	}
-	
-	public BandGraphicalRepresentation(Band band, GeometricDrawing aDrawing)
-	{
+
+	public BandGraphicalRepresentation(Band band, GeometricDrawing aDrawing) {
 		super(band, aDrawing);
 	}
-	
+
 }

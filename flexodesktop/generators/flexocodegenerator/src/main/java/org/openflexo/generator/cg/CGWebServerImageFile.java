@@ -27,24 +27,20 @@ import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.xml.GeneratedCodeBuilder;
 import org.openflexo.generator.file.AbstractCGFile;
 
-
 public class CGWebServerImageFile extends AbstractCGFile {
 
-	public CGWebServerImageFile(GeneratedCodeBuilder builder)
-    {
-        super(builder.generatedCode);
-     }
-    
-    public CGWebServerImageFile(GeneratedOutput generatedCode)
-    {
-        super(generatedCode);  
-    }
+	public CGWebServerImageFile(GeneratedCodeBuilder builder) {
+		super(builder.generatedCode);
+	}
 
-    public CGWebServerImageFile(GenerationRepository repository, CGRepositoryFileResource resource)
-    {
-        super(repository.getGeneratedCode());
-        setResource(resource);
-    }
+	public CGWebServerImageFile(GeneratedOutput generatedCode) {
+		super(generatedCode);
+	}
+
+	public CGWebServerImageFile(GenerationRepository repository, CGRepositoryFileResource resource) {
+		super(repository.getGeneratedCode());
+		setResource(resource);
+	}
 
 	public void generate() throws FlexoException {
 		getGenerator().generate(false);
@@ -55,8 +51,7 @@ public class CGWebServerImageFile extends AbstractCGFile {
 	}
 
 	@Override
-	public boolean hasGenerationErrors()
-	{
+	public boolean hasGenerationErrors() {
 		return false;
 	}
 

@@ -20,14 +20,14 @@
 package org.openflexo.toolbox;
 
 public enum ProgrammingLanguage {
-	JAVA,
-	CSHARP;
-	
+	JAVA, CSHARP;
+
 	@Override
-	public String toString()
-	{
-		if (this == JAVA) return "Java";
-		if (this == CSHARP) return "C#";
+	public String toString() {
+		if (this == JAVA)
+			return "Java";
+		if (this == CSHARP)
+			return "C#";
 		return super.toString();
 	}
 }

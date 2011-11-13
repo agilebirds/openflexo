@@ -26,57 +26,46 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMObject;
 
-
 /**
  * @deprecated
  * @author gpolet
- *
+ * 
  */
 @Deprecated
-public class ImportDenaliFoundationRepository extends CreateDMRepository 
-{
+public class ImportDenaliFoundationRepository extends CreateDMRepository {
 
-    static final Logger logger = Logger.getLogger(ImportDenaliFoundationRepository.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(ImportDenaliFoundationRepository.class.getPackage().getName());
 
-    public static FlexoActionType<ImportDenaliFoundationRepository,DMObject,DMObject> actionType
-    = new FlexoActionType<ImportDenaliFoundationRepository,DMObject,DMObject> (
-    		"import_denali_library",
-    		FlexoActionType.importMenu,
-    		FlexoActionType.defaultGroup) {
+	public static FlexoActionType<ImportDenaliFoundationRepository, DMObject, DMObject> actionType = new FlexoActionType<ImportDenaliFoundationRepository, DMObject, DMObject>(
+			"import_denali_library", FlexoActionType.importMenu, FlexoActionType.defaultGroup) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public ImportDenaliFoundationRepository makeNewAction(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) 
-        {
-            return new ImportDenaliFoundationRepository(focusedObject, globalSelection, editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public ImportDenaliFoundationRepository makeNewAction(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
+			return new ImportDenaliFoundationRepository(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) 
-        {
-            return true;
-         }
-                
-    };
-    
-    ImportDenaliFoundationRepository (DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+		@Override
+		protected boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
+			return true;
+		}
 
-    @Override
-	public String getRepositoryType() 
-    {
-        return DENALI_FOUNDATION_REPOSITORY;
-    }
+	};
 
- 
+	ImportDenaliFoundationRepository(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	public String getRepositoryType() {
+		return DENALI_FOUNDATION_REPOSITORY;
+	}
+
 }

@@ -26,36 +26,32 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 
-
 /**
  * Used only during XML serialization to build process
  * 
  * @author sguerin
  * 
  */
-public class FlexoProcessBuilder extends FlexoBuilder<FlexoProcessResource>
-{
+public class FlexoProcessBuilder extends FlexoBuilder<FlexoProcessResource> {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(FlexoProcessBuilder.class.getPackage().getName());
 
-    public FlexoProcess process = null;
+	public FlexoProcess process = null;
 
-    public String defaultProcessName = null;
+	public String defaultProcessName = null;
 
-    public FlexoWorkflow workflow = null;
+	public FlexoWorkflow workflow = null;
 
-    public boolean isBeingCloned = false;
+	public boolean isBeingCloned = false;
 
-    public FlexoProcessBuilder(FlexoProcessResource resource)
-    {
-        super(resource);
-    }
+	public FlexoProcessBuilder(FlexoProcessResource resource) {
+		super(resource);
+	}
 
-    public FlexoProcessBuilder(FlexoProject project)
-    {
-        super(null);
-        setProject(project);
-    }
-    
+	public FlexoProcessBuilder(FlexoProject project) {
+		super(null);
+		setProject(project);
+	}
+
 }

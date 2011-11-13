@@ -22,25 +22,23 @@ package org.openflexo.toolbox;
 import java.io.File;
 
 /**
- * Simple utility class to instanciate existing file from a relative path name,
- * in the context of Flexo. Directories search order is defined here.
+ * Simple utility class to instanciate existing file from a relative path name, in the context of Flexo. Directories search order is defined
+ * here.
  * 
  * @author sguerin
  * 
  */
-public class FileResource extends File
-{
+public class FileResource extends File {
 
 	private String internalPath;
-	
-    public FileResource(String relativePathName)
-    {
-        super(ResourceLocator.locateFile(relativePathName).getAbsolutePath());
-        internalPath = relativePathName;
-    }
-    
-    public String getInternalPath(){
-    	return internalPath;
-    }
+
+	public FileResource(String relativePathName) {
+		super(ResourceLocator.locateFile(relativePathName).getAbsolutePath());
+		internalPath = relativePathName;
+	}
+
+	public String getInternalPath() {
+		return internalPath;
+	}
 
 }

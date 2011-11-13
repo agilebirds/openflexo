@@ -38,34 +38,33 @@ import org.openflexo.view.controller.FlexoController;
 import org.openflexo.vpm.view.OntologyPerspectiveBrowserView;
 import org.openflexo.vpm.view.OntologyView;
 
-public class OntologyPerspective extends FlexoPerspective<FlexoModelObject>
-{
+public class OntologyPerspective extends FlexoPerspective<FlexoModelObject> {
 
 	private final CEDController _controller;
-	
+
 	/*private OntologyLibraryBrowser _browser;
 	private OntologyBrowser ontologyBrowser;
 	private OEBrowserView _browserView;
 	private OEBrowserView shemaBrowserView;*/
-	
-	//private JSplitPane splitPane;
-	
+
+	// private JSplitPane splitPane;
+
 	private final OntologyPerspectiveBrowserView _ontologyPerspectiveBrowserView;
-	
+
 	private final JLabel infoLabel;
-	
+
 	private static final JPanel EMPTY_RIGHT_VIEW = new JPanel();
 
 	/**
-	 * @param controller TODO
+	 * @param controller
+	 *            TODO
 	 * @param name
 	 */
-	public OntologyPerspective(CEDController controller)
-	{
+	public OntologyPerspective(CEDController controller) {
 		super("ontology_perspective");
 		_controller = controller;
 		_ontologyPerspectiveBrowserView = new OntologyPerspectiveBrowserView(controller);
-		
+
 		/*
 		_browser = new OntologyLibraryBrowser(controller);
 		_browserView = new OntologyPerspectiveBrowserView(_browser, _controller, SelectionPolicy.ParticipateToSelection) {
@@ -94,32 +93,29 @@ public class OntologyPerspective extends FlexoPerspective<FlexoModelObject>
 		ontologyBrowser.update();
 		ontologyBrowser.addBrowserListener(_browserView); 		            
 	}*/
-	
+
 	/**
 	 * Overrides getIcon
-	 *
+	 * 
 	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
-	public ImageIcon getActiveIcon()
-	{
+	public ImageIcon getActiveIcon() {
 		return VPMIconLibrary.VPM_OP_ACTIVE_ICON;
 	}
 
 	/**
 	 * Overrides getSelectedIcon
-	 *
+	 * 
 	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
 	 */
 	@Override
-	public ImageIcon getSelectedIcon()
-	{
+	public ImageIcon getSelectedIcon() {
 		return VPMIconLibrary.VPM_OP_SELECTED_ICON;
 	}
 
 	@Override
-	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) 
-	{
+	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) {
 		if (hasModuleViewForObject(proposedObject)) {
 			return proposedObject;
 		}
@@ -127,69 +123,57 @@ public class OntologyPerspective extends FlexoPerspective<FlexoModelObject>
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object)
-	{
+	public boolean hasModuleViewForObject(FlexoModelObject object) {
 		return (object instanceof FlexoOntology);
 	}
 
-
 	@Override
-	public ModuleView<? extends FlexoModelObject> createModuleViewForObject(FlexoModelObject object, FlexoController controller)
-	{
+	public ModuleView<? extends FlexoModelObject> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
 		if (object instanceof FlexoOntology) {
-			((FlexoOntology)object).loadWhenUnloaded();
-			return new OntologyView((FlexoOntology)object,(CEDController)controller,this);
+			((FlexoOntology) object).loadWhenUnloaded();
+			return new OntologyView((FlexoOntology) object, (CEDController) controller, this);
 		}
-		return new EmptyPanel<FlexoModelObject>(controller,this,object);
+		return new EmptyPanel<FlexoModelObject>(controller, this, object);
 	}
 
 	@Override
-	public boolean doesPerspectiveControlLeftView() 
-	{
+	public boolean doesPerspectiveControlLeftView() {
 		return true;
 	}
-	
+
 	@Override
-	public JComponent getLeftView() 
-	{
+	public JComponent getLeftView() {
 		return _ontologyPerspectiveBrowserView;
 	}
 
 	@Override
-	public JComponent getFooter() 
-	{
+	public JComponent getFooter() {
 		return infoLabel;
 	}
 
-
 	@Override
-	public boolean doesPerspectiveControlRightView() 
-	{
+	public boolean doesPerspectiveControlRightView() {
 		return true;
 	}
 
 	@Override
-	public JComponent getRightView() 
-	{
+	public JComponent getRightView() {
 		return EMPTY_RIGHT_VIEW;
 	}
-	
+
 	@Override
-	public boolean isAlwaysVisible() 
-	{
+	public boolean isAlwaysVisible() {
 		return true;
 	}
 
-	public String getWindowTitleforObject(FlexoModelObject object) 
-	{
+	public String getWindowTitleforObject(FlexoModelObject object) {
 		if (object instanceof OntologyLibrary) {
 			return FlexoLocalization.localizedForKey("ontology_library");
 		}
 		if (object instanceof ImportedOntology) {
-			return ((ImportedOntology)object).getName();
+			return ((ImportedOntology) object).getName();
 		}
 		return object.getFullyQualifiedName();
 	}
-	
 
 }

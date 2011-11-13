@@ -23,13 +23,12 @@ import org.openflexo.foundation.cg.CGRepository;
 import org.openflexo.foundation.cg.generator.GeneratedTextResource;
 import org.openflexo.foundation.dm.DMEntity;
 
-
 public interface FlexoJavaResourceGenerator {
 
-    public GeneratedTextResource getGeneratedCode();
-    
-    public DMEntity getEntity();
-    
-    public CGRepository getRepository();
-    
+	public GeneratedTextResource getGeneratedCode();
+
+	public DMEntity getEntity();
+
+	public CGRepository getRepository();
+
 }

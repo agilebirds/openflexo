@@ -19,10 +19,6 @@
  */
 package org.openflexo.foundation.cg.generator;
 
-public enum COMPONENT_CODE_TYPE
-{
-		HTML,
-		WOD,
-		WOO,
-		API;
+public enum COMPONENT_CODE_TYPE {
+	HTML, WOD, WOO, API;
 }

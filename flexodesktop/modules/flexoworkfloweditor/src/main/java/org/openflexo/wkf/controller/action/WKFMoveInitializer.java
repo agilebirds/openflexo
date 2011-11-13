@@ -30,71 +30,60 @@ import org.openflexo.foundation.wkf.action.WKFMove;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class WKFMoveInitializer extends ActionInitializer {
 
-    private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	WKFMoveInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(WKFMove.actionType,actionInitializer);
+	WKFMoveInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(WKFMove.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<WKFMove> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<WKFMove> getDefaultInitializer() {
 		return new FlexoActionInitializer<WKFMove>() {
-            @Override
-			public boolean run(ActionEvent e, WKFMove action)
-            {
-               return true;
-            }
-        };
+			@Override
+			public boolean run(ActionEvent e, WKFMove action) {
+				return true;
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<WKFMove> getDefaultFinalizer() 
-	{
+	@Override
+	protected FlexoActionFinalizer<WKFMove> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<WKFMove>() {
-            @Override
-			public boolean run(ActionEvent e, WKFMove action)
-            {
-            	getControllerActionInitializer().getWKFSelectionManager().setSelectedObjects(action.getGlobalSelection());
-                return true;
-            }
-        };
+			@Override
+			public boolean run(ActionEvent e, WKFMove action) {
+				getControllerActionInitializer().getWKFSelectionManager().setSelectedObjects(action.getGlobalSelection());
+				return true;
+			}
+		};
 	}
 
-     @Override
-  	protected FlexoActionUndoFinalizer<WKFMove> getDefaultUndoFinalizer() 
-  	{
-  		return new FlexoActionUndoFinalizer<WKFMove>() {
-              @Override
-			public boolean run(ActionEvent e, WKFMove action)
-              {
-              	getControllerActionInitializer().getWKFSelectionManager().setSelectedObjects(action.getGlobalSelection());
-                  return true;
-              }
-          };
-  	}
+	@Override
+	protected FlexoActionUndoFinalizer<WKFMove> getDefaultUndoFinalizer() {
+		return new FlexoActionUndoFinalizer<WKFMove>() {
+			@Override
+			public boolean run(ActionEvent e, WKFMove action) {
+				getControllerActionInitializer().getWKFSelectionManager().setSelectedObjects(action.getGlobalSelection());
+				return true;
+			}
+		};
+	}
 
-     @Override
- 	protected FlexoActionRedoFinalizer<WKFMove> getDefaultRedoFinalizer() 
- 	{
- 		return new FlexoActionRedoFinalizer<WKFMove>() {
-             @Override
-			public boolean run(ActionEvent e, WKFMove action)
-             {
-             	getControllerActionInitializer().getWKFSelectionManager().setSelectedObjects(action.getGlobalSelection());
-                 return true;
-             }
-         };
- 	}
+	@Override
+	protected FlexoActionRedoFinalizer<WKFMove> getDefaultRedoFinalizer() {
+		return new FlexoActionRedoFinalizer<WKFMove>() {
+			@Override
+			public boolean run(ActionEvent e, WKFMove action) {
+				getControllerActionInitializer().getWKFSelectionManager().setSelectedObjects(action.getGlobalSelection());
+				return true;
+			}
+		};
+	}
 
 }

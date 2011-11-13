@@ -37,70 +37,66 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.wkf.controller.RoleListBrowser;
 import org.openflexo.wkf.controller.WKFController;
 
-
 /**
  * Represents the view for WKF Browser
  * 
  * @author sguerin
  * 
  */
-public class RoleListBrowserView extends BrowserView
-{
+public class RoleListBrowserView extends BrowserView {
 
-    private static final Logger logger = Logger.getLogger(RoleListBrowserView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(RoleListBrowserView.class.getPackage().getName());
 
-    protected WKFController _controller;
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	protected WKFController _controller;
 
-    public RoleListBrowserView(RoleListBrowser roleListBrowser, WKFController controller)
-    {
-    	super(roleListBrowser, controller.getKeyEventListener(), controller.getEditor());
-    	JPanel north = new JPanel(new FlowLayout(FlowLayout.LEFT,1,1));
-    	for (int i = 0; i < RoleViewMode.values().length; i++) {
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
+
+	public RoleListBrowserView(RoleListBrowser roleListBrowser, WKFController controller) {
+		super(roleListBrowser, controller.getKeyEventListener(), controller.getEditor());
+		JPanel north = new JPanel(new FlowLayout(FlowLayout.LEFT, 1, 1));
+		for (int i = 0; i < RoleViewMode.values().length; i++) {
 			RoleViewMode viewMode = RoleViewMode.values()[i];
 			north.add(new RoleViewModeButton(viewMode));
 		}
-    	add(north,BorderLayout.NORTH);
-    	_controller = controller;
-    	FCH.setHelpItem(this,"rolelist-browser");
-    }
-    
-    private class RoleViewModeButton extends JButton implements ActionListener {
-    	private RoleViewMode viewMode;
-    	
-    	public RoleViewModeButton(RoleViewMode mode) {
-    		this.viewMode = mode;
-    		setIcon(viewMode.getIcon());
-    		setToolTipText(viewMode.getLocalizedName());
-    		setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-    		addActionListener(this);
-    		if (RoleListBrowserView.this.getBrowser().getRoleViewMode()==viewMode) {
-    			SwingUtilities.invokeLater(new Runnable() {
-    				@Override
+		add(north, BorderLayout.NORTH);
+		_controller = controller;
+		FCH.setHelpItem(this, "rolelist-browser");
+	}
+
+	private class RoleViewModeButton extends JButton implements ActionListener {
+		private RoleViewMode viewMode;
+
+		public RoleViewModeButton(RoleViewMode mode) {
+			this.viewMode = mode;
+			setIcon(viewMode.getIcon());
+			setToolTipText(viewMode.getLocalizedName());
+			setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+			addActionListener(this);
+			if (RoleListBrowserView.this.getBrowser().getRoleViewMode() == viewMode) {
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
 					public void run() {
-    					doClick();
-    				}
-    			});
-    		}
+						doClick();
+					}
+				});
+			}
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			RoleListBrowserView.this.getBrowser().setRoleViewMode(viewMode);
 		}
-    }
-    
-    @Override
-	public void treeSingleClick(FlexoModelObject object)
-    {
-    }
+	}
 
-    @Override
-	public void treeDoubleClick(FlexoModelObject object)
-    {
-    }
+	@Override
+	public void treeSingleClick(FlexoModelObject object) {
+	}
+
+	@Override
+	public void treeDoubleClick(FlexoModelObject object) {
+	}
 
 }

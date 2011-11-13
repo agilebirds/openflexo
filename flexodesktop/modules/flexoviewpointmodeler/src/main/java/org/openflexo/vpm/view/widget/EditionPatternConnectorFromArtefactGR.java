@@ -31,61 +31,53 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.vpm.view.widget.EditionPatternPreviewRepresentation.ConnectorFromArtifact;
 
-
-public class EditionPatternConnectorFromArtefactGR extends ShapeGraphicalRepresentation<ConnectorFromArtifact> implements GraphicalFlexoObserver {
+public class EditionPatternConnectorFromArtefactGR extends ShapeGraphicalRepresentation<ConnectorFromArtifact> implements
+		GraphicalFlexoObserver {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(EditionPatternConnectorFromArtefactGR.class.getPackage().getName());
 
 	/**
-	 * Constructor invoked during deserialization
-	 * DO NOT use it
+	 * Constructor invoked during deserialization DO NOT use it
 	 */
-	public EditionPatternConnectorFromArtefactGR()
-	{
-		this(null,null);
+	public EditionPatternConnectorFromArtefactGR() {
+		this(null, null);
 	}
 
-	public EditionPatternConnectorFromArtefactGR(ConnectorFromArtifact anArtefact, EditionPatternPreviewRepresentation aDrawing) 
-	{
+	public EditionPatternConnectorFromArtefactGR(ConnectorFromArtifact anArtefact, EditionPatternPreviewRepresentation aDrawing) {
 		super(ShapeType.CIRCLE, anArtefact, aDrawing);
 
 		setX(80);
 		setY(80);
-		
+
 		setWidth(20);
 		setHeight(20);
 		/*addToMouseClickControls(new CalcPaletteController.ShowContextualMenuControl());
 		if (ToolBox.getPLATFORM()!=ToolBox.MACOS) {
 			addToMouseClickControls(new CalcPaletteController.ShowContextualMenuControl(true));
 		}*/
-		//addToMouseDragControls(new DrawEdgeControl());
+		// addToMouseDragControls(new DrawEdgeControl());
 
-		//if (anArtefact != null) anArtefact.addObserver(this);
+		// if (anArtefact != null) anArtefact.addObserver(this);
 
-		setForeground(ForegroundStyle.makeStyle(new Color(255,204,0)));
-		setBackground(BackgroundStyle.makeColoredBackground(new Color(255,255,204)));
+		setForeground(ForegroundStyle.makeStyle(new Color(255, 204, 0)));
+		setBackground(BackgroundStyle.makeColoredBackground(new Color(255, 255, 204)));
 		setIsFocusable(true);
 		setIsSelectable(false);
-		
-	}
 
+	}
 
 	@Override
-	public EditionPatternPreviewRepresentation getDrawing() 
-	{
-		return (EditionPatternPreviewRepresentation)super.getDrawing();
+	public EditionPatternPreviewRepresentation getDrawing() {
+		return (EditionPatternPreviewRepresentation) super.getDrawing();
 	}
-	
-	public ConnectorFromArtifact getConnectorFromArtifact()
-	{
+
+	public ConnectorFromArtifact getConnectorFromArtifact() {
 		return getDrawable();
 	}
 
-
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		/*if (observable == getConnectorFromArtifact()) {
 			//logger.info("Notified "+dataModification);
 			if (dataModification instanceof ShapeInserted) {
@@ -114,6 +106,5 @@ public class EditionPatternConnectorFromArtefactGR extends ShapeGraphicalReprese
 		if (getCalcPaletteElement() != null)
 			getCalcPaletteElement().setName(text);
 	}*/
-
 
 }

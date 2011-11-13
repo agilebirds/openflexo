@@ -19,10 +19,8 @@
  */
 package org.openflexo.ie.view;
 
-
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.ie.view.widget.IEWidgetView;
-
 
 /**
  * Interface implemented by views representing IE stuff
@@ -31,15 +29,14 @@ import org.openflexo.ie.view.widget.IEWidgetView;
  * @author sguerin
  * 
  */
-public interface IEViewManaging
-{
+public interface IEViewManaging {
 
-    public IEWOComponentView getRootView();
+	public IEWOComponentView getRootView();
 
-    public IEWidgetView findViewForModel(IEObject object);
+	public IEWidgetView findViewForModel(IEObject object);
 
-    public IEWidgetView internallyFindViewForModel(IEObject object);
+	public IEWidgetView internallyFindViewForModel(IEObject object);
 
-    //public Color colorFromConceptualColor(FlexoConceptualColor conceptualColor);
+	// public Color colorFromConceptualColor(FlexoConceptualColor conceptualColor);
 
 }

@@ -27,7 +27,7 @@ public class IntegerParameter extends EditionSchemeParameter {
 	public Type getType() {
 		return Integer.class;
 	};
-	
+
 	@Override
 	public WidgetType getWidget() {
 		return WidgetType.INTEGER;

@@ -24,29 +24,25 @@ import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 
-public class IESequenceButton extends IESequence<IButton> implements IButton
-{
+public class IESequenceButton extends IESequence<IButton> implements IButton {
 
-    public IESequenceButton(FlexoComponentBuilder builder)
-    {
-        this(builder.woComponent, null, builder.getProject());
-        initializeDeserialization(builder);
-    }
+	public IESequenceButton(FlexoComponentBuilder builder) {
+		this(builder.woComponent, null, builder.getProject());
+		initializeDeserialization(builder);
+	}
 
-    public IESequenceButton(IEWOComponent woComponent, IEObject parent, FlexoProject prj)
-    {
-        super(woComponent, parent, prj);
-    }
+	public IESequenceButton(IEWOComponent woComponent, IEObject parent, FlexoProject prj) {
+		super(woComponent, parent, prj);
+	}
 
-    /**
-     * Overrides isSubsequence
-     * 
-     * @see org.openflexo.foundation.ie.widget.IESequence#isSubsequence()
-     */
-    @Override
-    public boolean isSubsequence()
-    {
-        return getParent() instanceof IESequenceButton;
-    }
+	/**
+	 * Overrides isSubsequence
+	 * 
+	 * @see org.openflexo.foundation.ie.widget.IESequence#isSubsequence()
+	 */
+	@Override
+	public boolean isSubsequence() {
+		return getParent() instanceof IESequenceButton;
+	}
 
 }

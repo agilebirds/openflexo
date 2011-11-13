@@ -29,19 +29,20 @@ import javax.swing.WindowConstants;
 
 import org.openflexo.toolbox.FileResource;
 
-
-
 public class FlexoWysiwygPopup extends JFrame {
-	
+
 	protected FlexoWysiwyg wysiwyg;
-	
+
 	protected EditableHtmlWidget model;
 
 	/**
-	 * Creates a JFrame for the Wysiwyg component, with the menu bar.
-	 * This version of the wysiwyg does not allow the user to import images or to create HTML forms.
-	 * @param targetWidget the IE widget responsible for getting and setting the HTML content of the editor (cannot be null).
-	 * @param cssFile the CSS file to apply on the document.
+	 * Creates a JFrame for the Wysiwyg component, with the menu bar. This version of the wysiwyg does not allow the user to import images
+	 * or to create HTML forms.
+	 * 
+	 * @param targetWidget
+	 *            the IE widget responsible for getting and setting the HTML content of the editor (cannot be null).
+	 * @param cssFile
+	 *            the CSS file to apply on the document.
 	 * @see FlexoWysiwyg
 	 */
 	public FlexoWysiwygPopup(EditableHtmlWidget model, FileResource cssFile) throws HeadlessException {
@@ -49,8 +50,9 @@ public class FlexoWysiwygPopup extends JFrame {
 		super();
 		this.model = model;
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		if (model == null) throw new NullPointerException("targetWidget cannot be null");
-		
+		if (model == null)
+			throw new NullPointerException("targetWidget cannot be null");
+
 		this.wysiwyg = new FlexoWysiwyg(model.getValue(), cssFile, true) {
 			@Override
 			public void notifyTextChanged() {
@@ -60,28 +62,27 @@ public class FlexoWysiwygPopup extends JFrame {
 		// remove support for images
 		wysiwyg.setRemovedToolbarItems("insertImageButton");
 		wysiwyg.setRemovedMenuItems("insertInsertImageMenuItem");
-		wysiwyg.setPreferredSize(new Dimension(830,500));
-		
+		wysiwyg.setPreferredSize(new Dimension(830, 500));
+
 		setContentPane(wysiwyg);
-		//setAlwaysOnTop(true);
+		// setAlwaysOnTop(true);
 		pack();
 		// center frame
-		Dimension d = Toolkit.getDefaultToolkit().getScreenSize(); 
-		setLocation((int)(d.getWidth()-getWidth()) / 2, (int)(d.getHeight()-getHeight()) / 2);  
+		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+		setLocation((int) (d.getWidth() - getWidth()) / 2, (int) (d.getHeight() - getHeight()) / 2);
 		setVisible(true);
 		toFront();
 	}
-	
+
 	@Override
 	public void dispose() {
 		updateModelFromWidget();
 		super.dispose();
 	}
-	
+
 	public FlexoWysiwyg getWysiwyg() {
 		return wysiwyg;
 	}
-	
 
 	/**
 	 * @param targetWidget
@@ -93,13 +94,15 @@ public class FlexoWysiwygPopup extends JFrame {
 	public static void main(String[] args) throws Exception {
 
 		File documentBaseFolder = new File("/Users/ajasselette/Desktop/WysiwygTest/");
-		if (!documentBaseFolder.exists()) documentBaseFolder.mkdir();
-		
+		if (!documentBaseFolder.exists())
+			documentBaseFolder.mkdir();
+
 		EditableHtmlWidget targetWidget = new EditableHtmlWidget() {
 			@Override
 			public String getValue() {
 				return "<html><body>Test</body></html>";
 			}
+
 			@Override
 			public void setValue(String value) {
 				System.out.println("CHANGE:\n" + value);

@@ -24,7 +24,6 @@ import java.awt.Dimension;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
 
 /**
  * Abstract widget allowing to edit a complex object with a popup
@@ -37,92 +36,81 @@ public abstract class TextFieldCustomPopup<T> extends CustomPopup<T> {
 	JTextField _textField;
 	private int requestedColNumber = -1;
 
-	public TextFieldCustomPopup(T editedObject) 
-	{
+	public TextFieldCustomPopup(T editedObject) {
 		this(editedObject, -1);
 	}
 
-	public TextFieldCustomPopup(T editedObject, int cols) 
-	{
+	public TextFieldCustomPopup(T editedObject, int cols) {
 		super(editedObject);
 		requestedColNumber = cols;
-		if (requestedColNumber > 0) _textField.setColumns(requestedColNumber);
+		if (requestedColNumber > 0)
+			_textField.setColumns(requestedColNumber);
 		_textField.setText(renderedString(editedObject));
 	}
 
-	// Override to use specific border
+	/*// Override to use specific border
 	@Override
 	protected Border getDownButtonBorder()
 	{
 		return null;
-	}
-	
+	}*/
 
 	@Override
-	protected JComponent buildFrontComponent() 
-	{
+	protected JComponent buildFrontComponent() {
 		_textField = new JTextField();
 		_textField.setEditable(false);
 		_textField.addActionListener(this);
-        _textField.setMinimumSize(new Dimension(50,25));
-        return _textField;
+		_textField.setMinimumSize(new Dimension(50, 25));
+		return _textField;
 	}
-		
+
 	@Override
-	public void fireEditedObjectChanged() 
-	{
+	public void fireEditedObjectChanged() {
 		super.fireEditedObjectChanged();
 		updateTextFieldProgrammaticaly();
 	}
-	
-	public void updateTextFieldProgrammaticaly()
-	{
+
+	public void updateTextFieldProgrammaticaly() {
 		String cur = _textField.getText();
 		String val = renderedString(getEditedObject());
-		if(cur==null && val==null)return;
-		if(cur!=null && cur.equals(val))return;
-		
-		SwingUtilities.invokeLater(new Runnable(){
+		if (cur == null && val == null)
+			return;
+		if (cur != null && cur.equals(val))
+			return;
+
+		SwingUtilities.invokeLater(new Runnable() {
 			@Override
-			public void run(){
+			public void run() {
 				_isProgrammaticalySet = true;
 				_textField.setText(renderedString(getEditedObject()));
 				_isProgrammaticalySet = false;
 			}
 		});
-			
-		
+
 	}
 
 	public abstract String renderedString(T editedObject);
 
-	
-	
 	public boolean _isProgrammaticalySet = false;
 
-	public boolean isProgrammaticalySet() 
-	{
+	public boolean isProgrammaticalySet() {
 		return _isProgrammaticalySet;
 	}
 
-	public void setProgrammaticalySet(boolean aFlag)
-	{
+	public void setProgrammaticalySet(boolean aFlag) {
 		_isProgrammaticalySet = aFlag;
 	}
 
-	
 	@Override
 	public abstract void updateCustomPanel(T editedObject);
 
-	public JTextField getTextField() 
-	{
+	public JTextField getTextField() {
 		return getFrontComponent();
 	}
-	
+
 	@Override
-	public JTextField getFrontComponent() 
-	{
-		return (JTextField)super.getFrontComponent();
+	public JTextField getFrontComponent() {
+		return (JTextField) super.getFrontComponent();
 	}
 
 }

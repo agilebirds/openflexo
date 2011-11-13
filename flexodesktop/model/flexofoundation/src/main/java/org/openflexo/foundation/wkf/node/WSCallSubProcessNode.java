@@ -29,7 +29,6 @@ import org.openflexo.foundation.wkf.ws.ServiceInterface;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.toolbox.EmptyVector;
 
-
 /**
  * Entry point to access WebService calls
  * 

@@ -36,73 +36,69 @@ import org.openflexo.logging.FlexoLogger;
  * @author gpolet
  * 
  */
-public class FlexoAutoScroll
-{
-    private static final Logger logger = FlexoLogger.getLogger(FlexoAutoScroll.class.getPackage().getName());
+public class FlexoAutoScroll {
+	private static final Logger logger = FlexoLogger.getLogger(FlexoAutoScroll.class.getPackage().getName());
 
-    /**
-     * 
-     * @param scrollable -
-     *            a component contained in a JScrollPane
-     * @param p
-     * @param margin -
-     *            the width of your insets where to scroll (imagine a border of
-     *            that width all around your component. Whenever the mouse
-     *            enters that border, it will start scrolling
-     */
-    public static void autoscroll(JComponent scrollable, Point p, int margin)
-    {
-        JScrollPane scroll = (JScrollPane) SwingUtilities.getAncestorOfClass(JScrollPane.class, scrollable);
-        if (scroll == null) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Not inside a scroll pane, cannot scroll!");
-            return;
-        }
-        Rectangle visible = scrollable.getVisibleRect();
-        p.x -= visible.x;
-        p.y -= visible.y;
-        Rectangle inner = scrollable.getParent().getBounds();
-        inner.x += margin;
-        inner.y += margin;
-        inner.height -= (2 * margin);
-        inner.width -= (2 * margin);
-        if (p.x < inner.x) {// Move Left
-            JScrollBar bar = scroll.getHorizontalScrollBar();
-            if (bar != null) {
-                if (bar.getValue() > bar.getMinimum()) {
-                    bar.setValue(bar.getValue() - bar.getUnitIncrement(-1));
-                }
-            }
-        } else if (p.x > inner.x + inner.width) { // Move right
-            JScrollBar bar = scroll.getHorizontalScrollBar();
-            if (bar != null) {
-                if (bar.getValue() < bar.getMaximum()) {
-                    bar.setValue(bar.getValue() + bar.getUnitIncrement(1));
-                }
-            }
-        }
-        if (p.y < inner.y) { // Move up
-            JScrollBar bar = scroll.getVerticalScrollBar();
-            if (bar != null) {
-                if (bar.getValue() > bar.getMinimum()) {
-                    bar.setValue(bar.getValue() - bar.getUnitIncrement(-1));
-                }
-            }
-        } else if (p.y > inner.y + inner.height) { // Move down
-            JScrollBar bar = scroll.getVerticalScrollBar();
-            if (bar != null) {
-                if (bar.getValue() < bar.getMaximum()) {
-                    bar.setValue(bar.getValue() + bar.getUnitIncrement(1));
-                }
-            }
-        }
-    }
+	/**
+	 * 
+	 * @param scrollable
+	 *            - a component contained in a JScrollPane
+	 * @param p
+	 * @param margin
+	 *            - the width of your insets where to scroll (imagine a border of that width all around your component. Whenever the mouse
+	 *            enters that border, it will start scrolling
+	 */
+	public static void autoscroll(JComponent scrollable, Point p, int margin) {
+		JScrollPane scroll = (JScrollPane) SwingUtilities.getAncestorOfClass(JScrollPane.class, scrollable);
+		if (scroll == null) {
+			if (logger.isLoggable(Level.WARNING))
+				logger.warning("Not inside a scroll pane, cannot scroll!");
+			return;
+		}
+		Rectangle visible = scrollable.getVisibleRect();
+		p.x -= visible.x;
+		p.y -= visible.y;
+		Rectangle inner = scrollable.getParent().getBounds();
+		inner.x += margin;
+		inner.y += margin;
+		inner.height -= (2 * margin);
+		inner.width -= (2 * margin);
+		if (p.x < inner.x) {// Move Left
+			JScrollBar bar = scroll.getHorizontalScrollBar();
+			if (bar != null) {
+				if (bar.getValue() > bar.getMinimum()) {
+					bar.setValue(bar.getValue() - bar.getUnitIncrement(-1));
+				}
+			}
+		} else if (p.x > inner.x + inner.width) { // Move right
+			JScrollBar bar = scroll.getHorizontalScrollBar();
+			if (bar != null) {
+				if (bar.getValue() < bar.getMaximum()) {
+					bar.setValue(bar.getValue() + bar.getUnitIncrement(1));
+				}
+			}
+		}
+		if (p.y < inner.y) { // Move up
+			JScrollBar bar = scroll.getVerticalScrollBar();
+			if (bar != null) {
+				if (bar.getValue() > bar.getMinimum()) {
+					bar.setValue(bar.getValue() - bar.getUnitIncrement(-1));
+				}
+			}
+		} else if (p.y > inner.y + inner.height) { // Move down
+			JScrollBar bar = scroll.getVerticalScrollBar();
+			if (bar != null) {
+				if (bar.getValue() < bar.getMaximum()) {
+					bar.setValue(bar.getValue() + bar.getUnitIncrement(1));
+				}
+			}
+		}
+	}
 
-    public static Insets getAutoscrollInsets(JComponent scrollable, int margin)
-    {
-        Rectangle outer = scrollable.getBounds();
-        Rectangle inner = scrollable.getParent().getBounds();
-        return new Insets(inner.y - outer.y + margin, inner.x - outer.x + margin, outer.height - inner.height - inner.y + outer.y + margin,
-                outer.width - inner.width - inner.x + outer.x + margin);
-    }
+	public static Insets getAutoscrollInsets(JComponent scrollable, int margin) {
+		Rectangle outer = scrollable.getBounds();
+		Rectangle inner = scrollable.getParent().getBounds();
+		return new Insets(inner.y - outer.y + margin, inner.x - outer.x + margin, outer.height - inner.height - inner.y + outer.y + margin,
+				outer.width - inner.width - inner.x + outer.x + margin);
+	}
 }

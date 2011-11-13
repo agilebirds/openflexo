@@ -21,13 +21,13 @@ package org.openflexo.foundation.ie.widget;
 
 import org.openflexo.foundation.bindings.AbstractBinding;
 
-public interface IEWidgetWithMainBinding
-{
+public interface IEWidgetWithMainBinding {
 	/**
-	 * Returns the main binding specified on this object. The 'main binding' is the more relevant one for the current widget <br> 
+	 * Returns the main binding specified on this object. The 'main binding' is the more relevant one for the current widget <br>
 	 * IE. For Textfield it will returns the bindingValue property.
+	 * 
 	 * @return the main binding specified on this object
 	 */
 	public AbstractBinding getMainBinding();
-	
+
 }

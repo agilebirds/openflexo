@@ -33,68 +33,58 @@ import org.openflexo.fge.geom.FGEGeometricObject.CardinalQuadrant;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.graphics.FGEGraphics;
 
-
 public class FGEQuarterPlane implements FGEArea {
 
-	   private static final Logger logger = Logger.getLogger(FGEQuarterPlane.class.getPackage().getName());
-	   
+	private static final Logger logger = Logger.getLogger(FGEQuarterPlane.class.getPackage().getName());
+
 	public FGEHalfPlane halfPlane1;
 	public FGEHalfPlane halfPlane2;
 
-	public static FGEQuarterPlane makeFGEQuarterPlane(FGEPoint point, CardinalQuadrant quadrant) 
-	{
+	public static FGEQuarterPlane makeFGEQuarterPlane(FGEPoint point, CardinalQuadrant quadrant) {
 		if (quadrant == CardinalQuadrant.NORTH_EAST) {
-			return new FGEQuarterPlane(
-					FGEHalfPlane.makeFGEHalfPlane(point, CardinalDirection.NORTH),
-					FGEHalfPlane.makeFGEHalfPlane(point, CardinalDirection.EAST));
-		}
-		else if (quadrant == CardinalQuadrant.NORTH_WEST) {
-			return new FGEQuarterPlane(
-					FGEHalfPlane.makeFGEHalfPlane(point, CardinalDirection.NORTH),
-					FGEHalfPlane.makeFGEHalfPlane(point, CardinalDirection.WEST));
-		}
-		else if (quadrant == CardinalQuadrant.SOUTH_EAST) {
-			return new FGEQuarterPlane(
-					FGEHalfPlane.makeFGEHalfPlane(point, CardinalDirection.SOUTH),
-					FGEHalfPlane.makeFGEHalfPlane(point, CardinalDirection.EAST));
-		}
-		else /* quadrant == CardinalQuadrant.SOUTH_WEST */ {
-			return new FGEQuarterPlane(
-					FGEHalfPlane.makeFGEHalfPlane(point, CardinalDirection.SOUTH),
-					FGEHalfPlane.makeFGEHalfPlane(point, CardinalDirection.WEST));
+			return new FGEQuarterPlane(FGEHalfPlane.makeFGEHalfPlane(point, CardinalDirection.NORTH), FGEHalfPlane.makeFGEHalfPlane(point,
+					CardinalDirection.EAST));
+		} else if (quadrant == CardinalQuadrant.NORTH_WEST) {
+			return new FGEQuarterPlane(FGEHalfPlane.makeFGEHalfPlane(point, CardinalDirection.NORTH), FGEHalfPlane.makeFGEHalfPlane(point,
+					CardinalDirection.WEST));
+		} else if (quadrant == CardinalQuadrant.SOUTH_EAST) {
+			return new FGEQuarterPlane(FGEHalfPlane.makeFGEHalfPlane(point, CardinalDirection.SOUTH), FGEHalfPlane.makeFGEHalfPlane(point,
+					CardinalDirection.EAST));
+		} else /* quadrant == CardinalQuadrant.SOUTH_WEST */{
+			return new FGEQuarterPlane(FGEHalfPlane.makeFGEHalfPlane(point, CardinalDirection.SOUTH), FGEHalfPlane.makeFGEHalfPlane(point,
+					CardinalDirection.WEST));
 		}
 	}
-	
-	public FGEQuarterPlane(FGEHalfPlane anHalfPlane1, FGEHalfPlane anHalfPlane2) 
-	{
+
+	public FGEQuarterPlane(FGEHalfPlane anHalfPlane1, FGEHalfPlane anHalfPlane2) {
 		super();
 		halfPlane1 = anHalfPlane1;
 		halfPlane2 = anHalfPlane2;
-		if (halfPlane1.line.isParallelTo(halfPlane2.line)) throw new IllegalArgumentException("lines are parallel");
+		if (halfPlane1.line.isParallelTo(halfPlane2.line))
+			throw new IllegalArgumentException("lines are parallel");
 	}
-	
-	public static void main(String[] args)
-	{
-		}
-	
+
+	public static void main(String[] args) {
+	}
+
 	@Override
-	public boolean containsPoint(FGEPoint p)
-	{
+	public boolean containsPoint(FGEPoint p) {
 		return halfPlane1.containsPoint(p) && halfPlane2.containsPoint(p);
 	}
 
 	/**
-	 * Creates a new object of the same class and with the same
-	 * contents as this object.
-	 * @return     a clone of this instance.
-	 * @exception  OutOfMemoryError            if there is not enough memory.
-	 * @see        java.lang.Cloneable
-	 * @since      1.2
+	 * Creates a new object of the same class and with the same contents as this object.
+	 * 
+	 * @return a clone of this instance.
+	 * @exception OutOfMemoryError
+	 *                if there is not enough memory.
+	 * @see java.lang.Cloneable
+	 * @since 1.2
 	 */
 	@Override
 	public FGEQuarterPlane clone() {
 		try {
-			return (FGEQuarterPlane)super.clone();
+			return (FGEQuarterPlane) super.clone();
 		} catch (CloneNotSupportedException e) {
 			// this shouldn't happen, since we are Cloneable
 			throw new InternalError();
@@ -102,94 +92,94 @@ public class FGEQuarterPlane implements FGEArea {
 	}
 
 	@Override
-	public FGEQuarterPlane transform(AffineTransform t)
-	{
-		return new FGEQuarterPlane(halfPlane1.transform(t),halfPlane2.transform(t));
+	public FGEQuarterPlane transform(AffineTransform t) {
+		return new FGEQuarterPlane(halfPlane1.transform(t), halfPlane2.transform(t));
 	}
-	
+
 	@Override
-	public String toString()
-	{
-		return "FGEQuarterPlane: "+halfPlane1.toString()+" "+halfPlane2.toString();
+	public String toString() {
+		return "FGEQuarterPlane: " + halfPlane1.toString() + " " + halfPlane2.toString();
 	}
-	
+
 	@Override
-	public void paint(FGEGraphics g)
-	{
+	public void paint(FGEGraphics g) {
 		// TODO
 	}
 
 	@Override
-	public boolean containsLine(FGEAbstractLine l)
-	{
-		if (!(containsPoint(l.getP1()) && containsPoint(l.getP2()))) return false;
-		
+	public boolean containsLine(FGEAbstractLine l) {
+		if (!(containsPoint(l.getP1()) && containsPoint(l.getP2())))
+			return false;
+
 		if (l instanceof FGEHalfLine) {
-			//TODO
+			// TODO
 			logger.warning("Not implemented yet");
 			return false;
 		}
-		if (l instanceof FGESegment) return true;
-		return false;
-	}
-	
-	@Override
-	public boolean containsArea(FGEArea a)
-	{
-		if (a instanceof FGEPoint) return containsPoint((FGEPoint)a);
-		if (a instanceof FGELine) return containsLine((FGELine)a);
-		if (a instanceof FGEShape) return FGEShape.AreaComputation.isShapeContainedInArea((FGEShape<?>)a, this);
+		if (l instanceof FGESegment)
+			return true;
 		return false;
 	}
 
 	@Override
-	public FGEArea exclusiveOr(FGEArea area)
-	{
-		return new FGEExclusiveOrArea(this,area);
+	public boolean containsArea(FGEArea a) {
+		if (a instanceof FGEPoint)
+			return containsPoint((FGEPoint) a);
+		if (a instanceof FGELine)
+			return containsLine((FGELine) a);
+		if (a instanceof FGEShape)
+			return FGEShape.AreaComputation.isShapeContainedInArea((FGEShape<?>) a, this);
+		return false;
 	}
 
 	@Override
-	public FGEArea intersect(FGEArea area)
-	{
-		if (area.containsArea(this)) return this.clone();
-		if (containsArea(area)) return area.clone();
-
-		FGEIntersectionArea returned = new FGEIntersectionArea(this,area);
-		if (returned.isDevelopable()) return returned.makeDevelopped();
-		else return returned;
+	public FGEArea exclusiveOr(FGEArea area) {
+		return new FGEExclusiveOrArea(this, area);
 	}
 
 	@Override
-	public FGEArea substract(FGEArea area, boolean isStrict)
-	{
-		return new FGESubstractionArea(this,area,isStrict);
+	public FGEArea intersect(FGEArea area) {
+		if (area.containsArea(this))
+			return this.clone();
+		if (containsArea(area))
+			return area.clone();
+
+		FGEIntersectionArea returned = new FGEIntersectionArea(this, area);
+		if (returned.isDevelopable())
+			return returned.makeDevelopped();
+		else
+			return returned;
 	}
 
 	@Override
-	public FGEArea union(FGEArea area)
-	{
-		if (containsArea(area)) return clone();
-		if (area.containsArea(this)) return area.clone();
-		
-		return new FGEUnionArea(this,area);
+	public FGEArea substract(FGEArea area, boolean isStrict) {
+		return new FGESubstractionArea(this, area, isStrict);
 	}
 
 	@Override
-	public FGEPoint getNearestPoint(FGEPoint aPoint)
-	{
-		if (containsPoint(aPoint)) return aPoint.clone();
+	public FGEArea union(FGEArea area) {
+		if (containsArea(area))
+			return clone();
+		if (area.containsArea(this))
+			return area.clone();
+
+		return new FGEUnionArea(this, area);
+	}
+
+	@Override
+	public FGEPoint getNearestPoint(FGEPoint aPoint) {
+		if (containsPoint(aPoint))
+			return aPoint.clone();
 		return FGEPoint.getNearestPoint(aPoint, halfPlane1.line.getProjection(aPoint), halfPlane2.line.getProjection(aPoint));
 	}
 
 	@Override
-	public FGEArea getOrthogonalPerspectiveArea(SimplifiedCardinalDirection orientation)
-	{
+	public FGEArea getOrthogonalPerspectiveArea(SimplifiedCardinalDirection orientation) {
 		return this;
 	}
 
 	@Override
-	public FGEArea getAnchorAreaFrom(SimplifiedCardinalDirection direction)
-	{
+	public FGEArea getAnchorAreaFrom(SimplifiedCardinalDirection direction) {
 		return this;
 	}
 
@@ -197,17 +187,15 @@ public class FGEQuarterPlane implements FGEArea {
 	 * This area is infinite, so always return false
 	 */
 	@Override
-	public final boolean isFinite()
-	{
+	public final boolean isFinite() {
 		return false;
 	}
-	
+
 	/**
 	 * This area is infinite, so always return null
 	 */
 	@Override
-	public final FGERectangle getEmbeddingBounds()
-	{
+	public final FGERectangle getEmbeddingBounds() {
 		return null;
 	}
 
@@ -216,17 +204,17 @@ public class FGEQuarterPlane implements FGEArea {
 	 * 
 	 * Returns null if no intersection was found
 	 * 
-	 * @param from point from which we are coming to area
-	 * @param orientation orientation we are coming from
-	 * @return 
+	 * @param from
+	 *            point from which we are coming to area
+	 * @param orientation
+	 *            orientation we are coming from
+	 * @return
 	 */
 	@Override
-	public FGEPoint nearestPointFrom(FGEPoint from, SimplifiedCardinalDirection orientation) 
-	{
+	public FGEPoint nearestPointFrom(FGEPoint from, SimplifiedCardinalDirection orientation) {
 		FGEHalfLine hl = FGEHalfLine.makeHalfLine(from, orientation);
 		FGEArea intersect = intersect(hl);
 		return intersect.nearestPointFrom(from, orientation);
 	}
-
 
 }

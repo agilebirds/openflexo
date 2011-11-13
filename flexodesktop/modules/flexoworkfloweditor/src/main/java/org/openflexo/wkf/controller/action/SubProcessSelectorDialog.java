@@ -157,24 +157,24 @@ public class SubProcessSelectorDialog {
 		AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
 				FlexoLocalization.localizedForKey("create_new_sub_process_node"),
 				FlexoLocalization.localizedForKey("what_would_you_like_to_do"), new AskParametersDialog.ValidationCondition() {
-			@Override
-			public boolean isValid(ParametersModel model) {
-				if (insertModeSelector.getValue() == null) {
-					errorMessage = "";
-					return false;
-				}
-				if (NEW_PROCESS.equals(insertModeSelector.getValue())
-						&& (newProcessNameTextField.getValue() == null || newProcessNameTextField.getValue().trim().length() == 0)) {
-					errorMessage = FlexoLocalization.localizedForKey("please_submit_a_valid_process_name");
-					return false;
-				}
-				if (EXISTING_PROCESS.equals(insertModeSelector.getValue()) && processSelector.getValue() == null) {
-					errorMessage = FlexoLocalization.localizedForKey("please_select_a_valid_process");
-					return false;
-				}
-				return true;
-			}
-		}, parameters);
+					@Override
+					public boolean isValid(ParametersModel model) {
+						if (insertModeSelector.getValue() == null) {
+							errorMessage = "";
+							return false;
+						}
+						if (NEW_PROCESS.equals(insertModeSelector.getValue())
+								&& (newProcessNameTextField.getValue() == null || newProcessNameTextField.getValue().trim().length() == 0)) {
+							errorMessage = FlexoLocalization.localizedForKey("please_submit_a_valid_process_name");
+							return false;
+						}
+						if (EXISTING_PROCESS.equals(insertModeSelector.getValue()) && processSelector.getValue() == null) {
+							errorMessage = FlexoLocalization.localizedForKey("please_select_a_valid_process");
+							return false;
+						}
+						return true;
+					}
+				}, parameters);
 
 		if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 			// node.setBackColor((FlexoColor) parameters[4].getValue());

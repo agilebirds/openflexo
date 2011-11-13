@@ -24,7 +24,6 @@ import java.util.logging.Level;
 
 import javax.swing.tree.TreePath;
 
-
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ExpansionSynchronizedElement;
@@ -38,13 +37,11 @@ import org.openflexo.fps.CVSRepository;
 import org.openflexo.fps.dm.CVSModuleDiscovered;
 import org.openflexo.localization.FlexoLocalization;
 
-public class CVSRepositoryElement extends FPSBrowserElement implements ExpansionSynchronizedElement
-{
+public class CVSRepositoryElement extends FPSBrowserElement implements ExpansionSynchronizedElement {
 	private FlexoEditor _editor;
 
-	public CVSRepositoryElement(CVSRepository repository, ProjectBrowser browser, BrowserElement parent)
-	{
-		super(repository, BrowserElementType.CVS_REPOSITORY, browser,parent);
+	public CVSRepositoryElement(CVSRepository repository, ProjectBrowser browser, BrowserElement parent) {
+		super(repository, BrowserElementType.CVS_REPOSITORY, browser, parent);
 	}
 
 	@Override
@@ -53,78 +50,69 @@ public class CVSRepositoryElement extends FPSBrowserElement implements Expansion
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
+	protected void buildChildrenVector() {
 		if (logger.isLoggable(Level.FINE))
-			logger.fine("buildChildrenVector() for CVSRepositoryElement, explorer = "+getCVSExplorer()+ " isExplored="+getCVSExplorer().isExplored());
+			logger.fine("buildChildrenVector() for CVSRepositoryElement, explorer = " + getCVSExplorer() + " isExplored="
+					+ getCVSExplorer().isExplored());
 		if (getCVSExplorer().isExplored()) {
-			for (CVSModule module : new Vector<CVSModule>(getCVSRepository().getCVSModules())) {// The clone is necessary, because FPS is M-T and new modules can be added after this call.
+			for (CVSModule module : new Vector<CVSModule>(getCVSRepository().getCVSModules())) {// The clone is necessary, because FPS is
+																								// M-T and new modules can be added after
+																								// this call.
 				addToChilds(module);
 			}
-		}
-		else if (!getCVSExplorer().isError()) {
+		} else if (!getCVSExplorer().isError()) {
 			addToChilds(getCVSExplorer());
 		}
 	}
 
 	@Override
-	public String getName()
-	{
-		return getCVSRepository().getName()+(getCVSRepository().isConnected()?"":" <"+FlexoLocalization.localizedForKey("unreachable")+">");
+	public String getName() {
+		return getCVSRepository().getName()
+				+ (getCVSRepository().isConnected() ? "" : " <" + FlexoLocalization.localizedForKey("unreachable") + ">");
 	}
 
-	public CVSRepository getCVSRepository()
-	{
-		return (CVSRepository)getObject();
+	public CVSRepository getCVSRepository() {
+		return (CVSRepository) getObject();
 	}
 
-	public CVSExplorer getCVSExplorer()
-	{
+	public CVSExplorer getCVSExplorer() {
 		return getCVSRepository().getCVSExplorer(getProjectBrowser());
 	}
 
 	@Override
-	public boolean isExpansionSynchronizedWithData()
-	{
+	public boolean isExpansionSynchronizedWithData() {
 		return true;
 	}
 
 	@Override
-	public boolean isExpanded()
-	{
+	public boolean isExpanded() {
 		return getCVSExplorer().wasExploringRequested();
 	}
 
 	@Override
-	public void expand()
-	{
+	public void expand() {
 		if (!getCVSExplorer().wasExploringRequested())
 			getCVSExplorer().explore();
 	}
 
 	@Override
-	public void collapse()
-	{
+	public void collapse() {
 		// Nothing to do
 	}
 
 	@Override
-	public boolean requiresExpansionFor(BrowserElement next)
-	{
+	public boolean requiresExpansionFor(BrowserElement next) {
 		return true;
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
-		//logger.info("observable="+observable+" dataModification="+dataModification);
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		// logger.info("observable="+observable+" dataModification="+dataModification);
 		if (dataModification instanceof CVSModuleDiscovered && getCVSExplorer().isExploring()) {
 			// Dont notify yet, wait for CVSExplored notification
-		}
-		else {
+		} else {
 			super.update(observable, dataModification);
 		}
 	}
-
 
 }

@@ -26,7 +26,6 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.wkf.edge.FlexoPostCondition;
 
-
 public abstract class Node extends AbstractNode {
 
 	public Node(FlexoProcess process) {
@@ -36,10 +35,10 @@ public abstract class Node extends AbstractNode {
 	public void getBestRole(Vector<Node> visited, TreeMap<Integer, Vector<Role>> roles, int depth) {
 		getBestRole(this, visited, roles, depth);
 	}
-	
+
 	@Override
 	public abstract PetriGraphNode getNode();
-	
+
 	public static void getBestRole(Node endNode, Vector<Node> visited, TreeMap<Integer, Vector<Role>> roles, int depth) {
 		if (visited.contains(endNode))
 			return;

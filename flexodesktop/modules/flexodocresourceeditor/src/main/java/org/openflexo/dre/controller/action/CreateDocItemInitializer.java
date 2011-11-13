@@ -22,7 +22,6 @@ package org.openflexo.dre.controller.action;
 import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemFolder;
@@ -41,58 +40,52 @@ public class CreateDocItemInitializer extends ActionInitializer {
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CreateDocItemInitializer(DREControllerActionInitializer actionInitializer)
-	{
-		super(CreateDocItem.actionType,actionInitializer);
+	CreateDocItemInitializer(DREControllerActionInitializer actionInitializer) {
+		super(CreateDocItem.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected DREControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DREControllerActionInitializer)super.getControllerActionInitializer();
+	protected DREControllerActionInitializer getControllerActionInitializer() {
+		return (DREControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<CreateDocItem> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<CreateDocItem> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateDocItem>() {
-            @Override
-			public boolean run(ActionEvent e, CreateDocItem action)
-            {
-                DocItemFolder docItemFolder = action.getDocItemFolder();
-                ParameterDefinition[] parameters = new ParameterDefinition[2];
-                parameters[0] = new TextFieldParameter("newItemIdentifier", "identifier", docItemFolder.getNextDefautItemName());
-                parameters[1] = new TextAreaParameter("description", "description", "");
-                parameters[1].addParameter("columns", "20");
-                AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(),
-                        null, FlexoLocalization.localizedForKey("create_new_doc_item"), FlexoLocalization.localizedForKey("enter_parameters_for_the_new_doc_item"), parameters);
-                if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
-                    String newItemIdentifier = (String) dialog.parameterValueWithName("newItemIdentifier");
-                    if (newItemIdentifier == null)
-                        return false;
-                    action.setNewItemIdentifier(newItemIdentifier);
-                    action.setNewItemDescription((String) dialog.parameterValueWithName("description"));
-                    return true;
-                } else {
-                    return false;
-                }
-           }
-        };
+			@Override
+			public boolean run(ActionEvent e, CreateDocItem action) {
+				DocItemFolder docItemFolder = action.getDocItemFolder();
+				ParameterDefinition[] parameters = new ParameterDefinition[2];
+				parameters[0] = new TextFieldParameter("newItemIdentifier", "identifier", docItemFolder.getNextDefautItemName());
+				parameters[1] = new TextAreaParameter("description", "description", "");
+				parameters[1].addParameter("columns", "20");
+				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
+						FlexoLocalization.localizedForKey("create_new_doc_item"),
+						FlexoLocalization.localizedForKey("enter_parameters_for_the_new_doc_item"), parameters);
+				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
+					String newItemIdentifier = (String) dialog.parameterValueWithName("newItemIdentifier");
+					if (newItemIdentifier == null)
+						return false;
+					action.setNewItemIdentifier(newItemIdentifier);
+					action.setNewItemDescription((String) dialog.parameterValueWithName("description"));
+					return true;
+				} else {
+					return false;
+				}
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<CreateDocItem> getDefaultFinalizer() 
-	{
+	@Override
+	protected FlexoActionFinalizer<CreateDocItem> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateDocItem>() {
-            @Override
-			public boolean run(ActionEvent e, CreateDocItem action)
-            {
-                DocItem newDocItem = action.getNewDocItem();
-                getControllerActionInitializer().getDREController().getDREBrowser().focusOn(newDocItem);
-                return true;
-          }
-        };
+			@Override
+			public boolean run(ActionEvent e, CreateDocItem action) {
+				DocItem newDocItem = action.getNewDocItem();
+				getControllerActionInitializer().getDREController().getDREBrowser().focusOn(newDocItem);
+				return true;
+			}
+		};
 	}
-
 
 }

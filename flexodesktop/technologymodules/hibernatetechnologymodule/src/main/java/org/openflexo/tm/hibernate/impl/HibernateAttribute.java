@@ -31,7 +31,6 @@ import org.openflexo.foundation.xml.ImplementationModelBuilder;
 import org.openflexo.tm.hibernate.impl.enums.HibernateAttributeType;
 import org.openflexo.toolbox.JavaUtils;
 
-
 /**
  * This class defines property fields for the mapping attributes in an Hibernate implementation.
  * 
@@ -255,7 +254,7 @@ public class HibernateAttribute extends TechnologyModelObject {
 			notifyObservers(new SGAttributeModification("type", oldValue, type));
 		}
 	}
-	
+
 	public HibernateEnum getHibernateEnum() {
 		return hibernateEnum;
 	}

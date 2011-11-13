@@ -27,11 +27,9 @@ import java.awt.Rectangle;
  * @author sguerin
  * 
  */
-public class ObjectBoundsChanged extends WKFDataModification
-{
+public class ObjectBoundsChanged extends WKFDataModification {
 
-    public ObjectBoundsChanged(Rectangle oldBounds, Rectangle newBounds)
-    {
-        super(oldBounds, newBounds);
-    }
+	public ObjectBoundsChanged(Rectangle oldBounds, Rectangle newBounds) {
+		super(oldBounds, newBounds);
+	}
 }

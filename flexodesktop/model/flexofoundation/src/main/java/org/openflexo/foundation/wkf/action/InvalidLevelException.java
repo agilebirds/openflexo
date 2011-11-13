@@ -23,13 +23,11 @@ import org.openflexo.foundation.FlexoException;
 
 public class InvalidLevelException extends FlexoException {
 
-    /**
-     * @param string
-     */
-    public InvalidLevelException(String string)
-    {
-        super(string,string);
-    }
-
+	/**
+	 * @param string
+	 */
+	public InvalidLevelException(String string) {
+		super(string, string);
+	}
 
 }

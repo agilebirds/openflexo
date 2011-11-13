@@ -24,33 +24,27 @@ import org.openflexo.antar.Nop;
 import org.openflexo.foundation.wkf.node.ActionNode;
 import org.openflexo.foundation.wkf.node.FlexoPreCondition;
 
-
 public class NormalActionNodeActivation extends NodeActivation<ActionNode> {
 
-	public NormalActionNodeActivation(ActionNode node, FlexoPreCondition pre)
-	{
-		super(node,pre);
+	public NormalActionNodeActivation(ActionNode node, FlexoPreCondition pre) {
+		super(node, pre);
 	}
-	
-	public NormalActionNodeActivation(ActionNode node)
-	{
+
+	public NormalActionNodeActivation(ActionNode node) {
 		super(node);
 	}
-	
+
 	@Override
-	public ControlGraph makeSpecificControlGraph(boolean interprocedural) throws NotSupportedException, InvalidModelException 
-	{
+	public ControlGraph makeSpecificControlGraph(boolean interprocedural) throws NotSupportedException, InvalidModelException {
 		// Nothing special to do here
 		return new Nop();
 	}
 
 	@Override
-	protected ControlGraph makeControlGraphCommonPostlude(boolean interprocedural) throws NotSupportedException, InvalidModelException
-	{
+	protected ControlGraph makeControlGraphCommonPostlude(boolean interprocedural) throws NotSupportedException, InvalidModelException {
 		// When activated (a user has clicked on the button), then immediately desactivate node
-		return makeSequentialControlGraph(
-				super.makeControlGraphCommonPostlude(interprocedural),
-				NodeDesactivation.desactivateNode(getNode(),interprocedural));
+		return makeSequentialControlGraph(super.makeControlGraphCommonPostlude(interprocedural),
+				NodeDesactivation.desactivateNode(getNode(), interprocedural));
 	}
 
 }

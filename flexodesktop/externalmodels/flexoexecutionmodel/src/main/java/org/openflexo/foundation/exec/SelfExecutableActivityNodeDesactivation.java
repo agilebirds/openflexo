@@ -23,17 +23,14 @@ import org.openflexo.antar.ControlGraph;
 import org.openflexo.antar.Nop;
 import org.openflexo.foundation.wkf.node.SelfExecutableActivityNode;
 
-
 public class SelfExecutableActivityNodeDesactivation extends NodeDesactivation<SelfExecutableActivityNode> {
 
-	public SelfExecutableActivityNodeDesactivation(SelfExecutableActivityNode node)
-	{
+	public SelfExecutableActivityNodeDesactivation(SelfExecutableActivityNode node) {
 		super(node);
 	}
-	
+
 	@Override
-	public ControlGraph makeSpecificControlGraph(boolean interprocedural) 
-	{
+	public ControlGraph makeSpecificControlGraph(boolean interprocedural) {
 		// Nothing special to do
 		return new Nop();
 	}

@@ -26,12 +26,10 @@ import org.openflexo.foundation.bindings.BindingDefinition;
  * 
  * @author sguerin
  */
-public class BindingRemoved extends IEDataModification
-{
+public class BindingRemoved extends IEDataModification {
 
-    public BindingRemoved(BindingDefinition removedBindingDefinition)
-    {
-        super(removedBindingDefinition, null);
-    }
+	public BindingRemoved(BindingDefinition removedBindingDefinition) {
+		super(removedBindingDefinition, null);
+	}
 
 }

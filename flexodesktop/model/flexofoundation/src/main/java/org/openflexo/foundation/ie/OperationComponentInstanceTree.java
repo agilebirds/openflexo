@@ -27,14 +27,13 @@ import java.util.Vector;
 
 import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
 
-
 public class OperationComponentInstanceTree {
 
 	private OperationComponentDefinition _operationComponentDefinition;
 	private Vector<OperationComponentInstance> _operationComponentInstances;
 	private Hashtable<OperationComponentInstance, InstanceTree> operationMap;
 	private ProjectInstanceTree _projectTree;
-	
+
 	public OperationComponentInstanceTree(OperationComponentDefinition cd, ProjectInstanceTree tree) {
 		super();
 		_projectTree = tree;
@@ -43,33 +42,34 @@ public class OperationComponentInstanceTree {
 		operationMap = new Hashtable<OperationComponentInstance, InstanceTree>();
 		Enumeration<OperationComponentInstance> en = _operationComponentInstances.elements();
 		OperationComponentInstance ci = null;
-		while(en.hasMoreElements()){
+		while (en.hasMoreElements()) {
 			ci = en.nextElement();
-			operationMap.put(ci, new InstanceTree(ci,null,null,this));
+			operationMap.put(ci, new InstanceTree(ci, null, null, this));
 		}
 	}
-	
-	public void registerInstance(InstanceTree tree){
+
+	public void registerInstance(InstanceTree tree) {
 		_projectTree.registerInstance(tree);
 	}
-	
-	public Collection<InstanceTree> getAllInstanceTree(){
+
+	public Collection<InstanceTree> getAllInstanceTree() {
 		return operationMap.values();
 	}
-	
-	public void print(PrintStream out){
+
+	public void print(PrintStream out) {
 		out.println("===================================================");
 		out.println(_operationComponentDefinition.getName().toUpperCase());
 		Enumeration<OperationComponentInstance> en = _operationComponentInstances.elements();
-		while(en.hasMoreElements()){
+		while (en.hasMoreElements()) {
 			operationMap.get(en.nextElement()).print(out);
 		}
 	}
+
 	@Override
-	public String toString(){
+	public String toString() {
 		StringBuffer buf = new StringBuffer();
 		Enumeration<OperationComponentInstance> en = _operationComponentInstances.elements();
-		while(en.hasMoreElements()){
+		while (en.hasMoreElements()) {
 			buf.append(operationMap.get(en.nextElement()).toString(buf));
 		}
 		return buf.toString();

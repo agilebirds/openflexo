@@ -23,31 +23,29 @@ import org.openflexo.foundation.rm.FlexoProject;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class DataModelStyleDocGenerator extends StyleDocGenerator
-{
-    
-    private static final String TEMPLATE_NAME = "flexodm.sty.vm";
+public class DataModelStyleDocGenerator extends StyleDocGenerator {
 
-    /**
-     * @param projectGenerator
-     * @param source
-     * @param styleName
-     */
-    public DataModelStyleDocGenerator(ProjectDocLatexGenerator projectGenerator, FlexoProject source)
-    {
-        super(projectGenerator, source, "flexodm.sty");
-    }
+	private static final String TEMPLATE_NAME = "flexodm.sty.vm";
 
-    /**
-     * Overrides getTemplateName
-     * @see org.openflexo.dg.DGGenerator#getTemplateName()
-     */
-    @Override
-    public String getTemplateName()
-    {
-        return TEMPLATE_NAME;
-    }
+	/**
+	 * @param projectGenerator
+	 * @param source
+	 * @param styleName
+	 */
+	public DataModelStyleDocGenerator(ProjectDocLatexGenerator projectGenerator, FlexoProject source) {
+		super(projectGenerator, source, "flexodm.sty");
+	}
+
+	/**
+	 * Overrides getTemplateName
+	 * 
+	 * @see org.openflexo.dg.DGGenerator#getTemplateName()
+	 */
+	@Override
+	public String getTemplateName() {
+		return TEMPLATE_NAME;
+	}
 
 }

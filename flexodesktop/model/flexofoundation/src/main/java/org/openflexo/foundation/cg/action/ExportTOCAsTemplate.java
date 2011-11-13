@@ -32,77 +32,70 @@ import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.xmlcode.XMLCoder;
 
+public class ExportTOCAsTemplate extends FlexoAction<ExportTOCAsTemplate, FlexoModelObject, FlexoModelObject> {
 
+	public static final FlexoActionType<ExportTOCAsTemplate, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<ExportTOCAsTemplate, FlexoModelObject, FlexoModelObject>(
+			"export_toc_as_template") {
 
-public class ExportTOCAsTemplate extends FlexoAction<ExportTOCAsTemplate, FlexoModelObject, FlexoModelObject>
-{
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return object instanceof TOCRepository;
+		}
 
-    public static final FlexoActionType<ExportTOCAsTemplate, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<ExportTOCAsTemplate, FlexoModelObject, FlexoModelObject>("export_toc_as_template") {
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return object instanceof TOCRepository;
+		}
 
-        @Override
-        protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection)
-        {
-            return object instanceof TOCRepository;
-        }
+		@Override
+		public ExportTOCAsTemplate makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection,
+				FlexoEditor editor) {
+			return new ExportTOCAsTemplate(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-        protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection)
-        {
-            return object instanceof TOCRepository;
-        }
+	};
 
-        @Override
-        public ExportTOCAsTemplate makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-        {
-            return new ExportTOCAsTemplate(focusedObject,globalSelection,editor);
-        }
-
-    };
-
-    static {
-        FlexoModelObject.addActionForClass (ExportTOCAsTemplate.actionType, TOCRepository.class);
-    }
-
-    private File destinationFile ;
-
-    public TOCRepository getSourceRepository() {
-		return (TOCRepository)getFocusedObject();
+	static {
+		FlexoModelObject.addActionForClass(ExportTOCAsTemplate.actionType, TOCRepository.class);
 	}
-    
-	/**
-     * @param actionType
-     * @param focusedObject
-     * @param globalSelection
-     */
-    protected ExportTOCAsTemplate(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
 
-    /**
-     * Overrides doAction
-     *
-     * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
-     */
-    @Override
-    protected void doAction(Object context) throws FlexoException
-    {
+	private File destinationFile;
+
+	public TOCRepository getSourceRepository() {
+		return (TOCRepository) getFocusedObject();
+	}
+
+	/**
+	 * @param actionType
+	 * @param focusedObject
+	 * @param globalSelection
+	 */
+	protected ExportTOCAsTemplate(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	/**
+	 * Overrides doAction
+	 * 
+	 * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
+	 */
+	@Override
+	protected void doAction(Object context) throws FlexoException {
 		try {
-			XMLCoder.encodeObjectWithMappingFile(getSourceRepository(),new FileResource("Models/TOCModel/toc_template_0.1.xml"), new FileOutputStream(getDestinationFile()));
+			XMLCoder.encodeObjectWithMappingFile(getSourceRepository(), new FileResource("Models/TOCModel/toc_template_0.1.xml"),
+					new FileOutputStream(getDestinationFile()));
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new FlexoException(e.getMessage(), e);
 		}
-    }
+	}
 
-    public File getDestinationFile()
-    {
-        return destinationFile;
-    }
+	public File getDestinationFile() {
+		return destinationFile;
+	}
 
-    public void setDestinationFile(File destinationFile)
-    {
-        this.destinationFile = destinationFile;
-    }
+	public void setDestinationFile(File destinationFile) {
+		this.destinationFile = destinationFile;
+	}
 
 }

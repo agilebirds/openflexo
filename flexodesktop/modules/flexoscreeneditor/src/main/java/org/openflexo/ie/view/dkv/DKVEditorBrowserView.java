@@ -25,54 +25,51 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dkv.DKVObject;
 import org.openflexo.ie.view.controller.IEController;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class DKVEditorBrowserView extends BrowserView
-{
+public class DKVEditorBrowserView extends BrowserView {
 
-    private IEController _controller;
-    
-    /**
-     * @param browser
-     * @param kl
-     */
-    public DKVEditorBrowserView(IEController controller)
-    {
-        super(controller.getDkvEditorBrowser(), controller.getKeyEventListener(), controller.getEditor());
-        _controller=controller;
-        FCH.setHelpItem(this,"dkv-browser");
-    }
+	private IEController _controller;
 
-    /**
-     * Overrides treeSingleClick
-     * @see org.openflexo.components.browser.view.BrowserView#treeSingleClick(org.openflexo.foundation.FlexoModelObject)
-     */
-    @Override
-	public void treeSingleClick(FlexoModelObject object)
-    {
-        if (object instanceof DKVObject) {
-            _controller.setSelectedDKVObject((DKVObject) object);
-        }
-        // If this object is inspectable, inspect it.
-        /*if (object instanceof InspectableObject) {
-            _controller.setCurrentInspectedObject((InspectableObject) object);
-        }*/
+	/**
+	 * @param browser
+	 * @param kl
+	 */
+	public DKVEditorBrowserView(IEController controller) {
+		super(controller.getDkvEditorBrowser(), controller.getKeyEventListener(), controller.getEditor());
+		_controller = controller;
+		FCH.setHelpItem(this, "dkv-browser");
+	}
 
-    }
+	/**
+	 * Overrides treeSingleClick
+	 * 
+	 * @see org.openflexo.components.browser.view.BrowserView#treeSingleClick(org.openflexo.foundation.FlexoModelObject)
+	 */
+	@Override
+	public void treeSingleClick(FlexoModelObject object) {
+		if (object instanceof DKVObject) {
+			_controller.setSelectedDKVObject((DKVObject) object);
+		}
+		// If this object is inspectable, inspect it.
+		/*if (object instanceof InspectableObject) {
+		    _controller.setCurrentInspectedObject((InspectableObject) object);
+		}*/
 
-    /**
-     * Overrides treeDoubleClick
-     * @see org.openflexo.components.browser.view.BrowserView#treeDoubleClick(org.openflexo.foundation.FlexoModelObject)
-     */
-    @Override
-	public void treeDoubleClick(FlexoModelObject object)
-    {
-        if (object instanceof DKVObject) {
-            _controller.setSelectedDKVObject((DKVObject) object);
-        }
-    }
+	}
+
+	/**
+	 * Overrides treeDoubleClick
+	 * 
+	 * @see org.openflexo.components.browser.view.BrowserView#treeDoubleClick(org.openflexo.foundation.FlexoModelObject)
+	 */
+	@Override
+	public void treeDoubleClick(FlexoModelObject object) {
+		if (object instanceof DKVObject) {
+			_controller.setSelectedDKVObject((DKVObject) object);
+		}
+	}
 
 }

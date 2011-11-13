@@ -36,31 +36,26 @@ import org.apache.cayenne.dba.hsqldb.HSQLDBNoSchemaAdapter;
  */
 public class H2DBSniffer implements DbAdapterFactory {
 
-    @Override
+	@Override
 	public DbAdapter createAdapter(DatabaseMetaData md) throws SQLException {
-        String dbName = md.getDatabaseProductName();
-        if (dbName == null || dbName.toUpperCase().indexOf("HSQL") < 0) {
-            return null;
-        }
+		String dbName = md.getDatabaseProductName();
+		if (dbName == null || dbName.toUpperCase().indexOf("HSQL") < 0) {
+			return null;
+		}
 
-        boolean supportsSchema = false;
-        if (md.getDriverMajorVersion() < 1) {
-            supportsSchema = true;
-        }
-        else if (md.getDriverMajorVersion() == 1) {
-            if (md.getDriverMinorVersion() <= 8) {
-                supportsSchema = true;
-            }
-            else {
-                supportsSchema = false;
-            }
-        }
-        else {
-            supportsSchema = false;
-        }
-        
-        return supportsSchema
-            ? new HSQLDBAdapter()
-            : new HSQLDBNoSchemaAdapter();
-    }
+		boolean supportsSchema = false;
+		if (md.getDriverMajorVersion() < 1) {
+			supportsSchema = true;
+		} else if (md.getDriverMajorVersion() == 1) {
+			if (md.getDriverMinorVersion() <= 8) {
+				supportsSchema = true;
+			} else {
+				supportsSchema = false;
+			}
+		} else {
+			supportsSchema = false;
+		}
+
+		return supportsSchema ? new HSQLDBAdapter() : new HSQLDBNoSchemaAdapter();
+	}
 }

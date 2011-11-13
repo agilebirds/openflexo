@@ -20,52 +20,54 @@
 package org.netbeans.lib.cvsclient.request;
 
 /**
- * Appends \n followed by the text specified in the request to the previous
- * argument sent.
- * @author  Robert Greig
+ * Appends \n followed by the text specified in the request to the previous argument sent.
+ * 
+ * @author Robert Greig
  */
 public class ArgumentxRequest extends Request {
-    /**
-     * The argument to pass in
-     */
-    private String argument;
+	/**
+	 * The argument to pass in
+	 */
+	private String argument;
 
-    /**
-     * Create a new request
-     * @param theArgument the argument to use
-     */
-    public ArgumentxRequest(String theArgument) {
-        argument = theArgument;
-    }
+	/**
+	 * Create a new request
+	 * 
+	 * @param theArgument
+	 *            the argument to use
+	 */
+	public ArgumentxRequest(String theArgument) {
+		argument = theArgument;
+	}
 
-    /**
-     * Set the argument
-     */
-    public void setArgument(String theArgument) {
-        argument = theArgument;
-    }
+	/**
+	 * Set the argument
+	 */
+	public void setArgument(String theArgument) {
+		argument = theArgument;
+	}
 
-    /**
-     * Get the request String that will be passed to the server
-     * @return the request String
-     */
-    @Override
+	/**
+	 * Get the request String that will be passed to the server
+	 * 
+	 * @return the request String
+	 */
+	@Override
 	public String getRequestString() throws UnconfiguredRequestException {
-        if (argument == null) {
-            throw new UnconfiguredRequestException(
-                    "Argument has not been set");
-        }
+		if (argument == null) {
+			throw new UnconfiguredRequestException("Argument has not been set");
+		}
 
-        return "Argumentx " + argument + "\n"; //NOI18N
-    }
+		return "Argumentx " + argument + "\n"; // NOI18N
+	}
 
-    /**
-     * Is a response expected from the server?
-     * @return true if a response is expected, false if no response if
-     * expected
-     */
-    @Override
+	/**
+	 * Is a response expected from the server?
+	 * 
+	 * @return true if a response is expected, false if no response if expected
+	 */
+	@Override
 	public boolean isResponseExpected() {
-        return false;
-    }
+		return false;
+	}
 }

@@ -32,82 +32,74 @@ import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.foundation.ie.widget.ITableData;
 import org.openflexo.foundation.ie.widget.InvalidOperation;
 
+public class DecreaseColSpan extends FlexoUndoableAction {
 
-public class DecreaseColSpan extends FlexoUndoableAction 
-{
+	private IETDWidget selectedTD;
+	public static FlexoActionType actionType = new FlexoActionType("decrease_col_span", FlexoActionType.defaultGroup) {
 
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new DecreaseColSpan(focusedObject, globalSelection, editor);
+		}
 
-    private IETDWidget selectedTD;
-    public static FlexoActionType actionType = new FlexoActionType("decrease_col_span",FlexoActionType.defaultGroup) {
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) 
-        {
-            return new DecreaseColSpan(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return (((object != null) && (object instanceof IETDWidget || (object instanceof IESequenceWidget && ((IESequenceWidget) object)
+					.isInTD()))) && (getFocusedTD((IEWidget) object).canDecreaseColSpan()));
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return true;
-        }
+	};
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return (((object != null) && (object instanceof IETDWidget || (object instanceof IESequenceWidget && ((IESequenceWidget)object).isInTD())))
-                    && (getFocusedTD((IEWidget)object).canDecreaseColSpan()));
-        }
-                
-    };
-    
-    DecreaseColSpan (FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	DecreaseColSpan(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    @Override
-	protected void doAction(Object context) throws InvalidOperation 
-    {
-        if(selectedTD != null){
-        		selectedTD.decreaseColSpan();
-        }
-        
-    }
+	@Override
+	protected void doAction(Object context) throws InvalidOperation {
+		if (selectedTD != null) {
+			selectedTD.decreaseColSpan();
+		}
 
-    @Override
-	protected void undoAction(Object context) throws InvalidOperation 
-    {
-    		if(selectedTD != null){
-    			selectedTD.increaseColSpan();
-    		}
-    }
+	}
 
-    @Override
-	protected void redoAction(Object context) throws InvalidOperation
-    {
-    		if(selectedTD != null){
-    			selectedTD.decreaseColSpan();
-    		}
-    }
-    
+	@Override
+	protected void undoAction(Object context) throws InvalidOperation {
+		if (selectedTD != null) {
+			selectedTD.increaseColSpan();
+		}
+	}
+
+	@Override
+	protected void redoAction(Object context) throws InvalidOperation {
+		if (selectedTD != null) {
+			selectedTD.decreaseColSpan();
+		}
+	}
+
 	public IETDWidget getSelectedTD() {
 		return selectedTD;
 	}
 
 	public void setSelectedTD(ITableData td) {
-		if(td instanceof IETDWidget)this.selectedTD = (IETDWidget)td;
+		if (td instanceof IETDWidget)
+			this.selectedTD = (IETDWidget) td;
 	}
-    
-	static IETDWidget getFocusedTD(IEWidget w){
-    	IEWidget temp = w;
-    	while(temp!=null){
-    		if(temp instanceof IETDWidget)return (IETDWidget)temp;
-    		temp = (IEWidget)temp.getParent();
-    	}
-    	return null;
-    }
+
+	static IETDWidget getFocusedTD(IEWidget w) {
+		IEWidget temp = w;
+		while (temp != null) {
+			if (temp instanceof IETDWidget)
+				return (IETDWidget) temp;
+			temp = (IEWidget) temp.getParent();
+		}
+		return null;
+	}
 }

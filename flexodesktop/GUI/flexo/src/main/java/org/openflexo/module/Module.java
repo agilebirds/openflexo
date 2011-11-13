@@ -92,8 +92,9 @@ public abstract class Module implements IModule {
 
 	public static final Module XXX_MODULE = new XXX();
 
-	private static final Module[] knownsModules = { WKF_MODULE, IE_MODULE, DE_MODULE, DM_MODULE, CG_MODULE, SG_MODULE, DG_MODULE, WSE_MODULE, VE_MODULE, DRE_MODULE, FPS_MODULE, VPM_MODULE
-    /*
+	private static final Module[] knownsModules = { WKF_MODULE, IE_MODULE, DE_MODULE, DM_MODULE, CG_MODULE, SG_MODULE, DG_MODULE,
+			WSE_MODULE, VE_MODULE, DRE_MODULE, FPS_MODULE, VPM_MODULE
+	/*
 	 * ,
 	 * XXX_MODULE
 	 */};
@@ -164,7 +165,7 @@ public abstract class Module implements IModule {
 		public String getShortName() {
 			return WKF_MODULE_SHORT_NAME;
 		}
-		
+
 	}
 
 	protected static class IE extends Module {
@@ -831,14 +832,12 @@ public abstract class Module implements IModule {
 		}
 
 		@Override
-		public String getName()
-		{
+		public String getName() {
 			return "TestModule";
 		}
 
 		@Override
-		public String getShortName()
-		{
+		public String getShortName() {
 			return "WKF";
 		}
 	}
@@ -903,24 +902,28 @@ public abstract class Module implements IModule {
 
 	/**
 	 * Return small icon for current module, as 20x20 pixels
+	 * 
 	 * @return
 	 */
 	public abstract ImageIcon getSmallIcon();
 
 	/**
 	 * Return medium icon for current module, as 32x32 pixels
+	 * 
 	 * @return
 	 */
 	public abstract ImageIcon getMediumIcon();
 
 	/**
 	 * Return medium icon for current module, as 32x32 pixels and with hover effect
+	 * 
 	 * @return
 	 */
 	public abstract ImageIcon getMediumIconWithHover();
 
 	/**
 	 * Return big icon for current module, as 64x64 pixels
+	 * 
 	 * @return
 	 */
 	public abstract ImageIcon getBigIcon();
@@ -1062,7 +1065,8 @@ public abstract class Module implements IModule {
 				}
 			} catch (IllegalArgumentException e) {
 				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("IllegalArgumentException raised during module " + _moduleClass.getName() + " name extracting. Aborting.");
+					logger.warning("IllegalArgumentException raised during module " + _moduleClass.getName()
+							+ " name extracting. Aborting.");
 				}
 			} catch (IllegalAccessException e) {
 				if (logger.isLoggable(Level.WARNING)) {
@@ -1070,7 +1074,8 @@ public abstract class Module implements IModule {
 				}
 			} catch (InvocationTargetException e) {
 				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("InvocationTargetException raised during module " + _moduleClass.getName() + " name extracting. Aborting.");
+					logger.warning("InvocationTargetException raised during module " + _moduleClass.getName()
+							+ " name extracting. Aborting.");
 				}
 			}
 		}
@@ -1274,22 +1279,19 @@ public abstract class Module implements IModule {
 	public String toString() {
 		return getLocalizedName();
 	}
-	
-	public String getHTMLDescription()
-	{
-    	Language language = DocResourceManager.instance().getLanguage(GeneralPreferences.getLanguage());
+
+	public String getHTMLDescription() {
+		Language language = DocResourceManager.instance().getLanguage(GeneralPreferences.getLanguage());
 		DocItem docItem = DocResourceManager.getDocItem(getHelpTopic());
-	   	if (docItem != null) {
-    		if (docItem.getLastApprovedActionForLanguage(language) != null) {
-    			String returned = "<html>" 
-    			+ docItem.getLastApprovedActionForLanguage(language).getVersion().getFullHTMLDescription()
-    			+ "</html>";
-    			return returned;
-     		}
-    	}
- 		
-		return "<html>No description available for <b>"+getLocalizedName()+"</b>"+"<br>"
-		+ "Please submit documentation in documentation resource center"+"<br>"
-		+"</html>";
+		if (docItem != null) {
+			if (docItem.getLastApprovedActionForLanguage(language) != null) {
+				String returned = "<html>" + docItem.getLastApprovedActionForLanguage(language).getVersion().getFullHTMLDescription()
+						+ "</html>";
+				return returned;
+			}
+		}
+
+		return "<html>No description available for <b>" + getLocalizedName() + "</b>" + "<br>"
+				+ "Please submit documentation in documentation resource center" + "<br>" + "</html>";
 	}
 }

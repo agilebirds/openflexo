@@ -30,88 +30,76 @@ public class DataPropertyStatement extends PropertyStatement {
 
 	private OntologyDataProperty property;
 	private Literal literal;
-	
-	public DataPropertyStatement(OntologyObject subject, Statement s)
-	{
-		super(subject,s);
+
+	public DataPropertyStatement(OntologyObject subject, Statement s) {
+		super(subject, s);
 		property = getOntologyLibrary().getDataProperty(s.getPredicate().getURI());
 		if (s.getObject() instanceof Literal) {
-			literal = (Literal)s.getObject();
-		}
-		else {
+			literal = (Literal) s.getObject();
+		} else {
 			logger.warning("DataPropertyStatement: object is not a Literal !");
 		}
 	}
 
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "data_property_statement";
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return "DataPropertyStatement: "+getStatement();
+	public String getFullyQualifiedName() {
+		return "DataPropertyStatement: " + getStatement();
 	}
 
-
 	@Override
-	public OntologyDataProperty getProperty() 
-	{
+	public OntologyDataProperty getProperty() {
 		return property;
 	}
 
-	public OntologicDataType getDataType()
-	{
+	public OntologicDataType getDataType() {
 		if (getProperty() != null)
 			return property.getDataType();
 		return null;
 	}
 
 	@Override
-	public Literal getLiteral() 
-	{
+	public Literal getLiteral() {
 		return literal;
 	}
 
 	@Override
-	public String toString() 
-	{
-		return (isAnnotationProperty() ? "(A) " : "")+getSubject().getName()+" "+getProperty().getName()+"=\""+getLiteral()+"\" language="+getLanguage();
+	public String toString() {
+		return (isAnnotationProperty() ? "(A) " : "") + getSubject().getName() + " " + getProperty().getName() + "=\"" + getLiteral()
+				+ "\" language=" + getLanguage();
 	}
-	
+
 	@Override
-	public boolean isAnnotationProperty()
-	{
+	public boolean isAnnotationProperty() {
 		return getProperty().isAnnotationProperty();
 	}
 
 	@Override
-	public OntologyDataProperty getPredicate() 
-	{
-		return (OntologyDataProperty)super.getPredicate();
+	public OntologyDataProperty getPredicate() {
+		return (OntologyDataProperty) super.getPredicate();
 	}
-	
-	public Object getValue()
-	{
+
+	public Object getValue() {
 		if (getDataType() != null && getLiteral() != null) {
 			return getDataType().valueFromLiteral(getLiteral());
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Creates a new Statement equals to this one with a new value
 	 * 
 	 * @param anObject
 	 */
-	public final void setValue(Object aValue)
-	{
+	public final void setValue(Object aValue) {
 		// Take care to this point: this object will disappear and be replaced by a new one
 		// during updateOntologyStatements() !!!!!
 
-		//logger.info("Change object from="+getStatementObject().getURI()+" to="+anObject.getURI());
+		// logger.info("Change object from="+getStatementObject().getURI()+" to="+anObject.getURI());
 		getSubject().removePropertyStatement(this);
 		getSubject().getOntResource().addLiteral(getProperty().getOntProperty(), aValue);
 		getSubject().updateOntologyStatements();

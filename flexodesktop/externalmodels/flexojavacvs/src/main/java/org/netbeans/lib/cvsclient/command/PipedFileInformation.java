@@ -26,101 +26,100 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Contains intercepted infomation from command standard output.
- * Actula data are held in temporary file.
- *
+ * Contains intercepted infomation from command standard output. Actula data are held in temporary file.
+ * 
  */
 public class PipedFileInformation extends FileInfoContainer {
-    private File file;
+	private File file;
 
-    private String repositoryRevision;
+	private String repositoryRevision;
 
-    private String repositoryFileName;
+	private String repositoryFileName;
 
-    private File tempFile;
+	private File tempFile;
 
-    private OutputStream tmpStream;
+	private OutputStream tmpStream;
 
-    public PipedFileInformation(File tempFile) {
-        this.tempFile = tempFile;
-        //this.tempFile.deleteOnExit();
-        try {
-            tmpStream = new BufferedOutputStream(new FileOutputStream(tempFile));
-        }
-        catch (IOException ex) {
-            // TODO
-        }
-    }
+	public PipedFileInformation(File tempFile) {
+		this.tempFile = tempFile;
+		// this.tempFile.deleteOnExit();
+		try {
+			tmpStream = new BufferedOutputStream(new FileOutputStream(tempFile));
+		} catch (IOException ex) {
+			// TODO
+		}
+	}
 
-    /**
-     * Returns the original file. For piped content see {@link #getTempFile()}.
-     */
-    @Override
+	/**
+	 * Returns the original file. For piped content see {@link #getTempFile()}.
+	 */
+	@Override
 	public File getFile() {
-        return file;
-    }
+		return file;
+	}
 
-    /**
-     * Sets the original file.
-     */
-    protected void setFile(File file) {
-        this.file = file;
-    }
+	/**
+	 * Sets the original file.
+	 */
+	protected void setFile(File file) {
+		this.file = file;
+	}
 
-    /**
-     * Returns the revision of the incoming file.
-     */
-    public String getRepositoryRevision() {
-        return repositoryRevision;
-    }
+	/**
+	 * Returns the revision of the incoming file.
+	 */
+	public String getRepositoryRevision() {
+		return repositoryRevision;
+	}
 
-    /**
-     * Sets the revision of the incoming file.
-     */
-    protected void setRepositoryRevision(String repositoryRevision) {
-        this.repositoryRevision = repositoryRevision;
-    }
+	/**
+	 * Sets the revision of the incoming file.
+	 */
+	protected void setRepositoryRevision(String repositoryRevision) {
+		this.repositoryRevision = repositoryRevision;
+	}
 
-    /**
-     * Returns the filename in the repository.
-     */
-    public String getRepositoryFileName() {
-        return repositoryFileName;
-    }
+	/**
+	 * Returns the filename in the repository.
+	 */
+	public String getRepositoryFileName() {
+		return repositoryFileName;
+	}
 
-    /**
-     * Sets the repository filename.
-     */
-    protected void setRepositoryFileName(String repositoryFileName) {
-        this.repositoryFileName = repositoryFileName;
-    }
+	/**
+	 * Sets the repository filename.
+	 */
+	protected void setRepositoryFileName(String repositoryFileName) {
+		this.repositoryFileName = repositoryFileName;
+	}
 
-    /**
-     * Adds the specified line to the temporary file.
-     */
-    protected void addToTempFile(byte[] bytes) throws IOException {
-        if (tmpStream != null) {
-            tmpStream.write(bytes);
-        }
-    }
-    /**
-     * Adds the specified line to the temporary file.
-     */
-    public void addToTempFile(byte[] bytes, int len) throws IOException {
-        if (tmpStream != null) {
-            tmpStream.write(bytes, 0, len);
-        }
-    }
+	/**
+	 * Adds the specified line to the temporary file.
+	 */
+	protected void addToTempFile(byte[] bytes) throws IOException {
+		if (tmpStream != null) {
+			tmpStream.write(bytes);
+		}
+	}
 
-    protected void closeTempFile() throws IOException {
-        if (tmpStream != null) {
-            tmpStream.flush();
-            tmpStream.close();
-        }
-    }
+	/**
+	 * Adds the specified line to the temporary file.
+	 */
+	public void addToTempFile(byte[] bytes, int len) throws IOException {
+		if (tmpStream != null) {
+			tmpStream.write(bytes, 0, len);
+		}
+	}
 
-    public File getTempFile() {
-        return tempFile;
-    }
+	protected void closeTempFile() throws IOException {
+		if (tmpStream != null) {
+			tmpStream.flush();
+			tmpStream.close();
+		}
+	}
+
+	public File getTempFile() {
+		return tempFile;
+	}
 
 }

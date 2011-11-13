@@ -30,65 +30,60 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.popups.FileDiffEditorPopup;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class CompareTemplatesInNewWindowInitializer extends ActionInitializer
-{
+public class CompareTemplatesInNewWindowInitializer extends ActionInitializer {
 
-    /**
-     * @param actionType
-     * @param controllerActionInitializer
-     */
-    public CompareTemplatesInNewWindowInitializer(ControllerActionInitializer controllerActionInitializer)
-    {
-        super(CompareTemplatesInNewWindow.actionType, controllerActionInitializer);
-    }
+	/**
+	 * @param actionType
+	 * @param controllerActionInitializer
+	 */
+	public CompareTemplatesInNewWindowInitializer(ControllerActionInitializer controllerActionInitializer) {
+		super(CompareTemplatesInNewWindow.actionType, controllerActionInitializer);
+	}
 
-    protected static FlexoFrame getActiveModuleFrame()
-    {
-        if (FlexoModule.getActiveModule() != null) {
-            return FlexoModule.getActiveModule().getFlexoFrame();
-        } else {
-            return null;
-        }
-    }
+	protected static FlexoFrame getActiveModuleFrame() {
+		if (FlexoModule.getActiveModule() != null) {
+			return FlexoModule.getActiveModule().getFlexoFrame();
+		} else {
+			return null;
+		}
+	}
 
-    /**
-     * Overrides getDefaultInitializer
-     *
-     * @see org.openflexo.view.controller.ActionInitializer#getDefaultInitializer()
-     */
-    @Override
-    protected FlexoActionInitializer<CompareTemplatesInNewWindow> getDefaultInitializer()
-    {
+	/**
+	 * Overrides getDefaultInitializer
+	 * 
+	 * @see org.openflexo.view.controller.ActionInitializer#getDefaultInitializer()
+	 */
+	@Override
+	protected FlexoActionInitializer<CompareTemplatesInNewWindow> getDefaultInitializer() {
 
-        return new FlexoActionInitializer<CompareTemplatesInNewWindow>() {
+		return new FlexoActionInitializer<CompareTemplatesInNewWindow>() {
 
-            @Override
-            public boolean run(ActionEvent event, CompareTemplatesInNewWindow action)
-            {
-            	return true;
-            }
+			@Override
+			public boolean run(ActionEvent event, CompareTemplatesInNewWindow action) {
+				return true;
+			}
 
-        };
-    }
+		};
+	}
 
-    @Override
-    protected FlexoActionFinalizer<? super CompareTemplatesInNewWindow> getDefaultFinalizer() {
-    	return new FlexoActionFinalizer<CompareTemplatesInNewWindow>() {
+	@Override
+	protected FlexoActionFinalizer<? super CompareTemplatesInNewWindow> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<CompareTemplatesInNewWindow>() {
 
-            @Override
-            public boolean run(ActionEvent event, CompareTemplatesInNewWindow action)
-            {
-            	FileDiffEditorPopup popup = new FileDiffEditorPopup(action.getTemplates().get(0).getNiceQualifiedName(),action.getTemplates().get(1).getNiceQualifiedName(),action.getTemplates().get(0).getContent(),action.getTemplates().get(1).getContent(),getController());
-            	popup.show();
-            	return true;
-            }
+			@Override
+			public boolean run(ActionEvent event, CompareTemplatesInNewWindow action) {
+				FileDiffEditorPopup popup = new FileDiffEditorPopup(action.getTemplates().get(0).getNiceQualifiedName(), action
+						.getTemplates().get(1).getNiceQualifiedName(), action.getTemplates().get(0).getContent(), action.getTemplates()
+						.get(1).getContent(), getController());
+				popup.show();
+				return true;
+			}
 
-        };
-    }
+		};
+	}
 
 }

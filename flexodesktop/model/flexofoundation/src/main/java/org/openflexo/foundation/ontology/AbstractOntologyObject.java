@@ -27,16 +27,14 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.xmlcode.XMLMapping;
 
-
 public abstract class AbstractOntologyObject extends FlexoModelObject implements InspectableObject {
 
 	private static final Logger logger = Logger.getLogger(AbstractOntologyObject.class.getPackage().getName());
 
-	public AbstractOntologyObject() 
-	{
+	public AbstractOntologyObject() {
 		super();
 	}
-	
+
 	@Override
 	public XMLMapping getXMLMapping() {
 		return null;
@@ -46,25 +44,22 @@ public abstract class AbstractOntologyObject extends FlexoModelObject implements
 	public XMLStorageResourceData getXMLResourceData() {
 		return null;
 	}
-	
+
 	public abstract FlexoOntology getFlexoOntology();
-	
+
 	@Override
-	public FlexoProject getProject()
-	{
+	public FlexoProject getProject() {
 		return getFlexoOntology().getProject();
 	}
-	
-	public OntologyLibrary getOntologyLibrary()
-	{
+
+	public OntologyLibrary getOntologyLibrary() {
 		return getFlexoOntology().getOntologyLibrary();
 	}
-	
-    @Override
-    public String toString() 
-    {
-    	return getClass().getSimpleName()+"_"+getURI();
-    }
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "_" + getURI();
+	}
 
 	public abstract String getDisplayableDescription();
 }

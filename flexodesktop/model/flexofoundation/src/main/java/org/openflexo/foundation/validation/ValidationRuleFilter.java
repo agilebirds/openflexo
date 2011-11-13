@@ -21,5 +21,5 @@ package org.openflexo.foundation.validation;
 
 public interface ValidationRuleFilter {
 
-    public boolean accept(ValidationRule rule);
+	public boolean accept(ValidationRule rule);
 }

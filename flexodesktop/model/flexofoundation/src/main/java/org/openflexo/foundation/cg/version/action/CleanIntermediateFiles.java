@@ -35,91 +35,76 @@ import org.openflexo.foundation.cg.version.CGRelease;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.cg.AbstractGeneratedFile;
 
+public class CleanIntermediateFiles extends AbstractGCAction<CleanIntermediateFiles, CGObject> {
 
-public class CleanIntermediateFiles extends AbstractGCAction<CleanIntermediateFiles,CGObject>
-{
+	private static final Logger logger = Logger.getLogger(CleanIntermediateFiles.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(CleanIntermediateFiles.class.getPackage().getName());
+	public static FlexoActionType<CleanIntermediateFiles, CGObject, CGObject> actionType = new FlexoActionType<CleanIntermediateFiles, CGObject, CGObject>(
+			"clean_intermediate_files", versionningMenu, versionningCleanGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-    public static FlexoActionType<CleanIntermediateFiles,CGObject,CGObject> actionType
-    = new FlexoActionType<CleanIntermediateFiles,CGObject,CGObject> (
-    		"clean_intermediate_files",
-    		versionningMenu,
-    		versionningCleanGroup,
-    		FlexoActionType.NORMAL_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public CleanIntermediateFiles makeNewAction(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return new CleanIntermediateFiles(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public CleanIntermediateFiles makeNewAction(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) 
-        {
-            return new CleanIntermediateFiles(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) {
+			Vector<CGObject> topLevelObjects = getSelectedTopLevelObjects(focusedObject, globalSelection);
+			for (CGObject obj : topLevelObjects) {
+				if (obj instanceof GeneratedOutput)
+					return false;
+			}
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) 
-        {
-            Vector<CGObject> topLevelObjects = getSelectedTopLevelObjects(focusedObject, globalSelection);
-            for (CGObject obj : topLevelObjects) {
-            	if (obj instanceof GeneratedOutput) return false;
-             }
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) {
+			GenerationRepository repository = getRepository(focusedObject, globalSelection);
+			if (repository == null)
+				return false;
+			return repository.getManageHistory();
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) 
-        {
-         	GenerationRepository repository = getRepository(focusedObject, globalSelection);
-        	if (repository == null) return false;
-            return repository.getManageHistory() ;
-        }
-        
-     };
-    
-    static {
-        FlexoModelObject.addActionForClass (CleanIntermediateFiles.actionType, CGObject.class);
-     }
-    
+	};
 
-    CleanIntermediateFiles (CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	static {
+		FlexoModelObject.addActionForClass(CleanIntermediateFiles.actionType, CGObject.class);
+	}
+
+	CleanIntermediateFiles(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
 	@Override
-	protected void doAction(Object context) throws SaveResourceException, FlexoException 
-	{
-		logger.info ("Clean intermediate versions");
+	protected void doAction(Object context) throws SaveResourceException, FlexoException {
+		logger.info("Clean intermediate versions");
 		for (CGFile file : getSelectedFiles()) {
-			logger.info ("Clean for file "+file.getFileName());
-            if (file.getGeneratedResourceData() instanceof AbstractGeneratedFile)
-                ((AbstractGeneratedFile)file.getGeneratedResourceData()).getHistory().clean(cleanBeforeFirstRelease,releasesToClean);
+			logger.info("Clean for file " + file.getFileName());
+			if (file.getGeneratedResourceData() instanceof AbstractGeneratedFile)
+				((AbstractGeneratedFile) file.getGeneratedResourceData()).getHistory().clean(cleanBeforeFirstRelease, releasesToClean);
 		}
 	}
-	
+
 	private boolean cleanBeforeFirstRelease;
 	private Vector<CGRelease> releasesToClean;
-	
-	public boolean getCleanBeforeFirstRelease() 
-	{
+
+	public boolean getCleanBeforeFirstRelease() {
 		return cleanBeforeFirstRelease;
 	}
 
-	public void setCleanBeforeFirstRelease(boolean cleanBeforeFirstRelease) 
-	{
+	public void setCleanBeforeFirstRelease(boolean cleanBeforeFirstRelease) {
 		this.cleanBeforeFirstRelease = cleanBeforeFirstRelease;
 	}
 
-	public Vector<CGRelease> getReleasesToClean() 
-	{
+	public Vector<CGRelease> getReleasesToClean() {
 		return releasesToClean;
 	}
 
-	public void setReleasesToClean(Vector<CGRelease> releasesToClean) 
-	{
+	public void setReleasesToClean(Vector<CGRelease> releasesToClean) {
 		this.releasesToClean = releasesToClean;
 	}
-	
 
 }

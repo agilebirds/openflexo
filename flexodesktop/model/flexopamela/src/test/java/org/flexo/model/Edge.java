@@ -10,9 +10,8 @@ import org.openflexo.model.annotations.ReturnedValue;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLElement;
 
-@ModelEntity(isAbstract=true)
+@ModelEntity(isAbstract = true)
 @ImplementationClass(EdgeImpl.class)
-
 public interface Edge extends WKFObject {
 
 	public static final String START_NODE = "startNode";
@@ -26,21 +25,21 @@ public interface Edge extends WKFObject {
 			@Parameter(END_NODE) AbstractNode end);
 
 	@Override
-	@Getter(value=PROCESS)
+	@Getter(value = PROCESS)
 	@ReturnedValue("startNode.process")
 	public FlexoProcess getProcess();
 
-	@Getter(value=START_NODE,inverse=AbstractNode.OUTGOING_EDGES)
-	@XMLElement(context="Start")
+	@Getter(value = START_NODE, inverse = AbstractNode.OUTGOING_EDGES)
+	@XMLElement(context = "Start")
 	public AbstractNode getStartNode();
 
-	@Setter(value=START_NODE)
+	@Setter(value = START_NODE)
 	public void setStartNode(AbstractNode node);
 
-	@Getter(value=END_NODE,inverse=AbstractNode.INCOMING_EDGES)
-	@XMLElement(context="End")
+	@Getter(value = END_NODE, inverse = AbstractNode.INCOMING_EDGES)
+	@XMLElement(context = "End")
 	public AbstractNode getEndNode();
 
-	@Setter(value=END_NODE)
+	@Setter(value = END_NODE)
 	public void setEndNode(AbstractNode node);
 }

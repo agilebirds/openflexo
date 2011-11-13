@@ -31,37 +31,32 @@ import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.utils.ResourceGenerator;
 import org.openflexo.logging.FlexoLogger;
 
-
 /**
  * @author denadmin
  * 
  */
-public class BPELGenerator extends MetaGenerator<FlexoModelObject, CGRepository>
-{
-    private static final Logger logger = FlexoLogger.getLogger(ResourceGenerator.class.getPackage().getName());
+public class BPELGenerator extends MetaGenerator<FlexoModelObject, CGRepository> {
+	private static final Logger logger = FlexoLogger.getLogger(ResourceGenerator.class.getPackage().getName());
 
-    private BPELFileGenerator bpelFileGenerator;
-    private BPELXSDFileGenerator xsdFileGenerator;
-    private BPELWSDLFilesGenerator wsdlFilesGenerator;
-    
+	private BPELFileGenerator bpelFileGenerator;
+	private BPELXSDFileGenerator xsdFileGenerator;
+	private BPELWSDLFilesGenerator wsdlFilesGenerator;
+
 	@Override
-	public Logger getGeneratorLogger()
-	{
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
-	public BPELGenerator(ProjectGenerator projectGenerator)
-    {
-    	super(projectGenerator,null);
+	public BPELGenerator(ProjectGenerator projectGenerator) {
+		super(projectGenerator, null);
 
-    	bpelFileGenerator = new BPELFileGenerator(projectGenerator);
-    	xsdFileGenerator = new BPELXSDFileGenerator(projectGenerator);
-    	wsdlFilesGenerator = new BPELWSDLFilesGenerator(projectGenerator);
-    }
+		bpelFileGenerator = new BPELFileGenerator(projectGenerator);
+		xsdFileGenerator = new BPELXSDFileGenerator(projectGenerator);
+		wsdlFilesGenerator = new BPELWSDLFilesGenerator(projectGenerator);
+	}
 
 	@Override
-	public void generate(boolean forceRegenerate) throws GenerationException
-	{
+	public void generate(boolean forceRegenerate) throws GenerationException {
 		startGeneration();
 		bpelFileGenerator.generate(forceRegenerate);
 		xsdFileGenerator.generate(forceRegenerate);
@@ -70,17 +65,15 @@ public class BPELGenerator extends MetaGenerator<FlexoModelObject, CGRepository>
 	}
 
 	@Override
-	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) 
-	{
+	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
 		resetSecondaryProgressWindow(24);
-    	bpelFileGenerator.buildResourcesAndSetGenerators(repository,resources); // OK    	
-    	xsdFileGenerator.buildResourcesAndSetGenerators(repository,resources); // OK    	
-    	wsdlFilesGenerator.buildResourcesAndSetGenerators(repository,resources); // OK    	
+		bpelFileGenerator.buildResourcesAndSetGenerators(repository, resources); // OK
+		xsdFileGenerator.buildResourcesAndSetGenerators(repository, resources); // OK
+		wsdlFilesGenerator.buildResourcesAndSetGenerators(repository, resources); // OK
 	}
 
-    public BPELFileGenerator getBpelFileGenerator()
-    {
-        return bpelFileGenerator;
-    }
+	public BPELFileGenerator getBpelFileGenerator() {
+		return bpelFileGenerator;
+	}
 
 }

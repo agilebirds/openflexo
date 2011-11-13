@@ -25,44 +25,37 @@ import java.util.logging.Logger;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
 
-
 public class FGEShapeDecorationGraphics extends FGEGraphics {
 
-    private static final Logger logger = Logger.getLogger(FGEShapeDecorationGraphics.class.getPackage().getName());
-   
-	public FGEShapeDecorationGraphics(ShapeGraphicalRepresentation aGraphicalRepresentation)
-	{
+	private static final Logger logger = Logger.getLogger(FGEShapeDecorationGraphics.class.getPackage().getName());
+
+	public FGEShapeDecorationGraphics(ShapeGraphicalRepresentation aGraphicalRepresentation) {
 		super(aGraphicalRepresentation);
 	}
-	
+
 	@Override
-	public ShapeGraphicalRepresentation getGraphicalRepresentation() 
-	{
-		return (ShapeGraphicalRepresentation)super.getGraphicalRepresentation();
+	public ShapeGraphicalRepresentation getGraphicalRepresentation() {
+		return (ShapeGraphicalRepresentation) super.getGraphicalRepresentation();
 	}
-	
-	public double getWidth()
-	{
+
+	public double getWidth() {
 		return getGraphicalRepresentation().getWidth();
 	}
 
-	public double getHeight()
-	{
+	public double getHeight() {
 		return getGraphicalRepresentation().getHeight();
 	}
 
 	// Decoration graphics doesn't use normalized coordinates system
 	@Override
-	public Point convertNormalizedPointToViewCoordinates(double x, double y)
-	{
-		return new Point((int)(x*getScale()),(int)(y*getScale()));
+	public Point convertNormalizedPointToViewCoordinates(double x, double y) {
+		return new Point((int) (x * getScale()), (int) (y * getScale()));
 	}
 
 	// Decoration graphics doesn't use normalized coordinates system
 	@Override
-	public FGEPoint convertViewCoordinatesToNormalizedPoint(int x, int y)
-	{
-		return new FGEPoint((x)/getScale(),(y)/getScale());
+	public FGEPoint convertViewCoordinatesToNormalizedPoint(int x, int y) {
+		return new FGEPoint((x) / getScale(), (y) / getScale());
 	}
 
 }

@@ -23,13 +23,13 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
 
-public interface ProjectLoadingHandler 
-{
-	public boolean loadAndConvertAllOldResourcesToLatestVersion(FlexoProject project, FlexoProgress progress) throws ProjectLoadingCancelledException;
-	
+public interface ProjectLoadingHandler {
+	public boolean loadAndConvertAllOldResourcesToLatestVersion(FlexoProject project, FlexoProgress progress)
+			throws ProjectLoadingCancelledException;
+
 	public boolean useOlderMappingWhenLoadingFailure(FlexoXMLStorageResource resource) throws ProjectLoadingCancelledException;
-	
+
 	public boolean upgradeResourceToLatestVersion(FlexoXMLStorageResource resource) throws ProjectLoadingCancelledException;
-	
+
 	public void notifySevereLoadingFailure(FlexoResource r, Exception e);
 }

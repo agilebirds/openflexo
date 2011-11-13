@@ -31,30 +31,26 @@ import org.openflexo.logging.FlexoLogger;
  * @deprecated use ComponentLatexFileResource instead. So far there is no need to specialize according to the Component Definition type
  */
 @Deprecated
-public class PageLatexFileResource extends ComponentLatexFileResource<OperationComponentDefinition>
-{
-    protected static final Logger logger = FlexoLogger.getLogger(PageLatexFileResource.class.getPackage().getName());
+public class PageLatexFileResource extends ComponentLatexFileResource<OperationComponentDefinition> {
+	protected static final Logger logger = FlexoLogger.getLogger(PageLatexFileResource.class.getPackage().getName());
 
-    /**
-     * @param builder
-     */
-    public PageLatexFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
+	/**
+	 * @param builder
+	 */
+	public PageLatexFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
-    /**
-     * @param aProject
-     */
-    public PageLatexFileResource(FlexoProject aProject)
-    {
-    	super(aProject);
-    }
+	/**
+	 * @param aProject
+	 */
+	public PageLatexFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
-    @Override
-	protected LatexFile createGeneratedResourceData()
-    {
-        return new LatexFile(getFile(),this);
-    }
-    
+	@Override
+	protected LatexFile createGeneratedResourceData() {
+		return new LatexFile(getFile(), this);
+	}
+
 }

@@ -42,22 +42,20 @@ public class CGTemplateFile extends CGTemplate {
 	// Template last update
 	private Date _lastUpdate;
 
-	public CGTemplateFile(File templateFile, CGTemplateSet set, String relativePath)
-	{
+	public CGTemplateFile(File templateFile, CGTemplateSet set, String relativePath) {
 		super(set);
 		_templateFile = templateFile;
 		String fileName = templateFile.getName();
-		_additionalPath = relativePath.substring(0,relativePath.indexOf(fileName));
+		_additionalPath = relativePath.substring(0, relativePath.indexOf(fileName));
 		if (templateFile.exists()) {
 			_lastUpdate = FileUtils.getDiskLastModifiedDate(templateFile);
 		} else {
-			logger.warning("Template declared for a non-existant file: "+templateFile.getAbsolutePath());
+			logger.warning("Template declared for a non-existant file: " + templateFile.getAbsolutePath());
 			_lastUpdate = new Date(0);
 		}
 	}
 
-	public File getTemplateFile()
-	{
+	public File getTemplateFile() {
 		return _templateFile;
 	}
 
@@ -65,8 +63,7 @@ public class CGTemplateFile extends CGTemplate {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getRelativePath()
-	{
+	public String getRelativePath() {
 		if (getSet() instanceof TargetSpecificCGTemplateSet) {
 			return ((TargetSpecificCGTemplateSet) getSet()).getTargetType().getName() + "/" + getRelativePathWithoutSetPrefix();
 		}
@@ -77,28 +74,24 @@ public class CGTemplateFile extends CGTemplate {
 		return getAdditionalPath() + getTemplateName();
 	}
 
-	private String getAdditionalPath()
-	{
+	private String getAdditionalPath() {
 		return StringUtils.isEmpty(_additionalPath) ? "" : _additionalPath;
 	}
 
-	public boolean isEdited()
-	{
+	public boolean isEdited() {
 		return _templateFileContentEditor != null;
 	}
 
-	public void edit(TemplateFileContentEditor templateFileContentEditor)
-	{
+	public void edit(TemplateFileContentEditor templateFileContentEditor) {
 		_templateFileContentEditor = templateFileContentEditor;
 		templateFileContentEditor.setEditedContent(getContent());
 		setChanged(false);
 		notifyObservers(new TemplateFileEdited(this));
 	}
 
-	public void save()
-	{
+	public void save() {
 		try {
-			synchronized(this) {
+			synchronized (this) {
 				FileUtils.saveToFile(getTemplateFile(), getEditedContent());
 			}
 			fileContent = getEditedContent();
@@ -110,8 +103,7 @@ public class CGTemplateFile extends CGTemplate {
 		}
 	}
 
-	public void cancelEdition()
-	{
+	public void cancelEdition() {
 		_templateFileContentEditor.setEditedContent(getContent());
 		_templateFileContentEditor = null;
 		setChanged(false);
@@ -122,8 +114,7 @@ public class CGTemplateFile extends CGTemplate {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getContent()
-	{
+	public String getContent() {
 		if (fileContent == null) {
 			try {
 				fileContent = FileUtils.fileContents(getTemplateFile());
@@ -134,8 +125,7 @@ public class CGTemplateFile extends CGTemplate {
 		return fileContent;
 	}
 
-	public String getEditedContent()
-	{
+	public String getEditedContent() {
 		if (_templateFileContentEditor != null) {
 			return _templateFileContentEditor.getEditedContent();
 		} else {
@@ -147,12 +137,11 @@ public class CGTemplateFile extends CGTemplate {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void update(boolean forceUpdate)
-	{
+	public void update(boolean forceUpdate) {
 		if (forceUpdate || fileContent == null || getIsVersionOnDiskSeemsNewer()) {
 			// Then reload
 			try {
-				logger.info("Load content for "+getTemplateFile().getAbsolutePath());
+				logger.info("Load content for " + getTemplateFile().getAbsolutePath());
 				fileContent = FileUtils.fileContents(getTemplateFile());
 				setChanged();
 				notifyObservers(new TemplateFileChanged(this));
@@ -180,15 +169,14 @@ public class CGTemplateFile extends CGTemplate {
 		return getTemplateFile().getName();
 	}
 
-	public interface TemplateFileContentEditor
-	{
+	public interface TemplateFileContentEditor {
 		public String getEditedContent();
+
 		public void setEditedContent(String content);
 	}
 
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return Inspectors.GENERATORS.CG_TEMPLATE_FILE;
 	}
 
@@ -196,15 +184,13 @@ public class CGTemplateFile extends CGTemplate {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Date getLastUpdate()
-	{
+	public Date getLastUpdate() {
 		return _lastUpdate;
 	}
 
 	@Override
-	public void setIsModified()
-	{
-		logger.info("setIsModified() for "+this);
+	public void setIsModified() {
+		logger.info("setIsModified() for " + this);
 		super.setIsModified();
 		_lastUpdate = new Date();
 		// Do this to reset dependant resources cache, in order to get up-to_date
@@ -213,18 +199,17 @@ public class CGTemplateFile extends CGTemplate {
 	}
 
 	@Override
-	public final void delete()
-	{
+	public final void delete() {
 		if (getRepository().isApplicationRepository()) {
 			if (logger.isLoggable(Level.SEVERE)) {
-				logger.severe("Cannot delete an application template!: "+getTemplateFile().getAbsolutePath());
+				logger.severe("Cannot delete an application template!: " + getTemplateFile().getAbsolutePath());
 			}
 			return;
 		}
-		if (getTemplateFile()!=null && getTemplateFile().exists()) {
+		if (getTemplateFile() != null && getTemplateFile().exists()) {
 			getTemplateFile().delete();
 		}
-		//_templateFile = null;
+		// _templateFile = null;
 		super.delete();
 		getRepository().refresh();
 		setChanged();

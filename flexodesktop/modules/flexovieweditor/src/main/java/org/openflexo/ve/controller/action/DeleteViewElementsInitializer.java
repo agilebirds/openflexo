@@ -36,71 +36,57 @@ import org.openflexo.ve.VECst;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class DeleteViewElementsInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeleteViewElementsInitializer(OEControllerActionInitializer actionInitializer)
-	{
-		super(DeleteViewElements.actionType,actionInitializer);
+	DeleteViewElementsInitializer(OEControllerActionInitializer actionInitializer) {
+		super(DeleteViewElements.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected OEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (OEControllerActionInitializer)super.getControllerActionInitializer();
+	protected OEControllerActionInitializer getControllerActionInitializer() {
+		return (OEControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<DeleteViewElements> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<DeleteViewElements> getDefaultInitializer() {
 		return new FlexoActionInitializer<DeleteViewElements>() {
-            @Override
-			public boolean run(ActionEvent e, DeleteViewElements action)
-            {
-				FIBDialog dialog = FIBDialog.instanciateComponent(
-						VECst.DELETE_VIEW_ELEMENTS_DIALOG_FIB,
-						action, null, true);
+			@Override
+			public boolean run(ActionEvent e, DeleteViewElements action) {
+				FIBDialog dialog = FIBDialog.instanciateComponent(VECst.DELETE_VIEW_ELEMENTS_DIALOG_FIB, action, null, true);
 				return (dialog.getStatus() == Status.VALIDATED);
-            }
-        };
-	}
-
-     @Override
-	protected FlexoActionFinalizer<DeleteViewElements> getDefaultFinalizer() 
-	{
-		return new FlexoActionFinalizer<DeleteViewElements>() {
-            @Override
-			public boolean run(ActionEvent e, DeleteViewElements action)
-            {
-                if (getControllerActionInitializer().getOEController().getSelectionManager().getLastSelectedObject()!=null
-                		&& getControllerActionInitializer().getOEController().getSelectionManager().getLastSelectedObject().isDeleted())
-                	getControllerActionInitializer().getOEController().getSelectionManager().resetSelection();
-                return true;
-          }
-        };
+			}
+		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected FlexoActionFinalizer<DeleteViewElements> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<DeleteViewElements>() {
+			@Override
+			public boolean run(ActionEvent e, DeleteViewElements action) {
+				if (getControllerActionInitializer().getOEController().getSelectionManager().getLastSelectedObject() != null
+						&& getControllerActionInitializer().getOEController().getSelectionManager().getLastSelectedObject().isDeleted())
+					getControllerActionInitializer().getOEController().getSelectionManager().resetSelection();
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
 		return IconLibrary.DELETE_ICON;
 	}
 
 	@Override
-	protected KeyStroke getShortcut() 
-	{
+	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(FlexoCst.BACKSPACE_DELETE_KEY_CODE, 0);
 	}
 
-
 	@Override
-	public void init()
-	{
-        super.init();
-        getControllerActionInitializer().registerAction(DeleteViewElements.actionType,KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0));
+	public void init() {
+		super.init();
+		getControllerActionInitializer().registerAction(DeleteViewElements.actionType, KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0));
 	}
-	
 
 }

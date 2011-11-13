@@ -18,8 +18,8 @@
  *
  */
 package org.openflexo.antar.expr.parser;
-import org.openflexo.antar.expr.BinaryOperator;
 
+import org.openflexo.antar.expr.BinaryOperator;
 
 /*
  * Created on 4 janv. 2006 by sguerin
@@ -30,40 +30,34 @@ import org.openflexo.antar.expr.BinaryOperator;
 
 public class ParsedBinaryExpression extends ParsedExpression {
 
-    private Token _leftOperand;
-    private Token _rightOperand;
-    
-    public ParsedBinaryExpression(ParsedOperator operator, ListOfToken left, ListOfToken right) throws ParseException
-    {
-        this(operator,makeOperand(left),makeOperand(right));
-    }
+	private Token _leftOperand;
+	private Token _rightOperand;
 
-    public ParsedBinaryExpression(ParsedOperator operator, Token left, Token right) 
-    {
-        super(operator);
-        _leftOperand = left;
-        _rightOperand = right;
-    }
-    
-	public BinaryOperator getBinaryOperator()
-	{
-		return (BinaryOperator)getOperator().getOperator();
+	public ParsedBinaryExpression(ParsedOperator operator, ListOfToken left, ListOfToken right) throws ParseException {
+		this(operator, makeOperand(left), makeOperand(right));
 	}
 
-     public Token getLeftOperand() 
-    {
-        return _leftOperand;
-    }
+	public ParsedBinaryExpression(ParsedOperator operator, Token left, Token right) {
+		super(operator);
+		_leftOperand = left;
+		_rightOperand = right;
+	}
 
-     public Token getRightOperand() 
-    {
-        return _rightOperand;
-    }
-    
-    @Override
-	public String toString()
-    {
-        return "("+_leftOperand+getOperator()+_rightOperand+")";
-    }
-    
+	public BinaryOperator getBinaryOperator() {
+		return (BinaryOperator) getOperator().getOperator();
+	}
+
+	public Token getLeftOperand() {
+		return _leftOperand;
+	}
+
+	public Token getRightOperand() {
+		return _rightOperand;
+	}
+
+	@Override
+	public String toString() {
+		return "(" + _leftOperand + getOperator() + _rightOperand + ")";
+	}
+
 }

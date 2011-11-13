@@ -27,62 +27,58 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ie.widget.IEBlocWidget;
 
-
 /**
  * @author bmangez <B>Class Description</B>
  */
-public class IEBlocElement extends IEElement
-{
+public class IEBlocElement extends IEElement {
 
-    public IEBlocElement(IEBlocWidget bloc, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(bloc, BrowserElementType.BLOC, browser,parent);
-        bloc.getButtonList().addObserver(this);
-    }
-    /**
-     * Overrides delete
-     * @see org.openflexo.components.browser.BrowserElement#delete()
-     */
-    @Override
-    public void delete()
-    {
-        getBloc().getButtonList().deleteObserver(this);
-        super.delete();
-    }
-    @Override
-	protected void buildChildrenVector()
-    {
-        // We add main table
-        if (getBloc().getContent() != null) {
-            addToChilds((FlexoModelObject) getBloc().getContent());
-        }
+	public IEBlocElement(IEBlocWidget bloc, ProjectBrowser browser, BrowserElement parent) {
+		super(bloc, BrowserElementType.BLOC, browser, parent);
+		bloc.getButtonList().addObserver(this);
+	}
 
-        // We add buttons
-        // for (Enumeration e = getBloc().buttons(); e.hasMoreElements();) {
-        // addToChilds((FlexoModelObject) e.nextElement());
-        // }
+	/**
+	 * Overrides delete
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#delete()
+	 */
+	@Override
+	public void delete() {
+		getBloc().getButtonList().deleteObserver(this);
+		super.delete();
+	}
 
-        FlexoModelObject child = null;
+	@Override
+	protected void buildChildrenVector() {
+		// We add main table
+		if (getBloc().getContent() != null) {
+			addToChilds((FlexoModelObject) getBloc().getContent());
+		}
 
-        for (Enumeration e = getBloc().elements(); e.hasMoreElements();) {
-            child = (FlexoModelObject) e.nextElement();
-            addToChilds(child);
-        }
+		// We add buttons
+		// for (Enumeration e = getBloc().buttons(); e.hasMoreElements();) {
+		// addToChilds((FlexoModelObject) e.nextElement());
+		// }
 
-    }
+		FlexoModelObject child = null;
 
-    @Override
-	public String getName()
-    {
-        if (getBloc().getTitle() == null) {
-            return "Bloc";
-        }
-        return getBloc().getTitle();
-    }
+		for (Enumeration e = getBloc().elements(); e.hasMoreElements();) {
+			child = (FlexoModelObject) e.nextElement();
+			addToChilds(child);
+		}
 
-    protected IEBlocWidget getBloc()
-    {
-        return (IEBlocWidget) getObject();
-    }
+	}
+
+	@Override
+	public String getName() {
+		if (getBloc().getTitle() == null) {
+			return "Bloc";
+		}
+		return getBloc().getTitle();
+	}
+
+	protected IEBlocWidget getBloc() {
+		return (IEBlocWidget) getObject();
+	}
 
 }

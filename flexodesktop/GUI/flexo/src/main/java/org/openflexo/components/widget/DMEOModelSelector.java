@@ -29,100 +29,84 @@ import org.openflexo.foundation.dm.ProjectDatabaseRepository;
 import org.openflexo.foundation.dm.eo.DMEOModel;
 import org.openflexo.foundation.rm.FlexoProject;
 
+public class DMEOModelSelector extends AbstractBrowserSelector<DMEOModel> {
 
-public class DMEOModelSelector extends AbstractBrowserSelector<DMEOModel>
-{
+	protected static final String EMPTY_STRING = "";
 
-    protected static final String EMPTY_STRING = "";
+	private ProjectDatabaseRepository _repository;
 
-    private ProjectDatabaseRepository _repository;
+	public DMEOModelSelector(DMEOModel eomodel) {
+		super(null, eomodel, DMEOModel.class);
+	}
 
-    public DMEOModelSelector(DMEOModel eomodel)
-    {
-        super(null, eomodel, DMEOModel.class);
-    }
+	public DMEOModelSelector(FlexoProject project, DMEOModel eomodel, int cols) {
+		super(project, eomodel, DMEOModel.class, cols);
+	}
 
-    public DMEOModelSelector(FlexoProject project, DMEOModel eomodel, int cols)
-    {
-        super(project, eomodel, DMEOModel.class, cols);
-    }
+	public ProjectDatabaseRepository getCVSRepositoryList() {
+		return _repository;
+	}
 
-    public ProjectDatabaseRepository getCVSRepositoryList()
-    {
-         return _repository;
-    }
+	@Override
+	protected ProjectDatabaseRepositorySelectorPanel makeCustomPanel(DMEOModel editedObject) {
+		return new ProjectDatabaseRepositorySelectorPanel();
+	}
 
-    @Override
-	protected ProjectDatabaseRepositorySelectorPanel makeCustomPanel(DMEOModel editedObject)
-    {
-        return new ProjectDatabaseRepositorySelectorPanel();
-    }
+	@Override
+	public String renderedString(DMEOModel editedObject) {
+		if (editedObject != null) {
+			return editedObject.getName();
+		}
+		return EMPTY_STRING;
+	}
 
-    @Override
-	public String renderedString(DMEOModel editedObject)
-    {
-        if (editedObject != null) {
-            return editedObject.getName();
-        }
-        return EMPTY_STRING;
-    }
+	protected class ProjectDatabaseRepositorySelectorPanel extends AbstractSelectorPanel<DMEOModel> {
+		protected ProjectDatabaseRepositorySelectorPanel() {
+			super(DMEOModelSelector.this);
+		}
 
-    protected class ProjectDatabaseRepositorySelectorPanel extends AbstractSelectorPanel<DMEOModel>
-    {
-        protected ProjectDatabaseRepositorySelectorPanel()
-        {
-            super(DMEOModelSelector.this);
-        }
+		@Override
+		protected ProjectBrowser createBrowser(FlexoProject project) {
+			return new DMEOModelBrowser(project);
+		}
 
-        @Override
-		protected ProjectBrowser createBrowser(FlexoProject project)
-        {
-            return new DMEOModelBrowser(project);
-        }
+		@Override
+		public Dimension getDefaultSize() {
+			Dimension returned = _browserView.getDefaultSize();
+			returned.width = returned.width;
+			returned.height = returned.height - 100;
+			return returned;
+		}
+	}
 
-        @Override
-		public Dimension getDefaultSize()
-        {
-            Dimension returned = _browserView.getDefaultSize();
-            returned.width = returned.width;
-            returned.height = returned.height - 100;
-            return returned;
-        }
-    }
+	protected class DMEOModelBrowser extends ProjectBrowser {
 
-    protected class DMEOModelBrowser extends ProjectBrowser
-    {
+		protected DMEOModelBrowser(FlexoProject project) {
+			super(project, false);
+			init();
+		}
 
-        protected DMEOModelBrowser(FlexoProject project)
-        {
-            super(project, false);
-            init();
-        }
+		@Override
+		public void configure() {
+			// setFilterStatus(BrowserElementType.DM_REPOSITORY, ElementTypeBrowserFilter.HIDE);
+			setFilterStatus(BrowserElementType.DM_ENTITY, BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.DM_EOATTRIBUTE, BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.DM_EOENTITY, BrowserFilterStatus.HIDE);
+			// setFilterStatus(BrowserElementType.DM_EOMODEL, ElementTypeBrowserFilter.HIDE);
+			setFilterStatus(BrowserElementType.DM_EORELATIONSHIP, BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.DM_METHOD, BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.DM_MODEL, BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.DM_PACKAGE, BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.DM_PROPERTY, BrowserFilterStatus.HIDE);
+			// setFilterStatus(BrowserElementType.DM_REPOSITORY, ElementTypeBrowserFilter.HIDE);
+			// setFilterStatus(BrowserElementType.DM_REPOSITORY_FOLDER, ElementTypeBrowserFilter.HIDE);
+			// setFilterStatus(BrowserElementType.DM_EOREPOSITORY, ElementTypeBrowserFilter.HIDE);
+		}
 
-        @Override
-		public void configure()
-        {
-            //setFilterStatus(BrowserElementType.DM_REPOSITORY, ElementTypeBrowserFilter.HIDE);
-            setFilterStatus(BrowserElementType.DM_ENTITY, BrowserFilterStatus.HIDE);
-            setFilterStatus(BrowserElementType.DM_EOATTRIBUTE, BrowserFilterStatus.HIDE);
-            setFilterStatus(BrowserElementType.DM_EOENTITY, BrowserFilterStatus.HIDE);
-            //setFilterStatus(BrowserElementType.DM_EOMODEL, ElementTypeBrowserFilter.HIDE);
-            setFilterStatus(BrowserElementType.DM_EORELATIONSHIP, BrowserFilterStatus.HIDE);
-            setFilterStatus(BrowserElementType.DM_METHOD, BrowserFilterStatus.HIDE);
-            setFilterStatus(BrowserElementType.DM_MODEL, BrowserFilterStatus.HIDE);
-            setFilterStatus(BrowserElementType.DM_PACKAGE, BrowserFilterStatus.HIDE);
-            setFilterStatus(BrowserElementType.DM_PROPERTY, BrowserFilterStatus.HIDE);
-            //setFilterStatus(BrowserElementType.DM_REPOSITORY, ElementTypeBrowserFilter.HIDE);
-            //setFilterStatus(BrowserElementType.DM_REPOSITORY_FOLDER, ElementTypeBrowserFilter.HIDE);
-            //setFilterStatus(BrowserElementType.DM_EOREPOSITORY, ElementTypeBrowserFilter.HIDE);
-        }
-
-        @Override
-		public FlexoModelObject getDefaultRootObject()
-        {
-            return getProject().getDataModel();
-        }
-    }
+		@Override
+		public FlexoModelObject getDefaultRootObject() {
+			return getProject().getDataModel();
+		}
+	}
 
 }
-

@@ -30,42 +30,38 @@ import org.openflexo.ie.view.listener.IEKeyEventListener;
 import org.openflexo.ie.view.palette.IEPaletteWindow;
 import org.openflexo.view.FlexoFrame;
 
-
 /**
  * The main window of the IE Module
  * 
  * @author bmangez, sguerin
  */
-public class IEFrame extends FlexoFrame
-{
+public class IEFrame extends FlexoFrame {
 
-    protected IEController _ieController;
+	protected IEController _ieController;
 
-    protected IEMenuBar _ieMenuBar;
+	protected IEMenuBar _ieMenuBar;
 
-    protected IEKeyEventListener _ieKeyEventListener;
+	protected IEKeyEventListener _ieKeyEventListener;
 
-    public JSplitPane splitPane;
+	public JSplitPane splitPane;
 
-    public IEFrame(String title, IEController controller, IEKeyEventListener ieKeyEventListener, IEMenuBar menuBar)
-    {
-        super(title, controller, ieKeyEventListener, menuBar);
-        _ieController = controller;
-        _ieMenuBar = menuBar;
-        _ieKeyEventListener = ieKeyEventListener;
+	public IEFrame(String title, IEController controller, IEKeyEventListener ieKeyEventListener, IEMenuBar menuBar) {
+		super(title, controller, ieKeyEventListener, menuBar);
+		_ieController = controller;
+		_ieMenuBar = menuBar;
+		_ieKeyEventListener = ieKeyEventListener;
 
-        getContentPane().setSize(new Dimension(IECst.IE_WINDOW_WIDTH, IECst.IE_WINDOW_HEIGHT));
-        setSize(new Dimension(IECst.IE_WINDOW_WIDTH, IECst.IE_WINDOW_HEIGHT));
-    }
+		getContentPane().setSize(new Dimension(IECst.IE_WINDOW_WIDTH, IECst.IE_WINDOW_HEIGHT));
+		setSize(new Dimension(IECst.IE_WINDOW_WIDTH, IECst.IE_WINDOW_HEIGHT));
+	}
 
-    public IEPaletteWindow getIEPaletteWindow()
-    {
-        return _ieController.getIEPaletteWindow();
-    }
+	public IEPaletteWindow getIEPaletteWindow() {
+		return _ieController.getIEPaletteWindow();
+	}
 
-    // ==========================================================================
-    // ============================ MyCellRenderer
-    // ==============================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================ MyCellRenderer
+	// ==============================
+	// ==========================================================================
 
 }

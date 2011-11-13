@@ -27,39 +27,38 @@ public class CubicCurveWithFourPointsConstruction extends CubicCurveConstruction
 	public PointConstruction controlPointConstruction1;
 	public PointConstruction controlPointConstruction2;
 	public PointConstruction endPointConstruction;
-	
-	public CubicCurveWithFourPointsConstruction() 
-	{
+
+	public CubicCurveWithFourPointsConstruction() {
 		super();
 	}
-	
-	public CubicCurveWithFourPointsConstruction(PointConstruction pointConstruction1, PointConstruction pointConstruction2, PointConstruction pointConstruction3, PointConstruction pointConstruction4) 
-	{
+
+	public CubicCurveWithFourPointsConstruction(PointConstruction pointConstruction1, PointConstruction pointConstruction2,
+			PointConstruction pointConstruction3, PointConstruction pointConstruction4) {
 		this();
 		this.startPointConstruction = pointConstruction1;
 		this.controlPointConstruction1 = pointConstruction2;
 		this.controlPointConstruction2 = pointConstruction3;
 		this.endPointConstruction = pointConstruction4;
 	}
-	
+
 	@Override
-	protected FGECubicCurve computeData()
-	{
-		return new FGECubicCurve(startPointConstruction.getPoint(),controlPointConstruction1.getPoint(),controlPointConstruction2.getPoint(),endPointConstruction.getPoint());
+	protected FGECubicCurve computeData() {
+		return new FGECubicCurve(startPointConstruction.getPoint(), controlPointConstruction1.getPoint(),
+				controlPointConstruction2.getPoint(), endPointConstruction.getPoint());
 	}
 
 	@Override
-	public String toString()
-	{
-		return "CubicCurveWithFourPointsConstruction[\n"+"> "+startPointConstruction.toString()+"\n> "+controlPointConstruction1.toString()+"\n> "+controlPointConstruction2.toString()+"\n> "+endPointConstruction.toString()+"\n]";
+	public String toString() {
+		return "CubicCurveWithFourPointsConstruction[\n" + "> " + startPointConstruction.toString() + "\n> "
+				+ controlPointConstruction1.toString() + "\n> " + controlPointConstruction2.toString() + "\n> "
+				+ endPointConstruction.toString() + "\n]";
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
-		GeometricConstruction[] returned = { startPointConstruction, controlPointConstruction1, controlPointConstruction2, endPointConstruction };
+	public GeometricConstruction[] getDepends() {
+		GeometricConstruction[] returned = { startPointConstruction, controlPointConstruction1, controlPointConstruction2,
+				endPointConstruction };
 		return returned;
 	}
-
 
 }

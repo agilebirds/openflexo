@@ -37,81 +37,74 @@ import org.openflexo.fge.geomedit.construction.ExplicitPointConstruction;
 import org.openflexo.fge.geomedit.construction.PointConstruction;
 import org.openflexo.xmlcode.XMLSerializable;
 
-
-public class EllipsGraphicalRepresentation extends GeometricObjectGraphicalRepresentation<FGEEllips,Ellips> implements XMLSerializable 
-{
+public class EllipsGraphicalRepresentation extends GeometricObjectGraphicalRepresentation<FGEEllips, Ellips> implements XMLSerializable {
 	// Called for LOAD
-	public EllipsGraphicalRepresentation(GeomEditBuilder builder)
-	{
-		this(null,builder.drawing);
+	public EllipsGraphicalRepresentation(GeomEditBuilder builder) {
+		this(null, builder.drawing);
 		initializeDeserialization();
 	}
 
-	public EllipsGraphicalRepresentation(Ellips ellips, GeometricDrawing aDrawing)
-	{
+	public EllipsGraphicalRepresentation(Ellips ellips, GeometricDrawing aDrawing) {
 		super(ellips, aDrawing);
 	}
 
 	@Override
-	protected List<ControlPoint> buildControlPointsForEllips(FGEEllips ellips)
-	{
+	protected List<ControlPoint> buildControlPointsForEllips(FGEEllips ellips) {
 		Vector<ControlPoint> returned = new Vector<ControlPoint>();
-		
+
 		EllipsConstruction ellipsConstruction = getDrawable().getConstruction();
-			
+
 		if (ellipsConstruction instanceof CircleWithCenterAndPointConstruction) {
-			PointConstruction centerConstruction = ((CircleWithCenterAndPointConstruction)ellipsConstruction).centerConstruction;
+			PointConstruction centerConstruction = ((CircleWithCenterAndPointConstruction) ellipsConstruction).centerConstruction;
 			if (centerConstruction instanceof ExplicitPointConstruction) {
-				returned.add(new DraggableControlPoint<FGEEllips>(this,"center",ellips.getCenter(),(ExplicitPointConstruction)centerConstruction) {
+				returned.add(new DraggableControlPoint<FGEEllips>(this, "center", ellips.getCenter(),
+						(ExplicitPointConstruction) centerConstruction) {
 					@Override
-					public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-					{
-						//getGeometricObject().setCenter
+					public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration,
+							FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event) {
+						// getGeometricObject().setCenter
 						setPoint(newAbsolutePoint);
 						notifyGeometryChanged();
 						return true;
 					}
+
 					@Override
-					public void update(FGEEllips geometricObject)
-					{
+					public void update(FGEEllips geometricObject) {
+						setPoint(geometricObject.getCenter());
+					}
+				});
+			} else {
+				returned.add(new ComputedControlPoint<FGEEllips>(this, "center", ellips.getCenter()) {
+					@Override
+					public void update(FGEEllips geometricObject) {
 						setPoint(geometricObject.getCenter());
 					}
 				});
 			}
-			else {
-				returned.add(new ComputedControlPoint<FGEEllips>(this,"center",ellips.getCenter()) {
-					@Override
-					public void update(FGEEllips geometricObject)
-					{
-						setPoint(geometricObject.getCenter());
-					}
-				});
-			}
-			
-			final PointConstruction pointConstruction = ((CircleWithCenterAndPointConstruction)ellipsConstruction).pointConstruction;
+
+			final PointConstruction pointConstruction = ((CircleWithCenterAndPointConstruction) ellipsConstruction).pointConstruction;
 			if (pointConstruction instanceof ExplicitPointConstruction) {
-				returned.add(new DraggableControlPoint<FGEEllips>(this,"point",pointConstruction.getData(),(ExplicitPointConstruction)pointConstruction) {
+				returned.add(new DraggableControlPoint<FGEEllips>(this, "point", pointConstruction.getData(),
+						(ExplicitPointConstruction) pointConstruction) {
 					@Override
-					public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-					{
-						//getGeometricObject().setCenter
+					public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration,
+							FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event) {
+						// getGeometricObject().setCenter
 						setPoint(newAbsolutePoint);
 						notifyGeometryChanged();
 						return true;
 					}
+
 					@Override
-					public void update(FGEEllips geometricObject)
-					{
-						//setPoint(pointConstruction.getData());
+					public void update(FGEEllips geometricObject) {
+						// setPoint(pointConstruction.getData());
 					}
 				});
-			}
-			else {
-				returned.add(new ComputedControlPoint<FGEEllips>(this,"point",pointConstruction.getData()) {
+			} else {
+				returned.add(new ComputedControlPoint<FGEEllips>(this, "point", pointConstruction.getData()) {
 					@Override
-					public void update(FGEEllips geometricObject)
-					{
-						//setPoint(pointConstruction.getData());
+					public void update(FGEEllips geometricObject) {
+						// setPoint(pointConstruction.getData());
 					}
 				});
 			}
@@ -119,7 +112,6 @@ public class EllipsGraphicalRepresentation extends GeometricObjectGraphicalRepre
 		return returned;
 	}
 
-	
 	/*private DraggableControlPoint nwCP1;
 	private DraggableControlPoint seCP2;
 
@@ -321,5 +313,5 @@ public class EllipsGraphicalRepresentation extends GeometricObjectGraphicalRepre
 
 		return returned;
 	}
-*/
+	*/
 }

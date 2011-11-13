@@ -100,9 +100,10 @@ public class DocxFileParser {
 	public ParsedDocx getParsedDocx() {
 		ParsedDocx parsedDocx = new ParsedDocx();
 
-		List<?> resultList = getDocumentXml()
-				.selectNodes(
-						"//w:sdt/w:sdtPr[not(w:showingPlcHdr)]/w:tag[" + "starts-with(@w:val, '" + FlexoDescriptionTag.FLEXODESCRIPTIONTAG + "') or " + "starts-with(@w:val, '" + FlexoNameTag.FLEXONAMETAG + "') or " + "starts-with(@w:val, '" + FlexoTitleTag.FLEXOTITLETAG + "') or " + "starts-with(@w:val, '" + FlexoContentTag.FLEXOCONTENTTAG + "')" + "]");
+		List<?> resultList = getDocumentXml().selectNodes(
+				"//w:sdt/w:sdtPr[not(w:showingPlcHdr)]/w:tag[" + "starts-with(@w:val, '" + FlexoDescriptionTag.FLEXODESCRIPTIONTAG
+						+ "') or " + "starts-with(@w:val, '" + FlexoNameTag.FLEXONAMETAG + "') or " + "starts-with(@w:val, '"
+						+ FlexoTitleTag.FLEXOTITLETAG + "') or " + "starts-with(@w:val, '" + FlexoContentTag.FLEXOCONTENTTAG + "')" + "]");
 		for (Iterator<?> iterator = resultList.iterator(); iterator.hasNext();) {
 			Element element = (Element) iterator.next();
 			String tagValue = element.attributeValue(DocxQName.getQName(OpenXmlTag.w_val));

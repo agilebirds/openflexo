@@ -86,433 +86,438 @@ import cb.petal.UseCase;
 import cb.petal.UsesRelationship;
 
 /**
- * Factory for classes, methods, etc., it also contains methods to add
- * relationships, like uses/realize relationships.
- *
+ * Factory for classes, methods, etc., it also contains methods to add relationships, like uses/realize relationships.
+ * 
  * @version $Id: XMIFactory.java,v 1.2 2011/09/12 11:47:01 gpolet Exp $
- * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A> 
-*/
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ */
 public class XMIFactory {
-  protected PetalFile    tree;
-  protected XMIGenerator gen;
+	protected PetalFile tree;
+	protected XMIGenerator gen;
 
-  protected XMIFactory() { }
-  
-  protected XMIFactory(PetalFile tree, XMIGenerator gen) {
-    this.tree = tree;
-    this.gen  = gen;
-  }
-
-  public MModel createModel() {
-    MModel model = new MModelImpl();
-    model.setName(tree.getModelName());
-    return model;
-  }
-
-  private HashMap stereo_types = new HashMap(); // Map <String, stereotype>
-
-  protected final MStereotype getStereotype(String stereo) {
-    MStereotype s = (MStereotype)stereo_types.get(stereo);
-
-    if(s == null) {
-      s = new MStereotypeImpl();
-      s.setName(stereo);
-      gen.getPackage().addOwnedElement(s);
-      stereo_types.put(stereo, s);
-    }
-
-    return s;
-  }
-
-  public MPackage createPackage(ClassCategory cat) {
-    MPackage pack = new MPackageImpl();
-    pack.setName(cat.getNameParameter());
-    pack.setUUID(cat.getQuid());
-
-    return pack;
-  }
-
-  public MPackage createPackage(SubSystem sys) {
-    MPackage pack = new MSubsystemImpl();
-    pack.setName(sys.getNameParameter());
-    pack.setUUID(sys.getQuid());
-
-    return pack;
-  }
-
-  protected void setStereotype(StereoTyped s, MModelElement e) {
-    String stereo = s.getStereotype();
-
-    if(stereo != null)
-      e.setStereotype(getStereotype(stereo));
-  }
-
-  protected void setVisibility(AccessQualified a, MModelElement e) {
-    String acc = a.getExportControl();
-
-    if(acc == null)
-      acc = "public";
-    else
-      acc = acc.toLowerCase();
-
-    MVisibilityKind kind = MVisibilityKind.forName(acc);
-
-    if(kind == null)
-      throw new RuntimeException("Can't map access qualifier: " + acc);
-
-    e.setVisibility(kind);
-  }
-
-  protected void setConcurrency(Operation op, MOperation o) {
-    String acc = op.getConcurrency();
-
-    if(acc == null)
-      acc = "sequential";
-    else
-      acc = acc.toLowerCase();
-
-    MCallConcurrencyKind kind = MCallConcurrencyKind.forName(acc);
-
-    if(kind == null)
-      throw new RuntimeException("Can't map concurrency: " + acc);
-
-    o.setConcurrency(kind);
-  }
-
-  /** @return MInterface, MClass, MAssociationClass or MActor
-   */
-  public MClassifier createClass(cb.petal.Class clazz) {
-    MClassifier cl;
-
-    /* ArgoUML/Poseidon can't display/use Actors/AssociationClass correctly
-     */
-    if(clazz.isInterface())
-      cl = new MInterfaceImpl();
-    else if(clazz.isActor())
-      cl = new MActorImpl();
-    else if(clazz.isAssociationClass())
-      cl = new MAssociationClassImpl();
-    else
-      cl = new MClassImpl();
-
-    cl.setName(clazz.getNameParameter());
-    cl.setUUID(clazz.getQuid());
-
-    setVisibility(clazz, cl);
-
-    if(clazz instanceof ClassUtility)
-      cl.setStereotype(getStereotype("utility"));
-    else if(!(clazz.isInterface() || clazz.isActor()))
-      setStereotype(clazz, cl);
-
-    return cl;
-  }
-
-  public MClassifier createUseCase(UseCase caze) {
-    MClassifier cl = new MUseCaseImpl();
-
-    cl.setName(caze.getNameParameter());
-    cl.setUUID(caze.getQuid());
-
-    setStereotype(caze, cl);
-
-    return cl;
-  }
-
-  public MClassifier createComponent(Module module) {
-    MClassifier cl = new MComponentImpl();
-
-    cl.setName(module.getNameParameter());
-    cl.setUUID(module.getQuid());
-
-    setStereotype(module, cl);
-
-    return cl;
-  }
-
-  public MClassifier createSubSystem(SubSystem sys) {
-    MClassifier cl = new MSubsystemImpl();
-
-    cl.setName(sys.getNameParameter());
-    cl.setUUID(sys.getQuid());
-
-    setStereotype(sys, cl);
-
-    return cl;
-  }
-
-  /** Create classifier for data type not directly contained in the model
-   * such as attribute types like "int".
-   */
-  public MClassifier createBasicType(String name) {
-    MClassifier clazz = new MDataTypeImpl();
-    clazz.setName(name);
-    clazz.setStereotype(getStereotype("utility"));
-
-    return clazz;
-  }
-
-  /** Look for classifier in model or create a new data type.
-   */
-  protected MClassifier getClassifierFor(String type) {
-    MClassifier clazz = (MClassifier)gen.searchElement(type, MClassifier.class);
-
-    if(clazz == null) {
-      clazz = createBasicType(type);
-      gen.getModel().addOwnedElement(clazz);
-    }
-
-    return clazz;
-  }
-
-  public MAttribute createAttribute(ClassAttribute attr) {
-    MAttribute a = new MAttributeImpl();
-    a.setName(attr.getNameParameter());
-    a.setUUID(attr.getQuid());
-
-    setVisibility(attr, a);
-    setStereotype(attr, a);
-
-    String type  = (attr.getType() == null)? "int" : attr.getType();
-
-    a.setType(getClassifierFor(type));
-
-    String init = attr.getInitialValue();
-
-    if(init != null)
-      a.setInitialValue(new MExpression("Java", init));
-
-    return a;
-  }
-
-  public MOperation createOperation(Operation op) {
-    MOperation m = new MOperationImpl();
-
-    m.setName(op.getNameParameter());
-    m.setUUID(op.getQuid());
-
-    setVisibility(op, m);
-    setStereotype(op, m);
-    setConcurrency(op, m);
-
-    String type = (op.getResult() == null)? "void" : op.getResult();
-
-    MParameter ret = new MParameterImpl();
-    ret.setName("return");
-    ret.setType(getClassifierFor(type));
-    ret.setKind(MParameterDirectionKind.RETURN);
-    m.addParameter(ret);
-
-    ArrayList params = new ArrayList();
-
-    if(op.getParameters() != null) {
-      for(Iterator i = op.getParameters().getElements().iterator(); i.hasNext();) {
-	cb.petal.Parameter p = (cb.petal.Parameter)i.next();
-
-	String name = p.getNameParameter();
-	type = p.getType();
-
-	// Typical erroneous "Address a", needs to be split
-
-	if(type == null) {
-	  int index = name.indexOf(' ');
-
-	  if(index > 0) {
-	    type = name.substring(0, index);
-	    name = name.substring(index + 1).trim();
-	  } else
-	    type = "int";
+	protected XMIFactory() {
 	}
 
-	MParameter param = new MParameterImpl();
-	param.setName(name);
-	param.setType(getClassifierFor(type));
-	param.setKind(MParameterDirectionKind.IN);
-	m.addParameter(param);
-      }
-    }
+	protected XMIFactory(PetalFile tree, XMIGenerator gen) {
+		this.tree = tree;
+		this.gen = gen;
+	}
 
-    return m;
-  }
+	public MModel createModel() {
+		MModel model = new MModelImpl();
+		model.setName(tree.getModelName());
+		return model;
+	}
 
-  private void setupRelationship(MDependency g, Relationship rel) {
-    MClassifier client   = gen.getContainingClassifier(rel);
-    MClassifier supplier = gen.getClassifier(rel.getQuidu());
+	private HashMap stereo_types = new HashMap(); // Map <String, stereotype>
 
-    g.addSupplier(supplier);
-    g.addClient(client);
-    g.setUUID(rel.getQuid());
+	protected final MStereotype getStereotype(String stereo) {
+		MStereotype s = (MStereotype) stereo_types.get(stereo);
 
-    setStereotype(rel, g);
+		if (s == null) {
+			s = new MStereotypeImpl();
+			s.setName(stereo);
+			gen.getPackage().addOwnedElement(s);
+			stereo_types.put(stereo, s);
+		}
 
-    if(rel.getLabel() != null)
-      g.setName(rel.getLabel());
-  }
+		return s;
+	}
 
-  public MGeneralization createGeneralization(InheritanceRelationship rel) {
-    MGeneralization g        = new MGeneralizationImpl();
-    MClassifier     client   = gen.getContainingClassifier(rel);
-    MClassifier     supplier = gen.getClassifier(rel.getQuidu());
+	public MPackage createPackage(ClassCategory cat) {
+		MPackage pack = new MPackageImpl();
+		pack.setName(cat.getNameParameter());
+		pack.setUUID(cat.getQuid());
 
-    g.setParent(supplier);
-    g.setChild(client);
-    g.setUUID(rel.getQuid());
+		return pack;
+	}
 
-    return g;
-  }
+	public MPackage createPackage(SubSystem sys) {
+		MPackage pack = new MSubsystemImpl();
+		pack.setName(sys.getNameParameter());
+		pack.setUUID(sys.getQuid());
 
-  public MAbstraction createRealization(RealizeRelationship rel) {
-    MAbstraction g  = new MAbstractionImpl();
-    setupRelationship(g, rel);
-    g.setStereotype(getStereotype("realize"));
-    return g;
-  }
+		return pack;
+	}
 
-  public MUsage createUsage(UsesRelationship rel) {
-    MUsage g  = new MUsageImpl();
-    setupRelationship(g, rel);
-    return g;
-  }
+	protected void setStereotype(StereoTyped s, MModelElement e) {
+		String stereo = s.getStereotype();
 
-  public MDependency createDependency(DependencyRelationship rel) {
-    MDependency g = new MDependencyImpl();
-    setupRelationship(g, rel);
-    return g;
-  }
+		if (stereo != null)
+			e.setStereotype(getStereotype(stereo));
+	}
 
-  private static String map(String number) {
-    if("n".equals(number.toLowerCase()) || "*".equals(number))
-      return "" + MMultiplicity.N;
-    else
-      return number;
-  }
+	protected void setVisibility(AccessQualified a, MModelElement e) {
+		String acc = a.getExportControl();
 
-  protected MMultiplicity getMultiplicityFor(Role role) {
-    int from = 1, to = 1;
+		if (acc == null)
+			acc = "public";
+		else
+			acc = acc.toLowerCase();
 
-    if(role.getClientCardinality() != null) {
-      String          card = role.getClientCardinality().getStringValue();
-      StringTokenizer tok  = new StringTokenizer(card, ".,");
+		MVisibilityKind kind = MVisibilityKind.forName(acc);
 
-      try {
-	from = Integer.parseInt(map(tok.nextToken()));
+		if (kind == null)
+			throw new RuntimeException("Can't map access qualifier: " + acc);
 
-	if(tok.hasMoreTokens())
-	  to = Integer.parseInt(map(tok.nextToken()));
-	else
-	  to = from;
-      } catch(Exception e) {
-	throw new RuntimeException("Invalid cardinality: " + card);
-      }
-    } else {
-      Role other = role.getOtherRole();
+		e.setVisibility(kind);
+	}
 
-      if(other.isAggregate()) {
-	from = 0;
-	to   = MMultiplicity.N;
-      }
-    }
+	protected void setConcurrency(Operation op, MOperation o) {
+		String acc = op.getConcurrency();
 
-    if(from ==  MMultiplicity.N)
-      from = 0;
-    
-    return new MMultiplicity(from, to);
-  }
+		if (acc == null)
+			acc = "sequential";
+		else
+			acc = acc.toLowerCase();
 
-  protected MAssociationEnd getRoleFor(Role role) {
-    MClassifier clazz = gen.getClassifier(role.getQuidu());
-    MAssociationEnd ae = new MAssociationEndImpl();
-    ae.setType(clazz);
-    ae.setNavigable(role.isNavigable());
-    ae.setMultiplicity(getMultiplicityFor(role));
+		MCallConcurrencyKind kind = MCallConcurrencyKind.forName(acc);
 
-    if(!role.getRoleName().startsWith("$")) // Anonymous name
-      ae.setName(role.getRoleName());
+		if (kind == null)
+			throw new RuntimeException("Can't map concurrency: " + acc);
 
-    if(role.isAggregation())
-      ae.setAggregation(MAggregationKind.AGGREGATE);
-    else if(role.isComposition())
-      ae.setAggregation(MAggregationKind.COMPOSITE);
-    else
-      ae.setAggregation(MAggregationKind.NONE);
+		o.setConcurrency(kind);
+	}
 
-    String c = role.getConstraints();
+	/**
+	 * @return MInterface, MClass, MAssociationClass or MActor
+	 */
+	public MClassifier createClass(cb.petal.Class clazz) {
+		MClassifier cl;
 
-    if(c != null) {
-      MConstraint constr = new MConstraintImpl();
-      MBooleanExpression body = new MBooleanExpression("Java", c);
-      constr.setBody(body);
-      ae.addConstraint(constr);
-      gen.getPackage().addOwnedElement(constr);
-    }
+		/* ArgoUML/Poseidon can't display/use Actors/AssociationClass correctly
+		 */
+		if (clazz.isInterface())
+			cl = new MInterfaceImpl();
+		else if (clazz.isActor())
+			cl = new MActorImpl();
+		else if (clazz.isAssociationClass())
+			cl = new MAssociationClassImpl();
+		else
+			cl = new MClassImpl();
 
-    return ae;
-  }
+		cl.setName(clazz.getNameParameter());
+		cl.setUUID(clazz.getQuid());
 
-  protected void setupAssociation(Association assoc, MAssociation a) {
-    Role first  = assoc.getFirstRole();
-    Role second = assoc.getSecondRole();
+		setVisibility(clazz, cl);
 
-    a.addConnection(getRoleFor(first));
-    a.addConnection(getRoleFor(second));
-  }
+		if (clazz instanceof ClassUtility)
+			cl.setStereotype(getStereotype("utility"));
+		else if (!(clazz.isInterface() || clazz.isActor()))
+			setStereotype(clazz, cl);
 
-  public MAssociation createAssociation(Association assoc) {
-    MAssociation a = new MAssociationImpl();
+		return cl;
+	}
 
-    if(!assoc.getNameParameter().startsWith("$")) // Anonymous name
-      a.setName(assoc.getNameParameter());
+	public MClassifier createUseCase(UseCase caze) {
+		MClassifier cl = new MUseCaseImpl();
 
-    setupAssociation(assoc, a);
-    return a;
-  }
+		cl.setName(caze.getNameParameter());
+		cl.setUUID(caze.getQuid());
 
-  /*************************** Utility method *******************************/
+		setStereotype(caze, cl);
 
-  /** Convert Rose identifier to normal one.
-   */
-  protected String makeName(String name) {
-    char[] chars = name.toCharArray();
-    StringBuffer buf = new StringBuffer();
+		return cl;
+	}
 
-    for(int i=0; i < chars.length; i++) {
-      char ch = chars[i];
+	public MClassifier createComponent(Module module) {
+		MClassifier cl = new MComponentImpl();
 
-      if((ch == ':') && (chars[i + 1] == ':')) {
-	buf.append('.');
-	i++;
-      } else {
-	if(Character.isLetterOrDigit(ch))
-	  buf.append(ch);
-	else
-	  buf.append('_');
-      }
-    }
+		cl.setName(module.getNameParameter());
+		cl.setUUID(module.getQuid());
 
-    return buf.toString();
-  }
+		setStereotype(module, cl);
 
-  /** Convert fully qualified rose name (with "foo::bar")
-   * @return tuple (class name, package name)
-   */
-  protected String[] makeNames(String qual) {
-    String name, pack;
-    int    index = qual.indexOf("::");
+		return cl;
+	}
 
-    if(index < 0) { // weird ...
-      pack = "";
-      name = makeName(qual);
-    } else {
-      int index2 = qual.lastIndexOf("::");
-      
-      if(index == index2) 
-	pack = "";
-      else
-	pack = makeName(qual.substring(index + 2, index2));
+	public MClassifier createSubSystem(SubSystem sys) {
+		MClassifier cl = new MSubsystemImpl();
 
-      name = qual.substring(index2 + 2);
-    }
+		cl.setName(sys.getNameParameter());
+		cl.setUUID(sys.getQuid());
 
-    return new String[] { name, pack };
-  }
+		setStereotype(sys, cl);
+
+		return cl;
+	}
+
+	/**
+	 * Create classifier for data type not directly contained in the model such as attribute types like "int".
+	 */
+	public MClassifier createBasicType(String name) {
+		MClassifier clazz = new MDataTypeImpl();
+		clazz.setName(name);
+		clazz.setStereotype(getStereotype("utility"));
+
+		return clazz;
+	}
+
+	/**
+	 * Look for classifier in model or create a new data type.
+	 */
+	protected MClassifier getClassifierFor(String type) {
+		MClassifier clazz = (MClassifier) gen.searchElement(type, MClassifier.class);
+
+		if (clazz == null) {
+			clazz = createBasicType(type);
+			gen.getModel().addOwnedElement(clazz);
+		}
+
+		return clazz;
+	}
+
+	public MAttribute createAttribute(ClassAttribute attr) {
+		MAttribute a = new MAttributeImpl();
+		a.setName(attr.getNameParameter());
+		a.setUUID(attr.getQuid());
+
+		setVisibility(attr, a);
+		setStereotype(attr, a);
+
+		String type = (attr.getType() == null) ? "int" : attr.getType();
+
+		a.setType(getClassifierFor(type));
+
+		String init = attr.getInitialValue();
+
+		if (init != null)
+			a.setInitialValue(new MExpression("Java", init));
+
+		return a;
+	}
+
+	public MOperation createOperation(Operation op) {
+		MOperation m = new MOperationImpl();
+
+		m.setName(op.getNameParameter());
+		m.setUUID(op.getQuid());
+
+		setVisibility(op, m);
+		setStereotype(op, m);
+		setConcurrency(op, m);
+
+		String type = (op.getResult() == null) ? "void" : op.getResult();
+
+		MParameter ret = new MParameterImpl();
+		ret.setName("return");
+		ret.setType(getClassifierFor(type));
+		ret.setKind(MParameterDirectionKind.RETURN);
+		m.addParameter(ret);
+
+		ArrayList params = new ArrayList();
+
+		if (op.getParameters() != null) {
+			for (Iterator i = op.getParameters().getElements().iterator(); i.hasNext();) {
+				cb.petal.Parameter p = (cb.petal.Parameter) i.next();
+
+				String name = p.getNameParameter();
+				type = p.getType();
+
+				// Typical erroneous "Address a", needs to be split
+
+				if (type == null) {
+					int index = name.indexOf(' ');
+
+					if (index > 0) {
+						type = name.substring(0, index);
+						name = name.substring(index + 1).trim();
+					} else
+						type = "int";
+				}
+
+				MParameter param = new MParameterImpl();
+				param.setName(name);
+				param.setType(getClassifierFor(type));
+				param.setKind(MParameterDirectionKind.IN);
+				m.addParameter(param);
+			}
+		}
+
+		return m;
+	}
+
+	private void setupRelationship(MDependency g, Relationship rel) {
+		MClassifier client = gen.getContainingClassifier(rel);
+		MClassifier supplier = gen.getClassifier(rel.getQuidu());
+
+		g.addSupplier(supplier);
+		g.addClient(client);
+		g.setUUID(rel.getQuid());
+
+		setStereotype(rel, g);
+
+		if (rel.getLabel() != null)
+			g.setName(rel.getLabel());
+	}
+
+	public MGeneralization createGeneralization(InheritanceRelationship rel) {
+		MGeneralization g = new MGeneralizationImpl();
+		MClassifier client = gen.getContainingClassifier(rel);
+		MClassifier supplier = gen.getClassifier(rel.getQuidu());
+
+		g.setParent(supplier);
+		g.setChild(client);
+		g.setUUID(rel.getQuid());
+
+		return g;
+	}
+
+	public MAbstraction createRealization(RealizeRelationship rel) {
+		MAbstraction g = new MAbstractionImpl();
+		setupRelationship(g, rel);
+		g.setStereotype(getStereotype("realize"));
+		return g;
+	}
+
+	public MUsage createUsage(UsesRelationship rel) {
+		MUsage g = new MUsageImpl();
+		setupRelationship(g, rel);
+		return g;
+	}
+
+	public MDependency createDependency(DependencyRelationship rel) {
+		MDependency g = new MDependencyImpl();
+		setupRelationship(g, rel);
+		return g;
+	}
+
+	private static String map(String number) {
+		if ("n".equals(number.toLowerCase()) || "*".equals(number))
+			return "" + MMultiplicity.N;
+		else
+			return number;
+	}
+
+	protected MMultiplicity getMultiplicityFor(Role role) {
+		int from = 1, to = 1;
+
+		if (role.getClientCardinality() != null) {
+			String card = role.getClientCardinality().getStringValue();
+			StringTokenizer tok = new StringTokenizer(card, ".,");
+
+			try {
+				from = Integer.parseInt(map(tok.nextToken()));
+
+				if (tok.hasMoreTokens())
+					to = Integer.parseInt(map(tok.nextToken()));
+				else
+					to = from;
+			} catch (Exception e) {
+				throw new RuntimeException("Invalid cardinality: " + card);
+			}
+		} else {
+			Role other = role.getOtherRole();
+
+			if (other.isAggregate()) {
+				from = 0;
+				to = MMultiplicity.N;
+			}
+		}
+
+		if (from == MMultiplicity.N)
+			from = 0;
+
+		return new MMultiplicity(from, to);
+	}
+
+	protected MAssociationEnd getRoleFor(Role role) {
+		MClassifier clazz = gen.getClassifier(role.getQuidu());
+		MAssociationEnd ae = new MAssociationEndImpl();
+		ae.setType(clazz);
+		ae.setNavigable(role.isNavigable());
+		ae.setMultiplicity(getMultiplicityFor(role));
+
+		if (!role.getRoleName().startsWith("$")) // Anonymous name
+			ae.setName(role.getRoleName());
+
+		if (role.isAggregation())
+			ae.setAggregation(MAggregationKind.AGGREGATE);
+		else if (role.isComposition())
+			ae.setAggregation(MAggregationKind.COMPOSITE);
+		else
+			ae.setAggregation(MAggregationKind.NONE);
+
+		String c = role.getConstraints();
+
+		if (c != null) {
+			MConstraint constr = new MConstraintImpl();
+			MBooleanExpression body = new MBooleanExpression("Java", c);
+			constr.setBody(body);
+			ae.addConstraint(constr);
+			gen.getPackage().addOwnedElement(constr);
+		}
+
+		return ae;
+	}
+
+	protected void setupAssociation(Association assoc, MAssociation a) {
+		Role first = assoc.getFirstRole();
+		Role second = assoc.getSecondRole();
+
+		a.addConnection(getRoleFor(first));
+		a.addConnection(getRoleFor(second));
+	}
+
+	public MAssociation createAssociation(Association assoc) {
+		MAssociation a = new MAssociationImpl();
+
+		if (!assoc.getNameParameter().startsWith("$")) // Anonymous name
+			a.setName(assoc.getNameParameter());
+
+		setupAssociation(assoc, a);
+		return a;
+	}
+
+	/*************************** Utility method *******************************/
+
+	/**
+	 * Convert Rose identifier to normal one.
+	 */
+	protected String makeName(String name) {
+		char[] chars = name.toCharArray();
+		StringBuffer buf = new StringBuffer();
+
+		for (int i = 0; i < chars.length; i++) {
+			char ch = chars[i];
+
+			if ((ch == ':') && (chars[i + 1] == ':')) {
+				buf.append('.');
+				i++;
+			} else {
+				if (Character.isLetterOrDigit(ch))
+					buf.append(ch);
+				else
+					buf.append('_');
+			}
+		}
+
+		return buf.toString();
+	}
+
+	/**
+	 * Convert fully qualified rose name (with "foo::bar")
+	 * 
+	 * @return tuple (class name, package name)
+	 */
+	protected String[] makeNames(String qual) {
+		String name, pack;
+		int index = qual.indexOf("::");
+
+		if (index < 0) { // weird ...
+			pack = "";
+			name = makeName(qual);
+		} else {
+			int index2 = qual.lastIndexOf("::");
+
+			if (index == index2)
+				pack = "";
+			else
+				pack = makeName(qual.substring(index + 2, index2));
+
+			name = qual.substring(index2 + 2);
+		}
+
+		return new String[] { name, pack };
+	}
 }

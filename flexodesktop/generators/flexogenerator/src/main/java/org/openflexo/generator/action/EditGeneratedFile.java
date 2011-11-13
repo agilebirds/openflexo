@@ -30,69 +30,57 @@ import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.CGFile.FileContentEditor;
 import org.openflexo.generator.file.AbstractCGFile;
 
+public class EditGeneratedFile extends GCAction<EditGeneratedFile, CGFile> {
 
-public class EditGeneratedFile extends GCAction<EditGeneratedFile,CGFile>
-{
+	private static final Logger logger = Logger.getLogger(EditGeneratedFile.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(EditGeneratedFile.class.getPackage().getName());
+	public static FlexoActionType<EditGeneratedFile, CGFile, CGObject> actionType = new FlexoActionType<EditGeneratedFile, CGFile, CGObject>(
+			"edit_file", EDITION_MENU, FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-    public static FlexoActionType<EditGeneratedFile,CGFile,CGObject> actionType 
-    = new FlexoActionType<EditGeneratedFile,CGFile,CGObject> (
-    		"edit_file",EDITION_MENU,FlexoActionType.defaultGroup,FlexoActionType.NORMAL_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public EditGeneratedFile makeNewAction(CGFile focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return new EditGeneratedFile(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public EditGeneratedFile makeNewAction(CGFile focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) 
-        {
-            return new EditGeneratedFile(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(CGFile object, Vector<CGObject> globalSelection) {
+			return (object instanceof AbstractCGFile);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(CGFile object, Vector<CGObject> globalSelection) 
-        {
-            return (object instanceof AbstractCGFile);
-        }
+		@Override
+		protected boolean isEnabledForSelection(CGFile object, Vector<CGObject> globalSelection) {
+			return ((object != null) && (object.hasVersionOnDisk()) && (!object.isEdited()));
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(CGFile object, Vector<CGObject> globalSelection) 
-        {
-            return ((object != null) && (object.hasVersionOnDisk()) && (!object.isEdited()));
-        }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (EditGeneratedFile.actionType, CGFile.class);
-    }
-    
+	};
 
-    private FileContentEditor fileContentEditor;
-    
-    EditGeneratedFile (CGFile focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	static {
+		FlexoModelObject.addActionForClass(EditGeneratedFile.actionType, CGFile.class);
+	}
 
-    @Override
-	protected void doAction(Object context)
-    {
-    	logger.info ("Edit file "+getFocusedObject().getFileName());
-    	if ((getFocusedObject() != null) && (fileContentEditor != null)) {
-    		getFocusedObject().edit(fileContentEditor);
-     	}
-     }
+	private FileContentEditor fileContentEditor;
 
-	public FileContentEditor getFileContentEditor() 
-	{
+	EditGeneratedFile(CGFile focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) {
+		logger.info("Edit file " + getFocusedObject().getFileName());
+		if ((getFocusedObject() != null) && (fileContentEditor != null)) {
+			getFocusedObject().edit(fileContentEditor);
+		}
+	}
+
+	public FileContentEditor getFileContentEditor() {
 		return fileContentEditor;
 	}
 
-	public void setFileContentEditor (FileContentEditor fileContentEditor) 
-	{
+	public void setFileContentEditor(FileContentEditor fileContentEditor) {
 		this.fileContentEditor = fileContentEditor;
 	}
 
-	
 }

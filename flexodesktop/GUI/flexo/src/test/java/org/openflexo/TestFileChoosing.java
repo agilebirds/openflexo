@@ -19,7 +19,6 @@
  */
 package org.openflexo;
 
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FileDialog;
@@ -48,8 +47,7 @@ public class TestFileChoosing {
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 
 		final JFrame dialog = new JFrame();
 
@@ -81,8 +79,8 @@ public class TestFileChoosing {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				FileDialog fileDialog = new FileDialog(dialog);
-				//fileDialog.setFilenameFilter(filter)
-				//fileDialog.set
+				// fileDialog.setFilenameFilter(filter)
+				// fileDialog.set
 				try {
 					fileDialog.setDirectory(AdvancedPrefs.getLastVisitedDirectory().getCanonicalPath());
 				} catch (Throwable t) {
@@ -92,7 +90,6 @@ public class TestFileChoosing {
 			}
 		});
 
-
 		JPanel controlPanel = new JPanel(new FlowLayout());
 		controlPanel.add(closeButton);
 		controlPanel.add(openButton1);
@@ -100,22 +97,21 @@ public class TestFileChoosing {
 
 		JPanel panel = new JPanel(new BorderLayout());
 
-		panel.add(controlPanel,BorderLayout.CENTER);
+		panel.add(controlPanel, BorderLayout.CENTER);
 
-		dialog.setPreferredSize(new Dimension(1000,800));
+		dialog.setPreferredSize(new Dimension(1000, 800));
 		dialog.getContentPane().add(panel);
 		dialog.validate();
 		dialog.pack();
 		dialog.setVisible(true);
 		dialog.getRootPane().putClientProperty(WINDOW_MODIFIED, Boolean.TRUE);
 		dialog.setVisible(true);
-		//Editor.main(null);
+		// Editor.main(null);
 	}
 
 	final static String WINDOW_MODIFIED = "windowModified";
 
-	public static class Editor extends JFrame
-	implements DocumentListener, ActionListener {
+	public static class Editor extends JFrame implements DocumentListener, ActionListener {
 
 		final static String WINDOW_MODIFIED = "windowModified";
 
@@ -132,13 +128,12 @@ public class TestFileChoosing {
 			jmb = new JMenuBar();
 			file = new JMenu("File");
 			save = new JMenuItem("Save");
-			save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
-					java.awt.Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+			save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, java.awt.Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 			save.addActionListener(this);
 			file.add(save);
 			jmb.add(file);
 			setJMenuBar(jmb);
-			setSize(400,600);
+			setSize(400, 600);
 			setVisible(true);
 		}
 
@@ -155,11 +150,19 @@ public class TestFileChoosing {
 
 		// DocumentListener implementations
 		@Override
-		public void changedUpdate(DocumentEvent e) { doChange(); }
+		public void changedUpdate(DocumentEvent e) {
+			doChange();
+		}
+
 		@Override
-		public void insertUpdate(DocumentEvent e)  { doChange(); }
+		public void insertUpdate(DocumentEvent e) {
+			doChange();
+		}
+
 		@Override
-		public void removeUpdate(DocumentEvent e)  { doChange(); }
+		public void removeUpdate(DocumentEvent e) {
+			doChange();
+		}
 
 		public static void main(String[] args) {
 			new Editor("test");

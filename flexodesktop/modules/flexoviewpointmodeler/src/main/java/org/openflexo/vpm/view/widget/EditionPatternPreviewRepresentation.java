@@ -36,25 +36,24 @@ import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole.PatternRoleType;
 import org.openflexo.foundation.viewpoint.ShapePatternRole;
 
-
-public class EditionPatternPreviewRepresentation extends DefaultDrawing<EditionPattern> implements GraphicalFlexoObserver, EditionPatternPreviewConstants {
+public class EditionPatternPreviewRepresentation extends DefaultDrawing<EditionPattern> implements GraphicalFlexoObserver,
+		EditionPatternPreviewConstants {
 
 	private static final Logger logger = Logger.getLogger(EditionPatternPreviewRepresentation.class.getPackage().getName());
-	
+
 	private EditionPatternPreviewShemaGR graphicalRepresentation;
-	
+
 	private Boolean ignoreNotifications = true;
 
-	private Hashtable<PatternRole,EditionPatternPreviewShapeGR> shapesGR;
-	private Hashtable<PatternRole,EditionPatternPreviewConnectorGR> connectorsGR;
+	private Hashtable<PatternRole, EditionPatternPreviewShapeGR> shapesGR;
+	private Hashtable<PatternRole, EditionPatternPreviewConnectorGR> connectorsGR;
 
-	public EditionPatternPreviewRepresentation(EditionPattern anEditionPattern)
-	{
-		super(anEditionPattern);	
-		
+	public EditionPatternPreviewRepresentation(EditionPattern anEditionPattern) {
+		super(anEditionPattern);
+
 		shapesGR = new Hashtable<PatternRole, EditionPatternPreviewShapeGR>();
 		connectorsGR = new Hashtable<PatternRole, EditionPatternPreviewConnectorGR>();
-		
+
 		fromArtifacts = new Hashtable<PatternRole, ConnectorFromArtifact>();
 		toArtifacts = new Hashtable<PatternRole, ConnectorToArtifact>();
 
@@ -62,41 +61,38 @@ public class EditionPatternPreviewRepresentation extends DefaultDrawing<EditionP
 		updateGraphicalObjectsHierarchy();
 		ignoreNotifications = false;
 	}
-	
+
 	@Override
-	public void delete()
-	{
-		if (graphicalRepresentation != null) graphicalRepresentation.delete();
-		if (getEditionPattern() != null) getEditionPattern().deleteObserver(this);
+	public void delete() {
+		if (graphicalRepresentation != null)
+			graphicalRepresentation.delete();
+		if (getEditionPattern() != null)
+			getEditionPattern().deleteObserver(this);
 		for (PatternRole role : getEditionPattern().getPatternRoles()) {
 			role.deleteObserver(this);
 		}
 	}
-	
+
 	@Override
-	protected void beginUpdateObjectHierarchy()
-	{
+	protected void beginUpdateObjectHierarchy() {
 		ignoreNotifications = true;
 		super.beginUpdateObjectHierarchy();
 	}
-	
+
 	@Override
-	protected void endUpdateObjectHierarchy()
-	{
+	protected void endUpdateObjectHierarchy() {
 		super.endUpdateObjectHierarchy();
 		ignoreNotifications = false;
 	}
-	
-	protected boolean ignoreNotifications()
-	{
-		if (ignoreNotifications == null) return true;
+
+	protected boolean ignoreNotifications() {
+		if (ignoreNotifications == null)
+			return true;
 		return ignoreNotifications;
 	}
-	
-	
+
 	@Override
-	protected void buildGraphicalObjectsHierarchy()
-	{
+	protected void buildGraphicalObjectsHierarchy() {
 		for (PatternRole role : getEditionPattern().getPatternRoles()) {
 			if (role instanceof ShapePatternRole) {
 				addDrawable(role, getEditionPattern());
@@ -104,21 +100,21 @@ public class EditionPatternPreviewRepresentation extends DefaultDrawing<EditionP
 		}
 		for (PatternRole role : getEditionPattern().getPatternRoles()) {
 			if (role instanceof ConnectorPatternRole) {
-				if (((ConnectorPatternRole)role).getStartShape() == null) addDrawable(getFromArtifact((ConnectorPatternRole)role), getEditionPattern());
-				if (((ConnectorPatternRole)role).getEndShape() == null) addDrawable(getToArtifact((ConnectorPatternRole)role), getEditionPattern());
+				if (((ConnectorPatternRole) role).getStartShape() == null)
+					addDrawable(getFromArtifact((ConnectorPatternRole) role), getEditionPattern());
+				if (((ConnectorPatternRole) role).getEndShape() == null)
+					addDrawable(getToArtifact((ConnectorPatternRole) role), getEditionPattern());
 				addDrawable(role, getEditionPattern());
 			}
 		}
 	}
-	
-	public EditionPattern getEditionPattern()
-	{
+
+	public EditionPattern getEditionPattern() {
 		return getModel();
 	}
 
 	@Override
-	public EditionPatternPreviewShemaGR getDrawingGraphicalRepresentation()
-	{
+	public EditionPatternPreviewShemaGR getDrawingGraphicalRepresentation() {
 		if (graphicalRepresentation == null) {
 			graphicalRepresentation = new EditionPatternPreviewShemaGR(this);
 		}
@@ -127,98 +123,89 @@ public class EditionPatternPreviewRepresentation extends DefaultDrawing<EditionP
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable)
-	{
+	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable) {
 		if (aDrawable instanceof PatternRole) {
-			PatternRole patternRole = (PatternRole)aDrawable;
+			PatternRole patternRole = (PatternRole) aDrawable;
 			if (patternRole instanceof ShapePatternRole) {
 				EditionPatternPreviewShapeGR returned = shapesGR.get(patternRole);
 				if (returned == null) {
-					returned = buildGraphicalRepresentationForShape((ShapePatternRole)patternRole);
+					returned = buildGraphicalRepresentationForShape((ShapePatternRole) patternRole);
 					shapesGR.put(patternRole, returned);
-					return (GraphicalRepresentation<O>)returned;
+					return (GraphicalRepresentation<O>) returned;
 				}
-				return (GraphicalRepresentation<O>)returned;
-			}
-			else if (patternRole instanceof ConnectorPatternRole) {
+				return (GraphicalRepresentation<O>) returned;
+			} else if (patternRole instanceof ConnectorPatternRole) {
 				EditionPatternPreviewConnectorGR returned = connectorsGR.get(patternRole);
 				if (returned == null) {
-					returned = buildGraphicalRepresentation((ConnectorPatternRole)patternRole);
+					returned = buildGraphicalRepresentation((ConnectorPatternRole) patternRole);
 					connectorsGR.put(patternRole, returned);
-					return (GraphicalRepresentation<O>)returned;
+					return (GraphicalRepresentation<O>) returned;
 				}
-				return (GraphicalRepresentation<O>)returned;
+				return (GraphicalRepresentation<O>) returned;
 			}
-		}
-		else if (aDrawable instanceof ConnectorFromArtifact) {
-			ConnectorFromArtifact connector = (ConnectorFromArtifact)aDrawable;
+		} else if (aDrawable instanceof ConnectorFromArtifact) {
+			ConnectorFromArtifact connector = (ConnectorFromArtifact) aDrawable;
+			return (GraphicalRepresentation<O>) connector.getGraphicalRepresentation();
+		} else if (aDrawable instanceof ConnectorToArtifact) {
+			ConnectorToArtifact connector = (ConnectorToArtifact) aDrawable;
 			return (GraphicalRepresentation<O>) connector.getGraphicalRepresentation();
 		}
-		else if (aDrawable instanceof ConnectorToArtifact) {
-			ConnectorToArtifact connector = (ConnectorToArtifact)aDrawable;
-			return (GraphicalRepresentation<O>) connector.getGraphicalRepresentation();
-		}
-		logger.warning("Cannot build GraphicalRepresentation for "+aDrawable);
+		logger.warning("Cannot build GraphicalRepresentation for " + aDrawable);
 		return null;
 	}
 
-	private EditionPatternPreviewShapeGR buildGraphicalRepresentationForShape(ShapePatternRole patternRole)
-	{
+	private EditionPatternPreviewShapeGR buildGraphicalRepresentationForShape(ShapePatternRole patternRole) {
 		patternRole.addObserver(this);
 		if (patternRole.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
-			EditionPatternPreviewShapeGR graphicalRepresentation = new EditionPatternPreviewShapeGR(patternRole,this);
-			graphicalRepresentation.setsWith(
-					(ShapeGraphicalRepresentation)patternRole.getGraphicalRepresentation(),
+			EditionPatternPreviewShapeGR graphicalRepresentation = new EditionPatternPreviewShapeGR(patternRole, this);
+			graphicalRepresentation.setsWith((ShapeGraphicalRepresentation) patternRole.getGraphicalRepresentation(),
 					GraphicalRepresentation.Parameters.text);
 			patternRole._setGraphicalRepresentationNoNotification(graphicalRepresentation);
 			return graphicalRepresentation;
 		}
-		EditionPatternPreviewShapeGR graphicalRepresentation = new EditionPatternPreviewShapeGR(patternRole,this);
+		EditionPatternPreviewShapeGR graphicalRepresentation = new EditionPatternPreviewShapeGR(patternRole, this);
 		patternRole._setGraphicalRepresentationNoNotification(graphicalRepresentation);
 		return graphicalRepresentation;
 	}
 
-	private EditionPatternPreviewConnectorGR buildGraphicalRepresentation(ConnectorPatternRole patternRole)
-	{
+	private EditionPatternPreviewConnectorGR buildGraphicalRepresentation(ConnectorPatternRole patternRole) {
 		patternRole.addObserver(this);
 		if (patternRole.getGraphicalRepresentation() instanceof ConnectorGraphicalRepresentation) {
-			EditionPatternPreviewConnectorGR graphicalRepresentation = new EditionPatternPreviewConnectorGR(patternRole,this);
-			graphicalRepresentation.setsWith(
-					(ConnectorGraphicalRepresentation)patternRole.getGraphicalRepresentation(),
+			EditionPatternPreviewConnectorGR graphicalRepresentation = new EditionPatternPreviewConnectorGR(patternRole, this);
+			graphicalRepresentation.setsWith((ConnectorGraphicalRepresentation) patternRole.getGraphicalRepresentation(),
 					GraphicalRepresentation.Parameters.text);
 			patternRole._setGraphicalRepresentationNoNotification(graphicalRepresentation);
 			return graphicalRepresentation;
 		}
-		EditionPatternPreviewConnectorGR graphicalRepresentation = new EditionPatternPreviewConnectorGR(patternRole,this);
+		EditionPatternPreviewConnectorGR graphicalRepresentation = new EditionPatternPreviewConnectorGR(patternRole, this);
 		patternRole._setGraphicalRepresentationNoNotification(graphicalRepresentation);
 		return graphicalRepresentation;
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification) 
-	{
-		logger.info("Receiving notification "+dataModification);
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		logger.info("Receiving notification " + dataModification);
 		if (dataModification instanceof GraphicalRepresentationChanged) {
-			PatternRole patternRole = ((GraphicalRepresentationChanged)dataModification).getPatternRole();
+			PatternRole patternRole = ((GraphicalRepresentationChanged) dataModification).getPatternRole();
 			if (patternRole.getType() == PatternRoleType.Shape) {
 				EditionPatternPreviewShapeGR returned = shapesGR.get(patternRole);
-				if (returned != null) returned.delete();
+				if (returned != null)
+					returned.delete();
 				shapesGR.remove(patternRole);
-			}
-			else if (patternRole.getType() == PatternRoleType.Connector) {
+			} else if (patternRole.getType() == PatternRoleType.Connector) {
 				EditionPatternPreviewConnectorGR returned = connectorsGR.get(patternRole);
-				if (returned != null) returned.delete();
+				if (returned != null)
+					returned.delete();
 				connectorsGR.remove(patternRole);
 			}
-			//invalidateGraphicalObjectsHierarchy(getEditionPattern());
+			// invalidateGraphicalObjectsHierarchy(getEditionPattern());
 			updateDrawable(patternRole);
-			//updateGraphicalObjectsHierarchy();
+			// updateGraphicalObjectsHierarchy();
 			getDrawingGraphicalRepresentation().notifyDrawingNeedsToBeRedrawn();
 		}
 	}
-	
-	protected ConnectorFromArtifact getFromArtifact(ConnectorPatternRole connector)
-	{
+
+	protected ConnectorFromArtifact getFromArtifact(ConnectorPatternRole connector) {
 		ConnectorFromArtifact returned = fromArtifacts.get(connector);
 		if (returned == null) {
 			returned = new ConnectorFromArtifact(connector);
@@ -226,9 +213,8 @@ public class EditionPatternPreviewRepresentation extends DefaultDrawing<EditionP
 		}
 		return returned;
 	}
-	
-	protected ConnectorToArtifact getToArtifact(ConnectorPatternRole connector)
-	{
+
+	protected ConnectorToArtifact getToArtifact(ConnectorPatternRole connector) {
 		ConnectorToArtifact returned = toArtifacts.get(connector);
 		if (returned == null) {
 			returned = new ConnectorToArtifact(connector);
@@ -236,76 +222,70 @@ public class EditionPatternPreviewRepresentation extends DefaultDrawing<EditionP
 		}
 		return returned;
 	}
-	
-	private Hashtable<PatternRole,ConnectorFromArtifact> fromArtifacts;
-	private Hashtable<PatternRole,ConnectorToArtifact> toArtifacts;
-	
+
+	private Hashtable<PatternRole, ConnectorFromArtifact> fromArtifacts;
+	private Hashtable<PatternRole, ConnectorToArtifact> toArtifacts;
+
 	protected class ConnectorFromArtifact {
-		
+
 		private EditionPatternConnectorFromArtefactGR gr;
 		private ConnectorPatternRole connector;
-		
-		protected ConnectorFromArtifact(ConnectorPatternRole aConnector)
-		{
+
+		protected ConnectorFromArtifact(ConnectorPatternRole aConnector) {
 			connector = aConnector;
 			gr = null;
 		}
-		
-		protected EditionPatternConnectorFromArtefactGR getGraphicalRepresentation()
-		{
+
+		protected EditionPatternConnectorFromArtefactGR getGraphicalRepresentation() {
 			if (gr == null) {
-				gr = new EditionPatternConnectorFromArtefactGR(this,EditionPatternPreviewRepresentation.this);
+				gr = new EditionPatternConnectorFromArtefactGR(this, EditionPatternPreviewRepresentation.this);
 				if (connector.getArtifactFromGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
-					ShapeGraphicalRepresentation storedGR = (ShapeGraphicalRepresentation)connector.getArtifactFromGraphicalRepresentation();
-					gr.setsWith(
-							storedGR,
-							GraphicalRepresentation.Parameters.text);
+					ShapeGraphicalRepresentation storedGR = (ShapeGraphicalRepresentation) connector
+							.getArtifactFromGraphicalRepresentation();
+					gr.setsWith(storedGR, GraphicalRepresentation.Parameters.text);
 				}
 				connector.setArtifactFromGraphicalRepresentation(gr);
 			}
-			return gr;			
+			return gr;
 		}
- 	}
-	
+	}
+
 	protected class ConnectorToArtifact {
-		
+
 		private EditionPatternConnectorToArtefactGR gr;
 		private ConnectorPatternRole connector;
-		
-		protected ConnectorToArtifact(ConnectorPatternRole aConnector)
-		{
+
+		protected ConnectorToArtifact(ConnectorPatternRole aConnector) {
 			connector = aConnector;
 			gr = null;
 		}
-		
-		protected EditionPatternConnectorToArtefactGR getGraphicalRepresentation()
-		{
+
+		protected EditionPatternConnectorToArtefactGR getGraphicalRepresentation() {
 			if (gr == null) {
-				gr = new EditionPatternConnectorToArtefactGR(this,EditionPatternPreviewRepresentation.this);
+				gr = new EditionPatternConnectorToArtefactGR(this, EditionPatternPreviewRepresentation.this);
 				if (connector.getArtifactToGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
-					gr.setsWith(
-							(ShapeGraphicalRepresentation)connector.getArtifactToGraphicalRepresentation(),
+					gr.setsWith((ShapeGraphicalRepresentation) connector.getArtifactToGraphicalRepresentation(),
 							GraphicalRepresentation.Parameters.text);
 				}
 				connector.setArtifactToGraphicalRepresentation(gr);
 			}
-			return gr;			
+			return gr;
 		}
-		
-	}
-	
-	protected ShapeGraphicalRepresentation<?> getStartShape(ConnectorPatternRole connector)
-	{
-		Object startShape = connector.getStartShape();
-		if (startShape == null) startShape = getFromArtifact(connector);
-		return (ShapeGraphicalRepresentation<?>)getGraphicalRepresentation(startShape);
+
 	}
 
-	protected ShapeGraphicalRepresentation<?> getEndShape(ConnectorPatternRole connector)
-	{
-		Object endShape = connector.getEndShape();
-		if (endShape == null) endShape = getToArtifact(connector);
-		return (ShapeGraphicalRepresentation<?>)getGraphicalRepresentation(endShape);
+	protected ShapeGraphicalRepresentation<?> getStartShape(ConnectorPatternRole connector) {
+		Object startShape = connector.getStartShape();
+		if (startShape == null)
+			startShape = getFromArtifact(connector);
+		return (ShapeGraphicalRepresentation<?>) getGraphicalRepresentation(startShape);
 	}
-	
+
+	protected ShapeGraphicalRepresentation<?> getEndShape(ConnectorPatternRole connector) {
+		Object endShape = connector.getEndShape();
+		if (endShape == null)
+			endShape = getToArtifact(connector);
+		return (ShapeGraphicalRepresentation<?>) getGraphicalRepresentation(endShape);
+	}
+
 }

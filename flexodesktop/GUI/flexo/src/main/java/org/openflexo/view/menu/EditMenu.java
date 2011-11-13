@@ -36,98 +36,86 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.view.controller.FlexoController;
 
-
 /**
  * 'Edit' menu
- *
+ * 
  * @author sguerin
  */
-public class EditMenu extends FlexoMenu
-{
+public class EditMenu extends FlexoMenu {
 
+	public FlexoMenuItem undoItem;
+	public FlexoMenuItem redoItem;
 
-    public FlexoMenuItem undoItem;
-    public FlexoMenuItem redoItem;
+	// Following fields might be null if non-implemented
+	public FlexoMenuItem deleteItem;
+	public FlexoMenuItem cutItem;
+	public FlexoMenuItem copyItem;
+	public FlexoMenuItem pasteItem;
+	public FlexoMenuItem selectAllItem;
 
-    // Following fields might be null if non-implemented
-    public FlexoMenuItem deleteItem;
-    public FlexoMenuItem cutItem;
-    public FlexoMenuItem copyItem;
-    public FlexoMenuItem pasteItem;
-    public FlexoMenuItem selectAllItem;
+	protected FlexoController _controller;
 
-    protected FlexoController _controller;
+	public EditMenu(FlexoController controller) {
+		super("edit", controller);
+		_controller = controller;
+		if (ModuleLoader.isMaintainerRelease() || ModuleLoader.isDevelopperRelease()) {
+			add(undoItem = new UndoItem());
+			add(redoItem = new RedoItem());
+			undoItem.setEnabled(false);
+			redoItem.setEnabled(false);
+		}
+	}
 
-    public EditMenu(FlexoController controller)
-    {
-        super("edit", controller);
-        _controller = controller;
-        if(ModuleLoader.isMaintainerRelease() || ModuleLoader.isDevelopperRelease()) {
-	        add(undoItem = new UndoItem());
-	        add(redoItem = new RedoItem());
-	        undoItem.setEnabled(false);
-	        redoItem.setEnabled(false);
-        }
-    }
+	// ==============================================
+	// ================== Undo ======================
+	// ==============================================
 
-    // ==============================================
-    // ================== Undo ======================
-    // ==============================================
+	public class UndoItem extends FlexoMenuItem {
 
-    public class UndoItem extends FlexoMenuItem
-    {
+		public UndoItem() {
+			super(new UndoAction(), "undo", KeyStroke.getKeyStroke(KeyEvent.VK_Z, FlexoCst.META_MASK), IconLibrary.UNDO_ICON,
+					getController());
+			_controller.getEditor().getUndoManager().registerUndoControl(this);
+		}
 
-        public UndoItem()
-        {
-            super(new UndoAction(), "undo", KeyStroke.getKeyStroke(KeyEvent.VK_Z, FlexoCst.META_MASK), IconLibrary.UNDO_ICON, getController());
-            _controller.getEditor().getUndoManager().registerUndoControl(this);
-        }
+	}
 
-    }
+	public class UndoAction extends AbstractAction {
+		public UndoAction() {
+			super();
+		}
 
-    public class UndoAction extends AbstractAction
-    {
-        public UndoAction()
-        {
-            super();
-        }
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			_controller.getEditor().getUndoManager().undo();
+		}
 
-        @Override
-		public void actionPerformed(ActionEvent event)
-        {
-        	_controller.getEditor().getUndoManager().undo();
-        }
+	}
 
-    }
+	// ==============================================
+	// ================== Redo ======================
+	// ==============================================
 
-    // ==============================================
-    // ================== Redo ======================
-    // ==============================================
+	public class RedoItem extends FlexoMenuItem {
 
-    public class RedoItem extends FlexoMenuItem
-    {
+		public RedoItem() {
+			super(new RedoAction(), "redo", KeyStroke.getKeyStroke(KeyEvent.VK_Y, FlexoCst.META_MASK), IconLibrary.REDO_ICON,
+					getController());
+			_controller.getEditor().getUndoManager().registerRedoControl(this);
+		}
 
-        public RedoItem()
-        {
-            super(new RedoAction(), "redo", KeyStroke.getKeyStroke(KeyEvent.VK_Y, FlexoCst.META_MASK), IconLibrary.REDO_ICON, getController());
-            _controller.getEditor().getUndoManager().registerRedoControl(this);
-        }
+	}
 
-    }
+	public class RedoAction extends AbstractAction {
+		public RedoAction() {
+			super();
+		}
 
-    public class RedoAction extends AbstractAction
-    {
-        public RedoAction()
-        {
-            super();
-        }
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			_controller.getEditor().getUndoManager().redo();
+		}
 
-        @Override
-		public void actionPerformed(ActionEvent event)
-        {
-        	_controller.getEditor().getUndoManager().redo();
-        }
-
-    }
+	}
 
 }

@@ -30,55 +30,53 @@ import org.openflexo.logging.FlexoLogger;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class ConstantsGenerator extends JavaClassGenerator
-{
-    private static final String TEMPLATE_NAME = "Constants.java.vm";
+public class ConstantsGenerator extends JavaClassGenerator {
+	private static final String TEMPLATE_NAME = "Constants.java.vm";
 	private static final Logger logger = FlexoLogger.getLogger(ConstantsGenerator.class.getPackage().getName());
 
-    /**
-     * @param projectGenerator
-     */
-    public ConstantsGenerator(ProjectGenerator projectGenerator)
-    {
-        super(projectGenerator,projectGenerator.getPrefix() + "Constants","");
-    }
+	/**
+	 * @param projectGenerator
+	 */
+	public ConstantsGenerator(ProjectGenerator projectGenerator) {
+		super(projectGenerator, projectGenerator.getPrefix() + "Constants", "");
+	}
 
-    /**
-     * Overrides getGeneratorLogger
-     * @see org.openflexo.generator.CGGenerator#getGeneratorLogger()
-     */
-    @Override
-    public Logger getGeneratorLogger()
-    {
-        return logger;
-    }
+	/**
+	 * Overrides getGeneratorLogger
+	 * 
+	 * @see org.openflexo.generator.CGGenerator#getGeneratorLogger()
+	 */
+	@Override
+	public Logger getGeneratorLogger() {
+		return logger;
+	}
 
-    @Override
-    protected VelocityContext defaultContext() {
-    	VelocityContext vc = super.defaultContext();
-        vc.put("prefix", getPrefix());
-        return vc;
-    }
-    
-    /**
-     * Overrides rebuildDependanciesForResource
-     * @see org.openflexo.generator.utils.JavaClassGenerator#rebuildDependanciesForResource(JavaFileResource)
-     */
-    @Override
-    public void rebuildDependanciesForResource(JavaFileResource resource)
-    {
-        resource.addToDependantResources(getProject().getFlexoDKVResource());
-        resource.addToDependantResources(getProject().getFlexoWorkflowResource());
-        Enumeration<FlexoProcess> en = getProject().getAllLocalFlexoProcesses().elements();
-        while (en.hasMoreElements()) {
+	@Override
+	protected VelocityContext defaultContext() {
+		VelocityContext vc = super.defaultContext();
+		vc.put("prefix", getPrefix());
+		return vc;
+	}
+
+	/**
+	 * Overrides rebuildDependanciesForResource
+	 * 
+	 * @see org.openflexo.generator.utils.JavaClassGenerator#rebuildDependanciesForResource(JavaFileResource)
+	 */
+	@Override
+	public void rebuildDependanciesForResource(JavaFileResource resource) {
+		resource.addToDependantResources(getProject().getFlexoDKVResource());
+		resource.addToDependantResources(getProject().getFlexoWorkflowResource());
+		Enumeration<FlexoProcess> en = getProject().getAllLocalFlexoProcesses().elements();
+		while (en.hasMoreElements()) {
 			resource.addToDependantResources(en.nextElement().getFlexoResource());
 		}
-    }
+	}
 
-    @Override
-    public String getTemplateName() {
-    	return TEMPLATE_NAME;
-    }
+	@Override
+	public String getTemplateName() {
+		return TEMPLATE_NAME;
+	}
 }

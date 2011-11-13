@@ -31,55 +31,46 @@ import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class CancelOverrideWithVersionInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CancelOverrideWithVersionInitializer(DGControllerActionInitializer actionInitializer)
-	{
-		super(CancelOverrideWithVersion.actionType,actionInitializer);
+	CancelOverrideWithVersionInitializer(DGControllerActionInitializer actionInitializer) {
+		super(CancelOverrideWithVersion.actionType, actionInitializer);
 	}
 
 	@Override
-	protected DGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DGControllerActionInitializer)super.getControllerActionInitializer();
+	protected DGControllerActionInitializer getControllerActionInitializer() {
+		return (DGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<CancelOverrideWithVersion> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<CancelOverrideWithVersion> getDefaultInitializer() {
 		return new FlexoActionInitializer<CancelOverrideWithVersion>() {
 			@Override
-			public boolean run(ActionEvent e, CancelOverrideWithVersion action)
-			{
+			public boolean run(ActionEvent e, CancelOverrideWithVersion action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<CancelOverrideWithVersion> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<CancelOverrideWithVersion> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CancelOverrideWithVersion>() {
 			@Override
-			public boolean run(ActionEvent e, CancelOverrideWithVersion action)
-			{
+			public boolean run(ActionEvent e, CancelOverrideWithVersion action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return GeneratorIconLibrary.CANCEL_ICON;
 	}
 
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return GeneratorIconLibrary.CANCEL_DISABLED_ICON;
 	}
 

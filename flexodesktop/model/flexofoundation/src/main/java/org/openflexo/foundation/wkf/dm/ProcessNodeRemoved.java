@@ -27,19 +27,16 @@ import org.openflexo.foundation.wkf.FlexoProcessNode;
  * @author sguerin
  * 
  */
-public class ProcessNodeRemoved extends WKFDataModification
-{
+public class ProcessNodeRemoved extends WKFDataModification {
 
-    public FlexoProcessNode removedProcess;
+	public FlexoProcessNode removedProcess;
 
-    public ProcessNodeRemoved(FlexoProcessNode removedProcess)
-    {
-        super(removedProcess, null);
-        this.removedProcess = removedProcess;
-    }
+	public ProcessNodeRemoved(FlexoProcessNode removedProcess) {
+		super(removedProcess, null);
+		this.removedProcess = removedProcess;
+	}
 
-    public FlexoProcessNode getRemovedProcess()
-    {
-        return removedProcess;
-    }
+	public FlexoProcessNode getRemovedProcess() {
+		return removedProcess;
+	}
 }

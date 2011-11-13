@@ -22,45 +22,42 @@ package org.openflexo.view;
 import org.openflexo.foundation.FlexoModelObject;
 
 /**
- * This interface is implemented by all views that will be displayed as a
- * top-level view of a module. This abstract representation is used by a general
- * scheme implemented in module controller to manage the navigation and includes
- * a control panel.
+ * This interface is implemented by all views that will be displayed as a top-level view of a module. This abstract representation is used
+ * by a general scheme implemented in module controller to manage the navigation and includes a control panel.
  * 
  * @author sguerin
  */
 public interface ModuleView<O extends FlexoModelObject> {
 
-    public O getRepresentedObject();
+	public O getRepresentedObject();
 
-    public void deleteModuleView();
+	public void deleteModuleView();
 
 	/**
-	 * This method should return the perspective in which this view is supposed
-	 * to be seen. DO NOT return null!!!
+	 * This method should return the perspective in which this view is supposed to be seen. DO NOT return null!!!
 	 * 
 	 * @return
 	 */
-    public FlexoPerspective<? super O> getPerspective();
+	public FlexoPerspective<? super O> getPerspective();
 
-    /**
-     * This method is called before the module view is about to be shown
-     * 
-     */
-    public void willShow();
+	/**
+	 * This method is called before the module view is about to be shown
+	 * 
+	 */
+	public void willShow();
 
-    /**
-     * This method is called before the module view is about to be hidden
-     * 
-     */
-    public void willHide();
-    
-    /**
-     * Returns flag indicating if this view is itself responsible for scroll management
-     * When not, Flexo will manage it's own scrollbar for you
-     * 
-     * @return
-     */
-    public boolean isAutoscrolled();
-    
+	/**
+	 * This method is called before the module view is about to be hidden
+	 * 
+	 */
+	public void willHide();
+
+	/**
+	 * Returns flag indicating if this view is itself responsible for scroll management When not, Flexo will manage it's own scrollbar for
+	 * you
+	 * 
+	 * @return
+	 */
+	public boolean isAutoscrolled();
+
 }

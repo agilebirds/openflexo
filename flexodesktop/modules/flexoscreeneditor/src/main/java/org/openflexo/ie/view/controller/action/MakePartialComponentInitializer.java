@@ -37,26 +37,23 @@ public class MakePartialComponentInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	MakePartialComponentInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(MakePartialComponent.actionType,actionInitializer);
+	MakePartialComponentInitializer(IEControllerActionInitializer actionInitializer) {
+		super(MakePartialComponent.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<MakePartialComponent> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<MakePartialComponent> getDefaultInitializer() {
 		return new FlexoActionInitializer<MakePartialComponent>() {
 			@Override
-			public boolean run(ActionEvent e, MakePartialComponent action)
-			{
+			public boolean run(ActionEvent e, MakePartialComponent action) {
 				String compName = JOptionPane.showInputDialog(null, FlexoLocalization.localizedForKey("component_name?"));
-				Object[] nameAndFolder = new Object[] { compName, getProject().getFlexoComponentLibrary().getRootFolder().getFolderTyped(FolderType.PARTIAL_COMPONENT_FOLDER) }; 
+				Object[] nameAndFolder = new Object[] { compName,
+						getProject().getFlexoComponentLibrary().getRootFolder().getFolderTyped(FolderType.PARTIAL_COMPONENT_FOLDER) };
 				if (nameAndFolder[0] != null && ((String) nameAndFolder[0]).trim().length() > 0 && nameAndFolder[1] != null
 						&& getProject().getFlexoComponentLibrary().getComponentNamed((String) nameAndFolder[0]) == null) {
 					(action).setNewComponentName((String) nameAndFolder[0]);
@@ -69,12 +66,10 @@ public class MakePartialComponentInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<MakePartialComponent> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<MakePartialComponent> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<MakePartialComponent>() {
 			@Override
-			public boolean run(ActionEvent e, MakePartialComponent action)
-			{
+			public boolean run(ActionEvent e, MakePartialComponent action) {
 				if ((action).getNewComponentResource() != null) {
 					getModule().retainResource((action).getNewComponentResource());
 				}

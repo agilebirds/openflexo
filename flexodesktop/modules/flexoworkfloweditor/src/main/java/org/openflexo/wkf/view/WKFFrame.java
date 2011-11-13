@@ -42,95 +42,88 @@ import org.openflexo.wkf.controller.WKFController;
 import org.openflexo.wkf.view.listener.WKFKeyEventListener;
 import org.openflexo.wkf.view.menu.WKFMenuBar;
 
-
 /**
  * The main window of the WKF Module.
- *
+ * 
  * @author benoit
  */
-public class WKFFrame extends FlexoFrame implements FlexoActionSource
-{
+public class WKFFrame extends FlexoFrame implements FlexoActionSource {
 
-    private static final Logger logger = Logger.getLogger(WKFFrame.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(WKFFrame.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance variables
+	// =========================
+	// ==========================================================================
 
-    protected WKFController _wkfController;
+	protected WKFController _wkfController;
 
-    protected WKFMenuBar _wkfMenuBar;
+	protected WKFMenuBar _wkfMenuBar;
 
-    protected WKFKeyEventListener _wkfKeyEventListener;
+	protected WKFKeyEventListener _wkfKeyEventListener;
 
-     // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    /**
-     * Constructor for WKFFrame
-     */
-    public WKFFrame(String title, WKFController controller, WKFKeyEventListener wkfKeyEventListener, WKFMenuBar menuBar) throws HeadlessException
-    {
-        super(title, controller, wkfKeyEventListener, menuBar);
-        _wkfController = controller;
-        _wkfMenuBar = menuBar;
-        _wkfKeyEventListener = wkfKeyEventListener;
-        setSize(WKFCst.DEFAULT_MAINFRAME_WIDTH, WKFCst.DEFAULT_MAINFRAME_HEIGHT);
-        updateTitle();
-        getContentPane().setLayout(new BorderLayout());
-        if (_wkfController.getFlexoWorkflow() != null) {
-            _wkfController.getFlexoWorkflow().addObserver(this);
-        }
-    }
-
-    @Override
-    public void update(FlexoObservable observable, DataModification dataModification)
-    {
-       super.update(observable,dataModification);
-    }
-
-    /**
-     * @return Returns the controller.
-     */
-    public WKFController getWKFController()
-    {
-        return _wkfController;
-    }
-
-    @Override
-    public FlexoModelObject getFocusedObject()
-    {
-        return getWKFController().getSelectionManager().getFocusedObject();
-    }
-
-    @Override
-    public Vector<FlexoModelObject> getGlobalSelection()
-    {
-        return getWKFController().getSelectionManager().getSelection();
-    }
+	/**
+	 * Constructor for WKFFrame
+	 */
+	public WKFFrame(String title, WKFController controller, WKFKeyEventListener wkfKeyEventListener, WKFMenuBar menuBar)
+			throws HeadlessException {
+		super(title, controller, wkfKeyEventListener, menuBar);
+		_wkfController = controller;
+		_wkfMenuBar = menuBar;
+		_wkfKeyEventListener = wkfKeyEventListener;
+		setSize(WKFCst.DEFAULT_MAINFRAME_WIDTH, WKFCst.DEFAULT_MAINFRAME_HEIGHT);
+		updateTitle();
+		getContentPane().setLayout(new BorderLayout());
+		if (_wkfController.getFlexoWorkflow() != null) {
+			_wkfController.getFlexoWorkflow().addObserver(this);
+		}
+	}
 
 	@Override
-    public FlexoEditor getEditor()
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		super.update(observable, dataModification);
+	}
+
+	/**
+	 * @return Returns the controller.
+	 */
+	public WKFController getWKFController() {
+		return _wkfController;
+	}
+
+	@Override
+	public FlexoModelObject getFocusedObject() {
+		return getWKFController().getSelectionManager().getFocusedObject();
+	}
+
+	@Override
+	public Vector<FlexoModelObject> getGlobalSelection() {
+		return getWKFController().getSelectionManager().getSelection();
+	}
+
+	@Override
+	public FlexoEditor getEditor() {
 		return getWKFController().getEditor();
 	}
 
 	/**
 	 * Overrides dispose
+	 * 
 	 * @see java.awt.Window#dispose()
 	 */
 	@Override
-	public void dispose()
-	{
-		if (_wkfController!=null)
+	public void dispose() {
+		if (_wkfController != null)
 			_wkfController.getFlexoWorkflow().deleteObserver(this);
 		_wkfController = null;
 		_wkfKeyEventListener = null;
 		_wkfMenuBar = null;
-	    super.dispose();
+		super.dispose();
 	}
 
 }

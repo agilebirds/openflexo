@@ -36,141 +36,136 @@ import org.openflexo.foundation.ie.widget.IETabWidget;
 import org.openflexo.ie.view.IEWOComponentView;
 import org.openflexo.ie.view.controller.IEController;
 
-
 /**
  * @author bmangez
- *
+ * 
  */
-public class IETabWidgetView extends IEReusableWidgetView<IETabWidget,TabComponentInstance,TabComponentDefinition>
-{
+public class IETabWidgetView extends IEReusableWidgetView<IETabWidget, TabComponentInstance, TabComponentDefinition> {
 
-    private static final Logger logger = Logger.getLogger(IEWidgetView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(IEWidgetView.class.getPackage().getName());
 
-    private boolean tabVisibility = false;
+	private boolean tabVisibility = false;
 
-    /**
-     * @param model
-     */
-    public IETabWidgetView(IEController ieController, IETabWidget model, IEWOComponentView view)
-    {
-        super(ieController, model, false,view);
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("new IETabWidgetView:" + model.toString() + " " + model.getTabKeyForGenerator());
-    }
+	/**
+	 * @param model
+	 */
+	public IETabWidgetView(IEController ieController, IETabWidget model, IEWOComponentView view) {
+		super(ieController, model, false, view);
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("new IETabWidgetView:" + model.toString() + " " + model.getTabKeyForGenerator());
+	}
 
-    /**
-     * Overrides delete
-     * @see org.openflexo.ie.view.widget.IEWidgetView#delete()
-     */
-    @Override
-    public void delete()
-    {
-    	getModel().getTabComponent().getRootSequence().deleteObserver(this);
-        super.delete();
-    }
+	/**
+	 * Overrides delete
+	 * 
+	 * @see org.openflexo.ie.view.widget.IEWidgetView#delete()
+	 */
+	@Override
+	public void delete() {
+		getModel().getTabComponent().getRootSequence().deleteObserver(this);
+		super.delete();
+	}
 
-    /**
-     * Overrides doLayout
-     * @see org.openflexo.ie.view.widget.IEWidgetView#doLayout()
-     */
-    @Override
-    public void doLayout()
-    {
-        if (!getTabVisibility())
-            return;
-        super.doLayout();
-    }
+	/**
+	 * Overrides doLayout
+	 * 
+	 * @see org.openflexo.ie.view.widget.IEWidgetView#doLayout()
+	 */
+	@Override
+	public void doLayout() {
+		if (!getTabVisibility())
+			return;
+		super.doLayout();
+	}
 
-    /**
-     * Overrides propagateResize
-     * @see org.openflexo.ie.view.widget.IEWidgetView#propagateResize()
-     */
-    @Override
-    public void propagateResize()
-    {
-        if (!getTabVisibility())
-            return;
-        super.propagateResize();
-    }
+	/**
+	 * Overrides propagateResize
+	 * 
+	 * @see org.openflexo.ie.view.widget.IEWidgetView#propagateResize()
+	 */
+	@Override
+	public void propagateResize() {
+		if (!getTabVisibility())
+			return;
+		super.propagateResize();
+	}
 
-    @Override
-    public Dimension getPreferredSize()
-    {
-    	if (getHoldsNextComputedPreferredSize()){
-        	Dimension storedSize = storedPrefSize();
-            if(storedSize!=null)return storedSize;
-        }
-        if (!getTabVisibility())
-            return new Dimension(0,0);
-        Dimension d = getReusableWidgetComponentView().getPreferredSize();
-        if (getHoldsNextComputedPreferredSize())
-            storePrefSize(d);
-        return d;
-    }
-    
-    public IETabWidget getTabWidget(){
-        return getModel();
-    }
-    
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
-     */
-    @Override
-    public void update(FlexoObservable arg0, DataModification modif)
-    {
-        if (!getTabVisibility())
-            return;
-        if (modif.modificationType() == DataModification.ATTRIBUTE && modif.propertyName().equals("title") && arg0==getTabWidget()) {
-            setName(getTabWidget().getTitle());
-            if (getParent()!=null)
-                ((JTabbedPane) getParent()).setTitleAt(getTabWidget().getRootParent()==getTabWidget().getParent()?getTabWidget().getIndex():getTabWidget().getParent().getIndex(), getTabWidget().getTitle());
-        } else if (modif instanceof ContentSizeChanged) {
-            getReusableWidgetComponentView().validate();
-            getReusableWidgetComponentView().doLayout();
-            getReusableWidgetComponentView().repaint();
-            doLayout();
-            repaint();
-            if (getParent()!=null) {
-                getParent().validate();
-                getParent().doLayout();
-                getParent().repaint();
-            }
-        } else if (modif instanceof TopComponentInserted) {
-            ((IEObject)(((TopComponentInserted)modif).newValue())).addObserver(this);
-            getReusableWidgetComponentView().validate();
-            getReusableWidgetComponentView().doLayout();
-            getReusableWidgetComponentView().repaint();
-            doLayout();
-            repaint();
-            if (getParent()!=null) {
-                getParent().validate();
-                getParent().doLayout();
-                getParent().repaint();
-            }
-        } else
-            super.update(arg0, modif);
-    }
+	@Override
+	public Dimension getPreferredSize() {
+		if (getHoldsNextComputedPreferredSize()) {
+			Dimension storedSize = storedPrefSize();
+			if (storedSize != null)
+				return storedSize;
+		}
+		if (!getTabVisibility())
+			return new Dimension(0, 0);
+		Dimension d = getReusableWidgetComponentView().getPreferredSize();
+		if (getHoldsNextComputedPreferredSize())
+			storePrefSize(d);
+		return d;
+	}
 
-    public boolean getTabVisibility()
-    {
-        return tabVisibility;
-    }
+	public IETabWidget getTabWidget() {
+		return getModel();
+	}
 
-    public void setTabVisibility(boolean isVisible)
-    {
-        this.tabVisibility = isVisible;
-        if (isVisible) {
-        	validate();
-        	doLayout();
-            if (logger.isLoggable(Level.INFO))
-                logger.info("Building tab: "+getTabWidget().getTitle());
-            getModel().getTabComponent().getRootSequence().addObserver(this);
-        }
-        if (!isVisible)
-            if (logger.isLoggable(Level.INFO))
-                logger.info("Hiding tab: "+getTabWidget().getTitle());
-    }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 */
+	@Override
+	public void update(FlexoObservable arg0, DataModification modif) {
+		if (!getTabVisibility())
+			return;
+		if (modif.modificationType() == DataModification.ATTRIBUTE && modif.propertyName().equals("title") && arg0 == getTabWidget()) {
+			setName(getTabWidget().getTitle());
+			if (getParent() != null)
+				((JTabbedPane) getParent()).setTitleAt(getTabWidget().getRootParent() == getTabWidget().getParent() ? getTabWidget()
+						.getIndex() : getTabWidget().getParent().getIndex(), getTabWidget().getTitle());
+		} else if (modif instanceof ContentSizeChanged) {
+			getReusableWidgetComponentView().validate();
+			getReusableWidgetComponentView().doLayout();
+			getReusableWidgetComponentView().repaint();
+			doLayout();
+			repaint();
+			if (getParent() != null) {
+				getParent().validate();
+				getParent().doLayout();
+				getParent().repaint();
+			}
+		} else if (modif instanceof TopComponentInserted) {
+			((IEObject) (((TopComponentInserted) modif).newValue())).addObserver(this);
+			getReusableWidgetComponentView().validate();
+			getReusableWidgetComponentView().doLayout();
+			getReusableWidgetComponentView().repaint();
+			doLayout();
+			repaint();
+			if (getParent() != null) {
+				getParent().validate();
+				getParent().doLayout();
+				getParent().repaint();
+			}
+		} else
+			super.update(arg0, modif);
+	}
+
+	public boolean getTabVisibility() {
+		return tabVisibility;
+	}
+
+	public void setTabVisibility(boolean isVisible) {
+		this.tabVisibility = isVisible;
+		if (isVisible) {
+			validate();
+			doLayout();
+			if (logger.isLoggable(Level.INFO))
+				logger.info("Building tab: " + getTabWidget().getTitle());
+			getModel().getTabComponent().getRootSequence().addObserver(this);
+		}
+		if (!isVisible)
+			if (logger.isLoggable(Level.INFO))
+				logger.info("Hiding tab: " + getTabWidget().getTitle());
+	}
 
 }

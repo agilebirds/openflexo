@@ -36,59 +36,54 @@ import javax.swing.table.TableCellEditor;
  * @author sguerin
  * 
  */
-public abstract class EditableStringColumn<D extends Observable> extends StringColumn<D> implements EditableColumn<D,String>
-{
+public abstract class EditableStringColumn<D extends Observable> extends StringColumn<D> implements EditableColumn<D, String> {
 
 	DefaultCellEditor editor;
-	
-    public EditableStringColumn(String title, int defaultWidth)
-    {
-        super(title, defaultWidth);
-    }
 
-    @Override
-    public boolean requireCellEditor() {
-    	return true;
-    }
-    
-    @Override
-    public TableCellEditor getCellEditor() {
-    	if(editor==null) {
-    		editor = new DefaultCellEditor(new JTextField()) {
-    			@Override
-    			public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-    				final JTextField textfield = (JTextField)super.getTableCellEditorComponent(table, value, isSelected, row, column);
-    				textfield.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-    				SwingUtilities.invokeLater(new Runnable(){
-    					@Override
+	public EditableStringColumn(String title, int defaultWidth) {
+		super(title, defaultWidth);
+	}
+
+	@Override
+	public boolean requireCellEditor() {
+		return true;
+	}
+
+	@Override
+	public TableCellEditor getCellEditor() {
+		if (editor == null) {
+			editor = new DefaultCellEditor(new JTextField()) {
+				@Override
+				public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+					final JTextField textfield = (JTextField) super.getTableCellEditorComponent(table, value, isSelected, row, column);
+					textfield.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+					SwingUtilities.invokeLater(new Runnable() {
+						@Override
 						public void run() {
-    						textfield.selectAll();
-    					}
-    				});
-    				return textfield;
-    			}
-    		};
-    	}
-    	return editor;
-    }
-    
-    @Override
-	public boolean isCellEditableFor(D object)
-    {
-        return true;
-    }
+							textfield.selectAll();
+						}
+					});
+					return textfield;
+				}
+			};
+		}
+		return editor;
+	}
 
-    @Override
-	public void setValueFor(D object, String value)
-    {
-        setValue(object, value);
-    }
+	@Override
+	public boolean isCellEditableFor(D object) {
+		return true;
+	}
 
-    public abstract void setValue(D object, String aValue);
+	@Override
+	public void setValueFor(D object, String value) {
+		setValue(object, value);
+	}
 
-    @Override
-	public String toString()
-    {
-        return "EditableStringColumn " + "[" + getTitle() + "]" + Integer.toHexString(hashCode());
-    }
+	public abstract void setValue(D object, String aValue);
+
+	@Override
+	public String toString() {
+		return "EditableStringColumn " + "[" + getTitle() + "]" + Integer.toHexString(hashCode());
+	}
 }

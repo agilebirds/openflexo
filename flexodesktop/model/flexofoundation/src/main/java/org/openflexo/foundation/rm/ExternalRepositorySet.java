@@ -24,17 +24,14 @@ package org.openflexo.foundation.rm;
  * 
  * @author sguerin
  */
-public class ExternalRepositorySet extends RMDataModification
-{
+public class ExternalRepositorySet extends RMDataModification {
 
-    public ExternalRepositorySet(ProjectExternalRepository repository)
-    {
-        super(null, repository);
-    }
+	public ExternalRepositorySet(ProjectExternalRepository repository) {
+		super(null, repository);
+	}
 
-    public ProjectExternalRepository getProjectExternalRepository()
-    {
-        return (ProjectExternalRepository) newValue();
-    }
+	public ProjectExternalRepository getProjectExternalRepository() {
+		return (ProjectExternalRepository) newValue();
+	}
 
 }

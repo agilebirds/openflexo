@@ -30,54 +30,46 @@ import org.openflexo.foundation.wkf.edge.FlexoPostCondition;
 import org.openflexo.foundation.wkf.ws.FlexoPortMap;
 import org.openflexo.icon.WKFIconLibrary;
 
-
 /**
  * Browser element representing a Role
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class PortMapElement extends BrowserElement
-{
+public class PortMapElement extends BrowserElement {
 
-    public PortMapElement(FlexoPortMap portMap, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(portMap, BrowserElementType.PORTMAP, browser, parent);
-    }
+	public PortMapElement(FlexoPortMap portMap, ProjectBrowser browser, BrowserElement parent) {
+		super(portMap, BrowserElementType.PORTMAP, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-        // We add post conditions
-        for (Enumeration e = getFlexoPortMap().getOutgoingPostConditions().elements(); e.hasMoreElements();) {
-            addToChilds((FlexoPostCondition) e.nextElement());
-        }
-    }
+	@Override
+	protected void buildChildrenVector() {
+		// We add post conditions
+		for (Enumeration e = getFlexoPortMap().getOutgoingPostConditions().elements(); e.hasMoreElements();) {
+			addToChilds((FlexoPostCondition) e.nextElement());
+		}
+	}
 
-    @Override
-	public String getName()
-    {
-        return getFlexoPortMap().getName();
-    }
+	@Override
+	public String getName() {
+		return getFlexoPortMap().getName();
+	}
 
-    protected FlexoPortMap getFlexoPortMap()
-    {
-        return (FlexoPortMap) getObject();
-    }
+	protected FlexoPortMap getFlexoPortMap() {
+		return (FlexoPortMap) getObject();
+	}
 
-    @Override
-	protected BrowserElementType getFilteredElementType()
-    {
-        return BrowserElementType.PORTMAP_REGISTERY;
-    }
+	@Override
+	protected BrowserElementType getFilteredElementType() {
+		return BrowserElementType.PORTMAP_REGISTERY;
+	}
 
-    @Override
-	public Icon getIcon()
-    {
-        if ((getFlexoPortMap() != null)) {
-    		return WKFIconLibrary.getImageIconForPortmap(getFlexoPortMap());
-       }
-        return null;
-    }
+	@Override
+	public Icon getIcon() {
+		if ((getFlexoPortMap() != null)) {
+			return WKFIconLibrary.getImageIconForPortmap(getFlexoPortMap());
+		}
+		return null;
+	}
 
 }

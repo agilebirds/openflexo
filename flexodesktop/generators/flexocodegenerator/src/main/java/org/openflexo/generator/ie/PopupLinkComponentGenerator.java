@@ -28,46 +28,42 @@ import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.generator.ProjectGenerator;
 import org.openflexo.generator.rm.GeneratedFileResourceFactory;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class PopupLinkComponentGenerator extends ComponentGenerator
-{
-    
-	/**
-     * @param projectGenerator
-     * @param componentDefinition
-     * @param componentGeneratedName
-     */
-    public PopupLinkComponentGenerator(ProjectGenerator projectGenerator, PopupComponentDefinition componentDefinition)
-    {
-        super(projectGenerator, componentDefinition, nameForPopupLink(componentDefinition));
-    }
+public class PopupLinkComponentGenerator extends ComponentGenerator {
 
-	@Override
-	public PopupComponentDefinition getComponentDefinition()
-	{
-		return (PopupComponentDefinition)super.getComponentDefinition();
+	/**
+	 * @param projectGenerator
+	 * @param componentDefinition
+	 * @param componentGeneratedName
+	 */
+	public PopupLinkComponentGenerator(ProjectGenerator projectGenerator, PopupComponentDefinition componentDefinition) {
+		super(projectGenerator, componentDefinition, nameForPopupLink(componentDefinition));
 	}
 
 	@Override
-	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) 
-	{
+	public PopupComponentDefinition getComponentDefinition() {
+		return (PopupComponentDefinition) super.getComponentDefinition();
+	}
+
+	@Override
+	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
 		// Java
 		javaResource = GeneratedFileResourceFactory.createNewPopupLinkComponentJavaFileResource(repository, this);
 		resources.add(javaResource);
 
 		// WO
-		woResource = GeneratedFileResourceFactory.createNewPopupLinkComponentWOFileResource(repository, this);;
+		woResource = GeneratedFileResourceFactory.createNewPopupLinkComponentWOFileResource(repository, this);
+		;
 		resources.add(woResource);
-		
+
 		// API
 		apiResource = GeneratedFileResourceFactory.createNewPopupLinkComponentAPIFileResource(repository, this);
 		resources.add(apiResource);
 	}
-	
+
 	@Override
 	protected VelocityContext defaultContext() {
 		VelocityContext vc = super.defaultContext();
@@ -75,23 +71,23 @@ public class PopupLinkComponentGenerator extends ComponentGenerator
 		return vc;
 	}
 
-  	@Override
-  	public String getJavaTemplate() {
-  		return "PopupLink.java.vm";
-  	}
-  	
-  	@Override
-  	public String getWodTemplate() {
-  		return "PopupLink.wod.vm";
-  	}
-  	
-  	@Override
-  	public String getHtmlTemplate() {
-  		return "PopupLink.html.vm";
-  	}
-  	
-  	@Override
-  	public String getApiTemplate() {
-  		return "PopupLink.api.vm";
-  	}
+	@Override
+	public String getJavaTemplate() {
+		return "PopupLink.java.vm";
+	}
+
+	@Override
+	public String getWodTemplate() {
+		return "PopupLink.wod.vm";
+	}
+
+	@Override
+	public String getHtmlTemplate() {
+		return "PopupLink.html.vm";
+	}
+
+	@Override
+	public String getApiTemplate() {
+		return "PopupLink.api.vm";
+	}
 }

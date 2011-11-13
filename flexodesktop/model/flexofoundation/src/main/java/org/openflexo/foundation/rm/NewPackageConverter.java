@@ -48,7 +48,7 @@ public class NewPackageConverter {
 				content = convertDMContentToNewPackage(content);
 			} else if (file.getName().endsWith(ProjectRestructuration.SHEMA_EXTENSION)) {
 				content = content.replace("OESHEMA", "VESCHEMA").replace("OEShape", "VEShape").replace("OEConnector", "VEConnector");
-			}else {
+			} else {
 				content = convertContentToNewPackage(content);
 			}
 			org.openflexo.toolbox.FileUtils.saveToFile(file, content);
@@ -86,8 +86,8 @@ public class NewPackageConverter {
 		// be.denali.flexo* --> org.openflexo*
 		StringBuilder sb = new StringBuilder(content.length());
 		for (int i = 0; i < content.length(); i++) {
-			if (content.charAt(i)=='@' && i>0&& !Character.isWhitespace(content.charAt(i-1))) {
-				boolean needsWhitespace =false;
+			if (content.charAt(i) == '@' && i > 0 && !Character.isWhitespace(content.charAt(i - 1))) {
+				boolean needsWhitespace = false;
 				for (String tag : AT_TAGS) {
 					needsWhitespace |= content.regionMatches(i + 1, tag, 0, tag.length());
 				}
@@ -104,9 +104,9 @@ public class NewPackageConverter {
 
 	private static String convertDMContentToNewPackage(String content) {
 		String JDK = "JDKRepository";
-		String COMPONENT="ComponentRepository";
-		String PROCESS_BUSINESS_DATA="ProcessBusinessDataRepository";
-		String PROCESS_INSTANCE="ProcessInstanceRepository";
+		String COMPONENT = "ComponentRepository";
+		String PROCESS_BUSINESS_DATA = "ProcessBusinessDataRepository";
+		String PROCESS_INSTANCE = "ProcessInstanceRepository";
 		content = convertDMContentToNewPackage(content, JDK);
 		content = convertDMContentToNewPackage(content, COMPONENT);
 		content = convertDMContentToNewPackage(content, PROCESS_BUSINESS_DATA);
@@ -137,7 +137,6 @@ public class NewPackageConverter {
 		content = filter(content, BE_AB); // be.agilebirds --> org.openflexo
 		return content;
 	}
-
 
 	private static String filter(String content, String packagePrefix) {
 		int lastAppendedIndex = 0;

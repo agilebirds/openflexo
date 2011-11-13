@@ -38,327 +38,267 @@ import javax.swing.text.html.parser.ParserDelegator;
 
 import org.openflexo.toolbox.HTMLUtils;
 
-
-public class FlexoWysiwygHtmlCleaner extends ParserCallback
-{
+public class FlexoWysiwygHtmlCleaner extends ParserCallback {
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(FlexoWysiwygHtmlCleaner.class.getPackage().getName());
-	
-	public static String cleanHtml(String originalHtml, List<?> availableStyleClasses) throws IOException
-	{
-		if(originalHtml != null)
-		{
+
+	public static String cleanHtml(String originalHtml, List<?> availableStyleClasses) throws IOException {
+		if (originalHtml != null) {
 			FlexoWysiwygHtmlCleaner cleaner = new FlexoWysiwygHtmlCleaner(availableStyleClasses);
 			Reader reader = new StringReader(originalHtml);
-			
+
 			new ParserDelegator().parse(reader, cleaner, false);
 			return cleaner.getCleanedHtml();
 		}
-		
+
 		return null;
 	}
-	
+
 	private StringBuilder newHtml = new StringBuilder();
 	private List<?> availableStyleClasses;
 	private Stack<String> closeTagsStack = new Stack<String>();
-	
-	public FlexoWysiwygHtmlCleaner(List<?> availableStyleClasses)
-	{
+
+	public FlexoWysiwygHtmlCleaner(List<?> availableStyleClasses) {
 		this.availableStyleClasses = availableStyleClasses;
 	}
-	
-	private String getCleanedHtml()
-	{
+
+	private String getCleanedHtml() {
 		return newHtml.toString();
 	}
-	
+
 	@Override
-	public void handleComment(char[] data, int pos)
-	{
-		//remove comments
+	public void handleComment(char[] data, int pos) {
+		// remove comments
 	}
-	
+
 	@Override
-	public void handleEndOfLineString(String eol)
-	{
+	public void handleEndOfLineString(String eol) {
 		newHtml.append(eol);
 	}
-	
+
 	@Override
-	public void handleText(char[] data, int pos)
-	{
+	public void handleText(char[] data, int pos) {
 		newHtml.append(HTMLUtils.escapeStringForHTML(new String(data), false));
 	}
-	
+
 	@Override
-	public void handleSimpleTag(Tag t, MutableAttributeSet a, int pos)
-	{
+	public void handleSimpleTag(Tag t, MutableAttributeSet a, int pos) {
 		newHtml.append(getCleanedTag(t, a, true));
 	}
-	
+
 	@Override
-	public void handleStartTag(Tag t, MutableAttributeSet a, int pos)
-	{
+	public void handleStartTag(Tag t, MutableAttributeSet a, int pos) {
 		newHtml.append(getCleanedTag(t, a, false));
 	}
-	
+
 	@Override
-	public void handleEndTag(Tag t, int pos)
-	{
+	public void handleEndTag(Tag t, int pos) {
 		closeNextTag();
 	}
-	
-	private void closeNextTag()
-	{
+
+	private void closeNextTag() {
 		newHtml.append(closeTagsStack.pop());
 	}
-	
-	private String getCleanedTag(Tag tag, MutableAttributeSet attributeSet, boolean closeTag)
-	{
-		if(!isTagKept(tag))
-		{
-			if(!closeTag)
-				closeTagsStack.push(""); //All tags must be in closeTagsStack
+
+	private String getCleanedTag(Tag tag, MutableAttributeSet attributeSet, boolean closeTag) {
+		if (!isTagKept(tag)) {
+			if (!closeTag)
+				closeTagsStack.push(""); // All tags must be in closeTagsStack
 			return "";
 		}
-		
+
 		StringBuilder sbMainTag = new StringBuilder();
 		StringBuilder sbAdditionalTag = new StringBuilder();
-		
+
 		sbMainTag.append("<" + tag.toString());
-		
-		for(Enumeration<?> en = attributeSet.getAttributeNames(); en.hasMoreElements(); )
-		{
+
+		for (Enumeration<?> en = attributeSet.getAttributeNames(); en.hasMoreElements();) {
 			Object attributeName = en.nextElement();
 			String cleanedAttribute = getCleanedAttribute(tag, attributeName, attributeSet.getAttribute(attributeName));
-			
-			if(attributeName == Attribute.STYLE && tag != Tag.FONT && sbAdditionalTag.length() == 0)
-			{
+
+			if (attributeName == Attribute.STYLE && tag != Tag.FONT && sbAdditionalTag.length() == 0) {
 				String fontAttributes = extractFontAttributesFromStyles(attributeSet.getAttribute(attributeName).toString());
-				if(fontAttributes != null && fontAttributes.length() > 0)
+				if (fontAttributes != null && fontAttributes.length() > 0)
 					sbAdditionalTag.append("<" + Tag.FONT + fontAttributes + ">");
 			}
-			
-			if(cleanedAttribute.length() > 0)
+
+			if (cleanedAttribute.length() > 0)
 				sbMainTag.append(" " + cleanedAttribute);
 		}
-		
-		if(closeTag)
+
+		if (closeTag)
 			sbMainTag.append(" /");
 		sbMainTag.append(">");
-		
-		if(closeTag)
-		{ //The eventual additional tag must be outside the main tag
-			if(sbAdditionalTag.length() > 0)
+
+		if (closeTag) { // The eventual additional tag must be outside the main tag
+			if (sbAdditionalTag.length() > 0)
 				return sbAdditionalTag.toString() + sbMainTag.toString() + "</" + Tag.FONT + ">";
 			return sbMainTag.toString();
 		}
-		
-		//The eventual additional tag must be inside the main tag
-		if(sbAdditionalTag.length() > 0)
-		{
+
+		// The eventual additional tag must be inside the main tag
+		if (sbAdditionalTag.length() > 0) {
 			closeTagsStack.push("</" + Tag.FONT + "></" + tag + ">");
-			return sbMainTag.toString() +  sbAdditionalTag.toString();
+			return sbMainTag.toString() + sbAdditionalTag.toString();
 		}
-		
+
 		closeTagsStack.push("</" + tag + ">");
 		return sbMainTag.toString();
 	}
-	
-	private boolean isTagKept(Tag tag)
-	{
-		return 
-			tag == HTML.Tag.A ||
-			tag == HTML.Tag.B ||
-			tag == HTML.Tag.BR ||
-			tag == HTML.Tag.DIV ||
-			tag == HTML.Tag.FONT ||
-			tag == HTML.Tag.H1 ||
-			tag == HTML.Tag.H2 ||
-			tag == HTML.Tag.H3 ||
-			tag == HTML.Tag.H4 ||
-			tag == HTML.Tag.H5 ||
-			tag == HTML.Tag.H6 ||
-			tag == HTML.Tag.I ||
-			tag == HTML.Tag.IMG ||
-			tag == HTML.Tag.LI ||
-			tag == HTML.Tag.OL ||
-			tag == HTML.Tag.P ||
-			tag == HTML.Tag.SPAN ||
-			tag == HTML.Tag.U ||
-			tag == HTML.Tag.UL;
+
+	private boolean isTagKept(Tag tag) {
+		return tag == HTML.Tag.A || tag == HTML.Tag.B || tag == HTML.Tag.BR || tag == HTML.Tag.DIV || tag == HTML.Tag.FONT
+				|| tag == HTML.Tag.H1 || tag == HTML.Tag.H2 || tag == HTML.Tag.H3 || tag == HTML.Tag.H4 || tag == HTML.Tag.H5
+				|| tag == HTML.Tag.H6 || tag == HTML.Tag.I || tag == HTML.Tag.IMG || tag == HTML.Tag.LI || tag == HTML.Tag.OL
+				|| tag == HTML.Tag.P || tag == HTML.Tag.SPAN || tag == HTML.Tag.U || tag == HTML.Tag.UL;
 	}
-	
-	private String getCleanedAttribute(Tag tag, Object attributeName, Object attributeValue)
-	{
-		if(attributeName == null)
+
+	private String getCleanedAttribute(Tag tag, Object attributeName, Object attributeValue) {
+		if (attributeName == null)
 			return "";
-		
-		if(attributeName == Attribute.STYLE)
-		{
-			if(attributeValue != null)
-			{
+
+		if (attributeName == Attribute.STYLE) {
+			if (attributeValue != null) {
 				String cleanedStyle = getCleanedStyleValue(attributeValue.toString());
-				if(cleanedStyle != null && cleanedStyle.length() > 0)
-					return "style=\"" +cleanedStyle+ "\"";
+				if (cleanedStyle != null && cleanedStyle.length() > 0)
+					return "style=\"" + cleanedStyle + "\"";
 			}
-			
+
 			return "";
 		}
-		
-		if(attributeName == Attribute.CLASS)
-		{
-			if(attributeValue != null)
-			{
+
+		if (attributeName == Attribute.CLASS) {
+			if (attributeValue != null) {
 				String cleanedClass = getCleanedClassValue(attributeValue.toString());
-				if(cleanedClass != null && cleanedClass.length() > 0)
-					return "class=\"" +cleanedClass+ "\"";
+				if (cleanedClass != null && cleanedClass.length() > 0)
+					return "class=\"" + cleanedClass + "\"";
 			}
-			
+
 			return "";
 		}
-		
+
 		boolean includeAttribute = false;
-		
-		if(tag == Tag.A)
+
+		if (tag == Tag.A)
 			includeAttribute = attributeName == Attribute.HREF || attributeName == Attribute.TARGET || attributeName == Attribute.TITLE;
-		else if(tag == Tag.FONT)
+		else if (tag == Tag.FONT)
 			includeAttribute = attributeName == Attribute.SIZE || attributeName == Attribute.COLOR;
-		else if(tag == Tag.IMG)
+		else if (tag == Tag.IMG)
 			includeAttribute = attributeName == Attribute.WIDTH || attributeName == Attribute.HEIGHT || attributeName == Attribute.SRC;
-		else if(tag == Tag.P)
+		else if (tag == Tag.P)
 			includeAttribute = attributeName == Attribute.ALIGN;
-		
-		if(includeAttribute)
-			return attributeName + "=\"" +attributeValue+ "\"";
+
+		if (includeAttribute)
+			return attributeName + "=\"" + attributeValue + "\"";
 		return "";
 	}
-	
-	private String getCleanedStyleValue(String styleValue)
-	{
+
+	private String getCleanedStyleValue(String styleValue) {
 		StringBuilder sb = new StringBuilder();
-		
-		for(String styleEffect : styleValue.split(";"))
-		{
+
+		for (String styleEffect : styleValue.split(";")) {
 			String cleanedStyleEffect = getCleanedStyleEffect(styleEffect);
-			if(cleanedStyleEffect.length() > 0)
+			if (cleanedStyleEffect.length() > 0)
 				sb.append(cleanedStyleEffect + ";");
 		}
-		
+
 		return sb.toString();
 	}
-	
-	private String extractFontAttributesFromStyles(String styleValue)
-	{
+
+	private String extractFontAttributesFromStyles(String styleValue) {
 		StringBuilder sb = new StringBuilder();
-		
-		for(String styleEffect : styleValue.split(";"))
-		{
+
+		for (String styleEffect : styleValue.split(";")) {
 			String[] keyAndValue = getStyleEffectKeyAndValue(styleEffect);
-			if(keyAndValue != null)
-			{
+			if (keyAndValue != null) {
 				String effectKey = keyAndValue[0];
 				String effectValue = keyAndValue[1];
-				
+
 				CSS.Attribute attribute = CSS.getAttribute(effectKey);
-				
-				if(attribute == CSS.Attribute.COLOR)
+
+				if (attribute == CSS.Attribute.COLOR)
 					sb.append(" " + Attribute.COLOR + "=\"" + effectValue + "\"");
-				else if(attribute == CSS.Attribute.FONT_SIZE)
-				{
+				else if (attribute == CSS.Attribute.FONT_SIZE) {
 					Integer fontSizeInPoints = HTMLUtils.getFontSizeInPoints(effectValue);
-					if(fontSizeInPoints != null)
+					if (fontSizeInPoints != null)
 						sb.append(" " + Attribute.STYLE + "=\"" + CSS.Attribute.FONT_SIZE + ":" + fontSizeInPoints + "pt;\"");
 				}
 			}
 		}
-		
+
 		return sb.toString();
 	}
-	
+
 	/**
 	 * Effect must contains [effect name]:[effect value] ie. "xxxx: yyyy"
+	 * 
 	 * @param effect
 	 * @return
 	 */
-	private String getCleanedStyleEffect(String effect)
-	{
+	private String getCleanedStyleEffect(String effect) {
 		String[] keyAndValue = getStyleEffectKeyAndValue(effect);
-		if(keyAndValue == null)
+		if (keyAndValue == null)
 			return "";
-		
+
 		String effectKey = keyAndValue[0];
 		String effectValue = keyAndValue[1];
-		
+
 		CSS.Attribute attribute = CSS.getAttribute(effectKey);
-		
-		if(attribute == null)
+
+		if (attribute == null)
 			return "";
-		
-// Color must be handled in Font tag otherwise the wysiwyg goes wrong when changing color
-//		if(attribute == CSS.Attribute.COLOR)
-//			return attribute.toString() + ": " + effectValue;
-		else if(attribute == CSS.Attribute.BACKGROUND_COLOR)
+
+		// Color must be handled in Font tag otherwise the wysiwyg goes wrong when changing color
+		// if(attribute == CSS.Attribute.COLOR)
+		// return attribute.toString() + ": " + effectValue;
+		else if (attribute == CSS.Attribute.BACKGROUND_COLOR)
 			return attribute.toString() + ": " + effectValue;
-// Font size must be handled in Font tag otherwise the wysiwyg goes wrong when changing font size
-//		else if(attribute == CSS.Attribute.FONT_SIZE)
-//			return attribute.toString() + ": " + effectValue;
-		else if(attribute == CSS.Attribute.FONT_WEIGHT)
-		{
-			if(effectValue.equals("bold") || effectValue.equals("bolder"))
+		// Font size must be handled in Font tag otherwise the wysiwyg goes wrong when changing font size
+		// else if(attribute == CSS.Attribute.FONT_SIZE)
+		// return attribute.toString() + ": " + effectValue;
+		else if (attribute == CSS.Attribute.FONT_WEIGHT) {
+			if (effectValue.equals("bold") || effectValue.equals("bolder"))
 				return attribute.toString() + ": bold";
-		}
-		else if(attribute == CSS.Attribute.TEXT_DECORATION)
-		{
-			if(effectValue.equals("underline"))
+		} else if (attribute == CSS.Attribute.TEXT_DECORATION) {
+			if (effectValue.equals("underline"))
 				return attribute.toString() + ": underline";
-		}
-		else if(attribute == CSS.Attribute.FONT_STYLE)
-		{
-			if(effectValue.equals("italic"))
+		} else if (attribute == CSS.Attribute.FONT_STYLE) {
+			if (effectValue.equals("italic"))
 				return attribute.toString() + ": italic";
-		}
-		else if(attribute == CSS.Attribute.TEXT_ALIGN)
-		{
-			if(effectValue.equals("left") || effectValue.equals("right") || effectValue.equals("center") || effectValue.equals("justify"))
+		} else if (attribute == CSS.Attribute.TEXT_ALIGN) {
+			if (effectValue.equals("left") || effectValue.equals("right") || effectValue.equals("center") || effectValue.equals("justify"))
 				return attribute.toString() + ": " + effectValue;
-		}
-		else if(attribute == CSS.Attribute.BACKGROUND)
-		{ //Get only the color if any
-			for(String backgroundItem : effectValue.split(" "))
-			{
+		} else if (attribute == CSS.Attribute.BACKGROUND) { // Get only the color if any
+			for (String backgroundItem : effectValue.split(" ")) {
 				Color color = HTMLUtils.extractColorFromString(backgroundItem.trim());
-				if(color != null)
+				if (color != null)
 					return CSS.Attribute.BACKGROUND_COLOR + ": " + backgroundItem.trim();
 			}
-		}	
-		
+		}
+
 		return "";
 	}
-	
-	private String[] getStyleEffectKeyAndValue(String effect)
-	{
+
+	private String[] getStyleEffectKeyAndValue(String effect) {
 		effect = effect.trim();
-		
+
 		int indexOf = effect.indexOf(':');
-		if(indexOf == -1 || effect.length() <= indexOf+1)
+		if (indexOf == -1 || effect.length() <= indexOf + 1)
 			return null;
-		
+
 		String[] keyAndValue = new String[2];
 		keyAndValue[0] = effect.substring(0, indexOf).trim();
-		keyAndValue[1] = effect.substring(indexOf+1).trim();
-		
+		keyAndValue[1] = effect.substring(indexOf + 1).trim();
+
 		return keyAndValue;
 	}
-	
-	private String getCleanedClassValue(String classValue)
-	{
-		for(String classItem : classValue.split(" "))
-		{
-			if(availableStyleClasses.contains(classItem))
-				return classItem; //Don't handle multiple class because we cannot set multiple styles in docx
+
+	private String getCleanedClassValue(String classValue) {
+		for (String classItem : classValue.split(" ")) {
+			if (availableStyleClasses.contains(classItem))
+				return classItem; // Don't handle multiple class because we cannot set multiple styles in docx
 		}
-		
+
 		return null;
 	}
 }

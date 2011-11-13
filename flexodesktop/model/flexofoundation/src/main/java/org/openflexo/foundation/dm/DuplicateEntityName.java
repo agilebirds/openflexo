@@ -24,7 +24,7 @@ import org.openflexo.foundation.FlexoException;
 public class DuplicateEntityName extends FlexoException {
 
 	private String name;
-	
+
 	public DuplicateEntityName(String newComponentName) {
 		this.name = newComponentName;
 	}

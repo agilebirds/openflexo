@@ -40,30 +40,24 @@ import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
-
-public class DataBinding implements StringConvertable<DataBinding>
-{
+public class DataBinding implements StringConvertable<DataBinding> {
 
 	private static final Logger logger = Logger.getLogger(FIBComponent.class.getPackage().getName());
 
 	public static DataBinding.DataBindingConverter CONVERTER = new DataBindingConverter();
 
-	public static class DataBindingConverter extends Converter<DataBinding>
-	{
-		public DataBindingConverter() 
-		{
+	public static class DataBindingConverter extends Converter<DataBinding> {
+		public DataBindingConverter() {
 			super(DataBinding.class);
 		}
 
 		@Override
-		public DataBinding convertFromString(String value) 
-		{
+		public DataBinding convertFromString(String value) {
 			return new DataBinding(value);
 		}
 
 		@Override
-		public String convertToString(DataBinding value) 
-		{
+		public String convertToString(DataBinding value) {
 			return value.toString();
 		};
 	}
@@ -79,72 +73,62 @@ public class DataBinding implements StringConvertable<DataBinding>
 	private BindingDefinition bindingDefinition;
 	private AbstractBinding binding;
 
-	//private Exception newIntanceException;
-	
-	public DataBinding(FIBModelObject owner, FIBModelAttribute attribute, BindingDefinition df) 
-	{
-		//newIntanceException = new Exception("Create instance with owner "+owner);
+	// private Exception newIntanceException;
+
+	public DataBinding(FIBModelObject owner, FIBModelAttribute attribute, BindingDefinition df) {
+		// newIntanceException = new Exception("Create instance with owner "+owner);
 		setOwner(owner);
 		setBindingAttribute(attribute);
 		setBindingDefinition(df);
 	}
 
-	public DataBinding(String unparsed) 
-	{
-		//newIntanceException = new Exception("Create instance with "+unparsed);
+	public DataBinding(String unparsed) {
+		// newIntanceException = new Exception("Create instance with "+unparsed);
 		unparsedBinding = unparsed;
 	}
 
-	public Object execute(BindingEvaluationContext context)
-	{
+	public Object execute(BindingEvaluationContext context) {
 		return getBindingValue(context);
 	}
 
-	public Object getBindingValue(BindingEvaluationContext context)
-	{
-		//logger.info("getBindingValue() "+this);
+	public Object getBindingValue(BindingEvaluationContext context) {
+		// logger.info("getBindingValue() "+this);
 		if (getBinding() != null) {
 			return getBinding().getBindingValue(context);
 		}
 		return null;
 	}
 
-	public void setBindingValue(Object value, BindingEvaluationContext context)
-	{
+	public void setBindingValue(Object value, BindingEvaluationContext context) {
 		if (getBinding() != null && getBinding().isSettable()) {
-			getBinding().setBindingValue(value,context);
+			getBinding().setBindingValue(value, context);
 		}
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		if (binding != null) {
 			return binding.getStringRepresentation();
 		}
 		return unparsedBinding;
 	}
 
-	public BindingDefinition getBindingDefinition() 
-	{
+	public BindingDefinition getBindingDefinition() {
 		return bindingDefinition;
 	}
 
-	public void setBindingDefinition(BindingDefinition bindingDefinition) 
-	{
+	public void setBindingDefinition(BindingDefinition bindingDefinition) {
 		this.bindingDefinition = bindingDefinition;
 	}
 
-	public AbstractBinding getBinding() 
-	{
+	public AbstractBinding getBinding() {
 		if (binding == null) {
 			finalizeDeserialization();
 		}
 		return binding;
 	}
 
-	public AbstractBinding getBinding(boolean silentMode) 
-	{
+	public AbstractBinding getBinding(boolean silentMode) {
 		if (binding == null) {
 			finalizeDeserialization(silentMode);
 		}
@@ -156,8 +140,7 @@ public class DataBinding implements StringConvertable<DataBinding>
 		this.binding = binding;
 	}*/
 
-	public void setBinding(AbstractBinding value)
-	{
+	public void setBinding(AbstractBinding value) {
 		AbstractBinding oldValue = this.binding;
 		if (oldValue == null) {
 			if (value == null) {
@@ -167,56 +150,50 @@ public class DataBinding implements StringConvertable<DataBinding>
 				unparsedBinding = value != null ? value.getStringRepresentation() : null;
 				updateDependancies();
 				if (bindingAttribute != null) {
-					owner.notify(new FIBAttributeNotification<AbstractBinding>(bindingAttribute,oldValue,value));
+					owner.notify(new FIBAttributeNotification<AbstractBinding>(bindingAttribute, oldValue, value));
 				}
 				owner.notifyBindingChanged(this);
 				return;
 			}
-		}
-		else {
+		} else {
 			if (oldValue.equals(value)) {
 				return; // No change
 			} else {
 				this.binding = value;
 				unparsedBinding = value != null ? value.getStringRepresentation() : null;
-				if(logger.isLoggable(Level.FINE)) {
-					logger.fine("Binding takes now value "+value);
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Binding takes now value " + value);
 				}
 				updateDependancies();
 				if (bindingAttribute != null) {
-					owner.notify(new FIBAttributeNotification<AbstractBinding>(bindingAttribute,oldValue,value));
+					owner.notify(new FIBAttributeNotification<AbstractBinding>(bindingAttribute, oldValue, value));
 				}
 				owner.notifyBindingChanged(this);
 				return;
 			}
 		}
 	}
-	
-	public boolean hasBinding()
-	{
+
+	public boolean hasBinding() {
 		return binding != null;
 	}
-	
-	public boolean isValid()
-	{
+
+	public boolean isValid() {
 		return getBinding() != null && getBinding().isBindingValid();
 	}
-	
-	public boolean isValid(boolean silentMode)
-	{
+
+	public boolean isValid(boolean silentMode) {
 		return getBinding(silentMode) != null && getBinding(silentMode).isBindingValid();
 	}
-		
-	public boolean isSet()
-	{
+
+	public boolean isSet() {
 		return unparsedBinding != null || binding != null;
 	}
-	
-	public boolean isUnset()
-	{
+
+	public boolean isUnset() {
 		return unparsedBinding == null && binding == null;
 	}
-	
+
 	public String getUnparsedBinding() {
 		return unparsedBinding;
 	}
@@ -226,115 +203,106 @@ public class DataBinding implements StringConvertable<DataBinding>
 		binding = null;
 	}
 
-	public Bindable getBindable()
-	{
+	public Bindable getBindable() {
 		return getOwner();
 	}
-	
-	public BindingFactory getBindingFactory()
-	{
+
+	public BindingFactory getBindingFactory() {
 		return getBindable().getBindingFactory();
 	}
-	
+
 	public FIBModelObject getOwner() {
 		return owner;
 	}
 
-	public void setOwner(FIBModelObject owner)
-	{
+	public void setOwner(FIBModelObject owner) {
 		this.owner = owner;
 	}
 
-	protected void finalizeDeserialization(boolean silentMode)
-	{
+	protected void finalizeDeserialization(boolean silentMode) {
 		if (getUnparsedBinding() == null) {
 			return;
 		}
-		
+
 		/*if (getUnparsedBinding().equals("data.isAcceptableAsSubProcess(SubProcess.component.candidateValue)")) {
 			System.out.println("finalizeDeserialization for "+getUnparsedBinding());
 			System.out.println("Owner: "+getOwner()+" of "+getOwner().getClass());
 			System.out.println("BindingModel: "+getOwner().getBindingModel());
 		}*/
-		
-		//System.out.println("BindingModel: "+getOwner().getBindingModel());
+
+		// System.out.println("BindingModel: "+getOwner().getBindingModel());
 		if (getBindable() != null) {
 			BindingFactory factory = getBindingFactory();
 			factory.setBindable(getBindable());
 			binding = factory.convertFromString(getUnparsedBinding());
 			binding.setBindingDefinition(getBindingDefinition());
-			//System.out.println(">>>>>>>>>>>>>> Binding: "+binding.getStringRepresentation()+" owner="+binding.getOwner());
-			//System.out.println("binding.isBindingValid()="+binding.isBindingValid());
+			// System.out.println(">>>>>>>>>>>>>> Binding: "+binding.getStringRepresentation()+" owner="+binding.getOwner());
+			// System.out.println("binding.isBindingValid()="+binding.isBindingValid());
 		}
-		
+
 		if (!binding.isBindingValid()) {
 			if (!silentMode) {
-				logger.warning("Binding not valid: "+binding+" for owner "+getOwner()+" context="+(getOwner()!=null?getOwner().getRootComponent():null));
+				logger.warning("Binding not valid: " + binding + " for owner " + getOwner() + " context="
+						+ (getOwner() != null ? getOwner().getRootComponent() : null));
 				// Dev note: Uncomment following to get more informations
-				//logger.warning("Binding not valid: "+binding+" for owner "+getOwner()+" context="+(getOwner()!=null?(getOwner()).getRootComponent():null));			logger.info("BindingModel="+getOwner().getBindingModel());
-				//binding.debugIsBindingValid();
-				//BindingExpression.logger.setLevel(Level.FINE);
-				//binding = AbstractBinding.abstractBindingConverter.convertFromString(getUnparsedBinding());
-				//binding.setBindingDefinition(getBindingDefinition());
-				//binding.isBindingValid();
-				//(new Exception("prout")).printStackTrace();
-				//System.exit(-1);
+				// logger.warning("Binding not valid: "+binding+" for owner "+getOwner()+" context="+(getOwner()!=null?(getOwner()).getRootComponent():null));
+				// logger.info("BindingModel="+getOwner().getBindingModel());
+				// binding.debugIsBindingValid();
+				// BindingExpression.logger.setLevel(Level.FINE);
+				// binding = AbstractBinding.abstractBindingConverter.convertFromString(getUnparsedBinding());
+				// binding.setBindingDefinition(getBindingDefinition());
+				// binding.isBindingValid();
+				// (new Exception("prout")).printStackTrace();
+				// System.exit(-1);
 			}
 		}
 
 		updateDependancies();
 	}
-	
-	protected void finalizeDeserialization()
-	{
+
+	protected void finalizeDeserialization() {
 		finalizeDeserialization(false);
 		if (owner != null && hasBinding() && isValid()) {
 			owner.notifyBindingChanged(this);
 		}
 	}
 
-	protected void updateDependancies()
-	{
+	protected void updateDependancies() {
 		if (getOwner() instanceof FIBComponent) {
 
 			if (binding == null) {
 				return;
 			}
-			
+
 			Vector<Expression> primitives;
 			try {
 				primitives = Expression.extractPrimitives(binding.getStringRepresentation());
 
-				FIBComponent component = (FIBComponent)getOwner();
+				FIBComponent component = (FIBComponent) getOwner();
 				FIBComponent rootComponent = component.getRootComponent();
 				Iterator<FIBComponent> subComponents = rootComponent.subComponentIterator();
 				while (subComponents.hasNext()) {
 					FIBComponent next = subComponents.next();
 					if (next != getOwner()) {
-						if (next instanceof FIBWidget 
-								&& ((FIBWidget)next).getData() != null
-								&& ((FIBWidget)next).getData().isSet()) {
-							String data = ((FIBWidget)next).getData().toString();
+						if (next instanceof FIBWidget && ((FIBWidget) next).getData() != null && ((FIBWidget) next).getData().isSet()) {
+							String data = ((FIBWidget) next).getData().toString();
 							if (data != null) {
 								for (Expression p : primitives) {
 									String primitiveValue = null;
 									if (p instanceof Variable) {
-										primitiveValue = ((Variable)p).getName();
+										primitiveValue = ((Variable) p).getName();
 									}
 									if (p instanceof Function) {
-										primitiveValue = ((Function)p).getName();
+										primitiveValue = ((Function) p).getName();
 									}
 									if (primitiveValue != null && primitiveValue.startsWith(data)) {
 										try {
 											component.declareDependantOf(next);
 										} catch (DependancyLoopException e) {
 											logger.warning("DependancyLoopException raised while declaring dependancy (data lookup)"
-													+"in the context of binding: "+binding.getStringRepresentation()
-													+" primitive: "+primitiveValue
-													+" component: "+component
-													+" dependancy: "+next
-													+" data: "+data
-													+" message: "+e.getMessage());
+													+ "in the context of binding: " + binding.getStringRepresentation() + " primitive: "
+													+ primitiveValue + " component: " + component + " dependancy: " + next + " data: "
+													+ data + " message: " + e.getMessage());
 										}
 									}
 								}
@@ -345,21 +313,20 @@ public class DataBinding implements StringConvertable<DataBinding>
 							for (Expression p : primitives) {
 								String primitiveValue = null;
 								if (p instanceof Variable) {
-									primitiveValue = ((Variable)p).getName();
+									primitiveValue = ((Variable) p).getName();
 								}
 								if (p instanceof Function) {
-									primitiveValue = ((Function)p).getName();
+									primitiveValue = ((Function) p).getName();
 								}
-								if (primitiveValue != null && StringUtils.isNotEmpty(next.getName()) && primitiveValue.startsWith(next.getName())) {
+								if (primitiveValue != null && StringUtils.isNotEmpty(next.getName())
+										&& primitiveValue.startsWith(next.getName())) {
 									try {
 										component.declareDependantOf(next);
 									} catch (DependancyLoopException e) {
 										logger.warning("DependancyLoopException raised while declaring dependancy (name lookup)"
-												+"in the context of binding: "+binding.getStringRepresentation()
-												+" primitive: "+primitiveValue
-												+" component: "+component
-												+" dependancy: "+next
-												+" message: "+e.getMessage());
+												+ "in the context of binding: " + binding.getStringRepresentation() + " primitive: "
+												+ primitiveValue + " component: " + component + " dependancy: " + next + " message: "
+												+ e.getMessage());
 									}
 								}
 							}
@@ -378,13 +345,11 @@ public class DataBinding implements StringConvertable<DataBinding>
 		}
 	}
 
-	public FIBModelAttribute getBindingAttribute()
-	{
+	public FIBModelAttribute getBindingAttribute() {
 		return bindingAttribute;
 	}
-	
-	public void setBindingAttribute(FIBModelAttribute bindingAttribute)
-	{
+
+	public void setBindingAttribute(FIBModelAttribute bindingAttribute) {
 		this.bindingAttribute = bindingAttribute;
 	}
 

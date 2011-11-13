@@ -26,38 +26,33 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
 import org.openflexo.foundation.ie.IEObject;
 
+public class IESelectAll extends FlexoGUIAction<IESelectAll, IEObject, IEObject> {
 
-public class IESelectAll extends FlexoGUIAction<IESelectAll, IEObject, IEObject>
-{
+	public static FlexoActionType<IESelectAll, IEObject, IEObject> actionType = new FlexoActionType<IESelectAll, IEObject, IEObject>(
+			"select_all", FlexoActionType.editGroup) {
 
-    public static FlexoActionType<IESelectAll, IEObject, IEObject> actionType = new FlexoActionType<IESelectAll, IEObject, IEObject> ("select_all",FlexoActionType.editGroup) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public IESelectAll makeNewAction(IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor) {
+			return new IESelectAll(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public IESelectAll makeNewAction(IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor) 
-        {
-            return new IESelectAll(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(IEObject object, Vector<IEObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(IEObject object, Vector<IEObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) 
-        {
-            return true;
-        }
-                
-    };
-    
-    IESelectAll (IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor)
-    {
-    		super(actionType, focusedObject, globalSelection,editor);
-    }
-    
+	};
+
+	IESelectAll(IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
 }

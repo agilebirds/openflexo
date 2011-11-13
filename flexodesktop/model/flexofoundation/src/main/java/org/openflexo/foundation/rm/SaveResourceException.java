@@ -27,19 +27,16 @@ import org.openflexo.foundation.FlexoException;
  * @author sguerin
  * 
  */
-public class SaveResourceException extends FlexoException
-{
+public class SaveResourceException extends FlexoException {
 
-    protected FlexoFileResource _fileResource;
+	protected FlexoFileResource _fileResource;
 
-    public SaveResourceException(FlexoFileResource fileResource)
-    {
-        super();
-        _fileResource = fileResource;
-    }
+	public SaveResourceException(FlexoFileResource fileResource) {
+		super();
+		_fileResource = fileResource;
+	}
 
-    public FlexoFileResource getFileResource()
-    {
-        return _fileResource;
-    }
+	public FlexoFileResource getFileResource() {
+		return _fileResource;
+	}
 }

@@ -28,66 +28,65 @@ import org.netbeans.lib.cvsclient.event.EventManager;
 import org.netbeans.lib.cvsclient.event.FileInfoEvent;
 
 /**
- * @author  Milos Kleint
+ * @author Milos Kleint
  */
 public class ExportBuilder implements Builder {
 
-    private static final String FILE_INFOS = "MUARC?"; //NOI18N
+	private static final String FILE_INFOS = "MUARC?"; // NOI18N
 
-    private final EventManager eventManager;
-    private final String localPath;
+	private final EventManager eventManager;
+	private final String localPath;
 
-    private DefaultFileInfoContainer fileInfoContainer;
+	private DefaultFileInfoContainer fileInfoContainer;
 
-    public ExportBuilder(EventManager eventManager, ExportCommand exportCommand) {
-        this.eventManager = eventManager;
+	public ExportBuilder(EventManager eventManager, ExportCommand exportCommand) {
+		this.eventManager = eventManager;
 
-        this.localPath = exportCommand.getLocalDirectory();
-    }
+		this.localPath = exportCommand.getLocalDirectory();
+	}
 
-    @Override
+	@Override
 	public void outputDone() {
-        if (fileInfoContainer == null) {
-            return;
-        }
+		if (fileInfoContainer == null) {
+			return;
+		}
 
-        FileInfoEvent event = new FileInfoEvent(this, fileInfoContainer);
-        eventManager.fireCVSEvent(event);
+		FileInfoEvent event = new FileInfoEvent(this, fileInfoContainer);
+		eventManager.fireCVSEvent(event);
 
-        fileInfoContainer = null;
-    }
+		fileInfoContainer = null;
+	}
 
-    @Override
+	@Override
 	public void parseLine(String line, boolean isErrorMessage) {
-        if (line.length() > 2 && line.charAt(1) == ' ') {
-            String firstChar = line.substring(0, 1);
-            if (FILE_INFOS.indexOf(firstChar) >= 0) {
-                String filename = line.substring(2).trim();
-                processFile(firstChar, filename);
-            }
-            else {
-                error(line);
-            }
-        }
-    }
+		if (line.length() > 2 && line.charAt(1) == ' ') {
+			String firstChar = line.substring(0, 1);
+			if (FILE_INFOS.indexOf(firstChar) >= 0) {
+				String filename = line.substring(2).trim();
+				processFile(firstChar, filename);
+			} else {
+				error(line);
+			}
+		}
+	}
 
-    @Override
+	@Override
 	public void parseEnhancedMessage(String key, Object value) {
-    }
+	}
 
-    private void error(String line) {
-        System.err.println("Don't know anything about: " + line);
-    }
+	private void error(String line) {
+		System.err.println("Don't know anything about: " + line);
+	}
 
-    private void processFile(String type, String filename) {
-        outputDone();
+	private void processFile(String type, String filename) {
+		outputDone();
 
-        File file = new File(localPath, filename);
+		File file = new File(localPath, filename);
 
-        fileInfoContainer = new DefaultFileInfoContainer();
-        fileInfoContainer.setType(type);
-        fileInfoContainer.setFile(file);
+		fileInfoContainer = new DefaultFileInfoContainer();
+		fileInfoContainer.setType(type);
+		fileInfoContainer.setFile(file);
 
-        outputDone();
-    }
+		outputDone();
+	}
 }

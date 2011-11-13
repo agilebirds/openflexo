@@ -49,153 +49,130 @@ public abstract class NodeDesactivation<N extends FlexoNode> extends ControlGrap
 	private static final Logger logger = FlexoLogger.getLogger(NodeDesactivation.class.getPackage().getName());
 
 	private N node;
-	
+
 	/**
 	 * Returns control graph associated to desactivation of supplied node
 	 * 
 	 * @param node
 	 * @return the computed control graph
-	 * @throws NotSupportedException when an element contained in the model is not currently supported by execution model
-	 * @throws InvalidModelException when the model is not conform (validation should have failed) and thus workflow cannot be computed
+	 * @throws NotSupportedException
+	 *             when an element contained in the model is not currently supported by execution model
+	 * @throws InvalidModelException
+	 *             when the model is not conform (validation should have failed) and thus workflow cannot be computed
 	 */
-	public static ControlGraph desactivateNode (FlexoNode node,boolean interprocedural) throws NotSupportedException, InvalidModelException
-	{
+	public static ControlGraph desactivateNode(FlexoNode node, boolean interprocedural) throws NotSupportedException, InvalidModelException {
 		ControlGraphBuilder cgBuilder = getDesactivationNodeBuilder(node);
-		
+
 		if (cgBuilder != null) {
-					
+
 			if (interprocedural) {
 				Procedure procedure = cgBuilder.makeProcedure();
 				ProcedureCall returned = new ProcedureCall(procedure);
-				returned.appendHeaderComment("Node "+node.getName()+" is desactivating",true);
+				returned.appendHeaderComment("Node " + node.getName() + " is desactivating", true);
+				return returned;
+			} else {
+				ControlGraph returned = cgBuilder.makeControlGraph(interprocedural);
+				returned.appendHeaderComment("Node " + node.getName() + " is desactivating", true);
 				return returned;
 			}
-			else {
-				ControlGraph returned = cgBuilder.makeControlGraph(interprocedural);			
-				returned.appendHeaderComment("Node "+node.getName()+" is desactivating",true);
-				return returned;
-			}
-		}
-		else {
-			throw new NotSupportedException("Dont know what to do with a "+node);
+		} else {
+			throw new NotSupportedException("Dont know what to do with a " + node);
 		}
 	}
-	
 
-	public static ControlGraphBuilder getDesactivationNodeBuilder (FlexoNode node) throws NotSupportedException, InvalidModelException
-	{
+	public static ControlGraphBuilder getDesactivationNodeBuilder(FlexoNode node) throws NotSupportedException, InvalidModelException {
 		if (node instanceof AbstractActivityNode) {
 			if (node instanceof SubProcessNode) {
-				return (new SubProcessActivityNodeDesactivation((SubProcessNode)node));
-			}
-			else if (node instanceof ActivityNode) {
+				return (new SubProcessActivityNodeDesactivation((SubProcessNode) node));
+			} else if (node instanceof ActivityNode) {
 				if (node instanceof SelfExecutableActivityNode) {
-					return (new SelfExecutableActivityNodeDesactivation((SelfExecutableActivityNode)node));
-				}
-				else { 
+					return (new SelfExecutableActivityNodeDesactivation((SelfExecutableActivityNode) node));
+				} else {
 					if (node.getNodeType() == NodeType.BEGIN) {
-						return (new BeginActivityNodeDesactivation((ActivityNode)node));
-					}
-					else if (node.getNodeType() == NodeType.END) {
-						return (new EndActivityNodeDesactivation((ActivityNode)node));
-					}
-					else { // Normal node
-						return (new NormalActivityNodeDesactivation((ActivityNode)node));
+						return (new BeginActivityNodeDesactivation((ActivityNode) node));
+					} else if (node.getNodeType() == NodeType.END) {
+						return (new EndActivityNodeDesactivation((ActivityNode) node));
+					} else { // Normal node
+						return (new NormalActivityNodeDesactivation((ActivityNode) node));
 					}
 				}
 			}
-		}
-		else if (node instanceof OperationNode) {
+		} else if (node instanceof OperationNode) {
 			if (node instanceof SelfExecutableOperationNode) {
-				return (new SelfExecutableOperationNodeDesactivation((SelfExecutableOperationNode)node));
-			}
-			else { 
+				return (new SelfExecutableOperationNodeDesactivation((SelfExecutableOperationNode) node));
+			} else {
 				if (node.getNodeType() == NodeType.BEGIN) {
-					return (new BeginOperationNodeDesactivation((OperationNode)node));
-				}
-				else if (node.getNodeType() == NodeType.END) {
-					return (new EndOperationNodeDesactivation((OperationNode)node));
-				}
-				else { // Normal node
-					return (new NormalOperationNodeDesactivation((OperationNode)node));
+					return (new BeginOperationNodeDesactivation((OperationNode) node));
+				} else if (node.getNodeType() == NodeType.END) {
+					return (new EndOperationNodeDesactivation((OperationNode) node));
+				} else { // Normal node
+					return (new NormalOperationNodeDesactivation((OperationNode) node));
 				}
 			}
-		}
-		else if (node instanceof ActionNode) {
+		} else if (node instanceof ActionNode) {
 			if (node instanceof SelfExecutableActionNode) {
-				return (new SelfExecutableActionNodeDesactivation((SelfExecutableActionNode)node));
-			}
-			else { 
+				return (new SelfExecutableActionNodeDesactivation((SelfExecutableActionNode) node));
+			} else {
 				if (node.getNodeType() == NodeType.BEGIN) {
-					return (new BeginActionNodeDesactivation((ActionNode)node));
-				}
-				else if (node.getNodeType() == NodeType.END) {
-					return (new EndActionNodeDesactivation((ActionNode)node));
-				}
-				else { // Normal node
-					return (new NormalActionNodeDesactivation((ActionNode)node));
+					return (new BeginActionNodeDesactivation((ActionNode) node));
+				} else if (node.getNodeType() == NodeType.END) {
+					return (new EndActionNodeDesactivation((ActionNode) node));
+				} else { // Normal node
+					return (new NormalActionNodeDesactivation((ActionNode) node));
 				}
 			}
 		}
-		
-		throw new NotSupportedException("Dont know what to do with a "+node);
+
+		throw new NotSupportedException("Dont know what to do with a " + node);
 	}
-	
-	public NodeDesactivation(N node)
-	{
+
+	public NodeDesactivation(N node) {
 		super();
 		this.node = node;
 	}
-	
 
 	@Override
-	protected String getProcedureComment()
-	{
-		 return FlexoLocalization.localizedForKeyWithParams("this_method_represents_code_to_be_executed_when_node_($0)_is_desactivated",getNode().getName());
+	protected String getProcedureComment() {
+		return FlexoLocalization.localizedForKeyWithParams("this_method_represents_code_to_be_executed_when_node_($0)_is_desactivated",
+				getNode().getName());
 	}
-	
+
 	@Override
-	public final ControlGraph makeControlGraph(boolean interprocedural)  throws InvalidModelException,NotSupportedException
-	{
-		ControlGraph returned = makeSequentialControlGraph(
-				makeControlGraphCommonPrelude(interprocedural),
-				makeSpecificControlGraph(interprocedural),
-				makeControlGraphCommonPostlude(interprocedural));
-		
+	public final ControlGraph makeControlGraph(boolean interprocedural) throws InvalidModelException, NotSupportedException {
+		ControlGraph returned = makeSequentialControlGraph(makeControlGraphCommonPrelude(interprocedural),
+				makeSpecificControlGraph(interprocedural), makeControlGraphCommonPostlude(interprocedural));
+
 		return returned;
 	}
 
-	public abstract ControlGraph makeSpecificControlGraph(boolean interprocedural)  throws InvalidModelException,NotSupportedException;
-	
-	protected final ControlGraph makeControlGraphCommonPrelude(boolean interprocedural)
-	{
+	public abstract ControlGraph makeSpecificControlGraph(boolean interprocedural) throws InvalidModelException, NotSupportedException;
+
+	protected final ControlGraph makeControlGraphCommonPrelude(boolean interprocedural) {
 		ControlGraph EXECUTE_DESACTIVATION_PRIMITIVE = null;
 		ControlGraph EXECUTE_DESACTIVATION_ASSIGNMENTS = null;
-		
+
 		if (getNode().getDesactivationPrimitive() != null) {
 			EXECUTE_DESACTIVATION_PRIMITIVE = makeControlGraphForExecutionPrimitive(getNode().getDesactivationPrimitive());
-			EXECUTE_DESACTIVATION_PRIMITIVE.setHeaderComment("Call desactivation primitive for node "+getNode().getName());
+			EXECUTE_DESACTIVATION_PRIMITIVE.setHeaderComment("Call desactivation primitive for node " + getNode().getName());
 		}
-		
+
 		if (getNode().getDesactivationAssignments().size() > 0) {
 			Vector<ControlGraph> allAssignments = new Vector<ControlGraph>();
 			for (BindingAssignment assignment : getNode().getDesactivationAssignments())
 				allAssignments.add(makeControlGraphForAssignment(assignment));
 			EXECUTE_DESACTIVATION_ASSIGNMENTS = makeSequentialControlGraph(allAssignments);
-			EXECUTE_DESACTIVATION_ASSIGNMENTS.setHeaderComment("Perform assignments declared for desactivation of node "+getNode().getName());
+			EXECUTE_DESACTIVATION_ASSIGNMENTS.setHeaderComment("Perform assignments declared for desactivation of node "
+					+ getNode().getName());
 		}
-		
-		return makeSequentialControlGraph(
-				EXECUTE_DESACTIVATION_PRIMITIVE,
-				EXECUTE_DESACTIVATION_ASSIGNMENTS);
+
+		return makeSequentialControlGraph(EXECUTE_DESACTIVATION_PRIMITIVE, EXECUTE_DESACTIVATION_ASSIGNMENTS);
 	}
 
-	protected ControlGraph makeControlGraphCommonPostlude(boolean interprocedural) throws InvalidModelException, NotSupportedException
-	{
+	protected ControlGraph makeControlGraphCommonPostlude(boolean interprocedural) throws InvalidModelException, NotSupportedException {
 		Vector<ControlGraph> sendTokensStatements = new Vector<ControlGraph>();
 
 		for (FlexoPostCondition edge : getNode().getOutgoingPostConditions()) {
-			sendTokensStatements.add(SendToken.sendToken(edge,interprocedural));
+			sendTokensStatements.add(SendToken.sendToken(edge, interprocedural));
 		}
 
 		ControlGraph SEND_TOKENS = makeFlowControlGraph(sendTokensStatements);
@@ -204,27 +181,23 @@ public abstract class NodeDesactivation<N extends FlexoNode> extends ControlGrap
 
 		for (FlexoPostCondition edge : getNode().getOutgoingPostConditions()) {
 			if (edge instanceof ExternalMessageInEdge) {
-				sendMessagesStatements.add(SendMessage.sendMessage((ExternalMessageInEdge)edge,interprocedural));
+				sendMessagesStatements.add(SendMessage.sendMessage((ExternalMessageInEdge) edge, interprocedural));
 			}
 		}
 
 		ControlGraph SEND_MESSAGES = makeFlowControlGraph(sendMessagesStatements);
 
-		ControlGraph returned = makeSequentialControlGraph(
-				SEND_MESSAGES,
-				SEND_TOKENS);
+		ControlGraph returned = makeSequentialControlGraph(SEND_MESSAGES, SEND_TOKENS);
 
 		return returned;
 	}
 
 	@Override
-	protected String getProcedureName()
-	{
-		return "deactivate_"+ToolBox.capitalize(ToolBox.getJavaName(getNode().getName()))+"_"+getNode().getFlexoID();
+	protected String getProcedureName() {
+		return "deactivate_" + ToolBox.capitalize(ToolBox.getJavaName(getNode().getName())) + "_" + getNode().getFlexoID();
 	}
 
-	public N getNode() 
-	{
+	public N getNode() {
 		return node;
 	}
 

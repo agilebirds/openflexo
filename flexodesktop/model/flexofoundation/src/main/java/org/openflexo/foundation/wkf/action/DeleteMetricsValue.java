@@ -28,46 +28,38 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.wkf.MetricsValue;
 
+public class DeleteMetricsValue extends FlexoAction<DeleteMetricsValue, MetricsValue, MetricsValue> {
 
-public class DeleteMetricsValue extends FlexoAction<DeleteMetricsValue,MetricsValue,MetricsValue> 
-{
+	private static final Logger logger = Logger.getLogger(DeleteMetricsValue.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(DeleteMetricsValue.class.getPackage().getName());
-    
-    public static FlexoActionType<DeleteMetricsValue,MetricsValue,MetricsValue>  actionType 
-    = new FlexoActionType<DeleteMetricsValue,MetricsValue,MetricsValue> (
-    		"delete_metrics",
-    		FlexoActionType.editGroup,
-    		FlexoActionType.DELETE_ACTION_TYPE) {
+	public static FlexoActionType<DeleteMetricsValue, MetricsValue, MetricsValue> actionType = new FlexoActionType<DeleteMetricsValue, MetricsValue, MetricsValue>(
+			"delete_metrics", FlexoActionType.editGroup, FlexoActionType.DELETE_ACTION_TYPE) {
 
-    	/**
-         * Factory method
-         */
-        @Override
-		public DeleteMetricsValue makeNewAction(MetricsValue focusedObject, Vector<MetricsValue> globalSelection, FlexoEditor editor) 
-        {
-            return new DeleteMetricsValue(focusedObject, globalSelection, editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public DeleteMetricsValue makeNewAction(MetricsValue focusedObject, Vector<MetricsValue> globalSelection, FlexoEditor editor) {
+			return new DeleteMetricsValue(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(MetricsValue role, Vector<MetricsValue> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(MetricsValue role, Vector<MetricsValue> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(MetricsValue role, Vector<MetricsValue> globalSelection) 
-        {
-            return (role != null || (globalSelection != null && globalSelection.size() > 0));
-        }
-                
-    };
-    
-    static {
-    	FlexoModelObject.addActionForClass(actionType, MetricsValue.class);
-    }
-    
-    protected DeleteMetricsValue(MetricsValue focusedObject, Vector<MetricsValue> globalSelection, FlexoEditor editor) {
+		@Override
+		protected boolean isEnabledForSelection(MetricsValue role, Vector<MetricsValue> globalSelection) {
+			return (role != null || (globalSelection != null && globalSelection.size() > 0));
+		}
+
+	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, MetricsValue.class);
+	}
+
+	protected DeleteMetricsValue(MetricsValue focusedObject, Vector<MetricsValue> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

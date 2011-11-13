@@ -24,10 +24,9 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.sg.implmodel.TechnologyModelObject;
 
-
 /**
  * @author Nicolas Daniels
- *
+ * 
  */
 public class TechnologyModuleBrowserElement<T extends TechnologyModelObject> extends BrowserElement {
 	public TechnologyModuleBrowserElement(T object, ProjectBrowser browser, BrowserElement parent) {

@@ -25,22 +25,19 @@ package org.openflexo.inspector.model;
  * @author sguerin
  * 
  */
-public class ParamModel extends ParametersContainerModelObject
-{
+public class ParamModel extends ParametersContainerModelObject {
 
-    public String name;
+	public String name;
 
-    public String value;
+	public String value;
 
-    public ParamModel()
-    {
-        super();
-    }
-    
-    public ParamModel(String name, String value)
-    {
-        super();
-        this.name = name;
-        this.value = value;
-    }
+	public ParamModel() {
+		super();
+	}
+
+	public ParamModel(String name, String value) {
+		super();
+		this.name = name;
+		this.value = value;
+	}
 }

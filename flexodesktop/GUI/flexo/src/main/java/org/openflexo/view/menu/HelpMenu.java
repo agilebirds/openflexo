@@ -45,122 +45,119 @@ import org.openflexo.view.controller.FlexoController;
  * 
  * @author sguerin
  */
-public class HelpMenu extends FlexoMenu implements Observer
-{
+public class HelpMenu extends FlexoMenu implements Observer {
 
-    private JMenuItem generalHelp;
+	private JMenuItem generalHelp;
 
-    private JMenuItem flexoHelp;
+	private JMenuItem flexoHelp;
 
-    private JMenuItem modelingHelp;
+	private JMenuItem modelingHelp;
 
-    private JMenuItem helpOn;
-    
-    private JMenuItem submitHelpFor;
-    
-    private JMenuItem aboutFlexo;
+	private JMenuItem helpOn;
 
-    private JMenuItem[] modulesHelp;
+	private JMenuItem submitHelpFor;
 
-    private ActionListener helpActionListener;
-    
-    public HelpMenu(final FlexoController controller)
-    {
-        super("help", controller);
+	private JMenuItem aboutFlexo;
 
-        helpActionListener = new CSH.DisplayHelpFromSource(FlexoHelp.getHelpBroker());
-        
-        generalHelp = new JMenuItem();
-        generalHelp.setAccelerator(ToolBox.getPLATFORM()==ToolBox.MACOS?KeyStroke.getKeyStroke(KeyEvent.VK_HELP,0):KeyStroke.getKeyStroke(KeyEvent.VK_F1,0));
-        generalHelp.setText(FlexoLocalization.localizedForKey("general_help", generalHelp));
-        CSH.setHelpIDString(generalHelp, DocResourceManager.instance().getDocResourceCenterItem().getIdentifier());
-        generalHelp.addActionListener(helpActionListener);
-        add(generalHelp);
+	private JMenuItem[] modulesHelp;
 
-        flexoHelp = new JMenuItem();
-        flexoHelp.setText(FlexoLocalization.localizedForKey("flexo_help", flexoHelp));
-        CSH.setHelpIDString(flexoHelp, DocResourceManager.instance().getFlexoToolSetItem().getIdentifier());
-         flexoHelp.addActionListener(helpActionListener);
-        add(flexoHelp);
+	private ActionListener helpActionListener;
 
-        modelingHelp = new JMenuItem();
-        modelingHelp.setText(FlexoLocalization.localizedForKey("modeling_help", modelingHelp));
-        CSH.setHelpIDString(modelingHelp, DocResourceManager.instance().getFlexoModelItem().getIdentifier());
-        modelingHelp.addActionListener(helpActionListener);
-        add(modelingHelp);
-        
-         addSeparator();
-        modulesHelp = new JMenuItem[ModuleLoader.availableModules().size()];
-        for (int i = 0; i < ModuleLoader.availableModules().size(); i++) {
-            Module module = ModuleLoader.availableModules().elementAt(i);
-            modulesHelp[i] = new JMenuItem();
-            modulesHelp[i].setText(FlexoLocalization.localizedForKey(module.getName(), modulesHelp[i]));
-            CSH.setHelpIDString(modulesHelp[i], module.getHelpTopic());
-            modulesHelp[i].addActionListener(helpActionListener);
-            add(modulesHelp[i]);
-        }
+	public HelpMenu(final FlexoController controller) {
+		super("help", controller);
 
-        addSeparator();
-        helpOn = new JMenuItem();
-        helpOn.setText(FlexoLocalization.localizedForKey("help_on", helpOn));
-        //helpOn.addActionListener(new CSH.DisplayHelpAfterTracking(FlexoHelp.getHelpBroker()));
-        helpOn.addActionListener(new ActionListener() {
-           @Override
-		public void actionPerformed(ActionEvent e) {
-               new TrackComponentCHForHelpView(controller.getFlexoFrame());
-            }
-        });
-        add(helpOn);
-        
-        if (ModuleLoader.allowsDocSubmission()) {
-            submitHelpFor = new JMenuItem();
-            submitHelpFor.setText(FlexoLocalization.localizedForKey("submit_help_for", submitHelpFor));
-            //helpOn.addActionListener(new CSH.DisplayHelpAfterTracking(FlexoHelp.getHelpBroker()));
-            submitHelpFor.addActionListener(new ActionListener() {
-                @Override
+		helpActionListener = new CSH.DisplayHelpFromSource(FlexoHelp.getHelpBroker());
+
+		generalHelp = new JMenuItem();
+		generalHelp.setAccelerator(ToolBox.getPLATFORM() == ToolBox.MACOS ? KeyStroke.getKeyStroke(KeyEvent.VK_HELP, 0) : KeyStroke
+				.getKeyStroke(KeyEvent.VK_F1, 0));
+		generalHelp.setText(FlexoLocalization.localizedForKey("general_help", generalHelp));
+		CSH.setHelpIDString(generalHelp, DocResourceManager.instance().getDocResourceCenterItem().getIdentifier());
+		generalHelp.addActionListener(helpActionListener);
+		add(generalHelp);
+
+		flexoHelp = new JMenuItem();
+		flexoHelp.setText(FlexoLocalization.localizedForKey("flexo_help", flexoHelp));
+		CSH.setHelpIDString(flexoHelp, DocResourceManager.instance().getFlexoToolSetItem().getIdentifier());
+		flexoHelp.addActionListener(helpActionListener);
+		add(flexoHelp);
+
+		modelingHelp = new JMenuItem();
+		modelingHelp.setText(FlexoLocalization.localizedForKey("modeling_help", modelingHelp));
+		CSH.setHelpIDString(modelingHelp, DocResourceManager.instance().getFlexoModelItem().getIdentifier());
+		modelingHelp.addActionListener(helpActionListener);
+		add(modelingHelp);
+
+		addSeparator();
+		modulesHelp = new JMenuItem[ModuleLoader.availableModules().size()];
+		for (int i = 0; i < ModuleLoader.availableModules().size(); i++) {
+			Module module = ModuleLoader.availableModules().elementAt(i);
+			modulesHelp[i] = new JMenuItem();
+			modulesHelp[i].setText(FlexoLocalization.localizedForKey(module.getName(), modulesHelp[i]));
+			CSH.setHelpIDString(modulesHelp[i], module.getHelpTopic());
+			modulesHelp[i].addActionListener(helpActionListener);
+			add(modulesHelp[i]);
+		}
+
+		addSeparator();
+		helpOn = new JMenuItem();
+		helpOn.setText(FlexoLocalization.localizedForKey("help_on", helpOn));
+		// helpOn.addActionListener(new CSH.DisplayHelpAfterTracking(FlexoHelp.getHelpBroker()));
+		helpOn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new TrackComponentCHForHelpView(controller.getFlexoFrame());
+			}
+		});
+		add(helpOn);
+
+		if (ModuleLoader.allowsDocSubmission()) {
+			submitHelpFor = new JMenuItem();
+			submitHelpFor.setText(FlexoLocalization.localizedForKey("submit_help_for", submitHelpFor));
+			// helpOn.addActionListener(new CSH.DisplayHelpAfterTracking(FlexoHelp.getHelpBroker()));
+			submitHelpFor.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
-                    new TrackComponentCHForHelpSubmission(controller.getFlexoFrame());
-                }
-            });
-            add(submitHelpFor);
-        }
-        
-        if (ToolBox.getPLATFORM()!=ToolBox.MACOS) {
-            addSeparator();
-            aboutFlexo = new JMenuItem();
-            aboutFlexo.setText(FlexoLocalization.localizedForKey("about_flexo",aboutFlexo));
-            aboutFlexo.addActionListener(new ActionListener() {
+					new TrackComponentCHForHelpSubmission(controller.getFlexoFrame());
+				}
+			});
+			add(submitHelpFor);
+		}
 
-                @Override
-				public void actionPerformed(ActionEvent e)
-                {
-                    AboutDialog about = new AboutDialog();
-                }
-                
-            });
-            add(aboutFlexo);
-        }
-        
-        FlexoHelp.instance.addObserver(this);
-   }
+		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
+			addSeparator();
+			aboutFlexo = new JMenuItem();
+			aboutFlexo.setText(FlexoLocalization.localizedForKey("about_flexo", aboutFlexo));
+			aboutFlexo.addActionListener(new ActionListener() {
 
-    @Override
-	public void update(Observable observable, Object arg) 
-    {
-        if (observable instanceof FlexoHelp) {
-            generalHelp.removeActionListener(helpActionListener);
-            flexoHelp.removeActionListener(helpActionListener);
-            modelingHelp.removeActionListener(helpActionListener);
-            for (JMenuItem item : modulesHelp) {
-                item.removeActionListener(helpActionListener);
-            }
-            helpActionListener = new CSH.DisplayHelpFromSource(FlexoHelp.getHelpBroker());
-            generalHelp.addActionListener(helpActionListener);
-            flexoHelp.addActionListener(helpActionListener);
-            modelingHelp.addActionListener(helpActionListener);
-            for (JMenuItem item : modulesHelp) {
-                item.addActionListener(helpActionListener);
-            }
-       }
-    }
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					AboutDialog about = new AboutDialog();
+				}
+
+			});
+			add(aboutFlexo);
+		}
+
+		FlexoHelp.instance.addObserver(this);
+	}
+
+	@Override
+	public void update(Observable observable, Object arg) {
+		if (observable instanceof FlexoHelp) {
+			generalHelp.removeActionListener(helpActionListener);
+			flexoHelp.removeActionListener(helpActionListener);
+			modelingHelp.removeActionListener(helpActionListener);
+			for (JMenuItem item : modulesHelp) {
+				item.removeActionListener(helpActionListener);
+			}
+			helpActionListener = new CSH.DisplayHelpFromSource(FlexoHelp.getHelpBroker());
+			generalHelp.addActionListener(helpActionListener);
+			flexoHelp.addActionListener(helpActionListener);
+			modelingHelp.addActionListener(helpActionListener);
+			for (JMenuItem item : modulesHelp) {
+				item.addActionListener(helpActionListener);
+			}
+		}
+	}
 }

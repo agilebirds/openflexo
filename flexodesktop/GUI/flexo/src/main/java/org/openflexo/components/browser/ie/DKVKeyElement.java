@@ -26,48 +26,45 @@ import org.openflexo.foundation.dkv.Domain;
 import org.openflexo.foundation.dkv.Key;
 import org.openflexo.foundation.dkv.Value;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class DKVKeyElement extends BrowserElement
-{
+public class DKVKeyElement extends BrowserElement {
 
-    /**
-     * @param object
-     * @param elementType
-     * @param browser
-     */
-    public DKVKeyElement(Key object, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(object, BrowserElementType.DKV_KEY, browser, parent);
-    }
+	/**
+	 * @param object
+	 * @param elementType
+	 * @param browser
+	 */
+	public DKVKeyElement(Key object, ProjectBrowser browser, BrowserElement parent) {
+		super(object, BrowserElementType.DKV_KEY, browser, parent);
+	}
 
-    /**
-     * Overrides buildChildrenVector
-     * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
-     */
-    @Override
-	protected void buildChildrenVector()
-    {
-        Key key = (Key)getObject();
-        Domain domain = key.getDomain();
-        for (Value value : domain.getValues().values()) {
-            if (value.getKey() == key) {
-                addToChilds(value);
-            }
-        }
-    }
+	/**
+	 * Overrides buildChildrenVector
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
+	 */
+	@Override
+	protected void buildChildrenVector() {
+		Key key = (Key) getObject();
+		Domain domain = key.getDomain();
+		for (Value value : domain.getValues().values()) {
+			if (value.getKey() == key) {
+				addToChilds(value);
+			}
+		}
+	}
 
-    /**
-     * Overrides getName
-     * @see org.openflexo.components.browser.BrowserElement#getName()
-     */
-    @Override
-	public String getName()
-    {
-        return ((Key)getObject()).getName();
-    }
+	/**
+	 * Overrides getName
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#getName()
+	 */
+	@Override
+	public String getName() {
+		return ((Key) getObject()).getName();
+	}
 
 }

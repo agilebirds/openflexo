@@ -34,9 +34,7 @@ import javax.swing.SwingUtilities;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 
-
-public class RectangleSelectingAction extends MouseDragControlAction
-{
+public class RectangleSelectingAction extends MouseDragControlAction {
 
 	static final Logger logger = Logger.getLogger(RectangleSelectingAction.class.getPackage().getName());
 
@@ -44,54 +42,56 @@ public class RectangleSelectingAction extends MouseDragControlAction
 	private Point currentMousePositionInDrawingView;
 
 	@Override
-	public MouseDragControlActionType getActionType()
-	{
+	public MouseDragControlActionType getActionType() {
 		return MouseDragControlActionType.RECTANGLE_SELECTING;
 	}
 
 	@Override
-	public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event)
-	{
-		//logger.info("Perform mouse PRESSED on RECTANGLE_SELECTING MouseDragControlAction");		
-		rectangleSelectingOriginInDrawingView = SwingUtilities.convertPoint((Component)event.getSource(), event.getPoint(), controller.getDrawingView());
+	public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
+		// logger.info("Perform mouse PRESSED on RECTANGLE_SELECTING MouseDragControlAction");
+		rectangleSelectingOriginInDrawingView = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
+				controller.getDrawingView());
 		currentMousePositionInDrawingView = rectangleSelectingOriginInDrawingView;
-		if (controller.getDrawingView() == null) return false;
+		if (controller.getDrawingView() == null)
+			return false;
 		controller.getDrawingView().setRectangleSelectingAction(this);
 		return true;
 	}
 
 	@Override
-	public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event, boolean isSignificativeDrag)
-	{
-		//logger.info("Perform mouse RELEASED on RECTANGLE_SELECTING MouseDragControlAction");
+	public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+			MouseEvent event, boolean isSignificativeDrag) {
+		// logger.info("Perform mouse RELEASED on RECTANGLE_SELECTING MouseDragControlAction");
 		if (isSignificativeDrag) {
 			Vector<GraphicalRepresentation> newSelection = buildCurrentSelection(graphicalRepresentation, controller);
 			controller.setSelectedObjects(newSelection);
-			if (controller.getDrawingView() == null) return false;
+			if (controller.getDrawingView() == null)
+				return false;
 			controller.getDrawingView().resetRectangleSelectingAction();
 		}
 		return true;
 	}
-	
+
 	@Override
-	public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event)
-	{
+	public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
 		if (logger.isLoggable(Level.FINE))
 			logger.fine("Perform mouse DRAGGED on RECTANGLE_SELECTING MouseDragControlAction");
-		currentMousePositionInDrawingView = SwingUtilities.convertPoint((Component)event.getSource(), event.getPoint(), controller.getDrawingView());
+		currentMousePositionInDrawingView = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
+				controller.getDrawingView());
 
 		Vector<GraphicalRepresentation> newFocusSelection = buildCurrentSelection(graphicalRepresentation, controller);
 		controller.setFocusedObjects(newFocusSelection);
-		if (controller.getDrawingView() == null) return false;
+		if (controller.getDrawingView() == null)
+			return false;
 		controller.getDrawingView().getPaintManager().repaint(controller.getDrawingView());
 
 		return true;
 	}
 
-	
-	private Vector<GraphicalRepresentation> buildCurrentSelection(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller)
-	{
-		if (getRectangleSelection() == null) return null;
+	private Vector<GraphicalRepresentation> buildCurrentSelection(GraphicalRepresentation<?> graphicalRepresentation,
+			DrawingController<?> controller) {
+		if (getRectangleSelection() == null)
+			return null;
 		Vector<GraphicalRepresentation> returned = new Vector<GraphicalRepresentation>();
 		for (GraphicalRepresentation child : graphicalRepresentation.getContainedGraphicalRepresentations()) {
 			if (child.getIsVisible()) {
@@ -107,42 +107,41 @@ public class RectangleSelectingAction extends MouseDragControlAction
 		return returned;
 	}
 
-    /**
-     * Return current rectangle selection
-     * 
-     * @return Rectangle object as current selection
-     */
-    private Rectangle getRectangleSelection()
-    {
-        if (rectangleSelectingOriginInDrawingView != null && currentMousePositionInDrawingView != null) {
-            Point origin = new Point();
-            Dimension dim = new Dimension();
-            if (rectangleSelectingOriginInDrawingView.x <= currentMousePositionInDrawingView.x) {
-                origin.x = rectangleSelectingOriginInDrawingView.x;
-                dim.width = currentMousePositionInDrawingView.x - rectangleSelectingOriginInDrawingView.x;
-            } else {
-                origin.x = currentMousePositionInDrawingView.x;
-                dim.width = rectangleSelectingOriginInDrawingView.x - currentMousePositionInDrawingView.x;
-            }
-            if (rectangleSelectingOriginInDrawingView.y <= currentMousePositionInDrawingView.y) {
-                origin.y = rectangleSelectingOriginInDrawingView.y;
-                dim.height = currentMousePositionInDrawingView.y - rectangleSelectingOriginInDrawingView.y;
-            } else {
-                origin.y = currentMousePositionInDrawingView.y;
-                dim.height = rectangleSelectingOriginInDrawingView.y - currentMousePositionInDrawingView.y;
-            }
-            return new Rectangle(origin, dim);
-        } else {
-            return null;
-        }
-    }
-    
-	public void paint(Graphics g, DrawingController controller)
-	{
+	/**
+	 * Return current rectangle selection
+	 * 
+	 * @return Rectangle object as current selection
+	 */
+	private Rectangle getRectangleSelection() {
+		if (rectangleSelectingOriginInDrawingView != null && currentMousePositionInDrawingView != null) {
+			Point origin = new Point();
+			Dimension dim = new Dimension();
+			if (rectangleSelectingOriginInDrawingView.x <= currentMousePositionInDrawingView.x) {
+				origin.x = rectangleSelectingOriginInDrawingView.x;
+				dim.width = currentMousePositionInDrawingView.x - rectangleSelectingOriginInDrawingView.x;
+			} else {
+				origin.x = currentMousePositionInDrawingView.x;
+				dim.width = rectangleSelectingOriginInDrawingView.x - currentMousePositionInDrawingView.x;
+			}
+			if (rectangleSelectingOriginInDrawingView.y <= currentMousePositionInDrawingView.y) {
+				origin.y = rectangleSelectingOriginInDrawingView.y;
+				dim.height = currentMousePositionInDrawingView.y - rectangleSelectingOriginInDrawingView.y;
+			} else {
+				origin.y = currentMousePositionInDrawingView.y;
+				dim.height = rectangleSelectingOriginInDrawingView.y - currentMousePositionInDrawingView.y;
+			}
+			return new Rectangle(origin, dim);
+		} else {
+			return null;
+		}
+	}
+
+	public void paint(Graphics g, DrawingController controller) {
 		Rectangle selection = getRectangleSelection();
-		if (selection == null) return;
+		if (selection == null)
+			return;
 		g.setColor(controller.getDrawingGraphicalRepresentation().getRectangleSelectingSelectionColor());
-		g.drawRect(selection.x,selection.y,selection.width,selection.height);
+		g.drawRect(selection.x, selection.y, selection.width, selection.height);
 	}
 
 }

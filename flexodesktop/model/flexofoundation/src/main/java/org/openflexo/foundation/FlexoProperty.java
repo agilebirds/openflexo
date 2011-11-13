@@ -26,75 +26,74 @@ import org.openflexo.foundation.xml.FlexoBuilder;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.xmlcode.XMLMapping;
 
-
 public class FlexoProperty extends FlexoModelObject implements InspectableObject {
-	
+
 	private FlexoModelObject owner;
-	
+
 	private String name;
 	private String value;
 
 	public FlexoProperty(FlexoBuilder<?> builder) {
 		this(builder.getProject());
 	}
-	
+
 	public FlexoProperty(FlexoProjectBuilder builder) {
 		this(builder.project);
 	}
-	
+
 	public FlexoProperty(FlexoProject project) {
 		super(project);
 	}
-	
+
 	public FlexoProperty(FlexoProject project, FlexoModelObject owner) {
 		this(project);
 		this.owner = owner;
 	}
-	
+
 	@Override
 	public void delete() {
-		if (getOwner()!=null)
+		if (getOwner() != null)
 			getOwner().removeFromCustomProperties(this);
 		super.delete();
 	}
-	
+
 	@Override
 	public String getName() {
 		return name;
 	}
-	
+
 	@Override
 	public void setName(String name) {
 		this.name = name;
 		setChanged();
-		notifyObservers(new DataModification(-1,"name", null,name));
+		notifyObservers(new DataModification(-1, "name", null, name));
 	}
-	
+
 	public String getValue() {
 		return value;
 	}
-	
+
 	public void setValue(String value) {
 		this.value = value;
 		setChanged();
-		notifyObservers(new DataModification(-1, "value", null,value));
+		notifyObservers(new DataModification(-1, "value", null, value));
 	}
-	
+
 	public FlexoModelObject getOwner() {
 		return owner;
 	}
-	
+
 	public void setOwner(FlexoModelObject owner) {
 		this.owner = owner;
 	}
-	
+
 	@Override
 	public FlexoProject getProject() {
-		if (getOwner()!=null)
+		if (getOwner() != null)
 			return getOwner().getProject();
 		return super.getProject();
 	}
-	
+
 	@Override
 	public String getClassNameKey() {
 		return "flexo_property";
@@ -102,19 +101,19 @@ public class FlexoProperty extends FlexoModelObject implements InspectableObject
 
 	@Override
 	public String getFullyQualifiedName() {
-		return getOwner()!=null?getOwner().getFullyQualifiedName():"No owner"+"."+name+"="+value;
+		return getOwner() != null ? getOwner().getFullyQualifiedName() : "No owner" + "." + name + "=" + value;
 	}
 
 	@Override
 	public XMLMapping getXMLMapping() {
-		if (getOwner()!=null)
+		if (getOwner() != null)
 			return getOwner().getXMLMapping();
 		return null;
 	}
 
 	@Override
 	public XMLStorageResourceData getXMLResourceData() {
-		if (getOwner()!=null)
+		if (getOwner() != null)
 			return getOwner().getXMLResourceData();
 		return null;
 	}

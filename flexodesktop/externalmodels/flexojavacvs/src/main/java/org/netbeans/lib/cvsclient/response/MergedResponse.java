@@ -26,49 +26,52 @@ import org.netbeans.lib.cvsclient.event.EventManager;
 import org.netbeans.lib.cvsclient.util.LoggedDataInputStream;
 
 /**
- * This response is very similar to an UpdatedResponse except that it backs
- * up the file being merged, and the file in question will still not be
- * up-to-date after the merge.
- * @author  Robert Greig
+ * This response is very similar to an UpdatedResponse except that it backs up the file being merged, and the file in question will still
+ * not be up-to-date after the merge.
+ * 
+ * @author Robert Greig
  * @see org.netbeans.lib.cvsclient.response.UpdatedResponse
  */
 class MergedResponse extends UpdatedResponse {
 
-    /**
-     * Process the data for the response.
-     * @param r the buffered reader allowing the client to read the server's
-     * response. Note that the actual response name has already been read
-     * and the reader is positioned just before the first argument, if any.
-     * @param services various services that are useful to response handlers
-     * @throws ResponseException if something goes wrong handling this response
-     */
-    @Override
-	public void process(LoggedDataInputStream dis, ResponseServices services)
-            throws ResponseException {
-        super.process(dis, services);
-        EventManager manager = services.getEventManager();
-        if (manager.isFireEnhancedEventSet()) {
-            manager.fireCVSEvent(new EnhancedMessageEvent(this, EnhancedMessageEvent.MERGED_PATH, localFile));
-        }
-    }
+	/**
+	 * Process the data for the response.
+	 * 
+	 * @param r
+	 *            the buffered reader allowing the client to read the server's response. Note that the actual response name has already been
+	 *            read and the reader is positioned just before the first argument, if any.
+	 * @param services
+	 *            various services that are useful to response handlers
+	 * @throws ResponseException
+	 *             if something goes wrong handling this response
+	 */
+	@Override
+	public void process(LoggedDataInputStream dis, ResponseServices services) throws ResponseException {
+		super.process(dis, services);
+		EventManager manager = services.getEventManager();
+		if (manager.isFireEnhancedEventSet()) {
+			manager.fireCVSEvent(new EnhancedMessageEvent(this, EnhancedMessageEvent.MERGED_PATH, localFile));
+		}
+	}
 
-    /**
-     * Returns the Conflict field for the file's entry.
-     * Can be overriden by subclasses.
-     * (For example the MergedResponse that sets the "result of merge" there.)
-     * @param date the date to put in
-     * @param hadConflicts if there were conflicts (e.g after merge)
-     * @return the conflict field
-     */
-    @Override
+	/**
+	 * Returns the Conflict field for the file's entry. Can be overriden by subclasses. (For example the MergedResponse that sets the
+	 * "result of merge" there.)
+	 * 
+	 * @param date
+	 *            the date to put in
+	 * @param hadConflicts
+	 *            if there were conflicts (e.g after merge)
+	 * @return the conflict field
+	 */
+	@Override
 	protected String getEntryConflict(Date date, boolean hadConflicts) {
-        if (!hadConflicts) {
-            return "Result of merge"; //NOI18N
-        }
-        else {
-            return "Result of merge+" + //NOI18N
-                    getDateFormatter().format(date);
-        }
-    }
+		if (!hadConflicts) {
+			return "Result of merge"; // NOI18N
+		} else {
+			return "Result of merge+" + // NOI18N
+					getDateFormatter().format(date);
+		}
+	}
 
 }

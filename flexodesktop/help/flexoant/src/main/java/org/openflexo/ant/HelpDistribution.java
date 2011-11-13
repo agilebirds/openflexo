@@ -22,8 +22,8 @@ package org.openflexo.ant;
 public class HelpDistribution {
 
 	private String name;
-	
-	public HelpDistribution(){
+
+	public HelpDistribution() {
 		super();
 	}
 

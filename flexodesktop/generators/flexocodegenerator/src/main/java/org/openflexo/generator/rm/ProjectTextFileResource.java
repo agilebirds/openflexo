@@ -32,75 +32,66 @@ import org.openflexo.generator.rm.GenerationAvailableFileResource;
 import org.openflexo.generator.utils.MetaFileGenerator;
 import org.openflexo.logging.FlexoLogger;
 
-
 /**
  * @author sylvain
  * 
  */
-public class ProjectTextFileResource extends TextFileResource<MetaFileGenerator, CGTextFile> implements GenerationAvailableFileResource
-{
-    protected static final Logger logger = FlexoLogger.getLogger(ProjectTextFileResource.class.getPackage().getName());
-
-    /**
-     * @param builder
-     */
-    public ProjectTextFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
-
-    /**
-     * @param aProject
-     */
-    public ProjectTextFileResource(FlexoProject aProject)
-    {
-    	super(aProject);
-    }
-
-    @Override
-	public String getFileName() 
-    {
-    	if (getGenerator() != null) return getGenerator().getFileName();
-    	return null;
-    }
-
-    @Override
-	protected ProjectTextFile createGeneratedResourceData()
-    {
-    	return new ProjectTextFile(getFile(),this);
-    }
-
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-	public void rebuildDependancies()
-    {
-        super.rebuildDependancies();
-        if(getGenerator()!=null)
-        	getGenerator().rebuildDependanciesForResource(this);
-    }
-    
-
-    @Override
-	public ProjectTextFile getGeneratedResourceData()
-    {
-    	return (ProjectTextFile)super.getGeneratedResourceData();
-    }
+public class ProjectTextFileResource extends TextFileResource<MetaFileGenerator, CGTextFile> implements GenerationAvailableFileResource {
+	protected static final Logger logger = FlexoLogger.getLogger(ProjectTextFileResource.class.getPackage().getName());
 
 	/**
-     * Return dependancy computing between this resource, and an other resource,
-     * asserting that this resource is contained in this resource's dependant resources
-     * 
-     * @param resource
-	 * @param dependancyScheme
-     * @return
-     */
+	 * @param builder
+	 */
+	public ProjectTextFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
+
+	/**
+	 * @param aProject
+	 */
+	public ProjectTextFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
+
 	@Override
-	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate)
-	{
+	public String getFileName() {
+		if (getGenerator() != null)
+			return getGenerator().getFileName();
+		return null;
+	}
+
+	@Override
+	protected ProjectTextFile createGeneratedResourceData() {
+		return new ProjectTextFile(getFile(), this);
+	}
+
+	/**
+	 * Rebuild resource dependancies for this resource
+	 */
+	@Override
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
+		if (getGenerator() != null)
+			getGenerator().rebuildDependanciesForResource(this);
+	}
+
+	@Override
+	public ProjectTextFile getGeneratedResourceData() {
+		return (ProjectTextFile) super.getGeneratedResourceData();
+	}
+
+	/**
+	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this
+	 * resource's dependant resources
+	 * 
+	 * @param resource
+	 * @param dependancyScheme
+	 * @return
+	 */
+	@Override
+	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate) {
 		if (resource instanceof TemplateLocator) {
-			return ((TemplateLocator)resource).needsUpdateForResource(this);
+			return ((TemplateLocator) resource).needsUpdateForResource(this);
 		}
 		return super.optimisticallyDependsOf(resource, requestDate);
 	}

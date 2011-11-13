@@ -32,7 +32,6 @@ import org.openflexo.fge.geom.area.FGEHalfLine;
 import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.graphics.FGEGraphics;
 
-
 public class FGEPoint extends Point2D.Double implements FGEGeometricObject<FGEPoint> {
 
 	public static final FGEPoint ORIGIN_POINT = new FGEPoint() {

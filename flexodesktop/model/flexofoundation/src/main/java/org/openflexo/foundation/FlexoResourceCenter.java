@@ -25,15 +25,14 @@ import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 
-
 public interface FlexoResourceCenter {
 
 	public OntologyLibrary retrieveBaseOntologyLibrary();
-	
+
 	public ViewPointLibrary retrieveViewPointLibrary();
-	
+
 	public ViewPoint getOntologyCalc(String ontologyCalcUri);
 
 	public File getNewCalcSandboxDirectory();
-	
+
 }

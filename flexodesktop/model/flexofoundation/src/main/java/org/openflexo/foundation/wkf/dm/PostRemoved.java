@@ -27,20 +27,17 @@ import org.openflexo.foundation.wkf.edge.FlexoPostCondition;
  * @author sguerin
  * 
  */
-public class PostRemoved extends WKFDataModification
-{
+public class PostRemoved extends WKFDataModification {
 
-    protected FlexoPostCondition<?,?> _removedPostCondition;
+	protected FlexoPostCondition<?, ?> _removedPostCondition;
 
-    public PostRemoved(FlexoPostCondition<?,?> removedPostCondition)
-    {
-        super(removedPostCondition, null);
-        _removedPostCondition = removedPostCondition;
-    }
+	public PostRemoved(FlexoPostCondition<?, ?> removedPostCondition) {
+		super(removedPostCondition, null);
+		_removedPostCondition = removedPostCondition;
+	}
 
-    public FlexoPostCondition<?,?> getRemovedPostCondition()
-    {
-        return _removedPostCondition;
-    }
+	public FlexoPostCondition<?, ?> getRemovedPostCondition() {
+		return _removedPostCondition;
+	}
 
 }

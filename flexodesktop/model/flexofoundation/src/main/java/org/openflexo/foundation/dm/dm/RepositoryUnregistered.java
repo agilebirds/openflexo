@@ -26,11 +26,9 @@ import org.openflexo.foundation.dm.DMRepository;
  * 
  * @author sguerin
  */
-public class RepositoryUnregistered extends DMDataModification
-{
+public class RepositoryUnregistered extends DMDataModification {
 
-    public RepositoryUnregistered(DMRepository repository)
-    {
-        super(repository, null);
-    }
+	public RepositoryUnregistered(DMRepository repository) {
+		super(repository, null);
+	}
 }

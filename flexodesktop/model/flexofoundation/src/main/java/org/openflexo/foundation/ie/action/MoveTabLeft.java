@@ -28,75 +28,64 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.ie.widget.IETabWidget;
 
+public class MoveTabLeft extends FlexoUndoableAction {
 
-public class MoveTabLeft extends FlexoUndoableAction
-{
+	private IETabWidget selectedTab;
 
-    private IETabWidget selectedTab;
+	public static FlexoActionType actionType = new FlexoActionType("move_tab_left", FlexoActionType.defaultGroup) {
 
-    public static FlexoActionType actionType = new FlexoActionType("move_tab_left", FlexoActionType.defaultGroup) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new MoveTabLeft(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-        {
-            return new MoveTabLeft(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection)
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return (object != null) && (object instanceof IETabWidget) && ((IETabWidget) object).getRootParent().getTabCount() > 1;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection)
-        {
-            return (object != null) && (object instanceof IETabWidget) && ((IETabWidget)object).getRootParent().getTabCount()>1;
-        }
+	};
 
-    };
+	protected MoveTabLeft(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    protected MoveTabLeft(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	@Override
+	protected void doAction(Object context) {
+		if (selectedTab != null) {
+			selectedTab.moveLeft();
+		}
 
-    @Override
-	protected void doAction(Object context)
-    {
-        if (selectedTab != null) {
-            selectedTab.moveLeft();
-        }
+	}
 
-    }
+	@Override
+	protected void undoAction(Object context) {
+		if (selectedTab != null) {
+			selectedTab.moveRight();
+		}
+	}
 
-    @Override
-	protected void undoAction(Object context)
-    {
-        if (selectedTab != null) {
-            selectedTab.moveRight();
-        }
-    }
+	@Override
+	protected void redoAction(Object context) {
+		if (selectedTab != null) {
+			selectedTab.moveLeft();
+		}
+	}
 
-    @Override
-	protected void redoAction(Object context)
-    {
-        if (selectedTab != null) {
-            selectedTab.moveLeft();
-        }
-    }
+	public IETabWidget getSelectedTab() {
+		return selectedTab;
+	}
 
-    public IETabWidget getSelectedTab()
-    {
-        return selectedTab;
-    }
-
-    public void setSelectedTab(IETabWidget selected_tab)
-    {
-        this.selectedTab = selected_tab;
-    }
+	public void setSelectedTab(IETabWidget selected_tab) {
+		this.selectedTab = selected_tab;
+	}
 
 }

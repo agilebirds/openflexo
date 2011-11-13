@@ -25,39 +25,33 @@ import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.menu.FileMenu;
 import org.openflexo.view.menu.FlexoMenuBar;
 
-
 /**
  * @author gpolet
  */
-public class DEMenuBar extends FlexoMenuBar
-{
+public class DEMenuBar extends FlexoMenuBar {
 
-    public DEFileMenu _fileMenu;
-    
-    public DEMenuBar(DEController controller)
-    {
-        super(controller, Module.DE_MODULE);
-    }
-    
-    public DEMenuBar(DEController controller, Module module)
-    {
-        super(controller, module);
-    }
+	public DEFileMenu _fileMenu;
 
-    /**
-     * Build if required and return CG 'File' menu.
-     * This method overrides the default one defined on superclass
-     * 
-     * @param controller
-     * @return a GeneratorFileMenu instance
-     */
-    @Override
-	public FileMenu getFileMenu(FlexoController controller)
-    {
-        if (_fileMenu == null) {
-            _fileMenu = new DEFileMenu((DEController)controller);
-        }
-        return _fileMenu;
-    }
+	public DEMenuBar(DEController controller) {
+		super(controller, Module.DE_MODULE);
+	}
+
+	public DEMenuBar(DEController controller, Module module) {
+		super(controller, module);
+	}
+
+	/**
+	 * Build if required and return CG 'File' menu. This method overrides the default one defined on superclass
+	 * 
+	 * @param controller
+	 * @return a GeneratorFileMenu instance
+	 */
+	@Override
+	public FileMenu getFileMenu(FlexoController controller) {
+		if (_fileMenu == null) {
+			_fileMenu = new DEFileMenu((DEController) controller);
+		}
+		return _fileMenu;
+	}
 
 }

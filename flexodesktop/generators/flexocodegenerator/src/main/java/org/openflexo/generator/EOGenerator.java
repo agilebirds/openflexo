@@ -25,28 +25,24 @@ import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.generator.exception.GenerationException;
 
-
 /**
- * This generator is used outside the context of a CGRepository for the purpose of
- * generating EO code
+ * This generator is used outside the context of a CGRepository for the purpose of generating EO code
  * 
  * @author sylvain
- *
+ * 
  */
 public class EOGenerator extends ProjectGenerator {
 
-    public EOGenerator(FlexoProject project) throws GenerationException
-    {
-    	super(project,null);
-    }
+	public EOGenerator(FlexoProject project) throws GenerationException {
+		super(project, null);
+	}
 
-    public CodeType getGenerationTarget()
-    {
-    	return getProject().getTargetType();
-    }
+	public CodeType getGenerationTarget() {
+		return getProject().getTargetType();
+	}
 
-    @Override
-    public File getRootOutputDirectory() {
-    	return null;
-    }
+	@Override
+	public File getRootOutputDirectory() {
+		return null;
+	}
 }

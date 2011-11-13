@@ -25,13 +25,21 @@ import javax.swing.text.Document;
 public interface ITextComponent {
 
 	public void select(int start, int end);
+
 	public boolean isEditable();
+
 	public int getCaretPosition();
+
 	public void addCaretListener(CaretListener listener);
+
 	public void removeCaretListener(CaretListener listener);
+
 	public Document getDocument();
+
 	public int getSelectionStart();
+
 	public int getSelectionEnd();
+
 	public String getSelectedText();
-	
+
 }

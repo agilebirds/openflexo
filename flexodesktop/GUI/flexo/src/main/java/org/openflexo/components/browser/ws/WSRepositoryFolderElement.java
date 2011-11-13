@@ -27,33 +27,29 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ws.WSRepository;
 import org.openflexo.foundation.ws.WSRepositoryFolder;
 
+public class WSRepositoryFolderElement extends BrowserElement {
 
-public class WSRepositoryFolderElement extends BrowserElement
-{
+	/**
+	 * @param object
+	 * @param elementType
+	 * @param browser
+	 */
+	public WSRepositoryFolderElement(WSRepositoryFolder object, ProjectBrowser browser, BrowserElement parent) {
+		super(object, BrowserElementType.WS_REPOSITORY_FOLDER, browser, parent);
+	}
 
-    /**
-     * @param object
-     * @param elementType
-     * @param browser
-     */
-    public WSRepositoryFolderElement(WSRepositoryFolder object, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(object, BrowserElementType.WS_REPOSITORY_FOLDER, browser, parent);
-    }
+	/**
+	 * Overrides buildChildrenVector
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
+	 */
+	@Override
+	protected void buildChildrenVector() {
+		WSRepositoryFolder list = (WSRepositoryFolder) getObject();
+		Enumeration en = list.getWSRepositories().elements();
+		while (en.hasMoreElements()) {
+			addToChilds(((WSRepository) en.nextElement()).getWSDLRepository());
+		}
 
-    /**
-     * Overrides buildChildrenVector
-     *
-     * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
-     */
-    @Override
-	protected void buildChildrenVector()
-    {
-        WSRepositoryFolder list = (WSRepositoryFolder) getObject();
-        Enumeration en = list.getWSRepositories().elements();
-        while (en.hasMoreElements()) {
-            addToChilds(((WSRepository) en.nextElement()).getWSDLRepository());
-        }
-
-    }
+	}
 }

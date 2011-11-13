@@ -28,29 +28,24 @@ import org.openflexo.foundation.cg.templates.CGTemplates;
 import org.openflexo.foundation.cg.templates.CustomCGTemplateRepository;
 import org.openflexo.foundation.cg.utils.TemplateRepositoryType;
 
+public class CGTemplatesElement extends BrowserElement {
 
-public class CGTemplatesElement extends BrowserElement
-{
+	public CGTemplatesElement(CGTemplates templates, ProjectBrowser browser, BrowserElement parent) {
+		super(templates, BrowserElementType.TEMPLATES, browser, parent);
+	}
 
-    public CGTemplatesElement(CGTemplates templates, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(templates, BrowserElementType.TEMPLATES, browser, parent);
-    }
+	@Override
+	protected void buildChildrenVector() {
+		addToChilds(getCGTemplates().getApplicationRepository());
+		for (Enumeration<CustomCGTemplateRepository> e = getCGTemplates().getCustomRepositories(); e.hasMoreElements();) {
+			CustomCGTemplateRepository rep = e.nextElement();
+			if (rep.getRepositoryType() == TemplateRepositoryType.Code)
+				addToChilds(rep);
+		}
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-    	addToChilds(getCGTemplates().getApplicationRepository());
-        for (Enumeration<CustomCGTemplateRepository> e = getCGTemplates().getCustomRepositories(); e.hasMoreElements();) {
-        	 CustomCGTemplateRepository rep = e.nextElement();
-        	 if (rep.getRepositoryType()==TemplateRepositoryType.Code)
-        		 addToChilds(rep);
-        }
-    }
-
-    protected CGTemplates getCGTemplates()
-    {
-        return (CGTemplates) getObject();
-    }
+	protected CGTemplates getCGTemplates() {
+		return (CGTemplates) getObject();
+	}
 
 }

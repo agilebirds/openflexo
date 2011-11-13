@@ -42,50 +42,48 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 
-
 /**
  * Represents a 'String' widget
- *
+ * 
  * @author bmangez
  */
 public class IEStringWidget extends IENonEditableTextWidget implements IEWidgetWithValueList {
 
-    /**
+	/**
      *
      */
-    public static final String STRING_WIDGET = "string_widget";
+	public static final String STRING_WIDGET = "string_widget";
 
-    private String _prototypeValues;
+	private String _prototypeValues;
 
-    private String _keyPath;
+	private String _keyPath;
 
-    private boolean isHTML = true;
+	private boolean isHTML = true;
 
-    private String _bindingValueWhenEmpty;
+	private String _bindingValueWhenEmpty;
 
-    private TextFieldType _fieldType;
+	private TextFieldType _fieldType;
 
-    private boolean _isHyperlink = false;
+	private boolean _isHyperlink = false;
 
-    private Domain domain;
+	private Domain domain;
 
-    private String domainName;
+	private String domainName;
 
 	public IEStringWidget(FlexoComponentBuilder builder) {
-        this(builder.woComponent, null, builder.getProject());
-        initializeDeserialization(builder);
-    }
+		this(builder.woComponent, null, builder.getProject());
+		initializeDeserialization(builder);
+	}
 
-	public IEStringWidget(IEWOComponent woComponent, IEObject parent,
-			FlexoProject prj) {
-        super(woComponent, parent, prj);
-        this.setTextCSSClass(TextCSSClass.BLOC_BODY_CONTENT);
-    }
+	public IEStringWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj) {
+		super(woComponent, parent, prj);
+		this.setTextCSSClass(TextCSSClass.BLOC_BODY_CONTENT);
+	}
 
 	@Override
 	public String getDefaultInspectorName() {
-        return "String.inspector";
-    }
+		return "String.inspector";
+	}
 
 	@Override
 	public void finalizeDeserialization(Object builder) {
@@ -95,231 +93,221 @@ public class IEStringWidget extends IENonEditableTextWidget implements IEWidgetW
 
 	public boolean isDKVField() {
 		return TextFieldType.KEYVALUE.equals(getFieldType());
-    }
+	}
 
 	public boolean isDateField() {
 		return TextFieldType.DATE.equals(getFieldType());
-    }
+	}
 
 	public boolean isStatusField() {
 		return TextFieldType.STATUS_LIST.equals(getFieldType());
-    }
+	}
 
 	public String getKeyPath() {
-        return _keyPath;
-    }
+		return _keyPath;
+	}
 
 	public void setKeyPath(String path) {
-        _keyPath = path;
-        setChanged();
-        notifyObservers(new IEDataModification("keyPath", null, _keyPath));
-    }
+		_keyPath = path;
+		setChanged();
+		notifyObservers(new IEDataModification("keyPath", null, _keyPath));
+	}
 
 	public String getPrototypeValues() {
-        return _prototypeValues;
-    }
+		return _prototypeValues;
+	}
 
 	public void setPrototypeValues(String values) {
-        _prototypeValues = values;
-        setChanged();
-		notifyObservers(new IEDataModification("prototypeValues", null,
-				_prototypeValues));
-    }
+		_prototypeValues = values;
+		setChanged();
+		notifyObservers(new IEDataModification("prototypeValues", null, _prototypeValues));
+	}
 
 	public boolean getIsHyperlink() {
-        return _isHyperlink;
-    }
+		return _isHyperlink;
+	}
 
 	public void setIsHyperlink(boolean hyperlink) {
-        _isHyperlink = hyperlink;
-        setChanged();
-		notifyObservers(new IEDataModification("isHyperlink", null,
-				new Boolean(_isHyperlink)));
-    }
+		_isHyperlink = hyperlink;
+		setChanged();
+		notifyObservers(new IEDataModification("isHyperlink", null, new Boolean(_isHyperlink)));
+	}
 
 	@Override
 	public String getDefaultValue() {
 		return "dynamic text";
 	}
 
-    /**
-     * @return Returns the _formatType.
-     */
+	/**
+	 * @return Returns the _formatType.
+	 */
 	public TextFieldType getFieldType() {
-        return _fieldType;
-    }
+		return _fieldType;
+	}
 
-    /**
-     * @param type
-     *            The _formatType to set.
-     */
+	/**
+	 * @param type
+	 *            The _formatType to set.
+	 */
 	public void setFieldType(TextFieldType type) {
-        _fieldType = type;
-        setChanged();
-        notifyObservers(new IEDataModification("fieldType", null, type));
-    }
+		_fieldType = type;
+		setChanged();
+		notifyObservers(new IEDataModification("fieldType", null, type));
+	}
 
-    /**
-     * @return Returns the _valueWhenEmpty.
-     */
+	/**
+	 * @return Returns the _valueWhenEmpty.
+	 */
 	public String getBindingValueWhenEmpty() {
-        return _bindingValueWhenEmpty;
-    }
+		return _bindingValueWhenEmpty;
+	}
 
-    /**
-     * @param whenEmpty
-     *            The _valueWhenEmpty to set.
-     */
+	/**
+	 * @param whenEmpty
+	 *            The _valueWhenEmpty to set.
+	 */
 	public void setBindingValueWhenEmpty(String whenEmpty) {
-        _bindingValueWhenEmpty = whenEmpty;
-        setChanged();
-		notifyObservers(new IEDataModification("bindingValueWhenEmpty", null,
-				_bindingValueWhenEmpty));
-    }
+		_bindingValueWhenEmpty = whenEmpty;
+		setChanged();
+		notifyObservers(new IEDataModification("bindingValueWhenEmpty", null, _bindingValueWhenEmpty));
+	}
 
-    /**
-     * Getter method for the attribute isHTML
-     *
-     * @return Returns the isHTML.
-     */
+	/**
+	 * Getter method for the attribute isHTML
+	 * 
+	 * @return Returns the isHTML.
+	 */
 	public boolean getIsHTML() {
-        return isHTML;
-    }
+		return isHTML;
+	}
 
-    /**
-     * Setter method for the isHTML attribute
-     *
-     * @param isHTML
-     *            The isHTML to set.
-     */
+	/**
+	 * Setter method for the isHTML attribute
+	 * 
+	 * @param isHTML
+	 *            The isHTML to set.
+	 */
 	public void setIsHTML(boolean isHTML) {
-        this.isHTML = isHTML;
-        setChanged();
-        notifyObservers(new ContentTypeChanged("isHTML",isHTML));
-    }
+		this.isHTML = isHTML;
+		setChanged();
+		notifyObservers(new ContentTypeChanged("isHTML", isHTML));
+	}
 
-    /**
-     * Return a Vector of embedded IEObjects at this level. NOTE that this is
-     * NOT a recursive method
-     *
-     * @return a Vector of IEObject instances
-     */
+	/**
+	 * Return a Vector of embedded IEObjects at this level. NOTE that this is NOT a recursive method
+	 * 
+	 * @return a Vector of IEObject instances
+	 */
 	@Override
 	public Vector<IObject> getEmbeddedIEObjects() {
-        return EMPTY_IOBJECT_VECTOR;
-    }
+		return EMPTY_IOBJECT_VECTOR;
+	}
 
 	@Override
 	public String getFullyQualifiedName() {
-        return "String";
-    }
+		return "String";
+	}
 
 	@Override
 	public WidgetBindingDefinition getBindingValueDefinition() {
-        if (getFieldType() != null && getFieldType() == TextFieldType.DATE) {
-			return WidgetBindingDefinition.get(this, "bindingValue",
-					Date.class, BindingDefinitionType.GET, false);
-        }
-        if (getFieldType() != null && getFieldType() == TextFieldType.INTEGER) {
-			return WidgetBindingDefinition.get(this, "bindingValue",
-					Number.class, BindingDefinitionType.GET, false);
-        }
-        if (getFieldType() != null && getFieldType() == TextFieldType.FLOAT) {
-			return WidgetBindingDefinition.get(this, "bindingValue",
-					Float.class, BindingDefinitionType.GET, false);
-        }
-        return super.getBindingValueDefinition();
-    }
+		if (getFieldType() != null && getFieldType() == TextFieldType.DATE) {
+			return WidgetBindingDefinition.get(this, "bindingValue", Date.class, BindingDefinitionType.GET, false);
+		}
+		if (getFieldType() != null && getFieldType() == TextFieldType.INTEGER) {
+			return WidgetBindingDefinition.get(this, "bindingValue", Number.class, BindingDefinitionType.GET, false);
+		}
+		if (getFieldType() != null && getFieldType() == TextFieldType.FLOAT) {
+			return WidgetBindingDefinition.get(this, "bindingValue", Float.class, BindingDefinitionType.GET, false);
+		}
+		return super.getBindingValueDefinition();
+	}
 
-    /**
-     * Overrides getClassNameKey
-     *
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
 	@Override
 	public String getClassNameKey() {
-        return STRING_WIDGET;
-    }
+		return STRING_WIDGET;
+	}
 
 	public Domain getDomain() {
-        if (domain == null && domainName != null) {
-            domain = getProject().getDKVModel().getDomainNamed(domainName);
-            if (domain == null)
-                setDomainName(null);
-        }
-        return domain;
-    }
+		if (domain == null && domainName != null) {
+			domain = getProject().getDKVModel().getDomainNamed(domainName);
+			if (domain == null)
+				setDomainName(null);
+		}
+		return domain;
+	}
 
 	public void setDomain(Domain domain) {
-        unregisterDomainObserving();
-        Domain old = this.domain;
-        this.domain = domain;
-        registerDomainObserving();
-        setChanged();
-        notifyObservers(new IEDataModification("domain", old, domain));
+		unregisterDomainObserving();
+		Domain old = this.domain;
+		this.domain = domain;
+		registerDomainObserving();
+		setChanged();
+		notifyObservers(new IEDataModification("domain", old, domain));
 	}
 
 	public String getDomainName() {
-        if (getDomain() != null)
-            return getDomain().getName();
-        else
-            return null;
-    }
+		if (getDomain() != null)
+			return getDomain().getName();
+		else
+			return null;
+	}
 
 	public void setDomainName(String domainName) {
-        String old = this.domainName;
-        this.domainName = domainName;
-        domain = null;
-        setChanged();
-        notifyObservers(new IEDataModification("domainName", old, domainName));
+		String old = this.domainName;
+		this.domainName = domainName;
+		domain = null;
+		setChanged();
+		notifyObservers(new IEDataModification("domainName", old, domainName));
 
-    }
+	}
 
 	private void registerDomainObserving() {
-        if (getDomain() != null) {
-            getDomain().addObserver(this);
-            getDomain().getKeyList().addObserver(this);
-            getDomain().getValueList().addObserver(this);
-        }
-    }
+		if (getDomain() != null) {
+			getDomain().addObserver(this);
+			getDomain().getKeyList().addObserver(this);
+			getDomain().getValueList().addObserver(this);
+		}
+	}
 
-    /**
+	/**
      *
      */
 	private void unregisterDomainObserving() {
-        if (getDomain() != null) {
-            getDomain().deleteObserver(this);
-            getDomain().getKeyList().deleteObserver(this);
-            getDomain().getValueList().deleteObserver(this);
-        }
-    }
+		if (getDomain() != null) {
+			getDomain().deleteObserver(this);
+			getDomain().getKeyList().deleteObserver(this);
+			getDomain().getValueList().deleteObserver(this);
+		}
+	}
 
 	@Override
 	public void update(FlexoObservable observable, DataModification obj) {
-		if (obj instanceof DomainDeleted
-				&& getDomain() == ((DomainDeleted) obj).oldValue()) {
-            setDomain(null);
-        } else if (obj instanceof DKVDataModification) {
-            setChanged();
+		if (obj instanceof DomainDeleted && getDomain() == ((DomainDeleted) obj).oldValue()) {
+			setDomain(null);
+		} else if (obj instanceof DKVDataModification) {
+			setChanged();
 			notifyObservers(new ListOfValuesHasChanged(new Object(), new Object()));
-        } else
-            super.update(observable, obj);
-    }
+		} else
+			super.update(observable, obj);
+	}
 
 	@Override
-	public String getProcessInstanceDictionaryKey()
-	{
-		if(isStatusField())
+	public String getProcessInstanceDictionaryKey() {
+		if (isStatusField())
 			return FlexoProcess.PROCESSINSTANCE_STATUS_KEY;
 		return super.getProcessInstanceDictionaryKey();
 	}
-	
+
 	/**
 	 * @see org.openflexo.foundation.ie.widget.IEWidgetWithValueList#getValueList()
 	 */
 	@Override
-	public List<Object> getValueList()
-	{
+	public List<Object> getValueList() {
 		return getValueList(null);
 	}
 
@@ -327,8 +315,7 @@ public class IEStringWidget extends IENonEditableTextWidget implements IEWidgetW
 	 * @see org.openflexo.foundation.ie.widget.IEWidgetWithValueList#getValueList(org.openflexo.foundation.wkf.FlexoProcess)
 	 */
 	@Override
-	public List<Object> getValueList(FlexoProcess process) 
-    {
-    	return parseValueListToAppropriateType(getValue(), getPrototypeValues(), getFieldType(), getDomain(), process);
-    }
+	public List<Object> getValueList(FlexoProcess process) {
+		return parseValueListToAppropriateType(getValue(), getPrototypeValues(), getFieldType(), getDomain(), process);
+	}
 }

@@ -25,13 +25,11 @@ package org.openflexo.inspector.model;
  * @author sguerin
  * 
  */
-public class HiddenGroupModel extends ModelObject
-{
+public class HiddenGroupModel extends ModelObject {
 
-    public String name;
+	public String name;
 
-    public HiddenGroupModel()
-    {
-        super();
-    }
+	public HiddenGroupModel() {
+		super();
+	}
 }

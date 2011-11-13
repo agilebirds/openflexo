@@ -33,7 +33,6 @@ import org.openflexo.antar.expr.Constant;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.Variable;
 
-
 import org.openflexo.foundation.bindings.BindingAssignment;
 import org.openflexo.foundation.exec.inst.ChangeProcessStatus;
 import org.openflexo.foundation.exec.inst.ResetTimeOut;
@@ -66,36 +65,40 @@ public abstract class NodeActivation<N extends FlexoNode> extends ControlGraphBu
 	private FlexoPreCondition pre;
 
 	/**
-	 * Returns control graph associated to activation of supplied node, without precising
-	 * the precondition which is the cause of this node activation
-	 *
+	 * Returns control graph associated to activation of supplied node, without precising the precondition which is the cause of this node
+	 * activation
+	 * 
 	 * @param node
 	 * @return the computed control graph
-	 * @throws NotSupportedException when an element contained in the model is not currently supported by execution model
-	 * @throws InvalidModelException when the model is not conform (validation should have failed) and thus workflow cannot be computed
+	 * @throws NotSupportedException
+	 *             when an element contained in the model is not currently supported by execution model
+	 * @throws InvalidModelException
+	 *             when the model is not conform (validation should have failed) and thus workflow cannot be computed
 	 */
-	public static ControlGraph activateNode (FlexoNode node,boolean interprocedural) throws NotSupportedException, InvalidModelException
-	{
-		return activateNode(node,null,interprocedural);
+	public static ControlGraph activateNode(FlexoNode node, boolean interprocedural) throws NotSupportedException, InvalidModelException {
+		return activateNode(node, null, interprocedural);
 	}
 
 	/**
-	 * Returns control graph associated to activation of supplied node, asserting that the
-	 * supplied precondition is the cause of node activation
-	 *
+	 * Returns control graph associated to activation of supplied node, asserting that the supplied precondition is the cause of node
+	 * activation
+	 * 
 	 * @param node
-	 * @param pre precondition which activate the node
+	 * @param pre
+	 *            precondition which activate the node
 	 * @return
-	 * @throws NotSupportedException when an element contained in the model is not currently supported by execution model
-	 * @throws InvalidModelException when the model is not conform (validation should have failed) and thus workflow cannot be computed
+	 * @throws NotSupportedException
+	 *             when an element contained in the model is not currently supported by execution model
+	 * @throws InvalidModelException
+	 *             when the model is not conform (validation should have failed) and thus workflow cannot be computed
 	 */
-	public static ControlGraph activateNode (FlexoNode node, FlexoPreCondition pre,boolean interprocedural) throws NotSupportedException, InvalidModelException
-	{
-		if(pre!=null){
-			if(pre.getAttachedNode()==null)
+	public static ControlGraph activateNode(FlexoNode node, FlexoPreCondition pre, boolean interprocedural) throws NotSupportedException,
+			InvalidModelException {
+		if (pre != null) {
+			if (pre.getAttachedNode() == null)
 				logger.severe("Activation of a node with a precondition not attached to it !");
 		}
-		ControlGraphBuilder cgBuilder = getActivationNodeBuilder(node,pre);
+		ControlGraphBuilder cgBuilder = getActivationNodeBuilder(node, pre);
 
 		if (cgBuilder != null) {
 
@@ -103,87 +106,72 @@ public abstract class NodeActivation<N extends FlexoNode> extends ControlGraphBu
 				Procedure procedure = cgBuilder.makeProcedure();
 				ProcedureCall returned = new ProcedureCall(procedure);
 				if (node.getPreConditions().size() > 1) {
-					if (pre == null) throw new InvalidModelException("Node activation called for "+node+" with a null precondition");
+					if (pre == null)
+						throw new InvalidModelException("Node activation called for " + node + " with a null precondition");
 					returned.addArgument(new Constant.IntegerConstant(pre.getFlexoID()));
-					returned.appendHeaderComment("Node "+node.getName()+" is activating from precondition "+pre.getName(),true);
-				}
-				else {
-					returned.appendHeaderComment("Node "+node.getName()+" is activating",true);
+					returned.appendHeaderComment("Node " + node.getName() + " is activating from precondition " + pre.getName(), true);
+				} else {
+					returned.appendHeaderComment("Node " + node.getName() + " is activating", true);
 				}
 				return returned;
-			}
-			else {
+			} else {
 				ControlGraph returned = cgBuilder.makeControlGraph(interprocedural);
-				returned.appendHeaderComment("Node "+node.getName()+" is activating",true);
+				returned.appendHeaderComment("Node " + node.getName() + " is activating", true);
 				return returned;
 			}
-		}
-		else {
-			throw new NotSupportedException("Dont know what to do with a "+node);
+		} else {
+			throw new NotSupportedException("Dont know what to do with a " + node);
 		}
 	}
 
-	public static ControlGraphBuilder getActivationNodeBuilder (FlexoNode node, FlexoPreCondition pre) throws NotSupportedException, InvalidModelException
-	{
+	public static ControlGraphBuilder getActivationNodeBuilder(FlexoNode node, FlexoPreCondition pre) throws NotSupportedException,
+			InvalidModelException {
 		if (node instanceof AbstractActivityNode) {
 			if (node instanceof SubProcessNode) {
-				return (new SubProcessActivityNodeActivation((SubProcessNode)node,pre));
-			}
-			else if (node instanceof ActivityNode) {
+				return (new SubProcessActivityNodeActivation((SubProcessNode) node, pre));
+			} else if (node instanceof ActivityNode) {
 				if (node instanceof SelfExecutableActivityNode) {
-					return (new SelfExecutableActivityNodeActivation((SelfExecutableActivityNode)node,pre));
-				}
-				else {
+					return (new SelfExecutableActivityNodeActivation((SelfExecutableActivityNode) node, pre));
+				} else {
 					if (node.getNodeType() == NodeType.BEGIN) {
-						return (new BeginActivityNodeActivation((ActivityNode)node,pre));
-					}
-					else if (node.getNodeType() == NodeType.END) {
-						return (new EndActivityNodeActivation((ActivityNode)node,pre));
-					}
-					else { // Normal node
-						return (new NormalActivityNodeActivation((ActivityNode)node,pre));
+						return (new BeginActivityNodeActivation((ActivityNode) node, pre));
+					} else if (node.getNodeType() == NodeType.END) {
+						return (new EndActivityNodeActivation((ActivityNode) node, pre));
+					} else { // Normal node
+						return (new NormalActivityNodeActivation((ActivityNode) node, pre));
 					}
 				}
 			}
-		}
-		else if (node instanceof OperationNode) {
+		} else if (node instanceof OperationNode) {
 			if (node instanceof SelfExecutableOperationNode) {
-				return (new SelfExecutableOperationNodeActivation((SelfExecutableOperationNode)node,pre));
-			}
-			else {
+				return (new SelfExecutableOperationNodeActivation((SelfExecutableOperationNode) node, pre));
+			} else {
 				if (node.getNodeType() == NodeType.BEGIN) {
-					return (new BeginOperationNodeActivation((OperationNode)node,pre));
-				}
-				else if (node.getNodeType() == NodeType.END) {
-					return (new EndOperationNodeActivation((OperationNode)node,pre));
-				}
-				else { // Normal node
-					return (new NormalOperationNodeActivation((OperationNode)node,pre));
+					return (new BeginOperationNodeActivation((OperationNode) node, pre));
+				} else if (node.getNodeType() == NodeType.END) {
+					return (new EndOperationNodeActivation((OperationNode) node, pre));
+				} else { // Normal node
+					return (new NormalOperationNodeActivation((OperationNode) node, pre));
 				}
 			}
-		}
-		else if (node instanceof ActionNode) {
+		} else if (node instanceof ActionNode) {
 			if (node instanceof SelfExecutableActionNode) {
-				return (new SelfExecutableActionNodeActivation((SelfExecutableActionNode)node,pre));
-			}
-			else {
+				return (new SelfExecutableActionNodeActivation((SelfExecutableActionNode) node, pre));
+			} else {
 				if (node.getNodeType() == NodeType.BEGIN) {
-					return (new BeginActionNodeActivation((ActionNode)node,pre));
-				}
-				else if (node.getNodeType() == NodeType.END) {
-					return (new EndActionNodeActivation((ActionNode)node,pre));
-				}
-				else { // Normal node
-					return (new NormalActionNodeActivation((ActionNode)node,pre));
+					return (new BeginActionNodeActivation((ActionNode) node, pre));
+				} else if (node.getNodeType() == NodeType.END) {
+					return (new EndActionNodeActivation((ActionNode) node, pre));
+				} else { // Normal node
+					return (new NormalActionNodeActivation((ActionNode) node, pre));
 				}
 			}
 		}
 
-		throw new NotSupportedException("Dont know what to do with a "+node);
+		throw new NotSupportedException("Dont know what to do with a " + node);
 	}
 
-	protected NodeActivation(N node, FlexoPreCondition pre)
-	{
+	protected NodeActivation(N node, FlexoPreCondition pre) {
 		super();
 		this.node = node;
 		this.pre = pre;
@@ -193,20 +181,19 @@ public abstract class NodeActivation<N extends FlexoNode> extends ControlGraphBu
 		}
 	}
 
-	protected NodeActivation(N node)
-	{
-		this(node,null);
+	protected NodeActivation(N node) {
+		this(node, null);
 	}
 
 	@Override
-	protected String getProcedureComment()
-	{
+	protected String getProcedureComment() {
 		StringBuffer returned = new StringBuffer();
-		returned.append(FlexoLocalization.localizedForKeyWithParams("this_method_represents_code_to_be_executed_when_node_($0)_is_activated",getNode().getName()));
+		returned.append(FlexoLocalization.localizedForKeyWithParams(
+				"this_method_represents_code_to_be_executed_when_node_($0)_is_activated", getNode().getName()));
 		if (getNode().getPreConditions().size() > 1) {
 			returned.append(StringUtils.LINE_SEPARATOR);
 			returned.append(StringUtils.LINE_SEPARATOR);
-			returned.append("@param "+getPreconditionVariable().getName()+" ");
+			returned.append("@param " + getPreconditionVariable().getName() + " ");
 			returned.append(FlexoLocalization.localizedForKey("identifier_of_precondition_which_activates_this_node"));
 		}
 		return returned.toString();
@@ -216,39 +203,31 @@ public abstract class NodeActivation<N extends FlexoNode> extends ControlGraphBu
 	 * Overrides parent's method by providing precondition identifier as argument
 	 */
 	@Override
-	protected Procedure makeProcedure() throws InvalidModelException,NotSupportedException
-	{
+	protected Procedure makeProcedure() throws InvalidModelException, NotSupportedException {
 		if (getNode().getPreConditions().size() > 1) {
-			return new Procedure(
-					getProcedureName(),
-					makeControlGraph(true),
-					getProcedureComment(),
-					new Procedure.ProcedureParameter(getPreconditionVariable(),new Type("int")));
-		}
-		else return super.makeProcedure();
+			return new Procedure(getProcedureName(), makeControlGraph(true), getProcedureComment(), new Procedure.ProcedureParameter(
+					getPreconditionVariable(), new Type("int")));
+		} else
+			return super.makeProcedure();
 	}
 
 	private Variable preconditionVariable = null;
 
-	private Variable getPreconditionVariable()
-	{
-		if (preconditionVariable == null) preconditionVariable = new Variable("preconditionId");
+	private Variable getPreconditionVariable() {
+		if (preconditionVariable == null)
+			preconditionVariable = new Variable("preconditionId");
 		return preconditionVariable;
 	}
 
 	@Override
-	protected final ControlGraph makeControlGraph(boolean interprocedural) throws InvalidModelException,NotSupportedException
-	{
-		return makeSequentialControlGraph(
-				makeControlGraphCommonPrelude(interprocedural),
-				makeSpecificControlGraph(interprocedural),
+	protected final ControlGraph makeControlGraph(boolean interprocedural) throws InvalidModelException, NotSupportedException {
+		return makeSequentialControlGraph(makeControlGraphCommonPrelude(interprocedural), makeSpecificControlGraph(interprocedural),
 				makeControlGraphCommonPostlude(interprocedural));
 	}
 
-	protected abstract ControlGraph makeSpecificControlGraph(boolean interprocedural) throws InvalidModelException,NotSupportedException;
+	protected abstract ControlGraph makeSpecificControlGraph(boolean interprocedural) throws InvalidModelException, NotSupportedException;
 
-	protected final ControlGraph makeControlGraphCommonPrelude(boolean interprocedural)
-	{
+	protected final ControlGraph makeControlGraphCommonPrelude(boolean interprocedural) {
 		ControlGraph SET_PROCESS_STATUS = null;
 		ControlGraph EXECUTE_ACTIVATION_PRIMITIVE = null;
 		ControlGraph EXECUTE_ACTIVATION_ASSIGNMENTS = null;
@@ -259,7 +238,7 @@ public abstract class NodeActivation<N extends FlexoNode> extends ControlGraphBu
 
 		if (getNode().getActivationPrimitive() != null) {
 			EXECUTE_ACTIVATION_PRIMITIVE = makeControlGraphForExecutionPrimitive(getNode().getActivationPrimitive());
-			EXECUTE_ACTIVATION_PRIMITIVE.setHeaderComment("Call activation primitive for node "+getNode().getName());
+			EXECUTE_ACTIVATION_PRIMITIVE.setHeaderComment("Call activation primitive for node " + getNode().getName());
 		}
 
 		if (getNode().getActivationAssignments().size() > 0) {
@@ -267,41 +246,33 @@ public abstract class NodeActivation<N extends FlexoNode> extends ControlGraphBu
 			for (BindingAssignment assignment : getNode().getActivationAssignments())
 				allAssignments.add(makeControlGraphForAssignment(assignment));
 			EXECUTE_ACTIVATION_ASSIGNMENTS = makeSequentialControlGraph(allAssignments);
-			EXECUTE_ACTIVATION_ASSIGNMENTS.setHeaderComment("Perform assignments declared for activation of node "+getNode().getName());
+			EXECUTE_ACTIVATION_ASSIGNMENTS.setHeaderComment("Perform assignments declared for activation of node " + getNode().getName());
 		}
 
-		return makeSequentialControlGraph(
-				SET_PROCESS_STATUS,
-				EXECUTE_ACTIVATION_PRIMITIVE,
-				EXECUTE_ACTIVATION_ASSIGNMENTS);
+		return makeSequentialControlGraph(SET_PROCESS_STATUS, EXECUTE_ACTIVATION_PRIMITIVE, EXECUTE_ACTIVATION_ASSIGNMENTS);
 	}
 
-	protected ControlGraph makeControlGraphCommonPostlude(boolean interprocedural) throws NotSupportedException, InvalidModelException
-	{
+	protected ControlGraph makeControlGraphCommonPostlude(boolean interprocedural) throws NotSupportedException, InvalidModelException {
 		ControlGraph ACTIVATE_ABOVE_BEGIN_NODE = null;
 
 		if (getNode().getPreConditions().size() > 1 && interprocedural) {
 			// Many preconditions, embedded all preconditions in a conditional structure
 			Conditional evaluatePrecondition = null;
 			for (FlexoPreCondition currentPre : getNode().getPreConditions()) {
-				Expression condition = new BinaryOperatorExpression(
-						BooleanBinaryOperator.EQUALS,
-						getPreconditionVariable(),
+				Expression condition = new BinaryOperatorExpression(BooleanBinaryOperator.EQUALS, getPreconditionVariable(),
 						new Constant.IntegerConstant(currentPre.getFlexoID()));
 				FlexoNode beginNode = currentPre.getAttachedBeginNode();
 				if (beginNode == null)
-					throw new InvalidModelException("Node "+getNode()+" defines a pre-condition without attached BEGIN node");
+					throw new InvalidModelException("Node " + getNode() + " defines a pre-condition without attached BEGIN node");
 				if (beginNode == getNode()) {
 					throw new InvalidModelException("Inconsistent data !!!");
 				}
-				Conditional conditional = new Conditional(
-						condition,
-						NodeActivation.activateNode(beginNode,/*currentPre,*/interprocedural),
-						"Originally activated precondition is "+beginNode.getName());
+				Conditional conditional = new Conditional(condition,
+						NodeActivation.activateNode(beginNode,/*currentPre,*/interprocedural), "Originally activated precondition is "
+								+ beginNode.getName());
 				if (evaluatePrecondition != null) {
 					evaluatePrecondition.setElseStatement(conditional);
-				}
-				else {
+				} else {
 					ACTIVATE_ABOVE_BEGIN_NODE = conditional;
 				}
 				evaluatePrecondition = conditional;
@@ -312,26 +283,23 @@ public abstract class NodeActivation<N extends FlexoNode> extends ControlGraphBu
 			if (getNode() instanceof FatherNode && pre != null) {
 				FlexoNode beginNode = pre.getAttachedBeginNode();
 				if (beginNode == null)
-					throw new InvalidModelException("Node "+getNode()+" defines a pre-condition without attached BEGIN node");
+					throw new InvalidModelException("Node " + getNode() + " defines a pre-condition without attached BEGIN node");
 				if (beginNode == getNode()) {
 					throw new InvalidModelException("Inconsistent data !!!");
 				}
-				ACTIVATE_ABOVE_BEGIN_NODE = activateNode(beginNode,interprocedural);
+				ACTIVATE_ABOVE_BEGIN_NODE = activateNode(beginNode, interprocedural);
 			}
 		}
 
-		return makeSequentialControlGraph(
-				ACTIVATE_ABOVE_BEGIN_NODE);
+		return makeSequentialControlGraph(ACTIVATE_ABOVE_BEGIN_NODE);
 	}
 
 	@Override
-	protected String getProcedureName()
-	{
-		return "activate_"+ToolBox.capitalize(ToolBox.getJavaName(getNode().getName()))+"_"+getNode().getFlexoID();
+	protected String getProcedureName() {
+		return "activate_" + ToolBox.capitalize(ToolBox.getJavaName(getNode().getName())) + "_" + getNode().getFlexoID();
 	}
 
-	public N getNode()
-	{
+	public N getNode() {
 		return node;
 	}
 
@@ -339,18 +307,15 @@ public abstract class NodeActivation<N extends FlexoNode> extends ControlGraphBu
 		return pre;
 	}
 
-	protected static final ChangeProcessStatus makeChangeProcessStatus(Status newStatus)
-	{
+	protected static final ChangeProcessStatus makeChangeProcessStatus(Status newStatus) {
 		return new ChangeProcessStatus(newStatus);
 	}
 
-
-	protected final ControlGraph makeResetTimeOut()
-	{
+	protected final ControlGraph makeResetTimeOut() {
 		Vector<ControlGraph> resetTimeOutStatements = new Vector<ControlGraph>();
 
 		for (EventNode event : getNode().getParentPetriGraph().getAllEventNodes()) {
-			if (TriggerType.TIMER.equals(event.getTrigger()) && EVENT_TYPE.Intermediate==event.getEventType())
+			if (TriggerType.TIMER.equals(event.getTrigger()) && EVENT_TYPE.Intermediate == event.getEventType())
 				resetTimeOutStatements.add(new ResetTimeOut(event));
 		}
 

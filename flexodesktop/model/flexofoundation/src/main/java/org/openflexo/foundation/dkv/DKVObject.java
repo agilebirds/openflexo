@@ -32,126 +32,112 @@ import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.xmlcode.XMLMapping;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public abstract class DKVObject extends FlexoModelObject implements Validable
-{
+public abstract class DKVObject extends FlexoModelObject implements Validable {
 
-    private FlexoProject project;
+	private FlexoProject project;
 
-    protected DKVModel dkvModel;
+	protected DKVModel dkvModel;
 
-    protected String name;
+	protected String name;
 
-    /**
+	/**
      *
      */
-    public DKVObject(DKVModel dl)
-    {
-        super(dl.getProject());
-        this.dkvModel = dl;
-        this.project = dkvModel.getProject();
-    }
+	public DKVObject(DKVModel dl) {
+		super(dl.getProject());
+		this.dkvModel = dl;
+		this.project = dkvModel.getProject();
+	}
 
-    // Should not be called by other object than DKVModel
-    public DKVObject(FlexoProject project)
-    {
-    	super(project);
-    }
+	// Should not be called by other object than DKVModel
+	public DKVObject(FlexoProject project) {
+		super(project);
+	}
 
-    /**
-     * Overrides getProject
-     *
-     * @see org.openflexo.foundation.rm.FlexoResourceData#getProject()
-     */
-    @Override
-    public FlexoProject getProject()
-    {
-        return project;
-    }
+	/**
+	 * Overrides getProject
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResourceData#getProject()
+	 */
+	@Override
+	public FlexoProject getProject() {
+		return project;
+	}
 
-    public abstract boolean isDeleteAble();
+	public abstract boolean isDeleteAble();
 
-    /**
-     * Overrides getSpecificActionListForThatClass
-     *
-     * @see org.openflexo.foundation.FlexoModelObject#getSpecificActionListForThatClass()
-     */
-    @Override
-    protected Vector<FlexoActionType> getSpecificActionListForThatClass()
-    {
-        Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
-        v.add(DKVDelete.actionType);
-        return v;
-    }
+	/**
+	 * Overrides getSpecificActionListForThatClass
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getSpecificActionListForThatClass()
+	 */
+	@Override
+	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
+		Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
+		v.add(DKVDelete.actionType);
+		return v;
+	}
 
-    /**
-     * Overrides setProject
-     *
-     * @see org.openflexo.foundation.rm.FlexoResourceData#setProject(org.openflexo.foundation.rm.FlexoProject)
-     */
-    public void setProject(FlexoProject aProject)
-    {
-        this.project = aProject;
-    }
+	/**
+	 * Overrides setProject
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResourceData#setProject(org.openflexo.foundation.rm.FlexoProject)
+	 */
+	public void setProject(FlexoProject aProject) {
+		this.project = aProject;
+	}
 
-    /**
-     * Overrides getXMLMapping
-     *
-     * @see org.openflexo.foundation.FlexoXMLSerializableObject#getXMLMapping()
-     */
-    @Override
-    public XMLMapping getXMLMapping()
-    {
-        return getDkvModel().getXMLMapping();
-    }
+	/**
+	 * Overrides getXMLMapping
+	 * 
+	 * @see org.openflexo.foundation.FlexoXMLSerializableObject#getXMLMapping()
+	 */
+	@Override
+	public XMLMapping getXMLMapping() {
+		return getDkvModel().getXMLMapping();
+	}
 
-    /**
-     * Overrides getXMLResourceData
-     *
-     * @see org.openflexo.foundation.FlexoXMLSerializableObject#getXMLResourceData()
-     */
-    @Override
-    public XMLStorageResourceData getXMLResourceData()
-    {
-        return dkvModel;
-    }
+	/**
+	 * Overrides getXMLResourceData
+	 * 
+	 * @see org.openflexo.foundation.FlexoXMLSerializableObject#getXMLResourceData()
+	 */
+	@Override
+	public XMLStorageResourceData getXMLResourceData() {
+		return dkvModel;
+	}
 
-    @Override
-	public String getName()
-    {
-        return name;
-    }
+	@Override
+	public String getName() {
+		return name;
+	}
 
-    @Override
-	public void setName(String name) throws DuplicateDKVObjectException
-    {
-        String old = this.name;
-        this.name = name;
-        setChanged();
-        notifyObservers(new DKVDataModification(-1, "name", old, name));
-    }
+	@Override
+	public void setName(String name) throws DuplicateDKVObjectException {
+		String old = this.name;
+		this.name = name;
+		setChanged();
+		notifyObservers(new DKVDataModification(-1, "name", old, name));
+	}
 
-    public DKVModel getDkvModel()
-    {
-        return dkvModel;
-    }
+	public DKVModel getDkvModel() {
+		return dkvModel;
+	}
 
-    public DKVObject getParent()
-    {
-        if (this instanceof Value) {
-            return ((Value) this).getKey();
-        } else if (this instanceof Key) {
-            return ((Key) this).getDomain();
-        } else if (this instanceof Domain) {
-            return ((Domain) this).getDkvModel().getDomainList();
-        }
-        return null;
-    }
-
+	public DKVObject getParent() {
+		if (this instanceof Value) {
+			return ((Value) this).getKey();
+		} else if (this instanceof Key) {
+			return ((Key) this).getDomain();
+		} else if (this instanceof Domain) {
+			return ((Domain) this).getDkvModel().getDomainList();
+		}
+		return null;
+	}
 
 	@Override
 	public ValidationModel getDefaultValidationModel() {
@@ -188,20 +174,19 @@ public abstract class DKVObject extends FlexoModelObject implements Validable
 		validationModel.validate(this, report);
 	}
 
-    /**
-     * Return a vector of all embedded objects on which the validation will be
-     * performed
-     *
-     * @return a Vector of Validable objects
-     */
-    @Override
+	/**
+	 * Return a vector of all embedded objects on which the validation will be performed
+	 * 
+	 * @return a Vector of Validable objects
+	 */
+	@Override
 	public abstract Vector getAllEmbeddedValidableObjects();
 
-    /**
-     * Returns fully qualified name for this object
-     *
-     * @return
-     */
-    @Override
-    public abstract String getFullyQualifiedName();
+	/**
+	 * Returns fully qualified name for this object
+	 * 
+	 * @return
+	 */
+	@Override
+	public abstract String getFullyQualifiedName();
 }

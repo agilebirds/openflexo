@@ -23,69 +23,59 @@ import java.util.Vector;
 
 import org.openflexo.antar.expr.Expression;
 
-
 public class ProcedureCall extends Instruction {
 
 	private Procedure procedure;
 	private Vector<Expression> arguments;
-	
-	public ProcedureCall(Procedure procedure) 
-	{
+
+	public ProcedureCall(Procedure procedure) {
 		super();
 		this.procedure = procedure;
 		this.arguments = new Vector<Expression>();
 	}
 
-	public ProcedureCall(Procedure procedure, Expression... arguments) 
-	{
+	public ProcedureCall(Procedure procedure, Expression... arguments) {
 		this(procedure);
-		for (Expression arg : arguments) addArgument(arg);
+		for (Expression arg : arguments)
+			addArgument(arg);
 	}
 
-	public ProcedureCall(Procedure procedure, Vector<Expression> arguments) 
-	{
+	public ProcedureCall(Procedure procedure, Vector<Expression> arguments) {
 		this(procedure);
-		for (Expression arg : arguments) addArgument(arg);
+		for (Expression arg : arguments)
+			addArgument(arg);
 	}
 
-	public Procedure getProcedure() 
-	{
+	public Procedure getProcedure() {
 		return procedure;
 	}
 
-	public void setProcedure(Procedure procedure) 
-	{
+	public void setProcedure(Procedure procedure) {
 		this.procedure = procedure;
 	}
 
-	public Vector<Expression> getArguments() 
-	{
+	public Vector<Expression> getArguments() {
 		return arguments;
 	}
 
-	public void setArguments(Vector<Expression> arguments) 
-	{
+	public void setArguments(Vector<Expression> arguments) {
 		this.arguments = arguments;
 	}
 
-	public void addArgument(Expression arg)
-	{
+	public void addArgument(Expression arg) {
 		arguments.add(arg);
 	}
-	
-	public void removeArgument(Expression arg)
-	{
+
+	public void removeArgument(Expression arg) {
 		arguments.remove(arg);
 	}
-	
+
 	@Override
-	public ProcedureCall clone()
-	{
-		ProcedureCall returned = new ProcedureCall(procedure,arguments);
+	public ProcedureCall clone() {
+		ProcedureCall returned = new ProcedureCall(procedure, arguments);
 		returned.setHeaderComment(getHeaderComment());
 		returned.setInlineComment(getInlineComment());
 		return returned;
 	}
-
 
 }

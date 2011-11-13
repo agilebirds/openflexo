@@ -18,25 +18,26 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents Module_Visibility_Relationship object
- *
+ * 
  * @version $Id: ModuleVisibilityRelationship.java,v 1.3 2011/09/12 11:46:47 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class ModuleVisibilityRelationship extends Relationship {
-  public ModuleVisibilityRelationship(PetalNode parent, Collection params) {
-    super(parent, "Module_Visibility_Relationship", params);
-  }
+	public ModuleVisibilityRelationship(PetalNode parent, Collection params) {
+		super(parent, "Module_Visibility_Relationship", params);
+	}
 
-  public ModuleVisibilityRelationship() {
-    super("Module_Visibility_Relationship");
-  }
+	public ModuleVisibilityRelationship() {
+		super("Module_Visibility_Relationship");
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

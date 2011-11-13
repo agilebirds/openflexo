@@ -35,112 +35,109 @@ import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.swing.MouseResizer;
 import org.openflexo.swing.MouseResizer.MouseResizerDelegate;
 
-
 /**
  * @author bmangez
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
+ *         TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
  */
-public class IEBIRTWidgetView extends IEWidgetView<IEBIRTWidget> implements MouseResizerDelegate
-{
+public class IEBIRTWidgetView extends IEWidgetView<IEBIRTWidget> implements MouseResizerDelegate {
 
-    private static final Logger logger = Logger.getLogger(IEBIRTWidgetView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(IEBIRTWidgetView.class.getPackage().getName());
 
-    private Image image;
-    private MouseResizer resizer;
-    
-    /**
-     * @param model
-     */
-    public IEBIRTWidgetView(IEController ieController, IEBIRTWidget model, boolean addDnDSupport, IEWOComponentView componentView)
-    {
-        super(ieController, model, addDnDSupport, componentView);
-        setBorder(null);
-        setOpaque(false);
-        computeImage();
-        resizer = new MouseResizer(this,this);
-    }
-    
-    private void computeImage() {
-        image = getModel().getGraphType().getIcon().getImage();
-    }
-    
-    @Override
-    public boolean isDragEnabled() {
-    	if (resizer.getMode()!=MouseResizer.ResizeMode.NONE)
-    		return false;
-    	return super.isDragEnabled();
-    }
-    
-    private int getPixelWidthUsingPercentage() {
-    	int width;
-    	if (getParent() instanceof IESequenceWidgetWidgetView) {
-    		width = ((IESequenceWidgetWidgetView)getParent()).getAvailableWidth();
-    	} else {
-    		width = getParent().getSize().width;
-    	}
-    	width = width* getModel().getPercentage()/100;
-    	return width;
-    }
-    
-    @Override
-    public void paint(Graphics g) {
-    	g.drawImage(image, 0, 0, getSize().width, getSize().height, null);
-    	super.paint(g);
-    }
-    
-    /**
-     * Overrides getPreferredSize
-     * @see javax.swing.JComponent#getPreferredSize()
-     */
-    @Override
-    public Dimension getPreferredSize()
-    {
-    	if (getHoldsNextComputedPreferredSize()){
-        	Dimension storedSize = storedPrefSize();
-            if(storedSize!=null)return storedSize;
-        }
-        Dimension d;
-        if (getModel().getUsePercentage()) {
-        	int width, height;
-        	width = getPixelWidthUsingPercentage();
-        	height = width * getModel().getGraphType().getIcon().getIconHeight()/getModel().getGraphType().getIcon().getIconWidth(); 
-        	d = new Dimension(width,height);
-        } else {
-        	d = new Dimension(getModel().getWidthPixel(),getModel().getHeightPixel());
-        }
-        if (getHoldsNextComputedPreferredSize())
-            storePrefSize(d);
-        return d;
-    }
-    
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
-     */
+	private Image image;
+	private MouseResizer resizer;
 
-    @Override
-	public void update(FlexoObservable arg0, DataModification arg1)
-    {
-        if (getModel() == arg0 && arg1 instanceof ObjectDeleted) {
-            JComponent parent = (JComponent) getParent();
-            delete();
-            if (parent!=null) { // Usually, parent TD will already have done this
-	            parent.validate();
-	            parent.repaint();
-            }
-        } else if (getModel()==arg0 && (arg1.propertyName()=="heightPixel" || arg1.propertyName()=="widthPixel"
-        	|| arg1.propertyName()=="usePercentage" || arg1.propertyName()=="percentage")){
-        	doLayout();
-        	paintImmediately(getBounds());
-        } else if (getModel()==arg0 && "graphType".equals(arg1.propertyName())) {
-        	computeImage();
-        	repaint();
-        } else
-            super.update(arg0, arg1);
-    }
+	/**
+	 * @param model
+	 */
+	public IEBIRTWidgetView(IEController ieController, IEBIRTWidget model, boolean addDnDSupport, IEWOComponentView componentView) {
+		super(ieController, model, addDnDSupport, componentView);
+		setBorder(null);
+		setOpaque(false);
+		computeImage();
+		resizer = new MouseResizer(this, this);
+	}
+
+	private void computeImage() {
+		image = getModel().getGraphType().getIcon().getImage();
+	}
+
+	@Override
+	public boolean isDragEnabled() {
+		if (resizer.getMode() != MouseResizer.ResizeMode.NONE)
+			return false;
+		return super.isDragEnabled();
+	}
+
+	private int getPixelWidthUsingPercentage() {
+		int width;
+		if (getParent() instanceof IESequenceWidgetWidgetView) {
+			width = ((IESequenceWidgetWidgetView) getParent()).getAvailableWidth();
+		} else {
+			width = getParent().getSize().width;
+		}
+		width = width * getModel().getPercentage() / 100;
+		return width;
+	}
+
+	@Override
+	public void paint(Graphics g) {
+		g.drawImage(image, 0, 0, getSize().width, getSize().height, null);
+		super.paint(g);
+	}
+
+	/**
+	 * Overrides getPreferredSize
+	 * 
+	 * @see javax.swing.JComponent#getPreferredSize()
+	 */
+	@Override
+	public Dimension getPreferredSize() {
+		if (getHoldsNextComputedPreferredSize()) {
+			Dimension storedSize = storedPrefSize();
+			if (storedSize != null)
+				return storedSize;
+		}
+		Dimension d;
+		if (getModel().getUsePercentage()) {
+			int width, height;
+			width = getPixelWidthUsingPercentage();
+			height = width * getModel().getGraphType().getIcon().getIconHeight() / getModel().getGraphType().getIcon().getIconWidth();
+			d = new Dimension(width, height);
+		} else {
+			d = new Dimension(getModel().getWidthPixel(), getModel().getHeightPixel());
+		}
+		if (getHoldsNextComputedPreferredSize())
+			storePrefSize(d);
+		return d;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 */
+
+	@Override
+	public void update(FlexoObservable arg0, DataModification arg1) {
+		if (getModel() == arg0 && arg1 instanceof ObjectDeleted) {
+			JComponent parent = (JComponent) getParent();
+			delete();
+			if (parent != null) { // Usually, parent TD will already have done this
+				parent.validate();
+				parent.repaint();
+			}
+		} else if (getModel() == arg0
+				&& (arg1.propertyName() == "heightPixel" || arg1.propertyName() == "widthPixel" || arg1.propertyName() == "usePercentage" || arg1
+						.propertyName() == "percentage")) {
+			doLayout();
+			paintImmediately(getBounds());
+		} else if (getModel() == arg0 && "graphType".equals(arg1.propertyName())) {
+			computeImage();
+			repaint();
+		} else
+			super.update(arg0, arg1);
+	}
 
 	@Override
 	public void resizeBy(int deltaX, int deltaY) {
@@ -148,19 +145,19 @@ public class IEBIRTWidgetView extends IEWidgetView<IEBIRTWidget> implements Mous
 
 	@Override
 	public void resizeDirectlyBy(int deltaX, int deltaY) {
-		Dimension d = new Dimension(getModel().getWidthPixel(),getModel().getHeightPixel());
+		Dimension d = new Dimension(getModel().getWidthPixel(), getModel().getHeightPixel());
 		if (getModel().getUsePercentage()) {
 			int percentage = getModel().getPercentage();
 			int w = getWidth();
-			int newPercentage = percentage+(int)(((double)deltaX/(double)w)*100);
-			if (newPercentage!=percentage) {
+			int newPercentage = percentage + (int) (((double) deltaX / (double) w) * 100);
+			if (newPercentage != percentage) {
 				getModel().setPercentage(newPercentage);
 			}
 		} else {
-			if (deltaY!=0)
-				getModel().setHeightPixel(d.height+deltaY);
-			if (deltaX!=0)
-				getModel().setWidthPixel(d.width+deltaX);
+			if (deltaY != 0)
+				getModel().setHeightPixel(d.height + deltaY);
+			if (deltaX != 0)
+				getModel().setWidthPixel(d.width + deltaX);
 		}
 	}
 

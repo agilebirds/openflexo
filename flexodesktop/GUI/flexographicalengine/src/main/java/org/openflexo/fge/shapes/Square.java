@@ -24,28 +24,24 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 public class Square extends Rectangle {
 
 	// *******************************************************************************
-	// *                               Constructor                                   *
+	// * Constructor *
 	// *******************************************************************************
-	
-	public Square() 
-	{
+
+	public Square() {
 		this(null);
 	}
-	
-	public Square(ShapeGraphicalRepresentation aGraphicalRepresentation) 
-	{
+
+	public Square(ShapeGraphicalRepresentation aGraphicalRepresentation) {
 		super(aGraphicalRepresentation);
 	}
-	
+
 	@Override
-	public ShapeType getShapeType()
-	{
+	public ShapeType getShapeType() {
 		return ShapeType.SQUARE;
 	}
 
 	@Override
-	public boolean areDimensionConstrained()
-	{
+	public boolean areDimensionConstrained() {
 		return true;
 	}
 }

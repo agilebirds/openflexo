@@ -24,36 +24,35 @@ import java.util.Vector;
 import org.openflexo.foundation.TemporaryFlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
 
-
 public class FlexoImportedProcessLibrary extends TemporaryFlexoModelObject {
 
 	private FlexoWorkflow workflow;
-	
+
 	public FlexoImportedProcessLibrary(FlexoWorkflow workflow) {
-		
-		this.workflow = workflow; 
+
+		this.workflow = workflow;
 	}
 
 	public FlexoWorkflow getWorkflow() {
 		return workflow;
 	}
-	
+
 	@Override
 	public FlexoProject getProject() {
 		return workflow.getProject();
 	}
-	
+
 	@Override
 	public String getClassNameKey() {
 		return "imported_process_library";
 	}
-	
+
 	public int size() {
-		if (getWorkflow()!=null)
+		if (getWorkflow() != null)
 			return getWorkflow().getImportedProcesses().size();
 		return 0;
 	}
-	
+
 	public Vector<FlexoProcess> getImportedProcesses() {
 		return getWorkflow().getImportedProcesses();
 	}

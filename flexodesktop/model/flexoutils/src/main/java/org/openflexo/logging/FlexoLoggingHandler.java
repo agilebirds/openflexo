@@ -26,57 +26,50 @@ import java.util.logging.Handler;
  * 
  * @author sguerin
  */
-public class FlexoLoggingHandler extends Handler
-{
+public class FlexoLoggingHandler extends Handler {
 
-    public FlexoLoggingHandler()
-    {
-        super();
-        FlexoLoggingManager.setFlexoLoggingHandler(this);
-    }
+	public FlexoLoggingHandler() {
+		super();
+		FlexoLoggingManager.setFlexoLoggingHandler(this);
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.logging.Handler#publish(java.util.logging.LogRecord)
-     */
-    @Override
-	public void publish(java.util.logging.LogRecord record)
-    {
-        if (FlexoLoggingManager.isInitialized()) {
-        org.openflexo.logging.LogRecord flexoRecord = new org.openflexo.logging.LogRecord(record);
-        FlexoLoggingManager.logRecords.add(flexoRecord);
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.util.logging.Handler#publish(java.util.logging.LogRecord)
+	 */
+	@Override
+	public void publish(java.util.logging.LogRecord record) {
+		if (FlexoLoggingManager.isInitialized()) {
+			org.openflexo.logging.LogRecord flexoRecord = new org.openflexo.logging.LogRecord(record);
+			FlexoLoggingManager.logRecords.add(flexoRecord);
+		}
+	}
 
-    public void publishUnhandledException(java.util.logging.LogRecord record, Exception e)
-    {
-        if (FlexoLoggingManager.isInitialized()) {
-            FlexoLoggingManager.logRecords
-                    .add(new org.openflexo.logging.LogRecord(record, e));
-        }
-    }
+	public void publishUnhandledException(java.util.logging.LogRecord record, Exception e) {
+		if (FlexoLoggingManager.isInitialized()) {
+			FlexoLoggingManager.logRecords.add(new org.openflexo.logging.LogRecord(record, e));
+		}
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.logging.Handler#flush()
-     */
-    @Override
-	public void flush()
-    {
-        // nothing special to do : the handler is logging "in memory"
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.util.logging.Handler#flush()
+	 */
+	@Override
+	public void flush() {
+		// nothing special to do : the handler is logging "in memory"
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.logging.Handler#close()
-     */
-    @Override
-	public void close() throws SecurityException
-    {
-    	// nothing special to do : the handler is logging "in memory"
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.util.logging.Handler#close()
+	 */
+	@Override
+	public void close() throws SecurityException {
+		// nothing special to do : the handler is logging "in memory"
+	}
 
 }

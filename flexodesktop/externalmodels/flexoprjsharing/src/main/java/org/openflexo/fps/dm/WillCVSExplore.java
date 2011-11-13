@@ -19,11 +19,8 @@
  */
 package org.openflexo.fps.dm;
 
-
-public class WillCVSExplore extends FPSDataModification
-{
-    public WillCVSExplore()
-    {
-        super(null,null);
-    }
+public class WillCVSExplore extends FPSDataModification {
+	public WillCVSExplore() {
+		super(null, null);
+	}
 }

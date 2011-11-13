@@ -21,27 +21,24 @@ package org.openflexo.foundation.ie.dm;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class ListOfValuesHasChanged extends IEDataModification
-{
+public class ListOfValuesHasChanged extends IEDataModification {
 
-    /**
+	/**
      * 
      */
-    public ListOfValuesHasChanged(Object oldValue, Object newValue)
-    {
-        this("valuesList",oldValue, newValue);
-    }
-    
-    /**
-     * @param propertyName
-     * @param oldValue
-     * @param newValue
-     */
-    public ListOfValuesHasChanged(String propertyName, Object oldValue, Object newValue)
-    {
-        super(propertyName, oldValue, newValue);
-    }
+	public ListOfValuesHasChanged(Object oldValue, Object newValue) {
+		this("valuesList", oldValue, newValue);
+	}
+
+	/**
+	 * @param propertyName
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public ListOfValuesHasChanged(String propertyName, Object oldValue, Object newValue) {
+		super(propertyName, oldValue, newValue);
+	}
 
 }

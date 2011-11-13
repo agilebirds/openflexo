@@ -27,39 +27,33 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-
 public class AddClass extends AddConcept<ClassPatternRole> {
 
 	private static final Logger logger = Logger.getLogger(AddClass.class.getPackage().getName());
 
 	public AddClass() {
 	}
-	
+
 	@Override
-	public EditionActionType getEditionActionType()
-	{
+	public EditionActionType getEditionActionType() {
 		return EditionActionType.AddClass;
 	}
-	
+
 	@Override
-	public OntologyClass getOntologyClass()
-	{
-		if (getPatternRole() != null) 
+	public OntologyClass getOntologyClass() {
+		if (getPatternRole() != null)
 			return getPatternRole().getOntologicType();
 		return null;
 	}
-	
+
 	@Override
-	public void setOntologyClass(OntologyClass ontologyClass)
-	{
-		if (getPatternRole() != null) 
+	public void setOntologyClass(OntologyClass ontologyClass) {
+		if (getPatternRole() != null)
 			getPatternRole().setOntologicType(ontologyClass);
 	}
 
-
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.VPM.ADD_CLASS_INSPECTOR;
 	}
 
@@ -72,27 +66,24 @@ public class AddClass extends AddConcept<ClassPatternRole> {
 	}*/
 
 	private ViewPointDataBinding className;
-	
+
 	private BindingDefinition CLASS_NAME = new BindingDefinition("className", String.class, BindingDefinitionType.GET, false);
-	
-	public BindingDefinition getClassNameBindingDefinition()
-	{
+
+	public BindingDefinition getClassNameBindingDefinition() {
 		return CLASS_NAME;
 	}
 
-	public ViewPointDataBinding getClassName() 
-	{
-		if (className == null) className = new ViewPointDataBinding(this,EditionActionBindingAttribute.className,getClassNameBindingDefinition());
+	public ViewPointDataBinding getClassName() {
+		if (className == null)
+			className = new ViewPointDataBinding(this, EditionActionBindingAttribute.className, getClassNameBindingDefinition());
 		return className;
 	}
 
-	public void setClassName(ViewPointDataBinding className) 
-	{
+	public void setClassName(ViewPointDataBinding className) {
 		className.setOwner(this);
 		className.setBindingAttribute(EditionActionBindingAttribute.className);
 		className.setBindingDefinition(getClassNameBindingDefinition());
 		this.className = className;
 	}
-
 
 }

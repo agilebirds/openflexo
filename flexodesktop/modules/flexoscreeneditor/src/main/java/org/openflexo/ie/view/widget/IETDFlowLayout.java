@@ -31,106 +31,99 @@ import javax.swing.SwingConstants;
  * @author gpolet
  * 
  */
-public class IETDFlowLayout extends FlowLayout
-{
+public class IETDFlowLayout extends FlowLayout {
 
-    /**
+	/**
      * 
      */
-    public IETDFlowLayout()
-    {
-    }
+	public IETDFlowLayout() {
+	}
 
-    /**
-     * @param align
-     */
-    public IETDFlowLayout(int align)
-    {
-        super(align);
-    }
+	/**
+	 * @param align
+	 */
+	public IETDFlowLayout(int align) {
+		super(align);
+	}
 
-    /**
-     * @param align
-     * @param hgap
-     * @param vgap
-     */
-    public IETDFlowLayout(int align, int hgap, int vgap, int vAlignement)
-    {
-        super(align, hgap, vgap);
-        _vAlign = vAlignement;
-    }
+	/**
+	 * @param align
+	 * @param hgap
+	 * @param vgap
+	 */
+	public IETDFlowLayout(int align, int hgap, int vgap, int vAlignement) {
+		super(align, hgap, vgap);
+		_vAlign = vAlignement;
+	}
 
-    /**
-     * Overrides preferredLayoutSize
-     * 
-     * @see java.awt.FlowLayout#preferredLayoutSize(java.awt.Container)
-     */
-    @Override
-    public Dimension preferredLayoutSize(Container target)
-    {
-        Dimension dim = new Dimension(0, 0);
-        int nmembers = target.getComponentCount();
-        Insets insets = target.getInsets();
-        Dimension targetMaxSize = target.getMaximumSize();
-        int maxWidth = targetMaxSize.width - (insets.left + insets.right + getHgap() * 2);
-        if (maxWidth<0)
-            maxWidth = 0;
-        int currentWidth = 0;
-        int currentHeight = 0;
-        boolean first = true;
-        int width=0;
-        for (int i = 0; i < nmembers; i++) {
-            Component m = target.getComponent(i);
-            if (m.isVisible()) {
-                Dimension d = m.getPreferredSize();
-                if (currentWidth == 0 || currentWidth + d.width <= maxWidth) {
-                    // We add the component to the current line
-                    currentWidth += d.width;
-                    currentHeight = Math.max(currentHeight, d.height);
-                    // The max height of all components of this line is the
-                    // height of this line
-                    if (first)
-                        first = false;
-                    else
-                        currentWidth += getHgap();
-                } else {// We add the component to a new line
-                    dim.height += currentHeight + getVgap();
-                    // We add the height of the previous line and the vertical
-                    // gap to the total height of the container
-                    width = Math.max(currentWidth, width);
-                    currentWidth = d.width;
-                    currentHeight = d.height;// The height of the new line
-                }
-            }
-        }
-        width = Math.max(currentWidth, width);
-        maxWidth = Math.min(width+getHgap(), targetMaxSize.width);
-        dim.height += currentHeight + getVgap()*2+insets.top+insets.bottom;
-        dim.width = maxWidth +2*getHgap();
-        return dim;
-    }
-    
-    
-    public int getVerticalAlignement(){
-    	return _vAlign;
-    }
-    
-    public void setVerticalAlignement(int v){
-    	_vAlign = v;
-    }
-    
-    private int _vAlign = SwingConstants.TOP;
-    
-    @Override
+	/**
+	 * Overrides preferredLayoutSize
+	 * 
+	 * @see java.awt.FlowLayout#preferredLayoutSize(java.awt.Container)
+	 */
+	@Override
+	public Dimension preferredLayoutSize(Container target) {
+		Dimension dim = new Dimension(0, 0);
+		int nmembers = target.getComponentCount();
+		Insets insets = target.getInsets();
+		Dimension targetMaxSize = target.getMaximumSize();
+		int maxWidth = targetMaxSize.width - (insets.left + insets.right + getHgap() * 2);
+		if (maxWidth < 0)
+			maxWidth = 0;
+		int currentWidth = 0;
+		int currentHeight = 0;
+		boolean first = true;
+		int width = 0;
+		for (int i = 0; i < nmembers; i++) {
+			Component m = target.getComponent(i);
+			if (m.isVisible()) {
+				Dimension d = m.getPreferredSize();
+				if (currentWidth == 0 || currentWidth + d.width <= maxWidth) {
+					// We add the component to the current line
+					currentWidth += d.width;
+					currentHeight = Math.max(currentHeight, d.height);
+					// The max height of all components of this line is the
+					// height of this line
+					if (first)
+						first = false;
+					else
+						currentWidth += getHgap();
+				} else {// We add the component to a new line
+					dim.height += currentHeight + getVgap();
+					// We add the height of the previous line and the vertical
+					// gap to the total height of the container
+					width = Math.max(currentWidth, width);
+					currentWidth = d.width;
+					currentHeight = d.height;// The height of the new line
+				}
+			}
+		}
+		width = Math.max(currentWidth, width);
+		maxWidth = Math.min(width + getHgap(), targetMaxSize.width);
+		dim.height += currentHeight + getVgap() * 2 + insets.top + insets.bottom;
+		dim.width = maxWidth + 2 * getHgap();
+		return dim;
+	}
+
+	public int getVerticalAlignement() {
+		return _vAlign;
+	}
+
+	public void setVerticalAlignement(int v) {
+		_vAlign = v;
+	}
+
+	private int _vAlign = SwingConstants.TOP;
+
+	@Override
 	public void layoutContainer(Container target) {
 		synchronized (target.getTreeLock()) {
 			Insets insets = target.getInsets();
-			int maxwidth = target.getWidth()
-					- (insets.left + insets.right + getHgap() * 2);
-            if (maxwidth<0)
-                maxwidth = 0;
+			int maxwidth = target.getWidth() - (insets.left + insets.right + getHgap() * 2);
+			if (maxwidth < 0)
+				maxwidth = 0;
 			int nmembers = target.getComponentCount();
-			int x = 0, y =  getVgap();
+			int x = 0, y = getVgap();
 			int rowh = 0, start = 0;
 			int offset = target.getSize().height - preferredLayoutSize(target).height + 4;
 			boolean ltr = target.getComponentOrientation().isLeftToRight();
@@ -148,8 +141,7 @@ public class IETDFlowLayout extends FlowLayout
 						x += d.width;
 						rowh = Math.max(rowh, d.height);
 					} else {
-						moveComponents(target, insets.left + getHgap(), y,
-								maxwidth - x, rowh, start, i, ltr, offset);
+						moveComponents(target, insets.left + getHgap(), y, maxwidth - x, rowh, start, i, ltr, offset);
 						x = d.width;
 						y += getVgap() + rowh;
 						rowh = d.height;
@@ -157,19 +149,17 @@ public class IETDFlowLayout extends FlowLayout
 					}
 				}
 			}
-			moveComponents(target, insets.left + getHgap(), y, maxwidth - x,
-					rowh, start, nmembers, ltr, offset);
+			moveComponents(target, insets.left + getHgap(), y, maxwidth - x, rowh, start, nmembers, ltr, offset);
 		}
 	}
-    
-    private void moveComponents(Container target, int x, int y, int width,
-			int height, int rowStart, int rowEnd, boolean ltr, int offset) {
-    	
+
+	private void moveComponents(Container target, int x, int y, int width, int height, int rowStart, int rowEnd, boolean ltr, int offset) {
+
 		synchronized (target.getTreeLock()) {
-            if (x<0)
-                x=getHgap();
-            if (y<0)
-                y = getVgap();
+			if (x < 0)
+				x = getHgap();
+			if (y < 0)
+				y = getVgap();
 			switch (getVerticalAlignement()) {
 			case SwingConstants.TOP:
 				break;
@@ -180,7 +170,7 @@ public class IETDFlowLayout extends FlowLayout
 				y += offset;
 				break;
 			}
-			
+
 			switch (getAlignment()) {
 			case LEFT:
 				x += ltr ? 0 : width;

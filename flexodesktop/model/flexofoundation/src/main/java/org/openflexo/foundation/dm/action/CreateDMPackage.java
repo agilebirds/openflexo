@@ -33,83 +33,70 @@ import org.openflexo.foundation.dm.ProcessInstanceRepository;
 import org.openflexo.foundation.dm.WORepository;
 import org.openflexo.foundation.dm.eo.DMEORepository;
 
+public class CreateDMPackage extends FlexoAction {
 
-public class CreateDMPackage extends FlexoAction 
-{
+	private static final Logger logger = Logger.getLogger(CreateDMPackage.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(CreateDMPackage.class.getPackage().getName());
+	public static FlexoActionType actionType = new FlexoActionType("add_package", FlexoActionType.newMenu, FlexoActionType.defaultGroup,
+			FlexoActionType.ADD_ACTION_TYPE) {
 
-    public static FlexoActionType actionType = new FlexoActionType ("add_package",FlexoActionType.newMenu,FlexoActionType.defaultGroup,FlexoActionType.ADD_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new CreateDMPackage(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) 
-        {
-            return new CreateDMPackage(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return ((object != null) && (object instanceof DMRepository) && !(object instanceof DMEORepository)
+					&& (!(object instanceof ComponentRepository)) && (!(object instanceof WORepository))
+					&& (!(object instanceof ProcessInstanceRepository)) && (!((DMRepository) object).isReadOnly()));
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return ((object != null) 
-                    && (object instanceof DMRepository) && !(object instanceof DMEORepository)
-                    && (! (object instanceof ComponentRepository))
-                    && (! (object instanceof WORepository))
-                    && (! (object instanceof ProcessInstanceRepository))
-                    && (!((DMRepository)object).isReadOnly()));
-         }
-                
-    };
-    
-    CreateDMPackage (FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-    private String _newPackageName;
-    private DMPackage _newPackage;
-    private DMRepository _repository;
+	CreateDMPackage(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    @Override
-	protected void doAction(Object context) 
-    {
-      logger.info ("CreateDMPackage"); 
-      if (getRepository() != null && getNewPackageName()!=null) {
-          _newPackage = getRepository().createPackage(getNewPackageName());
-      }
-    }
-    
-    public DMRepository getRepository() 
-    {
-        if (_repository == null) {
-            if ((getFocusedObject() != null) && (getFocusedObject() instanceof DMRepository)) {
-                _repository = (DMRepository)getFocusedObject();
-             }           
-        }
-        return _repository;
-    }
+	private String _newPackageName;
+	private DMPackage _newPackage;
+	private DMRepository _repository;
 
-    public String getNewPackageName() 
-    {
-        return _newPackageName;
-    }
-   
-    public void setNewPackageName(String newPackageName) 
-    {
-        _newPackageName = newPackageName;
-    }
+	@Override
+	protected void doAction(Object context) {
+		logger.info("CreateDMPackage");
+		if (getRepository() != null && getNewPackageName() != null) {
+			_newPackage = getRepository().createPackage(getNewPackageName());
+		}
+	}
 
-    public DMPackage getNewPackage() 
-    {
-        return _newPackage;
-    }
-   
+	public DMRepository getRepository() {
+		if (_repository == null) {
+			if ((getFocusedObject() != null) && (getFocusedObject() instanceof DMRepository)) {
+				_repository = (DMRepository) getFocusedObject();
+			}
+		}
+		return _repository;
+	}
+
+	public String getNewPackageName() {
+		return _newPackageName;
+	}
+
+	public void setNewPackageName(String newPackageName) {
+		_newPackageName = newPackageName;
+	}
+
+	public DMPackage getNewPackage() {
+		return _newPackage;
+	}
+
 }

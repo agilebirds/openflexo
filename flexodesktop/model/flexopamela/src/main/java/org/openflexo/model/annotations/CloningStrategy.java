@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 public @interface CloningStrategy {
 
 	public static enum StrategyType {
-		CLONE,REFERENCE,IGNORE,FACTORY;
+		CLONE, REFERENCE, IGNORE, FACTORY;
 	}
 
 	public static final String UNDEFINED = "";

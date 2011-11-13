@@ -25,7 +25,6 @@ import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.openflexo.foundation.rm.ProjectRestructuration;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
@@ -33,171 +32,148 @@ import org.openflexo.foundation.xml.FlexoDMBuilder;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileUtils;
 
-
 /**
- * Represents a logical group of objects definition extracted from
- * a RationalRose file
+ * Represents a logical group of objects definition extracted from a RationalRose file
  * 
  * @author sguerin
  * 
  */
-public class XMLSchemaRepository extends DMRepository
-{
-	
+public class XMLSchemaRepository extends DMRepository {
+
 	private FlexoProjectFile schemaFile;
 
-	private Hashtable<String,String> packageToNamespace=new Hashtable<String,String>();
-	
-	
-	  public Hashtable<String,String> getPackageToNamespace()
-	    {
-	    	
-	         return packageToNamespace;
-	    }
+	private Hashtable<String, String> packageToNamespace = new Hashtable<String, String>();
 
-	    public void setPackageToNamespace(Hashtable<String,String> props)
-	    {
-	    	packageToNamespace = props;
-	    }
+	public Hashtable<String, String> getPackageToNamespace() {
 
-	    public void setPackageToNamespaceForKey(String value, String key)
-	    {
-	    	if (value!=null)
-	        	packageToNamespace.put(key, value);
-	    	else
-	    		packageToNamespace.remove(key);
-	    }
+		return packageToNamespace;
+	}
 
-	    public void removePackageToNamespaceWithKey(String key)
-	    {
-	       	packageToNamespace.remove(key);
-	    }
-	
-    private static final Logger logger = Logger.getLogger(XMLSchemaRepository.class.getPackage().getName());
+	public void setPackageToNamespace(Hashtable<String, String> props) {
+		packageToNamespace = props;
+	}
 
-    // ==========================================================================
-    // ============================= Instance variables =========================
-    // ==========================================================================
+	public void setPackageToNamespaceForKey(String value, String key) {
+		if (value != null)
+			packageToNamespace.put(key, value);
+		else
+			packageToNamespace.remove(key);
+	}
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	public void removePackageToNamespaceWithKey(String key) {
+		packageToNamespace.remove(key);
+	}
 
-    /**
-     * Constructor used during deserialization
-     */
-    public XMLSchemaRepository(FlexoDMBuilder builder)
-    {
-        this(builder.dmModel);
-        initializeDeserialization(builder);
-    }
+	private static final Logger logger = Logger.getLogger(XMLSchemaRepository.class.getPackage().getName());
 
-    /**
-     * Default constructor
-     */
-    public XMLSchemaRepository(DMModel dmModel)
-    {
-        super(dmModel);
-    }
+	// ==========================================================================
+	// ============================= Instance variables =========================
+	// ==========================================================================
 
-    @Override
-	public DMRepositoryFolder getRepositoryFolder()
-    {
-        return getDMModel().getLibraryRepositoryFolder();
-    }
-    
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
+	/**
+	 * Constructor used during deserialization
+	 */
+	public XMLSchemaRepository(FlexoDMBuilder builder) {
+		this(builder.dmModel);
+		initializeDeserialization(builder);
+	}
 
-    
-    
-    /**
-     * @param dmModel
-     * @return
-     */
-    public static XMLSchemaRepository createNewXMLSchemaRepository(String aName, DMModel dmModel, File schemaFileToCopy, FlexoProgress progress)
-    {
-        // Creates the repository
-    	XMLSchemaRepository newRepository = new XMLSchemaRepository(dmModel);
+	/**
+	 * Default constructor
+	 */
+	public XMLSchemaRepository(DMModel dmModel) {
+		super(dmModel);
+	}
 
-        // Copy JAR file
-        File copiedFile = new File(ProjectRestructuration.getExpectedDataModelDirectory(dmModel.getProject().getProjectDirectory()), schemaFileToCopy.getName());
-        if (progress != null) {
-            progress.setProgress(FlexoLocalization.localizedForKey("copying") + " " + schemaFileToCopy.getName());
-        }
-        try {
-            if (logger.isLoggable(Level.INFO))
-                logger.info("Copying file " + schemaFileToCopy.getAbsolutePath() + " to " + copiedFile.getAbsolutePath());
-            FileUtils.copyFileToFile(schemaFileToCopy, copiedFile);
-        } catch (IOException e) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Could not copy file " + schemaFileToCopy.getAbsolutePath() + " to " + copiedFile.getAbsolutePath());
-        }
+	@Override
+	public DMRepositoryFolder getRepositoryFolder() {
+		return getDMModel().getLibraryRepositoryFolder();
+	}
 
-        // Perform some settings
-        FlexoProjectFile wsdlFile = new FlexoProjectFile(copiedFile, dmModel.getProject());
-        newRepository.setXMLSchemaFile(wsdlFile);
-        newRepository.setName(aName);
+	/**
+	 * @param dmModel
+	 * @return
+	 */
+	public static XMLSchemaRepository createNewXMLSchemaRepository(String aName, DMModel dmModel, File schemaFileToCopy,
+			FlexoProgress progress) {
+		// Creates the repository
+		XMLSchemaRepository newRepository = new XMLSchemaRepository(dmModel);
 
-        dmModel.addToXmlSchemaRepositories(newRepository);
+		// Copy JAR file
+		File copiedFile = new File(ProjectRestructuration.getExpectedDataModelDirectory(dmModel.getProject().getProjectDirectory()),
+				schemaFileToCopy.getName());
+		if (progress != null) {
+			progress.setProgress(FlexoLocalization.localizedForKey("copying") + " " + schemaFileToCopy.getName());
+		}
+		try {
+			if (logger.isLoggable(Level.INFO))
+				logger.info("Copying file " + schemaFileToCopy.getAbsolutePath() + " to " + copiedFile.getAbsolutePath());
+			FileUtils.copyFileToFile(schemaFileToCopy, copiedFile);
+		} catch (IOException e) {
+			if (logger.isLoggable(Level.WARNING))
+				logger.warning("Could not copy file " + schemaFileToCopy.getAbsolutePath() + " to " + copiedFile.getAbsolutePath());
+		}
 
-        
-        return newRepository;
-    }
-    
-    
-    
-    public void addPackageAndNamespace(String packName, String namespace) {
-    	packageToNamespace.put(packName, namespace);
-    }
-    
-    public String getNamespaceFromPackage(String packName) {
-    	return packageToNamespace.get(packName);
-    }
-    
-    
-    @Override
-	public int getOrder()
-    {
-        return 13;
-    }
+		// Perform some settings
+		FlexoProjectFile wsdlFile = new FlexoProjectFile(copiedFile, dmModel.getProject());
+		newRepository.setXMLSchemaFile(wsdlFile);
+		newRepository.setName(aName);
 
-    @Override
-	public boolean isReadOnly()
-    {
-        return true;
-    }
+		dmModel.addToXmlSchemaRepositories(newRepository);
 
-    @Override
-	public boolean isDeletable()
-    {
-        return true;
-    }
+		return newRepository;
+	}
 
-    
-    @Override
-	public /*final */ void delete()
-    {
-        getDMModel().removeFromXmlSchemaRepositories(this);
-        super.delete();
-    }
-    
-    
-    public FlexoProjectFile getXMLSchemaFile(){
-    		return schemaFile;
-    }
-    public void setXMLSchemaFile(FlexoProjectFile aFile){
-    		schemaFile=aFile;
-    }
-    
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "xml_schema_repository";
-    }
-    
+	public void addPackageAndNamespace(String packName, String namespace) {
+		packageToNamespace.put(packName, namespace);
+	}
+
+	public String getNamespaceFromPackage(String packName) {
+		return packageToNamespace.get(packName);
+	}
+
+	@Override
+	public int getOrder() {
+		return 13;
+	}
+
+	@Override
+	public boolean isReadOnly() {
+		return true;
+	}
+
+	@Override
+	public boolean isDeletable() {
+		return true;
+	}
+
+	@Override
+	public/*final */void delete() {
+		getDMModel().removeFromXmlSchemaRepositories(this);
+		super.delete();
+	}
+
+	public FlexoProjectFile getXMLSchemaFile() {
+		return schemaFile;
+	}
+
+	public void setXMLSchemaFile(FlexoProjectFile aFile) {
+		schemaFile = aFile;
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "xml_schema_repository";
+	}
+
 }

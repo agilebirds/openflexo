@@ -24,65 +24,57 @@ import java.lang.reflect.InvocationTargetException;
 
 /**
  * <p>
- * Exception thrown when invoking a class accessor during coding or decoding
- * process.
+ * Exception thrown when invoking a class accessor during coding or decoding process.
  * </p>
- * The <code>message</code> (see {@link #getMessage()}) contains the error
- * description, and <code>targetException</code> (see
+ * The <code>message</code> (see {@link #getMessage()}) contains the error description, and <code>targetException</code> (see
  * {@link #getTargetException()})
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  * @see XMLCoder
  * @see XMLDecoder
  */
-public class AccessorInvocationException extends RuntimeException
-{
+public class AccessorInvocationException extends RuntimeException {
 
-    protected Throwable targetException;
+	protected Throwable targetException;
 
-    /**
-     * Creates a new <code>AccessorInvocationException</code> instance.
-     * 
-     * @param exception
-     * 
-     */
-    public AccessorInvocationException(InvocationTargetException exception)
-    {
+	/**
+	 * Creates a new <code>AccessorInvocationException</code> instance.
+	 * 
+	 * @param exception
+	 * 
+	 */
+	public AccessorInvocationException(InvocationTargetException exception) {
 
-        super("Exception raised during accessors execution: " + exception.getTargetException().getMessage());
-        targetException = exception.getTargetException();
-    }
+		super("Exception raised during accessors execution: " + exception.getTargetException().getMessage());
+		targetException = exception.getTargetException();
+	}
 
-    /**
-     * Creates a new <code>AccessorInvocationException</code> instance given a
-     * message <code>aMessage</code>
-     * 
-     * @param aMessage
-     *            a <code>String</code> value
-     * @param exception
-     */
-    public AccessorInvocationException(String aMessage, InvocationTargetException exception)
-    {
+	/**
+	 * Creates a new <code>AccessorInvocationException</code> instance given a message <code>aMessage</code>
+	 * 
+	 * @param aMessage
+	 *            a <code>String</code> value
+	 * @param exception
+	 */
+	public AccessorInvocationException(String aMessage, InvocationTargetException exception) {
 
-        super(aMessage + " : " + exception.getTargetException().getClass().getName() + "[message=" + exception.getTargetException().getMessage() + "]");
-        targetException = exception.getTargetException();
-    }
+		super(aMessage + " : " + exception.getTargetException().getClass().getName() + "[message="
+				+ exception.getTargetException().getMessage() + "]");
+		targetException = exception.getTargetException();
+	}
 
-    /**
-     * Return the exception thrown during accessor invocation
-     * 
-     * @return
-     */
-    public Throwable getTargetException()
-    {
-        return targetException;
-    }
+	/**
+	 * Return the exception thrown during accessor invocation
+	 * 
+	 * @return
+	 */
+	public Throwable getTargetException() {
+		return targetException;
+	}
 
 	@Override
-	public Throwable getCause()
-	{
+	public Throwable getCause() {
 		return getTargetException();
 	}
-	
 
 }

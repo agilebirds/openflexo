@@ -33,24 +33,22 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-
-class DKVPerspective extends FlexoPerspective<DKVModel>
-{
+class DKVPerspective extends FlexoPerspective<DKVModel> {
 
 	private final IEController _controller;
-    private DKVEditorBrowserView _dkvEditorBrowserView;
+	private DKVEditorBrowserView _dkvEditorBrowserView;
 	protected DKVModelView dkvModelView;
 
 	/**
-	 * @param controller TODO
+	 * @param controller
+	 *            TODO
 	 * @param name
 	 */
-	public DKVPerspective(IEController controller)
-	{
+	public DKVPerspective(IEController controller) {
 		super("dkv_perspective");
 		_controller = controller;
 		_dkvEditorBrowserView = new DKVEditorBrowserView(controller);
-		_dkvEditorBrowserView.setName(FlexoLocalization.localizedForKey("Key-Value",_dkvEditorBrowserView));
+		_dkvEditorBrowserView.setName(FlexoLocalization.localizedForKey("Key-Value", _dkvEditorBrowserView));
 	}
 
 	/**
@@ -59,8 +57,7 @@ class DKVPerspective extends FlexoPerspective<DKVModel>
 	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
-	public ImageIcon getActiveIcon()
-	{
+	public ImageIcon getActiveIcon() {
 		return SEIconLibrary.DKV_PERSPECTIVE_ACTIVE_ICON;
 	}
 
@@ -70,65 +67,57 @@ class DKVPerspective extends FlexoPerspective<DKVModel>
 	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
 	 */
 	@Override
-	public ImageIcon getSelectedIcon()
-	{
+	public ImageIcon getSelectedIcon() {
 		return SEIconLibrary.DKV_PERSPECTIVE_SELECTED_ICON;
 	}
 
 	@Override
-	public DKVModel getDefaultObject(FlexoModelObject proposedObject) 
-	{
-		if (proposedObject instanceof DKVObject) return ((DKVObject)proposedObject).getDkvModel();
+	public DKVModel getDefaultObject(FlexoModelObject proposedObject) {
+		if (proposedObject instanceof DKVObject)
+			return ((DKVObject) proposedObject).getDkvModel();
 		return _controller.getProject().getDKVModel();
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoModelObject object) 
-	{
+	public boolean hasModuleViewForObject(FlexoModelObject object) {
 		return object instanceof DKVModel;
 	}
 
 	@Override
-	public ModuleView<DKVModel> createModuleViewForObject(DKVModel object, FlexoController controller) 
-	{
+	public ModuleView<DKVModel> createModuleViewForObject(DKVModel object, FlexoController controller) {
 		if (dkvModelView == null) {
-			dkvModelView = new DKVModelView(object,(IEController)controller);
+			dkvModelView = new DKVModelView(object, (IEController) controller);
 		}
 		return dkvModelView;
 	}
-	
+
 	@Override
-	public boolean isAlwaysVisible() 
-	{
+	public boolean isAlwaysVisible() {
 		return true;
 	}
-	
+
 	@Override
-	public void notifyModuleViewDisplayed(ModuleView<?> moduleView) 
-	{
+	public void notifyModuleViewDisplayed(ModuleView<?> moduleView) {
 		_controller.getSelectionManager().setSelectedObject(moduleView.getRepresentedObject());
 	}
-	
+
 	@Override
 	public boolean doesPerspectiveControlLeftView() {
 		return true;
 	}
 
 	@Override
-	public JComponent getLeftView() 
-	{
+	public JComponent getLeftView() {
 		return _dkvEditorBrowserView;
 	}
-	
+
 	@Override
-	public boolean doesPerspectiveControlRightView() 
-	{
+	public boolean doesPerspectiveControlRightView() {
 		return true;
 	}
-	
+
 	@Override
-	public JComponent getRightView() 
-	{
+	public JComponent getRightView() {
 		return _controller.getDisconnectedDocInspectorPanel();
 	}
 

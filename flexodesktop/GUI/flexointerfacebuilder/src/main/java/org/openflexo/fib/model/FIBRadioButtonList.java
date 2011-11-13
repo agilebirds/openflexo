@@ -21,7 +21,6 @@ package org.openflexo.fib.model;
 
 import java.util.logging.Logger;
 
-
 public class FIBRadioButtonList extends FIBMultipleValues {
 
 	private int columns = 1;
@@ -38,6 +37,5 @@ public class FIBRadioButtonList extends FIBMultipleValues {
 	public void setColumns(int columns) {
 		this.columns = columns;
 	}
-
 
 }

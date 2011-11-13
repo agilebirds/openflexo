@@ -28,29 +28,24 @@ public class IsDatatypePropertyStatement extends IsAStatement {
 	private static final Logger logger = Logger.getLogger(IsDatatypePropertyStatement.class.getPackage().getName());
 
 	public static final String DATATYPE_PROPERTY_URI = "http://www.w3.org/2002/07/owl#DatatypeProperty";
-	
-	public IsDatatypePropertyStatement(OntologyObject subject, Statement s)
-	{
-		super(subject,s);
+
+	public IsDatatypePropertyStatement(OntologyObject subject, Statement s) {
+		super(subject, s);
 	}
 
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "is_datatype_property_statement";
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return "IsDatatypePropertyStatement: "+getStatement();
+	public String getFullyQualifiedName() {
+		return "IsDatatypePropertyStatement: " + getStatement();
 	}
 
-
 	@Override
-	public String toString() 
-	{
-		return getSubject().getName()+" is a DatatypeProperty";
+	public String toString() {
+		return getSubject().getName() + " is a DatatypeProperty";
 	}
 
 }

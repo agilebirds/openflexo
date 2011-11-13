@@ -35,29 +35,25 @@ import org.openflexo.tm.hibernate.impl.HibernateImplementation;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
-public class CreateHibernateModelActionInitializer extends ActionInitializer<CreateHibernateModelAction, HibernateImplementation, HibernateImplementation> {
+public class CreateHibernateModelActionInitializer extends
+		ActionInitializer<CreateHibernateModelAction, HibernateImplementation, HibernateImplementation> {
 
 	public static String HIBERNATE_CREATEMODEL_DIALOG_FIB_RESOURCE_PATH = "/Hibernate/Fib/Dialog/CreateModelDialog.fib";
 
-	public CreateHibernateModelActionInitializer(SGControllerActionInitializer actionInitializer)
-	{
+	public CreateHibernateModelActionInitializer(SGControllerActionInitializer actionInitializer) {
 		super(CreateHibernateModelAction.actionType, actionInitializer);
 	}
 
 	@Override
-	protected SGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (SGControllerActionInitializer)super.getControllerActionInitializer();
+	protected SGControllerActionInitializer getControllerActionInitializer() {
+		return (SGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<CreateHibernateModelAction> getDefaultInitializer()
-	{
+	protected FlexoActionInitializer<CreateHibernateModelAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateHibernateModelAction>() {
 			@Override
-			public boolean run(ActionEvent e, CreateHibernateModelAction action)
-			{
+			public boolean run(ActionEvent e, CreateHibernateModelAction action) {
 				FIBDialog dialog = FIBDialog.instanciateComponent(HIBERNATE_CREATEMODEL_DIALOG_FIB_RESOURCE_PATH, action, null, true);
 				return (dialog.getStatus() == Status.VALIDATED);
 			}
@@ -79,10 +75,8 @@ public class CreateHibernateModelActionInitializer extends ActionInitializer<Cre
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return SGIconLibrary.GENERATED_CODE_ICON;
 	}
-
 
 }

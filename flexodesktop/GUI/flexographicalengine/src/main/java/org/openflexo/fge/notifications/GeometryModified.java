@@ -19,11 +19,9 @@
  */
 package org.openflexo.fge.notifications;
 
-
 public class GeometryModified extends FGENotification {
 
-	public GeometryModified()
-	{
-		super("geometry",null,null);
+	public GeometryModified() {
+		super("geometry", null, null);
 	}
 }

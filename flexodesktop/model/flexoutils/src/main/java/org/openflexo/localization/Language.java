@@ -30,244 +30,220 @@ import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
-
 /**
  * Represents a language in Flexo Application
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public abstract class Language extends KVCObject implements StringConvertable, ChoiceList
-{
+public abstract class Language extends KVCObject implements StringConvertable, ChoiceList {
 
-    private static final Logger logger = Logger.getLogger(Language.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(Language.class.getPackage().getName());
 
-    public static final StringEncoder.Converter<Language> languageConverter = new Converter<Language>(Language.class) {
+	public static final StringEncoder.Converter<Language> languageConverter = new Converter<Language>(Language.class) {
 
-        @Override
-		public Language convertFromString(String value)
-        {
-            return Language.get(value);
-        }
+		@Override
+		public Language convertFromString(String value) {
+			return Language.get(value);
+		}
 
-        @Override
-		public String convertToString(Language value)
-        {
-            return value.getName();
-        }
+		@Override
+		public String convertToString(Language value) {
+			return value.getName();
+		}
 
-    };
+	};
 
-    /**
-     * Those are available langages, represented as a
-     *
-     * <pre>
-     * Vector
-     * </pre>
-     *
-     * of
-     *
-     * <pre>
-     * Language
-     * </pre>
-     *
-     * objects
-     */
-    private static Vector<Language> availableLanguages = null;
+	/**
+	 * Those are available langages, represented as a
+	 * 
+	 * <pre>
+	 * Vector
+	 * </pre>
+	 * 
+	 * of
+	 * 
+	 * <pre>
+	 * Language
+	 * </pre>
+	 * 
+	 * objects
+	 */
+	private static Vector<Language> availableLanguages = null;
 
-    public static final Language ENGLISH = new EnglishLanguage();
+	public static final Language ENGLISH = new EnglishLanguage();
 
-    public static final Language FRENCH = new FrenchLanguage();
+	public static final Language FRENCH = new FrenchLanguage();
 
-    public static final Language DUTCH = new DutchLanguage();
+	public static final Language DUTCH = new DutchLanguage();
 
-    private static final Language[] knownsLanguages = { ENGLISH, FRENCH, DUTCH };
+	private static final Language[] knownsLanguages = { ENGLISH, FRENCH, DUTCH };
 
-    private static class EnglishLanguage extends Language
-    {
-    	EnglishLanguage(){
-    		super();
-    	}
+	private static class EnglishLanguage extends Language {
+		EnglishLanguage() {
+			super();
+		}
 
-        @Override
-		public String getName()
-        {
-            return "English";
-        }
+		@Override
+		public String getName() {
+			return "English";
+		}
 
-        @Override
-		public  String getIdentifier()
-        {
-            return "ENGLISH";
-        }
+		@Override
+		public String getIdentifier() {
+			return "ENGLISH";
+		}
 
-        @Override
-        public String getTag()
-        {
-        	return "EN";
-        }
-    }
+		@Override
+		public String getTag() {
+			return "EN";
+		}
+	}
 
-    private static class FrenchLanguage extends Language
-    {
-    	FrenchLanguage(){
-    		super();
-    	}
+	private static class FrenchLanguage extends Language {
+		FrenchLanguage() {
+			super();
+		}
 
-        @Override
-		public String getName()
-        {
-            return "French";
-        }
+		@Override
+		public String getName() {
+			return "French";
+		}
 
-        @Override
-		public  String getIdentifier()
-        {
-            return "FRENCH";
-        }
+		@Override
+		public String getIdentifier() {
+			return "FRENCH";
+		}
 
-        @Override
-        public String getTag()
-        {
-        	return "FR";
-        }
-    }
+		@Override
+		public String getTag() {
+			return "FR";
+		}
+	}
 
-    private static class DutchLanguage extends Language
-    {
-    	DutchLanguage(){
-    		super();
-    	}
+	private static class DutchLanguage extends Language {
+		DutchLanguage() {
+			super();
+		}
 
-        @Override
-		public String getName()
-        {
-            return "Dutch";
-        }
+		@Override
+		public String getName() {
+			return "Dutch";
+		}
 
-        @Override
-		public  String getIdentifier()
-        {
-            return "DUTCH";
-        }
+		@Override
+		public String getIdentifier() {
+			return "DUTCH";
+		}
 
-        @Override
-        public String getTag()
-        {
-        	return "NL";
-        }
-    }
-    /**
-     * Returns a vector containing all available languages as a
-     *
-     * <pre>
-     * Vector
-     * </pre>
-     *
-     * of
-     *
-     * <pre>
-     * Language
-     * </pre>
-     *
-     * objects
-     *
-     * @return Vector of
-     *
-     * <pre>
-     * Language
-     * </pre>
-     *
-     * objects
-     */
-    public static Vector<Language> getAvailableLanguages()
-    {
-        if (availableLanguages == null) {
-            availableLanguages = new Vector<Language>();
-            for (int i = 0; i < knownsLanguages.length; i++) {
-                availableLanguages.add(knownsLanguages[i]);
-            }
-        }
-        return availableLanguages;
-    }
+		@Override
+		public String getTag() {
+			return "NL";
+		}
+	}
 
-    public Language[] getKnownsLanguages() {
+	/**
+	 * Returns a vector containing all available languages as a
+	 * 
+	 * <pre>
+	 * Vector
+	 * </pre>
+	 * 
+	 * of
+	 * 
+	 * <pre>
+	 * Language
+	 * </pre>
+	 * 
+	 * objects
+	 * 
+	 * @return Vector of
+	 * 
+	 *         <pre>
+	 * Language
+	 * </pre>
+	 * 
+	 *         objects
+	 */
+	public static Vector<Language> getAvailableLanguages() {
+		if (availableLanguages == null) {
+			availableLanguages = new Vector<Language>();
+			for (int i = 0; i < knownsLanguages.length; i++) {
+				availableLanguages.add(knownsLanguages[i]);
+			}
+		}
+		return availableLanguages;
+	}
+
+	public Language[] getKnownsLanguages() {
 		return knownsLanguages;
 	}
-    
-   /**
-     * Return a Vector of possible values (which must be of the same type as the
-     * one declared as class implemented this interface)
-     *
-     * @return a Vector of ChoiceList
-     */
-    @Override
-	public Vector<Language> getAvailableValues()
-    {
-        return getAvailableLanguages();
-    }
 
-    public static Language get(String languageAsString)
-    {
-        if (languageAsString == null) {
-            return ENGLISH;
-        }
-        for (Enumeration e = getAvailableLanguages().elements(); e.hasMoreElements();) {
-            Language next = (Language) e.nextElement();
-            if (next.getName().equalsIgnoreCase(languageAsString)) {
-                return next;
-            }
-         }
-        if (logger.isLoggable(Level.WARNING))
-            logger.warning("Cannot find language " + languageAsString);
-        if (getAvailableLanguages().size() > 0) {
-            return getAvailableLanguages().firstElement();
-        }
-        return null;
-    }
+	/**
+	 * Return a Vector of possible values (which must be of the same type as the one declared as class implemented this interface)
+	 * 
+	 * @return a Vector of ChoiceList
+	 */
+	@Override
+	public Vector<Language> getAvailableValues() {
+		return getAvailableLanguages();
+	}
 
-    public static Language retrieveLanguage(String languageAsString)
-    {
-        if (languageAsString == null) {
-            return ENGLISH;
-        }
-        for (Enumeration e = getAvailableLanguages().elements(); e.hasMoreElements();) {
-            Language next = (Language) e.nextElement();
-            if (next.getName().equalsIgnoreCase(languageAsString)) {
-                return next;
-            }
-            if (next.getTag().equalsIgnoreCase(languageAsString)) {
-                return next;
-            }
-         }
-        return null;
-    }
+	public static Language get(String languageAsString) {
+		if (languageAsString == null) {
+			return ENGLISH;
+		}
+		for (Enumeration e = getAvailableLanguages().elements(); e.hasMoreElements();) {
+			Language next = (Language) e.nextElement();
+			if (next.getName().equalsIgnoreCase(languageAsString)) {
+				return next;
+			}
+		}
+		if (logger.isLoggable(Level.WARNING))
+			logger.warning("Cannot find language " + languageAsString);
+		if (getAvailableLanguages().size() > 0) {
+			return getAvailableLanguages().firstElement();
+		}
+		return null;
+	}
 
-   public abstract String getName();
+	public static Language retrieveLanguage(String languageAsString) {
+		if (languageAsString == null) {
+			return ENGLISH;
+		}
+		for (Enumeration e = getAvailableLanguages().elements(); e.hasMoreElements();) {
+			Language next = (Language) e.nextElement();
+			if (next.getName().equalsIgnoreCase(languageAsString)) {
+				return next;
+			}
+			if (next.getTag().equalsIgnoreCase(languageAsString)) {
+				return next;
+			}
+		}
+		return null;
+	}
 
-    public abstract String getIdentifier();
+	public abstract String getName();
 
-    public abstract String getTag();
+	public abstract String getIdentifier();
 
-   public String getLocalizedName()
-    {
-        return FlexoLocalization.localizedForKey(getName());
-    }
+	public abstract String getTag();
 
-    @Override
-	public StringEncoder.Converter getConverter()
-    {
-        return languageConverter;
-    }
+	public String getLocalizedName() {
+		return FlexoLocalization.localizedForKey(getName());
+	}
 
-    public static Vector<Language> availableValues()
-    {
-        return getAvailableLanguages();
-    }
+	@Override
+	public StringEncoder.Converter getConverter() {
+		return languageConverter;
+	}
 
-    @Override
-    public String toString() 
-    {
-    	return getName();
-    }
+	public static Vector<Language> availableValues() {
+		return getAvailableLanguages();
+	}
+
+	@Override
+	public String toString() {
+		return getName();
+	}
 }

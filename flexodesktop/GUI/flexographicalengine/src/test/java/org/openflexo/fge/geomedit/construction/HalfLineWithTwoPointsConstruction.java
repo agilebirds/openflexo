@@ -25,37 +25,32 @@ public class HalfLineWithTwoPointsConstruction extends HalfLineConstruction {
 
 	public PointConstruction limitPointConstruction;
 	public PointConstruction oppositePointConstruction;
-	
-	public HalfLineWithTwoPointsConstruction() 
-	{
+
+	public HalfLineWithTwoPointsConstruction() {
 		super();
 	}
-	
-	public HalfLineWithTwoPointsConstruction(PointConstruction pointConstruction1, PointConstruction pointConstruction2) 
-	{
+
+	public HalfLineWithTwoPointsConstruction(PointConstruction pointConstruction1, PointConstruction pointConstruction2) {
 		this();
 		this.limitPointConstruction = pointConstruction1;
 		this.oppositePointConstruction = pointConstruction2;
 	}
-	
+
 	@Override
-	protected FGEHalfLine computeData()
-	{
-		return new FGEHalfLine(limitPointConstruction.getPoint(),oppositePointConstruction.getPoint());
+	protected FGEHalfLine computeData() {
+		return new FGEHalfLine(limitPointConstruction.getPoint(), oppositePointConstruction.getPoint());
 	}
 
 	@Override
-	public String toString()
-	{
-		return "HalfLineWithTwoPointsConstruction[\n"+"> "+limitPointConstruction.toString()+"\n> "+oppositePointConstruction.toString()+"\n]";
+	public String toString() {
+		return "HalfLineWithTwoPointsConstruction[\n" + "> " + limitPointConstruction.toString() + "\n> "
+				+ oppositePointConstruction.toString() + "\n]";
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
+	public GeometricConstruction[] getDepends() {
 		GeometricConstruction[] returned = { limitPointConstruction, oppositePointConstruction };
 		return returned;
 	}
-
 
 }

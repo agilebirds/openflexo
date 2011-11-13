@@ -3,7 +3,6 @@
  */
 package org.openflexo.foundation.sg.implmodel.event;
 
-
 /**
  * Represents a new source generator model object creation.
  * 

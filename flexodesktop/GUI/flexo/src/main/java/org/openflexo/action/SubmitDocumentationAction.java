@@ -27,72 +27,64 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
 import org.openflexo.inspector.InspectableObject;
 
+public class SubmitDocumentationAction extends FlexoGUIAction<SubmitDocumentationAction, FlexoModelObject, FlexoModelObject> {
 
-public class SubmitDocumentationAction extends FlexoGUIAction<SubmitDocumentationAction,FlexoModelObject,FlexoModelObject> 
-{
+	public static class SubmitDocumentationActionType extends
+			FlexoActionType<SubmitDocumentationAction, FlexoModelObject, FlexoModelObject> {
+		protected SubmitDocumentationActionType() {
+			super("submit_documentation", null, FlexoActionType.helpGroup, NORMAL_ACTION_TYPE);
+		}
 
-    public static class SubmitDocumentationActionType extends FlexoActionType<SubmitDocumentationAction,FlexoModelObject,FlexoModelObject>
-    {
-        protected SubmitDocumentationActionType ()
-        {
-            super("submit_documentation",null,FlexoActionType.helpGroup,NORMAL_ACTION_TYPE);
-        }
-        
-       private boolean allowsDocSubmission = false;
-        
-        /**
-         * Factory method
-         */
-        @Override
-		public SubmitDocumentationAction makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) 
-        {
-            return new SubmitDocumentationAction(focusedObject, globalSelection,editor);
-        }
+		private boolean allowsDocSubmission = false;
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return allowsDocSubmission;
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public SubmitDocumentationAction makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection,
+				FlexoEditor editor) {
+			return new SubmitDocumentationAction(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return (allowsDocSubmission && (object != null) && (object instanceof InspectableObject));
-        }
-                
-        public boolean allowsDocSubmission() 
-        {
-            return allowsDocSubmission;
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return allowsDocSubmission;
+		}
 
-        public void setAllowsDocSubmission(boolean allows_Doc_Submission)
-        {
-            this.allowsDocSubmission = allows_Doc_Submission;
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return (allowsDocSubmission && (object != null) && (object instanceof InspectableObject));
+		}
 
-   }
-    
-    public static final SubmitDocumentationActionType actionType = new SubmitDocumentationActionType ();
-    
-    static {
-        FlexoModelObject.addActionForClass (SubmitDocumentationAction.actionType, FlexoModelObject.class);
-    }
+		public boolean allowsDocSubmission() {
+			return allowsDocSubmission;
+		}
 
-    SubmitDocumentationAction (FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+		public void setAllowsDocSubmission(boolean allows_Doc_Submission) {
+			this.allowsDocSubmission = allows_Doc_Submission;
+		}
 
-   /* public String getLocalizedName ()
-    {
-        if (getFocusedObject() != null) {
-            String shortClassName = null;
-            String extClassName = getFocusedObject().getClass().getName();
-            StringTokenizer st = new StringTokenizer(extClassName,".");
-            while (st.hasMoreTokens()) shortClassName = st.nextToken();
-            return FlexoLocalization.localizedForKey("submit_doc_for")+" "+shortClassName;
-        }
-        return null;
-    }*/
+	}
+
+	public static final SubmitDocumentationActionType actionType = new SubmitDocumentationActionType();
+
+	static {
+		FlexoModelObject.addActionForClass(SubmitDocumentationAction.actionType, FlexoModelObject.class);
+	}
+
+	SubmitDocumentationAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	/* public String getLocalizedName ()
+	 {
+	     if (getFocusedObject() != null) {
+	         String shortClassName = null;
+	         String extClassName = getFocusedObject().getClass().getName();
+	         StringTokenizer st = new StringTokenizer(extClassName,".");
+	         while (st.hasMoreTokens()) shortClassName = st.nextToken();
+	         return FlexoLocalization.localizedForKey("submit_doc_for")+" "+shortClassName;
+	     }
+	     return null;
+	 }*/
 }

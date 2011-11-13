@@ -28,12 +28,10 @@ import org.openflexo.module.FlexoModule;
  * @author sguerin
  * 
  */
-public class ModuleResourcesReviewer extends AskForSaveResources
-{
+public class ModuleResourcesReviewer extends AskForSaveResources {
 
-    public ModuleResourcesReviewer(FlexoModule module)
-    {
-        super(FlexoLocalization.localizedForKey("review_unsaved"), "save", "dont_save", module.getLoadedStorageResources());
-    }
+	public ModuleResourcesReviewer(FlexoModule module) {
+		super(FlexoLocalization.localizedForKey("review_unsaved"), "save", "dont_save", module.getLoadedStorageResources());
+	}
 
 }

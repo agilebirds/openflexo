@@ -29,45 +29,44 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.FlexoController;
 
 /**
- * Widget allowing to select an OperationComponent while browing the component
- * library
+ * Widget allowing to select an OperationComponent while browing the component library
  * 
  * @author sguerin
  * 
  */
-public class OperationComponentSelector extends AbstractComponentSelector<OperationComponentDefinition>
-{
+public class OperationComponentSelector extends AbstractComponentSelector<OperationComponentDefinition> {
 
-    public OperationComponentSelector(FlexoProject project, OperationComponentDefinition operationComponent)
-    {
-        super(project, operationComponent, OperationComponentDefinition.class);
-    }
+	public OperationComponentSelector(FlexoProject project, OperationComponentDefinition operationComponent) {
+		super(project, operationComponent, OperationComponentDefinition.class);
+	}
 
-    public OperationComponentSelector(FlexoProject project, OperationComponentDefinition operationComponent, int cols)
-    {
-        super(project, operationComponent, OperationComponentDefinition.class, cols);
-    }
+	public OperationComponentSelector(FlexoProject project, OperationComponentDefinition operationComponent, int cols) {
+		super(project, operationComponent, OperationComponentDefinition.class, cols);
+	}
 
-    @Override
-	public void newComponent()
-    {
-        FlexoComponentFolder folder = null;
-        if (getSelectedObject() instanceof FlexoComponentFolder) {
-            folder = (FlexoComponentFolder) getSelectedObject();
-        } else if (getSelectedObject() instanceof ComponentDefinition) {
-            folder = ((ComponentDefinition) getSelectedObject()).getFolder();
-        } else {
-            folder = getComponentLibrary().getRootFolder();
-        }
-        String newComponentName = FlexoController.askForStringMatchingPattern(FlexoLocalization.localizedForKey("enter_a_component_name"),IERegExp.JAVA_CLASS_NAME_PATTERN,FlexoLocalization.localizedForKey("must_start_with_a_letter_followed_by_any_letter_or_number"));
-        if(newComponentName==null)return;
-        try {
-            OperationComponentDefinition newComponent = new OperationComponentDefinition(newComponentName, getComponentLibrary(), folder, getProject());
-            setEditedObject(newComponent);
-        } catch (DuplicateResourceException e) {
-            // Warns about the exception
-            FlexoController.notify(FlexoLocalization.localizedForKey("invalid_name_a_component_with_this_name_already_exists"));
-        }
+	@Override
+	public void newComponent() {
+		FlexoComponentFolder folder = null;
+		if (getSelectedObject() instanceof FlexoComponentFolder) {
+			folder = (FlexoComponentFolder) getSelectedObject();
+		} else if (getSelectedObject() instanceof ComponentDefinition) {
+			folder = ((ComponentDefinition) getSelectedObject()).getFolder();
+		} else {
+			folder = getComponentLibrary().getRootFolder();
+		}
+		String newComponentName = FlexoController.askForStringMatchingPattern(FlexoLocalization.localizedForKey("enter_a_component_name"),
+				IERegExp.JAVA_CLASS_NAME_PATTERN,
+				FlexoLocalization.localizedForKey("must_start_with_a_letter_followed_by_any_letter_or_number"));
+		if (newComponentName == null)
+			return;
+		try {
+			OperationComponentDefinition newComponent = new OperationComponentDefinition(newComponentName, getComponentLibrary(), folder,
+					getProject());
+			setEditedObject(newComponent);
+		} catch (DuplicateResourceException e) {
+			// Warns about the exception
+			FlexoController.notify(FlexoLocalization.localizedForKey("invalid_name_a_component_with_this_name_already_exists"));
+		}
 
-    }
+	}
 }

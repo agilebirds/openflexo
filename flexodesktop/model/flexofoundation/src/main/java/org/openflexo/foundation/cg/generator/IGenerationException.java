@@ -23,8 +23,7 @@ package org.openflexo.foundation.cg.generator;
  * @author gpolet
  * 
  */
-public interface IGenerationException
-{
+public interface IGenerationException {
 	public Throwable getTargetException();
 
 	public String getDetails();

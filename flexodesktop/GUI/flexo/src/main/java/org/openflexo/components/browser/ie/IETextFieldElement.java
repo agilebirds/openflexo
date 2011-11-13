@@ -24,41 +24,34 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ie.widget.IETextFieldWidget;
 
-
 /**
- * @author bmangez
- * <B>Class Description</B>
+ * @author bmangez <B>Class Description</B>
  */
-public class IETextFieldElement extends IEElement
-{
+public class IETextFieldElement extends IEElement {
 
-    /**
-     * @param widget
-     * @param browser
-     */
-    public IETextFieldElement(IETextFieldWidget widget, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(widget, BrowserElementType.TEXTFIELD, browser,parent);
-    }
+	/**
+	 * @param widget
+	 * @param browser
+	 */
+	public IETextFieldElement(IETextFieldWidget widget, ProjectBrowser browser, BrowserElement parent) {
+		super(widget, BrowserElementType.TEXTFIELD, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
+	@Override
+	protected void buildChildrenVector() {
 
-    }
+	}
 
-    @Override
-	public String getName()
-    {
-        if (getTextField().getName() == null) {
-            return "TextField";
-        }
-        return getTextField().getName();
-    }
+	@Override
+	public String getName() {
+		if (getTextField().getName() == null) {
+			return "TextField";
+		}
+		return getTextField().getName();
+	}
 
-    protected IETextFieldWidget getTextField()
-    {
-        return (IETextFieldWidget) getObject();
-    }
+	protected IETextFieldWidget getTextField() {
+		return (IETextFieldWidget) getObject();
+	}
 
 }

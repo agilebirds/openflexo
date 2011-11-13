@@ -32,87 +32,70 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.ws.ServiceInterface;
 
+public class AddServiceInterface extends FlexoAction<AddServiceInterface, FlexoModelObject, FlexoModelObject> {
 
-public class AddServiceInterface extends FlexoAction<AddServiceInterface,FlexoModelObject,FlexoModelObject>
-{
+	private static final Logger logger = Logger.getLogger(AddServiceInterface.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(AddServiceInterface.class.getPackage().getName());
-    
+	public static FlexoActionType<AddServiceInterface, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<AddServiceInterface, FlexoModelObject, FlexoModelObject>(
+			"add_new_service_interface", FlexoActionType.newMenu, FlexoActionType.newMenuGroup4, FlexoActionType.ADD_ACTION_TYPE) {
 
-    
-    public static FlexoActionType<AddServiceInterface,FlexoModelObject,FlexoModelObject> actionType = new FlexoActionType<AddServiceInterface,FlexoModelObject,FlexoModelObject>(
-    		"add_new_service_interface",
-    		FlexoActionType.newMenu,
-    		FlexoActionType.newMenuGroup4,
-    		FlexoActionType.ADD_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public AddServiceInterface makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection,
+				FlexoEditor editor) {
+			return new AddServiceInterface(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public AddServiceInterface makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) 
-        {
-            return new AddServiceInterface(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return object instanceof FlexoProcess && !((FlexoProcess) object).isImported();
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) 
-        {
-            return object instanceof FlexoProcess && !((FlexoProcess)object).isImported();
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return object instanceof WKFObject && !((WKFObject) object).getProcess().isImported();
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) 
-        {
-            return object instanceof WKFObject && !((WKFObject)object).getProcess().isImported();
-        }
-                
-    };
-    
-    private String _newInterfaceName;
-    private ServiceInterface _serviceInterface;
+	};
 
-    AddServiceInterface (FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	private String _newInterfaceName;
+	private ServiceInterface _serviceInterface;
 
-    public FlexoProcess getProcess() 
-    {
-         if ((getFocusedObject() != null) && (getFocusedObject() instanceof WKFObject))  {
-             return ((WKFObject)getFocusedObject()).getProcess();
-         }
-        return null;
-    }
-    
-     public String getNewInterfaceName() 
-     {
-         return _newInterfaceName;
-     }
+	AddServiceInterface(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-     public void setNewInterfaceName(String name) 
-     {
-         _newInterfaceName = name;
-     }
+	public FlexoProcess getProcess() {
+		if ((getFocusedObject() != null) && (getFocusedObject() instanceof WKFObject)) {
+			return ((WKFObject) getFocusedObject()).getProcess();
+		}
+		return null;
+	}
 
- 	public ServiceInterface getServiceInterface() {
- 		return _serviceInterface;
- 	}
+	public String getNewInterfaceName() {
+		return _newInterfaceName;
+	}
 
-    @Override
-	protected void doAction(Object context) throws FlexoException
-    {
-        logger.info ("Add Service Interface");
-        if (getProcess() != null && !getProcess().isImported()) {
-        		_serviceInterface = getProcess().addServiceInterface(getNewInterfaceName());
-        	if (logger.isLoggable(Level.INFO)) logger.info("ServiceInterface created:"+ _serviceInterface.getName());
-        }
-        else {
-            logger.warning("Focused process is null or imported!");
-        }
-    }
+	public void setNewInterfaceName(String name) {
+		_newInterfaceName = name;
+	}
 
+	public ServiceInterface getServiceInterface() {
+		return _serviceInterface;
+	}
 
-
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		logger.info("Add Service Interface");
+		if (getProcess() != null && !getProcess().isImported()) {
+			_serviceInterface = getProcess().addServiceInterface(getNewInterfaceName());
+			if (logger.isLoggable(Level.INFO))
+				logger.info("ServiceInterface created:" + _serviceInterface.getName());
+		} else {
+			logger.warning("Focused process is null or imported!");
+		}
+	}
 
 }

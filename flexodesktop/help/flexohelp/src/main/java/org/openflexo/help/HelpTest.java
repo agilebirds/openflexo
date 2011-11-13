@@ -32,51 +32,48 @@ import javax.swing.JMenuItem;
  * @author sguerin
  * 
  */
-public class HelpTest
-{
-    JFrame f;
+public class HelpTest {
+	JFrame f;
 
-    JMenuItem overviewHelp;
+	JMenuItem overviewHelp;
 
-    JMenuItem wkfModuleHelp;
+	JMenuItem wkfModuleHelp;
 
-    JMenuItem ieModuleHelp;
+	JMenuItem ieModuleHelp;
 
-    JMenuItem dmModuleHelp;
+	JMenuItem dmModuleHelp;
 
-    JMenuItem cgfModuleHelp;
+	JMenuItem cgfModuleHelp;
 
-    public HelpTest()
-    {
-        f = new JFrame("Test help");
-        JButton button = new JButton("DM Module");
-        f.getContentPane().add(button);
-        JMenuBar mbar = new JMenuBar();
-        // menus Fichier et Aide
-        JMenu help = new JMenu("Aide");
-        // ajout d un item dans le menu Aide
-        help.add(overviewHelp = new JMenuItem("Overview"));
-        help.add(wkfModuleHelp = new JMenuItem("WKFModule"));
-        // ajout des menu a la barre de menu
-        mbar.add(help);
-        // creation des objetsHelpSet et HelpBroker
-        // affectation de l aide au composant
-        CSH.setHelpIDString(overviewHelp, "top");
-        CSH.setHelpIDString(wkfModuleHelp, "wkf-module");
-        CSH.setHelpIDString(button, "dm-module");
-        // gestion des evenements
-        overviewHelp.addActionListener(new CSH.DisplayHelpFromSource(FlexoHelp.getHelpBroker()));
-        wkfModuleHelp.addActionListener(new CSH.DisplayHelpFromSource(FlexoHelp.getHelpBroker()));
-        button.addActionListener(new CSH.DisplayHelpFromSource(FlexoHelp.getHelpBroker()));
-        // attachement de la barre de menu a la fenetre
-        f.setJMenuBar(mbar);
-        f.setSize(500, 300);
-        f.setVisible(true);
-    }
+	public HelpTest() {
+		f = new JFrame("Test help");
+		JButton button = new JButton("DM Module");
+		f.getContentPane().add(button);
+		JMenuBar mbar = new JMenuBar();
+		// menus Fichier et Aide
+		JMenu help = new JMenu("Aide");
+		// ajout d un item dans le menu Aide
+		help.add(overviewHelp = new JMenuItem("Overview"));
+		help.add(wkfModuleHelp = new JMenuItem("WKFModule"));
+		// ajout des menu a la barre de menu
+		mbar.add(help);
+		// creation des objetsHelpSet et HelpBroker
+		// affectation de l aide au composant
+		CSH.setHelpIDString(overviewHelp, "top");
+		CSH.setHelpIDString(wkfModuleHelp, "wkf-module");
+		CSH.setHelpIDString(button, "dm-module");
+		// gestion des evenements
+		overviewHelp.addActionListener(new CSH.DisplayHelpFromSource(FlexoHelp.getHelpBroker()));
+		wkfModuleHelp.addActionListener(new CSH.DisplayHelpFromSource(FlexoHelp.getHelpBroker()));
+		button.addActionListener(new CSH.DisplayHelpFromSource(FlexoHelp.getHelpBroker()));
+		// attachement de la barre de menu a la fenetre
+		f.setJMenuBar(mbar);
+		f.setSize(500, 300);
+		f.setVisible(true);
+	}
 
-    public static void main(String argv[])
-    {
-        new HelpTest();
-    }
+	public static void main(String argv[]) {
+		new HelpTest();
+	}
 
 }

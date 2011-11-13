@@ -27,53 +27,46 @@ import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.toolbox.FileUtils;
 
-
 public class CGFileIntermediateVersion extends AbstractCGFileVersion {
 
-	   /**
-     * Default constructor
-     */
-    public CGFileIntermediateVersion(CGFile cgFile, CGVersionIdentifier versionId, File file)
-    {
-        super(cgFile,versionId,file);
-    }
+	/**
+	 * Default constructor
+	 */
+	public CGFileIntermediateVersion(CGFile cgFile, CGVersionIdentifier versionId, File file) {
+		super(cgFile, versionId, file);
+	}
 
 	@Override
-	public String getClassNameKey() 
-	{
+	public String getClassNameKey() {
 		return "file_intermediate_version";
 	}
 
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.GENERATORS.FILE_INTERMEDIATE_VERSION_INSPECTOR;
 	}
 
 	@Override
-	public boolean isContainedIn(CGObject obj)
-	{
-		if (obj == getCGFile()) return true;
+	public boolean isContainedIn(CGObject obj) {
+		if (obj == getCGFile())
+			return true;
 		return getCGFile().isContainedIn(obj);
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return getVersionId().toString();
 	}
 
 	@Override
-	public String getDescription()
-	{
+	public String getDescription() {
 		return "-";
 	}
-	
+
 	private Date date = null;
 
 	@Override
-	public Date getDate()
-	{
+	public Date getDate() {
 		if (date == null) {
 			date = FileUtils.getDiskLastModifiedDate(getFile());
 		}
@@ -81,15 +74,13 @@ public class CGFileIntermediateVersion extends AbstractCGFileVersion {
 	}
 
 	@Override
-	public String getUserId()
-	{
+	public String getUserId() {
 		return "-";
 	}
 
 	@Override
-	public String getStringRepresentation()
-	{
-		return getVersionId().major+"."+getVersionId().minor+"."+getVersionId().patch;
+	public String getStringRepresentation() {
+		return getVersionId().major + "." + getVersionId().minor + "." + getVersionId().patch;
 	}
 
 }

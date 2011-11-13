@@ -21,10 +21,8 @@ package org.openflexo.drm.dm;
 
 import org.openflexo.drm.DocItem;
 
-public class DocItemAdded extends DRMDataModification
-{
-    public DocItemAdded(DocItem newItem)
-    {
-        super(null, newItem);
-    }
+public class DocItemAdded extends DRMDataModification {
+	public DocItemAdded(DocItem newItem) {
+		super(null, newItem);
+	}
 }

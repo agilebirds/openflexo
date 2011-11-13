@@ -36,7 +36,6 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -45,53 +44,46 @@ import org.openflexo.generator.action.DismissUnchangedGeneratedFiles;
 import org.openflexo.generator.action.ForceRegenerateSourceCode;
 import org.openflexo.generator.exception.GenerationException;
 
-
 public class ForceRegenerateSourceCodeInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	ForceRegenerateSourceCodeInitializer(SGControllerActionInitializer actionInitializer)
-	{
-		super(ForceRegenerateSourceCode.actionType,actionInitializer);
+	ForceRegenerateSourceCodeInitializer(SGControllerActionInitializer actionInitializer) {
+		super(ForceRegenerateSourceCode.actionType, actionInitializer);
 	}
 
 	@Override
-	protected SGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (SGControllerActionInitializer)super.getControllerActionInitializer();
+	protected SGControllerActionInitializer getControllerActionInitializer() {
+		return (SGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<ForceRegenerateSourceCode> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<ForceRegenerateSourceCode> getDefaultInitializer() {
 		return new FlexoActionInitializer<ForceRegenerateSourceCode>() {
 			@Override
-			public boolean run(ActionEvent e, ForceRegenerateSourceCode action)
-			{
+			public boolean run(ActionEvent e, ForceRegenerateSourceCode action) {
 				if (action.getRepository().getDirectory() == null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
 					return false;
 				}
 				action.setSaveBeforeGenerating(SGPreferences.getSaveBeforeGenerating());
 				action.getProjectGenerator().startHandleLogs();
-				((SGController)getController()).getBrowser().setHoldStructure();
+				((SGController) getController()).getBrowser().setHoldStructure();
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<ForceRegenerateSourceCode> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<ForceRegenerateSourceCode> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ForceRegenerateSourceCode>() {
 			@Override
-			public boolean run(ActionEvent e, ForceRegenerateSourceCode action)
-			{
-				((SGController)getController()).getBrowser().resetHoldStructure();
-				((SGController)getController()).getBrowser().update();
+			public boolean run(ActionEvent e, ForceRegenerateSourceCode action) {
+				((SGController) getController()).getBrowser().resetHoldStructure();
+				((SGController) getController()).getBrowser().update();
 				if (SGPreferences.getAutomaticallyDismissUnchangedFiles())
-					DismissUnchangedGeneratedFiles.actionType.makeNewAction(
-							action.getFocusedObject(), action.getGlobalSelection(), action.getEditor()).doAction();
+					DismissUnchangedGeneratedFiles.actionType.makeNewAction(action.getFocusedObject(), action.getGlobalSelection(),
+							action.getEditor()).doAction();
 				action.getProjectGenerator().stopHandleLogs();
 				action.getProjectGenerator().flushLogs();
 				getControllerActionInitializer().getSGController().disposeProgressWindow();
@@ -101,13 +93,12 @@ public class ForceRegenerateSourceCodeInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoExceptionHandler<ForceRegenerateSourceCode> getDefaultExceptionHandler() 
-	{
+	protected FlexoExceptionHandler<ForceRegenerateSourceCode> getDefaultExceptionHandler() {
 		return new FlexoExceptionHandler<ForceRegenerateSourceCode>() {
 			@Override
 			public boolean handleException(FlexoException exception, ForceRegenerateSourceCode action) {
-				((SGController)getController()).getBrowser().resetHoldStructure();
-				((SGController)getController()).getBrowser().update();
+				((SGController) getController()).getBrowser().resetHoldStructure();
+				((SGController) getController()).getBrowser().update();
 				getControllerActionInitializer().getSGController().disposeProgressWindow();
 				if (exception instanceof GenerationException) {
 					FlexoController.showError(FlexoLocalization.localizedForKey("generation_failed") + ":\n"
@@ -120,22 +111,18 @@ public class ForceRegenerateSourceCodeInitializer extends ActionInitializer {
 		};
 	}
 
-
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return GeneratorIconLibrary.FORCE_REGENERATE_CODE_ICON;
 	}
 
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return GeneratorIconLibrary.FORCE_REGENERATE_CODE_DISABLED_ICON;
 	}
 
 	@Override
-	protected KeyStroke getShortcut()
-	{
+	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(KeyEvent.VK_G, FlexoCst.META_MASK | InputEvent.SHIFT_DOWN_MASK);
 	}
 }

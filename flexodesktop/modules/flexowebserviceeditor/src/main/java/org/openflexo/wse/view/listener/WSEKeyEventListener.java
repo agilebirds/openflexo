@@ -24,29 +24,24 @@ import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.listener.SelectionManagingKeyEventListener;
 import org.openflexo.wse.controller.WSEController;
 
-
 /**
  * Key events listener used in the context of this module
  * 
  * @author yourname
  */
-public class WSEKeyEventListener extends SelectionManagingKeyEventListener
-{
+public class WSEKeyEventListener extends SelectionManagingKeyEventListener {
 
-    public WSEKeyEventListener(WSEController controller)
-    {
-        super(controller);
-    }
-
-    @Override
-	protected SelectionManager getSelectionManager()
-    {
-        return ((WSEController) getController()).getWSESelectionManager();
-    }
+	public WSEKeyEventListener(WSEController controller) {
+		super(controller);
+	}
 
 	@Override
-	public FlexoEditor getEditor() 
-	{
+	protected SelectionManager getSelectionManager() {
+		return ((WSEController) getController()).getWSESelectionManager();
+	}
+
+	@Override
+	public FlexoEditor getEditor() {
 		return getController().getEditor();
 	}
 }

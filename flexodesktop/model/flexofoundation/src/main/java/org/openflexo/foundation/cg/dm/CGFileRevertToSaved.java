@@ -21,11 +21,8 @@ package org.openflexo.foundation.cg.dm;
 
 import org.openflexo.foundation.cg.CGFile;
 
-
-public class CGFileRevertToSaved extends CGDataModification
-{
-    public CGFileRevertToSaved(CGFile file)
-    {
-        super(null,file);
-    }
+public class CGFileRevertToSaved extends CGDataModification {
+	public CGFileRevertToSaved(CGFile file) {
+		super(null, file);
+	}
 }

@@ -96,7 +96,6 @@ import org.openflexo.toolbox.FontCst;
 import org.openflexo.toolbox.Localized;
 import org.openflexo.toolbox.ToolBox;
 
-
 /**
  * jEdit's text area component. It is more suited for editing program source code than JEditorPane, because it drops the unnecessary
  * features (images, variable-width lines, and so on) and adds a whole bunch of useful goodies such as:
@@ -118,7 +117,8 @@ import org.openflexo.toolbox.ToolBox;
  * <pre>
  * JEditTextArea ta = new JEditTextArea();
  * ta.setTokenMarker(new JavaTokenMarker());
- * ta.setText(&quot;public class Test {\n&quot; + &quot;    public static void main(String[] args) {\n&quot; + &quot;        System.out.println(\&quot;Hello World\&quot;);\n&quot; + &quot;    }\n&quot; + &quot;}&quot;);
+ * ta.setText(&quot;public class Test {\n&quot; + &quot;    public static void main(String[] args) {\n&quot; + &quot;        System.out.println(\&quot;Hello World\&quot;);\n&quot;
+ * 		+ &quot;    }\n&quot; + &quot;}&quot;);
  * </pre>
  * 
  * @author Slava Pestov

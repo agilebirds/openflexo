@@ -27,7 +27,7 @@ import org.openflexo.toolbox.ImageIconResource;
  * Utility class containing all icons used in context of SGModule
  * 
  * @author sylvain
- *
+ * 
  */
 public class SGIconLibrary extends GeneratorIconLibrary {
 
@@ -44,7 +44,7 @@ public class SGIconLibrary extends GeneratorIconLibrary {
 	public static final ImageIcon SG_SGP_SELECTED_ICON = new ImageIconResource("Icons/SG/SGPerspective_S.gif");
 	public static final ImageIcon SG_VP_ACTIVE_ICON = new ImageIconResource("Icons/SG/VersionningPerspective_A.gif");
 	public static final ImageIcon SG_VP_SELECTED_ICON = new ImageIconResource("Icons/SG/VersionningPerspective_S.gif");
-	
+
 	// Model icons
 	public static final ImageIcon GENERATED_CODE_ICON = new ImageIconResource("Icons/SG/GeneratedCode.gif");
 	public static final ImageIcon GENERATED_CODE_REPOSITORY_ICON = new ImageIconResource("Icons/SG/GeneratedCodeRepository.gif");
@@ -52,6 +52,5 @@ public class SGIconLibrary extends GeneratorIconLibrary {
 	public static final ImageIcon JAVA_SOURCE_FOLDER_ICON = new ImageIconResource("Icons/SG/JavaSourceFolder.gif");
 	public static final ImageIcon TARGET_ICON = new ImageIconResource("Icons/SG/Target.gif");
 	public static final ImageIcon TARGET_FOLDER_ICON = new ImageIconResource("Icons/SG/TargetFolder.gif");
-
 
 }

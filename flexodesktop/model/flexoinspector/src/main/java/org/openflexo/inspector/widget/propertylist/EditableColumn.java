@@ -27,10 +27,9 @@ import org.openflexo.inspector.InspectableObject;
  * @author sguerin
  * 
  */
-public interface EditableColumn
-{
+public interface EditableColumn {
 
-    public boolean isCellEditableFor(InspectableObject object);
+	public boolean isCellEditableFor(InspectableObject object);
 
-    public void setValueFor(InspectableObject object, Object value);
+	public void setValueFor(InspectableObject object, Object value);
 }

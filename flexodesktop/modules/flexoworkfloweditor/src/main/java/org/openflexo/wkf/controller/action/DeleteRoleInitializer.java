@@ -41,71 +41,66 @@ public class DeleteRoleInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeleteRoleInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(DeleteRole.actionType,actionInitializer);
+	DeleteRoleInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(DeleteRole.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<DeleteRole> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<DeleteRole> getDefaultInitializer() {
 		return new FlexoActionInitializer<DeleteRole>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteRole action)
-			{
+			public boolean run(ActionEvent e, DeleteRole action) {
 				boolean doIt;
 				Vector<Role> roleToDelete = action.getRoleToDelete();
-				if (roleToDelete.size()==0) return false;
+				if (roleToDelete.size() == 0)
+					return false;
 				Vector<AbstractNode> nodes = new Vector<AbstractNode>();
-				for (Role r : roleToDelete) 
+				for (Role r : roleToDelete)
 					nodes.addAll(r.getNodesUsingRole());
-				if (nodes.size()>0) {
+				if (nodes.size() > 0) {
 					StringBuilder sb = new StringBuilder();
 					for (AbstractNode node : nodes) {
 						sb.append("* ").append(node.getName()).append("\n");
 					}
 					if (roleToDelete.size() == 1)
-						doIt = FlexoController.confirmWithWarning(FlexoLocalization
-								.localizedForKey("would_you_like_to_delete_this_role")+"\n"+FlexoLocalization.localizedForKey("it_is_used_in:")+"\n"+sb.toString());
-					else doIt = FlexoController.confirmWithWarning(FlexoLocalization
-							.localizedForKey("would_you_like_to_delete_these_roles")+"\n"+FlexoLocalization.localizedForKey("they_are_used_in:")+"\n"+sb.toString());
+						doIt = FlexoController.confirmWithWarning(FlexoLocalization.localizedForKey("would_you_like_to_delete_this_role")
+								+ "\n" + FlexoLocalization.localizedForKey("it_is_used_in:") + "\n" + sb.toString());
+					else
+						doIt = FlexoController.confirmWithWarning(FlexoLocalization.localizedForKey("would_you_like_to_delete_these_roles")
+								+ "\n" + FlexoLocalization.localizedForKey("they_are_used_in:") + "\n" + sb.toString());
 				} else {
 					if (roleToDelete.size() == 1)
 						doIt = FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_delete_this_role"));
-					else doIt = FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_delete_these_roles"));
+					else
+						doIt = FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_delete_these_roles"));
 
-				} 
+				}
 				return doIt;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<DeleteRole> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<DeleteRole> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DeleteRole>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteRole action)
-			{
-				if (getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject()!=null && getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject().isDeleted())
+			public boolean run(ActionEvent e, DeleteRole action) {
+				if (getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject() != null
+						&& getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject().isDeleted())
 					getControllerActionInitializer().getWKFController().getSelectionManager().resetSelection();
-                return true;
-          }
-        };
+				return true;
+			}
+		};
 	}
-     
- 	@Override
-	protected Icon getEnabledIcon() 
-	{
+
+	@Override
+	protected Icon getEnabledIcon() {
 		return IconLibrary.DELETE_ICON;
 	}
-
-
 
 }

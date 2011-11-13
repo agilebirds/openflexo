@@ -40,249 +40,202 @@ import org.openflexo.foundation.wkf.ws.NewPort;
 import org.openflexo.foundation.wkf.ws.PortMapRegistery;
 import org.openflexo.foundation.wkf.ws.ServiceOperation;
 
-
 /**
- * Abstract edge linking a FlexoNode and a FlexoPortMap, and used to make
- * connection between a process and a sub-process
+ * Abstract edge linking a FlexoNode and a FlexoPortMap, and used to make connection between a process and a sub-process
  * 
  * @author sguerin
  * 
  */
-public abstract class ExternalMessageEdge<S extends AbstractNode, E extends AbstractNode> extends MessageEdge<S, E>
-{
+public abstract class ExternalMessageEdge<S extends AbstractNode, E extends AbstractNode> extends MessageEdge<S, E> {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ExternalMessageEdge.class.getPackage().getName());
 
-    public static final String ACCESSED_PROCESS_INSTANCE = "accessedProcessInstance";
+	public static final String ACCESSED_PROCESS_INSTANCE = "accessedProcessInstance";
 
-    private AbstractBinding _accessedProcessInstance;
+	private AbstractBinding _accessedProcessInstance;
 
-    public static final String PARENT_PROCESS_INSTANCE = "parentProcessInstance";
+	public static final String PARENT_PROCESS_INSTANCE = "parentProcessInstance";
 
-    private AbstractBinding _parentProcessInstance;
+	private AbstractBinding _parentProcessInstance;
 
-    public static final String RETURNED_PROCESS_INSTANCE = "returnedProcessInstance";
+	public static final String RETURNED_PROCESS_INSTANCE = "returnedProcessInstance";
 
-    private AbstractBinding _returnedProcessInstance;
+	private AbstractBinding _returnedProcessInstance;
 
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	/**
+	 * Default constructor
+	 */
+	public ExternalMessageEdge(FlexoProcess process) {
+		super(process);
+	}
 
-    /**
-     * Default constructor
-     */
-    public ExternalMessageEdge(FlexoProcess process)
-    {
-        super(process);
-    }
+	public Stroke getStroke() {
+		return Constants.DASHED_STROKE;
 
-    public Stroke getStroke()
-    {
-        return Constants.DASHED_STROKE;
+	}
 
-    }
+	public abstract ServiceOperation getServiceOperation();
 
-    public abstract ServiceOperation getServiceOperation();
+	public abstract PortMapRegistery getPortMapRegistery();
 
-    public abstract PortMapRegistery getPortMapRegistery();
+	@Override
+	public FlexoPort getFlexoPort() {
+		if (getServiceOperation() != null)
+			return getServiceOperation().getPort();
+		return null;
+	}
 
-    @Override
-	public FlexoPort getFlexoPort()
-    {
-    	if (getServiceOperation() != null)
-    		return getServiceOperation().getPort();
-    	return null;
-    }
-    
-    public FlexoProcess getRelatedSubProcess()
-    {
-    	if (getFlexoPort() != null)
-    		return getFlexoPort().getProcess();
-    	return null;
-    }
+	public FlexoProcess getRelatedSubProcess() {
+		if (getFlexoPort() != null)
+			return getFlexoPort().getProcess();
+		return null;
+	}
 
-    @Override
-	public boolean isInputPort()
-    {	
-    	if(getServiceOperation()!=null)
-    		return getServiceOperation().isInputOperation();
-    	return false;
-    }
+	@Override
+	public boolean isInputPort() {
+		if (getServiceOperation() != null)
+			return getServiceOperation().isInputOperation();
+		return false;
+	}
 
-    @Override
-	public boolean isOutputPort()
-    {
-    	if(getServiceOperation()!=null)
-    		return getServiceOperation().isOutputOperation();
-    	return false;
-    }
+	@Override
+	public boolean isOutputPort() {
+		if (getServiceOperation() != null)
+			return getServiceOperation().isOutputOperation();
+		return false;
+	}
 
+	// ====================================================
+	// ===================== Bindings =====================
+	// ====================================================
 
+	public DMEntity getAbstractProcessInstanceEntity() {
+		return getProject().getDataModel().getExecutionModelRepository().getProcessInstanceEntity();
+	}
 
-    // ====================================================
-    // ===================== Bindings =====================
-    // ====================================================
+	public WKFBindingDefinition getAccessedProcessInstanceBindingDefinition() {
+		if (getServiceOperation() != null && getRelatedSubProcess() != null) {
+			boolean isNewPort = (getServiceOperation().getPort() instanceof NewPort);
+			// TODO ? what for operation ??
+			return WKFBindingDefinition.get(this, ACCESSED_PROCESS_INSTANCE,
+					DMType.makeResolvedDMType(getRelatedSubProcess().getProcessDMEntity()), BindingDefinitionType.GET_SET, !isNewPort);
+		}
+		return null;
+	}
 
-    public DMEntity getAbstractProcessInstanceEntity()
-    {
-        return getProject().getDataModel().getExecutionModelRepository().getProcessInstanceEntity();
-    }
+	public AbstractBinding getAccessedProcessInstance() {
+		if ((_accessedProcessInstance != null) && (_accessedProcessInstance.getBindingDefinition() == null))
+			_accessedProcessInstance.setBindingDefinition(getAccessedProcessInstanceBindingDefinition());
+		return _accessedProcessInstance;
+	}
 
-    public WKFBindingDefinition getAccessedProcessInstanceBindingDefinition()
-    {
-        if (getServiceOperation() != null && getRelatedSubProcess() != null) {
-        		boolean isNewPort =  (getServiceOperation().getPort() instanceof NewPort);
-        		//TODO ? what for operation ??
-            return WKFBindingDefinition.get(
-            		this, 
-            		ACCESSED_PROCESS_INSTANCE, 
-            		DMType.makeResolvedDMType(getRelatedSubProcess().getProcessDMEntity()),
-            		BindingDefinitionType.GET_SET,
-            		!isNewPort);
-        }
-        return null;
-    }
+	public String getAccessedProcessInstancePath() {
+		return _accessedProcessInstance.getCodeStringRepresentation();
+	}
 
-    public AbstractBinding getAccessedProcessInstance()
-    {
-        if ((_accessedProcessInstance != null)
-                && (_accessedProcessInstance.getBindingDefinition() == null))
-            _accessedProcessInstance
-                    .setBindingDefinition(getAccessedProcessInstanceBindingDefinition());
-        return _accessedProcessInstance;
-    }
+	public void setAccessedProcessInstance(AbstractBinding bindingValue) {
+		AbstractBinding oldBindingValue = _accessedProcessInstance;
+		_accessedProcessInstance = bindingValue;
+		if (_accessedProcessInstance != null) {
+			_accessedProcessInstance.setOwner(this);
+			_accessedProcessInstance.setBindingDefinition(getAccessedProcessInstanceBindingDefinition());
+		}
+		setChanged();
+		notifyObservers(new WKFAttributeDataModification(ACCESSED_PROCESS_INSTANCE, oldBindingValue, bindingValue));
+	}
 
-    public String getAccessedProcessInstancePath()
-    {
-        return _accessedProcessInstance.getCodeStringRepresentation();
-    }
+	public WKFBindingDefinition getParentProcessInstanceBindingDefinition() {
+		if ((getRelatedSubProcess() != null) && (getRelatedSubProcess().getParentProcess() != null)) {
+			boolean isNewPort = (getFlexoPort() instanceof NewPort);
+			return WKFBindingDefinition.get(this, PARENT_PROCESS_INSTANCE,
+					DMType.makeResolvedDMType(getRelatedSubProcess().getParentProcess().getProcessDMEntity()), BindingDefinitionType.GET,
+					isNewPort);
+		}
+		return null;
+	}
 
-    public void setAccessedProcessInstance(AbstractBinding bindingValue)
-    {
-    	AbstractBinding oldBindingValue = _accessedProcessInstance;
-        _accessedProcessInstance = bindingValue;
-        if (_accessedProcessInstance != null) {
-            _accessedProcessInstance.setOwner(this);
-            _accessedProcessInstance
-                    .setBindingDefinition(getAccessedProcessInstanceBindingDefinition());
-        }
-        setChanged();
-        notifyObservers(new WKFAttributeDataModification(ACCESSED_PROCESS_INSTANCE,
-                oldBindingValue, bindingValue));
-    }
+	public AbstractBinding getParentProcessInstance() {
+		if ((_parentProcessInstance != null) && (_parentProcessInstance.getBindingDefinition() == null))
+			_parentProcessInstance.setBindingDefinition(getParentProcessInstanceBindingDefinition());
+		return _parentProcessInstance;
+	}
 
-    public WKFBindingDefinition getParentProcessInstanceBindingDefinition()
-    {
-        if ((getRelatedSubProcess() != null) && (getRelatedSubProcess().getParentProcess() != null)) {
-        		boolean isNewPort =  (getFlexoPort() instanceof NewPort);
-                return WKFBindingDefinition.get(
-                		this, 
-                		PARENT_PROCESS_INSTANCE, 
-                		DMType.makeResolvedDMType(getRelatedSubProcess().getParentProcess().getProcessDMEntity()),
-                		BindingDefinitionType.GET,
-                		isNewPort);
-        }
-        return null;
-    }
+	public String getParentProcessInstancePath() {
+		return _parentProcessInstance.getCodeStringRepresentation();
+	}
 
-    public AbstractBinding getParentProcessInstance()
-    {
-        if ((_parentProcessInstance != null)
-                && (_parentProcessInstance.getBindingDefinition() == null))
-            _parentProcessInstance
-                    .setBindingDefinition(getParentProcessInstanceBindingDefinition());
-        return _parentProcessInstance;
-    }
+	public void setParentProcessInstance(AbstractBinding bindingValue) {
+		AbstractBinding oldBindingValue = _parentProcessInstance;
+		_parentProcessInstance = bindingValue;
+		if (_parentProcessInstance != null) {
+			_parentProcessInstance.setBindingDefinition(getParentProcessInstanceBindingDefinition());
+			_parentProcessInstance.setOwner(this);
+		}
+		setChanged();
+		notifyObservers(new WKFAttributeDataModification(PARENT_PROCESS_INSTANCE, oldBindingValue, bindingValue));
+	}
 
-    public String getParentProcessInstancePath()
-    {
-        return _parentProcessInstance.getCodeStringRepresentation();
-    }
+	public WKFBindingDefinition getReturnedProcessInstanceBindingDefinition() {
+		if (getRelatedSubProcess() != null) {
+			boolean isNewPort = (getFlexoPort() instanceof NewPort);
+			// TODO ? what for operation ??
+			return WKFBindingDefinition.get(this, RETURNED_PROCESS_INSTANCE,
+					DMType.makeResolvedDMType(getRelatedSubProcess().getProcessDMEntity()), BindingDefinitionType.SET, isNewPort);
+		}
+		return null;
+	}
 
-    public void setParentProcessInstance(AbstractBinding bindingValue)
-    {
-    	AbstractBinding oldBindingValue = _parentProcessInstance;
-        _parentProcessInstance = bindingValue;
-        if (_parentProcessInstance != null) {
-            _parentProcessInstance
-                    .setBindingDefinition(getParentProcessInstanceBindingDefinition());
-            _parentProcessInstance.setOwner(this);
-        }
-        setChanged();
-        notifyObservers(new WKFAttributeDataModification(PARENT_PROCESS_INSTANCE, oldBindingValue,
-                bindingValue));
-    }
+	public AbstractBinding getReturnedProcessInstance() {
+		if ((_returnedProcessInstance != null) && (_returnedProcessInstance.getBindingDefinition() == null))
+			_returnedProcessInstance.setBindingDefinition(getReturnedProcessInstanceBindingDefinition());
+		return _returnedProcessInstance;
+	}
 
-    public WKFBindingDefinition getReturnedProcessInstanceBindingDefinition()
-    {
-        if (getRelatedSubProcess() != null) {
-        		boolean isNewPort =  (getFlexoPort() instanceof NewPort);
-        		//TODO ? what for operation ??
-                return WKFBindingDefinition.get(
-                		this, 
-                		RETURNED_PROCESS_INSTANCE, 
-                		DMType.makeResolvedDMType(getRelatedSubProcess().getProcessDMEntity()),
-                		BindingDefinitionType.SET,
-                		isNewPort);
-         }
-        return null;
-    }
+	public String getReturnedProcessInstancePath() {
+		return _returnedProcessInstance.getCodeStringRepresentation();
+	}
 
-    public AbstractBinding getReturnedProcessInstance()
-    {
-        if ((_returnedProcessInstance != null)
-                && (_returnedProcessInstance.getBindingDefinition() == null))
-            _returnedProcessInstance
-                    .setBindingDefinition(getReturnedProcessInstanceBindingDefinition());
-        return _returnedProcessInstance;
-    }
+	public void setReturnedProcessInstance(AbstractBinding bindingValue) {
+		AbstractBinding oldBindingValue = _returnedProcessInstance;
+		_returnedProcessInstance = bindingValue;
+		if (_returnedProcessInstance != null) {
+			_returnedProcessInstance.setOwner(this);
+			_returnedProcessInstance.setBindingDefinition(getReturnedProcessInstanceBindingDefinition());
+		}
+		setChanged();
+		notifyObservers(new WKFAttributeDataModification(RETURNED_PROCESS_INSTANCE, oldBindingValue, bindingValue));
+	}
 
-    public String getReturnedProcessInstancePath()
-    {
-        return _returnedProcessInstance.getCodeStringRepresentation();
-    }
+	// ==========================================================================
+	// ============================= Validation
+	// =================================
+	// ==========================================================================
 
-    public void setReturnedProcessInstance(AbstractBinding bindingValue)
-    {
-    	AbstractBinding oldBindingValue = _returnedProcessInstance;
-        _returnedProcessInstance = bindingValue;
-        if (_returnedProcessInstance != null) {
-            _returnedProcessInstance.setOwner(this);
-            _returnedProcessInstance.setBindingDefinition(getReturnedProcessInstanceBindingDefinition());
-        }
-        setChanged();
-        notifyObservers(new WKFAttributeDataModification(RETURNED_PROCESS_INSTANCE,
-                oldBindingValue, bindingValue));
-    }
+	public static class ExternalMessageEdgeMustReferToAValidPortMapRegistery extends
+			ValidationRule<ExternalMessageEdgeMustReferToAValidPortMapRegistery, ExternalMessageEdge<AbstractNode, AbstractNode>> {
+		public ExternalMessageEdgeMustReferToAValidPortMapRegistery() {
+			super(ExternalMessageEdge.class, "external_edge_must_refer_to_a_valid_port_map_registery");
+		}
 
-    
-    // ==========================================================================
-    // ============================= Validation
-    // =================================
-    // ==========================================================================
+		@Override
+		public ValidationIssue<ExternalMessageEdgeMustReferToAValidPortMapRegistery, ExternalMessageEdge<AbstractNode, AbstractNode>> applyValidation(
+				ExternalMessageEdge<AbstractNode, AbstractNode> edge) {
+			if ((edge.getPortMapRegistery() == null) || (edge.getPortMapRegistery().getServiceInterface() == null)) {
+				ValidationError<ExternalMessageEdgeMustReferToAValidPortMapRegistery, ExternalMessageEdge<AbstractNode, AbstractNode>> error = new ValidationError<ExternalMessageEdgeMustReferToAValidPortMapRegistery, ExternalMessageEdge<AbstractNode, AbstractNode>>(
+						this, edge, "message_edge_refer_to_an_invalid_port_map_registery");
+				error.addToFixProposals(new DeletionFixProposal<ExternalMessageEdgeMustReferToAValidPortMapRegistery, ExternalMessageEdge<AbstractNode, AbstractNode>>(
+						"delete_this_message_edge"));
+				return error;
+			}
+			return null;
+		}
 
-    public static class ExternalMessageEdgeMustReferToAValidPortMapRegistery extends ValidationRule<ExternalMessageEdgeMustReferToAValidPortMapRegistery,ExternalMessageEdge<AbstractNode, AbstractNode>>
-    {
-        public ExternalMessageEdgeMustReferToAValidPortMapRegistery()
-        {
-            super(ExternalMessageEdge.class, "external_edge_must_refer_to_a_valid_port_map_registery");
-        }
-
-        @Override
-		public ValidationIssue<ExternalMessageEdgeMustReferToAValidPortMapRegistery,ExternalMessageEdge<AbstractNode, AbstractNode>> applyValidation(ExternalMessageEdge<AbstractNode, AbstractNode> edge)
-        {
-            if ((edge.getPortMapRegistery() == null) || (edge.getPortMapRegistery().getServiceInterface() == null)) {
-                ValidationError<ExternalMessageEdgeMustReferToAValidPortMapRegistery,ExternalMessageEdge<AbstractNode, AbstractNode>> error = new ValidationError<ExternalMessageEdgeMustReferToAValidPortMapRegistery,ExternalMessageEdge<AbstractNode, AbstractNode>>(this, edge, "message_edge_refer_to_an_invalid_port_map_registery");
-                error.addToFixProposals(new DeletionFixProposal<ExternalMessageEdgeMustReferToAValidPortMapRegistery,ExternalMessageEdge<AbstractNode, AbstractNode>>("delete_this_message_edge"));
-                return error;
-            }
-            return null;
-        }
-
-    }
+	}
 
 }

@@ -26,58 +26,60 @@ import org.netbeans.lib.cvsclient.file.FileMode;
 
 /**
  * Sends the server a copy of a locally modified file.
- * @author  Robert Greig
+ * 
+ * @author Robert Greig
  */
 public class ModifiedRequest extends Request {
-    /**
-     * The file details
-     */
-    private FileDetails fileDetails;
+	/**
+	 * The file details
+	 */
+	private FileDetails fileDetails;
 
-    /**
-     * Construct a new modified request.
-     * @param theFile the file that has been modified
-     */
-    public ModifiedRequest(File file, boolean isBinary) {
-        fileDetails = new FileDetails(file, isBinary);
-    }
+	/**
+	 * Construct a new modified request.
+	 * 
+	 * @param theFile
+	 *            the file that has been modified
+	 */
+	public ModifiedRequest(File file, boolean isBinary) {
+		fileDetails = new FileDetails(file, isBinary);
+	}
 
-    /**
-     * Get the request String that will be passed to the server
-     * @return the request String
-     * @throws UnconfiguredRequestException if the request has not been
-     * properly configured
-     */
-    @Override
+	/**
+	 * Get the request String that will be passed to the server
+	 * 
+	 * @return the request String
+	 * @throws UnconfiguredRequestException
+	 *             if the request has not been properly configured
+	 */
+	@Override
 	public String getRequestString() throws UnconfiguredRequestException {
-        if (fileDetails == null) {
-            throw new UnconfiguredRequestException("FileDetails is null in " +
-                                                   "ModifiedRequest");
-        }
-        final FileMode mode = new FileMode(fileDetails.getFile());
-        return "Modified " + fileDetails.getFile().getName() + "\n" + //NOI18N
-                mode.toString() + "\n"; //NOI18N
-    }
+		if (fileDetails == null) {
+			throw new UnconfiguredRequestException("FileDetails is null in " + "ModifiedRequest");
+		}
+		final FileMode mode = new FileMode(fileDetails.getFile());
+		return "Modified " + fileDetails.getFile().getName() + "\n" + // NOI18N
+				mode.toString() + "\n"; // NOI18N
+	}
 
-    /**
-     * Is a response expected from the server?
-     * @return true if a response is expected, false if no response if
-     * expected
-     */
-    @Override
+	/**
+	 * Is a response expected from the server?
+	 * 
+	 * @return true if a response is expected, false if no response if expected
+	 */
+	@Override
 	public boolean isResponseExpected() {
-        return false;
-    }
+		return false;
+	}
 
-    /**
-     * If a file transmission is required, get the file object representing
-     * the file to transmit after the request string. The default
-     * implementation returns null, indicating no file is to be transmitted
-     * @return the file details object, if one should be transmitted, or null
-     * if no file object is to be transmitted.
-     */
-    @Override
+	/**
+	 * If a file transmission is required, get the file object representing the file to transmit after the request string. The default
+	 * implementation returns null, indicating no file is to be transmitted
+	 * 
+	 * @return the file details object, if one should be transmitted, or null if no file object is to be transmitted.
+	 */
+	@Override
 	public FileDetails getFileForTransmission() {
-        return fileDetails;
-    }
+		return fileDetails;
+	}
 }

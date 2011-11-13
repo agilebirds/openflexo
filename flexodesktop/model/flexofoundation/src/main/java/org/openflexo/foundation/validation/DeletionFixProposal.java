@@ -23,43 +23,37 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.DeletableObject;
 
-
 /**
  * Automatic deletion fix proposal
  * 
  * @author sguerin
  * 
  */
-public class DeletionFixProposal<R extends ValidationRule<R,V>, V extends Validable> extends FixProposal<R,V>
-{
+public class DeletionFixProposal<R extends ValidationRule<R, V>, V extends Validable> extends FixProposal<R, V> {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DeletionFixProposal.class.getPackage().getName());
 
-    public DeletionFixProposal(String aMessage)
-    {
-        super(aMessage);
-    }
+	public DeletionFixProposal(String aMessage) {
+		super(aMessage);
+	}
 
-    @Override
-	public void apply()
-    {
-        fixAction();
-        getProblemIssue().revalidateAfterFixing(true);
-    }
+	@Override
+	public void apply() {
+		fixAction();
+		getProblemIssue().revalidateAfterFixing(true);
+	}
 
-    @Override
-	protected void fixAction()
-    {
-        if (getObject() instanceof DeletableObject) {
-            ((DeletableObject) getObject()).delete();
-        }
-    }
+	@Override
+	protected void fixAction() {
+		if (getObject() instanceof DeletableObject) {
+			((DeletableObject) getObject()).delete();
+		}
+	}
 
-    @Override
-	public boolean askConfirmation()
-    {
-        return true;
-    }
+	@Override
+	public boolean askConfirmation() {
+		return true;
+	}
 
 }

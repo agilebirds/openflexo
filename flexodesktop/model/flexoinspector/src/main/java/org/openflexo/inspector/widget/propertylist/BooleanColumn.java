@@ -27,56 +27,47 @@ import org.openflexo.inspector.InspectableObject;
  * @author sguerin
  * 
  */
-public abstract class BooleanColumn extends AbstractColumn implements EditableColumn
-{
+public abstract class BooleanColumn extends AbstractColumn implements EditableColumn {
 
-    public BooleanColumn(String title, int defaultWidth)
-    {
-        this(title, defaultWidth, true);
-    }
+	public BooleanColumn(String title, int defaultWidth) {
+		this(title, defaultWidth, true);
+	}
 
-    public BooleanColumn(String title, int defaultWidth, boolean isResizable)
-    {
-        this(title, defaultWidth, isResizable, true);
-    }
+	public BooleanColumn(String title, int defaultWidth, boolean isResizable) {
+		this(title, defaultWidth, isResizable, true);
+	}
 
-    public BooleanColumn(String title, int defaultWidth, boolean isResizable, boolean displayTitle)
-    {
-        super(title, defaultWidth, isResizable, displayTitle);
-    }
+	public BooleanColumn(String title, int defaultWidth, boolean isResizable, boolean displayTitle) {
+		super(title, defaultWidth, isResizable, displayTitle);
+	}
 
-    @Override
-	public Class getValueClass()
-    {
-        return Boolean.class;
-    }
+	@Override
+	public Class getValueClass() {
+		return Boolean.class;
+	}
 
-    @Override
-	public Object getValueFor(InspectableObject object)
-    {
-        return getValue(object);
-    }
+	@Override
+	public Object getValueFor(InspectableObject object) {
+		return getValue(object);
+	}
 
-    public abstract Boolean getValue(InspectableObject object);
+	public abstract Boolean getValue(InspectableObject object);
 
-    @Override
-	public boolean isCellEditableFor(InspectableObject object)
-    {
-        return true;
-    }
+	@Override
+	public boolean isCellEditableFor(InspectableObject object) {
+		return true;
+	}
 
-    @Override
-	public void setValueFor(InspectableObject object, Object value)
-    {
-        setValue(object, (Boolean) value);
-        notifyValueChangedFor(object);
-    }
+	@Override
+	public void setValueFor(InspectableObject object, Object value) {
+		setValue(object, (Boolean) value);
+		notifyValueChangedFor(object);
+	}
 
-    public abstract void setValue(InspectableObject object, Boolean aValue);
+	public abstract void setValue(InspectableObject object, Boolean aValue);
 
-    @Override
-	public String toString()
-    {
-        return "BooleanColumn " + "@" + Integer.toHexString(hashCode());
-    }
+	@Override
+	public String toString() {
+		return "BooleanColumn " + "@" + Integer.toHexString(hashCode());
+	}
 }

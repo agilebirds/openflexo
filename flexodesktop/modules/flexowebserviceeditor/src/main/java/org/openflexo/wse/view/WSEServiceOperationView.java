@@ -36,93 +36,79 @@ import org.openflexo.wse.controller.WSESelectionManager;
 import org.openflexo.wse.model.WSEMessageEntryTableModel;
 import org.openflexo.wse.model.WSEMessageTableModel;
 
-
-
 /**
  * View allowing to represent/edit a DMModel object
  * 
  * @author sguerin
  * 
  */
-public class WSEServiceOperationView extends WSEView<ServiceOperation>
-{
+public class WSEServiceOperationView extends WSEView<ServiceOperation> {
 
-    private static final Logger logger = Logger.getLogger(WSEServiceOperationView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(WSEServiceOperationView.class.getPackage().getName());
 
-   
+	private WSETabularView messageTable;
+	private WSEMessageTableModel messageTableModel;
 
-    private WSETabularView messageTable;
-    private WSEMessageTableModel messageTableModel;
-    
-    private WSETabularView entryTable;
-    private WSEMessageEntryTableModel entryTableModel;
+	private WSETabularView entryTable;
+	private WSEMessageEntryTableModel entryTableModel;
 
-    public WSEServiceOperationView(ServiceOperation model, WSEController controller)
-    {
-        super(model, controller, "ws_operation_($name)");
+	public WSEServiceOperationView(ServiceOperation model, WSEController controller) {
+		super(model, controller, "ws_operation_($name)");
 
-  
-        finalizeBuilding();
-    }
+		finalizeBuilding();
+	}
 
-    @Override
-	protected JComponent buildContentPane()
-    {
-    	
-    	WSService service = getServiceOperation().getServiceInterface().getParentService();
-        boolean readOnly=false;
- 		if(service!=null && service instanceof ExternalWSService) readOnly=true;
-    	
-        entryTableModel = new WSEMessageEntryTableModel(null, getWSEController().getProject(), readOnly);
-        entryTable = new WSETabularView(getWSEController(),entryTableModel,5);
-        
-        
-        messageTableModel = new WSEMessageTableModel(getServiceOperation(), getWSEController().getProject(), readOnly);
-        messageTable = new WSETabularView(getWSEController(), messageTableModel,10);
-        addToMasterTabularView(messageTable);
-        addToSlaveTabularView (entryTable, messageTable);
-        return new JSplitPane(JSplitPane.VERTICAL_SPLIT, messageTable, entryTable);
+	@Override
+	protected JComponent buildContentPane() {
 
-    }
+		WSService service = getServiceOperation().getServiceInterface().getParentService();
+		boolean readOnly = false;
+		if (service != null && service instanceof ExternalWSService)
+			readOnly = true;
 
-    public ServiceOperation getServiceOperation()
-    {
-        return getModelObject();
-    }
+		entryTableModel = new WSEMessageEntryTableModel(null, getWSEController().getProject(), readOnly);
+		entryTable = new WSETabularView(getWSEController(), entryTableModel, 5);
 
-  
+		messageTableModel = new WSEMessageTableModel(getServiceOperation(), getWSEController().getProject(), readOnly);
+		messageTable = new WSETabularView(getWSEController(), messageTableModel, 10);
+		addToMasterTabularView(messageTable);
+		addToSlaveTabularView(entryTable, messageTable);
+		return new JSplitPane(JSplitPane.VERTICAL_SPLIT, messageTable, entryTable);
 
-    public MessageEntry getSelectedMessageEntry()
-    {
-        WSESelectionManager sm = getWSEController().getWSESelectionManager();
-        Vector selection = sm.getSelection();
-        if ((selection.size() == 1) && (selection.firstElement() instanceof MessageEntry)) {
-            return (MessageEntry) selection.firstElement();
-        }
+	}
 
-        
-        return null;
-    }
-    
-    public AbstractMessageDefinition getSelectedMessageDefinition()
-    {
-        WSESelectionManager sm = getWSEController().getWSESelectionManager();
-        Vector selection = sm.getSelection();
-        if ((selection.size() == 1) && (selection.firstElement() instanceof AbstractMessageDefinition)) {
-            return (MessageDefinition) selection.firstElement();
-        }
-        if (getSelectedMessageEntry() != null) {
-            return getSelectedMessageEntry().getMessage();
-         }
-        return null;
-    }
-  
+	public ServiceOperation getServiceOperation() {
+		return getModelObject();
+	}
 
-    public WSETabularView getMessageTable() {
-        return messageTable;
-    }
-    public WSETabularView getEntryTable() {
-        return entryTable;
-    }
+	public MessageEntry getSelectedMessageEntry() {
+		WSESelectionManager sm = getWSEController().getWSESelectionManager();
+		Vector selection = sm.getSelection();
+		if ((selection.size() == 1) && (selection.firstElement() instanceof MessageEntry)) {
+			return (MessageEntry) selection.firstElement();
+		}
+
+		return null;
+	}
+
+	public AbstractMessageDefinition getSelectedMessageDefinition() {
+		WSESelectionManager sm = getWSEController().getWSESelectionManager();
+		Vector selection = sm.getSelection();
+		if ((selection.size() == 1) && (selection.firstElement() instanceof AbstractMessageDefinition)) {
+			return (MessageDefinition) selection.firstElement();
+		}
+		if (getSelectedMessageEntry() != null) {
+			return getSelectedMessageEntry().getMessage();
+		}
+		return null;
+	}
+
+	public WSETabularView getMessageTable() {
+		return messageTable;
+	}
+
+	public WSETabularView getEntryTable() {
+		return entryTable;
+	}
 
 }

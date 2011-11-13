@@ -24,33 +24,31 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.selection.SelectionManager;
 
-
 /**
  * Implemented by all the module controller implementing selection managing
  * 
  * @author sguerin
  * 
  */
-public interface SelectionManagingController
-{
+public interface SelectionManagingController {
 
-    /**
-     * Return the SelectionManager this controller is working with
-     * 
-     * @return
-     */
-    public SelectionManager getSelectionManager();
+	/**
+	 * Return the SelectionManager this controller is working with
+	 * 
+	 * @return
+	 */
+	public SelectionManager getSelectionManager();
 
-     /**
-     * Select the view representing supplied object, if this view exists.
-     * Try all to really display supplied object, even if required view
-     * is not the current displayed view
-     * 
-     * @param object: the object to focus on
-      */
-    public void selectAndFocusObject(FlexoModelObject object);
+	/**
+	 * Select the view representing supplied object, if this view exists. Try all to really display supplied object, even if required view
+	 * is not the current displayed view
+	 * 
+	 * @param object
+	 *            : the object to focus on
+	 */
+	public void selectAndFocusObject(FlexoModelObject object);
 
-    public FlexoProject getProject();
-    
-    public FlexoEditor getEditor();
+	public FlexoProject getProject();
+
+	public FlexoEditor getEditor();
 }

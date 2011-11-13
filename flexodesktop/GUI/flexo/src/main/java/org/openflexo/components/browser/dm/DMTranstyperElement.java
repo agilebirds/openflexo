@@ -24,36 +24,30 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.dm.DMTranstyper;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class DMTranstyperElement extends DMElement
-{
+public class DMTranstyperElement extends DMElement {
 
-    public DMTranstyperElement(DMTranstyper transtyper, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(transtyper, BrowserElementType.DM_TRANSTYPER, browser,parent);
-    }
+	public DMTranstyperElement(DMTranstyper transtyper, ProjectBrowser browser, BrowserElement parent) {
+		super(transtyper, BrowserElementType.DM_TRANSTYPER, browser, parent);
+	}
 
-    @Override
-	public String getName()
-    {
-        return getDMTranstyper().getName();
-    }
+	@Override
+	public String getName() {
+		return getDMTranstyper().getName();
+	}
 
-    protected DMTranstyper getDMTranstyper()
-    {
-        return (DMTranstyper) getObject();
-    }
+	protected DMTranstyper getDMTranstyper() {
+		return (DMTranstyper) getObject();
+	}
 
-    @Override
-	public boolean isNameEditable()
-    {
-        return true;
-    }
+	@Override
+	public boolean isNameEditable() {
+		return true;
+	}
 
 }

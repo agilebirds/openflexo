@@ -204,8 +204,8 @@ public abstract class InteractiveFlexoEditor implements FlexoEditor {
 	private final UndoManager _undoManager;
 	private ScenarioRecorder _scenarioRecorder;
 	private final Vector<FlexoActionType> _registeredActions;
-	private final Hashtable<FlexoActionType,Icon> _enabledIcons;
-	private final Hashtable<FlexoActionType,Icon> _disabledIcons;
+	private final Hashtable<FlexoActionType, Icon> _enabledIcons;
+	private final Hashtable<FlexoActionType, Icon> _disabledIcons;
 
 	private final Hashtable<FlexoAction, Vector<FlexoModelObject>> _createdAndNotNotifiedObjects;
 	private final Hashtable<FlexoAction, Vector<FlexoModelObject>> _deletedAndNotNotifiedObjects;
@@ -294,10 +294,12 @@ public abstract class InteractiveFlexoEditor implements FlexoEditor {
 		}
 		if (WARN_MODEL_MODIFICATIONS_OUTSIDE_FLEXO_ACTION_LAYER) {
 			for (FlexoModelObject o : _createdAndNotNotifiedObjects.get(action)) {
-				logger.warning("FlexoModelObject " + o + " created during action " + action + " but was not notified (see objectCreated(String,FlexoModelObject))");
+				logger.warning("FlexoModelObject " + o + " created during action " + action
+						+ " but was not notified (see objectCreated(String,FlexoModelObject))");
 			}
 			for (FlexoModelObject o : _deletedAndNotNotifiedObjects.get(action)) {
-				logger.warning("FlexoModelObject " + o + " deleted during action " + action + " but was not notified (see objectDeleted(String,FlexoModelObject))");
+				logger.warning("FlexoModelObject " + o + " deleted during action " + action
+						+ " but was not notified (see objectDeleted(String,FlexoModelObject))");
 			}
 		}
 		_createdAndNotNotifiedObjects.remove(action);
@@ -341,8 +343,7 @@ public abstract class InteractiveFlexoEditor implements FlexoEditor {
 		_registeredActions.add(actionType);
 	}
 
-	public void registerIcons(FlexoActionType actionType, Icon enabledIcon, Icon disabledIcon) 
-	{
+	public void registerIcons(FlexoActionType actionType, Icon enabledIcon, Icon disabledIcon) {
 		if (enabledIcon != null) {
 			_enabledIcons.put(actionType, enabledIcon);
 		}
@@ -350,7 +351,7 @@ public abstract class InteractiveFlexoEditor implements FlexoEditor {
 			_disabledIcons.put(actionType, disabledIcon);
 		}
 	}
-	
+
 	// Only explicitely registered actions are enabled
 	@Override
 	public boolean isActionEnabled(FlexoActionType actionType) {
@@ -398,7 +399,8 @@ public abstract class InteractiveFlexoEditor implements FlexoEditor {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("notifyObjectCreated: " + object);
 		}
-		if (_currentlyPerformedActionStack.isEmpty() && _currentlyUndoneActionStack.isEmpty() && _currentlyRedoneActionStack.isEmpty() && WARN_MODEL_MODIFICATIONS_OUTSIDE_FLEXO_ACTION_LAYER) {
+		if (_currentlyPerformedActionStack.isEmpty() && _currentlyUndoneActionStack.isEmpty() && _currentlyRedoneActionStack.isEmpty()
+				&& WARN_MODEL_MODIFICATIONS_OUTSIDE_FLEXO_ACTION_LAYER) {
 			logger.warning("FlexoModelObject " + object + " created outside of FlexoAction context !!!");
 		} else if (!_currentlyPerformedActionStack.isEmpty()) {
 			_createdAndNotNotifiedObjects.get(_currentlyPerformedActionStack.peek()).add(object);
@@ -411,7 +413,8 @@ public abstract class InteractiveFlexoEditor implements FlexoEditor {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("notifyObjectDeleted: " + object);
 		}
-		if (_currentlyPerformedActionStack.isEmpty() && _currentlyUndoneActionStack.isEmpty() && _currentlyRedoneActionStack.isEmpty() && WARN_MODEL_MODIFICATIONS_OUTSIDE_FLEXO_ACTION_LAYER) {
+		if (_currentlyPerformedActionStack.isEmpty() && _currentlyUndoneActionStack.isEmpty() && _currentlyRedoneActionStack.isEmpty()
+				&& WARN_MODEL_MODIFICATIONS_OUTSIDE_FLEXO_ACTION_LAYER) {
 			logger.warning("FlexoModelObject " + object + " deleted outside of FlexoAction context !!!");
 		} else if (!_currentlyPerformedActionStack.isEmpty()) {
 			_deletedAndNotNotifiedObjects.get(_currentlyPerformedActionStack.peek()).add(object);
@@ -420,7 +423,8 @@ public abstract class InteractiveFlexoEditor implements FlexoEditor {
 
 	@Override
 	public void notifyObjectChanged(FlexoModelObject object) {
-		if (_currentlyPerformedActionStack.isEmpty() && _currentlyUndoneActionStack.isEmpty() && _currentlyRedoneActionStack.isEmpty() && WARN_MODEL_MODIFICATIONS_OUTSIDE_FLEXO_ACTION_LAYER) {
+		if (_currentlyPerformedActionStack.isEmpty() && _currentlyUndoneActionStack.isEmpty() && _currentlyRedoneActionStack.isEmpty()
+				&& WARN_MODEL_MODIFICATIONS_OUTSIDE_FLEXO_ACTION_LAYER) {
 			logger.warning("setChanged() called for " + object + " outside of FlexoAction context !!!");
 		}
 	}
@@ -693,16 +697,13 @@ public abstract class InteractiveFlexoEditor implements FlexoEditor {
 			((SelectionManagingController) getActiveModule().getFlexoController()).getSelectionManager().setSelectedObject(object);
 		}
 	}
-	
-	public Icon getEnabledIconFor(FlexoActionType actionType)
-	{
+
+	public Icon getEnabledIconFor(FlexoActionType actionType) {
 		return _enabledIcons.get(actionType);
 	}
 
-	public Icon getDisabledIconFor(FlexoActionType actionType)
-	{
+	public Icon getDisabledIconFor(FlexoActionType actionType) {
 		return _disabledIcons.get(actionType);
 	}
-
 
 }

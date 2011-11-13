@@ -27,51 +27,46 @@ import org.openflexo.components.browser.view.BrowserView;
 import org.openflexo.dre.controller.DREController;
 import org.openflexo.foundation.FlexoModelObject;
 
-
 /**
  * Represents the view for the browser of this module
  * 
  * @author yourname
  * 
  */
-public class DREBrowserView extends BrowserView
-{
+public class DREBrowserView extends BrowserView {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DREBrowserView.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Variables
-    // ==================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Variables
+	// ==================================
+	// ==========================================================================
 
-    protected DREController _controller;
+	protected DREController _controller;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public DREBrowserView(DREController controller)
-    {
-        super(controller.getDREBrowser(), controller.getKeyEventListener(),controller.getEditor());
-        _controller = controller;
-        AskParametersPanel languageSelector = new AskParametersPanel(null,controller.getDREBrowser().getAvailableLanguages());
-        add(languageSelector,BorderLayout.NORTH);
-    }
+	public DREBrowserView(DREController controller) {
+		super(controller.getDREBrowser(), controller.getKeyEventListener(), controller.getEditor());
+		_controller = controller;
+		AskParametersPanel languageSelector = new AskParametersPanel(null, controller.getDREBrowser().getAvailableLanguages());
+		add(languageSelector, BorderLayout.NORTH);
+	}
 
-    @Override
-	public void treeSingleClick(FlexoModelObject object)
-    {
-        // Try to display object in view
-        _controller.selectAndFocusObject(object);
-    }
+	@Override
+	public void treeSingleClick(FlexoModelObject object) {
+		// Try to display object in view
+		_controller.selectAndFocusObject(object);
+	}
 
-    @Override
-	public void treeDoubleClick(FlexoModelObject object)
-    {
-        // Try to display object in view
-        _controller.selectAndFocusObject(object);
-    }
+	@Override
+	public void treeDoubleClick(FlexoModelObject object) {
+		// Try to display object in view
+		_controller.selectAndFocusObject(object);
+	}
 
 }

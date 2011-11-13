@@ -46,108 +46,106 @@ import org.openflexo.generator.rm.HelpFileResource;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileFormat;
 
+public class HelpGenerator extends MetaFileGenerator {
 
-public class HelpGenerator extends MetaFileGenerator
-{
+	private static final Logger logger = FlexoLogger.getLogger(LocalizedFileGenerator.class.getPackage().getName());
+	public static final String IDENTIFIER = "HELPPROPERTIES";
 
-    private static final Logger logger = FlexoLogger.getLogger(LocalizedFileGenerator.class.getPackage().getName());
-    public static final String IDENTIFIER = "HELPPROPERTIES";
-    /**
-     * @param projectGenerator
-     * @param object
-     */
-    public HelpGenerator(ProjectGenerator projectGenerator)
-    {
-        super(projectGenerator,FileFormat.XML,ResourceType.TEXT_FILE,"help.properties",IDENTIFIER);
-        generators = new Hashtable<ScreenshotResource, ResourceToCopyGenerator>();
-    }
+	/**
+	 * @param projectGenerator
+	 * @param object
+	 */
+	public HelpGenerator(ProjectGenerator projectGenerator) {
+		super(projectGenerator, FileFormat.XML, ResourceType.TEXT_FILE, "help.properties", IDENTIFIER);
+		generators = new Hashtable<ScreenshotResource, ResourceToCopyGenerator>();
+	}
 
-    @Override
-    public ProjectGenerator getProjectGenerator() {
-    	return super.getProjectGenerator();
-    }
-    
-    private Hashtable<ScreenshotResource, ResourceToCopyGenerator> generators;
-    
-    /**
-     * Overrides buildResourcesAndSetGenerators
-     * 
-     * @see org.openflexo.generator.CGGenerator#buildResourcesAndSetGenerators(org.openflexo.foundation.cg.CGRepository,
-     *      Vector)
-     */
-    @Override
-    public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources)
-    {
-        // PList file
-    	textResource = (HelpFileResource) resourceForKeyWithCGFile(ResourceType.TEXT_FILE,
-    			GeneratorUtils.nameForRepositoryAndIdentifier(repository, getIdentifier()));
-        if (textResource == null) {
-            textResource = GeneratedFileResourceFactory.createNewHelpFileResource(repository, this);
-            textResource.setGenerator(this);
-            logger.info("Created HELP resource " + textResource.getName());
-        } else {
-            textResource.setGenerator(this);
-            logger.info("Successfully retrieved HELP FILE resource " + textResource.getName());
-        }
-        ((HelpFileResource)textResource).registerObserverWhenRequired();
-        resources.add(textResource);
-        Hashtable<ScreenshotResource, ResourceToCopyGenerator> newGenerators = new Hashtable<ScreenshotResource, ResourceToCopyGenerator>();
-        Iterator<ApplicationHelpEntryPoint> it = getProject().getFlexoWorkflow().getAllHelpEntryPoints().iterator();
-    	while(it.hasNext()){
-    		ApplicationHelpEntryPoint item = it.next();
-    		ScreenshotResource screenshotResource = item.getProject().getScreenshotResource(item instanceof OperationNode?((OperationNode)item).getAbstractActivityNode():(FlexoModelObject)item, true);
-    		if (screenshotResource==null) {
+	@Override
+	public ProjectGenerator getProjectGenerator() {
+		return super.getProjectGenerator();
+	}
+
+	private Hashtable<ScreenshotResource, ResourceToCopyGenerator> generators;
+
+	/**
+	 * Overrides buildResourcesAndSetGenerators
+	 * 
+	 * @see org.openflexo.generator.CGGenerator#buildResourcesAndSetGenerators(org.openflexo.foundation.cg.CGRepository, Vector)
+	 */
+	@Override
+	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
+		// PList file
+		textResource = (HelpFileResource) resourceForKeyWithCGFile(ResourceType.TEXT_FILE,
+				GeneratorUtils.nameForRepositoryAndIdentifier(repository, getIdentifier()));
+		if (textResource == null) {
+			textResource = GeneratedFileResourceFactory.createNewHelpFileResource(repository, this);
+			textResource.setGenerator(this);
+			logger.info("Created HELP resource " + textResource.getName());
+		} else {
+			textResource.setGenerator(this);
+			logger.info("Successfully retrieved HELP FILE resource " + textResource.getName());
+		}
+		((HelpFileResource) textResource).registerObserverWhenRequired();
+		resources.add(textResource);
+		Hashtable<ScreenshotResource, ResourceToCopyGenerator> newGenerators = new Hashtable<ScreenshotResource, ResourceToCopyGenerator>();
+		Iterator<ApplicationHelpEntryPoint> it = getProject().getFlexoWorkflow().getAllHelpEntryPoints().iterator();
+		while (it.hasNext()) {
+			ApplicationHelpEntryPoint item = it.next();
+			ScreenshotResource screenshotResource = item.getProject().getScreenshotResource(
+					item instanceof OperationNode ? ((OperationNode) item).getAbstractActivityNode() : (FlexoModelObject) item, true);
+			if (screenshotResource == null) {
 				continue;
 			}
-    		ResourceToCopyGenerator generator = getGenerator(screenshotResource);
+			ResourceToCopyGenerator generator = getGenerator(screenshotResource);
 			generator.buildResourcesAndSetGenerators(repository, resources);
 			newGenerators.put(screenshotResource, generator);
-    	}
-    	generators.clear(); // Frees memory!
-    	generators = newGenerators;
-    }
+		}
+		generators.clear(); // Frees memory!
+		generators = newGenerators;
+	}
 
-    private ResourceToCopyGenerator getGenerator(ScreenshotResource screenshotResource) {
-    	ResourceToCopyGenerator gen = generators.get(screenshotResource);
-    	if (gen==null) {
-			generators.put(screenshotResource,gen = new ResourceToCopyGenerator(getProjectGenerator(),screenshotResource, getRepository().getWebResourcesSymbolicDirectory()));
+	private ResourceToCopyGenerator getGenerator(ScreenshotResource screenshotResource) {
+		ResourceToCopyGenerator gen = generators.get(screenshotResource);
+		if (gen == null) {
+			generators.put(screenshotResource, gen = new ResourceToCopyGenerator(getProjectGenerator(), screenshotResource, getRepository()
+					.getWebResourcesSymbolicDirectory()));
 		}
 		return gen;
 	}
 
 	/**
-     * Overrides generate
-     * 
-     * @see org.openflexo.generator.CGGenerator#generate(boolean)
-     */
-    @Override
-    public void generate(boolean forceRegenerate)
-    {
-        startGeneration();
-        VelocityContext vc = new VelocityContext();
-        vc.put("project",getProject());
-        vc.put("generator",this);
-        vc.put("helpItems", getProject().getFlexoWorkflow().getAllHelpEntryPoints());
-        try {
-        	String mergeResult = merge("HelpProperties.vm", vc);
-         	generatedCode = new GeneratedTextResource("help.properties", mergeResult);
-         	for (ResourceToCopyGenerator g : generators.values()) {
+	 * Overrides generate
+	 * 
+	 * @see org.openflexo.generator.CGGenerator#generate(boolean)
+	 */
+	@Override
+	public void generate(boolean forceRegenerate) {
+		startGeneration();
+		VelocityContext vc = new VelocityContext();
+		vc.put("project", getProject());
+		vc.put("generator", this);
+		vc.put("helpItems", getProject().getFlexoWorkflow().getAllHelpEntryPoints());
+		try {
+			String mergeResult = merge("HelpProperties.vm", vc);
+			generatedCode = new GeneratedTextResource("help.properties", mergeResult);
+			for (ResourceToCopyGenerator g : generators.values()) {
 				g.generate(forceRegenerate);
 			}
-           	stopGeneration();
-        } catch (GenerationException e) {
-    		setGenerationException(e);
+			stopGeneration();
+		} catch (GenerationException e) {
+			setGenerationException(e);
 		} catch (Exception e) {
-			setGenerationException(new UnexpectedExceptionOccuredException(e,getProjectGenerator()));
+			setGenerationException(new UnexpectedExceptionOccuredException(e, getProjectGenerator()));
 		}
-    }
-   /* private void copyScreen() throws PermissionDeniedException{
-    	Iterator<ApplicationHelpEntryPoint> it = getProject().getFlexoWorkflow().getAllHelpEntryPoints().iterator();
-    	while(it.hasNext()){
-    		ApplicationHelpEntryPoint item = it.next();
-    		ScreenshotResource screenshootResource = item.getProject().getScreenshotResource(item instanceof OperationNode?((OperationNode)item).getAbstractActivityNode():(FlexoModelObject)item, true);
-    		if(screenshootResource!=null){
-    			try {
+	}
+
+	/* private void copyScreen() throws PermissionDeniedException{
+	 	Iterator<ApplicationHelpEntryPoint> it = getProject().getFlexoWorkflow().getAllHelpEntryPoints().iterator();
+	 	while(it.hasNext()){
+	 		ApplicationHelpEntryPoint item = it.next();
+	 		ScreenshotResource screenshootResource = item.getProject().getScreenshotResource(item instanceof OperationNode?((OperationNode)item).getAbstractActivityNode():(FlexoModelObject)item, true);
+	 		if(screenshootResource!=null){
+	 			try {
 					screenshootResource.update();
 				} catch (LoadResourceException e1) {
 					// TODO Auto-generated catch block
@@ -170,41 +168,42 @@ public class HelpGenerator extends MetaFileGenerator
 					e1.printStackTrace();
 					continue;
 				}
-    			File f = projectGenerator.getWebResourceOutputDirectory();
-    	        if (!f.exists())
-    	            f.mkdirs();
-    	        if (!f.canWrite()) {
-    	           	throw new PermissionDeniedException(f,getProjectGenerator());
-    	        }
-    	        try {
-    	            FileUtils.copyFileToDir(screenshootResource.getFile(), f);
-    	        } catch (IOException e) {
-    	            e.printStackTrace();
-    	        }
-    		}
-    	}
-    }*/
-    public long getID(ApplicationHelpEntryPoint helpEntryPoint){
-    	if(helpEntryPoint instanceof OperationNode) {
-			return ((OperationNode)helpEntryPoint).getComponentInstance().getFlexoID();
+	 			File f = projectGenerator.getWebResourceOutputDirectory();
+	 	        if (!f.exists())
+	 	            f.mkdirs();
+	 	        if (!f.canWrite()) {
+	 	           	throw new PermissionDeniedException(f,getProjectGenerator());
+	 	        }
+	 	        try {
+	 	            FileUtils.copyFileToDir(screenshootResource.getFile(), f);
+	 	        } catch (IOException e) {
+	 	            e.printStackTrace();
+	 	        }
+	 		}
+	 	}
+	 }*/
+	public long getID(ApplicationHelpEntryPoint helpEntryPoint) {
+		if (helpEntryPoint instanceof OperationNode) {
+			return ((OperationNode) helpEntryPoint).getComponentInstance().getFlexoID();
 		}
-    	return helpEntryPoint.getFlexoID();
-    }
-    public String generateHelpDescriptor(ApplicationHelpEntryPoint helpEntryPoint){
-    	Element e = HelpElementBuilder.getHelpElement(helpEntryPoint);
-    	e.setAttribute("helpID",String.valueOf(getID(helpEntryPoint)));
-    	return new XMLOutputter().outputString(e);
-    }
-    /**
-     * Overrides getGeneratorLogger
-     * 
-     * @see org.openflexo.generator.CGGenerator#getGeneratorLogger()
-     */
-    @Override
-    public Logger getGeneratorLogger()
-    {
-        return logger;
-    }
+		return helpEntryPoint.getFlexoID();
+	}
+
+	public String generateHelpDescriptor(ApplicationHelpEntryPoint helpEntryPoint) {
+		Element e = HelpElementBuilder.getHelpElement(helpEntryPoint);
+		e.setAttribute("helpID", String.valueOf(getID(helpEntryPoint)));
+		return new XMLOutputter().outputString(e);
+	}
+
+	/**
+	 * Overrides getGeneratorLogger
+	 * 
+	 * @see org.openflexo.generator.CGGenerator#getGeneratorLogger()
+	 */
+	@Override
+	public Logger getGeneratorLogger() {
+		return logger;
+	}
 
 	@Override
 	public String getRelativePath() {
@@ -215,6 +214,5 @@ public class HelpGenerator extends MetaFileGenerator
 	public CGSymbolicDirectory getSymbolicDirectory(CGRepository repository) {
 		return repository.getResourcesSymbolicDirectory();
 	}
-
 
 }

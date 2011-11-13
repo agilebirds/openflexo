@@ -26,46 +26,35 @@ import org.openflexo.fge.geomedit.Polylin;
 import org.openflexo.fge.geomedit.construction.RectPolylinWithStartAndEndAreaConstruction;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
 
-
-
 public class CreateRectPolylinWithStartAndEndArea extends Edition {
-	
+
 	public CreateRectPolylinWithStartAndEndArea(GeomEditController controller) {
-		super("Create line from points",controller);
-		inputs.add(new ObtainObject("Select starting area",controller));
-		inputs.add(new ObtainSimplifiedCardinalDirection("Select start orientation",SimplifiedCardinalDirection.NORTH,controller));
-		inputs.add(new ObtainObject("Select end area",controller));
-		inputs.add(new ObtainSimplifiedCardinalDirection("Select end orientation",SimplifiedCardinalDirection.NORTH,controller));
+		super("Create line from points", controller);
+		inputs.add(new ObtainObject("Select starting area", controller));
+		inputs.add(new ObtainSimplifiedCardinalDirection("Select start orientation", SimplifiedCardinalDirection.NORTH, controller));
+		inputs.add(new ObtainObject("Select end area", controller));
+		inputs.add(new ObtainSimplifiedCardinalDirection("Select end orientation", SimplifiedCardinalDirection.NORTH, controller));
 	}
-	
+
 	@Override
-	public void performEdition()
-	{
-		ObtainObject o1 = (ObtainObject)inputs.get(0);
-		ObtainSimplifiedCardinalDirection startOrientation = (ObtainSimplifiedCardinalDirection)inputs.get(1);
-		ObtainObject o2 = (ObtainObject)inputs.get(2);
-		ObtainSimplifiedCardinalDirection endOrientation = (ObtainSimplifiedCardinalDirection)inputs.get(3);
-		
-		addObject (new Polylin(
-				getController().getDrawing().getModel(),
-				new RectPolylinWithStartAndEndAreaConstruction(
-						o1.getConstruction(),
-						startOrientation.getInputData(),
-						o2.getConstruction(),
-						endOrientation.getInputData())));
+	public void performEdition() {
+		ObtainObject o1 = (ObtainObject) inputs.get(0);
+		ObtainSimplifiedCardinalDirection startOrientation = (ObtainSimplifiedCardinalDirection) inputs.get(1);
+		ObtainObject o2 = (ObtainObject) inputs.get(2);
+		ObtainSimplifiedCardinalDirection endOrientation = (ObtainSimplifiedCardinalDirection) inputs.get(3);
+
+		addObject(new Polylin(getController().getDrawing().getModel(), new RectPolylinWithStartAndEndAreaConstruction(o1.getConstruction(),
+				startOrientation.getInputData(), o2.getConstruction(), endOrientation.getInputData())));
 
 	}
-	
+
 	/*public void addObject(GeometricObject object)
 	{
 		getController().getDrawing().getModel().addToChilds(object);
 	}*/
-	
+
 	@Override
-	public void paintEdition(FGEDrawingGraphics graphics,FGEPoint lastMouseLocation)
-	{
+	public void paintEdition(FGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		// Nothing to draw
 	}
 }
-
-

@@ -53,32 +53,29 @@ public class TestCGFoundation extends FlexoTestCase {
 	/**
 	 * Creates a new empty project in a temp directory
 	 */
-	public void test0CreateProject()
-	{
+	public void test0CreateProject() {
 		logger.info("test0CreateProject");
 		ToolBox.setPlatform();
 		FlexoLoggingManager.forceInitialize();
 		try {
 			File tempFile = File.createTempFile(TEST_CG, "");
-			_projectDirectory = new File (tempFile.getParentFile(),tempFile.getName()+".prj");
+			_projectDirectory = new File(tempFile.getParentFile(), tempFile.getName() + ".prj");
 			tempFile.delete();
 		} catch (IOException e) {
 			fail();
 		}
-		logger.info("Project directory: "+_projectDirectory.getAbsolutePath());
-		_projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length()-4);
-		logger.info("Project identifier: "+_projectIdentifier);
-		_editor = FlexoResourceManager.initializeNewProject(_projectDirectory,EDITOR_FACTORY,null);
+		logger.info("Project directory: " + _projectDirectory.getAbsolutePath());
+		_projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length() - 4);
+		logger.info("Project identifier: " + _projectIdentifier);
+		_editor = FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY, null);
 		_project = _editor.getProject();
 		logger.info("Project has been SUCCESSFULLY created");
 	}
 
-
 	/**
 	 * Creates a new empty project in a temp directory
 	 */
-	public void test1CreateExternalRepository()
-	{
+	public void test1CreateExternalRepository() {
 		logger.info("test1CreateExternalRepository");
 		AddGeneratedCodeRepository action = AddGeneratedCodeRepository.actionType.makeNewAction(_project.getGeneratedCode(), null, _editor);
 		action.setNewGeneratedCodeRepositoryName("GeneratedCode");
@@ -94,14 +91,13 @@ public class TestCGFoundation extends FlexoTestCase {
 	/**
 	 * Creates a new empty project in a temp directory
 	 */
-	public void test2Reload()
-	{
+	public void test2Reload() {
 		logger.info("test2Reload");
 		try {
-			if (_project!=null) {
+			if (_project != null) {
 				_project.close();
 			}
-			assertNotNull(_editor = FlexoResourceManager.initializeExistingProject(_projectDirectory,EDITOR_FACTORY,null));
+			assertNotNull(_editor = FlexoResourceManager.initializeExistingProject(_projectDirectory, EDITOR_FACTORY, null));
 			_project = _editor.getProject();
 		} catch (ProjectInitializerException e) {
 			e.printStackTrace();
@@ -110,7 +106,7 @@ public class TestCGFoundation extends FlexoTestCase {
 			e.printStackTrace();
 			fail();
 		}
-		logger.info("_project.getGeneratedCode()="+_project.getGeneratedCode());
+		logger.info("_project.getGeneratedCode()=" + _project.getGeneratedCode());
 		_project.close();
 		FileUtils.deleteDir(_projectDirectory);
 		_editor = null;

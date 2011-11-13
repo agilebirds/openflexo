@@ -20,7 +20,7 @@ public class AddToAccountableRole extends AddToXRole<AddToAccountableRole> {
 	private static final Logger logger = Logger.getLogger(AddToAccountableRole.class.getPackage().getName());
 
 	public static FlexoActionType<AddToAccountableRole, AbstractActivityNode, AbstractActivityNode> actionType = new FlexoActionType<AddToAccountableRole, AbstractActivityNode, AbstractActivityNode>(
-	"add_to_accountable_role") {
+			"add_to_accountable_role") {
 
 		/**
 		 * Factory method

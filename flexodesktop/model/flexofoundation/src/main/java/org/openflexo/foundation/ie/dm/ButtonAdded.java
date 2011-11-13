@@ -24,14 +24,11 @@ import org.openflexo.foundation.ie.widget.IEHyperlinkWidget;
 /**
  * @author sguerin
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
+ *         TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
  */
-public class ButtonAdded extends IEDataModification
-{
+public class ButtonAdded extends IEDataModification {
 
-    public ButtonAdded(IEHyperlinkWidget button)
-    {
-        super(null, button);
-    }
+	public ButtonAdded(IEHyperlinkWidget button) {
+		super(null, button);
+	}
 }

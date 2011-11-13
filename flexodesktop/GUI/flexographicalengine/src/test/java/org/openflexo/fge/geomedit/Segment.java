@@ -25,112 +25,94 @@ import org.openflexo.fge.geomedit.construction.SegmentConstruction;
 import org.openflexo.fge.geomedit.gr.SegmentGraphicalRepresentation;
 import org.openflexo.fge.notifications.FGENotification;
 
-
 public class Segment extends GeometricObject<FGESegment> {
 
 	private SegmentGraphicalRepresentation graphicalRepresentation;
-	
+
 	// Called for LOAD
-	public Segment(GeomEditBuilder builder)
-	{
+	public Segment(GeomEditBuilder builder) {
 		super(builder);
 	}
-	
-	public Segment(GeometricSet set, SegmentConstruction construction) 
-	{
+
+	public Segment(GeometricSet set, SegmentConstruction construction) {
 		super(set, construction);
-		graphicalRepresentation = new SegmentGraphicalRepresentation(this,set.getEditedDrawing());
+		graphicalRepresentation = new SegmentGraphicalRepresentation(this, set.getEditedDrawing());
 	}
-	
+
 	@Override
-	public SegmentGraphicalRepresentation getGraphicalRepresentation()
-	{
+	public SegmentGraphicalRepresentation getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
 
-	public void setGraphicalRepresentation(SegmentGraphicalRepresentation aGR)
-	{
+	public void setGraphicalRepresentation(SegmentGraphicalRepresentation aGR) {
 		aGR.setDrawable(this);
 		graphicalRepresentation = aGR;
 	}
-	
+
 	@Override
-	public SegmentConstruction getConstruction()
-	{
-		return (SegmentConstruction)super.getConstruction();
+	public SegmentConstruction getConstruction() {
+		return (SegmentConstruction) super.getConstruction();
 	}
 
-	public void setConstruction(SegmentConstruction lineConstruction)
-	{
+	public void setConstruction(SegmentConstruction lineConstruction) {
 		_setConstruction(lineConstruction);
 	}
 
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return "Segment.inspector";
 	}
 
-
-	public double getX1()
-	{
+	public double getX1() {
 		return getGeometricObject().getX1();
 	}
 
-	public void setX1(double x1)
-	{
-		if (x1 != getX1()) { 
+	public void setX1(double x1) {
+		if (x1 != getX1()) {
 			double oldX1 = getX1();
 			getGeometricObject().setX1(x1);
-			getGraphicalRepresentation().notify(new FGENotification("x1",oldX1,x1));
+			getGraphicalRepresentation().notify(new FGENotification("x1", oldX1, x1));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}
 
-	public double getX2()
-	{
+	public double getX2() {
 		return getGeometricObject().getX2();
 	}
 
-	public void setX2(double x2)
-	{
-		if (x2 != getX2()) { 
+	public void setX2(double x2) {
+		if (x2 != getX2()) {
 			double oldX2 = getX2();
 			getGeometricObject().setX2(x2);
-			getGraphicalRepresentation().notify(new FGENotification("x2",oldX2,x2));
+			getGraphicalRepresentation().notify(new FGENotification("x2", oldX2, x2));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}
 
-	public double getY1()
-	{
+	public double getY1() {
 		return getGeometricObject().getY1();
 	}
 
-	public void setY1(double y1)
-	{
-		if (y1 != getY1()) { 
+	public void setY1(double y1) {
+		if (y1 != getY1()) {
 			double oldY1 = getY1();
 			getGeometricObject().setY1(y1);
-			getGraphicalRepresentation().notify(new FGENotification("y1",oldY1,y1));
+			getGraphicalRepresentation().notify(new FGENotification("y1", oldY1, y1));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}
 
-	public double getY2()
-	{
+	public double getY2() {
 		return getGeometricObject().getY2();
 	}
 
-	public void setY2(double y2)
-	{
-		if (y2 != getY2()) { 
+	public void setY2(double y2) {
+		if (y2 != getY2()) {
 			double oldY2 = getY2();
 			getGeometricObject().setY2(y2);
-			getGraphicalRepresentation().notify(new FGENotification("y2",oldY2,y2));
+			getGraphicalRepresentation().notify(new FGENotification("y2", oldY2, y2));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}
-
 
 }

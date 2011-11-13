@@ -28,62 +28,55 @@ import org.openflexo.prefs.ModulePreferences;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.wse.controller.WSEController;
 
-
 /**
  * Contains preferences for this module
- *
+ * 
  * @author yourname
- *
+ * 
  */
-public final class WSEPreferences extends ModulePreferences
-{
+public final class WSEPreferences extends ModulePreferences {
 
-    private static final Logger logger = Logger.getLogger(WSEPreferences.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(WSEPreferences.class.getPackage().getName());
 
-    private static final Class WSE_PREFERENCES = WSEPreferences.class;
+	private static final Class WSE_PREFERENCES = WSEPreferences.class;
 
-    protected static final String EXAMPLE_PREF_VALUE = "examplePrefValue";
+	protected static final String EXAMPLE_PREF_VALUE = "examplePrefValue";
 
-    private static WSEController _controller;
+	private static WSEController _controller;
 
-    public static void init(WSEController controller)
-    {
-        _controller = controller;
-        preferences(WSE_PREFERENCES);
-    }
+	public static void init(WSEController controller) {
+		_controller = controller;
+		preferences(WSE_PREFERENCES);
+	}
 
-    public static void reset() {
-        _controller = null;
-    }
+	public static void reset() {
+		_controller = null;
+	}
 
-    public WSEPreferences()
-    {
-        super(Module.WSE_MODULE);
-    }
+	public WSEPreferences() {
+		super(Module.WSE_MODULE);
+	}
 
-    @Override
-    public File getInspectorFile()
-    {
-        return new FileResource("Config/Preferences/WSEPrefs.inspector");
-    }
+	@Override
+	public File getInspectorFile() {
+		return new FileResource("Config/Preferences/WSEPrefs.inspector");
+	}
 
-    public static Boolean getExamplePrefValue()
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("getExamplePrefValue");
-        Boolean value = preferences(WSE_PREFERENCES).getBooleanProperty(EXAMPLE_PREF_VALUE);
-        if (value == null) {
-            setExamplePrefValue(Boolean.FALSE);
-            return getExamplePrefValue();
-        }
-        return value;
-    }
+	public static Boolean getExamplePrefValue() {
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("getExamplePrefValue");
+		Boolean value = preferences(WSE_PREFERENCES).getBooleanProperty(EXAMPLE_PREF_VALUE);
+		if (value == null) {
+			setExamplePrefValue(Boolean.FALSE);
+			return getExamplePrefValue();
+		}
+		return value;
+	}
 
-    public static void setExamplePrefValue(Boolean alignOnGrid)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("setExamplePrefValue");
-        preferences(WSE_PREFERENCES).setBooleanProperty(EXAMPLE_PREF_VALUE, alignOnGrid);
-    }
+	public static void setExamplePrefValue(Boolean alignOnGrid) {
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("setExamplePrefValue");
+		preferences(WSE_PREFERENCES).setBooleanProperty(EXAMPLE_PREF_VALUE, alignOnGrid);
+	}
 
 }

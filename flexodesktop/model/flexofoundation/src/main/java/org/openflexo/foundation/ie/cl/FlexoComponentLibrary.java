@@ -67,7 +67,6 @@ import org.openflexo.foundation.xml.FlexoComponentLibraryBuilder;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.xmlcode.XMLMapping;
 
-
 /**
  * A FlexoComponentLibrary is an object referencing all components used in the project
  * 
@@ -568,9 +567,11 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 	}
 
 	/**
-	 * Validates this object by appending eventual issues to supplied ValidationReport. Default validation model is used to perform this validation.
+	 * Validates this object by appending eventual issues to supplied ValidationReport. Default validation model is used to perform this
+	 * validation.
 	 * 
-	 * @param report, a ValidationReport object on which found issues are appened
+	 * @param report
+	 *            , a ValidationReport object on which found issues are appened
 	 */
 	@Override
 	public void validate(ValidationReport report) {
@@ -578,9 +579,11 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 	}
 
 	/**
-	 * Validates this object by appending eventual issues to supplied ValidationReport. Supplied validation model is used to perform this validation.
+	 * Validates this object by appending eventual issues to supplied ValidationReport. Supplied validation model is used to perform this
+	 * validation.
 	 * 
-	 * @param report, a ValidationReport object on which found issues are appened
+	 * @param report
+	 *            , a ValidationReport object on which found issues are appened
 	 */
 	@Override
 	public void validate(ValidationReport report, ValidationModel validationModel) {

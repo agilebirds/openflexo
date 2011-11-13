@@ -27,55 +27,45 @@ import org.openflexo.dm.view.controller.DMController;
 import org.openflexo.view.menu.FlexoMenuItem;
 import org.openflexo.view.menu.ToolsMenu;
 
+public class DMToolsMenu extends ToolsMenu {
 
-public class DMToolsMenu extends ToolsMenu
-{
+	public CheckDataModelConsistencyItem checkDataModelItem;
 
-    public CheckDataModelConsistencyItem checkDataModelItem;
+	protected DMController _controller;
 
-    protected DMController _controller;
+	public DMToolsMenu(DMController controller) {
+		super(controller);
+		_controller = controller;
 
-    public DMToolsMenu(DMController controller)
-    {
-        super(controller);
-        _controller = controller;
- 
-    }
+	}
 
-    public DMController getDMController()
-    {
-        return _controller;
-    }
+	public DMController getDMController() {
+		return _controller;
+	}
 
-    @Override
-	public void addSpecificItems()
-    {
-        add(checkDataModelItem = new CheckDataModelConsistencyItem());
-        addSeparator();
-    }
-    
-    public class CheckDataModelConsistencyItem extends FlexoMenuItem
-    {
+	@Override
+	public void addSpecificItems() {
+		add(checkDataModelItem = new CheckDataModelConsistencyItem());
+		addSeparator();
+	}
 
-        public CheckDataModelConsistencyItem()
-        {
-            super(new CheckDMConsistencyAction(), "check_datamodel_consistency", null, getDMController(), true);
-        }
+	public class CheckDataModelConsistencyItem extends FlexoMenuItem {
 
-    }
+		public CheckDataModelConsistencyItem() {
+			super(new CheckDMConsistencyAction(), "check_datamodel_consistency", null, getDMController(), true);
+		}
 
-    public class CheckDMConsistencyAction extends AbstractAction
-    {
-        public CheckDMConsistencyAction()
-        {
-            super();
-        }
+	}
 
-        @Override
-		public void actionPerformed(ActionEvent event)
-        {
-            getDMController().consistencyCheck(getDMController().getDataModel());
-        }
+	public class CheckDMConsistencyAction extends AbstractAction {
+		public CheckDMConsistencyAction() {
+			super();
+		}
 
-    }
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			getDMController().consistencyCheck(getDMController().getDataModel());
+		}
+
+	}
 }

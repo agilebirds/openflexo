@@ -33,11 +33,10 @@ public class DropDownParameter extends EditionSchemeParameter {
 	public WidgetType getWidget() {
 		return WidgetType.DROPDOWN;
 	}
-	
-	public Vector<String> getValueList()
-	{
+
+	public Vector<String> getValueList() {
 		return null;
 	}
-	
+
 	public String values;
 }

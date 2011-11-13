@@ -22,8 +22,9 @@ import org.openflexo.logging.FlexoLogger;
 
 /**
  * This class allows to check the consistency of a project.
+ * 
  * @author gpolet
- *
+ * 
  */
 public class FlexoConsistencyCheckerMain extends FlexoExternalMainWithProject {
 
@@ -54,7 +55,7 @@ public class FlexoConsistencyCheckerMain extends FlexoExternalMainWithProject {
 	@Override
 	protected void run() throws FlexoRunException {
 		CodeType target = CodeType.get(codeType);
-		if (target==null) {
+		if (target == null) {
 			target = CodeType.PROTOTYPE;
 		}
 		ValidationReport[] reports = checkConsistency(projectDirectory, target);
@@ -62,27 +63,27 @@ public class FlexoConsistencyCheckerMain extends FlexoExternalMainWithProject {
 		for (int i = 0; i < reports.length; i++) {
 			ValidationReport report = reports[i];
 			for (ValidationError error : report.getErrors()) {
-				addError(error,sb);
+				addError(error, sb);
 			}
 		}
-		if (sb.length()>0) {
+		if (sb.length() > 0) {
 			reportMessage(sb.toString());
 			setExitCode(CONSISTENCY_FAILED_RETURN_CODE);
 		}
 	}
 
-	private void printTOCRepositories(FlexoEditor editor) throws ProjectInitializerException{
-		if(editor.getProject().getTOCData()!=null) {
+	private void printTOCRepositories(FlexoEditor editor) throws ProjectInitializerException {
+		if (editor.getProject().getTOCData() != null) {
 			TOCData tocData = editor.getProject().getTOCData();
-			if (tocData.getRepositories().size()>0) {
+			if (tocData.getRepositories().size() > 0) {
 				StringBuffer buffer = new StringBuffer("");
 				Enumeration<TOCRepository> en = tocData.getRepositories().elements();
-				while(en.hasMoreElements()){
+				while (en.hasMoreElements()) {
 					TOCRepository rep = en.nextElement();
 					buffer.append(rep.getTitle()).append(";");
 					buffer.append(rep.getUserIdentifier()).append(";");
 					buffer.append(rep.getFlexoID());
-					if(en.hasMoreElements()) {
+					if (en.hasMoreElements()) {
 						buffer.append(";");
 					}
 				}
@@ -94,10 +95,10 @@ public class FlexoConsistencyCheckerMain extends FlexoExternalMainWithProject {
 	}
 
 	private void addError(ValidationError error, StringBuilder sb) {
-		if (sb.length()==0) {
+		if (sb.length() == 0) {
 			sb.append("The following issues have been found within your project:\n");
 		}
-		if (error.getCause()!=null) {
+		if (error.getCause() != null) {
 			sb.append("* ").append(error.getCause().getLocalizedName()).append(": ").append(error.getLocalizedMessage()).append("\n");
 		} else {
 			sb.append("* ").append(error.getLocalizedMessage()).append("\n");
@@ -111,14 +112,16 @@ public class FlexoConsistencyCheckerMain extends FlexoExternalMainWithProject {
 
 	/**
 	 * This method checks the consistency for the project located within <code>projectDirectory</code> for the specified <code>target</code>
-	 * @param projectDirectory the directory containing the project (the .rmxml file)
-	 * @param target the target to check against
+	 * 
+	 * @param projectDirectory
+	 *            the directory containing the project (the .rmxml file)
+	 * @param target
+	 *            the target to check against
 	 * @return true if the consistency checks pass for the specified target.
 	 * @throws CorruptedProjectException
 	 * @throws ProjectLoadingCancelledException
 	 */
-	private ValidationReport[] checkConsistency(File projectDirectory, CodeType target) throws CorruptedProjectException
-	{
+	private ValidationReport[] checkConsistency(File projectDirectory, CodeType target) throws CorruptedProjectException {
 		long start = System.currentTimeMillis();
 		try {
 			editor.getProject().setTargetType(target);
@@ -127,18 +130,20 @@ public class FlexoConsistencyCheckerMain extends FlexoExternalMainWithProject {
 			ValidationReport datamodelReport = editor.getProject().getDataModel().validate();
 			ValidationReport dkvReport = editor.getProject().getDKVModel().validate();
 			long end = System.currentTimeMillis();
-			boolean success = componentLibraryReport.getErrorNb()+workflowReport.getErrorNb()+datamodelReport.getErrorNb()+dkvReport.getErrorNb() == 0;
+			boolean success = componentLibraryReport.getErrorNb() + workflowReport.getErrorNb() + datamodelReport.getErrorNb()
+					+ dkvReport.getErrorNb() == 0;
 			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Consistency checking took "+(end-start)/1000+" seconds for project located at: "+projectDirectory.getAbsolutePath()+"\nResult: "+(success?"Success":"Failure"));
+				logger.info("Consistency checking took " + (end - start) / 1000 + " seconds for project located at: "
+						+ projectDirectory.getAbsolutePath() + "\nResult: " + (success ? "Success" : "Failure"));
 			}
 			printTOCRepositories(editor);
-			return new ValidationReport[]{workflowReport,componentLibraryReport,datamodelReport,dkvReport};
+			return new ValidationReport[] { workflowReport, componentLibraryReport, datamodelReport, dkvReport };
 		} catch (ProjectInitializerException e) {
 			e.printStackTrace();
 			setExitCode(CORRUPTED_PROJECT_EXCEPTION);
 			throw new CorruptedProjectException(e);
 		} finally {
-			if (editor!=null) {
+			if (editor != null) {
 				editor.getProject().close();
 			}
 		}

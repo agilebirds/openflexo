@@ -32,62 +32,55 @@ import org.openflexo.foundation.ie.widget.IETDWidget;
 import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.logging.FlexoLogger;
 
-public class InsertColBefore extends FlexoAction
-{
-    private static final Logger logger = FlexoLogger.getLogger(InsertColBefore.class.getPackage().getName());
+public class InsertColBefore extends FlexoAction {
+	private static final Logger logger = FlexoLogger.getLogger(InsertColBefore.class.getPackage().getName());
 
-    public static FlexoActionType actionType = new FlexoActionType("insert_col_before", FlexoActionType.defaultGroup,
-            FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType actionType = new FlexoActionType("insert_col_before", FlexoActionType.defaultGroup,
+			FlexoActionType.ADD_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-        {
-            return new InsertColBefore(focusedObject, globalSelection,editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new InsertColBefore(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection)
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection)
-        {
-            return ((object != null) && ((object instanceof IETDWidget) || ((object instanceof IESequenceWidget) && ((IESequenceWidget) object)
-                    .isInTD())));
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return ((object != null) && ((object instanceof IETDWidget) || ((object instanceof IESequenceWidget) && ((IESequenceWidget) object)
+					.isInTD())));
+		}
 
-    };
+	};
 
-    InsertColBefore(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	InsertColBefore(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    @Override
-	protected void doAction(Object context)
-    {
-        if ((getFocusedTD() != null) && (getFocusedTD().htmlTable() != null)) {
-            if (logger.isLoggable(Level.INFO)) {
-				logger.info("Inserting new col "+getFocusedTD().getXLocation());
+	@Override
+	protected void doAction(Object context) {
+		if ((getFocusedTD() != null) && (getFocusedTD().htmlTable() != null)) {
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Inserting new col " + getFocusedTD().getXLocation());
 			}
-            getFocusedTD().htmlTable().insertCol(getFocusedTD().getXLocation());
-        }
-    }
+			getFocusedTD().htmlTable().insertCol(getFocusedTD().getXLocation());
+		}
+	}
 
-    private IETDWidget getFocusedTD()
-    {
-        IEWidget temp = (IEWidget) getFocusedObject();
-        while (temp != null) {
-            if (temp instanceof IETDWidget) {
+	private IETDWidget getFocusedTD() {
+		IEWidget temp = (IEWidget) getFocusedObject();
+		while (temp != null) {
+			if (temp instanceof IETDWidget) {
 				return (IETDWidget) temp;
 			}
-            temp = (IEWidget) temp.getParent();
-        }
-        return null;
-    }
+			temp = (IEWidget) temp.getParent();
+		}
+		return null;
+	}
 }

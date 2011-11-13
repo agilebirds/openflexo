@@ -22,27 +22,25 @@ package org.netbeans.lib.cvsclient.request;
 import java.io.File;
 
 /**
- * Represents <tt>Is-modified  filename \n</tt> request.
- * It's faster alternative to Modified but must be used with
- * care see protocol specs.
- *
+ * Represents <tt>Is-modified  filename \n</tt> request. It's faster alternative to Modified but must be used with care see protocol specs.
+ * 
  * @author Petr Kuzel
  */
 public final class IsModifiedRequest extends Request {
 
-    private final String fileName;
+	private final String fileName;
 
-    public IsModifiedRequest(File file) {
-        fileName = file.getName();
-    }
+	public IsModifiedRequest(File file) {
+		fileName = file.getName();
+	}
 
-    @Override
+	@Override
 	public String getRequestString() {
-        return "Is-modified " + fileName + "\n";  // NOI18N
-    }
+		return "Is-modified " + fileName + "\n"; // NOI18N
+	}
 
-    @Override
+	@Override
 	public boolean isResponseExpected() {
-        return false;
-    }
+		return false;
+	}
 }

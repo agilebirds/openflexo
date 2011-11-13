@@ -6,33 +6,29 @@ import org.openflexo.foundation.ontology.OntologyObjectProperty;
 public class DataPropertyPatternRole extends PropertyPatternRole {
 
 	@Override
-	public PatternRoleType getType()
-	{
+	public PatternRoleType getType() {
 		return PatternRoleType.DataProperty;
 	}
 
 	@Override
-	public  String getPreciseType()
-	{
-		if (type != null) return type.getName();
+	public String getPreciseType() {
+		if (type != null)
+			return type.getName();
 		return "";
 	}
-	
+
 	@Override
-	public Class<?> getAccessedClass()
-	{
+	public Class<?> getAccessedClass() {
 		return OntologyObjectProperty.class;
 	}
 
 	private OntologyDataProperty type;
-	
-	public OntologyDataProperty getOntologicType()
-	{
+
+	public OntologyDataProperty getOntologicType() {
 		return type;
 	}
-	
-	public void setOntologicType(OntologyDataProperty ontologyProperty)
-	{
+
+	public void setOntologicType(OntologyDataProperty ontologyProperty) {
 		type = ontologyProperty;
 	}
 

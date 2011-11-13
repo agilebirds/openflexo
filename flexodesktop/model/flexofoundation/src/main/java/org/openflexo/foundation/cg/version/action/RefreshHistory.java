@@ -34,66 +34,56 @@ import org.openflexo.foundation.cg.action.AbstractGCAction;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.cg.AbstractGeneratedFile;
 
+public class RefreshHistory extends AbstractGCAction<RefreshHistory, CGObject> {
 
-public class RefreshHistory extends AbstractGCAction<RefreshHistory,CGObject>
-{
+	private static final Logger logger = Logger.getLogger(RefreshHistory.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(RefreshHistory.class.getPackage().getName());
+	public static FlexoActionType<RefreshHistory, CGObject, CGObject> actionType = new FlexoActionType<RefreshHistory, CGObject, CGObject>(
+			"refresh_history", versionningMenu, versionningCleanGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-    public static FlexoActionType<RefreshHistory,CGObject,CGObject> actionType
-    = new FlexoActionType<RefreshHistory,CGObject,CGObject> (
-    		"refresh_history",
-    		versionningMenu,
-    		versionningCleanGroup,
-    		FlexoActionType.NORMAL_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public RefreshHistory makeNewAction(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return new RefreshHistory(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public RefreshHistory makeNewAction(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) 
-        {
-            return new RefreshHistory(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) {
+			Vector<CGObject> topLevelObjects = getSelectedTopLevelObjects(focusedObject, globalSelection);
+			for (CGObject obj : topLevelObjects) {
+				if (obj instanceof GeneratedOutput)
+					return false;
+			}
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) 
-        {
-             Vector<CGObject> topLevelObjects = getSelectedTopLevelObjects(focusedObject, globalSelection);
-            for (CGObject obj : topLevelObjects) {
-            	if (obj instanceof GeneratedOutput) return false;
-             }
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) {
+			GenerationRepository repository = getRepository(focusedObject, globalSelection);
+			if (repository == null)
+				return false;
+			return repository.getManageHistory();
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) 
-        {
-         	GenerationRepository repository = getRepository(focusedObject, globalSelection);
-        	if (repository == null) return false;
-            return repository.getManageHistory() ;
-        }
-        
-     };
-    
-    static {
-        FlexoModelObject.addActionForClass (RefreshHistory.actionType, CGObject.class);
-     }
-    
+	};
 
-    RefreshHistory (CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	static {
+		FlexoModelObject.addActionForClass(RefreshHistory.actionType, CGObject.class);
+	}
+
+	RefreshHistory(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
 	@Override
-	protected void doAction(Object context) throws SaveResourceException, FlexoException 
-	{
-		logger.info ("Refresh history");
+	protected void doAction(Object context) throws SaveResourceException, FlexoException {
+		logger.info("Refresh history");
 		for (CGFile file : getSelectedFiles()) {
-			logger.info ("Clean for file "+file.getFileName());
-            if (file.getGeneratedResourceData() instanceof AbstractGeneratedFile)
-                ((AbstractGeneratedFile)file.getGeneratedResourceData()).getHistory().refresh();
+			logger.info("Clean for file " + file.getFileName());
+			if (file.getGeneratedResourceData() instanceof AbstractGeneratedFile)
+				((AbstractGeneratedFile) file.getGeneratedResourceData()).getHistory().refresh();
 		}
 	}
 

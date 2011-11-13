@@ -27,41 +27,40 @@ import org.openflexo.foundation.ie.widget.IEBIRTWidget;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.utils.FlexoCSS;
 
-
 public class FlexoIEBIRTPalette extends FlexoIEPalette<FlexoIEBIRTPalette.FlexoIEBIRTWidget> {
 
 	public FlexoIEBIRTPalette(FlexoProject project) {
 		super(project);
 	}
-	
+
 	@Override
 	public boolean resizeScreenshots() {
 		return true;
 	}
-	
+
 	@Override
 	protected void loadWidgets() {
 		for (GraphType type : GraphType.values()) {
 			Properties props = new Properties();
-			props.put(PaletteAttribute.XML.getAttributeTag(), "<IEBIRTWidget type=\"" +type.name()+"\"/>");
+			props.put(PaletteAttribute.XML.getAttributeTag(), "<IEBIRTWidget type=\"" + type.name() + "\"/>");
 			props.put(PaletteAttribute.TARGET_CLASS_MODEL.getAttributeTag(), IEBIRTWidget.class.getName());
-			getWidgets().add(new FlexoIEBIRTWidget(type,props));
+			getWidgets().add(new FlexoIEBIRTWidget(type, props));
 		}
 	}
-	
+
 	public class FlexoIEBIRTWidget extends FlexoIEPalette<FlexoIEBIRTWidget>.FlexoIEPaletteWidget {
 
 		private GraphType type;
-		
+
 		public FlexoIEBIRTWidget(GraphType type, Properties props) {
 			super(type.name(), props);
 			this.type = type;
 		}
-		
+
 		@Override
 		public File getScreenshotFile(FlexoCSS css) {
 			return type.getFileResource();
 		}
-		
+
 	}
 }

@@ -41,59 +41,50 @@ public class MoveProcessFolderInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	MoveProcessFolderInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(MoveProcessFolder.actionType,actionInitializer);
+	MoveProcessFolderInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(MoveProcessFolder.actionType, actionInitializer);
 	}
 
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer()
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<MoveProcessFolder> getDefaultInitializer()
-	{
+	protected FlexoActionInitializer<MoveProcessFolder> getDefaultInitializer() {
 		return new FlexoActionInitializer<MoveProcessFolder>() {
-            @Override
-			public boolean run(ActionEvent e, MoveProcessFolder action)
-            {
-                return/* FlexoController.confirm(FlexoLocalization.localizedForKey("are_you_sure_you_want_to_move_all_contained_processes?"));*/ true;
-            }
-        };
-	}
-
-     @Override
-	protected FlexoActionFinalizer<MoveProcessFolder> getDefaultFinalizer()
-	{
-		return new FlexoActionFinalizer<MoveProcessFolder>() {
-            @Override
-			public boolean run(ActionEvent e, MoveProcessFolder action)
-            {
-				return true;
-          }
-        };
-	}
-
-     @Override
- 	protected FlexoExceptionHandler<MoveProcessFolder> getDefaultExceptionHandler()
- 	{
- 		return new FlexoExceptionHandler<MoveProcessFolder>() {
- 			@Override
-			public boolean handleException(FlexoException exception, MoveProcessFolder action) {
- 				if (exception instanceof InvalidParentProcessException) {
- 					FlexoController.notify(FlexoLocalization.localizedForKey("invalid_parent"));
- 				}
-                return false;
+			@Override
+			public boolean run(ActionEvent e, MoveProcessFolder action) {
+				return /* FlexoController.confirm(FlexoLocalization.localizedForKey("are_you_sure_you_want_to_move_all_contained_processes?"));*/true;
 			}
-        };
- 	}
-
+		};
+	}
 
 	@Override
-	protected Icon getEnabledIcon()
-	{
+	protected FlexoActionFinalizer<MoveProcessFolder> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<MoveProcessFolder>() {
+			@Override
+			public boolean run(ActionEvent e, MoveProcessFolder action) {
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected FlexoExceptionHandler<MoveProcessFolder> getDefaultExceptionHandler() {
+		return new FlexoExceptionHandler<MoveProcessFolder>() {
+			@Override
+			public boolean handleException(FlexoException exception, MoveProcessFolder action) {
+				if (exception instanceof InvalidParentProcessException) {
+					FlexoController.notify(FlexoLocalization.localizedForKey("invalid_parent"));
+				}
+				return false;
+			}
+		};
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
 		return WKFIconLibrary.PROCESS_FOLDER_ICON;
 	}
 

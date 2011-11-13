@@ -19,7 +19,6 @@
  */
 package org.openflexo.wkf.processeditor.gr;
 
-
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
@@ -40,47 +39,41 @@ import org.openflexo.foundation.wkf.node.LOOPOperator;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
-
 public class OperatorLOOPGR extends OperatorGR<LOOPOperator> {
 
 	static final Logger logger = Logger.getLogger(OperatorLOOPGR.class.getPackage().getName());
 
-	public OperatorLOOPGR(LOOPOperator operatorNode, ProcessRepresentation aDrawing, boolean isInPalet) 
-	{
+	public OperatorLOOPGR(LOOPOperator operatorNode, ProcessRepresentation aDrawing, boolean isInPalet) {
 		super(operatorNode, aDrawing, isInPalet);
-		addToMouseClickControls(new LoopedPetriGraphOpener(),true);
+		addToMouseClickControls(new LoopedPetriGraphOpener(), true);
 		if (getDrawable().hasExecutionPetriGraph())
 			getDrawable().getExecutionPetriGraph().addObserver(this);
 	}
-	
+
 	@Override
 	public void delete() {
 		if (getDrawable().hasExecutionPetriGraph())
 			getDrawable().getExecutionPetriGraph().deleteObserver(this);
 		super.delete();
 	}
-	
+
 	@Override
-	public ImageIcon getImageIcon()
-	{
+	public ImageIcon getImageIcon() {
 		return WKFIconLibrary.LOOP_OPERATOR_ICON;
 	}
-	
+
 	public class LoopedPetriGraphOpener extends MouseClickControl {
 
-		public LoopedPetriGraphOpener()
-		{
-			super("LoopedPetriGraphOpener", MouseButton.LEFT, 2,
-					new CustomClickControlAction() {
+		public LoopedPetriGraphOpener() {
+			super("LoopedPetriGraphOpener", MouseButton.LEFT, 2, new CustomClickControlAction() {
 				@Override
-				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, java.awt.event.MouseEvent event)
-				{
+				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+						java.awt.event.MouseEvent event) {
 					logger.info("Opening Execution petri graph by double-clicking");
-                    OpenLoopedPetriGraph.actionType.makeNewAction(getOperatorNode(),null,getDrawing().getEditor()).doAction();
+					OpenLoopedPetriGraph.actionType.makeNewAction(getOperatorNode(), null, getDrawing().getEditor()).doAction();
 					return true;
 				}
-			},
-			false,false,false,false);
+			}, false, false, false, false);
 		}
 
 	}

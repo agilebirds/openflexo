@@ -35,11 +35,11 @@ import org.openflexo.generator.utils.BuildPropertiesGenerator;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileFormat;
 
-
-public class BuildPropertiesResource extends TextFileResource<BuildPropertiesGenerator, CGTextFile> implements GenerationAvailableFileResource{
+public class BuildPropertiesResource extends TextFileResource<BuildPropertiesGenerator, CGTextFile> implements
+		GenerationAvailableFileResource {
 
 	private static final Logger logger = FlexoLogger.getLogger(BuildPropertiesResource.class.getPackage().getName());
-	
+
 	public BuildPropertiesResource(FlexoProject project) {
 		super(project);
 		setResourceFormat(FileFormat.TEXT);
@@ -50,63 +50,59 @@ public class BuildPropertiesResource extends TextFileResource<BuildPropertiesGen
 	}
 
 	@Override
-    public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate)
-	{
+	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate) {
 		if (resource instanceof TemplateLocator) {
-			return ((TemplateLocator)resource).needsUpdateForResource(this);
+			return ((TemplateLocator) resource).needsUpdateForResource(this);
 		}
 		if (resource instanceof GeneratedCodeResource) {
-            GeneratedCodeResource res = (GeneratedCodeResource) resource;
-            if (res.isLoaded() && (getRepository() != null)) {
-                if (getRepository().getLastWarNameUpdate().before(requestDate)
-                        || getRepository().getLastWarNameUpdate().equals(requestDate)) {
-                    if (logger.isLoggable(Level.FINER)) {
+			GeneratedCodeResource res = (GeneratedCodeResource) resource;
+			if (res.isLoaded() && (getRepository() != null)) {
+				if (getRepository().getLastWarNameUpdate().before(requestDate)
+						|| getRepository().getLastWarNameUpdate().equals(requestDate)) {
+					if (logger.isLoggable(Level.FINER)) {
 						logger.finer("OPTIMIST DEPENDANCY CHECKING FOR BUILD.PROPERTIES");
 					}
-                    return false;
-                }
-            }
-        }
+					return false;
+				}
+			}
+		}
 
 		return super.optimisticallyDependsOf(resource, requestDate);
 	}
 
 	@Override
-    public BuildPropertiesFile getGeneratedResourceData()
-    {
-    	return (BuildPropertiesFile)super.getGeneratedResourceData();
-    }
+	public BuildPropertiesFile getGeneratedResourceData() {
+		return (BuildPropertiesFile) super.getGeneratedResourceData();
+	}
+
 	@Override
-    protected BuildPropertiesFile createGeneratedResourceData()
-    {
-        return new BuildPropertiesFile(getFile(),this);
-    }
+	protected BuildPropertiesFile createGeneratedResourceData() {
+		return new BuildPropertiesFile(getFile(), this);
+	}
 
 	/**
 	 * Overrides getRepository
+	 * 
 	 * @see org.openflexo.foundation.rm.cg.CGRepositoryFileResource#getRepository()
 	 */
 	@Override
-	public CGRepository getRepository()
-	{
-	    return (CGRepository) super.getRepository();
+	public CGRepository getRepository() {
+		return (CGRepository) super.getRepository();
 	}
 
 	@Override
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
-		if(getRepository()!=null) {
+		if (getRepository() != null) {
 			addToDependantResources(getRepository().getGeneratedCode().getFlexoResource());
 		}
 	}
 
-    public void registerObserverWhenRequired()
-    {
-    }
-    static String getDefaultFileName()
-    {
-        return "build.properties";
-    }
+	public void registerObserverWhenRequired() {
+	}
 
+	static String getDefaultFileName() {
+		return "build.properties";
+	}
 
 }

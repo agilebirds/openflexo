@@ -43,82 +43,74 @@ import org.openflexo.generator.ie.ComponentGenerator;
 import org.openflexo.generator.rm.GenerationAvailableFileResource;
 import org.openflexo.logging.FlexoLogger;
 
-
 /**
  * @author sylvain
- *
+ * 
  */
-public abstract class ComponentJavaFileResource<G extends FlexoComponentResourceGenerator> extends JavaFileResource<G, CGJavaFile> implements GenerationAvailableFileResource, ComponentFileResource, FlexoObserver
-{
-    protected static final Logger logger = FlexoLogger.getLogger(ComponentJavaFileResource.class.getPackage().getName());
-    private boolean isObserverRegistered = false;
+public abstract class ComponentJavaFileResource<G extends FlexoComponentResourceGenerator> extends JavaFileResource<G, CGJavaFile>
+		implements GenerationAvailableFileResource, ComponentFileResource, FlexoObserver {
+	protected static final Logger logger = FlexoLogger.getLogger(ComponentJavaFileResource.class.getPackage().getName());
+	private boolean isObserverRegistered = false;
 
-    /**
-     * @param builder
-     */
-    public ComponentJavaFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
+	/**
+	 * @param builder
+	 */
+	public ComponentJavaFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
-    /**
-     * @param aProject
-     */
-    public ComponentJavaFileResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
-
-    @Override
-	protected ComponentJavaFile createGeneratedResourceData()
-    {
-        return new ComponentJavaFile(getFile(),this);
-    }
-
-    @Override
-	public ComponentJavaFile getGeneratedResourceData()
-    {
-    	return (ComponentJavaFile)super.getGeneratedResourceData();
-    }
+	/**
+	 * @param aProject
+	 */
+	public ComponentJavaFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
 	@Override
-	public ComponentDefinition getComponentDefinition()
-	{
+	protected ComponentJavaFile createGeneratedResourceData() {
+		return new ComponentJavaFile(getFile(), this);
+	}
+
+	@Override
+	public ComponentJavaFile getGeneratedResourceData() {
+		return (ComponentJavaFile) super.getGeneratedResourceData();
+	}
+
+	@Override
+	public ComponentDefinition getComponentDefinition() {
 		if (getGenerator() != null)
 			return getGenerator().getComponentDefinition();
 		return null;
 	}
 
-    @Override
-	public void registerObserverWhenRequired()
-    {
-    	if ((!isObserverRegistered) && (getComponentDefinition() != null)) {
-    		isObserverRegistered = true;
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("*** addObserver "+getFileName()+" for "+getComponentDefinition());
-    		getComponentDefinition().addObserver(this);
-    	}
-    }
-
-    /**
-     * Return dependancy computing between this resource, and an other resource,
-     * asserting that this resource is contained in this resource's dependant resources
-     *
-     * @param resource
-     * @param dependancyScheme
-     * @return
-     */
 	@Override
-	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate)
-	{
-		if (resource instanceof TemplateLocator) {
-			return ((TemplateLocator)resource).needsUpdateForResource(this);
+	public void registerObserverWhenRequired() {
+		if ((!isObserverRegistered) && (getComponentDefinition() != null)) {
+			isObserverRegistered = true;
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("*** addObserver " + getFileName() + " for " + getComponentDefinition());
+			getComponentDefinition().addObserver(this);
 		}
-		else if (resource instanceof FlexoDMResource) {
-			FlexoDMResource dmRes = (FlexoDMResource)resource;
+	}
+
+	/**
+	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this
+	 * resource's dependant resources
+	 * 
+	 * @param resource
+	 * @param dependancyScheme
+	 * @return
+	 */
+	@Override
+	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate) {
+		if (resource instanceof TemplateLocator) {
+			return ((TemplateLocator) resource).needsUpdateForResource(this);
+		} else if (resource instanceof FlexoDMResource) {
+			FlexoDMResource dmRes = (FlexoDMResource) resource;
 			if (dmRes.isLoaded() && getComponentDefinition() != null && getComponentDefinition().getComponentDMEntity() != null) {
 				if (!requestDate.before(getComponentDefinition().getComponentDMEntity().getLastUpdate())) {
-					if (logger.isLoggable(Level.FINER)) logger.finer("OPTIMIST DEPENDANCY CHECKING for JAVA COMPONENT "+getComponentDefinition().getName());
+					if (logger.isLoggable(Level.FINER))
+						logger.finer("OPTIMIST DEPENDANCY CHECKING for JAVA COMPONENT " + getComponentDefinition().getName());
 					return false;
 				}
 			}
@@ -126,44 +118,42 @@ public abstract class ComponentJavaFileResource<G extends FlexoComponentResource
 		return super.optimisticallyDependsOf(resource, requestDate);
 	}
 
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-	public void rebuildDependancies()
-    {
-        super.rebuildDependancies();
+	/**
+	 * Rebuild resource dependancies for this resource
+	 */
+	@Override
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
 
-        if (getComponentDefinition() != null) {
+		if (getComponentDefinition() != null) {
 
-        	addToDependantResources(getProject().getFlexoDMResource());
-        	addToDependantResources(getComponentDefinition().getComponentResource());
+			addToDependantResources(getProject().getFlexoDMResource());
+			addToDependantResources(getComponentDefinition().getComponentResource());
 
-        	if (getComponentDefinition().getWOComponent() != null) {
-        		for (Enumeration en = getComponentDefinition().getWOComponent().getAllComponentInstances().elements(); en.hasMoreElements();) {
-        			ComponentInstance ci = (ComponentInstance) en.nextElement();
-        			if (ci.getComponentDefinition() != null) {
-        				if (logger.isLoggable(Level.FINE))
-        					logger.fine("Found dependancy between " + this + " and " + ci.getComponentDefinition().getComponentResource());
-        				addToDependantResources(ci.getComponentDefinition().getComponentResource());
-        			} else {
-        				if (logger.isLoggable(Level.WARNING))
-        					logger.warning("Inconsistant data: ComponentInstance refers to an unknown ComponentDefinition "
-        							+ ci.getComponentName());
-        			}
-        		}
-        	}
+			if (getComponentDefinition().getWOComponent() != null) {
+				for (Enumeration en = getComponentDefinition().getWOComponent().getAllComponentInstances().elements(); en.hasMoreElements();) {
+					ComponentInstance ci = (ComponentInstance) en.nextElement();
+					if (ci.getComponentDefinition() != null) {
+						if (logger.isLoggable(Level.FINE))
+							logger.fine("Found dependancy between " + this + " and " + ci.getComponentDefinition().getComponentResource());
+						addToDependantResources(ci.getComponentDefinition().getComponentResource());
+					} else {
+						if (logger.isLoggable(Level.WARNING))
+							logger.warning("Inconsistant data: ComponentInstance refers to an unknown ComponentDefinition "
+									+ ci.getComponentName());
+					}
+				}
+			}
 
-        }
-    }
+		}
+	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getComponentDefinition()) {
 			if (dataModification instanceof ComponentNameChanged2) {
 				logger.info("Building new resource after renaming");
-				ComponentGenerator generator = (ComponentGenerator)getGenerator();
+				ComponentGenerator generator = (ComponentGenerator) getGenerator();
 				setGenerator(null);
 				getCGFile().setMarkedForDeletion(true);
 				generator.refreshConcernedResources();
@@ -171,8 +161,7 @@ public abstract class ComponentJavaFileResource<G extends FlexoComponentResource
 				generator.getRepository().refresh();
 				observable.deleteObserver(this);
 				isObserverRegistered = false;
-			}
-			else if (dataModification instanceof ComponentDeleted) {
+			} else if (dataModification instanceof ComponentDeleted) {
 				logger.info("Handle component has been deleted");
 				setGenerator(null);
 				getCGFile().setMarkedForDeletion(true);

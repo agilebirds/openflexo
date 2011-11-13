@@ -19,8 +19,6 @@
  */
 package org.openflexo.components.browser.ontology;
 
-
-
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
@@ -31,34 +29,30 @@ import org.openflexo.toolbox.StringUtils;
 
 /**
  * Browser element representing the ontology library
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class OEConnectorElement extends BrowserElement
-{
+public class OEConnectorElement extends BrowserElement {
 
-	protected OEConnectorElement(ViewConnector connector, ProjectBrowser browser, BrowserElement parent)
-	{
+	protected OEConnectorElement(ViewConnector connector, ProjectBrowser browser, BrowserElement parent) {
 		super(connector, BrowserElementType.OE_CONNECTOR, browser, parent);
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
+	protected void buildChildrenVector() {
 		for (ViewObject o : getConnector().getChilds()) {
 			addToChilds(o);
 		}
 	}
 
 	@Override
-	public String getName()
-	{
-		return StringUtils.isEmpty(getConnector().getName()) ? "<"+FlexoLocalization.localizedForKey("connector")+">" : getConnector().getName();
+	public String getName() {
+		return StringUtils.isEmpty(getConnector().getName()) ? "<" + FlexoLocalization.localizedForKey("connector") + ">" : getConnector()
+				.getName();
 	}
 
-	protected ViewConnector getConnector()
-	{
+	protected ViewConnector getConnector() {
 		return (ViewConnector) getObject();
 	}
 

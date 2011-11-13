@@ -28,101 +28,85 @@ import org.openflexo.foundation.dkv.Domain;
 import org.openflexo.foundation.dkv.Key;
 import org.openflexo.foundation.rm.FlexoProject;
 
-
 /**
  * Widget allowing to select a Key given a Domain browsing DKV model
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class KeySelector extends AbstractBrowserSelector<Key>
-{
+public class KeySelector extends AbstractBrowserSelector<Key> {
 
-    protected static final String EMPTY_STRING = "";
-    protected String STRING_REPRESENTATION_WHEN_NULL = EMPTY_STRING;
+	protected static final String EMPTY_STRING = "";
+	protected String STRING_REPRESENTATION_WHEN_NULL = EMPTY_STRING;
 
-    public KeySelector(FlexoProject project, Key key)
-    {
-        super(project, key, Key.class);
-    }
+	public KeySelector(FlexoProject project, Key key) {
+		super(project, key, Key.class);
+	}
 
-    public KeySelector(FlexoProject project, Key key, int cols)
-    {
-        super(project, key, Key.class, cols);
-    }
+	public KeySelector(FlexoProject project, Key key, int cols) {
+		super(project, key, Key.class, cols);
+	}
 
-    DKVModel getDKVModel()
-    {
-        if (getProject() != null) {
-            return getProject().getDKVModel();
-        }
-        return null;
-    }
+	DKVModel getDKVModel() {
+		if (getProject() != null) {
+			return getProject().getDKVModel();
+		}
+		return null;
+	}
 
-    @Override
-	protected KeySelectorPanel makeCustomPanel(Key editedObject)
-    {
-        return new KeySelectorPanel();
-    }
+	@Override
+	protected KeySelectorPanel makeCustomPanel(Key editedObject) {
+		return new KeySelectorPanel();
+	}
 
-    @Override
-	public String renderedString(Key editedObject)
-    {
-        if (editedObject != null) {
-            return editedObject.getName();
-        }
-        return STRING_REPRESENTATION_WHEN_NULL;
-    }
+	@Override
+	public String renderedString(Key editedObject) {
+		if (editedObject != null) {
+			return editedObject.getName();
+		}
+		return STRING_REPRESENTATION_WHEN_NULL;
+	}
 
-    public void setDomain(Domain aDomain)
-    {
-    	setRootObject(aDomain);
-    }
+	public void setDomain(Domain aDomain) {
+		setRootObject(aDomain);
+	}
 
-    protected class KeySelectorPanel extends AbstractSelectorPanel<Key>
-    {
-        protected KeySelectorPanel()
-        {
-            super(KeySelector.this);
-        }
+	protected class KeySelectorPanel extends AbstractSelectorPanel<Key> {
+		protected KeySelectorPanel() {
+			super(KeySelector.this);
+		}
 
-        @Override
-		protected ProjectBrowser createBrowser(FlexoProject project)
-        {
-            return new KeyBrowser(/* project.getDataModel() */);
-        }
+		@Override
+		protected ProjectBrowser createBrowser(FlexoProject project) {
+			return new KeyBrowser(/* project.getDataModel() */);
+		}
 
-    }
+	}
 
-    protected class KeyBrowser extends ProjectBrowser
-    {
+	protected class KeyBrowser extends ProjectBrowser {
 
-         protected KeyBrowser()
-        {
-            super((getDKVModel()!=null?getDKVModel().getProject():null), false);
-            init();
-        }
+		protected KeyBrowser() {
+			super((getDKVModel() != null ? getDKVModel().getProject() : null), false);
+			init();
+		}
 
-        @Override
-		public void configure()
-        {
-            setFilterStatus(BrowserElementType.DKV_DOMAIN_LIST, BrowserFilterStatus.HIDE,true);
-            setFilterStatus(BrowserElementType.DKV_LANGUAGE_LIST, BrowserFilterStatus.HIDE);
-            setFilterStatus(BrowserElementType.DKV_KEY_LIST, BrowserFilterStatus.HIDE,true);
-            setFilterStatus(BrowserElementType.DKV_VALUE_LIST, BrowserFilterStatus.HIDE);
-            setFilterStatus(BrowserElementType.DKV_VALUE, BrowserFilterStatus.HIDE);
-        }
+		@Override
+		public void configure() {
+			setFilterStatus(BrowserElementType.DKV_DOMAIN_LIST, BrowserFilterStatus.HIDE, true);
+			setFilterStatus(BrowserElementType.DKV_LANGUAGE_LIST, BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.DKV_KEY_LIST, BrowserFilterStatus.HIDE, true);
+			setFilterStatus(BrowserElementType.DKV_VALUE_LIST, BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.DKV_VALUE, BrowserFilterStatus.HIDE);
+		}
 
-        @Override
-		public FlexoModelObject getDefaultRootObject()
-        {
-            return getDKVModel();
-        }
-    }
+		@Override
+		public FlexoModelObject getDefaultRootObject() {
+			return getDKVModel();
+		}
+	}
 
-    public void setNullStringRepresentation(String aString)
-    {
-        STRING_REPRESENTATION_WHEN_NULL = aString;
-    }
+	public void setNullStringRepresentation(String aString) {
+		STRING_REPRESENTATION_WHEN_NULL = aString;
+	}
 
 }

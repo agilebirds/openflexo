@@ -33,28 +33,22 @@ import org.openflexo.icon.FilesIconLibrary;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconMarker;
 
-
-public class FileIntermediateVersionElement extends DGBrowserElement
-{
-	public FileIntermediateVersionElement(CGFileIntermediateVersion fileIntermediateVersion, ProjectBrowser browser, BrowserElement parent)
-	{
-		super(fileIntermediateVersion, BrowserElementType.FILE_INTERMEDIATE_VERSION, browser,parent);
+public class FileIntermediateVersionElement extends DGBrowserElement {
+	public FileIntermediateVersionElement(CGFileIntermediateVersion fileIntermediateVersion, ProjectBrowser browser, BrowserElement parent) {
+		super(fileIntermediateVersion, BrowserElementType.FILE_INTERMEDIATE_VERSION, browser, parent);
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
+	protected void buildChildrenVector() {
 	}
 
 	@Override
-	public String getName()
-	{
-			return getIntermediateVersion().getStringRepresentation();
+	public String getName() {
+		return getIntermediateVersion().getStringRepresentation();
 	}
 
 	@Override
-	public ImageIcon getBaseIcon()
-	{
+	public ImageIcon getBaseIcon() {
 		ImageIcon returned = FilesIconLibrary.smallIconForFileFormat(getIntermediateVersion().getCGFile().getFileFormat());
 		if (returned == null) {
 			returned = super.getBaseIcon();
@@ -63,8 +57,7 @@ public class FileIntermediateVersionElement extends DGBrowserElement
 	}
 
 	@Override
-	public Icon getIcon()
-	{
+	public Icon getIcon() {
 		ImageIcon returned = getBaseIcon();
 		Vector<IconMarker> markers = new Vector<IconMarker>();
 		markers.add(CGIconLibrary.INTERMEDIATE_VERSION);
@@ -73,16 +66,13 @@ public class FileIntermediateVersionElement extends DGBrowserElement
 		return returned;
 	}
 
-	public CGFileIntermediateVersion getIntermediateVersion()
-	{
-		return (CGFileIntermediateVersion)getObject();
+	public CGFileIntermediateVersion getIntermediateVersion() {
+		return (CGFileIntermediateVersion) getObject();
 	}
 
-    @Override
-	protected BrowserElementType getFilteredElementType()
-    {
-        return BrowserElementType.FILE_RELEASE_VERSION;
-    }
-
+	@Override
+	protected BrowserElementType getFilteredElementType() {
+		return BrowserElementType.FILE_RELEASE_VERSION;
+	}
 
 }

@@ -26,57 +26,49 @@ import org.openflexo.fge.geomedit.Rectangle;
 import org.openflexo.fge.geomedit.construction.RectangleWithTwoPointsConstruction;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
 
-
-
 public class CreateRectangleFromPoints extends Edition {
-	
+
 	public CreateRectangleFromPoints(GeomEditController controller) {
-		super("Create rectangle from points",controller);
-		inputs.add(new ObtainPoint("Select first point",controller));
-		inputs.add(new ObtainPoint("Select second point",controller));
+		super("Create rectangle from points", controller);
+		inputs.add(new ObtainPoint("Select first point", controller));
+		inputs.add(new ObtainPoint("Select second point", controller));
 	}
-	
+
 	@Override
-	public void performEdition()
-	{
-		ObtainPoint p1 = (ObtainPoint)inputs.get(0);
-		ObtainPoint p2 = (ObtainPoint)inputs.get(1);
-		
-		addObject (new Rectangle(
-				getController().getDrawing().getModel(),
-				new RectangleWithTwoPointsConstruction(p1.getConstruction(),p2.getConstruction())));
+	public void performEdition() {
+		ObtainPoint p1 = (ObtainPoint) inputs.get(0);
+		ObtainPoint p2 = (ObtainPoint) inputs.get(1);
+
+		addObject(new Rectangle(getController().getDrawing().getModel(), new RectangleWithTwoPointsConstruction(p1.getConstruction(),
+				p2.getConstruction())));
 
 	}
-	
+
 	/*public void addObject(GeometricObject object)
 	{
 		getController().getDrawing().getModel().addToChilds(object);
 	}*/
-	
+
 	@Override
-	public void paintEdition(FGEDrawingGraphics graphics,FGEPoint lastMouseLocation)
-	{
+	public void paintEdition(FGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		if (currentStep == 0) {
 			// Nothing to draw
-		}
-		else if (currentStep == 1) {
+		} else if (currentStep == 1) {
 			// Nothing to draw
-			
-			FGEPoint p1 = ((ObtainPoint)inputs.get(0)).getInputData();
+
+			FGEPoint p1 = ((ObtainPoint) inputs.get(0)).getInputData();
 			FGEPoint p2 = lastMouseLocation;
-		
+
 			FGEPoint p = new FGEPoint();
 			p.x = Math.min(p1.x, p2.x);
 			p.y = Math.min(p1.y, p2.y);
-			
-			double width = Math.abs(p1.x-p2.x);
-			double height = Math.abs(p1.y-p2.y);
+
+			double width = Math.abs(p1.x - p2.x);
+			double height = Math.abs(p1.y - p2.y);
 
 			graphics.setDefaultForeground(focusedForegroundStyle);
 			p1.paint(graphics);
-			(new FGERectangle(p.x,p.y,width,height)).paint(graphics);
+			(new FGERectangle(p.x, p.y, width, height)).paint(graphics);
 		}
 	}
 }
-
-

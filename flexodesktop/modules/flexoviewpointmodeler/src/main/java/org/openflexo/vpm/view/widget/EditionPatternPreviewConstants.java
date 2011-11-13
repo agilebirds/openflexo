@@ -24,16 +24,16 @@ import java.awt.Font;
 
 public interface EditionPatternPreviewConstants {
 
-    public static final Font DEFAULT_FONT = new Font("SansSerif", Font.BOLD, 11);
+	public static final Font DEFAULT_FONT = new Font("SansSerif", Font.BOLD, 11);
 	public static final double WIDTH = 400;
 	public static final double HEIGHT = 130;
 	public static final double DEFAULT_SHAPE_WIDTH = 80;
 	public static final double DEFAULT_SHAPE_HEIGHT = 50;
-	
-    public static final Color BACKGROUND_COLOR = new Color(255,255,225);
-    public static final Color DEFAULT_SHAPE_TEXT_COLOR = Color.BLACK;
-    public static final Color DEFAULT_SHAPE_BACKGROUND_COLOR = Color.LIGHT_GRAY;
-    public static final Color SELECTED_COLOR = new Color(181,213,255);
-    public static final Color FOCUSED_COLOR = new Color(237,243,254);
-    
+
+	public static final Color BACKGROUND_COLOR = new Color(255, 255, 225);
+	public static final Color DEFAULT_SHAPE_TEXT_COLOR = Color.BLACK;
+	public static final Color DEFAULT_SHAPE_BACKGROUND_COLOR = Color.LIGHT_GRAY;
+	public static final Color SELECTED_COLOR = new Color(181, 213, 255);
+	public static final Color FOCUSED_COLOR = new Color(237, 243, 254);
+
 }

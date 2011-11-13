@@ -27,7 +27,6 @@ import java.util.regex.Pattern;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-
 import org.openflexo.dg.latex.DocGeneratorConstants;
 import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.FlexoModelObject;
@@ -166,7 +165,8 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 	}
 
 	public static String nameForOperationNoExt(OperationNode operation, DGRepository repository) {
-		return cleanFileName(repository.getName() + ".operation." + operation.getProcess().getName() + "." + operation.getAbstractActivityNode().getName() + "." + operation.getName());
+		return cleanFileName(repository.getName() + ".operation." + operation.getProcess().getName() + "."
+				+ operation.getAbstractActivityNode().getName() + "." + operation.getName());
 	}
 
 	public static String nameForMenuNoExt(DGRepository repository) {
@@ -216,7 +216,8 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 	}
 
 	public String realNameForProjectNoExt(DGRepository repository) {
-		CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> r = getProjectGenerator().getResourceForObject(repository.getProject());
+		CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> r = getProjectGenerator()
+				.getResourceForObject(repository.getProject());
 		if (r != null) {
 			String fileName = r.getFileName();
 			if (fileName.endsWith(getFileExtension()))
@@ -227,7 +228,8 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 	}
 
 	public String realNameForProcessNoExt(FlexoProcess process, DGRepository repository) {
-		CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> r = getProjectGenerator().getResourceForObject(process);
+		CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> r = getProjectGenerator()
+				.getResourceForObject(process);
 		if (r != null) {
 			String fileName = r.getFileName();
 			if (fileName.endsWith(getFileExtension()))
@@ -238,7 +240,8 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 	}
 
 	public String realNameForDKVNoExt(DGRepository repository) {
-		CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> r = getProjectGenerator().getResourceForObject(repository.getProject().getDKVModel());
+		CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> r = getProjectGenerator()
+				.getResourceForObject(repository.getProject().getDKVModel());
 		if (r != null) {
 			String fileName = r.getFileName();
 			if (fileName.endsWith(getFileExtension()))
@@ -249,7 +252,8 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 	}
 
 	public String realNameForOperationNoExt(OperationNode operation, DGRepository repository) {
-		CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> r = getProjectGenerator().getResourceForObject(operation);
+		CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> r = getProjectGenerator()
+				.getResourceForObject(operation);
 		if (r != null) {
 			String fileName = r.getFileName();
 			if (fileName.endsWith(getFileExtension()))
@@ -260,7 +264,8 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 	}
 
 	public String realNameForMenuNoExt(DGRepository repository) {
-		CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> r = getProjectGenerator().getResourceForObject(repository.getProject().getFlexoNavigationMenu());
+		CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> r = getProjectGenerator()
+				.getResourceForObject(repository.getProject().getFlexoNavigationMenu());
 		if (r != null) {
 			String fileName = r.getFileName();
 			if (fileName.endsWith(getFileExtension()))
@@ -271,7 +276,8 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 	}
 
 	public String realNameForComponentNoExt(ComponentDefinition cd, DGRepository repository) {
-		CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> r = getProjectGenerator().getResourceForObject(cd);
+		CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> r = getProjectGenerator()
+				.getResourceForObject(cd);
 		if (r != null) {
 			String fileName = r.getFileName();
 			if (fileName.endsWith(getFileExtension()))
@@ -282,7 +288,8 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 	}
 
 	public String realNameForDataModelNoExt(DGRepository repository) {
-		CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> r = getProjectGenerator().getResourceForObject(repository.getProject().getDataModel());
+		CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> r = getProjectGenerator()
+				.getResourceForObject(repository.getProject().getDataModel());
 		if (r != null) {
 			String fileName = r.getFileName();
 			if (fileName.endsWith(getFileExtension()))
@@ -293,7 +300,8 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 	}
 
 	public String realNameForRepositoryNoExt(DMRepository dmr, DGRepository repository) {
-		CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> r = getProjectGenerator().getResourceForObject(dmr);
+		CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> r = getProjectGenerator()
+				.getResourceForObject(dmr);
 		if (r != null) {
 			String fileName = r.getFileName();
 			if (fileName.endsWith(getFileExtension()))
@@ -304,7 +312,8 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 	}
 
 	public String realNameForEntityNoExt(DMEntity entity, DGRepository repository) {
-		CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> r = getProjectGenerator().getResourceForObject(entity);
+		CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> r = getProjectGenerator()
+				.getResourceForObject(entity);
 		if (r != null) {
 			String fileName = r.getFileName();
 			if (fileName.endsWith(getFileExtension()))
@@ -315,8 +324,10 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 	}
 
 	public static String screenshotName(FlexoModelObject o) {
-		return CGSymbolicDirectory.FIGURES + "/"
-				+ o.getProject().getScreenshotResource(o, true).getFile().getName().substring(0, o.getProject().getScreenshotResource(o).getFile().getName().length() - 4);
+		return CGSymbolicDirectory.FIGURES
+				+ "/"
+				+ o.getProject().getScreenshotResource(o, true).getFile().getName()
+						.substring(0, o.getProject().getScreenshotResource(o).getFile().getName().length() - 4);
 	}
 
 	public static String screenshotName(FlexoModelObject o, ProjectDocGenerator pdg) {
@@ -376,10 +387,12 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 	}
 
 	public DGGenerator(ProjectDocGenerator projectGenerator, T source, String templateName) {
-		this(projectGenerator, source, templateName, source.getFullyQualifiedName(), nameForObjectNoExt(source, projectGenerator.getRepository()), null);
+		this(projectGenerator, source, templateName, source.getFullyQualifiedName(), nameForObjectNoExt(source,
+				projectGenerator.getRepository()), null);
 	}
 
-	public DGGenerator(ProjectDocGenerator projectGenerator, T source, String templateName, String identifier, String fileName, TOCEntry entry) {
+	public DGGenerator(ProjectDocGenerator projectGenerator, T source, String templateName, String identifier, String fileName,
+			TOCEntry entry) {
 		this(projectGenerator, source);
 		this.templateName = templateName;
 		this.identifier = identifier;
@@ -400,7 +413,8 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 	public abstract String getFileExtension();
 
 	/**
-	 * Generate code related to this generator. If this generator may store result, setting forceGenerate flag to false will result in giving the already generated code (cache scheme).
+	 * Generate code related to this generator. If this generator may store result, setting forceGenerate flag to false will result in
+	 * giving the already generated code (cache scheme).
 	 * 
 	 * @param forceRegenerate
 	 * @throws GenerationException
@@ -411,7 +425,8 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 			return;
 		startGeneration();
 		try {
-			generatedCode = new GeneratedTextResource(getFileName().endsWith(getFileExtension()) ? getFileName() : getFileName() + getFileExtension(), merge(getTemplateName()));
+			generatedCode = new GeneratedTextResource(getFileName().endsWith(getFileExtension()) ? getFileName() : getFileName()
+					+ getFileExtension(), merge(getTemplateName()));
 		} catch (GenerationException e) {
 			setGenerationException(e);
 		} catch (Exception e) {

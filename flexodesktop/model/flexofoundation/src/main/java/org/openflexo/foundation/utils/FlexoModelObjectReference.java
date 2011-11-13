@@ -35,12 +35,10 @@ import org.openflexo.logging.FlexoLogger;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
-public class FlexoModelObjectReference<O extends FlexoModelObject> extends FlexoObject implements
-StringConvertable,
-ResourceLoadingListener, PropertyChangeListener {
+public class FlexoModelObjectReference<O extends FlexoModelObject> extends FlexoObject implements StringConvertable,
+		ResourceLoadingListener, PropertyChangeListener {
 
-	private static final Logger logger = FlexoLogger
-			.getLogger(FlexoModelObjectReference.class.getPackage().getName());
+	private static final Logger logger = FlexoLogger.getLogger(FlexoModelObjectReference.class.getPackage().getName());
 
 	public static interface ReferenceOwner {
 
@@ -63,7 +61,8 @@ ResourceLoadingListener, PropertyChangeListener {
 	 * @return
 	 */
 	public static String getSerializationRepresentationForObject(FlexoModelObject modelObject, boolean serializeClassName) {
-		return modelObject.getXMLResourceData().getFlexoResource().getResourceIdentifier()+SEPARATOR+modelObject.getSerializationIdentifier()+(serializeClassName?SEPARATOR+modelObject.getClass().getName():"");
+		return modelObject.getXMLResourceData().getFlexoResource().getResourceIdentifier() + SEPARATOR
+				+ modelObject.getSerializationIdentifier() + (serializeClassName ? SEPARATOR + modelObject.getClass().getName() : "");
 	}
 
 	private String resourceIdentifier;
@@ -82,7 +81,7 @@ ResourceLoadingListener, PropertyChangeListener {
 
 	private boolean serializeClassName = false;
 
-	private ReferenceStatus status =  ReferenceStatus.UNRESOLVED;
+	private ReferenceStatus status = ReferenceStatus.UNRESOLVED;
 
 	private FlexoXMLStorageResource resource;
 
@@ -92,10 +91,10 @@ ResourceLoadingListener, PropertyChangeListener {
 		this.modelObject.addToReferencers(this);
 		this.status = ReferenceStatus.RESOLVED;
 		/**
-		 * We also initialize the string representation for the following reason:
-		 * Let's say the user creates a reference to the given <code>object</code> and then later on, the user
-		 * deletes that <code>object</code> but the reference owner does not remove its reference, we will have
-		 * to serialize this without any data which will be a disaster (we should expect NullPointer, ArrayIndexOutOfBounds, etc...
+		 * We also initialize the string representation for the following reason: Let's say the user creates a reference to the given
+		 * <code>object</code> and then later on, the user deletes that <code>object</code> but the reference owner does not remove its
+		 * reference, we will have to serialize this without any data which will be a disaster (we should expect NullPointer,
+		 * ArrayIndexOutOfBounds, etc...
 		 */
 		if (modelObject.getXMLResourceData() != null) {
 			this.resourceIdentifier = modelObject.getXMLResourceData().getFlexoResource().getResourceIdentifier();
@@ -106,9 +105,9 @@ ResourceLoadingListener, PropertyChangeListener {
 	}
 
 	@Override
-	public String toString()
-	{
-		return "FlexoModelObjectReference resource="+resourceIdentifier+" modelObject="+modelObject+" status="+status+" owner="+owner+" userIdentifier="+userIdentifier+" className="+className+" flexoID="+flexoID;
+	public String toString() {
+		return "FlexoModelObjectReference resource=" + resourceIdentifier + " modelObject=" + modelObject + " status=" + status + " owner="
+				+ owner + " userIdentifier=" + userIdentifier + " className=" + className + " flexoID=" + flexoID;
 	}
 
 	public FlexoModelObjectReference(FlexoProject project, String modelObjectIdentifier) {
@@ -117,14 +116,16 @@ ResourceLoadingListener, PropertyChangeListener {
 			String[] s = modelObjectIdentifier.split(SEPARATOR);
 			this.resourceIdentifier = s[0];
 			this.userIdentifier = s[1].substring(0, s[1].lastIndexOf(FlexoModelObject.ID_SEPARATOR));
-			this.flexoID = Long.valueOf(s[1].substring(s[1].lastIndexOf(FlexoModelObject.ID_SEPARATOR)+FlexoModelObject.ID_SEPARATOR.length()));
-			if (s.length==3) {
+			this.flexoID = Long.valueOf(s[1].substring(s[1].lastIndexOf(FlexoModelObject.ID_SEPARATOR)
+					+ FlexoModelObject.ID_SEPARATOR.length()));
+			if (s.length == 3) {
 				this.className = s[2];
 				serializeClassName = true;
 			}
 			if (getResource() == null) {
 				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Resource with id "+resourceIdentifier+" cannot be found! I doubt I will resolve the following object: "+modelObjectIdentifier);
+					logger.warning("Resource with id " + resourceIdentifier
+							+ " cannot be found! I doubt I will resolve the following object: " + modelObjectIdentifier);
 				}
 			}
 		} catch (NumberFormatException e) {
@@ -135,11 +136,11 @@ ResourceLoadingListener, PropertyChangeListener {
 	}
 
 	public void delete() {
-		if (getResource()!=null) {
+		if (getResource() != null) {
 			getResource().removeResourceLoadingListener(this);
 			getResource().getPropertyChangeSupport().removePropertyChangeListener("name", this);
 		}
-		if (modelObject!=null) {
+		if (modelObject != null) {
 			modelObject.removeFromReferencers(this);
 		}
 		project = null;
@@ -147,8 +148,7 @@ ResourceLoadingListener, PropertyChangeListener {
 		modelObject = null;
 	}
 
-	public O getObject()
-	{
+	public O getObject() {
 		return getObject(false);
 	}
 
@@ -157,7 +157,7 @@ ResourceLoadingListener, PropertyChangeListener {
 	}
 
 	public Class<O> getKlass() {
-		if (getClassName()!=null) {
+		if (getClassName() != null) {
 			try {
 				return (Class<O>) Class.forName(getClassName());
 			} catch (ClassNotFoundException e) {
@@ -165,26 +165,26 @@ ResourceLoadingListener, PropertyChangeListener {
 			} catch (ClassCastException e) {
 				e.printStackTrace();
 				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("There seems to be a problem in the code. Attempt to retrieve "+getClassName()+" but was something else (see stacktrace)");
+					logger.warning("There seems to be a problem in the code. Attempt to retrieve " + getClassName()
+							+ " but was something else (see stacktrace)");
 				}
 			}
 		}
 		return null;
 	}
 
-	public O getObject(boolean force)
-	{
+	public O getObject(boolean force) {
 		if (modelObject == null) {
 			modelObject = findObject(force);
-			if (modelObject!=null) {
+			if (modelObject != null) {
 				modelObject.addToReferencers(this);
 			}
-			if (owner!=null) {
-				if (modelObject!=null) {
+			if (owner != null) {
+				if (modelObject != null) {
 					status = ReferenceStatus.RESOLVED;
 					owner.notifyObjectLoaded(this);
-				} else if (getResource()==null || getResource().isLoaded() && !getResource().getIsLoading()) {
-					if (getResource()==null) {
+				} else if (getResource() == null || getResource().isLoaded() && !getResource().getIsLoading()) {
+					if (getResource() == null) {
 						status = ReferenceStatus.RESOURCE_NOT_FOUND;
 					} else {
 						status = ReferenceStatus.NOT_FOUND;
@@ -196,12 +196,11 @@ ResourceLoadingListener, PropertyChangeListener {
 		return modelObject;
 	}
 
-	private O findObject(boolean force)
-	{
-		if (project!=null) {
+	private O findObject(boolean force) {
+		if (project != null) {
 			try {
 				FlexoXMLStorageResource res = getResource();
-				if (res==null) {
+				if (res == null) {
 					return null;
 				}
 				if (force && !res.isLoaded()) {
@@ -221,9 +220,8 @@ ResourceLoadingListener, PropertyChangeListener {
 		return null;
 	}
 
-	public FlexoXMLStorageResource getResource()
-	{
-		if (resourceIdentifier==null || project==null) {
+	public FlexoXMLStorageResource getResource() {
+		if (resourceIdentifier == null || project == null) {
 			return null;
 		}
 		if (resource == null) {
@@ -233,13 +231,12 @@ ResourceLoadingListener, PropertyChangeListener {
 				resource.getPropertyChangeSupport().addPropertyChangeListener("name", this);
 			}
 		}
-		return resource ;
+		return resource;
 	}
 
 	@Override
-	public Converter getConverter()
-	{
-		if (project!=null) {
+	public Converter getConverter() {
+		if (project != null) {
 			return project.getObjectReferenceConverter();
 		}
 		return null;
@@ -254,18 +251,18 @@ ResourceLoadingListener, PropertyChangeListener {
 	}
 
 	public String getStringRepresentation() {
-		if (modelObject!=null) {
-			return getSerializationRepresentationForObject(modelObject,serializeClassName);
+		if (modelObject != null) {
+			return getSerializationRepresentationForObject(modelObject, serializeClassName);
 		} else {
-			return resourceIdentifier+SEPARATOR+userIdentifier+FlexoModelObject.ID_SEPARATOR+flexoID+(serializeClassName?SEPARATOR+className:"");
+			return resourceIdentifier + SEPARATOR + userIdentifier + FlexoModelObject.ID_SEPARATOR + flexoID
+					+ (serializeClassName ? SEPARATOR + className : "");
 		}
 	}
 
-	public void notifyObjectDeletion()
-	{
+	public void notifyObjectDeletion() {
 		status = ReferenceStatus.DELETED;
 		try {
-			if (getOwner()!=null) {
+			if (getOwner() != null) {
 				getOwner().objectDeleted(this);
 			}
 		} finally {
@@ -273,10 +270,9 @@ ResourceLoadingListener, PropertyChangeListener {
 		}
 	}
 
-	public void notifySerializationIdHasChanged()
-	{
+	public void notifySerializationIdHasChanged() {
 		try {
-			if (getOwner()!=null) {
+			if (getOwner() != null) {
 				getOwner().objectSerializationIdChanged(this);
 			}
 		} finally {
@@ -296,6 +292,7 @@ ResourceLoadingListener, PropertyChangeListener {
 
 	/**
 	 * Tells wheter the class name of the referenced model object should be serialized or not.
+	 * 
 	 * @return true if the class name of the referenced model object should be serialized, false otherwise.
 	 */
 	public boolean getSerializeClassName() {
@@ -310,7 +307,7 @@ ResourceLoadingListener, PropertyChangeListener {
 	}
 
 	public ReferenceStatus getStatus() {
-		if (getResource()==null && (status==ReferenceStatus.RESOLVED || status==ReferenceStatus.UNRESOLVED)) {
+		if (getResource() == null && (status == ReferenceStatus.RESOLVED || status == ReferenceStatus.UNRESOLVED)) {
 			status = ReferenceStatus.RESOURCE_NOT_FOUND;
 		}
 		return status;

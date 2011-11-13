@@ -21,12 +21,10 @@ package org.openflexo.foundation.dm.javaparser;
 
 import java.util.Vector;
 
-
-public interface ParsedJavaClass extends ParsedJavaElement
-{
+public interface ParsedJavaClass extends ParsedJavaElement {
 	public Vector<? extends ParsedJavaElement> getMembers();
 
-	public ParsedJavaField getFieldByName(String name); 
+	public ParsedJavaField getFieldByName(String name);
 
 	public ParsedJavaMethod getMethodBySignature(String signature);
 

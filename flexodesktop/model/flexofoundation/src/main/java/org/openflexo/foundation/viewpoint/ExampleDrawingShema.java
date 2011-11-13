@@ -47,14 +47,11 @@ import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 import org.openflexo.xmlcode.XMLDecoder;
 
-
-
 public class ExampleDrawingShema extends ExampleDrawingObject {
 
-    private static final Logger logger = Logger.getLogger(ExampleDrawingShema.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ExampleDrawingShema.class.getPackage().getName());
 
-	public static ExampleDrawingShema instanciateShema(ViewPoint calc, File shemaFile) 
-	{
+	public static ExampleDrawingShema instanciateShema(ViewPoint calc, File shemaFile) {
 		if (shemaFile.exists()) {
 			Converter<File> previousConverter = null;
 			FileInputStream inputStream = null;
@@ -63,9 +60,10 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 				RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(shemaFile.getParentFile());
 				StringEncoder.getDefaultInstance()._addConverter(relativePathFileConverter);
 				inputStream = new FileInputStream(shemaFile);
-				logger.info("Loading file "+shemaFile.getAbsolutePath());
-				ExampleDrawingShema returned = (ExampleDrawingShema)XMLDecoder.decodeObjectWithMapping(inputStream, calc.getViewPointLibrary().get_EXAMPLE_DRAWING_MODEL());
-				returned.init(calc,shemaFile);
+				logger.info("Loading file " + shemaFile.getAbsolutePath());
+				ExampleDrawingShema returned = (ExampleDrawingShema) XMLDecoder.decodeObjectWithMapping(inputStream, calc
+						.getViewPointLibrary().get_EXAMPLE_DRAWING_MODEL());
+				returned.init(calc, shemaFile);
 				return returned;
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -101,49 +99,45 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 			}
 			return null;
 		}
-		
+
 		else {
-			logger.severe("Not found: "+shemaFile);
+			logger.severe("Not found: " + shemaFile);
 			// TODO: implement a search here (find the good XML file)
 			return null;
 		}
 	}
-	
-	public static ExampleDrawingShema newShema(ViewPoint calc, File shemaFile, Object graphicalRepresentation) 
-	{
+
+	public static ExampleDrawingShema newShema(ViewPoint calc, File shemaFile, Object graphicalRepresentation) {
 		ExampleDrawingShema shema = new ExampleDrawingShema();
 		shema.setGraphicalRepresentation(graphicalRepresentation);
 		shema.init(calc, shemaFile);
 		return shema;
 	}
-	
+
 	private ViewPoint _calc;
 	private File _drawingFile;
 	private RelativePathFileConverter relativePathFileConverter;
 
-    public ExampleDrawingShema()
-	{
+	public ExampleDrawingShema() {
 		super();
 	}
 
 	private boolean initialized = false;
-	
-	private void init (ViewPoint calc, File drawingFile) 
-	{
+
+	private void init(ViewPoint calc, File drawingFile) {
 		if (StringUtils.isEmpty(getName())) {
-			setName(drawingFile.getName().substring(0,drawingFile.getName().length()-6));
+			setName(drawingFile.getName().substring(0, drawingFile.getName().length() - 6));
 		}
 		_calc = calc;
 		_drawingFile = drawingFile;
-		logger.info("Registering calc drawing shema for calc "+calc.getName());
+		logger.info("Registering calc drawing shema for calc " + calc.getName());
 		relativePathFileConverter = new RelativePathFileConverter(calc.getViewPointDirectory());
 		tryToLoadScreenshotImage();
 		initialized = true;
 	}
-	
+
 	@Override
-	public void delete()
-	{
+	public void delete() {
 		if (getCalc() != null) {
 			getCalc().removeFromCalcShemas(this);
 		}
@@ -152,10 +146,8 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 		deleteObservers();
 	}
 
-
 	@Override
-	public void saveToFile(File aFile)
-	{
+	public void saveToFile(File aFile) {
 		Converter<File> previousConverter = StringEncoder.getDefaultInstance()._converterForClass(File.class);
 		StringEncoder.getDefaultInstance()._addConverter(relativePathFileConverter);
 		super.saveToFile(aFile);
@@ -163,10 +155,9 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 		clearIsModified(true);
 	}
 
-	public void save()
-	{		
-		logger.info("Saving shema to "+_drawingFile.getAbsolutePath()+"...");
-		
+	public void save() {
+		logger.info("Saving shema to " + _drawingFile.getAbsolutePath() + "...");
+
 		File dir = _drawingFile.getParentFile();
 		if (!dir.exists()) {
 			dir.mkdirs();
@@ -176,21 +167,20 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 			makeLocalCopy();
 			temporaryFile = File.createTempFile("temp", ".xml", dir);
 			saveToFile(temporaryFile);
-			temporaryFile.renameTo(_drawingFile);	
+			temporaryFile.renameTo(_drawingFile);
 			clearIsModified(true);
 			buildAndSaveScreenshotImage();
-			logger.info("Saved shema to "+_drawingFile.getAbsolutePath()+". Done.");
+			logger.info("Saved shema to " + _drawingFile.getAbsolutePath() + ". Done.");
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.severe("Could not save shema to "+_drawingFile.getAbsolutePath());
+			logger.severe("Could not save shema to " + _drawingFile.getAbsolutePath());
 			if (temporaryFile != null) {
 				temporaryFile.delete();
 			}
 		}
 	}
 
-	private void makeLocalCopy() throws IOException
-	{
+	private void makeLocalCopy() throws IOException {
 		if ((_drawingFile != null) && (_drawingFile.exists())) {
 			String localCopyName = _drawingFile.getName() + "~";
 			File localCopy = new File(_drawingFile.getParentFile(), localCopyName);
@@ -198,77 +188,69 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 		}
 	}
 
-
 	@Override
-	public String getClassNameKey() 
-	{
+	public String getClassNameKey() {
 		return "calc_drawing_shema";
 	}
 
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return Inspectors.VPM.CALC_DRAWING_SHEMA_INSPECTOR;
 	}
-	
+
 	@Override
-	public ViewPoint getCalc()
-	{
+	public ViewPoint getCalc() {
 		return _calc;
 	}
-	
-	@Override
-	public ExampleDrawingShema getShema()
-    {
-        return this;
-    }
 
-	public File getDrawingFile()
-	{
+	@Override
+	public ExampleDrawingShema getShema() {
+		return this;
+	}
+
+	public File getDrawingFile() {
 		return _drawingFile;
 	}
-	
+
 	@Override
-	public boolean isContainedIn(ExampleDrawingObject o)
-	{
+	public boolean isContainedIn(ExampleDrawingObject o) {
 		return o == this;
 	}
-	
+
 	private ScreenshotImage screenshotImage;
-	
+
 	private File expectedScreenshotImageFile = null;
-	
-	private File getExpectedScreenshotImageFile()
-	{
+
+	private File getExpectedScreenshotImageFile() {
 		if (expectedScreenshotImageFile == null) {
-			expectedScreenshotImageFile = new File(getDrawingFile().getParentFile(),getName()+".shema.png");
+			expectedScreenshotImageFile = new File(getDrawingFile().getParentFile(), getName() + ".shema.png");
 		}
 		return expectedScreenshotImageFile;
 	}
-	
-	private ScreenshotImage buildAndSaveScreenshotImage()
-	{
-		ExternalCEDModule cedModule = ExternalModuleDelegater.getModuleLoader() != null ? ExternalModuleDelegater.getModuleLoader().getCEDModuleInstance() : null;
+
+	private ScreenshotImage buildAndSaveScreenshotImage() {
+		ExternalCEDModule cedModule = ExternalModuleDelegater.getModuleLoader() != null ? ExternalModuleDelegater.getModuleLoader()
+				.getCEDModuleInstance() : null;
 
 		if (cedModule == null) {
 			return null;
 		}
 
-		logger.info("Building "+getExpectedScreenshotImageFile().getAbsolutePath());
+		logger.info("Building " + getExpectedScreenshotImageFile().getAbsolutePath());
 
 		JComponent c = cedModule.createScreenshotForShema(this);
-		
+
 		BufferedImage bi = ImageUtils.createImageFromComponent(c);
 
 		screenshotImage = ScreenshotGenerator.trimImage(bi);
 		try {
-			logger.info("Saving "+getExpectedScreenshotImageFile().getAbsolutePath());
-			ImageUtils.saveImageToFile(screenshotImage.image,getExpectedScreenshotImageFile(),ImageType.PNG);
+			logger.info("Saving " + getExpectedScreenshotImageFile().getAbsolutePath());
+			ImageUtils.saveImageToFile(screenshotImage.image, getExpectedScreenshotImageFile(), ImageType.PNG);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.warning("Could not save "+getExpectedScreenshotImageFile().getAbsolutePath());
+			logger.warning("Could not save " + getExpectedScreenshotImageFile().getAbsolutePath());
 		}
-		
+
 		cedModule.finalizeScreenshotGeneration();
 
 		screenshotModified = false;
@@ -276,13 +258,12 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 		return screenshotImage;
 
 	}
-	
-	private ScreenshotImage tryToLoadScreenshotImage()
-	{
+
+	private ScreenshotImage tryToLoadScreenshotImage() {
 		if (getExpectedScreenshotImageFile().exists()) {
 			BufferedImage bi = ImageUtils.loadImageFromFile(getExpectedScreenshotImageFile());
 			if (bi != null) {
-				logger.info("Read "+getExpectedScreenshotImageFile().getAbsolutePath());
+				logger.info("Read " + getExpectedScreenshotImageFile().getAbsolutePath());
 				screenshotImage = ScreenshotGenerator.trimImage(bi);
 				screenshotModified = false;
 				return screenshotImage;
@@ -290,29 +271,27 @@ public class ExampleDrawingShema extends ExampleDrawingObject {
 		}
 		return null;
 	}
-	
-	public ScreenshotImage getScreenshotImage()
-	{
+
+	public ScreenshotImage getScreenshotImage() {
 		if ((screenshotImage == null) || screenshotModified) {
 			if (screenshotModified) {
-				logger.info("Rebuilding screenshot for "+this+" because screenshot is modified");
+				logger.info("Rebuilding screenshot for " + this + " because screenshot is modified");
 			}
 			buildAndSaveScreenshotImage();
 		}
 		return screenshotImage;
 	}
-	
+
 	@Override
-	public synchronized void setIsModified()
-	{
+	public synchronized void setIsModified() {
 		if (initialized) {
 			super.setIsModified();
 			if (!isModified()) {
-				logger.info(">>>>>>>>>>>>>>> Shema "+this+" has been modified !!!");
+				logger.info(">>>>>>>>>>>>>>> Shema " + this + " has been modified !!!");
 			}
 			screenshotModified = true;
 		}
 	}
-	
+
 	private boolean screenshotModified = false;
 }

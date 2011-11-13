@@ -23,19 +23,19 @@
 package com.metaphaseeditor;
 
 /**
- *
+ * 
  * @author Rudolf Visagie
  */
 public class MetaphaseEditorException extends RuntimeException {
-    public MetaphaseEditorException(Throwable cause) {
-        super(cause);
-    }
+	public MetaphaseEditorException(Throwable cause) {
+		super(cause);
+	}
 
-    public MetaphaseEditorException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public MetaphaseEditorException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
-    public MetaphaseEditorException(String message) {
-        super(message);
-    }
+	public MetaphaseEditorException(String message) {
+		super(message);
+	}
 }

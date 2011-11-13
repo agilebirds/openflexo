@@ -21,12 +21,9 @@ package org.openflexo.foundation.ie.dm;
 
 import org.openflexo.foundation.ie.widget.IETabWidget;
 
+public class TabSelectionChanged extends IEDataModification {
 
-public class TabSelectionChanged extends IEDataModification
-{
-
-    public TabSelectionChanged(IETabWidget insertedTD)
-    {
-        super(null, insertedTD);
-    }
+	public TabSelectionChanged(IETabWidget insertedTD) {
+		super(null, insertedTD);
+	}
 }

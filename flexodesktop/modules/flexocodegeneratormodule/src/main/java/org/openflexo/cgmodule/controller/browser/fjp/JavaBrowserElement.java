@@ -27,25 +27,21 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.javaparser.FJPJavaElement;
 
-
 public abstract class JavaBrowserElement extends BrowserElement {
 
-    protected static final Logger logger = Logger.getLogger(JavaBrowserElement.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(JavaBrowserElement.class.getPackage().getName());
 
-	public JavaBrowserElement(FJPJavaElement object, BrowserElementType elementType, JavaParserBrowser browser, BrowserElement parent)
-	{
+	public JavaBrowserElement(FJPJavaElement object, BrowserElementType elementType, JavaParserBrowser browser, BrowserElement parent) {
 		super(object, elementType, browser, parent);
 	}
-	
+
 	@Override
-	public FJPJavaElement getObject()
-	{
-		return (FJPJavaElement)super.getObject();
+	public FJPJavaElement getObject() {
+		return (FJPJavaElement) super.getObject();
 	}
 
-	public ImageIcon getBaseIcon()
-	{
+	public ImageIcon getBaseIcon() {
 		return getElementType().getIcon();
 	}
-	    
+
 }

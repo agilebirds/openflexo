@@ -20,13 +20,11 @@
 package org.openflexo.foundation;
 
 /**
- * A class can implement the <code>GraphicalFlexoObserver</code> interface
- * when it wants to be informed of changes in observable objects: by convention,
- * only graphical elements implement this interface.
+ * A class can implement the <code>GraphicalFlexoObserver</code> interface when it wants to be informed of changes in observable objects: by
+ * convention, only graphical elements implement this interface.
  * 
  * @author sguerin
  */
-public interface GraphicalFlexoObserver extends FlexoObserver
-{
-    // to be implemented by graphical objects.
+public interface GraphicalFlexoObserver extends FlexoObserver {
+	// to be implemented by graphical objects.
 }

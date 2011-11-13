@@ -26,86 +26,76 @@ import org.openflexo.view.menu.FlexoMenuBar;
 import org.openflexo.view.menu.ToolsMenu;
 import org.openflexo.view.menu.WindowMenu;
 
-
 /**
  * Class representing menus related to this module
  * 
  * @author sylvain
  */
-public class SGMenuBar extends FlexoMenuBar
-{
+public class SGMenuBar extends FlexoMenuBar {
 
-    private SGFileMenu _fileMenu;
-    private SGEditMenu _editMenu;
-    private SGToolsMenu _toolsMenu;
-    //private SGWindowMenu _windowMenu;
+	private SGFileMenu _fileMenu;
+	private SGEditMenu _editMenu;
+	private SGToolsMenu _toolsMenu;
 
-    public SGMenuBar(SGController controller)
-    {
-        super(controller, Module.SG_MODULE);
-     }
+	// private SGWindowMenu _windowMenu;
 
-    /**
-     * Build if required and return SG 'File' menu.
-     * This method overrides the default one defined on superclass
-     * 
-     * @param controller
-     * @return a SGFileMenu instance
-     */
-    @Override
-	public SGFileMenu getFileMenu(FlexoController controller)
-    {
-        if (_fileMenu == null) {
-            _fileMenu = new SGFileMenu((SGController)controller);
-        }
-        return _fileMenu;
-    }
+	public SGMenuBar(SGController controller) {
+		super(controller, Module.SG_MODULE);
+	}
 
-    /**
-     * Build if required and return SG 'Edit' menu.
-     * This method overrides the default one defined on superclass
-     * 
-     * @param controller
-     * @return a SGEditMenu instance
-     */
-     @Override
-	public SGEditMenu getEditMenu(FlexoController controller)
-    {
-        if (_editMenu == null) {
-            _editMenu = new SGEditMenu((SGController)controller);
-        }
-        return _editMenu;
-    }
+	/**
+	 * Build if required and return SG 'File' menu. This method overrides the default one defined on superclass
+	 * 
+	 * @param controller
+	 * @return a SGFileMenu instance
+	 */
+	@Override
+	public SGFileMenu getFileMenu(FlexoController controller) {
+		if (_fileMenu == null) {
+			_fileMenu = new SGFileMenu((SGController) controller);
+		}
+		return _fileMenu;
+	}
 
-     /**
-      * Build if required and return SG 'Window' menu.
-      * This method overrides the default one defined on superclass
-      * 
-      * @param controller
-      * @return a SGWindowMenu instance
-      */
-   @Override
-public WindowMenu getWindowMenu(FlexoController controller, Module module)
-    {
-        if (_windowMenu == null) {
-            _windowMenu = new SGWindowMenu((SGController) controller);
-        }
-        return _windowMenu;
-    }
+	/**
+	 * Build if required and return SG 'Edit' menu. This method overrides the default one defined on superclass
+	 * 
+	 * @param controller
+	 * @return a SGEditMenu instance
+	 */
+	@Override
+	public SGEditMenu getEditMenu(FlexoController controller) {
+		if (_editMenu == null) {
+			_editMenu = new SGEditMenu((SGController) controller);
+		}
+		return _editMenu;
+	}
 
-   /**
-    * Build if required and return SG 'Tools' menu.
-    * This method overrides the default one defined on superclass
-    * 
-    * @param controller
-    * @return a SGToolsMenu instance
-    */
- public ToolsMenu getToolsMenu(FlexoController controller, Module module)
-  {
-      if (_toolsMenu == null) {
-          _toolsMenu = new SGToolsMenu((SGController) controller);
-      }
-      return _toolsMenu;
-  }
+	/**
+	 * Build if required and return SG 'Window' menu. This method overrides the default one defined on superclass
+	 * 
+	 * @param controller
+	 * @return a SGWindowMenu instance
+	 */
+	@Override
+	public WindowMenu getWindowMenu(FlexoController controller, Module module) {
+		if (_windowMenu == null) {
+			_windowMenu = new SGWindowMenu((SGController) controller);
+		}
+		return _windowMenu;
+	}
+
+	/**
+	 * Build if required and return SG 'Tools' menu. This method overrides the default one defined on superclass
+	 * 
+	 * @param controller
+	 * @return a SGToolsMenu instance
+	 */
+	public ToolsMenu getToolsMenu(FlexoController controller, Module module) {
+		if (_toolsMenu == null) {
+			_toolsMenu = new SGToolsMenu((SGController) controller);
+		}
+		return _toolsMenu;
+	}
 
 }

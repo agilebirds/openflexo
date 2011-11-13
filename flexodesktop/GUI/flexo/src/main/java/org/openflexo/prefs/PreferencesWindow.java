@@ -43,11 +43,9 @@ import org.openflexo.toolbox.ToolBox;
  * 
  * @author sguerin
  */
-public class PreferencesWindow extends JFrame
-{
+public class PreferencesWindow extends JFrame {
 
-	public PreferencesWindow(JMenuBar menubar)
-	{
+	public PreferencesWindow(JMenuBar menubar) {
 		super();
 		if (ToolBox.getPLATFORM().equals(ToolBox.MACOS)) {
 			setJMenuBar(menubar);
@@ -63,8 +61,7 @@ public class PreferencesWindow extends JFrame
 
 	public static final int PREFERENCES_WINDOW_HEIGHT = 500;
 
-	public void reset()
-	{
+	public void reset() {
 		if (_currentScrollPane != null) {
 			getContentPane().remove(_currentScrollPane);
 		}
@@ -73,8 +70,7 @@ public class PreferencesWindow extends JFrame
 		getContentPane().add(_nothingToInspectLabel, BorderLayout.CENTER);
 	}
 
-	public void setTabPanel(InspectorModelView tabPanel)
-	{
+	public void setTabPanel(InspectorModelView tabPanel) {
 		if (_currentScrollPane != null) {
 			getContentPane().remove(_currentScrollPane);
 		} else {
@@ -87,30 +83,26 @@ public class PreferencesWindow extends JFrame
 		currentTabPanel = tabPanel;
 	}
 
-	private JScrollPane getScrollPane(JComponent content)
-	{
+	private JScrollPane getScrollPane(JComponent content) {
 		JScrollPane answer = new JScrollPane(content);
-		//content.setPreferredSize(new Dimension(getSize().height - 100, getSize().width - 20));
+		// content.setPreferredSize(new Dimension(getSize().height - 100, getSize().width - 20));
 		return answer;
 	}
 
-	protected JPanel getButtonPanel()
-	{
+	protected JPanel getButtonPanel() {
 		if (_buttonPanel == null) {
 			_buttonPanel = buttonPanel();
 		}
 		return _buttonPanel;
 	}
 
-	private JPanel buttonPanel()
-	{
+	private JPanel buttonPanel() {
 		JPanel answer = new JPanel(new FlowLayout());
 		_saveButton = new JButton();
 		_saveButton.setText(FlexoLocalization.localizedForKey("save_preferences", _saveButton));
 		_saveButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				FlexoPreferences.savePreferences(true);
 				_saveButton.setEnabled(false);
 				_revertButton.setEnabled(false);
@@ -121,8 +113,7 @@ public class PreferencesWindow extends JFrame
 		_revertButton.setText(FlexoLocalization.localizedForKey("revert_to_saved", _revertButton));
 		_revertButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				FlexoPreferences.revertToSaved();
 				_saveButton.setEnabled(false);
 				_revertButton.setEnabled(false);
@@ -130,24 +121,23 @@ public class PreferencesWindow extends JFrame
 			}
 		});
 		/*
-        _closeButton = new JButton();
-        _closeButton.setText(FlexoLocalization.localizedForKey("close_window", _closeButton));
-        _closeButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e)
-            {
-                setVisible(false);
-            }
-        });*/
+		_closeButton = new JButton();
+		_closeButton.setText(FlexoLocalization.localizedForKey("close_window", _closeButton));
+		_closeButton.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e)
+		    {
+		        setVisible(false);
+		    }
+		});*/
 		answer.add(_saveButton);
 		answer.add(_revertButton);
-		//answer.add(_closeButton);
+		// answer.add(_closeButton);
 		_saveButton.setEnabled(false);
 		_revertButton.setEnabled(false);
 		return answer;
 	}
 
-	public void enableSaveAndRevertButtons()
-	{
+	public void enableSaveAndRevertButtons() {
 		if (_saveButton != null && _revertButton != null) {
 			_saveButton.setEnabled(true);
 			_revertButton.setEnabled(true);
@@ -164,7 +154,7 @@ public class PreferencesWindow extends JFrame
 
 	JButton _revertButton;
 
-	//private JButton _closeButton;
+	// private JButton _closeButton;
 
 	private static JLabel _nothingToInspectLabel = new JLabel("No preferences !", SwingConstants.CENTER);
 }

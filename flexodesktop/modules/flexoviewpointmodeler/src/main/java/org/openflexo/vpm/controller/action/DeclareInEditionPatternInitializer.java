@@ -32,58 +32,46 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.controller.CEDController;
 
-
 public class DeclareInEditionPatternInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeclareInEditionPatternInitializer(CEDControllerActionInitializer actionInitializer)
-	{
-		super(DeclareInEditionPattern.actionType,actionInitializer);
+	DeclareInEditionPatternInitializer(CEDControllerActionInitializer actionInitializer) {
+		super(DeclareInEditionPattern.actionType, actionInitializer);
 	}
 
 	@Override
-	protected CEDControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (CEDControllerActionInitializer)super.getControllerActionInitializer();
+	protected CEDControllerActionInitializer getControllerActionInitializer() {
+		return (CEDControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	public CEDController getController()
-	{
-		return (CEDController)super.getController();
+	public CEDController getController() {
+		return (CEDController) super.getController();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<DeclareInEditionPattern> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<DeclareInEditionPattern> getDefaultInitializer() {
 		return new FlexoActionInitializer<DeclareInEditionPattern>() {
 			@Override
-			public boolean run(ActionEvent e, DeclareInEditionPattern action)
-			{
-				
-				FIBDialog dialog = FIBDialog.instanciateComponent(
-						CEDCst.DECLARE_IN_EDITION_PATTERN_DIALOG_FIB,
-						action, null, true);
+			public boolean run(ActionEvent e, DeclareInEditionPattern action) {
+
+				FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.DECLARE_IN_EDITION_PATTERN_DIALOG_FIB, action, null, true);
 				return (dialog.getStatus() == Status.VALIDATED);
 			}
 		};
 	}
-	
 
 	@Override
-	protected FlexoActionFinalizer<DeclareInEditionPattern> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<DeclareInEditionPattern> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DeclareInEditionPattern>() {
 			@Override
-			public boolean run(ActionEvent e, DeclareInEditionPattern action)
-			{
-				getController().setCurrentEditedObjectAsModuleView(action.getEditionPattern(),getController().VIEW_POINT_PERSPECTIVE);
+			public boolean run(ActionEvent e, DeclareInEditionPattern action) {
+				getController().setCurrentEditedObjectAsModuleView(action.getEditionPattern(), getController().VIEW_POINT_PERSPECTIVE);
 				getController().getSelectionManager().setSelectedObject(action.getPatternRole());
 				return true;
 			}
 		};
 	}
-
 
 }

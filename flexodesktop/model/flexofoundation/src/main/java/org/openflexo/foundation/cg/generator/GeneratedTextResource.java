@@ -19,8 +19,6 @@
  */
 package org.openflexo.foundation.cg.generator;
 
-
-
 import java.io.File;
 
 /**
@@ -28,24 +26,21 @@ import java.io.File;
  * 
  * @author gpolet
  */
-public class GeneratedTextResource extends GeneratedCodeResult
-{
+public class GeneratedTextResource extends GeneratedCodeResult {
 
-    /**
+	/**
      * 
      */
-    public GeneratedTextResource(String name, String text)
-    {
-        super(name);
-        setDefaultCode(text);
-    }
+	public GeneratedTextResource(String name, String text) {
+		super(name);
+		setDefaultCode(text);
+	}
 
-    /**
-     * @param file
-     */
-    public File saveToFile(File file)
-    {
-        return GeneratorUtils.saveToFile(name(), defaultCode(), file, null);
-    }
+	/**
+	 * @param file
+	 */
+	public File saveToFile(File file) {
+		return GeneratorUtils.saveToFile(name(), defaultCode(), file, null);
+	}
 
 }

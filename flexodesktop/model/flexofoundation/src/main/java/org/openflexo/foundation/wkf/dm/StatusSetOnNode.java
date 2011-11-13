@@ -25,24 +25,21 @@ import org.openflexo.foundation.wkf.node.PetriGraphNode;
  * @author gpolet
  * 
  */
-public class StatusSetOnNode extends WKFDataModification
-{
+public class StatusSetOnNode extends WKFDataModification {
 
-    private PetriGraphNode node;
-    
-    /**
-     * @param propertyName
-     * @param oldValue
-     * @param newValue
-     */
-    public StatusSetOnNode(PetriGraphNode node, Object oldValue, Object newValue)
-    {
-        super("newStatus", oldValue, newValue);
-        this.node = node;
-    }
+	private PetriGraphNode node;
 
-    public PetriGraphNode getNode()
-    {
-        return node;
-    }
+	/**
+	 * @param propertyName
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public StatusSetOnNode(PetriGraphNode node, Object oldValue, Object newValue) {
+		super("newStatus", oldValue, newValue);
+		this.node = node;
+	}
+
+	public PetriGraphNode getNode() {
+		return node;
+	}
 }

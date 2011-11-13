@@ -25,29 +25,30 @@ import java.util.Vector;
 import org.openflexo.foundation.ie.widget.IEBlocWidget;
 import org.openflexo.foundation.ie.widget.IEHeaderWidget;
 
-
 public class HTMLListDescriptorCollection extends Vector<HTMLListDescriptor> {
 
-	public HTMLListDescriptorCollection(){
+	public HTMLListDescriptorCollection() {
 		super();
 	}
-	
-	public HTMLListDescriptor getHTMLListForBloc(IEBlocWidget b){
+
+	public HTMLListDescriptor getHTMLListForBloc(IEBlocWidget b) {
 		Enumeration en = elements();
 		HTMLListDescriptor temp = null;
-		while(en.hasMoreElements()){
-			temp = (HTMLListDescriptor)en.nextElement();
-			if(temp.getBloc().equals(b))return temp;
+		while (en.hasMoreElements()) {
+			temp = (HTMLListDescriptor) en.nextElement();
+			if (temp.getBloc().equals(b))
+				return temp;
 		}
 		return null;
 	}
-	
-	public HTMLListDescriptor getHTMLListForHeader(IEHeaderWidget h){
+
+	public HTMLListDescriptor getHTMLListForHeader(IEHeaderWidget h) {
 		Enumeration en = elements();
 		HTMLListDescriptor temp = null;
-		while(en.hasMoreElements()){
-			temp = (HTMLListDescriptor)en.nextElement();
-			if(temp.containsHeader(h))return temp;
+		while (en.hasMoreElements()) {
+			temp = (HTMLListDescriptor) en.nextElement();
+			if (temp.containsHeader(h))
+				return temp;
 		}
 		return null;
 	}

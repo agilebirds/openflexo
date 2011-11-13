@@ -26,44 +26,41 @@ import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.inspector.InspectableObject;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class WKFBindingDefinition extends BindingDefinition implements InspectableObject
-{
+public class WKFBindingDefinition extends BindingDefinition implements InspectableObject {
 
-    @SuppressWarnings("hiding")
+	@SuppressWarnings("hiding")
 	private static final Logger logger = Logger.getLogger(WKFBindingDefinition.class.getPackage().getName());
 
-    public WKFBindingDefinition(String variableName, DMType type, WKFObject object, BindingDefinitionType bindingType, boolean mandatory)
-    {
-        super(variableName, type, object, bindingType, mandatory);
-    }
+	public WKFBindingDefinition(String variableName, DMType type, WKFObject object, BindingDefinitionType bindingType, boolean mandatory) {
+		super(variableName, type, object, bindingType, mandatory);
+	}
 
-    public static WKFBindingDefinition get(WKFObject wkfObject, String name, DMType type, BindingDefinitionType bindingType, boolean mandatory)
-    {
-    	if (wkfObject.getProject()!=null)
-    		return wkfObject.getProject().getWKFObjectBindingDefinition(wkfObject, name, type, bindingType, mandatory);
-    	else {
-    		if (logger.isLoggable(Level.WARNING))
-				logger.warning("WKFObject "+wkfObject+" has no project");
-    		return null;
-    	}
-    }
+	public static WKFBindingDefinition get(WKFObject wkfObject, String name, DMType type, BindingDefinitionType bindingType,
+			boolean mandatory) {
+		if (wkfObject.getProject() != null)
+			return wkfObject.getProject().getWKFObjectBindingDefinition(wkfObject, name, type, bindingType, mandatory);
+		else {
+			if (logger.isLoggable(Level.WARNING))
+				logger.warning("WKFObject " + wkfObject + " has no project");
+			return null;
+		}
+	}
 
-    public static WKFBindingDefinition get(WKFObject wkfObject, String name, Class typeClass, BindingDefinitionType bindingType, boolean mandatory)
-    {
-    	if (wkfObject.getProject()!=null)
-    		return get(wkfObject,name,DMType.makeResolvedDMType(typeClass, wkfObject.getProject()),bindingType,mandatory);
-    	else {
-    		if (logger.isLoggable(Level.WARNING))
-				logger.warning("WKFObject "+wkfObject+" has no project");
-    		return null;
-    	}
-    }
+	public static WKFBindingDefinition get(WKFObject wkfObject, String name, Class typeClass, BindingDefinitionType bindingType,
+			boolean mandatory) {
+		if (wkfObject.getProject() != null)
+			return get(wkfObject, name, DMType.makeResolvedDMType(typeClass, wkfObject.getProject()), bindingType, mandatory);
+		else {
+			if (logger.isLoggable(Level.WARNING))
+				logger.warning("WKFObject " + wkfObject + " has no project");
+			return null;
+		}
+	}
 
 }

@@ -31,35 +31,31 @@ import org.openflexo.logging.FlexoLogger;
  * @author sylvain
  * 
  */
-public class UtilComponentWOFileResource extends ComponentWOFileResource<FlexoComponentResourceGenerator>
-{
-    protected static final Logger logger = FlexoLogger.getLogger(UtilComponentWOFileResource.class.getPackage().getName());
+public class UtilComponentWOFileResource extends ComponentWOFileResource<FlexoComponentResourceGenerator> {
+	protected static final Logger logger = FlexoLogger.getLogger(UtilComponentWOFileResource.class.getPackage().getName());
 
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-	public void rebuildDependancies()
-    {
-        super.rebuildDependancies();
-        if (getGenerator() instanceof MetaWOGenerator)
-            ((MetaWOGenerator)getGenerator()).rebuildDependanciesForResource(this);
-    }
+	/**
+	 * Rebuild resource dependancies for this resource
+	 */
+	@Override
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
+		if (getGenerator() instanceof MetaWOGenerator)
+			((MetaWOGenerator) getGenerator()).rebuildDependanciesForResource(this);
+	}
 
-    /**
-     * @param builder
-     */
-    public UtilComponentWOFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
+	/**
+	 * @param builder
+	 */
+	public UtilComponentWOFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
-    /**
-     * @param aProject
-     */
-    public UtilComponentWOFileResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
+	/**
+	 * @param aProject
+	 */
+	public UtilComponentWOFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
 }

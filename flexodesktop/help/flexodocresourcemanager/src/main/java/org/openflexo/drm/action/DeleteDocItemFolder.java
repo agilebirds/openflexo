@@ -31,74 +31,65 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 
-
 /**
  * @author gpolet
  * 
  */
-public class DeleteDocItemFolder extends FlexoAction
-{
+public class DeleteDocItemFolder extends FlexoAction {
 
-    private static final Logger logger = Logger.getLogger(DeleteDocItemFolder.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DeleteDocItemFolder.class.getPackage().getName());
 
-    public static FlexoActionType actionType = new FlexoActionType("delete", FlexoActionType.editGroup, FlexoActionType.DELETE_ACTION_TYPE) {
+	public static FlexoActionType actionType = new FlexoActionType("delete", FlexoActionType.editGroup, FlexoActionType.DELETE_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-        {
-            return new DeleteDocItemFolder(focusedObject, globalSelection,editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new DeleteDocItemFolder(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection)
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection)
-        {
-            return ((object != null) || ((globalSelection != null) && (globalSelection.size() > 0)));
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return ((object != null) || ((globalSelection != null) && (globalSelection.size() > 0)));
+		}
 
-    };
+	};
 
-    DeleteDocItemFolder(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	DeleteDocItemFolder(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    private Vector folders;
+	private Vector folders;
 
-    /**
-     * Overrides doAction
-     * 
-     * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
-     */
-    @Override
-	protected void doAction(Object context) throws FlexoException
-    {
-        if (folders != null) {
-            Enumeration en = folders.elements();
-            while (en.hasMoreElements()) {
-                DocItemFolder folder = (DocItemFolder) en.nextElement();
-                folder.delete();
-            }
-        } else if (logger.isLoggable(Level.WARNING))
-            logger.warning("Tried to delete doc folders, but folders was not set.");
-    }
+	/**
+	 * Overrides doAction
+	 * 
+	 * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
+	 */
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		if (folders != null) {
+			Enumeration en = folders.elements();
+			while (en.hasMoreElements()) {
+				DocItemFolder folder = (DocItemFolder) en.nextElement();
+				folder.delete();
+			}
+		} else if (logger.isLoggable(Level.WARNING))
+			logger.warning("Tried to delete doc folders, but folders was not set.");
+	}
 
-    public Vector getFolders()
-    {
-        return folders;
-    }
+	public Vector getFolders() {
+		return folders;
+	}
 
-    public void setFolders(Vector folders)
-    {
-        this.folders = folders;
-    }
+	public void setFolders(Vector folders) {
+		this.folders = folders;
+	}
 
 }

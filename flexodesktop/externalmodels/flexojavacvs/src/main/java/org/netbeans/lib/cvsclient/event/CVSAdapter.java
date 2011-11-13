@@ -20,85 +20,94 @@
 package org.netbeans.lib.cvsclient.event;
 
 /**
- * A convenience class for implementing the CVSListener. This class provides
- * empty implementations of the CVSListener interface. Subclasses should
- * override the methods for the event in which they are interested.
- * @author  Robert Greig
+ * A convenience class for implementing the CVSListener. This class provides empty implementations of the CVSListener interface. Subclasses
+ * should override the methods for the event in which they are interested.
+ * 
+ * @author Robert Greig
  */
 public class CVSAdapter implements CVSListener {
 
-    /**
-     * Called when the server wants to send a message to be displayed to
-     * the user. The message is only for information purposes and clients
-     * can choose to ignore these messages if they wish.
-     * @param e the event
-     */
-    @Override
+	/**
+	 * Called when the server wants to send a message to be displayed to the user. The message is only for information purposes and clients
+	 * can choose to ignore these messages if they wish.
+	 * 
+	 * @param e
+	 *            the event
+	 */
+	@Override
 	public void messageSent(MessageEvent e) {
-    }
+	}
 
-    /**
-     * Called when the server wants to send a binary message to be displayed to
-     * the user. The message is only for information purposes and clients
-     * can choose to ignore these messages if they wish.
-     * @param e the event
-     */
-    @Override
+	/**
+	 * Called when the server wants to send a binary message to be displayed to the user. The message is only for information purposes and
+	 * clients can choose to ignore these messages if they wish.
+	 * 
+	 * @param e
+	 *            the event
+	 */
+	@Override
 	public void messageSent(BinaryMessageEvent e) {
-    }
+	}
 
-    /**
-     * Called when a file has been added.
-     * @param e the event
-     */
-    @Override
+	/**
+	 * Called when a file has been added.
+	 * 
+	 * @param e
+	 *            the event
+	 */
+	@Override
 	public void fileAdded(FileAddedEvent e) {
-    }
+	}
 
-    /**
-     * Called when a file is going to be removed.
-     * @param e the event
-     */
-    @Override
+	/**
+	 * Called when a file is going to be removed.
+	 * 
+	 * @param e
+	 *            the event
+	 */
+	@Override
 	public void fileToRemove(FileToRemoveEvent e) {
-    }
+	}
 
-    /**
-     * Called when a file is removed.
-     * @param e the event
-     */
-    @Override
+	/**
+	 * Called when a file is removed.
+	 * 
+	 * @param e
+	 *            the event
+	 */
+	@Override
 	public void fileRemoved(FileRemovedEvent e) {
-    }
+	}
 
-    /**
-     * Called when a file has been updated
-     * @param e the event
-     */
-    @Override
+	/**
+	 * Called when a file has been updated
+	 * 
+	 * @param e
+	 *            the event
+	 */
+	@Override
 	public void fileUpdated(FileUpdatedEvent e) {
-    }
+	}
 
-    /**
-     * Called when file status information has been received
-     */
-    @Override
+	/**
+	 * Called when file status information has been received
+	 */
+	@Override
 	public void fileInfoGenerated(FileInfoEvent e) {
-    }
+	}
 
-    /**
-     * called when server responses with "ok" or "error", (when the command finishes)
-     */
-    @Override
+	/**
+	 * called when server responses with "ok" or "error", (when the command finishes)
+	 */
+	@Override
 	public void commandTerminated(TerminationEvent e) {
-    }
+	}
 
-    /**
-     * Fire a module expansion event. This is called when the servers
-     * has responded to an expand-modules request.
-     */
-    @Override
+	/**
+	 * Fire a module expansion event. This is called when the servers has responded to an expand-modules request.
+	 */
+	@Override
 	public void moduleExpanded(ModuleExpansionEvent e) {
-    }
+	}
 
 }

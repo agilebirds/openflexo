@@ -30,7 +30,6 @@ import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.xmlcode.XMLMapping;
 
-
 /**
  * container for a Binding. (a binding value)
  * 

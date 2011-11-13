@@ -24,50 +24,42 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.wkf.DeadLine;
 
-
 /**
  * Browser element representing a DeadLine
- *
+ * 
  * @author sguerin
  * @deprecated since version 1.2
- *
+ * 
  */
 @Deprecated
-public class DeadLineElement extends BrowserElement
-{
+public class DeadLineElement extends BrowserElement {
 
-    public DeadLineElement(DeadLine deadLine, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(deadLine, BrowserElementType.DEADLINE, browser, parent);
-    }
+	public DeadLineElement(DeadLine deadLine, ProjectBrowser browser, BrowserElement parent) {
+		super(deadLine, BrowserElementType.DEADLINE, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-        // No children
-    }
+	@Override
+	protected void buildChildrenVector() {
+		// No children
+	}
 
-    @Override
-	public String getName()
-    {
-        return getDeadLine().getName();
-    }
+	@Override
+	public String getName() {
+		return getDeadLine().getName();
+	}
 
-    protected DeadLine getDeadLine()
-    {
-        return (DeadLine) getObject();
-    }
+	protected DeadLine getDeadLine() {
+		return (DeadLine) getObject();
+	}
 
-    @Override
-	public boolean isNameEditable()
-    {
-        return true;
-    }
+	@Override
+	public boolean isNameEditable() {
+		return true;
+	}
 
-    @Override
-	public void setName(String aName)
-    {
-        getDeadLine().setName(aName);
-    }
+	@Override
+	public void setName(String aName) {
+		getDeadLine().setName(aName);
+	}
 
 }

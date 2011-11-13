@@ -29,50 +29,51 @@ import org.openflexo.components.browser.ws.WSBrowserElementFactory;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
 
-
 public class DefaultBrowserElementFactory implements BrowserElementFactory {
 
-    private static final Logger logger = Logger.getLogger(DefaultBrowserElementFactory.class.getPackage()
-            .getName());
+	private static final Logger logger = Logger.getLogger(DefaultBrowserElementFactory.class.getPackage().getName());
 
-    public static final BrowserElementFactory DEFAULT_FACTORY = new DefaultBrowserElementFactory();
+	public static final BrowserElementFactory DEFAULT_FACTORY = new DefaultBrowserElementFactory();
 
-    private WKFBrowserElementFactory wkfFactory;
-    private IEBrowserElementFactory ieFactory;
-    private DMBrowserElementFactory dmFactory;
-    private WSBrowserElementFactory wsFactory;
-    private OEBrowserElementFactory oeFactory;
+	private WKFBrowserElementFactory wkfFactory;
+	private IEBrowserElementFactory ieFactory;
+	private DMBrowserElementFactory dmFactory;
+	private WSBrowserElementFactory wsFactory;
+	private OEBrowserElementFactory oeFactory;
 
-    protected DefaultBrowserElementFactory()
-    {
-        super();
-        wkfFactory = new WKFBrowserElementFactory();
-        ieFactory = new IEBrowserElementFactory();
-        dmFactory = new DMBrowserElementFactory();
-        wsFactory = new WSBrowserElementFactory();
-        oeFactory = new OEBrowserElementFactory();
-   }
+	protected DefaultBrowserElementFactory() {
+		super();
+		wkfFactory = new WKFBrowserElementFactory();
+		ieFactory = new IEBrowserElementFactory();
+		dmFactory = new DMBrowserElementFactory();
+		wsFactory = new WSBrowserElementFactory();
+		oeFactory = new OEBrowserElementFactory();
+	}
 
-    @Override
-	public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent)
-    {
-        if (object instanceof FlexoProject) {
-            return new ProjectElement((FlexoProject) object, browser,parent);
-        }
-        BrowserElement tryThis = null;
-        tryThis = wkfFactory.makeNewElement(object,browser, parent);
-        if (tryThis != null) return tryThis;
-        tryThis = ieFactory.makeNewElement(object,browser, parent);
-        if (tryThis != null) return tryThis;
-        tryThis = dmFactory.makeNewElement(object,browser, parent);
-        if (tryThis != null) return tryThis;
-        tryThis = wsFactory.makeNewElement(object,browser, parent);
-        if (tryThis != null) return tryThis;
-        tryThis = oeFactory.makeNewElement(object,browser, parent);
-        if (tryThis != null) return tryThis;
+	@Override
+	public BrowserElement makeNewElement(FlexoModelObject object, ProjectBrowser browser, BrowserElement parent) {
+		if (object instanceof FlexoProject) {
+			return new ProjectElement((FlexoProject) object, browser, parent);
+		}
+		BrowserElement tryThis = null;
+		tryThis = wkfFactory.makeNewElement(object, browser, parent);
+		if (tryThis != null)
+			return tryThis;
+		tryThis = ieFactory.makeNewElement(object, browser, parent);
+		if (tryThis != null)
+			return tryThis;
+		tryThis = dmFactory.makeNewElement(object, browser, parent);
+		if (tryThis != null)
+			return tryThis;
+		tryThis = wsFactory.makeNewElement(object, browser, parent);
+		if (tryThis != null)
+			return tryThis;
+		tryThis = oeFactory.makeNewElement(object, browser, parent);
+		if (tryThis != null)
+			return tryThis;
 
-        logger.warning("Unexpected type " + object.getClass().getName() + " in browser");
-        return null;
+		logger.warning("Unexpected type " + object.getClass().getName() + " in browser");
+		return null;
 
-    }
+	}
 }

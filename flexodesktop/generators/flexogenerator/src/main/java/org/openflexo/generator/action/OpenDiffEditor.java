@@ -30,67 +30,55 @@ import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.rm.cg.ContentSource;
 import org.openflexo.generator.file.AbstractCGFile;
 
+public class OpenDiffEditor extends FlexoGUIAction<OpenDiffEditor, CGFile, CGObject> {
 
-public class OpenDiffEditor extends FlexoGUIAction<OpenDiffEditor,CGFile,CGObject>
-{
+	public static FlexoActionType<OpenDiffEditor, CGFile, CGObject> actionType = new FlexoActionType<OpenDiffEditor, CGFile, CGObject>(
+			"open_in_diff_editor", GCAction.SHOW_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-    public static FlexoActionType<OpenDiffEditor,CGFile,CGObject> actionType 
-    = new FlexoActionType<OpenDiffEditor,CGFile,CGObject> (
-    		"open_in_diff_editor",GCAction.SHOW_GROUP,FlexoActionType.NORMAL_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public OpenDiffEditor makeNewAction(CGFile focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return new OpenDiffEditor(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public OpenDiffEditor makeNewAction(CGFile focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) 
-        {
-            return new OpenDiffEditor(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(CGFile object, Vector<CGObject> globalSelection) {
+			return (object instanceof AbstractCGFile);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(CGFile object, Vector<CGObject> globalSelection) 
-        {
-            return (object instanceof AbstractCGFile);
-       }
+		@Override
+		protected boolean isEnabledForSelection(CGFile object, Vector<CGObject> globalSelection) {
+			return (object != null);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(CGFile object, Vector<CGObject> globalSelection) 
-        {
-            return (object != null);
-       }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (OpenDiffEditor.actionType, CGFile.class);
-    }
-    
+	};
 
-    OpenDiffEditor (CGFile focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
-	
+	static {
+		FlexoModelObject.addActionForClass(OpenDiffEditor.actionType, CGFile.class);
+	}
+
+	OpenDiffEditor(CGFile focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
 	private ContentSource _leftSource;
 	private ContentSource _rightSource;
-	
-	public ContentSource getLeftSource() 
-	{
+
+	public ContentSource getLeftSource() {
 		return _leftSource;
 	}
-	
-	public void setLeftSource(ContentSource leftSource)
-	{
+
+	public void setLeftSource(ContentSource leftSource) {
 		_leftSource = leftSource;
 	}
-	
-	public ContentSource getRightSource() 
-	{
+
+	public ContentSource getRightSource() {
 		return _rightSource;
 	}
-	
-	public void setRightSource(ContentSource rightSource)
-	{
+
+	public void setRightSource(ContentSource rightSource) {
 		_rightSource = rightSource;
 	}
 

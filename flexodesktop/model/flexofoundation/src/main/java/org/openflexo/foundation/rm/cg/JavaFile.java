@@ -21,29 +21,24 @@ package org.openflexo.foundation.rm.cg;
 
 import java.io.File;
 
-public class JavaFile extends ASCIIFile
-{
+public class JavaFile extends ASCIIFile {
 
-	public JavaFile(File f)
-	{
+	public JavaFile(File f) {
 		super(f);
-    }
+	}
 
-	public JavaFile()
-	{
+	public JavaFile() {
 		super();
-    }
+	}
 
-    @Override
-	public JavaFileResource getFlexoResource()
-    {
-    	return (JavaFileResource)super.getFlexoResource();
-    }
+	@Override
+	public JavaFileResource getFlexoResource() {
+		return (JavaFileResource) super.getFlexoResource();
+	}
 
-    @Override
-	public String getCurrentGeneration()
-    {
-    	return getFlexoResource().getCurrentGeneration();
-    }
-    
+	@Override
+	public String getCurrentGeneration() {
+		return getFlexoResource().getCurrentGeneration();
+	}
+
 }

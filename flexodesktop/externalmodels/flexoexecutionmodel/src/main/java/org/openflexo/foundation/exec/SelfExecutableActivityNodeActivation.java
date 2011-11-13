@@ -26,41 +26,35 @@ import org.openflexo.foundation.bindings.BindingAssignment;
 import org.openflexo.foundation.wkf.node.FlexoPreCondition;
 import org.openflexo.foundation.wkf.node.SelfExecutableActivityNode;
 
-
 public class SelfExecutableActivityNodeActivation extends NodeActivation<SelfExecutableActivityNode> {
 
-	public SelfExecutableActivityNodeActivation(SelfExecutableActivityNode node, FlexoPreCondition pre)
-	{
-		super(node,pre);
+	public SelfExecutableActivityNodeActivation(SelfExecutableActivityNode node, FlexoPreCondition pre) {
+		super(node, pre);
 	}
-	
-	public SelfExecutableActivityNodeActivation(SelfExecutableActivityNode node)
-	{
+
+	public SelfExecutableActivityNodeActivation(SelfExecutableActivityNode node) {
 		super(node);
 	}
-	
+
 	@Override
-	public ControlGraph makeSpecificControlGraph(boolean interprocedural) 
-	{
+	public ControlGraph makeSpecificControlGraph(boolean interprocedural) {
 		ControlGraph EXECUTE_PRIMITIVE = null;
 		ControlGraph EXECUTE_ASSIGNMENTS = null;
-		
+
 		if (getNode().getExecutionPrimitive() != null) {
 			EXECUTE_PRIMITIVE = makeControlGraphForExecutionPrimitive(getNode().getExecutionPrimitive());
-			EXECUTE_PRIMITIVE.setHeaderComment("Call execution primitive for node "+getNode().getName());
+			EXECUTE_PRIMITIVE.setHeaderComment("Call execution primitive for node " + getNode().getName());
 		}
-		
+
 		if (getNode().getAssignments().size() > 0) {
 			Vector<ControlGraph> allAssignments = new Vector<ControlGraph>();
 			for (BindingAssignment assignment : getNode().getAssignments())
 				allAssignments.add(makeControlGraphForAssignment(assignment));
 			EXECUTE_ASSIGNMENTS = makeSequentialControlGraph(allAssignments);
-			EXECUTE_ASSIGNMENTS.setHeaderComment("Perform assignments declared for execution of node "+getNode().getName());
-		}	
-				
-		return makeSequentialControlGraph(
-				EXECUTE_PRIMITIVE,
-				EXECUTE_ASSIGNMENTS);
+			EXECUTE_ASSIGNMENTS.setHeaderComment("Perform assignments declared for execution of node " + getNode().getName());
+		}
+
+		return makeSequentialControlGraph(EXECUTE_PRIMITIVE, EXECUTE_ASSIGNMENTS);
 	}
 
 }

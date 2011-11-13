@@ -21,10 +21,8 @@ package org.openflexo.fps.dm;
 
 import org.openflexo.fps.CVSFile;
 
-public class CVSFileDiscovered extends FPSDataModification
-{
-    public CVSFileDiscovered(CVSFile file)
-    {
-        super(null,file);
-    }
+public class CVSFileDiscovered extends FPSDataModification {
+	public CVSFileDiscovered(CVSFile file) {
+		super(null, file);
+	}
 }

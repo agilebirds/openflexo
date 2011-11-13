@@ -24,20 +24,18 @@ import org.openflexo.foundation.ie.operator.IEOperator;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class OperatorChanged extends IEDataModification
-{
+public class OperatorChanged extends IEDataModification {
 
-    /**
-     * @param propertyName
-     * @param oldValue
-     * @param newValue
-     */
-    public OperatorChanged(IEOperator oldValue, IEOperator newValue)
-    {
-        super("operator", oldValue, newValue);
-        // TODO Auto-generated constructor stub
-    }
+	/**
+	 * @param propertyName
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public OperatorChanged(IEOperator oldValue, IEOperator newValue) {
+		super("operator", oldValue, newValue);
+		// TODO Auto-generated constructor stub
+	}
 
 }

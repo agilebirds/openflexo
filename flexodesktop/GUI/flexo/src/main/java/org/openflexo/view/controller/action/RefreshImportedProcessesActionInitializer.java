@@ -37,29 +37,23 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.ws.client.PPMWebService.PPMWebServiceClient;
 
-
-public class RefreshImportedProcessesActionInitializer extends ActionInitializer
-{
+public class RefreshImportedProcessesActionInitializer extends ActionInitializer {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(RefreshImportedProcessesActionInitializer.class.getPackage().getName());
 
-	public RefreshImportedProcessesActionInitializer(ControllerActionInitializer actionInitializer)
-	{
+	public RefreshImportedProcessesActionInitializer(ControllerActionInitializer actionInitializer) {
 		super(RefreshImportedProcessAction.actionType, actionInitializer);
 	}
 
 	@Override
-	protected FlexoActionInitializer<RefreshImportedProcessAction> getDefaultInitializer()
-	{
-		return new FlexoActionInitializer<RefreshImportedProcessAction>()
-		{
+	protected FlexoActionInitializer<RefreshImportedProcessAction> getDefaultInitializer() {
+		return new FlexoActionInitializer<RefreshImportedProcessAction>() {
 			@Override
-			public boolean run(ActionEvent e, RefreshImportedProcessAction action)
-			{
-				
+			public boolean run(ActionEvent e, RefreshImportedProcessAction action) {
+
 				PPMWebServiceClient client = getController().getWSClient();
-				if(client!=null){
+				if (client != null) {
 					action.setWebService(client.getWebService_PortType());
 					action.setLogin(client.getLogin());
 					action.setMd5Password(client.getEncriptedPWD());
@@ -74,15 +68,12 @@ public class RefreshImportedProcessesActionInitializer extends ActionInitializer
 	protected FlexoExceptionHandler<RefreshImportedProcessAction> getDefaultExceptionHandler() {
 		return new FlexoWSExceptionHandler<RefreshImportedProcessAction>(getController());
 	}
-	
+
 	@Override
-	protected FlexoActionFinalizer<RefreshImportedProcessAction> getDefaultFinalizer()
-	{
-		return new FlexoActionFinalizer<RefreshImportedProcessAction>()
-		{
+	protected FlexoActionFinalizer<RefreshImportedProcessAction> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<RefreshImportedProcessAction>() {
 			@Override
-			public boolean run(ActionEvent e, RefreshImportedProcessAction action)
-			{
+			public boolean run(ActionEvent e, RefreshImportedProcessAction action) {
 				if (!action.isAutomaticAction()) {
 					FlexoController.notify(action.getReport());
 				}
@@ -90,12 +81,10 @@ public class RefreshImportedProcessesActionInitializer extends ActionInitializer
 			}
 		};
 	}
-	
-	@Override
-	protected Icon getEnabledIcon()
-	{
-		return IconFactory.getImageIcon(WKFIconLibrary.PROCESS_ICON, new IconMarker[]{IconLibrary.IMPORT});
-	}
 
+	@Override
+	protected Icon getEnabledIcon() {
+		return IconFactory.getImageIcon(WKFIconLibrary.PROCESS_ICON, new IconMarker[] { IconLibrary.IMPORT });
+	}
 
 }

@@ -31,57 +31,47 @@ import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class RevertRepositoryToVersionInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	RevertRepositoryToVersionInitializer(DGControllerActionInitializer actionInitializer)
-	{
-		super(RevertRepositoryToVersion.actionType,actionInitializer);
+	RevertRepositoryToVersionInitializer(DGControllerActionInitializer actionInitializer) {
+		super(RevertRepositoryToVersion.actionType, actionInitializer);
 	}
 
 	@Override
-	protected DGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DGControllerActionInitializer)super.getControllerActionInitializer();
+	protected DGControllerActionInitializer getControllerActionInitializer() {
+		return (DGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<RevertRepositoryToVersion> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<RevertRepositoryToVersion> getDefaultInitializer() {
 		return new FlexoActionInitializer<RevertRepositoryToVersion>() {
 			@Override
-			public boolean run(ActionEvent e, RevertRepositoryToVersion action)
-			{
+			public boolean run(ActionEvent e, RevertRepositoryToVersion action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<RevertRepositoryToVersion> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<RevertRepositoryToVersion> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RevertRepositoryToVersion>() {
 			@Override
-			public boolean run(ActionEvent e, RevertRepositoryToVersion action)
-			{
+			public boolean run(ActionEvent e, RevertRepositoryToVersion action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return GeneratorIconLibrary.REVERT_REPOSITORY_TO_VERSION_ICON;
 	}
 
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return GeneratorIconLibrary.REVERT_REPOSITORY_TO_VERSION_DISABLED_ICON;
 	}
-
 
 }

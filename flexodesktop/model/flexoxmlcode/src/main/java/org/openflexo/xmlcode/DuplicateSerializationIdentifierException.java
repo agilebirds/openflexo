@@ -26,8 +26,9 @@ public class DuplicateSerializationIdentifierException extends Exception {
 	private Object duplicate;
 	private ModelEntity modelEntity;
 	private String xmlTag;
-	
-	public DuplicateSerializationIdentifierException(Object serializationIdentifier, Object serializedObject, Object duplicate, ModelEntity modelEntity, String xmlTag) {
+
+	public DuplicateSerializationIdentifierException(Object serializationIdentifier, Object serializedObject, Object duplicate,
+			ModelEntity modelEntity, String xmlTag) {
 		this.serializationIdentifier = serializationIdentifier;
 		this.serializedObject = serializedObject;
 		this.duplicate = duplicate;
@@ -46,13 +47,12 @@ public class DuplicateSerializationIdentifierException extends Exception {
 	public Object getDuplicate() {
 		return duplicate;
 	}
-	
+
 	@Override
 	public String getMessage() {
-		return "Found the same identifier '" + serializationIdentifier + "' for different objects: " + serializedObject.getClass() + " has the same serialization identifier than "
-				+ duplicate.getClass() + "\n"
-				+
-				"I was serializing '"+xmlTag+"' on entity "+modelEntity.name;
+		return "Found the same identifier '" + serializationIdentifier + "' for different objects: " + serializedObject.getClass()
+				+ " has the same serialization identifier than " + duplicate.getClass() + "\n" + "I was serializing '" + xmlTag
+				+ "' on entity " + modelEntity.name;
 	}
 
 }

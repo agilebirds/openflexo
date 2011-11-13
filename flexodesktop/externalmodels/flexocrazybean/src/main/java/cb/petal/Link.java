@@ -18,57 +18,58 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents Link object
- *
+ * 
  * @version $Id: Link.java,v 1.3 2011/09/12 11:46:47 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class Link extends QuidObject {
-  public Link(PetalNode parent, Collection params) {
-    super(parent, "Link", params);
-  }
+	public Link(PetalNode parent, Collection params) {
+		super(parent, "Link", params);
+	}
 
-  public Link() {
-    super("Link");
-  }
+	public Link() {
+		super("Link");
+	}
 
-  public String getSupplier() {
-    return getPropertyAsString("supplier");
-  }
+	public String getSupplier() {
+		return getPropertyAsString("supplier");
+	}
 
-  public void setSupplier(String o) {
-    defineProperty("supplier", o);
-  }
+	public void setSupplier(String o) {
+		defineProperty("supplier", o);
+	}
 
-  public String getSupplierContainment() {
-    return getPropertyAsString("supplier_containment");
-  }
+	public String getSupplierContainment() {
+		return getPropertyAsString("supplier_containment");
+	}
 
-  public void setSupplierContainment(String o) {
-    defineProperty("supplier_containment", o);
-  }
+	public void setSupplierContainment(String o) {
+		defineProperty("supplier_containment", o);
+	}
 
-  public String getClientContainment() {
-    return getPropertyAsString("client_containment");
-  }
+	public String getClientContainment() {
+		return getPropertyAsString("client_containment");
+	}
 
-  public void setClientContainment(String o) {
-    defineProperty("client_containment", o);
-  }
+	public void setClientContainment(String o) {
+		defineProperty("client_containment", o);
+	}
 
-  public List getMessages() {
-    return (List)getProperty("messages");
-  }
+	public List getMessages() {
+		return (List) getProperty("messages");
+	}
 
-  public void setMessages(List o) {
-    defineProperty("messages", o);
-  }
+	public void setMessages(List o) {
+		defineProperty("messages", o);
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

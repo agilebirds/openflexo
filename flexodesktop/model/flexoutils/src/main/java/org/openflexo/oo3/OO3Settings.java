@@ -23,81 +23,70 @@ import java.util.Vector;
 
 import org.openflexo.xmlcode.XMLSerializable;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class OO3Settings implements XMLSerializable
-{
-    public PageAdornment pageAdornment = new PageAdornment();
+public class OO3Settings implements XMLSerializable {
+	public PageAdornment pageAdornment = new PageAdornment();
 
-    public PrintInfo printInfo = new PrintInfo();
+	public PrintInfo printInfo = new PrintInfo();
 
-    public static class PageAdornment implements XMLSerializable
-    {
-        public FirstPageHeaders firstPageHeaders = new FirstPageHeaders();
+	public static class PageAdornment implements XMLSerializable {
+		public FirstPageHeaders firstPageHeaders = new FirstPageHeaders();
 
-        public static class FirstPageHeaders implements XMLSerializable
-        {
-            public String isActive = "yes";
+		public static class FirstPageHeaders implements XMLSerializable {
+			public String isActive = "yes";
 
-            public Header header = new Header();
+			public Header header = new Header();
 
-            public static class Header implements XMLSerializable
-            {
-                public String location;
+			public static class Header implements XMLSerializable {
+				public String location;
 
-                public OO3Text text;
+				public OO3Text text;
 
-                public Header()
-                {
-                    super();
-                    location = "center";
-                    text = new OO3Text();
-                    text.addParagraph(new OO3Text.Paragraph(new OO3Text.Paragraph.Run.Lit.Cell("OOSectionTitleVariableIdentifier")));
-                }
-            }
+				public Header() {
+					super();
+					location = "center";
+					text = new OO3Text();
+					text.addParagraph(new OO3Text.Paragraph(new OO3Text.Paragraph.Run.Lit.Cell("OOSectionTitleVariableIdentifier")));
+				}
+			}
 
-        }
+		}
 
-    }
+	}
 
-    public static class PrintInfo implements XMLSerializable
-    {
-        public Vector<PrintInfoKey> printInfoKeys;
+	public static class PrintInfo implements XMLSerializable {
+		public Vector<PrintInfoKey> printInfoKeys;
 
-        public PrintInfo()
-        {
-            super();
-            printInfoKeys = new Vector<PrintInfoKey>();
-            printInfoKeys.add(new PrintInfoKey("OOScaleDocumentToFitPageWidth", "boolean", "true"));
-        }
+		public PrintInfo() {
+			super();
+			printInfoKeys = new Vector<PrintInfoKey>();
+			printInfoKeys.add(new PrintInfoKey("OOScaleDocumentToFitPageWidth", "boolean", "true"));
+		}
 
-        public static class PrintInfoKey implements XMLSerializable
-        {
-            public String name;
+		public static class PrintInfoKey implements XMLSerializable {
+			public String name;
 
-            public String type;
+			public String type;
 
-            public String value;
+			public String value;
 
-            public PrintInfoKey()
-            {
-                super();
-            }
+			public PrintInfoKey() {
+				super();
+			}
 
-            public PrintInfoKey(String n, String t, String v)
-            {
-                this();
-                this.name = n;
-                this.type = t;
-                this.value = v;
-            }
-        }
+			public PrintInfoKey(String n, String t, String v) {
+				this();
+				this.name = n;
+				this.type = t;
+				this.value = v;
+			}
+		}
 
-    }
+	}
 
 }

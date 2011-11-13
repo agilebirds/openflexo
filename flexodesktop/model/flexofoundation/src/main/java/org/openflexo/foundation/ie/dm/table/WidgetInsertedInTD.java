@@ -25,15 +25,12 @@ import org.openflexo.foundation.ie.widget.IEWidget;
 /**
  * @author sguerin
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
+ *         TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
  */
-public class WidgetInsertedInTD extends IEDataModification
-{
+public class WidgetInsertedInTD extends IEDataModification {
 
-    public WidgetInsertedInTD(IEWidget widget)
-    {
-        super(null, widget);
-    }
+	public WidgetInsertedInTD(IEWidget widget) {
+		super(null, widget);
+	}
 
 }

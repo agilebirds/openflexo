@@ -43,191 +43,189 @@ import cb.petal.UsesView;
 
 /**
  * Create serialized templates.
- *
+ * 
  * @version $Id: Dump.java,v 1.3 2011/09/12 11:47:29 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class Dump {
-  private static class Traverser extends DescendingVisitor {
-    @Override
-	public void visit(cb.petal.Class obj) {
-      if(obj.getNameParameter().equals("SomeClass")) {
-	obj.setParent(null);
+	private static class Traverser extends DescendingVisitor {
+		@Override
+		public void visit(cb.petal.Class obj) {
+			if (obj.getNameParameter().equals("SomeClass")) {
+				obj.setParent(null);
 
-	dump("Class", obj);
-      }
+				dump("Class", obj);
+			}
 
-      visitObject(obj);
-    }
+			visitObject(obj);
+		}
 
-    @Override
-	public void visit(ClassView obj) {
-      if(obj.getQualifiedNameParameter().equals("Logical View::templates::SomeClass")) {
-	obj.setParent(null);
-	dump("ClassView", obj);
-      } else if(obj.getQualifiedNameParameter().equals("Logical View::templates::Actor")) {
-	obj.setParent(null);
-	dump("ActorView", obj);
-      } else if(obj.getQualifiedNameParameter().equals("Logical View::templates::Interface")) {
-	obj.setParent(null);
-	dump("StereotypeView", obj);
-      }
+		@Override
+		public void visit(ClassView obj) {
+			if (obj.getQualifiedNameParameter().equals("Logical View::templates::SomeClass")) {
+				obj.setParent(null);
+				dump("ClassView", obj);
+			} else if (obj.getQualifiedNameParameter().equals("Logical View::templates::Actor")) {
+				obj.setParent(null);
+				dump("ActorView", obj);
+			} else if (obj.getQualifiedNameParameter().equals("Logical View::templates::Interface")) {
+				obj.setParent(null);
+				dump("StereotypeView", obj);
+			}
 
-      visitObject(obj);
-    }
+			visitObject(obj);
+		}
 
-    @Override
-	public void visit(UseCaseView obj) {
-      if(obj.getQualifiedNameParameter().equals("Use Case View::Examination")) {
-	obj.setParent(null);
-	dump("UseCaseView", obj);
-      } else if(obj.getQualifiedNameParameter().equals("Use Case View::Lecture")) {
-	obj.setParent(null);
-	dump("UseCaseStereotypeView", obj);
-      }
-    }
+		@Override
+		public void visit(UseCaseView obj) {
+			if (obj.getQualifiedNameParameter().equals("Use Case View::Examination")) {
+				obj.setParent(null);
+				dump("UseCaseView", obj);
+			} else if (obj.getQualifiedNameParameter().equals("Use Case View::Lecture")) {
+				obj.setParent(null);
+				dump("UseCaseStereotypeView", obj);
+			}
+		}
 
-    @Override
-	public void visit(InheritView obj) {
-      if(obj.getQuidu().equals("3B29C6640186")) {
-	obj.setParent(null);
-	dump("InheritView", obj);
-      }
-    }
+		@Override
+		public void visit(InheritView obj) {
+			if (obj.getQuidu().equals("3B29C6640186")) {
+				obj.setParent(null);
+				dump("InheritView", obj);
+			}
+		}
 
-    @Override
-	public void visit(RealizeView obj) {
-      if(obj.getQuidu().equals("3B29C6F203D4")) {
-	obj.setParent(null);
-	dump("RealizeView", obj);
-      }
+		@Override
+		public void visit(RealizeView obj) {
+			if (obj.getQuidu().equals("3B29C6F203D4")) {
+				obj.setParent(null);
+				dump("RealizeView", obj);
+			}
 
-      visitObject(obj);
-    }
+			visitObject(obj);
+		}
 
-    @Override
-	public void visit(UsesView obj) {
-      if(obj.getQuidu().equals("3B29C88B0014")) {
-	obj.setParent(null);
-	dump("UsesView", obj);
-      }
+		@Override
+		public void visit(UsesView obj) {
+			if (obj.getQuidu().equals("3B29C88B0014")) {
+				obj.setParent(null);
+				dump("UsesView", obj);
+			}
 
-      visitObject(obj);
-    }
+			visitObject(obj);
+		}
 
-    @Override
-	public void visit(Association obj) {
-      if(obj.getQuid().equals("3B29CAD600E6")) {
-	obj.setParent(null);
-	dump("Association", obj);
-      }
+		@Override
+		public void visit(Association obj) {
+			if (obj.getQuid().equals("3B29CAD600E6")) {
+				obj.setParent(null);
+				dump("Association", obj);
+			}
 
-      visitObject(obj);
-    }
+			visitObject(obj);
+		}
 
-    @Override
-	public void visit(AssociationViewNew obj) {
-      if(obj.getQuidu().equals("3B29CAD600E6")) {
-	obj.setParent(null);
-	dump("AssociationViewNew", obj);
-      }
+		@Override
+		public void visit(AssociationViewNew obj) {
+			if (obj.getQuidu().equals("3B29CAD600E6")) {
+				obj.setParent(null);
+				dump("AssociationViewNew", obj);
+			}
 
-      visitObject(obj);
-    }
+			visitObject(obj);
+		}
 
-    @Override
-	public void visit(ItemLabel obj) {
-      if(obj.getLabel().equals("SomeClass")) {
-	obj.setParent(null);
-	dump("ItemLabel", obj);
-      }
+		@Override
+		public void visit(ItemLabel obj) {
+			if (obj.getLabel().equals("SomeClass")) {
+				obj.setParent(null);
+				dump("ItemLabel", obj);
+			}
 
-      visitObject(obj);
-    }
+			visitObject(obj);
+		}
 
-    @Override
-	public void visit(NoteView obj) {
-      if(obj.getTag() == 25) {
-	obj.setParent(null);
-	dump("NoteView", obj);
-      }
+		@Override
+		public void visit(NoteView obj) {
+			if (obj.getTag() == 25) {
+				obj.setParent(null);
+				dump("NoteView", obj);
+			}
 
-      visitObject(obj);
-    }
+			visitObject(obj);
+		}
 
-    @Override
-	public void visit(AttachView obj) {
-      if(obj.getTag() == 30) {
-	obj.setParent(null);
-	dump("AttachView", obj);
-      }
+		@Override
+		public void visit(AttachView obj) {
+			if (obj.getTag() == 30) {
+				obj.setParent(null);
+				dump("AttachView", obj);
+			}
 
-      visitObject(obj);
-    }
+			visitObject(obj);
+		}
 
-    @Override
-	public void visit(AssocAttachView obj) {
-      if(obj.getTag() == 27) {
-	obj.setParent(null);
-	dump("AssocAttachView", obj);
-      }
+		@Override
+		public void visit(AssocAttachView obj) {
+			if (obj.getTag() == 27) {
+				obj.setParent(null);
+				dump("AssocAttachView", obj);
+			}
 
-      visitObject(obj);
-    }
+			visitObject(obj);
+		}
 
-    @Override
-	public void visit(SegLabel obj) {
-      if(obj.getLabel().equals("1..*")) {
-	obj.setParent(null);
-	obj.removeProperty("anchor");
-	obj.removeProperty("anchor_loc");
-	dump("SegLabel", obj);
-      }
+		@Override
+		public void visit(SegLabel obj) {
+			if (obj.getLabel().equals("1..*")) {
+				obj.setParent(null);
+				obj.removeProperty("anchor");
+				obj.removeProperty("anchor_loc");
+				dump("SegLabel", obj);
+			}
 
-      visitObject(obj);
-    }
+			visitObject(obj);
+		}
 
-    @Override
-	public void visit(Operation obj) {
-      if(obj.getNameParameter().equals("setAddress")) {
-    	obj.setParent(null);
-    	dump("Operation", obj);
-      }
+		@Override
+		public void visit(Operation obj) {
+			if (obj.getNameParameter().equals("setAddress")) {
+				obj.setParent(null);
+				dump("Operation", obj);
+			}
 
-       visitObject(obj);
-    }
-  }
+			visitObject(obj);
+		}
+	}
 
-  static void dump(String name, PetalNode node) {
-    try {
-      File file = new File("templates" + File.separatorChar + name + ".ser");
-      ObjectOutputStream s = new ObjectOutputStream(new FileOutputStream(file));
-      s.writeObject(node);
-      s.close();
-    } catch(Exception e) {
-      e.printStackTrace();
-      return;
-    }
-  }
+	static void dump(String name, PetalNode node) {
+		try {
+			File file = new File("templates" + File.separatorChar + name + ".ser");
+			ObjectOutputStream s = new ObjectOutputStream(new FileOutputStream(file));
+			s.writeObject(node);
+			s.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		}
+	}
 
-  public static void main(String[] args) {
-    PetalFile tree = null;
+	public static void main(String[] args) {
+		PetalFile tree = null;
 
-    try {
-      tree = PetalParser.createParser("examples" + File.separatorChar +
-				      "empty.mdl").parse();
+		try {
+			tree = PetalParser.createParser("examples" + File.separatorChar + "empty.mdl").parse();
 
-      dump("PetalFile", tree);
-      dump("LogicalCategory", tree.getLogicalCategory());
-      dump("UseCaseCategory", tree.getUseCaseCategory());
+			dump("PetalFile", tree);
+			dump("LogicalCategory", tree.getLogicalCategory());
+			dump("UseCaseCategory", tree.getUseCaseCategory());
 
-      tree = PetalParser.createParser("examples" + File.separatorChar +
-				      "uni.mdl").parse();
+			tree = PetalParser.createParser("examples" + File.separatorChar + "uni.mdl").parse();
 
-      Traverser t = new Traverser();
-      tree.accept(t);
-    } catch(Exception e) {
-      e.printStackTrace();
-    }
-  }
+			Traverser t = new Traverser();
+			tree.accept(t);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

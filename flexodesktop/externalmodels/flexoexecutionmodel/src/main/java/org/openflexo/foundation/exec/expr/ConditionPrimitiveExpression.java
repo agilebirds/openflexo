@@ -23,33 +23,27 @@ import org.openflexo.antar.expr.EvaluationType;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.bindings.AbstractBinding;
 
-
-
 public class ConditionPrimitiveExpression extends FlexoBuiltInExpression {
 
 	private AbstractBinding conditionPrimitive;
-	
-	public ConditionPrimitiveExpression (AbstractBinding conditionPrimitive)
-	{
+
+	public ConditionPrimitiveExpression(AbstractBinding conditionPrimitive) {
 		super();
 		this.conditionPrimitive = conditionPrimitive;
 	}
 
 	@Override
-	public String toString()
-	{
-		return "<ConditionPrimitiveExpression("+conditionPrimitive.getStringRepresentation()+")>";
+	public String toString() {
+		return "<ConditionPrimitiveExpression(" + conditionPrimitive.getStringRepresentation() + ")>";
 	}
 
 	@Override
-	public String getJavaStringRepresentation() 
-	{
-		
-		return "("+conditionPrimitive.getJavaCodeStringRepresentation()+")";
+	public String getJavaStringRepresentation() {
+
+		return "(" + conditionPrimitive.getJavaCodeStringRepresentation() + ")";
 	}
 
-	public AbstractBinding getConditionPrimitive()
-	{
+	public AbstractBinding getConditionPrimitive() {
 		return conditionPrimitive;
 	}
 

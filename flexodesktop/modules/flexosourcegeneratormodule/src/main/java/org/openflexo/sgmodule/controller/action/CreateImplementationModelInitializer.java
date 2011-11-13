@@ -40,47 +40,38 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
 public class CreateImplementationModelInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CreateImplementationModelInitializer(SGControllerActionInitializer actionInitializer)
-	{
-		super(CreateImplementationModel.actionType,actionInitializer);
+	CreateImplementationModelInitializer(SGControllerActionInitializer actionInitializer) {
+		super(CreateImplementationModel.actionType, actionInitializer);
 	}
 
 	@Override
-	protected SGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (SGControllerActionInitializer)super.getControllerActionInitializer();
+	protected SGControllerActionInitializer getControllerActionInitializer() {
+		return (SGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<CreateImplementationModel> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<CreateImplementationModel> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateImplementationModel>() {
 			@Override
-			public boolean run(ActionEvent e, CreateImplementationModel action)
-			{
+			public boolean run(ActionEvent e, CreateImplementationModel action) {
 				if (action.skipDialog) {
 					return true;
 				}
-				FIBDialog dialog = FIBDialog.instanciateComponent(
-						SGCst.CREATE_IMPLEMENTATION_MODEL_DIALOG_FIB,
-						action, null, true);
+				FIBDialog dialog = FIBDialog.instanciateComponent(SGCst.CREATE_IMPLEMENTATION_MODEL_DIALOG_FIB, action, null, true);
 				return (dialog.getStatus() == Status.VALIDATED);
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<CreateImplementationModel> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<CreateImplementationModel> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateImplementationModel>() {
 			@Override
-			public boolean run(ActionEvent e, CreateImplementationModel action)
-			{
+			public boolean run(ActionEvent e, CreateImplementationModel action) {
 				getController().setCurrentEditedObjectAsModuleView(action.getNewImplementationModelDefinition());
 				return true;
 			}
@@ -88,8 +79,7 @@ public class CreateImplementationModelInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoExceptionHandler<CreateImplementationModel> getDefaultExceptionHandler() 
-	{
+	protected FlexoExceptionHandler<CreateImplementationModel> getDefaultExceptionHandler() {
 		return new FlexoExceptionHandler<CreateImplementationModel>() {
 			@Override
 			public boolean handleException(FlexoException exception, CreateImplementationModel action) {
@@ -106,12 +96,9 @@ public class CreateImplementationModelInitializer extends ActionInitializer {
 		};
 	}
 
-
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return SGIconLibrary.GENERATED_CODE_ICON;
 	}
-
 
 }

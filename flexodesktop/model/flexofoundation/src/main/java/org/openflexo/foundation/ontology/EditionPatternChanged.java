@@ -21,12 +21,10 @@ package org.openflexo.foundation.ontology;
 
 import org.openflexo.foundation.DataModification;
 
-public class EditionPatternChanged extends DataModification
-{
+public class EditionPatternChanged extends DataModification {
 
-    public EditionPatternChanged(EditionPatternInstance editionPatternInstance)
-    {
-        super(DataModification.UNDEFINED, null,editionPatternInstance);
-    }
+	public EditionPatternChanged(EditionPatternInstance editionPatternInstance) {
+		super(DataModification.UNDEFINED, null, editionPatternInstance);
+	}
 
- }
+}

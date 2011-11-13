@@ -26,58 +26,51 @@ import org.openflexo.module.Module;
 import org.openflexo.prefs.ModulePreferences;
 import org.openflexo.toolbox.FileResource;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public final class IEPreferences extends ModulePreferences
-{
+public final class IEPreferences extends ModulePreferences {
 
-    private static final Class IE_PREFERENCES = IEPreferences.class;
+	private static final Class IE_PREFERENCES = IEPreferences.class;
 
-    protected static final String SHOW_BINDINGVALUE_KEY = "showBindingValueInIE";
+	protected static final String SHOW_BINDINGVALUE_KEY = "showBindingValueInIE";
 
-    private static IEController _controller;
+	private static IEController _controller;
 
-    public static void init(IEController controller)
-    {
-        _controller = controller;
-        preferences(IE_PREFERENCES);
-    }
+	public static void init(IEController controller) {
+		_controller = controller;
+		preferences(IE_PREFERENCES);
+	}
 
-    public static void reset() {
-        _controller = null;
-    }
+	public static void reset() {
+		_controller = null;
+	}
 
-    public IEPreferences()
-    {
-        super(Module.IE_MODULE);
-    }
+	public IEPreferences() {
+		super(Module.IE_MODULE);
+	}
 
-    @Override
-    public File getInspectorFile()
-    {
-        return new FileResource("Config/Preferences/IEPrefs.inspector");
-    }
+	@Override
+	public File getInspectorFile() {
+		return new FileResource("Config/Preferences/IEPrefs.inspector");
+	}
 
+	public static Boolean getDisplayBindingValue() {
+		Boolean value = preferences(IE_PREFERENCES).getBooleanProperty(SHOW_BINDINGVALUE_KEY);
+		if (value == null) {
+			return Boolean.FALSE;
+		}
+		return value;
+	}
 
-    public static Boolean getDisplayBindingValue()
-    {
-         Boolean value = preferences(IE_PREFERENCES).getBooleanProperty(SHOW_BINDINGVALUE_KEY);
-        if (value == null) {
-            return Boolean.FALSE;
-        }
-        return value;
-    }
-
-    public static void setDisplayBindingValue(Boolean displayBindingValue)
-    {
-        if (displayBindingValue.booleanValue() == getDisplayBindingValue().booleanValue()) return;
-        preferences(IE_PREFERENCES).setBooleanProperty(SHOW_BINDINGVALUE_KEY, displayBindingValue);
-        _controller.notifyDisplayPrefHasChanged();
-    }
+	public static void setDisplayBindingValue(Boolean displayBindingValue) {
+		if (displayBindingValue.booleanValue() == getDisplayBindingValue().booleanValue())
+			return;
+		preferences(IE_PREFERENCES).setBooleanProperty(SHOW_BINDINGVALUE_KEY, displayBindingValue);
+		_controller.notifyDisplayPrefHasChanged();
+	}
 
 }

@@ -29,25 +29,18 @@ import org.openflexo.fge.controller.CustomClickControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 
-
 public class ShowContextualMenuControl extends MouseClickControl {
 
-	public ShowContextualMenuControl()
-	{
-		super("Show contextual menu", MouseButton.RIGHT, 1,
-				new CustomClickControlAction() {
+	public ShowContextualMenuControl() {
+		super("Show contextual menu", MouseButton.RIGHT, 1, new CustomClickControlAction() {
 			@Override
-			public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, java.awt.event.MouseEvent event)
-			{
-				Point newPoint = SwingUtilities.convertPoint(
-						(Component)event.getSource(), 
-						event.getPoint(), 
-						controller.getDrawingView());
-				((GeomEditController)controller).showContextualMenu(graphicalRepresentation,newPoint);
+			public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+					java.awt.event.MouseEvent event) {
+				Point newPoint = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), controller.getDrawingView());
+				((GeomEditController) controller).showContextualMenu(graphicalRepresentation, newPoint);
 				return false;
 			}
-		},
-		false,false,false,false);
+		}, false, false, false, false);
 	}
 
 }

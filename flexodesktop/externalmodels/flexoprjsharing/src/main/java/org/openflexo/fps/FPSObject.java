@@ -23,31 +23,27 @@ import org.openflexo.foundation.TemporaryFlexoModelObject;
 import org.openflexo.fps.automerge.AutomergeInitializer;
 import org.openflexo.inspector.InspectableObject;
 
-
 public abstract class FPSObject extends TemporaryFlexoModelObject implements InspectableObject {
 
 	static {
 		AutomergeInitializer.initialize();
 	}
-	
-	public boolean isEnabled() 
-	{
+
+	public boolean isEnabled() {
 		return true;
 	}
 
-    @Override
+	@Override
 	public abstract String getClassNameKey();
 
 	// ==========================================================================
-    // ========================== Embedding implementation  =====================
-    // ==========================================================================
+	// ========================== Embedding implementation =====================
+	// ==========================================================================
 
-    public abstract boolean isContainedIn(FPSObject obj);
-    
-    public boolean contains(FPSObject obj)
-    {
-        return obj.isContainedIn(this);
-   }
-    
+	public abstract boolean isContainedIn(FPSObject obj);
+
+	public boolean contains(FPSObject obj) {
+		return obj.isContainedIn(this);
+	}
 
 }

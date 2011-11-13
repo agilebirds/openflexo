@@ -22,13 +22,11 @@ package org.openflexo.foundation.wkf.ws;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.xmlcode.XMLSerializable;
 
-
-
 public interface OutputPort extends XMLSerializable {
 
 	public FlexoProcess getProcess();
-	
-    public MessageDefinition getOutputMessageDefinition();
 
-    public void setOutputMessageDefinition(MessageDefinition aMessageDefinition);
+	public MessageDefinition getOutputMessageDefinition();
+
+	public void setOutputMessageDefinition(MessageDefinition aMessageDefinition);
 }

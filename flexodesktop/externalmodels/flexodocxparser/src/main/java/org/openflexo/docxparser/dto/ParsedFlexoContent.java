@@ -23,32 +23,27 @@ import org.openflexo.docxparser.dto.api.IParsedFlexoContent;
 import org.openflexo.docxparser.dto.api.IParsedFlexoObject;
 import org.openflexo.docxparser.dto.api.IParsedHtml;
 
-public class ParsedFlexoContent implements IParsedFlexoContent
-{
+public class ParsedFlexoContent implements IParsedFlexoContent {
 	private IParsedFlexoObject flexoObject;
 	private IParsedHtml flexoContent;
 
-	public ParsedFlexoContent(IParsedFlexoObject flexoObject)
-	{
+	public ParsedFlexoContent(IParsedFlexoObject flexoObject) {
 		this.flexoObject = flexoObject;
 		this.flexoObject.setParsedFlexoContent(this);
 	}
 
 	@Override
-	public IParsedHtml getFlexoContent()
-	{
+	public IParsedHtml getFlexoContent() {
 		return flexoContent;
 	}
 
 	@Override
-	public void setFlexoContent(IParsedHtml flexoContent)
-	{
+	public void setFlexoContent(IParsedHtml flexoContent) {
 		this.flexoContent = flexoContent;
 	}
 
 	@Override
-	public IParsedFlexoObject getParsedFlexoObject()
-	{
+	public IParsedFlexoObject getParsedFlexoObject() {
 		return flexoObject;
 	}
 }

@@ -29,155 +29,140 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.xmlcode.AccessorInvocationException;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class SetDescriptionAction extends FlexoUndoableAction<SetDescriptionAction,FlexoModelObject,FlexoModelObject>
-{
-    
-    private static final Logger logger = Logger.getLogger(SetDescriptionAction.class.getPackage().getName());
+public class SetDescriptionAction extends FlexoUndoableAction<SetDescriptionAction, FlexoModelObject, FlexoModelObject> {
 
-    public static class SetPropertyActionType extends FlexoActionType<SetDescriptionAction, FlexoModelObject, FlexoModelObject>
-    {
-    	private Vector<Observer> _observers;
-    	
-    	protected SetPropertyActionType (String actionName)
-    	{
-    		super(actionName);
-    	}
+	private static final Logger logger = Logger.getLogger(SetDescriptionAction.class.getPackage().getName());
 
-    	@Override
-    	protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection)
-    	{
-    		return true;
-    	}
+	public static class SetPropertyActionType extends FlexoActionType<SetDescriptionAction, FlexoModelObject, FlexoModelObject> {
+		private Vector<Observer> _observers;
 
-    	@Override
-    	protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection)
-    	{
-    		return false;
-    	}
+		protected SetPropertyActionType(String actionName) {
+			super(actionName);
+		}
 
-    	@Override
-    	public SetDescriptionAction makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-    	{
-    		return new SetDescriptionAction(focusedObject,globalSelection,editor);
-    	}
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return true;
+		}
 
-    	/**
-    	 * Overrides getPersistentProperties
-    	 * @see org.openflexo.foundation.action.FlexoActionType#getPersistentProperties()
-    	 */
-    	@Override
-    	protected String[] getPersistentProperties()
-    	{
-    		return new String[]{"docType","value"};
-    	}
-           
-    }
-    
-    public static final SetPropertyActionType actionType  = new SetPropertyActionType("set_description");
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return false;
+		}
 
-    private DocType docType;
-    
-    private String value;
-    
-    private String previousValue;
-    
-    private String localizedPropertyName;
-    
-    /**
-     * @param actionType
-     * @param focusedObject
-     * @param globalSelection
-     * @param editor
-     */
-    protected SetDescriptionAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+		@Override
+		public SetDescriptionAction makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection,
+				FlexoEditor editor) {
+			return new SetDescriptionAction(focusedObject, globalSelection, editor);
+		}
 
-    /**
-     * Overrides redoAction
-     * @see org.openflexo.foundation.action.FlexoUndoableAction#redoAction(java.lang.Object)
-     */
-    @Override
-    protected void redoAction(Object context) throws FlexoException
-    {
-        doAction(context);
-    }
+		/**
+		 * Overrides getPersistentProperties
+		 * 
+		 * @see org.openflexo.foundation.action.FlexoActionType#getPersistentProperties()
+		 */
+		@Override
+		protected String[] getPersistentProperties() {
+			return new String[] { "docType", "value" };
+		}
 
-    /**
-     * Overrides undoAction
-     * @see org.openflexo.foundation.action.FlexoUndoableAction#undoAction(java.lang.Object)
-     */
-    @Override
-    protected void undoAction(Object context) throws FlexoException
-    {
-    	logger.info("Undo: set description from "+value+" to "+previousValue+" again");
-        getFocusedObject().setSpecificDescriptionsForKey(previousValue, getDocType().getName());
-    }
+	}
 
-    /**
-     * Overrides doAction
-     * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
-     */
-    @Override
-    protected void doAction(Object context) throws FlexoException
-    {
-    	previousValue = getFocusedObject().getSpecificDescriptionForKey(getDocType().getName());
-    	try {
-    		getFocusedObject().setSpecificDescriptionsForKey(getValue(), getDocType().getName());
-    	}
-    	catch (AccessorInvocationException exception) {
-    		if (exception.getCause() instanceof FlexoException)
-    			throw (FlexoException)exception.getCause();
-       		logger.warning("Unexpected exception: see log for details");
-       		exception.printStackTrace();
-       		if (exception.getCause() instanceof Exception)
-       			throw new UnexpectedException((Exception) exception.getCause());
-    	}
-    }
-    
-    public DocType getDocType()
-    {
-        return docType;
-    }
+	public static final SetPropertyActionType actionType = new SetPropertyActionType("set_description");
 
-    public void setDocType(DocType key)
-    {
-        this.docType = key;
-    }
+	private DocType docType;
 
-    public String getValue()
-    {
-        return value;
-    }
+	private String value;
 
-    public void setValue(String value)
-    {
-        this.value = value;
-    }
+	private String previousValue;
 
-    public static SetDescriptionAction makeAction(FlexoModelObject object, DocType key, String value, FlexoEditor editor)
-    {
-    	SetDescriptionAction returned = actionType.makeNewAction(object, null, editor);
-    	returned.setDocType(key);
-       	returned.setValue(value);
-       	return returned;
-    }
+	private String localizedPropertyName;
 
-    public String getLocalizedPropertyName()
-    {
-        return localizedPropertyName;
-    }
+	/**
+	 * @param actionType
+	 * @param focusedObject
+	 * @param globalSelection
+	 * @param editor
+	 */
+	protected SetDescriptionAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    public void setLocalizedPropertyName(String localizedPropertyName)
-    {
-        this.localizedPropertyName = localizedPropertyName;
-    }
+	/**
+	 * Overrides redoAction
+	 * 
+	 * @see org.openflexo.foundation.action.FlexoUndoableAction#redoAction(java.lang.Object)
+	 */
+	@Override
+	protected void redoAction(Object context) throws FlexoException {
+		doAction(context);
+	}
+
+	/**
+	 * Overrides undoAction
+	 * 
+	 * @see org.openflexo.foundation.action.FlexoUndoableAction#undoAction(java.lang.Object)
+	 */
+	@Override
+	protected void undoAction(Object context) throws FlexoException {
+		logger.info("Undo: set description from " + value + " to " + previousValue + " again");
+		getFocusedObject().setSpecificDescriptionsForKey(previousValue, getDocType().getName());
+	}
+
+	/**
+	 * Overrides doAction
+	 * 
+	 * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
+	 */
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		previousValue = getFocusedObject().getSpecificDescriptionForKey(getDocType().getName());
+		try {
+			getFocusedObject().setSpecificDescriptionsForKey(getValue(), getDocType().getName());
+		} catch (AccessorInvocationException exception) {
+			if (exception.getCause() instanceof FlexoException)
+				throw (FlexoException) exception.getCause();
+			logger.warning("Unexpected exception: see log for details");
+			exception.printStackTrace();
+			if (exception.getCause() instanceof Exception)
+				throw new UnexpectedException((Exception) exception.getCause());
+		}
+	}
+
+	public DocType getDocType() {
+		return docType;
+	}
+
+	public void setDocType(DocType key) {
+		this.docType = key;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	public static SetDescriptionAction makeAction(FlexoModelObject object, DocType key, String value, FlexoEditor editor) {
+		SetDescriptionAction returned = actionType.makeNewAction(object, null, editor);
+		returned.setDocType(key);
+		returned.setValue(value);
+		return returned;
+	}
+
+	public String getLocalizedPropertyName() {
+		return localizedPropertyName;
+	}
+
+	public void setLocalizedPropertyName(String localizedPropertyName) {
+		this.localizedPropertyName = localizedPropertyName;
+	}
 
 	public Object getPreviousValue() {
 		return previousValue;

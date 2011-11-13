@@ -19,30 +19,25 @@
  */
 package org.openflexo.foundation.exec.inst;
 
-
 public class DeleteProcessInstance extends CustomInstruction {
 
-	public DeleteProcessInstance ()
-	{
+	public DeleteProcessInstance() {
 		super();
 		setInlineComment("Delete current ProcessInstance");
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return "[DeleteProcessInstance]";
 	}
 
 	@Override
-	public String getJavaStringRepresentation() 
-	{
+	public String getJavaStringRepresentation() {
 		return "deleteProcessInstance();";
 	}
-	
+
 	@Override
-	public DeleteProcessInstance clone()
-	{
+	public DeleteProcessInstance clone() {
 		DeleteProcessInstance returned = new DeleteProcessInstance();
 		returned.setHeaderComment(getHeaderComment());
 		returned.setInlineComment(getInlineComment());

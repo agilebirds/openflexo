@@ -24,14 +24,12 @@ import java.util.logging.Logger;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.view.ShapeView;
 
-
 public class ShapeViewMouseListener extends FGEViewMouseListener {
 
 	private static final Logger logger = Logger.getLogger(ShapeViewMouseListener.class.getPackage().getName());
 
-	public ShapeViewMouseListener(ShapeGraphicalRepresentation aGraphicalRepresentation, ShapeView aView)
-	{
-		super(aGraphicalRepresentation,aView);
+	public ShapeViewMouseListener(ShapeGraphicalRepresentation aGraphicalRepresentation, ShapeView aView) {
+		super(aGraphicalRepresentation, aView);
 	}
-	
+
 }

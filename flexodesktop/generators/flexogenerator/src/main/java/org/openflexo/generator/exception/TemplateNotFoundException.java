@@ -24,16 +24,16 @@ import java.io.IOException;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.generator.AbstractProjectGenerator;
 
-
-public class TemplateNotFoundException extends TemplateReplacementException
-{
- 	public TemplateNotFoundException(String templateName, String searchedDirectories,  AbstractProjectGenerator<? extends GenerationRepository> projectGenerator)
-	{
-		super("Template not found","template_not_found","template name : "+templateName+"\n"+searchedDirectories,new Exception(),projectGenerator);
+public class TemplateNotFoundException extends TemplateReplacementException {
+	public TemplateNotFoundException(String templateName, String searchedDirectories,
+			AbstractProjectGenerator<? extends GenerationRepository> projectGenerator) {
+		super("Template not found", "template_not_found", "template name : " + templateName + "\n" + searchedDirectories, new Exception(),
+				projectGenerator);
 	}
 
- 	public TemplateNotFoundException(String templateName, IOException ioException,  AbstractProjectGenerator<? extends GenerationRepository> projectGenerator)
-	{
-		super("Template not found","template_not_found","template name : "+templateName+"\nIOException occured.",ioException,projectGenerator);
+	public TemplateNotFoundException(String templateName, IOException ioException,
+			AbstractProjectGenerator<? extends GenerationRepository> projectGenerator) {
+		super("Template not found", "template_not_found", "template name : " + templateName + "\nIOException occured.", ioException,
+				projectGenerator);
 	}
 }

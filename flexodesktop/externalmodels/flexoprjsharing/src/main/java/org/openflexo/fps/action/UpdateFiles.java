@@ -36,89 +36,78 @@ import org.openflexo.fps.CVSAbstractFile.UpdateListener;
 import org.openflexo.fps.CVSAbstractFile.UpdateStatus;
 import org.openflexo.localization.FlexoLocalization;
 
-public class UpdateFiles extends MultipleFileCVSAction<UpdateFiles> implements UpdateListener
-{
+public class UpdateFiles extends MultipleFileCVSAction<UpdateFiles> implements UpdateListener {
 
-    private static final Logger logger = Logger.getLogger(UpdateFiles.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(UpdateFiles.class.getPackage().getName());
 
-    public static MultipleFileCVSActionType<UpdateFiles> actionType 
-    = new MultipleFileCVSActionType<UpdateFiles> (
-    		"cvs_update",CVS_OPERATIONS_GROUP,FlexoActionType.NORMAL_ACTION_TYPE) {
+	public static MultipleFileCVSActionType<UpdateFiles> actionType = new MultipleFileCVSActionType<UpdateFiles>("cvs_update",
+			CVS_OPERATIONS_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-    	@Override
-		public UpdateFiles makeNewAction(FPSObject focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) 
-    	{
-    		return new UpdateFiles(focusedObject, globalSelection, editor);
-    	}
+		/**
+		 * Factory method
+		 */
+		@Override
+		public UpdateFiles makeNewAction(FPSObject focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {
+			return new UpdateFiles(focusedObject, globalSelection, editor);
+		}
 
-    	@Override
-		protected boolean accept(CVSFile aFile) 
-    	{
-    		return (aFile.getStatus().isRemotelyModified() 
-    				&& !aFile.getStatus().isConflicting());
-    	}
+		@Override
+		protected boolean accept(CVSFile aFile) {
+			return (aFile.getStatus().isRemotelyModified() && !aFile.getStatus().isConflicting());
+		}
 
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (UpdateFiles.actionType, CVSAbstractFile.class);
-    }
-    
+	};
 
-    UpdateFiles (FPSObject focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	static {
+		FlexoModelObject.addActionForClass(UpdateFiles.actionType, CVSAbstractFile.class);
+	}
 
-    @Override
-	protected void doAction(Object context)
-    {
-    	logger.info ("Update files");
-    	makeFlexoProgress(FlexoLocalization.localizedForKey("updating_files"), 4);
-    	setProgress("preparing_update");
-    	Hashtable<CVSContainer,Vector<CVSFile>> filesToUpdate 
-    	= new Hashtable<CVSContainer,Vector<CVSFile>>();
-    	for (CVSFile f : getSelectedCVSFilesOnWhyCurrentActionShouldApply()) {
-    		CVSContainer dir = f.getContainer();
-    		Vector<CVSFile> entriesForDir = filesToUpdate.get(dir);
-    		if (entriesForDir == null) {
-    			entriesForDir = new Vector<CVSFile>();
-    			filesToUpdate.put(dir, entriesForDir);
-    		}
-    		entriesForDir.add(f);
-    	}   
-    	
-    	sendUpdateRequests(filesToUpdate);
-    	
-    	waitResponses();
-    	
-    	hideFlexoProgress();
-    }
+	UpdateFiles(FPSObject focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    private synchronized void sendUpdateRequests(Hashtable<CVSContainer,Vector<CVSFile>> filesToUpdate)
-    {
-     	setProgress(FlexoLocalization.localizedForKey("updating_files"));
-    	resetSecondaryProgress(filesToUpdate.keySet().size());
-    	for (CVSContainer dir : filesToUpdate.keySet()) {
-    		setSecondaryProgress(FlexoLocalization.localizedForKey("updating")+" "+((CVSAbstractFile)dir).getFile().getAbsolutePath());
-    		CVSFile[] filesToUpdateInThisDir = filesToUpdate.get(dir).toArray(new CVSFile[filesToUpdate.get(dir).size()]);
-       		logger.info("Updating in "+dir);
-       		((CVSAbstractFile)dir).update(this, false, filesToUpdateInThisDir);
-       		filesToWait += filesToUpdateInThisDir.length;
-    	}      	
-     }
+	@Override
+	protected void doAction(Object context) {
+		logger.info("Update files");
+		makeFlexoProgress(FlexoLocalization.localizedForKey("updating_files"), 4);
+		setProgress("preparing_update");
+		Hashtable<CVSContainer, Vector<CVSFile>> filesToUpdate = new Hashtable<CVSContainer, Vector<CVSFile>>();
+		for (CVSFile f : getSelectedCVSFilesOnWhyCurrentActionShouldApply()) {
+			CVSContainer dir = f.getContainer();
+			Vector<CVSFile> entriesForDir = filesToUpdate.get(dir);
+			if (entriesForDir == null) {
+				entriesForDir = new Vector<CVSFile>();
+				filesToUpdate.put(dir, entriesForDir);
+			}
+			entriesForDir.add(f);
+		}
 
-    private void waitResponses()
-    {
-    	setProgress(FlexoLocalization.localizedForKey("waiting_for_responses"));
-    	resetSecondaryProgress(filesToWait);
-    	
-    	lastReception = System.currentTimeMillis();
-    	
-    	while (filesToWait > 0 && System.currentTimeMillis() - lastReception < TIME_OUT) {
+		sendUpdateRequests(filesToUpdate);
+
+		waitResponses();
+
+		hideFlexoProgress();
+	}
+
+	private synchronized void sendUpdateRequests(Hashtable<CVSContainer, Vector<CVSFile>> filesToUpdate) {
+		setProgress(FlexoLocalization.localizedForKey("updating_files"));
+		resetSecondaryProgress(filesToUpdate.keySet().size());
+		for (CVSContainer dir : filesToUpdate.keySet()) {
+			setSecondaryProgress(FlexoLocalization.localizedForKey("updating") + " " + ((CVSAbstractFile) dir).getFile().getAbsolutePath());
+			CVSFile[] filesToUpdateInThisDir = filesToUpdate.get(dir).toArray(new CVSFile[filesToUpdate.get(dir).size()]);
+			logger.info("Updating in " + dir);
+			((CVSAbstractFile) dir).update(this, false, filesToUpdateInThisDir);
+			filesToWait += filesToUpdateInThisDir.length;
+		}
+	}
+
+	private void waitResponses() {
+		setProgress(FlexoLocalization.localizedForKey("waiting_for_responses"));
+		resetSecondaryProgress(filesToWait);
+
+		lastReception = System.currentTimeMillis();
+
+		while (filesToWait > 0 && System.currentTimeMillis() - lastReception < TIME_OUT) {
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
@@ -132,35 +121,35 @@ public class UpdateFiles extends MultipleFileCVSAction<UpdateFiles> implements U
 				}
 			}
 		}
-    	
-    	if (filesToWait > 0) {
-    		timeOutReceived = true;
-    		logger.warning("Update finished with time-out expired: still waiting for "+filesToWait+" files");
-    	}
-    	
-     }
 
-    @Override
-	public boolean hasActionExecutionSucceeded ()
-    {
-    	if (timeOutReceived) return false;
-    	else return super.hasActionExecutionSucceeded();
-    }
-    
-    private boolean timeOutReceived;
-    private	long lastReception;
-    private static final long TIME_OUT = CVSConstants.TIME_OUT; // 60 s
-    private int filesToWait = 0;
-    private Vector<CVSFile> filesToNotify = new Vector<CVSFile>();
-    
-    @Override
-	public synchronized void notifyUpdateFinished(CVSFile file, UpdateStatus status) 
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("Update for "+file.getFile()+" finished with status "+status);
-    	filesToWait--;
-    	filesToNotify.add(file);
-    	lastReception = System.currentTimeMillis();
-    }
-	
+		if (filesToWait > 0) {
+			timeOutReceived = true;
+			logger.warning("Update finished with time-out expired: still waiting for " + filesToWait + " files");
+		}
+
+	}
+
+	@Override
+	public boolean hasActionExecutionSucceeded() {
+		if (timeOutReceived)
+			return false;
+		else
+			return super.hasActionExecutionSucceeded();
+	}
+
+	private boolean timeOutReceived;
+	private long lastReception;
+	private static final long TIME_OUT = CVSConstants.TIME_OUT; // 60 s
+	private int filesToWait = 0;
+	private Vector<CVSFile> filesToNotify = new Vector<CVSFile>();
+
+	@Override
+	public synchronized void notifyUpdateFinished(CVSFile file, UpdateStatus status) {
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("Update for " + file.getFile() + " finished with status " + status);
+		filesToWait--;
+		filesToNotify.add(file);
+		lastReception = System.currentTimeMillis();
+	}
+
 }

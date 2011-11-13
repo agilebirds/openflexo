@@ -30,38 +30,34 @@ import java.util.logging.Logger;
 import org.openflexo.sgmodule.controller.SGController;
 import org.openflexo.view.menu.ToolsMenu;
 
-
 /**
  * 'Tools' menu for this Module
  * 
  * @author sylvain
  */
-public class SGToolsMenu extends ToolsMenu
-{
+public class SGToolsMenu extends ToolsMenu {
 
-    private static final Logger logger = Logger.getLogger(SGToolsMenu.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(SGToolsMenu.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance Variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance Variables
+	// =========================
+	// ==========================================================================
 
-      protected SGController _sgController;
+	protected SGController _sgController;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public SGToolsMenu(SGController controller)
-    {
-        super(controller);
-        _sgController = controller;
-        // Put your actions here
-    }
+	public SGToolsMenu(SGController controller) {
+		super(controller);
+		_sgController = controller;
+		// Put your actions here
+	}
 
-    public SGController getSGController()
-    {
-        return _sgController;
-    }
+	public SGController getSGController() {
+		return _sgController;
+	}
 }

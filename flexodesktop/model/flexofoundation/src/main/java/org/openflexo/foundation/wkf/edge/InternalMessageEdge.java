@@ -25,7 +25,6 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.node.AbstractNode;
 import org.openflexo.foundation.wkf.ws.PortRegistery;
 
-
 /**
  * Abstract edge linking a FlexoNode and a FlexoPort, inside a FlexoProcess
  * 

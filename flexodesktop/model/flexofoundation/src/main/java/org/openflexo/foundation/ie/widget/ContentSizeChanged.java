@@ -23,18 +23,16 @@ import org.openflexo.foundation.ie.dm.IEDataModification;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class ContentSizeChanged extends IEDataModification
-{
+public class ContentSizeChanged extends IEDataModification {
 
-    /**
-     * @param oldValue
-     * @param newValue
-     */
-    public ContentSizeChanged()
-    {
-        super("resize",null, null);
-    }
+	/**
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public ContentSizeChanged() {
+		super("resize", null, null);
+	}
 
 }

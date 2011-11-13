@@ -58,21 +58,21 @@ public class ZipUtils {
 		if (!outputDir.exists()) {
 			boolean b = outputDir.mkdirs();
 			if (!b) {
-				throw new IllegalArgumentException("Could not create dir "+outputDir.getAbsolutePath());
+				throw new IllegalArgumentException("Could not create dir " + outputDir.getAbsolutePath());
 			}
 		}
 		if (!outputDir.isDirectory())
-			throw new IllegalArgumentException(outputDir.getAbsolutePath()+"is not a directory or is not writeable!");
+			throw new IllegalArgumentException(outputDir.getAbsolutePath() + "is not a directory or is not writeable!");
 		ZipFile zipFile;
 		zipFile = new ZipFile(zip);
 		entries = zipFile.entries();
-		if (progress!=null) {
+		if (progress != null) {
 			progress.resetSecondaryProgress(zipFile.size());
 		}
 		while (entries.hasMoreElements()) {
 			ZipEntry entry = (ZipEntry) entries.nextElement();
-			if (progress!=null) {
-				progress.setSecondaryProgress(Localized.localizedForKey("unzipping")+" "+entry.getName());
+			if (progress != null) {
+				progress.setSecondaryProgress(Localized.localizedForKey("unzipping") + " " + entry.getName());
 			}
 			if (entry.isDirectory()) {
 				// Assume directories are stored parents first then
@@ -87,7 +87,7 @@ public class ZipUtils {
 				copyInputStream(zipFile.getInputStream(entry), new BufferedOutputStream(new FileOutputStream(outputFile)));
 			} catch (IOException e) {
 				e.printStackTrace();
-				System.err.println("Could not extract: "+outputFile.getAbsolutePath()+" maybe some files contains invalid characters.");
+				System.err.println("Could not extract: " + outputFile.getAbsolutePath() + " maybe some files contains invalid characters.");
 			}
 		}
 		zipFile.close();
@@ -95,7 +95,7 @@ public class ZipUtils {
 
 	public static void unzip(File zip, String outputDirPath, IProgress progress) throws ZipException, IOException {
 		File outputDir = new File(outputDirPath);
-		unzip(zip, outputDir,progress);
+		unzip(zip, outputDir, progress);
 	}
 
 	public static void unzip(File zip, String outputDirPath) throws ZipException, IOException {
@@ -104,8 +104,11 @@ public class ZipUtils {
 
 	/**
 	 * This method makes a zip file on file <code>zipOutput</code>out of the given <code>fileToZip</code>
-	 * @param zipOutput - the output where to write the zip
-	 * @param fileToZip the file to zip (wheter it is a file or a directory)
+	 * 
+	 * @param zipOutput
+	 *            - the output where to write the zip
+	 * @param fileToZip
+	 *            the file to zip (wheter it is a file or a directory)
 	 * @throws IOException
 	 */
 	public static void makeZip(File zipOutput, File fileToZip) throws IOException {
@@ -114,8 +117,11 @@ public class ZipUtils {
 
 	/**
 	 * This method makes a zip file on file <code>zipOutput</code>out of the given <code>fileToZip</code>
-	 * @param zipOutput - the output where to write the zip
-	 * @param fileToZip the file to zip (wheter it is a file or a directory)
+	 * 
+	 * @param zipOutput
+	 *            - the output where to write the zip
+	 * @param fileToZip
+	 *            the file to zip (wheter it is a file or a directory)
 	 * @throws IOException
 	 */
 	public static void makeZip(File zipOutput, File fileToZip, IProgress progress) throws IOException {
@@ -124,8 +130,11 @@ public class ZipUtils {
 
 	/**
 	 * This method makes a zip file on file <code>zipOutput</code>out of the given <code>fileToZip</code>
-	 * @param zipOutput - the output where to write the zip
-	 * @param fileToZip the file to zip (wheter it is a file or a directory)
+	 * 
+	 * @param zipOutput
+	 *            - the output where to write the zip
+	 * @param fileToZip
+	 *            the file to zip (wheter it is a file or a directory)
 	 * @throws IOException
 	 */
 	public static void makeZip(File zipOutput, File fileToZip, IProgress progress, FileFilter filter) throws IOException {
@@ -138,12 +147,11 @@ public class ZipUtils {
 		zos.setLevel(level);
 		try {
 			if (fileToZip.isDirectory()) {
-				if (progress!=null) {
-					progress.resetSecondaryProgress(FileUtils.countFilesInDirectory(fileToZip,true)+1);
+				if (progress != null) {
+					progress.resetSecondaryProgress(FileUtils.countFilesInDirectory(fileToZip, true) + 1);
 				}
-				zipDir(fileToZip.getParentFile().getAbsolutePath().length()+1,fileToZip, zos, progress, filter);
-			}
-			else {
+				zipDir(fileToZip.getParentFile().getAbsolutePath().length() + 1, fileToZip, zos, progress, filter);
+			} else {
 				zipFile(fileToZip, zos, progress);
 			}
 		} finally {
@@ -153,8 +161,11 @@ public class ZipUtils {
 
 	/**
 	 * This method makes a zip on the outputsream <code>zos</code>out of the given <code>dirToZip</code>
-	 * @param dirToZip the directory to zip
-	 * @param zos the output stream where to write the zip data
+	 * 
+	 * @param dirToZip
+	 *            the directory to zip
+	 * @param zos
+	 *            the output stream where to write the zip data
 	 * @throws IOException
 	 */
 	public static void zipDir(File dirToZip, ZipOutputStream zos) throws IOException {
@@ -163,21 +174,27 @@ public class ZipUtils {
 
 	/**
 	 * This method makes a zip on the outputsream <code>zos</code>out of the given <code>dirToZip</code>
-	 * @param dirToZip the directory to zip
-	 * @param zos the output stream where to write the zip data
+	 * 
+	 * @param dirToZip
+	 *            the directory to zip
+	 * @param zos
+	 *            the output stream where to write the zip data
 	 * @throws IOException
 	 */
 	public static void zipDir(File dirToZip, ZipOutputStream zos, IProgress progress) throws IOException {
-		if (progress!=null) {
-			progress.resetSecondaryProgress(FileUtils.countFilesInDirectory(dirToZip,true));
+		if (progress != null) {
+			progress.resetSecondaryProgress(FileUtils.countFilesInDirectory(dirToZip, true));
 		}
-		zipDir(dirToZip.getParentFile().getAbsolutePath().length()+1,dirToZip, zos, progress, null);
+		zipDir(dirToZip.getParentFile().getAbsolutePath().length() + 1, dirToZip, zos, progress, null);
 	}
 
 	/**
 	 * This method makes a zip on the outputsream <code>zos</code>out of the given <code>fileToZip</code>
-	 * @param fileToZip the file to zip
-	 * @param zos the output stream where to write the zip data
+	 * 
+	 * @param fileToZip
+	 *            the file to zip
+	 * @param zos
+	 *            the output stream where to write the zip data
 	 * @throws IOException
 	 */
 
@@ -187,28 +204,31 @@ public class ZipUtils {
 
 	/**
 	 * This method makes a zip on the outputsream <code>zos</code>out of the given <code>fileToZip</code>
-	 * @param fileToZip the file to zip
-	 * @param zos the output stream where to write the zip data
+	 * 
+	 * @param fileToZip
+	 *            the file to zip
+	 * @param zos
+	 *            the output stream where to write the zip data
 	 * @throws IOException
 	 */
 
-	public static void zipFile(File fileToZip, ZipOutputStream zos,IProgress progress) throws IOException {
-		if (progress!=null) {
+	public static void zipFile(File fileToZip, ZipOutputStream zos, IProgress progress) throws IOException {
+		if (progress != null) {
 			progress.resetSecondaryProgress(1);
 		}
-		zipFile(fileToZip.getParentFile().getAbsolutePath().length()+1,fileToZip, zos, progress);
+		zipFile(fileToZip.getParentFile().getAbsolutePath().length() + 1, fileToZip, zos, progress);
 	}
 
-	public static void zipDir(int pathPrefixSize, File dirToZip, ZipOutputStream zos, IProgress progress, FileFilter filter) throws IOException
-	{
+	public static void zipDir(int pathPrefixSize, File dirToZip, ZipOutputStream zos, IProgress progress, FileFilter filter)
+			throws IOException {
 		String[] dirList = dirToZip.list();
 		for (int i = 0; i < dirList.length; i++) {
 			File f = new File(dirToZip, dirList[i]);
-			if (filter==null ||(f!=null && filter.accept(f))) {
+			if (filter == null || (f != null && filter.accept(f))) {
 				if (f.isDirectory()) {
 					zipDir(pathPrefixSize, f, zos, progress, filter);
 				} else {
-					zipFile(pathPrefixSize,f, zos, progress);
+					zipFile(pathPrefixSize, f, zos, progress);
 				}
 			}
 		}
@@ -219,8 +239,9 @@ public class ZipUtils {
 			return;
 		byte[] readBuffer = new byte[4096];
 		int bytesIn = 0;
-		if (progress!=null) {
-			progress.setSecondaryProgress(Localized.localizedForKey("zipping_file")+" "+fileToZip.getAbsolutePath().substring(pathPrefixSize));
+		if (progress != null) {
+			progress.setSecondaryProgress(Localized.localizedForKey("zipping_file") + " "
+					+ fileToZip.getAbsolutePath().substring(pathPrefixSize));
 		}
 		FileInputStream fis = new FileInputStream(fileToZip);
 		try {
@@ -236,8 +257,7 @@ public class ZipUtils {
 		}
 	}
 
-	public static void createEmptyZip(File zip) throws IOException
-	{
+	public static void createEmptyZip(File zip) throws IOException {
 		ZipOutputStream zos = null;
 		try {
 			FileUtils.createNewFile(zip);
@@ -245,7 +265,7 @@ public class ZipUtils {
 			ZipEntry entry = new ZipEntry("");
 			zos.putNextEntry(entry);
 		} finally {
-			if (zos!=null)
+			if (zos != null)
 				zos.close();
 		}
 	}

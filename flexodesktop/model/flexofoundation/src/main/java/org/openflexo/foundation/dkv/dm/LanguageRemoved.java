@@ -21,32 +21,27 @@ package org.openflexo.foundation.dkv.dm;
 
 import org.openflexo.foundation.dkv.Language;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class LanguageRemoved extends DKVDataModification
-{
+public class LanguageRemoved extends DKVDataModification {
 
-    private Language _removedLanguage;
+	private Language _removedLanguage;
 
-   /**
-     * @param modificationType
-     * @param propertyName
-     * @param oldValue
-     * @param newValue
-     */
-    public LanguageRemoved(Language oldValue)
-    {
-        super(-1, "languages", oldValue, null);
-        _removedLanguage = oldValue;
-    }
+	/**
+	 * @param modificationType
+	 * @param propertyName
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public LanguageRemoved(Language oldValue) {
+		super(-1, "languages", oldValue, null);
+		_removedLanguage = oldValue;
+	}
 
-    public Language getRemovedLanguage() 
-    {
-        return _removedLanguage;
-    }
-
+	public Language getRemovedLanguage() {
+		return _removedLanguage;
+	}
 
 }

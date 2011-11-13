@@ -23,22 +23,21 @@ import org.openflexo.foundation.FlexoException;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class ColumnIsNotEmpty extends FlexoException
-{
+public class ColumnIsNotEmpty extends FlexoException {
 
-    private int column;
-    /**
-     * @param colCount
-     */
-    public ColumnIsNotEmpty(int column)
-    {
-        this.column=column;
-    }
-    public int getColumn()
-    {
-        return column;
-    }
+	private int column;
+
+	/**
+	 * @param colCount
+	 */
+	public ColumnIsNotEmpty(int column) {
+		this.column = column;
+	}
+
+	public int getColumn() {
+		return column;
+	}
 
 }

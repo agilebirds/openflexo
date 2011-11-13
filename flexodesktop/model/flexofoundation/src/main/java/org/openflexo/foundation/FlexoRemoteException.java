@@ -24,7 +24,7 @@ import java.rmi.RemoteException;
 public class FlexoRemoteException extends FlexoException {
 
 	public FlexoRemoteException(String message, RemoteException e) {
-		super(message!=null?message:(e!=null?e.getMessage():null), e);
+		super(message != null ? message : (e != null ? e.getMessage() : null), e);
 	}
 
 	@Override

@@ -30,115 +30,106 @@ import org.netbeans.lib.cvsclient.command.CommandException;
 import org.netbeans.lib.cvsclient.util.LoggedDataInputStream;
 
 /**
- * This Template response allows the server to send a template file that is
- * used when committing changes. The client tools can read the Template file
- * which is stored in CVS/Template and display it to the user to be used as a
- * prompt for commit comments.
+ * This Template response allows the server to send a template file that is used when committing changes. The client tools can read the
+ * Template file which is stored in CVS/Template and display it to the user to be used as a prompt for commit comments.
+ * 
  * @author Robert Greig
  */
-class TemplateResponse
-        implements Response {
-    /**
-     * A reference to an uncompressed file handler
-     */
-/*
-    // TODO: Should this be taken from ResponseServices???
-    protected static FileHandler uncompressedFileHandler;
-*/
+class TemplateResponse implements Response {
+	/**
+	 * A reference to an uncompressed file handler
+	 */
+	/*
+	    // TODO: Should this be taken from ResponseServices???
+	    protected static FileHandler uncompressedFileHandler;
+	*/
 
-    /**
-     * The local path of the new file
-     */
-    protected String localPath;
+	/**
+	 * The local path of the new file
+	 */
+	protected String localPath;
 
-    /**
-     * The full repository path of the file
-     */
-    protected String repositoryPath;
+	/**
+	 * The full repository path of the file
+	 */
+	protected String repositoryPath;
 
-    /**
-     * Creates new TemplateResponse
-     */
-    public TemplateResponse() {
-    }
+	/**
+	 * Creates new TemplateResponse
+	 */
+	public TemplateResponse() {
+	}
 
-/*
-    // TODO: replace this with a call to ResponseSerivices::getUncompr....ler?
-    protected static FileHandler getUncompressedFileHandler()
-    {
-        if (uncompressedFileHandler == null) {
-            uncompressedFileHandler = new DefaultFileHandler();
-        }
-        return uncompressedFileHandler;
-    }
-*/
+	/*
+	    // TODO: replace this with a call to ResponseSerivices::getUncompr....ler?
+	    protected static FileHandler getUncompressedFileHandler()
+	    {
+	        if (uncompressedFileHandler == null) {
+	            uncompressedFileHandler = new DefaultFileHandler();
+	        }
+	        return uncompressedFileHandler;
+	    }
+	*/
 
-    /**
-     * Process the data for the response.
-     * @param dis the data inputstream allowing the client to read the server's
-     * response. Note that the actual response name has already been read
-     * and the input stream is positioned just before the first argument, if
-     * any.
-     */
-    @Override
-	public void process(LoggedDataInputStream dis, ResponseServices services)
-            throws ResponseException {
-        try {
-            localPath = dis.readLine();
-            repositoryPath = dis.readLine();
+	/**
+	 * Process the data for the response.
+	 * 
+	 * @param dis
+	 *            the data inputstream allowing the client to read the server's response. Note that the actual response name has already
+	 *            been read and the input stream is positioned just before the first argument, if any.
+	 */
+	@Override
+	public void process(LoggedDataInputStream dis, ResponseServices services) throws ResponseException {
+		try {
+			localPath = dis.readLine();
+			repositoryPath = dis.readLine();
 
-            int length = Integer.parseInt(dis.readLine());
+			int length = Integer.parseInt(dis.readLine());
 
-            // now read in the file
-            final String filePath = services.convertPathname(localPath,
-                                                             repositoryPath) +
-                    "CVS/Template"; //NOI18N
+			// now read in the file
+			final String filePath = services.convertPathname(localPath, repositoryPath) + "CVS/Template"; // NOI18N
 
-            // #69639 write metadata directly
-            // XXX possibly add a method to AdminHandler
-            OutputStream out = null;
-            File file = new File(filePath);
-            file.getParentFile().mkdirs();
-            try {
-                out = new FileOutputStream(file);
-                out = new BufferedOutputStream(out);
-                byte[] lineSeparator = System.getProperty("line.separator").getBytes();  // NOI18N
-                byte[] data = dis.readBytes(length);
-                for (int i = 0; i<data.length; i++) {
-                    byte ch = data[i];
-                    if (ch == '\n') {
-                        out.write(lineSeparator);
-                    } else {
-                        out.write(ch);
-                    }
-                }
-            } catch (EOFException eof) {
-            } finally {
-                if (out != null) {
-                    try {
-                        out.close();
-                    } catch (IOException alreadyClosed) {
-                    }
-                }
-            }
-        }
-        catch (EOFException ex) {
-            String localMessage =
-                    CommandException.getLocalMessage("CommandException.EndOfFile"); //NOI18N
-            throw new ResponseException(ex, localMessage);
-        }
-        catch (IOException ex) {
-            throw new ResponseException(ex);
-        }
-    }
+			// #69639 write metadata directly
+			// XXX possibly add a method to AdminHandler
+			OutputStream out = null;
+			File file = new File(filePath);
+			file.getParentFile().mkdirs();
+			try {
+				out = new FileOutputStream(file);
+				out = new BufferedOutputStream(out);
+				byte[] lineSeparator = System.getProperty("line.separator").getBytes(); // NOI18N
+				byte[] data = dis.readBytes(length);
+				for (int i = 0; i < data.length; i++) {
+					byte ch = data[i];
+					if (ch == '\n') {
+						out.write(lineSeparator);
+					} else {
+						out.write(ch);
+					}
+				}
+			} catch (EOFException eof) {
+			} finally {
+				if (out != null) {
+					try {
+						out.close();
+					} catch (IOException alreadyClosed) {
+					}
+				}
+			}
+		} catch (EOFException ex) {
+			String localMessage = CommandException.getLocalMessage("CommandException.EndOfFile"); // NOI18N
+			throw new ResponseException(ex, localMessage);
+		} catch (IOException ex) {
+			throw new ResponseException(ex);
+		}
+	}
 
-    /**
-     * Is this a terminal response, i.e. should reading of responses stop
-     * after this response. This is true for responses such as OK or
-     * an error response
-     */
-    @Override
+	/**
+	 * Is this a terminal response, i.e. should reading of responses stop after this response. This is true for responses such as OK or an
+	 * error response
+	 */
+	@Override
 	public boolean isTerminalResponse() {
-        return false;
-    }
+		return false;
+	}
 }

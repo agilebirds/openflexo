@@ -61,21 +61,20 @@ public class TestCreateComponent extends FlexoIETestCase {
 	/**
 	 * Creates a new empty project in a temp directory
 	 */
-	public void test0CreateProject()
-	{
+	public void test0CreateProject() {
 		ToolBox.setPlatform();
 		FlexoLoggingManager.forceInitialize();
 		try {
 			File tempFile = File.createTempFile(TEST_COMPONENT, "");
-			_projectDirectory = new File (tempFile.getParentFile(),tempFile.getName()+".prj");
+			_projectDirectory = new File(tempFile.getParentFile(), tempFile.getName() + ".prj");
 			tempFile.delete();
 		} catch (IOException e) {
 			fail();
 		}
-		logger.info("Project directory: "+_projectDirectory.getAbsolutePath());
-		_projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length()-4);
-		logger.info("Project identifier: "+_projectIdentifier);
-		_editor = FlexoResourceManager.initializeNewProject(_projectDirectory,EDITOR_FACTORY,null);
+		logger.info("Project directory: " + _projectDirectory.getAbsolutePath());
+		_projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length() - 4);
+		logger.info("Project identifier: " + _projectIdentifier);
+		_editor = FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY, null);
 		_project = _editor.getProject();
 		logger.info("Project has been SUCCESSFULLY created");
 	}
@@ -83,8 +82,7 @@ public class TestCreateComponent extends FlexoIETestCase {
 	/**
 	 * Creates a new component folder in the component library
 	 */
-	public void test1CreateComponentFolder()
-	{
+	public void test1CreateComponentFolder() {
 		_cl = _project.getFlexoComponentLibrary();
 		AddComponentFolder addComponentFolder = AddComponentFolder.actionType.makeNewAction(_cl, null, _editor);
 		addComponentFolder.setNewFolderName(TEST_COMPONENT_FOLDER);
@@ -98,8 +96,7 @@ public class TestCreateComponent extends FlexoIETestCase {
 	/**
 	 * Creates a new component in the new component folder
 	 */
-	public void test2CreateComponent()
-	{
+	public void test2CreateComponent() {
 		_cl = _project.getFlexoComponentLibrary();
 		AddComponent addComponent = AddComponent.actionType.makeNewAction(_cf, null, _editor);
 		addComponent.setNewComponentName(TEST_COMPONENT);
@@ -114,19 +111,18 @@ public class TestCreateComponent extends FlexoIETestCase {
 	/**
 	 * Edit that new component
 	 */
-	public void test3EditComponent()
-	{
+	public void test3EditComponent() {
 		// Insert a new bloc at index 0, name it Bloc1
 		DropIEElement dropBloc1 = DropIEElement.createBlocInComponent(_oc, 0, _editor);
 		assertTrue(dropBloc1.doAction().hasActionExecutionSucceeded());
-		IEBlocWidget bloc1 = (IEBlocWidget)dropBloc1.getDroppedWidget();
+		IEBlocWidget bloc1 = (IEBlocWidget) dropBloc1.getDroppedWidget();
 		assertNotNull(bloc1);
 		bloc1.setTitle("Bloc1");
 
 		// Insert a new bloc at index 1, name it Bloc2
 		DropIEElement dropBloc2 = DropIEElement.createBlocInComponent(_oc, 1, _editor);
 		assertTrue(dropBloc2.doAction().hasActionExecutionSucceeded());
-		IEBlocWidget bloc2 = (IEBlocWidget)dropBloc2.getDroppedWidget();
+		IEBlocWidget bloc2 = (IEBlocWidget) dropBloc2.getDroppedWidget();
 		assertNotNull(bloc2);
 		bloc2.setTitle("Bloc2");
 
@@ -134,14 +130,14 @@ public class TestCreateComponent extends FlexoIETestCase {
 		// This bloc is therefore placed between Bloc1 and Bloc2
 		DropIEElement dropBloc3 = DropIEElement.createBlocInComponent(_oc, 1, _editor);
 		assertTrue(dropBloc3.doAction().hasActionExecutionSucceeded());
-		IEBlocWidget bloc3 = (IEBlocWidget)dropBloc3.getDroppedWidget();
+		IEBlocWidget bloc3 = (IEBlocWidget) dropBloc3.getDroppedWidget();
 		assertNotNull(bloc3);
 		bloc3.setTitle("Bloc3");
 
 		// Drop a table in the bloc2
 		DropIEElement dropTable = DropIEElement.createTableInBloc(bloc2, _editor);
 		assertTrue(dropTable.doAction().hasActionExecutionSucceeded());
-		IEHTMLTableWidget table = (IEHTMLTableWidget)dropTable.getDroppedWidget();
+		IEHTMLTableWidget table = (IEHTMLTableWidget) dropTable.getDroppedWidget();
 		assertNotNull(table);
 
 		// Drop a label in the table, at cell (0,0) at position 0
@@ -228,10 +224,9 @@ public class TestCreateComponent extends FlexoIETestCase {
 
 	/**
 	 * Save the project
-	 *
+	 * 
 	 */
-	private void saveProject()
-	{
+	private void saveProject() {
 		try {
 			_project.save();
 		} catch (SaveResourceException e) {

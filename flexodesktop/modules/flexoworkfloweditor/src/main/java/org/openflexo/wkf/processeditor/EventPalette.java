@@ -88,7 +88,6 @@ public class EventPalette extends AbstractWKFPalette {
 
 	public class EventPaletteDecorationPainter implements DrawingDecorationPainter {
 
-
 		@Override
 		public boolean paintBeforeDrawing() {
 			return false;
@@ -98,12 +97,15 @@ public class EventPalette extends AbstractWKFPalette {
 		public void paintDecoration(FGEDrawingDecorationGraphics g) {
 			g.useForegroundStyle(ForegroundStyle.makeStyle(Color.BLACK));
 			g.useTextStyle(TextStyle.makeTextStyle(Color.black, FONT));
-			g.drawString(FlexoLocalization.localizedForKey("start"), GLOABAL_START_X +(GLOBAL_INTER1_X-GLOABAL_START_X)/2, TOP_Y+OFFSET, TextAlignment.CENTER);
-			g.drawString(FlexoLocalization.localizedForKey("intermediate"), GLOBAL_INTER1_X +(GLOBAL_END_X-GLOBAL_INTER1_X)/2, TOP_Y+OFFSET-2, TextAlignment.CENTER);
-			g.drawString(FlexoLocalization.localizedForKey("end"), GLOBAL_INTER2_X +(WIDTH-GLOBAL_INTER1bis_X)/2, TOP_Y+OFFSET, TextAlignment.CENTER);
-			g.drawLine(GLOBAL_INTER1_X-OFFSET, TOP_Y, GLOBAL_INTER1_X-OFFSET, g.getHeight()-OFFSET);
-			//g.drawLine(INTER2_X-OFFSET, TOP_Y, INTER2_X-OFFSET, g.getHeight()-OFFSET);
-			g.drawLine(GLOBAL_END_X-OFFSET, TOP_Y, GLOBAL_END_X-OFFSET, g.getHeight()-OFFSET);
+			g.drawString(FlexoLocalization.localizedForKey("start"), GLOABAL_START_X + (GLOBAL_INTER1_X - GLOABAL_START_X) / 2, TOP_Y
+					+ OFFSET, TextAlignment.CENTER);
+			g.drawString(FlexoLocalization.localizedForKey("intermediate"), GLOBAL_INTER1_X + (GLOBAL_END_X - GLOBAL_INTER1_X) / 2, TOP_Y
+					+ OFFSET - 2, TextAlignment.CENTER);
+			g.drawString(FlexoLocalization.localizedForKey("end"), GLOBAL_INTER2_X + (WIDTH - GLOBAL_INTER1bis_X) / 2, TOP_Y + OFFSET,
+					TextAlignment.CENTER);
+			g.drawLine(GLOBAL_INTER1_X - OFFSET, TOP_Y, GLOBAL_INTER1_X - OFFSET, g.getHeight() - OFFSET);
+			// g.drawLine(INTER2_X-OFFSET, TOP_Y, INTER2_X-OFFSET, g.getHeight()-OFFSET);
+			g.drawLine(GLOBAL_END_X - OFFSET, TOP_Y, GLOBAL_END_X - OFFSET, g.getHeight() - OFFSET);
 		}
 
 	}
@@ -112,16 +114,16 @@ public class EventPalette extends AbstractWKFPalette {
 
 	private static int deltaY = 39;
 
-	public EventPalette()
-	{
-		super(WIDTH, !WKFPreferences.getUseSimpleEventPalette()?529:(529-(4*deltaY)),"event");
+	public EventPalette() {
+		super(WIDTH, !WKFPreferences.getUseSimpleEventPalette() ? 529 : (529 - (4 * deltaY)), "event");
 		eventPaletteDecorationPainter = new EventPaletteDecorationPainter();
 
 		int y = TOP_Y;
 
 		y += OFFSET + 12;
 		makeEventElement(EventNode.makeEventNode(TriggerType.NONE, EVENT_TYPE.Start, true), START_X, y, "Default");
-		makeEventElement(EventNode.makeEventNode(TriggerType.NONE, EVENT_TYPE.Intermediate, true), INTER1_X, y, "", DROP_ON_ACTIVITY_OR_PETRIGRAPH);
+		makeEventElement(EventNode.makeEventNode(TriggerType.NONE, EVENT_TYPE.Intermediate, true), INTER1_X, y, "",
+				DROP_ON_ACTIVITY_OR_PETRIGRAPH);
 		makeEventElement(EventNode.makeEventNode(TriggerType.NONE, EVENT_TYPE.End, false), END_X, y, "");
 
 		y = y + deltaY;
@@ -137,9 +139,11 @@ public class EventPalette extends AbstractWKFPalette {
 		if (!WKFPreferences.getUseSimpleEventPalette()) {
 			makeEventElement(EventNode.makeEventNode(TriggerType.MESSAGE, EVENT_TYPE.NonInteruptive, true), START2_X, y, "");
 		}
-		makeEventElement(EventNode.makeEventNode(TriggerType.MESSAGE, EVENT_TYPE.Intermediate, true), INTER1_X, y, "", DROP_ON_ACTIVITY_OR_PETRIGRAPH);
+		makeEventElement(EventNode.makeEventNode(TriggerType.MESSAGE, EVENT_TYPE.Intermediate, true), INTER1_X, y, "",
+				DROP_ON_ACTIVITY_OR_PETRIGRAPH);
 		if (!WKFPreferences.getUseSimpleEventPalette()) {
-			makeEventElement(EventNode.makeEventNode(TriggerType.MESSAGE, EVENT_TYPE.NonInteruptiveBoundary, true), INTER1bis_X, y, "", DROP_ON_ACTIVITY);
+			makeEventElement(EventNode.makeEventNode(TriggerType.MESSAGE, EVENT_TYPE.NonInteruptiveBoundary, true), INTER1bis_X, y, "",
+					DROP_ON_ACTIVITY);
 		}
 		makeEventElement(EventNode.makeEventNode(TriggerType.MESSAGE, EVENT_TYPE.IntermediateDrop, false), INTER2_X, y, "");
 		makeEventElement(EventNode.makeEventNode(TriggerType.MESSAGE, EVENT_TYPE.End, false), END_X, y, "");
@@ -149,9 +153,11 @@ public class EventPalette extends AbstractWKFPalette {
 		if (!WKFPreferences.getUseSimpleEventPalette()) {
 			makeEventElement(EventNode.makeEventNode(TriggerType.TIMER, EVENT_TYPE.NonInteruptive, true), START2_X, y, "");
 		}
-		makeEventElement(EventNode.makeEventNode(TriggerType.TIMER, EVENT_TYPE.Intermediate, true), INTER1_X, y, "", DROP_ON_ACTIVITY_OR_PETRIGRAPH);
+		makeEventElement(EventNode.makeEventNode(TriggerType.TIMER, EVENT_TYPE.Intermediate, true), INTER1_X, y, "",
+				DROP_ON_ACTIVITY_OR_PETRIGRAPH);
 		if (!WKFPreferences.getUseSimpleEventPalette()) {
-			makeEventElement(EventNode.makeEventNode(TriggerType.TIMER, EVENT_TYPE.NonInteruptiveBoundary, true), INTER1bis_X, y, "", DROP_ON_ACTIVITY);
+			makeEventElement(EventNode.makeEventNode(TriggerType.TIMER, EVENT_TYPE.NonInteruptiveBoundary, true), INTER1bis_X, y, "",
+					DROP_ON_ACTIVITY);
 		}
 
 		y = y + deltaY;
@@ -159,14 +165,17 @@ public class EventPalette extends AbstractWKFPalette {
 		if (!WKFPreferences.getUseSimpleEventPalette()) {
 			makeEventElement(EventNode.makeEventNode(TriggerType.CONDITIONAL, EVENT_TYPE.NonInteruptive, true), START2_X, y, "");
 		}
-		makeEventElement(EventNode.makeEventNode(TriggerType.CONDITIONAL, EVENT_TYPE.Intermediate, true), INTER1_X, y, "", DROP_ON_ACTIVITY_OR_PETRIGRAPH);
+		makeEventElement(EventNode.makeEventNode(TriggerType.CONDITIONAL, EVENT_TYPE.Intermediate, true), INTER1_X, y, "",
+				DROP_ON_ACTIVITY_OR_PETRIGRAPH);
 		if (!WKFPreferences.getUseSimpleEventPalette()) {
-			makeEventElement(EventNode.makeEventNode(TriggerType.CONDITIONAL, EVENT_TYPE.NonInteruptiveBoundary, true), INTER1bis_X, y, "", DROP_ON_ACTIVITY);
+			makeEventElement(EventNode.makeEventNode(TriggerType.CONDITIONAL, EVENT_TYPE.NonInteruptiveBoundary, true), INTER1bis_X, y, "",
+					DROP_ON_ACTIVITY);
 		}
 
 		y = y + deltaY;
 		makeEventElement(EventNode.makeEventNode(TriggerType.ERROR, EVENT_TYPE.Start, true), START_X, y, "Error");
-		makeEventElement(EventNode.makeEventNode(TriggerType.ERROR, EVENT_TYPE.Intermediate, true), INTER1_X, y, "", DROP_ON_ACTIVITY_OR_PETRIGRAPH);
+		makeEventElement(EventNode.makeEventNode(TriggerType.ERROR, EVENT_TYPE.Intermediate, true), INTER1_X, y, "",
+				DROP_ON_ACTIVITY_OR_PETRIGRAPH);
 		makeEventElement(EventNode.makeEventNode(TriggerType.ERROR, EVENT_TYPE.End, false), END_X, y, "");
 
 		y = y + deltaY;
@@ -174,9 +183,11 @@ public class EventPalette extends AbstractWKFPalette {
 		if (!WKFPreferences.getUseSimpleEventPalette()) {
 			makeEventElement(EventNode.makeEventNode(TriggerType.SIGNAL, EVENT_TYPE.NonInteruptive, true), START2_X, y, "");
 		}
-		makeEventElement(EventNode.makeEventNode(TriggerType.SIGNAL, EVENT_TYPE.Intermediate, true), INTER1_X, y, "", DROP_ON_ACTIVITY_OR_PETRIGRAPH);
+		makeEventElement(EventNode.makeEventNode(TriggerType.SIGNAL, EVENT_TYPE.Intermediate, true), INTER1_X, y, "",
+				DROP_ON_ACTIVITY_OR_PETRIGRAPH);
 		if (!WKFPreferences.getUseSimpleEventPalette()) {
-			makeEventElement(EventNode.makeEventNode(TriggerType.SIGNAL, EVENT_TYPE.NonInteruptiveBoundary, true), INTER1bis_X, y, "", DROP_ON_ACTIVITY);
+			makeEventElement(EventNode.makeEventNode(TriggerType.SIGNAL, EVENT_TYPE.NonInteruptiveBoundary, true), INTER1bis_X, y, "",
+					DROP_ON_ACTIVITY);
 		}
 		makeEventElement(EventNode.makeEventNode(TriggerType.SIGNAL, EVENT_TYPE.IntermediateDrop, false), INTER2_X, y, "");
 		makeEventElement(EventNode.makeEventNode(TriggerType.SIGNAL, EVENT_TYPE.End, false), END_X, y, "");
@@ -186,40 +197,43 @@ public class EventPalette extends AbstractWKFPalette {
 		makeEventElement(EventNode.makeEventNode(TriggerType.LINK, EVENT_TYPE.Intermediate, true), INTER1_X, y, "Link");
 		makeEventElement(EventNode.makeEventNode(TriggerType.LINK, EVENT_TYPE.IntermediateDrop, false), INTER2_X, y, "");
 
-
-		if (!WKFPreferences.getUseSimpleEventPalette()){
+		if (!WKFPreferences.getUseSimpleEventPalette()) {
 			y = y + deltaY;
 			makeEventElement(EventNode.makeEventNode(TriggerType.ESCALATION, EVENT_TYPE.Start, true), START_X, y, "Esca-\nlation");
 			if (!WKFPreferences.getUseSimpleEventPalette()) {
 				makeEventElement(EventNode.makeEventNode(TriggerType.ESCALATION, EVENT_TYPE.NonInteruptive, true), START2_X, y, "");
 			}
-			makeEventElement(EventNode.makeEventNode(TriggerType.ESCALATION, EVENT_TYPE.Intermediate, true), INTER1_X, y, "", DROP_ON_ACTIVITY_OR_PETRIGRAPH);
+			makeEventElement(EventNode.makeEventNode(TriggerType.ESCALATION, EVENT_TYPE.Intermediate, true), INTER1_X, y, "",
+					DROP_ON_ACTIVITY_OR_PETRIGRAPH);
 			if (!WKFPreferences.getUseSimpleEventPalette()) {
-				makeEventElement(EventNode.makeEventNode(TriggerType.ESCALATION, EVENT_TYPE.NonInteruptiveBoundary, true), INTER1bis_X, y, "", DROP_ON_ACTIVITY);
+				makeEventElement(EventNode.makeEventNode(TriggerType.ESCALATION, EVENT_TYPE.NonInteruptiveBoundary, true), INTER1bis_X, y,
+						"", DROP_ON_ACTIVITY);
 			}
 			makeEventElement(EventNode.makeEventNode(TriggerType.ESCALATION, EVENT_TYPE.IntermediateDrop, false), INTER2_X, y, "");
 			makeEventElement(EventNode.makeEventNode(TriggerType.ESCALATION, EVENT_TYPE.End, false), END_X, y, "");
 		}
 
-
-		if (!WKFPreferences.getUseSimpleEventPalette()){
+		if (!WKFPreferences.getUseSimpleEventPalette()) {
 			y = y + deltaY;
 			makeEventElement(EventNode.makeEventNode(TriggerType.COMPENSATION, EVENT_TYPE.Start, true), START_X, y, "Compen-\nsation");
-			makeEventElement(EventNode.makeEventNode(TriggerType.COMPENSATION, EVENT_TYPE.Intermediate, true), INTER1_X, y, "", DROP_ON_ACTIVITY_OR_PETRIGRAPH);
+			makeEventElement(EventNode.makeEventNode(TriggerType.COMPENSATION, EVENT_TYPE.Intermediate, true), INTER1_X, y, "",
+					DROP_ON_ACTIVITY_OR_PETRIGRAPH);
 			makeEventElement(EventNode.makeEventNode(TriggerType.COMPENSATION, EVENT_TYPE.IntermediateDrop, false), INTER2_X, y, "");
 			makeEventElement(EventNode.makeEventNode(TriggerType.COMPENSATION, EVENT_TYPE.End, false), END_X, y, "");
 		}
 
-		if (!WKFPreferences.getUseSimpleEventPalette()){
+		if (!WKFPreferences.getUseSimpleEventPalette()) {
 			y = y + deltaY;
 
 			makeEventElement(EventNode.makeEventNode(TriggerType.MULTIPLE, EVENT_TYPE.Start, true), START_X, y, "Multiple");
 			if (!WKFPreferences.getUseSimpleEventPalette()) {
 				makeEventElement(EventNode.makeEventNode(TriggerType.MULTIPLE, EVENT_TYPE.NonInteruptive, true), START2_X, y, "");
 			}
-			makeEventElement(EventNode.makeEventNode(TriggerType.MULTIPLE, EVENT_TYPE.Intermediate, true), INTER1_X, y, "", DROP_ON_ACTIVITY_OR_PETRIGRAPH);
+			makeEventElement(EventNode.makeEventNode(TriggerType.MULTIPLE, EVENT_TYPE.Intermediate, true), INTER1_X, y, "",
+					DROP_ON_ACTIVITY_OR_PETRIGRAPH);
 			if (!WKFPreferences.getUseSimpleEventPalette()) {
-				makeEventElement(EventNode.makeEventNode(TriggerType.MULTIPLE, EVENT_TYPE.NonInteruptiveBoundary, true), INTER1bis_X, y, "", DROP_ON_ACTIVITY);
+				makeEventElement(EventNode.makeEventNode(TriggerType.MULTIPLE, EVENT_TYPE.NonInteruptiveBoundary, true), INTER1bis_X, y,
+						"", DROP_ON_ACTIVITY);
 			}
 			makeEventElement(EventNode.makeEventNode(TriggerType.MULTIPLE, EVENT_TYPE.IntermediateDrop, false), INTER2_X, y, "");
 			makeEventElement(EventNode.makeEventNode(TriggerType.MULTIPLE, EVENT_TYPE.End, false), END_X, y, "");
@@ -229,9 +243,11 @@ public class EventPalette extends AbstractWKFPalette {
 			if (!WKFPreferences.getUseSimpleEventPalette()) {
 				makeEventElement(EventNode.makeEventNode(TriggerType.MULTIPLEPARA, EVENT_TYPE.NonInteruptive, true), START2_X, y, "");
 			}
-			makeEventElement(EventNode.makeEventNode(TriggerType.MULTIPLEPARA, EVENT_TYPE.Intermediate, true), INTER1_X, y, "", DROP_ON_ACTIVITY_OR_PETRIGRAPH);
+			makeEventElement(EventNode.makeEventNode(TriggerType.MULTIPLEPARA, EVENT_TYPE.Intermediate, true), INTER1_X, y, "",
+					DROP_ON_ACTIVITY_OR_PETRIGRAPH);
 			if (!WKFPreferences.getUseSimpleEventPalette()) {
-				makeEventElement(EventNode.makeEventNode(TriggerType.MULTIPLEPARA, EVENT_TYPE.NonInteruptiveBoundary, true), INTER1bis_X, y, "", DROP_ON_ACTIVITY);
+				makeEventElement(EventNode.makeEventNode(TriggerType.MULTIPLEPARA, EVENT_TYPE.NonInteruptiveBoundary, true), INTER1bis_X,
+						y, "", DROP_ON_ACTIVITY);
 			}
 		}
 		makePalettePanel();
@@ -241,13 +257,11 @@ public class EventPalette extends AbstractWKFPalette {
 		return eventPaletteDecorationPainter;
 	}
 
-	private PaletteElement makeEventElement(EventNode event,int x, int y, String name)
-	{
+	private PaletteElement makeEventElement(EventNode event, int x, int y, String name) {
 		return makeEventElement(event, x, y, name, DROP_ON_PETRI_GRAPH);
 	}
 
-	private PaletteElement makeEventElement(EventNode event,int x, int y, String name, ContainerValidity validity)
-	{
+	private PaletteElement makeEventElement(EventNode event, int x, int y, String name, ContainerValidity validity) {
 		String label = null;
 		if (name != null && name.trim().length() > 0) {
 			label = FlexoLocalization.localizedForKey(name);
@@ -255,16 +269,13 @@ public class EventPalette extends AbstractWKFPalette {
 		if (label != null) {
 			event.setName(label);
 		}
-		event.setX(x,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		event.setY(y,ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		EventNodeGR eventNodeGR = new EventNodeGR(event,null,true);
+		event.setX(x, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		event.setY(y, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		EventNodeGR eventNodeGR = new EventNodeGR(event, null, true);
 		int labelX = -x + eventNodeGR.getNormalizedLabelSize().width / 2;
 		event.setLabelX(labelX, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
 		event.setLabelY(EventNodeGR.EVENT_NODE_SIZE / 2, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-		event.setDescription(FlexoLocalization.localizedForKey("doc_event_"+event.getTrigger()+"_"+event.getEventType()));
-		return makePaletteElement(
-				event,
-				eventNodeGR,
-				validity);
+		event.setDescription(FlexoLocalization.localizedForKey("doc_event_" + event.getTrigger() + "_" + event.getEventType()));
+		return makePaletteElement(event, eventNodeGR, validity);
 	}
 }

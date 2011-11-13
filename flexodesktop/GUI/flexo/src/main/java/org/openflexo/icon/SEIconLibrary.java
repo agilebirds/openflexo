@@ -32,12 +32,12 @@ import org.openflexo.toolbox.ImageIconResource;
  * Utility class containing all icons used in context of IEModule
  * 
  * @author sylvain
- *
+ * 
  */
 public class SEIconLibrary extends IconLibrary {
 
 	private static final Logger logger = Logger.getLogger(SEIconLibrary.class.getPackage().getName());
-	
+
 	// Module icons
 	public static final ImageIcon SE_SMALL_ICON = new ImageIconResource("Icons/SE/IE_A_Small.gif");
 	public static final ImageIcon SE_MEDIUM_ICON = new ImageIconResource("Icons/SE/module-se.png");
@@ -69,9 +69,9 @@ public class SEIconLibrary extends IconLibrary {
 	public static final Icon INSERTCOLBEFORE_ICON = new ImageIconResource("Icons/SE/Actions/InsertColBefore.gif");
 	public static final Icon INSERTROWBOTTOM_ICON = new ImageIconResource("Icons/SE/Actions/InsertRowBottom.gif");
 	public static final Icon INSERTROWUP_ICON = new ImageIconResource("Icons/SE/Actions/InsertRowUp.gif");
-	
+
 	// Model icons
-	
+
 	// IE CL Icons
 	public static final ImageIcon COMPONENT_LIBRARY_ICON = new ImageIconResource("Icons/Model/SE/Library_IE.gif");
 	public static final ImageIcon IE_FOLDER_ICON = new ImageIconResource("Icons/Model/SE/Folder_IE.gif");
@@ -108,24 +108,22 @@ public class SEIconLibrary extends IconLibrary {
 	public static final ImageIcon REPETITION_ICON = new ImageIconResource("Icons/Model/SE/Repetition.gif");
 	public static final ImageIcon RADIOBUTTON_ICON = new ImageIconResource("Icons/Model/SE/Small_RADIOBUTTON.gif");
 	public static final ImageIcon IMAGE_FILE = new ImageIconResource("Icons/Model/SE/Small_IMAGE.png");
-	
+
 	// DKV Icons
 	public static final ImageIcon DKV_KEY_ICON = new ImageIconResource("Icons/Model/SE/DKV/Key.jpg");
 	public static final ImageIcon LANGUAGE_ICON = new ImageIconResource("Icons/Model/SE/DKV/Language.jpg");
 	public static final ImageIcon DOMAIN_ICON = new ImageIconResource("Icons/Model/SE/DKV/Domain.gif");
 	public static final ImageIcon LIST_ICON = new ImageIconResource("Icons/Model/SE/DKV/List.gif");
 	public static final ImageIcon VALUE_ICON = new ImageIconResource("Icons/Model/SE/DKV/Value.jpg");
-	
+
 	// Menu Icons
 	public static final ImageIcon MENUITEM_ICON = new ImageIconResource("Icons/Model/SE/Small_HEADER.gif");
 	public static final ImageIcon SMALL_MULTIMEDIA = new ImageIconResource("Icons/Model/SE/Small_MULTIMEDIA.gif");
 	public static final ImageIcon REUSABLEWIDGET_ICON = new ImageIconResource("Icons/Model/SE/ReusableComponent.gif");
 
-	public static ImageIcon iconForObject(IEObject object)
-	{
+	public static ImageIcon iconForObject(IEObject object) {
 		logger.warning("iconForObject(IEObject) not implemented yet");
 		return null;
 	}
-
 
 }

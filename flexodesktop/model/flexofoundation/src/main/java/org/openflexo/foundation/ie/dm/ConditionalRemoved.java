@@ -21,19 +21,16 @@ package org.openflexo.foundation.ie.dm;
 
 import org.openflexo.foundation.ie.operator.ConditionalOperator;
 
-public class ConditionalRemoved extends IEDataModification
-{
+public class ConditionalRemoved extends IEDataModification {
 
-    private ConditionalOperator _tr;
+	private ConditionalOperator _tr;
 
-    public ConditionalRemoved(ConditionalOperator insertedTR)
-    {
-        super(insertedTR, null);
-        _tr = insertedTR;
-    }
+	public ConditionalRemoved(ConditionalOperator insertedTR) {
+		super(insertedTR, null);
+		_tr = insertedTR;
+	}
 
-    public ConditionalOperator getConditional()
-    {
-        return _tr;
-    }
+	public ConditionalOperator getConditional() {
+		return _tr;
+	}
 }

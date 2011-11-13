@@ -26,37 +26,32 @@ public class Assignment extends Instruction {
 
 	private Variable receiver;
 	private Expression assignmentValue;
-	
+
 	public Assignment(Variable receiver, Expression assignmentValue) {
 		super();
 		this.receiver = receiver;
 		this.assignmentValue = assignmentValue;
 	}
-	
-	public Expression getAssignmentValue() 
-	{
+
+	public Expression getAssignmentValue() {
 		return assignmentValue;
 	}
-	
-	public void setAssignmentValue(Expression assignmentValue) 
-	{
+
+	public void setAssignmentValue(Expression assignmentValue) {
 		this.assignmentValue = assignmentValue;
 	}
-	
-	public Variable getReceiver() 
-	{
+
+	public Variable getReceiver() {
 		return receiver;
 	}
-	
-	public void setReceiver(Variable receiver)
-	{
+
+	public void setReceiver(Variable receiver) {
 		this.receiver = receiver;
 	}
-	
+
 	@Override
-	public Assignment clone()
-	{
-		Assignment returned = new Assignment(receiver,assignmentValue);
+	public Assignment clone() {
+		Assignment returned = new Assignment(receiver, assignmentValue);
 		returned.setHeaderComment(getHeaderComment());
 		returned.setInlineComment(getInlineComment());
 		return returned;

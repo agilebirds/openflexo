@@ -31,38 +31,34 @@ import org.openflexo.module.Module;
 import org.openflexo.view.menu.WindowMenu;
 import org.openflexo.wse.controller.WSEController;
 
-
 /**
  * 'Window' menu for this Module
  * 
  * @author yourname
  */
-public class WSEWindowMenu extends WindowMenu
-{
+public class WSEWindowMenu extends WindowMenu {
 
-    private static final Logger logger = Logger.getLogger(WSEWindowMenu.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(WSEWindowMenu.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance Variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance Variables
+	// =========================
+	// ==========================================================================
 
-      protected WSEController _wseController;
+	protected WSEController _wseController;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public WSEWindowMenu(WSEController controller)
-    {
-        super(controller,Module.WSE_MODULE);
-        _wseController = controller;
-        // Put your actions here
-    }
+	public WSEWindowMenu(WSEController controller) {
+		super(controller, Module.WSE_MODULE);
+		_wseController = controller;
+		// Put your actions here
+	}
 
-    public WSEController getWSEController()
-    {
-        return _wseController;
-    }
+	public WSEController getWSEController() {
+		return _wseController;
+	}
 }

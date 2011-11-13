@@ -41,88 +41,77 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.wkf.controller.WKFController;
 
-
 public class WKFPasteInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	WKFPasteInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(WKFPaste.actionType,actionInitializer);
+	WKFPasteInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(WKFPaste.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<WKFPaste> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<WKFPaste> getDefaultInitializer() {
 		return new FlexoActionInitializer<WKFPaste>() {
-            @Override
-			public boolean run(ActionEvent e, WKFPaste action)
-            {
-            	return true;
-             }
-        };
-	}
-
-     @Override
-	protected FlexoActionFinalizer<WKFPaste> getDefaultFinalizer() 
-	{
-		return new FlexoActionFinalizer<WKFPaste>() {
-            @Override
-			public boolean run(ActionEvent e, WKFPaste action)
-            {
-            	getControllerActionInitializer().getWKFSelectionManager().performSelectionPaste();
-                return true;
-           }
-        };
-	}
-
-     @Override
-     protected FlexoActionEnableCondition<WKFPaste,FlexoModelObject,FlexoModelObject> getEnableCondition()
- 	{
- 		return new FlexoActionEnableCondition<WKFPaste,FlexoModelObject,FlexoModelObject>() {
- 			@Override
-			public boolean isEnabled(FlexoActionType<WKFPaste, FlexoModelObject, FlexoModelObject> actionType, FlexoModelObject object, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
-                return getControllerActionInitializer().getWKFSelectionManager().hasCopiedData();
+			@Override
+			public boolean run(ActionEvent e, WKFPaste action) {
+				return true;
 			}
-        };
- 	}
- 	
-     @Override
-    public WKFController getController() {
-    	return (WKFController) super.getController();
-    }
-     
+		};
+	}
+
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected FlexoActionFinalizer<WKFPaste> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<WKFPaste>() {
+			@Override
+			public boolean run(ActionEvent e, WKFPaste action) {
+				getControllerActionInitializer().getWKFSelectionManager().performSelectionPaste();
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected FlexoActionEnableCondition<WKFPaste, FlexoModelObject, FlexoModelObject> getEnableCondition() {
+		return new FlexoActionEnableCondition<WKFPaste, FlexoModelObject, FlexoModelObject>() {
+			@Override
+			public boolean isEnabled(FlexoActionType<WKFPaste, FlexoModelObject, FlexoModelObject> actionType, FlexoModelObject object,
+					Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+				return getControllerActionInitializer().getWKFSelectionManager().hasCopiedData();
+			}
+		};
+	}
+
+	@Override
+	public WKFController getController() {
+		return (WKFController) super.getController();
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
 		return IconLibrary.PASTE_ICON;
 	}
 
 	@Override
-	protected KeyStroke getShortcut() 
-	{
+	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(KeyEvent.VK_V, FlexoCst.META_MASK);
 	}
 
 	@Override
-	protected FlexoActionVisibleCondition<WKFPaste,FlexoModelObject,FlexoModelObject> getVisibleCondition() {
+	protected FlexoActionVisibleCondition<WKFPaste, FlexoModelObject, FlexoModelObject> getVisibleCondition() {
 		return new FlexoActionVisibleCondition<WKFPaste, FlexoModelObject, FlexoModelObject>() {
 
 			@Override
-			public boolean isVisible(
-					FlexoActionType<WKFPaste, FlexoModelObject, FlexoModelObject> actionType,
-					FlexoModelObject object, Vector<FlexoModelObject> globalSelection,
-					FlexoEditor editor) {
-				return getController().getCurrentPerspective()==getController().PROCESS_EDITOR_PERSPECTIVE
-				|| getController().getCurrentPerspective()==getController().ROLE_EDITOR_PERSPECTIVE;
+			public boolean isVisible(FlexoActionType<WKFPaste, FlexoModelObject, FlexoModelObject> actionType, FlexoModelObject object,
+					Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+				return getController().getCurrentPerspective() == getController().PROCESS_EDITOR_PERSPECTIVE
+						|| getController().getCurrentPerspective() == getController().ROLE_EDITOR_PERSPECTIVE;
 			}
-			
+
 		};
 	}
 }

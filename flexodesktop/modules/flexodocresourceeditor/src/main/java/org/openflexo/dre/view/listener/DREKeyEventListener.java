@@ -24,29 +24,24 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.listener.SelectionManagingKeyEventListener;
 
-
 /**
  * Key events listener used in the context of this module
  * 
  * @author yourname
  */
-public class DREKeyEventListener extends SelectionManagingKeyEventListener
-{
+public class DREKeyEventListener extends SelectionManagingKeyEventListener {
 
-    public DREKeyEventListener(DREController controller)
-    {
-        super(controller);
-    }
-
-    @Override
-	protected SelectionManager getSelectionManager()
-    {
-        return ((DREController) getController()).getDRESelectionManager();
-    }
+	public DREKeyEventListener(DREController controller) {
+		super(controller);
+	}
 
 	@Override
-	public FlexoEditor getEditor() 
-	{
+	protected SelectionManager getSelectionManager() {
+		return ((DREController) getController()).getDRESelectionManager();
+	}
+
+	@Override
+	public FlexoEditor getEditor() {
 		return getController().getEditor();
 	}
 }

@@ -30,141 +30,125 @@ import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 
-
 /**
  * Represents an EOModel resource
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class FlexoProjectOntologyResource extends FlexoStorageResource<ProjectOntology>
-{
+public class FlexoProjectOntologyResource extends FlexoStorageResource<ProjectOntology> {
 
-    private static final Logger logger = Logger.getLogger(FlexoProjectOntologyResource.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(FlexoProjectOntologyResource.class.getPackage().getName());
 
-    /**
-     * Constructor used for XML Serialization: never try to instanciate resource
-     * from this constructor
-     *
-     * @param builder
-     */
-    public FlexoProjectOntologyResource(FlexoProjectBuilder builder)
-    {
-        this(builder.project);
-        builder.notifyResourceLoading(this);
-    }
+	/**
+	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
+	 * 
+	 * @param builder
+	 */
+	public FlexoProjectOntologyResource(FlexoProjectBuilder builder) {
+		this(builder.project);
+		builder.notifyResourceLoading(this);
+	}
 
-    public FlexoProjectOntologyResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
+	public FlexoProjectOntologyResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
-    /*public FlexoProjectOntologyResource(FlexoProject aProject, FlexoDMResource dmResource, FlexoProjectFile eoModelFile)
-            throws InvalidFileNameException
-    {
-        this(aProject);
-        setResourceFile(eoModelFile);
-        addToSynchronizedResources(dmResource);
-        if (logger.isLoggable(Level.INFO))
-            logger.info("Build new FlexoEOModelResource");
-    }*/
+	/*public FlexoProjectOntologyResource(FlexoProject aProject, FlexoDMResource dmResource, FlexoProjectFile eoModelFile)
+	        throws InvalidFileNameException
+	{
+	    this(aProject);
+	    setResourceFile(eoModelFile);
+	    addToSynchronizedResources(dmResource);
+	    if (logger.isLoggable(Level.INFO))
+	        logger.info("Build new FlexoEOModelResource");
+	}*/
 
-    public FlexoProjectOntologyResource(
-    		FlexoProject aProject,
-    		ProjectOntology aProjectOntology,
-    		FlexoProjectFile ontologyFile) throws InvalidFileNameException, DuplicateResourceException
-    {
-        this(aProject);
-        _resourceData = aProjectOntology;
-        aProjectOntology.setFlexoResource(this);
-        setResourceFile(ontologyFile);
-    }
+	public FlexoProjectOntologyResource(FlexoProject aProject, ProjectOntology aProjectOntology, FlexoProjectFile ontologyFile)
+			throws InvalidFileNameException, DuplicateResourceException {
+		this(aProject);
+		_resourceData = aProjectOntology;
+		aProjectOntology.setFlexoResource(this);
+		setResourceFile(ontologyFile);
+	}
 
-    @Override
-    public ResourceType getResourceType()
-    {
-        return ResourceType.PROJECT_ONTOLOGY;
-    }
+	@Override
+	public ResourceType getResourceType() {
+		return ResourceType.PROJECT_ONTOLOGY;
+	}
 
-    @Override
-	public String getName()
-    {
-        return getProject().getProjectName();
-    }
+	@Override
+	public String getName() {
+		return getProject().getProjectName();
+	}
 
-    public Class getResourceDataClass()
-    {
-        return ProjectOntology.class;
-    }
+	public Class getResourceDataClass() {
+		return ProjectOntology.class;
+	}
 
-    @Override
-    public void setName(String aName)
-    {
-        // Not allowed
-    }
+	@Override
+	public void setName(String aName) {
+		// Not allowed
+	}
 
-    @Override
-    public ProjectOntology performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws LoadResourceException
-    {
-    	_resourceData = getProject().getProjectOntologyLibrary()._loadProjectOntology(getProject().getURI(), getFile());
-    	try {
+	@Override
+	public ProjectOntology performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler)
+			throws LoadResourceException {
+		_resourceData = getProject().getProjectOntologyLibrary()._loadProjectOntology(getProject().getURI(), getFile());
+		try {
 			_resourceData.setFlexoResource(this);
 		} catch (DuplicateResourceException e) {
 			e.printStackTrace();
 			logger.warning("Should not happen");
 		}
-    	notifyResourceStatusChanged();
-        return _resourceData;
-    }
+		notifyResourceStatusChanged();
+		return _resourceData;
+	}
 
-    /**
-     * Implements
-     *
-     * @see org.openflexo.foundation.rm.FlexoResource#saveResourceData()
-     * @see org.openflexo.foundation.rm.FlexoResource#saveResourceData()
-     */
-    @Override
-    protected void saveResourceData(boolean clearIsModified) throws SaveResourceException
-    {
-        if (!hasWritePermission()) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Permission denied : " + getFile().getAbsolutePath());
-            throw new SaveResourcePermissionDeniedException(this);
-        }
-        if (_resourceData != null) {
-           	FileWritingLock lock = willWriteOnDisk();
-           	_writeToFile();
-           	hasWrittenOnDisk(lock);
-           	notifyResourceStatusChanged();
-           	if (logger.isLoggable(Level.INFO))
-                logger.info("Succeeding to save Resource " + getResourceIdentifier() + " : " + getFile().getName());
-        }
-        if (clearIsModified)
-            getResourceData().clearIsModified(false);
-    }
-    
-    
-	public void _writeToFile() throws SaveResourceException 
-	{
+	/**
+	 * Implements
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResource#saveResourceData()
+	 * @see org.openflexo.foundation.rm.FlexoResource#saveResourceData()
+	 */
+	@Override
+	protected void saveResourceData(boolean clearIsModified) throws SaveResourceException {
+		if (!hasWritePermission()) {
+			if (logger.isLoggable(Level.WARNING))
+				logger.warning("Permission denied : " + getFile().getAbsolutePath());
+			throw new SaveResourcePermissionDeniedException(this);
+		}
+		if (_resourceData != null) {
+			FileWritingLock lock = willWriteOnDisk();
+			_writeToFile();
+			hasWrittenOnDisk(lock);
+			notifyResourceStatusChanged();
+			if (logger.isLoggable(Level.INFO))
+				logger.info("Succeeding to save Resource " + getResourceIdentifier() + " : " + getFile().getName());
+		}
+		if (clearIsModified)
+			getResourceData().clearIsModified(false);
+	}
+
+	public void _writeToFile() throws SaveResourceException {
 		FileOutputStream out = null;
 		try {
 			out = new FileOutputStream(getFile());
-			_resourceData.getOntModel().write(out,null,_resourceData.getOntologyURI());
+			_resourceData.getOntModel().write(out, null, _resourceData.getOntologyURI());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			throw new SaveResourceException(this);
 		} finally {
 			try {
-				if (out != null) out.close();
+				if (out != null)
+					out.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 				throw new SaveResourceException(this);
 			}
 		}
-		
-		logger.info("Wrote "+getFile());
+
+		logger.info("Wrote " + getFile());
 	}
 
-
-
- }
+}

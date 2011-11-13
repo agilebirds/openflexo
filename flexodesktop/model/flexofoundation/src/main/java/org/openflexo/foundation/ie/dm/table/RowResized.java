@@ -27,12 +27,10 @@ import org.openflexo.foundation.ie.widget.IEWidget;
  * 
  * @author bmangez
  */
-public class RowResized extends IEDataModification
-{
+public class RowResized extends IEDataModification {
 
-    public RowResized(IEWidget table)
-    {
-        super(table, null);
-    }
+	public RowResized(IEWidget table) {
+		super(table, null);
+	}
 
 }

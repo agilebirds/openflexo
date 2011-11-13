@@ -20,7 +20,7 @@ public class AddToInformedRole extends AddToXRole<AddToInformedRole> {
 	private static final Logger logger = Logger.getLogger(AddToInformedRole.class.getPackage().getName());
 
 	public static FlexoActionType<AddToInformedRole, AbstractActivityNode, AbstractActivityNode> actionType = new FlexoActionType<AddToInformedRole, AbstractActivityNode, AbstractActivityNode>(
-	"add_to_informed_role") {
+			"add_to_informed_role") {
 
 		/**
 		 * Factory method
@@ -45,7 +45,6 @@ public class AddToInformedRole extends AddToXRole<AddToInformedRole> {
 	static {
 		FlexoModelObject.addActionForClass(actionType, AbstractActivityNode.class);
 	}
-
 
 	AddToInformedRole(AbstractActivityNode focusedObject, Vector<AbstractActivityNode> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

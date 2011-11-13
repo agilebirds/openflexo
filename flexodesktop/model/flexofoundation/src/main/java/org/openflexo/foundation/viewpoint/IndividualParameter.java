@@ -37,27 +37,22 @@ public class IndividualParameter extends EditionSchemeParameter {
 	public WidgetType getWidget() {
 		return WidgetType.INDIVIDUAL;
 	}
-	
-	public String _getConceptURI() 
-	{
+
+	public String _getConceptURI() {
 		return conceptURI;
 	}
 
-	public void _setConceptURI(String conceptURI) 
-	{
+	public void _setConceptURI(String conceptURI) {
 		this.conceptURI = conceptURI;
 	}
-	
-	public OntologyClass getConcept()
-	{
+
+	public OntologyClass getConcept() {
 		getCalc().loadWhenUnloaded();
 		return getOntologyLibrary().getClass(_getConceptURI());
 	}
-	
-	public void setConcept(OntologyClass c)
-	{
+
+	public void setConcept(OntologyClass c) {
 		_setConceptURI(c != null ? c.getURI() : null);
 	}
-
 
 }

@@ -24,41 +24,37 @@ import org.openflexo.localization.FlexoLocalization;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class DuplicateCodeRepositoryNameException extends FlexoException
-{
+public class DuplicateCodeRepositoryNameException extends FlexoException {
 
-    private GenerationRepository repository;
-    private String name;
+	private GenerationRepository repository;
+	private String name;
 
-    /**
-     * @param folder
-     * @param name
-     */
-    public DuplicateCodeRepositoryNameException(GenerationRepository repository, String name)
-    {
-        this.repository =repository;//may be null
-        this.name = name;
-    }
+	/**
+	 * @param folder
+	 * @param name
+	 */
+	public DuplicateCodeRepositoryNameException(GenerationRepository repository, String name) {
+		this.repository = repository;// may be null
+		this.name = name;
+	}
 
-    public GenerationRepository getRepository()
-    {
-        return repository;
-    }
+	public GenerationRepository getRepository() {
+		return repository;
+	}
 
-    public String getName()
-    {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * Overrides getLocalizedMessage
-     * @see org.openflexo.foundation.FlexoException#getLocalizedMessage()
-     */
-    @Override
-    public String getLocalizedMessage()
-    {
-        return FlexoLocalization.localizedForKey("duplicate_code_repository_name");
-    }
+	/**
+	 * Overrides getLocalizedMessage
+	 * 
+	 * @see org.openflexo.foundation.FlexoException#getLocalizedMessage()
+	 */
+	@Override
+	public String getLocalizedMessage() {
+		return FlexoLocalization.localizedForKey("duplicate_code_repository_name");
+	}
 }

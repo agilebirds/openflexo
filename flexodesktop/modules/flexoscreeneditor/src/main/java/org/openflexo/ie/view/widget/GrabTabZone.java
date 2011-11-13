@@ -28,55 +28,51 @@ import org.openflexo.foundation.ie.widget.IESequenceTab;
 import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.ie.view.IEContainer;
 
-
 ;
 
 /**
  * @author gpolet
  * 
  */
-public class GrabTabZone extends JPanel implements IEContainer
-{
+public class GrabTabZone extends JPanel implements IEContainer {
 
-    private IESequenceTab tabs;
+	private IESequenceTab tabs;
 
-    /**
+	/**
      * 
      */
-    public GrabTabZone(IESequenceTab tabs)
-    {
-        super();
-        this.tabs = tabs;
-        setOpaque(false);
-        //setBackground(Color.WHITE);
-    }
+	public GrabTabZone(IESequenceTab tabs) {
+		super();
+		this.tabs = tabs;
+		setOpaque(false);
+		// setBackground(Color.WHITE);
+	}
 
-    public IESequenceTab getTabs()
-    {
-        return tabs;
-    }
+	public IESequenceTab getTabs() {
+		return tabs;
+	}
 
-    /**
-     * Overrides getContainerModel
-     * @see org.openflexo.ie.view.IEContainer#getContainerModel()
-     */
-    @Override
-	public IEWidget getContainerModel()
-    {
-        return getTabs();
-    }
-    
-    /**
-     * Overrides getPreferredSize
-     * @see javax.swing.JComponent#getPreferredSize()
-     */
-    @Override
-    public Dimension getPreferredSize()
-    {
-        Dimension d = super.getPreferredSize();
-        d.height = 10;
-        return d;
-    }
+	/**
+	 * Overrides getContainerModel
+	 * 
+	 * @see org.openflexo.ie.view.IEContainer#getContainerModel()
+	 */
+	@Override
+	public IEWidget getContainerModel() {
+		return getTabs();
+	}
+
+	/**
+	 * Overrides getPreferredSize
+	 * 
+	 * @see javax.swing.JComponent#getPreferredSize()
+	 */
+	@Override
+	public Dimension getPreferredSize() {
+		Dimension d = super.getPreferredSize();
+		d.height = 10;
+		return d;
+	}
 
 	@Override
 	public IEWOComponent getWOComponent() {

@@ -23,55 +23,47 @@ import java.util.Vector;
 
 import org.openflexo.foundation.FlexoObject;
 
-
 /**
- * A binding model represents a set of BindingVariable, which are variables
- * accessible in the context of which this binding model is declared
+ * A binding model represents a set of BindingVariable, which are variables accessible in the context of which this binding model is
+ * declared
  * 
  * @author sguerin
  * 
  */
-public abstract class BindingModel extends FlexoObject
-{
+public abstract class BindingModel extends FlexoObject {
 
-    private Vector<BindingVariable> _bindingVariables;
+	private Vector<BindingVariable> _bindingVariables;
 
-    public BindingModel()
-    {
-        super();
-        _bindingVariables = new Vector<BindingVariable>();
-    }
+	public BindingModel() {
+		super();
+		_bindingVariables = new Vector<BindingVariable>();
+	}
 
-    public int getBindingVariablesCount()
-    {
-        return _bindingVariables.size();
-    }
+	public int getBindingVariablesCount() {
+		return _bindingVariables.size();
+	}
 
-    public BindingVariable getBindingVariableAt(int index)
-    {
-        return _bindingVariables.elementAt(index);
-    }
+	public BindingVariable getBindingVariableAt(int index) {
+		return _bindingVariables.elementAt(index);
+	}
 
-    public void addToBindingVariables(BindingVariable variable)
-    {
-        _bindingVariables.add(variable);
-    }
+	public void addToBindingVariables(BindingVariable variable) {
+		_bindingVariables.add(variable);
+	}
 
-    public void removeFromBindingVariables(BindingVariable variable)
-    {
-        _bindingVariables.remove(variable);
-    }
+	public void removeFromBindingVariables(BindingVariable variable) {
+		_bindingVariables.remove(variable);
+	}
 
-    public BindingVariable bindingVariableNamed(String variableName)
-    {
-        for (int i = 0; i < getBindingVariablesCount(); i++) {
-            BindingVariable next = getBindingVariableAt(i);
-            if (next.getVariableName()!=null && next.getVariableName().equals(variableName)) {
-                return next;
-            }
-        }
-        return null;
-    }
-    
-    public abstract boolean allowsNewBindingVariableCreation();
+	public BindingVariable bindingVariableNamed(String variableName) {
+		for (int i = 0; i < getBindingVariablesCount(); i++) {
+			BindingVariable next = getBindingVariableAt(i);
+			if (next.getVariableName() != null && next.getVariableName().equals(variableName)) {
+				return next;
+			}
+		}
+		return null;
+	}
+
+	public abstract boolean allowsNewBindingVariableCreation();
 }

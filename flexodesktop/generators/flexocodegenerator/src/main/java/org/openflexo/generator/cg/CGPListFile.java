@@ -25,29 +25,24 @@ import org.openflexo.foundation.rm.cg.PListFileResource;
 import org.openflexo.foundation.xml.GeneratedCodeBuilder;
 import org.openflexo.generator.file.AbstractCGFile;
 
-
 public class CGPListFile extends AbstractCGFile {
 
-    public CGPListFile(GeneratedCodeBuilder builder)
-    {
-        this(builder.generatedCode);
-        initializeDeserialization(builder);
-     }
-    
-    public CGPListFile(GeneratedOutput generatedCode)
-    {
-        super(generatedCode);  
-    }
+	public CGPListFile(GeneratedCodeBuilder builder) {
+		this(builder.generatedCode);
+		initializeDeserialization(builder);
+	}
 
-    public CGPListFile(CGRepository repository, PListFileResource resource)
-    {
-        super(repository,resource);
-    }
+	public CGPListFile(GeneratedOutput generatedCode) {
+		super(generatedCode);
+	}
+
+	public CGPListFile(CGRepository repository, PListFileResource resource) {
+		super(repository, resource);
+	}
 
 	@Override
-	public PListFileResource getResource() 
-	{
-		return (PListFileResource)super.getResource();
+	public PListFileResource getResource() {
+		return (PListFileResource) super.getResource();
 	}
 
 }

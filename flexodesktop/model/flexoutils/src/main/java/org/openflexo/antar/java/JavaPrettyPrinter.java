@@ -56,7 +56,8 @@ public class JavaPrettyPrinter extends PrettyPrinter {
 	}
 
 	protected String makeJavadocComment(String javadocComment) {
-		return "/** " + StringUtils.LINE_SEPARATOR + "  * " + ToolBox.getJavaDocString(javadocComment, "  ") + "  */" + StringUtils.LINE_SEPARATOR;
+		return "/** " + StringUtils.LINE_SEPARATOR + "  * " + ToolBox.getJavaDocString(javadocComment, "  ") + "  */"
+				+ StringUtils.LINE_SEPARATOR;
 	}
 
 	protected String makeInlineComment(String inlineComment) {
@@ -96,8 +97,8 @@ public class JavaPrettyPrinter extends PrettyPrinter {
 				ControlGraph elseStatement = conditional.getElseStatement();
 				while (elseStatement instanceof Conditional) {
 					Conditional currentConditional = (Conditional) elseStatement;
-					String headerComment2 = currentConditional.getHeaderComment() != null ? StringUtils.LINE_SEPARATOR + makeHeaderComment(currentConditional
-							.getHeaderComment()) : "";
+					String headerComment2 = currentConditional.getHeaderComment() != null ? StringUtils.LINE_SEPARATOR
+							+ makeHeaderComment(currentConditional.getHeaderComment()) : "";
 					String inlineComment2 = currentConditional.getInlineComment() != null ? makeInlineComment(currentConditional
 							.getInlineComment()) : "";
 					sb.append(headerComment2);
@@ -262,7 +263,8 @@ public class JavaPrettyPrinter extends PrettyPrinter {
 		sb.append(headerComment);
 
 		for (ControlGraph statement : sequence.getStatements()) {
-			sb.append(getStringRepresentation(statement) + (statement != sequence.getStatements().lastElement() ? StringUtils.LINE_SEPARATOR : ""));
+			sb.append(getStringRepresentation(statement)
+					+ (statement != sequence.getStatements().lastElement() ? StringUtils.LINE_SEPARATOR : ""));
 		}
 
 		return sb.toString();
@@ -360,8 +362,8 @@ public class JavaPrettyPrinter extends PrettyPrinter {
 			if (jalopy.format()) {
 				String formatted = sb.toString();
 				// System.out.println("Unformatted:["+someCode+"]");
-				return removeExtraIndentation(formatted.substring(21 + StringUtils.LINE_SEPARATOR.length(),
-						formatted.length() - 1 - StringUtils.LINE_SEPARATOR.length()));
+				return removeExtraIndentation(formatted.substring(21 + StringUtils.LINE_SEPARATOR.length(), formatted.length() - 1
+						- StringUtils.LINE_SEPARATOR.length()));
 				// return formatted.substring(53,formatted.length()-4);
 			}
 		} catch (Exception e) {
@@ -388,7 +390,8 @@ public class JavaPrettyPrinter extends PrettyPrinter {
 			return "";
 		}
 
-		String javaCode = "public class Format {" + StringUtils.LINE_SEPARATOR + "public void formatThis() {" + StringUtils.LINE_SEPARATOR + "" + someCode + "" + StringUtils.LINE_SEPARATOR + "}" + StringUtils.LINE_SEPARATOR + "}";
+		String javaCode = "public class Format {" + StringUtils.LINE_SEPARATOR + "public void formatThis() {" + StringUtils.LINE_SEPARATOR
+				+ "" + someCode + "" + StringUtils.LINE_SEPARATOR + "}" + StringUtils.LINE_SEPARATOR + "}";
 
 		javaCode = javaCode.replace("\r", "");
 		javaCode = javaCode.replaceAll(MULTIPLE_NEW_LINE_ALONE_REG_EXP, StringUtils.LINE_SEPARATOR + StringUtils.LINE_SEPARATOR);
@@ -402,8 +405,8 @@ public class JavaPrettyPrinter extends PrettyPrinter {
 			if (jalopy.format()) {
 				String formatted = sb.toString();
 				// System.out.println("Unformatted:["+someCode+"]");
-				return removeExtraIndentation(formatted.substring(51 + 2 * StringUtils.LINE_SEPARATOR.length(),
-						formatted.length() - 2 - 2 * StringUtils.LINE_SEPARATOR.length()));
+				return removeExtraIndentation(formatted.substring(51 + 2 * StringUtils.LINE_SEPARATOR.length(), formatted.length() - 2 - 2
+						* StringUtils.LINE_SEPARATOR.length()));
 				// return formatted.substring(53,formatted.length()-4);
 			}
 		} catch (Exception e) {
@@ -438,7 +441,8 @@ public class JavaPrettyPrinter extends PrettyPrinter {
 			char c = lines.firstElement().charAt(firstSignificantCharIndex);
 			if (c < 32 || c == ' ' || c == '\t') {
 				for (int i = 1; i < lines.size(); i++) {
-					if (lines.elementAt(i).length() <= firstSignificantCharIndex || lines.elementAt(i).charAt(firstSignificantCharIndex) != c) {
+					if (lines.elementAt(i).length() <= firstSignificantCharIndex
+							|| lines.elementAt(i).charAt(firstSignificantCharIndex) != c) {
 						charIsUnsignificantAndMatchesEverywhere = false;
 					}
 				}

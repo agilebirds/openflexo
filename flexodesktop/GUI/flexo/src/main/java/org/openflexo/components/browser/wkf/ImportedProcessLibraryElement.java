@@ -31,46 +31,40 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.wkf.FlexoImportedProcessLibrary;
 
-
 /**
  * Browser element representing the workflow
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class ImportedProcessLibraryElement extends BrowserElement implements ExpansionSynchronizedElement
-{
+public class ImportedProcessLibraryElement extends BrowserElement implements ExpansionSynchronizedElement {
 
-    public ImportedProcessLibraryElement(FlexoImportedProcessLibrary library, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(library, BrowserElementType.IMPORTED_PROCESS_LIBRARY, browser, parent);
-    }
+	public ImportedProcessLibraryElement(FlexoImportedProcessLibrary library, ProjectBrowser browser, BrowserElement parent) {
+		super(library, BrowserElementType.IMPORTED_PROCESS_LIBRARY, browser, parent);
+	}
 
 	@Override
 	public TreePath getTreePath() {
 		return super.getTreePath();
 	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-    	Vector<FlexoModelObject> processes = new Vector<FlexoModelObject>(getImportedProcessLibrary().getImportedProcesses());
-    	Collections.sort(processes,FlexoModelObject.NAME_COMPARATOR);
-    	for (FlexoModelObject process : processes) {
+	@Override
+	protected void buildChildrenVector() {
+		Vector<FlexoModelObject> processes = new Vector<FlexoModelObject>(getImportedProcessLibrary().getImportedProcesses());
+		Collections.sort(processes, FlexoModelObject.NAME_COMPARATOR);
+		for (FlexoModelObject process : processes) {
 			addToChilds(process);
 		}
-    }
+	}
 
-    @Override
-	public String getName()
-    {
-        return getObject().getLocalizedClassName();
-    }
+	@Override
+	public String getName() {
+		return getObject().getLocalizedClassName();
+	}
 
-    protected FlexoImportedProcessLibrary getImportedProcessLibrary()
-    {
-        return (FlexoImportedProcessLibrary) getObject();
-    }
+	protected FlexoImportedProcessLibrary getImportedProcessLibrary() {
+		return (FlexoImportedProcessLibrary) getObject();
+	}
 
 	@Override
 	public void collapse() {

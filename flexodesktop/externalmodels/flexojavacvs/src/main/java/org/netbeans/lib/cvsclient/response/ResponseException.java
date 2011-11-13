@@ -22,22 +22,22 @@ package org.netbeans.lib.cvsclient.response;
 import org.netbeans.lib.cvsclient.command.CommandException;
 
 /**
- * This exception is thrown when an error occurs while processing the
- * server's responses.
- * @author  Robert Greig
+ * This exception is thrown when an error occurs while processing the server's responses.
+ * 
+ * @author Robert Greig
  */
 public class ResponseException extends CommandException {
 
-    public ResponseException(Exception e) {
-        super(e, e.getLocalizedMessage());
-    }
+	public ResponseException(Exception e) {
+		super(e, e.getLocalizedMessage());
+	}
 
-    public ResponseException(Exception e, String locMessage) {
-        super(e, locMessage);
-    }
+	public ResponseException(Exception e, String locMessage) {
+		super(e, locMessage);
+	}
 
-    public ResponseException(String message, String localizedMessage) {
-        super(message, localizedMessage);
-    }
+	public ResponseException(String message, String localizedMessage) {
+		super(message, localizedMessage);
+	}
 
 }

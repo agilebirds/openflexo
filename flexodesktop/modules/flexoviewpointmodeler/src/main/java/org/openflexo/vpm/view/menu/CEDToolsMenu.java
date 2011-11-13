@@ -30,38 +30,34 @@ import java.util.logging.Logger;
 import org.openflexo.view.menu.ToolsMenu;
 import org.openflexo.vpm.controller.CEDController;
 
-
 /**
  * 'Tools' menu for this Module
  * 
  * @author yourname
  */
-public class CEDToolsMenu extends ToolsMenu
-{
+public class CEDToolsMenu extends ToolsMenu {
 
-    private static final Logger logger = Logger.getLogger(CEDToolsMenu.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(CEDToolsMenu.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance Variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance Variables
+	// =========================
+	// ==========================================================================
 
-      protected CEDController _xxxController;
+	protected CEDController _xxxController;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public CEDToolsMenu(CEDController controller)
-    {
-        super(controller);
-        _xxxController = controller;
-        // Put your actions here
-    }
+	public CEDToolsMenu(CEDController controller) {
+		super(controller);
+		_xxxController = controller;
+		// Put your actions here
+	}
 
-    public CEDController getXXXController()
-    {
-        return _xxxController;
-    }
+	public CEDController getXXXController() {
+		return _xxxController;
+	}
 }

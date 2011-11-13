@@ -27,7 +27,6 @@ import java.util.regex.Pattern;
 
 import org.apache.velocity.VelocityContext;
 
-
 import org.openflexo.dg.latex.DocGeneratorConstants;
 import org.openflexo.dg.rm.DocxXmlFileResource;
 import org.openflexo.foundation.FlexoModelObject;
@@ -51,8 +50,7 @@ import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.exception.UnexpectedExceptionOccuredException;
 import org.openflexo.logging.FlexoLogger;
 
-public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T, DGRepository> implements IFlexoResourceGenerator
-{
+public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T, DGRepository> implements IFlexoResourceGenerator {
 	protected static final String BAD_CHARACTERS_REG_EXP = "['\"&}%#~\\s_?+:/\\\\]";
 	protected static final Pattern BAD_CHARACTERS_PATTERN = Pattern.compile(BAD_CHARACTERS_REG_EXP);
 
@@ -61,28 +59,22 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 	private String identifier;
 	private LinkedHashMap<DocxXmlFileResource<DGDocxXMLGenerator<T>>, DocxTemplatesEnum> docxResources;
 
-	public DGDocxXMLGenerator(ProjectDocDocxGenerator projectGenerator, T source, String identifier)
-	{
+	public DGDocxXMLGenerator(ProjectDocDocxGenerator projectGenerator, T source, String identifier) {
 		super(projectGenerator, source);
 		this.docxResources = new LinkedHashMap<DocxXmlFileResource<DGDocxXMLGenerator<T>>, DocxTemplatesEnum>();
 		this.identifier = identifier;
 	}
 
-	public CGSymbolicDirectory getSymbolicDirectory(DGRepository repository)
-	{
+	public CGSymbolicDirectory getSymbolicDirectory(DGRepository repository) {
 		return repository.getDocxSymbolicDirectory();
 	}
 
 	@Override
-	public GeneratedDocxXmlResource getGeneratedCode()
-	{
-		if (generatedCode == null)
-		{
+	public GeneratedDocxXmlResource getGeneratedCode() {
+		if (generatedCode == null) {
 			GeneratedDocxXmlResource generatedCodeTmp = new GeneratedDocxXmlResource(getIdentifier());
-			for(DocxXmlFileResource<DGDocxXMLGenerator<T>> resource : docxResources.keySet())
-			{
-				if(resource.getASCIIFile() == null || !resource.getASCIIFile().hasLastAcceptedContent())
-				{
+			for (DocxXmlFileResource<DGDocxXMLGenerator<T>> resource : docxResources.keySet()) {
+				if (resource.getASCIIFile() == null || !resource.getASCIIFile().hasLastAcceptedContent()) {
 					generatedCodeTmp = null;
 					break;
 				}
@@ -91,36 +83,30 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 
 			generatedCode = generatedCodeTmp;
 		}
-		return (GeneratedDocxXmlResource)generatedCode;
+		return (GeneratedDocxXmlResource) generatedCode;
 	}
 
 	@Override
-	public void buildResourcesAndSetGenerators(DGRepository repository, Vector<CGRepositoryFileResource> resources)
-	{
+	public void buildResourcesAndSetGenerators(DGRepository repository, Vector<CGRepositoryFileResource> resources) {
 		getProjectGenerator().refreshConcernedResources();
 	}
 
 	@Override
-	public void generate(boolean forceRegenerate)
-	{
+	public void generate(boolean forceRegenerate) {
 		if (!forceRegenerate && !needsGeneration())
 			return;
 
 		startGeneration();
-		try
-		{
+		try {
 			VelocityContext context = defaultContext();
 
 			generatedCode = new GeneratedDocxXmlResource(getIdentifier());
-			for(DocxXmlFileResource<DGDocxXMLGenerator<T>> resource : docxResources.keySet())
-				((GeneratedDocxXmlResource)generatedCode).addCode(getDocxTemplateForResource(resource), merge(getTemplateNameForResource(resource), context));
-		}
-		catch (GenerationException e)
-		{
+			for (DocxXmlFileResource<DGDocxXMLGenerator<T>> resource : docxResources.keySet())
+				((GeneratedDocxXmlResource) generatedCode).addCode(getDocxTemplateForResource(resource),
+						merge(getTemplateNameForResource(resource), context));
+		} catch (GenerationException e) {
 			setGenerationException(e);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			if (logger.isLoggable(Level.WARNING))
 				logger.warning("Unexpected exception occured: " + e.getMessage() + " for " + getObject().getFullyQualifiedName());
 			e.printStackTrace();
@@ -130,80 +116,71 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 	}
 
 	@Override
-	protected VelocityContext defaultContext()
-	{
+	protected VelocityContext defaultContext() {
 		VelocityContext context = super.defaultContext();
 		context.put("DocSection", DocConstants.DocSection.class);
 		return context;
 	}
 
 	@Override
-	public Logger getGeneratorLogger()
-	{
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
 	@Override
-	public String getIdentifier()
-	{
+	public String getIdentifier() {
 		return identifier;
 	}
 
-	public void addDocxResource(DocxXmlFileResource<DGDocxXMLGenerator<T>> docxResource, DocxTemplatesEnum docxTemplate)
-	{
+	public void addDocxResource(DocxXmlFileResource<DGDocxXMLGenerator<T>> docxResource, DocxTemplatesEnum docxTemplate) {
 		docxResources.put(docxResource, docxTemplate);
 	}
 
-	public DocxTemplatesEnum getDocxTemplateForResource(DocxXmlFileResource<DGDocxXMLGenerator<T>> docxResource)
-	{
+	public DocxTemplatesEnum getDocxTemplateForResource(DocxXmlFileResource<DGDocxXMLGenerator<T>> docxResource) {
 		return docxResources.get(docxResource);
 	}
 
-	public String getGenerationResultKeyForResource(DocxXmlFileResource<DGDocxXMLGenerator<T>> docxResource)
-	{
+	public String getGenerationResultKeyForResource(DocxXmlFileResource<DGDocxXMLGenerator<T>> docxResource) {
 		return docxResources.get(docxResource).toString();
 	}
 
-	public String getFileNameForResource(DocxXmlFileResource<DGDocxXMLGenerator<T>> docxResource)
-	{
+	public String getFileNameForResource(DocxXmlFileResource<DGDocxXMLGenerator<T>> docxResource) {
 		return docxResources.get(docxResource).getFilePath();
 	}
 
-	public String getTemplateNameForResource(DocxXmlFileResource<DGDocxXMLGenerator<T>> docxResource)
-	{
+	public String getTemplateNameForResource(DocxXmlFileResource<DGDocxXMLGenerator<T>> docxResource) {
 		return docxResources.get(docxResource).getTemplatePath();
 	}
 
 	public static String getReference(FlexoModelObject object) {
-        String s="";
-        if (object instanceof FlexoProcess) {
-            s = "PROCESS-"+((FlexoProcess)object).getName();
-        } else if (object instanceof DMModel) {
-            s = "DMMODEL-"+((DMModel)object).getName();
-        } else if (object instanceof DMEOEntity) {
-            s = "DMEOENTITY-"+((DMEOEntity)object).getName();
-        } else if (object instanceof AbstractActivityNode) {
-            s = "ACTIVITY-"+((AbstractActivityNode)object).getName()+"-"+object.getFlexoID();
-        } else if (object instanceof OperationNode) {
-            s = "OPERATION-"+((OperationNode)object).getName()+"-"+object.getFlexoID();
-        } else if (object instanceof DKVModel) {
-            s = "DKVMODEL-"+((DKVModel)object).getName();
-        } else if (object instanceof FlexoNavigationMenu) {
-            s = "MENU-"+((FlexoNavigationMenu)object).getName();
-        } else if (object instanceof IEPopupComponent) {
-            s = "POPUP-"+((IEPopupComponent)object).getName();
-        } else if (object instanceof IETabComponent) {
-            s = "TAB-"+((IETabComponent)object).getName();
-        } else if (object instanceof IEPageComponent) {
-            s = "PAGE-"+((IEPageComponent)object).getName();
-        } else {
-            s = object.getFullyQualifiedName();
-        }
-        return getValidReference(DocGeneratorConstants.DG_LABEL_PREFIX+s);
-    }
+		String s = "";
+		if (object instanceof FlexoProcess) {
+			s = "PROCESS-" + ((FlexoProcess) object).getName();
+		} else if (object instanceof DMModel) {
+			s = "DMMODEL-" + ((DMModel) object).getName();
+		} else if (object instanceof DMEOEntity) {
+			s = "DMEOENTITY-" + ((DMEOEntity) object).getName();
+		} else if (object instanceof AbstractActivityNode) {
+			s = "ACTIVITY-" + ((AbstractActivityNode) object).getName() + "-" + object.getFlexoID();
+		} else if (object instanceof OperationNode) {
+			s = "OPERATION-" + ((OperationNode) object).getName() + "-" + object.getFlexoID();
+		} else if (object instanceof DKVModel) {
+			s = "DKVMODEL-" + ((DKVModel) object).getName();
+		} else if (object instanceof FlexoNavigationMenu) {
+			s = "MENU-" + ((FlexoNavigationMenu) object).getName();
+		} else if (object instanceof IEPopupComponent) {
+			s = "POPUP-" + ((IEPopupComponent) object).getName();
+		} else if (object instanceof IETabComponent) {
+			s = "TAB-" + ((IETabComponent) object).getName();
+		} else if (object instanceof IEPageComponent) {
+			s = "PAGE-" + ((IEPageComponent) object).getName();
+		} else {
+			s = object.getFullyQualifiedName();
+		}
+		return getValidReference(DocGeneratorConstants.DG_LABEL_PREFIX + s);
+	}
 
-    public static String getValidReference(String label)
-    {
-        return BAD_CHARACTERS_PATTERN.matcher(label).replaceAll("-");
-    }
+	public static String getValidReference(String label) {
+		return BAD_CHARACTERS_PATTERN.matcher(label).replaceAll("-");
+	}
 }

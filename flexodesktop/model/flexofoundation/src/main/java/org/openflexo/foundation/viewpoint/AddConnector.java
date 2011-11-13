@@ -29,43 +29,36 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.action.LinkSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-
 public class AddConnector extends AddShemaElementAction<ConnectorPatternRole> {
 
 	private static final Logger logger = Logger.getLogger(LinkSchemeAction.class.getPackage().getName());
 
 	public AddConnector() {
 	}
-	
+
 	@Override
-	public EditionActionType getEditionActionType()
-	{
+	public EditionActionType getEditionActionType() {
 		return EditionActionType.AddConnector;
 	}
-	
+
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.VPM.ADD_CONNECTOR_INSPECTOR;
 	}
-	
 
-	public ViewShape getFromShape(EditionSchemeAction action)
-	{
-		return (ViewShape)getFromShape().getBindingValue(action);
+	public ViewShape getFromShape(EditionSchemeAction action) {
+		return (ViewShape) getFromShape().getBindingValue(action);
 	}
-	
-	public ViewShape getToShape(EditionSchemeAction action)
-	{
-		return (ViewShape)getToShape().getBindingValue(action);
+
+	public ViewShape getToShape(EditionSchemeAction action) {
+		return (ViewShape) getToShape().getBindingValue(action);
 	}
 
 	@Override
-	public String toString()
-	{
-		return "AddConnector "+Integer.toHexString(hashCode())+" patternRole="+getPatternRole();
+	public String toString() {
+		return "AddConnector " + Integer.toHexString(hashCode()) + " patternRole=" + getPatternRole();
 	}
-	
+
 	@Override
 	public ConnectorPatternRole getPatternRole() {
 		try {
@@ -76,33 +69,30 @@ public class AddConnector extends AddShemaElementAction<ConnectorPatternRole> {
 			return null;
 		}
 	}
-	
+
 	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
 	// Need to be fixed in KeyValueProperty.java
 	@Override
-	public void setPatternRole(ConnectorPatternRole patternRole) 
-	{
+	public void setPatternRole(ConnectorPatternRole patternRole) {
 		super.setPatternRole(patternRole);
 	}
-	
+
 	private ViewPointDataBinding fromShape;
 	private ViewPointDataBinding toShape;
-	
+
 	private BindingDefinition FROM_SHAPE = new BindingDefinition("fromShape", ViewShape.class, BindingDefinitionType.GET, false);
-	
-	public BindingDefinition getFromShapeBindingDefinition()
-	{
+
+	public BindingDefinition getFromShapeBindingDefinition() {
 		return FROM_SHAPE;
 	}
 
-	public ViewPointDataBinding getFromShape() 
-	{
-		if (fromShape == null) fromShape = new ViewPointDataBinding(this,EditionActionBindingAttribute.fromShape,getFromShapeBindingDefinition());
+	public ViewPointDataBinding getFromShape() {
+		if (fromShape == null)
+			fromShape = new ViewPointDataBinding(this, EditionActionBindingAttribute.fromShape, getFromShapeBindingDefinition());
 		return fromShape;
 	}
 
-	public void setFromShape(ViewPointDataBinding fromShape) 
-	{
+	public void setFromShape(ViewPointDataBinding fromShape) {
 		fromShape.setOwner(this);
 		fromShape.setBindingAttribute(EditionActionBindingAttribute.fromShape);
 		fromShape.setBindingDefinition(getFromShapeBindingDefinition());
@@ -110,25 +100,22 @@ public class AddConnector extends AddShemaElementAction<ConnectorPatternRole> {
 	}
 
 	private BindingDefinition TO_SHAPE = new BindingDefinition("toShape", ViewShape.class, BindingDefinitionType.GET, false);
-	
-	public BindingDefinition getToShapeBindingDefinition()
-	{
+
+	public BindingDefinition getToShapeBindingDefinition() {
 		return TO_SHAPE;
 	}
 
-	public ViewPointDataBinding getToShape() 
-	{
-		if (toShape == null) toShape = new ViewPointDataBinding(this,EditionActionBindingAttribute.toShape,getToShapeBindingDefinition());
+	public ViewPointDataBinding getToShape() {
+		if (toShape == null)
+			toShape = new ViewPointDataBinding(this, EditionActionBindingAttribute.toShape, getToShapeBindingDefinition());
 		return toShape;
 	}
 
-	public void setToShape(ViewPointDataBinding toShape) 
-	{
+	public void setToShape(ViewPointDataBinding toShape) {
 		toShape.setOwner(this);
 		toShape.setBindingAttribute(EditionActionBindingAttribute.toShape);
 		toShape.setBindingDefinition(getToShapeBindingDefinition());
 		this.toShape = toShape;
 	}
-
 
 }

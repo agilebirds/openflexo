@@ -23,8 +23,7 @@ import org.openflexo.antar.expr.parser.ExpressionParser;
 
 public class DefaultExpressionParser extends ExpressionParser {
 
-	public DefaultExpressionParser()
-	{
+	public DefaultExpressionParser() {
 		super(new DefaultGrammar());
 	}
 

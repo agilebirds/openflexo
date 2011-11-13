@@ -50,8 +50,8 @@ public class HelpLanguage {
 	}
 
 	public Vector<UserType> getDistributions() {
-		Vector<UserType> v=new Vector<UserType>();
-		if (distributions!=null) {
+		Vector<UserType> v = new Vector<UserType>();
+		if (distributions != null) {
 			for (HelpDistribution hd : distributions) {
 				v.add(UserType.getUserTypeNamed(hd.getName()));
 			}

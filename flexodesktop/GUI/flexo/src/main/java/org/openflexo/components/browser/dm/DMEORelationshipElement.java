@@ -24,24 +24,20 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.dm.eo.DMEORelationship;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class DMEORelationshipElement extends DMEOPropertyElement
-{
+public class DMEORelationshipElement extends DMEOPropertyElement {
 
-    public DMEORelationshipElement(DMEORelationship relationship, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(relationship, BrowserElementType.DM_EORELATIONSHIP, browser,parent);
-    }
+	public DMEORelationshipElement(DMEORelationship relationship, ProjectBrowser browser, BrowserElement parent) {
+		super(relationship, BrowserElementType.DM_EORELATIONSHIP, browser, parent);
+	}
 
-    protected DMEORelationship getDMEORelationship()
-    {
-        return (DMEORelationship) getObject();
-    }
+	protected DMEORelationship getDMEORelationship() {
+		return (DMEORelationship) getObject();
+	}
 
 }

@@ -31,59 +31,50 @@ import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class MarkAsMergedInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	MarkAsMergedInitializer(SGControllerActionInitializer actionInitializer)
-	{
-		super(MarkAsMerged.actionType,actionInitializer);
+	MarkAsMergedInitializer(SGControllerActionInitializer actionInitializer) {
+		super(MarkAsMerged.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected SGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (SGControllerActionInitializer)super.getControllerActionInitializer();
+	protected SGControllerActionInitializer getControllerActionInitializer() {
+		return (SGControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<MarkAsMerged> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<MarkAsMerged> getDefaultInitializer() {
 		return new FlexoActionInitializer<MarkAsMerged>() {
-            @Override
-			public boolean run(ActionEvent e, MarkAsMerged action)
-            {
-                action.getProjectGenerator().startHandleLogs();
-                return true;
-            }
-        };
-	}
-
-     @Override
-	protected FlexoActionFinalizer<MarkAsMerged> getDefaultFinalizer() 
-	{
-		return new FlexoActionFinalizer<MarkAsMerged>() {
-            @Override
-			public boolean run(ActionEvent e, MarkAsMerged action)
-            {
-                action.getProjectGenerator().stopHandleLogs();
-                action.getProjectGenerator().flushLogs();
-                return true;
-          }
-        };
+			@Override
+			public boolean run(ActionEvent e, MarkAsMerged action) {
+				action.getProjectGenerator().startHandleLogs();
+				return true;
+			}
+		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected FlexoActionFinalizer<MarkAsMerged> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<MarkAsMerged>() {
+			@Override
+			public boolean run(ActionEvent e, MarkAsMerged action) {
+				action.getProjectGenerator().stopHandleLogs();
+				action.getProjectGenerator().flushLogs();
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
 		return GeneratorIconLibrary.MARK_AS_MERGED_ICON;
 	}
- 
+
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return GeneratorIconLibrary.MARK_AS_MERGED_DISABLED_ICON;
 	}
- 
+
 }

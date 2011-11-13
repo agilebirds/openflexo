@@ -28,25 +28,24 @@ import org.openflexo.wysiwyg.FlexoWysiwyg;
 import org.openflexo.wysiwyg.FlexoWysiwygLight;
 import org.openflexo.wysiwyg.FlexoWysiwygUltraLight;
 
-
-
 public class WysiwygLightWidget extends DenaliWidget<String> {
 
 	private FlexoWysiwyg wysiwyg;
 
 	public WysiwygLightWidget(PropertyModel model, AbstractController controller, boolean isUltraLightWysiwyg) {
 		super(model, controller);
-		boolean showViewSourceButtonInWysiwyg = controller.getConfiguration()!=null && controller.getConfiguration().showViewSourceButtonInWysiwyg();
+		boolean showViewSourceButtonInWysiwyg = controller.getConfiguration() != null
+				&& controller.getConfiguration().showViewSourceButtonInWysiwyg();
 		if (isUltraLightWysiwyg) {
-			this.wysiwyg =  new FlexoWysiwygUltraLight(showViewSourceButtonInWysiwyg) {
+			this.wysiwyg = new FlexoWysiwygUltraLight(showViewSourceButtonInWysiwyg) {
 				@Override
 				public void notifyTextChanged() {
 					updateModelFromWidget();
 				}
 			};
 		} else {
-			//TODO -> load the CSS (need project)
-			this.wysiwyg =  new FlexoWysiwygLight(showViewSourceButtonInWysiwyg) {
+			// TODO -> load the CSS (need project)
+			this.wysiwyg = new FlexoWysiwygLight(showViewSourceButtonInWysiwyg) {
 				@Override
 				public void notifyTextChanged() {
 					updateModelFromWidget();
@@ -58,17 +57,17 @@ public class WysiwygLightWidget extends DenaliWidget<String> {
 		wysiwyg.getSelectedEditorComponent().addFocusListener(new WidgetFocusListener(this));
 	}
 
-    @Override
-    protected synchronized void setModel(InspectableObject value) {
-    	boolean forceRefresh = getModel()==null;
+	@Override
+	protected synchronized void setModel(InspectableObject value) {
+		boolean forceRefresh = getModel() == null;
 		boolean wasReadOnly = isReadOnly();
-    	super.setModel(value);
-    	boolean isReadOnly = isReadOnly();
-    	if (forceRefresh || (wasReadOnly!=isReadOnly)) {
-    		wysiwyg.setPreviewModeOnly(isReadOnly);
-    		wysiwyg.revalidate();
-    	}
-    }
+		super.setModel(value);
+		boolean isReadOnly = isReadOnly();
+		if (forceRefresh || (wasReadOnly != isReadOnly)) {
+			wysiwyg.setPreviewModeOnly(isReadOnly);
+			wysiwyg.revalidate();
+		}
+	}
 
 	@Override
 	public Class getDefaultType() {
@@ -98,14 +97,14 @@ public class WysiwygLightWidget extends DenaliWidget<String> {
 	 */
 	@Override
 	public synchronized void updateModelFromWidget() {
-       	if (isReadOnly())
-       		return;
+		if (isReadOnly())
+			return;
 		modelUpdating = true;
-       	try {
-       		setStringValue(wysiwyg.getBodyContent());
-       	} finally {
-       		modelUpdating = false;
-       	}
+		try {
+			setStringValue(wysiwyg.getBodyContent());
+		} finally {
+			modelUpdating = false;
+		}
 	}
 
 	@Override

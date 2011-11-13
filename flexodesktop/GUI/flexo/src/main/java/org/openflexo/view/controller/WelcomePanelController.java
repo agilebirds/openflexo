@@ -13,27 +13,23 @@ import org.openflexo.module.ModuleLoader;
 
 public class WelcomePanelController extends FlexoFIBController {
 
-	public WelcomePanelController(FIBComponent component) 
-	{
+	public WelcomePanelController(FIBComponent component) {
 		super(component);
 	}
 
-	public void exit()
-	{
+	public void exit() {
 		try {
 			ModuleLoader.quit(true);
 		} catch (ProjectExitingCancelledException e) {
 		}
 	}
 
-	public void openModule(Module module)
-	{
+	public void openModule(Module module) {
 		validateAndDispose();
 		ModuleLoader.switchToModule(module);
 	}
 
-	public void openProject(File project, Module module)
-	{
+	public void openProject(File project, Module module) {
 		if (project == null) {
 			try {
 				project = OpenProjectComponent.getProjectDirectory();
@@ -48,20 +44,18 @@ public class WelcomePanelController extends FlexoFIBController {
 		ModuleLoader.switchToModule(module);
 	}
 
-	public void newProject(Module module)
-	{
+	public void newProject(Module module) {
 		File project;
 		try {
 			project = NewProjectComponent.getProjectDirectory();
 		} catch (ProjectLoadingCancelledException e1) {
 			return;
 		}
-		
+
 		GeneralPreferences.addToLastOpenedProjects(project);
 		validateAndDispose();
 		ModuleLoader.newProject(project);
 		ModuleLoader.switchToModule(module);
 	}
-
 
 }

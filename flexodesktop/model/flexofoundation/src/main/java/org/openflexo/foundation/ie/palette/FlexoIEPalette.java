@@ -69,6 +69,7 @@ public abstract class FlexoIEPalette<W extends FlexoIEPalette.FlexoIEPaletteWidg
 			}
 		};
 		public abstract String getAttributeTag();
+
 		@Override
 		public String toString() {
 			return getAttributeTag();
@@ -94,7 +95,7 @@ public abstract class FlexoIEPalette<W extends FlexoIEPalette.FlexoIEPaletteWidg
 	}
 
 	public Vector<W> getWidgets() {
-		if (widgets==null) {
+		if (widgets == null) {
 			widgets = new Vector<W>();
 			loadWidgets();
 		}
@@ -102,7 +103,7 @@ public abstract class FlexoIEPalette<W extends FlexoIEPalette.FlexoIEPaletteWidg
 	}
 
 	public void refresh() {
-		if (widgets==null) {
+		if (widgets == null) {
 			return;
 		}
 		widgets.clear();
@@ -132,10 +133,12 @@ public abstract class FlexoIEPalette<W extends FlexoIEPalette.FlexoIEPaletteWidg
 			fetchIsTopComponent();
 		}
 
-		public IEWidget getWidget(FlexoComponentBuilder builder) throws InvalidXMLDataException, InvalidObjectSpecificationException, AccessorInvocationException, InvalidModelException, IOException, JDOMException {
-			IEWidget retval = (IEWidget) XMLDecoder.decodeObjectWithMapping(xml, getProject().getXmlMappings().getIEMapping(), builder,getProject().getStringEncoder());
-            retval.removeInvalidComponentInstances();
-            return retval;
+		public IEWidget getWidget(FlexoComponentBuilder builder) throws InvalidXMLDataException, InvalidObjectSpecificationException,
+				AccessorInvocationException, InvalidModelException, IOException, JDOMException {
+			IEWidget retval = (IEWidget) XMLDecoder.decodeObjectWithMapping(xml, getProject().getXmlMappings().getIEMapping(), builder,
+					getProject().getStringEncoder());
+			retval.removeInvalidComponentInstances();
+			return retval;
 		}
 
 		/**
@@ -153,11 +156,11 @@ public abstract class FlexoIEPalette<W extends FlexoIEPalette.FlexoIEPaletteWidg
 				targetClass = Class.forName(properties.getProperty(PaletteAttribute.TARGET_CLASS_MODEL.getAttributeTag()));
 			} catch (ClassNotFoundException e) {
 				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Could not find class "+properties.getProperty(PaletteAttribute.TARGET_CLASS_MODEL.getAttributeTag()));
+					logger.warning("Could not find class " + properties.getProperty(PaletteAttribute.TARGET_CLASS_MODEL.getAttributeTag()));
 				}
 			} catch (RuntimeException e) {
 				if (logger.isLoggable(Level.WARNING)) {
-					logger.log(Level.WARNING,"Error while loading class",e);
+					logger.log(Level.WARNING, "Error while loading class", e);
 				}
 			}
 		}
@@ -167,10 +170,10 @@ public abstract class FlexoIEPalette<W extends FlexoIEPalette.FlexoIEPaletteWidg
 		 */
 		protected void fetchXML() {
 			xml = properties.getProperty(PaletteAttribute.XML.getAttributeTag());
-			if(!xml.startsWith("<?xml")){
-            	xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+xml;
-            }
-			properties.put(PaletteAttribute.XML.getAttributeTag(),xml);
+			if (!xml.startsWith("<?xml")) {
+				xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + xml;
+			}
+			properties.put(PaletteAttribute.XML.getAttributeTag(), xml);
 		}
 
 		public String getXML() {
@@ -186,7 +189,7 @@ public abstract class FlexoIEPalette<W extends FlexoIEPalette.FlexoIEPaletteWidg
 		}
 
 		public boolean hasScreenshot() {
-			return (getScreenshotFile(FlexoCSS.CONTENTO)!=null) && getScreenshotFile(FlexoCSS.CONTENTO).exists();
+			return (getScreenshotFile(FlexoCSS.CONTENTO) != null) && getScreenshotFile(FlexoCSS.CONTENTO).exists();
 		}
 
 		public File getScreenshotFile(FlexoCSS css) {

@@ -24,9 +24,7 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.javaparser.ParsedJavaMethod.ParsedJavaMethodParameter;
 
-
 import com.thoughtworks.qdox.model.JavaParameter;
-
 
 public class FJPJavaParameter extends FJPJavaElement implements ParsedJavaMethodParameter {
 
@@ -34,50 +32,42 @@ public class FJPJavaParameter extends FJPJavaElement implements ParsedJavaMethod
 	private static final Logger logger = Logger.getLogger(FJPJavaParameter.class.getPackage().getName());
 
 	private JavaParameter _qdJavaParameter;
-	
-	public FJPJavaParameter (JavaParameter qdJavaParameter, FJPJavaSource aJavaSource)
-	{
+
+	public FJPJavaParameter(JavaParameter qdJavaParameter, FJPJavaSource aJavaSource) {
 		super(aJavaSource);
 		_qdJavaParameter = qdJavaParameter;
 	}
 
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		// not inspectable alone
 		return null;
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return _qdJavaParameter.getName();
 	}
 
-	public FJPJavaMethod getParentMethod() 
-	{
+	public FJPJavaMethod getParentMethod() {
 		return getMethod(_qdJavaParameter.getParentMethod());
 	}
 
 	@Override
-	public DMType getType()
-	{
-		return (DMType)_qdJavaParameter.getType();
+	public DMType getType() {
+		return (DMType) _qdJavaParameter.getType();
 	}
 
-	public String getTypeAsString()
-	{
+	public String getTypeAsString() {
 		return getType().toString();
 	}
 
-	public boolean isVarArgs() 
-	{
+	public boolean isVarArgs() {
 		return _qdJavaParameter.isVarArgs();
 	}
-	
-	public boolean isArray() 
-	{
+
+	public boolean isArray() {
 		return (getType() != null ? getType().isArray() : false);
 	}
-	
+
 }

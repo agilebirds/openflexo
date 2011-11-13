@@ -31,116 +31,105 @@ import org.openflexo.foundation.dm.DMPackage;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.DMEIconLibrary;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class WSEDMEntityTableModel extends AbstractModel<DMPackage,DMEntity>
-{
+public class WSEDMEntityTableModel extends AbstractModel<DMPackage, DMEntity> {
 
-    protected static final Logger logger = Logger.getLogger(WSEDMEntityTableModel.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(WSEDMEntityTableModel.class.getPackage().getName());
 
-    public WSEDMEntityTableModel(DMPackage aPackage, FlexoProject project)
-    {
-        super(aPackage, project);
-        addToColumns(new IconColumn<DMEntity>("entity_icon", 30) {
-            @Override
-			public Icon getIcon(DMEntity object)
-            {
-                return DMEIconLibrary.DM_ENTITY_ICON;
-            }
-        });
-        addToColumns(new StringColumn<DMEntity>("name", 150) {
-            @Override
-			public String getValue(DMEntity object)
-            {
-                return (object).getName();
-            }
+	public WSEDMEntityTableModel(DMPackage aPackage, FlexoProject project) {
+		super(aPackage, project);
+		addToColumns(new IconColumn<DMEntity>("entity_icon", 30) {
+			@Override
+			public Icon getIcon(DMEntity object) {
+				return DMEIconLibrary.DM_ENTITY_ICON;
+			}
+		});
+		addToColumns(new StringColumn<DMEntity>("name", 150) {
+			@Override
+			public String getValue(DMEntity object) {
+				return (object).getName();
+			}
 
-          /*  public void setValue(FlexoModelObject object, String aValue)
-            {
-                try {
-                    ((DMEntity) object).setName(aValue);
-                } catch (InvalidNameException e) {
-                    WSEController.notify(FlexoLocalization.localizedForKey("invalid_entity_name"));
-                }
-            }*/
-        });
-        addToColumns(new StringColumn<DMEntity>("class", 150) {
-            @Override
-			public String getValue(DMEntity object)
-            {
-                return (object).getEntityClassName();
-            }
-/*
-            public void setValue(FlexoModelObject object, String aValue)
-            {
-                try {
-                    ((DMEntity) object).setEntityClassName(aValue);
-                } catch (DuplicateClassNameException e) {
-                    FlexoController.notify(e.getLocalizedMessage());
-                } catch (InvalidNameException e) {
-                    WSEController.notify(FlexoLocalization.localizedForKey("invalid_entity_class_name"));
-                }
-                selectObject(object);
-            }*/
-        });
-        
-/*        addToColumns(new EntitySelectorColumn("parent", 150, project) {
-            public FlexoModelObject getValue(FlexoModelObject object)
-            {
-                return ((DMEntity) object).getParentEntity();
-            }
+			/*  public void setValue(FlexoModelObject object, String aValue)
+			  {
+			      try {
+			          ((DMEntity) object).setName(aValue);
+			      } catch (InvalidNameException e) {
+			          WSEController.notify(FlexoLocalization.localizedForKey("invalid_entity_name"));
+			      }
+			  }*/
+		});
+		addToColumns(new StringColumn<DMEntity>("class", 150) {
+			@Override
+			public String getValue(DMEntity object) {
+				return (object).getEntityClassName();
+			}
+			/*
+			            public void setValue(FlexoModelObject object, String aValue)
+			            {
+			                try {
+			                    ((DMEntity) object).setEntityClassName(aValue);
+			                } catch (DuplicateClassNameException e) {
+			                    FlexoController.notify(e.getLocalizedMessage());
+			                } catch (InvalidNameException e) {
+			                    WSEController.notify(FlexoLocalization.localizedForKey("invalid_entity_class_name"));
+			                }
+			                selectObject(object);
+			            }*/
+		});
 
-            public void setValue(FlexoModelObject object, FlexoModelObject aValue)
-            {
-                ((DMEntity) object).setParentEntity((DMEntity) aValue);
-            }
-        });*/
-        addToColumns(new StringColumn<DMEntity>("description", 250) {
-            @Override
-			public String getValue(DMEntity object)
-            {
-                return (object).getDescription();
-            }
+		/*        addToColumns(new EntitySelectorColumn("parent", 150, project) {
+		            public FlexoModelObject getValue(FlexoModelObject object)
+		            {
+		                return ((DMEntity) object).getParentEntity();
+		            }
 
-          /*  public void setValue(FlexoModelObject object, String aValue)
-            {
-                ((DMEntity) object).setDescription(aValue);
-            }*/
-        });
-    }
+		            public void setValue(FlexoModelObject object, FlexoModelObject aValue)
+		            {
+		                ((DMEntity) object).setParentEntity((DMEntity) aValue);
+		            }
+		        });*/
+		addToColumns(new StringColumn<DMEntity>("description", 250) {
+			@Override
+			public String getValue(DMEntity object) {
+				return (object).getDescription();
+			}
 
-    public DMPackage getDMPackage()
-    {
-        return getModel();
-    }
+			/*  public void setValue(FlexoModelObject object, String aValue)
+			  {
+			      ((DMEntity) object).setDescription(aValue);
+			  }*/
+		});
+	}
 
-    @Override
-	public DMEntity elementAt(int row)
-    {
-        if ((row >= 0) && (row < getRowCount())) {
-            return getDMPackage().getOrderedChildren().elementAt(row);
-        } else {
-            return null;
-        }
-    }
+	public DMPackage getDMPackage() {
+		return getModel();
+	}
 
-    public DMEntity entityAt(int row)
-    {
-        return elementAt(row);
-    }
+	@Override
+	public DMEntity elementAt(int row) {
+		if ((row >= 0) && (row < getRowCount())) {
+			return getDMPackage().getOrderedChildren().elementAt(row);
+		} else {
+			return null;
+		}
+	}
 
-    @Override
-	public int getRowCount()
-    {
-        if (getDMPackage() != null) {
-            return getDMPackage().getOrderedChildren().size();
-        }
-        return 0;
-    }
+	public DMEntity entityAt(int row) {
+		return elementAt(row);
+	}
+
+	@Override
+	public int getRowCount() {
+		if (getDMPackage() != null) {
+			return getDMPackage().getOrderedChildren().size();
+		}
+		return 0;
+	}
 
 }

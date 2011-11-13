@@ -21,7 +21,6 @@ package org.openflexo.foundation.exec;
 
 import java.util.logging.Logger;
 
-
 import org.openflexo.antar.ControlGraph;
 import org.openflexo.antar.Nop;
 import org.openflexo.foundation.wkf.node.LOOPOperator;
@@ -32,25 +31,20 @@ public class OperatorLOOPExecution extends OperatorNodeExecution {
 	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(OperatorLOOPExecution.class.getPackage().getName());
 
-	protected OperatorLOOPExecution(LOOPOperator operatorNode)
-	{
+	protected OperatorLOOPExecution(LOOPOperator operatorNode) {
 		super(operatorNode);
 	}
-	
 
 	@Override
-	protected final ControlGraph makeControlGraph(boolean interprocedural) throws InvalidModelException,NotSupportedException
-	{
+	protected final ControlGraph makeControlGraph(boolean interprocedural) throws InvalidModelException, NotSupportedException {
 		Nop returned = new Nop();
 		returned.setInlineComment("Manage LOOP");
 		return returned;
 	}
 
 	@Override
-	public LOOPOperator getOperatorNode() 
-	{
-		return (LOOPOperator)super.getOperatorNode();
+	public LOOPOperator getOperatorNode() {
+		return (LOOPOperator) super.getOperatorNode();
 	}
-
 
 }

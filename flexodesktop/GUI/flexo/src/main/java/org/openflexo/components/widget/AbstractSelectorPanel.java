@@ -56,8 +56,7 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.CustomPopup;
 
-public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends CustomPopup.ResizablePanel
-{
+public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends CustomPopup.ResizablePanel {
 	static final Logger logger = Logger.getLogger(AbstractSelectorPanel.class.getPackage().getName());
 
 	private final AbstractSelectorPanelOwner<T> _owner;
@@ -78,37 +77,51 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 	protected ListSelectionListener listSelectionListener;
 	protected MouseAdapter listMouseListener;
 
-	public static interface AbstractSelectorPanelOwner<T>
-	{
+	public static interface AbstractSelectorPanelOwner<T> {
 		public FlexoProject getProject();
+
 		public FlexoModelObject getRootObject();
+
 		public FlexoEditor getEditor();
-		public boolean isSelectable (FlexoModelObject object);
+
+		public boolean isSelectable(FlexoModelObject object);
+
 		public T getEditedObject();
+
 		public void setEditedObject(T object);
+
 		public void apply();
+
 		public void cancel();
+
 		public String renderedString(T editedObject);
+
 		public JTextField getTextField(); // used to manage completion
+
 		public boolean popupIsShown();
+
 		public void openPopup();
+
 		public void closePopup();
+
 		public boolean isProgrammaticalySet();
+
 		public void setProgrammaticalySet(boolean aFlag);
+
 		public KeyAdapter getCompletionListKeyAdapter();
+
 		public Integer getDefaultWidth();
+
 		public Integer getDefaultHeight();
 	}
 
-	public AbstractSelectorPanel(AbstractSelectorPanelOwner<T> owner)
-	{
+	public AbstractSelectorPanel(AbstractSelectorPanelOwner<T> owner) {
 		super();
 		_owner = owner;
 	}
 
 	@Override
-	public Dimension getDefaultSize()
-	{
+	public Dimension getDefaultSize() {
 		Dimension returned = _browserView.getDefaultSize();
 		returned.width = returned.width + 10;
 		returned.height = returned.height + 40;
@@ -121,8 +134,7 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 		return returned;
 	}
 
-	public FlexoModelObject getSelectedObject()
-	{
+	public FlexoModelObject getSelectedObject() {
 		if (_browserView != null) {
 			return _browserView.getSelectedObject();
 		}
@@ -133,15 +145,13 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 
 	T _lastBrowsed = null;
 
-	public void setRootObject(FlexoModelObject aRootObject)
-	{
+	public void setRootObject(FlexoModelObject aRootObject) {
 		if (_browser != null) {
 			_browser.setRootObject(aRootObject);
 		}
 	}
 
-	protected void init()
-	{
+	protected void init() {
 		setLayout(new BorderLayout());
 
 		_browser = createBrowser(_owner.getProject());
@@ -155,15 +165,13 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 		});
 		_browserView = new BrowserChooserView(_browser, _owner, _owner.getEditor()) {
 			@Override
-			public void objectWasSelected(FlexoModelObject object)
-			{
-				_owner.setEditedObject((T)object);
+			public void objectWasSelected(FlexoModelObject object) {
+				_owner.setEditedObject((T) object);
 			}
 
 			@Override
-			public void objectWasDefinitelySelected(FlexoModelObject object)
-			{
-				_owner.setEditedObject((T)object);
+			public void objectWasDefinitelySelected(FlexoModelObject object) {
+				_owner.setEditedObject((T) object);
 				_owner.apply();
 			}
 		};
@@ -171,7 +179,7 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 		sortedObjectList = new Vector<T>();
 		Enumeration en = _browser.getAllObjects();
 		while (en.hasMoreElements()) {
-			T o = (T)en.nextElement();
+			T o = (T) en.nextElement();
 			if (_owner.isSelectable(o)) {
 				sortedObjectList.add(o);
 			}
@@ -180,12 +188,11 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 			private Collator collator = Collator.getInstance();
 
 			@Override
-			public int compare(T o1, T o2)
-			{
+			public int compare(T o1, T o2) {
 				String s1 = _owner.renderedString(o1);
 				String s2 = _owner.renderedString(o2);
 				if (s1 != null && s2 != null) {
-					return collator.compare(s1,s2);
+					return collator.compare(s1, s2);
 				} else {
 					return 0;
 				}
@@ -206,8 +213,7 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listSelectionListener = new ListSelectionListener() {
 			@Override
-			public void valueChanged(ListSelectionEvent e)
-			{
+			public void valueChanged(ListSelectionEvent e) {
 				T o = getCurrentSelectedInCompletionList();
 				if (o != null) {
 					if (_lastBrowsed != null && _browser != null) {
@@ -218,15 +224,14 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 						_browser.fireObjectSelected(o);
 					}
 					_lastBrowsed = o;
-					//setEditedObject(o); /* ADDED on Apr 26th 2007, by SGU */
+					// setEditedObject(o); /* ADDED on Apr 26th 2007, by SGU */
 				}
 			}
 		};
 		list.addListSelectionListener(listSelectionListener);
 		listMouseListener = new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e)
-			{
+			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
 					T o = getCurrentSelectedInCompletionList();
 					if (o != null) {
@@ -248,8 +253,7 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 		_controlPanel.add(_resetButton = new JButton(FlexoLocalization.localizedForKey("reset")));
 		_applyButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				if (_lastBrowsed != null) {
 					AbstractSelectorPanel.this._owner.setEditedObject(_lastBrowsed);
 				}
@@ -258,15 +262,13 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 		});
 		_cancelButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				_owner.cancel();
 			}
 		});
 		_resetButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				AbstractSelectorPanel.this._owner.setEditedObject(null);
 				_owner.apply();
 			}
@@ -277,8 +279,7 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 	}
 
 	// return true if an object was correctely selected, false otherwise
-	protected boolean processEnterPressed()
-	{
+	protected boolean processEnterPressed() {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Pressed on ENTER");
 		}
@@ -291,10 +292,9 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 		return false;
 	}
 
-	protected void processTabPressed()
-	{
+	protected void processTabPressed() {
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Pressed on TAB, _completionListModel.size()="+_completionListModel.getSize());
+			logger.fine("Pressed on TAB, _completionListModel.size()=" + _completionListModel.getSize());
 		}
 		if (_completionListModel.getSize() == 1) {
 			T o = getObjectInCompletionListAtIndex(0);
@@ -302,15 +302,14 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 				_owner.setEditedObject(o);
 				_owner.apply();
 			}
-		}
-		else if (_completionListModel.getSize() > 1) {
+		} else if (_completionListModel.getSize() > 1) {
 			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Pressed on TAB, _completionListModel.size()="+_completionListModel.getSize());
+				logger.fine("Pressed on TAB, _completionListModel.size()=" + _completionListModel.getSize());
 			}
 			String commonPrefix = _completionListModel.getCommonPrefix();
 			if (commonPrefix.equalsIgnoreCase(_owner.getTextField().getText())) {
 				// Special case where text might be completed
-				for (int i=0; i<_completionListModel.getSize(); i++) {
+				for (int i = 0; i < _completionListModel.getSize(); i++) {
 					if (_completionListModel.getElementAt(i) != null) {
 						if (_completionListModel.getElementAt(i).equals(_owner.getTextField().getText())) {
 							T o = getObjectInCompletionListAtIndex(i);
@@ -321,8 +320,7 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 						}
 					}
 				}
-			}
-			else { // Just complete
+			} else { // Just complete
 				_owner.setProgrammaticalySet(true);
 				_owner.getTextField().setText(_completionListModel.getCommonPrefix());
 				_owner.setProgrammaticalySet(false);
@@ -330,44 +328,38 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 		}
 	}
 
-	protected void processUpPressed()
-	{
+	protected void processUpPressed() {
 		int selectedIndex = list.getSelectedIndex();
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("processUpPressed() selectedIndex="+selectedIndex+" size="+list.getModel().getSize());
+			logger.fine("processUpPressed() selectedIndex=" + selectedIndex + " size=" + list.getModel().getSize());
 		}
 		if (selectedIndex > 0) {
-			list.setSelectedIndex(selectedIndex-1);
-			list.ensureIndexIsVisible(selectedIndex-1);
-		}
-		else if (selectedIndex == 0) {
-			list.setSelectedIndex(list.getModel().getSize()-1);
-			list.ensureIndexIsVisible(list.getModel().getSize()-1);
-		}
-		else if (selectedIndex == -1) {
+			list.setSelectedIndex(selectedIndex - 1);
+			list.ensureIndexIsVisible(selectedIndex - 1);
+		} else if (selectedIndex == 0) {
+			list.setSelectedIndex(list.getModel().getSize() - 1);
+			list.ensureIndexIsVisible(list.getModel().getSize() - 1);
+		} else if (selectedIndex == -1) {
 			if (list.getModel().getSize() > 0) {
-				list.setSelectedIndex(list.getModel().getSize()-1);
-				list.ensureIndexIsVisible(list.getModel().getSize()-1);
+				list.setSelectedIndex(list.getModel().getSize() - 1);
+				list.ensureIndexIsVisible(list.getModel().getSize() - 1);
 			}
 		}
 		_owner.getTextField().requestFocus();
 	}
 
-	protected void processDownPressed()
-	{
+	protected void processDownPressed() {
 		int selectedIndex = list.getSelectedIndex();
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("processDownPressed() selectedIndex="+selectedIndex+" size="+list.getModel().getSize());
+			logger.fine("processDownPressed() selectedIndex=" + selectedIndex + " size=" + list.getModel().getSize());
 		}
-		if (selectedIndex < list.getModel().getSize()-1) {
-			list.setSelectedIndex(selectedIndex+1);
-			list.ensureIndexIsVisible(selectedIndex+1);
-		}
-		else if (selectedIndex == list.getModel().getSize()-1) {
+		if (selectedIndex < list.getModel().getSize() - 1) {
+			list.setSelectedIndex(selectedIndex + 1);
+			list.ensureIndexIsVisible(selectedIndex + 1);
+		} else if (selectedIndex == list.getModel().getSize() - 1) {
 			list.setSelectedIndex(0);
 			list.ensureIndexIsVisible(0);
-		}
-		else if (selectedIndex == -1) {
+		} else if (selectedIndex == -1) {
 			if (list.getModel().getSize() > 0) {
 				list.setSelectedIndex(0);
 				list.ensureIndexIsVisible(0);
@@ -376,16 +368,12 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 		_owner.getTextField().requestFocus();
 	}
 
-
-
-	protected JPanel getControlPanel()
-	{
+	protected JPanel getControlPanel() {
 		return _controlPanel;
 	}
 
-	protected T getCurrentSelectedInCompletionList()
-	{
-		if(list==null) {
+	protected T getCurrentSelectedInCompletionList() {
+		if (list == null) {
 			return null;
 		}
 		ListSelectionModel lsm = list.getSelectionModel();
@@ -400,8 +388,7 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 		return null;
 	}
 
-	protected T getObjectInCompletionListAtIndex(int index)
-	{
+	protected T getObjectInCompletionListAtIndex(int index) {
 		int selectedIndex = _completionListModel.getIndexOf(index);
 		if (selectedIndex >= 0 && selectedIndex < sortedObjectList.size()) {
 			T returned = sortedObjectList.elementAt(selectedIndex);
@@ -414,10 +401,9 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 
 	private JComponent _completionList;
 
-	void showCompletionList()
-	{
+	void showCompletionList() {
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("showCompletionList(), _popupIsShown="+_owner.popupIsShown());
+			logger.fine("showCompletionList(), _popupIsShown=" + _owner.popupIsShown());
 		}
 		if (logger.isLoggable(Level.FINE)) {
 			logger.finest("showCompletionList() " + _completionListModel.getSize());
@@ -442,8 +428,8 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 			validate();
 			repaint();
 		} else {
-			if (_completionList == list && _completionListModel.getSize() > 5
-					|| _completionList == scrollList && _completionListModel.getSize() <= 5) {
+			if (_completionList == list && _completionListModel.getSize() > 5 || _completionList == scrollList
+					&& _completionListModel.getSize() <= 5) {
 				T rememberMe = _lastBrowsed;
 				hideCompletionList();
 				showCompletionList();
@@ -452,8 +438,7 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 		}
 	}
 
-	void hideCompletionList()
-	{
+	void hideCompletionList() {
 		_lastBrowsed = null;
 		if (logger.isLoggable(Level.FINE)) {
 			logger.finest("hideCompletionList()");
@@ -466,8 +451,7 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 		}
 	}
 
-	protected void update()
-	{
+	protected void update() {
 		if (_browser != null) {
 			_browser.fireResetSelection();
 			if (_owner.getEditedObject() != null) {
@@ -476,8 +460,7 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 		}
 	}
 
-	protected void delete()
-	{
+	protected void delete() {
 		_completionListModel.delete();
 		list.removeKeyListener(_owner.getCompletionListKeyAdapter());
 		list.removeListSelectionListener(listSelectionListener);
@@ -487,48 +470,42 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 		removeAll();
 	}
 
-	protected class CompletionListModel extends AbstractListModel implements DocumentListener
-	{
+	protected class CompletionListModel extends AbstractListModel implements DocumentListener {
 		protected int min;
 		protected int max;
 		private Vector data;
 		private JTextField tf;
 
-		public CompletionListModel(JTextField textField)
-		{
+		public CompletionListModel(JTextField textField) {
 			super();
 			tf = textField;
 			min = 0;
-			max = - 1;
+			max = -1;
 		}
 
-		public void setData(Vector temp)
-		{
+		public void setData(Vector temp) {
 			data = temp;
 			min = 0;
 			max = data.size() - 1;
 			tf.getDocument().addDocumentListener(this);
 		}
 
-		public void delete()
-		{
+		public void delete() {
 			if (tf != null) {
 				tf.getDocument().removeDocumentListener(this);
 			}
 			data.clear();
 			min = 0;
-			max = - 1;
+			max = -1;
 		}
 
 		@Override
-		public int getSize()
-		{
+		public int getSize() {
 			return max - min + 1;
 		}
 
 		@Override
-		public Object getElementAt(int row)
-		{
+		public Object getElementAt(int row) {
 			try {
 				return data.get(min + row);
 			} catch (Exception e) {
@@ -536,27 +513,23 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 			}
 		}
 
-		public int getIndexOf(int row)
-		{
+		public int getIndexOf(int row) {
 			return min + row;
 		}
 
-		public String getCommonPrefix()
-		{
+		public String getCommonPrefix() {
 			StringBuffer returned = new StringBuffer();
 			boolean stillMatches = true;
 			int index = 0;
 			String string1 = (String) data.get(min);
 			String string2 = (String) data.get(max);
 			while (stillMatches && index < string1.length() && index < string2.length()) {
-				if (!string1.regionMatches(true,index,string2,index,1)) {
+				if (!string1.regionMatches(true, index, string2, index, 1)) {
 					stillMatches = false;
-				}
-				else {
+				} else {
 					if (index < tf.getText().length()) {
 						returned.append(tf.getText().charAt(index));
-					}
-					else {
+					} else {
 						returned.append(string1.charAt(index));
 					}
 					index++;
@@ -565,19 +538,16 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 			return returned.toString();
 		}
 
-		private void refreshInterval()
-		{
+		private void refreshInterval() {
 			String curText = tf.getText();
 			int previousMin = min;
 			int previousMax = max;
 			min = 0;
-			while (min < data.size() && !((String) data.get(min))
-					.regionMatches(true,0,curText,0,curText.length())) {
+			while (min < data.size() && !((String) data.get(min)).regionMatches(true, 0, curText, 0, curText.length())) {
 				min++;
 			}
 			max = min;
-			while (max < data.size() && ((String) data.get(max))
-					.regionMatches(true,0,curText,0,curText.length())) {
+			while (max < data.size() && ((String) data.get(max)).regionMatches(true, 0, curText, 0, curText.length())) {
 				max++;
 			}
 			max--;
@@ -594,25 +564,21 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 		}
 
 		@Override
-		public void changedUpdate(DocumentEvent arg0)
-		{
+		public void changedUpdate(DocumentEvent arg0) {
 			textWasChanged();
 		}
 
 		@Override
-		public void insertUpdate(DocumentEvent arg0)
-		{
+		public void insertUpdate(DocumentEvent arg0) {
 			textWasChanged();
 		}
 
 		@Override
-		public void removeUpdate(DocumentEvent arg0)
-		{
+		public void removeUpdate(DocumentEvent arg0) {
 			textWasChanged();
 		}
 
-		protected void textWasChanged()
-		{
+		protected void textWasChanged() {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("textWasChanged()");
 			}
@@ -626,13 +592,11 @@ public abstract class AbstractSelectorPanel<T extends FlexoModelObject> extends 
 		}
 	}
 
-	public ProjectBrowser getBrowser()
-	{
+	public ProjectBrowser getBrowser() {
 		return _browser;
 	}
 
-	public void textWasChanged()
-	{
+	public void textWasChanged() {
 		_completionListModel.textWasChanged();
 	}
 

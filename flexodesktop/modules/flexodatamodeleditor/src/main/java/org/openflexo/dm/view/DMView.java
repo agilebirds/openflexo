@@ -36,116 +36,105 @@ import org.openflexo.selection.SelectionListener;
 import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.SelectionSynchronizedModuleView;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public abstract class DMView<O extends DMObject> extends CompoundTabularView<O>
-implements SelectionSynchronizedModuleView<O>, GraphicalFlexoObserver
-{
-    static final Logger logger = Logger.getLogger(DMView.class.getPackage().getName());
+public abstract class DMView<O extends DMObject> extends CompoundTabularView<O> implements SelectionSynchronizedModuleView<O>,
+		GraphicalFlexoObserver {
+	static final Logger logger = Logger.getLogger(DMView.class.getPackage().getName());
 
-     public DMView(O object, DMController controller, String title)
-    {
-        super(object,controller,title);
-        object.addObserver(this);
-     }
+	public DMView(O object, DMController controller, String title) {
+		super(object, controller, title);
+		object.addObserver(this);
+	}
 
-    public DMController getDMController()
-    {
-        return (DMController)getController();
-    }
+	public DMController getDMController() {
+		return (DMController) getController();
+	}
 
-    public O getDMObject()
-    {
-        return getModelObject();
-   }
+	public O getDMObject() {
+		return getModelObject();
+	}
 
-    public DMTabularView findTabularViewContaining (DMObject anObject)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("findTabularViewContaining() "+this+" obj: "+anObject);
-         if (anObject == null) return null;
-        for (Enumeration en=getMasterTabularViews().elements(); en.hasMoreElements();) {
-            DMTabularView next = (DMTabularView)en.nextElement();
-            if (next.getModel().indexOf(anObject) > -1) {
-                return next;
-            }
-            DMObject parentObject = (DMObject)anObject.getParent();
-            if (next.getModel().indexOf(parentObject) > -1) {
-                if (next.getSelectedObjects().contains(parentObject)) {
-                    next.selectObject(parentObject);
-                }
-                for (Enumeration en2=next.getSlaveTabularViews().elements(); en2.hasMoreElements();) {
-                    DMTabularView next2 = (DMTabularView)en2.nextElement();
-                    if (next2.getModel().indexOf(anObject) > -1) {
-                        return next2;
-                    }
-                }
-             }
-         }
-        return null;
-    }
-    
-    public void tryToSelect(DMObject anObject)
-    {
-        DMTabularView tabView = findTabularViewContaining(anObject);
-        if (tabView != null) {
-            tabView.selectObject(anObject);
-        }
-    }
+	public DMTabularView findTabularViewContaining(DMObject anObject) {
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("findTabularViewContaining() " + this + " obj: " + anObject);
+		if (anObject == null)
+			return null;
+		for (Enumeration en = getMasterTabularViews().elements(); en.hasMoreElements();) {
+			DMTabularView next = (DMTabularView) en.nextElement();
+			if (next.getModel().indexOf(anObject) > -1) {
+				return next;
+			}
+			DMObject parentObject = (DMObject) anObject.getParent();
+			if (next.getModel().indexOf(parentObject) > -1) {
+				if (next.getSelectedObjects().contains(parentObject)) {
+					next.selectObject(parentObject);
+				}
+				for (Enumeration en2 = next.getSlaveTabularViews().elements(); en2.hasMoreElements();) {
+					DMTabularView next2 = (DMTabularView) en2.nextElement();
+					if (next2.getModel().indexOf(anObject) > -1) {
+						return next2;
+					}
+				}
+			}
+		}
+		return null;
+	}
 
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-    {
-        if (dataModification instanceof ObjectDeleted) {
-            if (dataModification.oldValue() == getDMObject()) {
-                deleteModuleView();
-             }
-        } else if (dataModification.propertyName()!=null && dataModification.propertyName().equals("name")) {
-            getDMController().getFlexoFrame().updateTitle();
-            updateTitlePanel();
-        }
-            
-    }
-    
-    @Override
-	public O getRepresentedObject()
-    {
-        return getDMObject();
-    }
-    
-    @Override
-	public void deleteModuleView()
-    {
-        if (logger.isLoggable(Level.INFO))
-            logger.info("Removing DM view :"+getDMObject().getName());
-        getDMController().removeModuleView(this);   
-    }
+	public void tryToSelect(DMObject anObject) {
+		DMTabularView tabView = findTabularViewContaining(anObject);
+		if (tabView != null) {
+			tabView.selectObject(anObject);
+		}
+	}
 
-    @Override
-	public FlexoPerspective<DMObject> getPerspective()
-    {
-        return getDMController().getDefaultPespective();
-    }
-    
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (dataModification instanceof ObjectDeleted) {
+			if (dataModification.oldValue() == getDMObject()) {
+				deleteModuleView();
+			}
+		} else if (dataModification.propertyName() != null && dataModification.propertyName().equals("name")) {
+			getDMController().getFlexoFrame().updateTitle();
+			updateTitlePanel();
+		}
+
+	}
+
+	@Override
+	public O getRepresentedObject() {
+		return getDMObject();
+	}
+
+	@Override
+	public void deleteModuleView() {
+		if (logger.isLoggable(Level.INFO))
+			logger.info("Removing DM view :" + getDMObject().getName());
+		getDMController().removeModuleView(this);
+	}
+
+	@Override
+	public FlexoPerspective<DMObject> getPerspective() {
+		return getDMController().getDefaultPespective();
+	}
+
 	/**
-	 * Returns flag indicating if this view is itself responsible for scroll management
-	 * When not, Flexo will manage it's own scrollbar for you
+	 * Returns flag indicating if this view is itself responsible for scroll management When not, Flexo will manage it's own scrollbar for
+	 * you
 	 * 
 	 * @return
 	 */
 	@Override
-	public boolean isAutoscrolled() 
-	{
+	public boolean isAutoscrolled() {
 		return false;
 	}
 
 	@Override
-	public List<SelectionListener> getSelectionListeners(){
+	public List<SelectionListener> getSelectionListeners() {
 		Vector<SelectionListener> reply = new Vector<SelectionListener>();
 		reply.add(this);
 		return reply;

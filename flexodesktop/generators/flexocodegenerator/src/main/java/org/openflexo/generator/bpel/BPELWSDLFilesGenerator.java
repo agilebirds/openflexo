@@ -33,37 +33,32 @@ import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.utils.ResourceGenerator;
 import org.openflexo.logging.FlexoLogger;
 
-
 /**
  * @author denadmin
  * 
  */
-public class BPELWSDLFilesGenerator extends MetaGenerator<FlexoModelObject, CGRepository>
-{
-    private static final Logger logger = FlexoLogger.getLogger(ResourceGenerator.class.getPackage().getName());
+public class BPELWSDLFilesGenerator extends MetaGenerator<FlexoModelObject, CGRepository> {
+	private static final Logger logger = FlexoLogger.getLogger(ResourceGenerator.class.getPackage().getName());
 
-    private Hashtable<FlexoProcess,BPELWSDLFileGenerator> generators;
-    
+	private Hashtable<FlexoProcess, BPELWSDLFileGenerator> generators;
+
 	@Override
-	public Logger getGeneratorLogger()
-	{
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
-	public BPELWSDLFilesGenerator(ProjectGenerator projectGenerator)
-    {
-    	super(projectGenerator,null);
-    	generators = new Hashtable<FlexoProcess, BPELWSDLFileGenerator>();
-    }
-	
+	public BPELWSDLFilesGenerator(ProjectGenerator projectGenerator) {
+		super(projectGenerator, null);
+		generators = new Hashtable<FlexoProcess, BPELWSDLFileGenerator>();
+	}
+
 	@Override
 	public ProjectGenerator getProjectGenerator() {
 		return (ProjectGenerator) super.getProjectGenerator();
 	}
 
 	@Override
-	public void generate(boolean forceRegenerate) throws GenerationException
-	{
+	public void generate(boolean forceRegenerate) throws GenerationException {
 		startGeneration();
 		for (BPELWSDLFileGenerator g : generators.values()) {
 			g.generate(forceRegenerate);
@@ -72,8 +67,7 @@ public class BPELWSDLFilesGenerator extends MetaGenerator<FlexoModelObject, CGRe
 	}
 
 	@Override
-	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) 
-	{
+	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
 		for (FlexoProcess process : getProject().getAllLocalFlexoProcesses()) {
 			if (process.getIsWebService()) {
 				BPELWSDLFileGenerator generator = getGenerator(process);
@@ -81,11 +75,11 @@ public class BPELWSDLFilesGenerator extends MetaGenerator<FlexoModelObject, CGRe
 			}
 		}
 	}
-	
-	private BPELWSDLFileGenerator getGenerator(FlexoProcess p){
-		if(generators.get(p)==null){
-			BPELWSDLFileGenerator generator = new BPELWSDLFileGenerator(getProjectGenerator(),p);
-			generators.put(p,generator);
+
+	private BPELWSDLFileGenerator getGenerator(FlexoProcess p) {
+		if (generators.get(p) == null) {
+			BPELWSDLFileGenerator generator = new BPELWSDLFileGenerator(getProjectGenerator(), p);
+			generators.put(p, generator);
 		}
 		return generators.get(p);
 	}

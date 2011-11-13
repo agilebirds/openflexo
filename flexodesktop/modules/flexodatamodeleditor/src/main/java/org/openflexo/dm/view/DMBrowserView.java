@@ -26,37 +26,31 @@ import org.openflexo.dm.view.controller.DMController;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.DMObject;
 
-
 /**
  * Represents the view for DM Browser
  * 
  * @author sguerin
  * 
  */
-public class DMBrowserView extends BrowserView
-{
+public class DMBrowserView extends BrowserView {
 
+	protected DMController _controller;
 
-    protected DMController _controller;
+	public DMBrowserView(DMBrowser dmBrowser, DMController controller) {
+		super(dmBrowser, controller.getKeyEventListener(), controller.getEditor());
+		_controller = controller;
+		FCH.setHelpItem(this, "dm-browser");
+	}
 
-    public DMBrowserView(DMBrowser dmBrowser, DMController controller)
-    {
-        super(dmBrowser, controller.getKeyEventListener(), controller.getEditor());
-        _controller = controller;
-        FCH.setHelpItem(this,"dm-browser");
-    }
+	@Override
+	public void treeSingleClick(FlexoModelObject object) {
+	}
 
-    @Override
-	public void treeSingleClick(FlexoModelObject object)
-    {
-    }
-
-    @Override
-	public void treeDoubleClick(FlexoModelObject object)
-    {
-        if (object instanceof DMObject) {
-            _controller.setCurrentEditedObject((DMObject) object);
-        }
-    }
+	@Override
+	public void treeDoubleClick(FlexoModelObject object) {
+		if (object instanceof DMObject) {
+			_controller.setCurrentEditedObject((DMObject) object);
+		}
+	}
 
 }

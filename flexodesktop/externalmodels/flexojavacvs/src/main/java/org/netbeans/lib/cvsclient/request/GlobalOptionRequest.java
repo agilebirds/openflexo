@@ -20,46 +20,47 @@
 package org.netbeans.lib.cvsclient.request;
 
 /**
- * The global options request.
- * Sends global switch to the server.
- *
- * @author  Milos Kleint
+ * The global options request. Sends global switch to the server.
+ * 
+ * @author Milos Kleint
  */
 public class GlobalOptionRequest extends Request {
-    /**
-     * The option to pass in.
-     */
-    private final String option;
+	/**
+	 * The option to pass in.
+	 */
+	private final String option;
 
-    /**
-     * Create a new request
-     * @param theOption the option to use
-     */
-    public GlobalOptionRequest(String option) {
-        this.option = option;
-    }
+	/**
+	 * Create a new request
+	 * 
+	 * @param theOption
+	 *            the option to use
+	 */
+	public GlobalOptionRequest(String option) {
+		this.option = option;
+	}
 
-    /**
-     * Get the request String that will be passed to the server.
-     * @return the request String
-     */
-    @Override
+	/**
+	 * Get the request String that will be passed to the server.
+	 * 
+	 * @return the request String
+	 */
+	@Override
 	public String getRequestString() throws UnconfiguredRequestException {
-        if (option == null) {
-            throw new UnconfiguredRequestException(
-                    "Global option has not been set");
-        }
+		if (option == null) {
+			throw new UnconfiguredRequestException("Global option has not been set");
+		}
 
-        return "Global_option " + option + "\n"; //NOI18N
-    }
+		return "Global_option " + option + "\n"; // NOI18N
+	}
 
-    /**
-     * Is a response expected from the server?
-     * @return true if a response is expected, false if no response if
-     *         expected
-     */
-    @Override
+	/**
+	 * Is a response expected from the server?
+	 * 
+	 * @return true if a response is expected, false if no response if expected
+	 */
+	@Override
 	public boolean isResponseExpected() {
-        return false;
-    }
+		return false;
+	}
 }

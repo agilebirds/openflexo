@@ -27,7 +27,7 @@ public class Declaration extends Instruction {
 	private Type type;
 	private Variable variable;
 	private Expression initializationValue;
-	
+
 	public Declaration(Type type, Variable variable, Expression initializationValue) {
 		super();
 		this.type = type;
@@ -60,13 +60,11 @@ public class Declaration extends Instruction {
 	}
 
 	@Override
-	public Declaration clone()
-	{
-		Declaration returned = new Declaration(type,variable,initializationValue);
+	public Declaration clone() {
+		Declaration returned = new Declaration(type, variable, initializationValue);
 		returned.setHeaderComment(getHeaderComment());
 		returned.setInlineComment(getInlineComment());
 		return returned;
 	}
-
 
 }

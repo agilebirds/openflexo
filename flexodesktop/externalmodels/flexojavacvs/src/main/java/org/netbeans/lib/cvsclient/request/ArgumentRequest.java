@@ -20,44 +20,47 @@
 package org.netbeans.lib.cvsclient.request;
 
 /**
- * The Argument request. The server saves the specified argument for use in
- * a future argument-using command
- * @author  Robert Greig
+ * The Argument request. The server saves the specified argument for use in a future argument-using command
+ * 
+ * @author Robert Greig
  */
 public class ArgumentRequest extends Request {
-    /**
-     * The argument to pass in
-     */
-    private final String argument;
+	/**
+	 * The argument to pass in
+	 */
+	private final String argument;
 
-    /**
-     * Create a new request
-     * @param theArgument the argument to use
-     */
-    public ArgumentRequest(String argument) {
-        if (argument == null) {
-            throw new IllegalArgumentException("argument must not be null!"); // NOI18N
-        }
+	/**
+	 * Create a new request
+	 * 
+	 * @param theArgument
+	 *            the argument to use
+	 */
+	public ArgumentRequest(String argument) {
+		if (argument == null) {
+			throw new IllegalArgumentException("argument must not be null!"); // NOI18N
+		}
 
-        this.argument = argument;
-    }
+		this.argument = argument;
+	}
 
-    /**
-     * Get the request String that will be passed to the server
-     * @return the request String
-     */
-    @Override
+	/**
+	 * Get the request String that will be passed to the server
+	 * 
+	 * @return the request String
+	 */
+	@Override
 	public String getRequestString() {
-        return "Argument " + argument + "\n"; //NOI18N
-    }
+		return "Argument " + argument + "\n"; // NOI18N
+	}
 
-    /**
-     * Is a response expected from the server?
-     * @return true if a response is expected, false if no response if
-     * expected
-     */
-    @Override
+	/**
+	 * Is a response expected from the server?
+	 * 
+	 * @return true if a response is expected, false if no response if expected
+	 */
+	@Override
 	public boolean isResponseExpected() {
-        return false;
-    }
+		return false;
+	}
 }

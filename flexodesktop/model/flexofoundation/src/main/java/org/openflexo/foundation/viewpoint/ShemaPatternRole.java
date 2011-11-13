@@ -6,35 +6,28 @@ import org.openflexo.localization.FlexoLocalization;
 public class ShemaPatternRole extends PatternRole {
 
 	@Override
-	public PatternRoleType getType()
-	{
+	public PatternRoleType getType() {
 		return PatternRoleType.Shema;
 	}
 
-
 	@Override
-	public String getPreciseType()
-	{
+	public String getPreciseType() {
 		return FlexoLocalization.localizedForKey("shema");
 	}
 
 	@Override
-	public Class<?> getAccessedClass()
-	{
+	public Class<?> getAccessedClass() {
 		return View.class;
 	}
-	
+
 	@Override
-	public boolean getIsPrimaryRole()
-	{
+	public boolean getIsPrimaryRole() {
 		return false;
 	}
-	
+
 	@Override
-	public void setIsPrimaryRole(boolean isPrimary)
-	{
+	public void setIsPrimaryRole(boolean isPrimary) {
 		// Not relevant
 	}
-
 
 }

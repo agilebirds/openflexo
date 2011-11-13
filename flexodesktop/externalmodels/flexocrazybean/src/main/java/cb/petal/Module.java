@@ -18,93 +18,94 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents module object
- *
+ * 
  * @version $Id: Module.java,v 1.3 2011/09/12 11:46:48 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class Module extends QuidObject implements Named, StereoTyped {
-  public Module(PetalNode parent, Collection params) {
-    super(parent, "module", params);
-  }
+	public Module(PetalNode parent, Collection params) {
+		super(parent, "module", params);
+	}
 
-  public Module() {
-    super("module");
-  }
+	public Module() {
+		super("module");
+	}
 
-  @Override
-public void setNameParameter(String o) {
-    params.set(0, o);
-  }
+	@Override
+	public void setNameParameter(String o) {
+		params.set(0, o);
+	}
 
-  @Override
-public String getNameParameter() {
-    return (String)params.get(0);
-  }
+	@Override
+	public String getNameParameter() {
+		return (String) params.get(0);
+	}
 
-  public void setTypeParameter(String o) {
-    params.set(1, o);
-  }
+	public void setTypeParameter(String o) {
+		params.set(1, o);
+	}
 
-  public String getTypeParameter() {
-    return (String)params.get(1);
-  }
+	public String getTypeParameter() {
+		return (String) params.get(1);
+	}
 
-  public void setSpecificationParameter(String o) {
-    params.set(2, o);
-  }
+	public void setSpecificationParameter(String o) {
+		params.set(2, o);
+	}
 
-  public String getSpecificationParameter() {
-    return (String)params.get(2);
-  }
+	public String getSpecificationParameter() {
+		return (String) params.get(2);
+	}
 
-  public List getAttributes() {
-    return (List)getProperty("attributes");
-  }
+	public List getAttributes() {
+		return (List) getProperty("attributes");
+	}
 
-  public void setAttributes(List o) {
-    defineProperty("attributes", o);
-  }
+	public void setAttributes(List o) {
+		defineProperty("attributes", o);
+	}
 
-  @Override
-public String getStereotype() {
-    return getPropertyAsString("stereotype");
-  }
+	@Override
+	public String getStereotype() {
+		return getPropertyAsString("stereotype");
+	}
 
-  @Override
-public void setStereotype(String o) {
-    defineProperty("stereotype", o);
-  }
+	@Override
+	public void setStereotype(String o) {
+		defineProperty("stereotype", o);
+	}
 
-  public List getVisibleModules() {
-    return (List)getProperty("visible_modules");
-  }
+	public List getVisibleModules() {
+		return (List) getProperty("visible_modules");
+	}
 
-  public void setVisibleModules(List o) {
-    defineProperty("visible_modules", o);
-  }
+	public void setVisibleModules(List o) {
+		defineProperty("visible_modules", o);
+	}
 
-  public String getPath() {
-    return getPropertyAsString("path");
-  }
+	public String getPath() {
+		return getPropertyAsString("path");
+	}
 
-  public void setPath(String o) {
-    defineProperty("path", o);
-  }
+	public void setPath(String o) {
+		defineProperty("path", o);
+	}
 
-  public String getLanguage() {
-    return getPropertyAsString("language");
-  }
+	public String getLanguage() {
+		return getPropertyAsString("language");
+	}
 
-  public void setLanguage(String o) {
-    defineProperty("language", o);
-  }
+	public void setLanguage(String o) {
+		defineProperty("language", o);
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

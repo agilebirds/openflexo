@@ -25,43 +25,39 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.dkv.DKVObject;
 import org.openflexo.foundation.dkv.Language;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class DKVLanguageElement extends BrowserElement
-{
+public class DKVLanguageElement extends BrowserElement {
 
-    /**
-     * @param object
-     * @param elementType
-     * @param browser
-     */
-    public DKVLanguageElement(Language object,
-            ProjectBrowser browser, BrowserElement parent)
-    {
-        super(object, BrowserElementType.DKV_LANGUAGE, browser, parent);
-    }
+	/**
+	 * @param object
+	 * @param elementType
+	 * @param browser
+	 */
+	public DKVLanguageElement(Language object, ProjectBrowser browser, BrowserElement parent) {
+		super(object, BrowserElementType.DKV_LANGUAGE, browser, parent);
+	}
 
-    /**
-     * Overrides buildChildrenVector
-     * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
-     */
-    @Override
-	protected void buildChildrenVector()
-    {
-        // TODO Auto-generated method stub
+	/**
+	 * Overrides buildChildrenVector
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
+	 */
+	@Override
+	protected void buildChildrenVector() {
+		// TODO Auto-generated method stub
 
-    }
+	}
 
-    /**
-     * Overrides getName
-     * @see org.openflexo.components.browser.BrowserElement#getName()
-     */
-    @Override
-	public String getName()
-    {
-        return ((DKVObject)getObject()).getName();
-    }
+	/**
+	 * Overrides getName
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#getName()
+	 */
+	@Override
+	public String getName() {
+		return ((DKVObject) getObject()).getName();
+	}
 }

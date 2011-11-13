@@ -181,32 +181,22 @@ import org.openflexo.ws.client.PPMWebService.PPMObject;
 import org.openflexo.ws.client.PPMWebService.PPMProcess;
 import org.openflexo.xmlcode.XMLMapping;
 
-
 /**
- * TODO: rewrite this, since it's no more up-to-date ! A FlexoProcess contains
- * all the data needed by the <I>workflow processor</I> to execute an instance
- * of a process. In other words, a FlexoProcess contains all the information
- * about the structure of a single workflow.<BR>
- * <B>Note : </B> The <I>process instance</I> is a running instance of a
- * FlexoProcess. The <I>workflow processor</I> is a processor that can run a
- * <I>process instance</I>, so one of the most important capabilities of a
- * <I>workflow processor</I> is the interpretation of a FlexoProcess.<BR>
- * A FlexoProcess can be part of a FlexoWorkflow. In this case, there will be
- * some links between the different flexo process inside the same workflow. For
- * instance, a particular node of this process can be able to start one or more
- * process instance of another process of the same workflow. The dual case is
- * that the end of one or more process instances of another process can have an
- * effect on this process.
- *
+ * TODO: rewrite this, since it's no more up-to-date ! A FlexoProcess contains all the data needed by the <I>workflow processor</I> to
+ * execute an instance of a process. In other words, a FlexoProcess contains all the information about the structure of a single workflow.<BR>
+ * <B>Note : </B> The <I>process instance</I> is a running instance of a FlexoProcess. The <I>workflow processor</I> is a processor that can
+ * run a <I>process instance</I>, so one of the most important capabilities of a <I>workflow processor</I> is the interpretation of a
+ * FlexoProcess.<BR>
+ * A FlexoProcess can be part of a FlexoWorkflow. In this case, there will be some links between the different flexo process inside the same
+ * workflow. For instance, a particular node of this process can be able to start one or more process instance of another process of the
+ * same workflow. The dual case is that the end of one or more process instances of another process can have an effect on this process.
+ * 
  * @author benoit, sylvain
  */
-public final class FlexoProcess extends WKFObject implements
-FlexoImportableObject, ApplicationHelpEntryPoint,
-XMLStorageResourceData, InspectableObject, Bindable,
-ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
+public final class FlexoProcess extends WKFObject implements FlexoImportableObject, ApplicationHelpEntryPoint, XMLStorageResourceData,
+		InspectableObject, Bindable, ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
-	static final Logger logger = Logger.getLogger(FlexoProcess.class
-			.getPackage().getName());
+	static final Logger logger = Logger.getLogger(FlexoProcess.class.getPackage().getName());
 
 	public static final String ACTIVITY_CONTEXT = "ACTIVITY";
 	public static final String OPERATION_CONTEXT = "OPERATION";
@@ -297,37 +287,32 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	}
 
 	/**
-	 * Creates a new FlexoProcess with default values (public API outside XML
-	 * serialization)
-	 *
+	 * Creates a new FlexoProcess with default values (public API outside XML serialization)
+	 * 
 	 * @param workflow
 	 * @throws DuplicateResourceException
 	 */
-	public FlexoProcess(String processName, FlexoWorkflow workflow)
-			throws DuplicateResourceException {
+	public FlexoProcess(String processName, FlexoWorkflow workflow) throws DuplicateResourceException {
 		this(workflow.getProject());
 		_name = processName;
 	}
 
 	/**
 	 * Creates and returns a newly created root process
-	 *
+	 * 
 	 * @return a newly created workflow
 	 * @throws InvalidFileNameException
 	 */
 	public static FlexoProcess createNewRootProcess(FlexoWorkflow workflow) {
 		if (workflow.getRootProcess() == null) {
 			try {
-				FlexoProcess returned = createNewProcess(workflow, null,
-						workflow.getWorkflowName(), true);
+				FlexoProcess returned = createNewProcess(workflow, null, workflow.getWorkflowName(), true);
 				workflow.setRootProcess(returned);
 				return returned;
 			} catch (DuplicateResourceException e) {
 				// Warns about the exception
 				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Exception raised: "
-							+ e.getClass().getName()
-							+ ". See console for details.");
+					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
 				}
 				e.printStackTrace();
 				if (logger.isLoggable(Level.WARNING)) {
@@ -337,16 +322,13 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 			} catch (InvalidFileNameException e) {
 				e.printStackTrace();
 				if (logger.isLoggable(Level.SEVERE)) {
-					logger.severe("Cannot create root process because "
-							+ workflow.getWorkflowName()
-							+ " is not a valid file name");
+					logger.severe("Cannot create root process because " + workflow.getWorkflowName() + " is not a valid file name");
 				}
 				return null;
 			}
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger
-				.warning("Cannot create root process: a root process is already declared");
+				logger.warning("Cannot create root process: a root process is already declared");
 			}
 			return null;
 		}
@@ -354,19 +336,18 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	/**
 	 * Creates and returns a newly created process
-	 *
+	 * 
 	 * @param isRoot
 	 *            TODO
-	 *
+	 * 
 	 * @return a newly created workflow
 	 * @throws DuplicateResourceException
 	 * @throws InvalidFileNameException
 	 */
 	// TODO: Move that in a FlexoAction !!!!
-	public static FlexoProcess createNewProcess(FlexoWorkflow workflow,
-			FlexoProcess parentProcess, String processName, boolean isRoot)
-					throws DuplicateResourceException, InvalidFileNameException {
-		if(processWithSimilarNameExists(workflow,null,ToolBox.getJavaName(processName))) {
+	public static FlexoProcess createNewProcess(FlexoWorkflow workflow, FlexoProcess parentProcess, String processName, boolean isRoot)
+			throws DuplicateResourceException, InvalidFileNameException {
+		if (processWithSimilarNameExists(workflow, null, ToolBox.getJavaName(processName))) {
 			throw new InvalidFileNameException("A process with similar name exists");
 		}
 		if (logger.isLoggable(Level.FINE)) {
@@ -379,14 +360,11 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		}
 		FlexoProcess newProcess = new FlexoProcess(processName, workflow);
 		newProcess.setProject(project);
-		ProcessDMEntity e = project.getDataModel()
-				.getProcessInstanceRepository().getProcessDMEntity(newProcess);
+		ProcessDMEntity e = project.getDataModel().getProcessInstanceRepository().getProcessDMEntity(newProcess);
 		if (e != null && logger.isLoggable(Level.SEVERE)) {
-			logger.severe("Dm entity for process " + processName
-					+ "already exists.");
+			logger.severe("Dm entity for process " + processName + "already exists.");
 		}
-		FlexoProcessResource processRes = createProcessResource(parentProcess,
-				processName, project, newProcess, false);
+		FlexoProcessResource processRes = createProcessResource(parentProcess, processName, project, newProcess, false);
 
 		initProcessObjects(newProcess);
 		project.registerResource(processRes);
@@ -407,50 +385,40 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		process.updateMetricsValues();
 		process.setStatusList(new StatusList(process, true));
 		ActivityPetriGraph.createNewActivityPetriGraph(process);
-		NewPort _newPort = new NewPort(process, process.findNextInitialName(
-				"NEW_PORT", NewPort.getDefaultInitialName()));
+		NewPort _newPort = new NewPort(process, process.findNextInitialName("NEW_PORT", NewPort.getDefaultInitialName()));
 		_newPort.setIndexValue(0);
 		process.getPortRegistery().addToNewPorts(_newPort);
-		DeletePort _deletePort = new DeletePort(process, process
-				.findNextInitialName("DELETE_PORT", DeletePort
-						.getDefaultInitialName()));
+		DeletePort _deletePort = new DeletePort(process, process.findNextInitialName("DELETE_PORT", DeletePort.getDefaultInitialName()));
 		_deletePort.setIndexValue(1);
 		process.getPortRegistery().addToDeletePorts(_deletePort);
-		OutPort _processTerminated = new OutPort(process, process
-				.findNextInitialName("PROCESS_TERMINATED", OutPort
-						.getDefaultInitialName()));
+		OutPort _processTerminated = new OutPort(process,
+				process.findNextInitialName("PROCESS_TERMINATED", OutPort.getDefaultInitialName()));
 		_processTerminated.setIndexValue(2);
 		process.getPortRegistery().addToOutPorts(_processTerminated);
 
-		//		ActivityNode begin = (ActivityNode) process.getActivityPetriGraph()
-		//				.getAllBeginNodes().firstElement();
-		//		ActivityNode end = (ActivityNode) process.getActivityPetriGraph()
-		//				.getAllEndNodes().firstElement();
-		//		new OperationPetriGraph(begin);
-		//		new OperationPetriGraph(end);
+		// ActivityNode begin = (ActivityNode) process.getActivityPetriGraph()
+		// .getAllBeginNodes().firstElement();
+		// ActivityNode end = (ActivityNode) process.getActivityPetriGraph()
+		// .getAllEndNodes().firstElement();
+		// new OperationPetriGraph(begin);
+		// new OperationPetriGraph(end);
 
-		EventNode begin = process.getActivityPetriGraph()
-				.getAllEventNodes().firstElement();
-		EventNode end = process.getActivityPetriGraph()
-				.getAllEventNodes().lastElement();
+		EventNode begin = process.getActivityPetriGraph().getAllEventNodes().firstElement();
+		EventNode end = process.getActivityPetriGraph().getAllEventNodes().lastElement();
 
-
-
-		//		FlexoPreCondition beginCondition = new FlexoPreCondition(begin, begin
-		//				.getOperationPetriGraph().getAllBeginNodes().firstElement());
-		//		FlexoPreCondition endCondition = new FlexoPreCondition(end, end
-		//				.getOperationPetriGraph().getAllBeginNodes().firstElement());
+		// FlexoPreCondition beginCondition = new FlexoPreCondition(begin, begin
+		// .getOperationPetriGraph().getAllBeginNodes().firstElement());
+		// FlexoPreCondition endCondition = new FlexoPreCondition(end, end
+		// .getOperationPetriGraph().getAllBeginNodes().firstElement());
 		try {
-			FlexoPostCondition newBeginPostCondition = new InternalMessageInEdge(
-					_newPort, begin, process);
+			FlexoPostCondition newBeginPostCondition = new InternalMessageInEdge(_newPort, begin, process);
 			newBeginPostCondition.updateMetricsValues();
 			_newPort.addToOutgoingPostConditions(newBeginPostCondition);
 		} catch (InvalidEdgeException e1) {
 			e1.printStackTrace();
 		}
 		try {
-			FlexoPostCondition deleteEndPostCondition = new InternalMessageInEdge(
-					_deletePort, end, process);
+			FlexoPostCondition deleteEndPostCondition = new InternalMessageInEdge(_deletePort, end, process);
 			deleteEndPostCondition.updateMetricsValues();
 			_deletePort.addToOutgoingPostConditions(deleteEndPostCondition);
 		} catch (InvalidEdgeException e1) {
@@ -458,11 +426,9 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 			e1.printStackTrace();
 		}
 		try {
-			FlexoPostCondition processTerminatedPostCondition = new InternalMessageOutEdge(
-					end, _processTerminated);
+			FlexoPostCondition processTerminatedPostCondition = new InternalMessageOutEdge(end, _processTerminated);
 			processTerminatedPostCondition.updateMetricsValues();
-			processTerminatedPostCondition.setName(FlexoLocalization
-					.localizedForKey("process_terminated"));
+			processTerminatedPostCondition.setName(FlexoLocalization.localizedForKey("process_terminated"));
 			end.addToOutgoingPostConditions(processTerminatedPostCondition);
 		} catch (InvalidEdgeException e1) {
 			// TODO Auto-generated catch block
@@ -481,22 +447,17 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	 * @return
 	 * @throws InvalidFileNameException
 	 */
-	private static FlexoProcessResource createProcessResource(
-			FlexoProcess parentProcess, String processName,
-			FlexoProject project, FlexoProcess newProcess, boolean isImported)
-					throws InvalidFileNameException {
+	private static FlexoProcessResource createProcessResource(FlexoProcess parentProcess, String processName, FlexoProject project,
+			FlexoProcess newProcess, boolean isImported) throws InvalidFileNameException {
 		FlexoWorkflow workflow = project.getWorkflow();
 		FlexoWorkflowResource workflowRes = workflow.getFlexoResource();
-		File processFile = ProjectRestructuration.getExpectedProcessFile(
-				project, processName);
-		FlexoProjectFile processResFile = new FlexoProjectFile(processFile,
-				project);
+		File processFile = ProjectRestructuration.getExpectedProcessFile(project, processName);
+		FlexoProjectFile processResFile = new FlexoProjectFile(processFile, project);
 		if (!processResFile.nameIsValid()) {
 			processResFile.fixName();
 		}
 
-		FlexoProcessNode newProcessNode = new FlexoProcessNode(processName,
-				processResFile.getRelativePath(), newProcess, project);
+		FlexoProcessNode newProcessNode = new FlexoProcessNode(processName, processResFile.getRelativePath(), newProcess, project);
 		if (parentProcess == null) {
 			if (isImported) {
 				workflow.addToImportedRootNodeProcesses(newProcessNode);
@@ -506,13 +467,11 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		} else {
 			if (isImported && !parentProcess.isImported()) {
 				if (logger.isLoggable(Level.SEVERE)) {
-					logger
-					.severe("Trying to add an imported process to an non-imported process!");
+					logger.severe("Trying to add an imported process to an non-imported process!");
 				}
 			} else if (!isImported && parentProcess.isImported()) {
 				if (logger.isLoggable(Level.SEVERE)) {
-					logger
-					.severe("Trying to add an non-imported process to an imported process!");
+					logger.severe("Trying to add an non-imported process to an imported process!");
 				}
 			}
 			parentProcess.addToSubProcesses(newProcess);
@@ -521,32 +480,25 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 		FlexoProcessResource processRes = null;
 		try {
-			processRes = new FlexoProcessResource(project, newProcess,
-					workflowRes, processResFile);
+			processRes = new FlexoProcessResource(project, newProcess, workflowRes, processResFile);
 		} catch (InvalidFileNameException e1) {
 			boolean ok = false;
 			for (int i = 0; i < 10000 && !ok; i++) {
 				try {
-					processFile = ProjectRestructuration
-							.getExpectedProcessFile(project, FileUtils
-									.getValidFileName(processName)
-									+ i);
+					processFile = ProjectRestructuration.getExpectedProcessFile(project, FileUtils.getValidFileName(processName) + i);
 					processResFile = new FlexoProjectFile(processFile, project);
-					processRes = new FlexoProcessResource(project, newProcess,
-							workflowRes, processResFile);
+					processRes = new FlexoProcessResource(project, newProcess, workflowRes, processResFile);
 					ok = true;
 				} catch (InvalidFileNameException e2) {
 
 				}
 			}
 			if (!ok) {
-				processFile = ProjectRestructuration.getExpectedProcessFile(
-						project, FileUtils.getValidFileName(processName)
-						+ newProcess.getFlexoID());
+				processFile = ProjectRestructuration.getExpectedProcessFile(project,
+						FileUtils.getValidFileName(processName) + newProcess.getFlexoID());
 				processResFile = new FlexoProjectFile(processFile, project);
 				processResFile.setProject(project);
-				processRes = new FlexoProcessResource(project, newProcess,
-						workflowRes, processResFile);
+				processRes = new FlexoProcessResource(project, newProcess, workflowRes, processResFile);
 			}
 		}
 		if (processRes == null) {
@@ -555,28 +507,22 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		return processRes;
 	}
 
-	public static FlexoProcess createImportedProcessFromProcess(
-			FlexoWorkflow workflow, PPMProcess process)
-					throws InvalidFileNameException, DuplicateResourceException {
+	public static FlexoProcess createImportedProcessFromProcess(FlexoWorkflow workflow, PPMProcess process)
+			throws InvalidFileNameException, DuplicateResourceException {
 		FlexoProject project = workflow.getProject();
-		FlexoProcess newFIP = workflow
-				.getRecursivelyImportedProcessWithURI(process.getUri());
+		FlexoProcess newFIP = workflow.getRecursivelyImportedProcessWithURI(process.getUri());
 		FlexoProcess parentProcess = null;
 		if (process.getParentProcess() != null) {
-			parentProcess = workflow
-					.getRecursivelyImportedProcessWithURI(process
-							.getParentProcess().getUri());
+			parentProcess = workflow.getRecursivelyImportedProcessWithURI(process.getParentProcess().getUri());
 			if (parentProcess == null) {
 				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Could not find parent process: "
-							+ process.getParentProcess().getName());
+					logger.warning("Could not find parent process: " + process.getParentProcess().getName());
 				}
 			}
 		}
 		if (newFIP != null) {
 			if (parentProcess != null) {
-				parentProcess.getProcessNode().addToSubProcesses(
-						newFIP.getProcessNode());
+				parentProcess.getProcessNode().addToSubProcesses(newFIP.getProcessNode());
 			}
 			try {
 				newFIP.updateFromObject(process);
@@ -593,13 +539,11 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		} catch (Exception e) {
 			// Should not happen for imported processes
 			if (logger.isLoggable(Level.SEVERE)) {
-				logger
-				.severe("setName threw an exception for imported FlexoProcess!!!");
+				logger.severe("setName threw an exception for imported FlexoProcess!!!");
 			}
 			e.printStackTrace();
 		}
-		FlexoProcessResource resource = createProcessResource(parentProcess,
-				process.getName(), project, fip, true);
+		FlexoProcessResource resource = createProcessResource(parentProcess, process.getName(), project, fip, true);
 		String name = resource.getName();
 		if (project.resourceForKey(resource.getResourceType(), name) != null) {
 			name = name + "FromServer";
@@ -680,19 +624,15 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		 * { return false; }
 		 */
 		if (compareChildren) {
-			boolean ok = getSubProcesses().size() != 0
-					&& p.getSubProcesses() != null && p.getSubProcesses().length == getSubProcesses()
-					.size()
-					|| getSubProcesses().size() == 0 && (p.getSubProcesses() == null || p
-					.getSubProcesses().length == 0);
+			boolean ok = getSubProcesses().size() != 0 && p.getSubProcesses() != null
+					&& p.getSubProcesses().length == getSubProcesses().size() || getSubProcesses().size() == 0
+					&& (p.getSubProcesses() == null || p.getSubProcesses().length == 0);
 			for (int i = 0; ok && i < getSubProcesses().size(); i++) {
 				FlexoProcess fip = getSubProcesses().get(i);
-				if (p.getSubProcesses() == null
-						|| p.getSubProcesses().length <= i) {
+				if (p.getSubProcesses() == null || p.getSubProcesses().length <= i) {
 					ok = false;
 				} else {
-					ok &= fip.isEquivalentTo(p.getSubProcesses()[i],
-							compareChildren);
+					ok &= fip.isEquivalentTo(p.getSubProcesses()[i], compareChildren);
 				}
 				ok &= fip.getParentProcess() == this;
 			}
@@ -723,7 +663,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	/**
 	 * Overrides getXMLMapping
-	 *
+	 * 
 	 * @see org.openflexo.foundation.wkf.WKFObject#getXMLMapping()
 	 */
 	@Override
@@ -754,9 +694,9 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	/**
 	 * Save this object using ResourceManager scheme
-	 *
+	 * 
 	 * Overrides
-	 *
+	 * 
 	 * @see org.openflexo.foundation.rm.FlexoResourceData#save()
 	 * @see org.openflexo.foundation.rm.FlexoResourceData#save()
 	 */
@@ -772,43 +712,35 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	/**
 	 * Implements
-	 *
-	 * @see org.openflexo.foundation.rm.FlexoResourceData#receiveRMNotification(org.openflexo.foundation.rm.RMNotification)
-	 *      Receive a notification that has been propagated by the
-	 *      ResourceManager scheme and coming from a modification on an other
-	 *      resource
-	 *
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResourceData#receiveRMNotification(org.openflexo.foundation.rm.RMNotification) Receive a
+	 *      notification that has been propagated by the ResourceManager scheme and coming from a modification on an other resource
+	 * 
 	 *      Handles ComponentNameChanged notifications
-	 *
+	 * 
 	 * @see org.openflexo.foundation.rm.FlexoResourceData#receiveRMNotification(org.openflexo.foundation.rm.RMNotification)
 	 */
 	@Override
 	public void receiveRMNotification(RMNotification aNotification) {
 		if (aNotification instanceof ComponentNameChanged) {
 			ComponentNameChanged notification = (ComponentNameChanged) aNotification;
-			for (Enumeration en = getAllEmbeddedOperationNodes().elements(); en
-					.hasMoreElements();) {
+			for (Enumeration en = getAllEmbeddedOperationNodes().elements(); en.hasMoreElements();) {
 				OperationNode node = (OperationNode) en.nextElement();
 				if (node.getComponentInstance() != null) {
 					OperationComponentInstance ci = node.getComponentInstance();
 					if (ci.getComponentName().equals(notification.oldValue())) {
 						if (logger.isLoggable(Level.INFO)) {
-							logger.info("Process " + getName()
-									+ " Updating component instance "
-									+ notification.component.getName()
+							logger.info("Process " + getName() + " Updating component instance " + notification.component.getName()
 									+ " for " + node.getName());
 						}
 						ci.notifyComponentNameChanged(notification.component);
 					}
 				}
 				if (node.getTabOperationComponentInstance() != null) {
-					TabComponentInstance ci = node
-							.getTabOperationComponentInstance();
+					TabComponentInstance ci = node.getTabOperationComponentInstance();
 					if (ci.getComponentName().equals(notification.oldValue())) {
 						if (logger.isLoggable(Level.INFO)) {
-							logger.info("Process " + getName()
-									+ " Updating tab component instance "
-									+ notification.component.getName()
+							logger.info("Process " + getName() + " Updating tab component instance " + notification.component.getName()
 									+ " for " + node.getName());
 						}
 						ci.notifyComponentNameChanged(notification.component);
@@ -817,13 +749,10 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 			}
 			for (ActionNode action : getAllEmbeddedActionNodes()) {
 				if (action.getTabActionComponentInstance() != null) {
-					TabComponentInstance ci = action
-							.getTabActionComponentInstance();
+					TabComponentInstance ci = action.getTabActionComponentInstance();
 					if (ci.getComponentName().equals(notification.oldValue())) {
 						if (logger.isLoggable(Level.INFO)) {
-							logger.info("Process " + getName()
-									+ " Updating component instance "
-									+ notification.component.getName()
+							logger.info("Process " + getName() + " Updating component instance " + notification.component.getName()
 									+ " for " + action.getName());
 						}
 						ci.notifyComponentNameChanged(notification.component);
@@ -833,36 +762,24 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		}
 		if (aNotification instanceof ComponentDeleteRequest) {
 			ComponentDeleteRequest notification = (ComponentDeleteRequest) aNotification;
-			for (Enumeration en = getAllEmbeddedOperationNodes().elements(); en
-					.hasMoreElements();) {
+			for (Enumeration en = getAllEmbeddedOperationNodes().elements(); en.hasMoreElements();) {
 				OperationNode node = (OperationNode) en.nextElement();
 				if (node.getComponentInstance() != null) {
 					OperationComponentInstance ci = node.getComponentInstance();
-					if (ci.getComponentName().equals(
-							notification.component.getComponentName())) {
+					if (ci.getComponentName().equals(notification.component.getComponentName())) {
 						if (logger.isLoggable(Level.INFO)) {
-							logger.info("Receive a deletion request for "
-									+ notification.component.getComponentName()
-									+ " in " + getName());
+							logger.info("Receive a deletion request for " + notification.component.getComponentName() + " in " + getName());
 						}
-						notification.addToWarnings(notification.component
-								.getComponentName()
-								+ " is used by operation : " + node.getName());
+						notification.addToWarnings(notification.component.getComponentName() + " is used by operation : " + node.getName());
 					}
 				}
 				if (node.getTabOperationComponentInstance() != null) {
-					TabComponentInstance ci = node
-							.getTabOperationComponentInstance();
-					if (ci.getComponentName().equals(
-							notification.component.getComponentName())) {
+					TabComponentInstance ci = node.getTabOperationComponentInstance();
+					if (ci.getComponentName().equals(notification.component.getComponentName())) {
 						if (logger.isLoggable(Level.INFO)) {
-							logger.info("Receive a deletion request for "
-									+ notification.component.getComponentName()
-									+ " in " + getName());
+							logger.info("Receive a deletion request for " + notification.component.getComponentName() + " in " + getName());
 						}
-						notification.addToWarnings(notification.component
-								.getComponentName()
-								+ " is used by operation : " + node.getName());
+						notification.addToWarnings(notification.component.getComponentName() + " is used by operation : " + node.getName());
 					}
 				}
 			}
@@ -870,32 +787,24 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		}
 		if (aNotification instanceof ComponentDeleted) {
 			ComponentDeleted notification = (ComponentDeleted) aNotification;
-			for (Enumeration en = getAllEmbeddedOperationNodes().elements(); en
-					.hasMoreElements();) {
+			for (Enumeration en = getAllEmbeddedOperationNodes().elements(); en.hasMoreElements();) {
 				OperationNode node = (OperationNode) en.nextElement();
 				if (node.getTabOperationComponentInstance() != null) {
-					TabComponentInstance ci = node
-							.getTabOperationComponentInstance();
-					if (ci.getComponentName().equals(
-							notification.component.getComponentName())) {
+					TabComponentInstance ci = node.getTabOperationComponentInstance();
+					if (ci.getComponentName().equals(notification.component.getComponentName())) {
 						if (logger.isLoggable(Level.INFO)) {
-							logger.info("Operation named " + node.getName()
-									+ " has received a deletion request for "
-									+ notification.component.getComponentName()
-									+ " in " + getName());
+							logger.info("Operation named " + node.getName() + " has received a deletion request for "
+									+ notification.component.getComponentName() + " in " + getName());
 						}
 						node.removeTabComponentInstance();
 					}
 				}
 				if (node.getComponentInstance() != null) {
 					OperationComponentInstance ci = node.getComponentInstance();
-					if (ci.getComponentName().equals(
-							notification.component.getComponentName())) {
+					if (ci.getComponentName().equals(notification.component.getComponentName())) {
 						if (logger.isLoggable(Level.INFO)) {
-							logger.info("Operation named " + node.getName()
-									+ " has received a deletion request for "
-									+ notification.component.getComponentName()
-									+ " in " + getName());
+							logger.info("Operation named " + node.getName() + " has received a deletion request for "
+									+ notification.component.getComponentName() + " in " + getName());
 						}
 						node.removeComponentInstance();
 					}
@@ -903,13 +812,10 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 			}
 			for (ActionNode action : getAllEmbeddedActionNodes()) {
 				if (action.getTabActionComponentInstance() != null) {
-					TabComponentInstance ci = action
-							.getTabActionComponentInstance();
+					TabComponentInstance ci = action.getTabActionComponentInstance();
 					if (ci.getComponentName().equals(notification.oldValue())) {
 						if (logger.isLoggable(Level.INFO)) {
-							logger.info("Process " + getName()
-									+ " Updating component instance "
-									+ notification.component.getName()
+							logger.info("Process " + getName() + " Updating component instance " + notification.component.getName()
 									+ " for " + action.getName());
 						}
 						action.removeTabComponentInstance();
@@ -956,7 +862,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	}
 
 	/**
-	 *
+	 * 
 	 * @return
 	 * @deprecated
 	 */
@@ -988,9 +894,8 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	}
 
 	/**
-	 * DEPRECATED: we will use this to add all roles defined in supplied role
-	 * list to workflow role list
-	 *
+	 * DEPRECATED: we will use this to add all roles defined in supplied role list to workflow role list
+	 * 
 	 * @param list
 	 * @deprecated
 	 */
@@ -1002,8 +907,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 			} catch (DuplicateRoleException e) {
 				logger.warning("DuplicateRoleException: " + e);
 				if (logger.isLoggable(Level.FINE)) {
-					logger.log(Level.FINE, "Duplicate role: " + role.getName(),
-							e);
+					logger.log(Level.FINE, "Duplicate role: " + role.getName(), e);
 				}
 			}
 		}
@@ -1030,8 +934,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	protected void notifyStatusListUpdated() {
 		setChanged();
-		notifyObservers(new WKFAttributeDataModification(
-				"statusList.defaultStatus", null, null));
+		notifyObservers(new WKFAttributeDataModification("statusList.defaultStatus", null, null));
 	}
 
 	/**
@@ -1126,8 +1029,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	@Override
 	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super
-				.getSpecificActionListForThatClass();
+		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
 		returned.add(AddSubProcess.actionType);
 		returned.add(AddRole.actionType);
 		returned.add(AddStatus.actionType);
@@ -1156,8 +1058,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	// ==========================================================================
 
 	/**
-	 * Same as getParentProcess(), but used in an interactive context
-	 * (inspector)
+	 * Same as getParentProcess(), but used in an interactive context (inspector)
 	 */
 	/*
 	 * public FlexoProcess getInteractiveParentProcess() { return
@@ -1165,10 +1066,8 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	 */
 
 	/**
-	 * Same as setParentProcess(), but used in an interactive context
-	 * (inspector) In this case, just throw an ProcessMovingConfirmation that
-	 * will be caught by a controller which has the responsability to continue
-	 * process if confirmation was given.
+	 * Same as setParentProcess(), but used in an interactive context (inspector) In this case, just throw an ProcessMovingConfirmation that
+	 * will be caught by a controller which has the responsability to continue process if confirmation was given.
 	 */
 	/*
 	 * public void setInteractiveParentProcess(FlexoProcess aNewParentProcess) {
@@ -1178,7 +1077,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	/**
 	 * Return the parent process of this process
-	 *
+	 * 
 	 * @return FlexoProcess
 	 */
 	public FlexoProcess getParentProcess() {
@@ -1195,11 +1094,9 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	/**
 	 * Sets the parent process of this process (move)
-	 *
+	 * 
 	 */
-	public void setParentProcess(FlexoProcess aNewParentProcess)
-			throws InvalidParentProcessException,
-			InvalidProcessReferencesException {
+	public void setParentProcess(FlexoProcess aNewParentProcess) throws InvalidParentProcessException, InvalidProcessReferencesException {
 		if (getParentProcess() != aNewParentProcess) {
 			if (aNewParentProcess != null && this.getIsWebService()) {
 				throw new InvalidParentProcessException(this, aNewParentProcess);
@@ -1214,11 +1111,10 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 				}
 			} else {
 				if (logger.isLoggable(Level.INFO)) {
-					logger.info("Moving process " + this + " under process "
-							+ aNewParentProcess);
+					logger.info("Moving process " + this + " under process " + aNewParentProcess);
 				}
 			}
-			FlexoProcessNode newParentProcessNode = aNewParentProcess != null ? aNewParentProcess.getProcessNode(): null;
+			FlexoProcessNode newParentProcessNode = aNewParentProcess != null ? aNewParentProcess.getProcessNode() : null;
 			if (newParentProcessNode != null) {
 				newParentProcessNode.addToSubProcesses(getProcessNode());
 			} else {
@@ -1242,17 +1138,12 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		return isProcessHierarchyValidForNewParentProcess(aProcess);
 	}
 
-	private boolean isProcessHierarchyValidForNewParentProcess(
-			FlexoProcess aNewParentProcess) {
-		return !isImported()
-				&& !isAncestorOf(aNewParentProcess)
-				&& (aNewParentProcess == null || !aNewParentProcess
-				.isImported());
+	private boolean isProcessHierarchyValidForNewParentProcess(FlexoProcess aNewParentProcess) {
+		return !isImported() && !isAncestorOf(aNewParentProcess) && (aNewParentProcess == null || !aNewParentProcess.isImported());
 	}
 
 	private void validateAfterMoving() throws InvalidProcessReferencesException {
-		ValidationReport report = getWorkflow().validate(
-				getProcessMovingValidationModel());
+		ValidationReport report = getWorkflow().validate(getProcessMovingValidationModel());
 		if (report.getErrorNb() > 0) {
 			throw new InvalidProcessReferencesException(this, report);
 		}
@@ -1262,8 +1153,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	public ProcessMovingValidationModel getProcessMovingValidationModel() {
 		if (processMovingValidationModel == null && getProject() != null) {
-			processMovingValidationModel = new ProcessMovingValidationModel(
-					getProject());
+			processMovingValidationModel = new ProcessMovingValidationModel(getProject());
 		}
 		return processMovingValidationModel;
 	}
@@ -1283,9 +1173,8 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		}
 
 		/**
-		 * Return a boolean indicating if validation of supplied object must be
-		 * notified
-		 *
+		 * Return a boolean indicating if validation of supplied object must be notified
+		 * 
 		 * @param next
 		 * @return a boolean
 		 */
@@ -1296,7 +1185,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 		/**
 		 * Overrides fixAutomaticallyIfOneFixProposal
-		 *
+		 * 
 		 * @see org.openflexo.foundation.validation.ValidationModel#fixAutomaticallyIfOneFixProposal()
 		 */
 		@Override
@@ -1327,7 +1216,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	/**
 	 * Return all sub-processes of this process, as a Vector of FlexoProcess
-	 *
+	 * 
 	 * @return a Vector of FlexoProcess
 	 */
 	public Vector<FlexoProcess> getSubProcesses() {
@@ -1338,12 +1227,10 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		return _subProcesses;
 	}
 
-	public boolean isSingleSubProcess()
-	{
+	public boolean isSingleSubProcess() {
 		boolean hasAtLeastOne = false;
-		for(SubProcessNode subProcessNode : getSubProcessNodes())
-		{
-			if(!subProcessNode.isSingle()) {
+		for (SubProcessNode subProcessNode : getSubProcessNodes()) {
+			if (!subProcessNode.isSingle()) {
 				return false;
 			}
 			hasAtLeastOne = true;
@@ -1354,8 +1241,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	public Vector<FlexoProcess> getSortedSubProcesses() {
 		Vector<FlexoProcess> reply = new Vector<FlexoProcess>();
-		Enumeration<FlexoProcessNode> en = getProcessNode()
-				.getSortedSubprocesses();
+		Enumeration<FlexoProcessNode> en = getProcessNode().getSortedSubprocesses();
 		while (en.hasMoreElements()) {
 			reply.add(en.nextElement().getProcess());
 		}
@@ -1364,20 +1250,17 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	public void addToSubProcesses(FlexoProcess aProcess) {
 		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Adding process " + aProcess.getName()
-					+ " as subprocess of " + getName());
+			logger.info("Adding process " + aProcess.getName() + " as subprocess of " + getName());
 		}
 		getProcessNode().addToSubProcesses(aProcess.getProcessNode());
 		rebuildSubProcesses();
 		if (aProcess.getProcessDMEntity() != null) {
-			aProcess.getProcessDMEntity()
-			.createParentProcessPropertyIfRequired();
+			aProcess.getProcessDMEntity().createParentProcessPropertyIfRequired();
 		}
 		setChanged();
 		notifyObservers(new ProcessInserted(aProcess, this));
 		if (logger.isLoggable(Level.INFO)) {
-			logger.info("DONE. Adding process " + aProcess.getName()
-					+ " as subprocess of " + getName());
+			logger.info("DONE. Adding process " + aProcess.getName() + " as subprocess of " + getName());
 		}
 	}
 
@@ -1390,7 +1273,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	/**
 	 * Return all sub-processes of this process, as a Vector of FlexoProcess
-	 *
+	 * 
 	 * @return a Vector of FlexoProcess
 	 */
 	protected Vector<FlexoProcess> rebuildSubProcesses() {
@@ -1400,15 +1283,13 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("rebuildSubProcesses() for " + getName());
 		}
-		if (getProcessNode() == null
-				|| getProcessNode().getSubProcesses() == null) {
+		if (getProcessNode() == null || getProcessNode().getSubProcesses() == null) {
 			return new Vector<FlexoProcess>();
 		}
 		_subProcesses = new Vector<FlexoProcess>();
 		Enumeration en = getProcessNode().getSubProcesses().elements();
 		while (en.hasMoreElements()) {
-			FlexoProcess subProcess = ((FlexoProcessNode) en.nextElement())
-					.getProcess();
+			FlexoProcess subProcess = ((FlexoProcessNode) en.nextElement()).getProcess();
 			if (subProcess != null) {
 				_subProcesses.add(subProcess);
 				if (logger.isLoggable(Level.FINE)) {
@@ -1430,16 +1311,15 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	}
 
 	public double getScale(String context, double defaultValue) {
-		return _doubleGraphicalPropertyForKey("scale_"+context, defaultValue);
+		return _doubleGraphicalPropertyForKey("scale_" + context, defaultValue);
 	}
 
-	public void setScale(String context, double value)
-	{
-		boolean wasNull = !hasGraphicalPropertyForKey("scale_"+context);
+	public void setScale(String context, double value) {
+		boolean wasNull = !hasGraphicalPropertyForKey("scale_" + context);
 		double oldValue = getScale(context, value);
-		logger.info("setScale from "+oldValue+" to "+value+" wasNull="+wasNull);
+		logger.info("setScale from " + oldValue + " to " + value + " wasNull=" + wasNull);
 		if (wasNull || value != oldValue) {
-			_setGraphicalPropertyForKey(value, "scale_"+context);
+			_setGraphicalPropertyForKey(value, "scale_" + context);
 			setChanged();
 
 		}
@@ -1447,7 +1327,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	/**
 	 * Return all OperationNode contained in this process
-	 *
+	 * 
 	 * @return a Vector of OperationNode
 	 */
 	public Vector<OperationNode> getAllEmbeddedOperationNodes() {
@@ -1456,8 +1336,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 			return v;
 		}
 		if (_petriGraph != null) {
-			for (AbstractActivityNode activity : _petriGraph
-					.getAllEmbeddedAbstractActivityNodes()) {
+			for (AbstractActivityNode activity : _petriGraph.getAllEmbeddedAbstractActivityNodes()) {
 				v.addAll(activity.getAllEmbeddedOperationNodes());
 			}
 			return v;
@@ -1469,9 +1348,8 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	}
 
 	/**
-	 * Return all OperationNode contained in this process that are associated
-	 * with a WOComponent
-	 *
+	 * Return all OperationNode contained in this process that are associated with a WOComponent
+	 * 
 	 * @return a Vector of OperationNode
 	 */
 	public Vector<OperationNode> getAllOperationNodesWithComponent() {
@@ -1488,8 +1366,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	}
 
 	public OperationNode getOperationNodeWithFlexoID(long flexoID) {
-		for (Enumeration e = getAllEmbeddedOperationNodes().elements(); e
-				.hasMoreElements();) {
+		for (Enumeration e = getAllEmbeddedOperationNodes().elements(); e.hasMoreElements();) {
 			OperationNode operation = (OperationNode) e.nextElement();
 			if (operation != null) {
 				if (operation.getFlexoID() == flexoID) {
@@ -1505,7 +1382,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	/**
 	 * Return all OperationNode contained in this process
-	 *
+	 * 
 	 * @return a Vector of OperationNode
 	 */
 	public Vector<WKFArtefact> getAllEmbeddedArtefacts() {
@@ -1514,7 +1391,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	/**
 	 * Return all WOComponents contained in this process
-	 *
+	 * 
 	 * @return a Vector of ComponentDefinition
 	 */
 	/*
@@ -1529,8 +1406,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		OperationNode cur = null;
 		while (en.hasMoreElements()) {
 			cur = (OperationNode) en.nextElement();
-			if (cur.getComponentInstance() != null
-					&& cur.getComponentInstance().getComponentDefinition() != null) {
+			if (cur.getComponentInstance() != null && cur.getComponentInstance().getComponentDefinition() != null) {
 				answer.add(cur.getComponentInstance());
 			}
 		}
@@ -1539,7 +1415,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	/**
 	 * Return all thumnail components contained in this process
-	 *
+	 * 
 	 * @return a Vector of ThumbnailComponentDefinition
 	 */
 	public Vector<TabComponentDefinition> getAllThumnailComponents() {
@@ -1556,14 +1432,13 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	/**
 	 * Return all ActionNode contained in this process
-	 *
+	 * 
 	 * @return a Vector of ActionNode
 	 */
 	public Vector<ActionNode> getAllEmbeddedActionNodes() {
 		if (_petriGraph != null) {
 			Vector<ActionNode> v = new Vector<ActionNode>();
-			for (AbstractActivityNode a : _petriGraph
-					.getAllEmbeddedAbstractActivityNodes()) {
+			for (AbstractActivityNode a : _petriGraph.getAllEmbeddedAbstractActivityNodes()) {
 				for (OperationNode o : a.getAllEmbeddedOperationNodes()) {
 					v.addAll(o.getAllEmbeddedActionNodes());
 				}
@@ -1616,30 +1491,29 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		return sb.toString();
 	}
 
-	private static boolean processWithSimilarNameExists(FlexoWorkflow workflow,FlexoProcess thisProcess,String nameCandidate){
+	private static boolean processWithSimilarNameExists(FlexoWorkflow workflow, FlexoProcess thisProcess, String nameCandidate) {
 		String javaNameCandidate = ToolBox.getJavaName(nameCandidate);
-		for(FlexoProcess p:workflow.getAllFlexoProcesses()){
-			if(p!=thisProcess){
+		for (FlexoProcess p : workflow.getAllFlexoProcesses()) {
+			if (p != thisProcess) {
 				String processJavaName = ToolBox.getJavaName(p.getName());
-				if(processJavaName.equals(javaNameCandidate)) {
+				if (processJavaName.equals(javaNameCandidate)) {
 					return true;
 				}
 			}
 		}
 		return false;
 	}
+
 	@Override
 	public void setName(String newName) throws DuplicateResourceException, InvalidNameException {
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("FlexoProcess.setName() with " + newName + " was: "
-					+ _name);
+			logger.fine("FlexoProcess.setName() with " + newName + " was: " + _name);
 		}
 		if (!newName.equals(_name) || _name == null) {
-			if(processWithSimilarNameExists(getWorkflow(),this,ToolBox.getJavaName(newName))) {
+			if (processWithSimilarNameExists(getWorkflow(), this, ToolBox.getJavaName(newName))) {
 				throw new InvalidNameException("A process with similar name exists");
 			}
-			if (getProject() != null && getFlexoResource() != null
-					&& !isDeserializing()) {
+			if (getProject() != null && getFlexoResource() != null && !isDeserializing()) {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("renameResource() with " + newName);
 				}
@@ -1648,28 +1522,22 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 				} catch (DuplicateResourceException e) {
 					if (!isImported()) {
 						setChanged(false);
-						notifyObserversAsReentrantModification(new NameChanged(
-								_name, _name));
+						notifyObserversAsReentrantModification(new NameChanged(_name, _name));
 						throw e;
 					} else if (logger.isLoggable(Level.WARNING)) {
-						logger
-						.warning("Duplicate resource thrown on imported process: "
-								+ newName);
+						logger.warning("Duplicate resource thrown on imported process: " + newName);
 					}
 				}
-				if (getProcessNode() != null)
-				{
+				if (getProcessNode() != null) {
 					getProcessNode().setChanged();// Workflow needs to be saved
 					// again
 				}
 			}
 			if (!isDeserializing() && getProcessDMEntity() != null) {
 				if (logger.isLoggable(Level.FINE)) {
-					logger.fine("rename process entity with "
-							+ getProcessInstanceEntityName(newName));
+					logger.fine("rename process entity with " + getProcessInstanceEntityName(newName));
 				}
-				getProcessDMEntity().setName(
-						getProcessInstanceEntityName(newName));
+				getProcessDMEntity().setName(getProcessInstanceEntityName(newName));
 			}
 			String oldName = _name;
 			_name = newName;
@@ -1707,20 +1575,15 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		if (_processDMEntity == null && !isImported()) {
 			if (getProject() != null) {
 				DMModel dmModel = getProject().getDataModel();
-				ProcessInstanceRepository processInstanceRepository = dmModel
-						.getProcessInstanceRepository();
-				_processDMEntity = processInstanceRepository
-						.getProcessDMEntity(this);
+				ProcessInstanceRepository processInstanceRepository = dmModel.getProcessInstanceRepository();
+				_processDMEntity = processInstanceRepository.getProcessDMEntity(this);
 				// logger.info("************ getProcessNode()="+getProcessNode());
 				if (_processDMEntity == null) {
 					if (logger.isLoggable(Level.INFO)) {
-						logger.info("Creates entry for process " + getName()
-								+ " in ProcessInstanceRepository");
+						logger.info("Creates entry for process " + getName() + " in ProcessInstanceRepository");
 					}
-					_processDMEntity = new ProcessDMEntity(getProject()
-							.getDataModel(), this);
-					getProject().getDataModel().getProcessInstanceRepository()
-					.registerEntity(_processDMEntity);
+					_processDMEntity = new ProcessDMEntity(getProject().getDataModel(), this);
+					getProject().getDataModel().getProcessInstanceRepository().registerEntity(_processDMEntity);
 				}
 				_processDMEntity.setProcess(this);
 			}
@@ -1752,8 +1615,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		return null;
 	}
 
-	public void setBusinessDataVariableName(String aName)
-			throws InvalidNameException, DuplicatePropertyNameException {
+	public void setBusinessDataVariableName(String aName) throws InvalidNameException, DuplicatePropertyNameException {
 		if (aName == null) {
 			return;
 		}
@@ -1782,8 +1644,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		} else if (getProcessDMEntity() != null) {
 			getProcessDMEntity().createBusinessDataProperty(aType);
 			setChanged();
-			notifyAttributeModification("businessDataVariableName", null,
-					getBusinessDataProperty());
+			notifyAttributeModification("businessDataVariableName", null, getBusinessDataProperty());
 		}
 		setChanged();
 		notifyAttributeModification("businessDataType", null, aType);
@@ -1828,21 +1689,16 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 			private DMType _processBindingVariableType = null;
 
 			ProcessBindingVariable() {
-				super(
-						FlexoProcess.this,
-						FlexoProcess.this.getProject().getDataModel(),
-						FlexoLocalization
+				super(FlexoProcess.this, FlexoProcess.this.getProject().getDataModel(), FlexoLocalization
 						.localizedForKey("access_to_the_current_process_instance"));
 				setVariableName("processInstance");
 			}
 
 			@Override
 			public DMType getType() {
-				if (_processBindingVariableType == null
-						|| _processBindingVariableType.getKindOfType() != DMType.KindOfType.RESOLVED
+				if (_processBindingVariableType == null || _processBindingVariableType.getKindOfType() != DMType.KindOfType.RESOLVED
 						|| _processBindingVariableType.getBaseEntity() != getProcessDMEntity()) {
-					_processBindingVariableType = DMType
-							.makeResolvedDMType(getProcessDMEntity());
+					_processBindingVariableType = DMType.makeResolvedDMType(getProcessDMEntity());
 				}
 				return _processBindingVariableType;
 			}
@@ -1861,7 +1717,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	/**
 	 * Return all abstract node at all levels for this process
-	 *
+	 * 
 	 * @return a Vector of AbstractNode
 	 */
 	public Vector<AbstractNode> getAllAbstractNodes() {
@@ -1870,8 +1726,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 			if (getPortRegistery() != null) {
 				allAbstractNodes.addAll(getPortRegistery().getAllPorts());
 			}
-			appendAllAbstractNodesOfPetriGraph(getActivityPetriGraph(),
-					allAbstractNodes);
+			appendAllAbstractNodesOfPetriGraph(getActivityPetriGraph(), allAbstractNodes);
 			/*
 			 * allAbstractNodes.addAll(getAllActivities()); if
 			 * (getPortRegistery() != null) {
@@ -1897,50 +1752,39 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		return allAbstractNodes;
 	}
 
-	private void appendAllAbstractNodesOfPetriGraph(FlexoPetriGraph pg,
-			Vector<AbstractNode> returned) {
+	private void appendAllAbstractNodesOfPetriGraph(FlexoPetriGraph pg, Vector<AbstractNode> returned) {
 		for (AbstractNode n : pg.getNodes()) {
 			appendAllAbstractNodes(n, returned);
 		}
 	}
 
-	private void appendAllAbstractNodes(AbstractNode node,
-			Vector<AbstractNode> returned) {
+	private void appendAllAbstractNodes(AbstractNode node, Vector<AbstractNode> returned) {
 		returned.add(node);
 		if (node instanceof FlexoNode) {
 			returned.addAll(((FlexoNode) node).getPreConditions());
 		}
 		if (node instanceof SubProcessNode) {
 			if (((SubProcessNode) node).getPortMapRegistery() != null) {
-				returned.addAll(((SubProcessNode) node).getPortMapRegistery()
-						.getPortMaps());
+				returned.addAll(((SubProcessNode) node).getPortMapRegistery().getPortMaps());
 			}
 		}
-		if (node instanceof AbstractActivityNode
-				&& ((AbstractActivityNode) node).hasContainedPetriGraph()) {
-			appendAllAbstractNodesOfPetriGraph(((AbstractActivityNode) node)
-					.getContainedPetriGraph(), returned);
+		if (node instanceof AbstractActivityNode && ((AbstractActivityNode) node).hasContainedPetriGraph()) {
+			appendAllAbstractNodesOfPetriGraph(((AbstractActivityNode) node).getContainedPetriGraph(), returned);
 		}
-		if (node instanceof OperationNode
-				&& ((OperationNode) node).hasContainedPetriGraph()) {
-			appendAllAbstractNodesOfPetriGraph(((OperationNode) node)
-					.getContainedPetriGraph(), returned);
+		if (node instanceof OperationNode && ((OperationNode) node).hasContainedPetriGraph()) {
+			appendAllAbstractNodesOfPetriGraph(((OperationNode) node).getContainedPetriGraph(), returned);
 		}
-		if (node instanceof SelfExecutableNode
-				&& ((SelfExecutableNode) node).hasExecutionPetriGraph()) {
-			appendAllAbstractNodesOfPetriGraph(((SelfExecutableNode) node)
-					.getExecutionPetriGraph(), returned);
+		if (node instanceof SelfExecutableNode && ((SelfExecutableNode) node).hasExecutionPetriGraph()) {
+			appendAllAbstractNodesOfPetriGraph(((SelfExecutableNode) node).getExecutionPetriGraph(), returned);
 		}
-		if (node instanceof LOOPOperator
-				&& ((LOOPOperator) node).hasExecutionPetriGraph()) {
-			appendAllAbstractNodesOfPetriGraph(((LOOPOperator) node)
-					.getExecutionPetriGraph(), returned);
+		if (node instanceof LOOPOperator && ((LOOPOperator) node).hasExecutionPetriGraph()) {
+			appendAllAbstractNodesOfPetriGraph(((LOOPOperator) node).getExecutionPetriGraph(), returned);
 		}
 	}
 
 	/**
 	 * Return all abstract node at all levels for this process
-	 *
+	 * 
 	 * @return a Vector of AbstractNode
 	 */
 	public Vector<WKFNode> getAllNodes() {
@@ -1975,8 +1819,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		return allNodes;
 	}
 
-	private void appendAllNodesOfPetriGraph(FlexoPetriGraph pg,
-			Vector<WKFNode> returned) {
+	private void appendAllNodesOfPetriGraph(FlexoPetriGraph pg, Vector<WKFNode> returned) {
 		for (AbstractNode n : pg.getNodes()) {
 			appendAllNodes(n, returned);
 		}
@@ -1990,35 +1833,26 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		}
 		if (node instanceof SubProcessNode) {
 			if (((SubProcessNode) node).getPortMapRegistery() != null) {
-				returned.addAll(((SubProcessNode) node).getPortMapRegistery()
-						.getPortMaps());
+				returned.addAll(((SubProcessNode) node).getPortMapRegistery().getPortMaps());
 			}
 		}
-		if (node instanceof AbstractActivityNode
-				&& ((AbstractActivityNode) node).hasContainedPetriGraph()) {
-			appendAllNodesOfPetriGraph(((AbstractActivityNode) node)
-					.getContainedPetriGraph(), returned);
+		if (node instanceof AbstractActivityNode && ((AbstractActivityNode) node).hasContainedPetriGraph()) {
+			appendAllNodesOfPetriGraph(((AbstractActivityNode) node).getContainedPetriGraph(), returned);
 		}
-		if (node instanceof OperationNode
-				&& ((OperationNode) node).hasContainedPetriGraph()) {
-			appendAllNodesOfPetriGraph(((OperationNode) node)
-					.getContainedPetriGraph(), returned);
+		if (node instanceof OperationNode && ((OperationNode) node).hasContainedPetriGraph()) {
+			appendAllNodesOfPetriGraph(((OperationNode) node).getContainedPetriGraph(), returned);
 		}
-		if (node instanceof SelfExecutableNode
-				&& ((SelfExecutableNode) node).hasExecutionPetriGraph()) {
-			appendAllNodesOfPetriGraph(((SelfExecutableNode) node)
-					.getExecutionPetriGraph(), returned);
+		if (node instanceof SelfExecutableNode && ((SelfExecutableNode) node).hasExecutionPetriGraph()) {
+			appendAllNodesOfPetriGraph(((SelfExecutableNode) node).getExecutionPetriGraph(), returned);
 		}
-		if (node instanceof LOOPOperator
-				&& ((LOOPOperator) node).hasExecutionPetriGraph()) {
-			appendAllNodesOfPetriGraph(((LOOPOperator) node)
-					.getExecutionPetriGraph(), returned);
+		if (node instanceof LOOPOperator && ((LOOPOperator) node).hasExecutionPetriGraph()) {
+			appendAllNodesOfPetriGraph(((LOOPOperator) node).getExecutionPetriGraph(), returned);
 		}
 	}
 
 	/**
 	 * Return all activities for this process
-	 *
+	 * 
 	 * @return a Vector of AbstractActivityNode
 	 */
 	public Vector<AbstractActivityNode> getAllAbstractActivityNodes() {
@@ -2032,9 +1866,9 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	public Vector<AbstractActivityNode> getAllMeaningFullActivityNodes() {
 		Vector<AbstractActivityNode> all = getAllAbstractActivityNodes();
 		Vector<AbstractActivityNode> reply = new Vector<AbstractActivityNode>();
-		for(AbstractActivityNode node:all){
-			if(!node.isBeginOrEndNode() && node.getName().trim().length()>0) {
-				if(!node.getDontGenerate()) {
+		for (AbstractActivityNode node : all) {
+			if (!node.isBeginOrEndNode() && node.getName().trim().length() > 0) {
+				if (!node.getDontGenerate()) {
 					reply.add(node);
 				}
 			}
@@ -2045,10 +1879,10 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	public Vector<SubProcessNode> getAllMeaningSubProcessNodes() {
 		Vector<AbstractActivityNode> all = getAllAbstractActivityNodes();
 		Vector<SubProcessNode> reply = new Vector<SubProcessNode>();
-		for(AbstractActivityNode node:all){
-			if(!node.isBeginOrEndNode() && node.getName().trim().length()>0) {
-				if(node instanceof SubProcessNode) {
-					reply.add((SubProcessNode)node);
+		for (AbstractActivityNode node : all) {
+			if (!node.isBeginOrEndNode() && node.getName().trim().length() > 0) {
+				if (node instanceof SubProcessNode) {
+					reply.add((SubProcessNode) node);
 				}
 			}
 		}
@@ -2077,12 +1911,9 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	public Vector<PetriGraphNode> getAllAbstractActivityNodesAndActivityOperatorsWithEvents() {
 		if (_petriGraph != null) {
 			Vector<PetriGraphNode> v = new Vector<PetriGraphNode>();
-			v.addAll(_petriGraph
-					.getAllEmbeddedNodesOfClass(AbstractActivityNode.class));
-			v.addAll(_petriGraph
-					.getAllEmbeddedNodesOfClassOfSameLevel(OperatorNode.class));
-			v.addAll(_petriGraph
-					.getAllEmbeddedNodesOfClassOfSameLevel(EventNode.class));
+			v.addAll(_petriGraph.getAllEmbeddedNodesOfClass(AbstractActivityNode.class));
+			v.addAll(_petriGraph.getAllEmbeddedNodesOfClassOfSameLevel(OperatorNode.class));
+			v.addAll(_petriGraph.getAllEmbeddedNodesOfClassOfSameLevel(EventNode.class));
 			return v;
 		} else {
 			return new Vector<PetriGraphNode>();
@@ -2091,7 +1922,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	/**
 	 * Return all activities of the underlying petri graph.
-	 *
+	 * 
 	 * @return a Vector of ActivityNode
 	 */
 	public Vector<ActivityNode> getAllActivityNodes() {
@@ -2103,8 +1934,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	}
 
 	public AbstractActivityNode getAbstractActivityNodeNamed(String name) {
-		Enumeration<AbstractActivityNode> en = getAllEmbeddedAbstractActivityNodes()
-				.elements();
+		Enumeration<AbstractActivityNode> en = getAllEmbeddedAbstractActivityNodes().elements();
 		while (en.hasMoreElements()) {
 			AbstractActivityNode node = en.nextElement();
 			if (node.getName().equals(name)) {
@@ -2112,9 +1942,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 			}
 		}
 		if (logger.isLoggable(Level.WARNING)) {
-			logger.warning("AbstractActivity named " + name
-					+ " could not be found in process "
-					+ getProcess().getName());
+			logger.warning("AbstractActivity named " + name + " could not be found in process " + getProcess().getName());
 		}
 		return null;
 	}
@@ -2128,17 +1956,14 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 			}
 		}
 		if (logger.isLoggable(Level.WARNING)) {
-			logger.warning("AbstractActivity named " + name
-					+ " could not be found in process "
-					+ getProcess().getName());
+			logger.warning("AbstractActivity named " + name + " could not be found in process " + getProcess().getName());
 		}
 		return null;
 	}
 
-
 	/**
 	 * Return all sub-processes for this process
-	 *
+	 * 
 	 * @return a Vector of SubProcessNode
 	 */
 	public Vector<SubProcessNode> getAllSubProcessNodes() {
@@ -2155,7 +1980,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	/**
 	 * Return a vector of all BEGIN_NODE of the underlying Petri Graph
-	 *
+	 * 
 	 * @return Vector of Begin nodes
 	 */
 	public Vector<FlexoNode> getAllBeginNodes() {
@@ -2168,7 +1993,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	/**
 	 * Return a vector of all END_NODE of the underlying Petri Graph
-	 *
+	 * 
 	 * @return Vector of end nodes
 	 */
 	public Vector<FlexoNode> getAllEndNodes() {
@@ -2181,7 +2006,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	/**
 	 * Return a vector of all OPERATOR of the underlying Petri Graph
-	 *
+	 * 
 	 * @return Vector of ActivityNode
 	 */
 	public Vector<OperatorNode> getAllOperatorNodes() {
@@ -2202,7 +2027,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	/**
 	 * Return a vector of all Event nodes of the underlying Petri Graph
-	 *
+	 * 
 	 * @return Vector of EventNode
 	 */
 	public Vector<EventNode> getAllEventNodes() {
@@ -2217,8 +2042,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	public Vector<FlexoPostCondition<?, ?>> getAllPostConditions() {
 		Vector<FlexoPostCondition<?, ?>> returned = new Vector<FlexoPostCondition<?, ?>>() {
 			@Override
-			public synchronized boolean addAll(
-					Collection<? extends FlexoPostCondition<?, ?>> c) {
+			public synchronized boolean addAll(Collection<? extends FlexoPostCondition<?, ?>> c) {
 				for (FlexoPostCondition<?, ?> edge : c) {
 					if (!contains(edge)) {
 						add(edge);
@@ -2237,8 +2061,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	public Vector<WKFAssociation> getAllAssociations() {
 		Vector<WKFAssociation> returned = new Vector<WKFAssociation>() {
 			@Override
-			public synchronized boolean addAll(
-					Collection<? extends WKFAssociation> c) {
+			public synchronized boolean addAll(Collection<? extends WKFAssociation> c) {
 				for (WKFAssociation edge : c) {
 					if (!contains(edge)) {
 						add(edge);
@@ -2267,9 +2090,8 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	}
 
 	/**
-	 * Returns the level of a FlexoProcess (which is {@link FlexoLevel.PROCESS}
-	 * ).
-	 *
+	 * Returns the level of a FlexoProcess (which is {@link FlexoLevel.PROCESS} ).
+	 * 
 	 * @see org.openflexo.foundation.wkf.LevelledObject#getLevel()
 	 */
 	@Override
@@ -2283,8 +2105,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	@Override
 	public final void delete() {
-		if (isImported())
-		{
+		if (isImported()) {
 			isImported = true;// This is important, because it allows to do some
 		}
 		// tests on this deleted object
@@ -2294,15 +2115,12 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		for (FlexoProcess p : new Vector<FlexoProcess>(getSubProcesses())) {
 			p.delete();
 		}
-		Vector<SubProcessNode> allBoundSubProcessNodes = new Vector<SubProcessNode>(
-				getSubProcessNodes());
-		for (Enumeration<SubProcessNode> e = allBoundSubProcessNodes.elements(); e
-				.hasMoreElements();) {
+		Vector<SubProcessNode> allBoundSubProcessNodes = new Vector<SubProcessNode>(getSubProcessNodes());
+		for (Enumeration<SubProcessNode> e = allBoundSubProcessNodes.elements(); e.hasMoreElements();) {
 			SubProcessNode subProcessNode = e.nextElement();
 			subProcessNode.setSubProcess(null);
 			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Set subprocess to null for "
-						+ subProcessNode.getName());
+				logger.info("Set subprocess to null for " + subProcessNode.getName());
 			}
 		}
 		/*
@@ -2319,11 +2137,11 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		if (getProcessDMEntity() != null) {
 			getProcessDMEntity().delete();
 		}
-		if (getProcessNode()!=null) {
+		if (getProcessNode() != null) {
 			getProcessNode().delete();
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Process "+getName()+" has no process node associated!");
+				logger.warning("Process " + getName() + " has no process node associated!");
 			}
 		}
 		FlexoProcessImageBuilder.deleteSnapshot(this);
@@ -2338,9 +2156,8 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	}
 
 	/**
-	 * Build and return a vector of all the objects that will be deleted during
-	 * process deletion
-	 *
+	 * Build and return a vector of all the objects that will be deleted during process deletion
+	 * 
 	 * @param aVector
 	 *            of DeletableObject
 	 */
@@ -2351,7 +2168,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	/**
 	 * Return a Vector of all embedded WKFObjects
-	 *
+	 * 
 	 * @return a Vector of WKFObject instances
 	 */
 	@Override
@@ -2381,17 +2198,15 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	}
 
 	/**
-	 * Return a vector of all embedded objects on which the validation will be
-	 * performed
-	 *
+	 * Return a vector of all embedded objects on which the validation will be performed
+	 * 
 	 * @return a Vector of Validable objects
 	 */
 	@Override
 	public Vector<Validable> getAllEmbeddedValidableObjects() {
 		Vector<Validable> returned = new Vector<Validable>();
 		returned.addAll(getAllEmbeddedWKFObjects());
-		for (Enumeration en = getAllEmbeddedOperationNodes().elements(); en
-				.hasMoreElements();) {
+		for (Enumeration en = getAllEmbeddedOperationNodes().elements(); en.hasMoreElements();) {
 			OperationNode next = (OperationNode) en.nextElement();
 			if (next.getComponentInstance() != null) {
 				returned.add(next.getComponentInstance());
@@ -2406,8 +2221,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	 * @return
 	 */
 	public String findNextInitialName(String baseName) {
-		return nextInitialName(baseName, getFullyQualifiedName() + "."
-				+ baseName);
+		return nextInitialName(baseName, getFullyQualifiedName() + "." + baseName);
 	}
 
 	/**
@@ -2416,8 +2230,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	 * @return
 	 */
 	public String findNextInitialName(String prefix, String baseName) {
-		return nextInitialName(baseName, getFullyQualifiedName() + "." + prefix
-				+ "." + baseName);
+		return nextInitialName(baseName, getFullyQualifiedName() + "." + prefix + "." + baseName);
 	}
 
 	/**
@@ -2425,37 +2238,31 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	 * @param node
 	 * @return
 	 */
-	public String findNextNonAmbigousNameForNode(String baseName,
-			AbstractNode aNode) {
+	public String findNextNonAmbigousNameForNode(String baseName, AbstractNode aNode) {
 		if (aNode instanceof PetriGraphNode) {
 			if (aNode instanceof AbstractActivityNode) {
 				return findNextInitialName(baseName);
 			}
 			if (aNode instanceof OperationNode) {
-				return findNextInitialName(baseName, ((OperationNode) aNode)
-						.getAbstractActivityNode());
+				return findNextInitialName(baseName, ((OperationNode) aNode).getAbstractActivityNode());
 			}
 			if (aNode instanceof ActionNode) {
-				return findNextInitialName(baseName, ((ActionNode) aNode)
-						.getOperationNode());
+				return findNextInitialName(baseName, ((ActionNode) aNode).getOperationNode());
 			}
 		} else if (aNode instanceof OperatorNode) {
 			if (aNode.getLevel() == FlexoLevel.ACTIVITY) {
 				return findNextInitialName(baseName);
 			}
 			if (aNode.getLevel() == FlexoLevel.OPERATION) {
-				return findNextInitialName(baseName, ((OperatorNode) aNode)
-						.getAbstractActivityNode());
+				return findNextInitialName(baseName, ((OperatorNode) aNode).getAbstractActivityNode());
 			}
 			if (aNode.getLevel() == FlexoLevel.ACTION) {
-				return findNextInitialName(baseName, ((OperatorNode) aNode)
-						.getOperationNode());
+				return findNextInitialName(baseName, ((OperatorNode) aNode).getOperationNode());
 			}
 		} else if (aNode instanceof FlexoPort) {
 			return findNextInitialName(baseName);
 		} else if (aNode instanceof FlexoPortMap) {
-			return findNextInitialName(baseName, ((FlexoPortMap) aNode)
-					.getSubProcessNode());
+			return findNextInitialName(baseName, ((FlexoPortMap) aNode).getSubProcessNode());
 		}
 		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Unexpected type " + aNode.getClass().getName());
@@ -2480,13 +2287,11 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	 * @param node
 	 * @return
 	 */
-	public String findNextInitialName(String baseName,
-			AbstractActivityNode activityNode) {
+	public String findNextInitialName(String baseName, AbstractActivityNode activityNode) {
 		if (activityNode == null) {
 			return baseName;
 		}
-		return nextInitialName(baseName, getFullyQualifiedName() + "."
-				+ activityNode.getName() + "." + baseName);
+		return nextInitialName(baseName, getFullyQualifiedName() + "." + activityNode.getName() + "." + baseName);
 	}
 
 	/**
@@ -2494,13 +2299,11 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	 * @param node
 	 * @return
 	 */
-	public String findNextInitialName(String baseName,
-			OperationNode operationNode) {
+	public String findNextInitialName(String baseName, OperationNode operationNode) {
 		if (operationNode == null) {
 			return baseName;
 		}
-		return nextInitialName(baseName, getFullyQualifiedName() + "."
-				+ operationNode.getAbstractActivityNode().getName() + "."
+		return nextInitialName(baseName, getFullyQualifiedName() + "." + operationNode.getAbstractActivityNode().getName() + "."
 				+ operationNode.getName() + "." + baseName);
 	}
 
@@ -2592,8 +2395,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		_serviceInterfaces = vector;
 	}
 
-	public ServiceInterface addServiceInterface(String name)
-			throws DuplicateWKFObjectException, DuplicateWSObjectException {
+	public ServiceInterface addServiceInterface(String name) throws DuplicateWKFObjectException, DuplicateWSObjectException {
 		// will throw an exception
 		ServiceInterface newInterface;
 		try {
@@ -2601,8 +2403,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 			newInterface = new ServiceInterface(this, name);
 		} catch (DuplicateWKFObjectException e) {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("An interface with the same name (" + name
-						+ ") already exist");
+				logger.warning("An interface with the same name (" + name + ") already exist");
 			}
 			throw e;
 		} catch (DuplicateWSObjectException e) {
@@ -2652,8 +2453,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		boolean oldValue = _isWebService;
 		_isWebService = isWebService;
 		if (isWebService != oldValue) {
-			notifyAttributeModification("isWebService", new Boolean(oldValue),
-					new Boolean(isWebService));
+			notifyAttributeModification("isWebService", new Boolean(oldValue), new Boolean(isWebService));
 		}
 	}
 
@@ -2663,8 +2463,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	public void addToSubProcessNodes(SubProcessNode node) {
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine(getName() + ": addToSubProcessNodes() "
-					+ node.getName());
+			logger.fine(getName() + ": addToSubProcessNodes() " + node.getName());
 		}
 		if (!node.getXMLResourceData().getFlexoXMLFileResource().isConverting() && !_subProcessNodes.contains(node)) {
 			_subProcessNodes.add(node);
@@ -2674,8 +2473,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	public void removeFromSubProcessNodes(SubProcessNode node) {
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine(getName() + ": removeFromSubProcessNodes() "
-					+ node.getName());
+			logger.fine(getName() + ": removeFromSubProcessNodes() " + node.getName());
 		}
 		_subProcessNodes.remove(node);
 		deleteObserver(node);
@@ -2692,37 +2490,30 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	}
 
 	/**
-	 * We finalize here serialization since port and port registery definitions
-	 * are inter-procedural !
+	 * We finalize here serialization since port and port registery definitions are inter-procedural !
 	 */
 	public void finalizeProcessBindings() {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("finalizeProcessBindings() " + getName());
 		}
-		for (Enumeration e = getAllSubProcessNodes().elements(); e
-				.hasMoreElements();) {
+		for (Enumeration e = getAllSubProcessNodes().elements(); e.hasMoreElements();) {
 			SubProcessNode node = (SubProcessNode) e.nextElement();
 			if (node.getSubProcess() != null) {
 				if (logger.isLoggable(Level.FINE)) {
-					logger.finer("Finalize linking " + getName() + " with "
-							+ node.getSubProcess().getName());
+					logger.finer("Finalize linking " + getName() + " with " + node.getSubProcess().getName());
 				}
 				if (!node.getSubProcess().isImported()) {
 					node.getPortMapRegistery().lookupServiceInterface();
 				}
 			} else if (node.getSubProcessName() != null) {
 				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Undefined sub-process "
-							+ node.getSubProcessName()
-							+ " referenced in process " + getName());
+					logger.warning("Undefined sub-process " + node.getSubProcessName() + " referenced in process " + getName());
 				}
 				node.setSubProcessName(null);
 			}
-			if (node.getSubProcess() == null
-					&& node.getPortMapRegistery() != null) {
+			if (node.getSubProcess() == null && node.getPortMapRegistery() != null) {
 				if (logger.isLoggable(Level.WARNING)) {
-					logger
-					.warning("Inconsistent data : PortMapRegistery defined while no sub-process is defined: remove it");
+					logger.warning("Inconsistent data : PortMapRegistery defined while no sub-process is defined: remove it");
 				}
 				node.getPortMapRegistery().delete();
 				node.setSubProcessName(null);
@@ -2741,8 +2532,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		if (ignoreNotifications()) {
 			return;
 		}
-		if (nameForNodeMap != null)
-		{
+		if (nameForNodeMap != null) {
 			nameForNodeMap.clear();// Any modification is capable of modify the
 		}
 		// names of the objects.
@@ -2753,7 +2543,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	/**
 	 * This date is use to perform fine tuning resource dependancies computing
-	 *
+	 * 
 	 * @return
 	 */
 	@Override
@@ -2783,8 +2573,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		return "PROCESS";
 	}
 
-	private static final Vector<WKFObject> EMPTY_VECTOR = EmptyVector
-			.EMPTY_VECTOR(WKFObject.class);
+	private static final Vector<WKFObject> EMPTY_VECTOR = EmptyVector.EMPTY_VECTOR(WKFObject.class);
 
 	public void addStatus() {
 		if (addStatusActionizer != null) {
@@ -2812,16 +2601,14 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 			return ToolBox.getEnumeration(new Status[0]);
 		}
 		disableObserving();
-		Status[] o = FlexoIndexManager.sortArray(getStatusList().getStatus()
-				.toArray(new Status[0]));
+		Status[] o = FlexoIndexManager.sortArray(getStatusList().getStatus().toArray(new Status[0]));
 		enableObserving();
 		return ToolBox.getEnumeration(o);
 	}
 
 	public Enumeration<EventNode> getSortedEvents() {
 		disableObserving();
-		EventNode[] o = FlexoIndexManager.sortArray(getAllEventNodes().toArray(
-				new EventNode[0]));
+		EventNode[] o = FlexoIndexManager.sortArray(getAllEventNodes().toArray(new EventNode[0]));
 		enableObserving();
 		return ToolBox.getEnumeration(o);
 	}
@@ -2832,8 +2619,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	private static ControlGraphFactory<FlexoProcess> _executionComputingFactory;
 
-	public static void setExecutionComputingFactory(
-			ControlGraphFactory<FlexoProcess> factory) {
+	public static void setExecutionComputingFactory(ControlGraphFactory<FlexoProcess> factory) {
 		_executionComputingFactory = factory;
 	}
 
@@ -2845,16 +2631,14 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	}
 
 	@Override
-	public void setProgrammingLanguageForControlGraphComputation(
-			ProgrammingLanguage language) {
+	public void setProgrammingLanguageForControlGraphComputation(ProgrammingLanguage language) {
 		if (getExecution() != null) {
 			getExecution().setProgrammingLanguage(language);
 		}
 	}
 
 	@Override
-	public void setInterproceduralForControlGraphComputation(
-			boolean interprocedural) {
+	public void setInterproceduralForControlGraphComputation(boolean interprocedural) {
 		if (getExecution() != null) {
 			getExecution().setInterprocedural(interprocedural);
 		}
@@ -2862,8 +2646,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	@Override
 	public String getExecutableElementName() {
-		return FlexoLocalization.localizedForKeyWithParams("process_($0)",
-				getName());
+		return FlexoLocalization.localizedForKeyWithParams("process_($0)", getName());
 	}
 
 	public String getExecutionClassName() {
@@ -2871,8 +2654,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	}
 
 	public String getExecutionGroupName() {
-		return "org.openflexo.controlgraph."
-				+ getProject().getPrefix().toLowerCase();
+		return "org.openflexo.controlgraph." + getProject().getPrefix().toLowerCase();
 	}
 
 	public synchronized BidiMap getNameForNodeMap() {
@@ -2887,8 +2669,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 			return (String) getNameForNodeMap().getKey(node);
 		}
 		if (logger.isLoggable(Level.WARNING)) {
-			logger
-			.warning("Node "
+			logger.warning("Node "
 					+ node
 					+ " had no computed name meaning that it was probably not properly embedded in the FlexoProcess."
 					+ "I will compute its name now, but this can be source of instability in the names of the nodes. You should try to find why that node was not embedded.");
@@ -2899,8 +2680,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	private synchronized String computeAndStoreNameForNode(AbstractNode node) {
 		String base = ToolBox.uncapitalize(node.getNiceName());
 		String attempt = base;
-		if (nameForNodeMap.get(attempt) != null
-				|| ReservedKeyword.contains(attempt)) {
+		if (nameForNodeMap.get(attempt) != null || ReservedKeyword.contains(attempt)) {
 			String nodeType = node.getNodeTypeName();
 			if (base.toLowerCase().indexOf(nodeType.toLowerCase()) == -1) {
 				base = base + nodeType;
@@ -2908,8 +2688,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 			base = ToolBox.uncapitalize(base);
 			int i = 1;
 			attempt = base;
-			while (nameForNodeMap.get(attempt) != null
-					|| ReservedKeyword.contains(attempt)) {
+			while (nameForNodeMap.get(attempt) != null || ReservedKeyword.contains(attempt)) {
 				i++;
 				attempt = base + String.valueOf(i);
 			}
@@ -2919,8 +2698,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	}
 
 	private void buildNameForNodeMap() {
-		Vector<AbstractNode> nodes = getActivityPetriGraph()
-				.getAllEmbeddedNodesOfClass(AbstractNode.class);
+		Vector<AbstractNode> nodes = getActivityPetriGraph().getAllEmbeddedNodesOfClass(AbstractNode.class);
 		nodes.addAll(getPortRegistery().getAllPorts());
 		Collections.sort(nodes, new Comparator<FlexoModelObject>() {
 
@@ -2931,18 +2709,14 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 		});
 		for (FlexoProcess process : getWorkflow().getAllLocalFlexoProcesses()) {
-			nameForNodeMap.put(ToolBox.uncapitalize(ToolBox.getJavaName(process
-					.getName())), process);
+			nameForNodeMap.put(ToolBox.uncapitalize(ToolBox.getJavaName(process.getName())), process);
 		}
-		for (FlexoProcess process : getWorkflow()
-				.getAllImportedFlexoProcesses()) {
-			nameForNodeMap.put(ToolBox.uncapitalize(ToolBox.getJavaName(process
-					.getName())), process);
+		for (FlexoProcess process : getWorkflow().getAllImportedFlexoProcesses()) {
+			nameForNodeMap.put(ToolBox.uncapitalize(ToolBox.getJavaName(process.getName())), process);
 		}
 		if (getProcessDMEntity() != null) {
 			for (DMObject obj : getProcessDMEntity().getOrderedChildren()) {
-				nameForNodeMap.put(ToolBox.uncapitalize(ToolBox.getJavaName(obj
-						.getName())), obj);
+				nameForNodeMap.put(ToolBox.uncapitalize(ToolBox.getJavaName(obj.getName())), obj);
 			}
 		}
 		for (AbstractNode node : nodes) {
@@ -2954,53 +2728,44 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	// ==================== Validation ============================
 	// ============================================================
 
-	public static class NonRootProcessShouldBeUsed extends
-	ValidationRule<NonRootProcessShouldBeUsed, FlexoProcess> {
+	public static class NonRootProcessShouldBeUsed extends ValidationRule<NonRootProcessShouldBeUsed, FlexoProcess> {
 		public NonRootProcessShouldBeUsed() {
 			super(FlexoProcess.class, "non_root_process_should_be_used");
 		}
 
 		@Override
-		public ValidationIssue<NonRootProcessShouldBeUsed, FlexoProcess> applyValidation(
-				final FlexoProcess process) {
-			if (!process.isRootProcess()
-					&& process.getSubProcessNodes().size() == 0
+		public ValidationIssue<NonRootProcessShouldBeUsed, FlexoProcess> applyValidation(final FlexoProcess process) {
+			if (!process.isRootProcess() && process.getSubProcessNodes().size() == 0
 					&& (!process.isImported() || process.isTopLevelProcess())) {
-				return new ValidationWarning<NonRootProcessShouldBeUsed, FlexoProcess>(
-						this, process, "process_($object.name)_is_used_nowhere");
+				return new ValidationWarning<NonRootProcessShouldBeUsed, FlexoProcess>(this, process,
+						"process_($object.name)_is_used_nowhere");
 			}
 			return null;
 		}
 	}
 
-	public static class FlexoProcessMustHaveADefaultStatus extends
-	ValidationRule<FlexoProcessMustHaveADefaultStatus, FlexoProcess> {
+	public static class FlexoProcessMustHaveADefaultStatus extends ValidationRule<FlexoProcessMustHaveADefaultStatus, FlexoProcess> {
 		public FlexoProcessMustHaveADefaultStatus() {
 			super(FlexoProcess.class, "process_must_have_a_default_status");
 		}
 
 		@Override
-		public ValidationIssue<FlexoProcessMustHaveADefaultStatus, FlexoProcess> applyValidation(
-				FlexoProcess process) {
-			if (process.getStatusList() != null
-					&& process.getStatusList().getDefaultStatus() == null) {
+		public ValidationIssue<FlexoProcessMustHaveADefaultStatus, FlexoProcess> applyValidation(FlexoProcess process) {
+			if (process.getStatusList() != null && process.getStatusList().getDefaultStatus() == null) {
 				Vector<FixProposal<FlexoProcessMustHaveADefaultStatus, FlexoProcess>> v = new Vector<FixProposal<FlexoProcessMustHaveADefaultStatus, FlexoProcess>>();
-				Enumeration<Status> en = process.getStatusList().getStatus()
-						.elements();
+				Enumeration<Status> en = process.getStatusList().getStatus().elements();
 				while (en.hasMoreElements()) {
 					Status s = en.nextElement();
 					v.add(new SetDefaultStatus(s));
 				}
 				v.add(new CreateAndSetDefaultStatus());
-				return new ValidationError<FlexoProcessMustHaveADefaultStatus, FlexoProcess>(
-						this, process,
+				return new ValidationError<FlexoProcessMustHaveADefaultStatus, FlexoProcess>(this, process,
 						"process_($object.name)_has_no_default_status", v);
 			}
 			return null;
 		}
 
-		protected static class CreateAndSetDefaultStatus extends
-		FixProposal<FlexoProcessMustHaveADefaultStatus, FlexoProcess> {
+		protected static class CreateAndSetDefaultStatus extends FixProposal<FlexoProcessMustHaveADefaultStatus, FlexoProcess> {
 
 			public CreateAndSetDefaultStatus() {
 				super("create_and_set_default_status");
@@ -3016,8 +2781,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 		}
 
-		protected static class SetDefaultStatus extends
-		FixProposal<FlexoProcessMustHaveADefaultStatus, FlexoProcess> {
+		protected static class SetDefaultStatus extends FixProposal<FlexoProcessMustHaveADefaultStatus, FlexoProcess> {
 
 			private Status status;
 
@@ -3040,46 +2804,36 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		}
 	}
 
-	public static class ProcessHierarchyIsConsistent extends
-	ValidationRule<ProcessHierarchyIsConsistent, FlexoProcess> {
+	public static class ProcessHierarchyIsConsistent extends ValidationRule<ProcessHierarchyIsConsistent, FlexoProcess> {
 		public ProcessHierarchyIsConsistent() {
 			super(FlexoProcess.class, "process_hierarchy_must_be_consistent");
 		}
 
 		@Override
-		public ValidationIssue<ProcessHierarchyIsConsistent, FlexoProcess> applyValidation(
-				final FlexoProcess process) {
-			if (!process.isImported()
-					&& !process.isAcceptableAsParentProcess(process
-							.getParentProcess())) {
-				return new ValidationError<ProcessHierarchyIsConsistent, FlexoProcess>(
-						this, process,
+		public ValidationIssue<ProcessHierarchyIsConsistent, FlexoProcess> applyValidation(final FlexoProcess process) {
+			if (!process.isImported() && !process.isAcceptableAsParentProcess(process.getParentProcess())) {
+				return new ValidationError<ProcessHierarchyIsConsistent, FlexoProcess>(this, process,
 						"process_hierarchy_for_($object.name)_is_inconsistant");
 			}
 			return null;
 		}
 	}
 
-	public static class ImportedProcessShouldExistOnServer extends
-	ValidationRule<ImportedProcessShouldExistOnServer, FlexoProcess> {
+	public static class ImportedProcessShouldExistOnServer extends ValidationRule<ImportedProcessShouldExistOnServer, FlexoProcess> {
 		public ImportedProcessShouldExistOnServer() {
 			super(FlexoProcess.class, "imported_process_should_exist_on_server");
 		}
 
 		@Override
-		public ValidationIssue<ImportedProcessShouldExistOnServer, FlexoProcess> applyValidation(
-				final FlexoProcess process) {
+		public ValidationIssue<ImportedProcessShouldExistOnServer, FlexoProcess> applyValidation(final FlexoProcess process) {
 			if (process.isImported() && process.isDeletedOnServer()) {
-				return new ValidationWarning<ImportedProcessShouldExistOnServer, FlexoProcess>(
-						this, process,
-						"process_($object.name)_no_longer_exists_on_server",
-						new DeleteProcess());
+				return new ValidationWarning<ImportedProcessShouldExistOnServer, FlexoProcess>(this, process,
+						"process_($object.name)_no_longer_exists_on_server", new DeleteProcess());
 			}
 			return null;
 		}
 
-		public static class DeleteProcess extends
-		FixProposal<ImportedProcessShouldExistOnServer, FlexoProcess> {
+		public static class DeleteProcess extends FixProposal<ImportedProcessShouldExistOnServer, FlexoProcess> {
 			public DeleteProcess() {
 				super("delete_process_($object.name)");
 			}
@@ -3091,8 +2845,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		}
 	}
 
-	public static class ProcessMustDefineBusinessDataClass extends
-	ValidationRule<ProcessMustDefineBusinessDataClass, FlexoProcess> {
+	public static class ProcessMustDefineBusinessDataClass extends ValidationRule<ProcessMustDefineBusinessDataClass, FlexoProcess> {
 
 		/**
 		 * @param objectType
@@ -3104,33 +2857,26 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 		/**
 		 * Overrides applyValidation
-		 *
+		 * 
 		 * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
 		 */
 		@Override
-		public ValidationIssue<ProcessMustDefineBusinessDataClass, FlexoProcess> applyValidation(
-				FlexoProcess process) {
-			if (process.getBusinessDataType() == null
-					&& !process.isRootProcess()) {
-				return new ValidationError<ProcessMustDefineBusinessDataClass, FlexoProcess>(
-						this, process,
-						"process_must_define_a_business_data_type",
-						new SetTypeProposal());
+		public ValidationIssue<ProcessMustDefineBusinessDataClass, FlexoProcess> applyValidation(FlexoProcess process) {
+			if (process.getBusinessDataType() == null && !process.isRootProcess()) {
+				return new ValidationError<ProcessMustDefineBusinessDataClass, FlexoProcess>(this, process,
+						"process_must_define_a_business_data_type", new SetTypeProposal());
 			}
 			if (!process.isRootProcess()
-					&& (process.getBusinessDataVariableName() == null || process
-					.getBusinessDataVariableName().trim().length() == 0)) {
-				return new ValidationError<ProcessMustDefineBusinessDataClass, FlexoProcess>(
-						this, process,
-						"process_must_define_a_business_data_variable",
-						new SetVariableNameProposal());
+					&& (process.getBusinessDataVariableName() == null || process.getBusinessDataVariableName().trim().length() == 0)) {
+				return new ValidationError<ProcessMustDefineBusinessDataClass, FlexoProcess>(this, process,
+						"process_must_define_a_business_data_variable", new SetVariableNameProposal());
 			}
 			return null;
 		}
 
 		/**
 		 * Overrides isValidForTarget
-		 *
+		 * 
 		 * @see org.openflexo.foundation.validation.ValidationRule#isValidForTarget(TargetType)
 		 */
 		@Override
@@ -3138,12 +2884,9 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 			return targetType != CodeType.PROTOTYPE;
 		}
 
-		public static class SetTypeProposal
-		extends
-		ParameteredFixProposal<ProcessMustDefineBusinessDataClass, FlexoProcess> {
+		public static class SetTypeProposal extends ParameteredFixProposal<ProcessMustDefineBusinessDataClass, FlexoProcess> {
 
-			private static final ParameterDefinition[] parameters = new ParameterDefinition[] { new DMEntityParameter(
-					"type", "type", null) };
+			private static final ParameterDefinition[] parameters = new ParameterDefinition[] { new DMEntityParameter("type", "type", null) };
 
 			/**
 			 * @param aMessage
@@ -3154,7 +2897,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 			/**
 			 * Overrides fixAction
-			 *
+			 * 
 			 * @see org.openflexo.foundation.validation.FixProposal#fixAction()
 			 */
 			@Override
@@ -3167,12 +2910,9 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 		}
 
-		public static class SetVariableNameProposal
-		extends
-		ParameteredFixProposal<ProcessMustDefineBusinessDataClass, FlexoProcess> {
+		public static class SetVariableNameProposal extends ParameteredFixProposal<ProcessMustDefineBusinessDataClass, FlexoProcess> {
 
-			private static final ParameterDefinition[] parameters = new ParameterDefinition[] { new TextFieldParameter(
-					"name", "name", null) };
+			private static final ParameterDefinition[] parameters = new ParameterDefinition[] { new TextFieldParameter("name", "name", null) };
 
 			/**
 			 * @param aMessage
@@ -3183,7 +2923,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 			/**
 			 * Overrides fixAction
-			 *
+			 * 
 			 * @see org.openflexo.foundation.validation.FixProposal#fixAction()
 			 */
 			@Override
@@ -3208,42 +2948,33 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	}
 
-	public static class BusinessDataClassMustHaveStatusProperty
-	extends
-	ValidationRule<BusinessDataClassMustHaveStatusProperty, FlexoProcess> {
+	public static class BusinessDataClassMustHaveStatusProperty extends
+			ValidationRule<BusinessDataClassMustHaveStatusProperty, FlexoProcess> {
 
 		/**
 		 * @param objectType
 		 * @param ruleName
 		 */
 		public BusinessDataClassMustHaveStatusProperty() {
-			super(FlexoProcess.class,
-					"business_data_class_must_have_status_property");
+			super(FlexoProcess.class, "business_data_class_must_have_status_property");
 		}
 
 		/**
 		 * Overrides applyValidation
-		 *
+		 * 
 		 * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
 		 */
 		@Override
-		public ValidationIssue<BusinessDataClassMustHaveStatusProperty, FlexoProcess> applyValidation(
-				FlexoProcess process) {
+		public ValidationIssue<BusinessDataClassMustHaveStatusProperty, FlexoProcess> applyValidation(FlexoProcess process) {
 
-			if (process._processDMEntity!=null) {
+			if (process._processDMEntity != null) {
 				if (process.getBusinessDataType().getProperty("status") == null) {
 					if (process.getBusinessDataType() instanceof DMEOEntity) {
-						return new ValidationError<BusinessDataClassMustHaveStatusProperty, FlexoProcess>(
-								this,
-								process,
-								"business_data_class_must_have_status_property",
-								process.getBusinessDataType().getIsReadOnly() ? null
-										: new AddPropertyStatus(
-												(DMEOEntity) process
-												.getBusinessDataType()));
+						return new ValidationError<BusinessDataClassMustHaveStatusProperty, FlexoProcess>(this, process,
+								"business_data_class_must_have_status_property", process.getBusinessDataType().getIsReadOnly() ? null
+										: new AddPropertyStatus((DMEOEntity) process.getBusinessDataType()));
 					} else {
-						return new ValidationError<BusinessDataClassMustHaveStatusProperty, FlexoProcess>(
-								this, process,
+						return new ValidationError<BusinessDataClassMustHaveStatusProperty, FlexoProcess>(this, process,
 								"business_data_class_must_have_status_property");
 					}
 
@@ -3254,7 +2985,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 		/**
 		 * Overrides isValidForTarget
-		 *
+		 * 
 		 * @see org.openflexo.foundation.validation.ValidationRule#isValidForTarget(TargetType)
 		 */
 		@Override
@@ -3262,9 +2993,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 			return targetType != CodeType.PROTOTYPE;
 		}
 
-		public static class AddPropertyStatus
-		extends
-		FixProposal<BusinessDataClassMustHaveStatusProperty, FlexoProcess> {
+		public static class AddPropertyStatus extends FixProposal<BusinessDataClassMustHaveStatusProperty, FlexoProcess> {
 
 			private DMEOEntity _businessDataClass;
 
@@ -3278,22 +3007,15 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 			/**
 			 * Overrides fixAction
-			 *
+			 * 
 			 * @see org.openflexo.foundation.validation.FixProposal#fixAction()
 			 */
 			@Override
 			protected void fixAction() {
 				try {
-					DMEOAttribute statusAttribute = DMEOAttribute
-							.createsNewDMEOAttribute(
-									_businessDataClass.getDMModel(),
-									_businessDataClass,
-									"status",
-									false,
-									true,
-									DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
-					statusAttribute.setPrototype(_businessDataClass
-							.getDMModel().getPrototypeNamed("str100"));
+					DMEOAttribute statusAttribute = DMEOAttribute.createsNewDMEOAttribute(_businessDataClass.getDMModel(),
+							_businessDataClass, "status", false, true, DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
+					statusAttribute.setPrototype(_businessDataClass.getDMModel().getPrototypeNamed("str100"));
 					statusAttribute.setColumnName("PROCESS_STATUS");
 					_businessDataClass.registerProperty(statusAttribute);
 				} catch (EOAccessException e) {
@@ -3313,7 +3035,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	/**
 	 * Overrides getClassNameKey
-	 *
+	 * 
 	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
 	 */
 	@Override
@@ -3322,9 +3044,8 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	}
 
 	/**
-	 * Wheter there is within all the operations of this process at least one
-	 * operation associated to a component
-	 *
+	 * Wheter there is within all the operations of this process at least one operation associated to a component
+	 * 
 	 * @return
 	 */
 	public boolean hasWOComponent() {
@@ -3341,8 +3062,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 			return getProcessNode().getIndex();
 		}
 
-		logger.warning("Process node is null for flexo process "
-				+ this.getName());
+		logger.warning("Process node is null for flexo process " + this.getName());
 		return -1;
 	}
 
@@ -3352,14 +3072,12 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 			if (getIndex() != index) {
 				setChanged(false);
-				AttributeDataModification dm = new AttributeDataModification(
-						"index", null, getIndex());
+				AttributeDataModification dm = new AttributeDataModification("index", null, getIndex());
 				dm.setReentrant(true);
 				notifyObservers(dm);
 			}
 		} else {
-			logger.warning("Process node is null for flexo process "
-					+ this.getName());
+			logger.warning("Process node is null for flexo process " + this.getName());
 		}
 	}
 
@@ -3368,8 +3086,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 			return getProcessNode().getVectorIndex();
 		}
 
-		logger.warning("Process node is null for flexo process "
-				+ this.getName());
+		logger.warning("Process node is null for flexo process " + this.getName());
 		return -1;
 	}
 
@@ -3379,24 +3096,20 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 			if (getVectorIndex() != index) {
 				setChanged(false);
-				AttributeDataModification dm = new AttributeDataModification(
-						"vectorIndex", null, getIndex());
+				AttributeDataModification dm = new AttributeDataModification("vectorIndex", null, getIndex());
 				dm.setReentrant(true);
 				notifyObservers(dm);
 			}
 		} else {
-			logger.warning("Process node is null for flexo process "
-					+ this.getName());
+			logger.warning("Process node is null for flexo process " + this.getName());
 		}
 	}
 
 	/**
-	 * Returns a sorted vector of all the abstract activity nodes that are in
-	 * the underlying activity petrigraph and the ones embedded by LOOPOperator
-	 * and SelfExecutableNode. This is done recursively on all nodes.
-	 *
-	 * @return a sorted vector of all the abstract activity nodes embedded in
-	 *         the petri graph.
+	 * Returns a sorted vector of all the abstract activity nodes that are in the underlying activity petrigraph and the ones embedded by
+	 * LOOPOperator and SelfExecutableNode. This is done recursively on all nodes.
+	 * 
+	 * @return a sorted vector of all the abstract activity nodes embedded in the petri graph.
 	 */
 	public Vector<AbstractActivityNode> getAllEmbeddedSortedAbstractActivityNodes() {
 		if (_petriGraph != null) {
@@ -3407,54 +3120,43 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 
 	public Enumeration<AbstractActivityNode> getSortedActivities() {
 		disableObserving();
-		AbstractActivityNode[] o = FlexoIndexManager
-				.sortArray(getAllAbstractActivityNodes().toArray(
-						new AbstractActivityNode[0]));
+		AbstractActivityNode[] o = FlexoIndexManager.sortArray(getAllAbstractActivityNodes().toArray(new AbstractActivityNode[0]));
 		enableObserving();
 		return ToolBox.getEnumeration(o);
 	}
 
 	public Enumeration<AbstractActivityNode> getSortedMeaningFullActivities() {
 		disableObserving();
-		AbstractActivityNode[] o = FlexoIndexManager
-				.sortArray(getAllMeaningFullActivityNodes().toArray(
-						new AbstractActivityNode[0]));
+		AbstractActivityNode[] o = FlexoIndexManager.sortArray(getAllMeaningFullActivityNodes().toArray(new AbstractActivityNode[0]));
 		enableObserving();
 		return ToolBox.getEnumeration(o);
 	}
 
 	public List<SubProcessNode> getSortedSubProcessNode() {
 		disableObserving();
-		SubProcessNode[] o = FlexoIndexManager
-				.sortArray(getAllMeaningSubProcessNodes().toArray(
-						new SubProcessNode[0]));
+		SubProcessNode[] o = FlexoIndexManager.sortArray(getAllMeaningSubProcessNodes().toArray(new SubProcessNode[0]));
 		enableObserving();
 		return Arrays.asList(o);
 	}
 
 	public List<AbstractActivityNode> getSortedMeaningFullActivitiesAndSubProcessNode() {
 		disableObserving();
-		AbstractActivityNode[] o = FlexoIndexManager
-				.sortArray(getAllMeaningFullActivityNodes().toArray(
-						new AbstractActivityNode[0]));
+		AbstractActivityNode[] o = FlexoIndexManager.sortArray(getAllMeaningFullActivityNodes().toArray(new AbstractActivityNode[0]));
 		enableObserving();
 		return Arrays.asList(o);
 	}
 
 	public Enumeration<PetriGraphNode> getSortedActivitiesAndOperators() {
 		disableObserving();
-		PetriGraphNode[] o = FlexoIndexManager
-				.sortArray(getAllAbstractActivityNodesAndActivityOperators()
-						.toArray(new PetriGraphNode[0]));
+		PetriGraphNode[] o = FlexoIndexManager.sortArray(getAllAbstractActivityNodesAndActivityOperators().toArray(new PetriGraphNode[0]));
 		enableObserving();
 		return ToolBox.getEnumeration(o);
 	}
 
 	public Enumeration<PetriGraphNode> getSortedActivitiesAndOperatorsWithEvents() {
 		disableObserving();
-		PetriGraphNode[] o = FlexoIndexManager
-				.sortArray(getAllAbstractActivityNodesAndActivityOperatorsWithEvents()
-						.toArray(new PetriGraphNode[0]));
+		PetriGraphNode[] o = FlexoIndexManager.sortArray(getAllAbstractActivityNodesAndActivityOperatorsWithEvents().toArray(
+				new PetriGraphNode[0]));
 		enableObserving();
 		return ToolBox.getEnumeration(o);
 	}
@@ -3529,24 +3231,22 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		}
 	}
 
-	public boolean oneAncestorIsNotGenerated(){
-		if(getDontGenerate()) {
+	public boolean oneAncestorIsNotGenerated() {
+		if (getDontGenerate()) {
 			return true;
 		}
-		if(getParentProcess()==null) {
+		if (getParentProcess() == null) {
 			return getDontGenerate();
 		}
 		return getParentProcess().oneAncestorIsNotGenerated();
 	}
 
-	public String getProcessDictionaryKey()
-	{
+	public String getProcessDictionaryKey() {
 		return ToolBox.cleanStringForProcessDictionaryKey(getName());
 	}
 
-	public String getBusinessDataDictionaryKey()
-	{
-		if(getBusinessDataType() != null) {
+	public String getBusinessDataDictionaryKey() {
+		if (getBusinessDataType() != null) {
 			return ToolBox.cleanStringForProcessDictionaryKey(getBusinessDataType().getName());
 		}
 
@@ -3562,38 +3262,35 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	 * 
 	 * @return a map containing the sample value list for each key used for this process (prototype)..
 	 */
-	public Map<String, List<Object>> getProcessInstanceDictionaryPrototypeSamples()
-	{
+	public Map<String, List<Object>> getProcessInstanceDictionaryPrototypeSamples() {
 		Map<String, List<Object>> keysTable = new HashMap<String, List<Object>>();
 
-		for(IEWidget widget : getWidgetsForProcessInstanceDictionary())
-		{
+		for (IEWidget widget : getWidgetsForProcessInstanceDictionary()) {
 			String key = widget.getProcessInstanceDictionaryKey();
 			List<Object> sampleValues = new ArrayList<Object>();
-			if(widget instanceof IEWidgetWithValueList) {
-				sampleValues = ((IEWidgetWithValueList)widget).getValueList(this);
+			if (widget instanceof IEWidgetWithValueList) {
+				sampleValues = ((IEWidgetWithValueList) widget).getValueList(this);
 			}
 
-			if(!keysTable.containsKey(key) || keysTable.get(key).size() < sampleValues.size()) {
+			if (!keysTable.containsKey(key) || keysTable.get(key).size() < sampleValues.size()) {
 				keysTable.put(widget.getProcessInstanceDictionaryKey(), sampleValues);
 			}
 		}
 
-		if(getStatusList().size() >0 )
-		{
-			//Always add status list if any
+		if (getStatusList().size() > 0) {
+			// Always add status list if any
 			List<Object> statuses = new ArrayList<Object>();
 			keysTable.put(PROCESSINSTANCE_STATUS_KEY, statuses);
-			for(Status status : getStatusList().getStatus()) {
+			for (Status status : getStatusList().getStatus()) {
 				statuses.add(status.getName());
 			}
 		}
 
-		if(keysTable.get(PROCESSINSTANCE_CREATIONDATE_KEY) == null) {
+		if (keysTable.get(PROCESSINSTANCE_CREATIONDATE_KEY) == null) {
 			keysTable.put(PROCESSINSTANCE_CREATIONDATE_KEY, new ArrayList<Object>());
 		}
 
-		if(keysTable.get(PROCESSINSTANCE_LASTUPDATEDATE_KEY) == null) {
+		if (keysTable.get(PROCESSINSTANCE_LASTUPDATEDATE_KEY) == null) {
 			keysTable.put(PROCESSINSTANCE_LASTUPDATEDATE_KEY, new ArrayList<Object>());
 		}
 
@@ -3605,17 +3302,14 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	 * 
 	 * @return a map with all keys found for this process with their type. Keys are created based on the screen components.
 	 */
-	public Map<String, Class<? extends Object>> getProcessInstanceDictionaryKeys()
-	{
+	public Map<String, Class<? extends Object>> getProcessInstanceDictionaryKeys() {
 		Map<String, Class<? extends Object>> result = new HashMap<String, Class<? extends Object>>();
-		for(IEWidget widget : getWidgetsForProcessInstanceDictionary())
-		{
+		for (IEWidget widget : getWidgetsForProcessInstanceDictionary()) {
 			String key = widget.getProcessInstanceDictionaryKey();
-			if(key != null)
-			{
+			if (key != null) {
 				Class<? extends Object> type = getProcessInstanceDictionaryType(widget);
 
-				if(result.containsKey(key) && result.get(key) != type) {
+				if (result.containsKey(key) && result.get(key) != type) {
 					type = Object.class;
 				}
 
@@ -3623,7 +3317,7 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 			}
 		}
 
-		if(getStatusList().size() >0 ) {
+		if (getStatusList().size() > 0) {
 			result.put(PROCESSINSTANCE_STATUS_KEY, String.class);
 		}
 
@@ -3633,16 +3327,13 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		return result;
 	}
 
-	private List<IEWidget> getWidgetsForProcessInstanceDictionary()
-	{
+	private List<IEWidget> getWidgetsForProcessInstanceDictionary() {
 		Map<FlexoProcess, Set<IEWOComponent>> componentsByProcess = new HashMap<FlexoProcess, Set<IEWOComponent>>();
 
-		for(OperationComponentInstance ci : getProject().getFlexoWorkflow().getAllComponentInstances())
-		{
+		for (OperationComponentInstance ci : getProject().getFlexoWorkflow().getAllComponentInstances()) {
 			OperationNode operationNode = ci.getOperationNode();
-			if(operationNode != null && operationNode.hasWOComponent())
-			{
-				if(componentsByProcess.get(operationNode.getProcess()) == null) {
+			if (operationNode != null && operationNode.hasWOComponent()) {
+				if (componentsByProcess.get(operationNode.getProcess()) == null) {
 					componentsByProcess.put(operationNode.getProcess(), new HashSet<IEWOComponent>());
 				}
 
@@ -3651,9 +3342,8 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		}
 
 		List<IEWidget> allWidgets = new ArrayList<IEWidget>();
-		for(Map.Entry<FlexoProcess, Set<IEWOComponent>> entry : componentsByProcess.entrySet())
-		{
-			for(IEWOComponent woComponent : entry.getValue()) {
+		for (Map.Entry<FlexoProcess, Set<IEWOComponent>> entry : componentsByProcess.entrySet()) {
+			for (IEWOComponent woComponent : entry.getValue()) {
 				allWidgets.addAll(getWidgetsForProcessInstanceFromComponent(woComponent, entry.getKey()));
 			}
 		}
@@ -3661,18 +3351,16 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 		return allWidgets;
 	}
 
-	private List<IEWidget> getWidgetsForProcessInstanceFromComponent(IEWOComponent component, FlexoProcess componentProcess)
-	{
+	private List<IEWidget> getWidgetsForProcessInstanceFromComponent(IEWOComponent component, FlexoProcess componentProcess) {
 		List<IEWidget> allWidgets = new ArrayList<IEWidget>();
 
-		for(IEWidget widget : component.getAllEmbeddedIEWidgets(IEWidget.class))
-		{
-			if(widget.getIsAcceptableForProcessInstanceDictionary(componentProcess, this)) {
+		for (IEWidget widget : component.getAllEmbeddedIEWidgets(IEWidget.class)) {
+			if (widget.getIsAcceptableForProcessInstanceDictionary(componentProcess, this)) {
 				allWidgets.add(widget);
 			}
 
-			if(widget instanceof IETabWidget) {
-				allWidgets.addAll(getWidgetsForProcessInstanceFromComponent(((IETabWidget)widget).getTabComponent(), componentProcess));
+			if (widget instanceof IETabWidget) {
+				allWidgets.addAll(getWidgetsForProcessInstanceFromComponent(((IETabWidget) widget).getTabComponent(), componentProcess));
 			}
 
 		}
@@ -3686,39 +3374,37 @@ ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
 	 * @param widget
 	 * @return the type used in the process instance dictionary for the specified IEWidget.
 	 */
-	public Class<? extends Object> getProcessInstanceDictionaryType(IEWidget widget)
-	{
-		if(widget instanceof IECheckBoxWidget) {
+	public Class<? extends Object> getProcessInstanceDictionaryType(IEWidget widget) {
+		if (widget instanceof IECheckBoxWidget) {
 			return Boolean.class;
 		}
-		if(widget instanceof IEDropDownWidget) {
+		if (widget instanceof IEDropDownWidget) {
 			return String.class;
 		}
-		if(widget instanceof IERadioButtonWidget) {
+		if (widget instanceof IERadioButtonWidget) {
 			return Boolean.class;
 		}
-		if(widget instanceof IETextAreaWidget) {
+		if (widget instanceof IETextAreaWidget) {
 			return String.class;
 		}
-		if(widget instanceof IEWysiwygWidget) {
+		if (widget instanceof IEWysiwygWidget) {
 			return String.class;
 		}
 
 		TextFieldType fieldType = null;
-		if(widget instanceof IEHyperlinkWidget) {
-			fieldType = ((IEHyperlinkWidget)widget).getFieldType();
-		} else if(widget instanceof IEStringWidget) {
-			fieldType = ((IEStringWidget)widget).getFieldType();
-		} else if(widget instanceof IETextFieldWidget) {
-			fieldType = ((IETextFieldWidget)widget).getFieldType();
+		if (widget instanceof IEHyperlinkWidget) {
+			fieldType = ((IEHyperlinkWidget) widget).getFieldType();
+		} else if (widget instanceof IEStringWidget) {
+			fieldType = ((IEStringWidget) widget).getFieldType();
+		} else if (widget instanceof IETextFieldWidget) {
+			fieldType = ((IETextFieldWidget) widget).getFieldType();
 		}
 
-		if(fieldType == null) {
+		if (fieldType == null) {
 			return String.class;
 		}
 
-		switch(fieldType)
-		{
+		switch (fieldType) {
 		case DATE:
 			return Date.class;
 		case DOUBLE:

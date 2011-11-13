@@ -35,78 +35,69 @@ import org.openflexo.foundation.dm.eo.InvalidEOModelFileException;
 import org.openflexo.foundation.dm.eo.UnresovedEntitiesException;
 import org.openflexo.foundation.rm.InvalidFileNameException;
 
+public class ImportDMEOModel extends FlexoAction {
 
-public class ImportDMEOModel extends FlexoAction 
-{
+	private static final Logger logger = Logger.getLogger(ImportDMEOModel.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(ImportDMEOModel.class.getPackage().getName());
+	public static FlexoActionType actionType = new FlexoActionType("import_eomodel", FlexoActionType.importMenu,
+			FlexoActionType.defaultGroup) {
 
-    public static FlexoActionType actionType = new FlexoActionType ("import_eomodel",FlexoActionType.importMenu,FlexoActionType.defaultGroup) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new ImportDMEOModel(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) 
-        {
-            return new ImportDMEOModel(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return object instanceof DMEORepository;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return object instanceof DMEORepository;
-         }
-                
-    };
-    
-    ImportDMEOModel (FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-    private File _eoModelFile;        
-    private DMEOModel _newDMEOModel;
-    private DMEORepository _repository;
+	ImportDMEOModel(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    @Override
-	protected void doAction(Object context) throws InvalidEOModelFileException, EOAccessException, EOModelAlreadyRegisteredException, InvalidFileNameException, UnresovedEntitiesException 
-    {
-      logger.info ("CreateDMEOModel"); 
-      if (getRepository() != null) {
-          _newDMEOModel = getRepository().copyAndImportEOModel(getEOModelFile());
-      }
-    }
-    
-    public DMEORepository getRepository() 
-    {
-        if (_repository == null) {
-            if ((getFocusedObject() != null) && (getFocusedObject() instanceof DMEORepository)) {
-                _repository = (DMEORepository)getFocusedObject();
-             }           
-        }
-        return _repository;
-    }
+	private File _eoModelFile;
+	private DMEOModel _newDMEOModel;
+	private DMEORepository _repository;
 
-    public DMEOModel getNewDMEOModel() 
-    {
-        return _newDMEOModel;
-    }
+	@Override
+	protected void doAction(Object context) throws InvalidEOModelFileException, EOAccessException, EOModelAlreadyRegisteredException,
+			InvalidFileNameException, UnresovedEntitiesException {
+		logger.info("CreateDMEOModel");
+		if (getRepository() != null) {
+			_newDMEOModel = getRepository().copyAndImportEOModel(getEOModelFile());
+		}
+	}
 
-    public File getEOModelFile()
-    {
-        return _eoModelFile;
-    }
+	public DMEORepository getRepository() {
+		if (_repository == null) {
+			if ((getFocusedObject() != null) && (getFocusedObject() instanceof DMEORepository)) {
+				_repository = (DMEORepository) getFocusedObject();
+			}
+		}
+		return _repository;
+	}
 
-    public void setEOModelFile(File eoModelFile) 
-    {
-        _eoModelFile = eoModelFile;
-    }
+	public DMEOModel getNewDMEOModel() {
+		return _newDMEOModel;
+	}
+
+	public File getEOModelFile() {
+		return _eoModelFile;
+	}
+
+	public void setEOModelFile(File eoModelFile) {
+		_eoModelFile = eoModelFile;
+	}
 
 }

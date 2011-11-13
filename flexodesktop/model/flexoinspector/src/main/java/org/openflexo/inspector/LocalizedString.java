@@ -26,17 +26,15 @@ public class LocalizedString {
 	public String string;
 	public Language language;
 
-	 
 	public LocalizedString(String string, Language language) {
 		super();
 		this.string = string;
 		this.language = language;
 	}
-	
+
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return string;
 	}
-	
+
 }

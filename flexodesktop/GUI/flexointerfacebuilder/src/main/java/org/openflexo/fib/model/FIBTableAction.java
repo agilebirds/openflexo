@@ -25,88 +25,77 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 
-
 public abstract class FIBTableAction extends FIBModelObject {
 
 	private static final Logger logger = Logger.getLogger(FIBTableAction.class.getPackage().getName());
 
 	private FIBTable table;
-	
-	public static enum Parameters implements FIBModelAttribute
-	{
-		method,
-		isAvailable
+
+	public static enum Parameters implements FIBModelAttribute {
+		method, isAvailable
 	}
 
-	public static enum ActionType
-	{
-		Add,
-		Delete,
-		Custom
+	public static enum ActionType {
+		Add, Delete, Custom
 	}
-	
+
 	private DataBinding method;
 	private DataBinding isAvailable;
 
 	public static BindingDefinition METHOD = new BindingDefinition("method", Object.class, BindingDefinitionType.EXECUTE, false);
 	public static BindingDefinition IS_AVAILABLE = new BindingDefinition("isAvailable", Boolean.class, BindingDefinitionType.GET, false);
 
-    public FIBTable getTable() 
-    {
+	public FIBTable getTable() {
 		return table;
 	}
 
-	public void setTable(FIBTable table)
-	{
+	public void setTable(FIBTable table) {
 		this.table = table;
 	}
 
 	@Override
-	public FIBComponent getRootComponent()
-	{
-		if (getTable() != null) return getTable().getRootComponent();
+	public FIBComponent getRootComponent() {
+		if (getTable() != null)
+			return getTable().getRootComponent();
 		return null;
 	}
-	
-	public DataBinding getMethod() 
-	{
-		if (method == null) method = new DataBinding(this,Parameters.method,METHOD);
+
+	public DataBinding getMethod() {
+		if (method == null)
+			method = new DataBinding(this, Parameters.method, METHOD);
 		return method;
 	}
 
-	public void setMethod(DataBinding method) 
-	{
+	public void setMethod(DataBinding method) {
 		method.setOwner(this);
 		method.setBindingAttribute(Parameters.method);
 		method.setBindingDefinition(METHOD);
 		this.method = method;
 	}
-	
-	public DataBinding getIsAvailable() 
-	{
-		if (isAvailable == null) isAvailable = new DataBinding(this,Parameters.isAvailable,IS_AVAILABLE);
+
+	public DataBinding getIsAvailable() {
+		if (isAvailable == null)
+			isAvailable = new DataBinding(this, Parameters.isAvailable, IS_AVAILABLE);
 		return isAvailable;
 	}
 
-	public void setIsAvailable(DataBinding isAvailable) 
-	{
+	public void setIsAvailable(DataBinding isAvailable) {
 		isAvailable.setOwner(this);
 		isAvailable.setBindingAttribute(Parameters.isAvailable);
 		isAvailable.setBindingDefinition(IS_AVAILABLE);
 		this.isAvailable = isAvailable;
 	}
-	
+
 	@Override
-	public BindingModel getBindingModel() 
-	{
-		if (getTable() != null) return getTable().getActionBindingModel();
+	public BindingModel getBindingModel() {
+		if (getTable() != null)
+			return getTable().getActionBindingModel();
 		return null;
 	}
-	
+
 	@Override
-	public void finalizeDeserialization() 
-	{
-		logger.fine("finalizeDeserialization() for FIBTableAction "+getName());
+	public void finalizeDeserialization() {
+		logger.fine("finalizeDeserialization() for FIBTableAction " + getName());
 		super.finalizeDeserialization();
 		if (method != null) {
 			method.finalizeDeserialization();
@@ -118,8 +107,7 @@ public abstract class FIBTableAction extends FIBModelObject {
 	public static class FIBAddAction extends FIBTableAction {
 
 		@Override
-		public ActionType getActionType()
-		{
+		public ActionType getActionType() {
 			return ActionType.Add;
 		}
 	}
@@ -127,8 +115,7 @@ public abstract class FIBTableAction extends FIBModelObject {
 	public static class FIBRemoveAction extends FIBTableAction {
 
 		@Override
-		public ActionType getActionType()
-		{
+		public ActionType getActionType() {
 			return ActionType.Delete;
 		}
 	}
@@ -136,10 +123,9 @@ public abstract class FIBTableAction extends FIBModelObject {
 	public static class FIBCustomAction extends FIBTableAction {
 
 		public boolean isStatic = false;
-		
+
 		@Override
-		public ActionType getActionType()
-		{
+		public ActionType getActionType() {
 			return ActionType.Custom;
 		}
 	}

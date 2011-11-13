@@ -28,112 +28,97 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.dkv.Key;
 import org.openflexo.foundation.dm.DMType;
 
-
 public class DKVBinding extends StaticBinding<Key> {
 
-    @SuppressWarnings("hiding")
+	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(DKVBinding.class.getPackage().getName());
 
-	public DKVBinding()
-	{
+	public DKVBinding() {
 		super();
 	}
-	
-    public DKVBinding(BindingDefinition bindingDefinition, FlexoModelObject owner)
-    {
-    	super(bindingDefinition,owner);
-    }
 
-    public DKVBinding(BindingDefinition bindingDefinition, FlexoModelObject owner, Key aValue)
-    {
-    	this(bindingDefinition,owner);
-    	setValue(aValue);
-     }
+	public DKVBinding(BindingDefinition bindingDefinition, FlexoModelObject owner) {
+		super(bindingDefinition, owner);
+	}
 
- 	@Override
-	public String getCodeStringRepresentation()
-	{
+	public DKVBinding(BindingDefinition bindingDefinition, FlexoModelObject owner, Key aValue) {
+		this(bindingDefinition, owner);
+		setValue(aValue);
+	}
+
+	@Override
+	public String getCodeStringRepresentation() {
 		return getStringRepresentation();
 	}
-	
- 	@Override
+
+	@Override
 	public String getWodStringRepresentation() {
 		logger.severe("dkv in wod files isn't supported yet");
 		return "\"dkv in wod files isn't supported yet\"";
 	}
- 	
+
 	@Override
 	public String getClassNameKey() {
 		return "dkv_binding";
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
+	public String getFullyQualifiedName() {
 		return "DKV_BINDING=" + getSerializationRepresentation();
 	}
 
 	@Override
-	public String getSerializationRepresentation() 
-	{
-		return "$"+getStringRepresentation();
+	public String getSerializationRepresentation() {
+		return "$" + getStringRepresentation();
 	}
-	
+
 	@Override
 	protected void _applyNewBindingDefinition() {
-		// TODO Auto-generated method stub	
+		// TODO Auto-generated method stub
 	}
-	
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-    {
-    	// TODO to be implemented
-     }
-
 
 	@Override
-	public EvaluationType getEvaluationType()
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		// TODO to be implemented
+	}
+
+	@Override
+	public EvaluationType getEvaluationType() {
 		return EvaluationType.ENUM;
 	}
 
 	private Key value;
-	
+
 	@Override
-	public Key getValue() 
-	{
+	public Key getValue() {
 		return value;
 	}
 
 	@Override
-	public void setValue(Key aValue) 
-	{
+	public void setValue(Key aValue) {
 		value = aValue;
 		accessedType = null;
 	}
 
-    @Override
-	public DMType getAccessedType()
-    {
-     	if (getValue() != null && accessedType == null) {
-     		accessedType = DMType.makeDKVDMType(getValue().getDomain());
-    	}
-    	return accessedType;
-    }
+	@Override
+	public DMType getAccessedType() {
+		if (getValue() != null && accessedType == null) {
+			accessedType = DMType.makeDKVDMType(getValue().getDomain());
+		}
+		return accessedType;
+	}
 
 	@Override
-	public DKVBinding clone()
-	{
+	public DKVBinding clone() {
 		DKVBinding returned = new DKVBinding();
 		returned.setsWith(this);
 		return returned;
 	}
- 
-    @Override
-    public String getJavaCodeStringRepresentation()
-    {
-    	return getStringRepresentation() + "/* TODO: implement DKV */";
-    }
+
+	@Override
+	public String getJavaCodeStringRepresentation() {
+		return getStringRepresentation() + "/* TODO: implement DKV */";
+	}
 
 	@Override
 	public Class<Key> getStaticBindingClass() {
@@ -141,8 +126,9 @@ public class DKVBinding extends StaticBinding<Key> {
 	}
 
 	@Override
-	public String getStringRepresentation() 
-	{
-		return DMType.DKV_PREFIX+(getValue()==null?"null":(getValue().getDomain()==null?"null":getValue().getDomain().getName())+"."+getValue().getName());
+	public String getStringRepresentation() {
+		return DMType.DKV_PREFIX
+				+ (getValue() == null ? "null" : (getValue().getDomain() == null ? "null" : getValue().getDomain().getName()) + "."
+						+ getValue().getName());
 	}
 }

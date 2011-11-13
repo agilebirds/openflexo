@@ -25,44 +25,39 @@ import org.openflexo.kvc.KVCObject;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLSerializable;
 
-
 /**
  * Represents a bug report action
  * 
  * @author sguerin
  */
-public class BugReportAction extends KVCObject implements XMLSerializable
-{
+public class BugReportAction extends KVCObject implements XMLSerializable {
 
-    public Date date;
+	public Date date;
 
-    public String username;
+	public String username;
 
-    public String description;
+	public String description;
 
-    public int status;
+	public int status;
 
-    private String _dateAsString;
+	private String _dateAsString;
 
-    public BugReportAction()
-    {
-        super();
-        date = new Date();
-        username = System.getProperty("user.name");
-    }
+	public BugReportAction() {
+		super();
+		date = new Date();
+		username = System.getProperty("user.name");
+	}
 
-    public String statusAsString()
-    {
-        return BugReport.getAvailableStatus().get(status);
-    }
+	public String statusAsString() {
+		return BugReport.getAvailableStatus().get(status);
+	}
 
-    public String dateAsString()
-    {
-        if (_dateAsString == null) {
-            StringEncoder.setDateFormat("HH:mm:ss dd/MM");
-            _dateAsString = StringEncoder.getDateRepresentation(date);
-        }
-        return _dateAsString;
-    }
+	public String dateAsString() {
+		if (_dateAsString == null) {
+			StringEncoder.setDateFormat("HH:mm:ss dd/MM");
+			_dateAsString = StringEncoder.getDateRepresentation(date);
+		}
+		return _dateAsString;
+	}
 
 }

@@ -29,50 +29,49 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 
-
 public interface IFlexoResourceGenerator {
 
 	public FlexoProject getProject();
-	
+
 	public String getIdentifier();
-	
-    public GeneratedCodeResult getGeneratedCode();
-    
-    // No more exception thrown because GenerationExceptions are handled in FlexoResourceGenerators
+
+	public GeneratedCodeResult getGeneratedCode();
+
+	// No more exception thrown because GenerationExceptions are handled in FlexoResourceGenerators
 	public void generate(boolean forceRegenerate);
 
 	public IGenerationException getGenerationException();
-	
+
 	public boolean isCodeAlreadyGenerated();
-	
+
 	public boolean needsGeneration();
-	
+
 	public boolean needsRegenerationBecauseOfTemplateUpdated();
-	
+
 	public boolean needsRegenerationBecauseOfTemplateUpdated(Date diskLastGenerationDate);
 
 	public Vector<CGRepositoryFileResource> refreshConcernedResources();
-	
-    public void addObserver(FlexoObserver o);
-    
-    public void deleteObserver(FlexoObserver o);
-    
+
+	public void addObserver(FlexoObserver o);
+
+	public void deleteObserver(FlexoObserver o);
+
 	public Vector<CGTemplate> getUsedTemplates();
-	
+
 	public void setUsedTemplates(Vector<CGTemplate> templates);
 
 	public Date getMemoryLastGenerationDate();
-	
-	public boolean hasFormattingException();
-	
-	public boolean hasAppendingException();
-	
-	public FlexoResource getTemplateLocator();
-	
-	public void addToGeneratedResourcesGeneratedByThisGenerator(CGRepositoryFileResource<?,?,? extends CGFile> resource);
 
-	public void removeFromGeneratedResourcesGeneratedByThisGenerator(CGRepositoryFileResource<?,?,? extends CGFile> resource);
-	
+	public boolean hasFormattingException();
+
+	public boolean hasAppendingException();
+
+	public FlexoResource getTemplateLocator();
+
+	public void addToGeneratedResourcesGeneratedByThisGenerator(CGRepositoryFileResource<?, ?, ? extends CGFile> resource);
+
+	public void removeFromGeneratedResourcesGeneratedByThisGenerator(CGRepositoryFileResource<?, ?, ? extends CGFile> resource);
+
 	public void silentlyGenerateCode();
 
 }

@@ -30,73 +30,67 @@ import org.openflexo.foundation.ie.widget.IESequenceWidget;
 import org.openflexo.foundation.ie.widget.IETDWidget;
 import org.openflexo.foundation.ie.widget.ITableData;
 
+public class DeleteCol extends FlexoAction {
 
-public class DeleteCol extends FlexoAction 
-{
+	public static FlexoActionType actionType = new FlexoActionType("delete_col", FlexoActionType.defaultGroup,
+			FlexoActionType.DELETE_ACTION_TYPE) {
 
-    public static FlexoActionType actionType = new FlexoActionType ("delete_col",FlexoActionType.defaultGroup,FlexoActionType.DELETE_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new DeleteCol(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) 
-        {
-            return new DeleteCol(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return true;
-        }
-
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            Vector<FlexoModelObject> v = getGlobalSelectionAndFocusedObject(object, globalSelection);
-            Enumeration<FlexoModelObject> en = v.elements();
-            while (en.hasMoreElements()) {
-                FlexoModelObject o = en.nextElement();
-                if (!(o instanceof IETDWidget) && !((o instanceof IESequenceWidget) && ((IESequenceWidget)o).isInTD())) {
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			Vector<FlexoModelObject> v = getGlobalSelectionAndFocusedObject(object, globalSelection);
+			Enumeration<FlexoModelObject> en = v.elements();
+			while (en.hasMoreElements()) {
+				FlexoModelObject o = en.nextElement();
+				if (!(o instanceof IETDWidget) && !((o instanceof IESequenceWidget) && ((IESequenceWidget) o).isInTD())) {
 					return false;
 				}
-            }
-            return true;
-        }
-                
-    };
-    
-    DeleteCol (FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
-
-    @Override
-	protected void doAction(Object context) 
-    {
-        Enumeration<FlexoModelObject> en = getGlobalSelectionAndFocusedObject().elements();
-        while (en.hasMoreElements()) {
-            FlexoModelObject o = en.nextElement();
-            if (o instanceof IETDWidget) {
-                IETDWidget td = (IETDWidget)o;
-                if (!td.isDeleted()) {
-					td.deleteCol();
-				}
-            } else if (o instanceof IESequenceWidget) {
-                IESequenceWidget seq = (IESequenceWidget)o;
-                IETDWidget td = seq.td();
-                if ((td!=null) && !td.isDeleted()) {
-					td.deleteCol();
-				}
-            }
-        }
-    }
-    
-    private ITableData td(){
-    	if(getFocusedObject() instanceof ITableData) {
-			return (ITableData)getFocusedObject();
+			}
+			return true;
 		}
-    	return ((IESequenceWidget)getFocusedObject()).td();
-    }
+
+	};
+
+	DeleteCol(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) {
+		Enumeration<FlexoModelObject> en = getGlobalSelectionAndFocusedObject().elements();
+		while (en.hasMoreElements()) {
+			FlexoModelObject o = en.nextElement();
+			if (o instanceof IETDWidget) {
+				IETDWidget td = (IETDWidget) o;
+				if (!td.isDeleted()) {
+					td.deleteCol();
+				}
+			} else if (o instanceof IESequenceWidget) {
+				IESequenceWidget seq = (IESequenceWidget) o;
+				IETDWidget td = seq.td();
+				if ((td != null) && !td.isDeleted()) {
+					td.deleteCol();
+				}
+			}
+		}
+	}
+
+	private ITableData td() {
+		if (getFocusedObject() instanceof ITableData) {
+			return (ITableData) getFocusedObject();
+		}
+		return ((IESequenceWidget) getFocusedObject()).td();
+	}
 }

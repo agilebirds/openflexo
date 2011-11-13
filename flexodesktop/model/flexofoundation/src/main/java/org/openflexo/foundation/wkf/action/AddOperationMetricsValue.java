@@ -29,18 +29,17 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.node.OperationNode;
 
+public class AddOperationMetricsValue extends AddMetricsValue<AddOperationMetricsValue, OperationNode> {
 
-public class AddOperationMetricsValue extends AddMetricsValue<AddOperationMetricsValue,OperationNode>
-{
-
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(AddOperationMetricsValue.class.getPackage().getName());
-    
-    public static FlexoActionType<AddOperationMetricsValue, OperationNode, WKFObject> actionType = new FlexoActionType<AddOperationMetricsValue, OperationNode, WKFObject>("add_metrics_value",FlexoActionType.ADD_ACTION_TYPE) {
+
+	public static FlexoActionType<AddOperationMetricsValue, OperationNode, WKFObject> actionType = new FlexoActionType<AddOperationMetricsValue, OperationNode, WKFObject>(
+			"add_metrics_value", FlexoActionType.ADD_ACTION_TYPE) {
 
 		@Override
 		protected boolean isEnabledForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
-			return object!=null;
+			return object != null;
 		}
 
 		@Override
@@ -50,22 +49,21 @@ public class AddOperationMetricsValue extends AddMetricsValue<AddOperationMetric
 
 		@Override
 		public AddOperationMetricsValue makeNewAction(OperationNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
-			return new AddOperationMetricsValue(focusedObject,globalSelection,editor);
+			return new AddOperationMetricsValue(focusedObject, globalSelection, editor);
 		}
-    	
-    };
-    
-    static {
-    	FlexoModelObject.addActionForClass(actionType, OperationNode.class);
-    }
-    
-    AddOperationMetricsValue (OperationNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
 
-    @Override
-    protected void doAction(Object context) throws FlexoException {
-    	getFocusedObject().addToMetricsValues(createMetricsValue());
-    }
+	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, OperationNode.class);
+	}
+
+	AddOperationMetricsValue(OperationNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		getFocusedObject().addToMetricsValues(createMetricsValue());
+	}
 }

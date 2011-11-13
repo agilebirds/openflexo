@@ -45,7 +45,6 @@ import org.openflexo.jedit.cd.GenericCodeDisplayer;
 import org.openflexo.toolbox.FileFormat;
 import org.openflexo.toolbox.TokenMarkerStyle;
 
-
 public class CodeDisplayer {
 
 	private static final Logger logger = Logger.getLogger(CodeDisplayer.class.getPackage().getName());
@@ -53,11 +52,10 @@ public class CodeDisplayer {
 	protected CodeDisplayerComponent _component;
 	private final GenerationAvailableFileResource _resource;
 	private final GeneratorController _controller;
-	
+
 	private ContentSource _contentSource;
-	
-	public CodeDisplayer(GenerationAvailableFileResource resource, ContentSource contentSource, GeneratorController controller)
-	{
+
+	public CodeDisplayer(GenerationAvailableFileResource resource, ContentSource contentSource, GeneratorController controller) {
 		super();
 		_resource = resource;
 		_contentSource = contentSource;
@@ -67,252 +65,214 @@ public class CodeDisplayer {
 			addToFocusListener(_controller.getFooter());
 		}
 	}
-	
-	public CodeDisplayer(GenerationAvailableFileResource resource, GeneratorController controller)
-	{
-		this(resource,ContentSource.GENERATED_MERGE,controller);
+
+	public CodeDisplayer(GenerationAvailableFileResource resource, GeneratorController controller) {
+		this(resource, ContentSource.GENERATED_MERGE, controller);
 	}
-	
-	public GenerationAvailableFileResource getResource()
-	{
+
+	public GenerationAvailableFileResource getResource() {
 		return _resource;
 	}
-	
-	public FlexoResourceGenerator getGenerator()
-	{
+
+	public FlexoResourceGenerator getGenerator() {
 		if (_resource != null) {
-			return (FlexoResourceGenerator)_resource.getGenerator();
+			return (FlexoResourceGenerator) _resource.getGenerator();
 		}
 		return null;
 	}
 
-	public CGFile getCGFile()
-	{
+	public CGFile getCGFile() {
 		if (_resource != null) {
 			return _resource.getCGFile();
 		}
 		return null;
 	}
-	
-	public GenerationAvailableFile getResourceData()
-	{
+
+	public GenerationAvailableFile getResourceData() {
 		if (_resource != null) {
 			return _resource.getGeneratedResourceData();
 		}
 		return null;
 	}
-	
-	public GeneratedCodeResult getGeneratedCode()
-	{
+
+	public GeneratedCodeResult getGeneratedCode() {
 		if (getGenerator() != null) {
 			return getGenerator().getGeneratedCode();
 		}
 		return null;
 	}
 
-	
-	public ResourceType getResourceType()
-	{
+	public ResourceType getResourceType() {
 		return _resource.getResourceType();
 	}
-	
-	public FileFormat getFileFormat()
-	{
+
+	public FileFormat getFileFormat() {
 		return _resource.getResourceFormat();
 	}
-	
-	public JComponent getComponent()
-	{
-		return (JComponent)_component;
+
+	public JComponent getComponent() {
+		return (JComponent) _component;
 	}
 
-	protected CodeDisplayerComponent buildComponent()
-	{
+	protected CodeDisplayerComponent buildComponent() {
 		_component = null;
-		
+
 		if (getResourceData() instanceof ASCIIFile) {
 			_component = new ASCIIFileCodePanel(_contentSource);
-		}
-		else if (getResourceData() instanceof WOFile) {
+		} else if (getResourceData() instanceof WOFile) {
 			_component = new WOComponentCodePanel(_contentSource);
-		}
-		else {
+		} else {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("This resource data type '"+getResourceData()+"' don't have a specific code panel. Use the default one.");
+				logger.warning("This resource data type '" + getResourceData() + "' don't have a specific code panel. Use the default one.");
 			}
-			_component = new GenericCodePanel(_contentSource,"Use generic code panel for :"+(getResourceData()==null?"null resource data (ERROR)":getResourceData().getClass()));
+			_component = new GenericCodePanel(_contentSource, "Use generic code panel for :"
+					+ (getResourceData() == null ? "null resource data (ERROR)" : getResourceData().getClass()));
 		}
 		return _component;
 	}
-	
-	public void update()
-	{
+
+	public void update() {
 		if (_component != null) {
 			_component.update();
 		}
 	}
-	
-	public DisplayContext getDisplayContext()
-	{
-		if (_component!=null) {
+
+	public DisplayContext getDisplayContext() {
+		if (_component != null) {
 			return _component.getDisplayContext();
 		}
 		return null;
 	}
-	
-	public void setDisplayContext(DisplayContext context)
-	{
+
+	public void setDisplayContext(DisplayContext context) {
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Restore display context: "+context);
+			logger.fine("Restore display context: " + context);
 		}
 		_component.setDisplayContext(context);
 	}
 
-	
-	protected interface CodeDisplayerComponent
-	{
+	protected interface CodeDisplayerComponent {
 		void update();
+
 		public void setEditable(boolean isEditable);
+
 		public String getEditedContentForKey(String contentKey);
-		public void setEditedContent(CGFile file); 
+
+		public void setEditedContent(CGFile file);
+
 		public void setContentSource(ContentSource aContentSource);
-		public void addToFocusListener (FocusListener aFocusListener);
+
+		public void addToFocusListener(FocusListener aFocusListener);
+
 		public DisplayContext getDisplayContext();
+
 		public void setDisplayContext(DisplayContext context);
 	}
 
-	protected String getASCIIContent (ContentSource contentSource)
-	{
+	protected String getASCIIContent(ContentSource contentSource) {
 		return getASCIIContentForFile(getCGFile(), contentSource);
 	}
 
-	protected String getASCIIContentForFile (CGFile aFile, ContentSource contentSource)
-	{
-		if ((aFile != null)
-				&& (aFile.getResource() != null)
-				&& (aFile.getResource().getGeneratedResourceData() != null)
+	protected String getASCIIContentForFile(CGFile aFile, ContentSource contentSource) {
+		if ((aFile != null) && (aFile.getResource() != null) && (aFile.getResource().getGeneratedResourceData() != null)
 				&& (aFile.getResource().getGeneratedResourceData() instanceof ASCIIFile)) {
-			return ((ASCIIFile)aFile.getResource().getGeneratedResourceData()).getContent(contentSource);
+			return ((ASCIIFile) aFile.getResource().getGeneratedResourceData()).getContent(contentSource);
 		}
 		return null;
 	}
 
-	protected class ASCIIFileCodePanel extends GenericCodeDisplayer implements CodeDisplayerComponent
-	{
+	protected class ASCIIFileCodePanel extends GenericCodeDisplayer implements CodeDisplayerComponent {
 		private ContentSource contentSource;
 		private final DisplayContext displayContext;
-		
-		protected ASCIIFileCodePanel (ContentSource contentSource) 
-		{
-			super(getASCIIContent(contentSource),
-					DefaultMergedDocumentType.getMergedDocumentType(getFileFormat()).getStyle());
+
+		protected ASCIIFileCodePanel(ContentSource contentSource) {
+			super(getASCIIContent(contentSource), DefaultMergedDocumentType.getMergedDocumentType(getFileFormat()).getStyle());
 			this.contentSource = contentSource;
 			displayContext = super.getDisplayContext();
 		}
 
 		@Override
-		public DisplayContext getDisplayContext()
-		{
+		public DisplayContext getDisplayContext() {
 			return displayContext;
 		}
-		
+
 		@Override
-		public void setDisplayContext(DisplayContext context)
-		{
+		public void setDisplayContext(DisplayContext context) {
 			applyDisplayContext(context);
 		}
 
 		@Override
-		public void update() 
-		{
+		public void update() {
 			setText(getASCIIContent(contentSource));
 		}
-		
+
 		@Override
-		public String getEditedContentForKey(String contentKey) 
-		{
+		public String getEditedContentForKey(String contentKey) {
 			return getText();
 		}
 
 		@Override
-		public void setEditedContent(CGFile file) 
-		{
-			String newContent = getASCIIContentForFile(file,contentSource);
+		public void setEditedContent(CGFile file) {
+			String newContent = getASCIIContentForFile(file, contentSource);
 			if (newContent != null) {
 				setTextKeepDisplayContext(newContent);
 			}
 		}
 
 		@Override
-		public void setContentSource(ContentSource aContentSource)
-		{
+		public void setContentSource(ContentSource aContentSource) {
 			contentSource = aContentSource;
 			update();
 		}
 
 		@Override
-		public void addToFocusListener(FocusListener aFocusListener) 
-		{
+		public void addToFocusListener(FocusListener aFocusListener) {
 			addFocusListener(aFocusListener);
 		}
 
 	}
 
-
-	protected String getHTMLContent (ContentSource contentSource)
-	{
-		return getHTMLContentForFile(getCGFile(),contentSource);
+	protected String getHTMLContent(ContentSource contentSource) {
+		return getHTMLContentForFile(getCGFile(), contentSource);
 	}
 
-	protected String getHTMLContentForFile (CGFile aFile, ContentSource contentSource)
-	{
-		if ((aFile != null)
-				&& (aFile.getResource() != null)
-				&& (aFile.getResource().getGeneratedResourceData() != null)
+	protected String getHTMLContentForFile(CGFile aFile, ContentSource contentSource) {
+		if ((aFile != null) && (aFile.getResource() != null) && (aFile.getResource().getGeneratedResourceData() != null)
 				&& (aFile.getResource().getGeneratedResourceData() instanceof WOFile)) {
-			return ((WOFile)aFile.getResource().getGeneratedResourceData()).getHTMLFile().getContent(contentSource);
+			return ((WOFile) aFile.getResource().getGeneratedResourceData()).getHTMLFile().getContent(contentSource);
 		}
 		return null;
 	}
 
-	protected String getWODContent (ContentSource contentSource)
-	{
-		return getWODContentForFile(getCGFile(),contentSource);
+	protected String getWODContent(ContentSource contentSource) {
+		return getWODContentForFile(getCGFile(), contentSource);
 	}
 
-	protected String getWODContentForFile (CGFile aFile, ContentSource contentSource)
-	{
-		if ((aFile != null)
-				&& (aFile.getResource() != null)
-				&& (aFile.getResource().getGeneratedResourceData() != null)
+	protected String getWODContentForFile(CGFile aFile, ContentSource contentSource) {
+		if ((aFile != null) && (aFile.getResource() != null) && (aFile.getResource().getGeneratedResourceData() != null)
 				&& (aFile.getResource().getGeneratedResourceData() instanceof WOFile)) {
-			return ((WOFile)aFile.getResource().getGeneratedResourceData()).getWODFile().getContent(contentSource);
+			return ((WOFile) aFile.getResource().getGeneratedResourceData()).getWODFile().getContent(contentSource);
 		}
 		return null;
 	}
 
-	protected String getWOOContent (ContentSource contentSource)
-	{
-		return getWOOContentForFile(getCGFile(),contentSource);
+	protected String getWOOContent(ContentSource contentSource) {
+		return getWOOContentForFile(getCGFile(), contentSource);
 	}
 
-	protected String getWOOContentForFile (CGFile aFile, ContentSource contentSource)
-	{
-		if ((aFile != null)
-				&& (aFile.getResource() != null)
-				&& (aFile.getResource().getGeneratedResourceData() != null)
+	protected String getWOOContentForFile(CGFile aFile, ContentSource contentSource) {
+		if ((aFile != null) && (aFile.getResource() != null) && (aFile.getResource().getGeneratedResourceData() != null)
 				&& (aFile.getResource().getGeneratedResourceData() instanceof WOFile)) {
-			return ((WOFile)aFile.getResource().getGeneratedResourceData()).getWOOFile().getContent(contentSource);
+			return ((WOFile) aFile.getResource().getGeneratedResourceData()).getWOOFile().getContent(contentSource);
 		}
 		return null;
 	}
 
-	protected class GenericCodePanel extends JPanel implements CodeDisplayerComponent
-	{
+	protected class GenericCodePanel extends JPanel implements CodeDisplayerComponent {
 
 		private ContentSource contentSource;
 		private DisplayContext displayContext;
-		
+
 		public GenericCodePanel(ContentSource contentSource, String info) {
 			super();
 			this.contentSource = contentSource;
@@ -322,13 +282,13 @@ public class CodeDisplayer {
 		@Override
 		public void update() {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void setEditable(boolean isEditable) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
@@ -340,7 +300,7 @@ public class CodeDisplayer {
 		@Override
 		public void setEditedContent(CGFile file) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
@@ -351,7 +311,7 @@ public class CodeDisplayer {
 		@Override
 		public void addToFocusListener(FocusListener aFocusListener) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
@@ -363,36 +323,34 @@ public class CodeDisplayer {
 		public void setDisplayContext(DisplayContext context) {
 			displayContext = context;
 		}
-		
+
 	}
-	protected class WOComponentCodePanel extends JTabbedPane implements CodeDisplayerComponent
-	{
+
+	protected class WOComponentCodePanel extends JTabbedPane implements CodeDisplayerComponent {
 		GenericCodeDisplayer htmlDisplayer;
 		GenericCodeDisplayer wodDisplayer;
 		GenericCodeDisplayer wooDisplayer;
 
 		private ContentSource contentSource;
-		
+
 		private static final String HTML = "html";
 		private static final String WOD = "wod";
 		private static final String WOO = "woo";
-		
-		protected WOComponentCodePanel (ContentSource contentSource) 
-		{
+
+		protected WOComponentCodePanel(ContentSource contentSource) {
 			super();
 			this.contentSource = contentSource;
-			htmlDisplayer = new GenericCodeDisplayer(getHTMLContent(contentSource),TokenMarkerStyle.HTML);
-			wodDisplayer = new GenericCodeDisplayer(getWODContent(contentSource),TokenMarkerStyle.WOD);
-			wooDisplayer = new GenericCodeDisplayer(getWOOContent(contentSource),TokenMarkerStyle.WOD);
-			add(".html",htmlDisplayer);
-			add(".wod",wodDisplayer);
-			add(".woo",wooDisplayer);
-			
+			htmlDisplayer = new GenericCodeDisplayer(getHTMLContent(contentSource), TokenMarkerStyle.HTML);
+			wodDisplayer = new GenericCodeDisplayer(getWODContent(contentSource), TokenMarkerStyle.WOD);
+			wooDisplayer = new GenericCodeDisplayer(getWOOContent(contentSource), TokenMarkerStyle.WOD);
+			add(".html", htmlDisplayer);
+			add(".wod", wodDisplayer);
+			add(".woo", wooDisplayer);
+
 		}
 
 		@Override
-		public DisplayContext getDisplayContext()
-		{
+		public DisplayContext getDisplayContext() {
 			DisplayContext context = null;
 			if (getSelectedComponent() == htmlDisplayer) {
 				context = htmlDisplayer.getDisplayContext();
@@ -408,10 +366,9 @@ public class CodeDisplayer {
 			}
 			return context;
 		}
-		
+
 		@Override
-		public void setDisplayContext(DisplayContext context)
-		{
+		public void setDisplayContext(DisplayContext context) {
 			if (context.getContent().equals(HTML)) {
 				setSelectedComponent(htmlDisplayer);
 				htmlDisplayer.applyDisplayContext(context);
@@ -426,66 +383,57 @@ public class CodeDisplayer {
 			}
 		}
 
-
 		@Override
-		public void update() 
-		{
+		public void update() {
 			htmlDisplayer.setText(getHTMLContent(contentSource));
 			wodDisplayer.setText(getWODContent(contentSource));
 			wooDisplayer.setText(getWOOContent(contentSource));
 		}
 
 		@Override
-		public void setEditable(boolean isEditable)
-		{
+		public void setEditable(boolean isEditable) {
 			htmlDisplayer.setEditable(isEditable);
 			wodDisplayer.setEditable(isEditable);
 			wooDisplayer.setEditable(isEditable);
 		}
 
 		@Override
-		public String getEditedContentForKey(String contentKey) 
-		{
-			if(contentKey == null) {
+		public String getEditedContentForKey(String contentKey) {
+			if (contentKey == null) {
 				return null;
 			}
-			
-			try
-			{
+
+			try {
 				COMPONENT_CODE_TYPE codeType = COMPONENT_CODE_TYPE.valueOf(contentKey);
-				switch(codeType)
-				{
-					case HTML:
-						return htmlDisplayer.getText();
-					case WOD:
-						return wodDisplayer.getText();
-					case WOO:
-						return wooDisplayer.getText();
+				switch (codeType) {
+				case HTML:
+					return htmlDisplayer.getText();
+				case WOD:
+					return wodDisplayer.getText();
+				case WOO:
+					return wooDisplayer.getText();
 				}
+			} catch (IllegalArgumentException e) {
 			}
-			catch(IllegalArgumentException e){}
-			
+
 			return null;
 		}
 
 		@Override
-		public void setEditedContent(CGFile file) 
-		{
-			htmlDisplayer.setTextKeepDisplayContext(getHTMLContentForFile(file,contentSource));
-			wodDisplayer.setTextKeepDisplayContext(getWODContentForFile(file,contentSource));
-			wooDisplayer.setTextKeepDisplayContext(getWOOContentForFile(file,contentSource));
+		public void setEditedContent(CGFile file) {
+			htmlDisplayer.setTextKeepDisplayContext(getHTMLContentForFile(file, contentSource));
+			wodDisplayer.setTextKeepDisplayContext(getWODContentForFile(file, contentSource));
+			wooDisplayer.setTextKeepDisplayContext(getWOOContentForFile(file, contentSource));
 		}
 
 		@Override
-		public void setContentSource(ContentSource aContentSource)
-		{
+		public void setContentSource(ContentSource aContentSource) {
 			contentSource = aContentSource;
 			update();
 		}
 
 		@Override
-		public void addToFocusListener(FocusListener aFocusListener) 
-		{
+		public void addToFocusListener(FocusListener aFocusListener) {
 			htmlDisplayer.addFocusListener(aFocusListener);
 			wodDisplayer.addFocusListener(aFocusListener);
 			wooDisplayer.addFocusListener(aFocusListener);
@@ -497,10 +445,9 @@ public class CodeDisplayer {
 		return _contentSource;
 	}
 
-	public void setContentSource(ContentSource aContentSource) 
-	{
+	public void setContentSource(ContentSource aContentSource) {
 		ContentSource old = _contentSource;
-		
+
 		if (!old.equals(aContentSource)) {
 			_contentSource = aContentSource;
 			if (_component != null) {
@@ -509,9 +456,8 @@ public class CodeDisplayer {
 		}
 	}
 
-	public void addToFocusListener (FocusListener aFocusListener)
-	{
-		if(_component!=null) {
+	public void addToFocusListener(FocusListener aFocusListener) {
+		if (_component != null) {
 			_component.addToFocusListener(aFocusListener);
 		}
 	}

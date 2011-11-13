@@ -24,18 +24,15 @@ package org.openflexo.foundation.exec;
  */
 public class TestExecutionModelProcessor {
 
-	public Object getProcessInstance()
-	{
+	public Object getProcessInstance() {
 		return null;
 	}
 
-	public Object getActivityTask()
-	{
+	public Object getActivityTask() {
 		return null;
 	}
 
-	public Object getOperationTask()
-	{
+	public Object getOperationTask() {
 		return null;
 	}
 
@@ -44,7 +41,7 @@ public class TestExecutionModelProcessor {
 	}
 
 	public void createActivityTask(int i, Object processInstance) {
-		// TODO Auto-generated method stub	
+		// TODO Auto-generated method stub
 	}
 
 	public void deleteActivityTask(int i, Object processInstance) {
@@ -62,7 +59,6 @@ public class TestExecutionModelProcessor {
 	public void destroyRemainingTokensForOperation(Object operationTask) {
 		// TODO Auto-generated method stub
 	}
-
 
 	public void storeTokenOnPrecondition(int i, Object processInstance) {
 		// TODO Auto-generated method stub
@@ -86,6 +82,5 @@ public class TestExecutionModelProcessor {
 	public void storeTokenOnOperator(int i, int j, Object processInstance) {
 		// TODO Auto-generated method stub
 	}
-
 
 }

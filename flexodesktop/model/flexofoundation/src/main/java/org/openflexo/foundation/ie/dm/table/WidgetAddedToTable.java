@@ -25,30 +25,25 @@ import org.openflexo.foundation.ie.widget.IEWidget;
 /**
  * @author sguerin
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
+ *         TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
  */
-public class WidgetAddedToTable extends IEDataModification
-{
+public class WidgetAddedToTable extends IEDataModification {
 
-    private int _row;
+	private int _row;
 
-    private int _col;
+	private int _col;
 
-    public WidgetAddedToTable(IEWidget widget, int row, int col)
-    {
-        super(null, widget);
-        _row = row;
-        _col = col;
-    }
+	public WidgetAddedToTable(IEWidget widget, int row, int col) {
+		super(null, widget);
+		_row = row;
+		_col = col;
+	}
 
-    public int getRow()
-    {
-        return _row;
-    }
+	public int getRow() {
+		return _row;
+	}
 
-    public int getCol()
-    {
-        return _col;
-    }
+	public int getCol() {
+		return _col;
+	}
 }

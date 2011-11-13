@@ -32,67 +32,54 @@ import org.openflexo.localization.FlexoLocalization;
  * @author sguerin
  * 
  */
-public abstract class BrowserFilter
-{
+public abstract class BrowserFilter {
 
-    private static final Logger logger = Logger.getLogger(BrowserFilter.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(BrowserFilter.class.getPackage().getName());
 
-    public enum BrowserFilterStatus
-    {
-    	HIDE,
-    	SHOW,
-    	OPTIONAL_INITIALLY_HIDDEN,
-    	OPTIONAL_INITIALLY_SHOWN;
-    }
-    
-    private BrowserFilterStatus status = BrowserFilterStatus.SHOW;
+	public enum BrowserFilterStatus {
+		HIDE, SHOW, OPTIONAL_INITIALLY_HIDDEN, OPTIONAL_INITIALLY_SHOWN;
+	}
 
-    private String name;
+	private BrowserFilterStatus status = BrowserFilterStatus.SHOW;
 
-    private Icon icon;
+	private String name;
 
-    protected BrowserFilter(String n, Icon i)
-    {
-        super();
-        this.name = n;
-        this.icon = i;
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("Setting icon " + i + " for " + name);
-    }
+	private Icon icon;
 
-    public Icon getIcon()
-    {
-        return icon;
-    }
+	protected BrowserFilter(String n, Icon i) {
+		super();
+		this.name = n;
+		this.icon = i;
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("Setting icon " + i + " for " + name);
+	}
 
-    public void setIcon(Icon i)
-    {
-        this.icon = i;
-    }
+	public Icon getIcon() {
+		return icon;
+	}
 
-    public String getName()
-    {
-        return name;
-    }
+	public void setIcon(Icon i) {
+		this.icon = i;
+	}
 
-    public void setName(String n)
-    {
-        this.name = n;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getLocalizedName()
-    {
-        return FlexoLocalization.localizedForKey(getName());
-    }
-    
-    public BrowserFilterStatus getStatus()
-    {
-        return status;
-    }
+	public void setName(String n) {
+		this.name = n;
+	}
 
-    public void setStatus(BrowserFilterStatus s)
-    {
-        this.status = s;
-    }
+	public String getLocalizedName() {
+		return FlexoLocalization.localizedForKey(getName());
+	}
+
+	public BrowserFilterStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(BrowserFilterStatus s) {
+		this.status = s;
+	}
 
 }

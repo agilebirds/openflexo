@@ -25,54 +25,49 @@ import org.apache.velocity.VelocityContext;
 import org.openflexo.foundation.rm.cg.JavaFileResource;
 import org.openflexo.generator.ProjectGenerator;
 
-
 /**
  * @author bmangez
  * 
- * To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
+ *         To change the template for this generated type comment go to Window - Preferences - Java - Code Generation - Code and Comments
  */
-public class DirectActionGenerator extends JavaClassGenerator
-{
+public class DirectActionGenerator extends JavaClassGenerator {
 
-    private static final String TEMPLATE_NAME = "DA.java.vm";
+	private static final String TEMPLATE_NAME = "DA.java.vm";
 	private static final Logger logger = Logger.getLogger(DirectActionGenerator.class.getPackage().getName());
 
-    public DirectActionGenerator(ProjectGenerator projectGenerator)
-    {
-        super(projectGenerator,projectGenerator.getPrefix() + "DA","");
-    }
+	public DirectActionGenerator(ProjectGenerator projectGenerator) {
+		super(projectGenerator, projectGenerator.getPrefix() + "DA", "");
+	}
 
-    @Override
-	public Logger getGeneratorLogger()
-    {
-        return logger;
-    }
-    
-    @Override
-    protected VelocityContext defaultContext() {
-        VelocityContext vc = super.defaultContext();
-        vc.put("prefix", getPrefix());
-        vc.put("project", getProject());
-        if (getProject().getFlexoNavigationMenu().getUserProfilePageName() != null) {
-            vc.put("profile", getProject().getFlexoNavigationMenu().getUserProfileOperation().getComponentDefinition().getName());
-        }
-        return vc;
-    }
+	@Override
+	public Logger getGeneratorLogger() {
+		return logger;
+	}
 
-    /**
-     * Overrides rebuildDependanciesForResource
-     * @see org.openflexo.generator.utils.JavaClassGenerator#rebuildDependanciesForResource(JavaFileResource)
-     */
-    @Override
-    public void rebuildDependanciesForResource(JavaFileResource resource)
-    {
-        resource.addToDependantResources(getProject().getFlexoComponentLibraryResource());
-    }
-    
-    @Override
-    public String getTemplateName() {
-    	return TEMPLATE_NAME;
-    }
+	@Override
+	protected VelocityContext defaultContext() {
+		VelocityContext vc = super.defaultContext();
+		vc.put("prefix", getPrefix());
+		vc.put("project", getProject());
+		if (getProject().getFlexoNavigationMenu().getUserProfilePageName() != null) {
+			vc.put("profile", getProject().getFlexoNavigationMenu().getUserProfileOperation().getComponentDefinition().getName());
+		}
+		return vc;
+	}
+
+	/**
+	 * Overrides rebuildDependanciesForResource
+	 * 
+	 * @see org.openflexo.generator.utils.JavaClassGenerator#rebuildDependanciesForResource(JavaFileResource)
+	 */
+	@Override
+	public void rebuildDependanciesForResource(JavaFileResource resource) {
+		resource.addToDependantResources(getProject().getFlexoComponentLibraryResource());
+	}
+
+	@Override
+	public String getTemplateName() {
+		return TEMPLATE_NAME;
+	}
 
 }

@@ -23,33 +23,29 @@ import java.io.File;
 
 import org.openflexo.foundation.FlexoException;
 
-
 public class InvalidFileException extends FlexoException {
 
-    private File invalidFile;
-    
-    private String fileName;
-    
-    public InvalidFileException(File aFile)
-    {
-        super();
-        invalidFile = aFile;
-        if (invalidFile!=null)
-            fileName = invalidFile.getAbsolutePath();
-    }
- 
-    public InvalidFileException(String fileName) {
-    }
-    
-    @Override
-	public String getMessage()
-    {
-        return "Invalid file: "+invalidFile;
-    }
+	private File invalidFile;
 
-    public String getFileName()
-    {
-        return fileName;
-    }
-    
- }
+	private String fileName;
+
+	public InvalidFileException(File aFile) {
+		super();
+		invalidFile = aFile;
+		if (invalidFile != null)
+			fileName = invalidFile.getAbsolutePath();
+	}
+
+	public InvalidFileException(String fileName) {
+	}
+
+	@Override
+	public String getMessage() {
+		return "Invalid file: " + invalidFile;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+}

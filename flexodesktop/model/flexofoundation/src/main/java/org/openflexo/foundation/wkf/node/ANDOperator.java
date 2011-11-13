@@ -26,26 +26,23 @@ import org.openflexo.localization.FlexoLocalization;
 
 public class ANDOperator extends CommonOutputOperatorNode {
 
-    /**
-     * Constructor used during deserialization
-     */
-    public ANDOperator(FlexoProcessBuilder builder)
-    {
-        this(builder.process);
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor used during deserialization
+	 */
+	public ANDOperator(FlexoProcessBuilder builder) {
+		this(builder.process);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Default constructor
-     */
-    public ANDOperator(FlexoProcess process)
-    {
-        super(process);
-    }
+	/**
+	 * Default constructor
+	 */
+	public ANDOperator(FlexoProcess process) {
+		super(process);
+	}
 
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return Inspectors.WKF.OPERATOR_AND_INSPECTOR;
 	}
 

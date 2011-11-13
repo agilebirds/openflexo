@@ -33,136 +33,116 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 
+public class RefuseVersion extends FlexoAction {
 
-public class RefuseVersion extends FlexoAction 
-{
+	private static final Logger logger = Logger.getLogger(RefuseVersion.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(RefuseVersion.class.getPackage().getName());
+	public static FlexoActionType actionType = new FlexoActionType("refuse_version", FlexoActionType.defaultGroup,
+			FlexoActionType.NORMAL_ACTION_TYPE) {
 
-    public static FlexoActionType actionType = new FlexoActionType ("refuse_version",FlexoActionType.defaultGroup,FlexoActionType.NORMAL_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new RefuseVersion(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) 
-        {
-            return new RefuseVersion(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return ((object != null) && (object instanceof DocItem) && (getPendingActions((DocItem) object).size() > 0));
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) 
-        {
-            return ((object != null) 
-                    && (object instanceof DocItem)
-                    && (getPendingActions((DocItem)object).size() > 0));
-        }
-                        
-    };
-    
-    protected static Vector getPendingActions(DocItem item)
-    {
-        Vector returned = new Vector();
-        for (Enumeration en=item.getDocResourceCenter().getLanguages().elements(); en.hasMoreElements();) {
-            Language lang = (Language)en.nextElement();
-            DocItemAction dia = item.getLastPendingActionForLanguage(lang);
-            if (dia != null) {
-                returned.add(dia);
-            }
-        }
-        return returned;
-    }
-    
-    private DocItem _docItem;
-    private DocItemVersion _version;
-    private Author _author;
-    private DocItemAction _newAction;
-    private String _note;
-    private Vector<DocItemVersion> _versionsThatCanBeApproved;
-      
-    public Vector<DocItemVersion> getVersionsThatCanBeApproved()
-    {
-        if (_versionsThatCanBeApproved == null) {
-            _versionsThatCanBeApproved = new Vector<DocItemVersion>();
-            for (Enumeration en=getPendingActions(getDocItem()).elements(); en.hasMoreElements();) {
-                DocItemAction next = (DocItemAction)en.nextElement();
-                _versionsThatCanBeApproved.add(next.getVersion());
-            };
-        }
-        return _versionsThatCanBeApproved;
-    }
-    
-    RefuseVersion (FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-     @Override
-	protected void doAction(Object context) 
-     {
-         if (getVersion() != null) {
-             logger.info ("RefuseVersion");
-              _newAction = getDocItem().refuseVersion(getVersion(),getAuthor(),getDocItem().getDocResourceCenter());
-             _newAction.setNote(getNote());
-         }
-     }
+	protected static Vector getPendingActions(DocItem item) {
+		Vector returned = new Vector();
+		for (Enumeration en = item.getDocResourceCenter().getLanguages().elements(); en.hasMoreElements();) {
+			Language lang = (Language) en.nextElement();
+			DocItemAction dia = item.getLastPendingActionForLanguage(lang);
+			if (dia != null) {
+				returned.add(dia);
+			}
+		}
+		return returned;
+	}
 
-   public DocItem getDocItem()
-   {
-       if (_docItem == null) {
-           if ((getFocusedObject() != null) && (getFocusedObject() instanceof DocItem)) {
-               _docItem = (DocItem)getFocusedObject();
-            }           
-       }
-       return _docItem;
-   }
-   
-   public void setDocItem(DocItem docItem)
-   {
-       _docItem = docItem;
-   }
+	private DocItem _docItem;
+	private DocItemVersion _version;
+	private Author _author;
+	private DocItemAction _newAction;
+	private String _note;
+	private Vector<DocItemVersion> _versionsThatCanBeApproved;
 
-   public Author getAuthor() 
-   {
-       return _author;
-   }
+	public Vector<DocItemVersion> getVersionsThatCanBeApproved() {
+		if (_versionsThatCanBeApproved == null) {
+			_versionsThatCanBeApproved = new Vector<DocItemVersion>();
+			for (Enumeration en = getPendingActions(getDocItem()).elements(); en.hasMoreElements();) {
+				DocItemAction next = (DocItemAction) en.nextElement();
+				_versionsThatCanBeApproved.add(next.getVersion());
+			}
+			;
+		}
+		return _versionsThatCanBeApproved;
+	}
 
-   public void setAuthor(Author author) 
-   {
-       _author = author;
-   }
+	RefuseVersion(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-   public DocItemAction getNewAction()
-   {
-       return _newAction;
-   }
+	@Override
+	protected void doAction(Object context) {
+		if (getVersion() != null) {
+			logger.info("RefuseVersion");
+			_newAction = getDocItem().refuseVersion(getVersion(), getAuthor(), getDocItem().getDocResourceCenter());
+			_newAction.setNote(getNote());
+		}
+	}
 
-   public DocItemVersion getVersion() 
-   {
-       return _version;
-   }
+	public DocItem getDocItem() {
+		if (_docItem == null) {
+			if ((getFocusedObject() != null) && (getFocusedObject() instanceof DocItem)) {
+				_docItem = (DocItem) getFocusedObject();
+			}
+		}
+		return _docItem;
+	}
 
-   public void setVersion(DocItemVersion version)
-   {
-       _version = version;
-   }
+	public void setDocItem(DocItem docItem) {
+		_docItem = docItem;
+	}
 
-   public String getNote() 
-   {
-       return _note;
-   }
+	public Author getAuthor() {
+		return _author;
+	}
 
-   public void setNote(String note) 
-   {
-       _note = note;
-   }
+	public void setAuthor(Author author) {
+		_author = author;
+	}
 
+	public DocItemAction getNewAction() {
+		return _newAction;
+	}
 
+	public DocItemVersion getVersion() {
+		return _version;
+	}
+
+	public void setVersion(DocItemVersion version) {
+		_version = version;
+	}
+
+	public String getNote() {
+		return _note;
+	}
+
+	public void setNote(String note) {
+		_note = note;
+	}
 
 }

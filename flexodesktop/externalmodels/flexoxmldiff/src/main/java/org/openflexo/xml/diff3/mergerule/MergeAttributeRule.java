@@ -26,13 +26,14 @@ public abstract class MergeAttributeRule {
 
 	protected UnresolvedAttributesConflict _conflict;
 	protected MergeAttributeAction _action;
-	public MergeAttributeRule(UnresolvedAttributesConflict conflict){
+
+	public MergeAttributeRule(UnresolvedAttributesConflict conflict) {
 		super();
 		_conflict = conflict;
 	}
-	
+
 	public abstract MergeAttributeAction getAction();
-	
+
 	public abstract boolean canBeApplyed();
-	
+
 }

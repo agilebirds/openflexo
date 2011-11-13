@@ -24,36 +24,31 @@ import java.util.Vector;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 
-
 public class DefaultFlexoActionSource implements FlexoActionSource {
 
-    private FlexoModelObject _focusedObject;
-    private Vector _globalSelection;
-    private FlexoEditor _editor;
-    
-    public DefaultFlexoActionSource(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) 
-    {
-        super();
-        _focusedObject = focusedObject;
-        _globalSelection = globalSelection;
-        _editor = editor;
-    }
-    
-    @Override
-	public FlexoModelObject getFocusedObject()
-    {
-        return _focusedObject;
-    }
+	private FlexoModelObject _focusedObject;
+	private Vector _globalSelection;
+	private FlexoEditor _editor;
 
-    @Override
-	public Vector getGlobalSelection() 
-    {
-        return _globalSelection;
-    }
+	public DefaultFlexoActionSource(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super();
+		_focusedObject = focusedObject;
+		_globalSelection = globalSelection;
+		_editor = editor;
+	}
 
 	@Override
-	public FlexoEditor getEditor() 
-	{
+	public FlexoModelObject getFocusedObject() {
+		return _focusedObject;
+	}
+
+	@Override
+	public Vector getGlobalSelection() {
+		return _globalSelection;
+	}
+
+	@Override
+	public FlexoEditor getEditor() {
 		return _editor;
 	}
 

@@ -33,61 +33,58 @@ import org.openflexo.generator.rm.UtilComponentWOFileResource;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 
+public class LocalizedStringGenerator extends MetaWOGenerator {
+	private static final Logger logger = FlexoLogger.getLogger(HelpPopupGenerator.class.getPackage().getName());
 
-public class LocalizedStringGenerator extends MetaWOGenerator
-{
-    private static final Logger logger = FlexoLogger.getLogger(HelpPopupGenerator.class.getPackage().getName());
-
-    public LocalizedStringGenerator(ProjectGenerator projectGenerator)
-    {
-        super(projectGenerator,null,projectGenerator.getPrefix() + "LocalizedString","");
-    }
+	public LocalizedStringGenerator(ProjectGenerator projectGenerator) {
+		super(projectGenerator, null, projectGenerator.getPrefix() + "LocalizedString", "");
+	}
 
 	@Override
-	public Logger getGeneratorLogger()
-	{
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
-   @Override
-public synchronized void generate(boolean forceRegenerate)
-    {
-	   	if (!forceRegenerate && !needsGeneration()) return;
-    	try {
-    		refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating")+ " "+getIdentifier(),false);
-    		startGeneration();
-    		VelocityContext velocityContext = defaultContext();
-    		String javaCode = merge("LocalizedString.java.vm", velocityContext);
-    		String htmlCode = merge("LocalizedString.html.vm", velocityContext);
-    		String wodCode = merge("LocalizedString.wod.vm", velocityContext);
-    		String apiCode = merge("LocalizedString.api.vm", velocityContext);
-    		generatedCode = new GeneratedComponent(getComponentClassName(), javaCode, apiCode, htmlCode, wodCode, GeneratorUtils.defaultWOO());
-            
-    		stopGeneration();
-             
-    	} catch (GenerationException e) {
-    		setGenerationException(e);
+	@Override
+	public synchronized void generate(boolean forceRegenerate) {
+		if (!forceRegenerate && !needsGeneration())
+			return;
+		try {
+			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + getIdentifier(), false);
+			startGeneration();
+			VelocityContext velocityContext = defaultContext();
+			String javaCode = merge("LocalizedString.java.vm", velocityContext);
+			String htmlCode = merge("LocalizedString.html.vm", velocityContext);
+			String wodCode = merge("LocalizedString.wod.vm", velocityContext);
+			String apiCode = merge("LocalizedString.api.vm", velocityContext);
+			generatedCode = new GeneratedComponent(getComponentClassName(), javaCode, apiCode, htmlCode, wodCode,
+					GeneratorUtils.defaultWOO());
+
+			stopGeneration();
+
+		} catch (GenerationException e) {
+			setGenerationException(e);
 		} catch (Exception e) {
-			setGenerationException(new UnexpectedExceptionOccuredException(e,getProjectGenerator()));
-    	}
-    }
+			setGenerationException(new UnexpectedExceptionOccuredException(e, getProjectGenerator()));
+		}
+	}
 
 	@Override
 	public void rebuildDependanciesForResource(UtilComponentJavaFileResource java) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void rebuildDependanciesForResource(UtilComponentWOFileResource wo) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void rebuildDependanciesForResource(UtilComponentAPIFileResource api) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

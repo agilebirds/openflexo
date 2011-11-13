@@ -23,19 +23,17 @@ import org.openflexo.foundation.ie.dm.IEDataModification;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class MenuItemAdded extends IEDataModification
-{
+public class MenuItemAdded extends IEDataModification {
 
-    /**
-     * @param propertyName
-     * @param oldValue
-     * @param newValue
-     */
-    public MenuItemAdded(Object newValue)
-    {
-        super("MenuItemAdded", null, newValue);
-    }
+	/**
+	 * @param propertyName
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public MenuItemAdded(Object newValue) {
+		super("MenuItemAdded", null, newValue);
+	}
 
 }

@@ -40,7 +40,6 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.foundation.viewpoint.action.AddPaletteElement;
 
-
 public class PalettePalette extends DrawingPalette {
 
 	private static final Logger logger = Logger.getLogger(PalettePalette.class.getPackage().getName());
@@ -51,43 +50,39 @@ public class PalettePalette extends DrawingPalette {
 	public static final Font LABEL_FONT = new Font("SansSerif", Font.PLAIN, 11);
 
 	private FlexoEditor _editor;
-	
-	public PalettePalette(FlexoEditor editor)
-	{
-		super(260,400,"default");
+
+	public PalettePalette(FlexoEditor editor) {
+		super(260, 400, "default");
 		_editor = editor;
-		int px = 0; 
+		int px = 0;
 		int py = 0;
 		for (ShapeType st : ShapeType.values()) {
-			addElement(makeShapeElement(st,px,py));
-			px = px+1;
-			if (px==3) {
-				px=0;
+			addElement(makeShapeElement(st, px, py));
+			px = px + 1;
+			if (px == 3) {
+				px = 0;
 				py++;
 			}
 		}
-		
-		addElement(makeSingleLabel(0,3));
-		addElement(makeMultilineLabel(1,3));
-		addElement(makeBoundedMultilineLabel(2,3));
-		
+
+		addElement(makeSingleLabel(0, 3));
+		addElement(makeMultilineLabel(1, 3));
+		addElement(makeBoundedMultilineLabel(2, 3));
+
 		makePalettePanel();
 		getPaletteView().revalidate();
 	}
-	
-	private PaletteElement makeShapeElement(ShapeType st, int px, int py)
-	{
-		final PaletteElementGraphicalRepresentation gr 
-		= new PaletteElementGraphicalRepresentation(st,null,getPaletteDrawing());
+
+	private PaletteElement makeShapeElement(ShapeType st, int px, int py) {
+		final PaletteElementGraphicalRepresentation gr = new PaletteElementGraphicalRepresentation(st, null, getPaletteDrawing());
 		if (gr.getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
-			gr.setX(px*GRID_WIDTH+15);
-			gr.setY(py*GRID_HEIGHT+10);
+			gr.setX(px * GRID_WIDTH + 15);
+			gr.setY(py * GRID_HEIGHT + 10);
 			gr.setWidth(50);
 			gr.setHeight(50);
-		}
-		else {
-			gr.setX(px*GRID_WIDTH+10);
-			gr.setY(py*GRID_HEIGHT+10);
+		} else {
+			gr.setX(px * GRID_WIDTH + 10);
+			gr.setY(py * GRID_HEIGHT + 10);
 			gr.setWidth(60);
 			gr.setHeight(50);
 		}
@@ -98,28 +93,26 @@ public class PalettePalette extends DrawingPalette {
 		gr.setBackground(BackgroundStyle.makeColoredBackground(Color.RED));*/
 		gr.setIsVisible(true);
 		gr.setIsFloatingLabel(false);
-		
-		return makePaletteElement(gr,true,true,true,true);
-		
+
+		return makePaletteElement(gr, true, true, true, true);
+
 	}
-	
+
 	@Override
-	public CalcPaletteController getController()
-	{
-		return (CalcPaletteController)super.getController();
+	public CalcPaletteController getController() {
+		return (CalcPaletteController) super.getController();
 	}
-	
-	private PaletteElement makeSingleLabel(int px, int py)
-	{
-		final PaletteElementGraphicalRepresentation gr 
-		= new PaletteElementGraphicalRepresentation(ShapeType.RECTANGLE,null,getPaletteDrawing());
-		gr.setX(px*GRID_WIDTH+10);
-		gr.setY(py*GRID_HEIGHT+15);
+
+	private PaletteElement makeSingleLabel(int px, int py) {
+		final PaletteElementGraphicalRepresentation gr = new PaletteElementGraphicalRepresentation(ShapeType.RECTANGLE, null,
+				getPaletteDrawing());
+		gr.setX(px * GRID_WIDTH + 10);
+		gr.setY(py * GRID_HEIGHT + 15);
 		gr.setWidth(60);
 		gr.setHeight(20);
 		gr.setAdjustMinimalWidthToLabelWidth(true);
 		gr.setAdjustMinimalHeightToLabelHeight(true);
-			
+
 		gr.setTextStyle(TextStyle.makeTextStyle(Color.BLACK, LABEL_FONT));
 		gr.setText("Label");
 		gr.setIsFloatingLabel(false);
@@ -128,20 +121,19 @@ public class PalettePalette extends DrawingPalette {
 		gr.setShadowStyle(ShadowStyle.makeNone());
 		gr.setIsVisible(true);
 
-		return makePaletteElement(gr,false,false,false,true);
+		return makePaletteElement(gr, false, false, false, true);
 	}
-	
-	private PaletteElement makeMultilineLabel(int px, int py)
-	{
-		final PaletteElementGraphicalRepresentation gr 
-		= new PaletteElementGraphicalRepresentation(ShapeType.RECTANGLE,null,getPaletteDrawing());
-		gr.setX(px*GRID_WIDTH+10);
-		gr.setY(py*GRID_HEIGHT+10);
+
+	private PaletteElement makeMultilineLabel(int px, int py) {
+		final PaletteElementGraphicalRepresentation gr = new PaletteElementGraphicalRepresentation(ShapeType.RECTANGLE, null,
+				getPaletteDrawing());
+		gr.setX(px * GRID_WIDTH + 10);
+		gr.setY(py * GRID_HEIGHT + 10);
 		gr.setWidth(60);
 		gr.setHeight(20);
 		gr.setAdjustMinimalWidthToLabelWidth(true);
 		gr.setAdjustMinimalHeightToLabelHeight(true);
-			
+
 		gr.setTextStyle(TextStyle.makeTextStyle(Color.BLACK, LABEL_FONT));
 		gr.setIsMultilineAllowed(true);
 		gr.setText("Multiple\nlines label");
@@ -151,20 +143,19 @@ public class PalettePalette extends DrawingPalette {
 		gr.setShadowStyle(ShadowStyle.makeNone());
 		gr.setIsVisible(true);
 
-		return makePaletteElement(gr,false,false,false,true);
+		return makePaletteElement(gr, false, false, false, true);
 	}
-	
-	private PaletteElement makeBoundedMultilineLabel(int px, int py)
-	{
-		final PaletteElementGraphicalRepresentation gr 
-		= new PaletteElementGraphicalRepresentation(ShapeType.RECTANGLE,null,getPaletteDrawing());
-		gr.setX(px*GRID_WIDTH+10);
-		gr.setY(py*GRID_HEIGHT+10);
+
+	private PaletteElement makeBoundedMultilineLabel(int px, int py) {
+		final PaletteElementGraphicalRepresentation gr = new PaletteElementGraphicalRepresentation(ShapeType.RECTANGLE, null,
+				getPaletteDrawing());
+		gr.setX(px * GRID_WIDTH + 10);
+		gr.setY(py * GRID_HEIGHT + 10);
 		gr.setWidth(60);
 		gr.setHeight(20);
 		gr.setAdjustMinimalWidthToLabelWidth(true);
 		gr.setAdjustMinimalHeightToLabelHeight(true);
-			
+
 		gr.setTextStyle(TextStyle.makeTextStyle(Color.BLACK, LABEL_FONT));
 		gr.setIsMultilineAllowed(true);
 		gr.setText("Multiple\nlines label");
@@ -173,64 +164,55 @@ public class PalettePalette extends DrawingPalette {
 		gr.setShadowStyle(ShadowStyle.makeNone());
 		gr.setIsVisible(true);
 
-		return makePaletteElement(gr,false,false,false,true);
+		return makePaletteElement(gr, false, false, false, true);
 	}
-	
-	private PaletteElement makePaletteElement(
-			final PaletteElementGraphicalRepresentation gr,
-			final boolean applyForegroundStyle,
-			final boolean applyBackgroundStyle,
-			final boolean applyShadowStyle,
-			final boolean applyTextStyle) 
-	{
+
+	private PaletteElement makePaletteElement(final PaletteElementGraphicalRepresentation gr, final boolean applyForegroundStyle,
+			final boolean applyBackgroundStyle, final boolean applyShadowStyle, final boolean applyTextStyle) {
 		PaletteElement returned = new PaletteElement() {
 			@Override
-			public boolean acceptDragging(GraphicalRepresentation target)
-			{
+			public boolean acceptDragging(GraphicalRepresentation target) {
 				return target.getDrawable() instanceof ViewPointPalette;
 			}
+
 			@Override
-			public boolean elementDragged(GraphicalRepresentation containerGR, FGEPoint dropLocation)
-			{
+			public boolean elementDragged(GraphicalRepresentation containerGR, FGEPoint dropLocation) {
 				if (containerGR.getDrawable() instanceof ViewPointPalette) {
-					
-					ViewPointPalette container = (ViewPointPalette)containerGR.getDrawable();
-					
+
+					ViewPointPalette container = (ViewPointPalette) containerGR.getDrawable();
+
 					ShapeGraphicalRepresentation<?> shapeGR = getGraphicalRepresentation().clone();
 					shapeGR.setIsSelectable(true);
 					shapeGR.setIsFocusable(true);
 					shapeGR.setIsReadOnly(false);
 					shapeGR.setLocationConstraints(LocationConstraints.FREELY_MOVABLE);
 					shapeGR.setLocation(dropLocation);
-					shapeGR.setLayer(containerGR.getLayer()+1);
+					shapeGR.setLayer(containerGR.getLayer() + 1);
 					shapeGR.setAllowToLeaveBounds(true);
-					
-					AddPaletteElement action = AddPaletteElement.actionType.makeNewAction(
-							container, null,  _editor);
+
+					AddPaletteElement action = AddPaletteElement.actionType.makeNewAction(container, null, _editor);
 					action.setGraphicalRepresentation(shapeGR);
-					
+
 					action.doAction();
-					
-					//container.addPaletteElement(shapeGR.getText(), shapeGR);
-					
+
+					// container.addPaletteElement(shapeGR.getText(), shapeGR);
+
 					return true;
 				}
-				
-				return false;				
+
+				return false;
 			}
-			
+
 			@Override
-			public PaletteElementGraphicalRepresentation getGraphicalRepresentation()
-			{
+			public PaletteElementGraphicalRepresentation getGraphicalRepresentation() {
 				return gr;
-			}		
-			
+			}
+
 			@Override
-			public DrawingPalette getPalette()
-			{
+			public DrawingPalette getPalette() {
 				return PalettePalette.this;
 			}
-			
+
 		};
 		gr.setDrawable(returned);
 		return returned;

@@ -21,45 +21,38 @@ package org.openflexo.letparser;
 
 public class BooleanValue extends Value {
 
-    private boolean _value;
-    
-    public BooleanValue (boolean value)
-    {
-        super();
-        _value = value;
-    }
-    
-    public boolean getBooleanValue() 
-    {
-        return _value;
-    }
-    
-    @Override
-	public String toString()
-    {
-        return getPrefix()+"Bool["+_value+"]";
-    }
+	private boolean _value;
 
-    @Override
-	public String getStringValue() 
-    {
-        return ""+_value;
-    }
-    
-    @Override
-	public String getSerializationValue()
-    {
-        return "$"+getStringValue();
-    }
+	public BooleanValue(boolean value) {
+		super();
+		_value = value;
+	}
 
+	public boolean getBooleanValue() {
+		return _value;
+	}
 
-    @Override
-	public boolean equals (Object obj)
-    {
-        if (obj instanceof BooleanValue) {
-            return (getBooleanValue() == ((BooleanValue)obj).getBooleanValue());
-        }
-        return super.equals(obj);
-    }
+	@Override
+	public String toString() {
+		return getPrefix() + "Bool[" + _value + "]";
+	}
+
+	@Override
+	public String getStringValue() {
+		return "" + _value;
+	}
+
+	@Override
+	public String getSerializationValue() {
+		return "$" + getStringValue();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof BooleanValue) {
+			return (getBooleanValue() == ((BooleanValue) obj).getBooleanValue());
+		}
+		return super.equals(obj);
+	}
 
 }

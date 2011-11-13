@@ -49,90 +49,89 @@ public class SplashWindow extends JDialog {
 		setUndecorated(true);
 		Dimension imageDim = new Dimension(IconLibrary.SPLASH_IMAGE.getIconWidth(), IconLibrary.SPLASH_IMAGE.getIconHeight());
 
-		//cree un label avec notre image
+		// cree un label avec notre image
 		splash = new JLabel(IconLibrary.SPLASH_IMAGE);
 		splash.setBorder(BorderFactory.createLineBorder(FlexoCst.UNDECORATED_DIALOG_BORDER_COLOR));
 
-		//ajoute le label au panel
+		// ajoute le label au panel
 		getContentPane().setLayout(null);
 		JLabel flexoLabel = new JLabel(IconLibrary.OPENFLEXO_TEXT_ICON, SwingConstants.RIGHT);
 		flexoLabel.setForeground(FlexoCst.WELCOME_FLEXO_COLOR);
 		flexoLabel.setBackground(Color.RED);
 		flexoLabel.setFont(new Font("SansSerif", Font.BOLD, 20));
 		getContentPane().add(flexoLabel);
-		flexoLabel.setBounds(319,142,231,59);
+		flexoLabel.setBounds(319, 142, 231, 59);
 
 		JLabel businessLabel = new JLabel(userType.getBusinessName2(), SwingConstants.RIGHT);
 		businessLabel.setForeground(FlexoCst.WELCOME_FLEXO_COLOR);
 		businessLabel.setFont(new Font("SansSerif", Font.ITALIC, 18));
 		getContentPane().add(businessLabel);
-		businessLabel.setBounds(260,195,280,15);
+		businessLabel.setBounds(260, 195, 280, 15);
 
-		JLabel versionLabel = new JLabel("Version " + FlexoCst.BUSINESS_APPLICATION_VERSION+ " (build " + FlexoCst.BUILD_ID+")", SwingConstants.RIGHT);
+		JLabel versionLabel = new JLabel("Version " + FlexoCst.BUSINESS_APPLICATION_VERSION + " (build " + FlexoCst.BUILD_ID + ")",
+				SwingConstants.RIGHT);
 		versionLabel.setForeground(Color.DARK_GRAY);
 		versionLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
 		getContentPane().add(versionLabel);
-		versionLabel.setBounds(260,215,280,15);
+		versionLabel.setBounds(260, 215, 280, 15);
 
 		JLabel urlLabel = new JLabel("<html><u>www.openflexo.com</u></html>", SwingConstants.RIGHT);
 		urlLabel.addMouseListener(new MouseAdapter() {
 
 			/**
 			 * Overrides mouseEntered
+			 * 
 			 * @see java.awt.event.MouseAdapter#mouseEntered(java.awt.event.MouseEvent)
 			 */
 			@Override
-			public void mouseEntered(MouseEvent e)
-			{
+			public void mouseEntered(MouseEvent e) {
 				setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			}
 
 			/**
 			 * Overrides mouseEntered
+			 * 
 			 * @see java.awt.event.MouseAdapter#mouseEntered(java.awt.event.MouseEvent)
 			 */
 			@Override
-			public void mouseExited(MouseEvent e)
-			{
+			public void mouseExited(MouseEvent e) {
 				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 			}
 
 			/**
 			 * Overrides mouseClicked
-			 *
+			 * 
 			 * @see java.awt.event.MouseAdapter#mouseClicked(java.awt.event.MouseEvent)
 			 */
 			@Override
-			public void mouseClicked(MouseEvent e)
-			{
+			public void mouseClicked(MouseEvent e) {
 				ToolBox.openURL("http://www.openflexo.com");
 			}
 		});
-		urlLabel.setForeground(new Color(180,150,200));
+		urlLabel.setForeground(new Color(180, 150, 200));
 		urlLabel.setFont(new Font("SansSerif", Font.PLAIN, 10));
 		getContentPane().add(urlLabel);
-		urlLabel.setBounds(290,263,280,12);
+		urlLabel.setBounds(290, 263, 280, 12);
 
 		JLabel copyrightLabel = new JLabel("(c) Copyright Agile Birds sprl, 2011, all rights reserved", SwingConstants.RIGHT);
 		copyrightLabel.setForeground(Color.DARK_GRAY);
 		copyrightLabel.setFont(new Font("SansSerif", Font.PLAIN, 9));
 		getContentPane().add(copyrightLabel);
-		copyrightLabel.setBounds(290,277,280,12);
+		copyrightLabel.setBounds(290, 277, 280, 12);
 
 		getContentPane().add(splash);
-		splash.setBounds(0,0,imageDim.width,imageDim.height);
+		splash.setBounds(0, 0, imageDim.width, imageDim.height);
 
 		setPreferredSize(imageDim);
 
 		pack();
 
-		//centre le splash screen
+		// centre le splash screen
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		Dimension labelSize = splash.getPreferredSize();
-		setLocation(screenSize.width / 2 - labelSize.width / 2,
-				screenSize.height / 2 - labelSize.height / 2);
+		setLocation(screenSize.width / 2 - labelSize.width / 2, screenSize.height / 2 - labelSize.height / 2);
 
-		//rend le splash screen invisible lorsque l'on clique dessus
+		// rend le splash screen invisible lorsque l'on clique dessus
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -141,10 +140,10 @@ public class SplashWindow extends JDialog {
 			}
 		});
 
-		//afin d'acceder à la valeur WaitTime
+		// afin d'acceder à la valeur WaitTime
 		final int pause = waitTime;
 
-		//thread pour fermer le splash screen
+		// thread pour fermer le splash screen
 		final Runnable closerRunner = new Runnable() {
 			@Override
 			public void run() {
@@ -153,13 +152,12 @@ public class SplashWindow extends JDialog {
 			}
 		};
 
-
 		Runnable waitRunner = new Runnable() {
 			@Override
 			public void run() {
 				try {
 					Thread.sleep(pause);
-					//lance le thread qui ferme le splash screen
+					// lance le thread qui ferme le splash screen
 					SwingUtilities.invokeAndWait(closerRunner);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -167,12 +165,12 @@ public class SplashWindow extends JDialog {
 			}
 		};
 
-		//affiche le splash screen
+		// affiche le splash screen
 		setVisible(true);
 
-		//lance le thread qui ferme le splash screen apres un certain temps
+		// lance le thread qui ferme le splash screen apres un certain temps
 		Thread splashThread = new Thread(waitRunner, "SplashThread");
-		//setAlwaysOnTop(true);
+		// setAlwaysOnTop(true);
 		splashThread.start();
 	}
 }

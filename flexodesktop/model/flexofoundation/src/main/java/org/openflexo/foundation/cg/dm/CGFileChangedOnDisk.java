@@ -21,11 +21,8 @@ package org.openflexo.foundation.cg.dm;
 
 import org.openflexo.foundation.cg.CGFile;
 
-
-public class CGFileChangedOnDisk extends CGDataModification
-{
-    public CGFileChangedOnDisk(CGFile file)
-    {
-        super(null,file);
-    }
+public class CGFileChangedOnDisk extends CGDataModification {
+	public CGFileChangedOnDisk(CGFile file) {
+		super(null, file);
+	}
 }

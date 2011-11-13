@@ -34,65 +34,57 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
 public class RegenerateAndOverrideInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	RegenerateAndOverrideInitializer(SGControllerActionInitializer actionInitializer)
-	{
-		super(RegenerateAndOverride.actionType,actionInitializer);
+	RegenerateAndOverrideInitializer(SGControllerActionInitializer actionInitializer) {
+		super(RegenerateAndOverride.actionType, actionInitializer);
 	}
 
 	@Override
-	protected SGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (SGControllerActionInitializer)super.getControllerActionInitializer();
+	protected SGControllerActionInitializer getControllerActionInitializer() {
+		return (SGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<RegenerateAndOverride> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<RegenerateAndOverride> getDefaultInitializer() {
 		return new FlexoActionInitializer<RegenerateAndOverride>() {
 			@Override
-			public boolean run(ActionEvent e, RegenerateAndOverride action)
-			{
+			public boolean run(ActionEvent e, RegenerateAndOverride action) {
 				if (action.getRepository().getDirectory() == null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
 					return false;
 				}
 				action.setSaveBeforeGenerating(SGPreferences.getSaveBeforeGenerating());
 				action.getProjectGenerator().startHandleLogs();
-				((SGController)getController()).getBrowser().setHoldStructure();
+				((SGController) getController()).getBrowser().setHoldStructure();
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<RegenerateAndOverride> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<RegenerateAndOverride> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RegenerateAndOverride>() {
 			@Override
-			public boolean run(ActionEvent e, RegenerateAndOverride action)
-			{
+			public boolean run(ActionEvent e, RegenerateAndOverride action) {
 				action.getProjectGenerator().stopHandleLogs();
 				action.getProjectGenerator().flushLogs();
-				((SGController)getController()).getBrowser().resetHoldStructure();
-				((SGController)getController()).getBrowser().update();
+				((SGController) getController()).getBrowser().resetHoldStructure();
+				((SGController) getController()).getBrowser().update();
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoExceptionHandler<RegenerateAndOverride> getDefaultExceptionHandler() 
-	{
+	protected FlexoExceptionHandler<RegenerateAndOverride> getDefaultExceptionHandler() {
 		return new FlexoExceptionHandler<RegenerateAndOverride>() {
 			@Override
 			public boolean handleException(FlexoException exception, RegenerateAndOverride action) {
-				((SGController)getController()).getBrowser().resetHoldStructure();
-				((SGController)getController()).getBrowser().update();
+				((SGController) getController()).getBrowser().resetHoldStructure();
+				((SGController) getController()).getBrowser().update();
 				getControllerActionInitializer().getSGController().disposeProgressWindow();
 				exception.printStackTrace();
 				FlexoController.showError(FlexoLocalization.localizedForKey("code_generation_synchronization_for_repository_failed")
@@ -101,6 +93,5 @@ public class RegenerateAndOverrideInitializer extends ActionInitializer {
 			}
 		};
 	}
-
 
 }

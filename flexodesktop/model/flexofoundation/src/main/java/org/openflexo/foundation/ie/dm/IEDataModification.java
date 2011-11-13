@@ -26,17 +26,14 @@ import org.openflexo.foundation.DataModification;
  * 
  * @author sguerin
  */
-public class IEDataModification extends DataModification
-{
+public class IEDataModification extends DataModification {
 
-    public IEDataModification(Object oldValue, Object newValue)
-    {
-        super(DataModification.IE_DM, oldValue, newValue);
-    }
+	public IEDataModification(Object oldValue, Object newValue) {
+		super(DataModification.IE_DM, oldValue, newValue);
+	}
 
-    public IEDataModification(String propertyName, Object oldValue, Object newValue)
-    {
-        super(DataModification.ATTRIBUTE, propertyName, oldValue, newValue);
-    }
+	public IEDataModification(String propertyName, Object oldValue, Object newValue) {
+		super(DataModification.ATTRIBUTE, propertyName, oldValue, newValue);
+	}
 
 }

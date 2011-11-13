@@ -28,35 +28,34 @@ import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.ws.action.CreateNewWebService;
 import org.openflexo.toolbox.FileResource;
 
-
 public class DocumentationTest extends FlexoTestCase {
-	
+
 	public DocumentationTest(String name) {
 		super(name);
 	}
 
-	public void testDoc(){
-		try{
-		FlexoEditor editor = FlexoResourceManager.initializeNewProject(new File("/tmp/FlexoTest/TestWSDLProject.prj"),EDITOR_FACTORY,null);
-		FlexoProject project = editor.getProject();
-		
-		CreateNewWebService action =(CreateNewWebService) CreateNewWebService.actionType.makeNewAction(project.getFlexoWSLibrary(), null, editor);
-		action.setWebServiceType(CreateNewWebService.EXTERNAL_WS);
-	
-        
-       	String externalName ="quizz";
-       	File wsdlFile = new FileResource("quiz.wsdl.xml");
-       	action.setNewWebServiceName(externalName);
-       	action.setWsdlFile(wsdlFile);
-       	
-		action.setProject(project);
-		action.doAction();
-		//try{
-		//	project.save();
-		}
-		catch(Exception e){
+	public void testDoc() {
+		try {
+			FlexoEditor editor = FlexoResourceManager.initializeNewProject(new File("/tmp/FlexoTest/TestWSDLProject.prj"), EDITOR_FACTORY,
+					null);
+			FlexoProject project = editor.getProject();
+
+			CreateNewWebService action = (CreateNewWebService) CreateNewWebService.actionType.makeNewAction(project.getFlexoWSLibrary(),
+					null, editor);
+			action.setWebServiceType(CreateNewWebService.EXTERNAL_WS);
+
+			String externalName = "quizz";
+			File wsdlFile = new FileResource("quiz.wsdl.xml");
+			action.setNewWebServiceName(externalName);
+			action.setWsdlFile(wsdlFile);
+
+			action.setProject(project);
+			action.doAction();
+			// try{
+			// project.save();
+		} catch (Exception e) {
 			fail(e.getMessage());
 		}
 	}
-	
+
 }

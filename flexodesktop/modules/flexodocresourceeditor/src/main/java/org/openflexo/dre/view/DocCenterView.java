@@ -41,216 +41,186 @@ import org.openflexo.selection.SelectionListener;
 import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.SelectionSynchronizedModuleView;
 
+public class DocCenterView extends JPanel implements SelectionSynchronizedModuleView<DocItemFolder> {
 
-public class DocCenterView extends JPanel implements SelectionSynchronizedModuleView<DocItemFolder>
-{
+	private static final Logger logger = Logger.getLogger(DocCenterView.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(DocCenterView.class.getPackage()
-            .getName());
+	private DocItemFolder _rootFolder;
+	private DREController _controller;
+	private DRETabularBrowserView _treeTable;
 
-    private DocItemFolder _rootFolder;
-    private DREController _controller;
-    private DRETabularBrowserView _treeTable;
-    
-    private static final String EMPTY_STRING = "";
-    
-    public DocCenterView(DocItemFolder rootFolder, DREController controller)
-    {
-        super();
-        _rootFolder = rootFolder;
-        _controller = controller;
-        //TabularBrowserModel model = new TabularBrowserModel(makeBrowser(process,controller),controller.getProject()," ",150);
-        TabularBrowserModel model = makeTabularBrowserModel(controller.getProject(),rootFolder.getDocResourceCenter());
-            model.addToColumns(new EditableStringColumn<FlexoModelObject>("description", 400) {
-             @Override
-			public boolean isCellEditableFor(FlexoModelObject object)
-             {
-                 return hasDescription(object);
-             }
-             
-            @Override
-			public String getValue(FlexoModelObject object)
-            {
-                if (hasDescription(object)) {
-                    return getDescription(object);
-                }
-                else return EMPTY_STRING;
-            }
-            
-            @Override
-			public void setValue(FlexoModelObject object, String aValue)
-            {
-                if (hasDescription(object)) {
-                    setDescription(object,aValue);
-                }
-           }
-        });
-         _treeTable = new DRETabularBrowserView(controller,model,10);                    
-         setLayout(new BorderLayout());
-         add(_treeTable,BorderLayout.CENTER);
-         validate();
-    }
-    
-    @Override
-	public DocItemFolder getRepresentedObject() 
-    {
-        return _rootFolder;
-    }
+	private static final String EMPTY_STRING = "";
 
-    @Override
-	public void deleteModuleView() 
-    {
-    	if (_controller!=null)
-    		_controller.removeModuleView(this);
-        logger.warning("implements me !");
-    }
-    
-    @Override
-	public FlexoPerspective<DRMObject> getPerspective()
-    {
-        return _controller.DRE_PERSPECTIVE;
-    }
+	public DocCenterView(DocItemFolder rootFolder, DREController controller) {
+		super();
+		_rootFolder = rootFolder;
+		_controller = controller;
+		// TabularBrowserModel model = new TabularBrowserModel(makeBrowser(process,controller),controller.getProject()," ",150);
+		TabularBrowserModel model = makeTabularBrowserModel(controller.getProject(), rootFolder.getDocResourceCenter());
+		model.addToColumns(new EditableStringColumn<FlexoModelObject>("description", 400) {
+			@Override
+			public boolean isCellEditableFor(FlexoModelObject object) {
+				return hasDescription(object);
+			}
 
-    public DRETabularBrowserView getTabularBrowserView() 
-    {
-        return _treeTable;
-    }
+			@Override
+			public String getValue(FlexoModelObject object) {
+				if (hasDescription(object)) {
+					return getDescription(object);
+				} else
+					return EMPTY_STRING;
+			}
 
-    // Make abstract beyond
-    
-    public TabularBrowserModel makeTabularBrowserModel(final FlexoProject project, final DocResourceCenter docResourceCenter) 
-    {
-         return new TabularBrowserModel(DREBrowser.makeBrowserConfiguration(project,docResourceCenter)," ",150);
-    }
-    
-    /*public ProjectBrowser makeBrowser(FlexoModelObject rootObject, FlexoController controller)
-    {
-        ProcessBrowser returned = new ProcessBrowser((WKFController)controller);
-        returned.setCurrentProcess((FlexoProcess)rootObject);
-        return returned;
-    }*/
-    
-    
-    public boolean hasDescription(FlexoModelObject object)
-    {
-        if (object instanceof DocItemFolder) {
-            return true;
-        }
-        else if (object instanceof DocItem) {
-            return true;
-        }
-        return false;
-    }
+			@Override
+			public void setValue(FlexoModelObject object, String aValue) {
+				if (hasDescription(object)) {
+					setDescription(object, aValue);
+				}
+			}
+		});
+		_treeTable = new DRETabularBrowserView(controller, model, 10);
+		setLayout(new BorderLayout());
+		add(_treeTable, BorderLayout.CENTER);
+		validate();
+	}
 
-    public String getDescription(FlexoModelObject object)
-    {
-        if (object instanceof DocItemFolder) {
-            return ((DocItemFolder)object).getDescription();
-        }
-        else if (object instanceof DocItem) {
-            return ((DocItem)object).getDescription();
-       }
-        return null;       
-    }
+	@Override
+	public DocItemFolder getRepresentedObject() {
+		return _rootFolder;
+	}
 
-    public void setDescription(FlexoModelObject object, String aDescription)
-    {
-        if (object instanceof DocItemFolder) {
-            ((DocItemFolder)object).setDescription(aDescription);
-        }
-        else if (object instanceof DocItem) {
-            ((DocItem)object).setDescription(aDescription);
-        }
-    }
+	@Override
+	public void deleteModuleView() {
+		if (_controller != null)
+			_controller.removeModuleView(this);
+		logger.warning("implements me !");
+	}
 
-    @Override
-	public void fireObjectSelected(FlexoModelObject object)
-    {
-        getTabularBrowserView().fireObjectSelected(object);
-     }
-    
-    @Override
-	public void fireObjectDeselected(FlexoModelObject object)
-    {
-        getTabularBrowserView().fireObjectDeselected(object);
-     }
-    
-    @Override
-	public void fireResetSelection()
-    {
-        getTabularBrowserView().fireResetSelection();
-    }
+	@Override
+	public FlexoPerspective<DRMObject> getPerspective() {
+		return _controller.DRE_PERSPECTIVE;
+	}
 
-    
-    @Override
-	public void fireBeginMultipleSelection()
-    {
-        getTabularBrowserView().fireBeginMultipleSelection();
-    }
-    
-    @Override
-	public void fireEndMultipleSelection() 
-    {
-        getTabularBrowserView().fireEndMultipleSelection();
-    }
-    
-    
-    public static class DRETabularBrowserView extends TabularBrowserView {
+	public DRETabularBrowserView getTabularBrowserView() {
+		return _treeTable;
+	}
 
-        public DRETabularBrowserView(DREController controller, TabularBrowserModel model, int visibleRowCount)
-        {
-            this(controller, model);
-            setVisibleRowCount(visibleRowCount);
-        }
+	// Make abstract beyond
 
-        public DRETabularBrowserView(DREController controller, TabularBrowserModel model)
-        {
-            super(controller,model,controller.getEditor());
-            setSynchronizeWithSelectionManager(true);
-        }
-        
-    }
+	public TabularBrowserModel makeTabularBrowserModel(final FlexoProject project, final DocResourceCenter docResourceCenter) {
+		return new TabularBrowserModel(DREBrowser.makeBrowserConfiguration(project, docResourceCenter), " ", 150);
+	}
 
+	/*public ProjectBrowser makeBrowser(FlexoModelObject rootObject, FlexoController controller)
+	{
+	    ProcessBrowser returned = new ProcessBrowser((WKFController)controller);
+	    returned.setCurrentProcess((FlexoProcess)rootObject);
+	    return returned;
+	}*/
 
-    /**
-     * Overrides willShow
-     * @see org.openflexo.view.ModuleView#willShow()
-     */
-    @Override
-	public void willShow()
-    {
-        // TODO Auto-generated method stub
-        
-    }
+	public boolean hasDescription(FlexoModelObject object) {
+		if (object instanceof DocItemFolder) {
+			return true;
+		} else if (object instanceof DocItem) {
+			return true;
+		}
+		return false;
+	}
 
-    /**
-     * Overrides willHide
-     * @see org.openflexo.view.ModuleView#willHide()
-     */
-    @Override
-	public void willHide()
-    {
-        // TODO Auto-generated method stub
-        
-    }
-    
+	public String getDescription(FlexoModelObject object) {
+		if (object instanceof DocItemFolder) {
+			return ((DocItemFolder) object).getDescription();
+		} else if (object instanceof DocItem) {
+			return ((DocItem) object).getDescription();
+		}
+		return null;
+	}
+
+	public void setDescription(FlexoModelObject object, String aDescription) {
+		if (object instanceof DocItemFolder) {
+			((DocItemFolder) object).setDescription(aDescription);
+		} else if (object instanceof DocItem) {
+			((DocItem) object).setDescription(aDescription);
+		}
+	}
+
+	@Override
+	public void fireObjectSelected(FlexoModelObject object) {
+		getTabularBrowserView().fireObjectSelected(object);
+	}
+
+	@Override
+	public void fireObjectDeselected(FlexoModelObject object) {
+		getTabularBrowserView().fireObjectDeselected(object);
+	}
+
+	@Override
+	public void fireResetSelection() {
+		getTabularBrowserView().fireResetSelection();
+	}
+
+	@Override
+	public void fireBeginMultipleSelection() {
+		getTabularBrowserView().fireBeginMultipleSelection();
+	}
+
+	@Override
+	public void fireEndMultipleSelection() {
+		getTabularBrowserView().fireEndMultipleSelection();
+	}
+
+	public static class DRETabularBrowserView extends TabularBrowserView {
+
+		public DRETabularBrowserView(DREController controller, TabularBrowserModel model, int visibleRowCount) {
+			this(controller, model);
+			setVisibleRowCount(visibleRowCount);
+		}
+
+		public DRETabularBrowserView(DREController controller, TabularBrowserModel model) {
+			super(controller, model, controller.getEditor());
+			setSynchronizeWithSelectionManager(true);
+		}
+
+	}
+
 	/**
-	 * Returns flag indicating if this view is itself responsible for scroll management
-	 * When not, Flexo will manage it's own scrollbar for you
+	 * Overrides willShow
+	 * 
+	 * @see org.openflexo.view.ModuleView#willShow()
+	 */
+	@Override
+	public void willShow() {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Overrides willHide
+	 * 
+	 * @see org.openflexo.view.ModuleView#willHide()
+	 */
+	@Override
+	public void willHide() {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Returns flag indicating if this view is itself responsible for scroll management When not, Flexo will manage it's own scrollbar for
+	 * you
 	 * 
 	 * @return
 	 */
 	@Override
-	public boolean isAutoscrolled() 
-	{
+	public boolean isAutoscrolled() {
 		return false;
 	}
 
 	@Override
-	public List<SelectionListener> getSelectionListeners(){
+	public List<SelectionListener> getSelectionListeners() {
 		Vector<SelectionListener> reply = new Vector<SelectionListener>();
 		reply.add(this);
 		return reply;
 	}
 
- }
+}

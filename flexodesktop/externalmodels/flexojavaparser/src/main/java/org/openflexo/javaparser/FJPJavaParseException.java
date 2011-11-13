@@ -26,27 +26,24 @@ import org.openflexo.localization.FlexoLocalization;
 
 import com.thoughtworks.qdox.parser.ParseException;
 
-public class FJPJavaParseException extends FJPJavaElement
-{
+public class FJPJavaParseException extends FJPJavaElement {
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(FJPJavaParseException.class.getPackage().getName());
 
 	ParseException _parseException;
 	String _sourceName;
 
-	public FJPJavaParseException (String sourceName, ParseException parseException)
-	{
+	public FJPJavaParseException(String sourceName, ParseException parseException) {
 		super(null);
 		_parseException = parseException;
 		_sourceName = sourceName;
 	}
 
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return null;
 	}
-	
+
 	public int getColumn() {
 		return _parseException.getColumn();
 	}
@@ -63,22 +60,18 @@ public class FJPJavaParseException extends FJPJavaElement
 		return _parseException.getMessage();
 	}
 
-	
 	private FJPParseException _flexoException;
-	
-	public FJPParseException getParseException() 
-	{
+
+	public FJPParseException getParseException() {
 		if (_flexoException == null) {
 			_flexoException = new FJPParseException();
 		}
 		return _flexoException;
 	}
 
-	public class FJPParseException extends FlexoException
-	{
-		public FJPParseException ()
-		{
-			super("Parse error while parsing "+_sourceName);
+	public class FJPParseException extends FlexoException {
+		public FJPParseException() {
+			super("Parse error while parsing " + _sourceName);
 		}
 
 		public int getColumn() {
@@ -90,12 +83,10 @@ public class FJPJavaParseException extends FJPJavaElement
 		}
 
 		@Override
-		public String getLocalizedMessage() 
-		{
-			return FlexoLocalization.localizedForKey("parse_error_while_parsing")
-			+" "+_sourceName
-			+" "+FlexoLocalization.localizedForKey("line")+" "+getLine()
-			+" "+FlexoLocalization.localizedForKey("at")+" "+getColumn();
+		public String getLocalizedMessage() {
+			return FlexoLocalization.localizedForKey("parse_error_while_parsing") + " " + _sourceName + " "
+					+ FlexoLocalization.localizedForKey("line") + " " + getLine() + " " + FlexoLocalization.localizedForKey("at") + " "
+					+ getColumn();
 		}
 
 		@Override

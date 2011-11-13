@@ -38,175 +38,191 @@ import org.openflexo.foundation.ie.widget.IETextFieldWidget;
 import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.toolbox.ToolBox;
 
-
 public class PropertyProposalFactory {
 
 	private List relevantWidgets;
 	private EntityFromWidgets entityFromWidgets;
-	private PropertyProposalFactory(){
+
+	private PropertyProposalFactory() {
 		super();
-		relevantWidgets = Arrays.asList(IETextFieldWidget.class,
-				IETextAreaWidget.class,
-				IEDropDownWidget.class,
-				IEStringWidget.class,
+		relevantWidgets = Arrays.asList(IETextFieldWidget.class, IETextAreaWidget.class, IEDropDownWidget.class, IEStringWidget.class,
 				IECheckBoxWidget.class);
 	}
-	public static PropertyProposalFactory getFactory(EntityFromWidgets entityFromWidgets){
+
+	public static PropertyProposalFactory getFactory(EntityFromWidgets entityFromWidgets) {
 		PropertyProposalFactory reply = new PropertyProposalFactory();
 		reply.entityFromWidgets = entityFromWidgets;
 		return reply;
 	}
-	
+
 	public boolean isRelevant(FlexoModelObject widget) {
-		
-		if(widget instanceof IEControlWidget && ((IEControlWidget)widget).getIsFilterForRepetition()!=null)
+
+		if (widget instanceof IEControlWidget && ((IEControlWidget) widget).getIsFilterForRepetition() != null)
 			return false;
-		if(relevantWidgets.contains(widget.getClass()))
+		if (relevantWidgets.contains(widget.getClass()))
 			return true;
 		return false;
 	}
 
-	private String transformPropertyNameIntoUniquePropertyName(String propertyName){
-		if(propertyName==null) return null;
+	private String transformPropertyNameIntoUniquePropertyName(String propertyName) {
+		if (propertyName == null)
+			return null;
 		String originalPropertyName = propertyName;
 		int i = 1;
-		while(entityFromWidgets.isPropertyNameUsed(propertyName)){
-			propertyName = originalPropertyName+i;
+		while (entityFromWidgets.isPropertyNameUsed(propertyName)) {
+			propertyName = originalPropertyName + i;
 			i++;
 		}
 		return propertyName;
 	}
-	
+
 	public PropertyProposal getEOAttributeProposal(IEWidget widget) {
 		String propertyName = ToolBox.convertStringToJavaString(widget.getCalculatedLabel());
 		transformPropertyNameIntoUniquePropertyName(propertyName);
-		if(widget instanceof IEStringWidget){
-			if(propertyName == null)propertyName = transformPropertyNameIntoUniquePropertyName("textAttribute");
-			DMEOPrototype p = findBestProptotype((IEStringWidget)widget);
-			return new EOAttributeProposal(widget,propertyName,p);
-		}else if(widget instanceof IETextFieldWidget){
-			if(propertyName == null)propertyName = transformPropertyNameIntoUniquePropertyName("textAttribute");
-			DMEOPrototype p = findBestProptotype((IETextFieldWidget)widget);
-			return new EOAttributeProposal(widget,propertyName,p);
-		}else if(widget instanceof IETextAreaWidget){
-			if(propertyName == null)propertyName = transformPropertyNameIntoUniquePropertyName("longTextAttribute");
-			return new EOAttributeProposal(widget,propertyName,widget.getProject().getDataModel().getPrototypeNamed("clob"));
-		}else if(widget instanceof IECheckBoxWidget){
-			if(propertyName == null)propertyName = transformPropertyNameIntoUniquePropertyName("isTrue");
-			else propertyName = "is"+ToolBox.capitalize(propertyName,true);
-			return new EOAttributeProposal(widget,propertyName,widget.getProject().getDataModel().getPrototypeNamed("boolean"));
-		}else if(widget instanceof IEDropDownWidget){
-			if(propertyName == null)propertyName = transformPropertyNameIntoUniquePropertyName("typeProperty");
-			if(((IEDropDownWidget)widget).getDropdownType()==DropDownType.DOMAIN_KEY_VALUE)
-				return new EOAttributeProposal(widget,propertyName,widget.getProject().getDataModel().getPrototypeNamed("str10"));
+		if (widget instanceof IEStringWidget) {
+			if (propertyName == null)
+				propertyName = transformPropertyNameIntoUniquePropertyName("textAttribute");
+			DMEOPrototype p = findBestProptotype((IEStringWidget) widget);
+			return new EOAttributeProposal(widget, propertyName, p);
+		} else if (widget instanceof IETextFieldWidget) {
+			if (propertyName == null)
+				propertyName = transformPropertyNameIntoUniquePropertyName("textAttribute");
+			DMEOPrototype p = findBestProptotype((IETextFieldWidget) widget);
+			return new EOAttributeProposal(widget, propertyName, p);
+		} else if (widget instanceof IETextAreaWidget) {
+			if (propertyName == null)
+				propertyName = transformPropertyNameIntoUniquePropertyName("longTextAttribute");
+			return new EOAttributeProposal(widget, propertyName, widget.getProject().getDataModel().getPrototypeNamed("clob"));
+		} else if (widget instanceof IECheckBoxWidget) {
+			if (propertyName == null)
+				propertyName = transformPropertyNameIntoUniquePropertyName("isTrue");
 			else
-				return new EOAttributeProposal(widget,propertyName,widget.getProject().getDataModel().getPrototypeNamed("str100"));
+				propertyName = "is" + ToolBox.capitalize(propertyName, true);
+			return new EOAttributeProposal(widget, propertyName, widget.getProject().getDataModel().getPrototypeNamed("boolean"));
+		} else if (widget instanceof IEDropDownWidget) {
+			if (propertyName == null)
+				propertyName = transformPropertyNameIntoUniquePropertyName("typeProperty");
+			if (((IEDropDownWidget) widget).getDropdownType() == DropDownType.DOMAIN_KEY_VALUE)
+				return new EOAttributeProposal(widget, propertyName, widget.getProject().getDataModel().getPrototypeNamed("str10"));
+			else
+				return new EOAttributeProposal(widget, propertyName, widget.getProject().getDataModel().getPrototypeNamed("str100"));
 		}
 		return null;
 	}
 
 	private DMEOPrototype findBestProptotype(IEStringWidget widget) {
-		if(widget.getFieldType()==TextFieldType.DATE)
+		if (widget.getFieldType() == TextFieldType.DATE)
 			return widget.getProject().getDataModel().getPrototypeNamed("date");
-		if(widget.getFieldType()==TextFieldType.DOUBLE)
+		if (widget.getFieldType() == TextFieldType.DOUBLE)
 			return widget.getProject().getDataModel().getPrototypeNamed("double");
-		if(widget.getFieldType()==TextFieldType.FLOAT)
+		if (widget.getFieldType() == TextFieldType.FLOAT)
 			return widget.getProject().getDataModel().getPrototypeNamed("float");
-		if(widget.getFieldType()==TextFieldType.INTEGER)
+		if (widget.getFieldType() == TextFieldType.INTEGER)
 			return widget.getProject().getDataModel().getPrototypeNamed("int");
-		if(widget.getFieldType()==TextFieldType.KEYVALUE)
+		if (widget.getFieldType() == TextFieldType.KEYVALUE)
 			return widget.getProject().getDataModel().getPrototypeNamed("str10");
-		if(widget.getFieldType()==TextFieldType.STATUS_LIST)
+		if (widget.getFieldType() == TextFieldType.STATUS_LIST)
 			return widget.getProject().getDataModel().getPrototypeNamed("str50");
 		return widget.getProject().getDataModel().getPrototypeNamed("str200");
 	}
-	
+
 	private DMEOPrototype findBestProptotype(IETextFieldWidget widget) {
-		if(widget.getFieldType()==TextFieldType.DATE)
+		if (widget.getFieldType() == TextFieldType.DATE)
 			return widget.getProject().getDataModel().getPrototypeNamed("date");
-		if(widget.getFieldType()==TextFieldType.DOUBLE)
+		if (widget.getFieldType() == TextFieldType.DOUBLE)
 			return widget.getProject().getDataModel().getPrototypeNamed("double");
-		if(widget.getFieldType()==TextFieldType.FLOAT)
+		if (widget.getFieldType() == TextFieldType.FLOAT)
 			return widget.getProject().getDataModel().getPrototypeNamed("float");
-		if(widget.getFieldType()==TextFieldType.INTEGER)
+		if (widget.getFieldType() == TextFieldType.INTEGER)
 			return widget.getProject().getDataModel().getPrototypeNamed("int");
-		if(widget.getFieldType()==TextFieldType.KEYVALUE)
+		if (widget.getFieldType() == TextFieldType.KEYVALUE)
 			return widget.getProject().getDataModel().getPrototypeNamed("str10");
-		if(widget.getFieldType()==TextFieldType.STATUS_LIST)
+		if (widget.getFieldType() == TextFieldType.STATUS_LIST)
 			return widget.getProject().getDataModel().getPrototypeNamed("str50");
 		return widget.getProject().getDataModel().getPrototypeNamed("str200");
 	}
-	
+
 	public DMPropertyProposal getDMAttributeProposal(IEWidget widget) {
 		String propertyName = ToolBox.convertStringToJavaString(widget.getCalculatedLabel());
 		transformPropertyNameIntoUniquePropertyName(propertyName);
-		if(widget instanceof IETextFieldWidget){
-			if(propertyName == null)propertyName = transformPropertyNameIntoUniquePropertyName("textAttribute");
-			DMType t = findBestType((IETextFieldWidget)widget);
-			return new DMPropertyProposal(widget,propertyName,t);
-		}else if(widget instanceof IEStringWidget){
-			if(propertyName == null)propertyName = transformPropertyNameIntoUniquePropertyName("textAttribute");
-			DMType t = findBestType((IEStringWidget)widget);
-			return new DMPropertyProposal(widget,propertyName,t);
-		}else if(widget instanceof IETextAreaWidget){
-			if(propertyName == null)propertyName = transformPropertyNameIntoUniquePropertyName("longTextAttribute");
-			return new DMPropertyProposal(widget,propertyName,DMType.makeResolvedDMType(widget.getProject().getDataModel().getDMEntity(String.class)));
-		}else if(widget instanceof IECheckBoxWidget){
-			if(propertyName == null)propertyName = transformPropertyNameIntoUniquePropertyName("isTrue");
-			else propertyName = "is"+ToolBox.capitalize(propertyName,true);
-			return new DMPropertyProposal(widget,propertyName,DMType.makeResolvedDMType(widget.getProject().getDataModel().getDMEntity(Boolean.class)));
-		}else if(widget instanceof IEDropDownWidget){
-			if(propertyName == null)propertyName = transformPropertyNameIntoUniquePropertyName("typeProperty");
-			if(((IEDropDownWidget)widget).getDropdownType()==DropDownType.DOMAIN_KEY_VALUE)
-				return new DMPropertyProposal(widget,propertyName,DMType.makeResolvedDMType(widget.getProject().getDataModel().getDMEntity(String.class)));
+		if (widget instanceof IETextFieldWidget) {
+			if (propertyName == null)
+				propertyName = transformPropertyNameIntoUniquePropertyName("textAttribute");
+			DMType t = findBestType((IETextFieldWidget) widget);
+			return new DMPropertyProposal(widget, propertyName, t);
+		} else if (widget instanceof IEStringWidget) {
+			if (propertyName == null)
+				propertyName = transformPropertyNameIntoUniquePropertyName("textAttribute");
+			DMType t = findBestType((IEStringWidget) widget);
+			return new DMPropertyProposal(widget, propertyName, t);
+		} else if (widget instanceof IETextAreaWidget) {
+			if (propertyName == null)
+				propertyName = transformPropertyNameIntoUniquePropertyName("longTextAttribute");
+			return new DMPropertyProposal(widget, propertyName, DMType.makeResolvedDMType(widget.getProject().getDataModel()
+					.getDMEntity(String.class)));
+		} else if (widget instanceof IECheckBoxWidget) {
+			if (propertyName == null)
+				propertyName = transformPropertyNameIntoUniquePropertyName("isTrue");
 			else
-				return new DMPropertyProposal(widget,propertyName,DMType.makeResolvedDMType(widget.getProject().getDataModel().getDMEntity(String.class)));
+				propertyName = "is" + ToolBox.capitalize(propertyName, true);
+			return new DMPropertyProposal(widget, propertyName, DMType.makeResolvedDMType(widget.getProject().getDataModel()
+					.getDMEntity(Boolean.class)));
+		} else if (widget instanceof IEDropDownWidget) {
+			if (propertyName == null)
+				propertyName = transformPropertyNameIntoUniquePropertyName("typeProperty");
+			if (((IEDropDownWidget) widget).getDropdownType() == DropDownType.DOMAIN_KEY_VALUE)
+				return new DMPropertyProposal(widget, propertyName, DMType.makeResolvedDMType(widget.getProject().getDataModel()
+						.getDMEntity(String.class)));
+			else
+				return new DMPropertyProposal(widget, propertyName, DMType.makeResolvedDMType(widget.getProject().getDataModel()
+						.getDMEntity(String.class)));
 		}
 		return null;
 	}
 
 	private DMType findBestType(IEStringWidget widget) {
-		if(widget.getFieldType()==TextFieldType.DATE)
+		if (widget.getFieldType() == TextFieldType.DATE)
 			return DMType.makeResolvedDMType(widget.getProject().getDataModel().getDMEntity(Date.class));
-		if(widget.getFieldType()==TextFieldType.DOUBLE)
+		if (widget.getFieldType() == TextFieldType.DOUBLE)
 			return DMType.makeResolvedDMType(widget.getProject().getDataModel().getDMEntity(Double.class));
-		if(widget.getFieldType()==TextFieldType.FLOAT)
+		if (widget.getFieldType() == TextFieldType.FLOAT)
 			return DMType.makeResolvedDMType(widget.getProject().getDataModel().getDMEntity(Float.class));
-		if(widget.getFieldType()==TextFieldType.INTEGER)
+		if (widget.getFieldType() == TextFieldType.INTEGER)
 			return DMType.makeResolvedDMType(widget.getProject().getDataModel().getDMEntity(Integer.class));
-		if(widget.getFieldType()==TextFieldType.KEYVALUE)
+		if (widget.getFieldType() == TextFieldType.KEYVALUE)
 			return DMType.makeResolvedDMType(widget.getProject().getDataModel().getDMEntity(String.class));
-		if(widget.getFieldType()==TextFieldType.STATUS_LIST)
+		if (widget.getFieldType() == TextFieldType.STATUS_LIST)
 			return DMType.makeResolvedDMType(widget.getProject().getDataModel().getDMEntity(String.class));
 		return DMType.makeResolvedDMType(widget.getProject().getDataModel().getDMEntity(String.class));
 	}
-	
+
 	private DMType findBestType(IETextFieldWidget widget) {
-		if(widget.getFieldType()==TextFieldType.DATE)
+		if (widget.getFieldType() == TextFieldType.DATE)
 			return DMType.makeResolvedDMType(widget.getProject().getDataModel().getDMEntity(Date.class));
-		if(widget.getFieldType()==TextFieldType.DOUBLE)
+		if (widget.getFieldType() == TextFieldType.DOUBLE)
 			return DMType.makeResolvedDMType(widget.getProject().getDataModel().getDMEntity(Double.class));
-		if(widget.getFieldType()==TextFieldType.FLOAT)
+		if (widget.getFieldType() == TextFieldType.FLOAT)
 			return DMType.makeResolvedDMType(widget.getProject().getDataModel().getDMEntity(Float.class));
-		if(widget.getFieldType()==TextFieldType.INTEGER)
+		if (widget.getFieldType() == TextFieldType.INTEGER)
 			return DMType.makeResolvedDMType(widget.getProject().getDataModel().getDMEntity(Integer.class));
-		if(widget.getFieldType()==TextFieldType.KEYVALUE)
+		if (widget.getFieldType() == TextFieldType.KEYVALUE)
 			return DMType.makeResolvedDMType(widget.getProject().getDataModel().getDMEntity(String.class));
-		if(widget.getFieldType()==TextFieldType.STATUS_LIST)
+		if (widget.getFieldType() == TextFieldType.STATUS_LIST)
 			return DMType.makeResolvedDMType(widget.getProject().getDataModel().getDMEntity(String.class));
 		return DMType.makeResolvedDMType(widget.getProject().getDataModel().getDMEntity(String.class));
 	}
+
 	public BindingDefinition retreiveRelevantBindingDefinition(IEWidget owner) {
-		if(owner.getClass().equals(IETextFieldWidget.class)){
-			return ((IETextFieldWidget)owner).getBindingValueDefinition();
-		}else if(owner.getClass().equals(IETextAreaWidget.class)){
-			return ((IETextAreaWidget)owner).getBindingValueDefinition();
-		}else if(owner.getClass().equals(IEDropDownWidget.class)){
-			return ((IEDropDownWidget)owner).getBindingSelectionDefinition();
-		}else if(owner.getClass().equals(IEStringWidget.class)){
-			return ((IEStringWidget)owner).getBindingValueDefinition();
-		}else if(owner.getClass().equals(IECheckBoxWidget.class)){
-			return ((IECheckBoxWidget)owner).getBindingCheckedDefinition();
+		if (owner.getClass().equals(IETextFieldWidget.class)) {
+			return ((IETextFieldWidget) owner).getBindingValueDefinition();
+		} else if (owner.getClass().equals(IETextAreaWidget.class)) {
+			return ((IETextAreaWidget) owner).getBindingValueDefinition();
+		} else if (owner.getClass().equals(IEDropDownWidget.class)) {
+			return ((IEDropDownWidget) owner).getBindingSelectionDefinition();
+		} else if (owner.getClass().equals(IEStringWidget.class)) {
+			return ((IEStringWidget) owner).getBindingValueDefinition();
+		} else if (owner.getClass().equals(IECheckBoxWidget.class)) {
+			return ((IECheckBoxWidget) owner).getBindingCheckedDefinition();
 		}
 		return null;
 	}

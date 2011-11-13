@@ -24,49 +24,41 @@ import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
 import org.openflexo.fge.geomedit.construction.HalfBandConstruction;
 import org.openflexo.fge.geomedit.gr.HalfBandGraphicalRepresentation;
 
-
 public class HalfBand extends GeometricObject<FGEHalfBand> {
 
 	private HalfBandGraphicalRepresentation graphicalRepresentation;
-	
+
 	// Called for LOAD
-	public HalfBand(GeomEditBuilder builder)
-	{
+	public HalfBand(GeomEditBuilder builder) {
 		super(builder);
 	}
-	
-	public HalfBand(GeometricSet set, HalfBandConstruction construction) 
-	{
+
+	public HalfBand(GeometricSet set, HalfBandConstruction construction) {
 		super(set, construction);
-		graphicalRepresentation = new HalfBandGraphicalRepresentation(this,set.getEditedDrawing());
+		graphicalRepresentation = new HalfBandGraphicalRepresentation(this, set.getEditedDrawing());
 	}
-	
+
 	@Override
-	public HalfBandGraphicalRepresentation getGraphicalRepresentation()
-	{
+	public HalfBandGraphicalRepresentation getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
 
-	public void setGraphicalRepresentation(HalfBandGraphicalRepresentation aGR)
-	{
+	public void setGraphicalRepresentation(HalfBandGraphicalRepresentation aGR) {
 		aGR.setDrawable(this);
 		graphicalRepresentation = aGR;
 	}
-	
+
 	@Override
-	public HalfBandConstruction getConstruction()
-	{
-		return (HalfBandConstruction)super.getConstruction();
+	public HalfBandConstruction getConstruction() {
+		return (HalfBandConstruction) super.getConstruction();
 	}
 
-	public void setConstruction(HalfBandConstruction hbConstruction)
-	{
+	public void setConstruction(HalfBandConstruction hbConstruction) {
 		_setConstruction(hbConstruction);
 	}
 
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return "HalfBand.inspector";
 	}
 

@@ -27,28 +27,22 @@ import org.openflexo.foundation.FlexoException;
  * @author sguerin
  * 
  */
-public class DuplicateWKFObjectException extends FlexoException
-{
+public class DuplicateWKFObjectException extends FlexoException {
 
- 
+	private WKFObject _object;
 
-    private WKFObject _object;
+	public DuplicateWKFObjectException(WKFObject anObject) {
+		super();
+		_object = anObject;
+	}
 
-    public DuplicateWKFObjectException(WKFObject anObject)
-    {
-        super();  
-        _object = anObject;
-    }
+	public DuplicateWKFObjectException(WKFObject anObject, String localizationKey) {
+		super(null, localizationKey);
+		_object = anObject;
+	}
 
-    public DuplicateWKFObjectException(WKFObject anObject, String localizationKey)
-    {
-        super(null, localizationKey);  
-        _object = anObject;
-    }
-    
-    @Override
-	public String getMessage()
-    {
-        return "DuplicateWKFObjectException: " + _object.getFullyQualifiedName() + " already registered.";
-    }
+	@Override
+	public String getMessage() {
+		return "DuplicateWKFObjectException: " + _object.getFullyQualifiedName() + " already registered.";
+	}
 }

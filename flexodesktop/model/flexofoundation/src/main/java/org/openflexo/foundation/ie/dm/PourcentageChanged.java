@@ -21,12 +21,10 @@ package org.openflexo.foundation.ie.dm;
 
 import org.openflexo.foundation.ie.widget.IEHTMLTableWidget;
 
-public class PourcentageChanged extends IEDataModification
-{
+public class PourcentageChanged extends IEDataModification {
 
-    public PourcentageChanged(IEHTMLTableWidget table)
-    {
-        super(table, table);
-    }
+	public PourcentageChanged(IEHTMLTableWidget table) {
+		super(table, table);
+	}
 
 }

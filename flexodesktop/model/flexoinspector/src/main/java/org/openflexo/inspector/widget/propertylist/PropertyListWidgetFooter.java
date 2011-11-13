@@ -46,12 +46,11 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ImageIconResource;
 import org.openflexo.toolbox.ToolBox;
 
-public class PropertyListWidgetFooter extends JPanel
-{
+public class PropertyListWidgetFooter extends JPanel {
 
-    protected static final Logger logger = Logger.getLogger(PropertyListWidgetFooter.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(PropertyListWidgetFooter.class.getPackage().getName());
 
-	public static final Color GUI_BACK_COLOR = ToolBox.getPLATFORM()==ToolBox.MACOS ? null : Color.WHITE;
+	public static final Color GUI_BACK_COLOR = ToolBox.getPLATFORM() == ToolBox.MACOS ? null : Color.WHITE;
 
 	// deprecated: will be removed while inspector project will disappear
 	// For now, icons are retrieved inside FIB project
@@ -68,375 +67,349 @@ public class PropertyListWidgetFooter extends JPanel
 	public static final ImageIcon BROWSER_FILTERS_DISABLED_ICON = new ImageIconResource("Icons/GUI/BrowserFiltersDisabled.gif");
 	public static final ImageIcon BROWSER_FILTERS_SELECTED_ICON = new ImageIconResource("Icons/GUI/BrowserFiltersSelected.gif");
 
-    public static final int MINIMUM_BROWSER_VIEW_WIDTH = 200;
-    
-    protected PropertyListWidget _widget;
-    protected PropertyListModel _propertyListModel;
-    protected PropertyListTableModel _tableModel;
-    
-    protected JButton plusButton;
+	public static final int MINIMUM_BROWSER_VIEW_WIDTH = 200;
 
-    protected JButton minusButton;
+	protected PropertyListWidget _widget;
+	protected PropertyListModel _propertyListModel;
+	protected PropertyListTableModel _tableModel;
 
-    protected JButton optionsButton;
+	protected JButton plusButton;
 
-    protected JPopupMenu popupMenu = null;
+	protected JButton minusButton;
 
-    /**
-     * Stores controls: key is the JButton and value the
-     * PropertyListActionListener
-     */
-    //private Hashtable<JButton,PropertyListActionListener> _controls;
+	protected JButton optionsButton;
 
-    public PropertyListWidgetFooter(PropertyListModel propertyListModel, PropertyListTableModel tableModel, PropertyListWidget widget)
-    {
-        super();
-        _widget = widget;
-        _tableModel = tableModel;
-        _propertyListModel = propertyListModel;
-        
-        initializeActions(propertyListModel,tableModel);
-               
-        setBorder(BorderFactory.createEmptyBorder());
-        setBackground(GUI_BACK_COLOR);
-        setLayout(new BorderLayout());
-        // setPreferredSize(new
-        // Dimension(FlexoCst.MINIMUM_BROWSER_VIEW_WIDTH,FlexoCst.MINIMUM_BROWSER_CONTROL_PANEL_HEIGHT));
-        setPreferredSize(new Dimension(MINIMUM_BROWSER_VIEW_WIDTH, 20));
+	protected JPopupMenu popupMenu = null;
 
-        JPanel plusMinusPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        plusMinusPanel.setBackground(GUI_BACK_COLOR);
-        plusMinusPanel.setBorder(BorderFactory.createEmptyBorder());
+	/**
+	 * Stores controls: key is the JButton and value the PropertyListActionListener
+	 */
+	// private Hashtable<JButton,PropertyListActionListener> _controls;
 
-        plusButton = new JButton(BROWSER_PLUS_ICON);
-        plusButton.setBackground(GUI_BACK_COLOR);
-        plusButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                if (!hasMultiplePlusActions()) {
-                    plusPressed();
-                    plusButton.setIcon(BROWSER_PLUS_ICON);
-                }
-            }
+	public PropertyListWidgetFooter(PropertyListModel propertyListModel, PropertyListTableModel tableModel, PropertyListWidget widget) {
+		super();
+		_widget = widget;
+		_tableModel = tableModel;
+		_propertyListModel = propertyListModel;
 
-        });
-        plusButton.setBorder(BorderFactory.createEmptyBorder());
-        plusButton.setDisabledIcon(BROWSER_PLUS_DISABLED_ICON);
-        // plusButton.setSelectedIcon(FlexoCst.BROWSER_PLUS_SELECTED_ICON);
-        plusButton.addMouseListener(new MouseAdapter() {
-            @Override
-			public void mousePressed(MouseEvent mouseEvent)
-            {
-                if (plusButton.isEnabled()) {
-					plusButton.setIcon(BROWSER_PLUS_SELECTED_ICON);
-				}
-                if (hasMultiplePlusActions()) {
-                    getPlusActionMenu().show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
-                    plusButton.setIcon(BROWSER_PLUS_ICON);
-                }
-            }
+		initializeActions(propertyListModel, tableModel);
 
-            @Override
-			public void mouseReleased(MouseEvent mouseEvent)
-            {
-                if (plusButton.isEnabled()) {
+		setBorder(BorderFactory.createEmptyBorder());
+		setBackground(GUI_BACK_COLOR);
+		setLayout(new BorderLayout());
+		// setPreferredSize(new
+		// Dimension(FlexoCst.MINIMUM_BROWSER_VIEW_WIDTH,FlexoCst.MINIMUM_BROWSER_CONTROL_PANEL_HEIGHT));
+		setPreferredSize(new Dimension(MINIMUM_BROWSER_VIEW_WIDTH, 20));
+
+		JPanel plusMinusPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+		plusMinusPanel.setBackground(GUI_BACK_COLOR);
+		plusMinusPanel.setBorder(BorderFactory.createEmptyBorder());
+
+		plusButton = new JButton(BROWSER_PLUS_ICON);
+		plusButton.setBackground(GUI_BACK_COLOR);
+		plusButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (!hasMultiplePlusActions()) {
+					plusPressed();
 					plusButton.setIcon(BROWSER_PLUS_ICON);
 				}
-                if (hasMultiplePlusActions()) {
-                    getPlusActionMenu().show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
-                }
-            }
-        });
-
-        minusButton = new JButton(BROWSER_MINUS_ICON);
-        minusButton.setBackground(GUI_BACK_COLOR);
-        minusButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                if (!hasMultipleMinusActions()) {
-                    minusPressed();
-                    minusButton.setIcon(BROWSER_MINUS_ICON);
-                }
-             }
-
-        });
-        minusButton.setBorder(BorderFactory.createEmptyBorder());
-        minusButton.setDisabledIcon(BROWSER_MINUS_DISABLED_ICON);
-        // minusButton.setSelectedIcon(FlexoCst.BROWSER_MINUS_SELECTED_ICON);
-        minusButton.addMouseListener(new MouseAdapter() {
-            @Override
-			public void mousePressed(MouseEvent mouseEvent)
-            {
-               if (minusButton.isEnabled()) {
-				minusButton.setIcon(BROWSER_MINUS_SELECTED_ICON);
 			}
-               if (hasMultipleMinusActions()) {
-                   getMinusActionMenu().show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
-                   minusButton.setIcon(BROWSER_MINUS_ICON);
-               }
-            }
 
-            @Override
-			public void mouseReleased(MouseEvent mouseEvent)
-            {
-                if (minusButton.isEnabled()) {
+		});
+		plusButton.setBorder(BorderFactory.createEmptyBorder());
+		plusButton.setDisabledIcon(BROWSER_PLUS_DISABLED_ICON);
+		// plusButton.setSelectedIcon(FlexoCst.BROWSER_PLUS_SELECTED_ICON);
+		plusButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent mouseEvent) {
+				if (plusButton.isEnabled()) {
+					plusButton.setIcon(BROWSER_PLUS_SELECTED_ICON);
+				}
+				if (hasMultiplePlusActions()) {
+					getPlusActionMenu().show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
+					plusButton.setIcon(BROWSER_PLUS_ICON);
+				}
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent mouseEvent) {
+				if (plusButton.isEnabled()) {
+					plusButton.setIcon(BROWSER_PLUS_ICON);
+				}
+				if (hasMultiplePlusActions()) {
+					getPlusActionMenu().show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
+				}
+			}
+		});
+
+		minusButton = new JButton(BROWSER_MINUS_ICON);
+		minusButton.setBackground(GUI_BACK_COLOR);
+		minusButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (!hasMultipleMinusActions()) {
+					minusPressed();
 					minusButton.setIcon(BROWSER_MINUS_ICON);
 				}
-                if (hasMultipleMinusActions()) {
-                	getMinusActionMenu().show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
-                }
-            }
-        });
+			}
 
-        plusMinusPanel.add(plusButton);
-        plusMinusPanel.add(minusButton);
+		});
+		minusButton.setBorder(BorderFactory.createEmptyBorder());
+		minusButton.setDisabledIcon(BROWSER_MINUS_DISABLED_ICON);
+		// minusButton.setSelectedIcon(FlexoCst.BROWSER_MINUS_SELECTED_ICON);
+		minusButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent mouseEvent) {
+				if (minusButton.isEnabled()) {
+					minusButton.setIcon(BROWSER_MINUS_SELECTED_ICON);
+				}
+				if (hasMultipleMinusActions()) {
+					getMinusActionMenu().show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
+					minusButton.setIcon(BROWSER_MINUS_ICON);
+				}
+			}
 
-        add(plusMinusPanel, BorderLayout.WEST);
-        optionsButton = new JButton(BROWSER_OPTIONS_ICON);
-        optionsButton.setBorder(BorderFactory.createEmptyBorder());
-        optionsButton.setDisabledIcon(BROWSER_OPTIONS_DISABLED_ICON);
-        add(optionsButton, BorderLayout.EAST);
+			@Override
+			public void mouseReleased(MouseEvent mouseEvent) {
+				if (minusButton.isEnabled()) {
+					minusButton.setIcon(BROWSER_MINUS_ICON);
+				}
+				if (hasMultipleMinusActions()) {
+					getMinusActionMenu().show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
+				}
+			}
+		});
 
-        optionsButton.addMouseListener(new MouseAdapter() {
-            @Override
-			public void mousePressed(MouseEvent mouseEvent)
-            {
-                if (optionsButton.isEnabled()) {
+		plusMinusPanel.add(plusButton);
+		plusMinusPanel.add(minusButton);
+
+		add(plusMinusPanel, BorderLayout.WEST);
+		optionsButton = new JButton(BROWSER_OPTIONS_ICON);
+		optionsButton.setBorder(BorderFactory.createEmptyBorder());
+		optionsButton.setDisabledIcon(BROWSER_OPTIONS_DISABLED_ICON);
+		add(optionsButton, BorderLayout.EAST);
+
+		optionsButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent mouseEvent) {
+				if (optionsButton.isEnabled()) {
 					optionsButton.setIcon(BROWSER_OPTIONS_SELECTED_ICON);
 				}
-                getOptionActionMenu().show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
-             }
+				getOptionActionMenu().show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
+			}
 
-            @Override
-			public void mouseReleased(MouseEvent mouseEvent)
-            {
-                if (optionsButton.isEnabled()) {
+			@Override
+			public void mouseReleased(MouseEvent mouseEvent) {
+				if (optionsButton.isEnabled()) {
 					optionsButton.setIcon(BROWSER_OPTIONS_ICON);
 				}
-                getOptionActionMenu().show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
-           }
+				getOptionActionMenu().show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
+			}
 
-         });
- 
-        handleSelectionCleared();
+		});
 
-        validate();
-    }
+		handleSelectionCleared();
 
+		validate();
+	}
 
-    protected void handleSelectionChanged()
-    {
-        //System.out.println("handleSelectionChanged");
-        plusActionMenuNeedsRecomputed = true;
-        minusActionMenuNeedsRecomputed = true;
-        optionsActionMenuNeedsRecomputed = true;
- 
-        if (hasMultiplePlusActions()) {
+	protected void handleSelectionChanged() {
+		// System.out.println("handleSelectionChanged");
+		plusActionMenuNeedsRecomputed = true;
+		minusActionMenuNeedsRecomputed = true;
+		optionsActionMenuNeedsRecomputed = true;
+
+		if (hasMultiplePlusActions()) {
 			plusButton.setEnabled(true);
 		} else {
-        	boolean isActive = false;
-        	for (PropertyListAction action : _addActions.keySet()) {
-        		PropertyListActionListener actionListener = _addActions.get(action);
-        		if (actionListener.isActive(_tableModel.getSelectedObject())) {
+			boolean isActive = false;
+			for (PropertyListAction action : _addActions.keySet()) {
+				PropertyListActionListener actionListener = _addActions.get(action);
+				if (actionListener.isActive(_tableModel.getSelectedObject())) {
 					isActive = true;
 				}
-        	}
-        	plusButton.setEnabled(isActive);
-        }
-
-        boolean isMinusActive = false;
-        for (PropertyListAction action : _removeActions.keySet()) {
-        	PropertyListActionListener actionListener = _removeActions.get(action);
-        	if (actionListener.isActive(_tableModel.getSelectedObject())) {
-        		isMinusActive = true;
-        	}
-         }
-        minusButton.setEnabled(isMinusActive);
-
-        optionsButton.setEnabled(_otherActions.size() > 0);
-        
-        /*FlexoModelObject focusedObject = getFocusedObject();
-        Vector<FlexoModelObject> globalSelection = buildGlobalSelection();
-        plusButton.setEnabled((focusedObject != null) && (getActionTypesWithAddType(focusedObject).size() > 0));
-        minusButton.setEnabled((focusedObject != null) && (getActionTypesWithDeleteType(focusedObject, globalSelection).size() > 0));
-        plusActionMenuNeedsRecomputed = true;*/
-    }
-
-    protected void handleSelectionCleared()
-    {
-    	handleSelectionChanged();
-    	
-        /*System.out.println("handleSelectionCleared");
-        
-        plusButton.setEnabled(false);
-        minusButton.setEnabled(false);
- 
-        plusActionMenuNeedsRecomputed = true;
-        minusActionMenuNeedsRecomputed = true;
-        optionsActionMenuNeedsRecomputed = true;
- */
-    }
-
-    void plusPressed()
-    {
-        for (PropertyListAction action : _addActions.keySet()) {
-        	PropertyListActionListener actionListener = _addActions.get(action);
-        	if (actionListener.isActive(_tableModel.getSelectedObject())) {
-               	actionListener.performAction();
-        	}
-        }
-    }
-
-    void minusPressed()
-    {
-        for (PropertyListAction action : _removeActions.keySet()) {
-        	PropertyListActionListener actionListener = _removeActions.get(action);
-        	if (actionListener.isActive(_tableModel.getSelectedObject())) {
-         		actionListener.performAction(_tableModel.getSelectedObject(), _tableModel.getSelectedObjects());
-        	}
-       }
-   }
-
- 
-    boolean hasMultiplePlusActions()
-    {
-        return _addActions.size() > 1;
-    }
-
-    boolean hasMultipleMinusActions()
-    {
-        return _removeActions.size() > 1;
-    }
-
-    private JPopupMenu plusActionMenu = null;
-    private JPopupMenu minusActionMenu = null;
-    private JPopupMenu optionsActionMenu = null;
-
-    private boolean plusActionMenuNeedsRecomputed = true;
-    private boolean minusActionMenuNeedsRecomputed = true;
-    private boolean optionsActionMenuNeedsRecomputed = true;
-
-    private JPopupMenu getPlusActionMenu()
-    {
-         if (plusActionMenuNeedsRecomputed) {
-            plusActionMenu = new JPopupMenu();
-            if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Build plus menu");
 			}
-            
-        	for (PropertyListAction action : _addActions.keySet()) {
-        		PropertyListActionListener actionListener = _addActions.get(action);
-        		actionListener.setSelectedObject(_tableModel.getSelectedObject());
-        		actionListener.setSelectedObjects(_tableModel.getSelectedObjects());
-                JMenuItem menuItem = new JMenuItem(FlexoLocalization.localizedForKey(action.name));
-                menuItem.addActionListener(actionListener);
-                plusActionMenu.add(menuItem);
-                menuItem.setEnabled(actionListener.isActive(_tableModel.getSelectedObject()));
-        	}
- 
-        	plusActionMenuNeedsRecomputed = false;
-        }
-        return plusActionMenu;
-    }
+			plusButton.setEnabled(isActive);
+		}
 
-    private JPopupMenu getMinusActionMenu()
-    {
-    	if (minusActionMenuNeedsRecomputed) {
-    		minusActionMenu = new JPopupMenu();
+		boolean isMinusActive = false;
+		for (PropertyListAction action : _removeActions.keySet()) {
+			PropertyListActionListener actionListener = _removeActions.get(action);
+			if (actionListener.isActive(_tableModel.getSelectedObject())) {
+				isMinusActive = true;
+			}
+		}
+		minusButton.setEnabled(isMinusActive);
 
-    		for (PropertyListAction action : _removeActions.keySet()) {
-    			PropertyListActionListener actionListener = _removeActions.get(action);
-    			actionListener.setSelectedObject(_tableModel.getSelectedObject());
-    			actionListener.setSelectedObjects(_tableModel.getSelectedObjects());
-    			JMenuItem menuItem = new JMenuItem(FlexoLocalization.localizedForKey(action.name));
-    			menuItem.addActionListener(actionListener);
-    			minusActionMenu.add(menuItem);
-    			menuItem.setEnabled(actionListener.isActive(_tableModel.getSelectedObject()));
-    		}
+		optionsButton.setEnabled(_otherActions.size() > 0);
 
-    		minusActionMenuNeedsRecomputed = false;
-    	}
-    	return minusActionMenu;
-    }
+		/*FlexoModelObject focusedObject = getFocusedObject();
+		Vector<FlexoModelObject> globalSelection = buildGlobalSelection();
+		plusButton.setEnabled((focusedObject != null) && (getActionTypesWithAddType(focusedObject).size() > 0));
+		minusButton.setEnabled((focusedObject != null) && (getActionTypesWithDeleteType(focusedObject, globalSelection).size() > 0));
+		plusActionMenuNeedsRecomputed = true;*/
+	}
 
-    private JPopupMenu getOptionActionMenu()
-    {
-    	if (optionsActionMenuNeedsRecomputed) {
-    		optionsActionMenu = new JPopupMenu();
-    		if (logger.isLoggable(Level.FINE)) {
+	protected void handleSelectionCleared() {
+		handleSelectionChanged();
+
+		/*System.out.println("handleSelectionCleared");
+		
+		plusButton.setEnabled(false);
+		minusButton.setEnabled(false);
+		
+		plusActionMenuNeedsRecomputed = true;
+		minusActionMenuNeedsRecomputed = true;
+		optionsActionMenuNeedsRecomputed = true;
+		*/
+	}
+
+	void plusPressed() {
+		for (PropertyListAction action : _addActions.keySet()) {
+			PropertyListActionListener actionListener = _addActions.get(action);
+			if (actionListener.isActive(_tableModel.getSelectedObject())) {
+				actionListener.performAction();
+			}
+		}
+	}
+
+	void minusPressed() {
+		for (PropertyListAction action : _removeActions.keySet()) {
+			PropertyListActionListener actionListener = _removeActions.get(action);
+			if (actionListener.isActive(_tableModel.getSelectedObject())) {
+				actionListener.performAction(_tableModel.getSelectedObject(), _tableModel.getSelectedObjects());
+			}
+		}
+	}
+
+	boolean hasMultiplePlusActions() {
+		return _addActions.size() > 1;
+	}
+
+	boolean hasMultipleMinusActions() {
+		return _removeActions.size() > 1;
+	}
+
+	private JPopupMenu plusActionMenu = null;
+	private JPopupMenu minusActionMenu = null;
+	private JPopupMenu optionsActionMenu = null;
+
+	private boolean plusActionMenuNeedsRecomputed = true;
+	private boolean minusActionMenuNeedsRecomputed = true;
+	private boolean optionsActionMenuNeedsRecomputed = true;
+
+	private JPopupMenu getPlusActionMenu() {
+		if (plusActionMenuNeedsRecomputed) {
+			plusActionMenu = new JPopupMenu();
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Build plus menu");
 			}
 
-    		for (PropertyListAction action : _otherActions.keySet()) {
-    			PropertyListActionListener actionListener = _otherActions.get(action);
-    			actionListener.setSelectedObject(_tableModel.getSelectedObject());
-    			actionListener.setSelectedObjects(_tableModel.getSelectedObjects());
-    			JMenuItem menuItem = new JMenuItem(FlexoLocalization.localizedForKey(action.name));
-    			menuItem.addActionListener(actionListener);
-    			optionsActionMenu.add(menuItem);
-    			menuItem.setEnabled(actionListener.isActive(_tableModel.getSelectedObject()));
-    		}
+			for (PropertyListAction action : _addActions.keySet()) {
+				PropertyListActionListener actionListener = _addActions.get(action);
+				actionListener.setSelectedObject(_tableModel.getSelectedObject());
+				actionListener.setSelectedObjects(_tableModel.getSelectedObjects());
+				JMenuItem menuItem = new JMenuItem(FlexoLocalization.localizedForKey(action.name));
+				menuItem.addActionListener(actionListener);
+				plusActionMenu.add(menuItem);
+				menuItem.setEnabled(actionListener.isActive(_tableModel.getSelectedObject()));
+			}
 
-        	optionsActionMenuNeedsRecomputed = false;
-        }
-        return optionsActionMenu;
-    }
+			plusActionMenuNeedsRecomputed = false;
+		}
+		return plusActionMenu;
+	}
 
-    
-    private Hashtable<PropertyListAction,PropertyListActionListener> _addActions;
-    private Hashtable<PropertyListAction,PropertyListActionListener> _removeActions;
-    private Hashtable<PropertyListAction,PropertyListActionListener> _otherActions;
-    
-    private void initializeActions(PropertyListModel propertyListModel, PropertyListTableModel tableModel)
-    {
-    	_addActions = new Hashtable<PropertyListAction, PropertyListActionListener>();
-    	_removeActions = new Hashtable<PropertyListAction, PropertyListActionListener>();
-    	_otherActions = new Hashtable<PropertyListAction, PropertyListActionListener>();
-           	
-        for (Enumeration en = propertyListModel.getActions().elements(); en.hasMoreElements();) {
-            PropertyListAction plAction = (PropertyListAction) en.nextElement();
-            PropertyListActionListener plActionListener = new PropertyListActionListener(plAction, tableModel);
-            if (plAction.type.equals("ADD")) {
-            	_addActions.put(plAction, plActionListener);
-            } else if (plAction.type.equals("DELETE")) {
-            	_removeActions.put(plAction, plActionListener);
-            } else if (plAction.type.equals("ACTION")) {
-            	_otherActions.put(plAction, plActionListener);
-            } else if (plAction.type.equals("STATIC_ACTION")) {
-               	_otherActions.put(plAction, plActionListener);
-            }
-        }
-    }
-    
-    protected Enumeration<PropertyListActionListener> getAddActionListeners()
-    {
-    	return _addActions.elements();
-    }
-    
-    protected void setModel(InspectableObject model)
-    {
-    	//logger.info("Set model with "+model);
-       	for (PropertyListAction action : _addActions.keySet()) {
-    		PropertyListActionListener actionListener = _addActions.get(action);
-    		actionListener.setModel(model);
-       	}   	
-       	for (PropertyListAction action : _removeActions.keySet()) {
-    		PropertyListActionListener actionListener = _removeActions.get(action);
-    		actionListener.setModel(model);
-       	}   	
-       	for (PropertyListAction action : _otherActions.keySet()) {
-    		PropertyListActionListener actionListener = _otherActions.get(action);
-    		actionListener.setModel(model);
-       	}   	
-       	handleSelectionChanged();
-      /* for (Enumeration en = _controls.elements(); en.hasMoreElements();) {
-            PropertyListActionListener actionListener = (PropertyListActionListener) en.nextElement();
-        	actionListener.setModel(model);
-        }
-        updateControls(null);*/
-    }
+	private JPopupMenu getMinusActionMenu() {
+		if (minusActionMenuNeedsRecomputed) {
+			minusActionMenu = new JPopupMenu();
 
+			for (PropertyListAction action : _removeActions.keySet()) {
+				PropertyListActionListener actionListener = _removeActions.get(action);
+				actionListener.setSelectedObject(_tableModel.getSelectedObject());
+				actionListener.setSelectedObjects(_tableModel.getSelectedObjects());
+				JMenuItem menuItem = new JMenuItem(FlexoLocalization.localizedForKey(action.name));
+				menuItem.addActionListener(actionListener);
+				minusActionMenu.add(menuItem);
+				menuItem.setEnabled(actionListener.isActive(_tableModel.getSelectedObject()));
+			}
+
+			minusActionMenuNeedsRecomputed = false;
+		}
+		return minusActionMenu;
+	}
+
+	private JPopupMenu getOptionActionMenu() {
+		if (optionsActionMenuNeedsRecomputed) {
+			optionsActionMenu = new JPopupMenu();
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Build plus menu");
+			}
+
+			for (PropertyListAction action : _otherActions.keySet()) {
+				PropertyListActionListener actionListener = _otherActions.get(action);
+				actionListener.setSelectedObject(_tableModel.getSelectedObject());
+				actionListener.setSelectedObjects(_tableModel.getSelectedObjects());
+				JMenuItem menuItem = new JMenuItem(FlexoLocalization.localizedForKey(action.name));
+				menuItem.addActionListener(actionListener);
+				optionsActionMenu.add(menuItem);
+				menuItem.setEnabled(actionListener.isActive(_tableModel.getSelectedObject()));
+			}
+
+			optionsActionMenuNeedsRecomputed = false;
+		}
+		return optionsActionMenu;
+	}
+
+	private Hashtable<PropertyListAction, PropertyListActionListener> _addActions;
+	private Hashtable<PropertyListAction, PropertyListActionListener> _removeActions;
+	private Hashtable<PropertyListAction, PropertyListActionListener> _otherActions;
+
+	private void initializeActions(PropertyListModel propertyListModel, PropertyListTableModel tableModel) {
+		_addActions = new Hashtable<PropertyListAction, PropertyListActionListener>();
+		_removeActions = new Hashtable<PropertyListAction, PropertyListActionListener>();
+		_otherActions = new Hashtable<PropertyListAction, PropertyListActionListener>();
+
+		for (Enumeration en = propertyListModel.getActions().elements(); en.hasMoreElements();) {
+			PropertyListAction plAction = (PropertyListAction) en.nextElement();
+			PropertyListActionListener plActionListener = new PropertyListActionListener(plAction, tableModel);
+			if (plAction.type.equals("ADD")) {
+				_addActions.put(plAction, plActionListener);
+			} else if (plAction.type.equals("DELETE")) {
+				_removeActions.put(plAction, plActionListener);
+			} else if (plAction.type.equals("ACTION")) {
+				_otherActions.put(plAction, plActionListener);
+			} else if (plAction.type.equals("STATIC_ACTION")) {
+				_otherActions.put(plAction, plActionListener);
+			}
+		}
+	}
+
+	protected Enumeration<PropertyListActionListener> getAddActionListeners() {
+		return _addActions.elements();
+	}
+
+	protected void setModel(InspectableObject model) {
+		// logger.info("Set model with "+model);
+		for (PropertyListAction action : _addActions.keySet()) {
+			PropertyListActionListener actionListener = _addActions.get(action);
+			actionListener.setModel(model);
+		}
+		for (PropertyListAction action : _removeActions.keySet()) {
+			PropertyListActionListener actionListener = _removeActions.get(action);
+			actionListener.setModel(model);
+		}
+		for (PropertyListAction action : _otherActions.keySet()) {
+			PropertyListActionListener actionListener = _otherActions.get(action);
+			actionListener.setModel(model);
+		}
+		handleSelectionChanged();
+		/* for (Enumeration en = _controls.elements(); en.hasMoreElements();) {
+		      PropertyListActionListener actionListener = (PropertyListActionListener) en.nextElement();
+		  	actionListener.setModel(model);
+		  }
+		  updateControls(null);*/
+	}
 
 }

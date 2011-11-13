@@ -22,35 +22,30 @@ package org.openflexo.xmlcode;
 
 /**
  * <p>
- * Exception thrown when trying to decode an object from invalid XML data
- * regarding a given mapping or model file. The 'message' (see
+ * Exception thrown when trying to decode an object from invalid XML data regarding a given mapping or model file. The 'message' (see
  * {@link #getMessage()}) contains the error description.
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  * @see XMLCoder
  * @see XMLDecoder
  */
-public class InvalidXMLDataException extends RuntimeException
-{
+public class InvalidXMLDataException extends RuntimeException {
 
-    /**
-     * Creates a new <code>InvalidXMLDataException</code> instance.
-     * 
-     */
-    public InvalidXMLDataException()
-    {
-        super();
-    }
+	/**
+	 * Creates a new <code>InvalidXMLDataException</code> instance.
+	 * 
+	 */
+	public InvalidXMLDataException() {
+		super();
+	}
 
-    /**
-     * Creates a new <code>InvalidXMLDataException</code> instance, given a
-     * message <code>aMessage</code>
-     * 
-     * @param aMessage
-     *            a <code>String</code> value
-     */
-    public InvalidXMLDataException(String aMessage)
-    {
-        super(aMessage);
-    }
+	/**
+	 * Creates a new <code>InvalidXMLDataException</code> instance, given a message <code>aMessage</code>
+	 * 
+	 * @param aMessage
+	 *            a <code>String</code> value
+	 */
+	public InvalidXMLDataException(String aMessage) {
+		super(aMessage);
+	}
 }

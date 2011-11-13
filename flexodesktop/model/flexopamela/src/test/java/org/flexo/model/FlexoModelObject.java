@@ -13,30 +13,30 @@ import org.openflexo.model.factory.AccessibleProxyObject;
 import org.openflexo.model.factory.CloneableProxyObject;
 import org.openflexo.model.factory.ObservableObject;
 
-@ModelEntity(isAbstract=true)
+@ModelEntity(isAbstract = true)
 @ImplementationClass(FlexoModelObjectImpl.class)
-public interface FlexoModelObject extends AccessibleProxyObject,ObservableObject,CloneableProxyObject {
+public interface FlexoModelObject extends AccessibleProxyObject, ObservableObject, CloneableProxyObject {
 
 	public static final String FLEXO_ID = "flexoId";
 	public static final String NAME = "name";
 	public static final String DELETED = "deleted";
 
-	//@XMLProperty(id="flexoId",kind=Kind.GETTER,xml="flexoID",defaultValue="00000")
+	// @XMLProperty(id="flexoId",kind=Kind.GETTER,xml="flexoID",defaultValue="00000")
 
-	@Getter(value=FLEXO_ID,defaultValue="0000")
-	@XMLAttribute(xmlTag=FLEXO_ID)
+	@Getter(value = FLEXO_ID, defaultValue = "0000")
+	@XMLAttribute(xmlTag = FLEXO_ID)
 	public String getFlexoID();
 
-	//@XMLProperty(id="flexoId",kind=Kind.SETTER)
-	@Setter(value=FLEXO_ID)
+	// @XMLProperty(id="flexoId",kind=Kind.SETTER)
+	@Setter(value = FLEXO_ID)
 	public void setFlexoID(String flexoID);
 
-	@Getter(value=NAME,defaultValue="???")
-	@XMLAttribute(xmlTag=NAME)
-	@CloningStrategy(value=StrategyType.FACTORY,factory="deriveName()")
+	@Getter(value = NAME, defaultValue = "???")
+	@XMLAttribute(xmlTag = NAME)
+	@CloningStrategy(value = StrategyType.FACTORY, factory = "deriveName()")
 	public String getName();
 
-	@Setter(value=NAME)
+	@Setter(value = NAME)
 	public void setName(String name);
 
 	public String deriveName();

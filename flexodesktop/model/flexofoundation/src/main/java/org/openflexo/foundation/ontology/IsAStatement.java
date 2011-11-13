@@ -30,17 +30,15 @@ public abstract class IsAStatement extends OntologyStatement {
 
 	private OntologyObject parentObject;
 
-	public IsAStatement(OntologyObject subject, Statement s)
-	{
-		super(subject,s);
+	public IsAStatement(OntologyObject subject, Statement s) {
+		super(subject, s);
 		if (s.getObject() instanceof Resource) {
-			parentObject = getOntologyLibrary().getOntologyObject(((Resource)s.getObject()).getURI());
+			parentObject = getOntologyLibrary().getOntologyObject(((Resource) s.getObject()).getURI());
 		}
 	}
 
-	public OntologyObject getParentObject() 
-	{
+	public OntologyObject getParentObject() {
 		return parentObject;
 	}
-	
+
 }

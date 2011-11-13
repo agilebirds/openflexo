@@ -26,7 +26,7 @@ package com.swabunga.spell.swing.autospell;
  */
 public interface AutoSpellConstants {
 
-	public static final String 	wordMisspelled="misspelled";
-	public static final Boolean wordMisspelledTrue=new Boolean(true);
-	
+	public static final String wordMisspelled = "misspelled";
+	public static final Boolean wordMisspelledTrue = new Boolean(true);
+
 }

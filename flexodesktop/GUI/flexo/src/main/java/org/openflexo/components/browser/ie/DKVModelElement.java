@@ -24,35 +24,31 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.dkv.DKVModel;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class DKVModelElement extends BrowserElement
-{
+public class DKVModelElement extends BrowserElement {
 
-    /**
-     * @param object
-     * @param elementType
-     * @param browser
-     */
-    public DKVModelElement(DKVModel object, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(object, BrowserElementType.DKV_MODEL, browser, parent);
-    }
+	/**
+	 * @param object
+	 * @param elementType
+	 * @param browser
+	 */
+	public DKVModelElement(DKVModel object, ProjectBrowser browser, BrowserElement parent) {
+		super(object, BrowserElementType.DKV_MODEL, browser, parent);
+	}
 
-    /**
-     * Overrides buildChildrenVector
-     *
-     * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
-     */
-    @Override
-	protected void buildChildrenVector()
-    {
-        DKVModel model = (DKVModel) getObject();
-        addToChilds(model.getDomainList());
-        addToChilds(model.getLanguageList());
-    }
+	/**
+	 * Overrides buildChildrenVector
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#buildChildrenVector()
+	 */
+	@Override
+	protected void buildChildrenVector() {
+		DKVModel model = (DKVModel) getObject();
+		addToChilds(model.getDomainList());
+		addToChilds(model.getLanguageList());
+	}
 
 }

@@ -23,7 +23,7 @@ import org.openflexo.foundation.sg.implmodel.TechnologyModuleDefinition;
 
 /**
  * @author Nicolas Daniels
- *
+ * 
  */
 public class TechnologyModuleCompatibilityCheckException extends ImplementationModelException {
 
@@ -35,7 +35,8 @@ public class TechnologyModuleCompatibilityCheckException extends ImplementationM
 		super();
 		this.module = module;
 		this.moduleIncompatibleWith = moduleIncompatibleWith;
-		message = new StringBuilder("Module '" + module.getName() + "' is incompatible with module '" + moduleIncompatibleWith.getName() + "'");
+		message = new StringBuilder("Module '" + module.getName() + "' is incompatible with module '" + moduleIncompatibleWith.getName()
+				+ "'");
 	}
 
 	public TechnologyModuleDefinition getModule() {

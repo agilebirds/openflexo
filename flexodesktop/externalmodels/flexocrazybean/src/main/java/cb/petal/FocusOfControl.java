@@ -18,81 +18,87 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents Focus_Of_Control object
- *
+ * 
  * @version $Id: FocusOfControl.java,v 1.3 2011/09/12 11:46:49 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class FocusOfControl extends PetalObject implements Tagged {
-  private int tag = -1;
+	private int tag = -1;
 
-  public FocusOfControl(PetalNode parent, Collection params, int tag) {
-    super(parent, "Focus_Of_Control", params);
-    setTag(tag);
-  }
+	public FocusOfControl(PetalNode parent, Collection params, int tag) {
+		super(parent, "Focus_Of_Control", params);
+		setTag(tag);
+	}
 
-  public FocusOfControl() {
-    super("Focus_Of_Control");
-  }
-  
-  @Override
-public void setTag(int t) { tag = t; }
-  @Override
-public int  getTag()      { return tag; }
+	public FocusOfControl() {
+		super("Focus_Of_Control");
+	}
 
-  public Location getLocation() {
-    return (Location)getProperty("location");
-  }
+	@Override
+	public void setTag(int t) {
+		tag = t;
+	}
 
-  public void setLocation(Location o) {
-    defineProperty("location", o);
-  }
+	@Override
+	public int getTag() {
+		return tag;
+	}
 
-  public String getIconStyle() {
-    return getPropertyAsString("icon_style");
-  }
+	public Location getLocation() {
+		return (Location) getProperty("location");
+	}
 
-  public void setIconStyle(String o) {
-    defineProperty("icon_style", o);
-  }
+	public void setLocation(Location o) {
+		defineProperty("location", o);
+	}
 
-  public Tag getInterObjView() {
-    return (Tag)getProperty("InterObjView");
-  }
+	public String getIconStyle() {
+		return getPropertyAsString("icon_style");
+	}
 
-  public void setInterObjView(Tag o) {
-    defineProperty("InterObjView", o);
-  }
+	public void setIconStyle(String o) {
+		defineProperty("icon_style", o);
+	}
 
-  public int getHeight() {
-    return getPropertyAsInteger("height");
-  }
+	public Tag getInterObjView() {
+		return (Tag) getProperty("InterObjView");
+	}
 
-  public void setHeight(int o) {
-    defineProperty("height", o);
-  }
+	public void setInterObjView(Tag o) {
+		defineProperty("InterObjView", o);
+	}
 
-  public int getYCoord() {
-    return getPropertyAsInteger("y_coord");
-  }
+	public int getHeight() {
+		return getPropertyAsInteger("height");
+	}
 
-  public void setYCoord(int o) {
-    defineProperty("y_coord", o);
-  }
+	public void setHeight(int o) {
+		defineProperty("height", o);
+	}
 
-  public boolean getNested() {
-    return getPropertyAsBoolean("Nested");
-  }
+	public int getYCoord() {
+		return getPropertyAsInteger("y_coord");
+	}
 
-  public void setNested(boolean o) {
-    defineProperty("Nested", o);
-  }
+	public void setYCoord(int o) {
+		defineProperty("y_coord", o);
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	public boolean getNested() {
+		return getPropertyAsBoolean("Nested");
+	}
+
+	public void setNested(boolean o) {
+		defineProperty("Nested", o);
+	}
+
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

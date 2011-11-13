@@ -25,113 +25,94 @@ import org.openflexo.fge.geomedit.construction.HalfLineConstruction;
 import org.openflexo.fge.geomedit.gr.HalfLineGraphicalRepresentation;
 import org.openflexo.fge.notifications.FGENotification;
 
-
 public class HalfLine extends GeometricObject<FGEHalfLine> {
 
 	private HalfLineGraphicalRepresentation graphicalRepresentation;
-	
+
 	// Called for LOAD
-	public HalfLine(GeomEditBuilder builder)
-	{
+	public HalfLine(GeomEditBuilder builder) {
 		super(builder);
 	}
-	
-	public HalfLine(GeometricSet set, HalfLineConstruction construction) 
-	{
+
+	public HalfLine(GeometricSet set, HalfLineConstruction construction) {
 		super(set, construction);
-		graphicalRepresentation = new HalfLineGraphicalRepresentation(this,set.getEditedDrawing());
+		graphicalRepresentation = new HalfLineGraphicalRepresentation(this, set.getEditedDrawing());
 	}
-	
+
 	@Override
-	public HalfLineGraphicalRepresentation getGraphicalRepresentation()
-	{
+	public HalfLineGraphicalRepresentation getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
 
-	public void setGraphicalRepresentation(HalfLineGraphicalRepresentation aGR)
-	{
+	public void setGraphicalRepresentation(HalfLineGraphicalRepresentation aGR) {
 		aGR.setDrawable(this);
 		graphicalRepresentation = aGR;
 	}
-	
+
 	@Override
-	public HalfLineConstruction getConstruction()
-	{
-		return (HalfLineConstruction)super.getConstruction();
+	public HalfLineConstruction getConstruction() {
+		return (HalfLineConstruction) super.getConstruction();
 	}
 
-	public void setConstruction(HalfLineConstruction lineConstruction)
-	{
+	public void setConstruction(HalfLineConstruction lineConstruction) {
 		_setConstruction(lineConstruction);
 	}
 
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return "HalfLine.inspector";
 	}
 
-
-	public double getLimitX()
-	{
+	public double getLimitX() {
 		return getGeometricObject().getX1();
 	}
 
-	public void setLimitX(double limitX)
-	{
-		if (limitX != getLimitX()) { 
+	public void setLimitX(double limitX) {
+		if (limitX != getLimitX()) {
 			double oldLimitX = getLimitX();
 			getGeometricObject().setX1(limitX);
-			getGraphicalRepresentation().notify(new FGENotification("x1",oldLimitX,limitX));
+			getGraphicalRepresentation().notify(new FGENotification("x1", oldLimitX, limitX));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}
 
-	public double getLimitY()
-	{
+	public double getLimitY() {
 		return getGeometricObject().getY1();
 	}
 
-	public void setLimitY(double limitY)
-	{
-		if (limitY != getLimitY()) { 
+	public void setLimitY(double limitY) {
+		if (limitY != getLimitY()) {
 			double oldLimitY = getLimitY();
 			getGeometricObject().setY1(limitY);
-			getGraphicalRepresentation().notify(new FGENotification("y1",oldLimitY,limitY));
+			getGraphicalRepresentation().notify(new FGENotification("y1", oldLimitY, limitY));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}
 
-
-	public double getOppositeX()
-	{
+	public double getOppositeX() {
 		return getGeometricObject().getX2();
 	}
 
-	public void setOppositeX(double oppositeX)
-	{
-		if (oppositeX != getOppositeX()) { 
+	public void setOppositeX(double oppositeX) {
+		if (oppositeX != getOppositeX()) {
 			double oldOppositeX = getOppositeX();
 			getGeometricObject().setX2(oppositeX);
-			getGraphicalRepresentation().notify(new FGENotification("x2",oldOppositeX,oppositeX));
+			getGraphicalRepresentation().notify(new FGENotification("x2", oldOppositeX, oppositeX));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}
 
-	public double getOppositeY()
-	{
+	public double getOppositeY() {
 		return getGeometricObject().getY2();
 	}
 
-	public void setOppositeY(double oppositeY)
-	{
-		if (oppositeY != getOppositeY()) { 
+	public void setOppositeY(double oppositeY) {
+		if (oppositeY != getOppositeY()) {
 			double oldOppositeY = getOppositeY();
 			getGeometricObject().setY2(oppositeY);
-			getGraphicalRepresentation().notify(new FGENotification("y2",oldOppositeY,oppositeY));
+			getGraphicalRepresentation().notify(new FGENotification("y2", oldOppositeY, oppositeY));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}
-
 
 }

@@ -28,45 +28,37 @@ import org.openflexo.foundation.ie.action.UnwrapConditional;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class UnwrapConditionalInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	UnwrapConditionalInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(UnwrapConditional.actionType,actionInitializer);
+	UnwrapConditionalInitializer(IEControllerActionInitializer actionInitializer) {
+		super(UnwrapConditional.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<UnwrapConditional> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<UnwrapConditional> getDefaultInitializer() {
 		return new FlexoActionInitializer<UnwrapConditional>() {
 			@Override
-			public boolean run(ActionEvent e, UnwrapConditional action)
-			{
+			public boolean run(ActionEvent e, UnwrapConditional action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<UnwrapConditional> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<UnwrapConditional> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<UnwrapConditional>() {
 			@Override
-			public boolean run(ActionEvent e, UnwrapConditional action)
-			{
+			public boolean run(ActionEvent e, UnwrapConditional action) {
 				return true;
 			}
 		};
 	}
-
 
 }

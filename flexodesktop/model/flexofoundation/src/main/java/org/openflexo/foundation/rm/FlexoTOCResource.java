@@ -29,16 +29,16 @@ public class FlexoTOCResource extends FlexoXMLStorageResource<TOCData> {
 		_resourceData = tocData;
 		tocData.setFlexoResource(this);
 	}
-	
+
 	public FlexoTOCResource(FlexoProject project) {
 		super(project);
 	}
-	
+
 	public FlexoTOCResource(FlexoProjectBuilder projectBuilder) {
 		super(projectBuilder.project);
 		projectBuilder.notifyResourceLoading(this);
 	}
-	
+
 	@Override
 	public String getName() {
 		return project.getName();
@@ -60,12 +60,12 @@ public class FlexoTOCResource extends FlexoXMLStorageResource<TOCData> {
 		builder.tocData = _resourceData;
 		return builder;
 	}
-	
+
 	@Override
 	public boolean hasBuilder() {
 		return true;
 	}
-	
+
 	@Override
 	protected boolean isDuplicateSerializationIdentifierRepairable() {
 		return false;

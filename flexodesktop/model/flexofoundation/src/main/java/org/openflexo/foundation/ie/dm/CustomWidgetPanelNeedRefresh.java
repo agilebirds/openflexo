@@ -19,11 +19,9 @@
  */
 package org.openflexo.foundation.ie.dm;
 
-public class CustomWidgetPanelNeedRefresh extends IEDataModification
-{
+public class CustomWidgetPanelNeedRefresh extends IEDataModification {
 
-    public CustomWidgetPanelNeedRefresh()
-    {
-        super(null, null);
-    }
+	public CustomWidgetPanelNeedRefresh() {
+		super(null, null);
+	}
 }

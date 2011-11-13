@@ -23,17 +23,15 @@ import org.openflexo.foundation.FlexoException;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class InvalidOperation extends FlexoException
-{
+public class InvalidOperation extends FlexoException {
 
-    /**
-     * @param string
-     */
-    public InvalidOperation(String string)
-    {
-        super(string,string);
-    }
+	/**
+	 * @param string
+	 */
+	public InvalidOperation(String string) {
+		super(string, string);
+	}
 
 }

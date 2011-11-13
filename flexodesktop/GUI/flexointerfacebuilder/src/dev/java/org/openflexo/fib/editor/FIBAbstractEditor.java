@@ -266,9 +266,11 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 
 		}
 
-		fileMenu.addSeparator();
 
-		fileMenu.add(quitItem);
+		if (showExitMenuItem()) {
+			fileMenu.addSeparator();
+			fileMenu.add(quitItem);
+		}
 
 		JMenuItem inspectItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION,"inspect"));
 		inspectItem.addActionListener(new ActionListener() {
@@ -456,6 +458,11 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		menuItem.addActionListener(actionListener);
 		actionMenu.add(menuItem);
 
+	}
+	
+	public boolean showExitMenuItem()
+	{
+		return true;
 	}
 }
 

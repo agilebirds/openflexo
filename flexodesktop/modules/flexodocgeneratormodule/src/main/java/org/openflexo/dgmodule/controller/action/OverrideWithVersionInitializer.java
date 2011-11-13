@@ -28,7 +28,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
-
 import org.openflexo.components.MultipleObjectSelectorPopup;
 import org.openflexo.dgmodule.view.popups.SelectFilesPopup;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -40,142 +39,102 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
 public class OverrideWithVersionInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	OverrideWithVersionInitializer(DGControllerActionInitializer actionInitializer)
-	{
-		super(null,actionInitializer);
+	OverrideWithVersionInitializer(DGControllerActionInitializer actionInitializer) {
+		super(null, actionInitializer);
 	}
-	
+
 	@Override
-	protected DGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DGControllerActionInitializer)super.getControllerActionInitializer();
+	protected DGControllerActionInitializer getControllerActionInitializer() {
+		return (DGControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<OverrideWithVersion> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<OverrideWithVersion> getDefaultInitializer() {
 		return new FlexoActionInitializer<OverrideWithVersion>() {
-            @Override
-			public boolean run(ActionEvent e, OverrideWithVersion action)
-            {
-             	if (action.getFilesToOverride().size() == 0) {
-            		FlexoController.notify(FlexoLocalization.localizedForKey("no_files_selected"));
-            		return false;
-            	}
-               	else if (action.getFilesToOverride().size() > 1 
-            			|| (!(action.getFocusedObject() instanceof CGFile))) {
-               		
-            		SelectFilesPopup popup 
-            		= new SelectFilesPopup(action.getActionType().getLocalizedName(),
-            				action.getActionType().getLocalizedDescription(),
-            				"override_files_on_disk",
-            				action.getFilesToOverride(),
-            				action.getFocusedObject().getProject(),
-            				getControllerActionInitializer().getDGController()) {
-            		    @Override
-						public JPanel getAdditionalPanel()
-            		    {
-             		        if (_additionalPanel == null) {
-            		            _additionalPanel = new JPanel();
-            		            _additionalPanel.setLayout(new FlowLayout());
-            		            setParam("DO_IT_NOW", Boolean.FALSE);
-            		            final JCheckBox doItNowCheckBox = new JCheckBox(FlexoLocalization.localizedForKey("check_this_box_if_you_want_override_to_be_immediately_performed"));
-            		            doItNowCheckBox.addActionListener(new ActionListener() {
-            		                @Override
+			@Override
+			public boolean run(ActionEvent e, OverrideWithVersion action) {
+				if (action.getFilesToOverride().size() == 0) {
+					FlexoController.notify(FlexoLocalization.localizedForKey("no_files_selected"));
+					return false;
+				} else if (action.getFilesToOverride().size() > 1 || (!(action.getFocusedObject() instanceof CGFile))) {
+
+					SelectFilesPopup popup = new SelectFilesPopup(action.getActionType().getLocalizedName(), action.getActionType()
+							.getLocalizedDescription(), "override_files_on_disk", action.getFilesToOverride(), action.getFocusedObject()
+							.getProject(), getControllerActionInitializer().getDGController()) {
+						@Override
+						public JPanel getAdditionalPanel() {
+							if (_additionalPanel == null) {
+								_additionalPanel = new JPanel();
+								_additionalPanel.setLayout(new FlowLayout());
+								setParam("DO_IT_NOW", Boolean.FALSE);
+								final JCheckBox doItNowCheckBox = new JCheckBox(
+										FlexoLocalization
+												.localizedForKey("check_this_box_if_you_want_override_to_be_immediately_performed"));
+								doItNowCheckBox.addActionListener(new ActionListener() {
+									@Override
 									public void actionPerformed(ActionEvent e) {
-            		                    setParam("DO_IT_NOW", doItNowCheckBox.isSelected());
-            		                }
-            		             });
-             		          _additionalPanel.add(doItNowCheckBox);
-            		          _additionalPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-            		        }
-             		        return _additionalPanel;
-            		    }
-            		 
-            		};
-            		popup.setVisible(true);
-            		if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) 
-            				&& (popup.getFileSet().getSelectedFiles().size() > 0)) {
-            			action.setDoItNow((Boolean)popup.getParam("DO_IT_NOW"));
-            			action.setFilesToOverride(popup.getFileSet().getSelectedFiles());
-            		}
-            		else {
-            			return false;
-            		}
-            	}
-               	else {
-               		// 1 occurence, ask confirmation
-               		String cancelOption = FlexoLocalization.localizedForKey("cancel");
-               		String doItNowOption = FlexoLocalization.localizedForKey("override_now");
-               		String reviewOption = FlexoLocalization.localizedForKey("review");
-               		int choice = FlexoController.selectOption(action.getActionType().getLocalizedName()+"\n"
-               				+FlexoLocalization.localizedForKey("would_you_like_to_do_it_now"), 
-               				reviewOption, reviewOption, doItNowOption, cancelOption);
-               		if (choice == 2) return false;
-               		if (choice == 1) action.setDoItNow(true);
-               		if (choice == 0) action.setDoItNow(false);
-               	}
-               	return true;
-           }
-        };
+										setParam("DO_IT_NOW", doItNowCheckBox.isSelected());
+									}
+								});
+								_additionalPanel.add(doItNowCheckBox);
+								_additionalPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+							}
+							return _additionalPanel;
+						}
+
+					};
+					popup.setVisible(true);
+					if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) && (popup.getFileSet().getSelectedFiles().size() > 0)) {
+						action.setDoItNow((Boolean) popup.getParam("DO_IT_NOW"));
+						action.setFilesToOverride(popup.getFileSet().getSelectedFiles());
+					} else {
+						return false;
+					}
+				} else {
+					// 1 occurence, ask confirmation
+					String cancelOption = FlexoLocalization.localizedForKey("cancel");
+					String doItNowOption = FlexoLocalization.localizedForKey("override_now");
+					String reviewOption = FlexoLocalization.localizedForKey("review");
+					int choice = FlexoController.selectOption(
+							action.getActionType().getLocalizedName() + "\n"
+									+ FlexoLocalization.localizedForKey("would_you_like_to_do_it_now"), reviewOption, reviewOption,
+							doItNowOption, cancelOption);
+					if (choice == 2)
+						return false;
+					if (choice == 1)
+						action.setDoItNow(true);
+					if (choice == 0)
+						action.setDoItNow(false);
+				}
+				return true;
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<OverrideWithVersion> getDefaultFinalizer() 
-	{
+	@Override
+	protected FlexoActionFinalizer<OverrideWithVersion> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<OverrideWithVersion>() {
-            @Override
-			public boolean run(ActionEvent e, OverrideWithVersion action)
-            {
-               	return true;
-                          }
-        };
+			@Override
+			public boolean run(ActionEvent e, OverrideWithVersion action) {
+				return true;
+			}
+		};
 	}
 
-  	@Override
-	public void init()
-	{
-		initActionType(OverrideWithVersion.overrideWithPureGeneration,
-				getDefaultInitializer(), 
-				getDefaultFinalizer(), 
-				getDefaultExceptionHandler(), 
-				getEnableCondition(), 
-				getVisibleCondition(),
-				null, 
-				null, 
-				null);
-		initActionType(OverrideWithVersion.overrideWithGeneratedMerge,
-				getDefaultInitializer(), 
-				getDefaultFinalizer(), 
-				getDefaultExceptionHandler(), 
-				getEnableCondition(),
-				getVisibleCondition(),
-				null, 
-				null, 
-				null);
-		initActionType(OverrideWithVersion.overrideWithLastGenerated,
-				getDefaultInitializer(), 
-				getDefaultFinalizer(), 
-				getDefaultExceptionHandler(), 
-				getEnableCondition(), 
-				getVisibleCondition(),
-				null, 
-				null, 
-				null);
-		initActionType(OverrideWithVersion.overrideWithLastAccepted,
-				getDefaultInitializer(), 
-				getDefaultFinalizer(), 
-				getDefaultExceptionHandler(), 
-				getEnableCondition(), 
-				getVisibleCondition(),
-				null, 
-				null, 
-				null);
+	@Override
+	public void init() {
+		initActionType(OverrideWithVersion.overrideWithPureGeneration, getDefaultInitializer(), getDefaultFinalizer(),
+				getDefaultExceptionHandler(), getEnableCondition(), getVisibleCondition(), null, null, null);
+		initActionType(OverrideWithVersion.overrideWithGeneratedMerge, getDefaultInitializer(), getDefaultFinalizer(),
+				getDefaultExceptionHandler(), getEnableCondition(), getVisibleCondition(), null, null, null);
+		initActionType(OverrideWithVersion.overrideWithLastGenerated, getDefaultInitializer(), getDefaultFinalizer(),
+				getDefaultExceptionHandler(), getEnableCondition(), getVisibleCondition(), null, null, null);
+		initActionType(OverrideWithVersion.overrideWithLastAccepted, getDefaultInitializer(), getDefaultFinalizer(),
+				getDefaultExceptionHandler(), getEnableCondition(), getVisibleCondition(), null, null, null);
 	}
 
 }

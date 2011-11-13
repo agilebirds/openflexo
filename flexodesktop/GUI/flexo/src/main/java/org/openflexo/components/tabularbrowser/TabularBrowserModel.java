@@ -33,258 +33,224 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.rm.FlexoProject;
 
-
 /**
  * 
- * A TabularBrowserModel defines a model that will be used to build 
- * a JTable or TabularBrowserView.
+ * A TabularBrowserModel defines a model that will be used to build a JTable or TabularBrowserView.
  * 
  * @author sguerin
  */
-public class TabularBrowserModel extends ConfigurableProjectBrowser implements TreeTableModel, DataFlexoObserver
-{
-    
-    private static final Logger logger = Logger.getLogger(TabularBrowserModel.class.getPackage().getName());
+public class TabularBrowserModel extends ConfigurableProjectBrowser implements TreeTableModel, DataFlexoObserver {
 
-    private Vector _columns;
+	private static final Logger logger = Logger.getLogger(TabularBrowserModel.class.getPackage().getName());
 
-    private int _rowHeight = -1;
+	private Vector _columns;
 
-    private FlexoProject _project;
+	private int _rowHeight = -1;
 
-    public TabularBrowserModel(BrowserConfiguration configuration, String browsableColumnName, int browsableColumnWidth)
-    {
-        this(configuration, true, browsableColumnName, browsableColumnWidth);
-    }
+	private FlexoProject _project;
 
-    public TabularBrowserModel(BrowserConfiguration configuration, boolean initNow, String browsableColumnName, int browsableColumnWidth)
-    {
-        super(configuration,null,initNow);
-        _project = configuration.getProject();
-        _columns = new Vector();
-        addToColumns(_browsableColumn = new TreeColumn(browsableColumnName, browsableColumnWidth));
-    }
-    
-   private  TreeColumn _browsableColumn;
-    
-    protected TreeColumn getBrowsableColumn()
-    {
-        return _browsableColumn;
-    }
-    
-    protected class TreeColumn extends AbstractColumn implements EditableColumn
-    {
-        public TreeColumn(String title, int defaultWidth)
-        {
-            this(title, defaultWidth, true);
-        }
+	public TabularBrowserModel(BrowserConfiguration configuration, String browsableColumnName, int browsableColumnWidth) {
+		this(configuration, true, browsableColumnName, browsableColumnWidth);
+	}
 
-        public TreeColumn(String title, int defaultWidth, boolean isResizable)
-        {
-            this(title, defaultWidth, isResizable, true);
-        }
+	public TabularBrowserModel(BrowserConfiguration configuration, boolean initNow, String browsableColumnName, int browsableColumnWidth) {
+		super(configuration, null, initNow);
+		_project = configuration.getProject();
+		_columns = new Vector();
+		addToColumns(_browsableColumn = new TreeColumn(browsableColumnName, browsableColumnWidth));
+	}
 
-        public TreeColumn(String title, int defaultWidth, boolean isResizable, boolean displayTitle)
-        {
-            super(title, defaultWidth, isResizable, displayTitle);
-        }
+	private TreeColumn _browsableColumn;
 
-        @Override
-		public Class getValueClass()
-        {
-            return TreeTableModel.class;
-        }
+	protected TreeColumn getBrowsableColumn() {
+		return _browsableColumn;
+	}
 
-        @Override
-		public Object getValueFor(FlexoModelObject object)
-        {
-            return object;
-        }
+	protected class TreeColumn extends AbstractColumn implements EditableColumn {
+		public TreeColumn(String title, int defaultWidth) {
+			this(title, defaultWidth, true);
+		}
 
-        @Override
-		public void setValueFor(FlexoModelObject object, Object value)
-        {
-            // We dont care !
-        }
+		public TreeColumn(String title, int defaultWidth, boolean isResizable) {
+			this(title, defaultWidth, isResizable, true);
+		}
 
-        @Override
-		public boolean isCellEditableFor(FlexoModelObject object)
-        {
-            return true;
-        }
+		public TreeColumn(String title, int defaultWidth, boolean isResizable, boolean displayTitle) {
+			super(title, defaultWidth, isResizable, displayTitle);
+		}
 
-        @Override
-		public String toString()
-        {
-            return "TreeColumn " + "@" + Integer.toHexString(hashCode());
-        }
-        
-    }
+		@Override
+		public Class getValueClass() {
+			return TreeTableModel.class;
+		}
 
-     @Override
-	public Object getRoot() 
-    {
-        return getRootElement();
-    }
+		@Override
+		public Object getValueFor(FlexoModelObject object) {
+			return object;
+		}
 
-    @Override
-	public int getRowHeight()
-    {
-        return _rowHeight;
-    }
+		@Override
+		public void setValueFor(FlexoModelObject object, Object value) {
+			// We dont care !
+		}
 
-    @Override
-	public void setRowHeight(int aRowHeight)
-    {
-        _rowHeight = aRowHeight;
-    }
+		@Override
+		public boolean isCellEditableFor(FlexoModelObject object) {
+			return true;
+		}
 
-    public void addToColumns(AbstractColumn aColumn)
-    {
-        _columns.add(aColumn);
-    }
+		@Override
+		public String toString() {
+			return "TreeColumn " + "@" + Integer.toHexString(hashCode());
+		}
 
-    public void insertColumnAtIndex(AbstractColumn aColumn, int index)
-    {
-        _columns.insertElementAt(aColumn,index);
-    }
+	}
 
-    public void removeFromColumns(AbstractColumn aColumn)
-    {
-        _columns.remove(aColumn);
-    }
+	@Override
+	public Object getRoot() {
+		return getRootElement();
+	}
 
-    public AbstractColumn columnAt(int index)
-    {
-        AbstractColumn returned = (AbstractColumn) _columns.elementAt(index);
-        return returned;
-    }
+	@Override
+	public int getRowHeight() {
+		return _rowHeight;
+	}
 
-    public int getTotalPreferredWidth()
-    {
-        int returned = 0;
-        for (int i= 0; i<getColumnCount(); i++) {
-            returned += getDefaultColumnSize(i);
-        }
-        return returned;
-    }
-    
-    @Override
-	public int getColumnCount()
-    {
-        return _columns.size();
-    }
+	@Override
+	public void setRowHeight(int aRowHeight) {
+		_rowHeight = aRowHeight;
+	}
 
-    @Override
-	public String getColumnName(int col)
-    {
-        AbstractColumn column = columnAt(col);
-        if (column != null) {
-            return column.getLocalizedTitle();
-        }
-        return "???";
-    }
+	public void addToColumns(AbstractColumn aColumn) {
+		_columns.add(aColumn);
+	}
 
-    public int getDefaultColumnSize(int col)
-    {
-        AbstractColumn column = columnAt(col);
-        if (column != null) {
-            return column.getDefaultWidth();
-        }
-        return 75;
-    }
+	public void insertColumnAtIndex(AbstractColumn aColumn, int index) {
+		_columns.insertElementAt(aColumn, index);
+	}
 
-    public boolean getColumnResizable(int col)
-    {
-        AbstractColumn column = columnAt(col);
-        if (column != null) {
-            return column.getResizable();
-        }
-        return true;
-    }
+	public void removeFromColumns(AbstractColumn aColumn) {
+		_columns.remove(aColumn);
+	}
 
-    @Override
-	public Object getValueAt(Object el, int col) 
-    {
-        if (el instanceof BrowserElement) {
-            BrowserElement element = (BrowserElement)el;
-            AbstractColumn column = columnAt(col);
-            return column.getValueFor(element.getObject());
-        }
-        logger.warning("TabularBrowserModel shound contain only BrowserElement instances "+el);
-                return null;
-    }
+	public AbstractColumn columnAt(int index) {
+		AbstractColumn returned = (AbstractColumn) _columns.elementAt(index);
+		return returned;
+	}
 
-    @Override
-	public Object getChild(Object parent, int index) 
-    {
-        if (parent instanceof BrowserElement) {
-            BrowserElement element = (BrowserElement)parent;
-            return element.getChildAt(index);
-        }
-        logger.warning("TabularBrowserModel shound contain only BrowserElement instances "+parent);
-        return null;
-    }
+	public int getTotalPreferredWidth() {
+		int returned = 0;
+		for (int i = 0; i < getColumnCount(); i++) {
+			returned += getDefaultColumnSize(i);
+		}
+		return returned;
+	}
 
-    @Override
-	public int getChildCount(Object parent) 
-    {
-        if (parent instanceof BrowserElement) {
-            BrowserElement element = (BrowserElement)parent;
-            return element.getChildCount();
-        }
-        logger.warning("TabularBrowserModel shound contain only BrowserElement instances "+parent);
-        return 0;
-    }
+	@Override
+	public int getColumnCount() {
+		return _columns.size();
+	}
 
-    @Override
-	public Class getColumnClass(int col)
-    {
-        AbstractColumn column = columnAt(col);
-        return column.getValueClass();
-    }
-    
-     @Override
-	public boolean isCellEditable(Object element, int col) 
-    { 
-        if (element instanceof BrowserElement) {
-            AbstractColumn column = columnAt(col);
-            return column.isCellEditableFor(((BrowserElement)element).getObject());
-        }
-        return false;
-    }
-    
-    @Override
-	public void setValueAt(Object aValue, Object el, int col) 
-    {
-        if (el instanceof BrowserElement) {
-            BrowserElement element = (BrowserElement)el;
-            AbstractColumn column = columnAt(col);
-            if ((column.isCellEditableFor((element).getObject()))
-                    && (column instanceof EditableColumn)) {
-                ((EditableColumn)column).setValueFor(element.getObject(),aValue);
-                return;
-            }
-        }
-        logger.warning("TabularBrowserModel shound contain only BrowserElement instances "+el);
-    }
+	@Override
+	public String getColumnName(int col) {
+		AbstractColumn column = columnAt(col);
+		if (column != null) {
+			return column.getLocalizedTitle();
+		}
+		return "???";
+	}
 
-    @Override
+	public int getDefaultColumnSize(int col) {
+		AbstractColumn column = columnAt(col);
+		if (column != null) {
+			return column.getDefaultWidth();
+		}
+		return 75;
+	}
+
+	public boolean getColumnResizable(int col) {
+		AbstractColumn column = columnAt(col);
+		if (column != null) {
+			return column.getResizable();
+		}
+		return true;
+	}
+
+	@Override
+	public Object getValueAt(Object el, int col) {
+		if (el instanceof BrowserElement) {
+			BrowserElement element = (BrowserElement) el;
+			AbstractColumn column = columnAt(col);
+			return column.getValueFor(element.getObject());
+		}
+		logger.warning("TabularBrowserModel shound contain only BrowserElement instances " + el);
+		return null;
+	}
+
+	@Override
+	public Object getChild(Object parent, int index) {
+		if (parent instanceof BrowserElement) {
+			BrowserElement element = (BrowserElement) parent;
+			return element.getChildAt(index);
+		}
+		logger.warning("TabularBrowserModel shound contain only BrowserElement instances " + parent);
+		return null;
+	}
+
+	@Override
+	public int getChildCount(Object parent) {
+		if (parent instanceof BrowserElement) {
+			BrowserElement element = (BrowserElement) parent;
+			return element.getChildCount();
+		}
+		logger.warning("TabularBrowserModel shound contain only BrowserElement instances " + parent);
+		return 0;
+	}
+
+	@Override
+	public Class getColumnClass(int col) {
+		AbstractColumn column = columnAt(col);
+		return column.getValueClass();
+	}
+
+	@Override
+	public boolean isCellEditable(Object element, int col) {
+		if (element instanceof BrowserElement) {
+			AbstractColumn column = columnAt(col);
+			return column.isCellEditableFor(((BrowserElement) element).getObject());
+		}
+		return false;
+	}
+
+	@Override
+	public void setValueAt(Object aValue, Object el, int col) {
+		if (el instanceof BrowserElement) {
+			BrowserElement element = (BrowserElement) el;
+			AbstractColumn column = columnAt(col);
+			if ((column.isCellEditableFor((element).getObject())) && (column instanceof EditableColumn)) {
+				((EditableColumn) column).setValueFor(element.getObject(), aValue);
+				return;
+			}
+		}
+		logger.warning("TabularBrowserModel shound contain only BrowserElement instances " + el);
+	}
+
+	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-        // TODO Auto-generated method stub        
-    }
+		// TODO Auto-generated method stub
+	}
 
-   /* @Override
-    public BrowserElement makeNewElement(FlexoModelObject object) 
-    {
-    	logger.info("makeNewElement with "+object);
-    	return super.makeNewElement(object);
-    }*/
-    
-    @Override
-    public void update() {
-    	logger.info("Update called");
-    	super.update();
-    }
+	/* @Override
+	 public BrowserElement makeNewElement(FlexoModelObject object) 
+	 {
+	 	logger.info("makeNewElement with "+object);
+	 	return super.makeNewElement(object);
+	 }*/
+
+	@Override
+	public void update() {
+		logger.info("Update called");
+		super.update();
+	}
 
 }

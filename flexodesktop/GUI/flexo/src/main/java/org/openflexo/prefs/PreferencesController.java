@@ -52,15 +52,12 @@ import org.openflexo.view.controller.FlexoInspectorController;
 import org.openflexo.xmlcode.XMLCoder;
 import org.openflexo.xmlcode.XMLDecoder;
 
-
 /**
- * Controller dedicated to preferences: there is only one instance of this
- * controller
- *
+ * Controller dedicated to preferences: there is only one instance of this controller
+ * 
  * @author sguerin
  */
-public class PreferencesController implements FlexoObserver, AbstractController, InspectingWidget
-{
+public class PreferencesController implements FlexoObserver, AbstractController, InspectingWidget {
 
 	private static final Logger logger = Logger.getLogger(PreferencesController.class.getPackage().getName());
 
@@ -70,7 +67,7 @@ public class PreferencesController implements FlexoObserver, AbstractController,
 	// ==========================================================================
 	private Vector<String> _multiValuesAttributes;
 
-	private Hashtable<String,String> _propertyListAttributes;
+	private Hashtable<String, String> _propertyListAttributes;
 
 	private static PreferencesController _current;
 
@@ -99,8 +96,7 @@ public class PreferencesController implements FlexoObserver, AbstractController,
 	// ================================
 	// ==========================================================================
 
-	protected PreferencesController(FlexoPreferences prefs, JMenuBar menubar) throws Exception
-	{
+	protected PreferencesController(FlexoPreferences prefs, JMenuBar menubar) throws Exception {
 
 		super();
 
@@ -117,10 +113,9 @@ public class PreferencesController implements FlexoObserver, AbstractController,
 		prefs.addObserver(this);
 	}
 
-	public static PreferencesController createInstance(FlexoPreferences prefs, JMenuBar menuBar)
-	{
+	public static PreferencesController createInstance(FlexoPreferences prefs, JMenuBar menuBar) {
 		try {
-			_current = new PreferencesController(prefs,menuBar);
+			_current = new PreferencesController(prefs, menuBar);
 			for (Enumeration<ContextPreferences> e = prefs.contextPreferencesVector.elements(); e.hasMoreElements();) {
 				ContextPreferences next = e.nextElement();
 				_current.importInspectorFile(next.getName(), next.getInspectorFile());
@@ -135,8 +130,7 @@ public class PreferencesController implements FlexoObserver, AbstractController,
 		return _current;
 	}
 
-	public static PreferencesController instance()
-	{
+	public static PreferencesController instance() {
 		if (_current == null) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Implementation error : there is no instance of PreferencesController.");
@@ -146,20 +140,17 @@ public class PreferencesController implements FlexoObserver, AbstractController,
 		return _current;
 	}
 
-	public static boolean hasInstance()
-	{
+	public static boolean hasInstance() {
 		return (_current != null);
 	}
 
-	public static void register(ContextPreferences cp)
-	{
+	public static void register(ContextPreferences cp) {
 		if (hasInstance()) {
 			instance().importInspectorFile(cp.getName(), cp.getInspectorFile());
 		}
 	}
 
-	public boolean importInspectorFile(String name, File inspectorFile)
-	{
+	public boolean importInspectorFile(String name, File inspectorFile) {
 		try {
 			if (InspectorMapping.getInstance() != null) {
 				TabModel tabModel = (TabModel) XMLDecoder.decodeObjectWithMapping(new FileInputStream(inspectorFile),
@@ -188,8 +179,7 @@ public class PreferencesController implements FlexoObserver, AbstractController,
 
 	private int index = 1;
 
-	public boolean importInspector(String name, TabModel inspectorTab)
-	{
+	public boolean importInspector(String name, TabModel inspectorTab) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Importing preferences inspector at index " + inspectorTab.index);
 		}
@@ -199,19 +189,16 @@ public class PreferencesController implements FlexoObserver, AbstractController,
 		return true;
 	}
 
-	public void showPreferences()
-	{
+	public void showPreferences() {
 		update();
 		_preferencesWindow.setVisible(true);
 	}
 
-	public void resetWindow()
-	{
+	public void resetWindow() {
 		_preferencesWindow.reset();
 	}
 
-	public PreferencesWindow getPreferencesWindow()
-	{
+	public PreferencesWindow getPreferencesWindow() {
 		return _preferencesWindow;
 	}
 
@@ -221,8 +208,7 @@ public class PreferencesController implements FlexoObserver, AbstractController,
 	// ==========================================================================
 
 	@Override
-	public void update(FlexoObservable arg0, DataModification arg1)
-	{
+	public void update(FlexoObservable arg0, DataModification arg1) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("update in PreferencesController with " + arg0 + " and " + arg1);
 		}
@@ -237,8 +223,7 @@ public class PreferencesController implements FlexoObserver, AbstractController,
 		}
 	}
 
-	public void update()
-	{
+	public void update() {
 		update(_prefs, null);
 	}
 
@@ -246,33 +231,27 @@ public class PreferencesController implements FlexoObserver, AbstractController,
 	// ============================= Instance Methods
 	// ===========================
 	// ==========================================================================
-	public void addToPropertyListAttributes(String name, String pListName)
-	{
+	public void addToPropertyListAttributes(String name, String pListName) {
 		_propertyListAttributes.put(name, pListName);
 	}
 
-	public void addToMultiValuesAttributes(String name)
-	{
+	public void addToMultiValuesAttributes(String name) {
 		_multiValuesAttributes.add(name);
 	}
 
-	public boolean isPropertyListAttribute(String attName)
-	{
+	public boolean isPropertyListAttribute(String attName) {
 		return _propertyListAttributes.contains(attName);
 	}
 
-	public boolean isMultiValuesAttribute(String attName)
-	{
+	public boolean isMultiValuesAttribute(String attName) {
 		return _multiValuesAttributes.contains(attName);
 	}
 
-	public String propListNameForAttName(String attName)
-	{
+	public String propListNameForAttName(String attName) {
 		return _propertyListAttributes.get(attName);
 	}
 
-	private InspectorModelView getInspectorTabPanel()
-	{
+	private InspectorModelView getInspectorTabPanel() {
 		if (_inpectorPanel == null) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Building new InspectorModelView");
@@ -283,8 +262,7 @@ public class PreferencesController implements FlexoObserver, AbstractController,
 		return _inpectorPanel;
 	}
 
-	private InspectorModelView rebuildTabPanel()
-	{
+	private InspectorModelView rebuildTabPanel() {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("rebuildTabPanelForInspectable()");
 		}
@@ -295,8 +273,7 @@ public class PreferencesController implements FlexoObserver, AbstractController,
 		return _inpectorPanel;
 	}
 
-	public InspectorModel getInspectorModel()
-	{
+	public InspectorModel getInspectorModel() {
 		if (logger.isLoggable(Level.FINER)) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.finer(_inspector.toString());
@@ -306,60 +283,50 @@ public class PreferencesController implements FlexoObserver, AbstractController,
 	}
 
 	@Override
-	public InspectorDelegate getDelegate()
-	{
+	public InspectorDelegate getDelegate() {
 		// Handle object with key-value coding
 		return null;
 	}
 
 	@Override
-	public HelpDelegate getHelpDelegate()
-	{
+	public HelpDelegate getHelpDelegate() {
 		// No help for this kind of controller
 		return null;
 	}
 
 	@Override
-	public void notifiedActiveTabChange(String newActiveTabName)
-	{
+	public void notifiedActiveTabChange(String newActiveTabName) {
 		// Dont care
 	}
 
 	@Override
-	public void notifiedInspectedObjectChange(InspectableObject newInspectedObject)
-	{
+	public void notifiedInspectedObjectChange(InspectableObject newInspectedObject) {
 		// Dont care
 	}
 
 	@Override
-	public PreferencesController getController()
-	{
+	public PreferencesController getController() {
 		return this;
 	}
 
 	@Override
-	public void newSelection(InspectorSelection selection)
-	{
+	public void newSelection(InspectorSelection selection) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public boolean isTabPanelVisible(TabModel tab, InspectableObject inspectable)
-	{
+	public boolean isTabPanelVisible(TabModel tab, InspectableObject inspectable) {
 		return true;
 	}
 
 	@Override
-	public InspectorWidgetConfiguration getConfiguration()
-	{
-		if(inspectorConfiguration == null)
-		{
+	public InspectorWidgetConfiguration getConfiguration() {
+		if (inspectorConfiguration == null) {
 			inspectorConfiguration = new InspectorWidgetConfiguration() {
 
 				@Override
-				public boolean showViewSourceButtonInWysiwyg()
-				{
+				public boolean showViewSourceButtonInWysiwyg() {
 					return ModuleLoader.getUserType() == UserType.DEVELOPER || ModuleLoader.getUserType() == UserType.MAINTAINER;
 				}
 

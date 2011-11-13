@@ -26,17 +26,14 @@ import org.openflexo.foundation.DataModification;
  * 
  * @author sguerin
  */
-public abstract class SGDataModification extends DataModification
-{
+public abstract class SGDataModification extends DataModification {
 
-    public SGDataModification(Object oldValue, Object newValue)
-    {
-        super(DataModification.SG_DM, oldValue, newValue);
-    }
+	public SGDataModification(Object oldValue, Object newValue) {
+		super(DataModification.SG_DM, oldValue, newValue);
+	}
 
-    public SGDataModification(String propertyName, Object oldValue, Object newValue)
-    {
-        super(DataModification.ATTRIBUTE, propertyName, oldValue, newValue);
-    }
+	public SGDataModification(String propertyName, Object oldValue, Object newValue) {
+		super(DataModification.ATTRIBUTE, propertyName, oldValue, newValue);
+	}
 
 }

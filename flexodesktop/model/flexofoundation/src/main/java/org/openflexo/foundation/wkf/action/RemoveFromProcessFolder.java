@@ -31,67 +31,62 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoProcessNode;
 import org.openflexo.foundation.wkf.InvalidParentProcessException;
 
+public class RemoveFromProcessFolder extends FlexoAction<RemoveFromProcessFolder, FlexoModelObject, FlexoModelObject> {
 
-public class RemoveFromProcessFolder extends FlexoAction<RemoveFromProcessFolder,FlexoModelObject,FlexoModelObject>
-{
-
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(RemoveFromProcessFolder.class.getPackage().getName());
 
-    private FlexoProcessNode getProcessNode() {
-    	return getProcessNode(getFocusedObject());
+	private FlexoProcessNode getProcessNode() {
+		return getProcessNode(getFocusedObject());
 	}
 
-    static FlexoProcessNode getProcessNode(FlexoModelObject object) {
-    	if (object instanceof FlexoProcessNode)
-    		return (FlexoProcessNode) object;
-    	else if (object instanceof FlexoProcess) {
-    		return ((FlexoProcess)object).getProcessNode();
-    	}
+	static FlexoProcessNode getProcessNode(FlexoModelObject object) {
+		if (object instanceof FlexoProcessNode)
+			return (FlexoProcessNode) object;
+		else if (object instanceof FlexoProcess) {
+			return ((FlexoProcess) object).getProcessNode();
+		}
 		return null;
-    }
+	}
 
-    public static FlexoActionType<RemoveFromProcessFolder,FlexoModelObject,FlexoModelObject> actionType
-    = new FlexoActionType<RemoveFromProcessFolder,FlexoModelObject,FlexoModelObject> ("remove_from_process_folder",FlexoActionType.defaultGroup) {
+	public static FlexoActionType<RemoveFromProcessFolder, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<RemoveFromProcessFolder, FlexoModelObject, FlexoModelObject>(
+			"remove_from_process_folder", FlexoActionType.defaultGroup) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public RemoveFromProcessFolder makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-        {
-            return new RemoveFromProcessFolder(focusedObject, globalSelection,editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public RemoveFromProcessFolder makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection,
+				FlexoEditor editor) {
+			return new RemoveFromProcessFolder(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection)
-        {
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 
-            return getProcessNode(object)!=null  && getProcessNode(object).getParentFolder()!=null;
-        }
+			return getProcessNode(object) != null && getProcessNode(object).getParentFolder() != null;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection)
-        {
-            return isVisibleForSelection(object, globalSelection);
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return isVisibleForSelection(object, globalSelection);
+		}
 
-    };
+	};
 
-    RemoveFromProcessFolder (FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	RemoveFromProcessFolder(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    static {
-    	FlexoModelObject.addActionForClass(actionType, FlexoProcessNode.class);
-    	FlexoModelObject.addActionForClass(actionType, FlexoProcess.class);
-    }
+	static {
+		FlexoModelObject.addActionForClass(actionType, FlexoProcessNode.class);
+		FlexoModelObject.addActionForClass(actionType, FlexoProcess.class);
+	}
 
-    @Override
+	@Override
 	protected void doAction(Object context) throws InvalidParentProcessException, UndoException {
-    	if (getProcessNode().getParentFolder()!=null)
-    		getProcessNode().getParentFolder().removeFromProcesses(getProcessNode());
-    }
+		if (getProcessNode().getParentFolder() != null)
+			getProcessNode().getParentFolder().removeFromProcesses(getProcessNode());
+	}
 
 }

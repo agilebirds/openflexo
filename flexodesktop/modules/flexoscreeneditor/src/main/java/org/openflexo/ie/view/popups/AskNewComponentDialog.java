@@ -58,8 +58,7 @@ import org.openflexo.view.controller.FlexoController;
  * @author sguerin
  * 
  */
-public class AskNewComponentDialog extends FlexoDialog implements ActionListener
-{
+public class AskNewComponentDialog extends FlexoDialog implements ActionListener {
 
 	public static final FileResource REUSABLECOMPONENT_ICON_FILE = new FileResource("Icons/Model/SE/ReusableComponent.gif");
 
@@ -99,8 +98,7 @@ public class AskNewComponentDialog extends FlexoDialog implements ActionListener
 
 	private final JTextField newComponentNameTF;
 
-	public AskNewComponentDialog(FlexoProject project, FlexoComponentFolder folder)
-	{
+	public AskNewComponentDialog(FlexoProject project, FlexoComponentFolder folder) {
 		super();
 
 		_project = project;
@@ -132,26 +130,26 @@ public class AskNewComponentDialog extends FlexoDialog implements ActionListener
 		tabComponentButton.setActionCommand(TAB_COMPONENT);
 
 		/* Disabled unused buttons
-        JRadioButton dataComponentButton = new JRadioButtonWithIcon(FlexoLocalization.localizedForKey("data_component"),
-                REUSABLECOMPONENT_ICON_FILE);
-        dataComponentButton.addActionListener(this);
-        dataComponentButton.setActionCommand(DATA_COMPONENT);
-        dataComponentButton.setEnabled(false);
-        dataComponentButton.setToolTipText(FlexoLocalization.localizedForKey("not_yet_implemented"));
+		JRadioButton dataComponentButton = new JRadioButtonWithIcon(FlexoLocalization.localizedForKey("data_component"),
+		        REUSABLECOMPONENT_ICON_FILE);
+		dataComponentButton.addActionListener(this);
+		dataComponentButton.setActionCommand(DATA_COMPONENT);
+		dataComponentButton.setEnabled(false);
+		dataComponentButton.setToolTipText(FlexoLocalization.localizedForKey("not_yet_implemented"));
 
-        JRadioButton monitoringScreenButton = new JRadioButtonWithIcon(FlexoLocalization.localizedForKey("monitoring_screen"),
-                REUSABLECOMPONENT_ICON_FILE);
-        monitoringScreenButton.addActionListener(this);
-        monitoringScreenButton.setActionCommand(MONITORING_SCREEN);
-        monitoringScreenButton.setEnabled(true);
-        monitoringScreenButton.setToolTipText(FlexoLocalization.localizedForKey("not_yet_implemented"));
+		JRadioButton monitoringScreenButton = new JRadioButtonWithIcon(FlexoLocalization.localizedForKey("monitoring_screen"),
+		        REUSABLECOMPONENT_ICON_FILE);
+		monitoringScreenButton.addActionListener(this);
+		monitoringScreenButton.setActionCommand(MONITORING_SCREEN);
+		monitoringScreenButton.setEnabled(true);
+		monitoringScreenButton.setToolTipText(FlexoLocalization.localizedForKey("not_yet_implemented"));
 
-        JRadioButton monitoringComponentButton = new JRadioButtonWithIcon(FlexoLocalization.localizedForKey("monitoring_component"),
-                REUSABLECOMPONENT_ICON_FILE);
-        monitoringComponentButton.addActionListener(this);
-        monitoringComponentButton.setActionCommand(MONITORING_COMPONENT);
-        monitoringComponentButton.setEnabled(false);
-        monitoringComponentButton.setToolTipText(FlexoLocalization.localizedForKey("not_yet_implemented"));
+		JRadioButton monitoringComponentButton = new JRadioButtonWithIcon(FlexoLocalization.localizedForKey("monitoring_component"),
+		        REUSABLECOMPONENT_ICON_FILE);
+		monitoringComponentButton.addActionListener(this);
+		monitoringComponentButton.setActionCommand(MONITORING_COMPONENT);
+		monitoringComponentButton.setEnabled(false);
+		monitoringComponentButton.setToolTipText(FlexoLocalization.localizedForKey("not_yet_implemented"));
 		 */
 		// Group the radio buttons.
 		ButtonGroup group = new ButtonGroup();
@@ -160,16 +158,15 @@ public class AskNewComponentDialog extends FlexoDialog implements ActionListener
 		// group.add(partialComponentButton);
 		group.add(tabComponentButton);
 		/* Disabled unused buttons
-        group.add(dataComponentButton);
-        group.add(monitoringScreenButton);
-        group.add(monitoringComponentButton);
+		group.add(dataComponentButton);
+		group.add(monitoringScreenButton);
+		group.add(monitoringComponentButton);
 		 */
 		newComponentNameTF = IERegExp.getJavaClassNameValidationTextField(20);
 		newComponentNameTF.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				performOK();
 			}
 
@@ -182,12 +179,12 @@ public class AskNewComponentDialog extends FlexoDialog implements ActionListener
 
 		monitoringScreenProcessSelector = new ProcessSelector(project, project.getFlexoWorkflow().getRootFlexoProcess());
 		monitoringComponentProcessSelector = new ProcessSelector(project, project.getFlexoWorkflow().getRootFlexoProcess());
-		dataComponentEntitySelector = new DMEntitySelector<DMEntity>(project, (DMEntity)null, DMEntity.class);
+		dataComponentEntitySelector = new DMEntitySelector<DMEntity>(project, (DMEntity) null, DMEntity.class);
 
 		JPanel choicePanel = new JPanel();
 		choicePanel.setLayout(new GridLayout(3, 2));
 		/* Disabled unused buttons
-        choicePanel.setLayout(new GridLayout(7, 2));
+		choicePanel.setLayout(new GridLayout(7, 2));
 		 */
 		choicePanel.add(operationComponentButton);
 		operationComponentButton.setFocusable(false);
@@ -201,19 +198,19 @@ public class AskNewComponentDialog extends FlexoDialog implements ActionListener
 		tabComponentButton.setFocusable(false);
 		choicePanel.add(new JPanel());
 		/* Disabled unused buttons
-        choicePanel.add(dataComponentButton);
-        // TODO FIXME: When dataComponentScreen, monitoringScreen and
-        // monitoringComponent will be implemented, the following lines need to
-        // be uncommented and the 3 matching "choicePanel.add(new JPanel());"
-        // must be removed consequently
-        // choicePanel.add(dataComponentEntitySelector);
-        choicePanel.add(new JPanel());
-        choicePanel.add(monitoringScreenButton);
-        choicePanel.add(monitoringScreenProcessSelector);
-        //choicePanel.add(new JPanel());
-        choicePanel.add(monitoringComponentButton);
-        // choicePanel.add(monitoringComponentProcessSelector);
-        choicePanel.add(new JPanel());
+		choicePanel.add(dataComponentButton);
+		// TODO FIXME: When dataComponentScreen, monitoringScreen and
+		// monitoringComponent will be implemented, the following lines need to
+		// be uncommented and the 3 matching "choicePanel.add(new JPanel());"
+		// must be removed consequently
+		// choicePanel.add(dataComponentEntitySelector);
+		choicePanel.add(new JPanel());
+		choicePanel.add(monitoringScreenButton);
+		choicePanel.add(monitoringScreenProcessSelector);
+		//choicePanel.add(new JPanel());
+		choicePanel.add(monitoringComponentButton);
+		// choicePanel.add(monitoringComponentProcessSelector);
+		choicePanel.add(new JPanel());
 		 */
 		choicePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
@@ -225,19 +222,17 @@ public class AskNewComponentDialog extends FlexoDialog implements ActionListener
 
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
 		});
 		confirmButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				performOK();
 			}
 		});
-		if (ToolBox.getPLATFORM()==ToolBox.MACOS) {
+		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 			controlPanel.add(cancelButton);
 			controlPanel.add(confirmButton);
 		} else {
@@ -265,8 +260,7 @@ public class AskNewComponentDialog extends FlexoDialog implements ActionListener
 
 	private boolean statusOK = false;
 
-	protected void performOK()
-	{
+	protected void performOK() {
 		if (checkComponentValidity()) {
 			statusOK = true;
 			dispose();
@@ -276,17 +270,15 @@ public class AskNewComponentDialog extends FlexoDialog implements ActionListener
 	/** Listens to the radio buttons. */
 
 	@Override
-	public void actionPerformed(ActionEvent e)
-	{
+	public void actionPerformed(ActionEvent e) {
 		currentChoice = e.getActionCommand();
 	}
 
 	private String newComponentName;
 
-	public boolean checkComponentValidity()
-	{
+	public boolean checkComponentValidity() {
 		newComponentName = newComponentNameTF.getText();
-		if(newComponentName!=null && newComponentName.equals(DEFAULT_ROCK_COMPONENT_NAME)){
+		if (newComponentName != null && newComponentName.equals(DEFAULT_ROCK_COMPONENT_NAME)) {
 			JFrame frame = new JFrame();
 			frame.getContentPane().add(new JLabel(IconLibrary.DEV_TEAM_ICON));
 			frame.pack();
@@ -326,13 +318,11 @@ public class AskNewComponentDialog extends FlexoDialog implements ActionListener
 
 	private AddComponent.ComponentType componentType = null;
 
-	public AddComponent.ComponentType getComponentType()
-	{
+	public AddComponent.ComponentType getComponentType() {
 		return componentType;
 	}
 
-	public boolean hasBeenValidated()
-	{
+	public boolean hasBeenValidated() {
 		return statusOK;
 	}
 
@@ -342,18 +332,15 @@ public class AskNewComponentDialog extends FlexoDialog implements ActionListener
 		return newComponentName;
 	}
 
-	public DMEntity getDataComponentEntity()
-	{
+	public DMEntity getDataComponentEntity() {
 		return dataComponentEntitySelector.getEditedObject();
 	}
 
-	public FlexoProcess getMonitoringComponentProcess()
-	{
+	public FlexoProcess getMonitoringComponentProcess() {
 		return monitoringComponentProcessSelector.getEditedObject();
 	}
 
-	public FlexoProcess getMonitoringScreenProcess()
-	{
+	public FlexoProcess getMonitoringScreenProcess() {
 		return monitoringScreenProcessSelector.getEditedObject();
 	}
 }

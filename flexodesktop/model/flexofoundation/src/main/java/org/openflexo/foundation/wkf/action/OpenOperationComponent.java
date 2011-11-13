@@ -29,47 +29,36 @@ import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.node.NodeType;
 import org.openflexo.foundation.wkf.node.OperationNode;
 
+public class OpenOperationComponent extends FlexoGUIAction<OpenOperationComponent, OperationNode, WKFObject> {
 
-public class OpenOperationComponent extends FlexoGUIAction<OpenOperationComponent,OperationNode,WKFObject> 
-{
-
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(OpenOperationComponent.class.getPackage().getName());
 
-    public static FlexoActionType<OpenOperationComponent,OperationNode,WKFObject> actionType 
-    = new FlexoActionType<OpenOperationComponent,OperationNode,WKFObject> (
-    		"open_operation_component",FlexoActionType.defaultGroup) {
+	public static FlexoActionType<OpenOperationComponent, OperationNode, WKFObject> actionType = new FlexoActionType<OpenOperationComponent, OperationNode, WKFObject>(
+			"open_operation_component", FlexoActionType.defaultGroup) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public OpenOperationComponent makeNewAction(OperationNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) 
-        {
-            return new OpenOperationComponent(focusedObject, globalSelection,editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public OpenOperationComponent makeNewAction(OperationNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+			return new OpenOperationComponent(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(OperationNode object, Vector<WKFObject> globalSelection) 
-        {
-            return ((object != null) 
-                    && ((object).getNodeType() == NodeType.NORMAL)
-                    && ((object).getComponentInstance() != null));
-        }
+		@Override
+		protected boolean isVisibleForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
+			return ((object != null) && ((object).getNodeType() == NodeType.NORMAL) && ((object).getComponentInstance() != null));
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(OperationNode object, Vector<WKFObject> globalSelection) 
-        {
-            return ((object != null) 
-                    && ((object).getNodeType() == NodeType.NORMAL)
-                    && ((object).getComponentInstance() != null));
-        }
-                
-    };
-    
-    OpenOperationComponent (OperationNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+		@Override
+		protected boolean isEnabledForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
+			return ((object != null) && ((object).getNodeType() == NodeType.NORMAL) && ((object).getComponentInstance() != null));
+		}
+
+	};
+
+	OpenOperationComponent(OperationNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
 }

@@ -25,17 +25,10 @@ import org.openflexo.antar.expr.Constant.ObjectSymbolicConstant;
 
 public interface SymbolicConstant {
 
-	public static final SymbolicConstant[] allKnownSymbolicConstants = 
-	{ 
-		ObjectSymbolicConstant.NULL,
-		ObjectSymbolicConstant.THIS,
-		DateSymbolicConstant.NOW,
-		DateSymbolicConstant.TODAY,
-		FloatSymbolicConstant.PI,
-		FloatSymbolicConstant.E
-	};
-	
+	public static final SymbolicConstant[] allKnownSymbolicConstants = { ObjectSymbolicConstant.NULL, ObjectSymbolicConstant.THIS,
+			DateSymbolicConstant.NOW, DateSymbolicConstant.TODAY, FloatSymbolicConstant.PI, FloatSymbolicConstant.E };
+
 	public String getSymbol();
-	
+
 	public String getValueAsString();
 }

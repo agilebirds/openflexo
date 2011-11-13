@@ -33,13 +33,11 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
 import javax.swing.colorchooser.ColorSelectionModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.openflexo.localization.FlexoLocalization;
-
 
 /**
  * Widget allowing to view and edit a Color
@@ -47,8 +45,7 @@ import org.openflexo.localization.FlexoLocalization;
  * @author sguerin
  * 
  */
-public class ColorSelector extends CustomPopup<Color> implements ChangeListener
-{
+public class ColorSelector extends CustomPopup<Color> implements ChangeListener {
 
 	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(ColorSelector.class.getPackage().getName());
@@ -58,8 +55,7 @@ public class ColorSelector extends CustomPopup<Color> implements ChangeListener
 	protected ColorDetailsPanel _selectorPanel;
 	protected ColorSelectionModel _csm;
 
-	public ColorSelector(ColorSelectionModel csm)
-	{
+	public ColorSelector(ColorSelectionModel csm) {
 		super(csm.getSelectedColor());
 		_csm = csm;
 		_csm.addChangeListener(this);
@@ -68,63 +64,58 @@ public class ColorSelector extends CustomPopup<Color> implements ChangeListener
 	}
 
 	@Override
-	public void setRevertValue(Color oldValue)
-	{
+	public void setRevertValue(Color oldValue) {
 		// WARNING: we need here to clone to keep track back of previous data !!!
-		if (oldValue != null) _revertValue = new Color(oldValue.getRed(),oldValue.getGreen(),oldValue.getBlue());
-		else _revertValue = null;
+		if (oldValue != null)
+			_revertValue = new Color(oldValue.getRed(), oldValue.getGreen(), oldValue.getBlue());
+		else
+			_revertValue = null;
 		if (logger.isLoggable(Level.FINE))
-			logger.fine("Sets revert value to "+_revertValue);
+			logger.fine("Sets revert value to " + _revertValue);
 	}
 
-	public Color getRevertValue()
-	{
+	public Color getRevertValue() {
 		return _revertValue;
 	}
 
 	@Override
-	protected ColorDetailsPanel createCustomPanel(Color editedObject)
-	{
+	protected ColorDetailsPanel createCustomPanel(Color editedObject) {
 		_selectorPanel = makeCustomPanel(editedObject);
 		return _selectorPanel;
 	}
 
-	protected ColorDetailsPanel makeCustomPanel(Color editedObject)
-	{
+	protected ColorDetailsPanel makeCustomPanel(Color editedObject) {
 		return new ColorDetailsPanel(editedObject);
 	}
 
 	@Override
-	public void updateCustomPanel(Color editedObject)
-	{
+	public void updateCustomPanel(Color editedObject) {
 		if (_selectorPanel != null) {
 			_selectorPanel.update();
 		}
 		getFrontComponent().update();
 	}
 
-	public ColorSelector getJComponent() 
-	{
+	public ColorSelector getJComponent() {
 		return this;
 	}
 
-	public class ColorDetailsPanel extends ResizablePanel
-	{
+	public class ColorDetailsPanel extends ResizablePanel {
 		private JColorChooser colorChooser;
 		private JButton _applyButton;
 		private JButton _cancelButton;
 		private JPanel _controlPanel;
 
-		protected ColorDetailsPanel(Color editedColor)
-		{
+		protected ColorDetailsPanel(Color editedColor) {
 			super();
 
-			if (editedColor == null) editedColor = Color.WHITE;
+			if (editedColor == null)
+				editedColor = Color.WHITE;
 			_csm.setSelectedColor(editedColor);
 			colorChooser = new JColorChooser(_csm);
 
 			setLayout(new BorderLayout());
-			add(colorChooser,BorderLayout.CENTER);
+			add(colorChooser, BorderLayout.CENTER);
 
 			_controlPanel = new JPanel();
 			_controlPanel.setLayout(new FlowLayout());
@@ -132,132 +123,114 @@ public class ColorSelector extends CustomPopup<Color> implements ChangeListener
 			_controlPanel.add(_cancelButton = new JButton(FlexoLocalization.localizedForKey("cancel")));
 			_applyButton.addActionListener(new ActionListener() {
 				@Override
-				public void actionPerformed(ActionEvent e)
-				{
+				public void actionPerformed(ActionEvent e) {
 					apply();
 				}
 			});
 			_cancelButton.addActionListener(new ActionListener() {
 				@Override
-				public void actionPerformed(ActionEvent e)
-				{
+				public void actionPerformed(ActionEvent e) {
 					cancel();
 				}
 			});
 			add(_controlPanel, BorderLayout.SOUTH);
 		}
 
-		public void update()
-		{
-			//_csm.setSelectedColor(getEditedObject());
-			//colorChooser.setColor(getEditedObject());
+		public void update() {
+			// _csm.setSelectedColor(getEditedObject());
+			// colorChooser.setColor(getEditedObject());
 		}
 
 		@Override
-		public Dimension getDefaultSize()
-		{
+		public Dimension getDefaultSize() {
 			return getPreferredSize();
 		}
 
-		public void delete()
-		{
+		public void delete() {
 		}
 	}
 
 	@Override
-	public Color getEditedObject()
-	{
+	public Color getEditedObject() {
 		if (_csm != null)
 			return _csm.getSelectedColor();
 		return null;
 	}
 
 	@Override
-	public void setEditedObject(Color color)
-	{
+	public void setEditedObject(Color color) {
 		_csm.setSelectedColor(color);
 		super.setEditedObject(color);
 	}
 
 	@Override
-	public void apply()
-	{
+	public void apply() {
 		setRevertValue(getEditedObject());
 		closePopup();
 		super.apply();
 	}
 
 	@Override
-	public void cancel()
-	{
-		if(logger.isLoggable(Level.FINE))
-			logger.fine("CANCEL: revert to "+getRevertValue());
+	public void cancel() {
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("CANCEL: revert to " + getRevertValue());
 		setEditedObject(getRevertValue());
 		closePopup();
 		super.cancel();
 	}
 
 	@Override
-	protected void deletePopup()
-	{
+	protected void deletePopup() {
 		_csm.removeChangeListener(this);
-		if (_selectorPanel != null) _selectorPanel.delete();
+		if (_selectorPanel != null)
+			_selectorPanel.delete();
 		_selectorPanel = null;
 		super.deletePopup();
 	}
 
-	public ColorDetailsPanel getSelectorPanel() 
-	{
+	public ColorDetailsPanel getSelectorPanel() {
 		return _selectorPanel;
 	}
 
 	@Override
-	protected ColorPreviewPanel buildFrontComponent()
-	{
+	protected ColorPreviewPanel buildFrontComponent() {
 		return new ColorPreviewPanel();
 	}
 
 	@Override
-	public ColorPreviewPanel getFrontComponent()
-	{
-		return (ColorPreviewPanel)super.getFrontComponent();
+	public ColorPreviewPanel getFrontComponent() {
+		return (ColorPreviewPanel) super.getFrontComponent();
 	}
 
-	@Override
+	/*@Override
 	protected Border getDownButtonBorder()
 	{
 		return BorderFactory.createCompoundBorder(
 				BorderFactory.createEmptyBorder(1,1,1,1),
 				BorderFactory.createRaisedBevelBorder());
-	}
+	}*/
 
-
-	protected class ColorPreviewPanel extends JPanel
-	{
+	protected class ColorPreviewPanel extends JPanel {
 		private JPanel insidePanel;
 
-		protected ColorPreviewPanel()
-		{
+		protected ColorPreviewPanel() {
 			super(new BorderLayout());
-			setBorder(BorderFactory.createEtchedBorder(Color.GRAY,Color.LIGHT_GRAY));
-			setPreferredSize(new Dimension(40,19));
-			setMinimumSize(new Dimension(40,19));
+			setBorder(BorderFactory.createEtchedBorder(Color.GRAY, Color.LIGHT_GRAY));
+			setPreferredSize(new Dimension(40, 19));
+			setMinimumSize(new Dimension(40, 19));
 			insidePanel = new JPanel(new BorderLayout());
-			add(insidePanel,BorderLayout.CENTER);
+			add(insidePanel, BorderLayout.CENTER);
 			update();
 		}
 
-		protected void update()
-		{
+		protected void update() {
 			insidePanel.setBackground(getEditedObject());
 		}
-
 
 	}
 
 	@Override
-	public void stateChanged(ChangeEvent e)
-	{
+	public void stateChanged(ChangeEvent e) {
 		getFrontComponent().update();
 	}
 

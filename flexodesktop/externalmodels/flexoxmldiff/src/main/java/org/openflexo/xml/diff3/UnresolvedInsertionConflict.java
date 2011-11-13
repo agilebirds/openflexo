@@ -20,46 +20,49 @@
 package org.openflexo.xml.diff3;
 
 import org.jdom.Element;
+
 /**
- * This conflict occurs when 2 Elements are inserted under the same parent
- * and that the parent cannot accept more than one child of this type.
- * This is checked against xml mappings.
+ * This conflict occurs when 2 Elements are inserted under the same parent and that the parent cannot accept more than one child of this
+ * type. This is checked against xml mappings.
+ * 
  * @author bmangez
- *
+ * 
  */
 public class UnresolvedInsertionConflict extends UnresolvedConflict {
 
 	private Element _parent;
 	private Element _existingChild;
 	private Element _rejectedChild;
-	
-	public UnresolvedInsertionConflict(XMLDiff3 merge,int index,Element parent,Element existingChild,Element rejectedChild){
-		super(merge,index);
+
+	public UnresolvedInsertionConflict(XMLDiff3 merge, int index, Element parent, Element existingChild, Element rejectedChild) {
+		super(merge, index);
 		_parent = parent;
 		_existingChild = existingChild;
 		_rejectedChild = rejectedChild;
 	}
-	
+
 	@Override
-	public String toString(){
-		return "Element "+_parent.getName()+" (id="+_parent.getAttributeValue("id")+") can only accept one child named "+_existingChild.getName()+"\n"+
-		"\texisting child :"+getExistingChildName()+"\n"+
-		"\trejected child :"+getRejectedChildName();
+	public String toString() {
+		return "Element " + _parent.getName() + " (id=" + _parent.getAttributeValue("id") + ") can only accept one child named "
+				+ _existingChild.getName() + "\n" + "\texisting child :" + getExistingChildName() + "\n" + "\trejected child :"
+				+ getRejectedChildName();
 	}
-	public String getExistingChildName(){
-		return _existingChild.getName()+"(id="+_existingChild.getAttributeValue("id")+")";
+
+	public String getExistingChildName() {
+		return _existingChild.getName() + "(id=" + _existingChild.getAttributeValue("id") + ")";
 	}
-	public String getRejectedChildName(){
-		return _rejectedChild.getName()+"(id="+_rejectedChild.getAttributeValue("id")+")";
+
+	public String getRejectedChildName() {
+		return _rejectedChild.getName() + "(id=" + _rejectedChild.getAttributeValue("id") + ")";
 	}
 
 	@Override
 	public MergeAction buildDiscardYourChangeAction() {
-		return new MergeElementAction(getConflictIndex(),MergeActionType.DONOTHING,_parent,_existingChild,_rejectedChild,-1);
+		return new MergeElementAction(getConflictIndex(), MergeActionType.DONOTHING, _parent, _existingChild, _rejectedChild, -1);
 	}
 
 	@Override
 	public MergeAction buildKeepYourChangeAction() {
-		return new InsertionSwapAction(getConflictIndex(),_parent,_rejectedChild,_existingChild);
+		return new InsertionSwapAction(getConflictIndex(), _parent, _rejectedChild, _existingChild);
 	}
 }

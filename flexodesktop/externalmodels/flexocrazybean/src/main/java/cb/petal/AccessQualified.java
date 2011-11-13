@@ -20,13 +20,14 @@
 package cb.petal;
 
 /**
- * Denote that a petal object may have an attribute "exportControl", e.g. classes,
- * methods, ..., which refers to a qualifier like "public", "protected", ...
- *
+ * Denote that a petal object may have an attribute "exportControl", e.g. classes, methods, ..., which refers to a qualifier like "public",
+ * "protected", ...
+ * 
  * @version $Id: AccessQualified.java,v 1.2 2011/09/12 11:46:47 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public interface AccessQualified {
-  public String getExportControl();
-  public void setExportControl(String o);
+	public String getExportControl();
+
+	public void setExportControl(String o);
 }

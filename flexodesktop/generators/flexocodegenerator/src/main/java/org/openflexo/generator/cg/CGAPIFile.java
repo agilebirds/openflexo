@@ -25,29 +25,24 @@ import org.openflexo.foundation.rm.cg.APIFileResource;
 import org.openflexo.foundation.xml.GeneratedCodeBuilder;
 import org.openflexo.generator.file.AbstractCGFile;
 
-
 public class CGAPIFile extends AbstractCGFile {
 
-    public CGAPIFile(GeneratedCodeBuilder builder)
-    {
-        this(builder.generatedCode);
-        initializeDeserialization(builder);
-     }
-    
-    public CGAPIFile(GeneratedOutput generatedCode)
-    {
-        super(generatedCode);  
-    }
+	public CGAPIFile(GeneratedCodeBuilder builder) {
+		this(builder.generatedCode);
+		initializeDeserialization(builder);
+	}
 
-    public CGAPIFile(CGRepository repository, APIFileResource resource)
-    {
-        super(repository,resource);
-    }
+	public CGAPIFile(GeneratedOutput generatedCode) {
+		super(generatedCode);
+	}
+
+	public CGAPIFile(CGRepository repository, APIFileResource resource) {
+		super(repository, resource);
+	}
 
 	@Override
-	public APIFileResource getResource() 
-	{
-		return (APIFileResource)super.getResource();
+	public APIFileResource getResource() {
+		return (APIFileResource) super.getResource();
 	}
 
 }

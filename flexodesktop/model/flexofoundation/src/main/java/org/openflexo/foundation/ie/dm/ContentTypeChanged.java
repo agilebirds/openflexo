@@ -19,19 +19,16 @@
  */
 package org.openflexo.foundation.ie.dm;
 
-public class ContentTypeChanged extends IEDataModification
-{
+public class ContentTypeChanged extends IEDataModification {
 
-    public ContentTypeChanged(String propertyName,boolean _isHTML)
-    {
-        super(propertyName,null, null);
-        isHTML = _isHTML;
-    }
+	public ContentTypeChanged(String propertyName, boolean _isHTML) {
+		super(propertyName, null, null);
+		isHTML = _isHTML;
+	}
 
-    public boolean getIsHTML()
-    {
-        return isHTML;
-    }
-    
-    private boolean isHTML;
+	public boolean getIsHTML() {
+		return isHTML;
+	}
+
+	private boolean isHTML;
 }

@@ -24,52 +24,42 @@ import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
 import org.openflexo.fge.geomedit.construction.QuarterPlaneConstruction;
 import org.openflexo.fge.geomedit.gr.QuarterPlaneGraphicalRepresentation;
 
-
 public class QuarterPlane extends GeometricObject<FGEQuarterPlane> {
 
 	private QuarterPlaneGraphicalRepresentation graphicalRepresentation;
-	
+
 	// Called for LOAD
-	public QuarterPlane(GeomEditBuilder builder)
-	{
+	public QuarterPlane(GeomEditBuilder builder) {
 		super(builder);
 	}
-	
-	public QuarterPlane(GeometricSet set, QuarterPlaneConstruction construction) 
-	{
+
+	public QuarterPlane(GeometricSet set, QuarterPlaneConstruction construction) {
 		super(set, construction);
-		graphicalRepresentation = new QuarterPlaneGraphicalRepresentation(this,set.getEditedDrawing());
+		graphicalRepresentation = new QuarterPlaneGraphicalRepresentation(this, set.getEditedDrawing());
 	}
-	
+
 	@Override
-	public QuarterPlaneGraphicalRepresentation getGraphicalRepresentation()
-	{
+	public QuarterPlaneGraphicalRepresentation getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
 
-	public void setGraphicalRepresentation(QuarterPlaneGraphicalRepresentation aGR)
-	{
+	public void setGraphicalRepresentation(QuarterPlaneGraphicalRepresentation aGR) {
 		aGR.setDrawable(this);
 		graphicalRepresentation = aGR;
 	}
-	
+
 	@Override
-	public QuarterPlaneConstruction getConstruction()
-	{
-		return (QuarterPlaneConstruction)super.getConstruction();
+	public QuarterPlaneConstruction getConstruction() {
+		return (QuarterPlaneConstruction) super.getConstruction();
 	}
 
-	public void setConstruction(QuarterPlaneConstruction qpConstruction)
-	{
+	public void setConstruction(QuarterPlaneConstruction qpConstruction) {
 		_setConstruction(qpConstruction);
 	}
 
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return "QuarterPlane.inspector";
 	}
-
-
 
 }

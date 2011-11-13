@@ -25,26 +25,22 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolylin;
 import org.openflexo.fge.geom.FGERectPolylin;
 
-
 public class PolylinWithNPointsConstruction extends PolylinConstruction {
 
 	public Vector<PointConstruction> pointConstructions;
-	
-	public PolylinWithNPointsConstruction() 
-	{
+
+	public PolylinWithNPointsConstruction() {
 		super();
 		pointConstructions = new Vector<PointConstruction>();
 	}
-	
-	public PolylinWithNPointsConstruction(Vector<PointConstruction> somePointConstructions) 
-	{
+
+	public PolylinWithNPointsConstruction(Vector<PointConstruction> somePointConstructions) {
 		this();
 		this.pointConstructions.addAll(somePointConstructions);
 	}
-	
+
 	@Override
-	protected FGEPolylin computeData()
-	{
+	protected FGEPolylin computeData() {
 		Vector<FGEPoint> pts = new Vector<FGEPoint>();
 		for (PointConstruction pc : pointConstructions) {
 			pts.add(pc.getPoint());
@@ -53,22 +49,19 @@ public class PolylinWithNPointsConstruction extends PolylinConstruction {
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("PolylinWithNPointsConstruction[\n");
 		for (PointConstruction pc : pointConstructions) {
-			sb.append("> "+pc.toString()+"\n");
+			sb.append("> " + pc.toString() + "\n");
 		}
 		sb.append("]");
 		return sb.toString();
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
+	public GeometricConstruction[] getDepends() {
 		return pointConstructions.toArray(new GeometricConstruction[pointConstructions.size()]);
 	}
-
 
 }

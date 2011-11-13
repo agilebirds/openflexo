@@ -19,24 +19,20 @@
  */
 package org.openflexo.module.external;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class ExternalModuleDelegater
-{
+public class ExternalModuleDelegater {
 
-    private static IModuleLoader moduleLoader;
-    
-    public static void registerModuleLoader(IModuleLoader loader) {
-        moduleLoader = loader;
-    }
+	private static IModuleLoader moduleLoader;
 
-    public static IModuleLoader getModuleLoader()
-    {
-        return moduleLoader;
-    }
-    
-    
+	public static void registerModuleLoader(IModuleLoader loader) {
+		moduleLoader = loader;
+	}
+
+	public static IModuleLoader getModuleLoader() {
+		return moduleLoader;
+	}
+
 }

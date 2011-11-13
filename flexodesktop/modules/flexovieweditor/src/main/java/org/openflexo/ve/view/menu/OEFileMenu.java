@@ -30,38 +30,34 @@ import java.util.logging.Logger;
 import org.openflexo.ve.controller.OEController;
 import org.openflexo.view.menu.FileMenu;
 
-
 /**
  * 'File' menu for this Module
  * 
  * @author yourname
  */
-public class OEFileMenu extends FileMenu
-{
+public class OEFileMenu extends FileMenu {
 
-    private static final Logger logger = Logger.getLogger(OEFileMenu.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(OEFileMenu.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance Variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance Variables
+	// =========================
+	// ==========================================================================
 
-      protected OEController _xxxController;
+	protected OEController _xxxController;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public OEFileMenu(OEController controller)
-    {
-        super(controller);
-        _xxxController = controller;
-        // Put your actions here
-    }
+	public OEFileMenu(OEController controller) {
+		super(controller);
+		_xxxController = controller;
+		// Put your actions here
+	}
 
-    public OEController getXXXController()
-    {
-        return _xxxController;
-    }
+	public OEController getXXXController() {
+		return _xxxController;
+	}
 }

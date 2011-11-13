@@ -26,11 +26,9 @@ import org.openflexo.foundation.dm.DMPackage;
  * 
  * @author sguerin
  */
-public class PackageDeleted extends DMDataModification
-{
+public class PackageDeleted extends DMDataModification {
 
-    public PackageDeleted(DMPackage aPackage)
-    {
-        super(aPackage, null);
-    }
+	public PackageDeleted(DMPackage aPackage) {
+		super(aPackage, null);
+	}
 }

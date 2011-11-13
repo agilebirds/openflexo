@@ -28,75 +28,71 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.generator.file.AbstractCGFile;
 
-
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class IncludeInGeneration extends MultipleFileGCAction<IncludeInGeneration>
-{
+public class IncludeInGeneration extends MultipleFileGCAction<IncludeInGeneration> {
 
-    public static final MultipleFileGCActionType<IncludeInGeneration> actionType = new MultipleFileGCActionType<IncludeInGeneration>("include_in_generation",
-            GENERATE_MENU, GENERATION_GROUP,FlexoActionType.NORMAL_ACTION_TYPE){
+	public static final MultipleFileGCActionType<IncludeInGeneration> actionType = new MultipleFileGCActionType<IncludeInGeneration>(
+			"include_in_generation", GENERATE_MENU, GENERATION_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-                @Override
-                protected boolean accept(AbstractCGFile aFile)
-                {
-                    return aFile.getMarkedAsDoNotGenerate();
-                }
+		@Override
+		protected boolean accept(AbstractCGFile aFile) {
+			return aFile.getMarkedAsDoNotGenerate();
+		}
 
-                @Override
-                public IncludeInGeneration makeNewAction(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-                {
-                    return new IncludeInGeneration(focusedObject,globalSelection,editor);
-                }
-                
-                /**
-                 * Overrides getSelectedCGFilesOnWhyCurrentActionShouldApply
-                 * @see org.openflexo.generator.action.MultipleFileGCAction.MultipleFileGCActionType#getSelectedCGFilesOnWhyCurrentActionShouldApply(org.openflexo.foundation.cg.CGObject, java.util.Vector)
-                 */
-                @Override
-                protected Vector<AbstractCGFile> getSelectedCGFilesOnWhyCurrentActionShouldApply(CGObject focusedObject, Vector<CGObject> globalSelection)
-                {
-                    Vector<AbstractCGFile> selectedFiles = getSelectedCGFiles(focusedObject, globalSelection);
-                    Vector<AbstractCGFile> returned = new Vector<AbstractCGFile>();
-                    for (AbstractCGFile file : selectedFiles) {
-                        if (accept(file))
-                            returned.add(file);
-                    }
-                    return returned;
-                }
-        
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (IncludeInGeneration.actionType, CGObject.class);
-    }
-    
-    /**
-     * @param actionType
-     * @param focusedObject
-     * @param globalSelection
-     * @param editor
-     */
-    protected IncludeInGeneration(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
-    
-    /**
-     * Overrides doAction
-     * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
-     */
-    @Override
-    protected void doAction(Object context) throws FlexoException
-    {
-        for (AbstractCGFile file : getSelectedCGFilesOnWhyCurrentActionShouldApply()) {
-            file.setMarkedAsDoNotGenerate(false);
-        }
-        getRepository().refresh();
-    }
+		@Override
+		public IncludeInGeneration makeNewAction(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return new IncludeInGeneration(focusedObject, globalSelection, editor);
+		}
+
+		/**
+		 * Overrides getSelectedCGFilesOnWhyCurrentActionShouldApply
+		 * 
+		 * @see org.openflexo.generator.action.MultipleFileGCAction.MultipleFileGCActionType#getSelectedCGFilesOnWhyCurrentActionShouldApply(org.openflexo.foundation.cg.CGObject,
+		 *      java.util.Vector)
+		 */
+		@Override
+		protected Vector<AbstractCGFile> getSelectedCGFilesOnWhyCurrentActionShouldApply(CGObject focusedObject,
+				Vector<CGObject> globalSelection) {
+			Vector<AbstractCGFile> selectedFiles = getSelectedCGFiles(focusedObject, globalSelection);
+			Vector<AbstractCGFile> returned = new Vector<AbstractCGFile>();
+			for (AbstractCGFile file : selectedFiles) {
+				if (accept(file))
+					returned.add(file);
+			}
+			return returned;
+		}
+
+	};
+
+	static {
+		FlexoModelObject.addActionForClass(IncludeInGeneration.actionType, CGObject.class);
+	}
+
+	/**
+	 * @param actionType
+	 * @param focusedObject
+	 * @param globalSelection
+	 * @param editor
+	 */
+	protected IncludeInGeneration(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	/**
+	 * Overrides doAction
+	 * 
+	 * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
+	 */
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		for (AbstractCGFile file : getSelectedCGFilesOnWhyCurrentActionShouldApply()) {
+			file.setMarkedAsDoNotGenerate(false);
+		}
+		getRepository().refresh();
+	}
 
 	public boolean requiresThreadPool() {
 		// TODO Auto-generated method stub

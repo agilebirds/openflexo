@@ -34,107 +34,97 @@ import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.node.AbstractNode;
 import org.openflexo.foundation.wkf.node.PetriGraphNode;
 
+public class MakeActivityGroup extends FlexoAction<MakeActivityGroup, WKFObject, WKFObject> {
 
-public class MakeActivityGroup extends FlexoAction<MakeActivityGroup,WKFObject,WKFObject>
-{
+	private static final Logger logger = Logger.getLogger(MakeActivityGroup.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(MakeActivityGroup.class.getPackage().getName());
+	public static FlexoActionType<MakeActivityGroup, WKFObject, WKFObject> actionType = new FlexoActionType<MakeActivityGroup, WKFObject, WKFObject>(
+			"group_activities", FlexoActionType.editGroup) {
 
-    public static FlexoActionType<MakeActivityGroup,WKFObject,WKFObject> actionType
-    = new FlexoActionType<MakeActivityGroup,WKFObject,WKFObject> (
-    		"group_activities",FlexoActionType.editGroup) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public MakeActivityGroup makeNewAction(WKFObject focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+			return new MakeActivityGroup(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public MakeActivityGroup makeNewAction(WKFObject focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-        {
-            return new MakeActivityGroup(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+			return false/* ((object != null)
+						&& object instanceof AbstractNode
+						&& ((AbstractNode)object).getLevel() == FlexoLevel.ACTIVITY)*/;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection)
-        {
-            return false/* ((object != null)
-                     && object instanceof AbstractNode
-                     && ((AbstractNode)object).getLevel() == FlexoLevel.ACTIVITY)*/;
-        }
+		@Override
+		protected boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+			return false /*getAllActivityLevelNodes(object, globalSelection).size() > 0*/;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection)
-        {
-            return false /*getAllActivityLevelNodes(object, globalSelection).size() > 0*/;
-        }
+	};
 
-    };
+	static {
+		FlexoModelObject.addActionForClass(MakeActivityGroup.actionType, AbstractNode.class);
+	}
 
-    static {
-        FlexoModelObject.addActionForClass (MakeActivityGroup.actionType, AbstractNode.class);
-     }
+	private String newGroupName;
+	private ActivityGroup newActivityGroup;
 
-    private String newGroupName;
-    private ActivityGroup newActivityGroup;
+	MakeActivityGroup(WKFObject focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    MakeActivityGroup (WKFObject focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		Vector<PetriGraphNode> nodesToGroup = getAllActivityLevelNodes(getFocusedObject(), getGlobalSelection());
 
-    @Override
-    protected void doAction(Object context) throws FlexoException
-    {
-    	Vector<PetriGraphNode> nodesToGroup = getAllActivityLevelNodes(getFocusedObject(), getGlobalSelection());
+		/*System.out.println("Make activity group");
+		System.out.println("focused = "+getFocusedObject());
+		System.out.println("global selection = "+getGlobalSelection());
+		System.out.println("nodesToGroup="+nodesToGroup);*/
 
-    	/*System.out.println("Make activity group");
-    	System.out.println("focused = "+getFocusedObject());
-    	System.out.println("global selection = "+getGlobalSelection());
-    	System.out.println("nodesToGroup="+nodesToGroup);*/
+		if (nodesToGroup.size() == 0) {
+			logger.warning("Sorry, no nodes to group");
+		} else {
+			if (nodesToGroup.firstElement().getParentPetriGraph() instanceof ActivityPetriGraph) {
+				FlexoPetriGraph pg = nodesToGroup.firstElement().getParentPetriGraph();
+				newActivityGroup = new ActivityGroup(getFocusedObject().getProcess(), nodesToGroup);
+				// TODO: following must be put in finalizer of MakeActivityGroup action
+				newActivityGroup.setX(nodesToGroup.firstElement().getX("bpe"), "collabsed_" + "bpe");
+				newActivityGroup.setY(nodesToGroup.firstElement().getY("bpe"), "collabsed_" + "bpe");
+				newActivityGroup.setGroupName(getNewGroupName());
+				pg.addToGroups(newActivityGroup);
+			}
+		}
+	}
 
-    	if (nodesToGroup.size() == 0) {
-    		logger.warning("Sorry, no nodes to group");
-    	} else {
-    		if (nodesToGroup.firstElement().getParentPetriGraph() instanceof ActivityPetriGraph) {
-    			FlexoPetriGraph pg = nodesToGroup.firstElement().getParentPetriGraph();
-    		   	newActivityGroup = new ActivityGroup(getFocusedObject().getProcess(),nodesToGroup);
-    		   	// TODO: following must be put in finalizer of MakeActivityGroup action
-    		   	newActivityGroup.setX(nodesToGroup.firstElement().getX("bpe"),"collabsed_"+"bpe");
-    		   	newActivityGroup.setY(nodesToGroup.firstElement().getY("bpe"),"collabsed_"+"bpe");
-    		   	newActivityGroup.setGroupName(getNewGroupName());
-    		   	pg.addToGroups(newActivityGroup);
-    		}
-    	}
-    }
-
-	public String getNewGroupName()
-	{
+	public String getNewGroupName() {
 		return newGroupName;
 	}
 
-	public void setNewGroupName(String newGroupName)
-	{
+	public void setNewGroupName(String newGroupName) {
 		this.newGroupName = newGroupName;
 	}
 
-	public ActivityGroup getNewActivityGroup()
-	{
+	public ActivityGroup getNewActivityGroup() {
 		return newActivityGroup;
 	}
 
-	protected static Vector<PetriGraphNode> getAllActivityLevelNodes(WKFObject focusedObject, Vector<WKFObject> globalSelection)
-	{
+	protected static Vector<PetriGraphNode> getAllActivityLevelNodes(WKFObject focusedObject, Vector<WKFObject> globalSelection) {
 		Vector<PetriGraphNode> returned = new Vector<PetriGraphNode>();
-		Vector<WKFObject> allObjects = new Vector<WKFObject>(globalSelection != null ? globalSelection : new  Vector<WKFObject>());
+		Vector<WKFObject> allObjects = new Vector<WKFObject>(globalSelection != null ? globalSelection : new Vector<WKFObject>());
 		if (!allObjects.contains(focusedObject))
 			allObjects.add(focusedObject);
 		ActivityPetriGraph pg = null;
 		for (WKFObject o : allObjects) {
-			//GPO: Throttle here to enable WKFGroup on the root petri graph only
+			// GPO: Throttle here to enable WKFGroup on the root petri graph only
 			pg = o.getProcess().getActivityPetriGraph();
-			if (o instanceof PetriGraphNode && !((PetriGraphNode)o).isGrouped() && ((PetriGraphNode)o).getParentPetriGraph() instanceof ActivityPetriGraph && (pg==null || ((PetriGraphNode)o).getParentPetriGraph()==pg)) {
-				returned.add((PetriGraphNode)o);
-				if (pg==null)
-					pg = (ActivityPetriGraph) ((PetriGraphNode)o).getParentPetriGraph();
+			if (o instanceof PetriGraphNode && !((PetriGraphNode) o).isGrouped()
+					&& ((PetriGraphNode) o).getParentPetriGraph() instanceof ActivityPetriGraph
+					&& (pg == null || ((PetriGraphNode) o).getParentPetriGraph() == pg)) {
+				returned.add((PetriGraphNode) o);
+				if (pg == null)
+					pg = (ActivityPetriGraph) ((PetriGraphNode) o).getParentPetriGraph();
 			}
 		}
 		return returned;

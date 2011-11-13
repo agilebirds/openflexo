@@ -20,12 +20,12 @@
 package org.netbeans.lib.cvsclient.util;
 
 /**
- * @author  Thomas Singer
+ * @author Thomas Singer
  */
 public interface StringPattern {
 
-    /**
-     * Returns whether the specified string matches thiz pattern.
-     */
-    boolean doesMatch(String string);
+	/**
+	 * Returns whether the specified string matches thiz pattern.
+	 */
+	boolean doesMatch(String string);
 }

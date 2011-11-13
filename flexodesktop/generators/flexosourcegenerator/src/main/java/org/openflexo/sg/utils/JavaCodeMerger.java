@@ -24,8 +24,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
-
 import org.openflexo.foundation.dm.DMCardinality;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMMethod;
@@ -95,26 +93,32 @@ public class JavaCodeMerger {
 				if (!p.getIsStaticallyDefinedInTemplate()) {
 					if (logger.isLoggable(Level.FINE))
 						logger.fine("Merging property " + p.getName());
-					if ((p.getImplementationType() == DMPropertyImplementationType.PUBLIC_FIELD) || (p.getImplementationType() == DMPropertyImplementationType.PROTECTED_FIELD)
+					if ((p.getImplementationType() == DMPropertyImplementationType.PUBLIC_FIELD)
+							|| (p.getImplementationType() == DMPropertyImplementationType.PROTECTED_FIELD)
 							|| (p.getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD)
 							|| (p.getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD)
 							|| (p.getImplementationType() == DMPropertyImplementationType.PUBLIC_STATIC_FINAL_FIELD)) {
-						javaCode = appendSourceCode(p.getFieldSourceCode(), parsedClass, lastGeneratedClass, lastAcceptedClass, javaCode, PreferredLocation.AFTER_LAST_FIELD, entity.getProject());
+						javaCode = appendSourceCode(p.getFieldSourceCode(), parsedClass, lastGeneratedClass, lastAcceptedClass, javaCode,
+								PreferredLocation.AFTER_LAST_FIELD, entity.getProject());
 						parsedClass = javaParser.parseClass(javaCode, entity.getDMModel());
 					}
 					if ((p.getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_ONLY)
 							|| (p.getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PROTECTED_FIELD)
 							|| (p.getImplementationType() == DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD)) {
-						javaCode = appendSourceCode(p.getGetterSourceCode(), parsedClass, lastGeneratedClass, lastAcceptedClass, javaCode, PreferredLocation.END_OF_CLASS, entity.getProject());
+						javaCode = appendSourceCode(p.getGetterSourceCode(), parsedClass, lastGeneratedClass, lastAcceptedClass, javaCode,
+								PreferredLocation.END_OF_CLASS, entity.getProject());
 						parsedClass = javaParser.parseClass(javaCode, entity.getDMModel());
 						if (p.isSettable()) {
-							javaCode = appendSourceCode(p.getSetterSourceCode(), parsedClass, lastGeneratedClass, lastAcceptedClass, javaCode, PreferredLocation.END_OF_CLASS, entity.getProject());
+							javaCode = appendSourceCode(p.getSetterSourceCode(), parsedClass, lastGeneratedClass, lastAcceptedClass,
+									javaCode, PreferredLocation.END_OF_CLASS, entity.getProject());
 							parsedClass = javaParser.parseClass(javaCode, entity.getDMModel());
 						}
 						if ((p.getCardinality() == DMCardinality.VECTOR) || (p.getCardinality() == DMCardinality.HASHTABLE)) {
-							javaCode = appendSourceCode(p.getAdditionSourceCode(), parsedClass, lastGeneratedClass, lastAcceptedClass, javaCode, PreferredLocation.END_OF_CLASS, entity.getProject());
+							javaCode = appendSourceCode(p.getAdditionSourceCode(), parsedClass, lastGeneratedClass, lastAcceptedClass,
+									javaCode, PreferredLocation.END_OF_CLASS, entity.getProject());
 							parsedClass = javaParser.parseClass(javaCode, entity.getDMModel());
-							javaCode = appendSourceCode(p.getRemovalSourceCode(), parsedClass, lastGeneratedClass, lastAcceptedClass, javaCode, PreferredLocation.END_OF_CLASS, entity.getProject());
+							javaCode = appendSourceCode(p.getRemovalSourceCode(), parsedClass, lastGeneratedClass, lastAcceptedClass,
+									javaCode, PreferredLocation.END_OF_CLASS, entity.getProject());
 							parsedClass = javaParser.parseClass(javaCode, entity.getDMModel());
 						}
 					}
@@ -125,7 +129,8 @@ public class JavaCodeMerger {
 				if (!m.getIsStaticallyDefinedInTemplate()) {
 					if (logger.isLoggable(Level.FINE))
 						logger.fine("Merging method " + m.getSignature());
-					javaCode = appendSourceCode(m.getSourceCode(), parsedClass, lastGeneratedClass, lastAcceptedClass, javaCode, PreferredLocation.END_OF_CLASS, entity.getProject());
+					javaCode = appendSourceCode(m.getSourceCode(), parsedClass, lastGeneratedClass, lastAcceptedClass, javaCode,
+							PreferredLocation.END_OF_CLASS, entity.getProject());
 					parsedClass = javaParser.parseClass(javaCode, entity.getDMModel());
 				}
 			}
@@ -150,8 +155,9 @@ public class JavaCodeMerger {
 		BEGINNING_OF_CLASS, END_OF_CLASS, AFTER_LAST_FIELD
 	}
 
-	private static String appendSourceCode(AbstractSourceCode sourceCode, ParsedJavaClass parsedClass, ParsedJavaClass lastGeneratedClass, ParsedJavaClass lastAcceptedClass, String initialCode,
-			PreferredLocation preferredLocation, FlexoProject project) throws ParserNotInstalledException {
+	private static String appendSourceCode(AbstractSourceCode sourceCode, ParsedJavaClass parsedClass, ParsedJavaClass lastGeneratedClass,
+			ParsedJavaClass lastAcceptedClass, String initialCode, PreferredLocation preferredLocation, FlexoProject project)
+			throws ParserNotInstalledException {
 		// logger.info("Called appendSourceCode() for "+sourceCode.getCode());
 		ParsedJavaElement foundExistingElement;
 		try {
@@ -195,28 +201,31 @@ public class JavaCodeMerger {
 
 			if (lowerBound != null) {
 				StringBounds lower = boundsForJavaElementInClass(lowerBound, initialCode);
-				return initialCode.substring(0, lower.beginIndex) + sourceCode.getCode() + StringUtils.LINE_SEPARATOR + StringUtils.LINE_SEPARATOR + initialCode.substring(lower.beginIndex);
+				return initialCode.substring(0, lower.beginIndex) + sourceCode.getCode() + StringUtils.LINE_SEPARATOR
+						+ StringUtils.LINE_SEPARATOR + initialCode.substring(lower.beginIndex);
 			}
 
 			if (upperBound != null) {
 				StringBounds upper = boundsForJavaElementInClass(upperBound, initialCode);
-				return initialCode.substring(0, upper.endIndex + 1) + StringUtils.LINE_SEPARATOR + StringUtils.LINE_SEPARATOR + sourceCode.getCode() + StringUtils.LINE_SEPARATOR
-						+ StringUtils.LINE_SEPARATOR + initialCode.substring(upper.endIndex + 1);
+				return initialCode.substring(0, upper.endIndex + 1) + StringUtils.LINE_SEPARATOR + StringUtils.LINE_SEPARATOR
+						+ sourceCode.getCode() + StringUtils.LINE_SEPARATOR + StringUtils.LINE_SEPARATOR
+						+ initialCode.substring(upper.endIndex + 1);
 			}
 
 			// Upper bounds and lower bounds are null, there is no members in the class -> insert before last }
 			int lastBrace = initialCode.lastIndexOf('}');
 
 			if (lastBrace > -1)
-				return initialCode.substring(0, lastBrace) + StringUtils.LINE_SEPARATOR + StringUtils.LINE_SEPARATOR + sourceCode.getCode() + StringUtils.LINE_SEPARATOR + StringUtils.LINE_SEPARATOR
-						+ initialCode.substring(lastBrace);
+				return initialCode.substring(0, lastBrace) + StringUtils.LINE_SEPARATOR + StringUtils.LINE_SEPARATOR + sourceCode.getCode()
+						+ StringUtils.LINE_SEPARATOR + StringUtils.LINE_SEPARATOR + initialCode.substring(lastBrace);
 
 			logger.warning("I should never come here");
 			return initialCode;
 		}
 	}
 
-	private static String appendSourceCodeByReplacingJavaElement(ParsedJavaElement elementToReplace, AbstractSourceCode sourceCode, String initialCode, FlexoProject project) {
+	private static String appendSourceCodeByReplacingJavaElement(ParsedJavaElement elementToReplace, AbstractSourceCode sourceCode,
+			String initialCode, FlexoProject project) {
 		if (sourceCode.isEdited()) {
 			StringBounds b = boundsForJavaElementInClass(elementToReplace, initialCode);
 
@@ -230,15 +239,18 @@ public class JavaCodeMerger {
 			 * logger.info("initialCode.substring(b.endIndex+1).indexOf(LINE_SEPARATOR)="+initialCode.substring(b.endIndex+1).indexOf(LINE_SEPARATOR));
 			 */
 
-			if (sourceCode.getCode().endsWith(StringUtils.LINE_SEPARATOR) && initialCode.substring(b.endIndex + 1).indexOf(StringUtils.LINE_SEPARATOR) == 0) {
-				return initialCode.substring(0, b.beginIndex) + sourceCode.getCode() + initialCode.substring(b.endIndex + 1 + StringUtils.LINE_SEPARATOR.length());
+			if (sourceCode.getCode().endsWith(StringUtils.LINE_SEPARATOR)
+					&& initialCode.substring(b.endIndex + 1).indexOf(StringUtils.LINE_SEPARATOR) == 0) {
+				return initialCode.substring(0, b.beginIndex) + sourceCode.getCode()
+						+ initialCode.substring(b.endIndex + 1 + StringUtils.LINE_SEPARATOR.length());
 			} else {
 				return initialCode.substring(0, b.beginIndex) + sourceCode.getCode() + initialCode.substring(b.endIndex + 1);
 			}
 		} else {
 			StringBounds b = boundsForJavaElementInClass(elementToReplace, initialCode);
 			try {
-				ParsedJavadoc doc = javaParser.parseJavadocForMethod(initialCode.substring(b.beginIndex, b.endIndex + 1), project.getDataModel());
+				ParsedJavadoc doc = javaParser.parseJavadocForMethod(initialCode.substring(b.beginIndex, b.endIndex + 1),
+						project.getDataModel());
 				if (doc == null) {
 					doc = javaParser.parseJavadocForMethod(sourceCode.getCode(), project.getDataModel());
 					if (doc != null)
@@ -272,7 +284,8 @@ public class JavaCodeMerger {
 			while (index > 0) {
 				if (initialCode.charAt(index - 1) != '\r') {
 					if (index - 50 > 0 && index + 50 < initialCode.length())
-						System.out.println(initialCode.substring(index - 50, index) + " here!!! " + initialCode.substring(index, index + 50));
+						System.out.println(initialCode.substring(index - 50, index) + " here!!! "
+								+ initialCode.substring(index, index + 50));
 					else
 						System.out.println("No \r at index " + index);
 				}
@@ -295,15 +308,16 @@ public class JavaCodeMerger {
 		}
 
 		if (logger.isLoggable(Level.FINER))
-			logger.finer("boundsForJavaElementInClass: " + element.getUniqueIdentifier() + " begin=" + returned.beginIndex + " end=" + returned.endIndex);
+			logger.finer("boundsForJavaElementInClass: " + element.getUniqueIdentifier() + " begin=" + returned.beginIndex + " end="
+					+ returned.endIndex);
 		if (returned.beginIndex > -1 && returned.beginIndex < returned.endIndex)
 			if (logger.isLoggable(Level.FINER))
 				logger.finer("Result: [" + initialCode.substring(returned.beginIndex, returned.endIndex + 1) + "]");
 		return returned;
 	}
 
-	private static ParsedJavaElement findUpperBound(AbstractSourceCode sourceCode, ParsedJavaClass parsedClass, ParsedJavaClass lastGeneratedClass, ParsedJavaClass lastAcceptedClass)
-			throws ParserNotInstalledException {
+	private static ParsedJavaElement findUpperBound(AbstractSourceCode sourceCode, ParsedJavaClass parsedClass,
+			ParsedJavaClass lastGeneratedClass, ParsedJavaClass lastAcceptedClass) throws ParserNotInstalledException {
 		if (logger.isLoggable(Level.FINE))
 			logger.fine("Find upper bound");
 
@@ -375,8 +389,8 @@ public class JavaCodeMerger {
 		return returned;
 	}
 
-	private static ParsedJavaElement findLowerBound(AbstractSourceCode sourceCode, ParsedJavaClass parsedClass, ParsedJavaClass lastGeneratedClass, ParsedJavaClass lastAcceptedClass)
-			throws ParserNotInstalledException {
+	private static ParsedJavaElement findLowerBound(AbstractSourceCode sourceCode, ParsedJavaClass parsedClass,
+			ParsedJavaClass lastGeneratedClass, ParsedJavaClass lastAcceptedClass) throws ParserNotInstalledException {
 		if (logger.isLoggable(Level.FINE))
 			logger.fine("Find lower bound");
 
@@ -440,7 +454,8 @@ public class JavaCodeMerger {
 		return returned;
 	}
 
-	private static ParsedJavaElement elementInClass(AbstractSourceCode sourceCode, ParsedJavaClass aClass) throws ParserNotInstalledException, JavaParseException {
+	private static ParsedJavaElement elementInClass(AbstractSourceCode sourceCode, ParsedJavaClass aClass)
+			throws ParserNotInstalledException, JavaParseException {
 		if (sourceCode instanceof FieldSourceCode) {
 			ParsedJavaField fieldToAppend = ((FieldSourceCode) sourceCode).getParsedField();
 			if (fieldToAppend == null) {

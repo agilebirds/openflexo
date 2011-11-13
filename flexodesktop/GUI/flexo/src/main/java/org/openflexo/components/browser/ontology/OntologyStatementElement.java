@@ -24,35 +24,29 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ontology.OntologyStatement;
 
-
 /**
  * Browser element representing the calc library
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class OntologyStatementElement extends BrowserElement
-{
+public class OntologyStatementElement extends BrowserElement {
 
-    protected OntologyStatementElement(OntologyStatement statement, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(statement, BrowserElementType.ONTOLOGY_STATEMENT, browser, parent);
-    }
+	protected OntologyStatementElement(OntologyStatement statement, ProjectBrowser browser, BrowserElement parent) {
+		super(statement, BrowserElementType.ONTOLOGY_STATEMENT, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-    }
+	@Override
+	protected void buildChildrenVector() {
+	}
 
-    @Override
-	public String getName()
-    {
-        return getOntologyStatement().toString();
-    }
+	@Override
+	public String getName() {
+		return getOntologyStatement().toString();
+	}
 
-    protected OntologyStatement getOntologyStatement()
-    {
-        return (OntologyStatement) getObject();
-    }
+	protected OntologyStatement getOntologyStatement() {
+		return (OntologyStatement) getObject();
+	}
 
 }

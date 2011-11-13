@@ -26,43 +26,40 @@ import org.openflexo.localization.FlexoLocalization;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public abstract class TargetType extends FlexoModelObject
-{
-    public TargetType(FlexoProject project) {
+public abstract class TargetType extends FlexoModelObject {
+	public TargetType(FlexoProject project) {
 		super(project);
 	}
 
-    @Override
+	@Override
 	public abstract String getName();
 
-    public abstract String getTemplateFolderName();
+	public abstract String getTemplateFolderName();
 
-    public abstract Vector<Format> getAvailableFormats();
-    
-    @Override
-    public String getClassNameKey()
-    {
-    	return "target_type";
-    }
-    
-    /**
-     * @return
-     */
-    public String getLocalizedName()
-    {
-        return FlexoLocalization.localizedForKey(getName());
-    }
+	public abstract Vector<Format> getAvailableFormats();
 
-    /**
-     * Overrides toString
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString()
-    {
-        return getName();
-    }
-    
+	@Override
+	public String getClassNameKey() {
+		return "target_type";
+	}
+
+	/**
+	 * @return
+	 */
+	public String getLocalizedName() {
+		return FlexoLocalization.localizedForKey(getName());
+	}
+
+	/**
+	 * Overrides toString
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return getName();
+	}
+
 }

@@ -34,7 +34,6 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.listener.FlexoKeyEventListener;
 
-
 import org.openflexo.components.MultipleObjectSelectorPopup;
 import org.openflexo.dgmodule.DGPreferences;
 import org.openflexo.dgmodule.view.DGMainPane;
@@ -46,109 +45,92 @@ import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.generator.action.WriteModifiedGeneratedFiles;
 
-
 public class WriteModifiedGeneratedFilesInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	WriteModifiedGeneratedFilesInitializer(DGControllerActionInitializer actionInitializer)
-	{
-		super(WriteModifiedGeneratedFiles.actionType,actionInitializer);
+	WriteModifiedGeneratedFilesInitializer(DGControllerActionInitializer actionInitializer) {
+		super(WriteModifiedGeneratedFiles.actionType, actionInitializer);
 	}
 
 	@Override
-	protected DGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DGControllerActionInitializer)super.getControllerActionInitializer();
+	protected DGControllerActionInitializer getControllerActionInitializer() {
+		return (DGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<WriteModifiedGeneratedFiles> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<WriteModifiedGeneratedFiles> getDefaultInitializer() {
 		return new FlexoActionInitializer<WriteModifiedGeneratedFiles>() {
 			@Override
-			public boolean run(ActionEvent e, WriteModifiedGeneratedFiles action)
-			{
+			public boolean run(ActionEvent e, WriteModifiedGeneratedFiles action) {
 				if (action.getFilesToWrite().size() == 0) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("no_files_selected"));
 					return false;
-				}
-				else if ((action.getFilesToWrite().size() > 1 
-						|| (!(action.getFocusedObject() instanceof CGFile))) 
-						&& !(e!=null && e.getActionCommand()!=null && e.getActionCommand().equals(FlexoKeyEventListener.KEY_PRESSED))) {
+				} else if ((action.getFilesToWrite().size() > 1 || (!(action.getFocusedObject() instanceof CGFile)))
+						&& !(e != null && e.getActionCommand() != null && e.getActionCommand().equals(FlexoKeyEventListener.KEY_PRESSED))) {
 					SelectFilesPopup popup = new SelectFilesPopup(FlexoLocalization.localizedForKey("write_modified_files_to_disk"),
-							FlexoLocalization.localizedForKey("write_modified_files_to_disk_description"), "write_to_disk", action
-									.getFilesToWrite(), action.getFocusedObject().getProject(), getControllerActionInitializer()
+							FlexoLocalization.localizedForKey("write_modified_files_to_disk_description"), "write_to_disk",
+							action.getFilesToWrite(), action.getFocusedObject().getProject(), getControllerActionInitializer()
 									.getDGController());
 					popup.setVisible(true);
-					if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) 
-							&& (popup.getFileSet().getSelectedFiles().size() > 0)) {
+					if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) && (popup.getFileSet().getSelectedFiles().size() > 0)) {
 						action.setFilesToWrite(popup.getFileSet().getSelectedFiles());
-                        action.setSaveBeforeGenerating(DGPreferences.getSaveBeforeGenerating());
-					}
-					else {
+						action.setSaveBeforeGenerating(DGPreferences.getSaveBeforeGenerating());
+					} else {
 						return false;
 					}
-				}
-				else {
+				} else {
 					// 1 occurence, continue without confirmation
 				}
-                action.setSaveBeforeGenerating(DGPreferences.getSaveBeforeGenerating());
-				((DGMainPane)getController().getMainPane()).getDgBrowserView().getBrowser().setHoldStructure();
+				action.setSaveBeforeGenerating(DGPreferences.getSaveBeforeGenerating());
+				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().setHoldStructure();
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<WriteModifiedGeneratedFiles> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<WriteModifiedGeneratedFiles> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<WriteModifiedGeneratedFiles>() {
 			@Override
-			public boolean run(ActionEvent e, WriteModifiedGeneratedFiles action)
-			{
-				((DGMainPane)getController().getMainPane()).getDgBrowserView().getBrowser().resetHoldStructure();
-				((DGMainPane)getController().getMainPane()).getDgBrowserView().getBrowser().update();
+			public boolean run(ActionEvent e, WriteModifiedGeneratedFiles action) {
+				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().resetHoldStructure();
+				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().update();
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoExceptionHandler<WriteModifiedGeneratedFiles> getDefaultExceptionHandler() 
-	{
+	protected FlexoExceptionHandler<WriteModifiedGeneratedFiles> getDefaultExceptionHandler() {
 		return new FlexoExceptionHandler<WriteModifiedGeneratedFiles>() {
 			@Override
 			public boolean handleException(FlexoException exception, WriteModifiedGeneratedFiles action) {
-				((DGMainPane)getController().getMainPane()).getDgBrowserView().getBrowser().resetHoldStructure();
-				((DGMainPane)getController().getMainPane()).getDgBrowserView().getBrowser().update();
+				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().resetHoldStructure();
+				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().update();
 				getControllerActionInitializer().getDGController().disposeProgressWindow();
 				exception.printStackTrace();
 				FlexoController.showError(FlexoLocalization.localizedForKey("file_writing_failed") + ":\n"
 						+ exception.getLocalizedMessage());
-				((DGMainPane)getController().getMainPane()).getDgBrowserView().getBrowser().resetHoldStructure();
-				((DGMainPane)getController().getMainPane()).getDgBrowserView().getBrowser().update();
+				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().resetHoldStructure();
+				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().update();
 				return true;
 			}
 		};
 	}
 
-
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return GeneratorIconLibrary.WRITE_TO_DISK_ICON;
 	}
 
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return GeneratorIconLibrary.WRITE_TO_DISK_DISABLED_ICON;
 	}
 
 	@Override
-	protected KeyStroke getShortcut()
-	{
+	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(KeyEvent.VK_D, FlexoCst.META_MASK);
 	}
 }

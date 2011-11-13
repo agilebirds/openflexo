@@ -59,7 +59,6 @@ import org.openflexo.swing.SwingUtils;
 import org.openflexo.wkf.processeditor.ProcessEditorConstants;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
-
 public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNode> {
 
 	private static final Logger logger = Logger.getLogger(SubProcessNodeGR.class.getPackage().getName());
@@ -185,8 +184,8 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 		} else {
 			absoluteIconX = (getWidth() - WKFIconLibrary.EXPANDABLE_ICON.getIconWidth() - typeIcon.getIconWidth() - MIN_SPACE) / 2;
 		}
-		return new FGERectangle(absoluteIconX / getWidth(), absoluteIconY / getHeight(), WKFIconLibrary.EXPANDABLE_ICON.getIconWidth() / getWidth(),
-				WKFIconLibrary.EXPANDABLE_ICON.getIconHeight() / getHeight());
+		return new FGERectangle(absoluteIconX / getWidth(), absoluteIconY / getHeight(), WKFIconLibrary.EXPANDABLE_ICON.getIconWidth()
+				/ getWidth(), WKFIconLibrary.EXPANDABLE_ICON.getIconHeight() / getHeight());
 
 	}
 
@@ -200,8 +199,8 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 		double absoluteIconY = vGap * 3 + labelSize.height + getRoleFont().getSize() + getExtraSpaceAbove();
 		double absoluteIconX = (getWidth() - WKFIconLibrary.EXPANDABLE_ICON.getIconWidth() - typeIcon.getIconWidth() - MIN_SPACE) / 2
 				+ WKFIconLibrary.EXPANDABLE_ICON.getIconWidth() + MIN_SPACE;
-		return new FGERectangle(absoluteIconX / getWidth(), absoluteIconY / getHeight(), WKFIconLibrary.EXPANDABLE_ICON.getIconWidth() / getWidth(),
-				WKFIconLibrary.EXPANDABLE_ICON.getIconHeight() / getHeight());
+		return new FGERectangle(absoluteIconX / getWidth(), absoluteIconY / getHeight(), WKFIconLibrary.EXPANDABLE_ICON.getIconWidth()
+				/ getWidth(), WKFIconLibrary.EXPANDABLE_ICON.getIconHeight() / getHeight());
 
 	}
 
@@ -216,8 +215,8 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 		double absoluteIconY = getHeight() - 10 - WKFIconLibrary.EXPANDABLE_ICON.getIconHeight();
 		double absoluteIconX = (getWidth() - WKFIconLibrary.EXPANDABLE_ICON.getIconWidth() - typeIcon.getIconWidth() - MIN_SPACE) / 2
 				+ WKFIconLibrary.EXPANDABLE_ICON.getIconWidth() + MIN_SPACE;
-		return new FGERectangle(absoluteIconX / getWidth(), absoluteIconY / getHeight(), WKFIconLibrary.EXPANDABLE_ICON.getIconWidth() / getWidth(),
-				WKFIconLibrary.EXPANDABLE_ICON.getIconHeight() / getHeight());
+		return new FGERectangle(absoluteIconX / getWidth(), absoluteIconY / getHeight(), WKFIconLibrary.EXPANDABLE_ICON.getIconWidth()
+				/ getWidth(), WKFIconLibrary.EXPANDABLE_ICON.getIconHeight() / getHeight());
 
 	}
 

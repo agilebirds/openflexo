@@ -33,44 +33,39 @@ import org.openflexo.icon.FilesIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class GoToCorrespondingJavaInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	GoToCorrespondingJavaInitializer(GeneratorControllerActionInitializer actionInitializer)
-	{
-		super(GoToCorrespondingJava.actionType,actionInitializer);
-	}
-	
-	@Override
-	protected GeneratorControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (GeneratorControllerActionInitializer)super.getControllerActionInitializer();
-	}
-	
-     @Override
-	protected FlexoActionFinalizer<GoToCorrespondingJava> getDefaultFinalizer() 
-	{
-		return new FlexoActionFinalizer<GoToCorrespondingJava>() {
-            @Override
-			public boolean run(ActionEvent e, GoToCorrespondingJava action)
-            {
-                CGWOFile file = action.getFocusedObject();
-                for (CGFile f : file.getRepository().getFiles()) {
-                    if ((f!=file) && (f instanceof CGJavaFile) && (f.getResource()!=null) && (f.getResource().getGenerator()==file.getResource().getGenerator())) {
-                        getController().setCurrentEditedObjectAsModuleView(f);
-                        return true;
-                    }
-                }
-       			return false;
-           }
-        };
+	GoToCorrespondingJavaInitializer(GeneratorControllerActionInitializer actionInitializer) {
+		super(GoToCorrespondingJava.actionType, actionInitializer);
 	}
 
-     @Override
-    protected Icon getEnabledIcon() 
-     {
-    	return FilesIconLibrary.SMALL_JAVA_FILE_ICON;
-    }
+	@Override
+	protected GeneratorControllerActionInitializer getControllerActionInitializer() {
+		return (GeneratorControllerActionInitializer) super.getControllerActionInitializer();
+	}
+
+	@Override
+	protected FlexoActionFinalizer<GoToCorrespondingJava> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<GoToCorrespondingJava>() {
+			@Override
+			public boolean run(ActionEvent e, GoToCorrespondingJava action) {
+				CGWOFile file = action.getFocusedObject();
+				for (CGFile f : file.getRepository().getFiles()) {
+					if ((f != file) && (f instanceof CGJavaFile) && (f.getResource() != null)
+							&& (f.getResource().getGenerator() == file.getResource().getGenerator())) {
+						getController().setCurrentEditedObjectAsModuleView(f);
+						return true;
+					}
+				}
+				return false;
+			}
+		};
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
+		return FilesIconLibrary.SMALL_JAVA_FILE_ICON;
+	}
 }

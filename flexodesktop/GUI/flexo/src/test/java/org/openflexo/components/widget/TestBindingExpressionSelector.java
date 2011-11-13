@@ -18,6 +18,7 @@
  *
  */
 package org.openflexo.components.widget;
+
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -36,7 +37,6 @@ import org.openflexo.swing.VerticalLayout;
 import org.openflexo.toolbox.Duration;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.Duration.DurationUnit;
-
 
 import org.openflexo.components.widget.DMTypeSelector;
 import org.openflexo.components.widget.DomainSelector;
@@ -62,7 +62,6 @@ import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 
-
 public class TestBindingExpressionSelector {
 
 	private static final Logger logger = FlexoLogger.getLogger(TestBindingExpressionSelector.class.getPackage().getName());
@@ -75,15 +74,14 @@ public class TestBindingExpressionSelector {
 	private ActivityNode activity1;
 	private OperationNode operation1;
 
-    protected static final FlexoEditorFactory EDITOR_FACTORY = new FlexoEditorFactory() {
+	protected static final FlexoEditorFactory EDITOR_FACTORY = new FlexoEditorFactory() {
 		@Override
 		public DefaultFlexoEditor makeFlexoEditor(FlexoProject project) {
 			return new DefaultFlexoEditor(project);
 		}
-    };
+	};
 
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		try {
 			FlexoLoggingManager.initialize();
 			FlexoLoggingManager.setKeepLogTrace(true);
@@ -101,12 +99,11 @@ public class TestBindingExpressionSelector {
 		test.showPanel();
 	}
 
-	public void loadProject()
-	{
+	public void loadProject() {
 		FileResource projectFile = new FileResource("src/test/resources/TestExecutionModel.prj");
-		logger.info("Found project "+projectFile.getAbsolutePath());
+		logger.info("Found project " + projectFile.getAbsolutePath());
 		try {
-			_editor = FlexoResourceManager.initializeExistingProject(projectFile,EDITOR_FACTORY,null);
+			_editor = FlexoResourceManager.initializeExistingProject(projectFile, EDITOR_FACTORY, null);
 		} catch (ProjectLoadingCancelledException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -115,20 +112,19 @@ public class TestBindingExpressionSelector {
 			e.printStackTrace();
 		}
 		_project = _editor.getProject();
-		logger.info("Successfully loaded project "+projectFile.getAbsolutePath());
+		logger.info("Successfully loaded project " + projectFile.getAbsolutePath());
 
-		 process = _project.getFlexoWorkflow().getRootProcess();
-		 operatorIF = (IFOperator)process.getActivityPetriGraph().getOperatorNodeNamed("IF");
-		 activity1 = process.getActivityPetriGraph().getActivityNodeNamed("Activity1");
-		 operation1 = activity1.getOperationNodeNamed("Operation1");
+		process = _project.getFlexoWorkflow().getRootProcess();
+		operatorIF = (IFOperator) process.getActivityPetriGraph().getOperatorNodeNamed("IF");
+		activity1 = process.getActivityPetriGraph().getActivityNodeNamed("Activity1");
+		operation1 = activity1.getOperationNodeNamed("Operation1");
 
-		 System.out.println("Operateur: "+operatorIF);
+		System.out.println("Operateur: " + operatorIF);
 
 	}
 
-	public void showPanel()
-	{
-		final JDialog dialog = new JDialog((Frame)null,false);
+	public void showPanel() {
+		final JDialog dialog = new JDialog((Frame) null, false);
 
 		JButton closeButton = new JButton("Close");
 		closeButton.addActionListener(new ActionListener() {
@@ -149,23 +145,20 @@ public class TestBindingExpressionSelector {
 
 		AbstractBinding bv = operatorIF.getConditionPrimitive();
 
-		BindingSelector _selector = new BindingSelector(null)
-		{
-            @Override
-			public void apply()
-            {
-            	super.apply();
-            	System.out.println("Apply, getEditedObject()="+getEditedObject());
-            }
+		BindingSelector _selector = new BindingSelector(null) {
+			@Override
+			public void apply() {
+				super.apply();
+				System.out.println("Apply, getEditedObject()=" + getEditedObject());
+			}
 
-            @Override
-			public void cancel()
-            {
-               	super.cancel();
-               	System.out.println("Cancel, getEditedObject()="+getEditedObject());
-           }
+			@Override
+			public void cancel() {
+				super.cancel();
+				System.out.println("Cancel, getEditedObject()=" + getEditedObject());
+			}
 		};
-		_selector.setBindable((Bindable)bv.getOwner());
+		_selector.setBindable((Bindable) bv.getOwner());
 		_selector.setBindingDefinition(bv.getBindingDefinition());
 		_selector.setEditedObject(bv);
 		_selector.setRevertValue(bv.clone());
@@ -175,29 +168,34 @@ public class TestBindingExpressionSelector {
 		selector1.setEditedObject(bv1);
 		selector1.setRevertValue(bv1.clone());
 
-		BindingDefinition def2 = new BindingDefinition("aBoolean",DMType.makeBooleanDMType(_project),operatorIF,BindingDefinitionType.GET,true);
-		BindingValue bv2 = new BindingValue(def2,operatorIF);
+		BindingDefinition def2 = new BindingDefinition("aBoolean", DMType.makeBooleanDMType(_project), operatorIF,
+				BindingDefinitionType.GET, true);
+		BindingValue bv2 = new BindingValue(def2, operatorIF);
 		BindingSelector selector2 = new BindingSelector(bv2);
 
-		BindingDefinition def2bis = new BindingDefinition("aMethod",null,operatorIF,BindingDefinitionType.EXECUTE,true);
-		BindingValue bv2bis = new BindingValue(def2bis,operatorIF);
+		BindingDefinition def2bis = new BindingDefinition("aMethod", null, operatorIF, BindingDefinitionType.EXECUTE, true);
+		BindingValue bv2bis = new BindingValue(def2bis, operatorIF);
 		BindingSelector selector2bis = new BindingSelector(bv2bis);
 		selector2bis.activateCompoundBindingMode();
 
-		BindingDefinition def2ter = new BindingDefinition("aSetBV",DMType.makeBooleanDMType(_project),operatorIF,BindingDefinitionType.SET,true);
-		BindingValue bv2ter = new BindingValue(def2ter,operatorIF);
+		BindingDefinition def2ter = new BindingDefinition("aSetBV", DMType.makeBooleanDMType(_project), operatorIF,
+				BindingDefinitionType.SET, true);
+		BindingValue bv2ter = new BindingValue(def2ter, operatorIF);
 		BindingSelector selector2ter = new BindingSelector(bv2ter);
 
-		BindingDefinition def3 = new BindingDefinition("anInteger",DMType.makeLongDMType(_project),operatorIF,BindingDefinitionType.GET,true);
-		BindingValue bv3 = new BindingValue(def3,operatorIF);
+		BindingDefinition def3 = new BindingDefinition("anInteger", DMType.makeLongDMType(_project), operatorIF, BindingDefinitionType.GET,
+				true);
+		BindingValue bv3 = new BindingValue(def3, operatorIF);
 		BindingSelector selector3 = new BindingSelector(bv3);
 
-		BindingDefinition def4 = new BindingDefinition("aFloat",DMType.makeDoubleDMType(_project),operatorIF,BindingDefinitionType.GET,true);
-		BindingValue bv4 = new BindingValue(def4,operatorIF);
+		BindingDefinition def4 = new BindingDefinition("aFloat", DMType.makeDoubleDMType(_project), operatorIF, BindingDefinitionType.GET,
+				true);
+		BindingValue bv4 = new BindingValue(def4, operatorIF);
 		BindingSelector selector4 = new BindingSelector(bv4);
 
-		BindingDefinition def5 = new BindingDefinition("aString",DMType.makeStringDMType(_project),operatorIF,BindingDefinitionType.GET,true);
-		BindingValue bv5 = new BindingValue(def5,operatorIF);
+		BindingDefinition def5 = new BindingDefinition("aString", DMType.makeStringDMType(_project), operatorIF, BindingDefinitionType.GET,
+				true);
+		BindingValue bv5 = new BindingValue(def5, operatorIF);
 		BindingSelector selector5 = new BindingSelector(bv5) {
 			@Override
 			public String toString() {
@@ -206,16 +204,19 @@ public class TestBindingExpressionSelector {
 			}
 		};
 
-		BindingDefinition def6 = new BindingDefinition("aDate",DMType.makeDateDMType(_project),operatorIF,BindingDefinitionType.GET,true);
-		BindingValue bv6 = new BindingValue(def6,operatorIF);
+		BindingDefinition def6 = new BindingDefinition("aDate", DMType.makeDateDMType(_project), operatorIF, BindingDefinitionType.GET,
+				true);
+		BindingValue bv6 = new BindingValue(def6, operatorIF);
 		BindingSelector selector6 = new BindingSelector(bv6);
 
-		BindingDefinition def7 = new BindingDefinition("aDuration",DMType.makeDurationDMType(_project),operatorIF,BindingDefinitionType.GET,true);
-		BindingValue bv7 = new BindingValue(def7,operatorIF);
+		BindingDefinition def7 = new BindingDefinition("aDuration", DMType.makeDurationDMType(_project), operatorIF,
+				BindingDefinitionType.GET, true);
+		BindingValue bv7 = new BindingValue(def7, operatorIF);
 		BindingSelector selector7 = new BindingSelector(bv7);
 
-		BindingDefinition def8 = new BindingDefinition("anObject",DMType.makeObjectDMType(_project),operatorIF,BindingDefinitionType.GET,true);
-		BindingValue bv8 = new BindingValue(def8,operatorIF);
+		BindingDefinition def8 = new BindingDefinition("anObject", DMType.makeObjectDMType(_project), operatorIF,
+				BindingDefinitionType.GET, true);
+		BindingValue bv8 = new BindingValue(def8, operatorIF);
 		BindingSelector selector8 = new BindingSelector(bv8);
 
 		JPanel panel = new JPanel(new VerticalLayout());
@@ -231,9 +232,9 @@ public class TestBindingExpressionSelector {
 		panel.add(selector7);
 		panel.add(selector8);
 		panel.add(new DateSelector(new Date()));
-		panel.add(new DurationSelector(new Duration(12,DurationUnit.DAYS)));
-		final KeySelector keySelector = new KeySelector(_project,null);
-		panel.add(new DomainSelector(_project,null) {
+		panel.add(new DurationSelector(new Duration(12, DurationUnit.DAYS)));
+		final KeySelector keySelector = new KeySelector(_project, null);
+		panel.add(new DomainSelector(_project, null) {
 			@Override
 			public void apply() {
 				super.apply();
@@ -242,18 +243,18 @@ public class TestBindingExpressionSelector {
 		});
 
 		panel.add(keySelector);
-		panel.add(new DMTypeSelector(_project,null,true));
+		panel.add(new DMTypeSelector(_project, null, true));
 
-		BindingDefinition def9 = new BindingDefinition("aDKV",DMType.makeDKVDMType(_project.getDKVModel().getDomains().elementAt(1)),operatorIF,BindingDefinitionType.GET,true);
-		BindingValue bv9 = new BindingValue(def9,operatorIF);
+		BindingDefinition def9 = new BindingDefinition("aDKV", DMType.makeDKVDMType(_project.getDKVModel().getDomains().elementAt(1)),
+				operatorIF, BindingDefinitionType.GET, true);
+		BindingValue bv9 = new BindingValue(def9, operatorIF);
 		BindingSelector selector9 = new BindingSelector(bv9);
 		panel.add(selector9);
-
 
 		panel.add(closeButton);
 		panel.add(logButton);
 
-		dialog.setPreferredSize(new Dimension(550,600));
+		dialog.setPreferredSize(new Dimension(550, 600));
 		dialog.getContentPane().add(panel);
 		dialog.validate();
 		dialog.pack();
@@ -261,6 +262,5 @@ public class TestBindingExpressionSelector {
 		dialog.setVisible(true);
 
 	}
-
 
 }

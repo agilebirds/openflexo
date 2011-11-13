@@ -29,51 +29,43 @@ import org.openflexo.foundation.action.OpenFileInExplorer;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
-public class DEControllerActionInitializer extends ControllerActionInitializer
-{
+public class DEControllerActionInitializer extends ControllerActionInitializer {
 
 	protected static final Logger logger = Logger.getLogger(DEControllerActionInitializer.class.getPackage().getName());
 
 	static {
-        FlexoModelObject.addActionForClass (OpenFileInExplorer.actionType, CGFile.class);
-    }
-	
+		FlexoModelObject.addActionForClass(OpenFileInExplorer.actionType, CGFile.class);
+	}
+
 	protected DEController deController;
 
-	public DEControllerActionInitializer(DEController controller)
-	{
+	public DEControllerActionInitializer(DEController controller) {
 		super(controller);
 		deController = controller;
 	}
 
-	protected DEController getDEController()
-	{
+	protected DEController getDEController() {
 		return deController;
 	}
 
-	protected DESelectionManager getDGSelectionManager()
-	{
+	protected DESelectionManager getDGSelectionManager() {
 		return getDEController().getSelectionManager();
 	}
 
 	@Override
-	public void initializeActions()
-	{
+	public void initializeActions() {
 		super.initializeActions();
-        new DESetPropertyInitializer(this).init();
-        new AddTOCRepositoryInitializer(this).init();
-        new AddTOCEntryInitializer(this).init();
-        new MoveTOCEntryInitializer(this).init();
-        new AddDocTypeInitializer(this).init();
-        new ImportTOCTemplateInitializer(this).init();
-        new RemoveTOCRepositoryInitializer(this).init();
-        new RemoveTOCEntryInitializer(this).init();
-        new RemoveDocTypeInitializer(this).init();
-        new RepairTocEntryInitializer(this).init();
-        new ImportImageInitializer(this).init();
+		new DESetPropertyInitializer(this).init();
+		new AddTOCRepositoryInitializer(this).init();
+		new AddTOCEntryInitializer(this).init();
+		new MoveTOCEntryInitializer(this).init();
+		new AddDocTypeInitializer(this).init();
+		new ImportTOCTemplateInitializer(this).init();
+		new RemoveTOCRepositoryInitializer(this).init();
+		new RemoveTOCEntryInitializer(this).init();
+		new RemoveDocTypeInitializer(this).init();
+		new RepairTocEntryInitializer(this).init();
+		new ImportImageInitializer(this).init();
 	}
-
-
 
 }

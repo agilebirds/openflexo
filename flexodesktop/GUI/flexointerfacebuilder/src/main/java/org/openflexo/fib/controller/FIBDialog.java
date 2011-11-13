@@ -32,21 +32,19 @@ import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.view.FIBView;
 
-
 @SuppressWarnings("serial")
 public class FIBDialog<T> extends JDialog {
 
 	private static final Logger logger = Logger.getLogger(FIBController.class.getPackage().getName());
 
 	private static FIBDialog _visibleDialog = null;
-	   
+
 	private FIBView view;
-	
-	public static <T> FIBDialog<T> instanciateComponent(File componentFile, T data, JFrame frame, boolean modal)
-	{
+
+	public static <T> FIBDialog<T> instanciateComponent(File componentFile, T data, JFrame frame, boolean modal) {
 		FIBComponent fibComponent = FIBLibrary.instance().retrieveFIBComponent(componentFile);
 		if (fibComponent == null) {
-			logger.warning("FileNotFoundException: "+componentFile.getAbsolutePath());
+			logger.warning("FileNotFoundException: " + componentFile.getAbsolutePath());
 			return null;
 		}
 		return instanciateComponent(fibComponent, data, frame, modal);
@@ -61,74 +59,65 @@ public class FIBDialog<T> extends JDialog {
 		return instanciateComponent(fibComponent, data, frame, modal);
 	}
 
-	private FIBDialog(JFrame frame, boolean modal, FIBComponent fibComponent)
-	{
-		super(frame,fibComponent.getParameter("title"),modal);
+	private FIBDialog(JFrame frame, boolean modal, FIBComponent fibComponent) {
+		super(frame, fibComponent.getParameter("title"), modal);
 		view = FIBController.makeView(fibComponent);
 		getContentPane().add(view.getResultingJComponent());
 		validate();
 		pack();
 	}
-	
-	protected FIBDialog(FIBComponent fibComponent, T data, JFrame frame, boolean modal)
-	{
-		this(frame,modal,fibComponent);
+
+	protected FIBDialog(FIBComponent fibComponent, T data, JFrame frame, boolean modal) {
+		this(frame, modal, fibComponent);
 		getController().setDataObject(data);
 	}
-	
-	public FIBController<T> getController()
-	{
+
+	public FIBController<T> getController() {
 		return view.getController();
 	}
-	
-	public T getData()
-	{
+
+	public T getData() {
 		return getController().getDataObject();
 	}
-	
-	public Status getStatus()
-	{
+
+	public Status getStatus() {
 		return getController().getStatus();
 	}
 
+	protected void showDialog() {
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2);
+		if (_visibleDialog == null) {
+			_visibleDialog = this;
+			setVisible(true);
+			toFront();
+		} else {
+			logger.warning("An other dialog box is already opened");
+			// _waitingDialog.add(this);
+		}
+	}
 
-    protected void showDialog()
-    {
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2);
-        if (_visibleDialog == null) {
-            _visibleDialog = this;
-            setVisible(true);
-            toFront();
-        } else {
-            logger.warning("An other dialog box is already opened");
-            //_waitingDialog.add(this);
-        }
-    }
+	@Override
+	public void dispose() {
+		super.dispose();
+		if (_visibleDialog == this) {
+			_visibleDialog = null;
+		}
+	}
 
-    @Override
-	public void dispose()
-    {
-    	super.dispose();
-    	if (_visibleDialog == this) {
-    		_visibleDialog = null;
-    	}
-    }
-
-    @Override
-    public void setVisible(boolean b) 
-    {
-    	super.setVisible(b);
-    	if (!b) {
-        	if (_visibleDialog == this) {
-        		_visibleDialog = null;
-        	}
-    	}
-    }
+	@Override
+	public void setVisible(boolean b) {
+		super.setVisible(b);
+		if (!b) {
+			if (_visibleDialog == this) {
+				_visibleDialog = null;
+			}
+		}
+	}
 
 	private static <T> FIBDialog<T> instanciateComponent(FIBComponent fibComponent, T data, JFrame frame, boolean modal) {
-		FIBDialog<T> dialog = new FIBDialog<T>(fibComponent,data,frame,modal);
-		dialog.showDialog();	
+		FIBDialog<T> dialog = new FIBDialog<T>(fibComponent, data, frame, modal);
+		dialog.showDialog();
 		return dialog;
 	}
 

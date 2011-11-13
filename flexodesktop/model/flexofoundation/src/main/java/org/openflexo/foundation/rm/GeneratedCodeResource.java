@@ -26,82 +26,69 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.cg.GeneratedCode;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 
-
 /**
  * Represents all generated code
  * 
  * @author sguerin
  */
-public class GeneratedCodeResource extends FlexoGeneratedOutputResource<GeneratedCode> implements Serializable
-{
-
-	
+public class GeneratedCodeResource extends FlexoGeneratedOutputResource<GeneratedCode> implements Serializable {
 
 	private static final Logger logger = Logger.getLogger(GeneratedCodeResource.class.getPackage().getName());
-    
+
 	/**
-     * Constructor used for XML Serialization: never try to instanciate resource
-     * from this constructor
-     * 
-     * @param builder
-     */
-    public GeneratedCodeResource(FlexoProjectBuilder builder)
-    {
-        this(builder.project);
-        builder.notifyResourceLoading(this);
-    }
+	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
+	 * 
+	 * @param builder
+	 */
+	public GeneratedCodeResource(FlexoProjectBuilder builder) {
+		this(builder.project);
+		builder.notifyResourceLoading(this);
+	}
 
-    public GeneratedCodeResource(FlexoProject aProject)
-    {
-        super(aProject);
-        if (aProject != null) {
-            try {
-                setResourceFile(new FlexoProjectFile(ProjectRestructuration
-                        .getExpectedGeneratedCodeFile(aProject), aProject));
-            } catch (InvalidFileNameException e) {
-                FlexoProjectFile f = new FlexoProjectFile("GeneratedCode");
-                f.setProject(aProject);
-                try {
-                    setResourceFile(f);
-                } catch (InvalidFileNameException e1) {
-                    if (logger.isLoggable(Level.SEVERE))
-                        logger.severe("This should not happen.");
-                    e1.printStackTrace();
-                }
-            }
-        }
+	public GeneratedCodeResource(FlexoProject aProject) {
+		super(aProject);
+		if (aProject != null) {
+			try {
+				setResourceFile(new FlexoProjectFile(ProjectRestructuration.getExpectedGeneratedCodeFile(aProject), aProject));
+			} catch (InvalidFileNameException e) {
+				FlexoProjectFile f = new FlexoProjectFile("GeneratedCode");
+				f.setProject(aProject);
+				try {
+					setResourceFile(f);
+				} catch (InvalidFileNameException e1) {
+					if (logger.isLoggable(Level.SEVERE))
+						logger.severe("This should not happen.");
+					e1.printStackTrace();
+				}
+			}
+		}
 
-     }
+	}
 
-    public GeneratedCodeResource(FlexoProject aProject,
-            FlexoProjectFile generatedCodeFile) throws InvalidFileNameException
-    {
-        super(aProject);
-        setResourceFile(generatedCodeFile);
-    }
+	public GeneratedCodeResource(FlexoProject aProject, FlexoProjectFile generatedCodeFile) throws InvalidFileNameException {
+		super(aProject);
+		setResourceFile(generatedCodeFile);
+	}
 
-    public GeneratedCodeResource(FlexoProject aProject, org.openflexo.foundation.cg.GeneratedOutput cg,
-            FlexoProjectFile generatedCodeFile) throws InvalidFileNameException
-    {
-        this(aProject, generatedCodeFile);
-        _resourceData = (GeneratedCode)cg;
-        try {
-            cg.setFlexoResource(this);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+	public GeneratedCodeResource(FlexoProject aProject, org.openflexo.foundation.cg.GeneratedOutput cg, FlexoProjectFile generatedCodeFile)
+			throws InvalidFileNameException {
+		this(aProject, generatedCodeFile);
+		_resourceData = (GeneratedCode) cg;
+		try {
+			cg.setFlexoResource(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-    @Override
-	public ResourceType getResourceType()
-    {
-        return ResourceType.GENERATED_CODE;
-    }
+	@Override
+	public ResourceType getResourceType() {
+		return ResourceType.GENERATED_CODE;
+	}
 
-    @Override
-	public Class getResourceDataClass()
-    {
-        return GeneratedCode.class;
-    }
+	@Override
+	public Class getResourceDataClass() {
+		return GeneratedCode.class;
+	}
 
 }

@@ -21,44 +21,37 @@ package org.openflexo.antar.expr.parser;
 
 public class IntValue extends Value {
 
-    private long _value;
-    
-    public IntValue (long value)
-    {
-        super();
-        _value = value;
-    }
-    
-    public long getIntValue() 
-    {
-        return _value;
-    }
-    
-    @Override
-	public String getStringValue() 
-    {
-        return ""+_value;
-    }
-    
-   @Override
-public String toString()
-    {
-        return getPrefix()+"Int["+_value+"]";
-    }
+	private long _value;
 
-   public String getSerializationValue()
-   {
-       return "$"+getStringValue();
-   }
+	public IntValue(long value) {
+		super();
+		_value = value;
+	}
 
-    @Override
-	public boolean equals (Object obj)
-    {
-        if (obj instanceof IntValue) {
-            return (getIntValue() == ((IntValue)obj).getIntValue());
-        }
-        return super.equals(obj);
-    }
+	public long getIntValue() {
+		return _value;
+	}
 
+	@Override
+	public String getStringValue() {
+		return "" + _value;
+	}
+
+	@Override
+	public String toString() {
+		return getPrefix() + "Int[" + _value + "]";
+	}
+
+	public String getSerializationValue() {
+		return "$" + getStringValue();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof IntValue) {
+			return (getIntValue() == ((IntValue) obj).getIntValue());
+		}
+		return super.equals(obj);
+	}
 
 }

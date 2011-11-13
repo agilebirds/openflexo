@@ -31,24 +31,21 @@ import org.openflexo.foundation.view.action.AddView;
 import org.openflexo.foundation.view.action.AddViewFolder;
 import org.openflexo.toolbox.FileUtils;
 
-
-public class TestShemas extends FlexoTestCase{
+public class TestShemas extends FlexoTestCase {
 
 	protected static final Logger logger = Logger.getLogger(TestPopulateDKV.class.getPackage().getName());
 
 	private static FlexoEditor _editor;
 	private static FlexoProject _project;
 
-	public TestShemas(String name)
-	{
+	public TestShemas(String name) {
 		super(name);
 	}
 
 	/**
 	 * Creates a new empty project in a temp directory
 	 */
-	public void test0CreateProject()
-	{
+	public void test0CreateProject() {
 		log("test0CreateProject()");
 
 		_editor = createProject("TestShema");
@@ -58,18 +55,17 @@ public class TestShemas extends FlexoTestCase{
 	/**
 	 * Creates a new empty project in a temp directory, create shema library, and reload
 	 */
-	public void test1CreateOntology()
-	{
+	public void test1CreateOntology() {
 		log("test1CreateOntology()");
 
-		logger.info("Hop"+_project.getShemaLibrary());
+		logger.info("Hop" + _project.getShemaLibrary());
 
 		saveProject(_project);
 
 		logger.info("Reload project");
 
 		_editor = reloadProject(_project.getProjectDirectory());
-		if (_project!=null) {
+		if (_project != null) {
 			_project.close();
 		}
 		_project = _editor.getProject();
@@ -79,11 +75,10 @@ public class TestShemas extends FlexoTestCase{
 	/**
 	 * Creates some shema folders
 	 */
-	public void test2CreateFolders()
-	{
+	public void test2CreateFolders() {
 		log("test2CreateFolders()");
 
-		logger.info("Hop "+_project.getShemaLibrary());
+		logger.info("Hop " + _project.getShemaLibrary());
 		AddViewFolder addFolder1 = AddViewFolder.actionType.makeNewAction(_project.getShemaLibrary(), null, _editor);
 		addFolder1.setNewFolderName("Folder1");
 		addFolder1.doAction();
@@ -101,7 +96,7 @@ public class TestShemas extends FlexoTestCase{
 		logger.info("Reload project");
 
 		_editor = reloadProject(_project.getProjectDirectory());
-		if (_project!=null) {
+		if (_project != null) {
 			_project.close();
 		}
 		_project = _editor.getProject();
@@ -111,13 +106,12 @@ public class TestShemas extends FlexoTestCase{
 	/**
 	 * Creates a shema
 	 */
-	public void test3CreateShema()
-	{
+	public void test3CreateShema() {
 		log("test3CreateShema()");
 
 		ViewFolder folder3 = _project.getShemaLibrary().getFolderWithName("Folder3");
 
-		logger.info("Hop "+folder3);
+		logger.info("Hop " + folder3);
 
 		AddView addShema = AddView.actionType.makeNewAction(folder3, null, _editor);
 		addShema.newViewName = "TestShema";
@@ -135,7 +129,7 @@ public class TestShemas extends FlexoTestCase{
 		logger.info("Reload project");
 
 		_editor = reloadProject(_project.getProjectDirectory());
-		if (_project!=null) {
+		if (_project != null) {
 			_project.close();
 		}
 		_project = _editor.getProject();
@@ -143,6 +137,5 @@ public class TestShemas extends FlexoTestCase{
 		_project = null;
 		_editor = null;
 	}
-
 
 }

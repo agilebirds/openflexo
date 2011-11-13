@@ -24,54 +24,47 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.foundation.FlexoModelObject;
 
-
-
 /**
  * Browser for DM module
  * 
  * @author sguerin
  * 
  */
-public class DMBrowser extends ProjectBrowser
-{
-	
-    protected DMController _controller;
+public class DMBrowser extends ProjectBrowser {
 
-    public DMBrowser(DMController controller)
-    {
-        this(controller,true);
-    }
+	protected DMController _controller;
 
-    public DMBrowser(DMController controller, boolean syncWithSelectionManager)
-    {
-        super(controller.getEditor(), (syncWithSelectionManager ? controller.getDMSelectionManager() : null));
-        _controller = controller;
-    }
+	public DMBrowser(DMController controller) {
+		this(controller, true);
+	}
 
-    @Override
-	public void configure()
-    {
-    	setFilterStatus(BrowserElementType.JDK_REPOSITORY,BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
-    	setFilterStatus(BrowserElementType.WO_REPOSITORY,BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
-    	setFilterStatus(BrowserElementType.EXTERNAL_REPOSITORY,BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
-    	setFilterStatus(BrowserElementType.DM_EOPROTOTYPES_REPOSITORY,BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
-    	setFilterStatus(BrowserElementType.DM_EXECUTION_MODEL_REPOSITORY,BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
-    }
+	public DMBrowser(DMController controller, boolean syncWithSelectionManager) {
+		super(controller.getEditor(), (syncWithSelectionManager ? controller.getDMSelectionManager() : null));
+		_controller = controller;
+	}
 
-    @Override
-	public FlexoModelObject getDefaultRootObject()
-    {
-        if (_controller != null) {
-        	if (getDMViewMode() == DMViewMode.Repositories)
-        		return _controller.getDataModel();
-        	else if (getDMViewMode() == DMViewMode.Packages)
-        		return _controller.getDataModel();
-        	else if (getDMViewMode() == DMViewMode.Diagrams)
-        		return _controller.getDataModel();
-        	else if (getDMViewMode() == DMViewMode.Hierarchy)
-        		return _controller.getDataModel().getEntityNamed("java.lang.Object");
-        }
-        return null;
-    }
+	@Override
+	public void configure() {
+		setFilterStatus(BrowserElementType.JDK_REPOSITORY, BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
+		setFilterStatus(BrowserElementType.WO_REPOSITORY, BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
+		setFilterStatus(BrowserElementType.EXTERNAL_REPOSITORY, BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
+		setFilterStatus(BrowserElementType.DM_EOPROTOTYPES_REPOSITORY, BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
+		setFilterStatus(BrowserElementType.DM_EXECUTION_MODEL_REPOSITORY, BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
+	}
+
+	@Override
+	public FlexoModelObject getDefaultRootObject() {
+		if (_controller != null) {
+			if (getDMViewMode() == DMViewMode.Repositories)
+				return _controller.getDataModel();
+			else if (getDMViewMode() == DMViewMode.Packages)
+				return _controller.getDataModel();
+			else if (getDMViewMode() == DMViewMode.Diagrams)
+				return _controller.getDataModel();
+			else if (getDMViewMode() == DMViewMode.Hierarchy)
+				return _controller.getDataModel().getEntityNamed("java.lang.Object");
+		}
+		return null;
+	}
 
 }

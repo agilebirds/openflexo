@@ -22,94 +22,83 @@ package org.openflexo.foundation.dm;
 import org.openflexo.foundation.xml.FlexoDMBuilder;
 
 /**
- * Represents a logical group of objects definition extracted from
- * a RationalRose file
+ * Represents a logical group of objects definition extracted from a RationalRose file
  * 
  * @author sguerin
  * 
  */
-public class RationalRoseRepository extends DMRepository
-{
+public class RationalRoseRepository extends DMRepository {
 
 	private boolean isReadOnly = true;
-	
-    /**
-     * Constructor used during deserialization
-     */
-    public RationalRoseRepository(FlexoDMBuilder builder)
-    {
-        this(builder.dmModel);
-        initializeDeserialization(builder);
-    }
 
-    /**
-     * Default constructor
-     */
-    private RationalRoseRepository(DMModel dmModel)
-    {
-        super(dmModel);
-    }
+	/**
+	 * Constructor used during deserialization
+	 */
+	public RationalRoseRepository(FlexoDMBuilder builder) {
+		this(builder.dmModel);
+		initializeDeserialization(builder);
+	}
 
-    @Override
-	public DMRepositoryFolder getRepositoryFolder()
-    {
-        return getDMModel().getLibraryRepositoryFolder();
-    }
-    
-  /**
-     * @param dmModel
-     * @return
-     */
-    public static RationalRoseRepository createNewRationalRoseRepository(String aName, DMModel dmModel)
-    {
-        RationalRoseRepository newRepository = new RationalRoseRepository(dmModel);
-        newRepository.setName(aName);
-        dmModel.addToRationalRoseRepositories(newRepository);
-        return newRepository;
-    }
+	/**
+	 * Default constructor
+	 */
+	private RationalRoseRepository(DMModel dmModel) {
+		super(dmModel);
+	}
 
-    @Override
-	public int getOrder()
-    {
-        return 11;
-    }
+	@Override
+	public DMRepositoryFolder getRepositoryFolder() {
+		return getDMModel().getLibraryRepositoryFolder();
+	}
 
-    /**
-     * By default, Rational rose repository are always read-only. However, we need to temporarily set
-     * as not "read-only" when we populate the repository from an MDL file.
-     */
-    @Override
-	public boolean isReadOnly()
-    {
-        return isReadOnly;
-    }
+	/**
+	 * @param dmModel
+	 * @return
+	 */
+	public static RationalRoseRepository createNewRationalRoseRepository(String aName, DMModel dmModel) {
+		RationalRoseRepository newRepository = new RationalRoseRepository(dmModel);
+		newRepository.setName(aName);
+		dmModel.addToRationalRoseRepositories(newRepository);
+		return newRepository;
+	}
 
-    public void setIsReadOnly(boolean isReadOnly)
-    {
-    	this.isReadOnly = isReadOnly;
-    }
-    
-    @Override
-	public boolean isDeletable()
-    {
-        return true;
-    }
+	@Override
+	public int getOrder() {
+		return 11;
+	}
 
-    @Override
-	public final void delete()
-    {
-        getDMModel().removeFromRationalRoseRepositories(this);
-        super.delete();
-    }
-    
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "rational_rose_repository";
-    }
-    
+	/**
+	 * By default, Rational rose repository are always read-only. However, we need to temporarily set as not "read-only" when we populate
+	 * the repository from an MDL file.
+	 */
+	@Override
+	public boolean isReadOnly() {
+		return isReadOnly;
+	}
+
+	public void setIsReadOnly(boolean isReadOnly) {
+		this.isReadOnly = isReadOnly;
+	}
+
+	@Override
+	public boolean isDeletable() {
+		return true;
+	}
+
+	@Override
+	public final void delete() {
+		getDMModel().removeFromRationalRoseRepositories(this);
+		super.delete();
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "rational_rose_repository";
+	}
+
 }

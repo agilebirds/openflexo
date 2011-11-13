@@ -29,128 +29,115 @@ import org.openflexo.fib.model.FIBModelObject.FIBModelAttribute;
 
 import com.metaphaseeditor.MetaphaseEditorConfiguration.MetaphaseEditorOption;
 
-
 public class FIBHtmlEditorOption extends FIBModelObject {
 
-	public static enum Parameters implements FIBModelAttribute
-	{
-		isVisible,
-		index
+	public static enum Parameters implements FIBModelAttribute {
+		isVisible, index
 	}
 
 	private FIBHtmlEditor editor;
-	
+
 	private boolean isVisible;
 	private int index;
 	private Vector<String> subOptions;
 	private int level;
-	
-	public FIBHtmlEditorOption() 
-    {
+
+	public FIBHtmlEditorOption() {
 		isVisible = false;
 		index = -1;
 		subOptions = new Vector<String>();
 	}
 
 	@Override
-	public void setName(String optionName) 
-	{
+	public void setName(String optionName) {
 		super.setName(optionName);
 		level = getLevel(optionName);
-		if (index == -1) index = retrieveIndex(optionName);
+		if (index == -1)
+			index = retrieveIndex(optionName);
 		for (String s : FIBHtmlEditor.option_keys) {
 			if (s.startsWith(optionName) && !s.equals(optionName)) {
 				subOptions.add(s);
 			}
 		}
 	}
-	
-	public FIBHtmlEditorOption(String optionName, FIBHtmlEditor editor) 
-    {
+
+	public FIBHtmlEditorOption(String optionName, FIBHtmlEditor editor) {
 		this();
 		this.editor = editor;
 		setName(optionName);
 	}
 
-	public int getLevel()
-	{
+	public int getLevel() {
 		return level;
 	}
-	
-	private static int getLevel(String optionName)
-	{
+
+	private static int getLevel(String optionName) {
 		int returned = 0;
 		String s = optionName;
 		while (s.indexOf(".") > -1) {
 			returned++;
 			try {
-				s = s.substring(s.indexOf(".")+1);
-			}
-			catch (ArrayIndexOutOfBoundsException e) {
+				s = s.substring(s.indexOf(".") + 1);
+			} catch (ArrayIndexOutOfBoundsException e) {
 				return returned;
 			}
 		}
 		return returned;
 	}
 
-	protected int retrieveIndex(String optionName)
-	{
+	protected int retrieveIndex(String optionName) {
 		int index = 0;
 		int level = getLevel(optionName);
 
 		for (String s : FIBHtmlEditor.option_keys) {
-			if (s.equals(optionName)) return index;
-			if (getLevel(s) == level) index++;
-			else if (optionName.startsWith(s)) index = 0;
+			if (s.equals(optionName))
+				return index;
+			if (getLevel(s) == level)
+				index++;
+			else if (optionName.startsWith(s))
+				index = 0;
 		}
 		return -1;
 	}
-	
-    public FIBHtmlEditor getFIBHtmlEditor() 
-    {
+
+	public FIBHtmlEditor getFIBHtmlEditor() {
 		return editor;
 	}
 
-	public void setFIBHtmlEditor(FIBHtmlEditor editor)
-	{
+	public void setFIBHtmlEditor(FIBHtmlEditor editor) {
 		this.editor = editor;
 	}
 
-
 	@Override
-	public FIBComponent getRootComponent() 
-	{
-		if (getFIBHtmlEditor() != null) return getFIBHtmlEditor().getRootComponent();
+	public FIBComponent getRootComponent() {
+		if (getFIBHtmlEditor() != null)
+			return getFIBHtmlEditor().getRootComponent();
 		return null;
 	}
 
-	public boolean getIsVisible() 
-	{
+	public boolean getIsVisible() {
 		return isVisible;
 	}
 
-	public void setIsVisible(boolean isVisible)
-	{
-		FIBAttributeNotification<Boolean> notification = requireChange(
-				Parameters.isVisible, isVisible);
+	public void setIsVisible(boolean isVisible) {
+		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.isVisible, isVisible);
 		if (notification != null) {
 			this.isVisible = isVisible;
 			hasChanged(notification);
 			if (editor != null) {
 				for (String o : subOptions) {
-					//System.out.println("Also do setIsVisible for "+o);
+					// System.out.println("Also do setIsVisible for "+o);
 					FIBHtmlEditorOption option = editor.getOption(o);
-					if (option != null) option.setIsVisible(isVisible);
+					if (option != null)
+						option.setIsVisible(isVisible);
 				}
 				if (isVisible) {
 					if (getLevel() == 0) {
-						if (!editor.anyLineContains(this) 
-								&& !editor.getVisibleAndUnusedOptions().contains(this)) {
-							//System.out.println("For "+this+" add to visible and unused");
+						if (!editor.anyLineContains(this) && !editor.getVisibleAndUnusedOptions().contains(this)) {
+							// System.out.println("For "+this+" add to visible and unused");
 							editor.addToVisibleAndUnusedOptions(this);
 						}
-					}
-					else {
+					} else {
 						if (getParentOption() != null) {
 							if (editor.getOptionsInLine1().contains(getParentOption()))
 								editor.addToOptionsInLine1(this);
@@ -160,8 +147,7 @@ public class FIBHtmlEditorOption extends FIBModelObject {
 								editor.addToOptionsInLine3(this);
 						}
 					}
-				}
-				else {
+				} else {
 					if (editor.getOptionsInLine1().contains(this))
 						editor.removeFromOptionsInLine1(this);
 					if (editor.getOptionsInLine2().contains(this))
@@ -175,26 +161,22 @@ public class FIBHtmlEditorOption extends FIBModelObject {
 		}
 	}
 
-	public int getIndex() 
-	{
+	public int getIndex() {
 		return index;
 	}
 
-	public void setIndex(int index) 
-	{
-		FIBAttributeNotification<Integer> notification = requireChange(
-				Parameters.index, index);
+	public void setIndex(int index) {
+		FIBAttributeNotification<Integer> notification = requireChange(Parameters.index, index);
 		if (notification != null) {
 			this.index = index;
 			hasChanged(notification);
-			if (editor != null) editor.indexChanged();
+			if (editor != null)
+				editor.indexChanged();
 		}
 	}
 
-	public void setIndexNoEditorNotification(int index) 
-	{
-		FIBAttributeNotification<Integer> notification = requireChange(
-				Parameters.index, index);
+	public void setIndexNoEditorNotification(int index) {
+		FIBAttributeNotification<Integer> notification = requireChange(Parameters.index, index);
 		if (notification != null) {
 			this.index = index;
 			hasChanged(notification);
@@ -202,22 +184,19 @@ public class FIBHtmlEditorOption extends FIBModelObject {
 	}
 
 	@Override
-	public String toString() 
-	{
-		return "FIBHtmlEditorOption["+getName()+"]";
+	public String toString() {
+		return "FIBHtmlEditorOption[" + getName() + "]";
 	}
-	
-	protected FIBHtmlEditorOption getParentOption()
-	{
+
+	protected FIBHtmlEditorOption getParentOption() {
 		if (getLevel() > 0 && editor != null) {
-			String parentOptionName = getName().substring(0,getName().lastIndexOf("."));
+			String parentOptionName = getName().substring(0, getName().lastIndexOf("."));
 			return editor.getOption(parentOptionName);
 		}
 		return null;
 	}
-	
-	protected List<FIBHtmlEditorOption> getSubOptions()
-	{
+
+	protected List<FIBHtmlEditorOption> getSubOptions() {
 		ArrayList<FIBHtmlEditorOption> returned = new ArrayList<FIBHtmlEditorOption>();
 		if (editor != null) {
 			for (String s : subOptions) {
@@ -226,19 +205,20 @@ public class FIBHtmlEditorOption extends FIBModelObject {
 		}
 		return returned;
 	}
-	
-	protected int getLine()
-	{
+
+	protected int getLine() {
 		if (editor != null) {
-			if (editor.getOptionsInLine1().contains(this)) return 1;
-			if (editor.getOptionsInLine2().contains(this)) return 2;
-			if (editor.getOptionsInLine3().contains(this)) return 3;
+			if (editor.getOptionsInLine1().contains(this))
+				return 1;
+			if (editor.getOptionsInLine2().contains(this))
+				return 2;
+			if (editor.getOptionsInLine3().contains(this))
+				return 3;
 		}
 		return -1;
 	}
-	
-	public MetaphaseEditorOption makeMetaphaseEditorOption(int line)
-	{
-		return new MetaphaseEditorOption(getName(),index,line);
+
+	public MetaphaseEditorOption makeMetaphaseEditorOption(int line) {
+		return new MetaphaseEditorOption(getName(), index, line);
 	}
 }

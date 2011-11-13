@@ -54,47 +54,45 @@ public class AddGeneratedCodeRepositoryInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddGeneratedCodeRepositoryInitializer(DGControllerActionInitializer actionInitializer)
-	{
-		super(AddGeneratedCodeRepository.actionType,actionInitializer);
+	AddGeneratedCodeRepositoryInitializer(DGControllerActionInitializer actionInitializer) {
+		super(AddGeneratedCodeRepository.actionType, actionInitializer);
 	}
 
 	@Override
-	protected DGControllerActionInitializer getControllerActionInitializer()
-	{
-		return (DGControllerActionInitializer)super.getControllerActionInitializer();
+	protected DGControllerActionInitializer getControllerActionInitializer() {
+		return (DGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<AddGeneratedCodeRepository> getDefaultInitializer()
-	{
+	protected FlexoActionInitializer<AddGeneratedCodeRepository> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddGeneratedCodeRepository>() {
 			@Override
-			public boolean run(ActionEvent e, final AddGeneratedCodeRepository action)
-			{
+			public boolean run(ActionEvent e, final AddGeneratedCodeRepository action) {
 				if ((action.getNewGeneratedCodeRepositoryName() == null) || (action.getNewGeneratedCodeRepositoryDirectory() == null)) {
 					Vector<Format> values = new Vector<Format>();
 					values.add(Format.HTML);
 					values.add(Format.LATEX);
 					values.add(Format.DOCX);
 					final GeneratedOutput gc = action.getFocusedObject().getGeneratedCode();
-					final DynamicDropDownParameter<Format> format = new DynamicDropDownParameter<Format>("format","format",Format.HTML);
+					final DynamicDropDownParameter<Format> format = new DynamicDropDownParameter<Format>("format", "format", Format.HTML);
 					format.setAvailableValues(values);
 					format.setShowReset(false);
-					final ChoiceListParameter<DocType> targetType = new ChoiceListParameter<DocType>("target", "target", action.getNewDocType());
+					final ChoiceListParameter<DocType> targetType = new ChoiceListParameter<DocType>("target", "target",
+							action.getNewDocType());
 					targetType.setShowReset(false);
 					final TextFieldParameter paramName = new TextFieldParameter("name", "repository_name",
-							(action.getNewGeneratedCodeRepositoryName() == null ?
-									gc.getProject().getNextExternalRepositoryIdentifier(FlexoLocalization.localizedForKey("generated_doc")) :
-									action.getNewGeneratedCodeRepositoryName()));
+							(action.getNewGeneratedCodeRepositoryName() == null ? gc.getProject().getNextExternalRepositoryIdentifier(
+									FlexoLocalization.localizedForKey("generated_doc")) : action.getNewGeneratedCodeRepositoryName()));
 					DynamicDropDownParameter<TOCRepository> paramToc = null;
-					if (getProject().getTOCData().getRepositories().size()>0) {
-						paramToc = new DynamicDropDownParameter<TOCRepository>("toc","toc",getProject().getTOCData().getRepositories(),getProject().getTOCData().getRepositories().firstElement());
+					if (getProject().getTOCData().getRepositories().size() > 0) {
+						paramToc = new DynamicDropDownParameter<TOCRepository>("toc", "toc", getProject().getTOCData().getRepositories(),
+								getProject().getTOCData().getRepositories().firstElement());
 						paramToc.setFormatter("title");
 						paramToc.setDepends("format");
 						paramToc.setConditional("format!=HTML");
 					}
-					final DirectoryParameter paramDir = new DirectoryParameter("directory", "source_directory", getParamDir(action, gc, targetType.getValue(), format.getValue(), paramName)) ;
+					final DirectoryParameter paramDir = new DirectoryParameter("directory", "source_directory", getParamDir(action, gc,
+							targetType.getValue(), format.getValue(), paramName));
 					format.addValueListener(new ValueListener<Format>() {
 						@Override
 						public void newValueWasSet(ParameterDefinition<Format> param, Format oldValue, Format newValue) {
@@ -104,7 +102,7 @@ public class AddGeneratedCodeRepositoryInitializer extends ActionInitializer {
 						}
 					});
 					paramDir.setDepends("target");
-					targetType.addValueListener(new ValueListener<DocType>(){
+					targetType.addValueListener(new ValueListener<DocType>() {
 
 						@Override
 						public void newValueWasSet(ParameterDefinition<DocType> param, DocType oldValue, DocType newValue) {
@@ -114,36 +112,37 @@ public class AddGeneratedCodeRepositoryInitializer extends ActionInitializer {
 						}
 
 					});
-					ParameterDefinition<?>[] pd = new ParameterDefinition<?>[paramToc==null?4:5];
+					ParameterDefinition<?>[] pd = new ParameterDefinition<?>[paramToc == null ? 4 : 5];
 					pd[0] = format;
 					pd[1] = targetType;
 					pd[2] = paramName;
-					pd[3] = paramToc!=null?paramToc:paramDir;
-					if (paramToc!=null) {
+					pd[3] = paramToc != null ? paramToc : paramDir;
+					if (paramToc != null) {
 						pd[4] = paramDir;
 					}
-					AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null, FlexoLocalization
-									        		.localizedForKey("create_new_generated_doc_repository"), FlexoLocalization
-									        		.localizedForKey("enter_parameters_for_the_new_generated_doc_repository"), pd);
+					AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
+							FlexoLocalization.localizedForKey("create_new_generated_doc_repository"),
+							FlexoLocalization.localizedForKey("enter_parameters_for_the_new_generated_doc_repository"), pd);
 					System.setProperty("apple.awt.fileDialogForDirectories", "false");
 
-                    while ((dialog.getStatus() == AskParametersDialog.VALIDATE) && (getProject().getExternalRepositoryWithDirectory(paramDir.getValue())!=null)) {
-						if (getProject().getExternalRepositoryWithDirectory(paramDir.getValue())!=null) {
-							dialog = AskParametersDialog.createAskParametersDialog(getProject(), null, FlexoLocalization
-                                    .localizedForKey("directory_is_already_used"), FlexoLocalization
-                                    .localizedForKey("confirm_source_directory_for_new_generated_doc"), paramDir);
+					while ((dialog.getStatus() == AskParametersDialog.VALIDATE)
+							&& (getProject().getExternalRepositoryWithDirectory(paramDir.getValue()) != null)) {
+						if (getProject().getExternalRepositoryWithDirectory(paramDir.getValue()) != null) {
+							dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
+									FlexoLocalization.localizedForKey("directory_is_already_used"),
+									FlexoLocalization.localizedForKey("confirm_source_directory_for_new_generated_doc"), paramDir);
 						} else if ((paramDir.getValue() != null) && new File(paramDir.getValue(), FileHistory.HISTORY_DIR).exists()) {
-                        dialog = AskParametersDialog.createAskParametersDialog(getProject(), null, FlexoLocalization
-                                .localizedForKey("directory_seems_to_be_already_used"), FlexoLocalization
-                                .localizedForKey("confirm_source_directory_for_new_generated_doc"), paramDir);
-                    }
+							dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
+									FlexoLocalization.localizedForKey("directory_seems_to_be_already_used"),
+									FlexoLocalization.localizedForKey("confirm_source_directory_for_new_generated_doc"), paramDir);
+						}
 					}
 					if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 						action.setFormat(format.getValue());
 						action.setNewDocType(targetType.getValue());
 						action.setNewGeneratedCodeRepositoryName(paramName.getValue());
 						action.setNewGeneratedCodeRepositoryDirectory(paramDir.getValue());
-						if (paramToc!=null) {
+						if (paramToc != null) {
 							action.setTocRepository(paramToc.getValue());
 						}
 						return true;
@@ -155,10 +154,11 @@ public class AddGeneratedCodeRepositoryInitializer extends ActionInitializer {
 				return true;
 			}
 
-			protected File getParamDir(AddGeneratedCodeRepository action, GeneratedOutput gc, DocType docType, Format format, TextFieldParameter paramName) {
-				if (action.getNewGeneratedCodeRepositoryDirectory()==null) {
-					return new File(System.getProperty("user.home")+"/"+gc.getProject().getProjectName()+"/"+format.name()+"/"+
-							(docType!=null?docType.getName():paramName.getValue()));
+			protected File getParamDir(AddGeneratedCodeRepository action, GeneratedOutput gc, DocType docType, Format format,
+					TextFieldParameter paramName) {
+				if (action.getNewGeneratedCodeRepositoryDirectory() == null) {
+					return new File(System.getProperty("user.home") + "/" + gc.getProject().getProjectName() + "/" + format.name() + "/"
+							+ (docType != null ? docType.getName() : paramName.getValue()));
 				} else {
 					return action.getNewGeneratedCodeRepositoryDirectory();
 				}
@@ -167,13 +167,11 @@ public class AddGeneratedCodeRepositoryInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<AddGeneratedCodeRepository> getDefaultFinalizer()
-	{
+	protected FlexoActionFinalizer<AddGeneratedCodeRepository> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddGeneratedCodeRepository>() {
 			@Override
-			public boolean run(ActionEvent e, AddGeneratedCodeRepository action)
-			{
-                if (action.getNewGeneratedCodeRepository()!=null) {
+			public boolean run(ActionEvent e, AddGeneratedCodeRepository action) {
+				if (action.getNewGeneratedCodeRepository() != null) {
 					getController().setCurrentEditedObjectAsModuleView(action.getNewGeneratedCodeRepository());
 				}
 				return true;
@@ -182,30 +180,28 @@ public class AddGeneratedCodeRepositoryInitializer extends ActionInitializer {
 	}
 
 	@Override
-    protected Icon getEnabledIcon()
-    {
-        return DGIconLibrary.GENERATED_DOC_ICON;
-    }
+	protected Icon getEnabledIcon() {
+		return DGIconLibrary.GENERATED_DOC_ICON;
+	}
 
 	/**
-     * Overrides getDefaultExceptionHandler
-     * @see org.openflexo.view.controller.ActionInitializer#getDefaultExceptionHandler()
-     */
-    @Override
-    protected FlexoExceptionHandler<AddGeneratedCodeRepository> getDefaultExceptionHandler()
-    {
-        return new FlexoExceptionHandler<AddGeneratedCodeRepository>() {
+	 * Overrides getDefaultExceptionHandler
+	 * 
+	 * @see org.openflexo.view.controller.ActionInitializer#getDefaultExceptionHandler()
+	 */
+	@Override
+	protected FlexoExceptionHandler<AddGeneratedCodeRepository> getDefaultExceptionHandler() {
+		return new FlexoExceptionHandler<AddGeneratedCodeRepository>() {
 
-            @Override
-            public boolean handleException(FlexoException exception, AddGeneratedCodeRepository action)
-            {
-                if (exception instanceof DuplicateCodeRepositoryNameException) {
-                    FlexoController.notify(FlexoLocalization.localizedForKey("name_is_already_used"));
-                    return true;
-                }
-                return false;
-            }
+			@Override
+			public boolean handleException(FlexoException exception, AddGeneratedCodeRepository action) {
+				if (exception instanceof DuplicateCodeRepositoryNameException) {
+					FlexoController.notify(FlexoLocalization.localizedForKey("name_is_already_used"));
+					return true;
+				}
+				return false;
+			}
 
-        };
-    }
+		};
+	}
 }

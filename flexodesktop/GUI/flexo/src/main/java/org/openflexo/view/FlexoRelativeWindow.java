@@ -29,175 +29,162 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.view.controller.FlexoController;
 
-
 /**
- * Abstract class defining behaviour of a window relating to a particular module
- * frame (eg palettes)
- *
+ * Abstract class defining behaviour of a window relating to a particular module frame (eg palettes)
+ * 
  * @author sguerin
  */
 public abstract class FlexoRelativeWindow extends JFrame /*implements FocusListener*/
 {
 
-    private static final Logger logger = Logger.getLogger(FlexoFrame.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(FlexoFrame.class.getPackage().getName());
 
-    private FlexoFrame _parentFrame;
+	private FlexoFrame _parentFrame;
 
-    private boolean isDisplayedWhenModuleIsActive;
+	private boolean isDisplayedWhenModuleIsActive;
 
-    protected FlexoRelativeWindow(FlexoFrame frame)
-    {
-        //super(frame);
-        super();
-        setIconImage(IconLibrary.OPENFLEXO_NOTEXT_128.getImage());
-        _parentFrame = frame;
-        //setModal(false);
-        setLocationRelativeTo(frame);
-        //setFocusable(true);
-        //addFocusListener(this);
-        addKeyListener(frame.getKeyEventListener());
-        isDisplayedWhenModuleIsActive = false;
-        _parentFrame.addToRelativeWindows(this);
-        getController().notifyNewFlexoRelativeWindow(this);
-        // if (ToolBox.getPLATFORM().equals(ToolBox.MACOS))
-        //setJMenuBar(getController().createAndRegisterNewMenuBar());
-         setFocusableWindowState(false);
+	protected FlexoRelativeWindow(FlexoFrame frame) {
+		// super(frame);
+		super();
+		setIconImage(IconLibrary.OPENFLEXO_NOTEXT_128.getImage());
+		_parentFrame = frame;
+		// setModal(false);
+		setLocationRelativeTo(frame);
+		// setFocusable(true);
+		// addFocusListener(this);
+		addKeyListener(frame.getKeyEventListener());
+		isDisplayedWhenModuleIsActive = false;
+		_parentFrame.addToRelativeWindows(this);
+		getController().notifyNewFlexoRelativeWindow(this);
+		// if (ToolBox.getPLATFORM().equals(ToolBox.MACOS))
+		// setJMenuBar(getController().createAndRegisterNewMenuBar());
+		setFocusableWindowState(false);
 
-    }
+	}
 
-    /**
-     * Overrides dispose
-     * @see java.awt.Window#dispose()
-     */
-    @Override
-    public void dispose()
-    {
-        super.dispose();
-        if (_parentFrame != null) 
-        	_parentFrame.removeFromRelativeWindows(this);
-    	getController().notifyRemoveFlexoRelativeWindow(this);
-    	removeAll();
-    	_parentFrame = null;
-    }
+	/**
+	 * Overrides dispose
+	 * 
+	 * @see java.awt.Window#dispose()
+	 */
+	@Override
+	public void dispose() {
+		super.dispose();
+		if (_parentFrame != null)
+			_parentFrame.removeFromRelativeWindows(this);
+		getController().notifyRemoveFlexoRelativeWindow(this);
+		removeAll();
+		_parentFrame = null;
+	}
 
-    public FlexoFrame getParentFrame()
-    {
-        return _parentFrame;
-    }
+	public FlexoFrame getParentFrame() {
+		return _parentFrame;
+	}
 
-    public FlexoController getController()
-    {
-        if (_parentFrame != null)
-            return _parentFrame.getController();
-        return null;
-    }
+	public FlexoController getController() {
+		if (_parentFrame != null)
+			return _parentFrame.getController();
+		return null;
+	}
 
-    public FlexoModule getModule()
-    {
-        if (getParentFrame()!=null)
-            return getParentFrame().getModule();
-        return null;
-    }
+	public FlexoModule getModule() {
+		if (getParentFrame() != null)
+			return getParentFrame().getModule();
+		return null;
+	}
 
-    /*public void focusGained(FocusEvent e)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("focusGained in " + this.getClass().getName());
-    }
+	/*public void focusGained(FocusEvent e)
+	{
+	    if (logger.isLoggable(Level.FINE))
+	        logger.fine("focusGained in " + this.getClass().getName());
+	}
 
-    public void focusLost(FocusEvent e)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("focusLost in " + this.getClass().getName());
-    }*/
+	public void focusLost(FocusEvent e)
+	{
+	    if (logger.isLoggable(Level.FINE))
+	        logger.fine("focusLost in " + this.getClass().getName());
+	}*/
 
-    @Override
-    public void setVisible(boolean mustBeDisplayed)
-    {
-        if (logger.isLoggable(Level.INFO))
-            logger.info("setVisible " + mustBeDisplayed + " in " + this.getClass().getName());
-        updateDisplayedWhenModuleIsActiveState(mustBeDisplayed);
-        if (mustBeDisplayed) {
-            if (getModule() != null && getModule().isActive()) {
-                requestSetVisible = true;
-                super.setVisible(true);
-                requestSetVisible = false;
-            }
-        } else {
-            requestSetVisible = true;
-            super.setVisible(false);
-            requestSetVisible = false;
-        }
-    }
+	@Override
+	public void setVisible(boolean mustBeDisplayed) {
+		if (logger.isLoggable(Level.INFO))
+			logger.info("setVisible " + mustBeDisplayed + " in " + this.getClass().getName());
+		updateDisplayedWhenModuleIsActiveState(mustBeDisplayed);
+		if (mustBeDisplayed) {
+			if (getModule() != null && getModule().isActive()) {
+				requestSetVisible = true;
+				super.setVisible(true);
+				requestSetVisible = false;
+			}
+		} else {
+			requestSetVisible = true;
+			super.setVisible(false);
+			requestSetVisible = false;
+		}
+	}
 
-    private boolean requestSetVisible = false;
+	private boolean requestSetVisible = false;
 
-    @Override
-    public void show()
-    {
-        if (!requestSetVisible) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("show() is deprecated and should not be used in this context !");
-        }
-        super.show();
-    }
+	@Override
+	public void show() {
+		if (!requestSetVisible) {
+			if (logger.isLoggable(Level.WARNING))
+				logger.warning("show() is deprecated and should not be used in this context !");
+		}
+		super.show();
+	}
 
-    @Override
-    public void hide()
-    {
-        if (!requestSetVisible) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("hide() is deprecated and should not be used in this context !");
-        }
-        super.hide();
-    }
+	@Override
+	public void hide() {
+		if (!requestSetVisible) {
+			if (logger.isLoggable(Level.WARNING))
+				logger.warning("hide() is deprecated and should not be used in this context !");
+		}
+		super.hide();
+	}
 
-    private void updateDisplayedWhenModuleIsActiveState(boolean mustBeDisplayed)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("updateDisplayedWhenModuleIsActiveState in " + this.getClass().getName());
-        if (logger.isLoggable(Level.FINE))
-            logger.finer("isDisplayedWhenModuleIsActive=" + isDisplayedWhenModuleIsActive);
-        if (logger.isLoggable(Level.FINE))
-            logger.finer("mustBeDisplayed=" + mustBeDisplayed);
-        if (_parentFrame == null)
-            return;
-        if (isDisplayedWhenModuleIsActive) {
-            if (!mustBeDisplayed) {
-                _parentFrame.removeFromDisplayedRelativeWindows(this);
-                isDisplayedWhenModuleIsActive = false;
-            }
-        }
-        if (!isDisplayedWhenModuleIsActive) {
-            if (mustBeDisplayed) {
-                _parentFrame.addToDisplayedRelativeWindows(this);
-                isDisplayedWhenModuleIsActive = true;
-            }
-        }
-    }
+	private void updateDisplayedWhenModuleIsActiveState(boolean mustBeDisplayed) {
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("updateDisplayedWhenModuleIsActiveState in " + this.getClass().getName());
+		if (logger.isLoggable(Level.FINE))
+			logger.finer("isDisplayedWhenModuleIsActive=" + isDisplayedWhenModuleIsActive);
+		if (logger.isLoggable(Level.FINE))
+			logger.finer("mustBeDisplayed=" + mustBeDisplayed);
+		if (_parentFrame == null)
+			return;
+		if (isDisplayedWhenModuleIsActive) {
+			if (!mustBeDisplayed) {
+				_parentFrame.removeFromDisplayedRelativeWindows(this);
+				isDisplayedWhenModuleIsActive = false;
+			}
+		}
+		if (!isDisplayedWhenModuleIsActive) {
+			if (mustBeDisplayed) {
+				_parentFrame.addToDisplayedRelativeWindows(this);
+				isDisplayedWhenModuleIsActive = true;
+			}
+		}
+	}
 
-    public void setVisibleNoParentFrameNotification(boolean mustBeDisplayed)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("setVisibleNoParentFrameNotification "+mustBeDisplayed+" in " + this.getClass().getName());
-        requestSetVisible = true;
-        super.setVisible(mustBeDisplayed);
-        requestSetVisible = false;
-    }
+	public void setVisibleNoParentFrameNotification(boolean mustBeDisplayed) {
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("setVisibleNoParentFrameNotification " + mustBeDisplayed + " in " + this.getClass().getName());
+		requestSetVisible = true;
+		super.setVisible(mustBeDisplayed);
+		requestSetVisible = false;
+	}
 
-    @Override
-    public abstract String getName();
+	@Override
+	public abstract String getName();
 
-    public String getLocalizedName()
-    {
-        return FlexoLocalization.localizedForKey(getName());
-    }
+	public String getLocalizedName() {
+		return FlexoLocalization.localizedForKey(getName());
+	}
 
-    @Override
-    public void setTitle(String title)
-    {
-        super.setTitle(title);
-        getController().notifyRenameFlexoRelativeWindow(this,title);
-    }
+	@Override
+	public void setTitle(String title) {
+		super.setTitle(title);
+		getController().notifyRenameFlexoRelativeWindow(this, title);
+	}
 
 }

@@ -28,38 +28,33 @@ import org.openflexo.foundation.wkf.node.ActivityNode;
 import org.openflexo.foundation.wkf.node.SelfExecutableNode;
 import org.openflexo.icon.WKFIconLibrary;
 
-
 /**
  * Browser element representing an Activity Node
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class ActivityNodeElement extends AbstractActivityNodeElement
-{
+public class ActivityNodeElement extends AbstractActivityNodeElement {
 
-    public ActivityNodeElement(ActivityNode node, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(node, BrowserElementType.ACTIVITY_NODE, browser,parent);
-    }
+	public ActivityNodeElement(ActivityNode node, ProjectBrowser browser, BrowserElement parent) {
+		super(node, BrowserElementType.ACTIVITY_NODE, browser, parent);
+	}
 
-    protected ActivityNode getActivityNode()
-    {
-        return (ActivityNode) getObject();
-    }
+	protected ActivityNode getActivityNode() {
+		return (ActivityNode) getObject();
+	}
 
-    @Override
-	public Icon getIcon()
-    {
-        if (getActivityNode() instanceof SelfExecutableNode) {
-            return decorateIcon(WKFIconLibrary.SELF_EXECUTABLE_ICON);
-        } else if (getActivityNode().isBeginNode()) {
-            return WKFIconLibrary.BEGIN_ACTIVITY_ICON;
-        } else if (getActivityNode().isEndNode()) {
-            return WKFIconLibrary.END_ACTIVITY_ICON;
-        } else {
-            return super.getIcon();
-        }
-    }
+	@Override
+	public Icon getIcon() {
+		if (getActivityNode() instanceof SelfExecutableNode) {
+			return decorateIcon(WKFIconLibrary.SELF_EXECUTABLE_ICON);
+		} else if (getActivityNode().isBeginNode()) {
+			return WKFIconLibrary.BEGIN_ACTIVITY_ICON;
+		} else if (getActivityNode().isEndNode()) {
+			return WKFIconLibrary.END_ACTIVITY_ICON;
+		} else {
+			return super.getIcon();
+		}
+	}
 
 }

@@ -32,76 +32,65 @@ import org.openflexo.foundation.action.SetPropertyAction;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 
+public class MoveFlexoProcess extends FlexoUndoableAction<MoveFlexoProcess, FlexoProcess, WKFObject> {
 
-public class MoveFlexoProcess extends FlexoUndoableAction<MoveFlexoProcess,FlexoProcess,WKFObject>
-{
-
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(MoveFlexoProcess.class.getPackage().getName());
 
-    public static FlexoActionType<MoveFlexoProcess,FlexoProcess,WKFObject> actionType
-    = new FlexoActionType<MoveFlexoProcess,FlexoProcess,WKFObject> (
-    		"move_process",
-    		FlexoActionType.defaultGroup,
-    		FlexoActionType.NORMAL_ACTION_TYPE) {
+	public static FlexoActionType<MoveFlexoProcess, FlexoProcess, WKFObject> actionType = new FlexoActionType<MoveFlexoProcess, FlexoProcess, WKFObject>(
+			"move_process", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public MoveFlexoProcess makeNewAction(FlexoProcess focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-        {
-            return new MoveFlexoProcess(focusedObject, globalSelection, editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public MoveFlexoProcess makeNewAction(FlexoProcess focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+			return new MoveFlexoProcess(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoProcess object, Vector<WKFObject> globalSelection)
-        {
-            return object!=null && !object.isImported();
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
+			return object != null && !object.isImported();
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoProcess object, Vector<WKFObject> globalSelection)
-        {
-            return isVisibleForSelection(object, globalSelection);
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
+			return isVisibleForSelection(object, globalSelection);
+		}
 
-    };
+	};
 
-    static {
-        FlexoModelObject.addActionForClass (MoveFlexoProcess.actionType, FlexoProcess.class);
-    }
+	static {
+		FlexoModelObject.addActionForClass(MoveFlexoProcess.actionType, FlexoProcess.class);
+	}
 
-    private SetPropertyAction _setParentProcessAction;
-    private FlexoProcess _newParentProcess;
+	private SetPropertyAction _setParentProcessAction;
+	private FlexoProcess _newParentProcess;
 
-    private boolean doImmediately = false;
+	private boolean doImmediately = false;
 
 	private boolean performValidate = true;
 
-    MoveFlexoProcess (FlexoProcess focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	MoveFlexoProcess(FlexoProcess focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
 	@Override
-	protected void doAction(Object context) throws FlexoException
-	{
+	protected void doAction(Object context) throws FlexoException {
 		Vector<FlexoProcess> potentialRoot = new Vector<FlexoProcess>();
 		boolean isMovingRoot = getFocusedObject().isRootProcess();
-		if(isMovingRoot){
+		if (isMovingRoot) {
 			Enumeration<FlexoProcess> en = getFocusedObject().getWorkflow().getAllLocalFlexoProcesses().elements();
-			while(en.hasMoreElements()){
+			while (en.hasMoreElements()) {
 				FlexoProcess candidate = en.nextElement();
-				if(candidate!=getFocusedObject()){
-					if(candidate.getParentProcess()==null){
+				if (candidate != getFocusedObject()) {
+					if (candidate.getParentProcess() == null) {
 						potentialRoot.add(candidate);
 					}
 				}
 			}
 
-
-			if(potentialRoot.size()==0)
+			if (potentialRoot.size() == 0)
 				throw new FlexoException("Sorry, you cannot move Root Process since there is no other potential root process.");
 		}
 		_setParentProcessAction = SetPropertyAction.actionType.makeNewEmbeddedAction(getFocusedObject(), null, this);
@@ -109,31 +98,27 @@ public class MoveFlexoProcess extends FlexoUndoableAction<MoveFlexoProcess,Flexo
 		_setParentProcessAction.setValue(getNewParentProcess());
 		_setParentProcessAction.setPerformValidate(getPerformValidate());
 		_setParentProcessAction.doAction();
-		if(isMovingRoot) {
+		if (isMovingRoot) {
 			FlexoProcess newRoot = potentialRoot.elementAt(0);
 			newRoot.getWorkflow().setRootProcess(newRoot);
 		}
 	}
 
 	@Override
-	protected void undoAction(Object context) throws FlexoException
-	{
+	protected void undoAction(Object context) throws FlexoException {
 		_setParentProcessAction.undoAction();
 	}
 
 	@Override
-	protected void redoAction(Object context) throws FlexoException
-	{
+	protected void redoAction(Object context) throws FlexoException {
 		_setParentProcessAction.redoAction();
 	}
 
-	public FlexoProcess getNewParentProcess()
-	{
+	public FlexoProcess getNewParentProcess() {
 		return _newParentProcess;
 	}
 
-	public void setNewParentProcess(FlexoProcess newParentProcess)
-	{
+	public void setNewParentProcess(FlexoProcess newParentProcess) {
 		_newParentProcess = newParentProcess;
 	}
 

@@ -24,38 +24,32 @@ import org.openflexo.foundation.bindings.BindingValue;
 public class CodeCall extends CustomInstruction {
 
 	private BindingValue executionPrimitive;
-	
-	public CodeCall (BindingValue executionPrimitive)
-	{
+
+	public CodeCall(BindingValue executionPrimitive) {
 		super();
 		this.executionPrimitive = executionPrimitive;
 	}
 
-	public BindingValue getExecutionPrimitive() 
-	{
+	public BindingValue getExecutionPrimitive() {
 		return executionPrimitive;
-	}
-	
-	@Override
-	public String toString()
-	{
-		return "[CodeCall:"+executionPrimitive.getStringRepresentation()+"]";
 	}
 
 	@Override
-	public String getJavaStringRepresentation() 
-	{
-		return executionPrimitive.getJavaCodeStringRepresentation()+";";
+	public String toString() {
+		return "[CodeCall:" + executionPrimitive.getStringRepresentation() + "]";
 	}
-	
+
 	@Override
-	public CodeCall clone()
-	{
+	public String getJavaStringRepresentation() {
+		return executionPrimitive.getJavaCodeStringRepresentation() + ";";
+	}
+
+	@Override
+	public CodeCall clone() {
 		CodeCall returned = new CodeCall(executionPrimitive);
 		returned.setHeaderComment(getHeaderComment());
 		returned.setInlineComment(getInlineComment());
 		return returned;
 	}
-
 
 }

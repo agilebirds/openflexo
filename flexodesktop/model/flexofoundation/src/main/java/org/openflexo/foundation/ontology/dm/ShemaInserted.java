@@ -23,26 +23,22 @@ import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewFolder;
 
 /**
- * Notify that a new ComponentDefinition has been inserted in a
- * ComponentLibrary's folder
+ * Notify that a new ComponentDefinition has been inserted in a ComponentLibrary's folder
  * 
  * @author sguerin
  * 
  */
-public class ShemaInserted extends OEDataModification
-{
+public class ShemaInserted extends OEDataModification {
 
-    private ViewFolder _folder;
+	private ViewFolder _folder;
 
-    public ShemaInserted(ViewDefinition shema, ViewFolder folder)
-    {
-        super(null, shema);
-        _folder = folder;
-    }
+	public ShemaInserted(ViewDefinition shema, ViewFolder folder) {
+		super(null, shema);
+		_folder = folder;
+	}
 
-    public ViewFolder getOEShemaFolder()
-    {
-        return _folder;
-    }
+	public ViewFolder getOEShemaFolder() {
+		return _folder;
+	}
 
 }

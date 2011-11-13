@@ -31,13 +31,12 @@ import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.ScenarioRecorder;
 
 /**
- * This class is intented to modelize preferences of Flexo application To be
- * accessed through all the application, all methods are statically defined.
+ * This class is intented to modelize preferences of Flexo application To be accessed through all the application, all methods are
+ * statically defined.
  * 
  * @author sguerin
  */
-public class FlexoProperties
-{
+public class FlexoProperties {
 	public static final String ALLOWSDOCSUBMISSION = "allowsDocSubmission";
 	public static final String LOGCOUNT = "logCount";
 	public static final String KEEPLOGTRACE = "keepLogTrace";
@@ -47,17 +46,16 @@ public class FlexoProperties
 	private static FlexoProperties _instance;
 	private Properties applicationProperties = null;
 
-	protected FlexoProperties(File preferencesFile)
-	{
+	protected FlexoProperties(File preferencesFile) {
 		super();
 		applicationProperties = new Properties();
 		try {
 			applicationProperties.load(new FileInputStream(preferencesFile));
 		} catch (FileNotFoundException e) {
-			FlexoController.showError("Cannot find configuration file : "+preferencesFile.getAbsolutePath());
+			FlexoController.showError("Cannot find configuration file : " + preferencesFile.getAbsolutePath());
 			System.exit(0);
 		} catch (IOException e) {
-			FlexoController.showError("Cannot read configuration file : "+preferencesFile.getAbsolutePath());
+			FlexoController.showError("Cannot read configuration file : " + preferencesFile.getAbsolutePath());
 			System.exit(0);
 		}
 
@@ -66,80 +64,87 @@ public class FlexoProperties
 		setMaxLogCount(getMaxLogCount());
 		setDefaultLoggingLevel(getDefaultLoggingLevel());
 		System.setProperty("java.util.logging.config.file", new FileResource("Config/logging.properties").getAbsolutePath());
-		if (applicationProperties.getProperty(DEFAULT_LOG_LEVEL)!=null){
-			System.setProperty("java.util.logging.config.file", new FileResource("Config/logging_"+applicationProperties.getProperty(DEFAULT_LOG_LEVEL)+".properties").getAbsolutePath());
+		if (applicationProperties.getProperty(DEFAULT_LOG_LEVEL) != null) {
+			System.setProperty("java.util.logging.config.file",
+					new FileResource("Config/logging_" + applicationProperties.getProperty(DEFAULT_LOG_LEVEL) + ".properties")
+							.getAbsolutePath());
 		}
 		if (applicationProperties.getProperty(CUSTOM_LOG_CONFIG_FILE) != null) {
-			System.setProperty("java.util.logging.config.file", new File(applicationProperties.getProperty(CUSTOM_LOG_CONFIG_FILE)).getAbsolutePath());
+			System.setProperty("java.util.logging.config.file",
+					new File(applicationProperties.getProperty(CUSTOM_LOG_CONFIG_FILE)).getAbsolutePath());
 		}
 	}
 
-	public String getApplicationProperty(String property){
+	public String getApplicationProperty(String property) {
 		return applicationProperties.getProperty(property);
 	}
-	public void setApplicationProperty(String property,String value){
-		applicationProperties.setProperty(property,value);
+
+	public void setApplicationProperty(String property, String value) {
+		applicationProperties.setProperty(property, value);
 	}
-	public boolean isLoggingTrace(){
+
+	public boolean isLoggingTrace() {
 		return "true".equals(applicationProperties.getProperty(KEEPLOGTRACE));
 	}
-	public int getMaxLogCount(){
-		return applicationProperties.getProperty(LOGCOUNT)==null?0:Integer.valueOf(applicationProperties.getProperty(LOGCOUNT));
+
+	public int getMaxLogCount() {
+		return applicationProperties.getProperty(LOGCOUNT) == null ? 0 : Integer.valueOf(applicationProperties.getProperty(LOGCOUNT));
 	}
-	public String getLoggingFileName(){
+
+	public String getLoggingFileName() {
 		return applicationProperties.getProperty(CUSTOM_LOG_CONFIG_FILE);
 	}
-	public void setLoggingFileName(String loggingFileName){
-		if(loggingFileName!=null){
+
+	public void setLoggingFileName(String loggingFileName) {
+		if (loggingFileName != null) {
 			applicationProperties.setProperty(CUSTOM_LOG_CONFIG_FILE, loggingFileName);
-		}else{
+		} else {
 			applicationProperties.remove(CUSTOM_LOG_CONFIG_FILE);
 		}
 	}
 
-	public File getCustomLoggingFile(){
-		if(getLoggingFileName()==null) {
+	public File getCustomLoggingFile() {
+		if (getLoggingFileName() == null) {
 			return null;
 		}
 		return new File(getLoggingFileName());
 	}
-	public String getDefaultLoggingLevel(){
+
+	public String getDefaultLoggingLevel() {
 		return applicationProperties.getProperty(DEFAULT_LOG_LEVEL);
 	}
-	public void setDefaultLoggingLevel(String l){
-		applicationProperties.setProperty(DEFAULT_LOG_LEVEL,l);
+
+	public void setDefaultLoggingLevel(String l) {
+		applicationProperties.setProperty(DEFAULT_LOG_LEVEL, l);
 	}
-	public void setIsLoggingTrace(boolean b){
-		applicationProperties.setProperty(KEEPLOGTRACE,b?"true":"false");
+
+	public void setIsLoggingTrace(boolean b) {
+		applicationProperties.setProperty(KEEPLOGTRACE, b ? "true" : "false");
 		FlexoLoggingManager.setKeepLogTrace(b);
 	}
-	public void setMaxLogCount(int c){
-		applicationProperties.setProperty(LOGCOUNT,String.valueOf(c));
+
+	public void setMaxLogCount(int c) {
+		applicationProperties.setProperty(LOGCOUNT, String.valueOf(c));
 		FlexoLoggingManager.setLogCount(c);
 	}
 
-	public boolean getAllowsDocSubmission(){
+	public boolean getAllowsDocSubmission() {
 		return "true".equals(applicationProperties.getProperty(ALLOWSDOCSUBMISSION));
 	}
-	public void setAllowsDocSubmission(boolean b){
+
+	public void setAllowsDocSubmission(boolean b) {
 		applicationProperties.setProperty(ALLOWSDOCSUBMISSION, String.valueOf(b));
 	}
 
-	public static void load()
-	{
+	public static void load() {
 		instance();
 	}
 
-	public static FlexoProperties instance()
-	{
+	public static FlexoProperties instance() {
 		if (_instance == null) {
 			_instance = new FlexoProperties(new FileResource("Config/Flexo.properties"));
 		}
 		return _instance;
 	}
-
-
-
-
 
 }

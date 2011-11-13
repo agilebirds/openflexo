@@ -35,29 +35,24 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
 public class DecreaseColSpanInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DecreaseColSpanInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(DecreaseColSpan.actionType,actionInitializer);
+	DecreaseColSpanInitializer(IEControllerActionInitializer actionInitializer) {
+		super(DecreaseColSpan.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<DecreaseColSpan> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<DecreaseColSpan> getDefaultInitializer() {
 		return new FlexoActionInitializer<DecreaseColSpan>() {
 			@Override
-			public boolean run(ActionEvent e, DecreaseColSpan action)
-			{
+			public boolean run(ActionEvent e, DecreaseColSpan action) {
 				if (action.getInvoker() instanceof IETDWidgetView
 						&& ((IETDWidgetView) action.getInvoker()).getSequenceModel().getParent() instanceof IETDWidget) {
 					IETDWidgetView invoker = (IETDWidgetView) action.getInvoker();
@@ -73,20 +68,17 @@ public class DecreaseColSpanInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<DecreaseColSpan> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<DecreaseColSpan> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DecreaseColSpan>() {
 			@Override
-			public boolean run(ActionEvent e, DecreaseColSpan action)
-			{
+			public boolean run(ActionEvent e, DecreaseColSpan action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoExceptionHandler<DecreaseColSpan> getDefaultExceptionHandler() 
-	{
+	protected FlexoExceptionHandler<DecreaseColSpan> getDefaultExceptionHandler() {
 		return new FlexoExceptionHandler<DecreaseColSpan>() {
 			@Override
 			public boolean handleException(FlexoException exception, DecreaseColSpan action) {

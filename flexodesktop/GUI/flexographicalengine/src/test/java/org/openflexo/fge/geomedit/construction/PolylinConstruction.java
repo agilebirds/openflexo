@@ -23,8 +23,7 @@ import org.openflexo.fge.geom.FGEPolylin;
 
 public abstract class PolylinConstruction extends GeometricConstruction<FGEPolylin> {
 
-	public final FGEPolylin getPolylin()
-	{
+	public final FGEPolylin getPolylin() {
 		return getData();
 	}
 

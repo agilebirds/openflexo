@@ -25,7 +25,7 @@ import org.openflexo.foundation.toc.TOCData;
 public class FlexoTOCBuilder extends FlexoBuilder<FlexoTOCResource> {
 
 	public TOCData tocData;
-	
+
 	public FlexoTOCBuilder(FlexoTOCResource resource) {
 		super(resource);
 	}

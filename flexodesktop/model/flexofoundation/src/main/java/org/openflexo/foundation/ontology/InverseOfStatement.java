@@ -29,42 +29,36 @@ public class InverseOfStatement extends OntologyStatement {
 	private static final Logger logger = Logger.getLogger(InverseOfStatement.class.getPackage().getName());
 
 	public static final String INVERSE_OF_URI = "http://www.w3.org/2002/07/owl#inverseOf";
-	
+
 	private OntologyObject inverseProperty;
-	
-	public InverseOfStatement(OntologyObject subject, Statement s)
-	{
-		super(subject,s);
+
+	public InverseOfStatement(OntologyObject subject, Statement s) {
+		super(subject, s);
 		if (s.getObject() instanceof Resource) {
-			inverseProperty = getOntologyLibrary().getOntologyObject(((Resource)s.getObject()).getURI());
-		}
-		else {
+			inverseProperty = getOntologyLibrary().getOntologyObject(((Resource) s.getObject()).getURI());
+		} else {
 			logger.warning("SubPropertyStatement: object is not a Resource !");
 		}
 	}
 
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "inverse_property_statement";
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return "InverseOfStatement: "+getStatement();
+	public String getFullyQualifiedName() {
+		return "InverseOfStatement: " + getStatement();
 	}
 
-
-	public OntologyObject getInverseProperty() 
-	{
+	public OntologyObject getInverseProperty() {
 		return inverseProperty;
 	}
 
 	@Override
-	public String toString() 
-	{
-		return getSubject().getName()+" is inverse property of "+(getInverseProperty() != null ? getInverseProperty().getName() : "<NOT_FOUND:"+getStatement().getObject()+">");
+	public String toString() {
+		return getSubject().getName() + " is inverse property of "
+				+ (getInverseProperty() != null ? getInverseProperty().getName() : "<NOT_FOUND:" + getStatement().getObject() + ">");
 	}
 
 }

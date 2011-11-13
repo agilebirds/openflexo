@@ -37,52 +37,47 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.view.FlexoFrame;
 
-
 /**
  * The main window of this module
  * 
  * @author yourname
  */
-public class DREFrame extends FlexoFrame
-{
+public class DREFrame extends FlexoFrame {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DREFrame.class.getPackage().getName());
 
-    protected DREController _DREController;
+	protected DREController _DREController;
 
-    protected DREMenuBar _DREMenuBar;
+	protected DREMenuBar _DREMenuBar;
 
-    protected DREKeyEventListener _DREKeyEventListener;
+	protected DREKeyEventListener _DREKeyEventListener;
 
-    /**
-     * Constructor for DREFrame
-     */
-    public DREFrame(String title, DREController controller, DREKeyEventListener wkfKeyEventListener, DREMenuBar menuBar) throws HeadlessException
-    {
-        super(title, controller, wkfKeyEventListener, menuBar);
-        _DREController = controller;
-        _DREMenuBar = menuBar;
-        _DREKeyEventListener = wkfKeyEventListener;
-        setSize(DRECst.DEFAULT_MAINFRAME_WIDTH, DRECst.DEFAULT_MAINFRAME_HEIGHT);
-        updateTitle();
-        getContentPane().setLayout(new BorderLayout());
-        // You may observe here some model objects
-    }
+	/**
+	 * Constructor for DREFrame
+	 */
+	public DREFrame(String title, DREController controller, DREKeyEventListener wkfKeyEventListener, DREMenuBar menuBar)
+			throws HeadlessException {
+		super(title, controller, wkfKeyEventListener, menuBar);
+		_DREController = controller;
+		_DREMenuBar = menuBar;
+		_DREKeyEventListener = wkfKeyEventListener;
+		setSize(DRECst.DEFAULT_MAINFRAME_WIDTH, DRECst.DEFAULT_MAINFRAME_HEIGHT);
+		updateTitle();
+		getContentPane().setLayout(new BorderLayout());
+		// You may observe here some model objects
+	}
 
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-    {
-       super.update(observable,dataModification);
-    }
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		super.update(observable, dataModification);
+	}
 
-    /**
-     * @return Returns the controller.
-     */
-    public DREController getDREController()
-    {
-        return _DREController;
-    }
-
+	/**
+	 * @return Returns the controller.
+	 */
+	public DREController getDREController() {
+		return _DREController;
+	}
 
 }

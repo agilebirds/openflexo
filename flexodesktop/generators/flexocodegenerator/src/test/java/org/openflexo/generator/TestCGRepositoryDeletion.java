@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -66,40 +65,41 @@ import org.openflexo.generator.rm.OperationComponentJavaFileResource;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.ToolBox;
 
+public class TestCGRepositoryDeletion extends CGTestCase {
 
-public class TestCGRepositoryDeletion  extends CGTestCase {
-
-    public TestCGRepositoryDeletion()
-    {
+	public TestCGRepositoryDeletion() {
 		super(TEST_CG);
 	}
-    public TestCGRepositoryDeletion(String testName)
-    {
+
+	public TestCGRepositoryDeletion(String testName) {
 		super(testName);
 	}
-     protected static final Logger logger = Logger.getLogger(TestCG.class.getPackage().getName());
 
-    private static final String TEST_CG = "TestCGRepositoryDeletion";
+	protected static final Logger logger = Logger.getLogger(TestCG.class.getPackage().getName());
+
+	private static final String TEST_CG = "TestCGRepositoryDeletion";
 	private static DebugBackwardSynchronizationHook _bsHook;
+
 	public static Test suite() {
-	     final TestSuite suite = new TestSuite("TestSuite for TestCGRepositoryDeletion");
-	     suite.addTest(new TestCGRepositoryDeletion("test0CreateProject")); 
-	     suite.addTest(new TestCGRepositoryDeletion("test1CheckResources"));
-	     suite.addTest(new TestCGRepositoryDeletion("test2CreateSubProcessAndCheckResources"));
-	     suite.addTest(new TestCGRepositoryDeletion("test3CreateSubProcessNodeAndCheckResources"));
-	     suite.addTest(new TestCGRepositoryDeletion("test4CreateOperationAndCheckResources"));
-	     suite.addTest(new TestCGRepositoryDeletion("test5EditOperationComponent1"));
-	     suite.addTest(new TestCGRepositoryDeletion("test6CreateOperationComponent2"));
-	     suite.addTest(new TestCGRepositoryDeletion("test7CreateOperationComponent3"));
-	     suite.addTest(new TestCGRepositoryDeletion("test8CreateSubProcessNodeAndCheckResources"));
-	     suite.addTest(new TestCGRepositoryDeletion("test9InitializeCodeGeneration"));
-	     suite.addTest(new TestCGRepositoryDeletion("test10ValidateProject"));
-	     suite.addTest(new TestCGRepositoryDeletion("test11SynchronizeCodeGeneration"));
-	     suite.addTest(new TestCGRepositoryDeletion("test12CheckAllGeneratedResourcesDependancies"));
-	     suite.addTest(new TestCGRepositoryDeletion("test13CheckGeneratedResourcesStatus"));
-	     suite.addTest(new TestCGRepositoryDeletion("test14Delete"));
-	     return suite;
-	 }
+		final TestSuite suite = new TestSuite("TestSuite for TestCGRepositoryDeletion");
+		suite.addTest(new TestCGRepositoryDeletion("test0CreateProject"));
+		suite.addTest(new TestCGRepositoryDeletion("test1CheckResources"));
+		suite.addTest(new TestCGRepositoryDeletion("test2CreateSubProcessAndCheckResources"));
+		suite.addTest(new TestCGRepositoryDeletion("test3CreateSubProcessNodeAndCheckResources"));
+		suite.addTest(new TestCGRepositoryDeletion("test4CreateOperationAndCheckResources"));
+		suite.addTest(new TestCGRepositoryDeletion("test5EditOperationComponent1"));
+		suite.addTest(new TestCGRepositoryDeletion("test6CreateOperationComponent2"));
+		suite.addTest(new TestCGRepositoryDeletion("test7CreateOperationComponent3"));
+		suite.addTest(new TestCGRepositoryDeletion("test8CreateSubProcessNodeAndCheckResources"));
+		suite.addTest(new TestCGRepositoryDeletion("test9InitializeCodeGeneration"));
+		suite.addTest(new TestCGRepositoryDeletion("test10ValidateProject"));
+		suite.addTest(new TestCGRepositoryDeletion("test11SynchronizeCodeGeneration"));
+		suite.addTest(new TestCGRepositoryDeletion("test12CheckAllGeneratedResourcesDependancies"));
+		suite.addTest(new TestCGRepositoryDeletion("test13CheckGeneratedResourcesStatus"));
+		suite.addTest(new TestCGRepositoryDeletion("test14Delete"));
+		return suite;
+	}
+
 	/*
 	public static Test suite() {
 	     return new OrderedTestSuite(TestCG.class, new String[]{
@@ -127,22 +127,21 @@ public class TestCGRepositoryDeletion  extends CGTestCase {
 	/**
 	 * Creates a new empty project in a temp directory
 	 */
-	public void test0CreateProject()
-	{
+	public void test0CreateProject() {
 		log("test0CreateProject");
-       ToolBox.setPlatform();
-       FlexoLoggingManager.forceInitialize();
+		ToolBox.setPlatform();
+		FlexoLoggingManager.forceInitialize();
 		try {
 			File tempFile = File.createTempFile(TEST_CG, "");
-			_projectDirectory = new File (tempFile.getParentFile(),tempFile.getName()+".prj");
+			_projectDirectory = new File(tempFile.getParentFile(), tempFile.getName() + ".prj");
 			tempFile.delete();
 		} catch (IOException e) {
 			fail();
 		}
-		logger.info("Project directory: "+_projectDirectory.getAbsolutePath());
-		_projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length()-4);
-		logger.info("Project identifier: "+_projectIdentifier);
-		_editor = (DefaultFlexoEditor)FlexoResourceManager.initializeNewProject(_projectDirectory,EDITOR_FACTORY,null);
+		logger.info("Project directory: " + _projectDirectory.getAbsolutePath());
+		_projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length() - 4);
+		logger.info("Project identifier: " + _projectIdentifier);
+		_editor = (DefaultFlexoEditor) FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY, null);
 		_project = _editor.getProject();
 		logger.info("Project has been SUCCESSFULLY created");
 		_bsHook = new DebugBackwardSynchronizationHook();
@@ -152,8 +151,7 @@ public class TestCGRepositoryDeletion  extends CGTestCase {
 	/**
 	 * Check that resources ans dependancies were correctely built
 	 */
-	public void test1CheckResources()
-	{
+	public void test1CheckResources() {
 		log("test1CheckResources");
 		assertNotNull(_rmResource = _project.getFlexoRMResource());
 		assertNotNull(_wkfResource = _project.getFlexoWorkflowResource());
@@ -166,21 +164,22 @@ public class TestCGRepositoryDeletion  extends CGTestCase {
 		assertNotNull(_eoPrototypesResource = _project.getEOModelResource(EOPrototypeRepository.EOPROTOTYPE_REPOSITORY_DIR.getName()));
 
 		for (FlexoResource resource : _project.getResources().values()) {
-			if (resource != _rmResource && !(resource instanceof FlexoMemoryResource)) assertSynchonized(resource, _rmResource);
+			if (resource != _rmResource && !(resource instanceof FlexoMemoryResource))
+				assertSynchonized(resource, _rmResource);
 		}
-		assertSynchonized (_dmResource,_executionModelResource);
-		assertSynchonized (_dmResource,_eoPrototypesResource);
+		assertSynchonized(_dmResource, _executionModelResource);
+		assertSynchonized(_dmResource, _eoPrototypesResource);
 
-		assertSynchonized (_wkfResource,_rootProcessResource);
+		assertSynchonized(_wkfResource, _rootProcessResource);
 
-		assertDepends (_rootProcessResource,_dmResource);
-		assertNotDepends (_rootProcessResource,_clResource);
+		assertDepends(_rootProcessResource, _dmResource);
+		assertNotDepends(_rootProcessResource, _clResource);
 
 		logger.info("Resources are WELL created and DEPENDANCIES checked");
 
 		for (FlexoResource resource : _project.getResources().values()) {
 			if (resource instanceof FlexoStorageResource) {
-				assertNotModified((FlexoStorageResource)resource);
+				assertNotModified((FlexoStorageResource) resource);
 			}
 		}
 
@@ -191,77 +190,71 @@ public class TestCGRepositoryDeletion  extends CGTestCase {
 	/**
 	 * Add a new sub-process and check resource dependancies
 	 */
-	public void test2CreateSubProcessAndCheckResources()
-	{
+	public void test2CreateSubProcessAndCheckResources() {
 		log("test2CreateSubProcessAndCheckResources");
 		AddSubProcess action = AddSubProcess.actionType.makeNewAction(_rootProcessResource.getFlexoProcess(), null, _editor);
 		action.setParentProcess(_rootProcessResource.getFlexoProcess());
 		action.setNewProcessName(TEST_SUB_PROCESS);
 		action.doAction();
-		logger.info("SubProcess "+action.getNewProcess().getName()+" successfully created");
+		logger.info("SubProcess " + action.getNewProcess().getName() + " successfully created");
 		_subProcessResource = _project.getFlexoProcessResource(TEST_SUB_PROCESS);
         defineStatusColumn(_rootProcessResource.getFlexoProcess());
         defineStatusColumn(action.getNewProcess());
 		assertNotNull(_subProcessResource);
-		assertSynchonized(_subProcessResource,_rmResource);
-		assertSynchonized(_subProcessResource,_wkfResource);
-		assertDepends(_subProcessResource,_dmResource);
-		assertNotDepends(_subProcessResource,_clResource);
+		assertSynchonized(_subProcessResource, _rmResource);
+		assertSynchonized(_subProcessResource, _wkfResource);
+		assertDepends(_subProcessResource, _dmResource);
+		assertNotDepends(_subProcessResource, _clResource);
 		for (FlexoResource resource : _project.getResources().values()) {
 			if (resource == _rmResource) {
 				assertModified(_rmResource);
-			}
-			else if (resource == _dmResource) {
+			} else if (resource == _dmResource) {
 				assertModified(_dmResource);
-			}
-			else if (resource == _wkfResource) {
+			} else if (resource == _wkfResource) {
 				assertModified(_wkfResource);
-			}
-			else if (resource == _rootProcessResource) {
+			} else if (resource == _rootProcessResource) {
 				assertModified(_rootProcessResource);
-			}
-			else if (resource == _subProcessResource) {
+			} else if (resource == _subProcessResource) {
 				assertModified(_subProcessResource);
-			}
-			else if (resource instanceof FlexoStorageResource) {
-				assertNotModified((FlexoStorageResource)resource);
+			} else if (resource instanceof FlexoStorageResource) {
+				assertNotModified((FlexoStorageResource) resource);
 			}
 		}
 	}
 
-	public void test3CreateSubProcessNodeAndCheckResources()
-	{
+	public void test3CreateSubProcessNodeAndCheckResources() {
 		log("test3CreateSubProcessNodeAndCheckResources");
-		DropWKFElement action = DropWKFElement.actionType.makeNewAction(_rootProcessResource.getFlexoProcess().getActivityPetriGraph(), null, _editor);
+		DropWKFElement action = DropWKFElement.actionType.makeNewAction(_rootProcessResource.getFlexoProcess().getActivityPetriGraph(),
+				null, _editor);
 		action.setElementType(WKFElementType.MULTIPLE_INSTANCE_PARALLEL_SUB_PROCESS_NODE);
 		action.setParameter(DropWKFElement.SUB_PROCESS, _subProcessResource.getFlexoProcess());
-		action.setLocation(100,100);
+		action.setLocation(100, 100);
 		action.doAction();
 		assertTrue(action.hasActionExecutionSucceeded());
         defineStatusColumn(action.getProcess());
-		_subProcessNode = (SubProcessNode)action.getObject();
-		logger.info("SubProcessNode "+_subProcessNode.getName()+" successfully created");
-		assertDepends(_rootProcessResource,_subProcessResource);
+		_subProcessNode = (SubProcessNode) action.getObject();
+		logger.info("SubProcessNode " + _subProcessNode.getName() + " successfully created");
+		assertDepends(_rootProcessResource, _subProcessResource);
 		saveProject();
 	}
 
 	/**
 	 * Open operation level, drop a new operation, and associate it a new operation component
 	 */
-	public void test4CreateOperationAndCheckResources()
-	{
+	public void test4CreateOperationAndCheckResources() {
 		log("test4CreateOperationAndCheckResources");
 		OpenOperationLevel openOperationLevel = OpenOperationLevel.actionType.makeNewAction(_subProcessNode, null, _editor);
 		openOperationLevel.doAction();
 		DropWKFElement dropOperation = DropWKFElement.actionType.makeNewAction(_subProcessNode.getOperationPetriGraph(), null, _editor);
 		dropOperation.setElementType(WKFElementType.NORMAL_OPERATION);
-		dropOperation.setLocation(100,100);
+		dropOperation.setLocation(100, 100);
 		dropOperation.doAction();
 		assertTrue(dropOperation.hasActionExecutionSucceeded());
-		_operationNode = (OperationNode)dropOperation.getObject();
+		_operationNode = (OperationNode) dropOperation.getObject();
 		_operationNode.setName(TEST_OPERATION_NODE_1);
-		logger.info("OperationNode "+_operationNode.getName()+" successfully created");
-		SetAndOpenOperationComponent setOperationComponent = SetAndOpenOperationComponent.actionType.makeNewAction(_operationNode, null, _editor);
+		logger.info("OperationNode " + _operationNode.getName() + " successfully created");
+		SetAndOpenOperationComponent setOperationComponent = SetAndOpenOperationComponent.actionType.makeNewAction(_operationNode, null,
+				_editor);
 		setOperationComponent.setNewComponentName(OPERATION_COMPONENT_1);
 		setOperationComponent.doAction();
 		assertTrue(setOperationComponent.hasActionExecutionSucceeded());
@@ -277,8 +270,7 @@ public class TestCGRepositoryDeletion  extends CGTestCase {
 	/**
 	 * Edit this new component by adding 3 blocks
 	 */
-	public void test5EditOperationComponent1()
-	{
+	public void test5EditOperationComponent1() {
 		log("test5EditOperationComponent1");
 		_operationComponent1 = _operationComponentResource1.getIEOperationComponent();
 		assertNotNull(_operationComponent1);
@@ -286,14 +278,14 @@ public class TestCGRepositoryDeletion  extends CGTestCase {
 		// Insert a new bloc at index 0, name it Bloc1
 		DropIEElement dropBloc1 = DropIEElement.createBlocInComponent(_operationComponent1, 0, _editor);
 		assertTrue(dropBloc1.doAction().hasActionExecutionSucceeded());
-		IEBlocWidget bloc1 = (IEBlocWidget)dropBloc1.getDroppedWidget();
+		IEBlocWidget bloc1 = (IEBlocWidget) dropBloc1.getDroppedWidget();
 		assertNotNull(bloc1);
 		bloc1.setTitle("Bloc1");
 
 		// Insert a new bloc at index 1, name it Bloc2
 		DropIEElement dropBloc2 = DropIEElement.createBlocInComponent(_operationComponent1, 1, _editor);
 		assertTrue(dropBloc2.doAction().hasActionExecutionSucceeded());
-		_bloc2 = (IEBlocWidget)dropBloc2.getDroppedWidget();
+		_bloc2 = (IEBlocWidget) dropBloc2.getDroppedWidget();
 		assertNotNull(_bloc2);
 		_bloc2.setTitle("Bloc2");
 
@@ -301,14 +293,14 @@ public class TestCGRepositoryDeletion  extends CGTestCase {
 		// This bloc is therefore placed between Bloc1 and Bloc2
 		DropIEElement dropBloc3 = DropIEElement.createBlocInComponent(_operationComponent1, 1, _editor);
 		assertTrue(dropBloc3.doAction().hasActionExecutionSucceeded());
-		IEBlocWidget bloc3 = (IEBlocWidget)dropBloc3.getDroppedWidget();
+		IEBlocWidget bloc3 = (IEBlocWidget) dropBloc3.getDroppedWidget();
 		assertNotNull(bloc3);
 		bloc3.setTitle("Bloc3");
 
 		// Drop a table in the bloc2
 		DropIEElement dropTable = DropIEElement.createTableInBloc(_bloc2, _editor);
 		assertTrue(dropTable.doAction().hasActionExecutionSucceeded());
-		IEHTMLTableWidget table = (IEHTMLTableWidget)dropTable.getDroppedWidget();
+		IEHTMLTableWidget table = (IEHTMLTableWidget) dropTable.getDroppedWidget();
 		assertNotNull(table);
 
 		// Drop a label in the table, at cell (0,0) at position 0
@@ -322,7 +314,7 @@ public class TestCGRepositoryDeletion  extends CGTestCase {
 		// Now, drop a TabsContainer
 		DropIEElement dropTabs = DropIEElement.createTabsInComponent(_operationComponent1, 3, _editor);
 		assertTrue(dropTabs.doAction().hasActionExecutionSucceeded());
-		IESequenceTab tabs = (IESequenceTab)dropTabs.getDroppedWidget();
+		IESequenceTab tabs = (IESequenceTab) dropTabs.getDroppedWidget();
 
 		FlexoComponentFolder rootFolder = _project.getFlexoComponentLibrary().getRootFolder();
 
@@ -353,8 +345,7 @@ public class TestCGRepositoryDeletion  extends CGTestCase {
 	/**
 	 * Creates a new operation component 2
 	 */
-	public void test6CreateOperationComponent2()
-	{
+	public void test6CreateOperationComponent2() {
 		log("test6CreateOperationComponent2");
 		AddComponent addComponent = AddComponent.actionType.makeNewAction(_project.getFlexoComponentLibrary(), null, _editor);
 		addComponent.setNewComponentName(OPERATION_COMPONENT_2);
@@ -372,14 +363,14 @@ public class TestCGRepositoryDeletion  extends CGTestCase {
 		// Insert a new bloc at index 0, name it Bloc1
 		DropIEElement dropBloc1 = DropIEElement.createBlocInComponent(_operationComponent2, 0, _editor);
 		assertTrue(dropBloc1.doAction().hasActionExecutionSucceeded());
-		IEBlocWidget bloc1 = (IEBlocWidget)dropBloc1.getDroppedWidget();
+		IEBlocWidget bloc1 = (IEBlocWidget) dropBloc1.getDroppedWidget();
 		assertNotNull(bloc1);
 		bloc1.setTitle("NewBloc");
 
 		// Now, drop a TabsContainer
 		DropIEElement dropTabs = DropIEElement.createTabsInComponent(_operationComponent2, 1, _editor);
 		assertTrue(dropTabs.doAction().hasActionExecutionSucceeded());
-		IESequenceTab tabs = (IESequenceTab)dropTabs.getDroppedWidget();
+		IESequenceTab tabs = (IESequenceTab) dropTabs.getDroppedWidget();
 
 		FlexoComponentFolder rootFolder = _project.getFlexoComponentLibrary().getRootFolder();
 
@@ -397,8 +388,7 @@ public class TestCGRepositoryDeletion  extends CGTestCase {
 	/**
 	 * Creates a new operation component 3
 	 */
-	public void test7CreateOperationComponent3()
-	{
+	public void test7CreateOperationComponent3() {
 		log("test7CreateOperationComponent3");
 		AddComponent addComponent = AddComponent.actionType.makeNewAction(_project.getFlexoComponentLibrary(), null, _editor);
 		addComponent.setNewComponentName(OPERATION_COMPONENT_3);
@@ -416,14 +406,14 @@ public class TestCGRepositoryDeletion  extends CGTestCase {
 		// Insert a new bloc at index 0, name it Bloc1
 		DropIEElement dropBloc1 = DropIEElement.createBlocInComponent(_operationComponent3, 0, _editor);
 		assertTrue(dropBloc1.doAction().hasActionExecutionSucceeded());
-		IEBlocWidget bloc1 = (IEBlocWidget)dropBloc1.getDroppedWidget();
+		IEBlocWidget bloc1 = (IEBlocWidget) dropBloc1.getDroppedWidget();
 		assertNotNull(bloc1);
 		bloc1.setTitle("NewBloc");
 
 		// Now, drop a TabsContainer
 		DropIEElement dropTabs = DropIEElement.createTabsInComponent(_operationComponent3, 1, _editor);
 		assertTrue(dropTabs.doAction().hasActionExecutionSucceeded());
-		IESequenceTab tabs = (IESequenceTab)dropTabs.getDroppedWidget();
+		IESequenceTab tabs = (IESequenceTab) dropTabs.getDroppedWidget();
 
 		FlexoComponentFolder rootFolder = _project.getFlexoComponentLibrary().getRootFolder();
 
@@ -441,47 +431,47 @@ public class TestCGRepositoryDeletion  extends CGTestCase {
 	/**
 	 * Add a new sub-process node, check dependancies
 	 */
-	public void test8CreateSubProcessNodeAndCheckResources()
-	{
+	public void test8CreateSubProcessNodeAndCheckResources() {
 		log("test8CreateSubProcessNodeAndCheckResources");
-		DropWKFElement addActivity = DropWKFElement.actionType.makeNewAction(_subProcessResource.getFlexoProcess().getActivityPetriGraph(), null, _editor);
+		DropWKFElement addActivity = DropWKFElement.actionType.makeNewAction(_subProcessResource.getFlexoProcess().getActivityPetriGraph(),
+				null, _editor);
 		addActivity.setElementType(WKFElementType.NORMAL_ACTIVITY);
-		addActivity.setLocation(100,100);
+		addActivity.setLocation(100, 100);
 		addActivity.doAction();
 		assertTrue(addActivity.hasActionExecutionSucceeded());
-		ActivityNode activityNode = (ActivityNode)addActivity.getObject();
+		ActivityNode activityNode = (ActivityNode) addActivity.getObject();
 		activityNode.setName(TEST_ACTIVITY_IN_SUB_PROCESS);
-		logger.info("ActivityNode "+activityNode.getName()+" successfully created");
+		logger.info("ActivityNode " + activityNode.getName() + " successfully created");
 
 		OpenOperationLevel openOperationLevel = OpenOperationLevel.actionType.makeNewAction(activityNode, null, _editor);
 		openOperationLevel.doAction();
 
 		DropWKFElement dropOperation2 = DropWKFElement.actionType.makeNewAction(activityNode.getOperationPetriGraph(), null, _editor);
 		dropOperation2.setElementType(WKFElementType.NORMAL_OPERATION);
-		dropOperation2.setLocation(10,50);
+		dropOperation2.setLocation(10, 50);
 		dropOperation2.doAction();
 		assertTrue(dropOperation2.hasActionExecutionSucceeded());
-		OperationNode operationNode2 = (OperationNode)dropOperation2.getObject();
+		OperationNode operationNode2 = (OperationNode) dropOperation2.getObject();
 		operationNode2.setName(TEST_OPERATION_NODE_2);
-		logger.info("OperationNode "+operationNode2.getName()+" successfully created");
+		logger.info("OperationNode " + operationNode2.getName() + " successfully created");
 
-		SetAndOpenOperationComponent setOperationComponent2
-		= SetAndOpenOperationComponent.actionType.makeNewAction(operationNode2, null, _editor);
+		SetAndOpenOperationComponent setOperationComponent2 = SetAndOpenOperationComponent.actionType.makeNewAction(operationNode2, null,
+				_editor);
 		setOperationComponent2.setNewComponentName(OPERATION_COMPONENT_2);
 		setOperationComponent2.doAction();
 		assertTrue(setOperationComponent2.hasActionExecutionSucceeded());
 
 		DropWKFElement dropOperation3 = DropWKFElement.actionType.makeNewAction(activityNode.getOperationPetriGraph(), null, _editor);
 		dropOperation3.setElementType(WKFElementType.NORMAL_OPERATION);
-		dropOperation3.setLocation(100,50);
+		dropOperation3.setLocation(100, 50);
 		dropOperation3.doAction();
 		assertTrue(dropOperation3.hasActionExecutionSucceeded());
-		OperationNode operationNode3 = (OperationNode)dropOperation3.getObject();
+		OperationNode operationNode3 = (OperationNode) dropOperation3.getObject();
 		operationNode3.setName(TEST_OPERATION_NODE_3);
-		logger.info("OperationNode "+operationNode3.getName()+" successfully created");
+		logger.info("OperationNode " + operationNode3.getName() + " successfully created");
 
-		SetAndOpenOperationComponent setOperationComponent3
-		= SetAndOpenOperationComponent.actionType.makeNewAction(operationNode3, null, _editor);
+		SetAndOpenOperationComponent setOperationComponent3 = SetAndOpenOperationComponent.actionType.makeNewAction(operationNode3, null,
+				_editor);
 		setOperationComponent3.setNewComponentName(OPERATION_COMPONENT_3);
 		setOperationComponent3.doAction();
 		assertTrue(setOperationComponent3.hasActionExecutionSucceeded());
@@ -489,12 +479,10 @@ public class TestCGRepositoryDeletion  extends CGTestCase {
 		saveProject();
 	}
 
-
 	/**
 	 * Reload project, Initialize code generation
 	 */
-	public void test9InitializeCodeGeneration()
-	{
+	public void test9InitializeCodeGeneration() {
 		log("test9InitializeCodeGeneration");
 		reloadProject(true);
 		// Save RM for eventual back-synchro to be saved
@@ -504,38 +492,36 @@ public class TestCGRepositoryDeletion  extends CGTestCase {
 		reloadProject(true); // This time, all must be not modified
 		for (FlexoResource resource : _project.getResources().values()) {
 			if (resource instanceof FlexoStorageResource) {
-				assertNotModified((FlexoStorageResource)resource);
+				assertNotModified((FlexoStorageResource) resource);
 			}
 		}
-		File directory = new File(_projectDirectory.getParentFile(),"GeneratedCodeFor"+_project.getProjectName());
+		File directory = new File(_projectDirectory.getParentFile(), "GeneratedCodeFor" + _project.getProjectName());
 		directory.mkdirs();
 		createDefaultGCRepository();
 		codeRepository.setTargetType(CodeType.PROTOTYPE);
 
 	}
 
-
 	/**
 	 * Reload project, Initialize code generation
 	 */
-	public void test10ValidateProject()
-	{
+	public void test10ValidateProject() {
 		log("test10ValidateProject");
 
-		_editor.registerExceptionHandlerFor(ValidateProject.actionType,new FlexoExceptionHandler<ValidateProject>() {
+		_editor.registerExceptionHandlerFor(ValidateProject.actionType, new FlexoExceptionHandler<ValidateProject>() {
 			@Override
-            public boolean handleException(FlexoException exception, ValidateProject action) {
+			public boolean handleException(FlexoException exception, ValidateProject action) {
 				if (action.getIeValidationReport() != null && action.getIeValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from IE:\n"+action.getIeValidationReport().reportAsString());
+					logger.info("Errors reported from IE:\n" + action.getIeValidationReport().reportAsString());
 				}
 				if (action.getWkfValidationReport() != null && action.getWkfValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from WKF:\n"+action.getWkfValidationReport().reportAsString());
+					logger.info("Errors reported from WKF:\n" + action.getWkfValidationReport().reportAsString());
 				}
 				if (action.getDkvValidationReport() != null && action.getDkvValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from DKV:\n"+action.getDkvValidationReport().reportAsString());
+					logger.info("Errors reported from DKV:\n" + action.getDkvValidationReport().reportAsString());
 				}
 				if (action.getDmValidationReport() != null && action.getDmValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from DM:\n"+action.getDmValidationReport().reportAsString());
+					logger.info("Errors reported from DM:\n" + action.getDmValidationReport().reportAsString());
 				}
 				return true;
 			}
@@ -555,54 +541,54 @@ public class TestCGRepositoryDeletion  extends CGTestCase {
 		}
 		fail();*/
 
-
 		// Try to fix errors (GPO: this is not required anymore, prefix is always set on root folder unless done otherwise explicitly)
 		FlexoComponentFolder rootFolder = _project.getFlexoComponentLibrary().getRootFolder();
-		//rootFolder.setComponentPrefix("TST");
+		// rootFolder.setComponentPrefix("TST");
 
 		// To fix errors we need another process and operation on which we will bind the menu
 		AddSubProcess process = AddSubProcess.actionType.makeNewAction(_project.getFlexoWorkflow(), null, _editor);
 		process.setNewProcessName("Process context free");
 		process.doAction();
         defineStatusColumn(process.getNewProcess());
-		DropWKFElement addActivity = DropWKFElement.actionType.makeNewAction(process.getNewProcess().getActivityPetriGraph(), null, _editor);
-        addActivity.setElementType(WKFElementType.NORMAL_ACTIVITY);
-        addActivity.setLocation(100,100);
-        addActivity.doAction();
-        assertTrue(addActivity.hasActionExecutionSucceeded());
-        ActivityNode activityNode = (ActivityNode)addActivity.getObject();
-        logger.info("ActivityNode "+activityNode.getName()+" successfully created");
+		DropWKFElement addActivity = DropWKFElement.actionType
+				.makeNewAction(process.getNewProcess().getActivityPetriGraph(), null, _editor);
+		addActivity.setElementType(WKFElementType.NORMAL_ACTIVITY);
+		addActivity.setLocation(100, 100);
+		addActivity.doAction();
+		assertTrue(addActivity.hasActionExecutionSucceeded());
+		ActivityNode activityNode = (ActivityNode) addActivity.getObject();
+		logger.info("ActivityNode " + activityNode.getName() + " successfully created");
 
-        OpenOperationLevel openOperationLevel = OpenOperationLevel.actionType.makeNewAction(activityNode, null, _editor);
-        openOperationLevel.doAction();
+		OpenOperationLevel openOperationLevel = OpenOperationLevel.actionType.makeNewAction(activityNode, null, _editor);
+		openOperationLevel.doAction();
 
-        DropWKFElement dropOperation2 = DropWKFElement.actionType.makeNewAction(activityNode.getOperationPetriGraph(), null, _editor);
-        dropOperation2.setElementType(WKFElementType.NORMAL_OPERATION);
-        dropOperation2.setLocation(10,50);
-        dropOperation2.doAction();
-        assertTrue(dropOperation2.hasActionExecutionSucceeded());
+		DropWKFElement dropOperation2 = DropWKFElement.actionType.makeNewAction(activityNode.getOperationPetriGraph(), null, _editor);
+		dropOperation2.setElementType(WKFElementType.NORMAL_OPERATION);
+		dropOperation2.setLocation(10, 50);
+		dropOperation2.doAction();
+		assertTrue(dropOperation2.hasActionExecutionSucceeded());
 
-        OperationNode operationNodeForMenu = (OperationNode)dropOperation2.getObject();
-        operationNodeForMenu.setName("OperationNodeForMenu");
+		OperationNode operationNodeForMenu = (OperationNode) dropOperation2.getObject();
+		operationNodeForMenu.setName("OperationNodeForMenu");
 
-        // We also need to set a screen on the operation node
-        AddComponent addComponent = AddComponent.actionType.makeNewAction(_project.getFlexoComponentLibrary(), null, _editor);
-        addComponent.setComponentType(ComponentType.OPERATION_COMPONENT);
-        addComponent.setNewComponentName("DummyComponentForMenu");
-        addComponent.doAction();
-        assertTrue(addComponent.hasActionExecutionSucceeded());
+		// We also need to set a screen on the operation node
+		AddComponent addComponent = AddComponent.actionType.makeNewAction(_project.getFlexoComponentLibrary(), null, _editor);
+		addComponent.setComponentType(ComponentType.OPERATION_COMPONENT);
+		addComponent.setNewComponentName("DummyComponentForMenu");
+		addComponent.doAction();
+		assertTrue(addComponent.hasActionExecutionSucceeded());
 
-        try {
-            operationNodeForMenu.setOperationComponent((OperationComponentDefinition) addComponent.getNewComponent());
-        } catch (OperationAssociatedWithComponentSuccessfully e) {
-            // Normal
-        }
+		try {
+			operationNodeForMenu.setOperationComponent((OperationComponentDefinition) addComponent.getNewComponent());
+		} catch (OperationAssociatedWithComponentSuccessfully e) {
+			// Normal
+		}
 
-        logger.info("OperationNode "+operationNodeForMenu.getName()+" successfully created");
+		logger.info("OperationNode " + operationNodeForMenu.getName() + " successfully created");
 		_project.getFlexoNavigationMenu().getRootMenu().setProcess(operationNodeForMenu.getProcess());
 		_project.getFlexoNavigationMenu().getRootMenu().setOperation(operationNodeForMenu);
 
-		//now we have to define tabs for operations
+		// now we have to define tabs for operations
 		associateTabWithOperations();
 		// Project should be without errors now
 		validateProject = ValidateProject.actionType.makeNewAction(codeRepository, null, _editor);
@@ -614,26 +600,25 @@ public class TestCGRepositoryDeletion  extends CGTestCase {
 
 	}
 
-	
 	/**
 	 * Reload project, Initialize code generation
 	 */
-	public void test11SynchronizeCodeGeneration()
-	{
+	public void test11SynchronizeCodeGeneration() {
 		log("test11SynchronizeCodeGeneration");
 
 		// Synchronize code generation
-		SynchronizeRepositoryCodeGeneration synchronizeCodeGeneration = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(codeRepository, null, _editor);
+		SynchronizeRepositoryCodeGeneration synchronizeCodeGeneration = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(
+				codeRepository, null, _editor);
 		// Do it even if validation failed
 		synchronizeCodeGeneration.setContinueAfterValidation(true);
 		synchronizeCodeGeneration.doAction();
 		if (!synchronizeCodeGeneration.hasActionExecutionSucceeded())
-            fail("Synchronization action failed. Action execution status: "+synchronizeCodeGeneration.getExecutionStatus().name());
+			fail("Synchronization action failed. Action execution status: " + synchronizeCodeGeneration.getExecutionStatus().name());
 		// Write generated files to disk
-		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository,null, _editor);
+		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository, null, _editor);
 		writeToDisk.doAction();
-        if (!writeToDisk.hasActionExecutionSucceeded())
-            fail("Writing to disk has failed. Action execution status: "+writeToDisk.getExecutionStatus().name());
+		if (!writeToDisk.hasActionExecutionSucceeded())
+			fail("Writing to disk has failed. Action execution status: " + writeToDisk.getExecutionStatus().name());
 		saveProject();
 
 	}
@@ -641,8 +626,7 @@ public class TestCGRepositoryDeletion  extends CGTestCase {
 	/**
 	 * Reload project, check all dependancies
 	 */
-	public void test12CheckAllGeneratedResourcesDependancies()
-	{
+	public void test12CheckAllGeneratedResourcesDependancies() {
 		log("test12CheckAllGeneratedResourcesDependancies");
 
 		reloadProject(true);
@@ -720,47 +704,51 @@ public class TestCGRepositoryDeletion  extends CGTestCase {
 	/**
 	 * Reload project, check all resources status
 	 */
-	public void test13CheckGeneratedResourcesStatus()
-	{
+	public void test13CheckGeneratedResourcesStatus() {
 		log("test13CheckGeneratedResourcesStatus");
 
 		logger.info("Synchronize code generation again");
 		// Synchronize code generation again
 		codeRepository.connect();
-		SynchronizeRepositoryCodeGeneration synchronizeCodeGeneration = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(codeRepository, null, _editor);
+		SynchronizeRepositoryCodeGeneration synchronizeCodeGeneration = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(
+				codeRepository, null, _editor);
 		synchronizeCodeGeneration.setContinueAfterValidation(true);
 		synchronizeCodeGeneration.doAction();
 
 		logger.info("Code generation is now synchronized");
 
-		//after a synchronize : all files must normally be up-to-date
-		//but : build.properties and Application.conf.PROD depends on the war name (this is really a deploiement parameter, and it IS NOT a model attribute)
-		//so we can admit that those files needs to be regenerate since the code repository has changed.
+		// after a synchronize : all files must normally be up-to-date
+		// but : build.properties and Application.conf.PROD depends on the war name (this is really a deploiement parameter, and it IS NOT a
+		// model attribute)
+		// so we can admit that those files needs to be regenerate since the code repository has changed.
 		checkThatAllFilesAreUpToDate();
-		//Except(GenerationStatus.GenerationModified,buildPropertiesResource.getCGFile(),appConfProdResource.getCGFile());
+		// Except(GenerationStatus.GenerationModified,buildPropertiesResource.getCGFile(),appConfProdResource.getCGFile());
 
 	}
 
-	public void test14Delete(){
+	public void test14Delete() {
 		codeRepository.delete(true);
-		assertTrue("The deleted repository is not supposed to still in the generated code.",_project.getGeneratedCode().getGeneratedRepositories().size()==0);
+		assertTrue("The deleted repository is not supposed to still in the generated code.", _project.getGeneratedCode()
+				.getGeneratedRepositories().size() == 0);
 		saveProject();
-		OperationComponentJavaFileResource generatedFile = (OperationComponentJavaFileResource)_project.resourceForKey(ResourceType.JAVA_FILE, codeRepository.getName()+"."+OPERATION_COMPONENT_1);
+		OperationComponentJavaFileResource generatedFile = (OperationComponentJavaFileResource) _project.resourceForKey(
+				ResourceType.JAVA_FILE, codeRepository.getName() + "." + OPERATION_COMPONENT_1);
 		assertNull("A generated resource of the deleted repository is supposed to be null after deletion", generatedFile);
-		assertFalse("The physical directory with Generated code data is supposed to be physically deleted after a delete and save",new File(_projectDirectory,"GeneratedCode/GeneratedCode").exists());
-		
+		assertFalse("The physical directory with Generated code data is supposed to be physically deleted after a delete and save",
+				new File(_projectDirectory, "GeneratedCode/GeneratedCode").exists());
+
 	}
-	
-	private class DebugBackwardSynchronizationHook implements BackwardSynchronizationHook
-	{
-		private class BackSynchroEntry
-		{
+
+	private class DebugBackwardSynchronizationHook implements BackwardSynchronizationHook {
+		private class BackSynchroEntry {
 			protected FlexoResource resource1;
 			protected FlexoResource resource2;
+
 			protected BackSynchroEntry(FlexoResource aResource1, FlexoResource aResource2) {
 				resource1 = aResource1;
 				resource2 = aResource2;
 			}
+
 			protected boolean backSynchroConcerns(FlexoResource aResource1, FlexoResource aResource2) {
 				return ((resource1 == aResource1) && (resource2 == aResource2));
 			}
@@ -768,48 +756,41 @@ public class TestCGRepositoryDeletion  extends CGTestCase {
 
 		private Vector<BackSynchroEntry> entries;
 
-		protected DebugBackwardSynchronizationHook()
-		{
+		protected DebugBackwardSynchronizationHook() {
 			entries = new Vector<BackSynchroEntry>();
 			clear();
 		}
 
-		protected void clear()
-		{
+		protected void clear() {
 			entries.clear();
 		}
 
 		@Override
-		public void notifyBackwardSynchronization(FlexoResource resource1, FlexoResource resource2)
-		{
-			System.out.println("Resource "+resource1+" is to be back-synchronized with "+resource2);
-			//(new Exception()).printStackTrace();
-			entries.add(new BackSynchroEntry(resource1,resource2));
+		public void notifyBackwardSynchronization(FlexoResource resource1, FlexoResource resource2) {
+			System.out.println("Resource " + resource1 + " is to be back-synchronized with " + resource2);
+			// (new Exception()).printStackTrace();
+			entries.add(new BackSynchroEntry(resource1, resource2));
 		}
 
-		protected void assertBackSynchronizationHasBeenPerformed(FlexoResource aResource1, FlexoResource aResource2)
-		{
+		protected void assertBackSynchronizationHasBeenPerformed(FlexoResource aResource1, FlexoResource aResource2) {
 			for (BackSynchroEntry entry : entries) {
-				if (entry.backSynchroConcerns(aResource1, aResource2)) return;
+				if (entry.backSynchroConcerns(aResource1, aResource2))
+					return;
 			}
-			fail("RESOURCE synchonization problem: "+aResource1+" MUST have been back-synchronized with "+aResource2);
+			fail("RESOURCE synchonization problem: " + aResource1 + " MUST have been back-synchronized with " + aResource2);
 		}
 
-		protected void assertNoBackSynchronization()
-		{
+		protected void assertNoBackSynchronization() {
 			assertBackSynchronizationCount(0);
 		}
 
-		protected void assertBackSynchronizationCount(int count)
-		{
+		protected void assertBackSynchronizationCount(int count) {
 			assertEquals(getBackSynchronizationCount(), count);
 		}
 
-		protected int getBackSynchronizationCount()
-		{
+		protected int getBackSynchronizationCount() {
 			return entries.size();
 		}
 	}
-
 
 }

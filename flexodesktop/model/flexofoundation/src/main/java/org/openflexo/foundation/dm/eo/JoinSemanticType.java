@@ -39,160 +39,140 @@ import org.openflexo.foundation.dm.eo.model.EORelationship;
  * @author sguerin
  * 
  */
-public abstract class JoinSemanticType extends FlexoObject implements StringConvertable, ChoiceList
-{
+public abstract class JoinSemanticType extends FlexoObject implements StringConvertable, ChoiceList {
 
-    private static final Logger logger = Logger.getLogger(JoinSemanticType.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(JoinSemanticType.class.getPackage().getName());
 
-    public static final JoinSemanticType INNER = new InnerJoin();
+	public static final JoinSemanticType INNER = new InnerJoin();
 
-    public static final JoinSemanticType FULL_OUTER = new FullOuterJoin();
+	public static final JoinSemanticType FULL_OUTER = new FullOuterJoin();
 
-    public static final JoinSemanticType LEFT_OUTER = new LeftOuterJoin();
+	public static final JoinSemanticType LEFT_OUTER = new LeftOuterJoin();
 
-    public static final JoinSemanticType RIGHT_OUTER = new RightOuterJoin();
+	public static final JoinSemanticType RIGHT_OUTER = new RightOuterJoin();
 
-    public static final StringEncoder.Converter<JoinSemanticType> joinSemanticTypeConverter = new Converter<JoinSemanticType>(JoinSemanticType.class) {
+	public static final StringEncoder.Converter<JoinSemanticType> joinSemanticTypeConverter = new Converter<JoinSemanticType>(
+			JoinSemanticType.class) {
 
-        @Override
-		public JoinSemanticType convertFromString(String value)
-        {
-            return get(value);
-        }
+		@Override
+		public JoinSemanticType convertFromString(String value) {
+			return get(value);
+		}
 
-        @Override
-		public String convertToString(JoinSemanticType value)
-        {
-            return value.getName();
-        }
+		@Override
+		public String convertToString(JoinSemanticType value) {
+			return value.getName();
+		}
 
-    };
+	};
 
-    protected static class InnerJoin extends JoinSemanticType
-    {
-        @Override
-		public String getName()
-        {
-            return "inner_join";
-        }
+	protected static class InnerJoin extends JoinSemanticType {
+		@Override
+		public String getName() {
+			return "inner_join";
+		}
 
-        @Override
-		public String getEOCode()
-        {
-            return EORelationship.InnerJoin;
-        };
-    }
+		@Override
+		public String getEOCode() {
+			return EORelationship.InnerJoin;
+		};
+	}
 
-    protected static class FullOuterJoin extends JoinSemanticType
-    {
-        @Override
-		public String getName()
-        {
-            return "full_outer";
-        }
+	protected static class FullOuterJoin extends JoinSemanticType {
+		@Override
+		public String getName() {
+			return "full_outer";
+		}
 
-        @Override
-		public String getEOCode()
-        {
-            return EORelationship.FullOuterJoin;
-        }
-    }
+		@Override
+		public String getEOCode() {
+			return EORelationship.FullOuterJoin;
+		}
+	}
 
-    protected static class LeftOuterJoin extends JoinSemanticType
-    {
-        @Override
-		public String getName()
-        {
-            return "left_outer";
-        }
+	protected static class LeftOuterJoin extends JoinSemanticType {
+		@Override
+		public String getName() {
+			return "left_outer";
+		}
 
-        @Override
-		public String getEOCode()
-        {
-            return EORelationship.LeftOuterJoin;
-        }
-    }
+		@Override
+		public String getEOCode() {
+			return EORelationship.LeftOuterJoin;
+		}
+	}
 
-    protected static class RightOuterJoin extends JoinSemanticType
-    {
-        @Override
-		public String getName()
-        {
-            return "right_outer";
-        }
+	protected static class RightOuterJoin extends JoinSemanticType {
+		@Override
+		public String getName() {
+			return "right_outer";
+		}
 
-        @Override
-		public String getEOCode()
-        {
-            return EORelationship.RightOuterJoin;
-        }
-    }
+		@Override
+		public String getEOCode() {
+			return EORelationship.RightOuterJoin;
+		}
+	}
 
-    public abstract String getName();
+	public abstract String getName();
 
-    public abstract String getEOCode();
+	public abstract String getEOCode();
 
-    public String getLocalizedName()
-    {
-        return FlexoLocalization.localizedForKey(getName());
-    }
+	public String getLocalizedName() {
+		return FlexoLocalization.localizedForKey(getName());
+	}
 
-    public static JoinSemanticType get(String joinSemantic)
-    {
-        if (joinSemantic==null)
-            return null;
-        for (Enumeration e = INNER.getAvailableValues().elements(); e.hasMoreElements();) {
-            JoinSemanticType temp = (JoinSemanticType) e.nextElement();
-            if (temp.getName().equals(joinSemantic)) {
-                return temp;
-            }
-        }
+	public static JoinSemanticType get(String joinSemantic) {
+		if (joinSemantic == null)
+			return null;
+		for (Enumeration e = INNER.getAvailableValues().elements(); e.hasMoreElements();) {
+			JoinSemanticType temp = (JoinSemanticType) e.nextElement();
+			if (temp.getName().equals(joinSemantic)) {
+				return temp;
+			}
+		}
 
-        if (logger.isLoggable(Level.WARNING))
-            logger.warning("Could not find JoinSemantic named " + joinSemantic);
-        return null;
-    }
+		if (logger.isLoggable(Level.WARNING))
+			logger.warning("Could not find JoinSemantic named " + joinSemantic);
+		return null;
+	}
 
-    public static JoinSemanticType getJoinSemanticType(String joinSemanticEOEcode)
-    {
-        if (joinSemanticEOEcode==null)
-            return null;
-        for (Enumeration e = INNER.getAvailableValues().elements(); e.hasMoreElements();) {
-            JoinSemanticType temp = (JoinSemanticType) e.nextElement();
-            if (temp.getEOCode().equals(joinSemanticEOEcode)) {
-                return temp;
-            }
-        }
+	public static JoinSemanticType getJoinSemanticType(String joinSemanticEOEcode) {
+		if (joinSemanticEOEcode == null)
+			return null;
+		for (Enumeration e = INNER.getAvailableValues().elements(); e.hasMoreElements();) {
+			JoinSemanticType temp = (JoinSemanticType) e.nextElement();
+			if (temp.getEOCode().equals(joinSemanticEOEcode)) {
+				return temp;
+			}
+		}
 
-        if (logger.isLoggable(Level.WARNING))
-            logger.warning("Could not find JoinSemantic coded as " + joinSemanticEOEcode);
-        return null;
-    }
+		if (logger.isLoggable(Level.WARNING))
+			logger.warning("Could not find JoinSemantic coded as " + joinSemanticEOEcode);
+		return null;
+	}
 
-    private Vector<JoinSemanticType> _availableValues = null;
+	private Vector<JoinSemanticType> _availableValues = null;
 
-    @Override
-	public Vector<JoinSemanticType> getAvailableValues()
-    {
-        if (_availableValues == null) {
-            _availableValues = new Vector<JoinSemanticType>();
-            _availableValues.add(INNER);
-            _availableValues.add(FULL_OUTER);
-            _availableValues.add(LEFT_OUTER);
-            _availableValues.add(RIGHT_OUTER);
-        }
-        return _availableValues;
-    }
+	@Override
+	public Vector<JoinSemanticType> getAvailableValues() {
+		if (_availableValues == null) {
+			_availableValues = new Vector<JoinSemanticType>();
+			_availableValues.add(INNER);
+			_availableValues.add(FULL_OUTER);
+			_availableValues.add(LEFT_OUTER);
+			_availableValues.add(RIGHT_OUTER);
+		}
+		return _availableValues;
+	}
 
-    @Override
-	public StringEncoder.Converter getConverter()
-    {
-        return joinSemanticTypeConverter;
-    }
+	@Override
+	public StringEncoder.Converter getConverter() {
+		return joinSemanticTypeConverter;
+	}
 
-    public static Vector availableValues()
-    {
-        return INNER.getAvailableValues();
-    }
+	public static Vector availableValues() {
+		return INNER.getAvailableValues();
+	}
 
 }

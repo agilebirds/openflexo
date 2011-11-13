@@ -21,11 +21,28 @@
 package org.openflexo.ws.client.PPMWebService;
 
 public interface PPMWebService_PortType extends java.rmi.Remote {
-    public org.openflexo.ws.client.PPMWebService.PPMRole[] getRoles(java.lang.String login, java.lang.String md5Password) throws java.rmi.RemoteException, org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException;
-    public org.openflexo.ws.client.PPMWebService.PPMProcess[] getProcesses(java.lang.String login, java.lang.String md5Password) throws java.rmi.RemoteException, org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException;
-    public byte[] getScreenshoot(java.lang.String login, java.lang.String md5Password, java.lang.String processVersionURI) throws java.rmi.RemoteException, org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException;
-    public org.openflexo.ws.client.PPMWebService.PPMProcess[] refreshProcesses(java.lang.String login, java.lang.String md5Password, java.lang.String[] uris) throws java.rmi.RemoteException, org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException;
-    public org.openflexo.ws.client.PPMWebService.PPMRole[] refreshRoles(java.lang.String login, java.lang.String md5Password, java.lang.String[] uris) throws java.rmi.RemoteException, org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException;
-    public org.openflexo.ws.client.PPMWebService.CLProjectDescriptor[] getAvailableProjects(java.lang.String login, java.lang.String md5Password) throws java.rmi.RemoteException, org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException;
-    public java.lang.String uploadPrj(org.openflexo.ws.client.PPMWebService.CLProjectDescriptor targetProject, javax.activation.DataHandler zip, java.lang.String uploadComment, java.lang.String login) throws java.rmi.RemoteException, org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException;
+	public org.openflexo.ws.client.PPMWebService.PPMRole[] getRoles(java.lang.String login, java.lang.String md5Password)
+			throws java.rmi.RemoteException, org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException;
+
+	public org.openflexo.ws.client.PPMWebService.PPMProcess[] getProcesses(java.lang.String login, java.lang.String md5Password)
+			throws java.rmi.RemoteException, org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException;
+
+	public byte[] getScreenshoot(java.lang.String login, java.lang.String md5Password, java.lang.String processVersionURI)
+			throws java.rmi.RemoteException, org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException;
+
+	public org.openflexo.ws.client.PPMWebService.PPMProcess[] refreshProcesses(java.lang.String login, java.lang.String md5Password,
+			java.lang.String[] uris) throws java.rmi.RemoteException,
+			org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException;
+
+	public org.openflexo.ws.client.PPMWebService.PPMRole[] refreshRoles(java.lang.String login, java.lang.String md5Password,
+			java.lang.String[] uris) throws java.rmi.RemoteException,
+			org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException;
+
+	public org.openflexo.ws.client.PPMWebService.CLProjectDescriptor[] getAvailableProjects(java.lang.String login,
+			java.lang.String md5Password) throws java.rmi.RemoteException,
+			org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException;
+
+	public java.lang.String uploadPrj(org.openflexo.ws.client.PPMWebService.CLProjectDescriptor targetProject,
+			javax.activation.DataHandler zip, java.lang.String uploadComment, java.lang.String login) throws java.rmi.RemoteException,
+			org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException;
 }

@@ -27,39 +27,34 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.sg.implmodel.ImplementationModel;
 import org.openflexo.foundation.sg.implmodel.TechnologyModuleImplementation;
 
-
-public class ImplementationModelElement extends BrowserElement
-{
-	public ImplementationModelElement(ImplementationModel implModel, ProjectBrowser browser, BrowserElement parent)
-	{
-		super(implModel, BrowserElementType.IMPLEMENTATION_MODEL, browser,parent);
+public class ImplementationModelElement extends BrowserElement {
+	public ImplementationModelElement(ImplementationModel implModel, ProjectBrowser browser, BrowserElement parent) {
+		super(implModel, BrowserElementType.IMPLEMENTATION_MODEL, browser, parent);
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
+	protected void buildChildrenVector() {
 		for (TechnologyModuleImplementation technologyModuleImplementation : getImplementationModel().getTechnologyModules())
 			addToChilds(technologyModuleImplementation);
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return getImplementationModel().getName();
 	}
 
-	public ImplementationModel getImplementationModel()
-	{
-		return (ImplementationModel)getObject();
+	public ImplementationModel getImplementationModel() {
+		return (ImplementationModel) getObject();
 	}
 
 	/**
 	 * Overrides update
-	 * @see org.openflexo.sgmodule.controller.browser.SGBrowserElement#update(org.openflexo.foundation.FlexoObservable, org.openflexo.foundation.DataModification)
+	 * 
+	 * @see org.openflexo.sgmodule.controller.browser.SGBrowserElement#update(org.openflexo.foundation.FlexoObservable,
+	 *      org.openflexo.foundation.DataModification)
 	 */
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		super.update(observable, dataModification);
 	}
 }

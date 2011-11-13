@@ -23,61 +23,53 @@ import java.util.Hashtable;
 
 import org.openflexo.xmlcode.XMLSerializable;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class OO3NamedStyles implements XMLSerializable
-{
+public class OO3NamedStyles implements XMLSerializable {
 
-    public static final String HIGHLIGHT = "Highlight";
+	public static final String HIGHLIGHT = "Highlight";
 
-    public static final String CITATION = "Citation";
+	public static final String CITATION = "Citation";
 
-    public static final String EMPHASIS = "Emphasis";
+	public static final String EMPHASIS = "Emphasis";
 
-    public Hashtable<String,OO3NamedStyle> namedStyles;
+	public Hashtable<String, OO3NamedStyle> namedStyles;
 
-    public OO3NamedStyles()
-    {
-        super();
-        namedStyles = new Hashtable<String,OO3NamedStyle>();
-        add(HIGHLIGHT, OO3Style.getHighLightStyle());
-        add(CITATION, OO3Style.getCitationStyle());
-        add(EMPHASIS, OO3Style.getEmphasisStyle());
-    }
+	public OO3NamedStyles() {
+		super();
+		namedStyles = new Hashtable<String, OO3NamedStyle>();
+		add(HIGHLIGHT, OO3Style.getHighLightStyle());
+		add(CITATION, OO3Style.getCitationStyle());
+		add(EMPHASIS, OO3Style.getEmphasisStyle());
+	}
 
-    public void add(String name, OO3Style style)
-    {
-        namedStyles.put(name, new OO3NamedStyle(name, style));
-    }
+	public void add(String name, OO3Style style) {
+		namedStyles.put(name, new OO3NamedStyle(name, style));
+	}
 
-    public static class OO3NamedStyle implements XMLSerializable
-    {
-        public String name;
+	public static class OO3NamedStyle implements XMLSerializable {
+		public String name;
 
-        public OO3Style style;
+		public OO3Style style;
 
-        public OO3NamedStyle()
-        {
-            super();
-        }
+		public OO3NamedStyle() {
+			super();
+		}
 
-        public OO3NamedStyle(String n, OO3Style st)
-        {
-            this();
-            this.style = st;
-            this.name = n;
-        }
+		public OO3NamedStyle(String n, OO3Style st) {
+			this();
+			this.style = st;
+			this.name = n;
+		}
 
-    }
+	}
 
-    public OO3NamedStyle styleWithName(String styleName)
-    {
-        return namedStyles.get(styleName);
-    }
+	public OO3NamedStyle styleWithName(String styleName) {
+		return namedStyles.get(styleName);
+	}
 
 }

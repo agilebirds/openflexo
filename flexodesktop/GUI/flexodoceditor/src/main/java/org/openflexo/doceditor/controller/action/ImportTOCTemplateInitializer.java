@@ -31,56 +31,50 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-public class ImportTOCTemplateInitializer extends ActionInitializer
-{
+public class ImportTOCTemplateInitializer extends ActionInitializer {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-    ImportTOCTemplateInitializer(DEControllerActionInitializer actionInitializer)
-    {
-        super(ImportTOCTemplate.actionType, actionInitializer);
-    }
+	ImportTOCTemplateInitializer(DEControllerActionInitializer actionInitializer) {
+		super(ImportTOCTemplate.actionType, actionInitializer);
+	}
 
-    @Override
-	protected DEControllerActionInitializer getControllerActionInitializer()
-    {
-        return (DEControllerActionInitializer) super.getControllerActionInitializer();
-    }
+	@Override
+	protected DEControllerActionInitializer getControllerActionInitializer() {
+		return (DEControllerActionInitializer) super.getControllerActionInitializer();
+	}
 
-    @Override
-    protected FlexoActionInitializer<ImportTOCTemplate> getDefaultInitializer()
-    {
-        return new FlexoActionInitializer<ImportTOCTemplate>() {
-            @Override
-			public boolean run(ActionEvent e, ImportTOCTemplate action)
-            {
-            	
-            	JFileChooser chooser = new JFileChooser();
-            	chooser.setDialogType(JFileChooser.OPEN_DIALOG);
-            	chooser.setDialogTitle(FlexoLocalization.localizedForKey("select_toc_template", chooser));
-            	
-            	
-            	File src = null;
-                int returnVal = chooser.showOpenDialog(null);
-                if (returnVal == JFileChooser.CANCEL_OPTION)
-                    return false;
-                if (returnVal == JFileChooser.APPROVE_OPTION) {
-                     src = chooser.getSelectedFile();
-                } else {
-                    return false;
-                }
+	@Override
+	protected FlexoActionInitializer<ImportTOCTemplate> getDefaultInitializer() {
+		return new FlexoActionInitializer<ImportTOCTemplate>() {
+			@Override
+			public boolean run(ActionEvent e, ImportTOCTemplate action) {
 
-                
-                if (!src.exists()) return false;
-                if (!src.isFile()) return false;
-					
-                action.setSourceFile(src);
-                return true;
-            }
-            
-        };
-    }
+				JFileChooser chooser = new JFileChooser();
+				chooser.setDialogType(JFileChooser.OPEN_DIALOG);
+				chooser.setDialogTitle(FlexoLocalization.localizedForKey("select_toc_template", chooser));
 
+				File src = null;
+				int returnVal = chooser.showOpenDialog(null);
+				if (returnVal == JFileChooser.CANCEL_OPTION)
+					return false;
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					src = chooser.getSelectedFile();
+				} else {
+					return false;
+				}
+
+				if (!src.exists())
+					return false;
+				if (!src.isFile())
+					return false;
+
+				action.setSourceFile(src);
+				return true;
+			}
+
+		};
+	}
 
 }

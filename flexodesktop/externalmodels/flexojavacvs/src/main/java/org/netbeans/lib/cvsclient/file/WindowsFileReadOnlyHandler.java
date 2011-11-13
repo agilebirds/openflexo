@@ -25,35 +25,32 @@ import java.io.IOException;
 import org.netbeans.lib.cvsclient.util.BugLog;
 
 /**
- * @author  Thomas Singer
+ * @author Thomas Singer
  * @version Nov 17, 2001
  */
-public class WindowsFileReadOnlyHandler
-        implements FileReadOnlyHandler {
-    // Implemented ============================================================
+public class WindowsFileReadOnlyHandler implements FileReadOnlyHandler {
+	// Implemented ============================================================
 
-    /**
-     * Makes the specified file read-only or writable, depending on the specified
-     * readOnly flag.
-     * @throws IOException if something gone wrong
-     */
-    @Override
+	/**
+	 * Makes the specified file read-only or writable, depending on the specified readOnly flag.
+	 * 
+	 * @throws IOException
+	 *             if something gone wrong
+	 */
+	@Override
 	public void setFileReadOnly(File file, boolean readOnly) throws IOException {
-        if (file == null) {
-            throw new IllegalArgumentException("file must not be null"); // NOI18N
-        }
+		if (file == null) {
+			throw new IllegalArgumentException("file must not be null"); // NOI18N
+		}
 
-        try {
-            String[] arguments = {
-                "attrib", // NOI18N
-                readOnly ? "+r": "-r", // NOI18N
-                file.getName()
-            };
-            Process process = Runtime.getRuntime().exec(arguments, null, file.getParentFile());
-            process.waitFor();
-        }
-        catch (InterruptedException ex) {
-            BugLog.getInstance().showException(ex);
-        }
-    }
+		try {
+			String[] arguments = { "attrib", // NOI18N
+					readOnly ? "+r" : "-r", // NOI18N
+					file.getName() };
+			Process process = Runtime.getRuntime().exec(arguments, null, file.getParentFile());
+			process.waitFor();
+		} catch (InterruptedException ex) {
+			BugLog.getInstance().showException(ex);
+		}
+	}
 }

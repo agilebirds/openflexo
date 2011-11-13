@@ -38,76 +38,73 @@ import org.openflexo.foundation.wkf.edge.FlexoPostCondition;
 import org.openflexo.foundation.wkf.node.LOOPOperator;
 import org.openflexo.foundation.wkf.node.PetriGraphNode;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class OperatorLoopElement extends OperatorNodeElement implements ExpansionSynchronizedElement
-{
+public class OperatorLoopElement extends OperatorNodeElement implements ExpansionSynchronizedElement {
 
-    /**
-     * @param object
-     * @param browser
-     */
-    public OperatorLoopElement(LOOPOperator object, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(object, BrowserElementType.OPERATOR_LOOP_NODE, browser,parent);
-    }
+	/**
+	 * @param object
+	 * @param browser
+	 */
+	public OperatorLoopElement(LOOPOperator object, ProjectBrowser browser, BrowserElement parent) {
+		super(object, BrowserElementType.OPERATOR_LOOP_NODE, browser, parent);
+	}
 
 	@Override
 	public TreePath getTreePath() {
 		return super.getTreePath();
 	}
 
-    private boolean isObserving = false;
+	private boolean isObserving = false;
 
-    private void addObserver()
-    {
-        if (isObserving)
-            return;
-        if (getLOOPOperator().getExecutionPetriGraph()!=null) {
-        	getLOOPOperator().getExecutionPetriGraph().addObserver(this);
-        	isObserving = true;
-        }
-    }
-    @Override
-    public void delete() {
-    	if (getLOOPOperator().getExecutionPetriGraph()!=null) {
-        	getLOOPOperator().getExecutionPetriGraph().deleteObserver(this);
-        	isObserving = false;
-        }
-    	super.delete();
-    }
+	private void addObserver() {
+		if (isObserving)
+			return;
+		if (getLOOPOperator().getExecutionPetriGraph() != null) {
+			getLOOPOperator().getExecutionPetriGraph().addObserver(this);
+			isObserving = true;
+		}
+	}
 
-    @Override
-    protected void buildChildrenVector() {
-    	if (getLOOPOperator().hasExecutionPetriGraph()) {
-    		addObserver();
-    		for(Enumeration<PetriGraphNode> en = getLOOPOperator().getExecutionPetriGraph().getSortedNodes();en.hasMoreElements();) {
-    			PetriGraphNode element = en.nextElement();
-                if (!element.isGrouped())
-                	addToChilds(element);
-    		}
-    		for(WKFGroup group:getLOOPOperator().getExecutionPetriGraph().getGroups())
-    			addToChilds(group);
-    	}
-    	super.buildChildrenVector();
-    }
+	@Override
+	public void delete() {
+		if (getLOOPOperator().getExecutionPetriGraph() != null) {
+			getLOOPOperator().getExecutionPetriGraph().deleteObserver(this);
+			isObserving = false;
+		}
+		super.delete();
+	}
 
-    @Override
-    public boolean isNameEditable() {
-    	return true;
-    }
+	@Override
+	protected void buildChildrenVector() {
+		if (getLOOPOperator().hasExecutionPetriGraph()) {
+			addObserver();
+			for (Enumeration<PetriGraphNode> en = getLOOPOperator().getExecutionPetriGraph().getSortedNodes(); en.hasMoreElements();) {
+				PetriGraphNode element = en.nextElement();
+				if (!element.isGrouped())
+					addToChilds(element);
+			}
+			for (WKFGroup group : getLOOPOperator().getExecutionPetriGraph().getGroups())
+				addToChilds(group);
+		}
+		super.buildChildrenVector();
+	}
 
-    public LOOPOperator getLOOPOperator() {
-    	return (LOOPOperator) getObject();
-    }
+	@Override
+	public boolean isNameEditable() {
+		return true;
+	}
 
-    @Override
-    public void setName(String name) {
-    	getLOOPOperator().setName(name);
-    }
+	public LOOPOperator getLOOPOperator() {
+		return (LOOPOperator) getObject();
+	}
+
+	@Override
+	public void setName(String name) {
+		getLOOPOperator().setName(name);
+	}
 
 	@Override
 	public void collapse() {
@@ -129,8 +126,7 @@ public class OperatorLoopElement extends OperatorNodeElement implements Expansio
 	@Override
 	public boolean isExpansionSynchronizedWithData() {
 		if (_browser.getSelectionManager() != null) {
-			return (getLOOPOperator().getProcess() == _browser
-					.getSelectionManager().getRootFocusedObject());
+			return (getLOOPOperator().getProcess() == _browser.getSelectionManager().getRootFocusedObject());
 		}
 		return false;
 	}
@@ -138,28 +134,28 @@ public class OperatorLoopElement extends OperatorNodeElement implements Expansio
 	@Override
 	public boolean requiresExpansionFor(BrowserElement next) {
 		if (next instanceof PreConditionElement) {
-			return ((PreConditionElement)next).getPreCondition().isContainedIn(getLOOPOperator());
+			return ((PreConditionElement) next).getPreCondition().isContainedIn(getLOOPOperator());
 		} else if (next instanceof PostConditionElement) {
-			FlexoPostCondition edge = ((PostConditionElement) next)
-					.getPostCondition();
-			if ((edge.getNextNode()!=null && edge.getNextNode().isContainedIn(getLOOPOperator()))
-					&& (edge.getStartNode()!=null && edge.getStartNode().isContainedIn(getLOOPOperator()))) {
+			FlexoPostCondition edge = ((PostConditionElement) next).getPostCondition();
+			if ((edge.getNextNode() != null && edge.getNextNode().isContainedIn(getLOOPOperator()))
+					&& (edge.getStartNode() != null && edge.getStartNode().isContainedIn(getLOOPOperator()))) {
 				return true;
 			}
 			return false;
 		} else if (next instanceof PortMapElement) {
-             return false;
-        } else if (next instanceof MessageElement) {
-             return false;
-        } else {
-             return true;
-        }
+			return false;
+		} else if (next instanceof MessageElement) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (_browser != null) {
-			if (dataModification instanceof ObjectVisibilityChanged || dataModification instanceof PetriGraphHasBeenClosed || dataModification instanceof PetriGraphHasBeenOpened) {
+			if (dataModification instanceof ObjectVisibilityChanged || dataModification instanceof PetriGraphHasBeenClosed
+					|| dataModification instanceof PetriGraphHasBeenOpened) {
 				_browser.notifyExpansionChanged(this);
 			}
 		}

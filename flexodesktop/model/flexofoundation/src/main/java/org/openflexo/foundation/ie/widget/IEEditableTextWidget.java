@@ -34,196 +34,182 @@ import org.openflexo.foundation.ie.dm.IETextFieldCssClassChange;
 import org.openflexo.foundation.ie.util.TextFieldClass;
 import org.openflexo.foundation.rm.FlexoProject;
 
-
 /**
  * Represents a dynamic component used to edit text
  * 
  * @author sguerin
  * 
  */
-public abstract class IEEditableTextWidget extends IEControlWidget implements IEEditableFieldWidget, IEWidgetWithValueList, IEWidgetWithMainBinding
-{
+public abstract class IEEditableTextWidget extends IEControlWidget implements IEEditableFieldWidget, IEWidgetWithValueList,
+		IEWidgetWithMainBinding {
 
-    private String _value;
+	private String _value;
 
-    private String _fieldLabel;
+	private String _fieldLabel;
 
-    private TextFieldClass _tfcssClass;
+	private TextFieldClass _tfcssClass;
 
-    private boolean _isMandatory;
+	private boolean _isMandatory;
 
-    private BindingValue _bindingValue; // Could be considered as a BindingValue because defined as GET_SET
+	private BindingValue _bindingValue; // Could be considered as a BindingValue because defined as GET_SET
 
-    public static final String BINDING_VALUE = "bindingValue";
+	public static final String BINDING_VALUE = "bindingValue";
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public IEEditableTextWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj)
-    {
-        super(woComponent, parent, prj);
-    }
+	public IEEditableTextWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj) {
+		super(woComponent, parent, prj);
+	}
 
-    public boolean getIsMandatory()
-    {
-        return _isMandatory;
-    }
+	public boolean getIsMandatory() {
+		return _isMandatory;
+	}
 
-    public void setIsMandatory(boolean value)
-    {
-        _isMandatory = value;
-        setChanged();
-        notifyObservers(new IEDataModification("isMandatory",null,new Boolean(value)));
-    }
+	public void setIsMandatory(boolean value) {
+		_isMandatory = value;
+		setChanged();
+		notifyObservers(new IEDataModification("isMandatory", null, new Boolean(value)));
+	}
 
-    public WidgetBindingDefinition getBindingValueDefinition()
-    {
-        return WidgetBindingDefinition.get(this, BINDING_VALUE, String.class, BindingDefinitionType.GET_SET, true);
-    }
+	public WidgetBindingDefinition getBindingValueDefinition() {
+		return WidgetBindingDefinition.get(this, BINDING_VALUE, String.class, BindingDefinitionType.GET_SET, true);
+	}
 
-    public final BindingValue getBindingValue()
-    {
-        if (isBeingCloned())
-            return null;
-        return _bindingValue;
-    }
-    public String getBindingValuePath(){
-    		return _bindingValue.getCodeStringRepresentation();
-    }
+	public final BindingValue getBindingValue() {
+		if (isBeingCloned())
+			return null;
+		return _bindingValue;
+	}
 
-    public final void setBindingValue(BindingValue bindingValue)
-    {
-    	BindingValue oldBindingValue = _bindingValue;
-        _bindingValue = bindingValue;
-        if (_bindingValue != null) {
-            _bindingValue.setOwner(this);
-            _bindingValue.setBindingDefinition(getBindingValueDefinition());
-        }
-        setChanged();
-        notifyObservers(new IEDataModification(BINDING_VALUE, oldBindingValue, bindingValue));
-    }
+	public String getBindingValuePath() {
+		return _bindingValue.getCodeStringRepresentation();
+	}
 
-    public String getFieldLabel()
-    {
-        return _fieldLabel;
-    }
+	public final void setBindingValue(BindingValue bindingValue) {
+		BindingValue oldBindingValue = _bindingValue;
+		_bindingValue = bindingValue;
+		if (_bindingValue != null) {
+			_bindingValue.setOwner(this);
+			_bindingValue.setBindingDefinition(getBindingValueDefinition());
+		}
+		setChanged();
+		notifyObservers(new IEDataModification(BINDING_VALUE, oldBindingValue, bindingValue));
+	}
 
-    public void setFieldLabel(String label)
-    {
-        _fieldLabel = label;
-        setChanged();
-        notifyObservers(new IEDataModification("fieldLabel",null,label));
-    }
+	public String getFieldLabel() {
+		return _fieldLabel;
+	}
 
-    public TextFieldClass getTfcssClass()
-    {
-        return _tfcssClass;
-    }
+	public void setFieldLabel(String label) {
+		_fieldLabel = label;
+		setChanged();
+		notifyObservers(new IEDataModification("fieldLabel", null, label));
+	}
 
-    public void setTfcssClass(TextFieldClass css)
-    {
-        _tfcssClass = css;
-        setChanged();
-        notifyObservers(new IETextFieldCssClassChange(css));
-    }
+	public TextFieldClass getTfcssClass() {
+		return _tfcssClass;
+	}
 
-    public String getValue()
-    {
-        return _value;
-    }
+	public void setTfcssClass(TextFieldClass css) {
+		_tfcssClass = css;
+		setChanged();
+		notifyObservers(new IETextFieldCssClassChange(css));
+	}
 
-    public void setValue(String value)
-    {
-        if (value!=null && value.trim().length()==0)
-            value = null;
-        this._value = value;
-        setChanged();
-        notifyObservers(new IEDataModification("value",null,value));
-    }
-    
-    /*public static class EditableFieldMustHaveABindingValue extends ValidationRule
-    {
-        public EditableFieldMustHaveABindingValue()
-        {
-            super(IEEditableTextWidget.class, "editable_fields_must_have_a_value");
-        }
+	public String getValue() {
+		return _value;
+	}
 
-        public ValidationIssue applyValidation(final Validable object)
-        {
-            final IEEditableTextWidget tf = (IEEditableTextWidget) object;
-            if (tf.getBindingValue() == null) {
-                ValidationError error = new ValidationError(this, object, "editable_fields_must_have_a_value");
-                Vector allAvailableBV = tf.getBindingValueDefinition().searchMatchingBindingValue(tf,2);
-                for (int i=0; i<allAvailableBV.size(); i++) {
-                    BindingValue bv = (BindingValue) allAvailableBV.elementAt(i);
-                    error.addToFixProposals(new SetBinding(bv));
-                 }
-                return error;
-            }
-            return null;
-        }
-    }
+	public void setValue(String value) {
+		if (value != null && value.trim().length() == 0)
+			value = null;
+		this._value = value;
+		setChanged();
+		notifyObservers(new IEDataModification("value", null, value));
+	}
 
-    public static class SetBinding extends FixProposal
-    {
-        public BindingValue bindingValue;
+	/*public static class EditableFieldMustHaveABindingValue extends ValidationRule
+	{
+	    public EditableFieldMustHaveABindingValue()
+	    {
+	        super(IEEditableTextWidget.class, "editable_fields_must_have_a_value");
+	    }
 
-        public SetBinding(BindingValue aBindingValue)
-        {
-            super("set_binding_value_to_($bindingValue.stringRepresentation)");
-            bindingValue = aBindingValue;
-        }
+	    public ValidationIssue applyValidation(final Validable object)
+	    {
+	        final IEEditableTextWidget tf = (IEEditableTextWidget) object;
+	        if (tf.getBindingValue() == null) {
+	            ValidationError error = new ValidationError(this, object, "editable_fields_must_have_a_value");
+	            Vector allAvailableBV = tf.getBindingValueDefinition().searchMatchingBindingValue(tf,2);
+	            for (int i=0; i<allAvailableBV.size(); i++) {
+	                BindingValue bv = (BindingValue) allAvailableBV.elementAt(i);
+	                error.addToFixProposals(new SetBinding(bv));
+	             }
+	            return error;
+	        }
+	        return null;
+	    }
+	}
 
-        protected void fixAction()
-        {
-            ((IEEditableTextWidget) getObject()).setBindingValue(bindingValue);
-        }
-    }
-*/
-    
-    public abstract boolean isNumber();
-    
-    public abstract boolean isDate();
-    
-    public abstract boolean isText();
+	public static class SetBinding extends FixProposal
+	{
+	    public BindingValue bindingValue;
 
-    public static class EditableFieldMustHaveABindingValue extends RequiredBindingValidationRule<IEEditableTextWidget>
-    {
-        public EditableFieldMustHaveABindingValue()
-        {
-            super(IEEditableTextWidget.class,"bindingValue","bindingValueDefinition");
-        }
-    }
-    
-    /**
-     * Overrides getRawRowKeyPath
-     * @see org.openflexo.foundation.ie.widget.IEWidget#getRawRowKeyPath()
-     */
-    @Override
-    public String getRawRowKeyPath()
-    {
-        HTMLListDescriptor desc = getHTMLListDescriptor();
-        if (desc==null)
-            return null;
-        String item = desc.getItemName();
-        if (item==null)
-            return null;
-        if (getBindingValue()==null)
-            return null;
-        if (getBindingValue().getCodeStringRepresentation().indexOf(item)>-1)
-            return getBindingValue().getCodeStringRepresentation().substring(getBindingValue().getCodeStringRepresentation().indexOf(item)+item.length()+1);
-        else
-            return null;
-    }
-    
-    /**
+	    public SetBinding(BindingValue aBindingValue)
+	    {
+	        super("set_binding_value_to_($bindingValue.stringRepresentation)");
+	        bindingValue = aBindingValue;
+	    }
+
+	    protected void fixAction()
+	    {
+	        ((IEEditableTextWidget) getObject()).setBindingValue(bindingValue);
+	    }
+	}
+	*/
+
+	public abstract boolean isNumber();
+
+	public abstract boolean isDate();
+
+	public abstract boolean isText();
+
+	public static class EditableFieldMustHaveABindingValue extends RequiredBindingValidationRule<IEEditableTextWidget> {
+		public EditableFieldMustHaveABindingValue() {
+			super(IEEditableTextWidget.class, "bindingValue", "bindingValueDefinition");
+		}
+	}
+
+	/**
+	 * Overrides getRawRowKeyPath
+	 * 
+	 * @see org.openflexo.foundation.ie.widget.IEWidget#getRawRowKeyPath()
+	 */
+	@Override
+	public String getRawRowKeyPath() {
+		HTMLListDescriptor desc = getHTMLListDescriptor();
+		if (desc == null)
+			return null;
+		String item = desc.getItemName();
+		if (item == null)
+			return null;
+		if (getBindingValue() == null)
+			return null;
+		if (getBindingValue().getCodeStringRepresentation().indexOf(item) > -1)
+			return getBindingValue().getCodeStringRepresentation().substring(
+					getBindingValue().getCodeStringRepresentation().indexOf(item) + item.length() + 1);
+		else
+			return null;
+	}
+
+	/**
 	 * @see org.openflexo.foundation.ie.widget.IEWidgetWithValueList#getValueList()
 	 */
 	@Override
-	public List<Object> getValueList()
-	{
+	public List<Object> getValueList() {
 		return getValueList(null);
 	}
 
@@ -231,8 +217,7 @@ public abstract class IEEditableTextWidget extends IEControlWidget implements IE
 	 * @see org.openflexo.foundation.ie.widget.IEWidgetWithMainBinding#getMainBinding()
 	 */
 	@Override
-	public AbstractBinding getMainBinding()
-	{
+	public AbstractBinding getMainBinding() {
 		return getBindingValue();
 	}
 }

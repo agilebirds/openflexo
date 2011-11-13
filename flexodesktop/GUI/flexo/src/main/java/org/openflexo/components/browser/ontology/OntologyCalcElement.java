@@ -27,45 +27,39 @@ import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 
-
 /**
  * Browser element representing the calc library
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class OntologyCalcElement extends BrowserElement
-{
+public class OntologyCalcElement extends BrowserElement {
 
-    protected OntologyCalcElement(ViewPoint calc, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(calc, BrowserElementType.ONTOLOGY_CALC, browser, parent);
-    }
+	protected OntologyCalcElement(ViewPoint calc, ProjectBrowser browser, BrowserElement parent) {
+		super(calc, BrowserElementType.ONTOLOGY_CALC, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-       	addToChilds(getCalc().getCalcOntology());
-       	for (EditionPattern ep : getCalc().getEditionPatterns()) {
-       		addToChilds(ep);
-       	}
-       	for (ExampleDrawingShema shema : getCalc().getShemas()) {
-       		addToChilds(shema);
-       	}
-       	for (ViewPointPalette palette : getCalc().getPalettes()) {
-       		addToChilds(palette);
-       	}
-     }
+	@Override
+	protected void buildChildrenVector() {
+		addToChilds(getCalc().getCalcOntology());
+		for (EditionPattern ep : getCalc().getEditionPatterns()) {
+			addToChilds(ep);
+		}
+		for (ExampleDrawingShema shema : getCalc().getShemas()) {
+			addToChilds(shema);
+		}
+		for (ViewPointPalette palette : getCalc().getPalettes()) {
+			addToChilds(palette);
+		}
+	}
 
-    @Override
-	public String getName()
-    {
-        return getCalc().getName();
-    }
+	@Override
+	public String getName() {
+		return getCalc().getName();
+	}
 
-    protected ViewPoint getCalc()
-    {
-        return (ViewPoint) getObject();
-    }
+	protected ViewPoint getCalc() {
+		return (ViewPoint) getObject();
+	}
 
 }

@@ -24,20 +24,21 @@ import java.util.Vector;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 
-
 /**
  * Interface implemented by all objects able to trigger FlexoAction
  * 
  * @author sylvain
- *
- * @param <T1> type focused object
- * @param <T2> type of objects included in the global selection
+ * 
+ * @param <T1>
+ *            type focused object
+ * @param <T2>
+ *            type of objects included in the global selection
  */
-public interface FlexoActionSource<T1 extends FlexoModelObject,T2 extends FlexoModelObject> {
+public interface FlexoActionSource<T1 extends FlexoModelObject, T2 extends FlexoModelObject> {
 
-    public T1 getFocusedObject();
-    
-    public Vector<T2> getGlobalSelection();
-    
-    public FlexoEditor getEditor();
+	public T1 getFocusedObject();
+
+	public Vector<T2> getGlobalSelection();
+
+	public FlexoEditor getEditor();
 }

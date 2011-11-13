@@ -40,7 +40,6 @@ import org.apache.axis.encoding.Base64;
 import org.apache.axis.handlers.BasicHandler;
 import org.openflexo.logging.FlexoLogger;
 
-
 /**
  * @author gunsnroz@hotmail.com
  */
@@ -52,7 +51,7 @@ public class HTTPUrlConnectionSender extends BasicHandler {
 	public void invoke(MessageContext context) throws AxisFault {
 		try {
 			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("URLConnection sender invoked for "+context.getStrProp(MessageContext.TRANS_URL));
+				logger.fine("URLConnection sender invoked for " + context.getStrProp(MessageContext.TRANS_URL));
 			}
 			URL targetURL = new URL(context.getStrProp(MessageContext.TRANS_URL));
 			HttpURLConnection connection = createHttpConnection(context, targetURL);
@@ -65,7 +64,7 @@ public class HTTPUrlConnectionSender extends BasicHandler {
 				Iterator<?> i = context.getAllPropertyNames();
 				while (i.hasNext()) {
 					Object prop = i.next();
-					logger.fine(prop+"="+context.getProperty(prop.toString()));
+					logger.fine(prop + "=" + context.getProperty(prop.toString()));
 				}
 			}
 			throw AxisFault.makeFault(e);
@@ -75,7 +74,7 @@ public class HTTPUrlConnectionSender extends BasicHandler {
 	}
 
 	private HttpURLConnection createHttpConnection(MessageContext context, URL targetURL) throws IOException {
-		HttpURLConnection connection = (HttpURLConnection)targetURL.openConnection();
+		HttpURLConnection connection = (HttpURLConnection) targetURL.openConnection();
 		connection.setAllowUserInteraction(true);
 		connection.setDoInput(true);
 		connection.setDoOutput(true);
@@ -101,7 +100,7 @@ public class HTTPUrlConnectionSender extends BasicHandler {
 
 		if (username != null) {
 			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Setting credentials for username "+username);
+				logger.fine("Setting credentials for username " + username);
 			}
 			String credentials = username + ":" + password;
 			credentials = Base64.encode(credentials.getBytes());
@@ -112,7 +111,7 @@ public class HTTPUrlConnectionSender extends BasicHandler {
 	private void send(MessageContext context, HttpURLConnection connection) throws IOException, SOAPException {
 		writeMimeHeaders(context, connection);
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("About to connect to: '"+connection.getURL()+"'.");
+			logger.fine("About to connect to: '" + connection.getURL() + "'.");
 		}
 		OutputStream os = connection.getOutputStream();
 		context.getRequestMessage().writeTo(os);
@@ -123,9 +122,8 @@ public class HTTPUrlConnectionSender extends BasicHandler {
 	private void writeMimeHeaders(MessageContext context, HttpURLConnection connection) throws IOException {
 		SOAPMessage reqMessage = context.getRequestMessage();
 		MimeHeader header = null;
-		for (Iterator it = reqMessage.getMimeHeaders().getAllHeaders();
-				it.hasNext(); ) {
-			header = (MimeHeader)it.next();
+		for (Iterator it = reqMessage.getMimeHeaders().getAllHeaders(); it.hasNext();) {
+			header = (MimeHeader) it.next();
 			connection.setRequestProperty(header.getName(), header.getValue());
 		}
 
@@ -159,7 +157,7 @@ public class HTTPUrlConnectionSender extends BasicHandler {
 		Message message = new Message(is, false, headers);
 		message.setMessageType(Message.RESPONSE);
 		context.setResponseMessage(message);
-		// is.close();	// DO NOT close input stream
+		// is.close(); // DO NOT close input stream
 	}
 
 	private boolean checkResponseStatusCode(MessageContext context, HttpURLConnection connection) throws IOException {
@@ -167,7 +165,7 @@ public class HTTPUrlConnectionSender extends BasicHandler {
 		int statusCode = connection.getResponseCode();
 		String statusMessage = connection.getResponseMessage();
 
-		if (statusCode > 199 && statusCode <300) {
+		if (statusCode > 199 && statusCode < 300) {
 			// SOAP return OK. so fall through
 			context.setProperty(HTTPConstants.MC_HTTP_STATUS_CODE, Integer.valueOf(statusCode));
 			context.setProperty(HTTPConstants.MC_HTTP_STATUS_CODE, statusMessage);
@@ -175,8 +173,9 @@ public class HTTPUrlConnectionSender extends BasicHandler {
 			if (statusCode >= 500) {
 				// SOAP Fault should be in here - so fall through
 				isSuccess = false;
-			} else if (statusCode>299 && statusCode<400) {
-				throw new AxisFault("redirect ("+statusCode+"): " + statusMessage+" Location: "+connection.getHeaderField("Location"));
+			} else if (statusCode > 299 && statusCode < 400) {
+				throw new AxisFault("redirect (" + statusCode + "): " + statusMessage + " Location: "
+						+ connection.getHeaderField("Location"));
 			} else if (statusCode == 401) {
 				throw new AxisFault("request requires HTTP authentication: " + statusMessage);
 			} else if (statusCode == 404) {

@@ -21,56 +21,61 @@
 package org.netbeans.lib.cvsclient.event;
 
 /**
- * An event sent from the server to indicate that a binary message should be
- * displayed to the user.
+ * An event sent from the server to indicate that a binary message should be displayed to the user.
  * <p>
  * One protocol reponse mey be splitted into several messages.
- *
- * @author  Martin Entlicher
+ * 
+ * @author Martin Entlicher
  */
 public class BinaryMessageEvent extends CVSEvent {
-    /**
-     * Holds value of property message.
-     */
-    private byte[] message;
+	/**
+	 * Holds value of property message.
+	 */
+	private byte[] message;
 
-    private int len;
+	private int len;
 
-    /**
-     * Construct a MessageEvent
-     * @param source the source of the event
-     * @param message the message text
-     */
-    public BinaryMessageEvent(Object source, byte[] message, int len) {
-        super(source);
-        this.message = message;
-        this.len = len;
-    }
+	/**
+	 * Construct a MessageEvent
+	 * 
+	 * @param source
+	 *            the source of the event
+	 * @param message
+	 *            the message text
+	 */
+	public BinaryMessageEvent(Object source, byte[] message, int len) {
+		super(source);
+		this.message = message;
+		this.len = len;
+	}
 
-    /**
-     * Raw data buffer that holds binary data.
-     * @return raw data buffer, its {@link #getMessageLength()} subset represents actual data
-     */
-    public byte[] getMessage() {
-        return message;
-    }
+	/**
+	 * Raw data buffer that holds binary data.
+	 * 
+	 * @return raw data buffer, its {@link #getMessageLength()} subset represents actual data
+	 */
+	public byte[] getMessage() {
+		return message;
+	}
 
-    /**
-     * Defines valid data length in raw data buffer.
-     * @return number of valid bytes in message raw data buffer.
-     */
-    public int getMessageLength() {
-        return len;
-    }
+	/**
+	 * Defines valid data length in raw data buffer.
+	 * 
+	 * @return number of valid bytes in message raw data buffer.
+	 */
+	public int getMessageLength() {
+		return len;
+	}
 
-    /**
-     * Fire the event to the event listener. Subclasses should call the
-     * appropriate method on the listener to dispatch this event.
-     * @param listener the event listener
-     */
-    @Override
+	/**
+	 * Fire the event to the event listener. Subclasses should call the appropriate method on the listener to dispatch this event.
+	 * 
+	 * @param listener
+	 *            the event listener
+	 */
+	@Override
 	protected void fireEvent(CVSListener listener) {
-        listener.messageSent(this);
-    }
+		listener.messageSent(this);
+	}
 
 }

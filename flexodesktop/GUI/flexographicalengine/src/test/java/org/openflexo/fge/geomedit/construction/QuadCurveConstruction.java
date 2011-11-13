@@ -23,12 +23,11 @@ import org.openflexo.fge.geom.FGEQuadCurve;
 
 public abstract class QuadCurveConstruction extends GeometricConstruction<FGEQuadCurve> {
 
-	public final FGEQuadCurve getCurve()
-	{
+	public final FGEQuadCurve getCurve() {
 		return getData();
 	}
 
 	@Override
 	protected abstract FGEQuadCurve computeData();
-	
+
 }

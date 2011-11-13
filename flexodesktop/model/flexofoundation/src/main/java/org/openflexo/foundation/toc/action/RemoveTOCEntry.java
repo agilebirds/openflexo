@@ -27,48 +27,41 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.toc.TOCEntry;
 
+public class RemoveTOCEntry extends FlexoAction<RemoveTOCEntry, TOCEntry, TOCEntry> {
 
-public class RemoveTOCEntry extends FlexoAction<RemoveTOCEntry, TOCEntry,TOCEntry>
-{
-
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(RemoveTOCEntry.class.getPackage().getName());
 
-    public static FlexoActionType<RemoveTOCEntry, TOCEntry, TOCEntry> actionType = new FlexoActionType<RemoveTOCEntry, TOCEntry, TOCEntry>(
-            "remove_toc_entry", FlexoActionType.defaultGroup, FlexoActionType.DELETE_ACTION_TYPE) {
+	public static FlexoActionType<RemoveTOCEntry, TOCEntry, TOCEntry> actionType = new FlexoActionType<RemoveTOCEntry, TOCEntry, TOCEntry>(
+			"remove_toc_entry", FlexoActionType.defaultGroup, FlexoActionType.DELETE_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-        public RemoveTOCEntry makeNewAction(TOCEntry focusedObject, Vector<TOCEntry> globalSelection, FlexoEditor editor)
-        {
-            return new RemoveTOCEntry(focusedObject, globalSelection, editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public RemoveTOCEntry makeNewAction(TOCEntry focusedObject, Vector<TOCEntry> globalSelection, FlexoEditor editor) {
+			return new RemoveTOCEntry(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-        protected boolean isVisibleForSelection(TOCEntry object, Vector<TOCEntry> globalSelection)
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(TOCEntry object, Vector<TOCEntry> globalSelection) {
+			return true;
+		}
 
-        @Override
-        protected boolean isEnabledForSelection(TOCEntry object, Vector<TOCEntry> globalSelection)
-        {
-            return object!=null ;
-        }
+		@Override
+		protected boolean isEnabledForSelection(TOCEntry object, Vector<TOCEntry> globalSelection) {
+			return object != null;
+		}
 
-    };
+	};
 
-    RemoveTOCEntry(TOCEntry focusedObject, Vector<TOCEntry> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	RemoveTOCEntry(TOCEntry focusedObject, Vector<TOCEntry> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    @Override
-    protected void doAction(Object context)
-    {
-    	getFocusedObject().delete();
-    }
+	@Override
+	protected void doAction(Object context) {
+		getFocusedObject().delete();
+	}
 
 }

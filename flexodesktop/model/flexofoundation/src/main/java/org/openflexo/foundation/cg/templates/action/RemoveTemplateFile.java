@@ -29,78 +29,66 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.templates.CGTemplateFile;
 import org.openflexo.foundation.cg.templates.CGTemplateFile.TemplateFileContentEditor;
 
+public class RemoveTemplateFile extends FlexoAction<RemoveTemplateFile, CGTemplateFile, CGTemplateFile> {
 
-public class RemoveTemplateFile extends FlexoAction<RemoveTemplateFile, CGTemplateFile, CGTemplateFile>
-{
+	private static final Logger logger = Logger.getLogger(RemoveTemplateFile.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(RemoveTemplateFile.class.getPackage().getName());
+	public static FlexoActionType<RemoveTemplateFile, CGTemplateFile, CGTemplateFile> actionType = new FlexoActionType<RemoveTemplateFile, CGTemplateFile, CGTemplateFile>(
+			"remove_template", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-	public static FlexoActionType<RemoveTemplateFile, CGTemplateFile, CGTemplateFile> actionType = new FlexoActionType<RemoveTemplateFile, CGTemplateFile, CGTemplateFile>("remove_template",
-			FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
-
-        /**
-         * Factory method
-         */
+		/**
+		 * Factory method
+		 */
 		@Override
-		public RemoveTemplateFile makeNewAction(CGTemplateFile focusedObject, Vector<CGTemplateFile> globalSelection, FlexoEditor editor)
-        {
-            return new RemoveTemplateFile(focusedObject, globalSelection,editor);
-        }
+		public RemoveTemplateFile makeNewAction(CGTemplateFile focusedObject, Vector<CGTemplateFile> globalSelection, FlexoEditor editor) {
+			return new RemoveTemplateFile(focusedObject, globalSelection, editor);
+		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGTemplateFile object, Vector<CGTemplateFile> globalSelection)
-        {
-            return ((object != null) && (object.isCustomTemplate()));
-       }
+		protected boolean isVisibleForSelection(CGTemplateFile object, Vector<CGTemplateFile> globalSelection) {
+			return ((object != null) && (object.isCustomTemplate()));
+		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGTemplateFile object, Vector<CGTemplateFile> globalSelection)
-        {
-            return ((object != null) && (object.isCustomTemplate()));
-       }
-                
-    };
-    
-    static {
+		protected boolean isEnabledForSelection(CGTemplateFile object, Vector<CGTemplateFile> globalSelection) {
+			return ((object != null) && (object.isCustomTemplate()));
+		}
+
+	};
+
+	static {
 		FlexoModelObject.addActionForClass(RemoveTemplateFile.actionType, CGTemplateFile.class);
-    }
-    
+	}
 
-    private TemplateFileContentEditor templateFileContentEditor;
-    
-	RemoveTemplateFile(CGTemplateFile focusedObject, Vector<CGTemplateFile> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	private TemplateFileContentEditor templateFileContentEditor;
 
-    @Override
-	protected void doAction(Object context)
-    {
-    	logger.info ("Remove CustomTemplateFile "+getFocusedObject());
-    	deleteTemplate(getFocusedObject());
-    	if (getGlobalSelection()!=null) {
+	RemoveTemplateFile(CGTemplateFile focusedObject, Vector<CGTemplateFile> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) {
+		logger.info("Remove CustomTemplateFile " + getFocusedObject());
+		deleteTemplate(getFocusedObject());
+		if (getGlobalSelection() != null) {
 			for (CGTemplateFile file : getGlobalSelection()) {
-                if (file!=null)
-                    deleteTemplate(file);
-            }
-    	}
-    }
+				if (file != null)
+					deleteTemplate(file);
+			}
+		}
+	}
 
-	private void deleteTemplate(CGTemplateFile file)
-    {
-        if (file.isEdited())
-            file.cancelEdition();
-        file.delete();
-    }
-    
-	public TemplateFileContentEditor getTemplateFileContentEditor() 
-	{
+	private void deleteTemplate(CGTemplateFile file) {
+		if (file.isEdited())
+			file.cancelEdition();
+		file.delete();
+	}
+
+	public TemplateFileContentEditor getTemplateFileContentEditor() {
 		return templateFileContentEditor;
 	}
 
-	public void setTemplateFileContentEditor(
-			TemplateFileContentEditor templateFileContentEditor) 
-	{
+	public void setTemplateFileContentEditor(TemplateFileContentEditor templateFileContentEditor) {
 		this.templateFileContentEditor = templateFileContentEditor;
 	}
 

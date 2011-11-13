@@ -34,7 +34,6 @@ import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
 
-
 public class CurvedPolylinConnector extends Connector {
 
 	private FGEPoint p1 = new FGEPoint();

@@ -28,7 +28,6 @@ import javax.swing.SwingUtilities;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.prefs.FlexoPreferences;
 
-
 public class FlexoSplitPaneLocationSaver implements PropertyChangeListener {
 
 	private JSplitPane splitPane;
@@ -59,14 +58,14 @@ public class FlexoSplitPaneLocationSaver implements PropertyChangeListener {
 	}
 
 	private void layoutSplitPane(String id, Double defaultDividerLocation) {
-		if (GeneralPreferences.getDividerLocationForSplitPaneWithID(id)>=0) {
+		if (GeneralPreferences.getDividerLocationForSplitPaneWithID(id) >= 0) {
 			splitPane.setDividerLocation(GeneralPreferences.getDividerLocationForSplitPaneWithID(id));
-		} else if (defaultDividerLocation!=null){
+		} else if (defaultDividerLocation != null) {
 			splitPane.setDividerLocation(defaultDividerLocation);
 		} else {
 			splitPane.resetToPreferredSizes();
 		}
-		splitPane.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY,this);
+		splitPane.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, this);
 	}
 
 	@Override
@@ -76,25 +75,23 @@ public class FlexoSplitPaneLocationSaver implements PropertyChangeListener {
 
 	private Thread locationSaver;
 
-	protected synchronized void saveLocationInPreferenceWhenPossible()
-	{
+	protected synchronized void saveLocationInPreferenceWhenPossible() {
 		if (!splitPane.isVisible()) {
 			return;
 		}
-		if (locationSaver!=null) {
-			locationSaver.interrupt();//Resets thread sleep
+		if (locationSaver != null) {
+			locationSaver.interrupt();// Resets thread sleep
 			return;
 		}
 
 		locationSaver = new Thread(new Runnable() {
 			/**
 			 * Overrides run
-			 *
+			 * 
 			 * @see java.lang.Runnable#run()
 			 */
 			@Override
-			public void run()
-			{
+			public void run() {
 				boolean go = true;
 				while (go) {
 					try {
@@ -106,22 +103,20 @@ public class FlexoSplitPaneLocationSaver implements PropertyChangeListener {
 				}
 				saveLocationInPreference();
 			}
-		},"Splitpane location saver for "+id);
+		}, "Splitpane location saver for " + id);
 		locationSaver.start();
 	}
 
-	protected void saveLocationInPreference()
-	{
+	protected void saveLocationInPreference() {
 		int value = splitPane.getDividerLocation();
-		if (value>splitPane.getMaximumDividerLocation()) {
+		if (value > splitPane.getMaximumDividerLocation()) {
 			value = splitPane.getMaximumDividerLocation();
-		} else if (value<splitPane.getMinimumDividerLocation()) {
+		} else if (value < splitPane.getMinimumDividerLocation()) {
 			value = splitPane.getMinimumDividerLocation();
 		}
-		GeneralPreferences.setDividerLocationForSplitPaneWithID(value,id);
+		GeneralPreferences.setDividerLocationForSplitPaneWithID(value, id);
 		FlexoPreferences.savePreferences(true);
 		locationSaver = null;
 	}
-
 
 }

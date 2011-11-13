@@ -23,12 +23,11 @@ import org.openflexo.fge.geom.area.FGEHalfLine;
 
 public abstract class HalfLineConstruction extends GeometricConstruction<FGEHalfLine> {
 
-	public final FGEHalfLine getHalfLine()
-	{
+	public final FGEHalfLine getHalfLine() {
 		return getData();
 	}
 
 	@Override
 	protected abstract FGEHalfLine computeData();
-	
+
 }

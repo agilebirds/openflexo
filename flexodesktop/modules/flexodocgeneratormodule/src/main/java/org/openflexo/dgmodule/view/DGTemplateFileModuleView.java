@@ -82,12 +82,12 @@ import org.openflexo.view.listener.FlexoActionButton;
 /**
  * @author sylvain
  */
-public class DGTemplateFileModuleView extends JPanel implements ModuleView<CGTemplate>, FlexoActionSource, FlexoObserver, TemplateFileContentEditor
-{
+public class DGTemplateFileModuleView extends JPanel implements ModuleView<CGTemplate>, FlexoActionSource, FlexoObserver,
+		TemplateFileContentEditor {
 	private final Logger logger = FlexoLogger.getLogger(DGTemplateFileModuleView.class.getPackage().getName());
 
 	private static final KeyStroke SAVE_KEY_STROKE = KeyStroke.getKeyStroke(KeyEvent.VK_S, FlexoCst.META_MASK);
-	
+
 	protected CGTemplate _CGTemplate;
 	protected DGController _controller;
 
@@ -96,8 +96,7 @@ public class DGTemplateFileModuleView extends JPanel implements ModuleView<CGTem
 
 	private boolean openedInSeparateWindow = false;
 
-	public DGTemplateFileModuleView(CGTemplate CGTemplate, DGController controller)
-	{
+	public DGTemplateFileModuleView(CGTemplate CGTemplate, DGController controller) {
 		super(new BorderLayout());
 		_controller = controller;
 		_CGTemplate = CGTemplate;
@@ -105,94 +104,90 @@ public class DGTemplateFileModuleView extends JPanel implements ModuleView<CGTem
 
 		_header = new ViewHeader();
 
-		add(_header,BorderLayout.NORTH);
+		add(_header, BorderLayout.NORTH);
 
 		FileFormat format = _CGTemplate.getFileFormat();
 
 		if (format == FileFormat.JAVA) {
 			_codeDisplayer = new VTLJavaCodePanel(_CGTemplate);
-			add((JComponent)_codeDisplayer);
-		}
-		else if (format == FileFormat.XML) {
+			add((JComponent) _codeDisplayer);
+		} else if (format == FileFormat.XML) {
 			_codeDisplayer = new XMLCodePanel(_CGTemplate);
-			add((JComponent)_codeDisplayer);
-		}
-		else if (format == FileFormat.HTML) {
+			add((JComponent) _codeDisplayer);
+		} else if (format == FileFormat.HTML) {
 			_codeDisplayer = new VTLHTMLCodePanel(_CGTemplate);
-			add((JComponent)_codeDisplayer);
-		}
-		else if (format == FileFormat.WOD) {
+			add((JComponent) _codeDisplayer);
+		} else if (format == FileFormat.WOD) {
 			_codeDisplayer = new WODCodePanel(_CGTemplate);
-			add((JComponent)_codeDisplayer);
-		}
-        else if (format == FileFormat.LATEX) {
+			add((JComponent) _codeDisplayer);
+		} else if (format == FileFormat.LATEX) {
 			_codeDisplayer = new TextCodePanel(_CGTemplate);
-            add((JComponent)_codeDisplayer);
-        }
-		else if (format instanceof TextFileFormat) {
+			add((JComponent) _codeDisplayer);
+		} else if (format instanceof TextFileFormat) {
 			_codeDisplayer = new TextCodePanel(_CGTemplate);
-			add((JComponent)_codeDisplayer);
-		}
-		else {
+			add((JComponent) _codeDisplayer);
+		} else {
 			logger.warning("I should not come here !");
 		}
 
 		if (_controller != null) {
 			_codeDisplayer.addToFocusListener(_controller.getFooter());
-			_codeDisplayer.getInputHandler().addKeyBinding((ToolBox.getPLATFORM()==ToolBox.MACOS?"M":"C")+"+S", new ActionListener(){
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					if ((_CGTemplate instanceof CGTemplateFile) && ((CGTemplateFile) _CGTemplate).isEdited()) {
-						SaveCustomTemplateFile save = SaveCustomTemplateFile.actionType.makeNewAction((CGTemplateFile) _CGTemplate, null, _controller.getEditor());
-						save.doAction();
-					}
-				}
-			});
+			_codeDisplayer.getInputHandler().addKeyBinding((ToolBox.getPLATFORM() == ToolBox.MACOS ? "M" : "C") + "+S",
+					new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							if ((_CGTemplate instanceof CGTemplateFile) && ((CGTemplateFile) _CGTemplate).isEdited()) {
+								SaveCustomTemplateFile save = SaveCustomTemplateFile.actionType.makeNewAction((CGTemplateFile) _CGTemplate,
+										null, _controller.getEditor());
+								save.doAction();
+							}
+						}
+					});
 		}
 	}
 
-	private void updateView()
-	{
+	private void updateView() {
 		_header.update();
 	}
 
-
-	protected class ViewHeader extends JPanel
-	{
+	protected class ViewHeader extends JPanel {
 		JLabel icon;
 		JLabel title;
 		JLabel subTitle;
 		JPanel controlPanel;
 		Vector<FlexoActionButton> actionButtons = new Vector<FlexoActionButton>();
 
-		protected ViewHeader()
-		{
+		protected ViewHeader() {
 			super(new BorderLayout());
 			icon = new JLabel(FilesIconLibrary.mediumIconForFileFormat(_CGTemplate.getFileFormat()));
 			icon.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-			add(icon,BorderLayout.WEST);
+			add(icon, BorderLayout.WEST);
 			title = new JLabel(_CGTemplate.getTemplateName(), SwingConstants.LEFT);
-			//title.setVerticalAlignment(JLabel.BOTTOM);
+			// title.setVerticalAlignment(JLabel.BOTTOM);
 			title.setFont(DGCst.HEADER_FONT);
 			title.setForeground(Color.BLACK);
 			title.setBorder(BorderFactory.createEmptyBorder(5, 10, 0, 10));
-			subTitle = new JLabel(subTitleForFile(),SwingConstants.LEFT);
-			//title.setVerticalAlignment(JLabel.BOTTOM);
+			subTitle = new JLabel(subTitleForFile(), SwingConstants.LEFT);
+			// title.setVerticalAlignment(JLabel.BOTTOM);
 			subTitle.setFont(DGCst.SUB_TITLE_FONT);
 			subTitle.setForeground(Color.GRAY);
 			subTitle.setBorder(BorderFactory.createEmptyBorder(0, 10, 5, 10));
 
-			JPanel labelsPanel = new JPanel(new GridLayout(2,1));
+			JPanel labelsPanel = new JPanel(new GridLayout(2, 1));
 			labelsPanel.add(title);
 			labelsPanel.add(subTitle);
-			add(labelsPanel,BorderLayout.CENTER);			
+			add(labelsPanel, BorderLayout.CENTER);
 
 			controlPanel = new JPanel(new FlowLayout());
 			if (_CGTemplate.isCustomTemplate()) {
-				FlexoActionButton editAction = new FlexoActionButton(EditCustomTemplateFile.actionType,"edit",DGTemplateFileModuleView.this,_controller.getEditor());
-				FlexoActionButton saveAction = new FlexoActionButton(SaveCustomTemplateFile.actionType,"save",DGTemplateFileModuleView.this,_controller.getEditor());
-				FlexoActionButton cancelAction = new FlexoActionButton(CancelEditionOfCustomTemplateFile.actionType,"cancel",DGTemplateFileModuleView.this,_controller.getEditor());
-				FlexoActionButton refreshAction = new FlexoActionButton(RefreshTemplates.actionType,"reload",DGTemplateFileModuleView.this,_controller.getEditor());
+				FlexoActionButton editAction = new FlexoActionButton(EditCustomTemplateFile.actionType, "edit",
+						DGTemplateFileModuleView.this, _controller.getEditor());
+				FlexoActionButton saveAction = new FlexoActionButton(SaveCustomTemplateFile.actionType, "save",
+						DGTemplateFileModuleView.this, _controller.getEditor());
+				FlexoActionButton cancelAction = new FlexoActionButton(CancelEditionOfCustomTemplateFile.actionType, "cancel",
+						DGTemplateFileModuleView.this, _controller.getEditor());
+				FlexoActionButton refreshAction = new FlexoActionButton(RefreshTemplates.actionType, "reload",
+						DGTemplateFileModuleView.this, _controller.getEditor());
 				actionButtons.add(editAction);
 				actionButtons.add(saveAction);
 				actionButtons.add(cancelAction);
@@ -202,395 +197,339 @@ public class DGTemplateFileModuleView extends JPanel implements ModuleView<CGTem
 				controlPanel.add(cancelAction);
 				controlPanel.add(refreshAction);
 				controlPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-			}
-			else {
-				FlexoActionButton redefineAction = new FlexoActionButton(RedefineCustomTemplateFile.actionType,DGTemplateFileModuleView.this,_controller.getEditor());
+			} else {
+				FlexoActionButton redefineAction = new FlexoActionButton(RedefineCustomTemplateFile.actionType,
+						DGTemplateFileModuleView.this, _controller.getEditor());
 				actionButtons.add(redefineAction);
-				controlPanel.add(redefineAction);				
+				controlPanel.add(redefineAction);
 			}
-			add(controlPanel,BorderLayout.EAST);
+			add(controlPanel, BorderLayout.EAST);
 
 			update();
 		}
 
-		private String subTitleForFile()
-		{
+		private String subTitleForFile() {
 			if (_CGTemplate.isCustomTemplate()) {
-				return FlexoLocalization.localizedForKey("custom_template_defined_in_template_repository")+" "
- + ((CustomCGTemplateRepository) _CGTemplate.getRepository()).getName();
-			}
-			else {
+				return FlexoLocalization.localizedForKey("custom_template_defined_in_template_repository") + " "
+						+ ((CustomCGTemplateRepository) _CGTemplate.getRepository()).getName();
+			} else {
 				return FlexoLocalization.localizedForKey("application_template_ro");
 			}
 		}
 
-		protected void update()
-		{
+		protected void update() {
 			title.setText(_CGTemplate.getTemplateName()
-					+ ((_CGTemplate instanceof CGTemplateFile) && ((CGTemplateFile) _CGTemplate).isEdited() ? "[" + FlexoLocalization.localizedForKey("edited") + "]" : ""));
+					+ ((_CGTemplate instanceof CGTemplateFile) && ((CGTemplateFile) _CGTemplate).isEdited() ? "["
+							+ FlexoLocalization.localizedForKey("edited") + "]" : ""));
 			for (FlexoActionButton button : actionButtons) {
 				button.update();
 			}
 		}
 	}
 
-	public DGController getController()
-	{
+	public DGController getController() {
 		return _controller;
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		DisplayContext previousDisplayContext = null;
-		if (_codeDisplayer!=null) {
+		if (_codeDisplayer != null) {
 			previousDisplayContext = _codeDisplayer.getDisplayContext();
 		}
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine ("RECEIVED "+dataModification+" for "+observable);
+			logger.fine("RECEIVED " + dataModification + " for " + observable);
 		}
 		if (dataModification instanceof TemplateFileEdited) {
 			_codeDisplayer.setEditable(true);
-		}
-		else if (dataModification instanceof TemplateFileChanged) {
+		} else if (dataModification instanceof TemplateFileChanged) {
 			_codeDisplayer.refresh();
-		}
-		else if (dataModification instanceof TemplateFileSaved) {
+		} else if (dataModification instanceof TemplateFileSaved) {
 			_codeDisplayer.setEditable(false);
-		}
-		else if (dataModification instanceof TemplateFileEditionCancelled) {
+		} else if (dataModification instanceof TemplateFileEditionCancelled) {
 			_codeDisplayer.setEditable(false);
 			_codeDisplayer.refresh();
 		}
 		updateView();
-		if ((previousDisplayContext!=null) && (_codeDisplayer!=null)) {
+		if ((previousDisplayContext != null) && (_codeDisplayer != null)) {
 			_codeDisplayer.applyDisplayContext(previousDisplayContext);
 		}
-			
+
 	}
 
 	@Override
-	public void deleteModuleView() 
-	{
+	public void deleteModuleView() {
 		logger.info("CGTemplateModuleView view deleted");
 		getController().removeModuleView(this);
 		_CGTemplate.deleteObserver(this);
 	}
 
 	@Override
-	public FlexoPerspective<FlexoModelObject> getPerspective() 
-	{
+	public FlexoPerspective<FlexoModelObject> getPerspective() {
 		return _controller.CODE_GENERATOR_PERSPECTIVE;
 	}
 
 	@Override
-	public CGTemplate getRepresentedObject()
-	{
+	public CGTemplate getRepresentedObject() {
 		return _CGTemplate;
 	}
 
 	@Override
-	public void willHide() 
-	{
+	public void willHide() {
 	}
 
-	
 	@Override
-	public void willShow()
-	{
+	public void willShow() {
 	}
 
-	protected interface CodeDisplayer extends TemplateFileContentEditor
-	{
+	protected interface CodeDisplayer extends TemplateFileContentEditor {
 		public void setEditable(boolean aBoolean);
+
 		public void refresh();
-		public void addToFocusListener (FocusListener aFocusListener);
+
+		public void addToFocusListener(FocusListener aFocusListener);
+
 		public InputHandler getInputHandler();
-		
+
 		public DisplayContext getDisplayContext();
+
 		public void applyDisplayContext(DisplayContext context);
 
 	}
 
-	protected class JavaCodePanel extends JavaCodeDisplayer implements CodeDisplayer
-	{
+	protected class JavaCodePanel extends JavaCodeDisplayer implements CodeDisplayer {
 		private final CGTemplate _file;
 
-		protected JavaCodePanel(CGTemplate file)
-		{
+		protected JavaCodePanel(CGTemplate file) {
 			super(file.getContent());
 			_file = file;
 		}
 
 		@Override
-		public void refresh()
-		{
+		public void refresh() {
 			setText(_file.getContent());
 		}
 
 		@Override
-		public String getEditedContent()
-		{
+		public String getEditedContent() {
 			return getText();
 		}
 
 		@Override
-		public void setEditedContent(String content)
-		{
+		public void setEditedContent(String content) {
 			setTextKeepDisplayContext(content);
 		}
 
 		@Override
-		public void addToFocusListener (FocusListener aFocusListener)
-		{
+		public void addToFocusListener(FocusListener aFocusListener) {
 			addFocusListener(aFocusListener);
 		}
 
 	}
 
-	protected class XMLCodePanel extends XMLCodeDisplayer implements CodeDisplayer
-	{
+	protected class XMLCodePanel extends XMLCodeDisplayer implements CodeDisplayer {
 		private final CGTemplate _file;
 
-		protected XMLCodePanel(CGTemplate file)
-		{
+		protected XMLCodePanel(CGTemplate file) {
 			super(file.getContent());
 			_file = file;
 		}
 
 		@Override
-		public void refresh()
-		{
+		public void refresh() {
 			setText(_file.getContent());
 		}
 
 		@Override
-		public String getEditedContent()
-		{
+		public String getEditedContent() {
 			return getText();
 		}
 
 		@Override
-		public void setEditedContent(String content)
-		{
+		public void setEditedContent(String content) {
 			setTextKeepDisplayContext(content);
 		}
 
 		@Override
-		public void addToFocusListener (FocusListener aFocusListener)
-		{
+		public void addToFocusListener(FocusListener aFocusListener) {
 			addFocusListener(aFocusListener);
 		}
 
 	}
 
-	protected class HTMLCodePanel extends HTMLCodeDisplayer implements CodeDisplayer
-	{
+	protected class HTMLCodePanel extends HTMLCodeDisplayer implements CodeDisplayer {
 		private final CGTemplate _file;
 
-		protected HTMLCodePanel(CGTemplate file)
-		{
+		protected HTMLCodePanel(CGTemplate file) {
 			super(file.getContent());
 			_file = file;
 		}
 
 		@Override
-		public void refresh()
-		{
+		public void refresh() {
 			setText(_file.getContent());
 		}
 
 		@Override
-		public String getEditedContent()
-		{
+		public String getEditedContent() {
 			return getText();
 		}
 
 		@Override
-		public void setEditedContent(String content)
-		{
+		public void setEditedContent(String content) {
 			setTextKeepDisplayContext(content);
 		}
 
 		@Override
-		public void addToFocusListener (FocusListener aFocusListener)
-		{
+		public void addToFocusListener(FocusListener aFocusListener) {
 			addFocusListener(aFocusListener);
 		}
 
 	}
 
-	protected class TextCodePanel extends TextCodeDisplayer implements CodeDisplayer
-	{
+	protected class TextCodePanel extends TextCodeDisplayer implements CodeDisplayer {
 		private final CGTemplate _file;
 
-		protected TextCodePanel(CGTemplate file)
-		{
+		protected TextCodePanel(CGTemplate file) {
 			super(file.getContent());
 			_file = file;
 		}
 
 		@Override
-		public void refresh()
-		{
+		public void refresh() {
 			setText(_file.getContent());
 		}
 
 		@Override
-		public String getEditedContent()
-		{
+		public String getEditedContent() {
 			return getText();
 		}
 
 		@Override
-		public void setEditedContent(String content)
-		{
+		public void setEditedContent(String content) {
 			setTextKeepDisplayContext(content);
 		}
 
 		@Override
-		public void addToFocusListener (FocusListener aFocusListener)
-		{
+		public void addToFocusListener(FocusListener aFocusListener) {
 			addFocusListener(aFocusListener);
 		}
 
 	}
-	protected class VTLJavaCodePanel extends VTLJavaCodeDisplayer implements CodeDisplayer
-	{
+
+	protected class VTLJavaCodePanel extends VTLJavaCodeDisplayer implements CodeDisplayer {
 		private final CGTemplate _file;
 
-		protected VTLJavaCodePanel(CGTemplate file)
-		{
+		protected VTLJavaCodePanel(CGTemplate file) {
 			super(file.getContent());
 			_file = file;
 		}
 
 		@Override
-		public void refresh()
-		{
+		public void refresh() {
 			setText(_file.getContent());
 		}
 
 		@Override
-		public String getEditedContent()
-		{
+		public String getEditedContent() {
 			return getText();
 		}
 
 		@Override
-		public void setEditedContent(String content)
-		{
+		public void setEditedContent(String content) {
 			setTextKeepDisplayContext(content);
 		}
 
 		@Override
-		public void addToFocusListener (FocusListener aFocusListener)
-		{
+		public void addToFocusListener(FocusListener aFocusListener) {
 			addFocusListener(aFocusListener);
 		}
 
 	}
 
-	protected class VTLHTMLCodePanel extends VTLHTMLCodeDisplayer implements CodeDisplayer
-	{
+	protected class VTLHTMLCodePanel extends VTLHTMLCodeDisplayer implements CodeDisplayer {
 		private final CGTemplate _file;
 
-		protected VTLHTMLCodePanel(CGTemplate file)
-		{
+		protected VTLHTMLCodePanel(CGTemplate file) {
 			super(file.getContent());
 			_file = file;
 		}
 
 		@Override
-		public void refresh()
-		{
+		public void refresh() {
 			setText(_file.getContent());
 		}
 
 		@Override
-		public String getEditedContent()
-		{
+		public String getEditedContent() {
 			return getText();
 		}
 
 		@Override
-		public void setEditedContent(String content)
-		{
+		public void setEditedContent(String content) {
 			setTextKeepDisplayContext(content);
 		}
 
 		@Override
-		public void addToFocusListener (FocusListener aFocusListener)
-		{
+		public void addToFocusListener(FocusListener aFocusListener) {
 			addFocusListener(aFocusListener);
 		}
 
 	}
 
-	protected class WODCodePanel extends WODCodeDisplayer implements CodeDisplayer
-	{
+	protected class WODCodePanel extends WODCodeDisplayer implements CodeDisplayer {
 		private final CGTemplate _file;
 
-		protected WODCodePanel(CGTemplate file)
-		{
+		protected WODCodePanel(CGTemplate file) {
 			super(file.getContent());
 			_file = file;
 		}
 
 		@Override
-		public void refresh()
-		{
+		public void refresh() {
 			setText(_file.getContent());
 		}
 
 		@Override
-		public String getEditedContent()
-		{
+		public String getEditedContent() {
 			return getText();
 		}
 
 		@Override
-		public void setEditedContent(String content)
-		{
+		public void setEditedContent(String content) {
 			setTextKeepDisplayContext(content);
 		}
 
 		@Override
-		public void addToFocusListener (FocusListener aFocusListener)
-		{
+		public void addToFocusListener(FocusListener aFocusListener) {
 			addFocusListener(aFocusListener);
 		}
 
 	}
-
 
 	/**
-	 * Returns flag indicating if this view is itself responsible for scroll management
-	 * When not, Flexo will manage it's own scrollbar for you
+	 * Returns flag indicating if this view is itself responsible for scroll management When not, Flexo will manage it's own scrollbar for
+	 * you
 	 * 
 	 * @return
 	 */
 	@Override
-	public boolean isAutoscrolled() 
-	{
+	public boolean isAutoscrolled() {
 		return true;
 	}
 
 	@Override
-	public FlexoModelObject getFocusedObject()
-	{
+	public FlexoModelObject getFocusedObject() {
 		return getRepresentedObject();
 	}
 
 	@Override
-	public Vector getGlobalSelection() 
-	{
+	public Vector getGlobalSelection() {
 		return null;
 	}
 
 	@Override
-	public String getEditedContent()
-	{
+	public String getEditedContent() {
 		if (_codeDisplayer != null) {
 			return _codeDisplayer.getEditedContent();
 		}
@@ -598,8 +537,7 @@ public class DGTemplateFileModuleView extends JPanel implements ModuleView<CGTem
 	}
 
 	@Override
-	public void setEditedContent(String content)
-	{
+	public void setEditedContent(String content) {
 		if (_codeDisplayer != null) {
 			_codeDisplayer.setEditedContent(content);
 		}
@@ -617,6 +555,5 @@ public class DGTemplateFileModuleView extends JPanel implements ModuleView<CGTem
 	public FlexoEditor getEditor() {
 		return _controller.getEditor();
 	}
-
 
 }

@@ -32,31 +32,28 @@ import org.openflexo.logging.FlexoLogger;
 
 /**
  * @author sylvain
- *
+ * 
  */
-public class PopupLinkComponentAPIFileResource extends ComponentAPIFileResource<PopupLinkComponentGenerator> implements PopupComponentFileResource
-{
-    protected static final Logger logger = FlexoLogger.getLogger(PopupLinkComponentAPIFileResource.class.getPackage().getName());
+public class PopupLinkComponentAPIFileResource extends ComponentAPIFileResource<PopupLinkComponentGenerator> implements
+		PopupComponentFileResource {
+	protected static final Logger logger = FlexoLogger.getLogger(PopupLinkComponentAPIFileResource.class.getPackage().getName());
 
-    /**
-     * @param builder
-     */
-    public PopupLinkComponentAPIFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
+	/**
+	 * @param builder
+	 */
+	public PopupLinkComponentAPIFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
-    /**
-     * @param aProject
-     */
-    public PopupLinkComponentAPIFileResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
+	/**
+	 * @param aProject
+	 */
+	public PopupLinkComponentAPIFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getComponentDefinition()) {
 			if (dataModification instanceof ComponentNameChanged2) {
 				logger.info("Building new resource after renaming");
@@ -68,8 +65,7 @@ public class PopupLinkComponentAPIFileResource extends ComponentAPIFileResource<
 				generator.getRepository().refresh();
 				observable.deleteObserver(this);
 				isObserverRegistered = false;
-			}
-			else if (dataModification instanceof ComponentDeleted) {
+			} else if (dataModification instanceof ComponentDeleted) {
 				logger.info("Handle component has been deleted");
 				setGenerator(null);
 				getCGFile().setMarkedForDeletion(true);
@@ -79,6 +75,5 @@ public class PopupLinkComponentAPIFileResource extends ComponentAPIFileResource<
 			}
 		}
 	}
-
 
 }

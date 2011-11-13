@@ -24,84 +24,75 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.dm.eo.DMEORepository;
 import org.openflexo.foundation.xml.FlexoDMBuilder;
 
-
 /**
  * Represents a logical group of objects stored in a thesaurus database
  * 
  * @author sguerin
  * 
  */
-public class ThesaurusDatabaseRepository extends DMEORepository
-{
+public class ThesaurusDatabaseRepository extends DMEORepository {
 
-    private static final Logger logger = Logger.getLogger(ThesaurusDatabaseRepository.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ThesaurusDatabaseRepository.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance variables
+	// =========================
+	// ==========================================================================
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    /**
-     * Constructor used during deserialization
-     */
-    public ThesaurusDatabaseRepository(FlexoDMBuilder builder)
-    {
-        this(builder.dmModel);
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor used during deserialization
+	 */
+	public ThesaurusDatabaseRepository(FlexoDMBuilder builder) {
+		this(builder.dmModel);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Default constructor
-     */
-    public ThesaurusDatabaseRepository(DMModel dmModel)
-    {
-        super(dmModel);
-    }
+	/**
+	 * Default constructor
+	 */
+	public ThesaurusDatabaseRepository(DMModel dmModel) {
+		super(dmModel);
+	}
 
-    @Override
-	public DMRepositoryFolder getRepositoryFolder()
-    {
-        return getDMModel().getLibraryRepositoryFolder();
-    }
-    
-  @Override
-public int getOrder()
-    {
-        return 10;
-    }
+	@Override
+	public DMRepositoryFolder getRepositoryFolder() {
+		return getDMModel().getLibraryRepositoryFolder();
+	}
 
-    @Override
-	public boolean isReadOnly()
-    {
-        return true;
-    }
+	@Override
+	public int getOrder() {
+		return 10;
+	}
 
-    @Override
-	public boolean isDeletable()
-    {
-        return true;
-    }
+	@Override
+	public boolean isReadOnly() {
+		return true;
+	}
 
-    @Override
-	public void delete(boolean deleteEOModelFiles)
-    {
-         getDMModel().removeFromThesaurusDatabaseRepositories(this);
-         super.delete(deleteEOModelFiles);
-     }
+	@Override
+	public boolean isDeletable() {
+		return true;
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "thesaurus_database_repository";
-    }
-    
+	@Override
+	public void delete(boolean deleteEOModelFiles) {
+		getDMModel().removeFromThesaurusDatabaseRepositories(this);
+		super.delete(deleteEOModelFiles);
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "thesaurus_database_repository";
+	}
+
 }

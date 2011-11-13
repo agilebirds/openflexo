@@ -19,7 +19,6 @@
  */
 package org.openflexo.generator;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -92,8 +91,7 @@ import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ToolBox;
 
-
-public class TestRoundTrip extends CGTestCase  {
+public class TestRoundTrip extends CGTestCase {
 
 	private static final String BUILDPROPERTIES_VM = "build.properties.vm";
 
@@ -108,38 +106,35 @@ public class TestRoundTrip extends CGTestCase  {
 	static BuildPropertiesResource _buildPropertiesResource;
 
 	@Override
-	protected void reloadGeneratedResources()
-	{
+	protected void reloadGeneratedResources() {
 		super.reloadGeneratedResources();
-		_buildPropertiesResource = (BuildPropertiesResource)_project.resourceForKey(ResourceType.TEXT_FILE, codeRepository.getName() + ".BUILD_PROPERTIES");
+		_buildPropertiesResource = (BuildPropertiesResource) _project.resourceForKey(ResourceType.TEXT_FILE, codeRepository.getName()
+				+ ".BUILD_PROPERTIES");
 	}
 
-
 	@Override
-	protected void reloadProject(boolean fullLoading)
-	{
+	protected void reloadProject(boolean fullLoading) {
 		super.reloadProject(fullLoading);
 	}
 
 	/**
 	 * Creates a new empty project in a temp directory
 	 */
-	public void test0CreateProject()
-	{
+	public void test0CreateProject() {
 		log("test0CreateProject");
 		ToolBox.setPlatform();
 		FlexoLoggingManager.forceInitialize();
 		try {
 			File tempFile = File.createTempFile(TEST_RT, "");
-			_projectDirectory = new File (tempFile.getParentFile(),tempFile.getName()+".prj");
+			_projectDirectory = new File(tempFile.getParentFile(), tempFile.getName() + ".prj");
 			tempFile.delete();
 		} catch (IOException e) {
 			fail();
 		}
-		logger.info("Project directory: "+_projectDirectory.getAbsolutePath());
-		_projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length()-4);
-		logger.info("Project identifier: "+_projectIdentifier);
-		_editor = (DefaultFlexoEditor)FlexoResourceManager.initializeNewProject(_projectDirectory,EDITOR_FACTORY,null);
+		logger.info("Project directory: " + _projectDirectory.getAbsolutePath());
+		_projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length() - 4);
+		logger.info("Project identifier: " + _projectIdentifier);
+		_editor = (DefaultFlexoEditor) FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY, null);
 		_project = _editor.getProject();
 		logger.info("Project has been SUCCESSFULLY created");
 
@@ -158,19 +153,19 @@ public class TestRoundTrip extends CGTestCase  {
 				assertSynchonized(resource, _rmResource);
 			}
 		}
-		assertSynchonized (_dmResource,_executionModelResource);
-		assertSynchonized (_dmResource,_eoPrototypesResource);
+		assertSynchonized(_dmResource, _executionModelResource);
+		assertSynchonized(_dmResource, _eoPrototypesResource);
 
-		assertSynchonized (_wkfResource,_rootProcessResource);
+		assertSynchonized(_wkfResource, _rootProcessResource);
 
-		assertDepends (_rootProcessResource,_dmResource);
-		assertNotDepends (_rootProcessResource,_clResource);
+		assertDepends(_rootProcessResource, _dmResource);
+		assertNotDepends(_rootProcessResource, _clResource);
 
 		logger.info("Resources are WELL created and DEPENDANCIES checked");
 
 		for (FlexoResource resource : _project.getResources().values()) {
 			if (resource instanceof FlexoStorageResource) {
-				assertNotModified((FlexoStorageResource)resource);
+				assertNotModified((FlexoStorageResource) resource);
 			}
 		}
 
@@ -181,44 +176,40 @@ public class TestRoundTrip extends CGTestCase  {
 		action.doAction();
         defineStatusColumn(action.getNewProcess());
 		assertTrue(action.hasActionExecutionSucceeded());
-		logger.info("SubProcess "+action.getNewProcess().getName()+" successfully created");
+		logger.info("SubProcess " + action.getNewProcess().getName() + " successfully created");
 		_subProcessResource = _project.getFlexoProcessResource(TEST_SUB_PROCESS);
 		assertNotNull(_subProcessResource);
-		assertSynchonized(_subProcessResource,_rmResource);
-		assertSynchonized(_subProcessResource,_wkfResource);
-		assertDepends(_subProcessResource,_dmResource);
-		assertNotDepends(_subProcessResource,_clResource);
+		assertSynchonized(_subProcessResource, _rmResource);
+		assertSynchonized(_subProcessResource, _wkfResource);
+		assertDepends(_subProcessResource, _dmResource);
+		assertNotDepends(_subProcessResource, _clResource);
 		for (FlexoResource resource : _project.getResources().values()) {
 			if (resource == _rmResource) {
 				assertModified(_rmResource);
-			}
-			else if (resource == _dmResource) {
+			} else if (resource == _dmResource) {
 				assertModified(_dmResource);
-			}
-			else if (resource == _wkfResource) {
+			} else if (resource == _wkfResource) {
 				assertModified(_wkfResource);
-			}
-			else if (resource == _rootProcessResource) {
+			} else if (resource == _rootProcessResource) {
 				assertModified(_rootProcessResource);
-			}
-			else if (resource == _subProcessResource) {
+			} else if (resource == _subProcessResource) {
 				assertModified(_subProcessResource);
-			}
-			else if (resource instanceof FlexoStorageResource) {
-				assertNotModified((FlexoStorageResource)resource);
+			} else if (resource instanceof FlexoStorageResource) {
+				assertNotModified((FlexoStorageResource) resource);
 			}
 		}
 
-		DropWKFElement dropSubProcessNode = DropWKFElement.actionType.makeNewAction(_rootProcessResource.getFlexoProcess().getActivityPetriGraph(), null, _editor);
+		DropWKFElement dropSubProcessNode = DropWKFElement.actionType.makeNewAction(_rootProcessResource.getFlexoProcess()
+				.getActivityPetriGraph(), null, _editor);
 		dropSubProcessNode.setElementType(WKFElementType.MULTIPLE_INSTANCE_PARALLEL_SUB_PROCESS_NODE);
 		dropSubProcessNode.setParameter(DropWKFElement.SUB_PROCESS, _subProcessResource.getFlexoProcess());
-		dropSubProcessNode.setLocation(100,100);
+		dropSubProcessNode.setLocation(100, 100);
 		dropSubProcessNode.doAction();
 		assertTrue(dropSubProcessNode.hasActionExecutionSucceeded());
-		_subProcessNode = (SubProcessNode)dropSubProcessNode.getObject();
+		_subProcessNode = (SubProcessNode) dropSubProcessNode.getObject();
 		_subProcessNode.setName(TEST_SUB_PROCESS_NODE);
-		logger.info("SubProcessNode "+_subProcessNode.getName()+" successfully created");
-		assertDepends(_rootProcessResource,_subProcessResource);
+		logger.info("SubProcessNode " + _subProcessNode.getName() + " successfully created");
+		assertDepends(_rootProcessResource, _subProcessResource);
 		saveProject();
 
 		OpenOperationLevel openOperationLevel = OpenOperationLevel.actionType.makeNewAction(_subProcessNode, null, _editor);
@@ -226,13 +217,14 @@ public class TestRoundTrip extends CGTestCase  {
 		assertTrue(openOperationLevel.hasActionExecutionSucceeded());
 		DropWKFElement dropOperation = DropWKFElement.actionType.makeNewAction(_subProcessNode.getOperationPetriGraph(), null, _editor);
 		dropOperation.setElementType(WKFElementType.NORMAL_OPERATION);
-		dropOperation.setLocation(100,100);
+		dropOperation.setLocation(100, 100);
 		dropOperation.doAction();
 		assertTrue(dropOperation.hasActionExecutionSucceeded());
-		_operationNode = (OperationNode)dropOperation.getObject();
+		_operationNode = (OperationNode) dropOperation.getObject();
 		_operationNode.setName(TEST_OPERATION_NODE_1);
-		logger.info("OperationNode "+_operationNode.getName()+" successfully created");
-		SetAndOpenOperationComponent setOperationComponent = SetAndOpenOperationComponent.actionType.makeNewAction(_operationNode, null, _editor);
+		logger.info("OperationNode " + _operationNode.getName() + " successfully created");
+		SetAndOpenOperationComponent setOperationComponent = SetAndOpenOperationComponent.actionType.makeNewAction(_operationNode, null,
+				_editor);
 		setOperationComponent.setNewComponentName(OPERATION_COMPONENT_1);
 		setOperationComponent.doAction();
 		assertTrue(setOperationComponent.hasActionExecutionSucceeded());
@@ -250,14 +242,14 @@ public class TestRoundTrip extends CGTestCase  {
 		// Insert a new bloc at index 0, name it Bloc1
 		DropIEElement dropBloc1 = DropIEElement.createBlocInComponent(_operationComponent1, 0, _editor);
 		assertTrue(dropBloc1.doAction().hasActionExecutionSucceeded());
-		IEBlocWidget bloc1 = (IEBlocWidget)dropBloc1.getDroppedWidget();
+		IEBlocWidget bloc1 = (IEBlocWidget) dropBloc1.getDroppedWidget();
 		assertNotNull(bloc1);
 		bloc1.setTitle("Bloc1");
 
 		// Insert a new bloc at index 1, name it Bloc2
 		DropIEElement dropBloc2 = DropIEElement.createBlocInComponent(_operationComponent1, 1, _editor);
 		assertTrue(dropBloc2.doAction().hasActionExecutionSucceeded());
-		_bloc2 = (IEBlocWidget)dropBloc2.getDroppedWidget();
+		_bloc2 = (IEBlocWidget) dropBloc2.getDroppedWidget();
 		assertNotNull(_bloc2);
 		_bloc2.setTitle("Bloc2");
 
@@ -265,14 +257,14 @@ public class TestRoundTrip extends CGTestCase  {
 		// This bloc is therefore placed between Bloc1 and Bloc2
 		DropIEElement dropBloc3 = DropIEElement.createBlocInComponent(_operationComponent1, 1, _editor);
 		assertTrue(dropBloc3.doAction().hasActionExecutionSucceeded());
-		IEBlocWidget bloc3 = (IEBlocWidget)dropBloc3.getDroppedWidget();
+		IEBlocWidget bloc3 = (IEBlocWidget) dropBloc3.getDroppedWidget();
 		assertNotNull(bloc3);
 		bloc3.setTitle("Bloc3");
 
 		// Drop a table in the bloc2
 		DropIEElement dropTable = DropIEElement.createTableInBloc(_bloc2, _editor);
 		assertTrue(dropTable.doAction().hasActionExecutionSucceeded());
-		IEHTMLTableWidget table = (IEHTMLTableWidget)dropTable.getDroppedWidget();
+		IEHTMLTableWidget table = (IEHTMLTableWidget) dropTable.getDroppedWidget();
 		assertNotNull(table);
 
 		// Drop a label in the table, at cell (0,0) at position 0
@@ -286,7 +278,7 @@ public class TestRoundTrip extends CGTestCase  {
 		// Now, drop a TabsContainer
 		DropIEElement dropTabs = DropIEElement.createTabsInComponent(_operationComponent1, 3, _editor);
 		assertTrue(dropTabs.doAction().hasActionExecutionSucceeded());
-		IESequenceTab tabs = (IESequenceTab)dropTabs.getDroppedWidget();
+		IESequenceTab tabs = (IESequenceTab) dropTabs.getDroppedWidget();
 
 		FlexoComponentFolder rootFolder = _project.getFlexoComponentLibrary().getRootFolder();
 
@@ -326,14 +318,14 @@ public class TestRoundTrip extends CGTestCase  {
 		// Insert a new bloc at index 0, name it Bloc1
 		DropIEElement dropBloc1InOp2 = DropIEElement.createBlocInComponent(_operationComponent2, 0, _editor);
 		assertTrue(dropBloc1InOp2.doAction().hasActionExecutionSucceeded());
-		IEBlocWidget bloc1InOp2 = (IEBlocWidget)dropBloc1InOp2.getDroppedWidget();
+		IEBlocWidget bloc1InOp2 = (IEBlocWidget) dropBloc1InOp2.getDroppedWidget();
 		assertNotNull(bloc1InOp2);
 		bloc1InOp2.setTitle("NewBloc");
 
 		// Now, drop a TabsContainer
 		DropIEElement dropTabsInOp2 = DropIEElement.createTabsInComponent(_operationComponent2, 1, _editor);
 		assertTrue(dropTabsInOp2.doAction().hasActionExecutionSucceeded());
-		IESequenceTab tabsInOp2 = (IESequenceTab)dropTabsInOp2.getDroppedWidget();
+		IESequenceTab tabsInOp2 = (IESequenceTab) dropTabsInOp2.getDroppedWidget();
 
 		// Put Tab1 inside
 		AddTab addTab1InTabs = AddTab.actionType.makeNewAction(tabsInOp2, null, _editor);
@@ -359,14 +351,14 @@ public class TestRoundTrip extends CGTestCase  {
 		// Insert a new bloc at index 0, name it Bloc1
 		DropIEElement dropBloc1InOp3 = DropIEElement.createBlocInComponent(_operationComponent3, 0, _editor);
 		assertTrue(dropBloc1InOp3.doAction().hasActionExecutionSucceeded());
-		IEBlocWidget bloc1InOp3 = (IEBlocWidget)dropBloc1InOp3.getDroppedWidget();
+		IEBlocWidget bloc1InOp3 = (IEBlocWidget) dropBloc1InOp3.getDroppedWidget();
 		assertNotNull(bloc1InOp3);
 		bloc1InOp3.setTitle("NewBloc");
 
 		// Now, drop a TabsContainer
 		DropIEElement dropTabsInOp3 = DropIEElement.createTabsInComponent(_operationComponent3, 1, _editor);
 		assertTrue(dropTabsInOp3.doAction().hasActionExecutionSucceeded());
-		IESequenceTab tabsInOp3 = (IESequenceTab)dropTabsInOp3.getDroppedWidget();
+		IESequenceTab tabsInOp3 = (IESequenceTab) dropTabsInOp3.getDroppedWidget();
 
 		// Put Tab2 inside
 		AddTab addTab2InOp3 = AddTab.actionType.makeNewAction(tabsInOp3, null, _editor);
@@ -376,44 +368,45 @@ public class TestRoundTrip extends CGTestCase  {
 		addTab2InOp3.setTabContainer(tabsInOp3);
 		assertTrue(addTab2InOp3.doAction().hasActionExecutionSucceeded());
 
-		DropWKFElement addActivity = DropWKFElement.actionType.makeNewAction(_subProcessResource.getFlexoProcess().getActivityPetriGraph(), null, _editor);
+		DropWKFElement addActivity = DropWKFElement.actionType.makeNewAction(_subProcessResource.getFlexoProcess().getActivityPetriGraph(),
+				null, _editor);
 		addActivity.setElementType(WKFElementType.NORMAL_ACTIVITY);
-		addActivity.setLocation(100,100);
+		addActivity.setLocation(100, 100);
 		addActivity.doAction();
 		assertTrue(addActivity.hasActionExecutionSucceeded());
-		ActivityNode activityNode = (ActivityNode)addActivity.getObject();
+		ActivityNode activityNode = (ActivityNode) addActivity.getObject();
 		activityNode.setName(TEST_ACTIVITY_IN_SUB_PROCESS);
-		logger.info("ActivityNode "+activityNode.getName()+" successfully created");
+		logger.info("ActivityNode " + activityNode.getName() + " successfully created");
 
 		OpenOperationLevel openOperationLevelInSubProcess = OpenOperationLevel.actionType.makeNewAction(activityNode, null, _editor);
 		openOperationLevelInSubProcess.doAction();
 		assertTrue(openOperationLevel.hasActionExecutionSucceeded());
 		DropWKFElement dropOperation2 = DropWKFElement.actionType.makeNewAction(activityNode.getOperationPetriGraph(), null, _editor);
 		dropOperation2.setElementType(WKFElementType.NORMAL_OPERATION);
-		dropOperation2.setLocation(10,50);
+		dropOperation2.setLocation(10, 50);
 		dropOperation2.doAction();
 		assertTrue(dropOperation2.hasActionExecutionSucceeded());
-		OperationNode operationNode2 = (OperationNode)dropOperation2.getObject();
+		OperationNode operationNode2 = (OperationNode) dropOperation2.getObject();
 		operationNode2.setName(TEST_OPERATION_NODE_2);
-		logger.info("OperationNode "+operationNode2.getName()+" successfully created");
+		logger.info("OperationNode " + operationNode2.getName() + " successfully created");
 
-		SetAndOpenOperationComponent setOperationComponent2
-		= SetAndOpenOperationComponent.actionType.makeNewAction(operationNode2, null, _editor);
+		SetAndOpenOperationComponent setOperationComponent2 = SetAndOpenOperationComponent.actionType.makeNewAction(operationNode2, null,
+				_editor);
 		setOperationComponent2.setNewComponentName(OPERATION_COMPONENT_2);
 		setOperationComponent2.doAction();
 		assertTrue(setOperationComponent2.hasActionExecutionSucceeded());
 
 		DropWKFElement dropOperation3 = DropWKFElement.actionType.makeNewAction(activityNode.getOperationPetriGraph(), null, _editor);
 		dropOperation3.setElementType(WKFElementType.NORMAL_OPERATION);
-		dropOperation3.setLocation(100,50);
+		dropOperation3.setLocation(100, 50);
 		dropOperation3.doAction();
 		assertTrue(dropOperation3.hasActionExecutionSucceeded());
-		OperationNode operationNode3 = (OperationNode)dropOperation3.getObject();
+		OperationNode operationNode3 = (OperationNode) dropOperation3.getObject();
 		operationNode3.setName(TEST_OPERATION_NODE_3);
-		logger.info("OperationNode "+operationNode3.getName()+" successfully created");
+		logger.info("OperationNode " + operationNode3.getName() + " successfully created");
 
-		SetAndOpenOperationComponent setOperationComponent3
-		= SetAndOpenOperationComponent.actionType.makeNewAction(operationNode3, null, _editor);
+		SetAndOpenOperationComponent setOperationComponent3 = SetAndOpenOperationComponent.actionType.makeNewAction(operationNode3, null,
+				_editor);
 		setOperationComponent3.setNewComponentName(OPERATION_COMPONENT_3);
 		setOperationComponent3.doAction();
 		assertTrue(setOperationComponent3.hasActionExecutionSucceeded());
@@ -424,8 +417,7 @@ public class TestRoundTrip extends CGTestCase  {
 	/**
 	 * Reload project, Initialize code generation
 	 */
-	public void test1InitializeCodeGeneration()
-	{
+	public void test1InitializeCodeGeneration() {
 		log("test1InitializeCodeGeneration");
 		reloadProject(true);
 		// Save RM for eventual back-synchro to be saved
@@ -435,29 +427,29 @@ public class TestRoundTrip extends CGTestCase  {
 		reloadProject(true); // This time, all must be not modified
 		for (FlexoResource resource : _project.getResources().values()) {
 			if (resource instanceof FlexoStorageResource) {
-				assertNotModified((FlexoStorageResource)resource);
+				assertNotModified((FlexoStorageResource) resource);
 			}
 		}
-		File directory = new File(_projectDirectory.getParentFile(),"GeneratedCodeFor"+_project.getProjectName());
+		File directory = new File(_projectDirectory.getParentFile(), "GeneratedCodeFor" + _project.getProjectName());
 		directory.mkdirs();
 
 		createDefaultGCRepository();
 		codeRepository.setTargetType(CodeType.PROTOTYPE);
 
-		_editor.registerExceptionHandlerFor(ValidateProject.actionType,new FlexoExceptionHandler<ValidateProject>() {
+		_editor.registerExceptionHandlerFor(ValidateProject.actionType, new FlexoExceptionHandler<ValidateProject>() {
 			@Override
 			public boolean handleException(FlexoException exception, ValidateProject action) {
 				if (action.getIeValidationReport() != null && action.getIeValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from IE:\n"+action.getIeValidationReport().reportAsString());
+					logger.info("Errors reported from IE:\n" + action.getIeValidationReport().reportAsString());
 				}
 				if (action.getWkfValidationReport() != null && action.getWkfValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from WKF:\n"+action.getWkfValidationReport().reportAsString());
+					logger.info("Errors reported from WKF:\n" + action.getWkfValidationReport().reportAsString());
 				}
 				if (action.getDkvValidationReport() != null && action.getDkvValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from DKV:\n"+action.getDkvValidationReport().reportAsString());
+					logger.info("Errors reported from DKV:\n" + action.getDkvValidationReport().reportAsString());
 				}
 				if (action.getDmValidationReport() != null && action.getDmValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from DM:\n"+action.getDmValidationReport().reportAsString());
+					logger.info("Errors reported from DM:\n" + action.getDmValidationReport().reportAsString());
 				}
 				return true;
 			}
@@ -471,31 +463,32 @@ public class TestRoundTrip extends CGTestCase  {
 
 		// Try to fix errors (GPO: this is not required anymore, prefix is always set on root folder unless done otherwise explicitly)
 		FlexoComponentFolder rootFolder = _project.getFlexoComponentLibrary().getRootFolder();
-		//rootFolder.setComponentPrefix("TST");
+		// rootFolder.setComponentPrefix("TST");
 		// To fix errors we need another process and operation on which we will bind the menu
 		AddSubProcess process = AddSubProcess.actionType.makeNewAction(_project.getFlexoWorkflow(), null, _editor);
 		process.setNewProcessName("Process context free");
 		process.doAction();
 		assertTrue(process.hasActionExecutionSucceeded());
         defineStatusColumn(process.getNewProcess());
-		DropWKFElement addActivity = DropWKFElement.actionType.makeNewAction(process.getNewProcess().getActivityPetriGraph(), null, _editor);
+		DropWKFElement addActivity = DropWKFElement.actionType
+				.makeNewAction(process.getNewProcess().getActivityPetriGraph(), null, _editor);
 		addActivity.setElementType(WKFElementType.NORMAL_ACTIVITY);
-		addActivity.setLocation(100,100);
+		addActivity.setLocation(100, 100);
 		addActivity.doAction();
 		assertTrue(addActivity.hasActionExecutionSucceeded());
-		ActivityNode activityNode = (ActivityNode)addActivity.getObject();
-		logger.info("ActivityNode "+activityNode.getName()+" successfully created");
+		ActivityNode activityNode = (ActivityNode) addActivity.getObject();
+		logger.info("ActivityNode " + activityNode.getName() + " successfully created");
 
 		OpenOperationLevel openOperationLevel = OpenOperationLevel.actionType.makeNewAction(activityNode, null, _editor);
 		openOperationLevel.doAction();
 		assertTrue(openOperationLevel.hasActionExecutionSucceeded());
 		DropWKFElement dropOperation2 = DropWKFElement.actionType.makeNewAction(activityNode.getOperationPetriGraph(), null, _editor);
 		dropOperation2.setElementType(WKFElementType.NORMAL_OPERATION);
-		dropOperation2.setLocation(10,50);
+		dropOperation2.setLocation(10, 50);
 		dropOperation2.doAction();
 		assertTrue(dropOperation2.hasActionExecutionSucceeded());
 
-		OperationNode operationNodeForMenu = (OperationNode)dropOperation2.getObject();
+		OperationNode operationNodeForMenu = (OperationNode) dropOperation2.getObject();
 		operationNodeForMenu.setName("OperationNodeForMenu");
 
 		// We also need to set a screen on the operation node
@@ -511,7 +504,7 @@ public class TestRoundTrip extends CGTestCase  {
 			// Normal
 		}
 
-		logger.info("OperationNode "+operationNodeForMenu.getName()+" successfully created");
+		logger.info("OperationNode " + operationNodeForMenu.getName() + " successfully created");
 		_project.getFlexoNavigationMenu().getRootMenu().setProcess(operationNodeForMenu.getProcess());
 		_project.getFlexoNavigationMenu().getRootMenu().setOperation(operationNodeForMenu);
 		associateTabWithOperations();
@@ -524,13 +517,14 @@ public class TestRoundTrip extends CGTestCase  {
 
 		// Synchronize code generation
 		codeRepository.connect();
-		SynchronizeRepositoryCodeGeneration synchronizeCodeGeneration = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(codeRepository, null, _editor);
+		SynchronizeRepositoryCodeGeneration synchronizeCodeGeneration = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(
+				codeRepository, null, _editor);
 		// Do it even if validation failed
 		synchronizeCodeGeneration.setContinueAfterValidation(true);
 		synchronizeCodeGeneration.doAction();
 		assertTrue(synchronizeCodeGeneration.hasActionExecutionSucceeded());
 		// Write generated files to disk
-		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository,null, _editor);
+		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository, null, _editor);
 		writeToDisk.doAction();
 		assertTrue(writeToDisk.hasActionExecutionSucceeded());
 		reloadGeneratedResources();
@@ -612,21 +606,21 @@ public class TestRoundTrip extends CGTestCase  {
 
 		// Synchronize code generation again
 		codeRepository.connect();
-		SynchronizeRepositoryCodeGeneration synchronizeCodeGenerationAgain = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(codeRepository, null, _editor);
+		SynchronizeRepositoryCodeGeneration synchronizeCodeGenerationAgain = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(
+				codeRepository, null, _editor);
 		synchronizeCodeGenerationAgain.setContinueAfterValidation(true);
 		synchronizeCodeGenerationAgain.doAction();
 		assertTrue(synchronizeCodeGeneration.hasActionExecutionSucceeded());
 		logger.info("Code generation is now synchronized");
 		checkThatAllFilesAreUpToDate();
-		//Except(GenerationStatus.GenerationModified,buildPropertiesResource.getCGFile(),appConfProdResource.getCGFile());
+		// Except(GenerationStatus.GenerationModified,buildPropertiesResource.getCGFile(),appConfProdResource.getCGFile());
 
 	}
 
 	/**
 	 * Perform some optimitic dependancy checking while editing components
 	 */
-	public void test2CheckDependancyCheckingWithComponents()
-	{
+	public void test2CheckDependancyCheckingWithComponents() {
 		log("test2CheckDependancyCheckingWithComponents");
 
 		_operationComponent1 = _operationComponentResource1.getIEOperationComponent();
@@ -635,46 +629,35 @@ public class TestRoundTrip extends CGTestCase  {
 		// On component 1, insert a new bloc at index 3, name it Bloc4
 		DropIEElement dropBloc4 = DropIEElement.createBlocInComponent(_operationComponent1, 0, _editor);
 		assertTrue(dropBloc4.doAction().hasActionExecutionSucceeded());
-		IEBlocWidget bloc4 = (IEBlocWidget)dropBloc4.getDroppedWidget();
+		IEBlocWidget bloc4 = (IEBlocWidget) dropBloc4.getDroppedWidget();
 		assertNotNull(bloc4);
 
-		checkThatAllFilesAreUpToDateExcept(
-				GenerationStatus.GenerationModified,
-				operationComponent1JavaResource.getCGFile(),
-				operationComponent1APIResource.getCGFile(),
-				operationComponent1WOResource.getCGFile(),
-				cstJavaResource.getCGFile(),
-				rootProcessJSCopy.getCGFile(),
-				operationComponent1ScreenshotCopyOfCopy.getCGFile());
+		checkThatAllFilesAreUpToDateExcept(GenerationStatus.GenerationModified, operationComponent1JavaResource.getCGFile(),
+				operationComponent1APIResource.getCGFile(), operationComponent1WOResource.getCGFile(), cstJavaResource.getCGFile(),
+				rootProcessJSCopy.getCGFile(), operationComponent1ScreenshotCopyOfCopy.getCGFile());
 		// Generate content
-		GenerateSourceCode generateRequiredCode = GenerateSourceCode.actionType.makeNewAction(codeRepository,null, _editor);
+		GenerateSourceCode generateRequiredCode = GenerateSourceCode.actionType.makeNewAction(codeRepository, null, _editor);
 		assertTrue(generateRequiredCode.doAction().hasActionExecutionSucceeded());
 
 		// Write generated files to disk
-		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository,null, _editor);
+		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository, null, _editor);
 		writeToDisk.doAction();
 
 		checkThatAllFilesAreUpToDate();
 
 		bloc4.setTitle("Bloc4");
 
-		checkThatAllFilesAreUpToDateExcept(
-				GenerationStatus.GenerationModified,
-				operationComponent1JavaResource.getCGFile(),
-				operationComponent1APIResource.getCGFile(),
-				operationComponent1WOResource.getCGFile(),
-				cstJavaResource.getCGFile(),
-				rootProcessJSCopy.getCGFile(),
-				operationComponent1ScreenshotCopyOfCopy.getCGFile());
-		generateRequiredCode = GenerateSourceCode.actionType.makeNewAction(codeRepository,null, _editor);
+		checkThatAllFilesAreUpToDateExcept(GenerationStatus.GenerationModified, operationComponent1JavaResource.getCGFile(),
+				operationComponent1APIResource.getCGFile(), operationComponent1WOResource.getCGFile(), cstJavaResource.getCGFile(),
+				rootProcessJSCopy.getCGFile(), operationComponent1ScreenshotCopyOfCopy.getCGFile());
+		generateRequiredCode = GenerateSourceCode.actionType.makeNewAction(codeRepository, null, _editor);
 		assertTrue(generateRequiredCode.doAction().hasActionExecutionSucceeded());
 		// Write generated files to disk
-		writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository,null, _editor);
+		writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository, null, _editor);
 		writeToDisk.doAction();
 
 		// And save project
 		saveProject();
-
 
 		IETabComponent tab2 = _tab2ComponentResource.getTabComponent();
 		assertNotNull(tab2);
@@ -682,42 +665,32 @@ public class TestRoundTrip extends CGTestCase  {
 		// Insert a new bloc at index 0, name it "BlocInTab2"
 		DropIEElement dropBlocInTab2 = DropIEElement.createBlocInComponent(tab2, 0, _editor);
 		assertTrue(dropBlocInTab2.doAction().hasActionExecutionSucceeded());
-		IEBlocWidget bloc = (IEBlocWidget)dropBlocInTab2.getDroppedWidget();
+		IEBlocWidget bloc = (IEBlocWidget) dropBlocInTab2.getDroppedWidget();
 		assertNotNull(bloc);
 		bloc.setTitle("BlocInTab2");
 
 		// Drop a table in the bloc2
 		DropIEElement dropTable = DropIEElement.createTableInBloc(bloc, _editor);
 		assertTrue(dropTable.doAction().hasActionExecutionSucceeded());
-		IEHTMLTableWidget table = (IEHTMLTableWidget)dropTable.getDroppedWidget();
+		IEHTMLTableWidget table = (IEHTMLTableWidget) dropTable.getDroppedWidget();
 		assertNotNull(table);
 		// Drop a label in the table, at cell (0,0) at position 0
 		DropIEElement dropLabel = DropIEElement.insertWidgetInTable(table, WidgetType.LABEL, 0, 0, 0, _editor);
 		assertTrue(dropLabel.doAction().hasActionExecutionSucceeded());
 
-		checkThatAllFilesAreUpToDateExcept(
-				GenerationStatus.GenerationModified,
-				tabComponent2JavaResource.getCGFile(),
-				tabComponent2APIResource.getCGFile(),
-				tabComponent2WOResource.getCGFile(),
-				operationComponent1JavaResource.getCGFile(),
-				operationComponent1APIResource.getCGFile(),
-				operationComponent1WOResource.getCGFile(),
-				operationComponent3JavaResource.getCGFile(),
-				operationComponent3APIResource.getCGFile(),
-				operationComponent3WOResource.getCGFile(),
-				cstJavaResource.getCGFile(),
-				rootProcessJSCopy.getCGFile(),
-				subProcessJSCopy.getCGFile(),
-				operationComponent1ScreenshotCopyOfCopy.getCGFile(),
-				operationComponent3ScreenshotCopyOfCopy.getCGFile(),
-				tabComponent2ScreenshotCopyOfCopy.getCGFile());
+		checkThatAllFilesAreUpToDateExcept(GenerationStatus.GenerationModified, tabComponent2JavaResource.getCGFile(),
+				tabComponent2APIResource.getCGFile(), tabComponent2WOResource.getCGFile(), operationComponent1JavaResource.getCGFile(),
+				operationComponent1APIResource.getCGFile(), operationComponent1WOResource.getCGFile(),
+				operationComponent3JavaResource.getCGFile(), operationComponent3APIResource.getCGFile(),
+				operationComponent3WOResource.getCGFile(), cstJavaResource.getCGFile(), rootProcessJSCopy.getCGFile(),
+				subProcessJSCopy.getCGFile(), operationComponent1ScreenshotCopyOfCopy.getCGFile(),
+				operationComponent3ScreenshotCopyOfCopy.getCGFile(), tabComponent2ScreenshotCopyOfCopy.getCGFile());
 
-		generateRequiredCode = GenerateSourceCode.actionType.makeNewAction(codeRepository,null, _editor);
+		generateRequiredCode = GenerateSourceCode.actionType.makeNewAction(codeRepository, null, _editor);
 		assertTrue(generateRequiredCode.doAction().hasActionExecutionSucceeded());
 
 		// Write generated files to disk
-		writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository,null, _editor);
+		writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository, null, _editor);
 		writeToDisk.doAction();
 
 		checkThatAllFilesAreUpToDate();
@@ -726,37 +699,30 @@ public class TestRoundTrip extends CGTestCase  {
 		saveProject();
 
 		logger.info("Before modifying");
-		logger.info("_tab2ComponentResource update="+new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(_tab2ComponentResource.getLastUpdate()));
-		logger.info("tabComponent2JavaResource update="+new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(tabComponent2JavaResource.getLastUpdate()));
+		logger.info("_tab2ComponentResource update="
+				+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(_tab2ComponentResource.getLastUpdate()));
+		logger.info("tabComponent2JavaResource update="
+				+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(tabComponent2JavaResource.getLastUpdate()));
 
 		// Now we change again bloc name
 		bloc.setTitle("BlocInTab2");
 
 		// Naturally those resources are changed
-		checkThatAllFilesAreUpToDateExcept(
-				GenerationStatus.GenerationModified,
-				tabComponent2JavaResource.getCGFile(),
-				tabComponent2APIResource.getCGFile(),
-				tabComponent2WOResource.getCGFile(),
-				operationComponent1JavaResource.getCGFile(),
-				operationComponent1APIResource.getCGFile(),
-				operationComponent1WOResource.getCGFile(),
-				operationComponent3JavaResource.getCGFile(),
-				operationComponent3APIResource.getCGFile(),
-				operationComponent3WOResource.getCGFile(),
-				cstJavaResource.getCGFile(),
-				rootProcessJSCopy.getCGFile(),
-				subProcessJSCopy.getCGFile(),
-				operationComponent1ScreenshotCopyOfCopy.getCGFile(),
-				operationComponent3ScreenshotCopyOfCopy.getCGFile(),
-				tabComponent2ScreenshotCopyOfCopy.getCGFile());
+		checkThatAllFilesAreUpToDateExcept(GenerationStatus.GenerationModified, tabComponent2JavaResource.getCGFile(),
+				tabComponent2APIResource.getCGFile(), tabComponent2WOResource.getCGFile(), operationComponent1JavaResource.getCGFile(),
+				operationComponent1APIResource.getCGFile(), operationComponent1WOResource.getCGFile(),
+				operationComponent3JavaResource.getCGFile(), operationComponent3APIResource.getCGFile(),
+				operationComponent3WOResource.getCGFile(), cstJavaResource.getCGFile(), rootProcessJSCopy.getCGFile(),
+				subProcessJSCopy.getCGFile(), operationComponent1ScreenshotCopyOfCopy.getCGFile(),
+				operationComponent3ScreenshotCopyOfCopy.getCGFile(), tabComponent2ScreenshotCopyOfCopy.getCGFile());
 
 		logger.info("After modifying");
-		logger.info("_tab2ComponentResource update="+new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(_tab2ComponentResource.getLastUpdate()));
-		logger.info("tabComponent2JavaResource update="+new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(tabComponent2JavaResource.getLastUpdate()));
+		logger.info("_tab2ComponentResource update="
+				+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(_tab2ComponentResource.getLastUpdate()));
+		logger.info("tabComponent2JavaResource update="
+				+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(tabComponent2JavaResource.getLastUpdate()));
 
-		log ("OK, trying to save and reload project");
-
+		log("OK, trying to save and reload project");
 
 		// But now we don't write it on disk, just save project
 		saveProject();
@@ -766,32 +732,28 @@ public class TestRoundTrip extends CGTestCase  {
 		reloadGeneratedResources();
 		// And resynchronize code generation
 		codeRepository.connect();
-		SynchronizeRepositoryCodeGeneration synchronizeCodeGeneration = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(codeRepository, null, _editor);
+		SynchronizeRepositoryCodeGeneration synchronizeCodeGeneration = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(
+				codeRepository, null, _editor);
 		synchronizeCodeGeneration.setContinueAfterValidation(true);
 		synchronizeCodeGeneration.doAction();
 
 		logger.info("After code synchro");
-		logger.info("_tab2ComponentResource update="+new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(_tab2ComponentResource.getLastUpdate()));
-		logger.info("tabComponent2JavaResource update="+new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(tabComponent2JavaResource.getLastUpdate()));
+		logger.info("_tab2ComponentResource update="
+				+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(_tab2ComponentResource.getLastUpdate()));
+		logger.info("tabComponent2JavaResource update="
+				+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(tabComponent2JavaResource.getLastUpdate()));
 
 		// The same resources must be in the 'modified' state except for the ones that have been cleared because the backsynchronization
 		// mechanism has not caused an update in resource dependancy tree (The
 		// We test here the persistance of 'Modified' status
-		checkThatAllFilesAreUpToDateExcept(
-				GenerationStatus.GenerationModified,
-				tabComponent2JavaResource.getCGFile(),
-				tabComponent2APIResource.getCGFile(),
-				tabComponent2WOResource.getCGFile(),
-				operationComponent1JavaResource.getCGFile(),
-				operationComponent1APIResource.getCGFile(),
-				operationComponent1WOResource.getCGFile(),
-				operationComponent3JavaResource.getCGFile(),
-				operationComponent3APIResource.getCGFile(),
-				operationComponent3WOResource.getCGFile(),
-				tabComponent2ScreenshotCopyOfCopy.getCGFile());
+		checkThatAllFilesAreUpToDateExcept(GenerationStatus.GenerationModified, tabComponent2JavaResource.getCGFile(),
+				tabComponent2APIResource.getCGFile(), tabComponent2WOResource.getCGFile(), operationComponent1JavaResource.getCGFile(),
+				operationComponent1APIResource.getCGFile(), operationComponent1WOResource.getCGFile(),
+				operationComponent3JavaResource.getCGFile(), operationComponent3APIResource.getCGFile(),
+				operationComponent3WOResource.getCGFile(), tabComponent2ScreenshotCopyOfCopy.getCGFile());
 
 		// Write generated files to disk
-		writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository,null, _editor);
+		writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository, null, _editor);
 		writeToDisk.doAction();
 		assertTrue(writeToDisk.hasActionExecutionSucceeded());
 		// And save project
@@ -799,12 +761,10 @@ public class TestRoundTrip extends CGTestCase  {
 
 	}
 
-
 	/**
 	 * Check that templates dynamic dependancies scheme is working
 	 */
-	public void test3CheckTemplateDependancies()
-	{
+	public void test3CheckTemplateDependancies() {
 		log("test3CheckTemplateDependancies");
 		CGTemplate labelHTMLTemplate = null;
 		try {
@@ -816,23 +776,18 @@ public class TestRoundTrip extends CGTestCase  {
 
 		assertTrue(labelHTMLTemplate.isApplicationTemplate());
 
-		checkDependingOnTemplate(labelHTMLTemplate,
-				tabComponent2JavaResource.getCGFile(),
-				tabComponent2APIResource.getCGFile(),
-				tabComponent2WOResource.getCGFile(),
-				operationComponent1JavaResource.getCGFile(),
-				operationComponent1APIResource.getCGFile(),
-				operationComponent1WOResource.getCGFile());
+		checkDependingOnTemplate(labelHTMLTemplate, tabComponent2JavaResource.getCGFile(), tabComponent2APIResource.getCGFile(),
+				tabComponent2WOResource.getCGFile(), operationComponent1JavaResource.getCGFile(),
+				operationComponent1APIResource.getCGFile(), operationComponent1WOResource.getCGFile());
 
-		AddCustomTemplateRepository addCustomTemplateRepository
-		= AddCustomTemplateRepository.actionType.makeNewAction(_project.getGeneratedCode().getTemplates(), null, _editor);
+		AddCustomTemplateRepository addCustomTemplateRepository = AddCustomTemplateRepository.actionType.makeNewAction(_project
+				.getGeneratedCode().getTemplates(), null, _editor);
 		addCustomTemplateRepository.setNewCustomTemplatesRepositoryName("MyCustomTemplates");
 		addCustomTemplateRepository.setRepositoryType(TemplateRepositoryType.Code);
-		addCustomTemplateRepository.setNewCustomTemplatesRepositoryDirectory(new FlexoProjectFile(_project,"MyCustomTemplates"));
+		addCustomTemplateRepository.setNewCustomTemplatesRepositoryDirectory(new FlexoProjectFile(_project, "MyCustomTemplates"));
 		assertTrue(addCustomTemplateRepository.doAction().hasActionExecutionSucceeded());
 
-		RedefineCustomTemplateFile redefineTemplate
-		= RedefineCustomTemplateFile.actionType.makeNewAction(labelHTMLTemplate, null, _editor);
+		RedefineCustomTemplateFile redefineTemplate = RedefineCustomTemplateFile.actionType.makeNewAction(labelHTMLTemplate, null, _editor);
 		redefineTemplate.setRepository(addCustomTemplateRepository.getNewCustomTemplatesRepository());
 		redefineTemplate.setTarget(CodeType.PROTOTYPE);
 		assertTrue(redefineTemplate.doAction().hasActionExecutionSucceeded());
@@ -843,7 +798,8 @@ public class TestRoundTrip extends CGTestCase  {
 
 		// Resynchronize code generation
 		codeRepository.connect();
-		SynchronizeRepositoryCodeGeneration synchronizeCodeGeneration = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(codeRepository, null, _editor);
+		SynchronizeRepositoryCodeGeneration synchronizeCodeGeneration = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(
+				codeRepository, null, _editor);
 		synchronizeCodeGeneration.setContinueAfterValidation(true);
 		synchronizeCodeGeneration.doAction();
 		assertTrue(synchronizeCodeGeneration.hasActionExecutionSucceeded());
@@ -862,32 +818,23 @@ public class TestRoundTrip extends CGTestCase  {
 		newLabelHTMLTemplate.setChanged();
 
 		// In this case, all those file must be marked as modified
-		checkThatAllFilesAreUpToDateExcept(
-				GenerationStatus.GenerationModified,
-				tabComponent2JavaResource.getCGFile(),
-				tabComponent2APIResource.getCGFile(),
-				tabComponent2WOResource.getCGFile(),
-				operationComponent1JavaResource.getCGFile(),
-				operationComponent1APIResource.getCGFile(),
-				operationComponent1WOResource.getCGFile());
+		checkThatAllFilesAreUpToDateExcept(GenerationStatus.GenerationModified, tabComponent2JavaResource.getCGFile(),
+				tabComponent2APIResource.getCGFile(), tabComponent2WOResource.getCGFile(), operationComponent1JavaResource.getCGFile(),
+				operationComponent1APIResource.getCGFile(), operationComponent1WOResource.getCGFile());
 
-		checkDependingOnTemplate(newLabelHTMLTemplate,
-				tabComponent2JavaResource.getCGFile(),
-				tabComponent2APIResource.getCGFile(),
-				tabComponent2WOResource.getCGFile(),
-				operationComponent1JavaResource.getCGFile(),
-				operationComponent1APIResource.getCGFile(),
-				operationComponent1WOResource.getCGFile());
+		checkDependingOnTemplate(newLabelHTMLTemplate, tabComponent2JavaResource.getCGFile(), tabComponent2APIResource.getCGFile(),
+				tabComponent2WOResource.getCGFile(), operationComponent1JavaResource.getCGFile(),
+				operationComponent1APIResource.getCGFile(), operationComponent1WOResource.getCGFile());
 
 		// Generate required files
 		logger.info("Generate required file");
-		GenerateSourceCode generateRequired = GenerateSourceCode.actionType.makeNewAction(codeRepository,null, _editor);
+		GenerateSourceCode generateRequired = GenerateSourceCode.actionType.makeNewAction(codeRepository, null, _editor);
 		assertTrue(generateRequired.doAction().hasActionExecutionSucceeded());
 		logger.info("Generate required file DONE");
 
 		// Write generated files to disk
 		logger.info("Write required file");
-		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository,null, _editor);
+		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository, null, _editor);
 		writeToDisk.doAction();
 		assertTrue(writeToDisk.hasActionExecutionSucceeded());
 		logger.info("Write required file DONE");
@@ -896,53 +843,49 @@ public class TestRoundTrip extends CGTestCase  {
 
 		final String ADDED_STRING = "DenisEstBete";
 		final String oldContent = newTabelHTMLTemplate2.getContent();
-		final String newContent = oldContent+ADDED_STRING;
+		final String newContent = oldContent + ADDED_STRING;
 
-		EditCustomTemplateFile editTemplate
-		= EditCustomTemplateFile.actionType.makeNewAction(newLabelHTMLTemplate, null, _editor);
+		EditCustomTemplateFile editTemplate = EditCustomTemplateFile.actionType.makeNewAction(newLabelHTMLTemplate, null, _editor);
 		editTemplate.setTemplateFileContentEditor(new TemplateFileContentEditor() {
 			@Override
 			public String getEditedContent() {
 				return newContent;
 			}
+
 			@Override
-			public void setEditedContent(String content) { }
+			public void setEditedContent(String content) {
+			}
 		});
 		editTemplate.doAction();
 		assertTrue(editTemplate.hasActionExecutionSucceeded());
-		SaveCustomTemplateFile saveTemplate
-		= SaveCustomTemplateFile.actionType.makeNewAction(newLabelHTMLTemplate, null, _editor);
+		SaveCustomTemplateFile saveTemplate = SaveCustomTemplateFile.actionType.makeNewAction(newLabelHTMLTemplate, null, _editor);
 		saveTemplate.doAction();
 		assertTrue(saveTemplate.hasActionExecutionSucceeded());
-		checkDependingOnTemplate(newLabelHTMLTemplate,
-				tabComponent2JavaResource.getCGFile(),
-				tabComponent2APIResource.getCGFile(),
-				tabComponent2WOResource.getCGFile(),
-				operationComponent1JavaResource.getCGFile(),
-				operationComponent1APIResource.getCGFile(),
-				operationComponent1WOResource.getCGFile());
+		checkDependingOnTemplate(newLabelHTMLTemplate, tabComponent2JavaResource.getCGFile(), tabComponent2APIResource.getCGFile(),
+				tabComponent2WOResource.getCGFile(), operationComponent1JavaResource.getCGFile(),
+				operationComponent1APIResource.getCGFile(), operationComponent1WOResource.getCGFile());
 		waitForVelocityRefresh();
 		// Generate required files
 		log("Generate required file");
 		logger.info("Generate required file");
-		generateRequired = GenerateSourceCode.actionType.makeNewAction(codeRepository,null, _editor);
+		generateRequired = GenerateSourceCode.actionType.makeNewAction(codeRepository, null, _editor);
 		assertTrue(generateRequired.doAction().hasActionExecutionSucceeded());
 		logger.info("Generate required file DONE");
 
 		// Write generated files to disk
 		log("Write required file");
 		logger.info("Write required file");
-		writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository,null, _editor);
+		writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository, null, _editor);
 		assertTrue(writeToDisk.doAction().hasActionExecutionSucceeded());
 		logger.info("Write required file DONE");
 
 		try {
-			File tab2_html = new File(tabComponent2WOResource.getFile(),TAB_COMPONENT2+".html");
-			logger.info("file: "+tab2_html.getAbsolutePath());
-			logger.info("content: "+FileUtils.fileContents(tab2_html));
-			logger.info("index="+FileUtils.fileContents(tab2_html).indexOf(ADDED_STRING));
+			File tab2_html = new File(tabComponent2WOResource.getFile(), TAB_COMPONENT2 + ".html");
+			logger.info("file: " + tab2_html.getAbsolutePath());
+			logger.info("content: " + FileUtils.fileContents(tab2_html));
+			logger.info("index=" + FileUtils.fileContents(tab2_html).indexOf(ADDED_STRING));
 			assertTrue(FileUtils.fileContents(tab2_html).indexOf(ADDED_STRING) > 0);
-			File operation1_html = new File(operationComponent1WOResource.getFile(),OPERATION_COMPONENT_1+".html");
+			File operation1_html = new File(operationComponent1WOResource.getFile(), OPERATION_COMPONENT_1 + ".html");
 			assertTrue(FileUtils.fileContents(operation1_html).indexOf(ADDED_STRING) > 0);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -953,11 +896,11 @@ public class TestRoundTrip extends CGTestCase  {
 	/**
 	 * Check that custom template edition is working
 	 */
-	public void test4TestEditCustomTemplate()
-	{
+	public void test4TestEditCustomTemplate() {
 		log("test4TestEditCustomTemplate");
 
-		_buildPropertiesResource = (BuildPropertiesResource)_project.resourceForKey(ResourceType.TEXT_FILE, codeRepository.getName() + ".BUILD_PROPERTIES");
+		_buildPropertiesResource = (BuildPropertiesResource) _project.resourceForKey(ResourceType.TEXT_FILE, codeRepository.getName()
+				+ ".BUILD_PROPERTIES");
 
 		CGTemplate buildPropertiesTemplate = null;
 		try {
@@ -969,8 +912,8 @@ public class TestRoundTrip extends CGTestCase  {
 
 		assertTrue(buildPropertiesTemplate.isApplicationTemplate());
 
-		RedefineCustomTemplateFile redefineTemplate
-		= RedefineCustomTemplateFile.actionType.makeNewAction(buildPropertiesTemplate, null, _editor);
+		RedefineCustomTemplateFile redefineTemplate = RedefineCustomTemplateFile.actionType.makeNewAction(buildPropertiesTemplate, null,
+				_editor);
 		redefineTemplate.setRepository(codeRepository.getPreferredTemplateRepository());
 		redefineTemplate.setTarget(CodeType.PROTOTYPE);
 		assertTrue(redefineTemplate.doAction().hasActionExecutionSucceeded());
@@ -979,7 +922,8 @@ public class TestRoundTrip extends CGTestCase  {
 
 		// Resynchronize code generation
 		codeRepository.connect();
-		SynchronizeRepositoryCodeGeneration synchronizeCodeGeneration = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(codeRepository, null, _editor);
+		SynchronizeRepositoryCodeGeneration synchronizeCodeGeneration = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(
+				codeRepository, null, _editor);
 		synchronizeCodeGeneration.setContinueAfterValidation(true);
 		synchronizeCodeGeneration.doAction();
 		assertTrue(synchronizeCodeGeneration.hasActionExecutionSucceeded());
@@ -987,51 +931,51 @@ public class TestRoundTrip extends CGTestCase  {
 		// Modify first line
 		try {
 			Thread.sleep(100);
-			//This sleep is here so that the lastUpdate date of the template will be at least 100 ms after the last memory generation
+			// This sleep is here so that the lastUpdate date of the template will be at least 100 ms after the last memory generation
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		}
 		final String ADDED_ON_FIRST_LINE = "Added on first line";
 
-		EditCustomTemplateFile editTemplate
-		= EditCustomTemplateFile.actionType.makeNewAction(newBuildPropertiesTemplate, null, _editor);
+		EditCustomTemplateFile editTemplate = EditCustomTemplateFile.actionType.makeNewAction(newBuildPropertiesTemplate, null, _editor);
 		editTemplate.setTemplateFileContentEditor(new TemplateFileContentEditor() {
 			@Override
 			public String getEditedContent() {
 				return ADDED_ON_FIRST_LINE + newBuildPropertiesTemplate.getContent();
 			}
+
 			@Override
-			public void setEditedContent(String content) { }
+			public void setEditedContent(String content) {
+			}
 		});
 		editTemplate.doAction();
 		assertTrue(editTemplate.hasActionExecutionSucceeded());
-		SaveCustomTemplateFile saveTemplate
-		= SaveCustomTemplateFile.actionType.makeNewAction(newBuildPropertiesTemplate, null, _editor);
+		SaveCustomTemplateFile saveTemplate = SaveCustomTemplateFile.actionType.makeNewAction(newBuildPropertiesTemplate, null, _editor);
 		saveTemplate.doAction();
 		assertTrue(saveTemplate.hasActionExecutionSucceeded());
 		// In this case, DefaultApplication.conf must be marked as modified
 		checkThatAllFilesAreUpToDateExcept(GenerationStatus.GenerationModified, _buildPropertiesResource.getCGFile());
 
 		// Check that file is to regenerate and generator also to run again
-		assertTrue (_buildPropertiesResource.getCGFile().getGenerationStatus() == GenerationStatus.GenerationModified);
-		assertTrue (_buildPropertiesResource.getGenerator().needsGeneration());
+		assertTrue(_buildPropertiesResource.getCGFile().getGenerationStatus() == GenerationStatus.GenerationModified);
+		assertTrue(_buildPropertiesResource.getGenerator().needsGeneration());
 		waitForVelocityRefresh();
 		// Generate required files
 		logger.info("Generate required file");
-		GenerateSourceCode generateRequired = GenerateSourceCode.actionType.makeNewAction(codeRepository,null, _editor);
+		GenerateSourceCode generateRequired = GenerateSourceCode.actionType.makeNewAction(codeRepository, null, _editor);
 		assertTrue(generateRequired.doAction().hasActionExecutionSucceeded());
 		logger.info("Generate required file DONE");
 
-		//       And depending on template
+		// And depending on template
 		checkDependingOnTemplate(newBuildPropertiesTemplate, _buildPropertiesResource.getCGFile());
 
 		// Check that file is to regenerate but generator has run and memory generation is up-to-date
-		assertTrue (_buildPropertiesResource.getCGFile().getGenerationStatus() == GenerationStatus.GenerationModified);
-		assertFalse (_buildPropertiesResource.getGenerator().needsGeneration());
+		assertTrue(_buildPropertiesResource.getCGFile().getGenerationStatus() == GenerationStatus.GenerationModified);
+		assertFalse(_buildPropertiesResource.getGenerator().needsGeneration());
 
 		// Write generated files to disk
 		logger.info("Write required file");
-		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository,null, _editor);
+		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository, null, _editor);
 		writeToDisk.doAction();
 		assertTrue(writeToDisk.hasActionExecutionSucceeded());
 		logger.info("Write required file DONE");
@@ -1049,14 +993,13 @@ public class TestRoundTrip extends CGTestCase  {
 	/**
 	 * Check that edition of file inside Flexo is working
 	 */
-	public void test5TestEditGeneratedFileInFlexo()
-	{
+	public void test5TestEditGeneratedFileInFlexo() {
 		log("test5TestEditGeneratedFileInFlexo");
 
 		// And now we must wait for some time (mimimal is FlexoFileResource.ACCEPTABLE_FS_DELAY)
-		logger.info("Waiting "+(FlexoFileResource.ACCEPTABLE_FS_DELAY+1000)+" ms");
+		logger.info("Waiting " + (FlexoFileResource.ACCEPTABLE_FS_DELAY + 1000) + " ms");
 		try {
-			Thread.sleep(FlexoFileResource.ACCEPTABLE_FS_DELAY+1000);
+			Thread.sleep(FlexoFileResource.ACCEPTABLE_FS_DELAY + 1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1065,36 +1008,40 @@ public class TestRoundTrip extends CGTestCase  {
 
 		final String ADDED_ON_FIRST_LINE_BY_FLEXO = "ADDED_ON_FIRST_LINE_BY_FLEXO";
 
-		assertTrue (_buildPropertiesResource.getCGFile().getGenerationStatus() == GenerationStatus.UpToDate);
+		assertTrue(_buildPropertiesResource.getCGFile().getGenerationStatus() == GenerationStatus.UpToDate);
 
 		// Edit file by prepending string on first line
-		EditGeneratedFile editFile
-		= EditGeneratedFile.actionType.makeNewAction(_buildPropertiesResource.getCGFile(), null, _editor);
+		EditGeneratedFile editFile = EditGeneratedFile.actionType.makeNewAction(_buildPropertiesResource.getCGFile(), null, _editor);
 		editFile.setFileContentEditor(new CGFile.FileContentEditor() {
 			@Override
-			public String getEditedContentForKey(String contentKey)
-			{
-				return ADDED_ON_FIRST_LINE_BY_FLEXO+_buildPropertiesResource.getGeneratedResourceData().getContent(ContentSource.CONTENT_ON_DISK);
+			public String getEditedContentForKey(String contentKey) {
+				return ADDED_ON_FIRST_LINE_BY_FLEXO
+						+ _buildPropertiesResource.getGeneratedResourceData().getContent(ContentSource.CONTENT_ON_DISK);
 			}
-			@Override
-			public void setEditedContent(CGFile file) { }
-		});
-		assertTrue (editFile.doAction().hasActionExecutionSucceeded());
 
-		//logger.info("applicationConfResource.getDiskLastModifiedDate()="+(new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(applicationConfResource.getDiskLastModifiedDate()));
-		//logger.info("applicationConfResource.getLastAcceptingDate()="+(new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(applicationConfResource.getLastAcceptingDate()));
+			@Override
+			public void setEditedContent(CGFile file) {
+			}
+		});
+		assertTrue(editFile.doAction().hasActionExecutionSucceeded());
+
+		// logger.info("applicationConfResource.getDiskLastModifiedDate()="+(new
+		// SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(applicationConfResource.getDiskLastModifiedDate()));
+		// logger.info("applicationConfResource.getLastAcceptingDate()="+(new
+		// SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(applicationConfResource.getLastAcceptingDate()));
 
 		// Save file
-		SaveGeneratedFile saveFile
-		= SaveGeneratedFile.actionType.makeNewAction(_buildPropertiesResource.getCGFile(), null, _editor);
-		assertTrue (saveFile.doAction().hasActionExecutionSucceeded());
+		SaveGeneratedFile saveFile = SaveGeneratedFile.actionType.makeNewAction(_buildPropertiesResource.getCGFile(), null, _editor);
+		assertTrue(saveFile.doAction().hasActionExecutionSucceeded());
 
 		// Status of file must be DiskModified
-		//logger.info("applicationConfResource.getDiskLastModifiedDate()="+(new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(applicationConfResource.getDiskLastModifiedDate()));
-		//logger.info("applicationConfResource.getLastAcceptingDate()="+(new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(applicationConfResource.getLastAcceptingDate()));
-		//logger.info("applicationConfResource.getGenerationStatus()="+applicationConfResource.getGenerationStatus());
+		// logger.info("applicationConfResource.getDiskLastModifiedDate()="+(new
+		// SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(applicationConfResource.getDiskLastModifiedDate()));
+		// logger.info("applicationConfResource.getLastAcceptingDate()="+(new
+		// SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(applicationConfResource.getLastAcceptingDate()));
+		// logger.info("applicationConfResource.getGenerationStatus()="+applicationConfResource.getGenerationStatus());
 
-		assertEquals (_buildPropertiesResource.getCGFile().getGenerationStatus(),GenerationStatus.DiskModified);
+		assertEquals(_buildPropertiesResource.getCGFile().getGenerationStatus(), GenerationStatus.DiskModified);
 
 		// Check if this was successfully written on disk
 		try {
@@ -1105,38 +1052,35 @@ public class TestRoundTrip extends CGTestCase  {
 		}
 
 		// Save file
-		AcceptDiskUpdate acceptDiskUpdate
-		= AcceptDiskUpdate.actionType.makeNewAction(_buildPropertiesResource.getCGFile(), null, _editor);
-		assertTrue (acceptDiskUpdate.doAction().hasActionExecutionSucceeded());
+		AcceptDiskUpdate acceptDiskUpdate = AcceptDiskUpdate.actionType.makeNewAction(_buildPropertiesResource.getCGFile(), null, _editor);
+		assertTrue(acceptDiskUpdate.doAction().hasActionExecutionSucceeded());
 
-		assertTrue (_buildPropertiesResource.getCGFile().getGenerationStatus() == GenerationStatus.UpToDate);
+		assertTrue(_buildPropertiesResource.getCGFile().getGenerationStatus() == GenerationStatus.UpToDate);
 	}
 
 	/**
 	 * Check that edition of file outside Flexo is working (third-party application)
 	 */
-	public void test6TestEditGeneratedFileOutsideFlexo()
-	{
+	public void test6TestEditGeneratedFileOutsideFlexo() {
 		log("test6TestEditGeneratedFileOutsideFlexo");
 
 		final String ADDED_ON_FIRST_LINE_OUTSIDE_FLEXO = "ADDED_ON_FIRST_LINE_OUTSIDE_FLEXO";
 
-		assertTrue (_buildPropertiesResource.getCGFile().getGenerationStatus() == GenerationStatus.UpToDate);
+		assertTrue(_buildPropertiesResource.getCGFile().getGenerationStatus() == GenerationStatus.UpToDate);
 
 		// And now we must wait for some time (mimimal is FlexoFileResource.ACCEPTABLE_FS_DELAY)
-		logger.info("Waiting "+(FlexoFileResource.ACCEPTABLE_FS_DELAY+1000)+" ms");
+		logger.info("Waiting " + (FlexoFileResource.ACCEPTABLE_FS_DELAY + 1000) + " ms");
 		try {
-			Thread.sleep(FlexoFileResource.ACCEPTABLE_FS_DELAY+1000);
+			Thread.sleep(FlexoFileResource.ACCEPTABLE_FS_DELAY + 1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		logger.info("OK, it should be ok now");
 
-
 		try {
 			String contentOnDisk = FileUtils.fileContents(_buildPropertiesResource.getResourceFile().getFile());
-			contentOnDisk = ADDED_ON_FIRST_LINE_OUTSIDE_FLEXO+contentOnDisk;
+			contentOnDisk = ADDED_ON_FIRST_LINE_OUTSIDE_FLEXO + contentOnDisk;
 			FileUtils.saveToFile(_buildPropertiesResource.getResourceFile().getFile(), contentOnDisk);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -1144,9 +1088,9 @@ public class TestRoundTrip extends CGTestCase  {
 		}
 
 		// And now we must wait for some time (mimimal is FlexoResourceManager.RESOURCE_CHECKING_DELAY)
-		logger.info("Waiting "+(FlexoResourceManager.RESOURCE_CHECKING_DELAY+1000)+" ms");
+		logger.info("Waiting " + (FlexoResourceManager.RESOURCE_CHECKING_DELAY + 1000) + " ms");
 		try {
-			Thread.sleep(FlexoResourceManager.RESOURCE_CHECKING_DELAY+3000);
+			Thread.sleep(FlexoResourceManager.RESOURCE_CHECKING_DELAY + 3000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1155,45 +1099,45 @@ public class TestRoundTrip extends CGTestCase  {
 
 		// Status of file must be DiskModified
 
-		assertEquals (_buildPropertiesResource.getCGFile().getGenerationStatus(),GenerationStatus.DiskModified);
+		assertEquals(_buildPropertiesResource.getCGFile().getGenerationStatus(), GenerationStatus.DiskModified);
 
 		// Check if this was successfully read
 
-		assertTrue(_buildPropertiesResource.getGeneratedResourceData().getContent(ContentSource.CONTENT_ON_DISK).indexOf(ADDED_ON_FIRST_LINE_OUTSIDE_FLEXO) == 0);
+		assertTrue(_buildPropertiesResource.getGeneratedResourceData().getContent(ContentSource.CONTENT_ON_DISK)
+				.indexOf(ADDED_ON_FIRST_LINE_OUTSIDE_FLEXO) == 0);
 
 		// Accept file
-		AcceptDiskUpdate acceptDiskUpdate
-		= AcceptDiskUpdate.actionType.makeNewAction(_buildPropertiesResource.getCGFile(), null, _editor);
-		assertTrue (acceptDiskUpdate.doAction().hasActionExecutionSucceeded());
+		AcceptDiskUpdate acceptDiskUpdate = AcceptDiskUpdate.actionType.makeNewAction(_buildPropertiesResource.getCGFile(), null, _editor);
+		assertTrue(acceptDiskUpdate.doAction().hasActionExecutionSucceeded());
 
-		assertTrue (_buildPropertiesResource.getCGFile().getGenerationStatus() == GenerationStatus.UpToDate);
+		assertTrue(_buildPropertiesResource.getCGFile().getGenerationStatus() == GenerationStatus.UpToDate);
 
 		// We will now check that the only difference between last generated and last accepted version is the first line
 
 		DiffReport diffReport = ComputeDiff.diff(
-				_buildPropertiesResource.getGeneratedResourceData().getContent(ContentSource.LAST_GENERATED),
-				_buildPropertiesResource.getGeneratedResourceData().getContent(ContentSource.LAST_ACCEPTED));
+				_buildPropertiesResource.getGeneratedResourceData().getContent(ContentSource.LAST_GENERATED), _buildPropertiesResource
+						.getGeneratedResourceData().getContent(ContentSource.LAST_ACCEPTED));
 
-		assertEquals (diffReport.getChanges().size(),1);
-		assertEquals (diffReport.getChanges().firstElement().getFirst0(),0);
-		assertEquals (diffReport.getChanges().firstElement().getLast0(),0);
-		assertEquals (diffReport.getChanges().firstElement().getFirst1(),0);
-		assertEquals (diffReport.getChanges().firstElement().getLast1(),0);
+		assertEquals(diffReport.getChanges().size(), 1);
+		assertEquals(diffReport.getChanges().firstElement().getFirst0(), 0);
+		assertEquals(diffReport.getChanges().firstElement().getLast0(), 0);
+		assertEquals(diffReport.getChanges().firstElement().getFirst1(), 0);
+		assertEquals(diffReport.getChanges().firstElement().getLast1(), 0);
 	}
 
 	/**
 	 * Check that automatic merging when there is no conflict is working
 	 */
-	public void test7TestMergeWithoutConflict()
-	{
+	public void test7TestMergeWithoutConflict() {
 		log("test7TestMergeWithoutConflict");
 
-		_buildPropertiesResource = (BuildPropertiesResource)_project.resourceForKey(ResourceType.TEXT_FILE, codeRepository.getName() + ".BUILD_PROPERTIES");
+		_buildPropertiesResource = (BuildPropertiesResource) _project.resourceForKey(ResourceType.TEXT_FILE, codeRepository.getName()
+				+ ".BUILD_PROPERTIES");
 
 		// And now we must wait for some time (mimimal is FlexoFileResource.ACCEPTABLE_FS_DELAY)
-		logger.info("Waiting "+(FlexoFileResource.ACCEPTABLE_FS_DELAY+1000)+" ms");
+		logger.info("Waiting " + (FlexoFileResource.ACCEPTABLE_FS_DELAY + 1000) + " ms");
 		try {
-			Thread.sleep(FlexoFileResource.ACCEPTABLE_FS_DELAY+1000);
+			Thread.sleep(FlexoFileResource.ACCEPTABLE_FS_DELAY + 1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1206,20 +1150,22 @@ public class TestRoundTrip extends CGTestCase  {
 		// And modify this template by prepending line nb on line 3 to 5
 		try {
 			final CGTemplate editedBuildPropertiesTemplate = projectGenerator.getTemplateLocator().templateWithName(BUILDPROPERTIES_VM);
-			EditCustomTemplateFile editTemplate
-			= EditCustomTemplateFile.actionType.makeNewAction((CGTemplateFile) editedBuildPropertiesTemplate, null, _editor);
+			EditCustomTemplateFile editTemplate = EditCustomTemplateFile.actionType.makeNewAction(
+					(CGTemplateFile) editedBuildPropertiesTemplate, null, _editor);
 			editTemplate.setTemplateFileContentEditor(new TemplateFileContentEditor() {
 				@Override
 				public String getEditedContent() {
 					return tagStringWithLineNb(editedBuildPropertiesTemplate.getContent(), "*", 3, 5);
 				}
+
 				@Override
-				public void setEditedContent(String content) { }
+				public void setEditedContent(String content) {
+				}
 			});
 			editTemplate.doAction();
 			assertTrue(editTemplate.hasActionExecutionSucceeded());
-			SaveCustomTemplateFile saveTemplate
-			= SaveCustomTemplateFile.actionType.makeNewAction((CGTemplateFile) editedBuildPropertiesTemplate, null, _editor);
+			SaveCustomTemplateFile saveTemplate = SaveCustomTemplateFile.actionType.makeNewAction(
+					(CGTemplateFile) editedBuildPropertiesTemplate, null, _editor);
 			saveTemplate.doAction();
 			assertTrue(saveTemplate.hasActionExecutionSucceeded());
 			newBuildPropertiesTemplate = editedBuildPropertiesTemplate;
@@ -1228,7 +1174,6 @@ public class TestRoundTrip extends CGTestCase  {
 			fail();
 		}
 
-
 		// In this case, DefaultApplication.conf must be marked as modified
 		checkThatAllFilesAreUpToDateExcept(GenerationStatus.GenerationModified, _buildPropertiesResource.getCGFile());
 
@@ -1236,30 +1181,31 @@ public class TestRoundTrip extends CGTestCase  {
 		checkDependingOnTemplate(newBuildPropertiesTemplate, _buildPropertiesResource.getCGFile());
 
 		// Check that file is to regenerate and generator also to run again
-		assertTrue (_buildPropertiesResource.getCGFile().getGenerationStatus() == GenerationStatus.GenerationModified);
-		assertTrue (_buildPropertiesResource.getGenerator().needsGeneration());
-
+		assertTrue(_buildPropertiesResource.getCGFile().getGenerationStatus() == GenerationStatus.GenerationModified);
+		assertTrue(_buildPropertiesResource.getGenerator().needsGeneration());
 
 		// Edit file by prepending line nb on line 8 to 11
-		EditGeneratedFile editFile
-		= EditGeneratedFile.actionType.makeNewAction(_buildPropertiesResource.getCGFile(), null, _editor);
+		EditGeneratedFile editFile = EditGeneratedFile.actionType.makeNewAction(_buildPropertiesResource.getCGFile(), null, _editor);
 		editFile.setFileContentEditor(new CGFile.FileContentEditor() {
 			@Override
-			public String getEditedContentForKey(String contentKey)
-			{
-				return tagStringWithLineNb(_buildPropertiesResource.getGeneratedResourceData().getContent(ContentSource.CONTENT_ON_DISK), "#", 8, 11);
+			public String getEditedContentForKey(String contentKey) {
+				return tagStringWithLineNb(_buildPropertiesResource.getGeneratedResourceData().getContent(ContentSource.CONTENT_ON_DISK),
+						"#", 8, 11);
 			}
+
 			@Override
-			public void setEditedContent(CGFile file) { }
+			public void setEditedContent(CGFile file) {
+			}
 		});
-		assertTrue (editFile.doAction().hasActionExecutionSucceeded());
-		//logger.info("applicationConfResource.getDiskLastModifiedDate()="+(new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(applicationConfResource.getDiskLastModifiedDate()));
-		//logger.info("applicationConfResource.getLastAcceptingDate()="+(new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(applicationConfResource.getLastAcceptingDate()));
+		assertTrue(editFile.doAction().hasActionExecutionSucceeded());
+		// logger.info("applicationConfResource.getDiskLastModifiedDate()="+(new
+		// SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(applicationConfResource.getDiskLastModifiedDate()));
+		// logger.info("applicationConfResource.getLastAcceptingDate()="+(new
+		// SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(applicationConfResource.getLastAcceptingDate()));
 
 		// Save file
-		SaveGeneratedFile saveFile
-		= SaveGeneratedFile.actionType.makeNewAction(_buildPropertiesResource.getCGFile(), null, _editor);
-		assertTrue (saveFile.doAction().hasActionExecutionSucceeded());
+		SaveGeneratedFile saveFile = SaveGeneratedFile.actionType.makeNewAction(_buildPropertiesResource.getCGFile(), null, _editor);
+		assertTrue(saveFile.doAction().hasActionExecutionSucceeded());
 		try {
 			Thread.currentThread().sleep(4000);
 			System.out.println(FileUtils.fileContents(_buildPropertiesResource.getResourceFile().getFile()));
@@ -1273,21 +1219,21 @@ public class TestRoundTrip extends CGTestCase  {
 			e.printStackTrace();
 		}
 
-		assertEquals (_buildPropertiesResource.getCGFile().getGenerationStatus(),GenerationStatus.ConflictingUnMerged);
-		assertTrue (_buildPropertiesResource.getGenerator().needsGeneration());
+		assertEquals(_buildPropertiesResource.getCGFile().getGenerationStatus(), GenerationStatus.ConflictingUnMerged);
+		assertTrue(_buildPropertiesResource.getGenerator().needsGeneration());
 
 		// Generate required files
 		logger.info("Generate required file");
-		GenerateSourceCode generateRequired = GenerateSourceCode.actionType.makeNewAction(codeRepository,null, _editor);
+		GenerateSourceCode generateRequired = GenerateSourceCode.actionType.makeNewAction(codeRepository, null, _editor);
 		assertTrue(generateRequired.doAction().hasActionExecutionSucceeded());
 		logger.info("Generate required file DONE");
 
-		assertEquals (_buildPropertiesResource.getCGFile().getGenerationStatus(),GenerationStatus.ConflictingUnMerged);
-		assertFalse (_buildPropertiesResource.getGenerator().needsGeneration());
+		assertEquals(_buildPropertiesResource.getCGFile().getGenerationStatus(), GenerationStatus.ConflictingUnMerged);
+		assertFalse(_buildPropertiesResource.getGenerator().needsGeneration());
 
 		// Check that this is not possible to write a file
-		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository,null, _editor);
-		assertEquals(writeToDisk.getFilesToWrite().size(),0);
+		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository, null, _editor);
+		assertEquals(writeToDisk.getFilesToWrite().size(), 0);
 
 		// Try to do it anyway
 		Vector<AbstractCGFile> writeThis = new Vector<AbstractCGFile>();
@@ -1295,7 +1241,7 @@ public class TestRoundTrip extends CGTestCase  {
 		writeToDisk.setFilesToWrite(writeThis);
 		assertFalse(writeToDisk.doAction().hasActionExecutionSucceeded());
 		// It's already been said: it's a conflict, it won't work
-		//assertTrue(writeToDisk.getThrownException() instanceof UnresolvedConflictException);
+		// assertTrue(writeToDisk.getThrownException() instanceof UnresolvedConflictException);
 		// Now, look at that conflict
 		// No changes are conflicting in generation merge
 		Merge generationMerge = _buildPropertiesResource.getGeneratedResourceData().getGenerationMerge();
@@ -1306,19 +1252,19 @@ public class TestRoundTrip extends CGTestCase  {
 
 		// Look if declared changes are conform
 		assertEquals(generationMerge.getChanges().size(), 2);
-		assertChange(generationMerge.getChanges().get(0),MergeChangeSource.Right,MergeChangeType.Modification,0,0,0,0,0,0);
-		assertChange(generationMerge.getChanges().get(1),MergeChangeSource.Left,MergeChangeType.Modification,3,4,3,4,3,4);
+		assertChange(generationMerge.getChanges().get(0), MergeChangeSource.Right, MergeChangeType.Modification, 0, 0, 0, 0, 0, 0);
+		assertChange(generationMerge.getChanges().get(1), MergeChangeSource.Left, MergeChangeType.Modification, 3, 4, 3, 4, 3, 4);
 		assertEquals(resultFileMerge.getChanges().size(), 2);
-		assertChange(resultFileMerge.getChanges().get(0),MergeChangeSource.Left,MergeChangeType.Modification,3,4,3,4,3,4);
-		assertChange(resultFileMerge.getChanges().get(1),MergeChangeSource.Right,MergeChangeType.Modification,8,10,8,10,8,10);
+		assertChange(resultFileMerge.getChanges().get(0), MergeChangeSource.Left, MergeChangeType.Modification, 3, 4, 3, 4, 3, 4);
+		assertChange(resultFileMerge.getChanges().get(1), MergeChangeSource.Right, MergeChangeType.Modification, 8, 10, 8, 10, 8, 10);
 
 		// Mark as merged
-		MarkAsMerged markAsMerged = MarkAsMerged.actionType.makeNewAction(_buildPropertiesResource.getCGFile(),null, _editor);
+		MarkAsMerged markAsMerged = MarkAsMerged.actionType.makeNewAction(_buildPropertiesResource.getCGFile(), null, _editor);
 		assertTrue(markAsMerged.doAction().hasActionExecutionSucceeded());
 
 		// Check that this is now possible to write a file
-		WriteModifiedGeneratedFiles writeToDiskNow = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository,null, _editor);
-		assertEquals(writeToDiskNow.getFilesToWrite().size(),1);
+		WriteModifiedGeneratedFiles writeToDiskNow = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository, null, _editor);
+		assertEquals(writeToDiskNow.getFilesToWrite().size(), 1);
 		assertTrue(writeToDiskNow.doAction().hasActionExecutionSucceeded());
 
 		// Check that this has been successfully written
@@ -1343,22 +1289,21 @@ public class TestRoundTrip extends CGTestCase  {
 	/**
 	 * Check that automatic merging when there a conflict is working
 	 */
-	public void test8TestMergeWithGenerationConflict()
-	{
+	public void test8TestMergeWithGenerationConflict() {
 		log("test8TestMergeWithGenerationConflict");
 
-		_buildPropertiesResource = (BuildPropertiesResource)_project.resourceForKey(ResourceType.TEXT_FILE, codeRepository.getName() + ".BUILD_PROPERTIES");
+		_buildPropertiesResource = (BuildPropertiesResource) _project.resourceForKey(ResourceType.TEXT_FILE, codeRepository.getName()
+				+ ".BUILD_PROPERTIES");
 
 		// And now we must wait for some time (mimimal is FlexoFileResource.ACCEPTABLE_FS_DELAY)
-		logger.info("Waiting "+(FlexoFileResource.ACCEPTABLE_FS_DELAY+1000)+" ms");
+		logger.info("Waiting " + (FlexoFileResource.ACCEPTABLE_FS_DELAY + 1000) + " ms");
 		try {
-			Thread.sleep(FlexoFileResource.ACCEPTABLE_FS_DELAY+1000);
+			Thread.sleep(FlexoFileResource.ACCEPTABLE_FS_DELAY + 1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		logger.info("OK, it should be ok now");
-
 
 		CGTemplate newBuildPropertiesTemplate = null;
 
@@ -1366,26 +1311,27 @@ public class TestRoundTrip extends CGTestCase  {
 		// And modify this template by prepending line nb on line 8 and 9
 		try {
 			final CGTemplate editedBuildPropertiesTemplate = projectGenerator.getTemplateLocator().templateWithName(BUILDPROPERTIES_VM);
-			EditCustomTemplateFile editTemplate
-			= EditCustomTemplateFile.actionType.makeNewAction((CGTemplateFile) editedBuildPropertiesTemplate, null, _editor);
+			EditCustomTemplateFile editTemplate = EditCustomTemplateFile.actionType.makeNewAction(
+					(CGTemplateFile) editedBuildPropertiesTemplate, null, _editor);
 			editTemplate.setTemplateFileContentEditor(new TemplateFileContentEditor() {
 				@Override
 				public String getEditedContent() {
 					return tagStringWithLineNb(editedBuildPropertiesTemplate.getContent(), "*", 8, 10);
 				}
+
 				@Override
-				public void setEditedContent(String content) { }
+				public void setEditedContent(String content) {
+				}
 			});
 			editTemplate.doAction();
-			SaveCustomTemplateFile saveTemplate
-			= SaveCustomTemplateFile.actionType.makeNewAction((CGTemplateFile) editedBuildPropertiesTemplate, null, _editor);
+			SaveCustomTemplateFile saveTemplate = SaveCustomTemplateFile.actionType.makeNewAction(
+					(CGTemplateFile) editedBuildPropertiesTemplate, null, _editor);
 			saveTemplate.doAction();
 			newBuildPropertiesTemplate = editedBuildPropertiesTemplate;
 		} catch (TemplateNotFoundException e) {
 			e.printStackTrace();
 			fail();
 		}
-
 
 		// In this case, DefaultApplication.conf must be marked as modified
 		checkThatAllFilesAreUpToDateExcept(GenerationStatus.GenerationModified, _buildPropertiesResource.getCGFile());
@@ -1394,24 +1340,24 @@ public class TestRoundTrip extends CGTestCase  {
 		checkDependingOnTemplate(newBuildPropertiesTemplate, _buildPropertiesResource.getCGFile());
 
 		// Check that file is to regenerate and generator also to run again
-		assertTrue (_buildPropertiesResource.getCGFile().getGenerationStatus() == GenerationStatus.GenerationModified);
-		assertTrue (_buildPropertiesResource.getGenerator().needsGeneration());
+		assertTrue(_buildPropertiesResource.getCGFile().getGenerationStatus() == GenerationStatus.GenerationModified);
+		assertTrue(_buildPropertiesResource.getGenerator().needsGeneration());
 
 		// Generate required files
 		logger.info("Generate required file");
-		GenerateSourceCode generateRequired = GenerateSourceCode.actionType.makeNewAction(codeRepository,null, _editor);
+		GenerateSourceCode generateRequired = GenerateSourceCode.actionType.makeNewAction(codeRepository, null, _editor);
 		assertTrue(generateRequired.doAction().hasActionExecutionSucceeded());
 		logger.info("Generate required file DONE");
 
 		// Status of file must be ConflictingUnMerged : this is a generation conflict !!!
 		// Because we have modified the generation in an area that was scheduled to
 		// Be changed in the generation (diff between last generated and last accepted)
-		assertEquals (_buildPropertiesResource.getCGFile().getGenerationStatus(),GenerationStatus.ConflictingUnMerged);
-		assertFalse (_buildPropertiesResource.getGenerator().needsGeneration());
+		assertEquals(_buildPropertiesResource.getCGFile().getGenerationStatus(), GenerationStatus.ConflictingUnMerged);
+		assertFalse(_buildPropertiesResource.getGenerator().needsGeneration());
 
 		// Check that this is not possible to write a file
-		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository,null, _editor);
-		assertEquals(writeToDisk.getFilesToWrite().size(),0);
+		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository, null, _editor);
+		assertEquals(writeToDisk.getFilesToWrite().size(), 0);
 
 		// Try to do it anyway
 		Vector<AbstractCGFile> writeThis = new Vector<AbstractCGFile>();
@@ -1419,7 +1365,7 @@ public class TestRoundTrip extends CGTestCase  {
 		writeToDisk.setFilesToWrite(writeThis);
 		assertFalse(writeToDisk.doAction().hasActionExecutionSucceeded());
 		// It's already been said: it's a conflict, it won't work
-		//assertTrue(writeToDisk.getThrownException() instanceof UnresolvedConflictException);
+		// assertTrue(writeToDisk.getThrownException() instanceof UnresolvedConflictException);
 
 		// Now, look at that conflict
 		// One change is conflicting in generation merge
@@ -1431,24 +1377,24 @@ public class TestRoundTrip extends CGTestCase  {
 
 		// Look if declared changes are conform
 		assertEquals(generationMerge.getChanges().size(), 2);
-		assertChange(generationMerge.getChanges().get(0),MergeChangeSource.Right,MergeChangeType.Modification,0,0,0,0,0,0);
-		assertChange(generationMerge.getChanges().get(1),MergeChangeSource.Conflict,MergeChangeType.Modification,8,10,8,10,8,10);
+		assertChange(generationMerge.getChanges().get(0), MergeChangeSource.Right, MergeChangeType.Modification, 0, 0, 0, 0, 0, 0);
+		assertChange(generationMerge.getChanges().get(1), MergeChangeSource.Conflict, MergeChangeType.Modification, 8, 10, 8, 10, 8, 10);
 		assertEquals(resultFileMerge.getChanges().size(), 1);
-		assertChange(resultFileMerge.getChanges().get(0),MergeChangeSource.Left,MergeChangeType.Modification,8,10,8,10,8,10);
+		assertChange(resultFileMerge.getChanges().get(0), MergeChangeSource.Left, MergeChangeType.Modification, 8, 10, 8, 10, 8, 10);
 
 		// Select both, right first
 		generationMerge.getChanges().get(1).setMergeChangeAction(MergeChangeAction.ChooseBothRightFirst);
 		// Result file merge must have changed also
 		assertEquals(resultFileMerge.getChanges().size(), 1);
-		assertChange(resultFileMerge.getChanges().get(0),MergeChangeSource.Left,MergeChangeType.Addition,11,13,11,10,11,10);
+		assertChange(resultFileMerge.getChanges().get(0), MergeChangeSource.Left, MergeChangeType.Addition, 11, 13, 11, 10, 11, 10);
 
 		// Mark as merged
-		MarkAsMerged markAsMerged = MarkAsMerged.actionType.makeNewAction(_buildPropertiesResource.getCGFile(),null, _editor);
+		MarkAsMerged markAsMerged = MarkAsMerged.actionType.makeNewAction(_buildPropertiesResource.getCGFile(), null, _editor);
 		assertTrue(markAsMerged.doAction().hasActionExecutionSucceeded());
 
 		// Check that this is now possible to write a file
-		WriteModifiedGeneratedFiles writeToDiskNow = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository,null, _editor);
-		assertEquals(writeToDiskNow.getFilesToWrite().size(),1);
+		WriteModifiedGeneratedFiles writeToDiskNow = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository, null, _editor);
+		assertEquals(writeToDiskNow.getFilesToWrite().size(), 1);
 		assertTrue(writeToDiskNow.doAction().hasActionExecutionSucceeded());
 
 		// Check that this has been successfully written
@@ -1473,22 +1419,21 @@ public class TestRoundTrip extends CGTestCase  {
 	/**
 	 * Check that automatic merging when there a conflict is working
 	 */
-	public void test9TestMergeWithConflict()
-	{
+	public void test9TestMergeWithConflict() {
 		log("test9TestMergeWithConflict");
 
-		_buildPropertiesResource = (BuildPropertiesResource)_project.resourceForKey(ResourceType.TEXT_FILE, codeRepository.getName() + ".BUILD_PROPERTIES");
+		_buildPropertiesResource = (BuildPropertiesResource) _project.resourceForKey(ResourceType.TEXT_FILE, codeRepository.getName()
+				+ ".BUILD_PROPERTIES");
 
 		// And now we must wait for some time (mimimal is FlexoFileResource.ACCEPTABLE_FS_DELAY)
-		logger.info("Waiting "+(FlexoFileResource.ACCEPTABLE_FS_DELAY+1000)+" ms");
+		logger.info("Waiting " + (FlexoFileResource.ACCEPTABLE_FS_DELAY + 1000) + " ms");
 		try {
-			Thread.sleep(FlexoFileResource.ACCEPTABLE_FS_DELAY+1000);
+			Thread.sleep(FlexoFileResource.ACCEPTABLE_FS_DELAY + 1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		logger.info("OK, it should be ok now");
-
 
 		CGTemplate newBuildPropertiesTemplate = null;
 
@@ -1496,19 +1441,21 @@ public class TestRoundTrip extends CGTestCase  {
 		// And modify this template by prepending line nb on line 5 and 6
 		try {
 			final CGTemplate editedBuildPropertiesTemplate = projectGenerator.getTemplateLocator().templateWithName(BUILDPROPERTIES_VM);
-			EditCustomTemplateFile editTemplate
-			= EditCustomTemplateFile.actionType.makeNewAction((CGTemplateFile) editedBuildPropertiesTemplate, null, _editor);
+			EditCustomTemplateFile editTemplate = EditCustomTemplateFile.actionType.makeNewAction(
+					(CGTemplateFile) editedBuildPropertiesTemplate, null, _editor);
 			editTemplate.setTemplateFileContentEditor(new TemplateFileContentEditor() {
 				@Override
 				public String getEditedContent() {
 					return tagStringWithLineNb(editedBuildPropertiesTemplate.getContent(), "*", 5, 7);
 				}
+
 				@Override
-				public void setEditedContent(String content) { }
+				public void setEditedContent(String content) {
+				}
 			});
 			editTemplate.doAction();
-			SaveCustomTemplateFile saveTemplate
-			= SaveCustomTemplateFile.actionType.makeNewAction((CGTemplateFile) editedBuildPropertiesTemplate, null, _editor);
+			SaveCustomTemplateFile saveTemplate = SaveCustomTemplateFile.actionType.makeNewAction(
+					(CGTemplateFile) editedBuildPropertiesTemplate, null, _editor);
 			saveTemplate.doAction();
 			assertTrue(saveTemplate.hasActionExecutionSucceeded());
 			newBuildPropertiesTemplate = editedBuildPropertiesTemplate;
@@ -1517,7 +1464,6 @@ public class TestRoundTrip extends CGTestCase  {
 			fail();
 		}
 
-
 		// In this case, DefaultApplication.conf must be marked as modified
 		checkThatAllFilesAreUpToDateExcept(GenerationStatus.GenerationModified, _buildPropertiesResource.getCGFile());
 
@@ -1525,48 +1471,50 @@ public class TestRoundTrip extends CGTestCase  {
 		checkDependingOnTemplate(newBuildPropertiesTemplate, _buildPropertiesResource.getCGFile());
 
 		// Check that file is to regenerate and generator also to run again
-		assertTrue (_buildPropertiesResource.getCGFile().getGenerationStatus() == GenerationStatus.GenerationModified);
-		assertTrue (_buildPropertiesResource.getGenerator().needsGeneration());
+		assertTrue(_buildPropertiesResource.getCGFile().getGenerationStatus() == GenerationStatus.GenerationModified);
+		assertTrue(_buildPropertiesResource.getGenerator().needsGeneration());
 
 		// Edit file by prepending line nb on line 6 and 7
-		EditGeneratedFile editFile
-		= EditGeneratedFile.actionType.makeNewAction(_buildPropertiesResource.getCGFile(), null, _editor);
+		EditGeneratedFile editFile = EditGeneratedFile.actionType.makeNewAction(_buildPropertiesResource.getCGFile(), null, _editor);
 		editFile.setFileContentEditor(new CGFile.FileContentEditor() {
 			@Override
-			public String getEditedContentForKey(String contentKey)
-			{
-				return tagStringWithLineNb(_buildPropertiesResource.getGeneratedResourceData().getContent(ContentSource.CONTENT_ON_DISK), "#", 6, 8);
+			public String getEditedContentForKey(String contentKey) {
+				return tagStringWithLineNb(_buildPropertiesResource.getGeneratedResourceData().getContent(ContentSource.CONTENT_ON_DISK),
+						"#", 6, 8);
 			}
-			@Override
-			public void setEditedContent(CGFile file) { }
-		});
-		assertTrue (editFile.doAction().hasActionExecutionSucceeded());
 
-		//logger.info("applicationConfResource.getDiskLastModifiedDate()="+(new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(applicationConfResource.getDiskLastModifiedDate()));
-		//logger.info("applicationConfResource.getLastAcceptingDate()="+(new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(applicationConfResource.getLastAcceptingDate()));
+			@Override
+			public void setEditedContent(CGFile file) {
+			}
+		});
+		assertTrue(editFile.doAction().hasActionExecutionSucceeded());
+
+		// logger.info("applicationConfResource.getDiskLastModifiedDate()="+(new
+		// SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(applicationConfResource.getDiskLastModifiedDate()));
+		// logger.info("applicationConfResource.getLastAcceptingDate()="+(new
+		// SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(applicationConfResource.getLastAcceptingDate()));
 
 		// Save file
-		SaveGeneratedFile saveFile
-		= SaveGeneratedFile.actionType.makeNewAction(_buildPropertiesResource.getCGFile(), null, _editor);
-		assertTrue (saveFile.doAction().hasActionExecutionSucceeded());
+		SaveGeneratedFile saveFile = SaveGeneratedFile.actionType.makeNewAction(_buildPropertiesResource.getCGFile(), null, _editor);
+		assertTrue(saveFile.doAction().hasActionExecutionSucceeded());
 
 		// Status of file must be ConflictingUnMerged
 
-		assertEquals (_buildPropertiesResource.getCGFile().getGenerationStatus(),GenerationStatus.ConflictingUnMerged);
-		assertTrue (_buildPropertiesResource.getGenerator().needsGeneration());
+		assertEquals(_buildPropertiesResource.getCGFile().getGenerationStatus(), GenerationStatus.ConflictingUnMerged);
+		assertTrue(_buildPropertiesResource.getGenerator().needsGeneration());
 
 		// Generate required files
 		logger.info("Generate required file");
-		GenerateSourceCode generateRequired = GenerateSourceCode.actionType.makeNewAction(codeRepository,null, _editor);
+		GenerateSourceCode generateRequired = GenerateSourceCode.actionType.makeNewAction(codeRepository, null, _editor);
 		assertTrue(generateRequired.doAction().hasActionExecutionSucceeded());
 		logger.info("Generate required file DONE");
 
-		assertEquals (_buildPropertiesResource.getCGFile().getGenerationStatus(),GenerationStatus.ConflictingUnMerged);
-		assertFalse (_buildPropertiesResource.getGenerator().needsGeneration());
+		assertEquals(_buildPropertiesResource.getCGFile().getGenerationStatus(), GenerationStatus.ConflictingUnMerged);
+		assertFalse(_buildPropertiesResource.getGenerator().needsGeneration());
 
 		// Check that this is not possible to write a file
-		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository,null, _editor);
-		assertEquals(writeToDisk.getFilesToWrite().size(),0);
+		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository, null, _editor);
+		assertEquals(writeToDisk.getFilesToWrite().size(), 0);
 
 		// Try to do it anyway
 		Vector<AbstractCGFile> writeThis = new Vector<AbstractCGFile>();
@@ -1574,7 +1522,7 @@ public class TestRoundTrip extends CGTestCase  {
 		writeToDisk.setFilesToWrite(writeThis);
 		assertFalse(writeToDisk.doAction().hasActionExecutionSucceeded());
 		// It's already been said: it's a conflict, it won't work
-		//assertTrue(writeToDisk.getThrownException() instanceof UnresolvedConflictException);
+		// assertTrue(writeToDisk.getThrownException() instanceof UnresolvedConflictException);
 
 		// Now, look at that conflict
 		// No changes are conflicting in generation merge
@@ -1586,11 +1534,11 @@ public class TestRoundTrip extends CGTestCase  {
 
 		// Look if declared changes are conform
 		assertEquals(generationMerge.getChanges().size(), 3);
-		assertChange(generationMerge.getChanges().get(0),MergeChangeSource.Right,MergeChangeType.Modification,0,0,0,0,0,0);
-		assertChange(generationMerge.getChanges().get(1),MergeChangeSource.Left,MergeChangeType.Modification,5,6,5,6,5,6);
-		assertChange(generationMerge.getChanges().get(2),MergeChangeSource.Right,MergeChangeType.Addition,8,7,8,7,8,10);
+		assertChange(generationMerge.getChanges().get(0), MergeChangeSource.Right, MergeChangeType.Modification, 0, 0, 0, 0, 0, 0);
+		assertChange(generationMerge.getChanges().get(1), MergeChangeSource.Left, MergeChangeType.Modification, 5, 6, 5, 6, 5, 6);
+		assertChange(generationMerge.getChanges().get(2), MergeChangeSource.Right, MergeChangeType.Addition, 8, 7, 8, 7, 8, 10);
 		assertEquals(resultFileMerge.getChanges().size(), 1);
-		assertChange(resultFileMerge.getChanges().get(0),MergeChangeSource.Conflict,MergeChangeType.Modification,5,7,5,7,5,7);
+		assertChange(resultFileMerge.getChanges().get(0), MergeChangeSource.Conflict, MergeChangeType.Modification, 5, 7, 5, 7, 5, 7);
 
 		// Manually resolve conflict
 		resultFileMerge.getChanges().get(0).setMergeChangeAction(MergeChangeAction.ChooseLeft);
@@ -1605,23 +1553,23 @@ public class TestRoundTrip extends CGTestCase  {
 		/*for (int i=0; i<rightVersion.length; i++) {
 			System.out.println("rightVersion["+i+"]="+rightVersion[i]);
 		}*/
-		String customHandEdition = leftVersion[0]+"\n"+leftVersion[1]+"\n"+rightVersion[1]+"\n"+rightVersion[2]+"\n";
-		//System.out.println("customHandEdition="+customHandEdition);
+		String customHandEdition = leftVersion[0] + "\n" + leftVersion[1] + "\n" + rightVersion[1] + "\n" + rightVersion[2] + "\n";
+		// System.out.println("customHandEdition="+customHandEdition);
 		resultFileMerge.getChanges().get(0).setCustomHandEdition(customHandEdition);
 		resultFileMerge.getChanges().get(0).setMergeChangeAction(MergeChangeAction.CustomEditing);
 
 		// Mark as merged
-		MarkAsMerged markAsMerged = MarkAsMerged.actionType.makeNewAction(_buildPropertiesResource.getCGFile(),null, _editor);
+		MarkAsMerged markAsMerged = MarkAsMerged.actionType.makeNewAction(_buildPropertiesResource.getCGFile(), null, _editor);
 		assertTrue(markAsMerged.doAction().hasActionExecutionSucceeded());
 
 		// Check that this is now possible to write a file
-		WriteModifiedGeneratedFiles writeToDiskNow = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository,null, _editor);
-		assertEquals(writeToDiskNow.getFilesToWrite().size(),1);
+		WriteModifiedGeneratedFiles writeToDiskNow = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository, null, _editor);
+		assertEquals(writeToDiskNow.getFilesToWrite().size(), 1);
 		assertTrue(writeToDiskNow.doAction().hasActionExecutionSucceeded());
 
 		// Check that this has been successfully written
 		try {
-			//System.out.println("fileContents="+FileUtils.fileContents(applicationConfResource.getResourceFile().getFile()));
+			// System.out.println("fileContents="+FileUtils.fileContents(applicationConfResource.getResourceFile().getFile()));
 			DiffSource diffSource = new DiffSource(FileUtils.fileContents(_buildPropertiesResource.getResourceFile().getFile()));
 			assertTrue(diffSource.tokenValueAt(3).indexOf("*3") == 0);
 			assertTrue(diffSource.tokenValueAt(4).indexOf("*4") == 0);
@@ -1648,6 +1596,5 @@ public class TestRoundTrip extends CGTestCase  {
 		resetVariables();
 		buildPropertiesResource = null;
 	}
-
 
 }

@@ -22,39 +22,32 @@ package org.openflexo.foundation.validation;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-
 /**
- * Represents a validation issue requiring attention embedded in a validation
- * report. A warning may signify a conception problem.
- *
+ * Represents a validation issue requiring attention embedded in a validation report. A warning may signify a conception problem.
+ * 
  * @author sguerin
- *
+ * 
  */
-public class ValidationWarning<R extends ValidationRule<R,V>, V extends Validable> extends ProblemIssue<R,V>
-{
+public class ValidationWarning<R extends ValidationRule<R, V>, V extends Validable> extends ProblemIssue<R, V> {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ValidationWarning.class.getPackage().getName());
 
-    public ValidationWarning(R rule, V anObject, String aMessage)
-    {
-        super(rule, anObject, aMessage);
-    }
+	public ValidationWarning(R rule, V anObject, String aMessage) {
+		super(rule, anObject, aMessage);
+	}
 
-    public ValidationWarning(R rule, V anObject, String aMessage, FixProposal<R,V> proposal)
-    {
-        super(rule, anObject, aMessage, proposal);
-    }
+	public ValidationWarning(R rule, V anObject, String aMessage, FixProposal<R, V> proposal) {
+		super(rule, anObject, aMessage, proposal);
+	}
 
-    public ValidationWarning(R rule, V anObject, String aMessage, Vector<FixProposal<R,V>> fixProposals)
-    {
-        super(rule, anObject, aMessage, fixProposals);
-    }
+	public ValidationWarning(R rule, V anObject, String aMessage, Vector<FixProposal<R, V>> fixProposals) {
+		super(rule, anObject, aMessage, fixProposals);
+	}
 
-    @Override
-    public String toString()
-    {
-    	return "VALIDATION / WARNING: "+getLocalizedMessage();
-    }
+	@Override
+	public String toString() {
+		return "VALIDATION / WARNING: " + getLocalizedMessage();
+	}
 
 }

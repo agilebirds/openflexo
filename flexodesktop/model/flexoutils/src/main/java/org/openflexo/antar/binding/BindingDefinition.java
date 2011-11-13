@@ -32,138 +32,121 @@ import org.openflexo.localization.FlexoLocalization;
  * @author sguerin
  * 
  */
-public class BindingDefinition
-{
+public class BindingDefinition {
 
-    static final Logger logger = Logger.getLogger(BindingDefinition.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(BindingDefinition.class.getPackage().getName());
 
-    private String _variableName;
+	private String _variableName;
 
-    private Type _type;
+	private Type _type;
 
-    private boolean _isMandatory;
+	private boolean _isMandatory;
 
-    private BindingDefinitionType _bindingDefinitionType = BindingDefinitionType.GET;
-    
-    public static enum BindingDefinitionType
-    {
-    	GET,
-    	SET,
-    	GET_SET,
-    	EXECUTE
-    }
-    
-     public BindingDefinition(String variableName, Type type, BindingDefinitionType bindingType, boolean mandatory)
-    {
-        super();
-        _variableName = variableName;
-        _type = type;
-        _isMandatory = mandatory;
-        _bindingDefinitionType = bindingType;
-    }
+	private BindingDefinitionType _bindingDefinitionType = BindingDefinitionType.GET;
 
-   @Override
-public boolean equals(Object object)
-    {
-        if (object instanceof BindingDefinition) {
-            BindingDefinition bd = (BindingDefinition)object;
-            if (_variableName == null) {
-                if (bd._variableName != null) return false;
-             }
-            else {
-                if (!_variableName.equals(bd._variableName)) return false;
-            }
-            return ((_type == bd._type)
-                    && (_isMandatory == bd._isMandatory));
-       }
-        else {
-            return super.equals(object);
-        }
-    } 
-    
+	public static enum BindingDefinitionType {
+		GET, SET, GET_SET, EXECUTE
+	}
 
-    public boolean getIsMandatory()
-    {
-        return _isMandatory;
-    }
+	public BindingDefinition(String variableName, Type type, BindingDefinitionType bindingType, boolean mandatory) {
+		super();
+		_variableName = variableName;
+		_type = type;
+		_isMandatory = mandatory;
+		_bindingDefinitionType = bindingType;
+	}
 
-    public void setIsMandatory(boolean mandatory)
-    {
-        _isMandatory = mandatory;
-     }
-    
-    public boolean getIsSettable()
-    {
-    	return (getBindingDefinitionType() == BindingDefinitionType.SET || getBindingDefinitionType() == BindingDefinitionType.GET_SET);
-    }
+	@Override
+	public boolean equals(Object object) {
+		if (object instanceof BindingDefinition) {
+			BindingDefinition bd = (BindingDefinition) object;
+			if (_variableName == null) {
+				if (bd._variableName != null)
+					return false;
+			} else {
+				if (!_variableName.equals(bd._variableName))
+					return false;
+			}
+			return ((_type == bd._type) && (_isMandatory == bd._isMandatory));
+		} else {
+			return super.equals(object);
+		}
+	}
 
-    public Type getType()
-    {
-        return _type;
-    }
+	public boolean getIsMandatory() {
+		return _isMandatory;
+	}
 
-    public void setType(Type type)
-    {
-    	_type = type;
-     }
+	public void setIsMandatory(boolean mandatory) {
+		_isMandatory = mandatory;
+	}
 
-    public String getVariableName()
-    {
-        return _variableName;
-    }
+	public boolean getIsSettable() {
+		return (getBindingDefinitionType() == BindingDefinitionType.SET || getBindingDefinitionType() == BindingDefinitionType.GET_SET);
+	}
 
-    public void setVariableName(String variableName)
-    {
-        _variableName = variableName;
-    }
+	public Type getType() {
+		return _type;
+	}
 
-    public static final Comparator<BindingDefinition> bindingDefinitionComparator = new BindingDefinitionComparator();
+	public void setType(Type type) {
+		_type = type;
+	}
 
-    /**
-     * Used to sort binding definition according to name alphabetic ordering
-     * 
-     * @author sguerin
-     * 
-     */
-    public static class BindingDefinitionComparator implements Comparator<BindingDefinition>
-    {
-        
-        BindingDefinitionComparator(){
-            
-        }
+	public String getVariableName() {
+		return _variableName;
+	}
 
-        /**
-         * Implements
-         * 
-         * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-         * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-         */
-        @Override
-		public int compare(BindingDefinition o1, BindingDefinition o2)
-        {
-                String s1 = o1.getVariableName();
-                String s2 = o2.getVariableName();
-                if ((s1 != null) && (s2 != null))
-                    return Collator.getInstance().compare(s1,s2);
-                else return 0;
-        }
+	public void setVariableName(String variableName) {
+		_variableName = variableName;
+	}
 
-    }
-    
-	public BindingDefinitionType getBindingDefinitionType() 
-	{
+	public static final Comparator<BindingDefinition> bindingDefinitionComparator = new BindingDefinitionComparator();
+
+	/**
+	 * Used to sort binding definition according to name alphabetic ordering
+	 * 
+	 * @author sguerin
+	 * 
+	 */
+	public static class BindingDefinitionComparator implements Comparator<BindingDefinition> {
+
+		BindingDefinitionComparator() {
+
+		}
+
+		/**
+		 * Implements
+		 * 
+		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+		 */
+		@Override
+		public int compare(BindingDefinition o1, BindingDefinition o2) {
+			String s1 = o1.getVariableName();
+			String s2 = o2.getVariableName();
+			if ((s1 != null) && (s2 != null))
+				return Collator.getInstance().compare(s1, s2);
+			else
+				return 0;
+		}
+
+	}
+
+	public BindingDefinitionType getBindingDefinitionType() {
 		return _bindingDefinitionType;
 	}
 
-    public String getTypeStringRepresentation()
-    {
-    	if (getType() == null) return FlexoLocalization.localizedForKey("no_type");
-    	else return TypeUtils.simpleRepresentation(getType());
-     }
+	public String getTypeStringRepresentation() {
+		if (getType() == null)
+			return FlexoLocalization.localizedForKey("no_type");
+		else
+			return TypeUtils.simpleRepresentation(getType());
+	}
 
-    @Override
-    public String toString() 
-    {
-     	return "BindingDefinition[name="+_variableName+",type="+_type+",mandatory="+_isMandatory+",kind="+_bindingDefinitionType+"]";
-    }
+	@Override
+	public String toString() {
+		return "BindingDefinition[name=" + _variableName + ",type=" + _type + ",mandatory=" + _isMandatory + ",kind="
+				+ _bindingDefinitionType + "]";
+	}
 }

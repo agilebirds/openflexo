@@ -23,12 +23,11 @@ import org.openflexo.fge.geom.FGECubicCurve;
 
 public abstract class CubicCurveConstruction extends GeometricConstruction<FGECubicCurve> {
 
-	public final FGECubicCurve getCurve()
-	{
+	public final FGECubicCurve getCurve() {
 		return getData();
 	}
 
 	@Override
 	protected abstract FGECubicCurve computeData();
-	
+
 }

@@ -22,9 +22,7 @@ package org.openflexo.wkf.swleditor.gr;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
-
-public interface SWLContainerGR 
-{
+public interface SWLContainerGR {
 
 	public int getSwimmingLaneNb();
 
@@ -35,10 +33,10 @@ public interface SWLContainerGR
 	public void setSwimmingLaneHeight(int height);
 
 	public double getWidth();
-	
+
 	public double getHeight();
-	
+
 	public SwimmingLaneRepresentation getDrawing();
-	
+
 	public FGEArea getLocationConstrainedAreaForChild(AbstractNodeGR node);
 }

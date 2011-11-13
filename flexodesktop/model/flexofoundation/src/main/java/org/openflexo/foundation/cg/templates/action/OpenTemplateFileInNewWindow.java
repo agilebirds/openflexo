@@ -30,46 +30,40 @@ import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.cg.templates.CGTemplateFile;
 import org.openflexo.foundation.cg.templates.CGTemplateObject;
 
+public class OpenTemplateFileInNewWindow extends FlexoGUIAction<OpenTemplateFileInNewWindow, CGTemplate, CGTemplateObject> {
 
-public class OpenTemplateFileInNewWindow extends FlexoGUIAction<OpenTemplateFileInNewWindow, CGTemplate, CGTemplateObject>
-{
-
-    private static final Logger logger = Logger.getLogger(OpenTemplateFileInNewWindow.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(OpenTemplateFileInNewWindow.class.getPackage().getName());
 
 	public static FlexoActionType<OpenTemplateFileInNewWindow, CGTemplate, CGTemplateObject> actionType = new FlexoActionType<OpenTemplateFileInNewWindow, CGTemplate, CGTemplateObject>(
 			"open_in_new_window", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
+		/**
+		 * Factory method
+		 */
 		@Override
-		public OpenTemplateFileInNewWindow makeNewAction(CGTemplate focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor)
-        {
-            return new OpenTemplateFileInNewWindow(focusedObject, globalSelection,editor);
-        }
+		public OpenTemplateFileInNewWindow makeNewAction(CGTemplate focusedObject, Vector<CGTemplateObject> globalSelection,
+				FlexoEditor editor) {
+			return new OpenTemplateFileInNewWindow(focusedObject, globalSelection, editor);
+		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGTemplate object, Vector<CGTemplateObject> globalSelection)
-        {
-            return (object != null);
-       }
+		protected boolean isVisibleForSelection(CGTemplate object, Vector<CGTemplateObject> globalSelection) {
+			return (object != null);
+		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGTemplate object, Vector<CGTemplateObject> globalSelection)
-        {
+		protected boolean isEnabledForSelection(CGTemplate object, Vector<CGTemplateObject> globalSelection) {
 			return ((object != null) && (!(object instanceof CGTemplateFile) || !((CGTemplateFile) object).isEdited()));
-       }
-                
-    };
-    
-    static {
-		FlexoModelObject.addActionForClass(OpenTemplateFileInNewWindow.actionType, CGTemplate.class);
-    }
-    
+		}
 
-	OpenTemplateFileInNewWindow(CGTemplate focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	};
+
+	static {
+		FlexoModelObject.addActionForClass(OpenTemplateFileInNewWindow.actionType, CGTemplate.class);
+	}
+
+	OpenTemplateFileInNewWindow(CGTemplate focusedObject, Vector<CGTemplateObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
 }

@@ -30,52 +30,48 @@ import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
 import org.openflexo.localization.FlexoLocalization;
 
-public class EditUserHelpAction extends FlexoGUIAction<EditUserHelpAction,FlexoModelObject,FlexoModelObject> 
-{
+public class EditUserHelpAction extends FlexoGUIAction<EditUserHelpAction, FlexoModelObject, FlexoModelObject> {
 
-    public static FlexoActionType<EditUserHelpAction,FlexoModelObject,FlexoModelObject> actionType = new FlexoActionType<EditUserHelpAction,FlexoModelObject,FlexoModelObject> ("help",FlexoActionType.helpGroup) {
+	public static FlexoActionType<EditUserHelpAction, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<EditUserHelpAction, FlexoModelObject, FlexoModelObject>(
+			"help", FlexoActionType.helpGroup) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public EditUserHelpAction makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) 
-        {
-            return new EditUserHelpAction(focusedObject, globalSelection,editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public EditUserHelpAction makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+			return new EditUserHelpAction(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) 
-        {
-            return (object != null) && (object instanceof OperationComponentDefinition) || (object instanceof IEOperationComponent);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return (object != null) && (object instanceof OperationComponentDefinition) || (object instanceof IEOperationComponent);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) 
-        {
-            return (object != null) && (object instanceof OperationComponentDefinition) || (object instanceof IEOperationComponent);
-        }
-                
-    };
-    
-    static {
-    	FlexoModelObject.addActionForClass (EditUserHelpAction.actionType, OperationComponentDefinition.class);
-    	FlexoModelObject.addActionForClass (EditUserHelpAction.actionType, IEOperationComponent.class);
-    }
-    
-    EditUserHelpAction (FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return (object != null) && (object instanceof OperationComponentDefinition) || (object instanceof IEOperationComponent);
+		}
 
-    @Override
-	public String getLocalizedName ()
-    {
-        if (getFocusedObject() != null && getFocusedObject() instanceof IEOperationComponent) {
-            return FlexoLocalization.localizedForKey("write_user_help_for")+" "+((IEWOComponent)getFocusedObject()).getName();
-        }else if(getFocusedObject() instanceof OperationComponentDefinition){
-        	return FlexoLocalization.localizedForKey("write_user_help_for")+" "+((OperationComponentDefinition)getFocusedObject()).getName();
-        }
-        return null;
-    }
+	};
+
+	static {
+		FlexoModelObject.addActionForClass(EditUserHelpAction.actionType, OperationComponentDefinition.class);
+		FlexoModelObject.addActionForClass(EditUserHelpAction.actionType, IEOperationComponent.class);
+	}
+
+	EditUserHelpAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	public String getLocalizedName() {
+		if (getFocusedObject() != null && getFocusedObject() instanceof IEOperationComponent) {
+			return FlexoLocalization.localizedForKey("write_user_help_for") + " " + ((IEWOComponent) getFocusedObject()).getName();
+		} else if (getFocusedObject() instanceof OperationComponentDefinition) {
+			return FlexoLocalization.localizedForKey("write_user_help_for") + " "
+					+ ((OperationComponentDefinition) getFocusedObject()).getName();
+		}
+		return null;
+	}
 }

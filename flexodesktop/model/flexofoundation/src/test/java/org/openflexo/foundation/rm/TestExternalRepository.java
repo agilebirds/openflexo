@@ -47,35 +47,32 @@ public class TestExternalRepository extends FlexoTestCase {
 	/**
 	 * Creates a new empty project in a temp directory
 	 */
-	public void test0CreateProject()
-	{
+	public void test0CreateProject() {
 		logger.info("test0CreateProject");
 		ToolBox.setPlatform();
 		FlexoLoggingManager.forceInitialize();
 		try {
 			File tempFile = File.createTempFile(TEST_ER, "");
-			_projectDirectory = new File (tempFile.getParentFile(),tempFile.getName()+".prj");
+			_projectDirectory = new File(tempFile.getParentFile(), tempFile.getName() + ".prj");
 			tempFile.delete();
 		} catch (IOException e) {
 			fail();
 		}
-		logger.info("Project directory: "+_projectDirectory.getAbsolutePath());
-		_projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length()-4);
-		logger.info("Project identifier: "+_projectIdentifier);
-		_editor = FlexoResourceManager.initializeNewProject(_projectDirectory,EDITOR_FACTORY,null);
+		logger.info("Project directory: " + _projectDirectory.getAbsolutePath());
+		_projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length() - 4);
+		logger.info("Project identifier: " + _projectIdentifier);
+		_editor = FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY, null);
 		_project = _editor.getProject();
 		logger.info("Project has been SUCCESSFULLY created");
 	}
 
-
 	/**
 	 * Creates a new empty project in a temp directory
 	 */
-	public void test1CreateExternalRepository()
-	{
+	public void test1CreateExternalRepository() {
 		logger.info("test1CreateExternalRepository");
-		_project.setDirectoryForRepositoryName("repository1",new File(System.getProperty("user.home")));
-		_project.setDirectoryForRepositoryName("repository2",new File(System.getProperty("user.home")+"/Test"));
+		_project.setDirectoryForRepositoryName("repository1", new File(System.getProperty("user.home")));
+		_project.setDirectoryForRepositoryName("repository2", new File(System.getProperty("user.home") + "/Test"));
 		try {
 			_project.save();
 		} catch (SaveResourceException e) {
@@ -86,53 +83,52 @@ public class TestExternalRepository extends FlexoTestCase {
 	/**
 	 * Creates a new empty project in a temp directory
 	 */
-	public void test2CreateResource()
-	{
+	public void test2CreateResource() {
 		logger.info("test2CreateResource : not maintained");
-		//		try {
-		//			CustomInspectorsResource res = new CustomInspectorsResource(_project,new FlexoProjectFile("repository1:temp"));
-		//			_project.registerResource(res);
-		//			CustomTemplatesResource res2 = new CustomTemplatesResource(_project,"Templates",new FlexoProjectFile(_project,_project.getExternalRepositoryWithKey("repository2"),"SomeTemplates"));
-		//			_project.registerResource(res2);
-		//			logger.info("res.getFile()"+res.getFile().getAbsolutePath());
-		//			logger.info("res2.getFile()"+res2.getFile().getAbsolutePath());
-		//		} catch (InvalidFileNameException e) {
-		//			fail();
-		//		} catch (DuplicateResourceException e) {
-		//			fail();
-		//		}
-		//		try {
-		//			_project.save();
-		//		} catch (SaveResourceException e) {
-		//			fail("Cannot save project");
-		//		}
+		// try {
+		// CustomInspectorsResource res = new CustomInspectorsResource(_project,new FlexoProjectFile("repository1:temp"));
+		// _project.registerResource(res);
+		// CustomTemplatesResource res2 = new CustomTemplatesResource(_project,"Templates",new
+		// FlexoProjectFile(_project,_project.getExternalRepositoryWithKey("repository2"),"SomeTemplates"));
+		// _project.registerResource(res2);
+		// logger.info("res.getFile()"+res.getFile().getAbsolutePath());
+		// logger.info("res2.getFile()"+res2.getFile().getAbsolutePath());
+		// } catch (InvalidFileNameException e) {
+		// fail();
+		// } catch (DuplicateResourceException e) {
+		// fail();
+		// }
+		// try {
+		// _project.save();
+		// } catch (SaveResourceException e) {
+		// fail("Cannot save project");
+		// }
 
 	}
 
 	/**
 	 * Creates a new empty project in a temp directory
 	 */
-	public void test3Reload()
-	{
+	public void test3Reload() {
 		logger.info("test3Reload : not maintained");
-		//		try {
-		//		    if (_project!=null)
-		//		        _project.close();
-		//			assertNotNull(_editor = FlexoResourceManager.initializeExistingProject(_projectDirectory,EDITOR_FACTORY));
-		//			_project = _editor.getProject();
-		//		} catch (ProjectInitializerException e) {
-		//			e.printStackTrace();
-		//			fail();
-		//		} catch (ProjectLoadingCancelledException e) {
-		//			e.printStackTrace();
-		//			fail();
-		//		}
-		//		CustomInspectorsResource res = _project.getCustomInspectorsResource();
-		//		CustomTemplatesResource res2 = _project.getCustomTemplatesResources().firstElement();
-		//		logger.info("res.getFile()"+res.getFile().getAbsolutePath());
-		//		logger.info("res2.getFile()"+res2.getFile().getAbsolutePath());
-		//		_project.close();
-		//		FileUtils.deleteDir(_project.getProjectDirectory());
+		// try {
+		// if (_project!=null)
+		// _project.close();
+		// assertNotNull(_editor = FlexoResourceManager.initializeExistingProject(_projectDirectory,EDITOR_FACTORY));
+		// _project = _editor.getProject();
+		// } catch (ProjectInitializerException e) {
+		// e.printStackTrace();
+		// fail();
+		// } catch (ProjectLoadingCancelledException e) {
+		// e.printStackTrace();
+		// fail();
+		// }
+		// CustomInspectorsResource res = _project.getCustomInspectorsResource();
+		// CustomTemplatesResource res2 = _project.getCustomTemplatesResources().firstElement();
+		// logger.info("res.getFile()"+res.getFile().getAbsolutePath());
+		// logger.info("res2.getFile()"+res2.getFile().getAbsolutePath());
+		// _project.close();
+		// FileUtils.deleteDir(_project.getProjectDirectory());
 		_project.close();
 		FileUtils.deleteDir(_project.getProjectDirectory());
 		_project = null;
@@ -140,6 +136,5 @@ public class TestExternalRepository extends FlexoTestCase {
 		_projectDirectory = null;
 		_projectIdentifier = null;
 	}
-
 
 }

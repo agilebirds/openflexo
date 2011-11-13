@@ -23,24 +23,21 @@ import org.openflexo.foundation.FlexoException;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class RowIsNotEmpty extends FlexoException
-{
+public class RowIsNotEmpty extends FlexoException {
 
-    private int row;
-    
-    /**
-     * @param rowCount
-     */
-    public RowIsNotEmpty(int row)
-    {
-        this.row = row;
-    }
+	private int row;
 
-    public int getRow()
-    {
-        return row;
-    }
+	/**
+	 * @param rowCount
+	 */
+	public RowIsNotEmpty(int row) {
+		this.row = row;
+	}
+
+	public int getRow() {
+		return row;
+	}
 
 }

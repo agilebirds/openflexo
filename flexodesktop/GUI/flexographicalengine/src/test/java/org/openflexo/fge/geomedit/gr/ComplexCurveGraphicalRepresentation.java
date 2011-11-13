@@ -38,76 +38,67 @@ import org.openflexo.fge.geomedit.construction.ExplicitPointConstruction;
 import org.openflexo.fge.geomedit.construction.PointConstruction;
 import org.openflexo.xmlcode.XMLSerializable;
 
-
-public class ComplexCurveGraphicalRepresentation extends GeometricObjectGraphicalRepresentation<FGEComplexCurve,ComplexCurve> implements XMLSerializable 
-{
+public class ComplexCurveGraphicalRepresentation extends GeometricObjectGraphicalRepresentation<FGEComplexCurve, ComplexCurve> implements
+		XMLSerializable {
 	// Called for LOAD
-	public ComplexCurveGraphicalRepresentation(GeomEditBuilder builder)
-	{
-		this(null,builder.drawing);
+	public ComplexCurveGraphicalRepresentation(GeomEditBuilder builder) {
+		this(null, builder.drawing);
 		initializeDeserialization();
 	}
 
-	public ComplexCurveGraphicalRepresentation(ComplexCurve curve, GeometricDrawing aDrawing)
-	{
+	public ComplexCurveGraphicalRepresentation(ComplexCurve curve, GeometricDrawing aDrawing) {
 		super(curve, aDrawing);
 	}
 
 	@Override
-	protected List<ControlPoint> buildControlPointsForGeneralShape(FGEGeneralShape shape)
-	{
+	protected List<ControlPoint> buildControlPointsForGeneralShape(FGEGeneralShape shape) {
 		Vector<ControlPoint> returned = new Vector<ControlPoint>();
 
 		ComplexCurveConstruction curveContruction = getDrawable().getConstruction();
 
 		if (curveContruction instanceof ComplexCurveWithNPointsConstruction) {
 
-			for (int i = 0; i<((ComplexCurveWithNPointsConstruction)curveContruction).pointConstructions.size(); i++) {
+			for (int i = 0; i < ((ComplexCurveWithNPointsConstruction) curveContruction).pointConstructions.size(); i++) {
 
 				final int pointIndex = i;
-				PointConstruction pc = ((ComplexCurveWithNPointsConstruction)curveContruction).pointConstructions.get(i);
+				PointConstruction pc = ((ComplexCurveWithNPointsConstruction) curveContruction).pointConstructions.get(i);
 
 				if (pc instanceof ExplicitPointConstruction) {
-					returned.add(new DraggableControlPoint<FGEComplexCurve>(this,"pt"+i,pc.getPoint(),(ExplicitPointConstruction)pc) {
+					returned.add(new DraggableControlPoint<FGEComplexCurve>(this, "pt" + i, pc.getPoint(), (ExplicitPointConstruction) pc) {
 						@Override
-						public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-						{
+						public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration,
+								FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event) {
 							if (pointIndex == 0) {
 								getGeometricObject().getElementAt(0).getP1().x = newAbsolutePoint.x;
 								getGeometricObject().getElementAt(0).getP1().y = newAbsolutePoint.y;
 								getGeometricObject().refresh();
-							}
-							else {
-								getGeometricObject().getElementAt(pointIndex-1).getP2().x = newAbsolutePoint.x;
-								getGeometricObject().getElementAt(pointIndex-1).getP2().y = newAbsolutePoint.y;
+							} else {
+								getGeometricObject().getElementAt(pointIndex - 1).getP2().x = newAbsolutePoint.x;
+								getGeometricObject().getElementAt(pointIndex - 1).getP2().y = newAbsolutePoint.y;
 								getGeometricObject().refresh();
 							}
 							setPoint(newAbsolutePoint);
 							notifyGeometryChanged();
 							return true;
 						}
+
 						@Override
-						public void update(FGEComplexCurve geometricObject)
-						{
+						public void update(FGEComplexCurve geometricObject) {
 							if (pointIndex == 0) {
 								setPoint(geometricObject.getElementAt(0).getP1());
-							}
-							else {
-								setPoint(geometricObject.getElementAt(pointIndex-1).getP2());
+							} else {
+								setPoint(geometricObject.getElementAt(pointIndex - 1).getP2());
 							}
 						}
 					});
-				}
-				else {
-					returned.add(new ComputedControlPoint<FGEComplexCurve>(this,"pt"+i,pc.getPoint()) {
+				} else {
+					returned.add(new ComputedControlPoint<FGEComplexCurve>(this, "pt" + i, pc.getPoint()) {
 						@Override
-						public void update(FGEComplexCurve geometricObject)
-						{
+						public void update(FGEComplexCurve geometricObject) {
 							if (pointIndex == 0) {
 								setPoint(geometricObject.getElementAt(0).getP1());
-							}
-							else {
-								setPoint(geometricObject.getElementAt(pointIndex-1).getP2());
+							} else {
+								setPoint(geometricObject.getElementAt(pointIndex - 1).getP2());
 							}
 						}
 					});
@@ -119,6 +110,5 @@ public class ComplexCurveGraphicalRepresentation extends GeometricObjectGraphica
 		return returned;
 
 	}
-
 
 }

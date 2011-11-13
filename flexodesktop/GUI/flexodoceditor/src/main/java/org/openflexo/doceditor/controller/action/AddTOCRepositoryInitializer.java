@@ -36,7 +36,6 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.xmlcode.XMLDecoder;
 
-
 import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -89,8 +88,8 @@ public class AddTOCRepositoryInitializer extends ActionInitializer {
 						FlexoLocalization.localizedForKey("enter_parameters_for_table_of_content"), new ValidationCondition() {
 							@Override
 							public boolean isValid(ParametersModel model) {
-								boolean b = model.parameterForKey("name").getValue() != null && ((String) model.parameterForKey("name")
-										.getValue()).trim().length() > 0;
+								boolean b = model.parameterForKey("name").getValue() != null
+										&& ((String) model.parameterForKey("name").getValue()).trim().length() > 0;
 								if (!b) {
 									errorMessage = FlexoLocalization.localizedForKey("name_cannot_be_empty");
 								}

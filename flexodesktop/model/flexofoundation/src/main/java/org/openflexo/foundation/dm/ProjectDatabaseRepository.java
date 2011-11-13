@@ -28,105 +28,94 @@ import org.openflexo.foundation.dm.action.ImportDMEOModel;
 import org.openflexo.foundation.dm.eo.DMEORepository;
 import org.openflexo.foundation.xml.FlexoDMBuilder;
 
-
 /**
  * Represents a logical group of objects stored in a project database
  * 
  * @author sguerin
  * 
  */
-public class ProjectDatabaseRepository extends DMEORepository
-{
+public class ProjectDatabaseRepository extends DMEORepository {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ProjectDatabaseRepository.class.getPackage().getName());
 
-    public String packageName;
+	public String packageName;
 
-    /**
-     * Constructor used during deserialization
-     */
-    public ProjectDatabaseRepository(FlexoDMBuilder builder)
-    {
-        this(builder.dmModel);
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor used during deserialization
+	 */
+	public ProjectDatabaseRepository(FlexoDMBuilder builder) {
+		this(builder.dmModel);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Default constructor
-     */
-    private ProjectDatabaseRepository(DMModel dmModel)
-    {
-        super(dmModel);
-    }
+	/**
+	 * Default constructor
+	 */
+	private ProjectDatabaseRepository(DMModel dmModel) {
+		super(dmModel);
+	}
 
-    @Override
-	public DMRepositoryFolder getRepositoryFolder()
-    {
-        return getDMModel().getPersistantDataRepositoryFolder();
-    }
-    
-    /**
-     * @param dmModel
-     * @return
-     */
-    public static ProjectDatabaseRepository createNewProjectDatabaseRepository(DMModel dmModel, String repositoryName)
-    {
-        ProjectDatabaseRepository newProjectDatabaseRepository = new ProjectDatabaseRepository(dmModel);
-        newProjectDatabaseRepository.setName(repositoryName);
-        dmModel.addToProjectDatabaseRepositories(newProjectDatabaseRepository);
-        return newProjectDatabaseRepository;
-    }
+	@Override
+	public DMRepositoryFolder getRepositoryFolder() {
+		return getDMModel().getPersistantDataRepositoryFolder();
+	}
 
-    @Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass()
-    {
-        Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-        returned.add(ImportDMEOModel.actionType);
-        return returned;
-    }
+	/**
+	 * @param dmModel
+	 * @return
+	 */
+	public static ProjectDatabaseRepository createNewProjectDatabaseRepository(DMModel dmModel, String repositoryName) {
+		ProjectDatabaseRepository newProjectDatabaseRepository = new ProjectDatabaseRepository(dmModel);
+		newProjectDatabaseRepository.setName(repositoryName);
+		dmModel.addToProjectDatabaseRepositories(newProjectDatabaseRepository);
+		return newProjectDatabaseRepository;
+	}
 
-    /**
-     * Overrides getInspectorName
-     * @see org.openflexo.foundation.dm.DMRepository#getInspectorName()
-     */
-    @Override
-	public String getInspectorName()
-    {
-        if (isReadOnly())
-            return Inspectors.DM.DM_RO_EO_REPOSITORY_INSPECTOR;
-        else
-            return Inspectors.DM.DM_EO_REPOSITORY_INSPECTOR;
-    }
-    
-    @Override
-	public int getOrder()
-    {
-        return 5;
-    }
+	@Override
+	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
+		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
+		returned.add(ImportDMEOModel.actionType);
+		return returned;
+	}
 
-    @Override
-	public boolean isReadOnly()
-    {
-        return false;
-    }
+	/**
+	 * Overrides getInspectorName
+	 * 
+	 * @see org.openflexo.foundation.dm.DMRepository#getInspectorName()
+	 */
+	@Override
+	public String getInspectorName() {
+		if (isReadOnly())
+			return Inspectors.DM.DM_RO_EO_REPOSITORY_INSPECTOR;
+		else
+			return Inspectors.DM.DM_EO_REPOSITORY_INSPECTOR;
+	}
 
-    @Override
-	public void delete(boolean deleteEOModelFiles)
-   {
-        getDMModel().removeFromProjectDatabaseRepositories(this);
-        super.delete(deleteEOModelFiles);
-    }
+	@Override
+	public int getOrder() {
+		return 5;
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "project_database_repository";
-    }
-    
+	@Override
+	public boolean isReadOnly() {
+		return false;
+	}
+
+	@Override
+	public void delete(boolean deleteEOModelFiles) {
+		getDMModel().removeFromProjectDatabaseRepositories(this);
+		super.delete(deleteEOModelFiles);
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "project_database_repository";
+	}
 
 }

@@ -33,52 +33,45 @@ import org.openflexo.toolbox.FileFormat;
  * @author sylvain
  * 
  */
-public class PListFileResource<G extends IFlexoResourceGenerator, F extends CGFile> extends TextFileResource<G,F>
-{
-    protected static final Logger logger = FlexoLogger.getLogger(PListFileResource.class.getPackage().getName());
+public class PListFileResource<G extends IFlexoResourceGenerator, F extends CGFile> extends TextFileResource<G, F> {
+	protected static final Logger logger = FlexoLogger.getLogger(PListFileResource.class.getPackage().getName());
 
-    /**
-     * @param builder
-     */
-    public PListFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-     }
+	/**
+	 * @param builder
+	 */
+	public PListFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
-    /**
-     * @param aProject
-     */
-    public PListFileResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
+	/**
+	 * @param aProject
+	 */
+	public PListFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
-    /**
-     * Overrides getResourceType
-     * 
-     * @see org.openflexo.foundation.rm.FlexoResource#getResourceType()
-     */
-    @Override
-	public ResourceType getResourceType()
-    {
-        return ResourceType.PLIST_FILE;
-    }
+	/**
+	 * Overrides getResourceType
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResource#getResourceType()
+	 */
+	@Override
+	public ResourceType getResourceType() {
+		return ResourceType.PLIST_FILE;
+	}
 
+	@Override
+	protected PListFile createGeneratedResourceData() {
+		return new PListFile(getFile());
+	}
 
-    @Override
-	protected PListFile createGeneratedResourceData()
-    {
-        return new PListFile(getFile());
-    }
-    
-     public PListFile getPListFile()
-    {
-        return (PListFile) getGeneratedResourceData();
-    }
+	public PListFile getPListFile() {
+		return (PListFile) getGeneratedResourceData();
+	}
 
-     @Override
-	public FileFormat getResourceFormat(){
-     	return FileFormat.PLIST;
-     }
-     
+	@Override
+	public FileFormat getResourceFormat() {
+		return FileFormat.PLIST;
+	}
+
 }

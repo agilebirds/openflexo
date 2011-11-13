@@ -31,67 +31,64 @@ import org.openflexo.foundation.cg.DuplicateCodeRepositoryNameException;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.localization.FlexoLocalization;
 
-public class RemoveGeneratedCodeRepository extends AbstractGCAction<RemoveGeneratedCodeRepository,GenerationRepository>
-{
+public class RemoveGeneratedCodeRepository extends AbstractGCAction<RemoveGeneratedCodeRepository, GenerationRepository> {
 
-    private static final Logger logger = Logger.getLogger(RemoveGeneratedCodeRepository.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(RemoveGeneratedCodeRepository.class.getPackage().getName());
 
-    public static FlexoActionType<RemoveGeneratedCodeRepository,GenerationRepository,CGObject> actionType = new FlexoActionType<RemoveGeneratedCodeRepository,GenerationRepository,CGObject> ("delete_repository",FlexoActionType.defaultGroup,FlexoActionType.DELETE_ACTION_TYPE) {
+	public static FlexoActionType<RemoveGeneratedCodeRepository, GenerationRepository, CGObject> actionType = new FlexoActionType<RemoveGeneratedCodeRepository, GenerationRepository, CGObject>(
+			"delete_repository", FlexoActionType.defaultGroup, FlexoActionType.DELETE_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public RemoveGeneratedCodeRepository makeNewAction(GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) 
-        {
-            return new RemoveGeneratedCodeRepository(focusedObject, globalSelection, editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public RemoveGeneratedCodeRepository makeNewAction(GenerationRepository focusedObject, Vector<CGObject> globalSelection,
+				FlexoEditor editor) {
+			return new RemoveGeneratedCodeRepository(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(GenerationRepository object, Vector<CGObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(GenerationRepository object, Vector<CGObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(GenerationRepository object, Vector<CGObject> globalSelection) 
-        {
-            return (object != null);
-        }
-                
-    };
-    
-    private boolean deleteFiles;
-    
-    RemoveGeneratedCodeRepository (GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+		@Override
+		protected boolean isEnabledForSelection(GenerationRepository object, Vector<CGObject> globalSelection) {
+			return (object != null);
+		}
 
-    @Override
-	protected void doAction(Object context) throws DuplicateCodeRepositoryNameException, RepositoryCannotBeDeletedException
-    {
-        logger.info ("Remove GeneratedCodeRepository");
-        if (getFocusedObject() instanceof DGRepository) {
-        	if (((DGRepository)getFocusedObject()).getRepositoriedUsingAsReader().size()>0) {
-        		StringBuilder sb = new StringBuilder();
-        		sb.append(FlexoLocalization.localizedForKey("repository_cannot_be_deleted_because_it_used_by_the_following_repositories")).append(":\n");
-        		for (CGRepository r : ((DGRepository)getFocusedObject()).getRepositoriedUsingAsReader()) {
+	};
+
+	private boolean deleteFiles;
+
+	RemoveGeneratedCodeRepository(GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) throws DuplicateCodeRepositoryNameException, RepositoryCannotBeDeletedException {
+		logger.info("Remove GeneratedCodeRepository");
+		if (getFocusedObject() instanceof DGRepository) {
+			if (((DGRepository) getFocusedObject()).getRepositoriedUsingAsReader().size() > 0) {
+				StringBuilder sb = new StringBuilder();
+				sb.append(FlexoLocalization.localizedForKey("repository_cannot_be_deleted_because_it_used_by_the_following_repositories"))
+						.append(":\n");
+				for (CGRepository r : ((DGRepository) getFocusedObject()).getRepositoriedUsingAsReader()) {
 					sb.append("* ").append(r.getName()).append("\n");
 				}
-        		throw new RepositoryCannotBeDeletedException(sb.toString());
-        	}
-        }
-        getFocusedObject().delete(makeFlexoProgress(FlexoLocalization.localizedForKey("removing_repository")+" "+getFocusedObject().getName(), getFocusedObject().getFiles().size()),deleteFiles);
-    }
+				throw new RepositoryCannotBeDeletedException(sb.toString());
+			}
+		}
+		getFocusedObject().delete(
+				makeFlexoProgress(FlexoLocalization.localizedForKey("removing_repository") + " " + getFocusedObject().getName(),
+						getFocusedObject().getFiles().size()), deleteFiles);
+	}
 
-	public boolean getDeleteFiles()
-	{
+	public boolean getDeleteFiles() {
 		return deleteFiles;
 	}
 
-	public void setDeleteFiles(boolean deleteFiles)
-	{
+	public void setDeleteFiles(boolean deleteFiles) {
 		this.deleteFiles = deleteFiles;
 	}
 

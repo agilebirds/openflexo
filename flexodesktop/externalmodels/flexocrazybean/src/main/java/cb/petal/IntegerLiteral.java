@@ -21,38 +21,45 @@ package cb.petal;
 
 /**
  * Integer literal.
- *
+ * 
  * @version $Id: IntegerLiteral.java,v 1.3 2011/09/12 11:46:49 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class IntegerLiteral extends Literal {
-  static final long serialVersionUID=-3040774411406090728L;
+	static final long serialVersionUID = -3040774411406090728L;
 
-  private int value;
+	private int value;
 
-  public IntegerLiteral(int value) {
-    super("<int>");
-    this.value = value;
-  }
+	public IntegerLiteral(int value) {
+		super("<int>");
+		this.value = value;
+	}
 
-  public int    getValue()        { return value; }
-  public void setValue(int i) { value = i; }
+	public int getValue() {
+		return value;
+	}
 
-  @Override
-public String toString() { return "" + value; }
+	public void setValue(int i) {
+		value = i;
+	}
 
-  @Override
-public java.lang.Object getLiteralValue() {
-    return new Integer(value);
-  }
-  
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public String toString() {
+		return "" + value;
+	}
 
-  @Override
-public boolean equals(java.lang.Object o) {
-    return (o instanceof IntegerLiteral) && (((IntegerLiteral)o).value == this.value);
-  }
+	@Override
+	public java.lang.Object getLiteralValue() {
+		return new Integer(value);
+	}
+
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
+
+	@Override
+	public boolean equals(java.lang.Object o) {
+		return (o instanceof IntegerLiteral) && (((IntegerLiteral) o).value == this.value);
+	}
 }

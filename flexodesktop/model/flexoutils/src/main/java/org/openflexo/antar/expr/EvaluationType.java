@@ -22,99 +22,74 @@ package org.openflexo.antar.expr;
 import org.openflexo.localization.FlexoLocalization;
 
 public enum EvaluationType {
-	LITERAL,
-	BOOLEAN,
-	ARITHMETIC_INTEGER,
-	ARITHMETIC_FLOAT,
-	STRING,
-	DATE,
-	DURATION,
-	ENUM;
-	
-	public String getName() 
-	{
+	LITERAL, BOOLEAN, ARITHMETIC_INTEGER, ARITHMETIC_FLOAT, STRING, DATE, DURATION, ENUM;
+
+	public String getName() {
 		return toString();
 	}
-	
-	public String getLocalizedName()
-	{
+
+	public String getLocalizedName() {
 		return FlexoLocalization.localizedForKey(getName());
 	}
-		
-	public boolean isLiteral()
-	{
+
+	public boolean isLiteral() {
 		return (this == LITERAL);
 	}
-	
-	public boolean isArithmetic()
-	{
+
+	public boolean isArithmetic() {
 		return (this == ARITHMETIC_FLOAT || this == ARITHMETIC_INTEGER);
 	}
 
-	public boolean isArithmeticInteger()
-	{
+	public boolean isArithmeticInteger() {
 		return (this == ARITHMETIC_INTEGER);
 	}
 
-	public boolean isArithmeticFloat()
-	{
+	public boolean isArithmeticFloat() {
 		return (this == ARITHMETIC_FLOAT);
 	}
 
-	public boolean isArithmeticOrLiteral()
-	{
+	public boolean isArithmeticOrLiteral() {
 		return (this == ARITHMETIC_FLOAT || this == ARITHMETIC_INTEGER || this == LITERAL);
 	}
 
-	public boolean isBoolean()
-	{
+	public boolean isBoolean() {
 		return (this == BOOLEAN);
 	}
 
-	public boolean isBooleanOrLiteral()
-	{
+	public boolean isBooleanOrLiteral() {
 		return (this == BOOLEAN || this == LITERAL);
 	}
 
-	public boolean isEnum()
-	{
+	public boolean isEnum() {
 		return (this == ENUM);
 	}
 
-	public boolean isEnumOrLiteral()
-	{
+	public boolean isEnumOrLiteral() {
 		return (this == ENUM || this == LITERAL);
 	}
 
-	public boolean isString()
-	{
+	public boolean isString() {
 		return (this == STRING);
 	}
 
-	public boolean isStringOrLiteral()
-	{
+	public boolean isStringOrLiteral() {
 		return (this == STRING || this == LITERAL);
 	}
 
-	public boolean isDate()
-	{
+	public boolean isDate() {
 		return (this == DATE);
 	}
 
-	public boolean isDateOrLiteral()
-	{
+	public boolean isDateOrLiteral() {
 		return (this == DATE || this == LITERAL);
 	}
 
-	public boolean isDuration()
-	{
+	public boolean isDuration() {
 		return (this == DURATION);
 	}
 
-	public boolean isDurationOrLiteral()
-	{
+	public boolean isDurationOrLiteral() {
 		return (this == DURATION || this == LITERAL);
 	}
-	
-	
+
 }

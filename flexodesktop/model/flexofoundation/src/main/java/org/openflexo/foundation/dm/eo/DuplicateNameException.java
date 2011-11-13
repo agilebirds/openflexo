@@ -24,11 +24,11 @@ import javax.naming.InvalidNameException;
 public class DuplicateNameException extends InvalidNameException {
 
 	private String name;
-	
+
 	public DuplicateNameException(String name) {
 		this.name = name;
 	}
-	
+
 	public String getName() {
 		return name;
 	}

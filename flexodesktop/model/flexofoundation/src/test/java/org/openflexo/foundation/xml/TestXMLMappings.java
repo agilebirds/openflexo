@@ -43,29 +43,24 @@ import org.openflexo.xmlcode.ModelEntity;
 import org.openflexo.xmlcode.ModelProperty;
 import org.openflexo.xmlcode.XMLMapping;
 
-
-public class TestXMLMappings extends FlexoTestCase
-{
+public class TestXMLMappings extends FlexoTestCase {
 
 	protected static final Logger logger = Logger.getLogger(TestXMLMappings.class.getPackage().getName());
 
 	private FlexoXMLMappings xmlMappings;
 
-	public TestXMLMappings()
-	{
+	public TestXMLMappings() {
 		super("TestXMLMappings");
 	}
 
 	@Override
-	protected void setUp() throws Exception
-	{
+	protected void setUp() throws Exception {
 		super.setUp();
 		xmlMappings = new FlexoXMLMappings();
 		xmlMappings.initialize();
 	}
 
-	public void testRMMappings()
-	{
+	public void testRMMappings() {
 		checkClassModels(FlexoProject.class);
 		/*XMLMapping rmMapping = xmlMappings.getRMMapping();
 		XMLMapping rmTSMapping = FlexoXMLMappings.getRMTSMapping();
@@ -76,84 +71,69 @@ public class TestXMLMappings extends FlexoTestCase
 		}*/
 	}
 
-	public void testWorkflowMappings()
-	{
+	public void testWorkflowMappings() {
 		checkClassModels(FlexoWorkflow.class);
 	}
 
-	public void testProcessMappings()
-	{
+	public void testProcessMappings() {
 		checkClassModels(FlexoProcess.class);
 	}
 
-	public void testComponentMappings()
-	{
+	public void testComponentMappings() {
 		checkClassModels(IEWOComponent.class);
 	}
 
-	public void testNavigationMenuMappings()
-	{
+	public void testNavigationMenuMappings() {
 		checkClassModels(FlexoNavigationMenu.class);
 	}
 
-	public void testComponentLibraryMappings()
-	{
+	public void testComponentLibraryMappings() {
 		checkClassModels(FlexoComponentLibrary.class);
 	}
 
-	public void testDataModelMappings()
-	{
+	public void testDataModelMappings() {
 		checkClassModels(DMModel.class);
 	}
 
-	public void testDKVMappings()
-	{
+	public void testDKVMappings() {
 		checkClassModels(DKVModel.class);
 	}
 
-	public void testWSLibraryMappings()
-	{
+	public void testWSLibraryMappings() {
 		checkClassModels(FlexoWSLibrary.class);
 	}
 
-	public void testShemaLibraryMappings()
-	{
+	public void testShemaLibraryMappings() {
 		checkClassModels(ViewLibrary.class);
 	}
 
-	public void testShemaMappings()
-	{
+	public void testShemaMappings() {
 		// checkClassModels(View.class);
 	}
 
-	public void testGeneratedCodeMappings()
-	{
+	public void testGeneratedCodeMappings() {
 		checkClassModels(GeneratedCode.class);
 	}
 
-	public void testGeneratedDocMappings()
-	{
+	public void testGeneratedDocMappings() {
 		checkClassModels(GeneratedDoc.class);
 	}
 
-	public void testTOCDataMappings()
-	{
+	public void testTOCDataMappings() {
 		checkClassModels(TOCData.class);
 	}
 
-	private void checkClassModels(Class aClass)
-	{
+	private void checkClassModels(Class aClass) {
 		boolean testFails = false;
 		ClassModels classModels = xmlMappings.getModelsForClass(aClass);
-		logger.info("-----------> Check class models for "+aClass.getName());
+		logger.info("-----------> Check class models for " + aClass.getName());
 		for (FlexoVersion version : classModels.getAvailableVersions()) {
 			try {
 				XMLMapping mapping = xmlMappings.getMappingForClassAndVersion(aClass, version);
 				if (mapping != null) {
-					logger.info("Successfully decoded mapping for class "+aClass.getSimpleName()+", version "+version);
-				}
-				else {
-					logger.warning("Failed decoded mapping for class "+aClass.getSimpleName()+", version "+version);
+					logger.info("Successfully decoded mapping for class " + aClass.getSimpleName() + ", version " + version);
+				} else {
+					logger.warning("Failed decoded mapping for class " + aClass.getSimpleName() + ", version " + version);
 					testFails = true;
 				}
 				Enumeration<ModelEntity> en = mapping.getAllModelEntities();
@@ -161,10 +141,9 @@ public class TestXMLMappings extends FlexoTestCase
 					ModelEntity me = en.nextElement();
 					checkModelEntity(me);
 				}
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
-				logger.warning("Failed decoded mapping for class "+aClass.getSimpleName()+", version "+version+" "+e.getMessage());
+				logger.warning("Failed decoded mapping for class " + aClass.getSimpleName() + ", version " + version + " " + e.getMessage());
 				testFails = true;
 			}
 		}
@@ -191,7 +170,7 @@ public class TestXMLMappings extends FlexoTestCase
 		String className = me.getName();
 		Class klass = Class.forName(className);
 		if (!me.isAbstract() && Modifier.isAbstract(klass.getModifiers())) {
-			fail(me.getName()+" is declared as not abstract but class is not instanciable");
+			fail(me.getName() + " is declared as not abstract but class is not instanciable");
 		}
 	}
 }

@@ -20,16 +20,16 @@
 package org.netbeans.lib.cvsclient.request;
 
 /**
- * This exception indicates that a request has not been properly configured
- * hence cannot be sent to the server for processing
- * @author  Robert Greig
+ * This exception indicates that a request has not been properly configured hence cannot be sent to the server for processing
+ * 
+ * @author Robert Greig
  */
 public class UnconfiguredRequestException extends Exception {
-    public UnconfiguredRequestException() {
-        super();
-    }
+	public UnconfiguredRequestException() {
+		super();
+	}
 
-    public UnconfiguredRequestException(String s) {
-        super(s);
-    }
+	public UnconfiguredRequestException(String s) {
+		super(s);
+	}
 }

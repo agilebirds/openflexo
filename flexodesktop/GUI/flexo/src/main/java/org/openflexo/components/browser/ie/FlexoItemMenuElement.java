@@ -27,36 +27,30 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ie.menu.FlexoItemMenu;
 
+public class FlexoItemMenuElement extends IEElement {
 
-public class FlexoItemMenuElement extends IEElement
-{
+	/**
+	 * @param widget
+	 * @param browser
+	 */
+	public FlexoItemMenuElement(FlexoItemMenu reusable, ProjectBrowser browser, BrowserElement parent) {
+		super(reusable, BrowserElementType.MENU_ITEM, browser, parent);
+	}
 
-    /**
-     * @param widget
-     * @param browser
-     */
-    public FlexoItemMenuElement(FlexoItemMenu reusable, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(reusable, BrowserElementType.MENU_ITEM, browser,parent);
-    }
+	@Override
+	protected void buildChildrenVector() {
+		for (Enumeration e = getItemMenu().getSubItems().elements(); e.hasMoreElements();) {
+			addToChilds((FlexoModelObject) e.nextElement());
+		}
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-        for (Enumeration e = getItemMenu().getSubItems().elements(); e.hasMoreElements();) {
-            addToChilds((FlexoModelObject) e.nextElement());
-        }
-    }
+	@Override
+	public String getName() {
+		return getItemMenu().getMenuLabel();
+	}
 
-    @Override
-	public String getName()
-    {
-        return getItemMenu().getMenuLabel();
-    }
-
-    public FlexoItemMenu getItemMenu()
-    {
-        return (FlexoItemMenu) getObject();
-    }
+	public FlexoItemMenu getItemMenu() {
+		return (FlexoItemMenu) getObject();
+	}
 
 }

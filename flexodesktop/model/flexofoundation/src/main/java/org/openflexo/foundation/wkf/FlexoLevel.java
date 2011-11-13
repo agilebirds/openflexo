@@ -24,118 +24,98 @@ package org.openflexo.foundation.wkf;
  * 
  * @author sguerin
  */
-public abstract class FlexoLevel
-{
+public abstract class FlexoLevel {
 
-    public static final FlexoLevel WORKFLOW = new WorkflowLevel();
+	public static final FlexoLevel WORKFLOW = new WorkflowLevel();
 
-    public static final FlexoLevel PROCESS = new ProcessLevel();
+	public static final FlexoLevel PROCESS = new ProcessLevel();
 
-    public static final FlexoLevel ACTIVITY = new ActivityLevel();
+	public static final FlexoLevel ACTIVITY = new ActivityLevel();
 
-    public static final FlexoLevel OPERATION = new OperationLevel();
+	public static final FlexoLevel OPERATION = new OperationLevel();
 
-    public static final FlexoLevel ACTION = new ActionLevel();
-    
-    public static final FlexoLevel PORT = new PortLevel();
+	public static final FlexoLevel ACTION = new ActionLevel();
 
-    static class WorkflowLevel extends FlexoLevel
-    {
-        @Override
-		public String getName()
-        {
-            return "WORKFLOW";
-        }
+	public static final FlexoLevel PORT = new PortLevel();
 
-        @Override
-		public FlexoLevel increment()
-        {
-            return PROCESS;
-        }
-    }
+	static class WorkflowLevel extends FlexoLevel {
+		@Override
+		public String getName() {
+			return "WORKFLOW";
+		}
 
-    static class ProcessLevel extends FlexoLevel
-    {
-        @Override
-		public String getName()
-        {
-            return "PROCESS";
-        }
+		@Override
+		public FlexoLevel increment() {
+			return PROCESS;
+		}
+	}
 
-        @Override
-		public FlexoLevel increment()
-        {
-            return ACTIVITY;
-        }
-    }
+	static class ProcessLevel extends FlexoLevel {
+		@Override
+		public String getName() {
+			return "PROCESS";
+		}
 
-    static class ActivityLevel extends FlexoLevel
-    {
-        @Override
-		public String getName()
-        {
-            return "ACTIVITY";
-        }
+		@Override
+		public FlexoLevel increment() {
+			return ACTIVITY;
+		}
+	}
 
-        @Override
-		public FlexoLevel increment()
-        {
-            return OPERATION;
-        }
-    }
+	static class ActivityLevel extends FlexoLevel {
+		@Override
+		public String getName() {
+			return "ACTIVITY";
+		}
 
-    static class OperationLevel extends FlexoLevel
-    {
-        @Override
-		public String getName()
-        {
-            return "OPERATION";
-        }
+		@Override
+		public FlexoLevel increment() {
+			return OPERATION;
+		}
+	}
 
-        @Override
-		public FlexoLevel increment()
-        {
-            return ACTION;
-        }
-    }
+	static class OperationLevel extends FlexoLevel {
+		@Override
+		public String getName() {
+			return "OPERATION";
+		}
 
-    static class ActionLevel extends FlexoLevel
-    {
-        @Override
-		public String getName()
-        {
-            return "ACTION";
-        }
+		@Override
+		public FlexoLevel increment() {
+			return ACTION;
+		}
+	}
 
-        @Override
-		public FlexoLevel increment()
-        {
-            return null;
-        }
-    }
-    
-    static class PortLevel extends FlexoLevel
-    {
-    	@Override
-		public String getName()
-    	{
-    		return "PORT";
-    	}
-    	
-    	@Override
-		public FlexoLevel increment()
-    	{
-    		return null;
-    	}
-    }
+	static class ActionLevel extends FlexoLevel {
+		@Override
+		public String getName() {
+			return "ACTION";
+		}
 
-    public abstract String getName();
+		@Override
+		public FlexoLevel increment() {
+			return null;
+		}
+	}
 
-    public abstract FlexoLevel increment();
+	static class PortLevel extends FlexoLevel {
+		@Override
+		public String getName() {
+			return "PORT";
+		}
 
-    @Override
-	public String toString()
-    {
-        return getName();
-    }
+		@Override
+		public FlexoLevel increment() {
+			return null;
+		}
+	}
+
+	public abstract String getName();
+
+	public abstract FlexoLevel increment();
+
+	@Override
+	public String toString() {
+		return getName();
+	}
 }

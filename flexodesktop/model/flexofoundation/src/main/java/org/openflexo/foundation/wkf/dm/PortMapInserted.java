@@ -27,20 +27,17 @@ import org.openflexo.foundation.wkf.ws.FlexoPortMap;
  * @author sguerin
  * 
  */
-public class PortMapInserted extends WKFDataModification
-{
+public class PortMapInserted extends WKFDataModification {
 
-    private FlexoPortMap _insertedPortMap;
+	private FlexoPortMap _insertedPortMap;
 
-    public PortMapInserted(FlexoPortMap insertedPortMap)
-    {
-        super(null, insertedPortMap);
-        _insertedPortMap = insertedPortMap;
-    }
+	public PortMapInserted(FlexoPortMap insertedPortMap) {
+		super(null, insertedPortMap);
+		_insertedPortMap = insertedPortMap;
+	}
 
-    public FlexoPortMap getInsertedPortMap()
-    {
-        return _insertedPortMap;
-    }
+	public FlexoPortMap getInsertedPortMap() {
+		return _insertedPortMap;
+	}
 
 }

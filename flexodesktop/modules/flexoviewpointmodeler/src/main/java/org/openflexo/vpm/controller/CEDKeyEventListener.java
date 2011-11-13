@@ -23,31 +23,26 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.listener.SelectionManagingKeyEventListener;
 
-
 /**
  * Key events listener used in the context of this module
  * 
  * @author yourname
  */
-public class CEDKeyEventListener extends SelectionManagingKeyEventListener
-{
+public class CEDKeyEventListener extends SelectionManagingKeyEventListener {
 
-    private static CEDKeyEventListener _current;
+	private static CEDKeyEventListener _current;
 
-    public CEDKeyEventListener(CEDController controller)
-    {
-        super(controller);
-    }
-
-    @Override
-	protected SelectionManager getSelectionManager()
-    {
-        return ((CEDController) getController()).getSelectionManager();
-    }
+	public CEDKeyEventListener(CEDController controller) {
+		super(controller);
+	}
 
 	@Override
-	public FlexoEditor getEditor() 
-	{
+	protected SelectionManager getSelectionManager() {
+		return ((CEDController) getController()).getSelectionManager();
+	}
+
+	@Override
+	public FlexoEditor getEditor() {
 		return getController().getEditor();
 	}
 }

@@ -31,32 +31,27 @@ import org.openflexo.inspector.InspectorSinglePanel;
 import org.openflexo.inspector.model.InspectorModel;
 import org.openflexo.inspector.model.TabModel;
 
-
 public class FlexoDocInspectorController extends FlexoInspectorController {
 
-    private static final Logger logger = Logger.getLogger(FlexoDocInspectorController.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(FlexoDocInspectorController.class.getPackage().getName());
 
-     protected InspectorSinglePanel _docInspectorPanel;
+	protected InspectorSinglePanel _docInspectorPanel;
 
-    protected FlexoDocInspectorController(FlexoController controller)
-    {
-    	super(controller.new FlexoControllerInspectorDelegate(),
-    			new DefaultInspectorHelpDelegate(DocResourceManager.instance()));
-     	if (getDocTabModel() != null) {
-    		_docInspectorPanel = createInspectorSinglePanel(getDocTabModel());
-    		_docInspectorPanel.setBorder(BorderFactory.createEmptyBorder());
-     	}
-     }
+	protected FlexoDocInspectorController(FlexoController controller) {
+		super(controller.new FlexoControllerInspectorDelegate(), new DefaultInspectorHelpDelegate(DocResourceManager.instance()));
+		if (getDocTabModel() != null) {
+			_docInspectorPanel = createInspectorSinglePanel(getDocTabModel());
+			_docInspectorPanel.setBorder(BorderFactory.createEmptyBorder());
+		}
+	}
 
-	public InspectorSinglePanel getDocInspectorPanel() 
-	{
+	public InspectorSinglePanel getDocInspectorPanel() {
 		return _docInspectorPanel;
 	}
 
 	private TabModel _docTabModel;
 
-	private TabModel getDocTabModel()
-	{
+	private TabModel getDocTabModel() {
 		if (_docTabModel == null) {
 			try {
 				InspectorModel docInspectorModel = importInspectorFile(Inspectors.getDocInspectorFile(/*getInspectorDirectory()*/));

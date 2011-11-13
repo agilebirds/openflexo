@@ -48,7 +48,6 @@ import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.processeditor.ProcessEditorConstants;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
-
 public class ArtefactGR<O extends WKFArtefact> extends WKFNodeGR<O> {
 
 	private static final Logger logger = Logger.getLogger(ArtefactGR.class.getPackage().getName());

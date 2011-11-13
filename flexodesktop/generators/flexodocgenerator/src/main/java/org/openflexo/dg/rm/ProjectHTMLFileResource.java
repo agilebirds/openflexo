@@ -23,7 +23,6 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.openflexo.dg.html.DGHTMLGenerator;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -37,96 +36,88 @@ import org.openflexo.logging.FlexoLogger;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class ProjectHTMLFileResource extends HTMLFileResource<DGHTMLGenerator<FlexoProject>> implements FlexoObserver
-{
-    protected static final Logger logger = FlexoLogger.getLogger(ProjectHTMLFileResource.class.getPackage().getName());
+public class ProjectHTMLFileResource extends HTMLFileResource<DGHTMLGenerator<FlexoProject>> implements FlexoObserver {
+	protected static final Logger logger = FlexoLogger.getLogger(ProjectHTMLFileResource.class.getPackage().getName());
 
-    /**
-     * @param builder
-     */
-    public ProjectHTMLFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
+	/**
+	 * @param builder
+	 */
+	public ProjectHTMLFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
-    /**
-     * @param aProject
-     */
-    public ProjectHTMLFileResource(FlexoProject aProject)
-    {
-    	super(aProject);
-    }
+	/**
+	 * @param aProject
+	 */
+	public ProjectHTMLFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
-    private boolean isObserverRegistered = false;
+	private boolean isObserverRegistered = false;
 
-    @Override
-	public String getName()
-    {
-    	if (getCGFile()==null || getCGFile().getRepository()==null || getProject()==null)
-    		return super.getName();
-    	registerObserverWhenRequired();
-    	if (super.getName()==null)
-    		setName(nameForRepositoryAndProject(getCGFile().getRepository(), getProject()));
-    	return nameForRepositoryAndProject(getCGFile().getRepository(), getProject());
-    }
+	@Override
+	public String getName() {
+		if (getCGFile() == null || getCGFile().getRepository() == null || getProject() == null)
+			return super.getName();
+		registerObserverWhenRequired();
+		if (super.getName() == null)
+			setName(nameForRepositoryAndProject(getCGFile().getRepository(), getProject()));
+		return nameForRepositoryAndProject(getCGFile().getRepository(), getProject());
+	}
 
-    public void registerObserverWhenRequired()
-    {
-    	if ((!isObserverRegistered) && (getProject() != null)) {
-    		isObserverRegistered = true;
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("*** addObserver "+getFileName()+" for "+getProject());
-            getProject().addObserver(this);
-    	}
-    }
+	public void registerObserverWhenRequired() {
+		if ((!isObserverRegistered) && (getProject() != null)) {
+			isObserverRegistered = true;
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("*** addObserver " + getFileName() + " for " + getProject());
+			getProject().addObserver(this);
+		}
+	}
 
-    public static String nameForRepositoryAndProject(GenerationRepository repository, FlexoProject project)
-    {
-    	return repository.getName()+".PROJECT_HTML."+project.getProjectName();
-    }
+	public static String nameForRepositoryAndProject(GenerationRepository repository, FlexoProject project) {
+		return repository.getName() + ".PROJECT_HTML." + project.getProjectName();
+	}
 
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-	public void rebuildDependancies()
-    {
-        super.rebuildDependancies();
-        addToDependantResources(getProject().getWorkflow().getFlexoResource());
-   }
+	/**
+	 * Rebuild resource dependancies for this resource
+	 */
+	@Override
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
+		addToDependantResources(getProject().getWorkflow().getFlexoResource());
+	}
 
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
 
 	}
 
-   /**
-     * Return dependancy computing between this resource, and an other resource,
-     * asserting that this resource is contained in this resource's dependant resources
-     *
-     * @param resource
-     * @param dependancyScheme
-     * @return
-     */
+	/**
+	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this
+	 * resource's dependant resources
+	 * 
+	 * @param resource
+	 * @param dependancyScheme
+	 * @return
+	 */
 	@Override
-	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate)
-	{
-//		Repository is not recorded as dependency
-//		if (resource instanceof GeneratedDocResource) {
-//			if (getGenerator()!=null) {
-//				if (!requestDate.before(getGenerator().getRepository().getLastUpdateDate())) {
-//					if (logger.isLoggable(Level.FINER)) logger.finer("OPTIMIST DEPENDANCY CHECKING for DGRepository "+getRepository());
-//					return false;
-//				}
-//			}
-//		} else
+	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate) {
+		// Repository is not recorded as dependency
+		// if (resource instanceof GeneratedDocResource) {
+		// if (getGenerator()!=null) {
+		// if (!requestDate.before(getGenerator().getRepository().getLastUpdateDate())) {
+		// if (logger.isLoggable(Level.FINER)) logger.finer("OPTIMIST DEPENDANCY CHECKING for DGRepository "+getRepository());
+		// return false;
+		// }
+		// }
+		// } else
 		if (resource instanceof FlexoTOCResource) {
-			if (getGenerator()!=null && getGenerator().getRepository().getTocRepository()!=null) {
+			if (getGenerator() != null && getGenerator().getRepository().getTocRepository() != null) {
 				if (!requestDate.before(getGenerator().getRepository().getTocRepository().getLastUpdateDate())) {
-					if (logger.isLoggable(Level.FINER)) logger.finer("OPTIMIST DEPENDANCY CHECKING for TOC ENTRY "+getRepository());
+					if (logger.isLoggable(Level.FINER))
+						logger.finer("OPTIMIST DEPENDANCY CHECKING for TOC ENTRY " + getRepository());
 					return false;
 				}
 			}
@@ -134,6 +125,5 @@ public class ProjectHTMLFileResource extends HTMLFileResource<DGHTMLGenerator<Fl
 		}
 		return super.optimisticallyDependsOf(resource, requestDate);
 	}
-
 
 }

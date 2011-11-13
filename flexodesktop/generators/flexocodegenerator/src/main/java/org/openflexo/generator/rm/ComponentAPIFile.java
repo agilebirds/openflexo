@@ -28,14 +28,11 @@ import org.openflexo.generator.FlexoResourceGenerator;
 import org.openflexo.generator.rm.GenerationAvailableFile;
 import org.openflexo.logging.FlexoLogger;
 
+public class ComponentAPIFile extends APIFile implements GenerationAvailableFile {
 
-public class ComponentAPIFile extends APIFile implements GenerationAvailableFile
-{
+	protected static final Logger logger = FlexoLogger.getLogger(ComponentAPIFile.class.getPackage().getName());
 
-    protected static final Logger logger = FlexoLogger.getLogger(ComponentAPIFile.class.getPackage().getName());
-
-    public ComponentAPIFile(File f, ComponentAPIFileResource resource)
-	{
+	public ComponentAPIFile(File f, ComponentAPIFileResource resource) {
 		super(f);
 		try {
 			setFlexoResource(resource);
@@ -43,23 +40,20 @@ public class ComponentAPIFile extends APIFile implements GenerationAvailableFile
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    }
-    
-    @Override
-	public ComponentAPIFileResource getFlexoResource()
-    {
-        return (ComponentAPIFileResource)super.getFlexoResource();
-    }
-
-	public ComponentAPIFile()
-	{
-		super();
-    }
+	}
 
 	@Override
-	public FlexoResourceGenerator getGenerator() 
-	{
-		return (FlexoResourceGenerator)getFlexoResource().getGenerator();
+	public ComponentAPIFileResource getFlexoResource() {
+		return (ComponentAPIFileResource) super.getFlexoResource();
 	}
-	
+
+	public ComponentAPIFile() {
+		super();
+	}
+
+	@Override
+	public FlexoResourceGenerator getGenerator() {
+		return (FlexoResourceGenerator) getFlexoResource().getGenerator();
+	}
+
 }

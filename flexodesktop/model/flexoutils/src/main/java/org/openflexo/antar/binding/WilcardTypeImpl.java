@@ -26,35 +26,30 @@ public class WilcardTypeImpl implements WildcardType {
 
 	private Type[] upperBounds = null;
 	private Type[] lowerBounds = null;
-	
-	public WilcardTypeImpl(Type[] upperBounds, Type[] lowerBounds) 
-	{
+
+	public WilcardTypeImpl(Type[] upperBounds, Type[] lowerBounds) {
 		this.upperBounds = upperBounds;
 		this.lowerBounds = lowerBounds;
 	}
-	
-	public WilcardTypeImpl(Type upperBound) 
-	{
+
+	public WilcardTypeImpl(Type upperBound) {
 		upperBounds = new Type[1];
 		upperBounds[0] = upperBound;
 		lowerBounds = null;
 	}
-	
+
 	@Override
-	public Type[] getLowerBounds()
-	{
+	public Type[] getLowerBounds() {
 		return lowerBounds;
 	}
-	
+
 	@Override
-	public Type[] getUpperBounds()
-	{
+	public Type[] getUpperBounds() {
 		return upperBounds;
 	}
-	
+
 	@Override
-	public String toString() 
-	{
+	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("?");
 
@@ -62,21 +57,21 @@ public class WilcardTypeImpl implements WildcardType {
 			sb.append(" extends ");
 			boolean isFirst = true;
 			for (Type t : getUpperBounds()) {
-				sb.append((isFirst?"":",")+TypeUtils.simpleRepresentation(t));
+				sb.append((isFirst ? "" : ",") + TypeUtils.simpleRepresentation(t));
 				isFirst = false;
 			}
 		}
-		
+
 		if (getLowerBounds() != null && getLowerBounds().length > 0) {
 			sb.append(" super ");
 			boolean isFirst = true;
 			for (Type t : getLowerBounds()) {
-				sb.append((isFirst?"":",")+TypeUtils.simpleRepresentation(t));
+				sb.append((isFirst ? "" : ",") + TypeUtils.simpleRepresentation(t));
 				isFirst = false;
 			}
 		}
-		
+
 		return sb.toString();
 	}
-	
+
 }

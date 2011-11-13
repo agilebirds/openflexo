@@ -44,114 +44,110 @@ import org.openflexo.localization.FlexoLocalization;
  * @author gpolet
  * 
  */
-public abstract class MetaWOGenerator extends FlexoResourceGenerator<ComponentDefinition, GeneratedComponent> implements FlexoComponentResourceGenerator
-{
-    private String _componentPackageName;
-    private DMEntity _entity;
-    protected String generatedComponentName;
-    protected ComponentDefinition component;
-    protected JavaFileResource javaResource;
-    protected WOFileResource woResource;
-    protected APIFileResource apiResource;
+public abstract class MetaWOGenerator extends FlexoResourceGenerator<ComponentDefinition, GeneratedComponent> implements
+		FlexoComponentResourceGenerator {
+	private String _componentPackageName;
+	private DMEntity _entity;
+	protected String generatedComponentName;
+	protected ComponentDefinition component;
+	protected JavaFileResource javaResource;
+	protected WOFileResource woResource;
+	protected APIFileResource apiResource;
 
-    public MetaWOGenerator(ProjectGenerator projectGenerator,ComponentDefinition componentDef, String generatedComponentName, String componentPackageName)
-    {
-        super(projectGenerator, componentDef);
-        this.component = componentDef;
-        this.generatedComponentName = generatedComponentName;
-        if(componentDef != null)
-        	_componentPackageName = componentDef.getComponentDMEntity().getPackage().getJavaStringRepresentation();
-        else
-        	_componentPackageName = componentPackageName != null ? componentPackageName : "";
-        _entity = componentDef!=null?componentDef.getComponentDMEntity():null;
-    }
-    
-    @Override
-	public ComponentDefinition getComponentDefinition()
-    {
-        return component;
-    }
-    
-    @Override
+	public MetaWOGenerator(ProjectGenerator projectGenerator, ComponentDefinition componentDef, String generatedComponentName,
+			String componentPackageName) {
+		super(projectGenerator, componentDef);
+		this.component = componentDef;
+		this.generatedComponentName = generatedComponentName;
+		if (componentDef != null)
+			_componentPackageName = componentDef.getComponentDMEntity().getPackage().getJavaStringRepresentation();
+		else
+			_componentPackageName = componentPackageName != null ? componentPackageName : "";
+		_entity = componentDef != null ? componentDef.getComponentDMEntity() : null;
+	}
+
+	@Override
+	public ComponentDefinition getComponentDefinition() {
+		return component;
+	}
+
+	@Override
 	public DMEntity getEntity() {
-    	return _entity;
-    }
-    
-    @Override
-	public final String getIdentifier() {
-    	return getComponentPackageName()+(getComponentPackageName().length()>0?".":"")+getComponentClassName();
-    }
-    
-    public final String getComponentClassName(){
-    	return generatedComponentName;
-    }
-    
-    public final String getComponentPackageName(){
-    	return _componentPackageName;
-    }
-    
-    public final String getComponentFolderPath(){
-    	if(getEntity()!=null){
-    		return getEntity().getPathForPackage();
-    	}
-    	return getComponentPackageName().replace('.','/');
-    }
-    
-    
-    @Override
-	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) 
-	{
-		refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating")+ " "+getIdentifier(),false);
+		return _entity;
+	}
 
-		// Java file 
-	 	javaResource = (JavaFileResource)resourceForKeyWithCGFile(ResourceType.JAVA_FILE, GeneratorUtils.nameForRepositoryAndIdentifier(repository, getIdentifier()));
+	@Override
+	public final String getIdentifier() {
+		return getComponentPackageName() + (getComponentPackageName().length() > 0 ? "." : "") + getComponentClassName();
+	}
+
+	public final String getComponentClassName() {
+		return generatedComponentName;
+	}
+
+	public final String getComponentPackageName() {
+		return _componentPackageName;
+	}
+
+	public final String getComponentFolderPath() {
+		if (getEntity() != null) {
+			return getEntity().getPathForPackage();
+		}
+		return getComponentPackageName().replace('.', '/');
+	}
+
+	@Override
+	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
+		refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + getIdentifier(), false);
+
+		// Java file
+		javaResource = (JavaFileResource) resourceForKeyWithCGFile(ResourceType.JAVA_FILE,
+				GeneratorUtils.nameForRepositoryAndIdentifier(repository, getIdentifier()));
 		if (javaResource == null) {
 			javaResource = GeneratedFileResourceFactory.createNewUtilComponentJavaFileResource(repository, this);
-		}
-		else {
+		} else {
 			javaResource.setGenerator(this);
 		}
-		resources.add(javaResource);		
+		resources.add(javaResource);
 		// WO file
-		WOFileResource WOResource = (WOFileResource)resourceForKeyWithCGFile(ResourceType.WO_FILE, GeneratorUtils.nameForRepositoryAndIdentifier(repository, getIdentifier()));
+		WOFileResource WOResource = (WOFileResource) resourceForKeyWithCGFile(ResourceType.WO_FILE,
+				GeneratorUtils.nameForRepositoryAndIdentifier(repository, getIdentifier()));
 		if (WOResource == null) {
 			WOResource = GeneratedFileResourceFactory.createNewUtilComponentWOFileResource(repository, this);
-		}
-		else {
+		} else {
 			WOResource.setGenerator(this);
 		}
 		resources.add(WOResource);
 		woResource = WOResource;
 
 		// API file
-		APIFileResource APIResource = (APIFileResource)resourceForKeyWithCGFile(ResourceType.API_FILE, GeneratorUtils.nameForRepositoryAndIdentifier(repository, getIdentifier()));
+		APIFileResource APIResource = (APIFileResource) resourceForKeyWithCGFile(ResourceType.API_FILE,
+				GeneratorUtils.nameForRepositoryAndIdentifier(repository, getIdentifier()));
 		if (APIResource == null) {
 			APIResource = GeneratedFileResourceFactory.createNewUtilComponentAPIFileResource(repository, this);
-		}
-		else {
+		} else {
 			APIResource.setGenerator(this);
 		}
-		resources.add(APIResource);	
+		resources.add(APIResource);
 		apiResource = APIResource;
 	}
-    
-    @Override
-    public GeneratedComponent getGeneratedCode() {
-    	if (generatedCode==null
-    			&& javaResource!=null && javaResource.getJavaFile()!=null && javaResource.getJavaFile().hasLastAcceptedContent()
-    			&& apiResource!=null && apiResource.getAPIFile()!=null && apiResource.getAPIFile().hasLastAcceptedContent()
-    			&& woResource !=null && woResource.getWOFile()!=null && woResource.getWOFile().hasLastAcceptedContent()) {
-    		generatedCode = new GeneratedComponent(generatedComponentName,
-    				javaResource.getJavaFile().getLastAcceptedContent(),
-    				apiResource.getAPIFile().getLastAcceptedContent(),
-    				woResource.getWOFile().getHTMLFile().getLastAcceptedContent(),
-    				woResource.getWOFile().getWODFile().getLastAcceptedContent(),
-    				woResource.getWOFile().getWOOFile().getLastAcceptedContent());    				
-    	}
-    	return generatedCode;
-    }
-    
-    public abstract void rebuildDependanciesForResource(UtilComponentJavaFileResource java);
-    public abstract void rebuildDependanciesForResource(UtilComponentWOFileResource wo);
-    public abstract void rebuildDependanciesForResource(UtilComponentAPIFileResource api);
+
+	@Override
+	public GeneratedComponent getGeneratedCode() {
+		if (generatedCode == null && javaResource != null && javaResource.getJavaFile() != null
+				&& javaResource.getJavaFile().hasLastAcceptedContent() && apiResource != null && apiResource.getAPIFile() != null
+				&& apiResource.getAPIFile().hasLastAcceptedContent() && woResource != null && woResource.getWOFile() != null
+				&& woResource.getWOFile().hasLastAcceptedContent()) {
+			generatedCode = new GeneratedComponent(generatedComponentName, javaResource.getJavaFile().getLastAcceptedContent(), apiResource
+					.getAPIFile().getLastAcceptedContent(), woResource.getWOFile().getHTMLFile().getLastAcceptedContent(), woResource
+					.getWOFile().getWODFile().getLastAcceptedContent(), woResource.getWOFile().getWOOFile().getLastAcceptedContent());
+		}
+		return generatedCode;
+	}
+
+	public abstract void rebuildDependanciesForResource(UtilComponentJavaFileResource java);
+
+	public abstract void rebuildDependanciesForResource(UtilComponentWOFileResource wo);
+
+	public abstract void rebuildDependanciesForResource(UtilComponentAPIFileResource api);
 }

@@ -22,52 +22,57 @@ package org.netbeans.lib.cvsclient.request;
 import java.io.File;
 
 /**
- * Tells the server that a particular filename has not been modified in the
- * checked-out directory.
- * @author  Robert Greig
+ * Tells the server that a particular filename has not been modified in the checked-out directory.
+ * 
+ * @author Robert Greig
  */
 public class UnchangedRequest extends Request {
-    /**
-     * The filename of the file that is unchanged
-     */
-    private String filename;
+	/**
+	 * The filename of the file that is unchanged
+	 */
+	private String filename;
 
-    /**
-     * Construct an Unchanged request
-     * @param theFilename the unchanged file's name
-     */
-    public UnchangedRequest(String theFilename) {
-        filename = theFilename;
-    }
+	/**
+	 * Construct an Unchanged request
+	 * 
+	 * @param theFilename
+	 *            the unchanged file's name
+	 */
+	public UnchangedRequest(String theFilename) {
+		filename = theFilename;
+	}
 
-    /**
-     * Construct an Unchanged request
-     * @param file the unchanged file
-     */
-    public UnchangedRequest(File file) {
-        filename = file.getName();
-    }
+	/**
+	 * Construct an Unchanged request
+	 * 
+	 * @param file
+	 *            the unchanged file
+	 */
+	public UnchangedRequest(File file) {
+		filename = file.getName();
+	}
 
-    /**
-     * Get the request String that will be passed to the server
-     * @return the request String
-     * @throws UnconfiguredRequestException if the request has not been
-     * properly configured
-     */
-    @Override
+	/**
+	 * Get the request String that will be passed to the server
+	 * 
+	 * @return the request String
+	 * @throws UnconfiguredRequestException
+	 *             if the request has not been properly configured
+	 */
+	@Override
 	public String getRequestString() throws UnconfiguredRequestException {
-        if (filename == null)
-            throw new UnconfiguredRequestException("Filename must be set");
-        return "Unchanged " + filename + "\n"; //NOI18N
-    }
+		if (filename == null)
+			throw new UnconfiguredRequestException("Filename must be set");
+		return "Unchanged " + filename + "\n"; // NOI18N
+	}
 
-    /**
-     * Is a response expected from the server?
-     * @return true if a response is expected, false if no response if
-     * expected
-     */
-    @Override
+	/**
+	 * Is a response expected from the server?
+	 * 
+	 * @return true if a response is expected, false if no response if expected
+	 */
+	@Override
 	public boolean isResponseExpected() {
-        return false;
-    }
+		return false;
+	}
 }

@@ -23,19 +23,17 @@ package org.openflexo.foundation.viewpoint.inspector;
  * Represents an inspector entry for an integer
  * 
  * @author sylvain
- *
+ * 
  */
 public class IntegerInspectorEntry extends InspectorEntry {
 
 	@Override
-	public Class getDefaultDataClass()
-	{
+	public Class getDefaultDataClass() {
 		return Integer.class;
 	}
 
 	@Override
-	public String getWidgetName() 
-	{
+	public String getWidgetName() {
 		return "Integer";
 	}
 }

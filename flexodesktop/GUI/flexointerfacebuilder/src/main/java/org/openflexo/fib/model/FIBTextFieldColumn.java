@@ -26,47 +26,42 @@ import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 
 public class FIBTextFieldColumn extends FIBTableColumn {
 
-	public static enum Parameters implements FIBModelAttribute
-	{
+	public static enum Parameters implements FIBModelAttribute {
 		isEditable
 	}
 
-	public static BindingDefinition IS_EDITABLE = new BindingDefinition("isEditable", Boolean.class , BindingDefinitionType.GET, false);
+	public static BindingDefinition IS_EDITABLE = new BindingDefinition("isEditable", Boolean.class, BindingDefinitionType.GET, false);
 
 	private DataBinding isEditable;
 
-	public DataBinding getIsEditable() 
-	{
-		if (isEditable == null) isEditable = new DataBinding(this,Parameters.isEditable,IS_EDITABLE);
+	public DataBinding getIsEditable() {
+		if (isEditable == null)
+			isEditable = new DataBinding(this, Parameters.isEditable, IS_EDITABLE);
 		return isEditable;
 	}
 
-	public void setIsEditable(DataBinding isEditable) 
-	{
+	public void setIsEditable(DataBinding isEditable) {
 		isEditable.setOwner(this);
 		isEditable.setBindingAttribute(Parameters.isEditable);
 		isEditable.setBindingDefinition(IS_EDITABLE);
 		this.isEditable = isEditable;
 	}
-	
+
 	@Override
-	public void finalizeTableDeserialization() 
-	{
+	public void finalizeTableDeserialization() {
 		super.finalizeTableDeserialization();
-		if (isEditable != null) isEditable.finalizeDeserialization();
+		if (isEditable != null)
+			isEditable.finalizeDeserialization();
 	}
 
 	@Override
-	public Type getDefaultDataClass()
-	{
+	public Type getDefaultDataClass() {
 		return String.class;
 	}
 
 	@Override
-	public ColumnType getColumnType()
-	{
+	public ColumnType getColumnType() {
 		return ColumnType.TextField;
 	}
-
 
 }

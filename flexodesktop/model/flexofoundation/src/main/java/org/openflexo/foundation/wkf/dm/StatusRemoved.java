@@ -28,15 +28,13 @@ import org.openflexo.foundation.wkf.Status;
  * @author sguerin
  * 
  */
-public class StatusRemoved extends WKFDataModification
-{
+public class StatusRemoved extends WKFDataModification {
 
-    public FlexoProcess parentProcess;
+	public FlexoProcess parentProcess;
 
-    public StatusRemoved(Status removedStatus, FlexoProcess parentProcess)
-    {
-        super(removedStatus, null);
-        this.parentProcess = parentProcess;
-    }
+	public StatusRemoved(Status removedStatus, FlexoProcess parentProcess) {
+		super(removedStatus, null);
+		this.parentProcess = parentProcess;
+	}
 
 }

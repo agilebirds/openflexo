@@ -30,49 +30,42 @@ public class RectPolylinWithStartAndEndAreaConstruction extends PolylinConstruct
 	public ObjectReference<? extends FGEArea> endAreaConstruction;
 	public SimplifiedCardinalDirection startOrientation;
 	public SimplifiedCardinalDirection endOrientation;
-	
-	public RectPolylinWithStartAndEndAreaConstruction() 
-	{
+
+	public RectPolylinWithStartAndEndAreaConstruction() {
 		super();
 	}
-	
-	public RectPolylinWithStartAndEndAreaConstruction(
-			ObjectReference<? extends FGEArea> aStartAreaConstruction, 
-			SimplifiedCardinalDirection aStartOrientation,
-			ObjectReference<? extends FGEArea> anEndAreaConstruction, 
-			SimplifiedCardinalDirection aEndOrientation)
-	{
+
+	public RectPolylinWithStartAndEndAreaConstruction(ObjectReference<? extends FGEArea> aStartAreaConstruction,
+			SimplifiedCardinalDirection aStartOrientation, ObjectReference<? extends FGEArea> anEndAreaConstruction,
+			SimplifiedCardinalDirection aEndOrientation) {
 		this();
 		this.startAreaConstruction = aStartAreaConstruction;
 		this.startOrientation = aStartOrientation;
 		this.endAreaConstruction = anEndAreaConstruction;
 		this.endOrientation = aEndOrientation;
 	}
-	
+
 	@Override
-	protected FGEPolylin computeData()
-	{
+	protected FGEPolylin computeData() {
 		FGEArea startArea = startAreaConstruction.getData();
 		FGEArea endArea = endAreaConstruction.getData();
-		if (startOrientation == null) startOrientation = SimplifiedCardinalDirection.NORTH;
-		if (endOrientation == null) endOrientation = SimplifiedCardinalDirection.SOUTH;
-		return new FGERectPolylin(startArea,startOrientation,endArea,endOrientation,false,10,10);
+		if (startOrientation == null)
+			startOrientation = SimplifiedCardinalDirection.NORTH;
+		if (endOrientation == null)
+			endOrientation = SimplifiedCardinalDirection.SOUTH;
+		return new FGERectPolylin(startArea, startOrientation, endArea, endOrientation, false, 10, 10);
 	}
 
 	@Override
-	public String toString()
-	{
-		return "RectPolylinWithStartAndEndAreaConstruction[\n"+"> "
-		+startAreaConstruction.toString()+"-"+startOrientation+"\n> "+"> "
-		+endAreaConstruction.toString()+"-"+endOrientation+"\n]";
+	public String toString() {
+		return "RectPolylinWithStartAndEndAreaConstruction[\n" + "> " + startAreaConstruction.toString() + "-" + startOrientation + "\n> "
+				+ "> " + endAreaConstruction.toString() + "-" + endOrientation + "\n]";
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
+	public GeometricConstruction[] getDepends() {
 		GeometricConstruction[] returned = { startAreaConstruction, endAreaConstruction };
 		return returned;
 	}
-
 
 }

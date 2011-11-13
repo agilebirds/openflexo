@@ -21,14 +21,14 @@ package org.openflexo.xml.diff3;
 
 import org.jdom.Element;
 
-public class InsertionSwapAction extends MergeAction{
+public class InsertionSwapAction extends MergeAction {
 
 	private Element _toInsert;
 	private Element _parentElement;
 	private Element _existing;
-	
-	public InsertionSwapAction(int actionIndex, Element parentElement,Element toInsert, Element existingChild){
-		super(actionIndex,MergeActionType.SWAP);
+
+	public InsertionSwapAction(int actionIndex, Element parentElement, Element toInsert, Element existingChild) {
+		super(actionIndex, MergeActionType.SWAP);
 		_parentElement = parentElement;
 		_toInsert = toInsert;
 		_existing = existingChild;
@@ -38,7 +38,8 @@ public class InsertionSwapAction extends MergeAction{
 	public void execute() {
 		switch (_actionType) {
 		case SWAP:
-			System.out.println("Execute SWAP : remove "+_existing.getAttributeValue("id")+" inserting : "+_toInsert.getAttributeValue("id"));
+			System.out.println("Execute SWAP : remove " + _existing.getAttributeValue("id") + " inserting : "
+					+ _toInsert.getAttributeValue("id"));
 			_parentElement.removeContent(_parentElement.getChild(_existing.getName()));
 			_parentElement.addContent(_toInsert);
 			break;
@@ -46,14 +47,15 @@ public class InsertionSwapAction extends MergeAction{
 		default:
 			break;
 		}
-		
+
 	}
-	
+
 	@Override
 	public void undo() {
 		switch (_actionType) {
 		case SWAP:
-			System.out.println("Undo SWAP : remove "+_toInsert.getAttributeValue("id")+" inserting : "+_existing.getAttributeValue("id"));
+			System.out.println("Undo SWAP : remove " + _toInsert.getAttributeValue("id") + " inserting : "
+					+ _existing.getAttributeValue("id"));
 			_parentElement.removeContent(_parentElement.getChild(_toInsert.getName()));
 			_parentElement.addContent(_existing);
 			break;
@@ -61,15 +63,15 @@ public class InsertionSwapAction extends MergeAction{
 		default:
 			break;
 		}
-		
+
 	}
-	
+
 	@Override
-	public String getLabel(){
+	public String getLabel() {
 		switch (_actionType) {
 		case SWAP:
 			return "replace existing child by it's concurrent";
 		}
-		return "error : action type "+_actionType+" is not supposed to be set on this conflict";
+		return "error : action type " + _actionType + " is not supposed to be set on this conflict";
 	}
 }

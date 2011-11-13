@@ -26,112 +26,99 @@ import org.openflexo.foundation.dm.action.ImportJARFileRepository;
 import org.openflexo.foundation.dm.action.ImportThesaurusDatabaseRepository;
 import org.openflexo.foundation.dm.action.ImportThesaurusRepository;
 
-
 public class LibraryRepositoryFolder extends DMRepositoryFolder {
 
-    static final Logger logger = Logger.getLogger(LibraryRepositoryFolder.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(LibraryRepositoryFolder.class.getPackage().getName());
 
-    /**
-     * Default constructor
-     */
-    public LibraryRepositoryFolder(DMModel dmModel)
-    {
-        super(dmModel);
-     }
+	/**
+	 * Default constructor
+	 */
+	public LibraryRepositoryFolder(DMModel dmModel) {
+		super(dmModel);
+	}
 
-    // TODO: s'occuper des repositories RationalRose + Thesaurus + ThesaurusDB
-    
-    @Override
-	public int getRepositoriesCount() 
-    {
-        return getDMModel().getExternalRepositories().size()
-        +getDMModel().getDenaliFoundationRepositories().size()
-        +getDMModel().getRationalRoseRepositories().size()
-        +getDMModel().getThesaurusRepositories().size()
-        +getDMModel().getThesaurusDatabaseRepositories().size()
-        +getDMModel().getWSDLRepositories().size()
-        +getDMModel().getXmlSchemaRepositories().size();
-    }
+	// TODO: s'occuper des repositories RationalRose + Thesaurus + ThesaurusDB
 
-     @Override
-	public DMRepository getRepositoryAtIndex(int index) 
-    {
-        if ((index >=0) 
-                && (index < getRepositoriesCount())) {
-            int existingRepositories = 0;
-            if (index-existingRepositories < getDMModel().getExternalRepositories().size()) {
-                return getDMModel().getExternalRepositories().elementAt(index-existingRepositories);                
-            }
-            existingRepositories += getDMModel().getExternalRepositories().size();
-            
-            if (index-existingRepositories < getDMModel().getDenaliFoundationRepositories().size()) {
-                return getDMModel().getDenaliFoundationRepositories().elementAt(index-existingRepositories);                
-            }
-            existingRepositories += getDMModel().getDenaliFoundationRepositories().size();
-            
-            if (index-existingRepositories < getDMModel().getRationalRoseRepositories().size()) {
-                return getDMModel().getRationalRoseRepositories().elementAt(index-existingRepositories);                
-            }
-            existingRepositories += getDMModel().getRationalRoseRepositories().size();
+	@Override
+	public int getRepositoriesCount() {
+		return getDMModel().getExternalRepositories().size() + getDMModel().getDenaliFoundationRepositories().size()
+				+ getDMModel().getRationalRoseRepositories().size() + getDMModel().getThesaurusRepositories().size()
+				+ getDMModel().getThesaurusDatabaseRepositories().size() + getDMModel().getWSDLRepositories().size()
+				+ getDMModel().getXmlSchemaRepositories().size();
+	}
 
-            if (index-existingRepositories < getDMModel().getWSDLRepositories().size()) {
-                return getDMModel().getWSDLRepositories().elementAt(index-existingRepositories);                
-            }
-            existingRepositories += getDMModel().getWSDLRepositories().size();
+	@Override
+	public DMRepository getRepositoryAtIndex(int index) {
+		if ((index >= 0) && (index < getRepositoriesCount())) {
+			int existingRepositories = 0;
+			if (index - existingRepositories < getDMModel().getExternalRepositories().size()) {
+				return getDMModel().getExternalRepositories().elementAt(index - existingRepositories);
+			}
+			existingRepositories += getDMModel().getExternalRepositories().size();
 
-            if (index-existingRepositories < getDMModel().getXmlSchemaRepositories().size()) {
-                return getDMModel().getXmlSchemaRepositories().elementAt(index-existingRepositories);                
-            }
-            existingRepositories += getDMModel().getXmlSchemaRepositories().size();
+			if (index - existingRepositories < getDMModel().getDenaliFoundationRepositories().size()) {
+				return getDMModel().getDenaliFoundationRepositories().elementAt(index - existingRepositories);
+			}
+			existingRepositories += getDMModel().getDenaliFoundationRepositories().size();
 
-            
-            if (index-existingRepositories < getDMModel().getThesaurusRepositories().size()) {
-                return getDMModel().getThesaurusRepositories().elementAt(index-existingRepositories);                
-            }
-            existingRepositories += getDMModel().getThesaurusRepositories().size();
-            
-            if (index-existingRepositories < getDMModel().getThesaurusDatabaseRepositories().size()) {
-                return getDMModel().getThesaurusDatabaseRepositories().elementAt(index-existingRepositories);                
-            }
-            existingRepositories += getDMModel().getThesaurusDatabaseRepositories().size();
-        }
-        logger.warning("Index out of range: "+index);
-       return null;
-    }
+			if (index - existingRepositories < getDMModel().getRationalRoseRepositories().size()) {
+				return getDMModel().getRationalRoseRepositories().elementAt(index - existingRepositories);
+			}
+			existingRepositories += getDMModel().getRationalRoseRepositories().size();
 
+			if (index - existingRepositories < getDMModel().getWSDLRepositories().size()) {
+				return getDMModel().getWSDLRepositories().elementAt(index - existingRepositories);
+			}
+			existingRepositories += getDMModel().getWSDLRepositories().size();
 
-    @Override
-	public String getName() 
-    {
-        return "library_repositories";
-     }
+			if (index - existingRepositories < getDMModel().getXmlSchemaRepositories().size()) {
+				return getDMModel().getXmlSchemaRepositories().elementAt(index - existingRepositories);
+			}
+			existingRepositories += getDMModel().getXmlSchemaRepositories().size();
 
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return getDMModel().getFullyQualifiedName()+".LIBRARY_REPOSITORY_FOLDER";
-    }
+			if (index - existingRepositories < getDMModel().getThesaurusRepositories().size()) {
+				return getDMModel().getThesaurusRepositories().elementAt(index - existingRepositories);
+			}
+			existingRepositories += getDMModel().getThesaurusRepositories().size();
 
-     @Override
-	protected Vector getSpecificActionListForThatClass()
-    {
-         Vector returned = super.getSpecificActionListForThatClass();
-         returned.add(ImportJARFileRepository.actionType);
-         //returned.add(ImportRationalRoseRepository.actionType);
-         //returned.add(ImportDenaliFoundationRepository.actionType);
-         returned.add(ImportThesaurusRepository.actionType);
-         returned.add(ImportThesaurusDatabaseRepository.actionType);
-         return returned;
-    }
+			if (index - existingRepositories < getDMModel().getThesaurusDatabaseRepositories().size()) {
+				return getDMModel().getThesaurusDatabaseRepositories().elementAt(index - existingRepositories);
+			}
+			existingRepositories += getDMModel().getThesaurusDatabaseRepositories().size();
+		}
+		logger.warning("Index out of range: " + index);
+		return null;
+	}
 
-     /**
-      * Overrides getClassNameKey
-      * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-      */
-     @Override
-	public String getClassNameKey()
-     {
-         return getName();
-     }
-     
+	@Override
+	public String getName() {
+		return "library_repositories";
+	}
+
+	@Override
+	public String getFullyQualifiedName() {
+		return getDMModel().getFullyQualifiedName() + ".LIBRARY_REPOSITORY_FOLDER";
+	}
+
+	@Override
+	protected Vector getSpecificActionListForThatClass() {
+		Vector returned = super.getSpecificActionListForThatClass();
+		returned.add(ImportJARFileRepository.actionType);
+		// returned.add(ImportRationalRoseRepository.actionType);
+		// returned.add(ImportDenaliFoundationRepository.actionType);
+		returned.add(ImportThesaurusRepository.actionType);
+		returned.add(ImportThesaurusDatabaseRepository.actionType);
+		return returned;
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return getName();
+	}
+
 }

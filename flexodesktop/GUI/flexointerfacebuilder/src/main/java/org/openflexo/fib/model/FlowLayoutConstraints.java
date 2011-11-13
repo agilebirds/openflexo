@@ -23,43 +23,33 @@ import javax.swing.JComponent;
 
 import org.openflexo.fib.model.FIBPanel.Layout;
 
-
-
 public class FlowLayoutConstraints extends ComponentConstraints {
 
-	public FlowLayoutConstraints() 
-	{
+	public FlowLayoutConstraints() {
 		super();
 	}
-	
-	public FlowLayoutConstraints(int index) 
-	{
+
+	public FlowLayoutConstraints(int index) {
 		super();
 		setIndex(index);
 	}
-	
-	protected FlowLayoutConstraints(String someConstraints) 
-	{
+
+	protected FlowLayoutConstraints(String someConstraints) {
 		super(someConstraints);
 	}
-	
-	FlowLayoutConstraints(ComponentConstraints someConstraints) 
-	{
+
+	FlowLayoutConstraints(ComponentConstraints someConstraints) {
 		super(someConstraints);
 	}
-	
+
 	@Override
-	protected Layout getType()
-	{
+	protected Layout getType() {
 		return Layout.flow;
 	}
 
 	@Override
-	public void performConstrainedAddition(JComponent container,
-			JComponent contained)
-	{
+	public void performConstrainedAddition(JComponent container, JComponent contained) {
 		container.add(contained);
 	}
-
 
 }

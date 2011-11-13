@@ -33,98 +33,88 @@ import org.openflexo.foundation.dm.action.DMDelete;
 import org.openflexo.foundation.dm.eo.DMEOPrototype;
 import org.openflexo.foundation.dm.eo.EOPrototypeRepository;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class EOPrototypeRepositoryView extends DMView<EOPrototypeRepository>
-{
+public class EOPrototypeRepositoryView extends DMView<EOPrototypeRepository> {
 
-    private DMEOPrototypeTableModel eoPrototypeTableModel;
+	private DMEOPrototypeTableModel eoPrototypeTableModel;
 
-    private DMTabularView eoPrototypeTable;
+	private DMTabularView eoPrototypeTable;
 
-    public EOPrototypeRepositoryView(EOPrototypeRepository repository, DMController controller)
-    {
-        super(repository, controller, "eo_prototypes");
+	public EOPrototypeRepositoryView(EOPrototypeRepository repository, DMController controller) {
+		super(repository, controller, "eo_prototypes");
 
-        addAction(new TabularViewAction(CreateDMPrototype.actionType,controller.getEditor()) {
-            @Override
-			protected Vector getGlobalSelection()
-            {
-                return getViewSelection();
-            }
+		addAction(new TabularViewAction(CreateDMPrototype.actionType, controller.getEditor()) {
+			@Override
+			protected Vector getGlobalSelection() {
+				return getViewSelection();
+			}
 
-            @Override
-			protected FlexoModelObject getFocusedObject() 
-            {
-                return getEOPrototypeRepository();
-            }           
-        });
-        addAction(new TabularViewAction(DMDelete.actionType,"delete_prototype",controller.getEditor()) {
-            @Override
-			protected Vector getGlobalSelection()
-            {
-                 return getViewSelection();
-            }
+			@Override
+			protected FlexoModelObject getFocusedObject() {
+				return getEOPrototypeRepository();
+			}
+		});
+		addAction(new TabularViewAction(DMDelete.actionType, "delete_prototype", controller.getEditor()) {
+			@Override
+			protected Vector getGlobalSelection() {
+				return getViewSelection();
+			}
 
-            @Override
-			protected FlexoModelObject getFocusedObject() 
-            {
-                return null;
-            }           
-        });
+			@Override
+			protected FlexoModelObject getFocusedObject() {
+				return null;
+			}
+		});
 
-         finalizeBuilding();
-    }
+		finalizeBuilding();
+	}
 
-    @Override
-	protected JComponent buildContentPane()
-    {
-        eoPrototypeTableModel = new DMEOPrototypeTableModel(getEOPrototypeRepository(), getDMController().getProject());
-        addToMasterTabularView(eoPrototypeTable = new DMTabularView(getDMController(), eoPrototypeTableModel));
+	@Override
+	protected JComponent buildContentPane() {
+		eoPrototypeTableModel = new DMEOPrototypeTableModel(getEOPrototypeRepository(), getDMController().getProject());
+		addToMasterTabularView(eoPrototypeTable = new DMTabularView(getDMController(), eoPrototypeTableModel));
 
-        return eoPrototypeTable;
-    }
+		return eoPrototypeTable;
+	}
 
-   public EOPrototypeRepository getEOPrototypeRepository()
-    {
-        return getDMObject();
-    }
+	public EOPrototypeRepository getEOPrototypeRepository() {
+		return getDMObject();
+	}
 
-    public DMEOPrototype getSelectedDMEOPrototype()
-    {
-        DMSelectionManager sm = getDMController().getDMSelectionManager();
-        Vector selection = sm.getSelection();
-        if ((selection.size() == 1) && (selection.firstElement() instanceof DMEOPrototype)) {
-            return (DMEOPrototype) selection.firstElement();
-        }
-        return null;
-    }
+	public DMEOPrototype getSelectedDMEOPrototype() {
+		DMSelectionManager sm = getDMController().getDMSelectionManager();
+		Vector selection = sm.getSelection();
+		if ((selection.size() == 1) && (selection.firstElement() instanceof DMEOPrototype)) {
+			return (DMEOPrototype) selection.firstElement();
+		}
+		return null;
+	}
 
-    /**
-     * Overrides willShow
-     * @see org.openflexo.view.ModuleView#willShow()
-     */
-    @Override
-	public void willShow()
-    {
-        // TODO Auto-generated method stub
-        
-    }
+	/**
+	 * Overrides willShow
+	 * 
+	 * @see org.openflexo.view.ModuleView#willShow()
+	 */
+	@Override
+	public void willShow() {
+		// TODO Auto-generated method stub
 
-    /**
-     * Overrides willHide
-     * @see org.openflexo.view.ModuleView#willHide()
-     */
-    @Override
-	public void willHide()
-    {
-        // TODO Auto-generated method stub
-        
-    }
+	}
+
+	/**
+	 * Overrides willHide
+	 * 
+	 * @see org.openflexo.view.ModuleView#willHide()
+	 */
+	@Override
+	public void willHide() {
+		// TODO Auto-generated method stub
+
+	}
 
 }

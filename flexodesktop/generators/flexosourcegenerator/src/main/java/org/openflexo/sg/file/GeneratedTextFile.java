@@ -28,7 +28,6 @@ import org.openflexo.generator.rm.GenerationAvailableFile;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.sg.generator.SGTextFileGenerator;
 
-
 public class GeneratedTextFile extends TextFile implements GenerationAvailableFile {
 
 	protected static final Logger logger = FlexoLogger.getLogger(GeneratedTextFile.class.getPackage().getName());

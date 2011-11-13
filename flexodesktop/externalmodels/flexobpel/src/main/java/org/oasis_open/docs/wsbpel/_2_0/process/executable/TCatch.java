@@ -23,7 +23,6 @@
 // Generated on: 2008.02.08 at 10:43:57 AM CET 
 //
 
-
 package org.oasis_open.docs.wsbpel._2_0.process.executable;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -34,11 +33,12 @@ import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import javax.xml.namespace.QName;
 
-
 /**
- * <p>Java class for tCatch complex type.
+ * <p>
+ * Java class for tCatch complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="tCatch">
@@ -57,114 +57,100 @@ import javax.xml.namespace.QName;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tCatch")
-public class TCatch
-    extends TActivityContainer
-{
+public class TCatch extends TActivityContainer {
 
-    @XmlAttribute
-    protected QName faultName;
-    @XmlAttribute
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String faultVariable;
-    @XmlAttribute
-    protected QName faultMessageType;
-    @XmlAttribute
-    protected QName faultElement;
+	@XmlAttribute
+	protected QName faultName;
+	@XmlAttribute
+	@XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+	protected String faultVariable;
+	@XmlAttribute
+	protected QName faultMessageType;
+	@XmlAttribute
+	protected QName faultElement;
 
-    /**
-     * Gets the value of the faultName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QName }
-     *     
-     */
-    public QName getFaultName() {
-        return faultName;
-    }
+	/**
+	 * Gets the value of the faultName property.
+	 * 
+	 * @return possible object is {@link QName }
+	 * 
+	 */
+	public QName getFaultName() {
+		return faultName;
+	}
 
-    /**
-     * Sets the value of the faultName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QName }
-     *     
-     */
-    public void setFaultName(QName value) {
-        this.faultName = value;
-    }
+	/**
+	 * Sets the value of the faultName property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link QName }
+	 * 
+	 */
+	public void setFaultName(QName value) {
+		this.faultName = value;
+	}
 
-    /**
-     * Gets the value of the faultVariable property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getFaultVariable() {
-        return faultVariable;
-    }
+	/**
+	 * Gets the value of the faultVariable property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getFaultVariable() {
+		return faultVariable;
+	}
 
-    /**
-     * Sets the value of the faultVariable property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setFaultVariable(String value) {
-        this.faultVariable = value;
-    }
+	/**
+	 * Sets the value of the faultVariable property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setFaultVariable(String value) {
+		this.faultVariable = value;
+	}
 
-    /**
-     * Gets the value of the faultMessageType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QName }
-     *     
-     */
-    public QName getFaultMessageType() {
-        return faultMessageType;
-    }
+	/**
+	 * Gets the value of the faultMessageType property.
+	 * 
+	 * @return possible object is {@link QName }
+	 * 
+	 */
+	public QName getFaultMessageType() {
+		return faultMessageType;
+	}
 
-    /**
-     * Sets the value of the faultMessageType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QName }
-     *     
-     */
-    public void setFaultMessageType(QName value) {
-        this.faultMessageType = value;
-    }
+	/**
+	 * Sets the value of the faultMessageType property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link QName }
+	 * 
+	 */
+	public void setFaultMessageType(QName value) {
+		this.faultMessageType = value;
+	}
 
-    /**
-     * Gets the value of the faultElement property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QName }
-     *     
-     */
-    public QName getFaultElement() {
-        return faultElement;
-    }
+	/**
+	 * Gets the value of the faultElement property.
+	 * 
+	 * @return possible object is {@link QName }
+	 * 
+	 */
+	public QName getFaultElement() {
+		return faultElement;
+	}
 
-    /**
-     * Sets the value of the faultElement property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QName }
-     *     
-     */
-    public void setFaultElement(QName value) {
-        this.faultElement = value;
-    }
+	/**
+	 * Sets the value of the faultElement property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link QName }
+	 * 
+	 */
+	public void setFaultElement(QName value) {
+		this.faultElement = value;
+	}
 
 }

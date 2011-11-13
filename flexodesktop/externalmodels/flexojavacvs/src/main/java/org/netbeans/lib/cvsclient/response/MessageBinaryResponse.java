@@ -28,64 +28,60 @@ import org.netbeans.lib.cvsclient.event.BinaryMessageEvent;
 import org.netbeans.lib.cvsclient.util.LoggedDataInputStream;
 
 /**
- * Handles binary message responses. Translate dthe reponse into
- * BinaryMessageEvents.
- *
- * @author  Martin Entlicher
+ * Handles binary message responses. Translate dthe reponse into BinaryMessageEvents.
+ * 
+ * @author Martin Entlicher
  */
 class MessageBinaryResponse implements Response {
 
-    private static final int CHUNK_SIZE = 1024 * 256;  // 256Kb
+	private static final int CHUNK_SIZE = 1024 * 256; // 256Kb
 
-    public MessageBinaryResponse() {
-        // do nothing
-    }
+	public MessageBinaryResponse() {
+		// do nothing
+	}
 
-    /**
-     * Process the data for the response.
-     * @param dis the data inputstream allowing the client to read the server's
-     * response. Note that the actual response name has already been read
-     * and the inputstream is positioned just before the first argument, if any.
-     */
-    @Override
-	public void process(LoggedDataInputStream dis, ResponseServices services)
-            throws ResponseException {
-        try {
-            String numBytesStr = dis.readLine();
-            int numBytes;
-            try {
-                numBytes = Integer.parseInt(numBytesStr);
-            } catch (NumberFormatException nfex) {
-                throw new ResponseException(nfex);
-            }
-            int chunk = Math.min(numBytes, CHUNK_SIZE);
-            byte[] bytes = new byte[chunk];
-            while (numBytes > 0) {
-                int len = dis.read(bytes, 0, chunk);
-                if (len == -1) {
-                    throw new ResponseException("EOF", CommandException.getLocalMessage("CommandException.EndOfFile", null));  // NOI18N
-                }
-                numBytes -= len;
-                chunk = Math.min(numBytes, CHUNK_SIZE); 
-                BinaryMessageEvent event = new BinaryMessageEvent(this, bytes, len);
-                services.getEventManager().fireCVSEvent(event);
-            }
-        }
-        catch (EOFException ex) {
-            throw new ResponseException(ex, CommandException.getLocalMessage("CommandException.EndOfFile", null)); //NOI18N
-        }
-        catch (IOException ex) {
-            throw new ResponseException(ex);
-        }
-    }
+	/**
+	 * Process the data for the response.
+	 * 
+	 * @param dis
+	 *            the data inputstream allowing the client to read the server's response. Note that the actual response name has already
+	 *            been read and the inputstream is positioned just before the first argument, if any.
+	 */
+	@Override
+	public void process(LoggedDataInputStream dis, ResponseServices services) throws ResponseException {
+		try {
+			String numBytesStr = dis.readLine();
+			int numBytes;
+			try {
+				numBytes = Integer.parseInt(numBytesStr);
+			} catch (NumberFormatException nfex) {
+				throw new ResponseException(nfex);
+			}
+			int chunk = Math.min(numBytes, CHUNK_SIZE);
+			byte[] bytes = new byte[chunk];
+			while (numBytes > 0) {
+				int len = dis.read(bytes, 0, chunk);
+				if (len == -1) {
+					throw new ResponseException("EOF", CommandException.getLocalMessage("CommandException.EndOfFile", null)); // NOI18N
+				}
+				numBytes -= len;
+				chunk = Math.min(numBytes, CHUNK_SIZE);
+				BinaryMessageEvent event = new BinaryMessageEvent(this, bytes, len);
+				services.getEventManager().fireCVSEvent(event);
+			}
+		} catch (EOFException ex) {
+			throw new ResponseException(ex, CommandException.getLocalMessage("CommandException.EndOfFile", null)); // NOI18N
+		} catch (IOException ex) {
+			throw new ResponseException(ex);
+		}
+	}
 
-    /**
-     * Is this a terminal response, i.e. should reading of responses stop
-     * after this response. This is true for responses such as OK or
-     * an error response
-     */
-    @Override
+	/**
+	 * Is this a terminal response, i.e. should reading of responses stop after this response. This is true for responses such as OK or an
+	 * error response
+	 */
+	@Override
 	public boolean isTerminalResponse() {
-        return false;
-    }
+		return false;
+	}
 }

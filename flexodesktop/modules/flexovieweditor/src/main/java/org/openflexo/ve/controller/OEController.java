@@ -45,17 +45,14 @@ import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.controller.SelectionManagingController;
 import org.openflexo.view.menu.FlexoMenuBar;
 
-
 /**
  * Controller for this module
  * 
  * @author yourname
  */
-public class OEController extends FlexoController implements SelectionManagingController
-{
+public class OEController extends FlexoController implements SelectionManagingController {
 
-	private static final Logger logger = Logger.getLogger(OEController.class.getPackage()
-			.getName());
+	private static final Logger logger = Logger.getLogger(OEController.class.getPackage().getName());
 
 	// ================================================
 	// ============= Instance variables ===============
@@ -66,21 +63,19 @@ public class OEController extends FlexoController implements SelectionManagingCo
 	protected OEKeyEventListener _oeKeyEventListener;
 	private OESelectionManager _selectionManager;
 
-    public final ShemaPerspective SHEMA_PERSPECTIVE;
-    public final OntologyPerspective ONTOLOGY_PERSPECTIVE;
+	public final ShemaPerspective SHEMA_PERSPECTIVE;
+	public final OntologyPerspective ONTOLOGY_PERSPECTIVE;
 
 	@Override
-	public boolean useNewInspectorScheme()
-	{
+	public boolean useNewInspectorScheme() {
 		return true;
 	}
-	
+
 	@Override
-	public boolean useOldInspectorScheme()
-	{
+	public boolean useOldInspectorScheme() {
 		return false;
 	}
-		
+
 	// ================================================
 	// ================ Constructor ===================
 	// ================================================
@@ -88,10 +83,9 @@ public class OEController extends FlexoController implements SelectionManagingCo
 	/**
 	 * Default constructor
 	 */
-	public OEController(InteractiveFlexoEditor projectEditor, FlexoModule module) throws Exception
-	{
-		super(projectEditor,module);
-		_oeMenuBar = (OEMenuBar)createAndRegisterNewMenuBar();
+	public OEController(InteractiveFlexoEditor projectEditor, FlexoModule module) throws Exception {
+		super(projectEditor, module);
+		_oeMenuBar = (OEMenuBar) createAndRegisterNewMenuBar();
 		_oeKeyEventListener = new OEKeyEventListener(this);
 		_frame = new OEFrame(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, this, _oeKeyEventListener, _oeMenuBar);
 		init(_frame, _oeKeyEventListener, _oeMenuBar);
@@ -99,38 +93,33 @@ public class OEController extends FlexoController implements SelectionManagingCo
 		// At this point the InspectorController is not yet loaded
 		_selectionManager = new OESelectionManager(this);
 
-	       addToPerspectives(SHEMA_PERSPECTIVE = new ShemaPerspective(this));
-	       addToPerspectives(ONTOLOGY_PERSPECTIVE = new OntologyPerspective(this));
+		addToPerspectives(SHEMA_PERSPECTIVE = new ShemaPerspective(this));
+		addToPerspectives(ONTOLOGY_PERSPECTIVE = new OntologyPerspective(this));
 
-	       setDefaultPespective(SHEMA_PERSPECTIVE);
-	       
-	        SwingUtilities.invokeLater(new Runnable() {
-	            @Override
-				public void run()
-	            {
-	                switchToPerspective(getDefaultPespective());
-	                setCurrentEditedObjectAsModuleView(getProject().getShemaLibrary());
-	            }
-	        });
+		setDefaultPespective(SHEMA_PERSPECTIVE);
+
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				switchToPerspective(getDefaultPespective());
+				setCurrentEditedObjectAsModuleView(getProject().getShemaLibrary());
+			}
+		});
 
 	}
 
 	@Override
-	public ControllerActionInitializer createControllerActionInitializer()
-	{
+	public ControllerActionInitializer createControllerActionInitializer() {
 		return new OEControllerActionInitializer(this);
 	}
 
-
 	/**
-	 * Creates a new instance of MenuBar for the module this 
-	 * controller refers to
+	 * Creates a new instance of MenuBar for the module this controller refers to
 	 * 
 	 * @return
 	 */
 	@Override
-	protected FlexoMenuBar createNewMenuBar()
-	{
+	protected FlexoMenuBar createNewMenuBar() {
 		return new OEMenuBar(this);
 	}
 
@@ -138,11 +127,12 @@ public class OEController extends FlexoController implements SelectionManagingCo
 	 * Init inspectors
 	 */
 	@Override
-	public void initInspectors()
-	{
+	public void initInspectors() {
 		super.initInspectors();
-		if (getSharedInspectorController() != null) getOESelectionManager().addObserver(getSharedInspectorController());
-		if (getDocInspectorController() != null) getOESelectionManager().addObserver(getDocInspectorController());
+		if (getSharedInspectorController() != null)
+			getOESelectionManager().addObserver(getSharedInspectorController());
+		if (getDocInspectorController() != null)
+			getOESelectionManager().addObserver(getDocInspectorController());
 
 		if (useNewInspectorScheme()) {
 			loadInspectorGroup("Ontology");
@@ -150,8 +140,7 @@ public class OEController extends FlexoController implements SelectionManagingCo
 
 	}
 
-	public void loadRelativeWindows()
-	{
+	public void loadRelativeWindows() {
 		// Build eventual relative windows
 	}
 
@@ -159,66 +148,57 @@ public class OEController extends FlexoController implements SelectionManagingCo
 	// ============== Instance method =================
 	// ================================================
 
-	public OEFrame getMainFrame()
-	{
+	public OEFrame getMainFrame() {
 		return _frame;
 	}
 
-	public OEMenuBar getEditorMenuBar()
-	{
+	public OEMenuBar getEditorMenuBar() {
 		return _oeMenuBar;
 	}
 
-	public void showBrowser()
-	{
+	public void showBrowser() {
 		if (getMainPane() != null) {
-			((OEMainPane)getMainPane()).showBrowser();
+			((OEMainPane) getMainPane()).showBrowser();
 		}
 	}
 
-	public void hideBrowser()
-	{
+	public void hideBrowser() {
 		if (getMainPane() != null) {
-			((OEMainPane)getMainPane()).hideBrowser();
+			((OEMainPane) getMainPane()).hideBrowser();
 		}
 	}
 
 	@Override
-	protected FlexoMainPane createMainPane()
-	{
+	protected FlexoMainPane createMainPane() {
 		return new OEMainPane(getEmptyPanel(), getMainFrame(), this);
 	}
 
-	public OEKeyEventListener getKeyEventListener()
-	{
+	public OEKeyEventListener getKeyEventListener() {
 		return _oeKeyEventListener;
 	}
 
 	// ================================================
-		// ============ Selection management ==============
-			// ================================================
+	// ============ Selection management ==============
+	// ================================================
 
 	@Override
-	public SelectionManager getSelectionManager()
-	{
+	public SelectionManager getSelectionManager() {
 		return getOESelectionManager();
 	}
 
-	public OESelectionManager getOESelectionManager()
-	{
+	public OESelectionManager getOESelectionManager() {
 		return _selectionManager;
 	}
 
 	/**
-	 * Select the view representing supplied object, if this view exists. Try
-	 * all to really display supplied object, even if required view is not the
-	 * current displayed view
+	 * Select the view representing supplied object, if this view exists. Try all to really display supplied object, even if required view
+	 * is not the current displayed view
 	 * 
-	 * @param object: the object to focus on
+	 * @param object
+	 *            : the object to focus on
 	 */
 	@Override
-	public void selectAndFocusObject(FlexoModelObject object)
-	{
+	public void selectAndFocusObject(FlexoModelObject object) {
 		// TODO: Implements this
 		setCurrentEditedObjectAsModuleView(object);
 	}
@@ -227,21 +207,19 @@ public class OEController extends FlexoController implements SelectionManagingCo
 	// ============ Exception management ==============
 	// ================================================
 
-
 	@Override
-	public boolean handleException(InspectableObject inspectable, String propertyName,
-			Object value, Throwable exception)
-	{
+	public boolean handleException(InspectableObject inspectable, String propertyName, Object value, Throwable exception) {
 		// TODO: Handles here exceptions that may be thrown through the inspector
 		return super.handleException(inspectable, propertyName, value, exception);
 	}
 
 	@Override
-	public String getWindowTitleforObject(FlexoModelObject object) 
-	{
-		if (getCurrentPerspective() == SHEMA_PERSPECTIVE) return SHEMA_PERSPECTIVE.getWindowTitleforObject(object);
-		if (getCurrentPerspective() == ONTOLOGY_PERSPECTIVE) return ONTOLOGY_PERSPECTIVE.getWindowTitleforObject(object);
+	public String getWindowTitleforObject(FlexoModelObject object) {
+		if (getCurrentPerspective() == SHEMA_PERSPECTIVE)
+			return SHEMA_PERSPECTIVE.getWindowTitleforObject(object);
+		if (getCurrentPerspective() == ONTOLOGY_PERSPECTIVE)
+			return ONTOLOGY_PERSPECTIVE.getWindowTitleforObject(object);
 		return object.getFullyQualifiedName();
 	}
-	
+
 }

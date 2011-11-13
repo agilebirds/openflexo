@@ -19,15 +19,11 @@
  */
 package org.openflexo.foundation.cg.dm;
 
-
 import org.openflexo.foundation.DataModification;
 
+public class LogAdded extends DataModification {
+	public LogAdded() {
+		super(LOG, null, null);
+	}
 
-public class LogAdded extends DataModification
-{
-    public LogAdded()
-    {
-        super(LOG,null,null);
-    }
-    
 }

@@ -23,75 +23,66 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.xml.FlexoDMBuilder;
 
-
 /**
  * Represents a logical group of objects stored in a non-database thesaurus
  * 
  * @author sguerin
  * 
  */
-public class ThesaurusRepository extends DMRepository
-{
+public class ThesaurusRepository extends DMRepository {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ThesaurusRepository.class.getPackage().getName());
 
-    /**
-     * Constructor used during deserialization
-     */
-    public ThesaurusRepository(FlexoDMBuilder builder)
-    {
-        this(builder.dmModel);
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor used during deserialization
+	 */
+	public ThesaurusRepository(FlexoDMBuilder builder) {
+		this(builder.dmModel);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Default constructor
-     */
-    public ThesaurusRepository(DMModel dmModel)
-    {
-        super(dmModel);
-    }
+	/**
+	 * Default constructor
+	 */
+	public ThesaurusRepository(DMModel dmModel) {
+		super(dmModel);
+	}
 
-    @Override
-	public DMRepositoryFolder getRepositoryFolder()
-    {
-        return getDMModel().getLibraryRepositoryFolder();
-    }
-    
-   @Override
-public int getOrder()
-    {
-        return 9;
-    }
+	@Override
+	public DMRepositoryFolder getRepositoryFolder() {
+		return getDMModel().getLibraryRepositoryFolder();
+	}
 
-    @Override
-	public boolean isReadOnly()
-    {
-        return true;
-    }
+	@Override
+	public int getOrder() {
+		return 9;
+	}
 
-    @Override
-	public boolean isDeletable()
-    {
-        return true;
-    }
+	@Override
+	public boolean isReadOnly() {
+		return true;
+	}
 
-    @Override
-	public final void delete()
-    {
-        getDMModel().removeFromThesaurusRepositories(this);
-        super.delete();
-    }
+	@Override
+	public boolean isDeletable() {
+		return true;
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "thesaurus_repository";
-    }
-    
+	@Override
+	public final void delete() {
+		getDMModel().removeFromThesaurusRepositories(this);
+		super.delete();
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "thesaurus_repository";
+	}
+
 }

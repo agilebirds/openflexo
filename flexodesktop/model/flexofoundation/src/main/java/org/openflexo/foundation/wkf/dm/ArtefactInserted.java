@@ -21,12 +21,10 @@ package org.openflexo.foundation.wkf.dm;
 
 import org.openflexo.foundation.wkf.WKFArtefact;
 
-public class ArtefactInserted extends WKFDataModification
-{
+public class ArtefactInserted extends WKFDataModification {
 
-     public ArtefactInserted(WKFArtefact insertedAnnotation)
-    {
-        super(null, insertedAnnotation);
-     }
+	public ArtefactInserted(WKFArtefact insertedAnnotation) {
+		super(null, insertedAnnotation);
+	}
 
 }

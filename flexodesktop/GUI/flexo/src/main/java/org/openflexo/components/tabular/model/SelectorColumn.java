@@ -23,25 +23,22 @@ import org.openflexo.components.widget.AbstractBrowserSelector;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public abstract class SelectorColumn<D extends FlexoModelObject,T extends FlexoModelObject> extends CustomColumn<D,T>
-{
+public abstract class SelectorColumn<D extends FlexoModelObject, T extends FlexoModelObject> extends CustomColumn<D, T> {
 
-     public SelectorColumn(String title, int defaultWidth, FlexoProject project)
-    {
-        super(title, defaultWidth, project);
-     }
+	public SelectorColumn(String title, int defaultWidth, FlexoProject project) {
+		super(title, defaultWidth, project);
+	}
 
-     @Override
+	@Override
 	protected abstract AbstractBrowserSelector<T> getViewSelector(D rowObject, T value);
 
-    @Override
+	@Override
 	protected abstract AbstractBrowserSelector<T> getEditSelector(D rowObject, T value);
 
 }

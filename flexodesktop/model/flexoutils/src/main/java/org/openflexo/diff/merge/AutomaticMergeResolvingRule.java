@@ -19,11 +19,10 @@
  */
 package org.openflexo.diff.merge;
 
-public interface AutomaticMergeResolvingRule 
-{
+public interface AutomaticMergeResolvingRule {
 	public boolean isApplicable(MergeChange change);
-	
+
 	public String getMergedResult(MergeChange change);
-	
+
 	public String getDescription();
 }

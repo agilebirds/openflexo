@@ -24,35 +24,29 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.dm.DMProperty;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class DMPropertyElement extends DMElement
-{
+public class DMPropertyElement extends DMElement {
 
-    public DMPropertyElement(DMProperty property, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(property, BrowserElementType.DM_PROPERTY, browser,parent);
-    }
+	public DMPropertyElement(DMProperty property, ProjectBrowser browser, BrowserElement parent) {
+		super(property, BrowserElementType.DM_PROPERTY, browser, parent);
+	}
 
-    public DMPropertyElement(DMProperty property, BrowserElementType elementType, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(property, elementType, browser,parent);
-    }
+	public DMPropertyElement(DMProperty property, BrowserElementType elementType, ProjectBrowser browser, BrowserElement parent) {
+		super(property, elementType, browser, parent);
+	}
 
-    protected DMProperty getDMProperty()
-    {
-        return (DMProperty) getObject();
-    }
+	protected DMProperty getDMProperty() {
+		return (DMProperty) getObject();
+	}
 
-    @Override
-	public boolean isNameEditable()
-    {
-        return !getDMProperty().getEntity().getIsReadOnly();
-    }
+	@Override
+	public boolean isNameEditable() {
+		return !getDMProperty().getEntity().getIsReadOnly();
+	}
 
 }

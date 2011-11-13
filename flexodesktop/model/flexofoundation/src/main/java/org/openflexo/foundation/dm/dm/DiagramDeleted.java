@@ -21,18 +21,15 @@ package org.openflexo.foundation.dm.dm;
 
 import org.openflexo.foundation.dm.ERDiagram;
 
-public class DiagramDeleted extends DMDataModification
-{
+public class DiagramDeleted extends DMDataModification {
 
-	public DiagramDeleted(ERDiagram deletedDiagram)
-	{
-		super(deletedDiagram,null);
+	public DiagramDeleted(ERDiagram deletedDiagram) {
+		super(deletedDiagram, null);
 	}
 
-    @Override
-    public ERDiagram oldValue()
-     {
-    	return (ERDiagram)super.oldValue();
-    }
+	@Override
+	public ERDiagram oldValue() {
+		return (ERDiagram) super.oldValue();
+	}
 
 }

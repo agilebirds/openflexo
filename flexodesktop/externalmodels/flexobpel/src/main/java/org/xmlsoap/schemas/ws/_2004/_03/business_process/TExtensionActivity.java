@@ -23,7 +23,6 @@
 // Generated on: 2007.11.06 at 03:26:51 PM CET 
 //
 
-
 package org.xmlsoap.schemas.ws._2004._03.business_process;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -33,11 +32,12 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.w3c.dom.Element;
 
-
 /**
- * <p>Java class for tExtensionActivity complex type.
+ * <p>
+ * Java class for tExtensionActivity complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="tExtensionActivity">
@@ -54,38 +54,31 @@ import org.w3c.dom.Element;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tExtensionActivity", propOrder = {
-    "any"
-})
+@XmlType(name = "tExtensionActivity", propOrder = { "any" })
 public class TExtensionActivity {
 
-    @XmlAnyElement(lax = true)
-    protected Object any;
+	@XmlAnyElement(lax = true)
+	protected Object any;
 
-    /**
-     * Gets the value of the any property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Object }
-     *     {@link Element }
-     *     
-     */
-    public Object getAny() {
-        return any;
-    }
+	/**
+	 * Gets the value of the any property.
+	 * 
+	 * @return possible object is {@link Object } {@link Element }
+	 * 
+	 */
+	public Object getAny() {
+		return any;
+	}
 
-    /**
-     * Sets the value of the any property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Object }
-     *     {@link Element }
-     *     
-     */
-    public void setAny(Object value) {
-        this.any = value;
-    }
+	/**
+	 * Sets the value of the any property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link Object } {@link Element }
+	 * 
+	 */
+	public void setAny(Object value) {
+		this.any = value;
+	}
 
 }

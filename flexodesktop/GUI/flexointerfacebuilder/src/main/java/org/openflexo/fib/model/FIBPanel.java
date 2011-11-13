@@ -26,22 +26,21 @@ import java.util.logging.Logger;
 
 import javax.swing.BoxLayout;
 
-
 public class FIBPanel extends FIBContainer {
-	
+
 	private static final Logger logger = Logger.getLogger(FIBPanel.class.getPackage().getName());
 
 	private Layout layout;
-	
+
 	private FlowLayoutAlignment flowAlignment = null;
 	private BoxLayoutAxis boxLayoutAxis = null;
-	
+
 	private Integer hGap = null;
 	private Integer vGap = null;
-	
+
 	private Integer cols = null;
 	private Integer rows = null;
-	
+
 	private Border border = Border.empty;
 	private Color borderColor = null;
 	private String borderTitle = null;
@@ -49,14 +48,13 @@ public class FIBPanel extends FIBContainer {
 	private Integer borderBottom = null;
 	private Integer borderLeft = null;
 	private Integer borderRight = null;
-	
+
 	private Font titleFont = null;
 	private int darkLevel = 0;
-	
+
 	private boolean protectContent = false;
-	
-	public static enum Parameters implements FIBModelAttribute
-	{
+
+	public static enum Parameters implements FIBModelAttribute {
 		layout,
 		flowAlignment,
 		boxLayoutAxis,
@@ -76,123 +74,110 @@ public class FIBPanel extends FIBContainer {
 		protectContent
 	}
 
+	public static enum Layout {
+		none, flow, border, grid, box, twocols, gridbag
+	}
 
-	public static enum Layout
-	{
-		none,
-		flow,
-		border,
-		grid,
-		box,
-		twocols,
-		gridbag
+	public static enum FlowLayoutAlignment {
+		LEFT {
+			@Override
+			public int getAlign() {
+				return FlowLayout.LEFT;
+			}
+		},
+		RIGHT {
+			@Override
+			public int getAlign() {
+				return FlowLayout.RIGHT;
+			}
+		},
+		CENTER {
+			@Override
+			public int getAlign() {
+				return FlowLayout.CENTER;
+			}
+		},
+		LEADING {
+			@Override
+			public int getAlign() {
+				return FlowLayout.LEADING;
+			}
+		},
+		TRAILING {
+			@Override
+			public int getAlign() {
+				return FlowLayout.TRAILING;
+			}
+		};
+
+		public abstract int getAlign();
 	}
-	
-	public static enum FlowLayoutAlignment
-	{
-	    LEFT {
-	    	@Override
-	    	public int getAlign() {
-	    		return FlowLayout.LEFT;
-	    	}
-	    },
-	    RIGHT {
-	    	@Override
-	    	public int getAlign() {
-	    		return FlowLayout.RIGHT;
-	    	}
-	    },
-	    CENTER {
-	    	@Override
-	    	public int getAlign() {
-	    		return FlowLayout.CENTER;
-	    	}
-	    },
-	    LEADING {
-	    	@Override
-	    	public int getAlign() {
-	    		return FlowLayout.LEADING;
-	    	}
-	    },
-	    TRAILING {
-	    	@Override
-	    	public int getAlign() {
-	    		return FlowLayout.TRAILING;
-	    	}
-	    };
-	    
-	    public abstract int getAlign();
-	}
-	
-	public static enum BoxLayoutAxis
-	{
+
+	public static enum BoxLayoutAxis {
 		X_AXIS {
-	    	@Override
-	    	public int getAxis() {
-	    		return BoxLayout.X_AXIS;
-	    	}
-	    },
-	    Y_AXIS {
-	    	@Override
-	    	public int getAxis() {
-	    		return BoxLayout.Y_AXIS;
-	    	}
-	    };
-	    
-	    public abstract int getAxis();
+			@Override
+			public int getAxis() {
+				return BoxLayout.X_AXIS;
+			}
+		},
+		Y_AXIS {
+			@Override
+			public int getAxis() {
+				return BoxLayout.Y_AXIS;
+			}
+		};
+
+		public abstract int getAxis();
 	}
 
-	public static enum Border
-	{
-		empty,
-		line,
-		etched,
-		raised,
-		lowered,
-		titled,
-		rounded3d
+	public static enum Border {
+		empty, line, etched, raised, lowered, titled, rounded3d
 	}
-		
-	public FIBPanel()
-	{
+
+	public FIBPanel() {
 		super();
 		layout = Layout.none;
 	}
-	
+
 	@Override
-	public String getIdentifier()
-	{
+	public String getIdentifier() {
 		return null;
 	}
-	
+
 	@Override
-	public Layout getLayout() 
-	{
+	public Layout getLayout() {
 		return layout;
 	}
 
 	@Override
-	public void setLayout(Layout layout)
-	{
-		FIBAttributeNotification<Layout> notification = requireChange(Parameters.layout,layout);
+	public void setLayout(Layout layout) {
+		FIBAttributeNotification<Layout> notification = requireChange(Parameters.layout, layout);
 		if (notification != null) {
 			this.layout = layout;
 			switch (layout) {
 			case none:
 				break;
 			case flow:
-				if (flowAlignment == null) flowAlignment = FlowLayoutAlignment.LEADING;
-				if (hGap == null) hGap = 5;
-				if (vGap == null) vGap = 5;
+				if (flowAlignment == null)
+					flowAlignment = FlowLayoutAlignment.LEADING;
+				if (hGap == null)
+					hGap = 5;
+				if (vGap == null)
+					vGap = 5;
 				break;
 			case grid:
-				if (hGap == null) hGap = 5;
-				if (vGap == null) vGap = 5;
-				if (rows == null) rows = 2;
-				if (cols == null) cols = 2;
+				if (hGap == null)
+					hGap = 5;
+				if (vGap == null)
+					vGap = 5;
+				if (rows == null)
+					rows = 2;
+				if (cols == null)
+					cols = 2;
 				break;
 			case box:
-				if (boxLayoutAxis == null) boxLayoutAxis = BoxLayoutAxis.X_AXIS;
+				if (boxLayoutAxis == null)
+					boxLayoutAxis = BoxLayoutAxis.X_AXIS;
 				break;
 			case border:
 				break;
@@ -204,33 +189,37 @@ public class FIBPanel extends FIBContainer {
 			default:
 				break;
 			}
-			
+
 			hasChanged(notification);
 		}
 	}
 
-	public Border getBorder()
-	{
+	public Border getBorder() {
 		return border;
 	}
 
-	public void setBorder(Border border)
-	{
-		FIBAttributeNotification<Border> notification = requireChange(Parameters.border,border);
+	public void setBorder(Border border) {
+		FIBAttributeNotification<Border> notification = requireChange(Parameters.border, border);
 		if (notification != null) {
 			this.border = border;
 			switch (border) {
 			case line:
-				if (borderColor == null) borderColor = Color.BLACK;
+				if (borderColor == null)
+					borderColor = Color.BLACK;
 				break;
 			case titled:
-				if (borderTitle == null) borderTitle = "Panel";
+				if (borderTitle == null)
+					borderTitle = "Panel";
 				break;
 			case rounded3d:
-				if (borderTop == null) borderTop = 2;
-				if (borderBottom == null) borderBottom = 2;
-				if (borderLeft == null) borderRight = 2;
-				if (borderRight == null) borderRight = 2;
+				if (borderTop == null)
+					borderTop = 2;
+				if (borderBottom == null)
+					borderBottom = 2;
+				if (borderLeft == null)
+					borderRight = 2;
+				if (borderRight == null)
+					borderRight = 2;
 				break;
 
 			default:
@@ -240,135 +229,110 @@ public class FIBPanel extends FIBContainer {
 		}
 	}
 
-	public Integer getHGap()
-	{
+	public Integer getHGap() {
 		return hGap;
 	}
-	
-	public void setHGap(Integer hGap) 
-	{
-		FIBAttributeNotification<Integer> notification = requireChange(Parameters.hGap,hGap);
+
+	public void setHGap(Integer hGap) {
+		FIBAttributeNotification<Integer> notification = requireChange(Parameters.hGap, hGap);
 		if (notification != null) {
 			this.hGap = hGap;
 			hasChanged(notification);
 		}
 	}
-	
-	public Integer getVGap()
-	{
+
+	public Integer getVGap() {
 		return vGap;
 	}
 
-	public void setVGap(Integer vGap)
-	{
-		FIBAttributeNotification<Integer> notification = requireChange(
-				Parameters.vGap, vGap);
+	public void setVGap(Integer vGap) {
+		FIBAttributeNotification<Integer> notification = requireChange(Parameters.vGap, vGap);
 		if (notification != null) {
 			this.vGap = vGap;
 			hasChanged(notification);
 		}
 	}
 
-	public FlowLayoutAlignment getFlowAlignment()
-	{
+	public FlowLayoutAlignment getFlowAlignment() {
 		return flowAlignment;
 	}
 
-	public void setFlowAlignment(FlowLayoutAlignment flowAlignment)
-	{
-		FIBAttributeNotification<FlowLayoutAlignment> notification = requireChange(
-				Parameters.flowAlignment, flowAlignment);
+	public void setFlowAlignment(FlowLayoutAlignment flowAlignment) {
+		FIBAttributeNotification<FlowLayoutAlignment> notification = requireChange(Parameters.flowAlignment, flowAlignment);
 		if (notification != null) {
 			this.flowAlignment = flowAlignment;
 			hasChanged(notification);
 		}
 	}
 
-	public Integer getCols()
-	{
+	public Integer getCols() {
 		return cols;
 	}
 
-	public void setCols(Integer cols)
-	{
-		//logger.info("setCols with "+cols);
-		FIBAttributeNotification<Integer> notification = requireChange(
-				Parameters.cols, cols);
+	public void setCols(Integer cols) {
+		// logger.info("setCols with "+cols);
+		FIBAttributeNotification<Integer> notification = requireChange(Parameters.cols, cols);
 		if (notification != null) {
 			this.cols = cols;
 			hasChanged(notification);
 		}
 	}
 
-	public Integer getRows()
-	{
+	public Integer getRows() {
 		return rows;
 	}
 
-	public void setRows(Integer rows)
-	{
-		//logger.info("setRows with "+rows);
-		FIBAttributeNotification<Integer> notification = requireChange(
-				Parameters.rows, rows);
+	public void setRows(Integer rows) {
+		// logger.info("setRows with "+rows);
+		FIBAttributeNotification<Integer> notification = requireChange(Parameters.rows, rows);
 		if (notification != null) {
 			this.rows = rows;
 			hasChanged(notification);
 		}
 	}
 
-	public Color getBorderColor()
-	{
+	public Color getBorderColor() {
 		return borderColor;
 	}
 
-	public void setBorderColor(Color borderColor)
-	{
-		FIBAttributeNotification<Color> notification = requireChange(
-				Parameters.borderColor, borderColor);
+	public void setBorderColor(Color borderColor) {
+		FIBAttributeNotification<Color> notification = requireChange(Parameters.borderColor, borderColor);
 		if (notification != null) {
 			this.borderColor = borderColor;
 			hasChanged(notification);
 		}
 	}
 
-	public String getBorderTitle()
-	{
+	public String getBorderTitle() {
 		return borderTitle;
 	}
 
-	public void setBorderTitle(String borderTitle)
-	{
-		FIBAttributeNotification<String> notification = requireChange(
-				Parameters.borderTitle, borderTitle);
+	public void setBorderTitle(String borderTitle) {
+		FIBAttributeNotification<String> notification = requireChange(Parameters.borderTitle, borderTitle);
 		if (notification != null) {
 			this.borderTitle = borderTitle;
 			hasChanged(notification);
 		}
 	}
 
-	public BoxLayoutAxis getBoxLayoutAxis()
-	{
+	public BoxLayoutAxis getBoxLayoutAxis() {
 		return boxLayoutAxis;
 	}
 
-	public void setBoxLayoutAxis(BoxLayoutAxis boxLayoutAxis)
-	{
-		FIBAttributeNotification<BoxLayoutAxis> notification = requireChange(
-				Parameters.boxLayoutAxis, boxLayoutAxis);
+	public void setBoxLayoutAxis(BoxLayoutAxis boxLayoutAxis) {
+		FIBAttributeNotification<BoxLayoutAxis> notification = requireChange(Parameters.boxLayoutAxis, boxLayoutAxis);
 		if (notification != null) {
 			this.boxLayoutAxis = boxLayoutAxis;
 			hasChanged(notification);
 		}
 	}
 
-	public boolean getProtectContent()
-	{
+	public boolean getProtectContent() {
 		return protectContent;
 	}
 
-	public void setProtectContent(boolean protectContent)
-	{
-		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.protectContent,protectContent);
+	public void setProtectContent(boolean protectContent) {
+		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.protectContent, protectContent);
 		if (notification != null) {
 			this.protectContent = protectContent;
 			hasChanged(notification);
@@ -376,96 +340,78 @@ public class FIBPanel extends FIBContainer {
 
 	}
 
-	public Integer getBorderTop()
-	{
+	public Integer getBorderTop() {
 		return borderTop;
 	}
 
-	public void setBorderTop(Integer borderTop)
-	{
-		FIBAttributeNotification<Integer> notification = requireChange(
-				Parameters.borderTop, borderTop);
+	public void setBorderTop(Integer borderTop) {
+		FIBAttributeNotification<Integer> notification = requireChange(Parameters.borderTop, borderTop);
 		if (notification != null) {
 			this.borderTop = borderTop;
 			hasChanged(notification);
 		}
 	}
 
-	public Integer getBorderBottom()
-	{
+	public Integer getBorderBottom() {
 		return borderBottom;
 	}
 
-	public void setBorderBottom(Integer borderBottom)
-	{
-		FIBAttributeNotification<Integer> notification = requireChange(
-				Parameters.borderBottom, borderBottom);
+	public void setBorderBottom(Integer borderBottom) {
+		FIBAttributeNotification<Integer> notification = requireChange(Parameters.borderBottom, borderBottom);
 		if (notification != null) {
 			this.borderBottom = borderBottom;
 			hasChanged(notification);
 		}
 	}
 
-	public Integer getBorderLeft()
-	{
+	public Integer getBorderLeft() {
 		return borderLeft;
 	}
 
-	public void setBorderLeft(Integer borderLeft)
-	{
-		FIBAttributeNotification<Integer> notification = requireChange(
-				Parameters.borderLeft, borderLeft);
+	public void setBorderLeft(Integer borderLeft) {
+		FIBAttributeNotification<Integer> notification = requireChange(Parameters.borderLeft, borderLeft);
 		if (notification != null) {
 			this.borderLeft = borderLeft;
 			hasChanged(notification);
 		}
 	}
 
-	public Integer getBorderRight()
-	{
+	public Integer getBorderRight() {
 		return borderRight;
 	}
 
-	public void setBorderRight(Integer borderRight)
-	{
-		FIBAttributeNotification<Integer> notification = requireChange(
-				Parameters.borderRight, borderRight);
+	public void setBorderRight(Integer borderRight) {
+		FIBAttributeNotification<Integer> notification = requireChange(Parameters.borderRight, borderRight);
 		if (notification != null) {
 			this.borderRight = borderRight;
 			hasChanged(notification);
 		}
 	}
 
-	public Font getTitleFont()
-	{
-		if (titleFont == null) return retrieveValidFont();
+	public Font getTitleFont() {
+		if (titleFont == null)
+			return retrieveValidFont();
 		return titleFont;
 	}
 
-	public void setTitleFont(Font titleFont)
-	{
-		FIBAttributeNotification<Font> notification = requireChange(
-				Parameters.titleFont, titleFont);
+	public void setTitleFont(Font titleFont) {
+		FIBAttributeNotification<Font> notification = requireChange(Parameters.titleFont, titleFont);
 		if (notification != null) {
 			this.titleFont = titleFont;
 			hasChanged(notification);
 		}
 	}
-	
-	public int getDarkLevel()
-	{
+
+	public int getDarkLevel() {
 		return darkLevel;
 	}
 
-	public void setDarkLevel(int darkLevel)
-	{
-		FIBAttributeNotification<Integer> notification = requireChange(
-				Parameters.darkLevel, darkLevel);
+	public void setDarkLevel(int darkLevel) {
+		FIBAttributeNotification<Integer> notification = requireChange(Parameters.darkLevel, darkLevel);
 		if (notification != null) {
 			this.darkLevel = darkLevel;
 			hasChanged(notification);
 		}
 	}
-
 
 }

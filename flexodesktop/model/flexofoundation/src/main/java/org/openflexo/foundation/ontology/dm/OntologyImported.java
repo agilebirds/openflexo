@@ -24,15 +24,13 @@ import org.openflexo.foundation.ontology.FlexoOntology;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class OntologyImported extends IEDataModification
-{
-    /**
+public class OntologyImported extends IEDataModification {
+	/**
      * 
      */
-    public OntologyImported(FlexoOntology ontology)
-    {
-        super("OntologyImported",null,ontology);
-    }
+	public OntologyImported(FlexoOntology ontology) {
+		super("OntologyImported", null, ontology);
+	}
 }

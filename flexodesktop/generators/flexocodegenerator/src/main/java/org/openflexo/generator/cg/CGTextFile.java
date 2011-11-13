@@ -25,29 +25,24 @@ import org.openflexo.foundation.rm.cg.TextFileResource;
 import org.openflexo.foundation.xml.GeneratedCodeBuilder;
 import org.openflexo.generator.file.AbstractCGFile;
 
-
 public class CGTextFile extends AbstractCGFile {
 
-   public CGTextFile(GeneratedCodeBuilder builder)
-    {
-        this(builder.generatedCode);
-        initializeDeserialization(builder);
-     }
-    
-    public CGTextFile(GeneratedOutput generatedCode)
-    {
-        super(generatedCode);  
-    }
+	public CGTextFile(GeneratedCodeBuilder builder) {
+		this(builder.generatedCode);
+		initializeDeserialization(builder);
+	}
 
-    public CGTextFile(CGRepository repository, TextFileResource resource)
-    {
-        super(repository,resource);
-    }
+	public CGTextFile(GeneratedOutput generatedCode) {
+		super(generatedCode);
+	}
+
+	public CGTextFile(CGRepository repository, TextFileResource resource) {
+		super(repository, resource);
+	}
 
 	@Override
-	public TextFileResource getResource() 
-	{
-		return (TextFileResource)super.getResource();
+	public TextFileResource getResource() {
+		return (TextFileResource) super.getResource();
 	}
 
 }

@@ -24,7 +24,7 @@ import org.openflexo.foundation.FlexoException;
 public class UnexpectedException extends FlexoException {
 
 	public UnexpectedException(Exception cause) {
-		super(cause.getMessage(),cause);
+		super(cause.getMessage(), cause);
 	}
 
 }

@@ -29,90 +29,75 @@ import org.openflexo.cgmodule.controller.GeneratorController;
 import org.openflexo.view.menu.FileMenu;
 import org.openflexo.view.menu.FlexoMenuItem;
 
-
 /**
  * @author sguerin
  */
-public class GeneratorFileMenu extends FileMenu
-{
+public class GeneratorFileMenu extends FileMenu {
 
-    static final Logger logger = Logger.getLogger(GeneratorFileMenu.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(GeneratorFileMenu.class.getPackage().getName());
 
-    public GenerateFilesItem generateFilesItem;
+	public GenerateFilesItem generateFilesItem;
 
-    public RefreshItem refreshItem;
+	public RefreshItem refreshItem;
 
-    protected GeneratorController _controller;
+	protected GeneratorController _controller;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public GeneratorFileMenu(GeneratorController controller)
-    {
-        super(controller);
-        _controller = controller;
-     }
+	public GeneratorFileMenu(GeneratorController controller) {
+		super(controller);
+		_controller = controller;
+	}
 
-    public GeneratorController getGeneratorController()
-    {
-        return _controller;
-    }
+	public GeneratorController getGeneratorController() {
+		return _controller;
+	}
 
-    @Override
-	public void addSpecificItems()
-    {
-        add(generateFilesItem = new GenerateFilesItem());
-        add(refreshItem = new RefreshItem());
-        addSeparator();
-   }
+	@Override
+	public void addSpecificItems() {
+		add(generateFilesItem = new GenerateFilesItem());
+		add(refreshItem = new RefreshItem());
+		addSeparator();
+	}
 
-    public class GenerateFilesItem extends FlexoMenuItem
-    {
-        public GenerateFilesItem()
-        {
-            super(new GenerateFilesAction(), "generate_files", null, getGeneratorController(), true);
-        }
+	public class GenerateFilesItem extends FlexoMenuItem {
+		public GenerateFilesItem() {
+			super(new GenerateFilesAction(), "generate_files", null, getGeneratorController(), true);
+		}
 
-    }
+	}
 
-    public class GenerateFilesAction extends AbstractAction
-    {
-        public GenerateFilesAction()
-        {
-            super();
-        }
+	public class GenerateFilesAction extends AbstractAction {
+		public GenerateFilesAction() {
+			super();
+		}
 
-        @Override
-		public void actionPerformed(ActionEvent arg0)
-        {
-        	logger.warning("Not implemented yet");
-            //getGeneratorController().generateAll();
-        }
-    }
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			logger.warning("Not implemented yet");
+			// getGeneratorController().generateAll();
+		}
+	}
 
-    public class RefreshItem extends FlexoMenuItem
-    {
-        public RefreshItem()
-        {
-            super(new RefreshAction(), "refresh", null, getGeneratorController(), true);
-        }
-    }
+	public class RefreshItem extends FlexoMenuItem {
+		public RefreshItem() {
+			super(new RefreshAction(), "refresh", null, getGeneratorController(), true);
+		}
+	}
 
-    public class RefreshAction extends AbstractAction
-    {
-        public RefreshAction()
-        {
-            super();
-        }
+	public class RefreshAction extends AbstractAction {
+		public RefreshAction() {
+			super();
+		}
 
-        @Override
-		public void actionPerformed(ActionEvent arg0)
-        {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Refresh not implemented");
-            // getGeneratorController().rebuildGeneratorWindow();
-        }
-    }
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			if (logger.isLoggable(Level.WARNING))
+				logger.warning("Refresh not implemented");
+			// getGeneratorController().rebuildGeneratorWindow();
+		}
+	}
 }

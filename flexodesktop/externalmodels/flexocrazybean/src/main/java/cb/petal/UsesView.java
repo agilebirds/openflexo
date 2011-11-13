@@ -18,25 +18,26 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents UsesView object
- *
+ * 
  * @version $Id: UsesView.java,v 1.3 2011/09/12 11:46:47 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class UsesView extends RelationshipView {
-  public UsesView(PetalNode parent, Collection params, int tag) {
-    super(parent, "UsesView", params, tag);
-  }
+	public UsesView(PetalNode parent, Collection params, int tag) {
+		super(parent, "UsesView", params, tag);
+	}
 
-  public UsesView() {
-    super("UsesView");
-  }
+	public UsesView() {
+		super("UsesView");
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

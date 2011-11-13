@@ -32,18 +32,18 @@ import junit.framework.TestSuite;
 
 public class XMLCoDeTestSuite {
 
-    public static Test suite() {
-        TestSuite suite = new TestSuite("Tests for XMLCoDe library");
-        
-        //$JUnit-BEGIN$
-        suite.addTestSuite(Example1Test.class);
-        suite.addTestSuite(Example2Test.class);
-        suite.addTestSuite(Example3Test.class);
-        suite.addTestSuite(Example4Test.class);
-        suite.addTestSuite(Example5Test.class);
-        suite.addTestSuite(TestParameteredKVCoding.class);
-         //$JUnit-END$
-        return suite;
-    }
+	public static Test suite() {
+		TestSuite suite = new TestSuite("Tests for XMLCoDe library");
+
+		// $JUnit-BEGIN$
+		suite.addTestSuite(Example1Test.class);
+		suite.addTestSuite(Example2Test.class);
+		suite.addTestSuite(Example3Test.class);
+		suite.addTestSuite(Example4Test.class);
+		suite.addTestSuite(Example5Test.class);
+		suite.addTestSuite(TestParameteredKVCoding.class);
+		// $JUnit-END$
+		return suite;
+	}
 
 }

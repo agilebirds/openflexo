@@ -33,14 +33,12 @@ import org.openflexo.foundation.wkf.action.AddArtefactMetricsValue;
 import org.openflexo.foundation.wkf.action.AddMetricsDefinition;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
-public class AddArtefactMetricsInitializer extends AddMetricsInitializer<AddArtefactMetricsValue,WKFArtefact> {
+public class AddArtefactMetricsInitializer extends AddMetricsInitializer<AddArtefactMetricsValue, WKFArtefact> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddArtefactMetricsInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(actionInitializer,AddArtefactMetricsValue.actionType);
+	AddArtefactMetricsInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(actionInitializer, AddArtefactMetricsValue.actionType);
 	}
 
 	@Override
@@ -51,7 +49,7 @@ public class AddArtefactMetricsInitializer extends AddMetricsInitializer<AddArte
 	@Override
 	protected Vector<MetricsDefinition> getAvailableMetricsDefinitions(WKFArtefact artefact) {
 		Vector<MetricsDefinition> v = new Vector<MetricsDefinition>(getProject().getWorkflow().getArtefactMetricsDefinitions());
-		for (MetricsValue mv: artefact.getMetricsValues()) {
+		for (MetricsValue mv : artefact.getMetricsValues()) {
 			v.remove(mv.getMetricsDefinition());
 		}
 		return v;

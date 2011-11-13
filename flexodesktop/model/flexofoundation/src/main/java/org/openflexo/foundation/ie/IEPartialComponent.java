@@ -32,20 +32,17 @@ import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 
+public abstract class IEPartialComponent extends IEWOComponent implements DataFlexoObserver {
 
-public abstract class IEPartialComponent extends IEWOComponent implements DataFlexoObserver
-{
-
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(IEPartialComponent.class.getPackage().getName());
 
-    public IEPartialComponent(ComponentDefinition model, FlexoProject prj)
-    {
-        super(model, prj);
-    }
-    
-    public IEPartialComponent(FlexoComponentBuilder builder) {
-    	super(builder);
+	public IEPartialComponent(ComponentDefinition model, FlexoProject prj) {
+		super(model, prj);
 	}
-    
+
+	public IEPartialComponent(FlexoComponentBuilder builder) {
+		super(builder);
+	}
+
 }

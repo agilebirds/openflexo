@@ -23,20 +23,16 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 
-
-public class OntologyLibraryBrowser extends CEDBrowser
-{
-	public OntologyLibraryBrowser(CEDController controller)
-	{
+public class OntologyLibraryBrowser extends CEDBrowser {
+	public OntologyLibraryBrowser(CEDController controller) {
 		super(controller);
 		switchToPartialHierarchyMode(controller.getBaseOntologyLibrary());
 	}
 
 	@Override
-	public void configure()
-	{
+	public void configure() {
 		super.configure();
-		setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY,BrowserFilterStatus.SHOW);
+		setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.SHOW);
 		setFilterStatus(BrowserElementType.IMPORTED_ONTOLOGY, BrowserFilterStatus.SHOW);
 		setFilterStatus(BrowserElementType.ONTOLOGY_CLASS, BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
 		setFilterStatus(BrowserElementType.ONTOLOGY_INDIVIDUAL, BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
@@ -45,44 +41,41 @@ public class OntologyLibraryBrowser extends CEDBrowser
 		setFilterStatus(BrowserElementType.CALC_LIBRARY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.ONTOLOGY_CALC, BrowserFilterStatus.HIDE);
 	}
-	
-	public void switchToNoHierarchyMode(OntologyLibrary ontologyLibrary)
-	{
-		changeFilterStatus(BrowserElementType.IMPORTED_ONTOLOGY,BrowserFilterStatus.SHOW);
-		changeFilterStatus(BrowserElementType.ONTOLOGY_CLASS,BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
-		changeFilterStatus(BrowserElementType.ONTOLOGY_INDIVIDUAL,BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
-		changeFilterStatus(BrowserElementType.ONTOLOGY_DATA_PROPERTY,BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
-		changeFilterStatus(BrowserElementType.ONTOLOGY_OBJECT_PROPERTY,BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
-		changeFilterStatus(BrowserElementType.ONTOLOGY_STATEMENT,BrowserFilterStatus.HIDE);
-		
+
+	public void switchToNoHierarchyMode(OntologyLibrary ontologyLibrary) {
+		changeFilterStatus(BrowserElementType.IMPORTED_ONTOLOGY, BrowserFilterStatus.SHOW);
+		changeFilterStatus(BrowserElementType.ONTOLOGY_CLASS, BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
+		changeFilterStatus(BrowserElementType.ONTOLOGY_INDIVIDUAL, BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
+		changeFilterStatus(BrowserElementType.ONTOLOGY_DATA_PROPERTY, BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
+		changeFilterStatus(BrowserElementType.ONTOLOGY_OBJECT_PROPERTY, BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
+		changeFilterStatus(BrowserElementType.ONTOLOGY_STATEMENT, BrowserFilterStatus.HIDE);
+
 		setRootObject(ontologyLibrary);
 		setOEViewMode(OEViewMode.NoHierarchy);
 	}
 
-	public void switchToPartialHierarchyMode(OntologyLibrary ontologyLibrary)
-	{
-		changeFilterStatus(BrowserElementType.IMPORTED_ONTOLOGY,BrowserFilterStatus.SHOW);
-		changeFilterStatus(BrowserElementType.ONTOLOGY_CLASS,BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
-		changeFilterStatus(BrowserElementType.ONTOLOGY_INDIVIDUAL,BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
-		changeFilterStatus(BrowserElementType.ONTOLOGY_DATA_PROPERTY,BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
-		changeFilterStatus(BrowserElementType.ONTOLOGY_OBJECT_PROPERTY,BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
-		changeFilterStatus(BrowserElementType.ONTOLOGY_STATEMENT,BrowserFilterStatus.HIDE);
-		
+	public void switchToPartialHierarchyMode(OntologyLibrary ontologyLibrary) {
+		changeFilterStatus(BrowserElementType.IMPORTED_ONTOLOGY, BrowserFilterStatus.SHOW);
+		changeFilterStatus(BrowserElementType.ONTOLOGY_CLASS, BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
+		changeFilterStatus(BrowserElementType.ONTOLOGY_INDIVIDUAL, BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
+		changeFilterStatus(BrowserElementType.ONTOLOGY_DATA_PROPERTY, BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
+		changeFilterStatus(BrowserElementType.ONTOLOGY_OBJECT_PROPERTY, BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
+		changeFilterStatus(BrowserElementType.ONTOLOGY_STATEMENT, BrowserFilterStatus.HIDE);
+
 		setRootObject(ontologyLibrary);
 		setOEViewMode(OEViewMode.PartialHierarchy);
 	}
 
-	public void switchToFullHierarchyMode(OntologyLibrary ontologyLibrary)
-	{
-		changeFilterStatus(BrowserElementType.IMPORTED_ONTOLOGY,BrowserFilterStatus.HIDE);
-		changeFilterStatus(BrowserElementType.ONTOLOGY_CLASS,BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
-		changeFilterStatus(BrowserElementType.ONTOLOGY_INDIVIDUAL,BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
-		changeFilterStatus(BrowserElementType.ONTOLOGY_DATA_PROPERTY,BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
-		changeFilterStatus(BrowserElementType.ONTOLOGY_OBJECT_PROPERTY,BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
-		changeFilterStatus(BrowserElementType.ONTOLOGY_STATEMENT,BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
-		
+	public void switchToFullHierarchyMode(OntologyLibrary ontologyLibrary) {
+		changeFilterStatus(BrowserElementType.IMPORTED_ONTOLOGY, BrowserFilterStatus.HIDE);
+		changeFilterStatus(BrowserElementType.ONTOLOGY_CLASS, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
+		changeFilterStatus(BrowserElementType.ONTOLOGY_INDIVIDUAL, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
+		changeFilterStatus(BrowserElementType.ONTOLOGY_DATA_PROPERTY, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
+		changeFilterStatus(BrowserElementType.ONTOLOGY_OBJECT_PROPERTY, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
+		changeFilterStatus(BrowserElementType.ONTOLOGY_STATEMENT, BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN);
+
 		setRootObject(ontologyLibrary);
 		setOEViewMode(OEViewMode.FullHierarchy);
 	}
-	
+
 }

@@ -23,7 +23,6 @@
 // Generated on: 2007.11.06 at 03:26:51 PM CET 
 //
 
-
 package org.xmlsoap.schemas.ws._2004._03.business_process;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -31,11 +30,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for tThrow complex type.
+ * <p>
+ * Java class for tThrow complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="tThrow">
@@ -52,61 +52,53 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tThrow")
-public class TThrow
-    extends TActivity
-{
+public class TThrow extends TActivity {
 
-    @XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
-    protected String faultName;
-    @XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
-    protected String faultVariable;
+	@XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
+	protected String faultName;
+	@XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
+	protected String faultVariable;
 
-    /**
-     * Gets the value of the faultName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getFaultName() {
-        return faultName;
-    }
+	/**
+	 * Gets the value of the faultName property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getFaultName() {
+		return faultName;
+	}
 
-    /**
-     * Sets the value of the faultName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setFaultName(String value) {
-        this.faultName = value;
-    }
+	/**
+	 * Sets the value of the faultName property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setFaultName(String value) {
+		this.faultName = value;
+	}
 
-    /**
-     * Gets the value of the faultVariable property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getFaultVariable() {
-        return faultVariable;
-    }
+	/**
+	 * Gets the value of the faultVariable property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getFaultVariable() {
+		return faultVariable;
+	}
 
-    /**
-     * Sets the value of the faultVariable property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setFaultVariable(String value) {
-        this.faultVariable = value;
-    }
+	/**
+	 * Sets the value of the faultVariable property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setFaultVariable(String value) {
+		this.faultVariable = value;
+	}
 
 }

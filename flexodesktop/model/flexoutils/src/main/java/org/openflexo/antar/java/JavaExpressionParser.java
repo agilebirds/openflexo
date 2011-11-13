@@ -23,8 +23,7 @@ import org.openflexo.antar.expr.parser.ExpressionParser;
 
 public class JavaExpressionParser extends ExpressionParser {
 
-	public JavaExpressionParser()
-	{
+	public JavaExpressionParser() {
 		super(new JavaGrammar());
 	}
 

@@ -27,14 +27,12 @@ import org.openflexo.xmlcode.XMLSerializable;
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  */
-public class Vendor extends Person implements XMLSerializable
-{
+public class Vendor extends Person implements XMLSerializable {
 
-    public int vendorId;
+	public int vendorId;
 
-    @Override
-	public String toString()
-    {
-        return "Vendor(name=" + name + ", fistName=" + firstName + ", address=" + address + ")";
-    }
+	@Override
+	public String toString() {
+		return "Vendor(name=" + name + ", fistName=" + firstName + ", address=" + address + ")";
+	}
 }

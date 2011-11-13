@@ -25,52 +25,45 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.SelectionManager;
 
-
 /**
  * Selection manager dedicated to Doc Editor module
  * 
  * @author gpolet
  */
-public class DESelectionManager extends SelectionManager
-{
+public class DESelectionManager extends SelectionManager {
 
-    protected static final Logger logger = Logger.getLogger(DESelectionManager.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(DESelectionManager.class.getPackage().getName());
 
-    public DESelectionManager(DEController controller)
-    {
-        super(controller);
-        _clipboard = controller.createClipboard(this);
-        _contextualMenuManager = controller.createContextualMenuManager(this);
-   }
+	public DESelectionManager(DEController controller) {
+		super(controller);
+		_clipboard = controller.createClipboard(this);
+		_contextualMenuManager = controller.createContextualMenuManager(this);
+	}
 
-    public DEController getGeneratorController()
-    {
-        return (DEController) getController();
-    }
+	public DEController getGeneratorController() {
+		return (DEController) getController();
+	}
 
-    @Override
-	public boolean performSelectionSelectAll()
-    {
-        if (logger.isLoggable(Level.WARNING))
-            logger.warning("'Select All' not implemented yet in DocGenerator");
-        return false;
-    }
+	@Override
+	public boolean performSelectionSelectAll() {
+		if (logger.isLoggable(Level.WARNING))
+			logger.warning("'Select All' not implemented yet in DocGenerator");
+		return false;
+	}
 
-    /**
-     * Returns the root object that can be currently edited
-     * 
-     * @return FlexoObservable
-     */
-    @Override
-	public FlexoModelObject getRootFocusedObject()
-    {
-        return getGeneratorController().getProject().getGeneratedDoc();
-    }
+	/**
+	 * Returns the root object that can be currently edited
+	 * 
+	 * @return FlexoObservable
+	 */
+	@Override
+	public FlexoModelObject getRootFocusedObject() {
+		return getGeneratorController().getProject().getGeneratedDoc();
+	}
 
-    @Override
-	public FlexoModelObject getPasteContext() 
-    {
-        return getFocusedObject();
-    }
+	@Override
+	public FlexoModelObject getPasteContext() {
+		return getFocusedObject();
+	}
 
 }

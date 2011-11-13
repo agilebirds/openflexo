@@ -21,11 +21,9 @@ package org.openflexo.foundation.ie.dm;
 
 import org.openflexo.foundation.ie.widget.InnerBlocWidgetInterface;
 
-public class InnerBlocRemoved extends IEDataModification
-{
+public class InnerBlocRemoved extends IEDataModification {
 
-    public InnerBlocRemoved(InnerBlocWidgetInterface removedWidget)
-    {
-        super(removedWidget, null);
-    }
+	public InnerBlocRemoved(InnerBlocWidgetInterface removedWidget) {
+		super(removedWidget, null);
+	}
 }

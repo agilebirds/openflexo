@@ -29,30 +29,25 @@ import java.util.Vector;
 
 import org.openflexo.kvc.KeyValueCoding;
 
-
-public class Test4Class<T1 extends File & KeyValueCoding, T2 extends Date> 
-extends Hashtable<String,Hashtable<T1,T2>>
-implements Map<String,Hashtable<T1,T2>>, Iterator<Vector<T2>>, Cloneable, Serializable
-{
-	public java.util.Hashtable<java.lang.String,java.util.Vector<java.io.File>> test4 = new java.util.Hashtable<java.lang.String,java.util.Vector<java.io.File>>();
+public class Test4Class<T1 extends File & KeyValueCoding, T2 extends Date> extends Hashtable<String, Hashtable<T1, T2>> implements
+		Map<String, Hashtable<T1, T2>>, Iterator<Vector<T2>>, Cloneable, Serializable {
+	public java.util.Hashtable<java.lang.String, java.util.Vector<java.io.File>> test4 = new java.util.Hashtable<java.lang.String, java.util.Vector<java.io.File>>();
 
 	private String _foo1;
 	private int[][] _foo2;
-	private Map<File,Hashtable<Integer,String>[]> _foo3;
+	private Map<File, Hashtable<Integer, String>[]> _foo3;
 	private T1 _foo4;
 	public T2 foo5;
-	public Hashtable<T1,?>[][] foo6;
-	private Hashtable<T1,T2> _foo7;
-	private Hashtable<? extends T1,? super T2> _foo8;
+	public Hashtable<T1, ?>[][] foo6;
+	private Hashtable<T1, T2> _foo7;
+	private Hashtable<? extends T1, ? super T2> _foo8;
 	public java.util.Map<? extends java.io.File, java.util.Hashtable<java.lang.Integer, java.util.Vector<? extends T1>>>[] foo9;
 
-	public Hashtable<T1,T2> method1 (String a, Hashtable<T1,T2> b, Map<File,Hashtable<Integer,String>[]> c) 
-	{
+	public Hashtable<T1, T2> method1(String a, Hashtable<T1, T2> b, Map<File, Hashtable<Integer, String>[]> c) {
 		return null;
 	}
 
-	public Hashtable<T1,T2> method2 (Vector<? super T1> t1, Vector<? extends T2> t2) 
-	{
+	public Hashtable<T1, T2> method2(Vector<? super T1> t1, Vector<? extends T2> t2) {
 		return null;
 	}
 

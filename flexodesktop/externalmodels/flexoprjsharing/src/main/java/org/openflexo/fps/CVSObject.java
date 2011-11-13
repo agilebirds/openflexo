@@ -19,7 +19,6 @@
  */
 package org.openflexo.fps;
 
-public abstract class CVSObject extends FPSObject 
-{
+public abstract class CVSObject extends FPSObject {
 	public abstract CVSStatus getDerivedStatus();
 }

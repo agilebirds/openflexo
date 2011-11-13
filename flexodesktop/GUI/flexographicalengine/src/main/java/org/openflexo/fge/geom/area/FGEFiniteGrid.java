@@ -27,7 +27,7 @@ public class FGEFiniteGrid extends FGEGrid {
 	public FGERectangle bounds;
 
 	public FGEFiniteGrid(FGEPoint origin, double hStep, double vStep, FGERectangle bounds) {
-		super(origin,hStep,vStep);
+		super(origin, hStep, vStep);
 		this.bounds = bounds;
 	}
 

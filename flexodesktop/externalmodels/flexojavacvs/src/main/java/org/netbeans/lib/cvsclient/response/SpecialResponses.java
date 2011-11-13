@@ -22,45 +22,41 @@ package org.netbeans.lib.cvsclient.response;
 
 /**
  * Defines few hacks needed to support special and error cases.
- *
+ * 
  * @author Petr Kuzel
  */
 final class SpecialResponses {
 
-    /**
-     * Sometimes server aborts without sending <tt>error</tt> terminating
-     * response. It sends just message reponse ending with following text.
-     * <p>
-     * It could terminate prematurely, ignoring <tt>error</tt> that should
-     * be probably the next response. AFAIK it's harmless.
-     * <p>
-     * <a ref="http://tasklist.netbeans.org/issues/show_bug.cgi?id=56552">#56552</a>
-     *
-     */
-    public static final String SERVER_ABORTED = " [server aborted]: received termination signal"; // NOI18N
+	/**
+	 * Sometimes server aborts without sending <tt>error</tt> terminating response. It sends just message reponse ending with following
+	 * text.
+	 * <p>
+	 * It could terminate prematurely, ignoring <tt>error</tt> that should be probably the next response. AFAIK it's harmless.
+	 * <p>
+	 * <a ref="http://tasklist.netbeans.org/issues/show_bug.cgi?id=56552">#56552</a>
+	 * 
+	 */
+	public static final String SERVER_ABORTED = " [server aborted]: received termination signal"; // NOI18N
 
-    /**
-     * Sometimes server aborts without sending <tt>error</tt> terminating
-     * response. It sends just message reponse ending with following text.
-     * <p>
-     * It could terminate prematurely, ignoring <tt>error</tt> that should
-     * be probably the next response. AFAIK it's harmless.
-     * <p>
-     * <a ref="http://tasklist.netbeans.org/issues/show_bug.cgi?id=56552">#56552</a>
-     *
-     */
-    public static final String SERVER_ABORTED_2 = " [server aborted]: received broken pipe signal"; // NOI18N
+	/**
+	 * Sometimes server aborts without sending <tt>error</tt> terminating response. It sends just message reponse ending with following
+	 * text.
+	 * <p>
+	 * It could terminate prematurely, ignoring <tt>error</tt> that should be probably the next response. AFAIK it's harmless.
+	 * <p>
+	 * <a ref="http://tasklist.netbeans.org/issues/show_bug.cgi?id=56552">#56552</a>
+	 * 
+	 */
+	public static final String SERVER_ABORTED_2 = " [server aborted]: received broken pipe signal"; // NOI18N
 
-
-    /**
-     * Sometimes server aborts without sending <tt>error</tt> terminating
-     * response. It sends just message reponse ending with following text.
-     * <p>
-     * It could terminate prematurely, ignoring <tt>error</tt> that should
-     * be probably the next response. AFAIK it's harmless.
-     * <p>
-     * <a ref="http://tasklist.netbeans.org/issues/show_bug.cgi?id=63376">#63376</a>
-     *
-     */
-    public static final String SERVER_ABORTED_3 = " [checkout aborted]: end of file from server (consult above messages if any)";  // NOI18N
+	/**
+	 * Sometimes server aborts without sending <tt>error</tt> terminating response. It sends just message reponse ending with following
+	 * text.
+	 * <p>
+	 * It could terminate prematurely, ignoring <tt>error</tt> that should be probably the next response. AFAIK it's harmless.
+	 * <p>
+	 * <a ref="http://tasklist.netbeans.org/issues/show_bug.cgi?id=63376">#63376</a>
+	 * 
+	 */
+	public static final String SERVER_ABORTED_3 = " [checkout aborted]: end of file from server (consult above messages if any)"; // NOI18N
 }

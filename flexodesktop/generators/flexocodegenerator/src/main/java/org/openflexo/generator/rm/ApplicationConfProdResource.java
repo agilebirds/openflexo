@@ -35,11 +35,11 @@ import org.openflexo.generator.utils.ApplicationConfProdGenerator;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileFormat;
 
-
-public class ApplicationConfProdResource extends TextFileResource<ApplicationConfProdGenerator, CGTextFile> implements GenerationAvailableFileResource {
+public class ApplicationConfProdResource extends TextFileResource<ApplicationConfProdGenerator, CGTextFile> implements
+		GenerationAvailableFileResource {
 
 	private static final Logger logger = FlexoLogger.getLogger(ApplicationConfProdResource.class.getPackage().getName());
-	
+
 	public ApplicationConfProdResource(FlexoProject project) {
 		super(project);
 		setResourceFormat(FileFormat.TEXT);
@@ -50,65 +50,60 @@ public class ApplicationConfProdResource extends TextFileResource<ApplicationCon
 	}
 
 	@Override
-    public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate)
-	{
+	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate) {
 		if (resource instanceof TemplateLocator) {
-			return ((TemplateLocator)resource).needsUpdateForResource(this);
+			return ((TemplateLocator) resource).needsUpdateForResource(this);
 		}
 		if (resource instanceof GeneratedCodeResource) {
-            GeneratedCodeResource res = (GeneratedCodeResource) resource;
-            if (res.isLoaded() && (getRepository() != null)) {
-                if ((getRepository().getLastWarNameUpdate().before(requestDate)
-                        || getRepository().getLastWarNameUpdate().equals(requestDate))
-                        && (getRepository().getLastLoginPasswordUpdate().before(requestDate)
-                                || getRepository().getLastLoginPasswordUpdate().equals(requestDate))){
-                    if (logger.isLoggable(Level.FINER)) {
+			GeneratedCodeResource res = (GeneratedCodeResource) resource;
+			if (res.isLoaded() && (getRepository() != null)) {
+				if ((getRepository().getLastWarNameUpdate().before(requestDate) || getRepository().getLastWarNameUpdate().equals(
+						requestDate))
+						&& (getRepository().getLastLoginPasswordUpdate().before(requestDate) || getRepository()
+								.getLastLoginPasswordUpdate().equals(requestDate))) {
+					if (logger.isLoggable(Level.FINER)) {
 						logger.finer("OPTIMIST DEPENDANCY CHECKING FOR BUILD.PROPERTIES");
 					}
-                    return false;
-                }
-            }
-        }
+					return false;
+				}
+			}
+		}
 		return super.optimisticallyDependsOf(resource, requestDate);
 	}
 
 	@Override
-    protected ApplicationConfProdFile createGeneratedResourceData()
-    {
-        return new ApplicationConfProdFile(getFile(),this);
-    }
+	protected ApplicationConfProdFile createGeneratedResourceData() {
+		return new ApplicationConfProdFile(getFile(), this);
+	}
 
 	@Override
-    public ApplicationConfProdFile getGeneratedResourceData()
-    {
-    	return (ApplicationConfProdFile)super.getGeneratedResourceData();
-    }
+	public ApplicationConfProdFile getGeneratedResourceData() {
+		return (ApplicationConfProdFile) super.getGeneratedResourceData();
+	}
 
 	/**
 	 * Overrides getRepository
+	 * 
 	 * @see org.openflexo.foundation.rm.cg.CGRepositoryFileResource#getRepository()
 	 */
 	@Override
-	public CGRepository getRepository()
-	{
-	    return (CGRepository) super.getRepository();
+	public CGRepository getRepository() {
+		return (CGRepository) super.getRepository();
 	}
 
 	@Override
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
-		if (getRepository()!=null) {
+		if (getRepository() != null) {
 			addToDependantResources(getRepository().getGeneratedCode().getFlexoResource());
 		}
 	}
 
-    public void registerObserverWhenRequired()
-    {
-    }
-    
-    static String getDefaultFileName()
-    {
-        return "Application.conf.PROD";
-    }
+	public void registerObserverWhenRequired() {
+	}
+
+	static String getDefaultFileName() {
+		return "Application.conf.PROD";
+	}
 
 }

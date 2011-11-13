@@ -45,22 +45,22 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	private static final Logger logger = Logger.getLogger(FIBComponent.class.getPackage().getName());
 
-	public static Color SECONDARY_SELECTION_COLOR = new Color(173,215,255);
+	public static Color SECONDARY_SELECTION_COLOR = new Color(173, 215, 255);
 	public static Color DISABLED_COLOR = Color.GRAY;
 
 	public static BindingDefinition VISIBLE = new BindingDefinition("visible", Boolean.class, BindingDefinitionType.GET, false);
 	private BindingDefinition DATA;
-	
-	public BindingDefinition getDataBindingDefinition()
-	{
+
+	private String definitionFile;
+
+	public BindingDefinition getDataBindingDefinition() {
 		if (DATA == null) {
 			DATA = new BindingDefinition("data", getDefaultDataClass(), BindingDefinitionType.GET, false);
 		}
 		return DATA;
 	}
-	
-	public static enum Parameters implements FIBModelAttribute
-	{
+
+	public static enum Parameters implements FIBModelAttribute {
 		index,
 		data,
 		visible,
@@ -83,60 +83,58 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		explicitDependancies
 	}
 
-	public static enum VerticalScrollBarPolicy
-	{
+	public static enum VerticalScrollBarPolicy {
 		VERTICAL_SCROLLBAR_AS_NEEDED {
-	    	@Override
-	    	public int getPolicy() {
-	    		return ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED;
-	    	}
-	    },
-	    VERTICAL_SCROLLBAR_NEVER {
-	    	@Override
-	    	public int getPolicy() {
-	    		return ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER;
-	    	}
-	    },
-	    VERTICAL_SCROLLBAR_ALWAYS {
-	    	@Override
-	    	public int getPolicy() {
-	    		return ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
-	    	}
-	    };    
-	    public abstract int getPolicy();
+			@Override
+			public int getPolicy() {
+				return ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED;
+			}
+		},
+		VERTICAL_SCROLLBAR_NEVER {
+			@Override
+			public int getPolicy() {
+				return ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER;
+			}
+		},
+		VERTICAL_SCROLLBAR_ALWAYS {
+			@Override
+			public int getPolicy() {
+				return ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
+			}
+		};
+		public abstract int getPolicy();
 	}
 
-	public static enum HorizontalScrollBarPolicy
-	{
+	public static enum HorizontalScrollBarPolicy {
 		HORIZONTAL_SCROLLBAR_AS_NEEDED {
-	    	@Override
-	    	public int getPolicy() {
-	    		return ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED;
-	    	}
-	    },
-	    HORIZONTAL_SCROLLBAR_NEVER {
-	    	@Override
-	    	public int getPolicy() {
-	    		return ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
-	    	}
-	    },
-	    HORIZONTAL_SCROLLBAR_ALWAYS {
-	    	@Override
-	    	public int getPolicy() {
-	    		return ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS;
-	    	}
-	    };    
-	    public abstract int getPolicy();
+			@Override
+			public int getPolicy() {
+				return ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED;
+			}
+		},
+		HORIZONTAL_SCROLLBAR_NEVER {
+			@Override
+			public int getPolicy() {
+				return ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
+			}
+		},
+		HORIZONTAL_SCROLLBAR_ALWAYS {
+			@Override
+			public int getPolicy() {
+				return ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS;
+			}
+		};
+		public abstract int getPolicy();
 	}
 
 	private DataBinding data;
 	private DataBinding visible;
-	
+
 	private Font font;
 	private boolean opaque = false;
 	private Color backgroundColor;
 	private Color foregroundColor;
-	
+
 	private Integer width;
 	private Integer height;
 
@@ -149,18 +147,17 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	private boolean useScrollBar = false;
 	private HorizontalScrollBarPolicy horizontalScrollbarPolicy = null;
 	private VerticalScrollBarPolicy verticalScrollbarPolicy = null;
-	//private String dataClassName;
-	
+	// private String dataClassName;
+
 	private final Vector<FIBComponent> mayDepends;
 	private final Vector<FIBComponent> mayAlters;
-	
+
 	private Class dataClass;
 	private Class controllerClass;
-	
+
 	private FIBContainer parent;
 
-	public FIBComponent() 
-	{
+	public FIBComponent() {
 		super();
 		explicitDependancies = new Vector<FIBDependancy>();
 		mayDepends = new Vector<FIBComponent>();
@@ -168,22 +165,19 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	}
 
 	@Override
-	public void delete()
-	{
+	public void delete() {
 		if (getParent() != null) {
 			getParent().removeFromSubComponents(this);
 		}
 		super.delete();
 	}
-	
-	public void setParent(FIBContainer parent) 
-	{
+
+	public void setParent(FIBContainer parent) {
 		this.parent = parent;
 	}
 
 	@Override
-	public FIBContainer getParent() 
-	{
+	public FIBContainer getParent() {
 		return parent;
 	}
 
@@ -231,17 +225,15 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 			}
 		}
 	}
-*/
-	
+	*/
+
 	private ComponentConstraints constraints;
-	
-	public ComponentConstraints getConstraints() 
-	{
+
+	public ComponentConstraints getConstraints() {
 		constraints = _normalizeConstraintsWhenRequired(constraints);
 		return constraints;
-		
-		
-		//logger.info("getConstraints() for "+getName());
+
+		// logger.info("getConstraints() for "+getName());
 		/*if (getParent() instanceof FIBPanel) {
 			// Init to default value when relevant but null
 			if (constraints == null) {
@@ -309,12 +301,10 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}*/
 	}
 
-	public void setConstraints(ComponentConstraints someConstraints)
-	{
-		//ComponentConstraints normalizedConstraints = constraints;
+	public void setConstraints(ComponentConstraints someConstraints) {
+		// ComponentConstraints normalizedConstraints = constraints;
 		ComponentConstraints normalizedConstraints = _normalizeConstraintsWhenRequired(someConstraints);
-		FIBAttributeNotification<ComponentConstraints> notification = requireChange(
-				Parameters.constraints, normalizedConstraints);
+		FIBAttributeNotification<ComponentConstraints> notification = requireChange(Parameters.constraints, normalizedConstraints);
 		if (notification != null) {
 			normalizedConstraints.setComponent(this);
 			this.constraints = normalizedConstraints;
@@ -322,13 +312,12 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}
 	}
 
-	private ComponentConstraints _normalizeConstraintsWhenRequired(ComponentConstraints someConstraints) 
-	{
+	private ComponentConstraints _normalizeConstraintsWhenRequired(ComponentConstraints someConstraints) {
 		if (getParent() instanceof FIBPanel) {
 			// Init to default value when relevant but null
 			if (someConstraints == null) {
 				ComponentConstraints returned;
-				switch (((FIBPanel)getParent()).getLayout()) {
+				switch (((FIBPanel) getParent()).getLayout()) {
 				case none:
 					returned = new NoneLayoutConstraints();
 					break;
@@ -358,34 +347,40 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 				return returned;
 			}
 			// Mutate to right type when necessary
-			switch (((FIBPanel)getParent()).getLayout()) {
+			switch (((FIBPanel) getParent()).getLayout()) {
 			case none:
-				if (!(someConstraints instanceof NoneLayoutConstraints)) return new NoneLayoutConstraints(someConstraints);
+				if (!(someConstraints instanceof NoneLayoutConstraints))
+					return new NoneLayoutConstraints(someConstraints);
 				break;
 			case flow:
-				if (!(someConstraints instanceof FlowLayoutConstraints)) return new FlowLayoutConstraints(someConstraints);
+				if (!(someConstraints instanceof FlowLayoutConstraints))
+					return new FlowLayoutConstraints(someConstraints);
 				break;
 			case grid:
-				if (!(someConstraints instanceof GridLayoutConstraints)) return new GridLayoutConstraints(someConstraints);
+				if (!(someConstraints instanceof GridLayoutConstraints))
+					return new GridLayoutConstraints(someConstraints);
 				break;
 			case box:
-				if (!(someConstraints instanceof BoxLayoutConstraints)) return new BoxLayoutConstraints(someConstraints);
+				if (!(someConstraints instanceof BoxLayoutConstraints))
+					return new BoxLayoutConstraints(someConstraints);
 				break;
 			case border:
-				if (!(someConstraints instanceof BorderLayoutConstraints)) return new BorderLayoutConstraints(someConstraints);
+				if (!(someConstraints instanceof BorderLayoutConstraints))
+					return new BorderLayoutConstraints(someConstraints);
 				break;
 			case twocols:
-				if (!(someConstraints instanceof TwoColsLayoutConstraints)) return new TwoColsLayoutConstraints(someConstraints);
+				if (!(someConstraints instanceof TwoColsLayoutConstraints))
+					return new TwoColsLayoutConstraints(someConstraints);
 				break;
 			case gridbag:
-				if (!(someConstraints instanceof GridBagLayoutConstraints)) return new GridBagLayoutConstraints(someConstraints);
+				if (!(someConstraints instanceof GridBagLayoutConstraints))
+					return new GridBagLayoutConstraints(someConstraints);
 				break;
 			default:
 			}
 			someConstraints.setComponent(this);
 			return someConstraints;
-		}
-		else {
+		} else {
 			// No constraints for a component which container is not custom layouted
 			return someConstraints;
 		}
@@ -471,44 +466,41 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		return true;
 	}*/
 
-	public boolean isRootComponent()
-	{
+	public boolean isRootComponent() {
 		return getParent() == null;
 	}
 
 	@Override
-	public FIBComponent getRootComponent()
-	{
+	public FIBComponent getRootComponent() {
 		FIBComponent current = this;
-		while (current != null && !current.isRootComponent()) current = current.getParent();
+		while (current != null && !current.isRootComponent())
+			current = current.getParent();
 		return current;
 	}
-	
+
 	protected BindingModel _bindingModel = null;
-	
+
 	@Override
-	public BindingModel getBindingModel() 
-	{
+	public BindingModel getBindingModel() {
 		if (isRootComponent()) {
-			if (_bindingModel == null) createBindingModel();
+			if (_bindingModel == null)
+				createBindingModel();
 			return _bindingModel;
-		}
-		else return super.getBindingModel();
+		} else
+			return super.getBindingModel();
 	}
-	
-	public void updateBindingModel()
-	{
+
+	public void updateBindingModel() {
 		logger.fine("updateBindingModel()");
 		if (getRootComponent() != null) {
 			getRootComponent()._bindingModel = null;
 			getRootComponent().createBindingModel();
 		}
 	}
-	
-	protected void createBindingModel()
-	{
+
+	protected void createBindingModel() {
 		_bindingModel = new BindingModel();
-		
+
 		/*Class dataClass = null;
 		try {
 			if (dataClassName != null) {
@@ -518,10 +510,10 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		} catch (ClassNotFoundException e) {
 			logger.warning("Not found: "+dataClassName);
 		}*/
-		//if (dataClass == null) dataClass = Object.class;
-		
-		_bindingModel.addToBindingVariables(new BindingVariableImpl(this, "data", dataClass != null ? dataClass : Object.class ));
-		
+		// if (dataClass == null) dataClass = Object.class;
+
+		_bindingModel.addToBindingVariables(new BindingVariableImpl(this, "data", dataClass != null ? dataClass : Object.class));
+
 		if (StringUtils.isNotEmpty(getName()) && getDynamicAccessType() != null) {
 			_bindingModel.addToBindingVariables(new BindingVariableImpl(this, getName(), getDynamicAccessType()));
 		}
@@ -530,14 +522,15 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		while (it.hasNext()) {
 			FIBComponent subComponent = it.next();
 			if (StringUtils.isNotEmpty(subComponent.getName()) && subComponent.getDynamicAccessType() != null) {
-				_bindingModel.addToBindingVariables(new BindingVariableImpl(this, subComponent.getName(), subComponent.getDynamicAccessType()));
+				_bindingModel.addToBindingVariables(new BindingVariableImpl(this, subComponent.getName(), subComponent
+						.getDynamicAccessType()));
 			}
 		}
-		
+
 		Class myControllerClass = getControllerClass();
-		if (myControllerClass == null) 
+		if (myControllerClass == null)
 			myControllerClass = FIBController.class;
-		
+
 		_bindingModel.addToBindingVariables(new BindingVariableImpl(this, "controller", myControllerClass));
 
 		it = subComponentIterator();
@@ -545,34 +538,35 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 			FIBComponent subComponent = it.next();
 			subComponent.notifiedBindingModelRecreated();
 		}
-		
-		//logger.info("Created binding model at root component level:\n"+_bindingModel);
+
+		// logger.info("Created binding model at root component level:\n"+_bindingModel);
 	}
 
-	public void notifiedBindingModelRecreated()
-	{
+	public void notifiedBindingModelRecreated() {
 	}
-		
+
 	protected boolean deserializationPerformed = false;
-	
+
 	@Override
-	public void finalizeDeserialization() 
-	{
-		//System.out.println("finalizeDeserialization for "+this+" isRoot="+isRootComponent());
-	
+	public void finalizeDeserialization() {
+		// System.out.println("finalizeDeserialization for "+this+" isRoot="+isRootComponent());
+
 		super.finalizeDeserialization();
-		
+
 		if (getRootComponent().getBindingModel() == null) {
 			getRootComponent().createBindingModel();
 		}
-		
-		if (isRootComponent()) updateBindingModel();
 
-		if (data != null) data.finalizeDeserialization();
-		if (visible != null) visible.finalizeDeserialization();
-		
+		if (isRootComponent())
+			updateBindingModel();
+
+		if (data != null)
+			data.finalizeDeserialization();
+		if (visible != null)
+			visible.finalizeDeserialization();
+
 		deserializationPerformed = true;
-		
+
 		/*if (conditional != null) {
 			Vector<Variable> variables;
 			try {
@@ -605,78 +599,76 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}*/
 	}
 
-	public Vector<FIBComponent> getNamedComponents()
-	{
+	public Vector<FIBComponent> getNamedComponents() {
 		Vector<FIBComponent> returned = new Vector<FIBComponent>();
 		for (FIBComponent c : retrieveAllSubComponents()) {
-			if (StringUtils.isNotEmpty(c.getName())) returned.add(c);
+			if (StringUtils.isNotEmpty(c.getName()))
+				returned.add(c);
 		}
 		return returned;
 	}
-	
-	public FIBComponent getComponentNamed(String name)
-	{
+
+	public FIBComponent getComponentNamed(String name) {
 		for (FIBComponent c : retrieveAllSubComponents()) {
-			if (StringUtils.isNotEmpty(c.getName()) && c.getName().equals(name)) return c; 
+			if (StringUtils.isNotEmpty(c.getName()) && c.getName().equals(name))
+				return c;
 		}
 		return null;
 	}
-	
-	public Vector<FIBComponent> retrieveAllSubComponents()
-	{
+
+	public Vector<FIBComponent> retrieveAllSubComponents() {
 		if (this instanceof FIBContainer) {
 			Vector<FIBComponent> returned = new Vector<FIBComponent>();
-			addAllSubComponents((FIBContainer)this,returned);
+			addAllSubComponents((FIBContainer) this, returned);
 			return returned;
 		}
 		return null;
 	}
 
-	private void addAllSubComponents(FIBContainer c, Vector<FIBComponent> returned)
-	{
+	private void addAllSubComponents(FIBContainer c, Vector<FIBComponent> returned) {
 		for (FIBComponent c2 : c.getSubComponents()) {
 			returned.add(c2);
-			if (c2 instanceof FIBContainer) addAllSubComponents((FIBContainer)c2,returned);
+			if (c2 instanceof FIBContainer)
+				addAllSubComponents((FIBContainer) c2, returned);
 		}
 	}
 
-	public Iterator<FIBComponent> subComponentIterator()
-	{
+	public Iterator<FIBComponent> subComponentIterator() {
 		Vector<FIBComponent> allSubComponents = retrieveAllSubComponents();
-		if (allSubComponents == null) return new Iterator<FIBComponent>() {
-			@Override
-			public boolean hasNext() {
-				return false;
-			}
-			@Override
-			public FIBComponent next() {
-				return null;
-			}
-			@Override
-			public void remove() {
-			}
-		};
-		else return allSubComponents.iterator();
+		if (allSubComponents == null)
+			return new Iterator<FIBComponent>() {
+				@Override
+				public boolean hasNext() {
+					return false;
+				}
+
+				@Override
+				public FIBComponent next() {
+					return null;
+				}
+
+				@Override
+				public void remove() {
+				}
+			};
+		else
+			return allSubComponents.iterator();
 	}
 
-	public Vector<FIBComponent> getMayDepends()
-	{
+	public Vector<FIBComponent> getMayDepends() {
 		return mayDepends;
 	}
-	
-	public Iterator<FIBComponent> getMayDependsIterator()
-	{
+
+	public Iterator<FIBComponent> getMayDependsIterator() {
 		return mayDepends.iterator();
 	}
 
-	public Iterator<FIBComponent> getMayAltersIterator() 
-	{
+	public Iterator<FIBComponent> getMayAltersIterator() {
 		return mayAlters.iterator();
 	}
-	
-	public void declareDependantOf(FIBComponent aComponent) throws DependancyLoopException
-	{
-		//logger.info("Component "+this+" depends of "+aComponent);
+
+	public void declareDependantOf(FIBComponent aComponent) throws DependancyLoopException {
+		// logger.info("Component "+this+" depends of "+aComponent);
 		if (aComponent == this) {
 			logger.warning("Forbidden reflexive dependancies");
 			return;
@@ -685,86 +677,83 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		try {
 			Vector<FIBComponent> dependancies = new Vector<FIBComponent>();
 			dependancies.add(aComponent);
-			searchLoopInDependanciesWith(aComponent,dependancies);
+			searchLoopInDependanciesWith(aComponent, dependancies);
 		} catch (DependancyLoopException e) {
-			logger.warning("Forbidden loop in dependancies: "+e.getMessage());
+			logger.warning("Forbidden loop in dependancies: " + e.getMessage());
 			throw e;
 		}
-		
+
 		if (!mayDepends.contains(aComponent)) {
 			mayDepends.add(aComponent);
-			logger.fine("Component "+this+" depends of "+aComponent);
+			logger.fine("Component " + this + " depends of " + aComponent);
 		}
-		if (!aComponent.mayAlters.contains(this)) aComponent.mayAlters.add(this);
+		if (!aComponent.mayAlters.contains(this))
+			aComponent.mayAlters.add(this);
 	}
-	
-	private void searchLoopInDependanciesWith(FIBComponent aComponent, Vector<FIBComponent> dependancies) throws DependancyLoopException
-	{
+
+	private void searchLoopInDependanciesWith(FIBComponent aComponent, Vector<FIBComponent> dependancies) throws DependancyLoopException {
 		for (FIBComponent c : aComponent.mayDepends) {
-			if (c == this) throw new DependancyLoopException(dependancies);
+			if (c == this)
+				throw new DependancyLoopException(dependancies);
 			Vector<FIBComponent> newVector = new Vector<FIBComponent>();
 			newVector.addAll(dependancies);
 			newVector.add(c);
-			searchLoopInDependanciesWith(c,newVector);
+			searchLoopInDependanciesWith(c, newVector);
 		}
 	}
-	
-	protected static class DependancyLoopException extends Exception
-	{	
+
+	protected static class DependancyLoopException extends Exception {
 		private final Vector<FIBComponent> dependancies;
-		public DependancyLoopException(Vector<FIBComponent> dependancies)
-		{
+
+		public DependancyLoopException(Vector<FIBComponent> dependancies) {
 			this.dependancies = dependancies;
 		}
+
 		@Override
-		public String getMessage()
-		{
-			return "DependancyLoopException: "+dependancies;
+		public String getMessage() {
+			return "DependancyLoopException: " + dependancies;
 		}
 	}
-	
-	public DataBinding getData() 
-	{
-		if (data == null) data = new DataBinding(this,Parameters.data,getDataBindingDefinition());
+
+	public DataBinding getData() {
+		if (data == null)
+			data = new DataBinding(this, Parameters.data, getDataBindingDefinition());
 		return data;
 	}
 
-	public void setData(DataBinding data) 
-	{
+	public void setData(DataBinding data) {
 		data.setOwner(this);
 		data.setBindingAttribute(Parameters.data);
 		data.setBindingDefinition(getDataBindingDefinition());
 		this.data = data;
 	}
-	
 
-	public DataBinding getVisible() 
-	{
-		if (visible == null) visible = new DataBinding(this,Parameters.visible,VISIBLE);
+	public DataBinding getVisible() {
+		if (visible == null)
+			visible = new DataBinding(this, Parameters.visible, VISIBLE);
 		return visible;
 	}
 
-	public void setVisible(DataBinding visible) 
-	{
+	public void setVisible(DataBinding visible) {
 		visible.setOwner(this);
 		visible.setBindingAttribute(Parameters.visible);
 		visible.setBindingDefinition(VISIBLE);
 		this.visible = visible;
 	}
-	
+
 	@Override
-	public String toString() 
-	{
-		return getClass().getSimpleName()+" ("+(getName()!=null?getName():(getIdentifier()!=null?getIdentifier():"unnamed"))+")";
+	public String toString() {
+		return getClass().getSimpleName() + " ("
+				+ (getName() != null ? getName() : (getIdentifier() != null ? getIdentifier() : "unnamed")) + ")";
 	}
-	
+
 	public abstract String getIdentifier();
-	
-	public Type getDataType()
-	{
-		if (dataClass == null) return Object.class;
+
+	public Type getDataType() {
+		if (dataClass == null)
+			return Object.class;
 		return dataClass;
-		
+
 		/*if (dataClassName == null) return null;
 		if (dataClass == null) {
 			try {
@@ -778,47 +767,39 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	}
 
-	public Class getDataClass()
-	{
+	public Class getDataClass() {
 		return dataClass;
 	}
-	
-	public void setDataClass(Class dataClass) 
-	{
-		FIBAttributeNotification<Class> notification = requireChange(
-				Parameters.dataClass, dataClass);
+
+	public void setDataClass(Class dataClass) {
+		FIBAttributeNotification<Class> notification = requireChange(Parameters.dataClass, dataClass);
 		if (notification != null) {
 			this.dataClass = dataClass;
 			updateBindingModel();
 			hasChanged(notification);
 		}
 	}
-	
-	public Class getControllerClass()
-	{
+
+	public Class getControllerClass() {
 		return controllerClass;
 	}
-	
-	public void setControllerClass(Class controllerClass) 
-	{
-		FIBAttributeNotification<Class> notification = requireChange(
-				Parameters.controllerClass, controllerClass);
+
+	public void setControllerClass(Class controllerClass) {
+		FIBAttributeNotification<Class> notification = requireChange(Parameters.controllerClass, controllerClass);
 		if (notification != null) {
 			this.controllerClass = controllerClass;
 			updateBindingModel();
 			hasChanged(notification);
 		}
 	}
-	
-	public Type getDefaultDataClass()
-	{
+
+	public Type getDefaultDataClass() {
 		return Object.class;
 
 	}
 
 	// Default behaviour: only data is managed
-	public Type getDynamicAccessType()
-	{
+	public Type getDynamicAccessType() {
 		if (data != null) {
 			Type[] args = new Type[1];
 			args[0] = getDataType();
@@ -827,78 +808,72 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		return null;
 	}
 
-	public void clearParameters()
-	{
+	public void clearParameters() {
 		getParameters().clear();
 	}
 
-	public final Font retrieveValidFont()
-	{
+	public final Font retrieveValidFont() {
 		if (font == null) {
-			if (!isRootComponent()) return getParent().retrieveValidFont();
-			else return (new JLabel()).getFont(); // Use system default
+			if (!isRootComponent())
+				return getParent().retrieveValidFont();
+			else
+				return (new JLabel()).getFont(); // Use system default
 		}
-		
-		return getFont();	
+
+		return getFont();
 	}
-	
-	public final Color retrieveValidForegroundColor()
-	{
+
+	public final Color retrieveValidForegroundColor() {
 		if (foregroundColor == null) {
-			if (!isRootComponent()) return getParent().retrieveValidForegroundColor();
-			else return Color.BLACK; // Use default
+			if (!isRootComponent())
+				return getParent().retrieveValidForegroundColor();
+			else
+				return Color.BLACK; // Use default
 		}
-		
-		return getForegroundColor();	
+
+		return getForegroundColor();
 	}
-	
-	public final Color retrieveValidBackgroundColor()
-	{
+
+	public final Color retrieveValidBackgroundColor() {
 		if (backgroundColor == null) {
-			if (!isRootComponent()) return getParent().retrieveValidBackgroundColor();
-			else return Color.WHITE; // Use system default
+			if (!isRootComponent())
+				return getParent().retrieveValidBackgroundColor();
+			else
+				return Color.WHITE; // Use system default
 		}
-		
-		return getBackgroundColor();	
+
+		return getBackgroundColor();
 	}
-	
-	public Font getFont()
-	{
+
+	public Font getFont() {
 		return font;
 	}
 
-	public void setFont(Font font)
-	{
-		FIBAttributeNotification<Font> notification = requireChange(
-				Parameters.font, font);
+	public void setFont(Font font) {
+		FIBAttributeNotification<Font> notification = requireChange(Parameters.font, font);
 		if (notification != null) {
 			this.font = font;
 			hasChanged(notification);
 		}
 	}
-	
-	public boolean getHasSpecificFont()
-	{
+
+	public boolean getHasSpecificFont() {
 		return getFont() != null;
 	}
 
-	public void setHasSpecificFont(boolean aFlag)
-	{
+	public void setHasSpecificFont(boolean aFlag) {
 		if (aFlag) {
 			setFont(retrieveValidFont());
-		}
-		else {
+		} else {
 			setFont(null);
 		}
 	}
-	
-	public Boolean getOpaque() 
-	{
+
+	public Boolean getOpaque() {
 		return opaque;
 	}
 
-	public void setOpaque(Boolean opaque) 
-	{
+	public void setOpaque(Boolean opaque) {
 		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.opaque, opaque);
 		if (notification != null) {
 			this.opaque = opaque;
@@ -906,83 +881,66 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}
 	}
 
-
-	public boolean getHasSpecificBackgroundColor()
-	{
+	public boolean getHasSpecificBackgroundColor() {
 		return getBackgroundColor() != null;
 	}
 
-	public void setHasSpecificBackgroundColor(boolean aFlag)
-	{
+	public void setHasSpecificBackgroundColor(boolean aFlag) {
 		if (aFlag) {
 			setBackgroundColor(retrieveValidBackgroundColor());
-		}
-		else {
+		} else {
 			setBackgroundColor(null);
 		}
 	}
-	
-	public boolean getHasSpecificForegroundColor()
-	{
+
+	public boolean getHasSpecificForegroundColor() {
 		return getForegroundColor() != null;
 	}
 
-	public void setHasSpecificForegroundColor(boolean aFlag)
-	{
+	public void setHasSpecificForegroundColor(boolean aFlag) {
 		if (aFlag) {
 			setForegroundColor(retrieveValidForegroundColor());
-		}
-		else {
+		} else {
 			setForegroundColor(null);
 		}
 	}
-	
-	public Color getBackgroundColor()
-	{
+
+	public Color getBackgroundColor() {
 		return backgroundColor;
 	}
 
-	public void setBackgroundColor(Color backgroundColor)
-	{
-		FIBAttributeNotification<Color> notification = requireChange(
-				Parameters.backgroundColor, backgroundColor);
+	public void setBackgroundColor(Color backgroundColor) {
+		FIBAttributeNotification<Color> notification = requireChange(Parameters.backgroundColor, backgroundColor);
 		if (notification != null) {
 			this.backgroundColor = backgroundColor;
 			hasChanged(notification);
 		}
 	}
 
-	public Color getForegroundColor()
-	{
+	public Color getForegroundColor() {
 		return foregroundColor;
 	}
 
-	public void setForegroundColor(Color foregroundColor)
-	{
-		FIBAttributeNotification<Color> notification = requireChange(
-				Parameters.foregroundColor, foregroundColor);
+	public void setForegroundColor(Color foregroundColor) {
+		FIBAttributeNotification<Color> notification = requireChange(Parameters.foregroundColor, foregroundColor);
 		if (notification != null) {
 			this.foregroundColor = foregroundColor;
 			hasChanged(notification);
 		}
 	}
 
-	public boolean getUseScrollBar() 
-	{
+	public boolean getUseScrollBar() {
 		return useScrollBar;
 	}
 
-	public void setUseScrollBar(boolean useScrollBar) 
-	{
-		FIBAttributeNotification<Boolean> notification = requireChange(
-				Parameters.useScrollBar, useScrollBar);
+	public void setUseScrollBar(boolean useScrollBar) {
+		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.useScrollBar, useScrollBar);
 		if (notification != null) {
 			this.useScrollBar = useScrollBar;
 			if (useScrollBar) {
 				horizontalScrollbarPolicy = HorizontalScrollBarPolicy.HORIZONTAL_SCROLLBAR_AS_NEEDED;
 				verticalScrollbarPolicy = VerticalScrollBarPolicy.VERTICAL_SCROLLBAR_AS_NEEDED;
-			}
-			else {
+			} else {
 				horizontalScrollbarPolicy = null;
 				verticalScrollbarPolicy = null;
 			}
@@ -990,123 +948,98 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}
 	}
 
-	public HorizontalScrollBarPolicy getHorizontalScrollbarPolicy() 
-	{
+	public HorizontalScrollBarPolicy getHorizontalScrollbarPolicy() {
 		return horizontalScrollbarPolicy;
 	}
 
-	public void setHorizontalScrollbarPolicy(
-			HorizontalScrollBarPolicy horizontalScrollbarPolicy) 
-	{
-		FIBAttributeNotification<HorizontalScrollBarPolicy> notification = requireChange(
-				Parameters.horizontalScrollbarPolicy, horizontalScrollbarPolicy);
+	public void setHorizontalScrollbarPolicy(HorizontalScrollBarPolicy horizontalScrollbarPolicy) {
+		FIBAttributeNotification<HorizontalScrollBarPolicy> notification = requireChange(Parameters.horizontalScrollbarPolicy,
+				horizontalScrollbarPolicy);
 		if (notification != null) {
 			this.horizontalScrollbarPolicy = horizontalScrollbarPolicy;
 			hasChanged(notification);
 		}
 	}
 
-	public VerticalScrollBarPolicy getVerticalScrollbarPolicy() 
-	{
+	public VerticalScrollBarPolicy getVerticalScrollbarPolicy() {
 		return verticalScrollbarPolicy;
 	}
 
-	public void setVerticalScrollbarPolicy(
-			VerticalScrollBarPolicy verticalScrollbarPolicy) 
-	{
-		FIBAttributeNotification<VerticalScrollBarPolicy> notification = requireChange(
-				Parameters.verticalScrollbarPolicy, verticalScrollbarPolicy);
+	public void setVerticalScrollbarPolicy(VerticalScrollBarPolicy verticalScrollbarPolicy) {
+		FIBAttributeNotification<VerticalScrollBarPolicy> notification = requireChange(Parameters.verticalScrollbarPolicy,
+				verticalScrollbarPolicy);
 		if (notification != null) {
 			this.verticalScrollbarPolicy = verticalScrollbarPolicy;
 			hasChanged(notification);
 		}
 	}
 
-
-	public Integer getWidth()
-	{
+	public Integer getWidth() {
 		return width;
 	}
 
-	public void setWidth(Integer width)
-	{
-		FIBAttributeNotification<Integer> notification = requireChange(
-				Parameters.width, width);
+	public void setWidth(Integer width) {
+		FIBAttributeNotification<Integer> notification = requireChange(Parameters.width, width);
 		if (notification != null) {
 			this.width = width;
 			hasChanged(notification);
 		}
 	}
 
-	public Integer getHeight()
-	{
+	public Integer getHeight() {
 		return height;
 	}
 
-	public void setHeight(Integer height)
-	{
-		FIBAttributeNotification<Integer> notification = requireChange(
-				Parameters.height, height);
+	public void setHeight(Integer height) {
+		FIBAttributeNotification<Integer> notification = requireChange(Parameters.height, height);
 		if (notification != null) {
 			this.height = height;
 			hasChanged(notification);
 		}
 	}
 
-	public Integer getMinWidth()
-	{
+	public Integer getMinWidth() {
 		return minWidth;
 	}
 
-	public void setMinWidth(Integer minWidth)
-	{
-		FIBAttributeNotification<Integer> notification = requireChange(
-				Parameters.minWidth, minWidth);
+	public void setMinWidth(Integer minWidth) {
+		FIBAttributeNotification<Integer> notification = requireChange(Parameters.minWidth, minWidth);
 		if (notification != null) {
 			this.minWidth = minWidth;
 			hasChanged(notification);
 		}
 	}
 
-	public Integer getMinHeight()
-	{
+	public Integer getMinHeight() {
 		return minHeight;
 	}
 
-	public void setMinHeight(Integer minHeight)
-	{
-		FIBAttributeNotification<Integer> notification = requireChange(
-				Parameters.minHeight, minHeight);
+	public void setMinHeight(Integer minHeight) {
+		FIBAttributeNotification<Integer> notification = requireChange(Parameters.minHeight, minHeight);
 		if (notification != null) {
 			this.minHeight = minHeight;
 			hasChanged(notification);
 		}
 	}
 
-	public Integer getMaxWidth()
-	{
+	public Integer getMaxWidth() {
 		return maxWidth;
 	}
 
-	public void setMaxWidth(Integer maxWidth)
-	{
-		FIBAttributeNotification<Integer> notification = requireChange(
-				Parameters.maxWidth, maxWidth);
+	public void setMaxWidth(Integer maxWidth) {
+		FIBAttributeNotification<Integer> notification = requireChange(Parameters.maxWidth, maxWidth);
 		if (notification != null) {
 			this.maxWidth = maxWidth;
 			hasChanged(notification);
 		}
 	}
 
-	public Integer getMaxHeight()
-	{
+	public Integer getMaxHeight() {
 		return maxHeight;
 	}
 
-	public void setMaxHeight(Integer maxHeight)
-	{
-		FIBAttributeNotification<Integer> notification = requireChange(
-				Parameters.maxHeight, maxHeight);
+	public void setMaxHeight(Integer maxHeight) {
+		FIBAttributeNotification<Integer> notification = requireChange(Parameters.maxHeight, maxHeight);
 		if (notification != null) {
 			this.maxHeight = maxHeight;
 			hasChanged(notification);
@@ -1114,94 +1047,86 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	}
 
 	@Override
-	public void setName(String name)
-	{
-		if (StringUtils.isEmpty(name)) name = null;
+	public void setName(String name) {
+		if (StringUtils.isEmpty(name))
+			name = null;
 		super.setName(name);
-		if (deserializationPerformed) updateBindingModel();
+		if (deserializationPerformed)
+			updateBindingModel();
 	}
-	
+
 	@Override
-	public void addToParameters(FIBParameter p)
-	{
+	public void addToParameters(FIBParameter p) {
 		// Little hask to recover previously created fib
 		if (p.name.equals("controllerClassName")) {
 			try {
 				Class myControllerClass = Class.forName(p.value);
 				setControllerClass(myControllerClass);
 			} catch (ClassNotFoundException e) {
-				logger.warning("Could not find class "+p.value);
+				logger.warning("Could not find class " + p.value);
 			}
-			
-		}
-		else {
+
+		} else {
 			super.addToParameters(p);
-			if (deserializationPerformed) updateBindingModel();
+			if (deserializationPerformed)
+				updateBindingModel();
 		}
 	}
-	
-	public boolean definePreferredDimensions()
-	{
+
+	public boolean definePreferredDimensions() {
 		return width != null && height != null;
 	}
 
-	public void setDefinePreferredDimensions(boolean definePreferredDimensions)
-	{
+	public void setDefinePreferredDimensions(boolean definePreferredDimensions) {
 		if (definePreferredDimensions) {
 			FIBView v = FIBController.makeView(this);
 			Dimension p = v.getJComponent().getPreferredSize();
 			setWidth(p.width);
 			setHeight(p.height);
 			v.delete();
-		}
-		else {
+		} else {
 			setWidth(null);
 			setHeight(null);
 		}
 	}
-	
-	public boolean defineMaxDimensions()
-	{
+
+	public boolean defineMaxDimensions() {
 		return maxWidth != null && maxHeight != null;
 	}
 
-	public void setDefineMaxDimensions(boolean defineMaxDimensions)
-	{
+	public void setDefineMaxDimensions(boolean defineMaxDimensions) {
 		if (defineMaxDimensions) {
 			FIBView v = FIBController.makeView(this);
 			setMaxWidth(1024);
 			setMaxHeight(1024);
 			v.delete();
-		}
-		else {
+		} else {
 			setMaxWidth(null);
 			setMaxHeight(null);
 		}
 	}
-	
-	public boolean defineMinDimensions()
-	{
+
+	public boolean defineMinDimensions() {
 		return minWidth != null && minHeight != null;
 	}
 
-	public void setDefineMinDimensions(boolean defineMinDimensions)
-	{
+	public void setDefineMinDimensions(boolean defineMinDimensions) {
 		if (defineMinDimensions) {
 			FIBView v = FIBController.makeView(this);
 			Dimension p = v.getJComponent().getMinimumSize();
 			setMinWidth(p.width);
 			setMinHeight(p.height);
 			v.delete();
-		}
-		else {
+		} else {
 			setMinWidth(null);
 			setMinHeight(null);
 		}
 	}
-	
+
 	private Vector<FIBDependancy> explicitDependancies;
-	//private Vector<FIBComponentDependancy> componentDependancies;
-	
+
+	// private Vector<FIBComponentDependancy> componentDependancies;
+
 	/*public Vector<FIBComponentDependancy> getComponentDependancies()
 	{
 		if (componentDependancies == null) {
@@ -1214,14 +1139,12 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		return componentDependancies;
 	}*/
 
-	public Vector<FIBDependancy> getExplicitDependancies()
-	{
+	public Vector<FIBDependancy> getExplicitDependancies() {
 		return explicitDependancies;
 	}
 
-	public void setExplicitDependancies(Vector<FIBDependancy> explicitDependancies)
-	{
-		FIBAttributeNotification<Vector<FIBDependancy>> notification = requireChange(Parameters.explicitDependancies,explicitDependancies);
+	public void setExplicitDependancies(Vector<FIBDependancy> explicitDependancies) {
+		FIBAttributeNotification<Vector<FIBDependancy>> notification = requireChange(Parameters.explicitDependancies, explicitDependancies);
 		explicitDependancies = null;
 		if (notification != null) {
 			this.explicitDependancies = explicitDependancies;
@@ -1229,62 +1152,64 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}
 	}
 
-	public void addToExplicitDependancies(FIBDependancy p)
-	{
+	public void addToExplicitDependancies(FIBDependancy p) {
 		p.setOwner(this);
 		explicitDependancies.add(p);
 		if (p.getMasterComponent() != null) {
 			try {
 				p.getOwner().declareDependantOf(p.getMasterComponent());
 			} catch (DependancyLoopException e) {
-				logger.warning("DependancyLoopException raised while applying explicit dependancy for "+p.getOwner()+" and "+p.getMasterComponent()+" message: "+e.getMessage());
+				logger.warning("DependancyLoopException raised while applying explicit dependancy for " + p.getOwner() + " and "
+						+ p.getMasterComponent() + " message: " + e.getMessage());
 			}
 		}
-		//componentDependancies = null;
+		// componentDependancies = null;
 		setChanged();
 		notifyObservers(new FIBAddingNotification<FIBDependancy>(Parameters.explicitDependancies, p));
 	}
 
-	public void removeFromExplicitDependancies(FIBDependancy p)
-	{
+	public void removeFromExplicitDependancies(FIBDependancy p) {
 		p.setOwner(null);
 		explicitDependancies.remove(p);
-		//componentDependancies = null;
+		// componentDependancies = null;
 		setChanged();
 		notifyObservers(new FIBRemovingNotification<FIBDependancy>(Parameters.explicitDependancies, p));
 	}
 
-	public FIBDependancy createNewExplicitDependancy()
-	{
+	public FIBDependancy createNewExplicitDependancy() {
 		FIBDependancy returned = new FIBDependancy();
 		addToExplicitDependancies(returned);
 		return returned;
 	}
 
-	public void deleteExplicitDependancy(FIBDependancy p)
-	{
+	public void deleteExplicitDependancy(FIBDependancy p) {
 		removeFromExplicitDependancies(p);
 	}
 
 	private FIBLocalizedDictionary localizedDictionary;
-	
-	public FIBLocalizedDictionary retrieveFIBLocalizedDictionary()
-	{
+
+	public FIBLocalizedDictionary retrieveFIBLocalizedDictionary() {
 		if (getLocalizedDictionary() == null) {
 			setLocalizedDictionary(new FIBLocalizedDictionary());
 		}
 		return getLocalizedDictionary();
 	}
 
-	public void setLocalizedDictionary(FIBLocalizedDictionary localizedDictionary)
-	{
+	public void setLocalizedDictionary(FIBLocalizedDictionary localizedDictionary) {
 		localizedDictionary.setComponent(this);
 		this.localizedDictionary = localizedDictionary;
 	}
 
-	public FIBLocalizedDictionary getLocalizedDictionary()
-	{
+	public FIBLocalizedDictionary getLocalizedDictionary() {
 		return localizedDictionary;
+	}
+
+	public String getDefinitionFile() {
+		return definitionFile;
+	}
+
+	public void setDefinitionFile(String definitionFile) {
+		this.definitionFile = definitionFile;
 	}
 
 }

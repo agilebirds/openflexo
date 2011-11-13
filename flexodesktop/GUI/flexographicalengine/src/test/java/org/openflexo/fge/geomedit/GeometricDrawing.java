@@ -19,57 +19,48 @@
  */
 package org.openflexo.fge.geomedit;
 
-
-
 import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.geomedit.gr.GeometricDrawingGraphicalRepresentation;
 
-
-public class GeometricDrawing extends DefaultDrawing<GeometricSet>
-{
+public class GeometricDrawing extends DefaultDrawing<GeometricSet> {
 	private GeometricDrawingGraphicalRepresentation gr;
-	private GeomEditController controller; 
+	private GeomEditController controller;
 
-	public GeometricDrawing(GeometricSet drawing)
-	{
+	public GeometricDrawing(GeometricSet drawing) {
 		super(drawing);
 		gr = new GeometricDrawingGraphicalRepresentation(this);
 	}
 
 	@Override
-	public GeometricDrawingGraphicalRepresentation getDrawingGraphicalRepresentation()
-	{
+	public GeometricDrawingGraphicalRepresentation getDrawingGraphicalRepresentation() {
 		return gr;
 	}
-	
-	public void setDrawingGraphicalRepresentation(GeometricDrawingGraphicalRepresentation aGR)
-	{
+
+	public void setDrawingGraphicalRepresentation(GeometricDrawingGraphicalRepresentation aGR) {
 		gr = aGR;
 	}
-	
+
 	@Override
 	@SuppressWarnings("unchecked")
-	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable)
-	{
-		if (aDrawable == getModel()) return (GraphicalRepresentation<O>)getDrawingGraphicalRepresentation();
-		if (aDrawable instanceof GeometricObject) return ((GeometricObject)aDrawable).getGraphicalRepresentation();
+	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable) {
+		if (aDrawable == getModel())
+			return (GraphicalRepresentation<O>) getDrawingGraphicalRepresentation();
+		if (aDrawable instanceof GeometricObject)
+			return ((GeometricObject) aDrawable).getGraphicalRepresentation();
 		(new Exception("???")).printStackTrace();
 		return null;
 	}
-	
-	public void init()
-	{
+
+	public void init() {
 		controller = new GeomEditController(this);
 	}
 
-	public GeomEditController getController()
-	{
+	public GeomEditController getController() {
 		return controller;
 	}
-	
+
 	@Override
-	protected void buildGraphicalObjectsHierarchy()
-	{
+	protected void buildGraphicalObjectsHierarchy() {
 	}
 }

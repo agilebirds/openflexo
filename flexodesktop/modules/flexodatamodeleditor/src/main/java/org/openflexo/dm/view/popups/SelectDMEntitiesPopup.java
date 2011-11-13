@@ -30,22 +30,21 @@ import org.openflexo.dm.view.controller.DMController;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.rm.FlexoProject;
 
-
 public class SelectDMEntitiesPopup extends MultipleObjectSelectorPopup {
 
 	static final Logger logger = Logger.getLogger(SelectDMEntitiesPopup.class.getPackage().getName());
 
-	public SelectDMEntitiesPopup(String title, String label, String description, Vector<DMEntity> selectedEntities, FlexoProject project, DMController controller)
-	{
-		super(title,label,description,new DefaultBrowserConfiguration(project.getDataModel(),new DefaultBrowserConfiguration.ObjectVisibilityDelegate() {
-			@Override
-			public BrowserFilterStatus getVisibility(BrowserElementType elementType) {
-				return BrowserFilterStatus.SHOW;
-			}  	
-		}),project,controller.getFlexoFrame(),controller.getEditor());
+	public SelectDMEntitiesPopup(String title, String label, String description, Vector<DMEntity> selectedEntities, FlexoProject project,
+			DMController controller) {
+		super(title, label, description, new DefaultBrowserConfiguration(project.getDataModel(),
+				new DefaultBrowserConfiguration.ObjectVisibilityDelegate() {
+					@Override
+					public BrowserFilterStatus getVisibility(BrowserElementType elementType) {
+						return BrowserFilterStatus.SHOW;
+					}
+				}), project, controller.getFlexoFrame(), controller.getEditor());
 		if (selectedEntities != null)
 			choicePanel.setSelectedObjects(selectedEntities);
 	}
-
 
 }

@@ -21,35 +21,28 @@ package org.openflexo.foundation.validation;
 
 import java.util.logging.Logger;
 
-
 /**
- * Represents a validation issue requiring to attention: contains an information
- * message only
- *
+ * Represents a validation issue requiring to attention: contains an information message only
+ * 
  * @author sguerin
- *
+ * 
  */
-public class InformationIssue<R extends ValidationRule<R,V>, V extends Validable> extends ValidationIssue<R,V>
-{
+public class InformationIssue<R extends ValidationRule<R, V>, V extends Validable> extends ValidationIssue<R, V> {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(InformationIssue.class.getPackage().getName());
 
-    public InformationIssue(V anObject, String aLocalizedMessage)
-    {
-        super(anObject, aLocalizedMessage);
-    }
+	public InformationIssue(V anObject, String aLocalizedMessage) {
+		super(anObject, aLocalizedMessage);
+	}
 
-    public InformationIssue(V anObject, String aMessage, boolean isLocalized)
-    {
-        super(anObject, aMessage,isLocalized);
-    }
+	public InformationIssue(V anObject, String aMessage, boolean isLocalized) {
+		super(anObject, aMessage, isLocalized);
+	}
 
-
-   @Override
-public String toString()
-   {
-	   return "VALIDATION / INFO:    "+getMessage();
-   }
+	@Override
+	public String toString() {
+		return "VALIDATION / INFO:    " + getMessage();
+	}
 
 }

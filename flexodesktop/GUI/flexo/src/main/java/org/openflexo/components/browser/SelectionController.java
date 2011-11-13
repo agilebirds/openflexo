@@ -23,14 +23,12 @@ import org.openflexo.foundation.FlexoModelObject;
 
 public abstract class SelectionController {
 
-    public abstract boolean isSelectable(FlexoModelObject o);
+	public abstract boolean isSelectable(FlexoModelObject o);
 
-    public static class DefaultSelectionController extends SelectionController
-    {
-        @Override
-		public boolean isSelectable(FlexoModelObject o)
-        {
-            return true;
-        }
-    }
+	public static class DefaultSelectionController extends SelectionController {
+		@Override
+		public boolean isSelectable(FlexoModelObject o) {
+			return true;
+		}
+	}
 }

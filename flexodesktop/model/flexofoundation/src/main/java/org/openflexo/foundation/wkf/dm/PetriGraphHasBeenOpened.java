@@ -25,16 +25,14 @@ import org.openflexo.foundation.wkf.FlexoPetriGraph;
  * @author gpolet
  * 
  */
-public class PetriGraphHasBeenOpened extends WKFDataModification
-{
+public class PetriGraphHasBeenOpened extends WKFDataModification {
 
-    /**
-     * @param oldValue
-     * @param newValue
-     */
-    public PetriGraphHasBeenOpened(FlexoPetriGraph newValue)
-    {
-        super("petriGraph", null, newValue);
-    }
+	/**
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public PetriGraphHasBeenOpened(FlexoPetriGraph newValue) {
+		super("petriGraph", null, newValue);
+	}
 
 }

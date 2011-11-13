@@ -41,22 +41,19 @@ import org.openflexo.antar.expr.Constant.FloatConstant;
 import org.openflexo.antar.expr.Constant.IntegerConstant;
 import org.openflexo.antar.expr.Constant.StringConstant;
 
-
 public abstract class ExpressionPrettyPrinter {
 
 	private ExpressionGrammar grammar;
-	
-	public ExpressionPrettyPrinter(ExpressionGrammar grammar)
-	{
+
+	public ExpressionPrettyPrinter(ExpressionGrammar grammar) {
 		super();
 		this.grammar = grammar;
 	}
 
-   public void print(Expression expression, PrintStream out)
-    {
-    	out.print(getStringRepresentation(expression));
-    }
-    
+	public void print(Expression expression, PrintStream out) {
+		out.print(getStringRepresentation(expression));
+	}
+
 	public BinaryOperator[] getAllSupportedBinaryOperators() {
 		return grammar.getAllSupportedBinaryOperators();
 	}
@@ -73,73 +70,69 @@ public abstract class ExpressionPrettyPrinter {
 		return grammar.getSymbol(operator);
 	}
 
-    public String getStringRepresentation(Expression expression)
-    {
-    	if (expression == null) {
-    		return "null";
-    	}
-    	if (expression instanceof Variable)
-    		return makeStringRepresentation((Variable)expression);
-       	if (expression instanceof Constant)
-    		return makeStringRepresentation((Constant)expression);
-       	if (expression instanceof Function)
-    		return makeStringRepresentation((Function)expression);
-       	if (expression instanceof UnaryOperatorExpression)
-    		return makeStringRepresentation((UnaryOperatorExpression)expression);
-       	if (expression instanceof BinaryOperatorExpression)
-    		return makeStringRepresentation((BinaryOperatorExpression)expression);
-       	//return "<unknown "+expression.getClass().getSimpleName()+">";
-       	return expression.toString();
-    }
+	public String getStringRepresentation(Expression expression) {
+		if (expression == null) {
+			return "null";
+		}
+		if (expression instanceof Variable)
+			return makeStringRepresentation((Variable) expression);
+		if (expression instanceof Constant)
+			return makeStringRepresentation((Constant) expression);
+		if (expression instanceof Function)
+			return makeStringRepresentation((Function) expression);
+		if (expression instanceof UnaryOperatorExpression)
+			return makeStringRepresentation((UnaryOperatorExpression) expression);
+		if (expression instanceof BinaryOperatorExpression)
+			return makeStringRepresentation((BinaryOperatorExpression) expression);
+		// return "<unknown "+expression.getClass().getSimpleName()+">";
+		return expression.toString();
+	}
 
-    protected String makeStringRepresentation (Variable variable)
-    {
-    	return variable.getName();
-    }
+	protected String makeStringRepresentation(Variable variable) {
+		return variable.getName();
+	}
 
-    protected String makeStringRepresentation (Constant constant)
-    {
-    	if (constant instanceof SymbolicConstant) {
-    		return makeStringRepresentation((SymbolicConstant)constant);
-    	}
-    	else if (constant instanceof BooleanConstant) {
-    		return makeStringRepresentation((BooleanConstant)constant);
-    	}
-    	else if (constant instanceof FloatConstant) {
-    		return makeStringRepresentation((FloatConstant)constant);
-    	}
-    	else if (constant instanceof IntegerConstant) {
-    		return makeStringRepresentation((IntegerConstant)constant);
-    	}
-    	else if (constant instanceof StringConstant) {
-    		return makeStringRepresentation((StringConstant)constant);
-    	}
-    	else if (constant instanceof DateConstant) {
-    		return makeStringRepresentation((DateConstant)constant);
-    	}
-    	else if (constant instanceof DurationConstant) {
-    		return makeStringRepresentation((DurationConstant)constant);
-    	}
-    	else if (constant instanceof EnumConstant) {
-    		return makeStringRepresentation((EnumConstant)constant);
-    	}
-    	return "???";
-    }
+	protected String makeStringRepresentation(Constant constant) {
+		if (constant instanceof SymbolicConstant) {
+			return makeStringRepresentation((SymbolicConstant) constant);
+		} else if (constant instanceof BooleanConstant) {
+			return makeStringRepresentation((BooleanConstant) constant);
+		} else if (constant instanceof FloatConstant) {
+			return makeStringRepresentation((FloatConstant) constant);
+		} else if (constant instanceof IntegerConstant) {
+			return makeStringRepresentation((IntegerConstant) constant);
+		} else if (constant instanceof StringConstant) {
+			return makeStringRepresentation((StringConstant) constant);
+		} else if (constant instanceof DateConstant) {
+			return makeStringRepresentation((DateConstant) constant);
+		} else if (constant instanceof DurationConstant) {
+			return makeStringRepresentation((DurationConstant) constant);
+		} else if (constant instanceof EnumConstant) {
+			return makeStringRepresentation((EnumConstant) constant);
+		}
+		return "???";
+	}
 
-    protected abstract String makeStringRepresentation (BooleanConstant constant);
-    protected abstract String makeStringRepresentation (FloatConstant constant);
-    protected abstract String makeStringRepresentation (IntegerConstant constant);
-    protected abstract String makeStringRepresentation (StringConstant constant);
-    protected abstract String makeStringRepresentation (SymbolicConstant constant);
-    protected abstract String makeStringRepresentation (DateConstant constant);
-    protected abstract String makeStringRepresentation (DurationConstant constant);
-    protected abstract String makeStringRepresentation (EnumConstant constant);
+	protected abstract String makeStringRepresentation(BooleanConstant constant);
 
-    protected abstract String makeStringRepresentation (Function function);
+	protected abstract String makeStringRepresentation(FloatConstant constant);
 
-    protected abstract String makeStringRepresentation (UnaryOperatorExpression expression);
+	protected abstract String makeStringRepresentation(IntegerConstant constant);
 
-    protected abstract String makeStringRepresentation (BinaryOperatorExpression expression);
+	protected abstract String makeStringRepresentation(StringConstant constant);
 
+	protected abstract String makeStringRepresentation(SymbolicConstant constant);
+
+	protected abstract String makeStringRepresentation(DateConstant constant);
+
+	protected abstract String makeStringRepresentation(DurationConstant constant);
+
+	protected abstract String makeStringRepresentation(EnumConstant constant);
+
+	protected abstract String makeStringRepresentation(Function function);
+
+	protected abstract String makeStringRepresentation(UnaryOperatorExpression expression);
+
+	protected abstract String makeStringRepresentation(BinaryOperatorExpression expression);
 
 }

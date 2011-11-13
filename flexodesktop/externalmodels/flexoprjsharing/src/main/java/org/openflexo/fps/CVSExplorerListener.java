@@ -19,8 +19,8 @@
  */
 package org.openflexo.fps;
 
-public interface CVSExplorerListener 
-{
+public interface CVSExplorerListener {
 	public void exploringSucceeded(CVSExplorable explorable, CVSExplorer explorer);
+
 	public void exploringFailed(CVSExplorable explorable, CVSExplorer explorer, Exception exception);
 }

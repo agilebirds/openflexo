@@ -19,13 +19,11 @@
  */
 package org.openflexo.generator;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
-
 
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.DefaultFlexoEditor;
@@ -73,46 +71,43 @@ import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ToolBox;
 
+public class TestCG2 extends CGTestCase {
 
-public class TestCG2 extends CGTestCase  {
-
-    public TestCG2(String arg0) {
+	public TestCG2(String arg0) {
 		super(arg0);
 	}
 
-     protected static final Logger logger = Logger.getLogger(TestCG2.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(TestCG2.class.getPackage().getName());
 
-    private static final String TEST_CG2 = "TestCG2";
+	private static final String TEST_CG2 = "TestCG2";
 
-    private static ProjectTextFileResource applicationConfResource;
+	private static ProjectTextFileResource applicationConfResource;
 
 	@Override
-    protected void reloadGeneratedResources()
-	{
+	protected void reloadGeneratedResources() {
 		super.reloadGeneratedResources();
-		applicationConfResource = (ProjectTextFileResource)_project.resourceForKey(ResourceType.TEXT_FILE, GeneratorUtils.nameForRepositoryAndIdentifier(codeRepository, DefaultApplicationConfGenerator.IDENTIFIER));
+		applicationConfResource = (ProjectTextFileResource) _project.resourceForKey(ResourceType.TEXT_FILE,
+				GeneratorUtils.nameForRepositoryAndIdentifier(codeRepository, DefaultApplicationConfGenerator.IDENTIFIER));
 	}
 
-
- 	/**
+	/**
 	 * Creates a new empty project in a temp directory
 	 */
-	public void test0CreateProject()
-	{
+	public void test0CreateProject() {
 		log("test0CreateProject");
-       ToolBox.setPlatform();
-       FlexoLoggingManager.forceInitialize();
+		ToolBox.setPlatform();
+		FlexoLoggingManager.forceInitialize();
 		try {
 			File tempFile = File.createTempFile(TEST_CG2, "");
-			_projectDirectory = new File (tempFile.getParentFile(),tempFile.getName()+".prj");
+			_projectDirectory = new File(tempFile.getParentFile(), tempFile.getName() + ".prj");
 			tempFile.delete();
 		} catch (IOException e) {
 			fail();
 		}
-		logger.info("Project directory: "+_projectDirectory.getAbsolutePath());
-		_projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length()-4);
-		logger.info("Project identifier: "+_projectIdentifier);
-		_editor = (DefaultFlexoEditor)FlexoResourceManager.initializeNewProject(_projectDirectory,EDITOR_FACTORY,null);
+		logger.info("Project directory: " + _projectDirectory.getAbsolutePath());
+		_projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length() - 4);
+		logger.info("Project identifier: " + _projectIdentifier);
+		_editor = (DefaultFlexoEditor) FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY, null);
 		_project = _editor.getProject();
 		logger.info("Project has been SUCCESSFULLY created");
 
@@ -127,81 +122,79 @@ public class TestCG2 extends CGTestCase  {
 		assertNotNull(_eoPrototypesResource = _project.getEOModelResource(EOPrototypeRepository.EOPROTOTYPE_REPOSITORY_DIR.getName()));
 
 		for (FlexoResource resource : _project.getResources().values()) {
-			if (resource != _rmResource && !(resource instanceof FlexoMemoryResource)) assertSynchonized(resource, _rmResource);
+			if (resource != _rmResource && !(resource instanceof FlexoMemoryResource))
+				assertSynchonized(resource, _rmResource);
 		}
-		assertSynchonized (_dmResource,_executionModelResource);
-		assertSynchonized (_dmResource,_eoPrototypesResource);
+		assertSynchonized(_dmResource, _executionModelResource);
+		assertSynchonized(_dmResource, _eoPrototypesResource);
 
-		assertSynchonized (_wkfResource,_rootProcessResource);
+		assertSynchonized(_wkfResource, _rootProcessResource);
 
-		assertDepends (_rootProcessResource,_dmResource);
-		assertNotDepends (_rootProcessResource,_clResource);
+		assertDepends(_rootProcessResource, _dmResource);
+		assertNotDepends(_rootProcessResource, _clResource);
 
 		logger.info("Resources are WELL created and DEPENDANCIES checked");
 
 		for (FlexoResource resource : _project.getResources().values()) {
 			if (resource instanceof FlexoStorageResource) {
-				assertNotModified((FlexoStorageResource)resource);
+				assertNotModified((FlexoStorageResource) resource);
 			}
 		}
 
-        defineStatusColumn(_rootProcessResource.getFlexoProcess());
+		defineStatusColumn(_rootProcessResource.getFlexoProcess());
 		AddSubProcess action = AddSubProcess.actionType.makeNewAction(_rootProcessResource.getFlexoProcess(), null, _editor);
 		action.setParentProcess(_rootProcessResource.getFlexoProcess());
 		action.setNewProcessName(TEST_SUB_PROCESS);
 		action.doAction();
-		logger.info("SubProcess "+action.getNewProcess().getName()+" successfully created");
-        defineStatusColumn(action.getNewProcess());
+		logger.info("SubProcess " + action.getNewProcess().getName() + " successfully created");
+		defineStatusColumn(action.getNewProcess());
 		_subProcessResource = _project.getFlexoProcessResource(TEST_SUB_PROCESS);
 		assertNotNull(_subProcessResource);
-		assertSynchonized(_subProcessResource,_rmResource);
-		assertSynchonized(_subProcessResource,_wkfResource);
-		assertDepends(_subProcessResource,_dmResource);
-		assertNotDepends(_subProcessResource,_clResource);
+		assertSynchonized(_subProcessResource, _rmResource);
+		assertSynchonized(_subProcessResource, _wkfResource);
+		assertDepends(_subProcessResource, _dmResource);
+		assertNotDepends(_subProcessResource, _clResource);
 		for (FlexoResource resource : _project.getResources().values()) {
 			if (resource == _rmResource) {
 				assertModified(_rmResource);
-			}
-			else if (resource == _dmResource) {
+			} else if (resource == _dmResource) {
 				assertModified(_dmResource);
-			}
-			else if (resource == _wkfResource) {
+			} else if (resource == _wkfResource) {
 				assertModified(_wkfResource);
-			}
-			else if (resource == _rootProcessResource) {
+			} else if (resource == _rootProcessResource) {
 				assertModified(_rootProcessResource);
-			}
-			else if (resource == _subProcessResource) {
+			} else if (resource == _subProcessResource) {
 				assertModified(_subProcessResource);
-			}
-			else if (resource instanceof FlexoStorageResource) {
-				assertNotModified((FlexoStorageResource)resource);
+			} else if (resource instanceof FlexoStorageResource) {
+				assertNotModified((FlexoStorageResource) resource);
 			}
 		}
 
-		DropWKFElement dropSubProcessNode = DropWKFElement.actionType.makeNewAction(_rootProcessResource.getFlexoProcess().getActivityPetriGraph(), null, _editor);
+		DropWKFElement dropSubProcessNode = DropWKFElement.actionType.makeNewAction(_rootProcessResource.getFlexoProcess()
+				.getActivityPetriGraph(), null, _editor);
 		dropSubProcessNode.setElementType(WKFElementType.MULTIPLE_INSTANCE_PARALLEL_SUB_PROCESS_NODE);
 		dropSubProcessNode.setParameter(DropWKFElement.SUB_PROCESS, _subProcessResource.getFlexoProcess());
-		dropSubProcessNode.setLocation(100,100);
+		dropSubProcessNode.setLocation(100, 100);
 		dropSubProcessNode.doAction();
 		assertTrue(dropSubProcessNode.hasActionExecutionSucceeded());
-		_subProcessNode = (SubProcessNode)dropSubProcessNode.getObject();
+		_subProcessNode = (SubProcessNode) dropSubProcessNode.getObject();
 		_subProcessNode.setName(TEST_SUB_PROCESS_NODE);
-		logger.info("SubProcessNode "+_subProcessNode.getName()+" successfully created");
-		assertDepends(_rootProcessResource,_subProcessResource);
+		logger.info("SubProcessNode " + _subProcessNode.getName() + " successfully created");
+		assertDepends(_rootProcessResource, _subProcessResource);
 		saveProject();
 
 		OpenOperationLevel openOperationLevel = OpenOperationLevel.actionType.makeNewAction(_subProcessNode, null, _editor);
 		openOperationLevel.doAction();
 		DropWKFElement dropOperation = DropWKFElement.actionType.makeNewAction(_subProcessNode.getOperationPetriGraph(), null, _editor);
 		dropOperation.setElementType(WKFElementType.NORMAL_OPERATION);
-		dropOperation.setLocation(100,100);
+		dropOperation.setLocation(100, 100);
 		dropOperation.doAction();
 		assertTrue(dropOperation.hasActionExecutionSucceeded());
-		_operationNode = (OperationNode)dropOperation.getObject();
+		_operationNode = (OperationNode) dropOperation.getObject();
 		_operationNode.setName(TEST_OPERATION_NODE_1);
-		logger.info("OperationNode "+_operationNode.getName()+" successfully created");
-		SetAndOpenOperationComponent setOperationComponent = SetAndOpenOperationComponent.actionType.makeNewAction(_operationNode, null, _editor);
+		logger.info("OperationNode " + _operationNode.getName() + " successfully created");
+		SetAndOpenOperationComponent setOperationComponent = SetAndOpenOperationComponent.actionType.makeNewAction(_operationNode, null,
+				_editor);
 		setOperationComponent.setNewComponentName(OPERATION_COMPONENT_1);
 		setOperationComponent.doAction();
 		assertTrue(setOperationComponent.hasActionExecutionSucceeded());
@@ -219,14 +212,14 @@ public class TestCG2 extends CGTestCase  {
 		// Insert a new bloc at index 0, name it Bloc1
 		DropIEElement dropBloc1 = DropIEElement.createBlocInComponent(_operationComponent1, 0, _editor);
 		assertTrue(dropBloc1.doAction().hasActionExecutionSucceeded());
-		IEBlocWidget bloc1 = (IEBlocWidget)dropBloc1.getDroppedWidget();
+		IEBlocWidget bloc1 = (IEBlocWidget) dropBloc1.getDroppedWidget();
 		assertNotNull(bloc1);
 		bloc1.setTitle("Bloc1");
 
 		// Insert a new bloc at index 1, name it Bloc2
 		DropIEElement dropBloc2 = DropIEElement.createBlocInComponent(_operationComponent1, 1, _editor);
 		assertTrue(dropBloc2.doAction().hasActionExecutionSucceeded());
-		_bloc2 = (IEBlocWidget)dropBloc2.getDroppedWidget();
+		_bloc2 = (IEBlocWidget) dropBloc2.getDroppedWidget();
 		assertNotNull(_bloc2);
 		_bloc2.setTitle("Bloc2");
 
@@ -234,14 +227,14 @@ public class TestCG2 extends CGTestCase  {
 		// This bloc is therefore placed between Bloc1 and Bloc2
 		DropIEElement dropBloc3 = DropIEElement.createBlocInComponent(_operationComponent1, 1, _editor);
 		assertTrue(dropBloc3.doAction().hasActionExecutionSucceeded());
-		IEBlocWidget bloc3 = (IEBlocWidget)dropBloc3.getDroppedWidget();
+		IEBlocWidget bloc3 = (IEBlocWidget) dropBloc3.getDroppedWidget();
 		assertNotNull(bloc3);
 		bloc3.setTitle("Bloc3");
 
 		// Drop a table in the bloc2
 		DropIEElement dropTable = DropIEElement.createTableInBloc(_bloc2, _editor);
 		assertTrue(dropTable.doAction().hasActionExecutionSucceeded());
-		IEHTMLTableWidget table = (IEHTMLTableWidget)dropTable.getDroppedWidget();
+		IEHTMLTableWidget table = (IEHTMLTableWidget) dropTable.getDroppedWidget();
 		assertNotNull(table);
 
 		// Drop a label in the table, at cell (0,0) at position 0
@@ -255,7 +248,7 @@ public class TestCG2 extends CGTestCase  {
 		// Now, drop a TabsContainer
 		DropIEElement dropTabs = DropIEElement.createTabsInComponent(_operationComponent1, 3, _editor);
 		assertTrue(dropTabs.doAction().hasActionExecutionSucceeded());
-		IESequenceTab tabs = (IESequenceTab)dropTabs.getDroppedWidget();
+		IESequenceTab tabs = (IESequenceTab) dropTabs.getDroppedWidget();
 
 		FlexoComponentFolder rootFolder = _project.getFlexoComponentLibrary().getRootFolder();
 
@@ -295,14 +288,14 @@ public class TestCG2 extends CGTestCase  {
 		// Insert a new bloc at index 0, name it Bloc1
 		DropIEElement dropBloc1InOp2 = DropIEElement.createBlocInComponent(_operationComponent2, 0, _editor);
 		assertTrue(dropBloc1InOp2.doAction().hasActionExecutionSucceeded());
-		IEBlocWidget bloc1InOp2 = (IEBlocWidget)dropBloc1InOp2.getDroppedWidget();
+		IEBlocWidget bloc1InOp2 = (IEBlocWidget) dropBloc1InOp2.getDroppedWidget();
 		assertNotNull(bloc1InOp2);
 		bloc1InOp2.setTitle("NewBloc");
 
 		// Now, drop a TabsContainer
 		DropIEElement dropTabsInOp2 = DropIEElement.createTabsInComponent(_operationComponent2, 1, _editor);
 		assertTrue(dropTabsInOp2.doAction().hasActionExecutionSucceeded());
-		IESequenceTab tabsInOp2 = (IESequenceTab)dropTabsInOp2.getDroppedWidget();
+		IESequenceTab tabsInOp2 = (IESequenceTab) dropTabsInOp2.getDroppedWidget();
 
 		// Put Tab1 inside
 		AddTab addTab1InTabs = AddTab.actionType.makeNewAction(tabsInOp2, null, _editor);
@@ -328,14 +321,14 @@ public class TestCG2 extends CGTestCase  {
 		// Insert a new bloc at index 0, name it Bloc1
 		DropIEElement dropBloc1InOp3 = DropIEElement.createBlocInComponent(_operationComponent3, 0, _editor);
 		assertTrue(dropBloc1InOp3.doAction().hasActionExecutionSucceeded());
-		IEBlocWidget bloc1InOp3 = (IEBlocWidget)dropBloc1InOp3.getDroppedWidget();
+		IEBlocWidget bloc1InOp3 = (IEBlocWidget) dropBloc1InOp3.getDroppedWidget();
 		assertNotNull(bloc1InOp3);
 		bloc1InOp3.setTitle("NewBloc");
 
 		// Now, drop a TabsContainer
 		DropIEElement dropTabsInOp3 = DropIEElement.createTabsInComponent(_operationComponent3, 1, _editor);
 		assertTrue(dropTabsInOp3.doAction().hasActionExecutionSucceeded());
-		IESequenceTab tabsInOp3 = (IESequenceTab)dropTabsInOp3.getDroppedWidget();
+		IESequenceTab tabsInOp3 = (IESequenceTab) dropTabsInOp3.getDroppedWidget();
 
 		// Put Tab2 inside
 		AddTab addTab2InOp3 = AddTab.actionType.makeNewAction(tabsInOp3, null, _editor);
@@ -345,44 +338,45 @@ public class TestCG2 extends CGTestCase  {
 		addTab2InOp3.setTabContainer(tabsInOp3);
 		assertTrue(addTab2InOp3.doAction().hasActionExecutionSucceeded());
 
-		DropWKFElement addActivity = DropWKFElement.actionType.makeNewAction(_subProcessResource.getFlexoProcess().getActivityPetriGraph(), null, _editor);
+		DropWKFElement addActivity = DropWKFElement.actionType.makeNewAction(_subProcessResource.getFlexoProcess().getActivityPetriGraph(),
+				null, _editor);
 		addActivity.setElementType(WKFElementType.NORMAL_ACTIVITY);
-		addActivity.setLocation(100,100);
+		addActivity.setLocation(100, 100);
 		addActivity.doAction();
 		assertTrue(addActivity.hasActionExecutionSucceeded());
-		ActivityNode activityNode = (ActivityNode)addActivity.getObject();
+		ActivityNode activityNode = (ActivityNode) addActivity.getObject();
 		activityNode.setName(TEST_ACTIVITY_IN_SUB_PROCESS);
-		logger.info("ActivityNode "+activityNode.getName()+" successfully created");
+		logger.info("ActivityNode " + activityNode.getName() + " successfully created");
 
 		OpenOperationLevel openOperationLevelInSubProcess = OpenOperationLevel.actionType.makeNewAction(activityNode, null, _editor);
 		openOperationLevelInSubProcess.doAction();
 
 		DropWKFElement dropOperation2 = DropWKFElement.actionType.makeNewAction(activityNode.getOperationPetriGraph(), null, _editor);
 		dropOperation2.setElementType(WKFElementType.NORMAL_OPERATION);
-		dropOperation2.setLocation(10,50);
+		dropOperation2.setLocation(10, 50);
 		dropOperation2.doAction();
 		assertTrue(dropOperation2.hasActionExecutionSucceeded());
-		OperationNode operationNode2 = (OperationNode)dropOperation2.getObject();
+		OperationNode operationNode2 = (OperationNode) dropOperation2.getObject();
 		operationNode2.setName(TEST_OPERATION_NODE_2);
-		logger.info("OperationNode "+operationNode2.getName()+" successfully created");
+		logger.info("OperationNode " + operationNode2.getName() + " successfully created");
 
-		SetAndOpenOperationComponent setOperationComponent2
-		= SetAndOpenOperationComponent.actionType.makeNewAction(operationNode2, null, _editor);
+		SetAndOpenOperationComponent setOperationComponent2 = SetAndOpenOperationComponent.actionType.makeNewAction(operationNode2, null,
+				_editor);
 		setOperationComponent2.setNewComponentName(OPERATION_COMPONENT_2);
 		setOperationComponent2.doAction();
 		assertTrue(setOperationComponent2.hasActionExecutionSucceeded());
 
 		DropWKFElement dropOperation3 = DropWKFElement.actionType.makeNewAction(activityNode.getOperationPetriGraph(), null, _editor);
 		dropOperation3.setElementType(WKFElementType.NORMAL_OPERATION);
-		dropOperation3.setLocation(100,50);
+		dropOperation3.setLocation(100, 50);
 		dropOperation3.doAction();
 		assertTrue(dropOperation3.hasActionExecutionSucceeded());
-		OperationNode operationNode3 = (OperationNode)dropOperation3.getObject();
+		OperationNode operationNode3 = (OperationNode) dropOperation3.getObject();
 		operationNode3.setName(TEST_OPERATION_NODE_3);
-		logger.info("OperationNode "+operationNode3.getName()+" successfully created");
+		logger.info("OperationNode " + operationNode3.getName() + " successfully created");
 
-		SetAndOpenOperationComponent setOperationComponent3
-		= SetAndOpenOperationComponent.actionType.makeNewAction(operationNode3, null, _editor);
+		SetAndOpenOperationComponent setOperationComponent3 = SetAndOpenOperationComponent.actionType.makeNewAction(operationNode3, null,
+				_editor);
 		setOperationComponent3.setNewComponentName(OPERATION_COMPONENT_3);
 		setOperationComponent3.doAction();
 		assertTrue(setOperationComponent3.hasActionExecutionSucceeded());
@@ -393,8 +387,7 @@ public class TestCG2 extends CGTestCase  {
 	/**
 	 * Reload project, Initialize code generation
 	 */
-	public void test1InitializeCodeGeneration()
-	{
+	public void test1InitializeCodeGeneration() {
 		log("test1InitializeCodeGeneration");
 		reloadProject(true);
 		associateTabWithOperations();
@@ -405,10 +398,10 @@ public class TestCG2 extends CGTestCase  {
 		reloadProject(true); // This time, all must be not modified
 		for (FlexoResource resource : _project.getResources().values()) {
 			if (resource instanceof FlexoStorageResource) {
-				assertNotModified((FlexoStorageResource)resource);
+				assertNotModified((FlexoStorageResource) resource);
 			}
 		}
-		File directory = new File(_projectDirectory.getParentFile(),"GeneratedCodeFor"+_project.getProjectName());
+		File directory = new File(_projectDirectory.getParentFile(), "GeneratedCodeFor" + _project.getProjectName());
 		directory.mkdirs();
 
 		createDefaultGCRepository();
@@ -416,20 +409,20 @@ public class TestCG2 extends CGTestCase  {
 
 		// Now sets the factory
 
-		_editor.registerExceptionHandlerFor(ValidateProject.actionType,new FlexoExceptionHandler<ValidateProject>() {
+		_editor.registerExceptionHandlerFor(ValidateProject.actionType, new FlexoExceptionHandler<ValidateProject>() {
 			@Override
-            public boolean handleException(FlexoException exception, ValidateProject action) {
+			public boolean handleException(FlexoException exception, ValidateProject action) {
 				if (action.getIeValidationReport() != null && action.getIeValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from IE:\n"+action.getIeValidationReport().reportAsString());
+					logger.info("Errors reported from IE:\n" + action.getIeValidationReport().reportAsString());
 				}
 				if (action.getWkfValidationReport() != null && action.getWkfValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from WKF:\n"+action.getWkfValidationReport().reportAsString());
+					logger.info("Errors reported from WKF:\n" + action.getWkfValidationReport().reportAsString());
 				}
 				if (action.getDkvValidationReport() != null && action.getDkvValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from DKV:\n"+action.getDkvValidationReport().reportAsString());
+					logger.info("Errors reported from DKV:\n" + action.getDkvValidationReport().reportAsString());
 				}
 				if (action.getDmValidationReport() != null && action.getDmValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from DM:\n"+action.getDmValidationReport().reportAsString());
+					logger.info("Errors reported from DM:\n" + action.getDmValidationReport().reportAsString());
 				}
 				return true;
 			}
@@ -444,11 +437,10 @@ public class TestCG2 extends CGTestCase  {
 		FlexoComponentFolder rootFolder = _project.getFlexoComponentLibrary().getRootFolder();
 
 		// Try to fix errors (GPO: this is not required anymore, prefix is always set on root folder unless done otherwise explicitly)
-		//FlexoComponentFolder rootFolder = _project.getFlexoComponentLibrary().getRootFolder();
-		//rootFolder.setComponentPrefix("TST");
+		// FlexoComponentFolder rootFolder = _project.getFlexoComponentLibrary().getRootFolder();
+		// rootFolder.setComponentPrefix("TST");
 		_project.getFlexoNavigationMenu().getRootMenu().setProcess(_operationNode.getProcess());
 		_project.getFlexoNavigationMenu().getRootMenu().setOperation(_operationNode);
-
 
 		// Project should be without errors now
 		validateProject = ValidateProject.actionType.makeNewAction(codeRepository, null, _editor);
@@ -459,13 +451,14 @@ public class TestCG2 extends CGTestCase  {
 
 		// Synchronize code generation
 		codeRepository.connect();
-		SynchronizeRepositoryCodeGeneration synchronizeCodeGeneration = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(codeRepository, null, _editor);
+		SynchronizeRepositoryCodeGeneration synchronizeCodeGeneration = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(
+				codeRepository, null, _editor);
 		// Do it even if validation failed
 		synchronizeCodeGeneration.setContinueAfterValidation(true);
 		synchronizeCodeGeneration.doAction();
 
 		// Write generated files to disk
-		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository,null, _editor);
+		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository, null, _editor);
 		writeToDisk.doAction();
 
 		reloadGeneratedResources();
@@ -547,14 +540,15 @@ public class TestCG2 extends CGTestCase  {
 
 		// Synchronize code generation again
 		codeRepository.connect();
-		SynchronizeRepositoryCodeGeneration synchronizeCodeGenerationAgain = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(codeRepository, null, _editor);
+		SynchronizeRepositoryCodeGeneration synchronizeCodeGenerationAgain = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(
+				codeRepository, null, _editor);
 		synchronizeCodeGenerationAgain.setContinueAfterValidation(true);
 		synchronizeCodeGenerationAgain.doAction();
 
 		logger.info("Code generation is now synchronized");
 
 		checkThatAllFilesAreUpToDate();
-		//Except(GenerationStatus.GenerationModified,buildPropertiesResource.getCGFile(),appConfProdResource.getCGFile());
+		// Except(GenerationStatus.GenerationModified,buildPropertiesResource.getCGFile(),appConfProdResource.getCGFile());
 
 	}
 
@@ -562,12 +556,11 @@ public class TestCG2 extends CGTestCase  {
 
 	private static final String NEW_TAB2_NAME = "Tab2WasRenamed";
 
-	public void test2TestRenamingComponentInsideSynchronization()
-	{
+	public void test2TestRenamingComponentInsideSynchronization() {
 		log("test2TestRenamingComponentInsideSynchronization");
 
 		checkThatAllFilesAreUpToDate();
-		//Except(GenerationStatus.GenerationModified,buildPropertiesResource.getCGFile(),appConfProdResource.getCGFile());
+		// Except(GenerationStatus.GenerationModified,buildPropertiesResource.getCGFile(),appConfProdResource.getCGFile());
 
 		try {
 			_tab1.setName(NEW_TAB1_NAME);
@@ -582,19 +575,18 @@ public class TestCG2 extends CGTestCase  {
 			fail();
 		}
 
-		TabComponentAPIFileResource renamedComponentAPIResource
-		= (TabComponentAPIFileResource)_project.resourceForKey(ResourceType.API_FILE, codeRepository.getName()+"."+NEW_TAB1_NAME);
-		TabComponentWOFileResource renamedComponentWOResource
-		= (TabComponentWOFileResource)_project.resourceForKey(ResourceType.WO_FILE, codeRepository.getName()+"."+NEW_TAB1_NAME);
-		TabComponentJavaFileResource renamedComponentJavaResource
-		= (TabComponentJavaFileResource)_project.resourceForKey(ResourceType.JAVA_FILE, codeRepository.getName()+"."+NEW_TAB1_NAME);
+		TabComponentAPIFileResource renamedComponentAPIResource = (TabComponentAPIFileResource) _project.resourceForKey(
+				ResourceType.API_FILE, codeRepository.getName() + "." + NEW_TAB1_NAME);
+		TabComponentWOFileResource renamedComponentWOResource = (TabComponentWOFileResource) _project.resourceForKey(ResourceType.WO_FILE,
+				codeRepository.getName() + "." + NEW_TAB1_NAME);
+		TabComponentJavaFileResource renamedComponentJavaResource = (TabComponentJavaFileResource) _project.resourceForKey(
+				ResourceType.JAVA_FILE, codeRepository.getName() + "." + NEW_TAB1_NAME);
 
 		assertNotNull(renamedComponentAPIResource);
 		assertNotNull(renamedComponentWOResource);
 		assertNotNull(renamedComponentJavaResource);
 
-		checkThatAllFilesAreUpToDateExcept(
-				operationComponent1APIResource.getCGFile(),
+		checkThatAllFilesAreUpToDateExcept(operationComponent1APIResource.getCGFile(),
 				operationComponent1WOResource.getCGFile(),
 				operationComponent1JavaResource.getCGFile(),
 				operationComponent2APIResource.getCGFile(),
@@ -609,27 +601,15 @@ public class TestCG2 extends CGTestCase  {
 				renamedComponentWOResource.getCGFile(),
 				renamedComponentJavaResource.getCGFile(),
 				tabComponent2APIResource.getCGFile(), // tab2 is also set as "needs generation" the WO tab2 depends of OperationNode
-				tabComponent2WOResource.getCGFile(),
-				tabComponent2JavaResource.getCGFile(),
-				tabComponent2ScreenshotCopyOfCopy.getCGFile(),
-				classpathTextResource.getCGFile(),
-				daJavaResource.getCGFile(),
-				cstJavaResource.getCGFile(),
-				headerFooterAPIResource.getCGFile(),
-				headerFooterJavaResource.getCGFile(),
-				headerFooterWOResource.getCGFile(),
-				rootProcessJSCopy.getCGFile(),
-				subProcessJSCopy.getCGFile(),
-				rootProcessScreenshotCopyOfCopy.getCGFile(),
-				subProcessNodeScreenshotInRootProcessCopyOfCopy.getCGFile(),
-				operationNode1ScreenshotCopyOfCopy.getCGFile(),
-				subProcessScreenshotCopyOfCopy.getCGFile(),
-				activityInSubProcessScreenshotCopyOfCopy.getCGFile(),
-				operationNode2ScreenshotCopyOfCopy.getCGFile(),
-				operationNode3ScreenshotCopyOfCopy.getCGFile(),
-				operationComponent1ScreenshotCopyOfCopy.getCGFile(),
-				operationComponent2ScreenshotCopyOfCopy.getCGFile(),
-                workflowComponentInstanceResource.getCGFile());
+				tabComponent2WOResource.getCGFile(), tabComponent2JavaResource.getCGFile(), tabComponent2ScreenshotCopyOfCopy.getCGFile(),
+				classpathTextResource.getCGFile(), daJavaResource.getCGFile(), cstJavaResource.getCGFile(),
+				headerFooterAPIResource.getCGFile(), headerFooterJavaResource.getCGFile(), headerFooterWOResource.getCGFile(),
+				rootProcessJSCopy.getCGFile(), subProcessJSCopy.getCGFile(), rootProcessScreenshotCopyOfCopy.getCGFile(),
+				subProcessNodeScreenshotInRootProcessCopyOfCopy.getCGFile(), operationNode1ScreenshotCopyOfCopy.getCGFile(),
+				subProcessScreenshotCopyOfCopy.getCGFile(), activityInSubProcessScreenshotCopyOfCopy.getCGFile(),
+				operationNode2ScreenshotCopyOfCopy.getCGFile(), operationNode3ScreenshotCopyOfCopy.getCGFile(),
+				operationComponent1ScreenshotCopyOfCopy.getCGFile(), operationComponent2ScreenshotCopyOfCopy.getCGFile(),
+				workflowComponentInstanceResource.getCGFile());
 
 		assertEquals(operationComponent1APIResource.getCGFile().getGenerationStatus(), GenerationStatus.GenerationModified);
 		assertEquals(operationComponent1WOResource.getCGFile().getGenerationStatus(), GenerationStatus.GenerationModified);
@@ -655,16 +635,16 @@ public class TestCG2 extends CGTestCase  {
 		assertTrue(operationComponent2WOResource.getCGFile().needsMemoryGeneration());
 		assertTrue(operationComponent2JavaResource.getCGFile().needsMemoryGeneration());
 
-		// The 3 next lines are commented because the generation is immediately performed when we discover that the 
+		// The 3 next lines are commented because the generation is immediately performed when we discover that the
 		// tab has been renamed. We, however, leave those 3 lines so that nobody ever tries again to add them before
 		// and get stuck here because he doesn't understand why we haven't put them before.
-		//assertTrue(renamedComponentAPIResource.getCGFile().needsMemoryGeneration());
-		//assertTrue(renamedComponentWOResource.getCGFile().needsMemoryGeneration());
-		//assertTrue(renamedComponentJavaResource.getCGFile().needsMemoryGeneration());
+		// assertTrue(renamedComponentAPIResource.getCGFile().needsMemoryGeneration());
+		// assertTrue(renamedComponentWOResource.getCGFile().needsMemoryGeneration());
+		// assertTrue(renamedComponentJavaResource.getCGFile().needsMemoryGeneration());
 
 		// Generate required files
 		logger.info("Generate required file");
-		GenerateSourceCode generateRequired = GenerateSourceCode.actionType.makeNewAction(codeRepository,null, _editor);
+		GenerateSourceCode generateRequired = GenerateSourceCode.actionType.makeNewAction(codeRepository, null, _editor);
 		assertTrue(generateRequired.doAction().hasActionExecutionSucceeded());
 		logger.info("Generate required file DONE");
 
@@ -682,7 +662,7 @@ public class TestCG2 extends CGTestCase  {
 
 		// Write generated files to disk
 		logger.info("Write required file");
-		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository,null, _editor);
+		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository, null, _editor);
 		assertTrue(writeToDisk.doAction().hasActionExecutionSucceeded());
 		logger.info("Write required file DONE");
 
@@ -691,13 +671,10 @@ public class TestCG2 extends CGTestCase  {
 		saveProject();
 	}
 
-
-	public void test3TestRenamingComponentOutsideSynchronization()
-	{
+	public void test3TestRenamingComponentOutsideSynchronization() {
 		log("test3TestRenamingComponentOutsideSynchronization");
-		reloadProject(true,NEW_TAB1_NAME,TAB_COMPONENT2);
-		reloadGeneratedResources(NEW_TAB1_NAME,TAB_COMPONENT2);
-
+		reloadProject(true, NEW_TAB1_NAME, TAB_COMPONENT2);
+		reloadGeneratedResources(NEW_TAB1_NAME, TAB_COMPONENT2);
 
 		try {
 			_tab2.setName(NEW_TAB2_NAME);
@@ -712,12 +689,12 @@ public class TestCG2 extends CGTestCase  {
 			fail();
 		}
 
-		TabComponentAPIFileResource renamedComponentAPIResource
-		= (TabComponentAPIFileResource)_project.resourceForKey(ResourceType.API_FILE, codeRepository.getName()+"."+NEW_TAB2_NAME);
-		TabComponentWOFileResource renamedComponentWOResource
-		= (TabComponentWOFileResource)_project.resourceForKey(ResourceType.WO_FILE, codeRepository.getName()+"."+NEW_TAB2_NAME);
-		TabComponentJavaFileResource renamedComponentJavaResource
-		= (TabComponentJavaFileResource)_project.resourceForKey(ResourceType.JAVA_FILE, codeRepository.getName()+"."+NEW_TAB2_NAME);
+		TabComponentAPIFileResource renamedComponentAPIResource = (TabComponentAPIFileResource) _project.resourceForKey(
+				ResourceType.API_FILE, codeRepository.getName() + "." + NEW_TAB2_NAME);
+		TabComponentWOFileResource renamedComponentWOResource = (TabComponentWOFileResource) _project.resourceForKey(ResourceType.WO_FILE,
+				codeRepository.getName() + "." + NEW_TAB2_NAME);
+		TabComponentJavaFileResource renamedComponentJavaResource = (TabComponentJavaFileResource) _project.resourceForKey(
+				ResourceType.JAVA_FILE, codeRepository.getName() + "." + NEW_TAB2_NAME);
 
 		assertNull(renamedComponentAPIResource);
 		assertNull(renamedComponentWOResource);
@@ -725,17 +702,18 @@ public class TestCG2 extends CGTestCase  {
 
 		// Synchronize code generation
 		codeRepository.connect();
-		SynchronizeRepositoryCodeGeneration synchronizeCodeGeneration = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(codeRepository, null, _editor);
+		SynchronizeRepositoryCodeGeneration synchronizeCodeGeneration = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(
+				codeRepository, null, _editor);
 		// Do it even if validation failed
 		synchronizeCodeGeneration.setContinueAfterValidation(true);
 		synchronizeCodeGeneration.doAction();
 
-		renamedComponentAPIResource
-		= (TabComponentAPIFileResource)_project.resourceForKey(ResourceType.API_FILE, codeRepository.getName()+"."+NEW_TAB2_NAME);
-		renamedComponentWOResource
-		= (TabComponentWOFileResource)_project.resourceForKey(ResourceType.WO_FILE, codeRepository.getName()+"."+NEW_TAB2_NAME);
-		renamedComponentJavaResource
-		= (TabComponentJavaFileResource)_project.resourceForKey(ResourceType.JAVA_FILE, codeRepository.getName()+"."+NEW_TAB2_NAME);
+		renamedComponentAPIResource = (TabComponentAPIFileResource) _project.resourceForKey(ResourceType.API_FILE, codeRepository.getName()
+				+ "." + NEW_TAB2_NAME);
+		renamedComponentWOResource = (TabComponentWOFileResource) _project.resourceForKey(ResourceType.WO_FILE, codeRepository.getName()
+				+ "." + NEW_TAB2_NAME);
+		renamedComponentJavaResource = (TabComponentJavaFileResource) _project.resourceForKey(ResourceType.JAVA_FILE,
+				codeRepository.getName() + "." + NEW_TAB2_NAME);
 		FlexoCopyOfFlexoResource copyOfCopyOfScreenshotOfRenamedTab = getCopyOfReaderScreenshotResourceForObject(_tab2);
 		assertNotNull(renamedComponentAPIResource);
 		assertNotNull(renamedComponentWOResource);
@@ -749,31 +727,16 @@ public class TestCG2 extends CGTestCase  {
 				operationComponent3WOResource.getCGFile(),
 				operationComponent3JavaResource.getCGFile(),
 				tabComponent1APIResource.getCGFile(),// tab1 is also set as "needs generation" the WO tab2 depends of OperationNode
-				tabComponent1WOResource.getCGFile(),
-				tabComponent1JavaResource.getCGFile(),
-				tabComponent2APIResource.getCGFile(),
-				tabComponent2WOResource.getCGFile(),
-				tabComponent2JavaResource.getCGFile(),
-				renamedComponentAPIResource.getCGFile(),
-				renamedComponentWOResource.getCGFile(),
-				renamedComponentJavaResource.getCGFile(),
-				tabComponent2ScreenshotCopyOfCopy.getCGFile(),
-				copyOfCopyOfScreenshotOfRenamedTab.getCGFile(),
-                classpathTextResource.getCGFile(),
-                daJavaResource.getCGFile(),
-                buildPropertiesResource.getCGFile(),
-                appConfProdResource.getCGFile(),
-				cstJavaResource.getCGFile(),
-				headerFooterAPIResource.getCGFile(),
-				headerFooterJavaResource.getCGFile(),
-				headerFooterWOResource.getCGFile(),
-				rootProcessJSCopy.getCGFile(),
-				subProcessJSCopy.getCGFile(),
-				subProcessScreenshotCopyOfCopy.getCGFile(),
-				activityInSubProcessScreenshotCopyOfCopy.getCGFile(),
-				operationNode2ScreenshotCopyOfCopy.getCGFile(),
-				operationNode3ScreenshotCopyOfCopy.getCGFile(),
-				operationComponent1ScreenshotCopyOfCopy.getCGFile(),
+				tabComponent1WOResource.getCGFile(), tabComponent1JavaResource.getCGFile(), tabComponent2APIResource.getCGFile(),
+				tabComponent2WOResource.getCGFile(), tabComponent2JavaResource.getCGFile(), renamedComponentAPIResource.getCGFile(),
+				renamedComponentWOResource.getCGFile(), renamedComponentJavaResource.getCGFile(),
+				tabComponent2ScreenshotCopyOfCopy.getCGFile(), copyOfCopyOfScreenshotOfRenamedTab.getCGFile(),
+				classpathTextResource.getCGFile(), daJavaResource.getCGFile(), buildPropertiesResource.getCGFile(),
+				appConfProdResource.getCGFile(), cstJavaResource.getCGFile(), headerFooterAPIResource.getCGFile(),
+				headerFooterJavaResource.getCGFile(), headerFooterWOResource.getCGFile(), rootProcessJSCopy.getCGFile(),
+				subProcessJSCopy.getCGFile(), subProcessScreenshotCopyOfCopy.getCGFile(),
+				activityInSubProcessScreenshotCopyOfCopy.getCGFile(), operationNode2ScreenshotCopyOfCopy.getCGFile(),
+				operationNode3ScreenshotCopyOfCopy.getCGFile(), operationComponent1ScreenshotCopyOfCopy.getCGFile(),
 				operationComponent3ScreenshotCopyOfCopy.getCGFile());
 
 		assertEquals(operationComponent1APIResource.getCGFile().getGenerationStatus(), GenerationStatus.GenerationModified);
@@ -794,24 +757,22 @@ public class TestCG2 extends CGTestCase  {
 
 		// Generate required files
 		logger.info("Generate required file");
-		GenerateSourceCode generateRequired = GenerateSourceCode.actionType.makeNewAction(codeRepository,null, _editor);
+		GenerateSourceCode generateRequired = GenerateSourceCode.actionType.makeNewAction(codeRepository, null, _editor);
 		generateRequired.doAction();
 		logger.info("Generate required file DONE");
 		// Write generated files to disk
 		logger.info("Write required file");
-		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository,null, _editor);
+		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository, null, _editor);
 		assertTrue(writeToDisk.doAction().hasActionExecutionSucceeded());
 		logger.info("Write required file DONE");
 
 		saveProject();
 
-
 		checkThatAllFilesAreUpToDate();
 
 	}
 
-	public void test4TestRemovingComponentInsideSynchronization()
-	{
+	public void test4TestRemovingComponentInsideSynchronization() {
 		log("test4TestRemovingComponentInsideSynchronization");
 
 		checkThatAllFilesAreUpToDate();
@@ -820,46 +781,26 @@ public class TestCG2 extends CGTestCase  {
 		IEDelete deleteTab1 = IEDelete.actionType.makeNewAction(_tab1, null, _editor);
 		assertTrue(deleteTab1.doAction().hasActionExecutionSucceeded());
 		logger.info("Delete tab1 DONE");
-		TabComponentAPIFileResource renamedComponentAPIResource
-		= (TabComponentAPIFileResource)_project.resourceForKey(ResourceType.API_FILE, codeRepository.getName()+"."+NEW_TAB2_NAME);
-		TabComponentWOFileResource renamedComponentWOResource
-		= (TabComponentWOFileResource)_project.resourceForKey(ResourceType.WO_FILE, codeRepository.getName()+"."+NEW_TAB2_NAME);
-		TabComponentJavaFileResource renamedComponentJavaResource
-		= (TabComponentJavaFileResource)_project.resourceForKey(ResourceType.JAVA_FILE, codeRepository.getName()+"."+NEW_TAB2_NAME);
+		TabComponentAPIFileResource renamedComponentAPIResource = (TabComponentAPIFileResource) _project.resourceForKey(
+				ResourceType.API_FILE, codeRepository.getName() + "." + NEW_TAB2_NAME);
+		TabComponentWOFileResource renamedComponentWOResource = (TabComponentWOFileResource) _project.resourceForKey(ResourceType.WO_FILE,
+				codeRepository.getName() + "." + NEW_TAB2_NAME);
+		TabComponentJavaFileResource renamedComponentJavaResource = (TabComponentJavaFileResource) _project.resourceForKey(
+				ResourceType.JAVA_FILE, codeRepository.getName() + "." + NEW_TAB2_NAME);
 
-		checkThatAllFilesAreUpToDateExcept(
-				operationComponent1APIResource.getCGFile(),
-				operationComponent1WOResource.getCGFile(),
-				operationComponent1JavaResource.getCGFile(),
-				operationComponent2APIResource.getCGFile(),
-				operationComponent2WOResource.getCGFile(),
-				operationComponent2JavaResource.getCGFile(),
-				tabComponent1APIResource.getCGFile(),
-				tabComponent1WOResource.getCGFile(),
-				tabComponent1JavaResource.getCGFile(),
-				tabComponent2APIResource.getCGFile(),
-				tabComponent2WOResource.getCGFile(),
-				tabComponent2JavaResource.getCGFile(),
-				headerFooterJavaResource.getCGFile(),
-				headerFooterWOResource.getCGFile(),
-				headerFooterAPIResource.getCGFile(),
-                classpathTextResource.getCGFile(),
-                daJavaResource.getCGFile(),
-				cstJavaResource.getCGFile(),
-				renamedComponentAPIResource.getCGFile(),
-				renamedComponentWOResource.getCGFile(),
-				renamedComponentJavaResource.getCGFile(),
-				rootProcessJSCopy.getCGFile(),
-				subProcessJSCopy.getCGFile(),
-				rootProcessScreenshotCopyOfCopy.getCGFile(),
-				subProcessNodeScreenshotInRootProcessCopyOfCopy.getCGFile(),
-				subProcessScreenshotCopyOfCopy.getCGFile(),
-				activityInSubProcessScreenshotCopyOfCopy.getCGFile(),
-				operationNode1ScreenshotCopyOfCopy.getCGFile(),
-				operationNode2ScreenshotCopyOfCopy.getCGFile(),
-				operationNode3ScreenshotCopyOfCopy.getCGFile(),
-				operationComponent1ScreenshotCopyOfCopy.getCGFile(),
-				operationComponent2ScreenshotCopyOfCopy.getCGFile());
+		checkThatAllFilesAreUpToDateExcept(operationComponent1APIResource.getCGFile(), operationComponent1WOResource.getCGFile(),
+				operationComponent1JavaResource.getCGFile(), operationComponent2APIResource.getCGFile(),
+				operationComponent2WOResource.getCGFile(), operationComponent2JavaResource.getCGFile(),
+				tabComponent1APIResource.getCGFile(), tabComponent1WOResource.getCGFile(), tabComponent1JavaResource.getCGFile(),
+				tabComponent2APIResource.getCGFile(), tabComponent2WOResource.getCGFile(), tabComponent2JavaResource.getCGFile(),
+				headerFooterJavaResource.getCGFile(), headerFooterWOResource.getCGFile(), headerFooterAPIResource.getCGFile(),
+				classpathTextResource.getCGFile(), daJavaResource.getCGFile(), cstJavaResource.getCGFile(),
+				renamedComponentAPIResource.getCGFile(), renamedComponentWOResource.getCGFile(), renamedComponentJavaResource.getCGFile(),
+				rootProcessJSCopy.getCGFile(), subProcessJSCopy.getCGFile(), rootProcessScreenshotCopyOfCopy.getCGFile(),
+				subProcessNodeScreenshotInRootProcessCopyOfCopy.getCGFile(), subProcessScreenshotCopyOfCopy.getCGFile(),
+				activityInSubProcessScreenshotCopyOfCopy.getCGFile(), operationNode1ScreenshotCopyOfCopy.getCGFile(),
+				operationNode2ScreenshotCopyOfCopy.getCGFile(), operationNode3ScreenshotCopyOfCopy.getCGFile(),
+				operationComponent1ScreenshotCopyOfCopy.getCGFile(), operationComponent2ScreenshotCopyOfCopy.getCGFile());
 
 		assertEquals(operationComponent1APIResource.getCGFile().getGenerationStatus(), GenerationStatus.GenerationModified);
 		assertEquals(operationComponent1WOResource.getCGFile().getGenerationStatus(), GenerationStatus.GenerationModified);
@@ -883,7 +824,7 @@ public class TestCG2 extends CGTestCase  {
 
 		// Generate required files
 		logger.info("Generate required file");
-		GenerateSourceCode generateRequired = GenerateSourceCode.actionType.makeNewAction(codeRepository,null, _editor);
+		GenerateSourceCode generateRequired = GenerateSourceCode.actionType.makeNewAction(codeRepository, null, _editor);
 		assertTrue(generateRequired.doAction().hasActionExecutionSucceeded());
 		logger.info("Generate required file DONE");
 
@@ -897,7 +838,7 @@ public class TestCG2 extends CGTestCase  {
 
 		// Write generated files to disk
 		logger.info("Write required file");
-		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository,null, _editor);
+		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository, null, _editor);
 		assertTrue(writeToDisk.doAction().hasActionExecutionSucceeded());
 		logger.info("Write required file DONE");
 
@@ -911,11 +852,10 @@ public class TestCG2 extends CGTestCase  {
 
 	}
 
-	public void test5TestRemovingComponentOutsideSynchronization()
-	{
+	public void test5TestRemovingComponentOutsideSynchronization() {
 		log("test5TestRemovingComponentOutsideSynchronization");
-		reloadProject(true,null,NEW_TAB2_NAME);
-		reloadGeneratedResources(null,NEW_TAB2_NAME);
+		reloadProject(true, null, NEW_TAB2_NAME);
+		reloadGeneratedResources(null, NEW_TAB2_NAME);
 
 		logger.info("Will delete tab2");
 		IEDelete deleteTab2 = IEDelete.actionType.makeNewAction(_tab2, null, _editor);
@@ -923,54 +863,57 @@ public class TestCG2 extends CGTestCase  {
 		logger.info("Delete tab2 DONE");
 		// Synchronize code generation
 		codeRepository.connect();
-		SynchronizeRepositoryCodeGeneration synchronizeCodeGeneration = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(codeRepository, null, _editor);
+		SynchronizeRepositoryCodeGeneration synchronizeCodeGeneration = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(
+				codeRepository, null, _editor);
 		// Do it even if validation failed
 		synchronizeCodeGeneration.setContinueAfterValidation(true);
 		synchronizeCodeGeneration.doAction();
 		System.out.println(synchronizeCodeGeneration.getValidationErrorAsString());
 		assertTrue(synchronizeCodeGeneration.hasActionExecutionSucceeded());
 
-		//TODO : decommenter ce qui suit et passer le test.
-		
-		//le problème est causé par la suppression d'un composant qui n'efface
-		//pas le screenshoot associé... il reste une ref dans le repository
-		//du moins c'est ce qui me semble.
-		
-		//ce problème est apparu en résolvant un probleme de dependance des screenshootResource.
-		// voir le code de "ScreenshootResource.rebuildDependencies()" qui est a present
-		//un peu particulier dans les cas ComponentDefinition :
-		// AVANT : on ajoutait la ComponentLibrary dans les dependentResources (ce qui me semble faut)
-		// MAINTENANT : on ajoute la ComponentResource correspondant a la ComponentDef dans les dependantResources (ce qui me semble correct)
-		// CONCLUSION : les screenshotResource ont des dependances correctes, et cela fait apparaitre un probleme lors du delete d'un composant...
+		// TODO : decommenter ce qui suit et passer le test.
 
-//		checkThatAllFilesAreUpToDateExcept(
-//				operationComponent1APIResource.getCGFile(),
-//				operationComponent1WOResource.getCGFile(),
-//				operationComponent1JavaResource.getCGFile(),
-//				operationComponent3APIResource.getCGFile(),
-//				operationComponent3WOResource.getCGFile(),
-//				operationComponent3JavaResource.getCGFile(),
-//				tabComponent2APIResource.getCGFile(),
-//				tabComponent2WOResource.getCGFile(),
-//				tabComponent2JavaResource.getCGFile(),
-//                headerFooterJavaResource.getCGFile(),
-//                headerFooterWOResource.getCGFile(),
-//                headerFooterAPIResource.getCGFile(),
-//                classpathTextResource.getCGFile(),
-//                daJavaResource.getCGFile(),
-//                buildPropertiesResource.getCGFile(),
-//                appConfProdResource.getCGFile(),
-//                cstJavaResource.getCGFile(),
-//				rootProcessJSCopy.getCGFile(),
-//				subProcessJSCopy.getCGFile(),
-//				subProcessScreenshotCopyOfCopy.getCGFile(),
-//				activityInSubProcessScreenshotCopyOfCopy.getCGFile(),
-//				operationNode2ScreenshotCopyOfCopy.getCGFile(),
-//				operationNode3ScreenshotCopyOfCopy.getCGFile(),
-//				operationComponent1ScreenshotCopyOfCopy.getCGFile(),
-//				operationComponent3ScreenshotCopyOfCopy.getCGFile(),
-//				tabComponent2ScreenshotCopyOfCopy.getCGFile()
-//				);
+		// le problème est causé par la suppression d'un composant qui n'efface
+		// pas le screenshoot associé... il reste une ref dans le repository
+		// du moins c'est ce qui me semble.
+
+		// ce problème est apparu en résolvant un probleme de dependance des screenshootResource.
+		// voir le code de "ScreenshootResource.rebuildDependencies()" qui est a present
+		// un peu particulier dans les cas ComponentDefinition :
+		// AVANT : on ajoutait la ComponentLibrary dans les dependentResources (ce qui me semble faut)
+		// MAINTENANT : on ajoute la ComponentResource correspondant a la ComponentDef dans les dependantResources (ce qui me semble
+		// correct)
+		// CONCLUSION : les screenshotResource ont des dependances correctes, et cela fait apparaitre un probleme lors du delete d'un
+		// composant...
+
+		// checkThatAllFilesAreUpToDateExcept(
+		// operationComponent1APIResource.getCGFile(),
+		// operationComponent1WOResource.getCGFile(),
+		// operationComponent1JavaResource.getCGFile(),
+		// operationComponent3APIResource.getCGFile(),
+		// operationComponent3WOResource.getCGFile(),
+		// operationComponent3JavaResource.getCGFile(),
+		// tabComponent2APIResource.getCGFile(),
+		// tabComponent2WOResource.getCGFile(),
+		// tabComponent2JavaResource.getCGFile(),
+		// headerFooterJavaResource.getCGFile(),
+		// headerFooterWOResource.getCGFile(),
+		// headerFooterAPIResource.getCGFile(),
+		// classpathTextResource.getCGFile(),
+		// daJavaResource.getCGFile(),
+		// buildPropertiesResource.getCGFile(),
+		// appConfProdResource.getCGFile(),
+		// cstJavaResource.getCGFile(),
+		// rootProcessJSCopy.getCGFile(),
+		// subProcessJSCopy.getCGFile(),
+		// subProcessScreenshotCopyOfCopy.getCGFile(),
+		// activityInSubProcessScreenshotCopyOfCopy.getCGFile(),
+		// operationNode2ScreenshotCopyOfCopy.getCGFile(),
+		// operationNode3ScreenshotCopyOfCopy.getCGFile(),
+		// operationComponent1ScreenshotCopyOfCopy.getCGFile(),
+		// operationComponent3ScreenshotCopyOfCopy.getCGFile(),
+		// tabComponent2ScreenshotCopyOfCopy.getCGFile()
+		// );
 
 		assertEquals(operationComponent1APIResource.getCGFile().getGenerationStatus(), GenerationStatus.GenerationModified);
 		assertEquals(operationComponent1WOResource.getCGFile().getGenerationStatus(), GenerationStatus.GenerationModified);
@@ -987,7 +930,7 @@ public class TestCG2 extends CGTestCase  {
 
 		// Write generated files to disk
 		logger.info("Write required file");
-		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository,null, _editor);
+		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository, null, _editor);
 		assertTrue(writeToDisk.doAction().hasActionExecutionSucceeded());
 		logger.info("Write required file DONE");
 
@@ -1003,6 +946,5 @@ public class TestCG2 extends CGTestCase  {
 		FileUtils.deleteDir(_project.getProjectDirectory());
 		resetVariables();
 	}
-
 
 }

@@ -27,31 +27,25 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCRepository;
 
-
-public class TOCRepositoryElement extends DEBrowserElement
-{
-	public TOCRepositoryElement(TOCRepository repository, ProjectBrowser browser, BrowserElement parent)
-	{
-		super(repository, BrowserElementType.TOC_REPOSITORY, browser,parent);
+public class TOCRepositoryElement extends DEBrowserElement {
+	public TOCRepositoryElement(TOCRepository repository, ProjectBrowser browser, BrowserElement parent) {
+		super(repository, BrowserElementType.TOC_REPOSITORY, browser, parent);
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
-		Enumeration<TOCEntry> en = getRepository().getSortedTocEntries(); 
-		while(en.hasMoreElements())
+	protected void buildChildrenVector() {
+		Enumeration<TOCEntry> en = getRepository().getSortedTocEntries();
+		while (en.hasMoreElements())
 			addToChilds(en.nextElement());
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return getRepository().getTitle();
 	}
 
-	public TOCRepository getRepository()
-	{
-		return (TOCRepository)getObject();
+	public TOCRepository getRepository() {
+		return (TOCRepository) getObject();
 	}
-	
+
 }

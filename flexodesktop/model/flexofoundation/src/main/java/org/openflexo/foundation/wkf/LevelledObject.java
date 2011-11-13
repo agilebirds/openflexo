@@ -22,14 +22,12 @@ package org.openflexo.foundation.wkf;
 import org.openflexo.foundation.DeletableObject;
 
 /**
- * Interface implemented by objects associated with a
- * {@link org.openflexo.foundation.wkf.FlexoLevel}
+ * Interface implemented by objects associated with a {@link org.openflexo.foundation.wkf.FlexoLevel}
  * 
  * @author sguerin
  */
-public interface LevelledObject extends DeletableObject
-{
+public interface LevelledObject extends DeletableObject {
 
-    public FlexoLevel getLevel();
+	public FlexoLevel getLevel();
 
 }

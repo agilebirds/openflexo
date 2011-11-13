@@ -24,31 +24,24 @@ import java.awt.Cursor;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
 
-
 public class ConnectorNonAdjustableControlPoint extends ControlPoint {
 
-	public ConnectorNonAdjustableControlPoint(ConnectorGraphicalRepresentation<?> gr, FGEPoint pt)
-	{
-		super(gr,pt);
-	}
-
-
-	@Override
-	public ConnectorGraphicalRepresentation<?> getGraphicalRepresentation()
-	{
-		return (ConnectorGraphicalRepresentation<?>)super.getGraphicalRepresentation();
+	public ConnectorNonAdjustableControlPoint(ConnectorGraphicalRepresentation<?> gr, FGEPoint pt) {
+		super(gr, pt);
 	}
 
 	@Override
-	public Cursor getDraggingCursor()
-	{
+	public ConnectorGraphicalRepresentation<?> getGraphicalRepresentation() {
+		return (ConnectorGraphicalRepresentation<?>) super.getGraphicalRepresentation();
+	}
+
+	@Override
+	public Cursor getDraggingCursor() {
 		return null;
 	}
 
-
 	@Override
-	public boolean isDraggable()
-	{
+	public boolean isDraggable() {
 		return false;
 	}
 

@@ -37,24 +37,23 @@ import javax.swing.text.ViewFactory;
 import javax.swing.text.Position.Bias;
 
 /**
- * This View just forward all calls to the original view but also paints
- * the waved line if the Elements is marked as misspelled.
+ * This View just forward all calls to the original view but also paints the waved line if the Elements is marked as misspelled.
  * 
  * @author Robert Gustavsson (robert@lindesign.se)
  */
-public class AutoSpellView extends View implements AutoSpellConstants{
+public class AutoSpellView extends View implements AutoSpellConstants {
 
-	private View	view=null;
-	private int[]	wavePoints=new int[10];
-	
-	public AutoSpellView(View view){
+	private View view = null;
+	private int[] wavePoints = new int[10];
+
+	public AutoSpellView(View view) {
 		super(view.getElement());
-		this.view=view;
-		for(int i=0;i<wavePoints.length;i++){
-			wavePoints[i]=(int)Math.round(Math.cos(2*i*(2*Math.PI/wavePoints.length)));
+		this.view = view;
+		for (int i = 0; i < wavePoints.length; i++) {
+			wavePoints[i] = (int) Math.round(Math.cos(2 * i * (2 * Math.PI / wavePoints.length)));
 		}
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see javax.swing.text.View#append(javax.swing.text.View)
 	 */
@@ -72,10 +71,7 @@ public class AutoSpellView extends View implements AutoSpellConstants{
 	/* (non-Javadoc)
 	 * @see javax.swing.text.View#changedUpdate(javax.swing.event.DocumentEvent, java.awt.Shape, javax.swing.text.ViewFactory)
 	 */
-	public void changedUpdate(
-		DocumentEvent arg0,
-		Shape arg1,
-		ViewFactory arg2) {
+	public void changedUpdate(DocumentEvent arg0, Shape arg1, ViewFactory arg2) {
 		view.changedUpdate(arg0, arg1, arg2);
 	}
 
@@ -173,13 +169,7 @@ public class AutoSpellView extends View implements AutoSpellConstants{
 	/* (non-Javadoc)
 	 * @see javax.swing.text.View#getNextVisualPositionFrom(int, javax.swing.text.Position.Bias, java.awt.Shape, int, javax.swing.text.Position.Bias[])
 	 */
-	public int getNextVisualPositionFrom(
-		int arg0,
-		Bias arg1,
-		Shape arg2,
-		int arg3,
-		Bias[] arg4)
-		throws BadLocationException {
+	public int getNextVisualPositionFrom(int arg0, Bias arg1, Shape arg2, int arg3, Bias[] arg4) throws BadLocationException {
 		return view.getNextVisualPositionFrom(arg0, arg1, arg2, arg3, arg4);
 	}
 
@@ -254,7 +244,6 @@ public class AutoSpellView extends View implements AutoSpellConstants{
 		return view.getViewIndex(arg0, arg1);
 	}
 
-
 	/* (non-Javadoc)
 	 * @see javax.swing.text.View#insert(int, javax.swing.text.View)
 	 */
@@ -288,16 +277,14 @@ public class AutoSpellView extends View implements AutoSpellConstants{
 	 * @return
 	 * @throws javax.swing.text.BadLocationException
 	 */
-	public Shape modelToView(int arg0, Shape arg1, Bias arg2)
-		throws BadLocationException {
+	public Shape modelToView(int arg0, Shape arg1, Bias arg2) throws BadLocationException {
 		return view.modelToView(arg0, arg1, arg2);
 	}
 
 	/* (non-Javadoc)
 	 * @see javax.swing.text.View#modelToView(int, javax.swing.text.Position.Bias, int, javax.swing.text.Position.Bias, java.awt.Shape)
 	 */
-	public Shape modelToView(int arg0, Bias arg1, int arg2, Bias arg3, Shape arg4)
-		throws BadLocationException {
+	public Shape modelToView(int arg0, Bias arg1, int arg2, Bias arg3, Shape arg4) throws BadLocationException {
 		return view.modelToView(arg0, arg1, arg2, arg3, arg4);
 	}
 
@@ -306,20 +293,21 @@ public class AutoSpellView extends View implements AutoSpellConstants{
 	 * @param arg1
 	 */
 	public void paint(Graphics arg0, Shape arg1) {
-		Graphics	g=arg0;
-		Rectangle	r;
-		Color		c;
+		Graphics g = arg0;
+		Rectangle r;
+		Color c;
 		view.paint(arg0, arg1);
-		if(getAttributes().containsAttribute(wordMisspelled, wordMisspelledTrue)){
-			r=arg1.getBounds();
-			c=g.getColor();
+		if (getAttributes().containsAttribute(wordMisspelled, wordMisspelledTrue)) {
+			r = arg1.getBounds();
+			c = g.getColor();
 			g.setColor(Color.red);
-			for(int x=r.x;x<r.x+r.width;x++){
-				g.drawLine(x,r.y+r.height-2-wavePoints[x%wavePoints.length],x,r.y+r.height-2-wavePoints[x%wavePoints.length]);
+			for (int x = r.x; x < r.x + r.width; x++) {
+				g.drawLine(x, r.y + r.height - 2 - wavePoints[x % wavePoints.length], x, r.y + r.height - 2
+						- wavePoints[x % wavePoints.length]);
 			}
-			//g.setColor(c);
+			// g.setColor(c);
 		}
-			
+
 	}
 
 	/* (non-Javadoc)
@@ -346,10 +334,7 @@ public class AutoSpellView extends View implements AutoSpellConstants{
 	/* (non-Javadoc)
 	 * @see javax.swing.text.View#removeUpdate(javax.swing.event.DocumentEvent, java.awt.Shape, javax.swing.text.ViewFactory)
 	 */
-	public void removeUpdate(
-		DocumentEvent arg0,
-		Shape arg1,
-		ViewFactory arg2) {
+	public void removeUpdate(DocumentEvent arg0, Shape arg1, ViewFactory arg2) {
 		view.removeUpdate(arg0, arg1, arg2);
 	}
 

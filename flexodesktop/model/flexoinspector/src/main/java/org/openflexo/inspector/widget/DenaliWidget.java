@@ -62,17 +62,14 @@ import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 import org.openflexo.xmlcode.StringRepresentable;
 
-
 /**
  * Abstract class representing a widget in the inspector
- *
+ * 
  * @author bmangez, sguerin
  */
-public abstract class DenaliWidget<T> extends JPanel implements InspectorObserver, InnerTabWidgetView
-{
+public abstract class DenaliWidget<T> extends JPanel implements InspectorObserver, InnerTabWidgetView {
 
-	private static final Logger logger = Logger
-	.getLogger(DenaliWidget.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DenaliWidget.class.getPackage().getName());
 
 	private static final String READONLY = "readOnly";
 
@@ -141,13 +138,13 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 
 	public static final String BUTTON = "BUTTON";
 
-	public static final Dimension MINIMUM_SIZE=new Dimension(30,25);
+	public static final Dimension MINIMUM_SIZE = new Dimension(30, 25);
 	// ==========================================================================
 	// ============================= Variables
 	// ==================================
 	// ==========================================================================
 
-	//protected String _observedPropertyName;
+	// protected String _observedPropertyName;
 
 	protected String _observedTabName;
 
@@ -172,8 +169,7 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 
 	boolean widgetRefreshPlanned = false;
 
-	protected DenaliWidget(PropertyModel model, AbstractController controller)
-	{
+	protected DenaliWidget(PropertyModel model, AbstractController controller) {
 		super();
 		_propertyModel = model;
 		_observedTabName = model._tabModelName;
@@ -182,46 +178,42 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 		_controller = controller;
 	}
 
-	public void refreshMe()
-	{
+	public void refreshMe() {
 		if (getDynamicComponent().getParent() != null && getDynamicComponent().getParent() instanceof JComponent) {
-			((JComponent)getDynamicComponent().getParent()).revalidate();
-			((JComponent)getDynamicComponent().getParent()).repaint();
+			((JComponent) getDynamicComponent().getParent()).revalidate();
+			((JComponent) getDynamicComponent().getParent()).repaint();
 		}
 	}
 
 	/**
 	 * Overrides getMinimumSize
+	 * 
 	 * @see javax.swing.JComponent#getMinimumSize()
 	 */
 	@Override
-	public Dimension getMinimumSize()
-	{
+	public Dimension getMinimumSize() {
 		return MINIMUM_SIZE;
 	}
 
 	AbstractController _controller;
 
-	public AbstractController getController()
-	{
+	public AbstractController getController() {
 		/*if (InspectorController.hasInstance())
-    		return InspectorController.instance();
-    	else return null;*/
+			return InspectorController.instance();
+		else return null;*/
 		return _controller;
 	}
 
-	public static InnerTabWidgetView instance(InnerTabWidget propModel, AbstractController controller)
-	{
+	public static InnerTabWidgetView instance(InnerTabWidget propModel, AbstractController controller) {
 		InnerTabWidgetView answer = null;
 		if (answer == null) {
-			answer = createWidget(propModel,controller);
+			answer = createWidget(propModel, controller);
 		}
 		answer.setController(controller);
 		return answer;
 	}
 
-	private static InnerTabWidgetView createWidget(InnerTabWidget widget, AbstractController controller)
-	{
+	private static InnerTabWidgetView createWidget(InnerTabWidget widget, AbstractController controller) {
 		if (widget instanceof PropertyModel) {
 			PropertyModel model = (PropertyModel) widget;
 			String propType = model.getWidget();
@@ -350,28 +342,27 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 			}
 			return new UnknownWidget(model, controller);
 		} else if (widget instanceof GroupModel) {
-			return new LineWidget((GroupModel)widget,controller);
+			return new LineWidget((GroupModel) widget, controller);
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Unknown model of type "+widget.getClass().getSimpleName());
+				logger.warning("Unknown model of type " + widget.getClass().getSimpleName());
 			}
 			return null;
 		}
 	}
 
 	@Override
-	public void setController(AbstractController controller)
-	{
+	public void setController(AbstractController controller) {
 		_controller = controller;
 	}
+
 	// ==========================================================================
 	// ========================== Updating from/to model
 	// ========================
 	// ==========================================================================
 
 	/**
-	 * Update the widget retrieving data from the model. This method is called
-	 * when the observed property change.
+	 * Update the widget retrieving data from the model. This method is called when the observed property change.
 	 */
 	@Override
 	public abstract void updateWidgetFromModel();
@@ -387,19 +378,18 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 	// ==========================================================================
 
 	@Override
-	public synchronized void switchObserved(InspectableObject inspectable)
-	{
+	public synchronized void switchObserved(InspectableObject inspectable) {
 		// SGU: I think we can try here to this:
 		/*if (inspectable != getModel()) {
-        	if (widgetHasFocus()) {
-        		looseFocus();
-        	}
-            if (getModel() != null) {
-                getModel().deleteInspectorObserver(this);
-            }
-            setModel(inspectable);
-            getModel().addInspectorObserver(this);
-    	}*/
+			if (widgetHasFocus()) {
+				looseFocus();
+			}
+		    if (getModel() != null) {
+		        getModel().deleteInspectorObserver(this);
+		    }
+		    setModel(inspectable);
+		    getModel().addInspectorObserver(this);
+		}*/
 
 		if (widgetHasFocus()) {
 			looseFocus();
@@ -411,7 +401,7 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 		getModel().addInspectorObserver(this);
 		try {
 			if (isWidgetVisible()) {
-				if(!modelUpdating && !widgetUpdating) {
+				if (!modelUpdating && !widgetUpdating) {
 					updateWidgetFromModel();
 				} else {
 					SwingUtilities.invokeLater(new Runnable() {
@@ -423,8 +413,7 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 				}
 			}
 		} catch (IllegalStateException e) {
-			if (logger.isLoggable(Level.INFO))
-			{
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("IllegalStateException raised: loop in AWT loop");
 				// Cannot modify, since was initialized from the widget itself
 				// Just catching this exception allow to update fields while
@@ -434,8 +423,7 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 
 	}
 
-	public void performUpdate()
-	{
+	public void performUpdate() {
 		if (!widgetUpdating) {
 			updateWidgetFromModel();
 		}
@@ -493,8 +481,7 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 	// ==========================================================================
 
 	@Override
-	public void update(final InspectableObject inspectable, final InspectableModification modification)
-	{
+	public void update(final InspectableObject inspectable, final InspectableModification modification) {
 		if (modification == null) {
 			return;
 		}
@@ -511,20 +498,17 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 		 * the update operation after the execution of the current
 		 * AWT-loop
 		 */
-		if (modelUpdating
-				&& !widgetRefreshPlanned
-				&& modification.isReentrant() /* Do it only for reentrant modifications !!! */) {
+		if (modelUpdating && !widgetRefreshPlanned && modification.isReentrant() /* Do it only for reentrant modifications !!! */) {
 			if (willUpdateModel(inspectable, modification)) {
 				widgetRefreshPlanned = true;
 				SwingUtilities.invokeLater(new Runnable() {
 					/**
 					 * Overrides run
-					 *
+					 * 
 					 * @see java.lang.Runnable#run()
 					 */
 					@Override
-					public void run()
-					{
+					public void run() {
 						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("pfew...that was close. Good Swing consultant: updating now");
 						}
@@ -559,13 +543,10 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 		}
 	}
 
-	private boolean willUpdateModel(InspectableObject inspectable, InspectableModification modification)
-	{
+	private boolean willUpdateModel(InspectableObject inspectable, InspectableModification modification) {
 		String propertyName = modification.propertyName();
-		return (inspectable==_model
-				&& propertyName!=null
-				&& (propertyName.equals(getObservedPropertyName())
-						|| propertyName.regionMatches(0, getObservedPropertyName(), getObservedPropertyName().lastIndexOf('.')+1, propertyName.length())));
+		return (inspectable == _model && propertyName != null && (propertyName.equals(getObservedPropertyName()) || propertyName
+				.regionMatches(0, getObservedPropertyName(), getObservedPropertyName().lastIndexOf('.') + 1, propertyName.length())));
 	}
 
 	// ==========================================================================
@@ -573,28 +554,24 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 	// ================================
 	// ==========================================================================
 
-	public synchronized void setStringValue(String newValueAsString)
-	{
-		if (typeIsString()||typeIsObject()) {
-			setObjectValue((T)newValueAsString);
+	public synchronized void setStringValue(String newValueAsString) {
+		if (typeIsString() || typeIsObject()) {
+			setObjectValue((T) newValueAsString);
 		} else if (typeIsStringConvertable()) {
-			setObjectValue((T)getTypeConverter().convertFromString(newValueAsString));
+			setObjectValue((T) getTypeConverter().convertFromString(newValueAsString));
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger
-				.warning("There is an error in some configuration file :\n the property named '"
-						+ _propertyModel.name
+				logger.warning("There is an error in some configuration file :\n the property named '" + _propertyModel.name
 						+ "' has no way to handle string representation building !");
 			}
-			System.out.println("TypeIsString="+typeIsString());
-			System.out.println("getType()="+getType());
-			System.out.println("hasObjectValue()="+hasObjectValue());
-			System.out.println("getObjectValue()="+getObjectValue());
+			System.out.println("TypeIsString=" + typeIsString());
+			System.out.println("getType()=" + getType());
+			System.out.println("hasObjectValue()=" + hasObjectValue());
+			System.out.println("getObjectValue()=" + getObjectValue());
 		}
 	}
 
-	public String getStringValue()
-	{
+	public String getStringValue() {
 		Object object = getObjectValue();
 		if (object != null) {
 			return getStringRepresentation(object);
@@ -603,14 +580,13 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 		}
 	}
 
-	public String getDisplayStringRepresentation(Object object)
-	{
-		if (object instanceof Enum && (_propertyModel.hasFormatter())){
+	public String getDisplayStringRepresentation(Object object) {
+		if (object instanceof Enum && (_propertyModel.hasFormatter())) {
 
 			Method formatter;
 			try {
-				formatter = ((Enum)object).getDeclaringClass().getMethod(_propertyModel.getValueForParameter("format"));
-				return (String)formatter.invoke(object);
+				formatter = ((Enum) object).getDeclaringClass().getMethod(_propertyModel.getValueForParameter("format"));
+				return (String) formatter.invoke(object);
 			} catch (SecurityException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -632,17 +608,16 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 		return getStringRepresentation(object);
 	}
 
-	public String getStringRepresentation(Object object)
-	{
+	public String getStringRepresentation(Object object) {
 		if (object instanceof String) {
 			return (String) object;
 		} else if ((object instanceof KeyValueCoding) && (_propertyModel.hasFormatter())) {
 			return _propertyModel.getFormattedObject((KeyValueCoding) object);
-		} else if (object instanceof Enum){
-			return FlexoLocalization.localizedForKey(((Enum)object).name().toLowerCase());
+		} else if (object instanceof Enum) {
+			return FlexoLocalization.localizedForKey(((Enum) object).name().toLowerCase());
 		} else if (object instanceof StringConvertable) {
 			String str = ((StringConvertable) object).getConverter().convertToString(object);
-			return str!=null?FlexoLocalization.localizedForKey(str.toLowerCase()):"";
+			return str != null ? FlexoLocalization.localizedForKey(str.toLowerCase()) : "";
 		} else if (object instanceof Number) {
 			return object.toString();
 		} else if (object instanceof Boolean) {
@@ -653,9 +628,7 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 			return object.toString();
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger
-				.warning("There is an error in some configuration file :\n the property named '"
-						+ _propertyModel.name
+				logger.warning("There is an error in some configuration file :\n the property named '" + _propertyModel.name
 						+ "' has no string representation formatter ! Object is a "
 						+ (object != null ? object.getClass().getName() : "null"));
 			}
@@ -672,16 +645,14 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 
 	protected StringEncoder.Converter _typeConverter;
 
-	protected Class getType()
-	{
+	protected Class getType() {
 		if (_type == null) {
 			retrieveType();
 		}
 		return _type;
 	}
 
-	protected Class retrieveType()
-	{
+	protected Class retrieveType() {
 		if (hasObjectValue()) {
 			Object value = getObjectValue();
 			if (value != null) {
@@ -708,8 +679,8 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 					_typeConverter = lookupStaticStringConverter(_type);
 				}
 			}
-			if (_type!=null) {
-				while(_type.isAnonymousClass()) {
+			if (_type != null) {
+				while (_type.isAnonymousClass()) {
 					_type = _type.getSuperclass();
 				}
 			}
@@ -739,8 +710,8 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 				}
 			}
 		}
-		//if ("textColor".equals(_observedPropertyName) || "backColor".equals(_observedPropertyName))
-		//	System.err.println("coucou");
+		// if ("textColor".equals(_observedPropertyName) || "backColor".equals(_observedPropertyName))
+		// System.err.println("coucou");
 		return null;
 	}
 
@@ -748,13 +719,11 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 	 * Returns a string representation
 	 */
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return getClass().getSimpleName() + "[" + observedPropertyName() + "]";
 	}
 
-	protected boolean typeIsString()
-	{
+	protected boolean typeIsString() {
 		if (getType() != null) {
 			return (String.class.isAssignableFrom(getType()));
 		} else {
@@ -766,23 +735,20 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 		return Object.class == getType();
 	}
 
-	protected boolean typeIsStringConvertable()
-	{
-		return getTypeConverter()!=null;
+	protected boolean typeIsStringConvertable() {
+		return getTypeConverter() != null;
 	}
 
-	protected StringEncoder.Converter getTypeConverter()
-	{
+	protected StringEncoder.Converter getTypeConverter() {
 		return _typeConverter;
 	}
 
-	public boolean isChoiceList()
-	{
+	public boolean isChoiceList() {
 		if (getPropertyModel().getBooleanValueForParameter("ignorechoicelist")) {
 			return false;
 		}
 		if (getType() != null) {
-			return (ChoiceList.class.isAssignableFrom(getType()) || getType().getEnumConstants()!=null);
+			return (ChoiceList.class.isAssignableFrom(getType()) || getType().getEnumConstants() != null);
 		} else {
 			return false;
 		}
@@ -792,7 +758,6 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 	// ==================== Dynamic access to values ===================
 	// =================================================================
 
-
 	protected boolean valueInError = false;
 
 	protected boolean focusListenerEnabled = true;
@@ -800,7 +765,7 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 	@Override
 	public void setBackground(Color bg) {
 		super.setBackground(bg);
-		if (getDynamicComponent()!=null) {
+		if (getDynamicComponent() != null) {
 			getDynamicComponent().setBackground(bg);
 		}
 	}
@@ -808,31 +773,28 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 	@Override
 	public void setForeground(Color fg) {
 		super.setForeground(fg);
-		if (getDynamicComponent()!=null) {
+		if (getDynamicComponent() != null) {
 			getDynamicComponent().setForeground(fg);
 		}
 	}
 
 	/*public KeyValueCoding getTargetObject()
-    {
-        return _propertyModel.getTargetObject(getModel());
-    }
+	{
+	    return _propertyModel.getTargetObject(getModel());
+	}
 
-    public String getLastAccessor()
-    {
-        return _propertyModel.getLastAccessor();
-    }*/
+	public String getLastAccessor()
+	{
+	    return _propertyModel.getLastAccessor();
+	}*/
 
 	/**
 	 * This method can be called to store the newValue in the model.
-	 *
+	 * 
 	 * @param newValue
 	 */
-	protected synchronized void setObjectValue(T newValue)
-	{
-		if (getController() != null
-				&& getController().getDelegate() != null
-				&& _propertyModel.allowDelegateHandling()) {
+	protected synchronized void setObjectValue(T newValue) {
+		if (getController() != null && getController().getDelegate() != null && _propertyModel.allowDelegateHandling()) {
 
 			// Special case for delegate handling
 
@@ -842,19 +804,19 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 			if (oldValue == null && newValue == null) {
 				return;
 			}
-			if ((newValue != null) && (oldValue != null) &&  (oldValue.equals(newValue))) {
+			if ((newValue != null) && (oldValue != null) && (oldValue.equals(newValue))) {
 				return;
 			}
-			//logger.info("_propertyModel="+_propertyModel);
-			//logger.info("target="+target);
-			//logger.info("lastAccessor="+lastAccessor);
-			//logger.info("delegate="+getController().getDelegate());
+			// logger.info("_propertyModel="+_propertyModel);
+			// logger.info("target="+target);
+			// logger.info("lastAccessor="+lastAccessor);
+			// logger.info("delegate="+getController().getDelegate());
 			if (target != null && getController().getDelegate().handlesObjectOfClass(target.getClass())) {
 				getController().getDelegate().setLocalizedPropertyName(getLocalizedLabel());
 				getController().getDelegate().setTarget(target);
 				getController().getDelegate().setKey(lastAccessor);
 				focusListenerEnabled = false;
-				boolean ok =getController().getDelegate().setObjectValue(newValue);
+				boolean ok = getController().getDelegate().setObjectValue(newValue);
 				if (!ok) {
 					valueInError = true;
 					SwingUtilities.invokeLater(new UpdateFromModel());
@@ -868,8 +830,7 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 					notifyInspectedPropertyChanged(newValue);
 				}
 			}
-		}
-		else {
+		} else {
 			try {
 
 				// Normal case here, just invoke this
@@ -881,8 +842,7 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 			catch (AccessorInvocationException e) {
 				valueInError = true;
 				if (_controller != null) {
-					if (!_controller.handleException(getModel(), observedPropertyName(),
-							newValue, e.getTargetException())) {
+					if (!_controller.handleException(getModel(), observedPropertyName(), newValue, e.getTargetException())) {
 						// Revert to value defined in the model !
 						if (logger.isLoggable(Level.INFO)) {
 							logger.info("Exception was NOT handled");
@@ -897,8 +857,7 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 							_tab.valueChange(newValue, this);
 						}
 					}
-				}
-				else {
+				} else {
 					e.getTargetException().printStackTrace();
 				}
 				valueInError = false;
@@ -907,189 +866,184 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 		}
 
 		/*Object oldValue = getObjectValue();
-        // logger.info("Old value="+oldValue+" New value="+newValue);
-        if (oldValue == null) {
-            if (newValue == null) {
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("Same null value. Ignored.");
-                return;
-            }
-        } else if ((newValue != null) && (oldValue.equals(newValue))) {
-            if (logger.isLoggable(Level.FINE))
-                logger.fine("Same value. Ignored.");
-            return;
-        }
-        try {
-            boolean ok = true;
-            KeyValueCoding target = getTargetObject();
-            if (getController() == null || getController().getDelegate() == null || !getController().getDelegate().handlesObjectOfClass(target.getClass())) {
-                if (newValue != null)
-                    if (logger.isLoggable(Level.FINE))
-                        logger.fine("setObjectValue() for property " + observedPropertyName() + " with " + newValue + " (type is "
-                                + newValue.getClass() + ")");
-                    else if (logger.isLoggable(Level.FINE))
-                        logger.fine("setObjectValue() for property " + observedPropertyName() + " with " + newValue + ")");
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("setObjectValue() for property " + observedPropertyName() + " with " + newValue);
-                if (target != null) {
-                    target.setObjectForKey(newValue, getLastAccessor());
-                } else if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Target object is null for key " + observedPropertyName() + ". We should definitely investigate this.");
-            } else {
-                getController().getDelegate().setLocalizedPropertyName(getLocalizedLabel());
-                getController().getDelegate().setTarget(target);
-                getController().getDelegate().setKey(getLastAccessor());
-                focusListenerEnabled = false;
-                ok =getController().getDelegate().setObjectValue(newValue);
-                if (!ok) {
-                    valueInError = true;
-                    SwingUtilities.invokeLater(new UpdateFromModel());
-                    if (_tab != null) {
-                        _tab.valueChange(newValue, this);
-                    }
-                    modelUpdating = false;
-                }
-                focusListenerEnabled = true;
-            }
-            if (ok) {
-                notifyInspectedPropertyChanged(newValue);
-                //BMA : comment those line because already executed in notify
-//                if (_tab != null) {
-//                    _tab.valueChange(newValue, this);
-//                }
-            }
-        } catch (AccessorInvocationException e) {
-            valueInError = true;
-            if (InspectorController.instance() != null) {
-            if (!InspectorController.instance().handleException(getModel(), observedPropertyName(),
-                    newValue, e.getTargetException())) {
-                // Revert to value defined in the model !
-                if (logger.isLoggable(Level.INFO))
-                    logger.info("Exception was NOT handled");
-                SwingUtilities.invokeLater(new UpdateFromModel());
-            } else {
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("Exception was handled");
-                SwingUtilities.invokeLater(new UpdateFromModel());
-                if (_tab != null) {
-                    _tab.valueChange(newValue, this);
-                }
-            }
-            }
-            else {
-            	e.getTargetException().printStackTrace();
-            }
-            valueInError = false;
-            modelUpdating = false;
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("setObjectValue() with " + newValue + " failed for property "
-                        + observedPropertyName() + " for object " + getModel().getClass().getName()
-                        + " : exception " + e.getMessage());
-        }*/
+		// logger.info("Old value="+oldValue+" New value="+newValue);
+		if (oldValue == null) {
+		    if (newValue == null) {
+		        if (logger.isLoggable(Level.FINE))
+		            logger.fine("Same null value. Ignored.");
+		        return;
+		    }
+		} else if ((newValue != null) && (oldValue.equals(newValue))) {
+		    if (logger.isLoggable(Level.FINE))
+		        logger.fine("Same value. Ignored.");
+		    return;
+		}
+		try {
+		    boolean ok = true;
+		    KeyValueCoding target = getTargetObject();
+		    if (getController() == null || getController().getDelegate() == null || !getController().getDelegate().handlesObjectOfClass(target.getClass())) {
+		        if (newValue != null)
+		            if (logger.isLoggable(Level.FINE))
+		                logger.fine("setObjectValue() for property " + observedPropertyName() + " with " + newValue + " (type is "
+		                        + newValue.getClass() + ")");
+		            else if (logger.isLoggable(Level.FINE))
+		                logger.fine("setObjectValue() for property " + observedPropertyName() + " with " + newValue + ")");
+		        if (logger.isLoggable(Level.FINE))
+		            logger.fine("setObjectValue() for property " + observedPropertyName() + " with " + newValue);
+		        if (target != null) {
+		            target.setObjectForKey(newValue, getLastAccessor());
+		        } else if (logger.isLoggable(Level.WARNING))
+		            logger.warning("Target object is null for key " + observedPropertyName() + ". We should definitely investigate this.");
+		    } else {
+		        getController().getDelegate().setLocalizedPropertyName(getLocalizedLabel());
+		        getController().getDelegate().setTarget(target);
+		        getController().getDelegate().setKey(getLastAccessor());
+		        focusListenerEnabled = false;
+		        ok =getController().getDelegate().setObjectValue(newValue);
+		        if (!ok) {
+		            valueInError = true;
+		            SwingUtilities.invokeLater(new UpdateFromModel());
+		            if (_tab != null) {
+		                _tab.valueChange(newValue, this);
+		            }
+		            modelUpdating = false;
+		        }
+		        focusListenerEnabled = true;
+		    }
+		    if (ok) {
+		        notifyInspectedPropertyChanged(newValue);
+		        //BMA : comment those line because already executed in notify
+		//                if (_tab != null) {
+		//                    _tab.valueChange(newValue, this);
+		//                }
+		    }
+		} catch (AccessorInvocationException e) {
+		    valueInError = true;
+		    if (InspectorController.instance() != null) {
+		    if (!InspectorController.instance().handleException(getModel(), observedPropertyName(),
+		            newValue, e.getTargetException())) {
+		        // Revert to value defined in the model !
+		        if (logger.isLoggable(Level.INFO))
+		            logger.info("Exception was NOT handled");
+		        SwingUtilities.invokeLater(new UpdateFromModel());
+		    } else {
+		        if (logger.isLoggable(Level.FINE))
+		            logger.fine("Exception was handled");
+		        SwingUtilities.invokeLater(new UpdateFromModel());
+		        if (_tab != null) {
+		            _tab.valueChange(newValue, this);
+		        }
+		    }
+		    }
+		    else {
+		    	e.getTargetException().printStackTrace();
+		    }
+		    valueInError = false;
+		    modelUpdating = false;
+		} catch (Exception e) {
+		    e.printStackTrace();
+		    if (logger.isLoggable(Level.WARNING))
+		        logger.warning("setObjectValue() with " + newValue + " failed for property "
+		                + observedPropertyName() + " for object " + getModel().getClass().getName()
+		                + " : exception " + e.getMessage());
+		}*/
 	}
 
-	protected boolean hasObjectValue()
-	{
+	protected boolean hasObjectValue() {
 		try {
 			return _propertyModel.hasObjectValue(getModel());
-		}
-		catch (AccessorInvocationException e) {
+		} catch (AccessorInvocationException e) {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("getObjectValue() failed for property " + getObservedPropertyName()
-						+ " for object " + getModel() + " : exception "
-						+ e.getMessage());
+				logger.warning("getObjectValue() failed for property " + getObservedPropertyName() + " for object " + getModel()
+						+ " : exception " + e.getMessage());
 			}
 			e.getTargetException().printStackTrace();
 			return false;
 		}
 		/* try {
-            if (getModel() == null) {
-                return false;
-            }
-            KeyValueCoding target = getTargetObject();
-            if (target != null) {
-            	target.objectForKey(getLastAccessor());
-            	return true;
-            } else {
-                return false;
-            }
-        } catch (InvalidObjectSpecificationException e) {
-            return false;
-        } catch (AccessorInvocationException e) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("getObjectValue() failed for property " + observedPropertyName()
-                        + " for object " + getModel().getClass().getName() + " : exception "
-                        + e.getMessage());
-            e.getTargetException().printStackTrace();
-            return false;
-        } catch (Exception e) {
-        	e.printStackTrace();
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("getObjectValue() failed for property " + observedPropertyName()
-                        + " for object " + getModel().getClass().getName() + " : exception "
-                        + e.getMessage());
-            return false;
-        }*/
+		    if (getModel() == null) {
+		        return false;
+		    }
+		    KeyValueCoding target = getTargetObject();
+		    if (target != null) {
+		    	target.objectForKey(getLastAccessor());
+		    	return true;
+		    } else {
+		        return false;
+		    }
+		} catch (InvalidObjectSpecificationException e) {
+		    return false;
+		} catch (AccessorInvocationException e) {
+		    if (logger.isLoggable(Level.WARNING))
+		        logger.warning("getObjectValue() failed for property " + observedPropertyName()
+		                + " for object " + getModel().getClass().getName() + " : exception "
+		                + e.getMessage());
+		    e.getTargetException().printStackTrace();
+		    return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+		    if (logger.isLoggable(Level.WARNING))
+		        logger.warning("getObjectValue() failed for property " + observedPropertyName()
+		                + " for object " + getModel().getClass().getName() + " : exception "
+		                + e.getMessage());
+		    return false;
+		}*/
 	}
 
-	protected T getObjectValue()
-	{
-		if (getModel()==null) {
+	protected T getObjectValue() {
+		if (getModel() == null) {
 			return null;
 		}
-		return (T)_propertyModel.getObjectValue(getModel());
+		return (T) _propertyModel.getObjectValue(getModel());
 		/* try {
-            if (getModel() == null) {
-                return null;
-            }
-            KeyValueCoding target = getTargetObject();
-            if (target != null) {
-                return (T)target.objectForKey(getLastAccessor());
-            } else {
-                return null;
-            }
-        } catch (AccessorInvocationException e) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("getObjectValue() failed for property " + observedPropertyName()
-                        + " for object " + getModel().getClass().getName() + " : exception "
-                        + e.getMessage());
-            e.getTargetException().printStackTrace();
-            return null;
-        } catch (Exception e) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("getObjectValue() failed for property " + observedPropertyName()
-                        + " for object " + getModel().getClass().getName() + " : exception "
-                        + e.getMessage());
-            return null;
-        }*/
+		    if (getModel() == null) {
+		        return null;
+		    }
+		    KeyValueCoding target = getTargetObject();
+		    if (target != null) {
+		        return (T)target.objectForKey(getLastAccessor());
+		    } else {
+		        return null;
+		    }
+		} catch (AccessorInvocationException e) {
+		    if (logger.isLoggable(Level.WARNING))
+		        logger.warning("getObjectValue() failed for property " + observedPropertyName()
+		                + " for object " + getModel().getClass().getName() + " : exception "
+		                + e.getMessage());
+		    e.getTargetException().printStackTrace();
+		    return null;
+		} catch (Exception e) {
+		    if (logger.isLoggable(Level.WARNING))
+		        logger.warning("getObjectValue() failed for property " + observedPropertyName()
+		                + " for object " + getModel().getClass().getName() + " : exception "
+		                + e.getMessage());
+		    return null;
+		}*/
 	}
 
 	/*protected synchronized void setBooleanValue(boolean value)
-    {
-        boolean oldValue = getBooleanValue();
-        if (oldValue == value) {
-            logger.info("Same value. Ignored.");
-            return;
-        }
-
-        try {
-            KeyValueCoding target = getTargetObject();
-            if (target != null) {
-                target.setBooleanValueForKey(value, getLastAccessor());
-            }
-            notifyInspectedPropertyChanged(new Boolean(value));
-        } catch (Exception e) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("setBooleanValue() with " + value + " failed for property "
-                        + observedPropertyName() + " for object " + getModel().getClass().getName()
-                        + " : exception " + e.getMessage());
-        }
-    }*/
-
-	protected void notifyInspectedPropertyChanged(Object newValue)
 	{
+	    boolean oldValue = getBooleanValue();
+	    if (oldValue == value) {
+	        logger.info("Same value. Ignored.");
+	        return;
+	    }
+
+	    try {
+	        KeyValueCoding target = getTargetObject();
+	        if (target != null) {
+	            target.setBooleanValueForKey(value, getLastAccessor());
+	        }
+	        notifyInspectedPropertyChanged(new Boolean(value));
+	    } catch (Exception e) {
+	        if (logger.isLoggable(Level.WARNING))
+	            logger.warning("setBooleanValue() with " + value + " failed for property "
+	                    + observedPropertyName() + " for object " + getModel().getClass().getName()
+	                    + " : exception " + e.getMessage());
+	    }
+	}*/
+
+	protected void notifyInspectedPropertyChanged(Object newValue) {
 		if (_inspectorModelView != null) {
 			_inspectorModelView.valueChange(newValue, this);
 		} else if (_tab != null) {
@@ -1098,219 +1052,207 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 
 	}
 
-	public void notifyInspectedPropertyChanged()
-	{
+	public void notifyInspectedPropertyChanged() {
 		notifyInspectedPropertyChanged(getObjectValue());
 	}
 
 	/* protected synchronized boolean getBooleanValue()
-    {
-        try {
-            KeyValueCoding target = getTargetObject();
-            if (target != null) {
-                return target.booleanValueForKey(getLastAccessor());
-            } else {
-                return false;
-            }
-        } catch (Exception e) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("getBooleanValue() failed for property " + observedPropertyName()
-                        + " for object " + getModel().getClass().getName() + " : exception "
-                        + e.getMessage());
-            return false;
-        }
-    }*/
+	{
+	    try {
+	        KeyValueCoding target = getTargetObject();
+	        if (target != null) {
+	            return target.booleanValueForKey(getLastAccessor());
+	        } else {
+	            return false;
+	        }
+	    } catch (Exception e) {
+	        if (logger.isLoggable(Level.WARNING))
+	            logger.warning("getBooleanValue() failed for property " + observedPropertyName()
+	                    + " for object " + getModel().getClass().getName() + " : exception "
+	                    + e.getMessage());
+	        return false;
+	    }
+	}*/
 
 	/* protected synchronized void setIntegerValue(int value)
-    {
-        int oldValue = getIntegerValue();
-        if (oldValue == value) {
-            logger.info("Same value. Ignored.");
-            return;
-        }
+	{
+	    int oldValue = getIntegerValue();
+	    if (oldValue == value) {
+	        logger.info("Same value. Ignored.");
+	        return;
+	    }
 
-        try {
-            KeyValueCoding target = getTargetObject();
-            if (target != null) {
-                target.setIntegerValueForKey(value, getLastAccessor());
-            }
-            notifyInspectedPropertyChanged(new Integer(value));
-        } catch (Exception e) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("setIntegerValue() with " + value + " failed for property "
-                        + observedPropertyName() + " for object " + getModel().getClass().getName()
-                        + " : exception " + e.getMessage());
-        }
-    }*/
+	    try {
+	        KeyValueCoding target = getTargetObject();
+	        if (target != null) {
+	            target.setIntegerValueForKey(value, getLastAccessor());
+	        }
+	        notifyInspectedPropertyChanged(new Integer(value));
+	    } catch (Exception e) {
+	        if (logger.isLoggable(Level.WARNING))
+	            logger.warning("setIntegerValue() with " + value + " failed for property "
+	                    + observedPropertyName() + " for object " + getModel().getClass().getName()
+	                    + " : exception " + e.getMessage());
+	    }
+	}*/
 
 	/*protected synchronized void setDoubleValue(double value)
-    {
-        double oldValue = getDoubleValue();
-        if (oldValue == value) {
-            logger.info("Same value. Ignored.");
-            return;
-        }
+	{
+	    double oldValue = getDoubleValue();
+	    if (oldValue == value) {
+	        logger.info("Same value. Ignored.");
+	        return;
+	    }
 
-        try {
-            KeyValueCoding target = getTargetObject();
-            if (target != null) {
-                target.setDoubleValueForKey(value, getLastAccessor());
-            }
-            notifyInspectedPropertyChanged(new Double(value));
-        } catch (Exception e) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("setIntegerValue() with " + value + " failed for property "
-                        + observedPropertyName() + " for object " + getModel().getClass().getName()
-                        + " : exception " + e.getMessage());
-        }
-    }*/
+	    try {
+	        KeyValueCoding target = getTargetObject();
+	        if (target != null) {
+	            target.setDoubleValueForKey(value, getLastAccessor());
+	        }
+	        notifyInspectedPropertyChanged(new Double(value));
+	    } catch (Exception e) {
+	        if (logger.isLoggable(Level.WARNING))
+	            logger.warning("setIntegerValue() with " + value + " failed for property "
+	                    + observedPropertyName() + " for object " + getModel().getClass().getName()
+	                    + " : exception " + e.getMessage());
+	    }
+	}*/
 
 	/*protected synchronized int getIntegerValue()
-    {
-        try {
-            KeyValueCoding target = getTargetObject();
-            if (target != null) {
-                return target.integerValueForKey(getLastAccessor());
-            } else {
-                return 0;
-            }
-        } catch (Exception e) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("getIntegerValue() failed for property " + observedPropertyName()
-                        + " for object " + getModel().getClass().getName() + " : exception "
-                        + e.getMessage());
-            return 0;
-        }
-    }*/
+	{
+	    try {
+	        KeyValueCoding target = getTargetObject();
+	        if (target != null) {
+	            return target.integerValueForKey(getLastAccessor());
+	        } else {
+	            return 0;
+	        }
+	    } catch (Exception e) {
+	        if (logger.isLoggable(Level.WARNING))
+	            logger.warning("getIntegerValue() failed for property " + observedPropertyName()
+	                    + " for object " + getModel().getClass().getName() + " : exception "
+	                    + e.getMessage());
+	        return 0;
+	    }
+	}*/
 
 	/*protected synchronized double getDoubleValue()
-    {
-        try {
-            KeyValueCoding target = getTargetObject();
-            if (target != null) {
-                return target.doubleValueForKey(getLastAccessor());
-            } else {
-                return 0;
-            }
-        } catch (Exception e) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("getIntegerValue() failed for property " + observedPropertyName()
-                        + " for object " + getModel().getClass().getName() + " : exception "
-                        + e.getMessage());
-            return 0;
-        }
-    }
+	{
+	    try {
+	        KeyValueCoding target = getTargetObject();
+	        if (target != null) {
+	            return target.doubleValueForKey(getLastAccessor());
+	        } else {
+	            return 0;
+	        }
+	    } catch (Exception e) {
+	        if (logger.isLoggable(Level.WARNING))
+	            logger.warning("getIntegerValue() failed for property " + observedPropertyName()
+	                    + " for object " + getModel().getClass().getName() + " : exception "
+	                    + e.getMessage());
+	        return 0;
+	    }
+	}
 
-    protected float getFloatValue()
-    {
-        try {
-            KeyValueCoding target = getTargetObject();
-            if (target != null) {
-                return target.floatValueForKey(getLastAccessor());
-            } else {
-                return 0;
-            }
-        } catch (Exception e) {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("getIntegerValue() failed for property " + observedPropertyName()
-                        + " for object " + getModel().getClass().getName() + " : exception "
-                        + e.getMessage());
-            return 0;
-        }
-    }*/
+	protected float getFloatValue()
+	{
+	    try {
+	        KeyValueCoding target = getTargetObject();
+	        if (target != null) {
+	            return target.floatValueForKey(getLastAccessor());
+	        } else {
+	            return 0;
+	        }
+	    } catch (Exception e) {
+	        if (logger.isLoggable(Level.WARNING))
+	            logger.warning("getIntegerValue() failed for property " + observedPropertyName()
+	                    + " for object " + getModel().getClass().getName() + " : exception "
+	                    + e.getMessage());
+	        return 0;
+	    }
+	}*/
 
 	// ====================================================
 	// ===================== Accessors ====================
 	// ====================================================
 
-	protected String observedPropertyName()
-	{
+	protected String observedPropertyName() {
 		return getObservedPropertyName();
 	}
 
 	/**
 	 * Overrides getXMLModel
+	 * 
 	 * @see org.openflexo.inspector.widget.InnerTabWidgetView#getXMLModel()
 	 */
 	@Override
-	public InnerTabWidget getXMLModel()
-	{
+	public InnerTabWidget getXMLModel() {
 		return _propertyModel;
 	}
 
-	public InspectableObject getModel()
-	{
+	public InspectableObject getModel() {
 		return _model;
 	}
 
-	protected synchronized void setModel(InspectableObject value)
-	{
+	protected synchronized void setModel(InspectableObject value) {
 		_model = value;
-		if (isWidgetVisible())
-		{
+		if (isWidgetVisible()) {
 			retrieveType();
 			// refreshConditional();
 		}
 	}
 
-	public String getLocalizedLabel()
-	{
+	public String getLocalizedLabel() {
 		if (_propertyModel.getLocalizedLabel() != null) {
 			return _propertyModel.getLocalizedLabel();
-		}
-		else {
+		} else {
 			return FlexoLocalization.localizedForKey(_propertyModel.label);
 		}
 	}
 
 	@Override
-	public JLabel getLabel()
-	{
+	public JLabel getLabel() {
 		if (_label == null && _propertyModel.label != null) {
 			_label = new JLabel(_propertyModel.label + " : ", SwingConstants.RIGHT);
 			if (_propertyModel.getLocalizedLabel() != null) {
-				_label.setText(_propertyModel.getLocalizedLabel()+ " : ");
-			}
-			else {
+				_label.setText(_propertyModel.getLocalizedLabel() + " : ");
+			} else {
 				_label.setText(FlexoLocalization.localizedForKey(_propertyModel.label, " : ", _label));
 			}
 			_label.setForeground(Color.BLACK);
-			//_label.setBackground(InspectorCst.BACK_COLOR);
+			// _label.setBackground(InspectorCst.BACK_COLOR);
 			_label.setFont(DEFAULT_LABEL_FONT);
 			if (_propertyModel.help != null && !_propertyModel.help.equals("")) {
 				_label.setToolTipText(_propertyModel.help);
-				logger.fine("setToolTipText() with "+_propertyModel.help);
+				logger.fine("setToolTipText() with " + _propertyModel.help);
 			}
-			if (_controller.getHelpDelegate() != null
-					&& _controller.getHelpDelegate().isHelpAvailableFor(_propertyModel)) {
+			if (_controller.getHelpDelegate() != null && _controller.getHelpDelegate().isHelpAvailableFor(_propertyModel)) {
 				_label.addMouseListener(new MouseAdapter() {
 					@Override
-					public void mouseEntered(MouseEvent e)
-					{
+					public void mouseEntered(MouseEvent e) {
 						if (_propertyModel.getLocalizedLabel() != null) {
-							_label.setText("<html><u>"+_propertyModel.getLocalizedLabel()+"</u>"+ " :&nbsp;"+"</html>");
-						}
-						else {
-							_label.setText("<html><u>"+FlexoLocalization.localizedForKey(_propertyModel.label)+"</u>"+ " :&nbsp;"+"</html>");
+							_label.setText("<html><u>" + _propertyModel.getLocalizedLabel() + "</u>" + " :&nbsp;" + "</html>");
+						} else {
+							_label.setText("<html><u>" + FlexoLocalization.localizedForKey(_propertyModel.label) + "</u>" + " :&nbsp;"
+									+ "</html>");
 						}
 						_label.setForeground(Color.BLUE);
 						_label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 					}
+
 					@Override
-					public void mouseExited(MouseEvent e)
-					{
+					public void mouseExited(MouseEvent e) {
 						if (_propertyModel.getLocalizedLabel() != null) {
-							_label.setText(_propertyModel.getLocalizedLabel()+ " : ");
-						}
-						else {
-							_label.setText(FlexoLocalization.localizedForKey(_propertyModel.label)+" : ");
+							_label.setText(_propertyModel.getLocalizedLabel() + " : ");
+						} else {
+							_label.setText(FlexoLocalization.localizedForKey(_propertyModel.label) + " : ");
 						}
 						_label.setForeground(Color.BLACK);
 						_label.setCursor(Cursor.getDefaultCursor());
 					}
+
 					@Override
-					public void mouseClicked(MouseEvent e)
-					{
+					public void mouseClicked(MouseEvent e) {
 						_controller.getHelpDelegate().displayHelpFor(getModel());
 					}
 				});
@@ -1318,7 +1260,6 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 		}
 		return _label;
 	}
-
 
 	public abstract Class getDefaultType();
 
@@ -1328,10 +1269,10 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 	 */
 	protected boolean isReadOnly() {
 		if (getPropertyModel().hasValueForParameter(READONLY)) {
-			String ro =getPropertyModel().getValueForParameter(READONLY);
-			if (ro.equalsIgnoreCase("true")||ro.equalsIgnoreCase("yes")) {
+			String ro = getPropertyModel().getValueForParameter(READONLY);
+			if (ro.equalsIgnoreCase("true") || ro.equalsIgnoreCase("yes")) {
 				return true;
-			} else if (ro.equalsIgnoreCase("false")||ro.equalsIgnoreCase("no")) {
+			} else if (ro.equalsIgnoreCase("false") || ro.equalsIgnoreCase("no")) {
 				return false;
 			} else {
 				// dynamic test
@@ -1339,9 +1280,9 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 				if (negate) {
 					ro = ro.substring(1);
 				}
-				boolean isReadOnly = getModel()!=null && getModel().booleanValueForKey(ro);
+				boolean isReadOnly = getModel() != null && getModel().booleanValueForKey(ro);
 				if (negate) {
-					isReadOnly =!isReadOnly;
+					isReadOnly = !isReadOnly;
 				}
 				return isReadOnly;
 			}
@@ -1349,8 +1290,7 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 		return false;
 	}
 
-	public boolean isWidgetVisible()
-	{
+	public boolean isWidgetVisible() {
 		if (getController() != null && !getController().isTabPanelVisible(getPropertyModel().getTabModel(), getModel())) {
 			return false;
 		}
@@ -1366,56 +1306,48 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 	 * @return
 	 */
 	@Override
-	public boolean isStillVisible(Object newValue, String propertyName)
-	{
+	public boolean isStillVisible(Object newValue, String propertyName) {
 		return isWidgetVisible();
-		//return conditional.isVisible(getModel());
+		// return conditional.isVisible(getModel());
 	}
 
-	public boolean isStillInvisible(Object newValue, String propertyName)
-	{
+	public boolean isStillInvisible(Object newValue, String propertyName) {
 		// return conditional.isStillInvisible(newValue,propertyName);
 		return !conditional.isVisible(getModel());
 	}
 
-	public boolean dependsOfProperty(String propertyName)
-	{
+	public boolean dependsOfProperty(String propertyName) {
 		return conditional.dependsOfProperty(propertyName);
 	}
 
 	@Override
-	public boolean dependsOfProperty(DenaliWidget widget)
-	{
+	public boolean dependsOfProperty(DenaliWidget widget) {
 		return dependsOfProperty(widget.observedPropertyName());
 	}
 
-	public boolean shouldBeDisplayed()
-	{
+	public boolean shouldBeDisplayed() {
 		return conditional.isVisible(getModel());
 	}
 
-	public boolean isVisible(InspectableObject inspectable)
-	{
+	public boolean isVisible(InspectableObject inspectable) {
 		return conditional.isVisible(inspectable);
 	}
 
 	protected boolean _hasFocus;
 
-	public void gainFocus()
-	{
+	public void gainFocus() {
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("DenaliWidget "+getClass().getSimpleName()+":"+_propertyModel.name+" GAIN focus");
+			logger.fine("DenaliWidget " + getClass().getSimpleName() + ":" + _propertyModel.name + " GAIN focus");
 		}
 		_hasFocus = true;
 		if (getInspectingWidget() != null && getInspectingWidget() instanceof InspectorTabbedPanel) {
-			((InspectorTabbedPanel)getInspectingWidget()).widgetGetFocus(this);
+			((InspectorTabbedPanel) getInspectingWidget()).widgetGetFocus(this);
 		}
 	}
 
-	public void looseFocus()
-	{
+	public void looseFocus() {
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("DenaliWidget "+getClass().getSimpleName()+":"+_propertyModel.name+" LOOSE focus");
+			logger.fine("DenaliWidget " + getClass().getSimpleName() + ":" + _propertyModel.name + " LOOSE focus");
 		}
 		if (!valueInError && focusListenerEnabled && !modelUpdating) {
 			updateModelFromWidget();
@@ -1423,82 +1355,72 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 		_hasFocus = false;
 	}
 
-	public boolean widgetHasFocus()
-	{
+	public boolean widgetHasFocus() {
 		return _hasFocus;
 	}
 
-	public String getObservedPropertyName()
-	{
+	public String getObservedPropertyName() {
 		return _propertyModel.name;
 	}
 
-	public String getObservedTabName()
-	{
+	public String getObservedTabName() {
 		return _observedTabName;
 	}
 
-	public PropertyModel getPropertyModel()
-	{
+	public PropertyModel getPropertyModel() {
 		return _propertyModel;
 	}
 
 	private InspectorModelView _inspectorModelView;
 
 	@Override
-	public void setTabModelView(TabModelView tab, int index)
-	{
+	public void setTabModelView(TabModelView tab, int index) {
 		_tab = tab;
 		indexInTab = index;
 		if (tab != null) {
 			_inspectorModelView = tab.getInspectorModelView();
 			if (getInspectingWidget() instanceof InspectorTabbedPanel) {
-				if (_propertyModel.name.equals(((InspectorTabbedPanel)getInspectingWidget()).getLastInspectedPropertyName())) {
-					((InspectorTabbedPanel)getInspectingWidget()).setNextFocusedWidget(this);
+				if (_propertyModel.name.equals(((InspectorTabbedPanel) getInspectingWidget()).getLastInspectedPropertyName())) {
+					((InspectorTabbedPanel) getInspectingWidget()).setNextFocusedWidget(this);
 				}
 			}
 		}
 	}
 
-	public InspectingWidget getInspectingWidget()
-	{
+	public InspectingWidget getInspectingWidget() {
 		if (_tab != null && _tab.getInspectorModelView() != null) {
 			return _tab.getInspectorModelView().getInspectingWidget();
 		}
 		return null;
 	}
 
-	public void setTabModelView(TabModelView tab)
-	{
+	public void setTabModelView(TabModelView tab) {
 		_tab = tab;
 		if (tab != null) {
 			_inspectorModelView = tab.getInspectorModelView();
 		}
 	}
 
-	public int getIndexInTab()
-	{
+	public int getIndexInTab() {
 		return indexInTab;
 	}
 
-	public class UpdateFromModel implements Runnable
-	{
+	public class UpdateFromModel implements Runnable {
 
 		/**
 		 * Overrides run
-		 *
+		 * 
 		 * @see java.lang.Runnable#run()
 		 */
-		 @Override
-		 public void run()
-		{
+		@Override
+		public void run() {
 			while (modelUpdating) {
 				try {
 					Thread.sleep(100);
 				} catch (InterruptedException e) {
 				}
 			}
-			if(!getModel().isDeleted()) {
+			if (!getModel().isDeleted()) {
 				updateWidgetFromModel();
 			}
 			valueInError = false;
@@ -1520,13 +1442,11 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 	private Boolean _displayLabel = null;
 
 	@Override
-	public final boolean shouldExpandHorizontally()
-	{
+	public final boolean shouldExpandHorizontally() {
 		if (_expandHorizontally == null) {
 			if (getPropertyModel().hasValueForParameter(EXPAND_HORIZONTALLY)) {
 				_expandHorizontally = getPropertyModel().getBooleanValueForParameter(EXPAND_HORIZONTALLY);
-			}
-			else {
+			} else {
 				_expandHorizontally = defaultShouldExpandHorizontally();
 			}
 		}
@@ -1534,13 +1454,11 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 	}
 
 	@Override
-	public final boolean shouldExpandVertically()
-	{
+	public final boolean shouldExpandVertically() {
 		if (_expandVertically == null) {
 			if (getPropertyModel().hasValueForParameter(EXPAND_VERTICALLY)) {
 				_expandVertically = getPropertyModel().getBooleanValueForParameter(EXPAND_VERTICALLY);
-			}
-			else {
+			} else {
 				_expandVertically = defaultShouldExpandVertically();
 			}
 		}
@@ -1548,66 +1466,54 @@ public abstract class DenaliWidget<T> extends JPanel implements InspectorObserve
 	}
 
 	@Override
-	public final WidgetLayout getWidgetLayout()
-	{
+	public final WidgetLayout getWidgetLayout() {
 		if (_widgetLayout == null) {
 			if (getPropertyModel().hasValueForParameter(WIDGET_LAYOUT)) {
 				if (getPropertyModel().getValueForParameter(WIDGET_LAYOUT).equals("1COL")) {
 					_widgetLayout = WidgetLayout.LABEL_ABOVE_WIDGET_LAYOUT;
-				}
-				else if (getPropertyModel().getValueForParameter(WIDGET_LAYOUT).equals("2COL")) {
-					_widgetLayout =  WidgetLayout.LABEL_NEXTTO_WIDGET_LAYOUT;
-				}
-				else {
+				} else if (getPropertyModel().getValueForParameter(WIDGET_LAYOUT).equals("2COL")) {
+					_widgetLayout = WidgetLayout.LABEL_NEXTTO_WIDGET_LAYOUT;
+				} else {
 					_widgetLayout = getDefaultWidgetLayout();
 				}
-			}
-			else {
+			} else {
 				_widgetLayout = getDefaultWidgetLayout();
 			}
 		}
 		return _widgetLayout;
 	}
 
-	public WidgetLayout getDefaultWidgetLayout()
-	{
+	public WidgetLayout getDefaultWidgetLayout() {
 		return WidgetLayout.LABEL_NEXTTO_WIDGET_LAYOUT;
 	}
 
-	public boolean defaultShouldExpandHorizontally()
-	{
+	public boolean defaultShouldExpandHorizontally() {
 		return true;
 	}
 
-	public boolean defaultShouldExpandVertically()
-	{
+	public boolean defaultShouldExpandVertically() {
 		return false;
 	}
 
 	// Override this if you want
-	public boolean defaultDisplayLabel()
-	{
+	public boolean defaultDisplayLabel() {
 		return (getPropertyModel().label != null);
 	}
 
 	@Override
-	public final boolean displayLabel()
-	{
+	public final boolean displayLabel() {
 		if (_displayLabel == null) {
 			if (getPropertyModel().hasValueForParameter(DISPLAY_LABEL)) {
 				_displayLabel = getPropertyModel().getBooleanValueForParameter(DISPLAY_LABEL);
-			}
-			else {
+			} else {
 				_displayLabel = defaultDisplayLabel();
 			}
 		}
 		return _displayLabel;
 	}
 
-	public enum WidgetLayout
-	{
-		LABEL_NEXTTO_WIDGET_LAYOUT,
-		LABEL_ABOVE_WIDGET_LAYOUT
+	public enum WidgetLayout {
+		LABEL_NEXTTO_WIDGET_LAYOUT, LABEL_ABOVE_WIDGET_LAYOUT
 	}
 
 }

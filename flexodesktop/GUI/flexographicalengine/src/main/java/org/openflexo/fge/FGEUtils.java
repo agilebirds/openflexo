@@ -26,7 +26,6 @@ import org.openflexo.fge.geom.FGEGeometricObject;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.toolbox.ColorUtils;
 
-
 public class FGEUtils {
 
 	public static final double PHI = (Math.sqrt(5) + 1) / 2;

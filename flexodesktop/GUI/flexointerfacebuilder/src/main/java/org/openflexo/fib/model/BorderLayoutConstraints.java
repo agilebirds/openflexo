@@ -26,88 +26,128 @@ import javax.swing.JComponent;
 
 import org.openflexo.fib.model.FIBPanel.Layout;
 
-
-
 public class BorderLayoutConstraints extends ComponentConstraints {
 
 	private static final Logger logger = Logger.getLogger(FIBComponent.class.getPackage().getName());
 
 	private static final String LOCATION = "location";
-	
-	public BorderLayoutLocation getLocation() 
-	{
-		return getEnumValue(LOCATION,BorderLayoutLocation.class,BorderLayoutLocation.center);
+
+	public BorderLayoutLocation getLocation() {
+		return getEnumValue(LOCATION, BorderLayoutLocation.class, BorderLayoutLocation.center);
 	}
 
-	public void setLocation(BorderLayoutLocation location) 
-	{
-		setEnumValue(LOCATION,location);
+	public void setLocation(BorderLayoutLocation location) {
+		setEnumValue(LOCATION, location);
 	}
 
-	public static enum BorderLayoutLocation
-	{
-		north { @Override
-		public String getConstraint() { return BorderLayout.NORTH; }},
-		south { @Override
-		public String getConstraint() { return BorderLayout.SOUTH; }},
-		east { @Override
-		public String getConstraint() { return BorderLayout.EAST; }},
-		west { @Override
-		public String getConstraint() { return BorderLayout.WEST; }},
-		center { @Override
-		public String getConstraint() { return BorderLayout.CENTER; }},
-		beforeFirstLine { @Override
-		public String getConstraint() { return BorderLayout.BEFORE_FIRST_LINE; }},
-		afterLastLine { @Override
-		public String getConstraint() { return BorderLayout.AFTER_LAST_LINE; }},
-		beforeLineBegins { @Override
-		public String getConstraint() { return BorderLayout.BEFORE_LINE_BEGINS; }},
-		afterLineEnds { @Override
-		public String getConstraint() { return BorderLayout.AFTER_LINE_ENDS; }},
-		pageStart { @Override
-		public String getConstraint() { return BorderLayout.PAGE_START; }},
-		pageEnd { @Override
-		public String getConstraint() { return BorderLayout.PAGE_END; }},
-		lineStart { @Override
-		public String getConstraint() { return BorderLayout.LINE_START; }},
-		lineEnd { @Override
-		public String getConstraint() { return BorderLayout.LINE_END; }};
-		
+	public static enum BorderLayoutLocation {
+		north {
+			@Override
+			public String getConstraint() {
+				return BorderLayout.NORTH;
+			}
+		},
+		south {
+			@Override
+			public String getConstraint() {
+				return BorderLayout.SOUTH;
+			}
+		},
+		east {
+			@Override
+			public String getConstraint() {
+				return BorderLayout.EAST;
+			}
+		},
+		west {
+			@Override
+			public String getConstraint() {
+				return BorderLayout.WEST;
+			}
+		},
+		center {
+			@Override
+			public String getConstraint() {
+				return BorderLayout.CENTER;
+			}
+		},
+		beforeFirstLine {
+			@Override
+			public String getConstraint() {
+				return BorderLayout.BEFORE_FIRST_LINE;
+			}
+		},
+		afterLastLine {
+			@Override
+			public String getConstraint() {
+				return BorderLayout.AFTER_LAST_LINE;
+			}
+		},
+		beforeLineBegins {
+			@Override
+			public String getConstraint() {
+				return BorderLayout.BEFORE_LINE_BEGINS;
+			}
+		},
+		afterLineEnds {
+			@Override
+			public String getConstraint() {
+				return BorderLayout.AFTER_LINE_ENDS;
+			}
+		},
+		pageStart {
+			@Override
+			public String getConstraint() {
+				return BorderLayout.PAGE_START;
+			}
+		},
+		pageEnd {
+			@Override
+			public String getConstraint() {
+				return BorderLayout.PAGE_END;
+			}
+		},
+		lineStart {
+			@Override
+			public String getConstraint() {
+				return BorderLayout.LINE_START;
+			}
+		},
+		lineEnd {
+			@Override
+			public String getConstraint() {
+				return BorderLayout.LINE_END;
+			}
+		};
+
 		public abstract String getConstraint();
 	}
 
-	public BorderLayoutConstraints() 
-	{
+	public BorderLayoutConstraints() {
 		super();
 	}
-	
-	public BorderLayoutConstraints(BorderLayoutLocation location) 
-	{
+
+	public BorderLayoutConstraints(BorderLayoutLocation location) {
 		super();
 		setLocation(location);
 	}
-	
-	protected BorderLayoutConstraints(String someConstraints) 
-	{
+
+	protected BorderLayoutConstraints(String someConstraints) {
 		super(someConstraints);
 	}
-	
-	BorderLayoutConstraints(ComponentConstraints someConstraints) 
-	{
+
+	BorderLayoutConstraints(ComponentConstraints someConstraints) {
 		super(someConstraints);
 	}
-	
+
 	@Override
-	protected Layout getType()
-	{
+	protected Layout getType() {
 		return Layout.border;
 	}
 
 	@Override
-	public void performConstrainedAddition(JComponent container,
-			JComponent contained)
-	{
-		container.add(contained,getLocation().getConstraint());
+	public void performConstrainedAddition(JComponent container, JComponent contained) {
+		container.add(contained, getLocation().getConstraint());
 	}
 
 }

@@ -26,37 +26,31 @@ public class SymetricPointConstruction extends PointConstruction {
 
 	public PointConstruction pointConstruction;
 	public PointConstruction pivotConstruction;
-	
-	public SymetricPointConstruction() 
-	{
+
+	public SymetricPointConstruction() {
 		super();
 	}
-	
-	public SymetricPointConstruction(PointConstruction pointConstruction, PointConstruction pivotConstruction) 
-	{
+
+	public SymetricPointConstruction(PointConstruction pointConstruction, PointConstruction pivotConstruction) {
 		this();
 		this.pointConstruction = pointConstruction;
 		this.pivotConstruction = pivotConstruction;
 	}
-	
+
 	@Override
-	protected FGEPoint computeData()
-	{
-		return (new FGESegment(pointConstruction.getPoint(),pivotConstruction.getPoint())).getScaledPoint(2);
+	protected FGEPoint computeData() {
+		return (new FGESegment(pointConstruction.getPoint(), pivotConstruction.getPoint())).getScaledPoint(2);
 	}
 
 	@Override
-	public String toString()
-	{
-		return "SymetricPointConstruction[\n"+"> "+pointConstruction.toString()+"\n> "+pivotConstruction.toString()+"\n]";
+	public String toString() {
+		return "SymetricPointConstruction[\n" + "> " + pointConstruction.toString() + "\n> " + pivotConstruction.toString() + "\n]";
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
+	public GeometricConstruction[] getDepends() {
 		GeometricConstruction[] returned = { pointConstruction, pivotConstruction };
 		return returned;
 	}
-
 
 }

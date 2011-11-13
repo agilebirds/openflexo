@@ -47,26 +47,25 @@ import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.ToolBox;
 
-
-public class FlexoCst extends ColorCst
-{
+public class FlexoCst extends ColorCst {
 	public static final String DLPM_WORKPACKAGE_ID = "1000023";
 
 	public static final String BUILD_ID = new String(ApplicationVersion.BUILD_ID);
 
 	public static final FlexoVersion BUSINESS_APPLICATION_VERSION = new FlexoVersion(ApplicationVersion.BUSINESS_APPLICATION_VERSION);
 
-	public static final String BUSINESS_APPLICATION_VERSION_NAME = "OpenFlexo "
-			+ BUSINESS_APPLICATION_VERSION;
+	public static final String BUSINESS_APPLICATION_VERSION_NAME = "OpenFlexo " + BUSINESS_APPLICATION_VERSION;
 
 	public static final String OUTPUT_FILES_ENCODING = "UTF-8";
 
-	public static final int META_MASK = ToolBox.getPLATFORM()==ToolBox.MACOS ? InputEvent.META_MASK : InputEvent.CTRL_MASK;
+	public static final int META_MASK = ToolBox.getPLATFORM() == ToolBox.MACOS ? InputEvent.META_MASK : InputEvent.CTRL_MASK;
 
-	public static final int MULTI_SELECTION_MASK = ToolBox.getPLATFORM()==ToolBox.MACOS ? InputEvent.META_DOWN_MASK : InputEvent.CTRL_DOWN_MASK;
+	public static final int MULTI_SELECTION_MASK = ToolBox.getPLATFORM() == ToolBox.MACOS ? InputEvent.META_DOWN_MASK
+			: InputEvent.CTRL_DOWN_MASK;
 
-	public static final int DELETE_KEY_CODE = ToolBox.getPLATFORM()==ToolBox.MACOS? KeyEvent.VK_BACK_SPACE:KeyEvent.VK_DELETE;
-	public static final int BACKSPACE_DELETE_KEY_CODE = ToolBox.getPLATFORM()==ToolBox.MACOS? KeyEvent.VK_DELETE:KeyEvent.VK_BACK_SPACE;
+	public static final int DELETE_KEY_CODE = ToolBox.getPLATFORM() == ToolBox.MACOS ? KeyEvent.VK_BACK_SPACE : KeyEvent.VK_DELETE;
+	public static final int BACKSPACE_DELETE_KEY_CODE = ToolBox.getPLATFORM() == ToolBox.MACOS ? KeyEvent.VK_DELETE
+			: KeyEvent.VK_BACK_SPACE;
 
 	public static final Font BIG_FONT = new Font("SansSerif", Font.PLAIN, 13);
 
@@ -86,12 +85,10 @@ public class FlexoCst extends ColorCst
 
 	public static final Color UNDECORATED_DIALOG_BORDER_COLOR = Color.LIGHT_GRAY;
 
-	public static URL cssUrl()
-	{
+	public static URL cssUrl() {
 		if (_cssURL == null) {
 			try {
-				_cssURL = new FileResource("Config/FlexoMasterStyle.css")
-				.toURL();
+				_cssURL = new FileResource("Config/FlexoMasterStyle.css").toURL();
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			}
@@ -119,14 +116,13 @@ public class FlexoCst extends ColorCst
 
 	public static Color WELCOME_BG_COLOR = Color.WHITE;
 
-	public static final Color DARK_BLUE_FLEXO_COLOR = new Color(245,255,246); //new Color(2,67,123);
+	public static final Color DARK_BLUE_FLEXO_COLOR = new Color(245, 255, 246); // new Color(2,67,123);
 
-	public static final Color WELCOME_FLEXO_COLOR = new Color(62,80,100);
+	public static final Color WELCOME_FLEXO_COLOR = new Color(62, 80, 100);
 
-	public static final Color WELCOME_FLEXO_BG_LIST_COLOR = ToolBox.getPLATFORM()==ToolBox.WINDOWS?Color.WHITE:Color.WHITE;
+	public static final Color WELCOME_FLEXO_BG_LIST_COLOR = ToolBox.getPLATFORM() == ToolBox.WINDOWS ? Color.WHITE : Color.WHITE;
 
 	public static final Color OPEN_BLUE_COLOR = new Color(65, 91, 116);
-
 
 	public static final int MINIMUM_BROWSER_VIEW_WIDTH = 200;
 	public static final int MINIMUM_BROWSER_VIEW_HEIGHT = 0;
@@ -134,8 +130,7 @@ public class FlexoCst extends ColorCst
 	public static final int PREFERRED_BROWSER_VIEW_HEIGHT = 200;
 	public static final int MINIMUM_BROWSER_CONTROL_PANEL_HEIGHT = 50;
 
-	public static void switchColors(String colorSet)
-	{
+	public static void switchColors(String colorSet) {
 		if (colorSet.equals("Contento")) {
 			oddLineColor = new Color(249, 246, 249);
 			otherLineColor = new Color(231, 232, 234);

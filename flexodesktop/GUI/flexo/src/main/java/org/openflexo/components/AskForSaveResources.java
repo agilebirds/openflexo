@@ -39,7 +39,6 @@ import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 
-
 import org.openflexo.FlexoCst;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoStorageResource;
@@ -56,377 +55,350 @@ import org.openflexo.view.controller.FlexoController;
  * @author sguerin
  * 
  */
-public class AskForSaveResources extends FlexoDialog
-{
+public class AskForSaveResources extends FlexoDialog {
 
-    static final Logger logger = Logger.getLogger(AskForSaveResources.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(AskForSaveResources.class.getPackage().getName());
 
-    ReviewUnsavedModel _reviewUnsavedModel;
+	ReviewUnsavedModel _reviewUnsavedModel;
 
-    // private SaveResourceExceptionList listOfExceptions = null;
-    int returned;
+	// private SaveResourceExceptionList listOfExceptions = null;
+	int returned;
 
-    public static final int SAVE = 0;
+	public static final int SAVE = 0;
 
-    public static final int CANCEL = 1;
+	public static final int CANCEL = 1;
 
-    protected JButton confirmButton;
-    protected JPanel controlPanel;
-    protected String _validateLabel;
-    protected String _emptyValidateLabel;
-    
-    // public static final int EXCEPTION_RAISED = 2;
-    // public static final int PERMISSION_DENIED = 3;
+	protected JButton confirmButton;
+	protected JPanel controlPanel;
+	protected String _validateLabel;
+	protected String _emptyValidateLabel;
 
-    /**
-     * Constructor
-     * 
-     * @param title
-     * @param resources:
-     *            a vector of FlexoStorageResource
-     */
-    public AskForSaveResources(String title, String validateLabel, String emptyValidateLabel, Vector<FlexoStorageResource> resources)
-    {
-        super(FlexoController.getActiveFrame(), true);
-        returned = CANCEL;
-        setTitle(title);
-        getContentPane().setLayout(new BorderLayout());
-        _reviewUnsavedModel = new ReviewUnsavedModel(resources);
-        
-        _validateLabel = validateLabel;
-        _emptyValidateLabel = emptyValidateLabel;
+	// public static final int EXCEPTION_RAISED = 2;
+	// public static final int PERMISSION_DENIED = 3;
 
-        JLabel question = new JLabel(" ", SwingConstants.CENTER);
-        question.setFont(FlexoCst.BIG_FONT);
-        JLabel hint1 = new JLabel(FlexoLocalization.localizedForKey("select_the_resources_that_you_want_to_save"), SwingConstants.CENTER);
-        // hint1.setFont(FlexoCst.MEDIUM_FONT);
-        // JLabel hint2 = new
-        // JLabel(FlexoLocalization.localizedForKey("select_the_resources_that_you_want_to_save"),JLabel.CENTER);
-        JLabel hint2 = new JLabel(" ", SwingConstants.CENTER);
-        // hint2.setFont(FlexoCst.MEDIUM_FONT);
+	/**
+	 * Constructor
+	 * 
+	 * @param title
+	 * @param resources
+	 *            : a vector of FlexoStorageResource
+	 */
+	public AskForSaveResources(String title, String validateLabel, String emptyValidateLabel, Vector<FlexoStorageResource> resources) {
+		super(FlexoController.getActiveFrame(), true);
+		returned = CANCEL;
+		setTitle(title);
+		getContentPane().setLayout(new BorderLayout());
+		_reviewUnsavedModel = new ReviewUnsavedModel(resources);
 
-        JPanel textPanel = new JPanel();
-        textPanel.setSize(1000, 50);
-        textPanel.setLayout(new BorderLayout());
-        textPanel.add(question, BorderLayout.NORTH);
-        textPanel.add(hint1, BorderLayout.CENTER);
-        textPanel.add(hint2, BorderLayout.SOUTH);
+		_validateLabel = validateLabel;
+		_emptyValidateLabel = emptyValidateLabel;
 
-        JTable reviewTable = new JTable(_reviewUnsavedModel);
-        for (int i = 0; i < _reviewUnsavedModel.getColumnCount(); i++) {
-            TableColumn col = reviewTable.getColumnModel().getColumn(i);
-            col.setPreferredWidth(getPreferedColumnSize(i));
-        }
+		JLabel question = new JLabel(" ", SwingConstants.CENTER);
+		question.setFont(FlexoCst.BIG_FONT);
+		JLabel hint1 = new JLabel(FlexoLocalization.localizedForKey("select_the_resources_that_you_want_to_save"), SwingConstants.CENTER);
+		// hint1.setFont(FlexoCst.MEDIUM_FONT);
+		// JLabel hint2 = new
+		// JLabel(FlexoLocalization.localizedForKey("select_the_resources_that_you_want_to_save"),JLabel.CENTER);
+		JLabel hint2 = new JLabel(" ", SwingConstants.CENTER);
+		// hint2.setFont(FlexoCst.MEDIUM_FONT);
 
-        JScrollPane scrollPane = new JScrollPane(reviewTable);
-        JPanel resourcesPanel = new JPanel();
-        resourcesPanel.setLayout(new BorderLayout());
-        resourcesPanel.add(reviewTable.getTableHeader(), BorderLayout.NORTH);
-        resourcesPanel.add(scrollPane, BorderLayout.CENTER);
-        resourcesPanel.setPreferredSize(new Dimension(800, 200));
+		JPanel textPanel = new JPanel();
+		textPanel.setSize(1000, 50);
+		textPanel.setLayout(new BorderLayout());
+		textPanel.add(question, BorderLayout.NORTH);
+		textPanel.add(hint1, BorderLayout.CENTER);
+		textPanel.add(hint2, BorderLayout.SOUTH);
 
-        controlPanel = new JPanel();
-        controlPanel.setLayout(new FlowLayout());
+		JTable reviewTable = new JTable(_reviewUnsavedModel);
+		for (int i = 0; i < _reviewUnsavedModel.getColumnCount(); i++) {
+			TableColumn col = reviewTable.getColumnModel().getColumn(i);
+			col.setPreferredWidth(getPreferedColumnSize(i));
+		}
 
-        confirmButton = new JButton(FlexoLocalization.localizedForKey(validateLabel));
-        JButton cancelButton = new JButton(FlexoLocalization.localizedForKey("cancel"));
-        JButton selectAllButton = new JButton(FlexoLocalization.localizedForKey("select_all"));
-        JButton deselectAllButton = new JButton(FlexoLocalization.localizedForKey("deselect_all"));
+		JScrollPane scrollPane = new JScrollPane(reviewTable);
+		JPanel resourcesPanel = new JPanel();
+		resourcesPanel.setLayout(new BorderLayout());
+		resourcesPanel.add(reviewTable.getTableHeader(), BorderLayout.NORTH);
+		resourcesPanel.add(scrollPane, BorderLayout.CENTER);
+		resourcesPanel.setPreferredSize(new Dimension(800, 200));
 
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                returned = CANCEL;
-                dispose();
-            }
-        });
-        confirmButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                /*
-                 * try { hide(); _reviewUnsavedModel.saveSelected(); returned =
-                 * SAVE; } catch (SaveResourceExceptionList e1) {
-                 * listOfExceptions = e1; returned = EXCEPTION_RAISED; } catch
-                 * (SaveResourcePermissionDeniedException e1) {
-                 * FlexoController.showError(FlexoLocalization.localizedForKey("could_not_save_permission_denied"));
-                 * returned = PERMISSION_DENIED; }
-                 */
-                returned = SAVE;
-                dispose();
-            }
-        });
-        selectAllButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                _reviewUnsavedModel.selectAll();
-                updateButtonLabel();
-            }
-        });
-        deselectAllButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                _reviewUnsavedModel.deselectAll();
-                updateButtonLabel();
-            }
-        });
-        controlPanel.add(selectAllButton);
-        controlPanel.add(deselectAllButton);
-        controlPanel.add(cancelButton);
-        controlPanel.add(confirmButton);
+		controlPanel = new JPanel();
+		controlPanel.setLayout(new FlowLayout());
 
-        JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new BorderLayout());
+		confirmButton = new JButton(FlexoLocalization.localizedForKey(validateLabel));
+		JButton cancelButton = new JButton(FlexoLocalization.localizedForKey("cancel"));
+		JButton selectAllButton = new JButton(FlexoLocalization.localizedForKey("select_all"));
+		JButton deselectAllButton = new JButton(FlexoLocalization.localizedForKey("deselect_all"));
 
-        contentPanel.add(textPanel, BorderLayout.NORTH);
-        contentPanel.add(resourcesPanel, BorderLayout.CENTER);
-        contentPanel.add(controlPanel, BorderLayout.SOUTH);
+		cancelButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				returned = CANCEL;
+				dispose();
+			}
+		});
+		confirmButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				/*
+				 * try { hide(); _reviewUnsavedModel.saveSelected(); returned =
+				 * SAVE; } catch (SaveResourceExceptionList e1) {
+				 * listOfExceptions = e1; returned = EXCEPTION_RAISED; } catch
+				 * (SaveResourcePermissionDeniedException e1) {
+				 * FlexoController.showError(FlexoLocalization.localizedForKey("could_not_save_permission_denied"));
+				 * returned = PERMISSION_DENIED; }
+				 */
+				returned = SAVE;
+				dispose();
+			}
+		});
+		selectAllButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				_reviewUnsavedModel.selectAll();
+				updateButtonLabel();
+			}
+		});
+		deselectAllButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				_reviewUnsavedModel.deselectAll();
+				updateButtonLabel();
+			}
+		});
+		controlPanel.add(selectAllButton);
+		controlPanel.add(deselectAllButton);
+		controlPanel.add(cancelButton);
+		controlPanel.add(confirmButton);
 
-        getContentPane().add(contentPanel, BorderLayout.CENTER);
+		JPanel contentPanel = new JPanel();
+		contentPanel.setLayout(new BorderLayout());
 
-        setModal(true);
-        setSize(1000, 200);
-        validate();
-        pack();
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2);
-        setVisible(true);
-    }
+		contentPanel.add(textPanel, BorderLayout.NORTH);
+		contentPanel.add(resourcesPanel, BorderLayout.CENTER);
+		contentPanel.add(controlPanel, BorderLayout.SOUTH);
 
-    protected void updateButtonLabel()
-    {
-        if (_reviewUnsavedModel.getNbOfFilesToSave() == 0) {
-            confirmButton.setText(FlexoLocalization.localizedForKey(_emptyValidateLabel));
-        }
-        else {
-            confirmButton.setText(FlexoLocalization.localizedForKey(_validateLabel));
-        }
-        controlPanel.validate();
-        controlPanel.repaint();
-    }
+		getContentPane().add(contentPanel, BorderLayout.CENTER);
 
-    public void saveSelection() throws SaveResourceExceptionList, SaveResourcePermissionDeniedException
-    {
-        _reviewUnsavedModel.saveSelected();
-    }
+		setModal(true);
+		setSize(1000, 200);
+		validate();
+		pack();
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2);
+		setVisible(true);
+	}
 
-    /**
-     * Return status which could be SAVE, CANCEL, EXCEPTION_RAISED,
-     * PERMISSION_DENIED
-     * 
-     * @return
-     */
-    public int getStatus()
-    {
-        return returned;
-    }
+	protected void updateButtonLabel() {
+		if (_reviewUnsavedModel.getNbOfFilesToSave() == 0) {
+			confirmButton.setText(FlexoLocalization.localizedForKey(_emptyValidateLabel));
+		} else {
+			confirmButton.setText(FlexoLocalization.localizedForKey(_validateLabel));
+		}
+		controlPanel.validate();
+		controlPanel.repaint();
+	}
 
-    /*
-     * public SaveResourceExceptionList getListOfExceptions() { return
-     * listOfExceptions; }
-     */
+	public void saveSelection() throws SaveResourceExceptionList, SaveResourcePermissionDeniedException {
+		_reviewUnsavedModel.saveSelected();
+	}
 
-    public String savedFilesList()
-    {
-        return _reviewUnsavedModel.savedFilesList();
-    }
+	/**
+	 * Return status which could be SAVE, CANCEL, EXCEPTION_RAISED, PERMISSION_DENIED
+	 * 
+	 * @return
+	 */
+	public int getStatus() {
+		return returned;
+	}
 
-    public int getPreferedColumnSize(int arg0)
-    {
-        switch (arg0) {
-        case 0:
-            return 25; // checkbox
-        case 1:
-            return 150; // name
-        case 2:
-            return 150; // type
-        case 3:
-            return 150; // file_name
-        case 4:
-            return 250; // last_saved_on
-        default:
-            return 50;
-        }
-    }
+	/*
+	 * public SaveResourceExceptionList getListOfExceptions() { return
+	 * listOfExceptions; }
+	 */
 
-    public class ReviewUnsavedModel extends AbstractTableModel
-    {
+	public String savedFilesList() {
+		return _reviewUnsavedModel.savedFilesList();
+	}
 
-        private Vector<FlexoStorageResource> _resources;
+	public int getPreferedColumnSize(int arg0) {
+		switch (arg0) {
+		case 0:
+			return 25; // checkbox
+		case 1:
+			return 150; // name
+		case 2:
+			return 150; // type
+		case 3:
+			return 150; // file_name
+		case 4:
+			return 250; // last_saved_on
+		default:
+			return 50;
+		}
+	}
 
-        private Vector<Boolean> _shouldSave;
+	public class ReviewUnsavedModel extends AbstractTableModel {
 
-        public ReviewUnsavedModel(Vector<FlexoStorageResource> resources)
-        {
-            super();
-            _resources = resources;
-            _shouldSave = new Vector<Boolean>();
-            for (int i = 0; i < resources.size(); i++) {
-                FlexoStorageResource res = resources.elementAt(i);
-                if (res.needsSaving()) {
-                    _shouldSave.add(new Boolean(true));
-                } else {
-                    _shouldSave.add(new Boolean(false));
-                }
-            }
-        }
+		private Vector<FlexoStorageResource> _resources;
 
-        @Override
-		public int getRowCount()
-        {
-            if (_resources == null) {
-                return 0;
-            }
-            return _resources.size();
-        }
+		private Vector<Boolean> _shouldSave;
 
-        @Override
-		public int getColumnCount()
-        {
-            return 5;
-        }
+		public ReviewUnsavedModel(Vector<FlexoStorageResource> resources) {
+			super();
+			_resources = resources;
+			_shouldSave = new Vector<Boolean>();
+			for (int i = 0; i < resources.size(); i++) {
+				FlexoStorageResource res = resources.elementAt(i);
+				if (res.needsSaving()) {
+					_shouldSave.add(new Boolean(true));
+				} else {
+					_shouldSave.add(new Boolean(false));
+				}
+			}
+		}
 
-        @Override
-		public String getColumnName(int columnIndex)
-        {
-            if (columnIndex == 0) {
-                return " ";
-            } else if (columnIndex == 1) {
-                return FlexoLocalization.localizedForKey("name");
-            } else if (columnIndex == 2) {
-                return FlexoLocalization.localizedForKey("type");
-            } else if (columnIndex == 3) {
-                return FlexoLocalization.localizedForKey("file_name");
-            } else if (columnIndex == 4) {
-                return FlexoLocalization.localizedForKey("last_saved_on");
-            }
-            return "???";
-        }
+		@Override
+		public int getRowCount() {
+			if (_resources == null) {
+				return 0;
+			}
+			return _resources.size();
+		}
 
-        @Override
-		public Class getColumnClass(int columnIndex)
-        {
-            if (columnIndex == 0) {
-                return Boolean.class;
-            } else {
-                return String.class;
-            }
-        }
+		@Override
+		public int getColumnCount() {
+			return 5;
+		}
 
-        @Override
-		public boolean isCellEditable(int rowIndex, int columnIndex)
-        {
-            return (columnIndex == 0 ? true : false);
-        }
+		@Override
+		public String getColumnName(int columnIndex) {
+			if (columnIndex == 0) {
+				return " ";
+			} else if (columnIndex == 1) {
+				return FlexoLocalization.localizedForKey("name");
+			} else if (columnIndex == 2) {
+				return FlexoLocalization.localizedForKey("type");
+			} else if (columnIndex == 3) {
+				return FlexoLocalization.localizedForKey("file_name");
+			} else if (columnIndex == 4) {
+				return FlexoLocalization.localizedForKey("last_saved_on");
+			}
+			return "???";
+		}
 
-        @Override
-		public Object getValueAt(int rowIndex, int columnIndex)
-        {
-            if (_resources == null) {
-                return null;
-            }
-            if (columnIndex == 0) {
-                return _shouldSave.elementAt(rowIndex);
-            } else if (columnIndex == 1) {
-                return (_resources.elementAt(rowIndex)).getName();
-            } else if (columnIndex == 2) {
-                return ( _resources.elementAt(rowIndex)).getResourceType().getName();
-            } else if (columnIndex == 3) {
-                return (_resources.elementAt(rowIndex)).getFile().getName();
-            } else if (columnIndex == 4) {
-                Date date = (_resources.elementAt(rowIndex)).getDiskLastModifiedDate();
-                if (date != null) {
-                    return (new SimpleDateFormat("dd/MM HH:mm:ss")).format(date);
-                } else {
-                    return "-";
-                }
-            }
-            return null;
-        }
+		@Override
+		public Class getColumnClass(int columnIndex) {
+			if (columnIndex == 0) {
+				return Boolean.class;
+			} else {
+				return String.class;
+			}
+		}
 
-        @Override
-		public void setValueAt(Object value, int rowIndex, int columnIndex)
-        {
-            if (columnIndex == 0) {
-                _shouldSave.setElementAt((Boolean) value, rowIndex);
-                updateButtonLabel();
-            }
-        }
+		@Override
+		public boolean isCellEditable(int rowIndex, int columnIndex) {
+			return (columnIndex == 0 ? true : false);
+		}
 
-        protected int getNbOfFilesToSave()
-        {
-            int nbOfFilesToSave = 0;
-            for (int i = 0; i < _shouldSave.size(); i++) {
-                if ((_shouldSave.elementAt(i)).booleanValue()) {
-                    nbOfFilesToSave++;
-                }
-            }
-          return nbOfFilesToSave;
-        }
-        
-        public void saveSelected() throws SaveResourceExceptionList, SaveResourcePermissionDeniedException
-        {
-            savedFilesList = "";
-            SaveResourceExceptionList listOfRaisedExceptions = null;
-            int i=0;
-            FlexoProject project = null;
-            while (project==null && i<_resources.size()) {
-                project =  _resources.get(i).getProject();
-            }
-            Vector<FlexoStorageResource> resourcesToSave = new Vector<FlexoStorageResource>();
-            for(i=0;i<_shouldSave.size();i++) {
-                if (_shouldSave.get(i))
-                    resourcesToSave.add(_resources.get(i));
-            }
-            
-            int nbOfFilesToSave = getNbOfFilesToSave();
+		@Override
+		public Object getValueAt(int rowIndex, int columnIndex) {
+			if (_resources == null) {
+				return null;
+			}
+			if (columnIndex == 0) {
+				return _shouldSave.elementAt(rowIndex);
+			} else if (columnIndex == 1) {
+				return (_resources.elementAt(rowIndex)).getName();
+			} else if (columnIndex == 2) {
+				return (_resources.elementAt(rowIndex)).getResourceType().getName();
+			} else if (columnIndex == 3) {
+				return (_resources.elementAt(rowIndex)).getFile().getName();
+			} else if (columnIndex == 4) {
+				Date date = (_resources.elementAt(rowIndex)).getDiskLastModifiedDate();
+				if (date != null) {
+					return (new SimpleDateFormat("dd/MM HH:mm:ss")).format(date);
+				} else {
+					return "-";
+				}
+			}
+			return null;
+		}
 
-            if (nbOfFilesToSave > 0) {
+		@Override
+		public void setValueAt(Object value, int rowIndex, int columnIndex) {
+			if (columnIndex == 0) {
+				_shouldSave.setElementAt((Boolean) value, rowIndex);
+				updateButtonLabel();
+			}
+		}
 
-                if (!ProgressWindow.hasInstance()) {
-                    ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving_selected_resources"), nbOfFilesToSave);
-                }
-                
-                try {
-                    project.saveStorageResources(resourcesToSave, ProgressWindow.instance());
-                } catch (SaveResourceException e) {
-                    e.printStackTrace();
-                    listOfRaisedExceptions  = new SaveResourceExceptionList(e);
-                }
+		protected int getNbOfFilesToSave() {
+			int nbOfFilesToSave = 0;
+			for (int i = 0; i < _shouldSave.size(); i++) {
+				if ((_shouldSave.elementAt(i)).booleanValue()) {
+					nbOfFilesToSave++;
+				}
+			}
+			return nbOfFilesToSave;
+		}
 
-                ProgressWindow.hideProgressWindow();
+		public void saveSelected() throws SaveResourceExceptionList, SaveResourcePermissionDeniedException {
+			savedFilesList = "";
+			SaveResourceExceptionList listOfRaisedExceptions = null;
+			int i = 0;
+			FlexoProject project = null;
+			while (project == null && i < _resources.size()) {
+				project = _resources.get(i).getProject();
+			}
+			Vector<FlexoStorageResource> resourcesToSave = new Vector<FlexoStorageResource>();
+			for (i = 0; i < _shouldSave.size(); i++) {
+				if (_shouldSave.get(i))
+					resourcesToSave.add(_resources.get(i));
+			}
 
-                if (listOfRaisedExceptions != null) {
-                    throw listOfRaisedExceptions;
-                }
-            }
-        }
+			int nbOfFilesToSave = getNbOfFilesToSave();
 
-        private String savedFilesList;
+			if (nbOfFilesToSave > 0) {
 
-        public String savedFilesList()
-        {
-            return savedFilesList;
-        }
+				if (!ProgressWindow.hasInstance()) {
+					ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving_selected_resources"), nbOfFilesToSave);
+				}
 
-        public void selectAll()
-        {
-            for (int i = 0; i < _shouldSave.size(); i++) {
-                _shouldSave.setElementAt(new Boolean(true), i);
-                fireTableCellUpdated(i, 0);
-            }
-        }
+				try {
+					project.saveStorageResources(resourcesToSave, ProgressWindow.instance());
+				} catch (SaveResourceException e) {
+					e.printStackTrace();
+					listOfRaisedExceptions = new SaveResourceExceptionList(e);
+				}
 
-        public void deselectAll()
-        {
-            for (int i = 0; i < _shouldSave.size(); i++) {
-                _shouldSave.setElementAt(new Boolean(false), i);
-                fireTableCellUpdated(i, 0);
-            }
-        }
-    }
+				ProgressWindow.hideProgressWindow();
+
+				if (listOfRaisedExceptions != null) {
+					throw listOfRaisedExceptions;
+				}
+			}
+		}
+
+		private String savedFilesList;
+
+		public String savedFilesList() {
+			return savedFilesList;
+		}
+
+		public void selectAll() {
+			for (int i = 0; i < _shouldSave.size(); i++) {
+				_shouldSave.setElementAt(new Boolean(true), i);
+				fireTableCellUpdated(i, 0);
+			}
+		}
+
+		public void deselectAll() {
+			for (int i = 0; i < _shouldSave.size(); i++) {
+				_shouldSave.setElementAt(new Boolean(false), i);
+				fireTableCellUpdated(i, 0);
+			}
+		}
+	}
 
 }

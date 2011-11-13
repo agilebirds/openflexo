@@ -23,61 +23,48 @@ import javax.swing.JComponent;
 
 import org.openflexo.fib.model.FIBPanel.Layout;
 
-
-
 public class NoneLayoutConstraints extends ComponentConstraints {
 
 	private static final String X = "x";
 	private static final String Y = "y";
-	
-	public int getX() 
-	{
-		return getIntValue(X,0);
+
+	public int getX() {
+		return getIntValue(X, 0);
 	}
 
-	public void setX(int x) 
-	{
-		setIntValue(X,x);
+	public void setX(int x) {
+		setIntValue(X, x);
 	}
 
-	public int getY() 
-	{
-		return getIntValue(Y,0);
+	public int getY() {
+		return getIntValue(Y, 0);
 	}
 
-	public void setY(int y) 
-	{
-		setIntValue(Y,y);
+	public void setY(int y) {
+		setIntValue(Y, y);
 	}
 
-	public NoneLayoutConstraints() 
-	{
+	public NoneLayoutConstraints() {
 		super();
 	}
-	
-	protected NoneLayoutConstraints(String someConstraints) 
-	{
+
+	protected NoneLayoutConstraints(String someConstraints) {
 		super(someConstraints);
 	}
-	
-	NoneLayoutConstraints(ComponentConstraints someConstraints) 
-	{
+
+	NoneLayoutConstraints(ComponentConstraints someConstraints) {
 		super(someConstraints);
 	}
-	
+
 	@Override
-	protected Layout getType()
-	{
+	protected Layout getType() {
 		return Layout.none;
 	}
 
 	@Override
-	public void performConstrainedAddition(JComponent container,
-			JComponent contained)
-	{
-		contained.setLocation(getX(),getY());
+	public void performConstrainedAddition(JComponent container, JComponent contained) {
+		contained.setLocation(getX(), getY());
 		container.add(contained);
 	}
-
 
 }

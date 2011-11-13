@@ -18,8 +18,7 @@ import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 
-@ModelEntity(isAbstract=true)
-
+@ModelEntity(isAbstract = true)
 public interface AbstractNode extends WKFObject {
 
 	public static final String OUTGOING_EDGES = "outgoingEdges";
@@ -35,32 +34,34 @@ public interface AbstractNode extends WKFObject {
 	@Deleter(embedded = { OUTGOING_EDGES, INCOMING_EDGES, MASTER_ANNOTATION, OTHER_ANNOTATIONS })
 	public void delete();
 
-	@Getter(value=OUTGOING_EDGES,cardinality=Cardinality.LIST,inverse=Edge.START_NODE)
+	@Getter(value = OUTGOING_EDGES, cardinality = Cardinality.LIST, inverse = Edge.START_NODE)
 	@XMLElement(context = "Outgoing", primary = true)
 	@CloningStrategy(StrategyType.CLONE)
-	@Embedded({
-		@ClosureCondition(id=Edge.END_NODE)
-	})
+	@Embedded({ @ClosureCondition(id = Edge.END_NODE) })
 	public List<Edge> getOutgoingEdges();
-	@Setter(value=OUTGOING_EDGES)
+
+	@Setter(value = OUTGOING_EDGES)
 	public void setOutgoingEdges(List<Edge> edges);
-	@Adder(id=OUTGOING_EDGES)
+
+	@Adder(id = OUTGOING_EDGES)
 	public void addToOutgoingEdges(Edge edge);
-	@Remover(id=OUTGOING_EDGES)
+
+	@Remover(id = OUTGOING_EDGES)
 	public void removeFromOutgoingEdges(Edge edge);
 
-	@Getter(value=INCOMING_EDGES,cardinality=Cardinality.LIST,inverse=Edge.END_NODE)
-	@XMLElement(context="Incoming")
-	@Embedded({
-		@ClosureCondition(id=Edge.START_NODE)
-	})
+	@Getter(value = INCOMING_EDGES, cardinality = Cardinality.LIST, inverse = Edge.END_NODE)
+	@XMLElement(context = "Incoming")
+	@Embedded({ @ClosureCondition(id = Edge.START_NODE) })
 	@CloningStrategy(StrategyType.CLONE)
 	public List<Edge> getIncomingEdges();
-	@Setter(value=INCOMING_EDGES)
+
+	@Setter(value = INCOMING_EDGES)
 	public void setIncomingEdges(List<Edge> edges);
-	@Adder(id=INCOMING_EDGES)
+
+	@Adder(id = INCOMING_EDGES)
 	public void addToIncomingEdges(Edge edge);
-	@Remover(id=INCOMING_EDGES)
+
+	@Remover(id = INCOMING_EDGES)
 	public void removeFromIncomingEdges(Edge edge);
 
 	@Getter(value = PROCESS, inverse = FlexoProcess.NODES)

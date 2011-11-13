@@ -26,31 +26,27 @@ import org.openflexo.foundation.wkf.ws.FlexoPort;
 import org.openflexo.foundation.wkf.ws.NewPort;
 import org.openflexo.logging.FlexoLogger;
 
-public abstract class PortDesactivation<N extends FlexoPort>  extends ControlGraphBuilder {
+public abstract class PortDesactivation<N extends FlexoPort> extends ControlGraphBuilder {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(PortActivation.class.getPackage().getName());
 
 	private N port;
-	
-	
+
 	public static ControlGraphBuilder getDesactivationPortBuilder(FlexoPort port) throws NotSupportedException {
-		if(port instanceof NewPort)
-			return new NewPortDesactivation((NewPort)port);
-		if(port instanceof DeletePort)
-			return new DeletePortDesactivation((DeletePort)port);
-		throw new NotSupportedException("Dont know what to do with a "+port);
+		if (port instanceof NewPort)
+			return new NewPortDesactivation((NewPort) port);
+		if (port instanceof DeletePort)
+			return new DeletePortDesactivation((DeletePort) port);
+		throw new NotSupportedException("Dont know what to do with a " + port);
 	}
 
-	
-	protected PortDesactivation(N port)
-	{
+	protected PortDesactivation(N port) {
 		super();
 		this.port = port;
 	}
-	
-	public N getPort() 
-	{
+
+	public N getPort() {
 		return port;
 	}
 }

@@ -19,16 +19,14 @@
  */
 package org.openflexo.foundation.ie.widget;
 
-public class IESequenceTRConstraints extends IEHTMLTableConstraints
-{
+public class IESequenceTRConstraints extends IEHTMLTableConstraints {
 
-    public IESequenceTRConstraints()
-    {
-        super();
-        fill = BOTH;
-        anchor = NORTHWEST;
-        weightx = 1.0;
-        weighty = 1.0;
-    }
+	public IESequenceTRConstraints() {
+		super();
+		fill = BOTH;
+		anchor = NORTHWEST;
+		weightx = 1.0;
+		weighty = 1.0;
+	}
 
 }

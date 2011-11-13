@@ -19,12 +19,8 @@
  */
 package org.openflexo.generator.exception;
 
-
-
-public class VelocityInitializingException extends GenerationException
-{
- 	public VelocityInitializingException(Exception targetException)
-	{
-		super("Failed initializing Velocity","failed_init_velocity","See target exception",targetException);
+public class VelocityInitializingException extends GenerationException {
+	public VelocityInitializingException(Exception targetException) {
+		super("Failed initializing Velocity", "failed_init_velocity", "See target exception", targetException);
 	}
 }

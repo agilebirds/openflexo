@@ -29,49 +29,43 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 import org.openflexo.logging.FlexoLogger;
 
-public class InnerTableReusableWidget extends IEReusableWidget<ReusableComponentDefinition,ReusableComponentInstance>
-{
-	private static final Logger logger = FlexoLogger
-			.getLogger(InnerTableReusableWidget.class.getPackage().getName());
+public class InnerTableReusableWidget extends IEReusableWidget<ReusableComponentDefinition, ReusableComponentInstance> {
+	private static final Logger logger = FlexoLogger.getLogger(InnerTableReusableWidget.class.getPackage().getName());
 
-    public InnerTableReusableWidget(FlexoComponentBuilder builder)
-    {
-        super(builder);
-        initializeDeserialization(builder);
-    }
+	public InnerTableReusableWidget(FlexoComponentBuilder builder) {
+		super(builder);
+		initializeDeserialization(builder);
+	}
 
-    public InnerTableReusableWidget(IEWOComponent woComponent, ReusableComponentDefinition def, IEWidget parent, FlexoProject prj)
-    {
-        super(woComponent, def, parent, prj);
-    }
+	public InnerTableReusableWidget(IEWOComponent woComponent, ReusableComponentDefinition def, IEWidget parent, FlexoProject prj) {
+		super(woComponent, def, parent, prj);
+	}
 
-    @Override
-    protected ReusableComponentInstance createComponentInstance(ReusableComponentDefinition componentDefinition, IEWOComponent woComponent) {
-    	return new ReusableComponentInstance(componentDefinition,woComponent);
-    }
-    
-    @Override
-	public String getDefaultInspectorName()
-    {
-        return null;
-    }
+	@Override
+	protected ReusableComponentInstance createComponentInstance(ReusableComponentDefinition componentDefinition, IEWOComponent woComponent) {
+		return new ReusableComponentInstance(componentDefinition, woComponent);
+	}
 
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return null;
-    }
+	@Override
+	public String getDefaultInspectorName() {
+		return null;
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "inner_table_reusable_widget";
-    }
-    
+	@Override
+	public String getFullyQualifiedName() {
+		return null;
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "inner_table_reusable_widget";
+	}
+
 	@Override
 	public boolean areComponentInstancesValid() {
 		if (logger.isLoggable(Level.WARNING))
@@ -80,9 +74,9 @@ public class InnerTableReusableWidget extends IEReusableWidget<ReusableComponent
 	}
 
 	@Override
-    public void removeInvalidComponentInstances() {
-    	if (logger.isLoggable(Level.WARNING))
+	public void removeInvalidComponentInstances() {
+		if (logger.isLoggable(Level.WARNING))
 			logger.warning("Implement me!!! please");
-    }
-    
+	}
+
 }

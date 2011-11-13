@@ -28,35 +28,37 @@ public class UnresolvedMoveConflict extends UnresolvedConflict {
 	private Element _parent2InMergedDocument;
 	private int _insertion1;
 	private int _insertion2;
-	
-	public UnresolvedMoveConflict(XMLDiff3 merge,int index,Element srcContent, Element parent1InMergedDocument, Element parent2InMergedDocument, int insertionIndex1,int insertionIndex2) {
-		super(merge,index);
+
+	public UnresolvedMoveConflict(XMLDiff3 merge, int index, Element srcContent, Element parent1InMergedDocument,
+			Element parent2InMergedDocument, int insertionIndex1, int insertionIndex2) {
+		super(merge, index);
 		_srcContent = srcContent;
 		_parent1InMergedDocument = parent1InMergedDocument;
 		_parent2InMergedDocument = parent2InMergedDocument;
-		_insertion1 =insertionIndex1;
+		_insertion1 = insertionIndex1;
 		_insertion2 = insertionIndex2;
 	}
 
-	public String getMovedContentName(){
+	public String getMovedContentName() {
 		return _srcContent.getName();
 	}
-	
-	public String getParent1Name(){
-		return _parent1InMergedDocument.getName()+"(id="+_parent1InMergedDocument.getAttributeValue("id")+")";
+
+	public String getParent1Name() {
+		return _parent1InMergedDocument.getName() + "(id=" + _parent1InMergedDocument.getAttributeValue("id") + ")";
 	}
-	public String getParent2Name(){
-		return _parent2InMergedDocument.getName()+"(id="+_parent2InMergedDocument.getAttributeValue("id")+")";
+
+	public String getParent2Name() {
+		return _parent2InMergedDocument.getName() + "(id=" + _parent2InMergedDocument.getAttributeValue("id") + ")";
 	}
 
 	@Override
 	public MergeAction buildDiscardYourChangeAction() {
-		return new MergeElementAction(getConflictIndex(),MergeActionType.INSERT,_srcContent,_parent1InMergedDocument,null,_insertion1);
+		return new MergeElementAction(getConflictIndex(), MergeActionType.INSERT, _srcContent, _parent1InMergedDocument, null, _insertion1);
 	}
 
 	@Override
 	public MergeAction buildKeepYourChangeAction() {
-		return new MergeElementAction(getConflictIndex(),MergeActionType.INSERT,_srcContent,_parent2InMergedDocument,null,_insertion2);
+		return new MergeElementAction(getConflictIndex(), MergeActionType.INSERT, _srcContent, _parent2InMergedDocument, null, _insertion2);
 	}
 
 }

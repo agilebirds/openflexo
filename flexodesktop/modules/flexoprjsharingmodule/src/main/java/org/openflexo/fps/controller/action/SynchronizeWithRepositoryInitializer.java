@@ -28,44 +28,37 @@ import org.openflexo.fps.action.SynchronizeWithRepository;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class SynchronizeWithRepositoryInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	SynchronizeWithRepositoryInitializer(FPSControllerActionInitializer actionInitializer)
-	{
-		super(SynchronizeWithRepository.actionType,actionInitializer);
-	}
-	
-	@Override
-	protected FPSControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (FPSControllerActionInitializer)super.getControllerActionInitializer();
-	}
-	
-	@Override
-	protected FlexoActionInitializer<SynchronizeWithRepository> getDefaultInitializer() 
-	{
-		return new FlexoActionInitializer<SynchronizeWithRepository>() {
-            @Override
-			public boolean run(ActionEvent e, SynchronizeWithRepository action)
-            {
-                return true;
-            }
-        };
+	SynchronizeWithRepositoryInitializer(FPSControllerActionInitializer actionInitializer) {
+		super(SynchronizeWithRepository.actionType, actionInitializer);
 	}
 
-     @Override
-	protected FlexoActionFinalizer<SynchronizeWithRepository> getDefaultFinalizer() 
-	{
+	@Override
+	protected FPSControllerActionInitializer getControllerActionInitializer() {
+		return (FPSControllerActionInitializer) super.getControllerActionInitializer();
+	}
+
+	@Override
+	protected FlexoActionInitializer<SynchronizeWithRepository> getDefaultInitializer() {
+		return new FlexoActionInitializer<SynchronizeWithRepository>() {
+			@Override
+			public boolean run(ActionEvent e, SynchronizeWithRepository action) {
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected FlexoActionFinalizer<SynchronizeWithRepository> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<SynchronizeWithRepository>() {
-            @Override
-			public boolean run(ActionEvent e, SynchronizeWithRepository action)
-            {
-                return true;
-          }
-        };
+			@Override
+			public boolean run(ActionEvent e, SynchronizeWithRepository action) {
+				return true;
+			}
+		};
 	}
 
 }

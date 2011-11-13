@@ -23,35 +23,28 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 
-
-class CalcBrowser extends CEDBrowser
-{
+class CalcBrowser extends CEDBrowser {
 	private ViewPoint representedCalc = null;
-	
-	protected CalcBrowser(CEDController controller)
-	{
+
+	protected CalcBrowser(CEDController controller) {
 		super(controller);
 	}
 
-	protected ViewPoint getRepresentedObject() 
-	{
+	protected ViewPoint getRepresentedObject() {
 		return representedCalc;
 	}
 
-	protected void setRepresentedObject(ViewPoint representedCalc) 
-	{
+	protected void setRepresentedObject(ViewPoint representedCalc) {
 		this.representedCalc = representedCalc;
 	}
 
-    @Override
-	public ViewPoint getDefaultRootObject()
-    {
-    	return representedCalc;
-    }
-    
 	@Override
-	public void configure()
-	{
+	public ViewPoint getDefaultRootObject() {
+		return representedCalc;
+	}
+
+	@Override
+	public void configure() {
 		super.configure();
 		setFilterStatus(BrowserElementType.PROJECT_ONTOLOGY, BrowserFilterStatus.SHOW);
 		setFilterStatus(BrowserElementType.IMPORTED_ONTOLOGY, BrowserFilterStatus.SHOW);

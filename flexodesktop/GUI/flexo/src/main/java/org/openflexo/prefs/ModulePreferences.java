@@ -23,34 +23,30 @@ import org.openflexo.module.Module;
 
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public abstract class ModulePreferences extends ContextPreferences
-{
+public abstract class ModulePreferences extends ContextPreferences {
 
-    protected Module module;
+	protected Module module;
 
-    protected ModulePreferences(Module aModule)
-    {
-        super();
-        module = aModule;
-    }
+	protected ModulePreferences(Module aModule) {
+		super();
+		module = aModule;
+	}
 
-    @Override
-    public String getName()
-    {
-        return getModule().getName();
-    }
+	@Override
+	public String getName() {
+		return getModule().getName();
+	}
 
-    public Module getModule()
-    {
-        return module;
-    }
-    /*
-     * public File getInspectorDirectory() { return new
-     * File(getModule().getDirectory(),File.separator+"Config"+File.separator+"Preferences"); }
-     */
+	public Module getModule() {
+		return module;
+	}
+	/*
+	 * public File getInspectorDirectory() { return new
+	 * File(getModule().getDirectory(),File.separator+"Config"+File.separator+"Preferences"); }
+	 */
 
 }

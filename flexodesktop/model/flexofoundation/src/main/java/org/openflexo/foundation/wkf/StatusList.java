@@ -107,7 +107,7 @@ public final class StatusList extends WKFObject implements DeletableObject, Leve
 		FlexoProcess current = getProcess();
 		while (current.getParentProcess() != null) {
 			current = current.getParentProcess();
-			if (current.getStatusList()!=null)
+			if (current.getStatusList() != null)
 				returned.addAll(current.getStatusList().getStatus());
 		}
 		return returned;
@@ -158,16 +158,18 @@ public final class StatusList extends WKFObject implements DeletableObject, Leve
 		aStatus.setProcess(getProcess());
 		_status.add(aStatus);
 		if (getProject() != null) {
-			if (getProject().getGlobalStatus().get(aStatus.getFullyQualifiedName()) != null && getProject().getGlobalStatus().get(aStatus.getFullyQualifiedName()) != aStatus)
+			if (getProject().getGlobalStatus().get(aStatus.getFullyQualifiedName()) != null
+					&& getProject().getGlobalStatus().get(aStatus.getFullyQualifiedName()) != aStatus)
 				if (logger.isLoggable(Level.WARNING))
-					logger.warning("There are two different statuses with the same name: " + aStatus.getFullyQualifiedName()+" this can be ignored during conversions");
+					logger.warning("There are two different statuses with the same name: " + aStatus.getFullyQualifiedName()
+							+ " this can be ignored during conversions");
 			getProject().getGlobalStatus().put(aStatus.getFullyQualifiedName(), aStatus);
 			if (!isDeserializing()) {
 				notifyStatusAdded(aStatus, getProcess());
 			}
 		} else {
 			if (logger.isLoggable(Level.WARNING))
-				logger.warning("No project for status list "+this);
+				logger.warning("No project for status list " + this);
 		}
 	}
 
@@ -190,11 +192,10 @@ public final class StatusList extends WKFObject implements DeletableObject, Leve
 
 	public void removeFromStatus(Status aStatus) {
 		_status.remove(aStatus);
-		if (getProject()!=null)
+		if (getProject() != null)
 			getProject().getGlobalStatus().remove(aStatus.getFullyQualifiedName());
-		else
-			if (logger.isLoggable(Level.WARNING))
-				logger.warning("No project for status list "+this);
+		else if (logger.isLoggable(Level.WARNING))
+			logger.warning("No project for status list " + this);
 		if (!aStatus.isDeleted()) {
 			aStatus.delete();
 		}
@@ -217,7 +218,7 @@ public final class StatusList extends WKFObject implements DeletableObject, Leve
 	}
 
 	public Status statusWithName(String aStatusName) {
-		if (getProject()!=null)
+		if (getProject() != null)
 			if (aStatusName != null && aStatusName.indexOf(".STATUS.") > -1)
 				return getProject().getGlobalStatus().get(aStatusName);
 		for (Enumeration e = _status.elements(); e.hasMoreElements();) {
@@ -240,21 +241,21 @@ public final class StatusList extends WKFObject implements DeletableObject, Leve
 	}
 
 	private String defaultStatusAsString;
-	
+
 	public Status getDefaultStatus() {
-		if (_defaultStatus==null && defaultStatusAsString!=null) {
-    		if (getProject()!=null) {
-    			_defaultStatus = getProject().getGlobalStatus().get(defaultStatusAsString);
-    			if (_defaultStatus==null && !isDeserializing()) {
-    				if (logger.isLoggable(Level.WARNING))
-						logger.warning("Status with name "+defaultStatusAsString+" could not be found.");
-    				defaultStatusAsString = null;
-    			}
-    		} else if (!isDeserializing()) {
-    			if (logger.isLoggable(Level.WARNING))
-					logger.warning("No project for Status List in process "+(getProcess()!=null?getProcess().getName():null));
-    		}
-    	}
+		if (_defaultStatus == null && defaultStatusAsString != null) {
+			if (getProject() != null) {
+				_defaultStatus = getProject().getGlobalStatus().get(defaultStatusAsString);
+				if (_defaultStatus == null && !isDeserializing()) {
+					if (logger.isLoggable(Level.WARNING))
+						logger.warning("Status with name " + defaultStatusAsString + " could not be found.");
+					defaultStatusAsString = null;
+				}
+			} else if (!isDeserializing()) {
+				if (logger.isLoggable(Level.WARNING))
+					logger.warning("No project for Status List in process " + (getProcess() != null ? getProcess().getName() : null));
+			}
+		}
 		return _defaultStatus;
 	}
 
@@ -262,22 +263,20 @@ public final class StatusList extends WKFObject implements DeletableObject, Leve
 		Status old = this._defaultStatus;
 		this._defaultStatus = defaultStatus;
 		setChanged();
-		notifyObservers(new WKFAttributeDataModification("defaultStatus",old,defaultStatus));
+		notifyObservers(new WKFAttributeDataModification("defaultStatus", old, defaultStatus));
 	}
 
-	public String getDefaultStatusAsString()
-	{
-		if (getDefaultStatus()!=null)
+	public String getDefaultStatusAsString() {
+		if (getDefaultStatus() != null)
 			return getDefaultStatus().getFullyQualifiedName();
 		else
 			return null;
 	}
-	
-	public void setDefaultStatusAsString(String status)
-	{
+
+	public void setDefaultStatusAsString(String status) {
 		this.defaultStatusAsString = status;
 	}
-	
+
 	public Status createNewStatus() {
 		String newStatusName = getNextNewStatusName();
 		Status newStatus = null;

@@ -24,32 +24,27 @@ import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.listener.SelectionManagingKeyEventListener;
 
-
 /**
  * Key events listener used in the context of Interface Editor
  * 
  * @author sguerin
  */
-public class IEKeyEventListener extends SelectionManagingKeyEventListener
-{
+public class IEKeyEventListener extends SelectionManagingKeyEventListener {
 
-    private IEController _ieController;
+	private IEController _ieController;
 
-    public IEKeyEventListener(IEController controller)
-    {
-        super(controller);
-        _ieController = controller;
-    }
-
-    @Override
-	protected SelectionManager getSelectionManager()
-    {
-        return _ieController.getIESelectionManager();
-    }
+	public IEKeyEventListener(IEController controller) {
+		super(controller);
+		_ieController = controller;
+	}
 
 	@Override
-	public FlexoEditor getEditor() 
-	{
+	protected SelectionManager getSelectionManager() {
+		return _ieController.getIESelectionManager();
+	}
+
+	@Override
+	public FlexoEditor getEditor() {
 		return _ieController.getEditor();
 	}
 }

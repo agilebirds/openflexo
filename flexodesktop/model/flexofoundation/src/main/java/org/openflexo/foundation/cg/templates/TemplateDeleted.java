@@ -19,15 +19,12 @@
  */
 package org.openflexo.foundation.cg.templates;
 
-
 /**
  * @author gpolet
  * 
  */
-public class TemplateDeleted extends TemplateFileNotification
-{
-	public TemplateDeleted(CGTemplateFile file)
-    {
-        super(file);
-    }
+public class TemplateDeleted extends TemplateFileNotification {
+	public TemplateDeleted(CGTemplateFile file) {
+		super(file);
+	}
 }

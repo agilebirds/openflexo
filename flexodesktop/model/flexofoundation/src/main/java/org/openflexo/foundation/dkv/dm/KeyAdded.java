@@ -19,23 +19,20 @@
  */
 package org.openflexo.foundation.dkv.dm;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class KeyAdded extends DKVDataModification
-{
+public class KeyAdded extends DKVDataModification {
 
-    /**
-     * @param modificationType
-     * @param propertyName
-     * @param oldValue
-     * @param newValue
-     */
-    public KeyAdded(Object newValue)
-    {
-        super(-1, "keys", null, newValue);
-    }
+	/**
+	 * @param modificationType
+	 * @param propertyName
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public KeyAdded(Object newValue) {
+		super(-1, "keys", null, newValue);
+	}
 
 }

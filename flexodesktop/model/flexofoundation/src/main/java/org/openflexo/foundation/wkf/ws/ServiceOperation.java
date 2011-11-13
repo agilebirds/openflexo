@@ -184,7 +184,7 @@ public class ServiceOperation extends WKFObject implements InspectableObject, Le
 		}
 		_name = aName;
 		setChanged();
-		notifyObservers(new NameChanged(null,_name));
+		notifyObservers(new NameChanged(null, _name));
 	}
 
 	/*

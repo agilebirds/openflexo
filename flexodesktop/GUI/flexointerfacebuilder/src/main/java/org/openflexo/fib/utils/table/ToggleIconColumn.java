@@ -27,27 +27,23 @@ import java.util.Observable;
  * @author sguerin
  * 
  */
-public abstract class ToggleIconColumn<D extends Observable> extends IconColumn<D>
-{
+public abstract class ToggleIconColumn<D extends Observable> extends IconColumn<D> {
 
-    public ToggleIconColumn(String title, int defaultWidth)
-    {
-        super(title, defaultWidth);
-    }
+	public ToggleIconColumn(String title, int defaultWidth) {
+		super(title, defaultWidth);
+	}
 
-    public void toogleValue(int row)
-    {
-        D object = elementAt(row);
-        toggleValue(object);
-        if (getModel() != null)
-            getModel().fireTableRowsUpdated(row, row);
-    }
+	public void toogleValue(int row) {
+		D object = elementAt(row);
+		toggleValue(object);
+		if (getModel() != null)
+			getModel().fireTableRowsUpdated(row, row);
+	}
 
-    public abstract void toggleValue(D object);
+	public abstract void toggleValue(D object);
 
-    @Override
-	public String toString()
-    {
-        return "ToggleIconColumn " + "[" + getTitle() + "]" + Integer.toHexString(hashCode());
-    }
+	@Override
+	public String toString() {
+		return "ToggleIconColumn " + "[" + getTitle() + "]" + Integer.toHexString(hashCode());
+	}
 }

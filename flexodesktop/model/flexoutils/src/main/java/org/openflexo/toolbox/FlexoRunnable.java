@@ -21,9 +21,8 @@ package org.openflexo.toolbox;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public interface FlexoRunnable extends Runnable
-{
-    public String getName();
+public interface FlexoRunnable extends Runnable {
+	public String getName();
 }

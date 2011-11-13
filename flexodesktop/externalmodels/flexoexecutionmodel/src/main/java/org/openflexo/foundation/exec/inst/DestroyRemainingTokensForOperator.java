@@ -24,34 +24,29 @@ import org.openflexo.foundation.wkf.node.OperatorNode;
 public class DestroyRemainingTokensForOperator extends CustomInstruction {
 
 	private OperatorNode operatorNode;
-	
-	public DestroyRemainingTokensForOperator (OperatorNode operatorNode)
-	{
+
+	public DestroyRemainingTokensForOperator(OperatorNode operatorNode) {
 		super();
 		this.operatorNode = operatorNode;
-		setInlineComment("Destroy remaining tokens in current ProcessInstance for operator "+getOperatorNode().getName());
+		setInlineComment("Destroy remaining tokens in current ProcessInstance for operator " + getOperatorNode().getName());
 	}
 
-	public OperatorNode getOperatorNode()
-	{
+	public OperatorNode getOperatorNode() {
 		return operatorNode;
 	}
 
 	@Override
-	public String toString()
-	{
-		return "[DestroyRemainingTokens:"+operatorNode+"]";
+	public String toString() {
+		return "[DestroyRemainingTokens:" + operatorNode + "]";
 	}
 
 	@Override
-	public String getJavaStringRepresentation() 
-	{
-		return "destroyRemainingTokensForOperator("+operatorNode.getFlexoID()+");";
+	public String getJavaStringRepresentation() {
+		return "destroyRemainingTokensForOperator(" + operatorNode.getFlexoID() + ");";
 	}
-	
+
 	@Override
-	public DestroyRemainingTokensForOperator clone()
-	{
+	public DestroyRemainingTokensForOperator clone() {
 		DestroyRemainingTokensForOperator returned = new DestroyRemainingTokensForOperator(operatorNode);
 		returned.setHeaderComment(getHeaderComment());
 		returned.setInlineComment(getInlineComment());

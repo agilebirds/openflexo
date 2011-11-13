@@ -31,9 +31,8 @@ public class PPMWebServiceClient {
 	private PPMWebService_PortType ppmService;
 	private String login;
 	private String encriptedPWD;
-	
-	public PPMWebServiceClient(String webServiceUrl, String login, String encriptedPWD) throws ServiceException
-	{
+
+	public PPMWebServiceClient(String webServiceUrl, String login, String encriptedPWD) throws ServiceException {
 		this.ppmServiceLocator = new PPMWebService_ServiceLocator();
 		this.ppmServiceLocator.setPPMWebServiceEndpointAddress(webServiceUrl);
 		this.ppmService = this.ppmServiceLocator.getPPMWebService();
@@ -44,38 +43,41 @@ public class PPMWebServiceClient {
 		this.login = login;
 		this.encriptedPWD = encriptedPWD;
 	}
-	
-	public PPMWebService_PortType getWebService_PortType(){ 
+
+	public PPMWebService_PortType getWebService_PortType() {
 		return ppmService;
 	}
-	
-	public PPMRole[] getRoles() throws ServiceException, PPMWebServiceAuthentificationException, RemoteException{
-		return ppmService.getRoles(login, encriptedPWD); 
+
+	public PPMRole[] getRoles() throws ServiceException, PPMWebServiceAuthentificationException, RemoteException {
+		return ppmService.getRoles(login, encriptedPWD);
 	}
-	
-	public PPMProcess[] getProcesses() throws ServiceException, PPMWebServiceAuthentificationException, RemoteException{
+
+	public PPMProcess[] getProcesses() throws ServiceException, PPMWebServiceAuthentificationException, RemoteException {
 		return ppmService.getProcesses(login, encriptedPWD);
 	}
-	
-	public byte[] getScreenshot(String processVersionURI) throws ServiceException, PPMWebServiceAuthentificationException, RemoteException{
-		return ppmService.getScreenshoot(login, encriptedPWD,processVersionURI);
+
+	public byte[] getScreenshot(String processVersionURI) throws ServiceException, PPMWebServiceAuthentificationException, RemoteException {
+		return ppmService.getScreenshoot(login, encriptedPWD, processVersionURI);
 	}
-	
-	public PPMRole[] refreshRoles(String[] uris) throws ServiceException, PPMWebServiceAuthentificationException, RemoteException{
+
+	public PPMRole[] refreshRoles(String[] uris) throws ServiceException, PPMWebServiceAuthentificationException, RemoteException {
 		return ppmService.refreshRoles(login, encriptedPWD, uris);
 	}
-	
-	public PPMProcess[] refreshProcesses(String[] uris) throws ServiceException, PPMWebServiceAuthentificationException, RemoteException{
+
+	public PPMProcess[] refreshProcesses(String[] uris) throws ServiceException, PPMWebServiceAuthentificationException, RemoteException {
 		return ppmService.refreshProcesses(login, encriptedPWD, uris);
 	}
 
-    public CLProjectDescriptor[] getAvailableProjects() throws java.rmi.RemoteException, org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException{
-    	return ppmService.getAvailableProjects(login, encriptedPWD);
-    }
+	public CLProjectDescriptor[] getAvailableProjects() throws java.rmi.RemoteException,
+			org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException {
+		return ppmService.getAvailableProjects(login, encriptedPWD);
+	}
 
-    public String uploadPrj(org.openflexo.ws.client.PPMWebService.CLProjectDescriptor targetProject, javax.activation.DataHandler zip, java.lang.String uploadComment, java.lang.String login) throws java.rmi.RemoteException, org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException{
-    	return ppmService.uploadPrj(targetProject, zip, uploadComment, login);
-    }
+	public String uploadPrj(org.openflexo.ws.client.PPMWebService.CLProjectDescriptor targetProject, javax.activation.DataHandler zip,
+			java.lang.String uploadComment, java.lang.String login) throws java.rmi.RemoteException,
+			org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException {
+		return ppmService.uploadPrj(targetProject, zip, uploadComment, login);
+	}
 
 	public String getLogin() {
 		return login;

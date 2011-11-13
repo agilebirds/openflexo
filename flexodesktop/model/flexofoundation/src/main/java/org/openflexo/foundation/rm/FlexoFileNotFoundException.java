@@ -25,17 +25,15 @@ package org.openflexo.foundation.rm;
  * @author sguerin
  * 
  */
-public class FlexoFileNotFoundException extends LoadResourceException
-{
-    public FlexoFileNotFoundException(FlexoFileResource fileResource)
-    {
-        super(fileResource, null);
-    }
+public class FlexoFileNotFoundException extends LoadResourceException {
+	public FlexoFileNotFoundException(FlexoFileResource fileResource) {
+		super(fileResource, null);
+	}
 
-    @Override
-	public String getMessage()
-    {
-        return "FileNotFoundException: resource: " + _fileResource.getResourceIdentifier() + " file: " + _fileResource.getFile().getAbsolutePath();
-    }
+	@Override
+	public String getMessage() {
+		return "FileNotFoundException: resource: " + _fileResource.getResourceIdentifier() + " file: "
+				+ _fileResource.getFile().getAbsolutePath();
+	}
 
 }

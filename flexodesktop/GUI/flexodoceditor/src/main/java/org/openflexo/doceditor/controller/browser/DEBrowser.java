@@ -30,15 +30,13 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.toc.TOCData;
 
-
 /**
  * Browser for Code Generator module
  * 
  * @author gpolet
  * 
  */
-public class DEBrowser extends ConfigurableProjectBrowser implements FlexoObserver
-{
+public class DEBrowser extends ConfigurableProjectBrowser implements FlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(DEBrowser.class.getPackage().getName());
 
@@ -48,28 +46,25 @@ public class DEBrowser extends ConfigurableProjectBrowser implements FlexoObserv
 	// ==========================================================================
 
 	private DEController _controller;
-	
+
 	// ==========================================================================
 	// ============================= Constructor
 	// ================================
 	// ==========================================================================
 
-	public DEBrowser(DEController controller)
-	{
-		super(makeDefaultBrowserConfiguration(controller.getProject().getTOCData()),controller.getSelectionManager());
+	public DEBrowser(DEController controller) {
+		super(makeDefaultBrowserConfiguration(controller.getProject().getTOCData()), controller.getSelectionManager());
 		_controller = controller;
 		update();
 	}
 
 	@Override
-	public void update(FlexoObservable o, DataModification arg)
-	{
+	public void update(FlexoObservable o, DataModification arg) {
 		if (logger.isLoggable(Level.FINE))
 			logger.fine("DocEditorBrowser update");
 	}
 
-	public static BrowserConfiguration makeDefaultBrowserConfiguration(TOCData tocData)
-	{
+	public static BrowserConfiguration makeDefaultBrowserConfiguration(TOCData tocData) {
 		BrowserConfiguration returned = new DEBrowserConfiguration(tocData);
 		return returned;
 	}
@@ -77,5 +72,5 @@ public class DEBrowser extends ConfigurableProjectBrowser implements FlexoObserv
 	public DEController getController() {
 		return _controller;
 	}
-	
+
 }

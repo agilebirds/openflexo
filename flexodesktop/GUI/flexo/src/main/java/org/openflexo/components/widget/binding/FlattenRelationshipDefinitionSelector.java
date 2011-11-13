@@ -41,104 +41,92 @@ import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.dm.eo.DMEORelationship;
 import org.openflexo.foundation.dm.eo.FlattenRelationshipDefinition;
 
-
 public class FlattenRelationshipDefinitionSelector extends BindingSelector {
 
 	private FlattenRelationshipDefinitionInfo _flattenRelationshipDefinitionInfo;
 
 	@Override
 	public FlattenRelationshipDefinition getEditedObject() {
-		return (FlattenRelationshipDefinition)super.getEditedObject();
+		return (FlattenRelationshipDefinition) super.getEditedObject();
 	}
 
-	protected class FlattenRelationshipDefinitionInfo extends BindingModel implements Bindable
-	{
+	protected class FlattenRelationshipDefinitionInfo extends BindingModel implements Bindable {
 		private DMEOEntity _sourceEntity;
 		private BindingVariable _bindingVariable;
-		//protected RootBindingColumnListModel _rootListModel;
+		// protected RootBindingColumnListModel _rootListModel;
 		private BindingDefinition _bindingDefinition;
 
-		FlattenRelationshipDefinitionInfo(DMEOEntity sourceEntity)
-		{
+		FlattenRelationshipDefinitionInfo(DMEOEntity sourceEntity) {
 			_sourceEntity = sourceEntity;
-			_bindingVariable = new BindingVariable(null,sourceEntity.getDMModel(),"");
+			_bindingVariable = new BindingVariable(null, sourceEntity.getDMModel(), "");
 			_bindingVariable.setVariableName("definition");
 			_bindingVariable.setType(DMType.makeResolvedDMType(sourceEntity));
-			//_rootListModel = new RootBindingColumnListModel();
-			_bindingDefinition = new BindingDefinition("flattenRelationshipDefinition",DMType.makeObjectDMType(sourceEntity.getProject()),sourceEntity,BindingDefinitionType.GET, true);
+			// _rootListModel = new RootBindingColumnListModel();
+			_bindingDefinition = new BindingDefinition("flattenRelationshipDefinition", DMType.makeObjectDMType(sourceEntity.getProject()),
+					sourceEntity, BindingDefinitionType.GET, true);
 			setBindingDefinition(_bindingDefinition);
 			setBindable(this);
 		}
 
 		@Override
-		public int getBindingVariablesCount()
-		{
+		public int getBindingVariablesCount() {
 			return 1;
 		}
 
 		@Override
-		public BindingVariable getBindingVariableAt(int index)
-		{
+		public BindingVariable getBindingVariableAt(int index) {
 			return _bindingVariable;
 		}
 
 		@Override
-		public BindingModel getBindingModel()
-		{
+		public BindingModel getBindingModel() {
 			return this;
 		}
 
 		@Override
-		public boolean allowsNewBindingVariableCreation()
-		{
+		public boolean allowsNewBindingVariableCreation() {
 			return false;
 		}
 
 	}
 
-	public FlattenRelationshipDefinitionSelector(BindingValue flattenRelationshipDefinition, DMEOEntity sourceEntity)
-	{
+	public FlattenRelationshipDefinitionSelector(BindingValue flattenRelationshipDefinition, DMEOEntity sourceEntity) {
 		super(flattenRelationshipDefinition);
 		setSourceEntity(sourceEntity);
 		activateNormalBindingMode();
 	}
 
-	public void updateCustomPanel(BindingValue editedObject)
-	{
+	public void updateCustomPanel(BindingValue editedObject) {
 		super.updateCustomPanel(editedObject);
 	}
 
 	@Override
-	protected FlattenRelationshipDefinition makeBinding()
-	{
+	protected FlattenRelationshipDefinition makeBinding() {
 		if (logger.isLoggable(Level.FINE))
-			logger.fine("makeBindingValue() "+getBindingDefinition());
+			logger.fine("makeBindingValue() " + getBindingDefinition());
 		if (_flattenRelationshipDefinitionInfo != null) {
-			FlattenRelationshipDefinition returned = new FlattenRelationshipDefinition(_flattenRelationshipDefinitionInfo._sourceEntity, null);
+			FlattenRelationshipDefinition returned = new FlattenRelationshipDefinition(_flattenRelationshipDefinitionInfo._sourceEntity,
+					null);
 			return returned;
 		} else
 			return null;
 	}
 
-
 	@Override
-	protected AbstractListModel getRootListModel()
-	{
+	protected AbstractListModel getRootListModel() {
 		if (_flattenRelationshipDefinitionInfo != null)
 			return getListModelFor(DMType.makeResolvedDMType(_flattenRelationshipDefinitionInfo._sourceEntity));
-		return ((BindingSelectorPanel)_selectorPanel).EMPTY_MODEL;
+		return ((BindingSelectorPanel) _selectorPanel).EMPTY_MODEL;
 	}
 
 	@Override
-	protected void valueSelected(int index, JList list, AbstractBinding flattenRelationshipDefinition)
-	{
+	protected void valueSelected(int index, JList list, AbstractBinding flattenRelationshipDefinition) {
 		if (flattenRelationshipDefinition instanceof FlattenRelationshipDefinition) {
-			FlattenRelationshipDefinition definition = (FlattenRelationshipDefinition)flattenRelationshipDefinition;
-			BindingColumnElement selectedValue
-			= (BindingColumnElement)list.getSelectedValue();
+			FlattenRelationshipDefinition definition = (FlattenRelationshipDefinition) flattenRelationshipDefinition;
+			BindingColumnElement selectedValue = (BindingColumnElement) list.getSelectedValue();
 			if (selectedValue.getElement() instanceof DMProperty) {
 				if (selectedValue.getElement() != definition.getBindingPathElementAtIndex(index)) {
-					definition.setBindingPathElementAtIndex((DMProperty)selectedValue.getElement(), index);
+					definition.setBindingPathElementAtIndex((DMProperty) selectedValue.getElement(), index);
 					setEditedObject(definition);
 					fireEditedObjectChanged();
 				}
@@ -146,23 +134,22 @@ public class FlattenRelationshipDefinitionSelector extends BindingSelector {
 		}
 	}
 
-	public DMEOEntity getSourceEntity()
-	{
-		if (_flattenRelationshipDefinitionInfo != null) return _flattenRelationshipDefinitionInfo._sourceEntity;
+	public DMEOEntity getSourceEntity() {
+		if (_flattenRelationshipDefinitionInfo != null)
+			return _flattenRelationshipDefinitionInfo._sourceEntity;
 		return null;
 	}
 
-	public void setSourceEntity(DMEOEntity sourceEntity)
-	{
+	public void setSourceEntity(DMEOEntity sourceEntity) {
 		if (sourceEntity != null && sourceEntity != getSourceEntity()) {
 			_flattenRelationshipDefinitionInfo = new FlattenRelationshipDefinitionInfo(sourceEntity);
-			if (_selectorPanel != null) _selectorPanel.update();
+			if (_selectorPanel != null)
+				_selectorPanel.update();
 		}
 	}
 
 	@Override
-	protected ResizablePanel createCustomPanel(AbstractBinding editedObject)
-	{
+	protected ResizablePanel createCustomPanel(AbstractBinding editedObject) {
 		_selectorPanel = new FlattenRelationshipDefinitionSelectorPanel();
 		_selectorPanel.init();
 		/*if (_bindable != null) {
@@ -171,22 +158,18 @@ public class FlattenRelationshipDefinitionSelector extends BindingSelector {
 		return _selectorPanel;
 	}
 
-
-	protected class FlattenRelationshipDefinitionSelectorPanel extends BindingSelectorPanel
-	{
+	protected class FlattenRelationshipDefinitionSelectorPanel extends BindingSelectorPanel {
 
 		protected FlattenRelationshipDefinitionSelectorPanel() {
 			super(FlattenRelationshipDefinitionSelector.this);
 			// TODO Auto-generated constructor stub
 		}
 
-		protected class RelationshipsOnlyListModel extends BindingColumnListModel
-		{
+		protected class RelationshipsOnlyListModel extends BindingColumnListModel {
 			private DMEOEntity _entity;
 			private Vector<BindingColumnElement> _elements;
 
-			RelationshipsOnlyListModel(DMEOEntity entity)
-			{
+			RelationshipsOnlyListModel(DMEOEntity entity) {
 				super();
 				_entity = entity;
 				_elements = new Vector<BindingColumnElement>();
@@ -194,53 +177,44 @@ public class FlattenRelationshipDefinitionSelector extends BindingSelector {
 			}
 
 			@Override
-			public void updateValues()
-			{
+			public void updateValues() {
 				_elements.clear();
 				for (DMEORelationship r : _entity.getOrderedRelationships()) {
-					_elements.add(new BindingColumnElement(r,r.getType()));
+					_elements.add(new BindingColumnElement(r, r.getType()));
 				}
 			}
 
 			@Override
-			public int getUnfilteredSize()
-			{
+			public int getUnfilteredSize() {
 				return _elements.size();
 			}
 
 			@Override
-			public BindingColumnElement getUnfilteredElementAt(int index)
-			{
+			public BindingColumnElement getUnfilteredElementAt(int index) {
 				return _elements.elementAt(index);
 			}
 
 		}
 
-		class EmptyColumnListModel extends BindingColumnListModel
-		{
+		class EmptyColumnListModel extends BindingColumnListModel {
 			@Override
-			public int getUnfilteredSize()
-			{
+			public int getUnfilteredSize() {
 				return 0;
 			}
 
 			@Override
-			public BindingColumnElement getUnfilteredElementAt(int index)
-			{
+			public BindingColumnElement getUnfilteredElementAt(int index) {
 				return null;
 			}
 
 		}
 
-
-		protected boolean displayOptions()
-		{
+		protected boolean displayOptions() {
 			return false;
 		}
 
 		@Override
-		protected void update()
-		{
+		protected void update() {
 			BindingValue bindingValue = getEditedObject();
 			if (logger.isLoggable(Level.FINE))
 				logger.fine("update with " + bindingValue);
@@ -250,8 +224,7 @@ public class FlattenRelationshipDefinitionSelector extends BindingSelector {
 			listAtIndex(0).setModel(getRootListModel());
 
 			int lastUpdatedList = 0;
-			if (bindingValue != null
-					&& bindingValue.getBindingPath() != null) {
+			if (bindingValue != null && bindingValue.getBindingPath() != null) {
 				for (int i = 0; i < bindingValue.getBindingPath().size(); i++) {
 					BindingPathElement pathElement = bindingValue.getBindingPath().elementAt(i);
 					if (i + 1 == getVisibleColsCount()) {
@@ -263,15 +236,13 @@ public class FlattenRelationshipDefinitionSelector extends BindingSelector {
 					}
 					listAtIndex(i).removeListSelectionListener(this);
 					if (pathElement instanceof DMProperty) {
-						BindingColumnElement propertyElementToSelect
-						= (listAtIndex(i).getModel()).getElementFor(pathElement);
+						BindingColumnElement propertyElementToSelect = (listAtIndex(i).getModel()).getElementFor(pathElement);
 						listAtIndex(i).setSelectedValue(propertyElementToSelect, true);
-						//listAtIndex(i).setSelectedValue(pathElement, true);
+						// listAtIndex(i).setSelectedValue(pathElement, true);
 					}
 					listAtIndex(i).addListSelectionListener(this);
 				}
 			}
-
 
 			// Remove unused lists
 			int lastVisibleList = defaultVisibleColCount - 1;
@@ -292,27 +263,23 @@ public class FlattenRelationshipDefinitionSelector extends BindingSelector {
 				list.setModel(EMPTY_MODEL);
 			}
 
-
 			// Set connect button state
 			_connectButton.setEnabled((bindingValue != null) && (bindingValue.isBindingValid()));
 
 			if (bindingValue != null) {
-				getTextField().setForeground(bindingValue.isBindingValid()?Color.BLACK:Color.RED);
+				getTextField().setForeground(bindingValue.isBindingValid() ? Color.BLACK : Color.RED);
 			}
 
 			updateSearchedTypeLabel();
 		}
 
 		@Override
-		protected BindingColumnListModel makeColumnListModel(DMType type)
-		{
-			if (type.getKindOfType() == DMType.KindOfType.RESOLVED
-					&& type.getBaseEntity() instanceof DMEOEntity)
-				return new RelationshipsOnlyListModel((DMEOEntity)type.getBaseEntity());
-			else return EMPTY_MODEL;
+		protected BindingColumnListModel makeColumnListModel(DMType type) {
+			if (type.getKindOfType() == DMType.KindOfType.RESOLVED && type.getBaseEntity() instanceof DMEOEntity)
+				return new RelationshipsOnlyListModel((DMEOEntity) type.getBaseEntity());
+			else
+				return EMPTY_MODEL;
 		}
-
-
 
 	}
 

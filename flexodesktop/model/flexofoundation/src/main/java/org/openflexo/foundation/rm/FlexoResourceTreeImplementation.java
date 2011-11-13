@@ -18,6 +18,7 @@
  *
  */
 package org.openflexo.foundation.rm;
+
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.Vector;
@@ -26,31 +27,26 @@ import java.util.Vector;
  * 
  */
 
-public class FlexoResourceTreeImplementation implements FlexoResourceTree
-{
+public class FlexoResourceTreeImplementation implements FlexoResourceTree {
 	private FlexoResource _root;
 	private Vector<FlexoResourceTree> _childs;
-	
-	public FlexoResourceTreeImplementation(FlexoResource resource)
-	{
+
+	public FlexoResourceTreeImplementation(FlexoResource resource) {
 		_root = resource;
 		_childs = new Vector<FlexoResourceTree>();
 	}
 
 	@Override
-	public Vector<FlexoResourceTree> getChildNodes() 
-	{
+	public Vector<FlexoResourceTree> getChildNodes() {
 		return _childs;
 	}
 
-	public void add(FlexoResourceTree tree)
-	{
+	public void add(FlexoResourceTree tree) {
 		_childs.add(tree);
 	}
-	
+
 	@Override
-	public FlexoResource getRootNode() 
-	{
+	public FlexoResource getRootNode() {
 		return _root;
 	}
 
@@ -58,30 +54,28 @@ public class FlexoResourceTreeImplementation implements FlexoResourceTree
 	public boolean isEmpty() {
 		return _childs.size() == 0;
 	}
-	
+
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return toString(0, false);
 	}
 
 	@Override
 	public String toString(int offset, boolean isLastChild) {
 		StringBuffer sb = new StringBuffer();
-		for (int i = 0;i<offset;i++){
-			if (i+1==offset)
+		for (int i = 0; i < offset; i++) {
+			if (i + 1 == offset)
 				sb.append("|---");
+			else if (isLastChild)
+				sb.append("    ");
 			else
-				if(isLastChild)
-					sb.append("    ");
-				else
-					sb.append("|   ");
+				sb.append("|   ");
 		}
 		sb.append(_root).append("(").append(new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(_root.getLastUpdate())).append(")\n");
 		Iterator<FlexoResourceTree> i = _childs.iterator();
 		while (i.hasNext()) {
 			FlexoResourceTree child = i.next();
-			sb.append(child.toString(offset+1,!i.hasNext()));
+			sb.append(child.toString(offset + 1, !i.hasNext()));
 		}
 		return sb.toString();
 	}

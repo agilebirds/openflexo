@@ -26,85 +26,82 @@ import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class StylesAndImagesGenerator extends DGGenerator<FlexoProject>
-{
-    private GeneralStyleDocGenerator generalStyleDocGenerator;
+public class StylesAndImagesGenerator extends DGGenerator<FlexoProject> {
+	private GeneralStyleDocGenerator generalStyleDocGenerator;
 
-    private DataModelStyleDocGenerator dataModelStyleDocGenerator;
-    
-    /**
-     * @param generator
-     * @param project
-     */
-    public StylesAndImagesGenerator(ProjectDocLatexGenerator generator, FlexoProject project)
-    {
-        super(generator, project);
-        generalStyleDocGenerator = new GeneralStyleDocGenerator(generator,project);
-        dataModelStyleDocGenerator = new DataModelStyleDocGenerator(generator,project);
-    }
+	private DataModelStyleDocGenerator dataModelStyleDocGenerator;
 
-    /**
-     * Overrides buildResourcesAndSetGenerators
-     * @see org.openflexo.dg.DGGenerator#buildResourcesAndSetGenerators(org.openflexo.foundation.cg.DGRepository, java.util.Vector)
-     */
-    @Override
-    public void buildResourcesAndSetGenerators(DGRepository repository, Vector<CGRepositoryFileResource> resources)
-    {
-        generalStyleDocGenerator.buildResourcesAndSetGenerators(repository, resources);
-        dataModelStyleDocGenerator.buildResourcesAndSetGenerators(repository, resources);
-    }
+	/**
+	 * @param generator
+	 * @param project
+	 */
+	public StylesAndImagesGenerator(ProjectDocLatexGenerator generator, FlexoProject project) {
+		super(generator, project);
+		generalStyleDocGenerator = new GeneralStyleDocGenerator(generator, project);
+		dataModelStyleDocGenerator = new DataModelStyleDocGenerator(generator, project);
+	}
 
-    /**
-     * Overrides getFileExtension
-     * @see org.openflexo.dg.DGGenerator#getFileExtension()
-     */
-    @Override
-    public String getFileExtension()
-    {
-        return null;
-    }
+	/**
+	 * Overrides buildResourcesAndSetGenerators
+	 * 
+	 * @see org.openflexo.dg.DGGenerator#buildResourcesAndSetGenerators(org.openflexo.foundation.cg.DGRepository, java.util.Vector)
+	 */
+	@Override
+	public void buildResourcesAndSetGenerators(DGRepository repository, Vector<CGRepositoryFileResource> resources) {
+		generalStyleDocGenerator.buildResourcesAndSetGenerators(repository, resources);
+		dataModelStyleDocGenerator.buildResourcesAndSetGenerators(repository, resources);
+	}
 
-    /**
-     * Overrides getFileName
-     * @see org.openflexo.dg.DGGenerator#getFileName()
-     */
-    @Override
-    public String getFileName()
-    {
-        return null;
-    }
+	/**
+	 * Overrides getFileExtension
+	 * 
+	 * @see org.openflexo.dg.DGGenerator#getFileExtension()
+	 */
+	@Override
+	public String getFileExtension() {
+		return null;
+	}
 
-    /**
-     * Overrides getTemplateName
-     * @see org.openflexo.dg.DGGenerator#getTemplateName()
-     */
-    @Override
-    public String getTemplateName()
-    {
-        return null;
-    }
+	/**
+	 * Overrides getFileName
+	 * 
+	 * @see org.openflexo.dg.DGGenerator#getFileName()
+	 */
+	@Override
+	public String getFileName() {
+		return null;
+	}
 
-    /**
-     * Overrides getIdentifier
-     * @see org.openflexo.dg.FlexoResourceGenerator#getIdentifier()
-     */
-    @Override
-	public String getIdentifier()
-    {
-        return "STYLE-AND-IMAGES";
-    }
+	/**
+	 * Overrides getTemplateName
+	 * 
+	 * @see org.openflexo.dg.DGGenerator#getTemplateName()
+	 */
+	@Override
+	public String getTemplateName() {
+		return null;
+	}
+
+	/**
+	 * Overrides getIdentifier
+	 * 
+	 * @see org.openflexo.dg.FlexoResourceGenerator#getIdentifier()
+	 */
+	@Override
+	public String getIdentifier() {
+		return "STYLE-AND-IMAGES";
+	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-    @Override
+	@Override
 	public boolean hasFormattingException() {
 		return false;
-    }
+	}
 
 }

@@ -54,301 +54,285 @@ import org.openflexo.logging.FlexoLogger;
 /**
  * @author bmangez
  * 
- * To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
+ *         To change the template for this generated type comment go to Window - Preferences - Java - Code Generation - Code and Comments
  */
-public class IETextFieldWidgetView extends AbstractInnerTableWidgetView<IETextFieldWidget> implements DisplayableBindingValue
-{
+public class IETextFieldWidgetView extends AbstractInnerTableWidgetView<IETextFieldWidget> implements DisplayableBindingValue {
 
-    private static final Logger logger = FlexoLogger.getLogger(IETextFieldWidgetView.class.getPackage().getName());
+	private static final Logger logger = FlexoLogger.getLogger(IETextFieldWidgetView.class.getPackage().getName());
 
-    protected boolean labelEditing = false;
+	protected boolean labelEditing = false;
 
-    // ==========================================================================
-    // ============================= Variables
-    // ==================================
-    // ==========================================================================
-    private JTextField _jTextField;
+	// ==========================================================================
+	// ============================= Variables
+	// ==================================
+	// ==========================================================================
+	private JTextField _jTextField;
 
-    private MouseListener mouseListener = new MouseAdapter() {
-        /**
-         * Overrides mouseClicked
-         * 
-         * @see java.awt.event.MouseAdapter#mouseClicked(java.awt.event.MouseEvent)
-         */
-        @Override
-		public void mouseClicked(MouseEvent e)
-        {
-            if (e.getClickCount() == 2 && !labelEditing) {
-                editValue();
-            }
-        }
-    };
+	private MouseListener mouseListener = new MouseAdapter() {
+		/**
+		 * Overrides mouseClicked
+		 * 
+		 * @see java.awt.event.MouseAdapter#mouseClicked(java.awt.event.MouseEvent)
+		 */
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			if (e.getClickCount() == 2 && !labelEditing) {
+				editValue();
+			}
+		}
+	};
 
-    protected JTextField _jLabelTextField;// Edition of default value
+	protected JTextField _jLabelTextField;// Edition of default value
 
-    public static final Font TEXTFIELD_FONT = new Font("SansSerif", Font.PLAIN, 10);
+	public static final Font TEXTFIELD_FONT = new Font("SansSerif", Font.PLAIN, 10);
 
-    // private IETextFieldWidget _model;
+	// private IETextFieldWidget _model;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public IETextFieldWidgetView(IEController ieController, IETextFieldWidget model, boolean addDnDSupport, IEWOComponentView view)
-    {
-        super(ieController, model, addDnDSupport, view);
-        // _model = model;
-        FlowLayout layout = new FlowLayout(FlowLayout.LEFT, 4, 4);
-        // layout.setVgap(4);
-        setLayout(layout);
-        if (getTextFieldModel().getBindingValue() != null) {
-            _jTextField = new JTextField(getTextFieldModel().getBindingValue().getCodeStringRepresentation());
-        } else {
-            _jTextField = new JTextField(getTextFieldModel().getValue());
-            _jTextField.addMouseListener(mouseListener);
-        }
-        // _jTextField.setPreferredSize(new
-        // Dimension(parent.getWidthForCol(model.getCol())-5,16));
-        _jTextField.setFont(TEXTFIELD_FONT);
-        add(_jTextField);
-        // _jTextField.addMouseListener(SelectionManager.instance());
-        _jTextField.setEditable(false);
-        _jTextField.setFocusable(false);
-        TransparentMouseListener tml = new TransparentMouseListener(_jTextField, this);
-        _jTextField.addMouseListener(tml);
-        _jTextField.addMouseMotionListener(tml);
+	public IETextFieldWidgetView(IEController ieController, IETextFieldWidget model, boolean addDnDSupport, IEWOComponentView view) {
+		super(ieController, model, addDnDSupport, view);
+		// _model = model;
+		FlowLayout layout = new FlowLayout(FlowLayout.LEFT, 4, 4);
+		// layout.setVgap(4);
+		setLayout(layout);
+		if (getTextFieldModel().getBindingValue() != null) {
+			_jTextField = new JTextField(getTextFieldModel().getBindingValue().getCodeStringRepresentation());
+		} else {
+			_jTextField = new JTextField(getTextFieldModel().getValue());
+			_jTextField.addMouseListener(mouseListener);
+		}
+		// _jTextField.setPreferredSize(new
+		// Dimension(parent.getWidthForCol(model.getCol())-5,16));
+		_jTextField.setFont(TEXTFIELD_FONT);
+		add(_jTextField);
+		// _jTextField.addMouseListener(SelectionManager.instance());
+		_jTextField.setEditable(false);
+		_jTextField.setFocusable(false);
+		TransparentMouseListener tml = new TransparentMouseListener(_jTextField, this);
+		_jTextField.addMouseListener(tml);
+		_jTextField.addMouseMotionListener(tml);
 
-        if (getTextFieldModel().getDescription() != null) {
-            _jTextField.setToolTipText(getTextFieldModel().getDescription());
-        }
-        updateDisplayedValue();
-    }
+		if (getTextFieldModel().getDescription() != null) {
+			_jTextField.setToolTipText(getTextFieldModel().getDescription());
+		}
+		updateDisplayedValue();
+	}
 
-    /**
-     * Overrides doLayout
-     * 
-     * @see org.openflexo.ie.view.widget.IEWidgetView#doLayout()
-     */
-    @Override
-    public void doLayout()
-    {
-        super.doLayout();
-        _jTextField.doLayout();
-    }
+	/**
+	 * Overrides doLayout
+	 * 
+	 * @see org.openflexo.ie.view.widget.IEWidgetView#doLayout()
+	 */
+	@Override
+	public void doLayout() {
+		super.doLayout();
+		_jTextField.doLayout();
+	}
 
-    public IETextFieldWidget getTextFieldModel()
-    {
-        return getModel();
-    }
+	public IETextFieldWidget getTextFieldModel() {
+		return getModel();
+	}
 
-    // ==========================================================================
-    // ============================= Observer
-    // ===================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Observer
+	// ===================================
+	// ==========================================================================
 
-    private void applyCss()
-    {
-        getPreferredSize();
-        doLayout();
-        repaint();
-    }
+	private void applyCss() {
+		getPreferredSize();
+		doLayout();
+		repaint();
+	}
 
-   @Override
-public void updateDisplayedValue(){
-	   if (IEPreferences.getDisplayBindingValue()) {
-           _jTextField.setText(getTextFieldModel().getBindingValue()!=null?getTextFieldModel().getBindingValue().getCodeStringRepresentation():"UNBOUND");
-           applyCss();
-           removeDoubleClickListener();
-       } else {
-           _jTextField.setText(getTextFieldModel().getValue());
-           applyCss();
-           addDoubleClickListener();
-       }
-   }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
-     */
-    @Override
-	public void update(FlexoObservable arg0, DataModification modif)
-    {
-        if (modif instanceof IETextFieldCssClassChange) {
-            applyCss();
-        }
-        if (modif.modificationType() == DataModification.ATTRIBUTE) {
-            if (modif.propertyName().equals(IEEditableTextWidget.BINDING_VALUE) && arg0 == getTextFieldModel()) {
-            	updateDisplayedValue();
-            } else if (modif.propertyName().equals(ATTRIB_DESCRIPTION_NAME)) {
-                _jTextField.setToolTipText(getTextFieldModel().getDescription());
-            } else if (modif.propertyName().equals("colSpan") || modif.propertyName().equals("rowSpan")) {
-                if (getParent() != null) {
-                    getParent().doLayout();
-                    ((JComponent) getParent()).repaint();
-                }
-            } else if (modif.propertyName().equals("value")) {
-                if (getTextFieldModel().getBindingValue() == null) {
-                    _jTextField.setText(getTextFieldModel().getValue());
-                    applyCss();
-                }
-            }
-        }
-        if (modif instanceof WidgetRemovedFromTable && arg0 == getModel()) {
-            delete();
-        } else
-            super.update(arg0, modif);
-    }
+	@Override
+	public void updateDisplayedValue() {
+		if (IEPreferences.getDisplayBindingValue()) {
+			_jTextField.setText(getTextFieldModel().getBindingValue() != null ? getTextFieldModel().getBindingValue()
+					.getCodeStringRepresentation() : "UNBOUND");
+			applyCss();
+			removeDoubleClickListener();
+		} else {
+			_jTextField.setText(getTextFieldModel().getValue());
+			applyCss();
+			addDoubleClickListener();
+		}
+	}
 
-    /**
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 */
+	@Override
+	public void update(FlexoObservable arg0, DataModification modif) {
+		if (modif instanceof IETextFieldCssClassChange) {
+			applyCss();
+		}
+		if (modif.modificationType() == DataModification.ATTRIBUTE) {
+			if (modif.propertyName().equals(IEEditableTextWidget.BINDING_VALUE) && arg0 == getTextFieldModel()) {
+				updateDisplayedValue();
+			} else if (modif.propertyName().equals(ATTRIB_DESCRIPTION_NAME)) {
+				_jTextField.setToolTipText(getTextFieldModel().getDescription());
+			} else if (modif.propertyName().equals("colSpan") || modif.propertyName().equals("rowSpan")) {
+				if (getParent() != null) {
+					getParent().doLayout();
+					((JComponent) getParent()).repaint();
+				}
+			} else if (modif.propertyName().equals("value")) {
+				if (getTextFieldModel().getBindingValue() == null) {
+					_jTextField.setText(getTextFieldModel().getValue());
+					applyCss();
+				}
+			}
+		}
+		if (modif instanceof WidgetRemovedFromTable && arg0 == getModel()) {
+			delete();
+		} else
+			super.update(arg0, modif);
+	}
+
+	/**
      * 
      */
-    private void addDoubleClickListener()
-    {
-        MouseListener[] ml = _jTextField.getMouseListeners();
-        for (int i = 0; i < ml.length; i++) {
-            if (ml[i] == mouseListener)
-                return;
-        }
-        _jTextField.addMouseListener(mouseListener);
-    }
+	private void addDoubleClickListener() {
+		MouseListener[] ml = _jTextField.getMouseListeners();
+		for (int i = 0; i < ml.length; i++) {
+			if (ml[i] == mouseListener)
+				return;
+		}
+		_jTextField.addMouseListener(mouseListener);
+	}
 
-    /**
+	/**
      * 
      */
-    private void removeDoubleClickListener()
-    {
-        _jTextField.removeMouseListener(mouseListener);
-    }
+	private void removeDoubleClickListener() {
+		_jTextField.removeMouseListener(mouseListener);
+	}
 
-    public void editValue()
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("Edit ie textfield");
-        labelEditing = true;
-        _jLabelTextField = new JTextField(getTextFieldModel().getValue());
-        // _jLabelTextField.setForeground(getFlexoNode().getTextColor());
-        _jLabelTextField.setBounds(_jTextField.getBounds());
-        _jLabelTextField.setPreferredSize(_jTextField.getPreferredSize());
-        _jLabelTextField.setMinimumSize(new Dimension(60, 15));
-        _jLabelTextField.setFont(_jTextField.getFont());
-        _jLabelTextField.setFocusable(true);
-        _jLabelTextField.setHorizontalAlignment(SwingConstants.LEFT);
-        _jLabelTextField.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent event)
-            {
-                finalizeEditValue();
-            }
-        });
+	public void editValue() {
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("Edit ie textfield");
+		labelEditing = true;
+		_jLabelTextField = new JTextField(getTextFieldModel().getValue());
+		// _jLabelTextField.setForeground(getFlexoNode().getTextColor());
+		_jLabelTextField.setBounds(_jTextField.getBounds());
+		_jLabelTextField.setPreferredSize(_jTextField.getPreferredSize());
+		_jLabelTextField.setMinimumSize(new Dimension(60, 15));
+		_jLabelTextField.setFont(_jTextField.getFont());
+		_jLabelTextField.setFocusable(true);
+		_jLabelTextField.setHorizontalAlignment(SwingConstants.LEFT);
+		_jLabelTextField.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				finalizeEditValue();
+			}
+		});
 
-        _jLabelTextField.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-			public void insertUpdate(DocumentEvent event)
-            {
-                updateSize();
-            }
+		_jLabelTextField.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent event) {
+				updateSize();
+			}
 
-            @Override
-			public void removeUpdate(DocumentEvent event)
-            {
-                updateSize();
-            }
+			@Override
+			public void removeUpdate(DocumentEvent event) {
+				updateSize();
+			}
 
-            @Override
-			public void changedUpdate(DocumentEvent event)
-            {
-                updateSize();
-            }
+			@Override
+			public void changedUpdate(DocumentEvent event) {
+				updateSize();
+			}
 
-            public void updateSize()
-            {
-                validate();
-                repaint();
-            }
-        });
-        _jLabelTextField.addFocusListener(new FocusAdapter() {
-            @Override
-			public void focusLost(FocusEvent arg0)
-            {
-                if (arg0.getOppositeComponent() != IETextFieldWidgetView.this)
-                    finalizeEditValue();
-                else
-                    _jLabelTextField.grabFocus();
-            }
-        });
-        remove(_jTextField);
-        add(_jLabelTextField);
-        _jLabelTextField.grabFocus();
-        _jLabelTextField.selectAll();
-        validate();
-        repaint();
-    }
+			public void updateSize() {
+				validate();
+				repaint();
+			}
+		});
+		_jLabelTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				if (arg0.getOppositeComponent() != IETextFieldWidgetView.this)
+					finalizeEditValue();
+				else
+					_jLabelTextField.grabFocus();
+			}
+		});
+		remove(_jTextField);
+		add(_jLabelTextField);
+		_jLabelTextField.grabFocus();
+		_jLabelTextField.selectAll();
+		validate();
+		repaint();
+	}
 
-    public void finalizeEditValue()
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("Finalize edit ie textfield");
-        if (labelEditing) {
-            getTextFieldModel().setValue(_jLabelTextField.getText());
-            labelEditing = false;
-            remove(_jLabelTextField);
-            add(_jTextField);
-            validate();
-            repaint();
-        }
-    }
+	public void finalizeEditValue() {
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("Finalize edit ie textfield");
+		if (labelEditing) {
+			getTextFieldModel().setValue(_jLabelTextField.getText());
+			labelEditing = false;
+			remove(_jLabelTextField);
+			add(_jTextField);
+			validate();
+			repaint();
+		}
+	}
 
-    @Override
-	public Dimension getPreferredSize()
-    {
-        if (getTextFieldModel().getIsExtensible()) {
-            IESequenceWidgetWidgetView parentSequenceView = null;
-            if (getParent() instanceof IESequenceWidgetWidgetView) {
-                parentSequenceView = (IESequenceWidgetWidgetView) getParent();
-            }
-            if (parentSequenceView != null) {
-                int width = parentSequenceView.getAvailableWidth();
-                Dimension d = super.getPreferredSize();
-                if (width>0)
-                    d.width = width;
-                Insets i = _jTextField.getInsets();
-                _jTextField.setPreferredSize(new Dimension(d.width -i.left-i.right, _jTextField.getFontMetrics(_jTextField.getFont()).getHeight()+i.top+i.bottom));
-                return d;
-            }
-            int w = getParent()==null?150:getParent().getWidth() - getParent().getInsets().left - getParent().getInsets().right;
-            int h = _jTextField.getHeight();
-            _jTextField.setPreferredSize(new Dimension(w - 4, h));
-            return new Dimension(w, h + 4);
-        }
-        if (getTextFieldModel().getTfcssClass() != null && getTextFieldModel().getTfcssClass().equals(TextFieldClass.DLMEDIUM)) {
-            Dimension d = _jTextField.getPreferredSize();
-            d.width = 150;
-            _jTextField.setPreferredSize(d);
-            d = new Dimension(d.width + 8, d.height + 8);
-            return d;
-        } else if (getTextFieldModel().getTfcssClass() != null && getTextFieldModel().getTfcssClass().equals(TextFieldClass.DLSHORT)) {
-            Dimension d = _jTextField.getPreferredSize();
-            d.width = 30;
-            _jTextField.setPreferredSize(d);
-            d = new Dimension(d.width + 8, d.height + 8);
-            return d;
-        } else if (getTextFieldModel().getTfcssClass() != null && getTextFieldModel().getTfcssClass().equals(TextFieldClass.DLTINY)) {
-            Dimension d = _jTextField.getPreferredSize();
-            d.width = 20;
-            _jTextField.setPreferredSize(d);
-            d = new Dimension(d.width + 8, d.height + 8);
-            return d;
-        } else {
-            Dimension d = _jTextField.getPreferredSize();
-            d.width = (int) _jTextField.getFontMetrics(_jTextField.getFont()).getStringBounds(_jTextField.getText(),
-                    _jTextField.getGraphics()).getWidth() + 10;
-            if (d.width < 50)
-                d.width = 50;
-            _jTextField.setPreferredSize(d);
-            d = new Dimension(d.width + 8, d.height + 8);
-            return d;
-        }
-    }
+	@Override
+	public Dimension getPreferredSize() {
+		if (getTextFieldModel().getIsExtensible()) {
+			IESequenceWidgetWidgetView parentSequenceView = null;
+			if (getParent() instanceof IESequenceWidgetWidgetView) {
+				parentSequenceView = (IESequenceWidgetWidgetView) getParent();
+			}
+			if (parentSequenceView != null) {
+				int width = parentSequenceView.getAvailableWidth();
+				Dimension d = super.getPreferredSize();
+				if (width > 0)
+					d.width = width;
+				Insets i = _jTextField.getInsets();
+				_jTextField.setPreferredSize(new Dimension(d.width - i.left - i.right, _jTextField.getFontMetrics(_jTextField.getFont())
+						.getHeight() + i.top + i.bottom));
+				return d;
+			}
+			int w = getParent() == null ? 150 : getParent().getWidth() - getParent().getInsets().left - getParent().getInsets().right;
+			int h = _jTextField.getHeight();
+			_jTextField.setPreferredSize(new Dimension(w - 4, h));
+			return new Dimension(w, h + 4);
+		}
+		if (getTextFieldModel().getTfcssClass() != null && getTextFieldModel().getTfcssClass().equals(TextFieldClass.DLMEDIUM)) {
+			Dimension d = _jTextField.getPreferredSize();
+			d.width = 150;
+			_jTextField.setPreferredSize(d);
+			d = new Dimension(d.width + 8, d.height + 8);
+			return d;
+		} else if (getTextFieldModel().getTfcssClass() != null && getTextFieldModel().getTfcssClass().equals(TextFieldClass.DLSHORT)) {
+			Dimension d = _jTextField.getPreferredSize();
+			d.width = 30;
+			_jTextField.setPreferredSize(d);
+			d = new Dimension(d.width + 8, d.height + 8);
+			return d;
+		} else if (getTextFieldModel().getTfcssClass() != null && getTextFieldModel().getTfcssClass().equals(TextFieldClass.DLTINY)) {
+			Dimension d = _jTextField.getPreferredSize();
+			d.width = 20;
+			_jTextField.setPreferredSize(d);
+			d = new Dimension(d.width + 8, d.height + 8);
+			return d;
+		} else {
+			Dimension d = _jTextField.getPreferredSize();
+			d.width = (int) _jTextField.getFontMetrics(_jTextField.getFont())
+					.getStringBounds(_jTextField.getText(), _jTextField.getGraphics()).getWidth() + 10;
+			if (d.width < 50)
+				d.width = 50;
+			_jTextField.setPreferredSize(d);
+			d = new Dimension(d.width + 8, d.height + 8);
+			return d;
+		}
+	}
 }

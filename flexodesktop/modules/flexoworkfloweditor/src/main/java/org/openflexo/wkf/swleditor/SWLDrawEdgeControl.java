@@ -43,7 +43,6 @@ import org.openflexo.wkf.swleditor.gr.AbstractNodeGR;
 import org.openflexo.wkf.swleditor.gr.PreConditionGR;
 import org.openflexo.wkf.swleditor.gr.WKFNodeGR;
 
-
 public class SWLDrawEdgeControl extends MouseDragControl {
 
 	private static final Logger logger = Logger.getLogger(CreateEdge.class.getPackage().getName());
@@ -53,35 +52,33 @@ public class SWLDrawEdgeControl extends MouseDragControl {
 	protected WKFNodeGR<?> from = null;
 	protected WKFNodeGR<?> to = null;
 
-	public SWLDrawEdgeControl()
-	{
-		super("Draw edge", MouseButton.LEFT,false,true,false,false); // CTRL DRAG
+	public SWLDrawEdgeControl() {
+		super("Draw edge", MouseButton.LEFT, false, true, false, false); // CTRL DRAG
 		action = new SWLDrawEdgeAction();
 	}
 
-	protected class SWLDrawEdgeAction extends CustomDragControlAction
-	{
+	protected class SWLDrawEdgeAction extends CustomDragControlAction {
 		@Override
-		public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event)
-		{
+		public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				MouseEvent event) {
 			if (graphicalRepresentation instanceof WKFNodeGR) {
 				drawEdge = true;
-				from = (WKFNodeGR<?>)graphicalRepresentation;
-				((SwimmingLaneView)controller.getDrawingView()).setDrawEdgeAction(this);
+				from = (WKFNodeGR<?>) graphicalRepresentation;
+				((SwimmingLaneView) controller.getDrawingView()).setDrawEdgeAction(this);
 				return true;
 			}
 			return false;
 		}
 
 		@Override
-		public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event, boolean isSignificativeDrag)
-		{
+		public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				MouseEvent event, boolean isSignificativeDrag) {
 			if (drawEdge) {
 				if (from != null && to != null) {
 					if (from instanceof AbstractNodeGR && to instanceof AbstractNodeGR) {
-						CreateEdge createEdgeAction = CreateEdge.actionType.makeNewAction(((AbstractNodeGR<?>)from).getDrawable(), null,
+						CreateEdge createEdgeAction = CreateEdge.actionType.makeNewAction(((AbstractNodeGR<?>) from).getDrawable(), null,
 								((SwimmingLaneEditorController) controller).getEditor());
-						createEdgeAction.setStartingNode(((AbstractNodeGR<?>)from).getNode());
+						createEdgeAction.setStartingNode(((AbstractNodeGR<?>) from).getNode());
 						if (to instanceof PreConditionGR) {
 							createEdgeAction.setEndNodePreCondition(((PreConditionGR) to).getFlexoPreCondition());
 							createEdgeAction.setEndNode(((PreConditionGR) to).getFlexoPreCondition().getNode());
@@ -100,7 +97,7 @@ public class SWLDrawEdgeControl extends MouseDragControl {
 				drawEdge = false;
 				from = null;
 				to = null;
-				((SwimmingLaneView)controller.getDrawingView()).setDrawEdgeAction(null);
+				((SwimmingLaneView) controller.getDrawingView()).setDrawEdgeAction(null);
 				DrawingView drawingView = controller.getDrawingView();
 				FGEPaintManager paintManager = drawingView.getPaintManager();
 				paintManager.invalidate(drawingView.getDrawingGraphicalRepresentation());
@@ -111,8 +108,7 @@ public class SWLDrawEdgeControl extends MouseDragControl {
 		}
 
 		// Attempt to repaint relevant zone only
-		private Rectangle getBoundsToRepaint(DrawingView<?> drawingView)
-		{
+		private Rectangle getBoundsToRepaint(DrawingView<?> drawingView) {
 			ShapeView<?> fromView = drawingView.shapeViewForObject(from);
 			Rectangle fromViewBounds = SwingUtilities.convertRectangle(fromView, fromView.getBounds(), drawingView);
 			Rectangle boundsToRepaint = fromViewBounds;
@@ -128,14 +124,14 @@ public class SWLDrawEdgeControl extends MouseDragControl {
 				boundsToRepaint = fromViewBounds.union(lastLocationBounds);
 			}
 
-			//logger.fine("boundsToRepaint="+boundsToRepaint);
+			// logger.fine("boundsToRepaint="+boundsToRepaint);
 
 			return boundsToRepaint;
 		}
 
 		@Override
-		public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event)
-		{
+		public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				MouseEvent event) {
 			if (drawEdge) {
 
 				DrawingView<?> drawingView = controller.getDrawingView();
@@ -143,36 +139,35 @@ public class SWLDrawEdgeControl extends MouseDragControl {
 
 				// Attempt to repaint relevant zone only
 				Rectangle oldBounds = previousRectangle;
-				if (oldBounds!=null) {
-					oldBounds.x-=1;
-					oldBounds.y-=1;
-					oldBounds.width+=2;
-					oldBounds.height+=2;
+				if (oldBounds != null) {
+					oldBounds.x -= 1;
+					oldBounds.y -= 1;
+					oldBounds.width += 2;
+					oldBounds.height += 2;
 				}
 
 				GraphicalRepresentation gr = controller.getDrawingView().getFocusRetriever().getFocusedObject(event);
-				if (gr instanceof WKFNodeGR
-						&& gr != from
+				if (gr instanceof WKFNodeGR && gr != from
 				/*&& !(from.getAncestors().contains(gr.getDrawable()))*/) {
-					to = (WKFNodeGR)gr;
-				}
-				else {
+					to = (WKFNodeGR) gr;
+				} else {
 					to = null;
 				}
 
-				currentDraggingLocationInDrawingView = SwingUtilities.convertPoint((Component)event.getSource(),event.getPoint(),controller.getDrawingView());
+				currentDraggingLocationInDrawingView = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
+						controller.getDrawingView());
 
 				// Attempt to repaint relevant zone only
 				Rectangle newBounds = getBoundsToRepaint(drawingView);
 				Rectangle boundsToRepaint;
-				if (oldBounds!=null)
+				if (oldBounds != null)
 					boundsToRepaint = oldBounds.union(newBounds);
 				else
 					boundsToRepaint = newBounds;
-				paintManager.repaint(drawingView,boundsToRepaint);
+				paintManager.repaint(drawingView, boundsToRepaint);
 
 				// Alternative @brutal zone
-				//paintManager.repaint(drawingView);
+				// paintManager.repaint(drawingView);
 
 				return true;
 			}
@@ -181,8 +176,7 @@ public class SWLDrawEdgeControl extends MouseDragControl {
 
 		private Rectangle previousRectangle;
 
-		public void paint(Graphics g, DrawingController controller)
-		{
+		public void paint(Graphics g, DrawingController controller) {
 			if (drawEdge && currentDraggingLocationInDrawingView != null) {
 				Point fromPoint = controller.getDrawingGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(
 						from.getShape().getShape().getCenter(), from, controller.getScale());
@@ -191,27 +185,26 @@ public class SWLDrawEdgeControl extends MouseDragControl {
 					/*toPoint = controller.getDrawingGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(
 							to.getShape().getShape().getCenter(), to, controller.getScale());*/
 					g.setColor(WKFCst.OK);
-				}
-				else {
+				} else {
 					g.setColor(Color.RED);
 				}
 				g.drawLine(fromPoint.x, fromPoint.y, toPoint.x, toPoint.y);
-				int x,y,w,h;
-				if (fromPoint.x>=toPoint.x) {
+				int x, y, w, h;
+				if (fromPoint.x >= toPoint.x) {
 					x = toPoint.x;
 					w = fromPoint.x - toPoint.x;
 				} else {
 					x = fromPoint.x;
 					w = toPoint.x - fromPoint.x;
 				}
-				if (fromPoint.y>=toPoint.y) {
+				if (fromPoint.y >= toPoint.y) {
 					y = toPoint.y;
 					h = fromPoint.y - toPoint.y;
 				} else {
 					y = fromPoint.y;
 					h = toPoint.y - fromPoint.y;
 				}
-				previousRectangle = new Rectangle(x,y,w,h);
+				previousRectangle = new Rectangle(x, y, w, h);
 			}
 		}
 	}

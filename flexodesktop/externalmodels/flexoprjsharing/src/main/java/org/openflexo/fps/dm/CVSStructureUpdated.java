@@ -21,10 +21,8 @@ package org.openflexo.fps.dm;
 
 import org.openflexo.fps.SharedProject;
 
-public class CVSStructureUpdated extends FPSDataModification
-{
-    public CVSStructureUpdated(SharedProject project)
-    {
-        super(null,project);
-    }
+public class CVSStructureUpdated extends FPSDataModification {
+	public CVSStructureUpdated(SharedProject project) {
+		super(null, project);
+	}
 }

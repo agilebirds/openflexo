@@ -24,34 +24,30 @@ import org.openflexo.foundation.wkf.node.FlexoPreCondition;
 public class StoreTokenOnPrecondition extends CustomInstruction {
 
 	private FlexoPreCondition pre;
-	
-	public StoreTokenOnPrecondition (FlexoPreCondition pre)
-	{
+
+	public StoreTokenOnPrecondition(FlexoPreCondition pre) {
 		super();
 		this.pre = pre;
-		setInlineComment("Store a new token on precondition"+(pre.getAttachedBeginNode()!=null?" "+pre.getName():"")+" of node "+pre.getAttachedNode().getName());
+		setInlineComment("Store a new token on precondition" + (pre.getAttachedBeginNode() != null ? " " + pre.getName() : "")
+				+ " of node " + pre.getAttachedNode().getName());
 	}
 
 	@Override
-	public String toString()
-	{
-		return "[StoreTokenOnPrecondition:"+pre.getAttachedNode().getName()+"]";
+	public String toString() {
+		return "[StoreTokenOnPrecondition:" + pre.getAttachedNode().getName() + "]";
 	}
 
-	public FlexoPreCondition getPre() 
-	{
+	public FlexoPreCondition getPre() {
 		return pre;
 	}
 
 	@Override
-	public String getJavaStringRepresentation() 
-	{
-		return "storeTokenOnPrecondition("+getPre().getFlexoID()+");";
+	public String getJavaStringRepresentation() {
+		return "storeTokenOnPrecondition(" + getPre().getFlexoID() + ");";
 	}
-	
+
 	@Override
-	public StoreTokenOnPrecondition clone()
-	{
+	public StoreTokenOnPrecondition clone() {
 		StoreTokenOnPrecondition returned = new StoreTokenOnPrecondition(pre);
 		returned.setHeaderComment(getHeaderComment());
 		returned.setInlineComment(getInlineComment());

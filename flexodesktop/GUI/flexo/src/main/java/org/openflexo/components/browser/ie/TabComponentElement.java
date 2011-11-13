@@ -24,28 +24,25 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ie.cl.TabComponentDefinition;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class TabComponentElement extends ComponentElement
-{
+public class TabComponentElement extends ComponentElement {
 
-    public TabComponentElement(TabComponentDefinition component, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(component, BrowserElementType.TAB_COMPONENT, browser,parent);
-    }
+	public TabComponentElement(TabComponentDefinition component, ProjectBrowser browser, BrowserElement parent) {
+		super(component, BrowserElementType.TAB_COMPONENT, browser, parent);
+	}
 
-    /**
-     * Overrides getFilteredElementType
-     * @see org.openflexo.components.browser.ie.ComponentElement#getFilteredElementType()
-     */
-    @Override
-	protected BrowserElementType getFilteredElementType()
-    {
-        return BrowserElementType.TAB_COMPONENT;
-    }
+	/**
+	 * Overrides getFilteredElementType
+	 * 
+	 * @see org.openflexo.components.browser.ie.ComponentElement#getFilteredElementType()
+	 */
+	@Override
+	protected BrowserElementType getFilteredElementType() {
+		return BrowserElementType.TAB_COMPONENT;
+	}
 }

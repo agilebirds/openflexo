@@ -25,7 +25,7 @@ import org.openflexo.foundation.cg.generator.GeneratedCodeResult;
 public class ContentRegenerated extends CGContentRegenerated {
 
 	private Generator generator;
-	
+
 	public ContentRegenerated(Generator generator, GeneratedCodeResult newGeneratedContent) {
 		super(newGeneratedContent);
 		this.generator = generator;

@@ -33,15 +33,13 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.swing.TextFieldCustomPopup;
 
-
 /**
  * Widget allowing to select a Project file
  * 
  * @author sguerin
  * 
  */
-public class FlexoProjectFileSelector extends TextFieldCustomPopup<FlexoProjectFile>
-{
+public class FlexoProjectFileSelector extends TextFieldCustomPopup<FlexoProjectFile> {
 
 	public static final Font NORMAL_FONT = new Font("SansSerif", Font.PLAIN, 11);
 
@@ -59,67 +57,56 @@ public class FlexoProjectFileSelector extends TextFieldCustomPopup<FlexoProjectF
 
 	private FlexoProject _project;
 
-	public FlexoProjectFileSelector()
-	{
+	public FlexoProjectFileSelector() {
 		this((FlexoProjectFile) null);
 	}
 
-	public FlexoProjectFileSelector(FileFilter aFileFilter)
-	{
+	public FlexoProjectFileSelector(FileFilter aFileFilter) {
 		this(null, aFileFilter);
 	}
 
-	public FlexoProjectFileSelector(FlexoProjectFile aFile)
-	{
+	public FlexoProjectFileSelector(FlexoProjectFile aFile) {
 		super(aFile);
 		_oldValue = aFile;
 	}
 
-	public FlexoProjectFileSelector(FlexoProjectFile aFile, FileFilter aFileFilter)
-	{
+	public FlexoProjectFileSelector(FlexoProjectFile aFile, FileFilter aFileFilter) {
 		this(aFile);
 		setFileFilter(aFileFilter);
 	}
 
-	public FlexoProjectFileSelector(FlexoProjectFile aFile, FileFilter aFileFilter, int aFileSelectionMode)
-	{
+	public FlexoProjectFileSelector(FlexoProjectFile aFile, FileFilter aFileFilter, int aFileSelectionMode) {
 		this(aFile);
 		setFileFilter(aFileFilter);
 		fileSelectionMode = aFileSelectionMode;
 	}
 
-	public FlexoProjectFileSelector(FlexoProjectFile aFile, FileFilter aFileFilter, int aFileSelectionMode, int aDialogType)
-	{
+	public FlexoProjectFileSelector(FlexoProjectFile aFile, FileFilter aFileFilter, int aFileSelectionMode, int aDialogType) {
 		this(aFile);
 		setFileFilter(aFileFilter);
 		fileSelectionMode = aFileSelectionMode;
 		dialogType = aDialogType;
 	}
 
-	public FlexoProjectFile getEditedFile()
-	{
+	public FlexoProjectFile getEditedFile() {
 		return getEditedObject();
 	}
 
-	public void setEditedFile(FlexoProjectFile aFile)
-	{
+	public void setEditedFile(FlexoProjectFile aFile) {
 		setEditedObject(aFile);
 	}
 
-	public void setProject(FlexoProject aProject)
-	{
+	public void setProject(FlexoProject aProject) {
 		_project = aProject;
 	}
 
-	public FlexoProject getProject()
-	{
+	public FlexoProject getProject() {
 		return _project;
 	}
 
 	@Override
-	protected ResizablePanel createCustomPanel(FlexoProjectFile editedObject)
-	{
-		fileChooserPanel = new FileChooserPanel((editedObject!=null?editedObject.getFile():new File(System.getProperty("user.home"))));
+	protected ResizablePanel createCustomPanel(FlexoProjectFile editedObject) {
+		fileChooserPanel = new FileChooserPanel((editedObject != null ? editedObject.getFile() : new File(System.getProperty("user.home"))));
 		if (_fileFilter != null) {
 			fileChooserPanel.setFileFilter(_fileFilter);
 		}
@@ -127,16 +114,14 @@ public class FlexoProjectFileSelector extends TextFieldCustomPopup<FlexoProjectF
 	}
 
 	@Override
-	public void updateCustomPanel(FlexoProjectFile editedObject)
-	{
+	public void updateCustomPanel(FlexoProjectFile editedObject) {
 		if (fileChooserPanel != null) {
 			fileChooserPanel.update(editedObject.getFile());
 		}
 	}
 
 	@Override
-	public String renderedString(FlexoProjectFile editedObject)
-	{
+	public String renderedString(FlexoProjectFile editedObject) {
 		if (editedObject != null) {
 			return editedObject.toString();
 		} else {
@@ -144,8 +129,7 @@ public class FlexoProjectFileSelector extends TextFieldCustomPopup<FlexoProjectF
 		}
 	}
 
-	public void setFileFilter(FileFilter aFilter)
-	{
+	public void setFileFilter(FileFilter aFilter) {
 		_fileFilter = aFilter;
 		if (fileChooserPanel != null) {
 			fileChooserPanel.setFileFilter(aFilter);
@@ -153,25 +137,21 @@ public class FlexoProjectFileSelector extends TextFieldCustomPopup<FlexoProjectF
 	}
 
 	@Override
-	protected void openPopup()
-	{
+	protected void openPopup() {
 		super.openPopup();
 		updateCustomPanel(getEditedObject());
 	}
 
-	protected class FileChooserPanel extends ResizablePanel implements ActionListener
-	{
+	protected class FileChooserPanel extends ResizablePanel implements ActionListener {
 		private JFileChooser fileChooser;
 
 		private Dimension defaultDimension = new Dimension(500, 400);
 
-		void update(File aFile)
-		{
+		void update(File aFile) {
 			fileChooser.setSelectedFile(aFile);
 		}
 
-		protected FileChooserPanel(File aFile)
-		{
+		protected FileChooserPanel(File aFile) {
 			super();
 			fileChooser = new JFileChooser(aFile);
 			fileChooser.addActionListener(this);
@@ -189,22 +169,19 @@ public class FlexoProjectFileSelector extends TextFieldCustomPopup<FlexoProjectF
 			fileChooser.setMaximumSize(defaultDimension);
 		}
 
-		public void setFileFilter(FileFilter aFilter)
-		{
+		public void setFileFilter(FileFilter aFilter) {
 			if (aFilter != null) {
 				fileChooser.setFileFilter(aFilter);
 			}
 		}
 
 		@Override
-		public Dimension getDefaultSize()
-		{
+		public Dimension getDefaultSize() {
 			return defaultDimension;
 		}
 
 		@Override
-		public void setPreferredSize(Dimension aDimension)
-		{
+		public void setPreferredSize(Dimension aDimension) {
 			fileChooser.setPreferredSize(aDimension);
 		}
 
@@ -215,16 +192,14 @@ public class FlexoProjectFileSelector extends TextFieldCustomPopup<FlexoProjectF
 		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 		 */
 		@Override
-		public void actionPerformed(ActionEvent e)
-		{
+		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals(JFileChooser.APPROVE_SELECTION)) {
 				if (getEditedFile() != null) {
-					FlexoProjectFile newFile = (FlexoProjectFile)getEditedFile().clone();
+					FlexoProjectFile newFile = (FlexoProjectFile) getEditedFile().clone();
 					newFile.setFile(fileChooser.getSelectedFile());
 					setEditedFile(newFile);
-				}
-				else {
-					FlexoProjectFile newFile = new FlexoProjectFile(fileChooser.getSelectedFile(),getProject());
+				} else {
+					FlexoProjectFile newFile = new FlexoProjectFile(fileChooser.getSelectedFile(), getProject());
 					setEditedFile(newFile);
 				}
 				apply();
@@ -236,107 +211,102 @@ public class FlexoProjectFileSelector extends TextFieldCustomPopup<FlexoProjectF
 	}
 
 	@Override
-	public void apply()
-	{
+	public void apply() {
 		setRevertValue(getEditedObject());
 		closePopup();
 	}
 
 	@Override
-	public void cancel()
-	{
+	public void cancel() {
 		setEditedObject(_oldValue);
 		closePopup();
 	}
 
 	@Override
-	public void setRevertValue(FlexoProjectFile oldValue)
-	{
+	public void setRevertValue(FlexoProjectFile oldValue) {
 		_oldValue = oldValue;
 	}
 
-	public FlexoProjectFile getRevertValue()
-	{
+	public FlexoProjectFile getRevertValue() {
 		return _oldValue;
 	}
 
-
 	/*
-    private FlexoProject _project;
-    private FlexoProjectFile _projectFile;
+	private FlexoProject _project;
+	private FlexoProjectFile _projectFile;
 
-    public FlexoProjectFileSelector(FlexoProject project, FlexoProjectFile aProjectFile)
-    {
-        this(project);
-        _projectFile = aProjectFile;
-        if ((aProjectFile != null) && (aProjectFile.getFile() != null)) {
-            setEditedObject(aProjectFile.getFile());
-        }
-    }
+	public FlexoProjectFileSelector(FlexoProject project, FlexoProjectFile aProjectFile)
+	{
+	    this(project);
+	    _projectFile = aProjectFile;
+	    if ((aProjectFile != null) && (aProjectFile.getFile() != null)) {
+	        setEditedObject(aProjectFile.getFile());
+	    }
+	}
 
-    public FlexoProjectFileSelector(FlexoProject project)
-    {
-        this();
-        _project = project;
-    }
+	public FlexoProjectFileSelector(FlexoProject project)
+	{
+	    this();
+	    _project = project;
+	}
 
-    public void setProject(FlexoProject aProject)
-    {
-        _project = aProject;
-    }
+	public void setProject(FlexoProject aProject)
+	{
+	    _project = aProject;
+	}
 
-    public FlexoProjectFileSelector()
-    {
-        super();
-        _project = null;
-    }
+	public FlexoProjectFileSelector()
+	{
+	    super();
+	    _project = null;
+	}
 
-    public void setEditedObject(File aFile)
-    {
-        super.setEditedObject(aFile);
-        if (_projectFile == null) {
-            _projectFile = new FlexoProjectFile(aFile,_project);
-        }
-        _projectFile.setFile(aFile);
-    }
+	public void setEditedObject(File aFile)
+	{
+	    super.setEditedObject(aFile);
+	    if (_projectFile == null) {
+	        _projectFile = new FlexoProjectFile(aFile,_project);
+	    }
+	    _projectFile.setFile(aFile);
+	}
 
-    public File getEditedFile()
-    {
-        return getEditedObject();
-    }
+	public File getEditedFile()
+	{
+	    return getEditedObject();
+	}
 
-    public void setEditedFile(File aFile)
-    {
-        setEditedObject(aFile);
-    }
+	public void setEditedFile(File aFile)
+	{
+	    setEditedObject(aFile);
+	}
 
-     public void setEditedFlexoProjectFile(FlexoProjectFile editedObject)
-    {
-        _projectFile = editedObject;
-        if (editedObject != null) {
-            _project = editedObject.getProject();
-            setEditedFile(editedObject.getFile());
-        }
-    }
+	 public void setEditedFlexoProjectFile(FlexoProjectFile editedObject)
+	{
+	    _projectFile = editedObject;
+	    if (editedObject != null) {
+	        _project = editedObject.getProject();
+	        setEditedFile(editedObject.getFile());
+	    }
+	}
 
-    public FlexoProjectFile getEditedFlexoProjectFile()
-    {
-        if (_projectFile == null) {
-            _projectFile = new FlexoProjectFile(getEditedObject(),_project);
-        }
-       _projectFile.setProject(_project);
-        _projectFile.setFile(getEditedObject());
-        return _projectFile;
-     }
+	public FlexoProjectFile getEditedFlexoProjectFile()
+	{
+	    if (_projectFile == null) {
+	        _projectFile = new FlexoProjectFile(getEditedObject(),_project);
+	    }
+	   _projectFile.setProject(_project);
+	    _projectFile.setFile(getEditedObject());
+	    return _projectFile;
+	 }
 
-    public String renderedString(File editedObject)
-    {
-        if (editedObject != null) {
-            return getEditedFlexoProjectFile().toString();
-        } else {
-            return super.renderedString(editedObject);
-        }
-    }
+	public String renderedString(File editedObject)
+	{
+	    if (editedObject != null) {
+	        return getEditedFlexoProjectFile().toString();
+	    } else {
+	        return super.renderedString(editedObject);
+	    }
+	}
 
 	 */
 }

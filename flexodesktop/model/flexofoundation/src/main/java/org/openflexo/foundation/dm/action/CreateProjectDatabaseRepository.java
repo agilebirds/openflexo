@@ -26,52 +26,40 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMObject;
 
+public class CreateProjectDatabaseRepository extends CreateDMRepository {
 
-public class CreateProjectDatabaseRepository extends CreateDMRepository 
-{
+	static final Logger logger = Logger.getLogger(CreateProjectDatabaseRepository.class.getPackage().getName());
 
-    static final Logger logger = Logger.getLogger(CreateProjectDatabaseRepository.class.getPackage().getName());
+	public static FlexoActionType<CreateProjectDatabaseRepository, DMObject, DMObject> actionType = new FlexoActionType<CreateProjectDatabaseRepository, DMObject, DMObject>(
+			"add_persistant_project_repository", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
-    public static FlexoActionType<CreateProjectDatabaseRepository,DMObject,DMObject> actionType 
-    = new FlexoActionType<CreateProjectDatabaseRepository,DMObject,DMObject> (
-    		"add_persistant_project_repository",
-    		FlexoActionType.newMenu,
-    		FlexoActionType.defaultGroup,
-    		FlexoActionType.ADD_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public CreateProjectDatabaseRepository makeNewAction(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
+			return new CreateProjectDatabaseRepository(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public CreateProjectDatabaseRepository makeNewAction(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) 
-        {
-            return new CreateProjectDatabaseRepository(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) 
-        {
-            return true;
-         }
-                
-    };
-    
-    CreateProjectDatabaseRepository (DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-    @Override
-	public String getRepositoryType() 
-    {
-        return PROJECT_DATABASE_REPOSITORY;
-    }
+	CreateProjectDatabaseRepository(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
- 
+	@Override
+	public String getRepositoryType() {
+		return PROJECT_DATABASE_REPOSITORY;
+	}
+
 }

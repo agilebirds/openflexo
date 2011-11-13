@@ -25,17 +25,14 @@ package org.openflexo.foundation.wkf.edge;
  * @author sguerin
  * 
  */
-public class InvalidEdgeException extends Exception
-{
-    public InvalidEdgeException(FlexoPostCondition post)
-    {
-        super();
-        post.delete();
-    }
+public class InvalidEdgeException extends Exception {
+	public InvalidEdgeException(FlexoPostCondition post) {
+		super();
+		post.delete();
+	}
 
-    @Override
-	public String getMessage()
-    {
-        return "Invalid edge definition";
-    }
+	@Override
+	public String getMessage() {
+		return "Invalid edge definition";
+	}
 }

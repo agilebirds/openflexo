@@ -24,17 +24,15 @@ import org.openflexo.foundation.ie.dm.IEDataModification;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class ComponentFolderInserted extends IEDataModification
-{
+public class ComponentFolderInserted extends IEDataModification {
 
-    /**
-     * @param sub
-     */
-    public ComponentFolderInserted(FlexoComponentFolder sub)
-    {
-        super(null, sub);
-    }
+	/**
+	 * @param sub
+	 */
+	public ComponentFolderInserted(FlexoComponentFolder sub) {
+		super(null, sub);
+	}
 
 }

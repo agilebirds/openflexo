@@ -25,7 +25,6 @@ import org.openflexo.toolbox.ToolBox;
 import org.openflexo.toolbox.ColorUtils.LAB;
 import org.openflexo.toolbox.ColorUtils.RGB;
 
-
 public class DocXConstants {
 
 	public enum HighlightColorValues {
@@ -98,10 +97,10 @@ public class DocXConstants {
 			double min = Double.MAX_VALUE;
 			RGB rgb = new RGB(color);
 			LAB lab = rgb.toLAB();
-			for (HighlightColorValues value:values()) {
+			for (HighlightColorValues value : values()) {
 				LAB lab2 = value.getMatchingRGB().toLAB();
 				double test = Math.abs(lab.computeDiff(lab2));
-				if (returned==null || test<min) {
+				if (returned == null || test < min) {
 					returned = value;
 					min = test;
 				}
@@ -112,6 +111,6 @@ public class DocXConstants {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(HighlightColorValues.findClosestColor(new Color(250,250,250)));
+		System.out.println(HighlightColorValues.findClosestColor(new Color(250, 250, 250)));
 	}
 }

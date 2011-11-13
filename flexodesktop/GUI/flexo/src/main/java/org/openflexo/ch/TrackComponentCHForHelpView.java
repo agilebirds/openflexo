@@ -31,28 +31,26 @@ import org.openflexo.help.FlexoHelp;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.FlexoFrame;
 
-
 public class TrackComponentCHForHelpView extends TrackComponentCH {
 
-    private static final Logger logger = Logger.getLogger(TrackComponentCHForHelpView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(TrackComponentCHForHelpView.class.getPackage().getName());
 
-    private static Cursor HELP_CURSOR = Toolkit.getDefaultToolkit().createCustomCursor(IconLibrary.HELP_CURSOR.getImage(),new Point(8,8),"Help cursor");
-    
-    public TrackComponentCHForHelpView (FlexoFrame frame)
-    {
-        super(frame);
-        frame.getContentPane().setCursor(HELP_CURSOR);
-     }
-    
-     @Override
-	public void applyTracking(JComponent component)
-    {
-        DocItem item = FCH.getDocForComponent(focusedComponent);
-        if (item != null) {
-            FlexoHelp.getHelpBroker().setCurrentID(item.getIdentifier());
-            FlexoHelp.getHelpBroker().setDisplayed(true);
-            logger.info("Trying to display help for "+item.getIdentifier());
-        }
-    }
-    
+	private static Cursor HELP_CURSOR = Toolkit.getDefaultToolkit().createCustomCursor(IconLibrary.HELP_CURSOR.getImage(), new Point(8, 8),
+			"Help cursor");
+
+	public TrackComponentCHForHelpView(FlexoFrame frame) {
+		super(frame);
+		frame.getContentPane().setCursor(HELP_CURSOR);
+	}
+
+	@Override
+	public void applyTracking(JComponent component) {
+		DocItem item = FCH.getDocForComponent(focusedComponent);
+		if (item != null) {
+			FlexoHelp.getHelpBroker().setCurrentID(item.getIdentifier());
+			FlexoHelp.getHelpBroker().setDisplayed(true);
+			logger.info("Trying to display help for " + item.getIdentifier());
+		}
+	}
+
 }

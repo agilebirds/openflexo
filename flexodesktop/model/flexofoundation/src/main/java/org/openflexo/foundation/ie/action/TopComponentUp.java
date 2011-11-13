@@ -36,81 +36,74 @@ import org.openflexo.logging.FlexoLogger;
  * @author gpolet
  * 
  */
-public class TopComponentUp extends FlexoAction<TopComponentUp, IEWidget, IEWidget>
-{
-    protected static final Logger logger = FlexoLogger.getLogger(TopComponentUp.class.getPackage().getName());
+public class TopComponentUp extends FlexoAction<TopComponentUp, IEWidget, IEWidget> {
+	protected static final Logger logger = FlexoLogger.getLogger(TopComponentUp.class.getPackage().getName());
 
-    public static FlexoActionType<TopComponentUp, IEWidget, IEWidget> actionType = new FlexoActionType<TopComponentUp, IEWidget, IEWidget>("move_up", FlexoActionType.defaultGroup) {
+	public static FlexoActionType<TopComponentUp, IEWidget, IEWidget> actionType = new FlexoActionType<TopComponentUp, IEWidget, IEWidget>(
+			"move_up", FlexoActionType.defaultGroup) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public TopComponentUp makeNewAction(IEWidget focusedObject, Vector<IEWidget> globalSelection, FlexoEditor editor)
-        {
-            return new TopComponentUp(focusedObject, globalSelection,editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public TopComponentUp makeNewAction(IEWidget focusedObject, Vector<IEWidget> globalSelection, FlexoEditor editor) {
+			return new TopComponentUp(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(IEWidget object, Vector<IEWidget> globalSelection)
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(IEWidget object, Vector<IEWidget> globalSelection)
-        {
-            return (object!=null) && object.isTopComponent();
-        }
+		@Override
+		protected boolean isEnabledForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
+			return (object != null) && object.isTopComponent();
+		}
 
-    };
+	};
 
-    private IEWidget component;
+	private IEWidget component;
 
-    /**
-     * @param actionType
-     * @param focusedObject
-     * @param globalSelection
-     */
-    protected TopComponentUp(IEWidget focusedObject, Vector<IEWidget> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	/**
+	 * @param actionType
+	 * @param focusedObject
+	 * @param globalSelection
+	 */
+	protected TopComponentUp(IEWidget focusedObject, Vector<IEWidget> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    /**
-     * Overrides doAction
-     * 
-     * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
-     */
-    @Override
+	/**
+	 * Overrides doAction
+	 * 
+	 * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
+	 */
+	@Override
 	@SuppressWarnings("unchecked")
-	protected void doAction(Object context) throws FlexoException
-    {
-        if (logger.isLoggable(Level.FINEST)) {
+	protected void doAction(Object context) throws FlexoException {
+		if (logger.isLoggable(Level.FINEST)) {
 			logger.finest("Do action top component up");
 		}
-        if ((getComponent() != null) && (getComponent().getParent() instanceof IESequence)) {
-        	IESequence<IWidget> c = (IESequence<IWidget>) getComponent().getParent();
-            int i = c.indexOf(getComponent());
-            if (i > 0) {
-                if (logger.isLoggable(Level.INFO)) {
+		if ((getComponent() != null) && (getComponent().getParent() instanceof IESequence)) {
+			IESequence<IWidget> c = (IESequence<IWidget>) getComponent().getParent();
+			int i = c.indexOf(getComponent());
+			if (i > 0) {
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Moving top component up from: " + i + " to " + (i - 1));
 				}
-                c.removeFromInnerWidgets(getComponent());
-                c.insertElementAt(getComponent(), i - 1);
-            }
-        }
+				c.removeFromInnerWidgets(getComponent());
+				c.insertElementAt(getComponent(), i - 1);
+			}
+		}
 
-    }
+	}
 
-    public IEWidget getComponent()
-    {
-        return component;
-    }
+	public IEWidget getComponent() {
+		return component;
+	}
 
-    public void setComponent(IEWidget comp)
-    {
-        this.component = comp;
-    }
+	public void setComponent(IEWidget comp) {
+		this.component = comp;
+	}
 
 }

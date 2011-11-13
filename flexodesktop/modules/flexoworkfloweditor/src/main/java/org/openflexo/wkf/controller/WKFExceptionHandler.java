@@ -23,28 +23,23 @@ import org.openflexo.foundation.wkf.action.BindButtonsToActionNode;
 import org.openflexo.foundation.wkf.utils.OperationAssociatedWithComponentSuccessfully;
 import org.openflexo.toolbox.EmptyVector;
 
-
 /**
  * 
- * This class is intended to handle the various actions to perform (in the UI)
- * when associating an OperationComponent with an OperationNode.
+ * This class is intended to handle the various actions to perform (in the UI) when associating an OperationComponent with an OperationNode.
  * 
  * @author gpolet
  * 
  */
-public class WKFExceptionHandler
-{
+public class WKFExceptionHandler {
 
-    /**
-     * @param assoc -
-     *            the exception thrown by the model when associating an
-     *            operation with its component
-     */
-    public static void handleAssociation(OperationAssociatedWithComponentSuccessfully assoc, WKFController controller)
-    {
-        BindButtonsToActionNode anAction = BindButtonsToActionNode.actionType.makeNewAction(assoc.getNode(),
-                EmptyVector.EMPTY_VECTOR, controller.getEditor());
-        anAction.setException(assoc);
-        anAction.doAction();
-    }
+	/**
+	 * @param assoc
+	 *            - the exception thrown by the model when associating an operation with its component
+	 */
+	public static void handleAssociation(OperationAssociatedWithComponentSuccessfully assoc, WKFController controller) {
+		BindButtonsToActionNode anAction = BindButtonsToActionNode.actionType.makeNewAction(assoc.getNode(), EmptyVector.EMPTY_VECTOR,
+				controller.getEditor());
+		anAction.setException(assoc);
+		anAction.doAction();
+	}
 }

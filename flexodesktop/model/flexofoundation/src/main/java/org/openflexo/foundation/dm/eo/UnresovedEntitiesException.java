@@ -23,27 +23,23 @@ import java.util.Vector;
 
 import org.openflexo.foundation.FlexoException;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class UnresovedEntitiesException extends FlexoException
-{
+public class UnresovedEntitiesException extends FlexoException {
 
-    private Vector<String> missingEntities;
-    
-    /**
-     * @param missingEntities
-     */
-    public UnresovedEntitiesException(Vector<String> missingEntities)
-    {
-        this.missingEntities = missingEntities;
-    }
+	private Vector<String> missingEntities;
 
-    public Vector<String> getMissingEntities()
-    {
-        return missingEntities;
-    }
+	/**
+	 * @param missingEntities
+	 */
+	public UnresovedEntitiesException(Vector<String> missingEntities) {
+		this.missingEntities = missingEntities;
+	}
+
+	public Vector<String> getMissingEntities() {
+		return missingEntities;
+	}
 
 }

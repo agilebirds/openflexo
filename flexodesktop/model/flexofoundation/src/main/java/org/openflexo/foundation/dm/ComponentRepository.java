@@ -32,115 +32,101 @@ import org.openflexo.localization.FlexoLocalization;
  * @author sguerin
  * 
  */
-public class ComponentRepository extends DMRepository
-{
+public class ComponentRepository extends DMRepository {
 
-    /**
-     * Constructor used during deserialization
-     */
-    public ComponentRepository(FlexoDMBuilder builder)
-    {
-        this(builder.dmModel);
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor used during deserialization
+	 */
+	public ComponentRepository(FlexoDMBuilder builder) {
+		this(builder.dmModel);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Default constructor
-     */
-    public ComponentRepository(DMModel dmModel)
-    {
-        super(dmModel);
-    }
+	/**
+	 * Default constructor
+	 */
+	public ComponentRepository(DMModel dmModel) {
+		super(dmModel);
+	}
 
-    @Override
-	public DMRepositoryFolder getRepositoryFolder()
-    {
-        return getDMModel().getInternalRepositoryFolder();
-    }
-    
-    @Override
-	public int getOrder()
-    {
-        return 3;
-    }
+	@Override
+	public DMRepositoryFolder getRepositoryFolder() {
+		return getDMModel().getInternalRepositoryFolder();
+	}
 
-    @Override
-	public String getName()
-    {
-        return "component_repository";
-    }
+	@Override
+	public int getOrder() {
+		return 3;
+	}
 
-    @Override
-	public String getLocalizedName()
-    {
-        return FlexoLocalization.localizedForKey(getName());
-    }
+	@Override
+	public String getName() {
+		return "component_repository";
+	}
 
-    @Override
-	public void setName(String name)
-    {
-        // Not allowed
-    }
+	@Override
+	public String getLocalizedName() {
+		return FlexoLocalization.localizedForKey(getName());
+	}
 
-    /**
-     * @param dmModel
-     * @return
-     */
-    public static ComponentRepository createNewComponentRepository(DMModel dmModel)
-    {
-        ComponentRepository newComponentRepository = new ComponentRepository(dmModel);
-        dmModel.setComponentRepository(newComponentRepository);
-        return newComponentRepository;
-    }
+	@Override
+	public void setName(String name) {
+		// Not allowed
+	}
 
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return getDMModel().getFullyQualifiedName() + ".COMPONENTS";
-    }
+	/**
+	 * @param dmModel
+	 * @return
+	 */
+	public static ComponentRepository createNewComponentRepository(DMModel dmModel) {
+		ComponentRepository newComponentRepository = new ComponentRepository(dmModel);
+		dmModel.setComponentRepository(newComponentRepository);
+		return newComponentRepository;
+	}
 
-    @Override
-	public String getInspectorName()
-    {
-    	return Inspectors.DM.DM_COMPONENTS_REPOSITORY_INSPECTOR;
-    }
+	@Override
+	public String getFullyQualifiedName() {
+		return getDMModel().getFullyQualifiedName() + ".COMPONENTS";
+	}
 
-    @Override
-	public boolean isReadOnly()
-    {
-        return false;
-    }
+	@Override
+	public String getInspectorName() {
+		return Inspectors.DM.DM_COMPONENTS_REPOSITORY_INSPECTOR;
+	}
 
-    @Override
-	public boolean isDeletable()
-    {
-        return false;
-    }
+	@Override
+	public boolean isReadOnly() {
+		return false;
+	}
 
-    public DMPackage getDefaultComponentPackage()
-    {
-        return getDefaultPackage();
-    }
+	@Override
+	public boolean isDeletable() {
+		return false;
+	}
 
-    public ComponentDMEntity getComponentDMEntity(ComponentDefinition componentDefinition)
-    { 
-        for (Enumeration en = getPackages().elements(); en.hasMoreElements();) {
-            DMPackage next = (DMPackage) en.nextElement();
-            DMEntity found = getDMEntity(next.getName(), componentDefinition.getName());
-            if (found != null) {
-                return (ComponentDMEntity) found;
-            }
-        }
-        return null;
-    }
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return getName();
-    }
-    
+	public DMPackage getDefaultComponentPackage() {
+		return getDefaultPackage();
+	}
+
+	public ComponentDMEntity getComponentDMEntity(ComponentDefinition componentDefinition) {
+		for (Enumeration en = getPackages().elements(); en.hasMoreElements();) {
+			DMPackage next = (DMPackage) en.nextElement();
+			DMEntity found = getDMEntity(next.getName(), componentDefinition.getName());
+			if (found != null) {
+				return (ComponentDMEntity) found;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return getName();
+	}
+
 }

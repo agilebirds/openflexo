@@ -26,11 +26,9 @@ import org.openflexo.foundation.dm.DMProperty;
  * 
  * @author sguerin
  */
-public class PropertyDeleted extends DMDataModification
-{
+public class PropertyDeleted extends DMDataModification {
 
-    public PropertyDeleted(DMProperty property)
-    {
-        super(property, null);
-    }
+	public PropertyDeleted(DMProperty property) {
+		super(property, null);
+	}
 }

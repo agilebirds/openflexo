@@ -21,7 +21,6 @@ package org.openflexo.cgmodule.controller.browser;
 
 import java.util.Enumeration;
 
-
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
@@ -32,52 +31,44 @@ import org.openflexo.foundation.cg.templates.CustomCGTemplateRepository;
 import org.openflexo.foundation.cg.templates.TargetSpecificCGTemplateSet;
 import org.openflexo.localization.FlexoLocalization;
 
-public class CGTemplateRepositoryElement extends BrowserElement
-{
+public class CGTemplateRepositoryElement extends BrowserElement {
 
-    public CGTemplateRepositoryElement(CGTemplateRepository templateRepository, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(templateRepository, BrowserElementType.TEMPLATE_REPOSITORY, browser, parent);
-    }
+	public CGTemplateRepositoryElement(CGTemplateRepository templateRepository, ProjectBrowser browser, BrowserElement parent) {
+		super(templateRepository, BrowserElementType.TEMPLATE_REPOSITORY, browser, parent);
+	}
 
-    @Override
-	public String getName()
-    {
-    	if (getCGTemplateRepository() instanceof ApplicationCGTemplateRepository) {
-    		return FlexoLocalization.localizedForKey("application_templates");
-    	}
-    	else if (getCGTemplateRepository() instanceof CustomCGTemplateRepository) {
-    		return ((CustomCGTemplateRepository)getCGTemplateRepository()).getName();
-    	}
-    	return "???";
-    }
+	@Override
+	public String getName() {
+		if (getCGTemplateRepository() instanceof ApplicationCGTemplateRepository) {
+			return FlexoLocalization.localizedForKey("application_templates");
+		} else if (getCGTemplateRepository() instanceof CustomCGTemplateRepository) {
+			return ((CustomCGTemplateRepository) getCGTemplateRepository()).getName();
+		}
+		return "???";
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-    	for (Enumeration<TargetSpecificCGTemplateSet> e = getCGTemplateRepository().getTargetSpecificTemplates(); e.hasMoreElements();) {
-    		addToChilds(e.nextElement());
-    	}
+	@Override
+	protected void buildChildrenVector() {
+		for (Enumeration<TargetSpecificCGTemplateSet> e = getCGTemplateRepository().getTargetSpecificTemplates(); e.hasMoreElements();) {
+			addToChilds(e.nextElement());
+		}
 		for (Enumeration<CGTemplate> e = getCGTemplateRepository().getCommonTemplates().getSortedTemplates(); e.hasMoreElements();) {
-    		addToChilds(e.nextElement());
-    	}
-    }
+			addToChilds(e.nextElement());
+		}
+	}
 
-    protected CGTemplateRepository getCGTemplateRepository()
-    {
-        return (CGTemplateRepository) getObject();
-    }
+	protected CGTemplateRepository getCGTemplateRepository() {
+		return (CGTemplateRepository) getObject();
+	}
 
-    @Override
-	public boolean isNameEditable()
-    {
-        return (getCGTemplateRepository() instanceof CustomCGTemplateRepository);
-    }
+	@Override
+	public boolean isNameEditable() {
+		return (getCGTemplateRepository() instanceof CustomCGTemplateRepository);
+	}
 
-    @Override
-	public void setName(String aName)
-    {
-        _setName(aName);
-    }
+	@Override
+	public void setName(String aName) {
+		_setName(aName);
+	}
 
 }

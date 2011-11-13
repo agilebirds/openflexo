@@ -24,21 +24,18 @@ import org.openflexo.fge.GraphicalRepresentation;
 public class GraphicalRepresentationAdded extends FGENotification {
 
 	private GraphicalRepresentation newGR;
-	
-	public GraphicalRepresentationAdded(GraphicalRepresentation gr)
-	{
-		super("object",null,gr);
+
+	public GraphicalRepresentationAdded(GraphicalRepresentation gr) {
+		super("object", null, gr);
 		newGR = gr;
 	}
-	
-	public GraphicalRepresentation getAddedGraphicalRepresentation()
-	{
+
+	public GraphicalRepresentation getAddedGraphicalRepresentation() {
 		return newGR;
 	}
-	
+
 	@Override
-	public boolean isModelNotification()
-	{
+	public boolean isModelNotification() {
 		return false;
 	}
 

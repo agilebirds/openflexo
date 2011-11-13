@@ -24,33 +24,29 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ie.widget.IEReusableWidget;
 
-
 /**
  * @author bmangez
- *
- * <B>Class Description</B>
+ * 
+ *         <B>Class Description</B>
  */
-public class IEReusableWidgetElement extends IEElement
-{
+public class IEReusableWidgetElement extends IEElement {
 
-    /**
-     * @param widget
-     * @param browser
-     */
-    public IEReusableWidgetElement(IEReusableWidget reusable, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(reusable, BrowserElementType.REUSABLE_COMPONENT, browser,parent);
-    }
+	/**
+	 * @param widget
+	 * @param browser
+	 */
+	public IEReusableWidgetElement(IEReusableWidget reusable, ProjectBrowser browser, BrowserElement parent) {
+		super(reusable, BrowserElementType.REUSABLE_COMPONENT, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-        if (getObject().getReusableComponentInstance()!=null)
-        	addToChilds(getObject().getReusableComponentInstance().getComponentDefinition());
-    }
+	@Override
+	protected void buildChildrenVector() {
+		if (getObject().getReusableComponentInstance() != null)
+			addToChilds(getObject().getReusableComponentInstance().getComponentDefinition());
+	}
 
-    @Override
-    public IEReusableWidget getObject() {
-    	return (IEReusableWidget) super.getObject();
-    }
+	@Override
+	public IEReusableWidget getObject() {
+		return (IEReusableWidget) super.getObject();
+	}
 }

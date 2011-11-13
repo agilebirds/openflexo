@@ -21,8 +21,8 @@ package org.openflexo.foundation.dm.javaparser;
 
 import org.openflexo.foundation.dm.DMModel;
 
-public interface JavaClassParser
-{
+public interface JavaClassParser {
 	public ParsedJavadoc parseJavadocForClass(String classCode, DMModel dataModel) throws JavaParseException;
+
 	public ParsedJavaClass parseClass(String classCode, DMModel dataModel) throws JavaParseException;
 }

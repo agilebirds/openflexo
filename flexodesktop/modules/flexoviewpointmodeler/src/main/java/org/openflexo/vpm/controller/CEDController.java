@@ -66,11 +66,9 @@ import org.openflexo.vpm.view.menu.CEDMenuBar;
  * 
  * @author yourname
  */
-public class CEDController extends FlexoController implements SelectionManagingController
-{
+public class CEDController extends FlexoController implements SelectionManagingController {
 
-	private static final Logger logger = Logger.getLogger(CEDController.class.getPackage()
-			.getName());
+	private static final Logger logger = Logger.getLogger(CEDController.class.getPackage().getName());
 
 	// ================================================
 	// ============= Instance variables ===============
@@ -78,7 +76,7 @@ public class CEDController extends FlexoController implements SelectionManagingC
 
 	protected CEDMenuBar _cedMenuBar;
 	protected CEDFrame _frame;
-	
+
 	protected CEDKeyEventListener _cedKeyEventListener;
 	private final CEDSelectionManager _selectionManager;
 
@@ -86,21 +84,18 @@ public class CEDController extends FlexoController implements SelectionManagingC
 	private final ViewPointLibrary viewPointLibrary;
 	private final OntologyLibrary baseOntologyLibrary;
 
-    public final ViewPointPerspective VIEW_POINT_PERSPECTIVE;
-    public final OntologyPerspective ONTOLOGY_PERSPECTIVE;
-    
+	public final ViewPointPerspective VIEW_POINT_PERSPECTIVE;
+	public final OntologyPerspective ONTOLOGY_PERSPECTIVE;
+
 	@Override
-	public boolean useNewInspectorScheme()
-	{
+	public boolean useNewInspectorScheme() {
 		return true;
 	}
-	
+
 	@Override
-	public boolean useOldInspectorScheme()
-	{
+	public boolean useOldInspectorScheme() {
 		return false;
 	}
-	
 
 	// ================================================
 	// ================ Constructor ===================
@@ -109,21 +104,20 @@ public class CEDController extends FlexoController implements SelectionManagingC
 	/**
 	 * Default constructor
 	 */
-	public CEDController(FlexoModule module) throws Exception
-	{
-		super(module.getEditor(),module);
+	public CEDController(FlexoModule module) throws Exception {
+		super(module.getEditor(), module);
 
 		resourceCenter = ModuleLoader.getFlexoResourceCenter();
 		viewPointLibrary = resourceCenter.retrieveViewPointLibrary();
 		baseOntologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
-		
-		_cedMenuBar = (CEDMenuBar)createAndRegisterNewMenuBar();
+
+		_cedMenuBar = (CEDMenuBar) createAndRegisterNewMenuBar();
 		_cedKeyEventListener = new CEDKeyEventListener(this);
 		_frame = new CEDFrame(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, this, _cedKeyEventListener, _cedMenuBar);
 		init(_frame, _cedKeyEventListener, _cedMenuBar);
 
 		resourceSavingInfo = new Vector<ResourceSavingInfo>();
-		
+
 		_selectionManager = new CEDSelectionManager(this);
 
 		addToPerspectives(VIEW_POINT_PERSPECTIVE = new ViewPointPerspective(this));
@@ -133,32 +127,26 @@ public class CEDController extends FlexoController implements SelectionManagingC
 
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
-			public void run()
-			{
+			public void run() {
 				switchToPerspective(getDefaultPespective());
 				selectAndFocusObject(viewPointLibrary);
 			}
 		});
 
-
 	}
 
 	@Override
-	public ControllerActionInitializer createControllerActionInitializer()
-	{
+	public ControllerActionInitializer createControllerActionInitializer() {
 		return new CEDControllerActionInitializer(this);
 	}
 
-
 	/**
-	 * Creates a new instance of MenuBar for the module this 
-	 * controller refers to
+	 * Creates a new instance of MenuBar for the module this controller refers to
 	 * 
 	 * @return
 	 */
 	@Override
-	protected FlexoMenuBar createNewMenuBar()
-	{
+	protected FlexoMenuBar createNewMenuBar() {
 		return new CEDMenuBar(this);
 	}
 
@@ -166,8 +154,7 @@ public class CEDController extends FlexoController implements SelectionManagingC
 	 * Init inspectors
 	 */
 	@Override
-	public void initInspectors()
-	{
+	public void initInspectors() {
 		super.initInspectors();
 		if (getSharedInspectorController() != null) {
 			_selectionManager.addObserver(getSharedInspectorController());
@@ -178,8 +165,7 @@ public class CEDController extends FlexoController implements SelectionManagingC
 
 	}
 
-	public void loadRelativeWindows()
-	{
+	public void loadRelativeWindows() {
 		// Build eventual relative windows
 	}
 
@@ -187,44 +173,37 @@ public class CEDController extends FlexoController implements SelectionManagingC
 	// ============== Instance method =================
 	// ================================================
 
-	public ValidationModel getDefaultValidationModel()
-	{
+	public ValidationModel getDefaultValidationModel() {
 		// If there is a ValidationModel associated to this module, put it here
 		return null;
 	}
 
-	public CEDFrame getMainFrame()
-	{
+	public CEDFrame getMainFrame() {
 		return _frame;
 	}
 
-	public CEDMenuBar getEditorMenuBar()
-	{
+	public CEDMenuBar getEditorMenuBar() {
 		return _cedMenuBar;
 	}
 
-	public void showBrowser()
-	{
+	public void showBrowser() {
 		if (getMainPane() != null) {
-			((CEDMainPane)getMainPane()).showBrowser();
+			((CEDMainPane) getMainPane()).showBrowser();
 		}
 	}
 
-	public void hideBrowser()
-	{
+	public void hideBrowser() {
 		if (getMainPane() != null) {
-			((CEDMainPane)getMainPane()).hideBrowser();
+			((CEDMainPane) getMainPane()).hideBrowser();
 		}
 	}
 
 	@Override
-	protected FlexoMainPane createMainPane()
-	{
+	protected FlexoMainPane createMainPane() {
 		return new CEDMainPane(getEmptyPanel(), getMainFrame(), this);
 	}
 
-	public CEDKeyEventListener getKeyEventListener()
-	{
+	public CEDKeyEventListener getKeyEventListener() {
 		return _cedKeyEventListener;
 	}
 
@@ -233,60 +212,56 @@ public class CEDController extends FlexoController implements SelectionManagingC
 	// ================================================
 
 	@Override
-	public SelectionManager getSelectionManager()
-	{
+	public SelectionManager getSelectionManager() {
 		return getCEDSelectionManager();
 	}
 
-	public CEDSelectionManager getCEDSelectionManager()
-	{
+	public CEDSelectionManager getCEDSelectionManager() {
 		return _selectionManager;
 	}
 
 	/**
-	 * Select the view representing supplied object, if this view exists. Try
-	 * all to really display supplied object, even if required view is not the
-	 * current displayed view
+	 * Select the view representing supplied object, if this view exists. Try all to really display supplied object, even if required view
+	 * is not the current displayed view
 	 * 
-	 * @param object: the object to focus on
+	 * @param object
+	 *            : the object to focus on
 	 */
 	@Override
-	public void selectAndFocusObject(FlexoModelObject object)
-	{
-		logger.info("selectAndFocusObject "+object);
+	public void selectAndFocusObject(FlexoModelObject object) {
+		logger.info("selectAndFocusObject " + object);
 		setCurrentEditedObjectAsModuleView(object);
 		if (getCurrentPerspective() == VIEW_POINT_PERSPECTIVE) {
 			if (object instanceof ViewPointLibrary) {
-				ViewPointLibrary cl = (ViewPointLibrary)object;
+				ViewPointLibrary cl = (ViewPointLibrary) object;
 				if (cl.getViewPoints().size() > 0) {
 					getSelectionManager().setSelectedObject(cl.getViewPoints().firstElement());
-				} 
-			}
-			if (object instanceof ImportedOntology) {
-				ImportedOntology ontology = (ImportedOntology)object;
-				VIEW_POINT_PERSPECTIVE.focusOnOntology(ontology);
-				if (ontology.getClasses().size()>0) {
-					getSelectionManager().setSelectedObject(ontology.getClasses().firstElement());
 				}
 			}
-			else if (object instanceof ExampleDrawingShema) {
-				VIEW_POINT_PERSPECTIVE.focusOnShema((ExampleDrawingShema)object);
+			if (object instanceof ImportedOntology) {
+				ImportedOntology ontology = (ImportedOntology) object;
+				VIEW_POINT_PERSPECTIVE.focusOnOntology(ontology);
+				if (ontology.getClasses().size() > 0) {
+					getSelectionManager().setSelectedObject(ontology.getClasses().firstElement());
+				}
+			} else if (object instanceof ExampleDrawingShema) {
+				VIEW_POINT_PERSPECTIVE.focusOnShema((ExampleDrawingShema) object);
 			}
 			if (object instanceof ViewPointPalette) {
-				VIEW_POINT_PERSPECTIVE.focusOnPalette((ViewPointPalette)object);
+				VIEW_POINT_PERSPECTIVE.focusOnPalette((ViewPointPalette) object);
 			}
 			if (object instanceof ViewPoint) {
-				ViewPoint calc = (ViewPoint)object;
+				ViewPoint calc = (ViewPoint) object;
 				VIEW_POINT_PERSPECTIVE.focusOnCalc(calc);
 				if (calc.getEditionPatterns().size() > 0) {
 					getSelectionManager().setSelectedObject(calc.getEditionPatterns().firstElement());
-				} 
+				}
 			}
 			if (object instanceof EditionPattern) {
-				EditionPattern pattern = (EditionPattern)object;
+				EditionPattern pattern = (EditionPattern) object;
 				if (pattern.getEditionSchemes().size() > 0) {
 					getSelectionManager().setSelectedObject(pattern.getEditionSchemes().firstElement());
-				} 
+				}
 			}
 		}
 	}
@@ -295,19 +270,15 @@ public class CEDController extends FlexoController implements SelectionManagingC
 	// ============ Exception management ==============
 	// ================================================
 
-
 	@Override
-	public boolean handleException(InspectableObject inspectable, String propertyName,
-			Object value, Throwable exception)
-	{
+	public boolean handleException(InspectableObject inspectable, String propertyName, Object value, Throwable exception) {
 		// TODO: Handles here exceptions that may be thrown through the inspector
 		return super.handleException(inspectable, propertyName, value, exception);
 	}
 
 	@Override
-	public String getWindowTitleforObject(FlexoModelObject object) 
-	{
-		//System.out.println("getWindowTitleforObject() "+object+" perspective="+getCurrentPerspective());
+	public String getWindowTitleforObject(FlexoModelObject object) {
+		// System.out.println("getWindowTitleforObject() "+object+" perspective="+getCurrentPerspective());
 		if (object instanceof ViewPointLibrary) {
 			return FlexoLocalization.localizedForKey("calc_library");
 		}
@@ -323,36 +294,31 @@ public class CEDController extends FlexoController implements SelectionManagingC
 		return object.getFullyQualifiedName();
 	}
 
-	public FlexoResourceCenter getResourceCenter()
-	{
+	public FlexoResourceCenter getResourceCenter() {
 		return resourceCenter;
 	}
 
-	public ViewPointLibrary getCalcLibrary()
-	{
+	public ViewPointLibrary getCalcLibrary() {
 		return viewPointLibrary;
 	}
 
-	public OntologyLibrary getBaseOntologyLibrary()
-	{
+	public OntologyLibrary getBaseOntologyLibrary() {
 		return baseOntologyLibrary;
 	}
-	
+
 	@Override
-	public FlexoProject getProject()
-	{
+	public FlexoProject getProject() {
 		logger.warning("Could not access to any project in this module (outside project scope module)");
 		return super.getProject();
 	}
-	
+
 	// ================================================
 	// ============ Resources management ==============
 	// ================================================
 
-	private final Vector<ResourceSavingInfo> resourceSavingInfo ;
-	
-	public void manageResource(FlexoModelObject o)
-	{
+	private final Vector<ResourceSavingInfo> resourceSavingInfo;
+
+	public void manageResource(FlexoModelObject o) {
 		boolean alreadyRegistered = false;
 		for (ResourceSavingInfo i : resourceSavingInfo) {
 			if (i.resource == o) {
@@ -363,99 +329,79 @@ public class CEDController extends FlexoController implements SelectionManagingC
 			resourceSavingInfo.add(new ResourceSavingInfo(o));
 		}
 	}
-	
-	public Vector<ResourceSavingInfo> getResourceSavingInfo()
-	{
+
+	public Vector<ResourceSavingInfo> getResourceSavingInfo() {
 		return resourceSavingInfo;
 	}
-	
-	public void saveModified()
-	{
+
+	public void saveModified() {
 		for (ResourceSavingInfo i : resourceSavingInfo) {
 			i.saveModified();
 		}
 	}
-	
-	public void reviewModifiedResources()
-	{
+
+	public void reviewModifiedResources() {
 		for (ResourceSavingInfo i : resourceSavingInfo) {
 			i.reviewModifiedResource();
 		}
 	}
-	
-	public static class ResourceSavingInfo
-	{
+
+	public static class ResourceSavingInfo {
 		protected FlexoModelObject resource;
 		protected boolean saveThisResource = true;
-		
-		public ResourceSavingInfo(FlexoModelObject r)
-		{
+
+		public ResourceSavingInfo(FlexoModelObject r) {
 			resource = r;
 		}
-		
-		public Icon getIcon()
-		{
+
+		public Icon getIcon() {
 			if (resource instanceof ImportedOntology) {
 				return OntologyIconLibrary.ONTOLOGY_ICON;
-			}
-			else if (resource instanceof ViewPoint) {
+			} else if (resource instanceof ViewPoint) {
 				return VPMIconLibrary.CALC_ICON;
-			}
-			else if (resource instanceof ViewPointPalette) {
+			} else if (resource instanceof ViewPointPalette) {
 				return VPMIconLibrary.CALC_PALETTE_ICON;
-			}
-			else if (resource instanceof ExampleDrawingShema) {
+			} else if (resource instanceof ExampleDrawingShema) {
 				return VPMIconLibrary.EXAMPLE_DIAGRAM_ICON;
 			}
 			return VPMIconLibrary.UNKNOWN_ICON;
 		}
-		
-		public String getName()
-		{
-			return resource.getName()+(isModified()?" ["+FlexoLocalization.localizedForKey("modified")+"]":"");
+
+		public String getName() {
+			return resource.getName() + (isModified() ? " [" + FlexoLocalization.localizedForKey("modified") + "]" : "");
 		}
-		
-		public String getType()
-		{
+
+		public String getType() {
 			return resource.getLocalizedClassName();
 		}
-		
-		public boolean isModified()
-		{
+
+		public boolean isModified() {
 			return resource.isModified();
 		}
-		
-		public boolean saveThisResource()
-		{
+
+		public boolean saveThisResource() {
 			return saveThisResource;
 		}
-		
-		public void setSaveThisResource(boolean saveThisResource)
-		{
+
+		public void setSaveThisResource(boolean saveThisResource) {
 			this.saveThisResource = saveThisResource;
 		}
-		
-		public void reviewModifiedResource()
-		{
+
+		public void reviewModifiedResource() {
 			saveThisResource = resource.isModified();
 		}
-		
 
-		public void saveModified()
-		{
+		public void saveModified() {
 			if (saveThisResource) {
 				try {
 					if (resource instanceof ImportedOntology) {
-						((ImportedOntology)resource).save();
-					}
-					else if (resource instanceof ViewPoint) {
-						((ViewPoint)resource).save();
-					}
-					else if (resource instanceof ViewPointPalette) {
-						((ViewPointPalette)resource).save();
-					}
-					else if (resource instanceof ExampleDrawingShema) {
-						((ExampleDrawingShema)resource).save();
+						((ImportedOntology) resource).save();
+					} else if (resource instanceof ViewPoint) {
+						((ViewPoint) resource).save();
+					} else if (resource instanceof ViewPointPalette) {
+						((ViewPointPalette) resource).save();
+					} else if (resource instanceof ExampleDrawingShema) {
+						((ExampleDrawingShema) resource).save();
 					}
 				} catch (SaveResourceException e) {
 					e.printStackTrace();

@@ -30,164 +30,130 @@ import org.openflexo.fge.geomedit.gr.GeometricObjectGraphicalRepresentation;
 import org.openflexo.inspector.DefaultInspectableObject;
 import org.openflexo.xmlcode.XMLSerializable;
 
-
-public abstract class GeometricObject<A extends FGEArea> extends DefaultInspectableObject implements XMLSerializable,Cloneable,TreeNode
-{
+public abstract class GeometricObject<A extends FGEArea> extends DefaultInspectableObject implements XMLSerializable, Cloneable, TreeNode {
 	public String name;
 	public String description;
 	private GeometricSet geometricSet;
-	
+
 	private GeometricConstruction<? extends A> construction;
-	
+
 	private static int index = 0;
-	
+
 	// Called for LOAD
-	public GeometricObject(GeomEditBuilder builder)
-	{
+	public GeometricObject(GeomEditBuilder builder) {
 		super();
 		initializeDeserialization();
 	}
-	
-	
+
 	// Called for NEW
-	public GeometricObject(GeometricSet set, GeometricConstruction<A> aConstruction) 
-	{
+	public GeometricObject(GeometricSet set, GeometricConstruction<A> aConstruction) {
 		super();
 		geometricSet = set;
 		_setConstruction(aConstruction);
 		index++;
-		name = getClass().getSimpleName()+index;
+		name = getClass().getSimpleName() + index;
 	}
-	
-	public abstract GeometricObjectGraphicalRepresentation<A,? extends GeometricObject<A>> getGraphicalRepresentation();
-	
-	//public abstract void setGraphicalRepresentation(GeometricObjectGraphicalRepresentation<O,? extends GeometricObject<O>> aGR);
+
+	public abstract GeometricObjectGraphicalRepresentation<A, ? extends GeometricObject<A>> getGraphicalRepresentation();
+
+	// public abstract void setGraphicalRepresentation(GeometricObjectGraphicalRepresentation<O,? extends GeometricObject<O>> aGR);
 
 	@Override
-	public String toString()
-	{
-		return "GeometricObject["+name+":"+construction.getData()+"]";
+	public String toString() {
+		return "GeometricObject[" + name + ":" + construction.getData() + "]";
 	}
-	
+
 	private boolean isDeserializing = false;
-	
-	public void initializeDeserialization()
-	{
+
+	public void initializeDeserialization() {
 		isDeserializing = true;
 	}
-	
-	public void finalizeDeserialization()
-	{
+
+	public void finalizeDeserialization() {
 		isDeserializing = false;
 	}
-	
-	public boolean isDeserializing()
-	{
+
+	public boolean isDeserializing() {
 		return isDeserializing;
 	}
-	
+
 	@Override
-	public GeometricObject clone()
-	{
+	public GeometricObject clone() {
 		try {
-			return (GeometricObject)super.clone();
-		}
-		catch (CloneNotSupportedException e) {
+			return (GeometricObject) super.clone();
+		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 			// cannot happen since we are clonable
 			return null;
 		}
 	}
 
-
-	public A getGeometricObject()
-	{
+	public A getGeometricObject() {
 		return getConstruction().getData();
 	}
 
 	@Override
 	public abstract String getInspectorName();
 
-
-	public GeometricConstruction<? extends A> getConstruction()
-	{
+	public GeometricConstruction<? extends A> getConstruction() {
 		return construction;
 	}
 
-	protected void _setConstruction(GeometricConstruction<? extends A> aConstruction)
-	{
+	protected void _setConstruction(GeometricConstruction<? extends A> aConstruction) {
 		construction = aConstruction;
 	}
 
-
 	@Override
-	public Enumeration children()
-	{
-			return null;
-	}
-
-
-	@Override
-	public boolean getAllowsChildren()
-	{
-		return false;
-	}
-
-
-	@Override
-	public TreeNode getChildAt(int childIndex)
-	{
+	public Enumeration children() {
 		return null;
 	}
 
+	@Override
+	public boolean getAllowsChildren() {
+		return false;
+	}
 
 	@Override
-	public int getChildCount()
-	{
+	public TreeNode getChildAt(int childIndex) {
+		return null;
+	}
+
+	@Override
+	public int getChildCount() {
 		return 0;
 	}
 
-
 	@Override
-	public int getIndex(TreeNode node)
-	{
+	public int getIndex(TreeNode node) {
 		return 0;
 	}
 
-
 	@Override
-	public TreeNode getParent()
-	{
+	public TreeNode getParent() {
 		return geometricSet;
 	}
 
-
 	@Override
-	public boolean isLeaf()
-	{
+	public boolean isLeaf() {
 		return true;
 	}
 
 	private A _resultingGeometricObject;
-	
-	public void resetResultingGeometricObject()
-	{
+
+	public void resetResultingGeometricObject() {
 		_resultingGeometricObject = null;
 		getConstruction().refresh();
 		getResultingGeometricObject();
 	}
-	
-	public A getResultingGeometricObject()
-	{
+
+	public A getResultingGeometricObject() {
 		if (_resultingGeometricObject == null) {
 			_resultingGeometricObject = getGeometricObject();
 		}
 		return _resultingGeometricObject;
 	}
 
-
-	public void setResultingGeometricObject(A object)
-	{
+	public void setResultingGeometricObject(A object) {
 		_resultingGeometricObject = object;
 	}
 

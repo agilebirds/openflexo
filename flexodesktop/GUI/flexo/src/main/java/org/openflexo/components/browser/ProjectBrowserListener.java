@@ -33,27 +33,26 @@ import org.openflexo.components.browser.ProjectBrowser.SelectionClearedEvent;
  * @author sguerin
  * 
  */
-public interface ProjectBrowserListener
-{
+public interface ProjectBrowserListener {
 
-    public void objectAddedToSelection(ObjectAddedToSelectionEvent event);
+	public void objectAddedToSelection(ObjectAddedToSelectionEvent event);
 
-    public void objectRemovedFromSelection(ObjectRemovedFromSelectionEvent event);
+	public void objectRemovedFromSelection(ObjectRemovedFromSelectionEvent event);
 
-    public void selectionCleared(SelectionClearedEvent event);
+	public void selectionCleared(SelectionClearedEvent event);
 
-    /*
-     * public void selectionSaved (SaveSelectionEvent event);
-     * 
-     * public void selectionRestored (RestoreSelectionEvent event);
-     */
+	/*
+	 * public void selectionSaved (SaveSelectionEvent event);
+	 * 
+	 * public void selectionRestored (RestoreSelectionEvent event);
+	 */
 
-    public void optionalFilterAdded(OptionalFilterAddedEvent event);
+	public void optionalFilterAdded(OptionalFilterAddedEvent event);
 
-    public void notifyExpansions(ExpansionNotificationEvent event);
+	public void notifyExpansions(ExpansionNotificationEvent event);
 
-    public void enableExpandingSynchronization(EnableExpandingSynchronizationEvent event);
+	public void enableExpandingSynchronization(EnableExpandingSynchronizationEvent event);
 
-    public void disableExpandingSynchronization(DisableExpandingSynchronizationEvent event);
+	public void disableExpandingSynchronization(DisableExpandingSynchronizationEvent event);
 
 }

@@ -23,7 +23,6 @@
 // Generated on: 2007.11.06 at 03:26:51 PM CET 
 //
 
-
 package org.xmlsoap.schemas.ws._2004._03.business_process;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -31,11 +30,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for tOnEvent complex type.
+ * <p>
+ * Java class for tOnEvent complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="tOnEvent">
@@ -54,89 +54,76 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tOnEvent", propOrder = {
-    "scope"
-})
-public class TOnEvent
-    extends TOnMsgCommon
-{
+@XmlType(name = "tOnEvent", propOrder = { "scope" })
+public class TOnEvent extends TOnMsgCommon {
 
-    protected TScope scope;
-    @XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
-    protected String messageType;
-    @XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
-    protected String element;
+	protected TScope scope;
+	@XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
+	protected String messageType;
+	@XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
+	protected String element;
 
-    /**
-     * Gets the value of the scope property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TScope }
-     *     
-     */
-    public TScope getScope() {
-        return scope;
-    }
+	/**
+	 * Gets the value of the scope property.
+	 * 
+	 * @return possible object is {@link TScope }
+	 * 
+	 */
+	public TScope getScope() {
+		return scope;
+	}
 
-    /**
-     * Sets the value of the scope property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TScope }
-     *     
-     */
-    public void setScope(TScope value) {
-        this.scope = value;
-    }
+	/**
+	 * Sets the value of the scope property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link TScope }
+	 * 
+	 */
+	public void setScope(TScope value) {
+		this.scope = value;
+	}
 
-    /**
-     * Gets the value of the messageType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getMessageType() {
-        return messageType;
-    }
+	/**
+	 * Gets the value of the messageType property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getMessageType() {
+		return messageType;
+	}
 
-    /**
-     * Sets the value of the messageType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setMessageType(String value) {
-        this.messageType = value;
-    }
+	/**
+	 * Sets the value of the messageType property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setMessageType(String value) {
+		this.messageType = value;
+	}
 
-    /**
-     * Gets the value of the element property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getElement() {
-        return element;
-    }
+	/**
+	 * Gets the value of the element property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getElement() {
+		return element;
+	}
 
-    /**
-     * Sets the value of the element property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setElement(String value) {
-        this.element = value;
-    }
+	/**
+	 * Sets the value of the element property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setElement(String value) {
+		this.element = value;
+	}
 
 }

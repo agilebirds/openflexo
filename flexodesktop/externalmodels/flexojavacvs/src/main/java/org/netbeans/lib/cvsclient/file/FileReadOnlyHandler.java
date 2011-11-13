@@ -23,15 +23,16 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * @author  Thomas Singer
+ * @author Thomas Singer
  * @version Nov 17, 2001
  */
 public interface FileReadOnlyHandler {
 
-    /**
-     * Makes the specified file read-only or writable, depending on the specified
-     * readOnly flag.
-     * @throws IOException if something gone wrong
-     */
-    void setFileReadOnly(File file, boolean readOnly) throws IOException;
+	/**
+	 * Makes the specified file read-only or writable, depending on the specified readOnly flag.
+	 * 
+	 * @throws IOException
+	 *             if something gone wrong
+	 */
+	void setFileReadOnly(File file, boolean readOnly) throws IOException;
 }

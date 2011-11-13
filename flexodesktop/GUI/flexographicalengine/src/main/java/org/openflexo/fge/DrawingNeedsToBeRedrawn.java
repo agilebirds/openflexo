@@ -24,7 +24,7 @@ import org.openflexo.fge.notifications.FGENotification;
 public class DrawingNeedsToBeRedrawn extends FGENotification {
 
 	public DrawingNeedsToBeRedrawn() {
-		super("repaint",null,null);
+		super("repaint", null, null);
 	}
-	
+
 }

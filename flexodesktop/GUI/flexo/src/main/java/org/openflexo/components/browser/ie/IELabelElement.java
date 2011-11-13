@@ -24,41 +24,34 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ie.widget.IELabelWidget;
 
-
 /**
- * @author bmangez
- * <B>Class Description</B>
+ * @author bmangez <B>Class Description</B>
  */
-public class IELabelElement extends IEElement
-{
+public class IELabelElement extends IEElement {
 
-    /**
-     * @param widget
-     * @param browser
-     */
-    public IELabelElement(IELabelWidget widget, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(widget, BrowserElementType.LABEL, browser,parent);
-    }
+	/**
+	 * @param widget
+	 * @param browser
+	 */
+	public IELabelElement(IELabelWidget widget, ProjectBrowser browser, BrowserElement parent) {
+		super(widget, BrowserElementType.LABEL, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-        //no childs
-    }
+	@Override
+	protected void buildChildrenVector() {
+		// no childs
+	}
 
-    @Override
-	public String getName()
-    {
-        if (getLabel().getValue() == null) {
-            return "Label";
-        }
-        return getLabel().getValue();
-    }
+	@Override
+	public String getName() {
+		if (getLabel().getValue() == null) {
+			return "Label";
+		}
+		return getLabel().getValue();
+	}
 
-    protected IELabelWidget getLabel()
-    {
-        return (IELabelWidget) getObject();
-    }
+	protected IELabelWidget getLabel() {
+		return (IELabelWidget) getObject();
+	}
 
 }

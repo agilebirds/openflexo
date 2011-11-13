@@ -28,29 +28,24 @@ public class InverseFunctionalPropertyStatement extends IsAStatement {
 	private static final Logger logger = Logger.getLogger(InverseFunctionalPropertyStatement.class.getPackage().getName());
 
 	public static final String INVERSE_FUNCTIONAL_PROPERTY_URI = "http://www.w3.org/2002/07/owl#InverseFunctionalProperty";
-	
-	public InverseFunctionalPropertyStatement(OntologyObject subject, Statement s)
-	{
-		super(subject,s);
+
+	public InverseFunctionalPropertyStatement(OntologyObject subject, Statement s) {
+		super(subject, s);
 	}
 
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "is_inverse_functional_property_statement";
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return "InverseFunctionalPropertyStatement: "+getStatement();
+	public String getFullyQualifiedName() {
+		return "InverseFunctionalPropertyStatement: " + getStatement();
 	}
 
-
 	@Override
-	public String toString() 
-	{
-		return getSubject().getName()+" is an InverseFunctionalProperty";
+	public String toString() {
+		return getSubject().getName() + " is an InverseFunctionalProperty";
 	}
 
 }

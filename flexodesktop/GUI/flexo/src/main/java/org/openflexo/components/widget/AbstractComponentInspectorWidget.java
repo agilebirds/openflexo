@@ -31,77 +31,68 @@ import org.openflexo.inspector.AbstractController;
 import org.openflexo.inspector.model.PropertyModel;
 import org.openflexo.inspector.widget.WidgetFocusListener;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public abstract class AbstractComponentInspectorWidget extends CustomInspectorWidget
-{
+public abstract class AbstractComponentInspectorWidget extends CustomInspectorWidget {
 
-    static final Logger logger = Logger.getLogger(AbstractComponentInspectorWidget.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(AbstractComponentInspectorWidget.class.getPackage().getName());
 
-    AbstractComponentSelector _selector;
+	AbstractComponentSelector _selector;
 
-    public AbstractComponentInspectorWidget(PropertyModel model, AbstractController controller)
-    {
-        super(model,controller);
-        _selector = createComponentSelector();
-        getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
-            @Override
-			public void focusGained(FocusEvent arg0)
-            {
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("Focus gained in " + getClass().getName());
-                super.focusGained(arg0);
-                _selector.getTextField().requestFocus();
-                _selector.getTextField().selectAll();
-            }
+	public AbstractComponentInspectorWidget(PropertyModel model, AbstractController controller) {
+		super(model, controller);
+		_selector = createComponentSelector();
+		getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				if (logger.isLoggable(Level.FINE))
+					logger.fine("Focus gained in " + getClass().getName());
+				super.focusGained(arg0);
+				_selector.getTextField().requestFocus();
+				_selector.getTextField().selectAll();
+			}
 
-            @Override
-			public void focusLost(FocusEvent arg0)
-            {
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("Focus lost in " + getClass().getName());
-                super.focusLost(arg0);
-            }
-        });
-    }
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				if (logger.isLoggable(Level.FINE))
+					logger.fine("Focus lost in " + getClass().getName());
+				super.focusLost(arg0);
+			}
+		});
+	}
 
-    protected abstract AbstractComponentSelector createComponentSelector();
+	protected abstract AbstractComponentSelector createComponentSelector();
 
-    @Override
+	@Override
 	public abstract Class getDefaultType();
 
-    @Override
-	public synchronized void updateWidgetFromModel()
-    {
-        _selector.setEditedObject(getObjectValue());
-        _selector.setRevertValue((FlexoModelObject) getObjectValue());
-    }
+	@Override
+	public synchronized void updateWidgetFromModel() {
+		_selector.setEditedObject(getObjectValue());
+		_selector.setRevertValue((FlexoModelObject) getObjectValue());
+	}
 
-    /**
-     * Update the model given the actual state of the widget
-     */
-    @Override
-	public synchronized void updateModelFromWidget()
-    {
-       setObjectValue(_selector.getEditedObject());
-       super.updateModelFromWidget();
-    }
+	/**
+	 * Update the model given the actual state of the widget
+	 */
+	@Override
+	public synchronized void updateModelFromWidget() {
+		setObjectValue(_selector.getEditedObject());
+		super.updateModelFromWidget();
+	}
 
-    @Override
-	public JComponent getDynamicComponent()
-    {
-        return _selector;
-    }
+	@Override
+	public JComponent getDynamicComponent() {
+		return _selector;
+	}
 
-    @Override
-	public void setProject(FlexoProject aProject)
-    {
-        super.setProject(aProject);
-        _selector.setProject(aProject);
-    }
+	@Override
+	public void setProject(FlexoProject aProject) {
+		super.setProject(aProject);
+		_selector.setProject(aProject);
+	}
 }

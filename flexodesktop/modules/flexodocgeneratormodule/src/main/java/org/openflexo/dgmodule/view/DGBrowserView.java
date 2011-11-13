@@ -41,7 +41,6 @@ import org.openflexo.FlexoCst;
 import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 
-
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.dnd.TreeDropTarget;
@@ -57,301 +56,280 @@ import org.openflexo.foundation.toc.TOCEntry;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class DGBrowserView extends BrowserView
-{
+public class DGBrowserView extends BrowserView {
 	// GPO: DGBrowserView does not extends DEBrowserView because they are
 	// different browsers (even though, they have some objects from the model in
-	// common, they are not displayed the same way at all). 
-    private DGController controller;
-    
-    /**
-     * @param browser
-     * @param kl
-     */
-    public DGBrowserView(DGController controller, ProjectBrowser browser)
-    {
-        super(browser, controller.getKeyEventListener(), controller.getEditor());
-        this.controller = controller;
-        
-        FlowLayout flowLayout = new FlowLayout();
-        JPanel viewModePanels = new JPanel(flowLayout);
-        viewModePanels.setBorder(BorderFactory.createEmptyBorder());
-        flowLayout.setHgap(2);
-        //logger.info("hGap="+flowLayout.getHgap()+" vGap="+flowLayout.getVgap());       
-        
-        ViewModeButton interestingFilesViewModeButton 
-        = new ViewModeButton(GeneratorIconLibrary.INTERESTING_FILES_VIEW_MODE_ICON,
-        		"interesting_files_mode") {
-    		@Override
-			public void setFilters() {
-    			getBrowser().getAllFilesAndDirectoryFilter().setStatus(BrowserFilterStatus.HIDE);
-      			getBrowser().getUpToDateFilesFilter().setStatus(BrowserFilterStatus.HIDE);
-      			getBrowser().getNeedsGenerationFilter().setStatus(BrowserFilterStatus.SHOW);
-      			getBrowser().getGenerationErrorFilter().setStatus(BrowserFilterStatus.SHOW);
-      			getBrowser().getGenerationModifiedFilter().setStatus(BrowserFilterStatus.SHOW);
-      			getBrowser().getDiskModifiedFilter().setStatus(BrowserFilterStatus.SHOW);
-      			getBrowser().getUnresolvedConflictsFilter().setStatus(BrowserFilterStatus.SHOW);
-     			getBrowser().getNeedsReinjectingFilter().setStatus(BrowserFilterStatus.SHOW);
-     			getBrowser().getOtherFilesFilter().setStatus(BrowserFilterStatus.SHOW);
-    		}
-        };
-        ViewModeButton generationModifiedViewModeButton 
-        = new ViewModeButton(GeneratorIconLibrary.GENERATION_MODIFIED_VIEW_MODE_ICON,
-        		"generation_modified_mode") {
-    		@Override
-			public void setFilters() {
-      			getBrowser().getAllFilesAndDirectoryFilter().setStatus(BrowserFilterStatus.HIDE);
-      			getBrowser().getUpToDateFilesFilter().setStatus(BrowserFilterStatus.HIDE);
-      			getBrowser().getNeedsGenerationFilter().setStatus(BrowserFilterStatus.HIDE);
-      			getBrowser().getGenerationErrorFilter().setStatus(BrowserFilterStatus.HIDE);
-      			getBrowser().getGenerationModifiedFilter().setStatus(BrowserFilterStatus.SHOW);
-      			getBrowser().getDiskModifiedFilter().setStatus(BrowserFilterStatus.HIDE);
-      			getBrowser().getUnresolvedConflictsFilter().setStatus(BrowserFilterStatus.SHOW);
-     			getBrowser().getNeedsReinjectingFilter().setStatus(BrowserFilterStatus.HIDE);
-     			getBrowser().getOtherFilesFilter().setStatus(BrowserFilterStatus.HIDE);
-    		}
-        };
-        ViewModeButton diskModifiedViewModeButton
-        = new ViewModeButton(GeneratorIconLibrary.DISK_MODIFIED_VIEW_MODE_ICON,
-        		"disk_modified_mode") {
-    		@Override
-			public void setFilters() {
-       			getBrowser().getAllFilesAndDirectoryFilter().setStatus(BrowserFilterStatus.HIDE);
-      			getBrowser().getUpToDateFilesFilter().setStatus(BrowserFilterStatus.HIDE);
-      			getBrowser().getNeedsGenerationFilter().setStatus(BrowserFilterStatus.HIDE);
-      			getBrowser().getGenerationErrorFilter().setStatus(BrowserFilterStatus.HIDE);
-      			getBrowser().getGenerationModifiedFilter().setStatus(BrowserFilterStatus.HIDE);
-      			getBrowser().getDiskModifiedFilter().setStatus(BrowserFilterStatus.SHOW);
-      			getBrowser().getUnresolvedConflictsFilter().setStatus(BrowserFilterStatus.SHOW);
-     			getBrowser().getNeedsReinjectingFilter().setStatus(BrowserFilterStatus.HIDE);
-    			getBrowser().getOtherFilesFilter().setStatus(BrowserFilterStatus.HIDE);
-    		}
-        };
-        ViewModeButton conflictingFilesViewModeButton 
-        = new ViewModeButton(GeneratorIconLibrary.CONFLICTING_FILES_VIEW_MODE_ICON,
-        		"conflicting_files_mode") {
-    		@Override
-			public void setFilters() {
-    			getBrowser().getAllFilesAndDirectoryFilter().setStatus(BrowserFilterStatus.HIDE);
-      			getBrowser().getUpToDateFilesFilter().setStatus(BrowserFilterStatus.HIDE);
-      			getBrowser().getNeedsGenerationFilter().setStatus(BrowserFilterStatus.HIDE);
-      			getBrowser().getGenerationErrorFilter().setStatus(BrowserFilterStatus.HIDE);
-      			getBrowser().getGenerationModifiedFilter().setStatus(BrowserFilterStatus.HIDE);
-      			getBrowser().getDiskModifiedFilter().setStatus(BrowserFilterStatus.HIDE);
-      			getBrowser().getUnresolvedConflictsFilter().setStatus(BrowserFilterStatus.SHOW);
-     			getBrowser().getNeedsReinjectingFilter().setStatus(BrowserFilterStatus.HIDE);
-    			getBrowser().getOtherFilesFilter().setStatus(BrowserFilterStatus.HIDE);
-    		}
-        };
-        /*ViewModeButton needsReinjectingViewModeButton 
-        = new ViewModeButton(IconLibrary.NEED_REINJECTING_VIEW_MODE_ICON,
-        		"needs_model_reinjection_mode") {
-    		public void setFilters() {
-    			getBrowser().getAllFilesAndDirectoryFilter().setStatus(BrowserFilter.HIDE);
-      			getBrowser().getUpToDateFilesFilter().setStatus(BrowserFilter.HIDE);
-      			getBrowser().getNeedsGenerationFilter().setStatus(BrowserFilter.HIDE);
-      			getBrowser().getGenerationErrorFilter().setStatus(BrowserFilter.HIDE);
-      			getBrowser().getGenerationModifiedFilter().setStatus(BrowserFilter.HIDE);
-      			getBrowser().getDiskModifiedFilter().setStatus(BrowserFilter.HIDE);
-      			getBrowser().getUnresolvedConflictsFilter().setStatus(BrowserFilter.HIDE);
-     			getBrowser().getNeedsReinjectingFilter().setStatus(BrowserFilter.SHOW);
-     			getBrowser().getOtherFilesFilter().setStatus(BrowserFilter.HIDE);
-    		}
-        };*/
-       ViewModeButton generationErrorViewModeButton 
-        = new ViewModeButton(GeneratorIconLibrary.GENERATION_ERROR_VIEW_MODE_ICON,
-        		"generation_errors_mode") {
-    		@Override
-			public void setFilters() {
-    			getBrowser().getAllFilesAndDirectoryFilter().setStatus(BrowserFilterStatus.HIDE);
-      			getBrowser().getUpToDateFilesFilter().setStatus(BrowserFilterStatus.HIDE);
-      			getBrowser().getNeedsGenerationFilter().setStatus(BrowserFilterStatus.HIDE);
-      			getBrowser().getGenerationErrorFilter().setStatus(BrowserFilterStatus.SHOW);
-      			getBrowser().getGenerationModifiedFilter().setStatus(BrowserFilterStatus.HIDE);
-      			getBrowser().getDiskModifiedFilter().setStatus(BrowserFilterStatus.HIDE);
-      			getBrowser().getUnresolvedConflictsFilter().setStatus(BrowserFilterStatus.HIDE);
-     			getBrowser().getNeedsReinjectingFilter().setStatus(BrowserFilterStatus.HIDE);
-     			getBrowser().getOtherFilesFilter().setStatus(BrowserFilterStatus.HIDE);
-    		}
-        };
-        
-        viewModePanels.add(interestingFilesViewModeButton);
-        viewModePanels.add(generationModifiedViewModeButton);
-        viewModePanels.add(diskModifiedViewModeButton);
-        viewModePanels.add(conflictingFilesViewModeButton);
-        //viewModePanels.add(needsReinjectingViewModeButton);
-        viewModePanels.add(generationErrorViewModeButton);
+	// common, they are not displayed the same way at all).
+	private DGController controller;
 
-        String htmlText = 
-            "<html><u>"+FlexoLocalization.localizedForKey("all_files")+"</u>"+"</html>";
-        final JLabel seeAllLabels = new JLabel(htmlText,SwingConstants.RIGHT);
-        seeAllLabels.setVerticalAlignment(SwingConstants.BOTTOM);
-        seeAllLabels.setForeground(Color.BLUE);
-        seeAllLabels.setFont(FlexoCst.SMALL_FONT);
-        seeAllLabels.setBorder(BorderFactory.createEmptyBorder(0,0,10,0));
-        seeAllLabels.addMouseListener(new MouseAdapter() {
-        	@Override
-			public void mouseEntered(MouseEvent e) 
-        	{
-        		seeAllLabels.setForeground(Color.MAGENTA);
-        		seeAllLabels.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        	}
-        	@Override
-			public void mouseExited(MouseEvent e) 
-        	{
-        		seeAllLabels.setForeground(Color.BLUE);
-        		seeAllLabels.setCursor(Cursor.getDefaultCursor());
-        	}
-    		@Override
-			public void mouseClicked(MouseEvent e) 
-    		{
-    			getBrowser().getAllFilesAndDirectoryFilter().setStatus(BrowserFilterStatus.SHOW);
-    			getBrowser().getUpToDateFilesFilter().setStatus(BrowserFilterStatus.SHOW);
-    			getBrowser().getNeedsGenerationFilter().setStatus(BrowserFilterStatus.SHOW);
-    			getBrowser().getGenerationErrorFilter().setStatus(BrowserFilterStatus.SHOW);
-    			getBrowser().getGenerationModifiedFilter().setStatus(BrowserFilterStatus.SHOW);
-    			getBrowser().getDiskModifiedFilter().setStatus(BrowserFilterStatus.SHOW);
-    			getBrowser().getUnresolvedConflictsFilter().setStatus(BrowserFilterStatus.SHOW);
-     			getBrowser().getNeedsReinjectingFilter().setStatus(BrowserFilterStatus.SHOW);
-   			getBrowser().getOtherFilesFilter().setStatus(BrowserFilterStatus.SHOW);
-    			getBrowser().update();
-    		}  
-        });
+	/**
+	 * @param browser
+	 * @param kl
+	 */
+	public DGBrowserView(DGController controller, ProjectBrowser browser) {
+		super(browser, controller.getKeyEventListener(), controller.getEditor());
+		this.controller = controller;
 
-        JPanel viewModeSelector = new JPanel(new BorderLayout());
-        viewModeSelector.add(viewModePanels,BorderLayout.WEST);
-        viewModeSelector.add(seeAllLabels,BorderLayout.EAST);
-               
-        add(viewModeSelector,BorderLayout.NORTH);
-        
-        setMinimumSize(new Dimension(DGCst.MINIMUM_BROWSER_VIEW_WIDTH, DGCst.MINIMUM_BROWSER_VIEW_HEIGHT));
-        setPreferredSize(new Dimension(DGCst.PREFERRED_BROWSER_VIEW_WIDTH, DGCst.PREFERRED_BROWSER_VIEW_HEIGHT));
- 
-    }
+		FlowLayout flowLayout = new FlowLayout();
+		JPanel viewModePanels = new JPanel(flowLayout);
+		viewModePanels.setBorder(BorderFactory.createEmptyBorder());
+		flowLayout.setHgap(2);
+		// logger.info("hGap="+flowLayout.getHgap()+" vGap="+flowLayout.getVgap());
 
-    protected abstract class ViewModeButton extends JButton implements MouseListener, ActionListener
-    {
-    	protected ViewModeButton(ImageIcon icon, String unlocalizedDescription)
-    	{
-    		super(icon);
-    		setToolTipText(FlexoLocalization.localizedForKey(unlocalizedDescription));
-    		setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
-    		addMouseListener(this);
-    		addActionListener(this);
-    	}
+		ViewModeButton interestingFilesViewModeButton = new ViewModeButton(GeneratorIconLibrary.INTERESTING_FILES_VIEW_MODE_ICON,
+				"interesting_files_mode") {
+			@Override
+			public void setFilters() {
+				getBrowser().getAllFilesAndDirectoryFilter().setStatus(BrowserFilterStatus.HIDE);
+				getBrowser().getUpToDateFilesFilter().setStatus(BrowserFilterStatus.HIDE);
+				getBrowser().getNeedsGenerationFilter().setStatus(BrowserFilterStatus.SHOW);
+				getBrowser().getGenerationErrorFilter().setStatus(BrowserFilterStatus.SHOW);
+				getBrowser().getGenerationModifiedFilter().setStatus(BrowserFilterStatus.SHOW);
+				getBrowser().getDiskModifiedFilter().setStatus(BrowserFilterStatus.SHOW);
+				getBrowser().getUnresolvedConflictsFilter().setStatus(BrowserFilterStatus.SHOW);
+				getBrowser().getNeedsReinjectingFilter().setStatus(BrowserFilterStatus.SHOW);
+				getBrowser().getOtherFilesFilter().setStatus(BrowserFilterStatus.SHOW);
+			}
+		};
+		ViewModeButton generationModifiedViewModeButton = new ViewModeButton(GeneratorIconLibrary.GENERATION_MODIFIED_VIEW_MODE_ICON,
+				"generation_modified_mode") {
+			@Override
+			public void setFilters() {
+				getBrowser().getAllFilesAndDirectoryFilter().setStatus(BrowserFilterStatus.HIDE);
+				getBrowser().getUpToDateFilesFilter().setStatus(BrowserFilterStatus.HIDE);
+				getBrowser().getNeedsGenerationFilter().setStatus(BrowserFilterStatus.HIDE);
+				getBrowser().getGenerationErrorFilter().setStatus(BrowserFilterStatus.HIDE);
+				getBrowser().getGenerationModifiedFilter().setStatus(BrowserFilterStatus.SHOW);
+				getBrowser().getDiskModifiedFilter().setStatus(BrowserFilterStatus.HIDE);
+				getBrowser().getUnresolvedConflictsFilter().setStatus(BrowserFilterStatus.SHOW);
+				getBrowser().getNeedsReinjectingFilter().setStatus(BrowserFilterStatus.HIDE);
+				getBrowser().getOtherFilesFilter().setStatus(BrowserFilterStatus.HIDE);
+			}
+		};
+		ViewModeButton diskModifiedViewModeButton = new ViewModeButton(GeneratorIconLibrary.DISK_MODIFIED_VIEW_MODE_ICON,
+				"disk_modified_mode") {
+			@Override
+			public void setFilters() {
+				getBrowser().getAllFilesAndDirectoryFilter().setStatus(BrowserFilterStatus.HIDE);
+				getBrowser().getUpToDateFilesFilter().setStatus(BrowserFilterStatus.HIDE);
+				getBrowser().getNeedsGenerationFilter().setStatus(BrowserFilterStatus.HIDE);
+				getBrowser().getGenerationErrorFilter().setStatus(BrowserFilterStatus.HIDE);
+				getBrowser().getGenerationModifiedFilter().setStatus(BrowserFilterStatus.HIDE);
+				getBrowser().getDiskModifiedFilter().setStatus(BrowserFilterStatus.SHOW);
+				getBrowser().getUnresolvedConflictsFilter().setStatus(BrowserFilterStatus.SHOW);
+				getBrowser().getNeedsReinjectingFilter().setStatus(BrowserFilterStatus.HIDE);
+				getBrowser().getOtherFilesFilter().setStatus(BrowserFilterStatus.HIDE);
+			}
+		};
+		ViewModeButton conflictingFilesViewModeButton = new ViewModeButton(GeneratorIconLibrary.CONFLICTING_FILES_VIEW_MODE_ICON,
+				"conflicting_files_mode") {
+			@Override
+			public void setFilters() {
+				getBrowser().getAllFilesAndDirectoryFilter().setStatus(BrowserFilterStatus.HIDE);
+				getBrowser().getUpToDateFilesFilter().setStatus(BrowserFilterStatus.HIDE);
+				getBrowser().getNeedsGenerationFilter().setStatus(BrowserFilterStatus.HIDE);
+				getBrowser().getGenerationErrorFilter().setStatus(BrowserFilterStatus.HIDE);
+				getBrowser().getGenerationModifiedFilter().setStatus(BrowserFilterStatus.HIDE);
+				getBrowser().getDiskModifiedFilter().setStatus(BrowserFilterStatus.HIDE);
+				getBrowser().getUnresolvedConflictsFilter().setStatus(BrowserFilterStatus.SHOW);
+				getBrowser().getNeedsReinjectingFilter().setStatus(BrowserFilterStatus.HIDE);
+				getBrowser().getOtherFilesFilter().setStatus(BrowserFilterStatus.HIDE);
+			}
+		};
+		/*ViewModeButton needsReinjectingViewModeButton 
+		= new ViewModeButton(IconLibrary.NEED_REINJECTING_VIEW_MODE_ICON,
+				"needs_model_reinjection_mode") {
+			public void setFilters() {
+				getBrowser().getAllFilesAndDirectoryFilter().setStatus(BrowserFilter.HIDE);
+				getBrowser().getUpToDateFilesFilter().setStatus(BrowserFilter.HIDE);
+				getBrowser().getNeedsGenerationFilter().setStatus(BrowserFilter.HIDE);
+				getBrowser().getGenerationErrorFilter().setStatus(BrowserFilter.HIDE);
+				getBrowser().getGenerationModifiedFilter().setStatus(BrowserFilter.HIDE);
+				getBrowser().getDiskModifiedFilter().setStatus(BrowserFilter.HIDE);
+				getBrowser().getUnresolvedConflictsFilter().setStatus(BrowserFilter.HIDE);
+				getBrowser().getNeedsReinjectingFilter().setStatus(BrowserFilter.SHOW);
+				getBrowser().getOtherFilesFilter().setStatus(BrowserFilter.HIDE);
+			}
+		};*/
+		ViewModeButton generationErrorViewModeButton = new ViewModeButton(GeneratorIconLibrary.GENERATION_ERROR_VIEW_MODE_ICON,
+				"generation_errors_mode") {
+			@Override
+			public void setFilters() {
+				getBrowser().getAllFilesAndDirectoryFilter().setStatus(BrowserFilterStatus.HIDE);
+				getBrowser().getUpToDateFilesFilter().setStatus(BrowserFilterStatus.HIDE);
+				getBrowser().getNeedsGenerationFilter().setStatus(BrowserFilterStatus.HIDE);
+				getBrowser().getGenerationErrorFilter().setStatus(BrowserFilterStatus.SHOW);
+				getBrowser().getGenerationModifiedFilter().setStatus(BrowserFilterStatus.HIDE);
+				getBrowser().getDiskModifiedFilter().setStatus(BrowserFilterStatus.HIDE);
+				getBrowser().getUnresolvedConflictsFilter().setStatus(BrowserFilterStatus.HIDE);
+				getBrowser().getNeedsReinjectingFilter().setStatus(BrowserFilterStatus.HIDE);
+				getBrowser().getOtherFilesFilter().setStatus(BrowserFilterStatus.HIDE);
+			}
+		};
 
-		@Override
-		public void mouseClicked(MouseEvent e) 
-		{
+		viewModePanels.add(interestingFilesViewModeButton);
+		viewModePanels.add(generationModifiedViewModeButton);
+		viewModePanels.add(diskModifiedViewModeButton);
+		viewModePanels.add(conflictingFilesViewModeButton);
+		// viewModePanels.add(needsReinjectingViewModeButton);
+		viewModePanels.add(generationErrorViewModeButton);
+
+		String htmlText = "<html><u>" + FlexoLocalization.localizedForKey("all_files") + "</u>" + "</html>";
+		final JLabel seeAllLabels = new JLabel(htmlText, SwingConstants.RIGHT);
+		seeAllLabels.setVerticalAlignment(SwingConstants.BOTTOM);
+		seeAllLabels.setForeground(Color.BLUE);
+		seeAllLabels.setFont(FlexoCst.SMALL_FONT);
+		seeAllLabels.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+		seeAllLabels.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				seeAllLabels.setForeground(Color.MAGENTA);
+				seeAllLabels.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				seeAllLabels.setForeground(Color.BLUE);
+				seeAllLabels.setCursor(Cursor.getDefaultCursor());
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				getBrowser().getAllFilesAndDirectoryFilter().setStatus(BrowserFilterStatus.SHOW);
+				getBrowser().getUpToDateFilesFilter().setStatus(BrowserFilterStatus.SHOW);
+				getBrowser().getNeedsGenerationFilter().setStatus(BrowserFilterStatus.SHOW);
+				getBrowser().getGenerationErrorFilter().setStatus(BrowserFilterStatus.SHOW);
+				getBrowser().getGenerationModifiedFilter().setStatus(BrowserFilterStatus.SHOW);
+				getBrowser().getDiskModifiedFilter().setStatus(BrowserFilterStatus.SHOW);
+				getBrowser().getUnresolvedConflictsFilter().setStatus(BrowserFilterStatus.SHOW);
+				getBrowser().getNeedsReinjectingFilter().setStatus(BrowserFilterStatus.SHOW);
+				getBrowser().getOtherFilesFilter().setStatus(BrowserFilterStatus.SHOW);
+				getBrowser().update();
+			}
+		});
+
+		JPanel viewModeSelector = new JPanel(new BorderLayout());
+		viewModeSelector.add(viewModePanels, BorderLayout.WEST);
+		viewModeSelector.add(seeAllLabels, BorderLayout.EAST);
+
+		add(viewModeSelector, BorderLayout.NORTH);
+
+		setMinimumSize(new Dimension(DGCst.MINIMUM_BROWSER_VIEW_WIDTH, DGCst.MINIMUM_BROWSER_VIEW_HEIGHT));
+		setPreferredSize(new Dimension(DGCst.PREFERRED_BROWSER_VIEW_WIDTH, DGCst.PREFERRED_BROWSER_VIEW_HEIGHT));
+
+	}
+
+	protected abstract class ViewModeButton extends JButton implements MouseListener, ActionListener {
+		protected ViewModeButton(ImageIcon icon, String unlocalizedDescription) {
+			super(icon);
+			setToolTipText(FlexoLocalization.localizedForKey(unlocalizedDescription));
+			setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+			addMouseListener(this);
+			addActionListener(this);
 		}
 
 		@Override
-		public void mouseEntered(MouseEvent e) 
-		{
+		public void mouseClicked(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
 			setBorder(BorderFactory.createEtchedBorder());
 		}
 
 		@Override
-		public void mouseExited(MouseEvent e) 
-		{
-			setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
+		public void mouseExited(MouseEvent e) {
+			setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 		}
 
 		@Override
-		public void mousePressed(MouseEvent e) 
-		{
+		public void mousePressed(MouseEvent e) {
 		}
 
 		@Override
-		public void mouseReleased(MouseEvent e) 
-		{
+		public void mouseReleased(MouseEvent e) {
 		}
 
 		@Override
-		public void actionPerformed(ActionEvent e) 
-		{
+		public void actionPerformed(ActionEvent e) {
 			setFilters();
 			getBrowser().update();
 		}
-		
+
 		public abstract void setFilters();
-    }
-    
-    @Override
-    protected TreeDropTarget createTreeDropTarget(FlexoJTree treeView2,
-    		ProjectBrowser _browser2) {
-    	return new DGTreeDropTarget(treeView2,_browser2);
-    }
-    
-    @Override
-	public DGBrowser getBrowser()
-    {
-    	return (DGBrowser)super.getBrowser();
-    }
-    
-    /**
-     * Overrides treeSingleClick
-     * @see org.openflexo.components.browser.view.BrowserView#treeSingleClick(org.openflexo.foundation.FlexoModelObject)
-     */
-    @Override
-	public void treeSingleClick(FlexoModelObject object)
-    {
-    	if (object instanceof GenerationRepository) {
-        	controller.setCurrentEditedObjectAsModuleView(object);
-    	}
-    	else if (object instanceof TOCEntry) {
-    		controller.setCurrentEditedObjectAsModuleView(object);
-    	}
-      /*  if (object instanceof FlexoWorkflow || object instanceof FlexoProject || object instanceof DMEORepository || object instanceof DMEOModel || object instanceof DMEOEntity || object instanceof OperationNode)
-            controller.setCurrentEditedObjectAsModuleView(object); */
-    	if (object instanceof GenerationRepository) {
-        	controller.setCurrentEditedObjectAsModuleView(object);
-    	}
-    	else if (object instanceof CGFile) {
-    		/*
-    		CGFile file = (CGFile)object;
-    		logger.info("File "+file.getFileName()+" resource "+file.getResource()
-    				+" status="+file.getGenerationStatus()
-    				+" needsGeneration="+file.getResource().needsGeneration()
-    				+" lastGenerationDate="+file.getResource().getLastGenerationDate());
-    		String s1 = "";
-    		for (Enumeration<FlexoResource> en = file.getResource().getDependantResources().elements(false,FlexoResourceManager.getDependancyScheme());en.hasMoreElements();) {
-    			FlexoResource res = en.nextElement();
-    			s1 += " "+res+"/"+res.getLastUpdate();
-    		}
-    		logger.info("dependant resources: "+s1);
-       		String s2 = "";
-    		for (Enumeration<FlexoResource> en = file.getResource().getDependantResources().elements();en.hasMoreElements();) {
-       			FlexoResource res = en.nextElement();
-    			s2 += " "+res+"/"+res.getLastUpdate();
-     		}
-   		logger.info("dependant resources: "+s2);
+	}
 
-    		if (file.getResource() instanceof GenerationAvailableFileResource) {
-    			FlexoResourceGenerator generator = ((GenerationAvailableFileResource)file.getResource()).getGenerator();
-    			if (generator != null) {
-    				String templates = "";
-    				for (CGTemplateFile template : generator.getUsedTemplates()) {
-    					templates += " "+template.getFileName();
-    				}
-    				logger.info("used templates: "+templates);
-    				logger.info("Generator needs regeneration "+generator.needsGeneration());
-    			}
-    		}*/
-    	}
-    	controller.refreshFooter();
-    }
+	@Override
+	protected TreeDropTarget createTreeDropTarget(FlexoJTree treeView2, ProjectBrowser _browser2) {
+		return new DGTreeDropTarget(treeView2, _browser2);
+	}
 
-    /**
-     * Overrides treeDoubleClick
-     * @see org.openflexo.components.browser.view.BrowserView#treeDoubleClick(org.openflexo.foundation.FlexoModelObject)
-     */
-    @Override
-	public void treeDoubleClick(FlexoModelObject object)
-    {
-    	controller.setCurrentEditedObjectAsModuleView(object);
-    }
+	@Override
+	public DGBrowser getBrowser() {
+		return (DGBrowser) super.getBrowser();
+	}
+
+	/**
+	 * Overrides treeSingleClick
+	 * 
+	 * @see org.openflexo.components.browser.view.BrowserView#treeSingleClick(org.openflexo.foundation.FlexoModelObject)
+	 */
+	@Override
+	public void treeSingleClick(FlexoModelObject object) {
+		if (object instanceof GenerationRepository) {
+			controller.setCurrentEditedObjectAsModuleView(object);
+		} else if (object instanceof TOCEntry) {
+			controller.setCurrentEditedObjectAsModuleView(object);
+		}
+		/*  if (object instanceof FlexoWorkflow || object instanceof FlexoProject || object instanceof DMEORepository || object instanceof DMEOModel || object instanceof DMEOEntity || object instanceof OperationNode)
+		      controller.setCurrentEditedObjectAsModuleView(object); */
+		if (object instanceof GenerationRepository) {
+			controller.setCurrentEditedObjectAsModuleView(object);
+		} else if (object instanceof CGFile) {
+			/*
+			CGFile file = (CGFile)object;
+			logger.info("File "+file.getFileName()+" resource "+file.getResource()
+					+" status="+file.getGenerationStatus()
+					+" needsGeneration="+file.getResource().needsGeneration()
+					+" lastGenerationDate="+file.getResource().getLastGenerationDate());
+			String s1 = "";
+			for (Enumeration<FlexoResource> en = file.getResource().getDependantResources().elements(false,FlexoResourceManager.getDependancyScheme());en.hasMoreElements();) {
+				FlexoResource res = en.nextElement();
+				s1 += " "+res+"/"+res.getLastUpdate();
+			}
+			logger.info("dependant resources: "+s1);
+			String s2 = "";
+			for (Enumeration<FlexoResource> en = file.getResource().getDependantResources().elements();en.hasMoreElements();) {
+				FlexoResource res = en.nextElement();
+				s2 += " "+res+"/"+res.getLastUpdate();
+			}
+			logger.info("dependant resources: "+s2);
+
+			if (file.getResource() instanceof GenerationAvailableFileResource) {
+				FlexoResourceGenerator generator = ((GenerationAvailableFileResource)file.getResource()).getGenerator();
+				if (generator != null) {
+					String templates = "";
+					for (CGTemplateFile template : generator.getUsedTemplates()) {
+						templates += " "+template.getFileName();
+					}
+					logger.info("used templates: "+templates);
+					logger.info("Generator needs regeneration "+generator.needsGeneration());
+				}
+			}*/
+		}
+		controller.refreshFooter();
+	}
+
+	/**
+	 * Overrides treeDoubleClick
+	 * 
+	 * @see org.openflexo.components.browser.view.BrowserView#treeDoubleClick(org.openflexo.foundation.FlexoModelObject)
+	 */
+	@Override
+	public void treeDoubleClick(FlexoModelObject object) {
+		controller.setCurrentEditedObjectAsModuleView(object);
+	}
 
 }

@@ -19,8 +19,8 @@
  */
 package org.openflexo.docxparser.dto.api;
 
-public interface IParsedHtmlResource
-{
+public interface IParsedHtmlResource {
 	public String getIdentifier();
+
 	public byte[] getFile();
 }

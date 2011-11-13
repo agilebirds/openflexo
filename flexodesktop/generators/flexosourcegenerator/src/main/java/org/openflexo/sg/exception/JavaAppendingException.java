@@ -23,7 +23,6 @@ import org.openflexo.foundation.dm.javaparser.JavaParseException;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.sg.generator.SGGenerator;
 
-
 public class JavaAppendingException extends GenerationException {
 	private SGGenerator _generator;
 

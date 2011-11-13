@@ -23,12 +23,11 @@ import org.openflexo.fge.geom.FGELine;
 
 public abstract class LineConstruction extends GeometricConstruction<FGELine> {
 
-	public final FGELine getLine()
-	{
+	public final FGELine getLine() {
 		return getData();
 	}
 
 	@Override
 	protected abstract FGELine computeData();
-	
+
 }

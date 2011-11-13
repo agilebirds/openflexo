@@ -24,7 +24,6 @@ import java.security.InvalidParameterException;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
@@ -38,45 +37,36 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
-public class CreateExampleDrawing extends FlexoAction<CreateExampleDrawing,ViewPoint,ViewPointObject> 
-{
+public class CreateExampleDrawing extends FlexoAction<CreateExampleDrawing, ViewPoint, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(CreateExampleDrawing.class.getPackage().getName());
 
-	public static FlexoActionType<CreateExampleDrawing,ViewPoint,ViewPointObject> actionType 
-	= new FlexoActionType<CreateExampleDrawing,ViewPoint,ViewPointObject> (
-			"create_example_drawing",
-			FlexoActionType.newMenu,
-			FlexoActionType.defaultGroup,
-			FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<CreateExampleDrawing, ViewPoint, ViewPointObject> actionType = new FlexoActionType<CreateExampleDrawing, ViewPoint, ViewPointObject>(
+			"create_example_drawing", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public CreateExampleDrawing makeNewAction(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) 
-		{
+		public CreateExampleDrawing makeNewAction(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 			return new CreateExampleDrawing(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) 
-		{
+		protected boolean isVisibleForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) 
-		{
+		protected boolean isEnabledForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass (CreateExampleDrawing.actionType, ViewPoint.class);
+		FlexoModelObject.addActionForClass(CreateExampleDrawing.actionType, ViewPoint.class);
 	}
-
 
 	public String newShemaName;
 	public String description;
@@ -84,59 +74,50 @@ public class CreateExampleDrawing extends FlexoAction<CreateExampleDrawing,ViewP
 
 	private ExampleDrawingShema _newShema;
 
-	CreateExampleDrawing (ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor)
-	{
+	CreateExampleDrawing(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	@Override
-	protected void doAction(Object context) throws DuplicateResourceException,NotImplementedException,InvalidParameterException
-	{
-		logger.info ("Add calc shema");  	
+	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
+		logger.info("Add calc shema");
 
-		_newShema = ExampleDrawingShema.newShema(
-				getFocusedObject(), 
-				new File(getFocusedObject().getViewPointDirectory(),newShemaName+".shema"),
-				graphicalRepresentation);
+		_newShema = ExampleDrawingShema.newShema(getFocusedObject(), new File(getFocusedObject().getViewPointDirectory(), newShemaName
+				+ ".shema"), graphicalRepresentation);
 		_newShema.setDescription(description);
 		getFocusedObject().addToCalcShemas(_newShema);
 		_newShema.save();
-		
+
 	}
 
-	public FlexoProject getProject()
-	{
-		if (getFocusedObject() != null) return getFocusedObject().getProject();
+	public FlexoProject getProject() {
+		if (getFocusedObject() != null)
+			return getFocusedObject().getProject();
 		return null;
 	}
 
-	public ExampleDrawingShema getNewShema()
-	{
+	public ExampleDrawingShema getNewShema() {
 		return _newShema;
 	}
 
 	private String nameValidityMessage = EMPTY_NAME;
-	
+
 	private static final String NAME_IS_VALID = FlexoLocalization.localizedForKey("name_is_valid");
 	private static final String DUPLICATED_NAME = FlexoLocalization.localizedForKey("this_name_is_already_used_please_choose_an_other_one");
 	private static final String EMPTY_NAME = FlexoLocalization.localizedForKey("empty_name");
-	
-	public String getNameValidityMessage()
-	{
+
+	public String getNameValidityMessage() {
 		return nameValidityMessage;
 	}
-	
-	public boolean isNameValid()
-	{
+
+	public boolean isNameValid() {
 		if (StringUtils.isEmpty(newShemaName)) {
 			nameValidityMessage = EMPTY_NAME;
 			return false;
-		}
-		else if (getFocusedObject().getShema(newShemaName) != null) {
+		} else if (getFocusedObject().getShema(newShemaName) != null) {
 			nameValidityMessage = DUPLICATED_NAME;
 			return false;
-		}
-		else {
+		} else {
 			nameValidityMessage = NAME_IS_VALID;
 			return true;
 		}

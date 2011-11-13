@@ -13,8 +13,8 @@ import org.openflexo.foundation.xml.ImplementationModelBuilder;
 import org.openflexo.toolbox.StringUtils;
 
 /**
- * This class is intended to be extended by any Database Layer Technology mode implementation instead of extending directly TechnologyModuleImplementation. It allows exposing some convenient methods
- * to be used by other technology module.
+ * This class is intended to be extended by any Database Layer Technology mode implementation instead of extending directly
+ * TechnologyModuleImplementation. It allows exposing some convenient methods to be used by other technology module.
  * 
  * @author Nicolas Daniels
  */
@@ -37,7 +37,8 @@ public abstract class DatabaseTechnologyModuleImplementation extends TechnologyM
 	 * 
 	 * @param shemaDefinition
 	 */
-	public DatabaseTechnologyModuleImplementation(ImplementationModel implementationModel) throws TechnologyModuleCompatibilityCheckException {
+	public DatabaseTechnologyModuleImplementation(ImplementationModel implementationModel)
+			throws TechnologyModuleCompatibilityCheckException {
 		super(implementationModel);
 	}
 
@@ -57,7 +58,7 @@ public abstract class DatabaseTechnologyModuleImplementation extends TechnologyM
 	 */
 	public String getDbObjectName(String name) {
 		name = escapeDbObjectName(name);
-		
+
 		if (name != null && getIsReservedKeywordsForDbObject(name))
 			name = '_' + name;
 
@@ -65,7 +66,8 @@ public abstract class DatabaseTechnologyModuleImplementation extends TechnologyM
 	}
 
 	/**
-	 * Escape all invalid characters in a name intended to be used in any database context name (DB name, Table name, Column name, ...) from the specified name. table name. <br>
+	 * Escape all invalid characters in a name intended to be used in any database context name (DB name, Table name, Column name, ...) from
+	 * the specified name. table name. <br>
 	 * This doesn't handle reserved keywords, for this functionality use #getDbObjectName from the database module instance.
 	 * 
 	 * @param name

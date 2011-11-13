@@ -23,26 +23,23 @@ import java.util.Vector;
 
 import org.openflexo.xmlcode.XMLSerializable;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class OO3DocumentContents implements XMLSerializable
-{
+public class OO3DocumentContents implements XMLSerializable {
 
-    public OO3Style style;
+	public OO3Style style;
 
-    /* Vector representing all the root items */
-    public Vector<OO3Item> items;
+	/* Vector representing all the root items */
+	public Vector<OO3Item> items;
 
-    public OO3DocumentContents()
-    {
-        super();
-        style = OO3Style.createDefaultDocumentStyle();
-        items = new Vector<OO3Item>();
-    }
+	public OO3DocumentContents() {
+		super();
+		style = OO3Style.createDefaultDocumentStyle();
+		items = new Vector<OO3Item>();
+	}
 
 }

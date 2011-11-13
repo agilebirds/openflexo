@@ -22,22 +22,17 @@ package org.openflexo.xmlcode;
 
 /**
  * <p>
- * Classes implementing interface <code>XMLSerializable</code> could be
- * instancied and coded from/to XML strings and streams.
+ * Classes implementing interface <code>XMLSerializable</code> could be instancied and coded from/to XML strings and streams.
  * </p>
- * No special behaviour has to be implemented in your
- * <code>XMLSerializable</code> objects, since it is done via an externaly
- * defined mapping (see {@link  org.openflexo.xmlcode.XMLMapping}). This interface
- * just help the programmer to remember that this class xml serialization MUST
- * be described somewhere.<br>
- * <b>Note that it means that you can encode/decode into/from XML all types of
- * classes</b>, since you just have to declare those classes as implementing
- * this interface..
+ * No special behaviour has to be implemented in your <code>XMLSerializable</code> objects, since it is done via an externaly defined
+ * mapping (see {@link org.openflexo.xmlcode.XMLMapping}). This interface just help the programmer to remember that this class xml
+ * serialization MUST be described somewhere.<br>
+ * <b>Note that it means that you can encode/decode into/from XML all types of classes</b>, since you just have to declare those classes as
+ * implementing this interface..
  * 
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  */
-public interface XMLSerializable
-{
+public interface XMLSerializable {
 
 } /* end interface XMLSerializable */

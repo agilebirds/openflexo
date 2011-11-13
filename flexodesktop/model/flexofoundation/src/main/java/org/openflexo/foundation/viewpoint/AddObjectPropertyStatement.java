@@ -29,47 +29,38 @@ import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-
-
 public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyStatementPatternRole> {
 
 	private static final Logger logger = Logger.getLogger(AddObjectPropertyStatement.class.getPackage().getName());
 
 	public AddObjectPropertyStatement() {
 	}
-	
+
 	@Override
-	public EditionActionType getEditionActionType()
-	{
+	public EditionActionType getEditionActionType() {
 		return EditionActionType.AddObjectPropertyStatement;
 	}
-	
-	public OntologyProperty getObjectProperty()
-	{
-		if (getPatternRole() != null) 
+
+	public OntologyProperty getObjectProperty() {
+		if (getPatternRole() != null)
 			return getPatternRole().getObjectProperty();
 		return null;
 	}
-	
-	public void setObjectProperty(OntologyProperty p)
-	{
-		if (getPatternRole() != null) 
+
+	public void setObjectProperty(OntologyProperty p) {
+		if (getPatternRole() != null)
 			getPatternRole().setObjectProperty(p);
 	}
-	
-	public OntologyObject getPropertyObject(EditionSchemeAction action)
-	{
-		return (OntologyObject)getObject().getBindingValue(action);
+
+	public OntologyObject getPropertyObject(EditionSchemeAction action) {
+		return (OntologyObject) getObject().getBindingValue(action);
 	}
 
-
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.VPM.ADD_OBJECT_PROPERTY_INSPECTOR;
 	}
 
-	
 	/*@Override
 	protected void updatePatternRoleType()
 	{
@@ -77,29 +68,26 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 			return;
 		}
 	}*/
-	
+
 	private ViewPointDataBinding object;
-	
+
 	private BindingDefinition OBJECT = new BindingDefinition("object", OntologyObject.class, BindingDefinitionType.GET, false);
-	
-	public BindingDefinition getObjectBindingDefinition()
-	{
+
+	public BindingDefinition getObjectBindingDefinition() {
 		return OBJECT;
 	}
 
-	public ViewPointDataBinding getObject() 
-	{
-		if (object == null) object = new ViewPointDataBinding(this,EditionActionBindingAttribute.object,getObjectBindingDefinition());
+	public ViewPointDataBinding getObject() {
+		if (object == null)
+			object = new ViewPointDataBinding(this, EditionActionBindingAttribute.object, getObjectBindingDefinition());
 		return object;
 	}
 
-	public void setObject(ViewPointDataBinding object) 
-	{
+	public void setObject(ViewPointDataBinding object) {
 		object.setOwner(this);
 		object.setBindingAttribute(EditionActionBindingAttribute.object);
 		object.setBindingDefinition(getObjectBindingDefinition());
 		this.object = object;
 	}
-
 
 }

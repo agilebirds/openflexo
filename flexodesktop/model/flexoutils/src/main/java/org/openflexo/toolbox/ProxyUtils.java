@@ -31,7 +31,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ProxyUtils {
-    private static final String WIN_REG_PROXY_PATH = "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings";
+	private static final String WIN_REG_PROXY_PATH = "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings";
 	private static final String WIN_REG_PROXY_ENABLE = "ProxyEnable"; // DWORD
 	private static final String WIN_REG_PROXY_SERVER = "ProxyServer";
 	private static final String WIN_REG_AUTO_CONFIG_URL = "AutoConfigURL";
@@ -39,27 +39,29 @@ public class ProxyUtils {
 	private static final Pattern PROXY_PATTERN = Pattern.compile("PROXY\\s+([a-zA-Z-.0-9]+)(:(\\p{Digit}+))?");
 
 	public static boolean isProxyEnabled() {
-		if (ToolBox.getPLATFORM()==ToolBox.WINDOWS) {
-			return Integer.decode(WinRegistryAccess.getRegistryValue(WIN_REG_PROXY_PATH, WIN_REG_PROXY_ENABLE, WinRegistryAccess.REG_DWORD_TOKEN))!=0;
+		if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
+			return Integer.decode(WinRegistryAccess.getRegistryValue(WIN_REG_PROXY_PATH, WIN_REG_PROXY_ENABLE,
+					WinRegistryAccess.REG_DWORD_TOKEN)) != 0;
 		}
 		return false;
 	}
 
 	public static boolean autoDetectSettingsEnabled() {
-		if (ToolBox.getPLATFORM()==ToolBox.WINDOWS) {
-			return WinRegistryAccess.getRegistryValue(WIN_REG_PROXY_PATH, WIN_REG_AUTO_CONFIG_URL, WinRegistryAccess.REG_SZ_TOKEN)!=null;
+		if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
+			return WinRegistryAccess.getRegistryValue(WIN_REG_PROXY_PATH, WIN_REG_AUTO_CONFIG_URL, WinRegistryAccess.REG_SZ_TOKEN) != null;
 		}
 		return false;
 	}
 
 	public static String[] getHTTPProxyPort(boolean secure) {
 		String[] proxyHost = null;
-		if (ToolBox.getPLATFORM()==ToolBox.WINDOWS) {
+		if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
 			try {
-				String proxyServer = WinRegistryAccess.getRegistryValue(WIN_REG_PROXY_PATH, WIN_REG_PROXY_SERVER, WinRegistryAccess.REG_SZ_TOKEN);
-				if (proxyServer!=null) {
-					int defaultPort = secure?443:80;
-					if (proxyServer.indexOf(";")>-1) {
+				String proxyServer = WinRegistryAccess.getRegistryValue(WIN_REG_PROXY_PATH, WIN_REG_PROXY_SERVER,
+						WinRegistryAccess.REG_SZ_TOKEN);
+				if (proxyServer != null) {
+					int defaultPort = secure ? 443 : 80;
+					if (proxyServer.indexOf(";") > -1) {
 						String[] s = proxyServer.split(";");
 						for (String string : s) {
 							if (string.toLowerCase().startsWith("https=")) {
@@ -88,30 +90,30 @@ public class ProxyUtils {
 
 	public static List<String[]> getProxiesFromAutoConfigURL(URL autoConfigURL, int defaultPort) {
 		List<String[]> proxies = new ArrayList<String[]>();
-		if (autoConfigURL==null)
+		if (autoConfigURL == null)
 			return proxies;
 		try {
 			String pac = ToolBox.getContentAtURL(autoConfigURL);
-			if (pac==null)
+			if (pac == null)
 				return proxies;
 			Matcher m = PROXY_PATTERN.matcher(pac);
-			while(m.find()) {
+			while (m.find()) {
 				String proxyHost = m.group(1);
 				int port = defaultPort;
-				if (m.groupCount()>2)
+				if (m.groupCount() > 2)
 					port = Integer.valueOf(m.group(3));
-				proxies.add(new String[]{proxyHost, String.valueOf(port)});
+				proxies.add(new String[] { proxyHost, String.valueOf(port) });
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.err.println("Can't read auto config file: "+autoConfigURL.toString());
+			System.err.println("Can't read auto config file: " + autoConfigURL.toString());
 		}
 		return proxies;
 	}
 
 	public static URL getAutoConfigURL() {
 		URL autoConfigURL = null;
-		if (ToolBox.getPLATFORM()==ToolBox.WINDOWS) {
+		if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
 			try {
 				/*String proxyPath = "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Connections";
 				String s ="DefaultConnectionSettings";
@@ -121,9 +123,10 @@ public class ProxyUtils {
 					// OK let's go for WPAD
 					autoConfigURL = WPADURL();
 				}*/
-				if (autoConfigURL==null) {
-					String autoConfig = WinRegistryAccess.getRegistryValue(WIN_REG_PROXY_PATH, WIN_REG_AUTO_CONFIG_URL, WinRegistryAccess.REG_SZ_TOKEN);
-					if (autoConfig!=null)
+				if (autoConfigURL == null) {
+					String autoConfig = WinRegistryAccess.getRegistryValue(WIN_REG_PROXY_PATH, WIN_REG_AUTO_CONFIG_URL,
+							WinRegistryAccess.REG_SZ_TOKEN);
+					if (autoConfig != null)
 						try {
 							return new URL(autoConfig);
 						} catch (MalformedURLException e) {
@@ -140,21 +143,21 @@ public class ProxyUtils {
 	}
 
 	/**
-	 * Implements the WPAD lookup like explained here: http://en.wikipedia.org/wiki/Web_Proxy_Autodiscovery_Protocol
-	 * This is insane.
+	 * Implements the WPAD lookup like explained here: http://en.wikipedia.org/wiki/Web_Proxy_Autodiscovery_Protocol This is insane.
+	 * 
 	 * @return
 	 */
 	public static URL WPADURL() {
 		try {
 			InetAddress addr = InetAddress.getLocalHost();
 			String host = addr.getHostName();
-			while (host.indexOf(".")>-1) {
+			while (host.indexOf(".") > -1) {
 				try {
-					URL attempt = new URL("http://wpad"+host.substring(host.indexOf("."))+"/wpad.dat");
+					URL attempt = new URL("http://wpad" + host.substring(host.indexOf(".")) + "/wpad.dat");
 					try {
 						HttpURLConnection conn = (HttpURLConnection) attempt.openConnection();
 						int code = conn.getResponseCode();
-						if (code>=200 && code<300)
+						if (code >= 200 && code < 300)
 							return attempt;
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -163,7 +166,7 @@ public class ProxyUtils {
 					e.printStackTrace();
 					return null;
 				}
-				host = host.substring(host.indexOf(".")+1);
+				host = host.substring(host.indexOf(".") + 1);
 			}
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -173,8 +176,8 @@ public class ProxyUtils {
 	}
 
 	public static void main(String[] args) {
-		System.err.println("Proxy enabled?"+isProxyEnabled());
-		System.err.println("Autodetect?"+autoDetectSettingsEnabled());
+		System.err.println("Proxy enabled?" + isProxyEnabled());
+		System.err.println("Autodetect?" + autoDetectSettingsEnabled());
 	}
 
 }

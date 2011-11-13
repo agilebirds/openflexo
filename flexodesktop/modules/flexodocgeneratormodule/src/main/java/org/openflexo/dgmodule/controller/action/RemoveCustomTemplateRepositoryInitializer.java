@@ -28,45 +28,37 @@ import org.openflexo.foundation.cg.templates.action.RemoveCustomTemplateReposito
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class RemoveCustomTemplateRepositoryInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	RemoveCustomTemplateRepositoryInitializer(DGControllerActionInitializer actionInitializer)
-	{
-		super(RemoveCustomTemplateRepository.actionType,actionInitializer);
+	RemoveCustomTemplateRepositoryInitializer(DGControllerActionInitializer actionInitializer) {
+		super(RemoveCustomTemplateRepository.actionType, actionInitializer);
 	}
 
 	@Override
-	protected DGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DGControllerActionInitializer)super.getControllerActionInitializer();
+	protected DGControllerActionInitializer getControllerActionInitializer() {
+		return (DGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<RemoveCustomTemplateRepository> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<RemoveCustomTemplateRepository> getDefaultInitializer() {
 		return new FlexoActionInitializer<RemoveCustomTemplateRepository>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveCustomTemplateRepository action)
-			{
+			public boolean run(ActionEvent e, RemoveCustomTemplateRepository action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<RemoveCustomTemplateRepository> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<RemoveCustomTemplateRepository> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RemoveCustomTemplateRepository>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveCustomTemplateRepository action)
-			{
+			public boolean run(ActionEvent e, RemoveCustomTemplateRepository action) {
 				return true;
 			}
 		};
 	}
-
 
 }

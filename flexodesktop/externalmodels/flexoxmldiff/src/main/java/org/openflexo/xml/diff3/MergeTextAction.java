@@ -27,10 +27,11 @@ public class MergeTextAction extends MergeAction {
 	private Text _text1;
 	private Text _text2;
 	private Element _parentInMergedDocument;
-	public MergeTextAction(int actionIndex,MergeActionType actionType,Element parentInMergedDocument,Text text1, Text text2){
-		super(actionIndex,actionType);
-		_text1 = text1!=null?(Text)text1.clone():null;
-		_text2 = text2!=null?(Text)text2.clone():null;
+
+	public MergeTextAction(int actionIndex, MergeActionType actionType, Element parentInMergedDocument, Text text1, Text text2) {
+		super(actionIndex, actionType);
+		_text1 = text1 != null ? (Text) text1.clone() : null;
+		_text2 = text2 != null ? (Text) text2.clone() : null;
 		_parentInMergedDocument = parentInMergedDocument;
 	}
 
@@ -38,43 +39,46 @@ public class MergeTextAction extends MergeAction {
 	public void execute() {
 		switch (_actionType) {
 		case CHOOSE1:
-			if(_text1!=null)_parentInMergedDocument.addContent(_text1);
+			if (_text1 != null)
+				_parentInMergedDocument.addContent(_text1);
 			break;
 		case CHOOSE2:
-			if(_text2!=null)_parentInMergedDocument.addContent(_text2);
+			if (_text2 != null)
+				_parentInMergedDocument.addContent(_text2);
 			break;
 
 		default:
 			break;
 		}
-		
+
 	}
-	
+
 	@Override
 	public void undo() {
 		switch (_actionType) {
 		case CHOOSE1:
-			if(_text1!=null)_parentInMergedDocument.removeContent(_text1);
+			if (_text1 != null)
+				_parentInMergedDocument.removeContent(_text1);
 			break;
 		case CHOOSE2:
-			if(_text2!=null)_parentInMergedDocument.removeContent(_text2);
+			if (_text2 != null)
+				_parentInMergedDocument.removeContent(_text2);
 			break;
 
 		default:
 			break;
 		}
-		
+
 	}
-	
+
 	@Override
-	public String getLabel(){
+	public String getLabel() {
 		switch (_actionType) {
 		case CHOOSE1:
-			return "choose "+_text1.getText();
+			return "choose " + _text1.getText();
 		case CHOOSE2:
-			return "choose "+_text2.getText();
+			return "choose " + _text2.getText();
 		}
-		return "error : action type "+_actionType+" is not supposed to be set on this conflict";
+		return "error : action type " + _actionType + " is not supposed to be set on this conflict";
 	}
 }
-

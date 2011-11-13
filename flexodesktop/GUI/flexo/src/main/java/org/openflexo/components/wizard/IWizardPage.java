@@ -24,43 +24,47 @@ import java.awt.Image;
 import javax.swing.JComponent;
 
 public interface IWizardPage {
-	
+
 	/**
 	 * The title of this page.
+	 * 
 	 * @return
 	 */
 	public String getTitle();
-	
+
 	/**
 	 * The current wizard that is using this page
+	 * 
 	 * @param wizard
 	 */
 	public void setWizard(FlexoWizard wizard);
-	
+
 	/**
 	 * The next page of this wizard page. Can be null.
+	 * 
 	 * @return
 	 */
 	public IWizardPage getNextPage();
-	
+
 	/**
 	 * The previous page of this wizard page. Can be null.
+	 * 
 	 * @return
 	 */
 	public IWizardPage getPreviousPage();
-	
+
 	public Image getPageImage();
-	
+
 	public boolean isPageComplete();
-	
+
 	public boolean isNextEnabled();
-	
+
 	public boolean isFinishEnabled();
-	
+
 	public boolean isPreviousEnabled();
-	
+
 	public JComponent initUserInterface(JComponent parent);
-	
+
 	public JComponent getUserInterface();
-	
+
 }

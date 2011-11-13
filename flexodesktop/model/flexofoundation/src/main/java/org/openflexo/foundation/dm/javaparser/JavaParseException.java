@@ -21,10 +21,8 @@ package org.openflexo.foundation.dm.javaparser;
 
 import org.openflexo.foundation.FlexoException;
 
-public class JavaParseException extends FlexoException
-{
-	public JavaParseException()
-	{
+public class JavaParseException extends FlexoException {
+	public JavaParseException() {
 		super("Java parse exception");
 	}
 }

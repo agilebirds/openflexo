@@ -28,29 +28,24 @@ public class IsClassStatement extends IsAStatement {
 	private static final Logger logger = Logger.getLogger(IsClassStatement.class.getPackage().getName());
 
 	public static final String CLASS_URI = "http://www.w3.org/2002/07/owl#Class";
-	
-	public IsClassStatement(OntologyObject subject, Statement s)
-	{
-		super(subject,s);
+
+	public IsClassStatement(OntologyObject subject, Statement s) {
+		super(subject, s);
 	}
 
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "is_class_statement";
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return "IsClassStatement: "+getStatement();
+	public String getFullyQualifiedName() {
+		return "IsClassStatement: " + getStatement();
 	}
 
-
 	@Override
-	public String toString() 
-	{
-		return getSubject().getName()+" is a Class";
+	public String toString() {
+		return getSubject().getName() + " is a Class";
 	}
 
 }

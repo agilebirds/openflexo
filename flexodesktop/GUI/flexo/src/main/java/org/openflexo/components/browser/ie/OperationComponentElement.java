@@ -24,28 +24,25 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class OperationComponentElement extends ComponentElement
-{
+public class OperationComponentElement extends ComponentElement {
 
-    public OperationComponentElement(OperationComponentDefinition component, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(component, BrowserElementType.OPERATION_COMPONENT, browser, parent);
-    }
+	public OperationComponentElement(OperationComponentDefinition component, ProjectBrowser browser, BrowserElement parent) {
+		super(component, BrowserElementType.OPERATION_COMPONENT, browser, parent);
+	}
 
-    /**
-     * Overrides getFilteredElementType
-     * @see org.openflexo.components.browser.ie.ComponentElement#getFilteredElementType()
-     */
-    @Override
-	protected BrowserElementType getFilteredElementType()
-    {
-        return BrowserElementType.OPERATION_COMPONENT;
-    }
+	/**
+	 * Overrides getFilteredElementType
+	 * 
+	 * @see org.openflexo.components.browser.ie.ComponentElement#getFilteredElementType()
+	 */
+	@Override
+	protected BrowserElementType getFilteredElementType() {
+		return BrowserElementType.OPERATION_COMPONENT;
+	}
 }

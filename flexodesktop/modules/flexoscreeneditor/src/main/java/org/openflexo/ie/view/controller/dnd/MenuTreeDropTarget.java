@@ -29,7 +29,7 @@ import org.openflexo.foundation.ie.menu.FlexoItemMenu;
 /**
  * 
  * @author gpolet
- *
+ * 
  */
 public class MenuTreeDropTarget extends TreeDropTarget {
 
@@ -38,34 +38,33 @@ public class MenuTreeDropTarget extends TreeDropTarget {
 	}
 
 	@Override
-	public boolean targetAcceptsSource(BrowserElement target,
-			BrowserElement source) {
+	public boolean targetAcceptsSource(BrowserElement target, BrowserElement source) {
 		if (source instanceof FlexoItemMenuElement && target instanceof FlexoItemMenuElement) {
-            return !((FlexoItemMenuElement)target).getItemMenu().isChildOf(((FlexoItemMenuElement)source).getItemMenu());
+			return !((FlexoItemMenuElement) target).getItemMenu().isChildOf(((FlexoItemMenuElement) source).getItemMenu());
 		}
 		return false;
 	}
-	
+
 	@Override
 	public boolean handleDrop(BrowserElement moved, BrowserElement destination) {
 		if ((moved instanceof FlexoItemMenuElement) && ((destination instanceof FlexoItemMenuElement))) {
-            FlexoItemMenu movedMenu = ((FlexoItemMenuElement) moved).getItemMenu();
-            FlexoItemMenu newParentMenu = null;
-            FlexoItemMenu oldParentMenu = movedMenu.getFather();
-            if (destination instanceof FlexoItemMenuElement) {
-                newParentMenu = ((FlexoItemMenuElement) destination).getItemMenu();
-            }
-            if (newParentMenu != null && movedMenu != null && oldParentMenu != null) {
-                if (!newParentMenu.isChildOf(movedMenu)) {
-                    oldParentMenu.removeFromSubItems(movedMenu);
-                    newParentMenu.addToSubItems(movedMenu);
-                    movedMenu.setFather(newParentMenu);
-                    _browser.update();
-                    return true;
-                }
-            }
-            return false;
-        }
-        return false;
+			FlexoItemMenu movedMenu = ((FlexoItemMenuElement) moved).getItemMenu();
+			FlexoItemMenu newParentMenu = null;
+			FlexoItemMenu oldParentMenu = movedMenu.getFather();
+			if (destination instanceof FlexoItemMenuElement) {
+				newParentMenu = ((FlexoItemMenuElement) destination).getItemMenu();
+			}
+			if (newParentMenu != null && movedMenu != null && oldParentMenu != null) {
+				if (!newParentMenu.isChildOf(movedMenu)) {
+					oldParentMenu.removeFromSubItems(movedMenu);
+					newParentMenu.addToSubItems(movedMenu);
+					movedMenu.setFather(newParentMenu);
+					_browser.update();
+					return true;
+				}
+			}
+			return false;
+		}
+		return false;
 	}
 }

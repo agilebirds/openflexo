@@ -30,52 +30,44 @@ import org.openflexo.fps.FPSObject;
 import org.openflexo.fps.FlexoAuthentificationException;
 import org.openflexo.fps.SharedProject;
 
+public class RefreshProject extends CVSAction<RefreshProject, SharedProject> {
 
-public class RefreshProject extends CVSAction<RefreshProject,SharedProject> 
-{
+	private static final Logger logger = Logger.getLogger(RefreshProject.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(RefreshProject.class.getPackage().getName());
+	public static FlexoActionType<RefreshProject, SharedProject, FPSObject> actionType = new FlexoActionType<RefreshProject, SharedProject, FPSObject>(
+			"refresh", SYNCHRONIZE_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-    public static FlexoActionType<RefreshProject,SharedProject,FPSObject> actionType 
-    = new FlexoActionType<RefreshProject,SharedProject,FPSObject> 
-    ("refresh",SYNCHRONIZE_GROUP,FlexoActionType.NORMAL_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public RefreshProject makeNewAction(SharedProject focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {
+			return new RefreshProject(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public RefreshProject makeNewAction(SharedProject focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) 
-        {
-            return new RefreshProject(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(SharedProject object, Vector<FPSObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(SharedProject object, Vector<FPSObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(SharedProject object, Vector<FPSObject> globalSelection) {
+			return (object != null);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(SharedProject object, Vector<FPSObject> globalSelection) 
-        {
-            return (object!=null);
-        }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (actionType, SharedProject.class);
-    }
- 
-      RefreshProject (SharedProject focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor)
-    {
-    	super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-    @Override
-	protected void doAction(Object context) throws IOFlexoException, FlexoAuthentificationException
-    {
-    	getFocusedObject().refresh();
-    }
+	static {
+		FlexoModelObject.addActionForClass(actionType, SharedProject.class);
+	}
 
- }
+	RefreshProject(SharedProject focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) throws IOFlexoException, FlexoAuthentificationException {
+		getFocusedObject().refresh();
+	}
+
+}

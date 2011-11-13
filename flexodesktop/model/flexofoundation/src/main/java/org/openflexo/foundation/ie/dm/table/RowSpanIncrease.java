@@ -25,12 +25,10 @@ import org.openflexo.foundation.ie.widget.IETDWidget;
 /**
  * <B>Class Description</B>
  */
-public class RowSpanIncrease extends IEDataModification
-{
+public class RowSpanIncrease extends IEDataModification {
 
-    public RowSpanIncrease(IETDWidget td)
-    {
-        super("rowSpan",null, td);
-    }
+	public RowSpanIncrease(IETDWidget td) {
+		super("rowSpan", null, td);
+	}
 
 }

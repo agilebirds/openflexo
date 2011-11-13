@@ -41,199 +41,187 @@ import org.openflexo.swing.FlexoFileChooser;
 import org.openflexo.toolbox.StringUtils;
 
 /**
- * Represents a widget able to edit a File, or a String representing a File or a
- * StringConvertable object
+ * Represents a widget able to edit a File, or a String representing a File or a StringConvertable object
  * 
  * @author sguerin
  */
-public class FIBFileWidget extends FIBWidgetView<FIBFile,JTextField,File> {
+public class FIBFileWidget extends FIBWidgetView<FIBFile, JTextField, File> {
 
-    static final Logger logger = Logger.getLogger(FIBFileWidget.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(FIBFileWidget.class.getPackage().getName());
 
-    protected JPanel _mySmallPanel;
+	protected JPanel _mySmallPanel;
 
-    protected JButton _chooseButton;
+	protected JButton _chooseButton;
 
-    protected JTextField _currentDirectoryLabel;
+	protected JTextField _currentDirectoryLabel;
 
-    protected File _file = null;
-    
-    protected FIBFile.FileMode mode;
-    protected String filter;
-    protected String title;
-    protected Boolean isDirectory;
-    protected File defaultDirectory;
-    protected int columns;
-   
+	protected File _file = null;
+
+	protected FIBFile.FileMode mode;
+	protected String filter;
+	protected String title;
+	protected Boolean isDirectory;
+	protected File defaultDirectory;
+	protected int columns;
+
 	private static final int DEFAULT_COLUMNS = 10;
 
-    public FIBFileWidget(FIBFile model, FIBController controller)
-    {
-        super(model,controller);
+	public FIBFileWidget(FIBFile model, FIBController controller) {
+		super(model, controller);
 
-        mode = model.mode != null ? model.mode : FIBFile.FileMode.OpenMode;
-        filter = model.filter;
-        title = model.title;
-        isDirectory = model.isDirectory;
-        defaultDirectory = model.defaultDirectory != null ? model.defaultDirectory : new File(System.getProperty("user.dir"));
-        
-        	
-       _mySmallPanel = new JPanel(new BorderLayout());
-        _chooseButton = new JButton();
-        _chooseButton.setText(FlexoLocalization.localizedForKey("choose", _chooseButton));
-        addActionListenerToChooseButton();
-        _currentDirectoryLabel = new JTextField("");
-        _currentDirectoryLabel.setColumns(model.columns != null ? model.columns : DEFAULT_COLUMNS);
-        _currentDirectoryLabel.setMinimumSize(MINIMUM_SIZE);
-        _currentDirectoryLabel.setPreferredSize(MINIMUM_SIZE);
-        _currentDirectoryLabel.setEditable(false);
-        _currentDirectoryLabel.setEnabled(true);
-        _currentDirectoryLabel.setFont(new Font("SansSerif", Font.PLAIN, 10));
-        _mySmallPanel.add(_currentDirectoryLabel, BorderLayout.CENTER);
-        _mySmallPanel.add(_chooseButton, BorderLayout.EAST);
-        _mySmallPanel.addFocusListener(this);
-        setFile(null);
+		mode = model.mode != null ? model.mode : FIBFile.FileMode.OpenMode;
+		filter = model.filter;
+		title = model.title;
+		isDirectory = model.isDirectory;
+		defaultDirectory = model.defaultDirectory != null ? model.defaultDirectory : new File(System.getProperty("user.dir"));
 
-    }
+		_mySmallPanel = new JPanel(new BorderLayout());
+		_chooseButton = new JButton();
+		_chooseButton.setText(FlexoLocalization.localizedForKey("choose", _chooseButton));
+		addActionListenerToChooseButton();
+		_currentDirectoryLabel = new JTextField("");
+		_currentDirectoryLabel.setColumns(model.columns != null ? model.columns : DEFAULT_COLUMNS);
+		_currentDirectoryLabel.setMinimumSize(MINIMUM_SIZE);
+		_currentDirectoryLabel.setPreferredSize(MINIMUM_SIZE);
+		_currentDirectoryLabel.setEditable(false);
+		_currentDirectoryLabel.setEnabled(true);
+		_currentDirectoryLabel.setFont(new Font("SansSerif", Font.PLAIN, 10));
+		_mySmallPanel.add(_currentDirectoryLabel, BorderLayout.CENTER);
+		_mySmallPanel.add(_chooseButton, BorderLayout.EAST);
+		_mySmallPanel.addFocusListener(this);
+		setFile(null);
 
-    protected void configureFileChooser(FlexoFileChooser chooser)
-    {
-    	if (!isDirectory) {
-    		//System.out.println("Looking for files");
-    		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-    		chooser.setDialogTitle(StringUtils.isEmpty(title)?FlexoLocalization.localizedForKey("select_a_file"):FlexoLocalization.localizedForKey(getController().getLocalizer(),title));
-    		chooser.setFileFilterAsString(filter);
-    		chooser.setDialogType(mode.getMode());
-    	    System.setProperty("apple.awt.fileDialogForDirectories", "false");
-    	}
-    	else {
-    		//System.out.println("Looking for directories");
-    		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-    		chooser.setDialogTitle(StringUtils.isEmpty(title)?FlexoLocalization.localizedForKey("select_directory"):FlexoLocalization.localizedForKey(getController().getLocalizer(),title));
-    		chooser.setFileFilterAsString(filter);
-    		chooser.setDialogType(mode.getMode());
-    		System.setProperty("apple.awt.fileDialogForDirectories", "true");
-    	}       
-    }
-    
-    public void addActionListenerToChooseButton()
-    {
-        _chooseButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-            	Window parent = SwingUtilities.getWindowAncestor(_chooseButton);
-                // get destination directory
-            	FlexoFileChooser chooser = new FlexoFileChooser(parent);
-                if (_file != null) {
-                    chooser.setCurrentDirectory(_file);
-                    if(!_file.isDirectory()){
-                    	chooser.setSelectedFile(_file);
-                    }
-                }
-                configureFileChooser(chooser);
-                
-        		switch (mode) {
+	}
+
+	protected void configureFileChooser(FlexoFileChooser chooser) {
+		if (!isDirectory) {
+			// System.out.println("Looking for files");
+			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			chooser.setDialogTitle(StringUtils.isEmpty(title) ? FlexoLocalization.localizedForKey("select_a_file") : FlexoLocalization
+					.localizedForKey(getController().getLocalizer(), title));
+			chooser.setFileFilterAsString(filter);
+			chooser.setDialogType(mode.getMode());
+			System.setProperty("apple.awt.fileDialogForDirectories", "false");
+		} else {
+			// System.out.println("Looking for directories");
+			chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			chooser.setDialogTitle(StringUtils.isEmpty(title) ? FlexoLocalization.localizedForKey("select_directory") : FlexoLocalization
+					.localizedForKey(getController().getLocalizer(), title));
+			chooser.setFileFilterAsString(filter);
+			chooser.setDialogType(mode.getMode());
+			System.setProperty("apple.awt.fileDialogForDirectories", "true");
+		}
+	}
+
+	public void addActionListenerToChooseButton() {
+		_chooseButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Window parent = SwingUtilities.getWindowAncestor(_chooseButton);
+				// get destination directory
+				FlexoFileChooser chooser = new FlexoFileChooser(parent);
+				if (_file != null) {
+					chooser.setCurrentDirectory(_file);
+					if (!_file.isDirectory()) {
+						chooser.setSelectedFile(_file);
+					}
+				}
+				configureFileChooser(chooser);
+
+				switch (mode) {
 				case OpenMode:
-	               	if (chooser.showOpenDialog(_chooseButton) == JFileChooser.APPROVE_OPTION) {
-                		// a dir has been picked...
+					if (chooser.showOpenDialog(_chooseButton) == JFileChooser.APPROVE_OPTION) {
+						// a dir has been picked...
 
-                		try {
-                			setFile(chooser.getSelectedFile());
-                			updateModelFromWidget();
-                		} catch (Exception e1) {
-                			e1.printStackTrace();
-                 		}
-                	} else {
-                		// cancelled, return.
-                 	}					
+						try {
+							setFile(chooser.getSelectedFile());
+							updateModelFromWidget();
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
+					} else {
+						// cancelled, return.
+					}
 					break;
-					
+
 				case SaveMode:
-                	if (chooser.showSaveDialog(_chooseButton) == JFileChooser.APPROVE_OPTION) {
-                		// a dir has been picked...
-                		try {
-                			setFile(chooser.getSelectedFile());
-                			updateModelFromWidget();
-                		} catch (Exception e1) {
-                			e1.printStackTrace();
-                		}
-                	} else {
-                		// cancelled, return.
-                	}
+					if (chooser.showSaveDialog(_chooseButton) == JFileChooser.APPROVE_OPTION) {
+						// a dir has been picked...
+						try {
+							setFile(chooser.getSelectedFile());
+							updateModelFromWidget();
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
+					} else {
+						// cancelled, return.
+					}
 					break;
 
 				default:
 					break;
 				}
-            }
-        });
-    }
+			}
+		});
+	}
 
-    public void performUpdate(Object newValue)
-    {
-        if (newValue instanceof File) {
-            setFile((File) newValue);
-        } else if (newValue instanceof String) {
-            setFile(new File((String) newValue));
-        }
-    }
-
-   @Override
-public synchronized boolean updateWidgetFromModel()
-   {
-	   if (notEquals(getValue(), _file)) {
-		   widgetUpdating = true;
-		   if (getValue() instanceof File) {
-			setFile(getValue());
-		} else if (getValue() == null) {
-			setFile(null);
+	public void performUpdate(Object newValue) {
+		if (newValue instanceof File) {
+			setFile((File) newValue);
+		} else if (newValue instanceof String) {
+			setFile(new File((String) newValue));
 		}
-		   widgetUpdating = false;
-		   return true;
-	   }
-	   return false;
-   }
-
-    /**
-     * Update the model given the actual state of the widget
-     */
-    @Override
-	public synchronized boolean updateModelFromWidget()
-    {
-    	if (notEquals(getValue(), _file)) {
-    		modelUpdating = true;
-    		setValue(_file);
-    		modelUpdating = false;
-    		return true;
-    	}
-    	return false;
-    }
-
-    @Override
-	public JPanel getJComponent()
-    {
-        return _mySmallPanel;
-    }
+	}
 
 	@Override
-	public JTextField getDynamicJComponent()
-	{
+	public synchronized boolean updateWidgetFromModel() {
+		if (notEquals(getValue(), _file)) {
+			widgetUpdating = true;
+			if (getValue() instanceof File) {
+				setFile(getValue());
+			} else if (getValue() == null) {
+				setFile(null);
+			}
+			widgetUpdating = false;
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Update the model given the actual state of the widget
+	 */
+	@Override
+	public synchronized boolean updateModelFromWidget() {
+		if (notEquals(getValue(), _file)) {
+			modelUpdating = true;
+			setValue(_file);
+			modelUpdating = false;
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public JPanel getJComponent() {
+		return _mySmallPanel;
+	}
+
+	@Override
+	public JTextField getDynamicJComponent() {
 		return _currentDirectoryLabel;
 	}
 
-    protected void setFile(File aFile)
-    {
-        _file = aFile;
-        if (_file != null) {
-        	_currentDirectoryLabel.setEnabled(true);
-            _currentDirectoryLabel.setText(_file.getAbsolutePath());
-            _currentDirectoryLabel.setToolTipText(_file.getAbsolutePath());
-        }
-        else {
-        	_currentDirectoryLabel.setEnabled(false);
-            _currentDirectoryLabel.setText(FlexoLocalization.localizedForKey("no_file"));
-        }
-    }
+	protected void setFile(File aFile) {
+		_file = aFile;
+		if (_file != null) {
+			_currentDirectoryLabel.setEnabled(true);
+			_currentDirectoryLabel.setText(_file.getAbsolutePath());
+			_currentDirectoryLabel.setToolTipText(_file.getAbsolutePath());
+		} else {
+			_currentDirectoryLabel.setEnabled(false);
+			_currentDirectoryLabel.setText(FlexoLocalization.localizedForKey("no_file"));
+		}
+	}
 
 }

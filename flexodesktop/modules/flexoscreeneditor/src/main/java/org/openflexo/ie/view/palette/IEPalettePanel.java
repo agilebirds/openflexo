@@ -23,7 +23,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 
-
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
@@ -36,70 +35,65 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.palette.PalettePanel;
 
-public class IEPalettePanel extends PalettePanel implements FlexoObserver
-{
+public class IEPalettePanel extends PalettePanel implements FlexoObserver {
 
 	private FlexoIEPalette<? extends FlexoIEPaletteWidget> model;
 
-    public FlexoIEPalette<? extends FlexoIEPaletteWidget> getModel() {
+	public FlexoIEPalette<? extends FlexoIEPaletteWidget> getModel() {
 		return model;
 	}
 
-	public IEPalettePanel(IEPalette palette, FlexoIEPalette<? extends FlexoIEPaletteWidget> model, String keyName)
-    {
-        super(palette);
-        setName(FlexoLocalization.localizedForKey(keyName,this));
-    	setBackground(Color.WHITE);
-    	if (ToolBox.getPLATFORM()==ToolBox.MACOS)
-    		setLayout(new FlowLayout(FlowLayout.LEFT,3,3));
-    	else
-    		setLayout(new FlowLayout(FlowLayout.LEFT));
-        this.model = model;
-        model.addObserver(this);
-        refresh();
-    }
+	public IEPalettePanel(IEPalette palette, FlexoIEPalette<? extends FlexoIEPaletteWidget> model, String keyName) {
+		super(palette);
+		setName(FlexoLocalization.localizedForKey(keyName, this));
+		setBackground(Color.WHITE);
+		if (ToolBox.getPLATFORM() == ToolBox.MACOS)
+			setLayout(new FlowLayout(FlowLayout.LEFT, 3, 3));
+		else
+			setLayout(new FlowLayout(FlowLayout.LEFT));
+		this.model = model;
+		model.addObserver(this);
+		refresh();
+	}
 
-    public void switchCSS() {
-    	for (int i = 0; i < getComponents().length; i++) {
+	public void switchCSS() {
+		for (int i = 0; i < getComponents().length; i++) {
 			Component c = getComponents()[i];
 			if (c instanceof IEDSWidgetView) {
-				((IEDSWidgetView)c)._model.refresh(getPalette().getController().getProject().getCssSheet());
+				((IEDSWidgetView) c)._model.refresh(getPalette().getController().getProject().getCssSheet());
 			}
 		}
-    }
+	}
 
-    private void refresh() {
-    	removeAll();
-    	for (FlexoIEPalette<? extends FlexoIEPaletteWidget>.FlexoIEPaletteWidget w : model.getWidgets()) {
-        	IEDSWidget dsWidget = new IEDSWidget(w,model.resizeScreenshots(),getPalette().getController().getProject().getCssSheet());
-        	add(new IEDSWidgetView((IEController) getPalette().getController(), dsWidget, w.canDeleteWidget()));
-        	addToPaletteElements(dsWidget);
+	private void refresh() {
+		removeAll();
+		for (FlexoIEPalette<? extends FlexoIEPaletteWidget>.FlexoIEPaletteWidget w : model.getWidgets()) {
+			IEDSWidget dsWidget = new IEDSWidget(w, model.resizeScreenshots(), getPalette().getController().getProject().getCssSheet());
+			add(new IEDSWidgetView((IEController) getPalette().getController(), dsWidget, w.canDeleteWidget()));
+			addToPaletteElements(dsWidget);
 		}
-    	validate();
-    	repaint();
-    }
+		validate();
+		repaint();
+	}
 
-    @Override
-	public IEPalettePanel delete(){
-    	model.deleteObserver(this);
-    	super.delete();
-    	return this;
-    }
+	@Override
+	public IEPalettePanel delete() {
+		model.deleteObserver(this);
+		super.delete();
+		return this;
+	}
 
-    @Override
-	public void editPalette()
-    {
-        logger.info("EditIEPalette");
-        ImportImage.actionType.makeNewAction(null, null,getPalette().getController().getEditor()).doAction();
-    }
+	@Override
+	public void editPalette() {
+		logger.info("EditIEPalette");
+		ImportImage.actionType.makeNewAction(null, null, getPalette().getController().getEditor()).doAction();
+	}
 
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-    {
-        if (dataModification instanceof PaletteHasChanged) {
-        	refresh();
-        }
-    }
-
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (dataModification instanceof PaletteHasChanged) {
+			refresh();
+		}
+	}
 
 }

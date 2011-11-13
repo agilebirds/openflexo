@@ -19,8 +19,6 @@
  */
 package org.openflexo.inspector.model;
 
-
-
 import java.awt.Color;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -43,25 +41,22 @@ import org.openflexo.inspector.widget.propertylist.StringColumn;
 import org.openflexo.kvc.KeyValueCoding;
 import org.openflexo.xmlcode.AccessorInvocationException;
 
-
-public class PropertyListColumn extends PropertyModel
-{
+public class PropertyListColumn extends PropertyModel {
 
 	static final Logger logger = Logger.getLogger(PropertyListColumn.class.getPackage().getName());
 
-	public static final String READ_ONLY_TEXT_FIELD ="READ_ONLY_TEXT_FIELD";
-	public static final String TEXT_FIELD ="TEXT_FIELD";
-	public static final String CHECKBOX ="CHECKBOX";
-	public static final String INTEGER ="INTEGER";
-	public static final String DROPDOWN ="DROPDOWN";
-	public static final String COLOR ="COLOR";
-	public static final String ICON ="ICON";
-	public static final String CUSTOM ="CUSTOM";
+	public static final String READ_ONLY_TEXT_FIELD = "READ_ONLY_TEXT_FIELD";
+	public static final String TEXT_FIELD = "TEXT_FIELD";
+	public static final String CHECKBOX = "CHECKBOX";
+	public static final String INTEGER = "INTEGER";
+	public static final String DROPDOWN = "DROPDOWN";
+	public static final String COLOR = "COLOR";
+	public static final String ICON = "ICON";
+	public static final String CUSTOM = "CUSTOM";
 
 	private Vector<String> availableWidgetValues;
 
-	public Vector<String> getAvailableWidgetValues()
-	{
+	public Vector<String> getAvailableWidgetValues() {
 		if (availableWidgetValues == null) {
 			availableWidgetValues = new Vector<String>();
 			availableWidgetValues.add(READ_ONLY_TEXT_FIELD);
@@ -74,7 +69,6 @@ public class PropertyListColumn extends PropertyModel
 		return availableWidgetValues;
 	}
 
-
 	public static final int DEFAULT_COLUMN_WIDTH = 80;
 
 	// public String name;
@@ -84,35 +78,29 @@ public class PropertyListColumn extends PropertyModel
 
 	private PropertyListModel _propertyListModel = null;
 
-	public PropertyListColumn()
-	{
+	public PropertyListColumn() {
 		super();
 		_tableColumn = null;
 	}
 
-	public PropertyListModel getPropertyListModel()
-	{
+	public PropertyListModel getPropertyListModel() {
 		return _propertyListModel;
 	}
 
-	public void setPropertyListModel(PropertyListModel propertyListModel)
-	{
+	public void setPropertyListModel(PropertyListModel propertyListModel) {
 		_propertyListModel = propertyListModel;
 	}
 
-	public void notifyValueChangedFor(InspectableObject object)
-	{
+	public void notifyValueChangedFor(InspectableObject object) {
 		// Override if required
 	}
 
-	public AbstractColumn getTableColumn(AbstractController controller)
-	{
+	public AbstractColumn getTableColumn(AbstractController controller) {
 		if (_tableColumn == null) {
 			if (getWidget().equals(READ_ONLY_TEXT_FIELD)) {
 				_tableColumn = new StringColumn(label, getColumnWidth(), isResizable(), displayTitle(), font()) {
 					@Override
-					public String getValue(InspectableObject object)
-					{
+					public String getValue(InspectableObject object) {
 						Object cellValue = getCellValue(object);
 						if (cellValue instanceof String) {
 							return (String) cellValue;
@@ -122,9 +110,9 @@ public class PropertyListColumn extends PropertyModel
 							return "null ???";
 						}
 					}
+
 					@Override
-					public void notifyValueChangedFor(InspectableObject object)
-					{
+					public void notifyValueChangedFor(InspectableObject object) {
 						super.notifyValueChangedFor(object);
 						PropertyListColumn.this.notifyValueChangedFor(object);
 					}
@@ -132,8 +120,7 @@ public class PropertyListColumn extends PropertyModel
 			} else if (getWidget().equals(TEXT_FIELD)) {
 				_tableColumn = new EditableStringColumn(label, getColumnWidth(), isResizable(), displayTitle(), font()) {
 					@Override
-					public String getValue(InspectableObject object)
-					{
+					public String getValue(InspectableObject object) {
 						Object cellValue = getCellValue(object);
 						if (cellValue instanceof String) {
 							return (String) cellValue;
@@ -151,14 +138,12 @@ public class PropertyListColumn extends PropertyModel
 					}
 
 					@Override
-					public void setValue(InspectableObject object, String aValue)
-					{
+					public void setValue(InspectableObject object, String aValue) {
 						setCellValue(aValue, object);
 					}
 
 					@Override
-					public void notifyValueChangedFor(InspectableObject object)
-					{
+					public void notifyValueChangedFor(InspectableObject object) {
 						super.notifyValueChangedFor(object);
 						PropertyListColumn.this.notifyValueChangedFor(object);
 					}
@@ -166,20 +151,17 @@ public class PropertyListColumn extends PropertyModel
 			} else if (getWidget().equals(CHECKBOX)) {
 				_tableColumn = new BooleanColumn(label, getColumnWidth(), isResizable(), displayTitle()) {
 					@Override
-					public Boolean getValue(InspectableObject object)
-					{
+					public Boolean getValue(InspectableObject object) {
 						return new Boolean(getBooleanCellValue(object));
 					}
 
 					@Override
-					public void setValue(InspectableObject object, Boolean aValue)
-					{
+					public void setValue(InspectableObject object, Boolean aValue) {
 						setBooleanCellValue(aValue.booleanValue(), object);
 					}
 
 					@Override
-					public void notifyValueChangedFor(InspectableObject object)
-					{
+					public void notifyValueChangedFor(InspectableObject object) {
 						super.notifyValueChangedFor(object);
 						PropertyListColumn.this.notifyValueChangedFor(object);
 					}
@@ -187,61 +169,56 @@ public class PropertyListColumn extends PropertyModel
 			} else if (getWidget().equals(INTEGER)) {
 				_tableColumn = new IntegerColumn(label, getColumnWidth(), isResizable(), displayTitle()) {
 					@Override
-					public Integer getValue(InspectableObject object)
-					{
+					public Integer getValue(InspectableObject object) {
 						return new Integer(getIntegerCellValue(object));
 					}
 
 					@Override
-					public void setValue(InspectableObject object, Integer aValue)
-					{
+					public void setValue(InspectableObject object, Integer aValue) {
 						setIntegerCellValue(aValue.intValue(), object);
 					}
 
 					@Override
-					public void notifyValueChangedFor(InspectableObject object)
-					{
+					public void notifyValueChangedFor(InspectableObject object) {
 						super.notifyValueChangedFor(object);
 						PropertyListColumn.this.notifyValueChangedFor(object);
 					}
 				};
-			}  else if (getWidget().equals(DROPDOWN)) {
+			} else if (getWidget().equals(DROPDOWN)) {
 				_tableColumn = new DropDownColumn(label, getColumnWidth()) {
 					@Override
-					public Object getValue(InspectableObject object)
-					{
-						//logger.info("getValue() for "+object+" return "+getCellValue(object));
+					public Object getValue(InspectableObject object) {
+						// logger.info("getValue() for "+object+" return "+getCellValue(object));
 						return getCellValue(object);
 						/*
-                    	Object cellValue = getCellValue(object);
-                        if (cellValue instanceof String) {
-                            return (String) cellValue;
-                        } else if (cellValue != null) {
-                            return cellValue.toString();
-                        } else {
-                            return null;
-                        }*/
+						Object cellValue = getCellValue(object);
+						if (cellValue instanceof String) {
+						    return (String) cellValue;
+						} else if (cellValue != null) {
+						    return cellValue.toString();
+						} else {
+						    return null;
+						}*/
 					}
 
 					@Override
-					public void setValue(InspectableObject object, Object aValue)
-					{
+					public void setValue(InspectableObject object, Object aValue) {
 						setCellValue(aValue, object);
 					}
 
 					@Override
-					public String renderValue(Object object){
+					public String renderValue(Object object) {
 						return getStringRepresentation(object);
-						//return object.toString();
+						// return object.toString();
 					}
 
 					@Override
-					public Vector getAvailableValues(InspectableObject object){
+					public Vector getAvailableValues(InspectableObject object) {
 
-						//logger.info("getAvailableValues() for "+object);
+						// logger.info("getAvailableValues() for "+object);
 
-						//	if (logger.isLoggable(Level.SEVERE))
-						//    logger.severe("getAvailableValues() on a "+object+" hasDynList="+hasDynamicList());
+						// if (logger.isLoggable(Level.SEVERE))
+						// logger.severe("getAvailableValues() on a "+object+" hasDynList="+hasDynamicList());
 						if (hasDynamicList()) {
 							return getDynamicList(object);
 						} else if (hasStaticList()) {
@@ -262,8 +239,7 @@ public class PropertyListColumn extends PropertyModel
 					}
 
 					@Override
-					public void notifyValueChangedFor(InspectableObject object)
-					{
+					public void notifyValueChangedFor(InspectableObject object) {
 						super.notifyValueChangedFor(object);
 						PropertyListColumn.this.notifyValueChangedFor(object);
 					}
@@ -271,22 +247,19 @@ public class PropertyListColumn extends PropertyModel
 			} else if (getWidget().equals(COLOR)) {
 				_tableColumn = new ColorColumn(label, getColumnWidth(), isResizable(), displayTitle()) {
 					@Override
-					public Object getValue(InspectableObject object)
-					{
+					public Object getValue(InspectableObject object) {
 						return getCellValue(object);
 					}
 
 					@Override
-					public void setValue(InspectableObject object, Object aValue)
-					{
+					public void setValue(InspectableObject object, Object aValue) {
 
 						setCellValue(aValue, object);
-						_colorCellEditor.setColor((Color)aValue);
+						_colorCellEditor.setColor((Color) aValue);
 					}
 
 					@Override
-					public void notifyValueChangedFor(InspectableObject object)
-					{
+					public void notifyValueChangedFor(InspectableObject object) {
 						super.notifyValueChangedFor(object);
 						PropertyListColumn.this.notifyValueChangedFor(object);
 					}
@@ -295,63 +268,56 @@ public class PropertyListColumn extends PropertyModel
 			} else if (getWidget().equals(ICON)) {
 				_tableColumn = new IconColumn(label, getColumnWidth(), isResizable(), displayTitle()) {
 					@Override
-					public Icon getValue(InspectableObject object)
-					{
+					public Icon getValue(InspectableObject object) {
 						return (Icon) getCellValue(object);
 					}
 
 					@Override
-					public void setValue(InspectableObject object, Icon aValue)
-					{
+					public void setValue(InspectableObject object, Icon aValue) {
 						setCellValue(aValue, object);
 					}
 
 					@Override
-					public void notifyValueChangedFor(InspectableObject object)
-					{
+					public void notifyValueChangedFor(InspectableObject object) {
 						super.notifyValueChangedFor(object);
 						PropertyListColumn.this.notifyValueChangedFor(object);
 					}
 
 				};
 			} else if (getWidget().equals(CUSTOM)) {
-				_tableColumn = new CustomColumn(this, label, getColumnWidth(), isResizable(), displayTitle(),controller) {
+				_tableColumn = new CustomColumn(this, label, getColumnWidth(), isResizable(), displayTitle(), controller) {
 					@Override
-					public void setValue(InspectableObject object, Object aValue)
-					{
+					public void setValue(InspectableObject object, Object aValue) {
 						// if (logger.isLoggable(Level.FINE))
-							// logger.fine("setCellValue() for property "+name+" and
-									// object "+object+" with "+aValue);
+						// logger.fine("setCellValue() for property "+name+" and
+						// object "+object+" with "+aValue);
 						setCellValue(aValue, object);
 					}
 
 					@Override
-					public Object getValue(InspectableObject object)
-					{
+					public Object getValue(InspectableObject object) {
 						if (logger.isLoggable(Level.FINE)) {
-							logger.fine("getCellValue() for property " + name + " and object " + object + " returns " + getCellValue(object));
+							logger.fine("getCellValue() for property " + name + " and object " + object + " returns "
+									+ getCellValue(object));
 						}
 						return getCellValue(object);
 					}
 
 					@Override
-					public void notifyValueChangedFor(InspectableObject object)
-					{
+					public void notifyValueChangedFor(InspectableObject object) {
 						super.notifyValueChangedFor(object);
 						PropertyListColumn.this.notifyValueChangedFor(object);
 					}
 				};
+			} else {
+				logger.warning("Unexpected widget type: " + getWidget());
 			}
-			else {
-				logger.warning("Unexpected widget type: "+getWidget());
-			}
-			if (_tableColumn!=null) {
+			if (_tableColumn != null) {
 				_tableColumn.setTooltipKey(getValueForParameter("tooltip"));
 			}
 		}
 		return _tableColumn;
 	}
-
 
 	protected boolean modelUpdating = false;
 
@@ -364,8 +330,7 @@ public class PropertyListColumn extends PropertyModel
 	 * 
 	 * @param newValue
 	 */
-	protected synchronized void setCellValue(Object newValue, InspectableObject object)
-	{
+	protected synchronized void setCellValue(Object newValue, InspectableObject object) {
 		try {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("setCellValue() for property " + name + " with " + newValue);
@@ -385,15 +350,14 @@ public class PropertyListColumn extends PropertyModel
 			valueInError = false;
 		} catch (Exception e) {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("setCellValue() with " + newValue + " failed for property " + name + " for object " + object.getClass().getName()
-						+ " : exception " + e.getMessage());
+				logger.warning("setCellValue() with " + newValue + " failed for property " + name + " for object "
+						+ object.getClass().getName() + " : exception " + e.getMessage());
 			}
 			e.printStackTrace();
 		}
 	}
 
-	public Object getCellValue(InspectableObject object)
-	{
+	public Object getCellValue(InspectableObject object) {
 		try {
 			if (object == null) {
 				if (logger.isLoggable(Level.WARNING)) {
@@ -409,23 +373,22 @@ public class PropertyListColumn extends PropertyModel
 			}
 		} catch (AccessorInvocationException e) {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("getCellValue() failed for property " + name + " for object " + object.getClass().getName() + " : exception " + e.getMessage());
+				logger.warning("getCellValue() failed for property " + name + " for object " + object.getClass().getName()
+						+ " : exception " + e.getMessage());
 			}
 			e.getTargetException().printStackTrace();
 			return null;
 		} catch (Exception e) {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger
-				.warning("getObjectValue() failed for property " + name + " for object " + object.getClass().getName() + " : exception "
-						+ e.getMessage());
+				logger.warning("getObjectValue() failed for property " + name + " for object " + object.getClass().getName()
+						+ " : exception " + e.getMessage());
 			}
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-	protected synchronized void setBooleanCellValue(boolean value, InspectableObject object)
-	{
+	protected synchronized void setBooleanCellValue(boolean value, InspectableObject object) {
 		try {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("setBooleanCellValue() for property " + name + " with " + value);
@@ -445,15 +408,14 @@ public class PropertyListColumn extends PropertyModel
 			valueInError = false;
 		} catch (Exception e) {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("setBooleanCellValue() with " + value + " failed for property " + name + " for object " + object.getClass().getName()
-						+ " : exception " + e.getMessage());
+				logger.warning("setBooleanCellValue() with " + value + " failed for property " + name + " for object "
+						+ object.getClass().getName() + " : exception " + e.getMessage());
 			}
 			e.printStackTrace();
 		}
 	}
 
-	protected synchronized boolean getBooleanCellValue(InspectableObject object)
-	{
+	protected synchronized boolean getBooleanCellValue(InspectableObject object) {
 		try {
 			if (object == null) {
 				if (logger.isLoggable(Level.WARNING)) {
@@ -469,22 +431,21 @@ public class PropertyListColumn extends PropertyModel
 			}
 		} catch (AccessorInvocationException e) {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("getCellValue() failed for property " + name + " for object " + object.getClass().getName() + " : exception " + e.getMessage());
+				logger.warning("getCellValue() failed for property " + name + " for object " + object.getClass().getName()
+						+ " : exception " + e.getMessage());
 			}
 			e.getTargetException().printStackTrace();
 			return false;
 		} catch (Exception e) {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger
-				.warning("getObjectValue() failed for property " + name + " for object " + object.getClass().getName() + " : exception "
-						+ e.getMessage());
+				logger.warning("getObjectValue() failed for property " + name + " for object " + object.getClass().getName()
+						+ " : exception " + e.getMessage());
 			}
 			return false;
 		}
 	}
 
-	protected synchronized void setIntegerCellValue(int value, InspectableObject object)
-	{
+	protected synchronized void setIntegerCellValue(int value, InspectableObject object) {
 		try {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("setIntegerCellValue() for property " + name + " with " + value);
@@ -504,15 +465,14 @@ public class PropertyListColumn extends PropertyModel
 			valueInError = false;
 		} catch (Exception e) {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("setIntegerCellValue() with " + value + " failed for property " + name + " for object " + object.getClass().getName()
-						+ " : exception " + e.getMessage());
+				logger.warning("setIntegerCellValue() with " + value + " failed for property " + name + " for object "
+						+ object.getClass().getName() + " : exception " + e.getMessage());
 			}
 			e.printStackTrace();
 		}
 	}
 
-	protected synchronized int getIntegerCellValue(InspectableObject object)
-	{
+	protected synchronized int getIntegerCellValue(InspectableObject object) {
 		try {
 			if (object == null) {
 				if (logger.isLoggable(Level.WARNING)) {
@@ -528,22 +488,21 @@ public class PropertyListColumn extends PropertyModel
 			}
 		} catch (AccessorInvocationException e) {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("getCellValue() failed for property " + name + " for object " + object.getClass().getName() + " : exception " + e.getMessage());
+				logger.warning("getCellValue() failed for property " + name + " for object " + object.getClass().getName()
+						+ " : exception " + e.getMessage());
 			}
 			e.getTargetException().printStackTrace();
 			return 0;
 		} catch (Exception e) {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger
-				.warning("getObjectValue() failed for property " + name + " for object " + object.getClass().getName() + " : exception "
-						+ e.getMessage());
+				logger.warning("getObjectValue() failed for property " + name + " for object " + object.getClass().getName()
+						+ " : exception " + e.getMessage());
 			}
 			return 0;
 		}
 	}
 
-	public KeyValueCoding getTargetObject(InspectableObject anObject)
-	{
+	public KeyValueCoding getTargetObject(InspectableObject anObject) {
 		KeyValueCoding object = anObject;
 		String listAccessor = name;
 		StringTokenizer strTok = new StringTokenizer(listAccessor, ".");
@@ -571,8 +530,7 @@ public class PropertyListColumn extends PropertyModel
 	private String _lastAccessor;
 
 	@Override
-	public String getLastAccessor()
-	{
+	public String getLastAccessor() {
 		if (_lastAccessor == null) {
 			String listAccessor = name;
 			StringTokenizer strTok = new StringTokenizer(listAccessor, ".");
@@ -592,85 +550,70 @@ public class PropertyListColumn extends PropertyModel
 	public static final String FORMAT = "format";
 	public static final String DYNAMIC_LIST = "dynamiclist";
 
-	public int getColumnWidth()
-	{
+	public int getColumnWidth() {
 		if (hasValueForParameter(COLUMN_WIDTH)) {
 			return getIntValueForParameter(COLUMN_WIDTH);
 		}
 		return DEFAULT_COLUMN_WIDTH;
 	}
 
-	public void setColumnWidth(int columnWidth)
-	{
-		setIntValueForParameter(COLUMN_WIDTH,columnWidth);
+	public void setColumnWidth(int columnWidth) {
+		setIntValueForParameter(COLUMN_WIDTH, columnWidth);
 	}
 
-	public boolean isResizable()
-	{
+	public boolean isResizable() {
 		if (hasValueForParameter(RESIZABLE)) {
 			return getBooleanValueForParameter(RESIZABLE);
 		}
 		return true;
 	}
 
-	public void setIsResizable(boolean isResizable)
-	{
-		setBooleanValueForParameter(RESIZABLE,isResizable);
+	public void setIsResizable(boolean isResizable) {
+		setBooleanValueForParameter(RESIZABLE, isResizable);
 	}
 
-	public boolean displayTitle()
-	{
+	public boolean displayTitle() {
 		if (hasValueForParameter(DISPLAY_TITLE)) {
 			return getBooleanValueForParameter(DISPLAY_TITLE);
 		}
 		return true;
 	}
 
-	public void setDisplayTitle(boolean displayTitle)
-	{
-		setBooleanValueForParameter(DISPLAY_TITLE,displayTitle);
+	public void setDisplayTitle(boolean displayTitle) {
+		setBooleanValueForParameter(DISPLAY_TITLE, displayTitle);
 	}
 
-	public String getFormat()
-	{
+	public String getFormat() {
 		if (hasValueForParameter(FORMAT)) {
 			return getValueForParameter(FORMAT);
 		}
 		return null;
 	}
 
-	public void setFormat(String format)
-	{
-		setValueForParameter(FORMAT,format);
+	public void setFormat(String format) {
+		setValueForParameter(FORMAT, format);
 	}
 
-	public String getDynamicList()
-	{
+	public String getDynamicList() {
 		if (hasValueForParameter(DYNAMIC_LIST)) {
 			return getValueForParameter(DYNAMIC_LIST);
 		}
 		return null;
 	}
 
-	public void setDynamicList(String format)
-	{
-		setValueForParameter(DYNAMIC_LIST,format);
+	public void setDynamicList(String format) {
+		setValueForParameter(DYNAMIC_LIST, format);
 	}
 
-
-
-	public String font()
-	{
+	public String font() {
 		if (hasValueForParameter(FONT)) {
 			return getValueForParameter(FONT);
 		}
 		return null;
 	}
 
-	public void setFont(String font)
-	{
-		setValueForParameter(FONT,font);
+	public void setFont(String font) {
+		setValueForParameter(FONT, font);
 	}
-
 
 }

@@ -26,29 +26,27 @@ import org.openflexo.foundation.FlexoModelObject;
  * 
  * @author bmangez, sguerin
  */
-public interface FocusableView
-{
+public interface FocusableView {
 
-    /**
-     * Return boolean indicating if related object is focused
-     * 
-     * @return boolean
-     */
-    public boolean isFocused();
+	/**
+	 * Return boolean indicating if related object is focused
+	 * 
+	 * @return boolean
+	 */
+	public boolean isFocused();
 
-    /**
-     * Sets related object to be focused or not
-     * 
-     * @param b
-     */
-    public void setIsFocused(boolean b);
-    
-    /**
-     * Return represented object, instance of
-     * {@link org.openflexo.foundation.FlexoModelObject}
-     * 
-     * @return
-     */
-    public FlexoModelObject getObject();
+	/**
+	 * Sets related object to be focused or not
+	 * 
+	 * @param b
+	 */
+	public void setIsFocused(boolean b);
+
+	/**
+	 * Return represented object, instance of {@link org.openflexo.foundation.FlexoModelObject}
+	 * 
+	 * @return
+	 */
+	public FlexoModelObject getObject();
 
 }

@@ -30,172 +30,164 @@ import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
 import org.openflexo.foundation.ie.cl.action.AddComponent;
 import org.openflexo.toolbox.FileUtils;
 
+public class TestBinding extends FlexoDMTestCase {
 
-public class TestBinding extends FlexoDMTestCase{
+	public TestBinding(String arg0) {
+		super(arg0);
+	}
 
-	   public TestBinding(String arg0) {
-			super(arg0);
+	public void test0Binding() {
+		FlexoEditor editor = createProject("BindingTest");
+		FlexoComponentFolder _cf = FlexoTestCase.createFolder("BindingTestFolder", null, editor);
+		IEWOComponent component = FlexoTestCase.createComponent("BindingTestComponent", _cf,
+				AddComponent.ComponentType.OPERATION_COMPONENT, editor);
+		DMProperty testProperty = createProperty(component.getComponentDMEntity(), "testProperty", editor);
+
+		component.getComponentDMEntity().setBindable(testProperty, true);
+		try {
+			testProperty.setName("changedName");
+		} catch (InvalidNameException e) {
+			e.printStackTrace();
+			fail();
+		} catch (DuplicatePropertyNameException e) {
+			e.printStackTrace();
+			fail();
 		}
 
-		public void test0Binding()
-		{
-	        FlexoEditor editor = createProject("BindingTest");
-	        FlexoComponentFolder _cf = FlexoTestCase.createFolder("BindingTestFolder", null, editor);
-	        IEWOComponent component = FlexoTestCase.createComponent("BindingTestComponent", _cf, AddComponent.ComponentType.OPERATION_COMPONENT, editor);
-	        DMProperty testProperty = createProperty(component.getComponentDMEntity(), "testProperty", editor);
+		assertTrue(component.getComponentDMEntity().isBindable(testProperty));
 
-	        component.getComponentDMEntity().setBindable(testProperty, true);
-	        try {
-				testProperty.setName("changedName");
-			} catch (InvalidNameException e) {
-				e.printStackTrace();
-				fail();
-			} catch (DuplicatePropertyNameException e) {
-				e.printStackTrace();
-				fail();
-			}
+		component.getComponentDMEntity().setBindable(testProperty, false);
 
+		assertFalse(component.getComponentDMEntity().isSettable(testProperty));
+		assertFalse(component.getComponentDMEntity().isMandatory(testProperty));
 
-	        assertTrue(component.getComponentDMEntity().isBindable(testProperty));
-
-	        component.getComponentDMEntity().setBindable(testProperty, false);
-
-	        assertFalse(component.getComponentDMEntity().isSettable(testProperty));
-	        assertFalse(component.getComponentDMEntity().isMandatory(testProperty));
-
-	        try {
-				testProperty.setName("changedName2");
-			} catch (InvalidNameException e) {
-				e.printStackTrace();
-				fail();
-			} catch (DuplicatePropertyNameException e) {
-				e.printStackTrace();
-				fail();
-			}
-
-	        assertFalse(component.getComponentDMEntity().isBindable(testProperty));
-	        assertFalse(component.getComponentDMEntity().isSettable(testProperty));
-	        assertFalse(component.getComponentDMEntity().isMandatory(testProperty));
-
-	        component.getComponentDMEntity().setMandatory(testProperty, true);
-	        try {
-				testProperty.setName("changedName3");
-			} catch (InvalidNameException e) {
-				e.printStackTrace();
-				fail();
-			} catch (DuplicatePropertyNameException e) {
-				e.printStackTrace();
-				fail();
-			}
-
-	        assertTrue(component.getComponentDMEntity().isMandatory(testProperty));
-	        assertTrue(component.getComponentDMEntity().isBindable(testProperty));
-	        assertFalse(component.getComponentDMEntity().isSettable(testProperty));
-
-	        component.getComponentDMEntity().setMandatory(testProperty, false);
-	        try {
-				testProperty.setName("changedName4");
-			} catch (InvalidNameException e) {
-				e.printStackTrace();
-				fail();
-			} catch (DuplicatePropertyNameException e) {
-				e.printStackTrace();
-				fail();
-			}
-
-	        assertTrue(component.getComponentDMEntity().isBindable(testProperty));
-	        assertFalse(component.getComponentDMEntity().isSettable(testProperty));
-	        assertFalse(component.getComponentDMEntity().isMandatory(testProperty));
-
-	        component.getComponentDMEntity().setSettable(testProperty, true);
-	        try {
-				testProperty.setName("changedName");
-			} catch (InvalidNameException e) {
-				e.printStackTrace();
-				fail();
-			} catch (DuplicatePropertyNameException e) {
-				e.printStackTrace();
-				fail();
-			}
-
-	        assertTrue(component.getComponentDMEntity().isSettable(testProperty));
-	        assertTrue(component.getComponentDMEntity().isBindable(testProperty));
-	        assertFalse(component.getComponentDMEntity().isMandatory(testProperty));
-
-	        try {
-				testProperty.setName("changedName2");
-			} catch (InvalidNameException e) {
-				e.printStackTrace();
-				fail();
-			} catch (DuplicatePropertyNameException e) {
-				e.printStackTrace();
-				fail();
-			}
-
-	        assertTrue(component.getComponentDMEntity().isBindable(testProperty));
-	        assertTrue(component.getComponentDMEntity().isSettable(testProperty));
-	        assertFalse(component.getComponentDMEntity().isMandatory(testProperty));
-
-	        saveProject(editor.getProject());
-			editor.getProject().close();
-	        editor = reloadProject(editor.getProject().getProjectDirectory());
-	        _cf = editor.getProject().getFlexoComponentLibrary().getFlexoComponentFolderWithName("BindingTestFolder");
-	        component = _cf.getComponentNamed("BindingTestComponent").getWOComponent();
-	        assertNotNull(component);
-	        testProperty = component.getComponentDMEntity().getProperty("changedName2");
-	        assertNotNull(testProperty);
-
-	        component.getComponentDMEntity().setSettable(testProperty, true);
-
-	        assertTrue(component.getComponentDMEntity().isSettable(testProperty));
-	        assertTrue(component.getComponentDMEntity().isBindable(testProperty));
-	        assertFalse(component.getComponentDMEntity().isMandatory(testProperty));
-	        editor.getProject().close();
-	        editor = reloadProject(editor.getProject().getProjectDirectory());
-	        _cf = editor.getProject().getFlexoComponentLibrary().getFlexoComponentFolderWithName("BindingTestFolder");
-	        component = _cf.getComponentNamed("BindingTestComponent").getWOComponent();
-	        assertNotNull(component);
-	        testProperty = component.getComponentDMEntity().getProperty("changedName2");
-	        assertNotNull(testProperty);
-
-
-	        assertTrue(component.getComponentDMEntity().isBindable(testProperty));
-	        assertTrue(component.getComponentDMEntity().isSettable(testProperty));
-	        assertFalse(component.getComponentDMEntity().isMandatory(testProperty));
-
-
-
-
-
-	        component = _cf.getComponentNamed("BindingTestComponent").getWOComponent();
-	        assertNotNull(component);
-	        testProperty = component.getComponentDMEntity().getProperty("changedName2");
-	        assertNotNull(testProperty);
-	        assertTrue(component.getComponentDMEntity().isSettable(testProperty));
-	        assertTrue(component.getComponentDMEntity().isBindable(testProperty));
-	        assertFalse(component.getComponentDMEntity().isMandatory(testProperty));
-
-
-	        component.getComponentDMEntity().setMandatory(testProperty, true);
-	        assertTrue(component.getComponentDMEntity().isSettable(testProperty));
-	        assertTrue(component.getComponentDMEntity().isBindable(testProperty));
-	        assertTrue(component.getComponentDMEntity().isMandatory(testProperty));
-
-	        saveProject(editor.getProject());
-	        editor.getProject().close();
-	        editor = reloadProject(editor.getProject().getProjectDirectory());
-	        _cf = editor.getProject().getFlexoComponentLibrary().getFlexoComponentFolderWithName("BindingTestFolder");
-	        component = _cf.getComponentNamed("BindingTestComponent").getWOComponent();
-	        assertNotNull(component);
-	        testProperty = component.getComponentDMEntity().getProperty("changedName2");
-	        assertNotNull(testProperty);
-
-	        assertTrue(component.getComponentDMEntity().isSettable(testProperty));
-	        assertTrue(component.getComponentDMEntity().isBindable(testProperty));
-	        assertTrue(component.getComponentDMEntity().isMandatory(testProperty));
-
-	        editor.getProject().close();
-	        FileUtils.deleteDir(editor.getProject().getProjectDirectory());
+		try {
+			testProperty.setName("changedName2");
+		} catch (InvalidNameException e) {
+			e.printStackTrace();
+			fail();
+		} catch (DuplicatePropertyNameException e) {
+			e.printStackTrace();
+			fail();
 		}
+
+		assertFalse(component.getComponentDMEntity().isBindable(testProperty));
+		assertFalse(component.getComponentDMEntity().isSettable(testProperty));
+		assertFalse(component.getComponentDMEntity().isMandatory(testProperty));
+
+		component.getComponentDMEntity().setMandatory(testProperty, true);
+		try {
+			testProperty.setName("changedName3");
+		} catch (InvalidNameException e) {
+			e.printStackTrace();
+			fail();
+		} catch (DuplicatePropertyNameException e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		assertTrue(component.getComponentDMEntity().isMandatory(testProperty));
+		assertTrue(component.getComponentDMEntity().isBindable(testProperty));
+		assertFalse(component.getComponentDMEntity().isSettable(testProperty));
+
+		component.getComponentDMEntity().setMandatory(testProperty, false);
+		try {
+			testProperty.setName("changedName4");
+		} catch (InvalidNameException e) {
+			e.printStackTrace();
+			fail();
+		} catch (DuplicatePropertyNameException e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		assertTrue(component.getComponentDMEntity().isBindable(testProperty));
+		assertFalse(component.getComponentDMEntity().isSettable(testProperty));
+		assertFalse(component.getComponentDMEntity().isMandatory(testProperty));
+
+		component.getComponentDMEntity().setSettable(testProperty, true);
+		try {
+			testProperty.setName("changedName");
+		} catch (InvalidNameException e) {
+			e.printStackTrace();
+			fail();
+		} catch (DuplicatePropertyNameException e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		assertTrue(component.getComponentDMEntity().isSettable(testProperty));
+		assertTrue(component.getComponentDMEntity().isBindable(testProperty));
+		assertFalse(component.getComponentDMEntity().isMandatory(testProperty));
+
+		try {
+			testProperty.setName("changedName2");
+		} catch (InvalidNameException e) {
+			e.printStackTrace();
+			fail();
+		} catch (DuplicatePropertyNameException e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		assertTrue(component.getComponentDMEntity().isBindable(testProperty));
+		assertTrue(component.getComponentDMEntity().isSettable(testProperty));
+		assertFalse(component.getComponentDMEntity().isMandatory(testProperty));
+
+		saveProject(editor.getProject());
+		editor.getProject().close();
+		editor = reloadProject(editor.getProject().getProjectDirectory());
+		_cf = editor.getProject().getFlexoComponentLibrary().getFlexoComponentFolderWithName("BindingTestFolder");
+		component = _cf.getComponentNamed("BindingTestComponent").getWOComponent();
+		assertNotNull(component);
+		testProperty = component.getComponentDMEntity().getProperty("changedName2");
+		assertNotNull(testProperty);
+
+		component.getComponentDMEntity().setSettable(testProperty, true);
+
+		assertTrue(component.getComponentDMEntity().isSettable(testProperty));
+		assertTrue(component.getComponentDMEntity().isBindable(testProperty));
+		assertFalse(component.getComponentDMEntity().isMandatory(testProperty));
+		editor.getProject().close();
+		editor = reloadProject(editor.getProject().getProjectDirectory());
+		_cf = editor.getProject().getFlexoComponentLibrary().getFlexoComponentFolderWithName("BindingTestFolder");
+		component = _cf.getComponentNamed("BindingTestComponent").getWOComponent();
+		assertNotNull(component);
+		testProperty = component.getComponentDMEntity().getProperty("changedName2");
+		assertNotNull(testProperty);
+
+		assertTrue(component.getComponentDMEntity().isBindable(testProperty));
+		assertTrue(component.getComponentDMEntity().isSettable(testProperty));
+		assertFalse(component.getComponentDMEntity().isMandatory(testProperty));
+
+		component = _cf.getComponentNamed("BindingTestComponent").getWOComponent();
+		assertNotNull(component);
+		testProperty = component.getComponentDMEntity().getProperty("changedName2");
+		assertNotNull(testProperty);
+		assertTrue(component.getComponentDMEntity().isSettable(testProperty));
+		assertTrue(component.getComponentDMEntity().isBindable(testProperty));
+		assertFalse(component.getComponentDMEntity().isMandatory(testProperty));
+
+		component.getComponentDMEntity().setMandatory(testProperty, true);
+		assertTrue(component.getComponentDMEntity().isSettable(testProperty));
+		assertTrue(component.getComponentDMEntity().isBindable(testProperty));
+		assertTrue(component.getComponentDMEntity().isMandatory(testProperty));
+
+		saveProject(editor.getProject());
+		editor.getProject().close();
+		editor = reloadProject(editor.getProject().getProjectDirectory());
+		_cf = editor.getProject().getFlexoComponentLibrary().getFlexoComponentFolderWithName("BindingTestFolder");
+		component = _cf.getComponentNamed("BindingTestComponent").getWOComponent();
+		assertNotNull(component);
+		testProperty = component.getComponentDMEntity().getProperty("changedName2");
+		assertNotNull(testProperty);
+
+		assertTrue(component.getComponentDMEntity().isSettable(testProperty));
+		assertTrue(component.getComponentDMEntity().isBindable(testProperty));
+		assertTrue(component.getComponentDMEntity().isMandatory(testProperty));
+
+		editor.getProject().close();
+		FileUtils.deleteDir(editor.getProject().getProjectDirectory());
+	}
 
 }

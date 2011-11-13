@@ -19,7 +19,6 @@
  */
 package org.openflexo.components.browser.ontology;
 
-
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
@@ -32,69 +31,62 @@ import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Browser element representing an ontology
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public abstract class FlexoOntologyElement extends BrowserElement
-{
+public abstract class FlexoOntologyElement extends BrowserElement {
 
-    protected FlexoOntologyElement(FlexoOntology ontology, BrowserElementType elementType, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(ontology, elementType, browser, parent);
-    }
+	protected FlexoOntologyElement(FlexoOntology ontology, BrowserElementType elementType, ProjectBrowser browser, BrowserElement parent) {
+		super(ontology, elementType, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-    	if (getProjectBrowser().getOEViewMode() == OEViewMode.NoHierarchy)
-    	{
-        	for (OntologyClass concept : getOntology().getClasses()) {
-           		addToChilds(concept);
-           	}
-          	for (OntologyProperty property : getOntology().getObjectProperties()) {
-          		if (!getProjectBrowser().showOnlyAnnotationProperties() || property.isAnnotationProperty())
-          			addToChilds(property);
-           	}
-           	for (OntologyProperty property : getOntology().getDataProperties()) {
-          		if (!getProjectBrowser().showOnlyAnnotationProperties() || property.isAnnotationProperty())
-          			addToChilds(property);
-           	}
-           	for (OntologyIndividual concept : getOntology().getIndividuals()) {
-           		addToChilds(concept);
-           	}
-    	}
+	@Override
+	protected void buildChildrenVector() {
+		if (getProjectBrowser().getOEViewMode() == OEViewMode.NoHierarchy) {
+			for (OntologyClass concept : getOntology().getClasses()) {
+				addToChilds(concept);
+			}
+			for (OntologyProperty property : getOntology().getObjectProperties()) {
+				if (!getProjectBrowser().showOnlyAnnotationProperties() || property.isAnnotationProperty())
+					addToChilds(property);
+			}
+			for (OntologyProperty property : getOntology().getDataProperties()) {
+				if (!getProjectBrowser().showOnlyAnnotationProperties() || property.isAnnotationProperty())
+					addToChilds(property);
+			}
+			for (OntologyIndividual concept : getOntology().getIndividuals()) {
+				addToChilds(concept);
+			}
+		}
 
-    	if (getProjectBrowser().getOEViewMode() == OEViewMode.PartialHierarchy)
-    	{
-          	for (OntologyClass concept : getOntology().getRootClasses()) {
-           		addToChilds(concept);
-           	}
-          	for (OntologyProperty concept : getOntology().getRootProperties()) {
-           		addToChilds(concept);
-           	}
-          	/*for (OntologyProperty property : getOntology().getDataProperties()) {
-           		addToChilds(property);
-           	}
-          	for (OntologyProperty property : getOntology().getObjectProperties()) {
-           		addToChilds(property);
-           	}*/
-           	/*for (OntologyIndividual concept : getOntology().getIndividuals()) {
-           		addToChilds(concept);
-           	}*/
-    	}
+		if (getProjectBrowser().getOEViewMode() == OEViewMode.PartialHierarchy) {
+			for (OntologyClass concept : getOntology().getRootClasses()) {
+				addToChilds(concept);
+			}
+			for (OntologyProperty concept : getOntology().getRootProperties()) {
+				addToChilds(concept);
+			}
+			/*for (OntologyProperty property : getOntology().getDataProperties()) {
+				addToChilds(property);
+			}
+			for (OntologyProperty property : getOntology().getObjectProperties()) {
+				addToChilds(property);
+			}*/
+			/*for (OntologyIndividual concept : getOntology().getIndividuals()) {
+				addToChilds(concept);
+			}*/
+		}
 
-    }
+	}
 
-    @Override
-	public String getName()
-    {
-        return getOntology().getName()+(getOntology().isLoaded()?"":" "+FlexoLocalization.localizedForKey("<unloaded>"));
-    }
+	@Override
+	public String getName() {
+		return getOntology().getName() + (getOntology().isLoaded() ? "" : " " + FlexoLocalization.localizedForKey("<unloaded>"));
+	}
 
-    protected FlexoOntology getOntology()
-    {
-        return (FlexoOntology) getObject();
-    }
+	protected FlexoOntology getOntology() {
+		return (FlexoOntology) getObject();
+	}
 
 }

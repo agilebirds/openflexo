@@ -1,6 +1,5 @@
 package org.openflexo.model.factory;
 
-
 public interface AccessibleProxyObject {
 
 	public Object performSuperGetter(String propertyIdentifier);

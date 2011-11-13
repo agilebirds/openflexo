@@ -1,6 +1,6 @@
 package org.openflexo.builders.exception;
 
-public class FlexoRunException extends Exception{
+public class FlexoRunException extends Exception {
 
 	public FlexoRunException() {
 		super();
@@ -18,5 +18,4 @@ public class FlexoRunException extends Exception{
 		super(cause);
 	}
 
-	
 }

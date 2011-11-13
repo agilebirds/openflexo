@@ -28,59 +28,49 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 
-
 /**
  * Widget allowing to select a Process while browsing the workflow
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class ProcessSelector extends AbstractBrowserSelector<FlexoProcess>
-{
+public class ProcessSelector extends AbstractBrowserSelector<FlexoProcess> {
 
 	protected static final String EMPTY_STRING = "";
 
-	public ProcessSelector(FlexoProject project, FlexoProcess process)
-	{
+	public ProcessSelector(FlexoProject project, FlexoProcess process) {
 		super(project, process, FlexoProcess.class);
 	}
 
-	public ProcessSelector(FlexoProject project, FlexoProcess process, int cols)
-	{
+	public ProcessSelector(FlexoProject project, FlexoProcess process, int cols) {
 		super(project, process, FlexoProcess.class, cols);
 	}
 
 	@Override
-	protected ProcessSelectorPanel makeCustomPanel(FlexoProcess editedObject)
-	{
+	protected ProcessSelectorPanel makeCustomPanel(FlexoProcess editedObject) {
 		return new ProcessSelectorPanel();
 	}
 
 	@Override
-	public String renderedString(FlexoProcess editedObject)
-	{
+	public String renderedString(FlexoProcess editedObject) {
 		if (editedObject != null) {
 			return editedObject.getName();
 		}
 		return EMPTY_STRING;
 	}
 
-	protected class ProcessSelectorPanel extends AbstractSelectorPanel<FlexoProcess>
-	{
-		protected ProcessSelectorPanel()
-		{
+	protected class ProcessSelectorPanel extends AbstractSelectorPanel<FlexoProcess> {
+		protected ProcessSelectorPanel() {
 			super(ProcessSelector.this);
 		}
 
 		@Override
-		protected ProjectBrowser createBrowser(FlexoProject project)
-		{
+		protected ProjectBrowser createBrowser(FlexoProject project) {
 			return new ProcessBrowser();
 		}
 
 		@Override
-		public Dimension getDefaultSize()
-		{
+		public Dimension getDefaultSize() {
 			Dimension returned = _browserView.getDefaultSize();
 			returned.width = returned.width;
 			returned.height = returned.height - 100;
@@ -88,18 +78,15 @@ public class ProcessSelector extends AbstractBrowserSelector<FlexoProcess>
 		}
 	}
 
-	protected class ProcessBrowser extends ProjectBrowser
-	{
+	protected class ProcessBrowser extends ProjectBrowser {
 
-		protected ProcessBrowser()
-		{
+		protected ProcessBrowser() {
 			super(ProcessSelector.this.getProject(), false);
 			init();
 		}
 
 		@Override
-		public void configure()
-		{
+		public void configure() {
 			setFilterStatus(BrowserElementType.PRECONDITION, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.POSTCONDITION, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.ROLE, BrowserFilterStatus.HIDE);
@@ -131,12 +118,11 @@ public class ProcessSelector extends AbstractBrowserSelector<FlexoProcess>
 			setFilterStatus(BrowserElementType.CALC_LIBRARY, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.OE_SHEMA_LIBRARY, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.PROCESS_FOLDER, BrowserFilterStatus.SHOW,true);
+			setFilterStatus(BrowserElementType.PROCESS_FOLDER, BrowserFilterStatus.SHOW, true);
 		}
 
 		@Override
-		public FlexoModelObject getDefaultRootObject()
-		{
+		public FlexoModelObject getDefaultRootObject() {
 			return getProject();
 		}
 

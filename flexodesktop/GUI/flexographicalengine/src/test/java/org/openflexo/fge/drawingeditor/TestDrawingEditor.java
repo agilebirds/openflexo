@@ -18,6 +18,7 @@
  *
  */
 package org.openflexo.fge.drawingeditor;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -45,18 +46,15 @@ import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.xmlcode.StringEncoder;
 
-
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
-
 
 public class TestDrawingEditor {
 
 	private static final Logger logger = FlexoLogger.getLogger(TestDrawingEditor.class.getPackage().getName());
 
-	public static void main(String[] args) 
-	{
+	public static void main(String[] args) {
 		try {
 			ToolBox.setPlatform();
 			FlexoLoggingManager.initialize();
@@ -71,10 +69,10 @@ public class TestDrawingEditor {
 		}
 
 		StringEncoder.getDefaultInstance()._addConverter(DataBinding.CONVERTER);
-		
+
 		TestDrawingEditor editor = new TestDrawingEditor();
 		editor.showPanel();
-		
+
 		/*(new Thread(new Runnable() {
 			public void run()
 			{
@@ -89,69 +87,65 @@ public class TestDrawingEditor {
 			}
 		})).start();*/
 	}
-	
+
 	private JFrame frame;
 	private JDialog paletteDialog;
 	private FlexoFileChooser fileChooser;
-	
+
 	private FIBInspectorController inspector;
 
-	public TestDrawingEditor()
-	{
+	public TestDrawingEditor() {
 		super();
 		frame = new JFrame();
-		frame.setPreferredSize(new Dimension(1000,800));
+		frame.setPreferredSize(new Dimension(1000, 800));
 		fileChooser = new FlexoFileChooser(frame);
 		fileChooser.setFileFilterAsString("*.drw");
 		fileChooser.setCurrentDirectory(new FileResource("DrawingExamples"));
-		
+
 		inspector = new FIBInspectorController(frame);
-		
-		paletteDialog = new JDialog(frame,"Palette",false);
+
+		paletteDialog = new JDialog(frame, "Palette", false);
 		JPanel emptyContent = new JPanel();
-		emptyContent.setPreferredSize(new Dimension(300,300));
+		emptyContent.setPreferredSize(new Dimension(300, 300));
 		paletteDialog.getContentPane().add(emptyContent);
-		paletteDialog.setLocation(1010,0);
+		paletteDialog.setLocation(1010, 0);
 		paletteDialog.pack();
 		paletteDialog.setVisible(true);
-		
+
 	}
-	
+
 	private Vector<MyDrawing> _drawings = new Vector<MyDrawing>();
 	private JPanel mainPanel;
 	private JTabbedPane tabbedPane;
-	
-	private MyDrawing currentDrawing;
-	
 
-	private class MyDrawingViewScrollPane extends JScrollPane
-	{
+	private MyDrawing currentDrawing;
+
+	private class MyDrawingViewScrollPane extends JScrollPane {
 		private MyDrawingView drawingView;
+
 		private MyDrawingViewScrollPane(MyDrawingView v) {
 			super(v);
 			drawingView = v;
 		}
 	}
-	
-	private void addDrawing(final MyDrawing drawing)
-	{
+
+	private void addDrawing(final MyDrawing drawing) {
 		if (tabbedPane == null) {
 			tabbedPane = new JTabbedPane();
 			tabbedPane.addChangeListener(new ChangeListener() {
 				@Override
-				public void stateChanged(ChangeEvent e)
-				{
-					MyDrawingViewScrollPane c = (MyDrawingViewScrollPane)tabbedPane.getSelectedComponent();
+				public void stateChanged(ChangeEvent e) {
+					MyDrawingViewScrollPane c = (MyDrawingViewScrollPane) tabbedPane.getSelectedComponent();
 					drawingSwitched(c.drawingView.getDrawing().getModel());
 				}
 			});
-			mainPanel.add(tabbedPane,BorderLayout.CENTER);
-			//mainPanel.add(drawing.getEditedDrawing().getPalette().getPaletteView(),BorderLayout.EAST);
+			mainPanel.add(tabbedPane, BorderLayout.CENTER);
+			// mainPanel.add(drawing.getEditedDrawing().getPalette().getPaletteView(),BorderLayout.EAST);
 		}
 		_drawings.add(drawing);
-		tabbedPane.add(drawing.getTitle(),new MyDrawingViewScrollPane(drawing.getEditedDrawing().getController().getDrawingView()));
+		tabbedPane.add(drawing.getTitle(), new MyDrawingViewScrollPane(drawing.getEditedDrawing().getController().getDrawingView()));
 		switchToDrawing(drawing);
-	
+
 		/*frame.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent event) 
 			{
@@ -179,30 +173,27 @@ public class TestDrawingEditor {
 			}
 		});*/
 	}
-	
-	private void removeDrawing(MyDrawing drawing)
-	{
-		
+
+	private void removeDrawing(MyDrawing drawing) {
+
 	}
-	
-	public void switchToDrawing(MyDrawing drawing)
-	{
+
+	public void switchToDrawing(MyDrawing drawing) {
 		tabbedPane.setSelectedIndex(_drawings.indexOf(drawing));
 	}
-	
-	private void drawingSwitched(MyDrawing drawing)
-	{
+
+	private void drawingSwitched(MyDrawing drawing) {
 		if (currentDrawing != null) {
 			mainPanel.remove(currentDrawing.getEditedDrawing().getController().getScalePanel());
 			currentDrawing.getEditedDrawing().getController().deleteObserver(inspector);
 		}
 		currentDrawing = drawing;
-		
+
 		JPanel topPanel = new JPanel(new BorderLayout());
-		topPanel.add(currentDrawing.getEditedDrawing().getController().getToolbox().getToolboxPanel(),BorderLayout.WEST);
-		topPanel.add(currentDrawing.getEditedDrawing().getController().getScalePanel(),BorderLayout.EAST);
-		
-		mainPanel.add(topPanel,BorderLayout.NORTH);
+		topPanel.add(currentDrawing.getEditedDrawing().getController().getToolbox().getToolboxPanel(), BorderLayout.WEST);
+		topPanel.add(currentDrawing.getEditedDrawing().getController().getScalePanel(), BorderLayout.EAST);
+
+		mainPanel.add(topPanel, BorderLayout.NORTH);
 		currentDrawing.getEditedDrawing().getController().addObserver(inspector);
 		updateFrameTitle();
 		mainPanel.revalidate();
@@ -211,19 +202,16 @@ public class TestDrawingEditor {
 		paletteDialog.getContentPane().add(drawing.getEditedDrawing().getPalette().getPaletteView());
 		paletteDialog.pack();
 	}
-	
-	private void updateFrameTitle()
-	{
-		frame.setTitle("Basic drawing editor - "+currentDrawing.getTitle());
+
+	private void updateFrameTitle() {
+		frame.setTitle("Basic drawing editor - " + currentDrawing.getTitle());
 	}
-	
-	private void updateTabTitle()
-	{
+
+	private void updateTabTitle() {
 		tabbedPane.setTitleAt(_drawings.indexOf(currentDrawing), currentDrawing.getTitle());
 	}
-	
-	public void showPanel() 
-	{
+
+	public void showPanel() {
 		frame.setTitle("Basic drawing editor");
 		mainPanel = new JPanel(new BorderLayout());
 
@@ -232,8 +220,7 @@ public class TestDrawingEditor {
 		JMenu editMenu = new JMenu(FlexoLocalization.localizedForKey("edit"));
 		JMenu toolsMenu = new JMenu(FlexoLocalization.localizedForKey("tools"));
 		JMenu helpMenu = new JMenu(FlexoLocalization.localizedForKey("help"));
-		
-		
+
 		JMenuItem newItem = new JMenuItem(FlexoLocalization.localizedForKey("new_drawing"));
 		newItem.addActionListener(new ActionListener() {
 			@Override
@@ -241,7 +228,7 @@ public class TestDrawingEditor {
 				newDrawing();
 			}
 		});
-		
+
 		JMenuItem loadItem = new JMenuItem(FlexoLocalization.localizedForKey("open_drawing"));
 		loadItem.addActionListener(new ActionListener() {
 			@Override
@@ -249,7 +236,7 @@ public class TestDrawingEditor {
 				loadDrawing();
 			}
 		});
-		
+
 		JMenuItem saveItem = new JMenuItem(FlexoLocalization.localizedForKey("save_drawing"));
 		saveItem.addActionListener(new ActionListener() {
 			@Override
@@ -257,7 +244,7 @@ public class TestDrawingEditor {
 				saveDrawing();
 			}
 		});
-		
+
 		JMenuItem saveAsItem = new JMenuItem(FlexoLocalization.localizedForKey("save_drawing_as"));
 		saveAsItem.addActionListener(new ActionListener() {
 			@Override
@@ -265,7 +252,7 @@ public class TestDrawingEditor {
 				saveDrawingAs();
 			}
 		});
-		
+
 		JMenuItem closeItem = new JMenuItem(FlexoLocalization.localizedForKey("close_drawing"));
 		closeItem.addActionListener(new ActionListener() {
 			@Override
@@ -273,7 +260,7 @@ public class TestDrawingEditor {
 				closeDrawing();
 			}
 		});
-		
+
 		JMenuItem quitItem = new JMenuItem(FlexoLocalization.localizedForKey("quit"));
 		quitItem.addActionListener(new ActionListener() {
 			@Override
@@ -281,7 +268,7 @@ public class TestDrawingEditor {
 				quit();
 			}
 		});
-		
+
 		fileMenu.add(newItem);
 		fileMenu.add(loadItem);
 		fileMenu.add(saveItem);
@@ -289,7 +276,7 @@ public class TestDrawingEditor {
 		fileMenu.add(closeItem);
 		fileMenu.addSeparator();
 		fileMenu.add(quitItem);
-		
+
 		JMenuItem inspectItem = new JMenuItem(FlexoLocalization.localizedForKey("inspect"));
 		inspectItem.addActionListener(new ActionListener() {
 			@Override
@@ -305,26 +292,25 @@ public class TestDrawingEditor {
 				FlexoLoggingManager.showLoggingViewer();
 			}
 		});
-		
+
 		JMenuItem localizedItem = new JMenuItem(FlexoLocalization.localizedForKey("localized_editor"));
 		localizedItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-			       FlexoLocalization.showLocalizedEditor();
+				FlexoLocalization.showLocalizedEditor();
 			}
 		});
-		
+
 		toolsMenu.add(inspectItem);
 		toolsMenu.add(logsItem);
 		toolsMenu.add(localizedItem);
-		
+
 		mb.add(fileMenu);
 		mb.add(editMenu);
 		mb.add(toolsMenu);
 		mb.add(helpMenu);
-		
+
 		frame.setJMenuBar(mb);
-		
 
 		frame.getContentPane().add(mainPanel);
 		frame.validate();
@@ -333,26 +319,22 @@ public class TestDrawingEditor {
 		frame.setVisible(true);
 
 	}
-	
-	public void quit()
-	{
+
+	public void quit() {
 		frame.dispose();
 		System.exit(0);
 	}
 
-	public void closeDrawing()
-	{
+	public void closeDrawing() {
 		logger.warning("Not implemented yet");
 	}
 
-	public void newDrawing()
-	{
+	public void newDrawing() {
 		MyDrawing newDrawing = MyDrawing.makeNewDrawing();
 		addDrawing(newDrawing);
 	}
 
-	public void loadDrawing()
-	{
+	public void loadDrawing() {
 		if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
 			MyDrawing loadedDrawing = MyDrawing.load(file);
@@ -361,33 +343,29 @@ public class TestDrawingEditor {
 		}
 	}
 
-	public void saveDrawing()
-	{
-		if (currentDrawing == null) return;
+	public void saveDrawing() {
+		if (currentDrawing == null)
+			return;
 		if (currentDrawing.file == null) {
 			saveDrawingAs();
-		}
-		else {
+		} else {
 			currentDrawing.save();
 		}
 	}
 
-	public void saveDrawingAs()
-	{
-		if (currentDrawing == null) return;
+	public void saveDrawingAs() {
+		if (currentDrawing == null)
+			return;
 		if (fileChooser.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
-			if (!file.getName().endsWith(".drw")) file = new File(file.getParentFile(),file.getName()+".drw");
+			if (!file.getName().endsWith(".drw"))
+				file = new File(file.getParentFile(), file.getName() + ".drw");
 			currentDrawing.file = file;
 			updateFrameTitle();
 			updateTabTitle();
 			currentDrawing.save();
-		}
-		else {
+		} else {
 			return;
 		}
 	}
 }
-
-
-

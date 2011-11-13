@@ -27,13 +27,11 @@ import org.openflexo.foundation.wkf.WKFStockObject;
 import org.openflexo.wkf.grsetup.StockObjectGRSetup;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
-
 public class StockObjectGR extends ArtefactGR<WKFStockObject> {
 
 	private static final Logger logger = Logger.getLogger(StockObjectGR.class.getPackage().getName());
 
-	public StockObjectGR(WKFStockObject dataSource, ProcessRepresentation aDrawing)
-	{
+	public StockObjectGR(WKFStockObject dataSource, ProcessRepresentation aDrawing) {
 		super(dataSource, ShapeType.TRIANGLE, aDrawing);
 		StockObjectGRSetup.setupGR(this);
 	}
@@ -54,11 +52,10 @@ public class StockObjectGR extends ArtefactGR<WKFStockObject> {
 	}
 
 	/**
-	 * This method computes the minimal width or minimal height so that the
-	 * label is centered on the two thirds of the triangle height (beware that
-	 * the triangle does not take the whole height of the shape, actually it's
-	 * three quarter of it) and the bounds of the labels are strictly enclosed in the triangle
-	 *
+	 * This method computes the minimal width or minimal height so that the label is centered on the two thirds of the triangle height
+	 * (beware that the triangle does not take the whole height of the shape, actually it's three quarter of it) and the bounds of the
+	 * labels are strictly enclosed in the triangle
+	 * 
 	 * @param labelWidth
 	 * @return
 	 */
@@ -85,18 +82,21 @@ public class StockObjectGR extends ArtefactGR<WKFStockObject> {
 
 	@Override
 	public FGESteppedDimensionConstraint getDimensionConstraintStep() {
-		if (getDrawing()!=null) {
-			FGESteppedDimensionConstraint constraint = getDrawing().getDrawingGraphicalRepresentation().getDimensionConstraintsForObject(this);
-			if (constraint!=null)
-				return new FGESteppedDimensionConstraint(constraint.getHorizontalStep()/(getShape().getShape().getEmbeddingBounds().width/*-getShape().getShape().getEmbeddingBounds().x*/), constraint.getVerticalStep()/(getShape().getShape().getEmbeddingBounds().height/*-getShape().getShape().getEmbeddingBounds().y*/));
+		if (getDrawing() != null) {
+			FGESteppedDimensionConstraint constraint = getDrawing().getDrawingGraphicalRepresentation().getDimensionConstraintsForObject(
+					this);
+			if (constraint != null)
+				return new FGESteppedDimensionConstraint(constraint.getHorizontalStep()
+						/ (getShape().getShape().getEmbeddingBounds().width/*-getShape().getShape().getEmbeddingBounds().x*/),
+						constraint.getVerticalStep()
+								/ (getShape().getShape().getEmbeddingBounds().height/*-getShape().getShape().getEmbeddingBounds().y*/));
 			return constraint;
 		}
 		return null;
 	}
 
 	@Override
-	protected boolean supportShadow()
-	{
+	protected boolean supportShadow() {
 		return false;
 	}
 

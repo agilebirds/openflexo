@@ -25,63 +25,52 @@ import org.openflexo.fge.geomedit.construction.PolygonConstruction;
 import org.openflexo.fge.geomedit.gr.PolygonGraphicalRepresentation;
 import org.openflexo.fge.notifications.FGENotification;
 
-
 public class Polygon extends GeometricObject<FGEPolygon> {
 
 	private PolygonGraphicalRepresentation graphicalRepresentation;
-	
+
 	// Called for LOAD
-	public Polygon(GeomEditBuilder builder)
-	{
+	public Polygon(GeomEditBuilder builder) {
 		super(builder);
 	}
-	
-	public Polygon(GeometricSet set, PolygonConstruction construction) 
-	{
+
+	public Polygon(GeometricSet set, PolygonConstruction construction) {
 		super(set, construction);
-		graphicalRepresentation = new PolygonGraphicalRepresentation(this,set.getEditedDrawing());
+		graphicalRepresentation = new PolygonGraphicalRepresentation(this, set.getEditedDrawing());
 	}
 
 	@Override
-	public PolygonGraphicalRepresentation getGraphicalRepresentation()
-	{
+	public PolygonGraphicalRepresentation getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
 
-	public void setGraphicalRepresentation(PolygonGraphicalRepresentation aGR)
-	{
+	public void setGraphicalRepresentation(PolygonGraphicalRepresentation aGR) {
 		aGR.setDrawable(this);
 		graphicalRepresentation = aGR;
 	}
 
 	@Override
-	public PolygonConstruction getConstruction()
-	{
-		return (PolygonConstruction)super.getConstruction();
+	public PolygonConstruction getConstruction() {
+		return (PolygonConstruction) super.getConstruction();
 	}
 
-	public void setConstruction(PolygonConstruction polygonConstruction)
-	{
+	public void setConstruction(PolygonConstruction polygonConstruction) {
 		_setConstruction(polygonConstruction);
 	}
 
-
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return "Polygon.inspector";
 	}
 
-	public boolean getIsFilled()
-	{
+	public boolean getIsFilled() {
 		return getConstruction().getIsFilled();
 	}
 
-	public void setIsFilled(boolean filled)
-	{
+	public void setIsFilled(boolean filled) {
 		if (filled != getIsFilled()) {
 			getConstruction().setIsFilled(filled);
-			getGraphicalRepresentation().notify(new FGENotification("isFilled",!filled,filled));
+			getGraphicalRepresentation().notify(new FGENotification("isFilled", !filled, filled));
 		}
 	}
 }

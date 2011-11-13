@@ -22,7 +22,6 @@ package org.openflexo.dgmodule.controller.action;
 import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
-
 import org.openflexo.dgmodule.controller.DGController;
 import org.openflexo.dgmodule.view.popups.ShowScreenshotDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -38,66 +37,58 @@ public class GenerateComponentScreenshotInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	GenerateComponentScreenshotInitializer(DGControllerActionInitializer actionInitializer)
-	{
-		super(GenerateComponentScreenshot.actionType,actionInitializer);
-	}
-	
-	@Override
-	protected DGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DGControllerActionInitializer)super.getControllerActionInitializer();
-	}
-	
-	@Override
-	protected FlexoActionInitializer<GenerateComponentScreenshot> getDefaultInitializer() 
-	{
-		return new FlexoActionInitializer<GenerateComponentScreenshot>() {
-            @Override
-			public boolean run(ActionEvent e, GenerateComponentScreenshot action)
-            {
-                // This action could be called from outside the
-                // scope of the DocumentationGenerator, sooo....
-                // We always return true, here, but we also store
-                // controller in context object
-                logger.info("Active controller is: " + FlexoModule.getActiveModule().getFlexoController());
-                action.setContext(FlexoModule.getActiveModule().getFlexoController());
-                return true;
-           }
-        };
+	GenerateComponentScreenshotInitializer(DGControllerActionInitializer actionInitializer) {
+		super(GenerateComponentScreenshot.actionType, actionInitializer);
 	}
 
-     @Override
-	protected FlexoActionFinalizer<GenerateComponentScreenshot> getDefaultFinalizer() 
-	{
+	@Override
+	protected DGControllerActionInitializer getControllerActionInitializer() {
+		return (DGControllerActionInitializer) super.getControllerActionInitializer();
+	}
+
+	@Override
+	protected FlexoActionInitializer<GenerateComponentScreenshot> getDefaultInitializer() {
+		return new FlexoActionInitializer<GenerateComponentScreenshot>() {
+			@Override
+			public boolean run(ActionEvent e, GenerateComponentScreenshot action) {
+				// This action could be called from outside the
+				// scope of the DocumentationGenerator, sooo....
+				// We always return true, here, but we also store
+				// controller in context object
+				logger.info("Active controller is: " + FlexoModule.getActiveModule().getFlexoController());
+				action.setContext(FlexoModule.getActiveModule().getFlexoController());
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected FlexoActionFinalizer<GenerateComponentScreenshot> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<GenerateComponentScreenshot>() {
-            @Override
-			public boolean run(ActionEvent e, GenerateComponentScreenshot action)
-            {
-                 FlexoController controller = (FlexoController) action.getContext();
-                if (action.getScreenshotResource() == null) {
-                    FlexoController.showError(FlexoLocalization.localizedForKey("error_while_generating_screenshot"));
-                } else {
-                    String title;
-                    if (action.hasBeenRegenerated()) {
-                        title = FlexoLocalization.localizedForKey("screenshot") + " " + action.getScreenshotResource().getFile().getName()
-                                + " " + FlexoLocalization.localizedForKey("has_been_regenerated");
-                    } else {
-                        title = FlexoLocalization.localizedForKey("screenshot") + " " + action.getScreenshotResource().getFile().getName()
-                                + " " + FlexoLocalization.localizedForKey("was_up_to_date");
-                    }
-                    if ((controller instanceof DGController) 
-                            && (((DGController)controller).getIgnoreScreenshotVisualization())) {
-                        // Ignore
-                    }
-                    else {
-                        ShowScreenshotDialog newDialog = new
-                        ShowScreenshotDialog(title,action.getScreenshotResource(),controller.getFlexoFrame());
-                    }
-                }
-                return true;
-           }
-        };
+			@Override
+			public boolean run(ActionEvent e, GenerateComponentScreenshot action) {
+				FlexoController controller = (FlexoController) action.getContext();
+				if (action.getScreenshotResource() == null) {
+					FlexoController.showError(FlexoLocalization.localizedForKey("error_while_generating_screenshot"));
+				} else {
+					String title;
+					if (action.hasBeenRegenerated()) {
+						title = FlexoLocalization.localizedForKey("screenshot") + " " + action.getScreenshotResource().getFile().getName()
+								+ " " + FlexoLocalization.localizedForKey("has_been_regenerated");
+					} else {
+						title = FlexoLocalization.localizedForKey("screenshot") + " " + action.getScreenshotResource().getFile().getName()
+								+ " " + FlexoLocalization.localizedForKey("was_up_to_date");
+					}
+					if ((controller instanceof DGController) && (((DGController) controller).getIgnoreScreenshotVisualization())) {
+						// Ignore
+					} else {
+						ShowScreenshotDialog newDialog = new ShowScreenshotDialog(title, action.getScreenshotResource(),
+								controller.getFlexoFrame());
+					}
+				}
+				return true;
+			}
+		};
 	}
 
 }

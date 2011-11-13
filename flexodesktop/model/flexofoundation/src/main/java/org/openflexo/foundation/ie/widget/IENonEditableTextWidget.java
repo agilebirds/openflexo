@@ -34,139 +34,137 @@ import org.openflexo.foundation.ie.util.TDCSSType;
 import org.openflexo.foundation.ie.util.TextCSSClass;
 import org.openflexo.foundation.rm.FlexoProject;
 
-
 /**
  * Represents an abstract component displaying text
  * 
  * @author sguerin
  * 
  */
-public abstract class IENonEditableTextWidget extends AbstractInnerTableWidget implements IEWidgetWithMainBinding
-{
+public abstract class IENonEditableTextWidget extends AbstractInnerTableWidget implements IEWidgetWithMainBinding {
 
-    private String _value;
+	private String _value;
 
-    private AbstractBinding _bindingValue;
+	private AbstractBinding _bindingValue;
 
-    private TextCSSClass _textCSSClass;
+	private TextCSSClass _textCSSClass;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public IENonEditableTextWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj)
-    {
-        super(woComponent, parent, prj);
-    }
+	public IENonEditableTextWidget(IEWOComponent woComponent, IEObject parent, FlexoProject prj) {
+		super(woComponent, parent, prj);
+	}
 
-    public TextCSSClass getTextCSSClass()
-    {
-        return _textCSSClass;
-    }
+	public TextCSSClass getTextCSSClass() {
+		return _textCSSClass;
+	}
 
-    public TDCSSType getTDCSSTypeDerivedFrowTextCSSSlass(){
-    	if(_textCSSClass==null)return null;
-    	if(_textCSSClass.equals(TextCSSClass.BLOC_BODY_CONTENT))return TDCSSType.DL_BLOCK_BODY_CONTENT;
-    	if(_textCSSClass.equals(TextCSSClass.BLOC_BODY_TITLE))return TDCSSType.DL_BLOCK_BODY_TITLE;
-    	if(_textCSSClass.equals(TextCSSClass.BLOC_BODY_EXTRA))return TDCSSType.DL_BLOCK_BODY_CONTENT;
-    	if(_textCSSClass.equals(TextCSSClass.BLOC_BODY_COMMENT))return TDCSSType.DL_BLOCK_BODY_COMMENT;
-    	return null;
-    }
-    public void setTextCSSClass(TextCSSClass aTextCSSClass)
-    {
-        _textCSSClass = aTextCSSClass;
-        setChanged();
-        notifyObservers(new CSSChanged("textCSSClass",aTextCSSClass));
-    }
+	public TDCSSType getTDCSSTypeDerivedFrowTextCSSSlass() {
+		if (_textCSSClass == null)
+			return null;
+		if (_textCSSClass.equals(TextCSSClass.BLOC_BODY_CONTENT))
+			return TDCSSType.DL_BLOCK_BODY_CONTENT;
+		if (_textCSSClass.equals(TextCSSClass.BLOC_BODY_TITLE))
+			return TDCSSType.DL_BLOCK_BODY_TITLE;
+		if (_textCSSClass.equals(TextCSSClass.BLOC_BODY_EXTRA))
+			return TDCSSType.DL_BLOCK_BODY_CONTENT;
+		if (_textCSSClass.equals(TextCSSClass.BLOC_BODY_COMMENT))
+			return TDCSSType.DL_BLOCK_BODY_COMMENT;
+		return null;
+	}
 
-    public String getValue()
-    {
-        return _value;
-    }
+	public void setTextCSSClass(TextCSSClass aTextCSSClass) {
+		_textCSSClass = aTextCSSClass;
+		setChanged();
+		notifyObservers(new CSSChanged("textCSSClass", aTextCSSClass));
+	}
 
-    public void setValue(String value)
-    {
-        String oldValue = getValue();
-        if (value==null || value.equals("")) {
-        	value = getDefaultValue();
-        }
-        this._value = value;
-        notifyModification("value", oldValue, value);
-    }
+	public String getValue() {
+		return _value;
+	}
 
-    public WidgetBindingDefinition getBindingValueDefinition()
-    {
-        return WidgetBindingDefinition.get(this, "bindingValue", Object.class, BindingDefinitionType.GET, bindingValueIsMandatory());
-    }
+	public void setValue(String value) {
+		String oldValue = getValue();
+		if (value == null || value.equals("")) {
+			value = getDefaultValue();
+		}
+		this._value = value;
+		notifyModification("value", oldValue, value);
+	}
 
-    private boolean bindingValueIsMandatory(){
-    	return this instanceof IEStringWidget;
-    }
-    public final AbstractBinding getBindingValue()
-    {
-        if (isBeingCloned())
-            return null;
-        return _bindingValue;
-    }
+	public WidgetBindingDefinition getBindingValueDefinition() {
+		return WidgetBindingDefinition.get(this, "bindingValue", Object.class, BindingDefinitionType.GET, bindingValueIsMandatory());
+	}
+
+	private boolean bindingValueIsMandatory() {
+		return this instanceof IEStringWidget;
+	}
+
+	public final AbstractBinding getBindingValue() {
+		if (isBeingCloned())
+			return null;
+		return _bindingValue;
+	}
 
 	public String getDefaultValue() {
-    	return null;
-    }
-    
-    public final void setBindingValue(AbstractBinding value)
-    {
-        _bindingValue = value;
-        if (_bindingValue != null) {
-            _bindingValue.setOwner(this);
-            _bindingValue.setBindingDefinition(getBindingValueDefinition());
-        }
-        setChanged();
-        notifyObservers(new IEDataModification("bindingValue",null,value));
-    }
+		return null;
+	}
 
-    /**
-     * Overrides getRawRowKeyPath
-     * @see org.openflexo.foundation.ie.widget.IEWidget#getRawRowKeyPath()
-     */
-    @Override
-    public String getRawRowKeyPath()
-    {
-        HTMLListDescriptor desc = getHTMLListDescriptor();
-        if (desc==null)
-            return null;
-        String item = desc.getItemName();
-        if (item==null)
-            return null;
-        if (getBindingValue()==null)
-            return null;
-        if (getBindingValue().getCodeStringRepresentation().indexOf(item)>-1)
-            return getBindingValue().getCodeStringRepresentation().substring(getBindingValue().getCodeStringRepresentation().indexOf(item)+item.length()+1);
-        else
-            return null;
-    }
-    
+	public final void setBindingValue(AbstractBinding value) {
+		_bindingValue = value;
+		if (_bindingValue != null) {
+			_bindingValue.setOwner(this);
+			_bindingValue.setBindingDefinition(getBindingValueDefinition());
+		}
+		setChanged();
+		notifyObservers(new IEDataModification("bindingValue", null, value));
+	}
+
+	/**
+	 * Overrides getRawRowKeyPath
+	 * 
+	 * @see org.openflexo.foundation.ie.widget.IEWidget#getRawRowKeyPath()
+	 */
+	@Override
+	public String getRawRowKeyPath() {
+		HTMLListDescriptor desc = getHTMLListDescriptor();
+		if (desc == null)
+			return null;
+		String item = desc.getItemName();
+		if (item == null)
+			return null;
+		if (getBindingValue() == null)
+			return null;
+		if (getBindingValue().getCodeStringRepresentation().indexOf(item) > -1)
+			return getBindingValue().getCodeStringRepresentation().substring(
+					getBindingValue().getCodeStringRepresentation().indexOf(item) + item.length() + 1);
+		else
+			return null;
+	}
+
 	@Override
 	public boolean areComponentInstancesValid() {
-    	return true;
-    }
-	
+		return true;
+	}
+
 	@Override
 	public void removeInvalidComponentInstances() {
 	}
-	
+
 	@Override
-	protected Hashtable<String,String> getLocalizableProperties(Hashtable<String,String> props){
-    	if(StringUtils.isNotEmpty(getValue()) && getBindingValue()==null)props.put("value",getValue());
-    	return super.getLocalizableProperties(props);
-    }
+	protected Hashtable<String, String> getLocalizableProperties(Hashtable<String, String> props) {
+		if (StringUtils.isNotEmpty(getValue()) && getBindingValue() == null)
+			props.put("value", getValue());
+		return super.getLocalizableProperties(props);
+	}
 
 	/**
 	 * @see org.openflexo.foundation.ie.widget.IEWidgetWithMainBinding#getMainBinding()
 	 */
 	@Override
-	public AbstractBinding getMainBinding()
-	{
+	public AbstractBinding getMainBinding() {
 		return getBindingValue();
 	}
 }

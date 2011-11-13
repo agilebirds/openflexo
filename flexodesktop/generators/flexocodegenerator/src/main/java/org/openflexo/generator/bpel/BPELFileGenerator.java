@@ -39,71 +39,67 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileFormat;
 import org.openflexo.toolbox.ToolBox;
 
+public class BPELFileGenerator extends MetaFileGenerator {
+	private static final String IDENTIFIER = "BPEL_FILE";
 
-public class BPELFileGenerator extends MetaFileGenerator
-{
-     private static final String IDENTIFIER = "BPEL_FILE";
-
-    public BPELFileGenerator(ProjectGenerator projectGenerator)
-    {
-        super(projectGenerator, FileFormat.BPEL, ResourceType.BPEL,ToolBox.cleanStringForJava(projectGenerator.getProject().getProjectName())+".bpel",IDENTIFIER+"_"+ToolBox.cleanStringForJava(projectGenerator.getProject().getProjectName()));
-    }
+	public BPELFileGenerator(ProjectGenerator projectGenerator) {
+		super(projectGenerator, FileFormat.BPEL, ResourceType.BPEL, ToolBox.cleanStringForJava(projectGenerator.getProject()
+				.getProjectName()) + ".bpel", IDENTIFIER + "_" + ToolBox.cleanStringForJava(projectGenerator.getProject().getProjectName()));
+	}
 
 	@Override
-	public Logger getGeneratorLogger()
-	{
+	public Logger getGeneratorLogger() {
 		return getProjectGenerator().getGeneratorLogger();
 	}
 
-    @Override
-	public void generate(boolean forceRegenerate)
-    {
-       	if (!forceRegenerate && !needsGeneration()) {
+	@Override
+	public void generate(boolean forceRegenerate) {
+		if (!forceRegenerate && !needsGeneration()) {
 			return;
 		}
-    	try {
-    		refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating")+ " "+getIdentifier(),false);
-    		startGeneration();
-    		//if (logger.isLoggable(Level.INFO))
-    			//logger.info("Generating "+getFileName());
-    		if (this.getProject().getRootFlexoProcess()==null) {
-    			throw new BPELModelException("No process defined for project");
-    		}
-    		
-    		FlexoProcess toTranslate=null;
-    		for (FlexoProcess p: this.getProject().getAllLocalFlexoProcesses()) {
-    			if ((p.getPortRegistery().getAllPorts().size()>=1) && ! p.getIsWebService()) {
-    				toTranslate=p;
-    			}
-    		}
-    		
-    		
-    		BPELWriter writer=getProjectGenerator().getInstance(toTranslate,true);
-    		String leCodeBPELQuOnDoitGenerer=writer.write();
-    	    generatedCode = new GeneratedTextResource(getFileName(), leCodeBPELQuOnDoitGenerer);
-    		stopGeneration();
-    		getGeneratorLogger().info("The generation of the BPEL process "+ this.getProject().getRootFlexoProcess().getName() +" has been successfully performed.");
-    	} catch (BPELModelException e) {
-    		setGenerationException(new GenerationException(e.getMessage()));
+		try {
+			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + getIdentifier(), false);
+			startGeneration();
+			// if (logger.isLoggable(Level.INFO))
+			// logger.info("Generating "+getFileName());
+			if (this.getProject().getRootFlexoProcess() == null) {
+				throw new BPELModelException("No process defined for project");
+			}
+
+			FlexoProcess toTranslate = null;
+			for (FlexoProcess p : this.getProject().getAllLocalFlexoProcesses()) {
+				if ((p.getPortRegistery().getAllPorts().size() >= 1) && !p.getIsWebService()) {
+					toTranslate = p;
+				}
+			}
+
+			BPELWriter writer = getProjectGenerator().getInstance(toTranslate, true);
+			String leCodeBPELQuOnDoitGenerer = writer.write();
+			generatedCode = new GeneratedTextResource(getFileName(), leCodeBPELQuOnDoitGenerer);
+			stopGeneration();
+			getGeneratorLogger().info(
+					"The generation of the BPEL process " + this.getProject().getRootFlexoProcess().getName()
+							+ " has been successfully performed.");
+		} catch (BPELModelException e) {
+			setGenerationException(new GenerationException(e.getMessage()));
 		} catch (Exception e) {
 			e.printStackTrace();
-			setGenerationException(new UnexpectedExceptionOccuredException(e,getProjectGenerator()));
-    	}
-    }
-
-    private BPELFileResource bpelFileResource;
-    
-    @Override
-    public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources)
-	{
-    	bpelFileResource = (BPELFileResource)resourceForKeyWithCGFile(ResourceType.BPEL, BPELFileResource.nameForRepositoryAndIdentifier(repository, getIdentifier()));
-		if (bpelFileResource == null) {
-			bpelFileResource = GeneratedFileResourceFactory.createBPELFileResource(repository,this);
-			//logger.info("Created BPEL resource "+bpelFileResource.getName());
+			setGenerationException(new UnexpectedExceptionOccuredException(e, getProjectGenerator()));
 		}
-		else {
+	}
+
+	private BPELFileResource bpelFileResource;
+
+	@Override
+	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
+		bpelFileResource = (BPELFileResource) resourceForKeyWithCGFile(ResourceType.BPEL,
+				BPELFileResource.nameForRepositoryAndIdentifier(repository, getIdentifier()));
+		if (bpelFileResource == null) {
+			bpelFileResource = GeneratedFileResourceFactory.createBPELFileResource(repository, this);
+			// logger.info("Created BPEL resource "+bpelFileResource.getName());
+		} else {
 			bpelFileResource.setGenerator(this);
-			//logger.info("Successfully retrieved BPEL resource "+bpelFileResource.getName());
+			// logger.info("Successfully retrieved BPEL resource "+bpelFileResource.getName());
 		}
 		bpelFileResource.setFileType(ResourceType.BPEL);
 		bpelFileResource.registerObserverWhenRequired();
@@ -112,14 +108,12 @@ public class BPELFileGenerator extends MetaFileGenerator
 	}
 
 	@Override
-	public String getRelativePath() 
-	{
+	public String getRelativePath() {
 		return "";
 	}
 
 	@Override
-	public CGSymbolicDirectory getSymbolicDirectory(CGRepository repository) 
-	{
+	public CGSymbolicDirectory getSymbolicDirectory(CGRepository repository) {
 		return repository.getProjectSymbolicDirectory();
 	}
 

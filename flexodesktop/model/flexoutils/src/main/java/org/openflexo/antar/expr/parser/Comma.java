@@ -21,10 +21,9 @@ package org.openflexo.antar.expr.parser;
 
 public class Comma implements AbstractToken {
 
-    @Override
-	public String toString()
-    {
-        return "COMMA";
-    }
+	@Override
+	public String toString() {
+		return "COMMA";
+	}
 
 }

@@ -21,7 +21,6 @@ package org.openflexo.generator.rm;
 
 import java.util.logging.Logger;
 
-
 import org.openflexo.foundation.rm.FlexoCopiedResource;
 import org.openflexo.foundation.rm.FlexoFileResourceResource;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -33,49 +32,47 @@ import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileFormat;
 import org.openflexo.toolbox.FileResource;
 
-public class FlexoCopyOfFileResource extends CopyOfFileResource<CopyOfFileResourceData, PackagedResourceToCopyGenerator, CGPackagedResourceFile> implements GenerationAvailableFileResource
-{
+public class FlexoCopyOfFileResource extends
+		CopyOfFileResource<CopyOfFileResourceData, PackagedResourceToCopyGenerator, CGPackagedResourceFile> implements
+		GenerationAvailableFileResource {
 
-    public static final Logger logger = FlexoLogger.getLogger(FlexoCopiedResource.class.getPackage().getName());
+	public static final Logger logger = FlexoLogger.getLogger(FlexoCopiedResource.class.getPackage().getName());
 
-    public FlexoCopyOfFileResource(FlexoProjectBuilder builder)
-    {
-        this(builder.project);
-    }
-    
-    /**
-     * @param aProject
-     */
-    public FlexoCopyOfFileResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
+	public FlexoCopyOfFileResource(FlexoProjectBuilder builder) {
+		this(builder.project);
+	}
 
-    /**
-     * @param aProject
-     */
-    public FlexoCopyOfFileResource(FlexoProject aProject, FileResource resourceToCopy)
-    {
-        super(aProject,resourceToCopy);
-    }
+	/**
+	 * @param aProject
+	 */
+	public FlexoCopyOfFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
-    @Override
-    public void rebuildDependancies() {
-    	super.rebuildDependancies();
-    	if (getGenerator()!=null && getGenerator().getSource()!=null)
-    		addToDependantResources(FlexoFileResourceResource.getResource(getGenerator().getSource(), getProject()));
-    }
-    
-    @Override
-    public FileFormat getResourceFormat() {
-    	if (getGenerator()!=null)
-    		return getGenerator().getFileFormat();
-    	return super.getResourceFormat();
-    }
-    
+	/**
+	 * @param aProject
+	 */
+	public FlexoCopyOfFileResource(FlexoProject aProject, FileResource resourceToCopy) {
+		super(aProject, resourceToCopy);
+	}
+
+	@Override
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
+		if (getGenerator() != null && getGenerator().getSource() != null)
+			addToDependantResources(FlexoFileResourceResource.getResource(getGenerator().getSource(), getProject()));
+	}
+
+	@Override
+	public FileFormat getResourceFormat() {
+		if (getGenerator() != null)
+			return getGenerator().getFileFormat();
+		return super.getResourceFormat();
+	}
+
 	@Override
 	protected CopyOfFileResourceData createGeneratedResourceData() {
 		return new CopyOfFileResourceData(this);
 	}
-	
+
 }

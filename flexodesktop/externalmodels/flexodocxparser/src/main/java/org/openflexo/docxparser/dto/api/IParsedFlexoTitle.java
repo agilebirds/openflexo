@@ -19,9 +19,10 @@
  */
 package org.openflexo.docxparser.dto.api;
 
-public interface IParsedFlexoTitle
-{
+public interface IParsedFlexoTitle {
 	public IParsedFlexoObject getParsedFlexoObject();
+
 	public String getFlexoTitle();
+
 	public void setFlexoTitle(String flexoTitle);
 }

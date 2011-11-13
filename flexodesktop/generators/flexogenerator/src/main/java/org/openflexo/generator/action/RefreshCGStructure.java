@@ -33,59 +33,49 @@ import org.openflexo.generator.AbstractProjectGenerator;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.file.AbstractCGFile;
 
-
-public class RefreshCGStructure extends GCAction<RefreshCGStructure,CGObject>
-{
+public class RefreshCGStructure extends GCAction<RefreshCGStructure, CGObject> {
 
 	private static final Logger logger = Logger.getLogger(RefreshCGStructure.class.getPackage().getName());
 
-	public static FlexoActionType<RefreshCGStructure,CGObject,CGObject> actionType 
-	= new FlexoActionType<RefreshCGStructure,CGObject,CGObject> ("refresh",
-			REFRESH_GROUP,FlexoActionType.NORMAL_ACTION_TYPE) {
+	public static FlexoActionType<RefreshCGStructure, CGObject, CGObject> actionType = new FlexoActionType<RefreshCGStructure, CGObject, CGObject>(
+			"refresh", REFRESH_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public RefreshCGStructure makeNewAction(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) 
-        {
-            return new RefreshCGStructure(focusedObject, globalSelection, editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public RefreshCGStructure makeNewAction(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+			return new RefreshCGStructure(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) 
-        {
-        	if (focusedObject instanceof AbstractCGFileVersion)
-        		return false;
-        	return (focusedObject instanceof AbstractCGFile);
-        }
+		@Override
+		protected boolean isVisibleForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) {
+			if (focusedObject instanceof AbstractCGFileVersion)
+				return false;
+			return (focusedObject instanceof AbstractCGFile);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) 
-        {
-            GenerationRepository repository = getRepository(focusedObject, globalSelection);
-            AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator(repository);
-            return ((pg != null) && (pg.hasBeenInitialized()));
-        }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (RefreshCGStructure.actionType, CGObject.class);
-    }
-    
+		@Override
+		protected boolean isEnabledForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) {
+			GenerationRepository repository = getRepository(focusedObject, globalSelection);
+			AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator(repository);
+			return ((pg != null) && (pg.hasBeenInitialized()));
+		}
 
-    
-    RefreshCGStructure (CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-    @Override
-	protected void doAction(Object context) throws GenerationException, SaveResourceException
-    {
-    	logger.info ("Refresh CG structure");
-    	getRepository().refresh();
-   }
+	static {
+		FlexoModelObject.addActionForClass(RefreshCGStructure.actionType, CGObject.class);
+	}
 
- }
+	RefreshCGStructure(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) throws GenerationException, SaveResourceException {
+		logger.info("Refresh CG structure");
+		getRepository().refresh();
+	}
+
+}

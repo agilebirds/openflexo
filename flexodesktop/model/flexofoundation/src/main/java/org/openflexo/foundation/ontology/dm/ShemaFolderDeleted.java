@@ -24,17 +24,15 @@ import org.openflexo.foundation.view.ViewFolder;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class ShemaFolderDeleted extends IEDataModification
-{
+public class ShemaFolderDeleted extends IEDataModification {
 
-    /**
-     * @param sub
-     */
-    public ShemaFolderDeleted(ViewFolder sub)
-    {
-        super(sub, null);
-    }
+	/**
+	 * @param sub
+	 */
+	public ShemaFolderDeleted(ViewFolder sub) {
+		super(sub, null);
+	}
 
 }

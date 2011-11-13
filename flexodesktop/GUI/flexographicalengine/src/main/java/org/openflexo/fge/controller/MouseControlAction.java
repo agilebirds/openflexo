@@ -19,6 +19,6 @@
  */
 package org.openflexo.fge.controller;
 
-public abstract class MouseControlAction {	
-	
+public abstract class MouseControlAction {
+
 }

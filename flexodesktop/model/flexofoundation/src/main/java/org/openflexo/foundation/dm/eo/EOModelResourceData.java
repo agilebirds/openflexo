@@ -36,191 +36,165 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.StorageResourceData;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class EOModelResourceData extends FlexoObservable implements StorageResourceData
-{
+public class EOModelResourceData extends FlexoObservable implements StorageResourceData {
 
-    private static final Logger logger = Logger.getLogger(EOModelResourceData.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(EOModelResourceData.class.getPackage().getName());
 
-    private FlexoProject _project;
+	private FlexoProject _project;
 
+	private EOModel _eoModel;
 
-    private EOModel _eoModel;
+	private FlexoEOModelResource _resource;
 
-    private FlexoEOModelResource _resource;
+	private boolean isModified;
 
-    private boolean isModified;
+	private Date lastMemoryUpdate;
 
-    private Date lastMemoryUpdate;
+	/*
+	 * public EOModelResourceData (FlexoProject aProject, DMModel dmModel) {
+	 * super(); _project = aProject; _dmModel = dmModel; _eoModel = null;
+	 * isModified = false; lastMemoryUpdate = null; }
+	 */
 
-    /*
-     * public EOModelResourceData (FlexoProject aProject, DMModel dmModel) {
-     * super(); _project = aProject; _dmModel = dmModel; _eoModel = null;
-     * isModified = false; lastMemoryUpdate = null; }
-     */
+	public EOModelResourceData(FlexoProject aProject, FlexoEOModelResource resource) {
+		super();
+		_project = aProject;
+		_eoModel = null;
+		isModified = false;
+		lastMemoryUpdate = null;
+		_resource = resource;
+	}
 
-    public EOModelResourceData(FlexoProject aProject, FlexoEOModelResource resource)
-    {
-        super();
-        _project = aProject;
-        _eoModel = null;
-        isModified = false;
-        lastMemoryUpdate = null;
-        _resource = resource;
-    }
+	public EOModel getEOModel() {
+		return _eoModel;
+	}
 
-    public EOModel getEOModel()
-    {
-        return _eoModel;
-    }
+	public void setEOModel(EOModel model) {
+		_eoModel = model;
+	}
 
-    public void setEOModel(EOModel model)
-    {
-        _eoModel = model;
-    }
+	public FlexoProjectFile getEOModelFile() {
+		return _resource.getResourceFile();
+	}
 
-    public FlexoProjectFile getEOModelFile()
-    {
-        return _resource.getResourceFile();
-    }
+	@Override
+	public FlexoEOModelResource getFlexoResource() {
+		return _resource;
+	}
 
-    @Override
-	public FlexoEOModelResource getFlexoResource()
-    {
-        return _resource;
-    }
+	@Override
+	public void setFlexoResource(FlexoResource resource) {
+		_resource = (FlexoEOModelResource) resource;
+	}
 
-    @Override
-	public void setFlexoResource(FlexoResource resource)
-    {
-        _resource = (FlexoEOModelResource) resource;
-    }
+	@Override
+	public FlexoProject getProject() {
+		return _project;
+	}
 
-    @Override
-	public FlexoProject getProject()
-    {
-        return _project;
-    }
+	@Override
+	public void setProject(FlexoProject aProject) {
+		_project = aProject;
+	}
 
-    @Override
-	public void setProject(FlexoProject aProject)
-    {
-        _project = aProject;
-    }
+	public DMModel getDMModel() {
+		return getProject().getDataModel();
+	}
 
-    public DMModel getDMModel()
-    {
-        return getProject().getDataModel();
-    }
+	@Override
+	public void save() throws SaveResourceException {
+		_resource.saveResourceData();
+	}
 
-    @Override
-	public void save() throws SaveResourceException
-    {
-        _resource.saveResourceData();
-    }
+	@Override
+	public synchronized boolean isModified() {
+		return isModified;
+	}
 
-    @Override
-	public synchronized boolean isModified()
-    {
-        return isModified;
-    }
-
-    @Override
-	public synchronized Date lastMemoryUpdate()
-    {
-        return lastMemoryUpdate;
-    }
+	@Override
+	public synchronized Date lastMemoryUpdate() {
+		return lastMemoryUpdate;
+	}
 
 	public void _setLastMemoryUpdate(Date date) {
 		lastMemoryUpdate = date;
 	}
-	
-    @Override
-	public synchronized void setIsModified()
-    {
-        if (!isModified)
-            logger.info(">>>>>>> Resource "+getFlexoResource()+" has been modified");
-        isModified = true;
-        lastMemoryUpdate = new Date();
-    }
 
-    @Override
-	public synchronized void clearIsModified(boolean clearLastMemoryUpdate)
-    {
-        isModified = false;
-        if(clearLastMemoryUpdate)
-        	lastMemoryUpdate = null;
-    }
+	@Override
+	public synchronized void setIsModified() {
+		if (!isModified)
+			logger.info(">>>>>>> Resource " + getFlexoResource() + " has been modified");
+		isModified = true;
+		lastMemoryUpdate = new Date();
+	}
 
-    /**
-     *
-     * Implements
-     *
-     * @see org.openflexo.foundation.rm.FlexoResourceData#notifyRM(org.openflexo.foundation.rm.RMNotification)
-     *      by forwarding
-     * @see org.openflexo.foundation.rm.RMNotification to the related
-     *      resource, if and only if this object represents the resource data
-     *      itself (@see org.openflexo.foundation.rm.FlexoResourceData).
-     *      Otherwise, invoking this method is ignored.
-     *
-     * @see org.openflexo.foundation.rm.FlexoResourceData#notifyRM(org.openflexo.foundation.rm.RMNotification)
-     */
-    @Override
-	public void notifyRM(RMNotification notification) throws FlexoException
-    {
-        getFlexoResource().notifyRM(notification);
-    }
+	@Override
+	public synchronized void clearIsModified(boolean clearLastMemoryUpdate) {
+		isModified = false;
+		if (clearLastMemoryUpdate)
+			lastMemoryUpdate = null;
+	}
 
-    /**
-     * Implements
-     *
-     * @see org.openflexo.foundation.rm.FlexoResourceData#receiveRMNotification(org.openflexo.foundation.rm.RMNotification)
-     *      Receive a notification that has been propagated by the
-     *      ResourceManager scheme and coming from a modification on an other
-     *      resource This method is relevant if and only if this object
-     *      represents the resource data itself (@see
-     *      org.openflexo.foundation.rm.FlexoResourceData). At this level,
-     *      this method is ignored and just return, so you need to override it
-     *      in subclasses if you want to get the hook to do your stuff !
-     *
-     * @see org.openflexo.foundation.rm.FlexoResourceData#receiveRMNotification(org.openflexo.foundation.rm.RMNotification)
-     */
-    @Override
-	public void receiveRMNotification(RMNotification notification) throws FlexoException
-    {
-        // Ignore it at this level: please overrides this method in relevant
-        // subclasses !
-    }
+	/**
+	 * 
+	 * Implements
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResourceData#notifyRM(org.openflexo.foundation.rm.RMNotification) by forwarding
+	 * @see org.openflexo.foundation.rm.RMNotification to the related resource, if and only if this object represents the resource data
+	 *      itself (@see org.openflexo.foundation.rm.FlexoResourceData). Otherwise, invoking this method is ignored.
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResourceData#notifyRM(org.openflexo.foundation.rm.RMNotification)
+	 */
+	@Override
+	public void notifyRM(RMNotification notification) throws FlexoException {
+		getFlexoResource().notifyRM(notification);
+	}
 
-    /**
-     * Overrides
-     *
-     * @see org.openflexo.foundation.FlexoObservable#notifyObservers(org.openflexo.foundation.DataModification)
-     *      by propagating dataModification if this one implements
-     * @see org.openflexo.foundation.rm.RMNotification to the related resource
-     *
-     * @see org.openflexo.foundation.FlexoObservable#notifyObservers(org.openflexo.foundation.DataModification)
-     */
-    @Override
-    public void notifyObservers(DataModification dataModification)
-    {
-        super.notifyObservers(dataModification);
-        if (dataModification instanceof RMNotification) {
-            try {
-                notifyRM((RMNotification) dataModification);
-            } catch (FlexoException e) {
-                // Warns about the exception
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("FLEXO Exception raised: " + e.getClass().getName() + ". See console for details.");
-                e.printStackTrace();
-            }
-        }
-    }
+	/**
+	 * Implements
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResourceData#receiveRMNotification(org.openflexo.foundation.rm.RMNotification) Receive a
+	 *      notification that has been propagated by the ResourceManager scheme and coming from a modification on an other resource This
+	 *      method is relevant if and only if this object represents the resource data itself (@see
+	 *      org.openflexo.foundation.rm.FlexoResourceData). At this level, this method is ignored and just return, so you need to override
+	 *      it in subclasses if you want to get the hook to do your stuff !
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResourceData#receiveRMNotification(org.openflexo.foundation.rm.RMNotification)
+	 */
+	@Override
+	public void receiveRMNotification(RMNotification notification) throws FlexoException {
+		// Ignore it at this level: please overrides this method in relevant
+		// subclasses !
+	}
+
+	/**
+	 * Overrides
+	 * 
+	 * @see org.openflexo.foundation.FlexoObservable#notifyObservers(org.openflexo.foundation.DataModification) by propagating
+	 *      dataModification if this one implements
+	 * @see org.openflexo.foundation.rm.RMNotification to the related resource
+	 * 
+	 * @see org.openflexo.foundation.FlexoObservable#notifyObservers(org.openflexo.foundation.DataModification)
+	 */
+	@Override
+	public void notifyObservers(DataModification dataModification) {
+		super.notifyObservers(dataModification);
+		if (dataModification instanceof RMNotification) {
+			try {
+				notifyRM((RMNotification) dataModification);
+			} catch (FlexoException e) {
+				// Warns about the exception
+				if (logger.isLoggable(Level.WARNING))
+					logger.warning("FLEXO Exception raised: " + e.getClass().getName() + ". See console for details.");
+				e.printStackTrace();
+			}
+		}
+	}
 
 }

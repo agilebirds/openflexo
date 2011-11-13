@@ -31,92 +31,79 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-public class DocxNumberingParser
-{
+public class DocxNumberingParser {
 	private static final Logger logger = Logger.getLogger(DocxNumberingParser.class.getPackage().toString());
-	
+
 	private PackagePart documentPart;
 	private PackagePart numberingPart;
 	private Document numberingXml;
-	
-	public DocxNumberingParser(PackagePart documentPart)
-	{
+
+	public DocxNumberingParser(PackagePart documentPart) {
 		this.documentPart = documentPart;
 	}
-	
-	public boolean isOrderedNumbering(String numberingId, String levelNumber)
-	{
-		if(levelNumber == null)
-			levelNumber = "0";
-		
-		Document xml = getNumberingXml();
-		
-		if(xml == null)
-			return false;
-		
-		Element element = (Element) xml.selectSingleNode("/w:numbering/w:num[@w:numId = '" +numberingId+ "']");
 
-		if(element == null)
+	public boolean isOrderedNumbering(String numberingId, String levelNumber) {
+		if (levelNumber == null)
+			levelNumber = "0";
+
+		Document xml = getNumberingXml();
+
+		if (xml == null)
 			return false;
-		
-		Element numberingFormatElement = (Element) element.selectSingleNode("w:lvlOverride[@w:ilvl = '" +levelNumber+ "']/w:lvl/w:numFmt");
-		
-		if(numberingFormatElement == null)
-		{ //Get the abstract one
+
+		Element element = (Element) xml.selectSingleNode("/w:numbering/w:num[@w:numId = '" + numberingId + "']");
+
+		if (element == null)
+			return false;
+
+		Element numberingFormatElement = (Element) element
+				.selectSingleNode("w:lvlOverride[@w:ilvl = '" + levelNumber + "']/w:lvl/w:numFmt");
+
+		if (numberingFormatElement == null) { // Get the abstract one
 			Element abstractNumIdElement = element.element(DocxQName.getQName(OpenXmlTag.w_abstractNumId));
-			if(abstractNumIdElement == null)
+			if (abstractNumIdElement == null)
 				return false;
-			
+
 			String abstractNumId = abstractNumIdElement.attributeValue(DocxQName.getQName(OpenXmlTag.w_val));
-			
-			numberingFormatElement = (Element) xml.selectSingleNode("/w:numbering/w:abstractNum[@w:abstractNumId = '" +abstractNumId+ "']/w:lvl[@w:ilvl = '" +levelNumber+ "']/w:numFmt");
-			
-			if(numberingFormatElement == null)
+
+			numberingFormatElement = (Element) xml.selectSingleNode("/w:numbering/w:abstractNum[@w:abstractNumId = '" + abstractNumId
+					+ "']/w:lvl[@w:ilvl = '" + levelNumber + "']/w:numFmt");
+
+			if (numberingFormatElement == null)
 				return false;
 		}
-		
+
 		String numberingFormat = numberingFormatElement.attributeValue(DocxQName.getQName(OpenXmlTag.w_val));
-		
-		return numberingFormat!=null && !"bullet".equals(numberingFormat);
+
+		return numberingFormat != null && !"bullet".equals(numberingFormat);
 	}
-	
-	public PackagePart getNumberingPart()
-    {
-    	if(numberingPart == null)
-    	{
-    		PackageRelationshipCollection packageRelationships;
-			try
-			{
+
+	public PackagePart getNumberingPart() {
+		if (numberingPart == null) {
+			PackageRelationshipCollection packageRelationships;
+			try {
 				packageRelationships = documentPart.getRelationshipsByType(DocxXmlUtil.RELATIONSHIPTYPE_NUMBERINGPART);
-				if(packageRelationships.size() > 0)
-	    		{
+				if (packageRelationships.size() > 0) {
 					PackagePartName parName = PackagingURIHelper.createPartName(packageRelationships.getRelationship(0).getTargetURI());
-	    			numberingPart = documentPart.getPackage().getPart(parName);
-	    		}
-			}
-			catch (InvalidFormatException e)
-			{
+					numberingPart = documentPart.getPackage().getPart(parName);
+				}
+			} catch (InvalidFormatException e) {
 				logger.log(Level.SEVERE, "Cannot get numbering relationship", e);
 			}
-    	}
-    	
-    	return numberingPart;
-    }
-    
-    public Document getNumberingXml()
-    {
-    	if(numberingXml == null && getNumberingPart()!=null)
-    	{
-    		try
-			{
-    			numberingXml = new SAXReader().read(getNumberingPart().getInputStream());
-			}
-			catch (Exception e)
-			{
+		}
+
+		return numberingPart;
+	}
+
+	public Document getNumberingXml() {
+		if (numberingXml == null && getNumberingPart() != null) {
+			try {
+				numberingXml = new SAXReader().read(getNumberingPart().getInputStream());
+			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
-    	}
-    	
-    	return numberingXml;
-    }
+		}
+
+		return numberingXml;
+	}
 }

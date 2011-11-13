@@ -24,23 +24,19 @@ import java.util.logging.Logger;
 import org.openflexo.doceditor.controller.DEController;
 import org.openflexo.view.menu.FileMenu;
 
-
 /**
  * @author gpolet
  */
-public class DEFileMenu extends FileMenu
-{
+public class DEFileMenu extends FileMenu {
 
-    private static final Logger logger = Logger.getLogger(DEFileMenu.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DEFileMenu.class.getPackage().getName());
 
-    public DEFileMenu(DEController controller)
-    {
-        super(controller);
-     }
+	public DEFileMenu(DEController controller) {
+		super(controller);
+	}
 
-    public DEController getGeneratorController()
-    {
-        return (DEController) _controller;
-    }
+	public DEController getGeneratorController() {
+		return (DEController) _controller;
+	}
 
 }

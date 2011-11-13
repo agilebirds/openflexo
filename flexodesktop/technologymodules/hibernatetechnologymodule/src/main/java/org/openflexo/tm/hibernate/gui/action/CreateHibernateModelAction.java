@@ -36,7 +36,6 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.tm.hibernate.impl.HibernateImplementation;
 import org.openflexo.tm.hibernate.impl.HibernateModel;
 
-
 @SuppressWarnings("serial")
 public class CreateHibernateModelAction extends FlexoAction<CreateHibernateModelAction, HibernateImplementation, HibernateImplementation> {
 
@@ -49,7 +48,8 @@ public class CreateHibernateModelAction extends FlexoAction<CreateHibernateModel
 		 * Factory method
 		 */
 		@Override
-		public CreateHibernateModelAction makeNewAction(HibernateImplementation focusedObject, Vector<HibernateImplementation> globalSelection, FlexoEditor editor) {
+		public CreateHibernateModelAction makeNewAction(HibernateImplementation focusedObject,
+				Vector<HibernateImplementation> globalSelection, FlexoEditor editor) {
 			return new CreateHibernateModelAction(focusedObject, globalSelection, editor);
 		}
 

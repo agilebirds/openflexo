@@ -42,63 +42,54 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
 public class DropSchemeActionInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DropSchemeActionInitializer(OEControllerActionInitializer actionInitializer)
-	{
-		super(DropSchemeAction.actionType,actionInitializer);
+	DropSchemeActionInitializer(OEControllerActionInitializer actionInitializer) {
+		super(DropSchemeAction.actionType, actionInitializer);
 	}
 
 	@Override
-	protected OEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (OEControllerActionInitializer)super.getControllerActionInitializer();
+	protected OEControllerActionInitializer getControllerActionInitializer() {
+		return (OEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<DropSchemeAction> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<DropSchemeAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<DropSchemeAction>() {
 			@Override
-			public boolean run(ActionEvent e, DropSchemeAction action)
-			{
-				return ParametersRetriever.retrieveParameters(action,action.escapeParameterRetrievingWhenValid);
-				
+			public boolean run(ActionEvent e, DropSchemeAction action) {
+				return ParametersRetriever.retrieveParameters(action, action.escapeParameterRetrievingWhenValid);
+
 			}
 		};
 	}
 
-	
 	@Override
-	protected FlexoActionFinalizer<DropSchemeAction> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<DropSchemeAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DropSchemeAction>() {
 			@Override
-			public boolean run(ActionEvent e, DropSchemeAction action)
-			{
+			public boolean run(ActionEvent e, DropSchemeAction action) {
 				ViewShape shape = action.getNewShape();
 				if (shape.getParent() != action.getParent()) {
-					VEShapeGR parentGR = (VEShapeGR)shape.getParent().getGraphicalRepresentation();
-					VEShapeGR expectedGR = (VEShapeGR)action.getParent().getGraphicalRepresentation();
-					VEShapeGR myGR = (VEShapeGR)action.getNewShape().getGraphicalRepresentation();
-					Point p = new Point((int)myGR.getX(),(int)myGR.getY());
+					VEShapeGR parentGR = (VEShapeGR) shape.getParent().getGraphicalRepresentation();
+					VEShapeGR expectedGR = (VEShapeGR) action.getParent().getGraphicalRepresentation();
+					VEShapeGR myGR = (VEShapeGR) action.getNewShape().getGraphicalRepresentation();
+					Point p = new Point((int) myGR.getX(), (int) myGR.getY());
 					Point newP = GraphicalRepresentation.convertPoint(expectedGR, p, parentGR, 1.0);
-					myGR.setLocation(new FGEPoint(newP.x,newP.y));
+					myGR.setLocation(new FGEPoint(newP.x, newP.y));
 					logger.info("Shape has been relocated");
 				}
-				
-				((OEController)getController()).getSelectionManager().setSelectedObject(action.getNewShape());
+
+				((OEController) getController()).getSelectionManager().setSelectedObject(action.getNewShape());
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoExceptionHandler<DropSchemeAction> getDefaultExceptionHandler() 
-	{
+	protected FlexoExceptionHandler<DropSchemeAction> getDefaultExceptionHandler() {
 		return new FlexoExceptionHandler<DropSchemeAction>() {
 			@Override
 			public boolean handleException(FlexoException exception, DropSchemeAction action) {
@@ -111,12 +102,9 @@ public class DropSchemeActionInitializer extends ActionInitializer {
 		};
 	}
 
-
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return VEIconLibrary.SHAPE_ICON;
 	}
-
 
 }

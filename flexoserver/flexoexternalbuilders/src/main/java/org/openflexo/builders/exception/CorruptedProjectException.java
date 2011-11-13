@@ -14,7 +14,7 @@ public class CorruptedProjectException extends FlexoRunException {
 		super(arg0);
 	}
 
-	public CorruptedProjectException(String message){
+	public CorruptedProjectException(String message) {
 		super(message);
 	}
 }

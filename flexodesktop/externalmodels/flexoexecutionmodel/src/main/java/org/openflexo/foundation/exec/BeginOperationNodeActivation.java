@@ -24,37 +24,28 @@ import org.openflexo.foundation.exec.inst.CreateActivityTask;
 import org.openflexo.foundation.wkf.node.FlexoPreCondition;
 import org.openflexo.foundation.wkf.node.OperationNode;
 
-
 public class BeginOperationNodeActivation extends NodeActivation<OperationNode> {
 
-	public BeginOperationNodeActivation(OperationNode node, FlexoPreCondition pre)
-	{
-		super(node,pre);
-	}
-	
-	public BeginOperationNodeActivation(OperationNode node)
-	{
-		super(node);
-	}
-	
-	@Override
-	public ControlGraph makeSpecificControlGraph(boolean interprocedural) throws NotSupportedException, InvalidModelException 
-	{
-		ControlGraph CREATE_ACTIVITY_TASK = new CreateActivityTask(getNode().getAbstractActivityNode());
-		ControlGraph RESET_TIME_OUT = makeResetTimeOut();
-		
-		return makeSequentialControlGraph(
-				CREATE_ACTIVITY_TASK,
-				RESET_TIME_OUT);
-	}
-	
-	@Override
-	protected ControlGraph makeControlGraphCommonPostlude(boolean interprocedural) throws NotSupportedException, InvalidModelException
-	{
-		return makeSequentialControlGraph(
-				super.makeControlGraphCommonPostlude(interprocedural),
-				NodeDesactivation.desactivateNode(getNode(),interprocedural));
+	public BeginOperationNodeActivation(OperationNode node, FlexoPreCondition pre) {
+		super(node, pre);
 	}
 
+	public BeginOperationNodeActivation(OperationNode node) {
+		super(node);
+	}
+
+	@Override
+	public ControlGraph makeSpecificControlGraph(boolean interprocedural) throws NotSupportedException, InvalidModelException {
+		ControlGraph CREATE_ACTIVITY_TASK = new CreateActivityTask(getNode().getAbstractActivityNode());
+		ControlGraph RESET_TIME_OUT = makeResetTimeOut();
+
+		return makeSequentialControlGraph(CREATE_ACTIVITY_TASK, RESET_TIME_OUT);
+	}
+
+	@Override
+	protected ControlGraph makeControlGraphCommonPostlude(boolean interprocedural) throws NotSupportedException, InvalidModelException {
+		return makeSequentialControlGraph(super.makeControlGraphCommonPostlude(interprocedural),
+				NodeDesactivation.desactivateNode(getNode(), interprocedural));
+	}
 
 }

@@ -34,8 +34,8 @@ import org.openflexo.generator.cg.CGTextFile;
 import org.openflexo.generator.utils.LocalizedFileGenerator;
 import org.openflexo.toolbox.FileFormat;
 
-
-public class LocalizationFileResource extends TextFileResource<LocalizedFileGenerator, CGTextFile> implements GenerationAvailableFileResource, FlexoObserver{
+public class LocalizationFileResource extends TextFileResource<LocalizedFileGenerator, CGTextFile> implements
+		GenerationAvailableFileResource, FlexoObserver {
 
 	private final boolean isObserverRegistered = false;
 
@@ -50,74 +50,62 @@ public class LocalizationFileResource extends TextFileResource<LocalizedFileGene
 	}
 
 	@Override
-	protected LocalizationFile createGeneratedResourceData()
-    {
-        return new LocalizationFile(getFile(),this);
-    }
-    
-    
-    public void registerObserverWhenRequired()
-    {
-    }
+	protected LocalizationFile createGeneratedResourceData() {
+		return new LocalizationFile(getFile(), this);
+	}
 
-    /**
-     * Overrides update
-     * 
-     * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable,
-     *      org.openflexo.foundation.DataModification)
-     */
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-    {
-        
-    }
-    
-    public Language getLanguage()
-    {
-        if (getGenerator() != null) {
+	public void registerObserverWhenRequired() {
+	}
+
+	/**
+	 * Overrides update
+	 * 
+	 * @see org.openflexo.foundation.FlexoObserver#update(org.openflexo.foundation.FlexoObservable,
+	 *      org.openflexo.foundation.DataModification)
+	 */
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+
+	}
+
+	public Language getLanguage() {
+		if (getGenerator() != null) {
 			return getGenerator().getLanguage();
 		}
-        return null;
-    }
-    
-    @Override
-	public LocalizationFile getGeneratedResourceData()
-    {
-    	return (LocalizationFile)super.getGeneratedResourceData();
-    }
-    
-    /**
-     * Return dependancy computing between this resource, and an other resource,
-     * asserting that this resource is contained in this resource's dependant
-     * resources
-     * 
-     * @param resource
-     * @param dependancyScheme
-     * @return
-     */
-    @Override
-	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate)
-    {
-    	if (resource instanceof TemplateLocator) {
-			return ((TemplateLocator)resource).needsUpdateForResource(this);
+		return null;
+	}
+
+	@Override
+	public LocalizationFile getGeneratedResourceData() {
+		return (LocalizationFile) super.getGeneratedResourceData();
+	}
+
+	/**
+	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this
+	 * resource's dependant resources
+	 * 
+	 * @param resource
+	 * @param dependancyScheme
+	 * @return
+	 */
+	@Override
+	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate) {
+		if (resource instanceof TemplateLocator) {
+			return ((TemplateLocator) resource).needsUpdateForResource(this);
 		}
-        return super.optimisticallyDependsOf(resource, requestDate);
-    }
+		return super.optimisticallyDependsOf(resource, requestDate);
+	}
 
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-	public void rebuildDependancies()
-    {
-        super.rebuildDependancies();
-    }
+	/**
+	 * Rebuild resource dependancies for this resource
+	 */
+	@Override
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
+	}
 
-    
-    static String getDefaultFileName(Language lg)
-    {
-        return lg.getIsoCode() + ".strings";
-    }
-
+	static String getDefaultFileName(Language lg) {
+		return lg.getIsoCode() + ".strings";
+	}
 
 }

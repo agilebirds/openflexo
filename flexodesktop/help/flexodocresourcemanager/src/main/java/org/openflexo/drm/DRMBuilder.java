@@ -19,28 +19,23 @@
  */
 package org.openflexo.drm;
 
-
 /**
  * Used only during XML serialization to build DRM
  * 
  * @author sguerin
  * 
  */
-public class DRMBuilder
-{
+public class DRMBuilder {
 
-    public DocResourceCenter docResourceCenter = null;
+	public DocResourceCenter docResourceCenter = null;
 
-     public DRMBuilder()
-    {
-        super();
-     }
+	public DRMBuilder() {
+		super();
+	}
 
-     public DRMBuilder(DocResourceCenter docResourceCenter)
-     {
-         this();
-         this.docResourceCenter = docResourceCenter;
-      }
-
+	public DRMBuilder(DocResourceCenter docResourceCenter) {
+		this();
+		this.docResourceCenter = docResourceCenter;
+	}
 
 }

@@ -272,7 +272,7 @@ implements Observer, MouseListener, FocusListener {
 	{
 		//System.out.println("receivedModelNotifications o="+o+" dataModification="+dataModification);
 		
-		if (o instanceof FIBPanel) 
+		if (o instanceof FIBPanel && view instanceof FIBPanelView) 
 		{
 			if (dataModification instanceof FIBAddingNotification) {
 				if (((FIBAddingNotification)dataModification).getAddedValue() instanceof FIBComponent) {

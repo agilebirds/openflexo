@@ -21,19 +21,17 @@ package org.openflexo.foundation.wkf.dm;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class DisplayProcessSet extends WKFDataModification
-{
+public class DisplayProcessSet extends WKFDataModification {
 
-    /**
-     * @param propertyName
-     * @param oldValue
-     * @param newValue
-     */
-    public DisplayProcessSet(Object oldValue, Object newValue)
-    {
-        super("displayProcess", oldValue, newValue);
-    }
+	/**
+	 * @param propertyName
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public DisplayProcessSet(Object oldValue, Object newValue) {
+		super("displayProcess", oldValue, newValue);
+	}
 
 }

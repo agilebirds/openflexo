@@ -26,17 +26,15 @@ public abstract class BinaryOperator extends Operator {
 
 	public abstract Constant evaluate(Constant leftArg, Constant rightArg) throws TypeMismatchException;
 
-	public abstract EvaluationType getEvaluationType(EvaluationType leftOperandType, EvaluationType rightOperandType) throws TypeMismatchException;
+	public abstract EvaluationType getEvaluationType(EvaluationType leftOperandType, EvaluationType rightOperandType)
+			throws TypeMismatchException;
 
-	public Expression evaluate(Expression leftArg, Constant rightArg) throws TypeMismatchException
-	{
-		return new BinaryOperatorExpression(this,leftArg,rightArg);
+	public Expression evaluate(Expression leftArg, Constant rightArg) throws TypeMismatchException {
+		return new BinaryOperatorExpression(this, leftArg, rightArg);
 	}
 
-	public Expression evaluate(Constant leftArg, Expression rightArg) throws TypeMismatchException
-	{
-		return new BinaryOperatorExpression(this,leftArg,rightArg);
+	public Expression evaluate(Constant leftArg, Expression rightArg) throws TypeMismatchException {
+		return new BinaryOperatorExpression(this, leftArg, rightArg);
 	}
-
 
 }

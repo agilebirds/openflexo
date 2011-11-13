@@ -23,68 +23,53 @@ import javax.swing.JComponent;
 
 import org.openflexo.fib.model.FIBPanel.Layout;
 
-
-
 public class GridLayoutConstraints extends ComponentConstraints {
 
 	private static final String X = "x";
 	private static final String Y = "y";
-	
-	public int getX() 
-	{
-		return getIntValue(X,0);
+
+	public int getX() {
+		return getIntValue(X, 0);
 	}
 
-	public void setX(int x) 
-	{
-		setIntValue(X,x);
+	public void setX(int x) {
+		setIntValue(X, x);
 	}
 
-	public int getY() 
-	{
-		return getIntValue(Y,0);
+	public int getY() {
+		return getIntValue(Y, 0);
 	}
 
-	public void setY(int y) 
-	{
-		setIntValue(Y,y);
+	public void setY(int y) {
+		setIntValue(Y, y);
 	}
 
-	public GridLayoutConstraints() 
-	{
+	public GridLayoutConstraints() {
 		super();
 	}
-	
-	public GridLayoutConstraints(int x, int y) 
-	{
+
+	public GridLayoutConstraints(int x, int y) {
 		this();
 		setX(x);
 		setY(y);
 	}
-	
-	protected GridLayoutConstraints(String someConstraints) 
-	{
+
+	protected GridLayoutConstraints(String someConstraints) {
 		super(someConstraints);
 	}
-	
-	GridLayoutConstraints(ComponentConstraints someConstraints) 
-	{
+
+	GridLayoutConstraints(ComponentConstraints someConstraints) {
 		super(someConstraints);
 	}
-	
+
 	@Override
-	protected Layout getType()
-	{
+	protected Layout getType() {
 		return Layout.grid;
 	}
 
 	@Override
-	public void performConstrainedAddition(JComponent container,
-			JComponent contained)
-	{
+	public void performConstrainedAddition(JComponent container, JComponent contained) {
 		container.add(contained);
 	}
-
-
 
 }

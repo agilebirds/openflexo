@@ -46,7 +46,6 @@ import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
 
-
 public class LineConnector extends Connector {
 
 	private static final Logger logger = Logger.getLogger(LineConnector.class.getPackage().getName());
@@ -151,7 +150,6 @@ public class LineConnector extends Connector {
 			}
 			controlPoints.add(cp2);
 			controlPoints.add(cp1);
-
 
 		}
 
@@ -348,7 +346,7 @@ public class LineConnector extends Connector {
 			cp2RelativeToEndObject = getEndObject().getShape().outlineIntersect(cp2RelativeToEndObject);
 			if (cp2RelativeToEndObject != null) {
 				newP2 = GraphicalRepresentation
-				.convertNormalizedPoint(getEndObject(), cp2RelativeToEndObject, getGraphicalRepresentation());
+						.convertNormalizedPoint(getEndObject(), cp2RelativeToEndObject, getGraphicalRepresentation());
 			}
 
 			cp1 = new ConnectorAdjustingControlPoint(getGraphicalRepresentation(), newP1) {
@@ -500,7 +498,7 @@ public class LineConnector extends Connector {
 			return new FGEPoint(0, 0);
 		}
 		return new FGESegment(cp1.getPoint(), cp2.getPoint())
-		.getScaledPoint(getGraphicalRepresentation().getRelativeMiddleSymbolLocation());
+				.getScaledPoint(getGraphicalRepresentation().getRelativeMiddleSymbolLocation());
 	}
 
 	@Override

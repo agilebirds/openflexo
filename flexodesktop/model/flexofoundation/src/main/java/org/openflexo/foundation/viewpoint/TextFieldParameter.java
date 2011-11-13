@@ -27,7 +27,7 @@ public class TextFieldParameter extends EditionSchemeParameter {
 	public Type getType() {
 		return String.class;
 	};
-	
+
 	@Override
 	public WidgetType getWidget() {
 		return WidgetType.TEXT_FIELD;

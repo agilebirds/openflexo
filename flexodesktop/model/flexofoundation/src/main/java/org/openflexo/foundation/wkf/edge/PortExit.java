@@ -22,14 +22,12 @@ package org.openflexo.foundation.wkf.edge;
 import org.openflexo.foundation.wkf.ws.AbstractInPort;
 
 /**
- * Classes implementing this interface represent an edge which is connected from
- * a AbstractInPort to something
+ * Classes implementing this interface represent an edge which is connected from a AbstractInPort to something
  * 
  * @author sguerin
  * 
  */
-public interface PortExit
-{
-    public AbstractInPort getStartNode();
+public interface PortExit {
+	public AbstractInPort getStartNode();
 
 }

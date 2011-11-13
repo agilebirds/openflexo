@@ -23,13 +23,11 @@ package org.netbeans.lib.cvsclient.command;
 import java.io.File;
 
 /**
- * It's a base class for all containers that store information being processed
- * during execution of cvs commands.
- * Such info is then transmitted via the event mechanism (CVSEvent) to the
- * appropriate UI classes that use this information to display it to the user.
- *
- * @author  Milos Kleint
+ * It's a base class for all containers that store information being processed during execution of cvs commands. Such info is then
+ * transmitted via the event mechanism (CVSEvent) to the appropriate UI classes that use this information to display it to the user.
+ * 
+ * @author Milos Kleint
  */
 public abstract class FileInfoContainer {
-    public abstract File getFile();
+	public abstract File getFile();
 }

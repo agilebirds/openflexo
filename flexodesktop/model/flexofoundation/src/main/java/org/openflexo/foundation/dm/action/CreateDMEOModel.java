@@ -34,154 +34,128 @@ import org.openflexo.foundation.dm.eo.DMEOAdaptorType;
 import org.openflexo.foundation.dm.eo.DMEOModel;
 import org.openflexo.foundation.dm.eo.DMEORepository;
 
+public class CreateDMEOModel extends FlexoAction<CreateDMEOModel, DMEORepository, DMObject> {
 
-public class CreateDMEOModel extends FlexoAction<CreateDMEOModel, DMEORepository, DMObject> 
-{
+	private static final Logger logger = Logger.getLogger(CreateDMEOModel.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(CreateDMEOModel.class.getPackage().getName());
+	public static FlexoActionType<CreateDMEOModel, DMEORepository, DMObject> actionType = new FlexoActionType<CreateDMEOModel, DMEORepository, DMObject>(
+			"creates_new_eo_model", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
-    public static FlexoActionType<CreateDMEOModel, DMEORepository, DMObject> actionType = new FlexoActionType<CreateDMEOModel, DMEORepository, DMObject>("creates_new_eo_model",FlexoActionType.newMenu,FlexoActionType.defaultGroup,FlexoActionType.ADD_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public CreateDMEOModel makeNewAction(DMEORepository focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
+			return new CreateDMEOModel(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public CreateDMEOModel makeNewAction(DMEORepository focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) 
-        {
-            return new CreateDMEOModel(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(DMEORepository object, Vector<DMObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(DMEORepository object, Vector<DMObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(DMEORepository object, Vector<DMObject> globalSelection) {
+			return object != null && !object.isReadOnly();
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(DMEORepository object, Vector<DMObject> globalSelection) 
-        {
-            return object != null && !object.isReadOnly();
-         }
-                
-    };
-    
-    CreateDMEOModel (DMEORepository focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-    private File _eoModelFile;
-    private DMEOAdaptorType _adaptorType;
-    private String _userName;
-    private String _password;
-    private String _databaseServerURL;
-    private String _plugin;
-    private String _driver;
-        
-    private DMEOModel _newDMEOModel;
-    private DMEORepository _repository;
+	CreateDMEOModel(DMEORepository focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    @Override
-	protected void doAction(Object context) throws FlexoException 
-    {
-      logger.info ("CreateDMEOModel"); 
-      if (getRepository() != null) {
-    	  try {
-          _newDMEOModel = getRepository().createsNewEOModel(getEOModelFile(),
-                      getAdaptorType(), 
-                      getUserName(), 
-                      getPassword(),
-                      getDatabaseServerURL(), 
-                      getPlugin(), 
-                      getDriver());
-    	  } catch (IOException e) {
-    		  throw new IOFlexoException(e);
-    	  }
-      }
-    }
-    
-    public DMEORepository getRepository() 
-    {
-        if (_repository == null) {
-            if (getFocusedObject() != null) {
-                _repository = getFocusedObject();
-             }           
-        }
-        return _repository;
-    }
+	private File _eoModelFile;
+	private DMEOAdaptorType _adaptorType;
+	private String _userName;
+	private String _password;
+	private String _databaseServerURL;
+	private String _plugin;
+	private String _driver;
 
-    public DMEOModel getNewDMEOModel() 
-    {
-        return _newDMEOModel;
-    }
+	private DMEOModel _newDMEOModel;
+	private DMEORepository _repository;
 
-    public DMEOAdaptorType getAdaptorType() 
-    {
-        return _adaptorType;
-    }
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		logger.info("CreateDMEOModel");
+		if (getRepository() != null) {
+			try {
+				_newDMEOModel = getRepository().createsNewEOModel(getEOModelFile(), getAdaptorType(), getUserName(), getPassword(),
+						getDatabaseServerURL(), getPlugin(), getDriver());
+			} catch (IOException e) {
+				throw new IOFlexoException(e);
+			}
+		}
+	}
 
-    public void setAdaptorType(DMEOAdaptorType adaptorType) 
-    {
-        _adaptorType = adaptorType;
-    }
+	public DMEORepository getRepository() {
+		if (_repository == null) {
+			if (getFocusedObject() != null) {
+				_repository = getFocusedObject();
+			}
+		}
+		return _repository;
+	}
 
-    public String getDatabaseServerURL() 
-    {
-        return _databaseServerURL;
-    }
+	public DMEOModel getNewDMEOModel() {
+		return _newDMEOModel;
+	}
 
-    public void setDatabaseServerURL(String databaseServerURL)
-    {
-        _databaseServerURL = databaseServerURL;
-    }
+	public DMEOAdaptorType getAdaptorType() {
+		return _adaptorType;
+	}
 
-    public String getDriver() 
-    {
-        return _driver;
-    }
+	public void setAdaptorType(DMEOAdaptorType adaptorType) {
+		_adaptorType = adaptorType;
+	}
 
-    public void setDriver(String driver)
-    {
-        _driver = driver;
-    }
+	public String getDatabaseServerURL() {
+		return _databaseServerURL;
+	}
 
-    public File getEOModelFile() 
-    {
-        return _eoModelFile;
-    }
+	public void setDatabaseServerURL(String databaseServerURL) {
+		_databaseServerURL = databaseServerURL;
+	}
 
-    public void setEOModelFile(File eoModelFile) 
-    {
-        _eoModelFile = eoModelFile;
-    }
+	public String getDriver() {
+		return _driver;
+	}
 
-    public String getPassword() 
-    {
-        return _password;
-    }
+	public void setDriver(String driver) {
+		_driver = driver;
+	}
 
-    public void setPassword(String password) {
-        _password = password;
-    }
+	public File getEOModelFile() {
+		return _eoModelFile;
+	}
 
-    public String getPlugin()
-    {
-        return _plugin;
-    }
+	public void setEOModelFile(File eoModelFile) {
+		_eoModelFile = eoModelFile;
+	}
 
-    public void setPlugin(String plugin)
-    {
-        _plugin = plugin;
-    }
+	public String getPassword() {
+		return _password;
+	}
 
-    public String getUserName() 
-    {
-        return _userName;
-    }
+	public void setPassword(String password) {
+		_password = password;
+	}
 
-    public void setUserName(String userName) 
-    {
-        _userName = userName;
-    }
-   
+	public String getPlugin() {
+		return _plugin;
+	}
+
+	public void setPlugin(String plugin) {
+		_plugin = plugin;
+	}
+
+	public String getUserName() {
+		return _userName;
+	}
+
+	public void setUserName(String userName) {
+		_userName = userName;
+	}
+
 }

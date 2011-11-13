@@ -24,17 +24,16 @@ import org.openflexo.localization.FlexoLocalization;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class NotEnoughRoomOnTheRight extends FlexoException
-{
-    /**
-     * Overrides getLocalizedMessage
-     * @see org.openflexo.foundation.FlexoException#getLocalizedMessage()
-     */
-    @Override
-    public String getLocalizedMessage()
-    {
-        return FlexoLocalization.localizedForKey("not_enough_room_on_the_right");
-    }
+public class NotEnoughRoomOnTheRight extends FlexoException {
+	/**
+	 * Overrides getLocalizedMessage
+	 * 
+	 * @see org.openflexo.foundation.FlexoException#getLocalizedMessage()
+	 */
+	@Override
+	public String getLocalizedMessage() {
+		return FlexoLocalization.localizedForKey("not_enough_room_on_the_right");
+	}
 }

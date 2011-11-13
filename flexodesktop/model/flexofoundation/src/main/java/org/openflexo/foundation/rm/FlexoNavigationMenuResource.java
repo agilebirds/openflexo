@@ -31,132 +31,118 @@ import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.xml.FlexoNavigationMenuBuilder;
 
-
 /**
  * Represents the navigation menu resource
  * 
  * @author sguerin
  */
-public class FlexoNavigationMenuResource extends FlexoXMLStorageResource<FlexoNavigationMenu>
-{
-	
-    private static final Logger logger = Logger.getLogger(FlexoNavigationMenuResource.class.getPackage().getName());
+public class FlexoNavigationMenuResource extends FlexoXMLStorageResource<FlexoNavigationMenu> {
 
-    /**
-     * Constructor used for XML Serialization: never try to instanciate resource
-     * from this constructor
-     * 
-     * @param builder
-     * @throws InvalidFileNameException 
-     */
-    public FlexoNavigationMenuResource(FlexoProjectBuilder builder) throws InvalidFileNameException
-    {
-        this(builder.project);
-        builder.notifyResourceLoading(this);
-   }
+	private static final Logger logger = Logger.getLogger(FlexoNavigationMenuResource.class.getPackage().getName());
 
-    public FlexoNavigationMenuResource(FlexoProject aProject) throws InvalidFileNameException
-    {
-        this(aProject, new FlexoProjectFile(ProjectRestructuration.getExpectedNavigationMenuFile(aProject), aProject));
-    }
+	/**
+	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
+	 * 
+	 * @param builder
+	 * @throws InvalidFileNameException
+	 */
+	public FlexoNavigationMenuResource(FlexoProjectBuilder builder) throws InvalidFileNameException {
+		this(builder.project);
+		builder.notifyResourceLoading(this);
+	}
 
-    public FlexoNavigationMenuResource(FlexoProject aProject, FlexoProjectFile navigationMenuFile) throws InvalidFileNameException
-    {
-        super(aProject);
-        setResourceFile(navigationMenuFile);
-    }
+	public FlexoNavigationMenuResource(FlexoProject aProject) throws InvalidFileNameException {
+		this(aProject, new FlexoProjectFile(ProjectRestructuration.getExpectedNavigationMenuFile(aProject), aProject));
+	}
 
-    public FlexoNavigationMenuResource(FlexoProject aProject, FlexoNavigationMenu menu, FlexoProjectFile menuFile) throws InvalidFileNameException
-    {
-        this(aProject, menuFile);
-        _resourceData = menu;
-        try {
-            menu.setFlexoResource(this);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+	public FlexoNavigationMenuResource(FlexoProject aProject, FlexoProjectFile navigationMenuFile) throws InvalidFileNameException {
+		super(aProject);
+		setResourceFile(navigationMenuFile);
+	}
 
-    @Override
-	public ResourceType getResourceType()
-    {
-        return ResourceType.NAVIGATION_MENU;
-    }
+	public FlexoNavigationMenuResource(FlexoProject aProject, FlexoNavigationMenu menu, FlexoProjectFile menuFile)
+			throws InvalidFileNameException {
+		this(aProject, menuFile);
+		_resourceData = menu;
+		try {
+			menu.setFlexoResource(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-    @Override
-	public String getName()
-    {
-        return getProject().getProjectName();
-    }
+	@Override
+	public ResourceType getResourceType() {
+		return ResourceType.NAVIGATION_MENU;
+	}
 
-    @Override
-	public Class getResourceDataClass()
-    {
-        return FlexoNavigationMenu.class;
-    }
+	@Override
+	public String getName() {
+		return getProject().getProjectName();
+	}
 
-    @Override
-	public FlexoNavigationMenu performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws LoadXMLResourceException, ProjectLoadingCancelledException, MalformedXMLException
-    {
-        FlexoNavigationMenu menu;
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("loadResourceData() in FlexoNavigationMenuResource");
-        try {
-            menu = super.performLoadResourceData(progress, loadingHandler);
-        } catch (FlexoFileNotFoundException e) {
-            if (logger.isLoggable(Level.SEVERE))
-                logger.severe("File " + getFile().getName() + " NOT found");
-            e.printStackTrace();
-            return null;
-        }
-        menu.setProject(getProject());
-        return menu;
-    }
+	@Override
+	public Class getResourceDataClass() {
+		return FlexoNavigationMenu.class;
+	}
 
-    @Override
-	public boolean hasBuilder()
-    {
-        return true;
-    }
+	@Override
+	public FlexoNavigationMenu performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler)
+			throws LoadXMLResourceException, ProjectLoadingCancelledException, MalformedXMLException {
+		FlexoNavigationMenu menu;
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("loadResourceData() in FlexoNavigationMenuResource");
+		try {
+			menu = super.performLoadResourceData(progress, loadingHandler);
+		} catch (FlexoFileNotFoundException e) {
+			if (logger.isLoggable(Level.SEVERE))
+				logger.severe("File " + getFile().getName() + " NOT found");
+			e.printStackTrace();
+			return null;
+		}
+		menu.setProject(getProject());
+		return menu;
+	}
 
-    /**
-     * Returns the required newly instancied builder if this resource needs a
-     * builder to be loaded
-     * 
-     * @return boolean
-     */
-    @Override
-	public Object instanciateNewBuilder()
-    {
-        FlexoNavigationMenuBuilder builder = new FlexoNavigationMenuBuilder(this);
-        builder.navigationMenu = _resourceData;
-        return builder;
-    }
+	@Override
+	public boolean hasBuilder() {
+		return true;
+	}
 
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-	public void rebuildDependancies()
-    {
-        super.rebuildDependancies();
-        FlexoItemMenu menu=getResourceData().getRootMenu();
-        rebuildDependancyForMenu(menu);
-    }
+	/**
+	 * Returns the required newly instancied builder if this resource needs a builder to be loaded
+	 * 
+	 * @return boolean
+	 */
+	@Override
+	public Object instanciateNewBuilder() {
+		FlexoNavigationMenuBuilder builder = new FlexoNavigationMenuBuilder(this);
+		builder.navigationMenu = _resourceData;
+		return builder;
+	}
 
-    /**
-     * @param menu
-     */
-    private void rebuildDependancyForMenu(FlexoItemMenu menu)
-    {
-        if (menu.getProcess()!=null)
-            addToDependantResources(menu.getProcess().getFlexoResource());
-        Enumeration en = menu.getSubItems().elements();
-        while (en.hasMoreElements()) {
-            FlexoItemMenu element = (FlexoItemMenu) en.nextElement();
-            rebuildDependancyForMenu(element);
-        }
-    }
+	/**
+	 * Rebuild resource dependancies for this resource
+	 */
+	@Override
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
+		FlexoItemMenu menu = getResourceData().getRootMenu();
+		rebuildDependancyForMenu(menu);
+	}
+
+	/**
+	 * @param menu
+	 */
+	private void rebuildDependancyForMenu(FlexoItemMenu menu) {
+		if (menu.getProcess() != null)
+			addToDependantResources(menu.getProcess().getFlexoResource());
+		Enumeration en = menu.getSubItems().elements();
+		while (en.hasMoreElements()) {
+			FlexoItemMenu element = (FlexoItemMenu) en.nextElement();
+			rebuildDependancyForMenu(element);
+		}
+	}
 
 	@Override
 	protected boolean isDuplicateSerializationIdentifierRepairable() {

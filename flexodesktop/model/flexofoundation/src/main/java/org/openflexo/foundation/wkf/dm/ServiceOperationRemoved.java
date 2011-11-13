@@ -27,20 +27,17 @@ import org.openflexo.foundation.wkf.ws.ServiceOperation;
  * @author dvanvyve
  * 
  */
-public class ServiceOperationRemoved extends WKFDataModification
-{
+public class ServiceOperationRemoved extends WKFDataModification {
 
-    protected  ServiceOperation _removedOperation;
+	protected ServiceOperation _removedOperation;
 
-    public ServiceOperationRemoved( ServiceOperation removedOperation)
-    {
-        super(removedOperation, null);
-        _removedOperation = removedOperation;
-    }
+	public ServiceOperationRemoved(ServiceOperation removedOperation) {
+		super(removedOperation, null);
+		_removedOperation = removedOperation;
+	}
 
-    public  ServiceOperation getRemovedOperation()
-    {
-        return _removedOperation;
-    }
+	public ServiceOperation getRemovedOperation() {
+		return _removedOperation;
+	}
 
 }

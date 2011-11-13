@@ -25,15 +25,14 @@ import org.openflexo.xmlcode.XMLSerializable;
  * @author gpolet
  * 
  */
-public interface Sortable extends XMLSerializable
-{
-    public Sortable[] getCollection();
+public interface Sortable extends XMLSerializable {
+	public Sortable[] getCollection();
 
-    public int getIndexValue();
+	public int getIndexValue();
 
-    public void setIndexValue(int index);
-    
-    public int getIndex();
-    
-    public void setIndex(int index);
+	public void setIndexValue(int index);
+
+	public int getIndex();
+
+	public void setIndex(int index);
 }

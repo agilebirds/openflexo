@@ -32,49 +32,42 @@ import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.controller.FlexoController;
 
-
 /**
- * Abstract listeners for key events for flexo modules managing a
- * {@link SelectionManager} At this level are managed 'delete' events (which is
- * linked to deletion process on corresponding {@link SelectionManager})
+ * Abstract listeners for key events for flexo modules managing a {@link SelectionManager} At this level are managed 'delete' events (which
+ * is linked to deletion process on corresponding {@link SelectionManager})
  * 
  * @author sylvain
  */
-public abstract class SelectionManagingKeyEventListener extends FlexoKeyEventListener implements FlexoActionSource
-{
+public abstract class SelectionManagingKeyEventListener extends FlexoKeyEventListener implements FlexoActionSource {
 
-    public SelectionManagingKeyEventListener(FlexoController controller)
-    {
-        super(controller);
-    }
-    
-    @Override
-	public void keyPressed(KeyEvent event)
-    {
-        if (event.getKeyCode() == KeyEvent.VK_DELETE || event.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-            ActionListener listener = getController().getActionForKeyStroke(KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0));
-            if (listener != null) {
-                listener.actionPerformed(new ActionEvent(this, event.getID(), ""));
-                event.consume();
-           }
-        }
-        if (!event.isConsumed()) {
-            super.keyPressed(event);
-        }
-    }
+	public SelectionManagingKeyEventListener(FlexoController controller) {
+		super(controller);
+	}
 
-    protected abstract SelectionManager getSelectionManager();
-    
-    @Override
-	public FlexoModelObject getFocusedObject()
-    {
-        return getSelectionManager().getLastSelectedObject();
-    }
-    
-    @Override
-	public Vector getGlobalSelection()
-    {
-        return getSelectionManager().getSelection();
-    }
+	@Override
+	public void keyPressed(KeyEvent event) {
+		if (event.getKeyCode() == KeyEvent.VK_DELETE || event.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+			ActionListener listener = getController().getActionForKeyStroke(KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0));
+			if (listener != null) {
+				listener.actionPerformed(new ActionEvent(this, event.getID(), ""));
+				event.consume();
+			}
+		}
+		if (!event.isConsumed()) {
+			super.keyPressed(event);
+		}
+	}
+
+	protected abstract SelectionManager getSelectionManager();
+
+	@Override
+	public FlexoModelObject getFocusedObject() {
+		return getSelectionManager().getLastSelectedObject();
+	}
+
+	@Override
+	public Vector getGlobalSelection() {
+		return getSelectionManager().getSelection();
+	}
 
 }

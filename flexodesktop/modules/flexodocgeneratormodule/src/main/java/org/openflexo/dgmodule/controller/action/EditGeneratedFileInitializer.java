@@ -32,30 +32,26 @@ import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class EditGeneratedFileInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	EditGeneratedFileInitializer(DGControllerActionInitializer actionInitializer)
-	{
-		super(EditGeneratedFile.actionType,actionInitializer);
+	EditGeneratedFileInitializer(DGControllerActionInitializer actionInitializer) {
+		super(EditGeneratedFile.actionType, actionInitializer);
 	}
 
 	@Override
-	protected DGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DGControllerActionInitializer)super.getControllerActionInitializer();
+	protected DGControllerActionInitializer getControllerActionInitializer() {
+		return (DGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<EditGeneratedFile> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<EditGeneratedFile> getDefaultInitializer() {
 		return new FlexoActionInitializer<EditGeneratedFile>() {
 			@Override
-			public boolean run(ActionEvent e, EditGeneratedFile action)
-			{
-				FileContentEditor editor = (FileContentEditor)getControllerActionInitializer().getDGController().moduleViewForObject(action.getFocusedObject());
+			public boolean run(ActionEvent e, EditGeneratedFile action) {
+				FileContentEditor editor = (FileContentEditor) getControllerActionInitializer().getDGController().moduleViewForObject(
+						action.getFocusedObject());
 				if (editor != null) {
 					action.setFileContentEditor(editor);
 					return true;
@@ -66,28 +62,24 @@ public class EditGeneratedFileInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<EditGeneratedFile> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<EditGeneratedFile> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<EditGeneratedFile>() {
 			@Override
-			public boolean run(ActionEvent e, EditGeneratedFile action)
-			{
+			public boolean run(ActionEvent e, EditGeneratedFile action) {
 				getControllerActionInitializer().getDGController().setCurrentEditedObjectAsModuleView(action.getFocusedObject());
 				getControllerActionInitializer().getDGController().selectAndFocusObject(action.getFocusedObject());
-				return true;            	
+				return true;
 			}
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return GeneratorIconLibrary.EDIT_ICON;
 	}
 
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return GeneratorIconLibrary.EDIT_DISABLED_ICON;
 	}
 

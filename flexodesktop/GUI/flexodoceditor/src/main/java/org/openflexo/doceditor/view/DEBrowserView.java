@@ -31,7 +31,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.dnd.TreeDropTarget;
 import org.openflexo.components.browser.view.BrowserView;
@@ -46,116 +45,103 @@ import org.openflexo.localization.FlexoLocalization;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class DEBrowserView extends BrowserView
-{
+public class DEBrowserView extends BrowserView {
 
-    private DEController controller;
-    
-    /**
-     * @param browser
-     * @param kl
-     */
-    public DEBrowserView(DEController controller, ProjectBrowser browser)
-    {
-        super(browser, controller.getKeyEventListener(), controller.getEditor());
-        this.controller = controller;
-        
-        FlowLayout flowLayout = new FlowLayout();
-        JPanel viewModePanels = new JPanel(flowLayout);
-        viewModePanels.setBorder(BorderFactory.createEmptyBorder());
-        flowLayout.setHgap(2);
-        //logger.info("hGap="+flowLayout.getHgap()+" vGap="+flowLayout.getVgap());       
-        
-        setMinimumSize(new Dimension(DECst.MINIMUM_BROWSER_VIEW_WIDTH, DECst.MINIMUM_BROWSER_VIEW_HEIGHT));
-        setPreferredSize(new Dimension(DECst.PREFERRED_BROWSER_VIEW_WIDTH, DECst.PREFERRED_BROWSER_VIEW_HEIGHT));
- 
-    }
-    
-    @Override
-    protected TreeDropTarget createTreeDropTarget(FlexoJTree treeView2,
-    		ProjectBrowser _browser2) {
-    	return new TOCTreeDropTarget(treeView2, _browser2);
-    }
+	private DEController controller;
 
-    protected abstract class ViewModeButton extends JButton implements MouseListener, ActionListener
-    {
-    	protected ViewModeButton(ImageIcon icon, String unlocalizedDescription)
-    	{
-    		super(icon);
-    		setToolTipText(FlexoLocalization.localizedForKey(unlocalizedDescription));
-    		setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
-    		addMouseListener(this);
-    		addActionListener(this);
-    	}
+	/**
+	 * @param browser
+	 * @param kl
+	 */
+	public DEBrowserView(DEController controller, ProjectBrowser browser) {
+		super(browser, controller.getKeyEventListener(), controller.getEditor());
+		this.controller = controller;
 
-		@Override
-		public void mouseClicked(MouseEvent e) 
-		{
+		FlowLayout flowLayout = new FlowLayout();
+		JPanel viewModePanels = new JPanel(flowLayout);
+		viewModePanels.setBorder(BorderFactory.createEmptyBorder());
+		flowLayout.setHgap(2);
+		// logger.info("hGap="+flowLayout.getHgap()+" vGap="+flowLayout.getVgap());
+
+		setMinimumSize(new Dimension(DECst.MINIMUM_BROWSER_VIEW_WIDTH, DECst.MINIMUM_BROWSER_VIEW_HEIGHT));
+		setPreferredSize(new Dimension(DECst.PREFERRED_BROWSER_VIEW_WIDTH, DECst.PREFERRED_BROWSER_VIEW_HEIGHT));
+
+	}
+
+	@Override
+	protected TreeDropTarget createTreeDropTarget(FlexoJTree treeView2, ProjectBrowser _browser2) {
+		return new TOCTreeDropTarget(treeView2, _browser2);
+	}
+
+	protected abstract class ViewModeButton extends JButton implements MouseListener, ActionListener {
+		protected ViewModeButton(ImageIcon icon, String unlocalizedDescription) {
+			super(icon);
+			setToolTipText(FlexoLocalization.localizedForKey(unlocalizedDescription));
+			setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+			addMouseListener(this);
+			addActionListener(this);
 		}
 
 		@Override
-		public void mouseEntered(MouseEvent e) 
-		{
+		public void mouseClicked(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
 			setBorder(BorderFactory.createEtchedBorder());
 		}
 
 		@Override
-		public void mouseExited(MouseEvent e) 
-		{
-			setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
+		public void mouseExited(MouseEvent e) {
+			setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 		}
 
 		@Override
-		public void mousePressed(MouseEvent e) 
-		{
+		public void mousePressed(MouseEvent e) {
 		}
 
 		@Override
-		public void mouseReleased(MouseEvent e) 
-		{
+		public void mouseReleased(MouseEvent e) {
 		}
 
 		@Override
-		public void actionPerformed(ActionEvent e) 
-		{
+		public void actionPerformed(ActionEvent e) {
 			setFilters();
 			getBrowser().update();
 		}
-		
-		public abstract void setFilters();
-    }
-    
-    @Override
-	public DEBrowser getBrowser()
-    {
-    	return (DEBrowser)super.getBrowser();
-    }
-    
-    /**
-     * Overrides treeSingleClick
-     * @see org.openflexo.components.browser.view.BrowserView#treeSingleClick(org.openflexo.foundation.FlexoModelObject)
-     */
-    @Override
-	public void treeSingleClick(FlexoModelObject object)
-    {
-    	if (object instanceof GenerationRepository) {
-        	controller.setCurrentEditedObjectAsModuleView(object);
-    	}
-    	else if (object instanceof TOCEntry) {
-    		controller.setCurrentEditedObjectAsModuleView(object);
-    	}
-    }
 
-    /**
-     * Overrides treeDoubleClick
-     * @see org.openflexo.components.browser.view.BrowserView#treeDoubleClick(org.openflexo.foundation.FlexoModelObject)
-     */
-    @Override
-	public void treeDoubleClick(FlexoModelObject object)
-    {
-    	
-    }
+		public abstract void setFilters();
+	}
+
+	@Override
+	public DEBrowser getBrowser() {
+		return (DEBrowser) super.getBrowser();
+	}
+
+	/**
+	 * Overrides treeSingleClick
+	 * 
+	 * @see org.openflexo.components.browser.view.BrowserView#treeSingleClick(org.openflexo.foundation.FlexoModelObject)
+	 */
+	@Override
+	public void treeSingleClick(FlexoModelObject object) {
+		if (object instanceof GenerationRepository) {
+			controller.setCurrentEditedObjectAsModuleView(object);
+		} else if (object instanceof TOCEntry) {
+			controller.setCurrentEditedObjectAsModuleView(object);
+		}
+	}
+
+	/**
+	 * Overrides treeDoubleClick
+	 * 
+	 * @see org.openflexo.components.browser.view.BrowserView#treeDoubleClick(org.openflexo.foundation.FlexoModelObject)
+	 */
+	@Override
+	public void treeDoubleClick(FlexoModelObject object) {
+
+	}
 
 }

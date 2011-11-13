@@ -33,74 +33,63 @@ public class Class implements AlgorithmicUnit {
 	private String groupName;
 	private Vector<Procedure> procedures;
 	private String comment;
-	
-	public Class(String className, String groupName) 
-	{
+
+	public Class(String className, String groupName) {
 		super();
 		this.className = className;
 		this.groupName = groupName;
 		this.procedures = new Vector<Procedure>();
 	}
 
-	public Class(String className, String groupName,Procedure... procedures) 
-	{
+	public Class(String className, String groupName, Procedure... procedures) {
 		this(className, groupName);
-		for (Procedure p : procedures) addProcedure(p);
+		for (Procedure p : procedures)
+			addProcedure(p);
 	}
 
-	public Class(String className, String groupName,Vector<Procedure> procedures) 
-	{
+	public Class(String className, String groupName, Vector<Procedure> procedures) {
 		this(className, groupName);
-		for (Procedure p : procedures) addProcedure(p);
+		for (Procedure p : procedures)
+			addProcedure(p);
 	}
 
-	public Vector<Procedure> getProcedures() 
-	{
+	public Vector<Procedure> getProcedures() {
 		return procedures;
 	}
-	
-	public void setProcedures(Vector<Procedure> procedures) 
-	{
+
+	public void setProcedures(Vector<Procedure> procedures) {
 		this.procedures = procedures;
 	}
-	
-	public void addProcedure(Procedure procedure)
-	{
+
+	public void addProcedure(Procedure procedure) {
 		procedures.add(procedure);
 	}
-	
-	public void removeProcedure(Procedure procedure)
-	{
+
+	public void removeProcedure(Procedure procedure) {
 		procedures.remove(procedure);
 	}
-	
-	public String getClassName()
-	{
+
+	public String getClassName() {
 		return className;
 	}
-	
-	public void setClassName(String className)
-	{
+
+	public void setClassName(String className) {
 		this.className = className;
 	}
-	
-	public String getGroupName()
-	{
+
+	public String getGroupName() {
 		return groupName;
 	}
-	
-	public void setGroupName(String groupName)
-	{
+
+	public void setGroupName(String groupName) {
 		this.groupName = groupName;
 	}
 
-	public String getComment() 
-	{
+	public String getComment() {
 		return comment;
 	}
 
-	public void setComment(String comment)
-	{
+	public void setComment(String comment) {
 		this.comment = comment;
 	}
 

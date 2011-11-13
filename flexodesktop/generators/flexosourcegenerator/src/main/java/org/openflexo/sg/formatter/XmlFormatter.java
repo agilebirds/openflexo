@@ -31,7 +31,6 @@ import org.jdom.output.Format.TextMode;
 import org.openflexo.sg.formatter.exception.FormattingException;
 import org.openflexo.toolbox.FileFormat;
 
-
 public class XmlFormatter implements Formatter {
 
 	private final Format format;

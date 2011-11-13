@@ -59,332 +59,308 @@ import org.openflexo.logging.FlexoLogger;
  * 
  * @author bmangez
  */
-public class IETabWidget extends IEReusableWidget<TabComponentDefinition,TabComponentInstance> implements DataFlexoObserver, ITabWidget
-{
-    /**
+public class IETabWidget extends IEReusableWidget<TabComponentDefinition, TabComponentInstance> implements DataFlexoObserver, ITabWidget {
+	/**
      * 
      */
-    public static final String TAB_WIDGET = "tab_widget";
+	public static final String TAB_WIDGET = "tab_widget";
 
-    private static final Logger logger = FlexoLogger.getLogger(IETabWidget.class.getPackage().getName());
-    
-    public static final String TAB_TITLE_ATTRIBUTE_NAME = "title";
+	private static final Logger logger = FlexoLogger.getLogger(IETabWidget.class.getPackage().getName());
 
-    private String _title;
+	public static final String TAB_TITLE_ATTRIBUTE_NAME = "title";
 
-    private String _key;
+	private String _title;
 
-    private String _bindings;
+	private String _key;
 
-    @Override
-    protected TabComponentInstance createComponentInstance(TabComponentDefinition componentDefinition, IEWOComponent woComponent) {
-    	return new TabComponentInstance(componentDefinition, this);
-    }
-    
-    /**
-     * Overrides getSpecificActionListForThatClass
-     * 
-     * @see org.openflexo.foundation.ie.widget.IEWidget#getSpecificActionListForThatClass()
-     */
-    @Override
-    protected Vector<FlexoActionType> getSpecificActionListForThatClass()
-    {
-        Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-        returned.add(AddTab.actionType);
-        returned.add(MoveTabLeft.actionType);
-        returned.add(MoveTabRight.actionType);
-        returned.remove(SuroundWithRepetition.actionType);
-        return returned;
-    }
+	private String _bindings;
 
-    /**
-     * Overrides getParent
-     * @see org.openflexo.foundation.ie.widget.IEWidget#getParent()
-     */
-    @Override
-    public IEWidget getParent()
-    {
-        return (IEWidget) super.getParent();
-    }
-    
-    @Override
-	public IESequenceTab getRootParent()
-    {
-        IESequenceTab root = ((IESequenceTab) getParent());
-        while (root.getParent() != null && root.getParent() instanceof IESequenceTab)
-            root = (IESequenceTab) root.getParent();
-        return root;
-    }
+	@Override
+	protected TabComponentInstance createComponentInstance(TabComponentDefinition componentDefinition, IEWOComponent woComponent) {
+		return new TabComponentInstance(componentDefinition, this);
+	}
 
-    public IETabComponent getTabComponent()
-    {
-        return getTabComponentDefinition().getWOComponent();
-    }
+	/**
+	 * Overrides getSpecificActionListForThatClass
+	 * 
+	 * @see org.openflexo.foundation.ie.widget.IEWidget#getSpecificActionListForThatClass()
+	 */
+	@Override
+	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
+		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
+		returned.add(AddTab.actionType);
+		returned.add(MoveTabLeft.actionType);
+		returned.add(MoveTabRight.actionType);
+		returned.remove(SuroundWithRepetition.actionType);
+		return returned;
+	}
 
-    public IETabWidget(FlexoComponentBuilder builder)
-    {
-        this(builder.woComponent,
-                null, null, builder.getProject());
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Overrides getParent
+	 * 
+	 * @see org.openflexo.foundation.ie.widget.IEWidget#getParent()
+	 */
+	@Override
+	public IEWidget getParent() {
+		return (IEWidget) super.getParent();
+	}
 
-    public IETabWidget(IEWOComponent woComponent, TabComponentDefinition def, IEObject parent, FlexoProject project)
-    {
-        super(woComponent, def, parent, project);
-        if (getTitle() == null)
-            setTitle("no title");
-    }
+	@Override
+	public IESequenceTab getRootParent() {
+		IESequenceTab root = ((IESequenceTab) getParent());
+		while (root.getParent() != null && root.getParent() instanceof IESequenceTab)
+			root = (IESequenceTab) root.getParent();
+		return root;
+	}
 
-    @Override
-	public String getDefaultInspectorName()
-    {
-        return Inspectors.IE.TAB_INSPECTOR;
-    }
+	public IETabComponent getTabComponent() {
+		return getTabComponentDefinition().getWOComponent();
+	}
 
-    // ==========================================================================
-    // ============================= Instance Methods
-    // ===========================
-    // ==========================================================================
+	public IETabWidget(FlexoComponentBuilder builder) {
+		this(builder.woComponent, null, null, builder.getProject());
+		initializeDeserialization(builder);
+	}
 
-    public void moveLeft()
-    {
-        ITabWidget w = null;
-        if (((IESequenceTab) getParent()).isSubsequence())
-            w = ((IESequenceTab) getParent());
-        else
-            w = this;
-        if (w.getIndex() == 0) {
-            getRootParent().removeFromInnerWidgets(w);
-            getRootParent().addToInnerWidgets(w);
-        } else {
-            getRootParent().swapTabs(w, getRootParent().get(w.getIndex() - 1));
-        }
-    }
+	public IETabWidget(IEWOComponent woComponent, TabComponentDefinition def, IEObject parent, FlexoProject project) {
+		super(woComponent, def, parent, project);
+		if (getTitle() == null)
+			setTitle("no title");
+	}
 
-    public void moveRight()
-    {
-        ITabWidget w = null;
-        if (((IESequenceTab) getParent()).isSubsequence())
-            w = ((IESequenceTab) getParent());
-        else
-            w = this;
-        if (w.getIndex() == getRootParent().size() - 1) {
-            getRootParent().removeFromInnerWidgets(w);
-            getRootParent().insertElementAt(w, 0);
-        } else {
-            getRootParent().swapTabs(w, getRootParent().get(w.getIndex() + 1));
-        }
-    }
+	@Override
+	public String getDefaultInspectorName() {
+		return Inspectors.IE.TAB_INSPECTOR;
+	}
 
-    @Override
-    public TabComponentInstance getReusableComponentInstance() {
-    	return super.getReusableComponentInstance();
-    }
-    
-    @Override
-    public String toString() {
-    	return "Tab-"+getTitle();
-    }
-    
-    public TabComponentDefinition getTabComponentDefinition()
-    {
-        return getReusableComponentInstance().getComponentDefinition();
-    }
+	// ==========================================================================
+	// ============================= Instance Methods
+	// ===========================
+	// ==========================================================================
 
-    // ==========================================================================
-    // ============================= Accessors
-    // ==================================
-    // ==========================================================================
+	public void moveLeft() {
+		ITabWidget w = null;
+		if (((IESequenceTab) getParent()).isSubsequence())
+			w = ((IESequenceTab) getParent());
+		else
+			w = this;
+		if (w.getIndex() == 0) {
+			getRootParent().removeFromInnerWidgets(w);
+			getRootParent().addToInnerWidgets(w);
+		} else {
+			getRootParent().swapTabs(w, getRootParent().get(w.getIndex() - 1));
+		}
+	}
 
-    @Override
-    public String getName() {
-    	return getTitle();
-    }
-    
-    public String getTitle()
-    {
-        return _title;
-    }
+	public void moveRight() {
+		ITabWidget w = null;
+		if (((IESequenceTab) getParent()).isSubsequence())
+			w = ((IESequenceTab) getParent());
+		else
+			w = this;
+		if (w.getIndex() == getRootParent().size() - 1) {
+			getRootParent().removeFromInnerWidgets(w);
+			getRootParent().insertElementAt(w, 0);
+		} else {
+			getRootParent().swapTabs(w, getRootParent().get(w.getIndex() + 1));
+		}
+	}
 
-    public void setTitle(String title)
-    {
-        this._title = title;
-        setChanged();
-        notifyObservers(new DataModification(DataModification.ATTRIBUTE, TAB_TITLE_ATTRIBUTE_NAME, null, title));
-    }
+	@Override
+	public TabComponentInstance getReusableComponentInstance() {
+		return super.getReusableComponentInstance();
+	}
 
-    public String getKey()
-    {
-        return _key;
-    }
+	@Override
+	public String toString() {
+		return "Tab-" + getTitle();
+	}
 
-    public void setKey(String key)
-    {
-        String old = _key;
-        this._key = key;
-        setChanged();
-        notifyObservers(new IEDataModification("key", old, key));
-    }
+	public TabComponentDefinition getTabComponentDefinition() {
+		return getReusableComponentInstance().getComponentDefinition();
+	}
 
-    public String getBindings()
-    {
-        return _bindings;
-    }
+	// ==========================================================================
+	// ============================= Accessors
+	// ==================================
+	// ==========================================================================
 
-    public void setBindings(String value)
-    {
-        String old = _bindings;
-        this._bindings = value;
-        setChanged();
-        notifyObservers(new IEDataModification("bindings", old, value));
-    }
+	@Override
+	public String getName() {
+		return getTitle();
+	}
 
-    public TabComponentInstance getComponentInstance()
-    {
-        return getReusableComponentInstance();
-    }
+	public String getTitle() {
+		return _title;
+	}
 
-    /**
-     * Return a Vector of embedded IEObjects at this level. NOTE that this is
-     * NOT a recursive method
-     * 
-     * @return a Vector of IEObject instances
-     */
-    @Override
-	public Vector<IObject> getEmbeddedIEObjects()
-    {
-        Vector<IObject> answer = new Vector<IObject>();
-        if (getComponentInstance() != null) {
-            answer.add(getComponentInstance());
-        }
-        return answer;
-    }
+	public void setTitle(String title) {
+		this._title = title;
+		setChanged();
+		notifyObservers(new DataModification(DataModification.ATTRIBUTE, TAB_TITLE_ATTRIBUTE_NAME, null, title));
+	}
 
-    @Override
-	public String getFullyQualifiedName()
-    {
-        return "TabReference";
-    }
+	public String getKey() {
+		return _key;
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * 
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return TAB_WIDGET;
-    }
+	public void setKey(String key) {
+		String old = _key;
+		this._key = key;
+		setChanged();
+		notifyObservers(new IEDataModification("key", old, key));
+	}
 
-    /**
-     * Overrides getAllTabs
-     * 
-     * @see org.openflexo.foundation.ie.widget.ITabWidget#getAllTabs()
-     */
-    @Override
-	public Vector<IETabWidget> getAllTabs()
-    {
-        Vector<IETabWidget> v = new Vector<IETabWidget>();
-        v.add(this);
-        return v;
-    }
+	public String getBindings() {
+		return _bindings;
+	}
 
-    private IESequenceTab getRootSequenceTab(){
-    	if(((IESequenceTab)getParent()).hasOperatorConditional() || ((IESequenceTab)getParent()).hasOperatorRepetition()){
-    		return (IESequenceTab) ((IESequenceTab)getParent()).getParent();
-    	}
-    	return (IESequenceTab)getParent();
-    }
-    
-    public String getTabKeyForGenerator(){
-    	if (_key!=null && _key.trim().length()>0)
-    		return _key;
-    	return getRootSequenceTab().getTitleForGenerator()+getRootSequenceTab().getAbsoluteIndexOfTab(this);
-    }
-    
-    /**
-     * Overrides update
-     * 
-     * @see org.openflexo.foundation.ie.IEObject#update(org.openflexo.foundation.FlexoObservable,
-     *      org.openflexo.foundation.DataModification)
-     */
-    @Override
-    public void update(FlexoObservable observable, DataModification obj)
-    {
-        /*if (observable == getTabComponent()) {
-            setChanged();
-            notifyObservers(obj);
-        }*/
-        super.update(observable, obj);
-    }
+	public void setBindings(String value) {
+		String old = _bindings;
+		this._bindings = value;
+		setChanged();
+		notifyObservers(new IEDataModification("bindings", old, value));
+	}
 
-    @Override
-    public boolean areComponentInstancesValid() {
-    	return getComponentInstance()==null || getComponentInstance().isValidInstance();
-    }
-    
+	public TabComponentInstance getComponentInstance() {
+		return getReusableComponentInstance();
+	}
+
+	/**
+	 * Return a Vector of embedded IEObjects at this level. NOTE that this is NOT a recursive method
+	 * 
+	 * @return a Vector of IEObject instances
+	 */
+	@Override
+	public Vector<IObject> getEmbeddedIEObjects() {
+		Vector<IObject> answer = new Vector<IObject>();
+		if (getComponentInstance() != null) {
+			answer.add(getComponentInstance());
+		}
+		return answer;
+	}
+
+	@Override
+	public String getFullyQualifiedName() {
+		return "TabReference";
+	}
+
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return TAB_WIDGET;
+	}
+
+	/**
+	 * Overrides getAllTabs
+	 * 
+	 * @see org.openflexo.foundation.ie.widget.ITabWidget#getAllTabs()
+	 */
+	@Override
+	public Vector<IETabWidget> getAllTabs() {
+		Vector<IETabWidget> v = new Vector<IETabWidget>();
+		v.add(this);
+		return v;
+	}
+
+	private IESequenceTab getRootSequenceTab() {
+		if (((IESequenceTab) getParent()).hasOperatorConditional() || ((IESequenceTab) getParent()).hasOperatorRepetition()) {
+			return (IESequenceTab) ((IESequenceTab) getParent()).getParent();
+		}
+		return (IESequenceTab) getParent();
+	}
+
+	public String getTabKeyForGenerator() {
+		if (_key != null && _key.trim().length() > 0)
+			return _key;
+		return getRootSequenceTab().getTitleForGenerator() + getRootSequenceTab().getAbsoluteIndexOfTab(this);
+	}
+
+	/**
+	 * Overrides update
+	 * 
+	 * @see org.openflexo.foundation.ie.IEObject#update(org.openflexo.foundation.FlexoObservable, org.openflexo.foundation.DataModification)
+	 */
+	@Override
+	public void update(FlexoObservable observable, DataModification obj) {
+		/*if (observable == getTabComponent()) {
+		    setChanged();
+		    notifyObservers(obj);
+		}*/
+		super.update(observable, obj);
+	}
+
+	@Override
+	public boolean areComponentInstancesValid() {
+		return getComponentInstance() == null || getComponentInstance().isValidInstance();
+	}
+
 	@Override
 	public void removeInvalidComponentInstances() {
 		if (!getComponentInstance().isValidInstance())
 			delete();
 	}
-    
-    public boolean isShownInOperation(OperationNode node)
-    {
-        ConditionalOperator operator = conditional();
-        if (operator!=null) {
-        	if (operator.getBindingConditional() instanceof BindingValue) {
-        		BindingValue bv = (BindingValue)operator.getBindingConditional();
-        		if (bv.getBindingPathElementCount()==1) {
-        			if (bv.getBindingPathElementAtIndex(0) instanceof DMProperty) {
-        				String varName = ((DMProperty)bv.getBindingPathElementAtIndex(0)).getName();
-        				Enumeration<ComponentBindingDefinition>en = operator.getWOComponent().getComponentDMEntity().getBindingDefinitions().elements();
-        				ComponentBindingDefinition cbd=null;
-        				while (en.hasMoreElements() && cbd==null) {
-        					cbd = en.nextElement();
-        					if (!cbd.getVariableName().equals(varName)) {
-        						cbd = null;
-        					}
-        				}
-        				if (cbd!=null) {
-        					ComponentInstanceBinding cib = node.getComponentInstance().getBinding(cbd);
-        					if (cib!=null && cib.getBindingValue()!=null) {
-        						if (cib.getBindingValue() instanceof BooleanStaticBinding) {
-        							if (operator.getIsNegate())
-        								return !((BooleanStaticBinding)cib.getBindingValue()).getValue();
-        							else
-        								return ((BooleanStaticBinding)cib.getBindingValue()).getValue();
-        						}
-        						else {
-        							if (logger.isLoggable(Level.INFO))
-        								logger.info("Binding of OperationNode "+node.getFullyQualifiedName()+" is dynamic, I cannot evaluate it.");
-        						}
-        					}
-        				}
-        			}
-        		}
-        	} else if (operator.getBindingConditional() instanceof BooleanStaticBinding) {
-        		BooleanStaticBinding bv = (BooleanStaticBinding)operator.getBindingConditional();
-        		if (bv.getValue()!=null)
-        			return bv.getValue();
-        	}
-        }
-        return true; // default is true
-    }
 
-    @Override
-	protected Hashtable<String,String> getLocalizableProperties(Hashtable<String,String> props){
-    	if(StringUtils.isNotEmpty(getTitle()))props.put("title",getTitle());
-    	return super.getLocalizableProperties(props);
-    }
-    
-    public String getTabsTitleForGenerator(){
-    	return getRootParent().getTabsTitleForGenerator();
-    }
-    
-    @Override
+	public boolean isShownInOperation(OperationNode node) {
+		ConditionalOperator operator = conditional();
+		if (operator != null) {
+			if (operator.getBindingConditional() instanceof BindingValue) {
+				BindingValue bv = (BindingValue) operator.getBindingConditional();
+				if (bv.getBindingPathElementCount() == 1) {
+					if (bv.getBindingPathElementAtIndex(0) instanceof DMProperty) {
+						String varName = ((DMProperty) bv.getBindingPathElementAtIndex(0)).getName();
+						Enumeration<ComponentBindingDefinition> en = operator.getWOComponent().getComponentDMEntity()
+								.getBindingDefinitions().elements();
+						ComponentBindingDefinition cbd = null;
+						while (en.hasMoreElements() && cbd == null) {
+							cbd = en.nextElement();
+							if (!cbd.getVariableName().equals(varName)) {
+								cbd = null;
+							}
+						}
+						if (cbd != null) {
+							ComponentInstanceBinding cib = node.getComponentInstance().getBinding(cbd);
+							if (cib != null && cib.getBindingValue() != null) {
+								if (cib.getBindingValue() instanceof BooleanStaticBinding) {
+									if (operator.getIsNegate())
+										return !((BooleanStaticBinding) cib.getBindingValue()).getValue();
+									else
+										return ((BooleanStaticBinding) cib.getBindingValue()).getValue();
+								} else {
+									if (logger.isLoggable(Level.INFO))
+										logger.info("Binding of OperationNode " + node.getFullyQualifiedName()
+												+ " is dynamic, I cannot evaluate it.");
+								}
+							}
+						}
+					}
+				}
+			} else if (operator.getBindingConditional() instanceof BooleanStaticBinding) {
+				BooleanStaticBinding bv = (BooleanStaticBinding) operator.getBindingConditional();
+				if (bv.getValue() != null)
+					return bv.getValue();
+			}
+		}
+		return true; // default is true
+	}
+
+	@Override
+	protected Hashtable<String, String> getLocalizableProperties(Hashtable<String, String> props) {
+		if (StringUtils.isNotEmpty(getTitle()))
+			props.put("title", getTitle());
+		return super.getLocalizableProperties(props);
+	}
+
+	public String getTabsTitleForGenerator() {
+		return getRootParent().getTabsTitleForGenerator();
+	}
+
+	@Override
 	public Vector<IEHyperlinkWidget> getAllButtonInterface() {
-    	return getTabComponent().getAllButtonInterface();
-    }
+		return getTabComponent().getAllButtonInterface();
+	}
 }

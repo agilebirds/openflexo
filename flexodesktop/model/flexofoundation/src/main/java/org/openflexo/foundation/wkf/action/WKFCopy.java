@@ -30,49 +30,42 @@ import org.openflexo.foundation.wkf.FlexoPetriGraph;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFGroup;
 
+public class WKFCopy extends FlexoAction<WKFCopy, FlexoModelObject, FlexoModelObject> {
 
-public class WKFCopy extends FlexoAction<WKFCopy,FlexoModelObject,FlexoModelObject> 
-{
+	private static final Logger logger = Logger.getLogger(WKFCopy.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(WKFCopy.class.getPackage().getName());
+	public static FlexoActionType<WKFCopy, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<WKFCopy, FlexoModelObject, FlexoModelObject>(
+			"copy", FlexoActionType.editGroup) {
 
-    public static FlexoActionType<WKFCopy,FlexoModelObject,FlexoModelObject> actionType 
-    = new FlexoActionType<WKFCopy,FlexoModelObject,FlexoModelObject> ("copy",FlexoActionType.editGroup) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public WKFCopy makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+			return new WKFCopy(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public WKFCopy makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) 
-        {
-            return new WKFCopy(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return isEnabledForSelection(object, globalSelection);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) 
-        {
-            return isEnabledForSelection(object, globalSelection);
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) 
-        {
-        	
-        	return !(object instanceof FlexoPetriGraph) && !(object instanceof FlexoProcess) && !(object instanceof WKFGroup);
-        }
-                
-    };
-    
-    WKFCopy (FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+			return !(object instanceof FlexoPetriGraph) && !(object instanceof FlexoProcess) && !(object instanceof WKFGroup);
+		}
 
-    @Override
-	protected void doAction(Object context) 
-    {
-        // Implemented in WKF module
-        logger.info ("COPY on WKF");
-    }
-    
+	};
+
+	WKFCopy(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) {
+		// Implemented in WKF module
+		logger.info("COPY on WKF");
+	}
+
 }

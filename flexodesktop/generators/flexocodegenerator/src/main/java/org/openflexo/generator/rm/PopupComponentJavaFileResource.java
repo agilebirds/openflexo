@@ -30,25 +30,22 @@ import org.openflexo.logging.FlexoLogger;
  * @author sylvain
  * 
  */
-public class PopupComponentJavaFileResource extends ComponentJavaFileResource<PopupComponentGenerator> implements PopupComponentFileResource
-{
-    protected static final Logger logger = FlexoLogger.getLogger(PopupComponentJavaFileResource.class.getPackage().getName());
+public class PopupComponentJavaFileResource extends ComponentJavaFileResource<PopupComponentGenerator> implements
+		PopupComponentFileResource {
+	protected static final Logger logger = FlexoLogger.getLogger(PopupComponentJavaFileResource.class.getPackage().getName());
 
-    /**
-     * @param builder
-     */
-    public PopupComponentJavaFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
+	/**
+	 * @param builder
+	 */
+	public PopupComponentJavaFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
-    /**
-     * @param aProject
-     */
-    public PopupComponentJavaFileResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
-	
+	/**
+	 * @param aProject
+	 */
+	public PopupComponentJavaFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
 }

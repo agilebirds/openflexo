@@ -39,80 +39,76 @@ import org.openflexo.logging.FlexoLogger;
 
 /**
  * @author sylvain
- *
+ * 
  */
-public class OperationComponentAPIFileResource extends ComponentAPIFileResource<PageComponentGenerator> implements OperationComponentFileResource
-{
-    protected static final Logger logger = FlexoLogger.getLogger(OperationComponentAPIFileResource.class.getPackage().getName());
-
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-	public void rebuildDependancies()
-    {
-        super.rebuildDependancies();
-    	if (getGenerator() != null) {
-    		for (ComponentInstance ci : getComponentDefinition().getComponentInstances()) {
-    			if (ci instanceof OperationComponentInstance)
-    				addToDependantResources(((OperationComponentInstance)ci).getOperationNode().getProcess().getFlexoResource());
-    		}
-    	}
-    }
-
-    /**
-     * @param builder
-     */
-    public OperationComponentAPIFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
-
-    /**
-     * @param aProject
-     */
-    public OperationComponentAPIFileResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
+public class OperationComponentAPIFileResource extends ComponentAPIFileResource<PageComponentGenerator> implements
+		OperationComponentFileResource {
+	protected static final Logger logger = FlexoLogger.getLogger(OperationComponentAPIFileResource.class.getPackage().getName());
 
 	/**
-     * Return dependancy computing between this resource, and an other resource,
-     * asserting that this resource is contained in this resource's dependant resources
-     *
-     * @param resource
-	 * @param dependancyScheme
-     * @return
-     */
+	 * Rebuild resource dependancies for this resource
+	 */
 	@Override
-	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate)
-	{
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
+		if (getGenerator() != null) {
+			for (ComponentInstance ci : getComponentDefinition().getComponentInstances()) {
+				if (ci instanceof OperationComponentInstance)
+					addToDependantResources(((OperationComponentInstance) ci).getOperationNode().getProcess().getFlexoResource());
+			}
+		}
+	}
+
+	/**
+	 * @param builder
+	 */
+	public OperationComponentAPIFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
+
+	/**
+	 * @param aProject
+	 */
+	public OperationComponentAPIFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
+
+	/**
+	 * Return dependancy computing between this resource, and an other resource, asserting that this resource is contained in this
+	 * resource's dependant resources
+	 * 
+	 * @param resource
+	 * @param dependancyScheme
+	 * @return
+	 */
+	@Override
+	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate) {
 		if (resource instanceof FlexoProcessResource) {
-			FlexoProcessResource processRes = (FlexoProcessResource)resource;
+			FlexoProcessResource processRes = (FlexoProcessResource) resource;
 			if (processRes.isLoaded()) {
 				FlexoProcess concernedProcess = processRes.getResourceData();
 				if (getGenerator() != null) {
 					boolean iCanBeOptimistic = true;
 					for (ComponentInstance ci : getComponentDefinition().getComponentInstances()) {
 						if (ci instanceof OperationComponentInstance) {
-							OperationNode operationNode = ((OperationComponentInstance)ci).getOperationNode();
+							OperationNode operationNode = ((OperationComponentInstance) ci).getOperationNode();
 							if (operationNode.getProcess() == concernedProcess) {
 								if (!operationNode.getLastUpdate().before(requestDate)) {
 									iCanBeOptimistic = false;
 								}
 							}
 						}
-		    		}
-					if (iCanBeOptimistic) return false;
-		    	}
+					}
+					if (iCanBeOptimistic)
+						return false;
+				}
 			}
 		}
 		return super.optimisticallyDependsOf(resource, requestDate);
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getComponentDefinition()) {
 			if (dataModification instanceof ComponentNameChanged2) {
 				logger.info("Building new resource after renaming");
@@ -124,8 +120,7 @@ public class OperationComponentAPIFileResource extends ComponentAPIFileResource<
 				generator.getRepository().refresh();
 				observable.deleteObserver(this);
 				isObserverRegistered = false;
-			}
-			else if (dataModification instanceof ComponentDeleted) {
+			} else if (dataModification instanceof ComponentDeleted) {
 				logger.info("Handle component has been deleted");
 				setGenerator(null);
 				getCGFile().setMarkedForDeletion(true);
@@ -135,6 +130,5 @@ public class OperationComponentAPIFileResource extends ComponentAPIFileResource<
 			}
 		}
 	}
-
 
 }

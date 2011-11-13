@@ -34,19 +34,21 @@ import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.sg.implmodel.exception.TechnologyModuleCompatibilityCheckException;
 
-
-public class CreateTechnologyModuleImplementation extends FlexoAction<CreateTechnologyModuleImplementation, ImplementationModel, ImplementationModel> {
+public class CreateTechnologyModuleImplementation extends
+		FlexoAction<CreateTechnologyModuleImplementation, ImplementationModel, ImplementationModel> {
 
 	private static final Logger logger = Logger.getLogger(CreateTechnologyModuleImplementation.class.getPackage().getName());
 
 	public static FlexoActionType<CreateTechnologyModuleImplementation, ImplementationModel, ImplementationModel> actionType = new FlexoActionType<CreateTechnologyModuleImplementation, ImplementationModel, ImplementationModel>(
-			"create_new_technology_module_implementation", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
+			"create_new_technology_module_implementation", FlexoActionType.newMenu, FlexoActionType.defaultGroup,
+			FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public CreateTechnologyModuleImplementation makeNewAction(ImplementationModel focusedObject, Vector<ImplementationModel> globalSelection, FlexoEditor editor) {
+		public CreateTechnologyModuleImplementation makeNewAction(ImplementationModel focusedObject,
+				Vector<ImplementationModel> globalSelection, FlexoEditor editor) {
 			return new CreateTechnologyModuleImplementation(focusedObject, globalSelection, editor);
 		}
 
@@ -83,7 +85,8 @@ public class CreateTechnologyModuleImplementation extends FlexoAction<CreateTech
 		}
 
 		newTechnologyModuleImplementation = technologyModuleDefinition.createNewImplementation(getFocusedObject());
-		logger.info("Created technology module implementation " + newTechnologyModuleImplementation + " for model " + newTechnologyModuleImplementation.getImplementationModel());
+		logger.info("Created technology module implementation " + newTechnologyModuleImplementation + " for model "
+				+ newTechnologyModuleImplementation.getImplementationModel());
 	}
 
 	public TechnologyModuleImplementation getNewTechnologyModuleImplementation() {

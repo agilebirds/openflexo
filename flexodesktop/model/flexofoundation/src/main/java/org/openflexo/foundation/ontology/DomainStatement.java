@@ -29,42 +29,36 @@ public class DomainStatement extends OntologyStatement {
 	private static final Logger logger = Logger.getLogger(DomainStatement.class.getPackage().getName());
 
 	public static final String DOMAIN_URI = "http://www.w3.org/2000/01/rdf-schema#domain";
-	
+
 	private OntologyObject domain;
-	
-	public DomainStatement(OntologyObject subject, Statement s)
-	{
-		super(subject,s);
+
+	public DomainStatement(OntologyObject subject, Statement s) {
+		super(subject, s);
 		if (s.getObject() instanceof Resource) {
-			domain = getOntologyLibrary().getOntologyObject(((Resource)s.getObject()).getURI());
-		}
-		else {
+			domain = getOntologyLibrary().getOntologyObject(((Resource) s.getObject()).getURI());
+		} else {
 			logger.warning("DomainStatement: object is not a Resource !");
 		}
 	}
 
 	@Override
-	public String getClassNameKey()
-	{
+	public String getClassNameKey() {
 		return "domain_statement";
 	}
 
 	@Override
-	public String getFullyQualifiedName()
-	{
-		return "DomainStatement: "+getStatement();
+	public String getFullyQualifiedName() {
+		return "DomainStatement: " + getStatement();
 	}
 
-
-	public OntologyObject getDomain() 
-	{
+	public OntologyObject getDomain() {
 		return domain;
 	}
 
 	@Override
-	public String toString() 
-	{
-		return getSubject().getName()+" has domain "+(getDomain() != null ? getDomain().getName() : "<NOT_FOUND:"+getStatement().getObject()+">");
+	public String toString() {
+		return getSubject().getName() + " has domain "
+				+ (getDomain() != null ? getDomain().getName() : "<NOT_FOUND:" + getStatement().getObject() + ">");
 	}
 
 }

@@ -30,40 +30,37 @@ import java.util.logging.Logger;
 import org.openflexo.fps.controller.FPSController;
 import org.openflexo.view.menu.EditMenu;
 
-
 /**
  * 'Edit' menu for this module
  * 
  * @author yourname
  */
-public class FPSEditMenu extends EditMenu
-{
+public class FPSEditMenu extends EditMenu {
 
-    private static final Logger logger = Logger.getLogger(FPSEditMenu.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(FPSEditMenu.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance Variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance Variables
+	// =========================
+	// ==========================================================================
 
-     protected FPSController _fpsController;
+	protected FPSController _fpsController;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public FPSEditMenu(FPSController controller)
-    {
-        super(controller);
-        _fpsController = controller;
-        addSeparator();
-        // Add actions here
-        //add(deleteItem = new FlexoMenuItem(FPSDelete.actionType, getController()));
-        //add(cutItem = new FlexoMenuItem(FPSCut.actionType, getController()));
-        //add(copyItem = new FlexoMenuItem(FPSCopy.actionType, getController()));
-        //add(pasteItem = new FlexoMenuItem(FPSPaste.actionType, getController()));
-        //add(selectAllItem = new FlexoMenuItem(FPSSelectAll.actionType, getController()));
-    }
+	public FPSEditMenu(FPSController controller) {
+		super(controller);
+		_fpsController = controller;
+		addSeparator();
+		// Add actions here
+		// add(deleteItem = new FlexoMenuItem(FPSDelete.actionType, getController()));
+		// add(cutItem = new FlexoMenuItem(FPSCut.actionType, getController()));
+		// add(copyItem = new FlexoMenuItem(FPSCopy.actionType, getController()));
+		// add(pasteItem = new FlexoMenuItem(FPSPaste.actionType, getController()));
+		// add(selectAllItem = new FlexoMenuItem(FPSSelectAll.actionType, getController()));
+	}
 
 }

@@ -29,73 +29,61 @@ import org.openflexo.fps.CVSRepository;
 import org.openflexo.fps.CVSRepositoryList;
 import org.openflexo.fps.controller.browser.CVSRepositoriesBrowser;
 
-
 /**
- * Widget allowing to select a CVSRepository 
+ * Widget allowing to select a CVSRepository
  * 
  * @author sguerin
  * 
  */
-public class CVSRepositorySelector extends AbstractBrowserSelector<CVSRepository>
-{
+public class CVSRepositorySelector extends AbstractBrowserSelector<CVSRepository> {
 
-    protected static final String EMPTY_STRING = "";
+	protected static final String EMPTY_STRING = "";
 
-    private CVSRepositoryList _repositoryList;
-    
-    public CVSRepositorySelector(CVSRepositoryList repositoryList, CVSRepository repository)
-    {
-        super(null, repository, CVSRepository.class);
-        _repositoryList = repositoryList;
-    }
+	private CVSRepositoryList _repositoryList;
 
-    public CVSRepositorySelector(FlexoProject project, CVSRepository repository, int cols)
-    {
-        super(project, repository, CVSRepository.class, cols);
-    }
+	public CVSRepositorySelector(CVSRepositoryList repositoryList, CVSRepository repository) {
+		super(null, repository, CVSRepository.class);
+		_repositoryList = repositoryList;
+	}
 
-    public CVSRepositoryList getCVSRepositoryList()
-    {
-         return _repositoryList;
-    }
+	public CVSRepositorySelector(FlexoProject project, CVSRepository repository, int cols) {
+		super(project, repository, CVSRepository.class, cols);
+	}
 
-    @Override
-	protected CVSRepositorySelectorPanel makeCustomPanel(CVSRepository editedObject)
-    {
-        return new CVSRepositorySelectorPanel();
-    }
+	public CVSRepositoryList getCVSRepositoryList() {
+		return _repositoryList;
+	}
 
-    @Override
-	public String renderedString(CVSRepository editedObject)
-    {
-        if (editedObject != null) {
-            return editedObject.getName();
-        }
-        return EMPTY_STRING;
-    }
+	@Override
+	protected CVSRepositorySelectorPanel makeCustomPanel(CVSRepository editedObject) {
+		return new CVSRepositorySelectorPanel();
+	}
 
-    protected class CVSRepositorySelectorPanel extends AbstractSelectorPanel<CVSRepository>
-    {
-        protected CVSRepositorySelectorPanel()
-        {
-            super(CVSRepositorySelector.this);
-        }
+	@Override
+	public String renderedString(CVSRepository editedObject) {
+		if (editedObject != null) {
+			return editedObject.getName();
+		}
+		return EMPTY_STRING;
+	}
 
-        @Override
-		protected ProjectBrowser createBrowser(FlexoProject project)
-        {
-            return new CVSRepositoriesBrowser(_repositoryList);
-        }
+	protected class CVSRepositorySelectorPanel extends AbstractSelectorPanel<CVSRepository> {
+		protected CVSRepositorySelectorPanel() {
+			super(CVSRepositorySelector.this);
+		}
 
-        @Override
-		public Dimension getDefaultSize()
-        {
-            Dimension returned = _browserView.getDefaultSize();
-            returned.width = returned.width;
-            returned.height = returned.height - 100;
-            return returned;
-        }
-    }
+		@Override
+		protected ProjectBrowser createBrowser(FlexoProject project) {
+			return new CVSRepositoriesBrowser(_repositoryList);
+		}
+
+		@Override
+		public Dimension getDefaultSize() {
+			Dimension returned = _browserView.getDefaultSize();
+			returned.width = returned.width;
+			returned.height = returned.height - 100;
+			return returned;
+		}
+	}
 
 }
-

@@ -45,124 +45,121 @@ public class ImageDiffPanel extends JLayeredPane {
 	private JPanel rightPanel;
 	private JPanel _separator;
 	private JScrollPane scrollPane;
-	
+
 	public ImageDiffPanel(File leftImage, File rightImage, String leftLabel, String rightLabel) {
-	setLayout(new BorderLayout());
-	JPanel topPanel = new JPanel(new BorderLayout());
+		setLayout(new BorderLayout());
+		JPanel topPanel = new JPanel(new BorderLayout());
 
-	if ((leftLabel != null) || (rightLabel != null)) {
+		if ((leftLabel != null) || (rightLabel != null)) {
 
-		JPanel labelPanels = new JPanel(new GridLayout(1,2));
-		JLabel _leftLabel = new JLabel (leftLabel,SwingConstants.CENTER);
-		JLabel _rightLabel = new JLabel (rightLabel,SwingConstants.CENTER);
-		labelPanels.add(_leftLabel);
-		labelPanels.add(_rightLabel);
-        labelPanels.validate();
-		topPanel.add(labelPanels,BorderLayout.SOUTH);
-	}
-    topPanel.validate();
-    leftPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-    JLabel left = new JLabel();
-    if (leftImage!=null && leftImage.exists()) {
-    	 left.setIcon(new ImageIcon(leftImage.getAbsolutePath()));
-    } else {
-    	 left.setText(FlexoLocalization.localizedForKey("file_does_not_exist"));
-    }
-    leftPanel.add(left);
-    rightPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-    JLabel right = new JLabel();
-    if (rightImage!=null && rightImage.exists()) {
-    	right.setIcon(new ImageIcon(rightImage.getAbsolutePath()));
-    } else {
-    	right.setText(FlexoLocalization.localizedForKey("file_does_not_exist"));
-    }
-    rightPanel.add(right);
-	
-	
-	JComponent separator = getSeparator();
-	
-	GridBagLayout gridbag = new GridBagLayout();
-	GridBagConstraints c = new GridBagConstraints();
-	JPanel centerPane = new JPanel();
-	centerPane.setLayout(gridbag);
-	
-	
-	//c.gridwidth = 1;               
-	//c.gridheight = 1;
-	c.weightx = 0.0;               
-	c.anchor = GridBagConstraints.NORTHWEST;
-    c.fill = GridBagConstraints.NONE;
-	//c.gridwidth = 1;
-	gridbag.setConstraints(leftPanel, c);
-	centerPane.add(leftPanel);
+			JPanel labelPanels = new JPanel(new GridLayout(1, 2));
+			JLabel _leftLabel = new JLabel(leftLabel, SwingConstants.CENTER);
+			JLabel _rightLabel = new JLabel(rightLabel, SwingConstants.CENTER);
+			labelPanels.add(_leftLabel);
+			labelPanels.add(_rightLabel);
+			labelPanels.validate();
+			topPanel.add(labelPanels, BorderLayout.SOUTH);
+		}
+		topPanel.validate();
+		leftPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		JLabel left = new JLabel();
+		if (leftImage != null && leftImage.exists()) {
+			left.setIcon(new ImageIcon(leftImage.getAbsolutePath()));
+		} else {
+			left.setText(FlexoLocalization.localizedForKey("file_does_not_exist"));
+		}
+		leftPanel.add(left);
+		rightPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		JLabel right = new JLabel();
+		if (rightImage != null && rightImage.exists()) {
+			right.setIcon(new ImageIcon(rightImage.getAbsolutePath()));
+		} else {
+			right.setText(FlexoLocalization.localizedForKey("file_does_not_exist"));
+		}
+		rightPanel.add(right);
 
-	c.weightx = 1.0;               
-	c.weighty = 1.0;               
-	//c.gridwidth = 1;               
-    //c.gridheight = 1;
-	c.anchor = GridBagConstraints.WEST;
-    c.fill = GridBagConstraints.BOTH;
-	//c.gridwidth = GridBagConstraints.REMAINDER;
-	gridbag.setConstraints(left, c);
-	centerPane.add(left);
-	
-	//c.gridwidth = 1;               
-	//c.gridheight = 1;
-	c.weightx = 0.0;               
-	c.anchor = GridBagConstraints.CENTER;
-    c.fill = GridBagConstraints.VERTICAL;
-	//c.gridwidth = 1;
-	gridbag.setConstraints(separator, c);
-	centerPane.add(separator);
-	
-	c.weightx = 1.0;               
-	c.weighty = 1.0;               
-	//c.gridwidth = 1;               
-	//c.gridheight = 1;
-	c.anchor = GridBagConstraints.EAST;
-   c.fill = GridBagConstraints.BOTH;
-	//c.gridwidth = GridBagConstraints.REMAINDER;
-	gridbag.setConstraints(right, c);
-	centerPane.add(right);
-	
-	//c.gridwidth = 1;               
-	//c.gridheight = 1;
-	c.weightx = 0.0;               
-	c.anchor = GridBagConstraints.NORTHEAST;
-    c.fill = GridBagConstraints.NONE;
-	//c.gridwidth = 1;
-	gridbag.setConstraints(rightPanel, c);
-	centerPane.add(rightPanel);
-	centerPane.validate();
-	add(topPanel,BorderLayout.NORTH);
-	
-	JPanel comparePanel = new JPanel(new BorderLayout());
-	scrollPane = new JScrollPane(centerPane,ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-	comparePanel.add(scrollPane,BorderLayout.CENTER);
-	scrollPane.getVerticalScrollBar().setUnitIncrement(10);
-	scrollPane.getVerticalScrollBar().setBlockIncrement(50);
-//    JPanel scrollBars = new JPanel(new GridLayout(1,2));
-//    scrollBars.add(_leftTextArea.getHorizontalScrollBar());
-//    scrollBars.add(_rightTextArea.getHorizontalScrollBar());
-//    scrollBars.validate();
-//    
-//    comparePanel.add(scrollBars,BorderLayout.SOUTH);
-	comparePanel.validate();
-    
-	add(comparePanel,BorderLayout.CENTER);
-	validate();
+		JComponent separator = getSeparator();
 
+		GridBagLayout gridbag = new GridBagLayout();
+		GridBagConstraints c = new GridBagConstraints();
+		JPanel centerPane = new JPanel();
+		centerPane.setLayout(gridbag);
+
+		// c.gridwidth = 1;
+		// c.gridheight = 1;
+		c.weightx = 0.0;
+		c.anchor = GridBagConstraints.NORTHWEST;
+		c.fill = GridBagConstraints.NONE;
+		// c.gridwidth = 1;
+		gridbag.setConstraints(leftPanel, c);
+		centerPane.add(leftPanel);
+
+		c.weightx = 1.0;
+		c.weighty = 1.0;
+		// c.gridwidth = 1;
+		// c.gridheight = 1;
+		c.anchor = GridBagConstraints.WEST;
+		c.fill = GridBagConstraints.BOTH;
+		// c.gridwidth = GridBagConstraints.REMAINDER;
+		gridbag.setConstraints(left, c);
+		centerPane.add(left);
+
+		// c.gridwidth = 1;
+		// c.gridheight = 1;
+		c.weightx = 0.0;
+		c.anchor = GridBagConstraints.CENTER;
+		c.fill = GridBagConstraints.VERTICAL;
+		// c.gridwidth = 1;
+		gridbag.setConstraints(separator, c);
+		centerPane.add(separator);
+
+		c.weightx = 1.0;
+		c.weighty = 1.0;
+		// c.gridwidth = 1;
+		// c.gridheight = 1;
+		c.anchor = GridBagConstraints.EAST;
+		c.fill = GridBagConstraints.BOTH;
+		// c.gridwidth = GridBagConstraints.REMAINDER;
+		gridbag.setConstraints(right, c);
+		centerPane.add(right);
+
+		// c.gridwidth = 1;
+		// c.gridheight = 1;
+		c.weightx = 0.0;
+		c.anchor = GridBagConstraints.NORTHEAST;
+		c.fill = GridBagConstraints.NONE;
+		// c.gridwidth = 1;
+		gridbag.setConstraints(rightPanel, c);
+		centerPane.add(rightPanel);
+		centerPane.validate();
+		add(topPanel, BorderLayout.NORTH);
+
+		JPanel comparePanel = new JPanel(new BorderLayout());
+		scrollPane = new JScrollPane(centerPane, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		comparePanel.add(scrollPane, BorderLayout.CENTER);
+		scrollPane.getVerticalScrollBar().setUnitIncrement(10);
+		scrollPane.getVerticalScrollBar().setBlockIncrement(50);
+		// JPanel scrollBars = new JPanel(new GridLayout(1,2));
+		// scrollBars.add(_leftTextArea.getHorizontalScrollBar());
+		// scrollBars.add(_rightTextArea.getHorizontalScrollBar());
+		// scrollBars.validate();
+		//
+		// comparePanel.add(scrollBars,BorderLayout.SOUTH);
+		comparePanel.validate();
+
+		add(comparePanel, BorderLayout.CENTER);
+		validate();
 
 	}
 
-	private JComponent getSeparator()
-	{
+	private JComponent getSeparator() {
 		if (_separator == null) {
 			_separator = new JPanel();
-			_separator.setLayout(new BoxLayout(_separator,BoxLayout.Y_AXIS));
-			_separator.setBorder(BorderFactory.createEmptyBorder(0,5,0,5));
+			_separator.setLayout(new BoxLayout(_separator, BoxLayout.Y_AXIS));
+			_separator.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 		}
 		return _separator;
 	}
-	
+
 }

@@ -27,15 +27,13 @@ import org.openflexo.foundation.wkf.FlexoProcess;
  * @author sguerin
  * 
  */
-public class ProcessMoved extends WKFAttributeDataModification
-{
+public class ProcessMoved extends WKFAttributeDataModification {
 
-    public FlexoProcess movedProcess;
+	public FlexoProcess movedProcess;
 
-    public ProcessMoved(FlexoProcess movedProcess, FlexoProcess oldParentProcess, FlexoProcess newParentProcess)
-    {
-        super("parentProcess",oldParentProcess,newParentProcess);
-        this.movedProcess = movedProcess;
-    }
+	public ProcessMoved(FlexoProcess movedProcess, FlexoProcess oldParentProcess, FlexoProcess newParentProcess) {
+		super("parentProcess", oldParentProcess, newParentProcess);
+		this.movedProcess = movedProcess;
+	}
 
 }

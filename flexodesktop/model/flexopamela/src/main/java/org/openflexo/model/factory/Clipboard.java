@@ -2,7 +2,6 @@ package org.openflexo.model.factory;
 
 import java.util.List;
 
-
 public class Clipboard {
 
 	private ModelFactory modelFactory;
@@ -10,8 +9,8 @@ public class Clipboard {
 	private Object contents;
 	private boolean isSingleObject;
 
-	protected Clipboard(ModelFactory modelFactory, Object... objects) throws ModelExecutionException, ModelDefinitionException, CloneNotSupportedException
-	{
+	protected Clipboard(ModelFactory modelFactory, Object... objects) throws ModelExecutionException, ModelDefinitionException,
+			CloneNotSupportedException {
 		this.modelFactory = modelFactory;
 		this.originalContents = objects;
 		if (objects == null || objects.length == 0) {
@@ -22,61 +21,52 @@ public class Clipboard {
 		if (isSingleObject) {
 			Object object = objects[0];
 			contents = modelFactory.getHandler(object).cloneObject(objects);
-		}
-		else {
+		} else {
 			contents = modelFactory.getHandler(objects[0]).cloneObjects(objects);
 		}
 	}
 
-	public ModelFactory getModelFactory()
-	{
+	public ModelFactory getModelFactory() {
 		return modelFactory;
 	}
 
-	public Object[] getOriginalContents()
-	{
+	public Object[] getOriginalContents() {
 		return originalContents;
 	}
 
-	public Object getContents()
-	{
+	public Object getContents() {
 		return contents;
 	}
 
-	public boolean isSingleObject()
-	{
+	public boolean isSingleObject() {
 		return isSingleObject;
 	}
 
-	public Class<?> getType()
-	{
+	public Class<?> getType() {
 		if (isSingleObject()) {
 			return getContents().getClass();
-		}
-		else {
-			return ((List)getContents()).get(0).getClass();
+		} else {
+			return ((List) getContents()).get(0).getClass();
 		}
 	}
 
-	public String debug()
-	{
+	public String debug() {
 		StringBuffer returned = new StringBuffer();
 		returned.append("*************** Clipboard ****************\n");
-		returned.append("Single object: "+isSingleObject()+"\n");
+		returned.append("Single object: " + isSingleObject() + "\n");
 		if (isSingleObject()) {
-			returned.append("------------------- "+contents+" -------------------\n");
+			returned.append("------------------- " + contents + " -------------------\n");
 			List<Object> embeddedList = modelFactory.getEmbeddedObjects(contents);
 			for (Object e : embeddedList) {
-				returned.append(Integer.toHexString(e.hashCode())+" Embedded: "+e+"\n");
+				returned.append(Integer.toHexString(e.hashCode()) + " Embedded: " + e + "\n");
 			}
-		}
-		else {
-			List contentsList = (List)contents;
+		} else {
+			List contentsList = (List) contents;
 			for (Object object : contentsList) {
-				returned.append("------------------- "+object+" -------------------\n");
-				List<Object> embeddedList = modelFactory.getEmbeddedObjects(object,contentsList.toArray());
+				returned.append("------------------- " + object + " -------------------\n");
+				List<Object> embeddedList = modelFactory.getEmbeddedObjects(object, contentsList.toArray());
 				for (Object e : embeddedList) {
-					returned.append(Integer.toHexString(e.hashCode())+" Embedded: "+e+"\n");
+					returned.append(Integer.toHexString(e.hashCode()) + " Embedded: " + e + "\n");
 				}
 			}
 		}
@@ -84,20 +74,17 @@ public class Clipboard {
 	}
 
 	/**
-	 * Called when clipboard has been used somewhere.
-	 * Copy again contents for a future use
+	 * Called when clipboard has been used somewhere. Copy again contents for a future use
 	 * 
 	 * @throws ModelExecutionException
 	 * @throws ModelDefinitionException
 	 * @throws CloneNotSupportedException
 	 */
-	public void consume() throws ModelExecutionException, ModelDefinitionException, CloneNotSupportedException
-	{
+	public void consume() throws ModelExecutionException, ModelDefinitionException, CloneNotSupportedException {
 		if (isSingleObject) {
 			contents = modelFactory.getHandler(contents).cloneObject(contents);
-		}
-		else {
-			contents = modelFactory.getHandler(((List)contents).get(0)).cloneObjects(((List)contents).toArray());
+		} else {
+			contents = modelFactory.getHandler(((List) contents).get(0)).cloneObjects(((List) contents).toArray());
 		}
 	}
 }

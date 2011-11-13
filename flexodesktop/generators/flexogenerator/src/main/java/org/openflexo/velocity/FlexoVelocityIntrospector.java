@@ -31,48 +31,46 @@ import org.openflexo.logging.FlexoLogger;
 public class FlexoVelocityIntrospector extends UberspectImpl {
 
 	private static final Logger logger = FlexoLogger.getLogger(FlexoVelocityIntrospector.class.getPackage().getName());
-	
+
 	@Override
 	public VelMethod getMethod(Object obj, String methodName, Object[] args, Info i) throws Exception {
-        if (obj == null)
-        {
-            return null;
-        }
-        
-        //Allow to use the 'magic' methods provided by Velocity on array (ex. get(x))
-        if(obj instanceof Object[]) {
+		if (obj == null) {
+			return null;
+		}
+
+		// Allow to use the 'magic' methods provided by Velocity on array (ex. get(x))
+		if (obj instanceof Object[]) {
 			return super.getMethod(obj, methodName, args, i);
 		}
 
-        Class objClass = obj.getClass();
-        
-        Method m = introspector.getMethod(objClass, methodName, args);
-        // if it's an array
-        if (m==null) {
-        	if (objClass == Class.class)
-        	{
-        		m = introspector.getMethod((Class)obj, methodName, args);
-        		if (m != null)
-        		{
-        			return new VelMethodImpl(m);
-        		}
-        	}
-        	
-        	if (logger.isLoggable(Level.INFO)) {
-				logger.info("Method '"+methodName+"' could not be found on "+objClass.getName()+" called in "+i.getTemplateName()+" at line "+i.getLine()+" column "+i.getColumn());
+		Class objClass = obj.getClass();
+
+		Method m = introspector.getMethod(objClass, methodName, args);
+		// if it's an array
+		if (m == null) {
+			if (objClass == Class.class) {
+				m = introspector.getMethod((Class) obj, methodName, args);
+				if (m != null) {
+					return new VelMethodImpl(m);
+				}
 			}
-        	return null;
-        }
-        // Fix a bug in security manager of JDK1.5 where access to a public method of a non-visible inherited class is refused although it
+
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Method '" + methodName + "' could not be found on " + objClass.getName() + " called in " + i.getTemplateName()
+						+ " at line " + i.getLine() + " column " + i.getColumn());
+			}
+			return null;
+		}
+		// Fix a bug in security manager of JDK1.5 where access to a public method of a non-visible inherited class is refused although it
 		// shouldn't (e.g, the method length() on StringBuilder is inherited from AbstractStringBuilder which has a package visibility)
-        try {
+		try {
 			m.setAccessible(true);
 		} catch (SecurityException e) {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger.log(Level.WARNING, "Security exception for method: "+objClass+"."+methodName, e);
+				logger.log(Level.WARNING, "Security exception for method: " + objClass + "." + methodName, e);
 			}
 		}
-        return m != null ? new VelMethodImpl(m) : null;
+		return m != null ? new VelMethodImpl(m) : null;
 	}
-	
+
 }

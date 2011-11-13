@@ -31,31 +31,29 @@ import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
-
 public class PortGR extends AbstractNodeGR<FlexoPort> {
 
 	private static final Logger logger = Logger.getLogger(PortGR.class.getPackage().getName());
 
 	private final BackgroundStyle.BackgroundImage background;
 
-	public PortGR(FlexoPort port, ProcessRepresentation aDrawing)
-	{
+	public PortGR(FlexoPort port, ProcessRepresentation aDrawing) {
 		super(port, ShapeType.SQUARE, aDrawing);
-		//setX(getPort().getPosX());
-		//setY(getPort().getPosY());
+		// setX(getPort().getPosX());
+		// setY(getPort().getPosY());
 		setWidth(30);
 		setHeight(30);
 
 		setLayer(EMBEDDED_ACTIVITY_LAYER);
 
-		//setText(getPort().getName());
-		//setAbsoluteTextX(getPort().getNodeLabelPosX());
-		//setAbsoluteTextY(getPort().getNodeLabelPosY());
+		// setText(getPort().getName());
+		// setAbsoluteTextX(getPort().getNodeLabelPosX());
+		// setAbsoluteTextY(getPort().getNodeLabelPosY());
 		setIsFloatingLabel(true);
 
 		background = BackgroundStyle.makeImageBackground(WKFIconLibrary.getImageIconForFlexoPort(getPort()));
 
-		//System.out.println("width="+getPort().getImageIcon().getIconWidth()+" height="+getPort().getImageIcon().getIconHeight());
+		// System.out.println("width="+getPort().getImageIcon().getIconWidth()+" height="+getPort().getImageIcon().getIconHeight());
 
 		background.setScaleX(1);
 		background.setScaleY(1);
@@ -73,39 +71,34 @@ public class PortGR extends AbstractNodeGR<FlexoPort> {
 
 	}
 
-	int getTopBorder()
-	{
+	int getTopBorder() {
 		return REQUIRED_SPACE_ON_TOP_FOR_CLOSING_BOX;
 	}
 
-	int getBottomBorder()
-	{
+	int getBottomBorder() {
 		return REQUIRED_SPACE_ON_BOTTOM;
 	}
 
-	int getLeftBorder()
-	{
+	int getLeftBorder() {
 		return REQUIRED_SPACE_ON_LEFT;
 	}
 
-	int getRightBorder()
-	{
+	int getRightBorder() {
 		return REQUIRED_SPACE_ON_RIGHT;
 	}
 
-
 	@Override
-	public void updatePropertiesFromWKFPreferences()
-	{
+	public void updatePropertiesFromWKFPreferences() {
 		super.updatePropertiesFromWKFPreferences();
-		setBorder(new ShapeBorder(getTopBorder(),getBottomBorder(),getLeftBorder(),getRightBorder()));
-		setTextStyle(TextStyle.makeTextStyle(Color.BLACK, getWorkflow()!=null?getWorkflow().getActivityFont(WKFPreferences.getActivityNodeFont()).getFont():WKFPreferences.getActivityNodeFont().getFont()));
+		setBorder(new ShapeBorder(getTopBorder(), getBottomBorder(), getLeftBorder(), getRightBorder()));
+		setTextStyle(TextStyle.makeTextStyle(Color.BLACK,
+				getWorkflow() != null ? getWorkflow().getActivityFont(WKFPreferences.getActivityNodeFont()).getFont() : WKFPreferences
+						.getActivityNodeFont().getFont()));
 		getShadowStyle().setShadowDepth(1);
 		getShadowStyle().setShadowBlur(3);
 	}
 
-	public FlexoPort getPort()
-	{
+	public FlexoPort getPort() {
 		return getDrawable();
 	}
 
@@ -113,8 +106,7 @@ public class PortGR extends AbstractNodeGR<FlexoPort> {
 	 * Overriden to implement defaut automatic layout
 	 */
 	@Override
-	public double getDefaultX()
-	{
+	public double getDefaultX() {
 		return getPort().getIndex() * 80 + 20;
 	}
 
@@ -122,8 +114,7 @@ public class PortGR extends AbstractNodeGR<FlexoPort> {
 	 * Overriden to implement defaut automatic layout
 	 */
 	@Override
-	public double getDefaultY()
-	{
+	public double getDefaultY() {
 		return 20;
 	}
 
@@ -131,8 +122,7 @@ public class PortGR extends AbstractNodeGR<FlexoPort> {
 	 * Overriden to implement defaut automatic layout
 	 */
 	@Override
-	public double getDefaultLabelX()
-	{
+	public double getDefaultLabelX() {
 		return 25;
 	}
 
@@ -140,10 +130,8 @@ public class PortGR extends AbstractNodeGR<FlexoPort> {
 	 * Overriden to implement defaut automatic layout
 	 */
 	@Override
-	public double getDefaultLabelY()
-	{
+	public double getDefaultLabelY() {
 		return 0;
 	}
-
 
 }

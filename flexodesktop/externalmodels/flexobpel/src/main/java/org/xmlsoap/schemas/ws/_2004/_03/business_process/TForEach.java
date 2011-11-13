@@ -23,7 +23,6 @@
 // Generated on: 2007.11.06 at 03:26:51 PM CET 
 //
 
-
 package org.xmlsoap.schemas.ws._2004._03.business_process;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -31,11 +30,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for tForEach complex type.
+ * <p>
+ * Java class for tForEach complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="tForEach">
@@ -57,167 +57,142 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tForEach", propOrder = {
-    "startCounterValue",
-    "finalCounterValue",
-    "completionCondition",
-    "scope"
-})
-public class TForEach
-    extends TActivity
-{
+@XmlType(name = "tForEach", propOrder = { "startCounterValue", "finalCounterValue", "completionCondition", "scope" })
+public class TForEach extends TActivity {
 
-    protected TExpression startCounterValue;
-    protected TExpression finalCounterValue;
-    protected TCompletionCondition completionCondition;
-    protected TScope scope;
-    @XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
-    protected String counterName;
-    @XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
-    protected TBoolean parallel;
+	protected TExpression startCounterValue;
+	protected TExpression finalCounterValue;
+	protected TCompletionCondition completionCondition;
+	protected TScope scope;
+	@XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
+	protected String counterName;
+	@XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
+	protected TBoolean parallel;
 
-    /**
-     * Gets the value of the startCounterValue property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TExpression }
-     *     
-     */
-    public TExpression getStartCounterValue() {
-        return startCounterValue;
-    }
+	/**
+	 * Gets the value of the startCounterValue property.
+	 * 
+	 * @return possible object is {@link TExpression }
+	 * 
+	 */
+	public TExpression getStartCounterValue() {
+		return startCounterValue;
+	}
 
-    /**
-     * Sets the value of the startCounterValue property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TExpression }
-     *     
-     */
-    public void setStartCounterValue(TExpression value) {
-        this.startCounterValue = value;
-    }
+	/**
+	 * Sets the value of the startCounterValue property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link TExpression }
+	 * 
+	 */
+	public void setStartCounterValue(TExpression value) {
+		this.startCounterValue = value;
+	}
 
-    /**
-     * Gets the value of the finalCounterValue property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TExpression }
-     *     
-     */
-    public TExpression getFinalCounterValue() {
-        return finalCounterValue;
-    }
+	/**
+	 * Gets the value of the finalCounterValue property.
+	 * 
+	 * @return possible object is {@link TExpression }
+	 * 
+	 */
+	public TExpression getFinalCounterValue() {
+		return finalCounterValue;
+	}
 
-    /**
-     * Sets the value of the finalCounterValue property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TExpression }
-     *     
-     */
-    public void setFinalCounterValue(TExpression value) {
-        this.finalCounterValue = value;
-    }
+	/**
+	 * Sets the value of the finalCounterValue property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link TExpression }
+	 * 
+	 */
+	public void setFinalCounterValue(TExpression value) {
+		this.finalCounterValue = value;
+	}
 
-    /**
-     * Gets the value of the completionCondition property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TCompletionCondition }
-     *     
-     */
-    public TCompletionCondition getCompletionCondition() {
-        return completionCondition;
-    }
+	/**
+	 * Gets the value of the completionCondition property.
+	 * 
+	 * @return possible object is {@link TCompletionCondition }
+	 * 
+	 */
+	public TCompletionCondition getCompletionCondition() {
+		return completionCondition;
+	}
 
-    /**
-     * Sets the value of the completionCondition property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TCompletionCondition }
-     *     
-     */
-    public void setCompletionCondition(TCompletionCondition value) {
-        this.completionCondition = value;
-    }
+	/**
+	 * Sets the value of the completionCondition property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link TCompletionCondition }
+	 * 
+	 */
+	public void setCompletionCondition(TCompletionCondition value) {
+		this.completionCondition = value;
+	}
 
-    /**
-     * Gets the value of the scope property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TScope }
-     *     
-     */
-    public TScope getScope() {
-        return scope;
-    }
+	/**
+	 * Gets the value of the scope property.
+	 * 
+	 * @return possible object is {@link TScope }
+	 * 
+	 */
+	public TScope getScope() {
+		return scope;
+	}
 
-    /**
-     * Sets the value of the scope property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TScope }
-     *     
-     */
-    public void setScope(TScope value) {
-        this.scope = value;
-    }
+	/**
+	 * Sets the value of the scope property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link TScope }
+	 * 
+	 */
+	public void setScope(TScope value) {
+		this.scope = value;
+	}
 
-    /**
-     * Gets the value of the counterName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getCounterName() {
-        return counterName;
-    }
+	/**
+	 * Gets the value of the counterName property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getCounterName() {
+		return counterName;
+	}
 
-    /**
-     * Sets the value of the counterName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setCounterName(String value) {
-        this.counterName = value;
-    }
+	/**
+	 * Sets the value of the counterName property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setCounterName(String value) {
+		this.counterName = value;
+	}
 
-    /**
-     * Gets the value of the parallel property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TBoolean }
-     *     
-     */
-    public TBoolean getParallel() {
-        return parallel;
-    }
+	/**
+	 * Gets the value of the parallel property.
+	 * 
+	 * @return possible object is {@link TBoolean }
+	 * 
+	 */
+	public TBoolean getParallel() {
+		return parallel;
+	}
 
-    /**
-     * Sets the value of the parallel property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TBoolean }
-     *     
-     */
-    public void setParallel(TBoolean value) {
-        this.parallel = value;
-    }
+	/**
+	 * Sets the value of the parallel property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link TBoolean }
+	 * 
+	 */
+	public void setParallel(TBoolean value) {
+		this.parallel = value;
+	}
 
 }

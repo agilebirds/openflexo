@@ -31,39 +31,35 @@ import org.openflexo.dre.controller.DREController;
 import org.openflexo.module.Module;
 import org.openflexo.view.menu.WindowMenu;
 
-
 /**
  * 'Window' menu for this Module
  * 
  * @author yourname
  */
-public class DREWindowMenu extends WindowMenu
-{
+public class DREWindowMenu extends WindowMenu {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DREWindowMenu.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance Variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance Variables
+	// =========================
+	// ==========================================================================
 
-      protected DREController _DREController;
+	protected DREController _DREController;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public DREWindowMenu(DREController controller)
-    {
-        super(controller,Module.DRE_MODULE);
-        _DREController = controller;
-        // Put your actions here
-    }
+	public DREWindowMenu(DREController controller) {
+		super(controller, Module.DRE_MODULE);
+		_DREController = controller;
+		// Put your actions here
+	}
 
-    public DREController getDREController()
-    {
-        return _DREController;
-    }
+	public DREController getDREController() {
+		return _DREController;
+	}
 }

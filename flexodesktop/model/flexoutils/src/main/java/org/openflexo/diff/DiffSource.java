@@ -30,7 +30,6 @@ import java.util.Vector;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.StringUtils;
 
-
 public class DiffSource {
 
 	private MergeSourceType type;
@@ -44,15 +43,13 @@ public class DiffSource {
 
 	private DelimitingMethod _delimitingMethod = DelimitingMethod.LINES;
 
-	public class MergeToken
-	{
+	public class MergeToken {
 		private final int beginDelimStartIndex;
 		private final int beginDelimEndIndex;
 		private final int endDelimStartIndex;
 		private final int endDelimEndIndex;
 
-		protected MergeToken(int beginDelimStartIndex, int beginDelimEndIndex, int endDelimStartIndex, int endDelimEndIndex)
-		{
+		protected MergeToken(int beginDelimStartIndex, int beginDelimEndIndex, int endDelimStartIndex, int endDelimEndIndex) {
 			this.beginDelimStartIndex = beginDelimStartIndex;
 			this.beginDelimEndIndex = beginDelimEndIndex;
 			this.endDelimStartIndex = endDelimStartIndex;
@@ -71,14 +68,12 @@ public class DiffSource {
 			return text.substring(beginDelimEndIndex, endDelimStartIndex);
 		}
 
-		public String getFullString()
-		{
+		public String getFullString() {
 			return text.substring(beginDelimStartIndex, endDelimEndIndex);
 		}
 
 		@Override
-		public String toString()
-		{
+		public String toString() {
 			return getFullString();
 		}
 
@@ -92,56 +87,47 @@ public class DiffSource {
 	}
 
 	public enum MergeSourceType {
-		File,
-		String
+		File, String
 	}
 
-	public DiffSource(String aString)
-	{
-		this(aString,DelimitingMethod.LINES);
+	public DiffSource(String aString) {
+		this(aString, DelimitingMethod.LINES);
 	}
 
-	public DiffSource(String aString, DelimitingMethod method)
-	{
-		this(aString,method,-1);
+	public DiffSource(String aString, DelimitingMethod method) {
+		this(aString, method, -1);
 	}
 
-	public DiffSource(String aString, int ignoredCols)
-	{
-		this(aString,DelimitingMethod.LINES,ignoredCols);
+	public DiffSource(String aString, int ignoredCols) {
+		this(aString, DelimitingMethod.LINES, ignoredCols);
 	}
 
-	public DiffSource(String aString, DelimitingMethod method, int ignoredCols)
-	{
+	public DiffSource(String aString, DelimitingMethod method, int ignoredCols) {
 		type = MergeSourceType.String;
 		sourceString = aString;
 		sourceFile = null;
 		this.ignoredCols = ignoredCols;
 		_delimitingMethod = method;
-		if (aString==null) {
+		if (aString == null) {
 			textTokens = slurpString("", ignoredCols, method);
 		} else {
 			textTokens = slurpString(aString, ignoredCols, method);
 		}
 	}
 
-	public DiffSource(File aFile) throws IOException
-	{
-		this(aFile,DelimitingMethod.LINES);
+	public DiffSource(File aFile) throws IOException {
+		this(aFile, DelimitingMethod.LINES);
 	}
 
-	public DiffSource(File aFile, DelimitingMethod method) throws IOException
-	{
-		this(aFile,method,-1);
+	public DiffSource(File aFile, DelimitingMethod method) throws IOException {
+		this(aFile, method, -1);
 	}
 
-	public DiffSource(File aFile, int ignoredCols) throws IOException
-	{
-		this(aFile,DelimitingMethod.LINES,ignoredCols);
+	public DiffSource(File aFile, int ignoredCols) throws IOException {
+		this(aFile, DelimitingMethod.LINES, ignoredCols);
 	}
 
-	public DiffSource(File aFile, DelimitingMethod method, int ignoredCols) throws IOException
-	{
+	public DiffSource(File aFile, DelimitingMethod method, int ignoredCols) throws IOException {
 		type = MergeSourceType.File;
 		sourceString = null;
 		sourceFile = aFile;
@@ -150,27 +136,24 @@ public class DiffSource {
 		textTokens = slurpFile(aFile, ignoredCols, method);
 	}
 
-	public void updateWith(String aString)
-	{
+	public void updateWith(String aString) {
 		sourceString = aString;
 		sourceFile = null;
-		textTokens = slurpString(aString,0,_delimitingMethod);
+		textTokens = slurpString(aString, 0, _delimitingMethod);
 	}
 
-	public void updateSourceString()
-	{
+	public void updateSourceString() {
 		StringBuffer sb = new StringBuffer();
-		for (int i=0; i<tokensCount(); i++) {
-			sb.append(tokenValueAt(i)+StringUtils.LINE_SEPARATOR);
+		for (int i = 0; i < tokensCount(); i++) {
+			sb.append(tokenValueAt(i) + StringUtils.LINE_SEPARATOR);
 		}
 		sourceString = sb.toString();
 	}
 
-	/** Read a text file into an array of String.  This provides basic diff
-    functionality.  A more advanced diff utility will use specialized
-    objects to represent the text lines, with options to, for example,
-    convert sequences of whitespace to a single space for comparison
-    purposes.
+	/**
+	 * Read a text file into an array of String. This provides basic diff functionality. A more advanced diff utility will use specialized
+	 * objects to represent the text lines, with options to, for example, convert sequences of whitespace to a single space for comparison
+	 * purposes.
 	 */
 	/*private String[] slurpFile(File file) throws IOException {
 		BufferedReader rdr = new BufferedReader(new FileReader(file));
@@ -258,8 +241,7 @@ public class DiffSource {
 	/**
 	 * Delete first columns
 	 */
-	private static String deleteFirstColumns(String aString, int ignoredCols)
-	{
+	private static String deleteFirstColumns(String aString, int ignoredCols) {
 		BufferedReader rdr = new BufferedReader(new StringReader(aString));
 		Vector<String> s = new Vector<String>();
 		StringBuffer sb = new StringBuffer();
@@ -274,18 +256,18 @@ public class DiffSource {
 				break;
 			}
 			s.addElement(line);
-			//System.out.println("String: add line "+line);
-			sb.append(line+StringUtils.LINE_SEPARATOR);
+			// System.out.println("String: add line "+line);
+			sb.append(line + StringUtils.LINE_SEPARATOR);
 		}
 		return sb.toString();
 	}
 
 	/**
 	 * Internally tokenize a File given some ignored cols and a delimiting method
+	 * 
 	 * @throws IOException
 	 */
-	private MergeToken[] slurpFile(File aFile, int ignoredCols, DelimitingMethod delimitingMethod) throws IOException
-	{
+	private MergeToken[] slurpFile(File aFile, int ignoredCols, DelimitingMethod delimitingMethod) throws IOException {
 		return slurpString(FileUtils.fileContents(aFile), ignoredCols, delimitingMethod);
 	}
 
@@ -296,8 +278,7 @@ public class DiffSource {
 	/**
 	 * Internally tokenize a String given some ignored cols and a delimiting method
 	 */
-	private MergeToken[] slurpString(String aString, int ignoredCols, DelimitingMethod delimitingMethod)
-	{
+	private MergeToken[] slurpString(String aString, int ignoredCols, DelimitingMethod delimitingMethod) {
 		if (ignoredCols > 0) {
 			aString = deleteFirstColumns(aString, ignoredCols);
 		}
@@ -398,41 +379,35 @@ public class DiffSource {
 		return textLines;
 	}*/
 
-	public int getIgnoredCols()
-	{
+	public int getIgnoredCols() {
 		return ignoredCols;
 	}
 
-	public File getSourceFile()
-	{
+	public File getSourceFile() {
 		return sourceFile;
 	}
 
-	public String getSourceString()
-	{
+	public String getSourceString() {
 		return sourceString;
 	}
 
-	public MergeToken[] getTextTokens()
-	{
+	public MergeToken[] getTextTokens() {
 		return textTokens;
 	}
 
 	private String[] _significativeTokens;
 
-	public String[] getSignificativeTokens()
-	{
+	public String[] getSignificativeTokens() {
 		if (_significativeTokens == null) {
 			_significativeTokens = new String[textTokens.length];
 		}
-		for (int i=0; i<textTokens.length; i++) {
+		for (int i = 0; i < textTokens.length; i++) {
 			_significativeTokens[i] = textTokens[i].getToken();
 		}
 		return _significativeTokens;
 	}
 
-	public MergeToken tokenAt(int index)
-	{
+	public MergeToken tokenAt(int index) {
 		if (index < textTokens.length) {
 			return textTokens[index];
 		} else {
@@ -440,8 +415,7 @@ public class DiffSource {
 		}
 	}
 
-	public String tokenValueAt(int index)
-	{
+	public String tokenValueAt(int index) {
 		if (index < textTokens.length) {
 			return textTokens[index].getToken();
 		} else {
@@ -449,39 +423,33 @@ public class DiffSource {
 		}
 	}
 
-	public int tokensCount()
-	{
+	public int tokensCount() {
 		return textTokens.length;
 	}
 
-	public String getText()
-	{
+	public String getText() {
 		return text;
 	}
 
-	public MergeSourceType getType()
-	{
+	public MergeSourceType getType() {
 		return type;
 	}
 
-	public String extractText(int beginIndex, int endIndex)
-	{
+	public String extractText(int beginIndex, int endIndex) {
 		StringBuffer returned = new StringBuffer();
-		for (int i=beginIndex; i<=endIndex; i++) {
-			if (i>=0 && i<textTokens.length) {
+		for (int i = beginIndex; i <= endIndex; i++) {
+			if (i >= 0 && i < textTokens.length) {
 				returned.append(textTokens[i].getFullString());
 			}
 		}
 		return returned.toString();
 	}
 
-	public DelimitingMethod getDelimitingMethod()
-	{
+	public DelimitingMethod getDelimitingMethod() {
 		return _delimitingMethod;
 	}
 
-	public int getMaxCols()
-	{
+	public int getMaxCols() {
 		return maxCols;
 	}
 

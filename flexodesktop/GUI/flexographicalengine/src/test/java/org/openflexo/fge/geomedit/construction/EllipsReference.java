@@ -24,37 +24,30 @@ import org.openflexo.fge.geom.FGEEllips;
 public class EllipsReference extends EllipsConstruction<FGEEllips> {
 
 	public EllipsConstruction<FGEEllips> reference;
-	
-	public EllipsReference() 
-	{
+
+	public EllipsReference() {
 		super();
 	}
 
-	public EllipsReference(EllipsConstruction<FGEEllips> aReference) 
-	{
+	public EllipsReference(EllipsConstruction<FGEEllips> aReference) {
 		this();
 		this.reference = aReference;
 	}
 
-	
 	@Override
-	protected FGEEllips computeData()
-	{
+	protected FGEEllips computeData() {
 		return reference.getData();
-	}
-	
-	@Override
-	public String toString()
-	{
-		return "EllipsReference["+reference.toString()+"]";
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
+	public String toString() {
+		return "EllipsReference[" + reference.toString() + "]";
+	}
+
+	@Override
+	public GeometricConstruction[] getDepends() {
 		GeometricConstruction[] returned = { reference };
 		return returned;
 	}
-
 
 }

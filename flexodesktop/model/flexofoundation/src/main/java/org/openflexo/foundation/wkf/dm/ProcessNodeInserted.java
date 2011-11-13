@@ -27,14 +27,12 @@ import org.openflexo.foundation.wkf.FlexoProcessNode;
  * @author sguerin
  * 
  */
-public class ProcessNodeInserted extends WKFDataModification
-{
+public class ProcessNodeInserted extends WKFDataModification {
 
-    public FlexoProcessNode parentProcess;
+	public FlexoProcessNode parentProcess;
 
-    public ProcessNodeInserted(FlexoProcessNode insertedProcess)
-    {
-        super(null, insertedProcess);
-    }
+	public ProcessNodeInserted(FlexoProcessNode insertedProcess) {
+		super(null, insertedProcess);
+	}
 
 }

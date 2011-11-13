@@ -21,5 +21,5 @@ package org.openflexo.components.tabular.model;
 
 public interface RowHeightListener {
 
-    public void notifyRowHeightChanged(int row, int newRowHeight);
+	public void notifyRowHeightChanged(int row, int newRowHeight);
 }

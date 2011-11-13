@@ -25,62 +25,52 @@ import java.util.logging.Logger;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.ve.shema.DrawEdgeControl.DrawEdgeAction;
 
-
 public class VEShemaView extends DrawingView<VEShemaRepresentation> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(VEShemaView.class.getPackage().getName());
 
-	public VEShemaView(VEShemaRepresentation aDrawing,VEShemaController controller)
-	{
-		super(aDrawing,controller);
+	public VEShemaView(VEShemaRepresentation aDrawing, VEShemaController controller) {
+		super(aDrawing, controller);
 	}
 
 	@Override
-	public VEShemaController getController() 
-	{
-		return (VEShemaController)super.getController();
+	public VEShemaController getController() {
+		return (VEShemaController) super.getController();
 	}
-	
 
 	private DrawEdgeAction _drawEdgeAction;
 
-	public void  setDrawEdgeAction(DrawEdgeAction action) 
-	{
+	public void setDrawEdgeAction(DrawEdgeAction action) {
 		_drawEdgeAction = action;
 	}
 
-	public void resetDrawEdgeAction() 
-	{
+	public void resetDrawEdgeAction() {
 		_drawEdgeAction = null;
 		repaint();
 	}
 
-
 	private FloatingPalette floatingPalette;
 
-	public void  setFloatingPalette(FloatingPalette palette)
-	{
+	public void setFloatingPalette(FloatingPalette palette) {
 		floatingPalette = palette;
 	}
 
-	public void resetFloatingPalette()
-	{
+	public void resetFloatingPalette() {
 		floatingPalette = null;
 		repaint();
 	}
 
 	@Override
-	public void paint(Graphics g)
-	{
+	public void paint(Graphics g) {
 		boolean isBuffering = isBuffering();
 		super.paint(g);
 		if (_drawEdgeAction != null && !isBuffering) {
-			_drawEdgeAction.paint(g,getController());
+			_drawEdgeAction.paint(g, getController());
 		}
 		if (floatingPalette != null && !isBuffering) {
-			floatingPalette.paint(g,getController());
+			floatingPalette.paint(g, getController());
 		}
 	}
-	
+
 }

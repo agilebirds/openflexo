@@ -19,7 +19,6 @@
  */
 package org.openflexo.components.tabular.model;
 
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,124 +31,113 @@ import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.DMTypeOwner;
 import org.openflexo.foundation.rm.FlexoProject;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public abstract class TypeSelectorColumn<D extends FlexoModelObject> extends CustomColumn<D, DMType>
-{
+public abstract class TypeSelectorColumn<D extends FlexoModelObject> extends CustomColumn<D, DMType> {
 
-    protected String STRING_REPRESENTATION_WHEN_NULL = "coucou";
+	protected String STRING_REPRESENTATION_WHEN_NULL = "coucou";
 
-    protected static final Logger logger = Logger.getLogger(TypeSelectorColumn.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(TypeSelectorColumn.class.getPackage().getName());
 
-    public TypeSelectorColumn(String title, int defaultWidth, FlexoProject project)
-    {
-        super(title, defaultWidth, project);
-        _selectorCellEditor = new DMTypeSelectorEditor();
-    }
+	public TypeSelectorColumn(String title, int defaultWidth, FlexoProject project) {
+		super(title, defaultWidth, project);
+		_selectorCellEditor = new DMTypeSelectorEditor();
+	}
 
-    @Override
-	public Class getValueClass()
-    {
-        return DMType.class;
-    }
-    
-    public class DMTypeSelectorEditor extends CustomColumn.SelectorCellEditor {
-    	
-    	@Override
-    	public Object getCellEditorValue() {
-    		return _selector.getEditedObject()!=null?((DMType)_selector.getEditedObject()).clone():null;
-    	}
-    } 
+	@Override
+	public Class getValueClass() {
+		return DMType.class;
+	}
 
-    private DMTypeSelector _viewSelector;
+	public class DMTypeSelectorEditor extends CustomColumn.SelectorCellEditor {
 
-    private DMTypeSelector _editSelector;
+		@Override
+		public Object getCellEditorValue() {
+			return _selector.getEditedObject() != null ? ((DMType) _selector.getEditedObject()).clone() : null;
+		}
+	}
 
-    private boolean _isReadOnly;
-    
-    @Override
-	protected DMTypeSelector getViewSelector(D rowObject, DMType value)
-    {
-        if (_viewSelector == null) {
-            _viewSelector = new DMTypeSelector(_project, null, true);
-            _viewSelector.setFont(FlexoCst.MEDIUM_FONT);
-        }
-        _viewSelector.setEditedObject(value);
-        _viewSelector.setOwner((DMTypeOwner)rowObject);
-        return _viewSelector;
-    }
+	private DMTypeSelector _viewSelector;
 
-    @Override
-	protected DMTypeSelector getEditSelector(D rowObject, DMType value)
-    {
-        if (_editSelector == null) {
-            _editSelector = new DMTypeSelector(_project, null, false) {
-                @Override
-				public void apply()
-                {
-                    super.apply();
-                    if (logger.isLoggable(Level.FINE))
-                        logger.fine("Apply");
-                    if (_editedRowObject != null) {
-                    	if (getEditedObject()!=null)
-                    		setValue(_editedRowObject, getEditedObject().clone());
-                    	else
-                    		setValue(_editedRowObject, null);
-                    }
-                }
+	private DMTypeSelector _editSelector;
 
-                @Override
-				public void cancel()
-                {
-                    super.cancel();
-                    if (logger.isLoggable(Level.FINE))
-                        logger.fine("Cancel");
-                    if (_editedRowObject != null) {
-                        setValue(_editedRowObject, getRevertValue());
-                    }
-                }
-            };
-            _editSelector.setFont(FlexoCst.NORMAL_FONT);
-        }
-        _editSelector.setEditedObject(value);
-        _editSelector.setRevertValue(value!=null?value.clone():null);
-        _editSelector.setOwner((DMTypeOwner)rowObject);
-        return _editSelector;
-    }
+	private boolean _isReadOnly;
 
-    @Override
-    public TableCellEditor getCellEditor() {
-    	return super.getCellEditor();
-    }
-    
-    public void setNullStringRepresentation(String aString)
-    {
-        STRING_REPRESENTATION_WHEN_NULL = aString;
-    }
+	@Override
+	protected DMTypeSelector getViewSelector(D rowObject, DMType value) {
+		if (_viewSelector == null) {
+			_viewSelector = new DMTypeSelector(_project, null, true);
+			_viewSelector.setFont(FlexoCst.MEDIUM_FONT);
+		}
+		_viewSelector.setEditedObject(value);
+		_viewSelector.setOwner((DMTypeOwner) rowObject);
+		return _viewSelector;
+	}
+
+	@Override
+	protected DMTypeSelector getEditSelector(D rowObject, DMType value) {
+		if (_editSelector == null) {
+			_editSelector = new DMTypeSelector(_project, null, false) {
+				@Override
+				public void apply() {
+					super.apply();
+					if (logger.isLoggable(Level.FINE))
+						logger.fine("Apply");
+					if (_editedRowObject != null) {
+						if (getEditedObject() != null)
+							setValue(_editedRowObject, getEditedObject().clone());
+						else
+							setValue(_editedRowObject, null);
+					}
+				}
+
+				@Override
+				public void cancel() {
+					super.cancel();
+					if (logger.isLoggable(Level.FINE))
+						logger.fine("Cancel");
+					if (_editedRowObject != null) {
+						setValue(_editedRowObject, getRevertValue());
+					}
+				}
+			};
+			_editSelector.setFont(FlexoCst.NORMAL_FONT);
+		}
+		_editSelector.setEditedObject(value);
+		_editSelector.setRevertValue(value != null ? value.clone() : null);
+		_editSelector.setOwner((DMTypeOwner) rowObject);
+		return _editSelector;
+	}
+
+	@Override
+	public TableCellEditor getCellEditor() {
+		return super.getCellEditor();
+	}
+
+	public void setNullStringRepresentation(String aString) {
+		STRING_REPRESENTATION_WHEN_NULL = aString;
+	}
 
 	public boolean isReadOnly() {
 		return _isReadOnly;
 	}
 
 	// TODO: not implemented yet
-	public void setReadOnly(boolean isReadOnly) 
-	{
+	public void setReadOnly(boolean isReadOnly) {
 		_isReadOnly = isReadOnly;
 	}
 
-    @Override
-	protected void setEditedRowObject(D anObject)
-    {
-        if (logger.isLoggable(Level.FINE))
-        	logger.fine("setEditedRowObject() with "+anObject);
-    	super.setEditedRowObject(anObject);
-    	_viewSelector.setOwner((DMTypeOwner)_editedRowObject);
-    	_editSelector.setOwner((DMTypeOwner)_editedRowObject);
-    }
+	@Override
+	protected void setEditedRowObject(D anObject) {
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("setEditedRowObject() with " + anObject);
+		super.setEditedRowObject(anObject);
+		_viewSelector.setOwner((DMTypeOwner) _editedRowObject);
+		_editSelector.setOwner((DMTypeOwner) _editedRowObject);
+	}
 
 }

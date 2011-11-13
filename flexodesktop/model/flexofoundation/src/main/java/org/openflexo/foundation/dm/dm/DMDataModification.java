@@ -26,17 +26,14 @@ import org.openflexo.foundation.DataModification;
  * 
  * @author sguerin
  */
-public abstract class DMDataModification extends DataModification
-{
+public abstract class DMDataModification extends DataModification {
 
-    public DMDataModification(Object oldValue, Object newValue)
-    {
-        super(DataModification.DM_DM, oldValue, newValue);
-    }
+	public DMDataModification(Object oldValue, Object newValue) {
+		super(DataModification.DM_DM, oldValue, newValue);
+	}
 
-    public DMDataModification(String propertyName, Object oldValue, Object newValue)
-    {
-        super(DataModification.ATTRIBUTE, propertyName, oldValue, newValue);
-    }
+	public DMDataModification(String propertyName, Object oldValue, Object newValue) {
+		super(DataModification.ATTRIBUTE, propertyName, oldValue, newValue);
+	}
 
 }

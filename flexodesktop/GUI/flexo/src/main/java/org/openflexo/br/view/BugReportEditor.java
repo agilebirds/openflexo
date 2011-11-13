@@ -25,26 +25,22 @@ import java.util.logging.Logger;
 import org.openflexo.Flexo;
 import org.openflexo.application.FlexoApplication;
 
-
 /**
- * Utility class allowing to launch a small application used to visualize bug
- * reports of Flexo
+ * Utility class allowing to launch a small application used to visualize bug reports of Flexo
  * 
  * @author sguerin
  */
-public class BugReportEditor
-{
+public class BugReportEditor {
 
-    private static final Logger logger = Logger.getLogger(BugReportEditor.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(BugReportEditor.class.getPackage().getName());
 
-    public static void main(String[] args)
-    {
+	public static void main(String[] args) {
 
-        Flexo.initializeLoggingManager();
-        FlexoApplication.initialize();
-        if (logger.isLoggable(Level.INFO))
-            logger.info("Starting BugReportsEditor");
-        BugReportViewerWindow w = new BugReportViewerWindow();
-        w.setVisible(true);
-    }
+		Flexo.initializeLoggingManager();
+		FlexoApplication.initialize();
+		if (logger.isLoggable(Level.INFO))
+			logger.info("Starting BugReportsEditor");
+		BugReportViewerWindow w = new BugReportViewerWindow();
+		w.setVisible(true);
+	}
 }

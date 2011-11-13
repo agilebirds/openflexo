@@ -28,88 +28,75 @@ import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
-
 /**
- * Convenient class used to represent type of FlexoNode
- * (NORMAL/BEGIN/END/PSEUDO_BEGIN/PSEUDO_END
+ * Convenient class used to represent type of FlexoNode (NORMAL/BEGIN/END/PSEUDO_BEGIN/PSEUDO_END
  * 
  * @author sguerin
  */
-public abstract class NodeType extends FlexoObject implements StringConvertable, Serializable
-{
+public abstract class NodeType extends FlexoObject implements StringConvertable, Serializable {
 
-    private static final Logger logger = Logger.getLogger(NodeType.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(NodeType.class.getPackage().getName());
 
-    public static final NodeType NORMAL = new NormalNodeType();
+	public static final NodeType NORMAL = new NormalNodeType();
 
-    public static final NodeType BEGIN = new BeginNodeType();
+	public static final NodeType BEGIN = new BeginNodeType();
 
-    public static final NodeType END = new EndNodeType();
+	public static final NodeType END = new EndNodeType();
 
-   public static final StringEncoder.Converter<NodeType> nodeTypeConverter = new Converter<NodeType>(NodeType.class) {
+	public static final StringEncoder.Converter<NodeType> nodeTypeConverter = new Converter<NodeType>(NodeType.class) {
 
-        @Override
-		public NodeType convertFromString(String value)
-        {
-            return get(value);
-        }
+		@Override
+		public NodeType convertFromString(String value) {
+			return get(value);
+		}
 
-        @Override
-		public String convertToString(NodeType value)
-        {
-            return value.getName();
-        }
+		@Override
+		public String convertToString(NodeType value) {
+			return value.getName();
+		}
 
-    };
+	};
 
-    static class NormalNodeType extends NodeType implements Serializable
-    {
-        @Override
-		public String getName()
-        {
-            return "NORMAL";
-        }
-    }
+	static class NormalNodeType extends NodeType implements Serializable {
+		@Override
+		public String getName() {
+			return "NORMAL";
+		}
+	}
 
-    static class BeginNodeType extends NodeType implements Serializable
-    {
-        @Override
-		public String getName()
-        {
-            return "BEGIN";
-        }
-    }
+	static class BeginNodeType extends NodeType implements Serializable {
+		@Override
+		public String getName() {
+			return "BEGIN";
+		}
+	}
 
-    static class EndNodeType extends NodeType implements Serializable
-    {
-        @Override
-		public String getName()
-        {
-            return "END";
-        }
-    }
+	static class EndNodeType extends NodeType implements Serializable {
+		@Override
+		public String getName() {
+			return "END";
+		}
+	}
 
-    public abstract String getName();
+	public abstract String getName();
 
-    public static NodeType get(String typeName)
-    {
-        if (NORMAL.getName().equals(typeName)) {
-            return NORMAL;
-        } else if (BEGIN.getName().equals(typeName)) {
-            return BEGIN;
-        } else if (END.getName().equals(typeName)) {
-            return END;
-        } else {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("Could not find NodeType named " + typeName);
-            return null;
-        }
-    }
+	public static NodeType get(String typeName) {
+		if (NORMAL.getName().equals(typeName)) {
+			return NORMAL;
+		} else if (BEGIN.getName().equals(typeName)) {
+			return BEGIN;
+		} else if (END.getName().equals(typeName)) {
+			return END;
+		} else {
+			if (logger.isLoggable(Level.WARNING))
+				logger.warning("Could not find NodeType named " + typeName);
+			return null;
+		}
+	}
 
-    @Override
-	public StringEncoder.Converter getConverter()
-    {
-        return nodeTypeConverter;
-    }
+	@Override
+	public StringEncoder.Converter getConverter() {
+		return nodeTypeConverter;
+	}
 
 }

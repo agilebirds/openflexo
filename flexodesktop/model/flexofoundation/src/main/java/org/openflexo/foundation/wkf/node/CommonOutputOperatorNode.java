@@ -23,17 +23,15 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 
 public abstract class CommonOutputOperatorNode extends OperatorNode {
 
-   // ================================================================
-    // ====================== Constructor =============================
-    // ================================================================
+	// ================================================================
+	// ====================== Constructor =============================
+	// ================================================================
 
-    /**
-     * Default constructor
-     */
-    public CommonOutputOperatorNode(FlexoProcess process)
-    {
-        super(process);
-    }
-
+	/**
+	 * Default constructor
+	 */
+	public CommonOutputOperatorNode(FlexoProcess process) {
+		super(process);
+	}
 
 }

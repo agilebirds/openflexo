@@ -28,7 +28,6 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-
 import org.openflexo.dgmodule.view.DGTemplateFileModuleView;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -42,54 +41,48 @@ public class OpenTemplateFileInNewWindowInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	OpenTemplateFileInNewWindowInitializer(DGControllerActionInitializer actionInitializer)
-	{
-		super(OpenTemplateFileInNewWindow.actionType,actionInitializer);
+	OpenTemplateFileInNewWindowInitializer(DGControllerActionInitializer actionInitializer) {
+		super(OpenTemplateFileInNewWindow.actionType, actionInitializer);
 	}
 
 	@Override
-	protected DGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DGControllerActionInitializer)super.getControllerActionInitializer();
+	protected DGControllerActionInitializer getControllerActionInitializer() {
+		return (DGControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<OpenTemplateFileInNewWindow> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<OpenTemplateFileInNewWindow> getDefaultInitializer() {
 		return new FlexoActionInitializer<OpenTemplateFileInNewWindow>() {
 			@Override
-			public boolean run(ActionEvent e, OpenTemplateFileInNewWindow action)
-			{
+			public boolean run(ActionEvent e, OpenTemplateFileInNewWindow action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<OpenTemplateFileInNewWindow> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<OpenTemplateFileInNewWindow> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<OpenTemplateFileInNewWindow>() {
 			@Override
-			public boolean run(ActionEvent e, OpenTemplateFileInNewWindow action)
-			{
-				DGTemplateFileModuleView view 
-				= (DGTemplateFileModuleView)getControllerActionInitializer().getDGController().
-				createModuleViewForObjectAndPerspective(action.getFocusedObject(), null);
+			public boolean run(ActionEvent e, OpenTemplateFileInNewWindow action) {
+				DGTemplateFileModuleView view = (DGTemplateFileModuleView) getControllerActionInitializer().getDGController()
+						.createModuleViewForObjectAndPerspective(action.getFocusedObject(), null);
 				view.setOpenedInSeparateWindow(true);
-				final FlexoDialog dialog = new FlexoDialog(getControllerActionInitializer().getDGController().getFlexoFrame(), action.getFocusedObject().getTemplateName(), false);
+				final FlexoDialog dialog = new FlexoDialog(getControllerActionInitializer().getDGController().getFlexoFrame(), action
+						.getFocusedObject().getTemplateName(), false);
 				dialog.getContentPane().setLayout(new BorderLayout());
-				dialog.getContentPane().add(view,BorderLayout.CENTER);
+				dialog.getContentPane().add(view, BorderLayout.CENTER);
 				JPanel controlPanel = new JPanel(new FlowLayout());
 				JButton button = new JButton();
-				button.setText(FlexoLocalization.localizedForKey("close",button));
+				button.setText(FlexoLocalization.localizedForKey("close", button));
 				button.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						dialog.dispose();
-					}            		
+					}
 				});
 				controlPanel.add(button);
-				dialog.getContentPane().add(controlPanel,BorderLayout.SOUTH);
+				dialog.getContentPane().add(controlPanel, BorderLayout.SOUTH);
 				dialog.validate();
 				dialog.pack();
 				dialog.setVisible(true);

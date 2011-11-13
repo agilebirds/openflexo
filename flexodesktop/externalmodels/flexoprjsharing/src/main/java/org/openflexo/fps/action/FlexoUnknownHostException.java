@@ -24,16 +24,15 @@ import java.net.UnknownHostException;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.fps.CVSRepository;
 
-
 public class FlexoUnknownHostException extends FlexoException {
 
 	private CVSRepository repository;
 
 	public FlexoUnknownHostException(UnknownHostException cause, CVSRepository repository) {
-		super("Unknown host: "+cause.getMessage(),cause);
+		super("Unknown host: " + cause.getMessage(), cause);
 		this.repository = repository;
 	}
-	
+
 	public CVSRepository getRepository() {
 		return repository;
 	}

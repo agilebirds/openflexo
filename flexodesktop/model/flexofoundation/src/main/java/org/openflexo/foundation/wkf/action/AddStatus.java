@@ -31,100 +31,80 @@ import org.openflexo.foundation.wkf.Status;
 import org.openflexo.foundation.wkf.StatusList;
 import org.openflexo.foundation.wkf.WKFObject;
 
+public class AddStatus extends FlexoAction<AddStatus, WKFObject, WKFObject> {
 
-public class AddStatus extends FlexoAction<AddStatus,WKFObject,WKFObject> 
-{
+	private static final Logger logger = Logger.getLogger(AddStatus.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(AddStatus.class.getPackage().getName());
-    
-    public static FlexoActionType<AddStatus,WKFObject,WKFObject> actionType 
-    = new FlexoActionType<AddStatus,WKFObject,WKFObject> (
-    		"add_new_status",
-    		FlexoActionType.newMenu,
-    		FlexoActionType.newMenuGroup1,
-    		FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<AddStatus, WKFObject, WKFObject> actionType = new FlexoActionType<AddStatus, WKFObject, WKFObject>(
+			"add_new_status", FlexoActionType.newMenu, FlexoActionType.newMenuGroup1, FlexoActionType.ADD_ACTION_TYPE) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public AddStatus makeNewAction(WKFObject focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) 
-        {
-            return new AddStatus(focusedObject, globalSelection, editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public AddStatus makeNewAction(WKFObject focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+			return new AddStatus(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) 
-        {
-            return object instanceof FlexoProcess && !((FlexoProcess)object).isImported();
-        }
+		@Override
+		protected boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+			return object instanceof FlexoProcess && !((FlexoProcess) object).isImported();
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) 
-        {
-            return object != null 
-            	&& ((object instanceof FlexoProcess && !((FlexoProcess)object).isImported())
-            		|| object instanceof StatusList
-            		|| object instanceof Status);
-        }
-                
-    };
-    
-    private String _newStatusName;
-    private String _newDescription;
-    private Status _newStatus;
+		@Override
+		protected boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+			return object != null
+					&& ((object instanceof FlexoProcess && !((FlexoProcess) object).isImported()) || object instanceof StatusList || object instanceof Status);
+		}
 
-    AddStatus (WKFObject focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-     public FlexoProcess getProcess() 
-    {
-         if (getFocusedObject() != null)  {
-             return (getFocusedObject()).getProcess();
-         }
-        return null;
-    }
-    
-    public String getNewStatusName() 
-    {
-        return _newStatusName;
-    }
+	private String _newStatusName;
+	private String _newDescription;
+	private Status _newStatus;
 
-    public void setNewStatusName(String newStatusName) 
-    {
-        _newStatusName = newStatusName;
-    }
-    
-    @Override
-	protected void doAction(Object context) throws DuplicateStatusException 
-    {
-        logger.info ("Add status");
-        if (getProcess() != null && !getProcess().isImported() && getProcess().getStatusList()!=null)  {
-            StatusList statusList = getProcess().getStatusList();
-            statusList.addToStatus(_newStatus = new Status(getProcess(), getNewStatusName()));
-            if (getNewDescription() != null) _newStatus.setDescription(getNewDescription());
-       }
-        else {
-            logger.warning("Focused process is null or imported!");
-        }
-    }
+	AddStatus(WKFObject focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    public Status getNewStatus() 
-    {
-        return _newStatus;
-    }
+	public FlexoProcess getProcess() {
+		if (getFocusedObject() != null) {
+			return (getFocusedObject()).getProcess();
+		}
+		return null;
+	}
 
-    public String getNewDescription() 
-    {
-        return _newDescription;
-    }
+	public String getNewStatusName() {
+		return _newStatusName;
+	}
 
-    public void setNewDescription(String newDescription) 
-    {
-        _newDescription = newDescription;
-    }
+	public void setNewStatusName(String newStatusName) {
+		_newStatusName = newStatusName;
+	}
 
+	@Override
+	protected void doAction(Object context) throws DuplicateStatusException {
+		logger.info("Add status");
+		if (getProcess() != null && !getProcess().isImported() && getProcess().getStatusList() != null) {
+			StatusList statusList = getProcess().getStatusList();
+			statusList.addToStatus(_newStatus = new Status(getProcess(), getNewStatusName()));
+			if (getNewDescription() != null)
+				_newStatus.setDescription(getNewDescription());
+		} else {
+			logger.warning("Focused process is null or imported!");
+		}
+	}
+
+	public Status getNewStatus() {
+		return _newStatus;
+	}
+
+	public String getNewDescription() {
+		return _newDescription;
+	}
+
+	public void setNewDescription(String newDescription) {
+		_newDescription = newDescription;
+	}
 
 }

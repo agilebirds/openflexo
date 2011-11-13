@@ -11,23 +11,20 @@ import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
 
-public class EditionPatternPathElement<E extends Bindable> implements BindingVariable<EditionPattern>
-{
+public class EditionPatternPathElement<E extends Bindable> implements BindingVariable<EditionPattern> {
 	static final Logger logger = Logger.getLogger(EditionPatternPathElement.class.getPackage().getName());
 
 	private E container;
 	private String name;
 	private EditionPattern editionPattern;
-	private Hashtable<PatternRole,PatternRolePathElement> patternRoleElements;
+	private Hashtable<PatternRole, PatternRolePathElement> patternRoleElements;
 	private Vector<PatternRolePathElement> allPatternRoleElements;
-	
-	public EditionPatternPathElement(EditionPattern anEditionPattern, E container)
-	{
-		this(null,anEditionPattern,container);
+
+	public EditionPatternPathElement(EditionPattern anEditionPattern, E container) {
+		this(null, anEditionPattern, container);
 	}
-	
-	public EditionPatternPathElement(String name, EditionPattern anEditionPattern, E container)
-	{
+
+	public EditionPatternPathElement(String name, EditionPattern anEditionPattern, E container) {
 		this.name = name;
 		this.editionPattern = anEditionPattern;
 		this.container = container;
@@ -36,27 +33,25 @@ public class EditionPatternPathElement<E extends Bindable> implements BindingVar
 		if (editionPattern != null) {
 			for (PatternRole pr : editionPattern.getPatternRoles()) {
 				PatternRolePathElement newPathElement = null;
-				newPathElement = PatternRolePathElement.makePatternRolePathElement(pr,(EditionPattern)null);
-				patternRoleElements.put(pr,newPathElement);
+				newPathElement = PatternRolePathElement.makePatternRolePathElement(pr, (EditionPattern) null);
+				patternRoleElements.put(pr, newPathElement);
 				allPatternRoleElements.add(newPathElement);
 			}
 		}
 	}
-	
-	public Vector<PatternRolePathElement> getAllPatternRoleElements() 
-	{
+
+	public Vector<PatternRolePathElement> getAllPatternRoleElements() {
 		return allPatternRoleElements;
 	}
 
-	public PatternRolePathElement getPatternRolePathElement(PatternRole pr)
-	{
+	public PatternRolePathElement getPatternRolePathElement(PatternRole pr) {
 		return patternRoleElements.get(pr);
 	}
-	
+
 	@Override
-	public Class<E> getDeclaringClass() 
-	{
-		if (container != null) return (Class<E>)container.getClass();
+	public Class<E> getDeclaringClass() {
+		if (container != null)
+			return (Class<E>) container.getClass();
 		return null;
 	}
 
@@ -66,9 +61,9 @@ public class EditionPatternPathElement<E extends Bindable> implements BindingVar
 	}
 
 	@Override
-	public String getSerializationRepresentation() 
-	{
-		if (name != null) return name;
+	public String getSerializationRepresentation() {
+		if (name != null)
+			return name;
 		return editionPattern.getName();
 	}
 
@@ -101,18 +96,16 @@ public class EditionPatternPathElement<E extends Bindable> implements BindingVar
 	public String getVariableName() {
 		return getSerializationRepresentation();
 	}
-			
+
 	@Override
-	public EditionPattern getBindingValue(Object target, BindingEvaluationContext context) 
-	{
+	public EditionPattern getBindingValue(Object target, BindingEvaluationContext context) {
 		return editionPattern;
 	}
 
-    @Override
-    public void setBindingValue(EditionPattern value, Object target, BindingEvaluationContext context) 
-    {
-    	// Not settable
-    }
+	@Override
+	public void setBindingValue(EditionPattern value, Object target, BindingEvaluationContext context) {
+		// Not settable
+	}
 
 	public EditionPattern getEditionPattern() {
 		return editionPattern;

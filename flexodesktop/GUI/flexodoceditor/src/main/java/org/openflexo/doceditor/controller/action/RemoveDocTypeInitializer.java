@@ -34,36 +34,31 @@ public class RemoveDocTypeInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	RemoveDocTypeInitializer(DEControllerActionInitializer actionInitializer)
-	{
-		super(RemoveDocType.actionType,actionInitializer);
+	RemoveDocTypeInitializer(DEControllerActionInitializer actionInitializer) {
+		super(RemoveDocType.actionType, actionInitializer);
 	}
 
 	@Override
-	protected DEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DEControllerActionInitializer)super.getControllerActionInitializer();
+	protected DEControllerActionInitializer getControllerActionInitializer() {
+		return (DEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<RemoveDocType> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<RemoveDocType> getDefaultInitializer() {
 		return new FlexoActionInitializer<RemoveDocType>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveDocType action)
-			{
-				return FlexoController.confirm(FlexoLocalization.localizedForKey("are_you_sure_you_want_to_remove_the_doc_type")+" "+action.getFocusedObject().getName());
+			public boolean run(ActionEvent e, RemoveDocType action) {
+				return FlexoController.confirm(FlexoLocalization.localizedForKey("are_you_sure_you_want_to_remove_the_doc_type") + " "
+						+ action.getFocusedObject().getName());
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<RemoveDocType> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<RemoveDocType> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RemoveDocType>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveDocType action)
-			{
+			public boolean run(ActionEvent e, RemoveDocType action) {
 				return true;
 			}
 		};

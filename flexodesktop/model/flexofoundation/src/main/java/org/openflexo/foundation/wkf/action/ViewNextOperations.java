@@ -28,47 +28,41 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
 import org.openflexo.foundation.wkf.node.ActionNode;
 
-
 /**
  * @author gpolet
  * 
  */
-public class ViewNextOperations extends FlexoGUIAction
-{
+public class ViewNextOperations extends FlexoGUIAction {
 
-    public static FlexoActionType actionType = new FlexoActionType("view_next_operations", FlexoActionType.inspectGroup) {
+	public static FlexoActionType actionType = new FlexoActionType("view_next_operations", FlexoActionType.inspectGroup) {
 
-        /**
-         * Factory method
-         */
-        @Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-        {
-            return new ViewNextOperations(focusedObject, globalSelection,editor);
-        }
+		/**
+		 * Factory method
+		 */
+		@Override
+		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+			return new ViewNextOperations(focusedObject, globalSelection, editor);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection)
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection)
-        {
-            return object instanceof ActionNode;
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return object instanceof ActionNode;
+		}
 
-    };
+	};
 
-    /**
-     * @param actionType
-     * @param focusedObject
-     * @param globalSelection
-     */
-    protected ViewNextOperations(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	/**
+	 * @param actionType
+	 * @param focusedObject
+	 * @param globalSelection
+	 */
+	protected ViewNextOperations(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
 }

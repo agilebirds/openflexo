@@ -24,33 +24,29 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
 
-
-
 public class ExampleDrawingShape extends ExampleDrawingObject {
 
-    private static final Logger logger = Logger.getLogger(ExampleDrawingShape.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ExampleDrawingShape.class.getPackage().getName());
 
-    //private String multilineText;
-    private Vector<ExampleDrawingConnector> incomingConnectors;
-    private Vector<ExampleDrawingConnector> outgoingConnectors;
-    
-    //private EditionPatternInstance editionPatternInstance; 
-    
+	// private String multilineText;
+	private Vector<ExampleDrawingConnector> incomingConnectors;
+	private Vector<ExampleDrawingConnector> outgoingConnectors;
+
+	// private EditionPatternInstance editionPatternInstance;
+
 	/**
-     * Constructor invoked during deserialization
-     * 
-     * @param componentDefinition
-     */
-    public ExampleDrawingShape()
-    {
-        super();
-        incomingConnectors = new Vector<ExampleDrawingConnector>();
-        outgoingConnectors = new Vector<ExampleDrawingConnector>();
-   }
+	 * Constructor invoked during deserialization
+	 * 
+	 * @param componentDefinition
+	 */
+	public ExampleDrawingShape() {
+		super();
+		incomingConnectors = new Vector<ExampleDrawingConnector>();
+		outgoingConnectors = new Vector<ExampleDrawingConnector>();
+	}
 
 	@Override
-	public void delete()
-	{
+	public void delete() {
 		if (getParent() != null) {
 			getParent().removeFromChilds(this);
 		}
@@ -64,68 +60,55 @@ public class ExampleDrawingShape extends ExampleDrawingObject {
 		deleteObservers();
 	}
 
-
 	@Override
-	public String getClassNameKey() 
-	{
+	public String getClassNameKey() {
 		return "calc_drawing_shape";
 	}
 
 	@Override
-	public String getFullyQualifiedName() 
-	{
-		return getShema().getFullyQualifiedName()+"."+getName();
+	public String getFullyQualifiedName() {
+		return getShema().getFullyQualifiedName() + "." + getName();
 	}
 
-    @Override
-	public String getInspectorName() 
-    {
-    	return Inspectors.VPM.CALC_DRAWING_SHAPE_INSPECTOR;
-    }
+	@Override
+	public String getInspectorName() {
+		return Inspectors.VPM.CALC_DRAWING_SHAPE_INSPECTOR;
+	}
 
- 	public Vector<ExampleDrawingConnector> getIncomingConnectors() 
-	{
+	public Vector<ExampleDrawingConnector> getIncomingConnectors() {
 		return incomingConnectors;
 	}
 
-	public void setIncomingConnectors(Vector<ExampleDrawingConnector> incomingConnectors) 
-	{
+	public void setIncomingConnectors(Vector<ExampleDrawingConnector> incomingConnectors) {
 		this.incomingConnectors = incomingConnectors;
 	}
 
-	public void addToIncomingConnectors(ExampleDrawingConnector connector) 
-	{
+	public void addToIncomingConnectors(ExampleDrawingConnector connector) {
 		incomingConnectors.add(connector);
 	}
 
-	public void removeFromIncomingConnectors(ExampleDrawingConnector connector) 
-	{
+	public void removeFromIncomingConnectors(ExampleDrawingConnector connector) {
 		incomingConnectors.remove(connector);
 	}
 
-	public Vector<ExampleDrawingConnector> getOutgoingConnectors() 
-	{
+	public Vector<ExampleDrawingConnector> getOutgoingConnectors() {
 		return outgoingConnectors;
 	}
 
-	public void setOutgoingConnectors(Vector<ExampleDrawingConnector> outgoingConnectors) 
-	{
+	public void setOutgoingConnectors(Vector<ExampleDrawingConnector> outgoingConnectors) {
 		this.outgoingConnectors = outgoingConnectors;
 	}
-    
-	public void addToOutgoingConnectors(ExampleDrawingConnector connector) 
-	{
+
+	public void addToOutgoingConnectors(ExampleDrawingConnector connector) {
 		outgoingConnectors.add(connector);
 	}
 
-	public void removeFromOutgoingConnectors(ExampleDrawingConnector connector) 
-	{
+	public void removeFromOutgoingConnectors(ExampleDrawingConnector connector) {
 		outgoingConnectors.remove(connector);
 	}
 
 	@Override
-	public boolean isContainedIn(ExampleDrawingObject o)
-	{
+	public boolean isContainedIn(ExampleDrawingObject o) {
 		if (o == this) {
 			return true;
 		}
@@ -137,6 +120,5 @@ public class ExampleDrawingShape extends ExampleDrawingObject {
 		}
 		return false;
 	}
-	
 
 }

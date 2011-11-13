@@ -31,38 +31,34 @@ import org.openflexo.module.Module;
 import org.openflexo.sgmodule.controller.SGController;
 import org.openflexo.view.menu.WindowMenu;
 
-
 /**
  * 'Window' menu for this Module
  * 
  * @author yourname
  */
-public class SGWindowMenu extends WindowMenu
-{
+public class SGWindowMenu extends WindowMenu {
 
-    private static final Logger logger = Logger.getLogger(SGWindowMenu.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(SGWindowMenu.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance Variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance Variables
+	// =========================
+	// ==========================================================================
 
-      protected SGController _xxxController;
+	protected SGController _xxxController;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public SGWindowMenu(SGController controller)
-    {
-        super(controller,Module.XXX_MODULE);
-        _xxxController = controller;
-        // Put your actions here
-    }
+	public SGWindowMenu(SGController controller) {
+		super(controller, Module.XXX_MODULE);
+		_xxxController = controller;
+		// Put your actions here
+	}
 
-    public SGController getXXXController()
-    {
-        return _xxxController;
-    }
+	public SGController getXXXController() {
+		return _xxxController;
+	}
 }

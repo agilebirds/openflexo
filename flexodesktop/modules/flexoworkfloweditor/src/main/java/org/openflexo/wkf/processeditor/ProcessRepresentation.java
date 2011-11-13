@@ -140,14 +140,14 @@ import org.openflexo.wkf.processeditor.gr.WKFObjectGR;
 import org.openflexo.wkf.processeditor.gr.ExpanderGR.Expander;
 import org.openflexo.wkf.processeditor.gr.PreAndBeginNodeAssociationGR.PreAndBeginNodeAssociation;
 
-
-public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implements GraphicalFlexoObserver,ProcessEditorConstants {
+public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implements GraphicalFlexoObserver, ProcessEditorConstants {
 
 	private static final Logger logger = Logger.getLogger(ProcessRepresentation.class.getPackage().getName());
 
 	public static interface ProcessRepresentationObjectVisibilityDelegate {
 
 		public boolean isVisible(WKFObject object);
+
 		public WKFObject getFirstVisibleObject(WKFObject targetObject);
 
 	}
@@ -155,8 +155,7 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 	public static class ProcessRepresentationDefaultVisibilityDelegate implements ProcessRepresentationObjectVisibilityDelegate {
 
 		@Override
-		public boolean isVisible(WKFObject targetObject)
-		{
+		public boolean isVisible(WKFObject targetObject) {
 			if (targetObject == null) {
 				if (logger.isLoggable(Level.WARNING))
 					logger.warning("Null object are not visible");
@@ -167,44 +166,43 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 			} else if (targetObject instanceof FlexoPetriGraph) {
 				return ((FlexoPetriGraph) targetObject).getIsVisible() && isVisible(((FlexoPetriGraph) targetObject).getContainer());
 			} else if (targetObject instanceof PortRegistery) {
-				return ((PortRegistery)targetObject).getIsVisible();
+				return ((PortRegistery) targetObject).getIsVisible();
 			} else if (targetObject instanceof WKFEdge) {
 				WKFEdge post = (WKFEdge) targetObject;
 				WKFObject firstVisibleStartObject = getFirstVisibleObject(post.getStartNode());
 				WKFObject firstVisibleEndObject = getFirstVisibleObject(post.getEndNode());
 				if (post instanceof MessageEdge) {
 					if (firstVisibleStartObject instanceof FlexoPortMap) {
-						if (((FlexoPortMap)firstVisibleStartObject).getSubProcessNode()==firstVisibleEndObject)
+						if (((FlexoPortMap) firstVisibleStartObject).getSubProcessNode() == firstVisibleEndObject)
 							return false;
 					} else if (firstVisibleEndObject instanceof FlexoPortMap) {
-						if (((FlexoPortMap)firstVisibleEndObject).getSubProcessNode()==firstVisibleStartObject)
+						if (((FlexoPortMap) firstVisibleEndObject).getSubProcessNode() == firstVisibleStartObject)
 							return false;
 					}
 				}
 				if (post instanceof FlexoPostCondition<?, ?>) {
-					if (((FlexoPostCondition<?, ?>)post).hideWhenInduced() && (post.getStartNode()!=firstVisibleStartObject||post.getEndNode()!=firstVisibleEndObject)) {
+					if (((FlexoPostCondition<?, ?>) post).hideWhenInduced()
+							&& (post.getStartNode() != firstVisibleStartObject || post.getEndNode() != firstVisibleEndObject)) {
 						return false;
 					}
 				}
 				return ((!(firstVisibleStartObject != post.getStartNode() && firstVisibleEndObject != post.getEndNode() && firstVisibleStartObject == firstVisibleEndObject))
-						&& firstVisibleStartObject != null
-						&& firstVisibleEndObject != null);
+						&& firstVisibleStartObject != null && firstVisibleEndObject != null);
 			} else if (targetObject instanceof WKFArtefact) {
-				return isVisible(((WKFArtefact)targetObject).getParentPetriGraph());
+				return isVisible(((WKFArtefact) targetObject).getParentPetriGraph());
 			} else if (targetObject instanceof WKFGroup) {
-				return ((WKFGroup)targetObject).getIsVisible();
+				return ((WKFGroup) targetObject).getIsVisible();
 			} else if (targetObject instanceof PortMapRegistery) {
-				return !((PortMapRegistery)targetObject).getIsHidden() && ((PortMapRegistery)targetObject).getPortMaps().size() > 0;
+				return !((PortMapRegistery) targetObject).getIsHidden() && ((PortMapRegistery) targetObject).getPortMaps().size() > 0;
 			} else if (targetObject instanceof FlexoPortMap) {
-				return !((FlexoPortMap)targetObject).getIsHidden();
+				return !((FlexoPortMap) targetObject).getIsHidden();
 			}
 			return getFirstVisibleObject(targetObject) == targetObject;
 		}
 
 		@Override
-		public final WKFObject getFirstVisibleObject(WKFObject targetObject)
-		{
-			if(targetObject==null)
+		public final WKFObject getFirstVisibleObject(WKFObject targetObject) {
+			if (targetObject == null)
 				return null;
 			AbstractNode concernedNode = null;
 			if (targetObject instanceof FlexoPreCondition) {
@@ -213,22 +211,21 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 				concernedNode = (AbstractNode) targetObject;
 			} else if (targetObject instanceof WKFArtefact) {
 				WKFArtefact artefact = (WKFArtefact) targetObject;
-				if (artefact.getParentPetriGraph()==null)
+				if (artefact.getParentPetriGraph() == null)
 					return null;
 				if (isVisible(artefact.getParentPetriGraph())) {
 					return targetObject;
-				}
-				else {
+				} else {
 					// Test if PetriGraphContainer is visible
 					WKFObject container = artefact.getParentPetriGraph().getContainer();
 					// Otherwise, do it recursively
 					return getFirstVisibleObject(container);
 
 					// If container visible itsef, return it
-					//if (isVisible(container))
-					//	return container;
+					// if (isVisible(container))
+					// return container;
 					// Otherwise, don't go 2 levels
-					//return null;
+					// return null;
 				}
 			} else {
 				logger.warning("Unexpected: " + targetObject);
@@ -236,27 +233,28 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 			}
 
 			if (concernedNode instanceof FlexoPort) {
-				if (((FlexoPort)concernedNode).getPortRegistery() == null) return null;
-				//GPO: Shouldn't we pass the FlexoPort (and the FlexoPort would have then to check that its parent portRegistery is shown)?
-				if (isVisible(((FlexoPort)concernedNode).getPortRegistery())) return targetObject;
+				if (((FlexoPort) concernedNode).getPortRegistery() == null)
+					return null;
+				// GPO: Shouldn't we pass the FlexoPort (and the FlexoPort would have then to check that its parent portRegistery is shown)?
+				if (isVisible(((FlexoPort) concernedNode).getPortRegistery()))
+					return targetObject;
 				return null;
 			}
 
 			if (concernedNode instanceof FlexoPortMap) {
-				if (isVisible(((FlexoPortMap)concernedNode).getSubProcessNode())) {
-					if (isVisible(concernedNode) && isVisible(((FlexoPortMap)concernedNode).getPortMapRegistery()))
+				if (isVisible(((FlexoPortMap) concernedNode).getSubProcessNode())) {
+					if (isVisible(concernedNode) && isVisible(((FlexoPortMap) concernedNode).getPortMapRegistery()))
 						return targetObject;
-					return ((FlexoPortMap)concernedNode).getSubProcessNode();
-				}
-				else
-					return getFirstVisibleObject(((FlexoPortMap)concernedNode).getSubProcessNode());
+					return ((FlexoPortMap) concernedNode).getSubProcessNode();
+				} else
+					return getFirstVisibleObject(((FlexoPortMap) concernedNode).getSubProcessNode());
 			}
 			if (!(concernedNode instanceof PetriGraphNode)) {
 				if (logger.isLoggable(Level.WARNING))
-					logger.warning("concerned node is not a petri graph node: "+concernedNode);
+					logger.warning("concerned node is not a petri graph node: " + concernedNode);
 				return null;
 			}
-			PetriGraphNode node = (PetriGraphNode)concernedNode;
+			PetriGraphNode node = (PetriGraphNode) concernedNode;
 
 			if (node.getParentPetriGraph() == null)
 				return null;
@@ -270,18 +268,17 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 
 			if (isVisible(node.getParentPetriGraph())) {
 				return targetObject;
-			}
-			else {
+			} else {
 				// Test if PetriGraphContainer is visible
 				WKFObject container = node.getParentPetriGraph().getContainer();
 				// Otherwise, do it recursively
 				return getFirstVisibleObject(container);
 
 				// If container visible itsef, return it
-				//if (isVisible(container))
-				//	return container;
+				// if (isVisible(container))
+				// return container;
 				// Otherwise, don't go 2 levels
-				//return null;
+				// return null;
 			}
 		}
 
@@ -305,43 +302,43 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 			if (targetObject instanceof FlexoProcess) {
 				return true;
 			} else if (targetObject instanceof FlexoPreCondition) {
-				return isVisible(((FlexoPreCondition)targetObject).getAttachedNode());
+				return isVisible(((FlexoPreCondition) targetObject).getAttachedNode());
 			} else if (targetObject instanceof ActivityPetriGraph) {
-				return  !(((ActivityPetriGraph)targetObject).getContainer() instanceof ActivityPetriGraph);
+				return !(((ActivityPetriGraph) targetObject).getContainer() instanceof ActivityPetriGraph);
 			} else if (targetObject instanceof PortRegistery) {
 				return false;
 			} else if (targetObject instanceof EventNode) {
-				return isVisible(((EventNode)targetObject).getParentPetriGraph());
+				return isVisible(((EventNode) targetObject).getParentPetriGraph());
 			} else if (targetObject instanceof FlexoNode) {
-				return isVisible(((FlexoNode)targetObject).getParentPetriGraph());
+				return isVisible(((FlexoNode) targetObject).getParentPetriGraph());
 			} else if (targetObject instanceof WKFEdge) {
 				WKFEdge post = (WKFEdge) targetObject;
 				WKFObject firstVisibleStartObject = getFirstVisibleObject(post.getStartNode());
 				WKFObject firstVisibleEndObject = getFirstVisibleObject(post.getEndNode());
-			
+
 				if (post instanceof MessageEdge) {
 					if (firstVisibleStartObject instanceof FlexoPortMap) {
-						if (((FlexoPortMap)firstVisibleStartObject).getSubProcessNode()==firstVisibleEndObject)
+						if (((FlexoPortMap) firstVisibleStartObject).getSubProcessNode() == firstVisibleEndObject)
 							return false;
 					} else if (firstVisibleEndObject instanceof FlexoPortMap) {
-						if (((FlexoPortMap)firstVisibleEndObject).getSubProcessNode()==firstVisibleStartObject)
+						if (((FlexoPortMap) firstVisibleEndObject).getSubProcessNode() == firstVisibleStartObject)
 							return false;
 					}
 				}
 				if (post instanceof FlexoPostCondition<?, ?>) {
-					if (((FlexoPostCondition<?, ?>)post).hideWhenInduced() && (post.getStartNode()!=firstVisibleStartObject||post.getEndNode()!=firstVisibleEndObject)) {
+					if (((FlexoPostCondition<?, ?>) post).hideWhenInduced()
+							&& (post.getStartNode() != firstVisibleStartObject || post.getEndNode() != firstVisibleEndObject)) {
 						return false;
 					}
 				}
 				return ((!(firstVisibleStartObject != post.getStartNode() && firstVisibleEndObject != post.getEndNode() && firstVisibleStartObject == firstVisibleEndObject))
-						&& firstVisibleStartObject != null
-						&& firstVisibleEndObject != null);
+						&& firstVisibleStartObject != null && firstVisibleEndObject != null);
 			} else if (targetObject instanceof WKFArtefact) {
-				return isVisible(((WKFArtefact)targetObject).getParentPetriGraph());
+				return isVisible(((WKFArtefact) targetObject).getParentPetriGraph());
 			} else if (targetObject instanceof OperatorNode) {
-				return isVisible(((OperatorNode)targetObject).getParentPetriGraph());
+				return isVisible(((OperatorNode) targetObject).getParentPetriGraph());
 			} else if (targetObject instanceof WKFGroup) {
-				return ((WKFGroup)targetObject).getIsVisible();
+				return ((WKFGroup) targetObject).getIsVisible();
 			} else if (targetObject instanceof PortMapRegistery) {
 				return false;
 			} else if (targetObject instanceof FlexoPortMap) {
@@ -349,9 +346,9 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 			}
 			return false;
 		}
-		
+
 	}
-	
+
 	public static final ProcessRepresentationObjectVisibilityDelegate DEFAULT_VISIBILITY = new ProcessRepresentationDefaultVisibilityDelegate();
 	public static final ProcessRepresentationObjectVisibilityDelegate SHOW_ALL = new ProcessRepresentationShowAllObjectsDelegate();
 	public static final ProcessRepresentationObjectVisibilityDelegate SHOW_TOP_LEVEL = new ProcessRepresentationShowTopLevelDelegate();
@@ -360,8 +357,7 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 	private final ProcessGraphicalRepresentation graphicalRepresentation;
 	private ProcessRepresentationObjectVisibilityDelegate visibilityDelegate;
 
-	public ProcessRepresentation(final FlexoProcess process, FlexoEditor anEditor)
-	{
+	public ProcessRepresentation(final FlexoProcess process, FlexoEditor anEditor) {
 		this(process, anEditor, false);
 	}
 
@@ -369,14 +365,15 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 	 * If openAllNodes is set to true, all nodes are directly open at creation. Used by the html doc generation
 	 */
 	public ProcessRepresentation(final FlexoProcess process, FlexoEditor anEditor, boolean openAllNodes) {
-		this(process, anEditor, openAllNodes?SHOW_ALL:DEFAULT_VISIBILITY);
+		this(process, anEditor, openAllNodes ? SHOW_ALL : DEFAULT_VISIBILITY);
 	}
 
-	public ProcessRepresentation(final FlexoProcess process, FlexoEditor anEditor, ProcessRepresentationObjectVisibilityDelegate visibilityDelegate) {
+	public ProcessRepresentation(final FlexoProcess process, FlexoEditor anEditor,
+			ProcessRepresentationObjectVisibilityDelegate visibilityDelegate) {
 		super(process);
 
 		this.editor = anEditor;
-		if (visibilityDelegate!=null)
+		if (visibilityDelegate != null)
 			this.visibilityDelegate = visibilityDelegate;
 		else
 			this.visibilityDelegate = DEFAULT_VISIBILITY;
@@ -390,44 +387,41 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 		updateGraphicalObjectsHierarchy();
 	}
 
-	private void addGroup(WKFGroup group, WKFObject container)
-	{
+	private void addGroup(WKFGroup group, WKFObject container) {
 		addDrawable(group, container);
 
 		if (isVisible(group)) {
 			for (AbstractNode node : group.getNodes()) {
-				addNode(node,group);
+				addNode(node, group);
 			}
 		}
 	}
 
-	private void addNode(AbstractNode node, WKFObject container)
-	{
+	private void addNode(AbstractNode node, WKFObject container) {
 		addDrawable(node, container);
 		if (node instanceof FlexoNode) {
-			for (FlexoPreCondition pre : ((FlexoNode)node).getPreConditions()) {
+			for (FlexoPreCondition pre : ((FlexoNode) node).getPreConditions()) {
 				addDrawable(pre, node);
-				if (pre.getAttachedBeginNode() != null
-						&& pre.getAttachedBeginNode().getParentPetriGraph() != null
+				if (pre.getAttachedBeginNode() != null && pre.getAttachedBeginNode().getParentPetriGraph() != null
 						&& isVisible(pre.getAttachedBeginNode().getParentPetriGraph())) {
 					addDrawable(preAndBeginNodeAssociationForPrecondition(pre), getProcess());
 				}
 			}
 		}
-		
+
 		if (node instanceof AbstractActivityNode) {
-			for (EventNode pre : ((AbstractActivityNode)node).getAllBoundaryEvents()) {
+			for (EventNode pre : ((AbstractActivityNode) node).getAllBoundaryEvents()) {
 				addDrawable(pre, node);
 			}
 		}
-		
+
 		/*if (node instanceof EdgeStarting) {
 			for (FlexoPostCondition post : ((EdgeStarting)node).getOutgoingPostConditions()) {
 				addDrawable(post,getProcess());
 			}
 		}*/
 		if (node instanceof SubProcessNode) {
-			SubProcessNode subProcessNode = (SubProcessNode)node;
+			SubProcessNode subProcessNode = (SubProcessNode) node;
 			if (subProcessNode.getPortMapRegistery() != null) {
 				addDrawable(subProcessNode.getPortMapRegistery(), subProcessNode);
 				for (FlexoPortMap portmap : subProcessNode.getPortMapRegistery().getPortMaps()) {
@@ -437,68 +431,65 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 		}
 
 		if (node instanceof AbstractActivityNode) {
-			AbstractActivityNode activity = (AbstractActivityNode)node;
+			AbstractActivityNode activity = (AbstractActivityNode) node;
 			if (activity.hasContainedPetriGraph() && isVisible(activity.getOperationPetriGraph())) {
 				addPetriGraph(activity, activity.getOperationPetriGraph());
 			}
 		}
 
 		if (node instanceof OperationNode) {
-			OperationNode operation = (OperationNode)node;
+			OperationNode operation = (OperationNode) node;
 			if (operation.hasContainedPetriGraph() && isVisible(operation.getActionPetriGraph())) {
 				addPetriGraph(operation, operation.getActionPetriGraph());
 			}
 		}
 
 		if (node instanceof SelfExecutableNode) {
-			SelfExecutableNode selfExecNode = (SelfExecutableNode)node;
+			SelfExecutableNode selfExecNode = (SelfExecutableNode) node;
 			if (selfExecNode.hasExecutionPetriGraph() && isVisible(selfExecNode.getExecutionPetriGraph())) {
-				addPetriGraph((AbstractNode)selfExecNode, selfExecNode.getExecutionPetriGraph());
+				addPetriGraph((AbstractNode) selfExecNode, selfExecNode.getExecutionPetriGraph());
 			}
 		}
 
 		if (node instanceof LOOPOperator) {
-			LOOPOperator loopOperator = (LOOPOperator)node;
+			LOOPOperator loopOperator = (LOOPOperator) node;
 			if (loopOperator.hasExecutionPetriGraph() && isVisible(loopOperator.getExecutionPetriGraph())) {
 				addPetriGraph(loopOperator, loopOperator.getExecutionPetriGraph());
 			}
 		}
-    }
+	}
 
-	private void addPetriGraph(AbstractNode father, FlexoPetriGraph pg)
-	{
+	private void addPetriGraph(AbstractNode father, FlexoPetriGraph pg) {
 		addDrawable(pg, getProcess());
-		addDrawable(expanderForNodeAndPG(father,pg), getProcess());
+		addDrawable(expanderForNodeAndPG(father, pg), getProcess());
 		for (PetriGraphNode n : pg.getNodes()) {
 			if (!n.isGrouped())
-				addNode(n,pg);
+				addNode(n, pg);
 		}
 		for (WKFArtefact annotation : pg.getArtefacts()) {
 			addDrawable(annotation, pg);
 		}
 		for (WKFGroup group : pg.getGroups()) {
 			addGroup(group, pg);
-	    }
+		}
 	}
 
 	@Override
-	public <O> void addDrawable(O aDrawable, Object aParentDrawable)
-	{
-		//logger.info("Adding "+aDrawable+" under "+aParentDrawable);
+	public <O> void addDrawable(O aDrawable, Object aParentDrawable) {
+		// logger.info("Adding "+aDrawable+" under "+aParentDrawable);
 		super.addDrawable(aDrawable, aParentDrawable);
 	}
 
 	@Override
-	protected void buildGraphicalObjectsHierarchy()
-	{
+	protected void buildGraphicalObjectsHierarchy() {
 
 		for (WKFGroup group : getProcess().getActivityPetriGraph().getGroups()) {
 			addGroup(group, getProcess());
 		}
 
 		for (PetriGraphNode node : getProcess().getActivityPetriGraph().getNodes()) {
-			if (!node.isGrouped()){
-				if(!(node instanceof EventNode && ((EventNode)node).getBoundaryOf()!=null))
+			if (!node.isGrouped()) {
+				if (!(node instanceof EventNode && ((EventNode) node).getBoundaryOf() != null))
 					addNode(node, getProcess());
 			}
 		}
@@ -506,7 +497,7 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 		if (isVisible(getProcess().getPortRegistery())) {
 			addDrawable(getProcess().getPortRegistery(), getProcess());
 			for (FlexoPort port : getProcess().getPortRegistery().getAllPorts()) {
-				addNode(port,getProcess().getPortRegistery());
+				addNode(port, getProcess().getPortRegistery());
 			}
 		}
 
@@ -535,64 +526,60 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 			}
 		}*/
 
-		for (WKFArtefact artefact: getProcess().getActivityPetriGraph().getArtefacts()) {
+		for (WKFArtefact artefact : getProcess().getActivityPetriGraph().getArtefacts()) {
 			addDrawable(artefact, getProcess());
 		}
 
 		for (FlexoPostCondition post : getProcess().getAllPostConditions()) {
 			if (isVisible(post)) {
 				if (post.isEdgeDisplayable()) {
-					//ConnectorGraphicalRepresentation<?> postGR = (ConnectorGraphicalRepresentation<?>)getGraphicalRepresentation(post);
-					//GraphicalRepresentation commonAncestor = GraphicalRepresentation.getFirstCommonAncestor(postGR.getStartObject(),postGR.getEndObject());
-					//System.out.println("Common ancestor: "+commonAncestor.getDrawable());
-					//addDrawable(post,commonAncestor.getDrawable());
-					addDrawable(post,getProcess());
-				}
-				else
-					System.err.println(post+" is not displayable");
+					// ConnectorGraphicalRepresentation<?> postGR = (ConnectorGraphicalRepresentation<?>)getGraphicalRepresentation(post);
+					// GraphicalRepresentation commonAncestor =
+					// GraphicalRepresentation.getFirstCommonAncestor(postGR.getStartObject(),postGR.getEndObject());
+					// System.out.println("Common ancestor: "+commonAncestor.getDrawable());
+					// addDrawable(post,commonAncestor.getDrawable());
+					addDrawable(post, getProcess());
+				} else
+					System.err.println(post + " is not displayable");
 			}
 		}
 
 		for (WKFAssociation post : getProcess().getAllAssociations()) {
 			if (isVisible(post) && post.isEdgeDisplayable()) {
-				addDrawable(post,getProcess());
+				addDrawable(post, getProcess());
 			}
 		}
 	}
 
-	public boolean isVisible(WKFObject object)
-	{
+	public boolean isVisible(WKFObject object) {
 		return visibilityDelegate.isVisible(object);
 	}
 
-	public WKFObject getFirstVisibleObject(WKFObject object)
-	{
-		//logger.info("getFirstVisibleObject() for "+object+" is "+visibilityDelegate.getFirstVisibleObject(object));
+	public WKFObject getFirstVisibleObject(WKFObject object) {
+		// logger.info("getFirstVisibleObject() for "+object+" is "+visibilityDelegate.getFirstVisibleObject(object));
 		return visibilityDelegate.getFirstVisibleObject(object);
 	}
 
-	private final Hashtable<AbstractNode,Hashtable<FlexoPetriGraph,Expander<?>>> expanders = new Hashtable<AbstractNode,Hashtable<FlexoPetriGraph,Expander<?>>>();
+	private final Hashtable<AbstractNode, Hashtable<FlexoPetriGraph, Expander<?>>> expanders = new Hashtable<AbstractNode, Hashtable<FlexoPetriGraph, Expander<?>>>();
 
 	@SuppressWarnings("unchecked")
-	protected <N extends AbstractNode> Expander<?> expanderForNodeAndPG(N node, FlexoPetriGraph pg)
-	{
-		Hashtable<FlexoPetriGraph,Expander<?>> expandersForNode = expanders.get(node);
+	protected <N extends AbstractNode> Expander<?> expanderForNodeAndPG(N node, FlexoPetriGraph pg) {
+		Hashtable<FlexoPetriGraph, Expander<?>> expandersForNode = expanders.get(node);
 		if (expandersForNode == null) {
-			expandersForNode = new Hashtable<FlexoPetriGraph,Expander<?>>();
+			expandersForNode = new Hashtable<FlexoPetriGraph, Expander<?>>();
 			expanders.put(node, expandersForNode);
 		}
-		Expander<N> returned = (Expander<N>)expandersForNode.get(pg);
+		Expander<N> returned = (Expander<N>) expandersForNode.get(pg);
 		if (returned == null) {
-			returned = new ExpanderGR.Expander<N>(node,pg);
-			expandersForNode.put(pg,returned);
+			returned = new ExpanderGR.Expander<N>(node, pg);
+			expandersForNode.put(pg, returned);
 		}
 		return returned;
 	}
 
-	private final Hashtable<FlexoPreCondition,PreAndBeginNodeAssociation> preAndBeginNodeAssociationForPrecondition = new Hashtable<FlexoPreCondition,PreAndBeginNodeAssociation>();
+	private final Hashtable<FlexoPreCondition, PreAndBeginNodeAssociation> preAndBeginNodeAssociationForPrecondition = new Hashtable<FlexoPreCondition, PreAndBeginNodeAssociation>();
 
-	protected PreAndBeginNodeAssociation preAndBeginNodeAssociationForPrecondition(FlexoPreCondition pre)
-	{
+	protected PreAndBeginNodeAssociation preAndBeginNodeAssociationForPrecondition(FlexoPreCondition pre) {
 		PreAndBeginNodeAssociation returned = preAndBeginNodeAssociationForPrecondition.get(pre);
 		if (returned == null) {
 			returned = new PreAndBeginNodeAssociation(pre);
@@ -601,160 +588,155 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 		return returned;
 	}
 
-
-	public FlexoProcess getFlexoProcess()
-	{
+	public FlexoProcess getFlexoProcess() {
 		return getModel();
 	}
 
-	public FlexoProcess getProcess()
-	{
+	public FlexoProcess getProcess() {
 		return getFlexoProcess();
 	}
 
-
 	@Override
-	public ProcessGraphicalRepresentation getDrawingGraphicalRepresentation()
-	{
+	public ProcessGraphicalRepresentation getDrawingGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable)
-	{
-		return (GraphicalRepresentation<O>)buildGraphicalRepresentation(aDrawable);
+	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable) {
+		return (GraphicalRepresentation<O>) buildGraphicalRepresentation(aDrawable);
 	}
 
-	private GraphicalRepresentation<?> buildGraphicalRepresentation(Object aDrawable)
-	{
+	private GraphicalRepresentation<?> buildGraphicalRepresentation(Object aDrawable) {
 		if (aDrawable instanceof SelfExecutableActivityNode) {
-			return new SelfExecActivityNodeGR((SelfExecutableActivityNode)aDrawable,this,false);
+			return new SelfExecActivityNodeGR((SelfExecutableActivityNode) aDrawable, this, false);
 		}
 		if (aDrawable instanceof ActivityNode) {
-			if (((ActivityNode)aDrawable).isBeginNode()) return new BeginActivityNodeGR((ActivityNode)aDrawable,this,false);
-			if (((ActivityNode)aDrawable).isEndNode()) return new EndActivityNodeGR((ActivityNode)aDrawable,this,false);
-			return new ActivityNodeGR((ActivityNode)aDrawable,this,false);
+			if (((ActivityNode) aDrawable).isBeginNode())
+				return new BeginActivityNodeGR((ActivityNode) aDrawable, this, false);
+			if (((ActivityNode) aDrawable).isEndNode())
+				return new EndActivityNodeGR((ActivityNode) aDrawable, this, false);
+			return new ActivityNodeGR((ActivityNode) aDrawable, this, false);
 		}
 		if (aDrawable instanceof SubProcessNode) {
-			return new SubProcessNodeGR((SubProcessNode)aDrawable,this,false);
+			return new SubProcessNodeGR((SubProcessNode) aDrawable, this, false);
 		}
 		if (aDrawable instanceof IFOperator) {
-			return new OperatorIFGR((IFOperator)aDrawable,this,false);
+			return new OperatorIFGR((IFOperator) aDrawable, this, false);
 		}
 		if (aDrawable instanceof InclusiveOperator) {
-			return new OperatorInclusiveGR((InclusiveOperator)aDrawable,this,false);
+			return new OperatorInclusiveGR((InclusiveOperator) aDrawable, this, false);
 		}
 		if (aDrawable instanceof ExclusiveEventBasedOperator) {
-			return new OperatorExclusiveEventBasedGR((ExclusiveEventBasedOperator)aDrawable,this,false);
+			return new OperatorExclusiveEventBasedGR((ExclusiveEventBasedOperator) aDrawable, this, false);
 		}
 		if (aDrawable instanceof ComplexOperator) {
-			return new OperatorComplexGR((ComplexOperator)aDrawable,this,false);
+			return new OperatorComplexGR((ComplexOperator) aDrawable, this, false);
 		}
 		if (aDrawable instanceof IFOperator) {
-			return new OperatorIFGR((IFOperator)aDrawable,this,false);
+			return new OperatorIFGR((IFOperator) aDrawable, this, false);
 		}
 		if (aDrawable instanceof ANDOperator) {
-			return new OperatorANDGR((ANDOperator)aDrawable,this,false);
+			return new OperatorANDGR((ANDOperator) aDrawable, this, false);
 		}
 		if (aDrawable instanceof OROperator) {
-			return new OperatorORGR((OROperator)aDrawable,this,false);
+			return new OperatorORGR((OROperator) aDrawable, this, false);
 		}
 		if (aDrawable instanceof LOOPOperator) {
-			return new OperatorLOOPGR((LOOPOperator)aDrawable,this,false);
+			return new OperatorLOOPGR((LOOPOperator) aDrawable, this, false);
 		}
 		if (aDrawable instanceof FlexoPort) {
-			return new PortGR((FlexoPort)aDrawable,this);
+			return new PortGR((FlexoPort) aDrawable, this);
 		}
 		if (aDrawable instanceof FlexoPortMap) {
-			return new PortmapGR((FlexoPortMap)aDrawable,this);
+			return new PortmapGR((FlexoPortMap) aDrawable, this);
 		}
 		if (aDrawable instanceof PortRegistery) {
-			return new PortRegisteryGR((PortRegistery)aDrawable,this);
+			return new PortRegisteryGR((PortRegistery) aDrawable, this);
 		}
 		if (aDrawable instanceof PortMapRegistery) {
-			return new PortmapRegisteryGR((PortMapRegistery)aDrawable,this);
+			return new PortmapRegisteryGR((PortMapRegistery) aDrawable, this);
 		}
 		if (aDrawable instanceof ActivityGroup) {
-			ActivityGroup group = (ActivityGroup)aDrawable;
+			ActivityGroup group = (ActivityGroup) aDrawable;
 			if (isVisible(group))
-				return new ExpandedActivityGroupGR(group,this);
+				return new ExpandedActivityGroupGR(group, this);
 			else
-				return new CollabsedActivityGroupGR(group,this);
+				return new CollabsedActivityGroupGR(group, this);
 		}
 		if (aDrawable instanceof ActivityPetriGraph) {
-			return new ActivityPetriGraphGR((ActivityPetriGraph)aDrawable,this);
+			return new ActivityPetriGraphGR((ActivityPetriGraph) aDrawable, this);
 		}
 		if (aDrawable instanceof OperationPetriGraph) {
-			return new OperationPetriGraphGR((OperationPetriGraph)aDrawable,this);
+			return new OperationPetriGraphGR((OperationPetriGraph) aDrawable, this);
 		}
 		if (aDrawable instanceof ActionPetriGraph) {
-			return new ActionPetriGraphGR((ActionPetriGraph)aDrawable,this);
+			return new ActionPetriGraphGR((ActionPetriGraph) aDrawable, this);
 		}
 		if (aDrawable instanceof SelfExecutableOperationNode) {
-			return new SelfExecOperationNodeGR((SelfExecutableOperationNode)aDrawable,this,false);
+			return new SelfExecOperationNodeGR((SelfExecutableOperationNode) aDrawable, this, false);
 		}
 		if (aDrawable instanceof OperationNode) {
-			if (((OperationNode)aDrawable).isBeginNode()) return new BeginOperationNodeGR((OperationNode)aDrawable,this,false);
-			if (((OperationNode)aDrawable).isEndNode()) return new EndOperationNodeGR((OperationNode)aDrawable,this,false);
-			return new OperationNodeGR((OperationNode)aDrawable,this,false);
+			if (((OperationNode) aDrawable).isBeginNode())
+				return new BeginOperationNodeGR((OperationNode) aDrawable, this, false);
+			if (((OperationNode) aDrawable).isEndNode())
+				return new EndOperationNodeGR((OperationNode) aDrawable, this, false);
+			return new OperationNodeGR((OperationNode) aDrawable, this, false);
 		}
 		if (aDrawable instanceof SelfExecutableActionNode) {
-			return new SelfExecActionNodeGR((SelfExecutableActionNode)aDrawable,this,false);
+			return new SelfExecActionNodeGR((SelfExecutableActionNode) aDrawable, this, false);
 		}
 		if (aDrawable instanceof ActionNode) {
-			if (((ActionNode)aDrawable).isBeginNode()) return new BeginActionNodeGR((ActionNode)aDrawable,this,false);
-			if (((ActionNode)aDrawable).isEndNode()) return new EndActionNodeGR((ActionNode)aDrawable,this,false);
-			return new ActionNodeGR((ActionNode)aDrawable,this,false);
+			if (((ActionNode) aDrawable).isBeginNode())
+				return new BeginActionNodeGR((ActionNode) aDrawable, this, false);
+			if (((ActionNode) aDrawable).isEndNode())
+				return new EndActionNodeGR((ActionNode) aDrawable, this, false);
+			return new ActionNodeGR((ActionNode) aDrawable, this, false);
 		}
 		if (aDrawable instanceof EventNode) {
-			return new EventNodeGR((EventNode)aDrawable,this);
+			return new EventNodeGR((EventNode) aDrawable, this);
 		}
 		if (aDrawable instanceof TokenEdge) {
-			return new TokenEdgeGR((TokenEdge)aDrawable,this);
+			return new TokenEdgeGR((TokenEdge) aDrawable, this);
 		}
 		if (aDrawable instanceof MessageEdge) {
-			return new MessageEdgeGR((MessageEdge)aDrawable,this);
+			return new MessageEdgeGR((MessageEdge) aDrawable, this);
 		}
 		if (aDrawable instanceof WKFAssociation) {
-			return new AssociationGR((WKFAssociation)aDrawable,this);
+			return new AssociationGR((WKFAssociation) aDrawable, this);
 		}
 		if (aDrawable instanceof FlexoPreCondition) {
-			return new PreConditionGR((FlexoPreCondition)aDrawable,this);
+			return new PreConditionGR((FlexoPreCondition) aDrawable, this);
 		}
 		if (aDrawable instanceof Expander) {
-			return new ExpanderGR((Expander<? extends FatherNode>)aDrawable,this);
+			return new ExpanderGR((Expander<? extends FatherNode>) aDrawable, this);
 		}
 		if (aDrawable instanceof PreAndBeginNodeAssociation) {
-			return new PreAndBeginNodeAssociationGR((PreAndBeginNodeAssociation)aDrawable,this);
+			return new PreAndBeginNodeAssociationGR((PreAndBeginNodeAssociation) aDrawable, this);
 		}
 		if (aDrawable instanceof WKFAnnotation) {
-			return new AnnotationGR((WKFAnnotation)aDrawable,this);
+			return new AnnotationGR((WKFAnnotation) aDrawable, this);
 		}
 		if (aDrawable instanceof WKFDataSource) {
-			return new DataSourceGR((WKFDataSource)aDrawable,this);
+			return new DataSourceGR((WKFDataSource) aDrawable, this);
 		}
 		if (aDrawable instanceof WKFDataObject) {
-			return new DataObjectGR((WKFDataObject)aDrawable,this);
+			return new DataObjectGR((WKFDataObject) aDrawable, this);
 		}
 		if (aDrawable instanceof WKFStockObject) {
-			return new StockObjectGR((WKFStockObject)aDrawable,this);
+			return new StockObjectGR((WKFStockObject) aDrawable, this);
 		}
-		logger.warning("Cannot build GraphicalRepresentation for "+aDrawable);
+		logger.warning("Cannot build GraphicalRepresentation for " + aDrawable);
 		return null;
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getFlexoProcess() || observable == getFlexoProcess().getActivityPetriGraph()) {
-			//logger.info("Notified "+dataModification);
-			if (dataModification instanceof NodeInserted
-					|| dataModification instanceof NodeRemoved
-					|| dataModification instanceof ArtefactInserted
-					|| dataModification instanceof ArtefactRemoved
-					|| dataModification instanceof PostInserted
-					|| dataModification instanceof AssociationInserted) {
+			// logger.info("Notified "+dataModification);
+			if (dataModification instanceof NodeInserted || dataModification instanceof NodeRemoved
+					|| dataModification instanceof ArtefactInserted || dataModification instanceof ArtefactRemoved
+					|| dataModification instanceof PostInserted || dataModification instanceof AssociationInserted) {
 				updateGraphicalObjectsHierarchy();
 			}
 			if (dataModification instanceof GroupInserted) {
@@ -766,40 +748,36 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 				// Better is to redraw all
 				invalidateGraphicalObjectsHierarchy(getProcess());
 				updateGraphicalObjectsHierarchy();
-			}
-			else if (dataModification instanceof GroupRemoved) {
-				WKFGroup group = ((GroupRemoved)dataModification).oldValue();
-				Vector<PetriGraphNode> nodesThatWereInGroup = ((GroupRemoved)dataModification).getNodesThatWereInGroup();
+			} else if (dataModification instanceof GroupRemoved) {
+				WKFGroup group = ((GroupRemoved) dataModification).oldValue();
+				Vector<PetriGraphNode> nodesThatWereInGroup = ((GroupRemoved) dataModification).getNodesThatWereInGroup();
 				if (nodesThatWereInGroup != null) {
 					for (AbstractNode node : nodesThatWereInGroup) {
 						invalidateGraphicalObjectsHierarchy(node);
-						node.setX(node.getX(BASIC_PROCESS_EDITOR)+group.getX(BASIC_PROCESS_EDITOR),BASIC_PROCESS_EDITOR);
-						node.setY(node.getY(BASIC_PROCESS_EDITOR)+group.getY(BASIC_PROCESS_EDITOR),BASIC_PROCESS_EDITOR);
+						node.setX(node.getX(BASIC_PROCESS_EDITOR) + group.getX(BASIC_PROCESS_EDITOR), BASIC_PROCESS_EDITOR);
+						node.setY(node.getY(BASIC_PROCESS_EDITOR) + group.getY(BASIC_PROCESS_EDITOR), BASIC_PROCESS_EDITOR);
 					}
 				}
 				invalidateGraphicalObjectsHierarchy(getProcess());
 				updateGraphicalObjectsHierarchy();
-			}
-			else if (dataModification instanceof PortRegisteryHasBeenOpened) {
+			} else if (dataModification instanceof PortRegisteryHasBeenOpened) {
 				updateGraphicalObjectsHierarchy();
-			}
-			else if (dataModification instanceof PortRegisteryHasBeenClosed) {
+			} else if (dataModification instanceof PortRegisteryHasBeenClosed) {
 				updateGraphicalObjectsHierarchy();
-			}
-			else if (dataModification instanceof ObjectSizeChanged) {
+			} else if (dataModification instanceof ObjectSizeChanged) {
 				graphicalRepresentation.updateAlignOnGridOrGridSize();
 				graphicalRepresentation.notifyObjectResized(null);
 			} else if (dataModification instanceof ObjectAlignementChanged) {
 				graphicalRepresentation.updateAlignOnGridOrGridSize();
 				getDrawingGraphicalRepresentation().notifyDrawingNeedsToBeRedrawn();
 			}
-		} else if (observable==getFlexoProcess().getWorkflow()) {
+		} else if (observable == getFlexoProcess().getWorkflow()) {
 			if (FlexoWorkflow.GraphicalProperties.SHOW_SHADOWS.getSerializationName().equals(dataModification.propertyName())) {
 				Enumeration<GraphicalRepresentation<?>> en = getAllGraphicalRepresentations();
 				while (en.hasMoreElements()) {
 					GraphicalRepresentation<?> gr = en.nextElement();
 					if (gr instanceof WKFObjectGR<?>) {
-						((WKFObjectGR<?>)gr).updatePropertiesFromWKFPreferences();
+						((WKFObjectGR<?>) gr).updatePropertiesFromWKFPreferences();
 					}
 				}
 			} else if (FlexoWorkflow.GraphicalProperties.USE_TRANSPARENCY.getSerializationName().equals(dataModification.propertyName())) {
@@ -807,7 +785,7 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 				while (en.hasMoreElements()) {
 					GraphicalRepresentation<?> gr = en.nextElement();
 					if (gr instanceof ContainerGR<?>) {
-						((ContainerGR<?>)gr).updatePropertiesFromWKFPreferences();
+						((ContainerGR<?>) gr).updatePropertiesFromWKFPreferences();
 					}
 				}
 			} else if (FlexoWorkflow.GraphicalProperties.SHOW_WO_NAME.getSerializationName().equals(dataModification.propertyName())) {
@@ -815,17 +793,15 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 				while (en.hasMoreElements()) {
 					GraphicalRepresentation<?> gr = en.nextElement();
 					if (gr instanceof OperationNodeGR) {
-						((OperationNodeGR)gr).notifyShapeNeedsToBeRedrawn();
+						((OperationNodeGR) gr).notifyShapeNeedsToBeRedrawn();
 					}
 				}
 			} else if (FlexoWorkflow.GraphicalProperties.ACTIVITY_FONT.getSerializationName().equals(dataModification.propertyName())) {
 				Enumeration<GraphicalRepresentation<?>> en = getAllGraphicalRepresentations();
 				while (en.hasMoreElements()) {
 					GraphicalRepresentation<?> gr = en.nextElement();
-					if (gr instanceof AbstractActivityNodeGR<?>
-						|| gr instanceof CollabsedActivityGroupGR
-						|| gr instanceof PortGR) {
-						((WKFObjectGR<?>)gr).updatePropertiesFromWKFPreferences();
+					if (gr instanceof AbstractActivityNodeGR<?> || gr instanceof CollabsedActivityGroupGR || gr instanceof PortGR) {
+						((WKFObjectGR<?>) gr).updatePropertiesFromWKFPreferences();
 					}
 				}
 			} else if (FlexoWorkflow.GraphicalProperties.OPERATION_FONT.getSerializationName().equals(dataModification.propertyName())) {
@@ -833,7 +809,7 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 				while (en.hasMoreElements()) {
 					GraphicalRepresentation<?> gr = en.nextElement();
 					if (gr instanceof AbstractOperationNodeGR) {
-						((AbstractOperationNodeGR)gr).updatePropertiesFromWKFPreferences();
+						((AbstractOperationNodeGR) gr).updatePropertiesFromWKFPreferences();
 					}
 				}
 			} else if (FlexoWorkflow.GraphicalProperties.ACTION_FONT.getSerializationName().equals(dataModification.propertyName())) {
@@ -841,16 +817,15 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 				while (en.hasMoreElements()) {
 					GraphicalRepresentation<?> gr = en.nextElement();
 					if (gr instanceof AbstractActionNodeGR) {
-						((AbstractActionNodeGR)gr).updatePropertiesFromWKFPreferences();
+						((AbstractActionNodeGR) gr).updatePropertiesFromWKFPreferences();
 					}
 				}
 			} else if (FlexoWorkflow.GraphicalProperties.EVENT_FONT.getSerializationName().equals(dataModification.propertyName())) {
 				Enumeration<GraphicalRepresentation<?>> en = getAllGraphicalRepresentations();
 				while (en.hasMoreElements()) {
 					GraphicalRepresentation<?> gr = en.nextElement();
-					if (gr instanceof EventNodeGR
-							|| gr instanceof OperatorGR<?>) {
-						((WKFObjectGR<?>)gr).updatePropertiesFromWKFPreferences();
+					if (gr instanceof EventNodeGR || gr instanceof OperatorGR<?>) {
+						((WKFObjectGR<?>) gr).updatePropertiesFromWKFPreferences();
 					}
 				}
 			} else if (FlexoWorkflow.GraphicalProperties.ROLE_FONT.getSerializationName().equals(dataModification.propertyName())) {
@@ -858,7 +833,7 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 				while (en.hasMoreElements()) {
 					GraphicalRepresentation<?> gr = en.nextElement();
 					if (gr instanceof NormalAbstractActivityNodeGR<?>) {
-						NormalAbstractActivityNodeGR<?> activityGR = (NormalAbstractActivityNodeGR<?>)gr;
+						NormalAbstractActivityNodeGR<?> activityGR = (NormalAbstractActivityNodeGR<?>) gr;
 						activityGR.updatePropertiesFromWKFPreferences();
 						activityGR.notifyShapeNeedsToBeRedrawn();
 					}
@@ -868,25 +843,25 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 				while (en.hasMoreElements()) {
 					GraphicalRepresentation<?> gr = en.nextElement();
 					if (gr instanceof OperationNodeGR) {
-						OperationNodeGR operationGR = (OperationNodeGR)gr;
+						OperationNodeGR operationGR = (OperationNodeGR) gr;
 						operationGR.updatePropertiesFromWKFPreferences();
 						operationGR.notifyShapeNeedsToBeRedrawn();
 					}
 				}
-			} else if (FlexoWorkflow.GraphicalProperties.CONNECTOR_REPRESENTATION.getSerializationName().equals(dataModification.propertyName())) {
+			} else if (FlexoWorkflow.GraphicalProperties.CONNECTOR_REPRESENTATION.getSerializationName().equals(
+					dataModification.propertyName())) {
 				Enumeration<GraphicalRepresentation<?>> en = getAllGraphicalRepresentations();
 				while (en.hasMoreElements()) {
 					GraphicalRepresentation<?> gr = en.nextElement();
 					if (gr instanceof EdgeGR<?>) {
-						((EdgeGR<?>)gr).updatePropertiesFromWKFPreferences();
+						((EdgeGR<?>) gr).updatePropertiesFromWKFPreferences();
 					}
 				}
 			}
 		}
 	}
 
-	public FlexoEditor getEditor()
-	{
+	public FlexoEditor getEditor() {
 		return editor;
 	}
 

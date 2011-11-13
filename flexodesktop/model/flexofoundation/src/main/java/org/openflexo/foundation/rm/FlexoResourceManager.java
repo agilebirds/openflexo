@@ -36,7 +36,6 @@ import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 
-
 /**
  * This class is used to perform synchronization of all resources of a Flexo project. Global consistant states of all the resources of a
  * Flexo project through all application modules is maintained by this scheme.

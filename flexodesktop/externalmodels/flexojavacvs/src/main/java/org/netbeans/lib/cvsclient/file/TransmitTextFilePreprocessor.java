@@ -24,21 +24,22 @@ import java.io.IOException;
 
 /**
  * Preprocesses the text file before transmitting to the server.
- * @author  Thomas Singer
+ * 
+ * @author Thomas Singer
  */
 public interface TransmitTextFilePreprocessor {
-    /**
-     * Generates the preprocessed text file from the original text file.
-     */
-    File getPreprocessedTextFile(File originalTextFile) throws IOException;
+	/**
+	 * Generates the preprocessed text file from the original text file.
+	 */
+	File getPreprocessedTextFile(File originalTextFile) throws IOException;
 
-    /**
-     * Cleans up the preprocessed text file after sending it.
-     */
-    void cleanup(File preprocessedTextFile);
-    
-    /**
-     * Set the temporary directory that is to be used to create temporary files.
-     */
-    void setTempDir(File tempDir);
+	/**
+	 * Cleans up the preprocessed text file after sending it.
+	 */
+	void cleanup(File preprocessedTextFile);
+
+	/**
+	 * Set the temporary directory that is to be used to create temporary files.
+	 */
+	void setTempDir(File tempDir);
 }

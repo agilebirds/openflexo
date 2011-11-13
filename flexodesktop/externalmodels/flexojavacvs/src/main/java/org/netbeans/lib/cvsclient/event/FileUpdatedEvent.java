@@ -21,37 +21,41 @@ package org.netbeans.lib.cvsclient.event;
 
 /**
  * Indicates that an existing file has been updated.
- * @author  Robert Greig
+ * 
+ * @author Robert Greig
  */
 public class FileUpdatedEvent extends CVSEvent {
-    /**
-     * The path of the file that has been added
-     */
-    protected String path;
+	/**
+	 * The path of the file that has been added
+	 */
+	protected String path;
 
-    /**
-     * Construct a FileUpdatedEvent
-     * @param source the event source
-     */
-    public FileUpdatedEvent(Object source, String path) {
-        super(source);
-        this.path = path;
-    }
+	/**
+	 * Construct a FileUpdatedEvent
+	 * 
+	 * @param source
+	 *            the event source
+	 */
+	public FileUpdatedEvent(Object source, String path) {
+		super(source);
+		this.path = path;
+	}
 
-    /**
-     * Get the path of the file that has been added
-     */
-    public String getFilePath() {
-        return path;
-    }
+	/**
+	 * Get the path of the file that has been added
+	 */
+	public String getFilePath() {
+		return path;
+	}
 
-    /**
-     * Fire the event to the event listener. Subclasses should call the
-     * appropriate method on the listener to dispatch this event.
-     * @param listener the event listener
-     */
-    @Override
+	/**
+	 * Fire the event to the event listener. Subclasses should call the appropriate method on the listener to dispatch this event.
+	 * 
+	 * @param listener
+	 *            the event listener
+	 */
+	@Override
 	protected void fireEvent(CVSListener listener) {
-        listener.fileUpdated(this);
-    }
+		listener.fileUpdated(this);
+	}
 }

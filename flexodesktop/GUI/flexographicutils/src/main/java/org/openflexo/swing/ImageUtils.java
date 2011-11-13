@@ -33,36 +33,32 @@ import javax.swing.ImageIcon;
 
 import org.openflexo.toolbox.FileUtils;
 
-
 public class ImageUtils {
 
 	public enum ImageType {
-		JPG,PNG,GIF;
+		JPG, PNG, GIF;
 
-		public String getExtension(){
+		public String getExtension() {
 			return name().toLowerCase();
 		}
 	}
 
-	public static BufferedImage createImageFromComponent(Component componentToPrint) 
-	{
+	public static BufferedImage createImageFromComponent(Component componentToPrint) {
 		BufferedImage bi = new BufferedImage(componentToPrint.getWidth(), componentToPrint.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D graphics = bi.createGraphics();
 		componentToPrint.print(graphics);
-        return bi;
+		return bi;
 	}
 
-	public static void saveImageToFile(RenderedImage image, File dest, ImageType type) throws IOException
-	{
-		if (type==null)
+	public static void saveImageToFile(RenderedImage image, File dest, ImageType type) throws IOException {
+		if (type == null)
 			type = ImageType.PNG;
 		if (!dest.exists())
 			FileUtils.createNewFile(dest);
 		ImageIO.write(image, type.getExtension(), dest);
 	}
 
-	public static BufferedImage loadImageFromFile(File source)
-	{
+	public static BufferedImage loadImageFromFile(File source) {
 		try {
 			return ImageIO.read(source);
 		} catch (IOException e) {
@@ -70,23 +66,21 @@ public class ImageUtils {
 			return null;
 		}
 	}
-	
-	public static ImageIcon getThumbnail(ImageIcon src, int maxWidth)
-	{
+
+	public static ImageIcon getThumbnail(ImageIcon src, int maxWidth) {
 		if (src != null) {
-	        if (src.getIconWidth() > maxWidth) {
-	            return new ImageIcon(src.getImage().getScaledInstance(maxWidth, -1, Image.SCALE_SMOOTH));
-	        } else { //no need to miniaturize
-	            return src;
-	        }
-	    }
+			if (src.getIconWidth() > maxWidth) {
+				return new ImageIcon(src.getImage().getScaledInstance(maxWidth, -1, Image.SCALE_SMOOTH));
+			} else { // no need to miniaturize
+				return src;
+			}
+		}
 		return null;
 	}
 
-	public static ImageIcon resize(ImageIcon src, Dimension size)
-	{
+	public static ImageIcon resize(ImageIcon src, Dimension size) {
 		if (src != null)
-            return new ImageIcon(src.getImage().getScaledInstance(size.width, size.height, Image.SCALE_SMOOTH));
+			return new ImageIcon(src.getImage().getScaledInstance(size.width, size.height, Image.SCALE_SMOOTH));
 		return null;
 	}
 }

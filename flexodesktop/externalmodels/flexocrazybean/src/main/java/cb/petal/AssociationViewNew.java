@@ -18,54 +18,55 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents AssociationViewNew object, i.e. the view for an association.
- *
+ * 
  * @version $Id: AssociationViewNew.java,v 1.3 2011/09/12 11:46:49 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  * @see Association
  */
 public class AssociationViewNew extends QuiduView implements SegLabeled {
-  static final long serialVersionUID = 5927996457897905931L;
+	static final long serialVersionUID = 5927996457897905931L;
 
-  public AssociationViewNew(PetalNode parent, Collection params, int tag) {
-    super(parent, "AssociationViewNew", params, tag);
-  }
+	public AssociationViewNew(PetalNode parent, Collection params, int tag) {
+		super(parent, "AssociationViewNew", params, tag);
+	}
 
-  public AssociationViewNew() {
-    super("AssociationViewNew");
-  }
+	public AssociationViewNew() {
+		super("AssociationViewNew");
+	}
 
-  public RoleView getFirstRoleView() {
-    return (RoleView)getRoleviewList().getElements().get(0);
-  }
+	public RoleView getFirstRoleView() {
+		return (RoleView) getRoleviewList().getElements().get(0);
+	}
 
-  public RoleView getSecondRoleView() {
-    return (RoleView)getRoleviewList().getElements().get(1);
-  }
+	public RoleView getSecondRoleView() {
+		return (RoleView) getRoleviewList().getElements().get(1);
+	}
 
-  public List getRoleviewList() {
-    return (List)getProperty("roleview_list");
-  }
+	public List getRoleviewList() {
+		return (List) getProperty("roleview_list");
+	}
 
-  public void setRoleviewList(List o) {
-    defineProperty("roleview_list", o);
-  }
+	public void setRoleviewList(List o) {
+		defineProperty("roleview_list", o);
+	}
 
-  @Override
-public SegLabel getLabel() {
-    return (SegLabel)getProperty("label");
-  }
+	@Override
+	public SegLabel getLabel() {
+		return (SegLabel) getProperty("label");
+	}
 
-  @Override
-public void setLabel(SegLabel o) {
-    defineProperty("label", o);
-  }
+	@Override
+	public void setLabel(SegLabel o) {
+		defineProperty("label", o);
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

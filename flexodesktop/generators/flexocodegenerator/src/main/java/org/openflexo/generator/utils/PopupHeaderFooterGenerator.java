@@ -39,167 +39,159 @@ import org.openflexo.generator.rm.UtilComponentAPIFileResource;
 import org.openflexo.generator.rm.UtilComponentJavaFileResource;
 import org.openflexo.generator.rm.UtilComponentWOFileResource;
 
-
 /**
  * Generator for Header footer.
  * 
  * @author lulu
  */
-public class PopupHeaderFooterGenerator extends MetaWOGenerator
-{
-    private static final Logger logger = Logger.getLogger(PopupHeaderFooterGenerator.class.getPackage().getName());
+public class PopupHeaderFooterGenerator extends MetaWOGenerator {
+	private static final Logger logger = Logger.getLogger(PopupHeaderFooterGenerator.class.getPackage().getName());
 
-	public PopupHeaderFooterGenerator(ProjectGenerator projectGenerator)
-    {
-        super(projectGenerator,null,projectGenerator.getPrefix() + "PopupHeaderFooter","");
-    }
+	public PopupHeaderFooterGenerator(ProjectGenerator projectGenerator) {
+		super(projectGenerator, null, projectGenerator.getPrefix() + "PopupHeaderFooter", "");
+	}
 
 	@Override
-	public Logger getGeneratorLogger()
-	{
+	public Logger getGeneratorLogger() {
 		return logger;
 	}
 
-    public String findMenuBgColor()
-    {
-        try {
-            FlexoCSS css = getProject().getCssSheet();
-            if (css.equals(FlexoCSS.CONTENTO)) {
-                return "1D4382";
-            }
-            if (css.equals(FlexoCSS.OMNISCIO)) {
-                return "F5790F";
-            }
-        } catch (Exception e) {
-            // do nothing
-        }
-        return "A2B95E";
-    }
-
-    public String findMenuSelectedBgColor()
-    {
-        try {
-            FlexoCSS css = getProject().getCssSheet();
-            if (css.equals(FlexoCSS.CONTENTO)) {
-                return "A5B3CD";
-            }
-            if (css.equals(FlexoCSS.OMNISCIO)) {
-                return "F9BA6D";
-            }
-        } catch (Exception e) {
-            // do nothing
-        }
-        return "4A7732";
-    }
-
-    @Override
-	public synchronized void generate(boolean forceRegenerate)
-    {
-      	if (!forceRegenerate && !needsGeneration()) return;
-    	try {
-    		startGeneration();
-    		if (logger.isLoggable(Level.INFO))
-    			logger.info("Generating popup header footer");
-    		VelocityContext vc = new VelocityContext();
-            vc.put("project",getProject());
-            vc.put("generator",this);
-    		vc.put("PREFIX", getPrefix());
-    		vc.put("MENU_ARRAY", "");
-
-    		vc.put("CSS_FRAMEWORK", "DenaliWebResources");
-    		vc.put("CSS_FILE", getStyleSheet());
-    		vc.put("WEBRESOURCES_GENERIC_NAME", getWebResourceGenericName());
-    		vc.put("MENU_BG_COLOR", findMenuBgColor());
-    		vc.put("MENU_SELECTED_BG_COLOR", findMenuSelectedBgColor());
-
-    		vc.put("WOCOMPONENTNAME", getPrefix() + "PopupHeaderFooter");
-      		String javaCode = merge("PopupHeaderFooter.java.vm", vc);
-    		try {
-    			javaAppendingException = null;
-				javaCode = JavaCodeMerger.mergeJavaCode(javaCode,getEntity(),javaResource);
-    		} catch (JavaParseException e) {
-    			javaAppendingException = new JavaAppendingException(this, getEntity().getFullQualifiedName(), e);
-    			logger.warning("Could not parse generated code. Escape java merge.");
-    		}
-    		_javaFormattingException = null;
-    		try {
-    			javaCode = GeneratorFormatter.formatJavaCode(javaCode,getComponentFolderPath(),getComponentClassName(),this,getProject());
-    		}
-    		catch (JavaFormattingException javaFormattingException) {
-    			_javaFormattingException = javaFormattingException;
-    		}
-    		String apiCode = merge("PopupHeaderFooter.api.vm", vc);
-    		String htmlCode = GeneratorFormatter.formatHTMLCode(merge("PopupHeaderFooter.html.vm", vc));
-    		String wodCode = GeneratorFormatter.formatWodCode(merge("PopupHeaderFooter.wod.vm", vc));
-
-    		generatedCode = new GeneratedComponent(getComponentClassName(), javaCode, apiCode, htmlCode,
-    				wodCode, GeneratorUtils.defaultWOO());
-     	} catch (GenerationException e) {
-    		setGenerationException(e);
+	public String findMenuBgColor() {
+		try {
+			FlexoCSS css = getProject().getCssSheet();
+			if (css.equals(FlexoCSS.CONTENTO)) {
+				return "1D4382";
+			}
+			if (css.equals(FlexoCSS.OMNISCIO)) {
+				return "F5790F";
+			}
 		} catch (Exception e) {
-			setGenerationException(new UnexpectedExceptionOccuredException(e,getProjectGenerator()));
-    	} finally {
-    		stopGeneration();
-    	}
-    }
+			// do nothing
+		}
+		return "A2B95E";
+	}
 
-    /**
-     * @return
-     */
-    private String getWebResourceGenericName()
-    {
-    	String s = getProject().getCssSheet().getName();
-    	s = s.toLowerCase();
-        s = (s.charAt(0) + "").toUpperCase() + s.substring(1);
-        return s;
-    }
+	public String findMenuSelectedBgColor() {
+		try {
+			FlexoCSS css = getProject().getCssSheet();
+			if (css.equals(FlexoCSS.CONTENTO)) {
+				return "A5B3CD";
+			}
+			if (css.equals(FlexoCSS.OMNISCIO)) {
+				return "F9BA6D";
+			}
+		} catch (Exception e) {
+			// do nothing
+		}
+		return "4A7732";
+	}
 
-    /**
-     * @return
-     */
-    private String getStyleSheet()
-    {
-        FlexoCSS css = getProject().getCssSheet();
-        if (css.equals(FlexoCSS.CONTENTO)) {
-            return "ContentoMasterStyle.css";
-        }
-        if (css.equals(FlexoCSS.OMNISCIO)) {
-            return "OmniscioMasterStyle.css";
-        }
-        return "FlexoMasterStyle.css";
-    }
+	@Override
+	public synchronized void generate(boolean forceRegenerate) {
+		if (!forceRegenerate && !needsGeneration())
+			return;
+		try {
+			startGeneration();
+			if (logger.isLoggable(Level.INFO))
+				logger.info("Generating popup header footer");
+			VelocityContext vc = new VelocityContext();
+			vc.put("project", getProject());
+			vc.put("generator", this);
+			vc.put("PREFIX", getPrefix());
+			vc.put("MENU_ARRAY", "");
 
-    /**
-     * Overrides rebuildDependanciesForResource
-     * @see org.openflexo.generator.utils.MetaWOGenerator#rebuildDependanciesForResource(org.openflexo.generator.rm.UtilComponentJavaFileResource)
-     */
-    @Override
-    public void rebuildDependanciesForResource(UtilComponentJavaFileResource java)
-    {
-        // TODO Auto-generated method stub
-        
-    }
+			vc.put("CSS_FRAMEWORK", "DenaliWebResources");
+			vc.put("CSS_FILE", getStyleSheet());
+			vc.put("WEBRESOURCES_GENERIC_NAME", getWebResourceGenericName());
+			vc.put("MENU_BG_COLOR", findMenuBgColor());
+			vc.put("MENU_SELECTED_BG_COLOR", findMenuSelectedBgColor());
 
-    /**
-     * Overrides rebuildDependanciesForResource
-     * @see org.openflexo.generator.utils.MetaWOGenerator#rebuildDependanciesForResource(org.openflexo.generator.rm.UtilComponentWOFileResource)
-     */
-    @Override
-    public void rebuildDependanciesForResource(UtilComponentWOFileResource wo)
-    {
-        // TODO Auto-generated method stub
-        
-    }
+			vc.put("WOCOMPONENTNAME", getPrefix() + "PopupHeaderFooter");
+			String javaCode = merge("PopupHeaderFooter.java.vm", vc);
+			try {
+				javaAppendingException = null;
+				javaCode = JavaCodeMerger.mergeJavaCode(javaCode, getEntity(), javaResource);
+			} catch (JavaParseException e) {
+				javaAppendingException = new JavaAppendingException(this, getEntity().getFullQualifiedName(), e);
+				logger.warning("Could not parse generated code. Escape java merge.");
+			}
+			_javaFormattingException = null;
+			try {
+				javaCode = GeneratorFormatter.formatJavaCode(javaCode, getComponentFolderPath(), getComponentClassName(), this,
+						getProject());
+			} catch (JavaFormattingException javaFormattingException) {
+				_javaFormattingException = javaFormattingException;
+			}
+			String apiCode = merge("PopupHeaderFooter.api.vm", vc);
+			String htmlCode = GeneratorFormatter.formatHTMLCode(merge("PopupHeaderFooter.html.vm", vc));
+			String wodCode = GeneratorFormatter.formatWodCode(merge("PopupHeaderFooter.wod.vm", vc));
 
-    /**
-     * Overrides rebuildDependanciesForResource
-     * @see org.openflexo.generator.utils.MetaWOGenerator#rebuildDependanciesForResource(org.openflexo.generator.rm.UtilComponentAPIFileResource)
-     */
-    @Override
-    public void rebuildDependanciesForResource(UtilComponentAPIFileResource api)
-    {
-        // TODO Auto-generated method stub
-        
-    }
+			generatedCode = new GeneratedComponent(getComponentClassName(), javaCode, apiCode, htmlCode, wodCode,
+					GeneratorUtils.defaultWOO());
+		} catch (GenerationException e) {
+			setGenerationException(e);
+		} catch (Exception e) {
+			setGenerationException(new UnexpectedExceptionOccuredException(e, getProjectGenerator()));
+		} finally {
+			stopGeneration();
+		}
+	}
+
+	/**
+	 * @return
+	 */
+	private String getWebResourceGenericName() {
+		String s = getProject().getCssSheet().getName();
+		s = s.toLowerCase();
+		s = (s.charAt(0) + "").toUpperCase() + s.substring(1);
+		return s;
+	}
+
+	/**
+	 * @return
+	 */
+	private String getStyleSheet() {
+		FlexoCSS css = getProject().getCssSheet();
+		if (css.equals(FlexoCSS.CONTENTO)) {
+			return "ContentoMasterStyle.css";
+		}
+		if (css.equals(FlexoCSS.OMNISCIO)) {
+			return "OmniscioMasterStyle.css";
+		}
+		return "FlexoMasterStyle.css";
+	}
+
+	/**
+	 * Overrides rebuildDependanciesForResource
+	 * 
+	 * @see org.openflexo.generator.utils.MetaWOGenerator#rebuildDependanciesForResource(org.openflexo.generator.rm.UtilComponentJavaFileResource)
+	 */
+	@Override
+	public void rebuildDependanciesForResource(UtilComponentJavaFileResource java) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Overrides rebuildDependanciesForResource
+	 * 
+	 * @see org.openflexo.generator.utils.MetaWOGenerator#rebuildDependanciesForResource(org.openflexo.generator.rm.UtilComponentWOFileResource)
+	 */
+	@Override
+	public void rebuildDependanciesForResource(UtilComponentWOFileResource wo) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Overrides rebuildDependanciesForResource
+	 * 
+	 * @see org.openflexo.generator.utils.MetaWOGenerator#rebuildDependanciesForResource(org.openflexo.generator.rm.UtilComponentAPIFileResource)
+	 */
+	@Override
+	public void rebuildDependanciesForResource(UtilComponentAPIFileResource api) {
+		// TODO Auto-generated method stub
+
+	}
 
 }

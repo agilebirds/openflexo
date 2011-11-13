@@ -36,12 +36,13 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-
 /**
- * <p>Java class for tPartnerLinkType complex type.
- *
- * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * <p>
+ * Java class for tPartnerLinkType complex type.
+ * 
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
+ * 
  * <pre>
  * &lt;complexType name="tPartnerLinkType">
  *   &lt;complexContent>
@@ -54,72 +55,65 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tPartnerLinkType", propOrder =  {
-    "role"}
-)
+@XmlType(name = "tPartnerLinkType", propOrder = { "role" })
 public class TPartnerLinkType extends TExtensibleElements {
-    @XmlElement(required = true)
-    protected List<TRole> role;
-    @XmlAttribute(required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "NCName")
-    protected String name;
+	@XmlElement(required = true)
+	protected List<TRole> role;
+	@XmlAttribute(required = true)
+	@XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+	@XmlSchemaType(name = "NCName")
+	protected String name;
 
-    /**
-     * Gets the value of the role property.
-     *
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the role property.
-     *
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getRole().add(newItem);
-     * </pre>
-     *
-     *
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link TRole }
-     *
-     *
-     */
-    public List<TRole> getRole() {
-        if (role == null) {
-            role = new ArrayList<TRole>();
-        }
+	/**
+	 * Gets the value of the role property.
+	 * 
+	 * <p>
+	 * This accessor method returns a reference to the live list, not a snapshot. Therefore any modification you make to the returned list
+	 * will be present inside the JAXB object. This is why there is not a <CODE>set</CODE> method for the role property.
+	 * 
+	 * <p>
+	 * For example, to add a new item, do as follows:
+	 * 
+	 * <pre>
+	 * getRole().add(newItem);
+	 * </pre>
+	 * 
+	 * 
+	 * <p>
+	 * Objects of the following type(s) are allowed in the list {@link TRole }
+	 * 
+	 * 
+	 */
+	public List<TRole> getRole() {
+		if (role == null) {
+			role = new ArrayList<TRole>();
+		}
 
-        return this.role;
-    }
+		return this.role;
+	}
 
-    /**
-     * Gets the value of the name property.
-     *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *
-     */
-    public String getName() {
-        return name;
-    }
+	/**
+	 * Gets the value of the name property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * Sets the value of the name property.
-     *
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
+	/**
+	 * Sets the value of the name property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setName(String value) {
+		this.name = value;
+	}
 }

@@ -34,8 +34,7 @@ import junit.framework.TestCase;
 
 /**
  * <p>
- * Class <code>Example4</code> is intented to show an example of xml
- * coding/decoding scheme
+ * Class <code>Example4</code> is intented to show an example of xml coding/decoding scheme
  * </p>
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
@@ -45,126 +44,119 @@ import junit.framework.TestCase;
  */
 public class Example4Test extends TestCase {
 
-    private static final File exampleModelFile = TestFileFinder.findTestFile("example4/ExampleModel.xml");
-    private static final File dataFile = TestFileFinder.findTestFile("example4/ExampleGraph.xml");
-    private static final File resultFile = new File(new File(System.getProperty("java.io.tmpdir")),"ResultGraph.xml");
-    
-    private String xmlData = "";
-    private XMLMapping aMapping;
- 
-    public Example4Test(String name) 
-    {
-        super(name);
-    }
+	private static final File exampleModelFile = TestFileFinder.findTestFile("example4/ExampleModel.xml");
+	private static final File dataFile = TestFileFinder.findTestFile("example4/ExampleGraph.xml");
+	private static final File resultFile = new File(new File(System.getProperty("java.io.tmpdir")), "ResultGraph.xml");
 
-    @Override
-	protected void setUp() throws Exception 
-    {
-        super.setUp();
-        
-        Debugging.disableDebug();
+	private String xmlData = "";
+	private XMLMapping aMapping;
 
-        if (!exampleModelFile.exists()) {
-            fail("File " + exampleModelFile.getAbsolutePath() + " doesn't exist. Maybe you have to check your paths ?");
-        }
+	public Example4Test(String name) {
+		super(name);
+	}
 
-        if (!dataFile.exists()) {
-            fail("File " + dataFile.getName() + " doesn't exist. Maybe you have to check your paths ?");
-        }
-        
-        FileInputStream in;
-        byte[] buffer;
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
 
-        try {
-            in = new FileInputStream(dataFile);
-            buffer = new byte[in.available()];
-            in.read(buffer);
-            xmlData = new String(buffer);
-            in.close();
-        } catch (Exception e) {
-            fail(e.getMessage());
-        }
+		Debugging.disableDebug();
 
-        XMLCoder.setTransformerFactoryClass("org.apache.xalan.processor.TransformerFactoryImpl");
-    }
+		if (!exampleModelFile.exists()) {
+			fail("File " + exampleModelFile.getAbsolutePath() + " doesn't exist. Maybe you have to check your paths ?");
+		}
 
-    @Override
-	protected void tearDown() throws Exception 
-    {
-        super.tearDown();
-     }
+		if (!dataFile.exists()) {
+			fail("File " + dataFile.getName() + " doesn't exist. Maybe you have to check your paths ?");
+		}
 
-    public void test1()
-    {
-        try {
-            Graph graph;
-            String result;
-            FileOutputStream out;
+		FileInputStream in;
+		byte[] buffer;
 
-            aMapping = new XMLMapping(exampleModelFile);
-            System.out.println("Reading, parsing and getting following model:\n" + aMapping.toString());
+		try {
+			in = new FileInputStream(dataFile);
+			buffer = new byte[in.available()];
+			in.read(buffer);
+			xmlData = new String(buffer);
+			in.close();
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
 
-            GraphBuilder gb = new GraphBuilder();
-            graph = (Graph) XMLDecoder.decodeObjectWithMapping(new FileInputStream(dataFile), aMapping, gb);
-            System.out.println("Obtaining by parsing stream: " + graph.toString());
+		XMLCoder.setTransformerFactoryClass("org.apache.xalan.processor.TransformerFactoryImpl");
+	}
 
-            System.out.print(gb.toString());
+	@Override
+	protected void tearDown() throws Exception {
+		super.tearDown();
+	}
 
-            result = XMLCoder.encodeObjectWithMapping(graph, aMapping);
-            System.out.println("Coding to XML and getting " + result);
+	public void test1() {
+		try {
+			Graph graph;
+			String result;
+			FileOutputStream out;
 
-            out = new FileOutputStream(resultFile);
-            XMLCoder.encodeObjectWithMapping(graph, aMapping, out);
-            out.flush();
-            out.close();
+			aMapping = new XMLMapping(exampleModelFile);
+			System.out.println("Reading, parsing and getting following model:\n" + aMapping.toString());
 
-        } catch (Exception e) {
-            fail (e.getMessage());
-        } 
-    }
+			GraphBuilder gb = new GraphBuilder();
+			graph = (Graph) XMLDecoder.decodeObjectWithMapping(new FileInputStream(dataFile), aMapping, gb);
+			System.out.println("Obtaining by parsing stream: " + graph.toString());
 
-    public void test2()
-    {
-        try {
-            Graph graph;
-            String result;
-            FileOutputStream out;
+			System.out.print(gb.toString());
 
-            graph = buildNewGraph();
-            // Debugging.enableDebug();
+			result = XMLCoder.encodeObjectWithMapping(graph, aMapping);
+			System.out.println("Coding to XML and getting " + result);
 
-            aMapping = new XMLMapping(exampleModelFile);
-            System.out.println("Reading, parsing and getting following model:\n" + aMapping.toString());
+			out = new FileOutputStream(resultFile);
+			XMLCoder.encodeObjectWithMapping(graph, aMapping, out);
+			out.flush();
+			out.close();
 
-             result = XMLCoder.encodeObjectWithMapping(graph, aMapping);
-            System.out.println("Coding to XML and getting " + result);
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
+	}
 
-            out = new FileOutputStream(resultFile);
-            XMLCoder.encodeObjectWithMapping(graph, aMapping, out);
-            out.flush();
-            out.close();
+	public void test2() {
+		try {
+			Graph graph;
+			String result;
+			FileOutputStream out;
 
-        } catch (Exception e) {
-            fail (e.getMessage());
-        } 
-   }
+			graph = buildNewGraph();
+			// Debugging.enableDebug();
 
-     public static Graph buildNewGraph()
-    {
-        GraphBuilder gb = new GraphBuilder();
-        Graph newGraph = new Graph(gb);
-        Node node1 = new Node(gb);
-        Node node2 = new Node(gb);
-        Node node3 = new Node(gb);
-        Node node4 = new Node(gb);
-        Edge edge1 = new Edge(gb, node1, node2);
-        Edge edge2 = new Edge(gb, node1, node3);
-        Edge edge3 = new Edge(gb, node2, node3);
-        Edge edge4 = new Edge(gb, node2, node4);
-        Edge edge5 = new Edge(gb, node3, node4);
-        newGraph.startNode = node1;
-        return newGraph;
-    }
+			aMapping = new XMLMapping(exampleModelFile);
+			System.out.println("Reading, parsing and getting following model:\n" + aMapping.toString());
 
-    
+			result = XMLCoder.encodeObjectWithMapping(graph, aMapping);
+			System.out.println("Coding to XML and getting " + result);
+
+			out = new FileOutputStream(resultFile);
+			XMLCoder.encodeObjectWithMapping(graph, aMapping, out);
+			out.flush();
+			out.close();
+
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
+	}
+
+	public static Graph buildNewGraph() {
+		GraphBuilder gb = new GraphBuilder();
+		Graph newGraph = new Graph(gb);
+		Node node1 = new Node(gb);
+		Node node2 = new Node(gb);
+		Node node3 = new Node(gb);
+		Node node4 = new Node(gb);
+		Edge edge1 = new Edge(gb, node1, node2);
+		Edge edge2 = new Edge(gb, node1, node3);
+		Edge edge3 = new Edge(gb, node2, node3);
+		Edge edge4 = new Edge(gb, node2, node4);
+		Edge edge5 = new Edge(gb, node3, node4);
+		newGraph.startNode = node1;
+		return newGraph;
+	}
+
 }

@@ -31,38 +31,34 @@ import org.openflexo.module.Module;
 import org.openflexo.ve.controller.OEController;
 import org.openflexo.view.menu.WindowMenu;
 
-
 /**
  * 'Window' menu for this Module
  * 
  * @author yourname
  */
-public class OEWindowMenu extends WindowMenu
-{
+public class OEWindowMenu extends WindowMenu {
 
-    private static final Logger logger = Logger.getLogger(OEWindowMenu.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(OEWindowMenu.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance Variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance Variables
+	// =========================
+	// ==========================================================================
 
-      protected OEController _xxxController;
+	protected OEController _xxxController;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public OEWindowMenu(OEController controller)
-    {
-        super(controller,Module.XXX_MODULE);
-        _xxxController = controller;
-        // Put your actions here
-    }
+	public OEWindowMenu(OEController controller) {
+		super(controller, Module.XXX_MODULE);
+		_xxxController = controller;
+		// Put your actions here
+	}
 
-    public OEController getXXXController()
-    {
-        return _xxxController;
-    }
+	public OEController getXXXController() {
+		return _xxxController;
+	}
 }

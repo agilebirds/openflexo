@@ -66,29 +66,24 @@ import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.GeometryModified;
 import org.openflexo.toolbox.ToolBox;
 
-
 public class GeometricGraphicalRepresentation<O> extends GraphicalRepresentation<O> implements Observer {
 
 	private static final Logger logger = Logger.getLogger(GeometricGraphicalRepresentation.class.getPackage().getName());
 
 	// *******************************************************************************
-	// *                                 Parameters                                  *
+	// * Parameters *
 	// *******************************************************************************
 
-	public static enum Parameters implements GRParameter
-	{
-		foreground,
-		background,
-		layer,
-		geometricObject
+	public static enum Parameters implements GRParameter {
+		foreground, background, layer, geometricObject
 	}
 
 	// *******************************************************************************
-	// *                              Inner classes                                  *
+	// * Inner classes *
 	// *******************************************************************************
 
 	// *******************************************************************************
-	// *                                  Fields                                     *
+	// * Fields *
 	// *******************************************************************************
 
 	private int layer = FGEConstants.DEFAULT_OBJECT_LAYER;
@@ -100,22 +95,18 @@ public class GeometricGraphicalRepresentation<O> extends GraphicalRepresentation
 	private FGEArea geometricObject;
 
 	// *******************************************************************************
-	// *                               Constructor                                   *
+	// * Constructor *
 	// *******************************************************************************
 
-	public GeometricGraphicalRepresentation(
-			FGEArea anObject, 
-			O aDrawable, 
-			Drawing<?> aDrawing)
-	{
-		super(aDrawable,aDrawing);
+	public GeometricGraphicalRepresentation(FGEArea anObject, O aDrawable, Drawing<?> aDrawing) {
+		super(aDrawable, aDrawing);
 
 		foreground = ForegroundStyle.makeStyle(Color.BLACK);
-		//foreground.setGraphicalRepresentation(this);
+		// foreground.setGraphicalRepresentation(this);
 		foreground.addObserver(this);
 
 		background = BackgroundStyle.makeColoredBackground(Color.WHITE);
-		//background.setGraphicalRepresentation(this);
+		// background.setGraphicalRepresentation(this);
 		background.addObserver(this);
 
 		geometricObject = anObject;
@@ -123,108 +114,102 @@ public class GeometricGraphicalRepresentation<O> extends GraphicalRepresentation
 
 		graphics = new FGEGeometricGraphics(this);
 
-		addToMouseClickControls(MouseClickControl.makeMouseClickControl("Selection",MouseButton.LEFT,1,MouseClickControlActionType.SELECTION));
-		if (ToolBox.getPLATFORM()==ToolBox.MACOS)
-			addToMouseClickControls(MouseClickControl.makeMouseMetaClickControl("Multiple selection",MouseButton.LEFT,1,MouseClickControlActionType.MULTIPLE_SELECTION));
+		addToMouseClickControls(MouseClickControl.makeMouseClickControl("Selection", MouseButton.LEFT, 1,
+				MouseClickControlActionType.SELECTION));
+		if (ToolBox.getPLATFORM() == ToolBox.MACOS)
+			addToMouseClickControls(MouseClickControl.makeMouseMetaClickControl("Multiple selection", MouseButton.LEFT, 1,
+					MouseClickControlActionType.MULTIPLE_SELECTION));
 		else
-			addToMouseClickControls(MouseClickControl.makeMouseControlClickControl("Multiple selection",MouseButton.LEFT,1,MouseClickControlActionType.MULTIPLE_SELECTION));
+			addToMouseClickControls(MouseClickControl.makeMouseControlClickControl("Multiple selection", MouseButton.LEFT, 1,
+					MouseClickControlActionType.MULTIPLE_SELECTION));
 	}
 
 	@Override
-	public Vector<GRParameter> getAllParameters()
-	{
+	public Vector<GRParameter> getAllParameters() {
 		Vector<GRParameter> returned = super.getAllParameters();
 		Parameters[] allParams = Parameters.values();
-		for (int i=0; i<allParams.length; i++) {
+		for (int i = 0; i < allParams.length; i++) {
 			returned.add(allParams[i]);
 		}
 		return returned;
 	}
-	
+
 	// ***************************************************************************
 	// * Deletion *
 	// ***************************************************************************
 
 	@Override
-	public void delete()
-	{
-		if (background != null) background.deleteObserver(this);
-		if (foreground != null) foreground.deleteObserver(this);
+	public void delete() {
+		if (background != null)
+			background.deleteObserver(this);
+		if (foreground != null)
+			foreground.deleteObserver(this);
 		super.delete();
 	}
 
-
 	// *******************************************************************************
-	// *                                 Accessors                                   *
+	// * Accessors *
 	// *******************************************************************************
 
-	public ForegroundStyle getForeground()
-	{
+	public ForegroundStyle getForeground() {
 		return foreground;
 	}
 
-	public void setForeground(ForegroundStyle aForeground)
-	{
-		FGENotification notification = requireChange(Parameters.foreground,
-				aForeground);
+	public void setForeground(ForegroundStyle aForeground) {
+		FGENotification notification = requireChange(Parameters.foreground, aForeground);
 		if (notification != null) {
-			if (foreground != null) foreground.deleteObserver(this);
+			if (foreground != null)
+				foreground.deleteObserver(this);
 			foreground = aForeground;
-			if (aForeground != null) aForeground.addObserver(this);
+			if (aForeground != null)
+				aForeground.addObserver(this);
 			hasChanged(notification);
 		}
 	}
 
-	public boolean getNoStroke()
-	{
+	public boolean getNoStroke() {
 		return foreground.getNoStroke();
 	}
 
-	public void setNoStroke(boolean noStroke)
-	{
+	public void setNoStroke(boolean noStroke) {
 		foreground.setNoStroke(noStroke);
 	}
 
-	public BackgroundStyle getBackground()
-	{
+	public BackgroundStyle getBackground() {
 		return background;
 	}
 
-	public void setBackground(BackgroundStyle aBackground)
-	{
-		FGENotification notification = requireChange(Parameters.background,
-				aBackground);
+	public void setBackground(BackgroundStyle aBackground) {
+		FGENotification notification = requireChange(Parameters.background, aBackground);
 		if (notification != null) {
-			//background = aBackground.clone();
-			if (background != null) background.deleteObserver(this);
+			// background = aBackground.clone();
+			if (background != null)
+				background.deleteObserver(this);
 			background = aBackground;
-			//background.setGraphicalRepresentation(this);
-			if (aBackground != null) aBackground.addObserver(this);
+			// background.setGraphicalRepresentation(this);
+			if (aBackground != null)
+				aBackground.addObserver(this);
 			hasChanged(notification);
 		}
 	}
 
-	public BackgroundStyleType getBackgroundType()
-	{
+	public BackgroundStyleType getBackgroundType() {
 		return background.getBackgroundStyleType();
 	}
 
-	public void setBackgroundType(BackgroundStyleType backgroundType)
-	{
+	public void setBackgroundType(BackgroundStyleType backgroundType) {
 		if (backgroundType != getBackgroundType()) {
 			setBackground(BackgroundStyle.makeBackground(backgroundType));
 		}
 	}
 
 	@Override
-	public int getLayer()
-	{
+	public int getLayer() {
 		return layer;
 	}
 
 	@Override
-	public void setLayer(int layer)
-	{
+	public void setLayer(int layer) {
 		FGENotification notification = requireChange(Parameters.layer, layer);
 		if (notification != null) {
 			this.layer = layer;
@@ -233,57 +218,45 @@ public class GeometricGraphicalRepresentation<O> extends GraphicalRepresentation
 	}
 
 	@Override
-	public int getViewX(double scale)
-	{
+	public int getViewX(double scale) {
 		return getViewBounds(scale).x;
 	}
 
 	@Override
-	public int getViewY(double scale)
-	{
+	public int getViewY(double scale) {
 		return getViewBounds(scale).y;
 	}
 
 	@Override
-	public int getViewWidth(double scale)
-	{
+	public int getViewWidth(double scale) {
 		return getViewBounds(scale).width;
 	}
 
 	@Override
-	public int getViewHeight(double scale)
-	{
+	public int getViewHeight(double scale) {
 		return getViewBounds(scale).height;
 	}
 
 	@Override
-	public Rectangle getViewBounds(double scale) 
-	{
+	public Rectangle getViewBounds(double scale) {
 		return getBounds(scale);
 	}
 
-	public Rectangle getBounds(double scale) 
-	{
+	public Rectangle getBounds(double scale) {
 		return getContainerGraphicalRepresentation().getViewBounds(scale);
-		//return new Rectangle(0,0,1,1);
+		// return new Rectangle(0,0,1,1);
 	}
 
 	@Override
-	public FGERectangle getNormalizedBounds()
-	{
+	public FGERectangle getNormalizedBounds() {
 		Rectangle bounds = getBounds(1);
-		return new FGERectangle(0,0,bounds.width,bounds.height,Filling.FILLED);
+		return new FGERectangle(0, 0, bounds.width, bounds.height, Filling.FILLED);
 	}
 
 	@Override
-	public boolean isContainedInSelection(Rectangle drawingViewSelection,double scale)
-	{
-		FGERectangle drawingViewBounds = new FGERectangle(
-				drawingViewSelection.getX(),
-				drawingViewSelection.getY(),
-				drawingViewSelection.getWidth(),
-				drawingViewSelection.getHeight(),
-				Filling.FILLED);
+	public boolean isContainedInSelection(Rectangle drawingViewSelection, double scale) {
+		FGERectangle drawingViewBounds = new FGERectangle(drawingViewSelection.getX(), drawingViewSelection.getY(),
+				drawingViewSelection.getWidth(), drawingViewSelection.getHeight(), Filling.FILLED);
 		boolean isFullyContained = true;
 		/*	for (ControlPoint cp : getConnector().getControlPoints()) {
 			Point cpInContainerView = convertLocalNormalizedPointToRemoteViewCoordinates(
@@ -300,9 +273,8 @@ public class GeometricGraphicalRepresentation<O> extends GraphicalRepresentation
 	}
 
 	@Override
-	public AffineTransform convertNormalizedPointToViewCoordinatesAT(double scale)
-	{
-		return AffineTransform.getScaleInstance(scale,scale); 
+	public AffineTransform convertNormalizedPointToViewCoordinatesAT(double scale) {
+		return AffineTransform.getScaleInstance(scale, scale);
 
 		/*double width = getContainerGraphicalRepresentation().getViewWidth(scale);
 		double height = getContainerGraphicalRepresentation().getViewHeight(scale);
@@ -314,9 +286,8 @@ public class GeometricGraphicalRepresentation<O> extends GraphicalRepresentation
 	}
 
 	@Override
-	public AffineTransform convertViewCoordinatesToNormalizedPointAT(double scale)
-	{
-		return AffineTransform.getScaleInstance(1/scale,1/scale); 
+	public AffineTransform convertViewCoordinatesToNormalizedPointAT(double scale) {
+		return AffineTransform.getScaleInstance(1 / scale, 1 / scale);
 
 		/*double width = getContainerGraphicalRepresentation().getViewWidth(scale);
 		double height = getContainerGraphicalRepresentation().getViewHeight(scale);
@@ -327,23 +298,22 @@ public class GeometricGraphicalRepresentation<O> extends GraphicalRepresentation
 	}
 
 	// *******************************************************************************
-	// *                                  Methods                                    *
+	// * Methods *
 	// *******************************************************************************
 
-	public void paintGeometricObject(FGEGeometricGraphics graphics)
-	{
+	public void paintGeometricObject(FGEGeometricGraphics graphics) {
 		getGeometricObject().paint(graphics);
 	}
 
 	@Override
-	public void paint(Graphics g, DrawingController<?> controller)
-	{
-		if (!isRegistered()) setRegistered(true);
+	public void paint(Graphics g, DrawingController<?> controller) {
+		if (!isRegistered())
+			setRegistered(true);
 
 		super.paint(g, controller);
 
 		Graphics2D g2 = (Graphics2D) g;
-		graphics.createGraphics(g2,controller);
+		graphics.createGraphics(g2, controller);
 
 		graphics.setDefaultBackground(getBackground());
 		graphics.setDefaultForeground(getForeground());
@@ -353,8 +323,7 @@ public class GeometricGraphicalRepresentation<O> extends GraphicalRepresentation
 			ForegroundStyle style = getForeground().clone();
 			if (getIsSelected()) {
 				style.setColorNoNotification(getDrawingGraphicalRepresentation().getSelectionColor());
-			}
-			else if (getIsFocused()) {
+			} else if (getIsFocused()) {
 				style.setColorNoNotification(getDrawingGraphicalRepresentation().getFocusColor());
 			}
 			graphics.setDefaultForeground(style);
@@ -366,82 +335,73 @@ public class GeometricGraphicalRepresentation<O> extends GraphicalRepresentation
 			Color color = null;
 			if (getIsSelected()) {
 				color = getDrawingGraphicalRepresentation().getSelectionColor();
-			}
-			else if (getIsFocused()) {
+			} else if (getIsFocused()) {
 				color = getDrawingGraphicalRepresentation().getFocusColor();
 			}
 			for (ControlPoint cp : getControlPoints()) {
-				cp.paint(graphics);		
+				cp.paint(graphics);
 			}
 		}
 
 		if (hasFloatingLabel()) {
 			graphics.useTextStyle(getTextStyle());
-			graphics.drawString(getText(), new FGEPoint(getLabelRelativePosition().x+getAbsoluteTextX(),getLabelRelativePosition().y+getAbsoluteTextY()),getTextAlignment());
+			graphics.drawString(getText(), new FGEPoint(getLabelRelativePosition().x + getAbsoluteTextX(), getLabelRelativePosition().y
+					+ getAbsoluteTextY()), getTextAlignment());
 		}
 
 		graphics.releaseGraphics();
 	}
 
-	protected FGEPoint getLabelRelativePosition()
-	{
-		if (getGeometricObject() instanceof FGEPoint) 
-			return (FGEPoint)getGeometricObject();
+	protected FGEPoint getLabelRelativePosition() {
+		if (getGeometricObject() instanceof FGEPoint)
+			return (FGEPoint) getGeometricObject();
 		else if (getGeometricObject() instanceof FGEAbstractLine) {
-			FGEAbstractLine line = (FGEAbstractLine)getGeometricObject();
-			return (new FGESegment(line.getP1(),line.getP2())).getMiddle();
+			FGEAbstractLine line = (FGEAbstractLine) getGeometricObject();
+			return (new FGESegment(line.getP1(), line.getP2())).getMiddle();
+		} else if (getGeometricObject() instanceof FGEShape) {
+			return ((FGEShape) getGeometricObject()).getCenter();
 		}
-		else if (getGeometricObject() instanceof FGEShape) {
-			return ((FGEShape)getGeometricObject()).getCenter();
-		}
-		return new FGEPoint(0,0);
+		return new FGEPoint(0, 0);
 	}
 
 	/**
 	 * Return center of label, relative to container view
+	 * 
 	 * @param scale
 	 * @return
 	 */
 	@Override
-	public Point getLabelViewCenter(double scale)
-	{
-		return new Point((int)(getAbsoluteTextX()*scale+getViewX(scale)),
-				(int)(getAbsoluteTextY()*scale+getViewY(scale)));
+	public Point getLabelViewCenter(double scale) {
+		return new Point((int) (getAbsoluteTextX() * scale + getViewX(scale)), (int) (getAbsoluteTextY() * scale + getViewY(scale)));
 	}
 
 	/**
 	 * Sets center of label, relative to container view
+	 * 
 	 * @param scale
 	 * @return
 	 */
 	@Override
-	public void setLabelViewCenter(Point aPoint, double scale)
-	{
-		setAbsoluteTextX(((double)aPoint.x-(double)getViewX(scale))/scale);
-		setAbsoluteTextY(((double)aPoint.y-(double)getViewY(scale))/scale);
+	public void setLabelViewCenter(Point aPoint, double scale) {
+		setAbsoluteTextX(((double) aPoint.x - (double) getViewX(scale)) / scale);
+		setAbsoluteTextY(((double) aPoint.y - (double) getViewY(scale)) / scale);
 
 	}
 
-
 	@Override
-	public boolean hasFloatingLabel()
-	{
+	public boolean hasFloatingLabel() {
 		return hasText();
 	}
 
-
-
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return "GeometricGraphicalRepresentation.inspector";
 	}
 
 	@Override
-	public void update(Observable observable, Object notification)
-	{
+	public void update(Observable observable, Object notification) {
 		super.update(observable, notification);
-		
+
 		if (observable instanceof BackgroundStyle) {
 			notifyAttributeChange(Parameters.background);
 		}
@@ -450,15 +410,12 @@ public class GeometricGraphicalRepresentation<O> extends GraphicalRepresentation
 		}
 	}
 
-	public FGEArea getGeometricObject()
-	{
+	public FGEArea getGeometricObject() {
 		return geometricObject;
 	}
 
-	public void setGeometricObject(FGEArea geometricObject)
-	{
-		FGENotification notification = requireChange(
-				Parameters.geometricObject, geometricObject);
+	public void setGeometricObject(FGEArea geometricObject) {
+		FGENotification notification = requireChange(Parameters.geometricObject, geometricObject);
 		if (notification != null) {
 			this.geometricObject = geometricObject;
 			rebuildControlPoints();
@@ -468,9 +425,9 @@ public class GeometricGraphicalRepresentation<O> extends GraphicalRepresentation
 
 	protected Vector<ControlPoint> _controlPoints;
 
-	public List<ControlPoint> getControlPoints()
-	{
-		if (_controlPoints == null) rebuildControlPoints();
+	public List<ControlPoint> getControlPoints() {
+		if (_controlPoints == null)
+			rebuildControlPoints();
 		return _controlPoints;
 	}
 
@@ -480,276 +437,271 @@ public class GeometricGraphicalRepresentation<O> extends GraphicalRepresentation
 		rebuildControlPoints();
 	}*/
 
-	protected List<ControlPoint> buildControlPointsForPoint(FGEPoint point)
-	{
+	protected List<ControlPoint> buildControlPointsForPoint(FGEPoint point) {
 		Vector<ControlPoint> returned = new Vector<ControlPoint>();
-		returned.add(new GeometryAdjustingControlPoint<FGEPoint>(this,"point",point.clone()) {
+		returned.add(new GeometryAdjustingControlPoint<FGEPoint>(this, "point", point.clone()) {
 			@Override
-			public FGEArea getDraggingAuthorizedArea()
-			{
+			public FGEArea getDraggingAuthorizedArea() {
 				return new FGEPlane();
 			}
+
 			@Override
-			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-			{
-				((FGEPoint)getGeometricObject()).x = newAbsolutePoint.x;
-				((FGEPoint)getGeometricObject()).y = newAbsolutePoint.y;
+			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
+					FGEPoint initialPoint, MouseEvent event) {
+				((FGEPoint) getGeometricObject()).x = newAbsolutePoint.x;
+				((FGEPoint) getGeometricObject()).y = newAbsolutePoint.y;
 				setPoint(newAbsolutePoint);
 				notifyGeometryChanged();
 				return true;
 			}
+
 			@Override
-			public void update(FGEPoint geometricObject)
-			{
+			public void update(FGEPoint geometricObject) {
 				setPoint(geometricObject);
 			}
 		});
 		return returned;
 	}
 
-	protected List<ControlPoint> buildControlPointsForLine(FGEAbstractLine line)
-	{
+	protected List<ControlPoint> buildControlPointsForLine(FGEAbstractLine line) {
 		Vector<ControlPoint> returned = new Vector<ControlPoint>();
-		returned.add(new GeometryAdjustingControlPoint<FGELine>(this,"p1",line.getP1()) {
+		returned.add(new GeometryAdjustingControlPoint<FGELine>(this, "p1", line.getP1()) {
 			@Override
-			public FGEArea getDraggingAuthorizedArea()
-			{
+			public FGEArea getDraggingAuthorizedArea() {
 				return new FGEPlane();
 			}
+
 			@Override
-			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-			{
-				((FGELine)getGeometricObject()).setP1(newAbsolutePoint);
+			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
+					FGEPoint initialPoint, MouseEvent event) {
+				((FGELine) getGeometricObject()).setP1(newAbsolutePoint);
 				setPoint(newAbsolutePoint);
 				notifyGeometryChanged();
 				return true;
 			}
+
 			@Override
-			public void update(FGELine geometricObject)
-			{
+			public void update(FGELine geometricObject) {
 				setPoint(geometricObject.getP1());
 			}
 		});
-		returned.add(new GeometryAdjustingControlPoint<FGELine>(this,"p2",line.getP2()) {
+		returned.add(new GeometryAdjustingControlPoint<FGELine>(this, "p2", line.getP2()) {
 			@Override
-			public FGEArea getDraggingAuthorizedArea()
-			{
+			public FGEArea getDraggingAuthorizedArea() {
 				return new FGEPlane();
 			}
+
 			@Override
-			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-			{
-				((FGELine)getGeometricObject()).setP2(newAbsolutePoint);
+			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
+					FGEPoint initialPoint, MouseEvent event) {
+				((FGELine) getGeometricObject()).setP2(newAbsolutePoint);
 				setPoint(newAbsolutePoint);
 				notifyGeometryChanged();
 				return true;
 			}
+
 			@Override
-			public void update(FGELine geometricObject)
-			{
+			public void update(FGELine geometricObject) {
 				setPoint(geometricObject.getP2());
 			}
 		});
 		return returned;
 	}
 
-	protected List<ControlPoint> buildControlPointsForCurve(FGEQuadCurve curve)
-	{
+	protected List<ControlPoint> buildControlPointsForCurve(FGEQuadCurve curve) {
 		Vector<ControlPoint> returned = new Vector<ControlPoint>();
-		returned.add(new GeometryAdjustingControlPoint<FGEQuadCurve>(this,"p1",curve.getP1()) {
+		returned.add(new GeometryAdjustingControlPoint<FGEQuadCurve>(this, "p1", curve.getP1()) {
 			@Override
-			public FGEArea getDraggingAuthorizedArea()
-			{
+			public FGEArea getDraggingAuthorizedArea() {
 				return new FGEPlane();
 			}
+
 			@Override
-			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-			{
-				((FGEQuadCurve)getGeometricObject()).setP1(newAbsolutePoint);
+			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
+					FGEPoint initialPoint, MouseEvent event) {
+				((FGEQuadCurve) getGeometricObject()).setP1(newAbsolutePoint);
 				setPoint(newAbsolutePoint);
 				notifyGeometryChanged();
 				return true;
 			}
+
 			@Override
-			public void update(FGEQuadCurve geometricObject)
-			{
+			public void update(FGEQuadCurve geometricObject) {
 				setPoint(geometricObject.getP1());
 			}
 		});
-		returned.add(new GeometryAdjustingControlPoint<FGEQuadCurve>(this,"cp",curve.getCtrlPoint()) {
+		returned.add(new GeometryAdjustingControlPoint<FGEQuadCurve>(this, "cp", curve.getCtrlPoint()) {
 			@Override
-			public FGEArea getDraggingAuthorizedArea()
-			{
+			public FGEArea getDraggingAuthorizedArea() {
 				return new FGEPlane();
 			}
+
 			@Override
-			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-			{
-				((FGEQuadCurve)getGeometricObject()).setCtrlPoint(newAbsolutePoint);
+			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
+					FGEPoint initialPoint, MouseEvent event) {
+				((FGEQuadCurve) getGeometricObject()).setCtrlPoint(newAbsolutePoint);
 				setPoint(newAbsolutePoint);
 				notifyGeometryChanged();
 				return true;
 			}
+
 			@Override
-			public void update(FGEQuadCurve geometricObject)
-			{
+			public void update(FGEQuadCurve geometricObject) {
 				setPoint(geometricObject.getCtrlPoint());
 			}
 		});
-		returned.add(new GeometryAdjustingControlPoint<FGEQuadCurve>(this,"p3",curve.getP3()) {
+		returned.add(new GeometryAdjustingControlPoint<FGEQuadCurve>(this, "p3", curve.getP3()) {
 			@Override
-			public FGEArea getDraggingAuthorizedArea()
-			{
+			public FGEArea getDraggingAuthorizedArea() {
 				return new FGEPlane();
 			}
+
 			@Override
-			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-			{
-				((FGEQuadCurve)getGeometricObject()).setP3(newAbsolutePoint);
+			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
+					FGEPoint initialPoint, MouseEvent event) {
+				((FGEQuadCurve) getGeometricObject()).setP3(newAbsolutePoint);
 				setPoint(newAbsolutePoint);
 				notifyGeometryChanged();
 				return true;
 			}
+
 			@Override
-			public void update(FGEQuadCurve geometricObject)
-			{
+			public void update(FGEQuadCurve geometricObject) {
 				setPoint(geometricObject.getP3());
 			}
 		});
-		returned.add(new GeometryAdjustingControlPoint<FGEQuadCurve>(this,"p2",curve.getP2()) {
+		returned.add(new GeometryAdjustingControlPoint<FGEQuadCurve>(this, "p2", curve.getP2()) {
 			@Override
-			public FGEArea getDraggingAuthorizedArea()
-			{
+			public FGEArea getDraggingAuthorizedArea() {
 				return new FGEPlane();
 			}
+
 			@Override
-			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-			{
-				((FGEQuadCurve)getGeometricObject()).setP2(newAbsolutePoint);
+			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
+					FGEPoint initialPoint, MouseEvent event) {
+				((FGEQuadCurve) getGeometricObject()).setP2(newAbsolutePoint);
 				setPoint(newAbsolutePoint);
 				notifyGeometryChanged();
 				return true;
 			}
+
 			@Override
-			public void update(FGEQuadCurve geometricObject)
-			{
+			public void update(FGEQuadCurve geometricObject) {
 				setPoint(geometricObject.getP2());
 			}
 		});
 		return returned;
 	}
 
-	protected List<ControlPoint> buildControlPointsForCurve(FGECubicCurve curve)
-	{
+	protected List<ControlPoint> buildControlPointsForCurve(FGECubicCurve curve) {
 		Vector<ControlPoint> returned = new Vector<ControlPoint>();
-		returned.add(new GeometryAdjustingControlPoint<FGECubicCurve>(this,"p1",curve.getP1()) {
+		returned.add(new GeometryAdjustingControlPoint<FGECubicCurve>(this, "p1", curve.getP1()) {
 			@Override
-			public FGEArea getDraggingAuthorizedArea()
-			{
+			public FGEArea getDraggingAuthorizedArea() {
 				return new FGEPlane();
 			}
+
 			@Override
-			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-			{
-				((FGECubicCurve)getGeometricObject()).setP1(newAbsolutePoint);
+			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
+					FGEPoint initialPoint, MouseEvent event) {
+				((FGECubicCurve) getGeometricObject()).setP1(newAbsolutePoint);
 				setPoint(newAbsolutePoint);
 				notifyGeometryChanged();
 				return true;
 			}
+
 			@Override
-			public void update(FGECubicCurve geometricObject)
-			{
+			public void update(FGECubicCurve geometricObject) {
 				setPoint(geometricObject.getP1());
 			}
 		});
-		returned.add(new GeometryAdjustingControlPoint<FGECubicCurve>(this,"cp1",curve.getCtrlP1()) {
+		returned.add(new GeometryAdjustingControlPoint<FGECubicCurve>(this, "cp1", curve.getCtrlP1()) {
 			@Override
-			public FGEArea getDraggingAuthorizedArea()
-			{
+			public FGEArea getDraggingAuthorizedArea() {
 				return new FGEPlane();
 			}
+
 			@Override
-			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-			{
-				((FGECubicCurve)getGeometricObject()).setCtrlP1(newAbsolutePoint);
+			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
+					FGEPoint initialPoint, MouseEvent event) {
+				((FGECubicCurve) getGeometricObject()).setCtrlP1(newAbsolutePoint);
 				setPoint(newAbsolutePoint);
 				notifyGeometryChanged();
 				return true;
 			}
+
 			@Override
-			public void update(FGECubicCurve geometricObject)
-			{
+			public void update(FGECubicCurve geometricObject) {
 				setPoint(geometricObject.getCtrlP1());
 			}
 		});
-		returned.add(new GeometryAdjustingControlPoint<FGECubicCurve>(this,"cp2",curve.getCtrlP2()) {
+		returned.add(new GeometryAdjustingControlPoint<FGECubicCurve>(this, "cp2", curve.getCtrlP2()) {
 			@Override
-			public FGEArea getDraggingAuthorizedArea()
-			{
+			public FGEArea getDraggingAuthorizedArea() {
 				return new FGEPlane();
 			}
+
 			@Override
-			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-			{
-				((FGECubicCurve)getGeometricObject()).setCtrlP2(newAbsolutePoint);
+			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
+					FGEPoint initialPoint, MouseEvent event) {
+				((FGECubicCurve) getGeometricObject()).setCtrlP2(newAbsolutePoint);
 				setPoint(newAbsolutePoint);
 				notifyGeometryChanged();
 				return true;
 			}
+
 			@Override
-			public void update(FGECubicCurve geometricObject)
-			{
+			public void update(FGECubicCurve geometricObject) {
 				setPoint(geometricObject.getCtrlP2());
 			}
 		});
-		returned.add(new GeometryAdjustingControlPoint<FGECubicCurve>(this,"p2",curve.getP2()) {
+		returned.add(new GeometryAdjustingControlPoint<FGECubicCurve>(this, "p2", curve.getP2()) {
 			@Override
-			public FGEArea getDraggingAuthorizedArea()
-			{
+			public FGEArea getDraggingAuthorizedArea() {
 				return new FGEPlane();
 			}
+
 			@Override
-			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-			{
-				((FGECubicCurve)getGeometricObject()).setP2(newAbsolutePoint);
+			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
+					FGEPoint initialPoint, MouseEvent event) {
+				((FGECubicCurve) getGeometricObject()).setP2(newAbsolutePoint);
 				setPoint(newAbsolutePoint);
 				notifyGeometryChanged();
 				return true;
 			}
+
 			@Override
-			public void update(FGECubicCurve geometricObject)
-			{
+			public void update(FGECubicCurve geometricObject) {
 				setPoint(geometricObject.getP2());
 			}
 		});
 		return returned;
 	}
 
-	protected List<ControlPoint> buildControlPointsForPolygon(FGEPolygon polygon)
-	{
+	protected List<ControlPoint> buildControlPointsForPolygon(FGEPolygon polygon) {
 		Vector<ControlPoint> returned = new Vector<ControlPoint>();
 
-		for (int i=0; i<polygon.getPointsNb(); i++) {
+		for (int i = 0; i < polygon.getPointsNb(); i++) {
 			final int index = i;
-			returned.add(new GeometryAdjustingControlPoint<FGEPolygon>(this,"p"+i,polygon.getPointAt(i)) {
+			returned.add(new GeometryAdjustingControlPoint<FGEPolygon>(this, "p" + i, polygon.getPointAt(i)) {
 				@Override
-				public FGEArea getDraggingAuthorizedArea()
-				{
+				public FGEArea getDraggingAuthorizedArea() {
 					return new FGEPlane();
 				}
+
 				@Override
-				public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-				{
-					FGEPoint p = ((FGEPolygon)getGeometricObject()).getPointAt(index);
+				public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration,
+						FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event) {
+					FGEPoint p = ((FGEPolygon) getGeometricObject()).getPointAt(index);
 					p.x = newAbsolutePoint.x;
 					p.y = newAbsolutePoint.y;
 					setPoint(newAbsolutePoint);
 					notifyGeometryChanged();
 					return true;
 				}
+
 				@Override
-				public void update(FGEPolygon geometricObject)
-				{
+				public void update(FGEPolygon geometricObject) {
 					setPoint(geometricObject.getPointAt(index));
 				}
 			});
@@ -757,31 +709,30 @@ public class GeometricGraphicalRepresentation<O> extends GraphicalRepresentation
 		return returned;
 	}
 
-	protected List<ControlPoint> buildControlPointsForPolylin(FGEPolylin polylin)
-	{
+	protected List<ControlPoint> buildControlPointsForPolylin(FGEPolylin polylin) {
 		Vector<ControlPoint> returned = new Vector<ControlPoint>();
 
-		for (int i=0; i<polylin.getPointsNb(); i++) {
+		for (int i = 0; i < polylin.getPointsNb(); i++) {
 			final int index = i;
-			returned.add(new GeometryAdjustingControlPoint<FGEPolylin>(this,"p"+i,polylin.getPointAt(i)) {
+			returned.add(new GeometryAdjustingControlPoint<FGEPolylin>(this, "p" + i, polylin.getPointAt(i)) {
 				@Override
-				public FGEArea getDraggingAuthorizedArea()
-				{
+				public FGEArea getDraggingAuthorizedArea() {
 					return new FGEPlane();
 				}
+
 				@Override
-				public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-				{
-					FGEPoint p = ((FGEPolylin)getGeometricObject()).getPointAt(index);
+				public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration,
+						FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event) {
+					FGEPoint p = ((FGEPolylin) getGeometricObject()).getPointAt(index);
 					p.x = newAbsolutePoint.x;
 					p.y = newAbsolutePoint.y;
 					setPoint(newAbsolutePoint);
 					notifyGeometryChanged();
 					return true;
 				}
+
 				@Override
-				public void update(FGEPolylin geometricObject)
-				{
+				public void update(FGEPolylin geometricObject) {
 					setPoint(geometricObject.getPointAt(index));
 				}
 			});
@@ -789,184 +740,189 @@ public class GeometricGraphicalRepresentation<O> extends GraphicalRepresentation
 		return returned;
 	}
 
-	protected List<ControlPoint> buildControlPointsForEllips(FGEEllips ellips)
-	{
+	protected List<ControlPoint> buildControlPointsForEllips(FGEEllips ellips) {
 		Vector<ControlPoint> returned = new Vector<ControlPoint>();
 		// TODO
 		return returned;
 	}
 
-	protected List<ControlPoint> buildControlPointsForRectangle(FGERectangle rectangle)
-	{
+	protected List<ControlPoint> buildControlPointsForRectangle(FGERectangle rectangle) {
 		Vector<ControlPoint> returned = new Vector<ControlPoint>();
-		returned.add(new GeometryAdjustingControlPoint<FGERectangle>(this,"northWest",rectangle.getNorthWestPt()) {
+		returned.add(new GeometryAdjustingControlPoint<FGERectangle>(this, "northWest", rectangle.getNorthWestPt()) {
 			private double initialWidth;
 			private double initialHeight;
+
 			@Override
-			public void startDragging(DrawingController<?> controller, FGEPoint startPoint)
-			{
-				initialWidth = ((FGERectangle)getGeometricObject()).width;
-				initialHeight = ((FGERectangle)getGeometricObject()).height;
-				setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(((FGERectangle)getGeometricObject()).getSouthEastPt(), CardinalQuadrant.NORTH_WEST));
+			public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
+				initialWidth = ((FGERectangle) getGeometricObject()).width;
+				initialHeight = ((FGERectangle) getGeometricObject()).height;
+				setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(((FGERectangle) getGeometricObject()).getSouthEastPt(),
+						CardinalQuadrant.NORTH_WEST));
 			}
+
 			@Override
-			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-			{
-				FGEPoint pt  = getNearestPointOnAuthorizedArea(newAbsolutePoint);
+			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
+					FGEPoint initialPoint, MouseEvent event) {
+				FGEPoint pt = getNearestPointOnAuthorizedArea(newAbsolutePoint);
 				setPoint(pt);
 
-				((FGERectangle)getGeometricObject()).x = pt.x;
-				((FGERectangle)getGeometricObject()).y = pt.y;
-				((FGERectangle)getGeometricObject()).width = -pt.x+initialPoint.x+initialWidth;
-				((FGERectangle)getGeometricObject()).height = -pt.y+initialPoint.y+initialHeight;
+				((FGERectangle) getGeometricObject()).x = pt.x;
+				((FGERectangle) getGeometricObject()).y = pt.y;
+				((FGERectangle) getGeometricObject()).width = -pt.x + initialPoint.x + initialWidth;
+				((FGERectangle) getGeometricObject()).height = -pt.y + initialPoint.y + initialHeight;
 
 				notifyGeometryChanged();
 				return true;
 			}
+
 			@Override
-			public void update(FGERectangle geometricObject)
-			{
+			public void update(FGERectangle geometricObject) {
 				setPoint(geometricObject.getNorthWestPt());
 			}
 		});
-		returned.add(new GeometryAdjustingControlPoint<FGERectangle>(this,"northEast",rectangle.getNorthEastPt()) {
+		returned.add(new GeometryAdjustingControlPoint<FGERectangle>(this, "northEast", rectangle.getNorthEastPt()) {
 			private double initialWidth;
 			private double initialHeight;
+
 			@Override
-			public void startDragging(DrawingController<?> controller, FGEPoint startPoint)
-			{
-				initialWidth = ((FGERectangle)getGeometricObject()).width;
-				initialHeight = ((FGERectangle)getGeometricObject()).height;
-				setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(((FGERectangle)getGeometricObject()).getSouthWestPt(), CardinalQuadrant.NORTH_EAST));
+			public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
+				initialWidth = ((FGERectangle) getGeometricObject()).width;
+				initialHeight = ((FGERectangle) getGeometricObject()).height;
+				setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(((FGERectangle) getGeometricObject()).getSouthWestPt(),
+						CardinalQuadrant.NORTH_EAST));
 			}
+
 			@Override
-			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-			{
-				FGEPoint pt  = getNearestPointOnAuthorizedArea(newAbsolutePoint);
+			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
+					FGEPoint initialPoint, MouseEvent event) {
+				FGEPoint pt = getNearestPointOnAuthorizedArea(newAbsolutePoint);
 				setPoint(pt);
 
-				((FGERectangle)getGeometricObject()).y = pt.y;
-				((FGERectangle)getGeometricObject()).width = pt.x-initialPoint.x+initialWidth;
-				((FGERectangle)getGeometricObject()).height = -pt.y+initialPoint.y+initialHeight;
+				((FGERectangle) getGeometricObject()).y = pt.y;
+				((FGERectangle) getGeometricObject()).width = pt.x - initialPoint.x + initialWidth;
+				((FGERectangle) getGeometricObject()).height = -pt.y + initialPoint.y + initialHeight;
 
 				notifyGeometryChanged();
 				return true;
 			}
+
 			@Override
-			public void update(FGERectangle geometricObject)
-			{
+			public void update(FGERectangle geometricObject) {
 				setPoint(geometricObject.getNorthEastPt());
 			}
 		});
-		returned.add(new GeometryAdjustingControlPoint<FGERectangle>(this,"southWest",rectangle.getSouthWestPt()) {
+		returned.add(new GeometryAdjustingControlPoint<FGERectangle>(this, "southWest", rectangle.getSouthWestPt()) {
 			private double initialWidth;
 			private double initialHeight;
+
 			@Override
-			public void startDragging(DrawingController<?> controller, FGEPoint startPoint)
-			{
-				initialWidth = ((FGERectangle)getGeometricObject()).width;
-				initialHeight = ((FGERectangle)getGeometricObject()).height;
-				setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(((FGERectangle)getGeometricObject()).getNorthEastPt(), CardinalQuadrant.SOUTH_WEST));
+			public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
+				initialWidth = ((FGERectangle) getGeometricObject()).width;
+				initialHeight = ((FGERectangle) getGeometricObject()).height;
+				setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(((FGERectangle) getGeometricObject()).getNorthEastPt(),
+						CardinalQuadrant.SOUTH_WEST));
 			}
+
 			@Override
-			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-			{
-				FGEPoint pt  = getNearestPointOnAuthorizedArea(newAbsolutePoint);
+			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
+					FGEPoint initialPoint, MouseEvent event) {
+				FGEPoint pt = getNearestPointOnAuthorizedArea(newAbsolutePoint);
 				setPoint(pt);
 
-				((FGERectangle)getGeometricObject()).x = pt.x;
-				((FGERectangle)getGeometricObject()).width = -pt.x+initialPoint.x+initialWidth;
-				((FGERectangle)getGeometricObject()).height = pt.y-initialPoint.y+initialHeight;
+				((FGERectangle) getGeometricObject()).x = pt.x;
+				((FGERectangle) getGeometricObject()).width = -pt.x + initialPoint.x + initialWidth;
+				((FGERectangle) getGeometricObject()).height = pt.y - initialPoint.y + initialHeight;
 
 				notifyGeometryChanged();
 				return true;
 			}
+
 			@Override
-			public void update(FGERectangle geometricObject)
-			{
+			public void update(FGERectangle geometricObject) {
 				setPoint(geometricObject.getSouthWestPt());
 			}
 		});
-		returned.add(new GeometryAdjustingControlPoint<FGERectangle>(this,"southEast",rectangle.getSouthEastPt()) {
+		returned.add(new GeometryAdjustingControlPoint<FGERectangle>(this, "southEast", rectangle.getSouthEastPt()) {
 			private double initialWidth;
 			private double initialHeight;
+
 			@Override
-			public void startDragging(DrawingController<?> controller, FGEPoint startPoint)
-			{
-				initialWidth = ((FGERectangle)getGeometricObject()).width;
-				initialHeight = ((FGERectangle)getGeometricObject()).height;
-				setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(((FGERectangle)getGeometricObject()).getNorthWestPt(), CardinalQuadrant.SOUTH_EAST));
+			public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
+				initialWidth = ((FGERectangle) getGeometricObject()).width;
+				initialHeight = ((FGERectangle) getGeometricObject()).height;
+				setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(((FGERectangle) getGeometricObject()).getNorthWestPt(),
+						CardinalQuadrant.SOUTH_EAST));
 			}
+
 			@Override
-			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-			{
-				FGEPoint pt  = getNearestPointOnAuthorizedArea(newAbsolutePoint);
+			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
+					FGEPoint initialPoint, MouseEvent event) {
+				FGEPoint pt = getNearestPointOnAuthorizedArea(newAbsolutePoint);
 				setPoint(pt);
 
-				((FGERectangle)getGeometricObject()).width = pt.x-initialPoint.x+initialWidth;
-				((FGERectangle)getGeometricObject()).height = pt.y-initialPoint.y+initialHeight;
+				((FGERectangle) getGeometricObject()).width = pt.x - initialPoint.x + initialWidth;
+				((FGERectangle) getGeometricObject()).height = pt.y - initialPoint.y + initialHeight;
 
 				notifyGeometryChanged();
 				return true;
 			}
+
 			@Override
-			public void update(FGERectangle geometricObject)
-			{
+			public void update(FGERectangle geometricObject) {
 				setPoint(geometricObject.getSouthEastPt());
 			}
 		});
 		return returned;
 	}
 
-	protected List<ControlPoint> buildControlPointsForGeneralShape(FGEGeneralShape shape)
-	{
+	protected List<ControlPoint> buildControlPointsForGeneralShape(FGEGeneralShape shape) {
 		Vector<ControlPoint> returned = new Vector<ControlPoint>();
 
-		returned.add(new GeometryAdjustingControlPoint<FGEGeneralShape>(this,"p0",shape.getPathElements().firstElement().getP1()) {
+		returned.add(new GeometryAdjustingControlPoint<FGEGeneralShape>(this, "p0", shape.getPathElements().firstElement().getP1()) {
 			@Override
-			public FGEArea getDraggingAuthorizedArea()
-			{
+			public FGEArea getDraggingAuthorizedArea() {
 				return new FGEPlane();
 			}
+
 			@Override
-			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-			{
-				FGEPoint p = ((FGEGeneralShape)getGeometricObject()).getPathElements().firstElement().getP1();
+			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
+					FGEPoint initialPoint, MouseEvent event) {
+				FGEPoint p = ((FGEGeneralShape) getGeometricObject()).getPathElements().firstElement().getP1();
 				p.x = newAbsolutePoint.x;
 				p.y = newAbsolutePoint.y;
 				setPoint(newAbsolutePoint);
 				notifyGeometryChanged();
 				return true;
 			}
+
 			@Override
-			public void update(FGEGeneralShape geometricObject)
-			{
+			public void update(FGEGeneralShape geometricObject) {
 				setPoint(geometricObject.getPathElements().firstElement().getP1());
 			}
 		});
-		for (int i=0; i<shape.getPathElements().size(); i++) {
+		for (int i = 0; i < shape.getPathElements().size(); i++) {
 			final int index = i;
-			GeneralShapePathElement<?> element = shape.getPathElements().get(i);	 
-			returned.add(new GeometryAdjustingControlPoint<FGEGeneralShape>(this,"p"+i,element.getP2()) {
+			GeneralShapePathElement<?> element = shape.getPathElements().get(i);
+			returned.add(new GeometryAdjustingControlPoint<FGEGeneralShape>(this, "p" + i, element.getP2()) {
 				@Override
-				public FGEArea getDraggingAuthorizedArea()
-				{
+				public FGEArea getDraggingAuthorizedArea() {
 					return new FGEPlane();
 				}
+
 				@Override
-				public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event)
-				{
-					FGEPoint p = ((FGEGeneralShape)getGeometricObject()).getPathElements().get(index).getP2();
+				public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration,
+						FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event) {
+					FGEPoint p = ((FGEGeneralShape) getGeometricObject()).getPathElements().get(index).getP2();
 					p.x = newAbsolutePoint.x;
 					p.y = newAbsolutePoint.y;
-					((FGEGeneralShape)getGeometricObject()).refresh();
+					((FGEGeneralShape) getGeometricObject()).refresh();
 					setPoint(newAbsolutePoint);
 					notifyGeometryChanged();
 					return true;
 				}
+
 				@Override
-				public void update(FGEGeneralShape geometricObject)
-				{
+				public void update(FGEGeneralShape geometricObject) {
 					setPoint(geometricObject.getPathElements().get(index).getP2());
 				}
 			});
@@ -975,88 +931,73 @@ public class GeometricGraphicalRepresentation<O> extends GraphicalRepresentation
 		return returned;
 	}
 
-
-	private void updateControlPoints()
-	{
+	private void updateControlPoints() {
 		boolean cpNeedsToBeRebuilt = false;
 		for (ControlPoint cp : _controlPoints) {
 			if (cp instanceof GeometryAdjustingControlPoint) {
-				((GeometryAdjustingControlPoint)cp).update(getGeometricObject());
-			}
-			else {
+				((GeometryAdjustingControlPoint) cp).update(getGeometricObject());
+			} else {
 				cpNeedsToBeRebuilt = true;
 			}
 		}
-		if (cpNeedsToBeRebuilt) rebuildControlPoints();
+		if (cpNeedsToBeRebuilt)
+			rebuildControlPoints();
 	}
 
-	public List<ControlPoint> rebuildControlPoints()
-	{
-		if (_controlPoints == null) _controlPoints = new Vector<ControlPoint>();
+	public List<ControlPoint> rebuildControlPoints() {
+		if (_controlPoints == null)
+			_controlPoints = new Vector<ControlPoint>();
 		_controlPoints.clear();
 
-		if (getGeometricObject() == null) return _controlPoints;
+		if (getGeometricObject() == null)
+			return _controlPoints;
 
 		if (getGeometricObject() instanceof FGEPoint) {
-			_controlPoints.addAll(buildControlPointsForPoint((FGEPoint)getGeometricObject()));
-		}
-		else if (getGeometricObject() instanceof FGEAbstractLine) {
-			_controlPoints.addAll(buildControlPointsForLine((FGEAbstractLine)getGeometricObject()));
-		}
-		else if (getGeometricObject() instanceof FGERectangle) {
-			_controlPoints.addAll(buildControlPointsForRectangle((FGERectangle)getGeometricObject()));
-		}
-		else if (getGeometricObject() instanceof FGERoundRectangle) {
-			_controlPoints.addAll(buildControlPointsForRectangle(((FGERoundRectangle)getGeometricObject()).getBoundingBox()));
-		}
-		else if (getGeometricObject() instanceof FGEEllips) {
-			_controlPoints.addAll(buildControlPointsForEllips((FGEEllips)getGeometricObject()));
-		}
-		else if (getGeometricObject() instanceof FGEPolygon) {
-			_controlPoints.addAll(buildControlPointsForPolygon((FGEPolygon)getGeometricObject()));
-		}
-		else if (getGeometricObject() instanceof FGEPolylin) {
-			_controlPoints.addAll(buildControlPointsForPolylin((FGEPolylin)getGeometricObject()));
-		}
-		else if (getGeometricObject() instanceof FGEQuadCurve) {
-			_controlPoints.addAll(buildControlPointsForCurve((FGEQuadCurve)getGeometricObject()));
-		}
-		else if (getGeometricObject() instanceof FGECubicCurve) {
-			_controlPoints.addAll(buildControlPointsForCurve((FGECubicCurve)getGeometricObject()));
-		}
-		else if (getGeometricObject() instanceof FGEGeneralShape) {
-			_controlPoints.addAll(buildControlPointsForGeneralShape((FGEGeneralShape)getGeometricObject()));
+			_controlPoints.addAll(buildControlPointsForPoint((FGEPoint) getGeometricObject()));
+		} else if (getGeometricObject() instanceof FGEAbstractLine) {
+			_controlPoints.addAll(buildControlPointsForLine((FGEAbstractLine) getGeometricObject()));
+		} else if (getGeometricObject() instanceof FGERectangle) {
+			_controlPoints.addAll(buildControlPointsForRectangle((FGERectangle) getGeometricObject()));
+		} else if (getGeometricObject() instanceof FGERoundRectangle) {
+			_controlPoints.addAll(buildControlPointsForRectangle(((FGERoundRectangle) getGeometricObject()).getBoundingBox()));
+		} else if (getGeometricObject() instanceof FGEEllips) {
+			_controlPoints.addAll(buildControlPointsForEllips((FGEEllips) getGeometricObject()));
+		} else if (getGeometricObject() instanceof FGEPolygon) {
+			_controlPoints.addAll(buildControlPointsForPolygon((FGEPolygon) getGeometricObject()));
+		} else if (getGeometricObject() instanceof FGEPolylin) {
+			_controlPoints.addAll(buildControlPointsForPolylin((FGEPolylin) getGeometricObject()));
+		} else if (getGeometricObject() instanceof FGEQuadCurve) {
+			_controlPoints.addAll(buildControlPointsForCurve((FGEQuadCurve) getGeometricObject()));
+		} else if (getGeometricObject() instanceof FGECubicCurve) {
+			_controlPoints.addAll(buildControlPointsForCurve((FGECubicCurve) getGeometricObject()));
+		} else if (getGeometricObject() instanceof FGEGeneralShape) {
+			_controlPoints.addAll(buildControlPointsForGeneralShape((FGEGeneralShape) getGeometricObject()));
 		}
 		return _controlPoints;
 	}
 
-	public void notifyGeometryChanged()
-	{
+	public void notifyGeometryChanged() {
 		updateControlPoints();
 		setChanged();
 		notifyObservers(new GeometryModified());
 		if (getGeometricObject() instanceof FGEPoint) {
 			notifyChange("drawable.x");
 			notifyChange("drawable.y");
-		}
-		else if (getGeometricObject() instanceof FGELine) {
+		} else if (getGeometricObject() instanceof FGELine) {
 			notifyChange("drawable.x1");
 			notifyChange("drawable.y1");
 			notifyChange("drawable.x2");
 			notifyChange("drawable.y2");
-		}
-		else if (getGeometricObject() instanceof FGERectangle) {
+		} else if (getGeometricObject() instanceof FGERectangle) {
 			notifyChange("drawable.x");
 			notifyChange("drawable.y");
 			notifyChange("drawable.width");
 			notifyChange("drawable.height");
-		}
-		else if (getGeometricObject() instanceof FGECircle) {
+		} else if (getGeometricObject() instanceof FGECircle) {
 			notifyChange("drawable.centerX");
 			notifyChange("drawable.centerY");
 			notifyChange("drawable.radius");
-		}
-		else if (getGeometricObject() instanceof FGEEllips) {
+		} else if (getGeometricObject() instanceof FGEEllips) {
 			notifyChange("drawable.x");
 			notifyChange("drawable.y");
 			notifyChange("drawable.width");
@@ -1065,10 +1006,8 @@ public class GeometricGraphicalRepresentation<O> extends GraphicalRepresentation
 	}
 
 	// Hack: for the inspector !!!
-	private void notifyChange(final String string)
-	{
+	private void notifyChange(final String string) {
 		notify(new FGENotification(string, null, null));
 	}
-
 
 }

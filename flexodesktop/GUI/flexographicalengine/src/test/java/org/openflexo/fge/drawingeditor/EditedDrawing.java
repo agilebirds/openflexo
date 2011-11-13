@@ -19,51 +19,46 @@
  */
 package org.openflexo.fge.drawingeditor;
 
-
-
 import java.util.logging.Logger;
 
 import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.logging.FlexoLogger;
 
-public class EditedDrawing extends DefaultDrawing<MyDrawing>
-{
+public class EditedDrawing extends DefaultDrawing<MyDrawing> {
 	private static final Logger logger = FlexoLogger.getLogger(TestDrawingEditor.class.getPackage().getName());
-	
-	private MyDrawingGraphicalRepresentation gr;
-	private MyDrawingController controller; 
 
-	public EditedDrawing(MyDrawing drawing)
-	{
+	private MyDrawingGraphicalRepresentation gr;
+	private MyDrawingController controller;
+
+	public EditedDrawing(MyDrawing drawing) {
 		super(drawing);
 		gr = new MyDrawingGraphicalRepresentation(this);
 	}
 
 	@Override
-	public MyDrawingGraphicalRepresentation getDrawingGraphicalRepresentation()
-	{
+	public MyDrawingGraphicalRepresentation getDrawingGraphicalRepresentation() {
 		return gr;
 	}
-	
-	public void setDrawingGraphicalRepresentation(MyDrawingGraphicalRepresentation aGR)
-	{
+
+	public void setDrawingGraphicalRepresentation(MyDrawingGraphicalRepresentation aGR) {
 		gr = aGR;
 	}
-	
+
 	@Override
 	@SuppressWarnings("unchecked")
-	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable)
-	{
-		if (aDrawable == getModel()) return (GraphicalRepresentation<O>)getDrawingGraphicalRepresentation();
-		if (aDrawable instanceof MyShape) return (GraphicalRepresentation<O>)((MyShape)aDrawable).getGraphicalRepresentation();
-		if (aDrawable instanceof MyConnector) return (GraphicalRepresentation<O>)((MyConnector)aDrawable).getGraphicalRepresentation();
+	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable) {
+		if (aDrawable == getModel())
+			return (GraphicalRepresentation<O>) getDrawingGraphicalRepresentation();
+		if (aDrawable instanceof MyShape)
+			return (GraphicalRepresentation<O>) ((MyShape) aDrawable).getGraphicalRepresentation();
+		if (aDrawable instanceof MyConnector)
+			return (GraphicalRepresentation<O>) ((MyConnector) aDrawable).getGraphicalRepresentation();
 		(new Exception()).printStackTrace();
 		return null;
 	}
-	
-	public void init()
-	{
+
+	public void init() {
 		controller = new MyDrawingController(this);
 		_palette = new MyDrawingPalette();
 		controller.registerPalette(_palette);
@@ -71,20 +66,16 @@ public class EditedDrawing extends DefaultDrawing<MyDrawing>
 	}
 
 	private MyDrawingPalette _palette;
-	
-	public  MyDrawingPalette getPalette()
-	{
+
+	public MyDrawingPalette getPalette() {
 		return _palette;
 	}
-	
 
-	public MyDrawingController getController()
-	{
+	public MyDrawingController getController() {
 		return controller;
 	}
-	
+
 	@Override
-	protected void buildGraphicalObjectsHierarchy()
-	{
+	protected void buildGraphicalObjectsHierarchy() {
 	}
 }

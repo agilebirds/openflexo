@@ -26,75 +26,66 @@ import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocResourceManager;
 import org.openflexo.view.FlexoPerspective;
 
-
 public class DocItemView extends AbstractDocItemView {
 
-    public DocItemView(DocItem docItem, DREController controller)
-    {
-        super(docItem,controller,controller.getEditor());
-    }
-    
-    public DREController getDREController()
-    {
-        return (DREController)_controller;
-    }
+	public DocItemView(DocItem docItem, DREController controller) {
+		super(docItem, controller, controller.getEditor());
+	}
 
-    @Override
-	public void deleteModuleView()
-    {
-         getDREController().removeModuleView(this);   
-    }
+	public DREController getDREController() {
+		return (DREController) _controller;
+	}
 
-    @Override
-	public FlexoPerspective<DRMObject> getPerspective()
-    {
-        return getDREController().DRE_PERSPECTIVE;
-    }
+	@Override
+	public void deleteModuleView() {
+		getDREController().removeModuleView(this);
+	}
 
-    @Override
-	public void updateViewFromModel()
-    {
-        super.updateViewFromModel();
-        getDREController().getSaveDocumentationCenterButton().setEnabled(getDocResourceManager().needSaving());
-    }
+	@Override
+	public FlexoPerspective<DRMObject> getPerspective() {
+		return getDREController().DRE_PERSPECTIVE;
+	}
 
-    @Override
-	public DocResourceManager getDocResourceManager()
-    {
-        return getDREController().getDocResourceManager();
-    }
+	@Override
+	public void updateViewFromModel() {
+		super.updateViewFromModel();
+		getDREController().getSaveDocumentationCenterButton().setEnabled(getDocResourceManager().needSaving());
+	}
 
-    /**
-     * Overrides willShow
-     * @see org.openflexo.view.ModuleView#willShow()
-     */
-    @Override
-	public void willShow()
-    {
-        
-    }
+	@Override
+	public DocResourceManager getDocResourceManager() {
+		return getDREController().getDocResourceManager();
+	}
 
-    /**
-     * Overrides willHide
-     * @see org.openflexo.view.ModuleView#willHide()
-     */
-    @Override
-	public void willHide()
-    {
-        
-    }
-    
 	/**
-	 * Returns flag indicating if this view is itself responsible for scroll management
-	 * When not, Flexo will manage it's own scrollbar for you
+	 * Overrides willShow
+	 * 
+	 * @see org.openflexo.view.ModuleView#willShow()
+	 */
+	@Override
+	public void willShow() {
+
+	}
+
+	/**
+	 * Overrides willHide
+	 * 
+	 * @see org.openflexo.view.ModuleView#willHide()
+	 */
+	@Override
+	public void willHide() {
+
+	}
+
+	/**
+	 * Returns flag indicating if this view is itself responsible for scroll management When not, Flexo will manage it's own scrollbar for
+	 * you
 	 * 
 	 * @return
 	 */
 	@Override
-	public boolean isAutoscrolled() 
-	{
+	public boolean isAutoscrolled() {
 		return false;
 	}
-
 
 }

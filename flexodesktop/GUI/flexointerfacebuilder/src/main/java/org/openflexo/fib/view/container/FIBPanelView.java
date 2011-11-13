@@ -45,34 +45,29 @@ import org.openflexo.fib.view.FIBContainerView;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.toolbox.StringUtils;
 
-
-public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C,JPanel> {
+public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C, JPanel> {
 
 	private static final Logger logger = Logger.getLogger(FIBPanelView.class.getPackage().getName());
 
 	private JPanel panel;
 
-	public FIBPanelView(C model, FIBController controller)
-	{
-		super(model,controller);
-		
+	public FIBPanelView(C model, FIBController controller) {
+		super(model, controller);
+
 		updateBorder();
 	}
 
 	@Override
-	public void updateGraphicalProperties()
-	{
+	public void updateGraphicalProperties() {
 		super.updateGraphicalProperties();
 		panel.setOpaque(getComponent().getOpaque());
 		panel.setBackground(getComponent().getBackgroundColor());
 	}
-	
-	public void updateBorder()
-	{
+
+	public void updateBorder() {
 		switch (getComponent().getBorder()) {
 		case empty:
-			panel.setBorder(BorderFactory.createEmptyBorder(
-					(getComponent().getBorderTop() != null ? getComponent().getBorderTop() : 0),
+			panel.setBorder(BorderFactory.createEmptyBorder((getComponent().getBorderTop() != null ? getComponent().getBorderTop() : 0),
 					(getComponent().getBorderLeft() != null ? getComponent().getBorderLeft() : 0),
 					(getComponent().getBorderBottom() != null ? getComponent().getBorderBottom() : 0),
 					(getComponent().getBorderRight() != null ? getComponent().getBorderRight() : 0)));
@@ -81,7 +76,8 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C,JPanel>
 			panel.setBorder(BorderFactory.createEtchedBorder());
 			break;
 		case line:
-			panel.setBorder(BorderFactory.createLineBorder(getComponent().getBorderColor() != null ? getComponent().getBorderColor() : Color.black));
+			panel.setBorder(BorderFactory.createLineBorder(getComponent().getBorderColor() != null ? getComponent().getBorderColor()
+					: Color.black));
 			break;
 		case lowered:
 			panel.setBorder(BorderFactory.createLoweredBevelBorder());
@@ -90,18 +86,17 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C,JPanel>
 			panel.setBorder(BorderFactory.createRaisedBevelBorder());
 			break;
 		case titled:
-			panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),getLocalized(getComponent().getBorderTitle()),TitledBorder.CENTER,TitledBorder.DEFAULT_POSITION,getComponent().retrieveValidFont(),getComponent().retrieveValidForegroundColor()));
+			panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), getLocalized(getComponent()
+					.getBorderTitle()), TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION, getComponent().retrieveValidFont(),
+					getComponent().retrieveValidForegroundColor()));
 			break;
 		case rounded3d:
-			panel.setBorder(new RoundedBorder(
-					StringUtils.isNotEmpty(getComponent().getBorderTitle()) ? getLocalized(getComponent().getBorderTitle()) : null,
-							(getComponent().getBorderTop() != null ? getComponent().getBorderTop() : 0),
-							(getComponent().getBorderLeft() != null ? getComponent().getBorderLeft() : 0),
-							(getComponent().getBorderBottom() != null ? getComponent().getBorderBottom() : 0),
-							(getComponent().getBorderRight() != null ? getComponent().getBorderRight() : 0),
-							getComponent().getTitleFont(),
-							getComponent().retrieveValidForegroundColor(),
-							getComponent().getDarkLevel()));
+			panel.setBorder(new RoundedBorder(StringUtils.isNotEmpty(getComponent().getBorderTitle()) ? getLocalized(getComponent()
+					.getBorderTitle()) : null, (getComponent().getBorderTop() != null ? getComponent().getBorderTop() : 0), (getComponent()
+					.getBorderLeft() != null ? getComponent().getBorderLeft() : 0),
+					(getComponent().getBorderBottom() != null ? getComponent().getBorderBottom() : 0),
+					(getComponent().getBorderRight() != null ? getComponent().getBorderRight() : 0), getComponent().getTitleFont(),
+					getComponent().retrieveValidForegroundColor(), getComponent().getDarkLevel()));
 			break;
 		default:
 			break;
@@ -109,30 +104,29 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C,JPanel>
 	}
 
 	@Override
-	public void updateLanguage()
-	{
+	public void updateLanguage() {
 		super.updateLanguage();
 		updateBorder();
 	}
 
-	private void _setPanelLayoutParameters()
-	{
+	private void _setPanelLayoutParameters() {
 		switch (getComponent().getLayout()) {
 		case none:
 			panel.setLayout(null);
 			break;
 		case flow:
-			panel.setLayout(new FlowLayout(getComponent().getFlowAlignment().getAlign(),getComponent().getHGap(),getComponent().getVGap()));
+			panel.setLayout(new FlowLayout(getComponent().getFlowAlignment().getAlign(), getComponent().getHGap(), getComponent().getVGap()));
 			break;
 		case border:
 			panel.setLayout(new BorderLayout());
 			break;
 		case grid:
-			//logger.info("rows="+getComponent().getRows()+" cols="+getComponent().getCols());
-			panel.setLayout(new GridLayout(getComponent().getRows(),getComponent().getCols(),getComponent().getHGap(),getComponent().getVGap()));
+			// logger.info("rows="+getComponent().getRows()+" cols="+getComponent().getCols());
+			panel.setLayout(new GridLayout(getComponent().getRows(), getComponent().getCols(), getComponent().getHGap(), getComponent()
+					.getVGap()));
 			break;
 		case box:
-			panel.setLayout(new BoxLayout(panel,getComponent().getBoxLayoutAxis().getAxis()));
+			panel.setLayout(new BoxLayout(panel, getComponent().getBoxLayoutAxis().getAxis()));
 			break;
 		case twocols:
 			panel.setLayout(new GridBagLayout());
@@ -146,19 +140,17 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C,JPanel>
 	}
 
 	@Override
-	protected JPanel createJComponent() 
-	{
+	protected JPanel createJComponent() {
 		panel = new JPanel();
 		updateGraphicalProperties();
-		
+
 		_setPanelLayoutParameters();
 
 		return panel;
 	}
 
 	@Override
-	public synchronized void updateLayout()
-	{
+	public synchronized void updateLayout() {
 		if (getSubViews() != null) {
 			for (FIBView v : getSubViews()) {
 				v.delete();
@@ -171,33 +163,28 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C,JPanel>
 	}
 
 	@Override
-	protected void retrieveContainedJComponentsAndConstraints()
-	{
+	protected void retrieveContainedJComponentsAndConstraints() {
 		Vector<FIBComponent> allSubComponents = new Vector<FIBComponent>();
 		allSubComponents.addAll(getComponent().getSubComponents());
-		//Vector<FIBComponent> allSubComponents = getComponent().getSubComponents();
-			
-		if (getComponent().getLayout() == Layout.flow
-				|| getComponent().getLayout() == Layout.box
-				|| getComponent().getLayout() == Layout.twocols
-				|| getComponent().getLayout() == Layout.gridbag) 
-		{
-			
-			Collections.sort(allSubComponents,new Comparator<FIBComponent>() {
+		// Vector<FIBComponent> allSubComponents = getComponent().getSubComponents();
+
+		if (getComponent().getLayout() == Layout.flow || getComponent().getLayout() == Layout.box
+				|| getComponent().getLayout() == Layout.twocols || getComponent().getLayout() == Layout.gridbag) {
+
+			Collections.sort(allSubComponents, new Comparator<FIBComponent>() {
 				@Override
 				public int compare(FIBComponent o1, FIBComponent o2) {
 					ComponentConstraints c1 = o1.getConstraints();
 					ComponentConstraints c2 = o2.getConstraints();
-					return c1.getIndex()-c2.getIndex();
+					return c1.getIndex() - c2.getIndex();
 				}
 			});
-			
-			int i= 0;
+
+			int i = 0;
 			for (FIBComponent subComponent : allSubComponents) {
 				(subComponent.getConstraints()).setIndexNoNotification(i);
 				i++;
 			}
-			
 
 			/*System.out.println("Apres le retrieve: ");
 			for (FIBComponent c : allSubComponents) {
@@ -222,9 +209,9 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C,JPanel>
 				registerViewForComponent(subView, subComponent);
 			}
 
-			for (int i=0; i<getComponent().getRows(); i++) {
-				for (int j=0; j<getComponent().getCols(); j++) {
-					registerComponentWithConstraints(_getJComponent(j,i),null);
+			for (int i = 0; i < getComponent().getRows(); i++) {
+				for (int j = 0; j < getComponent().getCols(); j++) {
+					registerComponentWithConstraints(_getJComponent(j, i), null);
 				}
 			}
 		}
@@ -233,48 +220,44 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C,JPanel>
 			for (FIBComponent subComponent : allSubComponents) {
 				FIBView subView = getController().buildView(subComponent);
 				registerViewForComponent(subView, subComponent);
-				registerComponentWithConstraints(subView.getResultingJComponent(),subComponent.getConstraints());
+				registerComponentWithConstraints(subView.getResultingJComponent(), subComponent.getConstraints());
 			}
 		}
 	}
 
 	@Override
-	protected void addJComponent(JComponent c)
-	{
+	protected void addJComponent(JComponent c) {
 		Object constraint = getConstraints().get(c);
-		
+
 		if (constraint instanceof ComponentConstraints) {
-			((ComponentConstraints)constraint).performConstrainedAddition(getJComponent(), c);
-		}
-		else {
-			super.addJComponent(c);			
+			((ComponentConstraints) constraint).performConstrainedAddition(getJComponent(), c);
+		} else {
+			super.addJComponent(c);
 		}
 	}
 
 	@Override
-	public JPanel getJComponent() 
-	{
+	public JPanel getJComponent() {
 		return panel;
 	}
 
-
 	// Special case for GridLayout
-	protected JComponent _getJComponent(int col, int row)
-	{
+	protected JComponent _getJComponent(int col, int row) {
 		for (FIBComponent subComponent : getComponent().getSubComponents()) {
-			GridLayoutConstraints glc = (GridLayoutConstraints)subComponent.getConstraints();
-			if (glc.getX() == col && glc.getY() == row) return getController().viewForComponent(subComponent).getResultingJComponent();
+			GridLayoutConstraints glc = (GridLayoutConstraints) subComponent.getConstraints();
+			if (glc.getX() == col && glc.getY() == row)
+				return getController().viewForComponent(subComponent).getResultingJComponent();
 		}
 		// Otherwise, it's an empty cell
-		return new JPanel();
+		JPanel returned = new JPanel();
+		returned.setOpaque(false);
+		return returned;
 
 	}
 
 	@Override
-	public void delete() 
-	{
+	public void delete() {
 		super.delete();
 	}
-
 
 }

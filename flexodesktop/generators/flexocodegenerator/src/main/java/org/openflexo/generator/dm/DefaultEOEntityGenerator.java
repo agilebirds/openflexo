@@ -30,7 +30,6 @@ import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.exception.JavaFormattingException;
 import org.openflexo.logging.FlexoLogger;
 
-
 public class DefaultEOEntityGenerator implements EOEntityCodeGenerator {
 
 	private static final Logger logger = FlexoLogger.getLogger(DefaultEOEntityGenerator.class.getPackage().getName());
@@ -43,7 +42,7 @@ public class DefaultEOEntityGenerator implements EOEntityCodeGenerator {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/*
 	 * This method is dynamically invoked from the DMModel class (installEOGenerators())
 	 */
@@ -53,23 +52,21 @@ public class DefaultEOEntityGenerator implements EOEntityCodeGenerator {
 	}
 
 	@Override
-	public String generateCodeForEntity(final DMEOEntity entity)
-	{
+	public String generateCodeForEntity(final DMEOEntity entity) {
 		String javaCode = null;
 		try {
-			GenericRecordGenerator generator = new GenericRecordGenerator(eoGenerator,entity);
-			javaCode = generator.merge(generator.getTemplateName(),generator.defaultContext());
+			GenericRecordGenerator generator = new GenericRecordGenerator(eoGenerator, entity);
+			javaCode = generator.merge(generator.getTemplateName(), generator.defaultContext());
 			try {
-				javaCode = GeneratorFormatter.formatJavaCode(javaCode, "", entity.getName(), generator,entity.getProject());
+				javaCode = GeneratorFormatter.formatJavaCode(javaCode, "", entity.getName(), generator, entity.getProject());
 			} catch (JavaFormattingException javaFormattingException) {
-				logger.fine("javaFormattingException: "+javaFormattingException);
+				logger.fine("javaFormattingException: " + javaFormattingException);
 			}
 		} catch (GenerationException e) {
 			e.printStackTrace();
 		}
 
-
-		//logger.info("javaCode = "+javaCode);
+		// logger.info("javaCode = "+javaCode);
 
 		return javaCode;
 	}

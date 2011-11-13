@@ -33,71 +33,61 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.wkf.view.ExternalProcessViewWindow;
 
+public class OpenProcessInNewWindow extends FlexoGUIAction<OpenProcessInNewWindow, FlexoProcess, WKFObject> {
 
-public class OpenProcessInNewWindow extends FlexoGUIAction<OpenProcessInNewWindow,FlexoProcess,WKFObject> 
-{
+	protected static final Logger logger = Logger.getLogger(OpenProcessInNewWindow.class.getPackage().getName());
 
-    protected static final Logger logger = Logger.getLogger(OpenProcessInNewWindow.class.getPackage().getName());
+	public static FlexoActionType<OpenProcessInNewWindow, FlexoProcess, WKFObject> actionType = new FlexoActionType<OpenProcessInNewWindow, FlexoProcess, WKFObject>(
+			"open_process_in_new_window", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-    public static FlexoActionType<OpenProcessInNewWindow,FlexoProcess,WKFObject> actionType 
-    = new FlexoActionType<OpenProcessInNewWindow,FlexoProcess,WKFObject> ("open_process_in_new_window",FlexoActionType.defaultGroup,FlexoActionType.NORMAL_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public OpenProcessInNewWindow makeNewAction(FlexoProcess focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+			return new OpenProcessInNewWindow(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public OpenProcessInNewWindow makeNewAction(FlexoProcess focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) 
-        {
-            return new OpenProcessInNewWindow(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
+			return !object.isImported();
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) 
-        {
-            return !object.isImported();
-        }
+		@Override
+		protected boolean isEnabledForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
+			return (object != null);
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) 
-        {
-            return (object != null);
-        }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (OpenProcessInNewWindow.actionType, FlexoProcess.class);
-    }
-    
-    OpenProcessInNewWindow (FlexoProcess focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	};
 
-    public static void initWithController (final WKFController controller)
-    {
-    	controller.getEditor().registerInitializerFor(actionType, new FlexoActionInitializer<OpenProcessInNewWindow>() {
-            @Override
-			public boolean run(ActionEvent e, OpenProcessInNewWindow anAction)
-            {
-                if (anAction.getFocusedObject() == null) {
-                    anAction.setFocusedObject(controller.getCurrentFlexoProcess());
-                }
-                return (anAction.getFocusedObject() != null);
-            }
-        }, controller.getModule());
-    	
-    	controller.getEditor().registerFinalizerFor(actionType, new FlexoActionFinalizer<OpenProcessInNewWindow>() {
-            @Override
-			public boolean run(ActionEvent e, final OpenProcessInNewWindow anAction)
-            {   
-            	ExternalProcessViewWindow window = new ExternalProcessViewWindow(controller,anAction.getFocusedObject());
-            	window.setVisible(true);
-            	return true;         	
-             }
-        }, controller.getModule());
-      
-    }
-    
+	static {
+		FlexoModelObject.addActionForClass(OpenProcessInNewWindow.actionType, FlexoProcess.class);
+	}
+
+	OpenProcessInNewWindow(FlexoProcess focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	public static void initWithController(final WKFController controller) {
+		controller.getEditor().registerInitializerFor(actionType, new FlexoActionInitializer<OpenProcessInNewWindow>() {
+			@Override
+			public boolean run(ActionEvent e, OpenProcessInNewWindow anAction) {
+				if (anAction.getFocusedObject() == null) {
+					anAction.setFocusedObject(controller.getCurrentFlexoProcess());
+				}
+				return (anAction.getFocusedObject() != null);
+			}
+		}, controller.getModule());
+
+		controller.getEditor().registerFinalizerFor(actionType, new FlexoActionFinalizer<OpenProcessInNewWindow>() {
+			@Override
+			public boolean run(ActionEvent e, final OpenProcessInNewWindow anAction) {
+				ExternalProcessViewWindow window = new ExternalProcessViewWindow(controller, anAction.getFocusedObject());
+				window.setVisible(true);
+				return true;
+			}
+		}, controller.getModule());
+
+	}
 
 }

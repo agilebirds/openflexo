@@ -34,131 +34,115 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.model.PropertyModel;
 import org.openflexo.inspector.widget.WidgetFocusListener;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class DMEOEntityInspectorWidget extends CustomInspectorWidget<DMEOEntity>
-{
+public class DMEOEntityInspectorWidget extends CustomInspectorWidget<DMEOEntity> {
 
-    protected static final Logger logger = Logger.getLogger(DMEOEntityInspectorWidget.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(DMEOEntityInspectorWidget.class.getPackage().getName());
 
-    protected DMEOEntitySelector<DMEOEntity> _selector;
+	protected DMEOEntitySelector<DMEOEntity> _selector;
 
-    public DMEOEntityInspectorWidget(PropertyModel model, AbstractController controller)
-    {
-        super(model,controller);
-        _selector = new DMEOEntitySelector<DMEOEntity>(null, null, DMEOEntity.class) {
-            @Override
-			public void apply()
-            {
-                super.apply();
-                updateModelFromWidget();
-            }
+	public DMEOEntityInspectorWidget(PropertyModel model, AbstractController controller) {
+		super(model, controller);
+		_selector = new DMEOEntitySelector<DMEOEntity>(null, null, DMEOEntity.class) {
+			@Override
+			public void apply() {
+				super.apply();
+				updateModelFromWidget();
+			}
 
-            @Override
-			public void cancel()
-            {
-                super.cancel();
-                updateModelFromWidget();
-            }
-        };
-        getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
-            @Override
-			public void focusGained(FocusEvent arg0)
-            {
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("Focus gained in " + getClass().getName());
-                super.focusGained(arg0);
-                _selector.getTextField().requestFocus();
-                _selector.getTextField().selectAll();
-            }
+			@Override
+			public void cancel() {
+				super.cancel();
+				updateModelFromWidget();
+			}
+		};
+		getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				if (logger.isLoggable(Level.FINE))
+					logger.fine("Focus gained in " + getClass().getName());
+				super.focusGained(arg0);
+				_selector.getTextField().requestFocus();
+				_selector.getTextField().selectAll();
+			}
 
-            @Override
-			public void focusLost(FocusEvent arg0)
-            {
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("Focus lost in " + getClass().getName());
-                super.focusLost(arg0);
-            }
-        });
-    }
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				if (logger.isLoggable(Level.FINE))
+					logger.fine("Focus lost in " + getClass().getName());
+				super.focusLost(arg0);
+			}
+		});
+	}
 
-    @Override
-	public Class getDefaultType()
-    {
-        return DMEOEntity.class;
-    }
+	@Override
+	public Class getDefaultType() {
+		return DMEOEntity.class;
+	}
 
-    @Override
-	public synchronized void updateWidgetFromModel()
-    {
-        _selector.setEditedObject(getObjectValue());
-        _selector.setRevertValue(getObjectValue());
-    }
+	@Override
+	public synchronized void updateWidgetFromModel() {
+		_selector.setEditedObject(getObjectValue());
+		_selector.setRevertValue(getObjectValue());
+	}
 
-    /**
-     * Update the model given the actual state of the widget
-     */
-    @Override
-	public synchronized void updateModelFromWidget()
-    {
-        setObjectValue(_selector.getEditedObject());
-    	super.updateModelFromWidget();
-    }
+	/**
+	 * Update the model given the actual state of the widget
+	 */
+	@Override
+	public synchronized void updateModelFromWidget() {
+		setObjectValue(_selector.getEditedObject());
+		super.updateModelFromWidget();
+	}
 
-    @Override
-	public JComponent getDynamicComponent()
-    {
-        return _selector;
-    }
+	@Override
+	public JComponent getDynamicComponent() {
+		return _selector;
+	}
 
-    @Override
-	public void setProject(FlexoProject aProject)
-    {
-        super.setProject(aProject);
-        _selector.setProject(aProject);
-    }
+	@Override
+	public void setProject(FlexoProject aProject) {
+		super.setProject(aProject);
+		_selector.setProject(aProject);
+	}
 
-    protected void setRepository(DMRepository repository)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("Setting repository to " + repository);
-        _selector.setRootObject(repository);
-    }
+	protected void setRepository(DMRepository repository) {
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("Setting repository to " + repository);
+		_selector.setRootObject(repository);
+	}
 
-    protected void setEOModel(DMEOModel eoModel)
-    {
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("Setting eomodel to " + eoModel);
-        _selector.setRootObject(eoModel);
-    }
+	protected void setEOModel(DMEOModel eoModel) {
+		if (logger.isLoggable(Level.FINE))
+			logger.fine("Setting eomodel to " + eoModel);
+		_selector.setRootObject(eoModel);
+	}
 
-   @Override
-protected void performModelUpdating(InspectableObject value)
-    {
-        if (hasValueForParameter("repository")) {
-            setRepository((DMRepository) getDynamicValueForParameter("repository", value));
-        }
-        if (hasValueForParameter("eomodel")) {
-        	setEOModel((DMEOModel) getDynamicValueForParameter("eomodel", value));
-        }
-    }
+	@Override
+	protected void performModelUpdating(InspectableObject value) {
+		if (hasValueForParameter("repository")) {
+			setRepository((DMRepository) getDynamicValueForParameter("repository", value));
+		}
+		if (hasValueForParameter("eomodel")) {
+			setEOModel((DMEOModel) getDynamicValueForParameter("eomodel", value));
+		}
+	}
 
-   @Override
-   public void fireEditingCanceled()
-   {
-   	if (_selector != null) _selector.closePopup();
-   }
+	@Override
+	public void fireEditingCanceled() {
+		if (_selector != null)
+			_selector.closePopup();
+	}
 
-   @Override
-   public void fireEditingStopped()
-   {
-   	if (_selector != null) _selector.closePopup();
-   }
-
+	@Override
+	public void fireEditingStopped() {
+		if (_selector != null)
+			_selector.closePopup();
+	}
 
 }

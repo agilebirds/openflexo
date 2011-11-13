@@ -12,7 +12,7 @@ import org.openflexo.tm.hibernate.impl.enums.HibernateAttributeType;
 import org.openflexo.view.controller.FlexoController;
 
 /**
- *
+ * 
  * @author Nicolas Daniels
  */
 public class HibernateModelController extends HibernateFibController<HibernateModel> {

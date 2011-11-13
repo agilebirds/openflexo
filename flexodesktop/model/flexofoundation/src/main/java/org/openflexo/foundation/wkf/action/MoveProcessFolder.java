@@ -35,77 +35,71 @@ import org.openflexo.foundation.wkf.FlexoProcessNode;
 import org.openflexo.foundation.wkf.InvalidParentProcessException;
 import org.openflexo.foundation.wkf.ProcessFolder;
 
+public class MoveProcessFolder extends FlexoAction<MoveProcessFolder, ProcessFolder, ProcessFolder> {
 
-public class MoveProcessFolder extends FlexoAction<MoveProcessFolder,ProcessFolder,ProcessFolder>
-{
+	private static final Logger logger = Logger.getLogger(MoveProcessFolder.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(MoveProcessFolder.class.getPackage().getName());
+	public static FlexoActionType<MoveProcessFolder, ProcessFolder, ProcessFolder> actionType = new FlexoActionType<MoveProcessFolder, ProcessFolder, ProcessFolder>(
+			"move_process_folder", FlexoActionType.defaultGroup) {
 
-    public static FlexoActionType<MoveProcessFolder,ProcessFolder,ProcessFolder> actionType
-    = new FlexoActionType<MoveProcessFolder,ProcessFolder,ProcessFolder> ("move_process_folder",FlexoActionType.defaultGroup) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public MoveProcessFolder makeNewAction(ProcessFolder focusedObject, Vector<ProcessFolder> globalSelection, FlexoEditor editor) {
+			return new MoveProcessFolder(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public MoveProcessFolder makeNewAction(ProcessFolder focusedObject, Vector<ProcessFolder> globalSelection, FlexoEditor editor)
-        {
-            return new MoveProcessFolder(focusedObject, globalSelection,editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(ProcessFolder object, Vector<ProcessFolder> globalSelection) {
+			return false;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(ProcessFolder object, Vector<ProcessFolder> globalSelection)
-        {
-            return false;
-        }
+		@Override
+		protected boolean isEnabledForSelection(ProcessFolder object, Vector<ProcessFolder> globalSelection) {
+			return object != null;
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(ProcessFolder object, Vector<ProcessFolder> globalSelection)
-        {
-            return object != null;
-        }
+	};
 
-    };
+	MoveProcessFolder(ProcessFolder focusedObject, Vector<ProcessFolder> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-    MoveProcessFolder (ProcessFolder focusedObject, Vector<ProcessFolder> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+	static {
+		FlexoModelObject.addActionForClass(actionType, ProcessFolder.class);
+	}
 
-    static {
-    	FlexoModelObject.addActionForClass(actionType, ProcessFolder.class);
-    }
+	private FlexoFolderContainerNode destination;
 
-    private FlexoFolderContainerNode destination;
-
-    @Override
+	@Override
 	protected void doAction(Object context) throws InvalidParentProcessException, UndoException {
-    	if (getDestination()==null) {
-    		if (logger.isLoggable(Level.WARNING))
+		if (getDestination() == null) {
+			if (logger.isLoggable(Level.WARNING))
 				logger.warning("Destination is null! Returning now");
-    		return;
-    	}
-    	if (getDestination().isImported()) {
-    		if (logger.isLoggable(Level.WARNING))
+			return;
+		}
+		if (getDestination().isImported()) {
+			if (logger.isLoggable(Level.WARNING))
 				logger.warning("Cannot move a folder to an imported object");
-    		return;
-    	}
-    	if (getDestination().getProcessNode()==null) {
-    		if (logger.isLoggable(Level.WARNING))
-    			logger.warning("Destination has no parent process node! Returning now");
-    		return;
-    	}
-    	if (getDestination() instanceof ProcessFolder) {
-    		if (!getFocusedObject().isAcceptableParentFolder((ProcessFolder) getDestination())) {
-    			if (logger.isLoggable(Level.WARNING))
+			return;
+		}
+		if (getDestination().getProcessNode() == null) {
+			if (logger.isLoggable(Level.WARNING))
+				logger.warning("Destination has no parent process node! Returning now");
+			return;
+		}
+		if (getDestination() instanceof ProcessFolder) {
+			if (!getFocusedObject().isAcceptableParentFolder((ProcessFolder) getDestination())) {
+				if (logger.isLoggable(Level.WARNING))
 					logger.warning("Destination folder is not acceptable");
-    			return;
-    		}
-    	}
-    	FlexoProcessNode currentParent = getFocusedObject().getProcessNode();
-    	FlexoProcess targetProcess = getDestination().getProcessNode().getProcess();
+				return;
+			}
+		}
+		FlexoProcessNode currentParent = getFocusedObject().getProcessNode();
+		FlexoProcess targetProcess = getDestination().getProcessNode().getProcess();
 
-    	if (targetProcess.getProcessNode() != currentParent) {
+		if (targetProcess.getProcessNode() != currentParent) {
 			for (FlexoProcessNode node : getFocusedObject().getAllDirectSubProcessNodes()) {
 				if (!targetProcess.isAcceptableAsParentProcess(node.getProcess()))
 					throw new InvalidParentProcessException(node.getProcess(), targetProcess);
@@ -141,7 +135,7 @@ public class MoveProcessFolder extends FlexoAction<MoveProcessFolder,ProcessFold
 			}
 		}
 		getDestination().addToFolders(getFocusedObject());
-    }
+	}
 
 	public void setDestination(FlexoFolderContainerNode destination) {
 		this.destination = destination;

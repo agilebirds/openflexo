@@ -23,53 +23,45 @@ import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.RMNotification;
 import org.openflexo.foundation.view.ViewDefinition;
 
-public class ShemaDeleted extends OEDataModification implements RMNotification
-{
+public class ShemaDeleted extends OEDataModification implements RMNotification {
 
-    public ViewDefinition shema;
-    
-    
-    public ShemaDeleted(ViewDefinition shema)
-    {
-        super(shema, null);
-        this.shema = shema;
-    }
+	public ViewDefinition shema;
 
-    @Override
-	public boolean forceUpdateWhenUnload()
-    {
-        return true;
-    }
+	public ShemaDeleted(ViewDefinition shema) {
+		super(shema, null);
+		this.shema = shema;
+	}
 
-    @Override
-	public boolean isDeepNotification()
-    {
-        return true;
-    }
+	@Override
+	public boolean forceUpdateWhenUnload() {
+		return true;
+	}
 
-    @Override
-	public boolean propagateToSynchronizedResource(FlexoResource originResource, FlexoResource targetResource)
-    {
-    	if ((originResource == shema.getShemaLibrary().getFlexoResource()) /*&& targetResource == component.getComponentResource()*/) {
-               return true;
-        } else {
-            return false;
-        }
-    }
+	@Override
+	public boolean isDeepNotification() {
+		return true;
+	}
 
-    @Override
-	public boolean propagateToAlteredResource(FlexoResource originResource, FlexoResource targetResource)
-    {
-        if (originResource == shema.getShemaResource()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+	@Override
+	public boolean propagateToSynchronizedResource(FlexoResource originResource, FlexoResource targetResource) {
+		if ((originResource == shema.getShemaLibrary().getFlexoResource()) /*&& targetResource == component.getComponentResource()*/) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-    @Override
-	public String toString()
-    {
-        return "ShemaDeleteRequest " + shema.getName();
-    }
+	@Override
+	public boolean propagateToAlteredResource(FlexoResource originResource, FlexoResource targetResource) {
+		if (originResource == shema.getShemaResource()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public String toString() {
+		return "ShemaDeleteRequest " + shema.getName();
+	}
 }

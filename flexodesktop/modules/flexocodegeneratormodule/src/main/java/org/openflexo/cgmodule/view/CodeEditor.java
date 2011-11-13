@@ -27,41 +27,34 @@ import org.openflexo.foundation.rm.cg.ContentSource;
 import org.openflexo.foundation.rm.cg.WOFile;
 import org.openflexo.generator.rm.GenerationAvailableFileResource;
 
+public class CodeEditor extends CodeDisplayer implements FileContentEditor {
 
-public class CodeEditor extends CodeDisplayer implements FileContentEditor
-{
-
-	public CodeEditor(GenerationAvailableFileResource resource, GeneratorController controller)
-	{
-		super(resource,controller);
+	public CodeEditor(GenerationAvailableFileResource resource, GeneratorController controller) {
+		super(resource, controller);
 		_component.setEditable(true);
 		setEditedContent(getCGFile());
 	}
 
 	@Override
-	public String getEditedContentForKey(String contentKey) 
-	{
+	public String getEditedContentForKey(String contentKey) {
 		return _component.getEditedContentForKey(contentKey);
 	}
 
 	@Override
-	public void setEditedContent(CGFile file) 
-	{
+	public void setEditedContent(CGFile file) {
 		_component.setEditedContent(file);
 	}
 
 	@Override
-	protected CodeDisplayerComponent buildComponent()
-	{
+	protected CodeDisplayerComponent buildComponent() {
 		_component = null;
-		
+
 		if (getResourceData() instanceof ASCIIFile) {
 			_component = new ASCIIFileCodePanel(ContentSource.CONTENT_ON_DISK);
-		}
-		else if (getResourceData() instanceof WOFile) {
+		} else if (getResourceData() instanceof WOFile) {
 			_component = new WOComponentCodePanel(ContentSource.CONTENT_ON_DISK);
 		}
 		return _component;
 	}
-	
+
 }

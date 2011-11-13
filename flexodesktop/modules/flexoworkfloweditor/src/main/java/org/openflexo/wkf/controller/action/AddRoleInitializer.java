@@ -34,7 +34,6 @@ import org.openflexo.wkf.controller.WKFController;
 import org.openflexo.wkf.roleeditor.RoleEditorController;
 import org.openflexo.wkf.roleeditor.RoleEditorView;
 
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
@@ -55,80 +54,79 @@ import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.wkf.action.AddRole;
 
-
 public class AddRoleInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddRoleInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(AddRole.actionType,actionInitializer);
-	}
-	
-	@Override
-	protected WKFControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (WKFControllerActionInitializer)super.getControllerActionInitializer();
-	}
-	
-	@Override
-	protected FlexoActionInitializer<AddRole> getDefaultInitializer() 
-	{
-		return new FlexoActionInitializer<AddRole>() {
-            @Override
-			public boolean run(ActionEvent e, AddRole action)
-            {
-                if (action.getContext() instanceof DuplicateRoleException)
-                    return true;
-                if (action.getRoleAutomaticallyCreated()) return true;
-                FlexoWorkflow workflow = action.getWorkflow();
-                ParameterDefinition[] parameters = new ParameterDefinition[3];
-                parameters[0] = new TextFieldParameter("newRoleName", "name", workflow.getRoleList().getNextNewUserRoleName());
-                parameters[1] = new ColorParameter("color", "color", workflow.getRoleList().getNewRoleColor());
-                parameters[2] = new TextAreaParameter("description", "description", "");
-                parameters[2].addParameter("columns", "20");
-                AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null, FlexoLocalization.localizedForKey("create_new_role"), FlexoLocalization.localizedForKey("enter_parameters_for_the_new_role"), parameters);
-                if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
-                    String newRoleName = (String) dialog.parameterValueWithName("newRoleName");
-                    if (newRoleName == null)
-                        return false;
-                    action.setNewRoleName(newRoleName);
-                    action.setNewColor((FlexoColor) dialog.parameterValueWithName("color"));
-                    action.setNewDescription((String) dialog.parameterValueWithName("description"));
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        };
+	AddRoleInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(AddRole.actionType, actionInitializer);
 	}
 
-     @Override
-	protected FlexoActionFinalizer<AddRole> getDefaultFinalizer() 
-	{
+	@Override
+	protected WKFControllerActionInitializer getControllerActionInitializer() {
+		return (WKFControllerActionInitializer) super.getControllerActionInitializer();
+	}
+
+	@Override
+	protected FlexoActionInitializer<AddRole> getDefaultInitializer() {
+		return new FlexoActionInitializer<AddRole>() {
+			@Override
+			public boolean run(ActionEvent e, AddRole action) {
+				if (action.getContext() instanceof DuplicateRoleException)
+					return true;
+				if (action.getRoleAutomaticallyCreated())
+					return true;
+				FlexoWorkflow workflow = action.getWorkflow();
+				ParameterDefinition[] parameters = new ParameterDefinition[3];
+				parameters[0] = new TextFieldParameter("newRoleName", "name", workflow.getRoleList().getNextNewUserRoleName());
+				parameters[1] = new ColorParameter("color", "color", workflow.getRoleList().getNewRoleColor());
+				parameters[2] = new TextAreaParameter("description", "description", "");
+				parameters[2].addParameter("columns", "20");
+				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
+						FlexoLocalization.localizedForKey("create_new_role"),
+						FlexoLocalization.localizedForKey("enter_parameters_for_the_new_role"), parameters);
+				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
+					String newRoleName = (String) dialog.parameterValueWithName("newRoleName");
+					if (newRoleName == null)
+						return false;
+					action.setNewRoleName(newRoleName);
+					action.setNewColor((FlexoColor) dialog.parameterValueWithName("color"));
+					action.setNewDescription((String) dialog.parameterValueWithName("description"));
+					return true;
+				} else {
+					return false;
+				}
+			}
+		};
+	}
+
+	@Override
+	protected FlexoActionFinalizer<AddRole> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddRole>() {
-            @Override
-			public boolean run(ActionEvent e, AddRole action)
-            {
-                Role newRole = action.getNewRole();
-                if ((e != null) && (e.getSource() instanceof BrowserActionSource)) {
-                    ProjectBrowser browser = ((BrowserActionSource) e.getSource()).getBrowser();
-                    if (!browser.activateBrowsingFor(newRole)) {
-                        if (FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_desactivate_role_filtering"))) {
-                            browser.getFilterForObject(newRole).setStatus(BrowserFilterStatus.SHOW);
-                            browser.update();
-                        }
-                    }
-                }
-                if (e!=null)//If it wasn't created through the process inspector
-                	getControllerActionInitializer().getWKFSelectionManager().setSelectedObject(newRole);
-                // getControllerActionInitializer().getWKFController().getWorkflowBrowser().focusOn(newRole);
-				if (getControllerActionInitializer().getWKFController().getCurrentPerspective() == getControllerActionInitializer().getWKFController().ROLE_EDITOR_PERSPECTIVE) {
-					RoleEditorController controller = getControllerActionInitializer().getWKFController().ROLE_EDITOR_PERSPECTIVE.getRoleEditorController();
+			@Override
+			public boolean run(ActionEvent e, AddRole action) {
+				Role newRole = action.getNewRole();
+				if ((e != null) && (e.getSource() instanceof BrowserActionSource)) {
+					ProjectBrowser browser = ((BrowserActionSource) e.getSource()).getBrowser();
+					if (!browser.activateBrowsingFor(newRole)) {
+						if (FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_desactivate_role_filtering"))) {
+							browser.getFilterForObject(newRole).setStatus(BrowserFilterStatus.SHOW);
+							browser.update();
+						}
+					}
+				}
+				if (e != null)// If it wasn't created through the process inspector
+					getControllerActionInitializer().getWKFSelectionManager().setSelectedObject(newRole);
+				// getControllerActionInitializer().getWKFController().getWorkflowBrowser().focusOn(newRole);
+				if (getControllerActionInitializer().getWKFController().getCurrentPerspective() == getControllerActionInitializer()
+						.getWKFController().ROLE_EDITOR_PERSPECTIVE) {
+					RoleEditorController controller = getControllerActionInitializer().getWKFController().ROLE_EDITOR_PERSPECTIVE
+							.getRoleEditorController();
 					if (controller != null) {
 						RoleEditorView drawing = controller.getDrawingView();
 						if (drawing != null) {
-							ShapeGraphicalRepresentation<?> roleGR = (ShapeGraphicalRepresentation<?>) drawing.getDrawing().getGraphicalRepresentation(newRole);
+							ShapeGraphicalRepresentation<?> roleGR = (ShapeGraphicalRepresentation<?>) drawing.getDrawing()
+									.getGraphicalRepresentation(newRole);
 							if (roleGR != null) {
 								final ShapeView<?> view = (ShapeView<?>) drawing.viewForObject(roleGR);
 								SwingUtilities.invokeLater(new Runnable() {
@@ -143,36 +141,33 @@ public class AddRoleInitializer extends ActionInitializer {
 					}
 				}
 				return true;
-          }
-        };
-	}
-
-     @Override
- 	protected FlexoExceptionHandler<AddRole> getDefaultExceptionHandler() 
- 	{
- 		return new FlexoExceptionHandler<AddRole>() {
- 			@Override
-			public boolean handleException(FlexoException exception, AddRole action) {
-                if (exception instanceof DuplicateRoleException) {
-                    String newRoleName = FlexoController.askForString(FlexoLocalization
-                            .localizedForKey("sorry_role_already_exists_please_choose_an_other_name"));
-                    if (newRoleName!=null) {
-                        action.setNewRoleName(newRoleName);
-                        action.setContext(exception);
-                        action.doAction();
-                    }
-                    return true;
-                }
-                return false;
 			}
-        };
- 	}
-
+		};
+	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected FlexoExceptionHandler<AddRole> getDefaultExceptionHandler() {
+		return new FlexoExceptionHandler<AddRole>() {
+			@Override
+			public boolean handleException(FlexoException exception, AddRole action) {
+				if (exception instanceof DuplicateRoleException) {
+					String newRoleName = FlexoController.askForString(FlexoLocalization
+							.localizedForKey("sorry_role_already_exists_please_choose_an_other_name"));
+					if (newRoleName != null) {
+						action.setNewRoleName(newRoleName);
+						action.setContext(exception);
+						action.doAction();
+					}
+					return true;
+				}
+				return false;
+			}
+		};
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
 		return WKFIconLibrary.ROLE_ICON;
 	}
- 
+
 }

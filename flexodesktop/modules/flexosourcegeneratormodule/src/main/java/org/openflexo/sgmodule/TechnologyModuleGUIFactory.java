@@ -28,7 +28,6 @@ import org.openflexo.sgmodule.controller.action.SGControllerActionInitializer;
 import org.openflexo.sgmodule.controller.browser.TechnologyModuleBrowserElement;
 import org.openflexo.view.ModuleView;
 
-
 /**
  * Interface used to record Technology module GUI elements provider.
  * 
@@ -45,7 +44,8 @@ public interface TechnologyModuleGUIFactory {
 	 * @param parent
 	 * @return the created Browser Element, or null.
 	 */
-	public <T extends TechnologyModelObject> TechnologyModuleBrowserElement<T> createBrowserElement(T object, ProjectBrowser browser, BrowserElement parent);
+	public <T extends TechnologyModelObject> TechnologyModuleBrowserElement<T> createBrowserElement(T object, ProjectBrowser browser,
+			BrowserElement parent);
 
 	/**
 	 * Create a new model view for the specified TechnologyModelObject. <br>
@@ -56,7 +56,8 @@ public interface TechnologyModuleGUIFactory {
 	 * @param codeGenerationPerspective
 	 * @return the created view or null.
 	 */
-	public <T extends TechnologyModelObject> ModuleView<T> createModelView(T object, SGController controller, CodeGenerationPerspective codeGenerationPerspective);
+	public <T extends TechnologyModelObject> ModuleView<T> createModelView(T object, SGController controller,
+			CodeGenerationPerspective codeGenerationPerspective);
 
 	/**
 	 * Called at SG Module actions initialization. Used to record all Technology Module specific actions.

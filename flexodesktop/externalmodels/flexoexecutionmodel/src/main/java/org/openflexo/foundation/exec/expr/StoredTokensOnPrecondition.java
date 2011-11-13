@@ -23,33 +23,27 @@ import org.openflexo.antar.expr.EvaluationType;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.wkf.node.FlexoPreCondition;
 
-
-
 public class StoredTokensOnPrecondition extends FlexoBuiltInExpression {
 
 	private FlexoPreCondition pre;
-	
-	public StoredTokensOnPrecondition (FlexoPreCondition pre)
-	{
+
+	public StoredTokensOnPrecondition(FlexoPreCondition pre) {
 		super();
 		this.pre = pre;
 	}
 
-	public FlexoPreCondition getPre()
-	{
+	public FlexoPreCondition getPre() {
 		return pre;
-	}
-	
-	@Override
-	public String toString()
-	{
-		return "<StoredTokensOnPrecondition("+pre.getAttachedNode().getName()+")>";
 	}
 
 	@Override
-	public String getJavaStringRepresentation() 
-	{
-		return "getNumberOfTokensStoredOnPrecondition("+getPre().getFlexoID()+")";
+	public String toString() {
+		return "<StoredTokensOnPrecondition(" + pre.getAttachedNode().getName() + ")>";
+	}
+
+	@Override
+	public String getJavaStringRepresentation() {
+		return "getNumberOfTokensStoredOnPrecondition(" + getPre().getFlexoID() + ")";
 	}
 
 	@Override

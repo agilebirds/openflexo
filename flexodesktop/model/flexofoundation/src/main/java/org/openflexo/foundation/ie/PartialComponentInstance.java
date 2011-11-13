@@ -29,56 +29,50 @@ import org.openflexo.foundation.xml.FlexoComponentBuilder;
 import org.openflexo.foundation.xml.FlexoNavigationMenuBuilder;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 
-
 /**
- * @author bmangez
- * <B>Class Description</B>
+ * @author bmangez <B>Class Description</B>
  */
-public class PartialComponentInstance extends ComponentInstance implements Serializable
-{
-	
+public class PartialComponentInstance extends ComponentInstance implements Serializable {
+
 	private IEReusableWidget reusableWidget;
-	
-    /**
-     * @param component
-     */
-    public PartialComponentInstance(ComponentDefinition componentDef, XMLStorageResourceData container)
-    {
-        super(componentDef, container);
-    }
 
-    public PartialComponentInstance(FlexoComponentBuilder builder)
-    {
-        super(builder);
-    }
+	/**
+	 * @param component
+	 */
+	public PartialComponentInstance(ComponentDefinition componentDef, XMLStorageResourceData container) {
+		super(componentDef, container);
+	}
 
-    public PartialComponentInstance(FlexoProcessBuilder builder) {
-    	super(builder);
-    }
+	public PartialComponentInstance(FlexoComponentBuilder builder) {
+		super(builder);
+	}
 
-    /**
-     * 
-     * @param builder
-     * @deprecated - {@link FlexoItemMenu} should not reference partial components
-     */
+	public PartialComponentInstance(FlexoProcessBuilder builder) {
+		super(builder);
+	}
+
+	/**
+	 * 
+	 * @param builder
+	 * @deprecated - {@link FlexoItemMenu} should not reference partial components
+	 */
 	@Deprecated
 	public PartialComponentInstance(FlexoNavigationMenuBuilder builder) {
 		super(builder);
 	}
 
-	public IEReusableWidget getReusableWidget()
-    {
-        return reusableWidget;
-    }
+	public IEReusableWidget getReusableWidget() {
+		return reusableWidget;
+	}
 
-    public void setReusableWidget(IEReusableWidget reusableWidget) {
-    	this.reusableWidget = reusableWidget;
-    	setOwner(reusableWidget);
-    }
-    
+	public void setReusableWidget(IEReusableWidget reusableWidget) {
+		this.reusableWidget = reusableWidget;
+		setOwner(reusableWidget);
+	}
+
 	@Override
 	public String getClassNameKey() {
 		return "reusable_component_instance";
 	}
-    
+
 }

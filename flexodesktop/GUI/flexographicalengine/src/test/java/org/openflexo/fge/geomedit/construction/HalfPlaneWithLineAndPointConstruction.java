@@ -25,38 +25,33 @@ public class HalfPlaneWithLineAndPointConstruction extends HalfPlaneConstruction
 
 	public LineConstruction lineConstruction;
 	public PointConstruction pointConstruction;
-	
-	public HalfPlaneWithLineAndPointConstruction() 
-	{
+
+	public HalfPlaneWithLineAndPointConstruction() {
 		super();
 	}
-	
-	public HalfPlaneWithLineAndPointConstruction(LineConstruction aLineConstruction, PointConstruction aPointConstruction) 
-	{
+
+	public HalfPlaneWithLineAndPointConstruction(LineConstruction aLineConstruction, PointConstruction aPointConstruction) {
 		this();
 		this.lineConstruction = aLineConstruction;
 		this.pointConstruction = aPointConstruction;
 	}
-	
+
 	@Override
-	protected FGEHalfPlane computeData()
-	{
-		FGEHalfPlane returned = new FGEHalfPlane(lineConstruction.getLine(),pointConstruction.getPoint());
+	protected FGEHalfPlane computeData() {
+		FGEHalfPlane returned = new FGEHalfPlane(lineConstruction.getLine(), pointConstruction.getPoint());
 		return returned;
 	}
 
 	@Override
-	public String toString()
-	{
-		return "HalfPlaneWithLineAndPointConstruction[\n"+"> "+lineConstruction.toString()+"\n> "+pointConstruction.toString()+"\n]";
+	public String toString() {
+		return "HalfPlaneWithLineAndPointConstruction[\n" + "> " + lineConstruction.toString() + "\n> " + pointConstruction.toString()
+				+ "\n]";
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
+	public GeometricConstruction[] getDepends() {
 		GeometricConstruction[] returned = { lineConstruction, pointConstruction };
 		return returned;
 	}
-
 
 }

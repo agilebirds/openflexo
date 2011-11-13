@@ -24,53 +24,46 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
 
-
 /**
- * Browser element representing a sub-process node (used in the parent process
- * petri graph)
- *
+ * Browser element representing a sub-process node (used in the parent process petri graph)
+ * 
  * @author sguerin
- *
+ * 
  */
-public class SubProcessNodeElement extends AbstractActivityNodeElement
-{
+public class SubProcessNodeElement extends AbstractActivityNodeElement {
 
-    public SubProcessNodeElement(SubProcessNode subProcessNode, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(subProcessNode, BrowserElementType.SUBPROCESS_NODE, browser,parent);
-    }
+	public SubProcessNodeElement(SubProcessNode subProcessNode, ProjectBrowser browser, BrowserElement parent) {
+		super(subProcessNode, BrowserElementType.SUBPROCESS_NODE, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-        // We add portmaps registery
-        if ((getSubProcessNode() != null) && (getSubProcessNode().getPortMapRegistery() != null)) {
-            addToChilds(getSubProcessNode().getPortMapRegistery());
-        }
-        // We add sub process
-        // We don't do that anymore, since it's leading to StackOverflowError
-        /*if ((getSubProcessNode() != null) && (getSubProcessNode().getSubProcess() != null)) {
-            addToChilds(getSubProcessNode().getSubProcess());
-        }*/
+	@Override
+	protected void buildChildrenVector() {
+		// We add portmaps registery
+		if ((getSubProcessNode() != null) && (getSubProcessNode().getPortMapRegistery() != null)) {
+			addToChilds(getSubProcessNode().getPortMapRegistery());
+		}
+		// We add sub process
+		// We don't do that anymore, since it's leading to StackOverflowError
+		/*if ((getSubProcessNode() != null) && (getSubProcessNode().getSubProcess() != null)) {
+		    addToChilds(getSubProcessNode().getSubProcess());
+		}*/
 
-        super.buildChildrenVector();
-    }
+		super.buildChildrenVector();
+	}
 
-    protected SubProcessNode getSubProcessNode()
-    {
-        return (SubProcessNode) getObject();
-    }
+	protected SubProcessNode getSubProcessNode() {
+		return (SubProcessNode) getObject();
+	}
 
-    @Override
-	public boolean requiresExpansionFor(BrowserElement next)
-    {
-        if (next instanceof PortMapRegisteryElement) {
-            return false;
-        } else if (next instanceof ProcessElement) {
-            return false;
-        } else {
-            return super.requiresExpansionFor(next);
-        }
-    }
+	@Override
+	public boolean requiresExpansionFor(BrowserElement next) {
+		if (next instanceof PortMapRegisteryElement) {
+			return false;
+		} else if (next instanceof ProcessElement) {
+			return false;
+		} else {
+			return super.requiresExpansionFor(next);
+		}
+	}
 
 }

@@ -20,8 +20,7 @@
 package org.openflexo.foundation;
 
 /**
- * Interface implemented by objects able to be observed in a given context.
- * Implementation is commonly provided by
+ * Interface implemented by objects able to be observed in a given context. Implementation is commonly provided by
  * 
  * <pre>
  * FlexoObservable
@@ -32,13 +31,12 @@ package org.openflexo.foundation;
  * @author sguerin
  * 
  */
-public interface Observed
-{
+public interface Observed {
 
-    public void addObserver(FlexoObserver o);
+	public void addObserver(FlexoObserver o);
 
-    public void deleteObserver(FlexoObserver o);
+	public void deleteObserver(FlexoObserver o);
 
-    public void deleteObservers();
+	public void deleteObservers();
 
 }

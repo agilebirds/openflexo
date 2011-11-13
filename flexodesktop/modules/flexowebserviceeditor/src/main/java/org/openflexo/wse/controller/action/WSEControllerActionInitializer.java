@@ -25,47 +25,41 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.wse.controller.WSEController;
 import org.openflexo.wse.controller.WSESelectionManager;
 
-
 /**
  * 
  * Action initializing for this module
  * 
  * @author yourname
  */
-public class WSEControllerActionInitializer extends ControllerActionInitializer
-{
+public class WSEControllerActionInitializer extends ControllerActionInitializer {
 
-    private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-    private WSEController _wseController;
+	private WSEController _wseController;
 
-    public WSEControllerActionInitializer(WSEController controller)
-    {
-        super(controller);
-        _wseController = controller;
-    }
+	public WSEControllerActionInitializer(WSEController controller) {
+		super(controller);
+		_wseController = controller;
+	}
 
-    protected WSEController getWSEController()
-    {
-        return _wseController;
-    }
+	protected WSEController getWSEController() {
+		return _wseController;
+	}
 
-    protected WSESelectionManager getWSESelectionManager()
-    {
-        return getWSEController().getWSESelectionManager();
-    }
+	protected WSESelectionManager getWSESelectionManager() {
+		return getWSEController().getWSESelectionManager();
+	}
 
-    @Override
-	public void initializeActions()
-    {
-        super.initializeActions();
-        
-        (new WSESetPropertyInitializer(this)).init();
+	@Override
+	public void initializeActions() {
+		super.initializeActions();
 
-        (new WSDeleteInitializer(this)).init();
-        (new ImportWsdlInitializer(this)).init();
-        (new CreateNewWebServiceInitializer(this)).init();
+		(new WSESetPropertyInitializer(this)).init();
 
-    }
+		(new WSDeleteInitializer(this)).init();
+		(new ImportWsdlInitializer(this)).init();
+		(new CreateNewWebServiceInitializer(this)).init();
+
+	}
 
 }

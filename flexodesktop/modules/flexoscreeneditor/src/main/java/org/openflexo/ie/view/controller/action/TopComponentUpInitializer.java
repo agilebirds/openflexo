@@ -34,29 +34,24 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class TopComponentUpInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	TopComponentUpInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(TopComponentUp.actionType,actionInitializer);
+	TopComponentUpInitializer(IEControllerActionInitializer actionInitializer) {
+		super(TopComponentUp.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<TopComponentUp> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<TopComponentUp> getDefaultInitializer() {
 		return new FlexoActionInitializer<TopComponentUp>() {
 			@Override
-			public boolean run(ActionEvent e, TopComponentUp action)
-			{
+			public boolean run(ActionEvent e, TopComponentUp action) {
 				boolean doable = false;
 				IEWidget top = action.getFocusedObject();
 				if (top.getParent() instanceof IESequence) {
@@ -71,22 +66,18 @@ public class TopComponentUpInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<TopComponentUp> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<TopComponentUp> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<TopComponentUp>() {
 			@Override
-			public boolean run(ActionEvent e, TopComponentUp action)
-			{
+			public boolean run(ActionEvent e, TopComponentUp action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return IconLibrary.MOVE_UP_ICON;
 	}
-
 
 }

@@ -33,32 +33,27 @@ import javax.swing.JTextArea;
  * @author sguerin
  * 
  */
-public class TestCustomPopup extends TextFieldCustomPopup<Object>
-{
+public class TestCustomPopup extends TextFieldCustomPopup<Object> {
 
 	private JTextArea _textArea;
 
 	private JButton _button;
 
-	public TestCustomPopup(String editedObject)
-	{
+	public TestCustomPopup(String editedObject) {
 		super(editedObject);
 	}
 
 	@Override
-	protected ResizablePanel createCustomPanel(Object editedObject)
-	{
+	protected ResizablePanel createCustomPanel(Object editedObject) {
 		ResizablePanel customPanel;
 		customPanel = new ResizablePanel() {
 			@Override
-			public Dimension getDefaultSize()
-			{
+			public Dimension getDefaultSize() {
 				return getPreferredSize();
 			}
 
 			@Override
-			public void setPreferredSize(Dimension aDimension)
-			{
+			public void setPreferredSize(Dimension aDimension) {
 			}
 
 		};
@@ -67,8 +62,7 @@ public class TestCustomPopup extends TextFieldCustomPopup<Object>
 		customPanel.add(_button = new JButton("add hop"), BorderLayout.SOUTH);
 		_button.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				setEditedObject((String) getEditedObject() + "hop");
 			}
 		});
@@ -76,14 +70,12 @@ public class TestCustomPopup extends TextFieldCustomPopup<Object>
 	}
 
 	@Override
-	public void updateCustomPanel(Object editedObject)
-	{
+	public void updateCustomPanel(Object editedObject) {
 		_textArea.setText((String) editedObject);
 	}
 
 	@Override
-	public String renderedString(Object editedObject)
-	{
+	public String renderedString(Object editedObject) {
 		return (String) editedObject;
 	}
 

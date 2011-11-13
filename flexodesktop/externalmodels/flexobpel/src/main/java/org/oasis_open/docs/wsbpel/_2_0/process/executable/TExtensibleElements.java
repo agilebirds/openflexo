@@ -23,7 +23,6 @@
 // Generated on: 2008.02.08 at 10:43:57 AM CET 
 //
 
-
 package org.oasis_open.docs.wsbpel._2_0.process.executable;
 
 import java.util.ArrayList;
@@ -41,16 +40,16 @@ import javax.xml.namespace.QName;
 
 import org.w3c.dom.Element;
 
-
 /**
  * 
- * 				This type is extended by other component types to allow elements and attributes from
- * 				other namespaces to be added at the modeled places.
- * 			
+ * This type is extended by other component types to allow elements and attributes from other namespaces to be added at the modeled places.
  * 
- * <p>Java class for tExtensibleElements complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * Java class for tExtensibleElements complex type.
+ * 
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="tExtensibleElements">
@@ -68,131 +67,89 @@ import org.w3c.dom.Element;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tExtensibleElements", propOrder = {
-    "documentation",
-    "any"
-})
-@XmlSeeAlso({
-    TExtensionAssignOperation.class,
-    TCopy.class,
-    TVariable.class,
-    TFaultHandlers.class,
-    TExtensions.class,
-    TLinks.class,
-    TVariables.class,
-    TProcess.class,
-    TExtension.class,
-    TSources.class,
-    TActivityContainer.class,
-    TToPart.class,
-    TCorrelationSets.class,
-    TMessageExchanges.class,
-    TCorrelationSet.class,
-    TSource.class,
-    TToParts.class,
-    TCompletionCondition.class,
-    TTarget.class,
-    TMessageExchange.class,
-    TImport.class,
-    TFromPart.class,
-    TEventHandlers.class,
-    TFromParts.class,
-    TElseif.class,
-    TPartnerLinks.class,
-    TLink.class,
-    TTargets.class,
-    TPartnerLink.class,
-    TOnAlarmPick.class,
-    TActivity.class,
-    TCorrelationsWithPattern.class,
-    TOnMsgCommon.class,
-    TCorrelations.class,
-    TCorrelation.class,
-    TOnAlarmEvent.class
-})
+@XmlType(name = "tExtensibleElements", propOrder = { "documentation", "any" })
+@XmlSeeAlso({ TExtensionAssignOperation.class, TCopy.class, TVariable.class, TFaultHandlers.class, TExtensions.class, TLinks.class,
+		TVariables.class, TProcess.class, TExtension.class, TSources.class, TActivityContainer.class, TToPart.class,
+		TCorrelationSets.class, TMessageExchanges.class, TCorrelationSet.class, TSource.class, TToParts.class, TCompletionCondition.class,
+		TTarget.class, TMessageExchange.class, TImport.class, TFromPart.class, TEventHandlers.class, TFromParts.class, TElseif.class,
+		TPartnerLinks.class, TLink.class, TTargets.class, TPartnerLink.class, TOnAlarmPick.class, TActivity.class,
+		TCorrelationsWithPattern.class, TOnMsgCommon.class, TCorrelations.class, TCorrelation.class, TOnAlarmEvent.class })
 public class TExtensibleElements {
 
-    protected List<TDocumentation> documentation;
-    @XmlAnyElement(lax = true)
-    protected List<Object> any;
-    @XmlAnyAttribute
-    private Map<QName, String> otherAttributes = new HashMap<QName, String>();
+	protected List<TDocumentation> documentation;
+	@XmlAnyElement(lax = true)
+	protected List<Object> any;
+	@XmlAnyAttribute
+	private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
-    /**
-     * Gets the value of the documentation property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the documentation property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getDocumentation().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link TDocumentation }
-     * 
-     * 
-     */
-    public List<TDocumentation> getDocumentation() {
-        if (documentation == null) {
-            documentation = new ArrayList<TDocumentation>();
-        }
-        return this.documentation;
-    }
+	/**
+	 * Gets the value of the documentation property.
+	 * 
+	 * <p>
+	 * This accessor method returns a reference to the live list, not a snapshot. Therefore any modification you make to the returned list
+	 * will be present inside the JAXB object. This is why there is not a <CODE>set</CODE> method for the documentation property.
+	 * 
+	 * <p>
+	 * For example, to add a new item, do as follows:
+	 * 
+	 * <pre>
+	 * getDocumentation().add(newItem);
+	 * </pre>
+	 * 
+	 * 
+	 * <p>
+	 * Objects of the following type(s) are allowed in the list {@link TDocumentation }
+	 * 
+	 * 
+	 */
+	public List<TDocumentation> getDocumentation() {
+		if (documentation == null) {
+			documentation = new ArrayList<TDocumentation>();
+		}
+		return this.documentation;
+	}
 
-    /**
-     * Gets the value of the any property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the any property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getAny().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Element }
-     * {@link Object }
-     * 
-     * 
-     */
-    public List<Object> getAny() {
-        if (any == null) {
-            any = new ArrayList<Object>();
-        }
-        return this.any;
-    }
+	/**
+	 * Gets the value of the any property.
+	 * 
+	 * <p>
+	 * This accessor method returns a reference to the live list, not a snapshot. Therefore any modification you make to the returned list
+	 * will be present inside the JAXB object. This is why there is not a <CODE>set</CODE> method for the any property.
+	 * 
+	 * <p>
+	 * For example, to add a new item, do as follows:
+	 * 
+	 * <pre>
+	 * getAny().add(newItem);
+	 * </pre>
+	 * 
+	 * 
+	 * <p>
+	 * Objects of the following type(s) are allowed in the list {@link Element } {@link Object }
+	 * 
+	 * 
+	 */
+	public List<Object> getAny() {
+		if (any == null) {
+			any = new ArrayList<Object>();
+		}
+		return this.any;
+	}
 
-    /**
-     * Gets a map that contains attributes that aren't bound to any typed property on this class.
-     * 
-     * <p>
-     * the map is keyed by the name of the attribute and 
-     * the value is the string value of the attribute.
-     * 
-     * the map returned by this method is live, and you can add new attribute
-     * by updating the map directly. Because of this design, there's no setter.
-     * 
-     * 
-     * @return
-     *     always non-null
-     */
-    public Map<QName, String> getOtherAttributes() {
-        return otherAttributes;
-    }
+	/**
+	 * Gets a map that contains attributes that aren't bound to any typed property on this class.
+	 * 
+	 * <p>
+	 * the map is keyed by the name of the attribute and the value is the string value of the attribute.
+	 * 
+	 * the map returned by this method is live, and you can add new attribute by updating the map directly. Because of this design, there's
+	 * no setter.
+	 * 
+	 * 
+	 * @return always non-null
+	 */
+	public Map<QName, String> getOtherAttributes() {
+		return otherAttributes;
+	}
 
 }

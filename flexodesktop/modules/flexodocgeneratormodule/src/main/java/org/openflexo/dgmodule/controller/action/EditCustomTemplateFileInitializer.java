@@ -33,74 +33,63 @@ import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class EditCustomTemplateFileInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	EditCustomTemplateFileInitializer(DGControllerActionInitializer actionInitializer)
-	{
-		super(EditCustomTemplateFile.actionType,actionInitializer);
+	EditCustomTemplateFileInitializer(DGControllerActionInitializer actionInitializer) {
+		super(EditCustomTemplateFile.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected DGControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DGControllerActionInitializer)super.getControllerActionInitializer();
+	protected DGControllerActionInitializer getControllerActionInitializer() {
+		return (DGControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<EditCustomTemplateFile> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<EditCustomTemplateFile> getDefaultInitializer() {
 		return new FlexoActionInitializer<EditCustomTemplateFile>() {
-            @Override
-			public boolean run(ActionEvent e, EditCustomTemplateFile action)
-            {
-            	DGTemplateFileModuleView editor;
-            	if ((action.getInvoker() != null) 
-            			&& (action.getInvoker() instanceof DGTemplateFileModuleView)
-            			&& (((DGTemplateFileModuleView)action.getInvoker()).isOpenedInSeparateWindow())) {
-            		editor = (DGTemplateFileModuleView)action.getInvoker();
-            	}
-            	else {
-					editor = (DGTemplateFileModuleView) getControllerActionInitializer().getDGController().moduleViewForObject((CGTemplate) action.getFocusedObject());
-            	}
-            	if (editor != null) {
-            		action.setTemplateFileContentEditor(editor);
-            		return true;
-            	}
-            	return false;
-           }
-        };
-	}
-
-     @Override
-	protected FlexoActionFinalizer<EditCustomTemplateFile> getDefaultFinalizer() 
-	{
-		return new FlexoActionFinalizer<EditCustomTemplateFile>() {
-            @Override
-			public boolean run(ActionEvent e, EditCustomTemplateFile action)
-            {
-               	if ((action.getInvoker() == null) 
-            			|| !(action.getInvoker() instanceof DGTemplateFileModuleView)
-            			|| !(((DGTemplateFileModuleView)action.getInvoker()).isOpenedInSeparateWindow())) {
-            		getControllerActionInitializer().getDGController().setCurrentEditedObjectAsModuleView(action.getFocusedObject());
-            		getControllerActionInitializer().getDGController().selectAndFocusObject(action.getFocusedObject());
-            	}
-            	return true;            	
-          }
-        };
+			@Override
+			public boolean run(ActionEvent e, EditCustomTemplateFile action) {
+				DGTemplateFileModuleView editor;
+				if ((action.getInvoker() != null) && (action.getInvoker() instanceof DGTemplateFileModuleView)
+						&& (((DGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow())) {
+					editor = (DGTemplateFileModuleView) action.getInvoker();
+				} else {
+					editor = (DGTemplateFileModuleView) getControllerActionInitializer().getDGController().moduleViewForObject(
+							(CGTemplate) action.getFocusedObject());
+				}
+				if (editor != null) {
+					action.setTemplateFileContentEditor(editor);
+					return true;
+				}
+				return false;
+			}
+		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected FlexoActionFinalizer<EditCustomTemplateFile> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<EditCustomTemplateFile>() {
+			@Override
+			public boolean run(ActionEvent e, EditCustomTemplateFile action) {
+				if ((action.getInvoker() == null) || !(action.getInvoker() instanceof DGTemplateFileModuleView)
+						|| !(((DGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow())) {
+					getControllerActionInitializer().getDGController().setCurrentEditedObjectAsModuleView(action.getFocusedObject());
+					getControllerActionInitializer().getDGController().selectAndFocusObject(action.getFocusedObject());
+				}
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
 		return GeneratorIconLibrary.EDIT_ICON;
 	}
- 
+
 	@Override
-	protected Icon getDisabledIcon() 
-	{
+	protected Icon getDisabledIcon() {
 		return GeneratorIconLibrary.EDIT_DISABLED_ICON;
 	}
 

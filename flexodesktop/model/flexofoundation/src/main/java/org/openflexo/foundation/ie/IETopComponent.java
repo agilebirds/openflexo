@@ -25,27 +25,25 @@ import org.openflexo.foundation.ie.widget.IESequenceTab;
 import org.openflexo.foundation.ie.widget.IWidget;
 import org.openflexo.foundation.xml.FlexoXMLSerializable;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public interface IETopComponent extends IWidget
-{
-    
-    public String getTitle();
+public interface IETopComponent extends IWidget {
 
-    @Override
+	public String getTitle();
+
+	@Override
 	public IEObject getParent();
 
-    @Override
+	@Override
 	public void setParent(IEObject parent);
 
-    public Vector<IESequenceTab> getAllTabContainers();
+	public Vector<IESequenceTab> getAllTabContainers();
 
-    @Override
+	@Override
 	public FlexoXMLSerializable cloneUsingXMLMapping();
 
 }

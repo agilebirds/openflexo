@@ -40,169 +40,155 @@ import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.xml.FlexoComponentLibraryBuilder;
 import org.openflexo.toolbox.FileUtils;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public final class PopupComponentDefinition extends ComponentDefinition implements Serializable
-{
-    private static final Logger logger = Logger.getLogger(PopupComponentDefinition.class.getPackage().getName());
+public final class PopupComponentDefinition extends ComponentDefinition implements Serializable {
+	private static final Logger logger = Logger.getLogger(PopupComponentDefinition.class.getPackage().getName());
 
-    /**
-     * Constructor used during deserialization
-     * 
-     * @throws DuplicateResourceException
-     */
-    public PopupComponentDefinition(FlexoComponentLibraryBuilder builder) throws DuplicateResourceException
-    {
-        this(null, builder.componentLibrary, null, builder.getProject());
-        initializeDeserialization(builder);
-    }
+	/**
+	 * Constructor used during deserialization
+	 * 
+	 * @throws DuplicateResourceException
+	 */
+	public PopupComponentDefinition(FlexoComponentLibraryBuilder builder) throws DuplicateResourceException {
+		this(null, builder.componentLibrary, null, builder.getProject());
+		initializeDeserialization(builder);
+	}
 
-    public PopupComponentDefinition(FlexoComponentLibrary componentLibrary)
-    {
-        super(componentLibrary);
-    }
+	public PopupComponentDefinition(FlexoComponentLibrary componentLibrary) {
+		super(componentLibrary);
+	}
 
-    public PopupComponentDefinition(String aComponentName, FlexoComponentLibrary componentLibrary, FlexoComponentFolder aFolder, FlexoProject prj,
-            boolean checkUnicity) throws DuplicateResourceException
-    {
-        super(aComponentName, componentLibrary, aFolder, prj);
-        if (checkUnicity) {
-            String resourceIdentifier = FlexoPopupComponentResource.resourceIdentifierForName(aComponentName);
-            if ((aFolder != null) && (aFolder.getProject() != null) && (aFolder.getProject().isRegistered(resourceIdentifier))) {
-                aFolder.removeFromComponents(this);
-                throw new DuplicateResourceException(resourceIdentifier);
-            }
-        }
-    }
+	public PopupComponentDefinition(String aComponentName, FlexoComponentLibrary componentLibrary, FlexoComponentFolder aFolder,
+			FlexoProject prj, boolean checkUnicity) throws DuplicateResourceException {
+		super(aComponentName, componentLibrary, aFolder, prj);
+		if (checkUnicity) {
+			String resourceIdentifier = FlexoPopupComponentResource.resourceIdentifierForName(aComponentName);
+			if ((aFolder != null) && (aFolder.getProject() != null) && (aFolder.getProject().isRegistered(resourceIdentifier))) {
+				aFolder.removeFromComponents(this);
+				throw new DuplicateResourceException(resourceIdentifier);
+			}
+		}
+	}
 
-    public PopupComponentDefinition(String aComponentName, FlexoComponentLibrary componentLibrary, FlexoComponentFolder aFolder, FlexoProject prj)
-            throws DuplicateResourceException
-    {
-        this(aComponentName, componentLibrary, aFolder, prj, true);
-    }
-
-    @Override
-    public IEWOComponent createNewComponent() {
-    	return new IEPopupComponent(this,getProject());
-    }
-    
-    @Override
-	public FlexoComponentResource getComponentResource(boolean createIfNotExists)
-    {
-        if (getProject() != null) {
-            FlexoComponentResource returned = getProject().getFlexoPopupComponentResource(getName());
-            if (returned == null && createIfNotExists) {
-                if (logger.isLoggable(Level.INFO))
-                    logger.info("Creating new popup component resource !");
-                // FlexoProcessResource processRes =
-                // getProject().getFlexoProcessResource(getProcess().getName());
-                File componentsDir=ProjectRestructuration.getExpectedDirectoryForComponent(getProject().getProjectDirectory(), this);
-                File componentFile = new File(componentsDir, _componentName
-                        + ".woxml");
-                FlexoProjectFile resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
-                FlexoPopupComponentResource compRes=null;
-                try {
-                    compRes = new FlexoPopupComponentResource(getProject(), _componentName, getProject()
-                            .getFlexoComponentLibraryResource(), resourceComponentFile);
-                } catch (InvalidFileNameException e1) {
-                    boolean ok = false;
-                    for (int i = 0; i < 100 && !ok; i++) {
-                        try {
-                            componentFile = new File(componentsDir, FileUtils.getValidFileName(_componentName)+i
-                                    + ".woxml");
-                            resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
-                            resourceComponentFile.setProject(getProject());
-                            compRes = new FlexoPopupComponentResource(getProject(), _componentName, getProject()
-                                    .getFlexoComponentLibraryResource(), resourceComponentFile);
-                            ok = true;
-                        } catch (InvalidFileNameException e) {
-                        }
-                    }
-                    if (!ok) {
-                        componentFile = new File(componentsDir, FileUtils.getValidFileName(_componentName)+getFlexoID()
-                                + ".woxml");
-                        resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
-                        try {
-                            compRes = new FlexoPopupComponentResource(getProject(), _componentName, getProject()
-                                    .getFlexoComponentLibraryResource(), resourceComponentFile);
-                        } catch (InvalidFileNameException e) {
-                            if (logger.isLoggable(Level.SEVERE))
-                                logger.severe("This should really not happen.");
-                            return null;
-                        }
-                    }
-                }
-                if (compRes==null)
-                    return null;
-                compRes.setResourceData(new IEPopupComponent(this, getProject()));
-                try {
-                    compRes.getResourceData().setFlexoResource(compRes);
-                    getProject().registerResource(compRes);
-                } catch (DuplicateResourceException e) {
-                    // Warns about the exception
-                    if (logger.isLoggable(Level.WARNING))
-                        logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-                    e.printStackTrace();
-                    return null;
-                }
-                if (logger.isLoggable(Level.INFO))
-                    logger.info("Registered component " + _componentName + " file: " + componentFile);
-                returned = compRes;
-            }
-            return returned;
-        } else {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("getProject()==null for a PopupComponentDefinition !");
-        }
-        return null;
-    }
-    
-    @Override
-	public String getInspectorName()
-    {
-        return Inspectors.IE.POPUP_COMPONENT_DEFINITION_INSPECTOR;
-    }
-/*
-    public final void delete()
-    {
-        super.delete();
-        deleteObservers();
-    }
-*/
-    /**
-     * Overrides getClassNameKey
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "popup_component_definition";
-    }
-    
-    public boolean isHelper()
-    {
-        return getName().equals("WDLDateAssistant"); 
-    }
-    
-    public boolean isWDLDateAssistant()
-    {
-        return getName().equals("WDLDateAssistant"); 
-    }
-    
-    @Override
-	public IEPopupComponent getWOComponent()
-    {
-        return (IEPopupComponent)super.getWOComponent();
-    }
+	public PopupComponentDefinition(String aComponentName, FlexoComponentLibrary componentLibrary, FlexoComponentFolder aFolder,
+			FlexoProject prj) throws DuplicateResourceException {
+		this(aComponentName, componentLibrary, aFolder, prj, true);
+	}
 
 	@Override
-	public List<OperationNode> getAllOperationNodesLinkedToThisComponent()
-	{
+	public IEWOComponent createNewComponent() {
+		return new IEPopupComponent(this, getProject());
+	}
+
+	@Override
+	public FlexoComponentResource getComponentResource(boolean createIfNotExists) {
+		if (getProject() != null) {
+			FlexoComponentResource returned = getProject().getFlexoPopupComponentResource(getName());
+			if (returned == null && createIfNotExists) {
+				if (logger.isLoggable(Level.INFO))
+					logger.info("Creating new popup component resource !");
+				// FlexoProcessResource processRes =
+				// getProject().getFlexoProcessResource(getProcess().getName());
+				File componentsDir = ProjectRestructuration.getExpectedDirectoryForComponent(getProject().getProjectDirectory(), this);
+				File componentFile = new File(componentsDir, _componentName + ".woxml");
+				FlexoProjectFile resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
+				FlexoPopupComponentResource compRes = null;
+				try {
+					compRes = new FlexoPopupComponentResource(getProject(), _componentName,
+							getProject().getFlexoComponentLibraryResource(), resourceComponentFile);
+				} catch (InvalidFileNameException e1) {
+					boolean ok = false;
+					for (int i = 0; i < 100 && !ok; i++) {
+						try {
+							componentFile = new File(componentsDir, FileUtils.getValidFileName(_componentName) + i + ".woxml");
+							resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
+							resourceComponentFile.setProject(getProject());
+							compRes = new FlexoPopupComponentResource(getProject(), _componentName, getProject()
+									.getFlexoComponentLibraryResource(), resourceComponentFile);
+							ok = true;
+						} catch (InvalidFileNameException e) {
+						}
+					}
+					if (!ok) {
+						componentFile = new File(componentsDir, FileUtils.getValidFileName(_componentName) + getFlexoID() + ".woxml");
+						resourceComponentFile = new FlexoProjectFile(componentFile, getProject());
+						try {
+							compRes = new FlexoPopupComponentResource(getProject(), _componentName, getProject()
+									.getFlexoComponentLibraryResource(), resourceComponentFile);
+						} catch (InvalidFileNameException e) {
+							if (logger.isLoggable(Level.SEVERE))
+								logger.severe("This should really not happen.");
+							return null;
+						}
+					}
+				}
+				if (compRes == null)
+					return null;
+				compRes.setResourceData(new IEPopupComponent(this, getProject()));
+				try {
+					compRes.getResourceData().setFlexoResource(compRes);
+					getProject().registerResource(compRes);
+				} catch (DuplicateResourceException e) {
+					// Warns about the exception
+					if (logger.isLoggable(Level.WARNING))
+						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					e.printStackTrace();
+					return null;
+				}
+				if (logger.isLoggable(Level.INFO))
+					logger.info("Registered component " + _componentName + " file: " + componentFile);
+				returned = compRes;
+			}
+			return returned;
+		} else {
+			if (logger.isLoggable(Level.WARNING))
+				logger.warning("getProject()==null for a PopupComponentDefinition !");
+		}
+		return null;
+	}
+
+	@Override
+	public String getInspectorName() {
+		return Inspectors.IE.POPUP_COMPONENT_DEFINITION_INSPECTOR;
+	}
+
+	/*
+	    public final void delete()
+	    {
+	        super.delete();
+	        deleteObservers();
+	    }
+	*/
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "popup_component_definition";
+	}
+
+	public boolean isHelper() {
+		return getName().equals("WDLDateAssistant");
+	}
+
+	public boolean isWDLDateAssistant() {
+		return getName().equals("WDLDateAssistant");
+	}
+
+	@Override
+	public IEPopupComponent getWOComponent() {
+		return (IEPopupComponent) super.getWOComponent();
+	}
+
+	@Override
+	public List<OperationNode> getAllOperationNodesLinkedToThisComponent() {
 		return new ArrayList<OperationNode>();
 	}
 }

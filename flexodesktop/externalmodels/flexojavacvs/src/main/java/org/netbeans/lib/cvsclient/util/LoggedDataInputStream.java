@@ -26,194 +26,196 @@ import java.io.InputStream;
 import java.io.InterruptedIOException;
 
 /**
- * This input stream worked exactly like the normal DataInputStream except that
- * it logs anything read to a file
- * @author  Robert Greig
+ * This input stream worked exactly like the normal DataInputStream except that it logs anything read to a file
+ * 
+ * @author Robert Greig
  */
 public class LoggedDataInputStream extends FilterInputStream {
 
-    private long counter;
+	private long counter;
 
-    /**
-     * Construct a logged stream using the specified underlying stream
-     * @param in the stream
-     */
-    public LoggedDataInputStream(InputStream in) {
-        super(in);
-    }
+	/**
+	 * Construct a logged stream using the specified underlying stream
+	 * 
+	 * @param in
+	 *            the stream
+	 */
+	public LoggedDataInputStream(InputStream in) {
+		super(in);
+	}
 
-    /**
-     * Read a line (up to the newline character) from the stream, logging
-     * it too.
-     *
-     * @deprecated It converts input data to string using {@link ByteArray#getStringFromBytes}
-     * that works only for ASCII without <tt>0</tt>. Use <tt>byte</tt> access methods instead.
-     */
-    @Deprecated
+	/**
+	 * Read a line (up to the newline character) from the stream, logging it too.
+	 * 
+	 * @deprecated It converts input data to string using {@link ByteArray#getStringFromBytes} that works only for ASCII without <tt>0</tt>.
+	 *             Use <tt>byte</tt> access methods instead.
+	 */
+	@Deprecated
 	public String readLine() throws IOException {
-        return readLineBytes().getStringFromBytes();
-    }
+		return readLineBytes().getStringFromBytes();
+	}
 
-    /**
-     *
-     * @return
-     * @throws IOException
-     * @throws EOFException at stream end
-     */
-    public ByteArray readLineBytes() throws IOException {
-        int ch;
-        boolean throwEOF = true;
-        ByteArray byteArray = new ByteArray();
-        loop: while (true) {
-            if (Thread.interrupted()) {
-                Thread.currentThread().interrupt();
-                break;
-            }
-            if (in.available() == 0) {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException iex) {
-                    Thread.currentThread().interrupt();
-                    break loop;
-                }
-                continue;
-            }
-            ch = in.read();
-            counter++;
-            switch (ch) {
-                case -1:
-                    if (throwEOF) {
-                        throw new EOFException();
-                    }
-                case '\n':
-                    break loop;
-                default:
-                    byteArray.add((byte) ch);
-            }
-            throwEOF = false;
-        }
-        byte[] bytes = byteArray.getBytes();
-        Logger.logInput(bytes);
-        Logger.logInput('\n'); //NOI18N
-        return byteArray;
-    }
+	/**
+	 * 
+	 * @return
+	 * @throws IOException
+	 * @throws EOFException
+	 *             at stream end
+	 */
+	public ByteArray readLineBytes() throws IOException {
+		int ch;
+		boolean throwEOF = true;
+		ByteArray byteArray = new ByteArray();
+		loop: while (true) {
+			if (Thread.interrupted()) {
+				Thread.currentThread().interrupt();
+				break;
+			}
+			if (in.available() == 0) {
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException iex) {
+					Thread.currentThread().interrupt();
+					break loop;
+				}
+				continue;
+			}
+			ch = in.read();
+			counter++;
+			switch (ch) {
+			case -1:
+				if (throwEOF) {
+					throw new EOFException();
+				}
+			case '\n':
+				break loop;
+			default:
+				byteArray.add((byte) ch);
+			}
+			throwEOF = false;
+		}
+		byte[] bytes = byteArray.getBytes();
+		Logger.logInput(bytes);
+		Logger.logInput('\n'); // NOI18N
+		return byteArray;
+	}
 
-    /**
-     * Synchronously reads fixed chunk from the stream, logging it too.
-     *
-     * @param len blocks until specifid number of bytes is read.
-     */
-    public byte[] readBytes(int len) throws IOException {
-        int ch;
-        ByteArray byteArray = new ByteArray();
-        loop: while (len != 0) {
-            if (Thread.interrupted()) {
-                Thread.currentThread().interrupt();
-                break;
-            }
-            if (in.available() == 0) {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException iex) {
-                    Thread.currentThread().interrupt();
-                    break loop;
-                }
-                continue;
-            }
-            ch = in.read();
-            counter++;
-            switch (ch) {
-                case -1:
-                    break loop;
-                default:
-                    byteArray.add((byte) ch);
-                    len--;
-            }
-        }
-        byte[] bytes = byteArray.getBytes();
-        Logger.logInput(bytes);
-        return bytes;
-    }
+	/**
+	 * Synchronously reads fixed chunk from the stream, logging it too.
+	 * 
+	 * @param len
+	 *            blocks until specifid number of bytes is read.
+	 */
+	public byte[] readBytes(int len) throws IOException {
+		int ch;
+		ByteArray byteArray = new ByteArray();
+		loop: while (len != 0) {
+			if (Thread.interrupted()) {
+				Thread.currentThread().interrupt();
+				break;
+			}
+			if (in.available() == 0) {
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException iex) {
+					Thread.currentThread().interrupt();
+					break loop;
+				}
+				continue;
+			}
+			ch = in.read();
+			counter++;
+			switch (ch) {
+			case -1:
+				break loop;
+			default:
+				byteArray.add((byte) ch);
+				len--;
+			}
+		}
+		byte[] bytes = byteArray.getBytes();
+		Logger.logInput(bytes);
+		return bytes;
+	}
 
-    /**
-     * Closes this input stream and releases any system resources associated
-     * with the stream.
-     */
-    @Override
+	/**
+	 * Closes this input stream and releases any system resources associated with the stream.
+	 */
+	@Override
 	public void close() throws IOException {
-        in.close();
-    }
+		in.close();
+	}
 
-    /**
-     * Reads up to byte.length bytes of data from this input stream into an
-     * array of bytes.
-     */
-    @Override
+	/**
+	 * Reads up to byte.length bytes of data from this input stream into an array of bytes.
+	 */
+	@Override
 	public int read(byte[] b) throws IOException {
-        int read = in.read(b);
-        if (read != -1) {
-            Logger.logInput(b, 0, read);
-            counter += read;
-        }
-        return read;
-    }
+		int read = in.read(b);
+		if (read != -1) {
+			Logger.logInput(b, 0, read);
+			counter += read;
+		}
+		return read;
+	}
 
-    /**
-     * Reads up to len bytes of data from this input stream into an array of
-     * bytes
-     */
-    @Override
+	/**
+	 * Reads up to len bytes of data from this input stream into an array of bytes
+	 */
+	@Override
 	public int read(byte[] b, int off, int len) throws IOException {
-        int read = in.read(b, off, len);
-        if (read != -1) {
-            Logger.logInput(b, off, read);
-            counter += read;
-        }
-        return read;
-    }
+		int read = in.read(b, off, len);
+		if (read != -1) {
+			Logger.logInput(b, off, read);
+			counter += read;
+		}
+		return read;
+	}
 
-    @Override
+	@Override
 	public long skip(long n) throws IOException {
-        long skip = super.skip(n);
-        if (skip > 0) {
-            Logger.logInput(new String("<skipped " + skip + " bytes>").getBytes("utf8")); // NOI18N
-            counter += skip;
-        }
-        return skip;
-    }
+		long skip = super.skip(n);
+		if (skip > 0) {
+			Logger.logInput(new String("<skipped " + skip + " bytes>").getBytes("utf8")); // NOI18N
+			counter += skip;
+		}
+		return skip;
+	}
 
-    /**
-     * Interruptible read.
-     * @throws InterruptedIOException on thread interrupt
-     */
-    @Override
+	/**
+	 * Interruptible read.
+	 * 
+	 * @throws InterruptedIOException
+	 *             on thread interrupt
+	 */
+	@Override
 	public int read() throws IOException {
-        while (in.available() == 0) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException iex) {
-                Thread.currentThread().interrupt();
-                throw new InterruptedIOException();
-            }
-        }
+		while (in.available() == 0) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException iex) {
+				Thread.currentThread().interrupt();
+				throw new InterruptedIOException();
+			}
+		}
 
-        int i = super.read();
-        if (i != -1) {
-            Logger.logInput((char) i);
-            counter++;
-        }
-        return i;
-    }
+		int i = super.read();
+		if (i != -1) {
+			Logger.logInput((char) i);
+			counter++;
+		}
+		return i;
+	}
 
-    public InputStream getUnderlyingStream() {
-        return in;
-    }
+	public InputStream getUnderlyingStream() {
+		return in;
+	}
 
-    public void setUnderlyingStream(InputStream is) {
-        in = is;
-    }
+	public void setUnderlyingStream(InputStream is) {
+		in = is;
+	}
 
-    public long getCounter() {
-        return counter;
-    }
+	public long getCounter() {
+		return counter;
+	}
 }

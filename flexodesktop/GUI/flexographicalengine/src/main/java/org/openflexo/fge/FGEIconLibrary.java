@@ -6,11 +6,11 @@ import org.openflexo.toolbox.ImageIconResource;
  * Utility class containing all icons used in FGE
  * 
  * @author sylvain
- *
+ * 
  */
 public class FGEIconLibrary {
 
-	public static final ImageIconResource CURSOR_MOVE_ICON =  new ImageIconResource("Icons/CursorMove.gif");
+	public static final ImageIconResource CURSOR_MOVE_ICON = new ImageIconResource("Icons/CursorMove.gif");
 
 	public static final ImageIconResource RECT_POLYLIN_CONNECTOR_ICON = new ImageIconResource("Icons/RectPolylinConnector.gif");
 	public static final ImageIconResource CURVE_CONNECTOR_ICON = new ImageIconResource("Icons/CurveConnector.gif");
@@ -22,8 +22,10 @@ public class FGEIconLibrary {
 	public static final ImageIconResource START_ARROW_ICON = new ImageIconResource("Icons/ConnectorSymbols/StartArrow.gif");
 	public static final ImageIconResource START_PLAIN_ARROW_ICON = new ImageIconResource("Icons/ConnectorSymbols/StartPlainArrow.gif");
 	public static final ImageIconResource START_FILLED_ARROW_ICON = new ImageIconResource("Icons/ConnectorSymbols/StartFilledArrow.gif");
-	public static final ImageIconResource START_PLAIN_DOUBLE_ARROW_ICON = new ImageIconResource("Icons/ConnectorSymbols/StartPlainDoubleArrow.gif");
-	public static final ImageIconResource START_FILLED_DOUBLE_ARROW_ICON = new ImageIconResource("Icons/ConnectorSymbols/StartFilledDoubleArrow.gif");
+	public static final ImageIconResource START_PLAIN_DOUBLE_ARROW_ICON = new ImageIconResource(
+			"Icons/ConnectorSymbols/StartPlainDoubleArrow.gif");
+	public static final ImageIconResource START_FILLED_DOUBLE_ARROW_ICON = new ImageIconResource(
+			"Icons/ConnectorSymbols/StartFilledDoubleArrow.gif");
 	public static final ImageIconResource START_PLAIN_CIRCLE_ICON = new ImageIconResource("Icons/ConnectorSymbols/StartPlainCircle.gif");
 	public static final ImageIconResource START_FILLED_CIRCLE_ICON = new ImageIconResource("Icons/ConnectorSymbols/StartFilledCircle.gif");
 	public static final ImageIconResource START_PLAIN_SQUARE_ICON = new ImageIconResource("Icons/ConnectorSymbols/StartPlainSquare.gif");
@@ -35,8 +37,10 @@ public class FGEIconLibrary {
 	public static final ImageIconResource END_ARROW_ICON = new ImageIconResource("Icons/ConnectorSymbols/EndArrow.gif");
 	public static final ImageIconResource END_PLAIN_ARROW_ICON = new ImageIconResource("Icons/ConnectorSymbols/EndPlainArrow.gif");
 	public static final ImageIconResource END_FILLED_ARROW_ICON = new ImageIconResource("Icons/ConnectorSymbols/EndFilledArrow.gif");
-	public static final ImageIconResource END_PLAIN_DOUBLE_ARROW_ICON = new ImageIconResource("Icons/ConnectorSymbols/EndPlainDoubleArrow.gif");
-	public static final ImageIconResource END_FILLED_DOUBLE_ARROW_ICON = new ImageIconResource("Icons/ConnectorSymbols/EndFilledDoubleArrow.gif");
+	public static final ImageIconResource END_PLAIN_DOUBLE_ARROW_ICON = new ImageIconResource(
+			"Icons/ConnectorSymbols/EndPlainDoubleArrow.gif");
+	public static final ImageIconResource END_FILLED_DOUBLE_ARROW_ICON = new ImageIconResource(
+			"Icons/ConnectorSymbols/EndFilledDoubleArrow.gif");
 	public static final ImageIconResource END_PLAIN_CIRCLE_ICON = new ImageIconResource("Icons/ConnectorSymbols/EndPlainCircle.gif");
 	public static final ImageIconResource END_FILLED_CIRCLE_ICON = new ImageIconResource("Icons/ConnectorSymbols/EndFilledCircle.gif");
 	public static final ImageIconResource END_PLAIN_SQUARE_ICON = new ImageIconResource("Icons/ConnectorSymbols/EndPlainSquare.gif");
@@ -47,15 +51,17 @@ public class FGEIconLibrary {
 	public static final ImageIconResource MIDDLE_ARROW_ICON = new ImageIconResource("Icons/ConnectorSymbols/MiddleArrow.gif");
 	public static final ImageIconResource MIDDLE_PLAIN_ARROW_ICON = new ImageIconResource("Icons/ConnectorSymbols/MiddlePlainArrow.gif");
 	public static final ImageIconResource MIDDLE_FILLED_ARROW_ICON = new ImageIconResource("Icons/ConnectorSymbols/MiddleFilledArrow.gif");
-	public static final ImageIconResource MIDDLE_PLAIN_DOUBLE_ARROW_ICON = new ImageIconResource("Icons/ConnectorSymbols/MiddlePlainDoubleArrow.gif");
-	public static final ImageIconResource MIDDLE_FILLED_DOUBLE_ARROW_ICON = new ImageIconResource("Icons/ConnectorSymbols/MiddleFilledDoubleArrow.gif");
+	public static final ImageIconResource MIDDLE_PLAIN_DOUBLE_ARROW_ICON = new ImageIconResource(
+			"Icons/ConnectorSymbols/MiddlePlainDoubleArrow.gif");
+	public static final ImageIconResource MIDDLE_FILLED_DOUBLE_ARROW_ICON = new ImageIconResource(
+			"Icons/ConnectorSymbols/MiddleFilledDoubleArrow.gif");
 	public static final ImageIconResource MIDDLE_PLAIN_CIRCLE_ICON = new ImageIconResource("Icons/ConnectorSymbols/MiddlePlainCircle.gif");
 	public static final ImageIconResource MIDDLE_FILLED_CIRCLE_ICON = new ImageIconResource("Icons/ConnectorSymbols/MiddleFilledCircle.gif");
 	public static final ImageIconResource MIDDLE_PLAIN_SQUARE_ICON = new ImageIconResource("Icons/ConnectorSymbols/MiddlePlainSquare.gif");
 	public static final ImageIconResource MIDDLE_FILLED_SQUARE_ICON = new ImageIconResource("Icons/ConnectorSymbols/MiddleFilledSquare.gif");
 	public static final ImageIconResource MIDDLE_PLAIN_DIAMOND_ICON = new ImageIconResource("Icons/ConnectorSymbols/MiddlePlainDiamond.gif");
-	public static final ImageIconResource MIDDLE_FILLED_DIAMOND_ICON = new ImageIconResource("Icons/ConnectorSymbols/MiddleFilledDiamond.gif");
-
+	public static final ImageIconResource MIDDLE_FILLED_DIAMOND_ICON = new ImageIconResource(
+			"Icons/ConnectorSymbols/MiddleFilledDiamond.gif");
 
 	public static final ImageIconResource CAP_BUTT_ICON = new ImageIconResource("Icons/CapButt.gif");
 	public static final ImageIconResource CAP_ROUND_ICON = new ImageIconResource("Icons/CapRound.gif");

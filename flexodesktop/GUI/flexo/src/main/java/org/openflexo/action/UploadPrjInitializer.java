@@ -38,7 +38,6 @@ import org.openflexo.ws.client.PPMWebService.CLProjectDescriptor;
 import org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException;
 import org.openflexo.ws.client.PPMWebService.PPMWebServiceClient;
 
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.foundation.FlexoException;
@@ -50,33 +49,27 @@ import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.param.RadioButtonListParameter;
 import org.openflexo.foundation.rm.SaveResourceException;
 
-
-public class UploadPrjInitializer extends ActionInitializer
-{
+public class UploadPrjInitializer extends ActionInitializer {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	public UploadPrjInitializer(ControllerActionInitializer actionInitializer)
-	{
+	public UploadPrjInitializer(ControllerActionInitializer actionInitializer) {
 		super(UploadPrjAction.actionType, actionInitializer);
 	}
 
 	@Override
-	protected FlexoActionInitializer<UploadPrjAction> getDefaultInitializer()
-	{
-		return new FlexoActionInitializer<UploadPrjAction>()
-		{
+	protected FlexoActionInitializer<UploadPrjAction> getDefaultInitializer() {
+		return new FlexoActionInitializer<UploadPrjAction>() {
 			@Override
-			public boolean run(ActionEvent e, UploadPrjAction action)
-			{
+			public boolean run(ActionEvent e, UploadPrjAction action) {
 				boolean isFirst = true;
 				PPMWebServiceClient client = null;
 				CLProjectDescriptor[] targetProjects = null;
-				while(targetProjects==null) {
+				while (targetProjects == null) {
 					client = getController().getWSClient(!isFirst);
 					isFirst = false;
-					if (client==null)
+					if (client == null)
 						return false;// Cancelled
 					try {
 						targetProjects = client.getAvailableProjects();
@@ -86,38 +79,37 @@ public class UploadPrjInitializer extends ActionInitializer
 						getController().handleWSException(e1);
 					}
 				}
-					CLProjectDescriptor target = selectTarget(targetProjects);
-					if(target!=null){
-						action.setTargetProject(target);
+				CLProjectDescriptor target = selectTarget(targetProjects);
+				if (target != null) {
+					action.setTargetProject(target);
 
-
-						File zipFile = null;
-						try {
-							zipFile = File.createTempFile("tmp_"+System.currentTimeMillis(), "tmp_"+System.currentTimeMillis());
-							zipFile.deleteOnExit();
-						} catch (IOException e2) {
-							e2.printStackTrace();
-							FlexoController.showError(e2.getMessage());
-							return false;
-						}
-
-						ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving"), 5);
-						try {
-							getProject().saveAsZipFile(zipFile, ProgressWindow.instance(), true, true);
-						} catch (SaveResourceException e1) {
-							FlexoController.showError(e1.getMessage());
-							e1.printStackTrace();
-							return false;
-						}
-			            ProgressWindow.hideProgressWindow();
-			            action.setFile(zipFile);
-			            action.setClientWS(client);
-			            String s = FlexoController.askForString(FlexoLocalization.localizedForKey("please_provide_some_comments"));
-			            if (s==null) // Cancel
-			            	return false;
-			            action.setComments(s);
-						return true;
+					File zipFile = null;
+					try {
+						zipFile = File.createTempFile("tmp_" + System.currentTimeMillis(), "tmp_" + System.currentTimeMillis());
+						zipFile.deleteOnExit();
+					} catch (IOException e2) {
+						e2.printStackTrace();
+						FlexoController.showError(e2.getMessage());
+						return false;
 					}
+
+					ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving"), 5);
+					try {
+						getProject().saveAsZipFile(zipFile, ProgressWindow.instance(), true, true);
+					} catch (SaveResourceException e1) {
+						FlexoController.showError(e1.getMessage());
+						e1.printStackTrace();
+						return false;
+					}
+					ProgressWindow.hideProgressWindow();
+					action.setFile(zipFile);
+					action.setClientWS(client);
+					String s = FlexoController.askForString(FlexoLocalization.localizedForKey("please_provide_some_comments"));
+					if (s == null) // Cancel
+						return false;
+					action.setComments(s);
+					return true;
+				}
 				return false;
 			}
 		};
@@ -130,7 +122,7 @@ public class UploadPrjInitializer extends ActionInitializer
 			@Override
 			public boolean handleException(FlexoException exception, UploadPrjAction action) {
 				Throwable e = exception;
-				if (exception.getCause()!=null) {
+				if (exception.getCause() != null) {
 					e = exception.getCause();
 				}
 				if (e instanceof PPMWebServiceAuthentificationException) {
@@ -138,7 +130,7 @@ public class UploadPrjInitializer extends ActionInitializer
 				} else if (e instanceof RemoteException) {
 					getController().handleWSException((RemoteException) e);
 				} else {
-					FlexoController.notify(FlexoLocalization.localizedForKey("upload_project_failed")+": "+e.getMessage());
+					FlexoController.notify(FlexoLocalization.localizedForKey("upload_project_failed") + ": " + e.getMessage());
 				}
 				return false;
 			}
@@ -149,41 +141,41 @@ public class UploadPrjInitializer extends ActionInitializer
 		Arrays.sort(targetProjects, new Comparator<CLProjectDescriptor>() {
 			@Override
 			public int compare(CLProjectDescriptor o1, CLProjectDescriptor o2) {
-				if (o1.getProjectName()==null) {
-					if (o2.getProjectName()==null)
+				if (o1.getProjectName() == null) {
+					if (o2.getProjectName() == null)
 						return 0;
 					else
 						return -1;
-				} else if (o2.getProjectName()==null) {
+				} else if (o2.getProjectName() == null) {
 					return 1;
 				} else
 					return o1.getProjectName().compareTo(o2.getProjectName());
 			}
 		});
-		if(targetProjects.length==0){
+		if (targetProjects.length == 0) {
 			FlexoController.showError(FlexoLocalization.localizedForKey("sorry_but_there_is_no_projects_where_this_prj_can_be_uploaded"));
 			return null;
 		}
 		ParameterDefinition[] parameters = new ParameterDefinition[1];
-		RadioButtonListParameter<CLProjectDescriptor> p = new RadioButtonListParameter<CLProjectDescriptor>("selectedProject","choose_project",targetProjects[0],targetProjects);
+		RadioButtonListParameter<CLProjectDescriptor> p = new RadioButtonListParameter<CLProjectDescriptor>("selectedProject",
+				"choose_project", targetProjects[0], targetProjects);
 		parameters[0] = p;
-		AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), FlexoLocalization.localizedForKey("import_processes"), FlexoLocalization.localizedForKey("select_processes_to_import"), parameters);
-		if (dialog.getStatus() == AskParametersDialog.VALIDATE){
+		AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(),
+				FlexoLocalization.localizedForKey("import_processes"), FlexoLocalization.localizedForKey("select_processes_to_import"),
+				parameters);
+		if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 			return p.getValue();
-		}else{
+		} else {
 			return null;
 		}
 	}
 
 	@Override
-	protected FlexoActionFinalizer<UploadPrjAction> getDefaultFinalizer()
-	{
-		return new FlexoActionFinalizer<UploadPrjAction>()
-		{
+	protected FlexoActionFinalizer<UploadPrjAction> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<UploadPrjAction>() {
 			@Override
-			public boolean run(ActionEvent e, UploadPrjAction action)
-			{
-				if (action.getUploadReport()!=null && action.getUploadReport().trim().length()>0)
+			public boolean run(ActionEvent e, UploadPrjAction action) {
+				if (action.getUploadReport() != null && action.getUploadReport().trim().length() > 0)
 					FlexoController.notify(action.getUploadReport());
 				return true;
 			}
@@ -191,8 +183,7 @@ public class UploadPrjInitializer extends ActionInitializer
 	}
 
 	@Override
-	protected Icon getEnabledIcon()
-	{
+	protected Icon getEnabledIcon() {
 		return WKFIconLibrary.PROCESS_ICON;
 	}
 

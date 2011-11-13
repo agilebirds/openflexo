@@ -92,14 +92,12 @@ import org.openflexo.view.controller.InteractiveFlexoEditor;
 import org.openflexo.view.controller.SelectionManagingController;
 import org.openflexo.view.menu.FlexoMenuBar;
 
-
 /**
  * Controller for Generator module
  * 
  * @author gpolet
  */
-public class DGController extends DEController implements FlexoObserver, SelectionManagingController
-{
+public class DGController extends DEController implements FlexoObserver, SelectionManagingController {
 
 	protected static final Logger logger = Logger.getLogger(DGController.class.getPackage().getName());
 
@@ -131,8 +129,7 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 	 * @param workflowFile
 	 * @throws Exception
 	 */
-	public DGController(InteractiveFlexoEditor projectEditor, FlexoModule module) throws Exception
-	{
+	public DGController(InteractiveFlexoEditor projectEditor, FlexoModule module) throws Exception {
 		super(projectEditor, module);
 		_CGGeneratedResourceModifiedHook = new DGGeneratedResourceModifiedHook();
 		ModuleLoader.getFlexoResourceUpdateHandler().setGeneratedResourceModifiedHook(_CGGeneratedResourceModifiedHook);
@@ -144,7 +141,8 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 		_projectGenerators = new Hashtable<DGRepository, ProjectDocGenerator>();
 		_generatorMenuBar = (DGMenuBar) createAndRegisterNewMenuBar();
 		_generatorKeyEventListener = new DGKeyEventListener(this);
-		_generatorFrame = new DGFrame(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, this, (DGKeyEventListener)_generatorKeyEventListener, (DGMenuBar)_generatorMenuBar);
+		_generatorFrame = new DGFrame(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, this, (DGKeyEventListener) _generatorKeyEventListener,
+				(DGMenuBar) _generatorMenuBar);
 		init(_generatorFrame, _generatorKeyEventListener, _generatorMenuBar);
 
 		if (_selectionManager == null) {
@@ -160,20 +158,17 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 	}
 
 	/**
-	 * Creates a new instance of MenuBar for the module this controller refers
-	 * to
+	 * Creates a new instance of MenuBar for the module this controller refers to
 	 * 
 	 * @return
 	 */
 	@Override
-	protected FlexoMenuBar createNewMenuBar()
-	{
+	protected FlexoMenuBar createNewMenuBar() {
 		return new DGMenuBar(this);
 	}
 
 	@Override
-	public DGMenuBar getEditorMenuBar()
-	{
+	public DGMenuBar getEditorMenuBar() {
 		return (DGMenuBar) _generatorMenuBar;
 	}
 
@@ -182,8 +177,7 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 	 */
 
 	@Override
-	public DGKeyEventListener getGeneratorKeyEventListener()
-	{
+	public DGKeyEventListener getGeneratorKeyEventListener() {
 		return (DGKeyEventListener) _generatorKeyEventListener;
 	}
 
@@ -217,12 +211,14 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 
 	/**
 	 * Overrides hasViewForObjectAndPerpsective
-	 * @see org.openflexo.view.controller.FlexoController#hasViewForObjectAndPerspective(org.openflexo.foundation.FlexoModelObject, org.openflexo.view.FlexoPerspective)
+	 * 
+	 * @see org.openflexo.view.controller.FlexoController#hasViewForObjectAndPerspective(org.openflexo.foundation.FlexoModelObject,
+	 *      org.openflexo.view.FlexoPerspective)
 	 */
 	/* @Override
-    public boolean hasViewForObjectAndPerspective(FlexoModelObject object, FlexoPerspective perspective)
-    {
-    	if (perspective == CODE_GENERATOR_PERSPECTIVE) {
+	public boolean hasViewForObjectAndPerspective(FlexoModelObject object, FlexoPerspective perspective)
+	{
+		if (perspective == CODE_GENERATOR_PERSPECTIVE) {
 	        if (object instanceof GeneratedDoc) {
 	            return true;
 	        } else if (object instanceof DGRepository) {
@@ -240,17 +236,17 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 			} else if (object instanceof TOCData) {
 				return true;
 			}
-    	} else if (perspective == VERSIONNING_PERSPECTIVE) {
-    		if (object instanceof DGLatexFile)
-    			return true; 
-    	}
-        return super.hasViewForObjectAndPerspective(object, perspective);
-    }*/
+		} else if (perspective == VERSIONNING_PERSPECTIVE) {
+			if (object instanceof DGLatexFile)
+				return true; 
+		}
+	    return super.hasViewForObjectAndPerspective(object, perspective);
+	}*/
 
 	/* @Override
-    public FlexoModelObject getDefaultObjectForPerspective(
-    		FlexoModelObject currentObjectAsModuleView, FlexoPerspective perspective) {
-    	if (perspective==DOCEDITOR_PERSPECTIVE) {
+	public FlexoModelObject getDefaultObjectForPerspective(
+			FlexoModelObject currentObjectAsModuleView, FlexoPerspective perspective) {
+		if (perspective==DOCEDITOR_PERSPECTIVE) {
 	        if (currentObjectAsModuleView instanceof DGLatexFile) {
 	            return ((DGLatexFile)currentObjectAsModuleView).getRepository();
 	        } else if (currentObjectAsModuleView instanceof DGScreenshotFile) {
@@ -258,19 +254,18 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 	        } else {
 	            return getProject().getTOCData();
 	        }
-    	} else if (perspective == CODE_GENERATOR_PERSPECTIVE) {
+		} else if (perspective == CODE_GENERATOR_PERSPECTIVE) {
 	        if (currentObjectAsModuleView instanceof TOCEntry) {
 	            return ((TOCEntry)currentObjectAsModuleView).getRepository();
 	        } else {
 	            return getProject().getGeneratedDoc();
 	        }
-    	}
-    	return super.getDefaultObjectForPerspective(currentObjectAsModuleView, perspective);
-    }*/
+		}
+		return super.getDefaultObjectForPerspective(currentObjectAsModuleView, perspective);
+	}*/
 
 	@Override
-	protected FlexoMainPane createMainPane()
-	{
+	protected FlexoMainPane createMainPane() {
 		return new DGMainPane(this, getEmptyPanel(), getFlexoFrame());
 	}
 
@@ -280,20 +275,17 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 	}
 
 	@Override
-	public DGControllerActionInitializer createControllerActionInitializer()
-	{
+	public DGControllerActionInitializer createControllerActionInitializer() {
 		return new DGControllerActionInitializer(this);
 	}
 
 	@Override
-	public DGKeyEventListener getKeyEventListener()
-	{
+	public DGKeyEventListener getKeyEventListener() {
 		return (DGKeyEventListener) _generatorKeyEventListener;
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (dataModification instanceof GenerationProgressNotification) {
 			if (((GenerationProgressNotification) dataModification).getIsFineMessage()) {
 				refreshSecondaryProgressWindow(((GenerationProgressNotification) dataModification).getProgressMessage());
@@ -306,25 +298,23 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 		}
 	}
 
-	public ProjectDocGenerator getProjectGenerator(DGRepository repository)
-	{
+	public ProjectDocGenerator getProjectGenerator(DGRepository repository) {
 		if (!repository.isConnected()) {
 			return null;
 		}
 		ProjectDocGenerator returned = _projectGenerators.get(repository);
 		if (returned == null) {
 			try {
-				switch(repository.getFormat())
-				{
-					case LATEX:
-						returned = new ProjectDocLatexGenerator(getProject(), repository);
-						break;
-					case HTML:
-						returned = new ProjectDocHTMLGenerator(getProject(), repository);
-						break;
-					case DOCX:
-						returned = new ProjectDocDocxGenerator(getProject(), repository);
-						break;
+				switch (repository.getFormat()) {
+				case LATEX:
+					returned = new ProjectDocLatexGenerator(getProject(), repository);
+					break;
+				case HTML:
+					returned = new ProjectDocHTMLGenerator(getProject(), repository);
+					break;
+				case DOCX:
+					returned = new ProjectDocDocxGenerator(getProject(), repository);
+					break;
 				}
 			} catch (GenerationException e) {
 				showError(e.getLocalizedMessage());
@@ -335,380 +325,352 @@ public class DGController extends DEController implements FlexoObserver, Selecti
 		return returned;
 	}
 
-	public Enumeration<ProjectDocGenerator> getProjectGenerators()
-	{
+	public Enumeration<ProjectDocGenerator> getProjectGenerators() {
 		return _projectGenerators.elements();
 	}
 
 	/**
 	 * 
 	 */
-	 @Override
-	public void initInspectors()
-	{
+	@Override
+	public void initInspectors() {
 		super.initInspectors();
 		getDGSelectionManager().addObserver(getSharedInspectorController());
 	}
 
 	// =========================================================
-		// ================ Selection management ===================
-	 // =========================================================
+	// ================ Selection management ===================
+	// =========================================================
 
-	 @Override
-	public DGSelectionManager getSelectionManager()
-	 {
-		 return getDGSelectionManager();
-	 }
+	@Override
+	public DGSelectionManager getSelectionManager() {
+		return getDGSelectionManager();
+	}
 
-	 public DGSelectionManager getDGSelectionManager()
-	 {
-		 return (DGSelectionManager) _selectionManager;
-	 }
+	public DGSelectionManager getDGSelectionManager() {
+		return (DGSelectionManager) _selectionManager;
+	}
 
-	 /**
-	  * Select the view representing supplied object, if this view exists. Try
-	  * all to really display supplied object, even if required view is not the
-	  * current displayed view
-	  * 
-	  * @param object:
-	  *            the object to focus on
-	  */
-	 @Override
-	public void selectAndFocusObject(FlexoModelObject object)
-	 {
-		 if (object instanceof CGFile) {
-			 setCurrentEditedObjectAsModuleView(object);
-		 }
-		 if (object instanceof TOCEntry) {
-			 setCurrentEditedObjectAsModuleView(object);
-		 }
-		 getSelectionManager().setSelectedObject(object);
-	 }
+	/**
+	 * Select the view representing supplied object, if this view exists. Try all to really display supplied object, even if required view
+	 * is not the current displayed view
+	 * 
+	 * @param object
+	 *            : the object to focus on
+	 */
+	@Override
+	public void selectAndFocusObject(FlexoModelObject object) {
+		if (object instanceof CGFile) {
+			setCurrentEditedObjectAsModuleView(object);
+		}
+		if (object instanceof TOCEntry) {
+			setCurrentEditedObjectAsModuleView(object);
+		}
+		getSelectionManager().setSelectedObject(object);
+	}
 
-	 public DGRepository getCurrentGeneratedCodeRepository()
-	 {
-		 FlexoModelObject object = getCurrentDisplayedObjectAsModuleView();
-		 if (object instanceof CGObject) {
-			 return (DGRepository) AbstractGCAction.repositoryForObject((CGObject) object);
-		 }
-		 return null;
-	 }
+	public DGRepository getCurrentGeneratedCodeRepository() {
+		FlexoModelObject object = getCurrentDisplayedObjectAsModuleView();
+		if (object instanceof CGObject) {
+			return (DGRepository) AbstractGCAction.repositoryForObject((CGObject) object);
+		}
+		return null;
+	}
 
-	 GenerationRepository _lastEditedCGRepository;
+	GenerationRepository _lastEditedCGRepository;
 
-	 protected Vector<DGRepository> observedRepositories = new Vector<DGRepository>();
+	protected Vector<DGRepository> observedRepositories = new Vector<DGRepository>();
 
-	 public void refreshFooter()
-	 {
-		 _footer.refresh();
-	 }
+	public void refreshFooter() {
+		_footer.refresh();
+	}
 
-	 private void createFooter()
-	 {
-		 _footer = new DGFooter();
-	 }
+	private void createFooter() {
+		_footer = new DGFooter();
+	}
 
-	 public GenerationRepository getLastEditedCGRepository()
-	 {
-		 return _lastEditedCGRepository;
-	 }
+	public GenerationRepository getLastEditedCGRepository() {
+		return _lastEditedCGRepository;
+	}
 
-	 private final Hashtable<CGFile, Hashtable<ContentSource, DGFileVersionPopup>> storedPopups = new Hashtable<CGFile, Hashtable<ContentSource, DGFileVersionPopup>>();
+	private final Hashtable<CGFile, Hashtable<ContentSource, DGFileVersionPopup>> storedPopups = new Hashtable<CGFile, Hashtable<ContentSource, DGFileVersionPopup>>();
 
-	 public DGFileVersionPopup getPopupShowingFileVersion(CGFile aFile, ContentSource contentSource)
-	 {
-		 if (storedPopups.get(aFile) == null) {
-			 Hashtable<ContentSource, DGFileVersionPopup> newHashtable = new Hashtable<ContentSource, DGFileVersionPopup>();
-			 storedPopups.put(aFile, newHashtable);
-		 }
-		 if (storedPopups.get(aFile).get(contentSource) == null) {
-			 DGFileVersionPopup newPopup = new DGFileVersionPopup(aFile, contentSource, this);
-			 storedPopups.get(aFile).put(contentSource, newPopup);
-		 }
-		 return storedPopups.get(aFile).get(contentSource);
-	 }
+	public DGFileVersionPopup getPopupShowingFileVersion(CGFile aFile, ContentSource contentSource) {
+		if (storedPopups.get(aFile) == null) {
+			Hashtable<ContentSource, DGFileVersionPopup> newHashtable = new Hashtable<ContentSource, DGFileVersionPopup>();
+			storedPopups.put(aFile, newHashtable);
+		}
+		if (storedPopups.get(aFile).get(contentSource) == null) {
+			DGFileVersionPopup newPopup = new DGFileVersionPopup(aFile, contentSource, this);
+			storedPopups.get(aFile).put(contentSource, newPopup);
+		}
+		return storedPopups.get(aFile).get(contentSource);
+	}
 
-	 public void deletePopupShowingFileVersion(CGFile aFile, ContentSource contentSource)
-	 {
-		 storedPopups.get(aFile).remove(contentSource);
-	 }
+	public void deletePopupShowingFileVersion(CGFile aFile, ContentSource contentSource) {
+		storedPopups.get(aFile).remove(contentSource);
+	}
 
-	 public DGFooter getFooter()
-	 {
-		 return _footer;
-	 }
+	public DGFooter getFooter() {
+		return _footer;
+	}
 
-	 public class DGFooter extends JPanel implements GraphicalFlexoObserver, FocusListener, CursorPositionListener
-	 {
+	public class DGFooter extends JPanel implements GraphicalFlexoObserver, FocusListener, CursorPositionListener {
 
-		 private final JLabel statusLabel;
+		private final JLabel statusLabel;
 
-		 private final JPanel statusCountPanel;
+		private final JPanel statusCountPanel;
 
-		 private final JPanel editorInfoPanel;
+		private final JPanel editorInfoPanel;
 
-		 private final JLabel generationModifiedLabel;
+		private final JLabel generationModifiedLabel;
 
-		 private final JLabel diskModifiedLabel;
+		private final JLabel diskModifiedLabel;
 
-		 private final JLabel conflictsLabel;
+		private final JLabel conflictsLabel;
 
-		 private final JLabel needsMemoryGenerationLabel;
+		private final JLabel needsMemoryGenerationLabel;
 
-		 private final JLabel errorsLabel;
+		private final JLabel errorsLabel;
 
-		 private final JLabel cursorPositionLabel;
+		private final JLabel cursorPositionLabel;
 
-		 private final JLabel editorStatusLabel;
+		private final JLabel editorStatusLabel;
 
-		 public DGFooter()
-		 {
-			 super(new GridLayout(1, 3));
-			 statusLabel = new JLabel("012345678901234567890123456789012345678901234567890123456789", SwingConstants.LEFT);
-			 statusLabel.setFont(FlexoCst.MEDIUM_FONT);
-			 statusLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
-			 add(statusLabel);
+		public DGFooter() {
+			super(new GridLayout(1, 3));
+			statusLabel = new JLabel("012345678901234567890123456789012345678901234567890123456789", SwingConstants.LEFT);
+			statusLabel.setFont(FlexoCst.MEDIUM_FONT);
+			statusLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
+			add(statusLabel);
 
-			 statusCountPanel = new JPanel(new FlowLayout());
-			 generationModifiedLabel = new JLabel("0");
-			 generationModifiedLabel.setFont(FlexoCst.MEDIUM_FONT);
-			 statusCountPanel.add(generationModifiedLabel);
-			 statusCountPanel.add(new JLabel(UtilsIconLibrary.LEFT_MODIFICATION_ICON));
-			 statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
-			 diskModifiedLabel = new JLabel("5");
-			 diskModifiedLabel.setFont(FlexoCst.MEDIUM_FONT);
-			 statusCountPanel.add(diskModifiedLabel);
-			 statusCountPanel.add(new JLabel(UtilsIconLibrary.RIGHT_MODIFICATION_ICON));
-			 statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
-			 conflictsLabel = new JLabel("8");
-			 conflictsLabel.setFont(FlexoCst.MEDIUM_FONT);
-			 statusCountPanel.add(conflictsLabel);
-			 statusCountPanel.add(new JLabel(UtilsIconLibrary.CONFLICT_ICON));
-			 statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
-			 statusCountPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
-			 statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
-			 needsMemoryGenerationLabel = new JLabel("1");
-			 needsMemoryGenerationLabel.setFont(FlexoCst.MEDIUM_FONT);
-			 statusCountPanel.add(needsMemoryGenerationLabel);
-			 statusCountPanel.add(new JLabel(GeneratorIconLibrary.GENERATE_CODE_ICON));
-			 statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
-			 statusCountPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
-			 statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
-			 errorsLabel = new JLabel("0");
-			 errorsLabel.setFont(FlexoCst.MEDIUM_FONT);
-			 statusCountPanel.add(errorsLabel);
-			 statusCountPanel.add(new JLabel(CGIconLibrary.UNFIXABLE_ERROR_ICON));
-			 add(statusCountPanel);
+			statusCountPanel = new JPanel(new FlowLayout());
+			generationModifiedLabel = new JLabel("0");
+			generationModifiedLabel.setFont(FlexoCst.MEDIUM_FONT);
+			statusCountPanel.add(generationModifiedLabel);
+			statusCountPanel.add(new JLabel(UtilsIconLibrary.LEFT_MODIFICATION_ICON));
+			statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
+			diskModifiedLabel = new JLabel("5");
+			diskModifiedLabel.setFont(FlexoCst.MEDIUM_FONT);
+			statusCountPanel.add(diskModifiedLabel);
+			statusCountPanel.add(new JLabel(UtilsIconLibrary.RIGHT_MODIFICATION_ICON));
+			statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
+			conflictsLabel = new JLabel("8");
+			conflictsLabel.setFont(FlexoCst.MEDIUM_FONT);
+			statusCountPanel.add(conflictsLabel);
+			statusCountPanel.add(new JLabel(UtilsIconLibrary.CONFLICT_ICON));
+			statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
+			statusCountPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
+			statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
+			needsMemoryGenerationLabel = new JLabel("1");
+			needsMemoryGenerationLabel.setFont(FlexoCst.MEDIUM_FONT);
+			statusCountPanel.add(needsMemoryGenerationLabel);
+			statusCountPanel.add(new JLabel(GeneratorIconLibrary.GENERATE_CODE_ICON));
+			statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
+			statusCountPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
+			statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
+			errorsLabel = new JLabel("0");
+			errorsLabel.setFont(FlexoCst.MEDIUM_FONT);
+			statusCountPanel.add(errorsLabel);
+			statusCountPanel.add(new JLabel(CGIconLibrary.UNFIXABLE_ERROR_ICON));
+			add(statusCountPanel);
 
-			 editorInfoPanel = new JPanel(new FlowLayout());
-			 editorInfoPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
-			 editorInfoPanel.add(Box.createRigidArea(new Dimension(3, 16)));
-			 cursorPositionLabel = new JLabel("-:-", SwingConstants.CENTER);
-			 cursorPositionLabel.setPreferredSize(new Dimension(50, 16));
-			 cursorPositionLabel.setFont(FlexoCst.MEDIUM_FONT);
-			 editorInfoPanel.add(cursorPositionLabel);
-			 editorInfoPanel.add(Box.createRigidArea(new Dimension(3, 16)));
-			 editorInfoPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
-			 editorInfoPanel.add(Box.createRigidArea(new Dimension(3, 16)));
-			 editorStatusLabel = new JLabel("");
-			 editorStatusLabel.setFont(FlexoCst.MEDIUM_FONT);
-			 editorInfoPanel.add(editorStatusLabel);
-			 add(editorInfoPanel);
-			 refreshEditorInfoPanel();
+			editorInfoPanel = new JPanel(new FlowLayout());
+			editorInfoPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
+			editorInfoPanel.add(Box.createRigidArea(new Dimension(3, 16)));
+			cursorPositionLabel = new JLabel("-:-", SwingConstants.CENTER);
+			cursorPositionLabel.setPreferredSize(new Dimension(50, 16));
+			cursorPositionLabel.setFont(FlexoCst.MEDIUM_FONT);
+			editorInfoPanel.add(cursorPositionLabel);
+			editorInfoPanel.add(Box.createRigidArea(new Dimension(3, 16)));
+			editorInfoPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
+			editorInfoPanel.add(Box.createRigidArea(new Dimension(3, 16)));
+			editorStatusLabel = new JLabel("");
+			editorStatusLabel.setFont(FlexoCst.MEDIUM_FONT);
+			editorInfoPanel.add(editorStatusLabel);
+			add(editorInfoPanel);
+			refreshEditorInfoPanel();
 
-		 }
+		}
 
-		 public void refresh()
-		 {
-			 DGRepository repositoryToConsider = getCurrentGeneratedCodeRepository();
-			 // logger.info("Refresh footer with "+repositoryToConsider);
-			 boolean displayItemStatus;
-			 if (repositoryToConsider != null) {
-				 if (!observedRepositories.contains(repositoryToConsider)) {
-					 observedRepositories.add(repositoryToConsider);
-					 repositoryToConsider.addObserver(this);
-				 }
-				 String repName = "[" + repositoryToConsider.getName() + "] ";
-				 if (!repositoryToConsider.isConnected()) {
-					 statusLabel.setText(repName + FlexoLocalization.localizedForKey("repository_disconnected"));
-					 statusLabel.setForeground(Color.BLACK);
-					 displayItemStatus = false;
-				 } else {
-					 if (_projectGenerators.get(repositoryToConsider) == null) {
-						 statusLabel.setText(repName + FlexoLocalization.localizedForKey("doc_generation_not_synchronized"));
-						 displayItemStatus = false;
-					 } else {
-						 statusLabel.setText(repName + FlexoLocalization.localizedForKey("doc_generation_is_synchronized"));
-						 displayItemStatus = true;
-					 }
-					 statusLabel.setForeground(Color.BLACK);
-				 }
-			 } else {
-				 statusLabel.setText(FlexoLocalization.localizedForKey("no_repository_selected"));
-				 statusLabel.setForeground(Color.GRAY);
-				 displayItemStatus = false;
-			 }
+		public void refresh() {
+			DGRepository repositoryToConsider = getCurrentGeneratedCodeRepository();
+			// logger.info("Refresh footer with "+repositoryToConsider);
+			boolean displayItemStatus;
+			if (repositoryToConsider != null) {
+				if (!observedRepositories.contains(repositoryToConsider)) {
+					observedRepositories.add(repositoryToConsider);
+					repositoryToConsider.addObserver(this);
+				}
+				String repName = "[" + repositoryToConsider.getName() + "] ";
+				if (!repositoryToConsider.isConnected()) {
+					statusLabel.setText(repName + FlexoLocalization.localizedForKey("repository_disconnected"));
+					statusLabel.setForeground(Color.BLACK);
+					displayItemStatus = false;
+				} else {
+					if (_projectGenerators.get(repositoryToConsider) == null) {
+						statusLabel.setText(repName + FlexoLocalization.localizedForKey("doc_generation_not_synchronized"));
+						displayItemStatus = false;
+					} else {
+						statusLabel.setText(repName + FlexoLocalization.localizedForKey("doc_generation_is_synchronized"));
+						displayItemStatus = true;
+					}
+					statusLabel.setForeground(Color.BLACK);
+				}
+			} else {
+				statusLabel.setText(FlexoLocalization.localizedForKey("no_repository_selected"));
+				statusLabel.setForeground(Color.GRAY);
+				displayItemStatus = false;
+			}
 
-			 if (displayItemStatus) {
-				 generationModifiedLabel.setForeground(Color.BLACK);
-				 generationModifiedLabel.setText("" + repositoryToConsider.getGenerationModifiedCount());
-				 diskModifiedLabel.setForeground(Color.BLACK);
-				 diskModifiedLabel.setText("" + repositoryToConsider.getDiskModifiedCount());
-				 conflictsLabel.setForeground(Color.BLACK);
-				 conflictsLabel.setText("" + repositoryToConsider.getConflictsCount());
-				 needsMemoryGenerationLabel.setForeground(Color.BLACK);
-				 needsMemoryGenerationLabel.setText("" + repositoryToConsider.getNeedsMemoryGenerationCount());
-				 errorsLabel.setForeground(Color.BLACK);
-				 errorsLabel.setText("" + repositoryToConsider.getErrorsCount());
-			 } else {
-				 generationModifiedLabel.setForeground(Color.GRAY);
-				 generationModifiedLabel.setText("-");
-				 diskModifiedLabel.setForeground(Color.GRAY);
-				 diskModifiedLabel.setText("-");
-				 conflictsLabel.setForeground(Color.GRAY);
-				 conflictsLabel.setText("-");
-				 needsMemoryGenerationLabel.setForeground(Color.GRAY);
-				 needsMemoryGenerationLabel.setText("-");
-				 errorsLabel.setForeground(Color.GRAY);
-				 errorsLabel.setText("-");
-			 }
+			if (displayItemStatus) {
+				generationModifiedLabel.setForeground(Color.BLACK);
+				generationModifiedLabel.setText("" + repositoryToConsider.getGenerationModifiedCount());
+				diskModifiedLabel.setForeground(Color.BLACK);
+				diskModifiedLabel.setText("" + repositoryToConsider.getDiskModifiedCount());
+				conflictsLabel.setForeground(Color.BLACK);
+				conflictsLabel.setText("" + repositoryToConsider.getConflictsCount());
+				needsMemoryGenerationLabel.setForeground(Color.BLACK);
+				needsMemoryGenerationLabel.setText("" + repositoryToConsider.getNeedsMemoryGenerationCount());
+				errorsLabel.setForeground(Color.BLACK);
+				errorsLabel.setText("" + repositoryToConsider.getErrorsCount());
+			} else {
+				generationModifiedLabel.setForeground(Color.GRAY);
+				generationModifiedLabel.setText("-");
+				diskModifiedLabel.setForeground(Color.GRAY);
+				diskModifiedLabel.setText("-");
+				conflictsLabel.setForeground(Color.GRAY);
+				conflictsLabel.setText("-");
+				needsMemoryGenerationLabel.setForeground(Color.GRAY);
+				needsMemoryGenerationLabel.setText("-");
+				errorsLabel.setForeground(Color.GRAY);
+				errorsLabel.setText("-");
+			}
 
-			 refreshEditorInfoPanel();
+			refreshEditorInfoPanel();
 
-			 validate();
-			 repaint();
-		 }
+			validate();
+			repaint();
+		}
 
-		 @Override
-		public void update(FlexoObservable observable, DataModification dataModification)
-		 {
-			 refresh();
-		 }
+		@Override
+		public void update(FlexoObservable observable, DataModification dataModification) {
+			refresh();
+		}
 
-		 @Override
-		public void focusGained(FocusEvent e)
-		 {
-			 if (e.getComponent() instanceof JEditTextArea) {
-				 ((JEditTextArea) e.getComponent()).addToCursorPositionListener(this);
-				 _activeGenericCodeDisplayer = ((JEditTextArea) e.getComponent());
-				 refresh();
-			 }
-		 }
+		@Override
+		public void focusGained(FocusEvent e) {
+			if (e.getComponent() instanceof JEditTextArea) {
+				((JEditTextArea) e.getComponent()).addToCursorPositionListener(this);
+				_activeGenericCodeDisplayer = ((JEditTextArea) e.getComponent());
+				refresh();
+			}
+		}
 
-		 @Override
-		public void focusLost(FocusEvent e)
-		 {
-			 if (e.getComponent() instanceof JEditTextArea) {
-				 ((JEditTextArea) e.getComponent()).removeFromCursorPositionListener(this);
-				 if (_activeGenericCodeDisplayer == e.getComponent()) {
-					 _activeGenericCodeDisplayer = null;
-				 }
-				 refresh();
-			 }
-		 }
+		@Override
+		public void focusLost(FocusEvent e) {
+			if (e.getComponent() instanceof JEditTextArea) {
+				((JEditTextArea) e.getComponent()).removeFromCursorPositionListener(this);
+				if (_activeGenericCodeDisplayer == e.getComponent()) {
+					_activeGenericCodeDisplayer = null;
+				}
+				refresh();
+			}
+		}
 
-		 private JEditTextArea _activeGenericCodeDisplayer;
+		private JEditTextArea _activeGenericCodeDisplayer;
 
-		 @Override
-		public void positionChanged(int newPosX, int newPosY)
-		 {
-			 refreshEditorInfoPanel();
-		 }
+		@Override
+		public void positionChanged(int newPosX, int newPosY) {
+			refreshEditorInfoPanel();
+		}
 
-		 private void refreshEditorInfoPanel()
-		 {
-			 // logger.info("refreshEditorInfoPanel()");
-			 if (_activeGenericCodeDisplayer == null) {
-				 cursorPositionLabel.setText("-");
-				 editorStatusLabel.setText(FlexoLocalization.localizedForKey("no_edition"));
-			 } else {
-				 cursorPositionLabel.setText(_activeGenericCodeDisplayer.getCursorY() + ":" + _activeGenericCodeDisplayer.getCursorX());
-				 editorStatusLabel.setText((_activeGenericCodeDisplayer.isEditable() ? FlexoLocalization.localizedForKey("edition")
-						 : FlexoLocalization.localizedForKey("read_only")));
-			 }
-		 }
+		private void refreshEditorInfoPanel() {
+			// logger.info("refreshEditorInfoPanel()");
+			if (_activeGenericCodeDisplayer == null) {
+				cursorPositionLabel.setText("-");
+				editorStatusLabel.setText(FlexoLocalization.localizedForKey("no_edition"));
+			} else {
+				cursorPositionLabel.setText(_activeGenericCodeDisplayer.getCursorY() + ":" + _activeGenericCodeDisplayer.getCursorX());
+				editorStatusLabel.setText((_activeGenericCodeDisplayer.isEditable() ? FlexoLocalization.localizedForKey("edition")
+						: FlexoLocalization.localizedForKey("read_only")));
+			}
+		}
 
-	 }
+	}
 
-	 private DGGeneratedResourceModifiedHook _CGGeneratedResourceModifiedHook;
+	private DGGeneratedResourceModifiedHook _CGGeneratedResourceModifiedHook;
 
-	 public class DGGeneratedResourceModifiedHook implements GeneratedResourceModifiedHook
-	 {
-		 private GeneratedResourceModifiedChoice defaultGeneratedResourceModifiedChoice = GeneratedResourceModifiedChoice.ASK;
+	public class DGGeneratedResourceModifiedHook implements GeneratedResourceModifiedHook {
+		private GeneratedResourceModifiedChoice defaultGeneratedResourceModifiedChoice = GeneratedResourceModifiedChoice.ASK;
 
-		 protected DGGeneratedResourceModifiedHook()
-		 {
-			 defaultGeneratedResourceModifiedChoice = DGPreferences.getGeneratedResourceModifiedChoice();
-		 }
+		protected DGGeneratedResourceModifiedHook() {
+			defaultGeneratedResourceModifiedChoice = DGPreferences.getGeneratedResourceModifiedChoice();
+		}
 
-		 public GeneratedResourceModifiedChoice getDefaultGeneratedResourceModifiedChoice()
-		 {
-			 return defaultGeneratedResourceModifiedChoice;
-		 }
+		public GeneratedResourceModifiedChoice getDefaultGeneratedResourceModifiedChoice() {
+			return defaultGeneratedResourceModifiedChoice;
+		}
 
-		 public void setDefaultGeneratedResourceModifiedChoice(GeneratedResourceModifiedChoice defaultGeneratedResourceModifiedChoice)
-		 {
-			 this.defaultGeneratedResourceModifiedChoice = defaultGeneratedResourceModifiedChoice;
-		 }
+		public void setDefaultGeneratedResourceModifiedChoice(GeneratedResourceModifiedChoice defaultGeneratedResourceModifiedChoice) {
+			this.defaultGeneratedResourceModifiedChoice = defaultGeneratedResourceModifiedChoice;
+		}
 
-		 @Override
-		public void handleGeneratedResourceModified(FlexoGeneratedResource aGeneratedResource)
-		 {
-			 if ((aGeneratedResource instanceof CGRepositoryFileResource) && !(aGeneratedResource instanceof FlexoCopiedResource)) {
-				 if (logger.isLoggable(Level.INFO)) {
+		@Override
+		public void handleGeneratedResourceModified(FlexoGeneratedResource aGeneratedResource) {
+			if ((aGeneratedResource instanceof CGRepositoryFileResource) && !(aGeneratedResource instanceof FlexoCopiedResource)) {
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Resource " + aGeneratedResource + " has been modified on the disk.");
 				}
-				 CGRepositoryFileResource generatedResource = (CGRepositoryFileResource) aGeneratedResource;
-				 GeneratedResourceModifiedChoice choice = defaultGeneratedResourceModifiedChoice;
-				 if (defaultGeneratedResourceModifiedChoice == GeneratedResourceModifiedChoice.ASK) {
+				CGRepositoryFileResource generatedResource = (CGRepositoryFileResource) aGeneratedResource;
+				GeneratedResourceModifiedChoice choice = defaultGeneratedResourceModifiedChoice;
+				if (defaultGeneratedResourceModifiedChoice == GeneratedResourceModifiedChoice.ASK) {
 
-					 RadioButtonListParameter<String> whatToDo = new RadioButtonListParameter<String>("whatToDo",
-							 "what_would_you_like_to_do", GeneratedResourceModifiedChoice.IGNORE.getLocalizedName(),
-							 GeneratedResourceModifiedChoice.IGNORE.getLocalizedName(), GeneratedResourceModifiedChoice.ACCEPT
-							 .getLocalizedName());
-					 CheckboxParameter rememberMyChoice = new CheckboxParameter("rememberMyChoice", "remember_my_choice", false);
-					 AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(
-							 getProject(), null,
-							 FlexoLocalization.localizedForKey("resource_edited"), FlexoLocalization.localizedForKey("resource") + " "
-							 + generatedResource.getFileName() + " " + FlexoLocalization.localizedForKey("has_been_edited"), whatToDo, rememberMyChoice);
-					 if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
-						 if (whatToDo.getValue().equals(GeneratedResourceModifiedChoice.IGNORE.getLocalizedName())) {
-							 choice = GeneratedResourceModifiedChoice.IGNORE;
-						 } else if (whatToDo.getValue().equals(GeneratedResourceModifiedChoice.ACCEPT.getLocalizedName())) {
-							 choice = GeneratedResourceModifiedChoice.ACCEPT;
-						 }
-						 if (rememberMyChoice.getValue()) {
-							 DGPreferences.setGeneratedResourceModifiedChoice(choice);
-						 }
-					 }
-				 }
-				 if (choice == GeneratedResourceModifiedChoice.ASK) {
-					 choice = GeneratedResourceModifiedChoice.IGNORE;
-				 }
+					RadioButtonListParameter<String> whatToDo = new RadioButtonListParameter<String>("whatToDo",
+							"what_would_you_like_to_do", GeneratedResourceModifiedChoice.IGNORE.getLocalizedName(),
+							GeneratedResourceModifiedChoice.IGNORE.getLocalizedName(),
+							GeneratedResourceModifiedChoice.ACCEPT.getLocalizedName());
+					CheckboxParameter rememberMyChoice = new CheckboxParameter("rememberMyChoice", "remember_my_choice", false);
+					AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
+							FlexoLocalization.localizedForKey("resource_edited"), FlexoLocalization.localizedForKey("resource") + " "
+									+ generatedResource.getFileName() + " " + FlexoLocalization.localizedForKey("has_been_edited"),
+							whatToDo, rememberMyChoice);
+					if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
+						if (whatToDo.getValue().equals(GeneratedResourceModifiedChoice.IGNORE.getLocalizedName())) {
+							choice = GeneratedResourceModifiedChoice.IGNORE;
+						} else if (whatToDo.getValue().equals(GeneratedResourceModifiedChoice.ACCEPT.getLocalizedName())) {
+							choice = GeneratedResourceModifiedChoice.ACCEPT;
+						}
+						if (rememberMyChoice.getValue()) {
+							DGPreferences.setGeneratedResourceModifiedChoice(choice);
+						}
+					}
+				}
+				if (choice == GeneratedResourceModifiedChoice.ASK) {
+					choice = GeneratedResourceModifiedChoice.IGNORE;
+				}
 
-				 // First of all, notify resource changed
-				 generatedResource.notifyResourceChangedOnDisk();
+				// First of all, notify resource changed
+				generatedResource.notifyResourceChangedOnDisk();
 
-				 Vector<CGObject> resourceChangedOnDisk = new Vector<CGObject>();
-				 resourceChangedOnDisk.add(generatedResource.getCGFile());
+				Vector<CGObject> resourceChangedOnDisk = new Vector<CGObject>();
+				resourceChangedOnDisk.add(generatedResource.getCGFile());
 
-				 if (choice == GeneratedResourceModifiedChoice.IGNORE) {
-				 } else if (choice == GeneratedResourceModifiedChoice.ACCEPT) {
-					 AcceptDiskUpdate.actionType.makeNewAction(generatedResource.getCGFile(), resourceChangedOnDisk, getEditor()).doAction();
-				 }
-			 }
-		 }
+				if (choice == GeneratedResourceModifiedChoice.IGNORE) {
+				} else if (choice == GeneratedResourceModifiedChoice.ACCEPT) {
+					AcceptDiskUpdate.actionType.makeNewAction(generatedResource.getCGFile(), resourceChangedOnDisk, getEditor()).doAction();
+				}
+			}
+		}
 
-	 }
+	}
 
-	 public DGGeneratedResourceModifiedHook getCGGeneratedResourceModifiedHook()
-	 {
-		 return _CGGeneratedResourceModifiedHook;
-	 }
+	public DGGeneratedResourceModifiedHook getCGGeneratedResourceModifiedHook() {
+		return _CGGeneratedResourceModifiedHook;
+	}
 
-	 public void setCGGeneratedResourceModifiedHook(DGGeneratedResourceModifiedHook generatedResourceModifiedHook)
-	 {
-		 _CGGeneratedResourceModifiedHook = generatedResourceModifiedHook;
-	 }
+	public void setCGGeneratedResourceModifiedHook(DGGeneratedResourceModifiedHook generatedResourceModifiedHook) {
+		_CGGeneratedResourceModifiedHook = generatedResourceModifiedHook;
+	}
 
 }

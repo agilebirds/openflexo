@@ -23,25 +23,20 @@ import java.lang.reflect.Type;
 
 import org.openflexo.fib.model.FIBNumber.NumberType;
 
-
 public class FIBNumberColumn extends FIBTableColumn {
 
-	public static enum Parameters implements FIBModelAttribute
-	{
+	public static enum Parameters implements FIBModelAttribute {
 		numberType
 	}
 
 	private NumberType numberType = NumberType.IntegerType;
 
-	public NumberType getNumberType()
-	{
+	public NumberType getNumberType() {
 		return numberType;
 	}
 
-	public void setNumberType(NumberType numberType)
-	{
-		FIBAttributeNotification<NumberType> notification = requireChange(
-				Parameters.numberType, numberType);
+	public void setNumberType(NumberType numberType) {
+		FIBAttributeNotification<NumberType> notification = requireChange(Parameters.numberType, numberType);
 		if (notification != null) {
 			this.numberType = numberType;
 			hasChanged(notification);
@@ -49,14 +44,12 @@ public class FIBNumberColumn extends FIBTableColumn {
 	}
 
 	@Override
-	public Type getDefaultDataClass()
-	{
+	public Type getDefaultDataClass() {
 		return Number.class;
 	}
 
 	@Override
-	public ColumnType getColumnType()
-	{
+	public ColumnType getColumnType() {
 		return ColumnType.Number;
 	}
 

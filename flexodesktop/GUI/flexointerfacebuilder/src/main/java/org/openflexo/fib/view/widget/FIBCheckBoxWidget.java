@@ -23,118 +23,107 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.logging.Logger;
 
-import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBCheckBox;
 import org.openflexo.fib.view.FIBWidgetView;
 
-
 /**
  * Represents a widget able to edit a boolean, a Boolean or a String object
- *
+ * 
  * @author sguerin
  */
-public class FIBCheckBoxWidget extends FIBWidgetView<FIBCheckBox,JCheckBox,Boolean>
-{
+public class FIBCheckBoxWidget extends FIBWidgetView<FIBCheckBox, JCheckBox, Boolean> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(FIBCheckBoxWidget.class.getPackage().getName());
 
-    private final JCheckBox _jCheckBox;
+	private final JCheckBox _jCheckBox;
 
-    private boolean isNegate = false;
+	private boolean isNegate = false;
 
-    /**
-     * @param model
-     */
-    public FIBCheckBoxWidget(FIBCheckBox model, FIBController controller)
-    {
-        super(model,controller);
-        _jCheckBox = new JCheckBox();
-        _jCheckBox.setOpaque(false);
-        _jCheckBox.setSelected(model.getSelected());
-        if (isReadOnly())
-        	_jCheckBox.setEnabled(false);
-        else
-        	_jCheckBox.addActionListener(new ActionListener() {
-        		@Override
-				public void actionPerformed(ActionEvent e)
-        		{
-        			updateModelFromWidget();
-        		}
-        	});
-        _jCheckBox.addFocusListener(this);
-        
-        _jCheckBox.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
-        
-        isNegate = model.getNegate();
+	/**
+	 * @param model
+	 */
+	public FIBCheckBoxWidget(FIBCheckBox model, FIBController controller) {
+		super(model, controller);
+		_jCheckBox = new JCheckBox();
+		_jCheckBox.setOpaque(false);
+		_jCheckBox.setBorderPaintedFlat(true);
+		_jCheckBox.setSelected(model.getSelected());
+		if (isReadOnly())
+			_jCheckBox.setEnabled(false);
+		else
+			_jCheckBox.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					updateModelFromWidget();
+				}
+			});
+		_jCheckBox.addFocusListener(this);
 
-        updateFont();
-    }
+		// _jCheckBox.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
 
-    @Override
-    public Boolean getValue() 
-    {
-    	if (super.getValue() instanceof Boolean) {
-    		Boolean returned = super.getValue();
-    		return returned;
-    	}
-    	return false;
-    }
+		isNegate = model.getNegate();
 
-    @Override
-	public synchronized boolean updateWidgetFromModel()
-    {
-    	if (notEquals(isNegate?!getValue():getValue(),_jCheckBox.isSelected())) {
-    		widgetUpdating = true;
-    		Boolean value = getValue();
-    		if (value != null) {
-    			if (isNegate)
-    				value = !value;
-    			_jCheckBox.setSelected(value);
-    		}
-    		widgetUpdating = false;
-    		return true;
-    	}
-    	return false;
-    }
+		updateFont();
+	}
 
-    /**
-     * Update the model given the actual state of the widget
-     */
-    @Override
-	public synchronized boolean updateModelFromWidget()
-    {
-    	if (isReadOnly())
-    		return false;
-
-    	if (notEquals(isNegate?!getValue():getValue(),_jCheckBox.isSelected())) {
-    		setValue(new Boolean(isNegate?!_jCheckBox.isSelected():_jCheckBox.isSelected()));
-    		return true;
-    	}
-    	return false;
-
-    }
-
-    @Override
-    public JCheckBox getJComponent() 
-    {
-    	return _jCheckBox;
-    }
-    
 	@Override
-	public JCheckBox getDynamicJComponent()
-	{
+	public Boolean getValue() {
+		if (super.getValue() instanceof Boolean) {
+			Boolean returned = super.getValue();
+			return returned;
+		}
+		return false;
+	}
+
+	@Override
+	public synchronized boolean updateWidgetFromModel() {
+		if (notEquals(isNegate ? !getValue() : getValue(), _jCheckBox.isSelected())) {
+			widgetUpdating = true;
+			Boolean value = getValue();
+			if (value != null) {
+				if (isNegate)
+					value = !value;
+				_jCheckBox.setSelected(value);
+			}
+			widgetUpdating = false;
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Update the model given the actual state of the widget
+	 */
+	@Override
+	public synchronized boolean updateModelFromWidget() {
+		if (isReadOnly())
+			return false;
+
+		if (notEquals(isNegate ? !getValue() : getValue(), _jCheckBox.isSelected())) {
+			setValue(new Boolean(isNegate ? !_jCheckBox.isSelected() : _jCheckBox.isSelected()));
+			return true;
+		}
+		return false;
+
+	}
+
+	@Override
+	public JCheckBox getJComponent() {
 		return _jCheckBox;
 	}
 
 	@Override
-	public Boolean getDefaultData()
-	{
+	public JCheckBox getDynamicJComponent() {
+		return _jCheckBox;
+	}
+
+	@Override
+	public Boolean getDefaultData() {
 		return getComponent().getSelected();
 	}
-	
 
 }

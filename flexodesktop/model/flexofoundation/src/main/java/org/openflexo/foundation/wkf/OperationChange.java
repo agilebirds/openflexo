@@ -24,23 +24,21 @@ import org.openflexo.foundation.wkf.node.OperationNode;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class OperationChange extends DataModification
-{
+public class OperationChange extends DataModification {
 
-    /**
-     * @param modificationType
-     * @param oldValue
-     * @param newValue
-     */
-    public OperationChange(OperationNode node)
-    {
-        super(-1, node, node);
-    }
+	/**
+	 * @param modificationType
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public OperationChange(OperationNode node) {
+		super(-1, node, node);
+	}
 
-    public OperationNode getNode() {
-        return (OperationNode) newValue();
-    }
-    
+	public OperationNode getNode() {
+		return (OperationNode) newValue();
+	}
+
 }

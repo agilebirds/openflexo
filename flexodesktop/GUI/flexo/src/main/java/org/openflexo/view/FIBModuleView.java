@@ -33,92 +33,76 @@ import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.selection.SelectionListener;
 import org.openflexo.view.controller.FlexoController;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public abstract class FIBModuleView<O extends FlexoModelObject> extends SelectionSynchronizedFIBView<O>
-implements SelectionSynchronizedModuleView<O>, GraphicalFlexoObserver, FIBSelectionListener
-{
-    static final Logger logger = Logger.getLogger(FIBModuleView.class.getPackage().getName());
+public abstract class FIBModuleView<O extends FlexoModelObject> extends SelectionSynchronizedFIBView<O> implements
+		SelectionSynchronizedModuleView<O>, GraphicalFlexoObserver, FIBSelectionListener {
+	static final Logger logger = Logger.getLogger(FIBModuleView.class.getPackage().getName());
 
-   // private O representedObject;
+	// private O representedObject;
 	// private FlexoController controller;
 	// private FIBView fibView;
 
-    public FIBModuleView(O representedObject, FlexoController controller, File fibFile)
-    {
-    	this(representedObject, controller, fibFile, false, controller.willLoad(fibFile));
-    }
+	public FIBModuleView(O representedObject, FlexoController controller, File fibFile) {
+		this(representedObject, controller, fibFile, false, controller.willLoad(fibFile));
+	}
 
-    public FIBModuleView(O representedObject, FlexoController controller, File fibFile, FlexoProgress progress)
-    {
-    	this(representedObject, controller, fibFile, false, progress);
-    }
+	public FIBModuleView(O representedObject, FlexoController controller, File fibFile, FlexoProgress progress) {
+		this(representedObject, controller, fibFile, false, progress);
+	}
 
-    public FIBModuleView(O representedObject, FlexoController controller, File fibFile, boolean addScrollBar)
-    {
-    	this(representedObject, controller, FIBLibrary.instance().retrieveFIBComponent(fibFile), addScrollBar, controller.willLoad(fibFile));
-    }
+	public FIBModuleView(O representedObject, FlexoController controller, File fibFile, boolean addScrollBar) {
+		this(representedObject, controller, FIBLibrary.instance().retrieveFIBComponent(fibFile), addScrollBar, controller.willLoad(fibFile));
+	}
 
-    public FIBModuleView(O representedObject, FlexoController controller, File fibFile, boolean addScrollBar, FlexoProgress progress)
-    {
-    	this(representedObject, controller, FIBLibrary.instance().retrieveFIBComponent(fibFile), addScrollBar, progress);
-    }
+	public FIBModuleView(O representedObject, FlexoController controller, File fibFile, boolean addScrollBar, FlexoProgress progress) {
+		this(representedObject, controller, FIBLibrary.instance().retrieveFIBComponent(fibFile), addScrollBar, progress);
+	}
 
-    public FIBModuleView(O representedObject, FlexoController controller, String fibResourcePath)
-    {
-    	this(representedObject, controller, fibResourcePath, false,  controller.willLoad(fibResourcePath));
-    }
+	public FIBModuleView(O representedObject, FlexoController controller, String fibResourcePath) {
+		this(representedObject, controller, fibResourcePath, false, controller.willLoad(fibResourcePath));
+	}
 
-    public FIBModuleView(O representedObject, FlexoController controller, String fibResourcePath, FlexoProgress progress)
-    {
-    	this(representedObject, controller, fibResourcePath, false, progress);
-    }
+	public FIBModuleView(O representedObject, FlexoController controller, String fibResourcePath, FlexoProgress progress) {
+		this(representedObject, controller, fibResourcePath, false, progress);
+	}
 
-    public FIBModuleView(O representedObject, FlexoController controller, String fibResourcePath, boolean addScrollBar, FlexoProgress progress)
-    {
-    	this(representedObject, controller, FIBLibrary.instance().retrieveFIBComponent(fibResourcePath), addScrollBar, progress);
-    }
+	public FIBModuleView(O representedObject, FlexoController controller, String fibResourcePath, boolean addScrollBar,
+			FlexoProgress progress) {
+		this(representedObject, controller, FIBLibrary.instance().retrieveFIBComponent(fibResourcePath), addScrollBar, progress);
+	}
 
-    protected FIBModuleView(O representedObject, FlexoController controller, FIBComponent fibComponent, boolean addScrollBar, FlexoProgress progress)
-    {
-    	super(representedObject, controller, fibComponent, addScrollBar, progress);
-    }
-
-    @Override
-	public void deleteModuleView()
-    {
-    	deleteView();
-        getFlexoController().removeModuleView(this);
-    }
+	protected FIBModuleView(O representedObject, FlexoController controller, FIBComponent fibComponent, boolean addScrollBar,
+			FlexoProgress progress) {
+		super(representedObject, controller, fibComponent, addScrollBar, progress);
+	}
 
 	@Override
-	public List<SelectionListener> getSelectionListeners()
-	{
+	public void deleteModuleView() {
+		deleteView();
+		getFlexoController().removeModuleView(this);
+	}
+
+	@Override
+	public List<SelectionListener> getSelectionListeners() {
 		Vector<SelectionListener> reply = new Vector<SelectionListener>();
 		reply.add(this);
 		return reply;
 	}
 
-
 	@Override
 	public abstract FlexoPerspective<? super O> getPerspective();
 
-
 	@Override
-	public void willHide()
-	{
+	public void willHide() {
 	}
 
-
 	@Override
-	public void willShow()
-	{
+	public void willShow() {
 	}
 
-
- }
+}

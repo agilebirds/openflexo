@@ -34,215 +34,183 @@ import org.openflexo.fib.view.FIBView;
 import org.openflexo.swing.TextFieldCustomPopup;
 import org.openflexo.toolbox.FileResource;
 
-
 /**
  * Widget allowing to edit a binding
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class ClassSelector
-extends TextFieldCustomPopup<Class>
-implements FIBCustomComponent<Class,ClassSelector>
-{
-    @SuppressWarnings("hiding")
+public class ClassSelector extends TextFieldCustomPopup<Class> implements FIBCustomComponent<Class, ClassSelector> {
+	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(ClassSelector.class.getPackage().getName());
 
 	public static FileResource FIB_FILE = new FileResource("Fib/ClassSelector.fib");
 
 	private static final Color DEFAULT_COLOR1 = Color.RED;
-    private static final Color DEFAULT_COLOR2 = Color.WHITE;
+	private static final Color DEFAULT_COLOR2 = Color.WHITE;
 
-    private Class _revertValue;
+	private Class _revertValue;
 
-    protected ClassSelectorDetailsPanel _selectorPanel;
+	protected ClassSelectorDetailsPanel _selectorPanel;
 
-
-    public ClassSelector(Class editedObject)
-    {
-        super(editedObject);
-        setRevertValue(editedObject);
-        setFocusable(true);
-    }
-
-	@Override
-	public void init(FIBCustom component, FIBController controller) 
-	{
+	public ClassSelector(Class editedObject) {
+		super(editedObject);
+		setRevertValue(editedObject);
+		setFocusable(true);
 	}
 
 	@Override
-	public void setRevertValue(Class oldValue)
-    {
-    	// WARNING: we need here to clone to keep track back of previous data !!!
-        if (oldValue != null) {
+	public void init(FIBCustom component, FIBController controller) {
+	}
+
+	@Override
+	public void setRevertValue(Class oldValue) {
+		// WARNING: we need here to clone to keep track back of previous data !!!
+		if (oldValue != null) {
 			_revertValue = oldValue;
 		} else {
 			_revertValue = null;
 		}
-        if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Sets revert value to "+_revertValue);
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Sets revert value to " + _revertValue);
 		}
-    }
+	}
 
-    @Override
-	public Class getRevertValue()
-    {
-        return _revertValue;
-    }
+	@Override
+	public Class getRevertValue() {
+		return _revertValue;
+	}
 
-     @Override
-	protected ResizablePanel createCustomPanel(Class editedObject)
-    {
-    	 _selectorPanel = makeCustomPanel(editedObject);
-    	 return _selectorPanel;
-    }
+	@Override
+	protected ResizablePanel createCustomPanel(Class editedObject) {
+		_selectorPanel = makeCustomPanel(editedObject);
+		return _selectorPanel;
+	}
 
-    protected ClassSelectorDetailsPanel makeCustomPanel(Class editedObject)
-    {
-    	return new ClassSelectorDetailsPanel(editedObject);
-    }
+	protected ClassSelectorDetailsPanel makeCustomPanel(Class editedObject) {
+		return new ClassSelectorDetailsPanel(editedObject);
+	}
 
-    @Override
-	public void updateCustomPanel(Class editedObject)
-    {
-    	//logger.info("updateCustomPanel with "+editedObject+" _selectorPanel="+_selectorPanel);
-         if (_selectorPanel != null) {
-            _selectorPanel.update();
-        }
-     }
-
-
-    public class ClassSelectorDetailsPanel extends ResizablePanel
-    {
-        private FIBComponent fibComponent;
-        private FIBView fibView;
-        private CustomFIBController controller;
-
-        protected ClassSelectorDetailsPanel(Class aClass)
-        {
-        	super();
-
-        	fibComponent = FIBLibrary.instance().retrieveFIBComponent(FIB_FILE);
-        	controller = new CustomFIBController(fibComponent);
-    		fibView =  controller.buildView(fibComponent);
-
-        	controller.setDataObject(LoadedClassesInfo.instance(aClass));
-
-        	setLayout(new BorderLayout());
-        	add(fibView.getResultingJComponent(),BorderLayout.CENTER);
-
-        }
-
-        public void update()
-        {
-         	controller.setDataObject(LoadedClassesInfo.instance(getEditedObject()));
-        }
-
-        @Override
-		public Dimension getDefaultSize()
-        {
-        	return new Dimension(fibComponent.getWidth(),fibComponent.getHeight());
-        }
-
-        public void delete()
-        {
-        }
-
-		public class CustomFIBController extends FIBController<LoadedClassesInfo>
-    	{
-    		public CustomFIBController(FIBComponent component)
-    		{
-    			super(component);
-    		}
-
-    		public void apply()
-    		{
-    			setEditedObject(LoadedClassesInfo.instance().getSelectedClassInfo().getRepresentedClass());
-    			ClassSelector.this.apply();
-    		}
-
-    		public void cancel()
-    		{
-    			ClassSelector.this.cancel();
-    		}
-
-    		public void reset()
-    		{
-    			setEditedObject(null);
-       			ClassSelector.this.apply();
-    		}
-
-   		public void classChanged()
-    		{
-    			System.out.println("Class changed !!!");
-    		}
-
-     	}
-
-
-    }
-
-   /* @Override
-    public void setEditedObject(BackgroundStyle object)
-    {
-    	logger.info("setEditedObject with "+object);
-    	super.setEditedObject(object);
-    }*/
-
-    @Override
-	public void apply()
-    {
-    	setRevertValue(getEditedObject());
-    	closePopup();
-        super.apply();
-    }
-
-    @Override
-	public void cancel()
-    {
-    	if(logger.isLoggable(Level.FINE)) {
-			logger.fine("CANCEL: revert to "+getRevertValue());
+	@Override
+	public void updateCustomPanel(Class editedObject) {
+		// logger.info("updateCustomPanel with "+editedObject+" _selectorPanel="+_selectorPanel);
+		if (_selectorPanel != null) {
+			_selectorPanel.update();
 		}
-        setEditedObject(getRevertValue());
-        closePopup();
-        super.cancel();
-    }
+	}
 
-     @Override
-	protected void deletePopup()
-    {
-        if (_selectorPanel != null) {
+	public class ClassSelectorDetailsPanel extends ResizablePanel {
+		private FIBComponent fibComponent;
+		private FIBView fibView;
+		private CustomFIBController controller;
+
+		protected ClassSelectorDetailsPanel(Class aClass) {
+			super();
+
+			fibComponent = FIBLibrary.instance().retrieveFIBComponent(FIB_FILE);
+			controller = new CustomFIBController(fibComponent);
+			fibView = controller.buildView(fibComponent);
+
+			controller.setDataObject(LoadedClassesInfo.instance(aClass));
+
+			setLayout(new BorderLayout());
+			add(fibView.getResultingJComponent(), BorderLayout.CENTER);
+
+		}
+
+		public void update() {
+			controller.setDataObject(LoadedClassesInfo.instance(getEditedObject()));
+		}
+
+		@Override
+		public Dimension getDefaultSize() {
+			return new Dimension(fibComponent.getWidth(), fibComponent.getHeight());
+		}
+
+		public void delete() {
+		}
+
+		public class CustomFIBController extends FIBController<LoadedClassesInfo> {
+			public CustomFIBController(FIBComponent component) {
+				super(component);
+			}
+
+			public void apply() {
+				setEditedObject(LoadedClassesInfo.instance().getSelectedClassInfo().getRepresentedClass());
+				ClassSelector.this.apply();
+			}
+
+			public void cancel() {
+				ClassSelector.this.cancel();
+			}
+
+			public void reset() {
+				setEditedObject(null);
+				ClassSelector.this.apply();
+			}
+
+			public void classChanged() {
+				System.out.println("Class changed !!!");
+			}
+
+		}
+
+	}
+
+	/* @Override
+	 public void setEditedObject(BackgroundStyle object)
+	 {
+	 	logger.info("setEditedObject with "+object);
+	 	super.setEditedObject(object);
+	 }*/
+
+	@Override
+	public void apply() {
+		setRevertValue(getEditedObject());
+		closePopup();
+		super.apply();
+	}
+
+	@Override
+	public void cancel() {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("CANCEL: revert to " + getRevertValue());
+		}
+		setEditedObject(getRevertValue());
+		closePopup();
+		super.cancel();
+	}
+
+	@Override
+	protected void deletePopup() {
+		if (_selectorPanel != null) {
 			_selectorPanel.delete();
 		}
-        _selectorPanel = null;
-        super.deletePopup();
-    }
+		_selectorPanel = null;
+		super.deletePopup();
+	}
 
-    /*protected void pointerLeavesPopup()
-    {
-       cancel();
-    }*/
-
-	public ClassSelectorDetailsPanel getSelectorPanel()
+	/*protected void pointerLeavesPopup()
 	{
+	   cancel();
+	}*/
+
+	public ClassSelectorDetailsPanel getSelectorPanel() {
 		return _selectorPanel;
 	}
 
 	@Override
-	public ClassSelector getJComponent()
-	{
+	public ClassSelector getJComponent() {
 		return this;
 	}
 
 	@Override
-	public Class<Class> getRepresentedType()
-	{
+	public Class<Class> getRepresentedType() {
 		return Class.class;
 	}
 
 	@Override
-	public String renderedString(Class editedObject)
-	{
+	public String renderedString(Class editedObject) {
 		if (editedObject == null) {
 			return "";
 		}

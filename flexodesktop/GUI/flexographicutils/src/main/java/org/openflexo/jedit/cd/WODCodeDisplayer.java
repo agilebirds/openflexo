@@ -23,17 +23,16 @@ import org.openflexo.jedit.JEditTextArea;
 import org.openflexo.jedit.WODTokenMarker;
 import org.openflexo.toolbox.FontCst;
 
-public class WODCodeDisplayer extends JEditTextArea{
+public class WODCodeDisplayer extends JEditTextArea {
 
-	public WODCodeDisplayer(String text)
-	{
+	public WODCodeDisplayer(String text) {
 		super();
 		setTokenMarker(new WODTokenMarker());
 		painter.setEOLMarkersPainted(false);
 		painter.setInvalidLinesPainted(false);
 		setFont(FontCst.CODE_FONT);
 		setEditable(false);
-		//setElectricScroll(1000);
+		// setElectricScroll(1000);
 		setFirstLine(0);
 		setText(text);
 	}

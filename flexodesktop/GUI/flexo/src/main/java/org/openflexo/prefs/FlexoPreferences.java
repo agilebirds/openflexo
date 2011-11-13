@@ -34,26 +34,23 @@ import org.openflexo.toolbox.ToolBox;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 
 /**
- * This class is intented to modelize preferences of Flexo application To be
- * accessed through all the application, all methods are statically defined.
- *
+ * This class is intented to modelize preferences of Flexo application To be accessed through all the application, all methods are
+ * statically defined.
+ * 
  * @author sguerin
  */
-public class FlexoPreferences extends FlexoAbstractPreferences
-{
+public class FlexoPreferences extends FlexoAbstractPreferences {
 
 	private static final Logger logger = Logger.getLogger(FlexoPreferences.class.getPackage().getName());
 
 	protected Vector<ContextPreferences> contextPreferencesVector;
 
-	protected FlexoPreferences(File preferencesFile)
-	{
+	protected FlexoPreferences(File preferencesFile) {
 		super(preferencesFile);
 		contextPreferencesVector = new Vector<ContextPreferences>();
 	}
 
-	protected void register(Class<ContextPreferences> contextPreferencesClass)
-	{
+	protected void register(Class<ContextPreferences> contextPreferencesClass) {
 		ContextPreferences cp = null;
 		try {
 			cp = contextPreferencesClass.newInstance();
@@ -79,13 +76,11 @@ public class FlexoPreferences extends FlexoAbstractPreferences
 
 	// STATIC METHODS
 
-	private static FlexoPreferences loadPreferencesFromFile()
-	{
+	private static FlexoPreferences loadPreferencesFromFile() {
 		return new FlexoPreferences(getPrefsFile());
 	}
 
-	public static File getApplicationDataDirectory()
-	{
+	public static File getApplicationDataDirectory() {
 		File prefDir = new File(new File(System.getProperty("user.home")), "Library/Flexo");
 		if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
 			String appData = System.getenv("APPDATA");
@@ -99,8 +94,7 @@ public class FlexoPreferences extends FlexoAbstractPreferences
 		return prefDir;
 	}
 
-	public static File getPrefsFile()
-	{
+	public static File getPrefsFile() {
 		File applicationDataDirectory = getApplicationDataDirectory();
 		File prefFile = new File(applicationDataDirectory, "Flexo.prefs");
 		if (!prefFile.exists()) {
@@ -121,18 +115,15 @@ public class FlexoPreferences extends FlexoAbstractPreferences
 	}
 
 	@Override
-	public File getPreferencesFile()
-	{
+	public File getPreferencesFile() {
 		return getPrefsFile();
 	}
 
-	public static void load()
-	{
+	public static void load() {
 		instance();
 	}
 
-	public static FlexoPreferences instance()
-	{
+	public static FlexoPreferences instance() {
 		if (_instance == null) {
 			_instance = loadPreferencesFromFile();
 			FlexoLocalization.setCurrentLanguage(GeneralPreferences.getLanguage());
@@ -143,13 +134,11 @@ public class FlexoPreferences extends FlexoAbstractPreferences
 		return _instance;
 	}
 
-	public static synchronized void savePreferences(boolean warning)
-	{
+	public static synchronized void savePreferences(boolean warning) {
 		instance().saveToFile(warning);
 	}
 
-	public static void revertToSaved()
-	{
+	public static void revertToSaved() {
 		instance().reloadFromFile(getPrefsFile());
 	}
 
@@ -190,8 +179,7 @@ public class FlexoPreferences extends FlexoAbstractPreferences
 	 */
 
 	@Override
-	public Object objectForKey(String key)
-	{
+	public Object objectForKey(String key) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("objectForKey for " + key);
 		}
@@ -220,8 +208,7 @@ public class FlexoPreferences extends FlexoAbstractPreferences
 	}
 
 	@Override
-	public void setObjectForKey(Object object, String key)
-	{
+	public void setObjectForKey(Object object, String key) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setObjectForKey for " + key + " value " + object);
 		}
@@ -251,8 +238,7 @@ public class FlexoPreferences extends FlexoAbstractPreferences
 	}
 
 	@Override
-	public Class<?> getTypeForKey(String key)
-	{
+	public Class<?> getTypeForKey(String key) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.finer("getTypeForKey for " + key);
 		}
@@ -286,8 +272,7 @@ public class FlexoPreferences extends FlexoAbstractPreferences
 	}
 
 	@Override
-	public String getInspectorTitle()
-	{
+	public String getInspectorTitle() {
 		return null;
 	}
 

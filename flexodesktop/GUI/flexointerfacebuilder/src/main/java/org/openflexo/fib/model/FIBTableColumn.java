@@ -29,37 +29,19 @@ import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariableImpl;
 
-
 public abstract class FIBTableColumn extends FIBModelObject {
 
 	private static final Logger logger = Logger.getLogger(FIBTableColumn.class.getPackage().getName());
 
 	private FIBTable table;
 
-	public static enum Parameters implements FIBModelAttribute
-	{
-		data,
-		format,
-		tooltip,
-		title,
-		tooltipText,
-		columnWidth,
-		resizable,
-		displayTitle,
-		font
+	public static enum Parameters implements FIBModelAttribute {
+		data, format, tooltip, title, tooltipText, columnWidth, resizable, displayTitle, font
 	}
 
-	public static enum ColumnType
-	{
-		CheckBox,
-		Custom,
-		DropDown,
-		Icon,
-		Label,
-		Number,
-		TextField
+	public static enum ColumnType {
+		CheckBox, Custom, DropDown, Icon, Label, Number, TextField
 	}
-	
 
 	public static BindingDefinition DATA = new BindingDefinition("data", Object.class, BindingDefinitionType.GET, false);
 	public static BindingDefinition TOOLTIP = new BindingDefinition("tooltip", String.class, BindingDefinitionType.GET, false);
@@ -74,145 +56,125 @@ public abstract class FIBTableColumn extends FIBModelObject {
 	private boolean resizable = true;
 	private boolean displayTitle = true;
 	private Font font;
-	
+
 	private final FIBFormatter formatter;
-	
-	public FIBTableColumn()
-	{
+
+	public FIBTableColumn() {
 		formatter = new FIBFormatter();
 	}
-	
-    public FIBTable getTable() 
-    {
+
+	public FIBTable getTable() {
 		return table;
 	}
 
-	public void setTable(FIBTable table)
-	{
+	public void setTable(FIBTable table) {
 		this.table = table;
 	}
 
 	@Override
-	public FIBComponent getRootComponent()
-	{
-		if (getTable() != null) return getTable().getRootComponent();
+	public FIBComponent getRootComponent() {
+		if (getTable() != null)
+			return getTable().getRootComponent();
 		return null;
 	}
 
-	public DataBinding getData() 
-	{
-		if (data == null) data = new DataBinding(this,Parameters.data,DATA);
+	public DataBinding getData() {
+		if (data == null)
+			data = new DataBinding(this, Parameters.data, DATA);
 		return data;
 	}
 
-	public void setData(DataBinding data) 
-	{
+	public void setData(DataBinding data) {
 		data.setOwner(this);
 		data.setBindingAttribute(Parameters.data);
 		data.setBindingDefinition(DATA);
 		this.data = data;
 	}
-	
-	public void finalizeTableDeserialization() 
-	{
-		logger.fine("finalizeDeserialization() for FIBTableColumn "+title);
+
+	public void finalizeTableDeserialization() {
+		logger.fine("finalizeDeserialization() for FIBTableColumn " + title);
 		if (data != null) {
 			data.finalizeDeserialization();
 		}
-		if (tooltip != null) tooltip.finalizeDeserialization();
+		if (tooltip != null)
+			tooltip.finalizeDeserialization();
 	}
 
 	@Override
-	public BindingModel getBindingModel() 
-	{
-		if (getTable() != null) return getTable().getTableBindingModel();
+	public BindingModel getBindingModel() {
+		if (getTable() != null)
+			return getTable().getTableBindingModel();
 		return null;
 	}
-	
-	public Type getDataClass()
-	{
-		if (getData() != null && getData().getBinding() != null && getData().getBinding() != null) 
+
+	public Type getDataClass() {
+		if (getData() != null && getData().getBinding() != null && getData().getBinding() != null)
 			return getData().getBinding().getAccessedType();
 		return getDefaultDataClass();
 	}
-	
+
 	public abstract Type getDefaultDataClass();
 
-	public String getTitle()
-	{
+	public String getTitle() {
 		return title;
 	}
 
-	public void setTitle(String title)
-	{
-		FIBAttributeNotification<String> notification = requireChange(
-				Parameters.title, title);
+	public void setTitle(String title) {
+		FIBAttributeNotification<String> notification = requireChange(Parameters.title, title);
 		if (notification != null) {
 			this.title = title;
 			hasChanged(notification);
 		}
 	}
 
-	public Integer getColumnWidth()
-	{
+	public Integer getColumnWidth() {
 		return columnWidth;
 	}
 
-	public void setColumnWidth(Integer columnWidth)
-	{
-		FIBAttributeNotification<Integer> notification = requireChange(
-				Parameters.columnWidth, columnWidth);
+	public void setColumnWidth(Integer columnWidth) {
+		FIBAttributeNotification<Integer> notification = requireChange(Parameters.columnWidth, columnWidth);
 		if (notification != null) {
 			this.columnWidth = columnWidth;
 			hasChanged(notification);
 		}
 	}
 
-	public Boolean getResizable()
-	{
+	public Boolean getResizable() {
 		return resizable;
 	}
 
-	public void setResizable(Boolean resizable)
-	{
-		FIBAttributeNotification<Boolean> notification = requireChange(
-				Parameters.resizable, resizable);
+	public void setResizable(Boolean resizable) {
+		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.resizable, resizable);
 		if (notification != null) {
 			this.resizable = resizable;
 			hasChanged(notification);
 		}
 	}
 
-	public Boolean getDisplayTitle()
-	{
+	public Boolean getDisplayTitle() {
 		return displayTitle;
 	}
 
-	public void setDisplayTitle(Boolean displayTitle)
-	{
-		FIBAttributeNotification<Boolean> notification = requireChange(
-				Parameters.displayTitle, displayTitle);
+	public void setDisplayTitle(Boolean displayTitle) {
+		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.displayTitle, displayTitle);
 		if (notification != null) {
 			this.displayTitle = displayTitle;
 			hasChanged(notification);
 		}
 	}
 
-	public Font retrieveValidFont()
-	{
-		if (font == null && getTable() != null) return getTable().retrieveValidFont();
-		return getFont();	
+	public Font retrieveValidFont() {
+		if (font == null && getTable() != null)
+			return getTable().retrieveValidFont();
+		return getFont();
 	}
-	
-	public Font getFont()
-	{
+
+	public Font getFont() {
 		return font;
 	}
 
-	public void setFont(Font font)
-	{
-		FIBAttributeNotification<Font> notification = requireChange(
-				Parameters.font, font);
+	public void setFont(Font font) {
+		FIBAttributeNotification<Font> notification = requireChange(Parameters.font, font);
 		if (notification != null) {
 			this.font = font;
 			hasChanged(notification);
@@ -220,92 +182,80 @@ public abstract class FIBTableColumn extends FIBModelObject {
 	}
 
 	public abstract ColumnType getColumnType();
-	
-	public DataBinding getFormat() 
-	{
-		if (format == null) format = new DataBinding(formatter,Parameters.format,FORMAT);
+
+	public DataBinding getFormat() {
+		if (format == null)
+			format = new DataBinding(formatter, Parameters.format, FORMAT);
 		return format;
 	}
 
-	public void setFormat(DataBinding format) 
-	{
+	public void setFormat(DataBinding format) {
 		format.setOwner(formatter);
 		format.setBindingAttribute(Parameters.format);
 		format.setBindingDefinition(FORMAT);
 		this.format = format;
 	}
-	
-	public FIBFormatter getFormatter()
-	{
+
+	public FIBFormatter getFormatter() {
 		return formatter;
 	}
-	
-	private class FIBFormatter extends FIBModelObject implements Bindable
-	{
+
+	private class FIBFormatter extends FIBModelObject implements Bindable {
 		private BindingModel formatterBindingModel = null;
-		
+
 		@Override
-		public BindingModel getBindingModel() 
-		{
-			if (formatterBindingModel == null) createFormatterBindingModel();
+		public BindingModel getBindingModel() {
+			if (formatterBindingModel == null)
+				createFormatterBindingModel();
 			return formatterBindingModel;
 		}
 
-		private void createFormatterBindingModel()
-		{
+		private void createFormatterBindingModel() {
 			formatterBindingModel = new BindingModel();
 			formatterBindingModel.addToBindingVariables(new BindingVariableImpl<Object>(this, "object", Object.class) {
 				@Override
-				public Type getType()
-				{
+				public Type getType() {
 					return getDataClass();
 				}
 			});
 		}
 
 		@Override
-		public FIBComponent getRootComponent()
-		{
+		public FIBComponent getRootComponent() {
 			return FIBTableColumn.this.getRootComponent();
 		}
 
 	}
 
-	public int getIndex()
-	{
+	public int getIndex() {
 		if (getTable() != null)
 			return getTable().getColumns().indexOf(this);
 		return -1;
 	}
 
-	public String getTooltipText()
-	{
+	public String getTooltipText() {
 		return tooltipText;
 	}
 
-	public void setTooltipText(String tooltipText)
-	{
-		FIBAttributeNotification<String> notification = requireChange(
-				Parameters.tooltipText, tooltipText);
+	public void setTooltipText(String tooltipText) {
+		FIBAttributeNotification<String> notification = requireChange(Parameters.tooltipText, tooltipText);
 		if (notification != null) {
 			this.tooltipText = tooltipText;
 			hasChanged(notification);
 		}
 	}
-	
-	public DataBinding getTooltip() 
-	{
-		if (tooltip == null) tooltip = new DataBinding(this,Parameters.tooltip,TOOLTIP);
+
+	public DataBinding getTooltip() {
+		if (tooltip == null)
+			tooltip = new DataBinding(this, Parameters.tooltip, TOOLTIP);
 		return tooltip;
 	}
 
-	public void setTooltip(DataBinding tooltip) 
-	{
+	public void setTooltip(DataBinding tooltip) {
 		tooltip.setOwner(this);
 		tooltip.setBindingAttribute(Parameters.tooltip);
 		tooltip.setBindingDefinition(TOOLTIP);
 		this.tooltip = tooltip;
 	}
-	
 
 }

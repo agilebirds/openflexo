@@ -37,20 +37,15 @@ import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.xmlcode.PropertiesKeyValueProperty;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
-
 /**
- * A RepresentableFlexoModelObjectObject instance represents an object which
- * stores data related to a potential graphical representation in some
- * (unknown at this level) graphical editors.
- * Those objects are then graphically representable, and
- * thus, have a position, a width and a heigth <br>
- * This class implements the common management of basic graphical features (position,
- * size, colors)
- *
+ * A RepresentableFlexoModelObjectObject instance represents an object which stores data related to a potential graphical representation in
+ * some (unknown at this level) graphical editors. Those objects are then graphically representable, and thus, have a position, a width and
+ * a heigth <br>
+ * This class implements the common management of basic graphical features (position, size, colors)
+ * 
  * @author sylvain
  */
-public abstract class RepresentableFlexoModelObject extends FlexoModelObject
-{
+public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 
 	private static final Logger logger = Logger.getLogger(RepresentableFlexoModelObject.class.getPackage().getName());
 
@@ -73,41 +68,35 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject
 	/**
 	 * Constructor
 	 */
-	public RepresentableFlexoModelObject(FlexoProject project)
-	{
+	public RepresentableFlexoModelObject(FlexoProject project) {
 		super(project);
 		graphicalProperties = new SortedHashtable<Object>();
 	}
 
+	private Hashtable<String, Object> graphicalProperties;
 
-	private Hashtable<String,Object> graphicalProperties;
-
-	public Hashtable<String, Object> _getGraphicalProperties()
-	{
-		if (isSerializing() && (graphicalProperties==null||graphicalProperties.size()==0)) {
+	public Hashtable<String, Object> _getGraphicalProperties() {
+		if (isSerializing() && (graphicalProperties == null || graphicalProperties.size() == 0)) {
 			return null;
 		}
 		return graphicalProperties;
 	}
 
-	public void _setGraphicalProperties(Hashtable<String, Object> graphicalProperties)
-	{
+	public void _setGraphicalProperties(Hashtable<String, Object> graphicalProperties) {
 		this.graphicalProperties = new SortedHashtable<Object>(graphicalProperties);
 	}
 
-	public boolean hasGraphicalPropertyForKey(String key)
-	{
+	public boolean hasGraphicalPropertyForKey(String key) {
 		return graphicalProperties.get(key) != null;
 	}
 
-	public Object _graphicalPropertyForKey(String key)
-	{
+	public Object _graphicalPropertyForKey(String key) {
 		Object returned = graphicalProperties.get(key);
 		if (returned instanceof PropertiesKeyValueProperty.UndecodableProperty) {
 			// Try to decode now
 			Class<?> objectType;
-			String className = ((PropertiesKeyValueProperty.UndecodableProperty)returned).className;
-			String value = ((PropertiesKeyValueProperty.UndecodableProperty)returned).value;
+			String className = ((PropertiesKeyValueProperty.UndecodableProperty) returned).className;
+			String value = ((PropertiesKeyValueProperty.UndecodableProperty) returned).value;
 			try {
 				objectType = Class.forName(className);
 			} catch (ClassNotFoundException e) {
@@ -118,13 +107,13 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject
 			if (converter == null) {
 				// Is it an enum ???
 				if (objectType.isEnum()) {
-					return Enum.valueOf((Class)objectType, value);
+					return Enum.valueOf((Class) objectType, value);
 				}
-				logger.warning("No converter for "+objectType);
+				logger.warning("No converter for " + objectType);
 				return returned;
 			}
 			returned = converter.convertFromString(value);
-			//System.out.println("Decoding UndecodableProperty to "+objectType+" as "+returned);
+			// System.out.println("Decoding UndecodableProperty to "+objectType+" as "+returned);
 			return returned;
 		}
 		return returned;
@@ -133,73 +122,67 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject
 	public Object _objectGraphicalPropertyForKey(String key, Object defaultValue) {
 		Object returned = _graphicalPropertyForKey(key);
 		if (returned == null) {
-			//logger.warning("Cannot retrieve value for "+key+". Using default value: "+defaultValue);
-			_setGraphicalPropertyForKey(defaultValue,key);
+			// logger.warning("Cannot retrieve value for "+key+". Using default value: "+defaultValue);
+			_setGraphicalPropertyForKey(defaultValue, key);
 			returned = defaultValue;
 		}
 		return returned;
 	}
 
-	public double _doubleGraphicalPropertyForKey(String key,double defaultValue)
-	{
+	public double _doubleGraphicalPropertyForKey(String key, double defaultValue) {
 		Object returned = _graphicalPropertyForKey(key);
 		if (returned == null) {
-			//logger.warning("Cannot retrieve value for "+key+". Using default value: "+defaultValue);
-			_setGraphicalPropertyForKey(defaultValue,key);
+			// logger.warning("Cannot retrieve value for "+key+". Using default value: "+defaultValue);
+			_setGraphicalPropertyForKey(defaultValue, key);
 			returned = defaultValue;
 		}
-		return (Double)returned;
+		return (Double) returned;
 	}
 
-	public int _integerGraphicalPropertyForKey(String key,int defaultValue)
-	{
+	public int _integerGraphicalPropertyForKey(String key, int defaultValue) {
 		Object returned = _graphicalPropertyForKey(key);
 		if (returned == null) {
-			//logger.warning("Cannot retrieve value. Using default.");
-			_setGraphicalPropertyForKey(defaultValue,key);
+			// logger.warning("Cannot retrieve value. Using default.");
+			_setGraphicalPropertyForKey(defaultValue, key);
 			returned = defaultValue;
 		}
-		return (Integer)returned;
+		return (Integer) returned;
 	}
 
-	public boolean _booleanGraphicalPropertyForKey(String key,boolean defaultValue)
-	{
+	public boolean _booleanGraphicalPropertyForKey(String key, boolean defaultValue) {
 		Object returned = _graphicalPropertyForKey(key);
 		if (returned == null) {
-			//logger.warning("Cannot retrieve value. Using default.");
-			_setGraphicalPropertyForKey(defaultValue,key);
+			// logger.warning("Cannot retrieve value. Using default.");
+			_setGraphicalPropertyForKey(defaultValue, key);
 			returned = defaultValue;
 		}
-		return (Boolean)returned;
+		return (Boolean) returned;
 	}
 
-	public FlexoColor _colorGraphicalPropertyForKey(String key,FlexoColor defaultValue)
-	{
+	public FlexoColor _colorGraphicalPropertyForKey(String key, FlexoColor defaultValue) {
 		Object returned = _graphicalPropertyForKey(key);
-		if (returned == null && defaultValue!=null) {
-			//logger.warning("Cannot retrieve value. Using default.");
-			_setGraphicalPropertyForKey(defaultValue,key);
+		if (returned == null && defaultValue != null) {
+			// logger.warning("Cannot retrieve value. Using default.");
+			_setGraphicalPropertyForKey(defaultValue, key);
 			returned = defaultValue;
 		}
-		return (FlexoColor)returned;
+		return (FlexoColor) returned;
 	}
 
-	public FlexoFont _fontGraphicalPropertyForKey(String key,FlexoFont defaultValue)
-	{
+	public FlexoFont _fontGraphicalPropertyForKey(String key, FlexoFont defaultValue) {
 		Object returned = _graphicalPropertyForKey(key);
 		if (returned == null) {
-			//logger.warning("Cannot retrieve value. Using default.");
-			_setGraphicalPropertyForKey(defaultValue,key);
+			// logger.warning("Cannot retrieve value. Using default.");
+			_setGraphicalPropertyForKey(defaultValue, key);
 			returned = defaultValue;
 		}
-		return (FlexoFont)returned;
+		return (FlexoFont) returned;
 	}
 
 	// Note that following is not notified (important to avoid loops), and does NOT call setChanged()
 	// Use high-level methods to do it (eg: setIntegerParameter()/setX()/setY()/etc....)
-	public void _setGraphicalPropertyForKey(Object value, String key)
-	{
-		if (value!=null) {
+	public void _setGraphicalPropertyForKey(Object value, String key) {
+		if (value != null) {
 			graphicalProperties.put(key, value);
 		} else {
 			graphicalProperties.remove(key);
@@ -207,8 +190,7 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject
 		setChanged();
 	}
 
-	public void _removeGraphicalPropertyWithKey(String key)
-	{
+	public void _removeGraphicalPropertyWithKey(String key) {
 		if (graphicalProperties.get(key) != null) {
 			graphicalProperties.remove(key);
 		}
@@ -219,255 +201,221 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject
 	// ============ Common features graphical management ==============
 	// ================================================================
 
-	public void setIsVisible(boolean b)
-	{
+	public void setIsVisible(boolean b) {
 		if (b != getIsVisible()) {
 			_setGraphicalPropertyForKey(b, VISIBILITY);
 			setChanged();
 			notifyObservers(new ObjectVisibilityChanged(b));
 		}
-		//logger.info("setIsVisible("+b+") for "+this);
-		//printObservers();
+		// logger.info("setIsVisible("+b+") for "+this);
+		// printObservers();
 	}
 
-	public boolean getIsVisible()
-	{
+	public boolean getIsVisible() {
 		return getIsVisible(false);
 	}
 
 	/**
-	 *
-	 * @param defaultVisibility: default value when never accessed
+	 * 
+	 * @param defaultVisibility
+	 *            : default value when never accessed
 	 * @return
 	 */
-	public boolean getIsVisible(boolean defaultVisibility)
-	{
+	public boolean getIsVisible(boolean defaultVisibility) {
 		return _booleanGraphicalPropertyForKey(VISIBILITY, defaultVisibility);
 	}
 
-	public boolean getIsVisible(String context)
-	{
-		return getIsVisible(context,true);
+	public boolean getIsVisible(String context) {
+		return getIsVisible(context, true);
 	}
 
-	public boolean getIsVisible(String context, boolean defaultValue)
-	{
-		return _booleanGraphicalPropertyForKey(VISIBILITY+"_"+context,defaultValue);
+	public boolean getIsVisible(String context, boolean defaultValue) {
+		return _booleanGraphicalPropertyForKey(VISIBILITY + "_" + context, defaultValue);
 	}
 
-	public void setIsVisible(boolean visible, String context)
-	{
+	public void setIsVisible(boolean visible, String context) {
 		if (visible != getIsVisible(context)) {
-			_setGraphicalPropertyForKey(visible, VISIBILITY+"_"+context);
+			_setGraphicalPropertyForKey(visible, VISIBILITY + "_" + context);
 			setChanged();
 			notifyObservers(new ObjectVisibilityChanged(visible));
 		}
 	}
 
-	public boolean getIsAlignedOnGrid(String context)
-	{
-		return getIsAlignedOnGrid(context,false);
+	public boolean getIsAlignedOnGrid(String context) {
+		return getIsAlignedOnGrid(context, false);
 	}
 
-	public boolean getIsAlignedOnGrid(String context, boolean defaultValue)
-	{
-		return _booleanGraphicalPropertyForKey(ALIGNED_ON_GRID+"_"+context,defaultValue);
+	public boolean getIsAlignedOnGrid(String context, boolean defaultValue) {
+		return _booleanGraphicalPropertyForKey(ALIGNED_ON_GRID + "_" + context, defaultValue);
 	}
 
-	public void setIsAlignedOnGrid(boolean isAligned, String context)
-	{
+	public void setIsAlignedOnGrid(boolean isAligned, String context) {
 		if (isAligned != getIsAlignedOnGrid(context)) {
-			_setGraphicalPropertyForKey(isAligned, ALIGNED_ON_GRID+"_"+context);
+			_setGraphicalPropertyForKey(isAligned, ALIGNED_ON_GRID + "_" + context);
 			setChanged();
 			notifyObservers(new ObjectAlignementChanged(isAligned));
 		}
 	}
 
-	public int getGridSize(String context)
-	{
-		return getGridSize(context,30);
+	public int getGridSize(String context) {
+		return getGridSize(context, 30);
 	}
 
-	public int getGridSize(String context, int defaultValue)
-	{
-		return _integerGraphicalPropertyForKey(GRID_SIZE+"_"+context,defaultValue);
+	public int getGridSize(String context, int defaultValue) {
+		return _integerGraphicalPropertyForKey(GRID_SIZE + "_" + context, defaultValue);
 	}
 
-	public void setGridSize(int gridSize, String context)
-	{
-		if (gridSize<1) {
-			gridSize=1;
+	public void setGridSize(int gridSize, String context) {
+		if (gridSize < 1) {
+			gridSize = 1;
 		}
-		if (gridSize>200) {
-			gridSize=200;
+		if (gridSize > 200) {
+			gridSize = 200;
 		}
 		if (gridSize != getGridSize(context)) {
-			_setGraphicalPropertyForKey(gridSize, GRID_SIZE+"_"+context);
+			_setGraphicalPropertyForKey(gridSize, GRID_SIZE + "_" + context);
 			setChanged();
 			notifyObservers(new ObjectAlignementChanged(gridSize));
 		}
 	}
 
-	public Point2D getLocation(String context)
-	{
-		return new Point2D.Double(getX(context),getY(context));
+	public Point2D getLocation(String context) {
+		return new Point2D.Double(getX(context), getY(context));
 	}
 
-	public boolean hasLocationForContext(String context)
-	{
-		return hasGraphicalPropertyForKey(POSX+"_"+context) && hasGraphicalPropertyForKey(POSY+"_"+context);
+	public boolean hasLocationForContext(String context) {
+		return hasGraphicalPropertyForKey(POSX + "_" + context) && hasGraphicalPropertyForKey(POSY + "_" + context);
 	}
 
-	public boolean hasDimensionForContext(String context)
-	{
-		return hasGraphicalPropertyForKey(WIDTH+"_"+context) && hasGraphicalPropertyForKey(HEIGHT+"_"+context);
+	public boolean hasDimensionForContext(String context) {
+		return hasGraphicalPropertyForKey(WIDTH + "_" + context) && hasGraphicalPropertyForKey(HEIGHT + "_" + context);
 	}
 
-	public boolean hasLabelLocationForContext(String context)
-	{
-		return hasGraphicalPropertyForKey(getLabelXContextForContext(context)) && hasGraphicalPropertyForKey(getLabelYContextForContext(context));
+	public boolean hasLabelLocationForContext(String context) {
+		return hasGraphicalPropertyForKey(getLabelXContextForContext(context))
+				&& hasGraphicalPropertyForKey(getLabelYContextForContext(context));
 	}
 
-	public void resetLocation()
-	{
+	public void resetLocation() {
 		setChanged();
 		notifyObservers(new ObjectLocationResetted());
 	}
 
-	public void resetLocation(String context)
-	{
+	public void resetLocation(String context) {
 		Point2D oldLocation = getLocation(context);
-		_removeGraphicalPropertyWithKey(POSX+"_"+context);
-		_removeGraphicalPropertyWithKey(POSY+"_"+context);
+		_removeGraphicalPropertyWithKey(POSX + "_" + context);
+		_removeGraphicalPropertyWithKey(POSY + "_" + context);
 		setChanged();
 		notifyObservers(new ObjectLocationChanged(oldLocation, null, context));
 	}
 
-	public void resetLabelLocation(String context)
-	{
-		//Point2D oldLocation = getLabelLocation(context);
+	public void resetLabelLocation(String context) {
+		// Point2D oldLocation = getLabelLocation(context);
 		_removeGraphicalPropertyWithKey(getLabelXContextForContext(context));
 		_removeGraphicalPropertyWithKey(getLabelYContextForContext(context));
 		setChanged();
 		notifyObservers(new LabelLocationChanged(/*oldLocation, null, context*/));
 	}
 
-
-
-	public double getX(String context)
-	{
-		return getX(context,0);
+	public double getX(String context) {
+		return getX(context, 0);
 	}
 
-	public double getX(String context, double defaultValue)
-	{
-		return _doubleGraphicalPropertyForKey(POSX+"_"+context,defaultValue);
+	public double getX(String context, double defaultValue) {
+		return _doubleGraphicalPropertyForKey(POSX + "_" + context, defaultValue);
 	}
 
-	public void setX(double x, String context)
-	{
+	public void setX(double x, String context) {
 		Point2D oldLocation = getLocation(context);
 		if (x != getX(context)) {
-			_setGraphicalPropertyForKey(x, POSX+"_"+context);
+			_setGraphicalPropertyForKey(x, POSX + "_" + context);
 			setChanged();
 			notifyObservers(new ObjectLocationChanged(oldLocation, getLocation(context), context));
 		}
 	}
 
-	public double getY(String context)
-	{
-		return getY(context,0);
+	public double getY(String context) {
+		return getY(context, 0);
 	}
 
-	public double getY(String context, double defaultValue)
-	{
-		return _doubleGraphicalPropertyForKey(POSY+"_"+context,defaultValue);
+	public double getY(String context, double defaultValue) {
+		return _doubleGraphicalPropertyForKey(POSY + "_" + context, defaultValue);
 	}
 
-	public void setY(double y, String context)
-	{
+	public void setY(double y, String context) {
 		Point2D oldLocation = getLocation(context);
 		if (y != getY(context)) {
-			_setGraphicalPropertyForKey(y, POSY+"_"+context);
+			_setGraphicalPropertyForKey(y, POSY + "_" + context);
 			setChanged();
 			notifyObservers(new ObjectLocationChanged(oldLocation, getLocation(context), context));
 		}
 	}
 
-	public Dimension2D getDimension(final String context)
-	{
+	public Dimension2D getDimension(final String context) {
 		return new Dimension2D() {
 			@Override
 			public double getWidth() {
 				return RepresentableFlexoModelObject.this.getWidth(context);
 			}
+
 			@Override
 			public double getHeight() {
 				return RepresentableFlexoModelObject.this.getHeight(context);
 			}
+
 			@Override
 			public void setSize(double width, double height) {
 			}
 		};
 	}
 
-	public double getWidth(String context)
-	{
-		return getWidth(context,100);
+	public double getWidth(String context) {
+		return getWidth(context, 100);
 	}
 
-	public double getWidth(String context, double defaultValue)
-	{
-		return _doubleGraphicalPropertyForKey(WIDTH+"_"+context,defaultValue);
+	public double getWidth(String context, double defaultValue) {
+		return _doubleGraphicalPropertyForKey(WIDTH + "_" + context, defaultValue);
 	}
 
-	public void setWidth(double width, String context)
-	{
+	public void setWidth(double width, String context) {
 		if (width != getWidth(context)) {
 			Dimension2D oldDimension = getDimension(context);
-			_setGraphicalPropertyForKey(width, WIDTH+"_"+context);
+			_setGraphicalPropertyForKey(width, WIDTH + "_" + context);
 			setChanged();
 			notifyObservers(new ObjectSizeChanged(oldDimension, getDimension(context), context));
 		}
 	}
 
-	public double getHeight(String context)
-	{
-		return getHeight(context,50);
+	public double getHeight(String context) {
+		return getHeight(context, 50);
 	}
 
-	public double getHeight(String context, double defaultValue)
-	{
-		return _doubleGraphicalPropertyForKey(HEIGHT+"_"+context,defaultValue);
+	public double getHeight(String context, double defaultValue) {
+		return _doubleGraphicalPropertyForKey(HEIGHT + "_" + context, defaultValue);
 	}
 
-	public void setHeight(double height, String context)
-	{
+	public void setHeight(double height, String context) {
 		if (height != getHeight(context)) {
 			Dimension2D oldDimension = getDimension(context);
-			_setGraphicalPropertyForKey(height, HEIGHT+"_"+context);
+			_setGraphicalPropertyForKey(height, HEIGHT + "_" + context);
 			setChanged();
 			notifyObservers(new ObjectSizeChanged(oldDimension, getDimension(context), context));
 		}
 	}
 
-	public Point2D getLabelLocation(String context)
-	{
-		return new Point2D.Double(getLabelX(context),getLabelY(context));
+	public Point2D getLabelLocation(String context) {
+		return new Point2D.Double(getLabelX(context), getLabelY(context));
 	}
 
-	public double getLabelX(String context)
-	{
-		return getLabelX(context,0);
+	public double getLabelX(String context) {
+		return getLabelX(context, 0);
 	}
 
-	public double getLabelX(String context, double defaultValue)
-	{
-		return _doubleGraphicalPropertyForKey(getLabelXContextForContext(context),defaultValue);
+	public double getLabelX(String context, double defaultValue) {
+		return _doubleGraphicalPropertyForKey(getLabelXContextForContext(context), defaultValue);
 	}
 
-	public void setLabelX(double x, String context)
-	{
+	public void setLabelX(double x, String context) {
 		if (x != getLabelX(context)) {
 			_setGraphicalPropertyForKey(x, getLabelXContextForContext(context));
 			setChanged();
@@ -475,18 +423,15 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject
 		}
 	}
 
-	public double getLabelY(String context)
-	{
-		return getLabelY(context,0);
+	public double getLabelY(String context) {
+		return getLabelY(context, 0);
 	}
 
-	public double getLabelY(String context, double defaultValue)
-	{
-		return _doubleGraphicalPropertyForKey(getLabelYContextForContext(context),defaultValue);
+	public double getLabelY(String context, double defaultValue) {
+		return _doubleGraphicalPropertyForKey(getLabelYContextForContext(context), defaultValue);
 	}
 
-	public void setLabelY(double y, String context)
-	{
+	public void setLabelY(double y, String context) {
 		if (y != getLabelY(context)) {
 			_setGraphicalPropertyForKey(y, getLabelYContextForContext(context));
 			setChanged();
@@ -495,100 +440,84 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject
 	}
 
 	public String getLabelXContextForContext(String context) {
-		return LABEL_POSX+"_"+context;
+		return LABEL_POSX + "_" + context;
 	}
 
 	public String getLabelYContextForContext(String context) {
-		return LABEL_POSY+"_"+context;
+		return LABEL_POSY + "_" + context;
 	}
 
-	public FlexoColor getBgColor(String context)
-	{
-		return _colorGraphicalPropertyForKey(BG_COLOR+"_"+context,FlexoColor.WHITE_COLOR);
+	public FlexoColor getBgColor(String context) {
+		return _colorGraphicalPropertyForKey(BG_COLOR + "_" + context, FlexoColor.WHITE_COLOR);
 	}
 
-	public FlexoColor getBgColor(String context, FlexoColor defaultValue)
-	{
-		return _colorGraphicalPropertyForKey(BG_COLOR+"_"+context,defaultValue);
+	public FlexoColor getBgColor(String context, FlexoColor defaultValue) {
+		return _colorGraphicalPropertyForKey(BG_COLOR + "_" + context, defaultValue);
 	}
 
-	public void setBgColor(FlexoColor bgColor, String context)
-	{
-		_setGraphicalPropertyForKey(bgColor, BG_COLOR+"_"+context);
+	public void setBgColor(FlexoColor bgColor, String context) {
+		_setGraphicalPropertyForKey(bgColor, BG_COLOR + "_" + context);
 	}
 
-	public FlexoColor getFgColor(String context)
-	{
-		return _colorGraphicalPropertyForKey(FG_COLOR+"_"+context,FlexoColor.BLACK_COLOR);
+	public FlexoColor getFgColor(String context) {
+		return _colorGraphicalPropertyForKey(FG_COLOR + "_" + context, FlexoColor.BLACK_COLOR);
 	}
 
-	public FlexoColor getFgColor(String context, FlexoColor defaultValue)
-	{
-		return _colorGraphicalPropertyForKey(FG_COLOR+"_"+context,defaultValue);
+	public FlexoColor getFgColor(String context, FlexoColor defaultValue) {
+		return _colorGraphicalPropertyForKey(FG_COLOR + "_" + context, defaultValue);
 	}
 
-	public void setFgColor(FlexoColor fgColor, String context)
-	{
-		_setGraphicalPropertyForKey(fgColor, FG_COLOR+"_"+context);
+	public void setFgColor(FlexoColor fgColor, String context) {
+		_setGraphicalPropertyForKey(fgColor, FG_COLOR + "_" + context);
 	}
 
-	public FlexoColor getTextColor(String context)
-	{
-		return _colorGraphicalPropertyForKey(TEXT_COLOR+"_"+context,FlexoColor.BLACK_COLOR);
+	public FlexoColor getTextColor(String context) {
+		return _colorGraphicalPropertyForKey(TEXT_COLOR + "_" + context, FlexoColor.BLACK_COLOR);
 	}
 
-	public FlexoColor getTextColor(String context, FlexoColor defaultValue)
-	{
-		return _colorGraphicalPropertyForKey(TEXT_COLOR+"_"+context,defaultValue);
+	public FlexoColor getTextColor(String context, FlexoColor defaultValue) {
+		return _colorGraphicalPropertyForKey(TEXT_COLOR + "_" + context, defaultValue);
 	}
 
-	public void setTextColor(FlexoColor textColor, String context)
-	{
-		_setGraphicalPropertyForKey(textColor, TEXT_COLOR+"_"+context);
+	public void setTextColor(FlexoColor textColor, String context) {
+		_setGraphicalPropertyForKey(textColor, TEXT_COLOR + "_" + context);
 	}
 
-	public FlexoFont getTextFont(String context)
-	{
-		return _fontGraphicalPropertyForKey(TEXT_FONT+"_"+context,FlexoFont.SANS_SERIF);
+	public FlexoFont getTextFont(String context) {
+		return _fontGraphicalPropertyForKey(TEXT_FONT + "_" + context, FlexoFont.SANS_SERIF);
 	}
 
-	public FlexoFont getTextFont(String context, FlexoFont defaultValue)
-	{
-		return _fontGraphicalPropertyForKey(TEXT_FONT+"_"+context,defaultValue);
+	public FlexoFont getTextFont(String context, FlexoFont defaultValue) {
+		return _fontGraphicalPropertyForKey(TEXT_FONT + "_" + context, defaultValue);
 	}
 
-	public void setTextFont(FlexoFont textFont, String context)
-	{
-		_setGraphicalPropertyForKey(textFont, TEXT_FONT+"_"+context);
+	public void setTextFont(FlexoFont textFont, String context) {
+		_setGraphicalPropertyForKey(textFont, TEXT_FONT + "_" + context);
 	}
 
-	public int getIntegerParameter(String key)
-	{
-		return getIntegerParameter(key,0);
+	public int getIntegerParameter(String key) {
+		return getIntegerParameter(key, 0);
 	}
 
-	public int getIntegerParameter(String key, int defaultValue)
-	{
-		return _integerGraphicalPropertyForKey(key,defaultValue);
+	public int getIntegerParameter(String key, int defaultValue) {
+		return _integerGraphicalPropertyForKey(key, defaultValue);
 	}
 
-	public void setIntegerParameter(int value, String key)
-	{
+	public void setIntegerParameter(int value, String key) {
 		int oldValue = getIntegerParameter(key);
 		if (oldValue != value) {
-			_setGraphicalPropertyForKey(value,key);
+			_setGraphicalPropertyForKey(value, key);
 			setChanged();
-			notifyObservers(new WKFAttributeDataModification(key,oldValue,value));
+			notifyObservers(new WKFAttributeDataModification(key, oldValue, value));
 		}
 	}
 
-	public void setIntegerParameter(int value, String key, int defaultValue)
-	{
-		int oldValue = getIntegerParameter(key,defaultValue);
+	public void setIntegerParameter(int value, String key, int defaultValue) {
+		int oldValue = getIntegerParameter(key, defaultValue);
 		if (oldValue != value) {
-			_setGraphicalPropertyForKey(value,key);
+			_setGraphicalPropertyForKey(value, key);
 			setChanged();
-			notifyObservers(new WKFAttributeDataModification(key,oldValue,value));
+			notifyObservers(new WKFAttributeDataModification(key, oldValue, value));
 		}
 	}
 
@@ -621,6 +550,5 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject
 			notifyObservers(new WKFAttributeDataModification(key,oldValue,value));
 		}
 	}*/
-
 
 }

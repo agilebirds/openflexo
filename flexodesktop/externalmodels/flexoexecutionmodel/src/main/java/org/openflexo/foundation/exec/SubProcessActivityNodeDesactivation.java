@@ -23,17 +23,14 @@ import org.openflexo.antar.ControlGraph;
 import org.openflexo.antar.Nop;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
 
-
 public class SubProcessActivityNodeDesactivation extends NodeDesactivation<SubProcessNode> {
 
-	public SubProcessActivityNodeDesactivation(SubProcessNode node)
-	{
+	public SubProcessActivityNodeDesactivation(SubProcessNode node) {
 		super(node);
 	}
-	
+
 	@Override
-	public ControlGraph makeSpecificControlGraph(boolean interprocedural) 
-	{
+	public ControlGraph makeSpecificControlGraph(boolean interprocedural) {
 		// Nothing special to do
 		return new Nop();
 	}

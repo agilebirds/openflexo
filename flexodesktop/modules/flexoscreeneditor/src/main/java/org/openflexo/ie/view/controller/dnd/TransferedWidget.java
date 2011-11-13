@@ -31,22 +31,18 @@ import org.openflexo.ie.view.palette.IEDSWidget;
 /**
  * @author bmangez
  * 
- * To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
+ *         To change the template for this generated type comment go to Window - Preferences - Java - Code Generation - Code and Comments
  */
-public class TransferedWidget
-{
+public class TransferedWidget {
 
-    public TransferedWidget(IEDSWidget widget)
-    {
-        _widget = widget;
-    }
+	public TransferedWidget(IEDSWidget widget) {
+		_widget = widget;
+	}
 
-    public IEDSWidget getWidget()
-    {
-        return _widget;
-    }
+	public IEDSWidget getWidget() {
+		return _widget;
+	}
 
-    private IEDSWidget _widget;
+	private IEDSWidget _widget;
 
 }

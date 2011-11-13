@@ -26,62 +26,56 @@ import org.openflexo.foundation.wkf.Role;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class FlexoImportedObjectValidationModel extends ValidationModel
-{
+public class FlexoImportedObjectValidationModel extends ValidationModel {
 
-    public FlexoImportedObjectValidationModel(FlexoProject project)
-    {
-        this(project,project.getTargetType());
-    }
-    
-    /**
-     * @param project
-     */
-    public FlexoImportedObjectValidationModel(FlexoProject project, TargetType targetType)
-    {
-        super(project,targetType);
-        registerRule(new FlexoProcess.ImportedProcessShouldExistOnServer());
-        registerRule(new Role.ImportedRoleShouldExistOnServer());
-        
-        // Notify that the validation model is complete and that inheritance
-        // computation could be performed
-        update();
-    }
+	public FlexoImportedObjectValidationModel(FlexoProject project) {
+		this(project, project.getTargetType());
+	}
 
-    /**
-     * Overrides shouldNotifyValidation
-     * @see org.openflexo.foundation.validation.ValidationModel#shouldNotifyValidation(org.openflexo.foundation.validation.Validable)
-     */
-    @Override
-    protected boolean shouldNotifyValidation(Validable next)
-    {
-        return true;
-    }
+	/**
+	 * @param project
+	 */
+	public FlexoImportedObjectValidationModel(FlexoProject project, TargetType targetType) {
+		super(project, targetType);
+		registerRule(new FlexoProcess.ImportedProcessShouldExistOnServer());
+		registerRule(new Role.ImportedRoleShouldExistOnServer());
 
-    /**
-     * Return a boolean indicating if validation of each rule must be
-     * notified
-     * 
-     * @param next
-     * @return a boolean
-     */
-    @Override
-	protected boolean shouldNotifyValidationRules()
-    {
-    	return true;
-    }
+		// Notify that the validation model is complete and that inheritance
+		// computation could be performed
+		update();
+	}
 
+	/**
+	 * Overrides shouldNotifyValidation
+	 * 
+	 * @see org.openflexo.foundation.validation.ValidationModel#shouldNotifyValidation(org.openflexo.foundation.validation.Validable)
+	 */
+	@Override
+	protected boolean shouldNotifyValidation(Validable next) {
+		return true;
+	}
 
-    /**
-     * Overrides fixAutomaticallyIfOneFixProposal
-     * @see org.openflexo.foundation.validation.ValidationModel#fixAutomaticallyIfOneFixProposal()
-     */
-    @Override
-    public boolean fixAutomaticallyIfOneFixProposal()
-    {
-        return false;
-    }
+	/**
+	 * Return a boolean indicating if validation of each rule must be notified
+	 * 
+	 * @param next
+	 * @return a boolean
+	 */
+	@Override
+	protected boolean shouldNotifyValidationRules() {
+		return true;
+	}
+
+	/**
+	 * Overrides fixAutomaticallyIfOneFixProposal
+	 * 
+	 * @see org.openflexo.foundation.validation.ValidationModel#fixAutomaticallyIfOneFixProposal()
+	 */
+	@Override
+	public boolean fixAutomaticallyIfOneFixProposal() {
+		return false;
+	}
 
 }

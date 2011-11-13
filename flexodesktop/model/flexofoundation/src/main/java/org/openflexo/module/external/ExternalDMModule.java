@@ -24,15 +24,14 @@ import javax.swing.JComponent;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.ERDiagram;
 
-
 /**
  * External view of the DM Module
  * 
  * @author sguerin
  */
-public interface ExternalDMModule extends ExternalModule
-{
-	   public void showDMEntity(DMEntity entity);
-	   public JComponent createScreenshotForObject(ERDiagram target);
+public interface ExternalDMModule extends ExternalModule {
+	public void showDMEntity(DMEntity entity);
+
+	public JComponent createScreenshotForObject(ERDiagram target);
 
 }

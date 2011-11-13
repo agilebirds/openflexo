@@ -23,12 +23,11 @@ import org.openflexo.fge.geom.area.FGEHalfBand;
 
 public abstract class HalfBandConstruction extends GeometricConstruction<FGEHalfBand> {
 
-	public final FGEHalfBand getHalfBand()
-	{
+	public final FGEHalfBand getHalfBand() {
 		return getData();
 	}
 
 	@Override
 	protected abstract FGEHalfBand computeData();
-	
+
 }

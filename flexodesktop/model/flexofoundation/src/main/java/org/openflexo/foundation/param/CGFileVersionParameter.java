@@ -23,23 +23,20 @@ import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.version.AbstractCGFileVersion;
 import org.openflexo.inspector.widget.DenaliWidget;
 
-
 public class CGFileVersionParameter extends ParameterDefinition<AbstractCGFileVersion> {
 
-    public CGFile file;
-	
-    public CGFileVersionParameter(String name, String label, CGFile file, AbstractCGFileVersion defaultValue)
-    {
-        super(name,label,defaultValue);
-        this.file = file;
-        addParameter("className","org.openflexo.cgmodule.view.CGVersionInspectorWidget");
-         addParameter("file", "params."+name+".file");
-     }
-    
-   @Override
-public String getWidgetName() 
-   {
-        return DenaliWidget.CUSTOM;
-    }
+	public CGFile file;
+
+	public CGFileVersionParameter(String name, String label, CGFile file, AbstractCGFileVersion defaultValue) {
+		super(name, label, defaultValue);
+		this.file = file;
+		addParameter("className", "org.openflexo.cgmodule.view.CGVersionInspectorWidget");
+		addParameter("file", "params." + name + ".file");
+	}
+
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.CUSTOM;
+	}
 
 }

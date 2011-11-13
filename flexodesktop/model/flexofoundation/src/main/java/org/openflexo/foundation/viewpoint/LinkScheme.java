@@ -25,26 +25,22 @@ import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
-
 public class LinkScheme extends EditionScheme {
 
 	private String fromTarget;
 	private String toTarget;
 
-	public LinkScheme() 
-	{
+	public LinkScheme() {
 		super();
 	}
 
 	@Override
-	public EditionSchemeType getEditionSchemeType()
-	{
+	public EditionSchemeType getEditionSchemeType() {
 		return EditionSchemeType.LinkScheme;
 	}
 
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.VPM.LINK_SCHEME_INSPECTOR;
 	}
 
@@ -64,8 +60,7 @@ public class LinkScheme extends EditionScheme {
 		this.toTarget = toTarget;
 	}
 
-	public EditionPattern getFromTargetEditionPattern()
-	{
+	public EditionPattern getFromTargetEditionPattern() {
 		if (StringUtils.isEmpty(_getFromTarget())) {
 			return null;
 		}
@@ -73,15 +68,13 @@ public class LinkScheme extends EditionScheme {
 			return getViewPointLibrary().getEditionPattern(_getFromTarget());
 		return null;
 	}
-	
-	public void setFromTargetEditionPattern(EditionPattern targetEditionPattern)
-	{
+
+	public void setFromTargetEditionPattern(EditionPattern targetEditionPattern) {
 		_setFromTarget(targetEditionPattern != null ? targetEditionPattern.getURI() : null);
 		updateBindingModels();
 	}
 
-	public EditionPattern getToTargetEditionPattern()
-	{
+	public EditionPattern getToTargetEditionPattern() {
 		if (StringUtils.isEmpty(_getToTarget())) {
 			return null;
 		}
@@ -89,63 +82,58 @@ public class LinkScheme extends EditionScheme {
 			return getViewPointLibrary().getEditionPattern(_getToTarget());
 		return null;
 	}
-	
-	public void setToTargetEditionPattern(EditionPattern targetEditionPattern)
-	{
+
+	public void setToTargetEditionPattern(EditionPattern targetEditionPattern) {
 		_setToTarget(targetEditionPattern != null ? targetEditionPattern.getURI() : null);
 		updateBindingModels();
 	}
 
-	public boolean isValidTarget(EditionPattern actualFromTarget, EditionPattern actualToTarget)
-	{
-		return getFromTargetEditionPattern() == actualFromTarget
-		&& getToTargetEditionPattern() == actualToTarget;
+	public boolean isValidTarget(EditionPattern actualFromTarget, EditionPattern actualToTarget) {
+		return getFromTargetEditionPattern() == actualFromTarget && getToTargetEditionPattern() == actualToTarget;
 	}
-	
+
 	@Override
-	protected void appendContextualBindingVariables(BindingModel bindingModel)
-	{
+	protected void appendContextualBindingVariables(BindingModel bindingModel) {
 		bindingModelNeedToBeRecomputed = false;
 		if (getFromTargetEditionPattern() != null) {
-			bindingModel.addToBindingVariables(new EditionPatternPathElement<LinkScheme>(EditionScheme.FROM_TARGET,getFromTargetEditionPattern(),this));
-		}
-		else if (_getFromTarget() != null && !StringUtils.isEmpty(_getFromTarget())) {
+			bindingModel.addToBindingVariables(new EditionPatternPathElement<LinkScheme>(EditionScheme.FROM_TARGET,
+					getFromTargetEditionPattern(), this));
+		} else if (_getFromTarget() != null && !StringUtils.isEmpty(_getFromTarget())) {
 			bindingModelNeedToBeRecomputed = true;
 		}
 		if (getToTargetEditionPattern() != null) {
-			bindingModel.addToBindingVariables(new EditionPatternPathElement<LinkScheme>(EditionScheme.TO_TARGET,getToTargetEditionPattern(),this));
-		}
-		else if (_getToTarget() != null && !StringUtils.isEmpty(_getToTarget())) {
+			bindingModel.addToBindingVariables(new EditionPatternPathElement<LinkScheme>(EditionScheme.TO_TARGET,
+					getToTargetEditionPattern(), this));
+		} else if (_getToTarget() != null && !StringUtils.isEmpty(_getToTarget())) {
 			bindingModelNeedToBeRecomputed = true;
 		}
 	}
-	
+
 	private boolean bindingModelNeedToBeRecomputed = false;
 
 	@Override
-	public BindingModel getBindingModel() 
-	{
-		if (bindingModelNeedToBeRecomputed) updateBindingModels();
+	public BindingModel getBindingModel() {
+		if (bindingModelNeedToBeRecomputed)
+			updateBindingModels();
 		return super.getBindingModel();
 	}
-		
 
 	@Override
-	public AddConnector createAddConnectorAction()
-	{
+	public AddConnector createAddConnectorAction() {
 		AddConnector newAction = super.createAddConnectorAction();
 		EditionPattern fromEditionPattern = this.getFromTargetEditionPattern();
 		if (fromEditionPattern != null) {
 			ShapePatternRole fromShapePatternRole = fromEditionPattern.getDefaultShapePatternRole();
-			if (fromShapePatternRole != null) newAction.setFromShape(new ViewPointDataBinding("fromTarget."+fromShapePatternRole.getName()));
+			if (fromShapePatternRole != null)
+				newAction.setFromShape(new ViewPointDataBinding("fromTarget." + fromShapePatternRole.getName()));
 		}
 		EditionPattern toEditionPattern = this.getToTargetEditionPattern();
 		if (toEditionPattern != null) {
 			ShapePatternRole toShapePatternRole = toEditionPattern.getDefaultShapePatternRole();
-			if (toShapePatternRole != null) newAction.setToShape(new ViewPointDataBinding("toTarget."+toShapePatternRole.getName()));
+			if (toShapePatternRole != null)
+				newAction.setToShape(new ViewPointDataBinding("toTarget." + toShapePatternRole.getName()));
 		}
 		return newAction;
 	}
-
 
 }

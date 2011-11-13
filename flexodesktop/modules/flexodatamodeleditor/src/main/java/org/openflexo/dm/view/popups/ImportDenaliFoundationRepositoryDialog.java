@@ -28,39 +28,34 @@ import org.openflexo.foundation.dm.action.ImportDenaliFoundationRepository;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.view.FlexoFrame;
 
-
 /**
  * Popup allowing to choose and import a Denali library
+ * 
  * @deprecated
  * @author sguerin
  * 
  */
 @Deprecated
-public class ImportDenaliFoundationRepositoryDialog extends AskNewRepositoryDialog
-{
+public class ImportDenaliFoundationRepositoryDialog extends AskNewRepositoryDialog {
 
-    public ImportDenaliFoundationRepositoryDialog(ImportDenaliFoundationRepository flexoAction, FlexoFrame owner)
-    {
-        super(flexoAction,owner);
-    }
-    
-    public static int displayDialog(ImportDenaliFoundationRepository flexoAction, FlexoProject project,
-    		FlexoFrame owner)
-    {
-        flexoAction.setProject(project);
-        ImportDenaliFoundationRepositoryDialog dialog = new ImportDenaliFoundationRepositoryDialog(flexoAction, owner);
-        return dialog.getStatus();
-    }
+	public ImportDenaliFoundationRepositoryDialog(ImportDenaliFoundationRepository flexoAction, FlexoFrame owner) {
+		super(flexoAction, owner);
+	}
 
-    @Override
-	protected void init()
-    {
-        choicePanel = new JPanel();
-        choicePanel.setLayout(new GridLayout(1, 2));
-        /*choicePanel.add(denaliFoundationRepositoryButton);
-        choicePanel.add(denaliFoundationRepositorySelector);
-        denaliFoundationRepositoryButton.setSelected(true);*/
-        selectRepositoryType(CreateDMRepository.DENALI_FOUNDATION_REPOSITORY);
-   }
+	public static int displayDialog(ImportDenaliFoundationRepository flexoAction, FlexoProject project, FlexoFrame owner) {
+		flexoAction.setProject(project);
+		ImportDenaliFoundationRepositoryDialog dialog = new ImportDenaliFoundationRepositoryDialog(flexoAction, owner);
+		return dialog.getStatus();
+	}
 
- }
+	@Override
+	protected void init() {
+		choicePanel = new JPanel();
+		choicePanel.setLayout(new GridLayout(1, 2));
+		/*choicePanel.add(denaliFoundationRepositoryButton);
+		choicePanel.add(denaliFoundationRepositorySelector);
+		denaliFoundationRepositoryButton.setSelected(true);*/
+		selectRepositoryType(CreateDMRepository.DENALI_FOUNDATION_REPOSITORY);
+	}
+
+}

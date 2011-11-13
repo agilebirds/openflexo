@@ -31,30 +31,26 @@ import org.openflexo.logging.FlexoLogger;
  * @deprecated
  */
 @Deprecated
-public class PopupLatexFileResource extends ComponentLatexFileResource<PopupComponentDefinition>
-{
-    protected static final Logger logger = FlexoLogger.getLogger(PopupLatexFileResource.class.getPackage().getName());
+public class PopupLatexFileResource extends ComponentLatexFileResource<PopupComponentDefinition> {
+	protected static final Logger logger = FlexoLogger.getLogger(PopupLatexFileResource.class.getPackage().getName());
 
-    /**
-     * @param builder
-     */
-    public PopupLatexFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
+	/**
+	 * @param builder
+	 */
+	public PopupLatexFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
-    /**
-     * @param aProject
-     */
-    public PopupLatexFileResource(FlexoProject aProject)
-    {
-    	super(aProject);
-    }
+	/**
+	 * @param aProject
+	 */
+	public PopupLatexFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
-    @Override
-	protected LatexFile createGeneratedResourceData()
-    {
-        return new LatexFile(getFile(),this);
-    }
-    
+	@Override
+	protected LatexFile createGeneratedResourceData() {
+		return new LatexFile(getFile(), this);
+	}
+
 }

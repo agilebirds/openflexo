@@ -24,22 +24,18 @@ import org.openflexo.foundation.ie.dm.IEDataModification;
 /**
  * @author sguerin
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
+ *         TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
  */
-public class AddEmptyCol extends IEDataModification
-{
+public class AddEmptyCol extends IEDataModification {
 
-    int _col;
+	int _col;
 
-    public AddEmptyCol(int col)
-    {
-        super(null, null);
-        _col = col;
-    }
+	public AddEmptyCol(int col) {
+		super(null, null);
+		_col = col;
+	}
 
-    public int getCol()
-    {
-        return _col;
-    }
+	public int getCol() {
+		return _col;
+	}
 }

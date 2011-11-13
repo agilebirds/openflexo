@@ -41,10 +41,9 @@ import org.openflexo.generator.rm.UtilComponentWOFileResource;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ToolBox;
 
-
 /**
  * Generator for Header footer.
- *
+ * 
  * @author lulu
  */
 public class HeaderFooterGenerator extends MetaWOGenerator {
@@ -217,7 +216,7 @@ public class HeaderFooterGenerator extends MetaWOGenerator {
 
 	/**
 	 * Overrides rebuildDependanciesForResource
-	 *
+	 * 
 	 * @see org.openflexo.generator.utils.MetaWOGenerator#rebuildDependanciesForResource(org.openflexo.generator.rm.UtilComponentJavaFileResource)
 	 */
 	@Override
@@ -227,7 +226,7 @@ public class HeaderFooterGenerator extends MetaWOGenerator {
 
 	/**
 	 * Overrides rebuildDependanciesForResource
-	 *
+	 * 
 	 * @see org.openflexo.generator.utils.MetaWOGenerator#rebuildDependanciesForResource(org.openflexo.generator.rm.UtilComponentWOFileResource)
 	 */
 	@Override
@@ -237,7 +236,7 @@ public class HeaderFooterGenerator extends MetaWOGenerator {
 
 	/**
 	 * Overrides rebuildDependanciesForResource
-	 *
+	 * 
 	 * @see org.openflexo.generator.utils.MetaWOGenerator#rebuildDependanciesForResource(org.openflexo.generator.rm.UtilComponentAPIFileResource)
 	 */
 	@Override

@@ -23,22 +23,19 @@ import org.openflexo.foundation.DataModification;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class ResourceStatusModification extends DataModification
-{
+public class ResourceStatusModification extends DataModification {
 
-    /**
-     * @param modificationType
-     * @param propertyName
-     * @param oldValue
-     * @param newValue
-     */
-    public ResourceStatusModification(Object oldValue,
-            Object newValue)
-    {
-        super(-1, "status", oldValue, newValue);
-        // TODO Auto-generated constructor stub
-    }
+	/**
+	 * @param modificationType
+	 * @param propertyName
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public ResourceStatusModification(Object oldValue, Object newValue) {
+		super(-1, "status", oldValue, newValue);
+		// TODO Auto-generated constructor stub
+	}
 
 }

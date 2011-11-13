@@ -39,7 +39,6 @@ public enum HibernateAttributeType {
 	/** Bytes type. */
 	BYTES;
 
-
 	/**
 	 * Return the java class link to this type
 	 * 
@@ -47,23 +46,23 @@ public enum HibernateAttributeType {
 	 */
 	public Class<? extends Object> getAsClass() {
 		switch (this) {
-			case DOUBLE:
-				return Double.class;
-			case LONG:
-				return Long.class;
-			case INTEGER:
-				return Integer.class;
-			case BOOLEAN:
-				return Boolean.class;
-			case ENUM:
-				return Enumeration.class;
-			case STRING:
-			case TEXT:
-				return String.class;
-			case DATE:
-				return Date.class;
-			default:
-				return Object.class;
+		case DOUBLE:
+			return Double.class;
+		case LONG:
+			return Long.class;
+		case INTEGER:
+			return Integer.class;
+		case BOOLEAN:
+			return Boolean.class;
+		case ENUM:
+			return Enumeration.class;
+		case STRING:
+		case TEXT:
+			return String.class;
+		case DATE:
+			return Date.class;
+		default:
+			return Object.class;
 		}
 	}
 }

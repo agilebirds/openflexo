@@ -26,43 +26,35 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEPoint;
 
-
 public class LabelControlPoint extends ControlPoint {
 
-	public LabelControlPoint(GraphicalRepresentation<?> graphicalRepresentation, FGEPoint pt)
-	{
-		super(graphicalRepresentation,pt);
-	}
-	
-	
-	@Override
-	public Cursor getDraggingCursor()
-	{
-			return Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR);
+	public LabelControlPoint(GraphicalRepresentation<?> graphicalRepresentation, FGEPoint pt) {
+		super(graphicalRepresentation, pt);
 	}
 
+	@Override
+	public Cursor getDraggingCursor() {
+		return Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR);
+	}
 
 	@Override
-	public boolean isDraggable()
-	{
-		return true;
-	}
-	
-	@Override
-	public void startDragging(DrawingController<?> controller, FGEPoint startPoint)
-	{
-	}
-	
-	@Override
-	public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event) 
-	{
+	public boolean isDraggable() {
 		return true;
 	}
 
 	@Override
-	public void stopDragging(DrawingController<?> controller)
-	{
+	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
+	}
+
+	@Override
+	public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
+			FGEPoint initialPoint, MouseEvent event) {
+		return true;
+	}
+
+	@Override
+	public void stopDragging(DrawingController<?> controller) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

@@ -19,9 +19,8 @@
  */
 package org.openflexo.antar.java;
 
-
 public interface JavaPrettyPrintable {
 
-	public String getJavaStringRepresentation(); 
+	public String getJavaStringRepresentation();
 
 }

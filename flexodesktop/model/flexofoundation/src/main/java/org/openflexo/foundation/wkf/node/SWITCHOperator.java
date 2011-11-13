@@ -28,13 +28,12 @@ import org.openflexo.foundation.wkf.edge.FlexoPostCondition;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.localization.FlexoLocalization;
 
-public class SWITCHOperator extends OperatorNode implements ContextualEdgeStarting  {
+public class SWITCHOperator extends OperatorNode implements ContextualEdgeStarting {
 
 	/**
 	 * Constructor used during deserialization
 	 */
-	public SWITCHOperator(FlexoProcessBuilder builder)
-	{
+	public SWITCHOperator(FlexoProcessBuilder builder) {
 		this(builder.process);
 		initializeDeserialization(builder);
 	}
@@ -42,8 +41,7 @@ public class SWITCHOperator extends OperatorNode implements ContextualEdgeStarti
 	/**
 	 * Default constructor
 	 */
-	public SWITCHOperator(FlexoProcess process)
-	{
+	public SWITCHOperator(FlexoProcess process) {
 		super(process);
 	}
 
@@ -53,40 +51,34 @@ public class SWITCHOperator extends OperatorNode implements ContextualEdgeStarti
 	}
 
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return Inspectors.WKF.OPERATOR_SWITCH_INSPECTOR;
 	}
 
 	@Override
-	public Vector<FlexoPostCondition<AbstractNode, AbstractNode>> getOutgoingPostConditions()
-	{
+	public Vector<FlexoPostCondition<AbstractNode, AbstractNode>> getOutgoingPostConditions() {
 		// TODO not implemented yet (manage here an hashtable value/post)
 		return null;
 	}
 
 	@Override
-	public void setOutgoingPostConditions(Vector<FlexoPostCondition<AbstractNode, AbstractNode>> postConditions)
-	{
+	public void setOutgoingPostConditions(Vector<FlexoPostCondition<AbstractNode, AbstractNode>> postConditions) {
 		// TODO not implemented yet (manage here an hashtable value/post)
 	}
 
 	@Override
-	public void addToOutgoingPostConditions(FlexoPostCondition post)
-	{
+	public void addToOutgoingPostConditions(FlexoPostCondition post) {
 		// Not applicable
 		logger.warning("addToOutgoingPostConditions() called in SWITCHOperator with no context");
 	}
 
 	@Override
-	public void addToOutgoingPostConditions(FlexoPostCondition post, Object outputContext)
-	{
-		logger.warning("NOT IMPLEMENTED: addToOutgoingPostConditions() called in SWITCHOperator with context="+outputContext);
+	public void addToOutgoingPostConditions(FlexoPostCondition post, Object outputContext) {
+		logger.warning("NOT IMPLEMENTED: addToOutgoingPostConditions() called in SWITCHOperator with context=" + outputContext);
 	}
 
 	@Override
-	public void removeFromOutgoingPostConditions(FlexoPostCondition post)
-	{
+	public void removeFromOutgoingPostConditions(FlexoPostCondition post) {
 		// TODO not implemented yet (manage here an hashtable value/post)
 	}
 

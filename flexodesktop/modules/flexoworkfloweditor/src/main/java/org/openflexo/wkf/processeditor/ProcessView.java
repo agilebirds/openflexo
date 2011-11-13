@@ -32,14 +32,12 @@ import org.openflexo.wkf.processeditor.DrawEdgeControl.DrawEdgeAction;
 import org.openflexo.wkf.processeditor.gr.EdgeGR;
 import org.openflexo.wkf.processeditor.gr.NodePalette;
 
-
 public class ProcessView extends DrawingView<ProcessRepresentation> implements ModuleView<FlexoProcess> {
 
 	private static final Logger logger = Logger.getLogger(ProcessView.class.getPackage().getName());
 
-	public ProcessView(ProcessRepresentation aDrawing,ProcessEditorController controller)
-	{
-		super(aDrawing,controller);
+	public ProcessView(ProcessRepresentation aDrawing, ProcessEditorController controller) {
+		super(aDrawing, controller);
 	}
 
 	@Override
@@ -48,38 +46,32 @@ public class ProcessView extends DrawingView<ProcessRepresentation> implements M
 	}
 
 	@Override
-	public ProcessEditorController getController()
-	{
-		return (ProcessEditorController)super.getController();
+	public ProcessEditorController getController() {
+		return (ProcessEditorController) super.getController();
 	}
 
 	@Override
-	public void deleteModuleView()
-	{
+	public void deleteModuleView() {
 		logger.info("deleteModuleView for process");
 		getController().delete();
 	}
 
 	@Override
-	public ProcessPerspective getPerspective()
-	{
+	public ProcessPerspective getPerspective() {
 		return getController().getWKFController().PROCESS_EDITOR_PERSPECTIVE;
 	}
 
-	public FlexoProject getProject()
-	{
+	public FlexoProject getProject() {
 		return getRepresentedObject().getProject();
 	}
 
 	@Override
-	public FlexoProcess getRepresentedObject()
-	{
+	public FlexoProcess getRepresentedObject() {
 		return getModel().getProcess();
 	}
 
 	@Override
-	public boolean isAutoscrolled()
-	{
+	public boolean isAutoscrolled() {
 		return false;
 	}
 
@@ -96,47 +88,42 @@ public class ProcessView extends DrawingView<ProcessRepresentation> implements M
 
 	private DrawEdgeAction _drawEdgeAction;
 
-	public void  setDrawEdgeAction(DrawEdgeAction action)
-	{
+	public void setDrawEdgeAction(DrawEdgeAction action) {
 		_drawEdgeAction = action;
 	}
 
-	public void resetDrawEdgeAction()
-	{
+	public void resetDrawEdgeAction() {
 		_drawEdgeAction = null;
 		repaint();
 	}
 
 	private NodePalette draggedNodePalette;
 
-	public void  setDraggedNodePalette(NodePalette palette)
-	{
+	public void setDraggedNodePalette(NodePalette palette) {
 		draggedNodePalette = palette;
 	}
 
-	public void resetDraggedNodePalette()
-	{
+	public void resetDraggedNodePalette() {
 		draggedNodePalette = null;
 		repaint();
 	}
 
 	@Override
-	public void paint(Graphics g)
-	{
+	public void paint(Graphics g) {
 		boolean isBuffering = isBuffering();
 		super.paint(g);
 		if (_drawEdgeAction != null && !isBuffering) {
-			_drawEdgeAction.paint(g,getController());
+			_drawEdgeAction.paint(g, getController());
 		}
 		if (draggedNodePalette != null && !isBuffering) {
-			draggedNodePalette.paint(g,getController());
+			draggedNodePalette.paint(g, getController());
 		}
 	}
 
 	public void refreshConnectors() {
-		for(Object gr:getGraphicalRepresentation().getContainedGraphicalRepresentations()) {
+		for (Object gr : getGraphicalRepresentation().getContainedGraphicalRepresentations()) {
 			if (gr instanceof EdgeGR)
-				((EdgeGR<WKFEdge<?, ?>>)gr).updatePropertiesFromWKFPreferences();
+				((EdgeGR<WKFEdge<?, ?>>) gr).updatePropertiesFromWKFPreferences();
 		}
 	}
 

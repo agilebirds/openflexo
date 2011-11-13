@@ -24,7 +24,6 @@ import java.util.Vector;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.rm.FlexoProject;
 
-
 public class CGTemplateFolder extends CGTemplateObject {
 	private CGTemplateSet templateSet;
 	private String folderName;

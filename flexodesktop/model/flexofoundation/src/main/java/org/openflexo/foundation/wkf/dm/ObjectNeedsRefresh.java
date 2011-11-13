@@ -19,19 +19,16 @@
  */
 package org.openflexo.foundation.wkf.dm;
 
-
 /**
  * Notification fired when a WKFRepresentable object is required to be refresh (with no change on data)
  * 
  * @author sguerin
  * 
  */
-public class ObjectNeedsRefresh extends WKFDataModification
-{
+public class ObjectNeedsRefresh extends WKFDataModification {
 
-     public ObjectNeedsRefresh()
-    {
-        super(null,null);
-    }
+	public ObjectNeedsRefresh() {
+		super(null, null);
+	}
 
- }
+}

@@ -24,18 +24,17 @@ import java.util.Vector;
 public class FIBTabPanel extends FIBContainer {
 
 	@Override
-	public String getIdentifier()
-	{
+	public String getIdentifier() {
 		return null;
 	}
-	
-	public Vector<FIBTab> getTabs() 
-	{
+
+	public Vector<FIBTab> getTabs() {
 		Vector<FIBTab> returned = new Vector<FIBTab>();
 		for (FIBComponent subComponent : getSubComponents()) {
-			if (subComponent instanceof FIBTab) returned.add((FIBTab)subComponent);
+			if (subComponent instanceof FIBTab)
+				returned.add((FIBTab) subComponent);
 		}
 		return returned;
 	}
-	
+
 }

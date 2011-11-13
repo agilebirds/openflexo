@@ -18,100 +18,100 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents ItemLabel object attached to View objects, ClassView in particular
- *
+ * 
  * @version $Id: ItemLabel.java,v 1.3 2011/09/12 11:46:47 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class ItemLabel extends PetalObject {
-  static final long serialVersionUID = 434686941683143909L;
-  
-  public ItemLabel(PetalNode parent, Collection params) {
-    super(parent, "ItemLabel", params);
-  }
+	static final long serialVersionUID = 434686941683143909L;
 
-  public ItemLabel() {
-    super("ItemLabel");
-  }
+	public ItemLabel(PetalNode parent, Collection params) {
+		super(parent, "ItemLabel", params);
+	}
 
-  public Tag getParentView() {
-    return (Tag)getProperty("Parent_View");
-  }
+	public ItemLabel() {
+		super("ItemLabel");
+	}
 
-  public void setParentView(Tag o) {
-    defineProperty("Parent_View", o);
-  }
+	public Tag getParentView() {
+		return (Tag) getProperty("Parent_View");
+	}
 
-  public Location getLocation() {
-    return (Location)getProperty("location");
-  }
+	public void setParentView(Tag o) {
+		defineProperty("Parent_View", o);
+	}
 
-  public void setLocation(Location o) {
-    defineProperty("location", o);
-  }
+	public Location getLocation() {
+		return (Location) getProperty("location");
+	}
 
-  public int getAnchorLoc() {
-    return getPropertyAsInteger("anchor_loc");
-  }
+	public void setLocation(Location o) {
+		defineProperty("location", o);
+	}
 
-  public void setAnchorLoc(int o) {
-    defineProperty("anchor_loc", o);
-  }
+	public int getAnchorLoc() {
+		return getPropertyAsInteger("anchor_loc");
+	}
 
-  public int getNlines() {
-    return getPropertyAsInteger("nlines");
-  }
+	public void setAnchorLoc(int o) {
+		defineProperty("anchor_loc", o);
+	}
 
-  public void setNlines(int o) {
-    defineProperty("nlines", o);
-  }
+	public int getNlines() {
+		return getPropertyAsInteger("nlines");
+	}
 
-  public int getMaxWidth() {
-    return getPropertyAsInteger("max_width");
-  }
+	public void setNlines(int o) {
+		defineProperty("nlines", o);
+	}
 
-  public void setMaxWidth(int o) {
-    defineProperty("max_width", o);
-  }
+	public int getMaxWidth() {
+		return getPropertyAsInteger("max_width");
+	}
 
-  public int getJustify() {
-    return getPropertyAsInteger("justify");
-  }
+	public void setMaxWidth(int o) {
+		defineProperty("max_width", o);
+	}
 
-  public void setJustify(int o) {
-    defineProperty("justify", o);
-  }
+	public int getJustify() {
+		return getPropertyAsInteger("justify");
+	}
 
-  public String getLabel() {
-    return getPropertyAsString("label");
-  }
+	public void setJustify(int o) {
+		defineProperty("justify", o);
+	}
 
-  public void setLabel(String o) {
-    defineProperty("label", o);
-  }
+	public String getLabel() {
+		return getPropertyAsString("label");
+	}
 
-  public int getFillColor() {
-    return getPropertyAsInteger("fill_color");
-  }
+	public void setLabel(String o) {
+		defineProperty("label", o);
+	}
 
-  public void setFillColor(int o) {
-    defineProperty("fill_color", o);
-  }
+	public int getFillColor() {
+		return getPropertyAsInteger("fill_color");
+	}
 
-  public int getAnchor() {
-    return getPropertyAsInteger("anchor");
-  }
+	public void setFillColor(int o) {
+		defineProperty("fill_color", o);
+	}
 
-  public void setAnchor(int o) {
-    defineProperty("anchor", o);
-  }
+	public int getAnchor() {
+		return getPropertyAsInteger("anchor");
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	public void setAnchor(int o) {
+		defineProperty("anchor", o);
+	}
+
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }
-

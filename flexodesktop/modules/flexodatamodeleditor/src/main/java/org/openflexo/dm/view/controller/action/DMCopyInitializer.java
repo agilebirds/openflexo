@@ -34,57 +34,48 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class DMCopyInitializer extends ActionInitializer {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DMCopyInitializer(DMControllerActionInitializer actionInitializer)
-	{
-		super(DMCopy.actionType,actionInitializer);
+	DMCopyInitializer(DMControllerActionInitializer actionInitializer) {
+		super(DMCopy.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected DMControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DMControllerActionInitializer)super.getControllerActionInitializer();
+	protected DMControllerActionInitializer getControllerActionInitializer() {
+		return (DMControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<DMCopy> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<DMCopy> getDefaultInitializer() {
 		return new FlexoActionInitializer<DMCopy>() {
-            @Override
-			public boolean run(ActionEvent e, DMCopy action)
-            {
-                return true;
-            }
-        };
+			@Override
+			public boolean run(ActionEvent e, DMCopy action) {
+				return true;
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<DMCopy> getDefaultFinalizer() 
-	{
+	@Override
+	protected FlexoActionFinalizer<DMCopy> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DMCopy>() {
-            @Override
-			public boolean run(ActionEvent e, DMCopy action)
-            {
-            	getControllerActionInitializer().getDMSelectionManager().performSelectionCopy();
-                return true;
-          }
-        };
+			@Override
+			public boolean run(ActionEvent e, DMCopy action) {
+				getControllerActionInitializer().getDMSelectionManager().performSelectionCopy();
+				return true;
+			}
+		};
 	}
 
- 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	@Override
+	protected Icon getEnabledIcon() {
 		return IconLibrary.COPY_ICON;
 	}
- 
+
 	@Override
-	protected KeyStroke getShortcut()
-	{
+	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(KeyEvent.VK_C, FlexoCst.META_MASK);
 	}
 

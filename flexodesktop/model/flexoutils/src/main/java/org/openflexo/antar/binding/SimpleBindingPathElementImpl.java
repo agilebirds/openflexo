@@ -28,7 +28,7 @@ import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
  * Default implementation for simple path elements
  * 
  * @author sylvain
- *
+ * 
  */
 public abstract class SimpleBindingPathElementImpl<T> extends Observable implements SimplePathElement<T> {
 
@@ -38,8 +38,7 @@ public abstract class SimpleBindingPathElementImpl<T> extends Observable impleme
 	private boolean settable = false;
 	private String tooltipText;
 
-	public SimpleBindingPathElementImpl(String label, Class<?> declaringClass, Type type, boolean isSettable, String tooltipText) 
-	{
+	public SimpleBindingPathElementImpl(String label, Class<?> declaringClass, Type type, boolean isSettable, String tooltipText) {
 		super();
 		this.label = label;
 		this.type = type;
@@ -49,51 +48,44 @@ public abstract class SimpleBindingPathElementImpl<T> extends Observable impleme
 	}
 
 	@Override
-	public Class<?> getDeclaringClass() 
-	{
+	public Class<?> getDeclaringClass() {
 		return declaringClass;
 	}
 
 	@Override
-	public Type getType() 
-	{
+	public Type getType() {
 		return type;
 	}
 
 	@Override
-	public String getSerializationRepresentation()
-	{
+	public String getSerializationRepresentation() {
 		return label;
 	}
 
 	@Override
-	public boolean isBindingValid() 
-	{
+	public boolean isBindingValid() {
 		return true;
 	}
 
 	@Override
-	public String getLabel() 
-	{
+	public String getLabel() {
 		return label;
 	}
 
 	@Override
-	public String getTooltipText(Type resultingType) 
-	{
+	public String getTooltipText(Type resultingType) {
 		return tooltipText;
 	}
 
 	@Override
-	public boolean isSettable() 
-	{
+	public boolean isSettable() {
 		return settable;
 	}
 
 	@Override
 	public abstract T getBindingValue(Object target, BindingEvaluationContext context);
-	
-    @Override
-    public abstract void setBindingValue(T value, Object target, BindingEvaluationContext context);
 
- }
+	@Override
+	public abstract void setBindingValue(T value, Object target, BindingEvaluationContext context);
+
+}

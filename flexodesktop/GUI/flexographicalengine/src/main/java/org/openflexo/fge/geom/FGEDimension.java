@@ -25,51 +25,46 @@ public class FGEDimension extends Dimension2D {
 
 	public double width;
 	public double height;
-	
-	public FGEDimension(double aWidth, double aHeight) 
-	{
+
+	public FGEDimension(double aWidth, double aHeight) {
 		super();
 		width = aWidth;
 		height = aHeight;
 	}
 
 	@Override
-	public double getHeight()
-	{
+	public double getHeight() {
 		return height;
 	}
 
 	@Override
-	public double getWidth() 
-	{
+	public double getWidth() {
 		return width;
 	}
 
 	@Override
-	public void setSize(double aWidth, double aHeight) 
-	{
+	public void setSize(double aWidth, double aHeight) {
 		width = aWidth;
 		height = aHeight;
 	}
-	
+
 	@Override
-	public boolean equals(Object obj)
-	{
+	public boolean equals(Object obj) {
 		if (obj instanceof FGEDimension) {
 			FGEDimension s = (FGEDimension) obj;
-			return (Math.abs(getWidth()-s.getWidth()) < FGEGeometricObject.EPSILON)
-			&& (Math.abs(getHeight()-s.getHeight()) <  FGEGeometricObject.EPSILON);
+			return (Math.abs(getWidth() - s.getWidth()) < FGEGeometricObject.EPSILON)
+					&& (Math.abs(getHeight() - s.getHeight()) < FGEGeometricObject.EPSILON);
 		}
 		return super.equals(obj);
 	}
 
 	@Override
 	public FGEDimension clone() {
-		return new FGEDimension(width,height);
+		return new FGEDimension(width, height);
 	}
 
 	@Override
 	public String toString() {
-		return "[FGEDimesion] "+width+"x"+height;
+		return "[FGEDimesion] " + width + "x" + height;
 	}
 }

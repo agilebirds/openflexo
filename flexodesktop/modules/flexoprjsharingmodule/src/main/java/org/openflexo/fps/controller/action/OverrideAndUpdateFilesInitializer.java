@@ -30,46 +30,38 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
 public class OverrideAndUpdateFilesInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	OverrideAndUpdateFilesInitializer(FPSControllerActionInitializer actionInitializer)
-	{
-		super(OverrideAndUpdateFiles.actionType,actionInitializer);
+	OverrideAndUpdateFilesInitializer(FPSControllerActionInitializer actionInitializer) {
+		super(OverrideAndUpdateFiles.actionType, actionInitializer);
 	}
-	
+
 	@Override
-	protected FPSControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (FPSControllerActionInitializer)super.getControllerActionInitializer();
+	protected FPSControllerActionInitializer getControllerActionInitializer() {
+		return (FPSControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<OverrideAndUpdateFiles> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<OverrideAndUpdateFiles> getDefaultInitializer() {
 		return new FlexoActionInitializer<OverrideAndUpdateFiles>() {
-            @Override
-			public boolean run(ActionEvent e, OverrideAndUpdateFiles action)
-            {
-       			return FlexoController.confirm(FlexoLocalization.localizedForKey(
-				"would_you_really_like_to_override_and_update_those_files"));
-            }
-        };
+			@Override
+			public boolean run(ActionEvent e, OverrideAndUpdateFiles action) {
+				return FlexoController.confirm(FlexoLocalization
+						.localizedForKey("would_you_really_like_to_override_and_update_those_files"));
+			}
+		};
 	}
 
-     @Override
-	protected FlexoActionFinalizer<OverrideAndUpdateFiles> getDefaultFinalizer() 
-	{
+	@Override
+	protected FlexoActionFinalizer<OverrideAndUpdateFiles> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<OverrideAndUpdateFiles>() {
-            @Override
-			public boolean run(ActionEvent e, OverrideAndUpdateFiles action)
-            {
-      			return true;            	
-          }
-        };
+			@Override
+			public boolean run(ActionEvent e, OverrideAndUpdateFiles action) {
+				return true;
+			}
+		};
 	}
-
 
 }

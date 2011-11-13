@@ -19,20 +19,16 @@
  */
 package org.openflexo.foundation.ws.dm;
 
+public class ExternalWSGroupAdded extends WSDataModification {
 
-
-public class ExternalWSGroupAdded extends WSDataModification
-{
-
-    /**
-     * @param modificationType
-     * @param propertyName
-     * @param oldValue
-     * @param newValue
-     */
-    public ExternalWSGroupAdded(Object newValue)
-    {
-        super( null, newValue);
-    }
+	/**
+	 * @param modificationType
+	 * @param propertyName
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public ExternalWSGroupAdded(Object newValue) {
+		super(null, newValue);
+	}
 
 }

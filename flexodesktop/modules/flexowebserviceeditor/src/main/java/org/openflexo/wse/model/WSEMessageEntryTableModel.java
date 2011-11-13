@@ -31,112 +31,94 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.ws.MessageEntry;
 import org.openflexo.foundation.wkf.ws.ServiceMessageDefinition;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class WSEMessageEntryTableModel extends AbstractModel<ServiceMessageDefinition,MessageEntry>
-{
+public class WSEMessageEntryTableModel extends AbstractModel<ServiceMessageDefinition, MessageEntry> {
 
-    protected static final Logger logger = Logger.getLogger(WSEMessageEntryTableModel.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(WSEMessageEntryTableModel.class.getPackage().getName());
 
-    public WSEMessageEntryTableModel(ServiceMessageDefinition model, FlexoProject project, boolean readOnly)
-    {
-        super(model, project);
-        if(readOnly){
-        addToColumns(new StringColumn<MessageEntry>("name", 190) {
-            @Override
-			public String getValue(MessageEntry object)
-            {
-                return (object).getVariableName();
-            }
-        });
-        addToColumns(new StringColumn<MessageEntry>("type", 150) {
-            @Override
-			public String getValue(MessageEntry object)
-            {
-                return (object).getTypeClassName();
-            }
+	public WSEMessageEntryTableModel(ServiceMessageDefinition model, FlexoProject project, boolean readOnly) {
+		super(model, project);
+		if (readOnly) {
+			addToColumns(new StringColumn<MessageEntry>("name", 190) {
+				@Override
+				public String getValue(MessageEntry object) {
+					return (object).getVariableName();
+				}
+			});
+			addToColumns(new StringColumn<MessageEntry>("type", 150) {
+				@Override
+				public String getValue(MessageEntry object) {
+					return (object).getTypeClassName();
+				}
 
-         /*   public void setValue(FlexoModelObject object, String aValue)
-            {
-                
-                    ((MessageEntry) object).setTypeClassName(aValue);
-                selectObject(object);
-            }*/
-        });
-        }
-        else{
-            addToColumns(new EditableStringColumn<MessageEntry>("name", 190) {
-                @Override
-				public String getValue(MessageEntry object)
-                {
-                    return (object).getVariableName();
-                }
-                @Override
-				public void setValue(MessageEntry object, String aValue)
-                {
-                    (object).setVariableName(aValue);
-                    selectObject(object);
-                }
-                
-            });
-            addToColumns(new EntitySelectorColumn<MessageEntry,DMEntity>("type", 150, project,DMEntity.class) {
-                @Override
-				public DMEntity getValue(MessageEntry object)
-                {
-                    return (object).getType().getBaseEntity();
-                }
+				/*   public void setValue(FlexoModelObject object, String aValue)
+				   {
+				       
+				           ((MessageEntry) object).setTypeClassName(aValue);
+				       selectObject(object);
+				   }*/
+			});
+		} else {
+			addToColumns(new EditableStringColumn<MessageEntry>("name", 190) {
+				@Override
+				public String getValue(MessageEntry object) {
+					return (object).getVariableName();
+				}
 
-                @Override
-				public void setValue(MessageEntry object, DMEntity aValue)
-                {
-                    (object).getType().setBaseEntity(aValue);
-                }
-            });
-        }
-        setRowHeight(20);
-    }
+				@Override
+				public void setValue(MessageEntry object, String aValue) {
+					(object).setVariableName(aValue);
+					selectObject(object);
+				}
 
-    public ServiceMessageDefinition getMessageDefinition(){
-    		return getModel();
-    }
-    
-    public Vector<MessageEntry> getEntries()
-    {	
-        return getMessageDefinition().getEntries();
-    }
-    
-    
-    @Override
-	public MessageEntry elementAt(int row)
-    {
-        if ((row >= 0) && (row < getRowCount())) {
-            return getEntries().get(row);
-         } else {
-            return null;
-        }
-    }
+			});
+			addToColumns(new EntitySelectorColumn<MessageEntry, DMEntity>("type", 150, project, DMEntity.class) {
+				@Override
+				public DMEntity getValue(MessageEntry object) {
+					return (object).getType().getBaseEntity();
+				}
 
-    public MessageEntry entryAt(int row)
-    {
-        return elementAt(row);
-    }
+				@Override
+				public void setValue(MessageEntry object, DMEntity aValue) {
+					(object).getType().setBaseEntity(aValue);
+				}
+			});
+		}
+		setRowHeight(20);
+	}
 
-    @Override
-	public int getRowCount()
-    {
-        if (getMessageDefinition() != null) {
-            return getEntries().size();
-        }
-        return 0;
-    }
+	public ServiceMessageDefinition getMessageDefinition() {
+		return getModel();
+	}
 
-   
+	public Vector<MessageEntry> getEntries() {
+		return getMessageDefinition().getEntries();
+	}
 
-   
+	@Override
+	public MessageEntry elementAt(int row) {
+		if ((row >= 0) && (row < getRowCount())) {
+			return getEntries().get(row);
+		} else {
+			return null;
+		}
+	}
+
+	public MessageEntry entryAt(int row) {
+		return elementAt(row);
+	}
+
+	@Override
+	public int getRowCount() {
+		if (getMessageDefinition() != null) {
+			return getEntries().size();
+		}
+		return 0;
+	}
 
 }

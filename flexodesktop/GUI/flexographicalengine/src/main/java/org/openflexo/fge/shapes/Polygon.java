@@ -28,97 +28,85 @@ import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.FGERegularPolygon;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 
-
 public class Polygon extends Shape {
 
 	private FGEPolygon _polygon;
-	
+
 	private int npoints = 5;
 	private int startAngle = 90;
 
 	private List<FGEPoint> points;
+
 	// *******************************************************************************
-	// *                               Constructor                                   *
+	// * Constructor *
 	// *******************************************************************************
-	
-	public Polygon() 
-	{
+
+	public Polygon() {
 		this(null);
 	}
-	
-	public Polygon(ShapeGraphicalRepresentation aGraphicalRepresentation) 
-	{
-		this(aGraphicalRepresentation,5);
+
+	public Polygon(ShapeGraphicalRepresentation aGraphicalRepresentation) {
+		this(aGraphicalRepresentation, 5);
 	}
-	
-	public Polygon(ShapeGraphicalRepresentation aGraphicalRepresentation, List<FGEPoint> points) 
-	{
+
+	public Polygon(ShapeGraphicalRepresentation aGraphicalRepresentation, List<FGEPoint> points) {
 		super(aGraphicalRepresentation);
 		this.points = new ArrayList<FGEPoint>(points);
 	}
-	
-	public Polygon(ShapeGraphicalRepresentation aGraphicalRepresentation,int pointsNb) 
-	{
+
+	public Polygon(ShapeGraphicalRepresentation aGraphicalRepresentation, int pointsNb) {
 		super(aGraphicalRepresentation);
-		if (pointsNb < 3) throw new IllegalArgumentException("Cannot build polygon with less then 3 points ("+pointsNb+")");
+		if (pointsNb < 3)
+			throw new IllegalArgumentException("Cannot build polygon with less then 3 points (" + pointsNb + ")");
 		npoints = pointsNb;
 		updateShape();
 	}
-	
+
 	@Override
-	public void updateShape()
-	{
-		if (points!=null) {
-			_polygon = new FGEPolygon(Filling.FILLED,points);
+	public void updateShape() {
+		if (points != null) {
+			_polygon = new FGEPolygon(Filling.FILLED, points);
 		} else {
-			_polygon = new FGERegularPolygon(0,0,1,1,Filling.FILLED,npoints,startAngle);
+			_polygon = new FGERegularPolygon(0, 0, 1, 1, Filling.FILLED, npoints, startAngle);
 		}
 		rebuildControlPoints();
 		if (getGraphicalRepresentation() != null)
 			getGraphicalRepresentation().notifyShapeChanged();
-	}	
-
+	}
 
 	@Override
-	public ShapeType getShapeType()
-	{
+	public ShapeType getShapeType() {
 		return ShapeType.POLYGON;
 	}
 
-	public List<FGEPoint> getPoints()
-	{
+	public List<FGEPoint> getPoints() {
 		return points;
 	}
-	
-	public void setPoints(List<FGEPoint> points)
-	{
-		if (points!=null) {
+
+	public void setPoints(List<FGEPoint> points) {
+		if (points != null) {
 			this.points = new ArrayList<FGEPoint>(points);
 			updateShape();
 		} else
 			this.points = null;
 	}
-	
-	public int getNPoints()
-	{
+
+	public int getNPoints() {
 		return npoints;
 	}
 
-	public void setNPoints(int pointsNb)
-	{
+	public void setNPoints(int pointsNb) {
 		if (pointsNb != npoints) {
 			npoints = pointsNb;
 			updateShape();
 		}
 	}
-	
-	public int getStartAngle()
-	{
-		return  startAngle;
+
+	public int getStartAngle() {
+		return startAngle;
 	}
-	
-	public void setStartAngle(int anAngle)
-	{
+
+	public void setStartAngle(int anAngle) {
 		if (anAngle != startAngle) {
 			startAngle = anAngle;
 			updateShape();
@@ -126,9 +114,8 @@ public class Polygon extends Shape {
 	}
 
 	@Override
-	public FGEPolygon getShape()
-	{
+	public FGEPolygon getShape() {
 		return _polygon;
 	}
-	
+
 }

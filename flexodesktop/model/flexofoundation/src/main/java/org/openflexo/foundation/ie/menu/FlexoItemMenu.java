@@ -189,7 +189,8 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 	}
 
 	/**
-	 * Returns reference to the main object in which this XML-serializable object is contained relating to storing scheme: here it's the navigation menu
+	 * Returns reference to the main object in which this XML-serializable object is contained relating to storing scheme: here it's the
+	 * navigation menu
 	 * 
 	 * @return
 	 */
@@ -258,7 +259,8 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 				if (getOperation().getComponentInstance().getWOComponent().getFirstTabContainerTitle() != null)
 					args.append(", null");
 
-				woaUrl = getOperation().getComponentDefinition().getName() + ".getUrlForOperation(context()" + args.toString() + "," + getOperation().getComponentInstance().getFlexoID() + ")";
+				woaUrl = getOperation().getComponentDefinition().getName() + ".getUrlForOperation(context()" + args.toString() + ","
+						+ getOperation().getComponentInstance().getFlexoID() + ")";
 
 			} else
 				woaUrl = "\"#\"";
@@ -297,7 +299,8 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 	}
 
 	public void switchItems(FlexoItemMenu item1, FlexoItemMenu item2) {
-		if (item1 != null && item2 != null && _subItems.indexOf(item1) > -1 && _subItems.indexOf(item2) > -1 && _subItems.indexOf(item1) != _subItems.indexOf(item2)) {
+		if (item1 != null && item2 != null && _subItems.indexOf(item1) > -1 && _subItems.indexOf(item2) > -1
+				&& _subItems.indexOf(item1) != _subItems.indexOf(item2)) {
 			if (_subItems.indexOf(item1) > _subItems.indexOf(item2)) {
 				switchItems(item2, item1);
 			} else {
@@ -534,7 +537,8 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 			ValidationIssue<RootItemMustBeBound, FlexoItemMenu> err = null;
 			if (menu.isRootMenu())
 				if (menu.getProcess() == null || menu.getOperation() == null)
-					err = new ValidationError<RootItemMustBeBound, FlexoItemMenu>(this, menu, "root_menu_item_must_be_bound_to_an_operation");
+					err = new ValidationError<RootItemMustBeBound, FlexoItemMenu>(this, menu,
+							"root_menu_item_must_be_bound_to_an_operation");
 			return err;
 		}
 	}
@@ -603,9 +607,11 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 	}
 
 	/**
-	 * Validates this object by appending eventual issues to supplied ValidationReport. Default validation model is used to perform this validation.
+	 * Validates this object by appending eventual issues to supplied ValidationReport. Default validation model is used to perform this
+	 * validation.
 	 * 
-	 * @param report, a ValidationReport object on which found issues are appened
+	 * @param report
+	 *            , a ValidationReport object on which found issues are appened
 	 */
 	@Override
 	public void validate(ValidationReport report) {
@@ -613,9 +619,11 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 	}
 
 	/**
-	 * Validates this object by appending eventual issues to supplied ValidationReport. Supplied validation model is used to perform this validation.
+	 * Validates this object by appending eventual issues to supplied ValidationReport. Supplied validation model is used to perform this
+	 * validation.
 	 * 
-	 * @param report, a ValidationReport object on which found issues are appened
+	 * @param report
+	 *            , a ValidationReport object on which found issues are appened
 	 */
 	@Override
 	public void validate(ValidationReport report, ValidationModel validationModel) {
@@ -692,7 +700,8 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 		if (newComponent == null) {
 			if (logger.isLoggable(Level.INFO))
 				logger.info("Creating a new Component named:" + aComponentName);
-			FlexoComponentFolder selectedFolder = getProject().getFlexoComponentLibrary().getRootFolder().getFolderTyped(FolderType.TAB_FOLDER);
+			FlexoComponentFolder selectedFolder = getProject().getFlexoComponentLibrary().getRootFolder()
+					.getFolderTyped(FolderType.TAB_FOLDER);
 			newComponent = new TabComponentDefinition(aComponentName, getProject().getFlexoComponentLibrary(), selectedFolder, getProject());
 		}
 		setTabComponent(newComponent);
@@ -731,7 +740,8 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 			setChanged();
 			notifyObservers(new DataModification(-1, "tabMenuComponentInstance", null, _tabComponentInstance));
 		} else if (logger.isLoggable(Level.SEVERE))
-			logger.severe("TabComponentInstance does not have a component definition for component named " + tabComponentInstance.getComponentName());
+			logger.severe("TabComponentInstance does not have a component definition for component named "
+					+ tabComponentInstance.getComponentName());
 	}
 
 	public void removeTabComponentInstance() {

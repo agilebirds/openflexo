@@ -28,24 +28,21 @@ import org.openflexo.action.SubmitDocumentationAction;
 import org.openflexo.drm.DocItem;
 import org.openflexo.view.FlexoFrame;
 
-
 public class TrackComponentCHForHelpSubmission extends TrackComponentCH {
 
-    private static final Logger logger = Logger.getLogger(TrackComponentCHForHelpSubmission.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(TrackComponentCHForHelpSubmission.class.getPackage().getName());
 
-    public TrackComponentCHForHelpSubmission (FlexoFrame frame)
-    {
-        super(frame);
-        frame.getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-    }
-    
-     @Override
-	public void applyTracking(JComponent component)
-    {
-        DocItem item = FCH.getDocForComponent(focusedComponent);
-        if (item != null) {
-            SubmitDocumentationAction.actionType.makeNewAction(item,null,getController().getEditor()).doAction();
-        }
-    }
-    
+	public TrackComponentCHForHelpSubmission(FlexoFrame frame) {
+		super(frame);
+		frame.getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+	}
+
+	@Override
+	public void applyTracking(JComponent component) {
+		DocItem item = FCH.getDocForComponent(focusedComponent);
+		if (item != null) {
+			SubmitDocumentationAction.actionType.makeNewAction(item, null, getController().getEditor()).doAction();
+		}
+	}
+
 }

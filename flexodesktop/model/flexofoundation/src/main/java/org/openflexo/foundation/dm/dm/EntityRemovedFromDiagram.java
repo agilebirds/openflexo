@@ -21,18 +21,15 @@ package org.openflexo.foundation.dm.dm;
 
 import org.openflexo.foundation.dm.DMEntity;
 
-public class EntityRemovedFromDiagram extends DMDataModification
-{
+public class EntityRemovedFromDiagram extends DMDataModification {
 
-	public EntityRemovedFromDiagram(DMEntity removedEntity)
-	{
-		super(removedEntity,null);
+	public EntityRemovedFromDiagram(DMEntity removedEntity) {
+		super(removedEntity, null);
 	}
 
-    @Override
-    public DMEntity oldValue()
-     {
-    	return (DMEntity)super.oldValue();
-    }
+	@Override
+	public DMEntity oldValue() {
+		return (DMEntity) super.oldValue();
+	}
 
 }

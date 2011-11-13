@@ -49,7 +49,6 @@ import org.openflexo.foundation.ws.action.WSDelete;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.inspector.InspectableObject;
 
-
 /**
  * A ServiceInteface is attached to a FlexoProcess and contains all the service operations used in the context of WebServices.
  * 
@@ -110,7 +109,7 @@ public class ServiceInterface extends WKFObject implements InspectableObject, Le
 		}
 		_name = aName;
 		setChanged();
-		notifyObservers(new NameChanged(null,_name));
+		notifyObservers(new NameChanged(null, _name));
 	}
 
 	public static void checkInterfaceName(FlexoProcess process, String aName, ServiceInterface currentInt)
@@ -296,8 +295,8 @@ public class ServiceInterface extends WKFObject implements InspectableObject, Le
 						// binding model based on variables of toEntry (operation's message)
 						// message def is from Port.
 						// a_pt=b_op
-						BindingVariable bvar = serviceOp.getInputMessageBindings().getBindingModel().bindingVariableNamed(
-								toEntry.getVariableName());
+						BindingVariable bvar = serviceOp.getInputMessageBindings().getBindingModel()
+								.bindingVariableNamed(toEntry.getVariableName());
 						bvalue.setBindingVariable(bvar);
 						binding.setBindingValue(bvalue);
 					}
@@ -320,8 +319,8 @@ public class ServiceInterface extends WKFObject implements InspectableObject, Le
 						// a_op=b_pt
 						ServiceMessageEntryBinding binding = serviceOp.getOutputMessageBindings().getBinding(toEntry);
 						BindingValue bvalue = new BindingValue(toEntry, serviceOp.getOutputMessageBindings());
-						BindingVariable bvar = serviceOp.getOutputMessageBindings().getBindingModel().bindingVariableNamed(
-								fromEntry.getVariableName());
+						BindingVariable bvar = serviceOp.getOutputMessageBindings().getBindingModel()
+								.bindingVariableNamed(fromEntry.getVariableName());
 						bvalue.setBindingVariable(bvar);
 						binding.setBindingValue(bvalue);
 					}

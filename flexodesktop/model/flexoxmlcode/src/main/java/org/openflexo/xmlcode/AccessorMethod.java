@@ -24,120 +24,111 @@ import java.lang.reflect.Method;
 
 /**
  * <p>
- * <code>AccessorMethod</code> is a class representing a KeyValueProperty
- * accessor method.
+ * <code>AccessorMethod</code> is a class representing a KeyValueProperty accessor method.
  * </p>
  * <p>
- * Because many differents accessors could be defined in a class, all
- * implementing different class-specific levels (more or less specialized,
- * regarding parameters classes), we store these <code>AccessorMethods</code>
- * in a particular order depending on the parameters specialization. This order
- * is implemented in this class through {@link Comparable} interface
- * implementation. Note: this class has a natural ordering that is inconsistent
- * with equals, which means that
- * <code>(x.compareTo(y)==0) == (x.equals(y))</code> condition is violated.
+ * Because many differents accessors could be defined in a class, all implementing different class-specific levels (more or less
+ * specialized, regarding parameters classes), we store these <code>AccessorMethods</code> in a particular order depending on the parameters
+ * specialization. This order is implemented in this class through {@link Comparable} interface implementation. Note: this class has a
+ * natural ordering that is inconsistent with equals, which means that <code>(x.compareTo(y)==0) == (x.equals(y))</code> condition is
+ * violated.
  * 
  * @author <a href="mailto:Sylvain.Guerin@enst-bretagne.fr">Sylvain Guerin</a>
  * @see KeyValueProperty
  */
-public class AccessorMethod implements Comparable
-{
+public class AccessorMethod implements Comparable {
 
-    /** Stores the related <code>KeyValueProperty</code> */
-    protected KeyValueProperty keyValueProperty;
+	/** Stores the related <code>KeyValueProperty</code> */
+	protected KeyValueProperty keyValueProperty;
 
-    /** Stores the related <code>Method</code> */
-    protected Method method;
+	/** Stores the related <code>Method</code> */
+	protected Method method;
 
-    /**
-     * Creates a new <code>AccessorMethod</code> instance.
-     * 
-     * @param aKeyValueProperty
-     *            a <code>KeyValueProperty</code> value
-     * @param aMethod
-     *            a <code>Method</code> value
-     */
-    public AccessorMethod(KeyValueProperty aKeyValueProperty, Method aMethod)
-    {
+	/**
+	 * Creates a new <code>AccessorMethod</code> instance.
+	 * 
+	 * @param aKeyValueProperty
+	 *            a <code>KeyValueProperty</code> value
+	 * @param aMethod
+	 *            a <code>Method</code> value
+	 */
+	public AccessorMethod(KeyValueProperty aKeyValueProperty, Method aMethod) {
 
-        super();
-        keyValueProperty = aKeyValueProperty;
-        method = aMethod;
-    }
+		super();
+		keyValueProperty = aKeyValueProperty;
+		method = aMethod;
+	}
 
-    /**
-     * Compares this object with the specified object for order. Returns a
-     * negative integer, zero, or a positive integer as this object is less
-     * than, equal to, or greater than the specified object.
-     * 
-     * @param object
-     *            an <code>Object</code> value
-     * @return an <code>int</code> value
-     * @exception ClassCastException
-     *                if an error occurs
-     */
-    @Override
-	public int compareTo(Object object) throws ClassCastException
-    {
+	/**
+	 * Compares this object with the specified object for order. Returns a negative integer, zero, or a positive integer as this object is
+	 * less than, equal to, or greater than the specified object.
+	 * 
+	 * @param object
+	 *            an <code>Object</code> value
+	 * @return an <code>int</code> value
+	 * @exception ClassCastException
+	 *                if an error occurs
+	 */
+	@Override
+	public int compareTo(Object object) throws ClassCastException {
 
-        if (object instanceof AccessorMethod) {
+		if (object instanceof AccessorMethod) {
 
-            AccessorMethod comparedAccessorMethod = (AccessorMethod) object;
+			AccessorMethod comparedAccessorMethod = (AccessorMethod) object;
 
-            if (getMethod().getParameterTypes().length != comparedAccessorMethod.getMethod().getParameterTypes().length) {
+			if (getMethod().getParameterTypes().length != comparedAccessorMethod.getMethod().getParameterTypes().length) {
 
-                // Those objects could not be compared and should be treated as
-                // equals
-                // regarding the specialization of their parameters
-                return 2;
-            }
+				// Those objects could not be compared and should be treated as
+				// equals
+				// regarding the specialization of their parameters
+				return 2;
+			}
 
-            else {
+			else {
 
-                for (int i = 0; i < getMethod().getParameterTypes().length; i++) {
+				for (int i = 0; i < getMethod().getParameterTypes().length; i++) {
 
-                    Class localParameterType = (getMethod().getParameterTypes())[i];
-                    Class comparedParameterType = (comparedAccessorMethod.getMethod().getParameterTypes())[i];
+					Class localParameterType = (getMethod().getParameterTypes())[i];
+					Class comparedParameterType = (comparedAccessorMethod.getMethod().getParameterTypes())[i];
 
-                    if (!localParameterType.equals(comparedParameterType)) {
+					if (!localParameterType.equals(comparedParameterType)) {
 
-                        boolean localParamIsParentOfComparedParam = localParameterType.isAssignableFrom(comparedParameterType);
+						boolean localParamIsParentOfComparedParam = localParameterType.isAssignableFrom(comparedParameterType);
 
-                        boolean localParamIsChildOfComparedParam = comparedParameterType.isAssignableFrom(localParameterType);
+						boolean localParamIsChildOfComparedParam = comparedParameterType.isAssignableFrom(localParameterType);
 
-                        if (localParamIsParentOfComparedParam) {
-                            return 1;
-                        }
-                        if (localParamIsChildOfComparedParam) {
-                            return -1;
-                        }
-                        // Those objects could not be compared
-                        return 2;
-                    }
+						if (localParamIsParentOfComparedParam) {
+							return 1;
+						}
+						if (localParamIsChildOfComparedParam) {
+							return -1;
+						}
+						// Those objects could not be compared
+						return 2;
+					}
 
-                } // end of for
+				} // end of for
 
-                // Those objects are equals regarding the specialization of
-                // their parameters
-                return 0;
-            }
+				// Those objects are equals regarding the specialization of
+				// their parameters
+				return 0;
+			}
 
-        }
+		}
 
-        else {
-            throw new ClassCastException();
-        }
-    }
+		else {
+			throw new ClassCastException();
+		}
+	}
 
-    /**
-     * Return the related <code>Method</code>
-     * 
-     * @return
-     */
-    public Method getMethod()
-    {
+	/**
+	 * Return the related <code>Method</code>
+	 * 
+	 * @return
+	 */
+	public Method getMethod() {
 
-        return method;
-    }
+		return method;
+	}
 
 }

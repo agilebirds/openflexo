@@ -22,7 +22,7 @@ package org.openflexo.fge.graphics;
 public interface DrawingDecorationPainter {
 
 	public void paintDecoration(FGEDrawingDecorationGraphics g);
-	
+
 	public boolean paintBeforeDrawing();
-	
+
 }

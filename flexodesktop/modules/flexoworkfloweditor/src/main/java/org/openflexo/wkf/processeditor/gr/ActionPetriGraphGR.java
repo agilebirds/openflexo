@@ -30,42 +30,37 @@ import org.openflexo.foundation.wkf.node.PetriGraphNode;
 import org.openflexo.foundation.wkf.node.SelfExecutableNode;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
-
 public class ActionPetriGraphGR extends ContainerGR<ActionPetriGraph> {
 
-	public ActionPetriGraphGR(ActionPetriGraph object, ProcessRepresentation aDrawing)
-	{
-		super(object, aDrawing,ACTION_PG_COLOR,ACTION_PG_BACK_COLOR);
+	public ActionPetriGraphGR(ActionPetriGraph object, ProcessRepresentation aDrawing) {
+		super(object, aDrawing, ACTION_PG_COLOR, ACTION_PG_BACK_COLOR);
 		setLayer(ACTION_PG_LAYER);
 	}
 
-	public ActionPetriGraph getActionPetriGraph()
-	{
+	public ActionPetriGraph getActionPetriGraph() {
 		return getDrawable();
 	}
 
 	@Override
-	public String getLabel()
-	{
-		return (getActionPetriGraph().getContainer() instanceof AbstractNode ?
-				((AbstractNode)getActionPetriGraph().getContainer()).getName() : "???");
+	public String getLabel() {
+		return (getActionPetriGraph().getContainer() instanceof AbstractNode ? ((AbstractNode) getActionPetriGraph().getContainer())
+				.getName() : "???");
 	}
 
-
 	@Override
-	public void closingRequested()
-	{
+	public void closingRequested() {
 		if (getActionPetriGraph().getContainer() instanceof SelfExecutableNode) {
-			OpenExecutionPetriGraph.actionType.makeNewAction((PetriGraphNode)getActionPetriGraph().getContainer(),null,getDrawing().getEditor()).doAction();
+			OpenExecutionPetriGraph.actionType.makeNewAction((PetriGraphNode) getActionPetriGraph().getContainer(), null,
+					getDrawing().getEditor()).doAction();
+		} else if (getActionPetriGraph().getContainer() instanceof LOOPOperator) {
+			OpenLoopedPetriGraph.actionType.makeNewAction((LOOPOperator) getActionPetriGraph().getContainer(), null,
+					getDrawing().getEditor()).doAction();
+		} else if (getActionPetriGraph().getContainer() instanceof OperationNode) {
+			OpenActionLevel.actionType.makeNewAction((OperationNode) getActionPetriGraph().getContainer(), null, getDrawing().getEditor())
+					.doAction();
 		}
-		else if (getActionPetriGraph().getContainer() instanceof LOOPOperator) {
-			OpenLoopedPetriGraph.actionType.makeNewAction((LOOPOperator)getActionPetriGraph().getContainer(),null,getDrawing().getEditor()).doAction();
-		}
-		else if (getActionPetriGraph().getContainer() instanceof OperationNode) {
-			OpenActionLevel.actionType.makeNewAction((OperationNode)getActionPetriGraph().getContainer(),null,getDrawing().getEditor()).doAction();
-		}
-        // Is now performed by receiving notification
-        // getDrawing().updateGraphicalObjectsHierarchy();
+		// Is now performed by receiving notification
+		// getDrawing().updateGraphicalObjectsHierarchy();
 	}
 
 	// Override to implement defaut automatic layout
@@ -84,18 +79,15 @@ public class ActionPetriGraphGR extends ContainerGR<ActionPetriGraph> {
 		return 0;
 	}*/
 
-	protected WKFObjectGR<?> getWKFContainerGR()
-	{
-		return (WKFObjectGR<?>)getGraphicalRepresentation(getActionPetriGraph().getContainer());
+	protected WKFObjectGR<?> getWKFContainerGR() {
+		return (WKFObjectGR<?>) getGraphicalRepresentation(getActionPetriGraph().getContainer());
 	}
 
 	/**
-	 * Overriden to implement defaut automatic layout
-	 * Container will be horizontal centered above parent node
+	 * Overriden to implement defaut automatic layout Container will be horizontal centered above parent node
 	 */
 	@Override
-	public double getDefaultX()
-	{
+	public double getDefaultX() {
 		if (getWKFContainerGR() != null) {
 			WKFObjectGR containerGR = getWKFContainerGR();
 			/*logger.info("containerGR.getLocationInDrawing().x="+containerGR.getLocationInDrawing().x);
@@ -104,21 +96,19 @@ public class ActionPetriGraphGR extends ContainerGR<ActionPetriGraph> {
 			for (PetriGraphNode n : getActionPetriGraph().getNodes()) {
 				logger.info("Node: "+((ShapeGraphicalRepresentation)getGraphicalRepresentation(n)).getLocation());
 			}*/
-			return Math.max(0,containerGR.getLocationInDrawing().x-(getWidth()-containerGR.getWidth())/2);
+			return Math.max(0, containerGR.getLocationInDrawing().x - (getWidth() - containerGR.getWidth()) / 2);
 		}
 		return 0;
 	}
 
 	/**
-	 * Overriden to implement defaut automatic layout
-	 * Container will be located 50 pixels (1.0 scale) above parent node
+	 * Overriden to implement defaut automatic layout Container will be located 50 pixels (1.0 scale) above parent node
 	 */
 	@Override
-	public double getDefaultY()
-	{
+	public double getDefaultY() {
 		if (getWKFContainerGR() != null) {
 			WKFObjectGR containerGR = getWKFContainerGR();
-			return containerGR.getLocationInDrawing().y+containerGR.getHeight()+50;
+			return containerGR.getLocationInDrawing().y + containerGR.getHeight() + 50;
 		}
 		return 0;
 	}

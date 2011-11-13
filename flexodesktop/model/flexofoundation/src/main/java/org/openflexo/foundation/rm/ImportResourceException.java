@@ -25,18 +25,15 @@ package org.openflexo.foundation.rm;
  * @author sguerin
  * 
  */
-public class ImportResourceException extends LoadResourceException
-{
+public class ImportResourceException extends LoadResourceException {
 
-     public ImportResourceException(FlexoImportedResource fileResource)
-    {
-        super(fileResource, null);
-    }
+	public ImportResourceException(FlexoImportedResource fileResource) {
+		super(fileResource, null);
+	}
 
-    @Override
-	public String getMessage()
-    {
-        return "ImportResourceException: resource " + _fileResource.getResourceIdentifier();
-    }
+	@Override
+	public String getMessage() {
+		return "ImportResourceException: resource " + _fileResource.getResourceIdentifier();
+	}
 
 }

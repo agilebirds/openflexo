@@ -25,7 +25,6 @@ import org.openflexo.foundation.sg.SourceRepository;
 import org.openflexo.foundation.xml.GeneratedSourcesBuilder;
 import org.openflexo.toolbox.FileFormat;
 
-
 public class SGTextFile extends SGFile {
 
 	public SGTextFile(GeneratedSourcesBuilder builder) {

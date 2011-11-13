@@ -33,59 +33,50 @@ import org.openflexo.toolbox.FileFormat;
  * @author sylvain
  * 
  */
-public class LatexFileResource<G extends IFlexoResourceGenerator, F extends CGFile> extends TextFileResource<G,F>
-{
-    protected static final Logger logger = FlexoLogger.getLogger(LatexFileResource.class.getPackage().getName());
+public class LatexFileResource<G extends IFlexoResourceGenerator, F extends CGFile> extends TextFileResource<G, F> {
+	protected static final Logger logger = FlexoLogger.getLogger(LatexFileResource.class.getPackage().getName());
 
-    /**
-     * @param builder
-     */
-    public LatexFileResource(FlexoProjectBuilder builder)
-    {
-        this(builder.project);
-    }
+	/**
+	 * @param builder
+	 */
+	public LatexFileResource(FlexoProjectBuilder builder) {
+		this(builder.project);
+	}
 
-    /**
-     * @param aProject
-     */
-    public LatexFileResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
+	/**
+	 * @param aProject
+	 */
+	public LatexFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
-    /**
-     * Overrides getResourceType
-     * 
-     * @see org.openflexo.foundation.rm.FlexoResource#getResourceType()
-     */
-    @Override
-	public ResourceType getResourceType()
-    {
-        return ResourceType.TEXT_FILE;
-    }
-
-
-    @Override
-	protected TextFile createGeneratedResourceData()
-    {
-        return new TextFile(getFile());
-    }
-    
-     @Override
-	public TextFile getTextFile()
-    {
-        return (TextFile) getGeneratedResourceData();
-    }
+	/**
+	 * Overrides getResourceType
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResource#getResourceType()
+	 */
+	@Override
+	public ResourceType getResourceType() {
+		return ResourceType.TEXT_FILE;
+	}
 
 	@Override
-	public ResourceType getFileType() 
-	{
+	protected TextFile createGeneratedResourceData() {
+		return new TextFile(getFile());
+	}
+
+	@Override
+	public TextFile getTextFile() {
+		return (TextFile) getGeneratedResourceData();
+	}
+
+	@Override
+	public ResourceType getFileType() {
 		return ResourceType.LATEX_FILE;
 	}
 
 	@Override
-	public FileFormat getResourceFormat() 
-	{
+	public FileFormat getResourceFormat() {
 		return FileFormat.LATEX;
 	}
 

@@ -22,29 +22,24 @@ package org.openflexo.ve.controller;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.view.View;
 
-class ShemaBrowser extends OEBrowser
-{
+class ShemaBrowser extends OEBrowser {
 	private View representedShema = null;
-	
-	protected ShemaBrowser(OEController controller)
-	{
+
+	protected ShemaBrowser(OEController controller) {
 		super(controller);
 	}
 
-	protected View getRepresentedShema() 
-	{
+	protected View getRepresentedShema() {
 		return representedShema;
 	}
 
-	protected void setRepresentedShema(View representedShema) 
-	{
+	protected void setRepresentedShema(View representedShema) {
 		this.representedShema = representedShema;
 	}
 
-    @Override
-	public FlexoModelObject getDefaultRootObject()
-    {
-    	return representedShema;
-    }
-    
+	@Override
+	public FlexoModelObject getDefaultRootObject() {
+		return representedShema;
+	}
+
 }

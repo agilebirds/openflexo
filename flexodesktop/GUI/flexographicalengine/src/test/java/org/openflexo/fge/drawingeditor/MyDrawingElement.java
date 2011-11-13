@@ -24,76 +24,64 @@ import java.util.Vector;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.xmlcode.XMLSerializable;
 
-
-public abstract class MyDrawingElement implements XMLSerializable,Cloneable {
+public abstract class MyDrawingElement implements XMLSerializable, Cloneable {
 
 	protected MyDrawing _drawing;
 	private Vector<MyDrawingElement> childs;
 
 	public abstract GraphicalRepresentation<? extends MyDrawingElement> getGraphicalRepresentation();
 
-	public MyDrawingElement(MyDrawing drawing)
-	{
+	public MyDrawingElement(MyDrawing drawing) {
 		childs = new Vector<MyDrawingElement>();
 		_drawing = drawing;
 	}
-	
-	public Vector<MyDrawingElement> getChilds()
-	{
+
+	public Vector<MyDrawingElement> getChilds() {
 		return childs;
 	}
 
-	public void setChilds(Vector<MyDrawingElement> someChilds)
-	{
+	public void setChilds(Vector<MyDrawingElement> someChilds) {
 		childs.addAll(someChilds);
 	}
 
-	public void addToChilds(MyDrawingElement aChild)
-	{
+	public void addToChilds(MyDrawingElement aChild) {
 		childs.add(aChild);
-		//System.out.println("Add "+aChild+" isDeserializing="+isDeserializing());
+		// System.out.println("Add "+aChild+" isDeserializing="+isDeserializing());
 		if (!isDeserializing()) {
 			getDrawing().getEditedDrawing().addDrawable(aChild, this);
 		}
 	}
 
-	public void removeFromChilds(MyDrawingElement aChild)
-	{
+	public void removeFromChilds(MyDrawingElement aChild) {
 		childs.remove(aChild);
 	}
-	
-	public MyDrawing getDrawing()
-	{
+
+	public MyDrawing getDrawing() {
 		return _drawing;
 	}
 
 	private boolean isDeserializing = false;
-	
-	public void initializeDeserialization()
-	{
+
+	public void initializeDeserialization() {
 		isDeserializing = true;
 	}
-	
-	public void finalizeDeserialization()
-	{
+
+	public void finalizeDeserialization() {
 		isDeserializing = false;
 		/*for (MyDrawingElement e : childs) {
 			getDrawing().getEditedDrawing().addDrawable(e, this);
 		}*/
 	}
-	
-	public boolean isDeserializing()
-	{
+
+	public boolean isDeserializing() {
 		return isDeserializing;
 	}
-	
+
 	@Override
-	public MyDrawingElement clone()
-	{
+	public MyDrawingElement clone() {
 		try {
-			return (MyDrawingElement)super.clone();
-		}
-		catch (CloneNotSupportedException e) {
+			return (MyDrawingElement) super.clone();
+		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 			// cannot happen since we are clonable
 			return null;

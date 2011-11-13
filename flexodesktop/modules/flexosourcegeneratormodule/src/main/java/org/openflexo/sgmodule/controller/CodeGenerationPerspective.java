@@ -43,7 +43,6 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-
 public class CodeGenerationPerspective extends FlexoPerspective<FlexoModelObject> {
 
 	private final SGController _controller;
@@ -79,7 +78,8 @@ public class CodeGenerationPerspective extends FlexoPerspective<FlexoModelObject
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return ((object instanceof GeneratedSources) || (object instanceof SourceRepository) || (object instanceof CGFile) || (object instanceof CGTemplate) || (object instanceof ImplementationModel) || (object instanceof TechnologyModelObject));
+		return ((object instanceof GeneratedSources) || (object instanceof SourceRepository) || (object instanceof CGFile)
+				|| (object instanceof CGTemplate) || (object instanceof ImplementationModel) || (object instanceof TechnologyModelObject));
 	}
 
 	@Override
@@ -96,9 +96,11 @@ public class CodeGenerationPerspective extends FlexoPerspective<FlexoModelObject
 			return new ImplementationModelView((ImplementationModel) object, (SGController) controller, this);
 		} else if (object instanceof TechnologyModelObject) {
 
-			TechnologyModuleGUIFactory technologyModuleGUIFactory = SGModule.getTechnologyModuleGUIFactory((((TechnologyModelObject) object).getTechnologyModuleImplementation()).getClass());
+			TechnologyModuleGUIFactory technologyModuleGUIFactory = SGModule
+					.getTechnologyModuleGUIFactory((((TechnologyModelObject) object).getTechnologyModuleImplementation()).getClass());
 			if (technologyModuleGUIFactory != null) {
-				ModuleView<? extends FlexoModelObject> view = technologyModuleGUIFactory.createModelView((TechnologyModelObject) object, (SGController) controller, this);
+				ModuleView<? extends FlexoModelObject> view = technologyModuleGUIFactory.createModelView((TechnologyModelObject) object,
+						(SGController) controller, this);
 				if (view != null) {
 					return view;
 				}

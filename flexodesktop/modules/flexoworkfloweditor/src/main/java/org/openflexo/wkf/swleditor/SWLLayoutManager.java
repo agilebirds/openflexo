@@ -23,7 +23,6 @@ import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.wkf.Role;
@@ -40,40 +39,37 @@ public class SWLLayoutManager extends WKFLayoutManager {
 
 	private final SwimmingLaneRepresentation _representation;
 
-	private Hashtable<Role,AutoLayoutNodePath> isolatedNodePath;
-	
-	public SWLLayoutManager(SwimmingLaneRepresentation representation) 
-	{
+	private Hashtable<Role, AutoLayoutNodePath> isolatedNodePath;
+
+	public SWLLayoutManager(SwimmingLaneRepresentation representation) {
 		super(representation.getProcess());
 		_representation = representation;
 	}
-	
+
 	@Override
-	public void recomputeProcessStructure(FlexoProgress progress) 
-	{
+	public void recomputeProcessStructure(FlexoProgress progress) {
 		super.recomputeProcessStructure(progress);
-		if (progress!=null)
+		if (progress != null)
 			progress.setProgress(FlexoLocalization.localizedForKey("finding_isolated_nodes"));
 		isolatedNodePath = new Hashtable<Role, AutoLayoutNodePath>();
-		for(AutoLayoutNode n:getIsolatedNodes()) {
+		for (AutoLayoutNode n : getIsolatedNodes()) {
 			Role role = bestRepresentationRole(n.node);
 			AutoLayoutNodePath path = isolatedNodePath.get(role);
-			if (path==null)
-				isolatedNodePath.put(role,path=new AutoLayoutNodePath());
+			if (path == null)
+				isolatedNodePath.put(role, path = new AutoLayoutNodePath());
 			path.add(n);
 		}
 	}
-	
-	protected Role bestRepresentationRole(PetriGraphNode node)
-	{
+
+	protected Role bestRepresentationRole(PetriGraphNode node) {
 		Role role = SwimmingLaneRepresentation.getRepresentationRole(node);
-		if (role==null || role.isDefaultRole()) {
+		if (role == null || role.isDefaultRole()) {
 			if (node instanceof EventNode || node instanceof OperatorNode) {
 				role = node.getBestRole();
 				if (node instanceof EventNode) {
-					((EventNode)node).setRole(role);
+					((EventNode) node).setRole(role);
 				} else {
-					((OperatorNode)node).setRole(role);
+					((OperatorNode) node).setRole(role);
 				}
 			}
 			if (role == null)
@@ -81,7 +77,7 @@ public class SWLLayoutManager extends WKFLayoutManager {
 		}
 		return role;
 	}
-	
+
 	/*private Role bestRepresentationRole(AbstractNode node, Vector<AbstractNode> acc)
 	{
 		if (acc.contains(node))
@@ -125,160 +121,153 @@ public class SWLLayoutManager extends WKFLayoutManager {
 		return returned;
 	}*/
 
-	private Hashtable<Role,SwimmingPool> generalLayout;
-	
+	private Hashtable<Role, SwimmingPool> generalLayout;
+
 	@Override
-	public void layoutProcess(FlexoProgress progress) 
-	{
+	public void layoutProcess(FlexoProgress progress) {
 		recomputeProcessStructure(progress);
-		if (getMainPath()==null)
+		if (getMainPath() == null)
 			return;
-		generalLayout = new Hashtable<Role,SwimmingPool>();
-		if (progress!=null)
+		generalLayout = new Hashtable<Role, SwimmingPool>();
+		if (progress != null)
 			progress.setProgress(FlexoLocalization.localizedForKey("computing_layout"));
-		layoutPath(getMainPath(),progress);
+		layoutPath(getMainPath(), progress);
 		for (AutoLayoutNodePath secondaryPath : getSecondaryPaths())
-			layoutPath(secondaryPath,progress);
-		for(Role r: isolatedNodePath.keySet()) {
-			layoutPath(isolatedNodePath.get(r),progress);
+			layoutPath(secondaryPath, progress);
+		for (Role r : isolatedNodePath.keySet()) {
+			layoutPath(isolatedNodePath.get(r), progress);
 		}
 		logger.info("Layout has been computed, apply it");
-		if (progress!=null)
+		if (progress != null)
 			progress.setProgress(FlexoLocalization.localizedForKey("applying_layout"));
-		if (progress!=null)
-			progress.resetSecondaryProgress(generalLayout.size()+nodeMap.size());
-		_representation.setSWLWidth(maxWidth+3*MARGIN);
+		if (progress != null)
+			progress.resetSecondaryProgress(generalLayout.size() + nodeMap.size());
+		_representation.setSWLWidth(maxWidth + 3 * MARGIN);
 		for (Role r : generalLayout.keySet()) {
-			if (progress!=null)
-				progress.setSecondaryProgress(FlexoLocalization.localizedForKey("role")+" "+r.getName());
+			if (progress != null)
+				progress.setSecondaryProgress(FlexoLocalization.localizedForKey("role") + " " + r.getName());
 			SwimmingPool pool = generalLayout.get(r);
 			_representation.setSwimmingLaneNb(pool.lanes.size(), r);
-			for(SwimmingLane lane:pool.lanes.values()) {
-				for(AutoLayoutNode node:lane.nodes)
-					node.proposedLocation.y = lane.index*pool.maxLaneHeight;
+			for (SwimmingLane lane : pool.lanes.values()) {
+				for (AutoLayoutNode node : lane.nodes)
+					node.proposedLocation.y = lane.index * pool.maxLaneHeight;
 			}
 			_representation.setSwimmingLaneHeight((int) pool.maxLaneHeight, r);
 		}
 		for (AutoLayoutNode n : nodeMap.values()) {
-			if (progress!=null)
-				progress.setSecondaryProgress(FlexoLocalization.localizedForKey("node")+" "+n.node.getName());
+			if (progress != null)
+				progress.setSecondaryProgress(FlexoLocalization.localizedForKey("node") + " " + n.node.getName());
 			n.node.setX(n.proposedLocation.x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 			n.node.setY(n.proposedLocation.y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		}
 	}
-	
+
 	private static final double MARGIN = 30;
 	private static final double SPACE_IN_SAME_LANE = 45;
 	private static final double SPACE_WHEN_CHANGING_LANE = 30;
 	private static final int SWL_HEIGHT = 80;
-	
-	private double maxWidth = 1000-3*MARGIN;
-	
-	private void layoutPath (AutoLayoutNodePath path, FlexoProgress progress)
-	{
+
+	private double maxWidth = 1000 - 3 * MARGIN;
+
+	private void layoutPath(AutoLayoutNodePath path, FlexoProgress progress) {
 		SwimmingLane previousLane = null;
 		AbstractNode previousNode = null;
 		boolean isMainPath = (path == getMainPath());
 		double x;
-		
+
 		if (isMainPath) {
 			x = MARGIN;
 		} else {
 			if (path.startPath != null) {
 				AutoLayoutNode firstElement = path.firstElement();
-				x = firstElement.proposedLocation.x+SPACE_WHEN_CHANGING_LANE;
-			}
-			else if (path.endPath != null) {
+				x = firstElement.proposedLocation.x + SPACE_WHEN_CHANGING_LANE;
+			} else if (path.endPath != null) {
 				double requiredWidth = 0;
 				for (AutoLayoutNode n : path) {
 					if (n != path.lastElement()) {
-						requiredWidth += n.node.getWidth(SWLEditorConstants.SWIMMING_LANE_EDITOR)+SPACE_WHEN_CHANGING_LANE;
+						requiredWidth += n.node.getWidth(SWLEditorConstants.SWIMMING_LANE_EDITOR) + SPACE_WHEN_CHANGING_LANE;
 					}
 				}
 				AutoLayoutNode lastElement = path.lastElement();
-				x = lastElement.proposedLocation.x-requiredWidth;
-			}
-			else {
+				x = lastElement.proposedLocation.x - requiredWidth;
+			} else {
 				x = MARGIN;
 			}
 		}
-		if (progress!=null)
+		if (progress != null)
 			progress.resetSecondaryProgress(path.size());
 		for (AutoLayoutNode n : path) {
-			if (progress!=null)
-				progress.setSecondaryProgress(FlexoLocalization.localizedForKey("laying_out")+" "+n.node.getName());
+			if (progress != null)
+				progress.setSecondaryProgress(FlexoLocalization.localizedForKey("laying_out") + " " + n.node.getName());
 			if (!isMainPath) {
 				if (path.startPath != null && n == path.firstElement()) {
 					// In this case, this is a secondary path attached to an other path
 					// And this is the first node, which location is then already determined
-					//System.out.println("Forget about "+n+" for secondary path "+path);
+					// System.out.println("Forget about "+n+" for secondary path "+path);
 					continue;
 				}
 				if (path.endPath != null && n == path.lastElement()) {
 					// In this case, this is a secondary path attached to an other path
 					// And this is the last node, which location is then already determined
-					//System.out.println("Forget about "+n+" for secondary path "+path);
+					// System.out.println("Forget about "+n+" for secondary path "+path);
 					continue;
 				}
 			}
-			
+
 			Role role = bestRepresentationRole(n.node);
 
 			SwimmingPool pool = generalLayout.get(role);
 			if (pool == null) {
 				pool = new SwimmingPool(role);
-				generalLayout.put(role,pool);
+				generalLayout.put(role, pool);
 			}
 			SwimmingLane lane = pool.lanes.get(path);
 			if (lane == null) {
-				lane = new SwimmingLane(path,pool.lanes.size());
+				lane = new SwimmingLane(path, pool.lanes.size());
 				pool.lanes.put(path, lane);
 			}
 			lane.nodes.add(n);
 			double height = n.node.getHeight(SWLEditorConstants.SWIMMING_LANE_EDITOR);
-			if (height+2*MARGIN>pool.maxLaneHeight) {
-				pool.maxLaneHeight = height+2*MARGIN;
+			if (height + 2 * MARGIN > pool.maxLaneHeight) {
+				pool.maxLaneHeight = height + 2 * MARGIN;
 			}
-			if (previousLane!=null && lane != previousLane && (n != path.lastElement())) {
+			if (previousLane != null && lane != previousLane && (n != path.lastElement())) {
 				x += SPACE_WHEN_CHANGING_LANE;
-				if (lane.nodes.size()>1) {
-					AutoLayoutNode previousNodeInLane = lane.nodes.get(lane.nodes.size()-2);
-					x=previousNodeInLane.proposedLocation.x+previousNodeInLane.node.getWidth(SWLEditorConstants.SWIMMING_LANE_EDITOR)+SPACE_IN_SAME_LANE;
+				if (lane.nodes.size() > 1) {
+					AutoLayoutNode previousNodeInLane = lane.nodes.get(lane.nodes.size() - 2);
+					x = previousNodeInLane.proposedLocation.x + previousNodeInLane.node.getWidth(SWLEditorConstants.SWIMMING_LANE_EDITOR)
+							+ SPACE_IN_SAME_LANE;
 				}
-			}
-			else if (previousNode != null) {
-				x = x + previousNode.getWidth(SWLEditorConstants.SWIMMING_LANE_EDITOR)+SPACE_IN_SAME_LANE;
+			} else if (previousNode != null) {
+				x = x + previousNode.getWidth(SWLEditorConstants.SWIMMING_LANE_EDITOR) + SPACE_IN_SAME_LANE;
 			}
 
-			n.proposedLocation = new FGEPoint(x,lane.index*SWL_HEIGHT);
-			
+			n.proposedLocation = new FGEPoint(x, lane.index * SWL_HEIGHT);
+
 			previousLane = lane;
 			previousNode = n.node;
 		}
-		if (x+previousNode.getWidth(SWLEditorConstants.SWIMMING_LANE_EDITOR)+MARGIN > maxWidth)
-			maxWidth = x+previousNode.getWidth(SWLEditorConstants.SWIMMING_LANE_EDITOR)+MARGIN;
+		if (x + previousNode.getWidth(SWLEditorConstants.SWIMMING_LANE_EDITOR) + MARGIN > maxWidth)
+			maxWidth = x + previousNode.getWidth(SWLEditorConstants.SWIMMING_LANE_EDITOR) + MARGIN;
 	}
-	
-	class SwimmingPool 
-	{
+
+	class SwimmingPool {
 		Role role;
-		Hashtable<AutoLayoutNodePath,SwimmingLane> lanes;
+		Hashtable<AutoLayoutNodePath, SwimmingLane> lanes;
 		double maxLaneHeight = SWL_HEIGHT;
-		public SwimmingPool(Role aRole) 
-		{
+
+		public SwimmingPool(Role aRole) {
 			role = aRole;
-			lanes = new Hashtable<AutoLayoutNodePath,SwimmingLane>();
+			lanes = new Hashtable<AutoLayoutNodePath, SwimmingLane>();
 		}
 	}
 
-	class SwimmingLane 
-	{
+	class SwimmingLane {
 		int index;
 		AutoLayoutNodePath path;
 		Vector<AutoLayoutNode> nodes;
 
-		SwimmingLane(AutoLayoutNodePath aPath, int anIndex) 
-		{
+		SwimmingLane(AutoLayoutNodePath aPath, int anIndex) {
 			index = anIndex;
 			path = aPath;
 			nodes = new Vector<AutoLayoutNode>();

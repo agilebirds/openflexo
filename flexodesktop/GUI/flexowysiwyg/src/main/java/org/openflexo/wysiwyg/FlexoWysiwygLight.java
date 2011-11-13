@@ -21,39 +21,39 @@ package org.openflexo.wysiwyg;
 
 import java.io.File;
 
-
-
 public abstract class FlexoWysiwygLight extends FlexoWysiwyg {
-	
+
 	/**
-	 * Creates the light version of wysiwyg component without the JMenuBar and without any CSS support.
-	 * This version removes a set of the less useful options.
-	 * This class must implement <code>textChanged(String htmlText)</code> to be concrete.
+	 * Creates the light version of wysiwyg component without the JMenuBar and without any CSS support. This version removes a set of the
+	 * less useful options. This class must implement <code>textChanged(String htmlText)</code> to be concrete.
 	 */
-	
+
 	public FlexoWysiwygLight(boolean isViewSourceAvailable) {
 		this(null, isViewSourceAvailable);
 	}
 
 	/**
-	 * Creates the light version of wysiwyg component without the JMenuBar and without any CSS support.
-	 * This version removes a set of the less useful options.
-	 * This class must implement <code>textChanged(String htmlText)</code> to be concrete.
-	 * @param htmlContent if not null, will initialize the wysiwyg with this HTML content.
+	 * Creates the light version of wysiwyg component without the JMenuBar and without any CSS support. This version removes a set of the
+	 * less useful options. This class must implement <code>textChanged(String htmlText)</code> to be concrete.
+	 * 
+	 * @param htmlContent
+	 *            if not null, will initialize the wysiwyg with this HTML content.
 	 */
 	public FlexoWysiwygLight(String htmlContent, boolean isViewSourceAvailable) {
 		this(htmlContent, null, isViewSourceAvailable);
 	}
-	
+
 	/**
-	 * Creates the light version of wysiwyg component without the JMenuBar and with CSS support.
-	 * This version removes a set of the less useful options.
-	 * This class must implement <code>textChanged(String htmlText)</code> to be concrete.
-	 * @param htmlContent if not null, will initialize the wysiwyg with this HTML content.
-	 * @param cssFile the CSS file to apply on the document.
+	 * Creates the light version of wysiwyg component without the JMenuBar and with CSS support. This version removes a set of the less
+	 * useful options. This class must implement <code>textChanged(String htmlText)</code> to be concrete.
+	 * 
+	 * @param htmlContent
+	 *            if not null, will initialize the wysiwyg with this HTML content.
+	 * @param cssFile
+	 *            the CSS file to apply on the document.
 	 */
 	public FlexoWysiwygLight(String htmlContent, File cssFile, boolean isViewSourceAvailable) {
-		
+
 		super(htmlContent, cssFile, isViewSourceAvailable);
 		// remove elements
 		setMainMenuVisible(false);
@@ -64,7 +64,7 @@ public abstract class FlexoWysiwygLight extends FlexoWysiwyg {
 		setPreviewVisible(false);
 		setStatusBarVisible(false);
 	}
-	
+
 	@Override
 	/**
 	 * Overridden to remove all table options ,since they are handled by the LaTeX transcriptor for now.
@@ -72,5 +72,4 @@ public abstract class FlexoWysiwygLight extends FlexoWysiwyg {
 	protected void initTableToolbar() {
 		// override to prevent table toolbar from drawing
 	}
-}	
-
+}

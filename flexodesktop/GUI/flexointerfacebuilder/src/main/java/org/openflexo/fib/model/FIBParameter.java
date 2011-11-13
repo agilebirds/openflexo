@@ -25,17 +25,15 @@ public class FIBParameter implements XMLSerializable {
 
 	public String name;
 	public String value;
-	
-	public FIBParameter() 
-	{
+
+	public FIBParameter() {
 		super();
 	}
 
-	public FIBParameter(String name, String value) 
-	{
+	public FIBParameter(String name, String value) {
 		super();
 		this.name = name;
 		this.value = value;
 	}
-	
+
 }

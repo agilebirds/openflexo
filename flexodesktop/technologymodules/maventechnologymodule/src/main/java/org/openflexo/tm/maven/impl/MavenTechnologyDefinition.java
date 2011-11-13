@@ -24,10 +24,9 @@ import org.openflexo.foundation.sg.implmodel.TechnologyModuleDefinition;
 import org.openflexo.foundation.sg.implmodel.TechnologyModuleImplementation;
 import org.openflexo.foundation.sg.implmodel.exception.TechnologyModuleCompatibilityCheckException;
 
-
 /**
  * @author nid
- *
+ * 
  */
 public class MavenTechnologyDefinition extends TechnologyModuleDefinition {
 
@@ -35,7 +34,8 @@ public class MavenTechnologyDefinition extends TechnologyModuleDefinition {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public TechnologyModuleImplementation createNewImplementation(ImplementationModel implementationModel) throws TechnologyModuleCompatibilityCheckException {
+	public TechnologyModuleImplementation createNewImplementation(ImplementationModel implementationModel)
+			throws TechnologyModuleCompatibilityCheckException {
 		MavenImplementation mavenImplementation = new MavenImplementation(implementationModel);
 		return mavenImplementation;
 	}

@@ -31,122 +31,127 @@ import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
+public abstract class GeneratedResourceModifiedChoice extends KVCObject implements StringConvertable, ChoiceList {
 
-public abstract class GeneratedResourceModifiedChoice extends KVCObject implements StringConvertable, ChoiceList
-{
+	private static final Logger logger = Logger.getLogger(GeneratedResourceModifiedChoice.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(GeneratedResourceModifiedChoice.class.getPackage().getName());
+	public static final StringEncoder.Converter converter = new Converter<GeneratedResourceModifiedChoice>(
+			GeneratedResourceModifiedChoice.class) {
 
-    public static final StringEncoder.Converter converter = new Converter<GeneratedResourceModifiedChoice>(GeneratedResourceModifiedChoice.class) {
+		@Override
+		public GeneratedResourceModifiedChoice convertFromString(String value) {
+			return GeneratedResourceModifiedChoice.get(value);
+		}
 
-        @Override
-		public GeneratedResourceModifiedChoice convertFromString(String value)
-        {
-            return GeneratedResourceModifiedChoice.get(value);
-        }
+		@Override
+		public String convertToString(GeneratedResourceModifiedChoice value) {
+			return value.getIdentifier();
+		}
 
-        @Override
-		public String convertToString(GeneratedResourceModifiedChoice value)
-        {
-            return value.getIdentifier();
-        }
+	};
 
-    };
+	private static Vector<GeneratedResourceModifiedChoice> availableChoices = null;
 
-    private static Vector<GeneratedResourceModifiedChoice> availableChoices = null;
+	public static final GeneratedResourceModifiedChoice ASK = new GeneratedResourceModifiedChoice() {
+		@Override
+		public String getIdentifier() {
+			return "ASK";
+		}
+	};
 
-    public static final GeneratedResourceModifiedChoice ASK = new GeneratedResourceModifiedChoice() {
-        @Override
-		public  String getIdentifier() {   return "ASK";  }
-    };
+	public static final GeneratedResourceModifiedChoice IGNORE = new GeneratedResourceModifiedChoice() {
+		@Override
+		public String getIdentifier() {
+			return "IGNORE";
+		}
+	};
 
-    public static final GeneratedResourceModifiedChoice IGNORE = new GeneratedResourceModifiedChoice() {
-        @Override
-		public  String getIdentifier() {   return "IGNORE";  }
-    };
+	public static final GeneratedResourceModifiedChoice REINJECT_IN_MODEL = new GeneratedResourceModifiedChoice() {
+		@Override
+		public String getIdentifier() {
+			return "REINJECT_IN_MODEL";
+		}
+	};
 
-     public static final GeneratedResourceModifiedChoice REINJECT_IN_MODEL = new GeneratedResourceModifiedChoice() {
-        @Override
-		public  String getIdentifier() {   return "REINJECT_IN_MODEL";  }
-    };
+	public static final GeneratedResourceModifiedChoice AUTOMATICALLY_REINJECT_IN_MODEL = new GeneratedResourceModifiedChoice() {
+		@Override
+		public String getIdentifier() {
+			return "AUTOMATICALLY_REINJECT_IN_MODEL";
+		}
+	};
 
-    public static final GeneratedResourceModifiedChoice AUTOMATICALLY_REINJECT_IN_MODEL = new GeneratedResourceModifiedChoice() {
-        @Override
-		public  String getIdentifier() {   return "AUTOMATICALLY_REINJECT_IN_MODEL";  }
-    };
+	public static final GeneratedResourceModifiedChoice ACCEPT = new GeneratedResourceModifiedChoice() {
+		@Override
+		public String getIdentifier() {
+			return "ACCEPT";
+		}
+	};
 
-    public static final GeneratedResourceModifiedChoice ACCEPT = new GeneratedResourceModifiedChoice() {
-        @Override
-		public  String getIdentifier() {   return "ACCEPT";  }
-    };
+	public static final GeneratedResourceModifiedChoice ACCEPT_AND_REINJECT = new GeneratedResourceModifiedChoice() {
+		@Override
+		public String getIdentifier() {
+			return "ACCEPT_AND_REINJECT";
+		}
+	};
 
-   public static final GeneratedResourceModifiedChoice ACCEPT_AND_REINJECT = new GeneratedResourceModifiedChoice() {
-        @Override
-		public  String getIdentifier() {   return "ACCEPT_AND_REINJECT";  }
-    };
+	public static final GeneratedResourceModifiedChoice ACCEPT_AND_AUTOMATICALLY_REINJECT = new GeneratedResourceModifiedChoice() {
+		@Override
+		public String getIdentifier() {
+			return "ACCEPT_AND_AUTOMATICALLY_REINJECT";
+		}
+	};
 
-    public static final GeneratedResourceModifiedChoice ACCEPT_AND_AUTOMATICALLY_REINJECT = new GeneratedResourceModifiedChoice() {
-        @Override
-		public  String getIdentifier() {   return "ACCEPT_AND_AUTOMATICALLY_REINJECT";  }
-    };
+	public static Vector<GeneratedResourceModifiedChoice> getAvailableChoices() {
+		if (availableChoices == null) {
+			availableChoices = new Vector<GeneratedResourceModifiedChoice>();
+			availableChoices.add(ASK);
+			availableChoices.add(IGNORE);
+			availableChoices.add(REINJECT_IN_MODEL);
+			availableChoices.add(AUTOMATICALLY_REINJECT_IN_MODEL);
+			availableChoices.add(ACCEPT);
+			availableChoices.add(ACCEPT_AND_REINJECT);
+			availableChoices.add(ACCEPT_AND_AUTOMATICALLY_REINJECT);
+		}
+		return availableChoices;
+	}
 
-    public static Vector<GeneratedResourceModifiedChoice> getAvailableChoices()
-    {
-    	if (availableChoices == null) {
-    		availableChoices = new Vector<GeneratedResourceModifiedChoice>();
-    		availableChoices.add(ASK);
-    		availableChoices.add(IGNORE);
-    		availableChoices.add(REINJECT_IN_MODEL);
-    		availableChoices.add(AUTOMATICALLY_REINJECT_IN_MODEL);
-    		availableChoices.add(ACCEPT);
-    		availableChoices.add(ACCEPT_AND_REINJECT);
-    		availableChoices.add(ACCEPT_AND_AUTOMATICALLY_REINJECT);
-    	}
-    	return availableChoices;
-    }
+	/**
+	 * Return a Vector of possible values (which must be of the same type as the one declared as class implemented this interface)
+	 * 
+	 * @return a Vector of ChoiceList
+	 */
+	@Override
+	public Vector<GeneratedResourceModifiedChoice> getAvailableValues() {
+		return getAvailableChoices();
+	}
 
-    /**
-     * Return a Vector of possible values (which must be of the same type as the
-     * one declared as class implemented this interface)
-     * 
-     * @return a Vector of ChoiceList
-     */
-    @Override
-	public Vector<GeneratedResourceModifiedChoice> getAvailableValues()
-    {
-        return getAvailableChoices();
-    }
+	public static GeneratedResourceModifiedChoice get(String anIdentifier) {
+		if (anIdentifier == null) {
+			return ASK;
+		}
+		for (Enumeration e = getAvailableChoices().elements(); e.hasMoreElements();) {
+			GeneratedResourceModifiedChoice next = (GeneratedResourceModifiedChoice) e.nextElement();
+			if (next.getIdentifier().equalsIgnoreCase(anIdentifier)) {
+				return next;
+			}
+		}
+		if (logger.isLoggable(Level.WARNING))
+			logger.warning("Cannot find choice " + anIdentifier);
+		if (getAvailableChoices().size() > 0) {
+			return getAvailableChoices().firstElement();
+		}
+		return null;
+	}
 
-    public static GeneratedResourceModifiedChoice get(String anIdentifier)
-    {
-        if (anIdentifier == null) {
-            return ASK;
-        }
-        for (Enumeration e = getAvailableChoices().elements(); e.hasMoreElements();) {
-            GeneratedResourceModifiedChoice next = (GeneratedResourceModifiedChoice) e.nextElement();
-            if (next.getIdentifier().equalsIgnoreCase(anIdentifier)) {
-                return next;
-            }
-        }
-        if (logger.isLoggable(Level.WARNING))
-            logger.warning("Cannot find choice " + anIdentifier);
-        if (getAvailableChoices().size() > 0) {
-            return getAvailableChoices().firstElement();
-        }
-        return null;
-    }
+	public abstract String getIdentifier();
 
-    public abstract String getIdentifier();
+	public String getLocalizedName() {
+		return FlexoLocalization.localizedForKey(getIdentifier());
+	}
 
-   public String getLocalizedName()
-    {
-        return FlexoLocalization.localizedForKey(getIdentifier());
-    }
+	@Override
+	public StringEncoder.Converter getConverter() {
+		return converter;
+	}
 
-    @Override
-	public StringEncoder.Converter getConverter()
-    {
-        return converter;
-    }
-
- }
+}

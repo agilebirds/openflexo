@@ -181,8 +181,8 @@ public class ControllerActionInitializer {
 									.getLanguages(), docItem.getDocResourceCenter().getLanguages().firstElement());
 							langParams[0].addParameter("format", "name");
 							AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
-									FlexoLocalization.localizedForKey("choose_language"), FlexoLocalization
-											.localizedForKey("define_submission_language"), langParams);
+									FlexoLocalization.localizedForKey("choose_language"),
+									FlexoLocalization.localizedForKey("define_submission_language"), langParams);
 							if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 								language = (Language) dialog.parameterValueWithName("language");
 							} else {
@@ -277,7 +277,7 @@ public class ControllerActionInitializer {
 	}
 
 	protected void registerAction(FlexoActionType actionType, KeyStroke keyStroke, Icon icon) {
-		registerAction(actionType,keyStroke,icon,null);
+		registerAction(actionType, keyStroke, icon, null);
 	}
 
 	public void registerAction(FlexoActionType actionType, KeyStroke keyStroke) {

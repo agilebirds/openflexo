@@ -28,37 +28,31 @@ import org.openflexo.generator.FlexoResourceGenerator;
 import org.openflexo.generator.rm.GenerationAvailableFile;
 import org.openflexo.logging.FlexoLogger;
 
+public class ProjectTextFile extends TextFile implements GenerationAvailableFile {
 
-public class ProjectTextFile extends TextFile implements GenerationAvailableFile
-{
+	protected static final Logger logger = FlexoLogger.getLogger(ProjectTextFile.class.getPackage().getName());
 
-    protected static final Logger logger = FlexoLogger.getLogger(ProjectTextFile.class.getPackage().getName());
-
-    public ProjectTextFile(File f, ProjectTextFileResource resource)
-	{
+	public ProjectTextFile(File f, ProjectTextFileResource resource) {
 		super(f);
 		try {
 			setFlexoResource(resource);
 		} catch (DuplicateResourceException e) {
 			e.printStackTrace();
 		}
-    }
+	}
 
-	public ProjectTextFile()
-	{
+	public ProjectTextFile() {
 		super();
-    }
-
-    @Override
-	public ProjectTextFileResource getFlexoResource()
-    {
-        return (ProjectTextFileResource)super.getFlexoResource();
-    }
+	}
 
 	@Override
-	public FlexoResourceGenerator getGenerator() 
-	{
+	public ProjectTextFileResource getFlexoResource() {
+		return (ProjectTextFileResource) super.getFlexoResource();
+	}
+
+	@Override
+	public FlexoResourceGenerator getGenerator() {
 		return getFlexoResource().getGenerator();
 	}
-	
+
 }

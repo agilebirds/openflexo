@@ -24,52 +24,45 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 
-
-
 public class ViewConnector extends ViewElement {
 
-    private static final Logger logger = Logger.getLogger(ViewShape.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ViewShape.class.getPackage().getName());
 
 	private ViewShape startShape;
 	private ViewShape endShape;
-	
-    /**
-     * Constructor invoked during deserialization
-     * 
-     * @param componentDefinition
-     */
-    public ViewConnector(VEShemaBuilder builder)
-    {
-    	this(builder.shema);
-        initializeDeserialization(builder);
-    }
 
-    /**
-     * Default constructor for OEShema
-     * 
-     * @param shemaDefinition
-     */
-    public ViewConnector(View shema)
-    {
-        super(shema);
-   }
+	/**
+	 * Constructor invoked during deserialization
+	 * 
+	 * @param componentDefinition
+	 */
+	public ViewConnector(VEShemaBuilder builder) {
+		this(builder.shema);
+		initializeDeserialization(builder);
+	}
 
-    /**
-     * Common constructor for OEShema
-     * 
-     * @param shemaDefinition
-     */
-    public ViewConnector(View shema, ViewShape aStartShape, ViewShape anEndShape)
-    {
-        super(shema);
-        setStartShape(aStartShape);
-        setEndShape(anEndShape);
-   }
-    
- 
+	/**
+	 * Default constructor for OEShema
+	 * 
+	 * @param shemaDefinition
+	 */
+	public ViewConnector(View shema) {
+		super(shema);
+	}
+
+	/**
+	 * Common constructor for OEShema
+	 * 
+	 * @param shemaDefinition
+	 */
+	public ViewConnector(View shema, ViewShape aStartShape, ViewShape anEndShape) {
+		super(shema);
+		setStartShape(aStartShape);
+		setEndShape(anEndShape);
+	}
+
 	@Override
-	public void delete()
-	{
+	public void delete() {
 		if (getParent() != null) {
 			getParent().removeFromChilds(this);
 		}
@@ -77,13 +70,12 @@ public class ViewConnector extends ViewElement {
 		deleteObservers();
 	}
 
-
-   /* @Override
-    public AddShemaElementAction getEditionAction() 
-    {
-    	return getAddConnectorAction();
-    }
-    
+	/* @Override
+	 public AddShemaElementAction getEditionAction() 
+	 {
+	 	return getAddConnectorAction();
+	 }
+	 
 	public AddConnector getAddConnectorAction()
 	{
 		if (getEditionPattern() != null && getPatternRole() != null)
@@ -92,48 +84,40 @@ public class ViewConnector extends ViewElement {
 	}*/
 
 	@Override
-	public String getClassNameKey() 
-	{
+	public String getClassNameKey() {
 		return "oe_connector";
 	}
 
 	@Override
-	public String getFullyQualifiedName() 
-	{
-		return getShema().getFullyQualifiedName()+"."+getName();
+	public String getFullyQualifiedName() {
+		return getShema().getFullyQualifiedName() + "." + getName();
 	}
 
-    @Override
-	public String getInspectorName() 
-    {
-    	return Inspectors.VE.OE_CONNECTOR_INSPECTOR;
-    }
+	@Override
+	public String getInspectorName() {
+		return Inspectors.VE.OE_CONNECTOR_INSPECTOR;
+	}
 
-	public ViewShape getEndShape() 
-	{
+	public ViewShape getEndShape() {
 		return endShape;
 	}
 
-	public void setEndShape(ViewShape endShape) 
-	{
+	public void setEndShape(ViewShape endShape) {
 		this.endShape = endShape;
 		endShape.addToIncomingConnectors(this);
 	}
 
-	public ViewShape getStartShape() 
-	{
+	public ViewShape getStartShape() {
 		return startShape;
 	}
 
-	public void setStartShape(ViewShape startShape) 
-	{
+	public void setStartShape(ViewShape startShape) {
 		this.startShape = startShape;
 		startShape.addToOutgoingConnectors(this);
 	}
 
 	@Override
-	public boolean isContainedIn(ViewObject o)
-	{
+	public boolean isContainedIn(ViewObject o) {
 		if (o == this) {
 			return true;
 		}
@@ -145,12 +129,10 @@ public class ViewConnector extends ViewElement {
 		}
 		return false;
 	}
-	
-	@Override
-	public String getDisplayableDescription()
-	{
-		return "Connector"+(getEditionPattern() != null ? " representing "+getEditionPattern() : "");
-	}
 
+	@Override
+	public String getDisplayableDescription() {
+		return "Connector" + (getEditionPattern() != null ? " representing " + getEditionPattern() : "");
+	}
 
 }

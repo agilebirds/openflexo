@@ -23,7 +23,6 @@ import org.openflexo.antar.ControlGraph;
 import org.openflexo.antar.Nop;
 import org.openflexo.foundation.wkf.ws.DeletePort;
 
-
 public class DeletePortActivation extends PortActivation<DeletePort> {
 
 	protected DeletePortActivation(DeletePort port) {
@@ -32,7 +31,7 @@ public class DeletePortActivation extends PortActivation<DeletePort> {
 
 	@Override
 	protected String getProcedureName() {
-		return "deleteProcessInstance"+getPort().getFlexoID();
+		return "deleteProcessInstance" + getPort().getFlexoID();
 	}
 
 	@Override
@@ -40,6 +39,4 @@ public class DeletePortActivation extends PortActivation<DeletePort> {
 		return new Nop();
 	}
 
-	
-	
 }

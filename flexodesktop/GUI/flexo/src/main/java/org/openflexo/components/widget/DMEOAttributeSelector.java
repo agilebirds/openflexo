@@ -27,88 +27,74 @@ import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.eo.DMEOAttribute;
 import org.openflexo.foundation.rm.FlexoProject;
 
-
 /**
  * Widget allowing to select a DMEOAttribute while browsing the data model
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class DMEOAttributeSelector extends AbstractBrowserSelector<DMEOAttribute>
-{
+public class DMEOAttributeSelector extends AbstractBrowserSelector<DMEOAttribute> {
 
-    protected static final String EMPTY_STRING = "";
+	protected static final String EMPTY_STRING = "";
 
-    public DMEOAttributeSelector(FlexoProject project, DMEOAttribute attribute)
-    {
-        super(project, attribute, DMEOAttribute.class);
-    }
+	public DMEOAttributeSelector(FlexoProject project, DMEOAttribute attribute) {
+		super(project, attribute, DMEOAttribute.class);
+	}
 
-    public DMEOAttributeSelector(FlexoProject project, DMEOAttribute attribute, int cols)
-    {
-        super(project, attribute, DMEOAttribute.class, cols);
-    }
+	public DMEOAttributeSelector(FlexoProject project, DMEOAttribute attribute, int cols) {
+		super(project, attribute, DMEOAttribute.class, cols);
+	}
 
-    DMModel getDataModel()
-    {
-        if (getProject() != null) {
-            return getProject().getDataModel();
-        }
-        return null;
-    }
+	DMModel getDataModel() {
+		if (getProject() != null) {
+			return getProject().getDataModel();
+		}
+		return null;
+	}
 
-    @Override
-	protected DMEOAttributeSelectorPanel makeCustomPanel(DMEOAttribute editedObject)
-    {
-        return new DMEOAttributeSelectorPanel();
-    }
+	@Override
+	protected DMEOAttributeSelectorPanel makeCustomPanel(DMEOAttribute editedObject) {
+		return new DMEOAttributeSelectorPanel();
+	}
 
-    @Override
-	public String renderedString(DMEOAttribute editedObject)
-    {
-        if (editedObject != null) {
-            return editedObject.getName();
-        }
-        return EMPTY_STRING;
-    }
+	@Override
+	public String renderedString(DMEOAttribute editedObject) {
+		if (editedObject != null) {
+			return editedObject.getName();
+		}
+		return EMPTY_STRING;
+	}
 
-    protected class DMEOAttributeSelectorPanel extends AbstractSelectorPanel<DMEOAttribute>
-    {
-        protected DMEOAttributeSelectorPanel()
-        {
-            super(DMEOAttributeSelector.this);
-        }
+	protected class DMEOAttributeSelectorPanel extends AbstractSelectorPanel<DMEOAttribute> {
+		protected DMEOAttributeSelectorPanel() {
+			super(DMEOAttributeSelector.this);
+		}
 
-        @Override
-		protected ProjectBrowser createBrowser(FlexoProject project)
-        {
-            return new DataModelBrowser();
-        }
+		@Override
+		protected ProjectBrowser createBrowser(FlexoProject project) {
+			return new DataModelBrowser();
+		}
 
-    }
+	}
 
-    protected class DataModelBrowser extends ProjectBrowser
-    {
+	protected class DataModelBrowser extends ProjectBrowser {
 
-        protected DataModelBrowser()
-        {
-            super(getDataModel().getProject(), false);
-            init();
-        }
+		protected DataModelBrowser() {
+			super(getDataModel().getProject(), false);
+			init();
+		}
 
-        @Override
-		public void configure()
-        {
-            setFilterStatus(BrowserElementType.DM_PROPERTY, BrowserFilterStatus.HIDE);
-            setFilterStatus(BrowserElementType.DM_EOATTRIBUTE, BrowserFilterStatus.SHOW);
-            setFilterStatus(BrowserElementType.DM_EORELATIONSHIP, BrowserFilterStatus.HIDE);
-        }
+		@Override
+		public void configure() {
+			setFilterStatus(BrowserElementType.DM_PROPERTY, BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.DM_EOATTRIBUTE, BrowserFilterStatus.SHOW);
+			setFilterStatus(BrowserElementType.DM_EORELATIONSHIP, BrowserFilterStatus.HIDE);
+		}
 
-        @Override
-		public FlexoModelObject getDefaultRootObject()
-        {
-            return getDataModel();
-        }
-    }
+		@Override
+		public FlexoModelObject getDefaultRootObject() {
+			return getDataModel();
+		}
+	}
 
 }

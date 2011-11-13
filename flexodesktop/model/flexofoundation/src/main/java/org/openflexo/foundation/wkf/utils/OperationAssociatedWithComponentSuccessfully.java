@@ -27,48 +27,42 @@ import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
 import org.openflexo.foundation.wkf.dm.OperationComponentHasBeenSet;
 import org.openflexo.foundation.wkf.node.OperationNode;
 
-
-public class OperationAssociatedWithComponentSuccessfully extends /*FlexoDynamicNotification*/ FlexoException
-{
+public class OperationAssociatedWithComponentSuccessfully extends /*FlexoDynamicNotification*/FlexoException {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(OperationAssociatedWithComponentSuccessfully.class.getPackage().getName());
 
 	private OperationComponentHasBeenSet dm;
 
-    private OperationNode node;
+	private OperationNode node;
 
-    private OperationComponentDefinition cd;
-    
-    private OperationComponentInstance previousComponentInstance;
+	private OperationComponentDefinition cd;
 
-    public OperationAssociatedWithComponentSuccessfully(OperationComponentHasBeenSet dm, OperationNode node, OperationComponentDefinition cd, OperationComponentInstance previousComponentInstance)
-    {
-        super();
-        this.dm = dm;
-        this.cd = cd;
-        this.node = node;
-        this.previousComponentInstance = previousComponentInstance;
-    }
+	private OperationComponentInstance previousComponentInstance;
 
-    public OperationComponentDefinition getCd()
-    {
-        return cd;
-    }
+	public OperationAssociatedWithComponentSuccessfully(OperationComponentHasBeenSet dm, OperationNode node,
+			OperationComponentDefinition cd, OperationComponentInstance previousComponentInstance) {
+		super();
+		this.dm = dm;
+		this.cd = cd;
+		this.node = node;
+		this.previousComponentInstance = previousComponentInstance;
+	}
 
-    public OperationComponentHasBeenSet getDm()
-    {
-        return dm;
-    }
+	public OperationComponentDefinition getCd() {
+		return cd;
+	}
 
-    public OperationNode getNode()
-    {
-        return node;
-    }
+	public OperationComponentHasBeenSet getDm() {
+		return dm;
+	}
 
-    public OperationComponentInstance getPreviousComponentInstance()
-    {
-        return previousComponentInstance;
-    }
+	public OperationNode getNode() {
+		return node;
+	}
+
+	public OperationComponentInstance getPreviousComponentInstance() {
+		return previousComponentInstance;
+	}
 
 }

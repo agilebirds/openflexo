@@ -28,32 +28,27 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-
 // Note: no Pattern Role for this action !!!
 public class GoToAction extends EditionAction {
 
 	private static final Logger logger = Logger.getLogger(GoToAction.class.getPackage().getName());
-	
+
 	public GoToAction() {
 	}
-	
+
 	@Override
-	public EditionActionType getEditionActionType()
-	{
+	public EditionActionType getEditionActionType() {
 		return EditionActionType.GoToObject;
 	}
-	
+
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.VPM.GO_TO_OBJECT_INSPECTOR;
 	}
 
-	public FlexoModelObject getTargetObject(EditionSchemeAction action)
-	{
-		return (FlexoModelObject)getTarget().getBindingValue(action);
+	public FlexoModelObject getTargetObject(EditionSchemeAction action) {
+		return (FlexoModelObject) getTarget().getBindingValue(action);
 	}
-
 
 	/*@Override
 	protected void updatePatternRoleType()
@@ -62,27 +57,24 @@ public class GoToAction extends EditionAction {
 	}*/
 
 	private ViewPointDataBinding target;
-	
+
 	private BindingDefinition TARGET = new BindingDefinition("target", FlexoModelObject.class, BindingDefinitionType.GET, false);
-	
-	public BindingDefinition getTargetBindingDefinition()
-	{
+
+	public BindingDefinition getTargetBindingDefinition() {
 		return TARGET;
 	}
 
-	public ViewPointDataBinding getTarget() 
-	{
-		if (target == null) target = new ViewPointDataBinding(this,EditionActionBindingAttribute.target,getTargetBindingDefinition());
+	public ViewPointDataBinding getTarget() {
+		if (target == null)
+			target = new ViewPointDataBinding(this, EditionActionBindingAttribute.target, getTargetBindingDefinition());
 		return target;
 	}
 
-	public void setTarget(ViewPointDataBinding target) 
-	{
+	public void setTarget(ViewPointDataBinding target) {
 		target.setOwner(this);
 		target.setBindingAttribute(EditionActionBindingAttribute.target);
 		target.setBindingDefinition(getTargetBindingDefinition());
 		this.target = target;
 	}
-	
 
 }

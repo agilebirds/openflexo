@@ -29,53 +29,45 @@ import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class MoveIEElementInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	MoveIEElementInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(MoveIEElement.actionType,actionInitializer);
+	MoveIEElementInitializer(IEControllerActionInitializer actionInitializer) {
+		super(MoveIEElement.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
 	public IEController getController() {
 		return getControllerActionInitializer().getIEController();
 	}
-	
+
 	@Override
-	protected FlexoActionInitializer<MoveIEElement> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<MoveIEElement> getDefaultInitializer() {
 		return new FlexoActionInitializer<MoveIEElement>() {
 			@Override
-			public boolean run(ActionEvent e, MoveIEElement action)
-			{
+			public boolean run(ActionEvent e, MoveIEElement action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<MoveIEElement> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<MoveIEElement> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<MoveIEElement>() {
 			@Override
-			public boolean run(ActionEvent e, MoveIEElement action)
-			{
-				if (action.getMovedWidget()!=null) {
+			public boolean run(ActionEvent e, MoveIEElement action) {
+				if (action.getMovedWidget() != null) {
 					getController().getIESelectionManager().setSelectedObject(action.getMovedWidget());
 				}
 				return true;
 			}
 		};
 	}
-
 
 }

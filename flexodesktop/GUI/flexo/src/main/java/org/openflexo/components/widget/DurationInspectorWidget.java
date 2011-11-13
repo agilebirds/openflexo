@@ -40,117 +40,107 @@ import org.openflexo.localization.FlexoLocalization;
  * @author sylvain
  * 
  */
-public class DurationInspectorWidget extends CustomInspectorWidget<Duration>
-{
+public class DurationInspectorWidget extends CustomInspectorWidget<Duration> {
 
-    static final Logger logger = Logger.getLogger(DurationInspectorWidget.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(DurationInspectorWidget.class.getPackage().getName());
 
-    DurationSelector _selector;
+	DurationSelector _selector;
 
-    public DurationInspectorWidget(PropertyModel model, AbstractController controller)
-    {
-        super(model,controller);
-        _selector = new DurationSelector() {
-            
+	public DurationInspectorWidget(PropertyModel model, AbstractController controller) {
+		super(model, controller);
+		_selector = new DurationSelector() {
+
 			@Override
 			public String localizedForKey(String aKey) {
 				return FlexoLocalization.localizedForKey(aKey);
 			}
+
 			@Override
 			public String localizedForKeyAndButton(String key, JButton component) {
-				return FlexoLocalization.localizedForKey(key,component);
+				return FlexoLocalization.localizedForKey(key, component);
 			}
-			
-            @Override
-			public void apply()
-            {
-                super.apply();
-                updateModelFromWidget();
-            }
 
-            @Override
-			public void cancel()
-            {
-                super.cancel();
-                updateModelFromWidget();
-            }
+			@Override
+			public void apply() {
+				super.apply();
+				updateModelFromWidget();
+			}
 
-        };
-        getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
-            @Override
-			public void focusGained(FocusEvent arg0)
-            {
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("Focus gained in " + getClass().getName());
-                super.focusGained(arg0);
-                _selector.getTextField().requestFocus();
-                _selector.getTextField().selectAll();
-            }
+			@Override
+			public void cancel() {
+				super.cancel();
+				updateModelFromWidget();
+			}
 
-            @Override
-			public void focusLost(FocusEvent arg0)
-            {
-                if (logger.isLoggable(Level.FINE))
-                    logger.fine("Focus lost in " + getClass().getName());
-                super.focusLost(arg0);
-            }
-        });
-    }
-    
-    @Override
-	public synchronized void updateWidgetFromModel()
-    {
-    	if (modelUpdating)
-    		return;
-    	widgetUpdating = true;
-    	try {
-	        _selector.setEditedObject(getObjectValue());
-	        _selector.setRevertValue(getObjectValue());
-    	} finally {
-    		widgetUpdating = false;
-    	}
-    }
+		};
+		getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				if (logger.isLoggable(Level.FINE))
+					logger.fine("Focus gained in " + getClass().getName());
+				super.focusGained(arg0);
+				_selector.getTextField().requestFocus();
+				_selector.getTextField().selectAll();
+			}
 
-    /**
-     * Update the model given the actual state of the widget
-     */
-    @Override
-	public synchronized void updateModelFromWidget()
-    {
-    	if (widgetUpdating)
-    		return;
-    	modelUpdating = true;
-    	try {
-    		setObjectValue(_selector.getEditedObject()!=null?_selector.getEditedObject().clone():null);
-    		super.updateModelFromWidget();
-    	} finally {
-    		modelUpdating = false;
-    	}
-   }
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				if (logger.isLoggable(Level.FINE))
+					logger.fine("Focus lost in " + getClass().getName());
+				super.focusLost(arg0);
+			}
+		});
+	}
 
-    @Override
-	public JComponent getDynamicComponent()
-    {
-        return _selector;
-    }
+	@Override
+	public synchronized void updateWidgetFromModel() {
+		if (modelUpdating)
+			return;
+		widgetUpdating = true;
+		try {
+			_selector.setEditedObject(getObjectValue());
+			_selector.setRevertValue(getObjectValue());
+		} finally {
+			widgetUpdating = false;
+		}
+	}
 
-    @Override
-	public Class getDefaultType()
-    {
-        return Duration.class;
-    }
+	/**
+	 * Update the model given the actual state of the widget
+	 */
+	@Override
+	public synchronized void updateModelFromWidget() {
+		if (widgetUpdating)
+			return;
+		modelUpdating = true;
+		try {
+			setObjectValue(_selector.getEditedObject() != null ? _selector.getEditedObject().clone() : null);
+			super.updateModelFromWidget();
+		} finally {
+			modelUpdating = false;
+		}
+	}
 
-    @Override
-    public void fireEditingCanceled() 
-    {
-    	if (_selector != null) _selector.closePopup();
-    }
-    
-    @Override
-    public void fireEditingStopped()     
-    {
-    	if (_selector != null) _selector.closePopup();
-    }
+	@Override
+	public JComponent getDynamicComponent() {
+		return _selector;
+	}
 
+	@Override
+	public Class getDefaultType() {
+		return Duration.class;
+	}
+
+	@Override
+	public void fireEditingCanceled() {
+		if (_selector != null)
+			_selector.closePopup();
+	}
+
+	@Override
+	public void fireEditingStopped() {
+		if (_selector != null)
+			_selector.closePopup();
+	}
 
 }

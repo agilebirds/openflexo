@@ -31,8 +31,7 @@ import org.openflexo.logging.FlexoLogger;
  * @author gpolet
  * 
  */
-public class PostVelocityParser
-{
+public class PostVelocityParser {
 	private static final Logger logger = FlexoLogger.getLogger(PostVelocityParser.class.getPackage().getName());
 
 	private static final String TAG_END = "end";
@@ -41,8 +40,7 @@ public class PostVelocityParser
 
 	private static final String TAG_START = "@";
 
-	public static String parseAndRenderCustomTag(String s)
-	{
+	public static String parseAndRenderCustomTag(String s) {
 		try {
 			Stack<String> tags = new Stack<String>();
 			Stack<String> output = new Stack<String>();
@@ -76,7 +74,7 @@ public class PostVelocityParser
 					int tmp = s.indexOf('\n', next);
 					if (next + nextTag.length() + 1 < s.length() && s.charAt(next + nextTag.length() + 1) == '@' && tmp > -1
 							&& tmp < s.length() - 1) {
-						index = tmp+1;
+						index = tmp + 1;
 					} else {
 						index = next + nextTag.length() + 1;
 					}
@@ -87,10 +85,10 @@ public class PostVelocityParser
 				} else {
 					tags.push(nextTag);
 					index = next + nextTag.length() + 1;
-					int nextNewLine = s.indexOf('\n',index);
-					if (nextNewLine>-1) {
-						if (s.substring(index, nextNewLine).trim().length()==0) {
-							index = nextNewLine+1;
+					int nextNewLine = s.indexOf('\n', index);
+					if (nextNewLine > -1) {
+						if (s.substring(index, nextNewLine).trim().length() == 0) {
+							index = nextNewLine + 1;
 						}
 					}
 				}
@@ -112,8 +110,7 @@ public class PostVelocityParser
 	 * @param middleText
 	 * @return
 	 */
-	private static String render(String tagToRender, String middleText)
-	{
+	private static String render(String tagToRender, String middleText) {
 		if (tagToRender.equals(TAGS[0])) {
 			return single(middleText);
 		} else if (tagToRender.equals(TAGS[1])) {
@@ -129,11 +126,10 @@ public class PostVelocityParser
 	 * @param middleText
 	 * @return
 	 */
-	private static String onereturn(String middleText)
-	{
+	private static String onereturn(String middleText) {
 		StringBuffer sb = new StringBuffer();
 		Matcher m = Pattern.compile("\\s*?\n\\s*").matcher(middleText);
-		while(m.find()) {
+		while (m.find()) {
 			m.appendReplacement(sb, "\n");
 		}
 		m.appendTail(sb);
@@ -144,8 +140,7 @@ public class PostVelocityParser
 	 * @param middleText
 	 * @return
 	 */
-	private static String single(String middleText)
-	{
+	private static String single(String middleText) {
 		return middleText.replaceAll("\\s+", " ");
 	}
 
@@ -153,8 +148,7 @@ public class PostVelocityParser
 	 * @param index
 	 * @return
 	 */
-	private static String findNextTag(String input, int index)
-	{
+	private static String findNextTag(String input, int index) {
 		int next = input.indexOf(TAG_START, index);
 		while (next > -1) {
 			for (String tag : TAGS) {
@@ -162,13 +156,12 @@ public class PostVelocityParser
 					return tag;
 				}
 			}
-			next = input.indexOf(TAG_START, next+1);
+			next = input.indexOf(TAG_START, next + 1);
 		}
 		return null;
 	}
 
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		String text = "    public void appendToResponse(WOResponse r, WOContext c) {\n" + "        hiddenFieldValue = null;\n"
 				+ "                pageDA = getUrlForOperation(context() @single\n" + "@end@\n"
 				+ " , getOperationComponentInstanceID());\n" + "		\n" + "        super.appendToResponse(r,c);\n" + "    }\n" + "\n" + "";

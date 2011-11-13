@@ -19,11 +19,8 @@
  */
 package org.openflexo.drm.dm;
 
-
-public class StructureModified extends DRMDataModification
-{
-    public StructureModified()
-    {
-        super(null, null);
-    }
+public class StructureModified extends DRMDataModification {
+	public StructureModified() {
+		super(null, null);
+	}
 }

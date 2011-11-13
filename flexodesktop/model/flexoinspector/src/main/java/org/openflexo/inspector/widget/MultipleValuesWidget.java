@@ -40,252 +40,232 @@ import org.openflexo.inspector.model.PropertyModel;
 import org.openflexo.kvc.ChoiceList;
 import org.openflexo.localization.FlexoLocalization;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public abstract class MultipleValuesWidget<T> extends DenaliWidget<T>
-{
+public abstract class MultipleValuesWidget<T> extends DenaliWidget<T> {
 
-    private static final Logger logger = Logger.getLogger(MultipleValuesWidget.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(MultipleValuesWidget.class.getPackage().getName());
 
-    protected static final int UNDEFINED = -1;
+	protected static final int UNDEFINED = -1;
 
-    protected static final int CHOICE_LIST = 0;
+	protected static final int CHOICE_LIST = 0;
 
-    protected static final int STATIC_LIST = 1;
+	protected static final int STATIC_LIST = 1;
 
-    protected static final int DYNAMIC_LIST = 2;
+	protected static final int DYNAMIC_LIST = 2;
 
-    protected static final int DYNAMIC_HASH = 3;
+	protected static final int DYNAMIC_HASH = 3;
 
-    protected int valueType = UNDEFINED;
+	protected int valueType = UNDEFINED;
 
-    private DenaliListModel listModel = null;
+	private DenaliListModel listModel = null;
 
-    private DenaliListCellRenderer listCellRenderer = null;
+	private DenaliListCellRenderer listCellRenderer = null;
 
-    protected boolean tryToShowIcon = false;
-    
-    /**
-     * @param model
-     */
-    protected MultipleValuesWidget(PropertyModel model, AbstractController controller)
-    {
-        super(model,controller);
+	protected boolean tryToShowIcon = false;
+
+	/**
+	 * @param model
+	 */
+	protected MultipleValuesWidget(PropertyModel model, AbstractController controller) {
+		super(model, controller);
 		if (model.hasValueForParameter("showIcon") && model.getBooleanValueForParameter("showIcon"))
 			tryToShowIcon = true;
-   }
+	}
 
-    @Override
-	protected void setModel(InspectableObject value)
-    {
-        super.setModel(value);
-        if (isChoiceList()) {
-            valueType = CHOICE_LIST;
-        } else if (_propertyModel.hasStaticList()) {
-            valueType = STATIC_LIST;
-        } else if (_propertyModel.hasDynamicList()) {
-            valueType = DYNAMIC_LIST;
-        } else if (_propertyModel.hasDynamicHashtable()) {
-            valueType = DYNAMIC_HASH;
-        }
-        listCellRenderer = new DenaliListCellRenderer();
-        listModel = new DenaliListModel();
-    }
+	@Override
+	protected void setModel(InspectableObject value) {
+		super.setModel(value);
+		if (isChoiceList()) {
+			valueType = CHOICE_LIST;
+		} else if (_propertyModel.hasStaticList()) {
+			valueType = STATIC_LIST;
+		} else if (_propertyModel.hasDynamicList()) {
+			valueType = DYNAMIC_LIST;
+		} else if (_propertyModel.hasDynamicHashtable()) {
+			valueType = DYNAMIC_HASH;
+		}
+		listCellRenderer = new DenaliListCellRenderer();
+		listModel = new DenaliListModel();
+	}
 
-    @Override
-	public void performUpdate()
-    {
-		//logger.info("Updating model for "+this);
+	@Override
+	public void performUpdate() {
+		// logger.info("Updating model for "+this);
 		super.performUpdate();
-        if (isChoiceList()) {
-            valueType = CHOICE_LIST;
-        } else if (_propertyModel.hasStaticList()) {
-            valueType = STATIC_LIST;
-        } else if (_propertyModel.hasDynamicList()) {
-            valueType = DYNAMIC_LIST;
-        } else if (_propertyModel.hasDynamicHashtable()) {
-            valueType = DYNAMIC_HASH;
-        }
-        listCellRenderer = new DenaliListCellRenderer();
-        listModel = new DenaliListModel();
-   }
-    
-    @Override
-	public Class getDefaultType()
-    {
-        return Vector.class;
-    }
+		if (isChoiceList()) {
+			valueType = CHOICE_LIST;
+		} else if (_propertyModel.hasStaticList()) {
+			valueType = STATIC_LIST;
+		} else if (_propertyModel.hasDynamicList()) {
+			valueType = DYNAMIC_LIST;
+		} else if (_propertyModel.hasDynamicHashtable()) {
+			valueType = DYNAMIC_HASH;
+		}
+		listCellRenderer = new DenaliListCellRenderer();
+		listModel = new DenaliListModel();
+	}
 
-    protected Object[] getListValues()
-    {
-    	if (_propertyModel.hasDynamicList()) {
-            return _propertyModel.getDynamicList(getModel()).toArray();
-    	}else if (getType().getEnumConstants()!=null){
-    		return getType().getEnumConstants();
-        } else if (isChoiceList()) {
-            if (getObjectValue() == null) {
-                try {
-                    // Dynamic call to getType() class on method
-                    // availableValues()
-                    Method availableValuesMethod = getType().getMethod("availableValues", (Class[])null);
-                    return ((Vector) availableValuesMethod.invoke(getType(), (Object[])null)).toArray();
-                } catch (Exception e) {
-                    // Warns about the exception
-                    if (logger.isLoggable(Level.WARNING))
-                        logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-                    e.printStackTrace();
-                    return new Vector().toArray();
-                }
-            } else {
-                return (((ChoiceList) getObjectValue()).getAvailableValues()).toArray();
-            }
-        } else if (_propertyModel.hasStaticList()) {
-            return _propertyModel.getStaticList().toArray();
-        } else {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("There is an error in some configuration file :\n the property named '" + _propertyModel.name
-                        + "' is supposed to be a list, but it doesn't hold any list definition!");
-            return new Vector().toArray();
-        }
-    }
+	@Override
+	public Class getDefaultType() {
+		return Vector.class;
+	}
 
-    protected Hashtable getHashValues()
-    {
-        if (_propertyModel.hasDynamicHashtable()) {
-            return _propertyModel.getDynamicHashtable(getModel());
-        } else {
-            if (logger.isLoggable(Level.WARNING))
-                logger.warning("There is an error in some configuration file :\n the property named '" + _propertyModel.name
-                        + "' is supposed to be a hashtable, but it doesn't hold any hashtable definition!");
-            return new Hashtable();
-        }
-    }
+	protected Object[] getListValues() {
+		if (_propertyModel.hasDynamicList()) {
+			return _propertyModel.getDynamicList(getModel()).toArray();
+		} else if (getType().getEnumConstants() != null) {
+			return getType().getEnumConstants();
+		} else if (isChoiceList()) {
+			if (getObjectValue() == null) {
+				try {
+					// Dynamic call to getType() class on method
+					// availableValues()
+					Method availableValuesMethod = getType().getMethod("availableValues", (Class[]) null);
+					return ((Vector) availableValuesMethod.invoke(getType(), (Object[]) null)).toArray();
+				} catch (Exception e) {
+					// Warns about the exception
+					if (logger.isLoggable(Level.WARNING))
+						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					e.printStackTrace();
+					return new Vector().toArray();
+				}
+			} else {
+				return (((ChoiceList) getObjectValue()).getAvailableValues()).toArray();
+			}
+		} else if (_propertyModel.hasStaticList()) {
+			return _propertyModel.getStaticList().toArray();
+		} else {
+			if (logger.isLoggable(Level.WARNING))
+				logger.warning("There is an error in some configuration file :\n the property named '" + _propertyModel.name
+						+ "' is supposed to be a list, but it doesn't hold any list definition!");
+			return new Vector().toArray();
+		}
+	}
 
-    public DenaliListCellRenderer getListCellRenderer()
-    {
-        if (listCellRenderer == null) {
-            listCellRenderer = new DenaliListCellRenderer();
-        }
-        return listCellRenderer;
-    }
+	protected Hashtable getHashValues() {
+		if (_propertyModel.hasDynamicHashtable()) {
+			return _propertyModel.getDynamicHashtable(getModel());
+		} else {
+			if (logger.isLoggable(Level.WARNING))
+				logger.warning("There is an error in some configuration file :\n the property named '" + _propertyModel.name
+						+ "' is supposed to be a hashtable, but it doesn't hold any hashtable definition!");
+			return new Hashtable();
+		}
+	}
 
-    public DenaliListModel getListModel()
-    {
-        if (listModel == null) {
-            listModel = new DenaliListModel();
-        }
-        return listModel;
-    }
+	public DenaliListCellRenderer getListCellRenderer() {
+		if (listCellRenderer == null) {
+			listCellRenderer = new DenaliListCellRenderer();
+		}
+		return listCellRenderer;
+	}
 
-    public int getValueType()
-    {
-        return valueType;
-    }
+	public DenaliListModel getListModel() {
+		if (listModel == null) {
+			listModel = new DenaliListModel();
+		}
+		return listModel;
+	}
 
-    protected class DenaliListCellRenderer extends DefaultListCellRenderer
-    {
-    	@Override
-		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
-    	{
-    		DenaliListCellRenderer label = (DenaliListCellRenderer) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-    		if (tryToShowIcon && value instanceof HasIcon) {
-    			label.setIcon(((HasIcon)value).getIcon());
-    		}
-    		if (value != null) {
-    			String stringRepresentation = getDisplayStringRepresentation(value);
-    			if (stringRepresentation == null || stringRepresentation.length()==0)
-    				stringRepresentation = "<html><i>"+FlexoLocalization.localizedForKey("empty_string")+"</i></html>";
+	public int getValueType() {
+		return valueType;
+	}
+
+	protected class DenaliListCellRenderer extends DefaultListCellRenderer {
+		@Override
+		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+			DenaliListCellRenderer label = (DenaliListCellRenderer) super.getListCellRendererComponent(list, value, index, isSelected,
+					cellHasFocus);
+			if (tryToShowIcon && value instanceof HasIcon) {
+				label.setIcon(((HasIcon) value).getIcon());
+			}
+			if (value != null) {
+				String stringRepresentation = getDisplayStringRepresentation(value);
+				if (stringRepresentation == null || stringRepresentation.length() == 0)
+					stringRepresentation = "<html><i>" + FlexoLocalization.localizedForKey("empty_string") + "</i></html>";
 				label.setText(stringRepresentation);
-    		} else {
-    			label.setText(FlexoLocalization.localizedForKey("no_selection"));
-    		}
-    		label.setBorder(BorderFactory.createEmptyBorder(1, 2, 1, 2));
-    		return label;
-    	}
-    }
+			} else {
+				label.setText(FlexoLocalization.localizedForKey("no_selection"));
+			}
+			label.setBorder(BorderFactory.createEmptyBorder(1, 2, 1, 2));
+			return label;
+		}
+	}
 
-    protected class DenaliListModel implements ListModel
-    {
-        private Object[] _values;
+	protected class DenaliListModel implements ListModel {
+		private Object[] _values;
 
-        private Hashtable _hashValues;
+		private Hashtable _hashValues;
 
-        protected DenaliListModel()
-        {
-            super();
-            if (getModel() != null) {
-                if ((valueType == CHOICE_LIST) || (valueType == STATIC_LIST) || (valueType == DYNAMIC_LIST)) {
-                    _values = getListValues();
-                } else if (valueType == DYNAMIC_HASH) {
-                    _hashValues = getHashValues();
-                }
-            }
-            //logger.info("values of model are: "+_values);
-        }
+		protected DenaliListModel() {
+			super();
+			if (getModel() != null) {
+				if ((valueType == CHOICE_LIST) || (valueType == STATIC_LIST) || (valueType == DYNAMIC_LIST)) {
+					_values = getListValues();
+				} else if (valueType == DYNAMIC_HASH) {
+					_hashValues = getHashValues();
+				}
+			}
+			// logger.info("values of model are: "+_values);
+		}
 
-        @Override
-		public int getSize()
-        {
-            if (getModel() != null) {
-                if (_values != null 
-                		&& ((valueType == CHOICE_LIST) || (valueType == STATIC_LIST) || (valueType == DYNAMIC_LIST))) {
-                    return _values.length;
-                } else if (valueType == DYNAMIC_HASH) {
-                    return _hashValues.size();
-                }
-            }
-            return 0;
-        }
+		@Override
+		public int getSize() {
+			if (getModel() != null) {
+				if (_values != null && ((valueType == CHOICE_LIST) || (valueType == STATIC_LIST) || (valueType == DYNAMIC_LIST))) {
+					return _values.length;
+				} else if (valueType == DYNAMIC_HASH) {
+					return _hashValues.size();
+				}
+			}
+			return 0;
+		}
 
-        @Override
-		public Object getElementAt(int index)
-        {
-            if (getModel() != null) {
-                if ((valueType == CHOICE_LIST) || (valueType == STATIC_LIST) || (valueType == DYNAMIC_LIST)) {
-                    return _values[index];
-                } else if (valueType == DYNAMIC_HASH) {
-                    Iterator it = _hashValues.values().iterator();
-                    for (int i = 0; i < index; i++) {
-                        if (it.hasNext()) {
-                            it.next();
-                        }
-                    }
-                    if (it.hasNext()) {
-                        return it.next();
-                    }
-                }
-                if (logger.isLoggable(Level.WARNING))
-                    logger.warning("Inconsistent data !");
-            }
-            return null;
-        }
+		@Override
+		public Object getElementAt(int index) {
+			if (getModel() != null) {
+				if ((valueType == CHOICE_LIST) || (valueType == STATIC_LIST) || (valueType == DYNAMIC_LIST)) {
+					return _values[index];
+				} else if (valueType == DYNAMIC_HASH) {
+					Iterator it = _hashValues.values().iterator();
+					for (int i = 0; i < index; i++) {
+						if (it.hasNext()) {
+							it.next();
+						}
+					}
+					if (it.hasNext()) {
+						return it.next();
+					}
+				}
+				if (logger.isLoggable(Level.WARNING))
+					logger.warning("Inconsistent data !");
+			}
+			return null;
+		}
 
-        @Override
-		public void addListDataListener(ListDataListener l)
-        {
-            // Interface
-        }
+		@Override
+		public void addListDataListener(ListDataListener l) {
+			// Interface
+		}
 
-        @Override
-		public void removeListDataListener(ListDataListener l)
-        {
-            // Interface
-        }
+		@Override
+		public void removeListDataListener(ListDataListener l) {
+			// Interface
+		}
 
-        public int indexOf(Object cur)
-        {
-            for (int i = 0; i < getSize(); i++) {
-                if (getElementAt(i).equals(cur)) {
-                    return i;
-                }
-            }
-            return -1;
-        }
-    }
+		public int indexOf(Object cur) {
+			for (int i = 0; i < getSize(); i++) {
+				if (getElementAt(i).equals(cur)) {
+					return i;
+				}
+			}
+			return -1;
+		}
+	}
 
 }

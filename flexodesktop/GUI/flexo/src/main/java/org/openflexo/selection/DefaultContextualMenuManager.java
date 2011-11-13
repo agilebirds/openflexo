@@ -30,8 +30,7 @@ import org.openflexo.foundation.DefaultFlexoEditor;
  */
 public class DefaultContextualMenuManager extends ContextualMenuManager {
 
-    public DefaultContextualMenuManager()
-    {
-        super(null,new DefaultFlexoEditor());
-     }
+	public DefaultContextualMenuManager() {
+		super(null, new DefaultFlexoEditor());
+	}
 }

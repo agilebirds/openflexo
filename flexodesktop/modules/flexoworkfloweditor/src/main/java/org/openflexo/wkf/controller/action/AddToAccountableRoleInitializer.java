@@ -21,5 +21,4 @@ public class AddToAccountableRoleInitializer extends AddToXRoleInitializer<AddTo
 		return activity.getAvailableAccountableRoles();
 	}
 
-
 }

@@ -21,9 +21,10 @@
 package org.openflexo.ws.client.PPMWebService;
 
 public interface PPMWebService_Service extends javax.xml.rpc.Service {
-    public java.lang.String getPPMWebServiceAddress();
+	public java.lang.String getPPMWebServiceAddress();
 
-    public org.openflexo.ws.client.PPMWebService.PPMWebService_PortType getPPMWebService() throws javax.xml.rpc.ServiceException;
+	public org.openflexo.ws.client.PPMWebService.PPMWebService_PortType getPPMWebService() throws javax.xml.rpc.ServiceException;
 
-    public org.openflexo.ws.client.PPMWebService.PPMWebService_PortType getPPMWebService(java.net.URL portAddress) throws javax.xml.rpc.ServiceException;
+	public org.openflexo.ws.client.PPMWebService.PPMWebService_PortType getPPMWebService(java.net.URL portAddress)
+			throws javax.xml.rpc.ServiceException;
 }

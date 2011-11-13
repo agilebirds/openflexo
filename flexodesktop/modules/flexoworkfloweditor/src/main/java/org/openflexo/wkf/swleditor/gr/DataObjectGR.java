@@ -45,41 +45,36 @@ import org.openflexo.foundation.wkf.WKFDataObject;
 import org.openflexo.toolbox.ConcatenedList;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
-
 public class DataObjectGR extends ArtefactGR<WKFDataObject> {
 
 	private static final Logger logger = Logger.getLogger(DataObjectGR.class.getPackage().getName());
 
 	private static final BackgroundStyle BACKGROUND = BackgroundStyle.makeColoredBackground(Color.WHITE);
-	private static final ForegroundStyle FOREGROUND = ForegroundStyle.makeStyle(new Color(0,34,73), 1.6f,JoinStyle.JOIN_ROUND,CapStyle.CAP_ROUND,DashStyle.PLAIN_STROKE);
+	private static final ForegroundStyle FOREGROUND = ForegroundStyle.makeStyle(new Color(0, 34, 73), 1.6f, JoinStyle.JOIN_ROUND,
+			CapStyle.CAP_ROUND, DashStyle.PLAIN_STROKE);
 
 	private static final double height = 1;
-	private static final double width = height/FGEUtils.PHI;
+	private static final double width = height / FGEUtils.PHI;
 	private static final double folding = 0.2;
 
-	private static final FGEPoint topLeftCorner = new FGEPoint((1-width)/2,(1-height)/2);
-	private static final FGEPoint bottomLeftCorner = new FGEPoint(topLeftCorner.x,1-topLeftCorner.y);
-	private static final FGEPoint middleLeftPoint= new FGEPoint(topLeftCorner.x,(topLeftCorner.y+bottomLeftCorner.y)/2);
-	private static final FGEPoint topRightCorner = new FGEPoint(1-topLeftCorner.x,topLeftCorner.y);
-	private static final FGEPoint bottomRightCorner = new FGEPoint(topRightCorner.x,bottomLeftCorner.y);
-	private static final FGEPoint middleRightPoint= new FGEPoint(topRightCorner.x,(topRightCorner.y+bottomRightCorner.y)/2);
+	private static final FGEPoint topLeftCorner = new FGEPoint((1 - width) / 2, (1 - height) / 2);
+	private static final FGEPoint bottomLeftCorner = new FGEPoint(topLeftCorner.x, 1 - topLeftCorner.y);
+	private static final FGEPoint middleLeftPoint = new FGEPoint(topLeftCorner.x, (topLeftCorner.y + bottomLeftCorner.y) / 2);
+	private static final FGEPoint topRightCorner = new FGEPoint(1 - topLeftCorner.x, topLeftCorner.y);
+	private static final FGEPoint bottomRightCorner = new FGEPoint(topRightCorner.x, bottomLeftCorner.y);
+	private static final FGEPoint middleRightPoint = new FGEPoint(topRightCorner.x, (topRightCorner.y + bottomRightCorner.y) / 2);
 
-	private static final FGEPoint foldingPoint = new FGEPoint(topRightCorner.x-folding,topRightCorner.y+folding);
-	private static final FGEPoint topFoldingPoint = new FGEPoint(foldingPoint.x,topRightCorner.y);
+	private static final FGEPoint foldingPoint = new FGEPoint(topRightCorner.x - folding, topRightCorner.y + folding);
+	private static final FGEPoint topFoldingPoint = new FGEPoint(foldingPoint.x, topRightCorner.y);
 	private static final FGEPoint rightFoldingPoint = new FGEPoint(topRightCorner.x, foldingPoint.y);
-	public static final FGEPolygon fileShape = new FGEPolygon(Filling.FILLED,
-			topLeftCorner,
-			topFoldingPoint,
-			rightFoldingPoint,
-			bottomRightCorner,
-			bottomLeftCorner);
+	public static final FGEPolygon fileShape = new FGEPolygon(Filling.FILLED, topLeftCorner, topFoldingPoint, rightFoldingPoint,
+			bottomRightCorner, bottomLeftCorner);
 
 	private ConcatenedList<ControlArea> controlAreas;
 
-	public DataObjectGR(WKFDataObject dataSource, SwimmingLaneRepresentation aDrawing)
-	{
+	public DataObjectGR(WKFDataObject dataSource, SwimmingLaneRepresentation aDrawing) {
 		super(dataSource, ShapeType.POLYGON, aDrawing);
-		((Polygon)getShape()).setPoints(fileShape.getPoints());
+		((Polygon) getShape()).setPoints(fileShape.getPoints());
 		setIsFloatingLabel(true);
 		setForeground(FOREGROUND);
 		setBackground(BACKGROUND);
@@ -90,8 +85,8 @@ public class DataObjectGR extends ArtefactGR<WKFDataObject> {
 			public void paintShape(FGEShapeGraphics g) {
 				g.setDefaultForeground(FOREGROUND);
 				g.useDefaultForegroundStyle();
-				g.drawLine(topFoldingPoint,foldingPoint);
-				g.drawLine(foldingPoint,rightFoldingPoint);
+				g.drawLine(topFoldingPoint, foldingPoint);
+				g.drawLine(foldingPoint, rightFoldingPoint);
 			}
 		});
 		updateControlAreas();
@@ -106,8 +101,8 @@ public class DataObjectGR extends ArtefactGR<WKFDataObject> {
 	private void updateControlAreas() {
 		controlAreas = new ConcatenedList<ControlArea>();
 		controlAreas.addElementList(super.getControlAreas());
-		controlAreas.addElement(new ShapeResizingControlPoint(this, middleLeftPoint,CardinalDirection.WEST));
-		controlAreas.addElement(new ShapeResizingControlPoint(this, middleRightPoint,CardinalDirection.EAST));
+		controlAreas.addElement(new ShapeResizingControlPoint(this, middleLeftPoint, CardinalDirection.WEST));
+		controlAreas.addElement(new ShapeResizingControlPoint(this, middleRightPoint, CardinalDirection.EAST));
 	}
 
 	@Override
@@ -116,14 +111,12 @@ public class DataObjectGR extends ArtefactGR<WKFDataObject> {
 	}
 
 	@Override
-	protected boolean supportShadow()
-	{
+	protected boolean supportShadow() {
 		return false;
 	}
 
 	@Override
-	public void update (FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		super.update(observable, dataModification);
 	}
 

@@ -29,23 +29,20 @@ import org.openflexo.foundation.utils.FlexoProjectFile;
  * @author sguerin
  * 
  */
-public class LoadEOModelException extends LoadResourceException
-{
-    private FlexoProjectFile _eoModelFile;
+public class LoadEOModelException extends LoadResourceException {
+	private FlexoProjectFile _eoModelFile;
 
-    private EOAccessException _exception;
+	private EOAccessException _exception;
 
-    public LoadEOModelException(FlexoEOModelResource fileResource, EOAccessException e)
-    {
-        super(fileResource, null);
-        _eoModelFile = fileResource.getResourceFile();
-        _exception = e;
-    }
+	public LoadEOModelException(FlexoEOModelResource fileResource, EOAccessException e) {
+		super(fileResource, null);
+		_eoModelFile = fileResource.getResourceFile();
+		_exception = e;
+	}
 
-    @Override
-	public String getMessage()
-    {
-        return _exception.getMessage();
-    }
+	@Override
+	public String getMessage() {
+		return _exception.getMessage();
+	}
 
 }

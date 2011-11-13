@@ -32,57 +32,52 @@ import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.xml.FlexoComponentLibraryBuilder;
 import org.openflexo.logging.FlexoLogger;
 
-public abstract class PartialComponentDefinition extends ComponentDefinition
-{
+public abstract class PartialComponentDefinition extends ComponentDefinition {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(PartialComponentDefinition.class.getPackage().getName());
-	
-    public PartialComponentDefinition(FlexoComponentLibrary componentLibrary)
-    {
-        super(componentLibrary);
-    }
 
-    public PartialComponentDefinition(String aComponentName, FlexoComponentFolder aFolder, FlexoProject prj) throws DuplicateResourceException
-    {
-        super(aComponentName, aFolder.getComponentLibrary(), aFolder, prj);
-    }
+	public PartialComponentDefinition(FlexoComponentLibrary componentLibrary) {
+		super(componentLibrary);
+	}
 
-    public PartialComponentDefinition(FlexoComponentLibraryBuilder builder)
-    {
-        super(builder);
-    }
+	public PartialComponentDefinition(String aComponentName, FlexoComponentFolder aFolder, FlexoProject prj)
+			throws DuplicateResourceException {
+		super(aComponentName, aFolder.getComponentLibrary(), aFolder, prj);
+	}
 
-    public PartialComponentDefinition(String aComponentName, FlexoComponentLibrary componentLibrary, FlexoComponentFolder aFolder, FlexoProject project)
-            throws DuplicateResourceException
-    {
-        super(aComponentName, componentLibrary, aFolder, project);
-    }
-    
-    @Override
-    public IEPartialComponent getWOComponent() {
-    	return (IEPartialComponent) super.getWOComponent();
-    }
-    
-    @Override
-    public final boolean isPage() {
-    	return false;
-    }
+	public PartialComponentDefinition(FlexoComponentLibraryBuilder builder) {
+		super(builder);
+	}
+
+	public PartialComponentDefinition(String aComponentName, FlexoComponentLibrary componentLibrary, FlexoComponentFolder aFolder,
+			FlexoProject project) throws DuplicateResourceException {
+		super(aComponentName, componentLibrary, aFolder, project);
+	}
 
 	@Override
-	public List<OperationNode> getAllOperationNodesLinkedToThisComponent()
-	{
+	public IEPartialComponent getWOComponent() {
+		return (IEPartialComponent) super.getWOComponent();
+	}
+
+	@Override
+	public final boolean isPage() {
+		return false;
+	}
+
+	@Override
+	public List<OperationNode> getAllOperationNodesLinkedToThisComponent() {
 		List<OperationNode> results = new ArrayList<OperationNode>();
 		for (ComponentInstance instance : getComponentInstances()) {
 			PartialComponentInstance inst = (PartialComponentInstance) instance;
-			if (inst.getReusableWidget()==null) {
+			if (inst.getReusableWidget() == null) {
 				// ActionNode and OperationNode also uses TabComponentInstance
 				continue;
 			}
-			
+
 			results.addAll(inst.getReusableWidget().getComponentDefinition().getAllOperationNodesLinkedToThisComponent());
 		}
-		
+
 		return results;
 	}
 }

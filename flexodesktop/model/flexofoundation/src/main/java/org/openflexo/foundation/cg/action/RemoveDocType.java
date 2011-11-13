@@ -29,66 +29,60 @@ import org.openflexo.foundation.DocType.DefaultDocType;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 
-
 /**
  * @author gpolet
  * 
  */
-public class RemoveDocType extends FlexoAction<RemoveDocType, DocType, DocType>
-{
+public class RemoveDocType extends FlexoAction<RemoveDocType, DocType, DocType> {
 
-    public static final FlexoActionType<RemoveDocType, DocType, DocType> actionType = new FlexoActionType<RemoveDocType, DocType, DocType>("remove_doc_type", FlexoActionType.DELETE_ACTION_TYPE) {
+	public static final FlexoActionType<RemoveDocType, DocType, DocType> actionType = new FlexoActionType<RemoveDocType, DocType, DocType>(
+			"remove_doc_type", FlexoActionType.DELETE_ACTION_TYPE) {
 
-        @Override
-        protected boolean isEnabledForSelection(DocType object, Vector<DocType> globalSelection)
-        {
-            return isVisibleForSelection(object, globalSelection);
-        }
+		@Override
+		protected boolean isEnabledForSelection(DocType object, Vector<DocType> globalSelection) {
+			return isVisibleForSelection(object, globalSelection);
+		}
 
-        @Override
-        protected boolean isVisibleForSelection(DocType object, Vector<DocType> globalSelection)
-        {
-        	Vector<FlexoModelObject> v = getGlobalSelectionAndFocusedObject(object, globalSelection);
-        	boolean ok = v.size()>0;
-        	for (FlexoModelObject o : v) {
-        		for(DefaultDocType defaultDocType : DefaultDocType.values())
-        			ok&=(o!=o.getProject().getDocTypeNamed(defaultDocType.name()));
+		@Override
+		protected boolean isVisibleForSelection(DocType object, Vector<DocType> globalSelection) {
+			Vector<FlexoModelObject> v = getGlobalSelectionAndFocusedObject(object, globalSelection);
+			boolean ok = v.size() > 0;
+			for (FlexoModelObject o : v) {
+				for (DefaultDocType defaultDocType : DefaultDocType.values())
+					ok &= (o != o.getProject().getDocTypeNamed(defaultDocType.name()));
 			}
-            return ok;
-        }
+			return ok;
+		}
 
-        @Override
-        public RemoveDocType makeNewAction(DocType focusedObject, Vector<DocType> globalSelection, FlexoEditor editor)
-        {
-            return new RemoveDocType(focusedObject,globalSelection,editor);
-        }
-        
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (RemoveDocType.actionType, DocType.class);
-    }
-    
-    /**
-     * @param actionType
-     * @param focusedObject
-     * @param globalSelection
-     */
-    protected RemoveDocType(DocType focusedObject, Vector<DocType> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection,editor);
-    }
+		@Override
+		public RemoveDocType makeNewAction(DocType focusedObject, Vector<DocType> globalSelection, FlexoEditor editor) {
+			return new RemoveDocType(focusedObject, globalSelection, editor);
+		}
 
-    /**
-     * Overrides doAction
-     * 
-     * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
-     */
-    @Override
-    protected void doAction(Object context) throws FlexoException
-    {
-        DocType dt = getFocusedObject();
-        dt.getProject().removeFromDocTypes(dt);
-    }
+	};
+
+	static {
+		FlexoModelObject.addActionForClass(RemoveDocType.actionType, DocType.class);
+	}
+
+	/**
+	 * @param actionType
+	 * @param focusedObject
+	 * @param globalSelection
+	 */
+	protected RemoveDocType(DocType focusedObject, Vector<DocType> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	/**
+	 * Overrides doAction
+	 * 
+	 * @see org.openflexo.foundation.action.FlexoAction#doAction(java.lang.Object)
+	 */
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		DocType dt = getFocusedObject();
+		dt.getProject().removeFromDocTypes(dt);
+	}
 
 }

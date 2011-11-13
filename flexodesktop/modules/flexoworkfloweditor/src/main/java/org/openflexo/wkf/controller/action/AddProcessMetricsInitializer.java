@@ -33,14 +33,12 @@ import org.openflexo.foundation.wkf.action.AddProcessMetricsDefinition;
 import org.openflexo.foundation.wkf.action.AddProcessMetricsValue;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class AddProcessMetricsInitializer extends AddMetricsInitializer<AddProcessMetricsValue, FlexoProcess> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	AddProcessMetricsInitializer(WKFControllerActionInitializer actionInitializer)
-	{
-		super(actionInitializer,AddProcessMetricsValue.actionType);
+	AddProcessMetricsInitializer(WKFControllerActionInitializer actionInitializer) {
+		super(actionInitializer, AddProcessMetricsValue.actionType);
 	}
 
 	@Override
@@ -51,10 +49,10 @@ public class AddProcessMetricsInitializer extends AddMetricsInitializer<AddProce
 	@Override
 	protected Vector<MetricsDefinition> getAvailableMetricsDefinitions(FlexoProcess process) {
 		Vector<MetricsDefinition> v = new Vector<MetricsDefinition>(getProject().getWorkflow().getProcessMetricsDefinitions());
-		for (MetricsValue mv: process.getMetricsValues()) {
+		for (MetricsValue mv : process.getMetricsValues()) {
 			v.remove(mv.getMetricsDefinition());
 		}
 		return v;
 	}
-	
+
 }

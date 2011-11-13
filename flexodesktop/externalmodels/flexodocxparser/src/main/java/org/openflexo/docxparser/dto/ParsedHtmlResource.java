@@ -21,26 +21,22 @@ package org.openflexo.docxparser.dto;
 
 import org.openflexo.docxparser.dto.api.IParsedHtmlResource;
 
-public class ParsedHtmlResource implements IParsedHtmlResource
-{
+public class ParsedHtmlResource implements IParsedHtmlResource {
 	private String identifier;
 	private byte[] file;
 
-	public ParsedHtmlResource(String identifier, byte[] file)
-	{
+	public ParsedHtmlResource(String identifier, byte[] file) {
 		this.identifier = identifier;
 		this.file = file;
 	}
-	
+
 	@Override
-	public String getIdentifier()
-	{
+	public String getIdentifier() {
 		return identifier;
 	}
-	
+
 	@Override
-	public byte[] getFile()
-	{
+	public byte[] getFile() {
 		return file;
 	}
 }

@@ -29,116 +29,117 @@ import org.openflexo.antar.expr.Operator;
 import org.openflexo.antar.expr.OperatorNotSupportedException;
 import org.openflexo.antar.expr.UnaryOperator;
 
-
 public class JavaGrammar implements ExpressionGrammar {
 
-	private static final BinaryOperator[] allSupportedBinaryOperators	= { 
-		BooleanBinaryOperator.AND,
-		BooleanBinaryOperator.OR,
-		BooleanBinaryOperator.EQUALS,
-		BooleanBinaryOperator.NOT_EQUALS,
-		BooleanBinaryOperator.LESS_THAN,
-		BooleanBinaryOperator.LESS_THAN_OR_EQUALS,
-		BooleanBinaryOperator.GREATER_THAN,
-		BooleanBinaryOperator.GREATER_THAN_OR_EQUALS,
-		ArithmeticBinaryOperator.ADDITION,  
-		ArithmeticBinaryOperator.SUBSTRACTION,
-		ArithmeticBinaryOperator.MULTIPLICATION,
-		ArithmeticBinaryOperator.DIVISION,
-		ArithmeticBinaryOperator.POWER,
-	};
-	
-	private static final UnaryOperator[] allSupportedUnaryOperators	= { 
-		BooleanUnaryOperator.NOT,
-		ArithmeticUnaryOperator.UNARY_MINUS,  
-		ArithmeticUnaryOperator.SIN,  
-		ArithmeticUnaryOperator.ASIN,  
-		ArithmeticUnaryOperator.COS,  
-		ArithmeticUnaryOperator.ACOS,  
-		ArithmeticUnaryOperator.TAN,  
-		ArithmeticUnaryOperator.ATAN,  
-		ArithmeticUnaryOperator.EXP,  
-		ArithmeticUnaryOperator.LOG,
-		ArithmeticUnaryOperator.SQRT
-	};
-	
+	private static final BinaryOperator[] allSupportedBinaryOperators = { BooleanBinaryOperator.AND, BooleanBinaryOperator.OR,
+			BooleanBinaryOperator.EQUALS, BooleanBinaryOperator.NOT_EQUALS, BooleanBinaryOperator.LESS_THAN,
+			BooleanBinaryOperator.LESS_THAN_OR_EQUALS, BooleanBinaryOperator.GREATER_THAN, BooleanBinaryOperator.GREATER_THAN_OR_EQUALS,
+			ArithmeticBinaryOperator.ADDITION, ArithmeticBinaryOperator.SUBSTRACTION, ArithmeticBinaryOperator.MULTIPLICATION,
+			ArithmeticBinaryOperator.DIVISION, ArithmeticBinaryOperator.POWER, };
+
+	private static final UnaryOperator[] allSupportedUnaryOperators = { BooleanUnaryOperator.NOT, ArithmeticUnaryOperator.UNARY_MINUS,
+			ArithmeticUnaryOperator.SIN, ArithmeticUnaryOperator.ASIN, ArithmeticUnaryOperator.COS, ArithmeticUnaryOperator.ACOS,
+			ArithmeticUnaryOperator.TAN, ArithmeticUnaryOperator.ATAN, ArithmeticUnaryOperator.EXP, ArithmeticUnaryOperator.LOG,
+			ArithmeticUnaryOperator.SQRT };
+
 	@Override
-	public BinaryOperator[] getAllSupportedBinaryOperators() 
-	{
+	public BinaryOperator[] getAllSupportedBinaryOperators() {
 		return allSupportedBinaryOperators;
 	}
 
 	@Override
-	public UnaryOperator[] getAllSupportedUnaryOperators() 
-	{
+	public UnaryOperator[] getAllSupportedUnaryOperators() {
 		return allSupportedUnaryOperators;
 	}
-	
-    public String getSymbol(UnaryOperator operator) throws OperatorNotSupportedException
-    {
-    	if (operator == BooleanUnaryOperator.NOT) return "!";
-       	if (operator == ArithmeticUnaryOperator.UNARY_MINUS) return "-";
-      	if (operator == ArithmeticUnaryOperator.SIN) return "Math.sin";
-      	if (operator == ArithmeticUnaryOperator.ASIN) return "Math.asin";
-     	if (operator == ArithmeticUnaryOperator.COS) return "Math.cos";
-      	if (operator == ArithmeticUnaryOperator.ACOS) return "Math.acos";
-     	if (operator == ArithmeticUnaryOperator.TAN) return "Math.tan";
-      	if (operator == ArithmeticUnaryOperator.ATAN) return "Math.atan";
-      	if (operator == ArithmeticUnaryOperator.EXP) return "Math.exp";
-      	if (operator == ArithmeticUnaryOperator.LOG) return "Math.log";
-      	if (operator == ArithmeticUnaryOperator.SQRT) return "Math.sqrt";
-       	throw new OperatorNotSupportedException();
-    }
 
-    public String getAlternativeSymbol(UnaryOperator operator) throws OperatorNotSupportedException
-    {
-    	return null;
-    }
-	
-    public String getSymbol(BinaryOperator operator) throws OperatorNotSupportedException
-    {
-        if (operator == BooleanBinaryOperator.AND) return "&&";
-       	if (operator == BooleanBinaryOperator.OR) return "||";
-       	if (operator == BooleanBinaryOperator.EQUALS) return "==";
-       	if (operator == BooleanBinaryOperator.NOT_EQUALS) return "!=";
-       	if (operator == BooleanBinaryOperator.LESS_THAN) return "<";
-       	if (operator == BooleanBinaryOperator.LESS_THAN_OR_EQUALS) return "<=";
-       	if (operator == BooleanBinaryOperator.GREATER_THAN) return ">";
-       	if (operator == BooleanBinaryOperator.GREATER_THAN_OR_EQUALS) return ">=";
-      	if (operator == ArithmeticBinaryOperator.ADDITION) return "+";
-       	if (operator == ArithmeticBinaryOperator.SUBSTRACTION) return "-";
-       	if (operator == ArithmeticBinaryOperator.MULTIPLICATION) return "*";
-       	if (operator == ArithmeticBinaryOperator.DIVISION) return "/";
-       	if (operator == ArithmeticBinaryOperator.POWER) return "^";
-       	throw new OperatorNotSupportedException();
-     }
+	public String getSymbol(UnaryOperator operator) throws OperatorNotSupportedException {
+		if (operator == BooleanUnaryOperator.NOT)
+			return "!";
+		if (operator == ArithmeticUnaryOperator.UNARY_MINUS)
+			return "-";
+		if (operator == ArithmeticUnaryOperator.SIN)
+			return "Math.sin";
+		if (operator == ArithmeticUnaryOperator.ASIN)
+			return "Math.asin";
+		if (operator == ArithmeticUnaryOperator.COS)
+			return "Math.cos";
+		if (operator == ArithmeticUnaryOperator.ACOS)
+			return "Math.acos";
+		if (operator == ArithmeticUnaryOperator.TAN)
+			return "Math.tan";
+		if (operator == ArithmeticUnaryOperator.ATAN)
+			return "Math.atan";
+		if (operator == ArithmeticUnaryOperator.EXP)
+			return "Math.exp";
+		if (operator == ArithmeticUnaryOperator.LOG)
+			return "Math.log";
+		if (operator == ArithmeticUnaryOperator.SQRT)
+			return "Math.sqrt";
+		throw new OperatorNotSupportedException();
+	}
 
+	public String getAlternativeSymbol(UnaryOperator operator) throws OperatorNotSupportedException {
+		return null;
+	}
 
-    public String getAlternativeSymbol(BinaryOperator operator) throws OperatorNotSupportedException
-    {
-        if (operator == BooleanBinaryOperator.AND) return "&";
-       	if (operator == BooleanBinaryOperator.OR) return "|";
-       	if (operator == BooleanBinaryOperator.EQUALS) return "=";
-       	if (operator == ArithmeticBinaryOperator.DIVISION) return ":";
-    	return null;
-    }
+	public String getSymbol(BinaryOperator operator) throws OperatorNotSupportedException {
+		if (operator == BooleanBinaryOperator.AND)
+			return "&&";
+		if (operator == BooleanBinaryOperator.OR)
+			return "||";
+		if (operator == BooleanBinaryOperator.EQUALS)
+			return "==";
+		if (operator == BooleanBinaryOperator.NOT_EQUALS)
+			return "!=";
+		if (operator == BooleanBinaryOperator.LESS_THAN)
+			return "<";
+		if (operator == BooleanBinaryOperator.LESS_THAN_OR_EQUALS)
+			return "<=";
+		if (operator == BooleanBinaryOperator.GREATER_THAN)
+			return ">";
+		if (operator == BooleanBinaryOperator.GREATER_THAN_OR_EQUALS)
+			return ">=";
+		if (operator == ArithmeticBinaryOperator.ADDITION)
+			return "+";
+		if (operator == ArithmeticBinaryOperator.SUBSTRACTION)
+			return "-";
+		if (operator == ArithmeticBinaryOperator.MULTIPLICATION)
+			return "*";
+		if (operator == ArithmeticBinaryOperator.DIVISION)
+			return "/";
+		if (operator == ArithmeticBinaryOperator.POWER)
+			return "^";
+		throw new OperatorNotSupportedException();
+	}
+
+	public String getAlternativeSymbol(BinaryOperator operator) throws OperatorNotSupportedException {
+		if (operator == BooleanBinaryOperator.AND)
+			return "&";
+		if (operator == BooleanBinaryOperator.OR)
+			return "|";
+		if (operator == BooleanBinaryOperator.EQUALS)
+			return "=";
+		if (operator == ArithmeticBinaryOperator.DIVISION)
+			return ":";
+		return null;
+	}
 
 	@Override
-	public String getAlternativeSymbol(Operator operator) throws OperatorNotSupportedException 
-	{
-		if (operator instanceof UnaryOperator) return getAlternativeSymbol((UnaryOperator)operator);
-		if (operator instanceof BinaryOperator) return getAlternativeSymbol((BinaryOperator)operator);
+	public String getAlternativeSymbol(Operator operator) throws OperatorNotSupportedException {
+		if (operator instanceof UnaryOperator)
+			return getAlternativeSymbol((UnaryOperator) operator);
+		if (operator instanceof BinaryOperator)
+			return getAlternativeSymbol((BinaryOperator) operator);
 		throw new OperatorNotSupportedException();
 	}
 
 	@Override
 	public String getSymbol(Operator operator) throws OperatorNotSupportedException {
-		if (operator instanceof UnaryOperator) return getSymbol((UnaryOperator)operator);
-		if (operator instanceof BinaryOperator) return getSymbol((BinaryOperator)operator);
+		if (operator instanceof UnaryOperator)
+			return getSymbol((UnaryOperator) operator);
+		if (operator instanceof BinaryOperator)
+			return getSymbol((BinaryOperator) operator);
 		throw new OperatorNotSupportedException();
 	}
-
-	
-
 
 }

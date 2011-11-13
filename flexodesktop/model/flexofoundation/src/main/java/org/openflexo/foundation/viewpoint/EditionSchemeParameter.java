@@ -37,8 +37,7 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 
 	private static final Logger logger = Logger.getLogger(EditionSchemeParameter.class.getPackage().getName());
 
-	public static enum WidgetType
-	{
+	public static enum WidgetType {
 		URI {
 			@Override
 			public Type getType() {
@@ -99,117 +98,99 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 				return OntologyIndividual.class;
 			}
 		};
-		
+
 		public abstract Type getType();
 	}
-	
+
 	private String name;
 	private String label;
 	private String description;
 	private boolean usePaletteLabelAsDefaultValue;
 
 	private EditionScheme _scheme;
-	
+
 	public EditionSchemeParameter() {
 	}
-	
+
 	public abstract Type getType();
 
 	public abstract WidgetType getWidget();
-	
-	public void setScheme(EditionScheme scheme) 
-	{
+
+	public void setScheme(EditionScheme scheme) {
 		_scheme = scheme;
 	}
 
-	public EditionScheme getScheme() 
-	{
+	public EditionScheme getScheme() {
 		return _scheme;
 	}
-	
+
 	@Override
-	public String getDescription() 
-	{
+	public String getDescription() {
 		return description;
 	}
 
 	@Override
-	public void setDescription(String description) 
-	{
+	public void setDescription(String description) {
 		this.description = description;
 	}
 
 	@Override
-	public ViewPoint getCalc() 
-	{
+	public ViewPoint getCalc() {
 		return getScheme().getCalc();
 	}
 
 	@Override
-	public String getName() 
-	{
+	public String getName() {
 		return name;
 	}
 
 	@Override
-	public void setName(String name) 
-	{
+	public void setName(String name) {
 		this.name = name;
 	}
 
-	public String getLabel() 
-	{
+	public String getLabel() {
 		return label;
 	}
 
-	public void setLabel(String label) 
-	{
+	public void setLabel(String label) {
 		this.label = label;
 	}
 
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.VPM.EDITION_PATTERN_PARAMETER_INSPECTOR;
 	}
-	
-	public boolean getUsePaletteLabelAsDefaultValue() 
-	{
+
+	public boolean getUsePaletteLabelAsDefaultValue() {
 		return usePaletteLabelAsDefaultValue;
 	}
-	
-	public void setUsePaletteLabelAsDefaultValue(boolean usePaletteLabelAsDefaultValue) 
-	{
+
+	public void setUsePaletteLabelAsDefaultValue(boolean usePaletteLabelAsDefaultValue) {
 		this.usePaletteLabelAsDefaultValue = usePaletteLabelAsDefaultValue;
 	}
 
-	public boolean evaluateCondition(BindingEvaluationContext parameterRetriever)
-	{
+	public boolean evaluateCondition(BindingEvaluationContext parameterRetriever) {
 		if (getConditional().isValid()) {
-			return (Boolean)getConditional().getBindingValue(parameterRetriever);
+			return (Boolean) getConditional().getBindingValue(parameterRetriever);
 		}
 		return true;
 	}
-	
+
 	@Override
-	public String toString()
-	{
-		return "EditionPatternParameter: "+getName();
+	public String toString() {
+		return "EditionPatternParameter: " + getName();
 	}
 
-	public int getIndex()
-	{
+	public int getIndex() {
 		return getScheme().getParameters().indexOf(this);
 	}
-	
+
 	private ViewPointDataBinding conditional;
 	private ViewPointDataBinding defaultValue;
 
-	public static enum ParameterBindingAttribute implements InspectorBindingAttribute
-	{
-		conditional,
-		baseURI,
-		defaultValue
+	public static enum ParameterBindingAttribute implements InspectorBindingAttribute {
+		conditional, baseURI, defaultValue
 	}
 
 	private BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);
@@ -219,61 +200,55 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 			return EditionSchemeParameter.this.getType();
 		};
 	};
-	
-	public BindingDefinition getConditionalBindingDefinition()
-	{
+
+	public BindingDefinition getConditionalBindingDefinition() {
 		return CONDITIONAL;
 	}
 
-	public BindingDefinition getDefaultValueBindingDefinition()
-	{
+	public BindingDefinition getDefaultValueBindingDefinition() {
 		return DEFAULT_VALUE;
 	}
 
-	public ViewPointDataBinding getConditional() 
-	{
-		if (conditional == null) conditional = new ViewPointDataBinding(this,ParameterBindingAttribute.conditional,getConditionalBindingDefinition());
+	public ViewPointDataBinding getConditional() {
+		if (conditional == null)
+			conditional = new ViewPointDataBinding(this, ParameterBindingAttribute.conditional, getConditionalBindingDefinition());
 		return conditional;
 	}
 
-	public void setConditional(ViewPointDataBinding conditional) 
-	{
+	public void setConditional(ViewPointDataBinding conditional) {
 		conditional.setOwner(this);
 		conditional.setBindingAttribute(ParameterBindingAttribute.conditional);
 		conditional.setBindingDefinition(getConditionalBindingDefinition());
 		this.conditional = conditional;
 	}
-	
-	public EditionPattern getEditionPattern()
-	{
+
+	public EditionPattern getEditionPattern() {
 		return getScheme().getEditionPattern();
 	}
-	
+
 	@Override
-	public BindingModel getBindingModel() 
-	{
+	public BindingModel getBindingModel() {
 		return getScheme().getParametersBindingModel();
 	}
 
-	public ViewPointDataBinding getDefaultValue() 
-	{
-		if (defaultValue == null) defaultValue = new ViewPointDataBinding(this,ParameterBindingAttribute.defaultValue,getDefaultValueBindingDefinition());
+	public ViewPointDataBinding getDefaultValue() {
+		if (defaultValue == null)
+			defaultValue = new ViewPointDataBinding(this, ParameterBindingAttribute.defaultValue, getDefaultValueBindingDefinition());
 		return defaultValue;
 	}
 
-	public void setDefaultValue(ViewPointDataBinding defaultValue) 
-	{
+	public void setDefaultValue(ViewPointDataBinding defaultValue) {
 		defaultValue.setOwner(this);
 		defaultValue.setBindingAttribute(ParameterBindingAttribute.defaultValue);
 		defaultValue.setBindingDefinition(getDefaultValueBindingDefinition());
 		this.defaultValue = defaultValue;
 	}
 
-	public Object getDefaultValue(EditionSchemeAction<?> action, BindingEvaluationContext parameterRetriever) 
-	{
-		ViewPointPaletteElement paletteElement = (action instanceof DropSchemeAction ? ((DropSchemeAction)action).getPaletteElement() : null);
+	public Object getDefaultValue(EditionSchemeAction<?> action, BindingEvaluationContext parameterRetriever) {
+		ViewPointPaletteElement paletteElement = (action instanceof DropSchemeAction ? ((DropSchemeAction) action).getPaletteElement()
+				: null);
 
-		//System.out.println("Default value for "+element.getName()+" ???");
+		// System.out.println("Default value for "+element.getName()+" ???");
 		if (getUsePaletteLabelAsDefaultValue() && (paletteElement != null)) {
 			return paletteElement.getName();
 		}
@@ -283,14 +258,12 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 		return null;
 	}
 
-	public boolean isMandatory()
-	{
+	public boolean isMandatory() {
 		return false;
 	}
-	
-	public boolean isValid(EditionSchemeAction action, Object value)
-	{
+
+	public boolean isValid(EditionSchemeAction action, Object value) {
 		return !isMandatory() || value != null;
 	}
-		
+
 }

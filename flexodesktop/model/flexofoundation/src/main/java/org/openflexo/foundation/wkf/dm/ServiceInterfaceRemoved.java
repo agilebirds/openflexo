@@ -27,20 +27,17 @@ import org.openflexo.foundation.wkf.ws.ServiceInterface;
  * @author dvanvyve
  * 
  */
-public class ServiceInterfaceRemoved extends WKFDataModification
-{
+public class ServiceInterfaceRemoved extends WKFDataModification {
 
-    protected  ServiceInterface _removedInterface;
+	protected ServiceInterface _removedInterface;
 
-    public ServiceInterfaceRemoved( ServiceInterface removedInterface)
-    {
-        super(removedInterface, null);
-        _removedInterface = removedInterface;
-    }
+	public ServiceInterfaceRemoved(ServiceInterface removedInterface) {
+		super(removedInterface, null);
+		_removedInterface = removedInterface;
+	}
 
-    public  ServiceInterface getRemovedInterface()
-    {
-        return _removedInterface;
-    }
+	public ServiceInterface getRemovedInterface() {
+		return _removedInterface;
+	}
 
 }

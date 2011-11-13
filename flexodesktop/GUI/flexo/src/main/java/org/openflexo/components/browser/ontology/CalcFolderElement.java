@@ -25,41 +25,35 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.viewpoint.ViewPointFolder;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 
-
 /**
  * Browser element representing a calc folder
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class CalcFolderElement extends BrowserElement
-{
+public class CalcFolderElement extends BrowserElement {
 
-    protected CalcFolderElement(ViewPointFolder folder, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(folder, BrowserElementType.CALC_FOLDER, browser, parent);
-    }
+	protected CalcFolderElement(ViewPointFolder folder, ProjectBrowser browser, BrowserElement parent) {
+		super(folder, BrowserElementType.CALC_FOLDER, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-       	for (ViewPointFolder subFolder : getFolder().getChildren()) {
-       		addToChilds(subFolder);
-       	}
-       	for (ViewPoint calc : getFolder().getViewPoints()) {
-       		addToChilds(calc);
-       	}
-     }
+	@Override
+	protected void buildChildrenVector() {
+		for (ViewPointFolder subFolder : getFolder().getChildren()) {
+			addToChilds(subFolder);
+		}
+		for (ViewPoint calc : getFolder().getViewPoints()) {
+			addToChilds(calc);
+		}
+	}
 
-    @Override
-	public String getName()
-    {
-        return getFolder().getName();
-    }
+	@Override
+	public String getName() {
+		return getFolder().getName();
+	}
 
-    protected ViewPointFolder getFolder()
-    {
-        return (ViewPointFolder) getObject();
-    }
+	protected ViewPointFolder getFolder() {
+		return (ViewPointFolder) getObject();
+	}
 
 }

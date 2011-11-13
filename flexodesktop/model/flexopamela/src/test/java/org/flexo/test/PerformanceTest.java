@@ -269,6 +269,7 @@ public class PerformanceTest {
 	/**
 	 * Method to invoke to run a test runnable 20 times in a row, 10 times using pamela objects and 10 times using regular objects.
 	 * Eventually, the method prints out the result.
+	 * 
 	 * @param runnable
 	 *            the test runnable to execute.
 	 * @param factory

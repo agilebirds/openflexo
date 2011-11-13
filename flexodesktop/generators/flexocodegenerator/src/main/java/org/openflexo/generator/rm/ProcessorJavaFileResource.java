@@ -40,69 +40,60 @@ import org.openflexo.generator.rm.GenerationAvailableFileResource;
 import org.openflexo.generator.wkf.ControlGraphGenerator;
 import org.openflexo.logging.FlexoLogger;
 
-
 /**
  * @author sylvain
  * 
  */
-public class ProcessorJavaFileResource extends JavaFileResource<ControlGraphGenerator, CGJavaFile> implements GenerationAvailableFileResource, FlexoObserver
-{
-    protected static final Logger logger = FlexoLogger.getLogger(ProcessorJavaFileResource.class.getPackage().getName());
+public class ProcessorJavaFileResource extends JavaFileResource<ControlGraphGenerator, CGJavaFile> implements
+		GenerationAvailableFileResource, FlexoObserver {
+	protected static final Logger logger = FlexoLogger.getLogger(ProcessorJavaFileResource.class.getPackage().getName());
 
-    /**
-     * @param builder
-     */
-    public ProcessorJavaFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
+	/**
+	 * @param builder
+	 */
+	public ProcessorJavaFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
-    /**
-     * @param aProject
-     */
-    public ProcessorJavaFileResource(FlexoProject aProject)
-    {
-        super(aProject);
-    }
+	/**
+	 * @param aProject
+	 */
+	public ProcessorJavaFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
-    public DMEntity getEntity() 
-    {
-    	return null;
-    }
-
-    @Override
-	public void registerObserverWhenRequired()
-    {
-    }
-    
-    @Override
-	protected ProcessorJavaFile createGeneratedResourceData()
-    {
-        return new ProcessorJavaFile(getFile(),this);
-    }
-    
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-	public void rebuildDependancies()
-    {
-        //super.rebuildDependancies();
-        if(getGenerator()!=null)
-        	addToDependantResources(getGenerator().getProcess().getFlexoResource());
-   }
-    
-    @Override
-	public ProcessorJavaFile getGeneratedResourceData()
-    {
-    	return (ProcessorJavaFile)super.getGeneratedResourceData();
-    }
+	public DMEntity getEntity() {
+		return null;
+	}
 
 	@Override
-	public void update(FlexoObservable observable,
-			DataModification dataModification) {
-		if(getGenerator()!=null && getGenerator().getProcess()==observable){
-			if(dataModification instanceof ProcessRemoved || dataModification instanceof NameChanged){
+	public void registerObserverWhenRequired() {
+	}
+
+	@Override
+	protected ProcessorJavaFile createGeneratedResourceData() {
+		return new ProcessorJavaFile(getFile(), this);
+	}
+
+	/**
+	 * Rebuild resource dependancies for this resource
+	 */
+	@Override
+	public void rebuildDependancies() {
+		// super.rebuildDependancies();
+		if (getGenerator() != null)
+			addToDependantResources(getGenerator().getProcess().getFlexoResource());
+	}
+
+	@Override
+	public ProcessorJavaFile getGeneratedResourceData() {
+		return (ProcessorJavaFile) super.getGeneratedResourceData();
+	}
+
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (getGenerator() != null && getGenerator().getProcess() == observable) {
+			if (dataModification instanceof ProcessRemoved || dataModification instanceof NameChanged) {
 				ControlGraphGenerator generator = getGenerator();
 				getCGFile().setMarkedForDeletion(true);
 				setGenerator(null);
@@ -111,21 +102,19 @@ public class ProcessorJavaFileResource extends JavaFileResource<ControlGraphGene
 			}
 		}
 	}
-	
+
 	@Override
-	public CGRepository getRepository()
-    {
-        return getGenerator().getProjectGenerator().getRepository();
-    }
-	
+	public CGRepository getRepository() {
+		return getGenerator().getProjectGenerator().getRepository();
+	}
+
 	@Override
-	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate)
-	{
+	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate) {
 		if (resource instanceof TemplateLocator) {
 			return false;
 		}
-		if(resource instanceof FlexoProcessResource) {
-			return ((FlexoProcessResource)resource).isModified();
+		if (resource instanceof FlexoProcessResource) {
+			return ((FlexoProcessResource) resource).isModified();
 		}
 		return super.optimisticallyDependsOf(resource, requestDate);
 	}

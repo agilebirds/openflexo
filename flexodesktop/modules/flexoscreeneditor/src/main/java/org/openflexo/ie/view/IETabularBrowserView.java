@@ -23,19 +23,16 @@ import org.openflexo.components.tabularbrowser.TabularBrowserModel;
 import org.openflexo.components.tabularbrowser.TabularBrowserView;
 import org.openflexo.ie.view.controller.IEController;
 
-
 public class IETabularBrowserView extends TabularBrowserView {
 
-    public IETabularBrowserView(IEController controller, TabularBrowserModel model, int visibleRowCount)
-    {
-        this(controller, model);
-        setVisibleRowCount(visibleRowCount);
-    }
+	public IETabularBrowserView(IEController controller, TabularBrowserModel model, int visibleRowCount) {
+		this(controller, model);
+		setVisibleRowCount(visibleRowCount);
+	}
 
-    public IETabularBrowserView(IEController controller, TabularBrowserModel model)
-    {
-        super(controller,model,controller.getEditor());
-        setSynchronizeWithSelectionManager(true);
-    }
-    
+	public IETabularBrowserView(IEController controller, TabularBrowserModel model) {
+		super(controller, model, controller.getEditor());
+		setSynchronizeWithSelectionManager(true);
+	}
+
 }

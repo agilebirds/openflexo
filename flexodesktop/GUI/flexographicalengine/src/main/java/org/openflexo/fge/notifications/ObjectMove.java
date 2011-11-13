@@ -23,8 +23,7 @@ import org.openflexo.fge.geom.FGEPoint;
 
 public class ObjectMove extends FGENotification {
 
-	public ObjectMove(FGEPoint oldLocation, FGEPoint newLocation)
-	{
-		super("location",oldLocation,newLocation);
+	public ObjectMove(FGEPoint oldLocation, FGEPoint newLocation) {
+		super("location", oldLocation, newLocation);
 	}
 }

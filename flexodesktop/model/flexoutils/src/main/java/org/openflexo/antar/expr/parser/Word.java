@@ -18,6 +18,7 @@
  *
  */
 package org.openflexo.antar.expr.parser;
+
 /*
  * Created on 4 janv. 2006 by sguerin
  *
@@ -27,28 +28,24 @@ package org.openflexo.antar.expr.parser;
 
 public class Word extends Token {
 
-    private String _value;
-    
-    public Word(String value) 
-    {
-        super();
-        _value = value;
-    }
+	private String _value;
 
-    public String getValue() 
-    {
-        return _value;
-    }
+	public Word(String value) {
+		super();
+		_value = value;
+	}
 
-    @Override
-	public String toString()
-    {
-        return _value;
-    }
-    
-    public String getSerializationValue()
-    {
-        return getValue();
-    }
+	public String getValue() {
+		return _value;
+	}
+
+	@Override
+	public String toString() {
+		return _value;
+	}
+
+	public String getSerializationValue() {
+		return getValue();
+	}
 
 }

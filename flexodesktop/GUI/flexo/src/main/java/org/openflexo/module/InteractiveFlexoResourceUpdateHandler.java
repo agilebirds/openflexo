@@ -67,10 +67,9 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 		options[2] = FlexoLocalization.localizedForKey("ignore");
 		if (options.length == 4)
 			options[3] = FlexoLocalization.localizedForKey("merge_changes");
-		int choice = FlexoController
-				.selectOption(
-						FlexoLocalization.localizedForKey("conflict_detected_on_resource") + " " + (storageResource != null ? storageResource : "") + "\n" + FlexoLocalization
-								.localizedForKey("possible_actions_are"), options, options[2]);
+		int choice = FlexoController.selectOption(FlexoLocalization.localizedForKey("conflict_detected_on_resource") + " "
+				+ (storageResource != null ? storageResource : "") + "\n" + FlexoLocalization.localizedForKey("possible_actions_are"),
+				options, options[2]);
 		switch (choice) {
 		case 0:
 			return OptionWhenStorageResourceFoundAsConflicting.UpdateFromDisk;
@@ -92,10 +91,9 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 		options[0] = FlexoLocalization.localizedForKey("update_from_disk");
 		options[1] = FlexoLocalization.localizedForKey("overwrite_disk_change");
 		options[2] = FlexoLocalization.localizedForKey("ignore");
-		int choice = FlexoController
-				.selectOption(
-						FlexoLocalization.localizedForKey("disk_change_detected_on_resource") + " " + (storageResource != null ? storageResource : "") + "\n" + FlexoLocalization
-								.localizedForKey("possible_actions_are"), options, options[2]);
+		int choice = FlexoController.selectOption(FlexoLocalization.localizedForKey("disk_change_detected_on_resource") + " "
+				+ (storageResource != null ? storageResource : "") + "\n" + FlexoLocalization.localizedForKey("possible_actions_are"),
+				options, options[2]);
 		switch (choice) {
 		case 0:
 			return OptionWhenStorageResourceFoundAsModifiedOnDisk.UpdateFromDisk;
@@ -114,10 +112,9 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 		String[] options = new String[2];
 		options[0] = FlexoLocalization.localizedForKey("update_from_disk");
 		options[1] = FlexoLocalization.localizedForKey("ignore");
-		int choice = FlexoController
-				.selectOption(
-						FlexoLocalization.localizedForKey("disk_change_detected_on_imported_resource") + " " + (importedResource != null ? importedResource : "") + "\n" + FlexoLocalization
-								.localizedForKey("possible_actions_are"), options, options[1]);
+		int choice = FlexoController.selectOption(FlexoLocalization.localizedForKey("disk_change_detected_on_imported_resource") + " "
+				+ (importedResource != null ? importedResource : "") + "\n" + FlexoLocalization.localizedForKey("possible_actions_are"),
+				options, options[1]);
 
 		switch (choice) {
 		case 0:

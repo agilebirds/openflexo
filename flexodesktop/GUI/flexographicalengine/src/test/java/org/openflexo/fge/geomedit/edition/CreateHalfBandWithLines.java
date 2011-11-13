@@ -32,99 +32,84 @@ import org.openflexo.fge.geomedit.HalfBand;
 import org.openflexo.fge.geomedit.construction.HalfBandWithLinesConstruction;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
 
-
-
 public class CreateHalfBandWithLines extends Edition {
-	
-    private static final Logger logger = Logger.getLogger(CreateHalfBandWithLines.class.getPackage().getName());
+
+	private static final Logger logger = Logger.getLogger(CreateHalfBandWithLines.class.getPackage().getName());
 
 	public CreateHalfBandWithLines(GeomEditController controller) {
-		super("Create half-plane with line and point",controller);
-		inputs.add(new ObtainLine("Select first line",controller));
-		inputs.add(new ObtainLine("Select second line",controller));
-		inputs.add(new ObtainLine("Select a line delimiting half-plane",controller));
-		inputs.add(new ObtainPoint("Select point inside half-plane",controller));
+		super("Create half-plane with line and point", controller);
+		inputs.add(new ObtainLine("Select first line", controller));
+		inputs.add(new ObtainLine("Select second line", controller));
+		inputs.add(new ObtainLine("Select a line delimiting half-plane", controller));
+		inputs.add(new ObtainPoint("Select point inside half-plane", controller));
 	}
-	
+
 	@Override
-	public void performEdition()
-	{		
-		ObtainLine l1 = (ObtainLine)inputs.get(0);
-		ObtainLine l2 = (ObtainLine)inputs.get(1);
-		ObtainLine l3 = (ObtainLine)inputs.get(2);
-		ObtainPoint p = (ObtainPoint)inputs.get(3);
-		
-		addObject (new HalfBand(
-					getController().getDrawing().getModel(),
-				new HalfBandWithLinesConstruction(l1.getConstruction(),l2.getConstruction(),l3.getConstruction(),p.getConstruction())));
+	public void performEdition() {
+		ObtainLine l1 = (ObtainLine) inputs.get(0);
+		ObtainLine l2 = (ObtainLine) inputs.get(1);
+		ObtainLine l3 = (ObtainLine) inputs.get(2);
+		ObtainPoint p = (ObtainPoint) inputs.get(3);
+
+		addObject(new HalfBand(getController().getDrawing().getModel(), new HalfBandWithLinesConstruction(l1.getConstruction(),
+				l2.getConstruction(), l3.getConstruction(), p.getConstruction())));
 
 	}
-	
+
 	private FGEArea whatToPaint = null;
 	private boolean requireRepaint = true;
-	
+
 	@Override
-	public void paintEdition(FGEDrawingGraphics graphics,FGEPoint lastMouseLocation)
-	{
+	public void paintEdition(FGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		if (currentStep == 0) {
 			// Nothing to draw
 			return;
-		}
-		else if (currentStep == 1) {
-			FGELine line1 = ((ObtainLine)inputs.get(0)).getInputData();
-			whatToPaint = new FGEHalfPlane(line1,lastMouseLocation);
-		}
-		else if (currentStep == 2) {
-			FGELine line1 = ((ObtainLine)inputs.get(0)).getInputData();
-			FGELine line2 = ((ObtainLine)inputs.get(1)).getInputData();
-			whatToPaint = new FGEBand(line1,line2);
-		}
-		else if (currentStep == 3) {
-			FGELine line1 = ((ObtainLine)inputs.get(0)).getInputData();
-			FGELine line2 = ((ObtainLine)inputs.get(1)).getInputData();
-			FGELine limitLine = ((ObtainLine)inputs.get(2)).getInputData();
-			whatToPaint = new FGEHalfBand(line1,line2,new FGEHalfPlane(limitLine,lastMouseLocation.clone()));
+		} else if (currentStep == 1) {
+			FGELine line1 = ((ObtainLine) inputs.get(0)).getInputData();
+			whatToPaint = new FGEHalfPlane(line1, lastMouseLocation);
+		} else if (currentStep == 2) {
+			FGELine line1 = ((ObtainLine) inputs.get(0)).getInputData();
+			FGELine line2 = ((ObtainLine) inputs.get(1)).getInputData();
+			whatToPaint = new FGEBand(line1, line2);
+		} else if (currentStep == 3) {
+			FGELine line1 = ((ObtainLine) inputs.get(0)).getInputData();
+			FGELine line2 = ((ObtainLine) inputs.get(1)).getInputData();
+			FGELine limitLine = ((ObtainLine) inputs.get(2)).getInputData();
+			whatToPaint = new FGEHalfBand(line1, line2, new FGEHalfPlane(limitLine, lastMouseLocation.clone()));
 		}
 		graphics.setDefaultForeground(focusedForegroundStyle);
 		graphics.setDefaultBackground(focusedBackgroundStyle);
 		whatToPaint.paint(graphics);
 	}
-	
+
 	@Override
-	public boolean requireRepaint(FGEPoint lastMouseLocation)
-	{
+	public boolean requireRepaint(FGEPoint lastMouseLocation) {
 		FGEArea thingToPaint = null;
 		if (currentStep == 0) {
 			// Nothing to draw
 			return false;
-		}
-		else if (currentStep == 1) {
-			FGELine line1 = ((ObtainLine)inputs.get(0)).getInputData();
-			thingToPaint = new FGEHalfPlane(line1,lastMouseLocation);
-		}
-		else if (currentStep == 2) {
-			FGELine line1 = ((ObtainLine)inputs.get(0)).getInputData();
-			FGELine line2 = ((ObtainLine)inputs.get(1)).getInputData();
-			thingToPaint = new FGEBand(line1,line2);
-		}
-		else if (currentStep == 3) {
-			FGELine line1 = ((ObtainLine)inputs.get(0)).getInputData();
-			FGELine line2 = ((ObtainLine)inputs.get(1)).getInputData();
-			FGELine limitLine = ((ObtainLine)inputs.get(2)).getInputData();
-			thingToPaint = new FGEHalfBand(line1,line2,new FGEHalfPlane(limitLine,lastMouseLocation.clone()));
+		} else if (currentStep == 1) {
+			FGELine line1 = ((ObtainLine) inputs.get(0)).getInputData();
+			thingToPaint = new FGEHalfPlane(line1, lastMouseLocation);
+		} else if (currentStep == 2) {
+			FGELine line1 = ((ObtainLine) inputs.get(0)).getInputData();
+			FGELine line2 = ((ObtainLine) inputs.get(1)).getInputData();
+			thingToPaint = new FGEBand(line1, line2);
+		} else if (currentStep == 3) {
+			FGELine line1 = ((ObtainLine) inputs.get(0)).getInputData();
+			FGELine line2 = ((ObtainLine) inputs.get(1)).getInputData();
+			FGELine limitLine = ((ObtainLine) inputs.get(2)).getInputData();
+			thingToPaint = new FGEHalfBand(line1, line2, new FGEHalfPlane(limitLine, lastMouseLocation.clone()));
 		}
 		if (whatToPaint == null || !whatToPaint.equals(thingToPaint)) {
 			whatToPaint = thingToPaint;
 			requireRepaint = true;
-		}
-		else {
+		} else {
 			requireRepaint = false;
 		}
-		
-		//System.out.println("Require repaint = "+requireRepaint+" currentStep="+currentStep+" thingToPaint="+thingToPaint);
-		
+
+		// System.out.println("Require repaint = "+requireRepaint+" currentStep="+currentStep+" thingToPaint="+thingToPaint);
+
 		return requireRepaint;
 	}
 }
-
-

@@ -31,92 +31,81 @@ import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DMProperty;
 import org.openflexo.foundation.dm.ProcessDMEntity;
 
+public class CreateDMProperty extends FlexoAction<CreateDMProperty, DMEntity, DMObject> {
 
-public class CreateDMProperty extends FlexoAction<CreateDMProperty,DMEntity,DMObject> 
-{
+	private static final Logger logger = Logger.getLogger(CreateDMProperty.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(CreateDMProperty.class.getPackage().getName());
+	public static FlexoActionType<CreateDMProperty, DMEntity, DMObject> actionType = new FlexoActionType<CreateDMProperty, DMEntity, DMObject>(
+			"add_property", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
-    public static FlexoActionType<CreateDMProperty,DMEntity,DMObject> actionType = new FlexoActionType<CreateDMProperty,DMEntity,DMObject>  ("add_property",FlexoActionType.newMenu,FlexoActionType.defaultGroup,FlexoActionType.ADD_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public CreateDMProperty makeNewAction(DMEntity focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
+			return new CreateDMProperty(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public CreateDMProperty makeNewAction(DMEntity focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) 
-        {
-            return new CreateDMProperty(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(DMEntity object, Vector<DMObject> globalSelection) {
+			return true;
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(DMEntity object, Vector<DMObject> globalSelection) 
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(DMEntity object, Vector<DMObject> globalSelection) {
+			return ((object != null) && (!object.getIsReadOnly()) && !(object instanceof ProcessDMEntity));
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(DMEntity object, Vector<DMObject> globalSelection) 
-        {
-            return ((object != null) 
-                    && (!object.getIsReadOnly()) && !(object instanceof ProcessDMEntity));
-        }
-                
-    };
-    
-    private DMEntity _entity;
-    private String _newPropertyName;
-    private DMProperty _newProperty;
-    private boolean _newPropertyIsBindable = false;
-    
-    CreateDMProperty (DMEntity focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	};
 
-   @Override
-protected void doAction(Object context) 
-    {
-      logger.info ("CreateDMProperty");
-      if (getEntity() != null) {
-    	  if(_newPropertyName==null)
-    		  _newPropertyName = getEntity().getDMModel().getNextDefautPropertyName(getEntity());
-          _newProperty = new DMProperty(getEntity().getDMModel(), /*getEntity(),*/ _newPropertyName, null, DMCardinality.SINGLE,
-                  getEntity().getIsReadOnly(), true, getEntity().getPropertyDefaultImplementationType());
-          getEntity().registerProperty(_newProperty,_newPropertyIsBindable);
-      }
-    }
+	private DMEntity _entity;
+	private String _newPropertyName;
+	private DMProperty _newProperty;
+	private boolean _newPropertyIsBindable = false;
 
-   public String getNewPropertyName()
-   {
-       return _newPropertyName;
-   }
-   
-   public void setNewPropertyName(String value)
-   {
-       _newPropertyName = value;
-   }
-   
-   public DMEntity getEntity()
-   {
-       if (_entity == null) {
-           if (getFocusedObject() != null) {
-               _entity = getFocusedObject();
-            }           
-       }
-       return _entity;
-   }
+	CreateDMProperty(DMEntity focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-   public DMProperty getNewProperty()
-   {
-       return _newProperty;
-   }
-   
-   public void setIsBindable(boolean v){
-	   _newPropertyIsBindable = v;
-   }
-   
-   public boolean getIsBindable(){
-	   return _newPropertyIsBindable;
-   }
+	@Override
+	protected void doAction(Object context) {
+		logger.info("CreateDMProperty");
+		if (getEntity() != null) {
+			if (_newPropertyName == null)
+				_newPropertyName = getEntity().getDMModel().getNextDefautPropertyName(getEntity());
+			_newProperty = new DMProperty(getEntity().getDMModel(), /*getEntity(),*/_newPropertyName, null, DMCardinality.SINGLE,
+					getEntity().getIsReadOnly(), true, getEntity().getPropertyDefaultImplementationType());
+			getEntity().registerProperty(_newProperty, _newPropertyIsBindable);
+		}
+	}
+
+	public String getNewPropertyName() {
+		return _newPropertyName;
+	}
+
+	public void setNewPropertyName(String value) {
+		_newPropertyName = value;
+	}
+
+	public DMEntity getEntity() {
+		if (_entity == null) {
+			if (getFocusedObject() != null) {
+				_entity = getFocusedObject();
+			}
+		}
+		return _entity;
+	}
+
+	public DMProperty getNewProperty() {
+		return _newProperty;
+	}
+
+	public void setIsBindable(boolean v) {
+		_newPropertyIsBindable = v;
+	}
+
+	public boolean getIsBindable() {
+		return _newPropertyIsBindable;
+	}
 
 }

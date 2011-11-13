@@ -21,11 +21,8 @@ package org.openflexo.foundation.ontology.dm;
 
 import org.openflexo.foundation.ontology.OntologyIndividual;
 
-
-public class OntologyIndividualRemoved extends OEDataModification
-{
-    public OntologyIndividualRemoved(OntologyIndividual individual)
-    {
-        super(individual,null);
-     }
+public class OntologyIndividualRemoved extends OEDataModification {
+	public OntologyIndividualRemoved(OntologyIndividual individual) {
+		super(individual, null);
+	}
 }

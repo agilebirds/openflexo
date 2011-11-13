@@ -25,25 +25,21 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.dm.DMProperty;
 import org.openflexo.foundation.dm.eo.DMEOProperty;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public abstract class DMEOPropertyElement extends DMPropertyElement
-{
+public abstract class DMEOPropertyElement extends DMPropertyElement {
 
-    public DMEOPropertyElement(DMEOProperty property, BrowserElementType elementType, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(property, elementType, browser,parent);
-    }
+	public DMEOPropertyElement(DMEOProperty property, BrowserElementType elementType, ProjectBrowser browser, BrowserElement parent) {
+		super(property, elementType, browser, parent);
+	}
 
-    @Override
-	protected DMProperty getDMProperty()
-    {
-        return (DMProperty) getObject();
-    }
+	@Override
+	protected DMProperty getDMProperty() {
+		return (DMProperty) getObject();
+	}
 
 }

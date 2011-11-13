@@ -30,7 +30,6 @@ import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DuplicateMethodSignatureException;
 import org.openflexo.foundation.dm.DMMethod.DMMethodParameter;
 
-
 public class DuplicateDMMethod extends FlexoAction<DuplicateDMMethod, DMMethod, DMObject> {
 
 	private static final Logger logger = Logger.getLogger(DuplicateDMMethod.class.getPackage().getName());

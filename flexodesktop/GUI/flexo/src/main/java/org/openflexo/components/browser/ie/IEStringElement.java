@@ -24,41 +24,34 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.ie.widget.IEStringWidget;
 
-
 /**
- * @author bmangez
- * <B>Class Description</B>
+ * @author bmangez <B>Class Description</B>
  */
-public class IEStringElement extends IEElement
-{
+public class IEStringElement extends IEElement {
 
-    /**
-     * @param widget
-     * @param browser
-     */
-    public IEStringElement(IEStringWidget widget, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(widget, BrowserElementType.STRING, browser,parent);
-    }
+	/**
+	 * @param widget
+	 * @param browser
+	 */
+	public IEStringElement(IEStringWidget widget, ProjectBrowser browser, BrowserElement parent) {
+		super(widget, BrowserElementType.STRING, browser, parent);
+	}
 
-    @Override
-	protected void buildChildrenVector()
-    {
-        //no childs
-    }
+	@Override
+	protected void buildChildrenVector() {
+		// no childs
+	}
 
-    @Override
-	public String getName()
-    {
-        if (getString().getValue() == null) {
-            return "String";
-        }
-        return getString().getValue().length()>9?getString().getValue().substring(0,6)+"...":getString().getValue();
-    }
+	@Override
+	public String getName() {
+		if (getString().getValue() == null) {
+			return "String";
+		}
+		return getString().getValue().length() > 9 ? getString().getValue().substring(0, 6) + "..." : getString().getValue();
+	}
 
-    protected IEStringWidget getString()
-    {
-        return (IEStringWidget) getObject();
-    }
+	protected IEStringWidget getString() {
+		return (IEStringWidget) getObject();
+	}
 
 }

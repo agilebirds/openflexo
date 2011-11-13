@@ -21,17 +21,14 @@ package org.openflexo.fge.notifications;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 
-
 public class ConnectorModified extends FGENotification {
 
-	public ConnectorModified()
-	{
-		super(ConnectorGraphicalRepresentation.Parameters.connector,null,null);
+	public ConnectorModified() {
+		super(ConnectorGraphicalRepresentation.Parameters.connector, null, null);
 	}
-	
+
 	@Override
-	public boolean isModelNotification()
-	{
+	public boolean isModelNotification() {
 		return false;
 	}
 }

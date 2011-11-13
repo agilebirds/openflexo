@@ -21,7 +21,6 @@ package org.openflexo.dg.rm;
 
 import java.util.logging.Logger;
 
-
 import org.openflexo.dg.latex.DGLatexGenerator;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -30,52 +29,46 @@ import org.openflexo.logging.FlexoLogger;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class DefinitionsLatexFileResource extends LatexFileResource<DGLatexGenerator<FlexoProject>> implements FlexoObserver
-{
-    protected static final Logger logger = FlexoLogger.getLogger(DefinitionsLatexFileResource.class.getPackage().getName());
+public class DefinitionsLatexFileResource extends LatexFileResource<DGLatexGenerator<FlexoProject>> implements FlexoObserver {
+	protected static final Logger logger = FlexoLogger.getLogger(DefinitionsLatexFileResource.class.getPackage().getName());
 
-    /**
-     * @param builder
-     */
-    public DefinitionsLatexFileResource(FlexoProjectBuilder builder)
-    {
-        super(builder);
-    }
+	/**
+	 * @param builder
+	 */
+	public DefinitionsLatexFileResource(FlexoProjectBuilder builder) {
+		super(builder);
+	}
 
-    /**
-     * @param aProject
-     */
-    public DefinitionsLatexFileResource(FlexoProject aProject)
-    {
-    	super(aProject);
-    }
+	/**
+	 * @param aProject
+	 */
+	public DefinitionsLatexFileResource(FlexoProject aProject) {
+		super(aProject);
+	}
 
-    @Override
-	public String getName()
-    {
-        if (getCGFile()==null || getCGFile().getRepository()==null || getIdentifier()==null)
-            return super.getName();
-        if (super.getName()==null)
-    		setName(nameForRepositoryAndIdentifier(getCGFile().getRepository(), getIdentifier()));
-        return nameForRepositoryAndIdentifier(getCGFile().getRepository(), getIdentifier());
-    }
+	@Override
+	public String getName() {
+		if (getCGFile() == null || getCGFile().getRepository() == null || getIdentifier() == null)
+			return super.getName();
+		if (super.getName() == null)
+			setName(nameForRepositoryAndIdentifier(getCGFile().getRepository(), getIdentifier()));
+		return nameForRepositoryAndIdentifier(getCGFile().getRepository(), getIdentifier());
+	}
 
-    @Override
-	protected LatexFile createGeneratedResourceData()
-    {
-        return new LatexFile(getFile(),this);
-    }
+	@Override
+	protected LatexFile createGeneratedResourceData() {
+		return new LatexFile(getFile(), this);
+	}
 
-    /**
-     * Rebuild resource dependancies for this resource
-     */
-    @Override
-	public void rebuildDependancies()
-    {
-        super.rebuildDependancies();
-        addToDependantResources(getProject().getTOCResource());
-    }
+	/**
+	 * Rebuild resource dependancies for this resource
+	 */
+	@Override
+	public void rebuildDependancies() {
+		super.rebuildDependancies();
+		addToDependantResources(getProject().getTOCResource());
+	}
 
 }

@@ -31,7 +31,6 @@ import org.openflexo.foundation.wkf.LevelledObject;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.inspector.InspectableObject;
 
-
 /**
  * dynamic ServiceOperation that maps exactly on a port.
  * 
@@ -63,8 +62,8 @@ public class DefaultServiceOperation extends ServiceOperation implements Inspect
 	public ServiceMessageDefinition getInputMessageDefinition() {
 		if (isInOperation() || isInOutOperation()) {
 			if (_inputMessageDefinition == null) {
-				_inputMessageDefinition = new DefaultServiceMessageDefinition(getProcess(), this, ((AbstractInPort) getPort())
-						.getInputMessageDefinition());
+				_inputMessageDefinition = new DefaultServiceMessageDefinition(getProcess(), this,
+						((AbstractInPort) getPort()).getInputMessageDefinition());
 			}
 			return _inputMessageDefinition;
 		}
@@ -82,8 +81,8 @@ public class DefaultServiceOperation extends ServiceOperation implements Inspect
 	public ServiceMessageDefinition getOutputMessageDefinition() {
 		if (isOutOperation() || isInOutOperation()) {
 			if (_outputMessageDefinition == null) {
-				_outputMessageDefinition = new DefaultServiceMessageDefinition(getProcess(), this, ((OutputPort) getPort())
-						.getOutputMessageDefinition());
+				_outputMessageDefinition = new DefaultServiceMessageDefinition(getProcess(), this,
+						((OutputPort) getPort()).getOutputMessageDefinition());
 			}
 			return _outputMessageDefinition;
 		}
@@ -139,8 +138,7 @@ public class DefaultServiceOperation extends ServiceOperation implements Inspect
 	}
 
 	/**
-	 * Build and return a vector of all the objects that will be deleted during
-	 * this deletion
+	 * Build and return a vector of all the objects that will be deleted during this deletion
 	 * 
 	 * @param aVector
 	 *            of DeletableObject

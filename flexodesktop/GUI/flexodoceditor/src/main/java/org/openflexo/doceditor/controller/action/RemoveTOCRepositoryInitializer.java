@@ -34,36 +34,31 @@ public class RemoveTOCRepositoryInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	RemoveTOCRepositoryInitializer(DEControllerActionInitializer actionInitializer)
-	{
-		super(RemoveTOCRepository.actionType,actionInitializer);
+	RemoveTOCRepositoryInitializer(DEControllerActionInitializer actionInitializer) {
+		super(RemoveTOCRepository.actionType, actionInitializer);
 	}
 
 	@Override
-	protected DEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (DEControllerActionInitializer)super.getControllerActionInitializer();
+	protected DEControllerActionInitializer getControllerActionInitializer() {
+		return (DEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<RemoveTOCRepository> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<RemoveTOCRepository> getDefaultInitializer() {
 		return new FlexoActionInitializer<RemoveTOCRepository>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveTOCRepository action)
-			{
-				return FlexoController.confirm(FlexoLocalization.localizedForKey("are_you_sure_you_want_to_remove_this_table_of_content")+" "+action.getFocusedObject().getTitle());
+			public boolean run(ActionEvent e, RemoveTOCRepository action) {
+				return FlexoController.confirm(FlexoLocalization.localizedForKey("are_you_sure_you_want_to_remove_this_table_of_content")
+						+ " " + action.getFocusedObject().getTitle());
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<RemoveTOCRepository> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<RemoveTOCRepository> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RemoveTOCRepository>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveTOCRepository action)
-			{
+			public boolean run(ActionEvent e, RemoveTOCRepository action) {
 				return true;
 			}
 		};

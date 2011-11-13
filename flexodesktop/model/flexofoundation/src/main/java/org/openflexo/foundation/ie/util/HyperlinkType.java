@@ -29,81 +29,71 @@ import org.openflexo.xmlcode.StringEncoder.Converter;
  * @author sguerin
  * 
  */
-public enum HyperlinkType implements StringConvertable
-{
+public enum HyperlinkType implements StringConvertable {
 
-	FLEXOACTION("FlexoAction"),
-	DISPLAYACTION("DisplayAction"),
-	CANCEL("Cancel"),
-	SEARCH("Search"),
-	URL("URL"),
-	MAILTO("Mail-to"),
-	CONFIRM("Confirm"),
-	IMAGE("Image"),
-	CLIENTSIDESCRIPT("ClientSideScript"),
-	HELP("HELP"),
-	PRINT("PRINT");
-	
-	
+	FLEXOACTION("FlexoAction"), DISPLAYACTION("DisplayAction"), CANCEL("Cancel"), SEARCH("Search"), URL("URL"), MAILTO("Mail-to"), CONFIRM(
+			"Confirm"), IMAGE("Image"), CLIENTSIDESCRIPT("ClientSideScript"), HELP("HELP"), PRINT("PRINT");
+
 	private final String serializationRepresentation;
 
 	public String getSerializationRepresentation() {
 		return serializationRepresentation;
 	}
-	
-	HyperlinkType(String serializationRepresentation){
+
+	HyperlinkType(String serializationRepresentation) {
 		this.serializationRepresentation = serializationRepresentation;
 	}
-	
+
 	@Override
 	public Converter getConverter() {
 		return hyperlinkTypeConverter;
 	}
-	
+
 	public boolean isFlexoAction() {
-		return this==FLEXOACTION;
+		return this == FLEXOACTION;
 	}
-	
+
 	public boolean isDisplayAction() {
-		return this==DISPLAYACTION;
+		return this == DISPLAYACTION;
 	}
-	
+
 	public boolean isCancel() {
-		return this==CANCEL;
+		return this == CANCEL;
 	}
-	
+
 	public boolean isSearch() {
-		return this==SEARCH;
+		return this == SEARCH;
 	}
-	
+
 	public boolean isURL() {
-		return this==URL;
+		return this == URL;
 	}
-	
+
 	public boolean isMailto() {
-		return this==MAILTO;
+		return this == MAILTO;
 	}
-	
+
 	public boolean isConfirm() {
-		return this==CONFIRM;
+		return this == CONFIRM;
 	}
-	
+
 	public boolean isClientSideScript() {
-		return this==CLIENTSIDESCRIPT;
+		return this == CLIENTSIDESCRIPT;
 	}
-	
+
 	public boolean isImage() {
-		return this==IMAGE;
+		return this == IMAGE;
 	}
-	
+
 	public boolean isHelp() {
-		return this==HELP;
+		return this == HELP;
 	}
-	
+
 	public boolean isPrint() {
-		return this==PRINT;
+		return this == PRINT;
 	}
-	
-	public static final StringEncoder.EnumerationConverter<HyperlinkType> hyperlinkTypeConverter = new StringEncoder.EnumerationConverter<HyperlinkType>(HyperlinkType.class,"getSerializationRepresentation");
+
+	public static final StringEncoder.EnumerationConverter<HyperlinkType> hyperlinkTypeConverter = new StringEncoder.EnumerationConverter<HyperlinkType>(
+			HyperlinkType.class, "getSerializationRepresentation");
 
 }

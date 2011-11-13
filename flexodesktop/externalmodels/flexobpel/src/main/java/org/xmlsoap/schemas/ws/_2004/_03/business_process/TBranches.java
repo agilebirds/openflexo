@@ -23,7 +23,6 @@
 // Generated on: 2007.11.06 at 03:26:51 PM CET 
 //
 
-
 package org.xmlsoap.schemas.ws._2004._03.business_process;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -31,11 +30,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for tBranches complex type.
+ * <p>
+ * Java class for tBranches complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="tBranches">
@@ -51,39 +51,34 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tBranches")
-public class TBranches
-    extends TExpression
-{
+public class TBranches extends TExpression {
 
-    @XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
-    protected TBoolean successfulBranchesOnly;
+	@XmlAttribute(namespace = "http://schemas.xmlsoap.org/ws/2004/03/business-process/")
+	protected TBoolean successfulBranchesOnly;
 
-    /**
-     * Gets the value of the successfulBranchesOnly property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TBoolean }
-     *     
-     */
-    public TBoolean getSuccessfulBranchesOnly() {
-        if (successfulBranchesOnly == null) {
-            return TBoolean.NO;
-        } else {
-            return successfulBranchesOnly;
-        }
-    }
+	/**
+	 * Gets the value of the successfulBranchesOnly property.
+	 * 
+	 * @return possible object is {@link TBoolean }
+	 * 
+	 */
+	public TBoolean getSuccessfulBranchesOnly() {
+		if (successfulBranchesOnly == null) {
+			return TBoolean.NO;
+		} else {
+			return successfulBranchesOnly;
+		}
+	}
 
-    /**
-     * Sets the value of the successfulBranchesOnly property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TBoolean }
-     *     
-     */
-    public void setSuccessfulBranchesOnly(TBoolean value) {
-        this.successfulBranchesOnly = value;
-    }
+	/**
+	 * Sets the value of the successfulBranchesOnly property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link TBoolean }
+	 * 
+	 */
+	public void setSuccessfulBranchesOnly(TBoolean value) {
+		this.successfulBranchesOnly = value;
+	}
 
 }

@@ -38,7 +38,8 @@ public class ImplementationModelView extends FIBModuleView<ImplementationModel> 
 
 	private FlexoPerspective<? super ImplementationModel> declaredPerspective;
 
-	public ImplementationModelView(ImplementationModel implementationModel, SGController controller, FlexoPerspective<? super ImplementationModel> perspective) {
+	public ImplementationModelView(ImplementationModel implementationModel, SGController controller,
+			FlexoPerspective<? super ImplementationModel> perspective) {
 		super(implementationModel, controller, SGCst.IMPLEMENTATION_MODEL_VIEW_FIB, true);
 		declaredPerspective = perspective;
 	}

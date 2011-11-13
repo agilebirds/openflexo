@@ -32,58 +32,46 @@ import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 
-
-public class DeleteEditionPattern extends FlexoAction<DeleteEditionPattern,EditionPattern,ViewPointObject> 
-{
+public class DeleteEditionPattern extends FlexoAction<DeleteEditionPattern, EditionPattern, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(DeleteEditionPattern.class.getPackage().getName());
 
-	public static FlexoActionType<DeleteEditionPattern,EditionPattern,ViewPointObject> actionType 
-	= new FlexoActionType<DeleteEditionPattern,EditionPattern,ViewPointObject> (
-			"delete_edition_pattern",
-			FlexoActionType.editGroup,
-			FlexoActionType.DELETE_ACTION_TYPE) {
+	public static FlexoActionType<DeleteEditionPattern, EditionPattern, ViewPointObject> actionType = new FlexoActionType<DeleteEditionPattern, EditionPattern, ViewPointObject>(
+			"delete_edition_pattern", FlexoActionType.editGroup, FlexoActionType.DELETE_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public DeleteEditionPattern makeNewAction(EditionPattern focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) 
-		{
+		public DeleteEditionPattern makeNewAction(EditionPattern focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 			return new DeleteEditionPattern(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(EditionPattern object, Vector<ViewPointObject> globalSelection) 
-		{
+		protected boolean isVisibleForSelection(EditionPattern object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(EditionPattern object, Vector<ViewPointObject> globalSelection) 
-		{
+		protected boolean isEnabledForSelection(EditionPattern object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass (DeleteEditionPattern.actionType, EditionPattern.class);
+		FlexoModelObject.addActionForClass(DeleteEditionPattern.actionType, EditionPattern.class);
 	}
 
-
-	DeleteEditionPattern (EditionPattern focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor)
-	{
+	DeleteEditionPattern(EditionPattern focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	@Override
-	protected void doAction(Object context) throws DuplicateResourceException,NotImplementedException,InvalidParameterException
-	{
-		logger.info ("Delete edition pattern");  	
+	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
+		logger.info("Delete edition pattern");
 
 		getFocusedObject().delete();
 	}
-
 
 }

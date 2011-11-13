@@ -27,49 +27,44 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
 import org.openflexo.generator.cg.CGWOFile;
 
-
 /**
  * @author gpolet
- *
+ * 
  */
-public class GoToCorrespondingJava extends FlexoGUIAction<GoToCorrespondingJava, CGWOFile, CGWOFile>
-{
+public class GoToCorrespondingJava extends FlexoGUIAction<GoToCorrespondingJava, CGWOFile, CGWOFile> {
 
-    public static FlexoActionType<GoToCorrespondingJava, CGWOFile, CGWOFile> actionType = new FlexoActionType<GoToCorrespondingJava, CGWOFile, CGWOFile>("go_to_corresponding_java",GCAction.SHOW_GROUP,FlexoActionType.NORMAL_ACTION_TYPE) {
+	public static FlexoActionType<GoToCorrespondingJava, CGWOFile, CGWOFile> actionType = new FlexoActionType<GoToCorrespondingJava, CGWOFile, CGWOFile>(
+			"go_to_corresponding_java", GCAction.SHOW_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-        @Override
-        protected boolean isEnabledForSelection(CGWOFile object, Vector<CGWOFile> globalSelection)
-        {
-            return true;
-        }
+		@Override
+		protected boolean isEnabledForSelection(CGWOFile object, Vector<CGWOFile> globalSelection) {
+			return true;
+		}
 
-        @Override
-        protected boolean isVisibleForSelection(CGWOFile object, Vector<CGWOFile> globalSelection)
-        {
-            return true;
-        }
+		@Override
+		protected boolean isVisibleForSelection(CGWOFile object, Vector<CGWOFile> globalSelection) {
+			return true;
+		}
 
-        @Override
-        public GoToCorrespondingJava makeNewAction(CGWOFile focusedObject, Vector<CGWOFile> globalSelection, FlexoEditor editor)
-        {
-            return new GoToCorrespondingJava(focusedObject,globalSelection,editor);
-        }
-        
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass(GoToCorrespondingJava.actionType, CGWOFile.class);
-    }
-    
-    /**
-     * @param actionType
-     * @param focusedObject
-     * @param globalSelection
-     * @param editor
-     */
-    protected GoToCorrespondingJava(CGWOFile focusedObject, Vector<CGWOFile> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+		@Override
+		public GoToCorrespondingJava makeNewAction(CGWOFile focusedObject, Vector<CGWOFile> globalSelection, FlexoEditor editor) {
+			return new GoToCorrespondingJava(focusedObject, globalSelection, editor);
+		}
+
+	};
+
+	static {
+		FlexoModelObject.addActionForClass(GoToCorrespondingJava.actionType, CGWOFile.class);
+	}
+
+	/**
+	 * @param actionType
+	 * @param focusedObject
+	 * @param globalSelection
+	 * @param editor
+	 */
+	protected GoToCorrespondingJava(CGWOFile focusedObject, Vector<CGWOFile> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
 }

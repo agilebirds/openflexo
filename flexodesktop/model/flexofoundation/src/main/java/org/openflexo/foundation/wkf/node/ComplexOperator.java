@@ -29,8 +29,7 @@ public class ComplexOperator extends CommonOutputOperatorNode {
 	/**
 	 * Constructor used during deserialization
 	 */
-	public ComplexOperator(FlexoProcessBuilder builder)
-	{
+	public ComplexOperator(FlexoProcessBuilder builder) {
 		this(builder.process);
 		initializeDeserialization(builder);
 	}
@@ -38,14 +37,12 @@ public class ComplexOperator extends CommonOutputOperatorNode {
 	/**
 	 * Default constructor
 	 */
-	public ComplexOperator(FlexoProcess process)
-	{
+	public ComplexOperator(FlexoProcess process) {
 		super(process);
 	}
 
 	@Override
-	public String getInspectorName()
-	{
+	public String getInspectorName() {
 		return Inspectors.WKF.OPERATOR_COMPLEX_INSPECTOR;
 	}
 

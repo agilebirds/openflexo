@@ -31,48 +31,42 @@ import org.openflexo.foundation.cg.templates.CGTemplateSet;
 import org.openflexo.foundation.cg.templates.TargetSpecificCGTemplateSet;
 import org.openflexo.icon.DGIconLibrary;
 
+public class DGTemplateSetElement extends BrowserElement {
 
-public class DGTemplateSetElement extends BrowserElement
-{
+	public DGTemplateSetElement(CGTemplateSet templateSet, ProjectBrowser browser, BrowserElement parent) {
+		super(templateSet, BrowserElementType.TEMPLATE_SET, browser, parent);
+	}
 
-    public DGTemplateSetElement(CGTemplateSet templateSet, ProjectBrowser browser, BrowserElement parent)
-    {
-        super(templateSet, BrowserElementType.TEMPLATE_SET, browser, parent);
-    }
+	@Override
+	public String getName() {
+		if (getCGTemplateSet() instanceof TargetSpecificCGTemplateSet) {
+			return ((TargetSpecificCGTemplateSet) getCGTemplateSet()).getTargetType().getTemplateFolderName();
+		}
+		return "???";
+	}
 
-    @Override
-	public String getName()
-    {
-    	if (getCGTemplateSet() instanceof TargetSpecificCGTemplateSet) {
-     		return ((TargetSpecificCGTemplateSet)getCGTemplateSet()).getTargetType().getTemplateFolderName();
-    	}
-    	return "???";
-    }
-
-    @Override
-	protected void buildChildrenVector()
-    {
+	@Override
+	protected void buildChildrenVector() {
 		for (Enumeration<CGTemplate> e = getCGTemplateSet().getSortedTemplates(); e.hasMoreElements();) {
-    		addToChilds(e.nextElement());
-    	}
-    }
+			addToChilds(e.nextElement());
+		}
+	}
 
-    protected CGTemplateSet getCGTemplateSet()
-    {
-        return (CGTemplateSet) getObject();
-    }
+	protected CGTemplateSet getCGTemplateSet() {
+		return (CGTemplateSet) getObject();
+	}
 
-    /**
-     * Overrides getIcon
-     * @see org.openflexo.components.browser.BrowserElement#getIcon()
-     */
-    @Override
-    public Icon getIcon()
-    {
-        if (getCGTemplateSet() instanceof TargetSpecificCGTemplateSet) {
+	/**
+	 * Overrides getIcon
+	 * 
+	 * @see org.openflexo.components.browser.BrowserElement#getIcon()
+	 */
+	@Override
+	public Icon getIcon() {
+		if (getCGTemplateSet() instanceof TargetSpecificCGTemplateSet) {
 			return DGIconLibrary.TARGET_FOLDER_ICON;
 		}
-        return super.getIcon();
-    }
+		return super.getIcon();
+	}
 
- }
+}

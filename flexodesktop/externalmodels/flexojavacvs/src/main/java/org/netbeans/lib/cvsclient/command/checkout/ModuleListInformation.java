@@ -25,61 +25,61 @@ import java.io.File;
 import org.netbeans.lib.cvsclient.command.FileInfoContainer;
 
 /**
- * Object containing information about various modules defined in the repository.
- * Is parsed from the output of cvs checkout -c and cvs checkout -s.
-
- * @author   Milos Kleint
+ * Object containing information about various modules defined in the repository. Is parsed from the output of cvs checkout -c and cvs
+ * checkout -s.
+ * 
+ * @author Milos Kleint
  */
 public class ModuleListInformation extends FileInfoContainer {
 
-    private String moduleName;
+	private String moduleName;
 
-    private String moduleStatus;
+	private String moduleStatus;
 
-    private final StringBuffer paths = new StringBuffer();
+	private final StringBuffer paths = new StringBuffer();
 
-    private String type;
+	private String type;
 
-    public ModuleListInformation() {
-     }
+	public ModuleListInformation() {
+	}
 
-    public String getModuleName() {
-        return moduleName;
-    }
+	public String getModuleName() {
+		return moduleName;
+	}
 
-    public void setModuleName(String moduleName) {
-        this.moduleName = moduleName;
-    }
+	public void setModuleName(String moduleName) {
+		this.moduleName = moduleName;
+	}
 
-    public String getModuleStatus() {
-        return moduleStatus;
-    }
+	public String getModuleStatus() {
+		return moduleStatus;
+	}
 
-    public void setModuleStatus(String moduleStatus) {
-        this.moduleStatus = moduleStatus;
-    }
+	public void setModuleStatus(String moduleStatus) {
+		this.moduleStatus = moduleStatus;
+	}
 
-    public String getPaths() {
-        return paths.toString();
-    }
+	public String getPaths() {
+		return paths.toString();
+	}
 
-    public void addPath(String path) {
-        if (paths.length() > 0) {
-            paths.append(' ');
-        }
-        paths.append(path);
-    }
+	public void addPath(String path) {
+		if (paths.length() > 0) {
+			paths.append(' ');
+		}
+		paths.append(path);
+	}
 
-    @Override
+	@Override
 	public File getFile() {
-        return null;
-    }
+		return null;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public void setType(String type) {
-        this.type = type;
-    }
+	public void setType(String type) {
+		this.type = type;
+	}
 }

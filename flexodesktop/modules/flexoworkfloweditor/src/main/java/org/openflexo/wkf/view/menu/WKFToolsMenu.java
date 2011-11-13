@@ -34,113 +34,94 @@ import org.openflexo.view.menu.FlexoMenuItem;
 import org.openflexo.view.menu.ToolsMenu;
 import org.openflexo.wkf.controller.WKFController;
 
-
 /**
  * 'Tools' menu for WKF Module
  * 
  * @author sguerin
  */
-public class WKFToolsMenu extends ToolsMenu
-{
+public class WKFToolsMenu extends ToolsMenu {
 
-    private static final Logger logger = Logger.getLogger(WKFToolsMenu.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(WKFToolsMenu.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance Variables
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Instance Variables
+	// =========================
+	// ==========================================================================
 
-    public FlexoMenuItem checkWorkflowConsistencyItem;
+	public FlexoMenuItem checkWorkflowConsistencyItem;
 
-    public FlexoMenuItem checkProcessConsistencyItem;
+	public FlexoMenuItem checkProcessConsistencyItem;
 
-    protected WKFController _wkfController;
+	protected WKFController _wkfController;
 
-    // ==========================================================================
-    // ============================= Constructor
-    // ================================
-    // ==========================================================================
+	// ==========================================================================
+	// ============================= Constructor
+	// ================================
+	// ==========================================================================
 
-    public WKFToolsMenu(WKFController controller)
-    {
-        super(controller);
-        _wkfController = controller;
-      }
+	public WKFToolsMenu(WKFController controller) {
+		super(controller);
+		_wkfController = controller;
+	}
 
-    public WKFController getWKFController()
-    {
-        return _wkfController;
-    }
+	public WKFController getWKFController() {
+		return _wkfController;
+	}
 
+	@Override
+	public void addSpecificItems() {
+		add(checkWorkflowConsistencyItem = new CheckWorkflowConsistencyItem());
+		add(checkProcessConsistencyItem = new CheckProcessConsistencyItem());
+		addSeparator();
+	}
 
-    @Override
-	public void addSpecificItems()
-    {
-        add(checkWorkflowConsistencyItem = new CheckWorkflowConsistencyItem());
-        add(checkProcessConsistencyItem = new CheckProcessConsistencyItem());
-        addSeparator();
-    }
-    
+	// ==========================================================================
+	// ======================= CheckWorkflowConsistency
+	// =========================
+	// ==========================================================================
 
-    // ==========================================================================
-    // ======================= CheckWorkflowConsistency
-    // =========================
-    // ==========================================================================
+	public class CheckWorkflowConsistencyItem extends FlexoMenuItem {
 
-    public class CheckWorkflowConsistencyItem extends FlexoMenuItem
-    {
+		public CheckWorkflowConsistencyItem() {
+			super(new CheckWorkflowConsistencyAction(), "check_workflow_consistency", null, getWKFController(), true);
+		}
 
-        public CheckWorkflowConsistencyItem()
-        {
-            super(new CheckWorkflowConsistencyAction(), "check_workflow_consistency", null, getWKFController(), true);
-        }
+	}
 
-    }
+	public class CheckWorkflowConsistencyAction extends AbstractAction {
+		public CheckWorkflowConsistencyAction() {
+			super();
+		}
 
-    public class CheckWorkflowConsistencyAction extends AbstractAction
-    {
-        public CheckWorkflowConsistencyAction()
-        {
-            super();
-        }
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			getWKFController().consistencyCheck(getWKFController().getProject().getFlexoWorkflow());
+		}
 
-        @Override
-		public void actionPerformed(ActionEvent arg0)
-        {
-            getWKFController().consistencyCheck(getWKFController().getProject().getFlexoWorkflow());
-        }
+	}
 
-    }
+	// ==========================================================================
+	// ======================= CheckProcessConsistency =========================
+	// ==========================================================================
 
-    // ==========================================================================
-    // ======================= CheckProcessConsistency =========================
-    // ==========================================================================
+	public class CheckProcessConsistencyItem extends FlexoMenuItem {
 
-    public class CheckProcessConsistencyItem extends FlexoMenuItem
-    {
+		public CheckProcessConsistencyItem() {
+			super(new CheckProcessConsistencyAction(), "check_process_consistency", null, getWKFController(), true);
+		}
 
-        public CheckProcessConsistencyItem()
-        {
-            super(new CheckProcessConsistencyAction(), "check_process_consistency", null, getWKFController(), true);
-        }
+	}
 
-    }
+	public class CheckProcessConsistencyAction extends AbstractAction {
+		public CheckProcessConsistencyAction() {
+			super();
+		}
 
-    public class CheckProcessConsistencyAction extends AbstractAction
-    {
-        public CheckProcessConsistencyAction()
-        {
-            super();
-        }
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			getWKFController().consistencyCheck(getWKFController().getCurrentFlexoProcess());
+		}
 
-        @Override
-		public void actionPerformed(ActionEvent arg0)
-        {
-            getWKFController().consistencyCheck(getWKFController().getCurrentFlexoProcess());
-        }
-
-    }
-
- 
+	}
 
 }

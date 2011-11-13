@@ -22,11 +22,11 @@ package org.openflexo.module;
 public class ModuleLoadingException extends Exception {
 
 	private Module module;
-	
+
 	public ModuleLoadingException(Module module) {
 		this.module = module;
 	}
-	
+
 	public Module getModule() {
 		return module;
 	}

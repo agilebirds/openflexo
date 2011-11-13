@@ -25,25 +25,20 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.cg.GeneratedOutput;
 import org.openflexo.foundation.cg.GenerationRepository;
 
-
-public class GeneratedCodeElement extends GCBrowserElement
-{
-	public GeneratedCodeElement(GeneratedOutput generatedCode, ProjectBrowser browser, BrowserElement parent)
-	{
-		super(generatedCode, BrowserElementType.GENERATED_CODE, browser,parent);
+public class GeneratedCodeElement extends GCBrowserElement {
+	public GeneratedCodeElement(GeneratedOutput generatedCode, ProjectBrowser browser, BrowserElement parent) {
+		super(generatedCode, BrowserElementType.GENERATED_CODE, browser, parent);
 	}
 
 	@Override
-	protected void buildChildrenVector()
-	{
+	protected void buildChildrenVector() {
 		for (GenerationRepository repository : getGeneratedCode().getGeneratedRepositories()) {
 			addToChilds(repository);
 		}
 		addToChilds(getGeneratedCode().getTemplates());
 	}
 
-	public GeneratedOutput getGeneratedCode()
-	{
-		return (GeneratedOutput)getObject();
+	public GeneratedOutput getGeneratedCode() {
+		return (GeneratedOutput) getObject();
 	}
 }

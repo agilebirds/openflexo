@@ -70,7 +70,6 @@ import org.openflexo.wkf.swleditor.gr.PortGR;
 import org.openflexo.wkf.swleditor.gr.SelfExecActivityNodeGR;
 import org.openflexo.wkf.swleditor.gr.SubProcessNodeGR;
 
-
 public class ActivityPalette extends AbstractWKFPalette {
 
 	private static final Logger logger = Logger.getLogger(ActivityPalette.class.getPackage().getName());
@@ -92,15 +91,17 @@ public class ActivityPalette extends AbstractWKFPalette {
 	private ContainerValidity DROP_ON_ROLE_OR_ACTIVITY_PG_OR_ACTIVITY_GROUP = new ContainerValidity() {
 		@Override
 		public boolean isContainerValid(FlexoModelObject container) {
-			return container instanceof Role || container instanceof ActivityPetriGraph || container instanceof ActivityGroup || container instanceof WKFAnnotation;
+			return container instanceof Role || container instanceof ActivityPetriGraph || container instanceof ActivityGroup
+					|| container instanceof WKFAnnotation;
 		}
 	};
 
 	private ContainerValidity DROP_ON_ROLE_OR_ACTIVITY_PG_OR_ACTIVITY_GROUP_FOR_INTERACTIVE_NODE = new ContainerValidity() {
 		@Override
 		public boolean isContainerValid(FlexoModelObject container) {
-			return container instanceof Role || container instanceof ActivityPetriGraph && !(((ActivityPetriGraph) container)
-					.getContainer() instanceof SelfExecutableNode) || container instanceof ActivityGroup || container instanceof WKFAnnotation;
+			return container instanceof Role || container instanceof ActivityPetriGraph
+					&& !(((ActivityPetriGraph) container).getContainer() instanceof SelfExecutableNode)
+					|| container instanceof ActivityGroup || container instanceof WKFAnnotation;
 		}
 	};
 

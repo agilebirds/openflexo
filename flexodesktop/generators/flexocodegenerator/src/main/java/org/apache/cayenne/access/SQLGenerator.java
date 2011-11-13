@@ -56,112 +56,112 @@ import org.openflexo.generator.utils.MetaFileGenerator;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileFormat;
 
-
-public class SQLGenerator extends MetaFileGenerator{
+public class SQLGenerator extends MetaFileGenerator {
 
 	protected static final Logger logger = Logger.getLogger(SQLGenerator.class.getPackage().getName());
-	
+
 	private DataMap _map;
 	private DbAdapter _dbAdapter;
 	private String _connectionString;
 	private boolean dropTable = true;
-	
-	public SQLGenerator(ProjectGenerator prjgen, boolean _dropTable){
-		super(prjgen, FileFormat.SQL, ResourceType.GENERATED_CODE, (_dropTable?"re-":"")+"createDB.sql", (_dropTable?"re-":"")+"createDB.sql");
+
+	public SQLGenerator(ProjectGenerator prjgen, boolean _dropTable) {
+		super(prjgen, FileFormat.SQL, ResourceType.GENERATED_CODE, (_dropTable ? "re-" : "") + "createDB.sql", (_dropTable ? "re-" : "")
+				+ "createDB.sql");
 		dropTable = _dropTable;
 		resetGenerator();
 	}
-	
-	private DataMap buildMergedDataMap(FlexoProject prj) throws Exception{
+
+	private DataMap buildMergedDataMap(FlexoProject prj) throws Exception {
 		DataMap datamap = new DataMap();
 		Enumeration<DMEOModel> en = prj.getDataModel().getAllDMEOModel().elements();
-		while(en.hasMoreElements()){
+		while (en.hasMoreElements()) {
 			DMEOModel dmeomodel = en.nextElement();
 			DataMap dataMapToMerge = new EOModelProcessor().loadEOModel(dmeomodel.createTemporaryCopyOfMemory().getAbsolutePath());
 			datamap.mergeWithDataMap(dataMapToMerge);
 		}
 		return datamap;
 	}
-	
-	private void resetGenerator(){
+
+	private void resetGenerator() {
 		_connectionString = getProject().getDataModel().getGlobalDefaultConnectionString();
 		_dbAdapter = findDBAdapter();
 	}
-	private DbAdapter findDBAdapter(){
-		if(_connectionString==null) {
+
+	private DbAdapter findDBAdapter() {
+		if (_connectionString == null) {
 			return null;
 		}
-		if(_connectionString.toLowerCase().indexOf("oracle")>-1) {
+		if (_connectionString.toLowerCase().indexOf("oracle") > -1) {
 			return new OracleAdapter();
 		}
-		if(_connectionString.toLowerCase().indexOf("frontbase")>-1) {
+		if (_connectionString.toLowerCase().indexOf("frontbase") > -1) {
 			return new FrontBaseAdapter();
 		}
-		if(_connectionString.toLowerCase().indexOf("postgres")>-1) {
+		if (_connectionString.toLowerCase().indexOf("postgres") > -1) {
 			return new PostgresAdapter();
 		}
-		if(_connectionString.toLowerCase().indexOf("mysql")>-1) {
+		if (_connectionString.toLowerCase().indexOf("mysql") > -1) {
 			return new MySQLAdapter();
 		}
-		if(_connectionString.toLowerCase().indexOf("derby")>-1) {
+		if (_connectionString.toLowerCase().indexOf("derby") > -1) {
 			return new DerbyAdapter();
 		}
-		if(_connectionString.toLowerCase().indexOf("hsql")>-1) {
+		if (_connectionString.toLowerCase().indexOf("hsql") > -1) {
 			return new HSQLDBAdapter();
 		}
-		if(_connectionString.toLowerCase().indexOf("h2")>-1) {
+		if (_connectionString.toLowerCase().indexOf("h2") > -1) {
 			return new H2DBAdapter();
 		}
 		return null;
 	}
-	
-	private void generateCode() throws GenerationException{
-		if(getProject().getDataModel().getAllDMEOModel().size()==0) {
-            generatedCode = new GeneratedTextResource(getFileName(),"");
-            return;
-        }      
-		resetGenerator();
-		if(_dbAdapter==null){
-			throw new GenerationException("Cannot find a suitable DbAdapter for connection string : "+_connectionString);
+
+	private void generateCode() throws GenerationException {
+		if (getProject().getDataModel().getAllDMEOModel().size() == 0) {
+			generatedCode = new GeneratedTextResource(getFileName(), "");
+			return;
 		}
-		try{
+		resetGenerator();
+		if (_dbAdapter == null) {
+			throw new GenerationException("Cannot find a suitable DbAdapter for connection string : " + _connectionString);
+		}
+		try {
 			_map = buildMergedDataMap(projectGenerator.getProject());
-		}catch (Exception e) {
+		} catch (Exception e) {
 			throw new GenerationException("An exception occurs during merge of all models", "error_during_merge_models", "see console", e);
 		}
 		try {
-            incorporatePrototypes();
-            //DbGenerator dbGenerator = new DbGenerator(_dbAdapter,_map);
-            MyDBGenerator dbGenerator = new MyDBGenerator(_dbAdapter,_map,Collections.EMPTY_LIST,null,new DBEntityComparator(getProject()));
-            dbGenerator.setShouldDropTables(dropTable);
-            dbGenerator.setShouldCreateTables(true);
-            dbGenerator.setShouldCreateFKConstraints(true);
-            dbGenerator.setShouldDropPKSupport(dropTable);
-            dbGenerator.setShouldCreatePKSupport(true);
-//		Iterator<DbEntity> en = _map.getDbEntities().iterator();
-//		while(en.hasNext()){
-//			System.out.println(en.next().getName());
-//		}
-            dbGenerator.buildStatements();
-            StringBuilder buf = new StringBuilder();
-            if (_dbAdapter instanceof FrontBaseAdapter) {
+			incorporatePrototypes();
+			// DbGenerator dbGenerator = new DbGenerator(_dbAdapter,_map);
+			MyDBGenerator dbGenerator = new MyDBGenerator(_dbAdapter, _map, Collections.EMPTY_LIST, null, new DBEntityComparator(
+					getProject()));
+			dbGenerator.setShouldDropTables(dropTable);
+			dbGenerator.setShouldCreateTables(true);
+			dbGenerator.setShouldCreateFKConstraints(true);
+			dbGenerator.setShouldDropPKSupport(dropTable);
+			dbGenerator.setShouldCreatePKSupport(true);
+			// Iterator<DbEntity> en = _map.getDbEntities().iterator();
+			// while(en.hasNext()){
+			// System.out.println(en.next().getName());
+			// }
+			dbGenerator.buildStatements();
+			StringBuilder buf = new StringBuilder();
+			if (_dbAdapter instanceof FrontBaseAdapter) {
 				buf.append("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE, LOCKING PESSIMISTIC;\n\n");
 			}
-            Iterator it = dbGenerator.configuredStatements().iterator();
-            String batchTerminator = dbGenerator.getAdapter().getBatchTerminator();
+			Iterator it = dbGenerator.configuredStatements().iterator();
+			String batchTerminator = dbGenerator.getAdapter().getBatchTerminator();
 
-            String lineEnd = (batchTerminator != null)
-                        ? "\n" + batchTerminator + "\n\n"
-                        : "\n\n";
+			String lineEnd = (batchTerminator != null) ? "\n" + batchTerminator + "\n\n" : "\n\n";
 
-            while (it.hasNext()) {
-            	buf.append(it.next()).append(lineEnd);
-            }
-            generatedCode = new GeneratedTextResource(getFileName(), buf.toString());
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            throw new GenerationException("sql_generation_error",null,null,e);
-        }
+			while (it.hasNext()) {
+				buf.append(it.next()).append(lineEnd);
+			}
+			generatedCode = new GeneratedTextResource(getFileName(), buf.toString());
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			throw new GenerationException("sql_generation_error", null, null, e);
+		}
 	}
 
 	@Override
@@ -176,14 +176,14 @@ public class SQLGenerator extends MetaFileGenerator{
 
 	@Override
 	public void generate(boolean forceRegenerate) {
-		try{
-			if(forceRegenerate || (generatedCode==null)) {
+		try {
+			if (forceRegenerate || (generatedCode == null)) {
 				startGeneration();
-				refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating")+ " "+getIdentifier(),false);
+				refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + getIdentifier(), false);
 				generateCode();
 				stopGeneration();
 			}
-		}catch (GenerationException e) {
+		} catch (GenerationException e) {
 			setGenerationException(e);
 		}
 
@@ -196,7 +196,7 @@ public class SQLGenerator extends MetaFileGenerator{
 
 	@Override
 	public boolean isCodeAlreadyGenerated() {
-		return generatedCode!=null;
+		return generatedCode != null;
 	}
 
 	@Override
@@ -224,38 +224,38 @@ public class SQLGenerator extends MetaFileGenerator{
 	public Logger getGeneratorLogger() {
 		return logger;
 	}
-	
-	private void incorporatePrototypes(){
+
+	private void incorporatePrototypes() {
 		Iterator entityIterator = _map.getDbEntities().iterator();
 		DbEntity entity = null;
 		DbAttribute attribute = null;
 		DMEOPrototype prototype = null;
 		DMEOAttribute dmeoattribute = null;
-		while(entityIterator.hasNext()){
-			entity = (DbEntity)entityIterator.next();
+		while (entityIterator.hasNext()) {
+			entity = (DbEntity) entityIterator.next();
 			Iterator attributeIterator = entity.getAttributes().iterator();
-			while(attributeIterator.hasNext()){
-				attribute = (DbAttribute)attributeIterator.next();
-				dmeoattribute = matchingDMEOAttribute(entity,attribute);
+			while (attributeIterator.hasNext()) {
+				attribute = (DbAttribute) attributeIterator.next();
+				dmeoattribute = matchingDMEOAttribute(entity, attribute);
 				attribute.setMandatory(!dmeoattribute.getAllowsNull());
-				if(dmeoattribute!=null){
+				if (dmeoattribute != null) {
 					prototype = dmeoattribute.getPrototype();
-					if(prototype!=null){
+					if (prototype != null) {
 						String externalType = prototype.getExternalType();
-						if("CHAR VARYING".equals(externalType)) {
-							externalType="VARCHAR";
+						if ("CHAR VARYING".equals(externalType)) {
+							externalType = "VARCHAR";
 						}
-						if("CHARACTER".equals(externalType)) {
-							externalType="CHAR";
+						if ("CHARACTER".equals(externalType)) {
+							externalType = "CHAR";
 						}
-						if("DOUBLE PRECISION".equals(externalType)) {
-							externalType="DOUBLE";
+						if ("DOUBLE PRECISION".equals(externalType)) {
+							externalType = "DOUBLE";
 						}
-						if("INT".equals(externalType)) {
-							externalType="INTEGER";
+						if ("INT".equals(externalType)) {
+							externalType = "INTEGER";
 						}
 						int sqlType = TypesMapping.getSqlTypeByName(externalType);
-						if((attribute.getMaxLength()<1) && (prototype.getWidth()>0)) {
+						if ((attribute.getMaxLength() < 1) && (prototype.getWidth() > 0)) {
 							attribute.setMaxLength(prototype.getWidth());
 						}
 						attribute.setType(sqlType);
@@ -264,47 +264,45 @@ public class SQLGenerator extends MetaFileGenerator{
 			}
 		}
 	}
-	
-	private DMEOAttribute matchingDMEOAttribute(DbEntity entity,DbAttribute attribute){
+
+	private DMEOAttribute matchingDMEOAttribute(DbEntity entity, DbAttribute attribute) {
 		DMEOAttribute reply = null;
 		DMEOEntity dmeoentity = findDMEOEntityWithName(entity.getName());
-		if(dmeoentity!=null){
-			reply = findDMEOAttributeWithName(dmeoentity,attribute.getName());
-		}else{
-			logger.warning("cannot find the matching entity for :"+entity.getName());
+		if (dmeoentity != null) {
+			reply = findDMEOAttributeWithName(dmeoentity, attribute.getName());
+		} else {
+			logger.warning("cannot find the matching entity for :" + entity.getName());
 		}
 		return reply;
 	}
-	
-	private DMEOAttribute findDMEOAttributeWithName(DMEOEntity dmeoentity,String attributeName){
+
+	private DMEOAttribute findDMEOAttributeWithName(DMEOEntity dmeoentity, String attributeName) {
 		Iterator<DMEOAttribute> en = dmeoentity.getAttributes().values().iterator();
 		DMEOAttribute candidate = null;
-		while(en.hasNext()){
+		while (en.hasNext()) {
 			candidate = en.next();
-			if((candidate.getColumnName()!=null) && candidate.getColumnName().equals(attributeName)) {
+			if ((candidate.getColumnName() != null) && candidate.getColumnName().equals(attributeName)) {
 				return candidate;
 			}
 		}
 		return null;
 	}
-	
-	private DMEOEntity findDMEOEntityWithName(String entityName){
+
+	private DMEOEntity findDMEOEntityWithName(String entityName) {
 		Enumeration<DMEOModel> en = getProject().getDataModel().getAllDMEOModel().elements();
 		DMEOEntity candidate = null;
 		DMEOModel model = null;
-		while(en.hasMoreElements()){
+		while (en.hasMoreElements()) {
 			model = en.nextElement();
 			Enumeration<DMEOEntity> en2 = model.getEntities().elements();
-			while(en2.hasMoreElements()){
+			while (en2.hasMoreElements()) {
 				candidate = en2.nextElement();
-				if((candidate.getExternalName()!=null) && candidate.getExternalName().equals(entityName)) {
+				if ((candidate.getExternalName() != null) && candidate.getExternalName().equals(entityName)) {
 					return candidate;
 				}
 			}
 		}
 		return null;
 	}
-
- 
 
 }

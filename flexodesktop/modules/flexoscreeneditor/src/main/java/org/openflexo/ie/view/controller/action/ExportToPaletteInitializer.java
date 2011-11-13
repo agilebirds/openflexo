@@ -43,39 +43,35 @@ public class ExportToPaletteInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	ExportToPaletteInitializer(IEControllerActionInitializer actionInitializer)
-	{
-		super(ExportWidgetToPalette.actionType,actionInitializer);
+	ExportToPaletteInitializer(IEControllerActionInitializer actionInitializer) {
+		super(ExportWidgetToPalette.actionType, actionInitializer);
 	}
 
 	@Override
-	protected IEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (IEControllerActionInitializer)super.getControllerActionInitializer();
+	protected IEControllerActionInitializer getControllerActionInitializer() {
+		return (IEControllerActionInitializer) super.getControllerActionInitializer();
 	}
-	
+
 	@Override
 	public IEController getController() {
 		return (IEController) super.getController();
 	}
 
 	@Override
-	protected FlexoActionInitializer<ExportWidgetToPalette> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<ExportWidgetToPalette> getDefaultInitializer() {
 		return new FlexoActionInitializer<ExportWidgetToPalette>() {
 			@Override
-			public boolean run(ActionEvent e, ExportWidgetToPalette action)
-			{
+			public boolean run(ActionEvent e, ExportWidgetToPalette action) {
 				boolean ok = false;
 				while (!ok) {
-					String name = FlexoController.askForStringMatchingPattern(FlexoLocalization.localizedForKey("new_widget_name"), Pattern
-							.compile(FileUtils.GOOD_CHARACTERS_REG_EXP + "+"), FlexoLocalization
-							.localizedForKey("name_cannot_contain_\\\"*/<>:"));
+					String name = FlexoController.askForStringMatchingPattern(FlexoLocalization.localizedForKey("new_widget_name"),
+							Pattern.compile(FileUtils.GOOD_CHARACTERS_REG_EXP + "+"),
+							FlexoLocalization.localizedForKey("name_cannot_contain_\\\"*/<>:"));
 					if (name != null) {
 						if (getProject().getCustomWidgetPalette().widgetWithNameExists(name)) {
 							String[] options = FlexoLocalization.localizedForKey(new String[] { "change_name", "replace", "cancel" });
-							int result = FlexoController.selectOption(FlexoLocalization
-									.localizedForKey("a_widget_with_that_name_already_exists"), options, options[0]);
+							int result = FlexoController.selectOption(
+									FlexoLocalization.localizedForKey("a_widget_with_that_name_already_exists"), options, options[0]);
 							switch (result) {
 							case 0:
 								continue;
@@ -86,8 +82,8 @@ public class ExportToPaletteInitializer extends ActionInitializer {
 							}
 						}
 						action.setWidgetName(name);
-						JComponent component = getController().viewForObject(action.getWidget(),true);
-						if (component!=null)
+						JComponent component = getController().viewForObject(action.getWidget(), true);
+						if (component != null)
 							action.setScreenshot(ImageUtils.createImageFromComponent(component));
 						return true;
 					} else
@@ -99,20 +95,17 @@ public class ExportToPaletteInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<ExportWidgetToPalette> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<ExportWidgetToPalette> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ExportWidgetToPalette>() {
 			@Override
-			public boolean run(ActionEvent e, ExportWidgetToPalette action)
-			{
+			public boolean run(ActionEvent e, ExportWidgetToPalette action) {
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return IconLibrary.EXPORT_ICON;
 	}
 

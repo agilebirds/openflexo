@@ -19,17 +19,14 @@
  */
 package org.openflexo.inspector.selection;
 
-
 /**
  * Used to "tell" the inspector that no object were selected
  * 
  * @author sguerin
  */
-public abstract class InspectorSelection
-{
-    public InspectorSelection ()
-    {
-        super();
-    }
+public abstract class InspectorSelection {
+	public InspectorSelection() {
+		super();
+	}
 
 }

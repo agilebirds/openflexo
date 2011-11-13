@@ -41,127 +41,111 @@ import javax.swing.table.TableCellRenderer;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBDropDownColumn;
 
-
-public class DropDownColumn<T extends Object> extends AbstractColumn<T> implements EditableColumn<T>
-{
+public class DropDownColumn<T extends Object> extends AbstractColumn<T> implements EditableColumn<T> {
 	static final Logger logger = Logger.getLogger(DropDownColumn.class.getPackage().getName());
-	   
-    private DropDownCellRenderer _cellRenderer;
 
-    private DropDownCellEditor _cellEditor;
+	private DropDownCellRenderer _cellRenderer;
 
-    public DropDownColumn(FIBDropDownColumn columnModel, FIBTableModel tableModel, FIBController controller)
-    {
-        super(columnModel,tableModel,controller);
-        _cellRenderer = new DropDownCellRenderer();
-        _cellEditor = new DropDownCellEditor(new JComboBox());
-     }
+	private DropDownCellEditor _cellEditor;
 
-    @Override
-    public FIBDropDownColumn getColumnModel()
-    {
-     	return (FIBDropDownColumn)super.getColumnModel();
-    }
-    
-    @Override
-	public Class getValueClass()
-    {
-        return Object.class;
-    }
+	public DropDownColumn(FIBDropDownColumn columnModel, FIBTableModel tableModel, FIBController controller) {
+		super(columnModel, tableModel, controller);
+		_cellRenderer = new DropDownCellRenderer();
+		_cellEditor = new DropDownCellEditor(new JComboBox());
+	}
 
-    /**
-     * Must be overriden if required
-     * 
-     * @return
-     */
-    @Override
-	public boolean requireCellRenderer()
-    {
-        return true;
-    }
+	@Override
+	public FIBDropDownColumn getColumnModel() {
+		return (FIBDropDownColumn) super.getColumnModel();
+	}
 
-    @Override
-	public TableCellRenderer getCellRenderer()
-    {
-        return _cellRenderer;
-    }
+	@Override
+	public Class getValueClass() {
+		return Object.class;
+	}
 
-    @Override
-	public boolean isCellEditableFor(Object object)
-    {
-        return true;
-    }
+	/**
+	 * Must be overriden if required
+	 * 
+	 * @return
+	 */
+	@Override
+	public boolean requireCellRenderer() {
+		return true;
+	}
 
-    protected class DropDownCellRenderer extends FIBTableCellRenderer<T>
-    {
-    	public DropDownCellRenderer() {
+	@Override
+	public TableCellRenderer getCellRenderer() {
+		return _cellRenderer;
+	}
+
+	@Override
+	public boolean isCellEditableFor(Object object) {
+		return true;
+	}
+
+	protected class DropDownCellRenderer extends FIBTableCellRenderer<T> {
+		public DropDownCellRenderer() {
 			super(DropDownColumn.this);
 		}
-    	
-        @Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
-        {
-            Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            if (returned instanceof JLabel) {
-                ((JLabel) returned).setText(renderValue((T)value));
-                ((JLabel) returned).setFont(getFont());
-            }
-            return returned;
-        }
-    }
 
-    
-    protected String renderValue(T value)
-    {
-     	return getStringRepresentation(value);
-    }
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+			Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			if (returned instanceof JLabel) {
+				((JLabel) returned).setText(renderValue((T) value));
+				((JLabel) returned).setFont(getFont());
+			}
+			return returned;
+		}
+	}
 
-    protected List getAvailableValues(Object object)
-    {
-    	
-		if (getColumnModel().staticList !=null) {
+	protected String renderValue(T value) {
+		return getStringRepresentation(value);
+	}
+
+	protected List getAvailableValues(Object object) {
+
+		if (getColumnModel().staticList != null) {
 			Vector<String> list = new Vector<String>();
-			StringTokenizer st = new StringTokenizer(getColumnModel().staticList,",");
+			StringTokenizer st = new StringTokenizer(getColumnModel().staticList, ",");
 			while (st.hasMoreTokens()) {
 				list.add(st.nextToken());
 			}
 			return list;
 		}
 
-		else if (getColumnModel().getList() !=null
-				&& getColumnModel().getList().isSet()) {
-			
-	    	iteratorObject = object;
+		else if (getColumnModel().getList() != null && getColumnModel().getList().isSet()) {
+
+			iteratorObject = object;
 			Object accessedList = getColumnModel().getList().getBindingValue(this);
 
-			if (accessedList instanceof List) return (List)accessedList;
+			if (accessedList instanceof List)
+				return (List) accessedList;
 		}
-		
-		else if (getColumnModel().getArray() !=null
-				&& getColumnModel().getArray().isSet()) {
-			
-	    	iteratorObject = object;
+
+		else if (getColumnModel().getArray() != null && getColumnModel().getArray().isSet()) {
+
+			iteratorObject = object;
 			Object accessedArray = getColumnModel().getArray().getBindingValue(getController());
 			try {
-				Object[] array = (Object[])accessedArray;
+				Object[] array = (Object[]) accessedArray;
 				Vector<Object> list = new Vector<Object>();
-				for (int i=0; i<array.length; i++) {
+				for (int i = 0; i < array.length; i++) {
 					list.add(array[i]);
 				}
 				return list;
-			}
-			catch(ClassCastException e) {
-				logger.warning("ClassCastException "+e.getMessage());
+			} catch (ClassCastException e) {
+				logger.warning("ClassCastException " + e.getMessage());
 			}
 		}
-		
-		else if (getColumnModel().getData() != null 
-				&& getColumnModel().getData().getBinding() != null) {
+
+		else if (getColumnModel().getData() != null && getColumnModel().getData().getBinding() != null) {
 			Type type = getColumnModel().getData().getBinding().getAccessedType();
-			if (type instanceof Class && ((Class)type).isEnum()) {
-				Object[] array = ((Class)type).getEnumConstants();
+			if (type instanceof Class && ((Class) type).isEnum()) {
+				Object[] array = ((Class) type).getEnumConstants();
 				Vector<Object> list = new Vector<Object>();
-				for (int i=0; i<array.length; i++) {
+				for (int i = 0; i < array.length; i++) {
 					list.add(array[i]);
 				}
 				return list;
@@ -169,85 +153,75 @@ public class DropDownColumn<T extends Object> extends AbstractColumn<T> implemen
 		}
 		logger.warning("Could not access element list");
 		return null;
-    }
+	}
 
-    @Override
-	public boolean requireCellEditor()
-    {
-        return true;
-    }
+	@Override
+	public boolean requireCellEditor() {
+		return true;
+	}
 
-    @Override
-	public TableCellEditor getCellEditor()
-    {
-        return _cellEditor;
-    }
+	@Override
+	public TableCellEditor getCellEditor() {
+		return _cellEditor;
+	}
 
-    protected class DropDownCellEditor extends DefaultCellEditor
-    {
-        private Hashtable<Integer, DropDownComboBoxModel> _comboBoxModels;
+	protected class DropDownCellEditor extends DefaultCellEditor {
+		private Hashtable<Integer, DropDownComboBoxModel> _comboBoxModels;
 
-        private JComboBox comboBox;
+		private JComboBox comboBox;
 
-        public DropDownCellEditor(JComboBox aComboBox)
-        {
-            super(aComboBox);
-            aComboBox.setFont(getFont());
-            _comboBoxModels = new Hashtable<Integer, DropDownComboBoxModel>();
-            comboBox = aComboBox;
-            comboBox.setRenderer(new DefaultListCellRenderer() {
-                @Override
-				public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
-                {
-                    Component returned = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                    if (returned instanceof JLabel) {
-                        ((JLabel) returned).setText(renderValue((T)value));
-                        ((JLabel) returned).setFont(getFont());
-                    }
-                    return returned;
-                }
-            });
-        }
+		public DropDownCellEditor(JComboBox aComboBox) {
+			super(aComboBox);
+			aComboBox.setFont(getFont());
+			_comboBoxModels = new Hashtable<Integer, DropDownComboBoxModel>();
+			comboBox = aComboBox;
+			comboBox.setRenderer(new DefaultListCellRenderer() {
+				@Override
+				public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+					Component returned = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+					if (returned instanceof JLabel) {
+						((JLabel) returned).setText(renderValue((T) value));
+						((JLabel) returned).setFont(getFont());
+					}
+					return returned;
+				}
+			});
+		}
 
-        @Override
-		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
-        {
-            Component returned = super.getTableCellEditorComponent(table, value, isSelected, row, column);
-            comboBox.setModel(getComboBoxModel(value,row,column));
-            return returned;
-        }
+		@Override
+		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+			Component returned = super.getTableCellEditorComponent(table, value, isSelected, row, column);
+			comboBox.setModel(getComboBoxModel(value, row, column));
+			return returned;
+		}
 
-        protected DropDownComboBoxModel getComboBoxModel(Object value, int row, int column)
-        {
+		protected DropDownComboBoxModel getComboBoxModel(Object value, int row, int column) {
 			// Don't use cache as it is never refreshed
 			// DropDownComboBoxModel _comboBoxModel = _comboBoxModels.get(row);
 			// if (_comboBoxModel == null) {
 			DropDownComboBoxModel _comboBoxModel = new DropDownComboBoxModel(elementAt(row));
 			// _comboBoxModels.put(row, _comboBoxModel);
 			// }
-            _comboBoxModel.setSelectedItem(value);
-            return _comboBoxModel;
-        }
+			_comboBoxModel.setSelectedItem(value);
+			return _comboBoxModel;
+		}
 
-        protected class DropDownComboBoxModel extends DefaultComboBoxModel
-        {
+		protected class DropDownComboBoxModel extends DefaultComboBoxModel {
 
-        	protected DropDownComboBoxModel(Object element)
-        	{
-        		super();
-        		List v = getAvailableValues(element);
-        		if (v!=null)
-        			for (Iterator it = v.iterator(); it.hasNext();) {
-        				Object next = it.next();
-        				addElement(next);
-        			}
-        	}
-        }
-    }
- 
-    @Override
-	public String toString()
-    {
-        return "DropDownColumn " + "@" + Integer.toHexString(hashCode());
-    }
+			protected DropDownComboBoxModel(Object element) {
+				super();
+				List v = getAvailableValues(element);
+				if (v != null)
+					for (Iterator it = v.iterator(); it.hasNext();) {
+						Object next = it.next();
+						addElement(next);
+					}
+			}
+		}
+	}
+
+	@Override
+	public String toString() {
+		return "DropDownColumn " + "@" + Integer.toHexString(hashCode());
+	}
 }

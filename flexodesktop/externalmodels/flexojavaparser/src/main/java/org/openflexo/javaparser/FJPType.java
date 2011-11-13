@@ -28,29 +28,26 @@ import com.thoughtworks.qdox.model.Type;
 public class FJPType extends DMType {
 
 	private String name;
-	
-	public FJPType(String fullName, String name, int dimensions, JavaClassParent context) 
-	{
-		super(fullName,name,dimensions,context);
+
+	public FJPType(String fullName, String name, int dimensions, JavaClassParent context) {
+		super(fullName, name, dimensions, context);
 		this.name = name;
 	}
 
-	public static Type createUnresolved(String name, int dimensions, JavaClassParent context) 
-	{
-        if (context.getClassLibrary() instanceof DMClassLibrary) {
-        	Type returned = ((DMClassLibrary)context.getClassLibrary()).retrieveType(name, dimensions, context);
-        	if (returned == null) {
-        		returned = new FJPType(null, name, dimensions, context);
-        		((DMClassLibrary)context.getClassLibrary()).registerType(returned, name, dimensions, context);
-         	}
-       		return returned;
-        }
-       return new FJPType(null, name, dimensions, context);
+	public static Type createUnresolved(String name, int dimensions, JavaClassParent context) {
+		if (context.getClassLibrary() instanceof DMClassLibrary) {
+			Type returned = ((DMClassLibrary) context.getClassLibrary()).retrieveType(name, dimensions, context);
+			if (returned == null) {
+				returned = new FJPType(null, name, dimensions, context);
+				((DMClassLibrary) context.getClassLibrary()).registerType(returned, name, dimensions, context);
+			}
+			return returned;
+		}
+		return new FJPType(null, name, dimensions, context);
 	}
 
 	@Override
-	public String getName() 
-	{
+	public String getName() {
 		return name;
 	}
 

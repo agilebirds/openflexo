@@ -28,79 +28,70 @@ import org.openflexo.foundation.bindings.BindingValue;
 import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.dm.DMType;
 
-
 public class FlattenRelationshipDefinition extends BindingValue {
 
-    private static final Logger logger = Logger.getLogger(FlattenRelationshipDefinition.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(FlattenRelationshipDefinition.class.getPackage().getName());
 
-    private DMEOEntity _sourceEntity;
-    
-    public FlattenRelationshipDefinition(DMEOEntity sourceEntity, DMEORelationship owner)
-	{
-		super(new BindingDefinition("flattenRelationshipDefinition",DMType.makeObjectDMType(sourceEntity.getProject()),sourceEntity,BindingDefinitionType.GET,true),
-				owner);
+	private DMEOEntity _sourceEntity;
+
+	public FlattenRelationshipDefinition(DMEOEntity sourceEntity, DMEORelationship owner) {
+		super(new BindingDefinition("flattenRelationshipDefinition", DMType.makeObjectDMType(sourceEntity.getProject()), sourceEntity,
+				BindingDefinitionType.GET, true), owner);
 		_sourceEntity = sourceEntity;
 	}
 
-	public FlattenRelationshipDefinition(DMEORelationship owner, String definition)
-	{
-		super(new BindingDefinition("flattenRelationshipDefinition",DMType.makeObjectDMType(owner.getProject()),owner.getEntity(),BindingDefinitionType.GET,true),
-				owner);
+	public FlattenRelationshipDefinition(DMEORelationship owner, String definition) {
+		super(new BindingDefinition("flattenRelationshipDefinition", DMType.makeObjectDMType(owner.getProject()), owner.getEntity(),
+				BindingDefinitionType.GET, true), owner);
 		_sourceEntity = owner.getEntity();
 		decodeFromStringRepresentation(definition);
 	}
 
-	public boolean isDefinitionValid()
-	{
+	public boolean isDefinitionValid() {
 		return isBindingValid();
 	}
 
 	@Override
-	public boolean isBindingValid()
-	{
+	public boolean isBindingValid() {
 		return _bindingPath.size() > 1;
 	}
 
 	@Override
-	protected boolean isBindingValidWithoutBindingDefinition()
-	{
+	protected boolean isBindingValidWithoutBindingDefinition() {
 		return isBindingValid();
 	}
 
 	@Override
-	public String getStringRepresentation()
-	{
+	public String getStringRepresentation() {
 		boolean isFirst = true;
 		StringBuilder sb = new StringBuilder("");
 		for (BindingPathElement element : _bindingPath) {
 			if (element != null)
-				sb.append((isFirst?"":".") + element.getSerializationRepresentation());
+				sb.append((isFirst ? "" : ".") + element.getSerializationRepresentation());
 			else
 				sb.append(".null");
-			 isFirst = false;
+			isFirst = false;
 		}
 		return sb.toString();
 	}
 
-	private void decodeFromStringRepresentation(String definition)
-	{
+	private void decodeFromStringRepresentation(String definition) {
 		if (logger.isLoggable(Level.FINE))
-			logger.fine("Decoding as "+definition);
+			logger.fine("Decoding as " + definition);
 		_bindingPath.clear();
-		StringTokenizer st = new StringTokenizer(definition,".");
+		StringTokenizer st = new StringTokenizer(definition, ".");
 		DMEOEntity current = _sourceEntity;
 		while (st.hasMoreTokens()) {
 			String next = st.nextToken();
 			if (current == null) {
-				logger.warning("Could not find relationship '"+next+"' because entity has been deleted");
+				logger.warning("Could not find relationship '" + next + "' because entity has been deleted");
 				return;
 			}
 			DMEORelationship relationship = current.getRelationshipNamed(next);
 			if (relationship == null) {
-				logger.warning("Could not find relationship '"+next+"' for entity "+current);
+				logger.warning("Could not find relationship '" + next + "' for entity " + current);
 				return;
-			}
-			else {
+			} else {
 				setBindingPathElementAtIndex(relationship, _bindingPath.size());
 				current = relationship.getDestinationEntity();
 			}
@@ -108,24 +99,20 @@ public class FlattenRelationshipDefinition extends BindingValue {
 	}
 
 	@Override
-	public DMEORelationship getBindingPathElementAtIndex(int i)
-	{
-		return (DMEORelationship)super.getBindingPathElementAtIndex(i);
+	public DMEORelationship getBindingPathElementAtIndex(int i) {
+		return (DMEORelationship) super.getBindingPathElementAtIndex(i);
 	}
 
-    @Override
-	public DMEORelationship getBindingPathLastElement()
-    {
-		return (DMEORelationship)super.getBindingPathLastElement();
-   }
-    
-    @Override
-	public FlattenRelationshipDefinition clone()
-    {
-    	FlattenRelationshipDefinition clone = new FlattenRelationshipDefinition(_sourceEntity, (DMEORelationship)getOwner());
-    	clone.decodeFromStringRepresentation(getStringRepresentation());
-        return clone;
-     }
+	@Override
+	public DMEORelationship getBindingPathLastElement() {
+		return (DMEORelationship) super.getBindingPathLastElement();
+	}
 
+	@Override
+	public FlattenRelationshipDefinition clone() {
+		FlattenRelationshipDefinition clone = new FlattenRelationshipDefinition(_sourceEntity, (DMEORelationship) getOwner());
+		clone.decodeFromStringRepresentation(getStringRepresentation());
+		return clone;
+	}
 
 }

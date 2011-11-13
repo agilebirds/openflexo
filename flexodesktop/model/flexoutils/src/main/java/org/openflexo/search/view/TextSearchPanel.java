@@ -57,7 +57,6 @@ import org.openflexo.search.TextQueryResult.Direction;
 import org.openflexo.search.TextQueryResult.Result;
 import org.openflexo.toolbox.Localized;
 
-
 public class TextSearchPanel extends JPanel implements CaretListener {
 
 	public class FindReplaceFieldPanel extends JPanel implements ActionListener {
@@ -370,8 +369,8 @@ public class TextSearchPanel extends JPanel implements CaretListener {
 			} else {
 				if (resultNavigator != null) {
 					if ((e.getSource() == replace || e.getSource() == replaceFind) && resultNavigator.getCurrentResult() != null) {
-						if (textComponent.getSelectionStart() == resultNavigator.getCurrentResult().startOffset && textComponent
-								.getSelectionEnd() == resultNavigator.getCurrentResult().endOffset) {
+						if (textComponent.getSelectionStart() == resultNavigator.getCurrentResult().startOffset
+								&& textComponent.getSelectionEnd() == resultNavigator.getCurrentResult().endOffset) {
 							resultNavigator.replaceBy(getReplacementText());
 							updateResults();
 							updateButtons();
@@ -567,8 +566,9 @@ public class TextSearchPanel extends JPanel implements CaretListener {
 		updateResultNavigator(true);
 		updateScopePanel();
 		if (textComponent.getSelectionStart() > -1 && textComponent.getSelectionEnd() > -1) {
-			if (resultNavigator == null || resultNavigator.getCurrentResult() == null || resultNavigator.getCurrentResult().startOffset != textComponent
-					.getSelectionStart() || resultNavigator.getCurrentResult().endOffset != textComponent.getSelectionEnd()) {
+			if (resultNavigator == null || resultNavigator.getCurrentResult() == null
+					|| resultNavigator.getCurrentResult().startOffset != textComponent.getSelectionStart()
+					|| resultNavigator.getCurrentResult().endOffset != textComponent.getSelectionEnd()) {
 				updateResultNavigator(true);
 			}
 		}

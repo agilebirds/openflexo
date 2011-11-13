@@ -39,35 +39,33 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.toolbox.HTMLUtils;
 
-
 /**
  * @author gpolet
  * 
  */
-public class DGHTMLGenerator<T extends FlexoModelObject> extends DGGenerator<T> implements IFlexoResourceGenerator
-{
-    protected static final String UPPER_CASE_REGEXP = "[A-Z]+";
+public class DGHTMLGenerator<T extends FlexoModelObject> extends DGGenerator<T> implements IFlexoResourceGenerator {
+	protected static final String UPPER_CASE_REGEXP = "[A-Z]+";
 
-    protected static final Pattern UPPER_CASE_PATTERN = Pattern.compile(UPPER_CASE_REGEXP);
+	protected static final Pattern UPPER_CASE_PATTERN = Pattern.compile(UPPER_CASE_REGEXP);
 
-    protected static final String LATEX_BACKSLASH = HTMLUtils.LATEX_BACKSLASH;
+	protected static final String LATEX_BACKSLASH = HTMLUtils.LATEX_BACKSLASH;
 
-    protected static final String JAVA_BACKSLASH = "\\";
+	protected static final String JAVA_BACKSLASH = "\\";
 
-    protected static final String LATEX_TAG_REGEXP = "^\\\\[^ {]+(\\{[^}]*\\}\\s*)*";
+	protected static final String LATEX_TAG_REGEXP = "^\\\\[^ {]+(\\{[^}]*\\}\\s*)*";
 
-    protected static final Pattern LATEX_TAG_PATTERN = Pattern.compile(LATEX_TAG_REGEXP);
+	protected static final Pattern LATEX_TAG_PATTERN = Pattern.compile(LATEX_TAG_REGEXP);
 
-    protected static final String CHARS_TO_ESCAPE_REGEXP = "[\\\\{}_&%#~]";
+	protected static final String CHARS_TO_ESCAPE_REGEXP = "[\\\\{}_&%#~]";
 
-    protected static final Pattern CHARS_TO_ESCAPE_PATTERN = Pattern.compile(CHARS_TO_ESCAPE_REGEXP);
+	protected static final Pattern CHARS_TO_ESCAPE_PATTERN = Pattern.compile(CHARS_TO_ESCAPE_REGEXP);
 
 	public static String getHTMLFileExtension() {
 		return ".html";
 	}
-	
+
 	public static String nameForObject(FlexoModelObject object, DGRepository repository) {
-		return nameForObjectNoExt(object, repository)+getHTMLFileExtension();
+		return nameForObjectNoExt(object, repository) + getHTMLFileExtension();
 	}
 
 	public static String nameForProject(DGRepository repository) {
@@ -124,82 +122,77 @@ public class DGHTMLGenerator<T extends FlexoModelObject> extends DGGenerator<T> 
 
 	private HTMLFileResource<DGHTMLGenerator<T>> htmlResource;
 
-    protected DGHTMLGenerator(ProjectDocHTMLGenerator projectGenerator, T source)
-    {
-        super(projectGenerator, source);
-    }
+	protected DGHTMLGenerator(ProjectDocHTMLGenerator projectGenerator, T source) {
+		super(projectGenerator, source);
+	}
 
-    public DGHTMLGenerator(ProjectDocHTMLGenerator projectGenerator, T source, String templateName) {
-    	super(projectGenerator, source, templateName);
-    }
-    
-    public DGHTMLGenerator(ProjectDocHTMLGenerator projectGenerator, T source, String templateName, String identifier, String fileName, TOCEntry entry)
-    {
-    	super(projectGenerator, source, templateName, identifier, fileName, entry);
-    }
+	public DGHTMLGenerator(ProjectDocHTMLGenerator projectGenerator, T source, String templateName) {
+		super(projectGenerator, source, templateName);
+	}
 
-    @Override
-	public boolean isCodeAlreadyGenerated()
-    {
-        return getGeneratedCode() != null;
-    }
-    
-    public static String splitOnUpperCase(String s)
-    {
-        if (s==null || s.trim().length()==0)
-            return "";
-        Matcher m = UPPER_CASE_PATTERN.matcher(s);
-        StringBuffer sb = new StringBuffer();
-        while (m.find()) {
-            if (sb.length() == 0 && m.start() == 0)
-                m.appendReplacement(sb, "$0");
-            else
-                m.appendReplacement(sb, "&#8203;$0");
-        }
-        m.appendTail(sb);
-        return sb.toString();
-    }
+	public DGHTMLGenerator(ProjectDocHTMLGenerator projectGenerator, T source, String templateName, String identifier, String fileName,
+			TOCEntry entry) {
+		super(projectGenerator, source, templateName, identifier, fileName, entry);
+	}
 
-    /**
-     * Overrides getSymbolicDirectory
-     * @see org.openflexo.dg.FlexoLatexResourceGenerator#getSymbolicDirectory(org.openflexo.foundation.cg.GenerationRepository)
-     */
-    public CGSymbolicDirectory getSymbolicDirectory(DGRepository repository)
-    {
-        return (repository).getHTMLSymbolicDirectory();
-    }
-    
-    /**
-     * Overrides getFileExtension
-     * @see org.openflexo.dg.DGGenerator#getFileExtension()
-     */
-    @Override
-    public String getFileExtension()
-    {
-        return getHTMLFileExtension();
-    }
-    
-    public static String getValidReference(String label)
-    {
-        return BAD_CHARACTERS_PATTERN.matcher(label).replaceAll("-");
-    }
+	@Override
+	public boolean isCodeAlreadyGenerated() {
+		return getGeneratedCode() != null;
+	}
 
-    protected FlexoCSS getCss()
-    {
-        return getObject().getProject().getCssSheet();
-    }
-    
+	public static String splitOnUpperCase(String s) {
+		if (s == null || s.trim().length() == 0)
+			return "";
+		Matcher m = UPPER_CASE_PATTERN.matcher(s);
+		StringBuffer sb = new StringBuffer();
+		while (m.find()) {
+			if (sb.length() == 0 && m.start() == 0)
+				m.appendReplacement(sb, "$0");
+			else
+				m.appendReplacement(sb, "&#8203;$0");
+		}
+		m.appendTail(sb);
+		return sb.toString();
+	}
+
+	/**
+	 * Overrides getSymbolicDirectory
+	 * 
+	 * @see org.openflexo.dg.FlexoLatexResourceGenerator#getSymbolicDirectory(org.openflexo.foundation.cg.GenerationRepository)
+	 */
+	public CGSymbolicDirectory getSymbolicDirectory(DGRepository repository) {
+		return (repository).getHTMLSymbolicDirectory();
+	}
+
+	/**
+	 * Overrides getFileExtension
+	 * 
+	 * @see org.openflexo.dg.DGGenerator#getFileExtension()
+	 */
+	@Override
+	public String getFileExtension() {
+		return getHTMLFileExtension();
+	}
+
+	public static String getValidReference(String label) {
+		return BAD_CHARACTERS_PATTERN.matcher(label).replaceAll("-");
+	}
+
+	protected FlexoCSS getCss() {
+		return getObject().getProject().getCssSheet();
+	}
+
 	@Override
 	public GeneratedCodeResult getGeneratedCode() {
-		if (generatedCode==null && htmlResource!=null && htmlResource.getASCIIFile()!=null && htmlResource.getASCIIFile().hasLastAcceptedContent()) {
-			generatedCode = new GeneratedTextResource(getFileName(),htmlResource.getASCIIFile().getLastAcceptedContent());
+		if (generatedCode == null && htmlResource != null && htmlResource.getASCIIFile() != null
+				&& htmlResource.getASCIIFile().hasLastAcceptedContent()) {
+			generatedCode = new GeneratedTextResource(getFileName(), htmlResource.getASCIIFile().getLastAcceptedContent());
 		}
 		return super.getGeneratedCode();
 	}
-	
+
 	public void setHtmlResource(HTMLFileResource<DGHTMLGenerator<T>> htmlResource) {
 		this.htmlResource = htmlResource;
 	}
-    
 
 }

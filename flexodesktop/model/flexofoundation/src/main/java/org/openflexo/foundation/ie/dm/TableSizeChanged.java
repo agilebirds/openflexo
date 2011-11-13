@@ -21,18 +21,16 @@ package org.openflexo.foundation.ie.dm;
 
 /**
  * @author gpolet
- *
+ * 
  */
-public class TableSizeChanged extends IEDataModification
-{
+public class TableSizeChanged extends IEDataModification {
 
-    /**
-     * @param oldValue
-     * @param newValue
-     */
-    public TableSizeChanged()
-    {
-        super("TableResize",null, null);
-    }
+	/**
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public TableSizeChanged() {
+		super("TableResize", null, null);
+	}
 
 }

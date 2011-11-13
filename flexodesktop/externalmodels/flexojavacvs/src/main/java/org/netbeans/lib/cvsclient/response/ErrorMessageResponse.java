@@ -27,59 +27,57 @@ import org.netbeans.lib.cvsclient.event.MessageEvent;
 import org.netbeans.lib.cvsclient.util.LoggedDataInputStream;
 
 /**
- * Handles a message that the server requests is sent to stderr. Note that
- * this does not mean that an error occurred, only that the message is
- * to be sent to stderr.
- * @author  Robert Greig
+ * Handles a message that the server requests is sent to stderr. Note that this does not mean that an error occurred, only that the message
+ * is to be sent to stderr.
+ * 
+ * @author Robert Greig
  * @see org.netbeans.lib.cvsclient.response.ErrorResponse
  */
 public final class ErrorMessageResponse implements Response {
 
-    private boolean terminating;
+	private boolean terminating;
 
-    private String message;
+	private String message;
 
-    /**
-     * Process the data for the response.
-     * @param r the buffered reader allowing the client to read the server's
-     * response. Note that the actual response name has already been read
-     * and the reader is positioned just before the first argument, if any.
-     */
-    @Override
-	public void process(LoggedDataInputStream dis, ResponseServices services)
-            throws ResponseException {
-        try {
-            final String line = dis.readLine();
-            terminating |= line.endsWith(SpecialResponses.SERVER_ABORTED);
-            terminating |= line.endsWith(SpecialResponses.SERVER_ABORTED_2);
-            terminating |= line.endsWith(SpecialResponses.SERVER_ABORTED_3);
-            terminating &= dis.available() == 0;  // heuristics to relax SpecialResponses in commit messages...
-            message = line;
-            MessageEvent event = new MessageEvent(this, line, true);
-            services.getEventManager().fireCVSEvent(event);
-        }
-        catch (EOFException ex) {
-            throw new ResponseException(ex, CommandException.getLocalMessage("CommandException.EndOfFile", null)); //NOI18N
-        }
-        catch (IOException ex) {
-            throw new ResponseException(ex);
-        }
-    }
+	/**
+	 * Process the data for the response.
+	 * 
+	 * @param r
+	 *            the buffered reader allowing the client to read the server's response. Note that the actual response name has already been
+	 *            read and the reader is positioned just before the first argument, if any.
+	 */
+	@Override
+	public void process(LoggedDataInputStream dis, ResponseServices services) throws ResponseException {
+		try {
+			final String line = dis.readLine();
+			terminating |= line.endsWith(SpecialResponses.SERVER_ABORTED);
+			terminating |= line.endsWith(SpecialResponses.SERVER_ABORTED_2);
+			terminating |= line.endsWith(SpecialResponses.SERVER_ABORTED_3);
+			terminating &= dis.available() == 0; // heuristics to relax SpecialResponses in commit messages...
+			message = line;
+			MessageEvent event = new MessageEvent(this, line, true);
+			services.getEventManager().fireCVSEvent(event);
+		} catch (EOFException ex) {
+			throw new ResponseException(ex, CommandException.getLocalMessage("CommandException.EndOfFile", null)); // NOI18N
+		} catch (IOException ex) {
+			throw new ResponseException(ex);
+		}
+	}
 
-    /** Is this a terminal response, i.e. should reading of responses stop
-     * after this response. This is true for responses such as OK or
-     * an error response
-     */
-    @Override
+	/**
+	 * Is this a terminal response, i.e. should reading of responses stop after this response. This is true for responses such as OK or an
+	 * error response
+	 */
+	@Override
 	public boolean isTerminalResponse() {
-        return terminating;
-    }
+		return terminating;
+	}
 
-    /**
-     * Get the error message. 
-     */
-    public String getMessage() {
-        return message;
-    }
+	/**
+	 * Get the error message.
+	 */
+	public String getMessage() {
+		return message;
+	}
 
 }

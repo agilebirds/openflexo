@@ -29,25 +29,22 @@ import org.openflexo.foundation.wkf.dm.AssociationRemoved;
 import org.openflexo.foundation.wkf.edge.WKFAssociation;
 import org.openflexo.foundation.wkf.edge.WKFEdge;
 
-
 public abstract class WKFNode extends WKFObject {
 
 	private Vector<WKFAssociation> incomingAssociations;
 	private Vector<WKFAssociation> outgoingAssociations;
 
-    /**
-     * Default constructor
-     */
-    public WKFNode(FlexoProcess process)
-    {
-        super(process);
-        incomingAssociations = new Vector<WKFAssociation>();
-        outgoingAssociations = new Vector<WKFAssociation>();
-    }
+	/**
+	 * Default constructor
+	 */
+	public WKFNode(FlexoProcess process) {
+		super(process);
+		incomingAssociations = new Vector<WKFAssociation>();
+		outgoingAssociations = new Vector<WKFAssociation>();
+	}
 
 	@Override
-	public void delete()
-	{
+	public void delete() {
 		Enumeration<WKFAssociation> en = new Vector<WKFAssociation>(incomingAssociations).elements();
 		while (en.hasMoreElements()) {
 			en.nextElement().delete();
@@ -59,14 +56,13 @@ public abstract class WKFNode extends WKFObject {
 		super.delete();
 	}
 
-    /**
+	/**
 	 * Return a Vector of all embedded WKFObjects
-	 *
+	 * 
 	 * @return a Vector of WKFObject instances
 	 */
 	@Override
-	public Vector<WKFObject> getAllEmbeddedWKFObjects()
-	{
+	public Vector<WKFObject> getAllEmbeddedWKFObjects() {
 		Vector<WKFObject> returned = new Vector<WKFObject>();
 		returned.add(this);
 		returned.addAll(getIncomingAssociations());
@@ -106,11 +102,12 @@ public abstract class WKFNode extends WKFObject {
 	}
 
 	public boolean hasIncomingAssociations() {
-		return getIncomingAssociations().size()>0;
+		return getIncomingAssociations().size() > 0;
 	}
 
 	/**
 	 * Returns all the start nodes of the incoming associations of this node
+	 * 
 	 * @return all the start nodes of the incoming associations of this node.
 	 */
 	public Vector<WKFNode> getFromAssociatedNodes() {
@@ -124,16 +121,18 @@ public abstract class WKFNode extends WKFObject {
 
 	/**
 	 * Returns all the edges that come into this node. Edges can either be Associations or PostConditions
+	 * 
 	 * @return all the edges that come into this node.
 	 */
 	public Vector<WKFEdge<?, ?>> getAllIncomingEdges() {
-		Vector<WKFEdge<?, ?>> edges = new Vector<WKFEdge<?,?>>();
+		Vector<WKFEdge<?, ?>> edges = new Vector<WKFEdge<?, ?>>();
 		edges.addAll(getIncomingAssociations());
 		return edges;
 	}
 
 	/**
 	 * Returns all nodes this node is related from.
+	 * 
 	 * @return all nodes this node is related from.
 	 */
 	public final Vector<WKFNode> getAllRelatedFromNodes() {
@@ -177,11 +176,12 @@ public abstract class WKFNode extends WKFObject {
 	}
 
 	public boolean hasOutgoingAssociations() {
-		return getOutgoingAssociations().size()>0;
+		return getOutgoingAssociations().size() > 0;
 	}
 
 	/**
 	 * Returns all the end nodes of the outgoing associations of this node
+	 * 
 	 * @return all the end nodes of the outgoing associations of this node.
 	 */
 	public Vector<WKFNode> getToAssociatedNodes() {
@@ -195,16 +195,18 @@ public abstract class WKFNode extends WKFObject {
 
 	/**
 	 * Returns all the edges that come into this node. Edges can either be Associations or PostConditions
+	 * 
 	 * @return all the edges that come into this node.
 	 */
 	public Vector<WKFEdge<?, ?>> getAllOutgoingEdges() {
-		Vector<WKFEdge<?, ?>> edges = new Vector<WKFEdge<?,?>>();
+		Vector<WKFEdge<?, ?>> edges = new Vector<WKFEdge<?, ?>>();
 		edges.addAll(getOutgoingAssociations());
 		return edges;
 	}
 
 	/**
 	 * Returns all nodes this node is related to.
+	 * 
 	 * @return all nodes this node is related to.
 	 */
 	public final Vector<WKFNode> getAllRelatedToNodes() {
@@ -214,7 +216,7 @@ public abstract class WKFNode extends WKFObject {
 	public abstract boolean isNodeValid();
 
 	protected void notifyAssociationInsertedToProcess(WKFAssociation association) {
-		if (getProcess()!=null) {
+		if (getProcess() != null) {
 			getProcess().notifyAssociationInserted(association);
 		}
 	}

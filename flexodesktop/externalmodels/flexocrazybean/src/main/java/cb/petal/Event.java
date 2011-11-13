@@ -18,35 +18,36 @@
  *
  */
 package cb.petal;
+
 import java.util.Collection;
 
 /**
  * Represents Event object
- *
+ * 
  * @version $Id: Event.java,v 1.3 2011/09/12 11:46:48 gpolet Exp $
- * @author  <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
+ * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public class Event extends PetalObject implements Named {
-  public Event(PetalNode parent, Collection params) {
-    super(parent, "Event", params);
-  }
+	public Event(PetalNode parent, Collection params) {
+		super(parent, "Event", params);
+	}
 
-  public Event() {
-    super("Event");
-  }
+	public Event() {
+		super("Event");
+	}
 
-  @Override
-public void setNameParameter(String o) {
-    params.set(0, o);
-  }
+	@Override
+	public void setNameParameter(String o) {
+		params.set(0, o);
+	}
 
-  @Override
-public String getNameParameter() {
-    return (String)params.get(0);
-  }
+	@Override
+	public String getNameParameter() {
+		return (String) params.get(0);
+	}
 
-  @Override
-public void accept(Visitor v) {
-    v.visit(this);
-  }
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

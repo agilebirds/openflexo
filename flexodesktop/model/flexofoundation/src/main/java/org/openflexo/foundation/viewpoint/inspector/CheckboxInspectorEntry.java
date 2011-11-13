@@ -23,19 +23,17 @@ package org.openflexo.foundation.viewpoint.inspector;
  * Represents an inspector entry for a check box (boolean value)
  * 
  * @author sylvain
- *
+ * 
  */
 public class CheckboxInspectorEntry extends InspectorEntry {
 
 	@Override
-	public Class getDefaultDataClass()
-	{
+	public Class getDefaultDataClass() {
 		return Boolean.class;
 	}
 
 	@Override
-	public String getWidgetName() 
-	{
+	public String getWidgetName() {
 		return "Checkbox";
 	}
 }

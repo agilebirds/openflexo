@@ -33,89 +33,79 @@ import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.wse.controller.WSEController;
 
-
 /**
  * Please comment this class
  * 
  * @author yourname
  * 
  */
-public class WSEViewExample extends JPanel implements ModuleView, GraphicalFlexoObserver
-{
-    
-    private WSEController _controller;
-    private FlexoModelObject _object;
+public class WSEViewExample extends JPanel implements ModuleView, GraphicalFlexoObserver {
 
-     public WSEViewExample(FlexoModelObject object, WSEController controller)
-    {
-        super(new BorderLayout());
-        add(new JLabel(object.getFullyQualifiedName(),SwingConstants.CENTER), BorderLayout.CENTER);
-        _controller = controller;
-        _object = object;
-    }
+	private WSEController _controller;
+	private FlexoModelObject _object;
 
-    public WSEController getWSEController()
-    {
-        return _controller;
-    }
+	public WSEViewExample(FlexoModelObject object, WSEController controller) {
+		super(new BorderLayout());
+		add(new JLabel(object.getFullyQualifiedName(), SwingConstants.CENTER), BorderLayout.CENTER);
+		_controller = controller;
+		_object = object;
+	}
 
-   @Override
-public FlexoModelObject getRepresentedObject()
-   {
-       return _object;
-   }
-    
-    @Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-    {
-        // TODO: Implements this
-    }
+	public WSEController getWSEController() {
+		return _controller;
+	}
 
-    @Override
-	public void deleteModuleView()
-    {
-         getWSEController().removeModuleView(this);   
-    }
+	@Override
+	public FlexoModelObject getRepresentedObject() {
+		return _object;
+	}
 
-    /**
-     * Overrides willShow
-     * @see org.openflexo.view.ModuleView#willShow()
-     */
-    @Override
-	public void willShow()
-    {
-        // TODO Auto-generated method stub
-        
-    }
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		// TODO: Implements this
+	}
 
-    /**
-     * Overrides willHide
-     * @see org.openflexo.view.ModuleView#willHide()
-     */
-    @Override
-	public void willHide()
-    {
-        // TODO Auto-generated method stub
-        
-    }
+	@Override
+	public void deleteModuleView() {
+		getWSEController().removeModuleView(this);
+	}
 
-    /**
-     * Returns flag indicating if this view is itself responsible for scroll management
-     * When not, Flexo will manage it's own scrollbar for you
-     * 
-     * @return
-     */
-    @Override
-	public boolean isAutoscrolled() 
-    {
-    	return false;
-    }
+	/**
+	 * Overrides willShow
+	 * 
+	 * @see org.openflexo.view.ModuleView#willShow()
+	 */
+	@Override
+	public void willShow() {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Overrides willHide
+	 * 
+	 * @see org.openflexo.view.ModuleView#willHide()
+	 */
+	@Override
+	public void willHide() {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Returns flag indicating if this view is itself responsible for scroll management When not, Flexo will manage it's own scrollbar for
+	 * you
+	 * 
+	 * @return
+	 */
+	@Override
+	public boolean isAutoscrolled() {
+		return false;
+	}
 
 	@Override
 	public FlexoPerspective getPerspective() {
 		return getWSEController().WSE_PERSPECTIVE;
 	}
-
-
 
 }

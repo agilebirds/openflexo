@@ -30,80 +30,66 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.ProcessFolder;
 
-
 /**
  * Widget allowing to select a Process while browsing the workflow
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public class ProcessOrProcessFolderSelector extends AbstractBrowserSelector<RepresentableFlexoModelObject>
-{
+public class ProcessOrProcessFolderSelector extends AbstractBrowserSelector<RepresentableFlexoModelObject> {
 
 	protected static final String EMPTY_STRING = "";
 
-	public ProcessOrProcessFolderSelector(FlexoProject project, FlexoProcess process)
-	{
-		this(project, (RepresentableFlexoModelObject)process, -1);
+	public ProcessOrProcessFolderSelector(FlexoProject project, FlexoProcess process) {
+		this(project, (RepresentableFlexoModelObject) process, -1);
 	}
 
-	public ProcessOrProcessFolderSelector(FlexoProject project, FlexoProcess process, int cols)
-	{
-		this(project, (RepresentableFlexoModelObject)process, cols);
+	public ProcessOrProcessFolderSelector(FlexoProject project, FlexoProcess process, int cols) {
+		this(project, (RepresentableFlexoModelObject) process, cols);
 	}
 
-	public ProcessOrProcessFolderSelector(FlexoProject project, ProcessFolder folder)
-	{
-		this(project, (RepresentableFlexoModelObject)folder, -1);
+	public ProcessOrProcessFolderSelector(FlexoProject project, ProcessFolder folder) {
+		this(project, (RepresentableFlexoModelObject) folder, -1);
 	}
 
-	public ProcessOrProcessFolderSelector(FlexoProject project, ProcessFolder folder, int cols)
-	{
-		this(project, (RepresentableFlexoModelObject)folder, cols);
+	public ProcessOrProcessFolderSelector(FlexoProject project, ProcessFolder folder, int cols) {
+		this(project, (RepresentableFlexoModelObject) folder, cols);
 	}
 
-	private ProcessOrProcessFolderSelector(FlexoProject project, RepresentableFlexoModelObject obj, int cols)
-	{
+	private ProcessOrProcessFolderSelector(FlexoProject project, RepresentableFlexoModelObject obj, int cols) {
 		super(project, obj, RepresentableFlexoModelObject.class, cols);
 	}
 
 	@Override
-	public boolean isSelectable(FlexoModelObject object)
-	{
+	public boolean isSelectable(FlexoModelObject object) {
 		return object instanceof FlexoProcess || object instanceof ProcessFolder;
 	}
 
 	@Override
-	protected ProcessSelectorPanel makeCustomPanel(RepresentableFlexoModelObject editedObject)
-	{
+	protected ProcessSelectorPanel makeCustomPanel(RepresentableFlexoModelObject editedObject) {
 		return new ProcessSelectorPanel();
 	}
 
 	@Override
-	public String renderedString(RepresentableFlexoModelObject editedObject)
-	{
+	public String renderedString(RepresentableFlexoModelObject editedObject) {
 		if (editedObject != null) {
 			return editedObject.getName();
 		}
 		return EMPTY_STRING;
 	}
 
-	protected class ProcessSelectorPanel extends AbstractSelectorPanel<RepresentableFlexoModelObject>
-	{
-		protected ProcessSelectorPanel()
-		{
+	protected class ProcessSelectorPanel extends AbstractSelectorPanel<RepresentableFlexoModelObject> {
+		protected ProcessSelectorPanel() {
 			super(ProcessOrProcessFolderSelector.this);
 		}
 
 		@Override
-		protected ProjectBrowser createBrowser(FlexoProject project)
-		{
+		protected ProjectBrowser createBrowser(FlexoProject project) {
 			return new ProcessBrowser();
 		}
 
 		@Override
-		public Dimension getDefaultSize()
-		{
+		public Dimension getDefaultSize() {
 			Dimension returned = _browserView.getDefaultSize();
 			returned.width = returned.width;
 			returned.height = returned.height - 100;
@@ -111,18 +97,15 @@ public class ProcessOrProcessFolderSelector extends AbstractBrowserSelector<Repr
 		}
 	}
 
-	protected class ProcessBrowser extends ProjectBrowser
-	{
+	protected class ProcessBrowser extends ProjectBrowser {
 
-		protected ProcessBrowser()
-		{
+		protected ProcessBrowser() {
 			super(ProcessOrProcessFolderSelector.this.getProject(), false);
 			init();
 		}
 
 		@Override
-		public void configure()
-		{
+		public void configure() {
 			setFilterStatus(BrowserElementType.PRECONDITION, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.POSTCONDITION, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.ROLE, BrowserFilterStatus.HIDE);
@@ -155,12 +138,11 @@ public class ProcessOrProcessFolderSelector extends AbstractBrowserSelector<Repr
 			setFilterStatus(BrowserElementType.OE_SHEMA_LIBRARY, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.ONTOLOGY_LIBRARY, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.WS_LIBRARY, BrowserFilterStatus.HIDE);
-			setFilterStatus(BrowserElementType.PROCESS_FOLDER, BrowserFilterStatus.SHOW,true);
+			setFilterStatus(BrowserElementType.PROCESS_FOLDER, BrowserFilterStatus.SHOW, true);
 		}
 
 		@Override
-		public FlexoModelObject getDefaultRootObject()
-		{
+		public FlexoModelObject getDefaultRootObject() {
 			return getProject();
 		}
 

@@ -22,19 +22,16 @@ package org.openflexo.foundation.param;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.inspector.widget.DenaliWidget;
 
-
 public class DMTypeParameter extends ParameterDefinition<DMType> {
 
-    public DMTypeParameter(String name, String label, DMType defaultValue)
-    {
-        super(name,label,defaultValue);
-        addParameter("className","org.openflexo.components.widget.DMTypeInspectorWidget");
-    }
-    
-   @Override
-public String getWidgetName() 
-   {
-        return DenaliWidget.CUSTOM;
-    }
+	public DMTypeParameter(String name, String label, DMType defaultValue) {
+		super(name, label, defaultValue);
+		addParameter("className", "org.openflexo.components.widget.DMTypeInspectorWidget");
+	}
+
+	@Override
+	public String getWidgetName() {
+		return DenaliWidget.CUSTOM;
+	}
 
 }

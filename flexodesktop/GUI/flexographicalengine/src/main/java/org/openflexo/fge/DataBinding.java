@@ -38,30 +38,24 @@ import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
-
-public class DataBinding implements StringConvertable<DataBinding>
-{
+public class DataBinding implements StringConvertable<DataBinding> {
 
 	private static final Logger logger = Logger.getLogger(DataBinding.class.getPackage().getName());
 
 	public static DataBinding.DataBindingConverter CONVERTER = new DataBindingConverter();
 
-	public static class DataBindingConverter extends Converter<DataBinding>
-	{
-		public DataBindingConverter() 
-		{
+	public static class DataBindingConverter extends Converter<DataBinding> {
+		public DataBindingConverter() {
 			super(DataBinding.class);
 		}
 
 		@Override
-		public DataBinding convertFromString(String value) 
-		{
+		public DataBinding convertFromString(String value) {
 			return new DataBinding(value);
 		}
 
 		@Override
-		public String convertToString(DataBinding value) 
-		{
+		public String convertToString(DataBinding value) {
 			return value.toString();
 		};
 	}
@@ -77,50 +71,46 @@ public class DataBinding implements StringConvertable<DataBinding>
 	private BindingDefinition bindingDefinition;
 	private AbstractBinding binding;
 
-	public DataBinding(GraphicalRepresentation owner, GRParameter attribute, BindingDefinition df) 
-	{
+	public DataBinding(GraphicalRepresentation owner, GRParameter attribute, BindingDefinition df) {
 		setOwner(owner);
 		setBindingAttribute(attribute);
 		setBindingDefinition(df);
 	}
 
-	public DataBinding(String unparsed) 
-	{
+	public DataBinding(String unparsed) {
 		unparsedBinding = unparsed;
 	}
 
-	public Object getBindingValue(BindingEvaluationContext context)
-	{
-		//logger.info("getBindingValue() "+this);
-		if (getBinding() != null) return getBinding().getBindingValue(context);
+	public Object getBindingValue(BindingEvaluationContext context) {
+		// logger.info("getBindingValue() "+this);
+		if (getBinding() != null)
+			return getBinding().getBindingValue(context);
 		return null;
 	}
 
-	public void setBindingValue(Object value, BindingEvaluationContext context)
-	{
-		if (getBinding() != null && getBinding().isSettable()) getBinding().setBindingValue(value,context);
+	public void setBindingValue(Object value, BindingEvaluationContext context) {
+		if (getBinding() != null && getBinding().isSettable())
+			getBinding().setBindingValue(value, context);
 	}
 
 	@Override
-	public String toString()
-	{
-		if (binding != null) return binding.getStringRepresentation();
+	public String toString() {
+		if (binding != null)
+			return binding.getStringRepresentation();
 		return unparsedBinding;
 	}
 
-	public BindingDefinition getBindingDefinition() 
-	{
+	public BindingDefinition getBindingDefinition() {
 		return bindingDefinition;
 	}
 
-	public void setBindingDefinition(BindingDefinition bindingDefinition) 
-	{
+	public void setBindingDefinition(BindingDefinition bindingDefinition) {
 		this.bindingDefinition = bindingDefinition;
 	}
 
-	public AbstractBinding getBinding() 
-	{
-		if (binding == null) finalizeDeserialization();
+	public AbstractBinding getBinding() {
+		if (binding == null)
+			finalizeDeserialization();
 		return binding;
 	}
 
@@ -129,54 +119,52 @@ public class DataBinding implements StringConvertable<DataBinding>
 		this.binding = binding;
 	}*/
 
-	public void setBinding(AbstractBinding value)
-	{
+	public void setBinding(AbstractBinding value) {
 		AbstractBinding oldValue = this.binding;
 		if (oldValue == null) {
-			if (value == null) return; // No change
+			if (value == null)
+				return; // No change
 			else {
 				this.binding = value;
 				unparsedBinding = (value != null ? value.getStringRepresentation() : null);
 				updateDependancies();
-				if (bindingAttribute != null) owner.notifyChange(bindingAttribute,oldValue,value);
+				if (bindingAttribute != null)
+					owner.notifyChange(bindingAttribute, oldValue, value);
 				owner.notifyBindingChanged(this);
 				return;
 			}
-		}
-		else {
-			if (oldValue.equals(value)) return; // No change
+		} else {
+			if (oldValue.equals(value))
+				return; // No change
 			else {
 				this.binding = value;
 				unparsedBinding = (value != null ? value.getStringRepresentation() : null);
-				logger.info("Binding takes now value "+value);
+				logger.info("Binding takes now value " + value);
 				updateDependancies();
-				if (bindingAttribute != null)  owner.notifyChange(bindingAttribute,oldValue,value);
+				if (bindingAttribute != null)
+					owner.notifyChange(bindingAttribute, oldValue, value);
 				owner.notifyBindingChanged(this);
 				return;
 			}
 		}
 	}
-	
-	public boolean hasBinding()
-	{
+
+	public boolean hasBinding() {
 		return binding != null;
 	}
-	
-	public boolean isValid()
-	{
+
+	public boolean isValid() {
 		return getBinding() != null && getBinding().isBindingValid();
 	}
-	
-	public boolean isSet()
-	{
+
+	public boolean isSet() {
 		return unparsedBinding != null || binding != null;
 	}
-	
-	public boolean isUnset()
-	{
+
+	public boolean isUnset() {
 		return unparsedBinding == null && binding == null;
 	}
-	
+
 	public String getUnparsedBinding() {
 		return unparsedBinding;
 	}
@@ -189,69 +177,65 @@ public class DataBinding implements StringConvertable<DataBinding>
 		return owner;
 	}
 
-	public void setOwner(GraphicalRepresentation owner)
-	{
+	public void setOwner(GraphicalRepresentation owner) {
 		this.owner = owner;
 	}
 
-	protected void finalizeDeserialization()
-	{
-		if (getUnparsedBinding() == null) return;
-		
-		//System.out.println("BindingModel: "+getOwner().getBindingModel());
+	protected void finalizeDeserialization() {
+		if (getUnparsedBinding() == null)
+			return;
+
+		// System.out.println("BindingModel: "+getOwner().getBindingModel());
 		if (getOwner() != null) {
 			BindingFactory factory = getOwner().getBindingFactory();
 			factory.setBindable(getOwner());
 			binding = factory.convertFromString(getUnparsedBinding());
 			binding.setBindingDefinition(getBindingDefinition());
-			//System.out.println(">>>>>>>>>>>>>> Binding: "+binding.getStringRepresentation()+" owner="+binding.getOwner());
-			//System.out.println("binding.isBindingValid()="+binding.isBindingValid());
+			// System.out.println(">>>>>>>>>>>>>> Binding: "+binding.getStringRepresentation()+" owner="+binding.getOwner());
+			// System.out.println("binding.isBindingValid()="+binding.isBindingValid());
 		}
-		
 
 		if (!binding.isBindingValid()) {
-			logger.warning("Binding not valid: "+binding+" for owner "+getOwner()+" context="+(getOwner()!=null?(getOwner()).getRootGraphicalRepresentation():null));
+			logger.warning("Binding not valid: " + binding + " for owner " + getOwner() + " context="
+					+ (getOwner() != null ? (getOwner()).getRootGraphicalRepresentation() : null));
 			/*logger.info("BindingModel="+getOwner().getBindingModel());
 			BindingExpression.logger.setLevel(Level.FINE);
 			binding = factory.convertFromString(getUnparsedBinding());
 			binding.setBindingDefinition(getBindingDefinition());
 			binding.isBindingValid();*/
 		}
-		
+
 		updateDependancies();
 	}
 
-	protected void updateDependancies()
-	{
-		if (binding == null) return;
+	protected void updateDependancies() {
+		if (binding == null)
+			return;
 
-		//logger.info("Searching dependancies for "+this);
+		// logger.info("Searching dependancies for "+this);
 
 		GraphicalRepresentation<?> component = getOwner();
 		List<TargetObject> targetList = binding.getTargetObjects(owner);
 		if (targetList != null) {
 			for (TargetObject o : targetList) {
-				//System.out.println("> "+o.target+" for "+o.propertyName);
+				// System.out.println("> "+o.target+" for "+o.propertyName);
 				if (o.target instanceof GraphicalRepresentation) {
-					GraphicalRepresentation<?> c = (GraphicalRepresentation)o.target;
+					GraphicalRepresentation<?> c = (GraphicalRepresentation) o.target;
 					GRParameter param = c.parameterWithName(o.propertyName);
-					//logger.info("OK, found "+getBindingAttribute()+" of "+getOwner()+" depends of "+param+" , "+c);
+					// logger.info("OK, found "+getBindingAttribute()+" of "+getOwner()+" depends of "+param+" , "+c);
 					try {
-						component.declareDependantOf(c,getBindingAttribute(),param);
+						component.declareDependantOf(c, getBindingAttribute(), param);
 					} catch (DependancyLoopException e) {
 						logger.warning("DependancyLoopException raised while declaring dependancy (data lookup)"
-								+"in the context of binding: "+binding.getStringRepresentation()
-								+" component: "+component
-								+" dependancy: "+c
-								+" identifier: "+c.getIdentifier()
-								+" message: "+e.getMessage());
+								+ "in the context of binding: " + binding.getStringRepresentation() + " component: " + component
+								+ " dependancy: " + c + " identifier: " + c.getIdentifier() + " message: " + e.getMessage());
 					}
 				}
 			}
 		}
 
-		//Vector<Expression> primitives;
-		//try {
+		// Vector<Expression> primitives;
+		// try {
 
 		/*primitives = Expression.extractPrimitives(binding.getStringRepresentation());
 
@@ -303,27 +287,24 @@ public class DataBinding implements StringConvertable<DataBinding>
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-*/
+		*/
 	}
 
-	public GRParameter getBindingAttribute()
-	{
+	public GRParameter getBindingAttribute() {
 		return bindingAttribute;
 	}
-	
-	public void setBindingAttribute(GRParameter bindingAttribute)
-	{
+
+	public void setBindingAttribute(GRParameter bindingAttribute) {
 		this.bindingAttribute = bindingAttribute;
 	}
 
 	@Override
-	public boolean equals(Object obj)
-	{
+	public boolean equals(Object obj) {
 		if (obj instanceof DataBinding) {
-			if (toString() == null) return false;
- 			return toString().equals(obj.toString());
-		}
-		else {
+			if (toString() == null)
+				return false;
+			return toString().equals(obj.toString());
+		} else {
 			return super.equals(obj);
 		}
 	}

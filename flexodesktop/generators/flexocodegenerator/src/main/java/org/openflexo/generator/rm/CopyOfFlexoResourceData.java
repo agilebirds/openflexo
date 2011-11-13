@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
@@ -39,13 +38,11 @@ import org.openflexo.generator.rm.GenerationAvailableFile;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileUtils;
 
-
-public class CopyOfFlexoResourceData implements GeneratedResourceData, GenerationAvailableFile
-{
+public class CopyOfFlexoResourceData implements GeneratedResourceData, GenerationAvailableFile {
 
 	private static final Logger logger = FlexoLogger.getLogger(CopyOfFlexoResourceData.class.getPackage().getName());
-	
-    /**
+
+	/**
 	 * 
 	 */
 	private final CopyOfFlexoResource flexoCopiedResource;
@@ -59,120 +56,113 @@ public class CopyOfFlexoResourceData implements GeneratedResourceData, Generatio
 
 	private File source;
 
-    /**
-     * Overrides generate
-     *
-     * @see org.openflexo.foundation.rm.GeneratedResourceData#generate()
-     */
-    @Override
-	public void generate() throws FlexoException
-    {
-    	if(flexoCopiedResource.getResourceToCopy() == null ||
-    	   flexoCopiedResource.getResourceToCopy().isDeleted()/* ||
-    	   !flexoCopiedResource.getResourceToCopy().getFile().exists()*/) {
-    		source = null;
-    	} else {
-    		source = flexoCopiedResource.getResourceToCopy().getFile();
-    	}
-    	
-    }
+	/**
+	 * Overrides generate
+	 * 
+	 * @see org.openflexo.foundation.rm.GeneratedResourceData#generate()
+	 */
+	@Override
+	public void generate() throws FlexoException {
+		if (flexoCopiedResource.getResourceToCopy() == null || flexoCopiedResource.getResourceToCopy().isDeleted()/* ||
+																													!flexoCopiedResource.getResourceToCopy().getFile().exists()*/) {
+			source = null;
+		} else {
+			source = flexoCopiedResource.getResourceToCopy().getFile();
+		}
 
-    //private 
-    
-    /**
-     * Overrides getFlexoResource
-     *
-     * @see org.openflexo.foundation.rm.GeneratedResourceData#getFlexoResource()
-     */
-    @Override
-	public FlexoGeneratedResource getFlexoResource()
-    {
-        return this.flexoCopiedResource;
-    }
+	}
 
-    /**
-     * Overrides regenerate
-     *
-     * @see org.openflexo.foundation.rm.GeneratedResourceData#regenerate()
-     */
-    @Override
-	public void regenerate() throws FlexoException
-    {
-        generate();
-    }
+	// private
 
-    /**
-     * Overrides writeToFile
-     *
-     * @see org.openflexo.foundation.rm.GeneratedResourceData#writeToFile(java.io.File)
-     */
-    @Override
-	public void writeToFile(File aFile) throws FlexoException
-    {
-    	if(source==null) {
-    		if (logger.isLoggable(Level.WARNING))
-				logger.warning("Source is null for resource: "+this);
-    		if (aFile.exists())
-    			aFile.delete();
-    		return;
-    	}
-        try {
-            boolean needsNotifyEndOfSaving = false;
-            FileWritingLock lock = null;
-            if (!getFlexoResource().isSaving()) {
-                logger.warning("writeToFile() called in "+getFlexoResource().getFileName()+" outside of RM-saving scheme");
-                lock = getFlexoResource().willWriteOnDisk();
-                needsNotifyEndOfSaving = true;
-            }
-            if (source.isFile())
-                FileUtils.copyFileToFile(source, aFile);
-            else if (source.isDirectory()) {
-            	aFile.mkdirs();
-                FileUtils.copyDirToDir(source, aFile);
-            } else {
-                if (logger.isLoggable(Level.SEVERE))
-                    logger.severe("Resource to copy file is neither a file nor a directory "+this.flexoCopiedResource.getResourceToCopy().getFile().getAbsolutePath());
-            }
-            if (needsNotifyEndOfSaving) {
-                getFlexoResource().hasWrittenOnDisk(lock);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new IOFlexoException(e);
-        }
-    }
+	/**
+	 * Overrides getFlexoResource
+	 * 
+	 * @see org.openflexo.foundation.rm.GeneratedResourceData#getFlexoResource()
+	 */
+	@Override
+	public FlexoGeneratedResource getFlexoResource() {
+		return this.flexoCopiedResource;
+	}
 
-    /**
-     * Overrides getProject
-     *
-     * @see org.openflexo.foundation.rm.FlexoResourceData#getProject()
-     */
-    @Override
-	public FlexoProject getProject()
-    {
-        return getFlexoResource().getProject();
-    }
+	/**
+	 * Overrides regenerate
+	 * 
+	 * @see org.openflexo.foundation.rm.GeneratedResourceData#regenerate()
+	 */
+	@Override
+	public void regenerate() throws FlexoException {
+		generate();
+	}
 
-    /**
-     * Overrides setFlexoResource
-     *
-     * @see org.openflexo.foundation.rm.FlexoResourceData#setFlexoResource(org.openflexo.foundation.rm.FlexoResource)
-     */
-    @Override
-	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException
-    {
+	/**
+	 * Overrides writeToFile
+	 * 
+	 * @see org.openflexo.foundation.rm.GeneratedResourceData#writeToFile(java.io.File)
+	 */
+	@Override
+	public void writeToFile(File aFile) throws FlexoException {
+		if (source == null) {
+			if (logger.isLoggable(Level.WARNING))
+				logger.warning("Source is null for resource: " + this);
+			if (aFile.exists())
+				aFile.delete();
+			return;
+		}
+		try {
+			boolean needsNotifyEndOfSaving = false;
+			FileWritingLock lock = null;
+			if (!getFlexoResource().isSaving()) {
+				logger.warning("writeToFile() called in " + getFlexoResource().getFileName() + " outside of RM-saving scheme");
+				lock = getFlexoResource().willWriteOnDisk();
+				needsNotifyEndOfSaving = true;
+			}
+			if (source.isFile())
+				FileUtils.copyFileToFile(source, aFile);
+			else if (source.isDirectory()) {
+				aFile.mkdirs();
+				FileUtils.copyDirToDir(source, aFile);
+			} else {
+				if (logger.isLoggable(Level.SEVERE))
+					logger.severe("Resource to copy file is neither a file nor a directory "
+							+ this.flexoCopiedResource.getResourceToCopy().getFile().getAbsolutePath());
+			}
+			if (needsNotifyEndOfSaving) {
+				getFlexoResource().hasWrittenOnDisk(lock);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new IOFlexoException(e);
+		}
+	}
 
-    }
+	/**
+	 * Overrides getProject
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResourceData#getProject()
+	 */
+	@Override
+	public FlexoProject getProject() {
+		return getFlexoResource().getProject();
+	}
+
+	/**
+	 * Overrides setFlexoResource
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResourceData#setFlexoResource(org.openflexo.foundation.rm.FlexoResource)
+	 */
+	@Override
+	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
+
+	}
 
 	@Override
 	public void setProject(FlexoProject project) {
-		
+
 	}
 
 	@Override
 	public FlexoResourceGenerator getGenerator() {
 		return null;
 	}
-
 
 }

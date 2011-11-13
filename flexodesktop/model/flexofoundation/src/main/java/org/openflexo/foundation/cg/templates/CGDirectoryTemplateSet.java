@@ -29,7 +29,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.toolbox.FileUtils;
 
-
 public abstract class CGDirectoryTemplateSet extends CGTemplateSet {
 
 	protected static final Logger logger = Logger.getLogger(CGDirectoryTemplateSet.class.getPackage().getName());
@@ -113,7 +112,6 @@ public abstract class CGDirectoryTemplateSet extends CGTemplateSet {
 	public File getDirectory() {
 		return _directory;
 	}
-
 
 	// public CGTemplateFile getTemplateFile(File aFile) {
 	// return _files.get(aFile);

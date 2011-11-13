@@ -19,14 +19,13 @@
  */
 package org.openflexo.components.tabular.model;
 
-public interface HeightAdjustableColumn 
-{
-    public void addRowHeightListener(RowHeightListener rhl);
-    
-    public void removeRowHeightListener(RowHeightListener rhl);
+public interface HeightAdjustableColumn {
+	public void addRowHeightListener(RowHeightListener rhl);
 
-    public void fireRowHeightChanged(int row);
-    
-    public int getRowHeight(int row);
-    
+	public void removeRowHeightListener(RowHeightListener rhl);
+
+	public void fireRowHeightChanged(int row);
+
+	public int getRowHeight(int row);
+
 }

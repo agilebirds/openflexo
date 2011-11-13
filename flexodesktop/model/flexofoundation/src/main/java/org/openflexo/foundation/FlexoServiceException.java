@@ -24,12 +24,12 @@ import javax.xml.rpc.ServiceException;
 public class FlexoServiceException extends FlexoException {
 
 	public FlexoServiceException(String message, ServiceException e) {
-		super(message!=null?message:(e!=null?e.getMessage():null), e);
+		super(message != null ? message : (e != null ? e.getMessage() : null), e);
 	}
 
 	@Override
 	public ServiceException getCause() {
 		return (ServiceException) super.getCause();
 	}
-	
+
 }

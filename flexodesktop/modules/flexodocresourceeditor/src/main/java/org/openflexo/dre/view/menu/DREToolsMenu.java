@@ -34,66 +34,53 @@ import org.openflexo.dre.controller.DREController;
 import org.openflexo.view.menu.FlexoMenuItem;
 import org.openflexo.view.menu.ToolsMenu;
 
-
 /**
  * 'Tools' menu for this Module
  * 
  * @author yourname
  */
-public class DREToolsMenu extends ToolsMenu
-{
+public class DREToolsMenu extends ToolsMenu {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DREToolsMenu.class.getPackage().getName());
 
-    public DREToolsMenu(DREController controller)
-    {
-        super(controller);
-    }
+	public DREToolsMenu(DREController controller) {
+		super(controller);
+	}
 
-    public DREController getDREController()
-    {
-        return (DREController)getController();
-    }
-    
-    @Override
-	public void addSpecificItems()
-    {
-        add(new CheckDocumentationConsistencyItem());
-        addSeparator();
-    }
-    
+	public DREController getDREController() {
+		return (DREController) getController();
+	}
 
-    // ==========================================================================
-    // ======================= CheckWorkflowConsistency
-    // =========================
-    // ==========================================================================
+	@Override
+	public void addSpecificItems() {
+		add(new CheckDocumentationConsistencyItem());
+		addSeparator();
+	}
 
-    public class CheckDocumentationConsistencyItem extends FlexoMenuItem
-    {
+	// ==========================================================================
+	// ======================= CheckWorkflowConsistency
+	// =========================
+	// ==========================================================================
 
-        public CheckDocumentationConsistencyItem()
-        {
-            super(new CheckDocumentationConsistencyAction(), "check_documentation_consistency", null, getDREController(), true);
-        }
+	public class CheckDocumentationConsistencyItem extends FlexoMenuItem {
 
-    }
+		public CheckDocumentationConsistencyItem() {
+			super(new CheckDocumentationConsistencyAction(), "check_documentation_consistency", null, getDREController(), true);
+		}
 
-    public class CheckDocumentationConsistencyAction extends AbstractAction
-    {
-        public CheckDocumentationConsistencyAction()
-        {
-            super();
-        }
+	}
 
-        @Override
-		public void actionPerformed(ActionEvent arg0)
-        {
-            getDREController().consistencyCheck(getDREController().getDocResourceManager().getDocResourceCenter());
-        }
+	public class CheckDocumentationConsistencyAction extends AbstractAction {
+		public CheckDocumentationConsistencyAction() {
+			super();
+		}
 
-    }
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			getDREController().consistencyCheck(getDREController().getDocResourceManager().getDocResourceCenter());
+		}
 
-
+	}
 
 }

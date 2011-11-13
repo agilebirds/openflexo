@@ -46,8 +46,7 @@ import org.openflexo.jedit.JEditTextArea.CursorPositionListener;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.sgmodule.controller.SGController;
 
-public class SGFooter extends JPanel implements GraphicalFlexoObserver,FocusListener, CursorPositionListener
-{
+public class SGFooter extends JPanel implements GraphicalFlexoObserver, FocusListener, CursorPositionListener {
 
 	/**
 	 * 
@@ -67,11 +66,10 @@ public class SGFooter extends JPanel implements GraphicalFlexoObserver,FocusList
 	private final JLabel cursorPositionLabel;
 	private final JLabel editorStatusLabel;
 
-	public SGFooter(SGController sgController)
-	{
-		super(new GridLayout(1,3));
+	public SGFooter(SGController sgController) {
+		super(new GridLayout(1, 3));
 		_sgController = sgController;
-		statusLabel = new JLabel("012345678901234567890123456789012345678901234567890123456789",SwingConstants.LEFT);
+		statusLabel = new JLabel("012345678901234567890123456789012345678901234567890123456789", SwingConstants.LEFT);
 		statusLabel.setFont(FlexoCst.MEDIUM_FONT);
 		statusLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
 		add(statusLabel);
@@ -81,31 +79,31 @@ public class SGFooter extends JPanel implements GraphicalFlexoObserver,FocusList
 		generationModifiedLabel.setFont(FlexoCst.MEDIUM_FONT);
 		statusCountPanel.add(generationModifiedLabel);
 		statusCountPanel.add(new JLabel(UtilsIconLibrary.LEFT_MODIFICATION_ICON));
-		statusCountPanel.add(Box.createRigidArea(new Dimension(3,16)));
+		statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 		diskModifiedLabel = new JLabel("5");
 		diskModifiedLabel.setFont(FlexoCst.MEDIUM_FONT);
 		statusCountPanel.add(diskModifiedLabel);
 		statusCountPanel.add(new JLabel(UtilsIconLibrary.RIGHT_MODIFICATION_ICON));
-		statusCountPanel.add(Box.createRigidArea(new Dimension(3,16)));
+		statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 		conflictsLabel = new JLabel("8");
 		conflictsLabel.setFont(FlexoCst.MEDIUM_FONT);
 		statusCountPanel.add(conflictsLabel);
 		statusCountPanel.add(new JLabel(UtilsIconLibrary.CONFLICT_ICON));
-		statusCountPanel.add(Box.createRigidArea(new Dimension(3,16)));
+		statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 		statusCountPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
-		statusCountPanel.add(Box.createRigidArea(new Dimension(3,16)));
+		statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 		needsMemoryGenerationLabel = new JLabel("1");
 		needsMemoryGenerationLabel.setFont(FlexoCst.MEDIUM_FONT);
 		statusCountPanel.add(needsMemoryGenerationLabel);
 		statusCountPanel.add(new JLabel(GeneratorIconLibrary.GENERATE_CODE_ICON));
-		statusCountPanel.add(Box.createRigidArea(new Dimension(3,16)));
+		statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 		needsReinjectionLabel = new JLabel("1");
 		needsReinjectionLabel.setFont(FlexoCst.MEDIUM_FONT);
 		statusCountPanel.add(needsReinjectionLabel);
 		statusCountPanel.add(new JLabel(GeneratorIconLibrary.NEEDS_MODEL_REINJECTION_ICON));
-		statusCountPanel.add(Box.createRigidArea(new Dimension(3,16)));
+		statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 		statusCountPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
-		statusCountPanel.add(Box.createRigidArea(new Dimension(3,16)));
+		statusCountPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 		errorsLabel = new JLabel("0");
 		errorsLabel.setFont(FlexoCst.MEDIUM_FONT);
 		statusCountPanel.add(errorsLabel);
@@ -114,14 +112,14 @@ public class SGFooter extends JPanel implements GraphicalFlexoObserver,FocusList
 
 		editorInfoPanel = new JPanel(new FlowLayout());
 		editorInfoPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
-		editorInfoPanel.add(Box.createRigidArea(new Dimension(3,16)));
-		cursorPositionLabel = new JLabel("-:-",SwingConstants.CENTER);
-		cursorPositionLabel.setPreferredSize(new Dimension(50,16));
+		editorInfoPanel.add(Box.createRigidArea(new Dimension(3, 16)));
+		cursorPositionLabel = new JLabel("-:-", SwingConstants.CENTER);
+		cursorPositionLabel.setPreferredSize(new Dimension(50, 16));
 		cursorPositionLabel.setFont(FlexoCst.MEDIUM_FONT);
 		editorInfoPanel.add(cursorPositionLabel);
-		editorInfoPanel.add(Box.createRigidArea(new Dimension(3,16)));
+		editorInfoPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 		editorInfoPanel.add(new JLabel(IconLibrary.SEPARATOR_ICON));
-		editorInfoPanel.add(Box.createRigidArea(new Dimension(3,16)));
+		editorInfoPanel.add(Box.createRigidArea(new Dimension(3, 16)));
 		editorStatusLabel = new JLabel("");
 		editorStatusLabel.setFont(FlexoCst.MEDIUM_FONT);
 		editorInfoPanel.add(editorStatusLabel);
@@ -130,36 +128,32 @@ public class SGFooter extends JPanel implements GraphicalFlexoObserver,FocusList
 
 	}
 
-	public void refresh()
-	{
+	public void refresh() {
 		SourceRepository repositoryToConsider = _sgController.getCurrentGeneratedCodeRepository();
-		//logger.info("Refresh footer with "+repositoryToConsider);
+		// logger.info("Refresh footer with "+repositoryToConsider);
 		boolean displayItemStatus;
 		if (repositoryToConsider != null) {
 			if (!_sgController.getObservedRepositories().contains(repositoryToConsider)) {
 				_sgController.getObservedRepositories().add(repositoryToConsider);
 				repositoryToConsider.addObserver(this);
 			}
-			String repName = "["+repositoryToConsider.getName()+"] ";
+			String repName = "[" + repositoryToConsider.getName() + "] ";
 			if (!repositoryToConsider.isConnected()) {
-				statusLabel.setText(repName+FlexoLocalization.localizedForKey("repository_disconnected"));
-				statusLabel.setForeground(Color.BLACK);   
+				statusLabel.setText(repName + FlexoLocalization.localizedForKey("repository_disconnected"));
+				statusLabel.setForeground(Color.BLACK);
 				displayItemStatus = false;
-			}
-			else {
+			} else {
 				if ((_sgController.getProjectGenerator(repositoryToConsider) == null)
 						|| !_sgController.getProjectGenerator(repositoryToConsider).hasBeenInitialized()) {
-					statusLabel.setText(repName+FlexoLocalization.localizedForKey("code_generation_not_synchronized"));
+					statusLabel.setText(repName + FlexoLocalization.localizedForKey("code_generation_not_synchronized"));
 					displayItemStatus = false;
-				}
-				else {
-					statusLabel.setText(repName+FlexoLocalization.localizedForKey("code_generation_is_synchronized"));
+				} else {
+					statusLabel.setText(repName + FlexoLocalization.localizedForKey("code_generation_is_synchronized"));
 					displayItemStatus = true;
 				}
-				statusLabel.setForeground(Color.BLACK);       			
+				statusLabel.setForeground(Color.BLACK);
 			}
-		}
-		else {
+		} else {
 			statusLabel.setText(FlexoLocalization.localizedForKey("no_repository_selected"));
 			statusLabel.setForeground(Color.GRAY);
 			displayItemStatus = false;
@@ -167,19 +161,18 @@ public class SGFooter extends JPanel implements GraphicalFlexoObserver,FocusList
 
 		if (displayItemStatus) {
 			generationModifiedLabel.setForeground(Color.BLACK);
-			generationModifiedLabel.setText(""+repositoryToConsider.getGenerationModifiedCount());
+			generationModifiedLabel.setText("" + repositoryToConsider.getGenerationModifiedCount());
 			diskModifiedLabel.setForeground(Color.BLACK);
-			diskModifiedLabel.setText(""+repositoryToConsider.getDiskModifiedCount());
+			diskModifiedLabel.setText("" + repositoryToConsider.getDiskModifiedCount());
 			conflictsLabel.setForeground(Color.BLACK);
-			conflictsLabel.setText(""+repositoryToConsider.getConflictsCount());
+			conflictsLabel.setText("" + repositoryToConsider.getConflictsCount());
 			needsMemoryGenerationLabel.setForeground(Color.BLACK);
-			needsMemoryGenerationLabel.setText(""+repositoryToConsider.getNeedsMemoryGenerationCount());
+			needsMemoryGenerationLabel.setText("" + repositoryToConsider.getNeedsMemoryGenerationCount());
 			needsReinjectionLabel.setForeground(Color.BLACK);
-			needsReinjectionLabel.setText(""+repositoryToConsider.getNeedsModelReinjectionCount());
+			needsReinjectionLabel.setText("" + repositoryToConsider.getNeedsModelReinjectionCount());
 			errorsLabel.setForeground(Color.BLACK);
-			errorsLabel.setText(""+repositoryToConsider.getErrorsCount());
-		}
-		else {
+			errorsLabel.setText("" + repositoryToConsider.getErrorsCount());
+		} else {
 			generationModifiedLabel.setForeground(Color.GRAY);
 			generationModifiedLabel.setText("-");
 			diskModifiedLabel.setForeground(Color.GRAY);
@@ -201,26 +194,23 @@ public class SGFooter extends JPanel implements GraphicalFlexoObserver,FocusList
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification) 
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		refresh();
 	}
 
 	@Override
-	public void focusGained(FocusEvent e)
-	{
+	public void focusGained(FocusEvent e) {
 		if (e.getComponent() instanceof JEditTextArea) {
-			((JEditTextArea)e.getComponent()).addToCursorPositionListener(this);
-			_activeGenericCodeDisplayer = ((JEditTextArea)e.getComponent());
+			((JEditTextArea) e.getComponent()).addToCursorPositionListener(this);
+			_activeGenericCodeDisplayer = ((JEditTextArea) e.getComponent());
 			refresh();
 		}
 	}
 
 	@Override
-	public void focusLost(FocusEvent e) 
-	{
+	public void focusLost(FocusEvent e) {
 		if (e.getComponent() instanceof JEditTextArea) {
-			((JEditTextArea)e.getComponent()).removeFromCursorPositionListener(this);
+			((JEditTextArea) e.getComponent()).removeFromCursorPositionListener(this);
 			if (_activeGenericCodeDisplayer == e.getComponent()) {
 				_activeGenericCodeDisplayer = null;
 			}
@@ -231,22 +221,19 @@ public class SGFooter extends JPanel implements GraphicalFlexoObserver,FocusList
 	private JEditTextArea _activeGenericCodeDisplayer;
 
 	@Override
-	public void positionChanged(int newPosX, int newPosY) 
-	{
+	public void positionChanged(int newPosX, int newPosY) {
 		refreshEditorInfoPanel();
-	}	
+	}
 
-
-	private void refreshEditorInfoPanel()
-	{
-		//logger.info("refreshEditorInfoPanel()");
+	private void refreshEditorInfoPanel() {
+		// logger.info("refreshEditorInfoPanel()");
 		if (_activeGenericCodeDisplayer == null) {
 			cursorPositionLabel.setText("-");
 			editorStatusLabel.setText(FlexoLocalization.localizedForKey("no_edition"));
-		}
-		else {
-			cursorPositionLabel.setText(_activeGenericCodeDisplayer.getCursorY()+":"+_activeGenericCodeDisplayer.getCursorX());
-			editorStatusLabel.setText((_activeGenericCodeDisplayer.isEditable()?FlexoLocalization.localizedForKey("edition"):FlexoLocalization.localizedForKey("read_only")));
+		} else {
+			cursorPositionLabel.setText(_activeGenericCodeDisplayer.getCursorY() + ":" + _activeGenericCodeDisplayer.getCursorX());
+			editorStatusLabel.setText((_activeGenericCodeDisplayer.isEditable() ? FlexoLocalization.localizedForKey("edition")
+					: FlexoLocalization.localizedForKey("read_only")));
 		}
 	}
 

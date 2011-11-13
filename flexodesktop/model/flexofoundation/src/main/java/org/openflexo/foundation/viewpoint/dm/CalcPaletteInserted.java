@@ -29,26 +29,22 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
  * @author sguerin
  * 
  */
-public class CalcPaletteInserted extends OEDataModification
-{
+public class CalcPaletteInserted extends OEDataModification {
 
-    private ViewPoint _parent;
+	private ViewPoint _parent;
 
-    public CalcPaletteInserted(ViewPointPalette palette, ViewPoint parent)
-    {
-        super(null, palette);
-        _parent = parent;
-    }
+	public CalcPaletteInserted(ViewPointPalette palette, ViewPoint parent) {
+		super(null, palette);
+		_parent = parent;
+	}
 
-    @Override
-    public ViewPointPalette newValue()
-    {
-     	return (ViewPointPalette)super.newValue();
-    }
-    
-    public ViewPoint getParent()
-    {
-        return _parent;
-    }
+	@Override
+	public ViewPointPalette newValue() {
+		return (ViewPointPalette) super.newValue();
+	}
+
+	public ViewPoint getParent() {
+		return _parent;
+	}
 
 }

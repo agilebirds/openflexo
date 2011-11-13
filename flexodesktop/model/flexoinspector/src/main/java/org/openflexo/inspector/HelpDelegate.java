@@ -21,19 +21,17 @@ package org.openflexo.inspector;
 
 import org.openflexo.inspector.model.PropertyModel;
 
-
 /**
  * Interface used by widgets to delegate help management.
  * 
  * @author sguerin
- *
+ * 
  */
-public interface HelpDelegate
-{
-	public boolean isHelpAvailableFor (PropertyModel property);
+public interface HelpDelegate {
+	public boolean isHelpAvailableFor(PropertyModel property);
 
-	public boolean displayHelpFor (InspectableObject object);
-	
+	public boolean displayHelpFor(InspectableObject object);
+
 	public String getHelpFor(PropertyModel property);
 
 }

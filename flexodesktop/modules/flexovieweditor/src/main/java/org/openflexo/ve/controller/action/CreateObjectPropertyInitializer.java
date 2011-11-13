@@ -35,54 +35,43 @@ import org.openflexo.ve.controller.OEController;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class CreateObjectPropertyInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	CreateObjectPropertyInitializer(OEControllerActionInitializer actionInitializer)
-	{
-		super(CreateObjectProperty.actionType,actionInitializer);
+	CreateObjectPropertyInitializer(OEControllerActionInitializer actionInitializer) {
+		super(CreateObjectProperty.actionType, actionInitializer);
 	}
 
 	@Override
-	protected OEControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (OEControllerActionInitializer)super.getControllerActionInitializer();
+	protected OEControllerActionInitializer getControllerActionInitializer() {
+		return (OEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<CreateObjectProperty> getDefaultInitializer() 
-	{
+	protected FlexoActionInitializer<CreateObjectProperty> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateObjectProperty>() {
 			@Override
-			public boolean run(ActionEvent e, CreateObjectProperty action)
-			{
-				FIBDialog dialog = FIBDialog.instanciateComponent(
-						VECst.CREATE_OBJECT_PROPERTY_DIALOG_FIB,
-						action, null, true);
+			public boolean run(ActionEvent e, CreateObjectProperty action) {
+				FIBDialog dialog = FIBDialog.instanciateComponent(VECst.CREATE_OBJECT_PROPERTY_DIALOG_FIB, action, null, true);
 				return (dialog.getStatus() == Status.VALIDATED);
 			}
 		};
 	}
-	
 
 	@Override
-	protected FlexoActionFinalizer<CreateObjectProperty> getDefaultFinalizer() 
-	{
+	protected FlexoActionFinalizer<CreateObjectProperty> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateObjectProperty>() {
 			@Override
-			public boolean run(ActionEvent e, CreateObjectProperty action)
-			{
-				((OEController)getController()).getSelectionManager().setSelectedObject(action.getNewProperty());
+			public boolean run(ActionEvent e, CreateObjectProperty action) {
+				((OEController) getController()).getSelectionManager().setSelectedObject(action.getNewProperty());
 				return true;
 			}
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return OntologyIconLibrary.ONTOLOGY_OBJECT_PROPERTY_ICON;
 	}
 

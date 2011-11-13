@@ -1,5 +1,5 @@
 #English
-#Wed Nov 09 13:55:36 CET 2011
+#Sun Nov 13 16:33:48 CET 2011
 =
 \ =\ 
 \ into\ =\ into 
@@ -4211,6 +4211,7 @@ return_type=Return type
 returned_instance=Returned ProcessInstance
 returned_type=Returned type
 returns=Returns
+reusable_component=reusable_component
 reuse_component=Reuse component
 revert=Revert
 revert_all_repository_to_version=Revert all repository to version

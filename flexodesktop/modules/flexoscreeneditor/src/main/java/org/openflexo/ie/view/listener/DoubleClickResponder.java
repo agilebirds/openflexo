@@ -28,9 +28,8 @@ import javax.swing.JComponent;
  * 
  * @author sguerin
  */
-public interface DoubleClickResponder
-{
+public interface DoubleClickResponder {
 
-    public void performDoubleClick(JComponent clickedContainer, Point clickedPoint, boolean isShiftDown);
+	public void performDoubleClick(JComponent clickedContainer, Point clickedPoint, boolean isShiftDown);
 
 }

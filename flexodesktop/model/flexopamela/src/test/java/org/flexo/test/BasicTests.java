@@ -1,6 +1,5 @@
 package org.flexo.test;
 
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -51,8 +50,7 @@ public class BasicTests extends TestCase {
 
 	@Override
 	@Before
-	public void setUp() throws Exception
-	{
+	public void setUp() throws Exception {
 		new File("/tmp").mkdirs();
 		factory = new ModelFactory();
 		deserializer = new XMLDeserializer(factory);
@@ -65,13 +63,11 @@ public class BasicTests extends TestCase {
 	}
 
 	/**
-	 * We declare here a basic mapping model, and we check
-	 * that the model construction is right
+	 * We declare here a basic mapping model, and we check that the model construction is right
 	 * 
 	 * @throws Exception
 	 */
-	public void test1() throws Exception
-	{
+	public void test1() throws Exception {
 		factory.importClass(FlexoProcess.class);
 
 		System.out.println(factory.debug());
@@ -102,15 +98,14 @@ public class BasicTests extends TestCase {
 		assertTrue(abstractNodeEntity.getDeclaredModelProperty(WKFObject.PROCESS).override());
 	}
 
-	public void test2() throws Exception
-	{
+	public void test2() throws Exception {
 		Document doc;
 
 		FlexoProcess process = factory.newInstance(FlexoProcess.class);
 		assertTrue(process instanceof FlexoProcess);
 
-		System.out.println("process="+process);
-		System.out.println("Id="+process.getFlexoID());
+		System.out.println("process=" + process);
+		System.out.println("Id=" + process.getFlexoID());
 		process.setFlexoID("234XX");
 		process.setName("NewProcess");
 		process.setFoo(8);
@@ -125,11 +120,11 @@ public class BasicTests extends TestCase {
 		activityNode.setName("MyActivity");
 		process.addToNodes(activityNode);
 
-		System.out.println("activityNode="+activityNode);
+		System.out.println("activityNode=" + activityNode);
 		assertEquals("MyActivity", activityNode.getName());
 		assertTrue(process.getNodes().contains(activityNode));
-		assertEquals(process,activityNode.getProcess());
-		System.out.println("process: "+activityNode.getProcess());
+		assertEquals(process, activityNode.getProcess());
+		System.out.println("process: " + activityNode.getProcess());
 
 		StartNode startNode = factory.newInstance(StartNode.class);
 		startNode.setName("Start");
@@ -139,28 +134,28 @@ public class BasicTests extends TestCase {
 		endNode.setName("End");
 		process.addToNodes(endNode);
 
-		System.out.println("process="+process);
+		System.out.println("process=" + process);
 
 		TokenEdge edge1 = (TokenEdge) factory.newInstance(TokenEdge.class).init(startNode, activityNode);
 		edge1.setName("edge1");
-		//startNode.addToOutgoingEdges(edge1);
-		//activityNode.addToIncomingEdges(edge1);
-		System.out.println("edge1="+edge1);
-		assertEquals(process,edge1.getProcess());
+		// startNode.addToOutgoingEdges(edge1);
+		// activityNode.addToIncomingEdges(edge1);
+		System.out.println("edge1=" + edge1);
+		assertEquals(process, edge1.getProcess());
 
-		TokenEdge edge2 = factory.newInstance(TokenEdge.class,"edge2",activityNode,endNode);
-		//edge2.setStartNode(activityNode);
-		//edge2.setEndNode(endNode);
+		TokenEdge edge2 = factory.newInstance(TokenEdge.class, "edge2", activityNode, endNode);
+		// edge2.setStartNode(activityNode);
+		// edge2.setEndNode(endNode);
 
-		System.out.println("edge2="+edge2);
-		assertEquals(process,edge2.getProcess());
+		System.out.println("edge2=" + edge2);
+		assertEquals(process, edge2.getProcess());
 
 		try {
 			FileOutputStream fos = new FileOutputStream("/tmp/TestFile.xml");
 			doc = serializer.serializeDocument(process, fos);
 			fos.flush();
 			fos.close();
-			System.out.println("XML:\n"+serializer.buildXMLOutput(doc));
+			System.out.println("XML:\n" + serializer.buildXMLOutput(doc));
 		} catch (FileNotFoundException e) {
 			fail(e.getMessage());
 		} catch (IOException e) {
@@ -169,8 +164,7 @@ public class BasicTests extends TestCase {
 
 	}
 
-	public void test3() throws Exception
-	{
+	public void test3() throws Exception {
 		Document doc;
 
 		FlexoProcess process = factory.newInstance(FlexoProcess.class);
@@ -178,24 +172,24 @@ public class BasicTests extends TestCase {
 		process.setName("NewProcess");
 		process.setFoo(8);
 
-		ActivityNode activityNode = factory.newInstance(ActivityNode.class,"MyActivity");
+		ActivityNode activityNode = factory.newInstance(ActivityNode.class, "MyActivity");
 		process.addToNodes(activityNode);
 		assertEquals("MyActivity", activityNode.getName());
 
-		StartNode startNode = factory.newInstance(StartNode.class,"Start");
+		StartNode startNode = factory.newInstance(StartNode.class, "Start");
 		process.addToNodes(startNode);
 		assertEquals("Start", startNode.getName());
 
-		EndNode endNode = factory.newInstance(EndNode.class,"End");
+		EndNode endNode = factory.newInstance(EndNode.class, "End");
 		process.addToNodes(endNode);
 		assertEquals("End", endNode.getName());
 
-		TokenEdge edge1 = factory.newInstance(TokenEdge.class,"edge1",startNode,activityNode);
-		TokenEdge edge2 = factory.newInstance(TokenEdge.class,"edge2",activityNode,endNode);
+		TokenEdge edge1 = factory.newInstance(TokenEdge.class, "edge1", startNode, activityNode);
+		TokenEdge edge2 = factory.newInstance(TokenEdge.class, "edge2", activityNode, endNode);
 		assertEquals(activityNode, edge2.getStartNode());
 		assertTrue(activityNode.getOutgoingEdges().contains(edge2));
-		assertEquals(1,startNode.getOutgoingEdges().size());
-		assertEquals(1,activityNode.getOutgoingEdges().size());
+		assertEquals(1, startNode.getOutgoingEdges().size());
+		assertEquals(1, activityNode.getOutgoingEdges().size());
 
 		WKFAnnotation annotation1 = factory.newInstance(WKFAnnotation.class, "Annotation 1");
 		WKFAnnotation annotation2 = factory.newInstance(WKFAnnotation.class, "Annotation 2");
@@ -210,7 +204,7 @@ public class BasicTests extends TestCase {
 			fos.flush();
 			fos.close();
 			xml1 = serializer.buildXMLOutput(doc);
-			System.out.println("XML 1:\n"+xml1);
+			System.out.println("XML 1:\n" + xml1);
 		} catch (FileNotFoundException e) {
 			fail(e.getMessage());
 		} catch (IOException e) {
@@ -220,8 +214,8 @@ public class BasicTests extends TestCase {
 		edge2.setStartNode(startNode);
 		assertEquals(startNode, edge2.getStartNode());
 		assertTrue(startNode.getOutgoingEdges().contains(edge2));
-		assertEquals(2,startNode.getOutgoingEdges().size());
-		assertEquals(0,activityNode.getOutgoingEdges().size());
+		assertEquals(2, startNode.getOutgoingEdges().size());
+		assertEquals(0, activityNode.getOutgoingEdges().size());
 
 		String xml2 = null;
 
@@ -231,20 +225,19 @@ public class BasicTests extends TestCase {
 			fos.flush();
 			fos.close();
 			xml2 = serializer.buildXMLOutput(doc);
-			System.out.println("XML 2:\n"+xml2);
+			System.out.println("XML 2:\n" + xml2);
 		} catch (FileNotFoundException e) {
 			fail(e.getMessage());
 		} catch (IOException e) {
 			fail(e.getMessage());
 		}
 
-
 		activityNode.addToOutgoingEdges(edge2);
 		assertEquals(activityNode, edge2.getStartNode());
 		assertFalse(startNode.getOutgoingEdges().contains(edge2));
 		assertTrue(activityNode.getOutgoingEdges().contains(edge2));
-		assertEquals(1,startNode.getOutgoingEdges().size());
-		assertEquals(1,activityNode.getOutgoingEdges().size());
+		assertEquals(1, startNode.getOutgoingEdges().size());
+		assertEquals(1, activityNode.getOutgoingEdges().size());
 
 		String xml3 = null;
 
@@ -254,7 +247,7 @@ public class BasicTests extends TestCase {
 			fos.flush();
 			fos.close();
 			xml3 = serializer.buildXMLOutput(doc);
-			System.out.println("XML 3:\n"+xml3);
+			System.out.println("XML 3:\n" + xml3);
 		} catch (FileNotFoundException e) {
 			fail(e.getMessage());
 		} catch (IOException e) {
@@ -264,8 +257,7 @@ public class BasicTests extends TestCase {
 		assertEquals(xml1, xml3);
 	}
 
-	public void test4() throws Exception
-	{
+	public void test4() throws Exception {
 		FlexoProcess process = loadProcessFromFile();
 
 		assertTrue(process instanceof FlexoProcess);
@@ -273,28 +265,28 @@ public class BasicTests extends TestCase {
 		assertEquals("NewProcess", process.getName());
 		assertEquals("234XX", process.getFlexoID());
 		assertEquals(8, process.getFoo());
-		ActivityNode activityNode = (ActivityNode)process.getNodeNamed("MyActivity");
+		ActivityNode activityNode = (ActivityNode) process.getNodeNamed("MyActivity");
 		assertNotNull(activityNode);
 		assertEquals("MyActivity", activityNode.getName());
 		assertTrue(process.getNodes().contains(activityNode));
-		assertEquals(process,activityNode.getProcess());
-		StartNode startNode = (StartNode)process.getNodeNamed("Start");
+		assertEquals(process, activityNode.getProcess());
+		StartNode startNode = (StartNode) process.getNodeNamed("Start");
 		assertNotNull(startNode);
 		assertNotNull(startNode.getMasterAnnotation());
 		assertEquals("Annotation 1", startNode.getMasterAnnotation().getText());
 		assertEquals(1, startNode.getOtherAnnotations().size());
-		EndNode endNode = (EndNode)process.getNodeNamed("End");
+		EndNode endNode = (EndNode) process.getNodeNamed("End");
 		assertNotNull(endNode);
-		TokenEdge edge1 = (TokenEdge)process.getEdgeNamed("edge1");
+		TokenEdge edge1 = (TokenEdge) process.getEdgeNamed("edge1");
 		assertNotNull(edge1);
-		TokenEdge edge2 = (TokenEdge)process.getEdgeNamed("edge2");
+		TokenEdge edge2 = (TokenEdge) process.getEdgeNamed("edge2");
 		assertNotNull(edge2);
-		assertEquals(process,edge1.getProcess());
-		assertEquals(process,edge2.getProcess());
+		assertEquals(process, edge1.getProcess());
+		assertEquals(process, edge2.getProcess());
 		assertEquals(activityNode, edge2.getStartNode());
 		assertTrue(activityNode.getOutgoingEdges().contains(edge2));
-		assertEquals(1,startNode.getOutgoingEdges().size());
-		assertEquals(1,activityNode.getOutgoingEdges().size());
+		assertEquals(1, startNode.getOutgoingEdges().size());
+		assertEquals(1, activityNode.getOutgoingEdges().size());
 	}
 
 	private FlexoProcess loadProcessFromFile() throws ModelDefinitionException {
@@ -348,31 +340,30 @@ public class BasicTests extends TestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void test6() throws Exception
-	{
+	public void test6() throws Exception {
 		FlexoProcess process = factory.newInstance(FlexoProcess.class);
 		process.setFlexoID("234XX");
 		process.setName("NewProcess");
 		process.setFoo(8);
 
-		ActivityNode activityNode = factory.newInstance(ActivityNode.class,"MyActivity");
+		ActivityNode activityNode = factory.newInstance(ActivityNode.class, "MyActivity");
 		process.addToNodes(activityNode);
-		StartNode startNode = factory.newInstance(StartNode.class,"Start");
+		StartNode startNode = factory.newInstance(StartNode.class, "Start");
 		process.addToNodes(startNode);
-		EndNode endNode = factory.newInstance(EndNode.class,"End");
+		EndNode endNode = factory.newInstance(EndNode.class, "End");
 		process.addToNodes(endNode);
-		TokenEdge edge1 = factory.newInstance(TokenEdge.class,"edge1",startNode,activityNode);
-		TokenEdge edge2 = factory.newInstance(TokenEdge.class,"edge2",activityNode,endNode);
+		TokenEdge edge1 = factory.newInstance(TokenEdge.class, "edge1", startNode, activityNode);
+		TokenEdge edge2 = factory.newInstance(TokenEdge.class, "edge2", activityNode, endNode);
 
 		// No embedded objects for a simple node (edges let the closure fail)
 		List<Object> embeddedObjects1 = factory.getEmbeddedObjects(startNode);
-		System.out.println("Embedded: "+embeddedObjects1);
-		assertEquals(0,embeddedObjects1.size());
+		System.out.println("Embedded: " + embeddedObjects1);
+		assertEquals(0, embeddedObjects1.size());
 
 		// The 3 nodes and the 2 edges belongs to same closure, take them
 		List<Object> embeddedObjects2 = factory.getEmbeddedObjects(process);
-		System.out.println("Embedded: "+embeddedObjects2);
-		assertEquals(5,embeddedObjects2.size());
+		System.out.println("Embedded: " + embeddedObjects2);
+		assertEquals(5, embeddedObjects2.size());
 		assertTrue(embeddedObjects2.contains(activityNode));
 		assertTrue(embeddedObjects2.contains(startNode));
 		assertTrue(embeddedObjects2.contains(endNode));
@@ -382,18 +373,18 @@ public class BasicTests extends TestCase {
 		// Computes embedded objects for activity node in the context of process
 		// In this case, edge1 and edge2 are also embedded because belonging to supplied
 		// context which is the process itself
-		List<Object> embeddedObjects3 = factory.getEmbeddedObjects(activityNode,process);
-		System.out.println("Embedded: "+embeddedObjects3);
-		assertEquals(2,embeddedObjects3.size());
+		List<Object> embeddedObjects3 = factory.getEmbeddedObjects(activityNode, process);
+		System.out.println("Embedded: " + embeddedObjects3);
+		assertEquals(2, embeddedObjects3.size());
 		assertTrue(embeddedObjects3.contains(edge1));
 		assertTrue(embeddedObjects3.contains(edge2));
 
 		// Computes embedded objects for activity node in the context of node startNode
 		// In this case, edge1 is also embedded because belonging to supplied
 		// context which is the opposite node startNode
-		List<Object> embeddedObjects4 = factory.getEmbeddedObjects(activityNode,startNode);
-		System.out.println("Embedded: "+embeddedObjects4);
-		assertEquals(1,embeddedObjects4.size());
+		List<Object> embeddedObjects4 = factory.getEmbeddedObjects(activityNode, startNode);
+		System.out.println("Embedded: " + embeddedObjects4);
+		assertEquals(1, embeddedObjects4.size());
 		assertTrue(embeddedObjects4.contains(edge1));
 	}
 
@@ -402,24 +393,23 @@ public class BasicTests extends TestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void test7() throws Exception
-	{
+	public void test7() throws Exception {
 		FlexoProcess process = factory.newInstance(FlexoProcess.class);
 		process.setFlexoID("234XX");
 		process.setName("NewProcess");
 		process.setFoo(8);
 
-		ActivityNode activityNode = factory.newInstance(ActivityNode.class,"MyActivity");
+		ActivityNode activityNode = factory.newInstance(ActivityNode.class, "MyActivity");
 		process.addToNodes(activityNode);
-		StartNode startNode = factory.newInstance(StartNode.class,"Start");
+		StartNode startNode = factory.newInstance(StartNode.class, "Start");
 		process.addToNodes(startNode);
-		EndNode endNode = factory.newInstance(EndNode.class,"End");
+		EndNode endNode = factory.newInstance(EndNode.class, "End");
 		process.addToNodes(endNode);
-		TokenEdge edge1 = factory.newInstance(TokenEdge.class,"edge1",startNode,activityNode);
-		TokenEdge edge2 = factory.newInstance(TokenEdge.class,"edge2",activityNode,endNode);
+		TokenEdge edge1 = factory.newInstance(TokenEdge.class, "edge1", startNode, activityNode);
+		TokenEdge edge2 = factory.newInstance(TokenEdge.class, "edge2", activityNode, endNode);
 
-		FlexoProcess processCopy = (FlexoProcess)process.cloneObject();
-		System.out.println("processCopy="+processCopy);
+		FlexoProcess processCopy = (FlexoProcess) process.cloneObject();
+		System.out.println("processCopy=" + processCopy);
 
 		assertNotNull(processCopy);
 		assertTrue(processCopy instanceof FlexoProcess);
@@ -427,28 +417,28 @@ public class BasicTests extends TestCase {
 		assertEquals("234XX", processCopy.getFlexoID());
 		assertEquals(8, processCopy.getFoo());
 
-		ActivityNode activityNodeCopy = (ActivityNode)processCopy.getNodeNamed("MyActivity1");
+		ActivityNode activityNodeCopy = (ActivityNode) processCopy.getNodeNamed("MyActivity1");
 		assertNotNull(activityNodeCopy);
 		assertEquals("MyActivity1", activityNodeCopy.getName());
 		assertTrue(processCopy.getNodes().contains(activityNodeCopy));
-		assertEquals(processCopy,activityNodeCopy.getProcess());
-		StartNode startNodeCopy = (StartNode)processCopy.getNodeNamed("Start1");
+		assertEquals(processCopy, activityNodeCopy.getProcess());
+		StartNode startNodeCopy = (StartNode) processCopy.getNodeNamed("Start1");
 		assertNotNull(startNodeCopy);
-		EndNode endNodeCopy = (EndNode)processCopy.getNodeNamed("End1");
+		EndNode endNodeCopy = (EndNode) processCopy.getNodeNamed("End1");
 		assertNotNull(endNodeCopy);
-		TokenEdge edge1Copy = (TokenEdge)processCopy.getEdgeNamed("edge11");
+		TokenEdge edge1Copy = (TokenEdge) processCopy.getEdgeNamed("edge11");
 		assertNotNull(edge1Copy);
-		TokenEdge edge2Copy = (TokenEdge)processCopy.getEdgeNamed("edge21");
+		TokenEdge edge2Copy = (TokenEdge) processCopy.getEdgeNamed("edge21");
 		assertNotNull(edge2Copy);
-		assertEquals(processCopy,edge1Copy.getProcess());
-		assertEquals(processCopy,edge2Copy.getProcess());
+		assertEquals(processCopy, edge1Copy.getProcess());
+		assertEquals(processCopy, edge2Copy.getProcess());
 		assertEquals(startNodeCopy, edge1Copy.getStartNode());
 		assertEquals(activityNodeCopy, edge1Copy.getEndNode());
 		assertEquals(activityNodeCopy, edge2Copy.getStartNode());
 		assertEquals(endNodeCopy, edge2Copy.getEndNode());
 		assertTrue(activityNodeCopy.getOutgoingEdges().contains(edge2Copy));
-		assertEquals(1,startNodeCopy.getOutgoingEdges().size());
-		assertEquals(1,activityNodeCopy.getOutgoingEdges().size());
+		assertEquals(1, startNodeCopy.getOutgoingEdges().size());
+		assertEquals(1, activityNodeCopy.getOutgoingEdges().size());
 
 		assertNotSame(edge1, edge1Copy);
 		assertNotSame(edge2, edge2Copy);
@@ -458,7 +448,7 @@ public class BasicTests extends TestCase {
 			Document doc = serializer.serializeDocument(processCopy, fos);
 			fos.flush();
 			fos.close();
-			System.out.println("XML:\n"+serializer.buildXMLOutput(doc));
+			System.out.println("XML:\n" + serializer.buildXMLOutput(doc));
 		} catch (FileNotFoundException e) {
 			fail(e.getMessage());
 		} catch (IOException e) {
@@ -472,60 +462,59 @@ public class BasicTests extends TestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void test8() throws Exception
-	{
+	public void test8() throws Exception {
 		FlexoProcess process = factory.newInstance(FlexoProcess.class);
 		process.setFlexoID("234XX");
 		process.setName("NewProcess");
 		process.setFoo(8);
 
-		ActivityNode activityNode = factory.newInstance(ActivityNode.class,"MyActivity");
+		ActivityNode activityNode = factory.newInstance(ActivityNode.class, "MyActivity");
 		process.addToNodes(activityNode);
-		StartNode startNode = factory.newInstance(StartNode.class,"Start");
+		StartNode startNode = factory.newInstance(StartNode.class, "Start");
 		process.addToNodes(startNode);
-		EndNode endNode = factory.newInstance(EndNode.class,"End");
+		EndNode endNode = factory.newInstance(EndNode.class, "End");
 		process.addToNodes(endNode);
-		TokenEdge edge1 = factory.newInstance(TokenEdge.class,"edge1",startNode,activityNode);
-		TokenEdge edge2 = factory.newInstance(TokenEdge.class,"edge2",activityNode,endNode);
+		TokenEdge edge1 = factory.newInstance(TokenEdge.class, "edge1", startNode, activityNode);
+		TokenEdge edge2 = factory.newInstance(TokenEdge.class, "edge2", activityNode, endNode);
 
 		// Clone activityNode, edge1 and edge2 will be cloned as their
 		// related property @CloningStrategy is flagged as CLONE
-		ActivityNode activityNodeCopy = (ActivityNode)activityNode.cloneObject();
-		System.out.println("activityNodeCopy="+activityNodeCopy);
+		ActivityNode activityNodeCopy = (ActivityNode) activityNode.cloneObject();
+		System.out.println("activityNodeCopy=" + activityNodeCopy);
 		System.out.println(debug(activityNodeCopy));
 
-		assertEquals(1,activityNodeCopy.getIncomingEdges().size());
-		TokenEdge edge1Copy = (TokenEdge)activityNodeCopy.getIncomingEdges().get(0);
-		assertEquals("edge11",edge1Copy.getName());
+		assertEquals(1, activityNodeCopy.getIncomingEdges().size());
+		TokenEdge edge1Copy = (TokenEdge) activityNodeCopy.getIncomingEdges().get(0);
+		assertEquals("edge11", edge1Copy.getName());
 
-		assertEquals(1,activityNodeCopy.getOutgoingEdges().size());
-		TokenEdge edge2Copy = (TokenEdge)activityNodeCopy.getOutgoingEdges().get(0);
-		assertEquals("edge21",edge2Copy.getName());
+		assertEquals(1, activityNodeCopy.getOutgoingEdges().size());
+		TokenEdge edge2Copy = (TokenEdge) activityNodeCopy.getOutgoingEdges().get(0);
+		assertEquals("edge21", edge2Copy.getName());
 
 		// Clone activityNode in the context of process, edge1 and edge2 will be cloned
 		// because they belong to process' context
-		ActivityNode activityNodeCopy2 = (ActivityNode)activityNode.cloneObject(process);
-		System.out.println("activityNodeCopy2="+activityNodeCopy2);
+		ActivityNode activityNodeCopy2 = (ActivityNode) activityNode.cloneObject(process);
+		System.out.println("activityNodeCopy2=" + activityNodeCopy2);
 		System.out.println(debug(activityNodeCopy2));
 
-		assertEquals(1,activityNodeCopy2.getIncomingEdges().size());
-		TokenEdge edge1Copy2 = (TokenEdge)activityNodeCopy2.getIncomingEdges().get(0);
-		assertEquals("edge11",edge1Copy2.getName());
+		assertEquals(1, activityNodeCopy2.getIncomingEdges().size());
+		TokenEdge edge1Copy2 = (TokenEdge) activityNodeCopy2.getIncomingEdges().get(0);
+		assertEquals("edge11", edge1Copy2.getName());
 
-		assertEquals(1,activityNodeCopy2.getOutgoingEdges().size());
-		TokenEdge edge2Copy2 = (TokenEdge)activityNodeCopy2.getOutgoingEdges().get(0);
-		assertEquals("edge21",edge2Copy2.getName());
+		assertEquals(1, activityNodeCopy2.getOutgoingEdges().size());
+		TokenEdge edge2Copy2 = (TokenEdge) activityNodeCopy2.getOutgoingEdges().get(0);
+		assertEquals("edge21", edge2Copy2.getName());
 
 		// Clone activityNode in the context of startNode, only edge1 will be cloned
-		ActivityNode activityNodeCopy3 = (ActivityNode)activityNode.cloneObject(startNode);
-		System.out.println("activityNodeCopy3="+activityNodeCopy3);
+		ActivityNode activityNodeCopy3 = (ActivityNode) activityNode.cloneObject(startNode);
+		System.out.println("activityNodeCopy3=" + activityNodeCopy3);
 		System.out.println(debug(activityNodeCopy3));
 
-		assertEquals(1,activityNodeCopy3.getIncomingEdges().size());
-		TokenEdge edge1Copy3 = (TokenEdge)activityNodeCopy3.getIncomingEdges().get(0);
-		assertEquals("edge11",edge1Copy3.getName());
+		assertEquals(1, activityNodeCopy3.getIncomingEdges().size());
+		TokenEdge edge1Copy3 = (TokenEdge) activityNodeCopy3.getIncomingEdges().get(0);
+		assertEquals("edge11", edge1Copy3.getName());
 
-		assertEquals(0,activityNodeCopy3.getOutgoingEdges().size());
+		assertEquals(0, activityNodeCopy3.getOutgoingEdges().size());
 	}
 
 	/**
@@ -533,46 +522,44 @@ public class BasicTests extends TestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void test9() throws Exception
-	{
+	public void test9() throws Exception {
 		FlexoProcess process = factory.newInstance(FlexoProcess.class);
 		process.setFlexoID("234XX");
 		process.setName("NewProcess");
 		process.setFoo(8);
 
-		ActivityNode activityNode = factory.newInstance(ActivityNode.class,"MyActivity");
+		ActivityNode activityNode = factory.newInstance(ActivityNode.class, "MyActivity");
 		process.addToNodes(activityNode);
-		StartNode startNode = factory.newInstance(StartNode.class,"Start");
+		StartNode startNode = factory.newInstance(StartNode.class, "Start");
 		process.addToNodes(startNode);
-		EndNode endNode = factory.newInstance(EndNode.class,"End");
+		EndNode endNode = factory.newInstance(EndNode.class, "End");
 		process.addToNodes(endNode);
-		TokenEdge edge1 = factory.newInstance(TokenEdge.class,"edge1",startNode,activityNode);
-		TokenEdge edge2 = factory.newInstance(TokenEdge.class,"edge2",activityNode,endNode);
-
+		TokenEdge edge1 = factory.newInstance(TokenEdge.class, "edge1", startNode, activityNode);
+		TokenEdge edge2 = factory.newInstance(TokenEdge.class, "edge2", activityNode, endNode);
 
 		Clipboard clipboard = factory.copy(activityNode);
 		System.out.println("Clipboard 1");
 		System.out.println(debug(clipboard.getContents()));
 		assertTrue(clipboard.isSingleObject());
 		assertTrue(clipboard.getContents() instanceof ActivityNode);
-		assertEquals("MyActivity1",((ActivityNode)clipboard.getContents()).getName());
-		assertEquals(0,((ActivityNode)clipboard.getContents()).getIncomingEdges().size());
-		assertEquals(0,((ActivityNode)clipboard.getContents()).getOutgoingEdges().size());
+		assertEquals("MyActivity1", ((ActivityNode) clipboard.getContents()).getName());
+		assertEquals(0, ((ActivityNode) clipboard.getContents()).getIncomingEdges().size());
+		assertEquals(0, ((ActivityNode) clipboard.getContents()).getOutgoingEdges().size());
 
 		factory.paste(clipboard, process);
 
 		System.out.println(debug(process));
 		assertEquals(4, process.getNodes().size());
-		ActivityNode newNode = (ActivityNode)process.getNodeNamed("MyActivity1");
-		assertEquals(0,newNode.getIncomingEdges().size());
-		assertEquals(0,newNode.getOutgoingEdges().size());
+		ActivityNode newNode = (ActivityNode) process.getNodeNamed("MyActivity1");
+		assertEquals(0, newNode.getIncomingEdges().size());
+		assertEquals(0, newNode.getOutgoingEdges().size());
 
 		try {
 			FileOutputStream fos = new FileOutputStream("/tmp/TestFile.xml");
 			Document doc = serializer.serializeDocument(process, fos);
 			fos.flush();
 			fos.close();
-			System.out.println("XML:\n"+serializer.buildXMLOutput(doc));
+			System.out.println("XML:\n" + serializer.buildXMLOutput(doc));
 		} catch (FileNotFoundException e) {
 			fail(e.getMessage());
 		} catch (IOException e) {
@@ -586,39 +573,37 @@ public class BasicTests extends TestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void test10() throws Exception
-	{
+	public void test10() throws Exception {
 		FlexoProcess process = factory.newInstance(FlexoProcess.class);
 		process.setFlexoID("234XX");
 		process.setName("NewProcess");
 		process.setFoo(8);
 
-		ActivityNode activityNode = factory.newInstance(ActivityNode.class,"MyActivity");
+		ActivityNode activityNode = factory.newInstance(ActivityNode.class, "MyActivity");
 		process.addToNodes(activityNode);
-		StartNode startNode = factory.newInstance(StartNode.class,"Start");
+		StartNode startNode = factory.newInstance(StartNode.class, "Start");
 		process.addToNodes(startNode);
-		EndNode endNode = factory.newInstance(EndNode.class,"End");
+		EndNode endNode = factory.newInstance(EndNode.class, "End");
 		process.addToNodes(endNode);
-		TokenEdge edge1 = factory.newInstance(TokenEdge.class,"edge1",startNode,activityNode);
-		TokenEdge edge2 = factory.newInstance(TokenEdge.class,"edge2",activityNode,endNode);
+		TokenEdge edge1 = factory.newInstance(TokenEdge.class, "edge1", startNode, activityNode);
+		TokenEdge edge2 = factory.newInstance(TokenEdge.class, "edge2", activityNode, endNode);
 
-
-		Clipboard clipboard = factory.copy(startNode,activityNode);
+		Clipboard clipboard = factory.copy(startNode, activityNode);
 		System.out.println("Clipboard");
 		System.out.println(debug(clipboard.getContents()));
 		assertFalse(clipboard.isSingleObject());
 		assertTrue(clipboard.getContents() instanceof List);
-		assertEquals(2,((List)clipboard.getContents()).size());
-		assertTrue(((List)clipboard.getContents()).get(0) instanceof StartNode);
-		assertTrue(((List)clipboard.getContents()).get(1) instanceof ActivityNode);
-		StartNode copiedStartNode = (StartNode)((List)clipboard.getContents()).get(0);
-		ActivityNode copiedActivityNode = (ActivityNode)((List)clipboard.getContents()).get(1);
-		assertEquals("Start1",copiedStartNode.getName());
-		assertEquals("MyActivity1",copiedActivityNode.getName());
-		assertEquals(0,copiedStartNode.getIncomingEdges().size());
-		assertEquals(1,copiedStartNode.getOutgoingEdges().size());
-		assertEquals(1,copiedActivityNode.getIncomingEdges().size());
-		assertEquals(0,copiedActivityNode.getOutgoingEdges().size());
+		assertEquals(2, ((List) clipboard.getContents()).size());
+		assertTrue(((List) clipboard.getContents()).get(0) instanceof StartNode);
+		assertTrue(((List) clipboard.getContents()).get(1) instanceof ActivityNode);
+		StartNode copiedStartNode = (StartNode) ((List) clipboard.getContents()).get(0);
+		ActivityNode copiedActivityNode = (ActivityNode) ((List) clipboard.getContents()).get(1);
+		assertEquals("Start1", copiedStartNode.getName());
+		assertEquals("MyActivity1", copiedActivityNode.getName());
+		assertEquals(0, copiedStartNode.getIncomingEdges().size());
+		assertEquals(1, copiedStartNode.getOutgoingEdges().size());
+		assertEquals(1, copiedActivityNode.getIncomingEdges().size());
+		assertEquals(0, copiedActivityNode.getOutgoingEdges().size());
 		assertSame(copiedStartNode.getOutgoingEdges().get(0), copiedActivityNode.getIncomingEdges().get(0));
 
 		factory.paste(clipboard, process);
@@ -627,20 +612,20 @@ public class BasicTests extends TestCase {
 
 		System.out.println(debug(process));
 		assertEquals(5, process.getNodes().size());
-		ActivityNode newActivity = (ActivityNode)process.getNodeNamed("MyActivity1");
-		StartNode newStartNode = (StartNode)process.getNodeNamed("Start1");
-		assertEquals(1,newActivity.getIncomingEdges().size());
-		assertEquals(0,newActivity.getOutgoingEdges().size());
-		assertEquals(0,newStartNode.getIncomingEdges().size());
-		assertEquals(1,newStartNode.getOutgoingEdges().size());
-		assertSame(newStartNode.getOutgoingEdges().get(0),newActivity.getIncomingEdges().get(0));
+		ActivityNode newActivity = (ActivityNode) process.getNodeNamed("MyActivity1");
+		StartNode newStartNode = (StartNode) process.getNodeNamed("Start1");
+		assertEquals(1, newActivity.getIncomingEdges().size());
+		assertEquals(0, newActivity.getOutgoingEdges().size());
+		assertEquals(0, newStartNode.getIncomingEdges().size());
+		assertEquals(1, newStartNode.getOutgoingEdges().size());
+		assertSame(newStartNode.getOutgoingEdges().get(0), newActivity.getIncomingEdges().get(0));
 
 		try {
 			FileOutputStream fos = new FileOutputStream("/tmp/TestFile.xml");
 			Document doc = serializer.serializeDocument(process, fos);
 			fos.flush();
 			fos.close();
-			System.out.println("XML:\n"+serializer.buildXMLOutput(doc));
+			System.out.println("XML:\n" + serializer.buildXMLOutput(doc));
 		} catch (FileNotFoundException e) {
 			fail(e.getMessage());
 		} catch (IOException e) {
@@ -648,20 +633,18 @@ public class BasicTests extends TestCase {
 		}
 	}
 
-	public String debug(Object o)
-	{
+	public String debug(Object o) {
 		if (o instanceof AbstractNode) {
-			AbstractNode node = (AbstractNode)o;
+			AbstractNode node = (AbstractNode) o;
 			StringBuffer returned = new StringBuffer();
-			returned.append("------------------- "+o+" -------------------\n");
+			returned.append("------------------- " + o + " -------------------\n");
 			List<Edge> inEdges = node.getIncomingEdges();
 			if (inEdges != null) {
 				for (Object e : inEdges) {
 					if (e == null) {
-						returned.append("null     Incoming: "+null+"\n");
-					}
-					else {
-						returned.append(Integer.toHexString(e.hashCode())+" Incoming: "+e+"\n");
+						returned.append("null     Incoming: " + null + "\n");
+					} else {
+						returned.append(Integer.toHexString(e.hashCode()) + " Incoming: " + e + "\n");
 					}
 				}
 			}
@@ -669,10 +652,9 @@ public class BasicTests extends TestCase {
 			if (outEdges != null) {
 				for (Object e : outEdges) {
 					if (e == null) {
-						returned.append("null     Outgoing: "+null+"\n");
-					}
-					else {
-						returned.append(Integer.toHexString(e.hashCode())+" Outgoing: "+e+"\n");
+						returned.append("null     Outgoing: " + null + "\n");
+					} else {
+						returned.append(Integer.toHexString(e.hashCode()) + " Outgoing: " + e + "\n");
 					}
 				}
 			}
@@ -680,18 +662,18 @@ public class BasicTests extends TestCase {
 		}
 
 		if (o instanceof Edge) {
-			Edge edge = (Edge)o;
+			Edge edge = (Edge) o;
 			StringBuffer returned = new StringBuffer();
-			returned.append("------------------- "+edge+" -------------------\n");
-			returned.append("From: "+edge.getStartNode()+"\n");
-			returned.append("To: "+edge.getEndNode()+"\n");
+			returned.append("------------------- " + edge + " -------------------\n");
+			returned.append("From: " + edge.getStartNode() + "\n");
+			returned.append("To: " + edge.getEndNode() + "\n");
 			return returned.toString();
 		}
 
 		if (o instanceof FlexoProcess) {
-			FlexoProcess process = (FlexoProcess)o;
+			FlexoProcess process = (FlexoProcess) o;
 			StringBuffer returned = new StringBuffer();
-			returned.append("=================== "+process+" ===================\n");
+			returned.append("=================== " + process + " ===================\n");
 			for (AbstractNode node : process.getNodes()) {
 				returned.append(debug(node));
 			}
@@ -700,7 +682,7 @@ public class BasicTests extends TestCase {
 
 		if (o instanceof List) {
 			StringBuffer returned = new StringBuffer();
-			for (Object o2 : (List)o) {
+			for (Object o2 : (List) o) {
 				returned.append(debug(o2));
 			}
 			return returned.toString();
@@ -708,6 +690,5 @@ public class BasicTests extends TestCase {
 
 		return o.toString();
 	}
-
 
 }

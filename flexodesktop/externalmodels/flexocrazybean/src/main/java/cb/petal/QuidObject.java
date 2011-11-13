@@ -22,53 +22,52 @@ package cb.petal;
 import java.util.Collection;
 
 /**
- * Super class for all petal objects that have a "quid" property
- * defined, i.e. a globally unique identifier.
- *
+ * Super class for all petal objects that have a "quid" property defined, i.e. a globally unique identifier.
+ * 
  * @version $Id: QuidObject.java,v 1.3 2011/09/12 11:46:47 gpolet Exp $
  * @author <A HREF="mailto:markus.dahm@berlin.de">M. Dahm</A>
  */
 public abstract class QuidObject extends PetalObject {
-  static final long serialVersionUID = -1442259881047075234L;
+	static final long serialVersionUID = -1442259881047075234L;
 
-  protected QuidObject(PetalNode parent, String name, Collection params) {
-    super(parent, name, params);
-  }
+	protected QuidObject(PetalNode parent, String name, Collection params) {
+		super(parent, name, params);
+	}
 
-  protected QuidObject(String name) {
-    super(name);
-  }
+	protected QuidObject(String name) {
+		super(name);
+	}
 
-  static String getQuid(QuidObject obj) {
-    return PetalObject.getPropertyAsString(obj, "quid");
-  }
+	static String getQuid(QuidObject obj) {
+		return PetalObject.getPropertyAsString(obj, "quid");
+	}
 
-  /** Registers this object.
-   */
-  @Override
-public void init() {
-    getRoot().registerQuidObject(this);
-  }
+	/**
+	 * Registers this object.
+	 */
+	@Override
+	public void init() {
+		getRoot().registerQuidObject(this);
+	}
 
-  public void setQuid(String quid) {
-    defineProperty("quid", quid);
-  }
+	public void setQuid(String quid) {
+		defineProperty("quid", quid);
+	}
 
-  public String getQuid() {
-    return getQuid(this);
-  }
+	public String getQuid() {
+		return getQuid(this);
+	}
 
-  public long getQuidAsLong() {
-    return Long.parseLong(getQuid(), 16);
-  }
+	public long getQuidAsLong() {
+		return Long.parseLong(getQuid(), 16);
+	}
 
-  public void setQuidAsLong(long quid) {
-    defineProperty("quid", Long.toHexString(quid).toUpperCase());
-  }
-  
-  public boolean hasQuidu() {
-	  return getProperty("quidu")!=null;
-  }
-  
+	public void setQuidAsLong(long quid) {
+		defineProperty("quid", Long.toHexString(quid).toUpperCase());
+	}
+
+	public boolean hasQuidu() {
+		return getProperty("quidu") != null;
+	}
 
 }

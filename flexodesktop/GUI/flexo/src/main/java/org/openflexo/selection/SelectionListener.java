@@ -22,43 +22,42 @@ package org.openflexo.selection;
 import org.openflexo.foundation.FlexoModelObject;
 
 /**
- * Implemented by components back-synchronized with a SelectionManager
- * This means that this component, once registered in a SelectionManager,
- * reveive synchronization request, but is not supposed to send some.
+ * Implemented by components back-synchronized with a SelectionManager This means that this component, once registered in a
+ * SelectionManager, reveive synchronization request, but is not supposed to send some.
  * 
  * @author sguerin
  */
-public interface SelectionListener
-{
+public interface SelectionListener {
 
-    /**
-     * Notified that supplied object has been added to selection
-     * 
-     * @param object: the object that has been added to selection
-     */
-    public void fireObjectSelected(FlexoModelObject object);
+	/**
+	 * Notified that supplied object has been added to selection
+	 * 
+	 * @param object
+	 *            : the object that has been added to selection
+	 */
+	public void fireObjectSelected(FlexoModelObject object);
 
-    /**
-      * Notified that supplied object has been removed from selection
-     * 
-     * @param object: the object that has been removed from selection
-     */
-    public void fireObjectDeselected(FlexoModelObject object);
+	/**
+	 * Notified that supplied object has been removed from selection
+	 * 
+	 * @param object
+	 *            : the object that has been removed from selection
+	 */
+	public void fireObjectDeselected(FlexoModelObject object);
 
-    /**
-     * Notified selection has been resetted
-     */
-    public void fireResetSelection();
+	/**
+	 * Notified selection has been resetted
+	 */
+	public void fireResetSelection();
 
-    /**
-     * Notified that the selection manager is performing a multiple selection
-     */
-    public void fireBeginMultipleSelection();
+	/**
+	 * Notified that the selection manager is performing a multiple selection
+	 */
+	public void fireBeginMultipleSelection();
 
-    /**
-     * Notified that the selection manager has finished to perform a multiple
-     * selection
-     */
-    public void fireEndMultipleSelection();
+	/**
+	 * Notified that the selection manager has finished to perform a multiple selection
+	 */
+	public void fireEndMultipleSelection();
 
 }

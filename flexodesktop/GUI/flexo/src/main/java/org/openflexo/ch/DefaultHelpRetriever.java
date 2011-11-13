@@ -30,61 +30,55 @@ import org.openflexo.foundation.FlexoModelObject.HelpRetriever;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.widget.DenaliWidget;
 
-
 public class DefaultHelpRetriever implements HelpRetriever {
 
-	private static final Logger logger = Logger
-	.getLogger(DenaliWidget.class.getPackage().getName());
-
+	private static final Logger logger = Logger.getLogger(DenaliWidget.class.getPackage().getName());
 
 	private DocResourceManager _docResourceManager;
 
-	public DefaultHelpRetriever(DocResourceManager docResourceManager)
-	{
+	public DefaultHelpRetriever(DocResourceManager docResourceManager) {
 		_docResourceManager = docResourceManager;
 	}
 
 	/**
-	 * Return help text for supplied object, as defined in DocResourceManager as short version
-	 * Note: return an HTML version, with embedding <html>...</html> tags.
+	 * Return help text for supplied object, as defined in DocResourceManager as short version Note: return an HTML version, with embedding
+	 * <html>...</html> tags.
 	 */
 	@Override
-	public String shortHelpForObject(FlexoModelObject object)
-	{
-		if (!(object instanceof InspectableObject)) return null;
-    	Language language = _docResourceManager.getLanguage(GeneralPreferences.getLanguage());
-    	
-      	DocItem propertyModelItem = _docResourceManager.getDocItemFor(((InspectableObject)object));
-    	if (propertyModelItem != null) {
-    		if (propertyModelItem.getLastApprovedActionForLanguage(language) != null) {
-    			return "<html>" 
-    			+ propertyModelItem.getLastApprovedActionForLanguage(language).getVersion().getShortHTMLDescription()
-    			+ "</html>";
-     		}
-    	}
-    	return null;
+	public String shortHelpForObject(FlexoModelObject object) {
+		if (!(object instanceof InspectableObject))
+			return null;
+		Language language = _docResourceManager.getLanguage(GeneralPreferences.getLanguage());
+
+		DocItem propertyModelItem = _docResourceManager.getDocItemFor(((InspectableObject) object));
+		if (propertyModelItem != null) {
+			if (propertyModelItem.getLastApprovedActionForLanguage(language) != null) {
+				return "<html>" + propertyModelItem.getLastApprovedActionForLanguage(language).getVersion().getShortHTMLDescription()
+						+ "</html>";
+			}
+		}
+		return null;
 	}
 
 	/**
-	 * Return help text for supplied object, as defined in DocResourceManager as long version
-	 * Note: return an HTML version, with embedding <html>...</html> tags.
+	 * Return help text for supplied object, as defined in DocResourceManager as long version Note: return an HTML version, with embedding
+	 * <html>...</html> tags.
 	 */
 	@Override
-	public String longHelpForObject(FlexoModelObject object)
-	{
-		if (!(object instanceof InspectableObject)) return null;
-    	Language language = DocResourceManager.instance().getLanguage(GeneralPreferences.getLanguage());
-    	
-      	DocItem propertyModelItem = _docResourceManager.getDocItemFor(((InspectableObject)object));
-    	if (propertyModelItem != null) {
-    		if (propertyModelItem.getLastApprovedActionForLanguage(language) != null) {
-    			String returned = "<html>" 
-    			+ propertyModelItem.getLastApprovedActionForLanguage(language).getVersion().getFullHTMLDescription()
-    			+ "</html>";
-    			return returned;
-     		}
-    	}
-    	return null;
+	public String longHelpForObject(FlexoModelObject object) {
+		if (!(object instanceof InspectableObject))
+			return null;
+		Language language = DocResourceManager.instance().getLanguage(GeneralPreferences.getLanguage());
+
+		DocItem propertyModelItem = _docResourceManager.getDocItemFor(((InspectableObject) object));
+		if (propertyModelItem != null) {
+			if (propertyModelItem.getLastApprovedActionForLanguage(language) != null) {
+				String returned = "<html>"
+						+ propertyModelItem.getLastApprovedActionForLanguage(language).getVersion().getFullHTMLDescription() + "</html>";
+				return returned;
+			}
+		}
+		return null;
 	}
 
 }

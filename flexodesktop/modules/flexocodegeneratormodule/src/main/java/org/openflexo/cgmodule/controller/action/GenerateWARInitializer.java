@@ -38,7 +38,6 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-
 public class GenerateWARInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
@@ -49,26 +48,22 @@ public class GenerateWARInitializer extends ActionInitializer {
 
 		private boolean currentTargetIsDist = false;
 
-		public WARBuildListener(GenerateWAR action)
-		{
+		public WARBuildListener(GenerateWAR action) {
 			this.action = action;
 		}
 
 		@Override
-		public void buildFinished(BuildEvent arg0)
-		{
+		public void buildFinished(BuildEvent arg0) {
 
 		}
 
 		@Override
-		public void buildStarted(BuildEvent arg0)
-		{
+		public void buildStarted(BuildEvent arg0) {
 		}
 
 		@Override
-		public void messageLogged(BuildEvent arg0)
-		{
-			if (arg0.getPriority()==Project.MSG_INFO) {
+		public void messageLogged(BuildEvent arg0) {
+			if (arg0.getPriority() == Project.MSG_INFO) {
 				action.getProjectGenerator().log(arg0.getMessage());
 			} else if (arg0.getPriority() == Project.MSG_WARN) {
 				action.getProjectGenerator().warn(arg0.getMessage());
@@ -80,22 +75,20 @@ public class GenerateWARInitializer extends ActionInitializer {
 		}
 
 		@Override
-		public void targetFinished(BuildEvent arg0)
-		{
+		public void targetFinished(BuildEvent arg0) {
 
 		}
 
 		@Override
-		public void targetStarted(BuildEvent arg0)
-		{
+		public void targetStarted(BuildEvent arg0) {
 			if (arg0.getTarget().getName().equals("dist")) {
 				currentTargetIsDist = true;
 			} else {
 				currentTargetIsDist = false;
 			}
-			ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("performing_target")+" "+arg0.getTarget().getName());
+			ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("performing_target") + " " + arg0.getTarget().getName());
 			if (!currentTargetIsDist) {
-				if (arg0.getTarget().getTasks()!=null) {
+				if (arg0.getTarget().getTasks() != null) {
 					ProgressWindow.resetSecondaryProgressInstance(arg0.getTarget().getTasks().length);
 				}
 			} else {
@@ -105,47 +98,41 @@ public class GenerateWARInitializer extends ActionInitializer {
 		}
 
 		@Override
-		public void taskFinished(BuildEvent arg0)
-		{
+		public void taskFinished(BuildEvent arg0) {
 
 		}
 
 		@Override
-		public void taskStarted(BuildEvent arg0)
-		{
+		public void taskStarted(BuildEvent arg0) {
 			if (!currentTargetIsDist) {
-				ProgressWindow.setSecondaryProgressInstance(FlexoLocalization.localizedForKey("current_task")+" "+arg0.getTask().getTaskName());
+				ProgressWindow.setSecondaryProgressInstance(FlexoLocalization.localizedForKey("current_task") + " "
+						+ arg0.getTask().getTaskName());
 			}
 		}
 
 		/**
 		 * 
 		 */
-		public void report()
-		{
+		public void report() {
 		}
 	}
 
 	protected WARBuildListener listener;
 
-	GenerateWARInitializer(GeneratorControllerActionInitializer actionInitializer)
-	{
-		super(GenerateWAR.actionType,actionInitializer);
+	GenerateWARInitializer(GeneratorControllerActionInitializer actionInitializer) {
+		super(GenerateWAR.actionType, actionInitializer);
 	}
 
 	@Override
-	protected GeneratorControllerActionInitializer getControllerActionInitializer()
-	{
-		return (GeneratorControllerActionInitializer)super.getControllerActionInitializer();
+	protected GeneratorControllerActionInitializer getControllerActionInitializer() {
+		return (GeneratorControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected FlexoActionInitializer<GenerateWAR> getDefaultInitializer()
-	{
+	protected FlexoActionInitializer<GenerateWAR> getDefaultInitializer() {
 		return new FlexoActionInitializer<GenerateWAR>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateWAR action)
-			{
+			public boolean run(ActionEvent e, GenerateWAR action) {
 				if (action.getRepository().getDirectory() == null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
 					return false;
@@ -155,7 +142,10 @@ public class GenerateWARInitializer extends ActionInitializer {
 					return false;
 				}
 				if (!action.getRepository().getWarRepository().getDirectory().exists()) {
-					if (FlexoController.confirm(FlexoLocalization.localizedForKey("directory")+" "+action.getRepository().getWarRepository().getDirectory().getAbsolutePath()+" "+FlexoLocalization.localizedForKey("does_not_exist")+"\n"+FlexoLocalization.localizedForKey("would_you_like_to_create_it_and_continue?"))) {
+					if (FlexoController.confirm(FlexoLocalization.localizedForKey("directory") + " "
+							+ action.getRepository().getWarRepository().getDirectory().getAbsolutePath() + " "
+							+ FlexoLocalization.localizedForKey("does_not_exist") + "\n"
+							+ FlexoLocalization.localizedForKey("would_you_like_to_create_it_and_continue?"))) {
 						action.getRepository().getWarRepository().getDirectory().mkdirs();
 					} else {
 						return false;
@@ -171,10 +161,12 @@ public class GenerateWARInitializer extends ActionInitializer {
 					return false;
 				}*/
 				if (action.getRepository().getWarDirectory().exists() && !action.getRepository().getWarDirectory().canWrite()) {
-					FlexoController.notify(FlexoLocalization.localizedForKey("permission_denied_for ") + action.getRepository().getWarDirectory().getAbsolutePath());
+					FlexoController.notify(FlexoLocalization.localizedForKey("permission_denied_for ")
+							+ action.getRepository().getWarDirectory().getAbsolutePath());
 					return false;
 				}
-				if (FlexoController.confirm(FlexoLocalization.localizedForKey("WAR_generation_is_based_on_code_generated_on_disk._Is_your_code_on_disk_ready_to_be_packaged?"))) {
+				if (FlexoController.confirm(FlexoLocalization
+						.localizedForKey("WAR_generation_is_based_on_code_generated_on_disk._Is_your_code_on_disk_ready_to_be_packaged?"))) {
 					action.setSaveBeforeGenerating(GeneratorPreferences.getSaveBeforeGenerating());
 					action.getProjectGenerator().startHandleLogs();
 					action.getProjectGenerator().addBuildListener(listener = new WARBuildListener(action));
@@ -189,12 +181,10 @@ public class GenerateWARInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionFinalizer<GenerateWAR> getDefaultFinalizer()
-	{
+	protected FlexoActionFinalizer<GenerateWAR> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<GenerateWAR>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateWAR action)
-			{
+			public boolean run(ActionEvent e, GenerateWAR action) {
 				listener.report();
 				action.getProjectGenerator().removeBuildListener(listener);
 				action.getProjectGenerator().stopHandleLogs();
@@ -205,8 +195,7 @@ public class GenerateWARInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoExceptionHandler<GenerateWAR> getDefaultExceptionHandler()
-	{
+	protected FlexoExceptionHandler<GenerateWAR> getDefaultExceptionHandler() {
 		return new FlexoExceptionHandler<GenerateWAR>() {
 			@Override
 			public boolean handleException(FlexoException exception, GenerateWAR action) {

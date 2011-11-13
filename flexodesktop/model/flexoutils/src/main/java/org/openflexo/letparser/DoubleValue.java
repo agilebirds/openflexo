@@ -21,45 +21,38 @@ package org.openflexo.letparser;
 
 public class DoubleValue extends Value {
 
-    private double _value;
-    
-    public DoubleValue (double value)
-    {
-        super();
-        _value = value;
-    }
-    
-    public double getDoubleValue() 
-    {
-        return _value;
-    }
-    
-    @Override
-	public String toString()
-    {
-        return getPrefix()+"Double["+_value+"]";
-    }
+	private double _value;
 
-    @Override
-	public String getStringValue() 
-    {
-        return ""+_value;
-    }
-    
-    @Override
-	public String getSerializationValue()
-    {
-        return "$"+getStringValue();
-    }
+	public DoubleValue(double value) {
+		super();
+		_value = value;
+	}
 
-   @Override
-public boolean equals (Object obj)
-    {
-        if (obj instanceof DoubleValue) {
-            return (getDoubleValue() == ((DoubleValue)obj).getDoubleValue());
-        }
-        return super.equals(obj);
-    }
+	public double getDoubleValue() {
+		return _value;
+	}
 
+	@Override
+	public String toString() {
+		return getPrefix() + "Double[" + _value + "]";
+	}
+
+	@Override
+	public String getStringValue() {
+		return "" + _value;
+	}
+
+	@Override
+	public String getSerializationValue() {
+		return "$" + getStringValue();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof DoubleValue) {
+			return (getDoubleValue() == ((DoubleValue) obj).getDoubleValue());
+		}
+		return super.equals(obj);
+	}
 
 }

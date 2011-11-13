@@ -29,115 +29,98 @@ import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.GeneratedResourceData;
 import org.openflexo.toolbox.FileFormat;
 
-
-public abstract class AbstractGeneratedFile implements GeneratedResourceData
-{
+public abstract class AbstractGeneratedFile implements GeneratedResourceData {
 	private File _file;
 	private CGRepositoryFileResource _resource;
-	
+
 	/**
 	 * 
 	 */
-	public AbstractGeneratedFile()
-	{
+	public AbstractGeneratedFile() {
 		super();
 	}
-	
+
 	/**
 	 * 
 	 */
-	public AbstractGeneratedFile(File f)
-	{
-        this();
-        setFile(f);
-    }
-    /**
-     * Overrides getFlexoResource
-     * 
-     * @see org.openflexo.foundation.rm.FlexoResourceData#getFlexoResource()
-     */
-    @Override
-	public CGRepositoryFileResource getFlexoResource()
-    {
-        return _resource;
-    }
- 
-    public void setFlexoResource(CGRepositoryFileResource resource) throws DuplicateResourceException
-    {
-    	_resource = resource;
-    }
+	public AbstractGeneratedFile(File f) {
+		this();
+		setFile(f);
+	}
 
-    @Override
-	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException
-    {
-    	_resource = (CGRepositoryFileResource)resource;
-    }
+	/**
+	 * Overrides getFlexoResource
+	 * 
+	 * @see org.openflexo.foundation.rm.FlexoResourceData#getFlexoResource()
+	 */
+	@Override
+	public CGRepositoryFileResource getFlexoResource() {
+		return _resource;
+	}
 
-    public FileFormat getFileFormat()
-    {
-    	return getFlexoResource().getResourceFormat();
-    }
-    
-    @Override
-	public FlexoProject getProject()
-    {
-        return getFlexoResource().getProject();
-    }
+	public void setFlexoResource(CGRepositoryFileResource resource) throws DuplicateResourceException {
+		_resource = resource;
+	}
 
-     @Override
-	public void setProject(FlexoProject aProject)
-    {
-    }
+	@Override
+	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
+		_resource = (CGRepositoryFileResource) resource;
+	}
 
-	public File getFile() 
-	{
+	public FileFormat getFileFormat() {
+		return getFlexoResource().getResourceFormat();
+	}
+
+	@Override
+	public FlexoProject getProject() {
+		return getFlexoResource().getProject();
+	}
+
+	@Override
+	public void setProject(FlexoProject aProject) {
+	}
+
+	public File getFile() {
 		return _file;
 	}
 
-	public void setFile(File file) 
-	{
+	public void setFile(File file) {
 		_file = file;
 	}
 
 	private FileHistory _history = null;
-	
-	public FileHistory getHistory()
-	{
+
+	public FileHistory getHistory() {
 		if (_history == null) {
 			_history = new FileHistory(getFlexoResource());
 		}
 		return _history;
 	}
-	
-	public void updateHistory()
-	{
+
+	public void updateHistory() {
 		if (manageHistory()) {
 			getHistory().update();
 		}
 	}
-	
-	public boolean manageHistory()
-	{
-		if ((getFlexoResource() == null)
-				|| (getFlexoResource().getCGFile() == null)
+
+	public boolean manageHistory() {
+		if ((getFlexoResource() == null) || (getFlexoResource().getCGFile() == null)
 				|| (getFlexoResource().getCGFile().getRepository() == null)) {
 			return false;
 		}
 		return getFlexoResource().getCGFile().getRepository().getManageHistory();
 	}
-	
-	public boolean fileOnDiskHasBeenEdited()
-	{
-		return (getFlexoResource().getDiskLastModifiedDate().getTime() 
-				> getFlexoResource().getLastGenerationDate().getTime()+FlexoFileResource.ACCEPTABLE_FS_DELAY);
+
+	public boolean fileOnDiskHasBeenEdited() {
+		return (getFlexoResource().getDiskLastModifiedDate().getTime() > getFlexoResource().getLastGenerationDate().getTime()
+				+ FlexoFileResource.ACCEPTABLE_FS_DELAY);
 	}
-	
+
 	public abstract void load() throws LoadGeneratedResourceIOException;
-	
+
 	public abstract boolean hasVersionOnDisk();
 
-	public void notifyRegenerated(CGContentRegenerated notification)
-	{
+	public void notifyRegenerated(CGContentRegenerated notification) {
 		// Override it if required
 	}
 
@@ -148,14 +131,13 @@ public abstract class AbstractGeneratedFile implements GeneratedResourceData
 	public abstract void overrideWith(ContentSource version);
 
 	public abstract void cancelOverriding();
-	
+
 	public abstract boolean isOverrideScheduled();
 
 	public abstract ContentSource getScheduledOverrideVersion();
-	
+
 	/**
-	 * Returns flag indicating if merge for generation is actually raising conflicts
-	 * (collision in changes)
+	 * Returns flag indicating if merge for generation is actually raising conflicts (collision in changes)
 	 */
 	public abstract boolean isGenerationConflicting();
 
@@ -164,6 +146,5 @@ public abstract class AbstractGeneratedFile implements GeneratedResourceData
 	public abstract boolean isTriviallyMergable();
 
 	public abstract boolean areAllConflictsResolved();
-
 
 }

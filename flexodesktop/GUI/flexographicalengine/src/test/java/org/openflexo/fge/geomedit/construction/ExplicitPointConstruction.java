@@ -24,41 +24,34 @@ import org.openflexo.fge.geom.FGEPoint;
 public class ExplicitPointConstruction extends PointConstruction {
 
 	public FGEPoint point;
-	
-	public ExplicitPointConstruction() 
-	{
+
+	public ExplicitPointConstruction() {
 		super();
 	}
-	
-	public ExplicitPointConstruction(FGEPoint aPoint) 
-	{
+
+	public ExplicitPointConstruction(FGEPoint aPoint) {
 		this();
 		point = aPoint;
 	}
-	
-	public void setPoint(FGEPoint p)
-	{
+
+	public void setPoint(FGEPoint p) {
 		point = p;
 		setModified();
 	}
-	
+
 	@Override
-	protected FGEPoint computeData()
-	{
+	protected FGEPoint computeData() {
 		return point;
 	}
-	
+
 	@Override
-	public String toString()
-	{
-		return "ExplicitPointConstruction["+point.toString()+"]";
+	public String toString() {
+		return "ExplicitPointConstruction[" + point.toString() + "]";
 	}
 
 	@Override
-	public GeometricConstruction[] getDepends()
-	{
+	public GeometricConstruction[] getDepends() {
 		return null;
 	}
-
 
 }

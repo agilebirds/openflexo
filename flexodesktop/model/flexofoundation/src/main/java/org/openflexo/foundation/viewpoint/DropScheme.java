@@ -25,113 +25,99 @@ import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
-
 public class DropScheme extends EditionScheme {
 
 	private String target;
 
-	public DropScheme() 
-	{
+	public DropScheme() {
 		super();
 	}
 
 	@Override
-	public EditionSchemeType getEditionSchemeType()
-	{
+	public EditionSchemeType getEditionSchemeType() {
 		return EditionSchemeType.DropScheme;
 	}
 
 	@Override
-	public String getInspectorName() 
-	{
+	public String getInspectorName() {
 		return Inspectors.VPM.DROP_SCHEME_INSPECTOR;
 	}
 
-	public String _getTarget() 
-	{
+	public String _getTarget() {
 		return target;
 	}
 
-	public void _setTarget(String target) 
-	{
+	public void _setTarget(String target) {
 		this.target = target;
 	}
 
-	public EditionPattern getTargetEditionPattern()
-	{
+	public EditionPattern getTargetEditionPattern() {
 		if (StringUtils.isEmpty(_getTarget())) {
 			return null;
 		}
-		if (isTopTarget()) return null;
- 		if (getViewPointLibrary() != null)
+		if (isTopTarget())
+			return null;
+		if (getViewPointLibrary() != null)
 			return getViewPointLibrary().getEditionPattern(_getTarget());
 		return null;
 	}
-	
-	public void setTargetEditionPattern(EditionPattern targetEditionPattern)
-	{
+
+	public void setTargetEditionPattern(EditionPattern targetEditionPattern) {
 		_setTarget(targetEditionPattern != null ? targetEditionPattern.getURI() : null);
 		updateBindingModels();
 	}
 
-	public boolean isTopTarget()
-	{
+	public boolean isTopTarget() {
 		return getTopTarget();
 	}
 
-	public boolean getTopTarget()
-	{
+	public boolean getTopTarget() {
 		if (StringUtils.isEmpty(_getTarget())) {
 			return false;
 		}
 		return _getTarget().equalsIgnoreCase("top");
 	}
-	
-	public void setTopTarget(boolean flag)
-	{
+
+	public void setTopTarget(boolean flag) {
 		if (flag) {
 			_setTarget("top");
-		}
-		else {
+		} else {
 			_setTarget("");
 		}
 	}
-	
-	public boolean isValidTarget(EditionPattern aTarget)
-	{
+
+	public boolean isValidTarget(EditionPattern aTarget) {
 		return getTargetEditionPattern() == aTarget;
-		
+
 	}
-	
-	
+
 	@Override
-	protected void appendContextualBindingVariables(BindingModel bindingModel)
-	{
+	protected void appendContextualBindingVariables(BindingModel bindingModel) {
 		bindingModelNeedToBeRecomputed = false;
 		if (getTargetEditionPattern() != null)
-			bindingModel.addToBindingVariables(new EditionPatternPathElement<DropScheme>(EditionScheme.TARGET,getTargetEditionPattern(),this));
+			bindingModel.addToBindingVariables(new EditionPatternPathElement<DropScheme>(EditionScheme.TARGET, getTargetEditionPattern(),
+					this));
 		else if (_getTarget() != null && !_getTarget().equals("top")) {
-			logger.warning("Cannot find edition pattern "+_getTarget()+" !!!!!!!!!!!!!!");
+			logger.warning("Cannot find edition pattern " + _getTarget() + " !!!!!!!!!!!!!!");
 			bindingModelNeedToBeRecomputed = true;
 		}
 	}
-	
+
 	private boolean bindingModelNeedToBeRecomputed = false;
 
 	@Override
-	public BindingModel getBindingModel() 
-	{
-		if (bindingModelNeedToBeRecomputed) updateBindingModels();
+	public BindingModel getBindingModel() {
+		if (bindingModelNeedToBeRecomputed)
+			updateBindingModels();
 		return super.getBindingModel();
 	}
-		
+
 	@Override
-	public AddShape createAddShapeAction()
-	{
+	public AddShape createAddShapeAction() {
 		AddShape newAction = super.createAddShapeAction();
-		if (isTopTarget()) newAction.setContainer(new ViewPointDataBinding(EditionScheme.TOP_LEVEL));
+		if (isTopTarget())
+			newAction.setContainer(new ViewPointDataBinding(EditionScheme.TOP_LEVEL));
 		return newAction;
 	}
-
 
 }

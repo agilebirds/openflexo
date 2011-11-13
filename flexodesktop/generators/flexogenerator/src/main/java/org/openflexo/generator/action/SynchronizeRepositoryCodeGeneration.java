@@ -38,27 +38,24 @@ import org.openflexo.generator.exception.ModelValidationException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.PlaySound;
 
-public class SynchronizeRepositoryCodeGeneration extends GCAction<SynchronizeRepositoryCodeGeneration,GenerationRepository>
-{
+public class SynchronizeRepositoryCodeGeneration extends GCAction<SynchronizeRepositoryCodeGeneration, GenerationRepository> {
 
 	private static final Logger logger = Logger.getLogger(SynchronizeRepositoryCodeGeneration.class.getPackage().getName());
 
-	public static FlexoActionType<SynchronizeRepositoryCodeGeneration,GenerationRepository,CGObject> actionType
-	= new FlexoActionType<SynchronizeRepositoryCodeGeneration,GenerationRepository,CGObject> ("synchronize_code_generation",
-			GENERATE_MENU, SYNCHRO_GROUP,FlexoActionType.NORMAL_ACTION_TYPE) {
+	public static FlexoActionType<SynchronizeRepositoryCodeGeneration, GenerationRepository, CGObject> actionType = new FlexoActionType<SynchronizeRepositoryCodeGeneration, GenerationRepository, CGObject>(
+			"synchronize_code_generation", GENERATE_MENU, SYNCHRO_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public SynchronizeRepositoryCodeGeneration makeNewAction(GenerationRepository object, Vector<CGObject> globalSelection, FlexoEditor editor)
-		{
+		public SynchronizeRepositoryCodeGeneration makeNewAction(GenerationRepository object, Vector<CGObject> globalSelection,
+				FlexoEditor editor) {
 			return new SynchronizeRepositoryCodeGeneration(object, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(GenerationRepository focusedObject, Vector<CGObject> globalSelection)
-		{
+		protected boolean isVisibleForSelection(GenerationRepository focusedObject, Vector<CGObject> globalSelection) {
 			Vector<CGObject> topLevelObjects = getSelectedTopLevelObjects(focusedObject, globalSelection);
 			for (CGObject obj : topLevelObjects) {
 				if (obj instanceof GeneratedOutput) {
@@ -69,8 +66,7 @@ public class SynchronizeRepositoryCodeGeneration extends GCAction<SynchronizeRep
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(GenerationRepository focusedObject, Vector<CGObject> globalSelection)
-		{
+		protected boolean isEnabledForSelection(GenerationRepository focusedObject, Vector<CGObject> globalSelection) {
 			GenerationRepository repository = getRepository(focusedObject, globalSelection);
 			if (repository == null) {
 				return false;
@@ -81,13 +77,10 @@ public class SynchronizeRepositoryCodeGeneration extends GCAction<SynchronizeRep
 	};
 
 	static {
-		FlexoModelObject.addActionForClass (SynchronizeRepositoryCodeGeneration.actionType, GenerationRepository.class);
+		FlexoModelObject.addActionForClass(SynchronizeRepositoryCodeGeneration.actionType, GenerationRepository.class);
 	}
 
-
-
-	SynchronizeRepositoryCodeGeneration (GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor)
-	{
+	SynchronizeRepositoryCodeGeneration(GenerationRepository focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
@@ -96,9 +89,8 @@ public class SynchronizeRepositoryCodeGeneration extends GCAction<SynchronizeRep
 	private boolean hasFailed = false;
 
 	@Override
-	protected void doAction(Object context) throws GenerationException, SaveResourceException, FlexoException
-	{
-		logger.info ("Synchronize repository code generation "+getFocusedObject());
+	protected void doAction(Object context) throws GenerationException, SaveResourceException, FlexoException {
+		logger.info("Synchronize repository code generation " + getFocusedObject());
 		PlaySound.tryToPlayRandomSound();
 		AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();
 		pg.setAction(this);
@@ -117,9 +109,9 @@ public class SynchronizeRepositoryCodeGeneration extends GCAction<SynchronizeRep
 				validateProjectAction.doAction(null);
 			} catch (ModelValidationException e) {
 				_continueAfterValidation = false;
-				hasFailed=true;
+				hasFailed = true;
 				if (logger.isLoggable(Level.INFO)) {
-					logger.info("Synchronization has failed because of validation:\n"+e.getDetails());
+					logger.info("Synchronization has failed because of validation:\n" + e.getDetails());
 				}
 			} catch (FlexoException e) {
 				throw e;
@@ -133,13 +125,13 @@ public class SynchronizeRepositoryCodeGeneration extends GCAction<SynchronizeRep
 		// We set ourselved back because ValidateProject has overriden us.
 		pg.setAction(this);
 
-		makeFlexoProgress(FlexoLocalization.localizedForKey("synchronize_repository_code_generation_for") +  " "
-				+ getFocusedObject().getProject().getPrefix() + "Application "
-				+ FlexoLocalization.localizedForKey("into")  +" "
+		makeFlexoProgress(FlexoLocalization.localizedForKey("synchronize_repository_code_generation_for") + " "
+				+ getFocusedObject().getProject().getPrefix() + "Application " + FlexoLocalization.localizedForKey("into") + " "
 				+ getRepository().getDirectory().getAbsolutePath(), 15);
 
 		pg.refreshConcernedResources();
-		GenerateSourceCode generateSourceCode = GenerateSourceCode.actionType.makeNewEmbeddedAction(getFocusedObject(), getGlobalSelection(), this);
+		GenerateSourceCode generateSourceCode = GenerateSourceCode.actionType.makeNewEmbeddedAction(getFocusedObject(),
+				getGlobalSelection(), this);
 		generateSourceCode.doAction();
 		hasFailed &= generateSourceCode.didGenerationSucceeded();
 		hideFlexoProgress();
@@ -150,21 +142,20 @@ public class SynchronizeRepositoryCodeGeneration extends GCAction<SynchronizeRep
 		return !hasFailed && super.hasActionExecutionSucceeded();
 	}
 
-	public String getValidationErrorAsString(){
+	public String getValidationErrorAsString() {
 		if (validateProjectAction != null) {
 			return validateProjectAction.readableValidationErrors();
 		}
 		return null;
 	}
+
 	private boolean _continueAfterValidation = true;
 
-	public boolean getContinueAfterValidation()
-	{
+	public boolean getContinueAfterValidation() {
 		return _continueAfterValidation;
 	}
 
-	public void setContinueAfterValidation(boolean continueAfterValidation)
-	{
+	public void setContinueAfterValidation(boolean continueAfterValidation) {
 		_continueAfterValidation = continueAfterValidation;
 	}
 

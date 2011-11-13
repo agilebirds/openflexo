@@ -23,22 +23,19 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.GeometricGraphicalRepresentation;
 
-
 public class FGEGeometricGraphics extends FGEGraphics {
 
-    private static final Logger logger = Logger.getLogger(FGEGeometricGraphics.class.getPackage().getName());
-   
-	public FGEGeometricGraphics(GeometricGraphicalRepresentation aGraphicalRepresentation)
-	{
+	private static final Logger logger = Logger.getLogger(FGEGeometricGraphics.class.getPackage().getName());
+
+	public FGEGeometricGraphics(GeometricGraphicalRepresentation aGraphicalRepresentation) {
 		super(aGraphicalRepresentation);
 	}
-	
+
 	@Override
-	public GeometricGraphicalRepresentation getGraphicalRepresentation() 
-	{
-		return (GeometricGraphicalRepresentation)super.getGraphicalRepresentation();
+	public GeometricGraphicalRepresentation getGraphicalRepresentation() {
+		return (GeometricGraphicalRepresentation) super.getGraphicalRepresentation();
 	}
-	
+
 	// Geometric graphics doesn't use normalized coordinates system
 	/*public Point convertNormalizedPointToViewCoordinates(double x, double y)
 	{

@@ -51,232 +51,211 @@ import org.openflexo.view.FlexoDialog;
  * 
  * @author sguerin
  */
-public class BugReportViewerWindow extends FlexoDialog
-{
+public class BugReportViewerWindow extends FlexoDialog {
 
-    BugReports _bugReports = null;
+	BugReports _bugReports = null;
 
-    private JTable _brTable;
+	private JTable _brTable;
 
-    private BugReportView _brView;
+	private BugReportView _brView;
 
-    public BugReportViewerWindow()
-    {
-        this(BugReports.instance());
-    }
+	public BugReportViewerWindow() {
+		this(BugReports.instance());
+	}
 
-    public BugReportViewerWindow(BugReports bugReports)
-    {
-        super((Frame) null, FlexoLocalization.localizedForKey("bug_reports_viewer"));
-        _bugReports = bugReports;
-        init();
-        _brTable.setModel(_bugReports);
-        for (int i = 0; i < _bugReports.getColumnCount(); i++) {
-            TableColumn col = _brTable.getColumnModel().getColumn(i);
-            col.setPreferredWidth(getPreferedColumnSize(i));
-        }
-        pack();
-        setVisible(true);
-    }
+	public BugReportViewerWindow(BugReports bugReports) {
+		super((Frame) null, FlexoLocalization.localizedForKey("bug_reports_viewer"));
+		_bugReports = bugReports;
+		init();
+		_brTable.setModel(_bugReports);
+		for (int i = 0; i < _bugReports.getColumnCount(); i++) {
+			TableColumn col = _brTable.getColumnModel().getColumn(i);
+			col.setPreferredWidth(getPreferedColumnSize(i));
+		}
+		pack();
+		setVisible(true);
+	}
 
-    public void reload()
-    {
-        _bugReports.reload();
-    }
+	public void reload() {
+		_bugReports.reload();
+	}
 
-    public void save()
-    {
-        if (getSelectedBugReport() != null) {
-            getSelectedBugReport().save();
-            _brView.setEdited(false);
-            _brTable.setModel(_bugReports);
-            _brTable.validate();
-            _brTable.repaint();
-        }
-    }
+	public void save() {
+		if (getSelectedBugReport() != null) {
+			getSelectedBugReport().save();
+			_brView.setEdited(false);
+			_brTable.setModel(_bugReports);
+			_brTable.validate();
+			_brTable.repaint();
+		}
+	}
 
-    public void saveAll()
-    {
-        _bugReports.saveAll();
-    }
+	public void saveAll() {
+		_bugReports.saveAll();
+	}
 
-    public void delete()
-    {
-        if (getSelectedBugReport() != null) {
-            _bugReports.remove(getSelectedBugReport());
-        }
-    }
+	public void delete() {
+		if (getSelectedBugReport() != null) {
+			_bugReports.remove(getSelectedBugReport());
+		}
+	}
 
-    public void edit()
-    {
-        if (getSelectedBugReport() != null) {
-            _brView.setEdited(true);
-        }
-    }
+	public void edit() {
+		if (getSelectedBugReport() != null) {
+			_brView.setEdited(true);
+		}
+	}
 
-    private BugReport getSelectedBugReport()
-    {
-        return _brView.getBugReport();
-    }
+	private BugReport getSelectedBugReport() {
+		return _brView.getBugReport();
+	}
 
-    void setSelectedBugReport(BugReport aBugReport)
-    {
-        _brView.setBugReport(aBugReport);
-        deleteButton.setEnabled(true);
-        saveButton.setEnabled(true);
-        editButton.setEnabled(true);
-    }
+	void setSelectedBugReport(BugReport aBugReport) {
+		_brView.setBugReport(aBugReport);
+		deleteButton.setEnabled(true);
+		saveButton.setEnabled(true);
+		editButton.setEnabled(true);
+	}
 
-    private void init()
-    {
-        _brTable = new JTable();
-        _brTable.setDefaultRenderer(String.class, new BugReportViewerCellRenderer());
-        _brTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        ListSelectionModel rowSM = _brTable.getSelectionModel();
-        rowSM.addListSelectionListener(new ListSelectionListener() {
-            @Override
-			public void valueChanged(ListSelectionEvent e)
-            {
-                // Ignore extra messages.
-                if (e.getValueIsAdjusting())
-                    return;
-                ListSelectionModel lsm = (ListSelectionModel) e.getSource();
-                if (lsm.isSelectionEmpty()) {
-                    // no rows are selected
-                } else {
-                    int selectedRow = lsm.getMinSelectionIndex();
-                    setSelectedBugReport(_bugReports.elementAt(selectedRow));
-                }
-            }
-        });
+	private void init() {
+		_brTable = new JTable();
+		_brTable.setDefaultRenderer(String.class, new BugReportViewerCellRenderer());
+		_brTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		ListSelectionModel rowSM = _brTable.getSelectionModel();
+		rowSM.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				// Ignore extra messages.
+				if (e.getValueIsAdjusting())
+					return;
+				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
+				if (lsm.isSelectionEmpty()) {
+					// no rows are selected
+				} else {
+					int selectedRow = lsm.getMinSelectionIndex();
+					setSelectedBugReport(_bugReports.elementAt(selectedRow));
+				}
+			}
+		});
 
-        JScrollPane scrollpane = new JScrollPane(_brTable);
-        JPanel viewerPanel = new JPanel(new BorderLayout());
-        viewerPanel.setBackground(ColorCst.GUI_BACK_COLOR);
-        viewerPanel.add(scrollpane, BorderLayout.CENTER);
-        viewerPanel.add(buttonPanel(), BorderLayout.SOUTH);
+		JScrollPane scrollpane = new JScrollPane(_brTable);
+		JPanel viewerPanel = new JPanel(new BorderLayout());
+		viewerPanel.setBackground(ColorCst.GUI_BACK_COLOR);
+		viewerPanel.add(scrollpane, BorderLayout.CENTER);
+		viewerPanel.add(buttonPanel(), BorderLayout.SOUTH);
 
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, viewerPanel, _brView = new BugReportView(false,null));
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, viewerPanel, _brView = new BugReportView(false, null));
 
-        getContentPane().add(splitPane);
-    }
+		getContentPane().add(splitPane);
+	}
 
-    public int getPreferedColumnSize(int arg0)
-    {
-        switch (arg0) {
-        case 0:
-            return 40; // identifier
-        case 1:
-            return 200; // title
-        case 2:
-            return 50; // severity
-        case 3:
-            return 50; // status
-        case 4:
-            return 50; // assigned
-        default:
-            return 50;
-        }
-    }
+	public int getPreferedColumnSize(int arg0) {
+		switch (arg0) {
+		case 0:
+			return 40; // identifier
+		case 1:
+			return 200; // title
+		case 2:
+			return 50; // severity
+		case 3:
+			return 50; // status
+		case 4:
+			return 50; // assigned
+		default:
+			return 50;
+		}
+	}
 
-    private JButton deleteButton;
+	private JButton deleteButton;
 
-    private JButton editButton;
+	private JButton editButton;
 
-    private JButton saveButton;
+	private JButton saveButton;
 
-    // private JButton saveAllButton;
+	// private JButton saveAllButton;
 
-    protected JPanel buttonPanel()
-    {
-        JPanel answer = new JPanel(new FlowLayout());
-        JButton closeButton = new JButton(FlexoLocalization.localizedForKey("close"));
-        closeButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                dispose();
-                if (ModuleLoader.getProject()==null) {
-                    System.exit(0);
-                }
-            }
-        });
-        answer.add(closeButton);
-        JButton reloadButton = new JButton(FlexoLocalization.localizedForKey("reload"));
-        reloadButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                reload();
-            }
-        });
-        answer.add(reloadButton);
-        deleteButton = new JButton(FlexoLocalization.localizedForKey("delete"));
-        deleteButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                delete();
-            }
-        });
-        answer.add(deleteButton);
-        editButton = new JButton(FlexoLocalization.localizedForKey("edit"));
-        editButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                edit();
-            }
-        });
-        answer.add(editButton);
-        saveButton = new JButton(FlexoLocalization.localizedForKey("save"));
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                save();
-            }
-        });
-        answer.add(saveButton);
-        /*
-         * saveAllButton = new
-         * JButton(FlexoLocalization.localizedForKey("save_all"));
-         * saveAllButton.addActionListener(new ActionListener(){ public void
-         * actionPerformed(ActionEvent e){ saveAll(); } });
-         * answer.add(saveAllButton);
-         */
-        deleteButton.setEnabled(false);
-        editButton.setEnabled(false);
-        saveButton.setEnabled(false);
-        return answer;
-    }
+	protected JPanel buttonPanel() {
+		JPanel answer = new JPanel(new FlowLayout());
+		JButton closeButton = new JButton(FlexoLocalization.localizedForKey("close"));
+		closeButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				if (ModuleLoader.getProject() == null) {
+					System.exit(0);
+				}
+			}
+		});
+		answer.add(closeButton);
+		JButton reloadButton = new JButton(FlexoLocalization.localizedForKey("reload"));
+		reloadButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				reload();
+			}
+		});
+		answer.add(reloadButton);
+		deleteButton = new JButton(FlexoLocalization.localizedForKey("delete"));
+		deleteButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				delete();
+			}
+		});
+		answer.add(deleteButton);
+		editButton = new JButton(FlexoLocalization.localizedForKey("edit"));
+		editButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				edit();
+			}
+		});
+		answer.add(editButton);
+		saveButton = new JButton(FlexoLocalization.localizedForKey("save"));
+		saveButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				save();
+			}
+		});
+		answer.add(saveButton);
+		/*
+		 * saveAllButton = new
+		 * JButton(FlexoLocalization.localizedForKey("save_all"));
+		 * saveAllButton.addActionListener(new ActionListener(){ public void
+		 * actionPerformed(ActionEvent e){ saveAll(); } });
+		 * answer.add(saveAllButton);
+		 */
+		deleteButton.setEnabled(false);
+		editButton.setEnabled(false);
+		saveButton.setEnabled(false);
+		return answer;
+	}
 
-    protected class BugReportViewerCellRenderer extends DefaultTableCellRenderer
-    {
-        @Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
-        {
-            Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            if (column == 3) {
-                BugReport br = _bugReports.elementAt(row);
-                int status = br.getStatus();
-                switch (status) {
-                case 0: // SUBMITTED
-                    returned.setForeground(Color.RED);
-                    break;
-                case 2: // FIXED
-                    returned.setForeground(Color.GREEN);
-                    break;
-                case 5: // NREP
-                    returned.setForeground(Color.ORANGE);
-                    break;
-                default:
-                    returned.setForeground(Color.BLACK);
-                }
-            } else {
-                returned.setForeground(Color.BLACK);
-            }
-            return returned;
-        }
-    }
+	protected class BugReportViewerCellRenderer extends DefaultTableCellRenderer {
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+			Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			if (column == 3) {
+				BugReport br = _bugReports.elementAt(row);
+				int status = br.getStatus();
+				switch (status) {
+				case 0: // SUBMITTED
+					returned.setForeground(Color.RED);
+					break;
+				case 2: // FIXED
+					returned.setForeground(Color.GREEN);
+					break;
+				case 5: // NREP
+					returned.setForeground(Color.ORANGE);
+					break;
+				default:
+					returned.setForeground(Color.BLACK);
+				}
+			} else {
+				returned.setForeground(Color.BLACK);
+			}
+			return returned;
+		}
+	}
 }

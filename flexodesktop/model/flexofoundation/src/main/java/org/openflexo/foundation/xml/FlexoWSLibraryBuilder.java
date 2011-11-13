@@ -25,19 +25,17 @@ import org.openflexo.foundation.rm.FlexoWSLibraryResource;
 import org.openflexo.foundation.ws.FlexoWSLibrary;
 import org.openflexo.logging.FlexoLogger;
 
-public class FlexoWSLibraryBuilder extends FlexoBuilder<FlexoWSLibraryResource>
-{
-    @SuppressWarnings("unused")
+public class FlexoWSLibraryBuilder extends FlexoBuilder<FlexoWSLibraryResource> {
+	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(FlexoWSLibraryBuilder.class.getPackage().getName());
 
-    public FlexoWSLibrary wsLibrary;
+	public FlexoWSLibrary wsLibrary;
 
-    /**
+	/**
      * 
      */
-    public FlexoWSLibraryBuilder(FlexoWSLibraryResource resource)
-    {
-        super(resource);
-    }
+	public FlexoWSLibraryBuilder(FlexoWSLibraryResource resource) {
+		super(resource);
+	}
 
 }

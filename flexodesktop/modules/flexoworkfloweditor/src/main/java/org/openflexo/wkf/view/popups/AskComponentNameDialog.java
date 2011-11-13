@@ -19,7 +19,6 @@
  */
 package org.openflexo.wkf.view.popups;
 
-
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
@@ -42,7 +41,6 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-
 import org.openflexo.foundation.ie.IERegExp;
 import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
 import org.openflexo.localization.FlexoLocalization;
@@ -50,208 +48,200 @@ import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.FlexoDialog;
 
 /**
- * Popup allowing to choose a way to select an existing sub-process or create a
- * new one
+ * Popup allowing to choose a way to select an existing sub-process or create a new one
  * 
  * @author sguerin
  * 
  */
-public class AskComponentNameDialog extends FlexoDialog implements ActionListener
-{
+public class AskComponentNameDialog extends FlexoDialog implements ActionListener {
 
-    protected int returned;
+	protected int returned;
 
-    public static final int CANCEL = 0;
+	public static final int CANCEL = 0;
 
-    public static final int VALIDATE_EXISTING_COMPONENT = 1;
+	public static final int VALIDATE_EXISTING_COMPONENT = 1;
 
-    public static final int VALIDATE_NEW_COMPONENT = 2;
+	public static final int VALIDATE_NEW_COMPONENT = 2;
 
-    private static final String EXISTING_COMPONENT = "EXISTING_COMPONENT";
+	private static final String EXISTING_COMPONENT = "EXISTING_COMPONENT";
 
-    private static final String NEW_COMPONENT = "NEW_COMPONENT";
+	private static final String NEW_COMPONENT = "NEW_COMPONENT";
 
-    private JComboBox existingOperationComponentChoice;
+	private JComboBox existingOperationComponentChoice;
 
-    protected JTextField newOperationComponentChoice;
-    
-    protected JButton confirmButton;
-    
-    protected JButton cancelButton;
+	protected JTextField newOperationComponentChoice;
 
-    public int getStatus()
-    {
-        return returned;
-    }
+	protected JButton confirmButton;
 
-    public AskComponentNameDialog(FlexoComponentLibrary lib)
-    {
-        super();
-        returned = VALIDATE_NEW_COMPONENT;
+	protected JButton cancelButton;
 
-        Vector availableTabs = (Vector)lib.getOperationsComponentList().clone();
-        
+	public int getStatus() {
+		return returned;
+	}
 
-        setTitle(FlexoLocalization.localizedForKey("select_a_choice"));
-        getContentPane().setLayout(new BorderLayout());
+	public AskComponentNameDialog(FlexoComponentLibrary lib) {
+		super();
+		returned = VALIDATE_NEW_COMPONENT;
 
-        // Create the radio buttons.
-        final JRadioButton existingTabButton = new JRadioButton(FlexoLocalization.localizedForKey("bind_existing_operation_component"));
-        existingTabButton.setSelected(false);
-        existingTabButton.addActionListener(this);
-        existingTabButton.setActionCommand(EXISTING_COMPONENT);
-        JRadioButton newTabButton = new JRadioButton(FlexoLocalization.localizedForKey("create_new_operation_component"));
-        newTabButton.addActionListener(this);
-        newTabButton.setActionCommand(NEW_COMPONENT);
-        // Group the radio buttons.
-        ButtonGroup group = new ButtonGroup();
-        group.add(existingTabButton);
-        group.add(newTabButton);
-        newTabButton.setSelected(true);
-        
-        existingOperationComponentChoice = new JComboBox(availableTabs);
-        existingOperationComponentChoice.setEnabled(false);
-        newOperationComponentChoice = IERegExp.getJavaClassNameValidationTextField(15);//new JTextField(15);
-        newOperationComponentChoice.getDocument().addDocumentListener(new DocumentListener(){
-            @Override
-			public void changedUpdate(DocumentEvent e){
-                removeUpdate(e);
-            }
-            @Override
-			public void insertUpdate(DocumentEvent e){
-                getRootPane().setDefaultButton(confirmButton);
-            }
-            @Override
-			public void removeUpdate(DocumentEvent e){
-                if(newOperationComponentChoice.getText()!=null && !newOperationComponentChoice.getText().equals("")){
-                    getRootPane().setDefaultButton(confirmButton);
-                }else{
-                    getRootPane().setDefaultButton(cancelButton);
-                }
-            }
-        });
-        existingOperationComponentChoice.addActionListener(new ActionListener() {
+		Vector availableTabs = (Vector) lib.getOperationsComponentList().clone();
 
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                existingTabButton.doClick();
-            }
-            
-        });
-        //newProcessChoice.setFocusable(true);
-        //this.setFocusable(true);
-        //newProcessChoice.setRequestFocusEnabled(true);
-        setFocusTraversalPolicy(new MyFocusTraversalPolicy(newOperationComponentChoice));
-        JPanel choicePanel = new JPanel();
+		setTitle(FlexoLocalization.localizedForKey("select_a_choice"));
+		getContentPane().setLayout(new BorderLayout());
 
-        if (availableTabs.size() > 0) {
-            choicePanel.setLayout(new GridLayout(2, 2));
-        } else {
-            choicePanel.setLayout(new FlowLayout());
-        }
-        choicePanel.add(newTabButton);
-        choicePanel.add(newOperationComponentChoice);
-        if (availableTabs.size() > 0) {
-            choicePanel.add(existingTabButton);
-            choicePanel.add(existingOperationComponentChoice);
-        }
-        choicePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+		// Create the radio buttons.
+		final JRadioButton existingTabButton = new JRadioButton(FlexoLocalization.localizedForKey("bind_existing_operation_component"));
+		existingTabButton.setSelected(false);
+		existingTabButton.addActionListener(this);
+		existingTabButton.setActionCommand(EXISTING_COMPONENT);
+		JRadioButton newTabButton = new JRadioButton(FlexoLocalization.localizedForKey("create_new_operation_component"));
+		newTabButton.addActionListener(this);
+		newTabButton.setActionCommand(NEW_COMPONENT);
+		// Group the radio buttons.
+		ButtonGroup group = new ButtonGroup();
+		group.add(existingTabButton);
+		group.add(newTabButton);
+		newTabButton.setSelected(true);
 
-        JPanel controlPanel = new JPanel();
-        controlPanel.setLayout(new FlowLayout());
+		existingOperationComponentChoice = new JComboBox(availableTabs);
+		existingOperationComponentChoice.setEnabled(false);
+		newOperationComponentChoice = IERegExp.getJavaClassNameValidationTextField(15);// new JTextField(15);
+		newOperationComponentChoice.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				removeUpdate(e);
+			}
 
-        confirmButton = new JButton(FlexoLocalization.localizedForKey("validate"));
-        cancelButton = new JButton(FlexoLocalization.localizedForKey("cancel"));
-        getRootPane().setDefaultButton(confirmButton);
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                returned = CANCEL;
-                dispose();
-            }
-        });
-        confirmButton.addActionListener(new ActionListener() {
-            @Override
-			public void actionPerformed(ActionEvent e)
-            {
-                dispose();
-            }
-        });
-        
-        if (ToolBox.getPLATFORM()==ToolBox.MACOS) {
-	        controlPanel.add(cancelButton);
-	        controlPanel.add(confirmButton);
-        } else {
-        	controlPanel.add(confirmButton);
-        	controlPanel.add(cancelButton);
-        }
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				getRootPane().setDefaultButton(confirmButton);
+			}
 
-        JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new BorderLayout());
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				if (newOperationComponentChoice.getText() != null && !newOperationComponentChoice.getText().equals("")) {
+					getRootPane().setDefaultButton(confirmButton);
+				} else {
+					getRootPane().setDefaultButton(cancelButton);
+				}
+			}
+		});
+		existingOperationComponentChoice.addActionListener(new ActionListener() {
 
-        contentPanel.add(choicePanel, BorderLayout.CENTER);
-        contentPanel.add(controlPanel, BorderLayout.SOUTH);
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				existingTabButton.doClick();
+			}
 
-        getContentPane().add(contentPanel, BorderLayout.CENTER);
+		});
+		// newProcessChoice.setFocusable(true);
+		// this.setFocusable(true);
+		// newProcessChoice.setRequestFocusEnabled(true);
+		setFocusTraversalPolicy(new MyFocusTraversalPolicy(newOperationComponentChoice));
+		JPanel choicePanel = new JPanel();
 
-        setModal(true);
-        validate();
-        pack();
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2);
-        show();
-        //requestFocus();
-        //KeyboardFocusManager.getCurrentKeyboardFocusManager().clearGlobalFocusOwner();
-        //newProcessChoice.requestFocus();
-        //newProcessChoice.requestFocusInWindow();
-        //newProcessChoice.setCaretPosition(0);
-    }
+		if (availableTabs.size() > 0) {
+			choicePanel.setLayout(new GridLayout(2, 2));
+		} else {
+			choicePanel.setLayout(new FlowLayout());
+		}
+		choicePanel.add(newTabButton);
+		choicePanel.add(newOperationComponentChoice);
+		if (availableTabs.size() > 0) {
+			choicePanel.add(existingTabButton);
+			choicePanel.add(existingOperationComponentChoice);
+		}
+		choicePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-    /** Listens to the radio buttons. */
+		JPanel controlPanel = new JPanel();
+		controlPanel.setLayout(new FlowLayout());
 
-    @Override
-	public void actionPerformed(ActionEvent e)
-    {
-        if (e.getActionCommand().equals(EXISTING_COMPONENT)) {
-            existingOperationComponentChoice.setEnabled(true);
-            newOperationComponentChoice.setEnabled(false);
-            returned = VALIDATE_EXISTING_COMPONENT;
-        } else if (e.getActionCommand().equals(NEW_COMPONENT)) {
-            newOperationComponentChoice.setEnabled(true);
-            existingOperationComponentChoice.setEnabled(false);
-            newOperationComponentChoice.requestFocusInWindow();
-            returned = VALIDATE_NEW_COMPONENT;
-        }
-    }
+		confirmButton = new JButton(FlexoLocalization.localizedForKey("validate"));
+		cancelButton = new JButton(FlexoLocalization.localizedForKey("cancel"));
+		getRootPane().setDefaultButton(confirmButton);
+		cancelButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				returned = CANCEL;
+				dispose();
+			}
+		});
+		confirmButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 
-    public String getWOComponentName()
-    {
-        if (returned == VALIDATE_EXISTING_COMPONENT) {
-            return existingOperationComponentChoice.getSelectedItem().toString();
-        } else if (returned == VALIDATE_NEW_COMPONENT) {
-            return newOperationComponentChoice.getText();
-        }
-        return null;
-    }
+		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+			controlPanel.add(cancelButton);
+			controlPanel.add(confirmButton);
+		} else {
+			controlPanel.add(confirmButton);
+			controlPanel.add(cancelButton);
+		}
 
-    private class MyFocusTraversalPolicy extends DefaultFocusTraversalPolicy{
+		JPanel contentPanel = new JPanel();
+		contentPanel.setLayout(new BorderLayout());
 
-        private Component _firstComponent;
-        public MyFocusTraversalPolicy(Component firstComponent){
-            super();
-            _firstComponent = firstComponent;
-        }
-        /* (non-Javadoc)
-         * @see java.awt.ContainerOrderFocusTraversalPolicy#getFirstComponent(java.awt.Container)
-         */
-        @Override
-		public Component getFirstComponent(Container arg0)
-        {
-            return _firstComponent;
-        }
-        
-        
-    }
+		contentPanel.add(choicePanel, BorderLayout.CENTER);
+		contentPanel.add(controlPanel, BorderLayout.SOUTH);
+
+		getContentPane().add(contentPanel, BorderLayout.CENTER);
+
+		setModal(true);
+		validate();
+		pack();
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2);
+		show();
+		// requestFocus();
+		// KeyboardFocusManager.getCurrentKeyboardFocusManager().clearGlobalFocusOwner();
+		// newProcessChoice.requestFocus();
+		// newProcessChoice.requestFocusInWindow();
+		// newProcessChoice.setCaretPosition(0);
+	}
+
+	/** Listens to the radio buttons. */
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getActionCommand().equals(EXISTING_COMPONENT)) {
+			existingOperationComponentChoice.setEnabled(true);
+			newOperationComponentChoice.setEnabled(false);
+			returned = VALIDATE_EXISTING_COMPONENT;
+		} else if (e.getActionCommand().equals(NEW_COMPONENT)) {
+			newOperationComponentChoice.setEnabled(true);
+			existingOperationComponentChoice.setEnabled(false);
+			newOperationComponentChoice.requestFocusInWindow();
+			returned = VALIDATE_NEW_COMPONENT;
+		}
+	}
+
+	public String getWOComponentName() {
+		if (returned == VALIDATE_EXISTING_COMPONENT) {
+			return existingOperationComponentChoice.getSelectedItem().toString();
+		} else if (returned == VALIDATE_NEW_COMPONENT) {
+			return newOperationComponentChoice.getText();
+		}
+		return null;
+	}
+
+	private class MyFocusTraversalPolicy extends DefaultFocusTraversalPolicy {
+
+		private Component _firstComponent;
+
+		public MyFocusTraversalPolicy(Component firstComponent) {
+			super();
+			_firstComponent = firstComponent;
+		}
+
+		/* (non-Javadoc)
+		 * @see java.awt.ContainerOrderFocusTraversalPolicy#getFirstComponent(java.awt.Container)
+		 */
+		@Override
+		public Component getFirstComponent(Container arg0) {
+			return _firstComponent;
+		}
+
+	}
 }

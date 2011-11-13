@@ -29,92 +29,83 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.rm.FlexoProject;
 
-
 /**
  * Please comment this class
- *
+ * 
  * @author sguerin
- *
+ * 
  */
-public abstract class EntitySelectorColumn<D extends FlexoModelObject,T extends DMEntity> extends SelectorColumn<D, T>
-{
+public abstract class EntitySelectorColumn<D extends FlexoModelObject, T extends DMEntity> extends SelectorColumn<D, T> {
 
-    protected String STRING_REPRESENTATION_WHEN_NULL = null;
+	protected String STRING_REPRESENTATION_WHEN_NULL = null;
 
-    protected static final Logger logger = Logger.getLogger(EntitySelectorColumn.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(EntitySelectorColumn.class.getPackage().getName());
 
-    private Class<T> entityClass;
+	private Class<T> entityClass;
 
-    public EntitySelectorColumn(String title, int defaultWidth, FlexoProject project, Class<T> entityClass)
-    {
-        super(title, defaultWidth, project);
-        this.entityClass = entityClass;
-    }
+	public EntitySelectorColumn(String title, int defaultWidth, FlexoProject project, Class<T> entityClass) {
+		super(title, defaultWidth, project);
+		this.entityClass = entityClass;
+	}
 
-    @Override
-	public Class<T> getValueClass()
-    {
-        return entityClass;
-    }
+	@Override
+	public Class<T> getValueClass() {
+		return entityClass;
+	}
 
-    private DMEntitySelector<T> _viewSelector;
+	private DMEntitySelector<T> _viewSelector;
 
-    private DMEntitySelector<T> _editSelector;
+	private DMEntitySelector<T> _editSelector;
 
-    @Override
-	protected AbstractBrowserSelector<T> getViewSelector(D rowObject, T value)
-    {
-        if (_viewSelector == null) {
-            _viewSelector = new DMEntitySelector<T>(_project, null,entityClass);
-            _viewSelector.setFont(FlexoCst.MEDIUM_FONT);
-            if (STRING_REPRESENTATION_WHEN_NULL != null) {
-                _viewSelector.setNullStringRepresentation(STRING_REPRESENTATION_WHEN_NULL);
-            }
-        }
-        _viewSelector.setEditedObject(value);
-        return _viewSelector;
-    }
+	@Override
+	protected AbstractBrowserSelector<T> getViewSelector(D rowObject, T value) {
+		if (_viewSelector == null) {
+			_viewSelector = new DMEntitySelector<T>(_project, null, entityClass);
+			_viewSelector.setFont(FlexoCst.MEDIUM_FONT);
+			if (STRING_REPRESENTATION_WHEN_NULL != null) {
+				_viewSelector.setNullStringRepresentation(STRING_REPRESENTATION_WHEN_NULL);
+			}
+		}
+		_viewSelector.setEditedObject(value);
+		return _viewSelector;
+	}
 
-    @Override
-	protected AbstractBrowserSelector<T> getEditSelector(D rowObject, T value)
-    {
-        if (_editSelector == null) {
-            _editSelector = new DMEntitySelector<T>(_project, null,entityClass) {
-                @Override
-				public void apply()
-                {
-                    super.apply();
-                    if (logger.isLoggable(Level.FINE))
-                        logger.fine("Apply");
-                    if (_editedRowObject != null) {
-                        setValue(_editedRowObject, getEditedObject());
-                    }
-                }
+	@Override
+	protected AbstractBrowserSelector<T> getEditSelector(D rowObject, T value) {
+		if (_editSelector == null) {
+			_editSelector = new DMEntitySelector<T>(_project, null, entityClass) {
+				@Override
+				public void apply() {
+					super.apply();
+					if (logger.isLoggable(Level.FINE))
+						logger.fine("Apply");
+					if (_editedRowObject != null) {
+						setValue(_editedRowObject, getEditedObject());
+					}
+				}
 
-                @Override
-				public void cancel()
-                {
-                    super.cancel();
-                    if (logger.isLoggable(Level.FINE))
-                        logger.fine("Cancel");
-                    if (_editedRowObject != null) {
-                        setValue(_editedRowObject, getRevertValue());
-                    }
-                }
-            };
-            _editSelector.setFont(FlexoCst.NORMAL_FONT);
-        }
-        if (STRING_REPRESENTATION_WHEN_NULL != null) {
-            _editSelector.setNullStringRepresentation(STRING_REPRESENTATION_WHEN_NULL);
-        }
-        _editSelector.setEditedObject(value);
-        _editSelector.setRevertValue(value);
-        return _editSelector;
-    }
+				@Override
+				public void cancel() {
+					super.cancel();
+					if (logger.isLoggable(Level.FINE))
+						logger.fine("Cancel");
+					if (_editedRowObject != null) {
+						setValue(_editedRowObject, getRevertValue());
+					}
+				}
+			};
+			_editSelector.setFont(FlexoCst.NORMAL_FONT);
+		}
+		if (STRING_REPRESENTATION_WHEN_NULL != null) {
+			_editSelector.setNullStringRepresentation(STRING_REPRESENTATION_WHEN_NULL);
+		}
+		_editSelector.setEditedObject(value);
+		_editSelector.setRevertValue(value);
+		return _editSelector;
+	}
 
-    public void setNullStringRepresentation(String aString)
-    {
-        STRING_REPRESENTATION_WHEN_NULL = aString;
-    }
+	public void setNullStringRepresentation(String aString) {
+		STRING_REPRESENTATION_WHEN_NULL = aString;
+	}
 
 }

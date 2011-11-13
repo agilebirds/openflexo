@@ -23,31 +23,27 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.localization.FlexoLocalization;
 
 /**
- * Thrown to notify that this method signature is already registered 
+ * Thrown to notify that this method signature is already registered
  * 
  * @author sguerin
  * 
  */
-public class DuplicatePropertyNameException extends FlexoException
-{
+public class DuplicatePropertyNameException extends FlexoException {
 
-    private String _duplicatedName;
+	private String _duplicatedName;
 
-    public DuplicatePropertyNameException(String duplicatedName)
-    {
-        super();
-        _duplicatedName = duplicatedName;
-    }
+	public DuplicatePropertyNameException(String duplicatedName) {
+		super();
+		_duplicatedName = duplicatedName;
+	}
 
-    @Override
-	public String getMessage()
-    {
-        return "Duplicate propertyName name: " + _duplicatedName;
-    }
+	@Override
+	public String getMessage() {
+		return "Duplicate propertyName name: " + _duplicatedName;
+	}
 
-    @Override
-	public String getLocalizedMessage()
-    {
-        return FlexoLocalization.localizedForKey("duplicate_property_name") + " : " + _duplicatedName;
-    }
+	@Override
+	public String getLocalizedMessage() {
+		return FlexoLocalization.localizedForKey("duplicate_property_name") + " : " + _duplicatedName;
+	}
 }

@@ -28,58 +28,47 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.fps.CVSFile;
 import org.openflexo.fps.FPSObject;
 
+public class RetrieveCVSHistory extends CVSAction<RetrieveCVSHistory, CVSFile> {
 
-public class RetrieveCVSHistory extends CVSAction<RetrieveCVSHistory,CVSFile>
-{
+	private static final Logger logger = Logger.getLogger(RetrieveCVSHistory.class.getPackage().getName());
 
-    private static final Logger logger = Logger.getLogger(RetrieveCVSHistory.class.getPackage().getName());
+	public static FlexoActionType<RetrieveCVSHistory, CVSFile, FPSObject> actionType = new FlexoActionType<RetrieveCVSHistory, CVSFile, FPSObject>(
+			"retrieve_cvs_history", CVS_HISTORY_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
 
-    public static FlexoActionType<RetrieveCVSHistory,CVSFile,FPSObject> actionType 
-    = new FlexoActionType<RetrieveCVSHistory,CVSFile,FPSObject> (
-    		"retrieve_cvs_history",CVS_HISTORY_GROUP,FlexoActionType.NORMAL_ACTION_TYPE) {
+		/**
+		 * Factory method
+		 */
+		@Override
+		public RetrieveCVSHistory makeNewAction(CVSFile focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {
+			return new RetrieveCVSHistory(focusedObject, globalSelection, editor);
+		}
 
-        /**
-         * Factory method
-         */
-        @Override
-		public RetrieveCVSHistory makeNewAction(CVSFile focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) 
-        {
-            return new RetrieveCVSHistory(focusedObject, globalSelection, editor);
-        }
+		@Override
+		protected boolean isVisibleForSelection(CVSFile object, Vector<FPSObject> globalSelection) {
+			return (object != null && object.getSharedProject() != null);
+		}
 
-        @Override
-		protected boolean isVisibleForSelection(CVSFile object, Vector<FPSObject> globalSelection) 
-        {
-            return (object != null && object.getSharedProject() != null);
-       }
+		@Override
+		protected boolean isEnabledForSelection(CVSFile object, Vector<FPSObject> globalSelection) {
+			return ((object != null) && (object.isCVSHistoryRetrievable()));
+		}
 
-        @Override
-		protected boolean isEnabledForSelection(CVSFile object, Vector<FPSObject> globalSelection) 
-        {
-            return ((object != null) 
-            		&& (object.isCVSHistoryRetrievable()));
-       }
-                
-    };
-    
-    static {
-        FlexoModelObject.addActionForClass (RetrieveCVSHistory.actionType, CVSFile.class);
-    }
-    
+	};
 
-    RetrieveCVSHistory (CVSFile focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor)
-    {
-        super(actionType, focusedObject, globalSelection, editor);
-    }
+	static {
+		FlexoModelObject.addActionForClass(RetrieveCVSHistory.actionType, CVSFile.class);
+	}
 
-    @Override
-	protected void doAction(Object context)
-    {
-    	logger.info ("Retrieve CVS history for file "+getFocusedObject().getFileName());
-    	if (getFocusedObject() != null) {
-    		getFocusedObject().retrieveCVSHistory();
-     	}
-     }
+	RetrieveCVSHistory(CVSFile focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
 
-	
+	@Override
+	protected void doAction(Object context) {
+		logger.info("Retrieve CVS history for file " + getFocusedObject().getFileName());
+		if (getFocusedObject() != null) {
+			getFocusedObject().retrieveCVSHistory();
+		}
+	}
+
 }

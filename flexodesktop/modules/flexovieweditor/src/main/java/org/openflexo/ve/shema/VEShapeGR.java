@@ -40,76 +40,64 @@ import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.toolbox.ConcatenedList;
 import org.openflexo.toolbox.ToolBox;
 
-
 public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implements GraphicalFlexoObserver, VEShemaConstants {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(VEShapeGR.class.getPackage().getName());
 
 	/**
-	 * Constructor invoked during deserialization
-	 * DO NOT use it
+	 * Constructor invoked during deserialization DO NOT use it
 	 */
-	public VEShapeGR(VEShemaBuilder builder)
-	{
-		this(null,null);
+	public VEShapeGR(VEShemaBuilder builder) {
+		this(null, null);
 	}
 
-	public VEShapeGR(ViewShape aShape, Drawing<?> aDrawing) 
-	{
+	public VEShapeGR(ViewShape aShape, Drawing<?> aDrawing) {
 		super(ShapeType.RECTANGLE, aShape, aDrawing);
 
 		addToMouseClickControls(new VEShemaController.ShowContextualMenuControl());
-		if (ToolBox.getPLATFORM()!=ToolBox.MACOS) {
+		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
 			addToMouseClickControls(new VEShemaController.ShowContextualMenuControl(true));
 		}
 		addToMouseDragControls(new DrawEdgeControl());
 
-		if (aShape != null) aShape.addObserver(this);
+		if (aShape != null)
+			aShape.addObserver(this);
 
-		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(25,25,25,25));
-		
+		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(25, 25, 25, 25));
+
 	}
 
 	@Override
-	public void delete()
-	{
-		if (getDrawable() != null) getDrawable().deleteObserver(this);
+	public void delete() {
+		if (getDrawable() != null)
+			getDrawable().deleteObserver(this);
 		super.delete();
 	}
 
-
 	@Override
-	public VEShemaRepresentation getDrawing() 
-	{
-		return (VEShemaRepresentation)super.getDrawing();
+	public VEShemaRepresentation getDrawing() {
+		return (VEShemaRepresentation) super.getDrawing();
 	}
-	
-	public ViewShape getOEShape()
-	{
+
+	public ViewShape getOEShape() {
 		return getDrawable();
 	}
 
-
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification)
-	{
+	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getOEShape()) {
-			//logger.info("Notified "+dataModification);
+			// logger.info("Notified "+dataModification);
 			if (dataModification instanceof ShapeInserted) {
 				getDrawing().updateGraphicalObjectsHierarchy();
-			}
-			else if (dataModification instanceof ShapeRemoved) {
+			} else if (dataModification instanceof ShapeRemoved) {
 				getDrawing().updateGraphicalObjectsHierarchy();
-			}
-			else if (dataModification instanceof ConnectorInserted) {
+			} else if (dataModification instanceof ConnectorInserted) {
 				getDrawing().updateGraphicalObjectsHierarchy();
-			}
-			else if (dataModification instanceof ConnectorRemoved) {
+			} else if (dataModification instanceof ConnectorRemoved) {
 				getDrawing().updateGraphicalObjectsHierarchy();
-			}
-			else if (dataModification instanceof NameChanged) {
-				//logger.info("received NameChanged notification");
+			} else if (dataModification instanceof NameChanged) {
+				// logger.info("received NameChanged notification");
 				setText(getText());
 				notifyChange(org.openflexo.fge.GraphicalRepresentation.Parameters.text);
 			}
@@ -117,22 +105,19 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 	}
 
 	@Override
-	public boolean getAllowToLeaveBounds()
-	{
+	public boolean getAllowToLeaveBounds() {
 		return false;
 	}
-	
+
 	@Override
-	public String getText()
-	{
+	public String getText() {
 		if (getOEShape() != null)
 			return getOEShape().getName();
 		return null;
 	}
 
 	@Override
-	public void setTextNoNotification(String text) 
-	{
+	public void setTextNoNotification(String text) {
 		if (getOEShape() != null)
 			getOEShape().setName(text);
 	}
@@ -140,17 +125,15 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 	private ConcatenedList<ControlArea> controlAreas;
 
 	@Override
-	public List<? extends ControlArea> getControlAreas() 
-	{
-		if (controlAreas==null) {
+	public List<? extends ControlArea> getControlAreas() {
+		if (controlAreas == null) {
 			controlAreas = new ConcatenedList<ControlArea>();
 			controlAreas.addElementList(super.getControlAreas());
-			if (getOEShape().getAvailableLinkSchemeFromThisShape() != null 
-					&& getOEShape().getAvailableLinkSchemeFromThisShape().size() > 0) {
-				controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(),SimplifiedCardinalDirection.EAST));
-				controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(),SimplifiedCardinalDirection.WEST));
-				controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(),SimplifiedCardinalDirection.NORTH));
-				controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(),SimplifiedCardinalDirection.SOUTH));
+			if (getOEShape().getAvailableLinkSchemeFromThisShape() != null && getOEShape().getAvailableLinkSchemeFromThisShape().size() > 0) {
+				controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(), SimplifiedCardinalDirection.EAST));
+				controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(), SimplifiedCardinalDirection.WEST));
+				controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(), SimplifiedCardinalDirection.NORTH));
+				controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(), SimplifiedCardinalDirection.SOUTH));
 			}
 		}
 		return controlAreas;

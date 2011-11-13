@@ -26,164 +26,139 @@ import java.util.Vector;
 import org.openflexo.oo3.OO3Attachments.OO3Attachment;
 import org.openflexo.xmlcode.XMLSerializable;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class OO3Text implements XMLSerializable
-{
+public class OO3Text implements XMLSerializable {
 
-    public Vector<Paragraph> paragraphs;
+	public Vector<Paragraph> paragraphs;
 
-    public OO3Text()
-    {
-        super();
-        paragraphs = new Vector<Paragraph>();
-    }
+	public OO3Text() {
+		super();
+		paragraphs = new Vector<Paragraph>();
+	}
 
-    public OO3Text(String firstParagraphText)
-    {
-        this();
-        addParagraph(firstParagraphText);
-    }
+	public OO3Text(String firstParagraphText) {
+		this();
+		addParagraph(firstParagraphText);
+	}
 
-    public void addParagraph(Paragraph paragraph)
-    {
-        paragraphs.add(paragraph);
-    }
+	public void addParagraph(Paragraph paragraph) {
+		paragraphs.add(paragraph);
+	}
 
-    public void addParagraph(String paragraph)
-    {
-        paragraphs.add(new Paragraph(paragraph));
-    }
+	public void addParagraph(String paragraph) {
+		paragraphs.add(new Paragraph(paragraph));
+	}
 
-    public void setText(String text)
-    {
-        if (text != null) {
-            StringTokenizer st = new StringTokenizer(text, "\n");
-            while (st.hasMoreTokens()) {
-                addParagraph(st.nextToken());
-            }
-        }
-    }
+	public void setText(String text) {
+		if (text != null) {
+			StringTokenizer st = new StringTokenizer(text, "\n");
+			while (st.hasMoreTokens()) {
+				addParagraph(st.nextToken());
+			}
+		}
+	}
 
-    public OO3Attachment addAttachment(OO3Document document, File file, String name)
-    {
-        OO3Attachment attachment = document.registerAttachment(file, name);
-        paragraphs.add(new Paragraph(attachment));
-        return attachment;
-    }
+	public OO3Attachment addAttachment(OO3Document document, File file, String name) {
+		OO3Attachment attachment = document.registerAttachment(file, name);
+		paragraphs.add(new Paragraph(attachment));
+		return attachment;
+	}
 
-    public static class Paragraph implements XMLSerializable
-    {
-        public Run run;
+	public static class Paragraph implements XMLSerializable {
+		public Run run;
 
-        public Paragraph()
-        {
-            super();
-        }
+		public Paragraph() {
+			super();
+		}
 
-        public Paragraph(String paragraphText)
-        {
-            this();
-            if (paragraphText != null) {
-                run = new Run(paragraphText);
-            }
-        }
+		public Paragraph(String paragraphText) {
+			this();
+			if (paragraphText != null) {
+				run = new Run(paragraphText);
+			}
+		}
 
-        public Paragraph(Run.Lit.Cell paragraphCell)
-        {
-            this();
-            run = new Run(paragraphCell);
-        }
+		public Paragraph(Run.Lit.Cell paragraphCell) {
+			this();
+			run = new Run(paragraphCell);
+		}
 
-        public Paragraph(OO3Attachment attachment)
-        {
-            this(new Run.Lit.Cell(attachment));
-        }
+		public Paragraph(OO3Attachment attachment) {
+			this(new Run.Lit.Cell(attachment));
+		}
 
-        public static class Run implements XMLSerializable
-        {
-            public Lit lit;
+		public static class Run implements XMLSerializable {
+			public Lit lit;
 
-            public Run()
-            {
-                super();
-                lit = null;
-            }
+			public Run() {
+				super();
+				lit = null;
+			}
 
-            public Run(String text)
-            {
-                this();
-                lit = new Lit(text);
-            }
+			public Run(String text) {
+				this();
+				lit = new Lit(text);
+			}
 
-            public Run(Lit.Cell cell)
-            {
-                this();
-                lit = new Lit(cell);
-            }
+			public Run(Lit.Cell cell) {
+				this();
+				lit = new Lit(cell);
+			}
 
-            public static class Lit implements XMLSerializable
-            {
-                public String text;
+			public static class Lit implements XMLSerializable {
+				public String text;
 
-                public Cell cell;
+				public Cell cell;
 
-                public Lit()
-                {
-                    super();
-                }
+				public Lit() {
+					super();
+				}
 
-                public Lit(String t)
-                {
-                    this();
-                    this.text = t;
-                }
+				public Lit(String t) {
+					this();
+					this.text = t;
+				}
 
-                public Lit(Cell c)
-                {
-                    this();
-                    this.cell = c;
-                }
+				public Lit(Cell c) {
+					this();
+					this.cell = c;
+				}
 
-                public static class Cell implements XMLSerializable
-                {
-                    public String variable;
+				public static class Cell implements XMLSerializable {
+					public String variable;
 
-                    public String refid;
+					public String refid;
 
-                    public String name;
+					public String name;
 
-                    public String expanded;
+					public String expanded;
 
-                    public Cell()
-                    {
-                        super();
-                    }
+					public Cell() {
+						super();
+					}
 
-                    public Cell(String v)
-                    {
-                        this();
-                        this.variable = v;
-                    }
+					public Cell(String v) {
+						this();
+						this.variable = v;
+					}
 
-                    public Cell(OO3Attachments.OO3Attachment attachment)
-                    {
-                        this();
-                        refid = attachment.id;
-                        name = attachment.name;
-                        expanded = "yes";
-                    }
-                }
+					public Cell(OO3Attachments.OO3Attachment attachment) {
+						this();
+						refid = attachment.id;
+						name = attachment.name;
+						expanded = "yes";
+					}
+				}
 
-            }
+			}
 
-        }
+		}
 
-    }
+	}
 
 }

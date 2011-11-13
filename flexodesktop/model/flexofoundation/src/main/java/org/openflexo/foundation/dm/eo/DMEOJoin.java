@@ -46,356 +46,320 @@ import org.openflexo.toolbox.EmptyVector;
  * @author sguerin
  * 
  */
-public class DMEOJoin extends DMObject implements DMEOObject, InspectableObject
-{
+public class DMEOJoin extends DMObject implements DMEOObject, InspectableObject {
 
-    private static final Logger logger = Logger.getLogger(DMEOJoin.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DMEOJoin.class.getPackage().getName());
 
-    // ==========================================================================
-    // ============================= Instance variables
-    // =========================
-    // ==========================================================================
-    private DMEORelationship _dmEORelationship;
-    private DMEOEntity _sourceEntity;
-    private DMEOEntity _destinationEntity;
-   
-    private EOJoin _eoJoin;
+	// ==========================================================================
+	// ============================= Instance variables
+	// =========================
+	// ==========================================================================
+	private DMEORelationship _dmEORelationship;
+	private DMEOEntity _sourceEntity;
+	private DMEOEntity _destinationEntity;
 
-    /**
-     * Default constructor
-     */
-    public DMEOJoin(DMEORelationship dmEORelationship)
-    {
-        super(dmEORelationship.getDMModel());
-        _dmEORelationship = dmEORelationship;
-        _eoJoin = null;
-    }
+	private EOJoin _eoJoin;
 
-    /**
-     * Default constructor
-     */
-    public DMEOJoin(DMEOEntity sourceEntity)
-    {
-        super(sourceEntity.getDMModel());
-        _sourceEntity = sourceEntity;
-        _eoJoin = null;
-    }
+	/**
+	 * Default constructor
+	 */
+	public DMEOJoin(DMEORelationship dmEORelationship) {
+		super(dmEORelationship.getDMModel());
+		_dmEORelationship = dmEORelationship;
+		_eoJoin = null;
+	}
 
-    /**
-     * Default constructor
-     */
-    public DMEOJoin(DMEORelationship dmEORelationship, EOJoin eoJoin)
-    {
-        this(dmEORelationship);
-        _eoJoin = eoJoin;
-    }
+	/**
+	 * Default constructor
+	 */
+	public DMEOJoin(DMEOEntity sourceEntity) {
+		super(sourceEntity.getDMModel());
+		_sourceEntity = sourceEntity;
+		_eoJoin = null;
+	}
 
-    public DMEORelationship getDMEORelationship()
-    {
-        return _dmEORelationship;
-    }
+	/**
+	 * Default constructor
+	 */
+	public DMEOJoin(DMEORelationship dmEORelationship, EOJoin eoJoin) {
+		this(dmEORelationship);
+		_eoJoin = eoJoin;
+	}
 
-    public void setDMEORelationship(DMEORelationship relationship) throws EOAccessException, InvalidJoinException
-    {
-    	_dmEORelationship = relationship;
-    	try{
-    		tryToCreateJoin();
-    	}catch(InvalidJoinException e){
-    		_dmEORelationship = null;
-    		throw e;
-    	}
-    }
+	public DMEORelationship getDMEORelationship() {
+		return _dmEORelationship;
+	}
 
-    @Override
-	public String getName()
-    {
-        return FlexoLocalization.localizedForKey(getClassNameKey());
-    }
-
-    @Override
-	public void setName(String aName)
-    {
-        // not relevant
-    }
-
-    /**
-     * Overrides isNameValid
-     * @see org.openflexo.foundation.dm.DMObject#isNameValid()
-     */
-    @Override
-    public boolean isNameValid()
-    {
-        return true; //joins don't have name
-    }
-    
-    /**
-     * Return a Vector of embedded DMObjects at this level.
-     * 
-     * @return null
-     */
-    @Override
-	public Vector getEmbeddedDMObjects()
-    {
-        return null;
-    }
-
-    @Override
-	public String getFullyQualifiedName()
-    {
-    	if (getDMEORelationship() == null) {
-			return "UNDEFINED_JOIN/"+Integer.toHexString(hashCode());
+	public void setDMEORelationship(DMEORelationship relationship) throws EOAccessException, InvalidJoinException {
+		_dmEORelationship = relationship;
+		try {
+			tryToCreateJoin();
+		} catch (InvalidJoinException e) {
+			_dmEORelationship = null;
+			throw e;
 		}
-        return getDMEORelationship().getFullyQualifiedName() + ".JOIN";
-    }
+	}
 
-    @Override
-	public DMEOModel getDMEOModel()
-    {
-    	if (getDMEORelationship() == null) {
+	@Override
+	public String getName() {
+		return FlexoLocalization.localizedForKey(getClassNameKey());
+	}
+
+	@Override
+	public void setName(String aName) {
+		// not relevant
+	}
+
+	/**
+	 * Overrides isNameValid
+	 * 
+	 * @see org.openflexo.foundation.dm.DMObject#isNameValid()
+	 */
+	@Override
+	public boolean isNameValid() {
+		return true; // joins don't have name
+	}
+
+	/**
+	 * Return a Vector of embedded DMObjects at this level.
+	 * 
+	 * @return null
+	 */
+	@Override
+	public Vector getEmbeddedDMObjects() {
+		return null;
+	}
+
+	@Override
+	public String getFullyQualifiedName() {
+		if (getDMEORelationship() == null) {
+			return "UNDEFINED_JOIN/" + Integer.toHexString(hashCode());
+		}
+		return getDMEORelationship().getFullyQualifiedName() + ".JOIN";
+	}
+
+	@Override
+	public DMEOModel getDMEOModel() {
+		if (getDMEORelationship() == null) {
 			return null;
 		}
-        return getDMEORelationship().getDMEOModel();
-    }
+		return getDMEORelationship().getDMEOModel();
+	}
 
-    @Override
-	public String getInspectorName()
-    {
-        // Never inspected by its own
-        return null;
-    }
+	@Override
+	public String getInspectorName() {
+		// Never inspected by its own
+		return null;
+	}
 
-    public EORelationship getEORelationship()
-    {
-        return getDMEORelationship().getEORelationship();
-    }
+	public EORelationship getEORelationship() {
+		return getDMEORelationship().getEORelationship();
+	}
 
-     private DMEOAttribute _sourceAttribute;
+	private DMEOAttribute _sourceAttribute;
 
-    private DMEOAttribute _destinationAttribute;
+	private DMEOAttribute _destinationAttribute;
 
-    public DMEOAttribute getSourceAttribute()
-    {
-        if (_eoJoin != null) {
-            EOAttribute source = _eoJoin.getSourceAttribute();
-            _sourceAttribute = getDMEORelationship().getDMEOEntity().getDMEOAttribute(source);
-        }
-        return _sourceAttribute;
-    }
+	public DMEOAttribute getSourceAttribute() {
+		if (_eoJoin != null) {
+			EOAttribute source = _eoJoin.getSourceAttribute();
+			_sourceAttribute = getDMEORelationship().getDMEOEntity().getDMEOAttribute(source);
+		}
+		return _sourceAttribute;
+	}
 
-    public DMEOAttribute getDestinationAttribute()
-    {
-        if (_eoJoin != null) {
-            EOAttribute destination = _eoJoin.getDestinationAttribute();
-            if (destination != null) {
+	public DMEOAttribute getDestinationAttribute() {
+		if (_eoJoin != null) {
+			EOAttribute destination = _eoJoin.getDestinationAttribute();
+			if (destination != null) {
 				_destinationAttribute = getDestinationEntity().getDMEOAttribute(destination);
 			}
-        }
-        return _destinationAttribute;
-    }
+		}
+		return _destinationAttribute;
+	}
 
-    public boolean isJoinValid()
-    {
-    	if (getDMEORelationship() == null) {
-    		return ((getSourceAttribute() != null) 
-    				&& (getDestinationAttribute() != null)); 
-    	}
-    	return (_eoJoin != null);
-    }
+	public boolean isJoinValid() {
+		if (getDMEORelationship() == null) {
+			return ((getSourceAttribute() != null) && (getDestinationAttribute() != null));
+		}
+		return (_eoJoin != null);
+	}
 
-    public void setSourceAttribute(DMEOAttribute sourceAttribute) throws EOAccessException, InvalidJoinException
-    {
-        if (sourceAttribute != getSourceAttribute()) {
-            DMEOAttribute oldSourceAttribute = _sourceAttribute;
-            _sourceAttribute = sourceAttribute;
-            if (_eoJoin != null) {
-                deleteEOJoin();
-            }
-            tryToCreateJoin();
-             notifyObservers(new DMAttributeDataModification("sourceAttribute", oldSourceAttribute, sourceAttribute));
-        }
-    }
+	public void setSourceAttribute(DMEOAttribute sourceAttribute) throws EOAccessException, InvalidJoinException {
+		if (sourceAttribute != getSourceAttribute()) {
+			DMEOAttribute oldSourceAttribute = _sourceAttribute;
+			_sourceAttribute = sourceAttribute;
+			if (_eoJoin != null) {
+				deleteEOJoin();
+			}
+			tryToCreateJoin();
+			notifyObservers(new DMAttributeDataModification("sourceAttribute", oldSourceAttribute, sourceAttribute));
+		}
+	}
 
-    public void setDestinationAttribute(DMEOAttribute destinationAttribute) throws EOAccessException, InvalidJoinException
-    {
-        if (destinationAttribute != getDestinationAttribute()) {
-            DMEOAttribute oldDestinationAttribute = _destinationAttribute;
-            _destinationAttribute = destinationAttribute;
-            if (_eoJoin != null) {
-                deleteEOJoin();
-            }
-            tryToCreateJoin();
-            notifyObservers(new DMAttributeDataModification("destinationAttribute", oldDestinationAttribute, destinationAttribute));
-         }
-    }
+	public void setDestinationAttribute(DMEOAttribute destinationAttribute) throws EOAccessException, InvalidJoinException {
+		if (destinationAttribute != getDestinationAttribute()) {
+			DMEOAttribute oldDestinationAttribute = _destinationAttribute;
+			_destinationAttribute = destinationAttribute;
+			if (_eoJoin != null) {
+				deleteEOJoin();
+			}
+			tryToCreateJoin();
+			notifyObservers(new DMAttributeDataModification("destinationAttribute", oldDestinationAttribute, destinationAttribute));
+		}
+	}
 
-    private void deleteEOJoin()
-    {
-        if (_eoJoin != null) {
-            getDMEORelationship().getEORelationship().removeJoin(_eoJoin);
-            _eoJoin = null;
-        }
-    }
+	private void deleteEOJoin() {
+		if (_eoJoin != null) {
+			getDMEORelationship().getEORelationship().removeJoin(_eoJoin);
+			_eoJoin = null;
+		}
+	}
 
-    private void tryToCreateJoin() throws EOAccessException, InvalidJoinException
-    {
-    	if (getDMEORelationship() == null) {
+	private void tryToCreateJoin() throws EOAccessException, InvalidJoinException {
+		if (getDMEORelationship() == null) {
 			return;
 		}
-        if ((getEORelationship() != null) && (getDestinationEntity() != null) && (_sourceAttribute != null)
-                && (_destinationAttribute != null) && (_destinationAttribute.getDMEOEntity() == getDestinationEntity())
-                && (_sourceAttribute.getEOAttribute() != null) && (_destinationAttribute.getEOAttribute() != null)) {
-            if (logger.isLoggable(Level.FINE)) {
+		if ((getEORelationship() != null) && (getDestinationEntity() != null) && (_sourceAttribute != null)
+				&& (_destinationAttribute != null) && (_destinationAttribute.getDMEOEntity() == getDestinationEntity())
+				&& (_sourceAttribute.getEOAttribute() != null) && (_destinationAttribute.getEOAttribute() != null)) {
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Make new EOJoin");
 			}
-            try {
-               _eoJoin = new EOJoin(getEORelationship(), _sourceAttribute.getEOAttribute(), _destinationAttribute.getEOAttribute());
-                 getEORelationship().addJoin(_eoJoin);
-                //for (EOJoin j : getEORelationship().getJoins()) logger.info("Join: "+j);
-                // TODO support a faire pour DMEntity.getPropertiesWithThisType
+			try {
+				_eoJoin = new EOJoin(getEORelationship(), _sourceAttribute.getEOAttribute(), _destinationAttribute.getEOAttribute());
+				getEORelationship().addJoin(_eoJoin);
+				// for (EOJoin j : getEORelationship().getJoins()) logger.info("Join: "+j);
+				// TODO support a faire pour DMEntity.getPropertiesWithThisType
 
-            } catch (IllegalArgumentException e) {
-                throw new EOAccessException(e);
-            } catch (IllegalStateException e) {
-                throw new EOAccessException(e);
-            }
-            setChanged();
-        }
+			} catch (IllegalArgumentException e) {
+				throw new EOAccessException(e);
+			} catch (IllegalStateException e) {
+				throw new EOAccessException(e);
+			}
+			setChanged();
+		}
 
-    }
+	}
 
-    @Override
-	public void delete()
-    {
-        delete(true);
-    }
+	@Override
+	public void delete() {
+		delete(true);
+	}
 
-    public void delete(boolean deleteEOJoin)
-    {
-        if (deleteEOJoin) {
+	public void delete(boolean deleteEOJoin) {
+		if (deleteEOJoin) {
 			deleteEOJoin();
 		}
-        getDMEORelationship().removeFromDMEOJoins(this);
-    }
+		getDMEORelationship().removeFromDMEOJoins(this);
+	}
 
-    @Override
-	public boolean isDeletable()
-    {
-    	if (_dmEORelationship != null) {
+	@Override
+	public boolean isDeletable() {
+		if (_dmEORelationship != null) {
 			return _dmEORelationship.isDeletable();
 		}
-    	return true;
-    }
+		return true;
+	}
 
-    // ==========================================================================
-    // ======================== TreeNode implementation
-    // =========================
-    // ==========================================================================
+	// ==========================================================================
+	// ======================== TreeNode implementation
+	// =========================
+	// ==========================================================================
 
-    @Override
-	public Vector<DMObject> getOrderedChildren()
-    {
-        return EmptyVector.EMPTY_VECTOR(DMObject.class);
-    }
+	@Override
+	public Vector<DMObject> getOrderedChildren() {
+		return EmptyVector.EMPTY_VECTOR(DMObject.class);
+	}
 
-    @Override
-	public TreeNode getParent()
-    {
-        return getDMEORelationship();
-    }
+	@Override
+	public TreeNode getParent() {
+		return getDMEORelationship();
+	}
 
-    @Override
-	public boolean getAllowsChildren()
-    {
-        return false;
-    }
+	@Override
+	public boolean getAllowsChildren() {
+		return false;
+	}
 
-    /**
-     * Overrides getClassNameKey
-     * 
-     * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-     */
-    @Override
-	public String getClassNameKey()
-    {
-        return "join";
-    }
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "join";
+	}
 
-    public static class JoinMustBeValid extends ValidationRule {
+	public static class JoinMustBeValid extends ValidationRule {
 
-        /**
-         * @param objectType
-         * @param ruleName
-         */
-        public JoinMustBeValid()
-        {
-            super(DMEOJoin.class, "join_must_be_valid");
-        }
+		/**
+		 * @param objectType
+		 * @param ruleName
+		 */
+		public JoinMustBeValid() {
+			super(DMEOJoin.class, "join_must_be_valid");
+		}
 
-        /**
-         * Overrides applyValidation
-         * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
-         */
-        @Override
-        public ValidationIssue applyValidation(Validable object)
-        {
-            if (!((DMEOJoin)object).isJoinValid()) {
-                ValidationError err = new ValidationError(this,object,"join_is_not_valid_for_$object");
-                err.addToFixProposals(new DeleteJoin());
-                return err;
-            }
-            return null;
-        }
+		/**
+		 * Overrides applyValidation
+		 * 
+		 * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
+		 */
+		@Override
+		public ValidationIssue applyValidation(Validable object) {
+			if (!((DMEOJoin) object).isJoinValid()) {
+				ValidationError err = new ValidationError(this, object, "join_is_not_valid_for_$object");
+				err.addToFixProposals(new DeleteJoin());
+				return err;
+			}
+			return null;
+		}
 
-        public static class DeleteJoin extends FixProposal
-        {
+		public static class DeleteJoin extends FixProposal {
 
-            /**
-             * @param aMessage
-             */
-            public DeleteJoin()
-            {
-                super("remove_join");
-            }
+			/**
+			 * @param aMessage
+			 */
+			public DeleteJoin() {
+				super("remove_join");
+			}
 
-            /**
-             * Overrides fixAction
-             * @see org.openflexo.foundation.validation.FixProposal#fixAction()
-             */
-            @Override
-            protected void fixAction()
-            {
-                ((DMEOJoin)getObject()).delete();
-            }
-            
-        }
-    }
+			/**
+			 * Overrides fixAction
+			 * 
+			 * @see org.openflexo.foundation.validation.FixProposal#fixAction()
+			 */
+			@Override
+			protected void fixAction() {
+				((DMEOJoin) getObject()).delete();
+			}
 
-    public DMEOEntity getDestinationEntity()
-    {
-    	if ( getDMEORelationship() != null) {
+		}
+	}
+
+	public DMEOEntity getDestinationEntity() {
+		if (getDMEORelationship() != null) {
 			return getDMEORelationship().getDestinationEntity();
 		}
-    	return _destinationEntity;
-    }
+		return _destinationEntity;
+	}
 
-
-	public DMEOEntity getSourceEntity() 
-	{
-    	if ( getDMEORelationship() != null) {
+	public DMEOEntity getSourceEntity() {
+		if (getDMEORelationship() != null) {
 			return getDMEORelationship().getDMEOEntity();
 		}
-    	return _sourceEntity;
+		return _sourceEntity;
 	}
 
 	// Relevant only if relationship is not set
-	public void setDestinationEntity(DMEOEntity destinationEntity)
-	{
+	public void setDestinationEntity(DMEOEntity destinationEntity) {
 		_destinationEntity = destinationEntity;
 	}
 
 	// Relevant only if relationship is not set
-	public void setSourceEntity(DMEOEntity sourceEntity) 
-	{
+	public void setSourceEntity(DMEOEntity sourceEntity) {
 		_sourceEntity = sourceEntity;
 	}
 }

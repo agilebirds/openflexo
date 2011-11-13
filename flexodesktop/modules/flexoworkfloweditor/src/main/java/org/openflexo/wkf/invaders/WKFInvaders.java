@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
-
 public class WKFInvaders extends DrawingController<ProcessRepresentation> {
 
 	public WKFInvaders(ProcessRepresentation aDrawing) {
@@ -32,8 +31,7 @@ public class WKFInvaders extends DrawingController<ProcessRepresentation> {
 		// TODO Auto-generated constructor stub
 	}
 
-	private static final Logger logger = Logger.getLogger(WKFInvaders.class.getPackage()
-			.getName());
+	private static final Logger logger = Logger.getLogger(WKFInvaders.class.getPackage().getName());
 
 	/*public static final Icon EXPLOSION_ICON = new ImageIconResource("Resources/WS/WSInterface-BIG.gif");
 	public static final Icon PLAYER_ICON = new ImageIconResource("Resources/WS/OperationPort-BIG.gif");

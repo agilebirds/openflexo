@@ -24,34 +24,29 @@ import org.openflexo.foundation.wkf.node.OperationNode;
 public class CreateOperationTask extends CustomInstruction {
 
 	private OperationNode operationNode;
-	
-	public CreateOperationTask (OperationNode operationNode)
-	{
+
+	public CreateOperationTask(OperationNode operationNode) {
 		super();
 		this.operationNode = operationNode;
-		setInlineComment("Create new OperationTask for node "+getOperationNode().getName());
+		setInlineComment("Create new OperationTask for node " + getOperationNode().getName());
 	}
 
-	public OperationNode getOperationNode()
-	{
+	public OperationNode getOperationNode() {
 		return operationNode;
 	}
 
 	@Override
-	public String toString()
-	{
-		return "[CreateOperationTask:"+operationNode+"]";
+	public String toString() {
+		return "[CreateOperationTask:" + operationNode + "]";
 	}
 
 	@Override
-	public String getJavaStringRepresentation() 
-	{
-		return "createOperationTask("+getOperationNode().getFlexoID()+");";
+	public String getJavaStringRepresentation() {
+		return "createOperationTask(" + getOperationNode().getFlexoID() + ");";
 	}
-	
+
 	@Override
-	public CreateOperationTask clone()
-	{
+	public CreateOperationTask clone() {
 		CreateOperationTask returned = new CreateOperationTask(operationNode);
 		returned.setHeaderComment(getHeaderComment());
 		returned.setInlineComment(getInlineComment());

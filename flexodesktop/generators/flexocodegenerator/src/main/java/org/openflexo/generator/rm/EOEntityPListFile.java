@@ -26,7 +26,6 @@ import org.openflexo.foundation.rm.cg.PListFile;
 import org.openflexo.generator.dm.EOEntityPListGenerator;
 import org.openflexo.generator.rm.GenerationAvailableFile;
 
-
 public class EOEntityPListFile extends PListFile implements GenerationAvailableFile {
 
 	public EOEntityPListFile() {
@@ -44,14 +43,12 @@ public class EOEntityPListFile extends PListFile implements GenerationAvailableF
 	}
 
 	@Override
-    public EOEntityPListFileResource getFlexoResource()
-    {
-        return (EOEntityPListFileResource)super.getFlexoResource();
-    }
+	public EOEntityPListFileResource getFlexoResource() {
+		return (EOEntityPListFileResource) super.getFlexoResource();
+	}
 
 	@Override
-	public EOEntityPListGenerator getGenerator()
-	{
+	public EOEntityPListGenerator getGenerator() {
 		return getFlexoResource().getGenerator();
 	}
 }

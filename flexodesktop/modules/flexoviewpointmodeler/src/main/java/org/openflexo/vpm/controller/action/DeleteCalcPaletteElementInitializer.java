@@ -28,25 +28,21 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-
 public class DeleteCalcPaletteElementInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeleteCalcPaletteElementInitializer(CEDControllerActionInitializer actionInitializer)
-	{
-		super(DeletePaletteElement.actionType,actionInitializer);
+	DeleteCalcPaletteElementInitializer(CEDControllerActionInitializer actionInitializer) {
+		super(DeletePaletteElement.actionType, actionInitializer);
 	}
 
 	@Override
-	protected CEDControllerActionInitializer getControllerActionInitializer() 
-	{
-		return (CEDControllerActionInitializer)super.getControllerActionInitializer();
+	protected CEDControllerActionInitializer getControllerActionInitializer() {
+		return (CEDControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	protected Icon getEnabledIcon() 
-	{
+	protected Icon getEnabledIcon() {
 		return IconLibrary.DELETE_ICON;
 	}
 

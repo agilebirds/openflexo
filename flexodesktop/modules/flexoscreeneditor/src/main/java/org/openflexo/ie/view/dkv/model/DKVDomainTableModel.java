@@ -33,99 +33,85 @@ import org.openflexo.foundation.dkv.DuplicateDKVObjectException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.SEIconLibrary;
 
-
 /**
  * Please comment this class
  * 
  * @author sguerin
  * 
  */
-public class DKVDomainTableModel extends AbstractModel<DKVModel.DomainList,Domain>
-{
+public class DKVDomainTableModel extends AbstractModel<DKVModel.DomainList, Domain> {
 
-    protected static final Logger logger = Logger.getLogger(DKVDomainTableModel.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(DKVDomainTableModel.class.getPackage().getName());
 
-    public DKVDomainTableModel(DKVModel.DomainList domainList, FlexoProject project)
-    {
-        super(domainList, project);
-        addToColumns(new IconColumn<Domain>("domain_icon", 30) {
-            @Override
-			public Icon getIcon(Domain object)
-            {
-                return SEIconLibrary.DOMAIN_ICON;
-            }
-        });
-        addToColumns(new EditableStringColumn<Domain>("name", 150) {
-            @Override
-			public String getValue(Domain domain)
-            {
-                return domain.getName();
-            }
+	public DKVDomainTableModel(DKVModel.DomainList domainList, FlexoProject project) {
+		super(domainList, project);
+		addToColumns(new IconColumn<Domain>("domain_icon", 30) {
+			@Override
+			public Icon getIcon(Domain object) {
+				return SEIconLibrary.DOMAIN_ICON;
+			}
+		});
+		addToColumns(new EditableStringColumn<Domain>("name", 150) {
+			@Override
+			public String getValue(Domain domain) {
+				return domain.getName();
+			}
 
-            @Override
-			public void setValue(Domain domain, String aValue)
-            {
-                try {
-                    domain.setName(aValue);
-               } catch (DuplicateDKVObjectException e) {
-                   
-               }
-            }
-        });
-        addToColumns(new StringColumn<Domain>("keys", 50) {
-            @Override
-			public String getValue(Domain domain)
-            {
-                return ""+domain.getKeys().size();
-            }
-        });
-        addToColumns(new EditableStringColumn<Domain>("description", 250) {
-            @Override
-			public String getValue(Domain domain)
-            {
-                return domain.getDescription();
-            }
+			@Override
+			public void setValue(Domain domain, String aValue) {
+				try {
+					domain.setName(aValue);
+				} catch (DuplicateDKVObjectException e) {
 
-            @Override
-			public void setValue(Domain domain, String aValue)
-            {
-                domain.setDescription(aValue);
-              }
-        });
-    }
+				}
+			}
+		});
+		addToColumns(new StringColumn<Domain>("keys", 50) {
+			@Override
+			public String getValue(Domain domain) {
+				return "" + domain.getKeys().size();
+			}
+		});
+		addToColumns(new EditableStringColumn<Domain>("description", 250) {
+			@Override
+			public String getValue(Domain domain) {
+				return domain.getDescription();
+			}
 
-    public DKVModel.DomainList getDomainList()
-    {
-        return getModel();
-    }
+			@Override
+			public void setValue(Domain domain, String aValue) {
+				domain.setDescription(aValue);
+			}
+		});
+	}
 
-    public DKVModel getDKVModel()
-    {
-        return getModel().getDkvModel();
-    }
+	public DKVModel.DomainList getDomainList() {
+		return getModel();
+	}
 
-    @Override
-	public Domain elementAt(int row)
-    {
-        if ((row >= 0) && (row < getRowCount())) {
-            return getDomainList().getDomains().elementAt(row);
-        } else {
-            return null;
-        }
-    }
+	public DKVModel getDKVModel() {
+		return getModel().getDkvModel();
+	}
 
-    public Domain entityAt(int row)
-    {
-        return elementAt(row);
-    }
+	@Override
+	public Domain elementAt(int row) {
+		if ((row >= 0) && (row < getRowCount())) {
+			return getDomainList().getDomains().elementAt(row);
+		} else {
+			return null;
+		}
+	}
 
-    @Override
-	public int getRowCount()
-    {
-        if (getDomainList() != null) {
-            return getDomainList().getDomains().size();
-        }
-        return 0;
-    }
+	public Domain entityAt(int row) {
+		return elementAt(row);
+	}
+
+	@Override
+	public int getRowCount() {
+		if (getDomainList() != null) {
+			return getDomainList().getDomains().size();
+		}
+		return 0;
+	}
 
 }

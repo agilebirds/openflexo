@@ -29,56 +29,50 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectPolylin;
 import org.openflexo.fge.geom.area.FGEArea;
 
-
-public abstract class RectPolylinAdjustableControlPoint extends ConnectorAdjustingControlPoint
-{
+public abstract class RectPolylinAdjustableControlPoint extends ConnectorAdjustingControlPoint {
 	protected FGERectPolylin initialPolylin;
 	private RectPolylinConnector connector;
 
-	public RectPolylinAdjustableControlPoint(FGEPoint point, RectPolylinConnector connector)
-	{
-		super(connector.getGraphicalRepresentation(),point);
+	public RectPolylinAdjustableControlPoint(FGEPoint point, RectPolylinConnector connector) {
+		super(connector.getGraphicalRepresentation(), point);
 		this.connector = connector;
 	}
-	
+
 	@Override
-	public Cursor getDraggingCursor()
-	{
+	public Cursor getDraggingCursor() {
 		return FGEConstants.MOVE_CURSOR;
 	}
-	
+
 	@Override
 	public abstract FGEArea getDraggingAuthorizedArea();
+
 	@Override
-	public abstract boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event);
-	protected void notifyConnectorChanged()
-	{
+	public abstract boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
+			FGEPoint initialPoint, MouseEvent event);
+
+	protected void notifyConnectorChanged() {
 		getGraphicalRepresentation().notifyConnectorChanged();
 	}
 
 	@Override
-	public void startDragging(DrawingController controller, FGEPoint startPoint)
-	{
+	public void startDragging(DrawingController controller, FGEPoint startPoint) {
 		super.startDragging(controller, startPoint);
 		initialPolylin = getPolylin().clone();
 		getConnector().setWasManuallyAdjusted(true);
 	}
 
 	@Override
-	public final void stopDragging(DrawingController controller)
-	{
+	public final void stopDragging(DrawingController controller) {
 		super.stopDragging(controller);
 		getConnector().setWasManuallyAdjusted(true);
 		getConnector()._connectorChanged(false);
 	}
 
-	public RectPolylinConnector getConnector()
-	{
+	public RectPolylinConnector getConnector() {
 		return connector;
 	}
 
-	public FGERectPolylin getPolylin()
-	{
+	public FGERectPolylin getPolylin() {
 		return getConnector().getCurrentPolylin();
 	}
 
