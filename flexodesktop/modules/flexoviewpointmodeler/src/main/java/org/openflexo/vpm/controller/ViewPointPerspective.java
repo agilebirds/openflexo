@@ -33,11 +33,11 @@ import org.openflexo.FlexoCst;
 import org.openflexo.components.browser.view.BrowserView.SelectionPolicy;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.ImportedOntology;
+import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
-import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManagingDrawingController;
@@ -344,7 +344,9 @@ public class ViewPointPerspective extends FlexoPerspective<FlexoModelObject> {
 		if (object instanceof EditionPattern) {
 			return ((EditionPattern) object).getName();
 		}
-		return object.getFullyQualifiedName();
+		if (object != null)
+			return object.getFullyQualifiedName();
+		return "null";
 	}
 
 	public CalcPaletteController getControllerForPalette(ViewPointPalette object) {
