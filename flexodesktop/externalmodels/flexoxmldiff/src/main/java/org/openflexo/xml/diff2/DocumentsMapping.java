@@ -420,10 +420,15 @@ public class DocumentsMapping {
 		@Override
 		public boolean equals(Object obj) {
 			if (obj instanceof MatchingTexts) {
-				return (getSourceText().equals(((MatchingTexts) obj).getSourceText()))
-						&& (getTargetText().equals(((MatchingTexts) obj).getTargetText()));
+				return getSourceText().equals(((MatchingTexts) obj).getSourceText())
+						&& getTargetText().equals(((MatchingTexts) obj).getTargetText());
 			}
 			return false;
+		}
+
+		@Override
+		public int hashCode() {
+			return getSourceText().hashCode() + getTargetText().hashCode();
 		}
 
 		@Override
@@ -467,10 +472,15 @@ public class DocumentsMapping {
 		@Override
 		public boolean equals(Object obj) {
 			if (obj instanceof MatchingElements) {
-				return (getSourceElement().equals(((MatchingElements) obj).getSourceElement()))
-						&& (getTargetElement().equals(((MatchingElements) obj).getTargetElement()));
+				return getSourceElement().equals(((MatchingElements) obj).getSourceElement())
+						&& getTargetElement().equals(((MatchingElements) obj).getTargetElement());
 			}
 			return false;
+		}
+
+		@Override
+		public int hashCode() {
+			return getSourceElement().hashCode() + getTargetElement().hashCode();
 		}
 	}
 
@@ -512,10 +522,15 @@ public class DocumentsMapping {
 		@Override
 		public boolean equals(Object obj) {
 			if (obj instanceof ParentReferences) {
-				return (getParentInSource().equals(((ParentReferences) obj).getParentInSource()))
-						&& (getParentInTarget().equals(((ParentReferences) obj).getParentInTarget()));
+				return getParentInSource().equals(((ParentReferences) obj).getParentInSource())
+						&& getParentInTarget().equals(((ParentReferences) obj).getParentInTarget());
 			}
 			return false;
+		}
+
+		@Override
+		public int hashCode() {
+			return getParentInSource().hashCode() + getParentInTarget().hashCode();
 		}
 	}
 

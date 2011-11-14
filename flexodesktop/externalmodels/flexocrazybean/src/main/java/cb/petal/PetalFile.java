@@ -53,7 +53,12 @@ public class PetalFile implements PetalNode, TreeModel {
 
 	@Override
 	public boolean equals(java.lang.Object o) {
-		return (o instanceof PetalFile) && (((PetalFile) o).petal.equals(this.petal)) && (((PetalFile) o).design.equals(this.design));
+		return o instanceof PetalFile && ((PetalFile) o).petal.equals(this.petal) && ((PetalFile) o).design.equals(this.design);
+	}
+
+	@Override
+	public int hashCode() {
+		return getPetal() == null ? 0 : getPetal().hashCode();
 	}
 
 	@Override
@@ -274,7 +279,7 @@ public class PetalFile implements PetalNode, TreeModel {
 	 */
 	@Override
 	public boolean isLeaf(java.lang.Object node) {
-		return (node instanceof Literal);
+		return node instanceof Literal;
 	}
 
 	/**

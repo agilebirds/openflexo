@@ -54,10 +54,10 @@ public abstract class PetalObject implements PetalNode {
 		}
 	};
 
-	private ArrayList names = new ArrayList();
-	private ArrayList values = new ArrayList();
+	private java.util.List<String> names = new ArrayList<String>();
+	private java.util.List<PetalNode> values = new ArrayList<PetalNode>();
 	private String name;
-	protected ArrayList params = EMPTY;
+	protected java.util.List<String> params = EMPTY;
 	private PetalNode parent;
 
 	/**
@@ -68,7 +68,7 @@ public abstract class PetalObject implements PetalNode {
 	 * @param params
 	 *            list of parameters, e.g., "Class" "Logical View::templates::Class"
 	 */
-	protected PetalObject(PetalNode parent, String name, ArrayList params) {
+	protected PetalObject(PetalNode parent, String name, java.util.List<String> params) {
 		setParent(parent);
 		setName(name);
 		setParameterList(params);
@@ -82,8 +82,8 @@ public abstract class PetalObject implements PetalNode {
 	 * @param params
 	 *            list of parameters, e.g., "Class" "Logical View::templates::Class"
 	 */
-	protected PetalObject(PetalNode parent, String name, Collection params) {
-		this(parent, name, new ArrayList(params));
+	protected PetalObject(PetalNode parent, String name, Collection<String> params) {
+		this(parent, name, new ArrayList<String>(params));
 	}
 
 	/**
@@ -107,9 +107,9 @@ public abstract class PetalObject implements PetalNode {
 			return null;
 		}
 
-		obj.names = (ArrayList) names.clone();
-		obj.values = (ArrayList) values.clone();
-		obj.params = (params == EMPTY) ? EMPTY : (ArrayList) params.clone();
+		obj.names = new ArrayList<String>(names);
+		obj.values = new ArrayList<PetalNode>(values);
+		obj.params = params == EMPTY ? EMPTY : new ArrayList<String>(params);
 
 		return obj;
 	}
@@ -118,7 +118,7 @@ public abstract class PetalObject implements PetalNode {
 	 * @return true if the name and all properties are equal without regarding the order of the properties.
 	 */
 	public boolean equals(Object o) {
-		if ((o != null) && (o.getClass() == this.getClass())) {
+		if (o != null && o.getClass() == this.getClass()) {
 			PetalObject obj = o;
 
 			if (!this.name.equals(obj.name)) {
@@ -150,6 +150,21 @@ public abstract class PetalObject implements PetalNode {
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public int hashCode() {
+		int h = 0;
+		for(String name:names) {
+			h += name.hashCode();
+		}
+		for (PetalNode o : values) {
+			h += o.hashCode();
+		}
+		for (String param : params) {
+			h += param.hashCode();
+		}
+		return h;
 	}
 
 	/**
@@ -243,7 +258,7 @@ public abstract class PetalObject implements PetalNode {
 		int i = indexOf(value);
 
 		if (i >= 0) {
-			return (String) names.get(i);
+			return names.get(i);
 		} else {
 			return null;
 		}
@@ -284,7 +299,7 @@ public abstract class PetalObject implements PetalNode {
 	 * @return property at given index
 	 */
 	public final PetalNode getProperty(int i) {
-		return (PetalNode) values.get(i);
+		return values.get(i);
 	}
 
 	/**
@@ -294,7 +309,7 @@ public abstract class PetalObject implements PetalNode {
 		int index = names.indexOf(name);
 
 		if (index >= 0) {
-			return (PetalNode) values.get(index);
+			return values.get(index);
 		} else {
 			return null;
 		}
@@ -432,8 +447,8 @@ public abstract class PetalObject implements PetalNode {
 			return;
 		}
 
-		String name = (String) names.get(from);
-		PetalNode value = (PetalNode) values.get(from);
+		String name = names.get(from);
+		PetalNode value = values.get(from);
 
 		if (from < to) {
 			to--;
@@ -482,15 +497,15 @@ public abstract class PetalObject implements PetalNode {
 	/**
 	 * @return all property names
 	 */
-	public ArrayList getNames() {
-		return (ArrayList) names.clone();
+	public java.util.List<String> getNames() {
+		return new ArrayList<String>(names);
 	}
 
 	/**
 	 * @return all property values
 	 */
-	public ArrayList getPropertyList() {
-		return (ArrayList) values.clone();
+	public java.util.List<PetalNode> getPropertyList() {
+		return new ArrayList<PetalNode>(values);
 	}
 
 	/**
@@ -507,11 +522,11 @@ public abstract class PetalObject implements PetalNode {
 		return props;
 	}
 
-	public ArrayList getParameterList() {
+	public java.util.List<String> getParameterList() {
 		return params;
 	}
 
-	public void setParameterList(ArrayList params) {
+	public void setParameterList(java.util.List<String> params) {
 		this.params = params;
 	}
 
@@ -552,7 +567,7 @@ public abstract class PetalObject implements PetalNode {
 	public String getQualifiedName() {
 		PetalNode n = this.getParent();
 		String result = ((Named) this).getNameParameter();
-		while (!(n instanceof Design) && (n instanceof Named)) {
+		while (!(n instanceof Design) && n instanceof Named) {
 			result = ((Named) n).getNameParameter() + "::" + result;
 			n = ((PetalObject) n).getParent();
 		}

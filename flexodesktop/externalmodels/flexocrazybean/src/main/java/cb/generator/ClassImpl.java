@@ -144,7 +144,7 @@ public class ClassImpl extends NodeImpl implements Class {
 	}
 
 	protected static void print(PrintWriter stream, String pre, String o, String post) {
-		if ((o != null) && !"".equals(o)) {
+		if (o != null && !"".equals(o)) {
 			stream.print(pre + o + post);
 		}
 	}
@@ -235,10 +235,14 @@ public class ClassImpl extends NodeImpl implements Class {
 	public boolean equals(Object o) {
 		if (o instanceof Class) {
 			Class c = (Class) o;
-
 			return getQualifiedName().equals(c.getQualifiedName());
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public int hashCode() {
+		return getQualifiedName().hashCode();
 	}
 }

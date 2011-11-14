@@ -150,10 +150,15 @@ public abstract class AbstractBinding implements Bindable, Cloneable, StringConv
 					return false;
 				}
 			}
-			return ((_owner == bv._owner) && (getStringRepresentation().equals(bv.getStringRepresentation())));
+			return _owner == bv._owner && getStringRepresentation().equals(bv.getStringRepresentation());
 		} else {
 			return super.equals(object);
 		}
+	}
+
+	@Override
+	public int hashCode() {
+		return getStringRepresentation() == null ? getUnparsableValue().hashCode() : getStringRepresentation().hashCode();
 	}
 
 	public String getUnparsableValue() {
@@ -202,9 +207,14 @@ public abstract class AbstractBinding implements Bindable, Cloneable, StringConv
 		public boolean equals(Object obj) {
 			if (obj instanceof TargetObject) {
 				TargetObject t = (TargetObject) obj;
-				return (target == t.target && propertyName != null && propertyName.equals(t.propertyName));
+				return target == t.target && propertyName != null && propertyName.equals(t.propertyName);
 			}
 			return super.equals(obj);
+		}
+
+		@Override
+		public int hashCode() {
+			return target.hashCode() + (propertyName == null ? 0 : propertyName.hashCode());
 		}
 	}
 
