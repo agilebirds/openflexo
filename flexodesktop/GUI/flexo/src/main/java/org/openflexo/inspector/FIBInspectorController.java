@@ -77,7 +77,6 @@ public class FIBInspectorController extends FlexoFIBController {
 
 	@Override
 	protected void openFIBEditor(FIBComponent component, final MouseEvent event) {
-		System.out.println("Je suis le controlleur de l'inspecteur");
 		if (component instanceof FIBInspector) {
 			JPopupMenu popup = new JPopupMenu();
 			FIBInspector current = (FIBInspector) component;

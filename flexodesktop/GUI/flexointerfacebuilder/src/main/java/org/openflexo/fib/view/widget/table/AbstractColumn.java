@@ -104,7 +104,12 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 	}
 
 	public String getLocalized(String key) {
-		return FlexoLocalization.localizedForKey(getController().getLocalizer(), key);
+		if (getController() != null) {
+			return FlexoLocalization.localizedForKey(getController().getLocalizer(), key);
+		} else {
+			logger.warning("Controller not defined");
+			return key;
+		}
 	}
 
 	public FIBTableModel getTableModel() {
