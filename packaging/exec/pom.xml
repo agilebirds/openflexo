@@ -38,31 +38,4 @@
             </properties>
         </profile>
 	</profiles>
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>exec-maven-plugin</artifactId>
-					<version>1.1</version>
-					<executions>
-					<execution>
-            <id></id>
-            <phase>verify</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <inherited>false</inherited>
-            <configuration>
-            </configuration>
-          </execution>
-					</executions>
-					<configuration>
-						<mainClass>org.openflexo.Application</mainClass>
-                        
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
 </project>

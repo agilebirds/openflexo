@@ -8,12 +8,46 @@
 		<version>1.4.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>flexobusiness</artifactId>
+    <packaging>pom</packaging>
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-			</plugin>
+			<!--<plugin>-->
+				<!--<groupId>org.apache.maven.plugins</groupId>-->
+				<!--<artifactId>maven-assembly-plugin</artifactId>-->
+			<!--</plugin>-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <classpathScope>runtime</classpathScope>
+                    <executable>java</executable>
+
+                    <arguments>
+                        <argument>-Xverify:all</argument>
+                        <argument>-Xmx512m</argument>
+                        <argument>-Xdock:name=Flexo</argument>
+                        <argument>-Djava.util.logging.config.file=Config/logging.properties</argument>
+                        <argument>-Dapple.laf.useScreenMenuBar=true</argument>
+
+                        <argument>-classpath</argument>
+                        <classpath/>
+
+                        <argument>org.openflexo.Flexo</argument>
+                        <argument>-userType</argument>
+                        <argument>customer_release</argument>
+
+                    </arguments>
+
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
 	<dependencies>

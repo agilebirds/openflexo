@@ -7,72 +7,54 @@
 		<version>1.4.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>flexobusinessplus</artifactId>
+    <packaging>pom</packaging>
 	<build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <classpathScope>runtime</classpathScope>
+                    <executable>java</executable>
+
+                    <arguments>
+                        <argument>-Xverify:all</argument>
+                        <argument>-Xmx512m</argument>
+                        <argument>-Xdock:name=Flexo</argument>
+                        <argument>-Djava.util.logging.config.file=Config/logging.properties</argument>
+                        <argument>-Dapple.laf.useScreenMenuBar=true</argument>
+
+                        <argument>-classpath</argument>
+                        <classpath/>
+
+                        <argument>org.openflexo.Flexo</argument>
+                        <argument>-userType</argument>
+                        <argument>analyst_release</argument>
+
+                    </arguments>
+
+                </configuration>
             </plugin>
         </plugins>
     </build>
 	<dependencies>
 		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexoworkfloweditor</artifactId>
+			<groupId>org.openflexo.packaging</groupId>
+			<artifactId>flexobusiness</artifactId>
 			<version>${project.version}</version>
-			<type>jar</type>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexoscreeneditor</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexodoceditormodule</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexodatamodeleditor</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexovieweditor</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
+			<type>pom</type>
 			<scope>runtime</scope>
 		</dependency>
 		
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexoworkfloweditor</artifactId>
-			<version>${project.version}</version>
-			<classifier>resources</classifier>
-			<type>zip</type>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexoscreeneditor</artifactId>
-			<version>${project.version}</version>
-			<classifier>resources</classifier>
-			<type>zip</type>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexodoceditormodule</artifactId>
-			<version>${project.version}</version>
-			<classifier>resources</classifier>
-			<type>zip</type>
-		</dependency>
+
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexodatamodeleditor</artifactId>
@@ -80,13 +62,7 @@
 			<classifier>resources</classifier>
 			<type>zip</type>
 		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexovieweditor</artifactId>
-			<version>${project.version}</version>
-			<classifier>resources</classifier>
-			<type>zip</type>
-		</dependency>
+
 		
 	</dependencies>
 </project>
