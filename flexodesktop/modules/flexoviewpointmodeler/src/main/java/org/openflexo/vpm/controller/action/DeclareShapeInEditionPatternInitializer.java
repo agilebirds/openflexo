@@ -22,22 +22,25 @@ package org.openflexo.vpm.controller.action;
 import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
-import org.openflexo.fib.controller.FIBDialog;
+import javax.swing.Icon;
+
 import org.openflexo.fib.controller.FIBController.Status;
+import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.viewpoint.action.DeclareInEditionPattern;
+import org.openflexo.foundation.viewpoint.action.DeclareShapeInEditionPattern;
+import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.controller.CEDController;
 
-public class DeclareInEditionPatternInitializer extends ActionInitializer {
+public class DeclareShapeInEditionPatternInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeclareInEditionPatternInitializer(CEDControllerActionInitializer actionInitializer) {
-		super(DeclareInEditionPattern.actionType, actionInitializer);
+	DeclareShapeInEditionPatternInitializer(CEDControllerActionInitializer actionInitializer) {
+		super(DeclareShapeInEditionPattern.actionType, actionInitializer);
 	}
 
 	@Override
@@ -51,22 +54,22 @@ public class DeclareInEditionPatternInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionInitializer<DeclareInEditionPattern> getDefaultInitializer() {
-		return new FlexoActionInitializer<DeclareInEditionPattern>() {
+	protected FlexoActionInitializer<DeclareShapeInEditionPattern> getDefaultInitializer() {
+		return new FlexoActionInitializer<DeclareShapeInEditionPattern>() {
 			@Override
-			public boolean run(ActionEvent e, DeclareInEditionPattern action) {
+			public boolean run(ActionEvent e, DeclareShapeInEditionPattern action) {
 
-				FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.DECLARE_IN_EDITION_PATTERN_DIALOG_FIB, action, null, true);
+				FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.DECLARE_SHAPE_IN_EDITION_PATTERN_DIALOG_FIB, action, null, true);
 				return (dialog.getStatus() == Status.VALIDATED);
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<DeclareInEditionPattern> getDefaultFinalizer() {
-		return new FlexoActionFinalizer<DeclareInEditionPattern>() {
+	protected FlexoActionFinalizer<DeclareShapeInEditionPattern> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<DeclareShapeInEditionPattern>() {
 			@Override
-			public boolean run(ActionEvent e, DeclareInEditionPattern action) {
+			public boolean run(ActionEvent e, DeclareShapeInEditionPattern action) {
 				getController().setCurrentEditedObjectAsModuleView(action.getEditionPattern(), getController().VIEW_POINT_PERSPECTIVE);
 				getController().getSelectionManager().setSelectedObject(action.getPatternRole());
 				return true;
@@ -74,4 +77,8 @@ public class DeclareInEditionPatternInitializer extends ActionInitializer {
 		};
 	}
 
+	@Override
+	protected Icon getEnabledIcon() {
+		return VPMIconLibrary.EDITION_PATTERN_ICON;
+	}
 }
