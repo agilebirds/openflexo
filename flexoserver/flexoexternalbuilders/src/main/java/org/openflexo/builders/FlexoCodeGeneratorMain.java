@@ -167,7 +167,7 @@ public class FlexoCodeGeneratorMain extends FlexoExternalMainWithProject {
 		docDir.mkdirs();
 		warDir.mkdirs();
 		if (project != null) {
-			project.computeDiff = false;
+			project.setComputeDiff(false);
 
 			AddGeneratedCodeRepository addReaderRepo = AddGeneratedCodeRepository.actionType.makeNewAction(editor.getProject()
 					.getGeneratedDoc(), null, editor);

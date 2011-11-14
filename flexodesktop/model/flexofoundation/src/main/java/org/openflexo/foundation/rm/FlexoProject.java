@@ -189,7 +189,6 @@ import org.openflexo.xmlcode.XMLMapping;
  */
 public final class FlexoProject extends FlexoModelObject implements XMLStorageResourceData, InspectableObject, Validable {
 
-	public static boolean SKOS_ENABLE = false;
 	private static final String FRAMEWORKS_DIRECTORY = "Frameworks";
 	private static final String HTML_DIRECTORY = "HTML";
 	private static final String DOCX_DIRECTORY = "Docx";
@@ -198,7 +197,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	private static final String PROCESS_SNAPSHOT_IMPORTED_DIRECTORY = "ProcessSnapshotImported";
 	private static final String PROJECT_DOCUMENTATION_CSS_FILE = "FlexoDocumentationMasterStyle.css";
 
-	public boolean computeDiff = true;
+	private boolean computeDiff = true;
 
 	private boolean timestampsHaveBeenLoaded = false;
 
@@ -4057,6 +4056,14 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	public void setTestRole(Role testRole) {
 		System.out.println("Test role: " + testRole);
 		this.testRole = testRole;
+	}
+
+	public boolean isComputeDiff() {
+		return computeDiff;
+	}
+
+	public void setComputeDiff(boolean computeDiff) {
+		this.computeDiff = computeDiff;
 	}
 
 	/**
