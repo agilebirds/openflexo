@@ -25,7 +25,7 @@ import javax.swing.JComponent;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
-import org.openflexo.icon.IconLibrary;
+import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
@@ -55,7 +55,7 @@ public class DocumentationPerspective extends FlexoPerspective<FlexoProcess> {
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
-		return IconLibrary.LIST_PERSPECTIVE_ACTIVE_ICON;
+		return WKFIconLibrary.WKF_DOCP_ACTIVE_ICON;
 	}
 
 	/**
@@ -65,7 +65,7 @@ public class DocumentationPerspective extends FlexoPerspective<FlexoProcess> {
 	 */
 	@Override
 	public ImageIcon getSelectedIcon() {
-		return IconLibrary.LIST_PERSPECTIVE_SELECTED_ICON;
+		return WKFIconLibrary.WKF_DOCP_SELECTED_ICON;
 	}
 
 	@Override

@@ -32,10 +32,10 @@ import org.openflexo.toolbox.ImageIconResource;
 public class WSEIconLibrary extends IconLibrary {
 
 	// Module icons
-	public static final ImageIcon WS_SMALL_ICON = new ImageIconResource("Icons/WSE/WS_A_Small.gif");
-	public static final ImageIcon WS_MEDIUM_ICON = new ImageIconResource("Icons/WSE/WS_A.gif");
-	public static final ImageIcon WS_MEDIUM_ICON_WITH_HOVER = new ImageIconResource("Icons/WSE/WS_S.gif");
-	public static final ImageIcon WS_BIG_ICON = new ImageIconResource("Icons/WSE/WS_A.gif");
+	public static final ImageIcon WS_SMALL_ICON = new ImageIconResource("Icons/WSE/module-wse-16.png");
+	public static final ImageIcon WS_MEDIUM_ICON = new ImageIconResource("Icons/WSE/module-wse-32.png");
+	public static final ImageIcon WS_MEDIUM_ICON_WITH_HOVER = new ImageIconResource("Icons/WSE/module-wse-hover-32.png");
+	public static final ImageIcon WS_BIG_ICON = new ImageIconResource("Icons/WSE/module-wse-hover-64.png");
 
 	// Perspective icons
 	public static final ImageIcon WSE_WSEP_ACTIVE_ICON = new ImageIconResource("Icons/WSE/WSPerspective_A.gif");

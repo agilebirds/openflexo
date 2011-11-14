@@ -27,8 +27,8 @@ import javax.swing.ImageIcon;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DMTranstyper;
-import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.DMTranstyper.DMTranstyperEntry;
+import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.DMType.KindOfType;
 import org.openflexo.foundation.dm.eo.DMEOJoin;
 import org.openflexo.toolbox.ImageIconResource;
@@ -44,10 +44,10 @@ public class DMEIconLibrary extends IconLibrary {
 	static final Logger logger = Logger.getLogger(DMEIconLibrary.class.getPackage().getName());
 
 	// Module icons
-	public static final ImageIcon DME_SMALL_ICON = new ImageIconResource("Icons/DME/DM_A_Small.gif");
-	public static final ImageIcon DME_MEDIUM_ICON = new ImageIconResource("Icons/DME/module-dme.png");
-	public static final ImageIcon DME_MEDIUM_ICON_WITH_HOVER = new ImageIconResource("Icons/DME/module-dme-hover.png");
-	public static final ImageIcon DME_BIG_ICON = new ImageIconResource("Icons/DME/module-dme-big.png");
+	public static final ImageIcon DME_SMALL_ICON = new ImageIconResource("Icons/DME/module-dme-16.png");
+	public static final ImageIcon DME_MEDIUM_ICON = new ImageIconResource("Icons/DME/module-dme-32.png");
+	public static final ImageIcon DME_MEDIUM_ICON_WITH_HOVER = new ImageIconResource("Icons/DME/module-dme-hover-32.png");
+	public static final ImageIcon DME_BIG_ICON = new ImageIconResource("Icons/DME/module-dme-hover-64.png");
 
 	// Perspective icons
 	public static final ImageIcon DME_RP_ACTIVE_ICON = new ImageIconResource("Icons/DME/RepositoryPerspective_A.gif");
