@@ -24,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Vector;
@@ -116,9 +117,7 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 		}
 		if (resourceFile != null && getProject() != null && resourceFile.getFile() != null) {
 			File f = resourceFile.getFile();
-			Enumeration<File> en = ((Vector<File>) getProject().getFilesToDelete().clone()).elements();
-			while (en.hasMoreElements()) {
-				File file = en.nextElement();
+			for (File file : new ArrayList<File>(getProject().getFilesToDelete())) {
 				if (file.getAbsolutePath().toLowerCase().equals(f.getAbsolutePath().toLowerCase())) {
 					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Petit filou");
@@ -176,7 +175,7 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 	}
 
 	public String getFileName() {
-		return (getFile() != null ? getFile().getName() : null);
+		return getFile() != null ? getFile().getName() : null;
 	}
 
 	public boolean renameFileTo(String name) throws InvalidFileNameException {
@@ -216,7 +215,7 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 	 * @return the last modified date known by Flexo with milliseconds precision.
 	 */
 	public final synchronized Date getDiskLastModifiedDate() {
-		if ((_diskLastModifiedDate == null || _diskLastModifiedDate.getTime() == 0 || (isConnected() && !getFile().exists())) && !_isSaving) {
+		if ((_diskLastModifiedDate == null || _diskLastModifiedDate.getTime() == 0 || isConnected() && !getFile().exists()) && !_isSaving) {
 			if (getFile() != null && getFile().exists()) {
 				_diskLastModifiedDate = FileUtils.getDiskLastModifiedDate(getFile());
 			} else {
@@ -235,10 +234,10 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 							+ this
 							+ " : declared lastWrittenOnDisk date is anterior to current effective last modified date: which means that file on disk in newer than expected"
 							+ "_diskLastModifiedDate["
-							+ (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(_diskLastModifiedDate)
+							+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(_diskLastModifiedDate)
 							+ "]"
 							+ " > lastWrittenOnDisk["
-							+ (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(new Date(_lastWrittenOnDisk.getTime()
+							+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(new Date(_lastWrittenOnDisk.getTime()
 									+ ACCEPTABLE_FS_DELAY)) + "]");
 				}
 				// Since we are in this block (diskLastModified was null see the top 'if'), we consider that it is some kind of bug in the
@@ -248,12 +247,12 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 				_lastWrittenOnDisk = _diskLastModifiedDate;
 			} else if (_lastWrittenOnDisk.getTime() - _diskLastModifiedDate.getTime() > ACCEPTABLE_FS_DELAY) {
 				if (getFile().exists()) { // Warn it only if file exists:
-											// otherwise it's normal
+					// otherwise it's normal
 					logger.warning("Resource "
 							+ this
 							+ " : declared lastWrittenOnDisk date is posterior to current effective last modified date (with a delay, due to FS date implementation): which means that something strange happened"
-							+ "_diskLastModifiedDate[" + (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(_diskLastModifiedDate) + "]"
-							+ " < lastWrittenOnDisk[" + (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(_lastWrittenOnDisk) + "]");
+							+ "_diskLastModifiedDate[" + new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(_diskLastModifiedDate) + "]"
+							+ " < lastWrittenOnDisk[" + new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(_lastWrittenOnDisk) + "]");
 				}
 			}
 		}
@@ -266,7 +265,7 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 	public final synchronized void _setLastWrittenOnDisk(Date aDate) {
 		if (logger.isLoggable(Level.FINE) && aDate != null) {
 			logger.fine("Resource " + this + "/" + hashCode() + " declared to be saved on disk on "
-					+ (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(aDate));
+					+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(aDate));
 		}
 		_diskLastModifiedDate = null;
 		_lastWrittenOnDisk = aDate;
@@ -324,7 +323,7 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 			_setLastWrittenOnDisk(new Date());
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("ID=" + getProject().getID() + " Resource " + this + " resetDiskLastModifiedDate() "
-						+ (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(_lastWrittenOnDisk));
+						+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(_lastWrittenOnDisk));
 			}
 		}
 	}
@@ -367,7 +366,7 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 			super("FileWritingLock:" + getFile().getAbsolutePath());
 			if (getFile().exists()) {
 				_previousLastModified = FileUtils.getDiskLastModifiedDate(getFile());
-				if ((new Date()).getTime() - _previousLastModified.getTime() < 1000) {
+				if (new Date().getTime() - _previousLastModified.getTime() < 1000) {
 					// Last modified is this second: no way to know that file has been written,
 					// Sets to null
 					_previousLastModified = null;
@@ -384,7 +383,7 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 
 			boolean fileHasBeenWritten = false;
 
-			while ((new Date()).getTime() <= startChecking.getTime() + ACCEPTABLE_FS_DELAY && !fileHasBeenWritten) {
+			while (new Date().getTime() <= startChecking.getTime() + ACCEPTABLE_FS_DELAY && !fileHasBeenWritten) {
 				if (_previousLastModified == null) {
 					fileHasBeenWritten = getFile().exists();
 				} else {
@@ -430,7 +429,7 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 	 */
 	public synchronized void delete(boolean deleteFile) {
 		super.delete();
-		if (getFile() != null && (getFile().exists()) && (deleteFile)) {
+		if (getFile() != null && getFile().exists() && deleteFile) {
 			getProject().addToFilesToDelete(getFile());
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Will delete file " + getFile().getAbsolutePath() + " upon next save of RM");
@@ -439,8 +438,8 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 	}
 
 	public synchronized boolean hasWritePermission() {
-		return (getFile() == null || ((!getFile().exists()) || (getFile().canWrite())) && (getFile().getParentFile() != null)
-				&& (!getFile().getParentFile().exists() || getFile().getParentFile().canWrite()));
+		return getFile() == null || (!getFile().exists() || getFile().canWrite()) && getFile().getParentFile() != null
+				&& (!getFile().getParentFile().exists() || getFile().getParentFile().canWrite());
 	}
 
 	/**
@@ -506,7 +505,7 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 		Enumeration en = getSynchronizedResources().elements();
 		while (en.hasMoreElements()) {
 			FlexoFileResource res = (FlexoFileResource) en.nextElement();
-			if ((!targetList.contains(res)) && (propagateToSynchronizedResourceForResourceUpdateNotification(res))) {
+			if (!targetList.contains(res) && propagateToSynchronizedResourceForResourceUpdateNotification(res)) {
 				targetList.add(res);
 			}
 			// No recursion with synchronized resources
@@ -515,7 +514,7 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 		en = getAlteredResources().elements();
 		while (en.hasMoreElements()) {
 			FlexoFileResource res = (FlexoFileResource) en.nextElement();
-			if ((!targetList.contains(res)) && (propagateToAlteredResourceForResourceUpdateNotification(res))) {
+			if (!targetList.contains(res) && propagateToAlteredResourceForResourceUpdateNotification(res)) {
 				targetList.add(res);
 			}
 			res.addResourceUpdateNotificationTargets(targetList, requesters);
@@ -542,7 +541,7 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 	 * @return
 	 */
 	protected boolean propagateToAlteredResourceForResourceUpdateNotification(FlexoResource targetResource) {
-		return ((targetResource instanceof FlexoStorageResource) && (((FlexoStorageResource) targetResource).isLoaded()));
+		return targetResource instanceof FlexoStorageResource && ((FlexoStorageResource) targetResource).isLoaded();
 	}
 
 }

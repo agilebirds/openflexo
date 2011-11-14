@@ -38,6 +38,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -212,10 +213,10 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	/**
 	 * These variable are here to replace old static references.
 	 */
-	private final Hashtable<IEWidget, Hashtable<String, WidgetBindingDefinition>> widgetBindingDefinitions = new Hashtable<IEWidget, Hashtable<String, WidgetBindingDefinition>>();
-	private final Hashtable<WKFObject, Hashtable<String, WKFBindingDefinition>> wkfObjectBindingDefinitions = new Hashtable<WKFObject, Hashtable<String, WKFBindingDefinition>>();
-	private Vector<FlexoModelObject> allRegisteredObjects;
-	private Vector<FlexoModelObject> _recentlyCreatedObjects;
+	private final Map<IEWidget, Hashtable<String, WidgetBindingDefinition>> widgetBindingDefinitions = new Hashtable<IEWidget, Hashtable<String, WidgetBindingDefinition>>();
+	private final Map<WKFObject, Hashtable<String, WKFBindingDefinition>> wkfObjectBindingDefinitions = new Hashtable<WKFObject, Hashtable<String, WKFBindingDefinition>>();
+	private List<FlexoModelObject> allRegisteredObjects;
+	private List<FlexoModelObject> _recentlyCreatedObjects;
 	private final Hashtable<String, Status> globalStatus = new Hashtable<String, Status>();
 	protected AbstractBindingStringConverter<AbstractBinding> abstractBindingConverter = new AbstractBinding.AbstractBindingStringConverter<AbstractBinding>(
 			AbstractBinding.class, this);
@@ -248,7 +249,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 
 	private CodeType _targetType;
 
-	private Vector<File> filesToDelete;
+	private List<File> filesToDelete;
 
 	private String _projectDescription = FlexoLocalization.localizedForKey("no_description");
 
@@ -287,7 +288,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		return id;
 	}
 
-	private Vector<FlexoEditor> _editors;
+	private List<FlexoEditor> _editors;
 
 	private final StringEncoder stringEncoder;
 
@@ -2337,11 +2338,11 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		return false;
 	}
 
-	public Vector<FlexoEditor> getEditors() {
+	public List<FlexoEditor> getEditors() {
 		return _editors;
 	}
 
-	public void setEditors(Vector<FlexoEditor> editors) {
+	public void setEditors(List<FlexoEditor> editors) {
 		_editors = editors;
 	}
 
@@ -2581,10 +2582,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		if (allRegisteredObjects == null) {
 			return null;
 		}
-		Enumeration<FlexoModelObject> en = allRegisteredObjects.elements();
-		FlexoModelObject temp = null;
-		while (en.hasMoreElements()) {
-			temp = en.nextElement();
+		for (FlexoModelObject temp : allRegisteredObjects) {
 			if (temp.getFlexoID() == objectFlexoID && temp.getUserIdentifier().equals(objectUID)) {
 				// logger.info("Try to find "+objectUID+"_"+objectFlexoID+" : SUCCEEDED");
 				return temp;
@@ -2612,7 +2610,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		}
 	}
 
-	public Vector<FlexoModelObject> getAllRegisteredObjects() {
+	public List<FlexoModelObject> getAllRegisteredObjects() {
 		return allRegisteredObjects;
 	}
 
@@ -2836,1270 +2834,1268 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	 * 
 	 * f = WRLocator.DENALI_LOGO; imageName = f.getName(); } file = new ImageFile(f); } return file; }
 	 */private class ImageFileConverter extends Converter<ImageFile> {
-		public ImageFileConverter() {
-			super(ImageFile.class);
-		}
-
-		@Override
-		public ImageFile convertFromString(String value) {
-			ImageFile file = null;
-			Vector<ImageFile> v = getAvailableImageFiles();
-			for (int i = 0; i < v.size(); i++) {
-				file = v.get(i);
-				if (file.equals(value)) {
-					break;
-				}
-			}
-			if (value != null && value.startsWith("/ImportedImages/")) {
-				return convertFromString(value.substring("/ImportedImages/".length()));
-			}
-			if (file == null) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Could not find '" + value + "' replacing with Denali logo");
-				}
-				return getDefaultImageFile();
-			}
-			return file;
-		}
-
-		@Override
-		public String convertToString(ImageFile value) {
-			return value.getImageName();
-		}
-	}
-
-	public class ImageFile extends KVCObject implements StringConvertable<ImageFile> {
-		private static final String HAS_FILE_EXTENSION_REGEXP = ".+\\.[a-zA-Z0-9]{3}$";
-
-		private String imageName;
-
-		public ImageFile(String imageName) {
-			this.imageName = imageName;
-		}
-
-		public ImageFile(File imageFile) {
-			this(imageNameForFile(imageFile));
-		}
-
-		public String getImageName() {
-			return imageName;
-		}
-
-		public String getBeautifiedImageName() {
-			if (imageName == null) {
-				return null;
-			}
-			String name = imageName;
-			if (name.startsWith("_Button_")) {
-				if (name.matches(HAS_FILE_EXTENSION_REGEXP)) {
-					name = name.substring("_Button_".length(), name.length() - 4);
-				} else {
-					name = name.substring("_Button_".length());
-				}
-			} else if (name.startsWith("Icon_")) {
-				if (name.matches(HAS_FILE_EXTENSION_REGEXP)) {
-					name = name.substring("Icon_".length(), name.length() - 4);
-				} else {
-					name = name.substring("Icon_".length());
-				}
-			} else if (name.startsWith("_Icon_")) {
-				if (name.matches(HAS_FILE_EXTENSION_REGEXP)) {
-					name = name.substring("_Icon_".length(), name.length() - 4);
-				} else {
-					name = name.substring("_Icon_".length());
-				}
-			}
-			return name.replace('_', ' ');
-		}
-
-		public File getImageFile() {
-			File f = WRLocator.locate(getProjectDirectory(), imageName, getCssSheet() == null ? FlexoCSS.CONTENTO.getName() : getCssSheet()
-					.getName());
-			if (f == null || !f.exists()) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Could not find '" + imageName + "' replacing with Denali logo");
-				}
-				f = WRLocator.AGILE_BIRDS_LOGO;
-				imageName = f.getName();
-			}
-			return f;
-		}
-
-		public boolean exists() {
-			return getImageFile() != null && getImageFile().exists();
-		}
-
-		/**
-		 * Overrides equals
-		 * 
-		 * @see java.lang.Object#equals(java.lang.Object)
-		 */
-		@Override
-		public boolean equals(Object obj) {
-			if (imageName != null && obj instanceof ImageFile) {
-				return ((ImageFile) obj).getImageName().equals(getImageName());
-			} else if (imageName != null && obj instanceof String) {
-				return imageName.equals(obj);
-			}
-			return super.equals(obj);
-		}
-
-		@Override
-		public Converter<? extends ImageFile> getConverter() {
-			return imageFileConverter;
-		}
-
-		public boolean isImported() {
-			return getImageFile().getParentFile().equals(getImportedImagesDir());
-		}
-
-		/**
-		 * @param b
-		 */
-		public File createButton(File output) {
-			File file = getImageFile();
-			if (file == null) {
-				return null;
-			}
-			if (!output.exists()) {
-				try {
-					output.createNewFile();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-					return output;
-				}
-			}
-			OutputStream out;
-			try {
-				out = new FileOutputStream(output);
-			} catch (FileNotFoundException e1) {
-				e1.printStackTrace();
-				return output;
-			}
-			try {
-				ImageIcon icon = new ImageIcon(file.getAbsolutePath());
-				Image i = icon.getImage();
-				BufferedImage bi = ImageIO.read(file);
-				BufferedImage image = new BufferedImage(bi.getWidth(null), bi.getHeight(null), BufferedImage.TYPE_INT_RGB);
-				image.createGraphics().drawImage(i, 0, 0, bi.getWidth(null), bi.getHeight(null), null);
-				ImageIO.write(image, "jpg", out);
-				return output;
-			} catch (IOException e) {
-				e.printStackTrace();
-				return null;
-			} finally {
-				try {
-					out.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
-	public String imageNameForFile(File f) {
-		if (f == null || f.getParentFile() == null) {
-			return null;
-		}
-		if (f.getName().startsWith("Contento_")) {
-			return ToolBox.replaceStringByStringInString("Contento", "", f.getName());
-		}
-		if (f.getName().startsWith("Flexo_")) {
-			return ToolBox.replaceStringByStringInString("Flexo", "", f.getName());
-		}
-		if (f.getName().startsWith("Omniscio_")) {
-			return ToolBox.replaceStringByStringInString("Omniscio", "", f.getName());
-		}
-		if (f.getParentFile().getName().equals("Images") || f.getParentFile().equals(getImportedImagesDir())) {
-			return f.getName();
-		}
-		return f.getParentFile().getName() + "/" + f.getName();
-	}
-
-	public FlexoIEBIRTPalette getBIRTPalette() {
-		if (birtPalette == null) {
-			birtPalette = new FlexoIEBIRTPalette(this);
-		}
-		return birtPalette;
-	}
-
-	public boolean isHoldingProjectRegistration() {
-		return holdObjectRegistration;
-	}
-
-	public void holdObjectRegistration() {
-		holdObjectRegistration = true;
-	}
-
-	public void unholdObjectRegistration() {
-		holdObjectRegistration = false;
-	}
-
-	private boolean _rebuildDependanciesIsRequired = false;
-
-	public void setRebuildDependanciesIsRequired() {
-		_rebuildDependanciesIsRequired = true;
-	}
-
-	public boolean rebuildDependanciesIsRequired() {
-		return _rebuildDependanciesIsRequired;
-	}
-
-	public void addToFilesToDelete(File f) {
-		filesToDelete.add(f);
-	}
-
-	public void removeFromFilesToDelete(File f) {
-		filesToDelete.remove(f);
-	}
-
-	public void deleteFilesToBeDeleted() {
-		Enumeration<File> en = filesToDelete.elements();
-		while (en.hasMoreElements()) {
-			File f = en.nextElement();
-			try {
-				if (FileUtils.recursiveDeleteFile(f)) {
-					if (logger.isLoggable(Level.INFO)) {
-						logger.info("Successfully deleted " + f.getAbsolutePath());
-						// filesToDelete.remove(f);
-					}
-				} else if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Could not delete " + f.getAbsolutePath());
-				}
-			} catch (RuntimeException e) {
-				e.printStackTrace();
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Could not delete " + f.getAbsolutePath());
-				}
-			}
-		}
-		filesToDelete.clear();
-	}
-
-	/**
-	 * Overrides getClassNameKey
-	 * 
-	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
-	 */
-	@Override
-	public String getClassNameKey() {
-		return "flexo_project";
-	}
-
-	public Vector<File> getFilesToDelete() {
-		return filesToDelete;
-	}
-
-	public void setFilesToDelete(Vector<File> filesToDel) {
-		this.filesToDelete = filesToDel;
-	}
-
-	public OperationNode getFirstOperation() {
-		if (firstOperation == null && firstOperationFlexoID > -1) {
-			firstOperation = getRootFlexoProcess().getOperationNodeWithFlexoID(firstOperationFlexoID);
-		}
-		if (firstOperation == null) {
-			Vector v = getRootFlexoProcess().getAllOperationNodesWithComponent();
-			if (v.size() > 0) {
-				firstOperation = (OperationNode) v.firstElement();
-				setChanged();
-				notifyObservers(new WKFAttributeDataModification("firstOperation", null, firstOperation));
-
-			}
-		}
-		return firstOperation;
-	}
-
-	public void setFirstOperation(OperationNode firstOp) {
-		OperationNode old = this.firstOperation;
-		this.firstOperation = firstOp;
-		setChanged();
-		notifyObservers(new WKFAttributeDataModification("firstOperation", old, firstOp));
-	}
-
-	public long getFirstOperationFlexoID() {
-		if (firstOperation != null) {
-			return getFirstOperation().getFlexoID();
-		} else {
-			return -1;
-		}
-	}
-
-	public void setFirstOperationFlexoID(long firstOpFlexoID) {
-		this.firstOperationFlexoID = firstOpFlexoID;
-	}
-
-	/**
-	 * @deprecated : use getImportedImagesDir
-	 * @return
-	 */
-	@Deprecated
-	public File getSpecificButtonDirectory() {
-		if (_specificButtonDir == null) {
-			_specificButtonDir = new File(getProjectDirectory(), "specificButtons");
-			if (!_specificButtonDir.exists()) {
-				_specificButtonDir.mkdirs();
-			}
-		}
-		return _specificButtonDir;
-	}
-
-	/**
-	 * @deprecated : use _importedImagesDir
-	 */
-	@Deprecated
-	private File _specificButtonDir;
-
-	public File getImportedImagesDir() {
-		if (_importedImagesDir == null) {
-			_importedImagesDir = new File(getProjectDirectory(), FileCst.IMPORTED_IMAGE_DIR_NAME);
-			if (!_importedImagesDir.exists()) {
-				_importedImagesDir.mkdirs();
-				FlexoWebServerFileResource.importSpecificButtonsIntoResources(this);
-			}
-		}
-		return _importedImagesDir;
-	}
-
-	private File _importedImagesDir;
-
-	private DependancyAlgorithmScheme _dependancyScheme = DependancyAlgorithmScheme.Optimistic;
-
-	public File getFrameworksToEmbedDirectory() {
-		return getProjectDirectoryWithName(FRAMEWORKS_DIRECTORY);
-	}
-
-	public File getHTMLToEmbedDirectory() {
-		return getProjectDirectoryWithName(HTML_DIRECTORY);
-	}
-
-	public File getDocxToEmbedDirectory() {
-		return getProjectDirectoryWithName(DOCX_DIRECTORY);
-	}
-
-	public File getLatexToEmbedDirectory() {
-		return getProjectDirectoryWithName(LATEX_DIRECTORY);
-	}
-
-	public File getProcessSnapshotImportedDirectory() {
-		return getProjectDirectoryWithName(PROCESS_SNAPSHOT_IMPORTED_DIRECTORY);
-	}
-
-	public File getProcessSnapshotLocalDirectory() {
-		return getProjectDirectoryWithName(PROCESS_SNAPSHOT_LOCAL_DIRECTORY);
-	}
-
-	/**
-	 * @return
-	 */
-	private File getProjectDirectoryWithName(String path) {
-		File file = new File(getProjectDirectory(), path);
-		if (file.exists()) {
-			return file;
-		} else {
-			final String loweredPath = path.toLowerCase();
-			File[] files = getProjectDirectory().listFiles(new FilenameFilter() {
-				@Override
-				public boolean accept(File dir, String name) {
-					return name.toLowerCase().indexOf(loweredPath) > -1;
-				}
-			});
-			for (int i = 0; i < files.length; i++) {
-				File file2 = files[i];
-				if (file2.isDirectory()) {
-					return file2;
-				}
-			}
-			// If we get here, it means that there are no Frameworks dir, so let's create the default one
-			file.mkdir();
-			return file;
-		}
-	}
-
-	public File[] listFrameworksToEmbed() {
-		final File f = getFrameworksToEmbedDirectory();
-		if (f != null && f.exists()) {
-			return f.listFiles(new FilenameFilter() {
-
-				@Override
-				public boolean accept(File dir, String name) {
-					return f.equals(dir) && name.endsWith(".framework");
-				}
-
-			});
-		} else {
-			return new File[0];
-		}
-	}
-
-	/**
-	 * Overrides getAllEmbeddedValidableObjects
-	 * 
-	 * @see org.openflexo.foundation.validation.Validable#getAllEmbeddedValidableObjects()
-	 */
-	@Override
-	public Vector<Validable> getAllEmbeddedValidableObjects() {
-		Vector<Validable> v = new Vector<Validable>();
-		v.add(this);
-		for (FlexoStorageResource r : getLoadedStorageResources()) {
-			if (r.getResourceData() instanceof Validable && r.getResourceData() != this) {
-				v.addAll(((Validable) r.getResourceData()).getAllEmbeddedValidableObjects());
-			}
-		}
-		return v;
-	}
-
-	/**
-	 * Overrides getDefaultValidationModel
-	 * 
-	 * @see org.openflexo.foundation.validation.Validable#getDefaultValidationModel()
-	 */
-	@Override
-	public ValidationModel getDefaultValidationModel() {
-		return getProjectValidationModel();
-	}
-
-	/**
-	 * Overrides isValid
-	 * 
-	 * @see org.openflexo.foundation.validation.Validable#isValid()
-	 */
-	@Override
-	public boolean isValid() {
-		return isValid(getDefaultValidationModel());
-	}
-
-	/**
-	 * Overrides isValid
-	 * 
-	 * @see org.openflexo.foundation.validation.Validable#isValid(org.openflexo.foundation.validation.ValidationModel)
-	 */
-	@Override
-	public boolean isValid(ValidationModel validationModel) {
-		return validationModel.isValid(this);
-	}
-
-	/**
-	 * Overrides validate
-	 * 
-	 * @see org.openflexo.foundation.validation.Validable#validate()
-	 */
-	@Override
-	public ValidationReport validate() {
-		return validate(getDefaultValidationModel());
-	}
-
-	/**
-	 * Overrides validate
-	 * 
-	 * @see org.openflexo.foundation.validation.Validable#validate(org.openflexo.foundation.validation.ValidationModel)
-	 */
-	@Override
-	public synchronized ValidationReport validate(ValidationModel validationModel) {
-		return validationModel.validate(this);
-	}
-
-	/**
-	 * Overrides validate
-	 * 
-	 * @see org.openflexo.foundation.validation.Validable#validate(org.openflexo.foundation.validation.ValidationReport)
-	 */
-	@Override
-	public void validate(ValidationReport report) {
-		validate(report, getDefaultValidationModel());
-	}
-
-	/**
-	 * Overrides validate
-	 * 
-	 * @see org.openflexo.foundation.validation.Validable#validate(org.openflexo.foundation.validation.ValidationReport,
-	 *      org.openflexo.foundation.validation.ValidationModel)
-	 */
-	@Override
-	public synchronized void validate(ValidationReport report, ValidationModel validationModel) {
-		validationModel.validate(this, report);
-	}
-
-	public static class FlexoIDMustBeUnique extends ValidationRule<FlexoIDMustBeUnique, FlexoProject> {
-
-		/**
-		 * @param objectType
-		 * @param ruleName
-		 */
-		public FlexoIDMustBeUnique() {
-			super(FlexoProject.class, "flexo_id_must_be_unique");
-		}
-
-		/**
-		 * Overrides applyValidation
-		 * 
-		 * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
-		 */
-		@Override
-		public ValidationIssue<FlexoIDMustBeUnique, FlexoProject> applyValidation(FlexoProject object) {
-			Vector<FlexoModelObject> badObjects = object.getObjectIDManager().checkProject(true);
-			if (badObjects.size() > 0) {
-				DuplicateObjectIDIssue issues = new DuplicateObjectIDIssue(object);
-				for (FlexoModelObject obj : badObjects) {
-					issues.addToContainedIssues(new InformationIssue<FlexoIDMustBeUnique, FlexoProject>(object,
-							"identifier_of_($object.fullyQualifiedName)_was_duplicated_and_reset_to_($object.flexoID)"));
-				}
-				return issues;
-			} else {
-				return new InformationIssue<FlexoIDMustBeUnique, FlexoProject>(object, "no_duplicated_identifiers_found");
-			}
-		}
-
-		public static class DuplicateObjectIDIssue extends CompoundIssue<FlexoIDMustBeUnique, FlexoProject> {
-
-			public DuplicateObjectIDIssue(FlexoProject anObject) {
-				super(anObject);
-			}
-
-		}
-	}
-
-	public static class AllResourcesMustBeDefinedInProject extends ValidationRule<AllResourcesMustBeDefinedInProject, FlexoProject> {
-
-		/**
-		 * @param objectType
-		 * @param ruleName
-		 */
-		public AllResourcesMustBeDefinedInProject() {
-			super(FlexoProject.class, "all_resources_must_be_defined_in_project");
-		}
-
-		/**
-		 * Overrides applyValidation
-		 * 
-		 * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
-		 */
-		@Override
-		public ValidationIssue<AllResourcesMustBeDefinedInProject, FlexoProject> applyValidation(FlexoProject p) {
-			p.checkResourceIntegrity();
-			boolean ok = true;
-			Enumeration<FlexoResource<FlexoResourceData>> en = p.getResources().elements();
-			while (en.hasMoreElements()) {
-				FlexoResource r = en.nextElement();
-				Iterator<FlexoResource<FlexoResourceData>> i = r.getDependantResources().iterator();
-				while (i.hasNext()) {
-					FlexoResource dr = i.next();
-					if (p.getResources().get(dr.getResourceIdentifier()) == null) {
-						if (logger.isLoggable(Level.INFO)) {
-							logger.info("Found a dependant resource not in project: " + dr.getResourceIdentifier());
-						}
-						ok = false;
-					}
-				}
-				i = r.getSynchronizedResources().iterator();
-				while (i.hasNext()) {
-					FlexoResource dr = i.next();
-					if (p.getResources().get(dr.getResourceIdentifier()) == null) {
-						if (logger.isLoggable(Level.INFO)) {
-							logger.info("Found a synchronized resource not in project: " + dr.getResourceIdentifier());
-						}
-						ok = false;
-					}
-				}
-				i = r.getAlteredResources().iterator();
-				while (i.hasNext()) {
-					FlexoResource dr = i.next();
-					if (p.getResources().get(dr.getResourceIdentifier()) == null) {
-						if (logger.isLoggable(Level.INFO)) {
-							logger.info("Found an altered resource not in project: " + dr.getResourceIdentifier());
-						}
-						ok = false;
-					}
-				}
-			}
-			if (ok) {
-				return new InformationIssue<AllResourcesMustBeDefinedInProject, FlexoProject>(p, "no_dereferenced_resources_found");
-			} else {
-				return new ValidationError<AllResourcesMustBeDefinedInProject, FlexoProject>(this, p,
-						"dependant_altered_synchronized_resources_exists_but_not_in_project", new RemoveUnexistentResources());
-			}
-		}
-
-		public class RemoveUnexistentResources extends FixProposal<AllResourcesMustBeDefinedInProject, FlexoProject> {
-			/**
+		 public ImageFileConverter() {
+			 super(ImageFile.class);
+		 }
+
+		 @Override
+		 public ImageFile convertFromString(String value) {
+			 ImageFile file = null;
+			 Vector<ImageFile> v = getAvailableImageFiles();
+			 for (int i = 0; i < v.size(); i++) {
+				 file = v.get(i);
+				 if (file.equals(value)) {
+					 break;
+				 }
+			 }
+			 if (value != null && value.startsWith("/ImportedImages/")) {
+				 return convertFromString(value.substring("/ImportedImages/".length()));
+			 }
+			 if (file == null) {
+				 if (logger.isLoggable(Level.WARNING)) {
+					 logger.warning("Could not find '" + value + "' replacing with Denali logo");
+				 }
+				 return getDefaultImageFile();
+			 }
+			 return file;
+		 }
+
+		 @Override
+		 public String convertToString(ImageFile value) {
+			 return value.getImageName();
+		 }
+	 }
+
+	 public class ImageFile extends KVCObject implements StringConvertable<ImageFile> {
+		 private static final String HAS_FILE_EXTENSION_REGEXP = ".+\\.[a-zA-Z0-9]{3}$";
+
+		 private String imageName;
+
+		 public ImageFile(String imageName) {
+			 this.imageName = imageName;
+		 }
+
+		 public ImageFile(File imageFile) {
+			 this(imageNameForFile(imageFile));
+		 }
+
+		 public String getImageName() {
+			 return imageName;
+		 }
+
+		 public String getBeautifiedImageName() {
+			 if (imageName == null) {
+				 return null;
+			 }
+			 String name = imageName;
+			 if (name.startsWith("_Button_")) {
+				 if (name.matches(HAS_FILE_EXTENSION_REGEXP)) {
+					 name = name.substring("_Button_".length(), name.length() - 4);
+				 } else {
+					 name = name.substring("_Button_".length());
+				 }
+			 } else if (name.startsWith("Icon_")) {
+				 if (name.matches(HAS_FILE_EXTENSION_REGEXP)) {
+					 name = name.substring("Icon_".length(), name.length() - 4);
+				 } else {
+					 name = name.substring("Icon_".length());
+				 }
+			 } else if (name.startsWith("_Icon_")) {
+				 if (name.matches(HAS_FILE_EXTENSION_REGEXP)) {
+					 name = name.substring("_Icon_".length(), name.length() - 4);
+				 } else {
+					 name = name.substring("_Icon_".length());
+				 }
+			 }
+			 return name.replace('_', ' ');
+		 }
+
+		 public File getImageFile() {
+			 File f = WRLocator.locate(getProjectDirectory(), imageName, getCssSheet() == null ? FlexoCSS.CONTENTO.getName() : getCssSheet()
+					 .getName());
+			 if (f == null || !f.exists()) {
+				 if (logger.isLoggable(Level.WARNING)) {
+					 logger.warning("Could not find '" + imageName + "' replacing with Denali logo");
+				 }
+				 f = WRLocator.AGILE_BIRDS_LOGO;
+				 imageName = f.getName();
+			 }
+			 return f;
+		 }
+
+		 public boolean exists() {
+			 return getImageFile() != null && getImageFile().exists();
+		 }
+
+		 /**
+		  * Overrides equals
+		  * 
+		  * @see java.lang.Object#equals(java.lang.Object)
+		  */
+		 @Override
+		 public boolean equals(Object obj) {
+			 if (imageName != null && obj instanceof ImageFile) {
+				 return ((ImageFile) obj).getImageName().equals(getImageName());
+			 } else if (imageName != null && obj instanceof String) {
+				 return imageName.equals(obj);
+			 }
+			 return super.equals(obj);
+		 }
+
+		 @Override
+		 public Converter<? extends ImageFile> getConverter() {
+			 return imageFileConverter;
+		 }
+
+		 public boolean isImported() {
+			 return getImageFile().getParentFile().equals(getImportedImagesDir());
+		 }
+
+		 /**
+		  * @param b
+		  */
+		 public File createButton(File output) {
+			 File file = getImageFile();
+			 if (file == null) {
+				 return null;
+			 }
+			 if (!output.exists()) {
+				 try {
+					 output.createNewFile();
+				 } catch (IOException e1) {
+					 e1.printStackTrace();
+					 return output;
+				 }
+			 }
+			 OutputStream out;
+			 try {
+				 out = new FileOutputStream(output);
+			 } catch (FileNotFoundException e1) {
+				 e1.printStackTrace();
+				 return output;
+			 }
+			 try {
+				 ImageIcon icon = new ImageIcon(file.getAbsolutePath());
+				 Image i = icon.getImage();
+				 BufferedImage bi = ImageIO.read(file);
+				 BufferedImage image = new BufferedImage(bi.getWidth(null), bi.getHeight(null), BufferedImage.TYPE_INT_RGB);
+				 image.createGraphics().drawImage(i, 0, 0, bi.getWidth(null), bi.getHeight(null), null);
+				 ImageIO.write(image, "jpg", out);
+				 return output;
+			 } catch (IOException e) {
+				 e.printStackTrace();
+				 return null;
+			 } finally {
+				 try {
+					 out.close();
+				 } catch (IOException e) {
+					 e.printStackTrace();
+				 }
+			 }
+		 }
+	 }
+
+	 public String imageNameForFile(File f) {
+		 if (f == null || f.getParentFile() == null) {
+			 return null;
+		 }
+		 if (f.getName().startsWith("Contento_")) {
+			 return ToolBox.replaceStringByStringInString("Contento", "", f.getName());
+		 }
+		 if (f.getName().startsWith("Flexo_")) {
+			 return ToolBox.replaceStringByStringInString("Flexo", "", f.getName());
+		 }
+		 if (f.getName().startsWith("Omniscio_")) {
+			 return ToolBox.replaceStringByStringInString("Omniscio", "", f.getName());
+		 }
+		 if (f.getParentFile().getName().equals("Images") || f.getParentFile().equals(getImportedImagesDir())) {
+			 return f.getName();
+		 }
+		 return f.getParentFile().getName() + "/" + f.getName();
+	 }
+
+	 public FlexoIEBIRTPalette getBIRTPalette() {
+		 if (birtPalette == null) {
+			 birtPalette = new FlexoIEBIRTPalette(this);
+		 }
+		 return birtPalette;
+	 }
+
+	 public boolean isHoldingProjectRegistration() {
+		 return holdObjectRegistration;
+	 }
+
+	 public void holdObjectRegistration() {
+		 holdObjectRegistration = true;
+	 }
+
+	 public void unholdObjectRegistration() {
+		 holdObjectRegistration = false;
+	 }
+
+	 private boolean _rebuildDependanciesIsRequired = false;
+
+	 public void setRebuildDependanciesIsRequired() {
+		 _rebuildDependanciesIsRequired = true;
+	 }
+
+	 public boolean rebuildDependanciesIsRequired() {
+		 return _rebuildDependanciesIsRequired;
+	 }
+
+	 public void addToFilesToDelete(File f) {
+		 filesToDelete.add(f);
+	 }
+
+	 public void removeFromFilesToDelete(File f) {
+		 filesToDelete.remove(f);
+	 }
+
+	 public void deleteFilesToBeDeleted() {
+		 for (File f : filesToDelete) {
+			 try {
+				 if (FileUtils.recursiveDeleteFile(f)) {
+					 if (logger.isLoggable(Level.INFO)) {
+						 logger.info("Successfully deleted " + f.getAbsolutePath());
+						 // filesToDelete.remove(f);
+					 }
+				 } else if (logger.isLoggable(Level.WARNING)) {
+					 logger.warning("Could not delete " + f.getAbsolutePath());
+				 }
+			 } catch (RuntimeException e) {
+				 e.printStackTrace();
+				 if (logger.isLoggable(Level.WARNING)) {
+					 logger.warning("Could not delete " + f.getAbsolutePath());
+				 }
+			 }
+		 }
+		 filesToDelete.clear();
+	 }
+
+	 /**
+	  * Overrides getClassNameKey
+	  * 
+	  * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	  */
+	 @Override
+	 public String getClassNameKey() {
+		 return "flexo_project";
+	 }
+
+	 public List<File> getFilesToDelete() {
+		 return filesToDelete;
+	 }
+
+	 public void setFilesToDelete(List<File> filesToDel) {
+		 this.filesToDelete = filesToDel;
+	 }
+
+	 public OperationNode getFirstOperation() {
+		 if (firstOperation == null && firstOperationFlexoID > -1) {
+			 firstOperation = getRootFlexoProcess().getOperationNodeWithFlexoID(firstOperationFlexoID);
+		 }
+		 if (firstOperation == null) {
+			 Vector v = getRootFlexoProcess().getAllOperationNodesWithComponent();
+			 if (v.size() > 0) {
+				 firstOperation = (OperationNode) v.firstElement();
+				 setChanged();
+				 notifyObservers(new WKFAttributeDataModification("firstOperation", null, firstOperation));
+
+			 }
+		 }
+		 return firstOperation;
+	 }
+
+	 public void setFirstOperation(OperationNode firstOp) {
+		 OperationNode old = this.firstOperation;
+		 this.firstOperation = firstOp;
+		 setChanged();
+		 notifyObservers(new WKFAttributeDataModification("firstOperation", old, firstOp));
+	 }
+
+	 public long getFirstOperationFlexoID() {
+		 if (firstOperation != null) {
+			 return getFirstOperation().getFlexoID();
+		 } else {
+			 return -1;
+		 }
+	 }
+
+	 public void setFirstOperationFlexoID(long firstOpFlexoID) {
+		 this.firstOperationFlexoID = firstOpFlexoID;
+	 }
+
+	 /**
+	  * @deprecated : use getImportedImagesDir
+	  * @return
+	  */
+	 @Deprecated
+	 public File getSpecificButtonDirectory() {
+		 if (_specificButtonDir == null) {
+			 _specificButtonDir = new File(getProjectDirectory(), "specificButtons");
+			 if (!_specificButtonDir.exists()) {
+				 _specificButtonDir.mkdirs();
+			 }
+		 }
+		 return _specificButtonDir;
+	 }
+
+	 /**
+	  * @deprecated : use _importedImagesDir
+	  */
+	 @Deprecated
+	 private File _specificButtonDir;
+
+	 public File getImportedImagesDir() {
+		 if (_importedImagesDir == null) {
+			 _importedImagesDir = new File(getProjectDirectory(), FileCst.IMPORTED_IMAGE_DIR_NAME);
+			 if (!_importedImagesDir.exists()) {
+				 _importedImagesDir.mkdirs();
+				 FlexoWebServerFileResource.importSpecificButtonsIntoResources(this);
+			 }
+		 }
+		 return _importedImagesDir;
+	 }
+
+	 private File _importedImagesDir;
+
+	 private DependancyAlgorithmScheme _dependancyScheme = DependancyAlgorithmScheme.Optimistic;
+
+	 public File getFrameworksToEmbedDirectory() {
+		 return getProjectDirectoryWithName(FRAMEWORKS_DIRECTORY);
+	 }
+
+	 public File getHTMLToEmbedDirectory() {
+		 return getProjectDirectoryWithName(HTML_DIRECTORY);
+	 }
+
+	 public File getDocxToEmbedDirectory() {
+		 return getProjectDirectoryWithName(DOCX_DIRECTORY);
+	 }
+
+	 public File getLatexToEmbedDirectory() {
+		 return getProjectDirectoryWithName(LATEX_DIRECTORY);
+	 }
+
+	 public File getProcessSnapshotImportedDirectory() {
+		 return getProjectDirectoryWithName(PROCESS_SNAPSHOT_IMPORTED_DIRECTORY);
+	 }
+
+	 public File getProcessSnapshotLocalDirectory() {
+		 return getProjectDirectoryWithName(PROCESS_SNAPSHOT_LOCAL_DIRECTORY);
+	 }
+
+	 /**
+	  * @return
+	  */
+	 private File getProjectDirectoryWithName(String path) {
+		 File file = new File(getProjectDirectory(), path);
+		 if (file.exists()) {
+			 return file;
+		 } else {
+			 final String loweredPath = path.toLowerCase();
+			 File[] files = getProjectDirectory().listFiles(new FilenameFilter() {
+				 @Override
+				 public boolean accept(File dir, String name) {
+					 return name.toLowerCase().indexOf(loweredPath) > -1;
+				 }
+			 });
+			 for (int i = 0; i < files.length; i++) {
+				 File file2 = files[i];
+				 if (file2.isDirectory()) {
+					 return file2;
+				 }
+			 }
+			 // If we get here, it means that there are no Frameworks dir, so let's create the default one
+			 file.mkdir();
+			 return file;
+		 }
+	 }
+
+	 public File[] listFrameworksToEmbed() {
+		 final File f = getFrameworksToEmbedDirectory();
+		 if (f != null && f.exists()) {
+			 return f.listFiles(new FilenameFilter() {
+
+				 @Override
+				 public boolean accept(File dir, String name) {
+					 return f.equals(dir) && name.endsWith(".framework");
+				 }
+
+			 });
+		 } else {
+			 return new File[0];
+		 }
+	 }
+
+	 /**
+	  * Overrides getAllEmbeddedValidableObjects
+	  * 
+	  * @see org.openflexo.foundation.validation.Validable#getAllEmbeddedValidableObjects()
+	  */
+	 @Override
+	 public Vector<Validable> getAllEmbeddedValidableObjects() {
+		 Vector<Validable> v = new Vector<Validable>();
+		 v.add(this);
+		 for (FlexoStorageResource r : getLoadedStorageResources()) {
+			 if (r.getResourceData() instanceof Validable && r.getResourceData() != this) {
+				 v.addAll(((Validable) r.getResourceData()).getAllEmbeddedValidableObjects());
+			 }
+		 }
+		 return v;
+	 }
+
+	 /**
+	  * Overrides getDefaultValidationModel
+	  * 
+	  * @see org.openflexo.foundation.validation.Validable#getDefaultValidationModel()
+	  */
+	 @Override
+	 public ValidationModel getDefaultValidationModel() {
+		 return getProjectValidationModel();
+	 }
+
+	 /**
+	  * Overrides isValid
+	  * 
+	  * @see org.openflexo.foundation.validation.Validable#isValid()
+	  */
+	 @Override
+	 public boolean isValid() {
+		 return isValid(getDefaultValidationModel());
+	 }
+
+	 /**
+	  * Overrides isValid
+	  * 
+	  * @see org.openflexo.foundation.validation.Validable#isValid(org.openflexo.foundation.validation.ValidationModel)
+	  */
+	 @Override
+	 public boolean isValid(ValidationModel validationModel) {
+		 return validationModel.isValid(this);
+	 }
+
+	 /**
+	  * Overrides validate
+	  * 
+	  * @see org.openflexo.foundation.validation.Validable#validate()
+	  */
+	 @Override
+	 public ValidationReport validate() {
+		 return validate(getDefaultValidationModel());
+	 }
+
+	 /**
+	  * Overrides validate
+	  * 
+	  * @see org.openflexo.foundation.validation.Validable#validate(org.openflexo.foundation.validation.ValidationModel)
+	  */
+	 @Override
+	 public synchronized ValidationReport validate(ValidationModel validationModel) {
+		 return validationModel.validate(this);
+	 }
+
+	 /**
+	  * Overrides validate
+	  * 
+	  * @see org.openflexo.foundation.validation.Validable#validate(org.openflexo.foundation.validation.ValidationReport)
+	  */
+	 @Override
+	 public void validate(ValidationReport report) {
+		 validate(report, getDefaultValidationModel());
+	 }
+
+	 /**
+	  * Overrides validate
+	  * 
+	  * @see org.openflexo.foundation.validation.Validable#validate(org.openflexo.foundation.validation.ValidationReport,
+	  *      org.openflexo.foundation.validation.ValidationModel)
+	  */
+	 @Override
+	 public synchronized void validate(ValidationReport report, ValidationModel validationModel) {
+		 validationModel.validate(this, report);
+	 }
+
+	 public static class FlexoIDMustBeUnique extends ValidationRule<FlexoIDMustBeUnique, FlexoProject> {
+
+		 /**
+		  * @param objectType
+		  * @param ruleName
+		  */
+		 public FlexoIDMustBeUnique() {
+			 super(FlexoProject.class, "flexo_id_must_be_unique");
+		 }
+
+		 /**
+		  * Overrides applyValidation
+		  * 
+		  * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
+		  */
+		 @Override
+		 public ValidationIssue<FlexoIDMustBeUnique, FlexoProject> applyValidation(FlexoProject object) {
+			 Vector<FlexoModelObject> badObjects = object.getObjectIDManager().checkProject(true);
+			 if (badObjects.size() > 0) {
+				 DuplicateObjectIDIssue issues = new DuplicateObjectIDIssue(object);
+				 for (FlexoModelObject obj : badObjects) {
+					 issues.addToContainedIssues(new InformationIssue<FlexoIDMustBeUnique, FlexoProject>(object,
+							 "identifier_of_($object.fullyQualifiedName)_was_duplicated_and_reset_to_($object.flexoID)"));
+				 }
+				 return issues;
+			 } else {
+				 return new InformationIssue<FlexoIDMustBeUnique, FlexoProject>(object, "no_duplicated_identifiers_found");
+			 }
+		 }
+
+		 public static class DuplicateObjectIDIssue extends CompoundIssue<FlexoIDMustBeUnique, FlexoProject> {
+
+			 public DuplicateObjectIDIssue(FlexoProject anObject) {
+				 super(anObject);
+			 }
+
+		 }
+	 }
+
+	 public static class AllResourcesMustBeDefinedInProject extends ValidationRule<AllResourcesMustBeDefinedInProject, FlexoProject> {
+
+		 /**
+		  * @param objectType
+		  * @param ruleName
+		  */
+		 public AllResourcesMustBeDefinedInProject() {
+			 super(FlexoProject.class, "all_resources_must_be_defined_in_project");
+		 }
+
+		 /**
+		  * Overrides applyValidation
+		  * 
+		  * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
+		  */
+		 @Override
+		 public ValidationIssue<AllResourcesMustBeDefinedInProject, FlexoProject> applyValidation(FlexoProject p) {
+			 p.checkResourceIntegrity();
+			 boolean ok = true;
+			 Enumeration<FlexoResource<FlexoResourceData>> en = p.getResources().elements();
+			 while (en.hasMoreElements()) {
+				 FlexoResource r = en.nextElement();
+				 Iterator<FlexoResource<FlexoResourceData>> i = r.getDependantResources().iterator();
+				 while (i.hasNext()) {
+					 FlexoResource dr = i.next();
+					 if (p.getResources().get(dr.getResourceIdentifier()) == null) {
+						 if (logger.isLoggable(Level.INFO)) {
+							 logger.info("Found a dependant resource not in project: " + dr.getResourceIdentifier());
+						 }
+						 ok = false;
+					 }
+				 }
+				 i = r.getSynchronizedResources().iterator();
+				 while (i.hasNext()) {
+					 FlexoResource dr = i.next();
+					 if (p.getResources().get(dr.getResourceIdentifier()) == null) {
+						 if (logger.isLoggable(Level.INFO)) {
+							 logger.info("Found a synchronized resource not in project: " + dr.getResourceIdentifier());
+						 }
+						 ok = false;
+					 }
+				 }
+				 i = r.getAlteredResources().iterator();
+				 while (i.hasNext()) {
+					 FlexoResource dr = i.next();
+					 if (p.getResources().get(dr.getResourceIdentifier()) == null) {
+						 if (logger.isLoggable(Level.INFO)) {
+							 logger.info("Found an altered resource not in project: " + dr.getResourceIdentifier());
+						 }
+						 ok = false;
+					 }
+				 }
+			 }
+			 if (ok) {
+				 return new InformationIssue<AllResourcesMustBeDefinedInProject, FlexoProject>(p, "no_dereferenced_resources_found");
+			 } else {
+				 return new ValidationError<AllResourcesMustBeDefinedInProject, FlexoProject>(this, p,
+						 "dependant_altered_synchronized_resources_exists_but_not_in_project", new RemoveUnexistentResources());
+			 }
+		 }
+
+		 public class RemoveUnexistentResources extends FixProposal<AllResourcesMustBeDefinedInProject, FlexoProject> {
+			 /**
 			  *
 			  */
-			public RemoveUnexistentResources() {
-				super("remove_unexistent_resources");
-			}
-
-			/**
-			 * Overrides fixAction
-			 * 
-			 * @see org.openflexo.foundation.validation.FixProposal#fixAction()
-			 */
-			@Override
-			protected void fixAction() {
-				FlexoProject p = getObject();
-				Enumeration<FlexoResource<FlexoResourceData>> en = p.getResources().elements();
-				while (en.hasMoreElements()) {
-					FlexoResource r = en.nextElement();
-					Iterator<FlexoResource<FlexoResourceData>> i = r.getDependantResources().iterator();
-					while (i.hasNext()) {
-						FlexoResource dr = i.next();
-						if (p.getResources().get(dr.getResourceIdentifier()) == null) {
-							i.remove();
-						}
-					}
-					i = r.getSynchronizedResources().iterator();
-					while (i.hasNext()) {
-						FlexoResource dr = i.next();
-						if (p.getResources().get(dr.getResourceIdentifier()) == null) {
-							i.remove();
-						}
-					}
-					i = r.getAlteredResources().iterator();
-					while (i.hasNext()) {
-						FlexoResource dr = i.next();
-						if (p.getResources().get(dr.getResourceIdentifier()) == null) {
-							i.remove();
-						}
-					}
-				}
-			}
-		}
-	}
-
-	public static class NameOfResourceMustBeKeyOfHashtableEntry extends
-			ValidationRule<NameOfResourceMustBeKeyOfHashtableEntry, FlexoProject> {
-
-		/**
-		 * @param objectType
-		 * @param ruleName
-		 */
-		public NameOfResourceMustBeKeyOfHashtableEntry() {
-			super(FlexoProject.class, "name_of_resource_must_be_key_of_hashtable_entry");
-		}
-
-		/**
-		 * Overrides applyValidation
-		 * 
-		 * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
-		 */
-		@SuppressWarnings("unchecked")
-		@Override
-		public ValidationIssue<NameOfResourceMustBeKeyOfHashtableEntry, FlexoProject> applyValidation(FlexoProject object) {
-			ValidationError issues = null;
-			for (String key : ((Hashtable<String, FlexoResource>) object.getResources().clone()).keySet()) {
-				FlexoResource resource = object.getResources().get(key);
-				if (!key.equals(resource.getResourceIdentifier())) {
-					issues = new ValidationError<NameOfResourceMustBeKeyOfHashtableEntry, FlexoProject>(this, object,
-							"name_of_resource_must_be_key_of_hashtable_entry", new RestoreResourceKeys());
-					break;
-				}
-			}
-			if (issues != null) {
-				return issues;
-			} else {
-				return new InformationIssue<NameOfResourceMustBeKeyOfHashtableEntry, FlexoProject>(object,
-						"no_inconsistant_resource_name_found");
-			}
-		}
-
-		public class RestoreResourceKeys extends FixProposal<NameOfResourceMustBeKeyOfHashtableEntry, FlexoProject> {
-
-			/**
-			 * @param aMessage
-			 */
-			public RestoreResourceKeys() {
-				super("restore_resource_keys");
-			}
-
-			/**
-			 * Overrides fixAction
-			 * 
-			 * @see org.openflexo.foundation.validation.FixProposal#fixAction()
-			 */
-			@Override
-			protected void fixAction() {
-				getProject().resources.restoreKeys();
-			}
-
-		}
-	}
-
-	public static class RebuildDependancies extends ValidationRule<RebuildDependancies, FlexoProject> {
-
-		public RebuildDependancies() {
-			super(FlexoProject.class, "rebuild_dependancies");
-		}
-
-		@Override
-		public ValidationIssue<RebuildDependancies, FlexoProject> applyValidation(FlexoProject object) {
-			object.rebuildDependancies();
-			return new InformationIssue<RebuildDependancies, FlexoProject>(object, "resource_dependancies_have_been_rebuilt");
-		}
-	}
-
-	public static class ResourceCanNotDeeplyDependOfItself extends ValidationRule<ResourceCanNotDeeplyDependOfItself, FlexoProject> {
-
-		/**
-		 * @param objectType
-		 * @param ruleName
-		 */
-		public ResourceCanNotDeeplyDependOfItself() {
-			super(FlexoProject.class, "resource_cannot_deeply_depend_of_itself");
-		}
-
-		/**
-		 * Overrides applyValidation
-		 * 
-		 * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
-		 */
-		@SuppressWarnings("unchecked")
-		@Override
-		public ValidationIssue<ResourceCanNotDeeplyDependOfItself, FlexoProject> applyValidation(FlexoProject object) {
-			CompoundIssue<ResourceCanNotDeeplyDependOfItself, FlexoProject> issues = null;
-			for (String key : ((Hashtable<String, FlexoResource>) object.getResources().clone()).keySet()) {
-				FlexoResource resource = object.getResources().get(key);
-				if (resource.deeplyDependsOfItSelf()) {
-					if (issues == null) {
-						issues = new CompoundIssue<ResourceCanNotDeeplyDependOfItself, FlexoProject>(object);
-					}
-					issues.addToContainedIssues(new ValidationError<ResourceCanNotDeeplyDependOfItself, FlexoProject>(this, object,
-							"resource_cannot_deeply_depend_of_itself", new BreakCycleDependances(resource)));
-				}
-			}
-			if (issues != null) {
-				return issues;
-			} else {
-				return new InformationIssue<ResourceCanNotDeeplyDependOfItself, FlexoProject>(object, "no_inconsistant_resource_name_found");
-			}
-		}
-
-		public class BreakCycleDependances extends FixProposal<ResourceCanNotDeeplyDependOfItself, FlexoProject> {
-			private final FlexoResource resource;
-
-			/**
-			 * @param aMessage
-			 */
-			public BreakCycleDependances(FlexoResource aResource) {
-				super("break_cycle_dependances");
-				resource = aResource;
-			}
-
-			/**
-			 * Overrides fixAction
-			 * 
-			 * @see org.openflexo.foundation.validation.FixProposal#fixAction()
-			 */
-			@Override
-			protected void fixAction() {
-				if (logger.isLoggable(Level.INFO)) {
-					logger.info("Implement me");
-				}
-			}
-
-		}
-	}
-
-	/**
-	 * @author gpolet
-	 * 
-	 */
-	public static class GeneratedResourcesMustHaveCGFile extends ValidationRule<GeneratedResourcesMustHaveCGFile, FlexoProject> {
-
-		/**
-		 * @param objectType
-		 * @param ruleName
-		 */
-		public GeneratedResourcesMustHaveCGFile() {
-			super(FlexoProject.class, "generated_resources_must_have_CGFile");
-		}
-
-		/**
-		 * Overrides applyValidation
-		 * 
-		 * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
-		 */
-		@Override
-		public ValidationIssue<GeneratedResourcesMustHaveCGFile, FlexoProject> applyValidation(FlexoProject project) {
-			if (project.getGeneratedCodeResource(false) != null && !project.getGeneratedCodeResource(false).isLoaded()
-					|| project.getGeneratedDocResource(false) != null && !project.getGeneratedDocResource(false).isLoaded()) {
-				return null;// If the generated code or the generated doc resource is not loaded, then CGFiles have not yet been associated
-				// with their resource!
-			}
-			Iterator i = project.getResources().values().iterator();
-			while (i.hasNext()) {
-				FlexoResource r = (FlexoResource) i.next();
-				if (r instanceof CGRepositoryFileResource) {
-					CGRepositoryFileResource cgr = (CGRepositoryFileResource) r;
-					if (cgr.getCGFile() == null) {
-						return new ValidationError<GeneratedResourcesMustHaveCGFile, FlexoProject>(this, project,
-								"some_generated_resources_dont_have_a_file", new DeleteGeneratedResourceWithoutFiles());
-					}
-				}
-			}
-			return null;
-		}
-
-		public class DeleteGeneratedResourceWithoutFiles extends FixProposal<GeneratedResourcesMustHaveCGFile, FlexoProject> {
-
-			public DeleteGeneratedResourceWithoutFiles() {
-				super("fix_invalid_generated_resource");
-			}
-
-			@Override
-			protected void fixAction() {
-				FlexoProject project = getObject();
-				Iterator i = ((Hashtable<String, FlexoResource>) project.getResources().clone()).values().iterator();
-				while (i.hasNext()) {
-					FlexoResource r = (FlexoResource) i.next();
-					if (r instanceof CGRepositoryFileResource) {
-						CGRepositoryFileResource cgr = (CGRepositoryFileResource) r;
-						if (cgr.getCGFile() == null) {
-							cgr.delete(false);
-						}
-					}
-				}
-			}
-		}
-
-	}
-
-	public static class ComponentInstancesMustDefineAComponent extends ValidationRule<ComponentInstancesMustDefineAComponent, FlexoProject> {
-
-		public class FixComponentInstances extends FixProposal<ComponentInstancesMustDefineAComponent, FlexoProject> {
-
-			public FixComponentInstances() {
-				super("fix_invalid_component_instances");
-			}
-
-			@Override
-			protected void fixAction() {
-				FlexoProject project = getObject();
-				Enumeration<ComponentDefinition> en = project.getFlexoComponentLibrary().getAllComponentList().elements();
-				while (en.hasMoreElements()) {
-					ComponentDefinition cd = en.nextElement();
-					IEWOComponent wo = cd.getWOComponent();
-					wo.getRootSequence().removeInvalidComponentInstances();
-				}
-			}
-		}
-
-		public ComponentInstancesMustDefineAComponent() {
-			super(FlexoProject.class, "component_instance_must_define_a_component");
-
-		}
-
-		@Override
-		public ValidationIssue<ComponentInstancesMustDefineAComponent, FlexoProject> applyValidation(FlexoProject object) {
-			FlexoProject project = object;
-			Enumeration<ComponentDefinition> en = project.getFlexoComponentLibrary().getAllComponentList().elements();
-			while (en.hasMoreElements()) {
-				ComponentDefinition cd = en.nextElement();
-				IEWOComponent wo = cd.getWOComponent();
-				if (!wo.getRootSequence().areComponentInstancesValid()) {
-					return new ValidationError<ComponentInstancesMustDefineAComponent, FlexoProject>(this, project,
-							"there_are_some_invalid_component_instances", new FixComponentInstances());
-				}
-			}
-			return null;
-		}
-
-	}
-
-	public List<ValidationReport> checkModelConsistency(CodeType generationTarget) {
-		return checkModelConsistency(null, null, null, null, generationTarget);
-	}
-
-	public void checkResourceIntegrity() {
-		Vector<FlexoResource<FlexoResourceData>> v = new Vector<FlexoResource<FlexoResourceData>>(getResources().values());
-		FlexoResource.sortResourcesWithDependancies(v);
-		Vector<FlexoResource<FlexoResourceData>> resourcesToDelete = new Vector<FlexoResource<FlexoResourceData>>();
-		for (FlexoResource<FlexoResourceData> resource : v) {
-			if (!resource.checkIntegrity()) {
-				resourcesToDelete.add(resource);
-			}
-		}
-		if (resourcesToDelete.size() > 0) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Found " + resourcesToDelete.size() + " resource that are no more acceptable.");
-			}
-			for (FlexoResource<FlexoResourceData> resource : resourcesToDelete) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Deleting " + resource.getFullyQualifiedName());
-				}
-				if (resource instanceof FlexoFileResource) {
-					((FlexoFileResource<FlexoResourceData>) resource).delete(false); // Let's be cautious here.
-				} else {
-					resource.delete();
-				}
-			}
-		}
-	}
-
-	public List<ValidationReport> checkModelConsistency(FlexoObserver ieValidationObserver, FlexoObserver wkfValidationObserver,
-			FlexoObserver dmValidationObserver, FlexoObserver dkvValidationObserver, CodeType generationTarget) {
-		Vector<ValidationReport> reply = new Vector<ValidationReport>();
-		// We validate the component library model
-		IEValidationModel ieValidationModel = new IEValidationModel(this, generationTarget);
-		if (ieValidationObserver != null) {
-			ieValidationModel.addObserver(ieValidationObserver);
-		}
-		ValidationReport report = getProject().getFlexoComponentLibrary().validate(ieValidationModel);
-		if (ieValidationObserver != null) {
-			ieValidationModel.deleteObserver(ieValidationObserver);
-		}
-
-		reply.add(report);
-		// We validate the workflow model
-		WKFValidationModel wkfValidationModel = new WKFValidationModel(getProject(), generationTarget);
-		if (wkfValidationObserver != null) {
-			wkfValidationModel.addObserver(wkfValidationObserver);
-		}
-		report = getProject().getFlexoWorkflow().validate(wkfValidationModel);
-		if (wkfValidationObserver != null) {
-			wkfValidationModel.deleteObserver(wkfValidationObserver);
-		}
-
-		reply.add(report);
-
-		// We validate the dkv model
-		DKVValidationModel dkvValidationModel = new DKVValidationModel(getProject(), generationTarget);
-		if (dkvValidationObserver != null) {
-			dkvValidationModel.addObserver(dkvValidationObserver);
-		}
-		report = getProject().getDKVModel().validate(dkvValidationModel);
-		if (dkvValidationObserver != null) {
-			dkvValidationModel.deleteObserver(dkvValidationObserver);
-		}
-
-		reply.add(report);
-
-		DMValidationModel dmValidationModel = new DMValidationModel(getProject(), generationTarget);
-		if (dmValidationObserver != null) {
-			dmValidationModel.addObserver(dmValidationObserver);
-		}
-		report = getProject().getDataModel().validate(dmValidationModel);
-		if (dmValidationObserver != null) {
-			dmValidationModel.deleteObserver(dmValidationObserver);
-		}
-
-		reply.add(report);
-
-		return reply;
-	}
-
-	// public static final String ONTOLOGY_URI = "urn:www.denali.be/ontology/PPM.owl";
-	public static final String ONTOLOGY_URI = "http://www.agilebirds.com/projects";
-
-	public String getProjectVersionURI() {
-		return projectVersionURI;
-	}
-
-	public void setProjectVersionURI(String projectVersionURI) {
-		this.projectVersionURI = projectVersionURI;
-	}
-
-	public String getProjectURI() {
-		return getURI();
-	}
-
-	public void setProjectURI(String projectURI) {
-		this.projectURI = projectURI;
-	}
-
-	@Override
-	public String getURI() {
-		if (projectURI == null && !isDeserializing()) {
-			Date currentDate = new Date();
-			projectURI = ONTOLOGY_URI + "/" + (1900 + currentDate.getYear()) + "/" + (currentDate.getMonth() + 1) + "/" + getProjectName()
-					+ "_" + System.currentTimeMillis();
-			// projectURI= ONTOLOGY_URI+"/data/prj_"+getPrefix()+"_"+System.currentTimeMillis();
-		}
-		return projectURI;
-	}
-
-	@Override
-	public String toString() {
-		return "PROJECT-" + getName() + " ID=" + getID();
-	}
-
-	public static void cleanUpActionizer() {
-		// CGFile
-		CGFile.editCustomTemplateActionizer = null;
-		CGFile.redefineTemplateActionizer = null;
-		CGFile.showTemplateActionizer = null;
-
-		// FlexoProcess
-		FlexoProcess.addMetricsActionizer = null;
-		FlexoProcess.addStatusActionizer = null;
-		FlexoProcess.deleteActionizer = null;
-		FlexoProcess.deleteMetricsActionizer = null;
-
-		// FlexoWorkflow
-		FlexoWorkflow.addActivityMetricsDefinitionActionizer = null;
-		FlexoWorkflow.addEdgeMetricsDefinitionActionizer = null;
-		FlexoWorkflow.addProcessMetricsDefinitionActionizer = null;
-		FlexoWorkflow.addOperationMetricsDefinitionActionizer = null;
-		FlexoWorkflow.deleteMetricsDefinitionActionizer = null;
-
-		// Role
-		Role.addParentRoleActionizer = null;
-
-		// RoleList
-		RoleList.addRoleActionizer = null;
-		RoleList.deleteRoleActionizer = null;
-
-		// FlexoPostCondition
-		FlexoPostCondition.addMetricsActionizer = null;
-		FlexoPostCondition.deleteMetricsActionizer = null;
-
-		// AbstractActivityNode
-		AbstractActivityNode.addMetricsActionizer = null;
-		AbstractActivityNode.deleteMetricsActionizer = null;
-
-		// OperationNode
-		OperationNode.addMetricsActionizer = null;
-		OperationNode.deleteMetricsActionizer = null;
-	}
-
-	public FlexoProjectOntologyResource getFlexoProjectOntologyResource() {
-		return getFlexoProjectOntologyResource(true);
-	}
-
-	public FlexoProjectOntologyResource getFlexoProjectOntologyResource(boolean createIfNotExist) {
-		FlexoProjectOntologyResource returned = (FlexoProjectOntologyResource) resourceForKey(ResourceType.PROJECT_ONTOLOGY,
-				getProjectName());
-		if (returned == null && createIfNotExist) {
-			ProjectOntology.createNewProjectOntology(this);
-			return getFlexoProjectOntologyResource();
-		}
-		return returned;
-	}
-
-	public ProjectOntology getProjectOntology() {
-		return getProjectOntology(true);
-	}
-
-	public ProjectOntology getProjectOntology(boolean createIfNotExist) {
-		if (getFlexoProjectOntologyResource(createIfNotExist) == null) {
-			if (createIfNotExist) {
-				ProjectOntology.createNewProjectOntology(this);
-			} else {
-				return null;
-			}
-		}
-		return getFlexoProjectOntologyResource(createIfNotExist).getResourceData();
-	}
-
-	private ProjectOntologyLibrary ontologyLibrary = null;
-
-	public ProjectOntologyLibrary getProjectOntologyLibrary() {
-		return getProjectOntologyLibrary(true);
-	}
-
-	public ProjectOntologyLibrary getProjectOntologyLibrary(boolean createIfNotExist) {
-		if (ontologyLibrary == null) {
-			if (createIfNotExist) {
-				logger.info("resource center: " + getResourceCenter());
-				ontologyLibrary = new ProjectOntologyLibrary(getResourceCenter(), this);
-				// ontologyLibrary.getFlexoConceptOntology().loadWhenUnloaded();
-				// ontologyLibrary.init();
-			} else {
-				return null;
-			}
-		}
-		return ontologyLibrary;
-	}
-
-	/*
-	 * private CalcLibrary calcLibrary = null;
-	 * 
-	 * public CalcLibrary getCalcLibrary() { return getCalcLibrary(true); }
-	 * 
-	 * public CalcLibrary getCalcLibrary(boolean createIfNotExist) { if (calcLibrary == null) { if (createIfNotExist) calcLibrary = new
-	 * CalcLibrary(getOntologyLibrary()); else return null; } return calcLibrary; }
-	 */
-
-	public FlexoImportedProcessLibrary getImportedProcessLibrary() {
-		if (getWorkflow() == null) {
-			return null;
-		}
-		return getWorkflow().getImportedProcessLibrary();
-	}
-
-	public RoleList getImportedRoleList() {
-		return getWorkflow().getImportedRoleList();
-	}
-
-	public FlexoLinksResource getFlexoLinksResource() {
-		FlexoLinksResource returned = (FlexoLinksResource) resourceForKey(ResourceType.LINKS, getProjectName());
-		if (returned == null) {
-			FlexoLinks.createLinks(this);
-			return getFlexoLinksResource();
-		}
-		return returned;
-	}
-
-	public FlexoLinks getFlexoLinks() {
-		return getFlexoLinksResource().getResourceData();
-	}
-
-	public boolean getIsLocalized() {
-		return getDKVModel().getLanguages().size() > 1;
-	}
-
-	private Hashtable<String, Hashtable<Long, EditionPatternInstance>> _editionPatternInstances;
-
-	public EditionPatternInstance makeNewEditionPatternInstance(EditionPattern pattern) {
-		EditionPatternInstance returned = new EditionPatternInstance(pattern, this);
-		if (_editionPatternInstances == null) {
-			_editionPatternInstances = new Hashtable<String, Hashtable<Long, EditionPatternInstance>>();
-		}
-		Hashtable<Long, EditionPatternInstance> hash = _editionPatternInstances.get(pattern.getName());
-		if (hash == null) {
-			hash = new Hashtable<Long, EditionPatternInstance>();
-			_editionPatternInstances.put(pattern.getName(), hash);
-		}
-		hash.put(returned.getInstanceId(), returned);
-		return returned;
-	}
-
-	public EditionPatternInstance getEditionPatternInstance(EditionPatternReference reference) {
-		if (_editionPatternInstances == null) {
-			_editionPatternInstances = new Hashtable<String, Hashtable<Long, EditionPatternInstance>>();
-		}
-		Hashtable<Long, EditionPatternInstance> hash = _editionPatternInstances.get(reference.getEditionPattern().getName());
-		if (hash == null) {
-			hash = new Hashtable<Long, EditionPatternInstance>();
-			_editionPatternInstances.put(reference.getEditionPattern().getName(), hash);
-		}
-		EditionPatternInstance returned = hash.get(reference.getInstanceId());
-		if (returned == null) {
-			returned = new EditionPatternInstance(reference);
-			hash.put(reference.getInstanceId(), returned);
-		}
-		return returned;
-	}
-
-	public FlexoObjectIDManager getObjectIDManager() {
-		if (objectIDManager == null) {
-			objectIDManager = new FlexoObjectIDManager(this);
-		}
-		return objectIDManager;
-	}
-
-	public FlexoResourceCenter getResourceCenter() {
-		if (resourceCenter == null) {
-			File file = getResourceCenterFile();
-			resourceCenter = new LocalResourceCenterImplementation(file);
-		}
-		// logger.info("return resourceCenter " + resourceCenter + " for project " + Integer.toHexString(hashCode()));
-		return resourceCenter;
-	}
-
-	public static File getResourceCenterFile() {
-		String base = "FlexoResourceCenter";
-		String attempt = base;
-		File root = new File(System.getProperty("user.home"), "Library/Flexo/");
-		if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
-			String appData = System.getenv("APPDATA");
-			if (appData != null) {
-				File f = new File(appData);
-				if (f.isDirectory() && f.canWrite()) {
-					root = new File(f, "OpenFlexo");
-				}
-			}
-		}
-		File file = null;
-		boolean ok = false;
-		int i = 0;
-		while (!ok && i < 100) {
-			file = new File(root, attempt);
-			if (!file.exists()) {
-				ok = file.mkdirs();
-			} else {
-				ok = file.isDirectory() && file.canWrite();
-			}
-			i++;
-			attempt = base + "-" + i;
-		}
-		i = 0;
-		while (!ok && i < 1000) {
-			try {
-				file = File.createTempFile("FlexoResourceCenter", null);
-				file.delete();
-				file.mkdirs();
-				ok = file.exists() && file.canWrite();
-				i++;
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		if (!ok) {
-			return null;
-		}
-		return file;
-	}
-
-	public void setResourceCenter(FlexoResourceCenter resourceCenter) {
-		logger.info(">>>>>>>>>>>>>>>>> setResourceCenter " + resourceCenter + " for project " + Integer.toHexString(hashCode()));
-
-		this.resourceCenter = resourceCenter;
-		EditionPatternConverter editionPatternConverter = new EditionPatternConverter(resourceCenter);
-		getStringEncoder()._addConverter(editionPatternConverter);
-	}
-
-	private Role testRole;
-
-	public Role getTestRole() {
-		return testRole;
-	}
-
-	public void setTestRole(Role testRole) {
-		System.out.println("Test role: " + testRole);
-		this.testRole = testRole;
-	}
-
-	public boolean isComputeDiff() {
-		return computeDiff;
-	}
-
-	public void setComputeDiff(boolean computeDiff) {
-		this.computeDiff = computeDiff;
-	}
-
-	/**
-	 * This method is called while deserializing EditionPatternReference instances Because this storage is distributed, we have to build
-	 * partial knowledge, as resources are being loaded.
-	 * 
-	 * @param conceptURI
-	 * @param actorReference
-	 */
-	public void _addToPendingEditionPatternReferences(String conceptURI, ConceptActorReference actorReference) {
-		System.out.println("OK, j'enregistre le concept " + conceptURI + " associe a la reference " + actorReference);
-		logger.info("Registering as pending pattern object reference: " + conceptURI);
-		Vector<ConceptActorReference> values = pendingEditionPatternReferences.get(conceptURI);
-		if (values == null) {
-			values = new Vector<ConceptActorReference>();
-			pendingEditionPatternReferences.put(conceptURI, values);
-		}
-		values.add(actorReference);
-	}
-
-	private Hashtable<String, Vector<ConceptActorReference>> pendingEditionPatternReferences = new Hashtable<String, Vector<ConceptActorReference>>();
-
-	public void _retrievePendingEditionPatternReferences(OntologyObject object) {
-		Vector<ConceptActorReference> values = pendingEditionPatternReferences.get(object.getURI());
-		if (values == null) {
-			// No pending EditionPattern references for object
-			return;
-		} else {
-			for (ConceptActorReference actorReference : values) {
-				EditionPatternInstance instance = actorReference.getPatternReference().getEditionPatternInstance();
-				PatternRole pr = actorReference.getPatternReference().getEditionPattern().getPatternRole(actorReference.patternRole);
-				logger.info("Retrieve Edition Pattern Instance " + instance + " for " + object + " role=" + pr);
-				object.registerEditionPatternReference(instance, pr);
-			}
-			values.clear();
-		}
-	}
+			 public RemoveUnexistentResources() {
+				 super("remove_unexistent_resources");
+			 }
+
+			 /**
+			  * Overrides fixAction
+			  * 
+			  * @see org.openflexo.foundation.validation.FixProposal#fixAction()
+			  */
+			 @Override
+			 protected void fixAction() {
+				 FlexoProject p = getObject();
+				 Enumeration<FlexoResource<FlexoResourceData>> en = p.getResources().elements();
+				 while (en.hasMoreElements()) {
+					 FlexoResource r = en.nextElement();
+					 Iterator<FlexoResource<FlexoResourceData>> i = r.getDependantResources().iterator();
+					 while (i.hasNext()) {
+						 FlexoResource dr = i.next();
+						 if (p.getResources().get(dr.getResourceIdentifier()) == null) {
+							 i.remove();
+						 }
+					 }
+					 i = r.getSynchronizedResources().iterator();
+					 while (i.hasNext()) {
+						 FlexoResource dr = i.next();
+						 if (p.getResources().get(dr.getResourceIdentifier()) == null) {
+							 i.remove();
+						 }
+					 }
+					 i = r.getAlteredResources().iterator();
+					 while (i.hasNext()) {
+						 FlexoResource dr = i.next();
+						 if (p.getResources().get(dr.getResourceIdentifier()) == null) {
+							 i.remove();
+						 }
+					 }
+				 }
+			 }
+		 }
+	 }
+
+	 public static class NameOfResourceMustBeKeyOfHashtableEntry extends
+	 ValidationRule<NameOfResourceMustBeKeyOfHashtableEntry, FlexoProject> {
+
+		 /**
+		  * @param objectType
+		  * @param ruleName
+		  */
+		 public NameOfResourceMustBeKeyOfHashtableEntry() {
+			 super(FlexoProject.class, "name_of_resource_must_be_key_of_hashtable_entry");
+		 }
+
+		 /**
+		  * Overrides applyValidation
+		  * 
+		  * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
+		  */
+		 @SuppressWarnings("unchecked")
+		 @Override
+		 public ValidationIssue<NameOfResourceMustBeKeyOfHashtableEntry, FlexoProject> applyValidation(FlexoProject object) {
+			 ValidationError issues = null;
+			 for (String key : ((Hashtable<String, FlexoResource>) object.getResources().clone()).keySet()) {
+				 FlexoResource resource = object.getResources().get(key);
+				 if (!key.equals(resource.getResourceIdentifier())) {
+					 issues = new ValidationError<NameOfResourceMustBeKeyOfHashtableEntry, FlexoProject>(this, object,
+							 "name_of_resource_must_be_key_of_hashtable_entry", new RestoreResourceKeys());
+					 break;
+				 }
+			 }
+			 if (issues != null) {
+				 return issues;
+			 } else {
+				 return new InformationIssue<NameOfResourceMustBeKeyOfHashtableEntry, FlexoProject>(object,
+						 "no_inconsistant_resource_name_found");
+			 }
+		 }
+
+		 public class RestoreResourceKeys extends FixProposal<NameOfResourceMustBeKeyOfHashtableEntry, FlexoProject> {
+
+			 /**
+			  * @param aMessage
+			  */
+			 public RestoreResourceKeys() {
+				 super("restore_resource_keys");
+			 }
+
+			 /**
+			  * Overrides fixAction
+			  * 
+			  * @see org.openflexo.foundation.validation.FixProposal#fixAction()
+			  */
+			 @Override
+			 protected void fixAction() {
+				 getProject().resources.restoreKeys();
+			 }
+
+		 }
+	 }
+
+	 public static class RebuildDependancies extends ValidationRule<RebuildDependancies, FlexoProject> {
+
+		 public RebuildDependancies() {
+			 super(FlexoProject.class, "rebuild_dependancies");
+		 }
+
+		 @Override
+		 public ValidationIssue<RebuildDependancies, FlexoProject> applyValidation(FlexoProject object) {
+			 object.rebuildDependancies();
+			 return new InformationIssue<RebuildDependancies, FlexoProject>(object, "resource_dependancies_have_been_rebuilt");
+		 }
+	 }
+
+	 public static class ResourceCanNotDeeplyDependOfItself extends ValidationRule<ResourceCanNotDeeplyDependOfItself, FlexoProject> {
+
+		 /**
+		  * @param objectType
+		  * @param ruleName
+		  */
+		 public ResourceCanNotDeeplyDependOfItself() {
+			 super(FlexoProject.class, "resource_cannot_deeply_depend_of_itself");
+		 }
+
+		 /**
+		  * Overrides applyValidation
+		  * 
+		  * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
+		  */
+		 @SuppressWarnings("unchecked")
+		 @Override
+		 public ValidationIssue<ResourceCanNotDeeplyDependOfItself, FlexoProject> applyValidation(FlexoProject object) {
+			 CompoundIssue<ResourceCanNotDeeplyDependOfItself, FlexoProject> issues = null;
+			 for (String key : ((Hashtable<String, FlexoResource>) object.getResources().clone()).keySet()) {
+				 FlexoResource resource = object.getResources().get(key);
+				 if (resource.deeplyDependsOfItSelf()) {
+					 if (issues == null) {
+						 issues = new CompoundIssue<ResourceCanNotDeeplyDependOfItself, FlexoProject>(object);
+					 }
+					 issues.addToContainedIssues(new ValidationError<ResourceCanNotDeeplyDependOfItself, FlexoProject>(this, object,
+							 "resource_cannot_deeply_depend_of_itself", new BreakCycleDependances(resource)));
+				 }
+			 }
+			 if (issues != null) {
+				 return issues;
+			 } else {
+				 return new InformationIssue<ResourceCanNotDeeplyDependOfItself, FlexoProject>(object, "no_inconsistant_resource_name_found");
+			 }
+		 }
+
+		 public class BreakCycleDependances extends FixProposal<ResourceCanNotDeeplyDependOfItself, FlexoProject> {
+			 private final FlexoResource resource;
+
+			 /**
+			  * @param aMessage
+			  */
+			 public BreakCycleDependances(FlexoResource aResource) {
+				 super("break_cycle_dependances");
+				 resource = aResource;
+			 }
+
+			 /**
+			  * Overrides fixAction
+			  * 
+			  * @see org.openflexo.foundation.validation.FixProposal#fixAction()
+			  */
+			 @Override
+			 protected void fixAction() {
+				 if (logger.isLoggable(Level.INFO)) {
+					 logger.info("Implement me");
+				 }
+			 }
+
+		 }
+	 }
+
+	 /**
+	  * @author gpolet
+	  * 
+	  */
+	 public static class GeneratedResourcesMustHaveCGFile extends ValidationRule<GeneratedResourcesMustHaveCGFile, FlexoProject> {
+
+		 /**
+		  * @param objectType
+		  * @param ruleName
+		  */
+		 public GeneratedResourcesMustHaveCGFile() {
+			 super(FlexoProject.class, "generated_resources_must_have_CGFile");
+		 }
+
+		 /**
+		  * Overrides applyValidation
+		  * 
+		  * @see org.openflexo.foundation.validation.ValidationRule#applyValidation(org.openflexo.foundation.validation.Validable)
+		  */
+		 @Override
+		 public ValidationIssue<GeneratedResourcesMustHaveCGFile, FlexoProject> applyValidation(FlexoProject project) {
+			 if (project.getGeneratedCodeResource(false) != null && !project.getGeneratedCodeResource(false).isLoaded()
+					 || project.getGeneratedDocResource(false) != null && !project.getGeneratedDocResource(false).isLoaded()) {
+				 return null;// If the generated code or the generated doc resource is not loaded, then CGFiles have not yet been associated
+				 // with their resource!
+			 }
+			 Iterator i = project.getResources().values().iterator();
+			 while (i.hasNext()) {
+				 FlexoResource r = (FlexoResource) i.next();
+				 if (r instanceof CGRepositoryFileResource) {
+					 CGRepositoryFileResource cgr = (CGRepositoryFileResource) r;
+					 if (cgr.getCGFile() == null) {
+						 return new ValidationError<GeneratedResourcesMustHaveCGFile, FlexoProject>(this, project,
+								 "some_generated_resources_dont_have_a_file", new DeleteGeneratedResourceWithoutFiles());
+					 }
+				 }
+			 }
+			 return null;
+		 }
+
+		 public class DeleteGeneratedResourceWithoutFiles extends FixProposal<GeneratedResourcesMustHaveCGFile, FlexoProject> {
+
+			 public DeleteGeneratedResourceWithoutFiles() {
+				 super("fix_invalid_generated_resource");
+			 }
+
+			 @Override
+			 protected void fixAction() {
+				 FlexoProject project = getObject();
+				 Iterator i = ((Hashtable<String, FlexoResource>) project.getResources().clone()).values().iterator();
+				 while (i.hasNext()) {
+					 FlexoResource r = (FlexoResource) i.next();
+					 if (r instanceof CGRepositoryFileResource) {
+						 CGRepositoryFileResource cgr = (CGRepositoryFileResource) r;
+						 if (cgr.getCGFile() == null) {
+							 cgr.delete(false);
+						 }
+					 }
+				 }
+			 }
+		 }
+
+	 }
+
+	 public static class ComponentInstancesMustDefineAComponent extends ValidationRule<ComponentInstancesMustDefineAComponent, FlexoProject> {
+
+		 public class FixComponentInstances extends FixProposal<ComponentInstancesMustDefineAComponent, FlexoProject> {
+
+			 public FixComponentInstances() {
+				 super("fix_invalid_component_instances");
+			 }
+
+			 @Override
+			 protected void fixAction() {
+				 FlexoProject project = getObject();
+				 Enumeration<ComponentDefinition> en = project.getFlexoComponentLibrary().getAllComponentList().elements();
+				 while (en.hasMoreElements()) {
+					 ComponentDefinition cd = en.nextElement();
+					 IEWOComponent wo = cd.getWOComponent();
+					 wo.getRootSequence().removeInvalidComponentInstances();
+				 }
+			 }
+		 }
+
+		 public ComponentInstancesMustDefineAComponent() {
+			 super(FlexoProject.class, "component_instance_must_define_a_component");
+
+		 }
+
+		 @Override
+		 public ValidationIssue<ComponentInstancesMustDefineAComponent, FlexoProject> applyValidation(FlexoProject object) {
+			 FlexoProject project = object;
+			 Enumeration<ComponentDefinition> en = project.getFlexoComponentLibrary().getAllComponentList().elements();
+			 while (en.hasMoreElements()) {
+				 ComponentDefinition cd = en.nextElement();
+				 IEWOComponent wo = cd.getWOComponent();
+				 if (!wo.getRootSequence().areComponentInstancesValid()) {
+					 return new ValidationError<ComponentInstancesMustDefineAComponent, FlexoProject>(this, project,
+							 "there_are_some_invalid_component_instances", new FixComponentInstances());
+				 }
+			 }
+			 return null;
+		 }
+
+	 }
+
+	 public List<ValidationReport> checkModelConsistency(CodeType generationTarget) {
+		 return checkModelConsistency(null, null, null, null, generationTarget);
+	 }
+
+	 public void checkResourceIntegrity() {
+		 Vector<FlexoResource<FlexoResourceData>> v = new Vector<FlexoResource<FlexoResourceData>>(getResources().values());
+		 FlexoResource.sortResourcesWithDependancies(v);
+		 Vector<FlexoResource<FlexoResourceData>> resourcesToDelete = new Vector<FlexoResource<FlexoResourceData>>();
+		 for (FlexoResource<FlexoResourceData> resource : v) {
+			 if (!resource.checkIntegrity()) {
+				 resourcesToDelete.add(resource);
+			 }
+		 }
+		 if (resourcesToDelete.size() > 0) {
+			 if (logger.isLoggable(Level.WARNING)) {
+				 logger.warning("Found " + resourcesToDelete.size() + " resource that are no more acceptable.");
+			 }
+			 for (FlexoResource<FlexoResourceData> resource : resourcesToDelete) {
+				 if (logger.isLoggable(Level.WARNING)) {
+					 logger.warning("Deleting " + resource.getFullyQualifiedName());
+				 }
+				 if (resource instanceof FlexoFileResource) {
+					 ((FlexoFileResource<FlexoResourceData>) resource).delete(false); // Let's be cautious here.
+				 } else {
+					 resource.delete();
+				 }
+			 }
+		 }
+	 }
+
+	 public List<ValidationReport> checkModelConsistency(FlexoObserver ieValidationObserver, FlexoObserver wkfValidationObserver,
+			 FlexoObserver dmValidationObserver, FlexoObserver dkvValidationObserver, CodeType generationTarget) {
+		 Vector<ValidationReport> reply = new Vector<ValidationReport>();
+		 // We validate the component library model
+		 IEValidationModel ieValidationModel = new IEValidationModel(this, generationTarget);
+		 if (ieValidationObserver != null) {
+			 ieValidationModel.addObserver(ieValidationObserver);
+		 }
+		 ValidationReport report = getProject().getFlexoComponentLibrary().validate(ieValidationModel);
+		 if (ieValidationObserver != null) {
+			 ieValidationModel.deleteObserver(ieValidationObserver);
+		 }
+
+		 reply.add(report);
+		 // We validate the workflow model
+		 WKFValidationModel wkfValidationModel = new WKFValidationModel(getProject(), generationTarget);
+		 if (wkfValidationObserver != null) {
+			 wkfValidationModel.addObserver(wkfValidationObserver);
+		 }
+		 report = getProject().getFlexoWorkflow().validate(wkfValidationModel);
+		 if (wkfValidationObserver != null) {
+			 wkfValidationModel.deleteObserver(wkfValidationObserver);
+		 }
+
+		 reply.add(report);
+
+		 // We validate the dkv model
+		 DKVValidationModel dkvValidationModel = new DKVValidationModel(getProject(), generationTarget);
+		 if (dkvValidationObserver != null) {
+			 dkvValidationModel.addObserver(dkvValidationObserver);
+		 }
+		 report = getProject().getDKVModel().validate(dkvValidationModel);
+		 if (dkvValidationObserver != null) {
+			 dkvValidationModel.deleteObserver(dkvValidationObserver);
+		 }
+
+		 reply.add(report);
+
+		 DMValidationModel dmValidationModel = new DMValidationModel(getProject(), generationTarget);
+		 if (dmValidationObserver != null) {
+			 dmValidationModel.addObserver(dmValidationObserver);
+		 }
+		 report = getProject().getDataModel().validate(dmValidationModel);
+		 if (dmValidationObserver != null) {
+			 dmValidationModel.deleteObserver(dmValidationObserver);
+		 }
+
+		 reply.add(report);
+
+		 return reply;
+	 }
+
+	 // public static final String ONTOLOGY_URI = "urn:www.denali.be/ontology/PPM.owl";
+	 public static final String ONTOLOGY_URI = "http://www.agilebirds.com/projects";
+
+	 public String getProjectVersionURI() {
+		 return projectVersionURI;
+	 }
+
+	 public void setProjectVersionURI(String projectVersionURI) {
+		 this.projectVersionURI = projectVersionURI;
+	 }
+
+	 public String getProjectURI() {
+		 return getURI();
+	 }
+
+	 public void setProjectURI(String projectURI) {
+		 this.projectURI = projectURI;
+	 }
+
+	 @Override
+	 public String getURI() {
+		 if (projectURI == null && !isDeserializing()) {
+			 Date currentDate = new Date();
+			 projectURI = ONTOLOGY_URI + "/" + (1900 + currentDate.getYear()) + "/" + (currentDate.getMonth() + 1) + "/" + getProjectName()
+					 + "_" + System.currentTimeMillis();
+			 // projectURI= ONTOLOGY_URI+"/data/prj_"+getPrefix()+"_"+System.currentTimeMillis();
+		 }
+		 return projectURI;
+	 }
+
+	 @Override
+	 public String toString() {
+		 return "PROJECT-" + getName() + " ID=" + getID();
+	 }
+
+	 public static void cleanUpActionizer() {
+		 // CGFile
+		 CGFile.editCustomTemplateActionizer = null;
+		 CGFile.redefineTemplateActionizer = null;
+		 CGFile.showTemplateActionizer = null;
+
+		 // FlexoProcess
+		 FlexoProcess.addMetricsActionizer = null;
+		 FlexoProcess.addStatusActionizer = null;
+		 FlexoProcess.deleteActionizer = null;
+		 FlexoProcess.deleteMetricsActionizer = null;
+
+		 // FlexoWorkflow
+		 FlexoWorkflow.addActivityMetricsDefinitionActionizer = null;
+		 FlexoWorkflow.addEdgeMetricsDefinitionActionizer = null;
+		 FlexoWorkflow.addProcessMetricsDefinitionActionizer = null;
+		 FlexoWorkflow.addOperationMetricsDefinitionActionizer = null;
+		 FlexoWorkflow.deleteMetricsDefinitionActionizer = null;
+
+		 // Role
+		 Role.addParentRoleActionizer = null;
+
+		 // RoleList
+		 RoleList.addRoleActionizer = null;
+		 RoleList.deleteRoleActionizer = null;
+
+		 // FlexoPostCondition
+		 FlexoPostCondition.addMetricsActionizer = null;
+		 FlexoPostCondition.deleteMetricsActionizer = null;
+
+		 // AbstractActivityNode
+		 AbstractActivityNode.addMetricsActionizer = null;
+		 AbstractActivityNode.deleteMetricsActionizer = null;
+
+		 // OperationNode
+		 OperationNode.addMetricsActionizer = null;
+		 OperationNode.deleteMetricsActionizer = null;
+	 }
+
+	 public FlexoProjectOntologyResource getFlexoProjectOntologyResource() {
+		 return getFlexoProjectOntologyResource(true);
+	 }
+
+	 public FlexoProjectOntologyResource getFlexoProjectOntologyResource(boolean createIfNotExist) {
+		 FlexoProjectOntologyResource returned = (FlexoProjectOntologyResource) resourceForKey(ResourceType.PROJECT_ONTOLOGY,
+				 getProjectName());
+		 if (returned == null && createIfNotExist) {
+			 ProjectOntology.createNewProjectOntology(this);
+			 return getFlexoProjectOntologyResource();
+		 }
+		 return returned;
+	 }
+
+	 public ProjectOntology getProjectOntology() {
+		 return getProjectOntology(true);
+	 }
+
+	 public ProjectOntology getProjectOntology(boolean createIfNotExist) {
+		 if (getFlexoProjectOntologyResource(createIfNotExist) == null) {
+			 if (createIfNotExist) {
+				 ProjectOntology.createNewProjectOntology(this);
+			 } else {
+				 return null;
+			 }
+		 }
+		 return getFlexoProjectOntologyResource(createIfNotExist).getResourceData();
+	 }
+
+	 private ProjectOntologyLibrary ontologyLibrary = null;
+
+	 public ProjectOntologyLibrary getProjectOntologyLibrary() {
+		 return getProjectOntologyLibrary(true);
+	 }
+
+	 public ProjectOntologyLibrary getProjectOntologyLibrary(boolean createIfNotExist) {
+		 if (ontologyLibrary == null) {
+			 if (createIfNotExist) {
+				 logger.info("resource center: " + getResourceCenter());
+				 ontologyLibrary = new ProjectOntologyLibrary(getResourceCenter(), this);
+				 // ontologyLibrary.getFlexoConceptOntology().loadWhenUnloaded();
+				 // ontologyLibrary.init();
+			 } else {
+				 return null;
+			 }
+		 }
+		 return ontologyLibrary;
+	 }
+
+	 /*
+	  * private CalcLibrary calcLibrary = null;
+	  * 
+	  * public CalcLibrary getCalcLibrary() { return getCalcLibrary(true); }
+	  * 
+	  * public CalcLibrary getCalcLibrary(boolean createIfNotExist) { if (calcLibrary == null) { if (createIfNotExist) calcLibrary = new
+	  * CalcLibrary(getOntologyLibrary()); else return null; } return calcLibrary; }
+	  */
+
+	 public FlexoImportedProcessLibrary getImportedProcessLibrary() {
+		 if (getWorkflow() == null) {
+			 return null;
+		 }
+		 return getWorkflow().getImportedProcessLibrary();
+	 }
+
+	 public RoleList getImportedRoleList() {
+		 return getWorkflow().getImportedRoleList();
+	 }
+
+	 public FlexoLinksResource getFlexoLinksResource() {
+		 FlexoLinksResource returned = (FlexoLinksResource) resourceForKey(ResourceType.LINKS, getProjectName());
+		 if (returned == null) {
+			 FlexoLinks.createLinks(this);
+			 return getFlexoLinksResource();
+		 }
+		 return returned;
+	 }
+
+	 public FlexoLinks getFlexoLinks() {
+		 return getFlexoLinksResource().getResourceData();
+	 }
+
+	 public boolean getIsLocalized() {
+		 return getDKVModel().getLanguages().size() > 1;
+	 }
+
+	 private Hashtable<String, Hashtable<Long, EditionPatternInstance>> _editionPatternInstances;
+
+	 public EditionPatternInstance makeNewEditionPatternInstance(EditionPattern pattern) {
+		 EditionPatternInstance returned = new EditionPatternInstance(pattern, this);
+		 if (_editionPatternInstances == null) {
+			 _editionPatternInstances = new Hashtable<String, Hashtable<Long, EditionPatternInstance>>();
+		 }
+		 Hashtable<Long, EditionPatternInstance> hash = _editionPatternInstances.get(pattern.getName());
+		 if (hash == null) {
+			 hash = new Hashtable<Long, EditionPatternInstance>();
+			 _editionPatternInstances.put(pattern.getName(), hash);
+		 }
+		 hash.put(returned.getInstanceId(), returned);
+		 return returned;
+	 }
+
+	 public EditionPatternInstance getEditionPatternInstance(EditionPatternReference reference) {
+		 if (_editionPatternInstances == null) {
+			 _editionPatternInstances = new Hashtable<String, Hashtable<Long, EditionPatternInstance>>();
+		 }
+		 Hashtable<Long, EditionPatternInstance> hash = _editionPatternInstances.get(reference.getEditionPattern().getName());
+		 if (hash == null) {
+			 hash = new Hashtable<Long, EditionPatternInstance>();
+			 _editionPatternInstances.put(reference.getEditionPattern().getName(), hash);
+		 }
+		 EditionPatternInstance returned = hash.get(reference.getInstanceId());
+		 if (returned == null) {
+			 returned = new EditionPatternInstance(reference);
+			 hash.put(reference.getInstanceId(), returned);
+		 }
+		 return returned;
+	 }
+
+	 public FlexoObjectIDManager getObjectIDManager() {
+		 if (objectIDManager == null) {
+			 objectIDManager = new FlexoObjectIDManager(this);
+		 }
+		 return objectIDManager;
+	 }
+
+	 public FlexoResourceCenter getResourceCenter() {
+		 if (resourceCenter == null) {
+			 File file = getResourceCenterFile();
+			 resourceCenter = new LocalResourceCenterImplementation(file);
+		 }
+		 // logger.info("return resourceCenter " + resourceCenter + " for project " + Integer.toHexString(hashCode()));
+		 return resourceCenter;
+	 }
+
+	 public static File getResourceCenterFile() {
+		 String base = "FlexoResourceCenter";
+		 String attempt = base;
+		 File root = new File(System.getProperty("user.home"), "Library/Flexo/");
+		 if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
+			 String appData = System.getenv("APPDATA");
+			 if (appData != null) {
+				 File f = new File(appData);
+				 if (f.isDirectory() && f.canWrite()) {
+					 root = new File(f, "OpenFlexo");
+				 }
+			 }
+		 }
+		 File file = null;
+		 boolean ok = false;
+		 int i = 0;
+		 while (!ok && i < 100) {
+			 file = new File(root, attempt);
+			 if (!file.exists()) {
+				 ok = file.mkdirs();
+			 } else {
+				 ok = file.isDirectory() && file.canWrite();
+			 }
+			 i++;
+			 attempt = base + "-" + i;
+		 }
+		 i = 0;
+		 while (!ok && i < 1000) {
+			 try {
+				 file = File.createTempFile("FlexoResourceCenter", null);
+				 file.delete();
+				 file.mkdirs();
+				 ok = file.exists() && file.canWrite();
+				 i++;
+			 } catch (IOException e) {
+				 e.printStackTrace();
+			 }
+		 }
+		 if (!ok) {
+			 return null;
+		 }
+		 return file;
+	 }
+
+	 public void setResourceCenter(FlexoResourceCenter resourceCenter) {
+		 logger.info(">>>>>>>>>>>>>>>>> setResourceCenter " + resourceCenter + " for project " + Integer.toHexString(hashCode()));
+
+		 this.resourceCenter = resourceCenter;
+		 EditionPatternConverter editionPatternConverter = new EditionPatternConverter(resourceCenter);
+		 getStringEncoder()._addConverter(editionPatternConverter);
+	 }
+
+	 private Role testRole;
+
+	 public Role getTestRole() {
+		 return testRole;
+	 }
+
+	 public void setTestRole(Role testRole) {
+		 System.out.println("Test role: " + testRole);
+		 this.testRole = testRole;
+	 }
+
+	 public boolean isComputeDiff() {
+		 return computeDiff;
+	 }
+
+	 public void setComputeDiff(boolean computeDiff) {
+		 this.computeDiff = computeDiff;
+	 }
+
+	 /**
+	  * This method is called while deserializing EditionPatternReference instances Because this storage is distributed, we have to build
+	  * partial knowledge, as resources are being loaded.
+	  * 
+	  * @param conceptURI
+	  * @param actorReference
+	  */
+	 public void _addToPendingEditionPatternReferences(String conceptURI, ConceptActorReference actorReference) {
+		 System.out.println("OK, j'enregistre le concept " + conceptURI + " associe a la reference " + actorReference);
+		 logger.info("Registering as pending pattern object reference: " + conceptURI);
+		 Vector<ConceptActorReference> values = pendingEditionPatternReferences.get(conceptURI);
+		 if (values == null) {
+			 values = new Vector<ConceptActorReference>();
+			 pendingEditionPatternReferences.put(conceptURI, values);
+		 }
+		 values.add(actorReference);
+	 }
+
+	 private Hashtable<String, Vector<ConceptActorReference>> pendingEditionPatternReferences = new Hashtable<String, Vector<ConceptActorReference>>();
+
+	 public void _retrievePendingEditionPatternReferences(OntologyObject object) {
+		 Vector<ConceptActorReference> values = pendingEditionPatternReferences.get(object.getURI());
+		 if (values == null) {
+			 // No pending EditionPattern references for object
+			 return;
+		 } else {
+			 for (ConceptActorReference actorReference : values) {
+				 EditionPatternInstance instance = actorReference.getPatternReference().getEditionPatternInstance();
+				 PatternRole pr = actorReference.getPatternReference().getEditionPattern().getPatternRole(actorReference.patternRole);
+				 logger.info("Retrieve Edition Pattern Instance " + instance + " for " + object + " role=" + pr);
+				 object.registerEditionPatternReference(instance, pr);
+			 }
+			 values.clear();
+		 }
+	 }
 
 }
