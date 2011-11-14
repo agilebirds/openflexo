@@ -104,8 +104,9 @@ public abstract class ValidationModel extends FlexoListModel {
 		Vector<Validable> objectsToValidate = new Vector<Validable>();
 		for (Enumeration<? extends Validable> en = allEmbeddedValidableObjects.elements(); en.hasMoreElements();) {
 			Validable next = en.nextElement();
-			if (!objectsToValidate.contains(next))
+			if (!objectsToValidate.contains(next)) {
 				objectsToValidate.add(next);
+			}
 		}
 
 		// Compute validation steps and notify validation initialization
@@ -164,8 +165,9 @@ public abstract class ValidationModel extends FlexoListModel {
 		int addedIssues = 0;
 
 		ValidationRuleSet rules = getValidationRulesForObjectType(next.getClass());
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Validating " + next.getFullyQualifiedName() + " " + next.toString());
+		}
 
 		if (shouldNotifyValidationRules()) {
 			setChanged();
@@ -174,16 +176,18 @@ public abstract class ValidationModel extends FlexoListModel {
 
 		for (Enumeration<ValidationRule> en = rules.elements(); en.hasMoreElements();) {
 			ValidationRule rule = en.nextElement();
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Applying rule " + rule.getLocalizedName());
+			}
 
 			if (shouldNotifyValidationRules()) {
 				setChanged();
 				notifyObservers(new ValidationSecondaryProgressNotification(next, rule));
 			}
 
-			if (performRuleValidation(rule, next, report))
+			if (performRuleValidation(rule, next, report)) {
 				addedIssues++;
+			}
 		}
 
 		return addedIssues;
@@ -192,14 +196,16 @@ public abstract class ValidationModel extends FlexoListModel {
 	private <R extends ValidationRule<R, V>, V extends Validable> boolean performRuleValidation(R rule, V next, ValidationReport report) {
 		ValidationIssue<R, V> issue = rule.getIsEnabled() ? rule.applyValidation(next) : null;
 		if (issue != null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Adding issue " + issue);
+			}
 			issue.setCause(rule);
 			report.addToValidationIssues(issue);
 			if (fixAutomaticallyIfOneFixProposal()) {
 				if (issue instanceof ProblemIssue && ((ProblemIssue<R, V>) issue).getSize() == 1) {
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Fixing automatically...");
+					}
 					((ProblemIssue<R, V>) issue).getElementAt(0).apply(false);
 					report.addToValidationIssues(new InformationIssue<R, V>(next, FlexoLocalization.localizedForKey("fixed_automatically:")
 							+ " " + issue.getLocalizedMessage() + " : "
@@ -208,8 +214,9 @@ public abstract class ValidationModel extends FlexoListModel {
 					for (ValidationIssue<R, V> containedIssue : ((CompoundIssue<R, V>) issue).getContainedIssues()) {
 						if ((containedIssue instanceof ProblemIssue) && (containedIssue.getSize() == 1)) {
 							report.addToValidationIssues(containedIssue);
-							if (logger.isLoggable(Level.INFO))
+							if (logger.isLoggable(Level.INFO)) {
 								logger.info("Fixing automatically...");
+							}
 							((ProblemIssue<R, V>) containedIssue).getElementAt(0).apply(false);
 							report.addToValidationIssues(new InformationIssue<R, V>(containedIssue.getObject(), FlexoLocalization
 									.localizedForKey("fixed_automatically:")
@@ -297,8 +304,9 @@ public abstract class ValidationModel extends FlexoListModel {
 				}
 				current = current.getSuperclass();
 			}
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Could not find validation rules for type " + objectType.getName());
+			}
 			return new ValidationRuleSet(objectType);
 		}
 	}
@@ -307,8 +315,9 @@ public abstract class ValidationModel extends FlexoListModel {
 	 * Internally used to maintain association between classes and a related set of ValidationRule objects.
 	 */
 	private void recomputeInheritedRules(ValidationRuleFilter filter) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("BEGIN recomputeInheritedRules()");
+		}
 		for (Enumeration e1 = _rules.keys(); e1.hasMoreElements();) {
 			Class type1 = (Class) e1.nextElement();
 			Vector rulesForType = _rules.get(type1);
@@ -337,8 +346,9 @@ public abstract class ValidationModel extends FlexoListModel {
 				}
 			}
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("END recomputeInheritedRules()");
+		}
 		_keys = buildAllKeys();
 		Collections.sort(_keys, new ClassComparator());
 		recomputeInheritedRules = false;
@@ -363,8 +373,9 @@ public abstract class ValidationModel extends FlexoListModel {
 			while (st2.hasMoreTokens()) {
 				className2 = st2.nextToken();
 			}
-			if ((className1 != null) && (className2 != null))
+			if ((className1 != null) && (className2 != null)) {
 				return collator.compare(className1, className2);
+			}
 			return 0;
 		}
 

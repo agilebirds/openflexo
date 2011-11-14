@@ -29,15 +29,6 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 
 import org.openflexo.GeneralPreferences;
-import org.openflexo.icon.IconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.prefs.FlexoPreferences;
-import org.openflexo.swing.FlexoFileChooser;
-import org.openflexo.swing.ImagePreview;
-import org.openflexo.view.FlexoFrame;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.AskParametersDialog.ValidationCondition;
 import org.openflexo.foundation.FlexoException;
@@ -49,6 +40,14 @@ import org.openflexo.foundation.param.ParametersModel;
 import org.openflexo.foundation.param.RadioButtonListParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.foundation.rm.DuplicateResourceException;
+import org.openflexo.icon.IconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.prefs.FlexoPreferences;
+import org.openflexo.swing.FlexoFileChooser;
+import org.openflexo.swing.ImagePreview;
+import org.openflexo.view.FlexoFrame;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
 
 public class ImportImageInitializer extends ActionInitializer {
 
@@ -63,8 +62,9 @@ public class ImportImageInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<ImportImage>() {
 			@Override
 			public boolean run(ActionEvent e, ImportImage action) {
-				if (action.getFileToImport() != null)
+				if (action.getFileToImport() != null) {
 					return true;
+				}
 				JFileChooser chooser = FlexoFileChooser
 						.getFileChooser(GeneralPreferences.getLastImageDirectory() != null ? GeneralPreferences.getLastImageDirectory()
 								.getAbsolutePath() : null);
@@ -73,8 +73,9 @@ public class ImportImageInitializer extends ActionInitializer {
 				chooser.setFileFilter(new FileFilter() {
 					@Override
 					public boolean accept(File f) {
-						if (f.isDirectory())
+						if (f.isDirectory()) {
 							return true;
+						}
 						String ext = f.getName().toLowerCase();
 						return ext.endsWith(".gif") || ext.endsWith(".png") || ext.endsWith(".jpg");
 					}
@@ -131,10 +132,11 @@ public class ImportImageInitializer extends ActionInitializer {
 					if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 						ImportImage image = ImportImage.actionType.makeNewAction(action.getFocusedObject(), action.getGlobalSelection(),
 								getEditor());
-						if (rbl.getValue().equals(OVERWRITE))
+						if (rbl.getValue().equals(OVERWRITE)) {
 							image.setOverwrite(true);
-						else if (rbl.getValue().equals(RENAME))
+						} else if (rbl.getValue().equals(RENAME)) {
 							image.setImageName(newImageName.getValue());
+						}
 						image.setFileToImport(action.getFileToImport());
 						image.doAction();
 						if (image.hasActionExecutionSucceeded()) {

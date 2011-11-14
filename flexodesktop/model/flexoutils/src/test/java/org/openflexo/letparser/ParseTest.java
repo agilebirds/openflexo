@@ -19,10 +19,6 @@
  */
 package org.openflexo.letparser;
 
-import org.openflexo.letparser.ParseException;
-import org.openflexo.letparser.Parser;
-import org.openflexo.letparser.Token;
-
 import junit.framework.TestCase;
 
 public class ParseTest extends TestCase {

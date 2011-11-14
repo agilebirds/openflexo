@@ -88,8 +88,9 @@ public abstract class NodeType extends FlexoObject implements StringConvertable,
 		} else if (END.getName().equals(typeName)) {
 			return END;
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not find NodeType named " + typeName);
+			}
 			return null;
 		}
 	}

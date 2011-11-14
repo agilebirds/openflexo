@@ -27,12 +27,6 @@ import javax.swing.Icon;
 import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.icon.GeneratorIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.cgmodule.GeneratorPreferences;
 import org.openflexo.cgmodule.controller.GeneratorController;
 import org.openflexo.cgmodule.view.GeneratorMainPane;
@@ -43,6 +37,11 @@ import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.generator.action.DismissUnchangedGeneratedFiles;
 import org.openflexo.generator.action.GenerateSourceCode;
 import org.openflexo.generator.exception.GenerationException;
+import org.openflexo.icon.GeneratorIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class GenerateSourceCodeInitializer extends ActionInitializer {
 
@@ -100,9 +99,10 @@ public class GenerateSourceCodeInitializer extends ActionInitializer {
 				action.getProjectGenerator().flushLogs();
 				getControllerActionInitializer().getGeneratorController().disposeProgressWindow();
 
-				if (GeneratorPreferences.getAutomaticallyDismissUnchangedFiles())
+				if (GeneratorPreferences.getAutomaticallyDismissUnchangedFiles()) {
 					DismissUnchangedGeneratedFiles.actionType.makeNewAction(action.getFocusedObject(), action.getGlobalSelection(),
 							action.getEditor()).doAction();
+				}
 
 				return true;
 			}

@@ -46,14 +46,16 @@ public class OperatorLOOPGR extends OperatorGR<LOOPOperator> {
 	public OperatorLOOPGR(LOOPOperator operatorNode, ProcessRepresentation aDrawing, boolean isInPalet) {
 		super(operatorNode, aDrawing, isInPalet);
 		addToMouseClickControls(new LoopedPetriGraphOpener(), true);
-		if (getDrawable().hasExecutionPetriGraph())
+		if (getDrawable().hasExecutionPetriGraph()) {
 			getDrawable().getExecutionPetriGraph().addObserver(this);
+		}
 	}
 
 	@Override
 	public void delete() {
-		if (getDrawable().hasExecutionPetriGraph())
+		if (getDrawable().hasExecutionPetriGraph()) {
 			getDrawable().getExecutionPetriGraph().deleteObserver(this);
+		}
 		super.delete();
 	}
 
@@ -81,19 +83,22 @@ public class OperatorLOOPGR extends OperatorGR<LOOPOperator> {
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getDrawable()) {
-			if (dataModification instanceof PetriGraphHasBeenOpened || dataModification instanceof PetriGraphHasBeenClosed)
+			if (dataModification instanceof PetriGraphHasBeenOpened || dataModification instanceof PetriGraphHasBeenClosed) {
 				getDrawing().updateGraphicalObjectsHierarchy();
-			else if (dataModification instanceof PetriGraphSet)
-				if (getDrawable().hasExecutionPetriGraph())
+			} else if (dataModification instanceof PetriGraphSet) {
+				if (getDrawable().hasExecutionPetriGraph()) {
 					getDrawable().getExecutionPetriGraph().addObserver(this);
+				}
+			}
 		}
-		if (getDrawable().hasExecutionPetriGraph())
+		if (getDrawable().hasExecutionPetriGraph()) {
 			if (observable == getDrawable().getExecutionPetriGraph()) {
 				if (dataModification instanceof GroupInserted || dataModification instanceof GroupRemoved) {
 					getDrawing().invalidateGraphicalObjectsHierarchy(getDrawable().getProcess());
 					getDrawing().updateGraphicalObjectsHierarchy();
 				}
 			}
+		}
 		super.update(observable, dataModification);
 	}
 

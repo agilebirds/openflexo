@@ -39,8 +39,9 @@ public class DurationStaticBinding extends StaticBinding<Duration> {
 
 	public DurationStaticBinding(BindingDefinition bindingDefinition, FlexoModelObject owner, Duration aValue) {
 		super(bindingDefinition, owner);
-		if (aValue != null)
+		if (aValue != null) {
 			value = aValue.clone();
+		}
 	}
 
 	@Override
@@ -50,8 +51,9 @@ public class DurationStaticBinding extends StaticBinding<Duration> {
 
 	@Override
 	public String getStringRepresentation() {
-		if (value != null)
+		if (value != null) {
 			return "[" + value.getSerializationRepresentation() + "]";
+		}
 		return "[null]";
 	}
 

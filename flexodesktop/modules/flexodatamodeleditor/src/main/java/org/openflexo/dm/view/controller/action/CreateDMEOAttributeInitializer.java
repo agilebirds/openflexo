@@ -63,15 +63,17 @@ public class CreateDMEOAttributeInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, CreateDMEOAttribute action) {
 				if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getEntity().getDMEOModel()) {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Finalizer for CreateDMEOAttribute in DMEOModelView");
+					}
 					DMEOModelView dmEOModelView = (DMEOModelView) getControllerActionInitializer().getDMController()
 							.getCurrentEditedObjectView();
 					dmEOModelView.getEoEntityTable().selectObject(action.getEntity());
 					dmEOModelView.getEoAttributeTable().selectObject(action.getNewEOAttribute());
 				} else if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getEntity()) {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Finalizer for CreateDMEOAttribute in DMEOEntityView");
+					}
 					DMEOEntityView eoEntityView = (DMEOEntityView) getControllerActionInitializer().getDMController()
 							.getCurrentEditedObjectView();
 					eoEntityView.getEoAttributeTable().selectObject(action.getNewEOAttribute());

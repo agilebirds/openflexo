@@ -25,9 +25,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.toolbox.FileUtils;
-import org.openflexo.xmlcode.XMLMapping;
-
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoLinksResource;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -41,6 +38,8 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.xml.FlexoLinksBuilder;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.toolbox.FileUtils;
+import org.openflexo.xmlcode.XMLMapping;
 
 public class FlexoLinks extends FlexoModelObject implements XMLStorageResourceData {
 
@@ -59,9 +58,10 @@ public class FlexoLinks extends FlexoModelObject implements XMLStorageResourceDa
 			try {
 				linksRes = new FlexoLinksResource(project, links, linksModelFile);
 			} catch (InvalidFileNameException e1) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("Could not create Links resource. Name: " + linksModelFile.getRelativePath()
 							+ " is not valid. This should never happen.");
+				}
 				return null;
 			}
 		}
@@ -70,8 +70,9 @@ public class FlexoLinks extends FlexoModelObject implements XMLStorageResourceDa
 			project.registerResource(linksRes);
 		} catch (Exception e1) {
 			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
+			}
 			e1.printStackTrace();
 		}
 		return links;
@@ -115,8 +116,9 @@ public class FlexoLinks extends FlexoModelObject implements XMLStorageResourceDa
 
 	protected void updateReferencesForObject(FlexoModelObject object, FlexoLink link) {
 		Vector<FlexoLink> l = referencesToObjects.get(object);
-		if (l == null)
+		if (l == null) {
 			referencesToObjects.put(object, l = new Vector<FlexoLink>());
+		}
 		l.add(link);
 	}
 

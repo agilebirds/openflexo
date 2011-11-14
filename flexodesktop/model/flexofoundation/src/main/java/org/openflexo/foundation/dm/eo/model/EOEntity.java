@@ -33,7 +33,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.cayenne.wocompat.PropertyListSerialization;
-
 import org.openflexo.logging.FlexoLogger;
 
 /**
@@ -107,11 +106,13 @@ public class EOEntity extends EOObject {
 	public void setName(String name) throws IllegalStateException {
 		if (getModel() != null) {
 			EOEntity e = getModel()._entityNamedIgnoreCase(name);
-			if (e != null)
+			if (e != null) {
 				throw new IllegalStateException("duplicated entity '" + e.getName() + "'");
+			}
 			if ((getName() == null && name != null) || (getName() != null && !getName().equals(name))) {
-				if (getFile() != null && getFile().exists())
+				if (getFile() != null && getFile().exists()) {
 					getModel().addToFilesToDelete(getFile());
+				}
 				setFile(new File(getModel().getFile(), name + ".plist"));
 			}
 		}
@@ -123,11 +124,12 @@ public class EOEntity extends EOObject {
 		Iterator<EOAttribute> i = attributes.iterator();
 		while (i.hasNext()) {
 			EOAttribute a = i.next();
-			if (a.getName() != null && !v.contains(a.getName()))
+			if (a.getName() != null && !v.contains(a.getName())) {
 				v.add(a.getName());
-			else {
-				if (logger.isLoggable(Level.WARNING))
+			} else {
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Removed attribute: " + a);
+				}
 				i.remove();
 			}
 		}
@@ -167,16 +169,18 @@ public class EOEntity extends EOObject {
 			Iterator<EOAttribute> i = getAttributes().iterator();
 			while (i.hasNext()) {
 				EOAttribute a = i.next();
-				if (parentEntity.propertyNamed(a.getName()) != null)
+				if (parentEntity.propertyNamed(a.getName()) != null) {
 					throw new IllegalArgumentException("Property " + a.getName() + " is defined in both entities " + getName() + " and "
 							+ parentEntity.getName());
+				}
 			}
 			Iterator<EORelationship> j = getRelationships().iterator();
 			while (i.hasNext()) {
 				EORelationship r = j.next();
-				if (parentEntity.propertyNamed(r.getName()) != null)
+				if (parentEntity.propertyNamed(r.getName()) != null) {
 					throw new IllegalArgumentException("Property " + r.getName() + " is defined in both entities " + getName() + " and "
 							+ parentEntity.getName());
+				}
 			}
 		}
 		this.parentEntity = parentEntity;
@@ -199,11 +203,12 @@ public class EOEntity extends EOObject {
 		Iterator<EORelationship> i = relationships.iterator();
 		while (i.hasNext()) {
 			EORelationship r = i.next();
-			if (r.getName() != null && !v.contains(r.getName()))
+			if (r.getName() != null && !v.contains(r.getName())) {
 				v.add(r.getName());
-			else {
-				if (logger.isLoggable(Level.WARNING))
+			} else {
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Removed relationships: " + r);
+				}
 				i.remove();
 			}
 		}
@@ -219,10 +224,12 @@ public class EOEntity extends EOObject {
 	}
 
 	public void addAttribute(EOAttribute attribute) throws IllegalArgumentException {
-		if (attributes.contains(attribute))
+		if (attributes.contains(attribute)) {
 			throw new IllegalArgumentException("Attribute " + attribute.getName() + " is already in entity " + getName());
-		if (propertyNamed(attribute.getName()) != null)
+		}
+		if (propertyNamed(attribute.getName()) != null) {
 			throw new IllegalArgumentException("An other attribute named " + attribute.getName() + " already exists in entity " + getName());
+		}
 		attributes.add(attribute);
 		classProperties.add(attribute);
 		attribute.setEntity(this);
@@ -241,10 +248,12 @@ public class EOEntity extends EOObject {
 	}
 
 	public void addRelationship(EORelationship rel) throws IllegalArgumentException {
-		if (relationships.contains(rel))
+		if (relationships.contains(rel)) {
 			throw new IllegalArgumentException("Relationship " + rel.getName() + " is already in entity " + getName());
-		if (propertyNamed(rel.getName()) != null)
+		}
+		if (propertyNamed(rel.getName()) != null) {
 			throw new IllegalArgumentException("An other relationship named " + rel.getName() + " already exists in entity " + getName());
+		}
 		relationships.add(rel);
 		classProperties.add(rel);
 		rel.setEntity(this);
@@ -261,8 +270,9 @@ public class EOEntity extends EOObject {
 	}
 
 	public EOAttribute attributeNamed(String name) {
-		if (name == null)
+		if (name == null) {
 			return null;
+		}
 		Iterator<EOAttribute> i = attributes.iterator();
 		while (i.hasNext()) {
 			EOAttribute a = i.next();
@@ -282,8 +292,9 @@ public class EOEntity extends EOObject {
 	 * @return the first attribute found that has the same name (ignoring case) than <code>name</code>
 	 */
 	public EOAttribute attributeNamedIgnoreCase(String name) {
-		if (name == null)
+		if (name == null) {
 			return null;
+		}
 		Iterator<EOAttribute> i = attributes.iterator();
 		while (i.hasNext()) {
 			EOAttribute a = i.next();
@@ -295,8 +306,9 @@ public class EOEntity extends EOObject {
 	}
 
 	public EORelationship relationshipNamed(String name) {
-		if (name == null)
+		if (name == null) {
 			return null;
+		}
 		Iterator<EORelationship> i = relationships.iterator();
 		while (i.hasNext()) {
 			EORelationship a = i.next();
@@ -316,8 +328,9 @@ public class EOEntity extends EOObject {
 	 * @return the first relationship found that has the same name (ignoring case) than <code>name</code>
 	 */
 	public EORelationship relationshipNamedIgnoreCase(String name) {
-		if (name == null)
+		if (name == null) {
 			return null;
+		}
 		Iterator<EORelationship> i = relationships.iterator();
 		while (i.hasNext()) {
 			EORelationship a = i.next();
@@ -331,8 +344,9 @@ public class EOEntity extends EOObject {
 	public EOProperty propertyNamed(String name) {
 		EOProperty retval = null;
 		retval = attributeNamed(name);
-		if (retval == null)
+		if (retval == null) {
 			retval = relationshipNamed(name);
+		}
 		return retval;
 	}
 
@@ -348,8 +362,9 @@ public class EOEntity extends EOObject {
 	public EOProperty propertyNamedIgnoreCase(String name) {
 		EOProperty retval = null;
 		retval = attributeNamedIgnoreCase(name);
-		if (retval == null)
+		if (retval == null) {
 			retval = relationshipNamedIgnoreCase(name);
+		}
 		return retval;
 	}
 
@@ -373,8 +388,9 @@ public class EOEntity extends EOObject {
 					attributes.add(att);
 				} catch (RuntimeException e) {
 					e.printStackTrace();
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Removing this attribute from original map: " + attributeMap);
+					}
 					i.remove();
 				}
 			}
@@ -400,10 +416,11 @@ public class EOEntity extends EOObject {
 				String classProperty = i.next();
 				EOProperty p = null;
 				p = entity.propertyNamed(classProperty);
-				if (p != null)
+				if (p != null) {
 					classProperties.add(p);
-				else if (logger.isLoggable(Level.WARNING))
+				} else if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not find class property named " + classProperty + " in entity named " + entity.getName());
+				}
 			}
 			entity.setClassProperties(classProperties);
 		}
@@ -415,11 +432,12 @@ public class EOEntity extends EOObject {
 			while (i.hasNext()) {
 				String attribute = i.next();
 				EOAttribute a = entity.attributeNamed(attribute);
-				if (a != null)
+				if (a != null) {
 					primaryKeyAttributes.add(a);
-				else {
-					if (logger.isLoggable(Level.WARNING))
+				} else {
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Could not find primary key named " + attribute + " in entity named " + entity.getName());
+					}
 				}
 			}
 			Collections.sort(primaryKeyAttributes, new Comparator<EOAttribute>() {
@@ -440,12 +458,13 @@ public class EOEntity extends EOObject {
 			while (i.hasNext()) {
 				String attribute = i.next();
 				EOAttribute a = entity.attributeNamed(attribute);
-				if (a != null)
+				if (a != null) {
 					attributesUsedForLocking.add(a);
-				else {
-					if (logger.isLoggable(Level.WARNING))
+				} else {
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Could not find attribute used for locking named " + attribute + " in entity named "
 								+ entity.getName());
+					}
 				}
 			}
 			entity.setAttributesUsedForLocking(attributesUsedForLocking);
@@ -492,8 +511,9 @@ public class EOEntity extends EOObject {
 				this.parentEntity = p;
 			} else {
 				getModel().addToMissingEntities(parent);
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not find parent entity named " + parent + " for entity " + getName());
+				}
 			}
 		}
 	}
@@ -507,10 +527,11 @@ public class EOEntity extends EOObject {
 	}
 
 	public void addToIncomingRelationships(EORelationship relationship) {
-		if (!incomingRelationships.contains(relationship))
+		if (!incomingRelationships.contains(relationship)) {
 			incomingRelationships.add(relationship);
-		else if (logger.isLoggable(Level.WARNING))
+		} else if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Attempt to add twice the same relationship to incoming relationships of entity " + getName());
+		}
 	}
 
 	public void removeFromIncomingRelationships(EORelationship relationship) {
@@ -520,24 +541,28 @@ public class EOEntity extends EOObject {
 	public Map<Object, Object> getMapRepresentation() {
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		// Updating attributes
-		if (getName() != null)
+		if (getName() != null) {
 			map.put(NAME_KEY, getName());
-		else
+		} else {
 			map.remove(NAME_KEY);
-		if (getClassName() != null)
+		}
+		if (getClassName() != null) {
 			map.put(CLASS_NAME_KEY, getClassName());
-		else
+		} else {
 			map.remove(CLASS_NAME_KEY);
-		if (getExternalName() != null)
+		}
+		if (getExternalName() != null) {
 			map.put(EXTERNAL_NAME_KEY, getExternalName());
-		else
+		} else {
 			map.remove(EXTERNAL_NAME_KEY);
+		}
 
 		// Updating parent
-		if (getParentEntity() != null)
+		if (getParentEntity() != null) {
 			map.put(PARENT_KEY, getParentEntity().getName());
-		else
+		} else {
 			map.remove(PARENT_KEY);
+		}
 
 		// Updating attributes
 		List<Map<Object, Object>> aList = new Vector<Map<Object, Object>>();
@@ -606,24 +631,28 @@ public class EOEntity extends EOObject {
 	public void writeToFile(File file) throws IOException {
 		Map<Object, Object> map = getOriginalMap();
 		// Updating attributes
-		if (getName() != null)
+		if (getName() != null) {
 			map.put(NAME_KEY, getName());
-		else
+		} else {
 			map.remove(NAME_KEY);
-		if (getClassName() != null)
+		}
+		if (getClassName() != null) {
 			map.put(CLASS_NAME_KEY, getClassName());
-		else
+		} else {
 			map.remove(CLASS_NAME_KEY);
-		if (getExternalName() != null)
+		}
+		if (getExternalName() != null) {
 			map.put(EXTERNAL_NAME_KEY, getExternalName());
-		else
+		} else {
 			map.remove(EXTERNAL_NAME_KEY);
+		}
 
 		// Updating parent
-		if (getParentEntity() != null)
+		if (getParentEntity() != null) {
 			map.put(PARENT_KEY, getParentEntity().getName());
-		else
+		} else {
 			map.remove(PARENT_KEY);
+		}
 
 		// Updating attributes
 		List<Map<Object, Object>> aList = new Vector<Map<Object, Object>>();
@@ -711,8 +740,9 @@ public class EOEntity extends EOObject {
 			r.setDestinationEntity(null);
 		}
 		if (model != null) {
-			if (getFile() != null)
+			if (getFile() != null) {
 				model.addToFilesToDelete(getFile());
+			}
 			model.removeEntity(this);
 		}
 	}
@@ -728,16 +758,18 @@ public class EOEntity extends EOObject {
 	@SuppressWarnings("unchecked")
 	public List<Map<Object, Object>> getAttributesList() {
 		Map<Object, Object> map = getOriginalMap();
-		if (map.get(ATTRIBUTES_KEY) == null)
+		if (map.get(ATTRIBUTES_KEY) == null) {
 			map.put(ATTRIBUTES_KEY, new Vector<Map<Object, Object>>());
+		}
 		return (List<Map<Object, Object>>) map.get(ATTRIBUTES_KEY);
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Map<Object, Object>> getRelationshipsList() {
 		Map<Object, Object> map = getOriginalMap();
-		if (map.get(RELATIONSHIPS_KEY) == null)
+		if (map.get(RELATIONSHIPS_KEY) == null) {
 			map.put(RELATIONSHIPS_KEY, new Vector<Map<Object, Object>>());
+		}
 		return (List<Map<Object, Object>>) map.get(RELATIONSHIPS_KEY);
 	}
 
@@ -771,8 +803,9 @@ public class EOEntity extends EOObject {
 			removeAttribute((EOAttribute) property);
 		} else if (property instanceof EORelationship) {
 			removeRelationship((EORelationship) property);
-		} else if (logger.isLoggable(Level.SEVERE))
+		} else if (logger.isLoggable(Level.SEVERE)) {
 			logger.severe("Trying to remove unknown type of EOProperty!!!");
+		}
 	}
 
 	public Vector<EORelationship> getIncomingRelationships() {

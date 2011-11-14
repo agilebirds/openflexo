@@ -27,16 +27,16 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
+import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.TypeUtils;
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBAttributeNotification;
 import org.openflexo.fib.model.FIBBrowserAction;
-import org.openflexo.fib.model.FIBTableAction;
 import org.openflexo.fib.model.FIBBrowserAction.FIBAddAction;
 import org.openflexo.fib.model.FIBBrowserAction.FIBCustomAction;
 import org.openflexo.fib.model.FIBBrowserAction.FIBRemoveAction;
+import org.openflexo.fib.model.FIBTableAction;
 
 public class FIBBrowserActionListener implements ActionListener, BindingEvaluationContext, Observer {
 
@@ -104,10 +104,12 @@ public class FIBBrowserActionListener implements ActionListener, BindingEvaluati
 		if (browserAction.getIsAvailable() != null && browserAction.getIsAvailable().isValid()) {
 			this.selectedObject = selectedObject;
 			Object returned = browserAction.getIsAvailable().getBindingValue(this);
-			if (returned == null)
+			if (returned == null) {
 				return false;
-			if (TypeUtils.isBoolean(returned.getClass()))
+			}
+			if (TypeUtils.isBoolean(returned.getClass())) {
 				return (Boolean) returned;
+			}
 		}
 		return true;
 	}
@@ -154,10 +156,11 @@ public class FIBBrowserActionListener implements ActionListener, BindingEvaluati
 
 	@Override
 	public Object getValue(BindingVariable variable) {
-		if (variable.getVariableName().equals("selected"))
+		if (variable.getVariableName().equals("selected")) {
 			return selectedObject;
-		else
+		} else {
 			return getController().getValue(variable);
+		}
 	}
 
 }

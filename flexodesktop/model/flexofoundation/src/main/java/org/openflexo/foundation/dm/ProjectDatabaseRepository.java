@@ -86,10 +86,11 @@ public class ProjectDatabaseRepository extends DMEORepository {
 	 */
 	@Override
 	public String getInspectorName() {
-		if (isReadOnly())
+		if (isReadOnly()) {
 			return Inspectors.DM.DM_RO_EO_REPOSITORY_INSPECTOR;
-		else
+		} else {
 			return Inspectors.DM.DM_EO_REPOSITORY_INSPECTOR;
+		}
 	}
 
 	@Override

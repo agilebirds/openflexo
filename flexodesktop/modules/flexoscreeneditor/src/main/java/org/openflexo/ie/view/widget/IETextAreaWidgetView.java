@@ -224,22 +224,25 @@ public class IETextAreaWidgetView extends AbstractInnerTableWidgetView<IETextAre
 				}
 
 			} else if (modif.propertyName().equals("value")) {
-				if (getTextAreaModel().getBindingValue() == null)
+				if (getTextAreaModel().getBindingValue() == null) {
 					_jTextArea.setText(getTextAreaModel().getValue());
+				}
 			} else if (modif.propertyName().equals("rows")) {
 				resizeMySelf();
 			}
 		}
 		if (modif instanceof WidgetRemovedFromTable && arg0 == getModel()) {
 			delete();
-		} else
+		} else {
 			super.update(arg0, modif);
+		}
 	}
 
 	public void resizeMySelf() {
 		_jTextArea.setRows(getTextAreaModel().getRows());
-		if (labelEditing && _jLabelTextArea != null)
+		if (labelEditing && _jLabelTextArea != null) {
 			_jLabelTextArea.setRows(_jTextArea.getRows());
+		}
 		doLayout();
 		repaint();
 		scrollPane.doLayout();
@@ -267,8 +270,9 @@ public class IETextAreaWidgetView extends AbstractInnerTableWidgetView<IETextAre
 	public Dimension getPreferredSize() {
 		if (getHoldsNextComputedPreferredSize()) {
 			Dimension storedSize = storedPrefSize();
-			if (storedSize != null)
+			if (storedSize != null) {
 				return storedSize;
+			}
 		}
 		IESequenceWidgetWidgetView parentSequenceView = null;
 		if (getParent() instanceof IESequenceWidgetWidgetView) {
@@ -279,8 +283,9 @@ public class IETextAreaWidgetView extends AbstractInnerTableWidgetView<IETextAre
 			int width = parentSequenceView.getAvailableWidth();
 			d.width = width;
 		}
-		if (getHoldsNextComputedPreferredSize())
+		if (getHoldsNextComputedPreferredSize()) {
 			storePrefSize(d);
+		}
 		return d;
 	}
 
@@ -290,8 +295,9 @@ public class IETextAreaWidgetView extends AbstractInnerTableWidgetView<IETextAre
 	private void addDoubleClickListener() {
 		MouseListener[] ml = _jTextArea.getMouseListeners();
 		for (int i = 0; i < ml.length; i++) {
-			if (ml[i] == mouseListener)
+			if (ml[i] == mouseListener) {
 				return;
+			}
 		}
 		_jTextArea.addMouseListener(mouseListener);
 	}
@@ -304,8 +310,9 @@ public class IETextAreaWidgetView extends AbstractInnerTableWidgetView<IETextAre
 	}
 
 	public void editValue() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Edit ie textarea");
+		}
 		labelEditing = true;
 		_jLabelTextArea = new JTextArea(getTextAreaModel().getValue());
 		labelScrollPane = new TextAreaPane(_jLabelTextArea);
@@ -341,12 +348,14 @@ public class IETextAreaWidgetView extends AbstractInnerTableWidgetView<IETextAre
 		_jLabelTextArea.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				if (logger.isLoggable(Level.FINEST))
+				if (logger.isLoggable(Level.FINEST)) {
 					logger.finest("Focus lost" + arg0.getOppositeComponent() + " and this=" + IETextAreaWidgetView.this);
-				if (arg0.getOppositeComponent() != IETextAreaWidgetView.this)
+				}
+				if (arg0.getOppositeComponent() != IETextAreaWidgetView.this) {
 					finalizeEditValue();
-				else
+				} else {
 					_jLabelTextArea.grabFocus();
+				}
 			}
 		});
 		remove(scrollPane);
@@ -358,8 +367,9 @@ public class IETextAreaWidgetView extends AbstractInnerTableWidgetView<IETextAre
 	}
 
 	public void finalizeEditValue() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Finalize edit ie textarea");
+		}
 		if (labelEditing) {
 			getTextAreaModel().setValue(_jLabelTextArea.getText());
 			labelEditing = false;

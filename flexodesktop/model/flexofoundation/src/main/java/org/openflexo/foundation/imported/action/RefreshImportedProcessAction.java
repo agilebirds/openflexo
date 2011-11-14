@@ -100,8 +100,9 @@ public class RefreshImportedProcessAction extends
 		try {
 			updatedProcesses = getWebService().refreshProcesses(getLogin(), getMd5Password(), uris);
 		} catch (RemoteException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.log(Level.WARNING, "Remote exception: " + e.getMessage(), e);
+			}
 			throw new FlexoRemoteException(null, e);
 		}
 		if (updatedProcesses != null) {
@@ -114,17 +115,19 @@ public class RefreshImportedProcessAction extends
 
 			for (FlexoProcess process : visitor.getProcessToDelete()) {
 				if (visitor.getProcessToKeep().contains(process)) {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Visitor reported process " + process.getName() + " to be kept and deleted! Keeping it.");
+					}
 					continue;
 				}
 				if (process.isTopLevelProcess()) {
 					process.markAsDeletedOnServer();
 				} else {
-					if (visitor.getProcessToDelete().contains(process.getParentProcess()))
+					if (visitor.getProcessToDelete().contains(process.getParentProcess())) {
 						continue;
-					else
+					} else {
 						process.delete();
+					}
 				}
 			}
 		}
@@ -136,8 +139,9 @@ public class RefreshImportedProcessAction extends
 	}
 
 	public String getReport() {
-		if (visitor != null)
+		if (visitor != null) {
 			return visitor.getReport();
+		}
 		return FlexoLocalization.localizedForKey("refresh_has_not_been_performed");
 	}
 
@@ -166,8 +170,9 @@ public class RefreshImportedProcessAction extends
 			case DELETED:
 				if (delta.getFiProcess().isTopLevelProcess()) {
 					if (!delta.getFiProcess().isDeletedOnServer()) {
-						if (report.length() > 0)
+						if (report.length() > 0) {
 							report.append("\n");
+						}
 						report.append(FlexoLocalization.localizedForKey("the_process")).append(" ").append(delta.getFiProcess().getName())
 								.append(" ").append(FlexoLocalization.localizedForKey("has_been_removed_from_server"));
 					}
@@ -177,8 +182,9 @@ public class RefreshImportedProcessAction extends
 			case UPDATED:
 				FlexoProcess fip = lib.getRecursivelyImportedProcessWithURI(process.getUri());
 				if (fip.isTopLevelProcess()) {
-					if (report.length() > 0)
+					if (report.length() > 0) {
 						report.append("\n");
+					}
 					report.append(FlexoLocalization.localizedForKey("the_process")).append(" ").append(fip.getName()).append(" ")
 							.append(FlexoLocalization.localizedForKey("has_been_updated"));
 					FlexoProcessImageBuilder.startBackgroundDownloadOfSnapshots(delta.getFiProcess(), getWebService(), getLogin(),
@@ -200,20 +206,23 @@ public class RefreshImportedProcessAction extends
 					v.add(delta.getPPMProcess());
 					importProcesses.setProcessesToImport(v);
 					importProcesses.doAction();
-					if (importProcesses.getImportReport().getProperlyImported().size() == 1)
+					if (importProcesses.getImportReport().getProperlyImported().size() == 1) {
 						addToProcessToKeep(importProcesses.getImportReport().getProperlyImported().get(delta.getPPMProcess()));
+					}
 				} else {
 					// We create the new sub-process
 					try {
 						addToProcessToKeep(FlexoProcess.createImportedProcessFromProcess(lib, delta.getPPMProcess()));
 					} catch (InvalidFileNameException e) {
-						if (logger.isLoggable(Level.SEVERE))
+						if (logger.isLoggable(Level.SEVERE)) {
 							logger.severe("Invalid file name thrown for process " + delta.getPPMProcess().getName() + ": " + e.getMessage());
+						}
 						e.printStackTrace();
 					} catch (DuplicateResourceException e) {
-						if (logger.isLoggable(Level.SEVERE))
+						if (logger.isLoggable(Level.SEVERE)) {
 							logger.severe("DuplicateResourceException file name thrown for process " + delta.getPPMProcess().getName()
 									+ ": " + e.getMessage());
+						}
 						e.printStackTrace();
 					}
 				}
@@ -227,8 +236,9 @@ public class RefreshImportedProcessAction extends
 		 * @param newFIP
 		 */
 		private void addToProcessToKeep(FlexoProcess newFIP) {
-			if (processToDelete.contains(newFIP))
+			if (processToDelete.contains(newFIP)) {
 				processToDelete.remove(newFIP);
+			}
 			processToKeep.add(newFIP);
 		}
 
@@ -236,8 +246,9 @@ public class RefreshImportedProcessAction extends
 		 * @param delta
 		 */
 		private void addToProcessToDelete(FlexoProcess process) {
-			if (processToKeep.contains(process))
+			if (processToKeep.contains(process)) {
 				return;
+			}
 			processToDelete.add(process);
 		}
 

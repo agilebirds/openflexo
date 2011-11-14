@@ -64,13 +64,15 @@ public class ComponentLatexFileResource<T extends ComponentDefinition> extends L
 	@Override
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
-		if (getComponentDefinition() != null)
+		if (getComponentDefinition() != null) {
 			addToDependantResources(getComponentDefinition().getComponentResource());
+		}
 	}
 
 	public ComponentDefinition getComponentDefinition() {
-		if (getGenerator() != null)
+		if (getGenerator() != null) {
 			return getGenerator().getObject();
+		}
 		return null;
 	}
 
@@ -80,8 +82,9 @@ public class ComponentLatexFileResource<T extends ComponentDefinition> extends L
 
 	@Override
 	public String getName() {
-		if (getCGFile() == null || getCGFile().getRepository() == null || getComponentDefinition() == null)
+		if (getCGFile() == null || getCGFile().getRepository() == null || getComponentDefinition() == null) {
 			return super.getName();
+		}
 		registerObserverWhenRequired();
 		if (super.getName() == null /*||  !super.getName().equals(nameForRepositoryAndComponent(getCGFile().getRepository(), getComponentDefinition()))*/) {
 			setName(nameForRepositoryAndComponent(getCGFile().getRepository(), getComponentDefinition()));
@@ -92,22 +95,24 @@ public class ComponentLatexFileResource<T extends ComponentDefinition> extends L
 	public void registerObserverWhenRequired() {
 		if ((!isObserverRegistered) && (getComponentDefinition() != null)) {
 			isObserverRegistered = true;
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getProject());
+			}
 			getComponentDefinition().addObserver(this);
 			getComponentDefinition().getWOComponent().addObserver(this);
 		}
 	}
 
 	public static String nameForRepositoryAndComponent(GenerationRepository repository, ComponentDefinition cd) {
-		if (cd instanceof OperationComponentDefinition)
+		if (cd instanceof OperationComponentDefinition) {
 			return repository.getName() + ".PAGE_LATEX." + cd.getName();
-		else if (cd instanceof PopupComponentDefinition)
+		} else if (cd instanceof PopupComponentDefinition) {
 			return repository.getName() + ".POPUP_LATEX." + cd.getName();
-		else if (cd instanceof PopupComponentDefinition)
+		} else if (cd instanceof PopupComponentDefinition) {
 			return repository.getName() + ".TAB_LATEX." + cd.getName();
-		else
+		} else {
 			return repository.getName() + ".COMPONENT_LATEX." + cd.getName();
+		}
 	}
 
 	/**
@@ -121,8 +126,9 @@ public class ComponentLatexFileResource<T extends ComponentDefinition> extends L
 			FlexoDMResource dmRes = (FlexoDMResource) resource;
 			if (dmRes.isLoaded() && getComponentDefinition() != null && getComponentDefinition().getComponentDMEntity() != null) {
 				if (!requestDate.before(getComponentDefinition().getComponentDMEntity().getLastUpdate())) {
-					if (logger.isLoggable(Level.FINER))
+					if (logger.isLoggable(Level.FINER)) {
 						logger.finer("OPTIMIST DEPENDANCY CHECKING for JAVA COMPONENT " + getComponentDefinition().getName());
+					}
 					return false;
 				}
 			}

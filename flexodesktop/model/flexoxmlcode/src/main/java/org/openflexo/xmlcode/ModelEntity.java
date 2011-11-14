@@ -344,8 +344,9 @@ public class ModelEntity {
 		} catch (NoSuchMethodException e) {
 			// Ignore for now
 		}
-		if (constructorWithoutParameter == null && builderClass.getSuperclass() != null)
+		if (constructorWithoutParameter == null && builderClass.getSuperclass() != null) {
 			findConstructorWithParameter(builderClass.getSuperclass());
+		}
 	}
 
 	private Vector<String> _availableContexts = null;
@@ -371,8 +372,9 @@ public class ModelEntity {
 			Vector inheritedContexts = parent.getAvailableContexts();
 			for (Enumeration en = inheritedContexts.elements(); en.hasMoreElements();) {
 				String next = (String) en.nextElement();
-				if (!_availableContexts.contains(next))
+				if (!_availableContexts.contains(next)) {
 					_availableContexts.add(next);
+				}
 			}
 		}
 	}
@@ -450,8 +452,9 @@ public class ModelEntity {
 	 * @return a <code>String[]</code> value
 	 */
 	public String[] getXmlTags() {
-		if (definedXMLTags == null)
+		if (definedXMLTags == null) {
 			return null;
+		}
 		if (derivedXMLTags == null) {
 			if (getAvailableContexts().size() == 0) {
 				derivedXMLTags = definedXMLTags;
@@ -480,10 +483,12 @@ public class ModelEntity {
 	 */
 	public String[] getXmlTags(String context) {
 		if ((getAvailableContexts().contains(context)) || (context == null)) {
-			if (definedXMLTags == null)
+			if (definedXMLTags == null) {
 				return null;
-			if (context == null)
+			}
+			if (context == null) {
 				context = "";
+			}
 			if (_xmlTagsForContext.get(context) == null) {
 				String[] tags = new String[definedXMLTags.length];
 				for (int i = 0; i < definedXMLTags.length; i++) {
@@ -591,8 +596,9 @@ public class ModelEntity {
 				ModelProperty item = null;
 				while (en.hasMoreElements()) {
 					item = en.nextElement();
-					if (item.getIsAttribute())
+					if (item.getIsAttribute()) {
 						continue;
+					}
 					String[] tags = item.getXmlTags();
 					Vector<String> v = new Vector<String>();
 					for (int i = 0; i < tags.length; i++) {
@@ -809,8 +815,9 @@ public class ModelEntity {
 	public Vector<ModelEntity> getAllChildrenEntities() {
 		Vector<ModelEntity> children = new Vector<ModelEntity>();
 		for (ModelEntity e : getModel().modelEntitiesStoredByClassName.values()) {
-			if (e.getParentEntity() == this)
+			if (e.getParentEntity() == this) {
 				children.add(e);
+			}
 		}
 		return children;
 	}
@@ -873,21 +880,25 @@ public class ModelEntity {
 	}
 
 	public boolean implementsGenericTypingKVProperty() {
-		if (genericTypingKVProperty != null)
+		if (genericTypingKVProperty != null) {
 			return true;
+		}
 		if (getParentEntity() != null) {
 			return getParentEntity().implementsGenericTypingKVProperty();
-		} else
+		} else {
 			return false;
+		}
 	}
 
 	public SingleKeyValueProperty getGenericTypingKVProperty() {
-		if (genericTypingKVProperty != null)
+		if (genericTypingKVProperty != null) {
 			return genericTypingKVProperty;
+		}
 		if (getParentEntity() != null) {
 			return getParentEntity().getGenericTypingKVProperty();
-		} else
+		} else {
 			return null;
+		}
 	}
 
 }

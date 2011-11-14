@@ -183,19 +183,23 @@ public class AttributesChange {
 
 	public static boolean elementIsInOneOfThoseTree(Element sourceElement, Vector<Content> removedElements) {
 		Element e = sourceElement;
-		if (removedElements.contains(e))
+		if (removedElements.contains(e)) {
 			return true;
-		if (e.getParentElement() == null)
+		}
+		if (e.getParentElement() == null) {
 			return false;
+		}
 		return elementIsInOneOfThoseTree(e.getParentElement(), removedElements);
 	}
 
 	public static Element getCauseOfConflict(Element sourceElement, Vector<Content> removedElements) {
 		Element e = sourceElement;
-		if (removedElements.contains(e))
+		if (removedElements.contains(e)) {
 			return e;
-		if (e.getParentElement() == null)
+		}
+		if (e.getParentElement() == null) {
 			return null;
+		}
 		return getCauseOfConflict(e.getParentElement(), removedElements);
 	}
 
@@ -360,20 +364,25 @@ public class AttributesChange {
 	private MergeAttributeAction tryAutoResolvingTheUpdateConflict(UnresolvedAttributesConflict conflict) {
 		MergeAttributeRule rule = null;
 		rule = new NewestDate(conflict);
-		if (rule.canBeApplyed())
+		if (rule.canBeApplyed()) {
 			return rule.getAction();
+		}
 		rule = new OldestDate(conflict);
-		if (rule.canBeApplyed())
+		if (rule.canBeApplyed()) {
 			return rule.getAction();
+		}
 		rule = new AveragePosition(conflict);
-		if (rule.canBeApplyed())
+		if (rule.canBeApplyed()) {
 			return rule.getAction();
+		}
 		rule = new AverageLocation(conflict);
-		if (rule.canBeApplyed())
+		if (rule.canBeApplyed()) {
 			return rule.getAction();
+		}
 		rule = new MaxValue(conflict);
-		if (rule.canBeApplyed())
+		if (rule.canBeApplyed()) {
 			return rule.getAction();
+		}
 		return null;
 	}
 

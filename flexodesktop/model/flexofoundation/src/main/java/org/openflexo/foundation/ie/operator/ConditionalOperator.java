@@ -22,9 +22,9 @@ package org.openflexo.foundation.ie.operator;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.bindings.AbstractBinding;
+import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.bindings.BooleanStaticBinding;
 import org.openflexo.foundation.bindings.WidgetBindingDefinition;
-import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.util.ListType;
 import org.openflexo.foundation.ie.widget.IESequence;
@@ -82,8 +82,9 @@ public class ConditionalOperator extends IEOperator {
 	}
 
 	public AbstractBinding getBindingConditional() {
-		if (isBeingCloned())
+		if (isBeingCloned()) {
 			return null;
+		}
 		return _bindingConditional;
 	}
 

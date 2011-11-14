@@ -23,8 +23,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.xmlcode.XMLMapping;
-
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.ObjectDeleted;
@@ -33,6 +31,7 @@ import org.openflexo.foundation.ie.widget.IEHTMLTableWidget;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.xmlcode.XMLMapping;
 
 public class DummyComponentInstance extends ComponentInstance {
 
@@ -54,10 +53,12 @@ public class DummyComponentInstance extends ComponentInstance {
 
 	@Override
 	public FlexoProject getProject() {
-		if (getComponentDefinition() != null)
+		if (getComponentDefinition() != null) {
 			return getComponentDefinition().getProject();
-		if (logger.isLoggable(Level.WARNING))
+		}
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("No component definition on dummy component instance");
+		}
 		return null;
 	}
 

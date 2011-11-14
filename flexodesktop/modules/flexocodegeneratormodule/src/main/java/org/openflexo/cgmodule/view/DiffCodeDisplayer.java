@@ -541,6 +541,7 @@ public class DiffCodeDisplayer extends CodeDisplayer {
 			// Interface
 		}
 
+		@Override
 		public void addToFocusListener(FocusListener aFocusListener) {
 			htmlDisplayer.addToFocusListener(aFocusListener);
 			wodDisplayer.addToFocusListener(aFocusListener);

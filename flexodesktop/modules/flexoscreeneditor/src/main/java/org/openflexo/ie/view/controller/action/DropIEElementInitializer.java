@@ -114,10 +114,12 @@ public class DropIEElementInitializer extends ActionInitializer {
 									}
 									while (((IEButtonWidget) action.getDroppedWidget()).getDateTextfield() == null && td != null) {
 										td = td.getPrevious();
-										if (td == null)
+										if (td == null) {
 											break;
-										if (td instanceof IESpanTDWidget)
+										}
+										if (td instanceof IESpanTDWidget) {
 											continue;
+										}
 										v = td.getSequenceWidget().getAllNonSequenceWidget();
 										for (int i = v.size() - 1; i >= 0; i--) {
 											widget = (IEWidget) v.get(i);
@@ -129,10 +131,12 @@ public class DropIEElementInitializer extends ActionInitializer {
 									td = action.getDroppedWidget().findTDInParent();
 									while (((IEButtonWidget) action.getDroppedWidget()).getDateTextfield() == null && td != null) {
 										td = td.getNext();
-										if (td == null)
+										if (td == null) {
 											break;
-										if (td instanceof IESpanTDWidget)
+										}
+										if (td instanceof IESpanTDWidget) {
 											continue;
+										}
 										v = td.getSequenceWidget().getAllNonSequenceWidget();
 										for (int i = 0; i < v.size(); i++) {
 											widget = (IEWidget) v.get(i);
@@ -144,10 +148,11 @@ public class DropIEElementInitializer extends ActionInitializer {
 								}
 							}
 
-						} else if (((IEButtonWidget) action.getDroppedWidget()).getImageName().toLowerCase().indexOf("delete") > -1)
+						} else if (((IEButtonWidget) action.getDroppedWidget()).getImageName().toLowerCase().indexOf("delete") > -1) {
 							action.getDroppedWidget().setTooltip(FlexoLocalization.localizedForKey("delete"));
-						else if (((IEButtonWidget) action.getDroppedWidget()).getImageName().toLowerCase().indexOf("remove") > -1)
+						} else if (((IEButtonWidget) action.getDroppedWidget()).getImageName().toLowerCase().indexOf("remove") > -1) {
 							action.getDroppedWidget().setTooltip(FlexoLocalization.localizedForKey("remove"));
+						}
 
 					}
 					return true;

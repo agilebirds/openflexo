@@ -107,14 +107,16 @@ public class ImplementationModelResource extends FlexoXMLStorageResource<Impleme
 	public ImplementationModel performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler)
 			throws LoadXMLResourceException, FlexoFileNotFoundException, ProjectLoadingCancelledException, MalformedXMLException {
 		ImplementationModel implModel;
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Loading shema " + getName());
+		}
 		try {
 			implModel = super.performLoadResourceData(progress, loadingHandler);
 		} catch (FlexoFileNotFoundException e) {
 			// OK, i create the resource by myself !
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Creating new implementation model " + getName());
+			}
 			implModel = createNewImplementationModel();
 			try {
 				implModel.setFlexoResource(this);
@@ -127,8 +129,9 @@ public class ImplementationModelResource extends FlexoXMLStorageResource<Impleme
 		if (implModel != null) {
 			implModel.setProject(getProject());
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Notify loading for implementation model " + getImplementationModelDefinition().getName());
+		}
 		getImplementationModelDefinition().notifyImplementationModelHasBeenLoaded();
 
 		logger.info("OK, we loaded implementation model");
@@ -172,9 +175,11 @@ public class ImplementationModelResource extends FlexoXMLStorageResource<Impleme
 	@Override
 	protected boolean repairDuplicateSerializationIdentifier() {
 		ValidationReport report = getProject().validate();
-		for (ValidationIssue issue : report.getValidationIssues())
-			if (issue instanceof DuplicateObjectIDIssue)
+		for (ValidationIssue issue : report.getValidationIssues()) {
+			if (issue instanceof DuplicateObjectIDIssue) {
 				return true;
+			}
+		}
 		return false;
 	}
 

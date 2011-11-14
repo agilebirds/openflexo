@@ -90,22 +90,24 @@ public abstract class WKFArtefact extends WKFNode implements MetricsValueOwner {
 	}
 
 	public void addMetrics() {
-		if (addMetricsActionizer != null)
+		if (addMetricsActionizer != null) {
 			addMetricsActionizer.run(this, null);
+		}
 	}
 
 	public void deleteMetrics(MetricsValue value) {
-		if (deleteMetricsActionizer != null)
+		if (deleteMetricsActionizer != null) {
 			deleteMetricsActionizer.run(value, null);
+		}
 	}
 
 	/**
 	 * Recursive method to determine if the current node is embedded in the Petri graph <code>petriGraph</code>
 	 */
 	public boolean isEmbeddedInPetriGraph(FlexoPetriGraph petriGraph) {
-		if (getParentPetriGraph() == petriGraph)
+		if (getParentPetriGraph() == petriGraph) {
 			return true;
-		else if (getParentPetriGraph() != null && getParentPetriGraph().getContainer() instanceof PetriGraphNode) {
+		} else if (getParentPetriGraph() != null && getParentPetriGraph().getContainer() instanceof PetriGraphNode) {
 			return ((PetriGraphNode) getParentPetriGraph().getContainer()).isEmbeddedInPetriGraph(petriGraph);
 		}
 		return false;
@@ -142,8 +144,9 @@ public abstract class WKFArtefact extends WKFNode implements MetricsValueOwner {
 	}
 
 	public FlexoLevel getLevel() {
-		if (getParentPetriGraph() != null)
+		if (getParentPetriGraph() != null) {
 			return getParentPetriGraph().getLevel();
+		}
 		return null;
 	}
 

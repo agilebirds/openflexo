@@ -59,8 +59,9 @@ public class CVSListener extends CVSAdapter {
 	 */
 	@Override
 	public void messageSent(MessageEvent e) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("messageSent() with " + e);
+		}
 	}
 
 	/**
@@ -72,8 +73,9 @@ public class CVSListener extends CVSAdapter {
 	 */
 	@Override
 	public void messageSent(BinaryMessageEvent e) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("messageSentBinary() with " + e);
+		}
 	}
 
 	private boolean fileAddingNotificationEnabled = true;
@@ -95,8 +97,9 @@ public class CVSListener extends CVSAdapter {
 	@Override
 	public void fileAdded(FileAddedEvent e) {
 		if (fileAddingNotificationEnabled) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("fileAdded() with " + e);
+			}
 			CVSAbstractFile cvsFile = _project.getCVSAbstractFile(e.getFilePath());
 			String filePath = e.getFilePath();
 			if (cvsFile == null) {
@@ -122,8 +125,9 @@ public class CVSListener extends CVSAdapter {
 	 */
 	@Override
 	public void fileToRemove(FileToRemoveEvent e) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("fileToRemove() with " + e);
+		}
 	}
 
 	/**
@@ -134,8 +138,9 @@ public class CVSListener extends CVSAdapter {
 	 */
 	@Override
 	public void fileRemoved(FileRemovedEvent e) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("fileRemoved() with " + e);
+		}
 		CVSAbstractFile cvsFile = _project.getCVSAbstractFile(e.getFilePath());
 		if (cvsFile != null) {
 			if (cvsFile instanceof CVSFile) {
@@ -155,8 +160,9 @@ public class CVSListener extends CVSAdapter {
 	 */
 	@Override
 	public void fileUpdated(FileUpdatedEvent e) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("fileUpdated() with " + e);
+		}
 		CVSAbstractFile cvsFile = _project.getCVSAbstractFile(e.getFilePath());
 		if (cvsFile != null) {
 			if (cvsFile instanceof CVSFile) {
@@ -176,8 +182,9 @@ public class CVSListener extends CVSAdapter {
 	 */
 	@Override
 	public void fileInfoGenerated(FileInfoEvent e) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("fileInfoGenerated() with " + e);
+		}
 		// logger.info("File "+e.getInfoContainer().getFile()+" "+e.getInfoContainer().getClass().getSimpleName()+" "+e.getInfoContainer());
 		if (e.getInfoContainer() instanceof DefaultFileInfoContainer && _receiveRemoteUpdateRequest) {
 			DefaultFileInfoContainer info = (DefaultFileInfoContainer) e.getInfoContainer();
@@ -188,11 +195,12 @@ public class CVSListener extends CVSAdapter {
 				fileWasAdded = true;
 			}
 			if (info.getType().equals("U") && (cvsFile instanceof CVSFile)) {
-				if (fileWasAdded)
+				if (fileWasAdded) {
 					((CVSFile) cvsFile).setStatus(CVSStatus.RemotelyAdded);
-				else if (((CVSFile) cvsFile).getStatus() != CVSStatus.LocallyRemoved
-						&& ((CVSFile) cvsFile).getStatus() != CVSStatus.LocallyAdded)
+				} else if (((CVSFile) cvsFile).getStatus() != CVSStatus.LocallyRemoved
+						&& ((CVSFile) cvsFile).getStatus() != CVSStatus.LocallyAdded) {
 					((CVSFile) cvsFile).setStatus(CVSStatus.RemotelyModified);
+				}
 			} else if (info.getType().equals("C") && (cvsFile instanceof CVSFile)) {
 				((CVSFile) cvsFile).setStatus(CVSStatus.Conflicting);
 			} else if (info.getType().equals("Y") && (cvsFile instanceof CVSFile)) {
@@ -247,8 +255,9 @@ public class CVSListener extends CVSAdapter {
 	 */
 	@Override
 	public void commandTerminated(TerminationEvent e) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("commandTerminated() with " + e);
+		}
 	}
 
 	/**
@@ -256,8 +265,9 @@ public class CVSListener extends CVSAdapter {
 	 */
 	@Override
 	public void moduleExpanded(ModuleExpansionEvent e) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("moduleExpanded() with " + e);
+		}
 	}
 
 	protected boolean getReceiveRemoteUpdateRequest() {

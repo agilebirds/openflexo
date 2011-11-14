@@ -91,8 +91,9 @@ public abstract class TechnologyModelObject extends FlexoModelObject implements 
 	 */
 	@Override
 	public String getInspectorName() {
-		if (getHasInspector())
+		if (getHasInspector()) {
 			return this.getClass().getSimpleName() + ".inspector";
+		}
 		return null;
 	}
 

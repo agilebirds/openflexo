@@ -26,9 +26,9 @@ import java.awt.event.MouseEvent;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGELine;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 
 public class ZoomAction extends MouseDragControlAction {
 
@@ -60,10 +60,11 @@ public class ZoomAction extends MouseDragControlAction {
 		// positive to negative
 		distance = refLine.ptLineDist(currentMousePositionInDrawingView);
 		double newScale = initialScale;
-		if (isPositive)
+		if (isPositive) {
 			newScale += distance * PIXEL_TO_PERCENT;
-		else
+		} else {
 			newScale -= distance * PIXEL_TO_PERCENT;
+		}
 		controller.setScale(newScale);
 		return true;
 	}

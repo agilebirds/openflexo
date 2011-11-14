@@ -72,8 +72,9 @@ public final class DataImporterLoader {
 	 * @return a Hashtable of DataImporter instances
 	 */
 	public static Hashtable getAllDataImporter() {
-		if (_dataImporter.size() == 0)
+		if (_dataImporter.size() == 0) {
 			loadAllDataImporter();
+		}
 		return _dataImporter;
 	}
 
@@ -103,8 +104,9 @@ public final class DataImporterLoader {
 					}
 				}
 			} catch (Error e) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("An error has occured while trying to load " + candidate.getClassName());
+				}
 				e.printStackTrace();
 			}
 		}

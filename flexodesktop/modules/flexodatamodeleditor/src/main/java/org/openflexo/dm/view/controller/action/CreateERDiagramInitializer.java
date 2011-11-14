@@ -24,11 +24,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
@@ -40,6 +35,10 @@ import org.openflexo.foundation.dm.action.CreateERDiagram;
 import org.openflexo.foundation.param.DMRepositoryParameter;
 import org.openflexo.foundation.param.MultipleObjectParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
 
 public class CreateERDiagramInitializer extends ActionInitializer {
 

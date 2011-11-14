@@ -254,7 +254,8 @@ public final class OperationPetriGraph extends FlexoPetriGraph {
 			return (AbstractActivityNode) getContainer();
 		} else if (getContainer() instanceof PetriGraphNode) {
 			return ((PetriGraphNode) getContainer()).getAbstractActivityNode();
-		} else
+		} else {
 			return null;
+		}
 	}
 }

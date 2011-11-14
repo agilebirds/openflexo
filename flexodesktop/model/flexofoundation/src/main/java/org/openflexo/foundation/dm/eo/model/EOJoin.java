@@ -71,14 +71,16 @@ public class EOJoin extends EOObject {
 
 	public void setDestinationAttribute(EOAttribute destinationAttribute) throws InvalidJoinException {
 		if (relationship != null) {
-			if (destinationAttribute != null && destinationAttribute.getEntity() != relationship.getDestinationEntity())
+			if (destinationAttribute != null && destinationAttribute.getEntity() != relationship.getDestinationEntity()) {
 				throw new IllegalArgumentException(
 						"The destination attribute that has been set is not from the destination entity of the relationship");
+			}
 			checkJoinValidity(sourceAttribute, destinationAttribute);
 		}
 		if (this.destinationAttribute != destinationAttribute) {
-			if (relationship != null && this.destinationAttribute != null)
+			if (relationship != null && this.destinationAttribute != null) {
 				relationship.removeFromDestinationAttributes(this.destinationAttribute);
+			}
 			this.destinationAttribute = destinationAttribute;
 			if (relationship != null && destinationAttribute != null) {
 				relationship.addToDestinationAttributes(destinationAttribute);
@@ -99,10 +101,12 @@ public class EOJoin extends EOObject {
 		if (src != null && dest != null) {
 			String srcExternalType = src.getExternalType();
 			String destExternalType = dest.getExternalType();
-			if (srcExternalType == null && src.getPrototype() != null)
+			if (srcExternalType == null && src.getPrototype() != null) {
 				srcExternalType = src.getPrototype().getExternalType();
-			if (destExternalType == null && dest.getPrototype() != null)
+			}
+			if (destExternalType == null && dest.getPrototype() != null) {
 				destExternalType = dest.getPrototype().getExternalType();
+			}
 
 			if (srcExternalType != null && destExternalType != null) {
 				if (!srcExternalType.equals(destExternalType)) {
@@ -114,14 +118,16 @@ public class EOJoin extends EOObject {
 
 	public void setSourceAttribute(EOAttribute sourceAttribute) throws IllegalArgumentException, InvalidJoinException {
 		if (relationship != null) {
-			if (sourceAttribute != null && sourceAttribute.getEntity() != relationship.getEntity())
+			if (sourceAttribute != null && sourceAttribute.getEntity() != relationship.getEntity()) {
 				throw new IllegalArgumentException(
 						"The source attribute that has been set is not from the source entity of the relationship");
+			}
 			checkJoinValidity(sourceAttribute, destinationAttribute);
 		}
 		if (this.sourceAttribute != sourceAttribute) {
-			if (relationship != null && this.sourceAttribute != null)
+			if (relationship != null && this.sourceAttribute != null) {
 				relationship.removeFromSourceAttributes(this.sourceAttribute);
+			}
 			this.sourceAttribute = sourceAttribute;
 			if (relationship != null && sourceAttribute != null) {
 				relationship.addToSourceAttributes(sourceAttribute);
@@ -154,9 +160,10 @@ public class EOJoin extends EOObject {
 					throw new RuntimeException(e);
 				}
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not resolve source attribute " + src + " in entity named "
 							+ getRelationship().getEntity().getName());
+				}
 			}
 		}
 		String dest = (String) getOriginalMap().get(DESTINATION_ATTRIBUTE_KEY);
@@ -171,12 +178,14 @@ public class EOJoin extends EOObject {
 						throw new RuntimeException(e);
 					}
 				} else {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Could not resolve destination attribute " + src + " in entity named "
 								+ getRelationship().getDestinationEntity().getName());
+					}
 				}
-			} else if (logger.isLoggable(Level.WARNING))
+			} else if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Destination attribute is not null but the destination entity cannot be resolved");
+			}
 		}
 	}
 
@@ -187,33 +196,40 @@ public class EOJoin extends EOObject {
 	public void setRelationship(EORelationship relationship) {
 		if (getRelationship() != relationship) {
 			if (getRelationship() != null) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("This should not happen: trying to change join from relationship");
-				if (getSourceAttribute() != null)
+				}
+				if (getSourceAttribute() != null) {
 					getRelationship().removeFromSourceAttributes(getSourceAttribute());
-				if (getDestinationAttribute() != null)
+				}
+				if (getDestinationAttribute() != null) {
 					getRelationship().removeFromDestinationAttributes(getDestinationAttribute());
+				}
 			}
 			this.relationship = relationship;
 			if (relationship != null) {
-				if (getSourceAttribute() != null)
-					if (getSourceAttribute().getEntity() == relationship.getEntity())
+				if (getSourceAttribute() != null) {
+					if (getSourceAttribute().getEntity() == relationship.getEntity()) {
 						relationship.addToSourceAttributes(getSourceAttribute());
-					else
+					} else {
 						try {
 							setSourceAttribute(null);
 						} catch (InvalidJoinException e) {
 							// NEVER APPEND because arg is null
 						}
-				if (getDestinationAttribute() != null)
-					if (getDestinationAttribute().getEntity() == relationship.getDestinationEntity())
+					}
+				}
+				if (getDestinationAttribute() != null) {
+					if (getDestinationAttribute().getEntity() == relationship.getDestinationEntity()) {
 						relationship.addToDestinationAttributes(getDestinationAttribute());
-					else
+					} else {
 						try {
 							setDestinationAttribute(null);
 						} catch (InvalidJoinException e) {
 							// NEVER APPEND because arg is null
 						}
+					}
+				}
 			}
 		}
 	}
@@ -223,14 +239,16 @@ public class EOJoin extends EOObject {
      */
 	public void synchronizeObjectWithOriginalMap() {
 		Map<Object, Object> map = getOriginalMap();
-		if (getSourceAttribute() != null)
+		if (getSourceAttribute() != null) {
 			map.put(SOURCE_ATTRIBUTE_KEY, getSourceAttribute().getName());
-		else
+		} else {
 			map.remove(SOURCE_ATTRIBUTE_KEY);
-		if (getDestinationAttribute() != null)
+		}
+		if (getDestinationAttribute() != null) {
 			map.put(DESTINATION_ATTRIBUTE_KEY, getDestinationAttribute().getName());
-		else
+		} else {
 			map.remove(DESTINATION_ATTRIBUTE_KEY);
+		}
 	}
 
 	/**
@@ -271,14 +289,16 @@ public class EOJoin extends EOObject {
 	 */
 	public Map<Object, Object> getMapRepresentation() {
 		Map<Object, Object> map = new HashMap<Object, Object>();
-		if (getSourceAttribute() != null)
+		if (getSourceAttribute() != null) {
 			map.put(SOURCE_ATTRIBUTE_KEY, getSourceAttribute().getName());
-		else
+		} else {
 			map.remove(SOURCE_ATTRIBUTE_KEY);
-		if (getDestinationAttribute() != null)
+		}
+		if (getDestinationAttribute() != null) {
 			map.put(DESTINATION_ATTRIBUTE_KEY, getDestinationAttribute().getName());
-		else
+		} else {
 			map.remove(DESTINATION_ATTRIBUTE_KEY);
+		}
 		return map;
 	}
 

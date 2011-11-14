@@ -951,9 +951,10 @@ public class XMLDecoder {
 
 					// TODO: Throw here an error in future release but for backward compatibility we leave it for now.
 					Element idRefElement = findElementWithId(node.getDocument(), idrefAttribute.getValue());
-					if (xmlMapping.entityWithXMLTag(idRefElement.getName()) != modelEntity)
+					if (xmlMapping.entityWithXMLTag(idRefElement.getName()) != modelEntity) {
 						System.err.println("SEVERE: Found a referencing object with a non-corresponding entity tag '"
 								+ idRefElement.getName() + "' than the referred object" + node.getName());
+					}
 					if (idRefElement != null) {
 						return buildObjectFromNodeAndModelEntity(idRefElement, modelEntity);
 					}
@@ -1401,11 +1402,13 @@ public class XMLDecoder {
 							}
 						}
 					}
-					if (!isMapped)
+					if (!isMapped) {
 						currentEntity = currentEntity.getParentEntity();
+					}
 				}
-				if (!isMapped)
+				if (!isMapped) {
 					returned.add(att);
+				}
 			}
 		}
 		return returned;
@@ -1455,12 +1458,14 @@ public class XMLDecoder {
 
 		@Override
 		public boolean matches(Object arg0) {
-			if (!(arg0 instanceof Element))
+			if (!(arg0 instanceof Element)) {
 				return false;
+			}
 			if (_parent.equals(((Element) arg0).getParentElement())) {
 				for (int i = 0; i < _tags.length; i++) {
-					if ((((Element) arg0).getName()).equals(_tags[i]))
+					if ((((Element) arg0).getName()).equals(_tags[i])) {
 						return true;
+					}
 				}
 			}
 			return false;
@@ -1575,8 +1580,9 @@ public class XMLDecoder {
 	}
 
 	private Element findElementWithId(Document document, String idRef) {
-		if (idRef == null)
+		if (idRef == null) {
 			return null;
+		}
 		return findElementWithId(idRef);
 		/*Iterator it = document.getDescendants(new IDFilter(idRef));
 		try{

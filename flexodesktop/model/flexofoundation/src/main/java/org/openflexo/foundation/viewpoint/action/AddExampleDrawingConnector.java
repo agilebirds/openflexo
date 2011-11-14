@@ -80,11 +80,13 @@ public class AddExampleDrawingConnector extends FlexoAction<AddExampleDrawingCon
 		if (getFocusedObject() != null && getFromShape() != null && toShape != null) {
 			ExampleDrawingObject parent = ExampleDrawingObject.getFirstCommonAncestor(getFromShape(), toShape);
 			logger.info("Parent=" + parent);
-			if (parent == null)
+			if (parent == null) {
 				throw new IllegalArgumentException("No common ancestor");
+			}
 			_newConnector = new ExampleDrawingConnector(getFromShape(), toShape);
-			if (graphicalRepresentation != null)
+			if (graphicalRepresentation != null) {
 				_newConnector.setGraphicalRepresentation(graphicalRepresentation);
+			}
 			_newConnector.setName(newConnectorName);
 			_newConnector.setDescription(annotation);
 			parent.addToChilds(_newConnector);
@@ -94,8 +96,9 @@ public class AddExampleDrawingConnector extends FlexoAction<AddExampleDrawingCon
 	}
 
 	public ExampleDrawingShape getFromShape() {
-		if (_fromShape == null)
+		if (_fromShape == null) {
 			return getFocusedObject();
+		}
 		return _fromShape;
 	}
 

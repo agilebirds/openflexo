@@ -62,8 +62,9 @@ public abstract class NodeImpl implements Node {
 	}
 
 	protected static void print(java.io.PrintWriter stream, String pre, String o, String post) {
-		if ((o != null) && !"".equals(o))
+		if ((o != null) && !"".equals(o)) {
 			stream.print(pre + o + post);
+		}
 	}
 
 	protected static void printDocumentation(java.io.PrintWriter stream, Documented d) {

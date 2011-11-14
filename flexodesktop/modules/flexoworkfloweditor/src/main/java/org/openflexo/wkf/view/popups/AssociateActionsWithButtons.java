@@ -51,13 +51,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
 import org.openflexo.ColorCst;
-import org.openflexo.FlexoCst;
-import org.openflexo.swing.ImageUtils;
-import org.openflexo.swing.VerticalLayout;
-import org.openflexo.toolbox.FlexoBoolean;
-import org.openflexo.toolbox.WRLocator;
-import org.openflexo.view.FlexoDialog;
-
 import org.openflexo.foundation.ie.widget.IEButtonWidget;
 import org.openflexo.foundation.ie.widget.IEHyperlinkWidget;
 import org.openflexo.foundation.ie.widget.IEWidget;
@@ -69,6 +62,11 @@ import org.openflexo.foundation.wkf.utils.OperationAssociatedWithComponentSucces
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.module.FlexoModule;
+import org.openflexo.swing.ImageUtils;
+import org.openflexo.swing.VerticalLayout;
+import org.openflexo.toolbox.FlexoBoolean;
+import org.openflexo.toolbox.WRLocator;
+import org.openflexo.view.FlexoDialog;
 
 /**
  * To refactored!
@@ -174,16 +172,18 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 						Enumeration<JCheckBox> en = checkBoxes.elements();
 						while (en.hasMoreElements()) {
 							JCheckBox box = en.nextElement();
-							if (!box.isSelected())
+							if (!box.isSelected()) {
 								box.setSelected(true);
+							}
 						}
 						c.setText(FlexoLocalization.localizedForKey("all"));
 					} else {
 						Enumeration<JCheckBox> en = checkBoxes.elements();
 						while (en.hasMoreElements()) {
 							JCheckBox box = en.nextElement();
-							if (box.isSelected())
+							if (box.isSelected()) {
 								box.setSelected(false);
+							}
 						}
 						c.setText(FlexoLocalization.localizedForKey("all"));
 					}
@@ -208,8 +208,9 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 				Enumeration en1 = comboBoxes.keys();
 				while (en1.hasMoreElements()) {
 					JComboBox combo1 = (JComboBox) en1.nextElement();
-					if (combo1 != combo)
+					if (combo1 != combo) {
 						combo1.removeItem(combo.getSelectedItem());
+					}
 				}
 			}
 		}
@@ -219,8 +220,9 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 			JCheckBox box = en1.nextElement();
 			select &= box.isSelected();
 		}
-		if (select)
+		if (select) {
 			selectAll.doClick();
+		}
 		JPanel panel;
 
 		// OK Button
@@ -230,8 +232,9 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Pressed ok");
+				}
 				synchronizeCheckboxes();
 				retval = OK;
 				dispose();
@@ -249,8 +252,9 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Pressed ignore");
+					}
 					retval = IGNORE;
 					dispose();
 				}
@@ -265,8 +269,9 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Pressed cancel");
+				}
 				retval = CANCEL;
 				dispose();
 			}
@@ -291,8 +296,9 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 
 	protected JComboBox getComboBox(String name) {
 		final JComboBox box = new JComboBox();
-		if (name != null)
+		if (name != null) {
 			box.setName(name);
+		}
 		Enumeration en = actions.elements();
 		while (en.hasMoreElements()) {
 			Object element = en.nextElement();
@@ -313,8 +319,9 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 					Enumeration en = comboBoxes.keys();
 					while (en.hasMoreElements()) {
 						JComboBox combo = (JComboBox) en.nextElement();
-						if (combo != cb)
+						if (combo != cb) {
 							combo.addItem(old);
+						}
 					}
 				}
 
@@ -323,8 +330,9 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 					Enumeration en = comboBoxes.keys();
 					while (en.hasMoreElements()) {
 						JComboBox combo = (JComboBox) en.nextElement();
-						if (combo != cb)
+						if (combo != cb) {
 							combo.removeItem(newNode);
+						}
 					}
 				}
 				associations.put(w, newNode);
@@ -359,12 +367,14 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 				String tooltip = null;
 				ActionNode node = (ActionNode) value;
 				s = node.getNodeName();
-				if (s == null || s.trim().length() == 0)
+				if (s == null || s.trim().length() == 0) {
 					s = node.getDefaultName();
+				}
 				tooltip = node.getDescription();
 				setText(s);
-				if (tooltip != null && tooltip.trim().length() > 0)
+				if (tooltip != null && tooltip.trim().length() > 0) {
 					setToolTipText(tooltip);
+				}
 			}
 			if (isSelected) {
 				setBackground(list.getSelectionBackground());
@@ -418,11 +428,13 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 			if (button instanceof IEButtonWidget) {
 				IEButtonWidget b = (IEButtonWidget) button;
 				s = b.getNameOrCalculatedLabel();
-				if (s == null || s.trim().length() == 0)
+				if (s == null || s.trim().length() == 0) {
 					s = b.getBeautifiedName();
+				}
 				tooltip = b.getDescription();
-				if (tooltip == null || tooltip.trim().length() == 0)
+				if (tooltip == null || tooltip.trim().length() == 0) {
 					tooltip = b.getTooltip();
+				}
 				FlexoCSS css = b.getFlexoCSS();
 				icon = WRLocator.locate(b.getProject().getProjectDirectory(), b.getImageName(), css == null ? FlexoCSS.CONTENTO.getName()
 						: css.getName());
@@ -430,11 +442,13 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 				IEHyperlinkWidget h = button;
 				s = h.getNameOrCalculatedLabel();
 				tooltip = h.getDescription();
-				if (tooltip == null || tooltip.trim().length() == 0)
+				if (tooltip == null || tooltip.trim().length() == 0) {
 					tooltip = h.getTooltip();
+				}
 			}
-			if (button.getIsMandatoryFlexoAction())
+			if (button.getIsMandatoryFlexoAction()) {
 				s = s + " (" + FlexoLocalization.localizedForKey("short_mandatory_sign") + ")";
+			}
 			// The Text
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 1, 1));
 			final JCheckBox box = new JCheckBox();
@@ -453,8 +467,9 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 			checkBoxes.put(button, box);
 			JLabel label = new JLabel();
 			label.setText(s);
-			if (tooltip != null && tooltip.trim().length() > 0)
+			if (tooltip != null && tooltip.trim().length() > 0) {
 				label.setToolTipText(tooltip);
+			}
 			panel.add(label);
 			panel.setOpaque(true);
 			panel.setBackground(ColorCst.GUI_BACK_COLOR);
@@ -478,16 +493,18 @@ public class AssociateActionsWithButtons extends FlexoDialog {
 				iconLabel.setFont(IEHyperlinkWidget.getButtonFont());
 				if (button.isCustomButton()) {
 					Color color = ((IEWidget) button).getProject().getCssSheet().getButtonColor();
-					if (color == null)
+					if (color == null) {
 						color = Color.BLACK;
+					}
 					iconLabel.setBackground(color);
 					iconLabel.setForeground(Color.WHITE);
 					iconLabel.setOpaque(true);
 					iconLabel.setBorder(BorderFactory.createMatteBorder(0, 10, 1, 10, color));
 					iconLabel.setVerticalTextPosition(SwingConstants.CENTER);
 					iconLabel.setHorizontalAlignment(SwingConstants.CENTER);
-				} else
+				} else {
 					iconLabel.setBackground(ColorCst.GUI_BACK_COLOR);
+				}
 			}
 			middlePanel.add(iconLabel);
 			add(middlePanel);

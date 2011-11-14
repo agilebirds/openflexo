@@ -65,14 +65,16 @@ public class JavaResourceUtil {
 					return getMatchingResourcesFromJar(jarFile, suffix);
 				} finally {
 					try {
-						if (jarFile != null)
+						if (jarFile != null) {
 							jarFile.close();
+						}
 					} catch (IOException e) {
 						logger.log(Level.WARNING, "Cannot close jar file '" + jarFile.getName() + "' !", e);
 					}
 				}
-			} else
+			} else {
 				logger.log(Level.WARNING, "Cannot handle file type for loading resources !");
+			}
 
 		} catch (URISyntaxException e) {
 			logger.log(Level.SEVERE, "Cannot load files from jar !", e);
@@ -97,8 +99,9 @@ public class JavaResourceUtil {
 		Enumeration<JarEntry> entries = jarFile.entries(); // gives ALL entries in jar
 		while (entries.hasMoreElements()) {
 			JarEntry entry = entries.nextElement();
-			if (suffix == null || entry.getName().endsWith(suffix))
+			if (suffix == null || entry.getName().endsWith(suffix)) {
 				result.add("/" + entry.getName());
+			}
 		}
 
 		return result;
@@ -141,8 +144,9 @@ public class JavaResourceUtil {
 		try {
 			URL url = JavaResourceUtil.class.getResource(resourcePath);
 
-			if (url == null)
+			if (url == null) {
 				return null;
+			}
 
 			return new Date(url.openConnection().getLastModified());
 		} catch (IOException e) {

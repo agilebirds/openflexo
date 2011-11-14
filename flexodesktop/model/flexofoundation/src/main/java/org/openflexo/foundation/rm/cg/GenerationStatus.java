@@ -19,9 +19,8 @@
  */
 package org.openflexo.foundation.rm.cg;
 
-import org.openflexo.xmlcode.StringRepresentable;
-
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.xmlcode.StringRepresentable;
 
 public enum GenerationStatus implements StringRepresentable {
 	UpToDate,

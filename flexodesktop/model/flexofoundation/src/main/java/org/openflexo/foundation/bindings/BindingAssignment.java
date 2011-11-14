@@ -71,22 +71,25 @@ public class BindingAssignment extends FlexoModelObject implements Bindable, Ins
 
 	@Override
 	public final FlexoProject getProject() {
-		if (_owner != null)
+		if (_owner != null) {
 			return _owner.getProject();
+		}
 		return null;
 	}
 
 	@Override
 	public final XMLMapping getXMLMapping() {
-		if (_owner != null)
+		if (_owner != null) {
 			return _owner.getXMLMapping();
+		}
 		return null;
 	}
 
 	@Override
 	public final XMLStorageResourceData getXMLResourceData() {
-		if (_owner != null)
+		if (_owner != null) {
 			return _owner.getXMLResourceData();
+		}
 		return null;
 	}
 
@@ -97,11 +100,13 @@ public class BindingAssignment extends FlexoModelObject implements Bindable, Ins
 	public void setOwner(FlexoModelObject owner) {
 		_owner = owner;
 		if (_owner == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Null owner declared for BindingValue");
+			}
 		} else if (!(_owner instanceof Bindable)) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Declared owner is not a Bindable !");
+			}
 		}
 	}
 
@@ -149,8 +154,9 @@ public class BindingAssignment extends FlexoModelObject implements Bindable, Ins
 	}
 
 	public DMType getType() {
-		if (getReceiver() != null && getReceiver().getAccessedType() != null)
+		if (getReceiver() != null && getReceiver().getAccessedType() != null) {
 			return getReceiver().getAccessedType();
+		}
 		return _defaultType;
 	}
 
@@ -284,8 +290,9 @@ public class BindingAssignment extends FlexoModelObject implements Bindable, Ins
 
 	@Override
 	public BindingAssignmentStringConverter getConverter() {
-		if (getProject() != null)
+		if (getProject() != null) {
 			return getProject().getBindingAssignementConverter();
+		}
 		return null;
 	}
 

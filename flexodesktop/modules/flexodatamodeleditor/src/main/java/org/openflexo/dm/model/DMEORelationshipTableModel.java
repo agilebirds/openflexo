@@ -32,13 +32,12 @@ import org.openflexo.components.tabular.model.IconColumn;
 import org.openflexo.components.tabular.model.StringColumn;
 import org.openflexo.components.tabular.model.ToggleIconColumn;
 import org.openflexo.dm.view.controller.DMController;
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.ReservedKeyword;
-
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.dm.eo.DMEORelationship;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.ReservedKeyword;
 
 /**
  * Please comment this class
@@ -65,15 +64,17 @@ public class DMEORelationshipTableModel extends AbstractModel<DMEOEntity, DMEORe
 		addToColumns(new ToggleIconColumn<DMEORelationship>("read_only", 25) {
 			@Override
 			public Icon getIcon(DMEORelationship relationship) {
-				if (relationship == null)
+				if (relationship == null) {
 					return null;
+				}
 				return (relationship.getIsReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON);
 			}
 
 			@Override
 			public void toggleValue(DMEORelationship relationship) {
-				if (relationship == null)
+				if (relationship == null) {
 					return;
+				}
 				relationship.setIsReadOnly(!relationship.getIsReadOnly());
 			}
 
@@ -86,15 +87,17 @@ public class DMEORelationshipTableModel extends AbstractModel<DMEOEntity, DMEORe
 		addToColumns(new ToggleIconColumn<DMEORelationship>("settable", 25) {
 			@Override
 			public Icon getIcon(DMEORelationship relationship) {
-				if (relationship == null)
+				if (relationship == null) {
 					return null;
+				}
 				return (relationship.getIsSettable() ? DMEIconLibrary.GET_SET_ICON : DMEIconLibrary.GET_ICON);
 			}
 
 			@Override
 			public void toggleValue(DMEORelationship relationship) {
-				if (relationship == null)
+				if (relationship == null) {
 					return;
+				}
 				relationship.setIsSettable(!relationship.getIsSettable());
 			}
 
@@ -107,15 +110,17 @@ public class DMEORelationshipTableModel extends AbstractModel<DMEOEntity, DMEORe
 		addToColumns(new ToggleIconColumn<DMEORelationship>("class_property", 25) {
 			@Override
 			public Icon getIcon(DMEORelationship relationship) {
-				if (relationship == null)
+				if (relationship == null) {
 					return null;
+				}
 				return (relationship.getIsClassProperty() ? DMEIconLibrary.CLASS_PROPERTY_ICON : null);
 			}
 
 			@Override
 			public void toggleValue(DMEORelationship relationship) {
-				if (relationship == null)
+				if (relationship == null) {
 					return;
+				}
 				relationship.setIsClassProperty(!relationship.getIsClassProperty());
 			}
 
@@ -147,27 +152,34 @@ public class DMEORelationshipTableModel extends AbstractModel<DMEOEntity, DMEORe
 		addToColumns(new EditableStringColumn<DMEORelationship>("name", 150) {
 			@Override
 			public String getValue(DMEORelationship relationship) {
-				if (relationship == null)
+				if (relationship == null) {
 					return null;
+				}
 				return relationship.getName();
 			}
 
 			@Override
 			public void setValue(DMEORelationship relationship, String aValue) {
-				if (relationship == null)
+				if (relationship == null) {
 					return;
+				}
 				try {
-					if (ReservedKeyword.contains(aValue))
+					if (ReservedKeyword.contains(aValue)) {
 						throw new InvalidNameException(aValue + " is a reserved keyword.");
+					}
 					relationship.setName(aValue);
 				} catch (IllegalArgumentException e) {
-					if (!DMEORelationshipTableModel.this.controller.handleException(relationship, "name", aValue, e))
-						if (logger.isLoggable(Level.WARNING))
+					if (!DMEORelationshipTableModel.this.controller.handleException(relationship, "name", aValue, e)) {
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("IllegalArgumentException was not handled by controller");
+						}
+					}
 				} catch (InvalidNameException e) {
-					if (!DMEORelationshipTableModel.this.controller.handleException(relationship, "name", aValue, e))
-						if (logger.isLoggable(Level.WARNING))
+					if (!DMEORelationshipTableModel.this.controller.handleException(relationship, "name", aValue, e)) {
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("IllegalArgumentException was not handled by controller");
+						}
+					}
 				}
 			}
 		});

@@ -29,9 +29,9 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMRepository;
 import org.openflexo.foundation.dm.DMSet;
+import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference;
 import org.openflexo.foundation.dm.ExternalRepository;
 import org.openflexo.foundation.dm.LoadableDMEntity;
-import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference;
 import org.openflexo.localization.FlexoLocalization;
 
 public class UpdateDMRepository extends FlexoAction {

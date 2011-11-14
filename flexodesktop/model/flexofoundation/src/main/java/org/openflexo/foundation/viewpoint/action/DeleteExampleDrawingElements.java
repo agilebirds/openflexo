@@ -87,8 +87,9 @@ public class DeleteExampleDrawingElements extends
 					break;
 				}
 			}
-			if (!isContainedByAnOtherObject)
+			if (!isContainedByAnOtherObject) {
 				returned.add(o);
+			}
 		}
 
 		return returned;
@@ -102,12 +103,15 @@ public class DeleteExampleDrawingElements extends
 
 	@Override
 	protected void doAction(Object context) {
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("DeleteCalcShemaElements");
-		if (logger.isLoggable(Level.INFO))
+		}
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("selection is: " + getGlobalSelection());
-		if (logger.isLoggable(Level.INFO))
+		}
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("selection to delete is: " + getObjectsToDelete());
+		}
 		for (ExampleDrawingObject o : getObjectsToDelete()) {
 			o.delete();
 		}

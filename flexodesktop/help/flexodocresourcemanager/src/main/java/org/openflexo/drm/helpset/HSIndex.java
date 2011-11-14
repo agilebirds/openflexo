@@ -93,8 +93,9 @@ public class HSIndex extends FlexoObject implements XMLSerializable {
 			entryChilds = new Vector();
 			for (Enumeration en = docItem.getInheritanceChildItems().elements(); en.hasMoreElements();) {
 				DocItem next = (DocItem) en.nextElement();
-				if (next.isPublished())
+				if (next.isPublished()) {
 					entryChilds.add(new HSIndexEntry(next));
+				}
 			}
 
 		}
@@ -118,31 +119,36 @@ public class HSIndex extends FlexoObject implements XMLSerializable {
 			File hsIndexModelFile;
 			hsIndexModelFile = new FileResource("Models/HSIndexModel.xml");
 			if (!hsIndexModelFile.exists()) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("File " + hsIndexModelFile.getAbsolutePath() + " doesn't exist. Maybe you have to check your paths ?");
+				}
 				return null;
 			} else {
 				try {
 					_indexMapping = new XMLMapping(hsIndexModelFile);
 				} catch (InvalidModelException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (IOException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (SAXException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (ParserConfigurationException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				}
 			}

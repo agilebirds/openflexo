@@ -50,22 +50,25 @@ public class Parser {
 
 	public static Expression parseExpression(String aString) throws ParseException {
 		Token result = parse(aString);
-		if (result instanceof Expression)
+		if (result instanceof Expression) {
 			return (Expression) result;
+		}
 		throw new ParseException("Could not parse as an expression " + aString);
 	}
 
 	public static Function parseFunction(String aString) throws ParseException {
 		Token result = parse(aString);
-		if (result instanceof Function)
+		if (result instanceof Function) {
 			return (Function) result;
+		}
 		throw new ParseException("Could not parse as an function " + aString);
 	}
 
 	private static Token parse(Reader rdr) throws ParseException {
 		ListOfToken unparsedList = parseLevel(initStreamTokenizer(rdr));
-		if ((unparsedList.size() == 1) && (unparsedList.firstElement() instanceof Token))
+		if ((unparsedList.size() == 1) && (unparsedList.firstElement() instanceof Token)) {
 			return (Token) unparsedList.firstElement();
+		}
 		try {
 			return Function.makeFunction(unparsedList);
 		} catch (ParseException e) {
@@ -161,8 +164,9 @@ public class Parser {
 	}
 
 	private static void handlesCurrentInput(Vector<AbstractToken> returned, String currentInput) throws ParseException {
-		if (currentInput.equals(""))
+		if (currentInput.equals("")) {
 			return;
+		}
 		if (currentInput.equals(",")) {
 			returned.add(new Comma());
 			return;
@@ -176,8 +180,9 @@ public class Parser {
 	}
 
 	private static void handlesWordAddition(Vector<AbstractToken> returned, String word) throws ParseException {
-		if (word.equals(""))
+		if (word.equals("")) {
 			return;
+		}
 		if ((word.equalsIgnoreCase("true")) || (word.equalsIgnoreCase("yes"))) {
 			returned.add(new BooleanValue(true));
 		} else if ((word.equalsIgnoreCase("false")) || (word.equalsIgnoreCase("no"))) {

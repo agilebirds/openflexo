@@ -21,8 +21,8 @@ package org.openflexo.fge.geomedit.gr;
 
 import org.openflexo.fge.geom.area.FGEHalfPlane;
 import org.openflexo.fge.geomedit.GeometricDrawing;
-import org.openflexo.fge.geomedit.HalfPlane;
 import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
+import org.openflexo.fge.geomedit.HalfPlane;
 import org.openflexo.xmlcode.XMLSerializable;
 
 public class HalfPlaneGraphicalRepresentation extends GeometricObjectGraphicalRepresentation<FGEHalfPlane, HalfPlane> implements

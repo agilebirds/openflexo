@@ -29,12 +29,6 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import org.openflexo.icon.IconFactory;
-import org.openflexo.icon.IconLibrary;
-import org.openflexo.icon.IconMarker;
-import org.openflexo.icon.WKFIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
@@ -44,6 +38,11 @@ import org.openflexo.foundation.wkf.DuplicateRoleException;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.wkf.RoleSpecialization;
 import org.openflexo.foundation.wkf.dm.RoleColorChange;
+import org.openflexo.icon.IconFactory;
+import org.openflexo.icon.IconLibrary;
+import org.openflexo.icon.IconMarker;
+import org.openflexo.icon.WKFIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Browser element representing a Role
@@ -62,8 +61,9 @@ public class RoleElement extends BrowserElement {
 		switch (getProjectBrowser().getRoleViewMode()) {
 		case TOP_DOWN:
 			for (Role role : getRole().getRolesSpecializingMyself()) {
-				if (role != getRole())
+				if (role != getRole()) {
 					addToChilds(role);
+				}
 			}
 			break;
 		case BOTTOM_UP:
@@ -96,8 +96,9 @@ public class RoleElement extends BrowserElement {
 
 	@Override
 	public void setName(String aName) throws DuplicateRoleException {
-		if (getRole().isImported())
+		if (getRole().isImported()) {
 			return;
+		}
 		getRole().setName(aName);
 	}
 
@@ -105,16 +106,18 @@ public class RoleElement extends BrowserElement {
 	public String getToolTip() {
 		if (getRole().isImported() && getRole().isDeletedOnServer()) {
 			return FlexoLocalization.localizedForKey("object_is_no_more_available_in_portfolio");
-		} else
+		} else {
 			return null;
+		}
 	}
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getRole() && dataModification instanceof RoleColorChange) {
 			customIcon = buildCustomIcon(getRole().getColor());
-		} else if (observable == getRole() && "isDeletedOnServer".equals(dataModification.propertyName()))
+		} else if (observable == getRole() && "isDeletedOnServer".equals(dataModification.propertyName())) {
 			refreshWhenPossible();
+		}
 		super.update(observable, dataModification);
 	}
 
@@ -129,8 +132,9 @@ public class RoleElement extends BrowserElement {
 			customIcon = buildCustomIcon(getRole().getColor());
 		}
 		IconMarker[] markers = getIconMarkers();
-		if (markers != null)
+		if (markers != null) {
 			return IconFactory.getImageIcon(customIcon, markers);
+		}
 		return decorateIcon(customIcon);
 	}
 
@@ -138,16 +142,19 @@ public class RoleElement extends BrowserElement {
 		int count = 0;
 		if (getRole().isImported()) {
 			count++;
-			if (getRole().isDeletedOnServer())
+			if (getRole().isDeletedOnServer()) {
 				count++;
+			}
 		}
 		IconMarker[] markers = null;
-		if (count > 0)
+		if (count > 0) {
 			markers = new IconMarker[count];
+		}
 		if (getRole().isImported()) {
 			markers[0] = IconLibrary.IMPORT;
-			if (getRole().isDeletedOnServer())
+			if (getRole().isDeletedOnServer()) {
 				markers[1] = IconLibrary.WARNING;
+			}
 		}
 		return markers;
 	}
@@ -158,8 +165,9 @@ public class RoleElement extends BrowserElement {
 		// See also org.openflexo.wkf.swleditor.gr.RoleContainerGR.updateColors() and
 		// org.openflexo.wkf.roleeditor.RoleGR.getRoleColor() and
 		// org.openflexo.wkf.processeditor.gr.AbstractActivityNodeGR.getMainBgColor()
-		if (aColor == null)
+		if (aColor == null) {
 			aColor = Color.RED;
+		}
 		Color mainColor = aColor;
 		Color borderColor = new Color((aColor.getRed() + 255) / 2, (aColor.getGreen() + 255) / 2, (aColor.getBlue() + 255) / 2);
 		ImageFilter imgfilter = new ColorSwapFilter(new Color(255, 51, 0), mainColor, new Color(255, 153, 102), borderColor);

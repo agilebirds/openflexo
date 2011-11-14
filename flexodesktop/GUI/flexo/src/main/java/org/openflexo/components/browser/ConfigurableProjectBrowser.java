@@ -48,15 +48,17 @@ public class ConfigurableProjectBrowser extends ProjectBrowser {
 
 	@Override
 	public FlexoModelObject getDefaultRootObject() {
-		if (_configuration != null)
+		if (_configuration != null) {
 			return _configuration.getDefaultRootObject();
+		}
 		return null;
 	}
 
 	@Override
 	public void configure() {
-		if (_configuration != null)
+		if (_configuration != null) {
 			_configuration.configure(this);
+		}
 	}
 
 	public BrowserConfiguration getConfiguration() {

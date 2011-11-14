@@ -21,7 +21,6 @@
 package org.openflexo.ws.client.PPMWebService;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 public class CLProjectDescriptor implements java.io.Serializable {
 	private java.lang.String currentEditSessionOwner;
@@ -193,13 +192,16 @@ public class CLProjectDescriptor implements java.io.Serializable {
 
 	@Override
 	public synchronized boolean equals(java.lang.Object obj) {
-		if (!(obj instanceof CLProjectDescriptor))
+		if (!(obj instanceof CLProjectDescriptor)) {
 			return false;
+		}
 		CLProjectDescriptor other = (CLProjectDescriptor) obj;
-		if (obj == null)
+		if (obj == null) {
 			return false;
-		if (this == obj)
+		}
+		if (this == obj) {
 			return true;
+		}
 		if (__equalsCalc != null) {
 			return (__equalsCalc == obj);
 		}

@@ -66,8 +66,9 @@ public class AbstractActivityNodeElement extends BrowserElement implements Expan
 	private boolean isObserving = false;
 
 	private void addObserver() {
-		if (isObserving)
+		if (isObserving) {
 			return;
+		}
 		if (getAbstractActivityNode().getOperationPetriGraph() != null) {
 			getAbstractActivityNode().getOperationPetriGraph().addObserver(this);
 			isObserving = true;
@@ -93,8 +94,9 @@ public class AbstractActivityNodeElement extends BrowserElement implements Expan
 
 	@Override
 	protected void buildChildrenVector() {
-		if (logger.isLoggable(Level.FINER))
+		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("Building children for activity " + getName());
+		}
 		// We add operation nodes
 		if (getAbstractActivityNode().getOperationPetriGraph() != null) {
 			addObserver();
@@ -109,8 +111,9 @@ public class AbstractActivityNodeElement extends BrowserElement implements Expan
 			while (en.hasMoreElements()) {
 				addToChilds((FlexoModelObject) en.nextElement());
 			}
-			for (WKFGroup group : ((SelfExecutableNode) getAbstractActivityNode()).getExecutionPetriGraph().getGroups())
+			for (WKFGroup group : ((SelfExecutableNode) getAbstractActivityNode()).getExecutionPetriGraph().getGroups()) {
 				addToChilds(group);
+			}
 		}
 		/*
 				// We add operator nodes

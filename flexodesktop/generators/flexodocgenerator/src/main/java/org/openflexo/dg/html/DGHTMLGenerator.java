@@ -141,15 +141,17 @@ public class DGHTMLGenerator<T extends FlexoModelObject> extends DGGenerator<T> 
 	}
 
 	public static String splitOnUpperCase(String s) {
-		if (s == null || s.trim().length() == 0)
+		if (s == null || s.trim().length() == 0) {
 			return "";
+		}
 		Matcher m = UPPER_CASE_PATTERN.matcher(s);
 		StringBuffer sb = new StringBuffer();
 		while (m.find()) {
-			if (sb.length() == 0 && m.start() == 0)
+			if (sb.length() == 0 && m.start() == 0) {
 				m.appendReplacement(sb, "$0");
-			else
+			} else {
 				m.appendReplacement(sb, "&#8203;$0");
+			}
 		}
 		m.appendTail(sb);
 		return sb.toString();

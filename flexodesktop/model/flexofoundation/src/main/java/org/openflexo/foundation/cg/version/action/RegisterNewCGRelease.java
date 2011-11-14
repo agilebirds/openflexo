@@ -23,8 +23,6 @@ import java.util.Date;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.xmlcode.StringRepresentable;
-
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.CGFile;
@@ -35,6 +33,7 @@ import org.openflexo.foundation.cg.action.AbstractGCAction;
 import org.openflexo.foundation.cg.version.CGRelease;
 import org.openflexo.foundation.cg.version.CGVersionIdentifier;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.xmlcode.StringRepresentable;
 
 public class RegisterNewCGRelease extends AbstractGCAction<RegisterNewCGRelease, GenerationRepository> {
 

@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.dg.action.GenerateDocx;
 import org.openflexo.dgmodule.DGPreferences;
-
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;

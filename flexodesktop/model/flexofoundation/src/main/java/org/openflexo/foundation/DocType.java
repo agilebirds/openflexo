@@ -43,8 +43,9 @@ public class DocType extends TargetType implements ChoiceList, Serializable, Str
 
 		public static boolean isDefaultDocType(String docType, boolean ignoreCase) {
 			for (DefaultDocType defaultDocType : values()) {
-				if (defaultDocType.name().equals(docType) || (ignoreCase && defaultDocType.name().equalsIgnoreCase(docType)))
+				if (defaultDocType.name().equals(docType) || (ignoreCase && defaultDocType.name().equalsIgnoreCase(docType))) {
 					return true;
+				}
 			}
 			return false;
 		}

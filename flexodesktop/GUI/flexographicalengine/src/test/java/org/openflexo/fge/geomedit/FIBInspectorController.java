@@ -123,8 +123,9 @@ public class FIBInspectorController implements Observer, ChangeListener {
 	private Object currentInspectedObject = null;
 
 	public void inspectObject(Object object) {
-		if (object == currentInspectedObject)
+		if (object == currentInspectedObject) {
 			return;
+		}
 
 		// System.out.println("inspect "+currentInspectedObject);
 
@@ -176,8 +177,9 @@ public class FIBInspectorController implements Observer, ChangeListener {
 			currentInspector = newInspector;
 			inspectorDialog.setTitle(newInspector.getParameter("title"));
 			tabPanelView = (FIBTabPanelView) currentInspectorView.getController().viewForComponent(currentInspector.getTabPanel());
-			if (lastInspectedTabIndex >= 0 && lastInspectedTabIndex < tabPanelView.getJComponent().getTabCount())
+			if (lastInspectedTabIndex >= 0 && lastInspectedTabIndex < tabPanelView.getJComponent().getTabCount()) {
 				tabPanelView.getJComponent().setSelectedIndex(lastInspectedTabIndex);
+			}
 			tabPanelView.getJComponent().addChangeListener(this);
 			// System.out.println("addChangeListener for "+tabPanelView.getJComponent());
 		} else {
@@ -187,8 +189,9 @@ public class FIBInspectorController implements Observer, ChangeListener {
 	}
 
 	protected FIBInspector inspectorForObject(Object object) {
-		if (object == null)
+		if (object == null) {
 			return null;
+		}
 		return inspectorForClass(object.getClass());
 	}
 
@@ -196,10 +199,11 @@ public class FIBInspectorController implements Observer, ChangeListener {
 		Class c = aClass;
 		while (c != null) {
 			FIBInspector returned = inspectors.get(c);
-			if (returned != null)
+			if (returned != null) {
 				return returned;
-			else
+			} else {
 				c = c.getSuperclass();
+			}
 		}
 		return null;
 	}

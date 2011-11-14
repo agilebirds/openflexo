@@ -12,8 +12,9 @@ public class ObjectPropertyStatementPatternRole extends StatementPatternRole {
 
 	@Override
 	public String getPreciseType() {
-		if (getObjectProperty() != null)
+		if (getObjectProperty() != null) {
 			return getObjectProperty().getName();
+		}
 		return "";
 	}
 

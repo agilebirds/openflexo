@@ -65,8 +65,9 @@ public class TOCData extends TOCObject implements XMLStorageResourceData {
 		for (TOCRepository rep : getRepositories()) {
 			String attempt = rep.getTitle();
 			int i = 1;
-			while (getRepositoryWithTitle(attempt) != null && getRepositoryWithTitle(attempt) != rep)
+			while (getRepositoryWithTitle(attempt) != null && getRepositoryWithTitle(attempt) != rep) {
 				attempt = rep.getTitle() + "-" + i++;
+			}
 			rep.setTitle(attempt);
 		}
 		super.finalizeDeserialization(builder);
@@ -150,8 +151,9 @@ public class TOCData extends TOCObject implements XMLStorageResourceData {
 
 	public static TOCData createNewTOCData(FlexoProject project) {
 		TOCData newCG = new TOCData(project);
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("createNewTOCData(), project=" + project + " " + newCG);
+		}
 
 		File cgFile = ProjectRestructuration.getExpectedTOCFile(project);
 		FlexoProjectFile generatedCodeFile = new FlexoProjectFile(cgFile, project);
@@ -167,8 +169,9 @@ public class TOCData extends TOCObject implements XMLStorageResourceData {
 				cgRes = new FlexoTOCResource(project, newCG);
 				cgRes.setResourceFile(generatedCodeFile);
 			} catch (InvalidFileNameException e) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("Could not create TOC.");
+				}
 				e.printStackTrace();
 				return null;
 			}
@@ -179,8 +182,9 @@ public class TOCData extends TOCObject implements XMLStorageResourceData {
 			project.registerResource(cgRes);
 		} catch (Exception e1) {
 			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
+			}
 			e1.printStackTrace();
 			System.exit(-1);
 		}
@@ -189,23 +193,27 @@ public class TOCData extends TOCObject implements XMLStorageResourceData {
 	}
 
 	public TOCRepository getRepositoryWithTitle(String title) {
-		if (title == null)
+		if (title == null) {
 			return null;
+		}
 		for (TOCRepository rep : getRepositories()) {
-			if (title.equals(rep.getTitle()))
+			if (title.equals(rep.getTitle())) {
 				return rep;
+			}
 		}
 		return null;
 	}
 
 	public TOCRepository getRepositoryWithIdentifier(String uid, long flexoID) {
-		if (uid == null)
+		if (uid == null) {
 			return null;
+		}
 		Enumeration<TOCRepository> en = getRepositories().elements();
 		while (en.hasMoreElements()) {
 			TOCRepository rep = en.nextElement();
-			if (uid.equals(rep.getUserIdentifier()) && flexoID == rep.getFlexoID())
+			if (uid.equals(rep.getUserIdentifier()) && flexoID == rep.getFlexoID()) {
 				return rep;
+			}
 		}
 		return null;
 	}

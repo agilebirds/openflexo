@@ -161,8 +161,9 @@ public class CGFileReleaseVersion extends AbstractCGFileVersion {
 	public void clean() {
 		logger.info("Cleaning " + getStringRepresentation());
 		for (CGFileIntermediateVersion intermediateVersion : _intermediateVersions) {
-			if (!FileUtils.recursiveDeleteFile(intermediateVersion.getFile()))
+			if (!FileUtils.recursiveDeleteFile(intermediateVersion.getFile())) {
 				logger.warning("Could not delete file " + intermediateVersion.getFile());
+			}
 			intermediateVersion.delete();
 		}
 		_intermediateVersions.clear();

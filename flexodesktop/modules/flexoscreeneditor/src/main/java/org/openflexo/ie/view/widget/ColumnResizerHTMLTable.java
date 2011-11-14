@@ -61,15 +61,17 @@ public class ColumnResizerHTMLTable extends MouseMotionAdapter implements MouseL
 	 */
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
-		if (view != null)
+		if (view != null) {
 			resizing = true;
-		else
+		} else {
 			resizing = false;
+		}
 		if (update) {
 			update(arg0);
 			update = false;
-		} else
+		} else {
 			update = true;
+		}
 	}
 
 	/*
@@ -123,8 +125,9 @@ public class ColumnResizerHTMLTable extends MouseMotionAdapter implements MouseL
 	public void mousePressed(MouseEvent arg0) {
 		startX = arg0.getPoint().x;
 		startFromEnd = startX > 10;
-		if (arg0.getSource() instanceof IETDWidgetView)
+		if (arg0.getSource() instanceof IETDWidgetView) {
 			view = ((IETDWidgetView) arg0.getSource());
+		}
 	}
 
 	/*
@@ -149,8 +152,9 @@ public class ColumnResizerHTMLTable extends MouseMotionAdapter implements MouseL
 				view.adjustPourcentage(delta, startFromEnd);
 				view.doLayout();
 				view.repaint();
-				if (startFromEnd)
+				if (startFromEnd) {
 					startX = arg0.getPoint().x;
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

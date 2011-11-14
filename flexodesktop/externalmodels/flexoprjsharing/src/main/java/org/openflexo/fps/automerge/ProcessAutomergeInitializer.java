@@ -177,8 +177,9 @@ public class ProcessAutomergeInitializer {
 			String rightDateAsString = extractContainerAttributeValueFromRight(change, "lastUpdate");
 			Date leftDate = StringEncoder.decodeObject(leftDateAsString, Date.class);
 			Date rightDate = StringEncoder.decodeObject(rightDateAsString, Date.class);
-			if (leftDate.after(rightDate))
+			if (leftDate.after(rightDate)) {
 				return change.getLeftText();
+			}
 			return change.getRightText();
 		}
 

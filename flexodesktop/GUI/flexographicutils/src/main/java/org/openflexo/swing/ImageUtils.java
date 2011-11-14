@@ -51,10 +51,12 @@ public class ImageUtils {
 	}
 
 	public static void saveImageToFile(RenderedImage image, File dest, ImageType type) throws IOException {
-		if (type == null)
+		if (type == null) {
 			type = ImageType.PNG;
-		if (!dest.exists())
+		}
+		if (!dest.exists()) {
 			FileUtils.createNewFile(dest);
+		}
 		ImageIO.write(image, type.getExtension(), dest);
 	}
 
@@ -79,8 +81,9 @@ public class ImageUtils {
 	}
 
 	public static ImageIcon resize(ImageIcon src, Dimension size) {
-		if (src != null)
+		if (src != null) {
 			return new ImageIcon(src.getImage().getScaledInstance(size.width, size.height, Image.SCALE_SMOOTH));
+		}
 		return null;
 	}
 }

@@ -39,15 +39,17 @@ public class ScenarioRecorder {
 	}
 
 	public void registerDoneAction(FlexoAction action) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.info("registerDoneAction " + action);
+		}
 		if (action instanceof FlexoGUIAction) {
 			// Ignore
 		} else {
 			_actionHistory.add(action);
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			debug();
+		}
 	}
 
 	private void debug() {

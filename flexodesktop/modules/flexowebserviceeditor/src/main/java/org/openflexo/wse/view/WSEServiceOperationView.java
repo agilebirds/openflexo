@@ -63,8 +63,9 @@ public class WSEServiceOperationView extends WSEView<ServiceOperation> {
 
 		WSService service = getServiceOperation().getServiceInterface().getParentService();
 		boolean readOnly = false;
-		if (service != null && service instanceof ExternalWSService)
+		if (service != null && service instanceof ExternalWSService) {
 			readOnly = true;
+		}
 
 		entryTableModel = new WSEMessageEntryTableModel(null, getWSEController().getProject(), readOnly);
 		entryTable = new WSETabularView(getWSEController(), entryTableModel, 5);

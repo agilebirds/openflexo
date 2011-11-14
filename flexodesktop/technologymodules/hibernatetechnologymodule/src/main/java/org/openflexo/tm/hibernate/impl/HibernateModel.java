@@ -116,11 +116,13 @@ public class HibernateModel extends TechnologyModelObject implements FlexoObserv
 	@Override
 	public void delete() {
 
-		for (HibernateEntity hibernateEntity : new Vector<HibernateEntity>(getEntities()))
+		for (HibernateEntity hibernateEntity : new Vector<HibernateEntity>(getEntities())) {
 			hibernateEntity.delete();
+		}
 
-		if (getHibernateImplementation() != null)
+		if (getHibernateImplementation() != null) {
 			getHibernateImplementation().removeFromModels(this);
+		}
 
 		setChanged();
 		notifyObservers(new SGObjectDeletedModification());
@@ -153,8 +155,9 @@ public class HibernateModel extends TechnologyModelObject implements FlexoObserv
 	 */
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (dataModification instanceof NameChanged)
+		if (dataModification instanceof NameChanged) {
 			sortEntities();
+		}
 	}
 
 	/* ===================== */
@@ -174,13 +177,15 @@ public class HibernateModel extends TechnologyModelObject implements FlexoObserv
 		if (requireChange(this.entities, entities)) {
 			Vector<HibernateEntity> oldValue = this.entities;
 
-			for (HibernateEntity entity : oldValue)
+			for (HibernateEntity entity : oldValue) {
 				entity.deleteObserver(this);
+			}
 
 			this.entities = entities;
 
-			for (HibernateEntity entity : entities)
+			for (HibernateEntity entity : entities) {
 				entity.addObserver(this);
+			}
 
 			sortEntities();
 			setChanged();
@@ -221,8 +226,9 @@ public class HibernateModel extends TechnologyModelObject implements FlexoObserv
 	}
 
 	public FlexoModelObjectReference<DMRepository> getWatchedRepositoryReference() {
-		if (getWatchedRepository() != null)
+		if (getWatchedRepository() != null) {
 			return new FlexoModelObjectReference<DMRepository>(getProject(), getWatchedRepository());
+		}
 		return null;
 	}
 
@@ -237,11 +243,13 @@ public class HibernateModel extends TechnologyModelObject implements FlexoObserv
 	public void setHibernateEnumContainer(HibernateEnumContainer hibernateEnumContainer) {
 		if (requireChange(this.hibernateEnumContainer, hibernateEnumContainer)) {
 			HibernateEnumContainer oldValue = this.hibernateEnumContainer;
-			if (oldValue != null)
+			if (oldValue != null) {
 				hibernateEnumContainer.setHibernateModel(null);
+			}
 			this.hibernateEnumContainer = hibernateEnumContainer;
-			if (hibernateEnumContainer != null)
+			if (hibernateEnumContainer != null) {
 				hibernateEnumContainer.setHibernateModel(this);
+			}
 			setChanged();
 			notifyObservers(new SGAttributeModification("hibernateEnumContainer", oldValue, hibernateEnumContainer));
 		}

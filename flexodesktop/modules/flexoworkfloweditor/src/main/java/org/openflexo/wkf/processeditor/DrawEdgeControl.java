@@ -162,10 +162,11 @@ public class DrawEdgeControl extends MouseDragControl {
 				// Attempt to repaint relevant zone only
 				Rectangle newBounds = getBoundsToRepaint(drawingView);
 				Rectangle boundsToRepaint;
-				if (oldBounds != null)
+				if (oldBounds != null) {
 					boundsToRepaint = oldBounds.union(newBounds);
-				else
+				} else {
 					boundsToRepaint = newBounds;
+				}
 				paintManager.repaint(drawingView, boundsToRepaint);
 
 				// Alternative @brutal zone

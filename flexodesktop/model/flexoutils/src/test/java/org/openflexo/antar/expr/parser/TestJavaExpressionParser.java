@@ -19,13 +19,12 @@
  */
 package org.openflexo.antar.expr.parser;
 
+import junit.framework.TestCase;
+
 import org.openflexo.antar.expr.DefaultExpressionParser;
 import org.openflexo.antar.expr.DefaultExpressionPrettyPrinter;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.TypeMismatchException;
-import org.openflexo.antar.expr.parser.ParseException;
-
-import junit.framework.TestCase;
 
 public class TestJavaExpressionParser extends TestCase {
 

@@ -90,8 +90,9 @@ public final class PopupComponentDefinition extends ComponentDefinition implemen
 		if (getProject() != null) {
 			FlexoComponentResource returned = getProject().getFlexoPopupComponentResource(getName());
 			if (returned == null && createIfNotExists) {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Creating new popup component resource !");
+				}
 				// FlexoProcessResource processRes =
 				// getProject().getFlexoProcessResource(getProcess().getName());
 				File componentsDir = ProjectRestructuration.getExpectedDirectoryForComponent(getProject().getProjectDirectory(), this);
@@ -121,33 +122,38 @@ public final class PopupComponentDefinition extends ComponentDefinition implemen
 							compRes = new FlexoPopupComponentResource(getProject(), _componentName, getProject()
 									.getFlexoComponentLibraryResource(), resourceComponentFile);
 						} catch (InvalidFileNameException e) {
-							if (logger.isLoggable(Level.SEVERE))
+							if (logger.isLoggable(Level.SEVERE)) {
 								logger.severe("This should really not happen.");
+							}
 							return null;
 						}
 					}
 				}
-				if (compRes == null)
+				if (compRes == null) {
 					return null;
+				}
 				compRes.setResourceData(new IEPopupComponent(this, getProject()));
 				try {
 					compRes.getResourceData().setFlexoResource(compRes);
 					getProject().registerResource(compRes);
 				} catch (DuplicateResourceException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 					return null;
 				}
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Registered component " + _componentName + " file: " + componentFile);
+				}
 				returned = compRes;
 			}
 			return returned;
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("getProject()==null for a PopupComponentDefinition !");
+			}
 		}
 		return null;
 	}

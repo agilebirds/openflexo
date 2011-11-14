@@ -47,11 +47,13 @@ public interface FGEShape<O extends FGEGeometricObject> extends FGEGeometricObje
 	public static class AreaComputation {
 
 		public static <O extends FGEGeometricObject> boolean isShapeContainedInArea(FGEShape<O> shape, FGEArea area) {
-			if (shape.getControlPoints().size() == 0)
+			if (shape.getControlPoints().size() == 0) {
 				return false;
+			}
 			for (FGEPoint p : shape.getControlPoints()) {
-				if (!area.containsPoint(p))
+				if (!area.containsPoint(p)) {
 					return false;
+				}
 			}
 			return true;
 		}
@@ -123,10 +125,12 @@ public interface FGEShape<O extends FGEGeometricObject> extends FGEGeometricObje
 				pathIterator.next();
 			}
 
-			if (polygons.size() == 0)
+			if (polygons.size() == 0) {
 				return new FGEEmptyArea();
-			if (polygons.size() == 1)
+			}
+			if (polygons.size() == 1) {
 				return polygons.firstElement();
+			}
 			return FGEUnionArea.makeUnion(polygons);
 
 		}

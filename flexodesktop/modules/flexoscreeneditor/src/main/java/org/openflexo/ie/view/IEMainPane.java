@@ -53,8 +53,9 @@ public class IEMainPane extends FlexoMainPane implements GraphicalFlexoObserver 
 	@Override
 	public void setModuleView(ModuleView moduleView) {
 		super.setModuleView(moduleView);
-		if (moduleView == null)
+		if (moduleView == null) {
 			return;
+		}
 		/* if (moduleView instanceof IEModuleView) {
 		     if (tabbedPane != null) {
 		         tabbedPane.removeChangeListener(browserTabbedPaneListener);

@@ -37,8 +37,9 @@ public class FGERegularPolygon extends FGEPolygon {
 		this.y = aY;
 		this.width = aWidth;
 		this.height = aHeight;
-		if (pointsNb < 3)
+		if (pointsNb < 3) {
 			throw new IllegalArgumentException("Cannot build regular polygon with less then 3 points (" + pointsNb + ")");
+		}
 		npoints = pointsNb;
 		updatePoints();
 	}
@@ -61,8 +62,9 @@ public class FGERegularPolygon extends FGEPolygon {
 	}
 
 	public void setNPoints(int pointsNb) {
-		if (pointsNb < 3)
+		if (pointsNb < 3) {
 			pointsNb = 3;
+		}
 		npoints = pointsNb;
 		updatePoints();
 	}

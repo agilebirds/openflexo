@@ -22,11 +22,11 @@ package org.openflexo.icon;
 import javax.swing.ImageIcon;
 
 import org.openflexo.toolbox.FileFormat;
-import org.openflexo.toolbox.ImageIconResource;
 import org.openflexo.toolbox.FileFormat.BinaryFileFormat;
 import org.openflexo.toolbox.FileFormat.DirectoryFormat;
 import org.openflexo.toolbox.FileFormat.ImageFileFormat;
 import org.openflexo.toolbox.FileFormat.TextFileFormat;
+import org.openflexo.toolbox.ImageIconResource;
 
 /**
  * Utility class containing all icons used in whole application Note that this file will be relocated inside Flexo project for common icons,

@@ -127,8 +127,9 @@ public class AskNewTabDialog extends FlexoDialog implements ActionListener {
 				getRootPane().setDefaultButton(confirmButton);
 				newTabButton.doClick();
 				if (tabTitle.getText() == null || tabTitle.getText().trim().length() == 0
-						|| tabTitle.getText().equals(newTabChoice.getText().substring(0, newTabChoice.getText().length() - 1)))
+						|| tabTitle.getText().equals(newTabChoice.getText().substring(0, newTabChoice.getText().length() - 1))) {
 					tabTitle.setText(newTabChoice.getText());
+				}
 			}
 
 			@Override
@@ -139,8 +140,9 @@ public class AskNewTabDialog extends FlexoDialog implements ActionListener {
 					getRootPane().setDefaultButton(cancelButton);
 				}
 				if (tabTitle.getText() == null || tabTitle.getText().trim().length() == 0
-						|| newTabChoice.getText().equals(tabTitle.getText().substring(0, tabTitle.getText().length() - 1)))
+						|| newTabChoice.getText().equals(tabTitle.getText().substring(0, tabTitle.getText().length() - 1))) {
 					tabTitle.setText(newTabChoice.getText());
+				}
 			}
 		});
 		// newProcessChoice.setFocusable(true);

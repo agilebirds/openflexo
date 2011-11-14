@@ -30,7 +30,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.tools.ant.BuildListener;
-
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.gen.GenerationProgressNotification;
@@ -117,8 +116,9 @@ public class FlexoWarBuilder extends FlexoObservable {
 		_distDir = distDirectory;
 		runner = new AntRunner(this);
 		listeners = new Vector<BuildListener>();
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("################### checkout libraries = " + checkoutLibraries + " ##################");
+		}
 	}
 
 	private String getWarProjectName() {
@@ -126,43 +126,51 @@ public class FlexoWarBuilder extends FlexoObservable {
 	}
 
 	protected File getWarProjectDir(File outputDirectory) throws IOException {
-		if (_warProjectDir == null)
+		if (_warProjectDir == null) {
 			_warProjectDir = new File(outputDirectory, getWarProjectName());
-		if (!_warProjectDir.exists())
+		}
+		if (!_warProjectDir.exists()) {
 			_warProjectDir.mkdirs();
+		}
 		return _warProjectDir;
 	}
 
 	private File getXDocsDir(File outputDir) throws Exception {
-		if (_xdocsDir == null)
+		if (_xdocsDir == null) {
 			_xdocsDir = new File(getWarProjectDir(outputDir), "xdocs");
-		if (!_xdocsDir.exists())
+		}
+		if (!_xdocsDir.exists()) {
 			checkoutProjectTemplate(outputDir);
+		}
 		System.err.println("_xdocsDir:" + _xdocsDir.getAbsolutePath());
 		return _xdocsDir;
 	}
 
 	private File getBuildTempDir(File outputDir) throws IOException {
-		if (_buildTempDir == null)
+		if (_buildTempDir == null) {
 			_buildTempDir = new File(getWarProjectDir(outputDir), "temp");
+		}
 		return _buildTempDir;
 	}
 
 	private File getBuildDistDir(File outputDir) throws IOException {
-		if (_buildDistDir == null)
+		if (_buildDistDir == null) {
 			_buildDistDir = new File(getBuildTempDir(outputDir), "dist");
+		}
 		return _buildDistDir;
 	}
 
 	private File getBuildWarDirectory(File outputDir) throws IOException {
-		if (_buildWarDir == null)
+		if (_buildWarDir == null) {
 			_buildWarDir = new File(getBuildDistDir(outputDir), "war");
+		}
 		return _buildWarDir;
 	}
 
 	private File getBuildWSDirectory(File outputDir) throws IOException {
-		if (_buildWSDir == null)
+		if (_buildWSDir == null) {
 			_buildWSDir = new File(getBuildTempDir(outputDir), "ws");
+		}
 		return _buildWSDir;
 	}
 
@@ -179,11 +187,13 @@ public class FlexoWarBuilder extends FlexoObservable {
 			@Override
 			public void run() {
 				try {
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Deleting " + outputDir.getAbsolutePath());
+					}
 					FileUtils.recursiveDeleteFile(outputDir);
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Done deleting " + outputDir.getAbsolutePath());
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				} finally {
@@ -192,18 +202,20 @@ public class FlexoWarBuilder extends FlexoObservable {
 		});
 		t.setPriority(Thread.MIN_PRIORITY);
 		t.start();
-		if (cleanImmediately)
+		if (cleanImmediately) {
 			try {
 				t.join();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+		}
 	}
 
 	private void copyBuildAna(File outputDir) throws Exception {
 		File destFile = new File(getXDocsDir(outputDir), "build.ana");
-		if (!destFile.exists())
+		if (!destFile.exists()) {
 			destFile.createNewFile();
+		}
 		FileUtils.copyFileToFile(_buildAna, destFile);
 	}
 
@@ -224,8 +236,9 @@ public class FlexoWarBuilder extends FlexoObservable {
 		runBuildScriptGenerator(outputDir);
 		runBuildScript(outputDir);
 		notifyProgress("Copying WAR to: " + outputDir.getAbsolutePath());
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Copying WAR to: " + outputDir.getAbsolutePath());
+		}
 		copyWarToDist(outputDir);
 		// copyWebResourcesToDist(outputDir);
 		notifyProgress("Clean temporary files");
@@ -240,8 +253,9 @@ public class FlexoWarBuilder extends FlexoObservable {
 		File f = new File(userHome, "Library/" + WO_BUILD_PROPERTIES);
 		try {
 			if (!f.exists()) {
-				if (!f.getParentFile().exists())
+				if (!f.getParentFile().exists()) {
 					f.getParentFile().mkdirs();
+				}
 				f.createNewFile();
 				Properties p = new Properties();
 				for (int i = 0; i < ABSOLUTE_KEYS.length; i++) {
@@ -253,14 +267,15 @@ public class FlexoWarBuilder extends FlexoObservable {
 					}
 				}
 				File WO_DIR = null;
-				if (System.getenv("NEXT_ROOT") != null)
+				if (System.getenv("NEXT_ROOT") != null) {
 					WO_DIR = new File(System.getenv("NEXT_ROOT"));
+				}
 				if (WO_DIR == null) {
 					if ((ToolBox.getPLATFORM() == ToolBox.WINDOWS)) {
 						File test = new File("c:\\System");
-						if (test.exists())
+						if (test.exists()) {
 							WO_DIR = test;
-						else {
+						} else {
 							WO_DIR = new File("c:\\Apple");
 						}
 					} else {
@@ -307,8 +322,9 @@ public class FlexoWarBuilder extends FlexoObservable {
 			ZipUtils.unzip(new FileResource(ZIPPED_TEMPLATE_PROJECT_PATH), outputDir);
 		}
 		File libraries = new File(getWarProjectDir(outputDir), "libraries");
-		if (!libraries.exists())
+		if (!libraries.exists()) {
 			libraries.mkdirs();
+		}
 
 	}
 
@@ -324,16 +340,18 @@ public class FlexoWarBuilder extends FlexoObservable {
 		}
 		// flexo_framework_dir
 		if (flexo_embedded_framework_path != null) {
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Frameworks path: " + flexo_embedded_framework_path);
+			}
 			defaultProperties.put("flexo_framework_dir", flexo_embedded_framework_path);
 		}
 		defaultProperties.store(new FileOutputStream(getDefaultPropertiesFile(outputDir)), null);
 	}
 
 	private File getDefaultPropertiesFile(File outputDir) throws IOException {
-		if (_defaultPropertiesFile == null)
+		if (_defaultPropertiesFile == null) {
 			_defaultPropertiesFile = new File(getWarProjectDir(outputDir), "default.properties");
+		}
 		return _defaultPropertiesFile;
 	}
 

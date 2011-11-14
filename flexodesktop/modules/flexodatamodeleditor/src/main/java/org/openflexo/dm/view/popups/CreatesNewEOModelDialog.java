@@ -40,16 +40,15 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileFilter;
 
-import org.openflexo.swing.FileSelector;
-import org.openflexo.toolbox.ToolBox;
-import org.openflexo.view.FlexoDialog;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.foundation.dm.action.CreateDMEOModel;
 import org.openflexo.foundation.dm.eo.DMEOAdaptorType;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ProjectRestructuration;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.swing.FileSelector;
+import org.openflexo.toolbox.ToolBox;
+import org.openflexo.view.FlexoDialog;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * Popup allowing to choose parameters to creates a new EOModel

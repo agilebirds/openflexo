@@ -50,15 +50,17 @@ public class ForegroundStyleInspectorWidget extends CustomWidget<ForegroundStyle
 		getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Focus gained in " + getClass().getName());
+				}
 				super.focusGained(arg0);
 			}
 
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Focus lost in " + getClass().getName());
+				}
 				super.focusLost(arg0);
 			}
 		});
@@ -94,14 +96,16 @@ public class ForegroundStyleInspectorWidget extends CustomWidget<ForegroundStyle
 
 	@Override
 	public void fireEditingCanceled() {
-		if (_selector != null)
+		if (_selector != null) {
 			_selector.closePopup();
+		}
 	}
 
 	@Override
 	public void fireEditingStopped() {
-		if (_selector != null)
+		if (_selector != null) {
 			_selector.closePopup();
+		}
 	}
 
 	@Override

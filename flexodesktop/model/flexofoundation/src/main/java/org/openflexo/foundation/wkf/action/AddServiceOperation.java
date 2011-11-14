@@ -98,8 +98,9 @@ public class AddServiceOperation extends FlexoAction<AddServiceOperation, FlexoM
 
 	public ServiceInterface getServiceInterface() {
 		// soit focussed object or specified
-		if (_serviceInterface != null)
+		if (_serviceInterface != null) {
 			return _serviceInterface;
+		}
 		if ((getFocusedObject() != null) && (getFocusedObject() instanceof ServiceInterface)) {
 			return ((ServiceInterface) getFocusedObject());
 		}

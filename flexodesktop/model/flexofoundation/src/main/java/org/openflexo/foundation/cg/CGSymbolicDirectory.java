@@ -147,29 +147,33 @@ public class CGSymbolicDirectory extends CGObject implements CGPathElement {
 
 	@Override
 	public boolean hasGenerationErrors() {
-		if (getGeneratedCodeRepository() != null)
+		if (getGeneratedCodeRepository() != null) {
 			getGeneratedCodeRepository().ensureStructureIsUpToDate();
+		}
 		return hasGenerationErrors;
 	}
 
 	@Override
 	public boolean needsRegeneration() {
-		if (getGeneratedCodeRepository() != null)
+		if (getGeneratedCodeRepository() != null) {
 			getGeneratedCodeRepository().ensureStructureIsUpToDate();
+		}
 		return needsRegeneration;
 	}
 
 	@Override
 	public boolean needsModelReinjection() {
-		if (getGeneratedCodeRepository() != null)
+		if (getGeneratedCodeRepository() != null) {
 			getGeneratedCodeRepository().ensureStructureIsUpToDate();
+		}
 		return needsModelReinjection;
 	}
 
 	@Override
 	public GenerationStatus getGenerationStatus() {
-		if (getGeneratedCodeRepository() != null)
+		if (getGeneratedCodeRepository() != null) {
 			getGeneratedCodeRepository().ensureStructureIsUpToDate();
+		}
 		return generationStatus;
 	}
 
@@ -189,8 +193,9 @@ public class CGSymbolicDirectory extends CGObject implements CGPathElement {
 	@Override
 	public CGFolder getDirectoryNamed(String aName) {
 		for (CGFolder dir : getSubFolders()) {
-			if (dir.getName().equals(aName))
+			if (dir.getName().equals(aName)) {
 				return dir;
+			}
 		}
 		return null;
 	}
@@ -236,8 +241,9 @@ public class CGSymbolicDirectory extends CGObject implements CGPathElement {
 		}
 		FlexoProjectFile projectFile = file.getResource().getResourceFile();
 		if (projectFile == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning(" null project file for " + file + " resource: " + file.getResource());
+			}
 			return;
 		}
 		if (projectFile.getExternalRepository() == null
@@ -257,17 +263,20 @@ public class CGSymbolicDirectory extends CGObject implements CGPathElement {
 				if (parent.getDirectoryNamed(dirName) == null) {
 					parent.getSubFolders().add(new CGFolder(getGeneratedCodeRepository(), dirName, parent));
 				}
-				if (file.isEnabled())
+				if (file.isEnabled()) {
 					parent.getDirectoryNamed(dirName).isEnabled = true;
+				}
 				parent = parent.getDirectoryNamed(dirName);
 			}
-			if (file.isEnabled())
+			if (file.isEnabled()) {
 				isEnabled = true;
+			}
 			file.setParent(parent);
 			parent.getFiles().add(file);
 		} else {
-			if (logger.isLoggable(Level.SEVERE))
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("relative path: " + relativePath + " for file : " + projectFile.getStringRepresentation());
+			}
 		}
 	}
 

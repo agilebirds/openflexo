@@ -31,16 +31,6 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-import org.openflexo.swing.DateSelector;
-import org.openflexo.swing.DurationSelector;
-import org.openflexo.swing.VerticalLayout;
-import org.openflexo.toolbox.Duration;
-import org.openflexo.toolbox.FileResource;
-import org.openflexo.toolbox.Duration.DurationUnit;
-
-import org.openflexo.components.widget.DMTypeSelector;
-import org.openflexo.components.widget.DomainSelector;
-import org.openflexo.components.widget.KeySelector;
 import org.openflexo.components.widget.binding.BindingSelector;
 import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
@@ -48,8 +38,8 @@ import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.bindings.AbstractBinding;
 import org.openflexo.foundation.bindings.Bindable;
 import org.openflexo.foundation.bindings.BindingDefinition;
-import org.openflexo.foundation.bindings.BindingValue;
 import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
+import org.openflexo.foundation.bindings.BindingValue;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResourceManager;
@@ -61,6 +51,12 @@ import org.openflexo.foundation.wkf.node.IFOperator;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
+import org.openflexo.swing.DateSelector;
+import org.openflexo.swing.DurationSelector;
+import org.openflexo.swing.VerticalLayout;
+import org.openflexo.toolbox.Duration;
+import org.openflexo.toolbox.Duration.DurationUnit;
+import org.openflexo.toolbox.FileResource;
 
 public class TestBindingExpressionSelector {
 

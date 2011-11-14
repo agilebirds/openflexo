@@ -38,10 +38,11 @@ public class Test3 {
 	public static void main(String[] args) throws Exception {
 		PetalParser parser;
 
-		if (args.length == 0)
+		if (args.length == 0) {
 			parser = PetalParser.createParser(System.in);
-		else
+		} else {
 			parser = PetalParser.createParser(args[0]);
+		}
 
 		PetalFile tree = parser.parse();
 

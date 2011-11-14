@@ -49,8 +49,9 @@ public abstract class SWLObjectGR<O extends FlexoModelObject> extends ShapeGraph
 	}
 
 	public FlexoWorkflow getWorkflow() {
-		if (getModel().getProject() != null)
+		if (getModel().getProject() != null) {
 			return getModel().getProject().getFlexoWorkflow();
+		}
 		return null;
 	}
 

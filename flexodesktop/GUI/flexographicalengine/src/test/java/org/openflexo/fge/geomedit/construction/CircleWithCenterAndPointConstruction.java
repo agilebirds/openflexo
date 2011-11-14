@@ -20,9 +20,9 @@
 package org.openflexo.fge.geomedit.construction;
 
 import org.openflexo.fge.geom.FGECircle;
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGESegment;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 
 public class CircleWithCenterAndPointConstruction extends CircleConstruction {
 

@@ -54,10 +54,11 @@ public abstract class Constant<V> extends Expression {
 
 	public static abstract class BooleanConstant extends Constant<Boolean> {
 		public static BooleanConstant get(boolean value) {
-			if (value)
+			if (value) {
 				return TRUE;
-			else
+			} else {
 				return FALSE;
+			}
 		}
 
 		@Override

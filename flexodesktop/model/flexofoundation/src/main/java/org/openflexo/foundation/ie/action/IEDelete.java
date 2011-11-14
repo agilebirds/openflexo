@@ -75,49 +75,57 @@ public class IEDelete extends FlexoUndoableAction<IEDelete, IEObject, IEObject> 
 	protected void doAction(Object context) {
 		if (entriesToDelete != null) {
 			for (TOCEntry entry : entriesToDelete) {
-				if (!entry.isDeleted())
+				if (!entry.isDeleted()) {
 					entry.delete();
+				}
 			}
 		}
 		if (actionsToDelete != null) {
 			for (ActionNode node : actionsToDelete) {
-				if (!node.isDeleted())
+				if (!node.isDeleted()) {
 					node.delete();
+				}
 			}
 		}
 		logger.info("DELETE on IE");
 		Vector<ComponentDefinition> components = new Vector<ComponentDefinition>();
 		Vector<FlexoComponentFolder> folders = new Vector<FlexoComponentFolder>();
 		Vector<FlexoModelObject> v = getGlobalSelectionAndFocusedObject();
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("IE Delete with " + v);
+		}
 
 		for (FlexoModelObject object : v) {
-			if (object instanceof ComponentDefinition)
+			if (object instanceof ComponentDefinition) {
 				components.add((ComponentDefinition) object);
-			else if (object instanceof FlexoComponentFolder)
+			} else if (object instanceof FlexoComponentFolder) {
 				folders.add((FlexoComponentFolder) object);
+			}
 		}
 		for (FlexoComponentFolder f : folders) {
 			if (f.containsComponents()) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Cannot delete non-empty folders");
+				}
 				return;
 			} else if (f.isRootFolder()) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Cannot delete root folder");
+				}
 				return;
 			}
 		}
 		for (FlexoModelObject object : v) {
-			if (object.isDeleted())
+			if (object.isDeleted()) {
 				continue;
+			}
 			if (object instanceof DKVObject) {
-				if (((DKVObject) object).isDeleteAble())
+				if (((DKVObject) object).isDeleteAble()) {
 					object.delete();
-				else {
-					if (logger.isLoggable(Level.INFO))
+				} else {
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("DKV-Object " + object + " is not deleteable");
+					}
 				}
 			} else if (object instanceof IEWOComponent) {
 				((IEWOComponent) object).getComponentDefinition().delete();

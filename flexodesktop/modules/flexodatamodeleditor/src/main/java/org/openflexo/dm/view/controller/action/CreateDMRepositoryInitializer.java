@@ -27,10 +27,6 @@ import javax.swing.KeyStroke;
 
 import org.openflexo.dm.view.DMModelView;
 import org.openflexo.dm.view.popups.AskNewRepositoryDialog;
-import org.openflexo.dm.view.popups.CreateProjectDatabaseRepositoryDialog;
-import org.openflexo.dm.view.popups.CreateProjectRepositoryDialog;
-import org.openflexo.dm.view.popups.ImportExternalDatabaseRepositoryDialog;
-import org.openflexo.dm.view.popups.ImportJARDialog;
 import org.openflexo.dm.view.popups.ImportRationalRoseRepositoryDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;

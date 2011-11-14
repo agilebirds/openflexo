@@ -73,8 +73,9 @@ public class FlexoImportedRoleLibraryDelta {
 	}
 
 	public void visit(DeltaVisitor visitor) {
-		for (RoleDelta delta : deltas)
+		for (RoleDelta delta : deltas) {
 			visitor.visit(delta);
+		}
 	}
 
 	private Vector<RoleDelta> computeDiff(Vector<Role> originalRoles, PPMRole[] updatedRoles) {
@@ -87,10 +88,11 @@ public class FlexoImportedRoleLibraryDelta {
 				if (fir != null) {
 					copyOfOriginal.remove(fir);
 					delta = new RoleDelta(fir, role);
-					if (fir.isEquivalentTo(role))
+					if (fir.isEquivalentTo(role)) {
 						delta.setStatus(DeltaStatus.UNCHANGED);
-					else
+					} else {
 						delta.setStatus(DeltaStatus.UPDATED);
+					}
 				} else {
 					delta = new RoleDelta(null, role);
 					delta.setStatus(DeltaStatus.NEW);

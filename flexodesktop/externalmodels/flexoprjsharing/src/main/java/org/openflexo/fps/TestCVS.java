@@ -230,27 +230,32 @@ public class TestCVS {
 		public String repository;
 
 		public CVSRoot(String root) throws IllegalArgumentException {
-			if (!root.startsWith(":"))
+			if (!root.startsWith(":")) {
 				throw new IllegalArgumentException();
+			}
 
 			int oldColonPosition = 0;
 			int colonPosition = root.indexOf(':', 1);
-			if (colonPosition == -1)
+			if (colonPosition == -1) {
 				throw new IllegalArgumentException();
+			}
 			connectionType = root.substring(oldColonPosition + 1, colonPosition);
 			oldColonPosition = colonPosition;
 			colonPosition = root.indexOf('@', colonPosition + 1);
-			if (colonPosition == -1)
+			if (colonPosition == -1) {
 				throw new IllegalArgumentException();
+			}
 			user = root.substring(oldColonPosition + 1, colonPosition);
 			oldColonPosition = colonPosition;
 			colonPosition = root.indexOf(':', colonPosition + 1);
-			if (colonPosition == -1)
+			if (colonPosition == -1) {
 				throw new IllegalArgumentException();
+			}
 			host = root.substring(oldColonPosition + 1, colonPosition);
 			repository = root.substring(colonPosition + 1);
-			if (connectionType == null || user == null || host == null || repository == null)
+			if (connectionType == null || user == null || host == null || repository == null) {
 				throw new IllegalArgumentException();
+			}
 		}
 	}
 

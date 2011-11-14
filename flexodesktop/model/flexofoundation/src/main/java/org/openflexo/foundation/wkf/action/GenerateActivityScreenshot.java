@@ -86,8 +86,9 @@ public class GenerateActivityScreenshot extends FlexoAction<GenerateActivityScre
 				logger.info("Resource for screenshot has been found");
 			}
 			_hasBeenRegenerated = screenshotResource.ensureGenerationIsUpToDate();
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Screenshot generated");
+			}
 		} else {
 			logger.warning("Focused object is null !");
 		}

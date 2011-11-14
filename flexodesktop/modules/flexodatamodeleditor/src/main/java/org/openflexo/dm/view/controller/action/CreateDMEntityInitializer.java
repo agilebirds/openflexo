@@ -63,15 +63,17 @@ public class CreateDMEntityInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, CreateDMEntity action) {
 				if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getRepository()) {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Finalizer for CreateDMEntity in DMRepositoryView");
+					}
 					DMRepositoryView repView = (DMRepositoryView) getControllerActionInitializer().getDMController()
 							.getCurrentEditedObjectView();
 					repView.getPackageTable().selectObject(action.getPackage());
 					repView.getEntityTable().selectObject(action.getNewEntity());
 				} else if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getPackage()) {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Finalizer for CreateDMEntity in DMPackageView");
+					}
 					DMPackageView packageView = (DMPackageView) getControllerActionInitializer().getDMController()
 							.getCurrentEditedObjectView();
 					packageView.getEntityTable().selectObject(action.getNewEntity());

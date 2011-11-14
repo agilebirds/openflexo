@@ -33,6 +33,7 @@ import org.openflexo.foundation.ie.IObject;
 import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
 import org.openflexo.foundation.rm.FlexoNavigationMenuResource;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProject.ImageFile;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
 import org.openflexo.foundation.rm.InvalidFileNameException;
@@ -40,7 +41,6 @@ import org.openflexo.foundation.rm.ProjectRestructuration;
 import org.openflexo.foundation.rm.RMNotification;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
-import org.openflexo.foundation.rm.FlexoProject.ImageFile;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
@@ -122,8 +122,9 @@ public class FlexoNavigationMenu extends IEObject implements XMLStorageResourceD
 	 * @return a newly created FlexoNavigationMenu
 	 */
 	public static FlexoNavigationMenu createNewFlexoNavigationMenu(FlexoProject project) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("createNewFlexoNavigationMenu(), project=" + project);
+		}
 		FlexoNavigationMenu newMenu = new FlexoNavigationMenu(project);
 
 		File menuFile = ProjectRestructuration.getExpectedNavigationMenuFile(project);
@@ -137,8 +138,9 @@ public class FlexoNavigationMenu extends IEObject implements XMLStorageResourceD
 			try {
 				res = new FlexoNavigationMenuResource(project, newMenu, resFile);
 			} catch (InvalidFileNameException e) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("This should not happen.");
+				}
 				return null;
 			}
 		}
@@ -148,8 +150,9 @@ public class FlexoNavigationMenu extends IEObject implements XMLStorageResourceD
 			project.registerResource(res);
 		} catch (Exception e1) {
 			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
+			}
 			e1.printStackTrace();
 		}
 		try {
@@ -295,8 +298,9 @@ public class FlexoNavigationMenu extends IEObject implements XMLStorageResourceD
 	}
 
 	public FlexoItemMenu getRootMenu() {
-		if (_rootMenu == null)
+		if (_rootMenu == null) {
 			_rootMenu = FlexoItemMenu.createNewRootMenu(this);
+		}
 		return _rootMenu;
 	}
 
@@ -334,8 +338,9 @@ public class FlexoNavigationMenu extends IEObject implements XMLStorageResourceD
 		if (getProject() != null) {
 			return getProject().getIEValidationModel();
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not access to project !");
+			}
 		}
 		return null;
 	}
@@ -454,8 +459,9 @@ public class FlexoNavigationMenu extends IEObject implements XMLStorageResourceD
 	}
 
 	public Date getLastUpdateDateForLogo() {
-		if (lastUpdateDateForLogo == null)
+		if (lastUpdateDateForLogo == null) {
 			lastUpdateDateForLogo = getLastUpdate();
+		}
 		return lastUpdateDateForLogo;
 	}
 
@@ -498,8 +504,9 @@ public class FlexoNavigationMenu extends IEObject implements XMLStorageResourceD
 	}
 
 	public String getUserProfilePageName() {
-		if (getUserProfileOperation() == null || getUserProfileOperation().getComponentInstance() == null)
+		if (getUserProfileOperation() == null || getUserProfileOperation().getComponentInstance() == null) {
 			return null;
+		}
 		return getUserProfileOperation().getComponentInstance().getComponentName();
 	}
 
@@ -542,8 +549,9 @@ public class FlexoNavigationMenu extends IEObject implements XMLStorageResourceD
 					setChanged();
 				}
 
-			} else if (logger.isLoggable(Level.WARNING))
+			} else if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("This is weird, an operation has been set but not its process.");
+			}
 		}
 		return userProfileOperation;
 	}
@@ -551,10 +559,11 @@ public class FlexoNavigationMenu extends IEObject implements XMLStorageResourceD
 	public void setUserProfileOperation(OperationNode displayOperation) {
 		OperationNode old = this.userProfileOperation;
 		this.userProfileOperation = displayOperation;
-		if (displayOperation != null)
+		if (displayOperation != null) {
 			userProfileOperationFlexoID = displayOperation.getFlexoID();
-		else
+		} else {
 			userProfileOperationFlexoID = -1;
+		}
 		setChanged();
 		notifyObservers(new DisplayOperationSet(old, displayOperation));
 	}
@@ -563,8 +572,9 @@ public class FlexoNavigationMenu extends IEObject implements XMLStorageResourceD
 		if (userProfileProcess == null && userProfileProcessFlexoID > -1) {
 			userProfileProcess = getProject().getFlexoWorkflow().getLocalFlexoProcessWithFlexoID(userProfileProcessFlexoID);
 			if (userProfileProcess == null) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not find process with flexoID " + userProfileProcessFlexoID);
+				}
 				userProfileProcessFlexoID = -1;
 				setUserProfileOperation(null);
 				setChanged();
@@ -582,36 +592,41 @@ public class FlexoNavigationMenu extends IEObject implements XMLStorageResourceD
 		if (displayProcess != null) {
 			userProfileProcessFlexoID = displayProcess.getFlexoID();
 			getFlexoResource().addToDependantResources(displayProcess.getFlexoResource());
-		} else
+		} else {
 			userProfileProcessFlexoID = -1;
+		}
 		setUserProfileOperation(null);
 		setChanged();
 		notifyObservers(new DisplayProcessSet(old, displayProcess));
 	}
 
 	public long getUserProfileOperationFlexoID() {
-		if (getUserProfileOperation() != null)
+		if (getUserProfileOperation() != null) {
 			return getUserProfileOperation().getFlexoID();
-		else
+		} else {
 			return -1;
+		}
 	}
 
 	public void setUserProfileOperationFlexoID(long displayOperationFlexoID) {
-		if (getUserProfileOperation() != null)
+		if (getUserProfileOperation() != null) {
 			userProfileOperation = null;
+		}
 		this.userProfileOperationFlexoID = displayOperationFlexoID;
 	}
 
 	public long getUserProfileProcessFlexoID() {
-		if (getUserProfileProcess() != null)
+		if (getUserProfileProcess() != null) {
 			return getUserProfileProcess().getFlexoID();
-		else
+		} else {
 			return -1;
+		}
 	}
 
 	public void setUserProfileProcessFlexoID(long displayProcessFlexoID) {
-		if (getUserProfileProcess() != null)
+		if (getUserProfileProcess() != null) {
 			setUserProfileProcess(null);
+		}
 		this.userProfileProcessFlexoID = displayProcessFlexoID;
 	}
 
@@ -625,8 +640,9 @@ public class FlexoNavigationMenu extends IEObject implements XMLStorageResourceD
 		while (en.hasMoreElements()) {
 			FlexoItemMenu menu = en.nextElement();
 			Hashtable<String, String> props = menu.getLocalizableProperties();
-			if (props != null)
+			if (props != null) {
 				reply.put(menu, props);
+			}
 		}
 		return reply;
 	}

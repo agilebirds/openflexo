@@ -118,8 +118,9 @@ public abstract class FIBWidget extends FIBComponent {
 	}
 
 	public DataBinding getTooltip() {
-		if (tooltip == null)
+		if (tooltip == null) {
 			tooltip = new DataBinding(this, Parameters.tooltip, TOOLTIP);
+		}
 		return tooltip;
 	}
 
@@ -131,8 +132,9 @@ public abstract class FIBWidget extends FIBComponent {
 	}
 
 	public DataBinding getEnable() {
-		if (enable == null)
+		if (enable == null) {
 			enable = new DataBinding(this, Parameters.enable, ENABLE);
+		}
 		return enable;
 	}
 
@@ -146,22 +148,28 @@ public abstract class FIBWidget extends FIBComponent {
 	@Override
 	public void finalizeDeserialization() {
 		super.finalizeDeserialization();
-		if (enable != null)
+		if (enable != null) {
 			enable.finalizeDeserialization();
-		if (format != null)
+		}
+		if (format != null) {
 			format.finalizeDeserialization();
-		if (icon != null)
+		}
+		if (icon != null) {
 			icon.finalizeDeserialization();
-		if (tooltip != null)
+		}
+		if (tooltip != null) {
 			tooltip.finalizeDeserialization();
-		if (valueChangedAction != null)
+		}
+		if (valueChangedAction != null) {
 			valueChangedAction.finalizeDeserialization();
+		}
 	}
 
 	@Override
 	public Type getDataType() {
-		if (getData() != null && getData().getBinding() != null)
+		if (getData() != null && getData().getBinding() != null) {
 			return getData().getBinding().getAccessedType();
+		}
 		return getDefaultDataClass();
 
 	}
@@ -173,9 +181,9 @@ public abstract class FIBWidget extends FIBComponent {
 	@Override
 	public Type getDynamicAccessType() {
 		if (getManageDynamicModel()) {
-			if (getData() != null && getData().isSet())
+			if (getData() != null && getData().isSet()) {
 				return super.getDynamicAccessType();
-			else {
+			} else {
 				Type[] args = new Type[1];
 				args[0] = getDataType();
 				return new ParameterizedTypeImpl(FIBComponentDynamicModel.class, args);
@@ -222,8 +230,9 @@ public abstract class FIBWidget extends FIBComponent {
 	}
 
 	public DataBinding getFormat() {
-		if (format == null)
+		if (format == null) {
 			format = new DataBinding(formatter, Parameters.format, FORMAT);
+		}
 		return format;
 	}
 
@@ -239,8 +248,9 @@ public abstract class FIBWidget extends FIBComponent {
 	}
 
 	public DataBinding getIcon() {
-		if (icon == null)
+		if (icon == null) {
 			icon = new DataBinding(formatter, Parameters.icon, ICON);
+		}
 		return icon;
 	}
 
@@ -280,8 +290,9 @@ public abstract class FIBWidget extends FIBComponent {
 
 		@Override
 		public BindingModel getBindingModel() {
-			if (formatterBindingModel == null)
+			if (formatterBindingModel == null) {
 				createFormatterBindingModel();
+			}
 			return formatterBindingModel;
 		}
 
@@ -320,8 +331,9 @@ public abstract class FIBWidget extends FIBComponent {
 	}
 
 	public DataBinding getValueChangedAction() {
-		if (valueChangedAction == null)
+		if (valueChangedAction == null) {
 			valueChangedAction = new DataBinding(this, Parameters.valueChangedAction, VALUE_CHANGED_ACTION);
+		}
 		return valueChangedAction;
 	}
 
@@ -337,8 +349,9 @@ public abstract class FIBWidget extends FIBComponent {
 	}
 
 	public DataBinding getClickAction() {
-		if (clickAction == null)
+		if (clickAction == null) {
 			clickAction = new DataBinding(this, Parameters.clickAction, CLICK_ACTION);
+		}
 		return clickAction;
 	}
 
@@ -354,8 +367,9 @@ public abstract class FIBWidget extends FIBComponent {
 	}
 
 	public DataBinding getDoubleClickAction() {
-		if (doubleClickAction == null)
+		if (doubleClickAction == null) {
 			doubleClickAction = new DataBinding(this, Parameters.doubleClickAction, DOUBLE_CLICK_ACTION);
+		}
 		return doubleClickAction;
 	}
 

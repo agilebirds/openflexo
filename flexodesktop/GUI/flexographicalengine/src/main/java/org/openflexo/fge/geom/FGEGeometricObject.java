@@ -64,14 +64,18 @@ public interface FGEGeometricObject<O extends FGEGeometricObject> extends Clonea
 		}
 
 		public SimplifiedCardinalDirection getOpposite() {
-			if (this == EAST)
+			if (this == EAST) {
 				return WEST;
-			if (this == WEST)
+			}
+			if (this == WEST) {
 				return EAST;
-			if (this == SOUTH)
+			}
+			if (this == SOUTH) {
 				return NORTH;
-			if (this == NORTH)
+			}
+			if (this == NORTH) {
 				return SOUTH;
+			}
 			return null;
 		}
 
@@ -91,16 +95,18 @@ public interface FGEGeometricObject<O extends FGEGeometricObject> extends Clonea
 
 		public static Vector<SimplifiedCardinalDirection> someDirections(SimplifiedCardinalDirection... someDirections) {
 			Vector<SimplifiedCardinalDirection> returned = new Vector<SimplifiedCardinalDirection>();
-			for (SimplifiedCardinalDirection o : someDirections)
+			for (SimplifiedCardinalDirection o : someDirections) {
 				returned.add(o);
+			}
 			return returned;
 		}
 
 		public static Vector<SimplifiedCardinalDirection> allDirectionsExcept(SimplifiedCardinalDirection aDirection) {
 			Vector<SimplifiedCardinalDirection> returned = new Vector<SimplifiedCardinalDirection>();
 			for (SimplifiedCardinalDirection o : values()) {
-				if (o != aDirection)
+				if (o != aDirection) {
 					returned.add(o);
+				}
 			}
 			return returned;
 		}
@@ -110,11 +116,13 @@ public interface FGEGeometricObject<O extends FGEGeometricObject> extends Clonea
 			for (SimplifiedCardinalDirection o : values()) {
 				boolean isToBeExcepted = false;
 				for (int i = 0; i < someDirections.length; i++) {
-					if (o == someDirections[i])
+					if (o == someDirections[i]) {
 						isToBeExcepted = true;
+					}
 				}
-				if (!isToBeExcepted)
+				if (!isToBeExcepted) {
 					returned.add(o);
+				}
 			}
 			return returned;
 		}
@@ -124,11 +132,13 @@ public interface FGEGeometricObject<O extends FGEGeometricObject> extends Clonea
 			for (SimplifiedCardinalDirection o : values()) {
 				boolean isToBeExcepted = false;
 				for (SimplifiedCardinalDirection o2 : someDirections) {
-					if (o == o2)
+					if (o == o2) {
 						isToBeExcepted = true;
+					}
 				}
-				if (!isToBeExcepted)
+				if (!isToBeExcepted) {
 					returned.add(o);
+				}
 			}
 			return returned;
 		}
@@ -137,8 +147,9 @@ public interface FGEGeometricObject<O extends FGEGeometricObject> extends Clonea
 				Vector<SimplifiedCardinalDirection> someOtherDirections) {
 			Vector<SimplifiedCardinalDirection> returned = new Vector<SimplifiedCardinalDirection>();
 			for (SimplifiedCardinalDirection o : someDirections) {
-				if (someOtherDirections.contains(o))
+				if (someOtherDirections.contains(o)) {
 					returned.add(o);
+				}
 			}
 			return returned;
 		}
@@ -149,18 +160,22 @@ public interface FGEGeometricObject<O extends FGEGeometricObject> extends Clonea
 		NORTH_EAST, SOUTH_EAST, SOUTH_WEST, NORTH_WEST;
 
 		public SimplifiedCardinalDirection getVerticalComponent() {
-			if (this == NORTH_EAST || this == NORTH_WEST)
+			if (this == NORTH_EAST || this == NORTH_WEST) {
 				return SimplifiedCardinalDirection.NORTH;
-			if (this == SOUTH_EAST || this == SOUTH_WEST)
+			}
+			if (this == SOUTH_EAST || this == SOUTH_WEST) {
 				return SimplifiedCardinalDirection.SOUTH;
+			}
 			return null;
 		}
 
 		public SimplifiedCardinalDirection getHorizonalComponent() {
-			if (this == NORTH_WEST || this == SOUTH_WEST)
+			if (this == NORTH_WEST || this == SOUTH_WEST) {
 				return SimplifiedCardinalDirection.WEST;
-			if (this == NORTH_EAST || this == SOUTH_EAST)
+			}
+			if (this == NORTH_EAST || this == SOUTH_EAST) {
 				return SimplifiedCardinalDirection.EAST;
+			}
 			return null;
 		}
 	}

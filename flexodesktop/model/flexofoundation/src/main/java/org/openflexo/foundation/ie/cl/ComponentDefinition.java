@@ -45,8 +45,8 @@ import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMProperty;
 import org.openflexo.foundation.dm.DMPropertyImplementationType;
 import org.openflexo.foundation.dm.DMType;
-import org.openflexo.foundation.dm.DuplicateClassNameException;
 import org.openflexo.foundation.dm.DMType.KindOfType;
+import org.openflexo.foundation.dm.DuplicateClassNameException;
 import org.openflexo.foundation.ie.ComponentInstance;
 import org.openflexo.foundation.ie.DummyComponentInstance;
 import org.openflexo.foundation.ie.IEObject;
@@ -754,8 +754,9 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 		if (!componentInstances.contains(instance) && !(instance instanceof DummyComponentInstance)) {
 			if (!instance.getXMLResourceData().getFlexoXMLFileResource().isConverting()) {
 				componentInstances.add(instance);
-				if (notify)
+				if (notify) {
 					setChanged();
+				}
 			} else if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Found resource converting, ignoring component instance");
 			}

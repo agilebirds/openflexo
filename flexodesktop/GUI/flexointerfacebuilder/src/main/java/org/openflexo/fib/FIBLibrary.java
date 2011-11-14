@@ -95,21 +95,24 @@ public class FIBLibrary {
 			// ("../FlexoInspector/Models/InspectorModel.xml");
 			File mappingFile = new FileResource("Models/FIBModel.xml");
 			if (!mappingFile.exists()) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("Could not find file: " + mappingFile.getAbsolutePath());
+				}
 			}
 			try {
 				_fibMapping = new XMLMapping(mappingFile);
 			} catch (InvalidModelException e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("Exception raised: " + e + " for file " + mappingFile.getAbsolutePath() + ". See console for details.");
+				}
 				e.printStackTrace();
 			} catch (Exception e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("Exception raised: " + e.getClass().getName() + " for file " + mappingFile.getAbsolutePath()
 							+ ". See console for details.");
+				}
 				e.printStackTrace();
 			}
 		}
@@ -172,8 +175,9 @@ public class FIBLibrary {
 					_fibDefinitions.put(fibIdentifier, fibComponent);
 				}
 			} catch (Exception e) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised during Fib import '" + fibIdentifier + "': " + e);
+				}
 				e.printStackTrace();
 			}
 		}

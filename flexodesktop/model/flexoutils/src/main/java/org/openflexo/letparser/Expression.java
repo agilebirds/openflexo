@@ -48,10 +48,9 @@ public class Expression extends Token {
 	}
 
 	private static Token makeOperand(ListOfToken listOfToken) throws ParseException {
-		if (listOfToken.size() == 0)
+		if (listOfToken.size() == 0) {
 			throw new ParseException("Syntax error: invalid null operand");
-
-		else if (listOfToken.size() == 1) {
+		} else if (listOfToken.size() == 1) {
 			if (listOfToken.firstElement() instanceof Token) {
 				return (Token) listOfToken.firstElement();
 			}
@@ -143,16 +142,19 @@ public class Expression extends Token {
 			});
 			// System.out.println ("sorted operators = "+allOperators);
 
-			if (allOperators.size() == 0)
+			if (allOperators.size() == 0) {
 				throw new ParseException("Syntax error: no operator found");
+			}
 
 			IndexedOperator pivot = allOperators.firstElement();
 			ListOfToken left = new ListOfToken();
-			for (int i = 0; i < pivot.index; i++)
+			for (int i = 0; i < pivot.index; i++) {
 				left.add(unparsedList.elementAt(i));
+			}
 			ListOfToken right = new ListOfToken();
-			for (int i = pivot.index + 1; i < unparsedList.size(); i++)
+			for (int i = pivot.index + 1; i < unparsedList.size(); i++) {
 				right.add(unparsedList.elementAt(i));
+			}
 			return new Expression(pivot.operator, left, right);
 		}
 

@@ -28,8 +28,9 @@ public class NamespacePrefixMapper {
 	public String getPrefixForNamespace(String namespace) {
 		if (nameToPrefix.containsKey(namespace)) {
 			return nameToPrefix.get(namespace);
-		} else
+		} else {
 			return null;
+		}
 	}
 
 	public void registerPrefixForNamespace(String namespace, String prefix) {

@@ -26,12 +26,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.GeneratorIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -42,6 +36,11 @@ import org.openflexo.foundation.param.RadioButtonListParameter;
 import org.openflexo.foundation.param.ReadOnlyTextFieldParameter;
 import org.openflexo.foundation.param.TextAreaParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
+import org.openflexo.icon.GeneratorIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class RegisterNewCGReleaseInitializer extends ActionInitializer {
 

@@ -124,13 +124,15 @@ public class WSEInternalWSFolderView extends WSEView<InternalWSFolder> {
 		}
 		if (getSelectedPortType() != null) {
 			WSService ws = getWSFolder().getParentOfServiceInterface(getSelectedPortType());
-			if (ws != null)
+			if (ws != null) {
 				return ws;
+			}
 		}
 		if (getSelectedWSDLRepository() != null) {
 			WSRepository wsr = getWSFolder().getWSRepositoryNamed(getSelectedWSDLRepository().getName());
-			if (wsr != null)
+			if (wsr != null) {
 				return wsr.getWSService();
+			}
 		}
 
 		return null;

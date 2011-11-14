@@ -115,16 +115,19 @@ public class IEButtonWidget extends IEHyperlinkWidget implements Indexable, Seri
 	public String getBeautifiedName() {
 		String s = "";
 		s = getLabel();
-		if (s == null || s.trim().length() == 0)
+		if (s == null || s.trim().length() == 0) {
 			s = getName();
-		if ((s == null || s.trim().length() == 0) && getFile() != null && getFile().getImageName() != null)
+		}
+		if ((s == null || s.trim().length() == 0) && getFile() != null && getFile().getImageName() != null) {
 			s = getFile().getBeautifiedImageName();
+		}
 		return s;
 	}
 
 	public ImageFile getFile() {
-		if (file == null && getProject() != null && !isDeserializing())
+		if (file == null && getProject() != null && !isDeserializing()) {
 			return getProject().getDefaultImageFile();
+		}
 		return file;
 	}
 
@@ -142,8 +145,9 @@ public class IEButtonWidget extends IEHyperlinkWidget implements Indexable, Seri
 	}
 
 	public String getImageName() {
-		if (getFile() != null)
+		if (getFile() != null) {
 			return getFile().getImageName();
+		}
 		return null;
 	}
 
@@ -177,16 +181,18 @@ public class IEButtonWidget extends IEHyperlinkWidget implements Indexable, Seri
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				} finally {
-					if (fis != null)
+					if (fis != null) {
 						try {
 							fis.close();
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
+					}
 				}
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("This button has no file");
+				}
 			}
 		}
 		return imageInformation;
@@ -222,8 +228,9 @@ public class IEButtonWidget extends IEHyperlinkWidget implements Indexable, Seri
 				heightPixel = Math.round((float)heightPercentage * ii.getHeight()/100);
 			}
 		}*/
-		if (usePercentage)// If we use percentage, we better force to maintain aspect ratio because browsers don't render them the same way.
+		if (usePercentage) {
 			setMaintainAspectRatio(true);
+		}
 		this.usePercentage = usePercentage;
 		setChanged();
 		notifyObservers(new IEDataModification("usePercentage", null, usePercentage));

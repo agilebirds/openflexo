@@ -48,12 +48,14 @@ public abstract class GeometricConstruction<O extends Object> extends DefaultIns
 
 	private void ensureUpToDate(Vector<GeometricConstruction> updatedConstructions) {
 		// Recursively called ensureUpToDate() on dependancies
-		if (getDepends() != null)
+		if (getDepends() != null) {
 			for (GeometricConstruction<?> c : getDepends()) {
-				if (!c._altered.contains(this))
+				if (!c._altered.contains(this)) {
 					c._altered.add(this);
+				}
 				c.ensureUpToDate(updatedConstructions);
 			}
+		}
 
 		if (modified || updatedConstructions.size() > 0) {
 			// System.out.println("Recompute data for "+this.getClass().getSimpleName());
@@ -65,9 +67,11 @@ public abstract class GeometricConstruction<O extends Object> extends DefaultIns
 
 	public final void refresh() {
 		// System.out.println("Refresh for "+this.getClass().getSimpleName());
-		if (getDepends() != null)
-			for (GeometricConstruction c : getDepends())
+		if (getDepends() != null) {
+			for (GeometricConstruction c : getDepends()) {
 				c.refresh();
+			}
+		}
 		computedData = computeData();
 	}
 

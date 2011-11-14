@@ -31,8 +31,9 @@ public class FIBTabPanel extends FIBContainer {
 	public Vector<FIBTab> getTabs() {
 		Vector<FIBTab> returned = new Vector<FIBTab>();
 		for (FIBComponent subComponent : getSubComponents()) {
-			if (subComponent instanceof FIBTab)
+			if (subComponent instanceof FIBTab) {
 				returned.add((FIBTab) subComponent);
+			}
 		}
 		return returned;
 	}

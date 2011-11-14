@@ -28,13 +28,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.inspector.model.PropertyListColumn;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.dm.view.DMEOEntityView;
 import org.openflexo.dm.view.DMEOModelView;
@@ -56,6 +49,12 @@ import org.openflexo.foundation.param.ParametersModel;
 import org.openflexo.foundation.param.PropertyListParameter;
 import org.openflexo.foundation.param.RadioButtonListParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.inspector.model.PropertyListColumn;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class CreateDMEORelationshipInitializer extends ActionInitializer {
 
@@ -101,10 +100,11 @@ public class CreateDMEORelationshipInitializer extends ActionInitializer {
 
 					@Override
 					public void newValueWasSet(ParameterDefinition param, DMEOEntity oldValue, DMEOEntity newValue) {
-						if (destinationEntityParameter.getValue() != null)
+						if (destinationEntityParameter.getValue() != null) {
 							newRelationshipNameParam.setValue(destinationEntityParameter.getValue().getNiceRelationshipNameToMe());
-						else
+						} else {
 							newRelationshipNameParam.setValue(action.getNewRelationshipName());
+						}
 					}
 
 				});
@@ -148,8 +148,9 @@ public class CreateDMEORelationshipInitializer extends ActionInitializer {
 				destinationEntityParameter.addValueListener(new ParameterDefinition.ValueListener<DMEOEntity>() {
 					@Override
 					public void newValueWasSet(ParameterDefinition param, DMEOEntity oldValue, DMEOEntity newValue) {
-						if (logger.isLoggable(Level.FINE))
+						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("New value :" + newValue);
+						}
 						joinsParameters.setDestinationEntity(newValue);
 					}
 				});
@@ -165,10 +166,11 @@ public class CreateDMEORelationshipInitializer extends ActionInitializer {
 							@Override
 							public void newValueWasSet(ParameterDefinition<FlattenRelationshipDefinition> param,
 									FlattenRelationshipDefinition oldValue, FlattenRelationshipDefinition newValue) {
-								if (newValue != null && newValue.getBindingPathLastElement() != null)
+								if (newValue != null && newValue.getBindingPathLastElement() != null) {
 									newRelationshipNameParam.setValue(newValue.getBindingPathLastElement().getName());
-								else
+								} else {
 									newRelationshipNameParam.setValue(action.getNewRelationshipName());
+								}
 							}
 						});
 				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null, action.getLocalizedName(),
@@ -207,14 +209,15 @@ public class CreateDMEORelationshipInitializer extends ActionInitializer {
 						action.setFlattenRelationShip(false);
 						action.setDestinationEntity(destinationEntityParameter.getValue());
 						action.setMultipleRelation(isMultipleParameter.getValue());
-						if (joinsParameters.getValue().size() > 0)
-							if (joinsParameters.getValue() instanceof Vector)
+						if (joinsParameters.getValue().size() > 0) {
+							if (joinsParameters.getValue() instanceof Vector) {
 								action.setJoins((Vector<DMEOJoin>) joinsParameters.getValue());
-							else {
+							} else {
 								Vector<DMEOJoin> joins = new Vector<DMEOJoin>();
 								joins.addAll(joinsParameters.getValue());
 								action.setJoins(joins);
 							}
+						}
 					} else {
 						action.setFlattenRelationShip(true);
 						action.setFlattenRelationshipDefinition(flattenRelationshipDefinitionParameter.getValue());
@@ -232,15 +235,17 @@ public class CreateDMEORelationshipInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, CreateDMEORelationship action) {
 				if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getEntity().getDMEOModel()) {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Finalizer for CreateDMEORelationship in DMEOModelView");
+					}
 					DMEOModelView dmEOModelView = (DMEOModelView) getControllerActionInitializer().getDMController()
 							.getCurrentEditedObjectView();
 					dmEOModelView.getEoEntityTable().selectObject(action.getEntity());
 					dmEOModelView.getEoRelationshipTable().selectObject(action.getNewEORelationship());
 				} else if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getEntity()) {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Finalizer for CreateDMEORelationship in DMEOEntityView");
+					}
 					DMEOEntityView eoEntityView = (DMEOEntityView) getControllerActionInitializer().getDMController()
 							.getCurrentEditedObjectView();
 					eoEntityView.getEoRelationshipTable().selectObject(action.getNewEORelationship());

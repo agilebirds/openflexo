@@ -60,8 +60,9 @@ public class GeneratorMenuBar extends FlexoMenuBar {
 	 */
 	@Override
 	public ToolsMenu getToolsMenu(FlexoController controller) {
-		if (toolsMenu == null)
+		if (toolsMenu == null) {
 			toolsMenu = new GeneratorToolsMenu(controller);
+		}
 		return toolsMenu;
 	}
 

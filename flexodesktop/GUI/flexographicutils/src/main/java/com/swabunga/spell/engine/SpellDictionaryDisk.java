@@ -20,8 +20,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 /* Created by bgalbs on Jan 30, 2003 at 11:38:39 PM */
 package com.swabunga.spell.engine;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 /**
  * An implementation of <code>SpellDictionary</code> that doesn't cache any words in memory. Avoids the huge footprint of
@@ -74,12 +90,15 @@ public class SpellDictionaryDisk extends SpellDictionaryASpell {
 		this.words = new File(base, DIRECTORY_WORDS);
 		this.db = new File(base, DIRECTORY_DB);
 
-		if (!this.base.exists())
+		if (!this.base.exists()) {
 			throw new FileNotFoundException("Couldn't find required path '" + this.base + "'");
-		if (!this.words.exists())
+		}
+		if (!this.words.exists()) {
 			throw new FileNotFoundException("Couldn't find required path '" + this.words + "'");
-		if (!this.db.exists())
+		}
+		if (!this.db.exists()) {
 			db.mkdirs();
+		}
 
 		if (newDictionaryFiles()) {
 			if (block) {
@@ -88,6 +107,7 @@ public class SpellDictionaryDisk extends SpellDictionaryASpell {
 				ready = true;
 			} else {
 				Thread t = new Thread() {
+					@Override
 					public void run() {
 						try {
 							buildNewDictionaryDatabase();
@@ -117,10 +137,12 @@ public class SpellDictionaryDisk extends SpellDictionaryASpell {
 		buildContentsFile();
 	}
 
+	@Override
 	public void addWord(String word) {
 		throw new UnsupportedOperationException("addWord not yet implemented (sorry)");
 	}
 
+	@Override
 	public List getWords(String code) {
 		Vector words = new Vector();
 
@@ -137,8 +159,9 @@ public class SpellDictionaryDisk extends SpellDictionaryASpell {
 				String[] lines = split(data, "\n");
 				for (int i = 0; i < lines.length; i++) {
 					String[] s = split(lines[i], ",");
-					if (s[0].equals(code))
+					if (s[0].equals(code)) {
 						words.addElement(s[1]);
+					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -171,8 +194,9 @@ public class SpellDictionaryDisk extends SpellDictionaryASpell {
 			} catch (IOException e) {
 				throw e;
 			} finally {
-				if (reader != null)
+				if (reader != null) {
 					reader.close();
+				}
 			}
 		}
 
@@ -261,8 +285,9 @@ public class SpellDictionaryDisk extends SpellDictionaryASpell {
 			String toWrite = cw.getCode() + "," + cw.getWord() + "\n";
 			byte[] bytes = toWrite.getBytes();
 
-			if (currentCode == null)
+			if (currentCode == null) {
 				currentCode = thisCode;
+			}
 			if (!currentCode.equals(thisCode)) {
 				index.add(new Object[] { currentCode, new int[] { currentPosition, currentLength } });
 				currentPosition += currentLength;
@@ -276,8 +301,9 @@ public class SpellDictionaryDisk extends SpellDictionaryASpell {
 		out.close();
 
 		// Output the last iteration
-		if (currentCode != null && currentPosition != 0 && currentLength != 0)
+		if (currentCode != null && currentPosition != 0 && currentLength != 0) {
 			index.add(new Object[] { currentCode, new int[] { currentPosition, currentLength } });
+		}
 
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(db, FILE_INDEX)));
 		for (int i = 0; i < index.size(); i++) {
@@ -333,16 +359,19 @@ public class SpellDictionaryDisk extends SpellDictionaryASpell {
 	}
 
 	private String getIndexCode(String code, List codes) {
-		if (indexCodeCache == null)
+		if (indexCodeCache == null) {
 			indexCodeCache = new ArrayList();
+		}
 
-		if (code.length() <= 1)
+		if (code.length() <= 1) {
 			return code;
+		}
 
 		for (int i = 0; i < indexCodeCache.size(); i++) {
 			String c = (String) indexCodeCache.get(i);
-			if (code.startsWith(c))
+			if (code.startsWith(c)) {
 				return c;
+			}
 		}
 
 		int foundSize = -1;
@@ -353,17 +382,20 @@ public class SpellDictionaryDisk extends SpellDictionaryASpell {
 			for (int i = 0; i < codes.size();) {
 				if (i == 0) {
 					i = Collections.binarySearch(codes, new CodeWord(thisCode, ""));
-					if (i < 0)
+					if (i < 0) {
 						i = 0;
+					}
 				}
 
 				CodeWord cw = (CodeWord) codes.get(i);
 				if (cw.getCode().startsWith(thisCode)) {
 					count++;
-					if (count > INDEX_SIZE_MAX)
+					if (count > INDEX_SIZE_MAX) {
 						break;
-				} else if (cw.getCode().compareTo(thisCode) > 0)
+					}
+				} else if (cw.getCode().compareTo(thisCode) > 0) {
 					break;
+				}
 				i++;
 			}
 			if (count <= INDEX_SIZE_MAX) {
@@ -374,8 +406,9 @@ public class SpellDictionaryDisk extends SpellDictionaryASpell {
 		}
 
 		String newCode = (foundSize == -1) ? code : code.substring(0, foundSize);
-		if (cacheable)
+		if (cacheable) {
 			indexCodeCache.add(newCode);
+		}
 		return newCode;
 	}
 
@@ -408,24 +441,30 @@ public class SpellDictionaryDisk extends SpellDictionaryASpell {
 			return word;
 		}
 
+		@Override
 		public boolean equals(Object o) {
-			if (this == o)
+			if (this == o) {
 				return true;
-			if (!(o instanceof CodeWord))
+			}
+			if (!(o instanceof CodeWord)) {
 				return false;
+			}
 
 			final CodeWord codeWord = (CodeWord) o;
 
-			if (!word.equals(codeWord.word))
+			if (!word.equals(codeWord.word)) {
 				return false;
+			}
 
 			return true;
 		}
 
+		@Override
 		public int hashCode() {
 			return word.hashCode();
 		}
 
+		@Override
 		public int compareTo(Object o) {
 			return code.compareTo(((CodeWord) o).getCode());
 		}
@@ -448,22 +487,28 @@ public class SpellDictionaryDisk extends SpellDictionaryASpell {
 			return size;
 		}
 
+		@Override
 		public boolean equals(Object o) {
-			if (this == o)
+			if (this == o) {
 				return true;
-			if (!(o instanceof FileSize))
+			}
+			if (!(o instanceof FileSize)) {
 				return false;
+			}
 
 			final FileSize fileSize = (FileSize) o;
 
-			if (size != fileSize.size)
+			if (size != fileSize.size) {
 				return false;
-			if (!filename.equals(fileSize.filename))
+			}
+			if (!filename.equals(fileSize.filename)) {
 				return false;
+			}
 
 			return true;
 		}
 
+		@Override
 		public int hashCode() {
 			int result;
 			result = filename.hashCode();

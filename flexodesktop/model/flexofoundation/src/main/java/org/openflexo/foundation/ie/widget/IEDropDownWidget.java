@@ -22,8 +22,8 @@ package org.openflexo.foundation.ie.widget;
 import java.io.Serializable;
 
 import org.openflexo.foundation.bindings.AbstractBinding;
-import org.openflexo.foundation.bindings.WidgetBindingDefinition;
 import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
+import org.openflexo.foundation.bindings.WidgetBindingDefinition;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
@@ -70,8 +70,9 @@ public class IEDropDownWidget extends IEAbstractListWidget implements Serializab
 		if (_bindingSelectionDefinition == null) {
 			_bindingSelectionDefinition = new WidgetBindingDefinition("bindingSelection", getContentType(), this,
 					BindingDefinitionType.GET_SET, true);
-			if (getBindingSelection() != null)
+			if (getBindingSelection() != null) {
 				getBindingSelection().setBindingDefinition(_bindingSelectionDefinition);
+			}
 		}
 		return _bindingSelectionDefinition;
 	}
@@ -91,8 +92,9 @@ public class IEDropDownWidget extends IEAbstractListWidget implements Serializab
 	}
 
 	public AbstractBinding getBindingIsEdit() {
-		if (isBeingCloned())
+		if (isBeingCloned()) {
 			return null;
+		}
 		return _bindingIsEdit;
 	}
 
@@ -108,8 +110,9 @@ public class IEDropDownWidget extends IEAbstractListWidget implements Serializab
 
 	@Override
 	public String getProcessInstanceDictionaryKey() {
-		if (isStatusList())
+		if (isStatusList()) {
 			return FlexoProcess.PROCESSINSTANCE_STATUS_KEY;
+		}
 		return super.getProcessInstanceDictionaryKey();
 	}
 }

@@ -116,12 +116,14 @@ public class EventManager {
 	 */
 	public void fireCVSEvent(CVSEvent e) {
 		// if we have no listeners, then there is nothing to do
-		if (listeners == null || listeners.length == 0)
+		if (listeners == null || listeners.length == 0) {
 			return;
+		}
 		if (e instanceof FileInfoEvent) {
 			File file = ((FileInfoEvent) e).getInfoContainer().getFile();
-			if (services.getGlobalOptions().isExcluded(file))
+			if (services.getGlobalOptions().isExcluded(file)) {
 				return;
+			}
 		}
 		CVSListener[] l = null;
 		synchronized (listeners) {

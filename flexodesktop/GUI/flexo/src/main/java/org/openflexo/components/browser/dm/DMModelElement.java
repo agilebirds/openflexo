@@ -45,12 +45,15 @@ public class DMModelElement extends DMElement {
 
 		if (getProjectBrowser().getDMViewMode() == DMViewMode.Repositories) {
 			addToChilds(getDMModel().getInternalRepositoryFolder());
-			if (getDMModel().getNonPersistantDataRepositoryFolder().getRepositoriesCount() > 0)
+			if (getDMModel().getNonPersistantDataRepositoryFolder().getRepositoriesCount() > 0) {
 				addToChilds(getDMModel().getNonPersistantDataRepositoryFolder());
-			if (getDMModel().getPersistantDataRepositoryFolder().getRepositoriesCount() > 0)
+			}
+			if (getDMModel().getPersistantDataRepositoryFolder().getRepositoriesCount() > 0) {
 				addToChilds(getDMModel().getPersistantDataRepositoryFolder());
-			if (getDMModel().getLibraryRepositoryFolder().getRepositoriesCount() > 0)
+			}
+			if (getDMModel().getLibraryRepositoryFolder().getRepositoriesCount() > 0) {
 				addToChilds(getDMModel().getLibraryRepositoryFolder());
+			}
 		} else if (getProjectBrowser().getDMViewMode() == DMViewMode.Packages) {
 			for (DMPackage p : getDMModel().getAllOrderedPackages()) {
 				addToChilds(p);

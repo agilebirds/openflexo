@@ -112,39 +112,41 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 	}
 
 	public static String removeNewLines(String text) {
-		if (text == null)
+		if (text == null) {
 			return null;
+		}
 		String replaced = text.replaceAll("(\r*\n)+", " ");
 		return replaced;
 	}
 
 	public static String nameForObjectNoExt(FlexoModelObject object, DGRepository repository) {
-		if (object instanceof ComponentDefinition)
+		if (object instanceof ComponentDefinition) {
 			return nameForComponentNoExt((ComponentDefinition) object, repository);
-		else if (object instanceof OperationNode)
+		} else if (object instanceof OperationNode) {
 			return nameForOperationNoExt((OperationNode) object, repository);
-		else if (object instanceof FlexoProcess)
+		} else if (object instanceof FlexoProcess) {
 			return nameForProcessNoExt((FlexoProcess) object, repository);
-		else if (object instanceof ProcessFolder)
+		} else if (object instanceof ProcessFolder) {
 			return nameForProcessFolderNoExt((ProcessFolder) object, repository);
-		else if (object instanceof DMEntity)
+		} else if (object instanceof DMEntity) {
 			return nameForEntityNoExt((DMEntity) object, repository);
-		else if (object instanceof DMRepository)
+		} else if (object instanceof DMRepository) {
 			return nameForRepositoryNoExt((DMRepository) object, repository);
-		else if (object instanceof DMModel)
+		} else if (object instanceof DMModel) {
 			return nameForDataModelNoExt(repository);
-		else if (object instanceof DKVModel)
+		} else if (object instanceof DKVModel) {
 			return nameForDKVNoExt(repository);
-		else if (object instanceof FlexoWorkflow)
+		} else if (object instanceof FlexoWorkflow) {
 			return nameForWorkflowNoExt(repository);
-		else if (object instanceof FlexoComponentLibrary)
+		} else if (object instanceof FlexoComponentLibrary) {
 			return nameForComponentLibraryNoExt(repository);
-		else if (object instanceof FlexoNavigationMenu)
+		} else if (object instanceof FlexoNavigationMenu) {
 			return nameForMenuNoExt(repository);
-		else if (object instanceof FlexoProject)
+		} else if (object instanceof FlexoProject) {
 			return nameForProjectNoExt(repository);
-		else if (logger.isLoggable(Level.WARNING))
+		} else if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("So far there is no known way to name a " + object);
+		}
 		return null;
 	}
 
@@ -174,14 +176,15 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 	}
 
 	public static String nameForComponentNoExt(ComponentDefinition cd, DGRepository repository) {
-		if (cd instanceof OperationComponentDefinition)
+		if (cd instanceof OperationComponentDefinition) {
 			return cleanFileName(repository.getName() + ".screen." + cd.getName());
-		else if (cd instanceof PopupComponentDefinition)
+		} else if (cd instanceof PopupComponentDefinition) {
 			return cleanFileName(repository.getName() + ".popup." + cd.getName());
-		else if (cd instanceof TabComponentDefinition)
+		} else if (cd instanceof TabComponentDefinition) {
 			return cleanFileName(repository.getName() + ".tab." + cd.getName());
-		else
+		} else {
 			return cleanFileName(repository.getName() + ".component." + cd.getName());
+		}
 	}
 
 	public static String nameForDataModelNoExt(DGRepository repository) {
@@ -209,10 +212,11 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 	}
 
 	public static String nameForEntityNoExt(DMEntity entity, DGRepository repository) {
-		if (entity instanceof DMEOEntity)
+		if (entity instanceof DMEOEntity) {
 			return cleanFileName(repository.getName() + ".eoentity." + entity.getName());
-		else
+		} else {
 			return cleanFileName(repository.getName() + ".entity." + entity.getName());
+		}
 	}
 
 	public String realNameForProjectNoExt(DGRepository repository) {
@@ -220,8 +224,9 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 				.getResourceForObject(repository.getProject());
 		if (r != null) {
 			String fileName = r.getFileName();
-			if (fileName.endsWith(getFileExtension()))
+			if (fileName.endsWith(getFileExtension())) {
 				return fileName.substring(0, fileName.length() - getFileExtension().length());
+			}
 			return fileName;
 		}
 		return nameForProjectNoExt(repository);
@@ -232,8 +237,9 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 				.getResourceForObject(process);
 		if (r != null) {
 			String fileName = r.getFileName();
-			if (fileName.endsWith(getFileExtension()))
+			if (fileName.endsWith(getFileExtension())) {
 				return fileName.substring(0, fileName.length() - getFileExtension().length());
+			}
 			return fileName;
 		}
 		return nameForProcessNoExt(process, repository);
@@ -244,8 +250,9 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 				.getResourceForObject(repository.getProject().getDKVModel());
 		if (r != null) {
 			String fileName = r.getFileName();
-			if (fileName.endsWith(getFileExtension()))
+			if (fileName.endsWith(getFileExtension())) {
 				return fileName.substring(0, fileName.length() - getFileExtension().length());
+			}
 			return fileName;
 		}
 		return nameForDKVNoExt(repository);
@@ -256,8 +263,9 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 				.getResourceForObject(operation);
 		if (r != null) {
 			String fileName = r.getFileName();
-			if (fileName.endsWith(getFileExtension()))
+			if (fileName.endsWith(getFileExtension())) {
 				return fileName.substring(0, fileName.length() - getFileExtension().length());
+			}
 			return fileName;
 		}
 		return nameForOperationNoExt(operation, repository);
@@ -268,8 +276,9 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 				.getResourceForObject(repository.getProject().getFlexoNavigationMenu());
 		if (r != null) {
 			String fileName = r.getFileName();
-			if (fileName.endsWith(getFileExtension()))
+			if (fileName.endsWith(getFileExtension())) {
 				return fileName.substring(0, fileName.length() - getFileExtension().length());
+			}
 			return fileName;
 		}
 		return nameForMenuNoExt(repository);
@@ -280,8 +289,9 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 				.getResourceForObject(cd);
 		if (r != null) {
 			String fileName = r.getFileName();
-			if (fileName.endsWith(getFileExtension()))
+			if (fileName.endsWith(getFileExtension())) {
 				return fileName.substring(0, fileName.length() - getFileExtension().length());
+			}
 			return fileName;
 		}
 		return nameForComponentNoExt(cd, repository);
@@ -292,8 +302,9 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 				.getResourceForObject(repository.getProject().getDataModel());
 		if (r != null) {
 			String fileName = r.getFileName();
-			if (fileName.endsWith(getFileExtension()))
+			if (fileName.endsWith(getFileExtension())) {
 				return fileName.substring(0, fileName.length() - getFileExtension().length());
+			}
 			return fileName;
 		}
 		return nameForDataModelNoExt(repository);
@@ -304,8 +315,9 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 				.getResourceForObject(dmr);
 		if (r != null) {
 			String fileName = r.getFileName();
-			if (fileName.endsWith(getFileExtension()))
+			if (fileName.endsWith(getFileExtension())) {
 				return fileName.substring(0, fileName.length() - getFileExtension().length());
+			}
 			return fileName;
 		}
 		return nameForRepositoryNoExt(dmr, repository);
@@ -316,8 +328,9 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 				.getResourceForObject(entity);
 		if (r != null) {
 			String fileName = r.getFileName();
-			if (fileName.endsWith(getFileExtension()))
+			if (fileName.endsWith(getFileExtension())) {
 				return fileName.substring(0, fileName.length() - getFileExtension().length());
+			}
 			return fileName;
 		}
 		return nameForEntityNoExt(entity, repository);
@@ -332,19 +345,21 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 
 	public static String screenshotName(FlexoModelObject o, ProjectDocGenerator pdg) {
 		FlexoCopiedResource r = pdg.getScreenshot(o);
-		if (r != null)
+		if (r != null) {
 			return CGSymbolicDirectory.FIGURES + "/" + r.getFile().getName().substring(0, r.getFile().getName().length() - 4);
-		else
+		} else {
 			return CGSymbolicDirectory.FIGURES + "/" + "GenerateScreenshot";
+		}
 	}
 
 	public static Icon screenshot(FlexoModelObject o, ProjectDocGenerator pdg) {
 		FlexoCopiedResource r = pdg.getScreenshot(o);
 		if (r != null) {
-			if (r.getFile().exists())
+			if (r.getFile().exists()) {
 				return new ImageIcon(r.getFile().getAbsolutePath());
-			else
+			} else {
 				return new ImageIcon(r.getResourceToCopy().getFile().getAbsolutePath());
+			}
 		} else {
 			return new ImageIcon(o.getProject().getScreenshotResource(o, true).getFile().getAbsolutePath());
 		}
@@ -421,8 +436,9 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 	 */
 	@Override
 	public void generate(boolean forceRegenerate) {
-		if (!forceRegenerate && !needsGeneration())
+		if (!forceRegenerate && !needsGeneration()) {
 			return;
+		}
 		startGeneration();
 		try {
 			generatedCode = new GeneratedTextResource(getFileName().endsWith(getFileExtension()) ? getFileName() : getFileName()
@@ -430,8 +446,9 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 		} catch (GenerationException e) {
 			setGenerationException(e);
 		} catch (Exception e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Unexpected exception occured: " + e.getMessage() + " for " + getObject().getFullyQualifiedName());
+			}
 			e.printStackTrace();
 			setGenerationException(new UnexpectedExceptionOccuredException(e, getProjectGenerator()));
 		}
@@ -440,8 +457,9 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 
 	public TOCEntry getTOCEntry() {
 		TOCEntry reply = getRepository().getTOCEntryForObject(getObject());
-		if (reply == null)
+		if (reply == null) {
 			return entry;
+		}
 		return reply;
 	}
 

@@ -43,14 +43,16 @@ public class Class implements AlgorithmicUnit {
 
 	public Class(String className, String groupName, Procedure... procedures) {
 		this(className, groupName);
-		for (Procedure p : procedures)
+		for (Procedure p : procedures) {
 			addProcedure(p);
+		}
 	}
 
 	public Class(String className, String groupName, Vector<Procedure> procedures) {
 		this(className, groupName);
-		for (Procedure p : procedures)
+		for (Procedure p : procedures) {
 			addProcedure(p);
+		}
 	}
 
 	public Vector<Procedure> getProcedures() {

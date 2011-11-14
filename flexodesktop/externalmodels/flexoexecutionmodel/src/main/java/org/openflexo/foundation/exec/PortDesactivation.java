@@ -34,10 +34,12 @@ public abstract class PortDesactivation<N extends FlexoPort> extends ControlGrap
 	private N port;
 
 	public static ControlGraphBuilder getDesactivationPortBuilder(FlexoPort port) throws NotSupportedException {
-		if (port instanceof NewPort)
+		if (port instanceof NewPort) {
 			return new NewPortDesactivation((NewPort) port);
-		if (port instanceof DeletePort)
+		}
+		if (port instanceof DeletePort) {
 			return new DeletePortDesactivation((DeletePort) port);
+		}
 		throw new NotSupportedException("Dont know what to do with a " + port);
 	}
 

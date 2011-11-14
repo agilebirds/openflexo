@@ -70,20 +70,23 @@ public class PrintVisitor extends DescendingVisitor {
 	public void visitObject(PetalObject obj) {
 		StringBuffer buf = new StringBuffer("(object " + obj.getName());
 
-		for (Iterator i = obj.getParameterList().iterator(); i.hasNext();)
+		for (Iterator i = obj.getParameterList().iterator(); i.hasNext();) {
 			buf.append(" \"" + i.next() + "\"");
+		}
 
 		if (obj instanceof Tagged) {
 			int label = ((Tagged) obj).getTag();
 
-			if (label > 0)
+			if (label > 0) {
 				buf.append(" @" + label);
+			}
 		}
 
 		print(buf);
 
-		if (obj.getNames().size() > 0)
+		if (obj.getNames().size() > 0) {
 			println();
+		}
 
 		level++;
 		setAlignment(obj.getLongestName().length());
@@ -95,8 +98,9 @@ public class PrintVisitor extends DescendingVisitor {
 
 			((PetalNode) j.next()).accept(this);
 
-			if (i.hasNext())
+			if (i.hasNext()) {
 				println();
+			}
 		}
 
 		print(")");
@@ -118,11 +122,12 @@ public class PrintVisitor extends DescendingVisitor {
 		int indent = level * 4;
 		int min_dist; // min distance between first char of name and first char of property
 
-		if (indent % 8 == 0) // name aligned on 8
+		if (indent % 8 == 0) {
 			min_dist = 16;
-		else
+		} else {
 			// name aligned on 4
 			min_dist = 12;
+		}
 
 		align_at = indent + min_dist;
 	}
@@ -147,8 +152,9 @@ public class PrintVisitor extends DescendingVisitor {
 		}
 
 		int spaces = 4 - (fill % 4);
-		for (int i = 0; i < spaces; i++)
+		for (int i = 0; i < spaces; i++) {
 			out.print(' ');
+		}
 
 		column += spaces;
 		fill -= spaces;
@@ -156,11 +162,13 @@ public class PrintVisitor extends DescendingVisitor {
 		if (fill > 0) {
 			int tabs = fill / 8;
 
-			if (fill % 8 > 0)
+			if (fill % 8 > 0) {
 				tabs++;
+			}
 
-			for (int i = 0; i < tabs; i++)
+			for (int i = 0; i < tabs; i++) {
 				out.print('\t');
+			}
 		}
 
 		// for(int i=0; i < fill; i++)
@@ -176,11 +184,13 @@ public class PrintVisitor extends DescendingVisitor {
 		int tabs = level / 2; // 4 spaces (INDENT) == 1 tab
 		int spaces = level % 2;
 
-		for (int i = 0; i < tabs; i++)
+		for (int i = 0; i < tabs; i++) {
 			out.print('\t');
+		}
 
-		for (int i = 0; i < spaces; i++)
+		for (int i = 0; i < spaces; i++) {
 			out.print("    ");
+		}
 
 		column += level * 4;
 	}
@@ -211,8 +221,9 @@ public class PrintVisitor extends DescendingVisitor {
 			}
 
 			indent();
-		} else
+		} else {
 			print(obj);
+		}
 	}
 
 	@Override
@@ -244,8 +255,9 @@ public class PrintVisitor extends DescendingVisitor {
 	public void visit(List list) {
 		print("(list ");
 
-		if (list.getName() != null)
+		if (list.getName() != null) {
 			print(list.getName());
+		}
 
 		java.util.List c = list.getElements();
 
@@ -274,8 +286,9 @@ public class PrintVisitor extends DescendingVisitor {
 			val.accept(this);
 
 			print(")");
-		} else
+		} else {
 			print(" " + val + ")");
+		}
 	}
 
 	@Override

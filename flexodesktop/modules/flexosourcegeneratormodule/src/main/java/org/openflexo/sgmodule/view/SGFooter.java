@@ -37,7 +37,6 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.sg.SourceRepository;
-import org.openflexo.icon.CGIconLibrary;
 import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.UtilsIconLibrary;
@@ -107,7 +106,7 @@ public class SGFooter extends JPanel implements GraphicalFlexoObserver, FocusLis
 		errorsLabel = new JLabel("0");
 		errorsLabel.setFont(FlexoCst.MEDIUM_FONT);
 		statusCountPanel.add(errorsLabel);
-		statusCountPanel.add(new JLabel(CGIconLibrary.UNFIXABLE_ERROR_ICON));
+		statusCountPanel.add(new JLabel(IconLibrary.UNFIXABLE_ERROR_ICON));
 		add(statusCountPanel);
 
 		editorInfoPanel = new JPanel(new FlowLayout());

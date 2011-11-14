@@ -22,9 +22,9 @@ package org.openflexo.fge.geom.area;
 import java.awt.geom.AffineTransform;
 
 import org.openflexo.fge.geom.FGEAbstractLine;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.graphics.FGEGraphics;
 
 public class FGEPlane implements FGEArea {
@@ -65,10 +65,12 @@ public class FGEPlane implements FGEArea {
 
 	@Override
 	public FGEArea union(FGEArea area) {
-		if (containsArea(area))
+		if (containsArea(area)) {
 			return clone();
-		if (area.containsArea(this))
+		}
+		if (area.containsArea(this)) {
 			return area.clone();
+		}
 
 		return clone();
 	}
@@ -115,10 +117,11 @@ public class FGEPlane implements FGEArea {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof FGEPlane)
+		if (obj instanceof FGEPlane) {
 			return true;
-		else
+		} else {
 			return super.equals(obj);
+		}
 	}
 
 	@Override

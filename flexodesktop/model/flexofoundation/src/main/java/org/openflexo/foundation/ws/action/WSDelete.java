@@ -65,20 +65,21 @@ public class WSDelete extends FlexoUndoableAction {
 
 		@Override
 		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			if (globalSelection == null)
+			if (globalSelection == null) {
 				return false;
+			}
 			for (Enumeration en = globalSelection.elements(); en.hasMoreElements();) {
 				FlexoModelObject next = (FlexoModelObject) en.nextElement();
 				// Only ExternalWSService and InternalWSService
-				if ((next instanceof ExternalWSService) && (((ExternalWSService) next).isDeletable()))
+				if ((next instanceof ExternalWSService) && (((ExternalWSService) next).isDeletable())) {
 					return true;
-				else if ((next instanceof InternalWSService) && (((InternalWSService) next).isDeletable()))
+				} else if ((next instanceof InternalWSService) && (((InternalWSService) next).isDeletable())) {
 					return true;
-				// TO DO: allow only ServiceInterface of InternalWebServices.
-				else if ((next instanceof ServiceInterface)) {
+				} else if ((next instanceof ServiceInterface)) {
 					WSService ws = next.getProject().getFlexoWSLibrary().getParentOfServiceInterface(((ServiceInterface) next));
-					if (ws != null && ws instanceof InternalWSService)
+					if (ws != null && ws instanceof InternalWSService) {
 						return true;
+					}
 				}
 			}
 			return false;
@@ -94,10 +95,12 @@ public class WSDelete extends FlexoUndoableAction {
 	@Override
 	protected void doAction(Object context) {
 		logger.info("DELETE on DM");
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("selection is: " + getGlobalSelection());
-		if (logger.isLoggable(Level.FINE))
+		}
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("selection to delete is: " + getObjectsToDelete());
+		}
 		for (Enumeration en = getObjectsToDelete().elements(); en.hasMoreElements();) {
 			FlexoModelObject next = (FlexoModelObject) en.nextElement();
 			deleteObject(next);
@@ -136,8 +139,9 @@ public class WSDelete extends FlexoUndoableAction {
 				// WARNING: assumption that THERE IS ONLY ONE PortType for a ServiceInterface !
 				else if ((object instanceof ServiceInterface)) {
 					WSService ws = object.getProject().getFlexoWSLibrary().getParentOfServiceInterface(((ServiceInterface) object));
-					if (ws != null && ws instanceof InternalWSService)
+					if (ws != null && ws instanceof InternalWSService) {
 						_objectsToDelete.add(object);
+					}
 				}
 			}
 		}

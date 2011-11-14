@@ -128,8 +128,9 @@ public class EOModelResourceData extends FlexoObservable implements StorageResou
 
 	@Override
 	public synchronized void setIsModified() {
-		if (!isModified)
+		if (!isModified) {
 			logger.info(">>>>>>> Resource " + getFlexoResource() + " has been modified");
+		}
 		isModified = true;
 		lastMemoryUpdate = new Date();
 	}
@@ -137,8 +138,9 @@ public class EOModelResourceData extends FlexoObservable implements StorageResou
 	@Override
 	public synchronized void clearIsModified(boolean clearLastMemoryUpdate) {
 		isModified = false;
-		if (clearLastMemoryUpdate)
+		if (clearLastMemoryUpdate) {
 			lastMemoryUpdate = null;
+		}
 	}
 
 	/**
@@ -190,8 +192,9 @@ public class EOModelResourceData extends FlexoObservable implements StorageResou
 				notifyRM((RMNotification) dataModification);
 			} catch (FlexoException e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("FLEXO Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 			}
 		}

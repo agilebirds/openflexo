@@ -50,8 +50,9 @@ public class FlexoWysiwygPopup extends JFrame {
 		super();
 		this.model = model;
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		if (model == null)
+		if (model == null) {
 			throw new NullPointerException("targetWidget cannot be null");
+		}
 
 		this.wysiwyg = new FlexoWysiwyg(model.getValue(), cssFile, true) {
 			@Override
@@ -94,8 +95,9 @@ public class FlexoWysiwygPopup extends JFrame {
 	public static void main(String[] args) throws Exception {
 
 		File documentBaseFolder = new File("/Users/ajasselette/Desktop/WysiwygTest/");
-		if (!documentBaseFolder.exists())
+		if (!documentBaseFolder.exists()) {
 			documentBaseFolder.mkdir();
+		}
 
 		EditableHtmlWidget targetWidget = new EditableHtmlWidget() {
 			@Override

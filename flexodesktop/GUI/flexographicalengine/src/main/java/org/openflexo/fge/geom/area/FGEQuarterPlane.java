@@ -23,14 +23,14 @@ import java.awt.geom.AffineTransform;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.geom.FGEAbstractLine;
+import org.openflexo.fge.geom.FGEGeometricObject.CardinalDirection;
+import org.openflexo.fge.geom.FGEGeometricObject.CardinalQuadrant;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGELine;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGESegment;
 import org.openflexo.fge.geom.FGEShape;
-import org.openflexo.fge.geom.FGEGeometricObject.CardinalDirection;
-import org.openflexo.fge.geom.FGEGeometricObject.CardinalQuadrant;
-import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.graphics.FGEGraphics;
 
 public class FGEQuarterPlane implements FGEArea {
@@ -60,8 +60,9 @@ public class FGEQuarterPlane implements FGEArea {
 		super();
 		halfPlane1 = anHalfPlane1;
 		halfPlane2 = anHalfPlane2;
-		if (halfPlane1.line.isParallelTo(halfPlane2.line))
+		if (halfPlane1.line.isParallelTo(halfPlane2.line)) {
 			throw new IllegalArgumentException("lines are parallel");
+		}
 	}
 
 	public static void main(String[] args) {
@@ -108,27 +109,32 @@ public class FGEQuarterPlane implements FGEArea {
 
 	@Override
 	public boolean containsLine(FGEAbstractLine l) {
-		if (!(containsPoint(l.getP1()) && containsPoint(l.getP2())))
+		if (!(containsPoint(l.getP1()) && containsPoint(l.getP2()))) {
 			return false;
+		}
 
 		if (l instanceof FGEHalfLine) {
 			// TODO
 			logger.warning("Not implemented yet");
 			return false;
 		}
-		if (l instanceof FGESegment)
+		if (l instanceof FGESegment) {
 			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public boolean containsArea(FGEArea a) {
-		if (a instanceof FGEPoint)
+		if (a instanceof FGEPoint) {
 			return containsPoint((FGEPoint) a);
-		if (a instanceof FGELine)
+		}
+		if (a instanceof FGELine) {
 			return containsLine((FGELine) a);
-		if (a instanceof FGEShape)
+		}
+		if (a instanceof FGEShape) {
 			return FGEShape.AreaComputation.isShapeContainedInArea((FGEShape<?>) a, this);
+		}
 		return false;
 	}
 
@@ -139,16 +145,19 @@ public class FGEQuarterPlane implements FGEArea {
 
 	@Override
 	public FGEArea intersect(FGEArea area) {
-		if (area.containsArea(this))
+		if (area.containsArea(this)) {
 			return this.clone();
-		if (containsArea(area))
+		}
+		if (containsArea(area)) {
 			return area.clone();
+		}
 
 		FGEIntersectionArea returned = new FGEIntersectionArea(this, area);
-		if (returned.isDevelopable())
+		if (returned.isDevelopable()) {
 			return returned.makeDevelopped();
-		else
+		} else {
 			return returned;
+		}
 	}
 
 	@Override
@@ -158,18 +167,21 @@ public class FGEQuarterPlane implements FGEArea {
 
 	@Override
 	public FGEArea union(FGEArea area) {
-		if (containsArea(area))
+		if (containsArea(area)) {
 			return clone();
-		if (area.containsArea(this))
+		}
+		if (area.containsArea(this)) {
 			return area.clone();
+		}
 
 		return new FGEUnionArea(this, area);
 	}
 
 	@Override
 	public FGEPoint getNearestPoint(FGEPoint aPoint) {
-		if (containsPoint(aPoint))
+		if (containsPoint(aPoint)) {
 			return aPoint.clone();
+		}
 		return FGEPoint.getNearestPoint(aPoint, halfPlane1.line.getProjection(aPoint), halfPlane2.line.getProjection(aPoint));
 	}
 

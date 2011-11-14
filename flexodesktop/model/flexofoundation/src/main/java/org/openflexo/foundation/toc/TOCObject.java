@@ -21,12 +21,11 @@ package org.openflexo.foundation.toc;
 
 import java.util.logging.Logger;
 
-import org.openflexo.xmlcode.XMLMapping;
-
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.xmlcode.XMLMapping;
 
 public abstract class TOCObject extends FlexoModelObject {
 

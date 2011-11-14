@@ -104,8 +104,9 @@ public class RepairTocEntryInitializer extends ActionInitializer {
 					if (pd[0].getValue() == FixProposal.CHOOSE_OTHER_OBJECT) {
 						FlexoModelObject newObject = null;
 						for (int k = 1; k < pd.length; k++) {
-							if (pd[k] != null && pd[k].getValue() instanceof FlexoModelObject)
+							if (pd[k] != null && pd[k].getValue() instanceof FlexoModelObject) {
 								newObject = (FlexoModelObject) pd[k].getValue();
+							}
 						}
 						action.setModelObject(newObject);
 					}

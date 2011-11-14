@@ -60,8 +60,9 @@ public class AddToEmbeddingChildItemInitializer extends ActionInitializer {
 						FlexoLocalization.localizedForKey("please_select_an_embedded_child_item"), parameters);
 				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 					DocItem newChildItem = (DocItem) dialog.parameterValueWithName("childItem");
-					if (newChildItem == null)
+					if (newChildItem == null) {
 						return false;
+					}
 					action.setChildDocItem(newChildItem);
 					return true;
 				} else {

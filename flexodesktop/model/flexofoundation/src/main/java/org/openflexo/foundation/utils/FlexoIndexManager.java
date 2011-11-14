@@ -36,8 +36,9 @@ public class FlexoIndexManager {
 	public static final IndexComparator INDEX_COMPARATOR = new IndexComparator();
 
 	public static void switchIndexForKey(int oldVal, int newVal, Sortable sortable) {
-		if (oldVal == newVal)// Does not move
+		if (oldVal == newVal) {
 			return;
+		}
 		Object[] collection = sortable.getCollection();
 		if (collection != null) {
 			if (newVal > collection.length) {
@@ -48,27 +49,31 @@ public class FlexoIndexManager {
 				reIndexObjectOfArray(sortable.getCollection());
 				return;
 			}
-			if (newVal < 1)
+			if (newVal < 1) {
 				newVal = 1;
-			if (oldVal > collection.length)
+			}
+			if (oldVal > collection.length) {
 				oldVal = collection.length;
+			}
 			if (oldVal > newVal) {// Goes up
 				collection = sortArray(sortable.getCollection());
 				for (int i = newVal - 1; i < oldVal; i++) {
 					Sortable s = (Sortable) collection[i];
-					if (s != sortable)
+					if (s != sortable) {
 						s.setIndexValue(s.getIndexValue() + 1);
-					else
+					} else {
 						s.setIndexValue(newVal);
+					}
 				}
 			} else { // Goes down
 				collection = sortArray(sortable.getCollection());
 				for (int i = oldVal - 1; i < newVal; i++) {
 					Sortable s = (Sortable) collection[i];
-					if (s != sortable)
+					if (s != sortable) {
 						s.setIndexValue(s.getIndexValue() - 1);
-					else
+					} else {
 						s.setIndexValue(newVal);
+					}
 				}
 			}
 		}
@@ -83,8 +88,9 @@ public class FlexoIndexManager {
 	 */
 	public static <E extends Sortable> void reIndexObjectOfArray(E[] array) {
 		if (array == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Attempt to reindex a null array");
+			}
 			return;
 		}
 		array = sortArray(array);
@@ -95,10 +101,12 @@ public class FlexoIndexManager {
 	}
 
 	public static <E extends Sortable> E[] sortArray(E[] array) {
-		if (array == null)
+		if (array == null) {
 			return null;
-		if (array.length == 0)
+		}
+		if (array.length == 0) {
 			return array;
+		}
 		Arrays.sort(array, INDEX_COMPARATOR);
 		return array;
 	}

@@ -81,8 +81,9 @@ public class RMAutomergeInitializer {
 			String rightDateAsString = extractContainerAttributeValueFromRight(change, "lastImportDate");
 			Date leftDate = StringEncoder.decodeObject(leftDateAsString, Date.class);
 			Date rightDate = StringEncoder.decodeObject(rightDateAsString, Date.class);
-			if (leftDate.before(rightDate))
+			if (leftDate.before(rightDate)) {
 				return change.getLeftText();
+			}
 			return change.getRightText();
 		}
 
@@ -104,8 +105,9 @@ public class RMAutomergeInitializer {
 			String rightDateAsString = extractContainerAttributeValueFromRight(change, "lastGenerationDate");
 			Date leftDate = StringEncoder.decodeObject(leftDateAsString, Date.class);
 			Date rightDate = StringEncoder.decodeObject(rightDateAsString, Date.class);
-			if (leftDate.before(rightDate))
+			if (leftDate.before(rightDate)) {
 				return change.getLeftText();
+			}
 			return change.getRightText();
 		}
 
@@ -127,8 +129,9 @@ public class RMAutomergeInitializer {
 			String rightDateAsString = extractContainerAttributeValueFromRight(change, "lastAcceptingDate");
 			Date leftDate = StringEncoder.decodeObject(leftDateAsString, Date.class);
 			Date rightDate = StringEncoder.decodeObject(rightDateAsString, Date.class);
-			if (leftDate.before(rightDate))
+			if (leftDate.before(rightDate)) {
 				return change.getLeftText();
+			}
 			return change.getRightText();
 		}
 
@@ -150,8 +153,9 @@ public class RMAutomergeInitializer {
 			String rightDateAsString = extractContainerAttributeValueFromRight(change, "lastGenerationCheckedDate");
 			Date leftDate = StringEncoder.decodeObject(leftDateAsString, Date.class);
 			Date rightDate = StringEncoder.decodeObject(rightDateAsString, Date.class);
-			if (leftDate.before(rightDate))
+			if (leftDate.before(rightDate)) {
 				return change.getLeftText();
+			}
 			return change.getRightText();
 		}
 
@@ -173,8 +177,9 @@ public class RMAutomergeInitializer {
 			String rightDateAsString = extractContainerAttributeValueFromRight(change, "lastModelReinjectingDate");
 			Date leftDate = StringEncoder.decodeObject(leftDateAsString, Date.class);
 			Date rightDate = StringEncoder.decodeObject(rightDateAsString, Date.class);
-			if (leftDate.before(rightDate))
+			if (leftDate.before(rightDate)) {
 				return change.getLeftText();
+			}
 			return change.getRightText();
 		}
 

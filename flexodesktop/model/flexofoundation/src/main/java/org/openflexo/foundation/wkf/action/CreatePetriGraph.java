@@ -73,8 +73,9 @@ public class CreatePetriGraph extends FlexoUndoableAction<CreatePetriGraph, Fath
 	protected void doAction(Object context) {
 		FatherNode node = getFocusedObject();
 		if (node instanceof SelfExecutableNode) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("This call should be changed and CreateExcecutionPetriGraph action should be used instead.");
+			}
 			if (((SelfExecutableNode) node).getExecutionPetriGraph() == null) {
 				if (node instanceof SelfExecutableActivityNode) {
 					newPetriGraph = ActivityPetriGraph.createNewActivityPetriGraph((SelfExecutableActivityNode) node);

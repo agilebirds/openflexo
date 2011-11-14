@@ -21,10 +21,6 @@ package org.openflexo.xmlcode;
 
 import java.util.Hashtable;
 
-import org.openflexo.xmlcode.InvalidKeyValuePropertyException;
-import org.openflexo.xmlcode.ParameteredKeyValueProperty;
-import org.openflexo.xmlcode.SingleKeyValueProperty;
-
 import junit.framework.TestCase;
 
 public class TestParameteredKVCoding extends TestCase {

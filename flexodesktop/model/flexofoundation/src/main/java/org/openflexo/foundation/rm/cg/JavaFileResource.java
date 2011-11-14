@@ -96,8 +96,9 @@ public class JavaFileResource<G extends IFlexoResourceGenerator, F extends CGFil
 		if (_javaModelFile == null) {
 			_javaModelFile = new File(getCGFile().getRepository().getCodeGenerationWorkingDirectory(), getResourceFile().getRelativePath()
 					+ ".JAVA_MODEL");
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("_javaModelFile" + _javaModelFile.getAbsolutePath());
+			}
 		}
 		return _javaModelFile;
 	}

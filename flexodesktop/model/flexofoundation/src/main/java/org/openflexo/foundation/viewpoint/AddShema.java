@@ -93,8 +93,9 @@ public class AddShema extends EditionAction<ShemaPatternRole> {
 	}
 
 	public ViewPointDataBinding getShemaName() {
-		if (shemaName == null)
+		if (shemaName == null) {
 			shemaName = new ViewPointDataBinding(this, EditionActionBindingAttribute.shemaName, getShemaNameBindingDefinition());
+		}
 		return shemaName;
 	}
 

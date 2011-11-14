@@ -81,17 +81,20 @@ public class LoadableDMEntity extends DMEntity {
 	private LoadableDMEntity(DMRepository repository, Class aClass, boolean includesGetOnlyProperties, boolean includesMethods) {
 		this(repository.getDMModel());
 		setRepository(repository);
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Build new LoadableDMEntity for " + aClass.getName());
+		}
 		javaType = aClass;
 		if (javaType.isPrimitive()) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Supplied class " + javaType + " is a primitive. Please use JDKPrimitive instead !");
+			}
 			return;
 		}
 		if (javaType.isArray()) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Supplied class " + javaType + " is an array which is not permitted !");
+			}
 			return;
 		}
 		initializeFromClass(includesGetOnlyProperties, includesMethods);
@@ -142,23 +145,27 @@ public class LoadableDMEntity extends DMEntity {
 		}
 	}
 
+	@Override
 	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
 		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
 		returned.add(UpdateLoadableDMEntity.actionType);
 		return returned;
 	}
 
+	@Override
 	public boolean getIsReadOnly() {
 		return true;
 	}
 
+	@Override
 	public void setIsReadOnly(boolean readOnly) {
 		// Not authorized
 	}
 
 	public Class getJavaType() {
-		if (javaType == null)
+		if (javaType == null) {
 			javaType = retrieveJavaType();
+		}
 		return javaType;
 	}
 
@@ -187,25 +194,34 @@ public class LoadableDMEntity extends DMEntity {
 
 	@Override
 	public boolean isAncestorOf(DMEntity entity) {
-		if (entity == null)
+		if (entity == null) {
 			return false;
+		}
 		if (entityPackageName.equals("java.lang")) {
-			if (entityClassName.equals("Boolean") && entity.getName().equals("boolean"))
+			if (entityClassName.equals("Boolean") && entity.getName().equals("boolean")) {
 				return true;
-			if (entityClassName.equals("Integer") && entity.getName().equals("int"))
+			}
+			if (entityClassName.equals("Integer") && entity.getName().equals("int")) {
 				return true;
-			if (entityClassName.equals("Long") && entity.getName().equals("long"))
+			}
+			if (entityClassName.equals("Long") && entity.getName().equals("long")) {
 				return true;
-			if (entityClassName.equals("Short") && entity.getName().equals("short"))
+			}
+			if (entityClassName.equals("Short") && entity.getName().equals("short")) {
 				return true;
-			if (entityClassName.equals("Float") && entity.getName().equals("float"))
+			}
+			if (entityClassName.equals("Float") && entity.getName().equals("float")) {
 				return true;
-			if (entityClassName.equals("Double") && entity.getName().equals("double"))
+			}
+			if (entityClassName.equals("Double") && entity.getName().equals("double")) {
 				return true;
-			if (entityClassName.equals("Character") && entity.getName().equals("char"))
+			}
+			if (entityClassName.equals("Character") && entity.getName().equals("char")) {
 				return true;
-			if (entityClassName.equals("Byte") && entity.getName().equals("byte"))
+			}
+			if (entityClassName.equals("Byte") && entity.getName().equals("byte")) {
 				return true;
+			}
 		}
 		return super.isAncestorOf(entity);
 	}
@@ -261,8 +277,9 @@ public class LoadableDMEntity extends DMEntity {
 		}
 		// entityClassName = name;
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Registering " + getFullyQualifiedName());
+		}
 
 		// setParentEntity(null);
 
@@ -277,12 +294,14 @@ public class LoadableDMEntity extends DMEntity {
 				// This entity is not yet known
 				LoadableDMEntity.createLoadableDMEntity(current, getDMModel(), includesGetOnlyProperties, includesMethods);
 				currentParentEntity = getDMModel().getDMEntity(current);
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.finer("Force register " + current.getName() + " in DataModel: " + currentParentEntity);
+				}
 			}
 			if (currentParentEntity == null) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not register " + current.getName() + " in DataModel");
+				}
 			}
 			if (current == javaType.getSuperclass()) {
 				setParentType(makeType(javaType.getGenericSuperclass(), getDMModel(), true), true);
@@ -298,8 +317,9 @@ public class LoadableDMEntity extends DMEntity {
 		for (Type t : javaType.getGenericInterfaces()) {
 			DMType implementsType = makeType(t, getDMModel(), true);
 			implementsType.setOwner(this);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Implements " + implementsType);
+			}
 			if (getImplementedTypes().size() > implementedTypesIndex) {
 				DMType existingTypeAsThisIndex = getImplementedTypes().elementAt(implementedTypesIndex);
 				if (!existingTypeAsThisIndex.equals(implementsType)) {
@@ -311,8 +331,9 @@ public class LoadableDMEntity extends DMEntity {
 			implementedTypesIndex++;
 		}
 		int implementedTypesToRemove = getImplementedTypes().size() - javaType.getGenericInterfaces().length;
-		for (int j = 0; j < implementedTypesToRemove; j++)
+		for (int j = 0; j < implementedTypesToRemove; j++) {
 			getImplementedTypes().removeElementAt(getTypeVariables().size() - 1);
+		}
 
 		// type variable
 		int typeVariableIndex = 0;
@@ -346,8 +367,9 @@ public class LoadableDMEntity extends DMEntity {
 			typeVariableIndex++;
 		}
 		int elementsToRemove = getTypeVariables().size() - javaType.getTypeParameters().length;
-		for (int j = 0; j < elementsToRemove; j++)
+		for (int j = 0; j < elementsToRemove; j++) {
 			getTypeVariables().removeElementAt(getTypeVariables().size() - 1);
+		}
 	}
 
 	private void registerMethods(Vector<String> excludedSignatures) {
@@ -366,11 +388,13 @@ public class LoadableDMEntity extends DMEntity {
 			Vector<String> excludedSignatures) {
 		Vector<DMMethod> returned = new Vector<DMMethod>();
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("searchForMethods()");
+		}
 		for (String excludedSignature : excludedSignatures) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Excluded: " + excludedSignature);
+			}
 		}
 
 		try {
@@ -380,21 +404,25 @@ public class LoadableDMEntity extends DMEntity {
 
 				DMMethod newMethod = makeMethod(method, dmModel, repository, importReferencedEntities);
 
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Examine: " + newMethod.getSignature());
+				}
 				if (!excludedSignatures.contains(newMethod.getSignature())) {
 					returned.add(newMethod);
 				} else {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Exclude " + DMMethod.signatureForMethod(method, true));
+					}
 				}
 			}
 		} catch (NoClassDefFoundError e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not find class: " + e.getMessage());
+			}
 		} catch (Throwable e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Unexpected exception raised " + e);
+			}
 			e.printStackTrace();
 		}
 
@@ -416,13 +444,15 @@ public class LoadableDMEntity extends DMEntity {
 	private static DMEntity obtainDMEntity(Class aClass, DMModel dmModel, boolean importReferencedEntities) {
 		DMEntity returned = dmModel.getDMEntity(aClass);
 		if ((returned == null) && (importReferencedEntities)) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.finer("Force register " + aClass.getName() + " in DataModel");
+			}
 			LoadableDMEntity.createLoadableDMEntity(aClass, dmModel, false, false);
 			returned = dmModel.getDMEntity(aClass);
 			if (returned == null) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not register " + aClass.getName() + " in DataModel");
+				}
 			}
 		}
 		return returned;
@@ -434,8 +464,9 @@ public class LoadableDMEntity extends DMEntity {
 			Class baseType;
 			if (typeAsClass.isArray()) {
 				baseType = typeAsClass.getComponentType();
-				while (baseType.isArray())
+				while (baseType.isArray()) {
 					baseType = baseType.getComponentType();
+				}
 			} else {
 				baseType = typeAsClass;
 			}
@@ -465,14 +496,16 @@ public class LoadableDMEntity extends DMEntity {
 				if (owner != null) {
 					DMTypeVariable typeVariable = null;
 					for (DMTypeVariable tv : owner.getTypeVariables()) {
-						if (tv.getName().equals(typeAsTypeVariable.getName()))
+						if (tv.getName().equals(typeAsTypeVariable.getName())) {
 							typeVariable = tv;
+						}
 					}
 					if (typeVariable == null) {
 						typeVariable = new DMTypeVariable(dmModel, owner);
 						typeVariable.setName(typeAsTypeVariable.getName());
-						if (typeAsTypeVariable.getBounds().length > 0)
+						if (typeAsTypeVariable.getBounds().length > 0) {
 							typeVariable.setBounds(typeAsTypeVariable.getBounds()[0].toString());
+						}
 						owner.addToTypeVariables(typeVariable);
 					}
 					return DMType.makeTypeVariableDMType(typeVariable);
@@ -507,8 +540,9 @@ public class LoadableDMEntity extends DMEntity {
 				return DMType.makeUnresolvedDMType(type.toString());
 			}
 		} else if (type instanceof GenericArrayType) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Found GenericArrayType: " + type);
+			}
 			GenericArrayType typeAsGenericArrayType = (GenericArrayType) type;
 			int dimensions = 1;
 			Type baseType = typeAsGenericArrayType.getGenericComponentType();
@@ -520,24 +554,28 @@ public class LoadableDMEntity extends DMEntity {
 			returned.setDimensions(dimensions);
 			return returned;
 		} else if (type instanceof WildcardType) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Found wildcard: " + type);
+			}
 			WildcardType typeAsWildcardType = (WildcardType) type;
 			Vector<DMType> upperBounds = new Vector<DMType>();
 			for (Type t : typeAsWildcardType.getUpperBounds()) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Upper: " + t);
+				}
 				upperBounds.add(makeType(t, dmModel, importReferencedEntities));
 			}
 			Vector<DMType> lowerBounds = new Vector<DMType>();
 			for (Type t : typeAsWildcardType.getLowerBounds()) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Lower: " + t);
+				}
 				lowerBounds.add(makeType(t, dmModel, importReferencedEntities));
 			}
 			DMType returned = DMType.makeWildcardDMType(upperBounds, lowerBounds);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Returning wildcard: " + returned.getStringRepresentation());
+			}
 			return returned;
 		}
 		logger.warning("Unexpected type " + type.getClass());
@@ -557,14 +595,15 @@ public class LoadableDMEntity extends DMEntity {
 
 		// Visibility
 		DMVisibilityType visibility;
-		if (Modifier.isPublic(method.getModifiers()))
+		if (Modifier.isPublic(method.getModifiers())) {
 			visibility = DMVisibilityType.PUBLIC;
-		else if (Modifier.isProtected(method.getModifiers()))
+		} else if (Modifier.isProtected(method.getModifiers())) {
 			visibility = DMVisibilityType.PROTECTED;
-		else if (Modifier.isPrivate(method.getModifiers()))
+		} else if (Modifier.isPrivate(method.getModifiers())) {
 			visibility = DMVisibilityType.PRIVATE;
-		else
+		} else {
 			visibility = DMVisibilityType.NONE;
+		}
 		newMethod.setVisibilityModifier(visibility);
 
 		// Static
@@ -606,10 +645,11 @@ public class LoadableDMEntity extends DMEntity {
 				DMType paramDMType = makeType(parameter, dmModel, importReferencedEntities);
 				DMMethodParameter param = new DMMethodParameter(dmModel, newMethod);
 				String name = "arg" + j;
-				if (paramDMType.getBaseEntity() != null)
+				if (paramDMType.getBaseEntity() != null) {
 					name = paramDMType.getBaseEntity().getNameAsMethodArgument();
-				else if (paramDMType.getTypeVariable() != null)
+				} else if (paramDMType.getTypeVariable() != null) {
 					name = paramDMType.getTypeVariable().getName().toLowerCase();
+				}
 				name = newMethod.getNextDefautParameterName(name);
 				param.setName(name);
 				param.setType(paramDMType);
@@ -655,8 +695,9 @@ public class LoadableDMEntity extends DMEntity {
 		Vector<String> excludedSignatures = new Vector<String>();
 		Vector<DMProperty> properties = searchForProperties(javaType, getDMModel(), getRepository(), includesGetOnlyProperties, true,
 				excludedSignatures);
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Properties to register: " + properties);
+		}
 		for (Enumeration en = properties.elements(); en.hasMoreElements();) {
 			DMProperty next = (DMProperty) en.nextElement();
 			registerProperty(next, false);
@@ -679,8 +720,9 @@ public class LoadableDMEntity extends DMEntity {
 				DMProperty newProperty = makeProperty(method, dmModel, repository, includesGetOnlyProperties, importReferencedEntities,
 						excludedSignatures);
 				if (newProperty != null && !containsAPropertyNamed(returned, newProperty.getName())) {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Make property from method: " + method);
+					}
 					returned.add(newProperty);
 				}
 			}
@@ -692,17 +734,20 @@ public class LoadableDMEntity extends DMEntity {
 
 				DMProperty newProperty = makeProperty(field, dmModel, repository, importReferencedEntities);
 				if (newProperty != null && !containsAPropertyNamed(returned, newProperty.getName())) {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Make property from field: " + field);
+					}
 					returned.add(newProperty);
 				}
 			}
 		} catch (NoClassDefFoundError e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not find class: " + e.getMessage());
+			}
 		} catch (Throwable e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Unexpected exception raised " + e);
+			}
 			e.printStackTrace();
 		}
 		return returned;
@@ -710,8 +755,9 @@ public class LoadableDMEntity extends DMEntity {
 
 	private static boolean containsAPropertyNamed(Vector<DMProperty> properties, String aName) {
 		for (DMProperty p : properties) {
-			if (p.getName().equals(aName))
+			if (p.getName().equals(aName)) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -721,16 +767,19 @@ public class LoadableDMEntity extends DMEntity {
 	 */
 	private static DMProperty makeProperty(Class type, String propertyName, DMModel dmModel, DMRepository repository,
 			boolean includesGetOnlyProperties, boolean importReferencedEntities, Vector<String> excludedSignatures) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("makeProperty() " + propertyName + " for " + type);
+		}
 		Method method = searchMatchingGetMethod(type, propertyName);
 		if (method != null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Found method " + method);
+			}
 			return makeProperty(method, dmModel, repository, includesGetOnlyProperties, importReferencedEntities, excludedSignatures);
 		} else {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Not found method, try field");
+			}
 			Field f = searchMatchingField(type, propertyName);
 			if (f != null) {
 				return makeProperty(f, dmModel, repository, importReferencedEntities);
@@ -793,8 +842,9 @@ public class LoadableDMEntity extends DMEntity {
 						AccessorMethod next = (AccessorMethod) it.next();
 						excludedSignatures.add(DMMethod.signatureForMethod(next.getMethod(), true));
 					}
-					if ((addToMethods.size() == 0) || (removeFromMethods.size() == 0))
+					if ((addToMethods.size() == 0) || (removeFromMethods.size() == 0)) {
 						isSettable = false;
+					}
 				}
 			}
 
@@ -810,8 +860,9 @@ public class LoadableDMEntity extends DMEntity {
 						AccessorMethod next = (AccessorMethod) it.next();
 						excludedSignatures.add(DMMethod.signatureForMethod(next.getMethod(), true));
 					}
-					if ((setMethods.size() == 0) || (removeMethods.size() == 0))
+					if ((setMethods.size() == 0) || (removeMethods.size() == 0)) {
 						isSettable = false;
+					}
 				}
 			}
 
@@ -1039,34 +1090,41 @@ public class LoadableDMEntity extends DMEntity {
 	}
 
 	private static Method getMethod(Class type, String methodName, Type... params) throws NoSuchMethodException {
-		if (params == null)
+		if (params == null) {
 			params = new Type[0];
+		}
 		StringBuffer sb = null;
 		if (logger.isLoggable(Level.FINE)) {
 			sb = new StringBuffer();
-			for (Type t : params)
+			for (Type t : params) {
 				sb.append(" " + t.toString());
-			if (logger.isLoggable(Level.FINE))
+			}
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Looking for " + methodName + " with" + sb.toString());
+			}
 		}
 		for (Method m : type.getMethods()) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Examining " + m);
+			}
 			if (m.getName().equals(methodName) && m.getGenericParameterTypes().length == params.length) {
 				boolean paramMatches = true;
 				for (int i = 0; i < params.length; i++) {
-					if (!params[i].equals(m.getGenericParameterTypes()[i]))
+					if (!params[i].equals(m.getGenericParameterTypes()[i])) {
 						paramMatches = false;
+					}
 				}
 				if (paramMatches) {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Looking for " + methodName + " with" + sb.toString() + ": found");
+					}
 					return m;
 				}
 			}
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Looking for " + methodName + " with" + sb.toString() + ": NOT found");
+		}
 		throw new NoSuchMethodException();
 	}
 
@@ -1251,6 +1309,7 @@ public class LoadableDMEntity extends DMEntity {
 		 * @exception ClassCastException
 		 *                if an error occurs
 		 */
+		@Override
 		public int compareTo(Object object) throws ClassCastException {
 
 			if (object instanceof AccessorMethod) {
@@ -1322,8 +1381,9 @@ public class LoadableDMEntity extends DMEntity {
 	 * @throws DuplicatePropertyNameException
 	 */
 	private void updateProperty(DMProperty property) throws InvalidNameException, DuplicatePropertyNameException {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Update property " + property);
+		}
 		DMProperty updatedProperty = makeProperty(getJavaType(), property.getName(), getDMModel(), getRepository(), true, true, null);
 		if (updatedProperty == null) {
 			logger.info("Delete property: " + property.getName());
@@ -1339,8 +1399,9 @@ public class LoadableDMEntity extends DMEntity {
 	 * @param property
 	 */
 	private DMProperty createProperty(PropertyReference propertyReference) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Create property " + propertyReference.getName());
+		}
 		DMProperty returnedProperty = makeProperty(getJavaType(), propertyReference.getName(), getDMModel(), getRepository(), true, true,
 				null);
 		registerProperty(returnedProperty, false);
@@ -1354,14 +1415,16 @@ public class LoadableDMEntity extends DMEntity {
 	 * @throws DuplicateMethodSignatureException
 	 */
 	private void updateMethod(DMMethod method) throws DuplicateMethodSignatureException {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Update method " + method);
+		}
 		DMMethod updatedMethod = makeMethod(getJavaType(), method.getSignature(), getDMModel(), getRepository(), true);
 		if (updatedMethod == null) {
 			method.delete();
 		} else {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Update method " + method.getSignature() + " with " + updatedMethod.getSignature());
+			}
 			method.update(updatedMethod, false);
 		}
 	}
@@ -1372,8 +1435,9 @@ public class LoadableDMEntity extends DMEntity {
 	 * @param property
 	 */
 	private DMMethod createMethod(MethodReference methodReference) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Create method " + methodReference.getSignature());
+		}
 		DMMethod returnedMethod = makeMethod(getJavaType(), methodReference.getSignature(), getDMModel(), getRepository(), true);
 		if (returnedMethod == null) {
 			logger.warning("Could not retrieve method " + methodReference.getSignature());
@@ -1393,8 +1457,9 @@ public class LoadableDMEntity extends DMEntity {
 			logger.warning("Could not update: could not find class !");
 		} else {
 
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Update " + getName() + " with " + aClassReference.getName());
+			}
 
 			// First update package and class name, and parent class if different
 			initializeFromClass(false, false);
@@ -1427,8 +1492,9 @@ public class LoadableDMEntity extends DMEntity {
 			for (Enumeration en = (new Vector<DMProperty>(propertiesToDelete)).elements(); en.hasMoreElements();) {
 				DMProperty toDelete = (DMProperty) en.nextElement();
 				logger.info("Delete property: " + toDelete.getName());
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Delete property " + toDelete);
+				}
 				toDelete.delete();
 			}
 
@@ -1454,8 +1520,9 @@ public class LoadableDMEntity extends DMEntity {
 			}
 			for (Enumeration en = (new Vector<DMMethod>(methodsToDelete)).elements(); en.hasMoreElements();) {
 				DMMethod toDelete = (DMMethod) en.nextElement();
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Delete method " + toDelete);
+				}
 				toDelete.delete();
 			}
 
@@ -1466,8 +1533,9 @@ public class LoadableDMEntity extends DMEntity {
 		if (getJavaType() == null) {
 			logger.warning("Could not update: could not find class !");
 		} else {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Update " + this + " with " + includeGetOnlyProperties + " and " + includeMethods);
+			}
 
 			// First update package and class name, and parent class if different
 			initializeFromClass(false, false);
@@ -1491,8 +1559,9 @@ public class LoadableDMEntity extends DMEntity {
 
 			for (Enumeration en = properties.elements(); en.hasMoreElements();) {
 				DMProperty nextProperty = (DMProperty) en.nextElement();
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Update property " + nextProperty);
+				}
 				try {
 					updateProperty(nextProperty);
 				} catch (InvalidNameException e) {
@@ -1515,8 +1584,9 @@ public class LoadableDMEntity extends DMEntity {
 
 			for (Enumeration en = allRequiredProperties.elements(); en.hasMoreElements();) {
 				DMProperty nextProperty = (DMProperty) en.nextElement();
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Create property " + nextProperty);
+				}
 				registerProperty(nextProperty, false);
 			}
 
@@ -1526,8 +1596,9 @@ public class LoadableDMEntity extends DMEntity {
 
 			for (Enumeration en = methods.elements(); en.hasMoreElements();) {
 				DMMethod nextMethod = (DMMethod) en.nextElement();
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Update method " + nextMethod);
+				}
 				try {
 					updateMethod(nextMethod);
 				} catch (DuplicateMethodSignatureException e) {
@@ -1545,8 +1616,9 @@ public class LoadableDMEntity extends DMEntity {
 
 			for (Enumeration en = allRequiredMethods.elements(); en.hasMoreElements();) {
 				DMMethod nextMethod = (DMMethod) en.nextElement();
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Create method " + nextMethod);
+				}
 				registerMethod(nextMethod);
 			}
 
@@ -1558,6 +1630,7 @@ public class LoadableDMEntity extends DMEntity {
 	 * 
 	 * @return
 	 */
+	@Override
 	public boolean isCodeGenerationApplicable() {
 		return false;
 	}

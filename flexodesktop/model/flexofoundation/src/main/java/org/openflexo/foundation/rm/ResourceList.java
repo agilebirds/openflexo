@@ -76,8 +76,9 @@ public abstract class ResourceList extends Vector<FlexoResource<FlexoResourceDat
 	}
 
 	public void addToResources(FlexoResource<FlexoResourceData> resource) {
-		if (resource.isDeleted())
+		if (resource.isDeleted()) {
 			return;
+		}
 		if (!contains(resource)) {
 			add(resource);
 			if (getRelatedResource() != null) {
@@ -143,8 +144,9 @@ public abstract class ResourceList extends Vector<FlexoResource<FlexoResourceDat
 				if (!resource.isToBeSerialized()
 						|| (getRelatedResource().getProject().getFlexoResource() != null
 								&& !getRelatedResource().getProject().getFlexoResource().isInitializingProject() && !resource
-									.checkIntegrity()))
+									.checkIntegrity())) {
 					i.remove();
+				}
 			}
 			return returned.elements();
 		}

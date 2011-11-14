@@ -75,10 +75,11 @@ public class FGEPaintManager {
 		_drawingView = drawingView;
 		_paintBuffer = null;
 		_temporaryObjects = new HashSet<GraphicalRepresentation<?>>();
-		if (ENABLE_CACHE_BY_DEFAULT)
+		if (ENABLE_CACHE_BY_DEFAULT) {
 			enablePaintingCache();
-		else
+		} else {
 			disablePaintingCache();
+		}
 	}
 
 	public DrawingView<?> getDrawingView() {
@@ -94,14 +95,16 @@ public class FGEPaintManager {
 	}
 
 	public void enablePaintingCache() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Painting cache: ENABLED");
+		}
 		_paintingCacheEnabled = true;
 	}
 
 	public void disablePaintingCache() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Painting cache: DISABLED");
+		}
 		_paintingCacheEnabled = false;
 	}
 
@@ -114,15 +117,19 @@ public class FGEPaintManager {
 	}
 
 	public boolean containsTemporaryObject(GraphicalRepresentation<?> gr) {
-		if (gr == null)
+		if (gr == null) {
 			return false;
-		if (isTemporaryObject(gr))
+		}
+		if (isTemporaryObject(gr)) {
 			return true;
-		if (gr.getContainedGraphicalRepresentations() == null)
+		}
+		if (gr.getContainedGraphicalRepresentations() == null) {
 			return false;
+		}
 		for (GraphicalRepresentation<?> child : gr.getContainedGraphicalRepresentations()) {
-			if (containsTemporaryObject(child))
+			if (containsTemporaryObject(child)) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -132,16 +139,19 @@ public class FGEPaintManager {
 	}
 
 	public boolean isTemporaryObjectOrParentIsTemporaryObject(GraphicalRepresentation<?> gr) {
-		if (isTemporaryObject(gr))
+		if (isTemporaryObject(gr)) {
 			return true;
-		if (gr.getContainerGraphicalRepresentation() != null)
+		}
+		if (gr.getContainerGraphicalRepresentation() != null) {
 			return isTemporaryObjectOrParentIsTemporaryObject(gr.getContainerGraphicalRepresentation());
+		}
 		return false;
 	}
 
 	public void addToTemporaryObjects(GraphicalRepresentation<?> gr) {
-		if (paintRequestLogger.isLoggable(Level.FINE))
+		if (paintRequestLogger.isLoggable(Level.FINE)) {
 			paintRequestLogger.fine("addToTemporaryObjects() " + gr);
+		}
 		_temporaryObjects.add(gr);
 	}
 
@@ -151,24 +161,28 @@ public class FGEPaintManager {
 
 	// CPU-expensive because it will ask to recreate the whole buffer
 	public void invalidate(GraphicalRepresentation<?> object) {
-		if (paintRequestLogger.isLoggable(Level.FINE))
+		if (paintRequestLogger.isLoggable(Level.FINE)) {
 			paintRequestLogger.fine("CALLED invalidate on FGEPaintManager");
+		}
 		_paintBuffer = null;
 		// repaintManager.clearTemporaryRepaintArea();
 	}
 
 	public void clearPaintBuffer() {
-		if (paintRequestLogger.isLoggable(Level.INFO))
+		if (paintRequestLogger.isLoggable(Level.INFO)) {
 			paintRequestLogger.info("CALLED clear paint buffer on FGEPaintManager");
+		}
 		_paintBuffer = null;
 	}
 
 	public void repaint(FGEView view, Rectangle bounds) {
-		if (!_drawingView.contains(view))
+		if (!_drawingView.contains(view)) {
 			return;
+		}
 
-		if (paintRequestLogger.isLoggable(Level.FINE))
+		if (paintRequestLogger.isLoggable(Level.FINE)) {
 			paintRequestLogger.fine("Called REPAINT for view " + view + " for " + bounds);
+		}
 		((JComponent) view).repaint(bounds.x, bounds.y, bounds.width, bounds.height);
 		// repaintManager.repaintTemporaryRepaintAreas((JComponent)view);
 		repaintManager.repaintTemporaryRepaintAreas(_drawingView);
@@ -188,11 +202,13 @@ public class FGEPaintManager {
 			});
 			return;
 		}
-		if (!_drawingView.contains(view))
+		if (!_drawingView.contains(view)) {
 			return;
+		}
 
-		if (paintRequestLogger.isLoggable(Level.FINE))
+		if (paintRequestLogger.isLoggable(Level.FINE)) {
 			paintRequestLogger.fine("Called REPAINT for view " + view);
+		}
 		if (view == _drawingView) {
 			// clearTemporaryRepaintArea();
 			// paintRequestLogger.warning("Called repaint on whole DrawingView. Is it really necessary ?");
@@ -206,16 +222,18 @@ public class FGEPaintManager {
 			} else if (view instanceof ShapeView) {
 				label = ((ShapeView<?>) view).getLabelView();
 			}
-			if (label != null)
+			if (label != null) {
 				label.repaint();
+			}
 		}
 		// repaintManager.repaintTemporaryRepaintAreas((JComponent)view);
 
 		if (view instanceof ShapeView /*&& isPaintingCacheEnabled()*/) {
 			if (((Component) view).getParent() == null) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Parent view to repaint is null: "
 							+ (view.getGraphicalRepresentation() != null ? view.getModel() : view));
+				}
 				return;
 			}
 			// What may happen here ?
@@ -258,11 +276,13 @@ public class FGEPaintManager {
 	}
 
 	public void repaint(GraphicalRepresentation<?> gr) {
-		if (paintRequestLogger.isLoggable(Level.FINE))
+		if (paintRequestLogger.isLoggable(Level.FINE)) {
 			paintRequestLogger.fine("Called REPAINT for graphical representation " + gr);
+		}
 		FGEView view = _drawingView.viewForObject(gr);
-		if (view != null)
+		if (view != null) {
 			repaint(view);
+		}
 	}
 
 	public BufferedImage getScreenshot(GraphicalRepresentation<?> gr) {
@@ -275,15 +295,17 @@ public class FGEPaintManager {
 		Rectangle rect = new Rectangle(((JComponent) v).getX(), ((JComponent) v).getY(), ((JComponent) v).getWidth(),
 				((JComponent) v).getHeight());
 		if (v instanceof ShapeView) {
-			if (((ShapeView<?>) v).getLabelView() != null)
+			if (((ShapeView<?>) v).getLabelView() != null) {
 				rect = rect.union(((ShapeView<?>) v).getLabelView().getBounds());
+			}
 		}
 		return getPaintBuffer().getSubimage(rect.x, rect.y, rect.width, rect.height);
 	}
 
 	private synchronized BufferedImage bufferDrawingView() {
-		if (paintRequestLogger.isLoggable(Level.FINE))
+		if (paintRequestLogger.isLoggable(Level.FINE)) {
 			paintRequestLogger.fine("Buffering whole DrawingView. Is it really necessary ?");
+		}
 		Component view = getDrawingView();
 		// GraphicsConfiguration config = view.getGraphicsConfiguration();
 		// VolatileImage image = config.createCompatibleVolatileImage(view.getWidth(), view.getHeight());
@@ -336,9 +358,10 @@ public class FGEPaintManager {
 					temporaryRepaintAreas.put(view, allRect);
 				}
 				allRect.add(r);
-				if (paintRequestLogger.isLoggable(Level.FINER))
+				if (paintRequestLogger.isLoggable(Level.FINER)) {
 					paintRequestLogger.finer("addTemporaryRepaintArea(" + r + ") for " + view.getClass().getSimpleName()
 							+ " temporaryRepaintAreas size=" + allRect.size());
+				}
 			}
 		}
 
@@ -348,8 +371,9 @@ public class FGEPaintManager {
 				if (allRect != null) {
 					for (Rectangle r : allRect) {
 						component.repaint(r);
-						if (paintRequestLogger.isLoggable(Level.FINER))
+						if (paintRequestLogger.isLoggable(Level.FINER)) {
 							paintRequestLogger.finer("repaint(" + r + ") for " + component.getClass().getSimpleName());
+						}
 					}
 					allRect.clear();
 				}
@@ -358,8 +382,9 @@ public class FGEPaintManager {
 
 		@Override
 		public synchronized void addDirtyRegion(JComponent c, int x, int y, int w, int h) {
-			if (paintRequestLogger.isLoggable(Level.FINEST))
+			if (paintRequestLogger.isLoggable(Level.FINEST)) {
 				paintRequestLogger.finest("adding DirtyRegion: " + c.getName() + ", " + x + "," + y + " " + w + "x" + h);
+			}
 			// paintRequestLogger.warning("adding DirtyRegion: "+c.getName()+", "+x+","+y+" "+w+"x"+h);
 			super.addDirtyRegion(c, x, y, w, h);
 			/*if (MANAGE_DIRTY_REGIONS) {
@@ -381,8 +406,9 @@ public class FGEPaintManager {
 			// Unfortunately most of the RepaintManager state is package
 			// private and not accessible from the subclass at the moment,
 			// so we can't print more info about what's being painted.
-			if (paintRequestLogger.isLoggable(Level.FINEST))
+			if (paintRequestLogger.isLoggable(Level.FINEST)) {
 				paintRequestLogger.finest("painting DirtyRegions");
+			}
 			super.paintDirtyRegions();
 		}
 
@@ -442,8 +468,9 @@ public class FGEPaintManager {
 	 * @return
 	 */
 	protected boolean renderUsingBuffer(Graphics2D g, Rectangle renderingBounds, GraphicalRepresentation gr, double scale) {
-		if (renderingBounds == null)
+		if (renderingBounds == null) {
 			return false;
+		}
 		// Use buffer
 		BufferedImage buffer = getPaintBuffer();
 		Rectangle viewBoundsInDrawingView = GraphicalRepresentation.convertRectangle(gr, renderingBounds,
@@ -458,15 +485,17 @@ public class FGEPaintManager {
 				|| (sp2.x > buffer.getWidth()) || (sp2.y < 0) || (sp2.y > buffer.getHeight())) {
 			// We have here a request for render outside cached image
 			// We cannot do that, so skip buffer use and do normal painting
-			if (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE))
+			if (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE)) {
 				FGEPaintManager.paintPrimitiveLogger.fine("GraphicalRepresentation:" + gr
 						+ " / request to render outside image buffer, use normal rendering clip=" + renderingBounds);
+			}
 			// invalidate(gr);
 			return false;
 		} else {
 			// OK, we are in our bounds
-			if (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE))
+			if (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE)) {
 				FGEPaintManager.paintPrimitiveLogger.fine("DrawingView: use image buffer, copy area " + renderingBounds);
+			}
 
 			// Below was the previous implementation, using i think a too complex drawing primitive
 			// (image was resized and so on)

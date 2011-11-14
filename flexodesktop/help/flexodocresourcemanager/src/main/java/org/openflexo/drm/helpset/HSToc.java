@@ -168,31 +168,36 @@ public class HSToc extends FlexoObject implements XMLSerializable {
 			File hsTocModelFile;
 			hsTocModelFile = new FileResource("Models/HSTocModel.xml");
 			if (!hsTocModelFile.exists()) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("File " + hsTocModelFile.getAbsolutePath() + " doesn't exist. Maybe you have to check your paths ?");
+				}
 				return null;
 			} else {
 				try {
 					_tocMapping = new XMLMapping(hsTocModelFile);
 				} catch (InvalidModelException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (IOException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (SAXException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (ParserConfigurationException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				}
 			}

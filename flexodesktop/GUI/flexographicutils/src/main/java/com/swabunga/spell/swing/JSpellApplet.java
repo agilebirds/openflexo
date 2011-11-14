@@ -19,17 +19,29 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 package com.swabunga.spell.swing;
 
-import com.swabunga.spell.engine.SpellDictionary;
-import com.swabunga.spell.engine.SpellDictionaryHashMap;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.zip.ZipInputStream;
+
+import javax.swing.JApplet;
+import javax.swing.JButton;
+import javax.swing.JTextArea;
+
+import com.swabunga.spell.engine.SpellDictionary;
+import com.swabunga.spell.engine.SpellDictionaryHashMap;
 
 /**
  * @author aim4min
@@ -47,6 +59,7 @@ public class JSpellApplet extends JApplet {
 	/**
 	 * @see java.awt.Component#paint(Graphics)
 	 */
+	@Override
 	public void paint(Graphics arg0) {
 		super.paint(arg0);
 
@@ -55,6 +68,7 @@ public class JSpellApplet extends JApplet {
 	/**
 	 * @see java.applet.Applet#init()
 	 */
+	@Override
 	public void init() {
 		super.init();
 
@@ -107,8 +121,10 @@ public class JSpellApplet extends JApplet {
 		spell = new JButton("spell check");
 		final JTextComponentSpellChecker sc = new JTextComponentSpellChecker(dictionary);
 		spell.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Thread t = new Thread() {
+					@Override
 					public void run() {
 						try {
 							sc.spellCheck(text);

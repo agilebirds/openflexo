@@ -60,19 +60,22 @@ public class ProcessJSFileResource extends JSFileResource<DGJSGenerator<FlexoPro
 
 	@Override
 	public String getName() {
-		if (getCGFile() == null || getCGFile().getRepository() == null || getProcess() == null)
+		if (getCGFile() == null || getCGFile().getRepository() == null || getProcess() == null) {
 			return super.getName();
+		}
 		registerObserverWhenRequired();
-		if (super.getName() == null)
+		if (super.getName() == null) {
 			setName(nameForRepositoryAndProcess(getCGFile().getRepository(), getProcess()));
+		}
 		return nameForRepositoryAndProcess(getCGFile().getRepository(), getProcess());
 	}
 
 	public void registerObserverWhenRequired() {
 		if ((!isObserverRegistered) && (getProcess() != null)) {
 			isObserverRegistered = true;
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getProject());
+			}
 			getProcess().addObserver(this);
 		}
 	}
@@ -82,8 +85,9 @@ public class ProcessJSFileResource extends JSFileResource<DGJSGenerator<FlexoPro
 	}
 
 	public FlexoProcess getProcess() {
-		if (getGenerator() != null)
+		if (getGenerator() != null) {
 			return getGenerator().getObject();
+		}
 		return null;
 	}
 
@@ -101,8 +105,9 @@ public class ProcessJSFileResource extends JSFileResource<DGJSGenerator<FlexoPro
 		if (getProcess() != null) {
 			addToDependantResources(getProcess().getFlexoResource());
 			addToDependantResources(getProject().getScreenshotResource(getProcess(), true));
-			for (AbstractActivityNode activityNode : getProcess().getAllEmbeddedAbstractActivityNodes())
+			for (AbstractActivityNode activityNode : getProcess().getAllEmbeddedAbstractActivityNodes()) {
 				addToDependantResources(getProject().getScreenshotResource(activityNode, true));
+			}
 		}
 	}
 
@@ -118,8 +123,9 @@ public class ProcessJSFileResource extends JSFileResource<DGJSGenerator<FlexoPro
 					getCGFile().setMarkedForDeletion(true);
 					generator.refreshConcernedResources();
 					generator.getRepository().refresh();
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Resource " + getName() + " is marked as deleted");
+					}
 					observable.deleteObserver(this);
 					isObserverRegistered = false;
 				}

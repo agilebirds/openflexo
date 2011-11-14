@@ -36,7 +36,6 @@ import org.apache.xmlbeans.XmlBeans;
 import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.impl.schema.MySchemaTypeSystemCompiler;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.wsdl.XMLTypeMapper;
 
 public class SchemaTypeTest extends TestCase {
 

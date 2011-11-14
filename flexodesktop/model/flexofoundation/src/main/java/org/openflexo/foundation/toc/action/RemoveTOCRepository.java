@@ -56,8 +56,9 @@ public class RemoveTOCRepository extends FlexoAction<RemoveTOCRepository, TOCRep
 
 	@Override
 	protected void doAction(Object context) throws FlexoException {
-		if (getFocusedObject() != null)
+		if (getFocusedObject() != null) {
 			getFocusedObject().delete();
+		}
 	}
 
 }

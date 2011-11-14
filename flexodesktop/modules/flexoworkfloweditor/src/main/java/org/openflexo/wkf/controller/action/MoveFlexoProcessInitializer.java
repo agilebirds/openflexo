@@ -22,12 +22,6 @@ package org.openflexo.wkf.controller.action;
 import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
-import org.openflexo.icon.WKFIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -39,6 +33,11 @@ import org.openflexo.foundation.param.ProcessParameter;
 import org.openflexo.foundation.param.RadioButtonListParameter;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.action.MoveFlexoProcess;
+import org.openflexo.icon.WKFIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class MoveFlexoProcessInitializer extends ActionInitializer {
 
@@ -53,10 +52,12 @@ public class MoveFlexoProcessInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<MoveFlexoProcess>() {
 			@Override
 			public boolean run(ActionEvent e, final MoveFlexoProcess action) {
-				if (action.getFocusedObject() == null)
+				if (action.getFocusedObject() == null) {
 					return false;
-				if (action.isDoImmediately())
+				}
+				if (action.isDoImmediately()) {
 					return true;
+				}
 				LabelParameter infoLabel = new LabelParameter("info", "info", action.getLocalizedDescription(), false);
 				infoLabel.setWidth(300);
 				infoLabel.setHeight(150);

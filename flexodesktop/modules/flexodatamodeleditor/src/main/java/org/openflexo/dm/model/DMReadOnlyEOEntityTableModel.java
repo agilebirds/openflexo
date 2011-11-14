@@ -21,14 +21,13 @@ package org.openflexo.dm.model;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-
 import org.openflexo.components.tabular.model.IconColumn;
 import org.openflexo.components.tabular.model.StringColumn;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.dm.eo.DMEOModel;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 
 /**
  * @author gpolet
@@ -42,8 +41,9 @@ public class DMReadOnlyEOEntityTableModel extends DMEOEntityTableModel {
 	 */
 	public DMReadOnlyEOEntityTableModel(DMEOModel dmEOModel, FlexoProject project) {
 		super(dmEOModel, project);
-		while (getColumnCount() > 0)
+		while (getColumnCount() > 0) {
 			removeFromColumns(columnAt(0));
+		}
 		addToColumns(new IconColumn<DMEOEntity>("entity_icon", 30) {
 			@Override
 			public Icon getIcon(DMEOEntity dmEOEntity) {
@@ -53,8 +53,9 @@ public class DMReadOnlyEOEntityTableModel extends DMEOEntityTableModel {
 		addToColumns(new IconColumn<DMEOEntity>("read_only", 25) {
 			@Override
 			public Icon getIcon(DMEOEntity dmEOEntity) {
-				if (dmEOEntity != null)
+				if (dmEOEntity != null) {
 					return (dmEOEntity.getIsReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON);
+				}
 				return null;
 			}
 
@@ -67,8 +68,9 @@ public class DMReadOnlyEOEntityTableModel extends DMEOEntityTableModel {
 		addToColumns(new StringColumn<DMEOEntity>("name", 150) {
 			@Override
 			public String getValue(DMEOEntity dmEOEntity) {
-				if (dmEOEntity != null)
+				if (dmEOEntity != null) {
 					return dmEOEntity.getName();
+				}
 				return null;
 			}
 
@@ -76,8 +78,9 @@ public class DMReadOnlyEOEntityTableModel extends DMEOEntityTableModel {
 		addToColumns(new StringColumn<DMEOEntity>("class", 150) {
 			@Override
 			public String getValue(DMEOEntity dmEOEntity) {
-				if (dmEOEntity != null)
+				if (dmEOEntity != null) {
 					return dmEOEntity.getEntityClassName();
+				}
 				return null;
 			}
 
@@ -85,17 +88,20 @@ public class DMReadOnlyEOEntityTableModel extends DMEOEntityTableModel {
 		addToColumns(new StringColumn<DMEOEntity>("external_name", 150) {
 			@Override
 			public String getValue(DMEOEntity dmEOEntity) {
-				if (dmEOEntity != null)
+				if (dmEOEntity != null) {
 					return dmEOEntity.getExternalName();
+				}
 				return null;
 			}
 		});
 		addToColumns(new StringColumn<DMEOEntity>("parent", 150) {
 			@Override
 			public String getValue(DMEOEntity dmEOEntity) {
-				if (dmEOEntity != null)
-					if (dmEOEntity.getParentType() != null)
+				if (dmEOEntity != null) {
+					if (dmEOEntity.getParentType() != null) {
 						return dmEOEntity.getParentType().getName();
+					}
+				}
 				return null;
 			}
 
@@ -116,8 +122,9 @@ public class DMReadOnlyEOEntityTableModel extends DMEOEntityTableModel {
 		addToColumns(new StringColumn<DMEOEntity>("description", 250) {
 			@Override
 			public String getValue(DMEOEntity dmEOEntity) {
-				if (dmEOEntity != null)
+				if (dmEOEntity != null) {
 					return dmEOEntity.getDescription();
+				}
 				return null;
 			}
 

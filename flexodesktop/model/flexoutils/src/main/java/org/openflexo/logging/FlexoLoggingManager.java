@@ -66,8 +66,9 @@ public class FlexoLoggingManager {
 
 	public static void initialize() throws SecurityException, IOException {
 		File f = new File(System.getProperty("user.home"), "Library/Logs/Flexo/");
-		if (!f.exists())
+		if (!f.exists()) {
 			f.mkdirs();
+		}
 		_isLoggingWindowShowed = false;
 		logRecords = new LogRecords();
 		viewer = null;

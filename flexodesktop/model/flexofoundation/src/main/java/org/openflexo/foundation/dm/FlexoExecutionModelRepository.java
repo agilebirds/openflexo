@@ -100,13 +100,15 @@ public class FlexoExecutionModelRepository extends DMEORepository {
 		File copiedDirectory = ProjectRestructuration.getExpectedDataModelDirectory(projectDirectory);
 		File toCopy = executionModelFile;
 		File copy = new File(copiedDirectory, toCopy.getName());
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Copying file " + toCopy.getAbsolutePath() + " to " + copy.getAbsolutePath());
+		}
 		try {
 			FileUtils.copyDirToDir(toCopy, copiedDirectory);
 		} catch (IOException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not copy " + executionModelFile.getAbsolutePath() + " to " + copy.getAbsolutePath());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -128,14 +130,17 @@ public class FlexoExecutionModelRepository extends DMEORepository {
 		try {
 			newExecutionModelRepository.importEOModelFile(eoPrototypeEOModelFile, dmModel, dmRes);
 		} catch (InvalidEOModelFileException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not import EOModel:" + eoPrototypeEOModelFile.getFile().getName());
+			}
 		} catch (EOModelAlreadyRegisteredException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not import EOModel:" + eoPrototypeEOModelFile.getFile().getName() + " already registered");
+			}
 		} catch (InvalidFileNameException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not import EOModel:" + eoPrototypeEOModelFile.getFile().getName() + " is not a valid file name");
+			}
 		}
 
 		DMEOModel executionModelEOModel = newExecutionModelRepository.getExecutionModelEOModel();
@@ -143,8 +148,9 @@ public class FlexoExecutionModelRepository extends DMEORepository {
 			executionModelEOModel.updateFromEOModel();
 		} catch (EOAccessException e) {
 			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+			}
 			e.printStackTrace();
 		}
 
@@ -191,8 +197,9 @@ public class FlexoExecutionModelRepository extends DMEORepository {
 			Enumeration en = getDMEOModels().elements();
 			return (DMEOModel) en.nextElement();
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Inconsistant data in FlexoExecutionModel repository");
+			}
 		}
 		return null;
 	}

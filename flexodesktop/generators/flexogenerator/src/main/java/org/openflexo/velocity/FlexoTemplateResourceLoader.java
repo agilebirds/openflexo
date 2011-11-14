@@ -93,16 +93,18 @@ public class FlexoTemplateResourceLoader extends ResourceLoader {
 		@Override
 		public void close() throws IOException {
 			super.close();
-			if (is != null)
+			if (is != null) {
 				is.close();
+			}
 		}
 
 	}
 
 	private TemplateLocator getTemplateLocator() throws ResourceNotFoundException {
 		TemplateLocator locator = (TemplateLocator) rsvc.getApplicationAttribute("templateLocator");
-		if (locator == null)
+		if (locator == null) {
 			throw new ResourceNotFoundException("Template locator not initialized for FlexoTemplateResourceLoader !");
+		}
 		return locator;
 	}
 

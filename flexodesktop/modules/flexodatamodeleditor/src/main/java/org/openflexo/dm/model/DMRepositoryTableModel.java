@@ -23,9 +23,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-
 import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.components.tabular.model.EditableStringColumn;
 import org.openflexo.components.tabular.model.IconColumn;
@@ -51,6 +48,8 @@ import org.openflexo.foundation.dm.XMLSchemaRepository;
 import org.openflexo.foundation.dm.eo.DMEORepository;
 import org.openflexo.foundation.dm.eo.EOPrototypeRepository;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Please comment this class

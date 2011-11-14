@@ -40,8 +40,9 @@ public class DropDownButtonWidget extends DropDownWidget {
 		widgetUpdating = true;
 		initJComboBox();
 		ImageIcon sel = findLabelWithName((String) getObjectValue());
-		if (sel != null)
+		if (sel != null) {
 			_jComboBox.setSelectedItem(sel);
+		}
 		widgetUpdating = false;
 	}
 

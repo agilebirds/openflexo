@@ -115,11 +115,12 @@ public class ButtonWidget extends DenaliWidget implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (_propertyModel.hasValueForParameter("action")) {
-			if (getController().getDelegate() != null)
+			if (getController().getDelegate() != null) {
 				getController().getDelegate().performAction(e, _propertyModel.getValueForParameter("action"), getModel());
-			else if (logger.isLoggable(Level.SEVERE))
+			} else if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("No delegate for inspector. Cannot perform action " + _propertyModel.getValueForParameter("action")
 						+ " on object " + getModel().toString());
+			}
 		}
 		String s = _propertyModel.name;
 		((KeyValueCoding) getModel()).objectForKey(s);

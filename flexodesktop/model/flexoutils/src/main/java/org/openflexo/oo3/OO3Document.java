@@ -70,8 +70,9 @@ public class OO3Document implements XMLSerializable {
 		try {
 			xmlns = new URL("http://www.omnigroup.com/namespace/OmniOutliner/v3");
 		} catch (MalformedURLException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+			}
 			e.printStackTrace();
 		}
 		styleAttributeRegistry = new OO3StyleAttributeRegistry();
@@ -128,8 +129,9 @@ public class OO3Document implements XMLSerializable {
 			if (!file.getParentFile().exists()) {
 				file.getParentFile().mkdirs();
 			}
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Saving OmniOutliner v3 document : " + file.getAbsolutePath());
+			}
 
 			File xmlFile;
 			if (attachments != null) {
@@ -147,8 +149,9 @@ public class OO3Document implements XMLSerializable {
 			out.flush();
 			out.close();
 		} catch (Exception e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Unexpected exception raised during OmniOutliner v3 document saving: " + e.getMessage());
+			}
 			e.printStackTrace();
 		}
 	}
@@ -157,8 +160,9 @@ public class OO3Document implements XMLSerializable {
 		try {
 			return XMLCoder.encodeObjectWithMapping(this, getXMLMapping());
 		} catch (Exception e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Unexpected exception raised during OmniOutliner v3 document saving: " + e.getMessage());
+			}
 			e.printStackTrace();
 			return null;
 		}
@@ -169,8 +173,9 @@ public class OO3Document implements XMLSerializable {
 			try {
 				_xmlMapping = new XMLMapping(new FileResource("Models/OO3Model.xml"));
 			} catch (Exception e) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Unexpected exception raised during OmniOutliner v3 document saving: " + e.getMessage());
+				}
 				e.printStackTrace();
 			}
 		}

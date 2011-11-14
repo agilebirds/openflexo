@@ -54,8 +54,9 @@ public class MergeElementAction extends MergeAction {
 		case INSERT:
 			if (_insertionIndex > -1) {
 				_parentElement.addContent(Math.min(_insertionIndex, _parentElement.getContentSize()), _operatedElement.detach());
-			} else
+			} else {
 				_parentElement.addContent(_operatedElement);
+			}
 			break;
 		case SWAP:
 			_parentElement.removeContent(_existingChild);
@@ -74,8 +75,9 @@ public class MergeElementAction extends MergeAction {
 		case DELETE:
 			if (_insertionIndex > -1) {
 				_parentElement.addContent(Math.min(_insertionIndex, _parentElement.getContentSize()), _operatedElement);
-			} else
+			} else {
 				_parentElement.addContent(_operatedElement);
+			}
 			break;
 		case INSERT:
 			_parentElement.removeContent(_operatedElement);

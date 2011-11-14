@@ -38,6 +38,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.openflexo.FlexoCst;
+import org.openflexo.foundation.dm.DuplicateMethodSignatureException;
+import org.openflexo.foundation.dm.javaparser.AbstractSourceCode;
+import org.openflexo.foundation.dm.javaparser.ParserNotInstalledException;
 import org.openflexo.inspector.AbstractController;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.model.PropertyModel;
@@ -48,10 +51,6 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.swing.diff.DiffPanel;
 import org.openflexo.toolbox.TokenMarkerStyle;
-
-import org.openflexo.foundation.dm.DuplicateMethodSignatureException;
-import org.openflexo.foundation.dm.javaparser.AbstractSourceCode;
-import org.openflexo.foundation.dm.javaparser.ParserNotInstalledException;
 
 /**
  * This widget may be used to represent source code that can be edited (a diff-view shows differences between edited code and default
@@ -133,20 +132,23 @@ public class JavaSourceCodeInspectorWidget extends CustomInspectorWidget<Abstrac
 			_textArea.getDocument().addDocumentListener(new DocumentListener() {
 				@Override
 				public void changedUpdate(DocumentEvent e) {
-					if ((!validateOnReturn) && (!widgetUpdating))
+					if ((!validateOnReturn) && (!widgetUpdating)) {
 						updateModelFromWidget();
+					}
 				}
 
 				@Override
 				public void insertUpdate(DocumentEvent e) {
-					if ((!validateOnReturn) && (!widgetUpdating))
+					if ((!validateOnReturn) && (!widgetUpdating)) {
 						updateModelFromWidget();
+					}
 				}
 
 				@Override
 				public void removeUpdate(DocumentEvent e) {
-					if ((!validateOnReturn) && (!widgetUpdating))
+					if ((!validateOnReturn) && (!widgetUpdating)) {
 						updateModelFromWidget();
+					}
 				}
 			});
 
@@ -280,8 +282,9 @@ public class JavaSourceCodeInspectorWidget extends CustomInspectorWidget<Abstrac
 		protected boolean editionRequested = false;
 
 		public void updateModelFromWidget() {
-			if (isUpdatingWidget || isUpdatingModel || getSourceCode() == null || !(getSourceCode().isEdited() || editionRequested))
+			if (isUpdatingWidget || isUpdatingModel || getSourceCode() == null || !(getSourceCode().isEdited() || editionRequested)) {
 				return;
+			}
 			isUpdatingModel = true;
 			try {
 				getSourceCode().setCode(_textArea.getText());
@@ -314,8 +317,9 @@ public class JavaSourceCodeInspectorWidget extends CustomInspectorWidget<Abstrac
 		}
 
 		private void resetToDefault() {
-			if (showDiffMode)
+			if (showDiffMode) {
 				switchToNormalMode();
+			}
 			showDiffMode = false;
 			editionRequested = false;
 		}
@@ -339,15 +343,17 @@ public class JavaSourceCodeInspectorWidget extends CustomInspectorWidget<Abstrac
 			if (!showDiffMode) {
 				if (getSourceCode().isEdited() || editionRequested) {
 					statusLabel.setText("[" + FlexoLocalization.localizedForKey("edited_code") + "]");
-					if (!_textArea.isEditable())
+					if (!_textArea.isEditable()) {
 						_textArea.setEditable(true);
+					}
 					resetImplementationLabel.setVisible(true);
 					showDiffLabel.setVisible(true);
 					editCodeLabel.setVisible(false);
 				} else {
 					statusLabel.setText("[" + FlexoLocalization.localizedForKey("default_implementation") + "]");
-					if (_textArea.isEditable())
+					if (_textArea.isEditable()) {
 						_textArea.setEditable(false);
+					}
 					resetImplementationLabel.setVisible(false);
 					showDiffLabel.setVisible(false);
 					editCodeLabel.setVisible(true);
@@ -374,8 +380,9 @@ public class JavaSourceCodeInspectorWidget extends CustomInspectorWidget<Abstrac
 		}
 
 		public void updateWidgetFromModel() {
-			if (isUpdatingModel || getSourceCode() == null)
+			if (isUpdatingModel || getSourceCode() == null) {
 				return;
+			}
 
 			isUpdatingWidget = true;
 			try {
@@ -438,8 +445,9 @@ public class JavaSourceCodeInspectorWidget extends CustomInspectorWidget<Abstrac
 	 */
 	@Override
 	public void updateModelFromWidget() {
-		if (isUpdatingWidget)
+		if (isUpdatingWidget) {
 			return;
+		}
 		isUpdatingModel = true;
 		try {
 			panel.updateModelFromWidget();
@@ -456,8 +464,9 @@ public class JavaSourceCodeInspectorWidget extends CustomInspectorWidget<Abstrac
 	 */
 	@Override
 	public void updateWidgetFromModel() {
-		if (isUpdatingModel)
+		if (isUpdatingModel) {
 			return;
+		}
 		isUpdatingWidget = true;
 		try {
 			panel.updateWidgetFromModel();

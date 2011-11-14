@@ -100,10 +100,11 @@ public class CEDFrame extends FlexoFrame {
 		if (getController().getCurrentModuleView() != null && getModule() != null) {
 			setTitle(getModule().getName() + " : " + getViewTitle() + projectTitle);
 		} else {
-			if (getModule() == null)
+			if (getModule() == null) {
 				setTitle(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME + projectTitle);
-			else
+			} else {
 				setTitle(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME + " - " + getModule().getName() + projectTitle);
+			}
 		}
 	}
 

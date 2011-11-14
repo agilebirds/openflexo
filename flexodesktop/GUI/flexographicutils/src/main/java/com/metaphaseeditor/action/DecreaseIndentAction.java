@@ -22,14 +22,16 @@
 
 package com.metaphaseeditor.action;
 
-import com.metaphaseeditor.MetaphaseEditorPanel;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JTextPane;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.html.CSS;
 import javax.swing.text.html.HTMLEditorKit;
+
+import com.metaphaseeditor.MetaphaseEditorPanel;
 
 /**
  * 
@@ -46,6 +48,7 @@ public class DecreaseIndentAction extends HTMLEditorKit.StyledTextAction {
 
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (!(this.isEnabled())) {
 			return;

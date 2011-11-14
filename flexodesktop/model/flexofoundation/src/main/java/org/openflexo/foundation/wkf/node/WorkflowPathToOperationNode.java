@@ -100,10 +100,11 @@ public class WorkflowPathToOperationNode {
 
 	public void addIfOperator(IFOperator ifOperator, boolean value) {
 		addCondition(ifOperator.getProcess(), ifOperator.getName(), ifOperator.getConditionPrimitive(), value);
-		if (value && ifOperator.getNewStatusForPositiveEvaluation() != null)
+		if (value && ifOperator.getNewStatusForPositiveEvaluation() != null) {
 			addNewStatus(ifOperator.getNewStatusForPositiveEvaluation());
-		else if (!value && ifOperator.getNewStatusForNegativeEvaluation() != null)
+		} else if (!value && ifOperator.getNewStatusForNegativeEvaluation() != null) {
 			addNewStatus(ifOperator.getNewStatusForNegativeEvaluation());
+		}
 	}
 
 	/**

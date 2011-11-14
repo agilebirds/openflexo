@@ -23,16 +23,15 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
-import org.openflexo.icon.WKFIconLibrary;
-import org.openflexo.logging.FlexoLogger;
-import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
-
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.CustomClickControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.foundation.wkf.action.OpenLoopedPetriGraph;
 import org.openflexo.foundation.wkf.node.LOOPOperator;
+import org.openflexo.icon.WKFIconLibrary;
+import org.openflexo.logging.FlexoLogger;
+import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
 public class OperatorLOOPGR extends OperatorGR<LOOPOperator> {
 
@@ -41,14 +40,16 @@ public class OperatorLOOPGR extends OperatorGR<LOOPOperator> {
 	public OperatorLOOPGR(LOOPOperator operatorNode, SwimmingLaneRepresentation aDrawing, boolean isInPalet) {
 		super(operatorNode, aDrawing, isInPalet);
 		addToMouseClickControls(new LoopedPetriGraphOpener(), true);
-		if (getDrawable().hasExecutionPetriGraph())
+		if (getDrawable().hasExecutionPetriGraph()) {
 			getDrawable().getExecutionPetriGraph().addObserver(this);
+		}
 	}
 
 	@Override
 	public void delete() {
-		if (getDrawable().hasExecutionPetriGraph())
+		if (getDrawable().hasExecutionPetriGraph()) {
 			getDrawable().getExecutionPetriGraph().deleteObserver(this);
+		}
 		super.delete();
 	}
 

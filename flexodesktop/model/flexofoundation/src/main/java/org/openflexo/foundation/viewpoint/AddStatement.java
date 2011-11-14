@@ -65,8 +65,9 @@ public abstract class AddStatement<R extends OntologicObjectPatternRole> extends
 	}
 
 	public ViewPointDataBinding getSubject() {
-		if (subject == null)
+		if (subject == null) {
 			subject = new ViewPointDataBinding(this, EditionActionBindingAttribute.subject, getSubjectBindingDefinition());
+		}
 		return subject;
 	}
 

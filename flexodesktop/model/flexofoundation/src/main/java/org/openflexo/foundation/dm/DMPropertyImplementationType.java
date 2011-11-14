@@ -25,13 +25,12 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.kvc.ChoiceList;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
-
-import org.openflexo.foundation.FlexoObject;
 
 /**
  * Represents the implementation type of a property
@@ -189,8 +188,9 @@ public abstract class DMPropertyImplementationType extends FlexoObject implement
 			}
 		}
 
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Could not find ImplementationType named " + cardName);
+		}
 		return null;
 	}
 

@@ -24,14 +24,13 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.dm.eo.model.EORelationship;
 import org.openflexo.kvc.ChoiceList;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
-
-import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.dm.eo.model.EORelationship;
 
 /**
  * Represents the join semantic type for a relationship
@@ -123,8 +122,9 @@ public abstract class JoinSemanticType extends FlexoObject implements StringConv
 	}
 
 	public static JoinSemanticType get(String joinSemantic) {
-		if (joinSemantic == null)
+		if (joinSemantic == null) {
 			return null;
+		}
 		for (Enumeration e = INNER.getAvailableValues().elements(); e.hasMoreElements();) {
 			JoinSemanticType temp = (JoinSemanticType) e.nextElement();
 			if (temp.getName().equals(joinSemantic)) {
@@ -132,14 +132,16 @@ public abstract class JoinSemanticType extends FlexoObject implements StringConv
 			}
 		}
 
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Could not find JoinSemantic named " + joinSemantic);
+		}
 		return null;
 	}
 
 	public static JoinSemanticType getJoinSemanticType(String joinSemanticEOEcode) {
-		if (joinSemanticEOEcode == null)
+		if (joinSemanticEOEcode == null) {
 			return null;
+		}
 		for (Enumeration e = INNER.getAvailableValues().elements(); e.hasMoreElements();) {
 			JoinSemanticType temp = (JoinSemanticType) e.nextElement();
 			if (temp.getEOCode().equals(joinSemanticEOEcode)) {
@@ -147,8 +149,9 @@ public abstract class JoinSemanticType extends FlexoObject implements StringConv
 			}
 		}
 
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Could not find JoinSemantic coded as " + joinSemanticEOEcode);
+		}
 		return null;
 	}
 

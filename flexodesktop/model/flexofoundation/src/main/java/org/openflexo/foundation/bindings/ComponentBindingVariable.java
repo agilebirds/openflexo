@@ -40,30 +40,34 @@ public class ComponentBindingVariable extends BindingVariable {
 
 	@Override
 	public DMType getType() {
-		if (_bindingDefinition == null)
+		if (_bindingDefinition == null) {
 			return null;
+		}
 		return _bindingDefinition.getType();
 	}
 
 	@Override
 	public void setType(DMType type) {
-		if (_bindingDefinition == null)
+		if (_bindingDefinition == null) {
 			return;
+		}
 		_bindingDefinition.setType(type);
 		setChanged();
 	}
 
 	@Override
 	public String getVariableName() {
-		if (_bindingDefinition == null)
+		if (_bindingDefinition == null) {
 			return null;
+		}
 		return _bindingDefinition.getVariableName();
 	}
 
 	@Override
 	public void setVariableName(String variableName) {
-		if (_bindingDefinition == null)
+		if (_bindingDefinition == null) {
 			return;
+		}
 		_bindingDefinition.setVariableName(variableName);
 		setChanged();
 	}

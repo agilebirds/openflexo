@@ -25,8 +25,8 @@ import org.openflexo.diff.DelimitingMethod;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileFormat;
-import org.openflexo.toolbox.TokenMarkerStyle;
 import org.openflexo.toolbox.FileFormat.TextFileFormat;
+import org.openflexo.toolbox.TokenMarkerStyle;
 
 public class DefaultMergedDocumentType implements MergedDocumentType {
 

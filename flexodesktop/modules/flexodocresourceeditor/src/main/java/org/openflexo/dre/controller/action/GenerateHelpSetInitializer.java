@@ -122,8 +122,9 @@ public class GenerateHelpSetInitializer extends ActionInitializer {
 					for (DRMHelpSet set : action.getVectorOfGeneratedHelpset()) {
 						if (set.getDistributionName().equals(ModuleLoader.getUserType().getIdentifier())
 								&& FlexoLocalization.getCurrentLanguage().getIdentifier()
-										.equalsIgnoreCase(set.getLanguage().getIdentifier()))
+										.equalsIgnoreCase(set.getLanguage().getIdentifier())) {
 							selected = set;
+						}
 					}
 					DynamicDropDownParameter<DRMHelpSet> helpSetParameter = new DynamicDropDownParameter<DRMHelpSet>("helpset",
 							"helpset_to_reload", action.getVectorOfGeneratedHelpset(), selected);

@@ -19,9 +19,9 @@
  */
 package org.openflexo.fge.geomedit.construction;
 
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERoundRectangle;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 
 public class RoundRectangleWithTwoPointsConstruction extends RoundRectangleConstruction {
 

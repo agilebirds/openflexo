@@ -48,8 +48,9 @@ public class CalcDrawingShapeBrowserElement extends BrowserElement {
 
 	@Override
 	public String getName() {
-		if (StringUtils.isEmpty(getShape().getName()))
+		if (StringUtils.isEmpty(getShape().getName())) {
 			return "<" + FlexoLocalization.localizedForKey("unnamed") + ">";
+		}
 		return getShape().getName();
 	}
 

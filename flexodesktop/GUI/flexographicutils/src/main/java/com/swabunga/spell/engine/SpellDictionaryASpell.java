@@ -24,7 +24,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.security.InvalidParameterException;
-import java.util.*;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Vector;
 
 /**
  * Container for various methods that any <code>SpellDictionary</code> will use. Based on the original Jazzy <a
@@ -39,24 +45,27 @@ public abstract class SpellDictionaryASpell implements SpellDictionary {
 	protected Transformator tf;
 
 	public SpellDictionaryASpell(File phonetic) throws IOException {
-		if (phonetic == null)
+		if (phonetic == null) {
 			tf = new DoubleMeta();
-		else
+		} else {
 			tf = new GenericTransformator(phonetic);
+		}
 	}
 
 	public SpellDictionaryASpell(File phonetic, String encoding) throws IOException {
-		if (phonetic == null)
+		if (phonetic == null) {
 			tf = new DoubleMeta();
-		else
+		} else {
 			tf = new GenericTransformator(phonetic, encoding);
+		}
 	}
 
 	public SpellDictionaryASpell(Reader phonetic) throws IOException {
-		if (phonetic == null)
+		if (phonetic == null) {
 			tf = new DoubleMeta();
-		else
+		} else {
 			tf = new GenericTransformator(phonetic);
+		}
 	}
 
 	/**
@@ -69,6 +78,7 @@ public abstract class SpellDictionaryASpell implements SpellDictionary {
 	 *            The lower boundary of similarity to mispelt word
 	 * @return Vector a List of suggestions
 	 */
+	@Override
 	public List getSuggestions(String word, int threshold) {
 
 		Hashtable nearmisscodes = new Hashtable();
@@ -116,8 +126,9 @@ public abstract class SpellDictionaryASpell implements SpellDictionary {
 				String s = getCode(new String(charArray));
 				nearmisscodes.put(s, s);
 			}
-			if (iy == 0)
+			if (iy == 0) {
 				break;
+			}
 			charArray[iy] = charArray[iy - 1];
 			--iy;
 		}
@@ -135,8 +146,9 @@ public abstract class SpellDictionaryASpell implements SpellDictionary {
 		while (true) {
 			String s = getCode(new String(charArray));
 			nearmisscodes.put(s, s);
-			if (ii == 0)
+			if (ii == 0) {
 				break;
+			}
 			b = a;
 			a = charArray2[ii - 1];
 			charArray2[ii - 1] = b;
@@ -147,8 +159,9 @@ public abstract class SpellDictionaryASpell implements SpellDictionary {
 
 		Vector wordlist = getWordsFromCode(word, nearmisscodes);
 
-		if (wordlist.size() == 0 && phoneticList.size() == 0)
+		if (wordlist.size() == 0 && phoneticList.size() == 0) {
 			addBestGuess(word, phoneticList);
+		}
 
 		// We sort a Vector at the end instead of maintaining a
 		// continously sorted TreeSet because everytime you add a collection
@@ -172,8 +185,9 @@ public abstract class SpellDictionaryASpell implements SpellDictionary {
 	 *            - the linked list that will get the best guess
 	 */
 	private void addBestGuess(String word, Vector wordList) {
-		if (wordList.size() != 0)
+		if (wordList.size() != 0) {
 			throw new InvalidParameterException("the wordList vector must be empty");
+		}
 
 		int bestScore = Integer.MAX_VALUE;
 
@@ -195,8 +209,9 @@ public abstract class SpellDictionaryASpell implements SpellDictionary {
 		// now, only pull out the guesses that had the best score
 		for (Iterator iter = candidates.iterator(); iter.hasNext();) {
 			Word candidate = (Word) iter.next();
-			if (candidate.getCost() == bestScore)
+			if (candidate.getCost() == bestScore) {
 				wordList.add(candidate);
+			}
 		}
 
 	}
@@ -237,14 +252,14 @@ public abstract class SpellDictionaryASpell implements SpellDictionary {
 	/**
 	 * Returns true if the word is correctly spelled against the current word list.
 	 */
+	@Override
 	public boolean isCorrect(String word) {
 		List possible = getWords(getCode(word));
-		if (possible.contains(word))
+		if (possible.contains(word)) {
 			return true;
-		// JMH should we always try the lowercase version. If I dont then capitalised
-		// words are always returned as incorrect.
-		else if (possible.contains(word.toLowerCase()))
+		} else if (possible.contains(word.toLowerCase())) {
 			return true;
+		}
 		return false;
 	}
 }

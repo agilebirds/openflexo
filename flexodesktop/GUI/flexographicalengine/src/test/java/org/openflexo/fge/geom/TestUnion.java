@@ -19,18 +19,12 @@
  */
 package org.openflexo.fge.geom;
 
-import org.openflexo.fge.geom.FGELine;
-import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.geom.FGEPolygon;
-import org.openflexo.fge.geom.FGEPolylin;
-import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.geom.FGESegment;
+import junit.framework.TestCase;
+
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEHalfPlane;
 import org.openflexo.fge.geom.area.FGEUnionArea;
-
-import junit.framework.TestCase;
 
 public class TestUnion extends TestCase {
 

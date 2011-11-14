@@ -27,13 +27,13 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.dm.DMCardinality;
 import org.openflexo.foundation.dm.DMMethod;
+import org.openflexo.foundation.dm.DMMethod.DMMethodParameter;
 import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMProperty;
 import org.openflexo.foundation.dm.DMPropertyImplementationType;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.DMVisibilityType;
 import org.openflexo.foundation.dm.DuplicateMethodSignatureException;
-import org.openflexo.foundation.dm.DMMethod.DMMethodParameter;
 import org.openflexo.foundation.dm.javaparser.ParsedJavadocItem;
 import org.openflexo.foundation.dm.javaparser.ParserNotInstalledException;
 import org.openflexo.javaparser.FJPTypeResolver.CrossReferencedEntitiesException;
@@ -62,16 +62,19 @@ public class FJPDMMapper {
 					returned.add(newMethod);
 					// logger.info("Add "+newMethod.getSignature());
 				} else {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Exclude " + method.getCallSignature());
+					}
 				}
 			}
 		} catch (NoClassDefFoundError e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not find class: " + e.getMessage());
+			}
 		} catch (Throwable e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Unexpected exception raised " + e);
+			}
 			e.printStackTrace();
 		}
 
@@ -110,9 +113,10 @@ public class FJPDMMapper {
 				newProperty = makeProperty(field, dataModel, context, source, importReferencedEntities);
 			} catch (FJPTypeResolver.CrossReferencedEntitiesException e) {
 			}
-			if (newProperty != null)
+			if (newProperty != null) {
 				returned.add(newProperty);
-			// logger.info("add property "+newProperty);
+				// logger.info("add property "+newProperty);
+			}
 		}
 
 		if (logger.isLoggable(Level.FINE)) {
@@ -134,8 +138,9 @@ public class FJPDMMapper {
 
 	static DMMethod makeMethod(FJPJavaMethod method, DMModel dataModel, FJPDMSet context, FJPJavaSource source,
 			boolean importReferencedEntities) throws FJPTypeResolver.CrossReferencedEntitiesException {
-		if (method.isConstructor())
+		if (method.isConstructor()) {
 			return null;
+		}
 
 		DMType returnType = method.getReturns();
 		Vector<FJPJavaParameter> parameters = method.getParameters();
@@ -146,14 +151,15 @@ public class FJPDMMapper {
 
 		// Visibility
 		DMVisibilityType visibility;
-		if (method.isPublic())
+		if (method.isPublic()) {
 			visibility = DMVisibilityType.PUBLIC;
-		else if (method.isProtected())
+		} else if (method.isProtected()) {
 			visibility = DMVisibilityType.PROTECTED;
-		else if (method.isPrivate())
+		} else if (method.isPrivate()) {
 			visibility = DMVisibilityType.PRIVATE;
-		else
+		} else {
 			visibility = DMVisibilityType.NONE;
+		}
 		newMethod.setVisibilityModifier(visibility);
 
 		// Static
@@ -216,14 +222,16 @@ public class FJPDMMapper {
 			newMethod.setDescription(javadoc.getComment());
 
 			for (ParsedJavadocItem tag : javadoc.getTagsByName("doc")) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Handle DOC tag " + tag.getParameterName() + " with " + tag.getParameterValue());
+				}
 				newMethod.setSpecificDescriptionsForKey(tag.getParameterValue(), tag.getParameterName());
 			}
 
 			for (ParsedJavadocItem tag : javadoc.getTagsByName("param")) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Handle PARAM tag " + tag.getParameterName() + " with " + tag.getParameterValue());
+				}
 				DMMethodParameter param = newMethod.getDMParameter(tag.getParameterName());
 				if (param != null) {
 					if (!tag.getParameterValue().equals(tag.getParameterName())) {
@@ -246,21 +254,26 @@ public class FJPDMMapper {
 	static DMProperty makeProperty(FJPJavaClass aClass, String propertyName, DMModel dataModel, FJPDMSet context, FJPJavaSource source,
 			boolean includesGetOnlyProperties, boolean importReferencedEntities, Vector<String> excludedSignatures)
 			throws FJPTypeResolver.CrossReferencedEntitiesException {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Looking for " + propertyName);
+		}
 		FJPJavaMethod method = searchMatchingGetMethod(aClass, propertyName);
 		if (method != null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Found method " + method);
+			}
 			return makeProperty(method, dataModel, context, source, includesGetOnlyProperties, importReferencedEntities, excludedSignatures);
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("No method found, looking for field ");
+		}
 		FJPJavaField field = aClass.getFieldByName(propertyName);
-		if (field == null)
+		if (field == null) {
 			field = aClass.getFieldByName("_" + propertyName);
-		if (field != null)
+		}
+		if (field != null) {
 			return makeProperty(field, dataModel, context, source, importReferencedEntities);
+		}
 		return null;
 	}
 
@@ -272,8 +285,9 @@ public class FJPDMMapper {
 	static DMProperty makeProperty(FJPJavaMethod method, DMModel dataModel, FJPDMSet context, FJPJavaSource source,
 			boolean includesGetOnlyProperties, boolean importReferencedEntities, Vector<String> excludedSignatures)
 			throws FJPTypeResolver.CrossReferencedEntitiesException {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Analyse method " + method.getCallSignature() + " is it a property ?");
+		}
 
 		FJPJavaClass parentClass = method.getParentClass();
 		DMType returnType = method.getReturns();
@@ -328,8 +342,9 @@ public class FJPDMMapper {
 				TreeSet<AccessorMethod> removeFromMethods = searchMatchingRemoveFromMethods(parentClass, propertyName);
 				for (Iterator it = addToMethods.iterator(); it.hasNext();) {
 					AccessorMethod next = (AccessorMethod) it.next();
-					if (excludedSignatures != null)
+					if (excludedSignatures != null) {
 						excludedSignatures.add(next.getMethod().getCallSignature());
+					}
 					if (propertyType == null) {
 						propertyType = next.getMethod().getParameters().firstElement().getType();
 					} else if (!propertyType.equals(next.getMethod().getParameters().firstElement().getType())) {
@@ -338,18 +353,22 @@ public class FJPDMMapper {
 				}
 				for (Iterator it = removeFromMethods.iterator(); it.hasNext();) {
 					AccessorMethod next = (AccessorMethod) it.next();
-					if (excludedSignatures != null)
+					if (excludedSignatures != null) {
 						excludedSignatures.add(next.getMethod().getCallSignature());
+					}
 					if (!propertyType.equals(next.getMethod().getParameters().firstElement().getType())) {
 						isSettable = false;
 					}
 				}
-				if ((addToMethods.size() == 0) || (removeFromMethods.size() == 0))
+				if ((addToMethods.size() == 0) || (removeFromMethods.size() == 0)) {
 					isSettable = false;
-				if (addToMethods.size() > 0)
+				}
+				if (addToMethods.size() > 0) {
 					additionMethod = addToMethods.first().method;
-				if (removeFromMethods.size() > 0)
+				}
+				if (removeFromMethods.size() > 0) {
 					removalMethod = removeFromMethods.first().method;
+				}
 				returnType = propertyType;
 				if (returnType == null) {
 					returnType = DMType.makeResolvedDMType(dataModel.getDMEntity(Object.class));
@@ -361,8 +380,9 @@ public class FJPDMMapper {
 				TreeSet<AccessorMethod> removeMethods = searchMatchingRemoveWithKeyMethods(parentClass, propertyName);
 				for (Iterator it = setMethods.iterator(); it.hasNext();) {
 					AccessorMethod next = (AccessorMethod) it.next();
-					if (excludedSignatures != null)
+					if (excludedSignatures != null) {
 						excludedSignatures.add(next.getMethod().getCallSignature());
+					}
 					if (propertyType == null) {
 						propertyType = next.getMethod().getParameters().firstElement().getType();
 					} else if (!propertyType.equals(next.getMethod().getParameters().firstElement().getType())) {
@@ -375,15 +395,19 @@ public class FJPDMMapper {
 				}
 				for (Iterator it = removeMethods.iterator(); it.hasNext();) {
 					AccessorMethod next = (AccessorMethod) it.next();
-					if (excludedSignatures != null)
+					if (excludedSignatures != null) {
 						excludedSignatures.add(next.getMethod().getCallSignature());
+					}
 				}
-				if ((setMethods.size() == 0) || (removeMethods.size() == 0))
+				if ((setMethods.size() == 0) || (removeMethods.size() == 0)) {
 					isSettable = false;
-				if (setMethods.size() > 0)
+				}
+				if (setMethods.size() > 0) {
 					additionMethod = setMethods.first().method;
-				if (removeMethods.size() > 0)
+				}
+				if (removeMethods.size() > 0) {
 					removalMethod = removeMethods.first().method;
+				}
 				returnType = propertyType;
 				if (returnType == null) {
 					returnType = DMType.makeResolvedDMType(dataModel.getDMEntity(Object.class));
@@ -413,18 +437,21 @@ public class FJPDMMapper {
 				try {
 					newProperty.getGetterSourceCode().setCode(
 							(method.getJavadoc() != null ? method.getJavadoc().toString() : "") + method.getSourceCode(), false);
-					if (setMethod != null)
+					if (setMethod != null) {
 						newProperty.getSetterSourceCode().setCode(
 								(setMethod.getJavadoc() != null ? setMethod.getJavadoc().toString() : "") + setMethod.getSourceCode(),
 								false);
-					if (additionMethod != null)
+					}
+					if (additionMethod != null) {
 						newProperty.getAdditionSourceCode().setCode(
 								(additionMethod.getJavadoc() != null ? additionMethod.getJavadoc().toString() : "")
 										+ additionMethod.getSourceCode(), false);
-					if (removalMethod != null)
+					}
+					if (removalMethod != null) {
 						newProperty.getRemovalSourceCode().setCode(
 								(removalMethod.getJavadoc() != null ? removalMethod.getJavadoc().toString() : "")
 										+ removalMethod.getSourceCode(), false);
+					}
 				} catch (ParserNotInstalledException e) {
 					e.printStackTrace();
 				} catch (DuplicateMethodSignatureException e) {
@@ -432,15 +459,18 @@ public class FJPDMMapper {
 				}
 
 				if (isSettable) {
-					if (setMethod != null && setMethod.getParameters() != null && setMethod.getParameters().size() == 1)
+					if (setMethod != null && setMethod.getParameters() != null && setMethod.getParameters().size() == 1) {
 						newProperty.setSetterParamName(setMethod.getParameters().firstElement().getName());
+					}
 				}
 
 				if (cardinality.isMultiple()) {
-					if (additionMethod != null && additionMethod.getParameters() != null && additionMethod.getParameters().size() == 1)
+					if (additionMethod != null && additionMethod.getParameters() != null && additionMethod.getParameters().size() == 1) {
 						newProperty.setAdditionAccessorParamName(additionMethod.getParameters().firstElement().getName());
-					if (removalMethod != null && removalMethod.getParameters() != null && removalMethod.getParameters().size() == 1)
+					}
+					if (removalMethod != null && removalMethod.getParameters() != null && removalMethod.getParameters().size() == 1) {
 						newProperty.setRemovalAccessorParamName(removalMethod.getParameters().firstElement().getName());
+					}
 				}
 
 				JavadocItem javadoc = method.getJavadoc();
@@ -450,8 +480,9 @@ public class FJPDMMapper {
 					newProperty.setDescription(javadoc.getComment());
 
 					for (ParsedJavadocItem tag : javadoc.getTagsByName("doc")) {
-						if (logger.isLoggable(Level.FINE))
+						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("Handle DOC tag " + tag.getParameterName() + " with " + tag.getParameterValue());
+						}
 						newProperty.setSpecificDescriptionsForKey(tag.getParameterValue(), tag.getParameterName());
 					}
 
@@ -506,11 +537,13 @@ public class FJPDMMapper {
 	 */
 	private static FJPJavaMethod searchMatchingMethod(FJPJavaClass aClass, String signature, DMModel dataModel, FJPDMSet context,
 			FJPJavaSource source) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Searching " + signature);
+		}
 		for (FJPJavaMethod method : aClass.getMethods()) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Try " + getFullQualifiedCallSignature(method, dataModel, context, source));
+			}
 			if (getFullQualifiedCallSignature(method, dataModel, context, source).equals(signature)) {
 				return method;
 			}
@@ -575,8 +608,9 @@ public class FJPDMMapper {
 
 		for (String tryThis : tries) {
 			FJPJavaMethod returned = aClass.getMethodBySignature(tryThis);
-			if (returned != null)
+			if (returned != null) {
 				return returned;
+			}
 		}
 		return null;
 
@@ -602,14 +636,16 @@ public class FJPDMMapper {
 
 		for (String tryThis : tries) {
 			FJPJavaMethod returned = aClass.getMethodBySignature(tryThis, aType);
-			if (returned != null)
+			if (returned != null) {
 				return returned;
+			}
 		}
 
 		// Little hask to handle properly NSArray as VECTOR-cardinality properties
 		// TODO: implement this better later
-		if (aType.getStringRepresentation().equals("com.webobjects.foundation.NSArray"))
+		if (aType.getStringRepresentation().equals("com.webobjects.foundation.NSArray")) {
 			return searchMatchingSetMethod(aClass, propertyName, DMType.makeUnresolvedDMType("com.webobjects.foundation.NSMutableArray"));
+		}
 
 		return null;
 	}
@@ -759,18 +795,22 @@ public class FJPDMMapper {
 		// Little hask to handle properly NSArray as VECTOR-cardinality properties
 		// TODO: implement this better later
 		Type NSARRAY_TYPE = new Type("NSArray");
-		if (aType.isA(NSARRAY_TYPE))
+		if (aType.isA(NSARRAY_TYPE)) {
 			return DMCardinality.VECTOR;
+		}
 		Type NSARRAY_TYPE_FQ = new Type("com.webobjects.foundation.NSArray");
-		if (aType.isA(NSARRAY_TYPE_FQ))
+		if (aType.isA(NSARRAY_TYPE_FQ)) {
 			return DMCardinality.VECTOR;
+		}
 
 		Type VECTOR_TYPE = new Type(java.util.Vector.class.getCanonicalName());
-		if (aType.isA(VECTOR_TYPE))
+		if (aType.isA(VECTOR_TYPE)) {
 			return DMCardinality.VECTOR;
+		}
 		Type HASHTABLE_TYPE = new Type(java.util.Hashtable.class.getCanonicalName());
-		if (aType.isA(HASHTABLE_TYPE))
+		if (aType.isA(HASHTABLE_TYPE)) {
 			return DMCardinality.HASHTABLE;
+		}
 		return DMCardinality.SINGLE;
 	}
 

@@ -26,8 +26,8 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.CGFile;
-import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.CGFile.FileContentEditor;
+import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.generator.file.AbstractCGFile;
 
 public class EditGeneratedFile extends GCAction<EditGeneratedFile, CGFile> {

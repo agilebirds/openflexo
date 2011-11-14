@@ -99,8 +99,9 @@ public class FlexoLoggingViewerWindow extends JDialog {
 			addToAvailableChoices(aFile);
 		}
 		if (!aFile.exists()) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("File " + aFile.getName() + " doesn't exist. Maybe you have to check your paths ?");
+			}
 			return null;
 		} else {
 
@@ -111,8 +112,9 @@ public class FlexoLoggingViewerWindow extends JDialog {
 			try {
 				return (LogRecords) XMLDecoder.decodeObjectWithMapping(new FileInputStream(aFile), FlexoLoggingManager.getLoggingMapping());
 			} catch (Exception e) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning(e.toString());
+				}
 			}
 		}
 		return null;
@@ -143,8 +145,9 @@ public class FlexoLoggingViewerWindow extends JDialog {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				// Ignore extra messages.
-				if (e.getValueIsAdjusting())
+				if (e.getValueIsAdjusting()) {
 					return;
+				}
 				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 				if (lsm.isSelectionEmpty()) {
 					// no rows are selected
@@ -238,8 +241,9 @@ public class FlexoLoggingViewerWindow extends JDialog {
 					try {
 						LogManager.getLogManager().readConfiguration();
 					} catch (IOException excep) {
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Could not read logging configuration");
+						}
 					}
 				}
 			});
@@ -282,8 +286,9 @@ public class FlexoLoggingViewerWindow extends JDialog {
 							File newLogFile = chooser.getSelectedFile();
 							switchToFile(newLogFile);
 						} catch (Exception exception) {
-							if (logger.isLoggable(Level.WARNING))
+							if (logger.isLoggable(Level.WARNING)) {
 								logger.warning(exception.getClass().getName());
+							}
 							exception.printStackTrace();
 						}
 					}

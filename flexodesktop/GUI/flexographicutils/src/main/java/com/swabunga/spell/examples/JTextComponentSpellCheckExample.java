@@ -24,17 +24,26 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 package com.swabunga.spell.examples;
 
-import com.swabunga.spell.engine.*;
-import com.swabunga.spell.swing.JTextComponentSpellChecker;
-
-import javax.swing.*;
-import javax.swing.text.JTextComponent;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JTextArea;
+import javax.swing.WindowConstants;
+import javax.swing.text.JTextComponent;
+
+import com.swabunga.spell.engine.SpellDictionary;
+import com.swabunga.spell.engine.SpellDictionaryHashMap;
+import com.swabunga.spell.swing.JTextComponentSpellChecker;
 
 /**
  * This class shows an example of how to use the spell checking capability on a JTextComponent.
@@ -52,12 +61,14 @@ public class JTextComponentSpellCheckExample extends JFrame {
 		File dictFile = null, phonetFile = null;
 
 		// INIT DICTIONARY
-		if (dictPath == null)
+		if (dictPath == null) {
 			dictFile = new File(englishDictionary);
-		else
+		} else {
 			dictFile = new File(dictPath);
-		if (phonetPath != null)
+		}
+		if (phonetPath != null) {
 			phonetFile = new File(phonetPath);
+		}
 		try {
 			dictionary = new SpellDictionaryHashMap(dictFile, phonetFile);
 			// dictionary = new SpellDictionaryDisk(dictFile, phonetFile, true);
@@ -67,9 +78,10 @@ public class JTextComponentSpellCheckExample extends JFrame {
 		}
 
 		// INIT GUI
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		addWindowListener(new WindowAdapter() {
 
+			@Override
 			public void windowClosed(WindowEvent e) {
 				System.exit(0);
 			}
@@ -107,10 +119,12 @@ public class JTextComponentSpellCheckExample extends JFrame {
 
 	public static void main(String[] args) {
 		String dictPath = null, phonetPath = null;
-		if (args.length > 0)
+		if (args.length > 0) {
 			dictPath = args[0];
-		if (args.length > 1)
+		}
+		if (args.length > 1) {
 			phonetPath = args[1];
+		}
 		JTextComponentSpellCheckExample d = new JTextComponentSpellCheckExample(dictPath, phonetPath);
 		d.show();
 	}
@@ -118,6 +132,7 @@ public class JTextComponentSpellCheckExample extends JFrame {
 	// INNER CLASSES
 	private class ButtonListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			Thread t = new SpellThread();
 			t.start();
@@ -126,6 +141,7 @@ public class JTextComponentSpellCheckExample extends JFrame {
 
 	private class SpellThread extends Thread {
 
+		@Override
 		public void run() {
 			try {
 				JTextComponentSpellChecker sc = new JTextComponentSpellChecker(dictionary);

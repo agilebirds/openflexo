@@ -88,8 +88,9 @@ public class ResetSourceCode extends FlexoAction<ResetSourceCode, DMObject, DMOb
 	}
 
 	private void processToAdditionOfSourceCodeOwner(DMObject object, HashSet<DMObject> visited, HashSet<SourceCodeOwner> codeOwner) {
-		if (visited.contains(object))
+		if (visited.contains(object)) {
 			return;
+		}
 		visited.add(object);
 		if (object instanceof SourceCodeOwner && !codeOwner.contains(object)) {
 			codeOwner.add((SourceCodeOwner) object);

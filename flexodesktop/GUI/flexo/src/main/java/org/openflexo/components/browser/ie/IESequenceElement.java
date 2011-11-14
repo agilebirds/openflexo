@@ -80,16 +80,17 @@ public class IESequenceElement extends BrowserElement {
 	 */
 	@Override
 	public String getName() {
-		if (getObject().getOperator() != null)
-			if (getObject().isConditional())
+		if (getObject().getOperator() != null) {
+			if (getObject().isConditional()) {
 				return FlexoLocalization.localizedForKey("Conditional");
-			else if (getObject().isRepetition())
+			} else if (getObject().isRepetition()) {
 				return FlexoLocalization.localizedForKey("Repetition");
-			else
+			} else {
 				return super.getName();
-
-		else
+			}
+		} else {
 			return super.getName();
+		}
 	}
 
 	/**
@@ -100,16 +101,18 @@ public class IESequenceElement extends BrowserElement {
 	@Override
 	public Icon getIcon() {
 		if (getObject().getOperator() != null) {
-			if (getObject().isConditional())
+			if (getObject().isConditional()) {
 				return BrowserElementType.CONDITIONAL.getIcon();
-			else if (getObject().isRepetition())
+			} else if (getObject().isRepetition()) {
 				return BrowserElementType.REPETITION.getIcon();
-			else {
-				if (logger.isLoggable(Level.WARNING))
+			} else {
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Unknown operator");
+				}
 				return super.getIcon();
 			}
-		} else
+		} else {
 			return super.getIcon();
+		}
 	}
 }

@@ -81,22 +81,25 @@ public class SingleWidgetComponentDefinition extends PartialComponentDefinition 
 
 	@Override
 	public IEWOComponent createNewComponent() {
-		if (logger.isLoggable(Level.SEVERE))
+		if (logger.isLoggable(Level.SEVERE)) {
 			logger.severe("SingleWigetComponentDefinition is deprecated");
+		}
 		return null;
 	}
 
 	@Override
 	public FlexoComponentResource getComponentResource(boolean createIfNotExists) {
-		if (logger.isLoggable(Level.SEVERE))
+		if (logger.isLoggable(Level.SEVERE)) {
 			logger.severe("SingleWigetComponentDefinition is deprecated");
+		}
 		return null;
 	}
 
 	@Override
 	public String getInspectorName() {
-		if (logger.isLoggable(Level.SEVERE))
+		if (logger.isLoggable(Level.SEVERE)) {
 			logger.severe("SingleWigetComponentDefinition is deprecated");
+		}
 		return null;
 	}
 

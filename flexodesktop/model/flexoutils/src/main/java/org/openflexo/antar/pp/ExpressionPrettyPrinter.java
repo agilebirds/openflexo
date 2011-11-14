@@ -24,6 +24,13 @@ import java.io.PrintStream;
 import org.openflexo.antar.expr.BinaryOperator;
 import org.openflexo.antar.expr.BinaryOperatorExpression;
 import org.openflexo.antar.expr.Constant;
+import org.openflexo.antar.expr.Constant.BooleanConstant;
+import org.openflexo.antar.expr.Constant.DateConstant;
+import org.openflexo.antar.expr.Constant.DurationConstant;
+import org.openflexo.antar.expr.Constant.EnumConstant;
+import org.openflexo.antar.expr.Constant.FloatConstant;
+import org.openflexo.antar.expr.Constant.IntegerConstant;
+import org.openflexo.antar.expr.Constant.StringConstant;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.ExpressionGrammar;
 import org.openflexo.antar.expr.Function;
@@ -33,13 +40,6 @@ import org.openflexo.antar.expr.SymbolicConstant;
 import org.openflexo.antar.expr.UnaryOperator;
 import org.openflexo.antar.expr.UnaryOperatorExpression;
 import org.openflexo.antar.expr.Variable;
-import org.openflexo.antar.expr.Constant.BooleanConstant;
-import org.openflexo.antar.expr.Constant.DateConstant;
-import org.openflexo.antar.expr.Constant.DurationConstant;
-import org.openflexo.antar.expr.Constant.EnumConstant;
-import org.openflexo.antar.expr.Constant.FloatConstant;
-import org.openflexo.antar.expr.Constant.IntegerConstant;
-import org.openflexo.antar.expr.Constant.StringConstant;
 
 public abstract class ExpressionPrettyPrinter {
 
@@ -74,16 +74,21 @@ public abstract class ExpressionPrettyPrinter {
 		if (expression == null) {
 			return "null";
 		}
-		if (expression instanceof Variable)
+		if (expression instanceof Variable) {
 			return makeStringRepresentation((Variable) expression);
-		if (expression instanceof Constant)
+		}
+		if (expression instanceof Constant) {
 			return makeStringRepresentation((Constant) expression);
-		if (expression instanceof Function)
+		}
+		if (expression instanceof Function) {
 			return makeStringRepresentation((Function) expression);
-		if (expression instanceof UnaryOperatorExpression)
+		}
+		if (expression instanceof UnaryOperatorExpression) {
 			return makeStringRepresentation((UnaryOperatorExpression) expression);
-		if (expression instanceof BinaryOperatorExpression)
+		}
+		if (expression instanceof BinaryOperatorExpression) {
 			return makeStringRepresentation((BinaryOperatorExpression) expression);
+		}
 		// return "<unknown "+expression.getClass().getSimpleName()+">";
 		return expression.toString();
 	}

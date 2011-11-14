@@ -70,7 +70,6 @@ import org.openflexo.generator.action.AcceptDiskUpdate;
 import org.openflexo.generator.action.AcceptDiskUpdateAndReinjectInModel;
 import org.openflexo.generator.action.ReinjectInModel;
 import org.openflexo.generator.exception.GenerationException;
-import org.openflexo.icon.CGIconLibrary;
 import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.UtilsIconLibrary;
@@ -79,8 +78,8 @@ import org.openflexo.jedit.JEditTextArea.CursorPositionListener;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.GeneratedResourceModifiedChoice;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.InteractiveFlexoResourceUpdateHandler.GeneratedResourceModifiedHook;
+import org.openflexo.module.ModuleLoader;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.toolbox.FileCst;
 import org.openflexo.toolbox.FileResource;
@@ -377,7 +376,7 @@ public class GeneratorController extends FlexoController implements SelectionMan
 			errorsLabel = new JLabel("0");
 			errorsLabel.setFont(FlexoCst.MEDIUM_FONT);
 			statusCountPanel.add(errorsLabel);
-			statusCountPanel.add(new JLabel(CGIconLibrary.UNFIXABLE_ERROR_ICON));
+			statusCountPanel.add(new JLabel(IconLibrary.UNFIXABLE_ERROR_ICON));
 			add(statusCountPanel);
 
 			editorInfoPanel = new JPanel(new FlowLayout());

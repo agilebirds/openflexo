@@ -158,9 +158,11 @@ public class DMPropertyGR extends ShapeGraphicalRepresentation<DMProperty> imple
 		return (Rectangle) super.getShape();
 	}
 
+	@Override
 	public int getIndex() {
-		if (getProperty() == null || getProperty().getEntity() == null)
+		if (getProperty() == null || getProperty().getEntity() == null) {
 			return -1;
+		}
 		return getProperty().getEntity().getOrderedProperties().indexOf(getProperty());
 	}
 
@@ -177,8 +179,9 @@ public class DMPropertyGR extends ShapeGraphicalRepresentation<DMProperty> imple
 	@Override
 	public double getWidth() {
 		GraphicalRepresentation<?> container = getContainerGraphicalRepresentation();
-		if (container instanceof DMEntityGR)
+		if (container instanceof DMEntityGR) {
 			return ((DMEntityGR) container).getWidth() - 1;
+		}
 		return WIDTH;
 	}
 

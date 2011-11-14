@@ -26,10 +26,10 @@ import java.awt.event.MouseEvent;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectPolylin;
 import org.openflexo.fge.geom.FGESegment;
-import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.graphics.FGEGraphics;
 

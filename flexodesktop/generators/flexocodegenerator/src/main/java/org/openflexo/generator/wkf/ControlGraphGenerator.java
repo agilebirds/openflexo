@@ -23,7 +23,6 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.apache.velocity.VelocityContext;
-
 import org.openflexo.foundation.cg.CGRepository;
 import org.openflexo.foundation.cg.generator.GeneratorUtils;
 import org.openflexo.foundation.rm.ResourceType;

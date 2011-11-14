@@ -141,20 +141,24 @@ public class BindButtonsToActionNode extends FlexoAction<BindButtonsToActionNode
 	private void handleOK() {
 		// cleanActions(cleanActions);
 		int i = 0;
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Ok pressed");
+		}
 		Enumeration en = buttons.elements();
 		while (en.hasMoreElements()) {
 			IEHyperlinkWidget w = (IEHyperlinkWidget) en.nextElement();
-			if (!getInsertActionNode()[i++].getValue())
+			if (!getInsertActionNode()[i++].getValue()) {
 				continue;
+			}
 			ActionNode node = (ActionNode) getAssociations().get(w);
 			if (node.getProcess() == null) {
 				node = OperationNode.createNewActionNodeForButton(w, operationNode);
-			} else
+			} else {
 				associateNodeWithButton(node, w);
-			if (node != null)
+			}
+			if (node != null) {
 				linkActionToBeginNode(node);
+			}
 		}
 	}
 
@@ -166,12 +170,14 @@ public class BindButtonsToActionNode extends FlexoAction<BindButtonsToActionNode
 			Enumeration<FlexoPostCondition<AbstractNode, AbstractNode>> en1 = pre.getIncomingPostConditions().elements();
 			while (en1.hasMoreElements() && bind) {
 				FlexoPostCondition<AbstractNode, AbstractNode> post = en1.nextElement();
-				if (post.getStartNode() instanceof ActionNode && ((ActionNode) post.getStartNode()).isBeginNode())
+				if (post.getStartNode() instanceof ActionNode && ((ActionNode) post.getStartNode()).isBeginNode()) {
 					bind = false;
+				}
 			}
 		}
-		if (bind)
+		if (bind) {
 			OperationNode.linkActionToBeginNode(node);
+		}
 	}
 
 	private static void handleIgnore() {
@@ -180,14 +186,16 @@ public class BindButtonsToActionNode extends FlexoAction<BindButtonsToActionNode
 	}
 
 	private static void handleCancel(OperationAssociatedWithComponentSuccessfully ex) {
-		if (ex == null)// If the exception is null, it means that the component
+		if (ex == null) {
 			// instance has not changed.
 			return;
+		}
 		try {
 			if (ex.getPreviousComponentInstance() != null) {
 				ex.getNode().setComponentInstance(ex.getPreviousComponentInstance());
-			} else
+			} else {
 				ex.getNode().removeComponentInstance();
+			}
 		} catch (OperationAssociatedWithComponentSuccessfully e) {
 			// We have nothing to do here since we set the component instance
 			// back to the ways it was
@@ -200,8 +208,9 @@ public class BindButtonsToActionNode extends FlexoAction<BindButtonsToActionNode
 			Enumeration en = getActions().elements();
 			while (en.hasMoreElements()) {
 				ActionNode a = (ActionNode) en.nextElement();
-				if (a.getAssociatedButtonWidget() == null && a.getProcess() != null)
+				if (a.getAssociatedButtonWidget() == null && a.getProcess() != null) {
 					a.delete();
+				}
 			}
 		}
 	}

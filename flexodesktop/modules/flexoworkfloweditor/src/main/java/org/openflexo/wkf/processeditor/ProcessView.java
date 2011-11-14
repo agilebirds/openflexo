@@ -122,8 +122,9 @@ public class ProcessView extends DrawingView<ProcessRepresentation> implements M
 
 	public void refreshConnectors() {
 		for (Object gr : getGraphicalRepresentation().getContainedGraphicalRepresentations()) {
-			if (gr instanceof EdgeGR)
+			if (gr instanceof EdgeGR) {
 				((EdgeGR<WKFEdge<?, ?>>) gr).updatePropertiesFromWKFPreferences();
+			}
 		}
 	}
 

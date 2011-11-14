@@ -98,10 +98,11 @@ public class FlexoMemoryResource extends FlexoResource {
 	private String _resourceClassName;
 
 	public String _getResourceClassName() {
-		if (_resourceClassName != null)
+		if (_resourceClassName != null) {
 			return _resourceClassName;
-		else
+		} else {
 			return this.getClass().getName();
+		}
 	}
 
 	public void _setResourceClassName(String aClassName) {

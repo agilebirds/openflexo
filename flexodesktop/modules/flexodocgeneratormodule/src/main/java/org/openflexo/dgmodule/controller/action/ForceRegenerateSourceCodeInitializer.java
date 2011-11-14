@@ -28,12 +28,6 @@ import javax.swing.Icon;
 import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.icon.GeneratorIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.dgmodule.DGPreferences;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -42,6 +36,11 @@ import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.generator.action.DismissUnchangedGeneratedFiles;
 import org.openflexo.generator.action.ForceRegenerateSourceCode;
 import org.openflexo.generator.exception.GenerationException;
+import org.openflexo.icon.GeneratorIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class ForceRegenerateSourceCodeInitializer extends ActionInitializer {
 

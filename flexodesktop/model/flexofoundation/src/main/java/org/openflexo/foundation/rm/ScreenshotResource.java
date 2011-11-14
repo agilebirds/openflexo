@@ -30,11 +30,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.swing.ImageUtils;
-import org.openflexo.swing.ImageUtils.ImageType;
-import org.openflexo.toolbox.FileUtils;
-import org.openflexo.toolbox.ImageInfo;
-
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
@@ -58,6 +53,10 @@ import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.foundation.wkf.node.LOOPOperator;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.swing.ImageUtils;
+import org.openflexo.swing.ImageUtils.ImageType;
+import org.openflexo.toolbox.FileUtils;
+import org.openflexo.toolbox.ImageInfo;
 
 /**
  * @author sylvain
@@ -94,8 +93,9 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 		if (getModelObject() != null) {
 			String s = ScreenshotGenerator.getScreenshotName(getModelObject());
 			if (name != null && !name.equals(s) && project != null && !project.isDeserializing() && !project.isSerializing()) {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Renaming resource " + name + " to " + s);
+				}
 				setName(s);
 			}
 		}
@@ -103,40 +103,47 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 
 	@Override
 	public void setName(String aName) {
-		if (aName == null)
+		if (aName == null) {
 			return;
-		if (name != null && name.equals(aName))
+		}
+		if (name != null && name.equals(aName)) {
 			return;
+		}
 		String oldName = name;
 		name = aName;
 		try {
 			if (resourceFile != null && !getFile().getName().equals(aName + DOTTED_SCREENSHOT_EXTENSION)
 					&& !getFile().getName().equals(aName)) {
-				if (!getFile().exists())
+				if (!getFile().exists()) {
 					try {
 						getFile().createNewFile();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
+				}
 				boolean b = renameFileTo(name + DOTTED_SCREENSHOT_EXTENSION);
-				if (!b && logger.isLoggable(Level.WARNING))
+				if (!b && logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not rename screenshot resource from" + getFile().getName() + " to " + name);
-				if (b)
+				}
+				if (b) {
 					getProject().renameResource(this, name);
+				}
 			}
 		} catch (DuplicateResourceException e) {
 			e.printStackTrace();
 			name = oldName;
 			delete();
 		} catch (InvalidFileNameException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("InvalidFileName occured while trying to rename screenshot with name " + name + ". Deleting it.");
+			}
 			e.printStackTrace();
 			name = oldName;
 			delete();
 		} catch (Exception e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("An exception occured while trying to rename screenshot with name " + name + ". Deleting it.");
+			}
 			e.printStackTrace();
 			name = oldName;
 			delete();
@@ -194,8 +201,9 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 			try {
 				ret.setResourceFile(file);
 			} catch (InvalidFileNameException e) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("Invalid file name: " + file.getRelativePath() + ". This should never happen.");
+				}
 				return null;
 			}
 		}
@@ -260,11 +268,13 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 	@Override
 	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate) {
 		if (resource instanceof FlexoProcessResource) {
-			if (!requestDate.before(((FlexoProcessResource) resource).getFlexoProcess().getLastUpdate()))
+			if (!requestDate.before(((FlexoProcessResource) resource).getFlexoProcess().getLastUpdate())) {
 				return false;
+			}
 		} else if (resource instanceof FlexoComponentResource) {
-			if (!checkOptimisticDependancyForComponent(resource, requestDate))
+			if (!checkOptimisticDependancyForComponent(resource, requestDate)) {
 				return false;
+			}
 		}
 		return super.optimisticallyDependsOf(resource, requestDate);
 	}
@@ -279,8 +289,9 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 			Vector<TabComponentDefinition> tabs = new Vector<TabComponentDefinition>();
 			((FlexoComponentResource) resource).getResourceData().getAllTabComponents(tabs);
 			for (TabComponentDefinition tab : tabs) {
-				if (tab.isLoaded())
+				if (tab.isLoaded()) {
 					depends |= !lastUpdateDateIsBefore(tab.getWOComponent(), requestDate);
+				}
 			}
 			return depends;
 		}
@@ -298,9 +309,9 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 	}
 
 	public FlexoModelObject getModelObject() {
-		if (getSourceReference() != null)
+		if (getSourceReference() != null) {
 			return sourceReference.getObject(true);
-		else {
+		} else {
 			if (!willBeDeleted) {
 				willBeDeleted = true;
 				this.delete(false);
@@ -337,10 +348,12 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 	public void setResourceFile(FlexoProjectFile aFile) throws InvalidFileNameException {
 		if (aFile.getRelativePath() != null && !aFile.getRelativePath().toLowerCase().endsWith(DOTTED_SCREENSHOT_EXTENSION)) {
 			String relPath = "";
-			if (aFile.getRelativePath().indexOf('/') > -1)
+			if (aFile.getRelativePath().indexOf('/') > -1) {
 				relPath = aFile.getRelativePath().substring(0, aFile.getRelativePath().lastIndexOf('/') + 1);
-			if (name != null)
+			}
+			if (name != null) {
 				aFile.setRelativePath(relPath + name + DOTTED_SCREENSHOT_EXTENSION);
+			}
 		}
 		super.setResourceFile(aFile);
 	}
@@ -361,8 +374,9 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 		protected ScreenshotImage data;
 
 		public BufferedImage getImage() {
-			if (data != null)
+			if (data != null) {
 				return data.image;
+			}
 			return null;
 		}
 
@@ -427,8 +441,9 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 
 		private void generateScreenshot() {
 			data = ScreenshotGenerator.getImage(getModelObject());
-			if (data != null)
+			if (data != null) {
 				trimInfo = data.trimInfo;
+			}
 		}
 
 		/**
@@ -437,8 +452,9 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 		@Override
 		public void writeToFile(File aFile) {
 			if (data == null) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("Called write to file without having called generate on screenshot resource data: " + getFlexoResource());
+				}
 				return;
 			}
 			/*
@@ -446,10 +462,12 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 			 */
 			File image = aFile;
 			File path = image.getParentFile();
-			if (!path.exists())
+			if (!path.exists()) {
 				path.mkdirs();
-			if (logger.isLoggable(Level.INFO))
+			}
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Writing file " + image.getAbsolutePath());
+			}
 			try {
 				ImageUtils.saveImageToFile(data.image, image, SCREENSHOT_TYPE);
 			} catch (Exception e) {
@@ -485,13 +503,15 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 					|| ((getModelObject() instanceof OperationNode) && (observable == ((OperationNode) getModelObject())
 							.getAbstractActivityNode()))) {
 				checkResourceNameIsUpToDate();
-				if (logger.isLoggable(Level.FINEST))
+				if (logger.isLoggable(Level.FINEST)) {
 					logger.finest("Renamed screenshot due to a rename in the workflow");
+				}
 			}
 		} else if (dataModification instanceof ComponentNameChanged && observable == getModelObject()) {
 			checkResourceNameIsUpToDate();
-			if (logger.isLoggable(Level.FINEST))
+			if (logger.isLoggable(Level.FINEST)) {
 				logger.finest("Renamed screenshot due to component rename.");
+			}
 		} else if (dataModification instanceof ObjectDeleted && ((ObjectDeleted) dataModification).getDeletedObject() == getModelObject()) {
 			delete(false);
 		}
@@ -500,13 +520,14 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 	private boolean isObserving = false;
 
 	public void startObserving() {
-		if (isObserving)
+		if (isObserving) {
 			return;
+		}
 		if (getModelObject() != null) {
 			getModelObject().addObserver(this);
-			if (getModelObject() instanceof AbstractActivityNode)
+			if (getModelObject() instanceof AbstractActivityNode) {
 				((AbstractActivityNode) getModelObject()).getProcess().addObserver(this);
-			else if (getModelObject() instanceof OperationNode) {
+			} else if (getModelObject() instanceof OperationNode) {
 				((OperationNode) getModelObject()).getProcess().addObserver(this);
 				((OperationNode) getModelObject()).getAbstractActivityNode().addObserver(this);
 			}
@@ -515,10 +536,12 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 	}
 
 	private void stopObserving() {
-		if (getModelObject() != null)
+		if (getModelObject() != null) {
 			getModelObject().deleteObserver(this);
-		if (getModelObject() instanceof AbstractActivityNode && ((AbstractActivityNode) getModelObject()).getProcess() != null)
+		}
+		if (getModelObject() instanceof AbstractActivityNode && ((AbstractActivityNode) getModelObject()).getProcess() != null) {
 			((AbstractActivityNode) getModelObject()).getProcess().deleteObserver(this);
+		}
 		isObserving = false;
 	}
 
@@ -528,8 +551,9 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 	@Override
 	public synchronized void delete(boolean deleteFile) {
 		willBeDeleted = true;
-		if (sourceReference != null)
+		if (sourceReference != null) {
 			sourceReference.delete();
+		}
 		stopObserving();
 		super.delete(deleteFile);
 	}
@@ -547,13 +571,15 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 		super.rebuildDependancies();
 		if (getModelObject() != null && getModelObject().getXMLResourceData() != null
 				&& getModelObject().getXMLResourceData().getFlexoResource() != null) {
-			if (!(getModelObject() instanceof ComponentDefinition))
+			if (!(getModelObject() instanceof ComponentDefinition)) {
 				addToDependantResources(getModelObject().getXMLResourceData().getFlexoResource());
+			}
 		}
 		if (getModelObject() instanceof ComponentDefinition) {
 			FlexoComponentResource compRes = ((ComponentDefinition) getModelObject()).getComponentResource(false);
-			if (compRes != null)
+			if (compRes != null) {
 				addToDependantResources(compRes);
+			}
 		}
 	}
 
@@ -570,12 +596,13 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				} finally {
-					if (fis != null)
+					if (fis != null) {
 						try {
 							fis.close();
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
+					}
 				}
 			}
 		}
@@ -592,8 +619,9 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 				setSourceReference(getProject().getObjectReferenceConverter().convertFromString(sourceReferenceString));
 				sourceReferenceString = null;
 			} else {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("No project on screenshot: " + getName());
+				}
 			}
 		}
 		return sourceReference;
@@ -601,8 +629,9 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 
 	private void setSourceReference(FlexoModelObjectReference<FlexoModelObject> sourceReference) {
 		if (sourceReference == null) {
-			if (logger.isLoggable(Level.SEVERE))
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Trying to set a null source reference, this is not allowed!");
+			}
 		}
 		this.sourceReference = sourceReference;
 		if (sourceReference != null) {
@@ -616,8 +645,9 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 			if (getProject() != null) {
 				return getProject().getObjectReferenceConverter().convertToString(sourceReference);
 			} else {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("No project on screenshot: " + getName());
+				}
 			}
 		}
 		return sourceReferenceString;
@@ -639,8 +669,9 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 
 	@Override
 	public void objectCantBeFound(FlexoModelObjectReference reference) {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Could not find object for reference: " + reference + ", deleting resource " + this);
+		}
 		if (!willBeDeleted) {
 			willBeDeleted = true;
 			this.delete(false);

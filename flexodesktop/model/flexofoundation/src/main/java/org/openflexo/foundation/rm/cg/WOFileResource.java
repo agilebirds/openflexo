@@ -86,8 +86,9 @@ public class WOFileResource<G extends IFlexoResourceGenerator, F extends CGFile>
 		FileWritingLock lock = willWriteOnDisk();
 
 		// Creates directory when non existant
-		if (!getFile().exists())
+		if (!getFile().exists()) {
 			getFile().mkdirs();
+		}
 
 		// Save content stored in supplied editor
 		try {

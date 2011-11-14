@@ -66,10 +66,11 @@ public class LatexUtils {
 	public static String getDefaultLatex2PDFCommand(boolean testDefaultCommands) {
 		// First we test the default commands (if they are defined in the path, it should work)
 		if (testDefaultCommands) {
-			if (testLatexCommand(TEXIFY))
+			if (testLatexCommand(TEXIFY)) {
 				return TEXIFY;
-			else if (testLatexCommand(PDFLATEX))
+			} else if (testLatexCommand(PDFLATEX)) {
 				return PDFLATEX;
+			}
 		}
 
 		// Then we scan the paths stored in the PATH variable
@@ -114,18 +115,22 @@ public class LatexUtils {
 			sb.append(System.getProperty("os.arch").equals("ppc") ? "powerpc" : "i386");
 			sb.append("-apple-darwin-current");
 			String path = testCommandsWithPath(sb.toString());
-			if (path != null)
+			if (path != null) {
 				return path;
+			}
 		} else if (ToolBox.getPLATFORM() == ToolBox.LINUX) {
 			String path = testCommandsWithPath("/usr/bin");
-			if (path != null)
+			if (path != null) {
 				return path;
+			}
 			path = testCommandsWithPath("/bin");
-			if (path != null)
+			if (path != null) {
 				return path;
+			}
 			path = testCommandsWithPath("/usr/local/bin");
-			if (path != null)
+			if (path != null) {
 				return path;
+			}
 		}
 		return null;
 	}
@@ -194,8 +199,9 @@ public class LatexUtils {
 		while (i.hasNext()) {
 			String s = (String) i.next();
 			sb.append(s);
-			if (i.hasNext())
+			if (i.hasNext()) {
 				sb.append('|');
+			}
 
 		}
 		Pattern p = Pattern.compile(sb.toString(), Pattern.CASE_INSENSITIVE);
@@ -216,8 +222,9 @@ public class LatexUtils {
 	 * @return
 	 */
 	public static String prepareJavaStringForLatex(String javaString) {
-		if (javaString == null)
+		if (javaString == null) {
 			return ""; // This will avoid any NPE
+		}
 
 		javaString = removeStringsToIgnore(javaString);
 		try {

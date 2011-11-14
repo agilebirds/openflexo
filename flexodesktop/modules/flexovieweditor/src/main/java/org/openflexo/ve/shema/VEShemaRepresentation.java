@@ -29,10 +29,10 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.view.ViewConnector;
-import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewConnector;
 import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.ViewShape;
 
 public class VEShemaRepresentation extends DefaultDrawing<View> implements GraphicalFlexoObserver, VEShemaConstants {
 
@@ -59,10 +59,12 @@ public class VEShemaRepresentation extends DefaultDrawing<View> implements Graph
 
 	@Override
 	public void delete() {
-		if (graphicalRepresentation != null)
+		if (graphicalRepresentation != null) {
 			graphicalRepresentation.delete();
-		if (getShema() != null)
+		}
+		if (getShema() != null) {
 			getShema().deleteObserver(this);
+		}
 	}
 
 	@Override

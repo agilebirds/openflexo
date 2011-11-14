@@ -19,11 +19,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 package com.swabunga.spell.swing;
 
-import com.swabunga.spell.engine.SpellDictionary;
-
-import javax.swing.text.*;
-import java.awt.*;
+import java.awt.Color;
 import java.util.StringTokenizer;
+
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
+
+import com.swabunga.spell.engine.SpellDictionary;
 
 /**
  * @author Stig Tanggaard
@@ -62,17 +68,21 @@ public class SpellCheckedDocument extends DefaultStyledDocument {
 				String text = getText(start, end - start);
 				// System.out.println(text);
 				checkoffset = text.indexOf(" ");
-				if (checkoffset == -1)
+				if (checkoffset == -1) {
 					return;
+				}
 				checkend = text.lastIndexOf(" ");
-				if (checkend == -1)
+				if (checkend == -1) {
 					return;
-				if (checkoffset == checkend)
+				}
+				if (checkoffset == checkend) {
 					return;
+				}
 				checkoffset += 1;
 				checkingline = text.substring(checkoffset, checkend);
-				if (checkingline == null)
+				if (checkingline == null) {
 					return;
+				}
 				// System.out.println(":" + checkingline + ":");
 				checkoffset += start;
 				checkend += start;
@@ -119,33 +129,41 @@ public class SpellCheckedDocument extends DefaultStyledDocument {
 		checkspelling = check;
 	}
 
+	@Override
 	public void insertString(int offset, String string, AttributeSet a) throws BadLocationException {
 		// if(normal == null) normal = a;
 		super.insertString(offset, string, normal);
-		if (!checkspelling)
+		if (!checkspelling) {
 			return;
+		}
 		if (dictionary != null) {
 			int start = offset - 30;
 			int end = offset + 30;
-			if (start < 0)
+			if (start < 0) {
 				start = 0;
-			if (end > getLength())
+			}
+			if (end > getLength()) {
 				end = getLength();
+			}
 			try {
 				String text = getText(start, end - start);
 				// System.out.println(text);
 				checkoffset = text.indexOf(" ");
-				if (checkoffset == -1)
+				if (checkoffset == -1) {
 					return;
+				}
 				checkend = text.lastIndexOf(" ");
-				if (checkend == -1)
+				if (checkend == -1) {
 					return;
-				if (checkoffset == checkend)
+				}
+				if (checkoffset == checkend) {
 					return;
+				}
 				checkoffset += 1;
 				checkingline = text.substring(checkoffset, checkend);
-				if (checkingline == null)
+				if (checkingline == null) {
 					return;
+				}
 				// System.out.println(":" + checkingline + ":");
 				checkoffset += start;
 				checkend += start;
@@ -189,32 +207,40 @@ public class SpellCheckedDocument extends DefaultStyledDocument {
 		}
 	}
 
+	@Override
 	public void remove(int offset, int len) throws BadLocationException {
 		super.remove(offset, len);
-		if (!checkspelling)
+		if (!checkspelling) {
 			return;
+		}
 		if (dictionary != null) {
 			int start = offset - 30;
 			int end = offset + 30;
-			if (start < 0)
+			if (start < 0) {
 				start = 0;
-			if (end > getLength())
+			}
+			if (end > getLength()) {
 				end = getLength();
+			}
 			try {
 				String text = getText(start, end - start);
 				// System.out.println(text);
 				checkoffset = text.indexOf(" ");
-				if (checkoffset == -1)
+				if (checkoffset == -1) {
 					return;
+				}
 				checkend = text.lastIndexOf(" ");
-				if (checkend == -1)
+				if (checkend == -1) {
 					return;
-				if (checkoffset == checkend)
+				}
+				if (checkoffset == checkend) {
 					return;
+				}
 				checkoffset += 1;
 				checkingline = text.substring(checkoffset, checkend);
-				if (checkingline == null)
+				if (checkingline == null) {
 					return;
+				}
 				// System.out.println(":" + checkingline + ":");
 				checkoffset += start;
 				checkend += start;

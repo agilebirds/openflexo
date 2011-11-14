@@ -19,8 +19,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 package com.swabunga.spell.engine;
 
-import java.io.*;
-import java.util.*;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Another implementation of <code>SpellDictionary</code> that doesn't cache any words in memory. Avoids the huge footprint of
@@ -78,6 +83,7 @@ public class SpellDictionaryDichoDisk extends SpellDictionaryASpell {
 	/**
 	 * Add a word permanantly to the dictionary (and the dictionary file). <i>not implemented !</i>
 	 */
+	@Override
 	public void addWord(String word) {
 		System.err.println("error: addWord is not implemented for SpellDictionaryDichoDisk");
 	}
@@ -90,28 +96,32 @@ public class SpellDictionaryDichoDisk extends SpellDictionaryASpell {
 		long pm = (p1 + p2) / 2;
 		dictFile.seek(pm);
 		String l;
-		if (encoding == null)
+		if (encoding == null) {
 			l = dictFile.readLine();
-		else
+		} else {
 			l = dictReadLine();
+		}
 		pm = dictFile.getFilePointer();
-		if (encoding == null)
+		if (encoding == null) {
 			l = dictFile.readLine();
-		else
+		} else {
 			l = dictReadLine();
+		}
 		long pm2 = dictFile.getFilePointer();
-		if (pm2 >= p2)
+		if (pm2 >= p2) {
 			return (seqFind(code, p1, p2));
+		}
 		int istar = l.indexOf('*');
-		if (istar == -1)
+		if (istar == -1) {
 			throw new IOException("bad format: no * !");
+		}
 		String testcode = l.substring(0, istar);
 		int comp = code.compareTo(testcode);
-		if (comp < 0)
+		if (comp < 0) {
 			return (dichoFind(code, p1, pm - 1));
-		else if (comp > 0)
+		} else if (comp > 0) {
 			return (dichoFind(code, pm2, p2));
-		else {
+		} else {
 			LinkedList l1 = dichoFind(code, p1, pm - 1);
 			LinkedList l2 = dichoFind(code, pm2, p2);
 			String word = l.substring(istar + 1);
@@ -127,13 +137,15 @@ public class SpellDictionaryDichoDisk extends SpellDictionaryASpell {
 		dictFile.seek(p1);
 		while (dictFile.getFilePointer() < p2) {
 			String l;
-			if (encoding == null)
+			if (encoding == null) {
 				l = dictFile.readLine();
-			else
+			} else {
 				l = dictReadLine();
+			}
 			int istar = l.indexOf('*');
-			if (istar == -1)
+			if (istar == -1) {
 				throw new IOException("bad format: no * !");
+			}
 			String testcode = l.substring(0, istar);
 			if (testcode.equals(code)) {
 				String word = l.substring(istar + 1);
@@ -158,8 +170,9 @@ public class SpellDictionaryDichoDisk extends SpellDictionaryASpell {
 			}
 		} catch (EOFException ex) {
 		}
-		if (i == 0)
+		if (i == 0) {
 			return ("");
+		}
 		String s = new String(buf, 0, i - 1, encoding);
 		return (s);
 	}
@@ -167,6 +180,7 @@ public class SpellDictionaryDichoDisk extends SpellDictionaryASpell {
 	/**
 	 * Returns a list of strings (words) for the code.
 	 */
+	@Override
 	public List getWords(String code) {
 		// System.out.println("getWords("+code+")");
 		LinkedList list;

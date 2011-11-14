@@ -26,8 +26,8 @@ import org.apache.commons.io.IOUtils;
 import org.jdom.Document;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
 import org.jdom.output.Format.TextMode;
+import org.jdom.output.XMLOutputter;
 import org.openflexo.sg.formatter.exception.FormattingException;
 import org.openflexo.toolbox.FileFormat;
 

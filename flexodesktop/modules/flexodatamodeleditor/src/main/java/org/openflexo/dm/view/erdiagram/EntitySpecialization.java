@@ -49,12 +49,15 @@ public class EntitySpecialization {
 
 	public String getLabel() {
 		String returned = null;
-		if (getSpecialization().equals(getSpecializedEntity().getParentType()))
+		if (getSpecialization().equals(getSpecializedEntity().getParentType())) {
 			returned = "extends";
-		if (getSpecializedEntity().getImplementedTypes().contains(getSpecialization()))
+		}
+		if (getSpecializedEntity().getImplementedTypes().contains(getSpecialization())) {
 			returned = "implements";
-		if (getSpecialization().isGeneric())
+		}
+		if (getSpecialization().isGeneric()) {
 			returned += " " + getSpecialization().getSimplifiedStringRepresentation();
+		}
 		return returned;
 	}
 }

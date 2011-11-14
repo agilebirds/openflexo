@@ -63,14 +63,16 @@ public class ShowComponentUsage extends FlexoGUIAction<ShowComponentUsage, IEObj
 	}
 
 	public FlexoProject getProject() {
-		if (getFocusedObject() != null)
+		if (getFocusedObject() != null) {
 			return getFocusedObject().getProject();
+		}
 		return null;
 	}
 
 	public ComponentDefinition getComponentDefinition() {
-		if (getFocusedObject() instanceof IEWOComponent)
+		if (getFocusedObject() instanceof IEWOComponent) {
 			return ((IEWOComponent) getFocusedObject()).getComponentDefinition();
+		}
 		return (ComponentDefinition) getFocusedObject();
 	}
 }

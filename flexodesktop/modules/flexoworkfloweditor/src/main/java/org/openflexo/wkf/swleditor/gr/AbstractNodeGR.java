@@ -117,8 +117,9 @@ public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O
 
 	@Override
 	public String getToolTipText() {
-		if (getNode().getDescription() == null || getNode().getDescription().trim().equals(""))
+		if (getNode().getDescription() == null || getNode().getDescription().trim().equals("")) {
 			return "<html><b>" + getNode().getName() + "</b><br><i>" + FlexoLocalization.localizedForKey("no_description") + "</i></html>";
+		}
 		return "<html><b>" + getNode().getName() + "</b><br><i>" + getNode().getDescription() + "</i></html>";
 	}
 
@@ -149,12 +150,14 @@ public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O
 				SWLContainerGR parentSWLContainer = (SWLContainerGR) getContainerGraphicalRepresentation();
 				getDrawing();
 				if (parentContainer instanceof RoleContainerGR
-						&& parentContainer.getDrawable() == SwimmingLaneRepresentation.getRepresentationRole(getNode()))
+						&& parentContainer.getDrawable() == SwimmingLaneRepresentation.getRepresentationRole(getNode())) {
 					locationConstrainedArea = parentSWLContainer.getLocationConstrainedAreaForChild(this);
+				}
 			}
 			return locationConstrainedArea;
-		} else
+		} else {
 			return super.getLocationConstrainedArea();
+		}
 	}
 
 	protected final void resetLocationConstrainedArea() {
@@ -179,16 +182,20 @@ public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O
 			getNode().setX(location.x, SWIMMING_LANE_EDITOR);
 			getNode().setY(location.y, SWIMMING_LANE_EDITOR);
 			return true;
-		} else
+		} else {
 			return false;
+		}
 	}
 
 	public boolean showNoChildrenSign() {
-		if (getDrawing() == null || getDrawing().getModel() == null)
+		if (getDrawing() == null || getDrawing().getModel() == null) {
 			return false;
-		if (getNode() instanceof FlexoNode)
-			if (((FlexoNode) getNode()).isBeginOrEndNode())
+		}
+		if (getNode() instanceof FlexoNode) {
+			if (((FlexoNode) getNode()).isBeginOrEndNode()) {
 				return false;
+			}
+		}
 		/*if (getNode() instanceof SelfExecutableNode) {
 			return !((SelfExecutableNode)getNode()).hasExecutionPetriGraph() || !((SelfExecutableNode)getNode()).getExecutionPetriGraph().hasOtherNodesThanBeginEndNodes();
 		} else*/if (getNode() instanceof AbstractActivityNode) {
@@ -219,8 +226,9 @@ public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O
 
 		@Override
 		public void paintDecoration(FGEShapeDecorationGraphics g) {
-			if (!showNoChildrenSign())
+			if (!showNoChildrenSign()) {
 				return;
+			}
 			// Uses a gray line
 			g.useForegroundStyle(ForegroundStyle.makeStyle(Color.gray));
 

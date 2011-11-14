@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.dgmodule.controller.DGController;
 import org.openflexo.diff.ComputeDiff;
-
 import org.openflexo.foundation.rm.cg.ASCIIFile;
 import org.openflexo.foundation.rm.cg.ASCIIFileResource;
 import org.openflexo.foundation.rm.cg.ContentSource;
@@ -66,8 +65,9 @@ public class CustomDiffDocDisplayer extends DiffCodeDisplayer {
 		@Override
 		public void update() {
 			removeAll();
-			if ((getLeft() == null) || (getRight() == null))
+			if ((getLeft() == null) || (getRight() == null)) {
 				return;
+			}
 			_diffReport = ComputeDiff.diff(getLeft(), getRight());
 			String leftLabel = (_left != null ? _left.getStringRepresentation() : "null");
 			String rightLabel = (_right != null ? _right.getStringRepresentation() : "null");
@@ -79,8 +79,9 @@ public class CustomDiffDocDisplayer extends DiffCodeDisplayer {
 		}
 
 		public String getLeft() {
-			if (_left == null)
+			if (_left == null) {
 				return "";
+			}
 			if (getResource() instanceof ASCIIFileResource) {
 				if (_left.getType() == ContentSourceType.PureGeneration) {
 					return ((ASCIIFileResource) getResource()).getCurrentGeneration();
@@ -91,8 +92,9 @@ public class CustomDiffDocDisplayer extends DiffCodeDisplayer {
 		}
 
 		public String getRight() {
-			if (_right == null)
+			if (_right == null) {
 				return "";
+			}
 			if (getResource() instanceof ASCIIFileResource) {
 				if (_right.getType() == ContentSourceType.PureGeneration) {
 					return ((ASCIIFileResource) getResource()).getCurrentGeneration();

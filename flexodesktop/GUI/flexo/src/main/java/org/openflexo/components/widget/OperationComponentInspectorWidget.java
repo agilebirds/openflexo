@@ -70,14 +70,16 @@ public class OperationComponentInspectorWidget extends AbstractComponentInspecto
 
 	@Override
 	public void fireEditingCanceled() {
-		if (_selector != null)
+		if (_selector != null) {
 			_selector.closePopup();
+		}
 	}
 
 	@Override
 	public void fireEditingStopped() {
-		if (_selector != null)
+		if (_selector != null) {
 			_selector.closePopup();
+		}
 	}
 
 }

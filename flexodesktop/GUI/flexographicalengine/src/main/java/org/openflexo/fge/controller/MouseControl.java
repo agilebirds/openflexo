@@ -37,28 +37,35 @@ public abstract class MouseControl extends DefaultInspectableObject {
 	public MouseButton button;
 
 	public boolean isApplicable(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent e) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Called isApplicable(MouseEvent) for " + this + " event=" + e);
+		}
 
-		if (e.isConsumed())
+		if (e.isConsumed()) {
 			return false;
+		}
 
-		if (button == MouseButton.LEFT && e.getButton() != MouseEvent.BUTTON1)
+		if (button == MouseButton.LEFT && e.getButton() != MouseEvent.BUTTON1) {
 			return false;
-		if (button == MouseButton.CENTER && e.getButton() != MouseEvent.BUTTON2)
+		}
+		if (button == MouseButton.CENTER && e.getButton() != MouseEvent.BUTTON2) {
 			return false;
-		if (button == MouseButton.RIGHT && e.getButton() != MouseEvent.BUTTON3)
+		}
+		if (button == MouseButton.RIGHT && e.getButton() != MouseEvent.BUTTON3) {
 			return false;
+		}
 
 		// logger.info("shiftPressed="+shiftPressed+" e.isShiftDown()="+e.isShiftDown());
 		// logger.info("ctrlPressed="+ctrlPressed+" e.isControlDown()="+e.isControlDown());
 		// logger.info("metaPressed="+metaPressed+" e.isMetaDown()="+e.isMetaDown());
 		// logger.info("altPressed="+altPressed+" e.isAltDown()="+e.isAltDown());
 
-		if (shiftPressed != e.isShiftDown())
+		if (shiftPressed != e.isShiftDown()) {
 			return false;
-		if (ctrlPressed != e.isControlDown())
+		}
+		if (ctrlPressed != e.isControlDown()) {
 			return false;
+		}
 
 		if (button == MouseButton.RIGHT) {
 			// Correction here: on all platforms, it is impossible to
@@ -73,13 +80,15 @@ public abstract class MouseControl extends DefaultInspectableObject {
 			// cannot distinguish both, so just skip this test
 			 */
 		} else {
-			if (metaPressed != e.isMetaDown())
+			if (metaPressed != e.isMetaDown()) {
 				return false;
+			}
 		}
 		if (button == MouseButton.CENTER) {
 
-		} else if (altPressed != e.isAltDown())
+		} else if (altPressed != e.isAltDown()) {
 			return false;
+		}
 
 		// Everything seems ok, return true
 		return true;

@@ -64,20 +64,23 @@ public class DeleteRoleSpecialization extends FlexoAction<DeleteRoleSpecializati
 	@Override
 	protected void doAction(Object context) {
 		logger.info("Delete role specialization(s)");
-		for (RoleSpecialization r : getRoleSpecializationToDelete())
+		for (RoleSpecialization r : getRoleSpecializationToDelete()) {
 			r.delete();
+		}
 	}
 
 	public Vector<RoleSpecialization> getRoleSpecializationToDelete() {
 		Vector<RoleSpecialization> roleSpecializationToDelete = new Vector<RoleSpecialization>();
 		if (getGlobalSelection() != null) {
 			for (FlexoModelObject o : getGlobalSelection()) {
-				if (o instanceof RoleSpecialization)
+				if (o instanceof RoleSpecialization) {
 					roleSpecializationToDelete.add((RoleSpecialization) o);
+				}
 			}
 		}
-		if (!roleSpecializationToDelete.contains(getFocusedObject()))
+		if (!roleSpecializationToDelete.contains(getFocusedObject())) {
 			roleSpecializationToDelete.add(getFocusedObject());
+		}
 		return roleSpecializationToDelete;
 	}
 

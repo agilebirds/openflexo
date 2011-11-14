@@ -64,16 +64,18 @@ public class EditionPatternPreviewConnectorGR extends ConnectorGraphicalRepresen
 		setStartObject(aDrawing.getStartShape(aPatternRole));
 		setEndObject(aDrawing.getEndShape(aPatternRole));
 
-		if (aPatternRole != null)
+		if (aPatternRole != null) {
 			aPatternRole.addObserver(this);
+		}
 
 		isInitialized = true;
 	}
 
 	@Override
 	public void delete() {
-		if (getDrawable() != null)
+		if (getDrawable() != null) {
 			getDrawable().deleteObserver(this);
+		}
 		super.delete();
 	}
 
@@ -100,8 +102,9 @@ public class EditionPatternPreviewConnectorGR extends ConnectorGraphicalRepresen
 	@Override
 	public String getText() {
 		if (getPatternRole() != null) {
-			if (getPatternRole().getLabel() != null)
+			if (getPatternRole().getLabel() != null) {
 				return getPatternRole().getLabel().toString();
+			}
 			return getPatternRole().getPatternRoleName();
 		}
 		return null;
@@ -116,8 +119,9 @@ public class EditionPatternPreviewConnectorGR extends ConnectorGraphicalRepresen
 	public void notifyObservers(Object arg) {
 		super.notifyObservers(arg);
 		if (arg instanceof FGENotification && ((FGENotification) arg).isModelNotification() && getDrawing() != null
-				&& !getDrawing().ignoreNotifications() && getPatternRole() != null)
+				&& !getDrawing().ignoreNotifications() && getPatternRole() != null) {
 			getPatternRole().setChanged();
+		}
 	}
 
 }

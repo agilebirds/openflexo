@@ -62,6 +62,7 @@ public interface FlexoProcess extends WKFObject {
 
 	public Edge getEdgeNamed(String name);
 
+	@Override
 	@Deleter
 	public void delete();
 }

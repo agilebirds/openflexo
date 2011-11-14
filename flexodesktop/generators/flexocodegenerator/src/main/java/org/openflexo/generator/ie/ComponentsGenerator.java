@@ -68,8 +68,9 @@ public class ComponentsGenerator extends MetaGenerator<FlexoModelObject, CGRepos
 
 	@Override
 	public void generate(boolean forceRegenerate) throws GenerationException {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Called ComponentsGenerator.generate(forceRegenerate)");
+		}
 		resetSecondaryProgressWindow(generators.values().size() + popupLinkGenerators.size());
 		startGeneration();
 		for (PopupLinkComponentGenerator generator : popupLinkGenerators.values()) {
@@ -95,28 +96,32 @@ public class ComponentsGenerator extends MetaGenerator<FlexoModelObject, CGRepos
 				hash.put(tcd, generator);
 				generator.buildResourcesAndSetGenerators(repository, resources);
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not instanciate ComponentGenerator for " + tcd);
+				}
 			}
 		}
 		for (PopupComponentDefinition pcd : getProject().getFlexoComponentLibrary().getPopupsComponentList()) {
-			if (pcd.isHelper())
+			if (pcd.isHelper()) {
 				continue;
+			}
 			PopupLinkComponentGenerator linkGenerator = getPopupLinkGenerator(pcd);
 			if (linkGenerator != null) {
 				links.put(pcd, linkGenerator);
 				linkGenerator.buildResourcesAndSetGenerators(repository, resources);
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not instanciate ComponentGenerator for " + pcd);
+				}
 			}
 			ComponentGenerator generator = getGenerator(pcd);
 			if (generator != null) {
 				hash.put(pcd, generator);
 				generator.buildResourcesAndSetGenerators(repository, resources);
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not instanciate ComponentGenerator for " + pcd);
+				}
 			}
 		}
 		for (OperationComponentDefinition ocd : getProject().getFlexoComponentLibrary().getOperationsComponentList()) {
@@ -125,19 +130,21 @@ public class ComponentsGenerator extends MetaGenerator<FlexoModelObject, CGRepos
 				hash.put(ocd, generator);
 				generator.buildResourcesAndSetGenerators(repository, resources);
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not instanciate ComponentGenerator for " + ocd);
+				}
 			}
 		}
 
 		if (getTarget() == CodeType.PROTOTYPE) {
 			// Add page to manage samples
 			StaticComponentGenerator generator = getStaticComponentGenerator("PrototypeSamplesAdminPage", "PrototypeSamplesAdminPage");
-			if (generator != null)
+			if (generator != null) {
 				generator.buildResourcesAndSetGenerators(repository, resources);
-			else {
-				if (logger.isLoggable(Level.WARNING))
+			} else {
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not instanciate StaticComponentGenerator for PrototypeSamplesAdminPage");
+				}
 			}
 		}
 
@@ -150,12 +157,13 @@ public class ComponentsGenerator extends MetaGenerator<FlexoModelObject, CGRepos
 	protected ComponentGenerator getGenerator(ComponentDefinition def) {
 		ComponentGenerator returned = generators.get(def);
 		if (returned == null) {
-			if (def instanceof OperationComponentDefinition)
+			if (def instanceof OperationComponentDefinition) {
 				generators.put(def, returned = new PageComponentGenerator(getProjectGenerator(), (OperationComponentDefinition) def));
-			else if (def instanceof PopupComponentDefinition)
+			} else if (def instanceof PopupComponentDefinition) {
 				generators.put(def, returned = new PopupComponentGenerator(getProjectGenerator(), (PopupComponentDefinition) def));
-			else if (def instanceof TabComponentDefinition)
+			} else if (def instanceof TabComponentDefinition) {
 				generators.put(def, returned = new TabComponentGenerator(getProjectGenerator(), (TabComponentDefinition) def));
+			}
 		}
 		return returned;
 	}

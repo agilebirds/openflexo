@@ -141,15 +141,17 @@ public class DGJSGenerator<T extends FlexoModelObject> extends DGGenerator<T> im
 	}
 
 	public static String splitOnUpperCase(String s) {
-		if (s == null || s.trim().length() == 0)
+		if (s == null || s.trim().length() == 0) {
 			return "";
+		}
 		Matcher m = UPPER_CASE_PATTERN.matcher(s);
 		StringBuffer sb = new StringBuffer();
 		while (m.find()) {
-			if (sb.length() == 0 && m.start() == 0)
+			if (sb.length() == 0 && m.start() == 0) {
 				m.appendReplacement(sb, "$0");
-			else
+			} else {
 				m.appendReplacement(sb, "&#8203;$0");
+			}
 		}
 		m.appendTail(sb);
 		return sb.toString();
@@ -197,24 +199,27 @@ public class DGJSGenerator<T extends FlexoModelObject> extends DGGenerator<T> im
 
 	@Override
 	public void generate(boolean forceRegenerate) {
-		if (!forceRegenerate && !needsGeneration())
+		if (!forceRegenerate && !needsGeneration()) {
 			return;
+		}
 		startGeneration();
 		try {
 			VelocityContext context = defaultContext();
 			if (getObject() instanceof FlexoProcess) {
 				if (ExternalModuleDelegater.getModuleLoader() != null
-						&& ExternalModuleDelegater.getModuleLoader().getWKFModuleInstance() != null)
+						&& ExternalModuleDelegater.getModuleLoader().getWKFModuleInstance() != null) {
 					context.put("processRepresentation", ExternalModuleDelegater.getModuleLoader().getWKFModuleInstance()
 							.getProcessRepresentation((FlexoProcess) getObject(), true));
+				}
 			}
 			generatedCode = new GeneratedTextResource(getFileName().endsWith(getFileExtension()) ? getFileName() : getFileName()
 					+ getFileExtension(), merge(getTemplateName(), context));
 		} catch (GenerationException e) {
 			setGenerationException(e);
 		} catch (Exception e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Unexpected exception occured: " + e.getMessage() + " for " + getObject().getFullyQualifiedName());
+			}
 			e.printStackTrace();
 			setGenerationException(new UnexpectedExceptionOccuredException(e, getProjectGenerator()));
 		}

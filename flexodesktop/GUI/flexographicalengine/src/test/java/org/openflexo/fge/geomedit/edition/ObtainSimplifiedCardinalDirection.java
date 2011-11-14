@@ -36,8 +36,9 @@ public class ObtainSimplifiedCardinalDirection extends EditionInput<SimplifiedCa
 	public ObtainSimplifiedCardinalDirection(String anInputLabel, SimplifiedCardinalDirection defaultValue, GeomEditController controller,
 			boolean appendEndSelection) {
 		this(anInputLabel, defaultValue, controller);
-		if (appendEndSelection)
+		if (appendEndSelection) {
 			availableMethods.add(new EndEditionSelection());
+		}
 		endOnRightClick = appendEndSelection;
 	}
 

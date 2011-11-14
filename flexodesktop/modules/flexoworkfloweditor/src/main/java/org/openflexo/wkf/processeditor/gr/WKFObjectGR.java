@@ -56,8 +56,9 @@ public abstract class WKFObjectGR<O extends WKFObject> extends ShapeGraphicalRep
 
 	@Override
 	public FGEArea getLocationConstrainedArea() {
-		if (getDrawing() != null)
+		if (getDrawing() != null) {
 			return getDrawing().getDrawingGraphicalRepresentation().getLocationConstraintsForObject(this);
+		}
 		return null;
 	}
 
@@ -78,10 +79,11 @@ public abstract class WKFObjectGR<O extends WKFObject> extends ShapeGraphicalRep
 
 	@Override
 	public boolean getIsVisible() {
-		if (getDrawing() != null)
+		if (getDrawing() != null) {
 			return getDrawing().isVisible(getModel());
-		else
+		} else {
 			return true;
+		}
 	}
 
 	@Override
@@ -90,8 +92,9 @@ public abstract class WKFObjectGR<O extends WKFObject> extends ShapeGraphicalRep
 	}
 
 	public FlexoWorkflow getWorkflow() {
-		if (getDrawable().getProcess() != null)
+		if (getDrawable().getProcess() != null) {
 			return getDrawable().getProcess().getWorkflow();
+		}
 		return null;
 	}
 

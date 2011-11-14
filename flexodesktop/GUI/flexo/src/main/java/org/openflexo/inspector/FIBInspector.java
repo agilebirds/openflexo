@@ -69,8 +69,9 @@ public class FIBInspector extends FIBPanel {
 	}
 
 	protected void appendSuperInspectors(MainInspectorController controller) {
-		if (getDataType() == null)
+		if (getDataType() == null) {
 			return;
+		}
 		if (getDataType() instanceof Class) {
 			FIBInspector superInspector = controller.inspectorForClass(((Class) getDataType()).getSuperclass());
 			if (superInspector != null) {

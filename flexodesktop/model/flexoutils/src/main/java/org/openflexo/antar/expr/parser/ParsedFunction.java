@@ -51,10 +51,9 @@ public class ParsedFunction extends Token {
 	}
 
 	private static Token makeParameter(ListOfToken listOfToken) throws ParseException {
-		if (listOfToken.size() == 0)
+		if (listOfToken.size() == 0) {
 			throw new ParseException("Syntax error: invalid null operand");
-
-		else if (listOfToken.size() == 1) {
+		} else if (listOfToken.size() == 1) {
 			if (listOfToken.firstElement() instanceof Token) {
 				return (Token) listOfToken.firstElement();
 			}
@@ -152,10 +151,11 @@ public class ParsedFunction extends Token {
 
 				return new ParsedFunction((Word) unparsedList.get(0), paramList);
 			}
-			if (unparsedList.size() > 0)
+			if (unparsedList.size() > 0) {
 				throw new ParseException("Syntax error near " + unparsedList.elementAt(0));
-			else
+			} else {
 				throw new ParseException("Syntax error ar beginning");
+			}
 
 		}
 

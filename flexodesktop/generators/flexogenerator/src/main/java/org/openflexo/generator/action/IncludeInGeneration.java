@@ -59,8 +59,9 @@ public class IncludeInGeneration extends MultipleFileGCAction<IncludeInGeneratio
 			Vector<AbstractCGFile> selectedFiles = getSelectedCGFiles(focusedObject, globalSelection);
 			Vector<AbstractCGFile> returned = new Vector<AbstractCGFile>();
 			for (AbstractCGFile file : selectedFiles) {
-				if (accept(file))
+				if (accept(file)) {
 					returned.add(file);
+				}
 			}
 			return returned;
 		}

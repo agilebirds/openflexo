@@ -50,17 +50,20 @@ public class FGESegment extends FGEAbstractLine<FGESegment> implements FGEGenera
 
 	@Override
 	public boolean containsLine(FGEAbstractLine l) {
-		if (!overlap(l))
+		if (!overlap(l)) {
 			return false;
+		}
 
-		if (!(containsPoint(l.getP1()) && containsPoint(l.getP2())))
+		if (!(containsPoint(l.getP1()) && containsPoint(l.getP2()))) {
 			return false;
+		}
 
 		if (l instanceof FGEHalfLine) {
 			return false;
 		}
-		if (l instanceof FGESegment)
+		if (l instanceof FGESegment) {
 			return true;
+		}
 
 		// If this is a line this is false
 		return false;
@@ -69,8 +72,9 @@ public class FGESegment extends FGEAbstractLine<FGESegment> implements FGEGenera
 	@Override
 	public boolean contains(FGEPoint p) {
 		// First see if located on line
-		if (!_containsPointIgnoreBounds(p))
+		if (!_containsPointIgnoreBounds(p)) {
 			return false;
+		}
 
 		// Now check bounds
 		if (getB() != 0) {
@@ -143,12 +147,14 @@ public class FGESegment extends FGEAbstractLine<FGESegment> implements FGEGenera
 		} catch (ParallelLinesException e) {
 			return false;
 		}
-		if (!(contains(intersection) && line.contains(intersection)))
+		if (!(contains(intersection) && line.contains(intersection))) {
 			return false;
+		}
 		if (insideOnly) {
 			if (intersection.equals(getP1()) || intersection.equals(getP2())
-					|| ((line instanceof FGESegment) && (intersection.equals(line.getP1()) || intersection.equals(line.getP2()))))
+					|| ((line instanceof FGESegment) && (intersection.equals(line.getP1()) || intersection.equals(line.getP2())))) {
 				return false;
+			}
 		}
 		return true;
 	}
@@ -245,8 +251,9 @@ public class FGESegment extends FGEAbstractLine<FGESegment> implements FGEGenera
 	public boolean equals(Object obj) {
 		if (obj instanceof FGESegment) {
 			FGESegment s = (FGESegment) obj;
-			if (!overlap(s))
+			if (!overlap(s)) {
 				return false;
+			}
 			return ((getP1().equals(s.getP1()) || getP1().equals(s.getP2())) && (getP2().equals(s.getP1()) || getP2().equals(s.getP2())));
 		}
 		return false;
@@ -292,8 +299,9 @@ public class FGESegment extends FGEAbstractLine<FGESegment> implements FGEGenera
 			FGEPoint returned;
 			try {
 				returned = getLineIntersection(line);
-				if (containsPoint(returned) && line.containsPoint(returned))
+				if (containsPoint(returned) && line.containsPoint(returned)) {
 					return returned;
+				}
 			} catch (ParallelLinesException e) {
 				// cannot happen
 			}
@@ -307,31 +315,36 @@ public class FGESegment extends FGEAbstractLine<FGESegment> implements FGEGenera
 				return s2.clone();
 			} else {
 				if (s2.containsPoint(s1.getP1())) {
-					if (s1.getP1().equals(s2.getP1()))
+					if (s1.getP1().equals(s2.getP1())) {
 						return s1.getP1().clone();
+					}
 					return new FGESegment(s1.getP1(), s2.getP1());
 				} else {
-					if (s2.getP1().equals(s1.getP2()))
+					if (s2.getP1().equals(s1.getP2())) {
 						return s2.getP1().clone();
+					}
 					return new FGESegment(s2.getP1(), s1.getP2());
 				}
 			}
 		} else {
 			if (s1.containsPoint(s2.getP2())) {
 				if (s2.containsPoint(s1.getP1())) {
-					if (s1.getP1().equals(s2.getP2()))
+					if (s1.getP1().equals(s2.getP2())) {
 						return s1.getP1().clone();
+					}
 					return new FGESegment(s1.getP1(), s2.getP2());
 				} else {
-					if (s2.getP2().equals(s1.getP2()))
+					if (s2.getP2().equals(s1.getP2())) {
 						return s2.getP2().clone();
+					}
 					return new FGESegment(s2.getP2(), s1.getP2());
 				}
 			} else {
-				if (s2.containsPoint(s1.getP1()) && s2.containsPoint(s1.getP2()))
+				if (s2.containsPoint(s1.getP1()) && s2.containsPoint(s1.getP2())) {
 					return s1.clone();
-				else
+				} else {
 					return new FGEEmptyArea();
+				}
 			}
 
 		}
@@ -346,23 +359,27 @@ public class FGESegment extends FGEAbstractLine<FGESegment> implements FGEGenera
 		if (orientation == SimplifiedCardinalDirection.NORTH) {
 			hl1 = new FGEHalfLine(ps1, new FGEPoint(ps1.x, ps1.y - 1));
 			hl2 = new FGEHalfLine(ps2, new FGEPoint(ps2.x, ps2.y - 1));
-			if (Math.abs(ps1.x - ps2.x) < EPSILON)
+			if (Math.abs(ps1.x - ps2.x) < EPSILON) {
 				return hl1;
+			}
 		} else if (orientation == SimplifiedCardinalDirection.SOUTH) {
 			hl1 = new FGEHalfLine(ps1, new FGEPoint(ps1.x, ps1.y + 1));
 			hl2 = new FGEHalfLine(ps2, new FGEPoint(ps2.x, ps2.y + 1));
-			if (Math.abs(ps1.x - ps2.x) < EPSILON)
+			if (Math.abs(ps1.x - ps2.x) < EPSILON) {
 				return hl1;
+			}
 		} else if (orientation == SimplifiedCardinalDirection.EAST) {
 			hl1 = new FGEHalfLine(ps1, new FGEPoint(ps1.x + 1, ps1.y));
 			hl2 = new FGEHalfLine(ps2, new FGEPoint(ps2.x + 1, ps2.y));
-			if (Math.abs(ps1.y - ps2.y) < EPSILON)
+			if (Math.abs(ps1.y - ps2.y) < EPSILON) {
 				return hl1;
+			}
 		} else if (orientation == SimplifiedCardinalDirection.WEST) {
 			hl1 = new FGEHalfLine(ps1, new FGEPoint(ps1.x - 1, ps1.y));
 			hl2 = new FGEHalfLine(ps2, new FGEPoint(ps2.x - 1, ps2.y));
-			if (Math.abs(ps1.y - ps2.y) < EPSILON)
+			if (Math.abs(ps1.y - ps2.y) < EPSILON) {
 				return hl1;
+			}
 		}
 		// System.out.println("Segment: "+this+" orientation="+orientation);
 		try {
@@ -388,10 +405,11 @@ public class FGESegment extends FGEAbstractLine<FGESegment> implements FGEGenera
 
 	public double getRelativeLocation(FGEPoint p) {
 		FGEPoint proj = getNearestPointOnSegment(p);
-		if (Math.abs(getP2().x - getP1().x) < EPSILON)
+		if (Math.abs(getP2().x - getP1().x) < EPSILON) {
 			return (proj.y - getP1().y) / (getP2().y - getP1().y);
-		else
+		} else {
 			return (proj.x - getP1().x) / (getP2().x - getP1().x);
+		}
 	}
 
 	public static FGERectangle getBoundingBox(FGESegment... segments) {
@@ -410,66 +428,80 @@ public class FGESegment extends FGEAbstractLine<FGESegment> implements FGEGenera
 		 * GPO: Angle will be between -PI/2 and 3PI/2 0-->WEST PI/2--> SOUTH -PI or PI-->EAST (Almost sure that -PI will never come but it
 		 * does not cost too much so let's do it) -PI/2 or 3PI/2-->NORTH
 		 */
-		if (Math.abs(angle) < EPSILON)
+		if (Math.abs(angle) < EPSILON) {
 			return SimplifiedCardinalDirection.WEST;
-		else if ((Math.abs(angle - Math.PI) < EPSILON) || (Math.abs(angle + Math.PI) < EPSILON))
+		} else if ((Math.abs(angle - Math.PI) < EPSILON) || (Math.abs(angle + Math.PI) < EPSILON)) {
 			return SimplifiedCardinalDirection.EAST;
-		else if (Math.abs(angle - Math.PI / 2) < EPSILON)
+		} else if (Math.abs(angle - Math.PI / 2) < EPSILON) {
 			return SimplifiedCardinalDirection.SOUTH;
-		else if (Math.abs(angle - 3 * Math.PI / 2) < EPSILON || Math.abs(angle + Math.PI / 2) < EPSILON)
+		} else if (Math.abs(angle - 3 * Math.PI / 2) < EPSILON || Math.abs(angle + Math.PI / 2) < EPSILON) {
 			return SimplifiedCardinalDirection.NORTH;
-		else
+		} else {
 			return null;
+		}
 	}
 
 	public SimplifiedCardinalDirection getApproximatedOrientation() {
 		SimplifiedCardinalDirection returned = getOrientation();
-		if (returned != null)
+		if (returned != null) {
 			return returned;
+		}
 
 		return FGEPoint.getSimplifiedOrientation(getP1(), getP2());
 	}
 
 	@Override
 	public final FGEArea union(FGEArea area) {
-		if (containsArea(area))
+		if (containsArea(area)) {
 			return clone();
-		if (area.containsArea(this))
+		}
+		if (area.containsArea(this)) {
 			return area.clone();
+		}
 
 		if (area instanceof FGEPolylin) {
 			return ((FGEPolylin) area).union(this);
 		}
 		if (area instanceof FGESegment) {
 			FGESegment s = (FGESegment) area;
-			if (s.containsLine(this))
+			if (s.containsLine(this)) {
 				return s;
-			if (containsLine(s))
+			}
+			if (containsLine(s)) {
 				return clone();
+			}
 			if (overlap(s)) {
 				if (containsPoint(s.getP1())) {
 					// Doesn't contains P2, otherwise all contained, see above
-					if (s.containsPoint(getP1()))
+					if (s.containsPoint(getP1())) {
 						return new FGESegment(getP2(), s.getP2());
-					if (s.containsPoint(getP2()))
+					}
+					if (s.containsPoint(getP2())) {
 						return new FGESegment(getP1(), s.getP2());
+					}
 				}
 				if (containsPoint(s.getP2())) {
 					// Doesn't contains P2, otherwise all contained, see above
-					if (s.containsPoint(getP1()))
+					if (s.containsPoint(getP1())) {
 						return new FGESegment(getP2(), s.getP1());
-					if (s.containsPoint(getP2()))
+					}
+					if (s.containsPoint(getP2())) {
 						return new FGESegment(getP1(), s.getP1());
+					}
 				}
 			}
-			if (getP1().equals(s.getP2()))
+			if (getP1().equals(s.getP2())) {
 				return new FGEPolylin(getP2(), getP1(), s.getP1());
-			if (getP1().equals(s.getP1()))
+			}
+			if (getP1().equals(s.getP1())) {
 				return new FGEPolylin(getP2(), getP1(), s.getP2());
-			if (getP2().equals(s.getP2()))
+			}
+			if (getP2().equals(s.getP2())) {
 				return new FGEPolylin(getP1(), getP2(), s.getP1());
-			if (getP2().equals(s.getP1()))
+			}
+			if (getP2().equals(s.getP1())) {
 				return new FGEPolylin(getP1(), getP2(), s.getP2());
+			}
 			return super.union(area);
 		}
 		return super.union(area);

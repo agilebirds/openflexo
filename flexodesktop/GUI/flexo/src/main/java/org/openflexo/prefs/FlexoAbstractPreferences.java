@@ -52,8 +52,9 @@ public abstract class FlexoAbstractPreferences extends FlexoObservable implement
 
 	protected FlexoAbstractPreferences(File preferencesFile) {
 		super();
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Constructor of FlexoAbstractPreferences with " + preferencesFile.getAbsolutePath());
+		}
 		_preferences = loadFromFile(preferencesFile);
 	}
 
@@ -61,8 +62,9 @@ public abstract class FlexoAbstractPreferences extends FlexoObservable implement
 		Properties reloadedProperties = loadFromFile(preferencesFile);
 		for (Enumeration e = reloadedProperties.keys(); e.hasMoreElements();) {
 			String reloadedKey = (String) e.nextElement();
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Resetting = " + reloadedKey + " with " + reloadedProperties.getProperty(reloadedKey));
+			}
 			setProperty(reloadedKey, reloadedProperties.getProperty(reloadedKey));
 		}
 	}
@@ -71,8 +73,9 @@ public abstract class FlexoAbstractPreferences extends FlexoObservable implement
 		Properties returned = new FlexoProperties();
 		try {
 			File parentDir = preferencesFile.getParentFile();
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.finest("Parent file = " + parentDir);
+			}
 			if (!parentDir.exists()) {
 				parentDir.mkdir();
 			}
@@ -81,23 +84,27 @@ public abstract class FlexoAbstractPreferences extends FlexoObservable implement
 			}
 			returned.load(new FileInputStream(preferencesFile));
 		} catch (Exception e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Unable to read preferences " + e.getClass().getName());
+			}
 		}
 		return returned;
 	}
 
 	public void setProperty(String key, String value, String notificationKey) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.finer("setProperty " + key + " with " + value);
+		}
 		String oldValue = getProperty(key);
-		if (value != null)
+		if (value != null) {
 			_preferences.setProperty(key, value);
-		else
+		} else {
 			_preferences.remove(key);
+		}
 		PreferencesHaveChanged modif = new PreferencesHaveChanged(key, oldValue, value);
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.finer("Notifying about " + modif);
+		}
 		setChanged();
 		notifyObservers(modif);
 		if (!key.equals(notificationKey)) {
@@ -123,15 +130,18 @@ public abstract class FlexoAbstractPreferences extends FlexoObservable implement
 			if (!preferenceFile.exists()) {
 				preferenceFile.createNewFile();
 			}
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Saving preferences to file: " + preferenceFile.getAbsolutePath());
-			if (logger.isLoggable(Level.FINE))
+			}
+			if (logger.isLoggable(Level.FINE)) {
 				logger.finer("properties:" + _preferences);
+			}
 			_preferences.store(new FileOutputStream(preferenceFile), "Flexo Preferences");
 		} catch (Exception e) {
 			if (warning) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Unable to save preferences");
+				}
 			}
 		}
 	}
@@ -139,20 +149,23 @@ public abstract class FlexoAbstractPreferences extends FlexoObservable implement
 	// INSPECTABLE OBJECT
 
 	public void setAttributeNamed(String attName, Object value) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.finer("setAttributeNamed " + attName + " and " + value + " of class " + value.getClass().getName());
+		}
 		if (value instanceof String) {
 			// setProperty(attName,(String)value);
 			setValueForKey((String) value, attName);
 		} else {
-			if (logger.isLoggable(Level.SEVERE))
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("I don't know what to do with a " + value.getClass().getName());
+			}
 		}
 	}
 
 	public Object getAttributeNamed(String attName) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.finer("getAttributeNamed " + attName);
+		}
 		return valueForKey(attName);
 		// return getProperty (attName);
 	}

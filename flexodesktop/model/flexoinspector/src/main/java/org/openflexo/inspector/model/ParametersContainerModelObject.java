@@ -66,8 +66,9 @@ public abstract class ParametersContainerModelObject extends ModelObject {
 			try {
 				return Integer.parseInt(stringValue);
 			} catch (Exception e) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Invalid number representation !");
+				}
 			}
 		}
 		return 0;
@@ -79,8 +80,9 @@ public abstract class ParametersContainerModelObject extends ModelObject {
 			try {
 				return Float.parseFloat(stringValue);
 			} catch (Exception e) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Invalid number representation !");
+				}
 			}
 		}
 		return 0;
@@ -92,8 +94,9 @@ public abstract class ParametersContainerModelObject extends ModelObject {
 			try {
 				return Double.parseDouble(stringValue);
 			} catch (Exception e) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Invalid number representation !");
+				}
 			}
 		}
 		return 0;

@@ -349,32 +349,39 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 			// Mutate to right type when necessary
 			switch (((FIBPanel) getParent()).getLayout()) {
 			case none:
-				if (!(someConstraints instanceof NoneLayoutConstraints))
+				if (!(someConstraints instanceof NoneLayoutConstraints)) {
 					return new NoneLayoutConstraints(someConstraints);
+				}
 				break;
 			case flow:
-				if (!(someConstraints instanceof FlowLayoutConstraints))
+				if (!(someConstraints instanceof FlowLayoutConstraints)) {
 					return new FlowLayoutConstraints(someConstraints);
+				}
 				break;
 			case grid:
-				if (!(someConstraints instanceof GridLayoutConstraints))
+				if (!(someConstraints instanceof GridLayoutConstraints)) {
 					return new GridLayoutConstraints(someConstraints);
+				}
 				break;
 			case box:
-				if (!(someConstraints instanceof BoxLayoutConstraints))
+				if (!(someConstraints instanceof BoxLayoutConstraints)) {
 					return new BoxLayoutConstraints(someConstraints);
+				}
 				break;
 			case border:
-				if (!(someConstraints instanceof BorderLayoutConstraints))
+				if (!(someConstraints instanceof BorderLayoutConstraints)) {
 					return new BorderLayoutConstraints(someConstraints);
+				}
 				break;
 			case twocols:
-				if (!(someConstraints instanceof TwoColsLayoutConstraints))
+				if (!(someConstraints instanceof TwoColsLayoutConstraints)) {
 					return new TwoColsLayoutConstraints(someConstraints);
+				}
 				break;
 			case gridbag:
-				if (!(someConstraints instanceof GridBagLayoutConstraints))
+				if (!(someConstraints instanceof GridBagLayoutConstraints)) {
 					return new GridBagLayoutConstraints(someConstraints);
+				}
 				break;
 			default:
 			}
@@ -473,8 +480,9 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	@Override
 	public FIBComponent getRootComponent() {
 		FIBComponent current = this;
-		while (current != null && !current.isRootComponent())
+		while (current != null && !current.isRootComponent()) {
 			current = current.getParent();
+		}
 		return current;
 	}
 
@@ -483,11 +491,13 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	@Override
 	public BindingModel getBindingModel() {
 		if (isRootComponent()) {
-			if (_bindingModel == null)
+			if (_bindingModel == null) {
 				createBindingModel();
+			}
 			return _bindingModel;
-		} else
+		} else {
 			return super.getBindingModel();
+		}
 	}
 
 	public void updateBindingModel() {
@@ -528,8 +538,9 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}
 
 		Class myControllerClass = getControllerClass();
-		if (myControllerClass == null)
+		if (myControllerClass == null) {
 			myControllerClass = FIBController.class;
+		}
 
 		_bindingModel.addToBindingVariables(new BindingVariableImpl(this, "controller", myControllerClass));
 
@@ -557,13 +568,16 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 			getRootComponent().createBindingModel();
 		}
 
-		if (isRootComponent())
+		if (isRootComponent()) {
 			updateBindingModel();
+		}
 
-		if (data != null)
+		if (data != null) {
 			data.finalizeDeserialization();
-		if (visible != null)
+		}
+		if (visible != null) {
 			visible.finalizeDeserialization();
+		}
 
 		deserializationPerformed = true;
 
@@ -602,16 +616,18 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	public Vector<FIBComponent> getNamedComponents() {
 		Vector<FIBComponent> returned = new Vector<FIBComponent>();
 		for (FIBComponent c : retrieveAllSubComponents()) {
-			if (StringUtils.isNotEmpty(c.getName()))
+			if (StringUtils.isNotEmpty(c.getName())) {
 				returned.add(c);
+			}
 		}
 		return returned;
 	}
 
 	public FIBComponent getComponentNamed(String name) {
 		for (FIBComponent c : retrieveAllSubComponents()) {
-			if (StringUtils.isNotEmpty(c.getName()) && c.getName().equals(name))
+			if (StringUtils.isNotEmpty(c.getName()) && c.getName().equals(name)) {
 				return c;
+			}
 		}
 		return null;
 	}
@@ -628,14 +644,15 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	private void addAllSubComponents(FIBContainer c, Vector<FIBComponent> returned) {
 		for (FIBComponent c2 : c.getSubComponents()) {
 			returned.add(c2);
-			if (c2 instanceof FIBContainer)
+			if (c2 instanceof FIBContainer) {
 				addAllSubComponents((FIBContainer) c2, returned);
+			}
 		}
 	}
 
 	public Iterator<FIBComponent> subComponentIterator() {
 		Vector<FIBComponent> allSubComponents = retrieveAllSubComponents();
-		if (allSubComponents == null)
+		if (allSubComponents == null) {
 			return new Iterator<FIBComponent>() {
 				@Override
 				public boolean hasNext() {
@@ -651,8 +668,9 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 				public void remove() {
 				}
 			};
-		else
+		} else {
 			return allSubComponents.iterator();
+		}
 	}
 
 	public Vector<FIBComponent> getMayDepends() {
@@ -687,14 +705,16 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 			mayDepends.add(aComponent);
 			logger.fine("Component " + this + " depends of " + aComponent);
 		}
-		if (!aComponent.mayAlters.contains(this))
+		if (!aComponent.mayAlters.contains(this)) {
 			aComponent.mayAlters.add(this);
+		}
 	}
 
 	private void searchLoopInDependanciesWith(FIBComponent aComponent, Vector<FIBComponent> dependancies) throws DependancyLoopException {
 		for (FIBComponent c : aComponent.mayDepends) {
-			if (c == this)
+			if (c == this) {
 				throw new DependancyLoopException(dependancies);
+			}
 			Vector<FIBComponent> newVector = new Vector<FIBComponent>();
 			newVector.addAll(dependancies);
 			newVector.add(c);
@@ -716,8 +736,9 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	}
 
 	public DataBinding getData() {
-		if (data == null)
+		if (data == null) {
 			data = new DataBinding(this, Parameters.data, getDataBindingDefinition());
+		}
 		return data;
 	}
 
@@ -729,8 +750,9 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	}
 
 	public DataBinding getVisible() {
-		if (visible == null)
+		if (visible == null) {
 			visible = new DataBinding(this, Parameters.visible, VISIBLE);
+		}
 		return visible;
 	}
 
@@ -750,8 +772,9 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	public abstract String getIdentifier();
 
 	public Type getDataType() {
-		if (dataClass == null)
+		if (dataClass == null) {
 			return Object.class;
+		}
 		return dataClass;
 
 		/*if (dataClassName == null) return null;
@@ -814,10 +837,11 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	public final Font retrieveValidFont() {
 		if (font == null) {
-			if (!isRootComponent())
+			if (!isRootComponent()) {
 				return getParent().retrieveValidFont();
-			else
+			} else {
 				return (new JLabel()).getFont(); // Use system default
+			}
 		}
 
 		return getFont();
@@ -825,10 +849,11 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	public final Color retrieveValidForegroundColor() {
 		if (foregroundColor == null) {
-			if (!isRootComponent())
+			if (!isRootComponent()) {
 				return getParent().retrieveValidForegroundColor();
-			else
+			} else {
 				return Color.BLACK; // Use default
+			}
 		}
 
 		return getForegroundColor();
@@ -836,10 +861,11 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	public final Color retrieveValidBackgroundColor() {
 		if (backgroundColor == null) {
-			if (!isRootComponent())
+			if (!isRootComponent()) {
 				return getParent().retrieveValidBackgroundColor();
-			else
+			} else {
 				return Color.WHITE; // Use system default
+			}
 		}
 
 		return getBackgroundColor();
@@ -1048,11 +1074,13 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	@Override
 	public void setName(String name) {
-		if (StringUtils.isEmpty(name))
+		if (StringUtils.isEmpty(name)) {
 			name = null;
+		}
 		super.setName(name);
-		if (deserializationPerformed)
+		if (deserializationPerformed) {
 			updateBindingModel();
+		}
 	}
 
 	@Override
@@ -1068,8 +1096,9 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 		} else {
 			super.addToParameters(p);
-			if (deserializationPerformed)
+			if (deserializationPerformed) {
 				updateBindingModel();
+			}
 		}
 	}
 

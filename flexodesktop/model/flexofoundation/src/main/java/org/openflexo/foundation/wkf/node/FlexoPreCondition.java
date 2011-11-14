@@ -105,8 +105,9 @@ public final class FlexoPreCondition extends Node implements InspectableObject, 
 		if (attachedNode.getProcess() == process) {
 			setAttachedNode(attachedNode);
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Inconsistent data while building FlexoPreCondition !");
+			}
 		}
 	}
 
@@ -198,8 +199,9 @@ public final class FlexoPreCondition extends Node implements InspectableObject, 
 
 	@Override
 	public boolean isContainedIn(WKFObject obj) {
-		if (getAttachedNode() == null)
+		if (getAttachedNode() == null) {
 			return false;
+		}
 		return getAttachedNode().isContainedIn(obj);
 	}
 
@@ -255,8 +257,9 @@ public final class FlexoPreCondition extends Node implements InspectableObject, 
 
 	@Override
 	public FlexoLevel getLevel() {
-		if (getAttachedNode() != null)
+		if (getAttachedNode() != null) {
 			return getAttachedNode().getLevel();
+		}
 		return null;
 	}
 
@@ -314,8 +317,9 @@ public final class FlexoPreCondition extends Node implements InspectableObject, 
 		}
 		if (beginNode != null) {
 			if (beginNode.getNodeType() != NodeType.BEGIN) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Attached BEGIN node must be a BEGIN node !");
+				}
 			} else {
 				_attachedBeginNode = beginNode;
 				beginNode.setAttachedPreCondition(this);
@@ -368,21 +372,24 @@ public final class FlexoPreCondition extends Node implements InspectableObject, 
 	}
 
 	public WorkflowControlGraph<FlexoPreCondition> getExecution() {
-		if (_executionComputingFactory != null)
+		if (_executionComputingFactory != null) {
 			return _executionComputingFactory.getControlGraph(this);
+		}
 		return null;
 	}
 
 	@Override
 	public void setProgrammingLanguageForControlGraphComputation(ProgrammingLanguage language) {
-		if (getExecution() != null)
+		if (getExecution() != null) {
 			getExecution().setProgrammingLanguage(language);
+		}
 	}
 
 	@Override
 	public void setInterproceduralForControlGraphComputation(boolean interprocedural) {
-		if (getExecution() != null)
+		if (getExecution() != null) {
 			getExecution().setInterprocedural(interprocedural);
+		}
 	}
 
 	@Override

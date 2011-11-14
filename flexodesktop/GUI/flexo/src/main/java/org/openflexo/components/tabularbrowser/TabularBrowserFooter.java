@@ -40,8 +40,8 @@ import javax.swing.JPopupMenu;
 
 import org.openflexo.ColorCst;
 import org.openflexo.FlexoCst;
-import org.openflexo.components.browser.ElementTypeBrowserFilter;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
+import org.openflexo.components.browser.ElementTypeBrowserFilter;
 import org.openflexo.components.browser.view.BrowserActionSource;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -89,8 +89,9 @@ public class TabularBrowserFooter extends JPanel {
 		plusButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent mouseEvent) {
-				if (plusButton.isEnabled())
+				if (plusButton.isEnabled()) {
 					plusButton.setIcon(IconLibrary.BROWSER_PLUS_SELECTED_ICON);
+				}
 				if (hasMultiplePlusActions()) {
 					getPlusActionMenu().show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
 					plusButton.setIcon(IconLibrary.BROWSER_PLUS_ICON);
@@ -99,8 +100,9 @@ public class TabularBrowserFooter extends JPanel {
 
 			@Override
 			public void mouseReleased(MouseEvent mouseEvent) {
-				if (plusButton.isEnabled())
+				if (plusButton.isEnabled()) {
 					plusButton.setIcon(IconLibrary.BROWSER_PLUS_ICON);
+				}
 				if (hasMultiplePlusActions()) {
 					getPlusActionMenu().show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
 				}
@@ -126,14 +128,16 @@ public class TabularBrowserFooter extends JPanel {
 		minusButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent mouseEvent) {
-				if (minusButton.isEnabled())
+				if (minusButton.isEnabled()) {
 					minusButton.setIcon(IconLibrary.BROWSER_MINUS_SELECTED_ICON);
+				}
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent mouseEvent) {
-				if (minusButton.isEnabled())
+				if (minusButton.isEnabled()) {
 					minusButton.setIcon(IconLibrary.BROWSER_MINUS_ICON);
+				}
 			}
 		});
 		// FCH.setHelpItem(minusButton,"minus");
@@ -168,9 +172,10 @@ public class TabularBrowserFooter extends JPanel {
 		optionsButton.setEnabled(hasOptionalFilters());
 		// FCH.setHelpItem(optionsButton,"options");
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Browser " + tabularBrowserView.getBrowser() + " has "
 					+ tabularBrowserView.getBrowser().getConfigurableElementTypeFilters().size() + " filters");
+		}
 
 		handleSelectionCleared();
 
@@ -179,8 +184,9 @@ public class TabularBrowserFooter extends JPanel {
 
 	public void handleOptionalFilterAdded() {
 		optionsButton.setEnabled(hasOptionalFilters());
-		if (popupMenu != null)
+		if (popupMenu != null) {
 			popupMenu.setVisible(false);
+		}
 		popupMenu = null;
 	}
 
@@ -196,16 +202,18 @@ public class TabularBrowserFooter extends JPanel {
 	}
 
 	private JPopupMenu makePopupMenu() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Browser " + _tabularBrowserView.getBrowser() + " has now "
 					+ _tabularBrowserView.getBrowser().getConfigurableElementTypeFilters().size() + " filters");
+		}
 
 		JPopupMenu returned = new JPopupMenu() {
 			@Override
 			public void setVisible(boolean b) {
 				super.setVisible(b);
-				if (!b)
+				if (!b) {
 					optionsButton.setIcon(IconLibrary.BROWSER_OPTIONS_ICON);
+				}
 			}
 
 			@Override
@@ -285,16 +293,18 @@ public class TabularBrowserFooter extends JPanel {
 	}
 
 	protected void plusPressed() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Pressed on plus");
+		}
 		FlexoActionType actionType = (FlexoActionType) getActionTypesWithAddType(getFocusedObject()).firstElement();
 		actionType.actionPerformed(new ActionEvent(new BrowserActionSource(_tabularBrowserView.getBrowser(), getFocusedObject(), null,
 				_tabularBrowserView.getEditor()), 1, "TabularBrowserFooter-PlusPressed"));
 	}
 
 	protected boolean hasMultiplePlusActions() {
-		if (getFocusedObject() == null)
+		if (getFocusedObject() == null) {
 			return false;
+		}
 		return getActionTypesWithAddType(getFocusedObject()).size() > 1;
 	}
 
@@ -304,8 +314,9 @@ public class TabularBrowserFooter extends JPanel {
 	protected JPopupMenu getPlusActionMenu() {
 		if (plusActionMenuNeedsRecomputed) {
 			plusActionMenu = new JPopupMenu();
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Build plus menu");
+			}
 			for (Enumeration en = getActionTypesWithAddType(getFocusedObject()).elements(); en.hasMoreElements();) {
 				final FlexoActionType action = (FlexoActionType) en.nextElement();
 				JMenuItem menuItem = new JMenuItem(action.getLocalizedName());
@@ -324,8 +335,9 @@ public class TabularBrowserFooter extends JPanel {
 	}
 
 	protected void minusPressed() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Pressed on minus");
+		}
 		Vector globalSelection = buildGlobalSelection();
 		FlexoActionType actionType = (FlexoActionType) getActionTypesWithDeleteType(getFocusedObject(), globalSelection).firstElement();
 		actionType.actionPerformed(new ActionEvent(new BrowserActionSource(_tabularBrowserView.getBrowser(), null, globalSelection,
@@ -364,8 +376,9 @@ public class TabularBrowserFooter extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			if (_filter != null) {
 				_filter.setStatus((isSelected() ? BrowserFilterStatus.SHOW : BrowserFilterStatus.HIDE));
-				if (_tabularBrowserView.getBrowser() != null)
+				if (_tabularBrowserView.getBrowser() != null) {
 					_tabularBrowserView.getBrowser().update();
+				}
 				_tabularBrowserView.getTreeTable().treeStructureChanged();
 			}
 		}

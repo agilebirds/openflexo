@@ -69,8 +69,9 @@ public class IETextAreaWidget extends IEEditableTextWidget implements Extensible
 	}
 
 	public void setRows(int _rows) throws InvalidArgumentException {
-		if (_rows < 1)
+		if (_rows < 1) {
 			throw new InvalidArgumentException("Negative numbers are not valid for rows number: " + _rows, null);
+		}
 		this._rows = _rows;
 		setChanged();
 		notifyObservers(new IEDataModification("rows", null, new Integer(_rows)));
@@ -137,8 +138,9 @@ public class IETextAreaWidget extends IEEditableTextWidget implements Extensible
 	@Override
 	public List<Object> getValueList(FlexoProcess process) {
 		List<Object> result = new ArrayList<Object>();
-		if (!StringUtils.isEmpty(getValue()))
+		if (!StringUtils.isEmpty(getValue())) {
 			result.add(getValue());
+		}
 		return result;
 	}
 

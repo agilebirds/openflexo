@@ -75,8 +75,9 @@ public class GenerateEntityFromSelection extends FlexoAction<GenerateEntityFromS
 
 	public List<FlexoModelObject> getSelection() {
 		ArrayList<FlexoModelObject> reply = new ArrayList<FlexoModelObject>();
-		if (getFocusedObject() != null)
+		if (getFocusedObject() != null) {
 			reply.add(getFocusedObject());
+		}
 		if (getGlobalSelection() != null && getGlobalSelection().size() > 0) {
 			reply.addAll(getGlobalSelection());
 		}

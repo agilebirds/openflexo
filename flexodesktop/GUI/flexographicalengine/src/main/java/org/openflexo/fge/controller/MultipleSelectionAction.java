@@ -35,7 +35,8 @@ public class MultipleSelectionAction extends MouseClickControlAction {
 			MouseClickControlAction.logger.info("Multiple select " + graphicalRepresentation);
 			controller.toogleSelection(graphicalRepresentation);
 			return true;
-		} else
+		} else {
 			return false;
+		}
 	}
 }

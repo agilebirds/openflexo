@@ -83,22 +83,27 @@ public class CreatePreCondition extends FlexoUndoableAction<CreatePreCondition, 
 
 	@Override
 	protected void doAction(Object context) throws InvalidArgumentException {
-		if (selectedPreCondition != null)
+		if (selectedPreCondition != null) {
 			return;
-
-		if (getFocusedObject() == null)
-			throw new InvalidArgumentException("Trying to create pre-condition on null FlexoNode");
-
-		if (getAttachedBeginNode() != null) {
-			if (!getAttachedBeginNode().isBeginNode())
-				throw new InvalidArgumentException("Supplied attached begin node is not a begin node");
-			if (getAttachedBeginNode().getParentPetriGraph() == null
-					|| getAttachedBeginNode().getParentPetriGraph().getContainer() != getFocusedObject())
-				throw new InvalidArgumentException("Supplied attached begin node is not a child node of focused node");
 		}
 
-		if (logger.isLoggable(Level.FINE))
+		if (getFocusedObject() == null) {
+			throw new InvalidArgumentException("Trying to create pre-condition on null FlexoNode");
+		}
+
+		if (getAttachedBeginNode() != null) {
+			if (!getAttachedBeginNode().isBeginNode()) {
+				throw new InvalidArgumentException("Supplied attached begin node is not a begin node");
+			}
+			if (getAttachedBeginNode().getParentPetriGraph() == null
+					|| getAttachedBeginNode().getParentPetriGraph().getContainer() != getFocusedObject()) {
+				throw new InvalidArgumentException("Supplied attached begin node is not a child node of focused node");
+			}
+		}
+
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Create pre-condition for " + getFocusedObject() + " with attached begin node=" + getAttachedBeginNode());
+		}
 		newPreCondition = new FlexoPreCondition(getFocusedObject(), getAttachedBeginNode());
 
 		objectCreated("NEW_PRE_CONDITION", newPreCondition);
@@ -108,8 +113,9 @@ public class CreatePreCondition extends FlexoUndoableAction<CreatePreCondition, 
 	@Override
 	protected void undoAction(Object context) throws FlexoException {
 		logger.info("CreatePreCondition: UNDO");
-		if (selectedPreCondition != null)
+		if (selectedPreCondition != null) {
 			return;
+		}
 		newPreCondition.delete();
 	}
 
@@ -128,8 +134,9 @@ public class CreatePreCondition extends FlexoUndoableAction<CreatePreCondition, 
 	}
 
 	public FlexoPreCondition getNewPreCondition() {
-		if (selectedPreCondition != null)
+		if (selectedPreCondition != null) {
 			return selectedPreCondition;
+		}
 		return newPreCondition;
 	}
 
@@ -139,10 +146,11 @@ public class CreatePreCondition extends FlexoUndoableAction<CreatePreCondition, 
 
 	@Override
 	public String getLocalizedName() {
-		if (allowsToSelectPreconditionOnly)
+		if (allowsToSelectPreconditionOnly) {
 			return FlexoLocalization.localizedForKey("create_or_select_pre_condition");
-		else
+		} else {
 			return super.getLocalizedName();
+		}
 	}
 
 	public boolean allowsToSelectPreconditionOnly() {

@@ -19,17 +19,34 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 package com.swabunga.spell.swing;
 
+import java.awt.Cursor;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.io.File;
+import java.util.List;
+
+import javax.swing.JEditorPane;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.plaf.TextUI;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.Element;
+import javax.swing.text.Position;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledEditorKit;
+
 import com.swabunga.spell.engine.SpellDictionary;
 import com.swabunga.spell.engine.SpellDictionaryHashMap;
 import com.swabunga.spell.engine.Word;
-
-import javax.swing.*;
-import javax.swing.plaf.TextUI;
-import javax.swing.text.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.File;
-import java.util.List;
 
 /**
  * 
@@ -63,6 +80,7 @@ public class SpellEditorKit extends StyledEditorKit {
 		dictionary = (SpellDictionary) o;
 	}
 
+	@Override
 	public void install(JEditorPane c) {
 		LinkController adapt = new LinkController();
 		c.addMouseMotionListener(adapt);
@@ -72,6 +90,7 @@ public class SpellEditorKit extends StyledEditorKit {
 		defaultCursor = c.getCursor();
 	}
 
+	@Override
 	public Document createDefaultDocument() {
 		return new SpellCheckedDocument(dictionary);
 	}
@@ -102,9 +121,11 @@ public class SpellEditorKit extends StyledEditorKit {
 		 *            the mouse event
 		 * @see MouseListener#mouseClicked
 		 */
+		@Override
 		public void mouseClicked(MouseEvent e) {
-			if (e.isPopupTrigger())
+			if (e.isPopupTrigger()) {
 				return;
+			}
 
 			JEditorPane editor = (JEditorPane) e.getSource();
 			if (editor.isEditable()) {
@@ -132,6 +153,7 @@ public class SpellEditorKit extends StyledEditorKit {
 						}
 						JMenuItem item = new JMenuItem("Add word to wordlist");
 						item.addActionListener(new ActionListener() {
+							@Override
 							public void actionPerformed(ActionEvent e) {
 								dictionary.addWord(word);
 							}
@@ -150,10 +172,12 @@ public class SpellEditorKit extends StyledEditorKit {
 		}
 
 		// ignore the drags
+		@Override
 		public void mouseDragged(MouseEvent e) {
 		}
 
 		// track the moving of the mouse.
+		@Override
 		public void mouseMoved(MouseEvent e) {
 			int pos = -1;
 			// int offset = 0;
@@ -242,6 +266,7 @@ public class SpellEditorKit extends StyledEditorKit {
 			this.doc = doc;
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			try {
 				doc.remove(offset, length);

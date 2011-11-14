@@ -64,25 +64,31 @@ public class IntegerStaticBinding extends StaticBinding<Long> {
 
 	@Override
 	protected boolean _areTypesMatching() {
-		if (getBindingDefinition().getType() == null)
+		if (getBindingDefinition().getType() == null) {
 			return true;
+		}
 
 		if (getBindingDefinition().getType().equals(Double.class) || getBindingDefinition().getType().equals(Double.TYPE)
 				|| getBindingDefinition().getType().equals(Float.class) || getBindingDefinition().getType().equals(Float.TYPE)
-				|| getBindingDefinition().getType().equals(Long.class) || getBindingDefinition().getType().equals(Long.TYPE))
+				|| getBindingDefinition().getType().equals(Long.class) || getBindingDefinition().getType().equals(Long.TYPE)) {
 			return true;
+		}
 
-		if (getBindingDefinition().getType().equals(Integer.class) || getBindingDefinition().getType().equals(Integer.TYPE))
+		if (getBindingDefinition().getType().equals(Integer.class) || getBindingDefinition().getType().equals(Integer.TYPE)) {
 			return (getValue() >= Integer.MIN_VALUE && getValue() <= Integer.MAX_VALUE);
+		}
 
-		if (getBindingDefinition().getType().equals(Short.class) || getBindingDefinition().getType().equals(Short.TYPE))
+		if (getBindingDefinition().getType().equals(Short.class) || getBindingDefinition().getType().equals(Short.TYPE)) {
 			return (getValue() >= Short.MIN_VALUE && getValue() <= Short.MAX_VALUE);
+		}
 
-		if (getBindingDefinition().getType().equals(Byte.class) || getBindingDefinition().getType().equals(Byte.TYPE))
+		if (getBindingDefinition().getType().equals(Byte.class) || getBindingDefinition().getType().equals(Byte.TYPE)) {
 			return (getValue() >= Byte.MIN_VALUE && getValue() <= Byte.MAX_VALUE);
+		}
 
-		if (getBindingDefinition().getType().equals(Character.class) || getBindingDefinition().getType().equals(Character.TYPE))
+		if (getBindingDefinition().getType().equals(Character.class) || getBindingDefinition().getType().equals(Character.TYPE)) {
 			return (getValue() >= Character.MIN_VALUE && getValue() <= Character.MAX_VALUE);
+		}
 
 		return super._areTypesMatching();
 	}
@@ -90,12 +96,13 @@ public class IntegerStaticBinding extends StaticBinding<Long> {
 	@Override
 	public Type getAccessedType() {
 		if (accessedType == null) {
-			if (getValue() >= Short.MIN_VALUE && getValue() <= Short.MAX_VALUE)
+			if (getValue() >= Short.MIN_VALUE && getValue() <= Short.MAX_VALUE) {
 				accessedType = Short.class;
-			else if (getValue() >= Integer.MIN_VALUE && getValue() <= Integer.MAX_VALUE)
+			} else if (getValue() >= Integer.MIN_VALUE && getValue() <= Integer.MAX_VALUE) {
 				accessedType = Integer.class;
-			else
+			} else {
 				accessedType = Long.class;
+			}
 		}
 		return accessedType;
 	}

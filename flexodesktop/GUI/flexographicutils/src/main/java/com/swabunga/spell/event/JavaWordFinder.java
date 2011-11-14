@@ -55,6 +55,7 @@ public class JavaWordFinder extends AbstractWordFinder {
 	 * @throws WordNotFoundException
 	 *             search string contains no more words.
 	 */
+	@Override
 	public Word next() {
 
 		if (nextWord == null) {
@@ -77,8 +78,9 @@ public class JavaWordFinder extends AbstractWordFinder {
 			i = ignore(i, "<CODE>", "</CODE>");
 			i = ignore(i, '<', '>');
 
-			if (i >= text.length())
+			if (i >= text.length()) {
 				break search;
+			}
 
 			char currentLetter = text.charAt(i);
 			if (inComment) {
@@ -125,6 +127,7 @@ public class JavaWordFinder extends AbstractWordFinder {
 	 * Initializes this word finder
 	 */
 
+	@Override
 	protected void init() {
 		// sentenceIterator = BreakIterator.getSentenceInstance();
 		// sentenceIterator.setText(text);

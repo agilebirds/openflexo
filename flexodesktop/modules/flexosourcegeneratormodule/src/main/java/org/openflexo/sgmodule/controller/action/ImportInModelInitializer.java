@@ -24,17 +24,16 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.action.FlexoActionFinalizer;
+import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.sg.action.ImportInModel;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-
-import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.action.FlexoActionFinalizer;
-import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.action.FlexoExceptionHandler;
 
 public class ImportInModelInitializer extends ActionInitializer {
 

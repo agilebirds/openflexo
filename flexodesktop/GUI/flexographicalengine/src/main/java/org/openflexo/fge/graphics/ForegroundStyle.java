@@ -74,12 +74,13 @@ public class ForegroundStyle extends Observable implements XMLSerializable, Clon
 
 		@Override
 		public ImageIcon getIcon() {
-			if (this == JOIN_MITER)
+			if (this == JOIN_MITER) {
 				return FGEIconLibrary.JOIN_MITER_ICON;
-			else if (this == JOIN_ROUND)
+			} else if (this == JOIN_ROUND) {
 				return FGEIconLibrary.JOIN_ROUND_ICON;
-			else if (this == JOIN_BEVEL)
+			} else if (this == JOIN_BEVEL) {
 				return FGEIconLibrary.JOIN_BEVEL_ICON;
+			}
 			return null;
 		}
 	}
@@ -103,12 +104,13 @@ public class ForegroundStyle extends Observable implements XMLSerializable, Clon
 
 		@Override
 		public ImageIcon getIcon() {
-			if (this == CAP_BUTT)
+			if (this == CAP_BUTT) {
 				return FGEIconLibrary.CAP_BUTT_ICON;
-			else if (this == CAP_ROUND)
+			} else if (this == CAP_ROUND) {
 				return FGEIconLibrary.CAP_ROUND_ICON;
-			else if (this == CAP_SQUARE)
+			} else if (this == CAP_SQUARE) {
 				return FGEIconLibrary.CAP_SQUARE_ICON;
+			}
 			return null;
 		}
 
@@ -119,20 +121,21 @@ public class ForegroundStyle extends Observable implements XMLSerializable, Clon
 
 		@Override
 		public ImageIcon getIcon() {
-			if (this == PLAIN_STROKE)
+			if (this == PLAIN_STROKE) {
 				return FGEIconLibrary.PLAIN_STROKE_ICON;
-			else if (this == SMALL_DASHES)
+			} else if (this == SMALL_DASHES) {
 				return FGEIconLibrary.SMALL_DASHES_ICON;
-			else if (this == MEDIUM_DASHES)
+			} else if (this == MEDIUM_DASHES) {
 				return FGEIconLibrary.MEDIUM_DASHES_ICON;
-			else if (this == MEDIUM_SPACED_DASHES)
+			} else if (this == MEDIUM_SPACED_DASHES) {
 				return FGEIconLibrary.MEDIUM_SPACED_DASHES_ICON;
-			else if (this == BIG_DASHES)
+			} else if (this == BIG_DASHES) {
 				return FGEIconLibrary.BIG_DASHES_ICON;
-			else if (this == DOTS_DASHES)
+			} else if (this == DOTS_DASHES) {
 				return FGEIconLibrary.DOTS_DASHES_ICON;
-			else if (this == DOT_LINES_DASHES)
+			} else if (this == DOT_LINES_DASHES) {
 				return FGEIconLibrary.DOTS_LINES_DASHES_ICON;
+			}
 			return null;
 		}
 
@@ -145,9 +148,9 @@ public class ForegroundStyle extends Observable implements XMLSerializable, Clon
 		 * @return the dash array.
 		 */
 		public float[] getDashArray() {
-			if (this == PLAIN_STROKE)
+			if (this == PLAIN_STROKE) {
 				return null;
-			else if (this == SMALL_DASHES) {
+			} else if (this == SMALL_DASHES) {
 				float[] da = { 3, 2 };
 				return da;
 			} else if (this == MEDIUM_DASHES) {
@@ -177,20 +180,21 @@ public class ForegroundStyle extends Observable implements XMLSerializable, Clon
 		 * @return the dash phase as a <code>float</code> value.
 		 */
 		public float getDashPhase() {
-			if (this == PLAIN_STROKE)
+			if (this == PLAIN_STROKE) {
 				return 0;
-			else if (this == SMALL_DASHES)
+			} else if (this == SMALL_DASHES) {
 				return 0;
-			else if (this == MEDIUM_DASHES)
+			} else if (this == MEDIUM_DASHES) {
 				return 0;
-			else if (this == MEDIUM_SPACED_DASHES)
+			} else if (this == MEDIUM_SPACED_DASHES) {
 				return 0;
-			else if (this == BIG_DASHES)
+			} else if (this == BIG_DASHES) {
 				return 0;
-			else if (this == DOTS_DASHES)
+			} else if (this == DOTS_DASHES) {
 				return 0;
-			else if (this == DOT_LINES_DASHES)
+			} else if (this == DOT_LINES_DASHES) {
 				return 0;
+			}
 			return 0;
 		}
 
@@ -335,12 +339,13 @@ public class ForegroundStyle extends Observable implements XMLSerializable, Clon
 
 	public Stroke getStroke(double scale) {
 		if (stroke == null || scale != strokeScale) {
-			if (dashStyle == DashStyle.PLAIN_STROKE)
+			if (dashStyle == DashStyle.PLAIN_STROKE) {
 				stroke = new BasicStroke((float) (lineWidth * scale), capStyle.ordinal(), joinStyle.ordinal());
-			else {
+			} else {
 				float[] scaledDashArray = new float[dashStyle.getDashArray().length];
-				for (int i = 0; i < dashStyle.getDashArray().length; i++)
+				for (int i = 0; i < dashStyle.getDashArray().length; i++) {
 					scaledDashArray[i] = (float) (dashStyle.getDashArray()[i] * scale * lineWidth);
+				}
 				float scaledDashedPhase = (float) (dashStyle.getDashPhase() * scale * lineWidth);
 				stroke = new BasicStroke((float) (lineWidth * scale), capStyle.ordinal(), joinStyle.ordinal(), 10, scaledDashArray,
 						scaledDashedPhase);
@@ -396,9 +401,9 @@ public class ForegroundStyle extends Observable implements XMLSerializable, Clon
 	}
 
 	public String toNiceString() {
-		if (getNoStroke())
+		if (getNoStroke()) {
 			return FlexoLocalization.localizedForKey("no_stroke");
-		else {
+		} else {
 			return lineWidth + "pt, " + color;
 		}
 	}
@@ -416,10 +421,11 @@ public class ForegroundStyle extends Observable implements XMLSerializable, Clon
 
 	private boolean requireChange(Object oldObject, Object newObject) {
 		if (oldObject == null) {
-			if (newObject == null)
+			if (newObject == null) {
 				return false;
-			else
+			} else {
 				return true;
+			}
 		}
 		return !oldObject.equals(newObject);
 	}

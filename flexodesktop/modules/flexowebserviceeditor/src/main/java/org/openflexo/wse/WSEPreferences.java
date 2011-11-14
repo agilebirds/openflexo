@@ -63,8 +63,9 @@ public final class WSEPreferences extends ModulePreferences {
 	}
 
 	public static Boolean getExamplePrefValue() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getExamplePrefValue");
+		}
 		Boolean value = preferences(WSE_PREFERENCES).getBooleanProperty(EXAMPLE_PREF_VALUE);
 		if (value == null) {
 			setExamplePrefValue(Boolean.FALSE);
@@ -74,8 +75,9 @@ public final class WSEPreferences extends ModulePreferences {
 	}
 
 	public static void setExamplePrefValue(Boolean alignOnGrid) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setExamplePrefValue");
+		}
 		preferences(WSE_PREFERENCES).setBooleanProperty(EXAMPLE_PREF_VALUE, alignOnGrid);
 	}
 

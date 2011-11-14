@@ -75,10 +75,11 @@ public class OpenSharedProject extends CVSAction<OpenSharedProject, FPSObject> {
 
 	@Override
 	protected void doAction(Object context) {
-		if (_repository != null)
+		if (_repository != null) {
 			_newProject = SharedProject.openProject(getRepositoryList(getFocusedObject()), _projectDirectory, _repository, getEditor());
-		else
+		} else {
 			_newProject = SharedProject.openProject(getRepositoryList(getFocusedObject()), _projectDirectory, getEditor());
+		}
 	}
 
 	public SharedProject getNewProject() {

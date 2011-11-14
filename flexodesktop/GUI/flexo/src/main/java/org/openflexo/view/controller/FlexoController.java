@@ -64,6 +64,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -851,7 +852,8 @@ public abstract class FlexoController implements InspectorNotFoundHandler, Inspe
 		pane.setMessageType(messageType);
 		final JDialog dialog = pane.createDialog(parentComponent, title);
 		Container content = dialog.getContentPane();
-		JScrollPane scroll = new JScrollPane(content, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		JScrollPane scroll = new JScrollPane(content, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		dialog.setContentPane(scroll);
 		dialog.addKeyListener(new KeyAdapter() {
 			@Override

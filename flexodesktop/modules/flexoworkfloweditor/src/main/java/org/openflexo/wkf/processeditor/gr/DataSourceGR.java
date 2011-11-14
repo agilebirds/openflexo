@@ -68,8 +68,9 @@ public class DataSourceGR extends ArtefactGR<WKFDataSource> {
 					g.useDefaultBackgroundStyle();
 					// g.useDefaultForegroundStyle();
 					g.fillCircle(0, (i - 1) * halfHeight, 1, height);
-					if (i > 1)
+					if (i > 1) {
 						g.fillRect(0, (i - 1) * halfHeight, 1, halfHeight);
+					}
 				}
 			}
 		});
@@ -87,8 +88,9 @@ public class DataSourceGR extends ArtefactGR<WKFDataSource> {
 
 	@Override
 	public FGESteppedDimensionConstraint getDimensionConstraintStep() {
-		if (getDrawing() != null)
+		if (getDrawing() != null) {
 			return getDrawing().getDrawingGraphicalRepresentation().getDimensionConstraintsForObject(this);
+		}
 		return null;
 	}
 

@@ -48,18 +48,24 @@ public class LoggingConfigurationWindow {
 	}
 
 	private String getDefaultRadioValue(String l) {
-		if (l.equals("SEVERE"))
+		if (l.equals("SEVERE")) {
 			return FlexoLocalization.localizedForKey("log_severe");
-		if (l.equals("WARNING"))
+		}
+		if (l.equals("WARNING")) {
 			return FlexoLocalization.localizedForKey("log_warning");
-		if (l.equals("INFO"))
+		}
+		if (l.equals("INFO")) {
 			return FlexoLocalization.localizedForKey("log_info");
-		if (l.equals("FINE"))
+		}
+		if (l.equals("FINE")) {
 			return FlexoLocalization.localizedForKey("log_fine");
-		if (l.equals("FINER"))
+		}
+		if (l.equals("FINER")) {
 			return FlexoLocalization.localizedForKey("log_finer");
-		if (l.equals("FINEST"))
+		}
+		if (l.equals("FINEST")) {
 			return FlexoLocalization.localizedForKey("log_finest");
+		}
 		return FlexoLocalization.localizedForKey("log_severe");
 	}
 
@@ -132,18 +138,24 @@ public class LoggingConfigurationWindow {
 			if (dialog.parameterValueWithName("mode").equals(USE_DEFAULT_LOG_CONFIG)) {
 				String fileName = "SEVERE";
 				Object lev = dialog.parameterValueWithName("logLevel");
-				if (lev == LOG_SEVERE)
+				if (lev == LOG_SEVERE) {
 					fileName = "SEVERE";
-				if (lev == LOG_WARNING)
+				}
+				if (lev == LOG_WARNING) {
 					fileName = "WARNING";
-				if (lev == LOG_INFO)
+				}
+				if (lev == LOG_INFO) {
 					fileName = "INFO";
-				if (lev == LOG_FINE)
+				}
+				if (lev == LOG_FINE) {
 					fileName = "FINE";
-				if (lev == LOG_FINER)
+				}
+				if (lev == LOG_FINER) {
 					fileName = "FINER";
-				if (lev == LOG_FINEST)
+				}
+				if (lev == LOG_FINEST) {
 					fileName = "FINEST";
+				}
 				reloadLoggingFile(new FileResource("Config/logging_" + fileName + ".properties").getAbsolutePath());
 				FlexoProperties.instance().setLoggingFileName(null);
 				FlexoProperties.instance().setDefaultLoggingLevel(fileName);

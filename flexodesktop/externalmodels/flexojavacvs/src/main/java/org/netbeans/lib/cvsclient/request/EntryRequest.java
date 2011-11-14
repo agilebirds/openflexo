@@ -86,8 +86,9 @@ public class EntryRequest extends Request {
 	 *            the Entry to send
 	 */
 	public EntryRequest(Entry theEntry) {
-		if (theEntry == null)
+		if (theEntry == null) {
 			throw new IllegalArgumentException("EntryRequest: Entry must not " + "be null");
+		}
 		entry = theEntry;
 	}
 

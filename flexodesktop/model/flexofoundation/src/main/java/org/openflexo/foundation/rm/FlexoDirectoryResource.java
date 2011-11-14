@@ -68,8 +68,9 @@ public abstract class FlexoDirectoryResource extends FlexoFileResource {
 		if (returned.isDirectory()) {
 			return returned;
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("File " + returned.getAbsolutePath() + " is supposed to be a directory");
+			}
 			return null;
 		}
 	}

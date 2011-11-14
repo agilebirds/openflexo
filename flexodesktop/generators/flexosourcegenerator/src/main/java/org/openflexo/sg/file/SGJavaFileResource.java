@@ -64,8 +64,9 @@ public class SGJavaFileResource extends JavaFileResource<SGJavaClassGenerator, S
 	}
 
 	public DMEntity getEntity() {
-		if (getGenerator() != null)
+		if (getGenerator() != null) {
 			return getGenerator().getEntity();
+		}
 		return null;
 	}
 
@@ -75,8 +76,9 @@ public class SGJavaFileResource extends JavaFileResource<SGJavaClassGenerator, S
 	public void registerObserverWhenRequired() {
 		if ((!isObserverRegistered) && (getEntity() != null)) {
 			isObserverRegistered = true;
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getEntity());
+			}
 			getEntity().addObserver(this);
 		}
 	}
@@ -96,8 +98,9 @@ public class SGJavaFileResource extends JavaFileResource<SGJavaClassGenerator, S
 		if (getEntity() != null) {
 			addToDependantResources(getProject().getFlexoDMResource());
 		}
-		if (getGenerator() != null)
+		if (getGenerator() != null) {
 			getGenerator().rebuildDependanciesForResource(this);
+		}
 	}
 
 	@Override
@@ -121,8 +124,9 @@ public class SGJavaFileResource extends JavaFileResource<SGJavaClassGenerator, S
 			FlexoDMResource dmRes = (FlexoDMResource) resource;
 			if (dmRes.isLoaded() && getEntity() != null) {
 				if (!requestDate.before(getEntity().getLastUpdate())) {
-					if (logger.isLoggable(Level.FINER))
+					if (logger.isLoggable(Level.FINER)) {
 						logger.finer("OPTIMIST DEPENDANCY CHECKING for UTIL JAVA FILE " + getEntity().getName());
+					}
 					return false;
 				}
 			}

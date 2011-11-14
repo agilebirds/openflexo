@@ -24,16 +24,6 @@ import java.util.Enumeration;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.SEIconLibrary;
-import org.openflexo.ie.view.IEPanel;
-import org.openflexo.ie.view.controller.IEController;
-import org.openflexo.ie.view.popups.AskNewTabDialog;
-import org.openflexo.ie.view.widget.IETabContainerWidgetView;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.EmptyVector;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -47,6 +37,15 @@ import org.openflexo.foundation.ie.cl.TabComponentDefinition;
 import org.openflexo.foundation.ie.widget.IESequenceTab;
 import org.openflexo.foundation.ie.widget.IETabWidget;
 import org.openflexo.foundation.rm.DuplicateResourceException;
+import org.openflexo.icon.SEIconLibrary;
+import org.openflexo.ie.view.IEPanel;
+import org.openflexo.ie.view.controller.IEController;
+import org.openflexo.ie.view.popups.AskNewTabDialog;
+import org.openflexo.ie.view.widget.IETabContainerWidgetView;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.EmptyVector;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class AddTabInitializer extends ActionInitializer {
 
@@ -65,15 +64,16 @@ public class AddTabInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, AddTab action) {
 				IESequenceTab tabContainer = null;
-				if (action.getFocusedObject() instanceof IESequenceTab)
+				if (action.getFocusedObject() instanceof IESequenceTab) {
 					tabContainer = (IESequenceTab) action.getFocusedObject();
-				else if (action.getFocusedObject() instanceof IETabWidget) {
+				} else if (action.getFocusedObject() instanceof IETabWidget) {
 					tabContainer = ((IESequenceTab) ((IETabWidget) action.getFocusedObject()).getParent());
 				}
-				if (tabContainer == null)
+				if (tabContainer == null) {
 					return false;
-				else
+				} else {
 					tabContainer = tabContainer.getRootParent();
+				}
 				IEPanel tabPane = ((IEController) getController()).getComponentForWidgetInCurrentComponent(tabContainer);
 				if (tabPane instanceof IETabContainerWidgetView) {
 					action.setTabIndex(((IETabContainerWidgetView) tabPane).getSelectedIndex() + 1);
@@ -112,8 +112,9 @@ public class AddTabInitializer extends ActionInitializer {
 					boolean alreadyInContainer = false;
 					while (en.hasMoreElements()) {
 						IETabWidget tab = en.nextElement();
-						if (tab.getTabComponentDefinition() == compDef)
+						if (tab.getTabComponentDefinition() == compDef) {
 							alreadyInContainer = true;
+						}
 					}
 					if (alreadyInContainer) {
 						if (FlexoController.confirm("add_tab_already_in_tab_container")) {
@@ -121,10 +122,12 @@ public class AddTabInitializer extends ActionInitializer {
 									.makeNewAction(compDef, EmptyVector.EMPTY_VECTOR, action.getEditor());
 							dupAction.doAction();
 							compDef = dupAction.getComponentDefinition();
-							if (compDef == null)
+							if (compDef == null) {
 								return false;
-						} else
+							}
+						} else {
 							return false;
+						}
 					}
 					(action).setTabDef((TabComponentDefinition) compDef);
 					executeAction = true;

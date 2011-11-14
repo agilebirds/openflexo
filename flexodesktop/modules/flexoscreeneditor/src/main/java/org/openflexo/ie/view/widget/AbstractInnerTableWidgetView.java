@@ -49,8 +49,9 @@ public abstract class AbstractInnerTableWidgetView<T extends AbstractInnerTableW
 	// ==========================================================================
 	public Color getBackgroundColor() {
 		IESequenceWidget sequence = getModel().getAncestorOfClass(IESequenceWidget.class);
-		if (sequence != null)
+		if (sequence != null) {
 			return sequence.getBackground();
+		}
 		return super.getBackground();
 	}
 
@@ -58,14 +59,16 @@ public abstract class AbstractInnerTableWidgetView<T extends AbstractInnerTableW
 	public void setDefaultBorder() {
 		if (getModel().getIsRootOfPartialComponent() && getParent() != null) {
 			((JPanel) getParent()).setBorder(BorderFactory.createLineBorder(Color.BLUE, 3));
-		} else
+		} else {
 			setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+		}
 	}
 
 	@Override
 	public void delete() {
-		if (getModel().getParent() != null)
+		if (getModel().getParent() != null) {
 			getModel().getParent().deleteObserver(this);
+		}
 		super.delete();
 	}
 

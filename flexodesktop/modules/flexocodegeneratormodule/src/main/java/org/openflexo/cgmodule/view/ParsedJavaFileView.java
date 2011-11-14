@@ -26,12 +26,6 @@ import java.util.logging.Logger;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 
-import org.openflexo.javaparser.FJPJavaElement;
-import org.openflexo.javaparser.FJPJavaEntity;
-import org.openflexo.javaparser.FJPJavaParseException;
-import org.openflexo.jedit.LinesHighlight;
-import org.openflexo.logging.FlexoLogger;
-
 import org.openflexo.cgmodule.GeneratorCst;
 import org.openflexo.cgmodule.controller.GeneratorController;
 import org.openflexo.cgmodule.controller.browser.fjp.JavaParserBrowser;
@@ -44,6 +38,11 @@ import org.openflexo.foundation.rm.cg.ContentSource;
 import org.openflexo.foundation.rm.cg.JavaFileResource;
 import org.openflexo.generator.cg.CGJavaFile;
 import org.openflexo.generator.rm.GenerationAvailableFileResource;
+import org.openflexo.javaparser.FJPJavaElement;
+import org.openflexo.javaparser.FJPJavaEntity;
+import org.openflexo.javaparser.FJPJavaParseException;
+import org.openflexo.jedit.LinesHighlight;
+import org.openflexo.logging.FlexoLogger;
 
 public class ParsedJavaFileView extends JSplitPane implements FileContentEditor {
 

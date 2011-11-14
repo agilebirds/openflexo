@@ -43,15 +43,17 @@ public class ActionSchemeAction extends EditionSchemeAction<ActionSchemeAction> 
 	}
 
 	public ActionScheme getActionScheme() {
-		if (actionType != null)
+		if (actionType != null) {
 			return actionType.getActionScheme();
+		}
 		return null;
 	}
 
 	@Override
 	public EditionPatternInstance getEditionPatternInstance() {
-		if (actionType != null)
+		if (actionType != null) {
 			return actionType.getEditionPatternReference().getEditionPatternInstance();
+		}
 		return null;
 	}
 
@@ -71,8 +73,9 @@ public class ActionSchemeAction extends EditionSchemeAction<ActionSchemeAction> 
 
 	@Override
 	protected View retrieveOEShema() {
-		if (getFocusedObject() instanceof ViewObject)
+		if (getFocusedObject() instanceof ViewObject) {
 			return ((ViewObject) getFocusedObject()).getShema();
+		}
 		return null;
 	}
 

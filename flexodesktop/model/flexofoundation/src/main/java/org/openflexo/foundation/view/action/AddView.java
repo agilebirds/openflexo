@@ -30,11 +30,11 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.view.ViewLibraryObject;
 import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.foundation.view.ViewDefinition.DuplicateShemaNameException;
 import org.openflexo.foundation.view.ViewFolder;
 import org.openflexo.foundation.view.ViewLibrary;
-import org.openflexo.foundation.view.ViewDefinition.DuplicateShemaNameException;
+import org.openflexo.foundation.view.ViewLibraryObject;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
@@ -95,20 +95,23 @@ public class AddView extends FlexoAction<AddView, ViewLibraryObject, ViewLibrary
 		if (StringUtils.isEmpty(newViewName)) {
 			throw new InvalidParameterException("shema name is undefined");
 		}
-		if (getProject().getShemaLibrary().getShemaNamed(newViewName) != null)
+		if (getProject().getShemaLibrary().getShemaNamed(newViewName) != null) {
 			throw new DuplicateShemaNameException(newViewName);
+		}
 
 		_newShema = new ViewDefinition(newViewName, getFolder().getShemaLibrary(), getFolder(), getProject(), true);
-		if (useViewPoint)
+		if (useViewPoint) {
 			_newShema.setCalc(calc);
+		}
 		logger.info("Added view " + _newShema + " for project " + _newShema.getProject());
 		// Creates the resource here
 		_newShema.getShemaResource();
 	}
 
 	public FlexoProject getProject() {
-		if (getFocusedObject() != null)
+		if (getFocusedObject() != null) {
 			return getFocusedObject().getProject();
+		}
 		return null;
 	}
 
@@ -117,8 +120,9 @@ public class AddView extends FlexoAction<AddView, ViewLibraryObject, ViewLibrary
 	}
 
 	public ViewLibrary getShemaLibrary() {
-		if (getFocusedObject() != null)
+		if (getFocusedObject() != null) {
 			return getFocusedObject().getShemaLibrary();
+		}
 		return null;
 	}
 

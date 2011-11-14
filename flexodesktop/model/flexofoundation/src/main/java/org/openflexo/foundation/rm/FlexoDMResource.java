@@ -24,9 +24,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.toolbox.FlexoVersion;
-import org.openflexo.xmlcode.StringEncoder;
-
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.dm.ComponentDMEntity;
 import org.openflexo.foundation.dm.DMEntity;
@@ -42,6 +39,8 @@ import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.xml.FlexoDMBuilder;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.FlexoVersion;
+import org.openflexo.xmlcode.StringEncoder;
 
 /**
  * Please comment this class
@@ -111,12 +110,14 @@ public class FlexoDMResource extends FlexoXMLStorageResource<DMModel> {
 			progress.setProgress(FlexoLocalization.localizedForKey("loading_data_model"));
 		}
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("loadResourceData() in FlexoDMResource");
+		}
 
 		if (getXmlVersion().isLesserThan(new FlexoVersion("1.1"))) {
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Recreates the DataModel...");
+			}
 			Vector resourcesToDelete = new Vector();
 			for (Enumeration en = getProject().getResources().elements(); en.hasMoreElements();) {
 				FlexoResource next = (FlexoResource) en.nextElement();
@@ -126,8 +127,9 @@ public class FlexoDMResource extends FlexoXMLStorageResource<DMModel> {
 			}
 			for (Enumeration en = resourcesToDelete.elements(); en.hasMoreElements();) {
 				FlexoResource next = (FlexoResource) en.nextElement();
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Removing resource " + next);
+				}
 				next.delete();
 			}
 			dmModel = DMModel.createNewDMModel(getProject(), this);
@@ -136,8 +138,9 @@ public class FlexoDMResource extends FlexoXMLStorageResource<DMModel> {
 			try {
 				dmModel = super.performLoadResourceData(progress, loadingHandler);
 			} catch (FlexoFileNotFoundException e) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("File " + getFile().getName() + " NOT found");
+				}
 				e.printStackTrace();
 				return null;
 			}
@@ -169,8 +172,9 @@ public class FlexoDMResource extends FlexoXMLStorageResource<DMModel> {
 		} catch (SaveResourcePermissionDeniedException e) {
 			throw e;
 		} finally {
-			if (s != null)
+			if (s != null) {
 				encoder._setDateFormat(s);
+			}
 		}
 	}
 
@@ -208,8 +212,9 @@ public class FlexoDMResource extends FlexoXMLStorageResource<DMModel> {
 				try {
 					UpdateDMRepository.actionType.makeNewAction(jarRepository, null).doAction();
 				} catch (LinkageError e) {
-					if (logger.isLoggable(Level.SEVERE))
+					if (logger.isLoggable(Level.SEVERE)) {
 						logger.log(Level.SEVERE, "LinkageError in jars!!!", e);
+					}
 					e.printStackTrace();
 				}
 			}
@@ -236,11 +241,13 @@ public class FlexoDMResource extends FlexoXMLStorageResource<DMModel> {
 	@Override
 	protected boolean convertResourceFileFromVersionToVersion(FlexoVersion v1, FlexoVersion v2) {
 		if (v1.equals(new FlexoVersion("1.0")) && v2.equals(new FlexoVersion("1.1"))) {
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Recreates the DataModel...");
+			}
 			// If there is a resource already registered, we remove it.
-			if (getProject().getResources().get(getResourceIdentifier()) != null)
+			if (getProject().getResources().get(getResourceIdentifier()) != null) {
 				getProject().getResources().remove(getResourceIdentifier());
+			}
 			FileWritingLock lock = willWriteOnDisk();
 			_resourceData = DMModel.createNewDMModel(getProject(), this);
 			hasWrittenOnDisk(lock);

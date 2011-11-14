@@ -38,9 +38,9 @@ import org.openflexo.foundation.cg.dm.CGRepositoryConnected;
 import org.openflexo.foundation.cg.dm.CGRepositoryDisconnected;
 import org.openflexo.foundation.rm.ProjectExternalRepository;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoModelObjectReference.ReferenceOwner;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
-import org.openflexo.foundation.utils.FlexoModelObjectReference.ReferenceOwner;
 import org.openflexo.foundation.xml.GeneratedCodeBuilder;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileUtils;
@@ -96,8 +96,9 @@ public class CGRepository extends GenerationRepository implements ReferenceOwner
 
 	@Override
 	public void delete(FlexoProgress progress, boolean deleteFiles) {
-		if (getReaderRepository() != null)
+		if (getReaderRepository() != null) {
 			getReaderRepository().removeFromRepositoriedUsingAsReader(this);
+		}
 		super.delete(progress, deleteFiles);
 	}
 
@@ -114,8 +115,9 @@ public class CGRepository extends GenerationRepository implements ReferenceOwner
 	}
 
 	public CodeType getTargetType() {
-		if (_targetType == null)
+		if (_targetType == null) {
 			_targetType = CodeType.PROTOTYPE;
+		}
 		return _targetType;
 	}
 
@@ -133,15 +135,17 @@ public class CGRepository extends GenerationRepository implements ReferenceOwner
 
 	@Override
 	public boolean connect() {
-		if (getReaderRepository() != null)
+		if (getReaderRepository() != null) {
 			return getReaderRepository().connect() && super.connect();
-		else
+		} else {
 			return super.connect();
+		}
 	}
 
 	public ProjectExternalRepository getWarRepository() {
-		if (_warRepository == null)
+		if (_warRepository == null) {
 			_warRepository = getProject().getExternalRepositoryWithKey(getName() + "WAR");
+		}
 		if (_warRepository == null) {
 			try {
 				_warRepository = getProject().setDirectoryForRepositoryName(
@@ -156,8 +160,9 @@ public class CGRepository extends GenerationRepository implements ReferenceOwner
 	}
 
 	public File getWarDirectory() {
-		if (getWarRepository() != null)
+		if (getWarRepository() != null) {
 			return getWarRepository().getDirectory();
+		}
 		return null;
 	}
 
@@ -177,11 +182,13 @@ public class CGRepository extends GenerationRepository implements ReferenceOwner
 	public void setWarName(String warName) throws DuplicateCodeRepositoryNameException {
 		String oldName = this.warName;
 		if (oldName == null) {
-			if (warName == null)
+			if (warName == null) {
 				return;
+			}
 		} else {
-			if (oldName.equals(warName))
+			if (oldName.equals(warName)) {
 				return;
+			}
 		}
 		this.warName = warName;
 		lastWarNameUpdate = new Date();
@@ -189,8 +196,9 @@ public class CGRepository extends GenerationRepository implements ReferenceOwner
 		if (warName != null && !warName.matches(ToolBox.WAR_NAME_ACCEPTABLE_CHARS)) {
 			this.warName = ToolBox.getWarName(warName);
 			notifyObserversAsReentrantModification(new DataModification(DataModification.CG_WAR, "warName", oldName, warName));
-		} else
+		} else {
 			notifyObservers(new DataModification(DataModification.CG_WAR, "warName", oldName, warName));
+		}
 	}
 
 	public String getSuperClassesGenerationSubPath() {
@@ -262,8 +270,9 @@ public class CGRepository extends GenerationRepository implements ReferenceOwner
 
 	@Override
 	protected void deleteExternalRepositories() {
-		if (getWarRepository() != null)
+		if (getWarRepository() != null) {
 			getProject().removeFromExternalRepositories(getWarRepository());
+		}
 		super.deleteExternalRepositories();
 	}
 
@@ -332,8 +341,9 @@ public class CGRepository extends GenerationRepository implements ReferenceOwner
 
 	@Override
 	public Format getFormat() {
-		if (format == null)
+		if (format == null) {
 			return Format.WEBOBJECTS;
+		}
 		return format;
 	}
 
@@ -344,8 +354,9 @@ public class CGRepository extends GenerationRepository implements ReferenceOwner
 
 	public boolean includeReader() {
 		if (includeReader && getReaderRepository() == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Repository '" + getName() + "' should include reader but has no reader repository!");
+			}
 		}
 		return includeReader && getReaderRepository() != null;
 	}
@@ -392,8 +403,9 @@ public class CGRepository extends GenerationRepository implements ReferenceOwner
 
 	@Override
 	public void notifyObjectLoaded(FlexoModelObjectReference reference) {
-		if (reference.getObject() instanceof DGRepository)
+		if (reference.getObject() instanceof DGRepository) {
 			setReaderRepository((DGRepository) reference.getObject());
+		}
 	}
 
 	@Override

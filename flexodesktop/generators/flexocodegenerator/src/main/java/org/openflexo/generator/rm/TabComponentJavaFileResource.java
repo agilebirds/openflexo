@@ -90,8 +90,9 @@ public class TabComponentJavaFileResource extends ComponentJavaFileResource<TabC
 							}
 						}
 					}
-					if (iCanBeOptimistic)
+					if (iCanBeOptimistic) {
 						return false;
+					}
 				}
 			}
 		}

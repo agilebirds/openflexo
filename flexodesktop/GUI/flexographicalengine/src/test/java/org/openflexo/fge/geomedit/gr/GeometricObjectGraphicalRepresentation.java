@@ -25,8 +25,8 @@ import org.openflexo.fge.GeometricGraphicalRepresentation;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geomedit.GeometricDrawing;
 import org.openflexo.fge.geomedit.GeometricObject;
-import org.openflexo.fge.geomedit.ShowContextualMenuControl;
 import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
+import org.openflexo.fge.geomedit.ShowContextualMenuControl;
 import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.BackgroundStyle.Texture.TextureType;
 import org.openflexo.xmlcode.XMLSerializable;
@@ -58,17 +58,20 @@ public class GeometricObjectGraphicalRepresentation<A extends FGEArea, G extends
 
 	@Override
 	public A getGeometricObject() {
-		if (getDrawable() != null)
+		if (getDrawable() != null) {
 			return getDrawable().getGeometricObject();
+		}
 		return null;
 	}
 
 	@Override
 	public String getText() {
-		if (!getDisplayLabel())
+		if (!getDisplayLabel()) {
 			return null;
-		if (getDrawable() != null)
+		}
+		if (getDrawable() != null) {
 			return getDrawable().name;
+		}
 		return super.getText();
 	}
 

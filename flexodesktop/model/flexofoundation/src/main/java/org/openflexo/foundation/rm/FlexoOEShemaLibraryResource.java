@@ -61,8 +61,9 @@ public class FlexoOEShemaLibraryResource extends FlexoXMLStorageResource<ViewLib
 				try {
 					setResourceFile(f);
 				} catch (InvalidFileNameException e1) {
-					if (logger.isLoggable(Level.SEVERE))
+					if (logger.isLoggable(Level.SEVERE)) {
 						logger.severe("This should not happen.");
+					}
 					e1.printStackTrace();
 				}
 			}
@@ -124,13 +125,15 @@ public class FlexoOEShemaLibraryResource extends FlexoXMLStorageResource<ViewLib
 		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("loading_shema_library"));
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("performLoadResourceData() in FlexoOEShemaLibraryResource");
+		}
 		try {
 			library = super.performLoadResourceData(progress, loadingHandler);
 		} catch (FlexoFileNotFoundException e) {
-			if (logger.isLoggable(Level.SEVERE))
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("File " + getFile().getName() + " NOT found");
+			}
 			e.printStackTrace();
 			return null;
 		}
@@ -150,8 +153,9 @@ public class FlexoOEShemaLibraryResource extends FlexoXMLStorageResource<ViewLib
 	 */
 	@Override
 	public Object instanciateNewBuilder() {
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("instanciateNewBuilder in FlexoComponentLibraryResource");
+		}
 		VEShemaLibraryBuilder builder = new VEShemaLibraryBuilder(this, getProject().getResourceCenter().retrieveViewPointLibrary());
 		builder.shemaLibrary = _resourceData;
 		return builder;

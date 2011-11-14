@@ -93,8 +93,9 @@ public class AddDomainAction extends FlexoUndoableAction<AddDomainAction, DKVObj
 	protected void doAction(Object context) throws FlexoException {
 		newDomain = getDkvModel().addDomainNamed(getNewDomainName());
 		newDomain.setDescription(getNewDomainDescription());
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Domain added");
+		}
 		objectCreated("NEW_DOMAIN", newDomain);
 	}
 

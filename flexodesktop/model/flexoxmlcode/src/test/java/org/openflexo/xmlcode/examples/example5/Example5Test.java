@@ -22,14 +22,13 @@ package org.openflexo.xmlcode.examples.example5;
 import java.io.File;
 import java.io.FileInputStream;
 
+import junit.framework.TestCase;
+
 import org.openflexo.xmlcode.Debugging;
 import org.openflexo.xmlcode.TestFileFinder;
 import org.openflexo.xmlcode.XMLCoder;
 import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
-import org.openflexo.xmlcode.XMLSerializable;
-
-import junit.framework.TestCase;
 
 /**
  * <p>
@@ -97,16 +96,18 @@ public class Example5Test extends TestCase {
 
 	public void test1() {
 		Graph graph = buildNewGraph();
-		if (LOG)
+		if (LOG) {
 			System.out.println("Build new graph:\n" + graph);
+		}
 
 		try {
 
 			System.out.println("\nTEST1: programmatically build a graph and serialize it (DEEP_FIRST mode, no contexts) ");
 
 			XMLMapping aMapping = new XMLMapping(exampleModel1File);
-			if (LOG)
+			if (LOG) {
 				System.out.println("TEST1: Reading, parsing and getting following model:\n" + aMapping.toString());
+			}
 
 			synchronized (this) {
 				wait(1000);
@@ -115,8 +116,9 @@ public class Example5Test extends TestCase {
 			long start = System.currentTimeMillis();
 			String result = XMLCoder.encodeObjectWithMapping(graph, aMapping);
 			long stop = System.currentTimeMillis();
-			if (LOG)
+			if (LOG) {
 				System.out.println("TEST1: Coding to XML and getting " + result);
+			}
 			System.out.println("TEST1: serialization took " + (stop - start) + " ms");
 
 		} catch (Exception e) {
@@ -133,21 +135,24 @@ public class Example5Test extends TestCase {
 			System.out.println("\nTEST2: deserialize a graph from file and re-serialize it (DEEP_FIRST mode, no contexts) ");
 
 			XMLMapping aMapping = new XMLMapping(exampleModel1File);
-			if (LOG)
+			if (LOG) {
 				System.out.println("TEST2: Reading, parsing and getting following model:\n" + aMapping.toString());
+			}
 
 			long start = System.currentTimeMillis();
 			graph = (Graph) XMLDecoder.decodeObjectWithMapping(new FileInputStream(dataFile1), aMapping);
 			long stop = System.currentTimeMillis();
-			if (LOG)
+			if (LOG) {
 				System.out.println("TEST2: Obtaining by parsing stream: \n" + graph.toString());
+			}
 			System.out.println("TEST2: deserialization took " + (stop - start) + " ms");
 
 			start = System.currentTimeMillis();
 			String result = XMLCoder.encodeObjectWithMapping(graph, aMapping);
 			stop = System.currentTimeMillis();
-			if (LOG)
+			if (LOG) {
 				System.out.println("TEST2: Coding to XML and getting " + result);
+			}
 			System.out.println("TEST2: serialization took " + (stop - start) + " ms");
 
 		} catch (Exception e) {
@@ -164,21 +169,24 @@ public class Example5Test extends TestCase {
 			System.out.println("\nTEST3: deserialize a graph from file and re-serialize it (DEEP_FIRST mode, with contexts) ");
 
 			XMLMapping aMapping = new XMLMapping(exampleModel2File);
-			if (LOG)
+			if (LOG) {
 				System.out.println("TEST3: Reading, parsing and getting following model:\n" + aMapping.toString());
+			}
 
 			long start = System.currentTimeMillis();
 			graph = (Graph) XMLDecoder.decodeObjectWithMapping(new FileInputStream(dataFile1), aMapping);
 			long stop = System.currentTimeMillis();
-			if (LOG)
+			if (LOG) {
 				System.out.println("TEST3: Obtaining by parsing stream: \n" + graph.toString());
+			}
 			System.out.println("TEST3: deserialization took " + (stop - start) + " ms");
 
 			start = System.currentTimeMillis();
 			String result = XMLCoder.encodeObjectWithMapping(graph, aMapping);
 			stop = System.currentTimeMillis();
-			if (LOG)
+			if (LOG) {
 				System.out.println("TEST3: Coding to XML and getting " + result);
+			}
 			System.out.println("TEST3: serialization took " + (stop - start) + " ms");
 
 		} catch (Exception e) {
@@ -189,22 +197,25 @@ public class Example5Test extends TestCase {
 
 	public void test4() {
 		Graph graph = buildNewGraph();
-		if (LOG)
+		if (LOG) {
 			System.out.println("Build new graph:\n" + graph);
+		}
 
 		try {
 
 			System.out.println("\nTEST4: programmatically build a graph and serialize it (PSEUDO_TREE mode) ");
 
 			XMLMapping aMapping = new XMLMapping(exampleModel3File);
-			if (LOG)
+			if (LOG) {
 				System.out.println("TEST4: Reading, parsing and getting following model:\n" + aMapping.toString());
+			}
 
 			long start = System.currentTimeMillis();
 			String result = XMLCoder.encodeObjectWithMapping(graph, aMapping);
 			long stop = System.currentTimeMillis();
-			if (LOG)
+			if (LOG) {
 				System.out.println("TEST4: Coding to XML and getting " + result);
+			}
 			System.out.println("TEST4: serialization took " + (stop - start) + " ms");
 
 		} catch (Exception e) {
@@ -215,22 +226,25 @@ public class Example5Test extends TestCase {
 
 	public void test5() {
 		Graph graph = buildNewGraph();
-		if (LOG)
+		if (LOG) {
 			System.out.println("Build new graph:\n" + graph);
+		}
 
 		try {
 
 			System.out.println("\nTEST5: programmatically build a graph and serialize it (ORDERED_PSEUDO_TREE mode) ");
 
 			XMLMapping aMapping = new XMLMapping(exampleModel4File);
-			if (LOG)
+			if (LOG) {
 				System.out.println("TEST5: Reading, parsing and getting following model:\n" + aMapping.toString());
+			}
 
 			long start = System.currentTimeMillis();
 			String result = XMLCoder.encodeObjectWithMapping(graph, aMapping);
 			long stop = System.currentTimeMillis();
-			if (LOG)
+			if (LOG) {
 				System.out.println("TEST5: Coding to XML and getting " + result);
+			}
 			System.out.println("TEST5: serialization took " + (stop - start) + " ms");
 
 		} catch (Exception e) {
@@ -247,21 +261,24 @@ public class Example5Test extends TestCase {
 			System.out.println("\nTEST6: deserialize a graph from file and re-serialize it (PSEUDO_TREE mode) ");
 
 			XMLMapping aMapping = new XMLMapping(exampleModel3File);
-			if (LOG)
+			if (LOG) {
 				System.out.println("TEST6: Reading, parsing and getting following model:\n" + aMapping.toString());
+			}
 
 			long start = System.currentTimeMillis();
 			graph = (Graph) XMLDecoder.decodeObjectWithMapping(new FileInputStream(dataFile2), aMapping);
 			long stop = System.currentTimeMillis();
-			if (LOG)
+			if (LOG) {
 				System.out.println("TEST6: Obtaining by parsing stream: \n" + graph.toString());
+			}
 			System.out.println("TEST6: deserialization took " + (stop - start) + " ms");
 
 			start = System.currentTimeMillis();
 			String result = XMLCoder.encodeObjectWithMapping(graph, aMapping);
 			stop = System.currentTimeMillis();
-			if (LOG)
+			if (LOG) {
 				System.out.println("TEST6: Coding to XML and getting " + result);
+			}
 			System.out.println("TEST6: serialization took " + (stop - start) + " ms");
 
 		} catch (Exception e) {
@@ -278,21 +295,24 @@ public class Example5Test extends TestCase {
 			System.out.println("\nTEST7: deserialize a graph from file and re-serialize it (ORDERED_PSEUDO_TREE mode) ");
 
 			XMLMapping aMapping = new XMLMapping(exampleModel4File);
-			if (LOG)
+			if (LOG) {
 				System.out.println("TEST7: Reading, parsing and getting following model:\n" + aMapping.toString());
+			}
 
 			long start = System.currentTimeMillis();
 			graph = (Graph) XMLDecoder.decodeObjectWithMapping(new FileInputStream(dataFile3), aMapping);
 			long stop = System.currentTimeMillis();
-			if (LOG)
+			if (LOG) {
 				System.out.println("TEST7: Obtaining by parsing stream: \n" + graph.toString());
+			}
 			System.out.println("TEST7: deserialization took " + (stop - start) + " ms");
 
 			start = System.currentTimeMillis();
 			String result = XMLCoder.encodeObjectWithMapping(graph, aMapping);
 			stop = System.currentTimeMillis();
-			if (LOG)
+			if (LOG) {
 				System.out.println("TEST7: Coding to XML and getting " + result);
+			}
 			System.out.println("TEST7: serialization took " + (stop - start) + " ms");
 
 		} catch (Exception e) {

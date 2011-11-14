@@ -88,8 +88,9 @@ public class EOModelExtractor extends DescendingVisitor {
 
 	@Override
 	public void visitObject(PetalObject obj) {
-		for (Iterator i = obj.getPropertyList().iterator(); i.hasNext();)
+		for (Iterator i = obj.getPropertyList().iterator(); i.hasNext();) {
 			((PetalNode) i.next()).accept(this);
+		}
 	}
 
 	@Override
@@ -114,10 +115,12 @@ public class EOModelExtractor extends DescendingVisitor {
 
 	public static String getSuperClassLabel(cb.petal.Class obj) {
 		List superClasses = obj.getSuperclassList();
-		if (superClasses == null || superClasses.getChildCount() == 0)
+		if (superClasses == null || superClasses.getChildCount() == 0) {
 			return "";
-		if (superClasses.getChildCount() > 1)
+		}
+		if (superClasses.getChildCount() > 1) {
 			return "MoreThanOne";
+		}
 		InheritanceRelationship superClass = (InheritanceRelationship) superClasses.get(0);
 		return getSupplierShortName(superClass);
 	}
@@ -132,8 +135,9 @@ public class EOModelExtractor extends DescendingVisitor {
 
 	public static String getLabel(PetalObject object) {
 		Iterator it = object.getParameterList().iterator();
-		if (it.hasNext())
+		if (it.hasNext()) {
 			return (String) it.next();
+		}
 		return "no_name";
 	}
 
@@ -201,8 +205,9 @@ public class EOModelExtractor extends DescendingVisitor {
 						if (j + 1 < opParameters.getChildCount()) {
 							params.append(" ,");
 						}
-						if (answer.length() > 0)
+						if (answer.length() > 0) {
 							answer.append("\n\n");
+						}
 						answer.append("Operation : " + opLabel + "(" + params.toString() + ")\n");
 						answer.append("\tDescription:" + (op.getDocumentation() != null ? op.getDocumentation() : ""));
 					}

@@ -22,8 +22,8 @@ package org.openflexo.components.widget;
 import java.awt.Dimension;
 
 import org.openflexo.components.browser.BrowserElementType;
-import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
+import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.Role;
@@ -87,8 +87,9 @@ public class RoleSelector extends AbstractBrowserSelector<Role> {
 
 		@Override
 		public void configure() {
-			for (BrowserElementType browserElementType : BrowserElementType.values())
+			for (BrowserElementType browserElementType : BrowserElementType.values()) {
 				setFilterStatus(browserElementType, BrowserFilterStatus.HIDE);
+			}
 
 			setFilterStatus(BrowserElementType.WORKFLOW, BrowserFilterStatus.SHOW);
 			setFilterStatus(BrowserElementType.ROLE, BrowserFilterStatus.SHOW);

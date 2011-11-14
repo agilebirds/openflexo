@@ -123,26 +123,32 @@ public class Domain extends DKVObject implements FlexoObserver, InspectableObjec
 	}
 
 	public boolean isKeyNameLegal(String keyName) throws DuplicateDKVObjectException, EmptyStringException {
-		if (keyName == null)
+		if (keyName == null) {
 			throw new NullPointerException();
-		if (keyName.trim().length() == 0)
+		}
+		if (keyName.trim().length() == 0) {
 			throw new EmptyStringException();
+		}
 		Enumeration<Key> en = keys.elements();
 		while (en.hasMoreElements()) {
 			Key key = en.nextElement();
-			if (key.getName().equals(keyName))
+			if (key.getName().equals(keyName)) {
 				throw new DuplicateDKVObjectException(key);
+			}
 		}
 		return true;
 	}
 
 	public Key addKeyNamed(String keyName) throws EmptyStringException, DuplicateDKVObjectException {
-		if (keyName == null)
+		if (keyName == null) {
 			throw new NullPointerException();
-		if (keyName.trim().length() == 0)
+		}
+		if (keyName.trim().length() == 0) {
 			throw new EmptyStringException();
-		if (getKeyNamed(keyName) != null)
+		}
+		if (getKeyNamed(keyName) != null) {
 			throw new DuplicateDKVObjectException(getKeyNamed(keyName));
+		}
 		Key key = new Key(getDkvModel(), this);
 		key.setName(keyName);
 		addToKeys(key);
@@ -151,8 +157,9 @@ public class Domain extends DKVObject implements FlexoObserver, InspectableObjec
 
 	public void addToKeys(Key key) {
 		if (keys.contains(key)) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Attempt to insert twice the same key.");
+			}
 			return;
 		}
 		Enumeration en = getDkvModel().getLanguages().elements();
@@ -175,8 +182,9 @@ public class Domain extends DKVObject implements FlexoObserver, InspectableObjec
 
 	public void removeFromKeys(Key key) {
 		if (!keys.contains(key)) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Attempt to remove a key that can not be found: " + key.getName());
+			}
 			return;
 		}
 		keys.remove(key);
@@ -208,8 +216,9 @@ public class Domain extends DKVObject implements FlexoObserver, InspectableObjec
 		Enumeration<Key> en = keys.elements();
 		while (en.hasMoreElements()) {
 			Key key = en.nextElement();
-			if (key.getName().equals(name))
+			if (key.getName().equals(name)) {
 				return key;
+			}
 		}
 		return null;
 	}
@@ -239,8 +248,9 @@ public class Domain extends DKVObject implements FlexoObserver, InspectableObjec
 	}
 
 	public void setValue(Value value) {
-		if (value != null)
+		if (value != null) {
 			values.put(value.getFullyQualifiedName(), value);
+		}
 	}
 
 	public void setValueForKey(Value v, String fullyQualifiedName) {
@@ -263,11 +273,13 @@ public class Domain extends DKVObject implements FlexoObserver, InspectableObjec
 	}
 
 	public void setDkvModel(DKVModel dkvModel) {
-		if (this.dkvModel != null)
+		if (this.dkvModel != null) {
 			this.dkvModel.deleteObserver(this);
+		}
 		this.dkvModel = dkvModel;
-		if (dkvModel != null)
+		if (dkvModel != null) {
 			this.dkvModel.addObserver(this);
+		}
 	}
 
 	public Vector<Key> getKeys() {
@@ -279,8 +291,9 @@ public class Domain extends DKVObject implements FlexoObserver, InspectableObjec
 	}
 
 	public Object[] getSortedKeys() {
-		if (keys.size() == 0)
+		if (keys.size() == 0) {
 			return new Object[0];
+		}
 		Object[] o = new Object[keys.size()];
 		int i = 0;
 		Enumeration<Key> en = keys.elements();

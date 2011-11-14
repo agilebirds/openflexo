@@ -58,8 +58,9 @@ public class BindingValueFactory extends StringEncoder.Converter<BindingValue> {
 			System.out.println("currentType="+currentType);
 			System.out.println("owner="+owner);
 		}*/
-		if (BindingValue.logger.isLoggable(Level.FINE))
+		if (BindingValue.logger.isLoggable(Level.FINE)) {
 			BindingValue.logger.fine("tryToDecodeAsMethodCall " + aValue);
+		}
 
 		String callName;
 		Vector<String> paramsAsString;
@@ -76,15 +77,17 @@ public class BindingValueFactory extends StringEncoder.Converter<BindingValue> {
 				}
 				// if (debug) System.out.println("methodName="+callName);
 			} else {
-				if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure)
+				if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure) {
 					BindingValue.logger.warning("Could not decode BindingValue : trying to find method call matching '" + aValue
 							+ " this is not a function call");
+				}
 				return null;
 			}
 		} catch (ParseException e) {
-			if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure)
+			if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure) {
 				BindingValue.logger.warning("Could not decode BindingValue : parse error while trying to find method call matching '"
 						+ aValue);
+			}
 			return null;
 		}
 
@@ -92,10 +95,12 @@ public class BindingValueFactory extends StringEncoder.Converter<BindingValue> {
 
 		Method[] allMethods = typeClass.getMethods();
 
-		if (BindingValue.logger.isLoggable(Level.FINE))
+		if (BindingValue.logger.isLoggable(Level.FINE)) {
 			BindingValue.logger.fine("allMethods=" + allMethods);
-		if (BindingValue.logger.isLoggable(Level.FINE))
+		}
+		if (BindingValue.logger.isLoggable(Level.FINE)) {
 			BindingValue.logger.fine("paramsAsString=" + paramsAsString);
+		}
 
 		String propertyNameWithFirstCharToUpperCase = callName.substring(0, 1).toUpperCase() + callName.substring(1, callName.length());
 
@@ -129,37 +134,42 @@ public class BindingValueFactory extends StringEncoder.Converter<BindingValue> {
 				String bindingAsString = paramsAsString.elementAt(i);
 				String paramName = "arg" + i;
 				i++;
-				if (BindingValue.logger.isLoggable(Level.FINE))
+				if (BindingValue.logger.isLoggable(Level.FINE)) {
 					BindingValue.logger.fine("Attempt to parse: " + bindingAsString);
+				}
 				// if (debug) System.out.println("Attempt to parse: "+bindingAsString);
 				AbstractBinding paramBindingValue = _bindingFactory.convertFromString(bindingAsString);
 				if ((paramBindingValue != null)) {
 					paramBindingValue.setOwner(_bindable);
-					if (BindingValue.logger.isLoggable(Level.FINE))
+					if (BindingValue.logger.isLoggable(Level.FINE)) {
 						BindingValue.logger.fine("paramBindingValue=" + paramBindingValue + " of " + paramBindingValue.getAccessedType());
+					}
 					// if (debug) System.out.println("paramBindingValue="+paramBindingValue+" of "+paramBindingValue.getAccessedType());
 					if (paramBindingValue.isStaticValue()) {
 						paramBindingValue.setBindingDefinition(methodCall.new MethodCallParamBindingDefinition(paramName, type));
 					}
 					if (type != null && paramBindingValue.getAccessedType() != null
 							&& TypeUtils.isTypeAssignableFrom(type, paramBindingValue.getAccessedType(), true)) {
-						if (BindingValue.logger.isLoggable(Level.FINE))
+						if (BindingValue.logger.isLoggable(Level.FINE)) {
 							BindingValue.logger.fine("Lookup on " + type + " succeded: " + paramBindingValue.getStringRepresentation());
+						}
 						// if (debug) System.out.println("Lookup on " + type + " succeded: " + paramBindingValue.getStringRepresentation());
 						methodCall.setBindingValueForParam(paramBindingValue, paramName);
 					} else {
-						if (BindingValue.logger.isLoggable(Level.FINE))
+						if (BindingValue.logger.isLoggable(Level.FINE)) {
 							BindingValue.logger.fine("Lookup on type " + type + " failed (wrong type): "
 									+ paramBindingValue.getStringRepresentation() + "types: " + "looking " + type + " found "
 									+ paramBindingValue.getAccessedType());
+						}
 						/*if (debug) System.out.println("Lookup on type " + type + " failed (wrong type): "
 									+ paramBindingValue.getStringRepresentation() + "types: "
 									+"looking "+type+" found "+paramBindingValue.getAccessedType());*/
 						successfull = false;
 					}
 				} else {
-					if (BindingValue.logger.isLoggable(Level.FINE))
+					if (BindingValue.logger.isLoggable(Level.FINE)) {
 						BindingValue.logger.fine("Lookup on " + type + " failed (cannot analysing): " + bindingAsString);
+					}
 					// if (debug) System.out.println("Lookup on " + type + " failed (cannot analysing): " + bindingAsString);
 					successfull = false;
 				}
@@ -171,12 +181,14 @@ public class BindingValueFactory extends StringEncoder.Converter<BindingValue> {
 		if (results.size() == 1) {
 			return results.firstElement();
 		} else if (results.size() > 1) {
-			if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure)
+			if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure) {
 				BindingValue.logger.warning(("While decoding BindingValue '" + aValue + "' : found ambigous methods " + callName));
+			}
 			return results.firstElement();
 		}
-		if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure)
+		if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure) {
 			BindingValue.logger.warning("Could not decode BindingValue : cannot find method call matching '" + aValue);
+		}
 		return null;
 	}
 
@@ -219,8 +231,9 @@ public class BindingValueFactory extends StringEncoder.Converter<BindingValue> {
 
 		public String nextToken() {
 			String returned = enumeration.nextElement();
-			if (BindingValue.logger.isLoggable(Level.FINE))
+			if (BindingValue.logger.isLoggable(Level.FINE)) {
 				BindingValue.logger.fine("> " + returned);
+			}
 			return returned;
 		}
 	}
@@ -236,12 +249,14 @@ public class BindingValueFactory extends StringEncoder.Converter<BindingValue> {
 			System.out.println("_bindable=" + _bindable);
 			System.out.println("binding model =" + _bindable.getBindingModel());
 		}
-		if (BindingValue.logger.isLoggable(Level.FINE))
+		if (BindingValue.logger.isLoggable(Level.FINE)) {
 			BindingValue.logger.fine("Decode " + aValue);
+		}
 
 		if (_bindable == null) {
-			if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure)
+			if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure) {
 				BindingValue.logger.warning(("Could not decode BindingValue '" + aValue + "' : bindable not set !"));
+			}
 			return null;
 		} else {
 			String value;
@@ -250,60 +265,72 @@ public class BindingValueFactory extends StringEncoder.Converter<BindingValue> {
 			} else {
 				value = aValue;
 			}
-			if ("null".equals(value))
+			if ("null".equals(value)) {
 				return null;
+			}
 
 			BindingValue returned = new BindingValue();
 
 			PathTokenizer st = new PathTokenizer(value);
 			if (st.hasMoreTokens()) {
 				String bindingVariableName = st.nextToken();
-				if (debug)
+				if (debug) {
 					System.out.println("bindingVariableName=" + bindingVariableName);
+				}
 				if (_bindable == null) {
-					if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure)
+					if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure) {
 						BindingValue.logger.warning(("Could not decode BindingValue '" + value + "' : no declared bindable !"));
+					}
 					return null;
 				}
 				if (_bindable.getBindingModel() == null) {
-					if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure)
+					if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure) {
 						BindingValue.logger
 								.warning(("Could not decode BindingValue '" + value + "' : declared bindable has a null binding model !"));
+					}
 					return null;
 				}
 				BindingVariable bv = _bindable.getBindingModel().bindingVariableNamed(bindingVariableName);
 				if (bv == null) {
-					if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure)
+					if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure) {
 						BindingValue.logger
 								.warning(("Could not decode BindingValue '" + value + "' : variable " + bindingVariableName + " not found in binding model !"));
-					if (BindingValue.logger.isLoggable(Level.FINE))
+					}
+					if (BindingValue.logger.isLoggable(Level.FINE)) {
 						BindingValue.logger.fine("NOT Found binding variable " + bv);
+					}
 					return null;
 				} else {
-					if (BindingValue.logger.isLoggable(Level.FINE))
+					if (BindingValue.logger.isLoggable(Level.FINE)) {
 						BindingValue.logger.fine("Found binding variable " + bv);
-					if (debug)
+					}
+					if (debug) {
 						System.out.println("Found binding variable " + bv);
+					}
 					BindingPathElement currentElement = bv;
 					Type currentType = bv.getType();
 					if (currentType == null) {
-						if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure)
+						if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure) {
 							BindingValue.logger
 									.warning(("Could not decode BindingValue '" + value + "' : variable " + bindingVariableName + " doesn't implement any type !"));
+						}
 						return null;
 					}
 					returned.setBindingVariable(bv);
 					while (st.hasMoreTokens()) {
 						String nextTokenName = st.nextToken();
-						if (BindingValue.logger.isLoggable(Level.FINE))
+						if (BindingValue.logger.isLoggable(Level.FINE)) {
 							BindingValue.logger.fine("nextTokenName=" + nextTokenName + " currentType=" + currentType);
-						if (debug)
+						}
+						if (debug) {
 							System.out.println("nextTokenName=" + nextTokenName + " currentType=" + currentType);
+						}
 						BindingPathElement nextElement;
 						if (TypeUtils.getBaseClass(currentType) == null) {
-							if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure)
+							if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure) {
 								BindingValue.logger.warning(("Could not decode BindingValue '" + value
 										+ "' : cannot find base entity for type '" + currentType));
+							}
 							return null;
 						}
 						// nextElement = KeyValueLibrary.getKeyValueProperty(currentType, nextTokenName);
@@ -321,59 +348,71 @@ public class BindingValueFactory extends StringEncoder.Converter<BindingValue> {
 							nextElement = tryToDecodeAsMethodCall(returned, currentType, nextTokenName);
 						}
 						if (nextElement == null) {
-							if (debug)
+							if (debug) {
 								System.out.println("cannot find next element");
-							if (debug)
+							}
+							if (debug) {
 								logger.info("cannot find next element for " + aValue + " factory=" + _bindingFactory);
-							if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure)
+							}
+							if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure) {
 								BindingValue.logger
 										.warning(("Could not decode BindingValue '" + value
 												+ "' : cannot find property nor method matching '" + nextTokenName + "' for type "
 												+ currentType + " !"));
+							}
 							return null;
 						} else {
-							if (debug)
+							if (debug) {
 								System.out.println("added to binding path " + nextElement);
-							if (debug)
+							}
+							if (debug) {
 								logger.info("found next element for " + aValue + " factory=" + _bindingFactory);
+							}
 							currentType = returned.addBindingPathElement(nextElement);
-							if (debug)
+							if (debug) {
 								logger.info("type=" + returned.getAccessedType());
+							}
 							// returned.addBindingPathElement(nextElement);
 							// currentType = nextElement.getType();
 							if (currentType == null) {
-								if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure)
+								if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure) {
 									BindingValue.logger
 											.warning(("Could not decode BindingValue '" + value + "' : token " + nextTokenName + " doesn't implement any type !"));
+								}
 								return null;
 							}
 						}
 						currentElement = nextElement;
 					}
 
-					if (debug)
+					if (debug) {
 						logger.info("Tout va bien pour decoder " + aValue);
+					}
 
 					// Before to receive its owner, we set to knonwn bindable, in order to check validity
 					returned.setOwner(_bindable);
 
-					if (debug)
+					if (debug) {
 						logger.info("Je mets le bindable " + _bindable);
-					if (debug)
+					}
+					if (debug) {
 						logger.info("Et c'est bon ? " + returned.isBindingValidWithoutBindingDefinition());
+					}
 
 					if (returned.isBindingValidWithoutBindingDefinition()) {
 						returned._isConnected = true;
 						return returned;
 					} else {
-						if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure)
+						if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure) {
 							BindingValue.logger.warning(("Could not decode BindingValue '" + value + "' : invalid binding !"));
+						}
 						return null;
 					}
 				}
 			} else {
-				if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure)
+				if (BindingValue.logger.isLoggable(Level.WARNING) && warnOnFailure) {
 					BindingValue.logger.warning(("Could not decode BindingValue '" + value + "' : variable not set !"));
+				}
 				return null;
 			}
 		}

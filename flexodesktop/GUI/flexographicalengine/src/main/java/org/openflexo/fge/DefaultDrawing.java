@@ -127,12 +127,14 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 				}
 			}
 			parentNode.nodesToRemove.remove(alreadyExistingNode);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("No need to insert " + aDrawable + " under " + aParentDrawable + " as it is already done");
+			}
 			return;
 		} else {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("add drawable " + aDrawable + " under " + aParentDrawable);
+			}
 			new DrawingTreeNode<O>(aDrawable, aParentDrawable);
 			if (getGraphicalRepresentation(aDrawable) == null) {
 				logger.warning("Could not find graphical representation for " + aDrawable);
@@ -166,8 +168,9 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 				logger.warning("Cannot find DrawingTreeNode for " + nodeToRemove);
 				return;
 			}
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("remove drawable " + aDrawable + " under " + aParentDrawable);
+			}
 			GraphicalRepresentation parentGR = getGraphicalRepresentation(aParentDrawable);
 			GraphicalRepresentation removedGR = getGraphicalRepresentation(aDrawable);
 			parentNode.removeChild(nodeToRemove);
@@ -201,10 +204,12 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 			@Override
 			public int compare(DrawingTreeNode o1, DrawingTreeNode o2) {
 				int res = o2.getDepth() - o1.getDepth();
-				if (res != 0)
+				if (res != 0) {
 					return res;
-				if (o2.parentNode == o1.parentNode)
+				}
+				if (o2.parentNode == o1.parentNode) {
 					return o2.parentNode.childNodes.indexOf(o1) - o2.parentNode.childNodes.indexOf(o2);
+				}
 				return res;
 				/*if (o1 == o2) return 0;
 				if (o1.isAncestorOf(o2)) return -1;
@@ -229,8 +234,9 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 
 	public final void enableGraphicalHierarchy() {
 		isGraphicalHierarchyEnabled = true;
-		if (isGraphicalHierarchyDirty)
+		if (isGraphicalHierarchyDirty) {
 			updateGraphicalObjectsHierarchy();
+		}
 	}
 
 	public final void disableGraphicalHierarchy() {
@@ -242,8 +248,9 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 			isGraphicalHierarchyDirty = true;
 			return;
 		}
-		if (isUpdatingObjectHierarchy) // Already doing it.
+		if (isUpdatingObjectHierarchy) {
 			return;
+		}
 		// logger.info("******************** BEGIN updateGraphicalObjectsHierarchy() ");
 		setChanged();
 		notifyObservers(new GraphicalObjectsHierarchyRebuildStarted(this));
@@ -266,16 +273,18 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 
 	public void invalidateGraphicalObjectsHierarchy(Object object) {
 		DrawingTreeNode<?> dtn = _hashMap.get(object);
-		if (dtn != null)
+		if (dtn != null) {
 			dtn.invalidate();
+		}
 	}
 
 	public void printGraphicalObjectHierarchy() {
 		logger.info("Graphical object hierarchy");
-		if (_root != null)
+		if (_root != null) {
 			_printGraphicalObjectHierarchy(_root, 0);
-		else
+		} else {
 			logger.info(" > Root node is null !");
+		}
 	}
 
 	private void _printGraphicalObjectHierarchy(DrawingTreeNode<?> dtn, int level) {
@@ -283,15 +292,18 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 				+ " > "
 				+ (dtn.graphicalRepresentation != null ? dtn.graphicalRepresentation.getClass().getSimpleName() + " "
 						+ Integer.toHexString(dtn.graphicalRepresentation.hashCode()) : " null ") + " object=" + dtn.drawable);
-		if (dtn.childNodes != null)
-			for (DrawingTreeNode<?> child : dtn.childNodes)
+		if (dtn.childNodes != null) {
+			for (DrawingTreeNode<?> child : dtn.childNodes) {
 				_printGraphicalObjectHierarchy(child, level + 1);
+			}
+		}
 	}
 
 	public static String buildString(char c, int length) {
 		StringBuffer sb = new StringBuffer();
-		for (int i = 0; i < length; i++)
+		for (int i = 0; i < length; i++) {
 			sb.append(c);
+		}
 		return sb.toString();
 	}
 
@@ -334,16 +346,19 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 			}
 		}
 
-		for (DrawingTreeNode n : nodesToUpdate)
+		for (DrawingTreeNode n : nodesToUpdate) {
 			n.beginUpdateObjectHierarchy();
+		}
 		graphicalRepresentationToNotifyAdding = new Vector<GraphicalRepresentation>();
 	}
 
 	protected void endUpdateObjectHierarchy() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Called endUpdateObjectHierarchy()");
-		for (DrawingTreeNode n : nodesToUpdate)
+		}
+		for (DrawingTreeNode n : nodesToUpdate) {
 			n.endUpdateObjectHierarchy();
+		}
 		for (GraphicalRepresentation gr : graphicalRepresentationToNotifyAdding) {
 			if (gr.getContainerGraphicalRepresentation() != null) {
 				gr.getContainerGraphicalRepresentation().notifyDrawableAdded(gr);
@@ -378,19 +393,22 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 
 		void invalidate() {
 			isInvalidated = true;
-			for (DrawingTreeNode<?> dtn : childNodes)
+			for (DrawingTreeNode<?> dtn : childNodes) {
 				dtn.invalidate();
+			}
 		}
 
 		private boolean isAncestorOf(DrawingTreeNode o2) {
-			if (o2 == null)
+			if (o2 == null) {
 				return false;
+			}
 			DrawingTreeNode current = o2;
 			while (current != DrawingTreeNode.this && current != null) {
 				current = current.parentNode;
 			}
-			if (current == null)
+			if (current == null) {
 				return false;
+			}
 			return true;
 		}
 
@@ -462,8 +480,9 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 
 		protected void delete() {
 			// Normally, it is already done, but check and do it when required...
-			if (parentNode != null && parentNode.childNodes.contains(this))
+			if (parentNode != null && parentNode.childNodes.contains(this)) {
 				parentNode.removeChild(this);
+			}
 
 			if (childNodes != null) {
 				for (DrawingTreeNode n : (Vector<DrawingTreeNode<?>>) childNodes.clone()) {
@@ -474,15 +493,18 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 
 			childNodes = null;
 
-			if (childs != null)
+			if (childs != null) {
 				childs.removeAllElements();
+			}
 			childs = null;
 
-			if (_hashMap != null && drawable != null)
+			if (_hashMap != null && drawable != null) {
 				_hashMap.remove(drawable);
+			}
 
-			if (graphicalRepresentation != null)
+			if (graphicalRepresentation != null) {
 				graphicalRepresentation.delete();
+			}
 
 			drawable = null;
 			parentNode = null;
@@ -498,8 +520,9 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 			// (we are sure that we don't want to keep it)
 			if (childNodes != null) {
 				for (DrawingTreeNode n : (new Vector<DrawingTreeNode<?>>(childNodes))) {
-					if (n.isInvalidated)
+					if (n.isInvalidated) {
 						removeDrawable(n.drawable, drawable);
+					}
 				}
 			}
 
@@ -525,8 +548,9 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 	public List<?> getContainedObjects(Object aDrawable) {
 		DrawingTreeNode treeNode = _hashMap.get(aDrawable);
 		// logger.info("getContainedObjects() for "+aDrawable+" > "+ _hashMap.get(aDrawable)+" childs="+treeNode.childs);
-		if (treeNode != null) // Bug 1006529 Fix
+		if (treeNode != null) {
 			return new Vector<Object>(treeNode.childs);
+		}
 		return null;
 	}
 
@@ -541,8 +565,9 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 			logger.info("Pour "+aDrawable+" le parent DTN c'est "+treeNode.parentNode);
 			logger.info("Pour "+aDrawable+" et le drawable c'est "+treeNode.parentNode.drawable);
 		}*/
-		if (treeNode != null && treeNode.parentNode != null)
+		if (treeNode != null && treeNode.parentNode != null) {
 			return treeNode.parentNode.drawable;
+		}
 		return null;
 	}
 
@@ -553,11 +578,13 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 
 	@Override
 	public <O> GraphicalRepresentation<O> getGraphicalRepresentation(O aDrawable) {
-		if (aDrawable == getModel())
+		if (aDrawable == getModel()) {
 			return (GraphicalRepresentation<O>) getDrawingGraphicalRepresentation();
+		}
 		DrawingTreeNode<O> treeNode = (DrawingTreeNode<O>) _hashMap.get(aDrawable);
-		if (treeNode != null)
+		if (treeNode != null) {
 			return treeNode.graphicalRepresentation;
+		}
 		return null;
 	}
 
@@ -571,8 +598,9 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 			for (Object drawable : drawableList) {
 				DrawingTreeNode dtn = _hashMap.get(drawable);
 				if (dtn != null) {
-					if (dtn.graphicalRepresentation != null)
+					if (dtn.graphicalRepresentation != null) {
 						dtn.graphicalRepresentation.delete();
+					}
 					dtn.delete();
 				}
 			}

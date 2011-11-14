@@ -38,11 +38,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.icon.GeneratorIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-
-import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
+import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.dnd.TreeDropTarget;
 import org.openflexo.components.browser.view.BrowserView;
 import org.openflexo.dgmodule.DGCst;
@@ -53,6 +50,8 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.toc.TOCEntry;
+import org.openflexo.icon.GeneratorIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 
 /**
  * @author gpolet

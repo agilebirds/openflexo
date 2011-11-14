@@ -76,8 +76,9 @@ public abstract class MouseSelectionManager extends SelectionManager implements 
 
 		setLastClickedContainer(clickedContainer);
 		setLastClickedPoint(clickedPoint);
-		if (ToolBox.getPLATFORM() != ToolBox.MACOS || e.getButton() != MouseEvent.BUTTON3)
+		if (ToolBox.getPLATFORM() != ToolBox.MACOS || e.getButton() != MouseEvent.BUTTON3) {
 			processMouseClicked(clickedContainer, clickedPoint, e.getClickCount(), e.getModifiersEx() == FlexoCst.MULTI_SELECTION_MASK);
+		}
 	}
 
 	@Override
@@ -129,8 +130,9 @@ public abstract class MouseSelectionManager extends SelectionManager implements 
 	 * Remove focus on supplied view
 	 */
 	public void removeFocus(FocusableView p) {
-		if (logger.isLoggable(Level.FINEST))
+		if (logger.isLoggable(Level.FINEST)) {
 			logger.finest("Remove focus on " + p);
+		}
 		_focusedPanel = null;
 		p.setIsFocused(false);
 	}
@@ -139,8 +141,9 @@ public abstract class MouseSelectionManager extends SelectionManager implements 
 	 * Add focus on supplied view
 	 */
 	protected void setIsFocused(FocusableView p) {
-		if (logger.isLoggable(Level.FINEST))
+		if (logger.isLoggable(Level.FINEST)) {
 			logger.finest("Set focus on " + p);
+		}
 		_focusedPanel = p;
 		p.setIsFocused(true);
 		setFocusedObject(p.getObject());

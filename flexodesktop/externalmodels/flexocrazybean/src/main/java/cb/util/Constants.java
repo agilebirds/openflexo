@@ -63,8 +63,9 @@ public abstract class Constants {
 	 * Convert a Rose name (which may contains white space, e.g.) to a Java name.
 	 */
 	public static String makeName(String name, java.util.List params, PetalNode parent) {
-		if (name == null)
+		if (name == null) {
 			return null;
+		}
 
 		char[] ch = name.toCharArray();
 		StringBuffer buf = new StringBuffer();
@@ -78,10 +79,11 @@ public abstract class Constants {
 				break;
 
 			default:
-				if (underscore)
+				if (underscore) {
 					buf.append(Character.toUpperCase(ch[i]));
-				else
+				} else {
 					buf.append(ch[i]);
+				}
 
 				underscore = false;
 				break;
@@ -93,25 +95,28 @@ public abstract class Constants {
 		if (ret.equals("ClassCategory")) { // Find more specific class
 			String obj = (String) params.get(0);
 
-			if (obj.equals("Use Case View") || (parent instanceof UseCaseCategory))
+			if (obj.equals("Use Case View") || (parent instanceof UseCaseCategory)) {
 				return "UseCaseCategory";
-			else if (obj.equals("Logical View") || (parent instanceof LogicalCategory))
+			} else if (obj.equals("Logical View") || (parent instanceof LogicalCategory)) {
 				return "LogicalCategory";
-			else
+			} else {
 				return ret;
-		} else
+			}
+		} else {
 			return ret;
+		}
 	}
 
 	private static HashSet primitive = new HashSet(
 			Arrays.asList(new String[] { "int", "double", "long", "char", "byte", "float", "short" }));
 
 	public static String getValueForType(String t) {
-		if (primitive.contains(t))
+		if (primitive.contains(t)) {
 			return "(" + t + ")0";
-		else if (t.equals("boolean"))
+		} else if (t.equals("boolean")) {
 			return "false";
-		else
+		} else {
 			return "null";
+		}
 	}
 }

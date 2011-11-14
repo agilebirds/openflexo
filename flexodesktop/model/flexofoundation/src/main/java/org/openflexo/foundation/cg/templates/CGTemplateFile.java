@@ -70,6 +70,7 @@ public class CGTemplateFile extends CGTemplate {
 		return getRelativePathWithoutSetPrefix();
 	}
 
+	@Override
 	public String getRelativePathWithoutSetPrefix() {
 		return getAdditionalPath() + getTemplateName();
 	}

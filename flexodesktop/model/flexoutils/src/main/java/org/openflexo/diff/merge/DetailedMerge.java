@@ -41,8 +41,9 @@ public class DetailedMerge extends Merge {
 	}
 
 	public Merge getParentMerge() {
-		if (_change != null)
+		if (_change != null) {
 			return _change.getMerge();
+		}
 		return null;
 	}
 
@@ -52,8 +53,9 @@ public class DetailedMerge extends Merge {
 
 	@Override
 	public MergedDocumentType getDocumentType() {
-		if (getParentMerge() != null)
+		if (getParentMerge() != null) {
 			return getParentMerge().getDocumentType();
+		}
 		return super.getDocumentType();
 	}
 

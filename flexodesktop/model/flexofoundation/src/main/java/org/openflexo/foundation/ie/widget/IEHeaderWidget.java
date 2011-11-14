@@ -155,8 +155,9 @@ public class IEHeaderWidget extends IENonEditableTextWidget implements Extensibl
 	}
 
 	public RepetitionOperator relatedRepetitionOperator() {
-		if (relatedRepeatedSequence() == null)
+		if (relatedRepeatedSequence() == null) {
 			return null;
+		}
 		return (RepetitionOperator) relatedRepeatedSequence().getOperator();
 	}
 
@@ -175,8 +176,9 @@ public class IEHeaderWidget extends IENonEditableTextWidget implements Extensibl
 	}
 
 	public ITableData tdContainer() {
-		if (getParent() instanceof IESequenceWidget)
+		if (getParent() instanceof IESequenceWidget) {
 			return ((IESequenceWidget) getParent()).td();
+		}
 		return null;
 	}
 
@@ -187,8 +189,9 @@ public class IEHeaderWidget extends IENonEditableTextWidget implements Extensibl
 			IETRWidget firstTR = repeatedSequence.getFirstTR();
 			IETDWidget relatedTD = firstTR.getTD(x);
 			if (relatedTD != null) {
-				if (relatedTD.getSequenceWidget().size() == 0)
+				if (relatedTD.getSequenceWidget().size() == 0) {
 					return null;
+				}
 				IEWidget candidate = null;
 				Enumeration en = relatedTD.getSequenceWidget().elements();
 				while (en.hasMoreElements()) {
@@ -212,10 +215,12 @@ public class IEHeaderWidget extends IENonEditableTextWidget implements Extensibl
 	public String getRepetitionName() {
 		RepetitionOperator repetition = relatedRepetitionOperator();
 		HTMLListDescriptor descriptor = getHTMLListDescriptor();
-		if (descriptor == null && repetition != null)
+		if (descriptor == null && repetition != null) {
 			descriptor = repetition.getHTMLListDescriptor();
-		if (descriptor == null)
+		}
+		if (descriptor == null) {
 			return "norepetition";
+		}
 		return descriptor.getListName();
 	}
 
@@ -228,12 +233,15 @@ public class IEHeaderWidget extends IENonEditableTextWidget implements Extensibl
 					IETRWidget tr = sequenceTR.getAllTR().firstElement();
 					IETDWidget td = tr.getTDatXLocation(findTDInParent().getXLocation());
 					return (IEWidget) td.getSequenceWidget().firstObject();
-				} else
+				} else {
 					return null;
-			} else
+				}
+			} else {
 				return null;
-		} else
+			}
+		} else {
 			return null;
+		}
 	}
 
 	public static class HeaderMustBeInATableContainingARepetition extends ValidationRule {

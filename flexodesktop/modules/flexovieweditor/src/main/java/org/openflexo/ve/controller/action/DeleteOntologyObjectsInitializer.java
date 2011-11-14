@@ -26,8 +26,8 @@ import javax.swing.Icon;
 import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.fib.controller.FIBController.Status;
+import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.ontology.action.DeleteOntologyObjects;
@@ -66,8 +66,9 @@ public class DeleteOntologyObjectsInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, DeleteOntologyObjects action) {
 				if (getControllerActionInitializer().getOEController().getSelectionManager().getLastSelectedObject() != null
-						&& getControllerActionInitializer().getOEController().getSelectionManager().getLastSelectedObject().isDeleted())
+						&& getControllerActionInitializer().getOEController().getSelectionManager().getLastSelectedObject().isDeleted()) {
 					getControllerActionInitializer().getOEController().getSelectionManager().resetSelection();
+				}
 				return true;
 			}
 		};

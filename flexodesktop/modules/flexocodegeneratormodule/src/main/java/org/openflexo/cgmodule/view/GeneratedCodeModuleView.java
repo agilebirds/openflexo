@@ -64,14 +64,16 @@ public class GeneratedCodeModuleView extends JPanel implements ModuleView<Genera
 	}
 
 	private void updateView() {
-		if (component != null)
+		if (component != null) {
 			panel.remove(component);
+		}
 		if (_gc.getGeneratedRepositories().size() == 0) {
 			panel.add(component = new FlexoActionButton(AddGeneratedCodeRepository.actionType, this, _controller.getEditor()),
 					BorderLayout.CENTER);
-		} else
+		} else {
 			panel.add(component = new JLabel(FlexoLocalization.localizedForKey("please_select_a_repository"), SwingConstants.CENTER),
 					BorderLayout.CENTER);
+		}
 		panel.validate();
 		panel.repaint();
 	}

@@ -58,9 +58,10 @@ public class RetrieveCVSHistoryInitializer extends ActionInitializer {
 			public boolean run(ActionEvent e, RetrieveCVSHistory action) {
 				getControllerActionInitializer().getFPSController().getSelectionManager().setSelectedObject(action.getFocusedObject());
 				getControllerActionInitializer().getFPSController().showInspector();
-				if (getControllerActionInitializer().getFPSController().getInspectorWindow().getContent().currentTabPanel != null)
+				if (getControllerActionInitializer().getFPSController().getInspectorWindow().getContent().currentTabPanel != null) {
 					getControllerActionInitializer().getFPSController().getInspectorWindow().getContent().currentTabPanel
 							.setSelectedIndex(2);
+				}
 				return true;
 			}
 		};

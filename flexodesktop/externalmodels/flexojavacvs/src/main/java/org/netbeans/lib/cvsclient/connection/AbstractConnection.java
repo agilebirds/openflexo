@@ -72,8 +72,9 @@ public abstract class AbstractConnection implements Connection {
 	 *            The data input stream
 	 */
 	protected final void setInputStream(LoggedDataInputStream inputStream) {
-		if (this.inputStream == inputStream)
+		if (this.inputStream == inputStream) {
 			return;
+		}
 		if (this.inputStream != null) {
 			try {
 				this.inputStream.close();
@@ -100,8 +101,9 @@ public abstract class AbstractConnection implements Connection {
 	 *            The data output stream
 	 */
 	protected final void setOutputStream(LoggedDataOutputStream outputStream) {
-		if (this.outputStream == outputStream)
+		if (this.outputStream == outputStream) {
 			return;
+		}
 		if (this.outputStream != null) {
 			try {
 				this.outputStream.close();
@@ -149,8 +151,9 @@ public abstract class AbstractConnection implements Connection {
 		int c;
 		while ((c = inputStream.read()) != -1) {
 			responseNameBuffer.append((char) c);
-			if (c == '\n')
+			if (c == '\n') {
 				break;
+			}
 		}
 
 		String response = responseNameBuffer.toString();

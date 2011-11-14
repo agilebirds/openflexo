@@ -90,8 +90,9 @@ public class MoveFlexoProcess extends FlexoUndoableAction<MoveFlexoProcess, Flex
 				}
 			}
 
-			if (potentialRoot.size() == 0)
+			if (potentialRoot.size() == 0) {
 				throw new FlexoException("Sorry, you cannot move Root Process since there is no other potential root process.");
+			}
 		}
 		_setParentProcessAction = SetPropertyAction.actionType.makeNewEmbeddedAction(getFocusedObject(), null, this);
 		_setParentProcessAction.setKey("parentProcess");

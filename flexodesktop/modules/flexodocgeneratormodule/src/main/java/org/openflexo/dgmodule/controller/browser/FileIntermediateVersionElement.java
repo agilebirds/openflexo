@@ -28,8 +28,8 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.cg.version.CGFileIntermediateVersion;
-import org.openflexo.icon.CGIconLibrary;
 import org.openflexo.icon.FilesIconLibrary;
+import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconMarker;
 
@@ -60,7 +60,7 @@ public class FileIntermediateVersionElement extends DGBrowserElement {
 	public Icon getIcon() {
 		ImageIcon returned = getBaseIcon();
 		Vector<IconMarker> markers = new Vector<IconMarker>();
-		markers.add(CGIconLibrary.INTERMEDIATE_VERSION);
+		markers.add(GeneratorIconLibrary.INTERMEDIATE_VERSION);
 		IconMarker[] markersArray = markers.toArray(new IconMarker[markers.size()]);
 		returned = IconFactory.getImageIcon(returned, markersArray);
 		return returned;

@@ -43,8 +43,9 @@ public class TabComponentWOFileResource extends ComponentWOFileResource<TabCompo
 	public void registerObserverWhenRequired() {
 		if ((!isObserverRegistered) && (getComponentDefinition() != null)) {
 			isObserverRegistered = true;
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getComponentDefinition());
+			}
 			getComponentDefinition().addObserver(this);
 		}
 	}
@@ -100,8 +101,9 @@ public class TabComponentWOFileResource extends ComponentWOFileResource<TabCompo
 							}
 						}
 					}
-					if (iCanBeOptimistic)
+					if (iCanBeOptimistic) {
 						return false;
+					}
 				}
 			}
 		}

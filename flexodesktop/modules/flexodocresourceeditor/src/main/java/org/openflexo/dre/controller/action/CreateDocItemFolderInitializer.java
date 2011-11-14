@@ -64,8 +64,9 @@ public class CreateDocItemFolderInitializer extends ActionInitializer {
 						FlexoLocalization.localizedForKey("enter_parameters_for_the_new_doc_item"), parameters);
 				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 					String newItemFolderIdentifier = (String) dialog.parameterValueWithName("newItemFolderIdentifier");
-					if (newItemFolderIdentifier == null)
+					if (newItemFolderIdentifier == null) {
 						return false;
+					}
 					action.setNewItemFolderIdentifier(newItemFolderIdentifier);
 					action.setNewItemFolderDescription((String) dialog.parameterValueWithName("description"));
 					return true;

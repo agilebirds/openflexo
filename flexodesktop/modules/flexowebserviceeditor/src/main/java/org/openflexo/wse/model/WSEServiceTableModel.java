@@ -24,11 +24,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.WSEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.FlexoController;
-import org.openflexo.wse.controller.WSEController;
-
 import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.components.tabular.model.EditableStringColumn;
 import org.openflexo.components.tabular.model.IconColumn;
@@ -38,6 +33,9 @@ import org.openflexo.foundation.ws.DuplicateWSObjectException;
 import org.openflexo.foundation.ws.ExternalWSService;
 import org.openflexo.foundation.ws.WSFolder;
 import org.openflexo.foundation.ws.WSService;
+import org.openflexo.icon.WSEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * table model for a service.
@@ -54,18 +52,20 @@ public class WSEServiceTableModel extends AbstractModel<WSFolder, WSService> {
 		addToColumns(new IconColumn<WSService>("ws_service_icon", 30) {
 			@Override
 			public Icon getIcon(WSService object) {
-				if (object instanceof ExternalWSService)
+				if (object instanceof ExternalWSService) {
 					return WSEIconLibrary.EXTERNAL_WS_SERVICE_ICON;
-				else
+				} else {
 					return WSEIconLibrary.INTERNAL_WS_SERVICE_ICON;
+				}
 			}
 
 			@Override
 			public String getLocalizedTooltip(WSService object) {
-				if (object instanceof ExternalWSService)
+				if (object instanceof ExternalWSService) {
 					return FlexoLocalization.localizedForKey("external_ws");
-				else
+				} else {
 					return FlexoLocalization.localizedForKey("internal_ws");
+				}
 			}
 		});
 

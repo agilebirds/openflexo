@@ -53,8 +53,9 @@ public class MoveTabLeftInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, MoveTabLeft action) {
 				IETabWidget tab = null;
-				if (action.getFocusedObject() instanceof IETabWidget)
+				if (action.getFocusedObject() instanceof IETabWidget) {
 					tab = ((IETabWidget) action.getFocusedObject());
+				}
 				if (action.getInvoker() instanceof DropTabZone) {
 					DropTabZone invoker = (DropTabZone) action.getInvoker();
 					if (invoker.getSelectedComponent() != null) {

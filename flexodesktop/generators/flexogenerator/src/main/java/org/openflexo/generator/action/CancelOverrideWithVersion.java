@@ -73,8 +73,9 @@ public class CancelOverrideWithVersion extends MultipleFileGCAction<CancelOverri
 		repository.getProject().getFlexoRMResource().saveResourceData();
 
 		// Refreshing repository
-		if (repository instanceof CGRepository)
+		if (repository instanceof CGRepository) {
 			((CGRepository) repository).clearAllJavaParsingData();
+		}
 
 	}
 

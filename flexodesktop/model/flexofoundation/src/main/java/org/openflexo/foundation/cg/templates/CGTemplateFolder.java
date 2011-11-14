@@ -42,8 +42,9 @@ public class CGTemplateFolder extends CGTemplateObject {
 
 	public CGTemplateFolder getFolder(String name) {
 		for (CGTemplateFolder dir : dirs) {
-			if (name.equals(dir.getName()))
+			if (name.equals(dir.getName())) {
 				return dir;
+			}
 		}
 		return null;
 	}

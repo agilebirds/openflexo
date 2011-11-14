@@ -33,8 +33,8 @@ import org.openflexo.fge.geom.FGERectPolylin;
 import org.openflexo.fge.geomedit.ComputedControlPoint;
 import org.openflexo.fge.geomedit.DraggableControlPoint;
 import org.openflexo.fge.geomedit.GeometricDrawing;
-import org.openflexo.fge.geomedit.Polylin;
 import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
+import org.openflexo.fge.geomedit.Polylin;
 import org.openflexo.fge.geomedit.construction.ExplicitPointConstruction;
 import org.openflexo.fge.geomedit.construction.PointConstruction;
 import org.openflexo.fge.geomedit.construction.PolylinConstruction;
@@ -78,8 +78,9 @@ public class PolylinGraphicalRepresentation extends GeometricObjectGraphicalRepr
 			graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.GREEN));
 			FGERectPolylin debugPolylin = rectPoly.makeNormalizedRectPolylin();
 			debugPolylin.paint(graphics);
-			for (FGEPoint p : debugPolylin.getPoints())
+			for (FGEPoint p : debugPolylin.getPoints()) {
 				p.paint(graphics);
+			}
 			if (rectPoly.currentPointStartingSide != null) {
 				graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.RED, 2.0f));
 				rectPoly.currentPointStartingSide.paint(graphics);

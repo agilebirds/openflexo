@@ -22,10 +22,10 @@ package org.openflexo.foundation.ie.widget;
 import java.util.List;
 
 import org.openflexo.foundation.bindings.AbstractBinding;
+import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.bindings.BindingValue;
 import org.openflexo.foundation.bindings.RequiredBindingValidationRule;
 import org.openflexo.foundation.bindings.WidgetBindingDefinition;
-import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.ie.HTMLListDescriptor;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
@@ -79,8 +79,9 @@ public abstract class IEEditableTextWidget extends IEControlWidget implements IE
 	}
 
 	public final BindingValue getBindingValue() {
-		if (isBeingCloned())
+		if (isBeingCloned()) {
 			return null;
+		}
 		return _bindingValue;
 	}
 
@@ -124,8 +125,9 @@ public abstract class IEEditableTextWidget extends IEControlWidget implements IE
 	}
 
 	public void setValue(String value) {
-		if (value != null && value.trim().length() == 0)
+		if (value != null && value.trim().length() == 0) {
 			value = null;
+		}
 		this._value = value;
 		setChanged();
 		notifyObservers(new IEDataModification("value", null, value));
@@ -191,18 +193,22 @@ public abstract class IEEditableTextWidget extends IEControlWidget implements IE
 	@Override
 	public String getRawRowKeyPath() {
 		HTMLListDescriptor desc = getHTMLListDescriptor();
-		if (desc == null)
+		if (desc == null) {
 			return null;
+		}
 		String item = desc.getItemName();
-		if (item == null)
+		if (item == null) {
 			return null;
-		if (getBindingValue() == null)
+		}
+		if (getBindingValue() == null) {
 			return null;
-		if (getBindingValue().getCodeStringRepresentation().indexOf(item) > -1)
+		}
+		if (getBindingValue().getCodeStringRepresentation().indexOf(item) > -1) {
 			return getBindingValue().getCodeStringRepresentation().substring(
 					getBindingValue().getCodeStringRepresentation().indexOf(item) + item.length() + 1);
-		else
+		} else {
 			return null;
+		}
 	}
 
 	/**

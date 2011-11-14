@@ -56,8 +56,9 @@ public class FileInspectorWidget extends CustomInspectorWidget<File> {
 		getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Focus gained in " + getClass().getName());
+				}
 				super.focusGained(arg0);
 				_selector.getTextField().requestFocus();
 				_selector.getTextField().selectAll();
@@ -65,8 +66,9 @@ public class FileInspectorWidget extends CustomInspectorWidget<File> {
 
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Focus lost in " + getClass().getName());
+				}
 				super.focusLost(arg0);
 			}
 		});
@@ -83,8 +85,9 @@ public class FileInspectorWidget extends CustomInspectorWidget<File> {
 	 */
 	@Override
 	public synchronized void updateModelFromWidget() {
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("FileSelector getEditedObject: " + _selector.getEditedObject());
+		}
 		setObjectValue(_selector.getEditedObject());
 		super.updateModelFromWidget();
 	}
@@ -106,14 +109,16 @@ public class FileInspectorWidget extends CustomInspectorWidget<File> {
 
 	@Override
 	public void fireEditingCanceled() {
-		if (_selector != null)
+		if (_selector != null) {
 			_selector.closePopup();
+		}
 	}
 
 	@Override
 	public void fireEditingStopped() {
-		if (_selector != null)
+		if (_selector != null) {
 			_selector.closePopup();
+		}
 	}
 
 }

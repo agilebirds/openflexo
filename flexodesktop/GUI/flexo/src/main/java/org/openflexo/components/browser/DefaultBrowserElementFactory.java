@@ -57,20 +57,25 @@ public class DefaultBrowserElementFactory implements BrowserElementFactory {
 		}
 		BrowserElement tryThis = null;
 		tryThis = wkfFactory.makeNewElement(object, browser, parent);
-		if (tryThis != null)
+		if (tryThis != null) {
 			return tryThis;
+		}
 		tryThis = ieFactory.makeNewElement(object, browser, parent);
-		if (tryThis != null)
+		if (tryThis != null) {
 			return tryThis;
+		}
 		tryThis = dmFactory.makeNewElement(object, browser, parent);
-		if (tryThis != null)
+		if (tryThis != null) {
 			return tryThis;
+		}
 		tryThis = wsFactory.makeNewElement(object, browser, parent);
-		if (tryThis != null)
+		if (tryThis != null) {
 			return tryThis;
+		}
 		tryThis = oeFactory.makeNewElement(object, browser, parent);
-		if (tryThis != null)
+		if (tryThis != null) {
 			return tryThis;
+		}
 
 		logger.warning("Unexpected type " + object.getClass().getName() + " in browser");
 		return null;

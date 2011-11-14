@@ -52,8 +52,9 @@ public abstract class AbstractAssertion extends ViewPointObject {
 	}
 
 	public boolean evaluateCondition(EditionSchemeAction action) {
-		if (getConditional().isValid())
+		if (getConditional().isValid()) {
 			return (Boolean) getConditional().getBindingValue(action);
+		}
 		return true;
 	}
 
@@ -75,8 +76,9 @@ public abstract class AbstractAssertion extends ViewPointObject {
 	}
 
 	public ViewPointDataBinding getConditional() {
-		if (conditional == null)
+		if (conditional == null) {
 			conditional = new ViewPointDataBinding(this, EditionActionBindingAttribute.conditional, getConditionalBindingDefinition());
+		}
 		return conditional;
 	}
 

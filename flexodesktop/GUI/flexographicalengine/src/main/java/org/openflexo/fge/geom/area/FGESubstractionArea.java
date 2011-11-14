@@ -24,11 +24,11 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.geom.FGEAbstractLine;
 import org.openflexo.fge.geom.FGEGeometricObject;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGELine;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGEShape;
-import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.FGEGraphics;
 
@@ -106,14 +106,18 @@ public class FGESubstractionArea extends FGEOperationArea {
 	 */
 	protected static FGEArea makeSubstraction(FGEArea containerArea, FGEArea substractedArea, boolean isStrict,
 			boolean checkNonNullIntersection) {
-		if (containerArea instanceof FGEEmptyArea)
+		if (containerArea instanceof FGEEmptyArea) {
 			return new FGEEmptyArea();
-		if (substractedArea instanceof FGEEmptyArea)
+		}
+		if (substractedArea instanceof FGEEmptyArea) {
 			return containerArea.clone();
-		if (checkNonNullIntersection && (containerArea.intersect(substractedArea) instanceof FGEEmptyArea))
+		}
+		if (checkNonNullIntersection && (containerArea.intersect(substractedArea) instanceof FGEEmptyArea)) {
 			return containerArea.clone();
-		if (substractedArea.containsArea(containerArea))
+		}
+		if (substractedArea.containsArea(containerArea)) {
 			return new FGEEmptyArea();
+		}
 		return new FGESubstractionArea(containerArea, substractedArea, isStrict);
 	}
 
@@ -135,39 +139,46 @@ public class FGESubstractionArea extends FGEOperationArea {
 
 	@Override
 	public boolean containsArea(FGEArea a) {
-		if (a instanceof FGEPoint)
+		if (a instanceof FGEPoint) {
 			return containsPoint((FGEPoint) a);
-		if (a instanceof FGELine)
+		}
+		if (a instanceof FGELine) {
 			return containsLine((FGELine) a);
-		if (a instanceof FGEShape)
+		}
+		if (a instanceof FGEShape) {
 			return FGEShape.AreaComputation.isShapeContainedInArea((FGEShape) a, this);
+		}
 		return false;
 	}
 
 	protected boolean isPointLocatedOnSubstractedAreaBorder(FGEPoint testPoint) {
-		if (!substractedArea.containsPoint(testPoint))
+		if (!substractedArea.containsPoint(testPoint)) {
 			return false;
+		}
 
-		if (substractedArea instanceof FGEShape)
+		if (substractedArea instanceof FGEShape) {
 			return ((FGEShape) substractedArea).nearestOutlinePoint(testPoint).equals(testPoint);
-
-		else {
+		} else {
 			// Little hack
 			// Test with 4 points located juste near this point (at 2*EPSILON, which is the equals criteria)
 			// If one of those point is not located inside substracted area, this means
 			// that test point was "borderline"
 			FGEPoint p1 = new FGEPoint(testPoint.x - 2 * FGEGeometricObject.EPSILON, testPoint.y);
-			if (!substractedArea.containsPoint(p1))
+			if (!substractedArea.containsPoint(p1)) {
 				return true;
+			}
 			FGEPoint p2 = new FGEPoint(testPoint.x + 2 * FGEGeometricObject.EPSILON, testPoint.y);
-			if (!substractedArea.containsPoint(p2))
+			if (!substractedArea.containsPoint(p2)) {
 				return true;
+			}
 			FGEPoint p3 = new FGEPoint(testPoint.x, testPoint.y - 2 * FGEGeometricObject.EPSILON);
-			if (!substractedArea.containsPoint(p3))
+			if (!substractedArea.containsPoint(p3)) {
 				return true;
+			}
 			FGEPoint p4 = new FGEPoint(testPoint.x, testPoint.y + 2 * FGEGeometricObject.EPSILON);
-			if (!substractedArea.containsPoint(p4))
+			if (!substractedArea.containsPoint(p4)) {
 				return true;
+			}
 			return false;
 		}
 	}
@@ -195,20 +206,24 @@ public class FGESubstractionArea extends FGEOperationArea {
 
 	@Override
 	public FGEPoint getNearestPoint(FGEPoint aPoint) {
-		if (containsPoint(aPoint))
+		if (containsPoint(aPoint)) {
 			return aPoint.clone();
+		}
 
 		FGEPoint returned = containerArea.getNearestPoint(aPoint);
-		if (returned == null)
+		if (returned == null) {
 			return null;
-		if (!substractedArea.containsPoint(returned))
+		}
+		if (!substractedArea.containsPoint(returned)) {
 			return returned;
+		}
 
 		// We have an other chance here !
 		if (substractedArea instanceof FGEShape && !isStrict()) {
 			FGEPoint outlinePoint = ((FGEShape) substractedArea).nearestOutlinePoint(aPoint);
-			if (containsPoint(outlinePoint))
+			if (containsPoint(outlinePoint)) {
 				return outlinePoint;
+			}
 		}
 
 		// TODO: we can implement a recursive method, trying to invoke getNearest() alternatively
@@ -253,12 +268,14 @@ public class FGESubstractionArea extends FGEOperationArea {
 	 */
 	@Override
 	public FGEPoint nearestPointFrom(FGEPoint from, SimplifiedCardinalDirection orientation) {
-		if (containsPoint(from))
+		if (containsPoint(from)) {
 			return from.clone();
+		}
 
 		FGEPoint returned = containerArea.nearestPointFrom(from, orientation);
-		if (!substractedArea.containsPoint(returned))
+		if (!substractedArea.containsPoint(returned)) {
 			return returned;
+		}
 
 		// TODO: to implement
 		logger.warning("Not implemented yet !!!!");

@@ -67,12 +67,13 @@ public class DocConstants {
 
 			@Override
 			public String getDefaultContent(String docTypeName) {
-				if (DefaultDocType.Business.name().equals(docTypeName))
+				if (DefaultDocType.Business.name().equals(docTypeName)) {
 					return PURPOSE_BUSINESS_CONTENT;
-				else if (DefaultDocType.Technical.name().equals(docTypeName))
+				} else if (DefaultDocType.Technical.name().equals(docTypeName)) {
 					return PURPOSE_TECHNICAL_CONTENT;
-				else
+				} else {
 					return PURPOSE_DEFAULT_CONTENT;
+				}
 			}
 		},
 		OBJECTIVES {

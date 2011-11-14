@@ -147,10 +147,11 @@ public class RadioButtonListWidget extends MultipleValuesWidget {
 	 */
 	@Override
 	public synchronized void updateModelFromWidget() {
-		if (!typeIsString() && typeIsStringConvertable() && _selectedObject instanceof String)
+		if (!typeIsString() && typeIsStringConvertable() && _selectedObject instanceof String) {
 			setStringValue((String) _selectedObject);
-		else
+		} else {
 			setObjectValue(_selectedObject);
+		}
 	}
 
 	@Override
@@ -165,25 +166,29 @@ public class RadioButtonListWidget extends MultipleValuesWidget {
 			if (getPropertyModel().hasValueForParameter("icon")) {
 				try {
 					String listAccessor = getPropertyModel().getValueForParameter("icon");
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Get icon file for object" + object + " with icon accessor "
 								+ getPropertyModel().getValueForParameter("icon"));
+					}
 					Object currentObject = PropertyModel.getObjectForMultipleAccessors((KeyValueCoding) object, listAccessor);
 					if (currentObject instanceof File) {
-						if (logger.isLoggable(Level.FINE))
+						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("Get icon file for object" + object + " with icon accessor "
 									+ getPropertyModel().getValueForParameter("icon") + " returns " + currentObject);
+						}
 						return ((File) currentObject);
 					} else {
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Property " + getPropertyModel().name + ": succeeded acces to " + listAccessor
 									+ " but answer is not a FILE");
+						}
 						return null;
 					}
 				} catch (Exception e) {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("getDynamicList() failed for property " + getPropertyModel().name + " for object " + object
 								+ " : exception " + e.getMessage());
+					}
 					return null;
 				}
 			} else {
@@ -191,9 +196,10 @@ public class RadioButtonListWidget extends MultipleValuesWidget {
 			}
 
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("There is an error in some configuration file :\n the property named '" + _propertyModel.name
 						+ "' has no FILE representation formatter ! Object is a " + (object != null ? object.getClass().getName() : "null"));
+			}
 			return null;
 		}
 	}

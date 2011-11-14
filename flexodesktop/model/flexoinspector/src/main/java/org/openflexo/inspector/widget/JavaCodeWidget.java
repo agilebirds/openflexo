@@ -98,20 +98,23 @@ public class JavaCodeWidget extends DenaliWidget<String> {
 		_textArea.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent e) {
-				if ((!validateOnReturn) && (!widgetUpdating))
+				if ((!validateOnReturn) && (!widgetUpdating)) {
 					updateModelFromWidget();
+				}
 			}
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				if ((!validateOnReturn) && (!widgetUpdating))
+				if ((!validateOnReturn) && (!widgetUpdating)) {
 					updateModelFromWidget();
+				}
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				if ((!validateOnReturn) && (!widgetUpdating))
+				if ((!validateOnReturn) && (!widgetUpdating)) {
 					updateModelFromWidget();
+				}
 			}
 		});
 
@@ -143,12 +146,14 @@ public class JavaCodeWidget extends DenaliWidget<String> {
 	@Override
 	public synchronized void updateWidgetFromModel() {
 		widgetUpdating = true;
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("updateWidgetFromModel() in JavaCodeWidget with " + getStringValue());
+		}
 		int oldPosition = _textArea.getCaretPosition();
 		_textArea.setText(getStringValue());
-		if (oldPosition < _textArea.getDocumentLength())
+		if (oldPosition < _textArea.getDocumentLength()) {
 			_textArea.setCaretPosition(oldPosition);
+		}
 		widgetUpdating = false;
 
 	}
@@ -159,8 +164,9 @@ public class JavaCodeWidget extends DenaliWidget<String> {
 	@Override
 	public synchronized void updateModelFromWidget() {
 		modelUpdating = true;
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("updateModelFromWidget() in JavaCodeWidget with " + _textArea.getText());
+		}
 		setStringValue(_textArea.getText());
 		modelUpdating = false;
 	}

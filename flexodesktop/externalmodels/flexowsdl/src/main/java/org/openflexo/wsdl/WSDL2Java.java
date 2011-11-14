@@ -176,8 +176,9 @@ public class WSDL2Java {
 
 		Map sourcesToCopyMap = new HashMap();
 
-		if (classpath != null)
+		if (classpath != null) {
 			cpResourceLoader = new PathResourceLoader(classpath);
+		}
 
 		boolean result = true;
 
@@ -236,10 +237,10 @@ public class WSDL2Java {
 
 					XmlObject wsdldoc = loader.parse(wsdlFiles[i], null, options);
 
-					if (!(wsdldoc instanceof org.apache.xmlbeans.impl.xb.substwsdl.DefinitionsDocument))
+					if (!(wsdldoc instanceof org.apache.xmlbeans.impl.xb.substwsdl.DefinitionsDocument)) {
 						StscState.addError(errorListener, XmlErrorCodes.INVALID_DOCUMENT_TYPE, new Object[] { wsdlFiles[i], "wsdl" },
 								wsdldoc);
-					else {
+					} else {
 						addWsdlSchemas(wsdlFiles[i].toString(), (org.apache.xmlbeans.impl.xb.substwsdl.DefinitionsDocument) wsdldoc,
 								errorListener, noVDoc, scontentlist);
 					}
@@ -297,24 +298,31 @@ public class WSDL2Java {
 		SchemaTypeLoader linkTo = SchemaTypeLoaderImpl.build(null, cpResourceLoader, null);
 
 		URI baseURI = null;
-		if (baseDir != null)
+		if (baseDir != null) {
 			baseURI = baseDir.toURI();
+		}
 
 		XmlOptions opts = new XmlOptions();
-		if (download)
+		if (download) {
 			opts.setCompileDownloadUrls();
-		if (noUpa)
+		}
+		if (noUpa) {
 			opts.setCompileNoUpaRule();
-		if (noPvr)
+		}
+		if (noPvr) {
 			opts.setCompileNoPvrRule();
-		if (noAnn)
+		}
+		if (noAnn) {
 			opts.setCompileNoAnnotations();
-		if (mdefNamespaces != null)
+		}
+		if (mdefNamespaces != null) {
 			opts.setCompileMdefNamespaces(mdefNamespaces);
+		}
 		opts.setCompileNoValidation(); // already validated here
 		opts.setEntityResolver(entResolver);
-		if (javasource != null)
+		if (javasource != null) {
 			opts.setGenerateJavaVersion(javasource);
+		}
 
 		// now pass it to the main compile function
 		SchemaTypeSystemCompiler.Parameters params = new SchemaTypeSystemCompiler.Parameters();
@@ -477,15 +485,17 @@ public class WSDL2Java {
 	 */
 	private static void addWsdlSchemas(String name, org.apache.xmlbeans.impl.xb.substwsdl.DefinitionsDocument wsdldoc,
 			XmlErrorWatcher errorListener, boolean noVDoc, List scontentlist) {
-		if (wsdlContainsEncoded(wsdldoc))
+		if (wsdlContainsEncoded(wsdldoc)) {
 			StscState
 					.addWarning(errorListener, "The WSDL " + name
 							+ " uses SOAP encoding. SOAP encoding is not compatible with literal XML Schema.", XmlErrorCodes.GENERIC_ERROR,
 							wsdldoc);
+		}
 		StscState.addInfo(errorListener, "Loading wsdl file " + name);
 		XmlOptions opts = new XmlOptions().setErrorListener(errorListener);
-		if (noVDoc)
+		if (noVDoc) {
 			opts.setValidateTreatLaxAsSkip();
+		}
 		XmlObject[] types = wsdldoc.getDefinitions().getTypesArray();
 		int count = 0;
 		for (int j = 0; j < types.length; j++) {
@@ -512,8 +522,9 @@ public class WSDL2Java {
 		XmlObject[] useAttrs = wsdldoc.selectPath("declare namespace soap='http://schemas.xmlsoap.org/wsdl/soap/' "
 				+ ".//soap:body/@use|.//soap:header/@use|.//soap:fault/@use");
 		for (int i = 0; i < useAttrs.length; i++) {
-			if ("encoded".equals(((SimpleValue) useAttrs[i]).getStringValue()))
+			if ("encoded".equals(((SimpleValue) useAttrs[i]).getStringValue())) {
 				return true;
+			}
 		}
 		return false;
 	}

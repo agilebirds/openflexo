@@ -190,14 +190,18 @@ public class DocItemAction extends DRMObject {
 	}
 
 	public String getStatusName() {
-		if (!isProposal())
+		if (!isProposal()) {
 			return "";
-		if (isApproved())
+		}
+		if (isApproved()) {
 			return FlexoLocalization.localizedForKey("[approved]");
-		if (isRefused())
+		}
+		if (isRefused()) {
 			return FlexoLocalization.localizedForKey("[refused]");
-		if (isPending())
+		}
+		if (isPending()) {
 			return FlexoLocalization.localizedForKey("[pending]");
+		}
 		return "";
 	}
 

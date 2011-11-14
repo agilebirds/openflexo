@@ -47,18 +47,20 @@ public class Token {
 	public static Token createToken(int kind, String image, int line) {
 		Token t;
 
-		if (stack.isEmpty())
+		if (stack.isEmpty()) {
 			t = new Token();
-		else
+		} else {
 			t = (Token) stack.pop();
+		}
 
 		t.init(kind, image, line);
 		return t;
 	}
 
 	public static void dispose(Token t) {
-		if (t != null)
+		if (t != null) {
 			stack.push(t);
+		}
 	}
 
 	public int kind;

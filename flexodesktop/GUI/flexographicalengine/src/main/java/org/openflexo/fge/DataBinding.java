@@ -19,20 +19,14 @@
  */
 package org.openflexo.fge;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding;
-import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.AbstractBinding.TargetObject;
-import org.openflexo.antar.expr.Expression;
-import org.openflexo.antar.expr.TypeMismatchException;
-import org.openflexo.antar.expr.Variable;
-import org.openflexo.antar.expr.parser.ParseException;
+import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.fge.GraphicalRepresentation.DependancyLoopException;
 import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.xmlcode.StringConvertable;
@@ -83,20 +77,23 @@ public class DataBinding implements StringConvertable<DataBinding> {
 
 	public Object getBindingValue(BindingEvaluationContext context) {
 		// logger.info("getBindingValue() "+this);
-		if (getBinding() != null)
+		if (getBinding() != null) {
 			return getBinding().getBindingValue(context);
+		}
 		return null;
 	}
 
 	public void setBindingValue(Object value, BindingEvaluationContext context) {
-		if (getBinding() != null && getBinding().isSettable())
+		if (getBinding() != null && getBinding().isSettable()) {
 			getBinding().setBindingValue(value, context);
+		}
 	}
 
 	@Override
 	public String toString() {
-		if (binding != null)
+		if (binding != null) {
 			return binding.getStringRepresentation();
+		}
 		return unparsedBinding;
 	}
 
@@ -109,8 +106,9 @@ public class DataBinding implements StringConvertable<DataBinding> {
 	}
 
 	public AbstractBinding getBinding() {
-		if (binding == null)
+		if (binding == null) {
 			finalizeDeserialization();
+		}
 		return binding;
 	}
 
@@ -122,27 +120,29 @@ public class DataBinding implements StringConvertable<DataBinding> {
 	public void setBinding(AbstractBinding value) {
 		AbstractBinding oldValue = this.binding;
 		if (oldValue == null) {
-			if (value == null)
+			if (value == null) {
 				return; // No change
-			else {
+			} else {
 				this.binding = value;
 				unparsedBinding = (value != null ? value.getStringRepresentation() : null);
 				updateDependancies();
-				if (bindingAttribute != null)
+				if (bindingAttribute != null) {
 					owner.notifyChange(bindingAttribute, oldValue, value);
+				}
 				owner.notifyBindingChanged(this);
 				return;
 			}
 		} else {
-			if (oldValue.equals(value))
+			if (oldValue.equals(value)) {
 				return; // No change
-			else {
+			} else {
 				this.binding = value;
 				unparsedBinding = (value != null ? value.getStringRepresentation() : null);
 				logger.info("Binding takes now value " + value);
 				updateDependancies();
-				if (bindingAttribute != null)
+				if (bindingAttribute != null) {
 					owner.notifyChange(bindingAttribute, oldValue, value);
+				}
 				owner.notifyBindingChanged(this);
 				return;
 			}
@@ -182,8 +182,9 @@ public class DataBinding implements StringConvertable<DataBinding> {
 	}
 
 	protected void finalizeDeserialization() {
-		if (getUnparsedBinding() == null)
+		if (getUnparsedBinding() == null) {
 			return;
+		}
 
 		// System.out.println("BindingModel: "+getOwner().getBindingModel());
 		if (getOwner() != null) {
@@ -209,8 +210,9 @@ public class DataBinding implements StringConvertable<DataBinding> {
 	}
 
 	protected void updateDependancies() {
-		if (binding == null)
+		if (binding == null) {
 			return;
+		}
 
 		// logger.info("Searching dependancies for "+this);
 
@@ -301,8 +303,9 @@ public class DataBinding implements StringConvertable<DataBinding> {
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof DataBinding) {
-			if (toString() == null)
+			if (toString() == null) {
 				return false;
+			}
 			return toString().equals(obj.toString());
 		} else {
 			return super.equals(obj);

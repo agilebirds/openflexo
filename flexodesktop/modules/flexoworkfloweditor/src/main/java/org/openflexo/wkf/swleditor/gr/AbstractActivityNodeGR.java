@@ -51,8 +51,9 @@ public abstract class AbstractActivityNodeGR<O extends AbstractActivityNode> ext
 		super(activity, shapeType, aDrawing, isInPalet);
 		setLayer(activity.isEmbedded() ? EMBEDDED_ACTIVITY_LAYER : ACTIVITY_LAYER);
 
-		if (!(activity instanceof SelfExecutableActivityNode))
+		if (!(activity instanceof SelfExecutableActivityNode)) {
 			addToMouseClickControls(new PetriGraphOpener(), true);
+		}
 
 		updatePropertiesFromWKFPreferences();
 
@@ -86,8 +87,9 @@ public abstract class AbstractActivityNodeGR<O extends AbstractActivityNode> ext
 
 	public String getRoleLabel() {
 		if (getAbstractActivityNode() == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("node is null in " + this);
+			}
 			return "";
 		}
 		Role role = getAbstractActivityNode().getRole();

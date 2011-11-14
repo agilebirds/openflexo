@@ -39,12 +39,14 @@ public class MergeTextAction extends MergeAction {
 	public void execute() {
 		switch (_actionType) {
 		case CHOOSE1:
-			if (_text1 != null)
+			if (_text1 != null) {
 				_parentInMergedDocument.addContent(_text1);
+			}
 			break;
 		case CHOOSE2:
-			if (_text2 != null)
+			if (_text2 != null) {
 				_parentInMergedDocument.addContent(_text2);
+			}
 			break;
 
 		default:
@@ -57,12 +59,14 @@ public class MergeTextAction extends MergeAction {
 	public void undo() {
 		switch (_actionType) {
 		case CHOOSE1:
-			if (_text1 != null)
+			if (_text1 != null) {
 				_parentInMergedDocument.removeContent(_text1);
+			}
 			break;
 		case CHOOSE2:
-			if (_text2 != null)
+			if (_text2 != null) {
 				_parentInMergedDocument.removeContent(_text2);
+			}
 			break;
 
 		default:

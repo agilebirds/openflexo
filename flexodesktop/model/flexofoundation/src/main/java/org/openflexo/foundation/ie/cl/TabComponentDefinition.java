@@ -35,11 +35,11 @@ import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoComponentResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoTabComponentResource;
+import org.openflexo.foundation.rm.FlexoXMLStorageResource.SaveXMLResourceException;
 import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.rm.ProjectRestructuration;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
-import org.openflexo.foundation.rm.FlexoXMLStorageResource.SaveXMLResourceException;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.xml.FlexoComponentLibraryBuilder;
 import org.openflexo.toolbox.FileUtils;
@@ -100,8 +100,9 @@ public final class TabComponentDefinition extends PartialComponentDefinition imp
 			if (tci.getReusableWidget() != null && tci.getReusableWidget().getComponentDefinition().isOperation()) {
 				for (ComponentInstance oci : ((OperationComponentDefinition) tci.getReusableWidget().getComponentDefinition())
 						.getComponentInstances()) {
-					if (!v.contains(oci))
+					if (!v.contains(oci)) {
 						v.add((OperationComponentInstance) oci);
+					}
 				}
 			}
 		}
@@ -118,8 +119,9 @@ public final class TabComponentDefinition extends PartialComponentDefinition imp
 		if (getProject() != null) {
 			FlexoComponentResource returned = getProject().getFlexoTabComponentResource(getName());
 			if (returned == null && createIfNotExists) {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Creating new tab component resource !");
+				}
 				// FlexoProcessResource processRes =
 				// getProject().getFlexoProcessResource(getProcess().getName());
 				File componentFile = new File(ProjectRestructuration.getExpectedDirectoryForComponent(getProject().getProjectDirectory(),
@@ -152,14 +154,16 @@ public final class TabComponentDefinition extends PartialComponentDefinition imp
 							compRes = new FlexoTabComponentResource(getProject(), _componentName, getProject()
 									.getFlexoComponentLibraryResource(), resourceComponentFile);
 						} catch (InvalidFileNameException e) {
-							if (logger.isLoggable(Level.SEVERE))
+							if (logger.isLoggable(Level.SEVERE)) {
 								logger.severe("This should really not happen.");
+							}
 							return null;
 						}
 					}
 				}
-				if (compRes == null)
+				if (compRes == null) {
 					return null;
+				}
 				compRes.setResourceData(new IETabComponent(this, getProject()));
 				try {
 					compRes.getResourceData().setFlexoResource(compRes);
@@ -167,30 +171,35 @@ public final class TabComponentDefinition extends PartialComponentDefinition imp
 					compRes.saveResourceData();
 				} catch (DuplicateResourceException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (SaveXMLResourceException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (SaveResourcePermissionDeniedException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (SaveResourceException e) {
 					e.printStackTrace();
 				}
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Registered component " + _componentName + " file: " + componentFile);
+				}
 				returned = compRes;
 			}
 			return returned;
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("project is null");
+			}
 		}
 		return null;
 	}

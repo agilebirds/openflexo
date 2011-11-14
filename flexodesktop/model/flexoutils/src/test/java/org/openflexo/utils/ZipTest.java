@@ -25,10 +25,10 @@ import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import junit.framework.TestCase;
+
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ZipUtils;
-
-import junit.framework.TestCase;
 
 public class ZipTest extends TestCase {
 

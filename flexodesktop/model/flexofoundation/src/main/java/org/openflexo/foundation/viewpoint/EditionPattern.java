@@ -163,15 +163,17 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 
 	public ShapePatternRole getDefaultShapePatternRole() {
 		List<ShapePatternRole> l = getShapePatternRoles();
-		if (l.size() > 0)
+		if (l.size() > 0) {
 			return l.get(0);
+		}
 		return null;
 	}
 
 	public ConnectorPatternRole getDefaultConnectorPatternRole() {
 		List<ConnectorPatternRole> l = getConnectorPatternRoles();
-		if (l.size() > 0)
+		if (l.size() > 0) {
 			return l.get(0);
+		}
 		return null;
 	}
 
@@ -508,8 +510,9 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 
 	@Override
 	public BindingModel getBindingModel() {
-		if (_bindingModel == null)
+		if (_bindingModel == null) {
 			createBindingModel();
+		}
 		return _bindingModel;
 	}
 
@@ -528,21 +531,24 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 
 	public OntologicObjectPatternRole getDefaultPrimaryConceptRole() {
 		List<OntologicObjectPatternRole> roles = getPatternRoles(OntologicObjectPatternRole.class);
-		if (roles.size() > 0)
+		if (roles.size() > 0) {
 			return roles.get(0);
+		}
 		return null;
 	}
 
 	public GraphicalElementPatternRole getDefaultPrimaryRepresentationRole() {
 		List<GraphicalElementPatternRole> roles = getPatternRoles(GraphicalElementPatternRole.class);
-		if (roles.size() > 0)
+		if (roles.size() > 0) {
 			return roles.get(0);
+		}
 		return null;
 	}
 
 	public OntologicObjectPatternRole getPrimaryConceptRole() {
-		if (primaryConceptRole == null)
+		if (primaryConceptRole == null) {
 			return getDefaultPrimaryConceptRole();
+		}
 		return primaryConceptRole;
 	}
 
@@ -551,8 +557,9 @@ public class EditionPattern extends ViewPointObject implements StringConvertable
 	}
 
 	public GraphicalElementPatternRole getPrimaryRepresentationRole() {
-		if (primaryRepresentationRole == null)
+		if (primaryRepresentationRole == null) {
 			return getDefaultPrimaryRepresentationRole();
+		}
 		return primaryRepresentationRole;
 	}
 

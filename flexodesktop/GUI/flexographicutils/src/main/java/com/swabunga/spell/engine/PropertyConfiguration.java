@@ -19,7 +19,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 package com.swabunga.spell.engine;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
 
@@ -48,6 +52,7 @@ public class PropertyConfiguration extends Configuration {
 	/**
 	 * @see com.swabunga.spell.engine.Configuration#getBoolean(String)
 	 */
+	@Override
 	public boolean getBoolean(String key) {
 		return new Boolean(prop.getProperty(key)).booleanValue();
 	}
@@ -55,6 +60,7 @@ public class PropertyConfiguration extends Configuration {
 	/**
 	 * @see com.swabunga.spell.engine.Configuration#getInteger(String)
 	 */
+	@Override
 	public int getInteger(String key) {
 		return new Integer(prop.getProperty(key)).intValue();
 	}
@@ -62,12 +68,14 @@ public class PropertyConfiguration extends Configuration {
 	/**
 	 * @see com.swabunga.spell.engine.Configuration#setBoolean(String, boolean)
 	 */
+	@Override
 	public void setBoolean(String key, boolean value) {
 		String string = null;
-		if (value)
+		if (value) {
 			string = "true";
-		else
+		} else {
 			string = "false";
+		}
 
 		prop.setProperty(key, string);
 		save();
@@ -76,6 +84,7 @@ public class PropertyConfiguration extends Configuration {
 	/**
 	 * @see com.swabunga.spell.engine.Configuration#setInteger(String, int)
 	 */
+	@Override
 	public void setInteger(String key, int value) {
 		prop.setProperty(key, Integer.toString(value));
 		save();

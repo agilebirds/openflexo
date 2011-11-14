@@ -35,8 +35,9 @@ public class PackageDeclarationElement extends JavaBrowserElement {
 
 	@Override
 	public String getName() {
-		if (getPackageDeclaration().getPackage() == null)
+		if (getPackageDeclaration().getPackage() == null) {
 			return FlexoLocalization.localizedForKey("default_package");
+		}
 		return getPackageDeclaration().getPackage();
 	}
 

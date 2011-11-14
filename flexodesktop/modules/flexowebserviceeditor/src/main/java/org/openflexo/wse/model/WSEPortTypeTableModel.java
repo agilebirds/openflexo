@@ -24,11 +24,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.WSEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.FlexoController;
-import org.openflexo.wse.controller.WSEController;
-
 import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.components.tabular.model.EditableStringColumn;
 import org.openflexo.components.tabular.model.IconColumn;
@@ -40,6 +35,9 @@ import org.openflexo.foundation.ws.DuplicateWSObjectException;
 import org.openflexo.foundation.ws.WSPortType;
 import org.openflexo.foundation.ws.WSPortTypeFolder;
 import org.openflexo.foundation.ws.WSService;
+import org.openflexo.icon.WSEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * Please comment this class
@@ -116,8 +114,9 @@ public class WSEPortTypeTableModel extends AbstractModel<WSService, ServiceInter
 	}
 
 	public WSPortTypeFolder getWSPortTypeFolder() {
-		if (getWSService() != null)
+		if (getWSService() != null) {
 			return getWSService().getWSPortTypeFolder();
+		}
 		return null;
 	}
 

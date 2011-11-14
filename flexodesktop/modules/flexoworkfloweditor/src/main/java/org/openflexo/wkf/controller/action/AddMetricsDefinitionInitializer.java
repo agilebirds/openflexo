@@ -31,8 +31,8 @@ import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.param.TextAreaParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
-import org.openflexo.foundation.wkf.WorkflowModelObject;
 import org.openflexo.foundation.wkf.MetricsDefinition.MetricsType;
+import org.openflexo.foundation.wkf.WorkflowModelObject;
 import org.openflexo.foundation.wkf.action.AddMetricsDefinition;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
@@ -57,8 +57,9 @@ public abstract class AddMetricsDefinitionInitializer extends ActionInitializer 
 		return new FlexoActionInitializer<AddMetricsDefinition>() {
 			@Override
 			public boolean run(ActionEvent e, AddMetricsDefinition action) {
-				if (action.getNewMetricsName() != null && action.getType() != null)
+				if (action.getNewMetricsName() != null && action.getType() != null) {
 					return true;
+				}
 				EnumDropDownParameter<MetricsType> metricsType = new EnumDropDownParameter<MetricsType>("type", "type", MetricsType.TEXT,
 						MetricsType.values());
 				TextFieldParameter unit = new TextFieldParameter("unit", "unit", null);
@@ -77,13 +78,15 @@ public abstract class AddMetricsDefinitionInitializer extends ActionInitializer 
 						FlexoLocalization.localizedForKey("enter_parameters_for_the_new_metrics"), parameters);
 				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 					String newMetricsName = (String) dialog.parameterValueWithName("newMetricsName");
-					if (newMetricsName == null)
+					if (newMetricsName == null) {
 						return false;
+					}
 					action.setNewMetricsName(newMetricsName);
 					action.setType(metricsType.getValue());
 					action.setDescription(description.getValue());
-					if (unit.getValue() != null && unit.getValue().trim().length() > 0)
+					if (unit.getValue() != null && unit.getValue().trim().length() > 0) {
 						action.setUnit(unit.getValue());
+					}
 					action.setAlwaysDefined(alwaysDefined.getValue());
 					return true;
 				} else {

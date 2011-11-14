@@ -26,18 +26,18 @@ import java.util.logging.Logger;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ShapeResizingControlPoint;
+import org.openflexo.fge.geom.FGEGeometricObject.CardinalDirection;
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.FGESteppedDimensionConstraint;
-import org.openflexo.fge.geom.FGEGeometricObject.CardinalDirection;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.graphics.ForegroundStyle.CapStyle;
 import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 import org.openflexo.fge.graphics.ForegroundStyle.JoinStyle;
+import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.shapes.Polygon;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
@@ -123,8 +123,9 @@ public class DataObjectGR extends ArtefactGR<WKFDataObject> {
 
 	@Override
 	public FGESteppedDimensionConstraint getDimensionConstraintStep() {
-		if (getDrawing() != null)
+		if (getDrawing() != null) {
 			return getDrawing().getDrawingGraphicalRepresentation().getDimensionConstraintsForObject(this);
+		}
 		return null;
 	}
 

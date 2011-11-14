@@ -59,8 +59,9 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 			if (getWidget().getList() != null && getWidget().getList().isSet() && getDataObject() != null) {
 
 				Object accessedList = getWidget().getList().getBindingValue(getController());
-				if (accessedList instanceof List)
+				if (accessedList instanceof List) {
 					list = (List) accessedList;
+				}
 
 			}
 
@@ -109,8 +110,9 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 
 		private boolean requireChange() {
 			// Always return true first time
-			if (requireChange)
+			if (requireChange) {
 				return true;
+			}
 			requireChange = false;
 
 			if (getWidget().getList() != null && getWidget().getList().isSet() && getDataObject() != null) {
@@ -143,19 +145,23 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 
 		@Override
 		public int getSize() {
-			if (list != null)
+			if (list != null) {
 				return list.size();
-			if (array != null)
+			}
+			if (array != null) {
 				return array.length;
+			}
 			return 0;
 		}
 
 		@Override
 		public Object getElementAt(int index) {
-			if (list != null && index >= 0 && index < list.size())
+			if (list != null && index >= 0 && index < list.size()) {
 				return list.get(index);
-			if (array != null && index >= 0 && index < array.length)
+			}
+			if (array != null && index >= 0 && index < array.length) {
 				return array[index];
+			}
 			return null;
 		}
 
@@ -183,15 +189,17 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 			if (object instanceof FIBMultipleValueWidget<?, ?, ?>.FIBMultipleValueModel) {
 				FIBMultipleValueModel object2 = (FIBMultipleValueModel) object;
 				if (list != null) {
-					if (object2.list == null)
+					if (object2.list == null) {
 						return false;
-					else
+					} else {
 						return list.equals(object2.list);
+					}
 				} else if (array != null) {
-					if (object2.array == null)
+					if (object2.array == null) {
 						return false;
-					else
+					} else {
 						return array.equals(object2.array);
+					}
 				}
 			}
 			return super.equals(object);
@@ -216,8 +224,9 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 			if (getWidget().getShowText()) {
 				if (value != null) {
 					String stringRepresentation = getStringRepresentation(value);
-					if (stringRepresentation == null || stringRepresentation.length() == 0)
+					if (stringRepresentation == null || stringRepresentation.length() == 0) {
 						stringRepresentation = "<html><i>" + FlexoLocalization.localizedForKey("empty_string") + "</i></html>";
+					}
 					label.setText(stringRepresentation);
 				} else {
 					label.setText(FlexoLocalization.localizedForKey("no_selection"));

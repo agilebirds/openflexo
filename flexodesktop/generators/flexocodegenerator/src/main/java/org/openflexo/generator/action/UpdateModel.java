@@ -32,7 +32,6 @@ import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.ModelReinjectableFile;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.generator.AbstractProjectGenerator;
-import org.openflexo.generator.action.MultipleFileGCAction;
 import org.openflexo.generator.cg.CGJavaFile;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.file.AbstractCGFile;

@@ -43,7 +43,6 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 import org.openflexo.ColorCst;
-import org.openflexo.FlexoCst;
 import org.openflexo.application.FlexoApplication;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.view.BrowserViewCellEditor;
@@ -143,8 +142,9 @@ public class TreeTableCellRenderer extends JTree implements TableCellRenderer {
 		for (int i = 0; i < t.length; i++) {
 			TreeSelectionListener treeSelectionListener = t[i];
 			if (treeSelectionListener == tsl) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("Adding twice the same tsl: " + tsl + ". Preventing this by returning");
+				}
 				return;
 			}
 		}
@@ -167,9 +167,11 @@ public class TreeTableCellRenderer extends JTree implements TableCellRenderer {
 				isInList = true;
 			}
 		}
-		if (!isInList)
-			if (logger.isLoggable(Level.SEVERE))
+		if (!isInList) {
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Nothing to remove!");
+			}
+		}
 		super.removeTreeSelectionListener(tsl);
 	}
 
@@ -233,8 +235,9 @@ public class TreeTableCellRenderer extends JTree implements TableCellRenderer {
 	}
 
 	public void setRowHeightForObject(FlexoModelObject obj, int height) {
-		if (obj != null)
+		if (obj != null) {
 			_heightForObjects.put(obj, new Integer(height));
+		}
 	}
 
 	public void setRowHeight(int row, int height) {
@@ -246,8 +249,9 @@ public class TreeTableCellRenderer extends JTree implements TableCellRenderer {
 	}
 
 	public int getRowHeightForObject(FlexoModelObject object) {
-		if (object == null)
+		if (object == null) {
 			return getRowHeight();
+		}
 		Integer returned = _heightForObjects.get(object);
 		if (returned == null) {
 			return getRowHeight();
@@ -340,8 +344,9 @@ public class TreeTableCellRenderer extends JTree implements TableCellRenderer {
 	}
 
 	protected FlexoModelObject getObjectAt(int row) {
-		if (getElementAt(row) != null)
+		if (getElementAt(row) != null) {
 			return getElementAt(row).getObject();
+		}
 		return null;
 	}
 

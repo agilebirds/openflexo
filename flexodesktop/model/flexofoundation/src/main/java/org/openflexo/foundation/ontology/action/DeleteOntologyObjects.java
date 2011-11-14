@@ -57,11 +57,13 @@ public class DeleteOntologyObjects extends FlexoUndoableAction<DeleteOntologyObj
 		@Override
 		protected boolean isEnabledForSelection(OntologyObject focusedObject, Vector<OntologyObject> globalSelection) {
 			Vector<OntologyObject> objectsToDelete = objectsToDelete(focusedObject, globalSelection);
-			if (objectsToDelete.size() == 0)
+			if (objectsToDelete.size() == 0) {
 				return false;
+			}
 			for (OntologyObject o : globalSelection) {
-				if (o.getIsReadOnly())
+				if (o.getIsReadOnly()) {
 					return false;
+				}
 			}
 			return true;
 		}
@@ -95,12 +97,15 @@ public class DeleteOntologyObjects extends FlexoUndoableAction<DeleteOntologyObj
 
 	@Override
 	protected void doAction(Object context) {
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("DeleteOntologyObjects");
-		if (logger.isLoggable(Level.INFO))
+		}
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("selection is: " + getGlobalSelection());
-		if (logger.isLoggable(Level.INFO))
+		}
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("selection to delete is: " + getObjectsToDelete());
+		}
 		for (OntologyObject o : getObjectsToDelete()) {
 			o.delete();
 		}

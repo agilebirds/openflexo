@@ -108,8 +108,9 @@ public class CreateERDiagram extends FlexoAction<CreateERDiagram, DMObject, DMEn
 		if (entitiesToPutInTheDiagram == null) {
 			entitiesToPutInTheDiagram = new Vector<DMEntity>();
 			for (FlexoModelObject o : getGlobalSelectionAndFocusedObject()) {
-				if (o instanceof DMEntity)
+				if (o instanceof DMEntity) {
 					entitiesToPutInTheDiagram.add((DMEntity) o);
+				}
 			}
 		}
 		return entitiesToPutInTheDiagram;
@@ -123,10 +124,11 @@ public class CreateERDiagram extends FlexoAction<CreateERDiagram, DMObject, DMEn
 		if (repository == null) {
 			Hashtable<DMRepository, Integer> occurences = new Hashtable<DMRepository, Integer>();
 			for (DMEntity e : getEntitiesToPutInTheDiagram()) {
-				if (occurences.get(e.getRepository()) == null)
+				if (occurences.get(e.getRepository()) == null) {
 					occurences.put(e.getRepository(), 1);
-				else
+				} else {
 					occurences.put(e.getRepository(), occurences.get(e.getRepository()) + 1);
+				}
 			}
 			int maxOccurs = -1;
 			for (DMRepository r : occurences.keySet()) {
@@ -135,8 +137,9 @@ public class CreateERDiagram extends FlexoAction<CreateERDiagram, DMObject, DMEn
 					maxOccurs = occurences.get(r);
 				}
 			}
-			if (repository == null)
+			if (repository == null) {
 				repository = getFocusedObject().getProject().getDataModel().getRepositories().values().iterator().next();
+			}
 		}
 		return repository;
 	}

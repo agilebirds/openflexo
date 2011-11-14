@@ -68,9 +68,11 @@ public class DeleteProcessFolder extends FlexoAction<DeleteProcessFolder, Proces
 
 	@Override
 	protected void doAction(Object context) throws InvalidParentProcessException, UndoException {
-		for (FlexoModelObject folder : getGlobalSelectionAndFocusedObject())
-			if (folder instanceof ProcessFolder)
+		for (FlexoModelObject folder : getGlobalSelectionAndFocusedObject()) {
+			if (folder instanceof ProcessFolder) {
 				folder.delete();
+			}
+		}
 	}
 
 }

@@ -107,8 +107,9 @@ public class ResourceManagerWindow extends FlexoDialog implements ChangeListener
 							toFront();
 						} catch (SaveResourceException e1) {
 							// Warns about the exception
-							if (logger.isLoggable(Level.WARNING))
+							if (logger.isLoggable(Level.WARNING)) {
 								logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
+							}
 							e1.printStackTrace();
 						}
 					}
@@ -133,8 +134,9 @@ public class ResourceManagerWindow extends FlexoDialog implements ChangeListener
 						toFront();
 					} catch (FlexoException exception) {
 						// Warns about the exception
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Exception raised: " + exception.getClass().getName() + ". See console for details.");
+						}
 						exception.printStackTrace();
 					}
 				}
@@ -161,14 +163,15 @@ public class ResourceManagerWindow extends FlexoDialog implements ChangeListener
 						reviewer.saveSelection();
 					} catch (SaveResourcePermissionDeniedException e1) {
 						e1.printStackTrace();
-						if (e1.getFileResource().getFile().isDirectory())
+						if (e1.getFileResource().getFile().isDirectory()) {
 							FlexoController.showError(FlexoLocalization.localizedForKey("permission_denied"),
 									FlexoLocalization.localizedForKey("project_was_not_properly_saved_permission_denied_directory") + "\n"
 											+ e1.getFileResource().getFile().getAbsolutePath());
-						else
+						} else {
 							FlexoController.showError(FlexoLocalization.localizedForKey("permission_denied"),
 									FlexoLocalization.localizedForKey("project_was_not_properly_saved_permission_denied_file") + "\n"
 											+ e1.getFileResource().getFile().getAbsolutePath());
+						}
 					} catch (SaveResourceExceptionList e1) {
 						e1.printStackTrace();
 						FlexoController.showError(FlexoLocalization.localizedForKey("error_during_saving") + "\n" + e1.errorFilesList());
@@ -272,8 +275,9 @@ public class ResourceManagerWindow extends FlexoDialog implements ChangeListener
 	}
 
 	protected ResourceManagerPanel getActivePanel() {
-		if (tabbedPane.getSelectedComponent() instanceof ResourceManagerPanel)
+		if (tabbedPane.getSelectedComponent() instanceof ResourceManagerPanel) {
 			return (ResourceManagerPanel) tabbedPane.getSelectedComponent();
+		}
 		return null;
 	}
 

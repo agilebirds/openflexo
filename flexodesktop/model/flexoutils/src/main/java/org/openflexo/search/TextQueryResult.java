@@ -62,18 +62,21 @@ public class TextQueryResult {
 
 		public Result getCurrentResult() {
 			Vector<Result> res = getFilteredResults();
-			if (currentIndex > -1 && currentIndex < res.size())
+			if (currentIndex > -1 && currentIndex < res.size()) {
 				return res.get(currentIndex);
-			else
+			} else {
 				return null;
+			}
 		}
 
 		public void replaceBy(String replacement) {
-			if (document == null)
+			if (document == null) {
 				throw new IllegalStateException("No document provided! Cannot edit the text");
+			}
 			Result currentResult = getCurrentResult();
-			if (currentResult == null)
+			if (currentResult == null) {
 				throw new IllegalStateException("No text is selected!");
+			}
 			try {
 				document.remove(currentResult.startOffset, currentResult.getLength());
 				document.insertString(currentResult.startOffset, replacement, null);
@@ -93,16 +96,18 @@ public class TextQueryResult {
 		public Result getNextResult() throws EndOfDocumentHasBeenReachedException, ResultNotFoundException {
 
 			Vector<Result> filteredResults = getFilteredResults();
-			if (filteredResults.size() == 0)
+			if (filteredResults.size() == 0) {
 				throw new ResultNotFoundException();
+			}
 
 			switch (direction) {
 			case FORWARD:
 				if (currentIndex + 1 == filteredResults.size()) {
 					if (wrapSearch) {
 						currentIndex = 0;
-					} else
+					} else {
 						throw new EndOfDocumentHasBeenReachedException();
+					}
 				} else {
 					currentIndex++;
 				}
@@ -111,8 +116,9 @@ public class TextQueryResult {
 				if (currentIndex - 1 < 0) {
 					if (wrapSearch) {
 						currentIndex = filteredResults.size() - 1;
-					} else
+					} else {
 						throw new EndOfDocumentHasBeenReachedException();
+					}
 				} else {
 					currentIndex--;
 				}
@@ -127,8 +133,9 @@ public class TextQueryResult {
 			if (limitToSelectedText) {
 				Vector<Result> r = new Vector<Result>();
 				for (Result result : getResults()) {
-					if (result.startOffset >= selectionStart && result.endOffset <= selectionEnd)
+					if (result.startOffset >= selectionStart && result.endOffset <= selectionEnd) {
 						r.add(result);
+					}
 				}
 				return r;
 			} else {
@@ -137,8 +144,9 @@ public class TextQueryResult {
 		}
 
 		public void setCurrentCaretPosition(int caretPosition) {
-			if (caretPosition < 0 || caretPosition >= text.length())
+			if (caretPosition < 0 || caretPosition >= text.length()) {
 				return;
+			}
 			int index = 0;
 			for (Result res : getFilteredResults()) {
 				if (res.startOffset >= caretPosition) {
@@ -179,8 +187,9 @@ public class TextQueryResult {
 		}
 
 		public void setLimitToSelectedText(boolean limitToSelectedText) {
-			if (this.limitToSelectedText != limitToSelectedText)
+			if (this.limitToSelectedText != limitToSelectedText) {
 				currentIndex = -1;
+			}
 			this.limitToSelectedText = limitToSelectedText;
 		}
 

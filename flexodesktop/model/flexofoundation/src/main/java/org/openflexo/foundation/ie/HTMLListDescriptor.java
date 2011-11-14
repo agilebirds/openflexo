@@ -80,26 +80,30 @@ public class HTMLListDescriptor {
 	}
 
 	public boolean isInSearchArea(IEWidget w) {
-		if (w == null || searchRow == null)
+		if (w == null || searchRow == null) {
 			return false;
+		}
 		IEWidget p = w;
 		while (p != null && p.getParent() instanceof IEWidget) {
-			if (p.equals(searchRow))
+			if (p.equals(searchRow)) {
 				return true;
+			}
 			p = (IEWidget) p.getParent();
 		}
 		return false;
 	}
 
 	public boolean containsHeader(IEHeaderWidget h) {
-		if (getHeaderRow() == null)
+		if (getHeaderRow() == null) {
 			return false;
+		}
 		Enumeration en = getHeaderRow().getSequenceTD().elements();
 		IETDWidget td = null;
 		while (en.hasMoreElements()) {
 			td = (IETDWidget) en.nextElement();
-			if (td.getSequenceWidget().contains(h))
+			if (td.getSequenceWidget().contains(h)) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -113,8 +117,9 @@ public class HTMLListDescriptor {
 				reply = seq.getOperator();
 			}
 		}
-		if (reply instanceof RepetitionOperator)
+		if (reply instanceof RepetitionOperator) {
 			return (RepetitionOperator) reply;
+		}
 		return null;
 	}
 
@@ -127,8 +132,9 @@ public class HTMLListDescriptor {
 	}
 
 	public String getItemName() {
-		if (getRepetitionOperator().getItemVariable() != null)
+		if (getRepetitionOperator().getItemVariable() != null) {
 			return getRepetitionOperator().getItemVariable().getCodeStringRepresentation();
+		}
 		return "item_" + getRepetitionName();
 	}
 
@@ -145,8 +151,9 @@ public class HTMLListDescriptor {
 	}
 
 	public Vector<IEHeaderWidget> getHeaders() {
-		if (headerRow == null)
+		if (headerRow == null) {
 			return new Vector<IEHeaderWidget>();
+		}
 		Vector<IEHeaderWidget> v = new Vector<IEHeaderWidget>();
 		Enumeration en = headerRow.getAllTD().elements();
 		while (en.hasMoreElements()) {
@@ -165,8 +172,9 @@ public class HTMLListDescriptor {
 			IEHeaderWidget h = en.nextElement();
 			String kp = getKeyPathForWidgetInHCWO(h);
 
-			if (kp != null && kp.trim().length() > 0)
+			if (kp != null && kp.trim().length() > 0) {
 				v.add(h);
+			}
 		}
 		return v;
 	}
@@ -177,21 +185,24 @@ public class HTMLListDescriptor {
 		IEHeaderWidget h = null;
 		while (en.hasMoreElements()) {
 			h = en.nextElement();
-			if (h.getIsSortable())
+			if (h.getIsSortable()) {
 				v.add(h);
+			}
 		}
 		return v;
 	}
 
 	public boolean hasSort() {
-		if (getHeaders() == null)
+		if (getHeaders() == null) {
 			return false;
+		}
 		Enumeration en = getHeaders().elements();
 		IEHeaderWidget h = null;
 		while (en.hasMoreElements()) {
 			h = (IEHeaderWidget) en.nextElement();
-			if (h.getIsSortable())
+			if (h.getIsSortable()) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -201,8 +212,9 @@ public class HTMLListDescriptor {
 		if (getRepetitionOperator().getListAccessor() != null) {
 			accessorName = getRepetitionOperator().getListAccessor().getCodeStringRepresentation();
 		}
-		if (accessorName == null)
+		if (accessorName == null) {
 			accessorName = getRepetitionName() + "ObjectArray";
+		}
 		return accessorName;
 	}
 
@@ -232,14 +244,16 @@ public class HTMLListDescriptor {
 
 	public IENonEditableTextWidget findHeaderForWidget(IEWidget widget) {
 		if (headerRow == null || headerRow.getColCount() == 0) {
-			if (logger.isLoggable(Level.FINEST))
+			if (logger.isLoggable(Level.FINEST)) {
 				logger.finest("Header row null or empty");
+			}
 			return null;
 		}
 		IETDWidget td = widget.findTDInParent();
 		if (td == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Widget not in TD");
+			}
 			return null;
 		}
 		// We lookup the TD located at the same location than the current one
@@ -266,15 +280,18 @@ public class HTMLListDescriptor {
 				IETDWidget td = (IETDWidget) en.nextElement();
 				if (td.constraints.gridx == gridx) {
 					IEWidget reply = td.getSequenceWidget().findFirstWidgetOfClass(IEStringWidget.class);
-					if (reply == null)
+					if (reply == null) {
 						reply = td.getSequenceWidget().findFirstWidgetOfClass(IEHyperlinkWidget.class);
-					if (reply == null && td.getSequenceWidget().size() > 0)
+					}
+					if (reply == null && td.getSequenceWidget().size() > 0) {
 						reply = td.getSequenceWidget().get(0);
+					}
 					return reply;
 				}
 			}
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("cannot find a widget matching header :" + h.getValue() + " at gridx = " + gridx);
+			}
 		}
 
 		return null;
@@ -294,15 +311,18 @@ public class HTMLListDescriptor {
 					IETDWidget td = (IETDWidget) en.nextElement();
 					if (td.constraints.gridx == gridx) {
 						IEWidget reply = td.getSequenceWidget().findFirstWidgetOfClass(IEStringWidget.class);
-						if (reply == null)
+						if (reply == null) {
 							reply = td.getSequenceWidget().findFirstWidgetOfClass(IEHyperlinkWidget.class);
-						if (reply == null && td.getSequenceWidget().size() > 0)
+						}
+						if (reply == null && td.getSequenceWidget().size() > 0) {
 							reply = td.getSequenceWidget().get(0);
+						}
 						answer.add(reply);
 					}
 				}
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("cannot find a widget matching header :" + h.getValue() + " at gridx = " + gridx);
+				}
 			}
 		}
 		return answer.toArray();
@@ -325,8 +345,9 @@ public class HTMLListDescriptor {
 
 	public String getKeyPathForWidgetInHCWO(IEHeaderWidget header) {
 		IEWidget widget = findWidgetMatchingHeader(header);
-		if (widget == null)
+		if (widget == null) {
 			return null;
+		}
 		if (widget instanceof IENonEditableTextWidget && ((IENonEditableTextWidget) widget).getBindingValue() != null) {
 			return ((IENonEditableTextWidget) widget).getBindingValue().getCodeStringRepresentation();
 		}
@@ -351,8 +372,9 @@ public class HTMLListDescriptor {
 				binding_value = ToolBox.getJavaName(binding_value);
 				if (binding_value == null || binding_value.equals("")) {
 					String relatedLabelValue = widget.getLabel();
-					if (relatedLabelValue == null)
+					if (relatedLabelValue == null) {
 						relatedLabelValue = widget.getCalculatedLabel();
+					}
 					if (relatedLabelValue != null && !relatedLabelValue.equals("")) {
 						binding_value = ToolBox.getJavaName(relatedLabelValue) + widget.getFlexoID();
 					} else {
@@ -373,20 +395,24 @@ public class HTMLListDescriptor {
 		} else if (widget instanceof IEStringWidget) {
 			bv = ((IEStringWidget) widget).getBindingValue();
 		}
-		if (bv == null)
+		if (bv == null) {
 			return null;
-		if (bv.getCodeStringRepresentation() == null || bv.getCodeStringRepresentation().trim().length() == 0)
+		}
+		if (bv.getCodeStringRepresentation() == null || bv.getCodeStringRepresentation().trim().length() == 0) {
 			return null;
+		}
 		String reply = bv.getCodeStringRepresentation();
 		BindingValue item = getRepetitionOperator().getItemVariable();
-		if (item == null || item.getCodeStringRepresentation() == null || item.getCodeStringRepresentation().trim().length() == 0)
+		if (item == null || item.getCodeStringRepresentation() == null || item.getCodeStringRepresentation().trim().length() == 0) {
 			return null;
+		}
 		String prefix = item.getCodeStringRepresentation() + ".";
 		try {
 			return reply.substring(prefix.length());
 		} catch (IndexOutOfBoundsException e) {
-			if (logger.isLoggable(Level.SEVERE))
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Item is : " + item.getCodeStringRepresentation() + ".+\nwhile bindinvalue is :" + reply);
+			}
 		}
 		return null;
 	}
@@ -447,15 +473,17 @@ public class HTMLListDescriptor {
 			Vector<IWidget> widgets = td.getSequenceWidget().getAllNonSequenceWidget();
 			for (IWidget widget : widgets) {
 				String s = widget.getRawRowKeyPath();
-				if (s != null && !v.contains(s))
+				if (s != null && !v.contains(s)) {
 					v.add(s);
+				}
 			}
 		}
 		if (getRepetitionOperator().getEntity() instanceof DMEOEntity) {
 			DMEOEntity entity = (DMEOEntity) getRepetitionOperator().getEntity();
 			for (DMEOAttribute a : entity.getPrimaryKeyAttributes()) {
-				if (!v.contains(a.getName()))
+				if (!v.contains(a.getName())) {
 					v.add(a.getName());
+				}
 			}
 		}
 		return v;
@@ -533,8 +561,9 @@ public class HTMLListDescriptor {
 	}
 
 	public boolean isSearchRow(IEWidget widget) {
-		if (widget != null)
+		if (widget != null) {
 			return widget.equals(searchRow);
+		}
 		return false;
 	}
 
@@ -591,8 +620,9 @@ public class HTMLListDescriptor {
 	public static HTMLListDescriptor createInstanceForWidget(IEWidget widget) {
 		IEWidget currentWidget = widget;
 		RepetitionOperator repetition = null;
-		if (widget instanceof RepetitionOperator)
+		if (widget instanceof RepetitionOperator) {
 			repetition = (RepetitionOperator) widget;
+		}
 		while (currentWidget != null && currentWidget.getParent() instanceof IEWidget && repetition == null) {
 			currentWidget = (IEWidget) currentWidget.getParent();
 			if (currentWidget instanceof IESequence) {
@@ -601,15 +631,19 @@ public class HTMLListDescriptor {
 				}
 			}
 		}
-		if (repetition == null)
+		if (repetition == null) {
 			return null;
-		if (repetition.getOperatedSequence() == null)
+		}
+		if (repetition.getOperatedSequence() == null) {
 			return null;
-		if (repetition.getOperatedSequence().size() < 1)
+		}
+		if (repetition.getOperatedSequence().size() < 1) {
 			return null;
+		}
 		IWidget w = repetition.getOperatedSequence().get(0);
-		if (!(w instanceof ITableRow))
+		if (!(w instanceof ITableRow)) {
 			return null;
+		}
 		ITableRow repeatedRow = (ITableRow) w;
 		if (repeatedRow.htmlTable() != null) {
 			IETRWidget headerRow = repeatedRow.htmlTable().getHeaderRowForSequence(repeatedRow);
@@ -619,8 +653,9 @@ public class HTMLListDescriptor {
 	}
 
 	public String getAnchor() {
-		if (getBloc() != null)
+		if (getBloc() != null) {
 			return getBloc().getAnchor();
+		}
 		return getRepetitionOperator().getAnchor();
 	}
 
@@ -640,14 +675,16 @@ public class HTMLListDescriptor {
 	}
 
 	public boolean isFetchingDMEOEntityWithIntegerPK() {
-		if (isFetchingDMEOEntity())
+		if (isFetchingDMEOEntity()) {
 			return ((DMEOEntity) getRepetitionOperator().getEntity()).isIntegerPrimaryKey();
+		}
 		return false;
 	}
 
 	public String getEntityName() {
-		if (isFetchingDMEOEntity())
+		if (isFetchingDMEOEntity()) {
 			return ((DMEOEntity) getRepetitionOperator().getEntity()).getName();
+		}
 		return null;
 	}
 }

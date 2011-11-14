@@ -143,12 +143,15 @@ public class LinkSchemeAction extends EditionSchemeAction<LinkSchemeAction> {
 
 	@Override
 	protected View retrieveOEShema() {
-		if (getFromShape() != null)
+		if (getFromShape() != null) {
 			return getFromShape().getShema();
-		if (getToShape() != null)
+		}
+		if (getToShape() != null) {
 			return getToShape().getShema();
-		if (getFocusedObject() instanceof ViewObject)
+		}
+		if (getFocusedObject() instanceof ViewObject) {
 			return ((ViewObject) getFocusedObject()).getShema();
+		}
 		return null;
 	}
 
@@ -161,10 +164,12 @@ public class LinkSchemeAction extends EditionSchemeAction<LinkSchemeAction> {
 	@Override
 	public Object getValue(BindingVariable variable) {
 		if (variable instanceof EditionPatternPathElement) {
-			if (variable.getVariableName().equals(EditionScheme.FROM_TARGET) && getLinkScheme().getFromTargetEditionPattern() != null)
+			if (variable.getVariableName().equals(EditionScheme.FROM_TARGET) && getLinkScheme().getFromTargetEditionPattern() != null) {
 				return getFromShape().getEditionPatternInstance();
-			if (variable.getVariableName().equals(EditionScheme.TO_TARGET) && getLinkScheme().getToTargetEditionPattern() != null)
+			}
+			if (variable.getVariableName().equals(EditionScheme.TO_TARGET) && getLinkScheme().getToTargetEditionPattern() != null) {
 				return getToShape().getEditionPatternInstance();
+			}
 		}
 		return super.getValue(variable);
 	}

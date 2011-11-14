@@ -22,8 +22,6 @@
 
 package com.metaphaseeditor.action;
 
-import com.metaphaseeditor.MetaphaseEditorException;
-import com.metaphaseeditor.MetaphaseEditorPanel;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.Enumeration;
@@ -39,6 +37,9 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyledEditorKit;
 import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
+
+import com.metaphaseeditor.MetaphaseEditorException;
+import com.metaphaseeditor.MetaphaseEditorPanel;
 
 public class AddAttributesAction extends StyledEditorKit.StyledTextAction {
 
@@ -120,6 +121,7 @@ public class AddAttributesAction extends StyledEditorKit.StyledTextAction {
 		}
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent ae) {
 		JTextPane textPane = editorPanel.getHtmlTextPane();
 		HTMLDocument htmlDocument = (HTMLDocument) textPane.getDocument();

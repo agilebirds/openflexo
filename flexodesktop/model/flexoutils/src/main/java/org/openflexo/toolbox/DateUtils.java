@@ -48,13 +48,15 @@ public class DateUtils {
 			for (String value : values) {
 				pos.setIndex(0);
 				Date date = dateFormat.parse(value.trim(), pos);
-				if (date == null || pos.getIndex() != value.length())
+				if (date == null || pos.getIndex() != value.length()) {
 					break;
+				}
 				results.add(date);
 			}
 
-			if (results.size() == values.length)
+			if (results.size() == values.length) {
 				return results.toArray(new Date[0]);
+			}
 		}
 
 		return null;
@@ -62,8 +64,9 @@ public class DateUtils {
 
 	public static Date parseDate(String value) {
 		Date[] dates = parseDate(new String[] { value });
-		if (dates != null && dates.length > 0)
+		if (dates != null && dates.length > 0) {
 			return dates[0];
+		}
 		return null;
 	}
 }

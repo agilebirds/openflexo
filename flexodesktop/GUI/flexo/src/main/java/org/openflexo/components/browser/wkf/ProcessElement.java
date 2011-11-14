@@ -29,12 +29,6 @@ import javax.naming.InvalidNameException;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-import org.openflexo.icon.IconFactory;
-import org.openflexo.icon.IconLibrary;
-import org.openflexo.icon.IconMarker;
-import org.openflexo.icon.WKFIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
@@ -51,6 +45,11 @@ import org.openflexo.foundation.wkf.dm.ProcessAddedToFolder;
 import org.openflexo.foundation.wkf.dm.ProcessRemovedFromFolder;
 import org.openflexo.foundation.wkf.node.PetriGraphNode;
 import org.openflexo.foundation.wkf.ws.ServiceInterface;
+import org.openflexo.icon.IconFactory;
+import org.openflexo.icon.IconLibrary;
+import org.openflexo.icon.IconMarker;
+import org.openflexo.icon.WKFIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Browser element representing a process
@@ -68,10 +67,12 @@ public class ProcessElement extends BrowserElement {
 	private boolean isObserving = false;
 
 	private void addObserver() {
-		if (isObserving)
+		if (isObserving) {
 			return;
-		if (getFlexoProcess().getProcessNode() != null)
+		}
+		if (getFlexoProcess().getProcessNode() != null) {
 			getFlexoProcess().getProcessNode().addObserver(this);
+		}
 		if (getFlexoProcess().getActivityPetriGraph() != null) {
 			getFlexoProcess().getActivityPetriGraph().addObserver(this);
 			isObserving = true;
@@ -80,8 +81,9 @@ public class ProcessElement extends BrowserElement {
 
 	@Override
 	public void delete() {
-		if (getFlexoProcess().getProcessNode() != null)
+		if (getFlexoProcess().getProcessNode() != null) {
 			getFlexoProcess().getProcessNode().deleteObserver(this);
+		}
 		if (getFlexoProcess().getActivityPetriGraph() != null) {
 			getFlexoProcess().getActivityPetriGraph().deleteObserver(this);
 			isObserving = false;
@@ -91,8 +93,9 @@ public class ProcessElement extends BrowserElement {
 
 	@Override
 	protected void buildChildrenVector() {
-		if (logger.isLoggable(Level.FINER))
+		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("Building children for process " + getName());
+		}
 
 		if (isImported()) {
 			Vector<FlexoModelObject> processes = new Vector<FlexoModelObject>(getFlexoProcess().getProcessNode().getSubProcesses());
@@ -106,8 +109,9 @@ public class ProcessElement extends BrowserElement {
 		// addToChilds(getFlexoProcess().getRoleList());
 
 		// We add the status
-		if (getFlexoProcess().getStatusList() != null)
+		if (getFlexoProcess().getStatusList() != null) {
 			addToChilds(getFlexoProcess().getStatusList());
+		}
 
 		// We add the deadlines
 		// addToChilds(getFlexoProcess().getDeadLineList());
@@ -124,37 +128,41 @@ public class ProcessElement extends BrowserElement {
 			for (Enumeration<ProcessFolder> en = getFlexoProcess().getProcessNode().getSortedFolders(); en.hasMoreElements();) {
 				addToChilds(en.nextElement());
 			}
-			for (Enumeration<FlexoProcessNode> en = getFlexoProcess().getProcessNode().getSortedOrphanSubprocesses(); en.hasMoreElements();)
+			for (Enumeration<FlexoProcessNode> en = getFlexoProcess().getProcessNode().getSortedOrphanSubprocesses(); en.hasMoreElements();) {
 				addToChilds(en.nextElement().getProcess());
+			}
 		}
 		// We add sub-process nodes and we add activity nodes
 		if (getFlexoProcess().getActivityPetriGraph() != null) {
 			addObserver();
 			for (Enumeration<PetriGraphNode> en = getFlexoProcess().getActivityPetriGraph().getSortedNodes(); en.hasMoreElements();) {
 				PetriGraphNode element = en.nextElement();
-				if (!element.isGrouped())
+				if (!element.isGrouped()) {
 					addToChilds(element);
+				}
 			}
 		}
 
-		for (WKFGroup group : getFlexoProcess().getActivityPetriGraph().getGroups())
+		for (WKFGroup group : getFlexoProcess().getActivityPetriGraph().getGroups()) {
 			addToChilds(group);
-		// We add operator nodes
-		/*
-		 * for (Enumeration e = getFlexoProcess().getAllOperatorNodes().elements(); e.hasMoreElements();) { OperatorNode operatorNode =
-		 * (OperatorNode) e.nextElement(); addToChilds(operatorNode); } // We add event nodes for (Enumeration e =
-		 * getFlexoProcess().getAllEventNodes().elements(); e.hasMoreElements();) { EventNode eventNode = (EventNode) e.nextElement();
-		 * addToChilds(eventNode); }
-		 */
-		// logger.info("STOP buildChildrenVector()");
+			// We add operator nodes
+			/*
+			 * for (Enumeration e = getFlexoProcess().getAllOperatorNodes().elements(); e.hasMoreElements();) { OperatorNode operatorNode =
+			 * (OperatorNode) e.nextElement(); addToChilds(operatorNode); } // We add event nodes for (Enumeration e =
+			 * getFlexoProcess().getAllEventNodes().elements(); e.hasMoreElements();) { EventNode eventNode = (EventNode) e.nextElement();
+			 * addToChilds(eventNode); }
+			 */
+			// logger.info("STOP buildChildrenVector()");
+		}
 	}
 
 	@Override
 	public Icon getIcon() {
 		Icon icon = super.getIcon();
 		IconMarker[] markers = getIconMarkers();
-		if (markers != null)
+		if (markers != null) {
 			return IconFactory.getImageIcon((ImageIcon) icon, markers);
+		}
 		return icon;
 	}
 
@@ -162,18 +170,21 @@ public class ProcessElement extends BrowserElement {
 		int count = 0;
 		if (isImported()) {
 			count++;
-			if (getFlexoProcess().isDeletedOnServer())
+			if (getFlexoProcess().isDeletedOnServer()) {
 				count++;
+			}
 		} else if (getFlexoProcess().getIsWebService()) {
 			count++;
 		}
 		IconMarker[] markers = null;
-		if (count > 0)
+		if (count > 0) {
 			markers = new IconMarker[count];
+		}
 		if (isImported()) {
 			markers[0] = IconLibrary.IMPORT;
-			if (getFlexoProcess().isDeletedOnServer())
+			if (getFlexoProcess().isDeletedOnServer()) {
 				markers[1] = IconLibrary.WARNING;
+			}
 		} else if (getFlexoProcess().getIsWebService()) {
 			markers[0] = WKFIconLibrary.WS_MARKER;
 		}
@@ -200,8 +211,9 @@ public class ProcessElement extends BrowserElement {
 	public String getToolTip() {
 		if (getFlexoProcess().isDeletedOnServer()) {
 			return FlexoLocalization.localizedForKey("object_is_no_more_available_in_portfolio");
-		} else
+		} else {
 			return null;
+		}
 	}
 
 	@Override
@@ -211,16 +223,18 @@ public class ProcessElement extends BrowserElement {
 
 	@Override
 	public String getSuffixName() {
-		if (getFlexoProcess().isRootProcess())
+		if (getFlexoProcess().isRootProcess()) {
 			return "[ROOT]";
-		else
+		} else {
 			return super.getSuffixName();
+		}
 	}
 
 	@Override
 	public void setName(String aName) throws FlexoException {
-		if (isImported())
+		if (isImported()) {
 			return;
+		}
 		try {
 			getFlexoProcess().setName(aName);
 		} catch (DuplicateResourceException e) {
@@ -233,10 +247,11 @@ public class ProcessElement extends BrowserElement {
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (observable == getFlexoProcess() && "isDeletedOnServer".equals(dataModification.propertyName()))
+		if (observable == getFlexoProcess() && "isDeletedOnServer".equals(dataModification.propertyName())) {
 			refreshWhenPossible();
-		else if (dataModification instanceof ProcessRemovedFromFolder || dataModification instanceof ProcessAddedToFolder)
+		} else if (dataModification instanceof ProcessRemovedFromFolder || dataModification instanceof ProcessAddedToFolder) {
 			refreshWhenPossible();
+		}
 		super.update(observable, dataModification);
 	}
 }

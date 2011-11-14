@@ -125,8 +125,9 @@ public abstract class ComponentElement extends BrowserElement implements Expansi
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (_browser != null) {
 			if (dataModification instanceof ComponentLoaded) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Notify expansion because WO has been loaded");
+				}
 				refreshWhenPossible();
 				_browser.notifyExpansionChanged(this);
 				getComponentDefinition().getWOComponent().addObserver(this);

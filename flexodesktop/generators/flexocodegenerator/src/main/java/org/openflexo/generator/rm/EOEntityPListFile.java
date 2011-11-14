@@ -24,7 +24,6 @@ import java.io.File;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.cg.PListFile;
 import org.openflexo.generator.dm.EOEntityPListGenerator;
-import org.openflexo.generator.rm.GenerationAvailableFile;
 
 public class EOEntityPListFile extends PListFile implements GenerationAvailableFile {
 

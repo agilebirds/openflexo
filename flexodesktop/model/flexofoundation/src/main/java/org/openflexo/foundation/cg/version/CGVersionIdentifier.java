@@ -23,12 +23,11 @@ import java.util.Comparator;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
-
-import org.openflexo.foundation.FlexoObject;
-import org.openflexo.localization.FlexoLocalization;
 
 public class CGVersionIdentifier extends FlexoObject implements StringConvertable, Cloneable {
 	protected static final Logger logger = Logger.getLogger(CGVersionIdentifier.class.getPackage().getName());
@@ -100,10 +99,12 @@ public class CGVersionIdentifier extends FlexoObject implements StringConvertabl
 		}
 		if (st.hasMoreTokens()) {
 			String unparsed = st.nextToken();
-			if (unparsed.equalsIgnoreCase(DISK_UPDATE_STRING))
+			if (unparsed.equalsIgnoreCase(DISK_UPDATE_STRING)) {
 				type = VersionType.DiskUpdate;
-			if (unparsed.equalsIgnoreCase(GENERATION_ITERATION_STRING))
+			}
+			if (unparsed.equalsIgnoreCase(GENERATION_ITERATION_STRING)) {
 				type = VersionType.GenerationIteration;
+			}
 		}
 	}
 
@@ -126,22 +127,28 @@ public class CGVersionIdentifier extends FlexoObject implements StringConvertabl
 	}
 
 	private String typeId() {
-		if (type == VersionType.DiskUpdate)
+		if (type == VersionType.DiskUpdate) {
 			return DISK_UPDATE_STRING;
-		if (type == VersionType.GenerationIteration)
+		}
+		if (type == VersionType.GenerationIteration) {
 			return GENERATION_ITERATION_STRING;
-		if (type == VersionType.Release)
+		}
+		if (type == VersionType.Release) {
 			return RELEASE_STRING;
+		}
 		return null;
 	}
 
 	public String typeAsString() {
-		if (type == VersionType.DiskUpdate)
+		if (type == VersionType.DiskUpdate) {
 			return FlexoLocalization.localizedForKey("disk_edition");
-		if (type == VersionType.GenerationIteration)
+		}
+		if (type == VersionType.GenerationIteration) {
 			return FlexoLocalization.localizedForKey("generation_iteration");
-		if (type == VersionType.Release)
+		}
+		if (type == VersionType.Release) {
 			return FlexoLocalization.localizedForKey("release");
+		}
 		return null;
 	}
 

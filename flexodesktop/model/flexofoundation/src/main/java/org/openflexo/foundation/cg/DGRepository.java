@@ -36,8 +36,8 @@ import org.openflexo.foundation.cg.dm.CGRepositoryConnected;
 import org.openflexo.foundation.cg.dm.PostBuildStart;
 import org.openflexo.foundation.cg.dm.PostBuildStop;
 import org.openflexo.foundation.cg.utils.DocConstants.DocSection;
-import org.openflexo.foundation.rm.ProjectExternalRepository;
 import org.openflexo.foundation.rm.FlexoProject.ImageFile;
+import org.openflexo.foundation.rm.ProjectExternalRepository;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCModification;
 import org.openflexo.foundation.toc.TOCRepository;
@@ -117,8 +117,9 @@ public class DGRepository extends GenerationRepository {
 
 	@Override
 	protected void deleteExternalRepositories() {
-		if (getPostBuildRepository() != null)
+		if (getPostBuildRepository() != null) {
 			getProject().removeFromExternalRepositories(getPostBuildRepository());
+		}
 		super.deleteExternalRepositories();
 	}
 
@@ -190,14 +191,16 @@ public class DGRepository extends GenerationRepository {
 	}
 
 	public CGSymbolicDirectory getSrcSymbolicDirectory() {
-		if (getFormat() == Format.LATEX)
+		if (getFormat() == Format.LATEX) {
 			return getLatexSymbolicDirectory();
+		}
 		return getHTMLSymbolicDirectory();
 	}
 
 	public CGSymbolicDirectory getResourcesSymbolicDirectory() {
-		if (getFormat() == Format.LATEX)
+		if (getFormat() == Format.LATEX) {
 			return getFiguresSymbolicDirectory();
+		}
 		return getSymbolicDirectoryNamed(CGSymbolicDirectory.RESOURCES);
 	}
 
@@ -212,14 +215,16 @@ public class DGRepository extends GenerationRepository {
 	public ProjectExternalRepository getPostBuildRepository() {
 		if (postBuildRepository == null) {
 			postBuildRepository = getProject().getExternalRepositoryWithKey(getName() + getFormat().getPostBuildKey());
-			if (postBuildRepository == null)
+			if (postBuildRepository == null) {
 				postBuildRepository = getProject().setDirectoryForRepositoryName(
 						getName() + getFormat().getPostBuildKey(),
 						getDirectory() != null ? getDirectory().getParentFile() : new File(System.getProperty("user.home") + "/"
 								+ getFormat().getPostBuildKey() + "/" + getName()));
-			if (postBuildRepository.getDirectory() == null)
+			}
+			if (postBuildRepository.getDirectory() == null) {
 				postBuildRepository.setDirectory(getDirectory() != null ? getDirectory().getParentFile() : new File(System
 						.getProperty("user.home") + "/" + getFormat().getPostBuildKey() + "/" + getName()));
+			}
 		}
 		return postBuildRepository;
 	}
@@ -227,8 +232,9 @@ public class DGRepository extends GenerationRepository {
 	private String docTypeAsString;
 
 	public Date getLastUpdateDate() {
-		if (lastUpdateDate == null)
+		if (lastUpdateDate == null) {
 			lastUpdateDate = getLastUpdate();
+		}
 		return lastUpdateDate;
 	}
 
@@ -242,8 +248,9 @@ public class DGRepository extends GenerationRepository {
 	}
 
 	public DocType getDocType() {
-		if (docType == null && getProject().getDocTypes().size() > 0)
+		if (docType == null && getProject().getDocTypes().size() > 0) {
 			docType = getProject().getDocTypes().get(0);
+		}
 		if (docTypeAsString != null) {
 			DocType dt = getProject().getDocTypeNamed(docTypeAsString);
 			if (dt != null) {
@@ -263,10 +270,11 @@ public class DGRepository extends GenerationRepository {
 	}
 
 	public String getDocTypeAsString() {
-		if (getDocType() != null)
+		if (getDocType() != null) {
 			return getDocType().getName();
-		else
+		} else {
 			return null;
+		}
 	}
 
 	public void setDocTypeAsString(String docType) {
@@ -289,13 +297,15 @@ public class DGRepository extends GenerationRepository {
 			getPostBuildRepository().setDirectory(selectedFile);
 			setChanged();
 			notifyObservers(new CGDataModification("pdfDirectory", old, selectedFile));
-		} else if (logger.isLoggable(Level.WARNING))
+		} else if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("pdf repository is null");
+		}
 	}
 
 	public String getPostProductName() {
-		if (postProductName == null)
+		if (postProductName == null) {
 			postProductName = getName() + getFormat().getPostBuildFileExtension();
+		}
 		return postProductName;
 	}
 
@@ -406,29 +416,33 @@ public class DGRepository extends GenerationRepository {
 	}
 
 	public ImageFile getLogo() {
-		if (getTocRepository() != null)
+		if (getTocRepository() != null) {
 			return getTocRepository().getLogo();
+		}
 		return null;
 	}
 
 	public File getPostBuildFile() {
-		if (!getPostProductName().endsWith(getFormat().getPostBuildFileExtension()))
+		if (!getPostProductName().endsWith(getFormat().getPostBuildFileExtension())) {
 			setPostProductName(getPostProductName() + getFormat().getPostBuildFileExtension());
+		}
 		return new File(getPostBuildDirectory(), getPostProductName());
 	}
 
 	public TOCEntry getTOCEntryWithID(DocSection id) {
-		if (getTocRepository() != null)
+		if (getTocRepository() != null) {
 			return getTocRepository().getTOCEntryWithID(id);
-		else
+		} else {
 			return null;
+		}
 	}
 
 	public TOCEntry getTOCEntryForObject(FlexoModelObject object) {
-		if (getTocRepository() != null)
+		if (getTocRepository() != null) {
 			return getTocRepository().getTOCEntryForObject(object);
-		else
+		} else {
 			return null;
+		}
 	}
 
 	/**
@@ -463,17 +477,19 @@ public class DGRepository extends GenerationRepository {
 	}
 
 	public void setTocRepository(TOCRepository tocRepository) {
-		if (tocRepository == this.tocRepository)
+		if (tocRepository == this.tocRepository) {
 			return;
+		}
 		this.tocRepository = tocRepository;
 		if (tocRepositoryRef != null) {
 			tocRepositoryRef.delete();
 			tocRepositoryRef = null;
 		}
-		if (tocRepository != null)
+		if (tocRepository != null) {
 			tocRepositoryRef = new FlexoModelObjectReference<TOCRepository>(getProject(), tocRepository);
-		else
+		} else {
 			tocRepositoryRef = null;
+		}
 		setChanged();
 		notifyObservers(new TOCModification(null, tocRepository));
 		if (tocRepository != null) {
@@ -492,8 +508,9 @@ public class DGRepository extends GenerationRepository {
 
 	@Override
 	public Format getFormat() {
-		if (format == null)
+		if (format == null) {
 			format = Format.LATEX; // For compatibility reason
+		}
 		return format;
 	}
 

@@ -72,8 +72,9 @@ public class RegenerateAndOverride extends MultipleFileGCAction<RegenerateAndOve
 		force.doAction();
 		WriteModifiedGeneratedFiles write = WriteModifiedGeneratedFiles.actionType.makeNewEmbeddedAction(getFocusedObject(),
 				getGlobalSelection(), this);
-		if (write.getFilesToWrite().size() > 0)
+		if (write.getFilesToWrite().size() > 0) {
 			write.doAction();
+		}
 		hideFlexoProgress();
 	}
 

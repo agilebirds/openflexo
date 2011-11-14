@@ -32,17 +32,16 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.openflexo.components.AskParametersPanel;
-import org.openflexo.icon.CGIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.ToolBox;
-import org.openflexo.view.FlexoDialog;
-
 import org.openflexo.foundation.param.LabelParameter;
 import org.openflexo.foundation.param.PropertyListParameter;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
+import org.openflexo.icon.IconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.ToolBox;
+import org.openflexo.view.FlexoDialog;
 
 public class FullInteractiveProjectLoadingHandler extends InteractiveProjectLoadingHandler {
 
@@ -54,11 +53,13 @@ public class FullInteractiveProjectLoadingHandler extends InteractiveProjectLoad
 
 	@Override
 	public boolean upgradeResourceToLatestVersion(FlexoXMLStorageResource resource) throws ProjectLoadingCancelledException {
-		if (isPerformingAutomaticConversion())
+		if (isPerformingAutomaticConversion()) {
 			return true;
+		}
 
-		if (alwaysUpgradeResourceToLatestVersion)
+		if (alwaysUpgradeResourceToLatestVersion) {
 			return true;
+		}
 
 		String CONVERT_ALL = FlexoLocalization.localizedForKey("convert_all_resources");
 		String CONVERT = FlexoLocalization.localizedForKey("convert_this_resource");
@@ -67,7 +68,7 @@ public class FullInteractiveProjectLoadingHandler extends InteractiveProjectLoad
 		int choice = FlexoController
 				.selectOption(
 						"<html><center>"
-								+ CGIconLibrary.UNFIXABLE_WARNING_ICON.getHTMLImg()
+								+ IconLibrary.UNFIXABLE_WARNING_ICON.getHTMLImg()
 								+ "<b>&nbsp;"
 								+ FlexoLocalization.localizedForKey("warning")
 								+ "</b></center><br>"
@@ -104,13 +105,14 @@ public class FullInteractiveProjectLoadingHandler extends InteractiveProjectLoad
 			useOlderMappingHashtable = new Hashtable<FlexoXMLStorageResource, Boolean>();
 		}
 
-		if (useOlderMappingHashtable.get(resource) != null)
+		if (useOlderMappingHashtable.get(resource) != null) {
 			return useOlderMappingHashtable.get(resource);
+		}
 
 		String TRY_TO_RECOVER = FlexoLocalization.localizedForKey("try_to_recover_resource");
 		String CANCEL = FlexoLocalization.localizedForKey("cancel");
 		int choice = FlexoController.selectOption(
-				"<html><center>" + CGIconLibrary.UNFIXABLE_WARNING_ICON.getHTMLImg() + "<b>&nbsp;"
+				"<html><center>" + IconLibrary.UNFIXABLE_WARNING_ICON.getHTMLImg() + "<b>&nbsp;"
 						+ FlexoLocalization.localizedForKey("warning") + "</b></center><br>"
 						+ FlexoLocalization.localizedForKey("resource") + " <b>" + resource.getResourceIdentifier() + "</b><br>"
 						+ FlexoLocalization.localizedForKey("this_resource_could_not_be_deserialized_with_declared_version") + "<br>"
@@ -136,11 +138,11 @@ public class FullInteractiveProjectLoadingHandler extends InteractiveProjectLoad
 		}
 		if (resourcesToConvert.size() > 0) {
 			ProjectConversionDialog dialog = new ProjectConversionDialog(project, resourcesToConvert);
-			if (dialog.getStatus() == ProjectConversionDialog.ReturnedStatus.CANCEL)
+			if (dialog.getStatus() == ProjectConversionDialog.ReturnedStatus.CANCEL) {
 				throw new ProjectLoadingCancelledException();
-			else if (dialog.getStatus() == ProjectConversionDialog.ReturnedStatus.SKIP_CONVERSION)
+			} else if (dialog.getStatus() == ProjectConversionDialog.ReturnedStatus.SKIP_CONVERSION) {
 				return false;
-			else if (dialog.getStatus() == ProjectConversionDialog.ReturnedStatus.CONVERT) {
+			} else if (dialog.getStatus() == ProjectConversionDialog.ReturnedStatus.CONVERT) {
 				alwaysUpgradeResourceToLatestVersion = true;
 				performConversion(project, resourcesToConvert, progress);
 				return true;
@@ -161,7 +163,7 @@ public class FullInteractiveProjectLoadingHandler extends InteractiveProjectLoad
 		ProjectConversionDialog(FlexoProject project, Vector<ResourceToConvert> resourcesToConvert) {
 			super((JFrame) null, FlexoLocalization.localizedForKey("project_conversion"), true);
 			LabelParameter infoLabel = new LabelParameter("info", "info", "<html><center>"
-					+ CGIconLibrary.UNFIXABLE_WARNING_ICON.getHTMLImg() + "<b>&nbsp;" + FlexoLocalization.localizedForKey("warning")
+					+ IconLibrary.UNFIXABLE_WARNING_ICON.getHTMLImg() + "<b>&nbsp;" + FlexoLocalization.localizedForKey("warning")
 					+ "</b></center><br>" + "<center>" + project.getProjectDirectory().getName() + "</center><br>"
 					+ FlexoLocalization.localizedForKey("this_project_seems_to_have_been_created_with_an_older_version_of_flexo") + "<br>"
 					+ FlexoLocalization.localizedForKey("would_you_like_to_convert_entire_project_to_new_version_of_flexo_(recommanded)")
@@ -209,8 +211,9 @@ public class FullInteractiveProjectLoadingHandler extends InteractiveProjectLoad
 					dispose();
 				}
 			});
-			if (ToolBox.getPLATFORM() == ToolBox.MACOS)
+			if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 				convertAllResources.setSelected(true);
+			}
 			controlPanel.add(convertAllResources);
 			getRootPane().setDefaultButton(convertAllResources);
 			getContentPane().add(controlPanel, BorderLayout.SOUTH);

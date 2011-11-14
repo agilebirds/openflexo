@@ -147,10 +147,11 @@ public class HibernateRelationship extends TechnologyModelObject implements Flex
 		}
 
 		if (getInverse() != null) {
-			if (getInverse().getIsInverse())
+			if (getInverse().getIsInverse()) {
 				getInverse().delete();
-			else
+			} else {
 				getInverse().setInverse(null);
+			}
 		}
 
 		setChanged();
@@ -209,21 +210,25 @@ public class HibernateRelationship extends TechnologyModelObject implements Flex
 	 */
 	public String getNameOrBuiltAutomaticOne() {
 
-		if (!StringUtils.isBlank(getName()))
+		if (!StringUtils.isBlank(getName())) {
 			return getName();
+		}
 
-		if (getDestination() == null)
+		if (getDestination() == null) {
 			return JavaUtils.getVariableName("relationship" + getHibernateEntity().getRelationships().size());
+		}
 
 		String builtName = getDestination().getName();
-		if (getToMany() && !builtName.endsWith("s") && !builtName.endsWith("x"))
+		if (getToMany() && !builtName.endsWith("s") && !builtName.endsWith("x")) {
 			builtName = builtName + "s";
+		}
 
 		builtName = JavaUtils.getVariableName(builtName);
 
 		if (getHasInverse() && getIsInverse()) { // Checks that the inverse has not the same name.
-			if (builtName.equals(getInverse().getName()))
+			if (builtName.equals(getInverse().getName())) {
 				builtName = builtName + "Inverse";
+			}
 		}
 
 		return builtName;
@@ -242,8 +247,9 @@ public class HibernateRelationship extends TechnologyModelObject implements Flex
 	 */
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (observable == getDestination() && dataModification instanceof SGObjectDeletedModification)
+		if (observable == getDestination() && dataModification instanceof SGObjectDeletedModification) {
 			setDestination(null);
+		}
 	}
 
 	/* ===================== */
@@ -323,8 +329,9 @@ public class HibernateRelationship extends TechnologyModelObject implements Flex
 			setChanged();
 			notifyObservers(new SGAttributeModification("isInverse", oldValue, isInverse));
 
-			if (getInverse() != null)
+			if (getInverse() != null) {
 				getInverse().setIsInverse(!isInverse);
+			}
 		}
 	}
 
@@ -365,11 +372,13 @@ public class HibernateRelationship extends TechnologyModelObject implements Flex
 	public void setDestination(HibernateEntity destination) {
 		if (requireChange(this.destination, destination)) {
 			HibernateEntity oldValue = this.destination;
-			if (oldValue != null)
+			if (oldValue != null) {
 				oldValue.deleteObserver(this);
+			}
 			this.destination = destination;
-			if (this.destination != null)
+			if (this.destination != null) {
 				this.destination.addObserver(this);
+			}
 			setChanged();
 			notifyObservers(new SGAttributeModification("destination", oldValue, destination));
 		}
@@ -387,10 +396,12 @@ public class HibernateRelationship extends TechnologyModelObject implements Flex
 			setChanged();
 			notifyObservers(new SGAttributeModification("inverse", oldValue, inverse));
 
-			if (this.inverse != null)
+			if (this.inverse != null) {
 				this.inverse.setInverse(this);
-			if (oldValue != null)
+			}
+			if (oldValue != null) {
 				oldValue.setInverse(null);
+			}
 		}
 	}
 

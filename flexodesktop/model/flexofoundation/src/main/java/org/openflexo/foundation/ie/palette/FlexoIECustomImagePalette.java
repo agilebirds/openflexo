@@ -44,8 +44,9 @@ public class FlexoIECustomImagePalette extends FlexoIEPalette<FlexoIECustomImage
 	protected void loadWidgets() {
 		for (FlexoWebServerFileResource r : getProject().getSpecificImageResources()) {
 			File f = r.getFile();
-			if (!f.exists())
+			if (!f.exists()) {
 				continue;
+			}
 			Properties props = new Properties();
 			props.put(PaletteAttribute.XML.getAttributeTag(), "<IEButton imageName=\"" + getProject().imageNameForFile(f)
 					+ "\" inspector=\"Button.inspector\"  hyperlink_type=\"" + HyperlinkType.IMAGE.getSerializationRepresentation()

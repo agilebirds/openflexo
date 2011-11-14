@@ -73,11 +73,13 @@ public class AddMenu extends FlexoAction {
 
 	@Override
 	protected void doAction(Object context) {
-		if (menuLabel == null)
+		if (menuLabel == null) {
 			return;
+		}
 		_newMenu = FlexoItemMenu.createNewMenu(father.getProject().getFlexoNavigationMenu(), father, menuLabel);
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Added a new subMenuItem to folder " + father.getMenuLabel());
+		}
 	}
 
 	public FlexoItemMenu getNewMenu() {

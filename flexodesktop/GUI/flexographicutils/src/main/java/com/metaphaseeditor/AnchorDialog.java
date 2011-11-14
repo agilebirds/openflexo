@@ -61,6 +61,7 @@ public class AnchorDialog extends javax.swing.JDialog {
 
 		cancelButton.setText("Cancel");
 		cancelButton.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				cancelButtonActionPerformed(evt);
 			}
@@ -68,6 +69,7 @@ public class AnchorDialog extends javax.swing.JDialog {
 
 		okButton.setText("OK");
 		okButton.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				okButtonActionPerformed(evt);
 			}

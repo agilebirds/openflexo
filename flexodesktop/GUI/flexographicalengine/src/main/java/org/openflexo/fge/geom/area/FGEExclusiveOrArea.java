@@ -23,11 +23,11 @@ import java.awt.geom.AffineTransform;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.geom.FGEAbstractLine;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGELine;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGEShape;
-import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.graphics.FGEGraphics;
 
 public class FGEExclusiveOrArea extends FGEOperationArea {
@@ -61,12 +61,15 @@ public class FGEExclusiveOrArea extends FGEOperationArea {
 
 	@Override
 	public boolean containsArea(FGEArea a) {
-		if (a instanceof FGEPoint)
+		if (a instanceof FGEPoint) {
 			return containsPoint((FGEPoint) a);
-		if (a instanceof FGELine)
+		}
+		if (a instanceof FGELine) {
 			return containsLine((FGELine) a);
-		if (a instanceof FGEShape)
+		}
+		if (a instanceof FGEShape) {
 			return FGEShape.AreaComputation.isShapeContainedInArea((FGEShape<?>) a, this);
+		}
 		return false;
 	}
 
@@ -84,8 +87,9 @@ public class FGEExclusiveOrArea extends FGEOperationArea {
 
 	@Override
 	public FGEPoint getNearestPoint(FGEPoint aPoint) {
-		if (containsPoint(aPoint))
+		if (containsPoint(aPoint)) {
 			return aPoint.clone();
+		}
 
 		// TODO: to implement
 		logger.warning("Not implemented yet !!!!");
@@ -128,8 +132,9 @@ public class FGEExclusiveOrArea extends FGEOperationArea {
 	 */
 	@Override
 	public FGEPoint nearestPointFrom(FGEPoint from, SimplifiedCardinalDirection orientation) {
-		if (containsPoint(from))
+		if (containsPoint(from)) {
 			return from.clone();
+		}
 
 		// TODO: to implement
 		logger.warning("Not implemented yet !!!!");

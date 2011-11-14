@@ -54,8 +54,9 @@ public abstract class MethodSourceCode extends AbstractSourceCode {
 
 	@Override
 	protected ParsedJavaMethod parseCode(final String qualifiedCode) throws ParserNotInstalledException {
-		if (_javaMethodParser == null)
+		if (_javaMethodParser == null) {
 			throw new ParserNotInstalledException();
+		}
 
 		try {
 			// Try to parse
@@ -67,16 +68,18 @@ public abstract class MethodSourceCode extends AbstractSourceCode {
 			setParseErrorWarning("<html><font color=\"red\">" + FlexoLocalization.localizedForKey("parse_error_warning")
 			// +" method: "+qualifiedCode
 					+ "</font></html>");
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Parse error while parsing method: " + qualifiedCode);
+			}
 			return null;
 		}
 	}
 
 	@Override
 	public ParsedJavadoc parseJavadoc(final String qualifiedCode) throws ParserNotInstalledException {
-		if (_javaMethodParser == null)
+		if (_javaMethodParser == null) {
 			throw new ParserNotInstalledException();
+		}
 		try {
 			return _javaMethodParser.parseJavadocForMethod(qualifiedCode, getOwner().getDMModel());
 		} catch (JavaParseException e) {

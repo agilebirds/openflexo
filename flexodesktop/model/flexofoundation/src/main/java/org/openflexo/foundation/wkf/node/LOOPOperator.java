@@ -25,10 +25,10 @@ import java.util.logging.Level;
 
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.bindings.AbstractBinding;
+import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.bindings.BindingValue;
 import org.openflexo.foundation.bindings.IntegerStaticBinding;
 import org.openflexo.foundation.bindings.WKFBindingDefinition;
-import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
@@ -109,8 +109,9 @@ public class LOOPOperator extends CommonOutputOperatorNode {
 	}
 
 	public AbstractBinding getCondition() {
-		if (isBeingCloned())
+		if (isBeingCloned()) {
 			return null;
+		}
 		return _condition;
 	}
 
@@ -126,8 +127,9 @@ public class LOOPOperator extends CommonOutputOperatorNode {
 	}
 
 	public BindingValue getIterator() {
-		if (isBeingCloned())
+		if (isBeingCloned()) {
 			return null;
+		}
 		return _iterator;
 	}
 
@@ -143,8 +145,9 @@ public class LOOPOperator extends CommonOutputOperatorNode {
 	}
 
 	public AbstractBinding getBeginValue() {
-		if (isBeingCloned())
+		if (isBeingCloned()) {
 			return null;
+		}
 		return _beginValue;
 	}
 
@@ -160,8 +163,9 @@ public class LOOPOperator extends CommonOutputOperatorNode {
 	}
 
 	public AbstractBinding getEndValue() {
-		if (isBeingCloned())
+		if (isBeingCloned()) {
 			return null;
+		}
 		return _endValue;
 	}
 
@@ -177,8 +181,9 @@ public class LOOPOperator extends CommonOutputOperatorNode {
 	}
 
 	public AbstractBinding getIncrementValue() {
-		if (isBeingCloned())
+		if (isBeingCloned()) {
 			return null;
+		}
 		return _incrementValue;
 	}
 
@@ -194,8 +199,9 @@ public class LOOPOperator extends CommonOutputOperatorNode {
 	}
 
 	public AbstractBinding getIterationCollection() {
-		if (isBeingCloned())
+		if (isBeingCloned()) {
 			return null;
+		}
 		return _iterationCollection;
 	}
 
@@ -211,8 +217,9 @@ public class LOOPOperator extends CommonOutputOperatorNode {
 	}
 
 	public BindingValue getCollectionItem() {
-		if (isBeingCloned())
+		if (isBeingCloned()) {
 			return null;
+		}
 		return _collectionItem;
 	}
 
@@ -230,8 +237,9 @@ public class LOOPOperator extends CommonOutputOperatorNode {
 	public WKFBindingDefinition CONDITION_BINDING_DEFINITION() {
 		if (getProject() != null) {
 			WKFBindingDefinition returned = WKFBindingDefinition.get(this, CONDITION, Boolean.class, BindingDefinitionType.GET, false);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Returned WKFBindingDefinition : " + returned);
+			}
 			return returned;
 		}
 		return null;
@@ -240,8 +248,9 @@ public class LOOPOperator extends CommonOutputOperatorNode {
 	public WKFBindingDefinition ITERATOR_BINDING_DEFINITION() {
 		if (getProject() != null) {
 			WKFBindingDefinition returned = WKFBindingDefinition.get(this, ITERATOR, Number.class, BindingDefinitionType.GET_SET, false);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Returned WKFBindingDefinition : " + returned);
+			}
 			return returned;
 		}
 		return null;
@@ -250,8 +259,9 @@ public class LOOPOperator extends CommonOutputOperatorNode {
 	public WKFBindingDefinition BEGIN_VALUE_BINDING_DEFINITION() {
 		if (getProject() != null) {
 			WKFBindingDefinition returned = WKFBindingDefinition.get(this, BEGIN_VALUE, Number.class, BindingDefinitionType.GET, false);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Returned WKFBindingDefinition : " + returned);
+			}
 			return returned;
 		}
 		return null;
@@ -260,8 +270,9 @@ public class LOOPOperator extends CommonOutputOperatorNode {
 	public WKFBindingDefinition END_VALUE_BINDING_DEFINITION() {
 		if (getProject() != null) {
 			WKFBindingDefinition returned = WKFBindingDefinition.get(this, END_VALUE, Number.class, BindingDefinitionType.GET, false);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Returned WKFBindingDefinition : " + returned);
+			}
 			return returned;
 		}
 		return null;
@@ -270,8 +281,9 @@ public class LOOPOperator extends CommonOutputOperatorNode {
 	public WKFBindingDefinition INCREMENT_VALUE_BINDING_DEFINITION() {
 		if (getProject() != null) {
 			WKFBindingDefinition returned = WKFBindingDefinition.get(this, INCREMENT_VALUE, Number.class, BindingDefinitionType.GET, false);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Returned WKFBindingDefinition : " + returned);
+			}
 			return returned;
 		}
 		return null;
@@ -281,8 +293,9 @@ public class LOOPOperator extends CommonOutputOperatorNode {
 		if (getProject() != null) {
 			WKFBindingDefinition returned = WKFBindingDefinition.get(this, ITERATION_COLLECTION, List.class, BindingDefinitionType.GET,
 					false);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Returned WKFBindingDefinition : " + returned);
+			}
 			return returned;
 		}
 		return null;
@@ -292,8 +305,9 @@ public class LOOPOperator extends CommonOutputOperatorNode {
 		if (getProject() != null) {
 			WKFBindingDefinition returned = WKFBindingDefinition.get(this, COLLECTION_ITEM, Object.class, BindingDefinitionType.GET_SET,
 					false);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Returned WKFBindingDefinition : " + returned);
+			}
 			return returned;
 		}
 		return null;
@@ -315,8 +329,9 @@ public class LOOPOperator extends CommonOutputOperatorNode {
 	@Override
 	public Vector<WKFObject> getAllEmbeddedWKFObjects() {
 		Vector<WKFObject> returned = super.getAllEmbeddedWKFObjects();
-		if (getExecutionPetriGraph() != null)
+		if (getExecutionPetriGraph() != null) {
 			returned.addAll(getExecutionPetriGraph().getAllEmbeddedWKFObjects());
+		}
 		return returned;
 	}
 

@@ -62,8 +62,9 @@ public final class DMPreferences extends ModulePreferences {
 
 	public static File getPreferedOutputDirectory() {
 		File returnedFile;
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getPreferedOutputDirectory");
+		}
 		returnedFile = preferences(DM_PREFERENCES).getDirectoryProperty(preferedOutputDirectoryKey, true);
 		if (returnedFile != null) {
 			return returnedFile;
@@ -73,8 +74,9 @@ public final class DMPreferences extends ModulePreferences {
 	}
 
 	public static void setPreferedOutputDirectory(File f) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setPreferedOutputDirectory");
+		}
 		preferences(DM_PREFERENCES).setDirectoryProperty(preferedOutputDirectoryKey, f, true);
 	}
 }

@@ -43,8 +43,9 @@ public abstract class TextFieldCustomPopup<T> extends CustomPopup<T> {
 	public TextFieldCustomPopup(T editedObject, int cols) {
 		super(editedObject);
 		requestedColNumber = cols;
-		if (requestedColNumber > 0)
+		if (requestedColNumber > 0) {
 			_textField.setColumns(requestedColNumber);
+		}
 		_textField.setText(renderedString(editedObject));
 	}
 
@@ -73,10 +74,12 @@ public abstract class TextFieldCustomPopup<T> extends CustomPopup<T> {
 	public void updateTextFieldProgrammaticaly() {
 		String cur = _textField.getText();
 		String val = renderedString(getEditedObject());
-		if (cur == null && val == null)
+		if (cur == null && val == null) {
 			return;
-		if (cur != null && cur.equals(val))
+		}
+		if (cur != null && cur.equals(val)) {
 			return;
+		}
 
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override

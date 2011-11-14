@@ -38,7 +38,6 @@ import org.jdom.output.XMLOutputter;
 import org.openflexo.foundation.xml.FlexoXMLMappings;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.xml.XMLDiffTest;
-import org.openflexo.xml.diff3.XMLDiff3;
 import org.openflexo.xmlcode.InvalidModelException;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 import org.openflexo.xmlcode.XMLMapping;
@@ -115,13 +114,14 @@ public class XMLDiff3Test extends TestCase {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		} finally {
-			if (isr != null)
+			if (isr != null) {
 				try {
 					isr.close();
 				} catch (IOException e1) {
 					logger.severe(e1.getMessage());
 					e1.printStackTrace();
 				}
+			}
 		}
 		return result.toString();
 	}

@@ -73,8 +73,9 @@ public class ReviewCopiedWOModel extends AbstractTableModel {
 					newName = componentName + "-" + j;
 				}
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not access to project, process or project is null !");
+				}
 			}
 		}
 	}

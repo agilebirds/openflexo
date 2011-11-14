@@ -16,7 +16,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.builders.FlexoExternalMain;
-
 import org.openflexo.logging.FlexoLogger;
 
 public class FlexoBuilderListener implements Runnable {
@@ -76,6 +75,7 @@ public class FlexoBuilderListener implements Runnable {
 		}
 	}
 
+	@Override
 	public void run() {
 		boolean isReportingMessage = false;
 		boolean isReportingTOCRepositories = false;

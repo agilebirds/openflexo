@@ -209,8 +209,9 @@ public class StandardAdminHandler implements AdminHandler {
 					}
 				}
 
-				if (t9yBeforeRename != null)
+				if (t9yBeforeRename != null) {
 					t9yBeforeRename.run();
+				}
 				FileUtils.renameFile(tempFile, parentCVSEntries);
 			}
 		}
@@ -277,8 +278,9 @@ public class StandardAdminHandler implements AdminHandler {
 				}
 			}
 
-			if (t9yBeforeRename != null)
+			if (t9yBeforeRename != null) {
 				t9yBeforeRename.run();
+			}
 			FileUtils.renameFile(tempFile, originalFile);
 		}
 	}
@@ -490,8 +492,9 @@ public class StandardAdminHandler implements AdminHandler {
 				}
 			}
 
-			if (t9yBeforeRename != null)
+			if (t9yBeforeRename != null) {
 				t9yBeforeRename.run();
+			}
 			FileUtils.renameFile(tempFile, entriesFile);
 		}
 	}
@@ -660,8 +663,9 @@ public class StandardAdminHandler implements AdminHandler {
 					}
 				}
 
-				if (t9yBeforeRename != null)
+				if (t9yBeforeRename != null) {
 					t9yBeforeRename.run();
+				}
 				FileUtils.renameFile(backup, entriesFile);
 			}
 			entriesDotLogFile.delete();
@@ -756,8 +760,9 @@ public class StandardAdminHandler implements AdminHandler {
 				File backup = new File(folder, "CVS/Entries.Backup"); // NOI18N
 				if (backup.exists()) {
 					try {
-						if (t9yBeforeRename != null)
+						if (t9yBeforeRename != null) {
 							t9yBeforeRename.run();
+						}
 						FileUtils.renameFile(backup, entries);
 						return entries;
 					} catch (IOException e) {

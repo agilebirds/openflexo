@@ -119,8 +119,9 @@ public class H2DBAdapter extends JdbcAdapter {
 		while (it0.hasNext()) {
 			DbAttribute next = (DbAttribute) it0.next();
 			buf.append(next.getName());
-			if (it0.hasNext())
+			if (it0.hasNext()) {
 				buf.append("_");
+			}
 		}
 		buf.append(" UNIQUE (");
 
@@ -172,8 +173,9 @@ public class H2DBAdapter extends JdbcAdapter {
 			if (!first) {
 				buf.append(", ");
 				refBuf.append(", ");
-			} else
+			} else {
 				first = false;
+			}
 
 			buf.append(join.getSourceName());
 			refBuf.append(join.getTargetName());

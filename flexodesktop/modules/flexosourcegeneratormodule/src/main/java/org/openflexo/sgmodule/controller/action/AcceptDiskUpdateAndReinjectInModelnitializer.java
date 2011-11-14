@@ -24,6 +24,12 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.components.MultipleObjectSelectorPopup;
+import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.action.FlexoActionFinalizer;
+import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.action.FlexoExceptionHandler;
+import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.sg.action.AcceptDiskUpdateAndReinjectInModel;
@@ -31,13 +37,6 @@ import org.openflexo.sgmodule.view.popup.SelectFilesPopup;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-
-import org.openflexo.components.MultipleObjectSelectorPopup;
-import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.action.FlexoActionFinalizer;
-import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.action.FlexoExceptionHandler;
-import org.openflexo.foundation.cg.CGFile;
 
 public class AcceptDiskUpdateAndReinjectInModelnitializer extends ActionInitializer {
 

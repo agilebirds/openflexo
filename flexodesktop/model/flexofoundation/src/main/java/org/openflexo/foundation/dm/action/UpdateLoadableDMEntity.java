@@ -32,8 +32,8 @@ import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DMPackage;
 import org.openflexo.foundation.dm.DMSet;
-import org.openflexo.foundation.dm.LoadableDMEntity;
 import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference;
+import org.openflexo.foundation.dm.LoadableDMEntity;
 import org.openflexo.localization.FlexoLocalization;
 
 public class UpdateLoadableDMEntity extends FlexoAction<UpdateLoadableDMEntity, DMObject, DMObject> {
@@ -89,12 +89,14 @@ public class UpdateLoadableDMEntity extends FlexoAction<UpdateLoadableDMEntity, 
 			ClassReference classReference = _updatedSet.getClassReference(next.getJavaType());
 			setSecondaryProgress(FlexoLocalization.localizedForKey("updating") + " " + classReference.getName());
 			if (classReference.isSelected()) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Update " + next + " according to " + classReference);
+				}
 				next.update(classReference);
 			} else {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Ignore update " + next);
+				}
 			}
 		}
 
@@ -127,14 +129,16 @@ public class UpdateLoadableDMEntity extends FlexoAction<UpdateLoadableDMEntity, 
 
 	private static void computeLoadableDMEntitiesListWith(FlexoModelObject object, Vector list) {
 		if ((object != null) && (object instanceof LoadableDMEntity)) {
-			if (!list.contains(object))
+			if (!list.contains(object)) {
 				list.add(object);
+			}
 		} else if ((object != null) && (object instanceof DMPackage)) {
 			for (Enumeration en = ((DMPackage) object).getEntities().elements(); en.hasMoreElements();) {
 				DMEntity next = (DMEntity) en.nextElement();
 				if (next instanceof LoadableDMEntity) {
-					if (!list.contains(next))
+					if (!list.contains(next)) {
 						list.add(next);
+					}
 				}
 			}
 		}

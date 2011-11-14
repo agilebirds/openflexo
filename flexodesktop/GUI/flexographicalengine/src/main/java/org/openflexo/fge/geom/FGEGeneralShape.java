@@ -88,16 +88,19 @@ public class FGEGeneralShape implements FGEGeometricObject<FGEGeneralShape>, FGE
 
 	public void addToPathElements(GeneralShapePathElement element) {
 		if (element instanceof FGESegment) {
-			if (currentPoint == null)
+			if (currentPoint == null) {
 				beginAtPoint(((FGESegment) element).getP1());
+			}
 			addSegment(((FGESegment) element).getP2());
 		} else if (element instanceof FGEQuadCurve) {
-			if (currentPoint == null)
+			if (currentPoint == null) {
 				beginAtPoint(((FGEQuadCurve) element).getP1());
+			}
 			addQuadCurve(((FGEQuadCurve) element).getCtrlPoint(), ((FGEQuadCurve) element).getP2());
 		} else if (element instanceof FGECubicCurve) {
-			if (currentPoint == null)
+			if (currentPoint == null) {
 				beginAtPoint(((FGECubicCurve) element).getP1());
+			}
 			addCubicCurve(((FGECubicCurve) element).getCtrlP1(), ((FGECubicCurve) element).getCtrlP2(), ((FGECubicCurve) element).getP2());
 		}
 	}
@@ -120,8 +123,9 @@ public class FGEGeneralShape implements FGEGeometricObject<FGEGeneralShape>, FGE
 	}
 
 	public void addSegment(FGEPoint p) {
-		if (currentPoint == null)
+		if (currentPoint == null) {
 			throw new IllegalArgumentException("No current point defined");
+		}
 		pathElements.add(new FGESegment(currentPoint, p));
 		updateGeneralPath();
 	}
@@ -131,8 +135,9 @@ public class FGEGeneralShape implements FGEGeometricObject<FGEGeneralShape>, FGE
 	}
 
 	public void addQuadCurve(FGEPoint cp, FGEPoint p) {
-		if (currentPoint == null)
+		if (currentPoint == null) {
 			throw new IllegalArgumentException("No current point defined");
+		}
 		pathElements.add(new FGEQuadCurve(currentPoint, cp, p));
 		updateGeneralPath();
 	}
@@ -142,8 +147,9 @@ public class FGEGeneralShape implements FGEGeometricObject<FGEGeneralShape>, FGE
 	}
 
 	public void addCubicCurve(FGEPoint cp1, FGEPoint cp2, FGEPoint p) {
-		if (currentPoint == null)
+		if (currentPoint == null) {
 			throw new IllegalArgumentException("No current point defined");
+		}
 		pathElements.add(new FGECubicCurve(currentPoint, cp1, cp2, p));
 		updateGeneralPath();
 	}
@@ -167,15 +173,17 @@ public class FGEGeneralShape implements FGEGeometricObject<FGEGeneralShape>, FGE
 	@Override
 	public void setIsFilled(boolean filled) {
 		if (filled) {
-			if (getClosure() == Closure.OPEN_NOT_FILLED)
+			if (getClosure() == Closure.OPEN_NOT_FILLED) {
 				setClosure(Closure.OPEN_FILLED);
-			else if (getClosure() == Closure.CLOSED_NOT_FILLED)
+			} else if (getClosure() == Closure.CLOSED_NOT_FILLED) {
 				setClosure(Closure.CLOSED_FILLED);
+			}
 		} else {
-			if (getClosure() == Closure.OPEN_FILLED)
+			if (getClosure() == Closure.OPEN_FILLED) {
 				setClosure(Closure.OPEN_NOT_FILLED);
-			else if (getClosure() == Closure.CLOSED_FILLED)
+			} else if (getClosure() == Closure.CLOSED_FILLED) {
 				setClosure(Closure.CLOSED_NOT_FILLED);
+			}
 		}
 	}
 
@@ -220,8 +228,9 @@ public class FGEGeneralShape implements FGEGeometricObject<FGEGeneralShape>, FGE
 				_generalPath.curveTo((float) cp1.x, (float) cp1.y, (float) cp2.x, (float) cp2.y, (float) current.x, (float) current.y);
 			}
 		}
-		if (closure == Closure.CLOSED_FILLED || closure == Closure.CLOSED_NOT_FILLED)
+		if (closure == Closure.CLOSED_FILLED || closure == Closure.CLOSED_NOT_FILLED) {
 			_generalPath.closePath();
+		}
 		_generalPath.setWindingRule(Path2D.WIND_NON_ZERO);
 	}
 
@@ -298,10 +307,11 @@ public class FGEGeneralShape implements FGEGeometricObject<FGEGeneralShape>, FGE
 	@Override
 	public FGEArea intersect(FGEArea area) {
 		FGEIntersectionArea returned = new FGEIntersectionArea(this, area);
-		if (returned.isDevelopable())
+		if (returned.isDevelopable()) {
 			return returned.makeDevelopped();
-		else
+		} else {
 			return returned;
+		}
 	}
 
 	@Override
@@ -311,10 +321,12 @@ public class FGEGeneralShape implements FGEGeometricObject<FGEGeneralShape>, FGE
 
 	@Override
 	public FGEArea union(FGEArea area) {
-		if (containsArea(area))
+		if (containsArea(area)) {
 			return clone();
-		if (area.containsArea(this))
+		}
+		if (area.containsArea(this)) {
 			return area.clone();
+		}
 
 		return new FGEUnionArea(this, area);
 	}
@@ -434,10 +446,12 @@ public class FGEGeneralShape implements FGEGeometricObject<FGEGeneralShape>, FGE
 	public boolean equals(Object obj) {
 		if (obj instanceof FGEGeneralShape) {
 			FGEGeneralShape p = (FGEGeneralShape) obj;
-			if (getClosure() != p.getClosure())
+			if (getClosure() != p.getClosure()) {
 				return false;
-			if (getPathElements().size() != p.getPathElements().size())
+			}
+			if (getPathElements().size() != p.getPathElements().size()) {
 				return false;
+			}
 			for (int i = 0; i < getPathElements().size(); i++) {
 				if (!getElementAt(i).equals(p.getElementAt(i))) {
 					return false;

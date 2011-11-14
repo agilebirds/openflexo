@@ -76,10 +76,12 @@ public abstract class WSEView<O extends FlexoModelObject> extends CompoundTabula
 	 }*/
 
 	public WSETabularView findTabularViewContaining(FlexoModelObject anObject) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("findTabularViewContaining() " + this + " obj: " + anObject);
-		if (anObject == null)
+		}
+		if (anObject == null) {
 			return null;
+		}
 		for (Enumeration en = getMasterTabularViews().elements(); en.hasMoreElements();) {
 			WSETabularView next = (WSETabularView) en.nextElement();
 			if (next.getModel().indexOf(anObject) > -1) {
@@ -137,15 +139,15 @@ public abstract class WSEView<O extends FlexoModelObject> extends CompoundTabula
 
 	public String getTitle() {
 		FlexoModelObject obj = getModelObject();
-		if (obj instanceof DMObject)
+		if (obj instanceof DMObject) {
 			return ((DMObject) obj).getLocalizedName();
-		else if (obj instanceof WSObject)
+		} else if (obj instanceof WSObject) {
 			return ((WSObject) obj).getLocalizedName();
-		else if (obj instanceof FlexoProcess)
+		} else if (obj instanceof FlexoProcess) {
 			return ((FlexoProcess) obj).getName();
-		else if (obj instanceof FlexoPort)
+		} else if (obj instanceof FlexoPort) {
 			return ((FlexoPort) obj).getName();
-		else if (obj instanceof AbstractMessageDefinition) {
+		} else if (obj instanceof AbstractMessageDefinition) {
 			return ((AbstractMessageDefinition) obj).getName();
 		} else if (obj instanceof ServiceInterface) {
 			return ((ServiceInterface) obj).getName();

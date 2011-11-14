@@ -68,8 +68,9 @@ public class CalcDrawingShemaGR extends DrawingGraphicalRepresentation<ExampleDr
 	}
 
 	public ExampleDrawingShema getShema() {
-		if (getDrawing() != null)
+		if (getDrawing() != null) {
 			return getDrawing().getShema();
+		}
 		return null;
 	}
 
@@ -89,8 +90,9 @@ public class CalcDrawingShemaGR extends DrawingGraphicalRepresentation<ExampleDr
 	public void notifyObservers(Object arg) {
 		super.notifyObservers(arg);
 		if (arg instanceof FGENotification && ((FGENotification) arg).isModelNotification() && getDrawing() != null
-				&& !getDrawing().ignoreNotifications() && getShema() != null && !getShema().ignoreNotifications())
+				&& !getDrawing().ignoreNotifications() && getShema() != null && !getShema().ignoreNotifications()) {
 			getShema().setChanged();
+		}
 	}
 
 }

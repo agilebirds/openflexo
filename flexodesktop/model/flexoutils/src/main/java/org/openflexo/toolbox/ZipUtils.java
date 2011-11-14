@@ -40,8 +40,9 @@ public class ZipUtils {
 		try {
 			byte[] buffer = new byte[4096];
 			int len;
-			while ((len = in.read(buffer)) >= 0)
+			while ((len = in.read(buffer)) >= 0) {
 				out.write(buffer, 0, len);
+			}
 		} finally {
 			in.close();
 			out.close();
@@ -61,8 +62,9 @@ public class ZipUtils {
 				throw new IllegalArgumentException("Could not create dir " + outputDir.getAbsolutePath());
 			}
 		}
-		if (!outputDir.isDirectory())
+		if (!outputDir.isDirectory()) {
 			throw new IllegalArgumentException(outputDir.getAbsolutePath() + "is not a directory or is not writeable!");
+		}
 		ZipFile zipFile;
 		zipFile = new ZipFile(zip);
 		entries = zipFile.entries();
@@ -235,8 +237,9 @@ public class ZipUtils {
 	}
 
 	private static void zipFile(int pathPrefixSize, File fileToZip, ZipOutputStream zos, IProgress progress) throws IOException {
-		if (!fileToZip.exists())
+		if (!fileToZip.exists()) {
 			return;
+		}
 		byte[] readBuffer = new byte[4096];
 		int bytesIn = 0;
 		if (progress != null) {
@@ -265,8 +268,9 @@ public class ZipUtils {
 			ZipEntry entry = new ZipEntry("");
 			zos.putNextEntry(entry);
 		} finally {
-			if (zos != null)
+			if (zos != null) {
 				zos.close();
+			}
 		}
 	}
 

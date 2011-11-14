@@ -115,8 +115,9 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		// INSTANCE = this;
 		// _project = project;
 		ontologies = new Hashtable<String, FlexoOntology>();
-		if (parentOntologyLibrary == null)
+		if (parentOntologyLibrary == null) {
 			graphMaker = new SimpleGraphMaker();
+		}
 		classes = new Hashtable<String, OntologyClass>();
 		individuals = new Hashtable<String, OntologyIndividual>();
 		dataProperties = new Hashtable<String, OntologyDataProperty>();
@@ -151,8 +152,9 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 	}*/
 
 	public OntologyClass getRootClass() {
-		if (parentOntologyLibrary != null)
+		if (parentOntologyLibrary != null) {
 			return parentOntologyLibrary.getRootClass();
+		}
 		return THING;
 	}
 
@@ -160,8 +162,9 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		if (_allOntologies == null) {
 			_allOntologies = new Vector<FlexoOntology>();
 			_allOntologies.addAll(ontologies.values());
-			if (parentOntologyLibrary != null)
+			if (parentOntologyLibrary != null) {
 				_allOntologies.addAll(parentOntologyLibrary.getAllOntologies());
+			}
 		}
 		return _allOntologies;
 	}
@@ -170,8 +173,9 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		if (_allDataProperties == null) {
 			_allDataProperties = new Vector<OntologyDataProperty>();
 			_allDataProperties.addAll(dataProperties.values());
-			if (parentOntologyLibrary != null)
+			if (parentOntologyLibrary != null) {
 				_allDataProperties.addAll(parentOntologyLibrary.getAllDataProperties());
+			}
 		}
 		return _allDataProperties;
 	}
@@ -180,8 +184,9 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		if (_allObjectProperties == null) {
 			_allObjectProperties = new Vector<OntologyObjectProperty>();
 			_allObjectProperties.addAll(objectProperties.values());
-			if (parentOntologyLibrary != null)
+			if (parentOntologyLibrary != null) {
 				_allObjectProperties.addAll(parentOntologyLibrary.getAllObjectProperties());
+			}
 		}
 		return _allObjectProperties;
 	}
@@ -190,8 +195,9 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		if (_allClasses == null) {
 			_allClasses = new Vector<OntologyClass>();
 			_allClasses.addAll(classes.values());
-			if (parentOntologyLibrary != null)
+			if (parentOntologyLibrary != null) {
 				_allClasses.addAll(parentOntologyLibrary.getAllClasses());
+			}
 		}
 		return _allClasses;
 	}
@@ -200,16 +206,18 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		if (_allIndividuals == null) {
 			_allIndividuals = new Vector<OntologyIndividual>();
 			_allIndividuals.addAll(individuals.values());
-			if (parentOntologyLibrary != null)
+			if (parentOntologyLibrary != null) {
 				_allIndividuals.addAll(parentOntologyLibrary.getAllIndividuals());
+			}
 		}
 		return _allIndividuals;
 	}
 
 	public FlexoOntology getOntology(String ontologyUri) {
 		FlexoOntology returned = ontologies.get(ontologyUri);
-		if (returned == null && parentOntologyLibrary != null)
+		if (returned == null && parentOntologyLibrary != null) {
 			return parentOntologyLibrary.getOntology(ontologyUri);
+		}
 		return returned;
 	}
 
@@ -235,13 +243,15 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 
 	public ImportedOntology importOntology(String ontologyUri, File alternativeLocalFile, OntologyFolder folder) {
 		logger.fine("Import ontology " + ontologyUri + " as " + alternativeLocalFile);
-		if (_allOntologies != null)
+		if (_allOntologies != null) {
 			_allOntologies.clear();
+		}
 		_allOntologies = null;
 		ImportedOntology newOntology = new ImportedOntology(ontologyUri, alternativeLocalFile, this);
 		ontologies.put(ontologyUri, newOntology);
-		if (folder != null)
+		if (folder != null) {
 			folder.addToOntologies(newOntology);
+		}
 		setChanged();
 		notifyObservers(new OntologyImported(newOntology));
 		return newOntology;
@@ -251,8 +261,9 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 
 	@Override
 	public GraphMaker getGraphMaker() {
-		if (parentOntologyLibrary != null)
+		if (parentOntologyLibrary != null) {
 			return parentOntologyLibrary.getGraphMaker();
+		}
 		return graphMaker;
 	}
 
@@ -262,8 +273,9 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 	}
 
 	public Model openModel() {
-		if (parentOntologyLibrary != null)
+		if (parentOntologyLibrary != null) {
 			return parentOntologyLibrary.openModel();
+		}
 		return new ModelCom(getGraphMaker().openGraph());
 	}
 
@@ -274,8 +286,9 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 
 	@Override
 	public OntModel openModel(String name, boolean strict) {
-		if (parentOntologyLibrary != null)
+		if (parentOntologyLibrary != null) {
 			return parentOntologyLibrary.openModel(name, strict);
+		}
 		getGraphMaker().openGraph(name, strict);
 		FlexoOntology ont = getOntology(name);
 		if (ont != null) {
@@ -301,13 +314,15 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 
 	@Override
 	public OntModel createModel(String name, boolean strict) {
-		if (parentOntologyLibrary != null)
+		if (parentOntologyLibrary != null) {
 			return parentOntologyLibrary.createModel(name, strict);
+		}
 		getGraphMaker().createGraph(name, strict);
 		FlexoOntology ont = getOntology(name);
 		if (ont != null) {
-			if (strict)
+			if (strict) {
 				throw new AlreadyExistsException(name);
+			}
 			return createDefaultModel();
 		}
 		ont = new ImportedOntology(name, null, this);
@@ -329,15 +344,17 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 
 	@Override
 	public OntModel createFreshModel() {
-		if (parentOntologyLibrary != null)
+		if (parentOntologyLibrary != null) {
 			return parentOntologyLibrary.createFreshModel();
+		}
 		return ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, this, null);
 	}
 
 	@Override
 	public OntModel createDefaultModel() {
-		if (parentOntologyLibrary != null)
+		if (parentOntologyLibrary != null) {
 			return parentOntologyLibrary.createDefaultModel();
+		}
 		return ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, this, null);
 	}
 
@@ -348,10 +365,12 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 
 	@Override
 	public boolean hasModel(String name) {
-		if (ontologies.get(name) != null)
+		if (ontologies.get(name) != null) {
 			return true;
-		if (parentOntologyLibrary != null)
+		}
+		if (parentOntologyLibrary != null) {
 			return parentOntologyLibrary.hasModel(name);
+		}
 		return getGraphMaker().hasGraph(name);
 	}
 
@@ -391,27 +410,34 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 		// System.out.println("ObjectProperties: "+objectProperties.toString());
 		// System.out.println("DataProperties: "+dataProperties.toString());
 
-		if (objectURI == null)
+		if (objectURI == null) {
 			return null;
+		}
 
-		if (objectURI.endsWith("#"))
+		if (objectURI.endsWith("#")) {
 			objectURI = objectURI.substring(0, objectURI.length() - 1);
+		}
 
 		OntologyObject returned = getOntology(objectURI);
-		if (returned != null)
+		if (returned != null) {
 			return returned;
+		}
 		returned = getClass(objectURI);
-		if (returned != null)
+		if (returned != null) {
 			return returned;
+		}
 		returned = getIndividual(objectURI);
-		if (returned != null)
+		if (returned != null) {
 			return returned;
+		}
 		returned = getObjectProperty(objectURI);
-		if (returned != null)
+		if (returned != null) {
 			return returned;
+		}
 		returned = getDataProperty(objectURI);
-		if (returned != null)
+		if (returned != null) {
 			return returned;
+		}
 
 		if (returned == null && objectURI.indexOf("#") > 0) {
 			// Maybe required ontology is not loaded ???
@@ -424,22 +450,26 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 			}
 		}
 
-		if (parentOntologyLibrary != null)
+		if (parentOntologyLibrary != null) {
 			return parentOntologyLibrary.getOntologyObject(objectURI);
+		}
 
 		return null;
 	}
 
 	public OntologyProperty getProperty(String objectURI) {
 		OntologyProperty returned = getObjectProperty(objectURI);
-		if (returned != null)
+		if (returned != null) {
 			return returned;
+		}
 		returned = getDataProperty(objectURI);
-		if (returned != null)
+		if (returned != null) {
 			return returned;
+		}
 
-		if (parentOntologyLibrary != null)
+		if (parentOntologyLibrary != null) {
 			return parentOntologyLibrary.getProperty(objectURI);
+		}
 
 		return null;
 	}
@@ -451,10 +481,12 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 	 * @return
 	 */
 	public boolean testValidURI(String ontologyURI, String conceptURI) {
-		if (StringUtils.isEmpty(conceptURI))
+		if (StringUtils.isEmpty(conceptURI)) {
 			return false;
-		if (StringUtils.isEmpty(conceptURI.trim()))
+		}
+		if (StringUtils.isEmpty(conceptURI.trim())) {
 			return false;
+		}
 		return (conceptURI.equals(ToolBox.getJavaName(conceptURI, true, false)) && getOntologyObject(ontologyURI + "#" + conceptURI) == null);
 	}
 
@@ -469,20 +501,24 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 	}
 
 	public OntologyClass getClass(String classURI) {
-		if (classURI == null)
+		if (classURI == null) {
 			return null;
+		}
 		OntologyClass returned = classes.get(classURI);
-		if (returned != null)
+		if (returned != null) {
 			return returned;
-		if (parentOntologyLibrary != null)
+		}
+		if (parentOntologyLibrary != null) {
 			return parentOntologyLibrary.getClass(classURI);
+		}
 		return null;
 	}
 
 	protected void registerNewClass(OntologyClass aClass) {
 		classes.put(aClass.getURI(), aClass);
-		if (_allClasses != null)
+		if (_allClasses != null) {
 			_allClasses.clear();
+		}
 		_allClasses = null;
 		setChanged();
 		notifyObservers(new OntologyClassInserted(aClass));
@@ -490,8 +526,9 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 
 	protected void unregisterClass(OntologyClass aClass) {
 		classes.remove(aClass.getURI());
-		if (_allClasses != null)
+		if (_allClasses != null) {
 			_allClasses.clear();
+		}
 		_allClasses = null;
 		setChanged();
 		notifyObservers(new OntologyClassRemoved(aClass));
@@ -500,28 +537,33 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 	protected void renameClass(OntologyClass object, String oldURI, String newURI) {
 		classes.remove(oldURI);
 		classes.put(object.getURI(), object);
-		if (_allClasses != null)
+		if (_allClasses != null) {
 			_allClasses.clear();
+		}
 		_allClasses = null;
 		setChanged();
 		notifyObservers(new OntologyObjectRenamed(object, oldURI, newURI));
 	}
 
 	public OntologyIndividual getIndividual(String individualURI) {
-		if (individualURI == null)
+		if (individualURI == null) {
 			return null;
+		}
 		OntologyIndividual returned = individuals.get(individualURI);
-		if (returned != null)
+		if (returned != null) {
 			return returned;
-		if (parentOntologyLibrary != null)
+		}
+		if (parentOntologyLibrary != null) {
 			return parentOntologyLibrary.getIndividual(individualURI);
+		}
 		return null;
 	}
 
 	protected void registerNewIndividual(OntologyIndividual anIndividual) {
 		individuals.put(anIndividual.getURI(), anIndividual);
-		if (_allIndividuals != null)
+		if (_allIndividuals != null) {
 			_allIndividuals.clear();
+		}
 		_allIndividuals = null;
 		setChanged();
 		notifyObservers(new OntologyIndividualInserted(anIndividual));
@@ -529,8 +571,9 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 
 	protected void unregisterIndividual(OntologyIndividual anIndividual) {
 		individuals.remove(anIndividual.getURI());
-		if (_allIndividuals != null)
+		if (_allIndividuals != null) {
 			_allIndividuals.clear();
+		}
 		_allIndividuals = null;
 		setChanged();
 		notifyObservers(new OntologyIndividualRemoved(anIndividual));
@@ -539,28 +582,33 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 	protected void renameIndividual(OntologyIndividual object, String oldURI, String newURI) {
 		individuals.remove(oldURI);
 		individuals.put(object.getURI(), object);
-		if (_allIndividuals != null)
+		if (_allIndividuals != null) {
 			_allIndividuals.clear();
+		}
 		_allIndividuals = null;
 		setChanged();
 		notifyObservers(new OntologyObjectRenamed(object, oldURI, newURI));
 	}
 
 	public OntologyDataProperty getDataProperty(String propertyURI) {
-		if (propertyURI == null)
+		if (propertyURI == null) {
 			return null;
+		}
 		OntologyDataProperty returned = dataProperties.get(propertyURI);
-		if (returned != null)
+		if (returned != null) {
 			return returned;
-		if (parentOntologyLibrary != null)
+		}
+		if (parentOntologyLibrary != null) {
 			return parentOntologyLibrary.getDataProperty(propertyURI);
+		}
 		return null;
 	}
 
 	protected void registerNewDataProperty(OntologyDataProperty property) {
 		dataProperties.put(property.getURI(), property);
-		if (_allDataProperties != null)
+		if (_allDataProperties != null) {
 			_allDataProperties.clear();
+		}
 		_allDataProperties = null;
 		setChanged();
 		notifyObservers(new OntologyDataPropertyInserted(property));
@@ -568,8 +616,9 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 
 	protected void unregisterDataProperty(OntologyDataProperty aProperty) {
 		dataProperties.remove(aProperty.getURI());
-		if (_allDataProperties != null)
+		if (_allDataProperties != null) {
 			_allDataProperties.clear();
+		}
 		_allDataProperties = null;
 		setChanged();
 		notifyObservers(new OntologyDataPropertyRemoved(aProperty));
@@ -578,28 +627,33 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 	protected void renameDataProperty(OntologyDataProperty object, String oldURI, String newURI) {
 		dataProperties.remove(oldURI);
 		dataProperties.put(object.getURI(), object);
-		if (_allDataProperties != null)
+		if (_allDataProperties != null) {
 			_allDataProperties.clear();
+		}
 		_allDataProperties = null;
 		setChanged();
 		notifyObservers(new OntologyObjectRenamed(object, oldURI, newURI));
 	}
 
 	public OntologyObjectProperty getObjectProperty(String propertyURI) {
-		if (propertyURI == null)
+		if (propertyURI == null) {
 			return null;
+		}
 		OntologyObjectProperty returned = objectProperties.get(propertyURI);
-		if (returned != null)
+		if (returned != null) {
 			return returned;
-		if (parentOntologyLibrary != null)
+		}
+		if (parentOntologyLibrary != null) {
 			return parentOntologyLibrary.getObjectProperty(propertyURI);
+		}
 		return null;
 	}
 
 	protected void registerNewObjectProperty(OntologyObjectProperty property) {
 		objectProperties.put(property.getURI(), property);
-		if (_allObjectProperties != null)
+		if (_allObjectProperties != null) {
 			_allObjectProperties.clear();
+		}
 		_allObjectProperties = null;
 		setChanged();
 		notifyObservers(new OntologyObjectPropertyInserted(property));
@@ -607,8 +661,9 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 
 	protected void unregisterObjectProperty(OntologyObjectProperty aProperty) {
 		objectProperties.remove(aProperty.getURI());
-		if (_allObjectProperties != null)
+		if (_allObjectProperties != null) {
 			_allObjectProperties.clear();
+		}
 		_allObjectProperties = null;
 		setChanged();
 		notifyObservers(new OntologyObjectPropertyRemoved(aProperty));
@@ -617,8 +672,9 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 	protected void renameObjectProperty(OntologyObjectProperty object, String oldURI, String newURI) {
 		objectProperties.remove(oldURI);
 		objectProperties.put(object.getURI(), object);
-		if (_allObjectProperties != null)
+		if (_allObjectProperties != null) {
 			_allObjectProperties.clear();
+		}
 		_allObjectProperties = null;
 		setChanged();
 		notifyObservers(new OntologyObjectRenamed(object, oldURI, newURI));
@@ -640,13 +696,15 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 
 	private void addTopLevelOntologyObjectProperty(OntologyObjectProperty property, Vector<OntologyObjectProperty> topLevelProperties) {
 		if (property.getSuperProperties().size() == 0) {
-			if (!topLevelProperties.contains(property))
+			if (!topLevelProperties.contains(property)) {
 				topLevelProperties.add(property);
+			}
 			return;
 		}
 		for (OntologyProperty superProperty : property.getSuperProperties()) {
-			if (superProperty instanceof OntologyObjectProperty)
+			if (superProperty instanceof OntologyObjectProperty) {
 				addTopLevelOntologyObjectProperty((OntologyObjectProperty) superProperty, topLevelProperties);
+			}
 		}
 	}
 
@@ -661,13 +719,15 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 
 	private void addTopLevelOntologyDataProperty(OntologyDataProperty property, Vector<OntologyDataProperty> topLevelProperties) {
 		if (property.getSuperProperties().size() == 0) {
-			if (!topLevelProperties.contains(property))
+			if (!topLevelProperties.contains(property)) {
 				topLevelProperties.add(property);
+			}
 			return;
 		}
 		for (OntologyProperty superProperty : property.getSuperProperties()) {
-			if (superProperty instanceof OntologyDataProperty)
+			if (superProperty instanceof OntologyDataProperty) {
 				addTopLevelOntologyDataProperty((OntologyDataProperty) superProperty, topLevelProperties);
+			}
 		}
 	}
 
@@ -675,24 +735,29 @@ public class OntologyLibrary extends TemporaryFlexoModelObject implements ModelM
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == parentOntologyLibrary) {
 			if (dataModification instanceof OntologyImported) {
-				if (_allOntologies != null)
+				if (_allOntologies != null) {
 					_allOntologies.clear();
+				}
 				_allOntologies = null;
 			} else if (dataModification instanceof OntologyClassInserted) {
-				if (_allClasses != null)
+				if (_allClasses != null) {
 					_allClasses.clear();
+				}
 				_allClasses = null;
 			} else if (dataModification instanceof OntologyIndividualInserted) {
-				if (_allIndividuals != null)
+				if (_allIndividuals != null) {
 					_allIndividuals.clear();
+				}
 				_allIndividuals = null;
 			} else if (dataModification instanceof OntologyDataPropertyInserted) {
-				if (_allDataProperties != null)
+				if (_allDataProperties != null) {
 					_allDataProperties.clear();
+				}
 				_allDataProperties = null;
 			} else if (dataModification instanceof OntologyObjectPropertyInserted) {
-				if (_allObjectProperties != null)
+				if (_allObjectProperties != null) {
 					_allObjectProperties.clear();
+				}
 				_allObjectProperties = null;
 			}
 		}

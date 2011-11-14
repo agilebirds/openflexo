@@ -36,14 +36,14 @@ import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.Function;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.expr.Variable;
-import org.openflexo.antar.expr.parser.Value;
-import org.openflexo.antar.expr.parser.Word;
 import org.openflexo.antar.expr.parser.ExpressionParser.ConstantFactory;
 import org.openflexo.antar.expr.parser.ExpressionParser.DefaultConstantFactory;
 import org.openflexo.antar.expr.parser.ExpressionParser.DefaultFunctionFactory;
 import org.openflexo.antar.expr.parser.ExpressionParser.DefaultVariableFactory;
 import org.openflexo.antar.expr.parser.ExpressionParser.FunctionFactory;
 import org.openflexo.antar.expr.parser.ExpressionParser.VariableFactory;
+import org.openflexo.antar.expr.parser.Value;
+import org.openflexo.antar.expr.parser.Word;
 import org.openflexo.antar.pp.ExpressionPrettyPrinter;
 
 public class BindingExpression extends AbstractBinding {
@@ -54,14 +54,15 @@ public class BindingExpression extends AbstractBinding {
 	static final ExpressionPrettyPrinter prettyPrinter = new DefaultExpressionPrettyPrinter() {
 		@Override
 		public String getStringRepresentation(Expression expression) {
-			if (expression instanceof BindingValueFunction)
+			if (expression instanceof BindingValueFunction) {
 				return makeStringRepresentation(((BindingValueFunction) expression).getFunction());
-			else if (expression instanceof BindingValueVariable)
+			} else if (expression instanceof BindingValueVariable) {
 				return makeStringRepresentation(((BindingValueVariable) expression).getVariable());
-			else if (expression instanceof BindingValueConstant)
+			} else if (expression instanceof BindingValueConstant) {
 				return makeStringRepresentation(((BindingValueConstant) expression).getConstant());
-			else
+			} else {
 				return super.getStringRepresentation(expression);
+			}
 		}
 	};
 
@@ -101,8 +102,9 @@ public class BindingExpression extends AbstractBinding {
 	public String getStringRepresentation() {
 		if (expression != null) {
 			return prettyPrinter.getStringRepresentation(expression);
-		} else if (unparsableValue != null)
+		} else if (unparsableValue != null) {
 			return "UNPARSABLE:" + unparsableValue;
+		}
 		return "null";
 	}
 
@@ -127,8 +129,9 @@ public class BindingExpression extends AbstractBinding {
 
 	@Override
 	public BindingExpressionFactory getConverter() {
-		if (getOwner() != null)
+		if (getOwner() != null) {
 			return getOwner().getBindingFactory().getBindingExpressionFactory();
+		}
 		return null;
 		// return bindingExpressionConverter;
 	}
@@ -161,10 +164,11 @@ public class BindingExpression extends AbstractBinding {
 		public void setStaticBinding(StaticBinding aStaticBinding) {
 			this.staticBinding = aStaticBinding;
 			if (aStaticBinding instanceof BooleanStaticBinding) {
-				if (((BooleanStaticBinding) aStaticBinding).getValue())
+				if (((BooleanStaticBinding) aStaticBinding).getValue()) {
 					constant = Constant.BooleanConstant.TRUE;
-				else
+				} else {
 					constant = Constant.BooleanConstant.FALSE;
+				}
 			} else if (aStaticBinding instanceof IntegerStaticBinding) {
 				constant = new Constant.IntegerConstant(((IntegerStaticBinding) aStaticBinding).getValue());
 			} else if (aStaticBinding instanceof FloatStaticBinding) {
@@ -181,8 +185,9 @@ public class BindingExpression extends AbstractBinding {
 		public void setConstant(Constant aConstant) {
 			this.constant = aConstant;
 			BindingDefinition bd = null;
-			if (_bindable != null)
+			if (_bindable != null) {
 				bd = new BindingDefinition("constant", Object.class, BindingDefinitionType.GET, true);
+			}
 			if (constant == Constant.BooleanConstant.TRUE) {
 				staticBinding = new BooleanStaticBinding(bd, _bindable, true);
 			} else if (constant == Constant.BooleanConstant.FALSE) {
@@ -194,9 +199,10 @@ public class BindingExpression extends AbstractBinding {
 			} else if (constant instanceof Constant.StringConstant) {
 				staticBinding = new StringStaticBinding(bd, _bindable, ((Constant.StringConstant) constant).getValue());
 			}
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("staticBinding=" + staticBinding + " bindable=" + staticBinding.getOwner() + " bd="
 						+ staticBinding.getBindingDefinition());
+			}
 		}
 
 		@Override
@@ -206,8 +212,9 @@ public class BindingExpression extends AbstractBinding {
 
 		@Override
 		public String toString() {
-			if (constant != null)
+			if (constant != null) {
 				return constant.toString();
+			}
 			return "null";
 		}
 
@@ -294,8 +301,9 @@ public class BindingExpression extends AbstractBinding {
 
 		@Override
 		public String toString() {
-			if (variable != null)
+			if (variable != null) {
 				return variable.toString();
+			}
 			return "null";
 		}
 
@@ -312,7 +320,7 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		public boolean isValid() {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("is BingValueVariable valid ? "
 						+ getVariable().isValid()
 						+ " getBindingValue()="
@@ -320,6 +328,7 @@ public class BindingExpression extends AbstractBinding {
 						+ " return "
 						+ (getVariable() != null && getVariable().isValid() && getBindingValue() != null && getBindingValue()
 								.isBindingValid()));
+			}
 			return getVariable() != null && getVariable().isValid() && getBindingValue() != null && getBindingValue().isBindingValid();
 		}
 
@@ -348,10 +357,11 @@ public class BindingExpression extends AbstractBinding {
 					} else if (binding instanceof BindingExpression) {
 						newExp = ((BindingExpression) binding).getExpression();
 					} else if (binding instanceof BindingValue) {
-						if (((BindingValue) binding).isCompoundBinding())
+						if (((BindingValue) binding).isCompoundBinding()) {
 							newExp = new BindingValueFunction((BindingValue) binding);
-						else
+						} else {
 							newExp = new BindingValueVariable((BindingValue) binding);
+						}
 					}
 					args.add(newExp);
 				}
@@ -475,8 +485,9 @@ public class BindingExpression extends AbstractBinding {
 	}
 
 	public BindingExpression evaluate() throws TypeMismatchException {
-		if (expression == null)
+		if (expression == null) {
 			return clone();
+		}
 		EvaluationContext evaluationContext = new EvaluationContext(getConverter().getConstantFactory(), getConverter()
 				.getVariableFactory(), getConverter().getFunctionFactory());
 		Expression evaluatedExpression = expression.evaluate(evaluationContext);
@@ -496,16 +507,21 @@ public class BindingExpression extends AbstractBinding {
 	@Override
 	public Type getAccessedType() {
 		try {
-			if (getEvaluationType() == EvaluationType.LITERAL)
+			if (getEvaluationType() == EvaluationType.LITERAL) {
 				return Object.class;
-			if (getEvaluationType() == EvaluationType.ARITHMETIC_INTEGER)
+			}
+			if (getEvaluationType() == EvaluationType.ARITHMETIC_INTEGER) {
 				return Long.class;
-			if (getEvaluationType() == EvaluationType.ARITHMETIC_FLOAT)
+			}
+			if (getEvaluationType() == EvaluationType.ARITHMETIC_FLOAT) {
 				return Float.class;
-			if (getEvaluationType() == EvaluationType.BOOLEAN)
+			}
+			if (getEvaluationType() == EvaluationType.BOOLEAN) {
 				return Boolean.class;
-			if (getEvaluationType() == EvaluationType.STRING)
+			}
+			if (getEvaluationType() == EvaluationType.STRING) {
 				return String.class;
+			}
 		} catch (TypeMismatchException e) {
 			// Lets return null
 		}
@@ -522,47 +538,55 @@ public class BindingExpression extends AbstractBinding {
 		// logger.setLevel(Level.FINE);
 
 		if (expression == null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Binding " + this + " not valid because expression is null");
+			}
 			System.out.println("null expression " + getStringRepresentation());
 			return false;
 		}
 
 		if (getAccessedType() == null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Binding " + this + " not valid because accessed type is null");
+			}
 			return false;
 		}
 
 		if (getBindingDefinition() == null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Binding " + this + " not valid because binding definition is null");
+			}
 			return false;
 		} else if (getBindingDefinition().getIsSettable()) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Invalid binding because binding definition is declared as settable");
+			}
 			return false;
 		} else if (getBindingDefinition().getBindingDefinitionType() == BindingDefinitionType.EXECUTE) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Invalid binding because binding definition is declared as executable");
+			}
 			return false;
 		}
 
 		for (Expression e : expression.getAllAtomicExpressions()) {
 			if (e instanceof BindingValueVariable && !((BindingValueVariable) e).isValid()) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Binding " + this + " not valid because invalid variable " + e);
+				}
 				return false;
 			}
 			if (e instanceof BindingValueFunction && !((BindingValueFunction) e).getBindingValue().isBindingValid()) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Binding " + this + " not valid because invalid function " + e);
+				}
 				return false;
 			}
 		}
 
-		if (getAccessedType().equals(Object.class))
+		if (getAccessedType().equals(Object.class)) {
 			return true;
+		}
 
 		if (getBindingDefinition().getType() == null
 				|| TypeUtils.isTypeAssignableFrom(getBindingDefinition().getType(), getAccessedType(), true)) {
@@ -571,12 +595,14 @@ public class BindingExpression extends AbstractBinding {
 
 		// If valid assignability could not be found, try with type class only (we are not a compiler !!!)
 		if (TypeUtils.kindOfType(getBindingDefinition().getType()) == TypeUtils.kindOfType(getAccessedType())
-				&& TypeUtils.kindOfType(getBindingDefinition().getType()) != EvaluationType.LITERAL)
+				&& TypeUtils.kindOfType(getBindingDefinition().getType()) != EvaluationType.LITERAL) {
 			return true;
+		}
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Binding " + this + " not valid because types are not matching: searched: " + getBindingDefinition().getType()
 					+ " have: " + getAccessedType());
+		}
 		return false;
 
 	}
@@ -620,8 +646,9 @@ public class BindingExpression extends AbstractBinding {
 			}
 		}
 
-		if (getAccessedType().equals(Object.class))
+		if (getAccessedType().equals(Object.class)) {
 			return true;
+		}
 
 		if (getBindingDefinition().getType() == null
 				|| TypeUtils.isTypeAssignableFrom(getBindingDefinition().getType(), getAccessedType(), true)) {
@@ -630,8 +657,9 @@ public class BindingExpression extends AbstractBinding {
 
 		// If valid assignability could not be found, try with type class only (we are not a compiler !!!)
 		if (TypeUtils.kindOfType(getBindingDefinition().getType()) == TypeUtils.kindOfType(getAccessedType())
-				&& TypeUtils.kindOfType(getBindingDefinition().getType()) != EvaluationType.LITERAL)
+				&& TypeUtils.kindOfType(getBindingDefinition().getType()) != EvaluationType.LITERAL) {
 			return true;
+		}
 
 		logger.info("Binding " + this + " not valid because types are not matching: searched: " + getBindingDefinition().getType()
 				+ " have: " + getAccessedType());
@@ -659,8 +687,9 @@ public class BindingExpression extends AbstractBinding {
 
 	@Override
 	public Object getBindingValue(final BindingEvaluationContext context) {
-		if (expression == null)
+		if (expression == null) {
 			return null;
+		}
 
 		// System.out.println("donc j'ai ca: "+getStringRepresentation());
 		// System.out.println("expression: "+expression);
@@ -703,8 +732,9 @@ public class BindingExpression extends AbstractBinding {
 
 		// System.out.println("evaluatedExpression="+evaluatedExpression);
 
-		if (evaluatedExpression instanceof Constant)
+		if (evaluatedExpression instanceof Constant) {
 			return ((Constant) evaluatedExpression).getValue();
+		}
 
 		return null;
 	}
@@ -729,8 +759,9 @@ public class BindingExpression extends AbstractBinding {
 	 */
 	@Override
 	public List<Object> getConcernedObjects(final BindingEvaluationContext context) {
-		if (expression == null)
+		if (expression == null) {
 			return null;
+		}
 
 		final ArrayList<Object> returned = new ArrayList<Object>();
 
@@ -744,8 +775,9 @@ public class BindingExpression extends AbstractBinding {
 				BindingValueVariable variable = new BindingValueVariable(variableFactory.makeVariable(value), getOwner());
 				Object evaluatedVariable = variable.getBindingValue().getBindingValue(context);
 				List<Object> list = variable.getBindingValue().getConcernedObjects(context);
-				if (list != null)
+				if (list != null) {
 					returned.addAll(list);
+				}
 				return constantFactory.makeConstant(Value.createConstantValue(evaluatedVariable));
 			}
 		}, new FunctionFactory() {
@@ -754,8 +786,9 @@ public class BindingExpression extends AbstractBinding {
 				BindingValueFunction function = new BindingValueFunction(functionFactory.makeFunction(functionName, args), getOwner());
 				Object evaluatedFunction = function.getBindingValue().getBindingValue(context);
 				List<Object> list = function.getBindingValue().getConcernedObjects(context);
-				if (list != null)
+				if (list != null) {
 					returned.addAll(list);
+				}
 				return constantFactory.makeConstant(Value.createConstantValue(evaluatedFunction));
 			}
 		});
@@ -779,8 +812,9 @@ public class BindingExpression extends AbstractBinding {
 	 */
 	@Override
 	public List<TargetObject> getTargetObjects(final BindingEvaluationContext context) {
-		if (expression == null)
+		if (expression == null) {
 			return null;
+		}
 
 		final ArrayList<TargetObject> returned = new ArrayList<TargetObject>();
 
@@ -794,8 +828,9 @@ public class BindingExpression extends AbstractBinding {
 				BindingValueVariable variable = new BindingValueVariable(variableFactory.makeVariable(value), getOwner());
 				Object evaluatedVariable = variable.getBindingValue().getBindingValue(context);
 				List<TargetObject> list = variable.getBindingValue().getTargetObjects(context);
-				if (list != null)
+				if (list != null) {
 					returned.addAll(list);
+				}
 				return constantFactory.makeConstant(Value.createConstantValue(evaluatedVariable));
 			}
 		}, new FunctionFactory() {
@@ -804,8 +839,9 @@ public class BindingExpression extends AbstractBinding {
 				BindingValueFunction function = new BindingValueFunction(functionFactory.makeFunction(functionName, args), getOwner());
 				Object evaluatedFunction = function.getBindingValue().getBindingValue(context);
 				List<TargetObject> list = function.getBindingValue().getTargetObjects(context);
-				if (list != null)
+				if (list != null) {
 					returned.addAll(list);
+				}
 				return constantFactory.makeConstant(Value.createConstantValue(evaluatedFunction));
 			}
 		});

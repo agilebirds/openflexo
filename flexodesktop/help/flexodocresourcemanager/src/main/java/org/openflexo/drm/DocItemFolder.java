@@ -126,8 +126,9 @@ public class DocItemFolder extends DRMObject implements InspectableObject {
 			DocItem it = (DocItem) en.nextElement();
 			it.delete();
 		}
-		if (parentFolder != null)
+		if (parentFolder != null) {
 			parentFolder.removeFromChildFolders(this);
+		}
 		itemCache = null;
 		super.delete();
 	}
@@ -181,8 +182,9 @@ public class DocItemFolder extends DRMObject implements InspectableObject {
 	public void setPrimaryDocItem(DocItem primaryDocItem) {
 		if (primaryDocItem.getFolder() == this) {
 			_primaryDocItem = primaryDocItem;
-			if (primaryDocItem != null)
+			if (primaryDocItem != null) {
 				primaryDocItemId = primaryDocItem.getIdentifier();
+			}
 			setChanged();
 		}
 	}
@@ -202,8 +204,9 @@ public class DocItemFolder extends DRMObject implements InspectableObject {
 	}
 
 	public String getPrimaryDocItemId() {
-		if (getPrimaryDocItem() != null)
+		if (getPrimaryDocItem() != null) {
 			return getPrimaryDocItem().getIdentifier();
+		}
 		return primaryDocItemId;
 	}
 
@@ -252,8 +255,9 @@ public class DocItemFolder extends DRMObject implements InspectableObject {
 	}
 
 	public Vector<DocItem> getItems() {
-		if (isSerializing())
+		if (isSerializing()) {
 			return getOrderedItems();
+		}
 		return items;
 	}
 
@@ -309,8 +313,9 @@ public class DocItemFolder extends DRMObject implements InspectableObject {
 	}
 
 	public Vector<DocItemFolder> getChildFolders() {
-		if (isSerializing())
+		if (isSerializing()) {
 			return getOrderedChildFolders();
+		}
 		return childFolders;
 	}
 
@@ -379,13 +384,15 @@ public class DocItemFolder extends DRMObject implements InspectableObject {
 
 	public DocItem getItemNamed(String itemIdentifier) {
 		DocItem returned = itemCache.get(itemIdentifier);
-		if (returned != null)
+		if (returned != null) {
 			return returned;
+		}
 		for (Enumeration en = getChildFolders().elements(); en.hasMoreElements();) {
 			DocItemFolder nextFolder = (DocItemFolder) en.nextElement();
 			returned = nextFolder.getItemNamed(itemIdentifier);
-			if (returned != null)
+			if (returned != null) {
 				return returned;
+			}
 		}
 		return null;
 	}
@@ -393,8 +400,9 @@ public class DocItemFolder extends DRMObject implements InspectableObject {
 	public DocItemFolder getItemFolderNamed(String itemFolderIdentifier) {
 		for (Enumeration en = getChildFolders().elements(); en.hasMoreElements();) {
 			DocItemFolder next = (DocItemFolder) en.nextElement();
-			if (next.getIdentifier().equals(itemFolderIdentifier))
+			if (next.getIdentifier().equals(itemFolderIdentifier)) {
 				return next;
+			}
 		}
 		return null;
 	}
@@ -417,12 +425,14 @@ public class DocItemFolder extends DRMObject implements InspectableObject {
 	}
 
 	public boolean isAncestorOf(DocItem anItem) {
-		if (anItem.getFolder() == this)
+		if (anItem.getFolder() == this) {
 			return true;
+		}
 		for (Enumeration en = getChildFolders().elements(); en.hasMoreElements();) {
 			DocItemFolder next = (DocItemFolder) en.nextElement();
-			if (next.isAncestorOf(anItem))
+			if (next.isAncestorOf(anItem)) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -492,27 +502,33 @@ public class DocItemFolder extends DRMObject implements InspectableObject {
 	}
 
 	public boolean isIncluded(HelpSetConfiguration configuration) {
-		if (isDirectelyIncluded(configuration))
+		if (isDirectelyIncluded(configuration)) {
 			return true;
-		if (isPartiallyIncluded(configuration))
+		}
+		if (isPartiallyIncluded(configuration)) {
 			return true;
+		}
 		return false;
 	}
 
 	protected boolean isDirectelyIncluded(HelpSetConfiguration configuration) {
-		if (configuration.getDocItemFolders().contains(this))
+		if (configuration.getDocItemFolders().contains(this)) {
 			return true;
-		if (getParentFolder() != null)
+		}
+		if (getParentFolder() != null) {
 			return getParentFolder().isDirectelyIncluded(configuration);
+		}
 		return false;
 	}
 
 	protected boolean isPartiallyIncluded(HelpSetConfiguration configuration) {
 		for (DocItemFolder folder : getChildFolders()) {
-			if (folder.isDirectelyIncluded(configuration))
+			if (folder.isDirectelyIncluded(configuration)) {
 				return true;
-			if (folder.isPartiallyIncluded(configuration))
+			}
+			if (folder.isPartiallyIncluded(configuration)) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -523,8 +539,9 @@ public class DocItemFolder extends DRMObject implements InspectableObject {
 	 * @param identifier2
 	 */
 	public void notifyItemHasBeenRenamedTo(DocItem docItem, String old, String identifier2) {
-		if (old != null)
+		if (old != null) {
 			itemCache.remove(old);
+		}
 		itemCache.put(identifier2, docItem);
 	}
 

@@ -52,8 +52,9 @@ public class IECSSClassCollection {
 			target = "all";
 		}
 		Vector answer = (Vector) targets.get(target);
-		if (answer == null)
+		if (answer == null) {
 			return new Vector();
+		}
 		return answer;
 	}
 

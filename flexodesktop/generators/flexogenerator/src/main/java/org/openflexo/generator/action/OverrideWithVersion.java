@@ -59,8 +59,9 @@ public class OverrideWithVersion extends MultipleFileGCAction<OverrideWithVersio
 
 		@Override
 		protected boolean accept(AbstractCGFile file) {
-			if ((file == null) || (file.getResource() == null))
+			if ((file == null) || (file.getResource() == null)) {
 				return false;
+			}
 			if (_source == ContentSourceType.PureGeneration) {
 				return file.getGenerationStatus().isGenerationAvailable();
 			} else if (_source == ContentSourceType.GeneratedMerge) {
@@ -216,8 +217,9 @@ public class OverrideWithVersion extends MultipleFileGCAction<OverrideWithVersio
 
 	public void setVersionId(CGVersionIdentifier versionId) {
 		this.versionId = versionId;
-		if (_contentSource != null)
+		if (_contentSource != null) {
 			_contentSource.setVersion(versionId);
+		}
 	}
 
 	public boolean requiresThreadPool() {

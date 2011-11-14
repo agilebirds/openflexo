@@ -30,11 +30,11 @@ import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 
 import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariableImpl;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.TypeUtils;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.fib.controller.FIBTableDynamicModel;
 import org.openflexo.fib.model.FIBTableAction.FIBAddAction;
 import org.openflexo.fib.model.FIBTableAction.FIBCustomAction;
@@ -127,8 +127,9 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 
 	public FIBTableColumn getColumnWithTitle(String title) {
 		for (FIBTableColumn c : columns) {
-			if (title.equals(c.getTitle()))
+			if (title.equals(c.getTitle())) {
 				return c;
+			}
 		}
 		return null;
 	}
@@ -179,8 +180,9 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 	}
 
 	public BindingModel getTableBindingModel() {
-		if (tableBindingModel == null)
+		if (tableBindingModel == null) {
 			createTableBindingModel();
+		}
 		return tableBindingModel;
 	}
 
@@ -194,8 +196,9 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 	}
 
 	public BindingModel getActionBindingModel() {
-		if (actionBindingModel == null)
+		if (actionBindingModel == null) {
 			createActionBindingModel();
+		}
 		return actionBindingModel;
 	}
 
@@ -216,8 +219,9 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 	}
 
 	public DataBinding getSelected() {
-		if (selected == null)
+		if (selected == null) {
 			selected = new DataBinding(this, Parameters.selected, getSelectedBindingDefinition());
+		}
 		return selected;
 	}
 
@@ -240,8 +244,9 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 		for (FIBTableColumn column : getColumns()) {
 			column.finalizeTableDeserialization();
 		}
-		if (selected != null)
+		if (selected != null) {
 			selected.finalizeDeserialization();
+		}
 	}
 
 	/*public boolean hasDynamicKeyValueProperty(String name) 
@@ -495,8 +500,9 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 	}
 
 	public void moveToTop(FIBTableColumn c) {
-		if (c == null)
+		if (c == null) {
 			return;
+		}
 		columns.remove(c);
 		columns.insertElementAt(c, 0);
 		setChanged();
@@ -504,8 +510,9 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 	}
 
 	public void moveUp(FIBTableColumn c) {
-		if (c == null)
+		if (c == null) {
 			return;
+		}
 		int index = columns.indexOf(c);
 		columns.remove(c);
 		columns.insertElementAt(c, index - 1);
@@ -514,8 +521,9 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 	}
 
 	public void moveDown(FIBTableColumn c) {
-		if (c == null)
+		if (c == null) {
 			return;
+		}
 		int index = columns.indexOf(c);
 		columns.remove(c);
 		columns.insertElementAt(c, index + 1);
@@ -524,8 +532,9 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 	}
 
 	public void moveToBottom(FIBTableColumn c) {
-		if (c == null)
+		if (c == null) {
 			return;
+		}
 		columns.remove(c);
 		columns.add(c);
 		setChanged();

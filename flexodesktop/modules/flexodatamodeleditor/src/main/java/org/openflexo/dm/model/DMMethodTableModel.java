@@ -29,17 +29,15 @@ import org.openflexo.components.tabular.model.EditableStringColumn;
 import org.openflexo.components.tabular.model.IconColumn;
 import org.openflexo.components.tabular.model.StringColumn;
 import org.openflexo.components.tabular.model.TypeSelectorColumn;
-import org.openflexo.dm.view.controller.DMController;
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.ReservedKeyword;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMMethod;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.DuplicateMethodSignatureException;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.ReservedKeyword;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * Please comment this class
@@ -81,8 +79,9 @@ public class DMMethodTableModel extends AbstractModel<DMEntity, DMMethod> {
 			@Override
 			public void setValue(DMMethod method, String aValue) {
 				try {
-					if (ReservedKeyword.contains(aValue))
+					if (ReservedKeyword.contains(aValue)) {
 						throw new InvalidNameException(aValue + " is a reserved keyword.");
+					}
 					method.setName(aValue);
 				} catch (DuplicateMethodSignatureException e) {
 					FlexoController.showError(FlexoLocalization.localizedForKey("sorry_this_signature_matches_an_other_method_signature"));

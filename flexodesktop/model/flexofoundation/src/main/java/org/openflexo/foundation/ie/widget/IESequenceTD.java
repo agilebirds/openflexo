@@ -56,8 +56,9 @@ public class IESequenceTD extends IESequence<ITableData> implements ITableData {
 	@Override
 	public void addToInnerWidgets(ITableData w) {
 		if (isDeserializing() && w instanceof IESpanTDWidget) {
-			if (logger.isLoggable(Level.SEVERE))
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Tried to deserialize an IESpanTDWidget: not adding it. A new one should automatically be created");
+			}
 			return;
 		}
 		super.addToInnerWidgets(w);
@@ -68,8 +69,9 @@ public class IESequenceTD extends IESequence<ITableData> implements ITableData {
 		super.removeFromInnerWidgets(td);
 		refreshIndexes();
 		setChanged();
-		if (td instanceof IETDWidget)
+		if (td instanceof IETDWidget) {
 			notifyObservers(new TDRemoved((IETDWidget) td));
+		}
 		if (!isDeserializing() && !isCreatedByCloning() && getParent() == tr()) {
 			tr().notifyTDRemoved(td);
 		}
@@ -80,8 +82,9 @@ public class IESequenceTD extends IESequence<ITableData> implements ITableData {
 		super.insertElementAt(td, i);
 		td.setParent(this);
 		setChanged();
-		if (td.getClass() == IETDWidget.class)
+		if (td.getClass() == IETDWidget.class) {
 			notifyObservers(new TDInserted((IETDWidget) td));
+		}
 		refreshIndexes();
 		if (!isDeserializing() && !isCreatedByCloning() && getParent() == tr() && tr() != null) {
 			tr().notifyTDAdded(td);
@@ -105,10 +108,12 @@ public class IESequenceTD extends IESequence<ITableData> implements ITableData {
 
 	@Override
 	public IETRWidget tr() {
-		if (getParent() == null)
+		if (getParent() == null) {
 			return null;
-		if (getParent() instanceof IETRWidget)
+		}
+		if (getParent() instanceof IETRWidget) {
 			return (IETRWidget) getParent();
+		}
 		return ((IESequenceTD) getParent()).tr();
 	}
 
@@ -124,27 +129,31 @@ public class IESequenceTD extends IESequence<ITableData> implements ITableData {
 
 	@Override
 	public void deleteCol() {
-		if (htmlTable() != null)
+		if (htmlTable() != null) {
 			htmlTable().deleteCol(getFirstTD().getXLocation());
+		}
 		return;
 	}
 
 	@Override
 	public void deleteRow() {
-		if (htmlTable() != null)
+		if (htmlTable() != null) {
 			htmlTable().deleteRow(tr());
+		}
 		return;
 	}
 
 	public IEHTMLTableWidget htmlTable() {
 		IEWidget o = (IEWidget) getParent();
 		while (!(o instanceof IEHTMLTableWidget) && o != null) {
-			if (o.getParent() instanceof SingleWidgetComponent)
+			if (o.getParent() instanceof SingleWidgetComponent) {
 				return null;
+			}
 			o = (IEWidget) o.getParent();
 		}
-		if (o instanceof IEHTMLTableWidget)
+		if (o instanceof IEHTMLTableWidget) {
 			return (IEHTMLTableWidget) o;
+		}
 		return null;
 	}
 
@@ -177,8 +186,9 @@ public class IESequenceTD extends IESequence<ITableData> implements ITableData {
 
 	@Override
 	public double getPourcentage() {
-		if (!isSubsequence())
+		if (!isSubsequence()) {
 			return 1.0d;
+		}
 		logger.warning("TODO pourcentage pour subsequences");
 		return 0.25d;
 	}
@@ -209,11 +219,13 @@ public class IESequenceTD extends IESequence<ITableData> implements ITableData {
 			ITableData td = en.nextElement();
 			if (td instanceof IESequenceTD) {
 				retval = ((IESequenceTD) td).getTDAtCol(col);
-				if (retval != null)
+				if (retval != null) {
 					return retval;
+				}
 			} else {
-				if (((IETDWidget) td).getXLocation() == col)
+				if (((IETDWidget) td).getXLocation() == col) {
 					return (IETDWidget) td;
+				}
 			}
 		}
 		return null;
@@ -223,18 +235,21 @@ public class IESequenceTD extends IESequence<ITableData> implements ITableData {
 	 * @param col
 	 */
 	public IETDWidget getCellAtIndex(int col) {
-		if (col < 0)
+		if (col < 0) {
 			return null;
+		}
 		Enumeration<ITableData> en = elements();
 		while (en.hasMoreElements()) {
 			ITableData td = en.nextElement();
 			if (td instanceof IETDWidget) {
-				if (((IETDWidget) td).getXLocation() == col)
+				if (((IETDWidget) td).getXLocation() == col) {
 					return (IETDWidget) td;
+				}
 			} else {
 				IETDWidget retval = ((IESequenceTD) td).getCellAtIndex(col);
-				if (retval != null)
+				if (retval != null) {
 					return retval;
+				}
 			}
 		}
 		return null;
@@ -339,8 +354,9 @@ public class IESequenceTD extends IESequence<ITableData> implements ITableData {
 		Vector<ITableData> orig = super.getInnerWidgets();
 		if (isSerializing || isSerializing() || isBeingCloned()) {
 			return getAllRealTD(orig);
-		} else
+		} else {
 			return orig;
+		}
 	}
 
 	public Vector<ITableData> getAllRealTD() {
@@ -356,8 +372,9 @@ public class IESequenceTD extends IESequence<ITableData> implements ITableData {
 		Enumeration<ITableData> en = orig.elements();
 		while (en.hasMoreElements()) {
 			ITableData td = en.nextElement();
-			if (td instanceof IESpanTDWidget)
+			if (td instanceof IESpanTDWidget) {
 				v.remove(td);
+			}
 		}
 		return v;
 	}
@@ -368,8 +385,9 @@ public class IESequenceTD extends IESequence<ITableData> implements ITableData {
 		while (i.hasNext()) {
 			ITableData td = i.next();
 			if (td instanceof IESpanTDWidget) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("Trying to set a vector containing spanTD's!!!");
+				}
 				i.remove();
 			}
 		}

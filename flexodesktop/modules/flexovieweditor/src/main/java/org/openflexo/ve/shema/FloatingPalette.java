@@ -154,10 +154,11 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 				}
 
 			} else {
-				if (isDnd)
+				if (isDnd) {
 					g.setColor(OK);
-				else
+				} else {
 					g.setColor(Color.RED);
+				}
 			}
 			g.drawLine(fromPoint.x, fromPoint.y, toPoint.x, toPoint.y);
 			int x, y, w, h;
@@ -182,10 +183,11 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 	@Override
 	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
 		mode = null;
-		if (roleRect.contains(startPoint))
+		if (roleRect.contains(startPoint)) {
 			mode = Mode.CREATE_SHAPE_AND_LINK;
-		else if (edgeRect.contains(startPoint))
+		} else if (edgeRect.contains(startPoint)) {
 			mode = Mode.LINK_ONLY;
+		}
 		if (mode != null) {
 			drawEdge = true;
 			normalizedStartPoint = startPoint;
@@ -228,10 +230,11 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 			// Attempt to repaint relevant zone only
 			Rectangle newBounds = getBoundsToRepaint(drawingView);
 			Rectangle boundsToRepaint;
-			if (oldBounds != null)
+			if (oldBounds != null) {
 				boundsToRepaint = oldBounds.union(newBounds);
-			else
+			} else {
 				boundsToRepaint = newBounds;
+			}
 			paintManager.repaint(drawingView, boundsToRepaint);
 
 			// Alternative @brutal zone
@@ -269,17 +272,20 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 		if (drawEdge && currentDraggingLocationInDrawingView != null && isDnd) {
 			try {
 				GraphicalRepresentation<?> targetGR = controller.getGraphicalRepresentation(target);
-				if (targetGR == null)
+				if (targetGR == null) {
 					targetGR = controller.getDrawingGraphicalRepresentation();
+				}
 				SimplifiedCardinalDirection direction = FGEPoint.getSimplifiedOrientation(
 						new FGEPoint(shapeGR.convertLocalNormalizedPointToRemoteViewCoordinates(this.normalizedStartPoint,
 								controller.getDrawingGraphicalRepresentation(), controller.getScale())), new FGEPoint(
 								currentDraggingLocationInDrawingView));
 				Point dropPoint = currentDraggingLocationInDrawingView;
-				if (dropPoint.x < 0)
+				if (dropPoint.x < 0) {
 					dropPoint.x = 0;
-				if (dropPoint.y < 0)
+				}
+				if (dropPoint.y < 0) {
 					dropPoint.y = 0;
+				}
 				Point p = GraphicalRepresentation.convertPoint(controller.getDrawingGraphicalRepresentation(), dropPoint, targetGR,
 						controller.getScale());
 				FGEPoint dropLocation = new FGEPoint(p.x / controller.getScale(), p.y / controller.getScale());
@@ -299,8 +305,9 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 					logger.warning("Not implemented !!!");
 					break;
 				}
-				if (to == null)
+				if (to == null) {
 					return;
+				}
 
 			} finally {
 				resetVariables();
@@ -404,9 +411,9 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 
 	protected void applyLinkScheme(final LinkScheme linkScheme, final FGEPoint dropLocation) {
 		Vector<DropScheme> allDS = findCompatibleDropSchemes(linkScheme);
-		if (allDS.size() == 0)
+		if (allDS.size() == 0) {
 			return;
-		else if (allDS.size() == 1) {
+		} else if (allDS.size() == 1) {
 			applyDropAndLinkScheme(allDS.firstElement(), linkScheme, dropLocation);
 			return;
 		} else {
@@ -499,10 +506,12 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 	@Override
 	public Rectangle paint(FGEGraphics drawingGraphics) {
 		// System.out.println("Focused:"+nodeGR.getIsFocused());
-		if (shapeGR.getIsSelected() && !shapeGR.getIsFocused())
+		if (shapeGR.getIsSelected() && !shapeGR.getIsFocused()) {
 			return null;
-		if (/*nodeGR.getIsSelected() ||*/shapeGR.isResizing() || shapeGR.isMoving())
+		}
+		if (/*nodeGR.getIsSelected() ||*/shapeGR.isResizing() || shapeGR.isMoving()) {
 			return null;
+		}
 		AffineTransform at = GraphicalRepresentation.convertNormalizedCoordinatesAT(shapeGR, drawingGraphics.getGraphicalRepresentation());
 
 		Graphics2D oldGraphics = drawingGraphics.cloneGraphics();

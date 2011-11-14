@@ -90,13 +90,15 @@ public class FlexoNavigationMenuResource extends FlexoXMLStorageResource<FlexoNa
 	public FlexoNavigationMenu performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler)
 			throws LoadXMLResourceException, ProjectLoadingCancelledException, MalformedXMLException {
 		FlexoNavigationMenu menu;
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("loadResourceData() in FlexoNavigationMenuResource");
+		}
 		try {
 			menu = super.performLoadResourceData(progress, loadingHandler);
 		} catch (FlexoFileNotFoundException e) {
-			if (logger.isLoggable(Level.SEVERE))
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("File " + getFile().getName() + " NOT found");
+			}
 			e.printStackTrace();
 			return null;
 		}
@@ -135,8 +137,9 @@ public class FlexoNavigationMenuResource extends FlexoXMLStorageResource<FlexoNa
 	 * @param menu
 	 */
 	private void rebuildDependancyForMenu(FlexoItemMenu menu) {
-		if (menu.getProcess() != null)
+		if (menu.getProcess() != null) {
 			addToDependantResources(menu.getProcess().getFlexoResource());
+		}
 		Enumeration en = menu.getSubItems().elements();
 		while (en.hasMoreElements()) {
 			FlexoItemMenu element = (FlexoItemMenu) en.nextElement();

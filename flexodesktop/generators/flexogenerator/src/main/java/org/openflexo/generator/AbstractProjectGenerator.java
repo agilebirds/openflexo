@@ -82,8 +82,9 @@ public abstract class AbstractProjectGenerator<R extends GenerationRepository> e
 		this.logListeners = new Vector<LogListener>();
 		this.loggers.add(FlexoVelocity.getLogger());
 		if (getRootOutputDirectory() != null) {
-			if (!getRootOutputDirectory().exists())
+			if (!getRootOutputDirectory().exists()) {
 				getRootOutputDirectory().mkdirs();
+			}
 			if (!getRootOutputDirectory().canWrite()) {
 				throw new PermissionDeniedException(getRootOutputDirectory(), this);
 			}
@@ -118,8 +119,9 @@ public abstract class AbstractProjectGenerator<R extends GenerationRepository> e
 
 	@Override
 	public TargetType getTarget() {
-		if (repository != null)
+		if (repository != null) {
 			return getRepository().getTarget();
+		}
 		return getProject().getTargetType();
 	}
 
@@ -127,8 +129,9 @@ public abstract class AbstractProjectGenerator<R extends GenerationRepository> e
 	 * @return
 	 */
 	public File getRootOutputDirectory() {
-		if (repository != null)
+		if (repository != null) {
 			return repository.getDirectory();
+		}
 		return null;
 	}
 
@@ -138,9 +141,9 @@ public abstract class AbstractProjectGenerator<R extends GenerationRepository> e
 		getRepository().disableObserving();
 		Vector<CGRepositoryFileResource> returned = super.refreshConcernedResources(forResources);
 		for (CGFile file : getRepository().getFiles()) {
-			if (file.getResource() == null)
+			if (file.getResource() == null) {
 				file.setMarkedForDeletion(true);
-			else {
+			} else {
 				CGRepositoryFileResource resource = file.getResource();
 				if (!returned.contains(resource)) {
 					file.setMarkedForDeletion(true);
@@ -160,8 +163,9 @@ public abstract class AbstractProjectGenerator<R extends GenerationRepository> e
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if ((dataModification.propertyName() != null && (dataModification.propertyName().equals("targetType") || dataModification
-				.propertyName().equals("docType"))))
+				.propertyName().equals("docType")))) {
 			getTemplateLocator().notifyTemplateModified();
+		}
 		if (dataModification instanceof TemplateFileNotification) {
 			getTemplateLocator().notifyTemplateModified();
 		} else if (dataModification instanceof CustomTemplateRepositoryChanged) {
@@ -181,8 +185,9 @@ public abstract class AbstractProjectGenerator<R extends GenerationRepository> e
 
 	protected void addToGenerators(Generator<? extends FlexoModelObject, R> generator) {
 		generators.add(generator);
-		if (!loggers.contains(generator.getGeneratorLogger()))
+		if (!loggers.contains(generator.getGeneratorLogger())) {
 			loggers.add(generator.getGeneratorLogger());
+		}
 	}
 
 	public boolean checkModelConsistency() throws ModelValidationException {
@@ -195,11 +200,13 @@ public abstract class AbstractProjectGenerator<R extends GenerationRepository> e
 
 		// We validate the component library model
 		IEValidationModel ieValidationModel = new IEValidationModel(getProject(), getTarget());
-		if (ieValidationObserver != null)
+		if (ieValidationObserver != null) {
 			ieValidationModel.addObserver(ieValidationObserver);
+		}
 		ValidationReport report = getProject().getFlexoComponentLibrary().validate(ieValidationModel);
-		if (ieValidationObserver != null)
+		if (ieValidationObserver != null) {
 			ieValidationModel.deleteObserver(ieValidationObserver);
+		}
 
 		if (getAction() instanceof ValidateProject) {
 			((ValidateProject) getAction()).setIeValidationReport(report);
@@ -211,11 +218,13 @@ public abstract class AbstractProjectGenerator<R extends GenerationRepository> e
 
 		// We validate the workflow model
 		WKFValidationModel wkfValidationModel = new WKFValidationModel(getProject(), getTarget());
-		if (wkfValidationObserver != null)
+		if (wkfValidationObserver != null) {
 			wkfValidationModel.addObserver(wkfValidationObserver);
+		}
 		report = getProject().getFlexoWorkflow().validate(wkfValidationModel);
-		if (wkfValidationObserver != null)
+		if (wkfValidationObserver != null) {
 			wkfValidationModel.deleteObserver(wkfValidationObserver);
+		}
 
 		if (getAction() instanceof ValidateProject) {
 			((ValidateProject) getAction()).setWkfValidationReport(report);
@@ -227,11 +236,13 @@ public abstract class AbstractProjectGenerator<R extends GenerationRepository> e
 
 		// We validate the dkv model
 		DKVValidationModel dkvValidationModel = new DKVValidationModel(getProject(), getTarget());
-		if (dkvValidationObserver != null)
+		if (dkvValidationObserver != null) {
 			dkvValidationModel.addObserver(dkvValidationObserver);
+		}
 		report = getProject().getDKVModel().validate(dkvValidationModel);
-		if (dkvValidationObserver != null)
+		if (dkvValidationObserver != null) {
 			dkvValidationModel.deleteObserver(dkvValidationObserver);
+		}
 
 		if (getAction() instanceof ValidateProject) {
 			((ValidateProject) getAction()).setDkvValidationReport(report);
@@ -242,11 +253,13 @@ public abstract class AbstractProjectGenerator<R extends GenerationRepository> e
 		}
 
 		DMValidationModel dmValidationModel = new DMValidationModel(getProject(), getTarget());
-		if (dmValidationObserver != null)
+		if (dmValidationObserver != null) {
 			dmValidationModel.addObserver(dmValidationObserver);
+		}
 		report = getProject().getDataModel().validate(dmValidationModel);
-		if (dmValidationObserver != null)
+		if (dmValidationObserver != null) {
 			dmValidationModel.deleteObserver(dmValidationObserver);
+		}
 
 		if (getAction() instanceof ValidateProject) {
 			((ValidateProject) getAction()).setDmValidationReport(report);
@@ -256,8 +269,9 @@ public abstract class AbstractProjectGenerator<R extends GenerationRepository> e
 			thrownException = new ModelValidationException("Data model validation failed", "data_model_is_not_valid", report);
 		}
 
-		if (thrownException != null)
+		if (thrownException != null) {
 			throw thrownException;
+		}
 
 		return true;
 	}
@@ -342,11 +356,13 @@ public abstract class AbstractProjectGenerator<R extends GenerationRepository> e
 			if (tempLogger != null) {
 				boolean alreadyInside = false;
 				for (Handler already : tempLogger.getHandlers()) {
-					if (already == getLogHandler())
+					if (already == getLogHandler()) {
 						alreadyInside = true;
+					}
 				}
-				if (!alreadyInside)
+				if (!alreadyInside) {
 					tempLogger.addHandler(getLogHandler());
+				}
 			}
 		}
 	}
@@ -358,8 +374,9 @@ public abstract class AbstractProjectGenerator<R extends GenerationRepository> e
 	public void stopHandleLogs() {
 		handleLogs = false;
 		for (Logger tempLogger : loggers) {
-			if (tempLogger != null)
+			if (tempLogger != null) {
 				tempLogger.removeHandler(getLogHandler());
+			}
 		}
 	}
 

@@ -70,26 +70,30 @@ public class DMRepositoryFolderTableModel extends AbstractModel<DMModel, DMRepos
 
 	@Override
 	public DMRepositoryFolder elementAt(int row) {
-		if (row == 0)
+		if (row == 0) {
 			return getDMModel().getInternalRepositoryFolder();
+		}
 		int nonEmptyFolders = 1;
 		if (getDMModel().getNonPersistantDataRepositoryFolder().getRepositoriesCount() > 0) {
-			if (row == nonEmptyFolders)
+			if (row == nonEmptyFolders) {
 				return getDMModel().getNonPersistantDataRepositoryFolder();
-			else
+			} else {
 				nonEmptyFolders++;
+			}
 		}
 		if (getDMModel().getPersistantDataRepositoryFolder().getRepositoriesCount() > 0) {
-			if (row == nonEmptyFolders)
+			if (row == nonEmptyFolders) {
 				return getDMModel().getPersistantDataRepositoryFolder();
-			else
+			} else {
 				nonEmptyFolders++;
+			}
 		}
 		if (getDMModel().getLibraryRepositoryFolder().getRepositoriesCount() > 0) {
-			if (row == nonEmptyFolders)
+			if (row == nonEmptyFolders) {
 				return getDMModel().getLibraryRepositoryFolder();
-			else
+			} else {
 				nonEmptyFolders++;
+			}
 		}
 		return null;
 	}
@@ -102,12 +106,15 @@ public class DMRepositoryFolderTableModel extends AbstractModel<DMModel, DMRepos
 	public int getRowCount() {
 		if (getDMModel() != null) {
 			int returned = 1;
-			if (getDMModel().getNonPersistantDataRepositoryFolder().getRepositoriesCount() > 0)
+			if (getDMModel().getNonPersistantDataRepositoryFolder().getRepositoriesCount() > 0) {
 				returned++;
-			if (getDMModel().getPersistantDataRepositoryFolder().getRepositoriesCount() > 0)
+			}
+			if (getDMModel().getPersistantDataRepositoryFolder().getRepositoriesCount() > 0) {
 				returned++;
-			if (getDMModel().getLibraryRepositoryFolder().getRepositoriesCount() > 0)
+			}
+			if (getDMModel().getLibraryRepositoryFolder().getRepositoriesCount() > 0) {
 				returned++;
+			}
 			return returned;
 		}
 		return 0;

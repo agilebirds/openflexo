@@ -35,8 +35,9 @@ public class TOCRepositoryElement extends DEBrowserElement {
 	@Override
 	protected void buildChildrenVector() {
 		Enumeration<TOCEntry> en = getRepository().getSortedTocEntries();
-		while (en.hasMoreElements())
+		while (en.hasMoreElements()) {
 			addToChilds(en.nextElement());
+		}
 	}
 
 	@Override

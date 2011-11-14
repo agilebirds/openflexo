@@ -22,9 +22,9 @@ package org.openflexo.fge.geomedit.construction;
 import org.openflexo.fge.geom.FGEAbstractLine;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEEllips;
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGELine;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 
 public class RotatedLineWithPointConstruction extends LineConstruction {
 

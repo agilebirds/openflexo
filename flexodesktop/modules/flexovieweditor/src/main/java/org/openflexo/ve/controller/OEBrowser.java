@@ -22,8 +22,8 @@ package org.openflexo.ve.controller;
 import java.util.logging.Logger;
 
 import org.openflexo.components.browser.BrowserElementType;
-import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
+import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 
 /**

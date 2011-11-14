@@ -52,8 +52,9 @@ public class List implements PetalNode {
 	}
 
 	public void setName(String n) {
-		if (n != null)
+		if (n != null) {
 			n = n.intern();
+		}
 
 		name = n;
 	}
@@ -103,8 +104,9 @@ public class List implements PetalNode {
 		for (Iterator i = list.iterator(); i.hasNext();) {
 			buf.append(i.next());
 
-			if (i.hasNext())
+			if (i.hasNext()) {
 				buf.append("\n");
+			}
 		}
 
 		buf.append(")\n");

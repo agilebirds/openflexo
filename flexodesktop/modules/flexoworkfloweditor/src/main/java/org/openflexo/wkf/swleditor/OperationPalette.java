@@ -35,8 +35,6 @@ import org.openflexo.foundation.wkf.node.OROperator;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.wkf.node.SelfExecutableNode;
 import org.openflexo.foundation.wkf.node.SelfExecutableOperationNode;
-import org.openflexo.wkf.swleditor.gr.ActionNodeGR;
-import org.openflexo.wkf.swleditor.gr.ActivityNodeGR;
 import org.openflexo.wkf.swleditor.gr.BeginOperationNodeGR;
 import org.openflexo.wkf.swleditor.gr.EndOperationNodeGR;
 import org.openflexo.wkf.swleditor.gr.OperationNodeGR;

@@ -131,12 +131,14 @@ public class SetPropertyAction extends FlexoUndoableAction<SetPropertyAction, Fl
 		try {
 			getFocusedObject().setObjectForKey(getValue(), getKey());
 		} catch (AccessorInvocationException exception) {
-			if (exception.getCause() instanceof FlexoException)
+			if (exception.getCause() instanceof FlexoException) {
 				throw (FlexoException) exception.getCause();
+			}
 			logger.warning("Unexpected exception: see log for details");
 			exception.printStackTrace();
-			if (exception.getCause() instanceof Exception)
+			if (exception.getCause() instanceof Exception) {
 				throw new UnexpectedException((Exception) exception.getCause());
+			}
 		}
 	}
 

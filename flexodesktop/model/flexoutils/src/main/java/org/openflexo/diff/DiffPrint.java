@@ -149,12 +149,16 @@ public class DiffPrint {
 				l1 = next.line1 + next.inserted - 1;
 				show_from += next.deleted;
 				show_to += next.inserted;
-				for (i = next.line0; i <= l0 && !nontrivial; i++)
-					if (!ignore.execute(file0[i]))
+				for (i = next.line0; i <= l0 && !nontrivial; i++) {
+					if (!ignore.execute(file0[i])) {
 						nontrivial = true;
-				for (i = next.line1; i <= l1 && !nontrivial; i++)
-					if (!ignore.execute(file1[i]))
+					}
+				}
+				for (i = next.line1; i <= l1 && !nontrivial; i++) {
+					if (!ignore.execute(file1[i])) {
 						nontrivial = true;
+					}
+				}
 			}
 
 			first0 = f0;
@@ -165,8 +169,9 @@ public class DiffPrint {
 			/* If all inserted or deleted lines are ignorable,
 			 tell the caller to ignore this hunk.  */
 
-			if (!nontrivial)
+			if (!nontrivial) {
 				show_from = show_to = 0;
+			}
 
 			deletes = show_from;
 			inserts = show_to;
@@ -199,12 +204,13 @@ public class DiffPrint {
 		}
 
 		public static char change_letter(int inserts, int deletes) {
-			if (inserts == 0)
+			if (inserts == 0) {
 				return 'd';
-			else if (deletes == 0)
+			} else if (deletes == 0) {
 				return 'a';
-			else
+			} else {
 				return 'c';
+			}
 		}
 	}
 
@@ -228,8 +234,9 @@ public class DiffPrint {
 
 			/* Determine range of line numbers involved in each file.  */
 			analyze_hunk(hunk);
-			if (deletes == 0 && inserts == 0)
+			if (deletes == 0 && inserts == 0) {
 				return;
+			}
 
 			/* Print out the line number header for this hunk */
 			print_number_range(',', first0, last0);
@@ -240,9 +247,11 @@ public class DiffPrint {
 			diffResult.append("\n");
 
 			/* Print the lines that the first file has.  */
-			if (deletes != 0)
-				for (int i = first0; i <= last0; i++)
+			if (deletes != 0) {
+				for (int i = first0; i <= last0; i++) {
 					print_1_line("< ", file0[i]);
+				}
+			}
 
 			if (inserts != 0 && deletes != 0) {
 				outfile.println("---");
@@ -250,9 +259,11 @@ public class DiffPrint {
 			}
 
 			/* Print the lines that the second file has.  */
-			if (inserts != 0)
-				for (int i = first1; i <= last1; i++)
+			if (inserts != 0) {
+				for (int i = first1; i <= last1; i++) {
 					print_1_line("> ", file1[i]);
+				}
+			}
 		}
 	}
 
@@ -274,8 +285,9 @@ public class DiffPrint {
 
 			/* Determine range of line numbers involved in each file.  */
 			analyze_hunk(hunk);
-			if (deletes == 0 && inserts == 0)
+			if (deletes == 0 && inserts == 0) {
 				return;
+			}
 
 			/* Print out the line number header for this hunk */
 			print_number_range(',', first0, last0);
@@ -284,17 +296,22 @@ public class DiffPrint {
 			outfile.println();
 
 			/* Print the lines that the first file has.  */
-			if (deletes != 0)
-				for (int i = first0; i <= last0; i++)
+			if (deletes != 0) {
+				for (int i = first0; i <= last0; i++) {
 					print_1_line("< ", file0[i]);
+				}
+			}
 
-			if (inserts != 0 && deletes != 0)
+			if (inserts != 0 && deletes != 0) {
 				outfile.println("---");
+			}
 
 			/* Print the lines that the second file has.  */
-			if (inserts != 0)
-				for (int i = first1; i <= last1; i++)
+			if (inserts != 0) {
+				for (int i = first1; i <= last1; i++) {
 					print_1_line("> ", file1[i]);
+				}
+			}
 		}
 	}
 
@@ -314,8 +331,9 @@ public class DiffPrint {
 
 			/* Determine range of line numbers involved in each file.  */
 			analyze_hunk(hunk);
-			if (deletes == 0 && inserts == 0)
+			if (deletes == 0 && inserts == 0) {
 				return;
+			}
 
 			/* Print out the line number header for this hunk */
 			print_number_range(',', first0, last0);
@@ -326,8 +344,9 @@ public class DiffPrint {
 				boolean inserting = true;
 				for (int i = first1; i <= last1; i++) {
 					/* Resume the insert, if we stopped.  */
-					if (!inserting)
+					if (!inserting) {
 						outfile.println(i - first1 + first0 + "a");
+					}
 					inserting = true;
 
 					/* If the file's line is just a dot, it would confuse `ed'.
@@ -341,14 +360,16 @@ public class DiffPrint {
 						/* Now change that double dot to the desired single dot.  */
 						outfile.println(i - first1 + first0 + 1 + "s/^\\.\\././");
 						inserting = false;
-					} else
+					} else {
 						/* Line is not `.', so output it unmodified.  */
 						print_1_line("", file1[i]);
+					}
 				}
 
 				/* End insert mode, if we are still in it.  */
-				if (inserting)
+				if (inserting) {
 					outfile.println(".");
+				}
 			}
 		}
 	}
@@ -363,8 +384,9 @@ public class DiffPrint {
 		Vector<String> s = new Vector<String>();
 		for (;;) {
 			String line = rdr.readLine();
-			if (line == null)
+			if (line == null) {
 				break;
+			}
 			s.addElement(line);
 			// System.out.println("File: add line "+line);
 		}
@@ -381,8 +403,9 @@ public class DiffPrint {
 		Vector<String> s = new Vector<String>();
 		for (;;) {
 			String line = rdr.readLine();
-			if (line == null)
+			if (line == null) {
 				break;
+			}
 			s.addElement(line.substring(ignoredCols));
 			// System.out.println("File: add line "+line);
 		}
@@ -408,8 +431,9 @@ public class DiffPrint {
 		Vector<String> s = new Vector<String>();
 		for (;;) {
 			String line = rdr.readLine();
-			if (line == null)
+			if (line == null) {
 				break;
+			}
 			s.addElement(line);
 			// System.out.println("String: add line "+line);
 		}
@@ -426,8 +450,9 @@ public class DiffPrint {
 		Vector<String> s = new Vector<String>();
 		for (;;) {
 			String line = rdr.readLine();
-			if (line == null)
+			if (line == null) {
 				break;
+			}
 			s.addElement(line.substring(ignoredCols));
 		}
 		String[] a = new String[s.size()];
@@ -445,14 +470,15 @@ public class DiffPrint {
 		Diff d = new Diff(a, b);
 		boolean edstyle = "-e".equals(argv[0]);
 		Diff.change script = d.diff_2(edstyle);
-		if (script == null)
+		if (script == null) {
 			System.err.println("No differences");
-		else {
+		} else {
 			Base p = null;
-			if (edstyle)
+			if (edstyle) {
 				p = new EdPrint(a, b);
-			else
+			} else {
 				p = new NormalPrint(a, b);
+			}
 			p.print_script(script);
 		}
 	} // end main

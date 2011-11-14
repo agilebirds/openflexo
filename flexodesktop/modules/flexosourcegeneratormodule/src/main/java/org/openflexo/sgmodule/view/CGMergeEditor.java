@@ -42,8 +42,8 @@ import org.openflexo.diff.merge.DefaultMergedDocumentType;
 import org.openflexo.diff.merge.Merge;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.merge.MergePanelElements;
-import org.openflexo.swing.merge.MergeTextArea;
 import org.openflexo.swing.merge.MergePanelElements.ComparePanel;
+import org.openflexo.swing.merge.MergeTextArea;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.TokenMarkerStyle;
 

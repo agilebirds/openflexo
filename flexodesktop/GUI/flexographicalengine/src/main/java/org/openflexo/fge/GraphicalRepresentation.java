@@ -312,8 +312,9 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	public GRParameter parameterWithName(String parameterName) {
-		if (parameterName == null)
+		if (parameterName == null) {
 			return null;
+		}
 		for (GRParameter param : getAllParameters()) {
 			if (param.name().equals(parameterName)) {
 				return param;
@@ -543,8 +544,9 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	public List<? extends Object> getContainedObjects() {
-		if (getDrawable() == null)
+		if (getDrawable() == null) {
 			return null;
+		}
 		if (getDrawing() == null) {
 			return null;
 		}
@@ -1898,9 +1900,10 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		_bindingModel = new BindingModel();
 
 		_bindingModel.addToBindingVariables(new GRBindingFactory.ComponentPathElement("this", this, this));
-		if (getParentGraphicalRepresentation() != null)
+		if (getParentGraphicalRepresentation() != null) {
 			_bindingModel.addToBindingVariables(new GRBindingFactory.ComponentPathElement("parent", getParentGraphicalRepresentation(),
 					this));
+		}
 		_bindingModel.addToBindingVariables(new ComponentsBindingVariable(this));
 
 		Iterator<GraphicalRepresentation> it = allContainedGRIterator();

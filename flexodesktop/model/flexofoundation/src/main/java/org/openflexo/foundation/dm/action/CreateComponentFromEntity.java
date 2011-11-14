@@ -125,15 +125,17 @@ public class CreateComponentFromEntity extends FlexoAction<CreateComponentFromEn
 	 */
 	@Override
 	protected void doAction(Object context) throws FlexoException, ColumnIsNotEmpty, RowIsNotEmpty {
-		if (getFocusedObject() == null)
+		if (getFocusedObject() == null) {
 			throw new NullPointerException("No entity selected");
+		}
 		AddComponent addComponent = AddComponent.actionType.makeNewEmbeddedAction(getFocusedObject().getProject()
 				.getFlexoComponentLibrary().getRootFolder(), null, this);
 		addComponent.setComponentType(getComponentType());
 		addComponent.setNewComponentName(getName());
 		addComponent.doAction();
-		if (!addComponent.hasActionExecutionSucceeded())
+		if (!addComponent.hasActionExecutionSucceeded()) {
 			throw new FlexoActionExecutionFailed(addComponent);
+		}
 		ComponentBindingDefinition cbd = addComponent.getNewComponent().createNewBinding();
 		cbd.setVariableName(getVariableName());
 		cbd.setIsMandatory(true);
@@ -145,15 +147,17 @@ public class CreateComponentFromEntity extends FlexoAction<CreateComponentFromEn
 		dropBlock.setContainer(addComponent.getNewComponent().getWOComponent().getRootSequence());
 		dropBlock.setIndex(0);
 		dropBlock.doAction();
-		if (!dropBlock.hasActionExecutionSucceeded())
+		if (!dropBlock.hasActionExecutionSucceeded()) {
 			throw new FlexoActionExecutionFailed(dropBlock);
+		}
 		((IEBlocWidget) dropBlock.getDroppedWidget()).setTitle(FlexoLocalization.localizedForKey("edit") + " " + cbd.getVariableName());
 		DropIEElement dropTable = DropIEElement.actionType.makeNewEmbeddedAction(dropBlock.getDroppedWidget(), null, this);
 		dropTable.setElementType(WidgetType.HTMLTable);
 		dropTable.setContainer(dropBlock.getDroppedWidget());
 		dropTable.doAction();
-		if (!dropTable.hasActionExecutionSucceeded())
+		if (!dropTable.hasActionExecutionSucceeded()) {
 			throw new FlexoActionExecutionFailed(dropTable);
+		}
 		IEHTMLTableWidget table = (IEHTMLTableWidget) dropTable.getDroppedWidget();
 		table.setColCount(4);
 		int rows = (getWidgets().size() + 1) / 2;
@@ -161,8 +165,9 @@ public class CreateComponentFromEntity extends FlexoAction<CreateComponentFromEn
 		for (int i = 0; i < getWidgets().size(); i++) {
 			DMAccessorWidget aw = getWidgets().get(i);
 			if (aw.widget == null) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("No widget selected for " + aw);
+				}
 				continue;
 			}
 			String label;
@@ -179,8 +184,9 @@ public class CreateComponentFromEntity extends FlexoAction<CreateComponentFromEn
 				if (aw.property instanceof DMEOAttribute) {
 					if (((DMEOAttribute) aw.property).isBoolean()) {
 						DMProperty p = aw.property.getEntity().getDMProperty(getName() + DMEOAttribute.BOOLEAN_METHOD_POSTFIX);
-						if (p != null)
+						if (p != null) {
 							aw.property = p;
+						}
 					}
 				}
 			} else if (aw.method != null) {
@@ -188,8 +194,9 @@ public class CreateComponentFromEntity extends FlexoAction<CreateComponentFromEn
 				description = aw.method.getDescription();
 				descriptions = aw.method.getSpecificDescriptions();
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Left a widget without property nor method");
+				}
 				continue;
 			}
 			// Here nor label nor widget are null, `continue´ calls automatically skip those
@@ -199,8 +206,9 @@ public class CreateComponentFromEntity extends FlexoAction<CreateComponentFromEn
 			dropLabel.setContainer(table.getTDAt(i < rows ? i : (i - rows), i < rows ? 0 : 2).getSequenceWidget());
 			dropLabel.setIndex(0);
 			dropLabel.doAction();
-			if (!dropLabel.hasActionExecutionSucceeded())
+			if (!dropLabel.hasActionExecutionSucceeded()) {
 				throw new FlexoActionExecutionFailed(dropLabel);
+			}
 			((IELabelWidget) dropLabel.getDroppedWidget()).setValue(label + ":");
 
 			DropIEElement dropWidget = DropIEElement.actionType.makeNewEmbeddedAction(addComponent.getNewComponent().getWOComponent(),
@@ -209,8 +217,9 @@ public class CreateComponentFromEntity extends FlexoAction<CreateComponentFromEn
 			dropWidget.setContainer(table.getTDAt(i < rows ? i : (i - rows), i < rows ? 1 : 3).getSequenceWidget());
 			dropWidget.setIndex(0);
 			dropWidget.doAction();
-			if (!dropWidget.hasActionExecutionSucceeded())
+			if (!dropWidget.hasActionExecutionSucceeded()) {
 				throw new FlexoActionExecutionFailed(dropLabel);
+			}
 			dropWidget.getDroppedWidget().setLabel(label);
 			if (copyDescription) {
 				dropWidget.getDroppedWidget().setDescription(description);
@@ -236,21 +245,23 @@ public class CreateComponentFromEntity extends FlexoAction<CreateComponentFromEn
 				bv.addBindingPathElement(aw.property != null ? aw.property : new MethodCall(bv, aw.method));
 				((IEStringWidget) droppedWidget).setBindingValue(bv);
 				Typed p = aw.property != null ? aw.property : aw.method;
-				if (p.getType() == null)
+				if (p.getType() == null) {
 					break;
+				}
 				/*if(p.getType().isBoolean())
 				    ((IEStringWidget)droppedWidget).setFieldType(TextFieldType.)
 				else */
-				if (p.getType().isString() || p.getType().isChar())
+				if (p.getType().isString() || p.getType().isChar()) {
 					((IEStringWidget) droppedWidget).setFieldType(TextFieldType.TEXT);
-				else if (p.getType().isInteger())
+				} else if (p.getType().isInteger()) {
 					((IEStringWidget) droppedWidget).setFieldType(TextFieldType.INTEGER);
-				else if (p.getType().isFloat())
+				} else if (p.getType().isFloat()) {
 					((IEStringWidget) droppedWidget).setFieldType(TextFieldType.FLOAT);
-				else if (p.getType().isDouble())
+				} else if (p.getType().isDouble()) {
 					((IEStringWidget) droppedWidget).setFieldType(TextFieldType.DOUBLE);
-				else if (p.getType().isDate())
+				} else if (p.getType().isDate()) {
 					((IEStringWidget) droppedWidget).setFieldType(TextFieldType.DATE);
+				}
 				break;
 			case TEXTFIELD:
 			case TEXTAREA:
@@ -262,15 +273,15 @@ public class CreateComponentFromEntity extends FlexoAction<CreateComponentFromEn
 				((IEEditableTextWidget) droppedWidget).setBindingValue(bv);
 				p = aw.property != null ? aw.property : aw.method;
 				if (aw.widget == WidgetType.TEXTFIELD) {
-					if (p.getType().isString() || p.getType().isChar())
+					if (p.getType().isString() || p.getType().isChar()) {
 						((IETextFieldWidget) droppedWidget).setFieldType(TextFieldType.TEXT);
-					else if (p.getType().isInteger())
+					} else if (p.getType().isInteger()) {
 						((IETextFieldWidget) droppedWidget).setFieldType(TextFieldType.INTEGER);
-					else if (p.getType().isFloat())
+					} else if (p.getType().isFloat()) {
 						((IETextFieldWidget) droppedWidget).setFieldType(TextFieldType.FLOAT);
-					else if (p.getType().isDouble())
+					} else if (p.getType().isDouble()) {
 						((IETextFieldWidget) droppedWidget).setFieldType(TextFieldType.DOUBLE);
-					else if (p.getType().isDate()) {
+					} else if (p.getType().isDate()) {
 						((IETextFieldWidget) droppedWidget).setFieldType(TextFieldType.DATE);
 
 					}
@@ -293,8 +304,9 @@ public class CreateComponentFromEntity extends FlexoAction<CreateComponentFromEn
 				((IERadioButtonWidget) droppedWidget).setBindingChecked(bv);
 				break;
 			default:
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Unimplemented type for export " + aw.widget);
+				}
 				break;
 			}
 		}
@@ -310,33 +322,38 @@ public class CreateComponentFromEntity extends FlexoAction<CreateComponentFromEn
 	private String extractLabel(String name) {
 		StringBuilder sb = new StringBuilder();
 		boolean previousCharsAreUpperCase = false;
-		while (name.startsWith("_"))
+		while (name.startsWith("_")) {
 			name = name.substring(1);
-		if (name.startsWith("get"))
+		}
+		if (name.startsWith("get")) {
 			name = name.substring(3);
-		if (name.startsWith("set"))
+		}
+		if (name.startsWith("set")) {
 			name = name.substring(3);
+		}
 		for (int i = 0; i < name.length(); i++) {
 			char c = name.charAt(i);
 			if (Character.isUpperCase(c)) {
-				if (i == 0 || previousCharsAreUpperCase)
+				if (i == 0 || previousCharsAreUpperCase) {
 					sb.append(c);
-				else {
-					if (i + 1 < name.length() && Character.isLowerCase(name.charAt(i + 1)))
+				} else {
+					if (i + 1 < name.length() && Character.isLowerCase(name.charAt(i + 1))) {
 						sb.append(' ').append(Character.toLowerCase(c));
-					else {
-						if (previousCharsAreUpperCase)
+					} else {
+						if (previousCharsAreUpperCase) {
 							sb.append(c);
-						else
+						} else {
 							sb.append(' ').append(c);
+						}
 					}
 				}
 				previousCharsAreUpperCase = true;
 			} else {
-				if (i == 0)
+				if (i == 0) {
 					sb.append(Character.toUpperCase(c));
-				else
+				} else {
 					sb.append(c);
+				}
 				previousCharsAreUpperCase = false;
 			}
 
@@ -347,14 +364,16 @@ public class CreateComponentFromEntity extends FlexoAction<CreateComponentFromEn
 	private String extractNameFromEntity(DMEntity entity) {
 		String name = entity.getName();
 		int i = 0;
-		while (i + 1 < name.length() && Character.isUpperCase(name.charAt(i + 1)))
+		while (i + 1 < name.length() && Character.isUpperCase(name.charAt(i + 1))) {
 			i++;
+		}
 		return Character.toLowerCase(name.charAt(i)) + name.substring(i + 1);
 	}
 
 	public ComponentType getComponentType() {
-		if (componentType == null)
+		if (componentType == null) {
 			return ComponentType.OPERATION_COMPONENT;
+		}
 		return componentType;
 	}
 

@@ -79,13 +79,15 @@ public class FlexoFIBView<O extends FlexoModelObject> extends JPanel implements 
 
 		FlexoFIBController<O> fibController = createFibController(fibComponent, controller);
 
-		if (progress != null)
+		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("build_view"));
+		}
 
 		fibView = fibController.buildView(fibComponent);
 
-		if (progress != null)
+		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("init_view"));
+		}
 
 		fibController.setDataObject(representedObject);
 
@@ -93,16 +95,18 @@ public class FlexoFIBView<O extends FlexoModelObject> extends JPanel implements 
 			fibView.getController().addMouseClickListener((FIBMouseClickListener) this);
 		}
 
-		if (addScrollBar)
+		if (addScrollBar) {
 			add(new JScrollPane(fibView.getJComponent()), BorderLayout.CENTER);
-		else
+		} else {
 			add(fibView.getJComponent(), BorderLayout.CENTER);
+		}
 
 		validate();
 		revalidate();
 
-		if (progress != null)
+		if (progress != null) {
 			progress.hideWindow();
+		}
 	}
 
 	/**
@@ -127,6 +131,7 @@ public class FlexoFIBView<O extends FlexoModelObject> extends JPanel implements 
 		return controller;
 	}
 
+	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		/* if (dataModification instanceof ObjectDeleted) {
 		     if (dataModification.oldValue() == getOntologyObject()) {

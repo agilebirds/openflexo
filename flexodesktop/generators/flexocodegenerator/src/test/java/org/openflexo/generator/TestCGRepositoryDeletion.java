@@ -46,9 +46,9 @@ import org.openflexo.foundation.ie.widget.IESequenceTab;
 import org.openflexo.foundation.rm.FlexoMemoryResource;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoResourceManager;
+import org.openflexo.foundation.rm.FlexoResourceManager.BackwardSynchronizationHook;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.ResourceType;
-import org.openflexo.foundation.rm.FlexoResourceManager.BackwardSynchronizationHook;
 import org.openflexo.foundation.wkf.WKFElementType;
 import org.openflexo.foundation.wkf.action.AddSubProcess;
 import org.openflexo.foundation.wkf.action.DropWKFElement;
@@ -164,8 +164,9 @@ public class TestCGRepositoryDeletion extends CGTestCase {
 		assertNotNull(_eoPrototypesResource = _project.getEOModelResource(EOPrototypeRepository.EOPROTOTYPE_REPOSITORY_DIR.getName()));
 
 		for (FlexoResource resource : _project.getResources().values()) {
-			if (resource != _rmResource && !(resource instanceof FlexoMemoryResource))
+			if (resource != _rmResource && !(resource instanceof FlexoMemoryResource)) {
 				assertSynchonized(resource, _rmResource);
+			}
 		}
 		assertSynchonized(_dmResource, _executionModelResource);
 		assertSynchonized(_dmResource, _eoPrototypesResource);
@@ -198,8 +199,8 @@ public class TestCGRepositoryDeletion extends CGTestCase {
 		action.doAction();
 		logger.info("SubProcess " + action.getNewProcess().getName() + " successfully created");
 		_subProcessResource = _project.getFlexoProcessResource(TEST_SUB_PROCESS);
-        defineStatusColumn(_rootProcessResource.getFlexoProcess());
-        defineStatusColumn(action.getNewProcess());
+		defineStatusColumn(_rootProcessResource.getFlexoProcess());
+		defineStatusColumn(action.getNewProcess());
 		assertNotNull(_subProcessResource);
 		assertSynchonized(_subProcessResource, _rmResource);
 		assertSynchonized(_subProcessResource, _wkfResource);
@@ -231,7 +232,7 @@ public class TestCGRepositoryDeletion extends CGTestCase {
 		action.setLocation(100, 100);
 		action.doAction();
 		assertTrue(action.hasActionExecutionSucceeded());
-        defineStatusColumn(action.getProcess());
+		defineStatusColumn(action.getProcess());
 		_subProcessNode = (SubProcessNode) action.getObject();
 		logger.info("SubProcessNode " + _subProcessNode.getName() + " successfully created");
 		assertDepends(_rootProcessResource, _subProcessResource);
@@ -549,7 +550,7 @@ public class TestCGRepositoryDeletion extends CGTestCase {
 		AddSubProcess process = AddSubProcess.actionType.makeNewAction(_project.getFlexoWorkflow(), null, _editor);
 		process.setNewProcessName("Process context free");
 		process.doAction();
-        defineStatusColumn(process.getNewProcess());
+		defineStatusColumn(process.getNewProcess());
 		DropWKFElement addActivity = DropWKFElement.actionType
 				.makeNewAction(process.getNewProcess().getActivityPetriGraph(), null, _editor);
 		addActivity.setElementType(WKFElementType.NORMAL_ACTIVITY);
@@ -612,13 +613,15 @@ public class TestCGRepositoryDeletion extends CGTestCase {
 		// Do it even if validation failed
 		synchronizeCodeGeneration.setContinueAfterValidation(true);
 		synchronizeCodeGeneration.doAction();
-		if (!synchronizeCodeGeneration.hasActionExecutionSucceeded())
+		if (!synchronizeCodeGeneration.hasActionExecutionSucceeded()) {
 			fail("Synchronization action failed. Action execution status: " + synchronizeCodeGeneration.getExecutionStatus().name());
+		}
 		// Write generated files to disk
 		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository, null, _editor);
 		writeToDisk.doAction();
-		if (!writeToDisk.hasActionExecutionSucceeded())
+		if (!writeToDisk.hasActionExecutionSucceeded()) {
 			fail("Writing to disk has failed. Action execution status: " + writeToDisk.getExecutionStatus().name());
+		}
 		saveProject();
 
 	}
@@ -774,8 +777,9 @@ public class TestCGRepositoryDeletion extends CGTestCase {
 
 		protected void assertBackSynchronizationHasBeenPerformed(FlexoResource aResource1, FlexoResource aResource2) {
 			for (BackSynchroEntry entry : entries) {
-				if (entry.backSynchroConcerns(aResource1, aResource2))
+				if (entry.backSynchroConcerns(aResource1, aResource2)) {
 					return;
+				}
 			}
 			fail("RESOURCE synchonization problem: " + aResource1 + " MUST have been back-synchronized with " + aResource2);
 		}

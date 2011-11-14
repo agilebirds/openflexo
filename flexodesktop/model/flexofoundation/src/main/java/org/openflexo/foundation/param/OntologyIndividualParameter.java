@@ -33,8 +33,9 @@ public class OntologyIndividualParameter extends ParameterDefinition<OntologyInd
 
 	public OntologyIndividualParameter(String name, String label, OntologyClass ontologyClass, OntologyIndividual defaultValue) {
 		this(name, label, defaultValue);
-		if (ontologyClass != null)
+		if (ontologyClass != null) {
 			setOntologyClass(ontologyClass);
+		}
 	}
 
 	@Override

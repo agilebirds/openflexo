@@ -30,9 +30,9 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.ViewShape;
 
 public class AddShape extends FlexoAction<AddShape, ViewObject, ViewObject> {
 
@@ -88,8 +88,9 @@ public class AddShape extends FlexoAction<AddShape, ViewObject, ViewObject> {
 		}
 
 		_newShape = new ViewShape(getParent().getShema());
-		if (getGraphicalRepresentation() != null)
+		if (getGraphicalRepresentation() != null) {
 			_newShape.setGraphicalRepresentation(getGraphicalRepresentation());
+		}
 
 		_newShape.setName(getNewShapeName());
 		getParent().addToChilds(_newShape);
@@ -98,8 +99,9 @@ public class AddShape extends FlexoAction<AddShape, ViewObject, ViewObject> {
 	}
 
 	public FlexoProject getProject() {
-		if (getFocusedObject() != null)
+		if (getFocusedObject() != null) {
 			return getFocusedObject().getProject();
+		}
 		return null;
 	}
 

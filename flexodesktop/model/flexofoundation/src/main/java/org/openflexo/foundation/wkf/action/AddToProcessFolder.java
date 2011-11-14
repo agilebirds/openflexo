@@ -65,9 +65,9 @@ public class AddToProcessFolder extends FlexoAction<AddToProcessFolder, FlexoMod
 	}
 
 	static FlexoProcessNode getProcessNode(FlexoModelObject object) {
-		if (object instanceof FlexoProcessNode)
+		if (object instanceof FlexoProcessNode) {
 			return (FlexoProcessNode) object;
-		else if (object instanceof FlexoProcess) {
+		} else if (object instanceof FlexoProcess) {
 			return ((FlexoProcess) object).getProcessNode();
 		}
 		return null;

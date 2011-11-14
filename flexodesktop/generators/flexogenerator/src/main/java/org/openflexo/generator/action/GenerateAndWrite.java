@@ -74,8 +74,9 @@ public class GenerateAndWrite extends MultipleFileGCAction<GenerateAndWrite> {
 
 	@Override
 	protected void doAction(Object context) throws GenerationException, SaveResourceException {
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Generating and writing " + getRepository().getName());
+		}
 		SynchronizeRepositoryCodeGeneration synch = SynchronizeRepositoryCodeGeneration.actionType.makeNewEmbeddedAction(getRepository(),
 				getGlobalSelection(), this);
 		synch.doAction();
@@ -86,8 +87,9 @@ public class GenerateAndWrite extends MultipleFileGCAction<GenerateAndWrite> {
 		}
 		WriteModifiedGeneratedFiles write = WriteModifiedGeneratedFiles.actionType.makeNewEmbeddedAction(getFocusedObject(),
 				getGlobalSelection(), this);
-		if (write.getFilesToWrite().size() > 0)
+		if (write.getFilesToWrite().size() > 0) {
 			write.doAction();
+		}
 	}
 
 	private boolean writeUnchangedFiles = true;

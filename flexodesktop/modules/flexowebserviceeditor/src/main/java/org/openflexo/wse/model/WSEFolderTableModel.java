@@ -23,9 +23,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.WSEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-
 import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.components.tabular.model.IconColumn;
 import org.openflexo.components.tabular.model.StringColumn;
@@ -33,6 +30,8 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.ws.ExternalWSFolder;
 import org.openflexo.foundation.ws.FlexoWSLibrary;
 import org.openflexo.foundation.ws.WSFolder;
+import org.openflexo.icon.WSEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Please comment this class
@@ -49,18 +48,20 @@ public class WSEFolderTableModel extends AbstractModel<FlexoWSLibrary, WSFolder>
 		addToColumns(new IconColumn<WSFolder>("ws_folder_icon", 30) {
 			@Override
 			public Icon getIcon(WSFolder object) {
-				if (object instanceof ExternalWSFolder)
+				if (object instanceof ExternalWSFolder) {
 					return WSEIconLibrary.WS_EXTERNAL_FOLDER_ICON;
-				else
+				} else {
 					return WSEIconLibrary.WS_INTERNAL_FOLDER_ICON;
+				}
 			}
 
 			@Override
 			public String getLocalizedTooltip(WSFolder object) {
-				if (object instanceof ExternalWSFolder)
+				if (object instanceof ExternalWSFolder) {
 					return FlexoLocalization.localizedForKey("external_ws_folder");
-				else
+				} else {
 					return FlexoLocalization.localizedForKey("internal_ws_folder");
+				}
 			}
 		});
 		addToColumns(new StringColumn<WSFolder>("name", 200) {
@@ -84,10 +85,12 @@ public class WSEFolderTableModel extends AbstractModel<FlexoWSLibrary, WSFolder>
 
 	@Override
 	public WSFolder elementAt(int row) {
-		if (row == 0)
+		if (row == 0) {
 			return getWSLibrary().getExternalWSFolder();
-		if (row == 1)
+		}
+		if (row == 1) {
 			return getWSLibrary().getInternalWSFolder();
+		}
 		return null;
 	}
 

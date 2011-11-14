@@ -69,8 +69,9 @@ public class Function extends Expression {
 		for (Expression arg : getArgs()) {
 			evaluatedArgs.add(arg.evaluate(context));
 		}
-		if (context != null)
+		if (context != null) {
 			return context.getFunctionFactory().makeFunction(getName(), evaluatedArgs);
+		}
 		return new Function(getName(), evaluatedArgs);
 	}
 

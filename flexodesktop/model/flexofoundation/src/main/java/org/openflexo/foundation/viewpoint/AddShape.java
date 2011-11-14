@@ -76,8 +76,9 @@ public class AddShape extends AddShemaElementAction<ShapePatternRole> {
 	}
 
 	public ViewPointDataBinding getContainer() {
-		if (container == null)
+		if (container == null) {
 			container = new ViewPointDataBinding(this, EditionActionBindingAttribute.container, getContainerBindingDefinition());
+		}
 		return container;
 	}
 

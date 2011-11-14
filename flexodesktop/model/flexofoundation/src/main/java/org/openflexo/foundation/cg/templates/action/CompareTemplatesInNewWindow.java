@@ -35,10 +35,12 @@ public class CompareTemplatesInNewWindow extends FlexoGUIAction<CompareTemplates
 
 	public static Vector<CGTemplate> getTemplates(CGTemplate object, Vector<CGTemplate> globalSelection) {
 		Vector<CGTemplate> v = globalSelection == null ? new Vector<CGTemplate>(1) : new Vector<CGTemplate>(globalSelection.size() + 1);
-		if (globalSelection != null)
+		if (globalSelection != null) {
 			v.addAll(globalSelection);
-		if (object != null && !v.contains(object))
+		}
+		if (object != null && !v.contains(object)) {
 			v.add(object);
+		}
 		return v;
 	}
 

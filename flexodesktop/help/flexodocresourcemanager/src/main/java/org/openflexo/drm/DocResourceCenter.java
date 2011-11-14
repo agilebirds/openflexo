@@ -168,8 +168,9 @@ public class DocResourceCenter extends DRMObject implements XMLStorageResourceDa
 			e.printStackTrace();
 		} finally {
 			try {
-				if (out != null)
+				if (out != null) {
 					out.close();
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -191,8 +192,9 @@ public class DocResourceCenter extends DRMObject implements XMLStorageResourceDa
 	public Author getAuthorNamed(String authorIdentifier) {
 		for (Enumeration en = getAuthors().elements(); en.hasMoreElements();) {
 			Author next = (Author) en.nextElement();
-			if (next.getIdentifier().equals(authorIdentifier))
+			if (next.getIdentifier().equals(authorIdentifier)) {
 				return next;
+			}
 		}
 		return null;
 	}
@@ -200,15 +202,17 @@ public class DocResourceCenter extends DRMObject implements XMLStorageResourceDa
 	public Language getLanguageNamed(String languageIdentifier) {
 		for (Enumeration en = getLanguages().elements(); en.hasMoreElements();) {
 			Language next = (Language) en.nextElement();
-			if (next.getIdentifier().equalsIgnoreCase(languageIdentifier))
+			if (next.getIdentifier().equalsIgnoreCase(languageIdentifier)) {
 				return next;
+			}
 		}
 		return null;
 	}
 
 	public DocItem getItemNamed(String aName) {
-		if (getRootFolder() == null)
+		if (getRootFolder() == null) {
 			return null;
+		}
 		return getRootFolder().getItemNamed(aName);
 	}
 

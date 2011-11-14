@@ -59,18 +59,22 @@ public class ComponentBindingDefinition extends BindingDefinition {
 		if (object instanceof ComponentBindingDefinition) {
 			ComponentBindingDefinition bd = (ComponentBindingDefinition) object;
 			if (_property == null) {
-				if (bd._property != null)
+				if (bd._property != null) {
 					return false;
+				}
 			} else {
-				if (!_property.equals(bd._property))
+				if (!_property.equals(bd._property)) {
 					return false;
+				}
 			}
 			if (_componentDMEntity == null) {
-				if (bd._componentDMEntity != null)
+				if (bd._componentDMEntity != null) {
 					return false;
+				}
 			} else {
-				if (!_componentDMEntity.equals(bd._componentDMEntity))
+				if (!_componentDMEntity.equals(bd._componentDMEntity)) {
 					return false;
+				}
 			}
 			return ((getOwner() == bd.getOwner()) && (getType() == bd.getType()) && (getIsMandatory() == bd.getIsMandatory()));
 		} else {
@@ -160,16 +164,18 @@ public class ComponentBindingDefinition extends BindingDefinition {
 	public void setVariableName(String variableName) {
 		if (_property != null) {
 			try {
-				if (ReservedKeyword.contains(variableName))
+				if (ReservedKeyword.contains(variableName)) {
 					throw new InvalidNameException(variableName + " is a reserved keyword.");
+				}
 				_property.setName(variableName);
 			} catch (InvalidNameException e) {
 				setChanged();
 				notifyObserversAsReentrantModification(new DataModification(-1, "variableName", null, _property.getName()));
 				new FlexoException(e.getMessage(), e);
 			} catch (DuplicatePropertyNameException e) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning(e.getMessage());
+				}
 				setChanged();
 				notifyObserversAsReentrantModification(new DataModification(-1, "variableName", null, _property.getName()));
 			}

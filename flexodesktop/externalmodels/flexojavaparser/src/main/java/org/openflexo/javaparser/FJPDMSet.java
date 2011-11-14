@@ -72,8 +72,9 @@ public class FJPDMSet extends DMSet {
 	}
 
 	private FJPPackageReference packageNamed(String packageName) {
-		if (packageName == null)
+		if (packageName == null) {
 			packageName = DMPackage.DEFAULT_PACKAGE_NAME;
+		}
 		if (_packages.get(packageName) == null) {
 			FJPPackageReference newPackageReference = new FJPPackageReference(packageName);
 			_packages.put(packageName, newPackageReference);
@@ -83,10 +84,12 @@ public class FJPDMSet extends DMSet {
 	}
 
 	private void addJavaClass(FJPJavaSource javaSource, DMEntity entity) {
-		if (javaSource == null)
+		if (javaSource == null) {
 			return;
-		if (javaSource.getRootClass() == null)
+		}
+		if (javaSource.getRootClass() == null) {
 			return;
+		}
 		FJPPackageReference packageRef = packageForClass(javaSource.getRootClass());
 		addToSelectedObjects(packageRef);
 		ClassReference aClassReference = packageRef.add(javaSource, entity);
@@ -217,12 +220,14 @@ public class FJPDMSet extends DMSet {
 		for (PackageReference aPackage : _packages.values()) {
 			for (ClassReference aClass : aPackage.getClasses()) {
 				for (PropertyReference prop : aClass.getProperties()) {
-					if (prop.isNewlyDiscovered() && prop.isResolvable())
+					if (prop.isNewlyDiscovered() && prop.isResolvable()) {
 						addToSelectedObjects(prop);
+					}
 				}
 				for (MethodReference meth : aClass.getMethods()) {
-					if (meth.isNewlyDiscovered() && meth.isResolvable())
+					if (meth.isNewlyDiscovered() && meth.isResolvable()) {
 						addToSelectedObjects(meth);
+					}
 				}
 			}
 		}

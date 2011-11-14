@@ -87,9 +87,9 @@ import org.openflexo.generator.cg.CGWebServerImageFile;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.rm.ComponentJavaFileResource;
 import org.openflexo.generator.rm.GenerationAvailableFileResource;
-import org.openflexo.icon.CGIconLibrary;
 import org.openflexo.icon.FilesIconLibrary;
 import org.openflexo.icon.GeneratorIconLibrary;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.jedit.JEditTextArea.DisplayContext;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
@@ -353,12 +353,12 @@ public class CGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 						FlexoResourceGenerator generator = (FlexoResourceGenerator) resource.getGenerator();
 						if (generator != null) {
 							if (generator.hasFormattingException()) {
-								addInfoPanel(CGIconLibrary.UNFIXABLE_WARNING_ICON,
+								addInfoPanel(IconLibrary.UNFIXABLE_WARNING_ICON,
 										FlexoLocalization.localizedForKey("java_formatting_warning_title"),
 										FlexoLocalization.localizedForKey("java_formatting_warning_description"));
 							}
 							if (generator.hasAppendingException()) {
-								addInfoPanel(CGIconLibrary.UNFIXABLE_WARNING_ICON,
+								addInfoPanel(IconLibrary.UNFIXABLE_WARNING_ICON,
 										FlexoLocalization.localizedForKey("java_appending_warning_title"),
 										FlexoLocalization.localizedForKey("java_appending_warning_description"));
 							}
@@ -372,7 +372,7 @@ public class CGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 				}
 
 				if (_cgFile.hasGenerationErrors()) {
-					addInfoPanel(CGIconLibrary.UNFIXABLE_ERROR_ICON, FlexoLocalization.localizedForKey("generation_error"),
+					addInfoPanel(IconLibrary.UNFIXABLE_ERROR_ICON, FlexoLocalization.localizedForKey("generation_error"),
 							FlexoLocalization.localizedForKey("generation_error_description"));
 				}
 			}

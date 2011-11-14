@@ -60,8 +60,9 @@ public class AddToInheritanceChildItemInitializer extends ActionInitializer {
 						FlexoLocalization.localizedForKey("please_select_a_child_item_related_to_inheritance"), parameters);
 				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 					DocItem newChildItem = (DocItem) dialog.parameterValueWithName("childItem");
-					if (newChildItem == null)
+					if (newChildItem == null) {
 						return false;
+					}
 					action.setChildDocItem(newChildItem);
 					return true;
 				} else {

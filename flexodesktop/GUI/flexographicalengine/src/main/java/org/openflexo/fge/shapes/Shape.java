@@ -149,21 +149,24 @@ public abstract class Shape extends KVCObject implements XMLSerializable, Clonea
 	}
 
 	public List<ControlPoint> getControlPoints() {
-		if (_controlPoints == null)
+		if (_controlPoints == null) {
 			rebuildControlPoints();
+		}
 		return _controlPoints;
 	}
 
 	public List<ControlPoint> rebuildControlPoints() {
 		// logger.info("For Shape "+this+" rebuildControlPoints()");
 
-		if (_controlPoints != null)
+		if (_controlPoints != null) {
 			_controlPoints.clear();
-		else
+		} else {
 			_controlPoints = new Vector<ControlPoint>();
+		}
 
-		if (getGraphicalRepresentation() == null)
+		if (getGraphicalRepresentation() == null) {
 			return _controlPoints;
+		}
 
 		for (FGEPoint pt : getShape().getControlPoints()) {
 			_controlPoints.add(new ShapeResizingControlPoint(getGraphicalRepresentation(), pt, null));
@@ -238,10 +241,12 @@ public abstract class Shape extends KVCObject implements XMLSerializable, Clonea
 			System.out.println("inters=" + inters);
 			if (inters instanceof FGEPoint || inters instanceof FGEEmptyArea) {
 				// Consider this point
-				if (p.y > maxY)
+				if (p.y > maxY) {
 					maxY = p.y;
-				if (p.y < minY)
+				}
+				if (p.y < minY) {
 					minY = p.y;
+				}
 			}
 		}
 		FGEHalfLine north = new FGEHalfLine(0, minY, -1, minY);

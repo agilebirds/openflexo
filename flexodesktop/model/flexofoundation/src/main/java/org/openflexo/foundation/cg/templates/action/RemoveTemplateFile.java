@@ -72,15 +72,17 @@ public class RemoveTemplateFile extends FlexoAction<RemoveTemplateFile, CGTempla
 		deleteTemplate(getFocusedObject());
 		if (getGlobalSelection() != null) {
 			for (CGTemplateFile file : getGlobalSelection()) {
-				if (file != null)
+				if (file != null) {
 					deleteTemplate(file);
+				}
 			}
 		}
 	}
 
 	private void deleteTemplate(CGTemplateFile file) {
-		if (file.isEdited())
+		if (file.isEdited()) {
 			file.cancelEdition();
+		}
 		file.delete();
 	}
 

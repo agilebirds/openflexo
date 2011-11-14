@@ -70,8 +70,9 @@ public class MakeFlexoProcessContextFree extends FlexoUndoableAction<MakeFlexoPr
 
 	@Override
 	protected void doAction(Object context) throws FlexoException {
-		if (getFocusedObject().isImported())
+		if (getFocusedObject().isImported()) {
 			return;
+		}
 		_setParentProcessAction = SetPropertyAction.actionType.makeNewEmbeddedAction(getFocusedObject(), null, this);
 		_setParentProcessAction.setKey("parentProcess");
 		_setParentProcessAction.setValue(null);

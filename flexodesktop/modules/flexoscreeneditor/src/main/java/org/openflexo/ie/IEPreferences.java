@@ -67,8 +67,9 @@ public final class IEPreferences extends ModulePreferences {
 	}
 
 	public static void setDisplayBindingValue(Boolean displayBindingValue) {
-		if (displayBindingValue.booleanValue() == getDisplayBindingValue().booleanValue())
+		if (displayBindingValue.booleanValue() == getDisplayBindingValue().booleanValue()) {
 			return;
+		}
 		preferences(IE_PREFERENCES).setBooleanProperty(SHOW_BINDINGVALUE_KEY, displayBindingValue);
 		_controller.notifyDisplayPrefHasChanged();
 	}

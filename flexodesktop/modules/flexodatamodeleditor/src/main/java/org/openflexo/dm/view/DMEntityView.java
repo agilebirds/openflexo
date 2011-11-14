@@ -94,15 +94,17 @@ public class DMEntityView extends DMView<DMEntity> {
 	@Override
 	protected JComponent buildContentPane() {
 		DMEntity entity = getDMObject();
-		if (getDMEntity().getRepository().isReadOnly())
+		if (getDMEntity().getRepository().isReadOnly()) {
 			propertyTableModel = new DMReadOnlyPropertyTableModel(entity, getDMController().getProject());
-		else
+		} else {
 			propertyTableModel = new DMPropertyTableModel(entity, getDMController().getProject());
+		}
 		addToMasterTabularView(propertyTable = new DMTabularView(getDMController(), propertyTableModel, 15));
-		if (getDMEntity().getRepository().isReadOnly())
+		if (getDMEntity().getRepository().isReadOnly()) {
 			methodTableModel = new DMReadOnlyMethodTableModel(entity, getDMController().getProject());
-		else
+		} else {
 			methodTableModel = new DMMethodTableModel(entity, getDMController().getProject());
+		}
 		addToMasterTabularView(methodTable = new DMTabularView(getDMController(), methodTableModel, 15));
 
 		return new JSplitPane(JSplitPane.VERTICAL_SPLIT, propertyTable, methodTable);

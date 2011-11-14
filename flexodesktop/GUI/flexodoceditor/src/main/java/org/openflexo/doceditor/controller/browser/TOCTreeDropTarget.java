@@ -47,15 +47,17 @@ public class TOCTreeDropTarget extends TreeDropTarget {
 			TOCEntry dragged = ((TOCEntryElement) source).getEntry();
 			if (targ instanceof TOCEntryElement) {
 				TOCEntry over = ((TOCEntryElement) targ).getEntry();
-				if (over == null || dragged == null)
+				if (over == null || dragged == null) {
 					return false;
+				}
 				Vector<TOCEntry> v = new Vector<TOCEntry>();
 				v.add(dragged);
 				return MoveTOCEntry.actionType.isEnabled(over, v, editor);
 			} else if (targ instanceof TOCRepositoryElement) {
 				TOCRepository over = ((TOCRepositoryElement) targ).getRepository();
-				if (over == null || dragged == null)
+				if (over == null || dragged == null) {
 					return false;
+				}
 				Vector<TOCEntry> v = new Vector<TOCEntry>();
 				v.add(dragged);
 				return MoveTOCEntry.actionType.isEnabled(over, v, editor);
@@ -84,14 +86,16 @@ public class TOCTreeDropTarget extends TreeDropTarget {
 				return move.hasActionExecutionSucceeded();
 			}
 		} else {
-			if (source == null || targ == null)
+			if (source == null || targ == null) {
 				return false;
+			}
 			if (source instanceof TOCEntryElement) {
 				TOCEntry dragged = ((TOCEntryElement) source).getEntry();
 				if (targ instanceof TOCEntryElement) {
 					TOCEntry over = ((TOCEntryElement) targ).getEntry();
-					if (over == null || dragged == null)
+					if (over == null || dragged == null) {
 						return false;
+					}
 					if (over == dragged) {
 						FlexoController.notify(FlexoLocalization.localizedForKey("cannot_drop_entry_within_itself"));
 						return false;

@@ -90,20 +90,23 @@ public class DMEOPrototype extends DMEOAttribute {
 
 	@Override
 	public DMType getType() {
-		if (getEOAttribute() == null)
+		if (getEOAttribute() == null) {
 			return null;
+		}
 
 		if (_prototypeType == null || _prototypeType.getBaseEntity() == null
 				|| !_prototypeType.getBaseEntity().getFullQualifiedName().equals(getEOAttribute().getClassName())) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Recompute type for DMEOPrototype " + getName());
+			}
 			_prototypeType = DMType.makeResolvedDMType(getDMModel().getDMEntity(getEOAttribute().getClassName()));
 			if (_prototypeType.getBaseEntity() == null) {
 				logger.warning("Could not find entity: " + getEOAttribute().getClassName());
 			}
 		} else {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Return cached type for DMEOPrototype " + getName());
+			}
 		}
 		return _prototypeType;
 	}

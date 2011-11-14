@@ -59,8 +59,9 @@ public abstract class PetriGraphNodeGR<O extends PetriGraphNode> extends Abstrac
 	 */
 	@Override
 	protected void doLayoutMethod1() {
-		if (!getModel().hasLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR))
+		if (!getModel().hasLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR)) {
 			return;
+		}
 		Point2D swlPosition = getModel().getLocation(SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		FlexoPetriGraph parentPetrigraph = getModel().getParentPetriGraph();
 		boolean isInRootPetriGraph = parentPetrigraph.isRootPetriGraph();
@@ -80,8 +81,9 @@ public abstract class PetriGraphNodeGR<O extends PetriGraphNode> extends Abstrac
 				if (isInRootPetriGraph) {
 					// We need the node to be in the same role, otherwise there is no useful information
 					if (SwimmingLaneRepresentation.getRepresentationRole((PetriGraphNode) node) != SwimmingLaneRepresentation
-							.getRepresentationRole(getModel()))
+							.getRepresentationRole(getModel())) {
 						continue;
+					}
 				}
 				if (node.hasLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR) && node.hasLocationForContext(BASIC_PROCESS_EDITOR)) {
 					Point2D p1 = node.getLocation(SWLEditorConstants.SWIMMING_LANE_EDITOR);

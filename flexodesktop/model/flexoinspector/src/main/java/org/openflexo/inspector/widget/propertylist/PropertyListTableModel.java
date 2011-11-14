@@ -89,11 +89,13 @@ public class PropertyListTableModel extends DefaultTableModel {
 	private static final Vector EMPTY_VECTOR = new Vector();
 
 	public void setValues(List values) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setValues() with " + values);
+		}
 		List newValues = values;
-		if (values == null)
+		if (values == null) {
 			newValues = EMPTY_VECTOR;
+		}
 
 		List oldValues = _values;
 		_values = newValues;
@@ -147,8 +149,9 @@ public class PropertyListTableModel extends DefaultTableModel {
 				// logger.info("element at "+row+" is "+returned);
 				return (InspectableObject) returned;
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Found a non-inspectable object in a inspectable property-list");
+				}
 			}
 		}
 		return null;
@@ -258,8 +261,9 @@ public class PropertyListTableModel extends DefaultTableModel {
 			logger.fine("new row is " + newRow);
 		}
 		if (row != newRow) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("row changed !");
+			}
 			fireTableChanged(new RowMoveForObjectEvent(this, editedObject, newRow, column));
 		}
 	}
@@ -345,8 +349,9 @@ public class PropertyListTableModel extends DefaultTableModel {
 	}
 
 	protected void setSelectedObject(InspectableObject selectedObject) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setSelectedObject with " + selectedObject);
+		}
 		_selectedObject = selectedObject;
 		_footer.handleSelectionChanged();
 
@@ -362,8 +367,9 @@ public class PropertyListTableModel extends DefaultTableModel {
 	}
 
 	protected void setSelectedObjects(Vector<InspectableObject> selectedObject) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setSelectedObjects with " + selectedObject);
+		}
 		this.selectedObjects = selectedObject;
 		_footer.handleSelectionChanged();
 
@@ -394,10 +400,12 @@ public class PropertyListTableModel extends DefaultTableModel {
 
 	@Override
 	public void fireTableRowsUpdated(int firstRow, int lastRow) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("fireTableRowsUpdated firstRow=" + firstRow + " lastRow=" + lastRow);
-		if (firstRow > -1 && lastRow > -1)
+		}
+		if (firstRow > -1 && lastRow > -1) {
 			super.fireTableRowsUpdated(firstRow, lastRow);
+		}
 	}
 
 	protected PropertyListWidget getPropertyListWidget() {

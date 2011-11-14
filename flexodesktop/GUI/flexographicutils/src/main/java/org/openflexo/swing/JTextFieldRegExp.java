@@ -106,11 +106,13 @@ public class JTextFieldRegExp extends JTextField implements DocumentListener {
 		String err = validateError();
 		if (err == null) {
 			err = validateWarning();
-			if (err != null)
+			if (err != null) {
 				errorLevel = WARNING;
+			}
 			return err;
-		} else
+		} else {
 			errorLevel = REG_EXP_ERROR;
+		}
 		return err;
 	}
 
@@ -132,8 +134,9 @@ public class JTextFieldRegExp extends JTextField implements DocumentListener {
 		int i = 0;
 		while (en.hasMoreElements()) {
 			p = (Pattern) en.nextElement();
-			if (!p.matcher(getText()).matches())
+			if (!p.matcher(getText()).matches()) {
 				return messages.get(i).toString();
+			}
 			i++;
 		}
 		return null;

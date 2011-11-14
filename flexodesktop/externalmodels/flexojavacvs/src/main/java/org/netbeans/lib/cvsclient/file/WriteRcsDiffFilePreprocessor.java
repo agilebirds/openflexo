@@ -270,8 +270,9 @@ public class WriteRcsDiffFilePreprocessor implements WriteTextFilePreprocessor {
 		int spacePos = indexOf(diffLine, (byte) ' ');
 		if (spacePos > 0) {
 			int end = indexOf(diffLine, (byte) ' ', spacePos + 1);
-			if (end < 0)
+			if (end < 0) {
 				end = diffLine.length;
+			}
 			String number = new String(diffLine, spacePos + 1, end - spacePos - 1);
 			try {
 				int toReturn = Integer.parseInt(number);

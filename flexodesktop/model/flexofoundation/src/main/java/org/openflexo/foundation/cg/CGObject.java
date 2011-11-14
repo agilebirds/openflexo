@@ -117,8 +117,9 @@ public abstract class CGObject extends FlexoModelObject implements FlexoObserver
 
 	@Override
 	public FlexoProject getProject() {
-		if (getGeneratedCode() != null)
+		if (getGeneratedCode() != null) {
 			return getGeneratedCode().getProject();
+		}
 		return null;
 	}
 

@@ -51,10 +51,11 @@ public class LoadedClassesInfo implements HasPropertyChangeSupport {
 	static {
 		appLoader = ClassLoader.getSystemClassLoader();
 		currentLoader = LoadedClassesInfo.class.getClassLoader();
-		if (appLoader != currentLoader)
+		if (appLoader != currentLoader) {
 			loaders = new ClassLoader[] { appLoader, currentLoader };
-		else
+		} else {
 			loaders = new ClassLoader[] { appLoader };
+		}
 		instance = new LoadedClassesInfo();
 	}
 
@@ -212,13 +213,16 @@ public class LoadedClassesInfo implements HasPropertyChangeSupport {
 		}
 
 		public boolean isFiltered() {
-			if (getFilteredPackageName() == null || StringUtils.isEmpty(getFilteredPackageName()))
+			if (getFilteredPackageName() == null || StringUtils.isEmpty(getFilteredPackageName())) {
 				return false;
-			if (packageName.startsWith(getFilteredPackageName()))
+			}
+			if (packageName.startsWith(getFilteredPackageName())) {
 				return false;
+			}
 			String patternString = getFilteredPackageName();
-			if (patternString.startsWith("*"))
+			if (patternString.startsWith("*")) {
 				patternString = "." + getFilteredPackageName();
+			}
 			try {
 				Pattern pattern = Pattern.compile(patternString);
 				Matcher matcher = pattern.matcher(packageName);
@@ -310,10 +314,12 @@ public class LoadedClassesInfo implements HasPropertyChangeSupport {
 		}
 
 		public Icon getIcon() {
-			if (clazz.isEnum())
+			if (clazz.isEnum()) {
 				return FIBIconLibrary.ENUM_ICON;
-			if (clazz.isInterface())
+			}
+			if (clazz.isInterface()) {
 				return FIBIconLibrary.INTERFACE_ICON;
+			}
 			return FIBIconLibrary.CLASS_ICON;
 		}
 
@@ -389,8 +395,9 @@ public class LoadedClassesInfo implements HasPropertyChangeSupport {
 
 		if (!StringUtils.isEmpty(filteredClassName)) {
 			String patternString = filteredClassName;
-			if (patternString.startsWith("*"))
+			if (patternString.startsWith("*")) {
 				patternString = "." + filteredClassName;
+			}
 			try {
 				Vector<ClassInfo> exactMatches = new Vector<ClassInfo>();
 				if (classesForName.get(filteredClassName) != null) {
@@ -404,9 +411,10 @@ public class LoadedClassesInfo implements HasPropertyChangeSupport {
 						for (ClassInfo potentialMatch : classesForName.get(s)) {
 							PackageInfo packageInfo = registerPackage(potentialMatch.clazz.getPackage());
 							if (!packageInfo.isFiltered()) {
-								if (!exactMatches.contains(potentialMatch))
+								if (!exactMatches.contains(potentialMatch)) {
 									matchingClasses.add(potentialMatch);
-								// System.out.println("Found "+potentialMatch);
+									// System.out.println("Found "+potentialMatch);
+								}
 							}
 						}
 					}

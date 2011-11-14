@@ -52,8 +52,9 @@ public class IEViewUtils {
 		} else if (conceptualColor == FlexoConceptualColor.OTHER_LINE_COLOR) {
 			return css.getOtherLineColor();
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("No color defined for FlexoConceptualColor " + conceptualColor);
+			}
 			return Color.WHITE;
 		}
 	}

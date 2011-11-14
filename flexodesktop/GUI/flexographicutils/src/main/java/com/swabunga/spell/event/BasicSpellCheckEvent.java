@@ -58,29 +58,35 @@ class BasicSpellCheckEvent implements SpellCheckEvent {
 	}
 
 	/** Returns the list of suggested Word objects */
+	@Override
 	public List getSuggestions() {
 		return suggestions;
 	}
 
 	/** Returns the currently misspelt word */
+	@Override
 	public String getInvalidWord() {
 		return invalidWord;
 	}
 
+	@Override
 	public String getWordContext() {
 		// JMH TBD
 		return null;
 	}
 
 	/** Returns the start position of the misspelt word in the context */
+	@Override
 	public int getWordContextPosition() {
 		return startPosition;
 	}
 
+	@Override
 	public short getAction() {
 		return action;
 	}
 
+	@Override
 	public String getReplaceWord() {
 		return replaceWord;
 	}
@@ -93,13 +99,16 @@ class BasicSpellCheckEvent implements SpellCheckEvent {
 	 * @param boolean replaceAll If set to true, the SpellChecker will replace all further occurances of the misspelt word without firing a
 	 *        SpellCheckEvent.
 	 */
+	@Override
 	public void replaceWord(String newWord, boolean replaceAll) {
-		if (action != INITIAL)
+		if (action != INITIAL) {
 			throw new IllegalStateException("The action can can only be set once");
-		if (replaceAll)
+		}
+		if (replaceAll) {
 			action = REPLACEALL;
-		else
+		} else {
 			action = REPLACE;
+		}
 		replaceWord = newWord;
 	}
 
@@ -109,28 +118,35 @@ class BasicSpellCheckEvent implements SpellCheckEvent {
 	 * @param boolean ignoreAll If set to true, the SpellChecker will replace all further occurances of the misspelt word without firing a
 	 *        SpellCheckEvent.
 	 */
+	@Override
 	public void ignoreWord(boolean ignoreAll) {
-		if (action != INITIAL)
+		if (action != INITIAL) {
 			throw new IllegalStateException("The action can can only be set once");
-		if (ignoreAll)
+		}
+		if (ignoreAll) {
 			action = IGNOREALL;
-		else
+		} else {
 			action = IGNORE;
+		}
 	}
 
 	/**
 	 * Set the action to add a new word into the dictionary. This will also replace the currently misspelt word.
 	 */
+	@Override
 	public void addToDictionary(String newWord) {
-		if (action != INITIAL)
+		if (action != INITIAL) {
 			throw new IllegalStateException("The action can can only be set once");
+		}
 		action = ADDTODICT;
 		replaceWord = newWord;
 	}
 
+	@Override
 	public void cancel() {
-		if (action != INITIAL)
+		if (action != INITIAL) {
 			throw new IllegalStateException("The action can can only be set once");
+		}
 		action = CANCEL;
 	}
 }

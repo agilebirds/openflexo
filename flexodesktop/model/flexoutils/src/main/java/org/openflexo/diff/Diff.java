@@ -137,29 +137,33 @@ public class Diff {
 			boolean big_snake = false;
 
 			/* Extend the top-down search by an edit step in each diagonal. */
-			if (fmin > dmin)
+			if (fmin > dmin) {
 				fd[fdiagoff + --fmin - 1] = -1;
-			else
+			} else {
 				++fmin;
-			if (fmax < dmax)
+			}
+			if (fmax < dmax) {
 				fd[fdiagoff + ++fmax + 1] = -1;
-			else
+			} else {
 				--fmax;
+			}
 			for (d = fmax; d >= fmin; d -= 2) {
 				int x, y, oldx, tlo = fd[fdiagoff + d - 1], thi = fd[fdiagoff + d + 1];
 
-				if (tlo >= thi)
+				if (tlo >= thi) {
 					x = tlo + 1;
-				else
+				} else {
 					x = thi;
+				}
 				oldx = x;
 				y = x - d;
 				while (x < xlim && y < ylim && xv[x] == yv[y]) {
 					++x;
 					++y;
 				}
-				if (x - oldx > 20)
+				if (x - oldx > 20) {
 					big_snake = true;
+				}
 				fd[fdiagoff + d] = x;
 				if (odd && bmin <= d && d <= bmax && bd[bdiagoff + d] <= fd[fdiagoff + d]) {
 					cost = 2 * c - 1;
@@ -168,29 +172,33 @@ public class Diff {
 			}
 
 			/* Similar extend the bottom-up search. */
-			if (bmin > dmin)
+			if (bmin > dmin) {
 				bd[bdiagoff + --bmin - 1] = Integer.MAX_VALUE;
-			else
+			} else {
 				++bmin;
-			if (bmax < dmax)
+			}
+			if (bmax < dmax) {
 				bd[bdiagoff + ++bmax + 1] = Integer.MAX_VALUE;
-			else
+			} else {
 				--bmax;
+			}
 			for (d = bmax; d >= bmin; d -= 2) {
 				int x, y, oldx, tlo = bd[bdiagoff + d - 1], thi = bd[bdiagoff + d + 1];
 
-				if (tlo < thi)
+				if (tlo < thi) {
 					x = tlo;
-				else
+				} else {
 					x = thi - 1;
+				}
 				oldx = x;
 				y = x - d;
 				while (x > xoff && y > yoff && xv[x - 1] == yv[y - 1]) {
 					--x;
 					--y;
 				}
-				if (oldx - x > 20)
+				if (oldx - x > 20) {
 					big_snake = true;
+				}
 				bd[bdiagoff + d] = x;
 				if (!odd && fmin <= d && d <= fmax && bd[bdiagoff + d] <= fd[fdiagoff + d]) {
 					cost = 2 * c;
@@ -219,9 +227,11 @@ public class Diff {
 
 							/* We have a good enough best diagonal;
 							   now insist that it end with a significant snake.  */
-							for (k = 1; k <= 20; k++)
-								if (xvec[x - k] != yvec[x - d - k])
+							for (k = 1; k <= 20; k++) {
+								if (xvec[x - k] != yvec[x - d - k]) {
 									break;
+								}
+							}
 
 							if (k == 21) {
 								best = fd[fdiagoff + d] * 2 - dd;
@@ -245,9 +255,11 @@ public class Diff {
 							int k;
 							int x = bd[bdiagoff + d];
 
-							for (k = 0; k < 20; k++)
-								if (xvec[x + k] != yvec[x - d + k])
+							for (k = 0; k < 20; k++) {
+								if (xvec[x + k] != yvec[x - d + k]) {
 									break;
+								}
+							}
 							if (k == 20) {
 								best = (xlim - bd[bdiagoff + d]) * 2 + dd;
 								bestpos = d;
@@ -287,13 +299,15 @@ public class Diff {
 		}
 
 		/* Handle simple cases. */
-		if (xoff == xlim)
-			while (yoff < ylim)
+		if (xoff == xlim) {
+			while (yoff < ylim) {
 				filevec[1].changed_flag[1 + filevec[1].realindexes[yoff++]] = true;
-		else if (yoff == ylim)
-			while (xoff < xlim)
+			}
+		} else if (yoff == ylim) {
+			while (xoff < xlim) {
 				filevec[0].changed_flag[1 + filevec[0].realindexes[xoff++]] = true;
-		else {
+			}
+		} else {
 			/* Find a point of correspondence in the middle of the files.  */
 
 			int d = diag(xoff, xlim, yoff, ylim);
@@ -334,8 +348,9 @@ public class Diff {
 	 */
 
 	private void shift_boundaries() {
-		if (inhibit)
+		if (inhibit) {
 			return;
+		}
 		filevec[0].shift_boundaries(filevec[1]);
 		filevec[1].shift_boundaries(filevec[0]);
 	}
@@ -360,10 +375,12 @@ public class Diff {
 				int line0 = i0, line1 = i1;
 
 				/* Find # lines changed here in each file.  */
-				while (changed0[1 + i0])
+				while (changed0[1 + i0]) {
 					++i0;
-				while (changed1[1 + i1])
+				}
+				while (changed1[1 + i1]) {
 					++i1;
+				}
 
 				/* Record this change.  */
 				script = new change(line0, line1, i0 - line0, i1 - line1, script);
@@ -396,10 +413,12 @@ public class Diff {
 				int line0 = i0, line1 = i1;
 
 				/* Find # lines changed here in each file.  */
-				while (changed0[i0])
+				while (changed0[i0]) {
 					--i0;
-				while (changed1[i1])
+				}
+				while (changed1[i1]) {
 					--i1;
+				}
 
 				/* Record this change.  */
 				script = new change(i0, i1, line0 - i0, line1 - i1, script);
@@ -447,10 +466,11 @@ public class Diff {
 		/* Get the results of comparison in the form of a chain
 		   of `struct change's -- an edit script.  */
 
-		if (reverse)
+		if (reverse) {
 			return build_reverse_script();
-		else
+		} else {
 			return build_script();
+		}
 	}
 
 	/**
@@ -514,8 +534,9 @@ public class Diff {
 		 */
 		int[] equivCount() {
 			int[] equiv_count = new int[equiv_max];
-			for (int i = 0; i < buffered_lines; ++i)
+			for (int i = 0; i < buffered_lines; ++i) {
 				++equiv_count[equivs[i]];
+			}
 			return equiv_count;
 		}
 
@@ -564,18 +585,21 @@ public class Diff {
 
 			/* Multiply MANY by approximate square root of number of lines.
 			   That is the threshold for provisionally discardable lines.  */
-			while ((tem = tem >> 2) > 0)
+			while ((tem = tem >> 2) > 0) {
 				many *= 2;
+			}
 
 			for (int i = 0; i < end; i++) {
 				int nmatch;
-				if (equivs2[i] == 0)
+				if (equivs2[i] == 0) {
 					continue;
+				}
 				nmatch = counts[equivs2[i]];
-				if (nmatch == 0)
+				if (nmatch == 0) {
 					discards[i] = 1;
-				else if (nmatch > many)
+				} else if (nmatch > many) {
 					discards[i] = 2;
+				}
 			}
 			return discards;
 		}
@@ -590,9 +614,9 @@ public class Diff {
 
 			for (int i = 0; i < end; i++) {
 				/* Cancel provisional discards not in middle of run of discards.  */
-				if (discards[i] == 2)
+				if (discards[i] == 2) {
 					discards[i] = 0;
-				else if (discards[i] != 0) {
+				} else if (discards[i] != 0) {
 					/* We have found a nonprovisional discard.  */
 					int j;
 					int length;
@@ -601,10 +625,12 @@ public class Diff {
 					/* Find end of this run of discardable lines.
 					   Count how many are provisionally discardable.  */
 					for (j = i; j < end; j++) {
-						if (discards[j] == 0)
+						if (discards[j] == 0) {
 							break;
-						if (discards[j] == 2)
+						}
+						if (discards[j] == 2) {
 							++provisional;
+						}
 					}
 
 					/* Cancel provisional discards at end, and shrink the run.  */
@@ -620,9 +646,11 @@ public class Diff {
 					/* If 1/4 of the lines in the run are provisional,
 					   cancel discarding of all provisional lines in the run.  */
 					if (provisional * 4 > length) {
-						while (j > i)
-							if (discards[--j] == 2)
+						while (j > i) {
+							if (discards[--j] == 2) {
 								discards[j] = 0;
+							}
+						}
 					} else {
 						int consec;
 						int minimum = 1;
@@ -632,37 +660,43 @@ public class Diff {
 						   A subrun of two or more provisionals can stand
 						   when LENGTH is at least 16.
 						   A subrun of 4 or more can stand when LENGTH >= 64.  */
-						while ((tem = tem >> 2) > 0)
+						while ((tem = tem >> 2) > 0) {
 							minimum *= 2;
+						}
 						minimum++;
 
 						/* Cancel any subrun of MINIMUM or more provisionals
 						   within the larger run.  */
-						for (j = 0, consec = 0; j < length; j++)
-							if (discards[i + j] != 2)
+						for (j = 0, consec = 0; j < length; j++) {
+							if (discards[i + j] != 2) {
 								consec = 0;
-							else if (minimum == ++consec)
+							} else if (minimum == ++consec) {
 								/* Back up to start of subrun, to cancel it all.  */
 								j -= consec;
-							else if (minimum < consec)
+							} else if (minimum < consec) {
 								discards[i + j] = 0;
+							}
+						}
 
 						/* Scan from beginning of run
 						   until we find 3 or more nonprovisionals in a row
 						   or until the first nonprovisional at least 8 lines in.
 						   Until that point, cancel any provisionals.  */
 						for (j = 0, consec = 0; j < length; j++) {
-							if (j >= 8 && discards[i + j] == 1)
+							if (j >= 8 && discards[i + j] == 1) {
 								break;
+							}
 							if (discards[i + j] == 2) {
 								consec = 0;
 								discards[i + j] = 0;
-							} else if (discards[i + j] == 0)
+							} else if (discards[i + j] == 0) {
 								consec = 0;
-							else
+							} else {
 								consec++;
-							if (consec == 3)
+							}
+							if (consec == 3) {
 								break;
+							}
 						}
 
 						/* I advances to the last line of the run.  */
@@ -670,17 +704,20 @@ public class Diff {
 
 						/* Same thing, from end.  */
 						for (j = 0, consec = 0; j < length; j++) {
-							if (j >= 8 && discards[i - j] == 1)
+							if (j >= 8 && discards[i - j] == 1) {
 								break;
+							}
 							if (discards[i - j] == 2) {
 								consec = 0;
 								discards[i - j] = 0;
-							} else if (discards[i - j] == 0)
+							} else if (discards[i - j] == 0) {
 								consec = 0;
-							else
+							} else {
 								consec++;
-							if (consec == 3)
+							}
+							if (consec == 3) {
 								break;
+							}
 						}
 					}
 				}
@@ -696,12 +733,14 @@ public class Diff {
 		private void discard(final byte[] discards) {
 			final int end = buffered_lines;
 			int j = 0;
-			for (int i = 0; i < end; ++i)
+			for (int i = 0; i < end; ++i) {
 				if (no_discards || discards[i] == 0) {
 					undiscarded[j] = equivs[i];
 					realindexes[j++] = i;
-				} else
+				} else {
 					changed_flag[1 + i] = true;
+				}
+			}
 			nondiscarded_lines = j;
 		}
 
@@ -714,10 +753,11 @@ public class Diff {
 
 			for (int i = 0; i < data.length; ++i) {
 				Integer ir = h.get(data[i]);
-				if (ir == null)
+				if (ir == null) {
 					h.put(data[i], new Integer(equivs[i] = equiv_max++));
-				else
+				} else {
 					equivs[i] = ir.intValue();
+				}
 			}
 		}
 
@@ -749,15 +789,17 @@ public class Diff {
 				   Also keep track of the corresponding point in the other file.  */
 
 				while (i < i_end && !changed[1 + i]) {
-					while (other_changed[1 + j++])
+					while (other_changed[1 + j++]) {
 						/* Non-corresponding lines in the other file
 						   will count as the preceding batch of changes.  */
 						other_preceding = j;
+					}
 					i++;
 				}
 
-				if (i == i_end)
+				if (i == i_end) {
 					break;
+				}
 
 				start = i;
 				other_start = j;
@@ -765,8 +807,9 @@ public class Diff {
 				for (;;) {
 					/* Now find the end of this run of changes.  */
 
-					while (i < i_end && changed[1 + i])
+					while (i < i_end && changed[1 + i]) {
 						i++;
+					}
 					end = i;
 
 					/* If the first changed line matches the following unchanged one,
@@ -787,8 +830,9 @@ public class Diff {
 						   instead of after, we must advance in the other file
 						   to keep in synch.  */
 						++j;
-					} else
+					} else {
 						break;
+					}
 				}
 
 				preceding = i;

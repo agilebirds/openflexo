@@ -58,16 +58,15 @@ import org.openflexo.GeneralPreferences;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.ExpansionSynchronizedElement;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.components.browser.ProjectBrowserListener;
 import org.openflexo.components.browser.ProjectBrowser.DisableExpandingSynchronizationEvent;
 import org.openflexo.components.browser.ProjectBrowser.EnableExpandingSynchronizationEvent;
 import org.openflexo.components.browser.ProjectBrowser.ExpansionNotificationEvent;
 import org.openflexo.components.browser.ProjectBrowser.ObjectAddedToSelectionEvent;
 import org.openflexo.components.browser.ProjectBrowser.ObjectRemovedFromSelectionEvent;
 import org.openflexo.components.browser.ProjectBrowser.SelectionClearedEvent;
+import org.openflexo.components.browser.ProjectBrowserListener;
 import org.openflexo.components.browser.dnd.TreeDragSource;
 import org.openflexo.components.browser.dnd.TreeDropTarget;
-
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionSource;
@@ -179,8 +178,9 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		treeView.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if (getContextualMenuManager() != null)
+				if (getContextualMenuManager() != null) {
 					getContextualMenuManager().processMousePressed(e);
+				}
 			}
 
 			@Override
@@ -204,15 +204,17 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 				        }
 				        _browser.addBrowserListener(BrowserView.this);
 				    }*/
-				if (getContextualMenuManager() != null)
+				if (getContextualMenuManager() != null) {
 					getContextualMenuManager().processMouseReleased(e);
+				}
 			}
 		});
 		treeView.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				if (getContextualMenuManager() != null)
+				if (getContextualMenuManager() != null) {
 					getContextualMenuManager().processMouseMoved(e);
+				}
 			}
 		});
 
@@ -236,8 +238,9 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		}
 		browser.addBrowserListener(this);
 
-		if (kl != null)
+		if (kl != null) {
 			treeView.addKeyListener(kl);
+		}
 
 		setMinimumSize(new Dimension(FlexoCst.MINIMUM_BROWSER_VIEW_WIDTH, FlexoCst.MINIMUM_BROWSER_VIEW_HEIGHT));
 		// setPreferredSize(new Dimension(FlexoCst.PREFERRED_BROWSER_VIEW_WIDTH, FlexoCst.PREFERRED_BROWSER_VIEW_HEIGHT));
@@ -247,10 +250,12 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 	}
 
 	protected ContextualMenuManager getContextualMenuManager() {
-		if (!_browser.handlesControlPanel())
+		if (!_browser.handlesControlPanel()) {
 			return null;
-		if (_browser.getSelectionManager() != null)
+		}
+		if (_browser.getSelectionManager() != null) {
 			return _browser.getSelectionManager().getContextualMenuManager();
+		}
 		if (defaultContextualMenuManager == null) {
 			defaultContextualMenuManager = new DefaultContextualMenuManager();
 		}
@@ -306,8 +311,9 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 				}
 			}
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Recomputing selected elements with " + selectedElements.size() + " elements");
+		}
 		selectedElementsNeedRecomputing = false;
 	}
 
@@ -359,8 +365,9 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 	}
 
 	public void processSingleClick(TreePath path, MouseEvent e) {
-		if (getSelectedElement() == null)
+		if (getSelectedElement() == null) {
 			return;
+		}
 		if (e.isAltDown()) {
 			treeSingleClickWithAltDown(getSelectedObject());
 		} else {
@@ -394,10 +401,12 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 	@Override
 	public void objectAddedToSelection(ObjectAddedToSelectionEvent event) {
 		TreePath[] paths = _browser.treePathForObject(event.getAddedObject());
-		if (paths == null)
+		if (paths == null) {
 			return;
-		if (logger.isLoggable(Level.FINE))
+		}
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("BrowserView.objectAddedToSelection() " + event.getAddedObject() + " paths=" + paths);
+		}
 		superviseExpansion = true;
 		expansionSupervisedElements = new Vector<BrowserElement>();
 		for (int i = 0; i < paths.length; i++) {
@@ -407,8 +416,9 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		treeView.removeTreeSelectionListener(this);
 		treeView.addSelectionPaths(paths);
 		treeView.addTreeSelectionListener(this);
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Added " + event.getAddedObject());
+		}
 		superviseExpansion = false;
 		selectedElementsNeedRecomputing = true;
 		if (_browser.handlesControlPanel()) {
@@ -420,15 +430,18 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 	public void objectRemovedFromSelection(ObjectRemovedFromSelectionEvent event) {
 		if (event.getRemovedObject() != null) {
 			TreePath[] paths = _browser.treePathForObject(event.getRemovedObject());
-			if (paths == null)
+			if (paths == null) {
 				return;
-			if (logger.isLoggable(Level.FINE))
+			}
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("BrowserView.objectRemovedFromSelection() " + event.getRemovedObject() + " paths=" + paths);
+			}
 			treeView.removeTreeSelectionListener(this);
 			treeView.removeSelectionPaths(paths);
 			treeView.addTreeSelectionListener(this);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Removed " + event.getRemovedObject());
+			}
 			selectedElementsNeedRecomputing = true;
 			if (_browser.handlesControlPanel()) {
 				controlPanel.handleSelectionChanged();
@@ -471,8 +484,9 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		}*/
 		// Code initial suit:
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("valueChanged() " + e);
+		}
 		selectedElementsNeedRecomputing = true;
 		if (_browser.getSelectionManager() != null) {
 			_browser.deleteBrowserListener(this);
@@ -481,13 +495,15 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 				for (int i = 0; i < selectionChanges.length; i++) {
 					BrowserElement element = (BrowserElement) selectionChanges[i].getLastPathComponent();
 					if (e.isAddedPath(selectionChanges[i])) {
-						if (logger.isLoggable(Level.FINE))
+						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("valueChanged() for ADDITION " + element.getSelectableObject());
+						}
 						_browser.getSelectionManager().addToSelected(element.getSelectableObject());
 						// _browser.addToSelected(element.getSelectableObject());
 					} else {
-						if (logger.isLoggable(Level.FINE))
+						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("valueChanged() for REMOVING " + element.getSelectableObject());
+						}
 						_browser.getSelectionManager().removeFromSelected(element.getSelectableObject());
 						// _browser.removeFromSelected(element.getSelectableObject());
 					}
@@ -502,12 +518,15 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 			_browser.addBrowserListener(this);
 			_browser.getSelectionManager().updateSelectionForMaster(_browser);
 			if (logger.isLoggable(Level.FINE)) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine(_browser.getSelectionManager().toString());
+				}
 			}
-			if (_browser.getSelectionManager().getContextualMenuManager() != null)
-				if (_browser.getSelectionManager().getContextualMenuManager().isPopupMenuDisplayed())
+			if (_browser.getSelectionManager().getContextualMenuManager() != null) {
+				if (_browser.getSelectionManager().getContextualMenuManager().isPopupMenuDisplayed()) {
 					_browser.getSelectionManager().getContextualMenuManager().hidePopupMenu();
+				}
+			}
 		}
 		if (_browser.handlesControlPanel()) {
 			controlPanel.handleSelectionChanged();
@@ -523,8 +542,9 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 	@Override
 	public void treeExpanded(TreeExpansionEvent event) {
 		BrowserElement element = (BrowserElement) event.getPath().getLastPathComponent();
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Tree may expand for " + element);
+		}
 
 		// Lets look at the expansion supervising
 		if (_browser.isExpansionSynchronizedElement(element) && element.isSynchronizeExpansionEnabled()) {
@@ -556,12 +576,15 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 			} else {
 				// If we come here, the tree expansion event was originated by the user pressing the + in the JTree
 				// Therefore, if we are on a node that
-				if (_browser.getSelectionManager() != null)
-					for (FlexoModelObject o : _browser.getSelectionManager().getSelection())
-						if (element.contains(o))// If the expanded element contains object from the selection, then we synchronize the
-												// browser
+				if (_browser.getSelectionManager() != null) {
+					for (FlexoModelObject o : _browser.getSelectionManager().getSelection()) {
+						if (element.contains(o)) {
+							// browser
 							// view with the selection given by the selection manager
 							_browser.updateSelection();
+						}
+					}
+				}
 			}
 			if (doExpand) {
 				// Finally i decide to expand
@@ -584,8 +607,9 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 	@Override
 	public void treeCollapsed(TreeExpansionEvent event) {
 		BrowserElement element = (BrowserElement) event.getPath().getLastPathComponent();
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Tree collabsed for " + element);
+		}
 		if (_browser.isExpansionSynchronizedElement(element)) {
 			((ExpansionSynchronizedElement) element).collapse();
 		}
@@ -599,16 +623,18 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 			TreePath path = e.nextElement();
 			if (treeView.isCollapsed(path)) {
 				treeView.expandPath(path);
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Expand " + path);
+				}
 			}
 		}
 		for (Enumeration<TreePath> e = event.pathsToCollabse().elements(); e.hasMoreElements();) {
 			TreePath path = e.nextElement();
 			if (treeView.isExpanded(path)) {
 				treeView.collapsePath(path);
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Collapse " + path);
+				}
 			}
 		}
 		treeView.addTreeExpansionListener(this);
@@ -617,15 +643,17 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 
 	@Override
 	public void enableExpandingSynchronization(EnableExpandingSynchronizationEvent event) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("enableExpandingSynchronization()");
+		}
 		treeView.addTreeExpansionListener(this);
 	}
 
 	@Override
 	public void disableExpandingSynchronization(DisableExpandingSynchronizationEvent event) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("disableExpandingSynchronization()");
+		}
 		treeView.removeTreeExpansionListener(this);
 	}
 
@@ -638,8 +666,9 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		public FlexoJTree(ProjectBrowser browser) {
 			super(browser);
 			setRootVisible(browser.showRootNode());
-			if (!isRootVisible())
+			if (!isRootVisible()) {
 				setShowsRootHandles(true);
+			}
 			setAutoscrolls(true);
 			ToolTipManager.sharedInstance().registerComponent(this);
 			setRowHeight(_browser.getRowHeight());
@@ -656,10 +685,11 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 			if (GeneralPreferences.getSynchronizedBrowser() && paths != null && paths.length > 0) {
 				TreePath treePath = paths[0];
 				while (treePath != null) {
-					if (!treeView.isExpanded(treePath.getParentPath()))// If my parent is not expanded, then I'm not visible
+					if (!treeView.isExpanded(treePath.getParentPath())) {
 						treePath = treePath.getParentPath();
-					else
+					} else {
 						break;
+					}
 				}
 				if (treePath != null) {
 					scrollPathToVisible(treePath);
@@ -678,8 +708,9 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 			for (int i = 0; i < t.length; i++) {
 				TreeSelectionListener treeSelectionListener = t[i];
 				if (treeSelectionListener == tsl) {
-					if (logger.isLoggable(Level.SEVERE))
+					if (logger.isLoggable(Level.SEVERE)) {
 						logger.severe("Adding twice the same tsl: " + tsl + ". Preventing this by returning");
+					}
 					return;
 				}
 			}
@@ -702,9 +733,11 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 					isInList = true;
 				}
 			}
-			if (!isInList)
-				if (logger.isLoggable(Level.SEVERE))
+			if (!isInList) {
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("Nothing to remove!");
+				}
+			}
 			super.removeTreeSelectionListener(tsl);
 		}
 
@@ -732,8 +765,9 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		}
 
 		public void handleAutoExpand(TreePath path) {
-			if (path != null && !isExpanded(path) && !path.equals(expandedPath))
+			if (path != null && !isExpanded(path) && !path.equals(expandedPath)) {
 				startExpandCountDownForNode(path);
+			}
 		}
 
 		protected Thread expandCountDown = null;
@@ -769,8 +803,9 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		}
 
 		public void stopExpandCountDown() {
-			if (expandCountDown == null)
+			if (expandCountDown == null) {
 				return;
+			}
 			try {
 				expandCountDown.interrupt();
 				expandCountDown = null;
@@ -808,14 +843,16 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		}
 
 		public final void paintDraggedNode(Point pt) {
-			if (pt == null || capturedDraggedNodeImage == null)
+			if (pt == null || capturedDraggedNodeImage == null) {
 				return;
+			}
 			if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 				pt.x -= offset.x;
 				pt.y -= offset.y;
 			}
-			if (rect2D != null && rect2D.getLocation().equals(pt))
+			if (rect2D != null && rect2D.getLocation().equals(pt)) {
 				return;
+			}
 			paintImmediately(rect2D.getBounds());
 			rect2D.setRect((int) pt.getX(), (int) pt.getY(), capturedDraggedNodeImage.getWidth(), capturedDraggedNodeImage.getHeight());
 			getGraphics().drawImage(capturedDraggedNodeImage, (int) pt.getX(), (int) pt.getY(), this);
@@ -862,8 +899,9 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 	@Override
 	public void updateUI() {
 		super.updateUI();
-		if (treeView != null)
+		if (treeView != null) {
 			treeView.updateUI();
+		}
 	}
 
 	public FlexoJTree getTreeView() {

@@ -51,9 +51,10 @@ public class CVSRepositoryElement extends FPSBrowserElement implements Expansion
 
 	@Override
 	protected void buildChildrenVector() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("buildChildrenVector() for CVSRepositoryElement, explorer = " + getCVSExplorer() + " isExplored="
 					+ getCVSExplorer().isExplored());
+		}
 		if (getCVSExplorer().isExplored()) {
 			for (CVSModule module : new Vector<CVSModule>(getCVSRepository().getCVSModules())) {// The clone is necessary, because FPS is
 																								// M-T and new modules can be added after
@@ -91,8 +92,9 @@ public class CVSRepositoryElement extends FPSBrowserElement implements Expansion
 
 	@Override
 	public void expand() {
-		if (!getCVSExplorer().wasExploringRequested())
+		if (!getCVSExplorer().wasExploringRequested()) {
 			getCVSExplorer().explore();
+		}
 	}
 
 	@Override

@@ -64,12 +64,13 @@ public class FlexoResourceTreeImplementation implements FlexoResourceTree {
 	public String toString(int offset, boolean isLastChild) {
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < offset; i++) {
-			if (i + 1 == offset)
+			if (i + 1 == offset) {
 				sb.append("|---");
-			else if (isLastChild)
+			} else if (isLastChild) {
 				sb.append("    ");
-			else
+			} else {
 				sb.append("|   ");
+			}
 		}
 		sb.append(_root).append("(").append(new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(_root.getLastUpdate())).append(")\n");
 		Iterator<FlexoResourceTree> i = _childs.iterator();

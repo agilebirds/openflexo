@@ -41,8 +41,9 @@ public abstract class AbstractViewObject extends FlexoModelObject implements Ins
 		setChanged();
 		int modifType = DataModification.ATTRIBUTE;
 		DataModification dataModification = new DataModification(modifType, key, oldValue, newValue);
-		if (isReentrant)
+		if (isReentrant) {
 			dataModification.setReentrant(isReentrant);
+		}
 		notifyObservers(dataModification);
 	}
 

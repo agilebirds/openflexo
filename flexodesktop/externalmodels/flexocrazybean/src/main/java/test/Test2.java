@@ -63,8 +63,9 @@ public class Test2 {
 		gen = new Generator(tree, dump, ".java") {
 			@Override
 			public void visit(cb.petal.Class clazz) {
-				if (clazz.getQualifiedName().startsWith("Logical View::barat::reflect"))
+				if (clazz.getQualifiedName().startsWith("Logical View::barat::reflect")) {
 					clazz.setStereotype("Interface"); // Meant to be interfaces
+				}
 				super.visit(clazz);
 			}
 		};

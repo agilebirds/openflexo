@@ -68,9 +68,9 @@ public class VTLCTokenMarker extends TokenMarker {
 				switch (c) {
 				case '"':
 					doKeyword(line, i, c);
-					if (backslash)
+					if (backslash) {
 						backslash = false;
-					else {
+					} else {
 						addToken(i - lastOffset, token);
 						token = Token.LITERAL1;
 						lastOffset = lastKeyword = i;
@@ -78,9 +78,9 @@ public class VTLCTokenMarker extends TokenMarker {
 					break;
 				case '\'':
 					doKeyword(line, i, c);
-					if (backslash)
+					if (backslash) {
 						backslash = false;
-					else {
+					} else {
 						addToken(i - lastOffset, token);
 						token = Token.LITERAL2;
 						lastOffset = lastKeyword = i;
@@ -88,13 +88,15 @@ public class VTLCTokenMarker extends TokenMarker {
 					break;
 				case ':':
 					if (lastKeyword == offset) {
-						if (doKeyword(line, i, c))
+						if (doKeyword(line, i, c)) {
 							break;
+						}
 						backslash = false;
 						addToken(i1 - lastOffset, Token.LABEL);
 						lastOffset = lastKeyword = i1;
-					} else if (doKeyword(line, i, c))
+					} else if (doKeyword(line, i, c)) {
 						break;
+					}
 					break;
 				case '/':
 					backslash = false;
@@ -104,10 +106,11 @@ public class VTLCTokenMarker extends TokenMarker {
 						case '*':
 							addToken(i - lastOffset, token);
 							lastOffset = lastKeyword = i;
-							if (length - i > 2 && array[i + 2] == '*')
+							if (length - i > 2 && array[i + 2] == '*') {
 								token = Token.COMMENT2;
-							else
+							} else {
 								token = Token.COMMENT1;
+							}
 							break;
 						case '/':
 							addToken(i - lastOffset, token);
@@ -176,10 +179,11 @@ public class VTLCTokenMarker extends TokenMarker {
 							if (array[tmp] == '{') {
 								openingB++;
 							} else if (array[tmp] == '}') {
-								if (openingB > 1)
+								if (openingB > 1) {
 									openingB--;
-								else
+								} else {
 									acceptable = false;
+								}
 							}
 							tmp++;
 						}
@@ -193,19 +197,22 @@ public class VTLCTokenMarker extends TokenMarker {
 							} else if (array[tmp] == '{') {
 								openingB++;
 							} else if (array[tmp] == ')') {
-								if (openingP > 0)
+								if (openingP > 0) {
 									openingP--;
-								else
+								} else {
 									acceptable = false;
+								}
 							} else if (array[tmp] == '}') {
-								if (openingB > 0)
+								if (openingB > 0) {
 									openingB--;
-								else
+								} else {
 									acceptable = false;
+								}
 							} else if (array[tmp] == '!' && array[tmp - 1] == '$') {
 								// OK - silent reference notation
-							} else
+							} else {
 								acceptable = false;
+							}
 							tmp++;
 						}
 					}
@@ -220,8 +227,9 @@ public class VTLCTokenMarker extends TokenMarker {
 					break;
 				default:
 					backslash = false;
-					if (!Character.isLetterOrDigit(c) && c != '_')
+					if (!Character.isLetterOrDigit(c) && c != '_') {
 						doKeyword(line, i, c);
+					}
 					break;
 				}
 				break;
@@ -290,10 +298,11 @@ public class VTLCTokenMarker extends TokenMarker {
 							if (array[tmp] == '{') {
 								openingB++;
 							} else if (array[tmp] == '}') {
-								if (openingB > 1)
+								if (openingB > 1) {
 									openingB--;
-								else
+								} else {
 									acceptable = false;
+								}
 							}
 							tmp++;
 						}
@@ -307,19 +316,22 @@ public class VTLCTokenMarker extends TokenMarker {
 							} else if (array[tmp] == '{') {
 								openingB++;
 							} else if (array[tmp] == ')') {
-								if (openingP > 0)
+								if (openingP > 0) {
 									openingP--;
-								else
+								} else {
 									acceptable = false;
+								}
 							} else if (array[tmp] == '}') {
-								if (openingB > 0)
+								if (openingB > 0) {
 									openingB--;
-								else
+								} else {
 									acceptable = false;
+								}
 							} else if (array[tmp] == '!' && array[tmp - 1] == '$') {
 								// OK - silent reference notation
-							} else
+							} else {
 								acceptable = false;
+							}
 							tmp++;
 						}
 					}
@@ -348,18 +360,18 @@ public class VTLCTokenMarker extends TokenMarker {
 				}
 				break;
 			case Token.LITERAL1:
-				if (backslash)
+				if (backslash) {
 					backslash = false;
-				else if (c == '"') {
+				} else if (c == '"') {
 					addToken(i1 - lastOffset, token);
 					token = Token.NULL;
 					lastOffset = lastKeyword = i1;
 				}
 				break;
 			case Token.LITERAL2:
-				if (backslash)
+				if (backslash) {
 					backslash = false;
-				else if (c == '\'') {
+				} else if (c == '\'') {
 					addToken(i1 - lastOffset, Token.LITERAL1);
 					token = Token.NULL;
 					lastOffset = lastKeyword = i1;
@@ -475,8 +487,9 @@ public class VTLCTokenMarker extends TokenMarker {
 			}
 		}
 
-		if (token == Token.NULL)
+		if (token == Token.NULL) {
 			doKeyword(line, length, '\0');
+		}
 
 		switch (token) {
 		case Token.LITERAL1:
@@ -486,8 +499,9 @@ public class VTLCTokenMarker extends TokenMarker {
 			break;
 		case Token.KEYWORD2:
 			addToken(length - lastOffset, token);
-			if (!backslash)
+			if (!backslash) {
 				token = Token.NULL;
+			}
 		default:
 			addToken(length - lastOffset, token);
 			break;
@@ -560,8 +574,9 @@ public class VTLCTokenMarker extends TokenMarker {
 		int len = i - lastKeyword;
 		byte id = keywords.lookup(line, lastKeyword, len);
 		if (id != Token.NULL) {
-			if (lastKeyword != lastOffset)
+			if (lastKeyword != lastOffset) {
 				addToken(lastKeyword - lastOffset, Token.NULL);
+			}
 			addToken(len, id);
 			lastOffset = i;
 		}

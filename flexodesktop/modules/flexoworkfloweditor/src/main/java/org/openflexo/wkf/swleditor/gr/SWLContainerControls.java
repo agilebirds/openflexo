@@ -26,10 +26,10 @@ import java.awt.geom.AffineTransform;
 
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.cp.ControlArea;
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGERoundRectangle;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.FGEGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;

@@ -50,19 +50,23 @@ public abstract class BooleanBinaryOperator extends BinaryOperator {
 
 		@Override
 		public Expression evaluate(Expression leftArg, Constant rightArg) throws TypeMismatchException {
-			if (rightArg == BooleanConstant.FALSE)
+			if (rightArg == BooleanConstant.FALSE) {
 				return BooleanConstant.FALSE;
-			if (rightArg == BooleanConstant.TRUE)
+			}
+			if (rightArg == BooleanConstant.TRUE) {
 				return leftArg;
+			}
 			return super.evaluate(leftArg, rightArg);
 		}
 
 		@Override
 		public Expression evaluate(Constant leftArg, Expression rightArg) throws TypeMismatchException {
-			if (leftArg == BooleanConstant.FALSE)
+			if (leftArg == BooleanConstant.FALSE) {
 				return BooleanConstant.FALSE;
-			if (leftArg == BooleanConstant.TRUE)
+			}
+			if (leftArg == BooleanConstant.TRUE) {
 				return rightArg;
+			}
 			return super.evaluate(leftArg, rightArg);
 		}
 	};
@@ -88,19 +92,23 @@ public abstract class BooleanBinaryOperator extends BinaryOperator {
 
 		@Override
 		public Expression evaluate(Expression leftArg, Constant rightArg) throws TypeMismatchException {
-			if (rightArg == BooleanConstant.FALSE)
+			if (rightArg == BooleanConstant.FALSE) {
 				return leftArg;
-			if (rightArg == BooleanConstant.TRUE)
+			}
+			if (rightArg == BooleanConstant.TRUE) {
 				return BooleanConstant.TRUE;
+			}
 			return super.evaluate(leftArg, rightArg);
 		}
 
 		@Override
 		public Expression evaluate(Constant leftArg, Expression rightArg) throws TypeMismatchException {
-			if (leftArg == BooleanConstant.FALSE)
+			if (leftArg == BooleanConstant.FALSE) {
 				return rightArg;
-			if (leftArg == BooleanConstant.TRUE)
+			}
+			if (leftArg == BooleanConstant.TRUE) {
 				return BooleanConstant.TRUE;
+			}
 			return super.evaluate(leftArg, rightArg);
 		}
 	};
@@ -146,17 +154,21 @@ public abstract class BooleanBinaryOperator extends BinaryOperator {
 			// System.out.println("leftArg="+leftArg+" of "+leftArg.getEvaluationType());
 			// System.out.println("rightArg="+rightArg+" of "+rightArg.getEvaluationType());
 			if (rightArg == ObjectSymbolicConstant.NULL) {
-				if (leftArg == ObjectSymbolicConstant.NULL)
+				if (leftArg == ObjectSymbolicConstant.NULL) {
 					return Constant.BooleanConstant.TRUE;
-				if (leftArg instanceof StringConstant && ((StringConstant) leftArg).getValue().equals("null"))
+				}
+				if (leftArg instanceof StringConstant && ((StringConstant) leftArg).getValue().equals("null")) {
 					return Constant.BooleanConstant.TRUE;
+				}
 				return Constant.BooleanConstant.FALSE;
 			}
 			if (leftArg == ObjectSymbolicConstant.NULL) {
-				if (rightArg == ObjectSymbolicConstant.NULL)
+				if (rightArg == ObjectSymbolicConstant.NULL) {
 					return Constant.BooleanConstant.TRUE;
-				if (rightArg instanceof StringConstant && ((StringConstant) rightArg).getValue().equals("null"))
+				}
+				if (rightArg instanceof StringConstant && ((StringConstant) rightArg).getValue().equals("null")) {
 					return Constant.BooleanConstant.TRUE;
+				}
 				return Constant.BooleanConstant.FALSE;
 			}
 			throw new TypeMismatchException(this, leftArg.getEvaluationType(), rightArg.getEvaluationType(), EvaluationType.values());

@@ -118,15 +118,17 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 	@Override
 	public void focusGained(FocusEvent event) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("focusGained()");
+		}
 		gainFocus();
 	}
 
 	@Override
 	public void focusLost(FocusEvent event) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("focusLost()");
+		}
 
 		if (event.getOppositeComponent() != null && SwingUtilities.isDescendingFrom(event.getOppositeComponent(), getJComponent())) {
 			// Not relevant in this case
@@ -138,8 +140,9 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	protected boolean _hasFocus;
 
 	public void gainFocus() {
-		if (getController().getFocusedWidget() != null && getController().getFocusedWidget()._hasFocus == true)
+		if (getController().getFocusedWidget() != null && getController().getFocusedWidget()._hasFocus == true) {
 			getController().getFocusedWidget().looseFocus();
+		}
 		logger.fine("Getting focus: " + getWidget());
 		_hasFocus = true;
 		getController().setFocusedWidget(this);
@@ -158,19 +161,22 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	}
 
 	public T getValue() {
-		if (isDeleted())
+		if (isDeleted()) {
 			return null;
+		}
 
 		if (getWidget().getData() == null || getWidget().getData().isUnset()) {
 			if (getDynamicModel() != null) {
 				logger.fine("Get dynamic model value: " + getDynamicModel().getData());
 				return getDynamicModel().getData();
-			} else
+			} else {
 				return null;
+			}
 		}
 
-		if (getDataObject() == null)
+		if (getDataObject() == null) {
 			return null;
+		}
 		try {
 			T returned = (T) getWidget().getData().getBindingValue(getController());
 			if (getDynamicModel() != null) {
@@ -185,11 +191,13 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	}
 
 	public void setValue(T aValue) {
-		if (!isEnabled())
+		if (!isEnabled()) {
 			return;
+		}
 
-		if (isDeleted())
+		if (isDeleted()) {
 			return;
+		}
 
 		if (getDynamicModel() != null) {
 			logger.fine("Sets dynamic model value with " + aValue + " for " + getComponent());
@@ -200,8 +208,9 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 		if (getWidget().getData() == null || getWidget().getData().isUnset()) {
 		} else {
-			if (getDataObject() == null)
+			if (getDataObject() == null) {
 				return;
+			}
 			getWidget().getData().setBindingValue(aValue, getController());
 		}
 
@@ -275,8 +284,9 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 	@Override
 	protected boolean checkValidDataPath() {
-		if (getParentView() != null && !getParentView().checkValidDataPath())
+		if (getParentView() != null && !getParentView().checkValidDataPath()) {
 			return false;
+		}
 		if (getComponent().getDataType() != null) {
 			Object value = getValue();
 			if (value != null && !TypeUtils.isTypeAssignableFrom(getComponent().getDataType(), value.getClass(), true)) {
@@ -291,10 +301,13 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	protected synchronized void appendToDependingObjects(DataBinding binding, List<TargetObject> returned) {
 		if (binding.isSet()) {
 			List<TargetObject> list = binding.getBinding().getTargetObjects(getController());
-			if (list != null)
-				for (TargetObject t : list)
-					if (!returned.contains(t))
+			if (list != null) {
+				for (TargetObject t : list) {
+					if (!returned.contains(t)) {
 						returned.add(t);
+					}
+				}
+			}
 		}
 	}
 
@@ -315,8 +328,9 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			if (isComponentVisible()) {
 				updateDynamicTooltip();
 				updateDependingObjects();
-				if (updateWidgetFromModel())
+				if (updateWidgetFromModel()) {
 					updateDependancies();
+				}
 			} else if (!dependingObjectsAreComputed && checkValidDataPath()) {
 				// Even if the component is not visible, its visibility may depend
 				// it self from some depending component (which in that situation,
@@ -330,8 +344,9 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	}
 
 	protected void updateDependancies() {
-		if (getController() == null)
+		if (getController() == null) {
 			return;
+		}
 		Iterator<FIBComponent> it = getWidget().getMayAltersIterator();
 		while (it.hasNext()) {
 			FIBComponent c = it.next();
@@ -385,15 +400,18 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 	public final boolean isComponentEnabled() {
 		boolean componentEnabled = true;
-		if (getComponent().getReadOnly())
+		if (getComponent().getReadOnly()) {
 			return false;
+		}
 		if (getComponent().getEnable() != null && getComponent().getEnable().isValid()) {
 			Object isEnabled = getComponent().getEnable().getBindingValue(getController());
-			if (isEnabled instanceof Boolean)
+			if (isEnabled instanceof Boolean) {
 				componentEnabled = (Boolean) isEnabled;
+			}
 		}
-		if (!componentEnabled)
+		if (!componentEnabled) {
 			return false;
+		}
 		return true;
 	}
 
@@ -405,15 +423,17 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	}
 
 	public String getStringRepresentation(final Object value) {
-		if (value == null)
+		if (value == null) {
 			return "";
+		}
 		if (getWidget().getFormat() != null && getWidget().getFormat().isValid()) {
 			formatter.setValue(value);
 			String returned = (String) getWidget().getFormat().getBindingValue(formatter);
 			if (getWidget().getLocalize() && returned != null) {
 				return getLocalized(returned);
-			} else
+			} else {
 				return returned;
+			}
 		}
 		if (value instanceof String) {
 			if (getWidget().getLocalize()) {
@@ -424,8 +444,9 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	}
 
 	public Icon getIconRepresentation(final Object value) {
-		if (value == null)
+		if (value == null) {
 			return null;
+		}
 		if (getWidget().getIcon() != null && getWidget().getIcon().isValid()) {
 			formatter.setValue(value);
 			return (Icon) getWidget().getIcon().getBindingValue(formatter);
@@ -453,8 +474,9 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 	@Override
 	public void updateFont() {
-		if (getFont() != null)
+		if (getFont() != null) {
 			getJComponent().setFont(getFont());
+		}
 	}
 
 	public boolean isEnabled() {
@@ -508,10 +530,11 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 		@Override
 		public Object getValue(BindingVariable variable) {
-			if (variable.getVariableName().equals("object"))
+			if (variable.getVariableName().equals("object")) {
 				return value;
-			else
+			} else {
 				return getController().getValue(variable);
+			}
 		}
 	}
 

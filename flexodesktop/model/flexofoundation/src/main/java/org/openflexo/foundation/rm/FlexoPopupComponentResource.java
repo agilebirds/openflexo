@@ -84,10 +84,12 @@ public class FlexoPopupComponentResource extends FlexoComponentResource implemen
 
 			_componentDefinition = (PopupComponentDefinition) getProject().getFlexoComponentLibrary().getComponentNamed(getName());
 			if (_componentDefinition == null) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("cant find an PopupComponentDefinition for popup: " + getName() + " in library");
-				if (logger.isLoggable(Level.INFO))
+				}
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Trying to repair...");
+				}
 				FlexoComponentFolder rootFolder = getProject().getFlexoComponentLibrary().getRootFolder();
 				try {
 					_componentDefinition = new PopupComponentDefinition(getName(), getProject().getFlexoComponentLibrary(), rootFolder,

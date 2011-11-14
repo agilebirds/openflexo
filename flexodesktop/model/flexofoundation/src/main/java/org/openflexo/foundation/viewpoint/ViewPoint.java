@@ -278,15 +278,17 @@ public class ViewPoint extends ViewPointObject {
 
 		// logger.info("calcOntology="+calcOntology.getURI());
 		// logger.info(calcOntology.getURI()+" isLoaded="+calcOntology.isLoaded()+" isLoading="+calcOntology.isLoading());
-		if (calcOntology != null)
+		if (calcOntology != null) {
 			calcOntology.loadWhenUnloaded();
+		}
 
 		if (getLocalizedDictionary() != null) {
 			FlexoLocalization.addToLocalizedDelegates(getLocalizedDictionary());
 		}
 
-		if (calcOntology != null)
+		if (calcOntology != null) {
 			isLoaded = true;
+		}
 		isLoading = false;
 
 		/*logger.info("Loaded ViewPoint "+calcURI);
@@ -538,8 +540,9 @@ public class ViewPoint extends ViewPointObject {
 
 	@Override
 	public BindingModel getBindingModel() {
-		if (_bindingModel == null)
+		if (_bindingModel == null) {
 			createBindingModel();
+		}
 		return _bindingModel;
 	}
 

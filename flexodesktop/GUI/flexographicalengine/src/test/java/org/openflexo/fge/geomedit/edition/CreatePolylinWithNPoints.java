@@ -59,8 +59,9 @@ public class CreatePolylinWithNPoints extends Edition {
 		Vector<PointConstruction> pc = new Vector<PointConstruction>();
 		for (EditionInput o : inputs) {
 			PointConstruction pp = ((ObtainPoint) o).getConstruction();
-			if (pp != null)
+			if (pp != null) {
 				pc.add(pp);
+			}
 		}
 		addObject(new Polylin(getController().getDrawing().getModel(), new PolylinWithNPointsConstruction(pc)));
 	}

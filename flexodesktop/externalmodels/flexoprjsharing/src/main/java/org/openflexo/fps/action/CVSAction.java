@@ -82,16 +82,18 @@ public abstract class CVSAction<A extends FlexoAction<?, T1, FPSObject>, T1 exte
 			for (FPSObject obj : globalSelection) {
 				boolean alreadyContained = false;
 				for (FPSObject temp : returned) {
-					if (obj.isContainedIn(temp))
+					if (obj.isContainedIn(temp)) {
 						alreadyContained = true;
+					}
 				}
 				if (!alreadyContained) {
 					// Not already contained, add it
 					// Before to do it, look if some other are to be removed
 					Vector<FPSObject> removeThose = new Vector<FPSObject>();
 					for (FPSObject temp : returned) {
-						if (temp.isContainedIn(obj))
+						if (temp.isContainedIn(obj)) {
 							removeThose.add(temp);
+						}
 					}
 					returned.removeAll(removeThose);
 					returned.add(obj);
@@ -138,8 +140,9 @@ public abstract class CVSAction<A extends FlexoAction<?, T1, FPSObject>, T1 exte
 	protected static Vector<CVSFile> getSelectedFiles(SharedProject sharedProject, Vector<FPSObject> selectedTopLevelObject) {
 		// logger.info("getSelectedFiles() with "+sharedProject+" and "+selectedTopLevelObject);
 		Vector<CVSFile> returned = new Vector<CVSFile>();
-		if (sharedProject == null)
+		if (sharedProject == null) {
 			return returned;
+		}
 		for (CVSFile file : sharedProject.getAllCVSFiles()) {
 			for (FPSObject obj : selectedTopLevelObject) {
 				if (obj.contains(file)) {
@@ -152,18 +155,22 @@ public abstract class CVSAction<A extends FlexoAction<?, T1, FPSObject>, T1 exte
 	}
 
 	public static CVSRepositoryList getRepositoryList(FPSObject object) {
-		if (object instanceof CVSRepositoryList)
+		if (object instanceof CVSRepositoryList) {
 			return (CVSRepositoryList) object;
-		if (object instanceof CVSExplorable)
+		}
+		if (object instanceof CVSExplorable) {
 			return ((CVSExplorable) object).getCVSRepository().getCVSRepositoryList();
+		}
 		return null;
 	}
 
 	public CVSRepository getRepository(FPSObject object) {
-		if (object instanceof CVSRepository)
+		if (object instanceof CVSRepository) {
 			return (CVSRepository) object;
-		if (object instanceof CVSExplorable)
+		}
+		if (object instanceof CVSExplorable) {
 			return ((CVSExplorable) object).getCVSRepository();
+		}
 		return null;
 	}
 }

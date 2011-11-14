@@ -43,24 +43,29 @@ public class StringUtils {
 	}
 
 	public static String reverse(String s) {
-		if (s == null)
+		if (s == null) {
 			return s;
+		}
 		StringBuilder sb = new StringBuilder(s.length());
-		for (int i = s.length(); i > 0; i--)
+		for (int i = s.length(); i > 0; i--) {
 			sb.append(s.charAt(i - 1));
+		}
 		return sb.toString();
 	}
 
 	public static String circularOffset(String s, int offset) {
-		if (offset == 0)
+		if (offset == 0) {
 			return s;
-		if (s.length() != 0)
+		}
+		if (s.length() != 0) {
 			offset = offset % s.length();
+		}
 		StringBuilder sb = new StringBuilder(s.length());
 		for (int i = 0; i < s.length(); i++) {
 			int location = (i + offset) % s.length();
-			if (location < 0)
+			if (location < 0) {
 				location += s.length();
+			}
 			sb.append(s.charAt(location));
 		}
 		return sb.toString();
@@ -163,19 +168,23 @@ public class StringUtils {
 	}
 
 	public static Hashtable<String, String> getQueryFromURL(URL url) {
-		if (url == null || url.getQuery() == null)
+		if (url == null || url.getQuery() == null) {
 			return new Hashtable<String, String>();
+		}
 		Hashtable<String, String> returned = new Hashtable<String, String>();
 		StringTokenizer st = new StringTokenizer(url.getQuery(), "&");
 		while (st.hasMoreTokens()) {
 			StringTokenizer subSt = new StringTokenizer(st.nextToken(), "=");
 			String key = null, value = null;
-			if (subSt.hasMoreTokens())
+			if (subSt.hasMoreTokens()) {
 				key = subSt.nextToken();
-			if (subSt.hasMoreTokens())
+			}
+			if (subSt.hasMoreTokens()) {
 				value = subSt.nextToken();
-			if (key != null && value != null)
+			}
+			if (key != null && value != null) {
 				returned.put(key, value);
+			}
 		}
 		return returned;
 	}
@@ -194,9 +203,9 @@ public class StringUtils {
 	}
 
 	public static boolean isSame(String str1, String str2) {
-		if (str1 == null)
+		if (str1 == null) {
 			return str2 == null;
-		else {
+		} else {
 			return str1.equals(str2);
 		}
 	}
@@ -222,8 +231,9 @@ public class StringUtils {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			if (line == null)
+			if (line == null) {
 				break;
+			}
 			returned++;
 		}
 		return returned;
@@ -236,12 +246,15 @@ public class StringUtils {
 		int n = 0;
 		for (int i = 0; i < aString.length(); i++) {
 			char c = aString.charAt(i);
-			if (n >= lineNb)
+			if (n >= lineNb) {
 				sb.append(c);
-			if (c == '\n')
+			}
+			if (c == '\n') {
 				n++;
-			if (c == '\r' && i + 1 < aString.length() && aString.charAt(i + 1) != '\n')
+			}
+			if (c == '\r' && i + 1 < aString.length() && aString.charAt(i + 1) != '\n') {
 				n++;
+			}
 		}
 		return sb.toString();
 	}
@@ -257,10 +270,12 @@ public class StringUtils {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			if (line == null)
+			if (line == null) {
 				break;
-			if (n >= lineNb)
+			}
+			if (n >= lineNb) {
 				returned.append((n > lineNb ? LINE_SEPARATOR : "") + line);
+			}
 			n++;
 		}
 		return returned.toString();
@@ -287,28 +302,33 @@ public class StringUtils {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			if (line == null)
+			if (line == null) {
 				break;
-			if (n == lineNb)
+			}
+			if (n == lineNb) {
 				return line;
+			}
 			n++;
 		}
 		return null;
 	}
 
 	public static String extractWhiteSpace(String aString) {
-		if (aString == null)
+		if (aString == null) {
 			return null;
+		}
 		int index = 0;
-		while (index < aString.length() && aString.charAt(index) < ' ')
+		while (index < aString.length() && aString.charAt(index) < ' ') {
 			index++;
+		}
 		return aString.substring(0, index);
 	}
 
 	public static String buildString(char c, int length) {
 		StringBuffer sb = new StringBuffer();
-		for (int i = 0; i < length; i++)
+		for (int i = 0; i < length; i++) {
 			sb.append(c);
+		}
 		return sb.toString();
 	}
 
@@ -325,20 +345,27 @@ public class StringUtils {
 
 		while (index < someJavaCode.length()) {
 			char current = someJavaCode.charAt(index);
-			if (current == '(')
+			if (current == '(') {
 				parentLevel++;
-			if (current == ')')
+			}
+			if (current == ')') {
 				parentLevel--;
-			if (current == '[')
+			}
+			if (current == '[') {
 				bracketLevel++;
-			if (current == ']')
+			}
+			if (current == ']') {
 				bracketLevel--;
-			if (current == '{')
+			}
+			if (current == '{') {
 				curlyLevel++;
-			if (current == '}')
+			}
+			if (current == '}') {
 				curlyLevel--;
-			if (parentLevel == 0 && bracketLevel == 0 && curlyLevel == 0 && current == searchedChar)
+			}
+			if (parentLevel == 0 && bracketLevel == 0 && curlyLevel == 0 && current == searchedChar) {
 				return index;
+			}
 			index++;
 		}
 
@@ -362,38 +389,44 @@ public class StringUtils {
 	 * @return the camel case string
 	 */
 	public static String camelCase(String string, boolean firstUpper) {
-		if (string == null)
+		if (string == null) {
 			return null;
+		}
 		String value = string.trim().replace('_', ' ');
-		if (value.trim().length() == 0)
+		if (value.trim().length() == 0) {
 			return value;
-		if (value.equals(value.toUpperCase()))
+		}
+		if (value.equals(value.toUpperCase())) {
 			value = value.toLowerCase();
+		}
 		StringBuilder result = new StringBuilder(value.length());
 
 		String[] words = value.split(" ");
 
 		// First word
 		if (words[0].equals(words[0].toUpperCase())) {
-			if (firstUpper)
+			if (firstUpper) {
 				result.append(words[0]);// If the first word is upper case, and first letter must be uppercase, we keep all the word
 										// uppercase.
-			else
+			} else {
 				result.append(words[0].toLowerCase());// If the first word is upper case, and first letter must be lowercase, we set all the
 														// word lowercase.
+			}
 		} else {
-			if (firstUpper)
+			if (firstUpper) {
 				result.append(firstUpper(words[0]));
-			else
+			} else {
 				result.append(firstsLower(words[0]));
+			}
 		}
 
 		// Other words
 		for (int i = 1; i < words.length; i++) {
 			if (words[i].equals(words[i].toUpperCase())) {
 				result.append(words[i]);
-			} else
+			} else {
 				result.append(firstUpper(words[i]));
+			}
 		}
 
 		return result.toString();
@@ -407,10 +440,12 @@ public class StringUtils {
 	 * @return the same string with the first char upper case.
 	 */
 	public static String firstUpper(String value) {
-		if (value == null)
+		if (value == null) {
 			return null;
-		if (value.length() < 2)
+		}
+		if (value.length() < 2) {
 			return value.toUpperCase();
+		}
 		return value.substring(0, 1).toUpperCase() + value.substring(1);
 	}
 
@@ -423,21 +458,25 @@ public class StringUtils {
 	 * @return the same string, with its first upper case letters converted into lower case.
 	 */
 	public static String firstsLower(String value) {
-		if (value == null)
+		if (value == null) {
 			return null;
+		}
 
-		if (value.length() == 0)
+		if (value.length() == 0) {
 			return value;
+		}
 
 		int indexOfUpperCase = -1;
 		for (char c : value.toCharArray()) {
-			if (!Character.isUpperCase(c))
+			if (!Character.isUpperCase(c)) {
 				break;
+			}
 			indexOfUpperCase++;
 		}
 
-		if (indexOfUpperCase <= 0)
+		if (indexOfUpperCase <= 0) {
 			indexOfUpperCase = 1;
+		}
 
 		return value.substring(0, indexOfUpperCase).toLowerCase()
 				+ (value.length() > indexOfUpperCase ? value.substring(indexOfUpperCase) : "");

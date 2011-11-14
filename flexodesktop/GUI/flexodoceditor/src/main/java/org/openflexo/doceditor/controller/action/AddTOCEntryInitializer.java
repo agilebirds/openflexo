@@ -39,9 +39,9 @@ import org.openflexo.foundation.param.EnumDropDownParameter;
 import org.openflexo.foundation.param.OperationComponentParameter;
 import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.param.ProcessOrProcessFolderParameter;
+import org.openflexo.foundation.param.ProcessOrProcessFolderParameter.ProcessOrProcessFolderSelectingConditional;
 import org.openflexo.foundation.param.RoleParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
-import org.openflexo.foundation.param.ProcessOrProcessFolderParameter.ProcessOrProcessFolderSelectingConditional;
 import org.openflexo.foundation.toc.action.AddTOCEntry;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.ProcessFolder;
@@ -65,14 +65,16 @@ public class AddTOCEntryInitializer extends ActionInitializer {
 			public boolean run(ActionEvent e, AddTOCEntry action) {
 				final Vector<DocSection> staticSections = new Vector<DocSection>();
 				for (DocSection docSection : DocSection.values()) {
-					if (action.getRepository().getTOCEntryWithID(docSection) == null)
+					if (action.getRepository().getTOCEntryWithID(docSection) == null) {
 						staticSections.add(docSection);
+					}
 				}
 
 				Vector<FlexoProcess> processSections = new Vector<FlexoProcess>();
 				for (FlexoProcess process : getProject().getAllLocalFlexoProcesses()) {
-					if (action.getRepository().getTOCEntryForObject(process) == null)
+					if (action.getRepository().getTOCEntryForObject(process) == null) {
 						processSections.add(process);
+					}
 				}
 
 				ParameterDefinition[] def = new ParameterDefinition[9];
@@ -179,18 +181,21 @@ public class AddTOCEntryInitializer extends ActionInitializer {
 				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 					action.setTocEntryTitle((String) def[0].getValue());
 					if (def[1].getValue() == SectionTypeList.PRE_DEFINED) {
-						if (def[2].getValue() == null)
+						if (def[2].getValue() == null) {
 							return false;
+						}
 						action.setSection((DocSection) def[2].getValue());
 						return true;
 					}
 					if (def[1].getValue() == SectionTypeList.PROCESS) {
-						if (def[3].getValue() == null)
+						if (def[3].getValue() == null) {
 							return false;
+						}
 						action.setModelObject((FlexoModelObject) def[3].getValue());
 						// action.setSection(DocSection.PROCESSES);
-						if (def[7].getValue() == null)
+						if (def[7].getValue() == null) {
 							return false;
+						}
 
 						action.setSubType(def[7].getValue().equals(SectionSubType.Doc) ? ProcessDocSectionSubType.Doc : (def[7].getValue()
 								.equals(SectionSubType.RaciMatrix) ? ProcessDocSectionSubType.RaciMatrix : (def[7].getValue().equals(
@@ -200,27 +205,31 @@ public class AddTOCEntryInitializer extends ActionInitializer {
 						return true;
 					}
 					if (def[1].getValue() == SectionTypeList.ROLE) {
-						if (def[4].getValue() == null)
+						if (def[4].getValue() == null) {
 							return false;
+						}
 						action.setModelObject((FlexoModelObject) def[4].getValue());
 						return true;
 					}
 					if (def[1].getValue() == SectionTypeList.ENTITY) {
-						if (def[5].getValue() == null)
+						if (def[5].getValue() == null) {
 							return false;
+						}
 						action.setModelObject((FlexoModelObject) def[5].getValue());
 						return true;
 					}
 					if (def[1].getValue() == SectionTypeList.OPERATIONCOMPONENT) {
-						if (def[6].getValue() == null)
+						if (def[6].getValue() == null) {
 							return false;
+						}
 						action.setModelObject((FlexoModelObject) def[6].getValue());
 						return true;
 					}
 
 					if (def[1].getValue() == SectionTypeList.ER_DIAGRAM) {
-						if (def[8].getValue() == null)
+						if (def[8].getValue() == null) {
 							return false;
+						}
 						action.setModelObject((ERDiagram) def[8].getValue());
 						action.setSection(DocSection.ER_DIAGRAM);
 						return true;

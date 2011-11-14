@@ -20,7 +20,6 @@
 package org.openflexo.generator.exception;
 
 import org.openflexo.generator.CGGenerator;
-import org.openflexo.generator.exception.GenerationException;
 
 public class JavaFormattingException extends GenerationException {
 	private CGGenerator _generator;

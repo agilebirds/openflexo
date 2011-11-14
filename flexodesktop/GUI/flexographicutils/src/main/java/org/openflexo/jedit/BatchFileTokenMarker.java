@@ -62,8 +62,9 @@ public class BatchFileTokenMarker extends TokenMarker {
 						addToken(2, Token.KEYWORD2);
 						i += 2;
 						lastOffset = i;
-					} else
+					} else {
 						token = Token.KEYWORD2;
+					}
 					break;
 				case '"':
 					addToken(i - lastOffset, token);
@@ -105,10 +106,11 @@ public class BatchFileTokenMarker extends TokenMarker {
 		}
 
 		if (lastOffset != length) {
-			if (token != Token.NULL)
+			if (token != Token.NULL) {
 				token = Token.INVALID;
-			else if (lastOffset == offset)
+			} else if (lastOffset == offset) {
 				token = Token.KEYWORD1;
+			}
 			addToken(length - lastOffset, token);
 		}
 		return Token.NULL;

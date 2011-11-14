@@ -40,10 +40,11 @@ public class FIBImageWidget extends FIBWidgetView<FIBImage, JLabel, Image> imple
 
 	public FIBImageWidget(FIBImage model, FIBController controller) {
 		super(model, controller);
-		if (model.getData().isValid())
+		if (model.getData().isValid()) {
 			labelWidget = new JLabel(" ");
-		else
+		} else {
 			labelWidget = new JLabel();
+		}
 		updateFont();
 		updateAlign();
 		updateImage();
@@ -53,8 +54,9 @@ public class FIBImageWidget extends FIBWidgetView<FIBImage, JLabel, Image> imple
 
 	@Override
 	public synchronized boolean updateWidgetFromModel() {
-		if (modelUpdating)
+		if (modelUpdating) {
 			return false;
+		}
 		widgetUpdating = true;
 		updateImage();
 		widgetUpdating = false;
@@ -106,10 +108,12 @@ public class FIBImageWidget extends FIBWidgetView<FIBImage, JLabel, Image> imple
 	}
 
 	private ImageIcon makeImageIcon(Image image) {
-		if (image == null)
+		if (image == null) {
 			return null;
-		if (getWidget() == null)
+		}
+		if (getWidget() == null) {
 			return null;
+		}
 		switch (getWidget().getSizeAdjustment()) {
 		case OriginalSize:
 			return new ImageIcon(image);
@@ -154,12 +158,15 @@ public class FIBImageWidget extends FIBWidgetView<FIBImage, JLabel, Image> imple
 	private boolean computeImageLater = false;
 
 	private void updateImageDefaultSize(Image image) {
-		if (getWidget() == null || image == null)
+		if (getWidget() == null || image == null) {
 			return;
-		if (getWidget().getImageWidth() == null)
+		}
+		if (getWidget().getImageWidth() == null) {
 			getWidget().setImageWidth(image.getWidth(this));
-		if (getWidget().getImageHeight() == null)
+		}
+		if (getWidget().getImageHeight() == null) {
 			getWidget().setImageHeight(image.getHeight(this));
+		}
 
 	}
 

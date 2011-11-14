@@ -84,7 +84,8 @@ public class FieldImpl extends NodeImpl implements Field {
 			Field f = (Field) o;
 
 			return getType().equals(f.getType()) && getName().equals(f.getName());
-		} else
+		} else {
 			return false;
+		}
 	}
 }

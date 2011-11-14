@@ -77,8 +77,9 @@ public class OntologyObjectInspectorWidget extends CustomInspectorWidget<Ontolog
 		getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Focus gained in " + getClass().getName());
+				}
 				super.focusGained(arg0);
 				_selector.getTextField().requestFocus();
 				_selector.getTextField().selectAll();
@@ -86,8 +87,9 @@ public class OntologyObjectInspectorWidget extends CustomInspectorWidget<Ontolog
 
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Focus lost in " + getClass().getName());
+				}
 				super.focusLost(arg0);
 			}
 		});
@@ -130,20 +132,23 @@ public class OntologyObjectInspectorWidget extends CustomInspectorWidget<Ontolog
 
 	@Override
 	public void fireEditingCanceled() {
-		if (_selector != null)
+		if (_selector != null) {
 			_selector.closePopup();
+		}
 	}
 
 	@Override
 	public void fireEditingStopped() {
 		// logger.info("fireEditingStopped() in OntologyObjectInspectorWidget editedValue="+getEditedValue().getURI());
-		if (_selector != null)
+		if (_selector != null) {
 			_selector.closePopup();
+		}
 	}
 
 	public boolean isHierarchicalRepresentation() {
-		if (hasValueForParameter("hierarchicalRepresentation"))
+		if (hasValueForParameter("hierarchicalRepresentation")) {
 			return getBooleanValueForParameter("hierarchicalRepresentation");
+		}
 		return false;
 	}
 

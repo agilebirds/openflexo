@@ -140,14 +140,16 @@ public enum GraphType {
 	public abstract String getImageName();
 
 	public ImageIconResource getIcon() {
-		if (icon == null)
+		if (icon == null) {
 			icon = new ImageIconResource(PALETTE_DIRECTORY + getImageName());
+		}
 		return icon;
 	}
 
 	public FileResource getFileResource() {
-		if (fileResource == null)
+		if (fileResource == null) {
 			fileResource = new FileResource(PALETTE_DIRECTORY + getImageName());
+		}
 		return fileResource;
 	}
 

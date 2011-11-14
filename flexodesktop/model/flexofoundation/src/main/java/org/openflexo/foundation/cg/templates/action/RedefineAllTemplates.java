@@ -84,8 +84,9 @@ public class RedefineAllTemplates extends FlexoAction<RedefineAllTemplates, CGTe
 		Enumeration<CGTemplate> en = source.getCommonTemplates().getAllTemplates();
 		while (en.hasMoreElements()) {
 			CGTemplate candidate = en.nextElement();
-			if (candidate.getTemplateName().equals("VM_global_library.vm"))
+			if (candidate.getTemplateName().equals("VM_global_library.vm")) {
 				continue;
+			}
 			CGTemplate existingRedefinedTemplate = dest.getCommonTemplates().getTemplate(candidate.getRelativePath());
 			if (existingRedefinedTemplate != null) {
 				logger.info("Template '" + existingRedefinedTemplate.getTemplateName() + "' is already redefined in the repository "
@@ -102,8 +103,9 @@ public class RedefineAllTemplates extends FlexoAction<RedefineAllTemplates, CGTe
 			while (en.hasMoreElements()) {
 				CGTemplate candidate = en.nextElement();
 				CGTemplate existingRedefinedTemplate = null;
-				if (dest.getTemplateSetForTarget(targetType) != null)
+				if (dest.getTemplateSetForTarget(targetType) != null) {
 					existingRedefinedTemplate = dest.getTemplateSetForTarget(targetType).getTemplate(candidate.getRelativePath());
+				}
 				if (existingRedefinedTemplate != null) {
 					logger.info("Template '" + existingRedefinedTemplate.getTemplateName() + "' is already redefined in the repository "
 							+ dest.getName());

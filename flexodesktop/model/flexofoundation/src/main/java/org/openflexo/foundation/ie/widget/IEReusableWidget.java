@@ -86,8 +86,9 @@ public abstract class IEReusableWidget<C extends PartialComponentDefinition, CI 
 	}
 
 	public void setReusableComponentInstance(CI widgetComponentInstance) {
-		if (reusableComponentInstance != null)
+		if (reusableComponentInstance != null) {
 			reusableComponentInstance.delete();
+		}
 		reusableComponentInstance = widgetComponentInstance;
 		if (widgetComponentInstance != null) {
 			widgetComponentInstance.setReusableWidget(this);
@@ -96,8 +97,9 @@ public abstract class IEReusableWidget<C extends PartialComponentDefinition, CI 
 
 	@Override
 	public void setWOComponent(IEWOComponent woComponent) {
-		if (reusableComponentInstance != null)
+		if (reusableComponentInstance != null) {
 			reusableComponentInstance.updateDependancies(getWOComponent(), woComponent);
+		}
 		super.setWOComponent(woComponent);
 	}
 
@@ -109,11 +111,12 @@ public abstract class IEReusableWidget<C extends PartialComponentDefinition, CI 
 	}
 
 	public IEWidget getRootObject() {
-		if (getReusableComponentInstance() != null)
+		if (getReusableComponentInstance() != null) {
 			return getReusableComponentInstance().getWOComponent().getRootSequence();
-		else {
-			if (logger.isLoggable(Level.WARNING))
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Reusable component with no definition");
+			}
 			return null;
 		}
 	}
@@ -138,8 +141,9 @@ public abstract class IEReusableWidget<C extends PartialComponentDefinition, CI 
 
 	@Override
 	public void removeInvalidComponentInstances() {
-		if (this.reusableComponentInstance == null || this.reusableComponentInstance.getComponentDefinition() == null)
+		if (this.reusableComponentInstance == null || this.reusableComponentInstance.getComponentDefinition() == null) {
 			removeFromContainer();
+		}
 	}
 
 	@Override

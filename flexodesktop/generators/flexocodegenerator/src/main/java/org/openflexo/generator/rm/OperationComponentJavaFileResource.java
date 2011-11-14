@@ -49,8 +49,9 @@ public class OperationComponentJavaFileResource extends ComponentJavaFileResourc
 		super.rebuildDependancies();
 		if (getGenerator() != null) {
 			for (ComponentInstance ci : getComponentDefinition().getComponentInstances()) {
-				if (ci instanceof OperationComponentInstance)
+				if (ci instanceof OperationComponentInstance) {
 					addToDependantResources(((OperationComponentInstance) ci).getOperationNode().getProcess().getFlexoResource());
+				}
 			}
 		}
 	}
@@ -95,8 +96,9 @@ public class OperationComponentJavaFileResource extends ComponentJavaFileResourc
 							}
 						}
 					}
-					if (iCanBeOptimistic)
+					if (iCanBeOptimistic) {
 						return false;
+					}
 				}
 			}
 		}

@@ -121,8 +121,9 @@ class SelectionTabularBrowserModel<E extends FlexoModelObject> extends TabularBr
 
 		@Override
 		public Boolean getBooleanValue(E object) {
-			if (!isSelectable(object))
+			if (!isSelectable(object)) {
 				return null;
+			}
 			Boolean returned = _hashSet.get(object);
 			if (returned == null) {
 				returned = new Boolean(_selection.contains(object));
@@ -133,12 +134,14 @@ class SelectionTabularBrowserModel<E extends FlexoModelObject> extends TabularBr
 
 		@Override
 		public void setBooleanValue(E object, Boolean aBoolean) {
-			if (!isSelectable(object))
+			if (!isSelectable(object)) {
 				return;
+			}
 			if (getConfiguration() instanceof MultipleObjectSelector.TabularBrowserConfiguration) {
 				MultipleObjectSelector.TabularBrowserConfiguration bc = (MultipleObjectSelector.TabularBrowserConfiguration) getConfiguration();
-				if (!bc.isSelectable(object))
+				if (!bc.isSelectable(object)) {
 					return;
+				}
 			}
 
 			boolean oldValue = getBooleanValue(object).booleanValue();
@@ -164,8 +167,9 @@ class SelectionTabularBrowserModel<E extends FlexoModelObject> extends TabularBr
 		}
 
 		public void setBooleanValue(BrowserElement element, Boolean aBoolean) {
-			if (!isSelectable(element.getObject()))
+			if (!isSelectable(element.getObject())) {
 				return;
+			}
 			boolean oldValue = getBooleanValue((E) element.getObject()).booleanValue();
 			if (oldValue != aBoolean.booleanValue()) {
 				logger.info("Hop: " + aBoolean + " for " + element);
@@ -190,8 +194,9 @@ class SelectionTabularBrowserModel<E extends FlexoModelObject> extends TabularBr
 	}
 
 	public void fireSelectionChanged() {
-		for (SelectionTabularBrowserModelSelectionListener l : _selectionListeners)
+		for (SelectionTabularBrowserModelSelectionListener l : _selectionListeners) {
 			l.notifySelectionChanged();
+		}
 	}
 
 	protected boolean isSelectable(FlexoModelObject object) {

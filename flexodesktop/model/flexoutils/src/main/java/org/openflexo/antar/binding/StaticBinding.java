@@ -65,8 +65,9 @@ public abstract class StaticBinding<T> extends AbstractBinding {
 
 	@Override
 	public StaticBindingFactory getConverter() {
-		if (getOwner() != null)
+		if (getOwner() != null) {
 			return getOwner().getBindingFactory().getStaticBindingFactory();
+		}
 		return null;
 		// return staticBindingConverter;
 	}
@@ -97,16 +98,19 @@ public abstract class StaticBinding<T> extends AbstractBinding {
 
 	@Override
 	public boolean equals(Object object) {
-		if (object == null)
+		if (object == null) {
 			return false;
+		}
 		if (object instanceof StaticBinding) {
 			StaticBinding sb = (StaticBinding) object;
 			if (getBindingDefinition() == null) {
-				if (sb.getBindingDefinition() != null)
+				if (sb.getBindingDefinition() != null) {
 					return false;
+				}
 			} else {
-				if (!getBindingDefinition().equals(sb.getBindingDefinition()))
+				if (!getBindingDefinition().equals(sb.getBindingDefinition())) {
 					return false;
+				}
 			}
 			return ((_owner == sb._owner) && sb.getValue() != null && getValue().equals(sb.getValue()));
 		} else {
@@ -118,8 +122,9 @@ public abstract class StaticBinding<T> extends AbstractBinding {
 
 	@Override
 	public Type getAccessedType() {
-		if (accessedType == null)
+		if (accessedType == null) {
 			accessedType = getStaticBindingClass();
+		}
 		return accessedType;
 	}
 
@@ -127,41 +132,49 @@ public abstract class StaticBinding<T> extends AbstractBinding {
 
 	@Override
 	public boolean isBindingValid() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Is StaticBinding " + this + " valid ?");
+		}
 
 		if (getAccessedType() == null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Invalid binding because accessed type is null");
+			}
 			return false;
 		}
 
 		if (getBindingDefinition() == null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Invalid binding because binding definition is null");
+			}
 			return false;
 		} else if (getBindingDefinition().getIsSettable()) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Invalid binding because binding definition is declared as settable");
+			}
 			return false;
 		} else if (getBindingDefinition().getBindingDefinitionType() == BindingDefinitionType.EXECUTE) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Invalid binding because binding definition is declared as executable");
+			}
 			return false;
 		}
 
-		if (getAccessedType().equals(Object.class))
-			return true;
-
-		if (_areTypesMatching()) {
-			if (logger.isLoggable(Level.FINE))
-				logger.fine("Valid binding");
+		if (getAccessedType().equals(Object.class)) {
 			return true;
 		}
 
-		if (logger.isLoggable(Level.FINE))
+		if (_areTypesMatching()) {
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Valid binding");
+			}
+			return true;
+		}
+
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Invalid binding because types doesn't match: " + getAccessedType() + " cannot be assigned to "
 					+ getBindingDefinition().getType());
+		}
 		return false;
 
 	}

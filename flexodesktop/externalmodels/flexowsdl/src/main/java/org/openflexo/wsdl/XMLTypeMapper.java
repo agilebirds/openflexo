@@ -47,8 +47,9 @@ public class XMLTypeMapper {
 
 		// Test an Array
 		if (type == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Type is NULL. Cannot find java Name for a NULL Type");
+			}
 			return new String[] { null, "SINGLE" };
 		}
 
@@ -145,8 +146,9 @@ public class XMLTypeMapper {
 
 				// When parsed With WSDL2Java the wsdl namespace http://schemas.xmlsoap.org/wsdl/ is subsituted...
 				String wsdlNS = "http://schemas.xmlsoap.org/wsdl/";
-				if (useSchemaFromExtractor)
+				if (useSchemaFromExtractor) {
 					wsdlNS = "http://www.apache.org/internal/xmlbeans/wsdlsubst";
+				}
 
 				// Find Elements of with correct name
 				if (type.isAnonymousType() || type.isDocumentType()) {

@@ -50,8 +50,9 @@ public class CVSExplorer extends FPSObject {
 		_explorable = explorable;
 		_listener = listener;
 		_status = ExploringStatus.NOT_EXPLORED;
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Build new CVSExplorer for " + explorable + " controlled by " + listener);
+		}
 	}
 
 	@Override
@@ -91,8 +92,9 @@ public class CVSExplorer extends FPSObject {
 	}
 
 	public synchronized void explore() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Explore for CVSExplorer for " + _explorable + " controlled by " + _listener);
+		}
 		_status = ExploringStatus.EXPLORING;
 		_explorable.notifyWillExplore();
 		_explorerThread = new ExplorerThread();
@@ -106,8 +108,9 @@ public class CVSExplorer extends FPSObject {
 
 		@Override
 		public void run() {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Start exploration of " + _explorable);
+			}
 			if (_explorable instanceof CVSRepository) {
 				try {
 					((CVSRepository) _explorable)._retrieveModules();
@@ -122,8 +125,9 @@ public class CVSExplorer extends FPSObject {
 					e.printStackTrace();
 					if (e.getCause() instanceof UnknownHostException) {
 						explorationFailed(new FlexoUnknownHostException((UnknownHostException) e.getCause(), _explorable.getCVSRepository()));
-					} else
+					} else {
 						explorationFailed(new FlexoAuthentificationException(_explorable.getCVSRepository()));
+					}
 				}
 			} else if (_explorable instanceof CVSModule) {
 				try {
@@ -144,17 +148,20 @@ public class CVSExplorer extends FPSObject {
 		private void explorationSucceeded() {
 			_status = ExploringStatus.EXPLORED;
 			_explorable.notifyHasExplored();
-			if (_listener != null)
+			if (_listener != null) {
 				_listener.exploringSucceeded(_explorable, CVSExplorer.this);
+			}
 		}
 
 		private void explorationFailed(Exception e) {
-			if (_listener != null)
+			if (_listener != null) {
 				_listener.exploringFailed(_explorable, CVSExplorer.this, e);
+			}
 			_status = ExploringStatus.ERROR;
 			_explorable.notifyHasExplored();
-			if (_listener != null)
+			if (_listener != null) {
 				_listener.exploringFailed(_explorable, CVSExplorer.this, e);
+			}
 		}
 	}
 

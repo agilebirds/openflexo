@@ -119,10 +119,12 @@ public class LocalizedTextFieldWidget extends DenaliWidget<LocalizedString> {
 		_languageCB.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (widgetUpdating)
+				if (widgetUpdating) {
 					return;
-				if (logger.isLoggable(Level.FINE))
+				}
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Action performed in " + this.getClass().getName());
+				}
 				updateModelFromWidget();
 			}
 		});
@@ -136,8 +138,9 @@ public class LocalizedTextFieldWidget extends DenaliWidget<LocalizedString> {
 		} else {
 			validateOnReturn = false;
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("validateOnReturn=" + validateOnReturn);
+		}
 		if (model.hasValueForParameter(COLUMNS_PARAM)) {
 			int colNb = model.getIntValueForParameter(COLUMNS_PARAM);
 			_textField.setColumns(colNb > 0 ? colNb : DEFAULT_COLUMNS);
@@ -169,8 +172,9 @@ public class LocalizedTextFieldWidget extends DenaliWidget<LocalizedString> {
 						if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 							if (e.getLength() == 1) {
 								char c = _textField.getText().charAt(e.getOffset());
-								if (c == '´' || c == 'ˆ' || c == '˜' || c == '`' || c == '¨')
+								if (c == '´' || c == 'ˆ' || c == '˜' || c == '`' || c == '¨') {
 									return;
+								}
 							}
 						}
 					} catch (RuntimeException e1) {
@@ -219,15 +223,18 @@ public class LocalizedTextFieldWidget extends DenaliWidget<LocalizedString> {
 	public synchronized void updateWidgetFromModel() {
 		// if (logger.isLoggable(Level.FINE)) logger.fine ("BEGIN
 		// updateWidgetFromModel()");
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("updateWidgetFromModel() in TextFieldWidget");
-		if (modelUpdating)
+		}
+		if (modelUpdating) {
 			return;
+		}
 		widgetUpdating = true;
 		int caret = _textField.getCaretPosition();
 		_textField.setText(getObjectValue().string);
-		if (caret > -1 && caret < _textField.getDocument().getLength())
+		if (caret > -1 && caret < _textField.getDocument().getLength()) {
 			_textField.setCaretPosition(caret);
+		}
 		_languageCB.setSelectedItem(getObjectValue().language);
 		widgetUpdating = false;
 		// if (logger.isLoggable(Level.INFO)) logger.info ("END
@@ -243,8 +250,9 @@ public class LocalizedTextFieldWidget extends DenaliWidget<LocalizedString> {
 		// if (logger.isLoggable(Level.INFO)) logger.info ("BEGIN
 		// updateModelFromWidget()");
 		modelUpdating = true;
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("updateModelFromWidget() in TextFieldWidget");
+		}
 		setObjectValue(new LocalizedString(_textField.getText(), (Language) _languageCB.getSelectedItem()));
 		modelUpdating = false;
 		// if (logger.isLoggable(Level.INFO)) logger.info ("END

@@ -67,14 +67,16 @@ public class ProxyUtils {
 							if (string.toLowerCase().startsWith("https=")) {
 								string = string.substring("https=".length());
 								proxyHost = ToolBox.getHostPortFromString(string, defaultPort);
-								if (secure)
+								if (secure) {
 									break;
+								}
 							}
 							if (string.toLowerCase().startsWith("http=")) {
 								string = string.substring("http=".length());
 								proxyHost = ToolBox.getHostPortFromString(string, defaultPort);
-								if (!secure)
+								if (!secure) {
 									break;
+								}
 							}
 						}
 					} else {
@@ -90,18 +92,21 @@ public class ProxyUtils {
 
 	public static List<String[]> getProxiesFromAutoConfigURL(URL autoConfigURL, int defaultPort) {
 		List<String[]> proxies = new ArrayList<String[]>();
-		if (autoConfigURL == null)
+		if (autoConfigURL == null) {
 			return proxies;
+		}
 		try {
 			String pac = ToolBox.getContentAtURL(autoConfigURL);
-			if (pac == null)
+			if (pac == null) {
 				return proxies;
+			}
 			Matcher m = PROXY_PATTERN.matcher(pac);
 			while (m.find()) {
 				String proxyHost = m.group(1);
 				int port = defaultPort;
-				if (m.groupCount() > 2)
+				if (m.groupCount() > 2) {
 					port = Integer.valueOf(m.group(3));
+				}
 				proxies.add(new String[] { proxyHost, String.valueOf(port) });
 			}
 		} catch (IOException e) {
@@ -126,13 +131,14 @@ public class ProxyUtils {
 				if (autoConfigURL == null) {
 					String autoConfig = WinRegistryAccess.getRegistryValue(WIN_REG_PROXY_PATH, WIN_REG_AUTO_CONFIG_URL,
 							WinRegistryAccess.REG_SZ_TOKEN);
-					if (autoConfig != null)
+					if (autoConfig != null) {
 						try {
 							return new URL(autoConfig);
 						} catch (MalformedURLException e) {
 							e.printStackTrace();
 							return null;
 						}
+					}
 				}
 
 			} catch (RuntimeException e) {
@@ -157,8 +163,9 @@ public class ProxyUtils {
 					try {
 						HttpURLConnection conn = (HttpURLConnection) attempt.openConnection();
 						int code = conn.getResponseCode();
-						if (code >= 200 && code < 300)
+						if (code >= 200 && code < 300) {
 							return attempt;
+						}
 					} catch (IOException e) {
 						e.printStackTrace();
 					}

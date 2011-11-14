@@ -58,19 +58,22 @@ public class DKVModelLatexFileResource extends LatexFileResource<DGLatexGenerato
 
 	@Override
 	public String getName() {
-		if (getCGFile() == null || getCGFile().getRepository() == null || getDKV() == null)
+		if (getCGFile() == null || getCGFile().getRepository() == null || getDKV() == null) {
 			return super.getName();
+		}
 		registerObserverWhenRequired();
-		if (super.getName() == null)
+		if (super.getName() == null) {
 			setName(nameForRepositoryAndDKV(getCGFile().getRepository(), getDKV()));
+		}
 		return nameForRepositoryAndDKV(getCGFile().getRepository(), getDKV());
 	}
 
 	public void registerObserverWhenRequired() {
 		if ((!isObserverRegistered) && (getDKV() != null)) {
 			isObserverRegistered = true;
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getProject());
+			}
 			getDKV().addObserver(this);
 		}
 	}
@@ -80,8 +83,9 @@ public class DKVModelLatexFileResource extends LatexFileResource<DGLatexGenerato
 	}
 
 	public DKVModel getDKV() {
-		if (getGenerator() != null)
+		if (getGenerator() != null) {
 			return getGenerator().getObject();
+		}
 		return null;
 	}
 

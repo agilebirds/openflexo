@@ -134,20 +134,17 @@ public class FGELine extends FGEAbstractLine<FGELine> {
 
 		FGEArea intersect = hp1.intersect(hp2);
 
-		if (intersect instanceof FGEEmptyArea)
+		if (intersect instanceof FGEEmptyArea) {
 			return new FGEEmptyArea();
-
-		else if (intersect instanceof FGEBand) {
+		} else if (intersect instanceof FGEBand) {
 			return new FGESegment(hl1.getLimit(), hl2.getLimit());
 		}
 
-		else if (intersect.equals(hp1))
+		else if (intersect.equals(hp1)) {
 			return hl1.clone();
-
-		else if (intersect.equals(hp2))
+		} else if (intersect.equals(hp2)) {
 			return hl2.clone();
-
-		else {
+		} else {
 			logger.warning("Unexpected intersection: " + intersect);
 			return null;
 		}
@@ -164,8 +161,9 @@ public class FGELine extends FGEAbstractLine<FGELine> {
 			FGEPoint returned;
 			try {
 				returned = getLineIntersection(line);
-				if (containsPoint(returned) && line.containsPoint(returned))
+				if (containsPoint(returned) && line.containsPoint(returned)) {
 					return returned;
+				}
 			} catch (ParallelLinesException e) {
 				// cannot happen
 			}
@@ -175,11 +173,13 @@ public class FGELine extends FGEAbstractLine<FGELine> {
 
 	@Override
 	public boolean containsLine(FGEAbstractLine l) {
-		if (!overlap(l))
+		if (!overlap(l)) {
 			return false;
+		}
 
-		if (!(containsPoint(l.getP1()) && containsPoint(l.getP2())))
+		if (!(containsPoint(l.getP1()) && containsPoint(l.getP2()))) {
 			return false;
+		}
 
 		return true;
 	}
@@ -218,25 +218,29 @@ public class FGELine extends FGEAbstractLine<FGELine> {
 	@Override
 	public FGEArea getOrthogonalPerspectiveArea(SimplifiedCardinalDirection orientation) {
 		if (orientation == SimplifiedCardinalDirection.NORTH) {
-			if (isVertical())
+			if (isVertical()) {
 				return clone();
-			else
+			} else {
 				return new FGEPlane();
+			}
 		} else if (orientation == SimplifiedCardinalDirection.SOUTH) {
-			if (isVertical())
+			if (isVertical()) {
 				return clone();
-			else
+			} else {
 				return new FGEPlane();
+			}
 		} else if (orientation == SimplifiedCardinalDirection.EAST) {
-			if (isHorizontal())
+			if (isHorizontal()) {
 				return clone();
-			else
+			} else {
 				return new FGEPlane();
+			}
 		} else if (orientation == SimplifiedCardinalDirection.WEST) {
-			if (isHorizontal())
+			if (isHorizontal()) {
 				return clone();
-			else
+			} else {
 				return new FGEPlane();
+			}
 		}
 		return null;
 	}

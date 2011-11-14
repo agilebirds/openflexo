@@ -22,14 +22,16 @@ package org.openflexo.foundation.viewpoint;
 public abstract class OntologicObjectPatternRole extends PatternRole {
 
 	public boolean getIsPrimaryConceptRole() {
-		if (getEditionPattern() == null)
+		if (getEditionPattern() == null) {
 			return false;
+		}
 		return (getEditionPattern().getPrimaryConceptRole() == this);
 	}
 
 	public void setIsPrimaryConceptRole(boolean isPrimary) {
-		if (getEditionPattern() == null)
+		if (getEditionPattern() == null) {
 			return;
+		}
 		if (isPrimary) {
 			getEditionPattern().setPrimaryConceptRole(this);
 		} else {

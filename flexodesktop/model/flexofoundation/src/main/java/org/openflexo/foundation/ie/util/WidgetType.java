@@ -19,8 +19,6 @@
  */
 package org.openflexo.foundation.ie.util;
 
-import org.openflexo.xmlcode.StringRepresentable;
-
 import org.openflexo.foundation.ie.widget.IEBlocWidget;
 import org.openflexo.foundation.ie.widget.IEBrowserWidget;
 import org.openflexo.foundation.ie.widget.IECheckBoxWidget;
@@ -37,6 +35,7 @@ import org.openflexo.foundation.ie.widget.IETextAreaWidget;
 import org.openflexo.foundation.ie.widget.IETextFieldWidget;
 import org.openflexo.foundation.ie.widget.IEWysiwygWidget;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.xmlcode.StringRepresentable;
 
 public enum WidgetType implements StringRepresentable {
 

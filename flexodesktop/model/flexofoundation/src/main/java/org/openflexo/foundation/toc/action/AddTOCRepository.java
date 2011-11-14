@@ -77,12 +77,14 @@ public class AddTOCRepository extends FlexoAction<AddTOCRepository, FlexoModelOb
 
 	@Override
 	protected void doAction(Object context) throws FlexoException {
-		if (getRepositoryName() == null || getRepositoryName().trim().length() == 0)
+		if (getRepositoryName() == null || getRepositoryName().trim().length() == 0) {
 			throw new InvalidArgumentException(FlexoLocalization.localizedForKey("name_cannot_be_empty"), "name_cannot_be_empty");
+		}
 		String attempt = getRepositoryName();
 		int i = 1;
-		while (getData().getRepositoryWithTitle(attempt) != null)
+		while (getData().getRepositoryWithTitle(attempt) != null) {
 			attempt = getRepositoryName() + "-" + i++;
+		}
 		newRepository = new TOCRepository(getData(), getDocType(), getTocTemplate());
 		newRepository.setTitle(attempt);
 		getData().addToRepositories(newRepository);

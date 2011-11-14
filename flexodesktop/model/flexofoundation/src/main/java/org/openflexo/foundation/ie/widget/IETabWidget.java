@@ -26,7 +26,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -108,8 +107,9 @@ public class IETabWidget extends IEReusableWidget<TabComponentDefinition, TabCom
 	@Override
 	public IESequenceTab getRootParent() {
 		IESequenceTab root = ((IESequenceTab) getParent());
-		while (root.getParent() != null && root.getParent() instanceof IESequenceTab)
+		while (root.getParent() != null && root.getParent() instanceof IESequenceTab) {
 			root = (IESequenceTab) root.getParent();
+		}
 		return root;
 	}
 
@@ -124,8 +124,9 @@ public class IETabWidget extends IEReusableWidget<TabComponentDefinition, TabCom
 
 	public IETabWidget(IEWOComponent woComponent, TabComponentDefinition def, IEObject parent, FlexoProject project) {
 		super(woComponent, def, parent, project);
-		if (getTitle() == null)
+		if (getTitle() == null) {
 			setTitle("no title");
+		}
 	}
 
 	@Override
@@ -140,10 +141,11 @@ public class IETabWidget extends IEReusableWidget<TabComponentDefinition, TabCom
 
 	public void moveLeft() {
 		ITabWidget w = null;
-		if (((IESequenceTab) getParent()).isSubsequence())
+		if (((IESequenceTab) getParent()).isSubsequence()) {
 			w = ((IESequenceTab) getParent());
-		else
+		} else {
 			w = this;
+		}
 		if (w.getIndex() == 0) {
 			getRootParent().removeFromInnerWidgets(w);
 			getRootParent().addToInnerWidgets(w);
@@ -154,10 +156,11 @@ public class IETabWidget extends IEReusableWidget<TabComponentDefinition, TabCom
 
 	public void moveRight() {
 		ITabWidget w = null;
-		if (((IESequenceTab) getParent()).isSubsequence())
+		if (((IESequenceTab) getParent()).isSubsequence()) {
 			w = ((IESequenceTab) getParent());
-		else
+		} else {
 			w = this;
+		}
 		if (w.getIndex() == getRootParent().size() - 1) {
 			getRootParent().removeFromInnerWidgets(w);
 			getRootParent().insertElementAt(w, 0);
@@ -275,8 +278,9 @@ public class IETabWidget extends IEReusableWidget<TabComponentDefinition, TabCom
 	}
 
 	public String getTabKeyForGenerator() {
-		if (_key != null && _key.trim().length() > 0)
+		if (_key != null && _key.trim().length() > 0) {
 			return _key;
+		}
 		return getRootSequenceTab().getTitleForGenerator() + getRootSequenceTab().getAbsoluteIndexOfTab(this);
 	}
 
@@ -301,8 +305,9 @@ public class IETabWidget extends IEReusableWidget<TabComponentDefinition, TabCom
 
 	@Override
 	public void removeInvalidComponentInstances() {
-		if (!getComponentInstance().isValidInstance())
+		if (!getComponentInstance().isValidInstance()) {
 			delete();
+		}
 	}
 
 	public boolean isShownInOperation(OperationNode node) {
@@ -326,14 +331,16 @@ public class IETabWidget extends IEReusableWidget<TabComponentDefinition, TabCom
 							ComponentInstanceBinding cib = node.getComponentInstance().getBinding(cbd);
 							if (cib != null && cib.getBindingValue() != null) {
 								if (cib.getBindingValue() instanceof BooleanStaticBinding) {
-									if (operator.getIsNegate())
+									if (operator.getIsNegate()) {
 										return !((BooleanStaticBinding) cib.getBindingValue()).getValue();
-									else
+									} else {
 										return ((BooleanStaticBinding) cib.getBindingValue()).getValue();
+									}
 								} else {
-									if (logger.isLoggable(Level.INFO))
+									if (logger.isLoggable(Level.INFO)) {
 										logger.info("Binding of OperationNode " + node.getFullyQualifiedName()
 												+ " is dynamic, I cannot evaluate it.");
+									}
 								}
 							}
 						}
@@ -341,8 +348,9 @@ public class IETabWidget extends IEReusableWidget<TabComponentDefinition, TabCom
 				}
 			} else if (operator.getBindingConditional() instanceof BooleanStaticBinding) {
 				BooleanStaticBinding bv = (BooleanStaticBinding) operator.getBindingConditional();
-				if (bv.getValue() != null)
+				if (bv.getValue() != null) {
 					return bv.getValue();
+				}
 			}
 		}
 		return true; // default is true
@@ -350,8 +358,9 @@ public class IETabWidget extends IEReusableWidget<TabComponentDefinition, TabCom
 
 	@Override
 	protected Hashtable<String, String> getLocalizableProperties(Hashtable<String, String> props) {
-		if (StringUtils.isNotEmpty(getTitle()))
+		if (StringUtils.isNotEmpty(getTitle())) {
 			props.put("title", getTitle());
+		}
 		return super.getLocalizableProperties(props);
 	}
 

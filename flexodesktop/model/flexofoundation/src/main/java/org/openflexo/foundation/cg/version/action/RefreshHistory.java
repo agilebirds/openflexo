@@ -53,8 +53,9 @@ public class RefreshHistory extends AbstractGCAction<RefreshHistory, CGObject> {
 		protected boolean isVisibleForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) {
 			Vector<CGObject> topLevelObjects = getSelectedTopLevelObjects(focusedObject, globalSelection);
 			for (CGObject obj : topLevelObjects) {
-				if (obj instanceof GeneratedOutput)
+				if (obj instanceof GeneratedOutput) {
 					return false;
+				}
 			}
 			return true;
 		}
@@ -62,8 +63,9 @@ public class RefreshHistory extends AbstractGCAction<RefreshHistory, CGObject> {
 		@Override
 		protected boolean isEnabledForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) {
 			GenerationRepository repository = getRepository(focusedObject, globalSelection);
-			if (repository == null)
+			if (repository == null) {
 				return false;
+			}
 			return repository.getManageHistory();
 		}
 
@@ -82,8 +84,9 @@ public class RefreshHistory extends AbstractGCAction<RefreshHistory, CGObject> {
 		logger.info("Refresh history");
 		for (CGFile file : getSelectedFiles()) {
 			logger.info("Clean for file " + file.getFileName());
-			if (file.getGeneratedResourceData() instanceof AbstractGeneratedFile)
+			if (file.getGeneratedResourceData() instanceof AbstractGeneratedFile) {
 				((AbstractGeneratedFile) file.getGeneratedResourceData()).getHistory().refresh();
+			}
 		}
 	}
 

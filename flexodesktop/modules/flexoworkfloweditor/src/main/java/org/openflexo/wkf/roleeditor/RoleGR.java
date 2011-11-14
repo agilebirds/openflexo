@@ -31,16 +31,16 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEDimension;
-import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
+import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.graphics.BackgroundStyle;
+import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage;
+import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage.ImageBackgroundType;
+import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.DecorationPainter;
 import org.openflexo.fge.graphics.FGEShapeDecorationGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.TextStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage.ImageBackgroundType;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.shapes.Rectangle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
@@ -125,8 +125,9 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 		// See also org.openflexo.wkf.swleditor.gr.RoleContainerGR.updateColors() and
 		// org.openflexo.components.browser.wkf.RoleElement.buildCustomIcon(Color)
 		// org.openflexo.wkf.processeditor.gr.AbstractActivityNodeGR.getMainBgColor()
-		if (getRole().getColor() != null)
+		if (getRole().getColor() != null) {
 			return getRole().getColor();
+		}
 		return Color.RED;
 	}
 
@@ -256,11 +257,12 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 							ok = false;
 							if (viewBounds.x + viewBounds.width + WIDTH > getDrawingGraphicalRepresentation().getWidth()) {
 								// End of line, we go to the next one
-								if (y + 10 + HEIGHT < getDrawingGraphicalRepresentation().getHeight())
+								if (y + 10 + HEIGHT < getDrawingGraphicalRepresentation().getHeight()) {
 									doDefaultLayout(10, y + 10 + HEIGHT);
-								else {
-									if (logger.isLoggable(Level.WARNING))
+								} else {
+									if (logger.isLoggable(Level.WARNING)) {
 										logger.warning("Could not find suitable location for role: " + getRole());
+									}
 									defaultX = 10;
 									defaultY = 10;
 								}
@@ -302,10 +304,11 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 
 	@Override
 	public String getText() {
-		if (isEditingLabel)
+		if (isEditingLabel) {
 			return editingText;
-		else
+		} else {
 			return getRole().getName();
+		}
 	}
 
 	@Override

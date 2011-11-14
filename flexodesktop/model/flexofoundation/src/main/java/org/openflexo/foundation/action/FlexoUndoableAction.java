@@ -57,8 +57,9 @@ public abstract class FlexoUndoableAction<A extends FlexoUndoableAction<?, T1, T
 	}
 
 	protected FlexoProject getProject() {
-		if (getEditor() != null)
+		if (getEditor() != null) {
 			return getEditor().getProject();
+		}
 		return null;
 	}
 
@@ -75,8 +76,9 @@ public abstract class FlexoUndoableAction<A extends FlexoUndoableAction<?, T1, T
 			Enumeration<FlexoResource<FlexoResourceData>> en = getProject().getResources().elements();
 			while (en.hasMoreElements()) {
 				FlexoResource r = en.nextElement();
-				if (r instanceof FlexoStorageResource && !((FlexoStorageResource) r).isModified())
+				if (r instanceof FlexoStorageResource && !((FlexoStorageResource) r).isModified()) {
 					_modifiedResources.put((FlexoStorageResource) r, null);
+				}
 			}
 		}
 		A action;
@@ -93,8 +95,9 @@ public abstract class FlexoUndoableAction<A extends FlexoUndoableAction<?, T1, T
 			Enumeration<FlexoResource<FlexoResourceData>> en = getProject().getResources().elements();
 			while (en.hasMoreElements()) {
 				FlexoResource r = en.nextElement();
-				if (r instanceof FlexoStorageResource && !((FlexoStorageResource) r).isModified())
+				if (r instanceof FlexoStorageResource && !((FlexoStorageResource) r).isModified()) {
 					_modifiedResources.remove(r);
+				}
 			}
 		}
 
@@ -107,8 +110,9 @@ public abstract class FlexoUndoableAction<A extends FlexoUndoableAction<?, T1, T
 					Iterator<FlexoStorageResource> i = ((FlexoUndoableAction) action2)._modifiedResources.keySet().iterator();
 					while (i.hasNext()) {
 						FlexoStorageResource r = i.next();
-						if (_modifiedResources.get(r) != null)
+						if (_modifiedResources.get(r) != null) {
 							i.remove();
+						}
 					}
 				}
 			}
@@ -121,8 +125,9 @@ public abstract class FlexoUndoableAction<A extends FlexoUndoableAction<?, T1, T
 					// while (en.hasMoreElements()) {
 					while (i.hasNext()) {
 						FlexoStorageResource r = i.next();
-						if (_modifiedResources.get(r) != null)
+						if (_modifiedResources.get(r) != null) {
 							i.remove();
+						}
 					}
 				}
 			}
@@ -135,8 +140,9 @@ public abstract class FlexoUndoableAction<A extends FlexoUndoableAction<?, T1, T
 					// while (en.hasMoreElements()) {
 					while (i.hasNext()) {
 						FlexoStorageResource r = i.next();
-						if (_modifiedResources.get(r) != null)
+						if (_modifiedResources.get(r) != null) {
 							i.remove();
+						}
 					}
 				}
 			}

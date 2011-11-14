@@ -80,20 +80,23 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 	@Override
 	protected void doAction(Object context) throws DuplicateSectionException, InvalidLevelException {
 		if (section != null) {
-			if (getRepository().getTOCEntryWithID(section) != null && modelObject == null)
+			if (getRepository().getTOCEntryWithID(section) != null && modelObject == null) {
 				throw new DuplicateSectionException();
+			}
 		}
 		TOCEntry entry;
 		if (section != null || modelObject != null) {
-			if (section != null && modelObject != null)
+			if (section != null && modelObject != null) {
 				entry = getRepository().createObjectEntry(modelObject, section);
-			else if (section != null)
+			} else if (section != null) {
 				entry = getRepository().createDefaultEntry(section);
-			else
+			} else {
 				entry = getRepository().createObjectEntry(modelObject);
+			}
 			entry.setTitle(getTocEntryTitle());
-			if (subType != null)
+			if (subType != null) {
 				entry.setSubType(subType);
+			}
 			if (entry.getPreferredLevel() == -1) {
 				addEntryToFocusedObject(entry);
 			} else {
@@ -114,8 +117,9 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 			}
 		} else {
 			entry = new TOCEntry(getFocusedObject().getData());
-			if (subType != null)
+			if (subType != null) {
 				entry.setSubType(subType);
+			}
 			entry.setTitle(getTocEntryTitle());
 			addEntryToFocusedObject(entry);
 		}

@@ -22,9 +22,9 @@ package org.openflexo.fge.geom.area;
 import java.awt.geom.AffineTransform;
 
 import org.openflexo.fge.geom.FGEAbstractLine;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.graphics.FGEGraphics;
 
 public class FGEEmptyArea implements FGEArea {
@@ -110,10 +110,11 @@ public class FGEEmptyArea implements FGEArea {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof FGEEmptyArea)
+		if (obj instanceof FGEEmptyArea) {
 			return true;
-		else
+		} else {
 			return super.equals(obj);
+		}
 	}
 
 	@Override

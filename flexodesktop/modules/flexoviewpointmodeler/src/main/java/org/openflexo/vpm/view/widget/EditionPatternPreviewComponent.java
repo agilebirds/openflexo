@@ -77,8 +77,9 @@ public class EditionPatternPreviewComponent extends JPanel implements FIBCustomC
 			logger.fine("EditionPatternPreview: setEditedObject: " + object);
 			editionPattern = object;
 			if (previewController != null && object != null) {
-				if (previewController.getDrawingView() != null)
+				if (previewController.getDrawingView() != null) {
 					remove(previewController.getDrawingView());
+				}
 				previewController.delete();
 				previewController = null;
 			}
@@ -97,8 +98,9 @@ public class EditionPatternPreviewComponent extends JPanel implements FIBCustomC
 
 	public void setSelectionManager(SelectionManager selectionManager) {
 		this.selectionManager = selectionManager;
-		if (previewController != null)
+		if (previewController != null) {
 			previewController.setSelectionManager(selectionManager);
+		}
 	}
 
 	@Override
@@ -133,10 +135,12 @@ public class EditionPatternPreviewComponent extends JPanel implements FIBCustomC
 	@Override
 	public Object getSelectedObject() {
 		if (previewController != null) {
-			if (previewController.getSelectedObjects() == null)
+			if (previewController.getSelectedObjects() == null) {
 				return null;
-			if (previewController.getSelectedObjects().size() > 0)
+			}
+			if (previewController.getSelectedObjects().size() > 0) {
 				return previewController.getSelectedObjects().firstElement().getDrawable();
+			}
 			return null;
 		}
 		return null;
@@ -144,9 +148,11 @@ public class EditionPatternPreviewComponent extends JPanel implements FIBCustomC
 
 	@Override
 	public Vector<Object> getSelection() {
-		if (previewController != null)
-			if (previewController.getSelectedObjects() == null)
+		if (previewController != null) {
+			if (previewController.getSelectedObjects() == null) {
 				return null;
+			}
+		}
 		if (previewController.getSelectedObjects().size() > 0) {
 			Vector<Object> returned = new Vector<Object>();
 			for (GraphicalRepresentation gr : previewController.getSelectedObjects()) {
@@ -164,38 +170,44 @@ public class EditionPatternPreviewComponent extends JPanel implements FIBCustomC
 
 	@Override
 	public void objectAddedToSelection(Object o) {
-		if (previewController != null && o instanceof FlexoModelObject)
+		if (previewController != null && o instanceof FlexoModelObject) {
 			previewController.fireObjectSelected((FlexoModelObject) o);
+		}
 	}
 
 	@Override
 	public void objectRemovedFromSelection(Object o) {
-		if (previewController != null && o instanceof FlexoModelObject)
+		if (previewController != null && o instanceof FlexoModelObject) {
 			previewController.fireObjectDeselected((FlexoModelObject) o);
+		}
 	}
 
 	@Override
 	public void selectionResetted() {
-		if (previewController != null)
+		if (previewController != null) {
 			previewController.fireResetSelection();
+		}
 	}
 
 	@Override
 	public void addToSelection(Object o) {
-		if (previewController != null)
+		if (previewController != null) {
 			previewController.addToSelectedObjects(previewController.getDrawing().getGraphicalRepresentation(o));
+		}
 	}
 
 	@Override
 	public void removeFromSelection(Object o) {
-		if (previewController != null)
+		if (previewController != null) {
 			previewController.removeFromSelectedObjects(previewController.getDrawing().getGraphicalRepresentation(o));
+		}
 	}
 
 	@Override
 	public void resetSelection() {
-		if (previewController != null)
+		if (previewController != null) {
 			previewController.clearSelection();
+		}
 	}
 
 	@Override

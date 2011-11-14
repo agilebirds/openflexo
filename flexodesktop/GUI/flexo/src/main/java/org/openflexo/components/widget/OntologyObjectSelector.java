@@ -20,8 +20,8 @@
 package org.openflexo.components.widget;
 
 import org.openflexo.components.browser.BrowserElementType;
-import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
+import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.OntologyObject;
@@ -114,10 +114,11 @@ public class OntologyObjectSelector extends AbstractBrowserSelector<OntologyObje
 			setFilterStatus(BrowserElementType.ONTOLOGY_OBJECT_PROPERTY, BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN);
 			setFilterStatus(BrowserElementType.ONTOLOGY_STATEMENT, BrowserFilterStatus.HIDE);
 
-			if (hierarchicalMode)
+			if (hierarchicalMode) {
 				setOEViewMode(OEViewMode.PartialHierarchy);
-			else
+			} else {
 				setOEViewMode(OEViewMode.NoHierarchy);
+			}
 		}
 
 		@Override

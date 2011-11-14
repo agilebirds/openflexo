@@ -50,15 +50,14 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.openflexo.swing.JTextFieldRegExp;
-import org.openflexo.view.FlexoDialog;
-
+import org.openflexo.foundation.dkv.DKVModel.LanguageList;
 import org.openflexo.foundation.dkv.Key;
 import org.openflexo.foundation.dkv.Language;
-import org.openflexo.foundation.dkv.DKVModel.LanguageList;
 import org.openflexo.foundation.ie.IERegExp;
 import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.swing.JTextFieldRegExp;
+import org.openflexo.view.FlexoDialog;
 
 public class AskNewKeyDialog extends FlexoDialog implements ActionListener {
 
@@ -106,13 +105,15 @@ public class AskNewKeyDialog extends FlexoDialog implements ActionListener {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				if (e.getKeyChar() == KeyEvent.VK_TAB) {
-					if (newKeyDescriptionTextArea.getText() != null && newKeyDescriptionTextArea.getText().length() > 0)
+					if (newKeyDescriptionTextArea.getText() != null && newKeyDescriptionTextArea.getText().length() > 0) {
 						newKeyDescriptionTextArea.setText(newKeyDescriptionTextArea.getText().substring(0,
 								newKeyDescriptionTextArea.getText().length() - 1));
-					if (e.getModifiers() == InputEvent.SHIFT_DOWN_MASK || e.getModifiers() == InputEvent.SHIFT_MASK)
+					}
+					if (e.getModifiers() == InputEvent.SHIFT_DOWN_MASK || e.getModifiers() == InputEvent.SHIFT_MASK) {
 						newKeyTextField.requestFocus();
-					else
+					} else {
 						valueTextFieldList.get(0).requestFocus();
+					}
 					e.consume();
 				}
 
@@ -293,8 +294,9 @@ public class AskNewKeyDialog extends FlexoDialog implements ActionListener {
 			KeyValueJTextField tf = en.nextElement();
 			String valueText = tf.getText();
 			if (tf.getText() == null || tf.getText().trim().length() == 0
-					|| (newKeyTextField.getText().equals(valueText.substring(0, valueText.length() - 1))))
+					|| (newKeyTextField.getText().equals(valueText.substring(0, valueText.length() - 1)))) {
 				tf.setText(newKeyTextField.getText());
+			}
 		}
 	}
 
@@ -305,8 +307,9 @@ public class AskNewKeyDialog extends FlexoDialog implements ActionListener {
 		while (en.hasMoreElements()) {
 			KeyValueJTextField tf = en.nextElement();
 			if (tf.getText() == null || tf.getText().trim().length() == 0
-					|| tf.getText().equals(newKeyTextField.getText().substring(0, newKeyTextField.getText().length() - 1)))
+					|| tf.getText().equals(newKeyTextField.getText().substring(0, newKeyTextField.getText().length() - 1))) {
 				tf.setText(newKeyTextField.getText());
+			}
 		}
 
 	}
@@ -327,8 +330,9 @@ public class AskNewKeyDialog extends FlexoDialog implements ActionListener {
 		KeyValueJTextField tf = null;
 		while (en.hasMoreElements()) {
 			tf = en.nextElement();
-			if (tf.getLanguage() == l)
+			if (tf.getLanguage() == l) {
 				return tf.getText();
+			}
 		}
 		return null;
 	}

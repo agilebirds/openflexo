@@ -33,13 +33,13 @@ import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMMethod;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DMProperty;
+import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference;
+import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference.MethodReference;
+import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference.PropertyReference;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.DuplicateClassNameException;
 import org.openflexo.foundation.dm.DuplicateMethodSignatureException;
 import org.openflexo.foundation.dm.DuplicatePropertyNameException;
-import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference;
-import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference.MethodReference;
-import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference.PropertyReference;
 import org.openflexo.foundation.dm.javaparser.ParsedJavaClass;
 import org.openflexo.foundation.dm.javaparser.ParsedJavaElement;
 import org.openflexo.javaparser.FJPTypeResolver.UnresolvedTypeException;
@@ -143,8 +143,9 @@ public class FJPJavaClass extends FJPJavaEntity implements ParsedJavaClass {
 		// First look for full qualified
 		for (FJPJavaMethod m : getMethods()) {
 			// logger.info("Compare: "+signature+" and "+m.getCallSignature());
-			if (m.getCallSignature().equals(signature))
+			if (m.getCallSignature().equals(signature)) {
 				return m;
+			}
 		}
 
 		// Not found
@@ -153,8 +154,9 @@ public class FJPJavaClass extends FJPJavaEntity implements ParsedJavaClass {
 		for (FJPJavaMethod m : getMethods()) {
 			String us = FJPJavaMethod.unqualifySignature(m.getCallSignature());
 			// logger.info("Compare: "+unqualifiedSignature+" and "+us);
-			if (unqualifiedSignature.equals(us))
+			if (unqualifiedSignature.equals(us)) {
 				return m;
+			}
 		}
 
 		return null;
@@ -190,8 +192,9 @@ public class FJPJavaClass extends FJPJavaEntity implements ParsedJavaClass {
 	}
 
 	public DMType getSuperClass() {
-		if (_qdJavaClass != null)
+		if (_qdJavaClass != null) {
 			return (DMType) _qdJavaClass.getSuperClass();
+		}
 		return null;
 	}
 
@@ -200,8 +203,9 @@ public class FJPJavaClass extends FJPJavaEntity implements ParsedJavaClass {
 	}
 
 	public String getSuperClassAsString() {
-		if (getSuperClass() != null)
+		if (getSuperClass() != null) {
 			return getSuperClass().getStringRepresentation();
+		}
 		return "java.lang.Object";
 	}
 
@@ -277,8 +281,9 @@ public class FJPJavaClass extends FJPJavaEntity implements ParsedJavaClass {
 
 	private void updateProperty(DMEntity entity, DMProperty property, FJPDMSet context, FJPJavaSource source)
 			throws FJPTypeResolver.CrossReferencedEntitiesException, InvalidNameException, DuplicatePropertyNameException {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Update property " + property);
+		}
 		DMProperty updatedProperty = FJPDMMapper.makeProperty(this, property.getName(), entity.getDMModel(), context, source, true, true,
 				null);
 		if (updatedProperty == null) {
@@ -295,8 +300,9 @@ public class FJPJavaClass extends FJPJavaEntity implements ParsedJavaClass {
 
 	private DMProperty createProperty(DMEntity entity, PropertyReference propertyReference, FJPDMSet context, FJPJavaSource source)
 			throws FJPTypeResolver.CrossReferencedEntitiesException {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Create property " + propertyReference.getName());
+		}
 		DMProperty returnedProperty = FJPDMMapper.makeProperty(this, propertyReference.getName(), entity.getDMModel(), context, source,
 				true, true, null);
 		logger.info("For property " + propertyReference.getName() + " Create property " + returnedProperty);
@@ -309,8 +315,9 @@ public class FJPJavaClass extends FJPJavaEntity implements ParsedJavaClass {
 
 	private void updateMethod(DMEntity entity, DMMethod method, FJPDMSet context, FJPJavaSource source)
 			throws FJPTypeResolver.CrossReferencedEntitiesException {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Update method " + method);
+		}
 		DMMethod updatedMethod = FJPDMMapper.makeMethod(this, method.getSignature(), entity.getDMModel(), context, source, true);
 		if (updatedMethod == null) {
 			logger.info("Delete method " + method);
@@ -327,8 +334,9 @@ public class FJPJavaClass extends FJPJavaEntity implements ParsedJavaClass {
 
 	private DMMethod createMethod(DMEntity entity, MethodReference methodReference, FJPDMSet context, FJPJavaSource source)
 			throws FJPTypeResolver.CrossReferencedEntitiesException {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Create method " + methodReference.getSignature());
+		}
 		DMMethod returnedMethod = FJPDMMapper.makeMethod(this, methodReference.getSignature(), entity.getDMModel(), context, source, true);
 		logger.info("For method " + methodReference.getSignature() + " Create method " + returnedMethod);
 		if (returnedMethod != null) {
@@ -431,8 +439,9 @@ public class FJPJavaClass extends FJPJavaEntity implements ParsedJavaClass {
 			}
 			for (Enumeration en = (new Vector<DMProperty>(propertiesToDelete)).elements(); en.hasMoreElements();) {
 				DMProperty toDelete = (DMProperty) en.nextElement();
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Delete property " + toDelete);
+				}
 				toDelete.delete();
 			}
 
@@ -463,8 +472,9 @@ public class FJPJavaClass extends FJPJavaEntity implements ParsedJavaClass {
 			}
 			for (Enumeration en = (new Vector<DMMethod>(methodsToDelete)).elements(); en.hasMoreElements();) {
 				DMMethod toDelete = (DMMethod) en.nextElement();
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Delete method " + toDelete);
+				}
 				toDelete.delete();
 			}
 

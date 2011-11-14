@@ -83,16 +83,18 @@ public class DERepositoryModuleView extends JPanel implements ModuleView<TOCRepo
 			styleSheet.setBase(STYLESHEET_FILE.toURL());
 		} catch (MalformedURLException e1) {
 			e1.printStackTrace();
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Documentation Editor Stylesheet not found");
+			}
 		}
 		((HTMLEditorKit) htmlComponent.getEditorKit()).setStyleSheet(styleSheet);
 		try {
 			((HTMLDocument) htmlComponent.getDocument()).setBase(ctrl.getProject().getImportedImagesDir().getParentFile().toURI().toURL()); /* set the base to the parent of the imported images dir */
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Hum, this sucks,..., oh well, images won't be displayed");
+			}
 		}
 		/*
 		 * Note for later. If we want to entirely control image resolvation, for
@@ -121,23 +123,26 @@ public class DERepositoryModuleView extends JPanel implements ModuleView<TOCRepo
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (observable instanceof TOCEntry && ((TOCEntry) observable).getRepository() == codeRepository)
+		if (observable instanceof TOCEntry && ((TOCEntry) observable).getRepository() == codeRepository) {
 			requestRefresh();
-		else if (observable == codeRepository)
+		} else if (observable == codeRepository) {
 			requestRefresh();
+		}
 	}
 
 	// CPU-expensive
 	protected void refresh() {
-		if (isShown)
+		if (isShown) {
 			htmlComponent.setText(codeRepository.buildDocument(controller.getProject().getDocumentationCssResource().getFile()));
+		}
 	}
 
 	protected boolean refreshRequested = false;
 
 	private synchronized void requestRefresh() {
-		if (refreshRequested)
+		if (refreshRequested) {
 			return;
+		}
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {

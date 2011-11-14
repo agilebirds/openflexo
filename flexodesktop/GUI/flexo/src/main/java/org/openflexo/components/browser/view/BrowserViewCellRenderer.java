@@ -47,8 +47,9 @@ public class BrowserViewCellRenderer extends DefaultTreeCellRenderer {
 		setFont(AdvancedPrefs.getBrowserFont().getFont());
 		if (getBorder() != null) {
 			setBorder(BorderFactory.createCompoundBorder(getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
-		} else
+		} else {
 			setBorder(BorderFactory.createEmptyBorder(0, 1, 0, 0));
+		}
 	}
 
 	@Override
@@ -61,16 +62,18 @@ public class BrowserViewCellRenderer extends DefaultTreeCellRenderer {
 			BrowserElement element = (BrowserElement) object;
 			if (!(element.isDeleted())) {
 				String fullName = element.getName();
-				if (element.getSuffixName() != null)
+				if (element.getSuffixName() != null) {
 					fullName += element.getSuffixName();
+				}
 				setText(fullName);
 				setIcon(expanded ? (element).getExpandedIcon() : (element).getIcon());
 				if (!element.isSelectable()) {
 					setForeground(Color.LIGHT_GRAY);
 				}
 				Font f = element.mustBeHighlighted() ? getFont().deriveFont(Font.BOLD) : getFont();
-				if (element.mustBeItalic())
+				if (element.mustBeItalic()) {
 					f = f.deriveFont(Font.ITALIC);
+				}
 				setFont(f);
 				setToolTipText(element.getToolTip());
 			}

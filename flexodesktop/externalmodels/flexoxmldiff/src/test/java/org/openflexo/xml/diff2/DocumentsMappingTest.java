@@ -27,7 +27,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.jdom.Document;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.xml.XMLDiffTest;
-import org.openflexo.xml.diff2.DocumentsMapping;
 import org.xml.sax.SAXException;
 
 public class DocumentsMappingTest extends XMLDiffTest {

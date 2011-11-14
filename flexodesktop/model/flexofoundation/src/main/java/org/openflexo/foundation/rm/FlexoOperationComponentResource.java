@@ -127,13 +127,16 @@ public class FlexoOperationComponentResource extends FlexoComponentResource impl
 		if (_componentDefinition == null) {
 			// FlexoProcess process = getProcessResource().getFlexoProcess();
 			ComponentDefinition cd = getProject().getFlexoComponentLibrary().getComponentNamed(getName());
-			if (cd instanceof OperationComponentDefinition)
+			if (cd instanceof OperationComponentDefinition) {
 				_componentDefinition = (OperationComponentDefinition) cd;
+			}
 			if (_componentDefinition == null) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("cant find an OperationComponentDefinition for operation: " + getName() + " in library");
-				if (logger.isLoggable(Level.INFO))
+				}
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Trying to repair...");
+				}
 				FlexoComponentFolder rootFolder = getProject().getFlexoComponentLibrary().getRootFolder();
 				try {
 					_componentDefinition = new OperationComponentDefinition(getName(), getProject().getFlexoComponentLibrary(), rootFolder,

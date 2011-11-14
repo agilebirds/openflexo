@@ -105,8 +105,9 @@ public final class PortRegistery extends WKFObject implements InspectableObject,
 	public Vector<WKFObject> getAllEmbeddedWKFObjects() {
 		Vector<WKFObject> returned = new Vector<WKFObject>();
 		returned.add(this);
-		for (FlexoPort p : getAllPorts())
+		for (FlexoPort p : getAllPorts()) {
 			returned.addAll(p.getAllEmbeddedWKFObjects());
+		}
 		/*returned.addAll(getNewPorts());
 		returned.addAll(getDeletePorts());
 		returned.addAll(getInPorts());
@@ -127,8 +128,9 @@ public final class PortRegistery extends WKFObject implements InspectableObject,
 		} else if (aPort instanceof OutPort) {
 			addToOutPorts((OutPort) aPort);
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Unexpected value in addToPorts()");
+			}
 		}
 	}
 
@@ -144,8 +146,9 @@ public final class PortRegistery extends WKFObject implements InspectableObject,
 		} else if (aPort instanceof OutPort) {
 			removeFromOutPorts((OutPort) aPort);
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Unexpected value in removeFromPorts()");
+			}
 		}
 	}
 
@@ -158,8 +161,9 @@ public final class PortRegistery extends WKFObject implements InspectableObject,
 			}
 			setChanged();
 			notifyObservers(new PortInserted(aPort));
-			if (getProcess() != null)
+			if (getProcess() != null) {
 				getProcess().clearCachedObjects();
+			}
 			return true;
 		} else {
 			return false;
@@ -172,8 +176,9 @@ public final class PortRegistery extends WKFObject implements InspectableObject,
 			setChanged();
 			notifyObservers(new PortRemoved(aPort));
 			aPort.setPortRegistery(null);
-			if (getProcess() != null)
+			if (getProcess() != null) {
 				getProcess().clearCachedObjects();
+			}
 		}
 	}
 

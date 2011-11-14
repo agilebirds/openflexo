@@ -28,12 +28,12 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.fps.CVSAbstractFile;
+import org.openflexo.fps.CVSAbstractFile.CommitListener;
+import org.openflexo.fps.CVSAbstractFile.CommitStatus;
 import org.openflexo.fps.CVSConstants;
 import org.openflexo.fps.CVSContainer;
 import org.openflexo.fps.CVSFile;
 import org.openflexo.fps.FPSObject;
-import org.openflexo.fps.CVSAbstractFile.CommitListener;
-import org.openflexo.fps.CVSAbstractFile.CommitStatus;
 import org.openflexo.localization.FlexoLocalization;
 
 public class CommitFiles extends MultipleFileCVSAction<CommitFiles> implements CommitListener {
@@ -132,10 +132,11 @@ public class CommitFiles extends MultipleFileCVSAction<CommitFiles> implements C
 
 	@Override
 	public boolean hasActionExecutionSucceeded() {
-		if (timeOutReceived)
+		if (timeOutReceived) {
 			return false;
-		else
+		} else {
 			return super.hasActionExecutionSucceeded();
+		}
 	}
 
 	private boolean timeOutReceived;
@@ -147,8 +148,9 @@ public class CommitFiles extends MultipleFileCVSAction<CommitFiles> implements C
 
 	@Override
 	public synchronized void notifyCommitFinished(CVSFile file, CommitStatus status) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Commit for " + file.getFile() + " finished with status " + status);
+		}
 		filesToWait--;
 		filesToNotify.add(file);
 		lastReception = System.currentTimeMillis();

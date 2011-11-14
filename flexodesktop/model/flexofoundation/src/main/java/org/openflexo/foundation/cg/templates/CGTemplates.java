@@ -111,8 +111,9 @@ public abstract class CGTemplates extends CGTemplateObject {
 		Enumeration<CustomCGTemplateRepository> en = getCustomRepositories();
 		while (en.hasMoreElements()) {
 			CustomCGTemplateRepository rep = en.nextElement();
-			if (rep.getRepositoryType() == TemplateRepositoryType.Code)
+			if (rep.getRepositoryType() == TemplateRepositoryType.Code) {
 				v.add(rep);
+			}
 
 		}
 		return v;
@@ -123,19 +124,22 @@ public abstract class CGTemplates extends CGTemplateObject {
 		Enumeration<CustomCGTemplateRepository> en = getCustomRepositories();
 		while (en.hasMoreElements()) {
 			CustomCGTemplateRepository rep = en.nextElement();
-			if (rep.getRepositoryType() == TemplateRepositoryType.Documentation)
+			if (rep.getRepositoryType() == TemplateRepositoryType.Documentation) {
 				v.add(rep);
+			}
 
 		}
 		return v;
 	}
 
 	public CustomCGTemplateRepository getCustomCGTemplateRepositoryForName(String aName) {
-		if (aName == null)
+		if (aName == null) {
 			return null;
+		}
 		for (CustomCGTemplateRepository repository : _customRepositories.values()) {
-			if (repository.getName().equals(aName))
+			if (repository.getName().equals(aName)) {
 				return repository;
+			}
 		}
 		return null;
 	}

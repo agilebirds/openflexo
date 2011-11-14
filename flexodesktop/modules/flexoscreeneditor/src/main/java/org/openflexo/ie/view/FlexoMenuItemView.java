@@ -34,18 +34,17 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.openflexo.swing.JTextFieldRegExp;
-import org.openflexo.swing.VerticalLayout;
-import org.openflexo.view.FlexoPerspective;
-import org.openflexo.view.ModuleView;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.ie.menu.FlexoItemMenu;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.swing.JTextFieldRegExp;
+import org.openflexo.swing.VerticalLayout;
+import org.openflexo.view.FlexoPerspective;
+import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.FlexoController;
 
 public class FlexoMenuItemView extends JPanel implements ModuleView<FlexoItemMenu> {
 
@@ -94,15 +93,17 @@ public class FlexoMenuItemView extends JPanel implements ModuleView<FlexoItemMen
 						String menuLabel = FlexoController.askForStringMatchingPattern(
 								FlexoLocalization.localizedForKey("enter_label_for_the_new_menu"), Pattern.compile("\\S.*"),
 								FlexoLocalization.localizedForKey("cannot_be_empty"));
-						if (menuLabel == null)
+						if (menuLabel == null) {
 							_model.setMenuLabel(oldValue);
-						else
+						} else {
 							_model.setMenuLabel(menuLabel);
+						}
 						labelField.setText(_model.getMenuLabel());
 
 					} else if (_model.getNavigationMenu().getMenuLabeled(labelField.getText()) != null
-							&& _model.getNavigationMenu().getMenuLabeled(labelField.getText()) != _model)
+							&& _model.getNavigationMenu().getMenuLabeled(labelField.getText()) != _model) {
 						FlexoController.notify(FlexoLocalization.localizedForKey("a_menu_with_such_label_already_exists"));
+					}
 				}
 
 			});
@@ -122,8 +123,9 @@ public class FlexoMenuItemView extends JPanel implements ModuleView<FlexoItemMen
 		private void validateLabel() {
 			if (labelField.getText() == null || labelField.getText().trim().length() == 0) {
 				labelField.setBackground(JTextFieldRegExp.ERROR_BORDER);
-			} else
+			} else {
 				labelField.setBackground(JTextFieldRegExp.DEFAULT_BORDER);
+			}
 		}
 
 		@Override
@@ -154,8 +156,9 @@ public class FlexoMenuItemView extends JPanel implements ModuleView<FlexoItemMen
 		public void update(FlexoObservable observable, DataModification dataModification) {
 			if (observable == _model) {
 				if (dataModification.propertyName() != null && dataModification.propertyName().equals("menuLabel")) {
-					if (!isUpdatingMenuLabel)
+					if (!isUpdatingMenuLabel) {
 						labelField.setText(_model.getMenuLabel());
+					}
 				}
 			}
 		}

@@ -112,8 +112,9 @@ public abstract class DropDownType extends FlexoObject implements StringConverta
 			}
 		}
 
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Could not find ListType named " + typeName);
+		}
 		return null;
 	}
 

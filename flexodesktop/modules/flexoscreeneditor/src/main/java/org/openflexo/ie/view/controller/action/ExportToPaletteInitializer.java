@@ -26,6 +26,9 @@ import java.util.regex.Pattern;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 
+import org.openflexo.foundation.action.FlexoActionFinalizer;
+import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.ie.action.ExportWidgetToPalette;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.localization.FlexoLocalization;
@@ -34,10 +37,6 @@ import org.openflexo.toolbox.FileUtils;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-
-import org.openflexo.foundation.action.FlexoActionFinalizer;
-import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.ie.action.ExportWidgetToPalette;
 
 public class ExportToPaletteInitializer extends ActionInitializer {
 
@@ -83,11 +82,13 @@ public class ExportToPaletteInitializer extends ActionInitializer {
 						}
 						action.setWidgetName(name);
 						JComponent component = getController().viewForObject(action.getWidget(), true);
-						if (component != null)
+						if (component != null) {
 							action.setScreenshot(ImageUtils.createImageFromComponent(component));
+						}
 						return true;
-					} else
+					} else {
 						return false;
+					}
 				}
 				return false;
 			}

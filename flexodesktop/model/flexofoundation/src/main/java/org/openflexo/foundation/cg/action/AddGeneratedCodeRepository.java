@@ -110,8 +110,9 @@ public class AddGeneratedCodeRepository extends AbstractGCAction<AddGeneratedCod
 						getNewGeneratedCodeRepositoryDirectory());
 				((CGRepository) _newGeneratedCodeRepository).setTargetType(getNewTargetType());
 
-				if (getNewTargetType() != CodeType.BPEL)
+				if (getNewTargetType() != CodeType.BPEL) {
 					((CGRepository) _newGeneratedCodeRepository).setWarName(getNewGeneratedCodeRepositoryName() + "WAR");
+				}
 
 				getFocusedObject().getGeneratedCode().addToGeneratedRepositories(_newGeneratedCodeRepository);
 
@@ -166,8 +167,9 @@ public class AddGeneratedCodeRepository extends AbstractGCAction<AddGeneratedCod
 				_newGeneratedCodeRepository = new DGRepository((GeneratedDoc) gc, getNewGeneratedCodeRepositoryName(), getNewDocType(),
 						getFormat(), getNewGeneratedCodeRepositoryDirectory());
 				((DGRepository) _newGeneratedCodeRepository).setPostProductName(getNewGeneratedCodeRepositoryName());
-				if (tocRepository != null)
+				if (tocRepository != null) {
 					((DGRepository) _newGeneratedCodeRepository).setTocRepository(tocRepository);
+				}
 				getFocusedObject().getGeneratedCode().addToGeneratedRepositories(_newGeneratedCodeRepository);
 
 				String srcSymbDirType = null;
@@ -203,8 +205,9 @@ public class AddGeneratedCodeRepository extends AbstractGCAction<AddGeneratedCod
 	}
 
 	private void createFiguresSymbolicDir(FlexoProject project, String figuresPath) {
-		if (figuresPath == null)
+		if (figuresPath == null) {
 			figuresPath = "/./Figures";
+		}
 
 		FlexoProjectFile figSymbDir = new FlexoProjectFile(project, _newGeneratedCodeRepository.getSourceCodeRepository(), figuresPath);
 		_newGeneratedCodeRepository.setSymbolicDirectoryForKey(new CGSymbolicDirectory(_newGeneratedCodeRepository,
@@ -227,8 +230,9 @@ public class AddGeneratedCodeRepository extends AbstractGCAction<AddGeneratedCod
 	}
 
 	private void createResourcesSymbolicDir(FlexoProject project, String srcSymbDirType, String resourcesPath) {
-		if (resourcesPath == null)
+		if (resourcesPath == null) {
 			resourcesPath = "/./resources";
+		}
 
 		FlexoProjectFile resourcesSymbDir = new FlexoProjectFile(project, _newGeneratedCodeRepository.getSourceCodeRepository(),
 				resourcesPath);
@@ -283,8 +287,9 @@ public class AddGeneratedCodeRepository extends AbstractGCAction<AddGeneratedCod
 	}
 
 	public Format getFormat() {
-		if (format == null)
+		if (format == null) {
 			format = Format.HTML;
+		}
 		return format;
 	}
 

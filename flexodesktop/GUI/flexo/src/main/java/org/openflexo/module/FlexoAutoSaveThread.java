@@ -48,9 +48,17 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.ColorCst;
-import org.openflexo.FlexoCst;
 import org.openflexo.components.AskParametersPanel;
 import org.openflexo.components.ProgressWindow;
+import org.openflexo.foundation.param.ParameterDefinition;
+import org.openflexo.foundation.param.PropertyListParameter;
+import org.openflexo.foundation.param.ReadOnlyTextFieldParameter;
+import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoResource;
+import org.openflexo.foundation.rm.FlexoResourceData;
+import org.openflexo.foundation.rm.FlexoStorageResource;
+import org.openflexo.foundation.rm.SaveResourceException;
+import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.InspectorObserver;
@@ -61,16 +69,6 @@ import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.view.FlexoDialog;
 import org.openflexo.view.controller.FlexoController;
-
-import org.openflexo.foundation.param.ParameterDefinition;
-import org.openflexo.foundation.param.PropertyListParameter;
-import org.openflexo.foundation.param.ReadOnlyTextFieldParameter;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoResource;
-import org.openflexo.foundation.rm.FlexoResourceData;
-import org.openflexo.foundation.rm.FlexoStorageResource;
-import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.utils.FlexoProgress;
 
 /**
  * @author gpolet
@@ -157,11 +155,13 @@ public class FlexoAutoSaveThread extends Thread {
 			tempDirectory = new File(content.trim());
 			if (!tempDirectory.exists()
 					|| (!content.startsWith(System.getProperty("java.io.tmpdir")) && !content.startsWith(new File(System
-							.getProperty("java.io.tmpdir")).getCanonicalPath())))
+							.getProperty("java.io.tmpdir")).getCanonicalPath()))) {
 				tempDirectory = getNewTempDirectory();
+			}
 		} catch (IOException e) {
-			if (logger.isLoggable(Level.FINEST))
+			if (logger.isLoggable(Level.FINEST)) {
 				logger.log(Level.FINEST, "IO exception while opening " + AUTO_SAVE_FILE_NAME_INFO + " file.", e);
+			}
 			tempDirectory = getNewTempDirectory();
 		}
 		File files[] = tempDirectory.listFiles(new FilenameFilter() {
@@ -175,11 +175,13 @@ public class FlexoAutoSaveThread extends Thread {
 				return name.indexOf(AUTO_SAVE_FILE_EXTENSION) > -1;
 			}
 		});
-		if (files != null)
+		if (files != null) {
 			for (File file : files) {
-				if (file.isDirectory())
+				if (file.isDirectory()) {
 					projects.add(new FlexoAutoSaveFile(file, new Date(file.lastModified())));
+				}
 			}
+		}
 		Collections.sort(projects, new Comparator<FlexoAutoSaveFile>() { // This comparator will make oldest files first and newer ones last
 																			// in the queue
 					/**
@@ -189,12 +191,13 @@ public class FlexoAutoSaveThread extends Thread {
 					 */
 					@Override
 					public int compare(FlexoAutoSaveFile o1, FlexoAutoSaveFile o2) {
-						if (o1.lastModified() < o2.lastModified())
+						if (o1.lastModified() < o2.lastModified()) {
 							return -1;
-						else if (o1.lastModified() > o2.lastModified())
+						} else if (o1.lastModified() > o2.lastModified()) {
 							return 1;
-						else
+						} else {
 							return 0;
+						}
 					}
 				});
 	}
@@ -240,26 +243,29 @@ public class FlexoAutoSaveThread extends Thread {
 			try {
 				Thread.sleep(sleepTime);
 			} catch (InterruptedException e) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.log(Level.FINE, "I got interrupted, probably because the user has changed the sleep time", e);
+				}
 				continue;
 			}
 			boolean needsSave = false;
-			if (projects.size() == 0)
+			if (projects.size() == 0) {
 				needsSave = true;
-			else {
+			} else {
 				Date lastAutoSave = projects.getLast().getCreationDate();
 				Enumeration<FlexoResource<FlexoResourceData>> en = new Vector<FlexoResource<FlexoResourceData>>(project.getResources()
 						.values()).elements();
 				while (!needsSave && en.hasMoreElements()) {
 					FlexoResource<FlexoResourceData> resource = en.nextElement();
-					if (resource instanceof FlexoStorageResource && resource.getLastUpdate().after(lastAutoSave))
+					if (resource instanceof FlexoStorageResource && resource.getLastUpdate().after(lastAutoSave)) {
 						needsSave = true;
+					}
 				}
 			}
 			if (!needsSave) {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("project has not changed since last auto-save: " + formatter.format(projects.getLast().getCreationDate()));
+				}
 				continue;
 			}
 			try {
@@ -274,10 +280,11 @@ public class FlexoAutoSaveThread extends Thread {
 					saveActionSuccess = false;
 					e.printStackTrace();
 				}
-				if (saveActionSuccess)
+				if (saveActionSuccess) {
 					projects.add(new FlexoAutoSaveFile(nextSaveDirectory, new Date()));
-				else
+				} else {
 					SwingUtilities.invokeLater(new AutoSaveActionFailed());
+				}
 				if (projects.size() >= numberOfIntermediateSave && numberOfIntermediateSave > 0) {
 					while (projects.size() > numberOfIntermediateSave) {
 						FlexoAutoSaveFile toRemove = projects.removeFirst();// First in First out policy
@@ -299,20 +306,25 @@ public class FlexoAutoSaveThread extends Thread {
 			dest = new File(projectDirectory.getParentFile(), projectDirectory.getName() + ".restore" + (attempt == 0 ? "" : "." + attempt));
 			attempt++;
 		}
-		if (progress != null)
+		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("creating_restore_project_at") + " " + dest.getAbsolutePath());
+		}
 		FileUtils.copyContentDirToDir(projectDirectory, dest);
-		if (progress != null)
+		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("closing_project"));
+		}
 		ModuleLoader.closeCurrentProject();
-		if (progress != null)
+		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("deleting_project"));
+		}
 		FileUtils.deleteDir(projectDirectory);
-		if (progress != null)
+		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("restoring_project"));
+		}
 		FileUtils.copyContentDirToDir(autoSaveFile.getDirectory(), projectDirectory);
-		if (progress != null)
+		if (progress != null) {
 			progress.hideWindow();
+		}
 		ModuleLoader.openProjectWithModule(projectDirectory, module);
 	}
 
@@ -334,8 +346,9 @@ public class FlexoAutoSaveThread extends Thread {
 
 	public void setSleepTime(long sleepTime) {
 		this.sleepTime = sleepTime;
-		if (getState() == State.TIMED_WAITING)
+		if (getState() == State.TIMED_WAITING) {
 			this.interrupt();
+		}
 	}
 
 	/**
@@ -404,12 +417,13 @@ public class FlexoAutoSaveThread extends Thread {
 		public String getOffset() {
 			long current = System.currentTimeMillis();
 			long offset = current - creationDate.getTime();
-			if (offset < 60 * 60 * 1000)// Less than an hour
+			if (offset < 60 * 60 * 1000) {
 				return FlexoLocalization.localizedForKeyWithParams("($minutes) minutes_ago", this);
-			else if (offset < 24 * 60 * 60 * 1000)
+			} else if (offset < 24 * 60 * 60 * 1000) {
 				return FlexoLocalization.localizedForKeyWithParams("($hours) hours_ago_and_($minutesOverHours)_minutes", this);
-			else
+			} else {
 				return formatter.format(creationDate);
+			}
 		}
 
 		public String minutes() {
@@ -537,8 +551,9 @@ public class FlexoAutoSaveThread extends Thread {
 					if (FlexoController.confirm(FlexoLocalization.localizedForKey("are_you_sure_that_you_want_to_revert_to_that_version?"))) {
 						try {
 							ProgressWindow.showProgressWindow(null, FlexoLocalization.localizedForKey("project_restoration"), 4);
-							if (FlexoModule.getActiveModule() != null)
+							if (FlexoModule.getActiveModule() != null) {
 								ProgressWindow.instance().centerOnFrame(FlexoModule.getActiveModule().getFlexoFrame());
+							}
 							restoreAutoSaveProject(autoSaveFile, ProgressWindow.instance());
 						} catch (IOException e1) {
 							e1.printStackTrace();

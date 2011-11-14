@@ -23,8 +23,8 @@ import java.util.Hashtable;
 
 import org.apache.commons.lang.StringUtils;
 import org.openflexo.foundation.bindings.AbstractBinding;
-import org.openflexo.foundation.bindings.WidgetBindingDefinition;
 import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
+import org.openflexo.foundation.bindings.WidgetBindingDefinition;
 import org.openflexo.foundation.ie.HTMLListDescriptor;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
@@ -62,16 +62,21 @@ public abstract class IENonEditableTextWidget extends AbstractInnerTableWidget i
 	}
 
 	public TDCSSType getTDCSSTypeDerivedFrowTextCSSSlass() {
-		if (_textCSSClass == null)
+		if (_textCSSClass == null) {
 			return null;
-		if (_textCSSClass.equals(TextCSSClass.BLOC_BODY_CONTENT))
+		}
+		if (_textCSSClass.equals(TextCSSClass.BLOC_BODY_CONTENT)) {
 			return TDCSSType.DL_BLOCK_BODY_CONTENT;
-		if (_textCSSClass.equals(TextCSSClass.BLOC_BODY_TITLE))
+		}
+		if (_textCSSClass.equals(TextCSSClass.BLOC_BODY_TITLE)) {
 			return TDCSSType.DL_BLOCK_BODY_TITLE;
-		if (_textCSSClass.equals(TextCSSClass.BLOC_BODY_EXTRA))
+		}
+		if (_textCSSClass.equals(TextCSSClass.BLOC_BODY_EXTRA)) {
 			return TDCSSType.DL_BLOCK_BODY_CONTENT;
-		if (_textCSSClass.equals(TextCSSClass.BLOC_BODY_COMMENT))
+		}
+		if (_textCSSClass.equals(TextCSSClass.BLOC_BODY_COMMENT)) {
 			return TDCSSType.DL_BLOCK_BODY_COMMENT;
+		}
 		return null;
 	}
 
@@ -103,8 +108,9 @@ public abstract class IENonEditableTextWidget extends AbstractInnerTableWidget i
 	}
 
 	public final AbstractBinding getBindingValue() {
-		if (isBeingCloned())
+		if (isBeingCloned()) {
 			return null;
+		}
 		return _bindingValue;
 	}
 
@@ -130,18 +136,22 @@ public abstract class IENonEditableTextWidget extends AbstractInnerTableWidget i
 	@Override
 	public String getRawRowKeyPath() {
 		HTMLListDescriptor desc = getHTMLListDescriptor();
-		if (desc == null)
+		if (desc == null) {
 			return null;
+		}
 		String item = desc.getItemName();
-		if (item == null)
+		if (item == null) {
 			return null;
-		if (getBindingValue() == null)
+		}
+		if (getBindingValue() == null) {
 			return null;
-		if (getBindingValue().getCodeStringRepresentation().indexOf(item) > -1)
+		}
+		if (getBindingValue().getCodeStringRepresentation().indexOf(item) > -1) {
 			return getBindingValue().getCodeStringRepresentation().substring(
 					getBindingValue().getCodeStringRepresentation().indexOf(item) + item.length() + 1);
-		else
+		} else {
 			return null;
+		}
 	}
 
 	@Override
@@ -155,8 +165,9 @@ public abstract class IENonEditableTextWidget extends AbstractInnerTableWidget i
 
 	@Override
 	protected Hashtable<String, String> getLocalizableProperties(Hashtable<String, String> props) {
-		if (StringUtils.isNotEmpty(getValue()) && getBindingValue() == null)
+		if (StringUtils.isNotEmpty(getValue()) && getBindingValue() == null) {
 			props.put("value", getValue());
+		}
 		return super.getLocalizableProperties(props);
 	}
 

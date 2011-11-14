@@ -317,9 +317,9 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 		protected final Icon decorateIcon(FlexoModelObject object, Icon returned) {
 			if (AdvancedPrefs.getHightlightUncommentedItem() && object != null && object.isDescriptionImportant()
 					&& !object.hasDescription()) {
-				if (returned instanceof ImageIcon)
+				if (returned instanceof ImageIcon) {
 					returned = IconFactory.getImageIcon((ImageIcon) returned, new IconMarker[] { IconLibrary.WARNING });
-				else {
+				} else {
 					logger.severe("CANNOT decorate a non ImageIcon for " + this);
 				}
 			}
@@ -412,10 +412,12 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 	 * Override when required
 	 */
 	protected boolean isAcceptableValue(FlexoModelObject o) {
-		if (o == null)
+		if (o == null) {
 			return false;
-		if (!getRepresentedType().isAssignableFrom(o.getClass()))
+		}
+		if (!getRepresentedType().isAssignableFrom(o.getClass())) {
 			return false;
+		}
 		return evaluateSelectableCondition((T) o);
 	}
 
@@ -423,10 +425,12 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 	private DataBinding _selectableCondition;
 
 	public DataBinding getSelectableConditionDataBinding() {
-		if (_selectableCondition != null)
+		if (_selectableCondition != null) {
 			return _selectableCondition;
-		if (_selectableConditionAsString == null || StringUtils.isEmpty(_selectableConditionAsString))
+		}
+		if (_selectableConditionAsString == null || StringUtils.isEmpty(_selectableConditionAsString)) {
 			return null;
+		}
 		_selectableCondition = new DataBinding(_selectableConditionAsString);
 		_selectableCondition.setOwner(component);
 		_selectableCondition.setBindingAttribute(null);
@@ -446,8 +450,9 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 	}
 
 	public boolean evaluateSelectableCondition(T candidateValue) {
-		if (getSelectableConditionDataBinding() == null)
+		if (getSelectableConditionDataBinding() == null) {
 			return true;
+		}
 		setCandidateValue(candidateValue);
 		boolean returned = (Boolean) getSelectableConditionDataBinding().getBindingValue(controller);
 		return returned;

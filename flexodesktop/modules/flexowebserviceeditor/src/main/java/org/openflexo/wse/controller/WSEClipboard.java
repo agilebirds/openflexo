@@ -63,8 +63,9 @@ public class WSEClipboard extends FlexoClipboard {
 		if (_isPasteEnabled) {
 			return super.performSelectionPaste();
 		} else {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Sorry, PASTE disabled");
+			}
 			return false;
 		}
 	}
@@ -73,13 +74,15 @@ public class WSEClipboard extends FlexoClipboard {
 	protected void performSelectionPaste(FlexoModelObject pastingContext, PastingGraphicalContext graphicalContext) {
 		JComponent targetContainer = graphicalContext.targetContainer;
 		if (isTargetValidForPasting(targetContainer)) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Paste is legal");
-			// Handle paste here
+				// Handle paste here
+			}
 		} else {
 			FlexoController.notify(FlexoLocalization.localizedForKey("cannot_paste_at_this_place_wrong_level"));
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Paste is NOT legal");
+			}
 		}
 	}
 

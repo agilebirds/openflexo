@@ -70,8 +70,9 @@ public abstract class FlexoRelativeWindow extends JFrame /*implements FocusListe
 	@Override
 	public void dispose() {
 		super.dispose();
-		if (_parentFrame != null)
+		if (_parentFrame != null) {
 			_parentFrame.removeFromRelativeWindows(this);
+		}
 		getController().notifyRemoveFlexoRelativeWindow(this);
 		removeAll();
 		_parentFrame = null;
@@ -82,14 +83,16 @@ public abstract class FlexoRelativeWindow extends JFrame /*implements FocusListe
 	}
 
 	public FlexoController getController() {
-		if (_parentFrame != null)
+		if (_parentFrame != null) {
 			return _parentFrame.getController();
+		}
 		return null;
 	}
 
 	public FlexoModule getModule() {
-		if (getParentFrame() != null)
+		if (getParentFrame() != null) {
 			return getParentFrame().getModule();
+		}
 		return null;
 	}
 
@@ -107,8 +110,9 @@ public abstract class FlexoRelativeWindow extends JFrame /*implements FocusListe
 
 	@Override
 	public void setVisible(boolean mustBeDisplayed) {
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("setVisible " + mustBeDisplayed + " in " + this.getClass().getName());
+		}
 		updateDisplayedWhenModuleIsActiveState(mustBeDisplayed);
 		if (mustBeDisplayed) {
 			if (getModule() != null && getModule().isActive()) {
@@ -128,8 +132,9 @@ public abstract class FlexoRelativeWindow extends JFrame /*implements FocusListe
 	@Override
 	public void show() {
 		if (!requestSetVisible) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("show() is deprecated and should not be used in this context !");
+			}
 		}
 		super.show();
 	}
@@ -137,21 +142,26 @@ public abstract class FlexoRelativeWindow extends JFrame /*implements FocusListe
 	@Override
 	public void hide() {
 		if (!requestSetVisible) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("hide() is deprecated and should not be used in this context !");
+			}
 		}
 		super.hide();
 	}
 
 	private void updateDisplayedWhenModuleIsActiveState(boolean mustBeDisplayed) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("updateDisplayedWhenModuleIsActiveState in " + this.getClass().getName());
-		if (logger.isLoggable(Level.FINE))
+		}
+		if (logger.isLoggable(Level.FINE)) {
 			logger.finer("isDisplayedWhenModuleIsActive=" + isDisplayedWhenModuleIsActive);
-		if (logger.isLoggable(Level.FINE))
+		}
+		if (logger.isLoggable(Level.FINE)) {
 			logger.finer("mustBeDisplayed=" + mustBeDisplayed);
-		if (_parentFrame == null)
+		}
+		if (_parentFrame == null) {
 			return;
+		}
 		if (isDisplayedWhenModuleIsActive) {
 			if (!mustBeDisplayed) {
 				_parentFrame.removeFromDisplayedRelativeWindows(this);
@@ -167,8 +177,9 @@ public abstract class FlexoRelativeWindow extends JFrame /*implements FocusListe
 	}
 
 	public void setVisibleNoParentFrameNotification(boolean mustBeDisplayed) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setVisibleNoParentFrameNotification " + mustBeDisplayed + " in " + this.getClass().getName());
+		}
 		requestSetVisible = true;
 		super.setVisible(mustBeDisplayed);
 		requestSetVisible = false;

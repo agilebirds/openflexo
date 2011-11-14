@@ -97,15 +97,16 @@ public class ShellScriptTokenMarker extends TokenMarker {
 				case '&':
 				case '|':
 				case ';':
-					if (backslash)
+					if (backslash) {
 						backslash = false;
-					else
+					} else {
 						cmdState = 0; /*beforeCmd*/
+					}
 					break;
 				case '#':
-					if (backslash)
+					if (backslash) {
 						backslash = false;
-					else {
+					} else {
 						addToken(i - lastOffset, token);
 						addToken(length - i, Token.COMMENT1);
 						lastOffset = length;
@@ -113,9 +114,9 @@ public class ShellScriptTokenMarker extends TokenMarker {
 					}
 					break;
 				case '$':
-					if (backslash)
+					if (backslash) {
 						backslash = false;
-					else {
+					} else {
 						addToken(i - lastOffset, token);
 						cmdState = 2; /*afterCmd*/
 						lastOffset = i;
@@ -130,14 +131,15 @@ public class ShellScriptTokenMarker extends TokenMarker {
 								token = Token.KEYWORD2;
 								break;
 							}
-						} else
+						} else {
 							token = Token.KEYWORD2;
+						}
 					}
 					break;
 				case '"':
-					if (backslash)
+					if (backslash) {
 						backslash = false;
-					else {
+					} else {
 						addToken(i - lastOffset, token);
 						token = Token.LITERAL1;
 						lineInfo[lineIndex].obj = null;
@@ -146,9 +148,9 @@ public class ShellScriptTokenMarker extends TokenMarker {
 					}
 					break;
 				case '\'':
-					if (backslash)
+					if (backslash) {
 						backslash = false;
-					else {
+					} else {
 						addToken(i - lastOffset, token);
 						token = Token.LITERAL2;
 						cmdState = 2; /*afterCmd*/
@@ -156,9 +158,9 @@ public class ShellScriptTokenMarker extends TokenMarker {
 					}
 					break;
 				case '<':
-					if (backslash)
+					if (backslash) {
 						backslash = false;
-					else {
+					} else {
 						if (length - i > 1 && array[i1] == '<') {
 							addToken(i - lastOffset, token);
 							token = Token.LITERAL1;
@@ -195,26 +197,28 @@ public class ShellScriptTokenMarker extends TokenMarker {
 				}
 				break;
 			case Token.LITERAL1:
-				if (backslash)
+				if (backslash) {
 					backslash = false;
-				else if (c == '"') {
+				} else if (c == '"') {
 					addToken(i1 - lastOffset, token);
 					cmdState = 2; /*afterCmd*/
 					lastOffset = i1;
 					token = Token.NULL;
-				} else
+				} else {
 					backslash = false;
+				}
 				break;
 			case Token.LITERAL2:
-				if (backslash)
+				if (backslash) {
 					backslash = false;
-				else if (c == '\'') {
+				} else if (c == '\'') {
 					addToken(i1 - lastOffset, Token.LITERAL1);
 					cmdState = 2; /*afterCmd*/
 					lastOffset = i1;
 					token = Token.NULL;
-				} else
+				} else {
 					backslash = false;
+				}
 				break;
 			case LVARIABLE:
 				backslash = false;
@@ -231,10 +235,11 @@ public class ShellScriptTokenMarker extends TokenMarker {
 
 		switch (token) {
 		case Token.NULL:
-			if (cmdState == 1)
+			if (cmdState == 1) {
 				addToken(length - lastOffset, Token.KEYWORD1);
-			else
+			} else {
 				addToken(length - lastOffset, token);
+			}
 			break;
 		case Token.LITERAL2:
 			addToken(length - lastOffset, Token.LITERAL1);

@@ -29,8 +29,9 @@ public class TestFileFinder {
 	public static File findTestFile(String fileName) {
 		String fullPath1 = pathWorkspace + fileName;
 		File reply = new File(fullPath1);
-		if (reply.exists())
+		if (reply.exists()) {
 			return reply;
+		}
 		return new File(pathHudson + fileName);
 	}
 }

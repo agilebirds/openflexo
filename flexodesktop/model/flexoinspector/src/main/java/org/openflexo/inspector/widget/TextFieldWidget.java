@@ -90,8 +90,9 @@ public class TextFieldWidget extends DenaliWidget<String> {
 		} else {
 			validateOnReturn = false;
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("validateOnReturn=" + validateOnReturn);
+		}
 		if (model.hasValueForParameter(COLUMNS_PARAM)) {
 			int colNb = model.getIntValueForParameter(COLUMNS_PARAM);
 			_textField.setColumns(colNb > 0 ? colNb : DEFAULT_COLUMNS);
@@ -123,8 +124,9 @@ public class TextFieldWidget extends DenaliWidget<String> {
 						if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 							if (e.getLength() == 1) {
 								char c = _textField.getText().charAt(e.getOffset());
-								if (c == '´' || c == 'ˆ' || c == '˜' || c == '`' || c == '¨')
+								if (c == '´' || c == 'ˆ' || c == '˜' || c == '`' || c == '¨') {
 									return;
+								}
 							}
 						}
 					} catch (RuntimeException e1) {
@@ -173,13 +175,15 @@ public class TextFieldWidget extends DenaliWidget<String> {
 	public synchronized void updateWidgetFromModel() {
 		// if (logger.isLoggable(Level.FINE)) logger.fine ("BEGIN
 		// updateWidgetFromModel()");
-		if (modelUpdating)
+		if (modelUpdating) {
 			return;
+		}
 		widgetUpdating = true;
 		int caret = _textField.getCaretPosition();
 		_textField.setText(getStringValue());
-		if (caret > -1 && caret < _textField.getDocument().getLength())
+		if (caret > -1 && caret < _textField.getDocument().getLength()) {
 			_textField.setCaretPosition(caret);
+		}
 		widgetUpdating = false;
 		// if (logger.isLoggable(Level.INFO)) logger.info ("END
 		// updateWidgetFromModel()");
@@ -193,8 +197,9 @@ public class TextFieldWidget extends DenaliWidget<String> {
 		// if (logger.isLoggable(Level.INFO)) logger.info ("BEGIN
 		// updateModelFromWidget()");
 		modelUpdating = true;
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("updateModelFromWidget() in TextFieldWidget");
+		}
 		setStringValue(_textField.getText());
 		modelUpdating = false;
 		// if (logger.isLoggable(Level.INFO)) logger.info ("END

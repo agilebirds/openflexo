@@ -161,8 +161,9 @@ public enum OntologicDataType {
 
 	public static OntologicDataType fromURI(String uri) {
 		for (OntologicDataType dt : values()) {
-			if (dt.getURI().equals(uri))
+			if (dt.getURI().equals(uri)) {
 				return dt;
+			}
 		}
 		return null;
 	}

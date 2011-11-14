@@ -52,16 +52,18 @@ public class DuplicateComponentInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, DuplicateComponentAction action) {
 				IEWOComponent c;
-				if (action.getFocusedObject() instanceof ComponentDefinition)
+				if (action.getFocusedObject() instanceof ComponentDefinition) {
 					c = ((ComponentDefinition) action.getFocusedObject()).getWOComponent();
-				else if (action.getFocusedObject() instanceof IEWOComponent)
+				} else if (action.getFocusedObject() instanceof IEWOComponent) {
 					c = (IEWOComponent) action.getFocusedObject();
-				else
+				} else {
 					return false;
+				}
 				String componentName = null;
 				do {
-					if (componentName != null)
+					if (componentName != null) {
 						FlexoController.notify("this_name_isalready_used_by_another_component");
+					}
 					componentName = FlexoController.askForStringMatchingPattern(FlexoLocalization.localizedForKey("new_component_name"),
 							IERegExp.JAVA_CLASS_NAME_PATTERN,
 							FlexoLocalization.localizedForKey("must_start_with_a_letter_followed_by_any_letter_or_number"));
@@ -78,8 +80,9 @@ public class DuplicateComponentInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<DuplicateComponentAction>() {
 			@Override
 			public boolean run(ActionEvent e, DuplicateComponentAction action) {
-				if (action.getComponentDefinition() != null)
+				if (action.getComponentDefinition() != null) {
 					getController().setCurrentEditedObjectAsModuleView(action.getComponentDefinition().getDummyComponentInstance());
+				}
 				return true;
 			}
 		};

@@ -104,14 +104,16 @@ public abstract class ViewElement extends ViewObject implements Bindable {
 	}
 
 	protected String getLabelValue() {
-		if (getPatternRole() != null)
+		if (getPatternRole() != null) {
 			return (String) getPatternRole().getLabel().getBindingValue(getEditionPatternInstance());
+		}
 		return null;
 	}
 
 	protected void setLabelValue(String aValue) {
-		if (getPatternRole() != null && !getPatternRole().getReadOnlyLabel())
+		if (getPatternRole() != null && !getPatternRole().getReadOnlyLabel()) {
 			getPatternRole().getLabel().setBindingValue(aValue, getEditionPatternInstance());
+		}
 	}
 
 	public EditionPattern getEditionPattern() {
@@ -147,16 +149,18 @@ public abstract class ViewElement extends ViewObject implements Bindable {
 						}
 					}
 				}
-				if (returned != null)
+				if (returned != null) {
 					return returned;
+				}
 			}
 		}
 		return null;
 	}
 
 	public EditionPatternInstance getEditionPatternInstance() {
-		if (getEditionPatternReference() != null)
+		if (getEditionPatternReference() != null) {
 			return getEditionPatternReference().getEditionPatternInstance();
+		}
 		return null;
 	}
 

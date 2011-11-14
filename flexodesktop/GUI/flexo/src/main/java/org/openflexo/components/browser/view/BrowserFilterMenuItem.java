@@ -26,8 +26,8 @@ import java.util.logging.Logger;
 import javax.swing.JCheckBoxMenuItem;
 
 import org.openflexo.components.browser.BrowserFilter;
-import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
+import org.openflexo.components.browser.ProjectBrowser;
 
 /**
  * Please comment this class
@@ -53,8 +53,9 @@ public class BrowserFilterMenuItem extends JCheckBoxMenuItem implements ActionLi
 	public void actionPerformed(ActionEvent e) {
 		if (_filter != null) {
 			_filter.setStatus((isSelected() ? BrowserFilterStatus.SHOW : BrowserFilterStatus.HIDE));
-			if (_browser != null)
+			if (_browser != null) {
 				_browser.update();
+			}
 		}
 	}
 

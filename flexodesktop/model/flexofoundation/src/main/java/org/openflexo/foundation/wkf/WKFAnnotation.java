@@ -93,8 +93,9 @@ public class WKFAnnotation extends WKFArtefact implements InspectableObject, Del
 	public String getInspectorName() {
 		if (isBoundingBox()) {
 			return Inspectors.WKF.BOUNDING_BOX_INSPECTOR;
-		} else
+		} else {
 			return Inspectors.WKF.ANNOTATION_INSPECTOR;
+		}
 	}
 
 	public FlexoColor getBackgroundColor() {

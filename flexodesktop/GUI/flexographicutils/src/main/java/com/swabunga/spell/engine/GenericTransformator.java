@@ -19,11 +19,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 package com.swabunga.spell.engine;
 
-import com.swabunga.util.StringUtility;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.HashMap;
 import java.util.Vector;
+
+import com.swabunga.util.StringUtility;
 
 /**
  * A Generic implementation of a transformator takes an aspell phonetics file and constructs some sort of transformation table using the
@@ -111,12 +117,14 @@ public class GenericTransformator implements Transformator {
 		TransformationRule rule;
 		Vector tmp = new Vector();
 
-		if (ruleArray == null)
+		if (ruleArray == null) {
 			return null;
+		}
 		for (int i = 0; i < ruleArray.length; i++) {
 			rule = (TransformationRule) ruleArray[i];
-			if (rule.getReplaceExp().length() == 1)
+			if (rule.getReplaceExp().length() == 1) {
 				tmp.addElement(rule.getReplaceExp());
+			}
 		}
 		replacements = new char[tmp.size()];
 		for (int i = 0; i < tmp.size(); i++) {
@@ -130,6 +138,7 @@ public class GenericTransformator implements Transformator {
 	 * 
 	 * @return char[] An array of chars representing the alphabet or null if no alphabet was available.
 	 */
+	@Override
 	public char[] getReplaceList() {
 		return alphabetString;
 	}
@@ -137,10 +146,12 @@ public class GenericTransformator implements Transformator {
 	/**
 	 * Returns the phonetic code of the word.
 	 */
+	@Override
 	public String transform(String word) {
 
-		if (ruleArray == null)
+		if (ruleArray == null) {
 			return null;
+		}
 
 		TransformationRule rule;
 		StringBuffer str = new StringBuffer(word.toUpperCase());
@@ -159,8 +170,9 @@ public class GenericTransformator implements Transformator {
 			for (int i = 0; i < ruleArray.length; i++) {
 				// System.out.println("Testing rule#:"+i);
 				rule = (TransformationRule) ruleArray[i];
-				if (rule.startsWithExp() && startPos > 0)
+				if (rule.startsWithExp() && startPos > 0) {
 					continue;
+				}
 				if (startPos + rule.lengthOfMatch() > strLength) {
 					continue;
 				}
@@ -195,11 +207,13 @@ public class GenericTransformator implements Transformator {
 
 	// Here is where the real work of reading the phonetics file is done.
 	private void buildRule(String str, Vector ruleList) {
-		if (str.length() < 1)
+		if (str.length() < 1) {
 			return;
+		}
 		for (int i = 0; i < IGNORED_KEYWORDS.length; i++) {
-			if (str.startsWith(IGNORED_KEYWORDS[i]))
+			if (str.startsWith(IGNORED_KEYWORDS[i])) {
 				return;
+			}
 		}
 
 		// A different alphabet is used for this language, will be read into
@@ -230,15 +244,19 @@ public class GenericTransformator implements Transformator {
 							takeOutPart++;
 							matchLength++;
 						}
-						if (str.charAt(i) == STARTMULTI || str.charAt(i) == ENDMULTI)
+						if (str.charAt(i) == STARTMULTI || str.charAt(i) == ENDMULTI) {
 							inMulti = !inMulti;
+						}
 					}
-					if (str.charAt(i) == '-')
+					if (str.charAt(i) == '-') {
 						takeOutPart--;
-					if (str.charAt(i) == '^')
+					}
+					if (str.charAt(i) == '^') {
 						start = true;
-					if (str.charAt(i) == '$')
+					}
+					if (str.charAt(i) == '$') {
 						end = true;
+					}
 				} else {
 					replaceExp.append(str.charAt(i));
 				}
@@ -255,8 +273,9 @@ public class GenericTransformator implements Transformator {
 
 	// Chars with special meaning to aspell. Not everyone is implemented here.
 	private boolean isReservedChar(char ch) {
-		if (ch == '<' || ch == '>' || ch == '^' || ch == '$' || ch == '-' || Character.isDigit(ch))
+		if (ch == '<' || ch == '>' || ch == '^' || ch == '$' || ch == '-' || Character.isDigit(ch)) {
 			return true;
+		}
 		return false;
 	}
 
@@ -305,30 +324,36 @@ public class GenericTransformator implements Transformator {
 				matchCh = match[matchPos];
 				if (matchCh == STARTMULTI || matchCh == ENDMULTI) {
 					inMulti = !inMulti;
-					if (!inMulti)
+					if (!inMulti) {
 						matching = matching & multiMatch;
-					else
+					} else {
 						multiMatch = false;
+					}
 				} else {
 					if (matchCh != word.charAt(wordPos)) {
-						if (inMulti)
+						if (inMulti) {
 							multiMatch = multiMatch | false;
-						else
+						} else {
 							matching = false;
+						}
 					} else {
-						if (inMulti)
+						if (inMulti) {
 							multiMatch = multiMatch | true;
-						else
+						} else {
 							matching = true;
+						}
 					}
-					if (!inMulti)
+					if (!inMulti) {
 						wordPos++;
-					if (!matching)
+					}
+					if (!matching) {
 						break;
+					}
 				}
 			}
-			if (end && wordPos != word.length())
+			if (end && wordPos != word.length()) {
 				matching = false;
+			}
 			return matching;
 		}
 
@@ -349,6 +374,7 @@ public class GenericTransformator implements Transformator {
 		}
 
 		// Just for debugging purposes.
+		@Override
 		public String toString() {
 			return "Match:" + String.valueOf(match) + " Replace:" + replace + " TakeOut:" + takeOut + " MatchLength:" + matchLength
 					+ " Start:" + start + " End:" + end;

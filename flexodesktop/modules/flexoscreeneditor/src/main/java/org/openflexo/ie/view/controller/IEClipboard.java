@@ -70,11 +70,13 @@ public class IEClipboard extends FlexoClipboard {
 		JComponent container = graphicalContext.targetContainer;
 		Point location = graphicalContext.pastingLocation;
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Pasting " + _clipboardData + " in container " + container);
+		}
 		if (isTargetValidForPasting(container)) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Target is valid");
+			}
 			IEContainer targetContainer = (IEContainer) container;
 			if (!IEDTListener.isValidDropTargetContainer(targetContainer.getContainerModel(), _clipboardData)) {
 				JComponent subTarget = (JComponent) container.getComponentAt(location);
@@ -87,29 +89,35 @@ public class IEClipboard extends FlexoClipboard {
 			}
 			// Now we create the object to insert in the dropContainer.
 			IEWidget targetModel = targetContainer.getContainerModel();
-			if (targetModel instanceof IETDWidget)
+			if (targetModel instanceof IETDWidget) {
 				targetModel = ((IETDWidget) targetModel).getSequenceWidget();
+			}
 			IEWidget newWidget = IEDTListener.createModelFromMovedWidget(_clipboardData, targetModel, false);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Widget has been created");
+			}
 			// IEWidgetView newView =
 			// IEDTListener.createView(_ieController,newWidget,targetModel);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("View has been created");
+			}
 
 			if (newWidget != null) {
 				IEDTListener.insertView(newWidget, targetContainer, location);
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("View has been inserted");
-				// _ieController.getIESelectionManager().processMouseClicked(newView,newView.getCenter(),1,false);
+					// _ieController.getIESelectionManager().processMouseClicked(newView,newView.getCenter(),1,false);
+				}
 
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not create view for model " + newWidget);
+				}
 			}
 		} else {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Target is NOT valid");
+			}
 		}
 	}
 
@@ -130,21 +138,24 @@ public class IEClipboard extends FlexoClipboard {
 				IEWidget copiedWidget = (IEWidget) currentlySelectedObjects.elementAt(0);
 				_clipboardData = copiedWidget;
 			}
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Copying " + _clipboardData);
+			}
 			return true;
 		}
 		return false;
 	}
 
 	protected boolean isTargetValidForPasting(JComponent targetContainer) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("isTargetValidForPasting(): container is a " + targetContainer.getClass().getName());
+		}
 		return targetContainer instanceof IEContainer;
 	}
 
 	protected void exportClipboardToPalette(File paletteDirectory, String newPaletteElementName) {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Sorry, exporting clipboard to IE palette not implemented.");
+		}
 	}
 }

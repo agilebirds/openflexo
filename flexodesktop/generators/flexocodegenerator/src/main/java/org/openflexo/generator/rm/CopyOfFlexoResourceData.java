@@ -27,14 +27,13 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
+import org.openflexo.foundation.rm.FlexoFileResource.FileWritingLock;
 import org.openflexo.foundation.rm.FlexoGeneratedResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.GeneratedResourceData;
-import org.openflexo.foundation.rm.FlexoFileResource.FileWritingLock;
 import org.openflexo.foundation.rm.cg.CopyOfFlexoResource;
 import org.openflexo.generator.FlexoResourceGenerator;
-import org.openflexo.generator.rm.GenerationAvailableFile;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileUtils;
 
@@ -102,10 +101,12 @@ public class CopyOfFlexoResourceData implements GeneratedResourceData, Generatio
 	@Override
 	public void writeToFile(File aFile) throws FlexoException {
 		if (source == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Source is null for resource: " + this);
-			if (aFile.exists())
+			}
+			if (aFile.exists()) {
 				aFile.delete();
+			}
 			return;
 		}
 		try {
@@ -116,15 +117,16 @@ public class CopyOfFlexoResourceData implements GeneratedResourceData, Generatio
 				lock = getFlexoResource().willWriteOnDisk();
 				needsNotifyEndOfSaving = true;
 			}
-			if (source.isFile())
+			if (source.isFile()) {
 				FileUtils.copyFileToFile(source, aFile);
-			else if (source.isDirectory()) {
+			} else if (source.isDirectory()) {
 				aFile.mkdirs();
 				FileUtils.copyDirToDir(source, aFile);
 			} else {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("Resource to copy file is neither a file nor a directory "
 							+ this.flexoCopiedResource.getResourceToCopy().getFile().getAbsolutePath());
+				}
 			}
 			if (needsNotifyEndOfSaving) {
 				getFlexoResource().hasWrittenOnDisk(lock);

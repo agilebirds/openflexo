@@ -50,8 +50,9 @@ public class ControlPointReference extends PointConstruction {
 
 	@Override
 	protected FGEPoint computeData() {
-		if (getControlPoint() != null)
+		if (getControlPoint() != null) {
 			return getControlPoint().getPoint();
+		}
 		System.out.println("computeData() for ControlPointReference: cannot find cp " + cpName + " for " + reference);
 		setModified();
 		return new FGEPoint(0, 0);

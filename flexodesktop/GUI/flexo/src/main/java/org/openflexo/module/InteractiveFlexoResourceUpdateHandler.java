@@ -34,13 +34,13 @@ import org.openflexo.foundation.rm.FlexoGeneratedResource;
 import org.openflexo.foundation.rm.FlexoImportedResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
+import org.openflexo.foundation.rm.FlexoResource.DependancyAlgorithmScheme;
 import org.openflexo.foundation.rm.FlexoResourceData;
 import org.openflexo.foundation.rm.FlexoResourceUpdateHandler;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.GeneratedResourceData;
 import org.openflexo.foundation.rm.ImportedResourceData;
 import org.openflexo.foundation.rm.StorageResourceData;
-import org.openflexo.foundation.rm.FlexoResource.DependancyAlgorithmScheme;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.FlexoController;
 
@@ -58,15 +58,17 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 	protected OptionWhenStorageResourceFoundAsConflicting getOptionWhenStorageResourceFoundAsConflicting(
 			FlexoStorageResource storageResource) {
 		String[] options;
-		if (storageResource == null || !storageResource.implementsResourceMerge())
+		if (storageResource == null || !storageResource.implementsResourceMerge()) {
 			options = new String[3];
-		else
+		} else {
 			options = new String[4];
+		}
 		options[0] = FlexoLocalization.localizedForKey("update_from_disk");
 		options[1] = FlexoLocalization.localizedForKey("overwrite_disk_change");
 		options[2] = FlexoLocalization.localizedForKey("ignore");
-		if (options.length == 4)
+		if (options.length == 4) {
 			options[3] = FlexoLocalization.localizedForKey("merge_changes");
+		}
 		int choice = FlexoController.selectOption(FlexoLocalization.localizedForKey("conflict_detected_on_resource") + " "
 				+ (storageResource != null ? storageResource : "") + "\n" + FlexoLocalization.localizedForKey("possible_actions_are"),
 				options, options[2]);
@@ -128,8 +130,9 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 
 	@Override
 	public void handlesResourceUpdate(final FlexoFileResource fileResource) {
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("handlesResourceUpdate() for " + fileResource);
+		}
 
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
@@ -139,8 +142,9 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 					FlexoStorageResource storageResource = (FlexoStorageResource) fileResource;
 
 					if (storageResource.isModified()) {
-						if (logger.isLoggable(Level.INFO))
+						if (logger.isLoggable(Level.INFO)) {
 							logger.info("Conflict detected on resource " + storageResource);
+						}
 						OptionWhenStorageResourceFoundAsConflicting choice = getOptionWhenStorageResourceFoundAsConflicting(storageResource);
 						if (choice == OptionWhenStorageResourceFoundAsConflicting.UpdateFromDisk) {
 							reloadProject(storageResource);
@@ -161,8 +165,9 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 							}
 						}
 					} else {
-						if (logger.isLoggable(Level.INFO))
+						if (logger.isLoggable(Level.INFO)) {
 							logger.info("Update detected on resource " + storageResource);
+						}
 						OptionWhenStorageResourceFoundAsModifiedOnDisk choice = getOptionWhenStorageResourceFoundAsModifiedOnDisk(storageResource);
 						if (choice == OptionWhenStorageResourceFoundAsModifiedOnDisk.UpdateFromDisk) {
 							try {
@@ -186,8 +191,9 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 
 					FlexoImportedResource importedResource = (FlexoImportedResource) fileResource;
 
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Update detected on resource " + importedResource);
+					}
 					OptionWhenImportedResourceFoundAsModifiedOnDisk choice = getOptionWhenImportedResourceFoundAsModifiedOnDisk(importedResource);
 					if (choice == OptionWhenImportedResourceFoundAsModifiedOnDisk.UpdateFromDisk) {
 						try {
@@ -204,8 +210,9 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 
 					FlexoGeneratedResource generatedResource = (FlexoGeneratedResource) fileResource;
 
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Update detected on resource " + generatedResource);
+					}
 
 					generatedResourceModified(generatedResource);
 				}
@@ -214,12 +221,14 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 					logger.info("Updating " + fileResource);
 					CustomCGTemplateRepository rep = fileResource.getProject().getGeneratedCode().getTemplates()
 							.getCustomCGTemplateRepository((CustomTemplatesResource) fileResource);
-					if (rep == null)
+					if (rep == null) {
 						rep = fileResource.getProject().getGeneratedDoc().getTemplates()
 								.getCustomCGTemplateRepository((CustomTemplatesResource) fileResource);
-					if (rep == null)
+					}
+					if (rep == null) {
 						rep = fileResource.getProject().getGeneratedSources().getTemplates()
 								.getCustomCGTemplateRepository((CustomTemplatesResource) fileResource);
+					}
 					rep.update();
 				}
 
@@ -256,13 +265,14 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 		List<CustomTemplatesResource> templates = new ArrayList<CustomTemplatesResource>();
 		for (FlexoFileResource<? extends FlexoResourceData> r : updatedResources) {
 			if (r instanceof FlexoStorageResource<?>) {
-				if (((FlexoStorageResource<?>) r).isModified())
+				if (((FlexoStorageResource<?>) r).isModified()) {
 					conflictingStorageResource.add((FlexoStorageResource<? extends StorageResourceData>) r);
-				else
+				} else {
 					updatedStorageResource.add((FlexoStorageResource<? extends StorageResourceData>) r);
-			} else if (r instanceof FlexoImportedResource<?>)
+				}
+			} else if (r instanceof FlexoImportedResource<?>) {
 				importedResource.add((FlexoImportedResource<? extends ImportedResourceData>) r);
-			else if (r instanceof FlexoGeneratedResource<?>) {
+			} else if (r instanceof FlexoGeneratedResource<?>) {
 				generatedResource.add((FlexoGeneratedResource<? extends GeneratedResourceData>) r);
 			} else if (r instanceof CustomTemplatesResource) {
 				templates.add((CustomTemplatesResource) r);
@@ -283,20 +293,23 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 				// Does nothing
 			}
 		}
-		if (generatedResource.size() > 0)
+		if (generatedResource.size() > 0) {
 			generatedResourcesModified(generatedResource);
+		}
 		if (templates.size() > 0) {
 			for (CustomTemplatesResource templatesResource : templates) {
 				CustomCGTemplateRepository rep = templatesResource.getProject().getGeneratedCode().getTemplates()
 						.getCustomCGTemplateRepository(templatesResource);
-				if (rep == null)
+				if (rep == null) {
 					rep = templatesResource.getProject().getGeneratedDoc().getTemplates().getCustomCGTemplateRepository(templatesResource);
-				if (rep == null)
+				}
+				if (rep == null) {
 					rep = templatesResource.getProject().getGeneratedSources().getTemplates()
 							.getCustomCGTemplateRepository(templatesResource);
-				if (rep != null)
+				}
+				if (rep != null) {
 					rep.update();
-				else if (logger.isLoggable(Level.WARNING)) {
+				} else if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not find repository for template " + templatesResource);
 				}
 			}

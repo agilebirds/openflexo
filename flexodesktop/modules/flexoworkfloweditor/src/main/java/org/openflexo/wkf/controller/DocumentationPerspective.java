@@ -75,8 +75,9 @@ public class DocumentationPerspective extends FlexoPerspective<FlexoProcess> {
 
 	@Override
 	public FlexoProcess getDefaultObject(FlexoModelObject proposedObject) {
-		if (proposedObject instanceof WKFObject)
+		if (proposedObject instanceof WKFObject) {
 			return ((WKFObject) proposedObject).getProcess();
+		}
 		return _controller.getProject().getRootFlexoProcess();
 	}
 

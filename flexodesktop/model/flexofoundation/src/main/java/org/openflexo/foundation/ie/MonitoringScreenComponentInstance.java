@@ -140,15 +140,17 @@ public class MonitoringScreenComponentInstance extends ComponentInstance {
 		while (en.hasMoreElements()) {
 			IEHyperlinkWidget button = en.nextElement();
 			ActionNode action = getOperationNode().getActionNodeForButton(button);
-			if (action != null)
+			if (action != null) {
 				reply.put(button, action);
+			}
 		}
 		return reply;
 	}
 
 	public String getTabKey() {
-		if (getWOComponent().getFirstTabContainerTitle() == null)
+		if (getWOComponent().getFirstTabContainerTitle() == null) {
 			return null;
+		}
 		return getOperationNode().getSelectedTabKey();
 	}
 
@@ -161,8 +163,9 @@ public class MonitoringScreenComponentInstance extends ComponentInstance {
 		ActionNode reply = null;
 		while (en.hasMoreElements()) {
 			reply = en.nextElement();
-			if (button == reply.getAssociatedButtonWidget())
+			if (button == reply.getAssociatedButtonWidget()) {
 				return reply;
+			}
 		}
 		return null;
 	}

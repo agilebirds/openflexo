@@ -25,14 +25,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.GeneratorIconLibrary;
-import org.openflexo.javaparser.FJPTypeResolver;
-import org.openflexo.javaparser.FJPJavaParseException.FJPParseException;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.cgmodule.view.popups.ModelReinjectionPopup;
 import org.openflexo.components.MultipleObjectSelectorPopup;
 import org.openflexo.foundation.FlexoException;
@@ -42,6 +34,13 @@ import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.cg.ModelReinjectableFile;
 import org.openflexo.generator.action.UpdateModel;
 import org.openflexo.generator.cg.CGJavaFile;
+import org.openflexo.icon.GeneratorIconLibrary;
+import org.openflexo.javaparser.FJPJavaParseException.FJPParseException;
+import org.openflexo.javaparser.FJPTypeResolver;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class UpdateModelInitializer extends ActionInitializer {
 

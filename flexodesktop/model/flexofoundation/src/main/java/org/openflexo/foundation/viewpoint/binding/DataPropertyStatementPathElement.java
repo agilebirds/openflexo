@@ -28,8 +28,9 @@ public class DataPropertyStatementPathElement extends StatementPathElement<Objec
 
 	@Override
 	public Type getType() {
-		if (ontologyProperty != null && ontologyProperty.getDataType() != null)
+		if (ontologyProperty != null && ontologyProperty.getDataType() != null) {
 			return ontologyProperty.getDataType().getAccessedType();
+		}
 		return Object.class;
 	}
 
@@ -53,8 +54,9 @@ public class DataPropertyStatementPathElement extends StatementPathElement<Objec
 		if (target instanceof OntologyIndividual) {
 			OntologyIndividual individual = (OntologyIndividual) target;
 			PropertyStatement statement = individual.getPropertyStatement(ontologyProperty);
-			if (statement == null)
+			if (statement == null) {
 				return null;
+			}
 			if (statement instanceof DataPropertyStatement) {
 				return ((DataPropertyStatement) statement).getValue();
 			} else {

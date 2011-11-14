@@ -62,14 +62,16 @@ public class UnresolvedAttributesConflict extends UnresolvedConflict {
 	}
 
 	public String value1() {
-		if (_attribute1 == null)
+		if (_attribute1 == null) {
 			return null;
+		}
 		return _attribute1.getValue();
 	}
 
 	public String value2() {
-		if (_attribute2 == null)
+		if (_attribute2 == null) {
 			return null;
+		}
 		return _attribute2.getValue();
 	}
 

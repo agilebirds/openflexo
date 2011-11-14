@@ -75,31 +75,37 @@ public abstract class FlexoClipboard {
 	protected void setCopyEnabled(boolean aBoolean) {
 		// aBoolean = ((FlexoActionType)_copyMenuItem.getAction()).isEnabled(_selectionManager.getFocusedObject(),
 		// _selectionManager.getSelection());
-		if (_copyMenuItem != null)
+		if (_copyMenuItem != null) {
 			_copyMenuItem.setEnabled(aBoolean);
+		}
 		_isCopyEnabled = aBoolean;
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("COPY enabled = " + aBoolean);
+		}
 	}
 
 	protected void setPasteEnabled(boolean aBoolean) {
 		// aBoolean = ((FlexoActionType)_pasteMenuItem.getAction()).isEnabled(_selectionManager.getFocusedObject(),
 		// _selectionManager.getSelection());
-		if (_pasteMenuItem != null)
+		if (_pasteMenuItem != null) {
 			_pasteMenuItem.setEnabled(aBoolean);
+		}
 		_isPasteEnabled = aBoolean;
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("PASTE enabled = " + aBoolean);
+		}
 	}
 
 	protected void setCutEnabled(boolean aBoolean) {
 		// aBoolean = ((FlexoActionType)_cutMenuItem.getAction()).isEnabled(_selectionManager.getFocusedObject(),
 		// _selectionManager.getSelection());
-		if (_cutMenuItem != null)
+		if (_cutMenuItem != null) {
 			_cutMenuItem.setEnabled(aBoolean);
+		}
 		_isCutEnabled = aBoolean;
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("CUT enabled = " + aBoolean);
+		}
 	}
 
 	public boolean hasCopiedData() {
@@ -109,25 +115,30 @@ public abstract class FlexoClipboard {
 	public boolean performSelectionCopy(Vector<FlexoModelObject> currentlySelectedObjects) {
 		if (_isCopyEnabled) {
 			if (isCurrentSelectionValidForCopy(currentlySelectedObjects)) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Copy is VALID");
+				}
 				if (performCopyOfSelection(currentlySelectedObjects)) {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Copy has been SUCCESSFULLY performed");
+					}
 					setPasteEnabled(true);
 					return true;
 				} else {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Copy has FAILED");
+					}
 					return false;
 				}
 			} else {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Copy is INVALID");
+				}
 			}
 		} else {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Sorry, COPY disabled");
+			}
 		}
 		return false;
 	}
@@ -137,8 +148,9 @@ public abstract class FlexoClipboard {
 			performSelectionPaste(_selectionManager.getPasteContext(), _selectionManager.getPastingGraphicalContext());
 			return true;
 		} else {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Sorry, PASTE disabled");
+			}
 			return false;
 		}
 	}
@@ -147,8 +159,9 @@ public abstract class FlexoClipboard {
 		if (_isCutEnabled) {
 			return performSelectionCopy(currentlySelectedObjects);
 		} else {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Sorry, CUT disabled");
+			}
 			return false;
 		}
 	}

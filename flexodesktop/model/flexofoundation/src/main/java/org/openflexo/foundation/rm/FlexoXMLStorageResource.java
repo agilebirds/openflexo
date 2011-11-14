@@ -34,6 +34,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.jdom.JDOMException;
+import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoXMLSerializableObject;
+import org.openflexo.foundation.utils.FlexoProgress;
+import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
+import org.openflexo.foundation.utils.ProjectLoadingHandler;
+import org.openflexo.foundation.xml.FlexoXMLMappings;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.xmlcode.AccessorInvocationException;
@@ -47,15 +55,6 @@ import org.openflexo.xmlcode.XMLCoder;
 import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
 import org.openflexo.xmlcode.XMLSerializable;
-
-import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.FlexoXMLSerializableObject;
-import org.openflexo.foundation.utils.FlexoProgress;
-import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
-import org.openflexo.foundation.utils.ProjectLoadingHandler;
-import org.openflexo.foundation.xml.FlexoXMLMappings;
-import org.openflexo.localization.FlexoLocalization;
 
 /**
  * This class represents a File Flexo resource, where related file is an XML file A File FlexoResource represent an object handled by Flexo
@@ -122,23 +121,26 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 				_resourceData = loadResourceData(progress, getLoadingHandler());
 			} catch (LoadXMLResourceException e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not load resource data for resource " + getResourceIdentifier() + " message: " + e.getMessage());
+				}
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine(e.getExtendedMessage());
 					e.printStackTrace();
 				}
 			} catch (FlexoException e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not load resource data for resource " + getResourceIdentifier() + " message: " + e.getMessage());
+				}
 				e.printStackTrace();
 			}
 		}
 
 		if (_resourceData == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Resource data for resource " + getResourceIdentifier() + " is null !");
+			}
 		}
 
 		return _resourceData;
@@ -169,13 +171,15 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 		notifyResourceStatusChanged();
 		boolean requiresRMFileSaving = false;
 		LoadXMLResourceException exception = null;
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Load resource data for " + getResourceIdentifier());
+		}
 		if (!getFile().exists()) {
 			recoverFile();
 			if (!getFile().exists()) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("File " + getFile().getAbsolutePath() + " does not exist, throwing exception now!");
+				}
 				throw new FlexoFileNotFoundException(this);
 			}
 		}
@@ -192,16 +196,18 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 		int i = availableVersionsNew.length - 1;
 		boolean notCorrectelyDeserialized = true;
 		FlexoVersion triedVersion = null;
-		if (projectWasHoldingObjectRegistration)
+		if (projectWasHoldingObjectRegistration) {
 			project.unholdObjectRegistration();
+		}
 		try {
 			while (notCorrectelyDeserialized
 					&& ((i >= 0 && performLoadWithPreviousVersion) || (i == availableVersionsNew.length - 1 && !performLoadWithPreviousVersion))) {
 				// triedVersion = availableVersions[i];
 				triedVersion = availableVersionsNew[i];
 				i--;
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("tried version = " + triedVersion.toString());
+				}
 
 				FlexoXMLMappings.ClassModelVersion cmv = getXmlMappings().getClassModelVersion(getResourceDataClass(), triedVersion);
 				if (cmv == null) {
@@ -213,21 +219,24 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 																			 * Little hack because GPO used it differently with conversion
 																			 * from 3.5 to 4.0 in RM
 																			 */) {
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("This resource " + getResourceIdentifier() + " must be converted from " + triedVersion + " into "
 								+ cmv.toVersion);
+					}
 					if (progress != null) {
 						progress.setProgress(FlexoLocalization.localizedForKey("converting from version ") + triedVersion + " "
 								+ FlexoLocalization.localizedForKey("to") + " " + cmv.toVersion);
 					}
 					isConverting = true;
 					if (convertResourceFileFromVersionToVersion(triedVersion, cmv.toVersion)) {
-						if (logger.isLoggable(Level.INFO))
+						if (logger.isLoggable(Level.INFO)) {
 							logger.info("Conversion from " + triedVersion + " into " + cmv.toVersion + " was successfull.");
+						}
 						// Load again with the new version !
 						try {
-							if (project != null)
+							if (project != null) {
 								project.holdObjectRegistration(); // Anyway, we will reload it later
+							}
 							// TODO: project should not be used for this but rather the resource. If by any chances, the loading of resource
 							// initiates the conversion of another one, that other resource will unset this property on the project and
 							// there is
@@ -235,31 +244,36 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 							returned = tryToLoadResourceDataWithVersion(cmv.toVersion);
 							requiresRMFileSaving = true;
 						} catch (JDOMException e) {
-							if (logger.isLoggable(Level.WARNING))
+							if (logger.isLoggable(Level.WARNING)) {
 								logger.warning("Malformed XML File: " + e.getMessage());
+							}
 							return null;
 						} catch (XMLOperationException e) {
 							e.printStackTrace();
-							if (e.getCause() != null)
+							if (e.getCause() != null) {
 								e.getCause().printStackTrace();
+							}
 							if (exception == null) {
 								exception = new LoadXMLResourceException(this, e.getCause() != null ? e.getCause().getMessage()
 										: e.getMessage());
 							}
 							exception.addLoadException(e);
-							if (logger.isLoggable(Level.SEVERE))
+							if (logger.isLoggable(Level.SEVERE)) {
 								logger.severe("Could not load Resource " + getResourceIdentifier() + ": failed to reload after conversion!");
+							}
 							throw exception;
 						} finally {
-							if (project != null)
+							if (project != null) {
 								project.unholdObjectRegistration();
+							}
 						}
 						triedVersion = cmv.toVersion;
 					} else {
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Conversion FAILED: succeeding to load Resource " + getResourceIdentifier()
 									+ " with model version " + triedVersion + " but this requires a conversion from version "
 									+ triedVersion + " to version " + cmv.toVersion + " which seem to be not implemented.");
+						}
 						/*
 						 * try { backwardSynchronizeWith(newerResourcesToSynchronizeWith); } catch (FlexoException e1) { if (exception ==
 						 * null) { exception = new LoadXMLResourceException(this); } exception.addLoadException(new
@@ -271,16 +285,18 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 
 				if (!triedVersion.equals(latestVersion())) {
 					isConverting = true;
-					if (project != null)
+					if (project != null) {
 						project.holdObjectRegistration();
+					}
 				} else {
 					isConverting = false;
 				}
 				try {
 					returned = tryToLoadResourceDataWithVersion(triedVersion);
 				} catch (JDOMException e) {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Malformed XML File: " + e.getMessage());
+					}
 					_isLoading = false;
 					throw new MalformedXMLException(this, e);
 				} catch (XMLOperationException e) {
@@ -299,28 +315,33 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 					}
 					exception.addLoadException(e);
 				} finally {
-					if (!triedVersion.equals(latestVersion()) && project != null)
+					if (!triedVersion.equals(latestVersion()) && project != null) {
 						project.unholdObjectRegistration();
+					}
 				}
 				if (returned != null) {
 					notCorrectelyDeserialized = false;
 				} else {
-					if (!loadingHandler.useOlderMappingWhenLoadingFailure(this))
+					if (!loadingHandler.useOlderMappingWhenLoadingFailure(this)) {
 						throw new LoadXMLResourceException(this, "Mapping used '" + cmv + "' could not load this resource.");
+					}
 				}
 			}
 
-			if (isDeleted())
+			if (isDeleted()) {
 				return null;
+			}
 
 			if (notCorrectelyDeserialized) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("Could not load Resource " + getResourceIdentifier() + ": no valid XML model found !");
+				}
 				_isLoading = false;
 				throw exception;
 			} else {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Found a version to load resource " + getResourceIdentifier());
+				}
 				_currentVersion = triedVersion;
 				FlexoXMLMappings.ClassModelVersion cmv = getXmlMappings().getClassModelVersion(getResourceDataClass(), triedVersion);
 
@@ -330,9 +351,10 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 				}
 
 				if (cmv.needsManualConversion && convertToLatestVersion) {
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("This resource " + getResourceIdentifier() + "must be converted from " + triedVersion + " into "
 								+ cmv.toVersion);
+					}
 					_resourceData = returned;
 					if (progress != null) {
 						progress.setProgress(FlexoLocalization.localizedForKey("converting from version ") + triedVersion + " "
@@ -340,47 +362,55 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 					}
 					isConverting = true;
 					if (convertResourceFileFromVersionToVersion(triedVersion, cmv.toVersion)) {
-						if (logger.isLoggable(Level.INFO))
+						if (logger.isLoggable(Level.INFO)) {
 							logger.info("Conversion from " + triedVersion + " into " + cmv.toVersion + " was successfull.");
+						}
 						// Load again with the new version !
 						try {
 							if (!cmv.toVersion.equals(latestVersion())) {
 								isConverting = true;
-								if (project != null)
+								if (project != null) {
 									project.holdObjectRegistration();
+								}
 							} else {
 								isConverting = false;
-								if (project != null)
+								if (project != null) {
 									project.unholdObjectRegistration();
+								}
 							}
 							returned = tryToLoadResourceDataWithVersion(cmv.toVersion);
 							requiresRMFileSaving = true;
 						} catch (JDOMException e) {
-							if (logger.isLoggable(Level.WARNING))
+							if (logger.isLoggable(Level.WARNING)) {
 								logger.warning("Malformed XML File: " + e.getMessage());
+							}
 							return null;
 						} catch (XMLOperationException e) {
 							e.printStackTrace();
-							if (e.getCause() != null)
+							if (e.getCause() != null) {
 								e.getCause().printStackTrace();
+							}
 							if (exception == null) {
 								exception = new LoadXMLResourceException(this, e.getCause() != null ? e.getCause().getMessage()
 										: e.getMessage());
 							}
 							exception.addLoadException(e);
-							if (logger.isLoggable(Level.SEVERE))
+							if (logger.isLoggable(Level.SEVERE)) {
 								logger.severe("Could not load Resource " + getResourceIdentifier() + ": failed to reload after conversion!");
+							}
 							throw exception;
 						} finally {
-							if (!cmv.toVersion.equals(latestVersion()) && project != null)
+							if (!cmv.toVersion.equals(latestVersion()) && project != null) {
 								project.unholdObjectRegistration();
+							}
 						}
 						triedVersion = cmv.toVersion;
 					} else {
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Conversion FAILED: succeeding to load Resource " + getResourceIdentifier()
 									+ " with model version " + triedVersion + " but this requires a conversion from version "
 									+ triedVersion + " to version " + cmv.toVersion + " which seem to be not implemented.");
+						}
 						/*
 						 * try { backwardSynchronizeWith(newerResourcesToSynchronizeWith); } catch (FlexoException e1) { if (exception ==
 						 * null) { exception = new LoadXMLResourceException(this); } exception.addLoadException(new
@@ -389,26 +419,31 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 						return returned;
 					}
 				}
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Succeeding to load Resource " + getResourceIdentifier() + " with model version " + triedVersion);
+				}
 				_resourceData = returned;
 				if (!triedVersion.equals(latestVersion()) && convertToLatestVersion) {
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Converting Resource " + getResourceIdentifier() + " to latest version " + latestVersion());
+					}
 					if (progress != null) {
 						progress.setProgress(FlexoLocalization.localizedForKey("converting from version ") + triedVersion + " "
 								+ FlexoLocalization.localizedForKey("to") + " " + latestVersion());
 					}
 					isConverting = true;
-					if (project != null)
+					if (project != null) {
 						project.holdObjectRegistration();
+					}
 					if (incrementalConversionFromVersionToVersion(triedVersion, latestVersion())) {
-						if (logger.isLoggable(Level.INFO))
+						if (logger.isLoggable(Level.INFO)) {
 							logger.info("Conversion from " + triedVersion + " into latest version :" + latestVersion() + " was successful.");
+						}
 						try {
 							isConverting = false;
-							if (project != null)
+							if (project != null) {
 								project.unholdObjectRegistration();
+							}
 							returned = tryToLoadResourceDataWithVersion(latestVersion());
 						} catch (Exception exce) {
 							exce.printStackTrace();
@@ -417,10 +452,12 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 						_isLoading = false;
 						_currentVersion = latestVersion();
 					} else {
-						if (project != null)
+						if (project != null) {
 							project.unholdObjectRegistration();
-						if (logger.isLoggable(Level.WARNING))
+						}
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Conversion from " + triedVersion + " into latest version : " + latestVersion() + " FAILED.");
+						}
 					}
 
 					try {
@@ -430,19 +467,22 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 						saveResourceData();
 						requiresRMFileSaving = true;
 					} catch (SaveXMLResourceException e) {
-						if (logger.isLoggable(Level.SEVERE))
+						if (logger.isLoggable(Level.SEVERE)) {
 							logger.log(Level.SEVERE, "Could not load Resource " + getResourceIdentifier()
 									+ ": failed to convert to new version !", e);
+						}
 						throw new LoadXMLResourceException(this, e.getMessage());
 					} catch (SaveResourcePermissionDeniedException e) {
-						if (logger.isLoggable(Level.SEVERE))
+						if (logger.isLoggable(Level.SEVERE)) {
 							logger.log(Level.SEVERE, "Could not load Resource " + getResourceIdentifier()
 									+ ": failed to convert to new version because file is read-only !", e);
+						}
 						throw new LoadXMLResourceException(this, e.getMessage());
 					} catch (SaveResourceException e) {
-						if (logger.isLoggable(Level.SEVERE))
+						if (logger.isLoggable(Level.SEVERE)) {
 							logger.log(Level.SEVERE, "Could not load Resource " + getResourceIdentifier()
 									+ ": failed to convert to new version !", e);
+						}
 						throw new LoadXMLResourceException(this, e.getMessage());
 					}
 				} else {
@@ -453,18 +493,22 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 				// _currentVersion = triedVersion;
 				if (requiresRMFileSaving) {
 					try {
-						if (logger.isLoggable(Level.FINE))
+						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("Save RM file.");
-						if (this instanceof FlexoRMResource)
+						}
+						if (this instanceof FlexoRMResource) {
 							this.saveResourceData(true);
-						else
+						} else {
 							getProject().getFlexoXMLFileResource().saveResourceData(true);
-						if (logger.isLoggable(Level.FINE))
+						}
+						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("RM file saving succeeded.");
+						}
 					} catch (SaveResourceException e1) {
 						// Warns about the exception
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Could not save RM file: see logs for details.");
+						}
 						e1.printStackTrace();
 						throw new LoadXMLResourceException(this, e1.getMessage());
 					}
@@ -476,8 +520,9 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 				_resourceData.setFlexoResource(this);
 			} catch (DuplicateResourceException e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 			}
 			/*
@@ -488,8 +533,9 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 		} finally {
 			_isLoading = false;
 			isConverting = false;
-			if (project != null && projectWasHoldingObjectRegistration)
+			if (project != null && projectWasHoldingObjectRegistration) {
 				project.holdObjectRegistration();
+			}
 		}
 	}
 
@@ -507,8 +553,9 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 		// Let's find the index of the version in the array
 		for (; i < v.length; i++) {
 			FlexoVersion version = v[i];
-			if (version.equals(fromVersion))
+			if (version.equals(fromVersion)) {
 				break;
+			}
 		}
 		// We try to convert until toVersion
 		for (; i < v.length; i++) {
@@ -517,22 +564,25 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 				if (cmv.needsManualConversion) {
 					if (convertResourceFileFromVersionToVersion(v[i], cmv.toVersion)) {
 						_currentVersion = cmv.toVersion;
-						if (logger.isLoggable(Level.INFO))
+						if (logger.isLoggable(Level.INFO)) {
 							logger.info("Successfully converted resource " + getResourceIdentifier() + " from " + v[i] + " to "
 									+ cmv.toVersion);
+						}
 						while ((i + 1) < v.length && !v[i + 1].equals(cmv.toVersion)) {
 							i++;
 						}
 						if (i + 1 == v.length || !v[i + 1].equals(cmv.toVersion)) {
-							if (logger.isLoggable(Level.WARNING))
+							if (logger.isLoggable(Level.WARNING)) {
 								logger.warning("This is weird. I tried to convert from " + cmv.version + " to " + cmv.toVersion
 										+ " but I can't find that version in the mapping.");
+							}
 							return false;
 						}
 					} else {
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("FAILED to convert resource " + getResourceIdentifier() + " from " + v[i] + " to "
 									+ cmv.toVersion);
+						}
 					}
 				} else {
 					_currentVersion = cmv.version;
@@ -548,8 +598,9 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 				break;// We are done here
 			}
 		}
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Incremental conversion from " + fromVersion + " to " + toVersion + " performed successfully");
+		}
 		return true;
 	}
 
@@ -569,15 +620,17 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 	@Override
 	protected void saveResourceData(boolean clearIsModified) throws SaveXMLResourceException, SaveResourcePermissionDeniedException {
 		if (!hasWritePermission()) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Permission denied : " + getFile().getAbsolutePath());
+			}
 			throw new SaveResourcePermissionDeniedException(this);
 		}
 		if (_resourceData != null) {
 			_saveResourceData(latestVersion(), clearIsModified);
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Succeeding to save Resource " + getResourceIdentifier() + " : " + getFile().getName() + " with date "
 						+ FileUtils.getDiskLastModifiedDate(getFile()));
+			}
 		}
 		if (clearIsModified) {
 			try {
@@ -600,14 +653,16 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 			logger.info("Trying to convert " + getResourceIdentifier() + " from " + latestVersion() + " to " + version);
 			_currentVersion = version;
 			if (!hasWritePermission()) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Permission denied : " + getFile().getAbsolutePath());
+				}
 				throw new SaveResourcePermissionDeniedException(this);
 			}
 			if (_resourceData != null) {
 				final XMLMapping currentMapping = getXmlMappings().getMappingForClassAndVersion(getResourceDataClass(), latestVersion());
 				final XMLMapping revertedMapping = getXmlMappings().getMappingForClassAndVersion(getResourceDataClass(), version);
 				_saveResourceData(version, new SerializationHandler() {
+					@Override
 					public void objectWillBeSerialized(XMLSerializable object) {
 						if (object instanceof FlexoModelObject) {
 							fillInUnmappedAttributesAsDynamicProperties((FlexoModelObject) object, currentMapping, revertedMapping);
@@ -615,14 +670,16 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 						}
 					}
 
+					@Override
 					public void objectHasBeenSerialized(XMLSerializable object) {
 						if (object instanceof FlexoModelObject) {
 							((FlexoModelObject) object).finalizeSerialization();
 						}
 					}
 				}, true);
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Succeeding to save Resource " + getResourceIdentifier() + " : " + getFile().getName());
+				}
 			}
 			_currentVersion = version;
 			getResourceData().clearIsModified(false);
@@ -650,14 +707,16 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 	protected synchronized void saveResourceDataWithVersion(FlexoVersion version) throws SaveXMLResourceException,
 			SaveResourcePermissionDeniedException {
 		if (!hasWritePermission()) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Permission denied : " + getFile().getAbsolutePath());
+			}
 			throw new SaveResourcePermissionDeniedException(this);
 		}
 		if (_resourceData != null) {
 			_saveResourceData(version, true);
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Succeeding to save Resource " + getResourceIdentifier() + " : " + getFile().getName());
+			}
 		}
 		try {
 			_currentVersion = version;
@@ -669,12 +728,14 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 
 	private void _saveResourceData(FlexoVersion version, boolean clearIsModified) throws SaveXMLResourceException {
 		_saveResourceData(version, new SerializationHandler() {
+			@Override
 			public void objectWillBeSerialized(XMLSerializable object) {
 				if (object instanceof FlexoModelObject) {
 					((FlexoModelObject) object).initializeSerialization();
 				}
 			}
 
+			@Override
 			public void objectHasBeenSerialized(XMLSerializable object) {
 				if (object instanceof FlexoModelObject) {
 					((FlexoModelObject) object).finalizeSerialization();
@@ -696,18 +757,21 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 			makeLocalCopy();
 			// Using temporary file
 			temporaryFile = File.createTempFile("temp", ".xml", dir);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.finer("Creating temp file " + temporaryFile.getAbsolutePath());
+			}
 			try {
 				performXMLSerialization(version, handler, temporaryFile);
 				// Renaming temporary file
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.finer("Renaming temp file " + temporaryFile.getAbsolutePath() + " to " + getFile().getAbsolutePath());
+				}
 				// temporaryFile.renameTo(getFile());
 				postXMLSerialization(version, temporaryFile, lock, clearIsModified);
 			} catch (DuplicateSerializationIdentifierException e) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.log(Level.SEVERE, "Duplicate serialization identifier: " + e.getMessage(), e);
+				}
 				if (isDuplicateSerializationIdentifierRepairable()) {
 					if (repairDuplicateSerializationIdentifier()) {
 						performXMLSerialization(version, handler, temporaryFile);
@@ -724,8 +788,9 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 			if (temporaryFile != null) {
 				temporaryFile.delete();
 			}
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Failed to save resource " + getResourceIdentifier() + " with model version " + version);
+			}
 			hasWrittenOnDisk(lock);
 			((FlexoXMLSerializableObject) getResourceData()).finalizeSerialization();
 			throw new SaveXMLResourceException(this, e, version);
@@ -745,8 +810,9 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 		hasWrittenOnDisk(lock);
 		((FlexoXMLSerializableObject) getResourceData()).finalizeSerialization();
 		_currentVersion = version;
-		if (clearIsModified)
+		if (clearIsModified) {
 			notifyResourceStatusChanged();
+		}
 	}
 
 	/**
@@ -775,8 +841,9 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 			out.close();
 			out = null;
 		} finally {
-			if (out != null)
+			if (out != null) {
 				out.close();
+			}
 			out = null;
 		}
 	}
@@ -806,12 +873,15 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 			// System.gc(); // protection against Windows
 
 			// Do a normal API rename attempt
-			if (f2.exists())
+			if (f2.exists()) {
 				f2.delete();
-			if (f1.renameTo(f2))
+			}
+			if (f1.renameTo(f2)) {
 				return true;
-			if (!f2.exists())
+			}
+			if (!f2.exists()) {
 				FileUtils.createNewFile(f2);
+			}
 			// API rename attempt failed, forcibly copy
 			bis = new BufferedInputStream(new FileInputStream(f1));
 			bos = new BufferedOutputStream(new FileOutputStream(f2));
@@ -828,8 +898,9 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 
 			// Attempt to preserve file modification times
 			f2.setLastModified(f1.lastModified());
-			if (!f1.canWrite())
+			if (!f1.canWrite()) {
 				f2.setReadOnly();
+			}
 
 			// Delete the original
 			// System.gc();
@@ -840,14 +911,16 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 			return true;
 		} finally {
 			try {
-				if (bis != null)
+				if (bis != null) {
 					bis.close();
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			try {
-				if (bos != null)
+				if (bos != null) {
 					bos.close();
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -877,45 +950,53 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 	protected XMLRD tryToLoadResourceDataWithVersion(FlexoVersion version) throws XMLOperationException, JDOMException {
 		XMLRD returned = null;
 		try {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Trying to load " + getResourceDataClass().getName() + " with model version " + version);
+			}
 			XMLMapping mapping = getXmlMappings().getMappingForClassAndVersion(getResourceDataClass(), version);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Model version " + version + " has been loaded.");
+			}
 
 			if (hasBuilder() && mapping.hasBuilderClass()) {
-				if (getProject() != null)
+				if (getProject() != null) {
 					returned = (XMLRD) XMLDecoder.decodeObjectWithMapping(new FileInputStream(getFile()), mapping, instanciateNewBuilder(),
 							getProject().getStringEncoder());
-				else {
-					if (!(this instanceof FlexoRMResource))
-						if (logger.isLoggable(Level.WARNING))
+				} else {
+					if (!(this instanceof FlexoRMResource)) {
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Project is not set on " + this.getFullyQualifiedName());
+						}
+					}
 					returned = (XMLRD) XMLDecoder.decodeObjectWithMapping(new FileInputStream(getFile()), mapping, instanciateNewBuilder());
 				}
 			} else {
-				if (getProject() != null)
+				if (getProject() != null) {
 					returned = (XMLRD) XMLDecoder.decodeObjectWithMapping(new FileInputStream(getFile()), mapping, null, getProject()
 							.getStringEncoder());
-				else {
-					if (!(this instanceof FlexoRMResource))
-						if (logger.isLoggable(Level.WARNING))
+				} else {
+					if (!(this instanceof FlexoRMResource)) {
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Project is not set on " + this.getFullyQualifiedName());
+						}
+					}
 					returned = (XMLRD) XMLDecoder.decodeObjectWithMapping(new FileInputStream(getFile()), mapping, null, getProject()
 							.getStringEncoder());
 				}
 			}
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Succeeded loading " + getResourceDataClass().getName() + " with model version " + version);
+			}
 			if (returned != null) {
 				returned.setFlexoResource(this);
 			}
 			return returned;
 		} catch (AccessorInvocationException e) {
 			if (logger.isLoggable(Level.FINE)) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("FAILED loading " + getResourceDataClass().getName() + " with model version " + version + " Exception: "
 							+ e.getTargetException().getMessage());
+				}
 			}
 			if (logger.isLoggable(Level.FINER)) {
 				e.getTargetException().printStackTrace();
@@ -924,9 +1005,10 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 			throw new XMLOperationException(e, version);
 		} catch (Exception e) {
 			if (logger.isLoggable(Level.FINE)) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("FAILED loading " + getResourceDataClass().getName() + " with model version " + version + " Exception: "
 							+ e.getMessage());
+				}
 			}
 			if (logger.isLoggable(Level.FINEST)) {
 				e.printStackTrace();
@@ -985,8 +1067,9 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 	 * @return boolean indicating if conversion was sucessfull
 	 */
 	protected boolean convertResourceFileFromVersionToVersion(FlexoVersion v1, FlexoVersion v2) {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Unable to find converter for resource " + getResourceIdentifier() + " from version " + v1 + " to version " + v2);
+		}
 		return false;
 	}
 

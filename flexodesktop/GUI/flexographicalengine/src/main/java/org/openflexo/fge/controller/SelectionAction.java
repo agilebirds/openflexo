@@ -38,21 +38,25 @@ public class SelectionAction extends MouseClickControlAction {
 
 	@Override
 	public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
-		if (controller.getDrawingView() == null)
+		if (controller.getDrawingView() == null) {
 			return false;
+		}
 
 		if (graphicalRepresentation.getIsSelectable()) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Select " + graphicalRepresentation);
+			}
 			controller.setSelectedObject(graphicalRepresentation);
-			if (controller.getDrawingView() == null)
+			if (controller.getDrawingView() == null) {
 				return false;
+			}
 			FGEView<?> view = controller.getDrawingView().viewForObject(graphicalRepresentation);
 			Point newPoint = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), (Component) view);
 			controller.setLastClickedPoint(new FGEPoint(newPoint.x / controller.getScale(), newPoint.y / controller.getScale()));
 			controller.setLastSelectedGR(graphicalRepresentation);
 			return false;
-		} else
+		} else {
 			return false;
+		}
 	}
 }

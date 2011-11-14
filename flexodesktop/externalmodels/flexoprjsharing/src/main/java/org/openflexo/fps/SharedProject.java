@@ -48,7 +48,6 @@ import org.netbeans.lib.cvsclient.event.CVSAdapter;
 import org.netbeans.lib.cvsclient.event.FileInfoEvent;
 import org.netbeans.lib.cvsclient.util.DefaultIgnoreFileFilter;
 import org.netbeans.lib.cvsclient.util.IgnoreFileFilter;
-
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.utils.FlexoProgress;
@@ -103,14 +102,17 @@ public class SharedProject extends CVSAbstractFile implements CVSContainer {
 					public Thread newThread(Runnable r) {
 						threadCount++;
 						Thread t = null;
-						if (r instanceof FlexoRunnable)
+						if (r instanceof FlexoRunnable) {
 							t = new Thread(r, ((FlexoRunnable) r).getName());
-						else
+						} else {
 							t = new Thread(r, "Thread-" + threadCount + " in pool for " + localName);
-						if (t.isDaemon())
+						}
+						if (t.isDaemon()) {
 							t.setDaemon(false);
-						if (t.getPriority() != Thread.NORM_PRIORITY)
+						}
+						if (t.getPriority() != Thread.NORM_PRIORITY) {
 							t.setPriority(Thread.NORM_PRIORITY);
+						}
 						return t;
 					}
 				});
@@ -178,8 +180,9 @@ public class SharedProject extends CVSAbstractFile implements CVSContainer {
 
 	public static SharedProject openProject(CVSRepositoryList repositoryList, File projectDirectory, CVSRepository repository,
 			FlexoEditor editor) {
-		if (projectDirectory == null || !projectDirectory.exists())
+		if (projectDirectory == null || !projectDirectory.exists()) {
 			return null;
+		}
 
 		boolean isFound = false;
 		for (CVSRepository rep : repositoryList.getCVSRepositories()) {
@@ -224,8 +227,9 @@ public class SharedProject extends CVSAbstractFile implements CVSContainer {
 	}
 
 	public static SharedProject openProject(CVSRepositoryList repositoryList, File projectDirectory, FlexoEditor editor) {
-		if (projectDirectory == null || !projectDirectory.exists())
+		if (projectDirectory == null || !projectDirectory.exists()) {
 			return null;
+		}
 
 		File cvsRepositoryLocation = new File(projectDirectory, SharedProject.CVS_REPOSITORY_LOCATION_FILE);
 		CVSRepository relatedCVSRepository = new CVSRepository(cvsRepositoryLocation);
@@ -237,8 +241,9 @@ public class SharedProject extends CVSAbstractFile implements CVSContainer {
 			String moduleName, // Full qualified
 			String vendorTag, String releaseTag, String logMessage, FlexoEditor editor) throws IOException, CommandException,
 			AuthenticationException {
-		if (projectDirectory == null || !projectDirectory.exists())
+		if (projectDirectory == null || !projectDirectory.exists()) {
 			return null;
+		}
 		long start = System.currentTimeMillis();
 		boolean isFound = false;
 		for (CVSRepository rep : repositoryList.getCVSRepositories()) {
@@ -319,8 +324,9 @@ public class SharedProject extends CVSAbstractFile implements CVSContainer {
 
 		Vector<FPSObject> binaryFiles = new Vector<FPSObject>();
 		for (CVSFile f : returned.getAllCVSFiles()) {
-			if (f.isBinary())
+			if (f.isBinary()) {
 				binaryFiles.add(f);
+			}
 		}
 
 		if (binaryFiles.size() > 0) {
@@ -336,8 +342,9 @@ public class SharedProject extends CVSAbstractFile implements CVSContainer {
 
 	public void shutdownThreadPool() {
 		if (connectionThreadPool != null) {
-			if (!connectionThreadPool.isShutdown())
+			if (!connectionThreadPool.isShutdown()) {
 				connectionThreadPool.shutdownNow();
+			}
 			connectionThreadPool = null;
 		}
 	}
@@ -362,11 +369,13 @@ public class SharedProject extends CVSAbstractFile implements CVSContainer {
 		}
 		File[] allFiles = source.listFiles(new CVSNotIgnoredFileFilter(source));
 		if (allFiles == null) {
-			if (logger.isLoggable(Level.SEVERE))
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("listFiles() returned null for path: " + source.getAbsolutePath());
-			if (logger.isLoggable(Level.INFO))
+			}
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("source exists? " + source.exists() + "\n" + "source is file? " + source.isFile() + "\n"
 						+ "source is directory? " + source.isDirectory());
+			}
 
 		} else {
 			for (File f : allFiles) {
@@ -529,21 +538,25 @@ public class SharedProject extends CVSAbstractFile implements CVSContainer {
 	}
 
 	private void appendAllCVSFiles(Vector<CVSFile> files, CVSContainer container) {
-		for (CVSFile f : container.getFiles())
+		for (CVSFile f : container.getFiles()) {
 			files.add(f);
-		for (CVSDirectory d : container.getDirectories())
+		}
+		for (CVSDirectory d : container.getDirectories()) {
 			appendAllCVSFiles(files, d);
+		}
 	}
 
 	@Override
 	public boolean isRegistered(File aFile) {
 		for (CVSFile f : getFiles()) {
-			if (f.getFile().equals(aFile))
+			if (f.getFile().equals(aFile)) {
 				return true;
+			}
 		}
 		for (CVSDirectory d : getDirectories()) {
-			if (d.getFile().equals(aFile))
+			if (d.getFile().equals(aFile)) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -571,10 +584,12 @@ public class SharedProject extends CVSAbstractFile implements CVSContainer {
 
 		@Override
 		public boolean accept(File file) {
-			if (file.getName().equals("CVS"))
+			if (file.getName().equals("CVS")) {
 				return false;
-			if (file.getName().equals(CVS_REPOSITORY_LOCATION_FILE))
+			}
+			if (file.getName().equals(CVS_REPOSITORY_LOCATION_FILE)) {
 				return false;
+			}
 			return !ignoreFileFilter.shouldBeIgnored(_directory, file.getName());
 		}
 	}
@@ -589,15 +604,17 @@ public class SharedProject extends CVSAbstractFile implements CVSContainer {
 
 		@Override
 		public boolean accept(File file) {
-			if (!file.isFile())
+			if (!file.isFile()) {
 				return false;
+			}
 			return ignoreFileFilter.shouldBeIgnored(_directory, file.getName());
 		}
 	}
 
 	private static void checkNewFilesAndDirectories(CVSContainer container, final File directory) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("checkNewFilesAndDirectories() for " + directory.getAbsolutePath() + " for " + container);
+		}
 
 		File[] allUnignoredFiles = directory.listFiles(new CVSNotIgnoredFileFilter(directory));
 
@@ -630,8 +647,9 @@ public class SharedProject extends CVSAbstractFile implements CVSContainer {
 		// logger.info("checkDeletedFiles() for "+directory.getAbsolutePath()+" for "+container);
 
 		for (CVSFile f : container.getFiles()) {
-			if (!f.getFile().exists())
+			if (!f.getFile().exists()) {
 				f.setStatus(CVSStatus.LocallyRemoved);
+			}
 		}
 
 		for (CVSDirectory d : container.getDirectories()) {
@@ -690,8 +708,9 @@ public class SharedProject extends CVSAbstractFile implements CVSContainer {
 	}
 
 	public void synchronizeWithRepository(final FlexoProgress progress) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Synchronize with repository " + getModuleDirectory().getAbsolutePath());
+		}
 
 		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("check_changes_on_local_file_system"));
@@ -709,8 +728,9 @@ public class SharedProject extends CVSAbstractFile implements CVSContainer {
 
 		getCVSHandler().setReceiveRemoteUpdateRequest(true);
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("[" + Thread.currentThread().getName() + "] Perform update command");
+		}
 
 		UpdateCommand updateCommand = new UpdateCommand();
 		updateCommand.setRecursive(true);
@@ -729,9 +749,10 @@ public class SharedProject extends CVSAbstractFile implements CVSContainer {
 						progress.setSecondaryProgress(FlexoLocalization.localizedForKey("received_info_for") + " "
 								+ e.getInfoContainer().getFile().getName());
 					}
-					if (logger.isLoggable(Level.FINER))
+					if (logger.isLoggable(Level.FINER)) {
 						logger.finer("[" + Thread.currentThread().getName() + "] synchronizeWithRepository: Received update info for file "
 								+ e.getInfoContainer().getFile() + " " + e.getInfoContainer().getClass().getSimpleName());
+					}
 				}
 			});
 			connection.executeCommand(updateCommand, options);
@@ -749,8 +770,9 @@ public class SharedProject extends CVSAbstractFile implements CVSContainer {
 
 		// Finally perform a status command
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("[" + Thread.currentThread().getName() + "] Now perform a status command");
+		}
 
 		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("retrieving_status"));
@@ -766,9 +788,10 @@ public class SharedProject extends CVSAbstractFile implements CVSContainer {
 			connection.getClient().getEventManager().addCVSListener(new CVSAdapter() {
 				@Override
 				public void fileInfoGenerated(FileInfoEvent e) {
-					if (logger.isLoggable(Level.FINER))
+					if (logger.isLoggable(Level.FINER)) {
 						logger.finer("[" + Thread.currentThread().getName() + "] synchronizeWithRepository: Received status for file "
 								+ e.getInfoContainer().getFile() + " " + e.getInfoContainer().getClass().getSimpleName());
+					}
 					if (progress != null) {
 						progress.setSecondaryProgress(FlexoLocalization.localizedForKey("received_status_info_for") + " "
 								+ e.getInfoContainer().getFile().getName());
@@ -786,8 +809,9 @@ public class SharedProject extends CVSAbstractFile implements CVSContainer {
 			e.printStackTrace();
 		}
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("[" + Thread.currentThread().getName() + "] Now retrieve all necessary versions to compute merges");
+		}
 
 		_isSynchronizing = false;
 
@@ -812,9 +836,10 @@ public class SharedProject extends CVSAbstractFile implements CVSContainer {
 
 			for (CVSFile f : getAllCVSFiles()) {
 				if (f.getStatus().isConflicting()) {
-					if (logger.isLoggable(Level.FINER))
+					if (logger.isLoggable(Level.FINER)) {
 						logger.finer("[" + Thread.currentThread().getName() + "] Start obtaining necessary revisions for "
 								+ f.getFileName());
+					}
 					f.getContentOnDisk();
 					originalContentRevisionRetrieverListener.addFileToWait(f);
 					contentOnRepositoryRevisionRetrieverListener.addFileToWait(f);
@@ -830,8 +855,9 @@ public class SharedProject extends CVSAbstractFile implements CVSContainer {
 		setChanged();
 		notifyObservers(new CVSStructureUpdated(this));
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("[" + Thread.currentThread().getName() + "] Synchronize with repository DONE");
+		}
 
 	}
 
@@ -898,12 +924,13 @@ public class SharedProject extends CVSAbstractFile implements CVSContainer {
 					while (i.hasNext()) {
 						CVSFile key = i.next();
 						CVSRevisionIdentifier revision = filesToNotify.get(key);
-						if (revision == null)
+						if (revision == null) {
 							progress.setSecondaryProgress(FlexoLocalization.localizedForKeyWithParams(
 									"received_repository_revision_for_file_($0)", key.getFileName()));
-						else
+						} else {
 							progress.setSecondaryProgress(FlexoLocalization.localizedForKeyWithParams(
 									"received_revision_($0)_for_file_($1)", revision.versionAsString(), key.getFileName()));
+						}
 					}
 				}
 				filesToNotify.clear();
@@ -927,8 +954,9 @@ public class SharedProject extends CVSAbstractFile implements CVSContainer {
 		// First look if absolute path
 		File searchedFile = new File(aPath);
 		CVSAbstractFile returned = getCVSAbstractFile(searchedFile);
-		if (returned != null)
+		if (returned != null) {
 			return returned;
+		}
 		// Then look if relative path
 		searchedFile = new File(getModuleDirectory(), aPath);
 		return getCVSAbstractFile(searchedFile);
@@ -936,8 +964,9 @@ public class SharedProject extends CVSAbstractFile implements CVSContainer {
 
 	public CVSFile getCVSFile(String aPath) {
 		CVSAbstractFile returned = getCVSAbstractFile(aPath);
-		if (returned instanceof CVSFile)
+		if (returned instanceof CVSFile) {
 			return (CVSFile) returned;
+		}
 		return null;
 	}
 
@@ -955,11 +984,13 @@ public class SharedProject extends CVSAbstractFile implements CVSContainer {
 			return null;
 		}
 		CVSAbstractFile returned;
-		if (getCVSAbstractFile(file) != null)
+		if (getCVSAbstractFile(file) != null) {
 			return getCVSAbstractFile(file);
+		}
 		CVSContainer cvsParent = (CVSContainer) getCVSAbstractFile(file.getParentFile());
-		if (cvsParent == null)
+		if (cvsParent == null) {
 			cvsParent = (CVSDirectory) createCVSFile(file.getParentFile());
+		}
 		if (file.isDirectory()) {
 			returned = new CVSDirectory(file, this);
 			cvsParent.addToDirectories((CVSDirectory) returned);
@@ -1015,8 +1046,9 @@ public class SharedProject extends CVSAbstractFile implements CVSContainer {
 	public int getResolvedConflictsCount() {
 		int returned = 0;
 		for (CVSFile f : conflictingFiles) {
-			if (f.getMerge() != null && f.getMerge().isResolved())
+			if (f.getMerge() != null && f.getMerge().isResolved()) {
 				returned++;
+			}
 		}
 		return returned;
 	}
@@ -1051,14 +1083,16 @@ public class SharedProject extends CVSAbstractFile implements CVSContainer {
 
 	public void addToThreadPool(Runnable runnable) {
 		connectionThreadPool.execute(runnable);
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Thread pool size " + connectionThreadPool.getPoolSize() + " there are " + connectionThreadPool.getQueue().size()
 					+ " threads waiting");
+		}
 	}
 
 	public FlexoXMLMappings getFlexoXMLMappings() {
-		if (_mappings == null)
+		if (_mappings == null) {
 			_mappings = new FlexoXMLMappings();
+		}
 		return _mappings;
 	}
 

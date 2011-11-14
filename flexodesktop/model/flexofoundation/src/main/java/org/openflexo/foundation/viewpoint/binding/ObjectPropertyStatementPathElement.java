@@ -130,8 +130,9 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 			if (target instanceof OntologyIndividual) {
 				OntologyIndividual individual = (OntologyIndividual) target;
 				PropertyStatement statement = individual.getPropertyStatement(getOntologyProperty());
-				if (statement == null)
+				if (statement == null) {
 					return null;
+				}
 				if (statement instanceof ObjectPropertyStatement) {
 					return ((ObjectPropertyStatement) statement).getStatementObject();
 				} else {
@@ -337,8 +338,9 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 			if (target instanceof OntologyIndividual) {
 				OntologyIndividual individual = (OntologyIndividual) target;
 				PropertyStatement statement = individual.getPropertyStatement(getOntologyProperty());
-				if (statement != null)
+				if (statement != null) {
 					return statement.getLiteral();
+				}
 				return null;
 			} else {
 				logger.warning("Unexpected target " + target + " while evaluateBinding()");

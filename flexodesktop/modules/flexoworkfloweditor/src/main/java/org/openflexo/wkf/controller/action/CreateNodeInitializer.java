@@ -22,11 +22,6 @@ package org.openflexo.wkf.controller.action;
 import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
-import org.openflexo.icon.WKFIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -35,6 +30,10 @@ import org.openflexo.foundation.action.FlexoActionRedoFinalizer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.foundation.wkf.action.CreateNode;
+import org.openflexo.icon.WKFIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
 
 public class CreateNodeInitializer extends ActionInitializer {
 

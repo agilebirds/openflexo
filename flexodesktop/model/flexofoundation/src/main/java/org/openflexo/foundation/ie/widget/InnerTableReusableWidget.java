@@ -68,15 +68,17 @@ public class InnerTableReusableWidget extends IEReusableWidget<ReusableComponent
 
 	@Override
 	public boolean areComponentInstancesValid() {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Implement me!!! please");
+		}
 		return true;
 	}
 
 	@Override
 	public void removeInvalidComponentInstances() {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Implement me!!! please");
+		}
 	}
 
 }

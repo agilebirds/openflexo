@@ -14,8 +14,9 @@ public abstract class FlexoProcessImpl extends FlexoModelObjectImpl implements F
 	@Override
 	public AbstractNode getNodeNamed(String name) {
 		for (AbstractNode n : getNodes()) {
-			if (n.getName() != null && n.getName().equals(name))
+			if (n.getName() != null && n.getName().equals(name)) {
 				return n;
+			}
 		}
 		return null;
 	}
@@ -24,12 +25,14 @@ public abstract class FlexoProcessImpl extends FlexoModelObjectImpl implements F
 	public Edge getEdgeNamed(String name) {
 		for (AbstractNode n : getNodes()) {
 			for (Edge e : n.getIncomingEdges()) {
-				if (e.getName() != null && e.getName().equals(name))
+				if (e.getName() != null && e.getName().equals(name)) {
 					return e;
+				}
 			}
 			for (Edge e : n.getOutgoingEdges()) {
-				if (e.getName() != null && e.getName().equals(name))
+				if (e.getName() != null && e.getName().equals(name)) {
 					return e;
+				}
 			}
 		}
 		return null;

@@ -16,6 +16,7 @@ public abstract class FlexoModelObjectImpl implements FlexoModelObject {
 		pcSupport = new PropertyChangeSupport(this);
 	}
 
+	@Override
 	public String deriveName() {
 		return getName() + "1";
 	}

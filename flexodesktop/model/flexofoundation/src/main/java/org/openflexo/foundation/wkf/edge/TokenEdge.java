@@ -77,15 +77,17 @@ public final class TokenEdge extends FlexoPostCondition<PetriGraphNode, Node> im
 		if (endNode.getProcess() == process) {
 			setEndNode(endNode);
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Inconsistent data while building TokenEdge !");
+			}
 			throw new InvalidEdgeException(this);
 		}
 		if (startNode.getProcess() == process) {
 			setStartNode(startNode);
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Inconsistent data while building TokenEdge !");
+			}
 			throw new InvalidEdgeException(this);
 		}
 		if (!isEdgeValid()) {
@@ -137,15 +139,18 @@ public final class TokenEdge extends FlexoPostCondition<PetriGraphNode, Node> im
 	public FlexoLevel getLevel() {
 		if (getStartNode() != null) {
 			if (getStartNode() instanceof FlexoNode && ((FlexoNode) getStartNode()).isEndNode()) {
-				if (getStartNode() instanceof OperationNode)
+				if (getStartNode() instanceof OperationNode) {
 					return FlexoLevel.ACTIVITY;
-				if (getStartNode() instanceof ActionNode)
+				}
+				if (getStartNode() instanceof ActionNode) {
 					return FlexoLevel.OPERATION;
+				}
 			}
 			return getStartNode().getLevel();
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("No attached starting node for this post-condition !");
+			}
 			return null;
 		}
 	}
@@ -162,19 +167,22 @@ public final class TokenEdge extends FlexoPostCondition<PetriGraphNode, Node> im
 		// While execution engine is not well defined, we dont't perform more
 		// validation on it
 
-		if (getStartNode() == null || getNextNode() == null || getStartNode() == getNextNode())
+		if (getStartNode() == null || getNextNode() == null || getStartNode() == getNextNode()) {
 			return false;
+		}
 
 		PetriGraphNode startNode = getStartNode();
 		PetriGraphNode nextNode = getEndNode().getNode();
 		if (startNodeIsOperatorNode()) {
 			// OperatorOutEdge rule
-			if (getStartNode().getParentPetriGraph() != nextNode.getParentPetriGraph())
+			if (getStartNode().getParentPetriGraph() != nextNode.getParentPetriGraph()) {
 				return false;
+			}
 		} else if (endNodeIsOperatorNode()) {
 			// OperatorInEdge rule
-			if (!getStartNode().isEmbeddedInPetriGraph(nextNode.getParentPetriGraph()))
+			if (!getStartNode().isEmbeddedInPetriGraph(nextNode.getParentPetriGraph())) {
 				return false;
+			}
 		}
 		return (startNode.getProcess() == nextNode.getProcess());
 

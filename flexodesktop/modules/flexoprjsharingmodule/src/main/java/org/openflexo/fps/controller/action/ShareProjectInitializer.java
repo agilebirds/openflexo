@@ -70,8 +70,9 @@ public class ShareProjectInitializer extends ActionInitializer {
 					} catch (ProjectLoadingCancelledException e1) {
 						return false;
 					}
-					if (newProjectDirectory == null)
+					if (newProjectDirectory == null) {
 						return false;
+					}
 					action.setProjectDirectory(newProjectDirectory);
 				}
 
@@ -108,8 +109,9 @@ public class ShareProjectInitializer extends ActionInitializer {
 						} else {
 							return false;
 						}
-					} else if (returned == 2)
+					} else if (returned == 2) {
 						return false;
+					}
 				}
 				action.setRepository(repository);
 				action.setModuleName(moduleName);

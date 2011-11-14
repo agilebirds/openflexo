@@ -26,13 +26,12 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
-
-import org.openflexo.foundation.FlexoObject;
-import org.openflexo.localization.FlexoLocalization;
 
 public class DocItemVersion extends DRMObject {
 
@@ -86,8 +85,9 @@ public class DocItemVersion extends DRMObject {
 	}
 
 	public String getFullHTMLDescription() {
-		if (!_isLoaded)
+		if (!_isLoaded) {
 			load();
+		}
 		return _fullHTMLDescription;
 	}
 
@@ -99,8 +99,9 @@ public class DocItemVersion extends DRMObject {
 	}
 
 	public String getShortHTMLDescription() {
-		if (!_isLoaded)
+		if (!_isLoaded) {
 			load();
+		}
 		return _shortHTMLDescription;
 	}
 
@@ -114,8 +115,9 @@ public class DocItemVersion extends DRMObject {
 						e.printStackTrace();
 					}
 				} else {
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Could not find: " + getShortHTMLDescriptionFile().getAbsolutePath());
+					}
 				}
 			}
 			if (getFullHTMLDescriptionFile() != null) {
@@ -342,8 +344,9 @@ public class DocItemVersion extends DRMObject {
 					}
 				}
 				// don't know what to do with this !!!
-				else
+				else {
 					return 0;
+				}
 			}
 
 		}

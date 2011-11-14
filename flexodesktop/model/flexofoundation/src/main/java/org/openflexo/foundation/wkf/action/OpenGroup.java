@@ -95,8 +95,9 @@ public class OpenGroup extends FlexoUndoableAction<OpenGroup, WKFGroup, WKFGroup
 	}
 
 	public boolean visibility() {
-		if (visibility == null)
+		if (visibility == null) {
 			visibility = !getFocusedObject().getIsVisible();
+		}
 		return visibility;
 	}
 

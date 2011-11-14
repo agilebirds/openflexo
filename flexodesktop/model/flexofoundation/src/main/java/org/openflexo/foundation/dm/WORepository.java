@@ -129,47 +129,59 @@ public class WORepository extends DMRepository {
 
 	public void convertFromVersion_2_3_prelude() {
 		DMEntity applicationEntityToRemove = getDMEntity(WO_APPSERVER_PACKAGE_NAME, WO_APPLICATION_CLASS_NAME);
-		if (applicationEntityToRemove != null)
+		if (applicationEntityToRemove != null) {
 			applicationEntityToRemove.delete();
+		}
 		DMEntity componentEntityToRemove = getDMEntity(WO_APPSERVER_PACKAGE_NAME, WO_COMPONENT_CLASS_NAME);
-		if (componentEntityToRemove != null)
+		if (componentEntityToRemove != null) {
 			componentEntityToRemove.delete();
+		}
 		DMEntity directActionEntityToRemove = getDMEntity(WO_APPSERVER_PACKAGE_NAME, WO_DIRECT_ACTION_CLASS_NAME);
-		if (directActionEntityToRemove != null)
+		if (directActionEntityToRemove != null) {
 			directActionEntityToRemove.delete();
+		}
 		DMEntity sessionEntityToRemove = getDMEntity(WO_APPSERVER_PACKAGE_NAME, WO_SESSION_CLASS_NAME);
-		if (sessionEntityToRemove != null)
+		if (sessionEntityToRemove != null) {
 			sessionEntityToRemove.delete();
+		}
 	}
 
 	public void convertFromVersion_2_3_postlude() {
 		initCustomEntities();
 		if (isDenaliCoreAvailable()) {
-			if (getCustomApplicationEntity() != null)
+			if (getCustomApplicationEntity() != null) {
 				getCustomApplicationEntity().setParentType(
 						DMType.makeResolvedDMType(getDMModel().getEntityNamed("org.openflexo.core.woapp.WDLApplication")), true);
-			if (getCustomSessionEntity() != null)
+			}
+			if (getCustomSessionEntity() != null) {
 				getCustomSessionEntity().setParentType(
 						DMType.makeResolvedDMType(getDMModel().getEntityNamed("org.openflexo.core.woapp.DLSession")), true);
-			if (getCustomDirectActionEntity() != null)
+			}
+			if (getCustomDirectActionEntity() != null) {
 				getCustomDirectActionEntity().setParentType(
 						DMType.makeResolvedDMType(getDMModel().getEntityNamed("org.openflexo.core.woapp.WDLDirectAction")), true);
-			if (getCustomComponentEntity() != null)
+			}
+			if (getCustomComponentEntity() != null) {
 				getCustomComponentEntity().setParentType(
 						DMType.makeResolvedDMType(getDMModel().getEntityNamed("org.openflexo.core.woapp.WDLComponent")), true);
+			}
 		} else if (isWebObjectsAvailable()) {
-			if (getCustomApplicationEntity() != null)
+			if (getCustomApplicationEntity() != null) {
 				getCustomApplicationEntity().setParentType(
 						DMType.makeResolvedDMType(getDMModel().getEntityNamed("com.webobjects.appserver.WOApplication")), true);
-			if (getCustomSessionEntity() != null)
+			}
+			if (getCustomSessionEntity() != null) {
 				getCustomSessionEntity().setParentType(
 						DMType.makeResolvedDMType(getDMModel().getEntityNamed("com.webobjects.appserver.WOSession")), true);
-			if (getCustomDirectActionEntity() != null)
+			}
+			if (getCustomDirectActionEntity() != null) {
 				getCustomDirectActionEntity().setParentType(
 						DMType.makeResolvedDMType(getDMModel().getEntityNamed("com.webobjects.appserver.WODirectAction")), true);
-			if (getCustomComponentEntity() != null)
+			}
+			if (getCustomComponentEntity() != null) {
 				getCustomComponentEntity().setParentType(
 						DMType.makeResolvedDMType(getDMModel().getEntityNamed("com.webobjects.appserver.WOComponent")), true);
+			}
 		}
 	}
 
@@ -223,8 +235,9 @@ public class WORepository extends DMRepository {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception while initializing custom base entities : " + e.getMessage());
+			}
 		}
 
 	}
@@ -248,8 +261,9 @@ public class WORepository extends DMRepository {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Fixing session property returning null");
+				}
 			}
 			DMProperty application = componentEntity.getProperty("application");
 			if (application != null && application.getGetterCode() != null && application.getGetterCode().indexOf("return null") > -1) {
@@ -265,8 +279,9 @@ public class WORepository extends DMRepository {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Fixing application property returning null");
+				}
 			}
 		}
 		super.finalizeDeserialization(builder);
@@ -396,13 +411,16 @@ public class WORepository extends DMRepository {
 
 	DMEntity getDefaultCustomComponentCandidate() {
 		for (DMEntity e : getEntities().values()) {
-			if (e == getCustomComponentEntity())
+			if (e == getCustomComponentEntity()) {
 				return e;
-			if (e != getCustomApplicationEntity() && e != getCustomSessionEntity() && e != getCustomDirectActionEntity())
+			}
+			if (e != getCustomApplicationEntity() && e != getCustomSessionEntity() && e != getCustomDirectActionEntity()) {
 				return e;
+			}
 		}
-		if (getEntities().size() > 0)
+		if (getEntities().size() > 0) {
 			return getEntities().elements().nextElement();
+		}
 		return null;
 	}
 
@@ -438,8 +456,9 @@ public class WORepository extends DMRepository {
 			if (!o.isNameValid()) {
 				ValidationError err = new ValidationError(this, o,
 						"data_model_objects_can_contain_only_alphanumeric_characters_or_underscore_and_must_start_with_a_letter");
-				if (o.getName() != null)
+				if (o.getName() != null) {
 					err.addToFixProposals(new CleanDataModelObjectName(ToolBox.cleanStringForJava(o.getName())));
+				}
 				err.addToFixProposals(new SetCustomName());
 				return err;
 			}

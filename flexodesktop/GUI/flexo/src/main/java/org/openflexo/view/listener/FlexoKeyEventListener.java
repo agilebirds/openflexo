@@ -68,8 +68,9 @@ public abstract class FlexoKeyEventListener extends KeyAdapter {
 	 */
 	@Override
 	public void keyPressed(KeyEvent event) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("KeyPressed in " + getClass().getName() + " with " + event);
+		}
 		ActionListener listener = _controller.getActionForKeyStroke(KeyStroke.getKeyStroke(event.getKeyCode(), event.getModifiers()));
 		if (listener != null) {
 			Object eventSource = event.getSource();

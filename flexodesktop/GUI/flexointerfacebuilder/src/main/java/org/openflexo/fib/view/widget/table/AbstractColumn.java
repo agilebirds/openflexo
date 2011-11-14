@@ -28,8 +28,8 @@ import java.util.logging.Logger;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
-import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBAttributeNotification;
 import org.openflexo.fib.model.FIBTableColumn;
@@ -173,10 +173,11 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 
 	@Override
 	public Object getValue(BindingVariable variable) {
-		if (variable.getVariableName().equals("iterator"))
+		if (variable.getVariableName().equals("iterator")) {
 			return iteratorObject;
-		else
+		} else {
 			return getController().getValue(variable);
+		}
 	}
 
 	/**
@@ -236,8 +237,9 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 	}
 
 	public void notifyValueChangedFor(Object object) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("notifyValueChangedFor " + object);
+		}
 		// Following will force the whole row where object was modified to be updated
 		// (In case of some computed cells are to be updated according to ths new value)
 		getTableModel().fireTableRowsUpdated(getTableModel().indexOf(object), getTableModel().indexOf(object));
@@ -257,8 +259,9 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 	}
 
 	public String getStringRepresentation(final Object value) {
-		if (value == null)
+		if (value == null) {
 			return "";
+		}
 		if (getColumnModel().getFormat().isValid()) {
 			formatter.setValue(value);
 			return (String) getColumnModel().getFormat().getBindingValue(formatter);

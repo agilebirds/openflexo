@@ -75,24 +75,28 @@ public class MoveProcessFolder extends FlexoAction<MoveProcessFolder, ProcessFol
 	@Override
 	protected void doAction(Object context) throws InvalidParentProcessException, UndoException {
 		if (getDestination() == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Destination is null! Returning now");
+			}
 			return;
 		}
 		if (getDestination().isImported()) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Cannot move a folder to an imported object");
+			}
 			return;
 		}
 		if (getDestination().getProcessNode() == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Destination has no parent process node! Returning now");
+			}
 			return;
 		}
 		if (getDestination() instanceof ProcessFolder) {
 			if (!getFocusedObject().isAcceptableParentFolder((ProcessFolder) getDestination())) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Destination folder is not acceptable");
+				}
 				return;
 			}
 		}
@@ -101,8 +105,9 @@ public class MoveProcessFolder extends FlexoAction<MoveProcessFolder, ProcessFol
 
 		if (targetProcess.getProcessNode() != currentParent) {
 			for (FlexoProcessNode node : getFocusedObject().getAllDirectSubProcessNodes()) {
-				if (!targetProcess.isAcceptableAsParentProcess(node.getProcess()))
+				if (!targetProcess.isAcceptableAsParentProcess(node.getProcess())) {
 					throw new InvalidParentProcessException(node.getProcess(), targetProcess);
+				}
 			}
 			getFocusedObject().setParent(null);
 			boolean success = true;

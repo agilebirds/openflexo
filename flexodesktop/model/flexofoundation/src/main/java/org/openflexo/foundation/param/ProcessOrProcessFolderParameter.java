@@ -54,14 +54,16 @@ public class ProcessOrProcessFolderParameter extends ParameterDefinition<FlexoMo
 	public boolean isAcceptableProcessOrProcessFolder(FlexoModelObject aProcess) {
 
 		if (aProcess instanceof FlexoProcess) {
-			if (_processSelectingConditional != null)
+			if (_processSelectingConditional != null) {
 				return _processSelectingConditional.isSelectable((FlexoProcess) aProcess);
+			}
 			return true;
 		}
 
 		if (aProcess instanceof ProcessFolder) {
-			if (_processSelectingConditional != null)
+			if (_processSelectingConditional != null) {
 				return _processSelectingConditional.isSelectable((ProcessFolder) aProcess);
+			}
 			return true;
 		}
 

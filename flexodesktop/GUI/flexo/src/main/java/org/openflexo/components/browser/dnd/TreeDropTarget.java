@@ -80,10 +80,11 @@ public class TreeDropTarget implements DropTargetListener {
 		DropTargetContext dtc = dtde.getDropTargetContext();
 		JTree tree = (JTree) dtc.getComponent();
 		TreePath path = tree.getClosestPathForLocation(p.x, p.y);
-		if (path == null)
+		if (path == null) {
 			return null;
-		else
+		} else {
 			return (BrowserElement) path.getLastPathComponent();
+		}
 	}
 
 	@Override
@@ -91,8 +92,9 @@ public class TreeDropTarget implements DropTargetListener {
 		dtde.acceptDrag(DnDConstants.ACTION_MOVE);
 		BrowserElement node = getNodeForEvent(dtde);
 		TreePath path = targetTree.getClosestPathForLocation(dtde.getLocation().x, dtde.getLocation().y);
-		if (!targetTree.getModel().isLeaf(path.getLastPathComponent()) && !targetTree.isExpanded(path))
+		if (!targetTree.getModel().isLeaf(path.getLastPathComponent()) && !targetTree.isExpanded(path)) {
 			targetTree.handleAutoExpand(path);
+		}
 		targetTree.paintDraggedNode(dtde.getLocation());
 		/*
 		if (node==null || !sourceIsDroppableInTarget(getSourceNode(dtde.getTransferable()), node)) {
@@ -109,27 +111,31 @@ public class TreeDropTarget implements DropTargetListener {
 		BrowserElement node = getNodeForEvent(dtde);
 		TreePath path = targetTree.getClosestPathForLocation(dtde.getLocation().x, dtde.getLocation().y);
 		TreePath realPath = targetTree.getPathForLocation(dtde.getLocation().x, dtde.getLocation().y);
-		if (realPath != null && !targetTree.getModel().isLeaf(realPath.getLastPathComponent()) && !targetTree.isExpanded(path))
+		if (realPath != null && !targetTree.getModel().isLeaf(realPath.getLastPathComponent()) && !targetTree.isExpanded(path)) {
 			targetTree.handleAutoExpand(realPath);
-		else
+		} else {
 			targetTree.stopExpandCountDown();
+		}
 		targetTree.paintDraggedNode(dtde.getLocation());
 		targetTree.setSelectionPath(realPath);
 		BrowserElement source = getSourceNode(dtde.getTransferable());
-		if (source == node)
+		if (source == node) {
 			return;
+		}
 		if (node == null || !targetAcceptsSource(node, source)) {
 			dtde.rejectDrag();
 			if (ToolBox.getPLATFORM() == ToolBox.MACOS && _browser != null && _browser.getSelectionManager() != null
 					&& _browser.getSelectionManager().getController() != null
-					&& _browser.getSelectionManager().getController().getFlexoFrame() != null)
+					&& _browser.getSelectionManager().getController().getFlexoFrame() != null) {
 				_browser.getSelectionManager().getController().getFlexoFrame().setCursor(INVALID_CURSOR);
+			}
 		} else {
 			targetTree.setSelectionPath(path);
 			// start by supporting move operations
 			dtde.acceptDrag(DnDConstants.ACTION_MOVE);
-			if (ToolBox.getPLATFORM() == ToolBox.MACOS)
+			if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 				_browser.getSelectionManager().getController().getFlexoFrame().setCursor(VALID_CURSOR);
+			}
 		}
 	}
 
@@ -180,8 +186,9 @@ public class TreeDropTarget implements DropTargetListener {
 	}
 
 	private BrowserElement getSourceNode(Transferable transferable) {
-		if (transferable instanceof ElementMovable)
+		if (transferable instanceof ElementMovable) {
 			return ((ElementMovable) transferable).path;
+		}
 		DataFlavor[] dataFlavors = transferable.getTransferDataFlavors();
 		for (int i = 0; i < dataFlavors.length; i++) {
 			if (transferable.isDataFlavorSupported(dataFlavors[i])) {

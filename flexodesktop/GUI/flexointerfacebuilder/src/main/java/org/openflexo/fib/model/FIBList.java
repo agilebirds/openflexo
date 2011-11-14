@@ -111,8 +111,9 @@ public class FIBList extends FIBMultipleValues {
 	}
 
 	public DataBinding getSelected() {
-		if (selected == null)
+		if (selected == null) {
 			selected = new DataBinding(this, Parameters.selected, getSelectedBindingDefinition());
+		}
 		return selected;
 	}
 
@@ -126,8 +127,9 @@ public class FIBList extends FIBMultipleValues {
 	@Override
 	public void finalizeDeserialization() {
 		super.finalizeDeserialization();
-		if (selected != null)
+		if (selected != null) {
 			selected.finalizeDeserialization();
+		}
 	}
 
 	public int getVisibleRowCount() {

@@ -102,22 +102,25 @@ public class InstanceTree implements TreeNode {
 	}
 
 	private int getDepth() {
-		if (getParent() == null)
+		if (getParent() == null) {
 			return 0;
+		}
 		return _father.getDepth() + 1;
 	}
 
 	public StringBuffer toString(StringBuffer buf) {
 		int d = getDepth();
-		for (int i = 0; i < d; i++)
+		for (int i = 0; i < d; i++) {
 			buf.append("\t");
+		}
 		buf.append(_node.getFullyQualifiedName());
 		buf.append("(buttons : ");
 		Enumeration<IEHyperlinkWidget> en = localButtons.elements();
 		while (en.hasMoreElements()) {
 			buf.append(en.nextElement().getBeautifiedName());
-			if (en.hasMoreElements())
+			if (en.hasMoreElements()) {
 				buf.append(" , ");
+			}
 		}
 		buf.append(")\n");
 		Enumeration<InstanceTree> en2 = children.elements();
@@ -129,15 +132,17 @@ public class InstanceTree implements TreeNode {
 
 	public void print(PrintStream out) {
 		int d = getDepth();
-		for (int i = 0; i < d; i++)
+		for (int i = 0; i < d; i++) {
 			out.print("\t");
+		}
 		out.print(_node.getFullyQualifiedName());
 		out.print("\n(buttons : ");
 		Enumeration<IEHyperlinkWidget> en = localButtons.elements();
 		while (en.hasMoreElements()) {
 			out.print(en.nextElement().getBeautifiedName());
-			if (en.hasMoreElements())
+			if (en.hasMoreElements()) {
 				out.print(" , ");
+			}
 		}
 		out.println(")\n");
 		Enumeration<InstanceTree> en2 = children.elements();

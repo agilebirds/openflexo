@@ -75,8 +75,9 @@ public class FlexoLinksResource extends FlexoXMLStorageResource<FlexoLinks> {
 	protected void saveResourceData(boolean clearIsModified)
 			throws org.openflexo.foundation.rm.FlexoXMLStorageResource.SaveXMLResourceException, SaveResourcePermissionDeniedException {
 		if (!FlexoProject.SKOS_ENABLE) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("SAVE IS NOT ENABLE on " + getResourceType());
+			}
 			return;
 		}
 		super.saveResourceData(clearIsModified);

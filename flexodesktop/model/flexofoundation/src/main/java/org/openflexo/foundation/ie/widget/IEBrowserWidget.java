@@ -25,8 +25,8 @@ import javax.swing.ListModel;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
-import org.openflexo.foundation.bindings.WidgetBindingDefinition;
 import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
+import org.openflexo.foundation.bindings.WidgetBindingDefinition;
 import org.openflexo.foundation.dkv.Domain;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.ie.IEObject;
@@ -76,8 +76,9 @@ public class IEBrowserWidget extends IEAbstractListWidget implements ListModel {
 
 	@Override
 	public void addListDataListener(ListDataListener l) {
-		if (!_listDataListener.contains(l))
+		if (!_listDataListener.contains(l)) {
 			_listDataListener.add(l);
+		}
 	}
 
 	@Override
@@ -100,8 +101,9 @@ public class IEBrowserWidget extends IEAbstractListWidget implements ListModel {
 		if (_bindingSelectionDefinition == null) {
 			_bindingSelectionDefinition = new WidgetBindingDefinition("bindingSelection", DMType.makeListDMType(getContentType(),
 					getProject()), this, BindingDefinitionType.GET_SET, true);
-			if (getBindingSelection() != null)
+			if (getBindingSelection() != null) {
 				getBindingSelection().setBindingDefinition(_bindingSelectionDefinition);
+			}
 		}
 		return _bindingSelectionDefinition;
 	}

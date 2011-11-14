@@ -36,7 +36,6 @@ import org.openflexo.foundation.rm.cg.JavaFileResource;
 import org.openflexo.foundation.wkf.dm.ProcessRemoved;
 import org.openflexo.generator.TemplateLocator;
 import org.openflexo.generator.cg.CGJavaFile;
-import org.openflexo.generator.rm.GenerationAvailableFileResource;
 import org.openflexo.generator.wkf.ControlGraphGenerator;
 import org.openflexo.logging.FlexoLogger;
 
@@ -81,8 +80,9 @@ public class ProcessorJavaFileResource extends JavaFileResource<ControlGraphGene
 	@Override
 	public void rebuildDependancies() {
 		// super.rebuildDependancies();
-		if (getGenerator() != null)
+		if (getGenerator() != null) {
 			addToDependantResources(getGenerator().getProcess().getFlexoResource());
+		}
 	}
 
 	@Override

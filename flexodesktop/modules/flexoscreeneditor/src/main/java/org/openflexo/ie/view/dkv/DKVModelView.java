@@ -37,10 +37,10 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.dkv.DKVModel;
+import org.openflexo.foundation.dkv.DKVModel.DomainList;
 import org.openflexo.foundation.dkv.DKVObject;
 import org.openflexo.foundation.dkv.Domain;
 import org.openflexo.foundation.dkv.Key;
-import org.openflexo.foundation.dkv.DKVModel.DomainList;
 import org.openflexo.foundation.dkv.action.AddDomainAction;
 import org.openflexo.foundation.dkv.action.AddKeyAction;
 import org.openflexo.foundation.dkv.action.AddLanguageAction;
@@ -203,10 +203,12 @@ public class DKVModelView extends CompoundTabularView<DKVModel> implements Selec
 	}
 
 	public DKVTabularView findTabularViewContaining(DKVObject anObject) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("findTabularViewContaining() " + this + " obj: " + anObject);
-		if (anObject == null)
+		}
+		if (anObject == null) {
 			return null;
+		}
 		for (Enumeration<TabularView> en = getMasterTabularViews().elements(); en.hasMoreElements();) {
 			DKVTabularView next = (DKVTabularView) en.nextElement();
 			if (next.getModel().indexOf(anObject) > -1) {

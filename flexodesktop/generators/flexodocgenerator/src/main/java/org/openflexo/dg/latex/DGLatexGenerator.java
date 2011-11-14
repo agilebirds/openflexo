@@ -165,10 +165,11 @@ public class DGLatexGenerator<T extends FlexoModelObject> extends DGGenerator<T>
 
 	public static String convertHTML2Latex(String htmlString) {
 		String converted = HTMLUtils.convertHTML2Latex(htmlString);
-		if (converted == null)
+		if (converted == null) {
 			return "";
-		else
+		} else {
 			return converted;
+		}
 	}
 
 	public static String prepareJavaStringForLatex(String javaString) {
@@ -176,15 +177,17 @@ public class DGLatexGenerator<T extends FlexoModelObject> extends DGGenerator<T>
 	}
 
 	public static String splitOnUpperCase(String s) {
-		if (s == null || s.trim().length() == 0)
+		if (s == null || s.trim().length() == 0) {
 			return "";
+		}
 		Matcher m = UPPER_CASE_PATTERN.matcher(s);
 		StringBuffer sb = new StringBuffer();
 		while (m.find()) {
-			if (sb.length() == 0 && m.start() == 0)
+			if (sb.length() == 0 && m.start() == 0) {
 				m.appendReplacement(sb, "$0");
-			else
+			} else {
 				m.appendReplacement(sb, "\\\\-$0");
+			}
 		}
 		m.appendTail(sb);
 		return sb.toString();
@@ -205,21 +208,24 @@ public class DGLatexGenerator<T extends FlexoModelObject> extends DGGenerator<T>
 	}
 
 	public String getSystemActions(IEHyperlinkWidget button) {
-		if (button == null)
+		if (button == null) {
 			return "";
+		}
 		StringBuilder sb = new StringBuilder();
 		if (button.getPopupComponentDefinition() != null) {
 			sb.append("opens popup " + "\\hyperlink{" + getReference(button.getPopupComponentDefinition()) + "}{"
 					+ button.getPopupComponentDefinition().getComponentName() + "}");
 		}
 		if (button.getLink() != null && button.getLink().trim().length() > 0) {
-			if (sb.length() > 0)
+			if (sb.length() > 0) {
 				sb.append("\\par ");
+			}
 			String lnk = LatexUtils.prepareJavaStringForLatex(button.getLink());
-			if (button.getFuncName() != null && button.getFuncName().trim().length() > 0)
+			if (button.getFuncName() != null && button.getFuncName().trim().length() > 0) {
 				sb.append("\\href{" + lnk + "}{" + button.getFuncName() + "}");
-			else
+			} else {
 				sb.append("\\href{" + lnk + "}{" + lnk + "}");
+			}
 		}
 		return sb.toString();
 	}
@@ -229,8 +235,9 @@ public class DGLatexGenerator<T extends FlexoModelObject> extends DGGenerator<T>
 	}
 
 	public String getImageString(IEHyperlinkWidget button) {
-		if (button == null)
+		if (button == null) {
 			return "";
+		}
 		if (button.isCustomButton()) {
 			StringBuilder sb = new StringBuilder();
 			Color c = getCss().getTextColor();
@@ -264,8 +271,9 @@ public class DGLatexGenerator<T extends FlexoModelObject> extends DGGenerator<T>
 	protected VelocityContext defaultContext() {
 		VelocityContext vc = super.defaultContext();
 		TOCEntry entry = getTOCEntry();
-		if (entry != null)
+		if (entry != null) {
 			vc.put("entry", entry);
+		}
 		return vc;
 	}
 

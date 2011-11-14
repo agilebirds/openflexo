@@ -119,11 +119,13 @@ public class JavaParser {
 
 	public FJPJavaClass getClassByName(String fullQualifiedName) {
 		JavaClass foundClass = _builder.getClassByName(fullQualifiedName);
-		if (foundClass == null)
+		if (foundClass == null) {
 			return null;
+		}
 		for (FJPJavaSource source : _sources) {
-			if (source.getClass(foundClass) != null)
+			if (source.getClass(foundClass) != null) {
 				return source.getClass(foundClass);
+			}
 		}
 		return null;
 	}

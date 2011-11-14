@@ -25,12 +25,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.dm.view.DMEORepositoryView;
 import org.openflexo.dm.view.popups.CreatesNewEOModelDialog;
 import org.openflexo.foundation.FlexoException;
@@ -40,6 +34,11 @@ import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.dm.action.CreateDMEOModel;
 import org.openflexo.foundation.dm.eo.InvalidEOModelFileException;
 import org.openflexo.foundation.rm.InvalidFileNameException;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class CreateDMEOModelInitializer extends ActionInitializer {
 
@@ -71,8 +70,9 @@ public class CreateDMEOModelInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, CreateDMEOModel action) {
 				if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getRepository()) {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Finalizer for CreateDMEOModel in DMEORepository");
+					}
 					DMEORepositoryView repView = (DMEORepositoryView) getControllerActionInitializer().getDMController()
 							.getCurrentEditedObjectView();
 					repView.getEoModelTable().selectObject(action.getNewDMEOModel());
@@ -89,11 +89,12 @@ public class CreateDMEOModelInitializer extends ActionInitializer {
 			@Override
 			public boolean handleException(FlexoException exception, CreateDMEOModel action) {
 				if (exception instanceof InvalidFileNameException || exception instanceof InvalidEOModelFileException) {
-					if (action.getEOModelFile() != null)
+					if (action.getEOModelFile() != null) {
 						FlexoController.notify(FlexoLocalization.localizedForKey("invalid_file_name") + ": "
 								+ action.getEOModelFile().getName());
-					else
+					} else {
 						FlexoController.notify(FlexoLocalization.localizedForKey("invalid_file_name"));
+					}
 					return true;
 				}
 				return false;

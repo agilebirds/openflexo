@@ -23,7 +23,6 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.apache.velocity.VelocityContext;
-
 import org.openflexo.foundation.cg.CGRepository;
 import org.openflexo.foundation.cg.generator.GeneratorUtils;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
@@ -60,10 +59,11 @@ public class GenericRecordGenerator extends JavaClassGenerator {
 		VelocityContext context = super.defaultContext();
 		imports = new Vector<String>();
 		context.put("entity", getObject());
-		if (getEOEntity().getPrimaryKeyAttributes().size() > 0)
+		if (getEOEntity().getPrimaryKeyAttributes().size() > 0) {
 			context.put("primaryKeyAttributeName", getEOEntity().getPrimaryKeyAttributes().elementAt(0).getName());
-		else
+		} else {
 			context.put("primaryKeyAttributeName", "<undefined>");
+		}
 
 		context.put("props", getEOEntity().getAllNonEOProperties());
 		context.put("nonEOproperties", "");
@@ -72,12 +72,16 @@ public class GenericRecordGenerator extends JavaClassGenerator {
 	}
 
 	public String addToImports(String fullClassName) {
-		if (fullClassName == null)
+		if (fullClassName == null) {
 			return null;
-		if (!imports.contains(fullClassName.trim()))
-			if (fullClassName.indexOf(".") > -1 && !fullClassName.trim().startsWith("java.lang."))
-				if (!fullClassName.startsWith("default_package"))
+		}
+		if (!imports.contains(fullClassName.trim())) {
+			if (fullClassName.indexOf(".") > -1 && !fullClassName.trim().startsWith("java.lang.")) {
+				if (!fullClassName.startsWith("default_package")) {
 					imports.add(fullClassName.trim());
+				}
+			}
+		}
 		return fullClassName;
 	}
 

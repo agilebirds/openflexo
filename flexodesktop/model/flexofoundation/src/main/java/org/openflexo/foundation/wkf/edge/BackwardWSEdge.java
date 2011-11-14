@@ -77,8 +77,9 @@ public final class BackwardWSEdge extends ExternalMessageEdge<FlexoPortMap, Flex
 			setStartNode(startPortMap);
 			setEndNode(outPort);
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Inconsistent data while building BackwardWSEdge !");
+			}
 			throw new InvalidEdgeException(this);
 		}
 
@@ -126,8 +127,9 @@ public final class BackwardWSEdge extends ExternalMessageEdge<FlexoPortMap, Flex
 		// of a WebService to an OUT port
 
 		if (getStartNode() == null || !getStartNode().isOutputPort() || getEndNode() == null || !getEndNode().isOutPort()
-				|| getPortMapRegistery() == null || getPortMapRegistery().getSubProcessNode() == null)
+				|| getPortMapRegistery() == null || getPortMapRegistery().getSubProcessNode() == null) {
 			return false;
+		}
 
 		return ((getStartNode().getProcess() == getEndNode().getProcess()) && (getStartNode().getSubProcessNode().getSubProcess()
 				.getIsWebService()));
@@ -174,8 +176,9 @@ public final class BackwardWSEdge extends ExternalMessageEdge<FlexoPortMap, Flex
 		if (getServiceOperation() != null && getServiceOperation().getOutputMessageDefinition() != null) {
 			return getServiceOperation().getOutputMessageDefinition();
 		} else {
-			if (!isDeserializing())
+			if (!isDeserializing()) {
 				logger.warning("Inconsistant data found in BackwardWSEdge " + getServiceOperation());
+			}
 			return null;
 		}
 	}
@@ -185,8 +188,9 @@ public final class BackwardWSEdge extends ExternalMessageEdge<FlexoPortMap, Flex
 		if (getFlexoPort() != null && getFlexoPort() instanceof OutputPort) {
 			return ((OutputPort) getFlexoPort()).getOutputMessageDefinition();
 		} else {
-			if (!isDeserializing())
+			if (!isDeserializing()) {
 				logger.warning("Inconsistant data found in BackwardWSEdge");
+			}
 			return null;
 		}
 	}

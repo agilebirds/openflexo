@@ -71,8 +71,9 @@ class DefaultValuePerspective extends FlexoPerspective<ComponentInstance> {
 
 	@Override
 	public ComponentInstance getDefaultObject(FlexoModelObject proposedObject) {
-		if (proposedObject instanceof ComponentInstance)
+		if (proposedObject instanceof ComponentInstance) {
 			return (ComponentInstance) proposedObject;
+		}
 		return null;
 	}
 

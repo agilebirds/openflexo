@@ -47,15 +47,15 @@ public class FlexoProjectBuilder {
 	public void initResourcesCount(int resourcesCount) {
 		if (progress != null) {
 			this.resourcesCount = resourcesCount;
-			if (resourcesCount < 20)
+			if (resourcesCount < 20) {
 				stepsToNotify = 1;
-			else if (resourcesCount < 100)
+			} else if (resourcesCount < 100) {
 				stepsToNotify = 5;
-			else if (resourcesCount < 500)
+			} else if (resourcesCount < 500) {
 				stepsToNotify = 25;
-			else if (resourcesCount < 1000)
+			} else if (resourcesCount < 1000) {
 				stepsToNotify = 50;
-			else {
+			} else {
 				stepsToNotify = (resourcesCount / 20);
 			}
 			current = 0;

@@ -105,12 +105,14 @@ public class CVSDirectory extends CVSAbstractFile implements CVSContainer {
 	@Override
 	public boolean isRegistered(File aFile) {
 		for (CVSFile f : getFiles()) {
-			if (f.getFile().equals(aFile))
+			if (f.getFile().equals(aFile)) {
 				return true;
+			}
 		}
 		for (CVSDirectory d : getDirectories()) {
-			if (d.getFile().equals(aFile))
+			if (d.getFile().equals(aFile)) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -134,12 +136,15 @@ public class CVSDirectory extends CVSAbstractFile implements CVSContainer {
 	public ResourceType getResourceType() {
 		if (!_triedToResolveResourceType) {
 			_triedToResolveResourceType = true;
-			if (getFileName().endsWith(".eomodeld"))
+			if (getFileName().endsWith(".eomodeld")) {
 				_resourceType = ResourceType.EOMODEL;
-			if (getFileName().endsWith(".wo.LAST_ACCEPTED"))
+			}
+			if (getFileName().endsWith(".wo.LAST_ACCEPTED")) {
 				_resourceType = ResourceType.WO_FILE;
-			if (getFileName().endsWith(".wo.LAST_GENERATED"))
+			}
+			if (getFileName().endsWith(".wo.LAST_GENERATED")) {
 				_resourceType = ResourceType.WO_FILE;
+			}
 		}
 		return _resourceType;
 	}

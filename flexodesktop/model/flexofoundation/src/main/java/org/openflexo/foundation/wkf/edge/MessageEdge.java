@@ -121,10 +121,12 @@ public abstract class MessageEdge<S extends AbstractNode, E extends AbstractNode
 	public abstract AbstractMessageDefinition getOutputMessageDefinition();
 
 	public void lookupMessageDefinition() {
-		if (_inputMessage != null)
+		if (_inputMessage != null) {
 			_inputMessage.setMessageDefinition(getInputMessageDefinition());
-		if (_outputMessage != null)
+		}
+		if (_outputMessage != null) {
 			_outputMessage.setMessageDefinition(getOutputMessageDefinition());
+		}
 
 	}
 
@@ -136,10 +138,12 @@ public abstract class MessageEdge<S extends AbstractNode, E extends AbstractNode
 	@Override
 	public Vector<WKFObject> getAllEmbeddedWKFObjects() {
 		Vector<WKFObject> returned = super.getAllEmbeddedWKFObjects();
-		if (getInputMessage() != null)
+		if (getInputMessage() != null) {
 			returned.add(getInputMessage());
-		if (getOutputMessage() != null)
+		}
+		if (getOutputMessage() != null) {
 			returned.add(getOutputMessage());
+		}
 		return returned;
 	}
 

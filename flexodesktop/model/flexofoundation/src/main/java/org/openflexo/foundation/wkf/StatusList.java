@@ -107,8 +107,9 @@ public final class StatusList extends WKFObject implements DeletableObject, Leve
 		FlexoProcess current = getProcess();
 		while (current.getParentProcess() != null) {
 			current = current.getParentProcess();
-			if (current.getStatusList() != null)
+			if (current.getStatusList() != null) {
 				returned.addAll(current.getStatusList().getStatus());
+			}
 		}
 		return returned;
 	}
@@ -139,8 +140,9 @@ public final class StatusList extends WKFObject implements DeletableObject, Leve
 	}
 
 	public void addToStatus(Status aStatus) throws DuplicateStatusException {
-		if (aStatus.getName() == null)
+		if (aStatus.getName() == null) {
 			aStatus.setName(getNextNewStatusName());
+		}
 
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("addToStatus with " + aStatus.getFullyQualifiedName());
@@ -159,17 +161,20 @@ public final class StatusList extends WKFObject implements DeletableObject, Leve
 		_status.add(aStatus);
 		if (getProject() != null) {
 			if (getProject().getGlobalStatus().get(aStatus.getFullyQualifiedName()) != null
-					&& getProject().getGlobalStatus().get(aStatus.getFullyQualifiedName()) != aStatus)
-				if (logger.isLoggable(Level.WARNING))
+					&& getProject().getGlobalStatus().get(aStatus.getFullyQualifiedName()) != aStatus) {
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("There are two different statuses with the same name: " + aStatus.getFullyQualifiedName()
 							+ " this can be ignored during conversions");
+				}
+			}
 			getProject().getGlobalStatus().put(aStatus.getFullyQualifiedName(), aStatus);
 			if (!isDeserializing()) {
 				notifyStatusAdded(aStatus, getProcess());
 			}
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("No project for status list " + this);
+			}
 		}
 	}
 
@@ -186,16 +191,18 @@ public final class StatusList extends WKFObject implements DeletableObject, Leve
 				subProcess.getStatusList().notifyStatusAdded(status, process);
 			}
 		}
-		if (getProcess() != null)
+		if (getProcess() != null) {
 			getProcess().notifyStatusListUpdated();
+		}
 	}
 
 	public void removeFromStatus(Status aStatus) {
 		_status.remove(aStatus);
-		if (getProject() != null)
+		if (getProject() != null) {
 			getProject().getGlobalStatus().remove(aStatus.getFullyQualifiedName());
-		else if (logger.isLoggable(Level.WARNING))
+		} else if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("No project for status list " + this);
+		}
 		if (!aStatus.isDeleted()) {
 			aStatus.delete();
 		}
@@ -218,9 +225,11 @@ public final class StatusList extends WKFObject implements DeletableObject, Leve
 	}
 
 	public Status statusWithName(String aStatusName) {
-		if (getProject() != null)
-			if (aStatusName != null && aStatusName.indexOf(".STATUS.") > -1)
+		if (getProject() != null) {
+			if (aStatusName != null && aStatusName.indexOf(".STATUS.") > -1) {
 				return getProject().getGlobalStatus().get(aStatusName);
+			}
+		}
 		for (Enumeration e = _status.elements(); e.hasMoreElements();) {
 			Status temp = (Status) e.nextElement();
 			if ((temp != null) && (temp.getName().equals(aStatusName))) {
@@ -247,13 +256,15 @@ public final class StatusList extends WKFObject implements DeletableObject, Leve
 			if (getProject() != null) {
 				_defaultStatus = getProject().getGlobalStatus().get(defaultStatusAsString);
 				if (_defaultStatus == null && !isDeserializing()) {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Status with name " + defaultStatusAsString + " could not be found.");
+					}
 					defaultStatusAsString = null;
 				}
 			} else if (!isDeserializing()) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("No project for Status List in process " + (getProcess() != null ? getProcess().getName() : null));
+				}
 			}
 		}
 		return _defaultStatus;
@@ -267,10 +278,11 @@ public final class StatusList extends WKFObject implements DeletableObject, Leve
 	}
 
 	public String getDefaultStatusAsString() {
-		if (getDefaultStatus() != null)
+		if (getDefaultStatus() != null) {
 			return getDefaultStatus().getFullyQualifiedName();
-		else
+		} else {
 			return null;
+		}
 	}
 
 	public void setDefaultStatusAsString(String status) {

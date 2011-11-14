@@ -101,10 +101,12 @@ public class FlexoLink extends FlexoModelObject implements ReferenceOwner {
 
 	@Override
 	public void notifyObjectLoaded(FlexoModelObjectReference reference) {
-		if (reference == object1)
+		if (reference == object1) {
 			links.updateReferencesForObject(object1.getObject(), this);
-		if (reference == object2)
+		}
+		if (reference == object2) {
 			links.updateReferencesForObject(object2.getObject(), this);
+		}
 	}
 
 	@Override

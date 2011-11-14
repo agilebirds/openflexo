@@ -39,8 +39,8 @@ import org.openflexo.toolbox.FileFormat.TextFileFormat;
 import org.openflexo.toolbox.FileFormat.TextSyntax;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.XMLMapping;
 import org.openflexo.xmlcode.StringEncoder.Converter;
+import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * Represents type of a resource

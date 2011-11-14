@@ -44,8 +44,9 @@ public class DGMainPane extends DEMainPane {
 		super(controller, moduleView, mainFrame);
 		dgBrowserView = new DGBrowserView(controller, new DGBrowser(controller));
 		setLeftView(dgBrowserView);
-		if (deBrowserView.getParent() != null)
+		if (deBrowserView.getParent() != null) {
 			deBrowserView.getParent().remove(deBrowserView);
+		}
 		deBrowserView.getBrowser().delete();
 		deBrowserView = null;
 	}
@@ -57,8 +58,9 @@ public class DGMainPane extends DEMainPane {
 	 */
 	@Override
 	protected FlexoModelObject getParentObject(FlexoModelObject object) {
-		if (object instanceof CGFile)
+		if (object instanceof CGFile) {
 			return ((CGFile) object).getRepository();
+		}
 		return super.getParentObject(object);
 	}
 

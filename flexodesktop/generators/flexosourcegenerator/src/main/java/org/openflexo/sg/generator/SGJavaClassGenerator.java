@@ -91,8 +91,9 @@ public class SGJavaClassGenerator extends SGGenerator<DMEntity, GeneratedTextRes
 
 	@Override
 	public final void generate(boolean forceRegenerate) {
-		if (!needGeneration(forceRegenerate))
+		if (!needGeneration(forceRegenerate)) {
 			return;
+		}
 		try {
 			startGeneration();
 			String javaCode = merge(getTemplateName(), defaultContext());

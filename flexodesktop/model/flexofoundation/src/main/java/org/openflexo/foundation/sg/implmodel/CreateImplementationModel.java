@@ -84,8 +84,9 @@ public class CreateImplementationModel extends FlexoAction<CreateImplementationM
 		if (StringUtils.isEmpty(newModelName)) {
 			throw new InvalidParametersException("model name is undefined");
 		}
-		if (getProject().getGeneratedSources().getImplementationModelNamed(newModelName) != null)
+		if (getProject().getGeneratedSources().getImplementationModelNamed(newModelName) != null) {
 			throw new ImplementationModelDefinition.DuplicateImplementationModelNameException(newModelName);
+		}
 
 		_newImplementationModelDefinition = new ImplementationModelDefinition(newModelName, getFocusedObject(), getProject(), true);
 		_newImplementationModelDefinition.setDescription(newModelDescription);
@@ -96,8 +97,9 @@ public class CreateImplementationModel extends FlexoAction<CreateImplementationM
 	}
 
 	public FlexoProject getProject() {
-		if (getFocusedObject() != null)
+		if (getFocusedObject() != null) {
 			return getFocusedObject().getProject();
+		}
 		return null;
 	}
 

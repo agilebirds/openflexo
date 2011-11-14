@@ -49,8 +49,9 @@ public abstract class WKFEdge<S extends WKFNode, E extends WKFNode> extends WKFO
 
 	@Override
 	public void finalizeDeserialization(Object builder) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("finalizeDeserialization() for " + this.getClass().getName());
+		}
 		if (!isEdgeDisplayable() && !isCreatedByCloning()) {
 			delete();
 			return;
@@ -83,8 +84,9 @@ public abstract class WKFEdge<S extends WKFNode, E extends WKFNode> extends WKFO
 	}
 
 	public void setStartNode(S startNode) {
-		if (this.startNode == startNode)
+		if (this.startNode == startNode) {
 			return;
+		}
 		if (this.startNode != null) {
 			removeOutgoingEdgeFromStartNode(this.startNode);
 			this.startNode = null;
@@ -102,16 +104,18 @@ public abstract class WKFEdge<S extends WKFNode, E extends WKFNode> extends WKFO
 	}
 
 	public void setEndNode(E endNode) {
-		if (this.endNode == endNode)
+		if (this.endNode == endNode) {
 			return;
+		}
 		if (this.endNode != null) {
 			removeIncomingEdgeFromEndNode(this.endNode);
 			this.endNode = null;
 		}
 		if (endNode == null || getEndNodeClass().isAssignableFrom(endNode.getClass())) {
 			this.endNode = endNode;
-			if (this.endNode != null)
+			if (this.endNode != null) {
 				addIncomingEdgeToEndNode(endNode);
+			}
 		}
 	}
 

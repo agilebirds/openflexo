@@ -22,14 +22,15 @@
 
 package com.metaphaseeditor.action;
 
-import com.metaphaseeditor.MetaphaseEditorException;
-import com.metaphaseeditor.MetaphaseEditorPanel;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledEditorKit;
 import javax.swing.text.html.HTMLDocument;
+
+import com.metaphaseeditor.MetaphaseEditorException;
+import com.metaphaseeditor.MetaphaseEditorPanel;
 
 public class InsertTextAction extends StyledEditorKit.StyledTextAction {
 
@@ -42,6 +43,7 @@ public class InsertTextAction extends StyledEditorKit.StyledTextAction {
 		this.text = text;
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent ae) {
 		try {
 			JTextPane textPane = editorPanel.getHtmlTextPane();

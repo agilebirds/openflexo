@@ -35,8 +35,9 @@ public class ParsedHtml implements IParsedHtml {
 
 	public ParsedHtml(String html) {
 		this.html = new StringBuilder();
-		if (html != null)
+		if (html != null) {
 			this.html.append(html);
+		}
 		this.neededResources = new ArrayList<IParsedHtmlResource>();
 	}
 
@@ -60,7 +61,8 @@ public class ParsedHtml implements IParsedHtml {
 
 	public void append(ParsedHtml parsedHtml) {
 		this.appendHtml(parsedHtml.getHtml());
-		for (IParsedHtmlResource resource : parsedHtml.getNeededResources())
+		for (IParsedHtmlResource resource : parsedHtml.getNeededResources()) {
 			this.neededResources.add(resource);
+		}
 	}
 }

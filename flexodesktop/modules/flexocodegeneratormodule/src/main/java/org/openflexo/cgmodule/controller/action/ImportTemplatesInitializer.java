@@ -25,12 +25,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.GeneratorIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.cg.CGFile;
@@ -46,6 +40,11 @@ import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.param.RadioButtonListParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.foundation.utils.FlexoProjectFile;
+import org.openflexo.icon.GeneratorIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class ImportTemplatesInitializer extends ActionInitializer {
 
@@ -102,10 +101,12 @@ public class ImportTemplatesInitializer extends ActionInitializer {
 						FlexoLocalization.localizedForKey("import_templates"),
 						FlexoLocalization.localizedForKey("enter_new_repository_name"), params);
 				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
-					if (paramDir.getValue() == null || !paramDir.getValue().isDirectory())
+					if (paramDir.getValue() == null || !paramDir.getValue().isDirectory()) {
 						return false;
-					if (newRepositoryNameParam.getValue() == null || newRepositoryNameParam.getValue().length() == 0)
+					}
+					if (newRepositoryNameParam.getValue() == null || newRepositoryNameParam.getValue().length() == 0) {
 						return false;
+					}
 					// CustomCGTemplateRepository repository = null;
 					if (!hasTemplateRepositories || repChoiceParam.getValue().equals(NEW)) {
 						if (hasTemplateRepositories) {

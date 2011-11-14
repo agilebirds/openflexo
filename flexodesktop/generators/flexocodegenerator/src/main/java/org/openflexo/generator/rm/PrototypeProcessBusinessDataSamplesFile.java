@@ -23,7 +23,6 @@ import java.io.File;
 
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.cg.TextFile;
-import org.openflexo.generator.rm.GenerationAvailableFile;
 import org.openflexo.generator.utils.PrototypeProcessBusinessDataSamplesGenerator;
 
 public class PrototypeProcessBusinessDataSamplesFile extends TextFile implements GenerationAvailableFile {

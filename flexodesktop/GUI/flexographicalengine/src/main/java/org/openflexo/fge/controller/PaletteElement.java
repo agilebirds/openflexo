@@ -142,8 +142,9 @@ public interface PaletteElement extends Serializable {
 
 			enableDragging();
 
-			if (aGraphicalRepresentation.getToolTipText() != null)
+			if (aGraphicalRepresentation.getToolTipText() != null) {
 				setToolTipText(aGraphicalRepresentation.getToolTipText());
+			}
 		}
 
 		@Override
@@ -189,8 +190,9 @@ public interface PaletteElement extends Serializable {
 
 		protected void disableDragging() {
 			dgr.setComponent(null);
-			if (getLabelView() != null)
+			if (getLabelView() != null) {
 				getLabelView().enableMouseListeners();
+			}
 		}
 
 		/**
@@ -213,11 +215,12 @@ public interface PaletteElement extends Serializable {
 
 				// if the action is ok we go ahead
 				// otherwise we punt
-				if ((e.getDragAction() & dragAction) == 0)
+				if ((e.getDragAction() & dragAction) == 0) {
 					return;
-				// get the label's text and put it inside a Transferable
-				// Transferable transferable = new StringSelection(
-				// DragLabel.this.getText() );
+					// get the label's text and put it inside a Transferable
+					// Transferable transferable = new StringSelection(
+					// DragLabel.this.getText() );
+				}
 
 				PaletteElementTransferable transferable = new PaletteElementTransferable(getDrawable(), e.getDragOrigin());
 
@@ -250,8 +253,9 @@ public interface PaletteElement extends Serializable {
 			public void dragDropEnd(DragSourceDropEvent e) {
 				getDrawingView().resetCapturedNode();
 				if (e.getDropSuccess() == false) {
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Dropping was not successful");
+					}
 					return;
 				}
 				/*
@@ -259,8 +263,9 @@ public interface PaletteElement extends Serializable {
 				 * acceptDrop
 				 */
 				// this is the action selected by the drop target
-				if (e.getDropAction() == DnDConstants.ACTION_MOVE)
+				if (e.getDropAction() == DnDConstants.ACTION_MOVE) {
 					setName("");
+				}
 			}
 
 			/**

@@ -27,14 +27,6 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.icon.IconFactory;
-import org.openflexo.javaparser.FJPDMSet;
-import org.openflexo.javaparser.FJPJavaClass;
-import org.openflexo.javaparser.FJPJavaSource;
-import org.openflexo.javaparser.FJPJavaParseException.FJPParseException;
-import org.openflexo.localization.FlexoLocalization;
-
 import org.openflexo.cgmodule.controller.GeneratorController;
 import org.openflexo.components.MultipleObjectSelectorPopup;
 import org.openflexo.components.browser.BrowserElement;
@@ -54,6 +46,13 @@ import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference.MethodR
 import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference.PropertyReference;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.generator.cg.CGJavaFile;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.icon.IconFactory;
+import org.openflexo.javaparser.FJPDMSet;
+import org.openflexo.javaparser.FJPJavaClass;
+import org.openflexo.javaparser.FJPJavaParseException.FJPParseException;
+import org.openflexo.javaparser.FJPJavaSource;
+import org.openflexo.localization.FlexoLocalization;
 
 public class ModelReinjectionPopup extends MultipleObjectSelectorPopup {
 
@@ -66,8 +65,9 @@ public class ModelReinjectionPopup extends MultipleObjectSelectorPopup {
 		Hashtable<FJPJavaClass, Vector<String>> ignoredProperties = new Hashtable<FJPJavaClass, Vector<String>>();
 		Hashtable<FJPJavaClass, Vector<String>> ignoredMethods = new Hashtable<FJPJavaClass, Vector<String>>();
 		for (CGJavaFile javaFile : javaFiles) {
-			if (javaFile.getParseException() != null)
+			if (javaFile.getParseException() != null) {
 				throw javaFile.getParseException().getParseException();
+			}
 			FJPJavaClass parsedClass = javaFile.getParsedJavaSource().getRootClass();
 			ignoredProperties.put(parsedClass, javaFile.getPropertiesKnownAndIgnored());
 			ignoredMethods.put(parsedClass, javaFile.getMethodsKnownAndIgnored());
@@ -98,8 +98,9 @@ public class ModelReinjectionPopup extends MultipleObjectSelectorPopup {
 			_project = project;
 			Hashtable<FJPJavaSource, DMEntity> entries = new Hashtable<FJPJavaSource, DMEntity>();
 			for (CGJavaFile javaFile : javaFiles) {
-				if (javaFile.getParsedJavaSource() != null)
+				if (javaFile.getParsedJavaSource() != null) {
 					entries.put(javaFile.getParsedJavaSource(), javaFile.getModelEntity());
+				}
 			}
 			dmSet = new FJPDMSet(project, "updated_classes", entries);
 			_factory = new UpdateClassesBrowserElementFactory();
@@ -295,10 +296,11 @@ public class ModelReinjectionPopup extends MultipleObjectSelectorPopup {
 						@Override
 						public Icon getIcon(FlexoModelObject object) {
 							if (object instanceof PropertyReference) {
-								if (((PropertyReference) object).isSettable())
+								if (((PropertyReference) object).isSettable()) {
 									return DMEIconLibrary.GET_SET_ICON;
-								else
+								} else {
 									return DMEIconLibrary.GET_ICON;
+								}
 							}
 							return null;
 						}
@@ -306,10 +308,11 @@ public class ModelReinjectionPopup extends MultipleObjectSelectorPopup {
 						@Override
 						public String getLocalizedTooltip(FlexoModelObject object) {
 							if (object instanceof PropertyReference) {
-								if (((PropertyReference) object).isSettable())
+								if (((PropertyReference) object).isSettable()) {
 									return FlexoLocalization.localizedForKey("can_be_set");
-								else
+								} else {
 									return FlexoLocalization.localizedForKey("cannot_be_set");
+								}
 							}
 							return null;
 						}

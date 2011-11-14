@@ -57,8 +57,9 @@ public class FIBProcessSelector extends FIBModelObjectSelector<FlexoProcess> {
 	 */
 	@Override
 	protected Enumeration<FlexoProcess> getAllSelectableValues() {
-		if (getProject() != null)
+		if (getProject() != null) {
 			return getProject().getWorkflow().getSortedProcesses();
+		}
 		return null;
 	}
 
@@ -79,8 +80,9 @@ public class FIBProcessSelector extends FIBModelObjectSelector<FlexoProcess> {
 
 	@Override
 	public String renderedString(FlexoProcess editedObject) {
-		if (editedObject != null)
+		if (editedObject != null) {
 			return editedObject.getName();
+		}
 		return "";
 	}
 

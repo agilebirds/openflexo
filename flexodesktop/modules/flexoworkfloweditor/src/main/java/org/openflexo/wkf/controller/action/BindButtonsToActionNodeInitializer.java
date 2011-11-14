@@ -74,22 +74,26 @@ public class BindButtonsToActionNodeInitializer extends ActionInitializer {
 				Vector<ActionNode> actions = new Vector<ActionNode>();
 				while (i.hasNext()) {
 					ActionNode element = (ActionNode) i.next();
-					if (!element.isBeginNode() && !element.isEndNode())
+					if (!element.isBeginNode() && !element.isEndNode()) {
 						actions.add(element);
+					}
 				}
 				Vector b = node.getComponentInstance().getComponentDefinition().getWOComponent().getAllButtonInterface();
 				i = b.iterator();
 				Vector<IEHyperlinkWidget> buttons = new Vector<IEHyperlinkWidget>();
 				while (i.hasNext()) {
 					IEHyperlinkWidget w = (IEHyperlinkWidget) i.next();
-					if (w.hasActionType())
+					if (w.hasActionType()) {
 						buttons.add(w);
+					}
 				}
 				if (buttons.size() > 0) {
-					if (node.getContainedPetriGraph() == null || !node.getContainedPetriGraph().getIsVisible())
+					if (node.getContainedPetriGraph() == null || !node.getContainedPetriGraph().getIsVisible()) {
 						OpenActionLevel.actionType.makeNewAction(node, null, action.getEditor()).doAction();
-					if (logger.isLoggable(Level.INFO))
+					}
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Some buttons require an associated flexo action");
+					}
 					AssociateActionsWithButtons associator = new AssociateActionsWithButtons(buttons, actions, node, action.getException());
 					associator.setVisible(true);
 					int retval = associator.getButtonPressed();
@@ -98,15 +102,17 @@ public class BindButtonsToActionNodeInitializer extends ActionInitializer {
 					action.setInsertActionNode(associator.getInsertActionNode());
 					action.setCleanActions(associator.isCleanActions());
 					action.setButtons(buttons);
-					if (retval == AssociateActionsWithButtons.OK)
+					if (retval == AssociateActionsWithButtons.OK) {
 						action.setRetval(BindButtonsToActionNode.OK);
-					else if (retval == AssociateActionsWithButtons.IGNORE)
+					} else if (retval == AssociateActionsWithButtons.IGNORE) {
 						action.setRetval(BindButtonsToActionNode.IGNORE);
-					else
+					} else {
 						action.setRetval(BindButtonsToActionNode.CANCEL);
+					}
 					return true;
-				} else if (logger.isLoggable(Level.INFO))
+				} else if (logger.isLoggable(Level.INFO)) {
 					logger.info("There are no buttons that require an action");
+				}
 				return false;
 			}
 		};

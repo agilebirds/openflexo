@@ -97,8 +97,9 @@ public class WysiwygLightWidget extends DenaliWidget<String> {
 	 */
 	@Override
 	public synchronized void updateModelFromWidget() {
-		if (isReadOnly())
+		if (isReadOnly()) {
 			return;
+		}
 		modelUpdating = true;
 		try {
 			setStringValue(wysiwyg.getBodyContent());

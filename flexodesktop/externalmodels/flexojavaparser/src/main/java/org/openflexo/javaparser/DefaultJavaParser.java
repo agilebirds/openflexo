@@ -33,9 +33,9 @@ import org.openflexo.foundation.dm.javaparser.JavaParseException;
 import org.openflexo.foundation.dm.javaparser.ParsedJavaClass;
 import org.openflexo.foundation.dm.javaparser.ParsedJavaField;
 import org.openflexo.foundation.dm.javaparser.ParsedJavaMethod;
+import org.openflexo.foundation.dm.javaparser.ParsedJavaMethod.ParsedJavaMethodParameter;
 import org.openflexo.foundation.dm.javaparser.ParsedJavadoc;
 import org.openflexo.foundation.dm.javaparser.ParsedJavadocItem;
-import org.openflexo.foundation.dm.javaparser.ParsedJavaMethod.ParsedJavaMethodParameter;
 import org.openflexo.javaparser.FJPTypeResolver.CrossReferencedEntitiesException;
 import org.openflexo.toolbox.StringUtils;
 
@@ -72,8 +72,9 @@ public class DefaultJavaParser implements JavaClassParser, JavaMethodParser, Jav
 
 		catch (ParseException e) {
 			logger.info("Parse error");
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Code: " + classCode);
+			}
 			throw new JavaParseException();
 		}
 	}
@@ -84,14 +85,16 @@ public class DefaultJavaParser implements JavaClassParser, JavaMethodParser, Jav
 			String parsedString = "public class TemporaryClass {" + StringUtils.LINE_SEPARATOR + methodCode + StringUtils.LINE_SEPARATOR
 					+ "}" + StringUtils.LINE_SEPARATOR;
 
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Parsing " + parsedString);
+			}
 
 			String sourceName = "TemporaryClass";
 			FJPJavaSource source = new FJPJavaSource(sourceName, parsedString, dataModel.getClassLibrary());
 			FJPJavaClass parsedClass = source.getRootClass();
-			if (parsedClass.getMethods().length == 0)
+			if (parsedClass.getMethods().length == 0) {
 				return null;
+			}
 			FJPJavaMethod parsedMethod = parsedClass.getMethods()[0];
 
 			return parsedMethod;
@@ -111,14 +114,16 @@ public class DefaultJavaParser implements JavaClassParser, JavaMethodParser, Jav
 			parsedString = "public class TemporaryClass {" + StringUtils.LINE_SEPARATOR + fieldCode + StringUtils.LINE_SEPARATOR + "}"
 					+ StringUtils.LINE_SEPARATOR;
 
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Parsing " + parsedString);
+			}
 
 			String sourceName = "TemporaryClass";
 			FJPJavaSource source = new FJPJavaSource(sourceName, parsedString, dataModel.getClassLibrary());
 			FJPJavaClass parsedClass = source.getRootClass();
-			if (parsedClass.getFields().length == 0)
+			if (parsedClass.getFields().length == 0) {
 				return null;
+			}
 			FJPJavaField parsedField = parsedClass.getFields()[0];
 
 			return parsedField;
@@ -137,14 +142,16 @@ public class DefaultJavaParser implements JavaClassParser, JavaMethodParser, Jav
 			String parsedString = "public class TemporaryClass {" + StringUtils.LINE_SEPARATOR + methodCode + StringUtils.LINE_SEPARATOR
 					+ "}" + StringUtils.LINE_SEPARATOR;
 
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Parsing " + parsedString);
+			}
 
 			String sourceName = "TemporaryClass";
 			FJPJavaSource source = new FJPJavaSource(sourceName, parsedString, dataModel.getClassLibrary());
 			FJPJavaClass parsedClass = source.getRootClass();
-			if (parsedClass.getMethods().length == 0)
+			if (parsedClass.getMethods().length == 0) {
 				return null;
+			}
 			FJPJavaMethod parsedMethod = parsedClass.getMethods()[0];
 
 			return parsedMethod.getJavadoc();
@@ -162,14 +169,16 @@ public class DefaultJavaParser implements JavaClassParser, JavaMethodParser, Jav
 			String parsedString = "public class TemporaryClass {" + StringUtils.LINE_SEPARATOR + fieldCode + StringUtils.LINE_SEPARATOR
 					+ "}" + StringUtils.LINE_SEPARATOR;
 
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Parsing " + parsedString);
+			}
 
 			String sourceName = "TemporaryClass";
 			FJPJavaSource source = new FJPJavaSource(sourceName, parsedString, dataModel.getClassLibrary());
 			FJPJavaClass parsedClass = source.getRootClass();
-			if (parsedClass.getFields().length == 0)
+			if (parsedClass.getFields().length == 0) {
 				return null;
+			}
 			FJPJavaField parsedField = parsedClass.getFields()[0];
 
 			return parsedField.getJavadoc();
@@ -210,8 +219,9 @@ public class DefaultJavaParser implements JavaClassParser, JavaMethodParser, Jav
 		FJPJavaClass parsedClass = parsedMethod.getParentClass();
 		FJPJavaSource source = parsedMethod.getJavaSource();
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Try to update method " + method + " from parsed method");
+		}
 		try {
 			DMMethod updatedMethod = FJPDMMapper.makeMethod(parsedClass, parsedMethod.getCallSignature(), method.getDMModel(), null,
 					source, false);
@@ -226,17 +236,20 @@ public class DefaultJavaParser implements JavaClassParser, JavaMethodParser, Jav
 			e.printStackTrace();
 		}
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Try to update method " + method + " from parsed method: DONE ");
+		}
 	}
 
 	@Override
 	public void updateGetterWith(DMProperty property, ParsedJavaMethod javaMethod) throws DuplicateMethodSignatureException {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Try to update property " + property + " from parsed getter method");
+		}
 
-		if (javaMethod.getJavadoc() != null)
+		if (javaMethod.getJavadoc() != null) {
 			property.setDescription(javaMethod.getJavadoc().getComment());
+		}
 
 		// TODO: we can handle type reinjection here
 		// TODO: handle 'static' here
@@ -244,8 +257,9 @@ public class DefaultJavaParser implements JavaClassParser, JavaMethodParser, Jav
 
 	@Override
 	public void updateSetterWith(DMProperty property, ParsedJavaMethod javaMethod) throws DuplicateMethodSignatureException {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Try to update property " + property + " from parsed setter method");
+		}
 
 		if (javaMethod.getMethodParameters().size() == 1) {
 			ParsedJavaMethodParameter setterParam = javaMethod.getMethodParameters().firstElement();
@@ -258,8 +272,9 @@ public class DefaultJavaParser implements JavaClassParser, JavaMethodParser, Jav
 
 	@Override
 	public void updateAdditionAccessorWith(DMProperty property, ParsedJavaMethod javaMethod) throws DuplicateMethodSignatureException {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Try to update property " + property + " from parsed addition method");
+		}
 
 		if (javaMethod.getMethodParameters().size() == 1) {
 			ParsedJavaMethodParameter additionMethodParam = javaMethod.getMethodParameters().firstElement();
@@ -273,8 +288,9 @@ public class DefaultJavaParser implements JavaClassParser, JavaMethodParser, Jav
 
 	@Override
 	public void updateRemovalAccessorWith(DMProperty property, ParsedJavaMethod javaMethod) throws DuplicateMethodSignatureException {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Try to update property " + property + " from parsed removal method");
+		}
 
 		if (javaMethod.getMethodParameters().size() == 1) {
 			ParsedJavaMethodParameter removalMethodParam = javaMethod.getMethodParameters().firstElement();
@@ -287,10 +303,11 @@ public class DefaultJavaParser implements JavaClassParser, JavaMethodParser, Jav
 
 	@Override
 	public void updatePropertyFromJavaField(DMProperty property, ParsedJavaField javaField) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Try to update property " + property + " from parsed field");
-		// TODO implement this
-		// TODO: handle 'static' here
+			// TODO implement this
+			// TODO: handle 'static' here
+		}
 	}
 
 }

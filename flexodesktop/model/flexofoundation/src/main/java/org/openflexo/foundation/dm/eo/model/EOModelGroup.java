@@ -40,8 +40,9 @@ public class EOModelGroup extends EOObject {
 	private Vector<EOModel> models = new Vector<EOModel>();
 
 	public static EOModelGroup getDefaultGroup() {
-		if (defaultGroup == null)
+		if (defaultGroup == null) {
 			defaultGroup = new EOModelGroup();
+		}
 		return defaultGroup;
 	}
 
@@ -105,8 +106,9 @@ public class EOModelGroup extends EOObject {
 		while (i.hasNext()) {
 			EOModel model = i.next();
 			EOEntity e = model._entityNamed(name);
-			if (e != null)
+			if (e != null) {
 				return e;
+			}
 		}
 		return null;
 	}
@@ -116,8 +118,9 @@ public class EOModelGroup extends EOObject {
 		while (i.hasNext()) {
 			EOModel model = i.next();
 			EOEntity e = model._entityNamedIgnoreCase(name);
-			if (e != null)
+			if (e != null) {
 				return e;
+			}
 		}
 		return null;
 	}
@@ -129,8 +132,9 @@ public class EOModelGroup extends EOObject {
 	 */
 	@Override
 	public void delete() {
-		if (logger.isLoggable(Level.SEVERE))
+		if (logger.isLoggable(Level.SEVERE)) {
 			logger.severe("Delete should never be called on a EOModelGroup");
+		}
 	}
 
 	/**

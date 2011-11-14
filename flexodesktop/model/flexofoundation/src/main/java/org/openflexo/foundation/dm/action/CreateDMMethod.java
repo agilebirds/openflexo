@@ -67,11 +67,13 @@ public class CreateDMMethod extends FlexoAction<CreateDMMethod, DMEntity, DMObje
 
 	@Override
 	protected void doAction(Object context) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("CreateDMMethod");
+		}
 		if (getEntity() != null) {
-			if (_newMethodName == null || getEntity().getMethod(_newMethodName + "()") != null)
+			if (_newMethodName == null || getEntity().getMethod(_newMethodName + "()") != null) {
 				_newMethodName = getEntity().getDMModel().getNextDefautMethodName(getEntity());
+			}
 			_newMethod = new DMMethod(getEntity().getDMModel(),/* getEntity(),*/_newMethodName);
 			_newMethod.setEntity(getEntity());
 			getEntity().registerMethod(_newMethod);

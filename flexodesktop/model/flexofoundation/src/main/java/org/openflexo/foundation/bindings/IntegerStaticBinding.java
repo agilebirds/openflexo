@@ -69,24 +69,30 @@ public class IntegerStaticBinding extends StaticBinding<Long> {
 
 	@Override
 	protected boolean _areTypesMatching() {
-		if (getBindingDefinition().getType() == null)
+		if (getBindingDefinition().getType() == null) {
 			return true;
+		}
 
 		if (getBindingDefinition().getType().isDouble() || getBindingDefinition().getType().isFloat()
-				|| getBindingDefinition().getType().isLong())
+				|| getBindingDefinition().getType().isLong()) {
 			return true;
+		}
 
-		if (getBindingDefinition().getType().isInteger())
+		if (getBindingDefinition().getType().isInteger()) {
 			return (getValue() >= Integer.MIN_VALUE && getValue() <= Integer.MAX_VALUE);
+		}
 
-		if (getBindingDefinition().getType().isShort())
+		if (getBindingDefinition().getType().isShort()) {
 			return (getValue() >= Short.MIN_VALUE && getValue() <= Short.MAX_VALUE);
+		}
 
-		if (getBindingDefinition().getType().isByte())
+		if (getBindingDefinition().getType().isByte()) {
 			return (getValue() >= Byte.MIN_VALUE && getValue() <= Byte.MAX_VALUE);
+		}
 
-		if (getBindingDefinition().getType().isChar())
+		if (getBindingDefinition().getType().isChar()) {
 			return (getValue() >= Character.MIN_VALUE && getValue() <= Character.MAX_VALUE);
+		}
 
 		return super._areTypesMatching();
 	}
@@ -94,12 +100,13 @@ public class IntegerStaticBinding extends StaticBinding<Long> {
 	@Override
 	public DMType getAccessedType() {
 		if (getOwner() != null && getOwner().getProject() != null && accessedType == null) {
-			if (getValue() >= Short.MIN_VALUE && getValue() <= Short.MAX_VALUE)
+			if (getValue() >= Short.MIN_VALUE && getValue() <= Short.MAX_VALUE) {
 				accessedType = DMType.makeShortDMType(getOwner().getProject());
-			else if (getValue() >= Integer.MIN_VALUE && getValue() <= Integer.MAX_VALUE)
+			} else if (getValue() >= Integer.MIN_VALUE && getValue() <= Integer.MAX_VALUE) {
 				accessedType = DMType.makeShortDMType(getOwner().getProject());
-			else
+			} else {
 				accessedType = DMType.makeLongDMType(getOwner().getProject());
+			}
 		}
 		return accessedType;
 	}

@@ -41,8 +41,8 @@ import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.DataBinding;
 import org.openflexo.fib.model.FIBCustom;
-import org.openflexo.fib.model.FIBCustomColumn;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
+import org.openflexo.fib.model.FIBCustomColumn;
 import org.openflexo.fib.model.FIBCustomColumn.FIBCustomAssignment;
 import org.openflexo.swing.CustomPopup.ApplyCancelListener;
 import org.openflexo.toolbox.ToolBox;
@@ -72,8 +72,9 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 				(Class<T>) columnModel.getDataClass());
 		_editCustomWidget = makeCustomComponent((Class<FIBCustomComponent<T, ?>>) columnModel.getComponentClass(),
 				(Class<T>) columnModel.getDataClass());
-		if (_editCustomWidget != null)
+		if (_editCustomWidget != null) {
 			_editCustomWidget.addApplyCancelListener(this);
+		}
 		_customCellRenderer = new CustomCellRenderer();
 		_customCellEditor = new CustomCellEditor();
 		useCustomViewForCellRendering = columnModel.customRendering;
@@ -197,14 +198,16 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 				Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 				if (returned instanceof JLabel) {
 					((JLabel) returned).setText(renderValue((T) value));
-					if (ToolBox.getPLATFORM() == ToolBox.MACOS)
+					if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 						((JLabel) returned).setForeground(getColorFor(value));
+					}
 					((JLabel) returned).setFont(CustomColumn.this.getFont());
 				}
 				c = returned;
 			}
-			if (c instanceof JComponent)
+			if (c instanceof JComponent) {
 				((JComponent) c).setToolTipText(getTooltip(elementAt(row)));
+			}
 			return c;
 		}
 
@@ -278,8 +281,9 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 		// Implement the one CellEditor method that AbstractCellEditor doesn't.
 		@Override
 		public Object getCellEditorValue() {
-			if (_customWidget == null)
+			if (_customWidget == null) {
 				return null;
+			}
 			return _customWidget.getEditedObject();
 		}
 
@@ -287,11 +291,12 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 		@Override
 		public Component getTableCellEditorComponent(final JTable table, Object value, boolean isSelected, int row, int column) {
 			// logger.info("elementAt(row)="+elementAt(row));
-			if (disableTerminateEditOnFocusLost)
+			if (disableTerminateEditOnFocusLost) {
 				table.putClientProperty("terminateEditOnFocusLost", Boolean.FALSE);
+			}
 			setEditedRowObject(elementAt(row));
 			_customWidget.setEditedObject(getValueFor(elementAt(row)));
-			if (disableTerminateEditOnFocusLost)
+			if (disableTerminateEditOnFocusLost) {
 				_customWidget.addApplyCancelListener(new ApplyCancelListener() {
 
 					@Override
@@ -305,6 +310,7 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 					}
 
 				});
+			}
 			return _customWidget.getJComponent();
 		}
 	}
@@ -336,10 +342,11 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 
 	@Override
 	public Object getValue(BindingVariable variable) {
-		if (variable.getVariableName().equals(FIBCustom.COMPONENT_NAME))
+		if (variable.getVariableName().equals(FIBCustom.COMPONENT_NAME)) {
 			return _editCustomWidget;
-		else
+		} else {
 			return super.getValue(variable);
+		}
 	}
 
 	@Override
@@ -354,8 +361,9 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 	}
 
 	protected String renderValue(T value) {
-		if (value == null)
+		if (value == null) {
 			return "";
+		}
 		return getStringRepresentation(value);
 	}
 

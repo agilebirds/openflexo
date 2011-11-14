@@ -43,8 +43,9 @@ public class WidgetBindingDefinition extends BindingDefinition implements Inspec
 
 	public static WidgetBindingDefinition get(IEWidget widget, String name, Class type, BindingDefinitionType bindingType, boolean mandatory) {
 		if (widget.getProject() == null) {
-			if (logger.isLoggable(Level.SEVERE))
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Widget " + widget.getFullyQualifiedName() + " has no project!!!");
+			}
 			return null;
 		}
 		return widget.getProject().getWidgetBindingDefinition(widget, name, type, bindingType, mandatory);

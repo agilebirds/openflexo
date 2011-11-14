@@ -25,7 +25,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.fps.CVSFile;
 import org.openflexo.fps.controller.FPSController;
 import org.openflexo.module.Module;
 import org.openflexo.prefs.ModulePreferences;
@@ -79,8 +78,9 @@ public final class FPSPreferences extends ModulePreferences {
 	}
 
 	public static Boolean getExamplePrefValue() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getExamplePrefValue");
+		}
 		Boolean value = preferences(FPS_PREFERENCES).getBooleanProperty(EXAMPLE_PREF_VALUE);
 		if (value == null) {
 			setExamplePrefValue(Boolean.FALSE);
@@ -90,8 +90,9 @@ public final class FPSPreferences extends ModulePreferences {
 	}
 
 	public static void setExamplePrefValue(Boolean alignOnGrid) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setExamplePrefValue");
+		}
 		preferences(FPS_PREFERENCES).setBooleanProperty(EXAMPLE_PREF_VALUE, alignOnGrid);
 	}
 
@@ -110,8 +111,9 @@ public final class FPSPreferences extends ModulePreferences {
 	}
 
 	public static String getLastOpenedProject1() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getLastOpenedProjects");
+		}
 		return preferences(FPS_PREFERENCES).getProperty(LAST_OPENED_PROJECTS_1);
 	}
 
@@ -120,8 +122,9 @@ public final class FPSPreferences extends ModulePreferences {
 	}
 
 	public static String getLastOpenedProject2() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getLastOpenedProjects");
+		}
 		return preferences(FPS_PREFERENCES).getProperty(LAST_OPENED_PROJECTS_2);
 	}
 
@@ -130,8 +133,9 @@ public final class FPSPreferences extends ModulePreferences {
 	}
 
 	public static String getLastOpenedProject3() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getLastOpenedProjects");
+		}
 		return preferences(FPS_PREFERENCES).getProperty(LAST_OPENED_PROJECTS_3);
 	}
 
@@ -140,8 +144,9 @@ public final class FPSPreferences extends ModulePreferences {
 	}
 
 	public static String getLastOpenedProject4() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getLastOpenedProjects");
+		}
 		return preferences(FPS_PREFERENCES).getProperty(LAST_OPENED_PROJECTS_4);
 	}
 
@@ -150,8 +155,9 @@ public final class FPSPreferences extends ModulePreferences {
 	}
 
 	public static String getLastOpenedProject5() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getLastOpenedProjects");
+		}
 		return preferences(FPS_PREFERENCES).getProperty(LAST_OPENED_PROJECTS_5);
 	}
 
@@ -173,28 +179,33 @@ public final class FPSPreferences extends ModulePreferences {
 		File f5 = null;
 		if (s1 != null) {
 			f1 = new File(s1);
-			if (f1.exists())
+			if (f1.exists()) {
 				files.add(f1);
+			}
 		}
 		if (s2 != null) {
 			f2 = new File(s2);
-			if (f2.exists())
+			if (f2.exists()) {
 				files.add(f2);
+			}
 		}
 		if (s3 != null) {
 			f3 = new File(s3);
-			if (f3.exists())
+			if (f3.exists()) {
 				files.add(f3);
+			}
 		}
 		if (s4 != null) {
 			f4 = new File(s4);
-			if (f4.exists())
+			if (f4.exists()) {
 				files.add(f4);
+			}
 		}
 		if (s5 != null) {
 			f5 = new File(s5);
-			if (f5.exists())
+			if (f5.exists()) {
 				files.add(f5);
+			}
 		}
 		return files;
 	}

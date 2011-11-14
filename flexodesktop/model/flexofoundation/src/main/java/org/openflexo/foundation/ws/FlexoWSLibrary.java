@@ -28,9 +28,6 @@ import java.util.logging.Logger;
 
 import javax.swing.tree.TreeNode;
 
-import org.openflexo.toolbox.FileUtils;
-import org.openflexo.xmlcode.XMLMapping;
-
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.dkv.EmptyStringException;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -52,6 +49,8 @@ import org.openflexo.foundation.ws.dm.InternalWSServiceRemoved;
 import org.openflexo.foundation.xml.FlexoWSLibraryBuilder;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.toolbox.FileUtils;
+import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * @author gpolet
@@ -76,9 +75,10 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 			try {
 				wslRes = new FlexoWSLibraryResource(project, wsl, wsLibraryFile);
 			} catch (InvalidFileNameException e1) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("Could not create WS Library with name: " + wsLibraryFile.getRelativePath()
 							+ ". This should never happen");
+				}
 				return null;
 			}
 		}
@@ -88,8 +88,9 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 			project.registerResource(wslRes);
 		} catch (Exception e1) {
 			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
+			}
 			e1.printStackTrace();
 		}
 		return wsl;
@@ -180,8 +181,9 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 	 * @return
 	 */
 	public ExternalWSService createExternalWSService(String wsServiceName) throws FlexoException {
-		if (wsServiceName == null)
+		if (wsServiceName == null) {
 			throw new FlexoException("Input name for the WSService is null", "ws_service_with_no_name");
+		}
 		if (wsServiceName.trim().length() == 0) {
 			// TODO this exception comes from DKV package. not really nice.
 			throw new FlexoException("Empty String for WSService name", "ws_service_with_no_name");
@@ -206,8 +208,9 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 		Enumeration en = externalWSServices.elements();
 		while (en.hasMoreElements()) {
 			ExternalWSService element = (ExternalWSService) en.nextElement();
-			if (element.getName().equals(group.getName()))
+			if (element.getName().equals(group.getName())) {
 				throw new DuplicateWSObjectException(element, "ws_service_already_exists");
+			}
 		}
 		// wsdl file
 		File copiedFile = new File(ProjectRestructuration.getExpectedWSLibraryDirectory(getWSLibrary().getProject().getProjectDirectory()),
@@ -216,12 +219,14 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 		     progress.setProgress(FlexoLocalization.localizedForKey("copying") + " " + wsdlFileToCopy.getName());
 		 }*/
 		try {
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Copying file " + wsdlFileToCopy.getAbsolutePath() + " to " + copiedFile.getAbsolutePath());
+			}
 			FileUtils.copyFileToFile(wsdlFileToCopy, copiedFile);
 		} catch (IOException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not copy file " + wsdlFileToCopy.getAbsolutePath() + " to " + copiedFile.getAbsolutePath());
+			}
 		}
 
 		// Perform some settings
@@ -243,8 +248,9 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 	 * @return
 	 */
 	public InternalWSService createInternalWSService(String wsServiceName) throws FlexoException {
-		if (wsServiceName == null)
+		if (wsServiceName == null) {
 			throw new FlexoException("Input name for the WSService is null", "ws_service_with_no_name");
+		}
 		if (wsServiceName.trim().length() == 0) {
 			// TODO this exception comes from DKV package. not really nice.
 			throw new FlexoException("Empty String for wsgroup name", "ws_service_with_no_name");
@@ -261,8 +267,9 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 		Enumeration en = internalWSServices.elements();
 		while (en.hasMoreElements()) {
 			InternalWSService elem = (InternalWSService) en.nextElement();
-			if (elem.getName().equals(group.getName()))
+			if (elem.getName().equals(group.getName())) {
 				throw new DuplicateWSObjectException(group, "ws_service_already_exists");
+			}
 		}
 		addToInternalWSServices(group);
 
@@ -272,8 +279,9 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 
 	public void addToExternalWSServices(ExternalWSService group) {
 		if (externalWSServices.contains(group)) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Attempt to insert twice the same wsService.");
+			}
 			return;
 		}
 		externalWSServices.add(group);
@@ -287,8 +295,9 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 
 	public void addToInternalWSServices(InternalWSService group) {
 		if (internalWSServices.contains(group)) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Attempt to insert twice the same wsService.");
+			}
 			return;
 		}
 		internalWSServices.add(group);
@@ -341,13 +350,16 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 		Enumeration en = externalWSServices.elements();
 		while (en.hasMoreElements()) {
 			ExternalWSService group = (ExternalWSService) en.nextElement();
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("looking in :" + group.getName());
-			if (group.getName().equals(name))
+			}
+			if (group.getName().equals(name)) {
 				return group;
+			}
 		}
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Service " + name + " could not be found.");
+		}
 		return null;
 	}
 
@@ -355,21 +367,25 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 		Enumeration en = internalWSServices.elements();
 		while (en.hasMoreElements()) {
 			InternalWSService group = (InternalWSService) en.nextElement();
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("looking in :" + group.getName());
-			if (group.getName().equals(name))
+			}
+			if (group.getName().equals(name)) {
 				return group;
+			}
 		}
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Service " + name + " could not be found.");
+		}
 		return null;
 	}
 
 	public WSService getWSServiceNamed(String s) {
 
 		WSService group = getExternalWSServiceNamed(s);
-		if (group == null)
+		if (group == null) {
 			group = getInternalWSServiceNamed(s);
+		}
 		return group;
 	}
 
@@ -381,8 +397,9 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 		while (en.hasMoreElements()) {
 			ExternalWSService group = (ExternalWSService) en.nextElement();
 			toReturn = group.getWSPortTypeNamed(s);
-			if (toReturn != null)
+			if (toReturn != null) {
 				return toReturn;
+			}
 		}
 
 		// Look in internal wsgroups
@@ -390,12 +407,14 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 		while (en.hasMoreElements()) {
 			InternalWSService group = (InternalWSService) en.nextElement();
 			toReturn = group.getWSPortTypeNamed(s);
-			if (toReturn != null)
+			if (toReturn != null) {
 				return toReturn;
+			}
 		}
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Could not find a WSPortType named: " + s);
+		}
 		return null;
 
 	}
@@ -408,8 +427,9 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 		while (en.hasMoreElements()) {
 			ExternalWSService group = (ExternalWSService) en.nextElement();
 			toReturn = group.getWSRepositoryNamed(s);
-			if (toReturn != null)
+			if (toReturn != null) {
 				return toReturn;
+			}
 		}
 
 		// Look in internal wsgroups
@@ -417,12 +437,14 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 		while (en.hasMoreElements()) {
 			InternalWSService group = (InternalWSService) en.nextElement();
 			toReturn = group.getWSRepositoryNamed(s);
-			if (toReturn != null)
+			if (toReturn != null) {
 				return toReturn;
+			}
 		}
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Could not find a WSRepository named: " + s);
+		}
 		return null;
 
 	}
@@ -458,8 +480,9 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 	@Override
 	public void delete() {
 		// euh, delete the entire library??
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("delete : FlexoWSLibrary");
+		}
 		getInternalWSFolder().delete();
 		getExternalWSFolder().delete();
 	}
@@ -470,8 +493,9 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 
 	public WSPortType portTypeForProcess(FlexoProcess aProcess) {
 		WSPortType portType = getWSPortTypeNamed(aProcess.getName());
-		if (portType != null && portType.getFlexoProcess() == aProcess)
+		if (portType != null && portType.getFlexoProcess() == aProcess) {
 			return portType;
+		}
 		return null;
 	}
 

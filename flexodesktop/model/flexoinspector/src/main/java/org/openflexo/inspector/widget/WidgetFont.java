@@ -95,14 +95,18 @@ public class WidgetFont extends KVCObject implements StringConvertable {
 
 	private static int styleFromString(String s) {
 		String parseMe = s.substring(s.indexOf(",") + 1, s.lastIndexOf(","));
-		if (parseMe.equalsIgnoreCase("plain"))
+		if (parseMe.equalsIgnoreCase("plain")) {
 			return Font.PLAIN;
-		if (parseMe.equalsIgnoreCase("bold"))
+		}
+		if (parseMe.equalsIgnoreCase("bold")) {
 			return Font.BOLD;
-		if (parseMe.equalsIgnoreCase("italic"))
+		}
+		if (parseMe.equalsIgnoreCase("italic")) {
 			return Font.ITALIC;
-		if (parseMe.equalsIgnoreCase("bold+italic"))
+		}
+		if (parseMe.equalsIgnoreCase("bold+italic")) {
 			return Font.BOLD + Font.ITALIC;
+		}
 		try {
 			return Integer.parseInt(parseMe);
 		} catch (NumberFormatException e) {

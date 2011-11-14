@@ -45,8 +45,9 @@ public class RectangleConverter extends Converter<Rectangle> {
 	 */
 	@Override
 	public Rectangle convertFromString(String value) {
-		if (value == null)
+		if (value == null) {
 			return null;
+		}
 		Rectangle r = new Rectangle();
 		int i = value.indexOf("x=");
 		if (i > -1 && value.indexOf(',', i) > -1) {

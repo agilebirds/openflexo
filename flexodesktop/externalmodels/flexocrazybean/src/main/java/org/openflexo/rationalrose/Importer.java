@@ -32,6 +32,7 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.dm.DMCardinality;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMMethod;
+import org.openflexo.foundation.dm.DMMethod.DMMethodParameter;
 import org.openflexo.foundation.dm.DMPackage;
 import org.openflexo.foundation.dm.DMProperty;
 import org.openflexo.foundation.dm.DMPropertyImplementationType;
@@ -39,7 +40,6 @@ import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.DMVisibilityType;
 import org.openflexo.foundation.dm.DuplicateMethodSignatureException;
 import org.openflexo.foundation.dm.RationalRoseRepository;
-import org.openflexo.foundation.dm.DMMethod.DMMethodParameter;
 import org.openflexo.foundation.dm.action.CreateDMMethod;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
@@ -92,8 +92,9 @@ public class Importer implements DataImporter {
 		this.project = project;
 
 		String[] args = new String[] { importedFile.getAbsolutePath() };
-		if (flexoAction != null)
+		if (flexoAction != null) {
 			flexoAction.setProgress(FlexoLocalization.localizedForKey("parsing") + " " + importedFile.getName());
+		}
 		tree = PetalParser.parse(args);
 		extractor = new EOModelExtractor(System.out);
 		tree.accept(extractor);
@@ -164,21 +165,24 @@ public class Importer implements DataImporter {
 		DMEntity entity = createDMEntity(className, pack);
 		addProperty(RATIONAL_TYPE_ATTRIBUTE, "Class", entity);
 		extractProperties(currentClass, entity);
-		if (currentClass.getParameters() != null && currentClass.getParameters().size() > 0)
+		if (currentClass.getParameters() != null && currentClass.getParameters().size() > 0) {
 			addProperty("Parameters", currentClass.getParameters().toString(), entity);
+		}
 		addProperty(ORDER_ATTRIBUTE, order, entity);
 		java.util.List<cb.petal.Class> superClasses = currentClass.getSuperclasses();
 		if (superClasses != null && superClasses.size() > 0) {
 			StringBuilder sb = new StringBuilder();
 			for (Class klass : superClasses) {
-				if (sb.length() > 0)
+				if (sb.length() > 0) {
 					sb.append(",");
+				}
 				sb.append(EOModelExtractor.getLabel(klass));
 			}
 			addProperty("Super classes", sb.toString(), entity);
 		}
-		if (currentClass.getDocumentation() != null && currentClass.getDocumentation().trim().length() > 0)
+		if (currentClass.getDocumentation() != null && currentClass.getDocumentation().trim().length() > 0) {
 			entity.setDescription(currentClass.getDocumentation());
+		}
 		return entity;
 	}
 
@@ -235,8 +239,9 @@ public class Importer implements DataImporter {
 						Role rel = (Role) en2.nextElement();
 						if (EOModelExtractor.getLabel(rel).indexOf("$") == -1) {
 							Class klass = null;
-							if (rel.hasQuidu())
+							if (rel.hasQuidu()) {
 								klass = tree.getClassByQuid(rel.getQuidu());
+							}
 							DMEntity to = entities.get(EOModelExtractor.getSupplierShortName(rel));
 							DMProperty prop = createRelationship(rel, currentEntity, to);
 							addProperty(RATIONAL_TYPE_ATTRIBUTE, "Role", prop);
@@ -269,10 +274,12 @@ public class Importer implements DataImporter {
 			m.setVisibilityModifier(DMVisibilityType.PROTECTED);
 		} else if (operation.isPublic()) {
 			m.setVisibilityModifier(DMVisibilityType.PUBLIC);
-		} else
+		} else {
 			m.setVisibilityModifier(DMVisibilityType.NONE);
-		if (operation.getResult() != null && entities.get(operation.getResult()) != null)
+		}
+		if (operation.getResult() != null && entities.get(operation.getResult()) != null) {
 			m.setReturnType(DMType.makeResolvedDMType(entities.get(operation.getResult())), false);
+		}
 		addProperty(RATIONAL_TYPE_ATTRIBUTE, "Operation", m);
 		extractProperties(operation, m);
 		addProperty(ORDER_ATTRIBUTE, order, m);
@@ -286,10 +293,11 @@ public class Importer implements DataImporter {
 					try {
 						methodParam = m.createNewParameter();
 						methodParam.setName(paramName);
-						if (p.getType() != null && entities.get(p.getType()) != null)
+						if (p.getType() != null && entities.get(p.getType()) != null) {
 							methodParam.setType(DMType.makeResolvedDMType(entities.get(p.getType())), false);
-						else
+						} else {
 							methodParam.setType(DMType.makeResolvedDMType(project.getDataModel().getDMEntity(Object.class)), false);
+						}
 					} catch (DuplicateMethodSignatureException e) {
 						e.printStackTrace();
 					}
@@ -311,8 +319,9 @@ public class Importer implements DataImporter {
 		int start = attributeName.indexOf('[');
 		if (start > -1) {
 			int end = attributeName.indexOf(']');
-			if (end > start)
+			if (end > start) {
 				card = attributeName.substring(start + 1, end).trim();
+			}
 			attributeName = attributeName.substring(0, start).trim();
 		}
 		DMProperty prop = createDMProperty(entity, attributeName);
@@ -324,8 +333,9 @@ public class Importer implements DataImporter {
 		}
 		prop.setDescription(attrib.getDocumentation());
 		addProperty(RATIONAL_TYPE_ATTRIBUTE, "ClassAttribute", prop);
-		if (card != null)
+		if (card != null) {
 			addProperty("client_cardinality", card, prop);
+		}
 		extractProperties(attrib, prop);
 		addProperty(ORDER_ATTRIBUTE, order, prop);
 	}
@@ -337,12 +347,14 @@ public class Importer implements DataImporter {
 	 */
 	private void extractProperties(cb.petal.PetalObject petalObject, FlexoModelObject modelObject) {
 		for (String name : (java.util.List<String>) petalObject.getNames()) {
-			if (propertyWithNameShouldBeIgnored(name))
+			if (propertyWithNameShouldBeIgnored(name)) {
 				continue;
+			}
 			PetalNode value = petalObject.getProperty(name);
 			String s = getStringRepresentation(value);
-			if (value != null)
+			if (value != null) {
 				addProperty(name, s, modelObject);
+			}
 		}
 		ArrayList<PetalNode> attributes = petalObject.getProperties(ATTRIBUTES_PROPERTY_NAME);
 		if (attributes != null) {
@@ -364,8 +376,9 @@ public class Importer implements DataImporter {
 
 	private boolean propertyWithNameShouldBeIgnored(String name) {
 		for (String propertiesToIgnore : PROPERTIES_TO_IGNORE) {
-			if (propertiesToIgnore.equals(name))
+			if (propertiesToIgnore.equals(name)) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -383,11 +396,12 @@ public class Importer implements DataImporter {
 	private DMProperty createRelationship(Role role, DMEntity from, DMEntity to) {
 		boolean isRoleToOne = role.getCardinality() != null && role.getCardinality().equals("1");
 		DMProperty newProperty = new DMProperty(from.getDMModel(), EOModelExtractor.getLabel(role), DMType.makeResolvedDMType(to), /*isRoleToOne?*/
-				DMCardinality.SINGLE/*:DMCardinality.VECTOR*/, from.getIsReadOnly(), true,
+		DMCardinality.SINGLE/*:DMCardinality.VECTOR*/, from.getIsReadOnly(), true,
 				DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
 		extractProperties(role, newProperty);
-		if (role.getParent() instanceof PetalObject)
+		if (role.getParent() instanceof PetalObject) {
 			extractProperties((PetalObject) role.getParent(), newProperty);
+		}
 		from.registerProperty(newProperty, true);
 		return newProperty;
 	}
@@ -420,8 +434,9 @@ public class Importer implements DataImporter {
 	 * @param prop
 	 */
 	private void addProperty(String name, String value, FlexoModelObject prop) {
-		if (value == null || value.length() == 0)
+		if (value == null || value.length() == 0) {
 			return;
+		}
 		AddFlexoProperty add = AddFlexoProperty.actionType.makeNewAction(prop, null, flexoAction != null ? flexoAction.getEditor() : null);
 		add.__setLogActionTime(false);// Prevents from leaking
 		add.setName(name);

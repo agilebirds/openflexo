@@ -25,16 +25,15 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.foundation.action.FlexoActionFinalizer;
+import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.wkf.MetricsDefinition;
+import org.openflexo.foundation.wkf.action.DeleteMetricsDefinition;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-
-import org.openflexo.foundation.action.FlexoActionFinalizer;
-import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.wkf.MetricsDefinition;
-import org.openflexo.foundation.wkf.action.DeleteMetricsDefinition;
 
 public class DeleteMetricsDefinitionInitializer extends ActionInitializer {
 
@@ -56,8 +55,9 @@ public class DeleteMetricsDefinitionInitializer extends ActionInitializer {
 			public boolean run(ActionEvent e, DeleteMetricsDefinition action) {
 				boolean doIt;
 				Vector<MetricsDefinition> metricsDefinitionToDelete = action.getMetricsDefinitionToDelete();
-				if (metricsDefinitionToDelete.size() == 0)
+				if (metricsDefinitionToDelete.size() == 0) {
 					return false;
+				}
 				/* TODO: tell if the metric definition is used somewhere using referencers-->referenceOwner-->getDisplayableName()
 				Vector<FlexoModelObjectReference.ReferenceOwner> nodes = new Vector<ReferenceOwner>();
 				for (MetricsDefinition r : metricsDefinitionToDelete) {
@@ -93,8 +93,9 @@ public class DeleteMetricsDefinitionInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, DeleteMetricsDefinition action) {
 				if (getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject() != null
-						&& getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject().isDeleted())
+						&& getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject().isDeleted()) {
 					getControllerActionInitializer().getWKFController().getSelectionManager().resetSelection();
+				}
 				return true;
 			}
 		};

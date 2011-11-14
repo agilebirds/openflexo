@@ -23,7 +23,6 @@ import java.awt.Image;
 import java.io.File;
 import java.lang.reflect.Type;
 
-import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 public class FIBImage extends FIBWidget {

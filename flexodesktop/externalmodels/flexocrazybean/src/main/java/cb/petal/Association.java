@@ -78,8 +78,9 @@ public class Association extends AccessObject {
 		getRoot().registerAssociation(this);
 
 		Class clazz = getAssociationClass();
-		if (clazz != null)
+		if (clazz != null) {
 			clazz.isAssociationClass(true);
+		}
 	}
 
 	public Class getAssociationClass() {
@@ -88,12 +89,14 @@ public class Association extends AccessObject {
 		if (s != null) {
 			Class clazz = getRoot().getClassByQualifiedName(s);
 
-			if (clazz == null)
+			if (clazz == null) {
 				System.err.println("Warning: Could not find association class " + s + " (forward declaration?)");
+			}
 
 			return clazz;
-		} else
+		} else {
 			return null;
+		}
 	}
 
 	public void setAssociationClass(Class o) {

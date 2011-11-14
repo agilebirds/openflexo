@@ -21,14 +21,13 @@ package org.openflexo.dm.model;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-
 import org.openflexo.components.tabular.model.IconColumn;
 import org.openflexo.components.tabular.model.StringColumn;
 import org.openflexo.dm.view.controller.DMController;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.dm.eo.DMEORelationship;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 
 /**
  * @author gpolet
@@ -42,8 +41,9 @@ public class DMReadOnlyEORelationshipTableModel extends DMEORelationshipTableMod
 	 */
 	public DMReadOnlyEORelationshipTableModel(DMEOEntity entity, DMController ctrl) {
 		super(entity, ctrl);
-		while (getColumnCount() > 0)
+		while (getColumnCount() > 0) {
 			removeFromColumns(columnAt(0));
+		}
 		addToColumns(new IconColumn<DMEORelationship>("property_icon", 30) {
 			@Override
 			public Icon getIcon(DMEORelationship relationship) {
@@ -53,8 +53,9 @@ public class DMReadOnlyEORelationshipTableModel extends DMEORelationshipTableMod
 		addToColumns(new IconColumn<DMEORelationship>("read_only", 25) {
 			@Override
 			public Icon getIcon(DMEORelationship relationship) {
-				if (relationship == null)
+				if (relationship == null) {
 					return null;
+				}
 				return (relationship.getIsReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON);
 			}
 
@@ -68,8 +69,9 @@ public class DMReadOnlyEORelationshipTableModel extends DMEORelationshipTableMod
 		addToColumns(new IconColumn<DMEORelationship>("settable", 25) {
 			@Override
 			public Icon getIcon(DMEORelationship relationship) {
-				if (relationship == null)
+				if (relationship == null) {
 					return null;
+				}
 				return (relationship.getIsSettable() ? DMEIconLibrary.GET_SET_ICON : DMEIconLibrary.GET_ICON);
 			}
 
@@ -82,8 +84,9 @@ public class DMReadOnlyEORelationshipTableModel extends DMEORelationshipTableMod
 		addToColumns(new IconColumn<DMEORelationship>("class_property", 25) {
 			@Override
 			public Icon getIcon(DMEORelationship relationship) {
-				if (relationship == null)
+				if (relationship == null) {
 					return null;
+				}
 				return (relationship.getIsClassProperty() ? DMEIconLibrary.CLASS_PROPERTY_ICON : null);
 			}
 
@@ -97,16 +100,18 @@ public class DMReadOnlyEORelationshipTableModel extends DMEORelationshipTableMod
 		addToColumns(new StringColumn<DMEORelationship>("is_to_many", 25, false, false) {
 			@Override
 			public String getValue(DMEORelationship relationship) {
-				if (relationship == null)
+				if (relationship == null) {
 					return null;
+				}
 				return (relationship.getIsToMany() ? ">>" : ">");
 			}
 		});
 		addToColumns(new StringColumn<DMEORelationship>("name", 150) {
 			@Override
 			public String getValue(DMEORelationship relationship) {
-				if (relationship == null)
+				if (relationship == null) {
 					return null;
+				}
 				return relationship.getName();
 			}
 

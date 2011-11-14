@@ -59,8 +59,9 @@ public class FontSelector extends CustomPopup<Font> implements ChangeListener {
 	public FontSelector(FontSelectionModel fsm) {
 		super(fsm.getSelectedFont() != null ? fsm.getSelectedFont() : DEFAULT_FONT);
 		_fsm = fsm;
-		if (fsm.getSelectedFont() == null)
+		if (fsm.getSelectedFont() == null) {
 			fsm.setSelectedFont(DEFAULT_FONT);
+		}
 		_fsm.addChangeListener(this);
 		setRevertValue(fsm.getSelectedFont());
 		setFocusable(true);
@@ -70,12 +71,14 @@ public class FontSelector extends CustomPopup<Font> implements ChangeListener {
 	@Override
 	public void setRevertValue(Font oldValue) {
 		// WARNING: we need here to clone to keep track back of previous data !!!
-		if (oldValue != null)
+		if (oldValue != null) {
 			_revertValue = new Font(oldValue.getFontName(), oldValue.getStyle(), oldValue.getSize());
-		else
+		} else {
 			_revertValue = null;
-		if (logger.isLoggable(Level.FINE))
+		}
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Sets revert value to " + _revertValue);
+		}
 	}
 
 	public Font getRevertValue() {
@@ -154,18 +157,20 @@ public class FontSelector extends CustomPopup<Font> implements ChangeListener {
 	@Override
 	public Font getEditedObject() {
 		if (_fsm != null) {
-			if (_fsm.getSelectedFont() != null)
+			if (_fsm.getSelectedFont() != null) {
 				return _fsm.getSelectedFont();
-			else
+			} else {
 				return DEFAULT_FONT;
+			}
 		}
 		return DEFAULT_FONT;
 	}
 
 	@Override
 	public void setEditedObject(Font font) {
-		if (font == null)
+		if (font == null) {
 			font = DEFAULT_FONT;
+		}
 		_fsm.setSelectedFont(font);
 		super.setEditedObject(font);
 	}
@@ -179,8 +184,9 @@ public class FontSelector extends CustomPopup<Font> implements ChangeListener {
 
 	@Override
 	public void cancel() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("CANCEL: revert to " + getRevertValue());
+		}
 		setEditedObject(getRevertValue());
 		closePopup();
 		super.cancel();
@@ -189,8 +195,9 @@ public class FontSelector extends CustomPopup<Font> implements ChangeListener {
 	@Override
 	protected void deletePopup() {
 		_fsm.removeChangeListener(this);
-		if (_selectorPanel != null)
+		if (_selectorPanel != null) {
 			_selectorPanel.delete();
+		}
 		_selectorPanel = null;
 		super.deletePopup();
 	}

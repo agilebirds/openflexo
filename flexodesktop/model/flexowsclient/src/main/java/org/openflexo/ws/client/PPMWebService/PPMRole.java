@@ -60,8 +60,9 @@ public class PPMRole extends PPMObject implements java.io.Serializable {
 	}
 
 	public int[] getRgb() {
-		if (getRgbColor() == null)
+		if (getRgbColor() == null) {
 			return null;
+		}
 		StringTokenizer st = new StringTokenizer(getRgbColor(), ",");
 		int[] rgb = new int[3];
 		rgb[0] = Integer.parseInt(st.nextToken());
@@ -72,22 +73,25 @@ public class PPMRole extends PPMObject implements java.io.Serializable {
 
 	public int getRed() {
 		int[] rgb = getRgb();
-		if (rgb == null)
+		if (rgb == null) {
 			return -1;
+		}
 		return rgb[0];
 	}
 
 	public int getGreen() {
 		int[] rgb = getRgb();
-		if (rgb == null)
+		if (rgb == null) {
 			return -1;
+		}
 		return rgb[1];
 	}
 
 	public int getBlue() {
 		int[] rgb = getRgb();
-		if (rgb == null)
+		if (rgb == null) {
 			return -1;
+		}
 		return rgb[2];
 	}
 
@@ -99,13 +103,16 @@ public class PPMRole extends PPMObject implements java.io.Serializable {
 
 	@Override
 	public synchronized boolean equals(java.lang.Object obj) {
-		if (!(obj instanceof PPMRole))
+		if (!(obj instanceof PPMRole)) {
 			return false;
+		}
 		PPMRole other = (PPMRole) obj;
-		if (obj == null)
+		if (obj == null) {
 			return false;
-		if (this == obj)
+		}
+		if (this == obj) {
 			return true;
+		}
 		if (__equalsCalc != null) {
 			return (__equalsCalc == obj);
 		}

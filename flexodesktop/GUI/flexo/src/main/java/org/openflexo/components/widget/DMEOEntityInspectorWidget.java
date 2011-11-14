@@ -64,8 +64,9 @@ public class DMEOEntityInspectorWidget extends CustomInspectorWidget<DMEOEntity>
 		getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Focus gained in " + getClass().getName());
+				}
 				super.focusGained(arg0);
 				_selector.getTextField().requestFocus();
 				_selector.getTextField().selectAll();
@@ -73,8 +74,9 @@ public class DMEOEntityInspectorWidget extends CustomInspectorWidget<DMEOEntity>
 
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Focus lost in " + getClass().getName());
+				}
 				super.focusLost(arg0);
 			}
 		});
@@ -112,14 +114,16 @@ public class DMEOEntityInspectorWidget extends CustomInspectorWidget<DMEOEntity>
 	}
 
 	protected void setRepository(DMRepository repository) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Setting repository to " + repository);
+		}
 		_selector.setRootObject(repository);
 	}
 
 	protected void setEOModel(DMEOModel eoModel) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Setting eomodel to " + eoModel);
+		}
 		_selector.setRootObject(eoModel);
 	}
 
@@ -135,14 +139,16 @@ public class DMEOEntityInspectorWidget extends CustomInspectorWidget<DMEOEntity>
 
 	@Override
 	public void fireEditingCanceled() {
-		if (_selector != null)
+		if (_selector != null) {
 			_selector.closePopup();
+		}
 	}
 
 	@Override
 	public void fireEditingStopped() {
-		if (_selector != null)
+		if (_selector != null) {
 			_selector.closePopup();
+		}
 	}
 
 }

@@ -65,23 +65,27 @@ public class TeXTokenMarker extends TokenMarker {
 					// we skip over this character,
 					// hence the `continue'
 					backslash = false;
-					if (token == Token.KEYWORD2 || token == EDFORMULA)
+					if (token == Token.KEYWORD2 || token == EDFORMULA) {
 						token = Token.KEYWORD2;
+					}
 					addToken(i1 - lastOffset, token);
 					lastOffset = i1;
-					if (token == Token.KEYWORD1)
+					if (token == Token.KEYWORD1) {
 						token = Token.NULL;
+					}
 					continue;
 				} else {
 					// \blah<non alpha>
 					// we leave the character in
 					// the stream, and it's not
 					// part of the command token
-					if (token == BDFORMULA || token == EDFORMULA)
+					if (token == BDFORMULA || token == EDFORMULA) {
 						token = Token.KEYWORD2;
+					}
 					addToken(i - lastOffset, token);
-					if (token == Token.KEYWORD1)
+					if (token == Token.KEYWORD1) {
 						token = Token.NULL;
+					}
 					lastOffset = i;
 				}
 			}
@@ -136,8 +140,9 @@ public class TeXTokenMarker extends TokenMarker {
 				break;
 			}
 		}
-		if (lastOffset != length)
+		if (lastOffset != length) {
 			addToken(length - lastOffset, token == BDFORMULA || token == EDFORMULA ? Token.KEYWORD2 : token);
+		}
 		return (token != Token.KEYWORD1 ? token : Token.NULL);
 	}
 }

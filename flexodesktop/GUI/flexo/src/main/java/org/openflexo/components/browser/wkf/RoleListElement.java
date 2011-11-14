@@ -27,9 +27,6 @@ import java.util.Vector;
 import javax.swing.Icon;
 import javax.swing.tree.TreePath;
 
-import org.openflexo.icon.WKFIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ExpansionSynchronizedElement;
@@ -37,6 +34,8 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.wkf.RoleList;
+import org.openflexo.icon.WKFIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Browser element representing all the roles of a process
@@ -68,8 +67,9 @@ public class RoleListElement extends BrowserElement implements ExpansionSynchron
 
 	@Override
 	protected void buildChildrenVector() {
-		if (observedRole == null)
+		if (observedRole == null) {
 			observedRole = new HashSet<Role>();
+		}
 		clearObserving();
 		// We add the roles
 		if (!getRoleList().isImportedRoleList()) {
@@ -110,8 +110,9 @@ public class RoleListElement extends BrowserElement implements ExpansionSynchron
 	}
 
 	private void clearObserving() {
-		if (observedRole == null)
+		if (observedRole == null) {
 			observedRole = new HashSet<Role>();
+		}
 		for (Role r : observedRole) {
 			r.deleteObserver(this);
 		}
@@ -119,8 +120,9 @@ public class RoleListElement extends BrowserElement implements ExpansionSynchron
 	}
 
 	private void observeRole(Role role) {
-		if (observedRole == null)
+		if (observedRole == null) {
 			observedRole = new HashSet<Role>();
+		}
 		if (!observedRole.contains(role)) {
 			role.addObserver(this);
 			observedRole.add(role);

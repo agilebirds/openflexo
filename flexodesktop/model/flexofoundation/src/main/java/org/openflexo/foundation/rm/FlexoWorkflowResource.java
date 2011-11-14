@@ -26,7 +26,6 @@ import java.util.logging.Logger;
 
 import org.jdom.Document;
 import org.jdom.Element;
-
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
@@ -98,8 +97,9 @@ public class FlexoWorkflowResource extends FlexoXMLStorageResource<FlexoWorkflow
 		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("loading_workflow"));
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("loadResourceData() in FlexoWorkflowResource");
+		}
 		workflow = super.performLoadResourceData(progress, loadingHandler);
 		workflow.setProject(getProject());
 		// Load all processes
@@ -113,16 +113,18 @@ public class FlexoWorkflowResource extends FlexoXMLStorageResource<FlexoWorkflow
 			FlexoProcessNode nextProcessNode = e.nextElement();
 			FlexoProcess next = nextProcessNode.getProcess();
 			if (next != null) {
-				if (next.getProcessDMEntity() != null)
+				if (next.getProcessDMEntity() != null) {
 					next.getProcessDMEntity().updateParentProcessPropertyIfRequired();
+				}
 				next.finalizeProcessBindings();
 				next.resolveObjectReferences();
 				next.clearIsModified(true);
 				next.setLastUpdate(null);// resets last update date.
 			} else {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("No FlexoProcess linked with processsNode : '" + nextProcessNode.getName()
 							+ "' !!! Could not load process, removing process node !");
+				}
 				nextProcessNode.delete();
 			}
 		}
@@ -163,8 +165,9 @@ public class FlexoWorkflowResource extends FlexoXMLStorageResource<FlexoWorkflow
 	protected boolean convertResourceFileFromVersionToVersion(FlexoVersion vers1, FlexoVersion vers2) {
 		if (vers1.equals(new FlexoVersion("0.1")) && vers2.equals(new FlexoVersion("1.0"))) {
 			try {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Start converting from 0.1 to 1.0");
+				}
 				Document _document = null;
 				Element root_Element = null;
 				_document = XMLUtils.getJDOMDocument(getResourceFile().getFile());
@@ -174,15 +177,17 @@ public class FlexoWorkflowResource extends FlexoXMLStorageResource<FlexoWorkflow
 				newWorkflowElement.setContent((Element) root_Element.clone());
 				_document.setRootElement(newWorkflowElement);
 				FileWritingLock lock = willWriteOnDisk();
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Conversion from 0.1 to 1.0 SUCCESSFULL. Save the file.");
+				}
 				boolean returned = XMLUtils.saveXMLFile(_document, getResourceFile().getFile());
 				hasWrittenOnDisk(lock);
 				return returned;
 			} catch (Exception e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 			}
 			return false;

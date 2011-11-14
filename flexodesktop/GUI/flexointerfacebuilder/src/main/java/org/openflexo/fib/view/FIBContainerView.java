@@ -86,10 +86,11 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 	protected void addJComponent(JComponent c) {
 		Object constraint = constraints.get(c);
 		logger.fine(getComponent() + ": addJComponent " + c + " constraint=" + constraint);
-		if (constraint == null)
+		if (constraint == null) {
 			getJComponent().add(c);
-		else
+		} else {
 			getJComponent().add(c, constraint);
+		}
 	}
 
 	@Override
@@ -101,10 +102,12 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 	}
 
 	public Object getValue() {
-		if (getDataObject() == null)
+		if (getDataObject() == null) {
 			return null;
-		if (getComponent().getData() == null || getComponent().getData().isUnset())
+		}
+		if (getComponent().getData() == null || getComponent().getData().isUnset()) {
 			return null;
+		}
 		return getComponent().getData().getBindingValue(getController());
 	}
 
@@ -125,8 +128,9 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 
 	@Override
 	protected boolean checkValidDataPath() {
-		if (getParentView() != null && !getParentView().checkValidDataPath())
+		if (getParentView() != null && !getParentView().checkValidDataPath()) {
 			return false;
+		}
 		if (getComponent().getDataType() != null) {
 			Object value = getValue();
 			if (value != null && !TypeUtils.isTypeAssignableFrom(getComponent().getDataType(), value.getClass(), true)) {
@@ -158,8 +162,9 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 	protected void registerComponentWithConstraints(JComponent component, Object constraint) {
 		logger.fine("Register component: " + component + " constraint=" + constraint);
 		subComponents.add(component);
-		if (constraint != null)
+		if (constraint != null) {
 			constraints.put(component, constraint);
+		}
 	}
 
 	protected void registerComponentWithConstraints(JComponent component) {
@@ -190,8 +195,9 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 
 	@Override
 	public synchronized void updateFont() {
-		if (getFont() != null)
+		if (getFont() != null) {
 			getJComponent().setFont(getFont());
+		}
 		for (FIBView v : subViews) {
 			v.updateFont();
 		}

@@ -158,26 +158,34 @@ public class FIBPanel extends FIBContainer {
 			case none:
 				break;
 			case flow:
-				if (flowAlignment == null)
+				if (flowAlignment == null) {
 					flowAlignment = FlowLayoutAlignment.LEADING;
-				if (hGap == null)
+				}
+				if (hGap == null) {
 					hGap = 5;
-				if (vGap == null)
+				}
+				if (vGap == null) {
 					vGap = 5;
+				}
 				break;
 			case grid:
-				if (hGap == null)
+				if (hGap == null) {
 					hGap = 5;
-				if (vGap == null)
+				}
+				if (vGap == null) {
 					vGap = 5;
-				if (rows == null)
+				}
+				if (rows == null) {
 					rows = 2;
-				if (cols == null)
+				}
+				if (cols == null) {
 					cols = 2;
+				}
 				break;
 			case box:
-				if (boxLayoutAxis == null)
+				if (boxLayoutAxis == null) {
 					boxLayoutAxis = BoxLayoutAxis.X_AXIS;
+				}
 				break;
 			case border:
 				break;
@@ -204,22 +212,28 @@ public class FIBPanel extends FIBContainer {
 			this.border = border;
 			switch (border) {
 			case line:
-				if (borderColor == null)
+				if (borderColor == null) {
 					borderColor = Color.BLACK;
+				}
 				break;
 			case titled:
-				if (borderTitle == null)
+				if (borderTitle == null) {
 					borderTitle = "Panel";
+				}
 				break;
 			case rounded3d:
-				if (borderTop == null)
+				if (borderTop == null) {
 					borderTop = 2;
-				if (borderBottom == null)
+				}
+				if (borderBottom == null) {
 					borderBottom = 2;
-				if (borderLeft == null)
+				}
+				if (borderLeft == null) {
 					borderRight = 2;
-				if (borderRight == null)
+				}
+				if (borderRight == null) {
 					borderRight = 2;
+				}
 				break;
 
 			default:
@@ -389,8 +403,9 @@ public class FIBPanel extends FIBContainer {
 	}
 
 	public Font getTitleFont() {
-		if (titleFont == null)
+		if (titleFont == null) {
 			return retrieveValidFont();
+		}
 		return titleFont;
 	}
 

@@ -114,16 +114,18 @@ public final class Status extends WKFObject implements DeletableObject, Inspecta
 		if ((statusName == null && aName != null) || (statusName != null && aName == null)
 				|| (statusName != null && aName != null && !statusName.equals(aName))) {
 			if ((getStatusList() != null) && (getStatusList().statusWithName(aName) != null)) {
-				if (isDeserializing())
+				if (isDeserializing()) {
 					setName(aName + "-1");
+				}
 				throw new DuplicateStatusException(this, aName);
 			}
 			String oldValue = statusName;
 			statusName = aName;
 			setChanged();
 			notifyObservers(new WKFAttributeDataModification("name", oldValue, aName));
-			if (getProcess() != null)
+			if (getProcess() != null) {
 				getProcess().notifyStatusListUpdated();
+			}
 		}
 	}
 
@@ -172,8 +174,9 @@ public final class Status extends WKFObject implements DeletableObject, Inspecta
 
 	@Override
 	public final void delete() {
-		if (getStatusList() != null && getStatusList().getStatus().contains(this))
+		if (getStatusList() != null && getStatusList().getStatus().contains(this)) {
 			getStatusList().removeFromStatus(this);
+		}
 		super.delete();
 		deleteObservers();
 	}
@@ -206,8 +209,9 @@ public final class Status extends WKFObject implements DeletableObject, Inspecta
 
 	@Override
 	public int getIndex() {
-		if (isBeingCloned())
+		if (isBeingCloned()) {
 			return -1;
+		}
 		if (index == -1 && getCollection() != null) {
 			index = getCollection().length;
 			FlexoIndexManager.reIndexObjectOfArray(getCollection());
@@ -237,8 +241,9 @@ public final class Status extends WKFObject implements DeletableObject, Inspecta
 
 	@Override
 	public void setIndexValue(int index) {
-		if (index == this.index)
+		if (index == this.index) {
 			return;
+		}
 		int old = this.index;
 		this.index = index;
 		setChanged();
@@ -256,8 +261,9 @@ public final class Status extends WKFObject implements DeletableObject, Inspecta
 	 */
 	@Override
 	public Status[] getCollection() {
-		if (getProcess() == null)
+		if (getProcess() == null) {
 			return null;
+		}
 		return getProcess().getStatusList().getStatus().toArray(new Status[0]);
 	}
 

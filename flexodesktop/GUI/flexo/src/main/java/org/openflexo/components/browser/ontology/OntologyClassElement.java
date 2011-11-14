@@ -63,8 +63,9 @@ public class OntologyClassElement extends BrowserElement {
 					addToChilds(subClass);
 				}
 				for (OntologyIndividual individual : getOntologyClass().getIndividuals()) {
-					if (individual.getFlexoOntology() == ontology)
+					if (individual.getFlexoOntology() == ontology) {
 						addToChilds(individual);
+					}
 				}
 			}
 		}

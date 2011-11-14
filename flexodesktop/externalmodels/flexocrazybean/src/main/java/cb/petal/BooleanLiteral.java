@@ -49,10 +49,11 @@ public class BooleanLiteral extends Literal {
 
 	@Override
 	public java.lang.Object getLiteralValue() {
-		if (value)
+		if (value) {
 			return Boolean.TRUE;
-		else
+		} else {
 			return Boolean.FALSE;
+		}
 	}
 
 	@Override

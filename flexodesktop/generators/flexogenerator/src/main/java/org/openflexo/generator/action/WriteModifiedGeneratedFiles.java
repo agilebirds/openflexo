@@ -122,8 +122,9 @@ public class WriteModifiedGeneratedFiles extends MultipleFileGCAction<WriteModif
 			try {
 				file.writeModifiedFile();
 			} catch (FlexoException e) {
-				if (exception == null)
+				if (exception == null) {
 					exception = new MultipleGenerationException();
+				}
 				exception.addToExceptions(e);
 			}
 
@@ -136,25 +137,29 @@ public class WriteModifiedGeneratedFiles extends MultipleFileGCAction<WriteModif
 			try {
 				file.writeModifiedFile();
 			} catch (FlexoException e) {
-				if (exception == null)
+				if (exception == null) {
 					exception = new MultipleGenerationException();
+				}
 				exception.addToExceptions(e);
 			}
 		}
 		try {
 			pg.copyAdditionalFiles();
 		} catch (IOException e) {
-			if (exception == null)
+			if (exception == null) {
 				exception = new MultipleGenerationException();
+			}
 			exception.addToExceptions(new IOExceptionOccuredException(e, pg));
 		}
 		setProgress(FlexoLocalization.localizedForKey("save_rm"));
 		repository.getProject().getFlexoRMResource().saveResourceData();
-		if (repository instanceof CGRepository)
+		if (repository instanceof CGRepository) {
 			((CGRepository) repository).clearAllJavaParsingData();
+		}
 		hideFlexoProgress();
-		if (exception != null)
+		if (exception != null) {
 			throw exception;
+		}
 	}
 
 	private Vector<AbstractCGFile> _filesToWrite;

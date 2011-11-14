@@ -62,8 +62,9 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 		});
 
 		_mySmallPanel.add(_jComboBox, BorderLayout.CENTER);
-		if (model.showReset)
+		if (model.showReset) {
 			_mySmallPanel.add(_resetButton, BorderLayout.EAST);
+		}
 		_mySmallPanel.setOpaque(false);
 		_mySmallPanel.addFocusListener(this);
 
@@ -72,8 +73,9 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 	}
 
 	protected void initJComboBox() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("initJComboBox()");
+		}
 		Dimension dimTemp = null;
 		Point locTemp = null;
 		Container parentTemp = null;
@@ -100,8 +102,9 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 		_jComboBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Action performed in " + this.getClass().getName());
+				}
 				updateModelFromWidget();
 			}
 		});
@@ -109,8 +112,9 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 			// _jComboBox.setSize(dimTemp);
 			_jComboBox.setLocation(locTemp);
 			((JPanel) parentTemp).add(_jComboBox, BorderLayout.CENTER);
-			if (getWidget().showReset)
+			if (getWidget().showReset) {
 				((JPanel) parentTemp).add(_resetButton, BorderLayout.EAST);
+			}
 		}
 		// Important: otherwise might be desynchronized
 		_jComboBox.revalidate();
@@ -126,8 +130,9 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 	public synchronized boolean updateWidgetFromModel() {
 		if (notEquals(getValue(), _jComboBox.getSelectedItem()) || listModelRequireChange()) {
 
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("updateWidgetFromModel()");
+			}
 			widgetUpdating = true;
 			initJComboBox();
 			_jComboBox.setSelectedItem(getValue());
@@ -150,8 +155,9 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 	public synchronized boolean updateModelFromWidget() {
 		if (notEquals(getValue(), _jComboBox.getSelectedItem())) {
 			modelUpdating = true;
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("updateModelFromWidget with " + _jComboBox.getSelectedItem());
+			}
 			if ((_jComboBox.getSelectedItem() != null) && (!widgetUpdating)) {
 				setValue(_jComboBox.getSelectedItem());
 			}

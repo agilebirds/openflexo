@@ -58,8 +58,9 @@ public class ProjectOntology extends FlexoOntology implements StorageResourceDat
 	 * @return a newly created DMModel
 	 */
 	public static ProjectOntology createNewProjectOntology(FlexoProject project) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("createNewProjectOntology(), project=" + project);
+		}
 		logger.info("-------------> Create ontology for " + project.getProjectName());
 		File owlFile = ProjectRestructuration.getExpectedProjectOntologyFile(project, project.getProjectName());
 		FlexoProjectFile ontologyFile = new FlexoProjectFile(owlFile, project);
@@ -71,13 +72,15 @@ public class ProjectOntology extends FlexoOntology implements StorageResourceDat
 			ontologyRes = new FlexoProjectOntologyResource(project, newProjectOntology, ontologyFile);
 		} catch (InvalidFileNameException e) {
 			e.printStackTrace();
-			if (logger.isLoggable(Level.SEVERE))
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("This should not happen: invalid file " + ontologyFile);
+			}
 			return null;
 		} catch (DuplicateResourceException e) {
 			e.printStackTrace();
-			if (logger.isLoggable(Level.SEVERE))
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("This should not happen: DuplicateResourceException for " + ontologyFile);
+			}
 			return null;
 		}
 		// newDMModel.initializeDefaultRepositories(dmRes);
@@ -86,8 +89,9 @@ public class ProjectOntology extends FlexoOntology implements StorageResourceDat
 			project.registerResource(ontologyRes);
 		} catch (Exception e1) {
 			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
+			}
 			e1.printStackTrace();
 		}
 
@@ -95,8 +99,9 @@ public class ProjectOntology extends FlexoOntology implements StorageResourceDat
 			ontologyRes.saveResourceData();
 		} catch (Exception e1) {
 			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
+			}
 			e1.printStackTrace();
 		}
 

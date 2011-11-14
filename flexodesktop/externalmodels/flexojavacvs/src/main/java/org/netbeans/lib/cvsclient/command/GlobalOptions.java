@@ -161,8 +161,9 @@ public class GlobalOptions implements Cloneable {
 	public boolean isExcluded(File file) {
 		if (exclusions != null) {
 			for (int i = 0; i < exclusions.length; i++) {
-				if (isParentOrEqual(exclusions[i], file))
+				if (isParentOrEqual(exclusions[i], file)) {
 					return true;
+				}
 			}
 		}
 		return false;
@@ -179,8 +180,9 @@ public class GlobalOptions implements Cloneable {
 	 */
 	private static boolean isParentOrEqual(File parent, File file) {
 		for (; file != null; file = file.getParentFile()) {
-			if (file.equals(parent))
+			if (file.equals(parent)) {
 				return true;
+			}
 		}
 		return false;
 	}

@@ -20,8 +20,8 @@
 package org.openflexo.components.widget;
 
 import org.openflexo.components.browser.BrowserElementType;
-import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
+import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyIndividual;
@@ -102,8 +102,9 @@ public class OntologyIndividualSelector extends AbstractBrowserSelector<Ontology
 
 		@Override
 		public FlexoModelObject getDefaultRootObject() {
-			if (getOntologyLibrary() != null)
+			if (getOntologyLibrary() != null) {
 				return getOntologyLibrary().getRootClass();
+			}
 			return null;
 		}
 	}

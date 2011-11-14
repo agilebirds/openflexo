@@ -52,8 +52,9 @@ public class ImageFileInspectorWidget extends CustomInspectorWidget<ImageFile> {
 		_selector = new ImageFileSelector(null, new ImageFileSelector.ImageImporter() {
 			@Override
 			public void importImage(ActionEvent e) {
-				if (getController() != null && getController().getDelegate() != null && getProject() != null)
+				if (getController() != null && getController().getDelegate() != null && getProject() != null) {
 					getController().getDelegate().performAction(e, "import_image", getProject());
+				}
 			}
 		}, null, model.getBooleanValueForParameter("importedOnly")) {
 			@Override
@@ -72,8 +73,9 @@ public class ImageFileInspectorWidget extends CustomInspectorWidget<ImageFile> {
 		getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Focus gained in " + getClass().getName());
+				}
 				super.focusGained(arg0);
 				_selector.getTextField().requestFocus();
 				_selector.getTextField().selectAll();
@@ -81,8 +83,9 @@ public class ImageFileInspectorWidget extends CustomInspectorWidget<ImageFile> {
 
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Focus lost in " + getClass().getName());
+				}
 				super.focusLost(arg0);
 			}
 		});
@@ -130,14 +133,16 @@ public class ImageFileInspectorWidget extends CustomInspectorWidget<ImageFile> {
 
 	@Override
 	public void fireEditingCanceled() {
-		if (_selector != null)
+		if (_selector != null) {
 			_selector.closePopup();
+		}
 	}
 
 	@Override
 	public void fireEditingStopped() {
-		if (_selector != null)
+		if (_selector != null) {
 			_selector.closePopup();
+		}
 	}
 
 }

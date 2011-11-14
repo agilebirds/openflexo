@@ -45,14 +45,15 @@ public class OldestDate extends MergeAttributeRule {
 			Date date1 = MergeUtils.dateFromString(_conflict.value1());
 			Date date2 = MergeUtils.dateFromString(_conflict.value2());
 			String reply = null;
-			if (date1 == null)
+			if (date1 == null) {
 				reply = MergeUtils.dateToString(date1);
-			else if (date2 == null)
+			} else if (date2 == null) {
 				reply = MergeUtils.dateToString(date2);
-			else if (date1.after(date2))
+			} else if (date1.after(date2)) {
 				reply = MergeUtils.dateToString(date2);
-			else
+			} else {
 				reply = MergeUtils.dateToString(date1);
+			}
 
 			_action = new MergeAttributeAction(_conflict.getConflictIndex(), MergeActionType.UPDATE, _conflict.attributeName(), reply,
 					_conflict.getMergedElement());

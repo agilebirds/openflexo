@@ -40,7 +40,6 @@ import org.openflexo.generator.FlexoComponentResourceGenerator;
 import org.openflexo.generator.TemplateLocator;
 import org.openflexo.generator.cg.CGJavaFile;
 import org.openflexo.generator.ie.ComponentGenerator;
-import org.openflexo.generator.rm.GenerationAvailableFileResource;
 import org.openflexo.logging.FlexoLogger;
 
 /**
@@ -78,8 +77,9 @@ public abstract class ComponentJavaFileResource<G extends FlexoComponentResource
 
 	@Override
 	public ComponentDefinition getComponentDefinition() {
-		if (getGenerator() != null)
+		if (getGenerator() != null) {
 			return getGenerator().getComponentDefinition();
+		}
 		return null;
 	}
 
@@ -87,8 +87,9 @@ public abstract class ComponentJavaFileResource<G extends FlexoComponentResource
 	public void registerObserverWhenRequired() {
 		if ((!isObserverRegistered) && (getComponentDefinition() != null)) {
 			isObserverRegistered = true;
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getComponentDefinition());
+			}
 			getComponentDefinition().addObserver(this);
 		}
 	}
@@ -109,8 +110,9 @@ public abstract class ComponentJavaFileResource<G extends FlexoComponentResource
 			FlexoDMResource dmRes = (FlexoDMResource) resource;
 			if (dmRes.isLoaded() && getComponentDefinition() != null && getComponentDefinition().getComponentDMEntity() != null) {
 				if (!requestDate.before(getComponentDefinition().getComponentDMEntity().getLastUpdate())) {
-					if (logger.isLoggable(Level.FINER))
+					if (logger.isLoggable(Level.FINER)) {
 						logger.finer("OPTIMIST DEPENDANCY CHECKING for JAVA COMPONENT " + getComponentDefinition().getName());
+					}
 					return false;
 				}
 			}
@@ -134,13 +136,15 @@ public abstract class ComponentJavaFileResource<G extends FlexoComponentResource
 				for (Enumeration en = getComponentDefinition().getWOComponent().getAllComponentInstances().elements(); en.hasMoreElements();) {
 					ComponentInstance ci = (ComponentInstance) en.nextElement();
 					if (ci.getComponentDefinition() != null) {
-						if (logger.isLoggable(Level.FINE))
+						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("Found dependancy between " + this + " and " + ci.getComponentDefinition().getComponentResource());
+						}
 						addToDependantResources(ci.getComponentDefinition().getComponentResource());
 					} else {
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Inconsistant data: ComponentInstance refers to an unknown ComponentDefinition "
 									+ ci.getComponentName());
+						}
 					}
 				}
 			}

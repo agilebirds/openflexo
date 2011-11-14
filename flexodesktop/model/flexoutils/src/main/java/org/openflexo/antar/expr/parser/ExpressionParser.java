@@ -75,8 +75,9 @@ public class ExpressionParser {
 
 	private String preprocessString(String aString) throws ParseException {
 		StringBuffer returned = new StringBuffer();
-		if (aString.length() == 0)
+		if (aString.length() == 0) {
 			throw new ParseException("Empty string");
+		}
 		int parentLevel = 0;
 		boolean escaping = false;
 		char waitedEscapingEndChar = '?';
@@ -92,24 +93,29 @@ public class ExpressionParser {
 				} else if (c == '[') {
 					escaping = true;
 					waitedEscapingEndChar = ']';
-				} else if (c == '(')
+				} else if (c == '(') {
 					parentLevel++;
-				else if (c == ')')
+				} else if (c == ')') {
 					parentLevel--;
+				}
 				returned.append(c);
 			} else {
-				if (c == waitedEscapingEndChar)
+				if (c == waitedEscapingEndChar) {
 					escaping = false;
-				if (c == ']')
+				}
+				if (c == ']') {
 					returned.append('['); // We use [] to embed date or duration representation
-				else
+				} else {
 					returned.append(c);
+				}
 			}
 		}
-		if (parentLevel != 0)
+		if (parentLevel != 0) {
 			throw new ParseException("Unbalanced parenthesis: " + aString);
-		if (escaping)
+		}
+		if (escaping) {
 			throw new ParseException("Unbalanced escaping char : expecting " + waitedEscapingEndChar);
+		}
 		return returned.toString();
 	}
 
@@ -161,8 +167,9 @@ public class ExpressionParser {
 	}
 
 	private void considerAsOperator(String symbol, StreamTokenizer input) {
-		if (symbol == null)
+		if (symbol == null) {
 			return;
+		}
 		// System.out.println("considerAsOperator: "+symbol);
 		char firstChar = symbol.charAt(0);
 		if ((firstChar >= 'a' && firstChar <= 'z') || (firstChar >= 'A' && firstChar <= 'Z')) {
@@ -175,8 +182,9 @@ public class ExpressionParser {
 
 	private Token parse(Reader rdr) throws ParseException {
 		ListOfToken unparsedList = parseLevel(initStreamTokenizer(rdr));
-		if ((unparsedList.size() == 1) && (unparsedList.firstElement() instanceof Token))
+		if ((unparsedList.size() == 1) && (unparsedList.firstElement() instanceof Token)) {
 			return (Token) unparsedList.firstElement();
+		}
 		try {
 			return ParsedFunction.makeFunction(unparsedList);
 		} catch (ParseException e) {
@@ -273,10 +281,11 @@ public class ExpressionParser {
 					currentInput = "";
 					// handlesWordAddition(returned,input.sval);
 					Value value;
-					if (input.sval.length() == 0)
+					if (input.sval.length() == 0) {
 						value = CharValue.createCharValue(input.sval.charAt(0));
-					else
+					} else {
 						value = StringValue.createStringValue(input.sval);
+					}
 					value.setPrefixedBy$(prefixedBy$);
 					returned.add(value);
 					prefixedBy$ = false;
@@ -314,8 +323,9 @@ public class ExpressionParser {
 	}
 
 	private void handlesCurrentInput(Vector<AbstractToken> returned, String currentInput) throws ParseException {
-		if (currentInput.equals(""))
+		if (currentInput.equals("")) {
 			return;
+		}
 		if (currentInput.equals(",")) {
 			returned.add(new Comma());
 			return;
@@ -329,8 +339,9 @@ public class ExpressionParser {
 	}
 
 	private void handlesWordAddition(Vector<AbstractToken> returned, String word) throws ParseException {
-		if (word.equals(""))
+		if (word.equals("")) {
 			return;
+		}
 		if ((word.equalsIgnoreCase("true")) || (word.equalsIgnoreCase("yes"))) {
 			returned.add(new BooleanValue(true));
 		} else if ((word.equalsIgnoreCase("false")) || (word.equalsIgnoreCase("no"))) {
@@ -350,11 +361,13 @@ public class ExpressionParser {
 			if (binaryOperator != null) {
 				// Ambigous operator
 				return new ParsedOperator(unaryOperator, binaryOperator, this);
-			} else
+			} else {
 				return new ParsedOperator(unaryOperator, this);
+			}
 		} else {
-			if (binaryOperator != null)
+			if (binaryOperator != null) {
 				return new ParsedOperator(binaryOperator, this);
+			}
 		}
 		return null;
 	}
@@ -459,12 +472,13 @@ public class ExpressionParser {
 	public static class DefaultConstantFactory implements ConstantFactory {
 		@Override
 		public Constant makeConstant(Value value) {
-			if (value == null)
+			if (value == null) {
 				return /*Constant.ObjectSymbolicConstant.NULL;*/new Constant.StringConstant("null");
+			}
 			if (value instanceof BooleanValue) {
-				if (((BooleanValue) value).getBooleanValue())
+				if (((BooleanValue) value).getBooleanValue()) {
 					return Constant.BooleanConstant.TRUE;
-				else {
+				} else {
 					return Constant.BooleanConstant.FALSE;
 				}
 			} else if (value instanceof CharValue) {

@@ -92,16 +92,17 @@ public class ImportRolesAction extends FlexoAction<ImportRolesAction, WorkflowMo
 		RoleList lib = getEditor().getProject().getWorkflow().getImportedRoleList();
 		importReport = new RoleImportReport();
 		for (PPMRole p : getRolesToImport()) {
-			if (!isValid(p))
+			if (!isValid(p)) {
 				importReport.addToInvalidRoles(p);
-			else {
+			} else {
 				try {
 					Role fip = lib.importRole(p);
 					importReport.addToProperlyImportedRoles(p, fip);
 				} catch (RoleAlreadyImportedException e) {
 					importReport.addToAlreadyImportedRoles(p);
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.log(Level.FINE, "Role " + p.getName() + " was already imported", e);
+					}
 				}
 			}
 		}
@@ -171,16 +172,18 @@ public class ImportRolesAction extends FlexoAction<ImportRolesAction, WorkflowMo
 			// 3. Already imported
 			i = getAlreadyImportedRoles().iterator();
 			append(sb, i, FlexoLocalization.localizedForKey("the_following_roles_were_already_imported"));
-			if (sb.length() == 0)
+			if (sb.length() == 0) {
 				return FlexoLocalization.localizedForKey("nothing_has_been_imported");
-			else
+			} else {
 				sb.append("</html>");
+			}
 			return sb.toString();
 		}
 
 		private void append(StringBuilder sb, Iterator<PPMRole> i, String title) {
-			if (sb.length() == 0)
+			if (sb.length() == 0) {
 				sb.append("<html>");
+			}
 			boolean needsClosingUl = false;
 			if (i.hasNext()) {
 				sb.append(title).append(':').append("<ul>");

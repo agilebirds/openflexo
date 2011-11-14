@@ -93,8 +93,9 @@ public class FlexoReusableComponentResource extends FlexoComponentResource imple
 	@Override
 	public IEWOComponent performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler)
 			throws LoadXMLResourceException, FlexoFileNotFoundException, ProjectLoadingCancelledException, MalformedXMLException {
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Loading component " + getName());
+		}
 		IEReusableComponent singleWidgetComponent = (IEReusableComponent) super.performLoadResourceData(progress, loadingHandler);
 		singleWidgetComponent.setProject(getProject());
 		return singleWidgetComponent;
@@ -107,10 +108,12 @@ public class FlexoReusableComponentResource extends FlexoComponentResource imple
 		if (_componentDefinition == null) {
 			_componentDefinition = (ReusableComponentDefinition) getProject().getFlexoComponentLibrary().getComponentNamed(name);
 			if (_componentDefinition == null) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("cant find an SingleWidgetComponentDefinition for component: " + getName() + " in library");
-				if (logger.isLoggable(Level.INFO))
+				}
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Trying to repair...");
+				}
 				FlexoComponentFolder rootFolder = getProject().getFlexoComponentLibrary().getRootFolder();
 				try {
 					_componentDefinition = new ReusableComponentDefinition(getName(), getProject().getFlexoComponentLibrary(),

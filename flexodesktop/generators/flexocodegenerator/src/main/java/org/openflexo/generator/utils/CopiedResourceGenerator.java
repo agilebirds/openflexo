@@ -67,9 +67,10 @@ public class CopiedResourceGenerator extends FlexoResourceGenerator<FlexoModelOb
 	@Override
 	public void generate(boolean forceRegenerate) {
 		if (forceRegenerate) {
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Called force generate on copied resource");
-			if (copiedResource.getResourceToCopy() instanceof FlexoGeneratedResource)
+			}
+			if (copiedResource.getResourceToCopy() instanceof FlexoGeneratedResource) {
 				try {
 					((FlexoGeneratedResource) copiedResource.getResourceToCopy()).generate();
 				} catch (SaveResourceException e) {
@@ -77,6 +78,7 @@ public class CopiedResourceGenerator extends FlexoResourceGenerator<FlexoModelOb
 				} catch (FlexoException e) {
 					e.printStackTrace();
 				}
+			}
 		}
 		generatedCode = new GeneratedCopiedFile(copiedResource.getResourceToCopy().getFile());
 		lastMemoryGeneration = new Date();

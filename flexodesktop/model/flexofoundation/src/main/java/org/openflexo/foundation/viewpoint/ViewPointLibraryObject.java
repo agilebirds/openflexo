@@ -29,8 +29,9 @@ public abstract class ViewPointLibraryObject extends TemporaryFlexoModelObject i
 	public abstract ViewPointLibrary getViewPointLibrary();
 
 	public OntologyLibrary getOntologyLibrary() {
-		if (getViewPointLibrary() != null)
+		if (getViewPointLibrary() != null) {
 			return getViewPointLibrary().getOntologyLibrary();
+		}
 		return null;
 	}
 

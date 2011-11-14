@@ -24,13 +24,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.logging.Logger;
 
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.xmlcode.XMLCoder;
 import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
-
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.logging.FlexoLogger;
 
 public class MyDrawing extends MyDrawingElement {
 
@@ -77,10 +76,11 @@ public class MyDrawing extends MyDrawingElement {
 	}
 
 	public String getTitle() {
-		if (file != null)
+		if (file != null) {
 			return file.getName();
-		else
+		} else {
 			return FlexoLocalization.localizedForKey("untitled") + "-" + index;
+		}
 	}
 
 	@Override

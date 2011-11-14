@@ -43,6 +43,9 @@ import org.openflexo.fge.geom.FGECircle;
 import org.openflexo.fge.geom.FGECubicCurve;
 import org.openflexo.fge.geom.FGEEllips;
 import org.openflexo.fge.geom.FGEGeneralShape;
+import org.openflexo.fge.geom.FGEGeneralShape.GeneralShapePathElement;
+import org.openflexo.fge.geom.FGEGeometricObject.CardinalQuadrant;
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGELine;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
@@ -52,16 +55,13 @@ import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGERoundRectangle;
 import org.openflexo.fge.geom.FGESegment;
 import org.openflexo.fge.geom.FGEShape;
-import org.openflexo.fge.geom.FGEGeneralShape.GeneralShapePathElement;
-import org.openflexo.fge.geom.FGEGeometricObject.CardinalQuadrant;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEPlane;
 import org.openflexo.fge.geom.area.FGEQuarterPlane;
 import org.openflexo.fge.graphics.BackgroundStyle;
+import org.openflexo.fge.graphics.BackgroundStyle.BackgroundStyleType;
 import org.openflexo.fge.graphics.FGEGeometricGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundStyleType;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.GeometryModified;
 import org.openflexo.toolbox.ToolBox;
@@ -116,12 +116,13 @@ public class GeometricGraphicalRepresentation<O> extends GraphicalRepresentation
 
 		addToMouseClickControls(MouseClickControl.makeMouseClickControl("Selection", MouseButton.LEFT, 1,
 				MouseClickControlActionType.SELECTION));
-		if (ToolBox.getPLATFORM() == ToolBox.MACOS)
+		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 			addToMouseClickControls(MouseClickControl.makeMouseMetaClickControl("Multiple selection", MouseButton.LEFT, 1,
 					MouseClickControlActionType.MULTIPLE_SELECTION));
-		else
+		} else {
 			addToMouseClickControls(MouseClickControl.makeMouseControlClickControl("Multiple selection", MouseButton.LEFT, 1,
 					MouseClickControlActionType.MULTIPLE_SELECTION));
+		}
 	}
 
 	@Override
@@ -140,10 +141,12 @@ public class GeometricGraphicalRepresentation<O> extends GraphicalRepresentation
 
 	@Override
 	public void delete() {
-		if (background != null)
+		if (background != null) {
 			background.deleteObserver(this);
-		if (foreground != null)
+		}
+		if (foreground != null) {
 			foreground.deleteObserver(this);
+		}
 		super.delete();
 	}
 
@@ -158,11 +161,13 @@ public class GeometricGraphicalRepresentation<O> extends GraphicalRepresentation
 	public void setForeground(ForegroundStyle aForeground) {
 		FGENotification notification = requireChange(Parameters.foreground, aForeground);
 		if (notification != null) {
-			if (foreground != null)
+			if (foreground != null) {
 				foreground.deleteObserver(this);
+			}
 			foreground = aForeground;
-			if (aForeground != null)
+			if (aForeground != null) {
 				aForeground.addObserver(this);
+			}
 			hasChanged(notification);
 		}
 	}
@@ -183,12 +188,14 @@ public class GeometricGraphicalRepresentation<O> extends GraphicalRepresentation
 		FGENotification notification = requireChange(Parameters.background, aBackground);
 		if (notification != null) {
 			// background = aBackground.clone();
-			if (background != null)
+			if (background != null) {
 				background.deleteObserver(this);
+			}
 			background = aBackground;
 			// background.setGraphicalRepresentation(this);
-			if (aBackground != null)
+			if (aBackground != null) {
 				aBackground.addObserver(this);
+			}
 			hasChanged(notification);
 		}
 	}
@@ -307,8 +314,9 @@ public class GeometricGraphicalRepresentation<O> extends GraphicalRepresentation
 
 	@Override
 	public void paint(Graphics g, DrawingController<?> controller) {
-		if (!isRegistered())
+		if (!isRegistered()) {
 			setRegistered(true);
+		}
 
 		super.paint(g, controller);
 
@@ -353,9 +361,9 @@ public class GeometricGraphicalRepresentation<O> extends GraphicalRepresentation
 	}
 
 	protected FGEPoint getLabelRelativePosition() {
-		if (getGeometricObject() instanceof FGEPoint)
+		if (getGeometricObject() instanceof FGEPoint) {
 			return (FGEPoint) getGeometricObject();
-		else if (getGeometricObject() instanceof FGEAbstractLine) {
+		} else if (getGeometricObject() instanceof FGEAbstractLine) {
 			FGEAbstractLine line = (FGEAbstractLine) getGeometricObject();
 			return (new FGESegment(line.getP1(), line.getP2())).getMiddle();
 		} else if (getGeometricObject() instanceof FGEShape) {
@@ -426,8 +434,9 @@ public class GeometricGraphicalRepresentation<O> extends GraphicalRepresentation
 	protected Vector<ControlPoint> _controlPoints;
 
 	public List<ControlPoint> getControlPoints() {
-		if (_controlPoints == null)
+		if (_controlPoints == null) {
 			rebuildControlPoints();
+		}
 		return _controlPoints;
 	}
 
@@ -940,17 +949,20 @@ public class GeometricGraphicalRepresentation<O> extends GraphicalRepresentation
 				cpNeedsToBeRebuilt = true;
 			}
 		}
-		if (cpNeedsToBeRebuilt)
+		if (cpNeedsToBeRebuilt) {
 			rebuildControlPoints();
+		}
 	}
 
 	public List<ControlPoint> rebuildControlPoints() {
-		if (_controlPoints == null)
+		if (_controlPoints == null) {
 			_controlPoints = new Vector<ControlPoint>();
+		}
 		_controlPoints.clear();
 
-		if (getGeometricObject() == null)
+		if (getGeometricObject() == null) {
 			return _controlPoints;
+		}
 
 		if (getGeometricObject() instanceof FGEPoint) {
 			_controlPoints.addAll(buildControlPointsForPoint((FGEPoint) getGeometricObject()));

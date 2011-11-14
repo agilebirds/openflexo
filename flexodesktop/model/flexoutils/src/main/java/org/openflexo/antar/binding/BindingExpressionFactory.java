@@ -12,15 +12,15 @@ import org.openflexo.antar.binding.BindingExpression.BindingValueVariable;
 import org.openflexo.antar.expr.DefaultExpressionParser;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.parser.ExpressionParser;
-import org.openflexo.antar.expr.parser.ParseException;
-import org.openflexo.antar.expr.parser.Value;
-import org.openflexo.antar.expr.parser.Word;
 import org.openflexo.antar.expr.parser.ExpressionParser.ConstantFactory;
 import org.openflexo.antar.expr.parser.ExpressionParser.DefaultConstantFactory;
 import org.openflexo.antar.expr.parser.ExpressionParser.DefaultFunctionFactory;
 import org.openflexo.antar.expr.parser.ExpressionParser.DefaultVariableFactory;
 import org.openflexo.antar.expr.parser.ExpressionParser.FunctionFactory;
 import org.openflexo.antar.expr.parser.ExpressionParser.VariableFactory;
+import org.openflexo.antar.expr.parser.ParseException;
+import org.openflexo.antar.expr.parser.Value;
+import org.openflexo.antar.expr.parser.Word;
 import org.openflexo.antar.pp.ExpressionPrettyPrinter;
 import org.openflexo.xmlcode.StringEncoder;
 
@@ -88,8 +88,9 @@ public class BindingExpressionFactory extends StringEncoder.Converter<BindingExp
 
 		@Override
 		public Expression makeConstant(Value value) {
-			if (BindingExpression.logger.isLoggable(Level.FINE))
+			if (BindingExpression.logger.isLoggable(Level.FINE)) {
 				BindingExpression.logger.fine("Make constant from " + value + " of " + value.getClass().getSimpleName());
+			}
 			return new BindingValueConstant(constantFactory.makeConstant(value), _bindable);
 		}
 	}

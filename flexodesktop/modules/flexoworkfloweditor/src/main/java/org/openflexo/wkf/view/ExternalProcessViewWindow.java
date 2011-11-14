@@ -122,15 +122,17 @@ public class ExternalProcessViewWindow extends FlexoRelativeWindow {
 	}
 
 	public FlexoProcess getFlexoProcess() {
-		if (_processEditorController != null && _processEditorController.getDrawing() != null)
+		if (_processEditorController != null && _processEditorController.getDrawing() != null) {
 			return _processEditorController.getDrawing().getFlexoProcess();
+		}
 		return null;
 	}
 
 	public void closeWindow() {
 		logger.info("Closing ExternalProcessViewWindow");
-		if (_processEditorController != null)
+		if (_processEditorController != null) {
 			_processEditorController.delete();
+		}
 		_processEditorController = null;
 		dispose();
 	}

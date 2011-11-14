@@ -35,8 +35,8 @@ import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMMethod;
 import org.openflexo.foundation.dm.DMTranstyper;
-import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.DMTranstyper.DMTranstyperEntry;
+import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.inspector.InspectableObject;
@@ -126,8 +126,9 @@ public class TranstypedBinding extends AbstractBinding {
 
 		@Override
 		public boolean equals(Object object) {
-			if (object == null)
+			if (object == null) {
 				return false;
+			}
 			if (object instanceof TranstypedBindingValue) {
 				TranstypedBindingValue o = (TranstypedBindingValue) object;
 				return ((o.getEntry() == getEntry()) && (o.getBindingValue() == getBindingValue()));
@@ -227,8 +228,9 @@ public class TranstypedBinding extends AbstractBinding {
 		}
 
 		private MethodCall tryToDecodeAsMethodCall(BindingValue owner, DMType currentType, String aValue) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("tryToDecodeAsMethodCall " + aValue);
+			}
 
 			String methodName;
 			Vector<String> paramsAsString;
@@ -243,30 +245,36 @@ public class TranstypedBinding extends AbstractBinding {
 						paramsAsString.add(e.toString());
 					}
 				} else {
-					if (logger.isLoggable(Level.WARNING) && warnOnFailure)
+					if (logger.isLoggable(Level.WARNING) && warnOnFailure) {
 						logger.warning("Could not decode BindingValue : trying to find method call matching '" + aValue
 								+ " this is not a function call");
+					}
 					return null;
 				}
 			} catch (ParseException e) {
-				if (logger.isLoggable(Level.WARNING) && warnOnFailure)
+				if (logger.isLoggable(Level.WARNING) && warnOnFailure) {
 					logger.warning("Could not decode BindingValue : parse error while trying to find method call matching '" + aValue);
+				}
 				return null;
 			}
 
 			Vector<DMMethod> allMethods = currentType.getBaseEntity().getAccessibleMethods();
 
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("allMethods=" + allMethods);
-			if (logger.isLoggable(Level.FINE))
+			}
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("paramsAsString=" + paramsAsString);
+			}
 			Vector<DMMethod> possiblyMatchingMethods = new Vector<DMMethod>();
 			for (DMMethod method : allMethods) {
-				if ((method.getName().equals(methodName)) && (method.getParameters().size() == paramsAsString.size()))
+				if ((method.getName().equals(methodName)) && (method.getParameters().size() == paramsAsString.size())) {
 					possiblyMatchingMethods.add(method);
+				}
 			}
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("possiblyMatchingMethods=" + possiblyMatchingMethods);
+			}
 			Vector<MethodCall> results = new Vector<MethodCall>();
 			for (DMMethod method : possiblyMatchingMethods) {
 				boolean successfull = true;
@@ -275,31 +283,36 @@ public class TranstypedBinding extends AbstractBinding {
 					DMMethod.DMMethodParameter param = method.getParameters().elementAt(i);
 					String bindingAsString = paramsAsString.elementAt(i);
 					DMType type = param.getType();
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Attempt to parse: " + bindingAsString);
+					}
 					AbstractBinding paramBindingValue = _abstractBindingStringConverter.convertFromString(bindingAsString);
 					if ((paramBindingValue != null)) {
 						paramBindingValue.setOwner((FlexoModelObject) _bindable);
-						if (logger.isLoggable(Level.FINE))
+						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("paramBindingValue=" + paramBindingValue + " of " + paramBindingValue.getAccessedType());
+						}
 						if (paramBindingValue.isStaticValue()) {
 							paramBindingValue.setBindingDefinition(methodCall.new MethodCallParamBindingDefinition(param));
 						}
 						if (type != null && paramBindingValue.getAccessedType() != null
 								&& type.isAssignableFrom(paramBindingValue.getAccessedType(), true)) {
-							if (logger.isLoggable(Level.FINE))
+							if (logger.isLoggable(Level.FINE)) {
 								logger.fine("Lookup on " + type.getName() + " succeded: " + paramBindingValue.getStringRepresentation());
+							}
 							methodCall.setBindingValueForParam(paramBindingValue, param);
 						} else {
-							if (logger.isLoggable(Level.FINE))
+							if (logger.isLoggable(Level.FINE)) {
 								logger.fine("Lookup on type " + type + " failed (wrong type): "
 										+ paramBindingValue.getStringRepresentation() + "types: " + "looking " + type + " found "
 										+ paramBindingValue.getAccessedType());
+							}
 							successfull = false;
 						}
 					} else {
-						if (logger.isLoggable(Level.FINE))
+						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("Lookup on " + type.getName() + " failed (cannot analysing): " + bindingAsString);
+						}
 						successfull = false;
 					}
 				}
@@ -310,12 +323,14 @@ public class TranstypedBinding extends AbstractBinding {
 			if (results.size() == 1) {
 				return results.firstElement();
 			} else if (results.size() > 1) {
-				if (logger.isLoggable(Level.WARNING) && warnOnFailure)
+				if (logger.isLoggable(Level.WARNING) && warnOnFailure) {
 					logger.warning(("While decoding BindingValue '" + aValue + "' : found ambigous methods " + methodName));
+				}
 				return results.firstElement();
 			}
-			if (logger.isLoggable(Level.WARNING) && warnOnFailure)
+			if (logger.isLoggable(Level.WARNING) && warnOnFailure) {
 				logger.warning("Could not decode BindingValue : cannot find method call matching '" + aValue);
+			}
 			return null;
 		}
 
@@ -335,15 +350,17 @@ public class TranstypedBinding extends AbstractBinding {
 						paramsAsString.add(e.toString());
 					}
 				} else {
-					if (logger.isLoggable(Level.WARNING) && warnOnFailure)
+					if (logger.isLoggable(Level.WARNING) && warnOnFailure) {
 						logger.warning("Could not decode TranstypedBinding : trying to find transtyper syntax with '" + aValue
 								+ " : wrong syntax");
+					}
 					return null;
 				}
 			} catch (ParseException e) {
-				if (logger.isLoggable(Level.WARNING) && warnOnFailure)
+				if (logger.isLoggable(Level.WARNING) && warnOnFailure) {
 					logger.warning("Could not decode TranstypedBinding : parse error while trying to decode as transtyped binding '"
 							+ aValue);
+				}
 				return null;
 			}
 
@@ -351,28 +368,32 @@ public class TranstypedBinding extends AbstractBinding {
 			String transtyperName = fullyQualifiedTranstyperName.substring(fullyQualifiedTranstyperName.lastIndexOf(".") + 1);
 
 			if (_bindable == null) {
-				if (logger.isLoggable(Level.WARNING) && warnOnFailure)
+				if (logger.isLoggable(Level.WARNING) && warnOnFailure) {
 					logger.warning(("Could not decode TranstypedBinding '" + aValue + "' : no declared bindable !"));
+				}
 				return null;
 			}
 
 			if (_bindable.getBindingModel() == null) {
-				if (logger.isLoggable(Level.WARNING) && warnOnFailure)
+				if (logger.isLoggable(Level.WARNING) && warnOnFailure) {
 					logger.warning(("Could not decode TranstypedBinding '" + aValue + "' : declared bindable has a null binding model !"));
+				}
 				return null;
 			}
 
 			DMEntity declaringEntity = ((FlexoModelObject) _bindable).getProject().getDataModel().getEntityNamed(fullyQualifiedEntityName);
 			if (declaringEntity == null) {
-				if (logger.isLoggable(Level.WARNING) && warnOnFailure)
+				if (logger.isLoggable(Level.WARNING) && warnOnFailure) {
 					logger.warning(("Could not decode TranstypedBinding '" + aValue + "' : no declaring entity !"));
+				}
 				return null;
 			}
 			DMTranstyper transtyper = declaringEntity.getDMTranstyper(transtyperName);
 			if (transtyper == null) {
-				if (logger.isLoggable(Level.WARNING) && warnOnFailure)
+				if (logger.isLoggable(Level.WARNING) && warnOnFailure) {
 					logger.warning(("Could not decode TranstypedBinding '" + aValue + "' : could not find transtyper " + transtyperName
 							+ " for " + declaringEntity.getFullyQualifiedName()));
+				}
 				return null;
 			}
 
@@ -382,22 +403,25 @@ public class TranstypedBinding extends AbstractBinding {
 			logger.info("Built new TranstypedBinding: " + returned);
 
 			if (returned.getValues().size() != paramsAsString.size()) {
-				if (logger.isLoggable(Level.WARNING) && warnOnFailure)
+				if (logger.isLoggable(Level.WARNING) && warnOnFailure) {
 					logger.warning("Could not decode TranstypedBinding '" + aValue + "' : parameters size does not match");
+				}
 				return null;
 			}
 
 			_abstractBindingStringConverter.setBindable(_bindable);
 			for (int i = 0; i < paramsAsString.size(); i++) {
 				String bindingAsString = paramsAsString.elementAt(i);
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Attempt to parse: " + bindingAsString);
+				}
 				AbstractBinding paramBindingValue = _abstractBindingStringConverter.convertFromString(bindingAsString);
 				if ((paramBindingValue != null)) {
 					returned.getValues().elementAt(i).setBindingValue(paramBindingValue);
 				} else {
-					if (logger.isLoggable(Level.WARNING) && warnOnFailure)
+					if (logger.isLoggable(Level.WARNING) && warnOnFailure) {
 						logger.warning("Could not decode TranstypedBinding '" + aValue + "' : failed to decode '" + bindingAsString + "'");
+					}
 					return null;
 				}
 			}
@@ -415,8 +439,9 @@ public class TranstypedBinding extends AbstractBinding {
 
 	@Override
 	public TranstypedBindingStringConverter getConverter() {
-		if (getProject() != null)
+		if (getProject() != null) {
 			return getProject().getTranstypedBindingStringConverter();
+		}
 		return null;
 	}
 
@@ -446,16 +471,19 @@ public class TranstypedBinding extends AbstractBinding {
 
 	@Override
 	public boolean equals(Object object) {
-		if (object == null)
+		if (object == null) {
 			return false;
+		}
 		if (object instanceof TranstypedBinding) {
 			TranstypedBinding tb = (TranstypedBinding) object;
 			if (getBindingDefinition() == null) {
-				if (tb.getBindingDefinition() != null)
+				if (tb.getBindingDefinition() != null) {
 					return false;
+				}
 			} else {
-				if (!getBindingDefinition().equals(tb.getBindingDefinition()))
+				if (!getBindingDefinition().equals(tb.getBindingDefinition())) {
 					return false;
+				}
 			}
 			return ((_owner == tb._owner) && (getTranstyper() == tb.getTranstyper()) && (getValues().equals(tb.getValues())));
 		} else {
@@ -470,55 +498,65 @@ public class TranstypedBinding extends AbstractBinding {
 	 */
 	@Override
 	public DMType getAccessedType() {
-		if (transtyper != null)
+		if (transtyper != null) {
 			return transtyper.getReturnedType();
+		}
 		return null;
 	}
 
 	@Override
 	public boolean isBindingValid() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Is StaticBinding " + this + " valid ?");
+		}
 
 		if (getAccessedType() == null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Invalid binding because accessed type is null");
+			}
 			return false;
 		}
 
 		if (getBindingDefinition() == null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Invalid binding because binding definition is null");
+			}
 			return false;
 		} else if (getBindingDefinition().getIsSettable()) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Invalid binding because binding definition is declared as settable");
+			}
 			return false;
 		} else if (getBindingDefinition().getBindingDefinitionType() == BindingDefinitionType.EXECUTE) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Invalid binding because binding definition is declared as executable");
+			}
 			return false;
 		}
 
 		if (getTranstyper() == null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Invalid binding because transtyper is null");
+			}
 			return false;
 		}
 
 		for (TranstypedBindingValue v : getValues()) {
 			if (v.getEntry() == null) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Invalid binding because value entry is null");
+				}
 				return false;
 			}
 			if (v.getBindingValue() == null) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Invalid binding because value of " + v.getEntry().getName() + " is null");
+				}
 				return false;
 			} else if (!v.getBindingValue().isBindingValid()) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Invalid binding because value of " + v.getEntry().getName() + " is not valid");
+				}
 				return false;
 			}
 		}
@@ -527,9 +565,10 @@ public class TranstypedBinding extends AbstractBinding {
 			return true;
 		}
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Invalid binding because types are not matching searched " + getBindingDefinition().getType() + " having "
 					+ getAccessedType());
+		}
 		return false;
 
 	}
@@ -557,8 +596,9 @@ public class TranstypedBinding extends AbstractBinding {
 
 	@Override
 	public String getStringRepresentation() {
-		if (getTranstyper() == null)
+		if (getTranstyper() == null) {
 			return "null";
+		}
 
 		StringBuffer sb = new StringBuffer();
 		sb.append(getTranstyper().getDeclaringEntity().getFullyQualifiedName());

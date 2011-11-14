@@ -297,11 +297,13 @@ public abstract class FlexoCSS extends FlexoObject implements StringConvertable,
 			return CONTENTO;
 		} else {
 			for (FlexoCSS css : availableValues()) {
-				if (css.getName().equals(cssName))
+				if (css.getName().equals(cssName)) {
 					return css;
+				}
 			}
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not find FlexoCSS named " + cssName);
+			}
 			return null;
 		}
 	}

@@ -73,8 +73,9 @@ public class WSRepositoryFolder extends WSObject {
 
 	@Override
 	public void delete() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("delete: WSRepositoryFolder " + getName());
+		}
 		parentGroup = null;
 		super.delete();
 		notifyObservers(new ObjectDeleted(this));

@@ -144,8 +144,9 @@ public class WSRepository extends WSObject implements FlexoObserver {
 	 */
 	@Override
 	public void delete() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("delete: WSRepository " + getName());
+		}
 		if (parentService != null) {
 			parentService.removeFromWSRepositories(this);
 			parentService = null;

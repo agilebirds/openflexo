@@ -98,8 +98,9 @@ public class ParametersRetriever implements BindingEvaluationContext {
 		paramHash = new Hashtable<EditionSchemeParameter, ParameterDefinition>();
 
 		String description = editionScheme.getDescription();
-		if (description == null)
+		if (description == null) {
 			description = editionScheme.getEditionPattern().getDescription();
+		}
 
 		parameters.add(new InfoLabelParameter("infoLabel", "description", description));
 
@@ -109,8 +110,9 @@ public class ParametersRetriever implements BindingEvaluationContext {
 			if (parameter instanceof org.openflexo.foundation.viewpoint.URIParameter) {
 				param = new URIParameter((org.openflexo.foundation.viewpoint.URIParameter) parameter, action);
 				uriParametersList.add((URIParameter) param);
-				if (defaultValue != null)
+				if (defaultValue != null) {
 					action.getParameterValues().put(parameter.getName(), defaultValue);
+				}
 			} else if (parameter instanceof org.openflexo.foundation.viewpoint.TextFieldParameter) {
 				param = new TextFieldParameter(parameter.getName(), parameter.getLabel(), (String) defaultValue, 40) {
 					@Override
@@ -124,8 +126,9 @@ public class ParametersRetriever implements BindingEvaluationContext {
 						}
 					}
 				};
-				if (defaultValue != null)
+				if (defaultValue != null) {
 					action.getParameterValues().put(parameter.getName(), defaultValue);
+				}
 			} else if (parameter.getWidget() == WidgetType.LOCALIZED_TEXT_FIELD) {
 				LocalizedString ls = new LocalizedString((String) defaultValue, Language.ENGLISH);
 				param = new LocalizedTextFieldParameter(parameter.getName(), parameter.getLabel(), ls, 40) {
@@ -144,8 +147,9 @@ public class ParametersRetriever implements BindingEvaluationContext {
 						action.getParameterValues().put(parameter.getName(), value);
 					}
 				};
-				if (defaultValue != null)
+				if (defaultValue != null) {
 					action.getParameterValues().put(parameter.getName(), defaultValue);
+				}
 			} else if (parameter instanceof org.openflexo.foundation.viewpoint.IntegerParameter) {
 				param = new IntegerParameter(parameter.getName(), parameter.getLabel(), ((Number) defaultValue).intValue()) {
 					@Override
@@ -159,8 +163,9 @@ public class ParametersRetriever implements BindingEvaluationContext {
 						}
 					}
 				};
-				if (defaultValue != null)
+				if (defaultValue != null) {
 					action.getParameterValues().put(parameter.getName(), defaultValue);
+				}
 			} else if (parameter instanceof org.openflexo.foundation.viewpoint.CheckboxParameter) {
 				param = new CheckboxParameter(parameter.getName(), parameter.getLabel(), (Boolean) defaultValue) {
 					@Override
@@ -169,8 +174,9 @@ public class ParametersRetriever implements BindingEvaluationContext {
 						action.getParameterValues().put(parameter.getName(), value);
 					}
 				};
-				if (defaultValue != null)
+				if (defaultValue != null) {
 					action.getParameterValues().put(parameter.getName(), defaultValue);
+				}
 			} else if (parameter instanceof DropDownParameter) {
 				param = new StaticDropDownParameter<String>(parameter.getName(), parameter.getLabel(),
 						((DropDownParameter) parameter).getValueList(), parameter.getDefaultValue().toString()) {
@@ -180,8 +186,9 @@ public class ParametersRetriever implements BindingEvaluationContext {
 						action.getParameterValues().put(parameter.getName(), value);
 					}
 				};
-				if (defaultValue != null)
+				if (defaultValue != null) {
 					action.getParameterValues().put(parameter.getName(), defaultValue);
+				}
 			} else if (parameter instanceof IndividualParameter) {
 				OntologyClass ontologyClass = ((IndividualParameter) parameter).getConcept();
 				OntologyIndividual defaultIndividual = null;
@@ -315,9 +322,10 @@ public class ParametersRetriever implements BindingEvaluationContext {
 					dependancyParameters = new Vector<ParameterDefinition>();
 					Vector<EditionSchemeParameter> depends = extractDepends(_parameter.getBaseURI().toString(), _action);
 					for (EditionSchemeParameter p : depends) {
-						if (p != null)
+						if (p != null) {
 							dependancyParameters.add(paramHash.get(p));
-						// System.out.println("Param URI "+parameter+" depends of "+paramHash.get(p)+" p="+p);
+							// System.out.println("Param URI "+parameter+" depends of "+paramHash.get(p)+" p="+p);
+						}
 					}
 				} catch (ParseException e) {
 					e.printStackTrace();
@@ -343,10 +351,11 @@ public class ParametersRetriever implements BindingEvaluationContext {
 				Integer i = null;
 				while (_action.getProject().getProjectOntologyLibrary()
 						.isDuplicatedURI(_action.getProject().getProjectOntology().getURI(), proposal)) {
-					if (i == null)
+					if (i == null) {
 						i = 1;
-					else
+					} else {
 						i++;
+					}
 					proposal = baseProposal + i;
 				}
 			}
@@ -375,8 +384,9 @@ public class ParametersRetriever implements BindingEvaluationContext {
 		}
 
 		private String evaluateExpression(final Hashtable<String, Object> parameterValues) {
-			if (baseExpression == null)
+			if (baseExpression == null) {
 				return "";
+			}
 			try {
 				Expression evaluation = baseExpression.evaluate(parameterValues);
 				if (evaluation instanceof StringConstant) {

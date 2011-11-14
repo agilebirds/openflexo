@@ -54,8 +54,9 @@ public class FIBButton extends FIBWidget {
 	}
 
 	public DataBinding getAction() {
-		if (action == null)
+		if (action == null) {
 			action = new DataBinding(this, Parameters.action, ACTION);
+		}
 		return action;
 	}
 

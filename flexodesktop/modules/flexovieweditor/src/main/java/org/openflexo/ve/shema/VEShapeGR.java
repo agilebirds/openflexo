@@ -61,8 +61,9 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 		}
 		addToMouseDragControls(new DrawEdgeControl());
 
-		if (aShape != null)
+		if (aShape != null) {
 			aShape.addObserver(this);
+		}
 
 		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(25, 25, 25, 25));
 
@@ -70,8 +71,9 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 
 	@Override
 	public void delete() {
-		if (getDrawable() != null)
+		if (getDrawable() != null) {
 			getDrawable().deleteObserver(this);
+		}
 		super.delete();
 	}
 
@@ -111,15 +113,17 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 
 	@Override
 	public String getText() {
-		if (getOEShape() != null)
+		if (getOEShape() != null) {
 			return getOEShape().getName();
+		}
 		return null;
 	}
 
 	@Override
 	public void setTextNoNotification(String text) {
-		if (getOEShape() != null)
+		if (getOEShape() != null) {
 			getOEShape().setName(text);
+		}
 	}
 
 	private ConcatenedList<ControlArea> controlAreas;

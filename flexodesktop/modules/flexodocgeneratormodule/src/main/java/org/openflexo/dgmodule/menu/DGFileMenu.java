@@ -92,9 +92,10 @@ public class DGFileMenu extends DEFileMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Refresh not implemented");
-			// getGeneratorController().rebuildGeneratorWindow();
+				// getGeneratorController().rebuildGeneratorWindow();
+			}
 		}
 	}
 }

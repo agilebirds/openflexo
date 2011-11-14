@@ -113,8 +113,9 @@ public abstract class SelectionManager extends Observable {
 	// ==========================================================================
 
 	public void addToSelectionListeners(SelectionListener listener) {
-		if (!_selectionListeners.contains(listener))
+		if (!_selectionListeners.contains(listener)) {
 			_selectionListeners.add(listener);
+		}
 	}
 
 	public void removeFromSelectionListeners(SelectionListener listener) {
@@ -220,12 +221,14 @@ public abstract class SelectionManager extends Observable {
 		for (Enumeration<FlexoModelObject> en = getSelection().elements(); en.hasMoreElements();) {
 			FlexoModelObject obj = en.nextElement();
 			if (!master.mayRepresents(obj)) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Removing " + obj + " because master view is not able to show it");
+				}
 				internallyRemoveFromSelected(obj);
 			} else {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Keeping " + obj + " because master view is able to show it");
+				}
 			}
 		}
 		updateInspectorManagement();
@@ -238,8 +241,9 @@ public abstract class SelectionManager extends Observable {
 	 *            : objects to add to selection, as a Vector of FlexoModelObject
 	 */
 	public void addToSelected(Vector<? extends FlexoModelObject> objects) {
-		if (objects == null || objects.isEmpty())
+		if (objects == null || objects.isEmpty()) {
 			return;
+		}
 		for (Enumeration<SelectionListener> e = _selectionListeners.elements(); e.hasMoreElements();) {
 			SelectionListener sl = e.nextElement();
 			sl.fireBeginMultipleSelection();
@@ -262,8 +266,9 @@ public abstract class SelectionManager extends Observable {
 	 *            : objects to remove from selection, as a Vector of FlexoModelObject
 	 */
 	public void removeFromSelected(Vector<? extends FlexoModelObject> objects) {
-		if (objects == null || objects.isEmpty())
+		if (objects == null || objects.isEmpty()) {
 			return;
+		}
 		for (Enumeration<SelectionListener> e = _selectionListeners.elements(); e.hasMoreElements();) {
 			SelectionListener sl = e.nextElement();
 			sl.fireBeginMultipleSelection();
@@ -328,8 +333,9 @@ public abstract class SelectionManager extends Observable {
 		selectionListenerToSynchronize.fireResetSelection();
 		for (Enumeration<FlexoModelObject> e = getSelection().elements(); e.hasMoreElements();) {
 			FlexoModelObject o = e.nextElement();
-			if (!o.isDeleted())
+			if (!o.isDeleted()) {
 				selectionListenerToSynchronize.fireObjectSelected(o);
+			}
 		}
 
 	}
@@ -376,10 +382,12 @@ public abstract class SelectionManager extends Observable {
 	 *            : the object to add to selection
 	 */
 	protected void internallyAddToSelected(FlexoModelObject object, boolean isNewFocusedObject) {
-		if (!isSelectable(object))
+		if (!isSelectable(object)) {
 			return;
-		if (logger.isLoggable(Level.FINE))
+		}
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("internallyAddToSelected with " + object);
+		}
 		boolean selectionWasEmpty = (getSelectionSize() == 0);
 		if (!selectionContains(object)) {
 			_selection.add(object);
@@ -387,8 +395,9 @@ public abstract class SelectionManager extends Observable {
 				SelectionListener sl = e.nextElement();
 				sl.fireObjectSelected(object);
 			}
-			if (selectionWasEmpty && getSelectionSize() > 0)
+			if (selectionWasEmpty && getSelectionSize() > 0) {
 				fireSelectionIsNoMoreEmpty();
+			}
 		}
 		if (isNewFocusedObject) {
 			setLastSelectedObject(object);
@@ -403,14 +412,18 @@ public abstract class SelectionManager extends Observable {
 	 *            : the object to remove from selection
 	 */
 	protected void internallyRemoveFromSelected(FlexoModelObject object) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("internallyRemoveFromSelected with " + object);
-		if (_focusedObject == object)
+		}
+		if (_focusedObject == object) {
 			_focusedObject = null;
-		if (_inspectedObject == object)
+		}
+		if (_inspectedObject == object) {
 			_inspectedObject = null;
-		if (lastSelectedObject == object)
+		}
+		if (lastSelectedObject == object) {
 			lastSelectedObject = null;
+		}
 		if (selectionContains(object)) {
 			_selection.remove(object);
 			for (Enumeration<SelectionListener> e = _selectionListeners.elements(); e.hasMoreElements();) {
@@ -431,15 +444,19 @@ public abstract class SelectionManager extends Observable {
 	 *            : the objects to remove from selection
 	 */
 	protected void internallyRemoveFromSelected(Vector<? extends FlexoModelObject> objects) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("internallyRemoveFromSelected with " + objects);
+		}
 		for (FlexoModelObject object : objects) {
-			if (_focusedObject == object)
+			if (_focusedObject == object) {
 				_focusedObject = null;
-			if (_inspectedObject == object)
+			}
+			if (_inspectedObject == object) {
 				_inspectedObject = null;
-			if (lastSelectedObject == object)
+			}
+			if (lastSelectedObject == object) {
 				lastSelectedObject = null;
+			}
 			if (selectionContains(object)) {
 				_selection.remove(object);
 				for (Enumeration<SelectionListener> e = _selectionListeners.elements(); e.hasMoreElements();) {
@@ -474,20 +491,23 @@ public abstract class SelectionManager extends Observable {
 	// ==========================================================================
 
 	public boolean performSelectionCopy() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("performSelectionCopy in " + getClass().getName());
+		}
 		return _clipboard.performSelectionCopy(getSelection());
 	}
 
 	public boolean performSelectionPaste() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("performSelectionPaste in " + getClass().getName());
+		}
 		return _clipboard.performSelectionPaste();
 	}
 
 	public boolean performSelectionCut() {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Perform selection cut is not implemented");
+		}
 		return false;
 	}
 
@@ -533,21 +553,25 @@ public abstract class SelectionManager extends Observable {
 
 	private void setCurrentInspectedObject(InspectableObject inspectable) {
 		// logger.info("Inspect "+inspectable);
-		if (!isInspectable(inspectable))
+		if (!isInspectable(inspectable)) {
 			return;
-		if (logger.isLoggable(Level.FINE))
+		}
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setCurrentInspectedObject: " + countObservers() + " observers");
+		}
 		if (_inspectedObject != null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Inspected object was: " + _inspectedObject.getClass().getName() + " with "
 						+ ((FlexoModelObject) _inspectedObject).countObservers() + " observers");
+			}
 		}
 		if (inspectable != null) {
 			if (_inspectedObject == null || !_inspectedObject.equals(inspectable)) {
 				_inspectedObject = inspectable;
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Inspected object is now: " + _inspectedObject.getClass().getName() + " with "
 							+ ((FlexoModelObject) _inspectedObject).countObservers() + " observers");
+				}
 				setChanged();
 				// Component focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
 				notifyObservers(new UniqueSelection(_inspectedObject, getInspectionContext()));
@@ -591,8 +615,9 @@ public abstract class SelectionManager extends Observable {
 		} else if (getSelectionSize() > 1) {
 			setCurrentInspectedObjectToMultiple();
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Current selection is now: " + toString());
+		}
 	}
 
 	// ==========================================================================
@@ -608,8 +633,9 @@ public abstract class SelectionManager extends Observable {
 	public abstract FlexoModelObject getRootFocusedObject();
 
 	protected boolean isInspectable(InspectableObject object) {
-		if (!(object instanceof FlexoModelObject))
+		if (!(object instanceof FlexoModelObject)) {
 			return true;
+		}
 		FlexoModelObject obj = (FlexoModelObject) object;
 		if (obj.getContext() != null) {
 			if (obj.getContext() instanceof PalettePanel) {
@@ -620,10 +646,12 @@ public abstract class SelectionManager extends Observable {
 	}
 
 	protected boolean isSelectable(FlexoModelObject object) {
-		if (object == null)
+		if (object == null) {
 			return false;
-		if (object.isDeleted())
+		}
+		if (object.isDeleted()) {
 			return false;
+		}
 		if (object.getContext() != null) {
 			if (object.getContext() instanceof PalettePanel) {
 				return (((PalettePanel) object.getContext()).isEdited());

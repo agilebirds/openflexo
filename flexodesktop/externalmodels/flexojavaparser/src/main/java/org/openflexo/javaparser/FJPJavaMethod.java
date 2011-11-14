@@ -257,8 +257,9 @@ public class FJPJavaMethod extends FJPJavaEntity implements ParsedJavaMethod {
 	}
 
 	public String getReturnAsString() {
-		if (getReturns() != null)
+		if (getReturns() != null) {
 			return getReturns().toString();
+		}
 		return "void";
 	}
 
@@ -282,12 +283,14 @@ public class FJPJavaMethod extends FJPJavaEntity implements ParsedJavaMethod {
 		String returned = qualifiedType;
 
 		// remove generics if any
-		if (qualifiedType.indexOf("<") > -1 && qualifiedType.indexOf(">") > -1 && qualifiedType.indexOf("<") < qualifiedType.indexOf(">"))
+		if (qualifiedType.indexOf("<") > -1 && qualifiedType.indexOf(">") > -1 && qualifiedType.indexOf("<") < qualifiedType.indexOf(">")) {
 			returned = qualifiedType.substring(0, qualifiedType.indexOf("<"));
+		}
 
 		// take last qualified item
-		if (returned.lastIndexOf(".") > -1)
+		if (returned.lastIndexOf(".") > -1) {
 			returned = returned.substring(returned.lastIndexOf(".") + 1);
+		}
 
 		return returned;
 	}
@@ -303,8 +306,9 @@ public class FJPJavaMethod extends FJPJavaEntity implements ParsedJavaMethod {
 		DMTypeTokenizer st = new DMTypeTokenizer(qualifiedTypes);
 		boolean isFirst = true;
 		while (st.hasMoreTokens()) {
-			if (!isFirst)
+			if (!isFirst) {
 				sb.append(",");
+			}
 			sb.append(unqualifiedType(st.nextToken()));
 			isFirst = false;
 		}
@@ -318,9 +322,10 @@ public class FJPJavaMethod extends FJPJavaEntity implements ParsedJavaMethod {
 	 * @return
 	 */
 	public static String unqualifySignature(String aSignature) {
-		if (aSignature.indexOf("(") > -1 && aSignature.indexOf(")") > -1 && aSignature.indexOf("(") < aSignature.indexOf(")"))
+		if (aSignature.indexOf("(") > -1 && aSignature.indexOf(")") > -1 && aSignature.indexOf("(") < aSignature.indexOf(")")) {
 			return aSignature.substring(0, aSignature.indexOf("(") + 1)
 					+ unqualifiedTypes(aSignature.substring(aSignature.indexOf("(") + 1, aSignature.indexOf(")"))) + ")";
+		}
 		logger.warning("Signature " + aSignature + " does NOT seem to be valid: " + aSignature);
 		return aSignature.trim();
 

@@ -68,8 +68,9 @@ public class IEButtonWidgetView extends IEWidgetView<IEButtonWidget> implements 
 	private void computeImage() {
 		imageIconFile = WRLocator.locate(getModel().getProject().getProjectDirectory(), getModel().getImageName(),
 				getCSSName() == null ? FlexoCSS.CONTENTO.getName() : getCSSName());
-		if (imageIconFile == null)
+		if (imageIconFile == null) {
 			imageIconFile = WRLocator.AGILE_BIRDS_LOGO;
+		}
 		imageIcon = new ImageIcon(imageIconFile.getAbsolutePath());
 		image = imageIcon.getImage();
 	}
@@ -80,8 +81,9 @@ public class IEButtonWidgetView extends IEWidgetView<IEButtonWidget> implements 
 
 	@Override
 	public boolean isDragEnabled() {
-		if (resizer.getMode() != MouseResizer.ResizeMode.NONE)
+		if (resizer.getMode() != MouseResizer.ResizeMode.NONE) {
 			return false;
+		}
 		return super.isDragEnabled();
 	}
 
@@ -123,8 +125,9 @@ public class IEButtonWidgetView extends IEWidgetView<IEButtonWidget> implements 
 	public Dimension getPreferredSize() {
 		if (getHoldsNextComputedPreferredSize()) {
 			Dimension storedSize = storedPrefSize();
-			if (storedSize != null)
+			if (storedSize != null) {
 				return storedSize;
+			}
 		}
 		Dimension d;
 		if (getModel().getUsePercentage()) {
@@ -136,8 +139,9 @@ public class IEButtonWidgetView extends IEWidgetView<IEButtonWidget> implements 
 		} else {
 			d = new Dimension(getModel().getWidthPixel(), getModel().getHeightPixel());
 		}
-		if (getHoldsNextComputedPreferredSize())
+		if (getHoldsNextComputedPreferredSize()) {
 			storePrefSize(d);
+		}
 		return d;
 	}
 
@@ -175,8 +179,9 @@ public class IEButtonWidgetView extends IEWidgetView<IEButtonWidget> implements 
 		} else if (getModel() == arg0 && (arg1.propertyName() == "usePercentage" || arg1.propertyName() == "widthPercentage")) {
 			doLayout();
 			paintImmediately(getBounds());
-		} else
+		} else {
 			super.update(arg0, arg1);
+		}
 	}
 
 	@Override
@@ -194,10 +199,12 @@ public class IEButtonWidgetView extends IEWidgetView<IEButtonWidget> implements 
 			}
 		} else {
 			Dimension d = new Dimension(getModel().getWidthPixel(), getModel().getHeightPixel());
-			if (deltaY != 0)
+			if (deltaY != 0) {
 				getModel().setHeightPixel(d.height + deltaY);
-			if (deltaX != 0)
+			}
+			if (deltaX != 0) {
 				getModel().setWidthPixel(d.width + deltaX);
+			}
 		}
 	}
 

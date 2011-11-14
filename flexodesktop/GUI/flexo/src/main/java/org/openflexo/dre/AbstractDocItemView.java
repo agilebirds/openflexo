@@ -253,8 +253,9 @@ public abstract class AbstractDocItemView extends JPanel implements ModuleView<D
 
 			@Override
 			public void itemDoubleClicked(DocItem anItem) {
-				if (_controller != null)
+				if (_controller != null) {
 					_controller.selectAndFocusObject(anItem);
+				}
 			}
 		});
 		embeddingChildsListView = new DocItemListView("embedding_child_items", new DocItemListView.DocItemListModel() {
@@ -276,8 +277,9 @@ public abstract class AbstractDocItemView extends JPanel implements ModuleView<D
 
 			@Override
 			public void itemDoubleClicked(DocItem anItem) {
-				if (_controller != null)
+				if (_controller != null) {
 					_controller.selectAndFocusObject(anItem);
+				}
 			}
 		});
 		relatedToListView = new DocItemListView("related_to_items", new DocItemListView.DocItemListModel() {
@@ -301,8 +303,9 @@ public abstract class AbstractDocItemView extends JPanel implements ModuleView<D
 
 			@Override
 			public void itemDoubleClicked(DocItem anItem) {
-				if (_controller != null)
+				if (_controller != null) {
 					_controller.selectAndFocusObject(anItem);
+				}
 			}
 		});
 
@@ -364,9 +367,11 @@ public abstract class AbstractDocItemView extends JPanel implements ModuleView<D
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					if (e.getClickCount() == 2) {
-						if (_docItem.getInheritanceParentItem() != null)
-							if (_controller != null)
+						if (_docItem.getInheritanceParentItem() != null) {
+							if (_controller != null) {
 								_controller.selectAndFocusObject(_docItem.getInheritanceParentItem());
+							}
+						}
 					}
 				}
 			});
@@ -383,9 +388,11 @@ public abstract class AbstractDocItemView extends JPanel implements ModuleView<D
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					if (e.getClickCount() == 2) {
-						if (_docItem.getInheritanceParentItem() != null)
-							if (_controller != null)
+						if (_docItem.getInheritanceParentItem() != null) {
+							if (_controller != null) {
 								_controller.selectAndFocusObject(_docItem.getEmbeddingParentItem());
+							}
+						}
 					}
 				}
 			});
@@ -655,8 +662,9 @@ public abstract class AbstractDocItemView extends JPanel implements ModuleView<D
 
 			@Override
 			public Object getElementAt(int index) {
-				if (index < _docItem.getActions().size())
+				if (index < _docItem.getActions().size()) {
 					return _docItem.getActions().elementAt(index);
+				}
 				return null;
 			}
 		}
@@ -763,8 +771,9 @@ public abstract class AbstractDocItemView extends JPanel implements ModuleView<D
 				@Override
 				protected void valueChanged(JTextComponent component, String value) {
 					if (component == noteTA) {
-						if (getCurrentAction() != null)
+						if (getCurrentAction() != null) {
 							getCurrentAction().setNote(value);
+						}
 					}
 				}
 			};
@@ -811,10 +820,12 @@ public abstract class AbstractDocItemView extends JPanel implements ModuleView<D
 				returned.setText(docItemAction.getLocalizedName());
 				if (docItemAction.getVersion().getLanguage() == getCurrentLanguage()) {
 					returned.setForeground(Color.BLACK);
-					if (docItemAction.getActionType() == ActionType.APPROVED)
+					if (docItemAction.getActionType() == ActionType.APPROVED) {
 						returned.setForeground(GREEN);
-					if (docItemAction.getActionType() == ActionType.REFUSED)
+					}
+					if (docItemAction.getActionType() == ActionType.REFUSED) {
 						returned.setForeground(Color.RED);
+					}
 				} else {
 					returned.setForeground(Color.LIGHT_GRAY);
 				}

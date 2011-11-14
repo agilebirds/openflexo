@@ -23,11 +23,10 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.logging.FlexoLogger;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
-
-import org.openflexo.logging.FlexoLogger;
 
 /**
  * @author gpolet
@@ -79,11 +78,13 @@ public abstract class FolderType implements StringConvertable {
 	public static FolderType get(String s) {
 		for (int i = 0; i < availableValues().size(); i++) {
 			FolderType f = (FolderType) availableValues().get(i);
-			if (f.getName().equals(s))
+			if (f.getName().equals(s)) {
 				return f;
+			}
 		}
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Could not find corresponding folder type for " + s);
+		}
 		return null;
 	}
 

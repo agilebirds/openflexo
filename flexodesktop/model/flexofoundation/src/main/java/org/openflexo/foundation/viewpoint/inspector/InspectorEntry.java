@@ -48,10 +48,11 @@ public abstract class InspectorEntry extends ViewPointObject implements Bindable
 			DATA = new BindingDefinition("data", getDefaultDataClass(), BindingDefinitionType.GET_SET, false) {
 				@Override
 				public BindingDefinitionType getBindingDefinitionType() {
-					if (getIsReadOnly())
+					if (getIsReadOnly()) {
 						return BindingDefinitionType.GET;
-					else
+					} else {
 						return BindingDefinitionType.GET_SET;
+					}
 				}
 			};
 		}
@@ -85,14 +86,16 @@ public abstract class InspectorEntry extends ViewPointObject implements Bindable
 
 	@Override
 	public ViewPoint getCalc() {
-		if (getEditionPattern() != null)
+		if (getEditionPattern() != null) {
 			return getEditionPattern().getCalc();
+		}
 		return null;
 	}
 
 	public EditionPattern getEditionPattern() {
-		if (getInspector() != null)
+		if (getInspector() != null) {
 			return getInspector().getEditionPattern();
+		}
 		return null;
 	}
 
@@ -135,8 +138,9 @@ public abstract class InspectorEntry extends ViewPointObject implements Bindable
 	}
 
 	public ViewPointDataBinding getData() {
-		if (data == null)
+		if (data == null) {
 			data = new ViewPointDataBinding(this, InspectorEntryBindingAttribute.data, getDataBindingDefinition());
+		}
 		return data;
 	}
 
@@ -148,8 +152,9 @@ public abstract class InspectorEntry extends ViewPointObject implements Bindable
 	}
 
 	public ViewPointDataBinding getConditional() {
-		if (conditional == null)
+		if (conditional == null) {
 			conditional = new ViewPointDataBinding(this, InspectorEntryBindingAttribute.conditional, CONDITIONAL);
+		}
 		return conditional;
 	}
 

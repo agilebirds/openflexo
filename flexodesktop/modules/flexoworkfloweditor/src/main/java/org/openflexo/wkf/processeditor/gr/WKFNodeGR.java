@@ -49,8 +49,9 @@ public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O> implem
 	@Override
 	public final double getX() {
 		if (!getNode().hasLocationForContext(BASIC_PROCESS_EDITOR)) {
-			if (!isRegistered())
+			if (!isRegistered()) {
 				return 0;
+			}
 			return getNode().getX(BASIC_PROCESS_EDITOR, getDefaultX());
 		}
 		return getNode().getX(BASIC_PROCESS_EDITOR);
@@ -66,8 +67,9 @@ public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O> implem
 	@Override
 	public final double getY() {
 		if (!getNode().hasLocationForContext(BASIC_PROCESS_EDITOR)) {
-			if (!isRegistered())
+			if (!isRegistered()) {
 				return 0;
+			}
 			return getNode().getY(BASIC_PROCESS_EDITOR, getDefaultY());
 		}
 		return getNode().getY(BASIC_PROCESS_EDITOR);
@@ -83,8 +85,9 @@ public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O> implem
 	@Override
 	public double getAbsoluteTextX() {
 		if (!getNode().hasLabelLocationForContext(BASIC_PROCESS_EDITOR)) {
-			if (!isRegistered())
+			if (!isRegistered()) {
 				return 0;
+			}
 			return getNode().getLabelX(BASIC_PROCESS_EDITOR, getDefaultLabelX());
 		}
 		return getNode().getLabelX(BASIC_PROCESS_EDITOR);
@@ -149,20 +152,25 @@ public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O> implem
 	}
 
 	protected void doDefaultLayout(double x, double y) {
-		if (!isRegistered())
+		if (!isRegistered()) {
 			return;
-		if (isLayingout)
+		}
+		if (isLayingout) {
 			return;
+		}
 		isLayingout = true;
 		try {
 			if (getContainerGraphicalRepresentation() != null) {
 				doLayoutMethod1();
-				if (defaultX < 0 || defaultY < 0)
+				if (defaultX < 0 || defaultY < 0) {
 					doLayoutMethod2();
-				if (defaultX < 0 || defaultY < 0)
+				}
+				if (defaultX < 0 || defaultY < 0) {
 					doLayoutMethod3(x, y);
-				if (defaultX >= 0 && defaultY >= 0)
+				}
+				if (defaultX >= 0 && defaultY >= 0) {
 					notifyObjectMoved();
+				}
 			}
 		} finally {
 			isLayingout = false;
@@ -240,8 +248,9 @@ public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O> implem
 										attemptY = attemptY + 10 + getHeight();
 										break;
 									} else {
-										if (logger.isLoggable(Level.WARNING))
+										if (logger.isLoggable(Level.WARNING)) {
 											logger.warning("Could not find suitable location for node (bpe): " + getModel());
+										}
 										break;
 									}
 								} else {
@@ -270,8 +279,9 @@ public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O> implem
 			GraphicalRepresentation<?> gr = en.nextElement();
 			if (gr instanceof ConnectorGraphicalRepresentation<?>) {
 				ConnectorGraphicalRepresentation<?> connector = (ConnectorGraphicalRepresentation<?>) gr;
-				if (connector.getEndObject() == this && connector.getStartObject() instanceof WKFObjectGR<?>)
+				if (connector.getEndObject() == this && connector.getStartObject() instanceof WKFObjectGR {
 					findSiblingGRFromNodeAndAddToVector((WKFObjectGR<?>) connector.getStartObject(), v);
+				}
 			}
 		}
 		return v;
@@ -284,8 +294,9 @@ public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O> implem
 			GraphicalRepresentation<?> gr = en.nextElement();
 			if (gr instanceof ConnectorGraphicalRepresentation<?>) {
 				ConnectorGraphicalRepresentation<?> connector = (ConnectorGraphicalRepresentation<?>) gr;
-				if (connector.getStartObject() == this && connector.getEndObject() instanceof WKFObjectGR<?>)
+				if (connector.getStartObject() == this && connector.getEndObject() instanceof WKFObjectGR {
 					findSiblingGRFromNodeAndAddToVector((WKFObjectGR<?>) connector.getEndObject(), v);
+				}
 			}
 		}
 		return v;
@@ -293,24 +304,28 @@ public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O> implem
 
 	protected void findSiblingGRFromNodeAndAddToVector(WKFObjectGR<?> gr, Vector<WKFNodeGR<?>> vector) {
 		while (gr != null && gr.getParentGraphicalRepresentation() != getParentGraphicalRepresentation()) {
-			if (gr.getParentGraphicalRepresentation() instanceof WKFObjectGR<?>)
+			if (gr.getParentGraphicalRepresentation() instanceof WKFObjectGR<?>) {
 				gr = (WKFObjectGR<?>) gr.getParentGraphicalRepresentation();
-			else
+			} else {
 				gr = null;
+			}
 		}
-		if (gr != null && gr instanceof WKFNodeGR<?> && !vector.contains(gr))
+		if (gr != null && gr instanceof WKFNodeGR<?> && !vector.contains(gr)) {
 			vector.add((WKFNodeGR<?>) gr);
+		}
 	}
 
 	public double getDefaultLabelX() {
-		if (getModel().hasLabelLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR))
+		if (getModel().hasLabelLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR)) {
 			return getModel().getLabelLocation(SWLEditorConstants.SWIMMING_LANE_EDITOR).getX();
+		}
 		return 0;
 	}
 
 	public double getDefaultLabelY() {
-		if (getModel().hasLabelLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR))
+		if (getModel().hasLabelLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR)) {
 			return getModel().getLabelLocation(SWLEditorConstants.SWIMMING_LANE_EDITOR).getY();
+		}
 		return 0;
 	}
 

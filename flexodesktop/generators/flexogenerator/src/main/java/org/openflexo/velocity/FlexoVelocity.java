@@ -30,7 +30,6 @@ import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.RuntimeSingleton;
-
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.generator.TemplateLocator;
 import org.openflexo.logging.FlexoLogger;
@@ -51,8 +50,9 @@ public class FlexoVelocity {
 			init();
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Error while initializing Velocity");
+			}
 		}
 	}
 
@@ -62,14 +62,17 @@ public class FlexoVelocity {
 
 	public synchronized static void addToVelocimacro(TemplateLocator templateLocator, CGTemplate[] templates)
 			throws ResourceNotFoundException, ParseErrorException, Exception {
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Adding macros: " + templates);
-		if (resourceCache != null)
+		}
+		if (resourceCache != null) {
 			resourceCache.clearCache();
+		}
 		Velocity.setApplicationAttribute("templateLocator", templateLocator);
 		for (CGTemplate template : templates) {
-			if (template != null)
+			if (template != null) {
 				Velocity.getTemplate(template.getRelativePath());
+			}
 		}
 		Velocity.setApplicationAttribute("templateLocator", null);
 	}
@@ -95,14 +98,16 @@ public class FlexoVelocity {
 			// 5. We initialize properly Velocity passing no properties at all!
 			Velocity.init();
 			isInitialized = true;
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Velocity Engine started");
+			}
 		}
 	}
 
 	public static void setResourceCache(FlexoVelocityResourceCache resourceCache) {
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Setting Velocity resource cache");
+		}
 		FlexoVelocity.resourceCache = resourceCache;
 	}
 }

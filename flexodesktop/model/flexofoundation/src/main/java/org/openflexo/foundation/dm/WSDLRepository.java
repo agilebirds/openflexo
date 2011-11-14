@@ -95,12 +95,14 @@ public class WSDLRepository extends XMLSchemaRepository {
 				progress.setProgress(FlexoLocalization.localizedForKey("copying") + " " + wsdlFileToCopy.getName());
 			}
 			try {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Copying file " + wsdlFileToCopy.getAbsolutePath() + " to " + copiedFile.getAbsolutePath());
+				}
 				FileUtils.copyFileToFile(wsdlFileToCopy, copiedFile);
 			} catch (IOException e) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not copy file " + wsdlFileToCopy.getAbsolutePath() + " to " + copiedFile.getAbsolutePath());
+				}
 			}
 
 			// Perform some settings
@@ -132,8 +134,9 @@ public class WSDLRepository extends XMLSchemaRepository {
 
 	public boolean isUsedInWebService() {
 		WSRepository rep = getProject().getFlexoWSLibrary().getWSRepositoryNamed(getName());
-		if (rep != null && rep.getWSDLRepository() != null && rep.getWSDLRepository().equals(this))
+		if (rep != null && rep.getWSDLRepository() != null && rep.getWSDLRepository().equals(this)) {
 			return true;
+		}
 		return false;
 	}
 
@@ -149,8 +152,9 @@ public class WSDLRepository extends XMLSchemaRepository {
 		if (wsdlFile != null && wsdlFile.getFile() != null) {
 			boolean deleted = FileUtils.recursiveDeleteFile(getWSDLFile().getFile());
 
-			if (logger.isLoggable(Level.WARNING) && !deleted)
+			if (logger.isLoggable(Level.WARNING) && !deleted) {
 				logger.warning("WSDLFile of WSDLRepository " + getName() + " not deleted");
+			}
 		}
 		wsdlFile = null;
 		getDMModel().removeFromWSDLRepositories(this);

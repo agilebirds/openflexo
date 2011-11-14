@@ -72,8 +72,9 @@ public class FlexoEOModelResource extends FlexoStorageResource<EOModelResourceDa
 		this(aProject);
 		setResourceFile(eoModelFile);
 		addToSynchronizedResources(dmResource);
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Build new FlexoEOModelResource");
+		}
 	}
 
 	public FlexoEOModelResource(FlexoProject aProject, EOModelResourceData anEOModelResourceData, FlexoDMResource dmResource,
@@ -90,8 +91,9 @@ public class FlexoEOModelResource extends FlexoStorageResource<EOModelResourceDa
 
 	@Override
 	public String getName() {
-		if (getFile() != null)
+		if (getFile() != null) {
 			return getFile().getName();
+		}
 		return null;
 	}
 
@@ -111,13 +113,15 @@ public class FlexoEOModelResource extends FlexoStorageResource<EOModelResourceDa
 		try {
 			eoModel = loadEOModel(getModelGroup());
 		} catch (InvalidEOModelFileException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Invalid EOModel, remove resource !");
+			}
 			this.delete();
 		} catch (EOAccessException e) {
 			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("EOAccessException raised: " + e.getMessage());
+			}
 			throw new LoadEOModelException(this, e);
 		}
 		_resourceData = new EOModelResourceData(project, this);
@@ -169,8 +173,9 @@ public class FlexoEOModelResource extends FlexoStorageResource<EOModelResourceDa
 				notifyResourceStatusChanged();
 				return eoModel;
 			} catch (InvalidEOModelFileException e) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Invalid EOModel, remove resource !");
+				}
 				this.delete();
 			}
 			notifyResourceStatusChanged();
@@ -182,25 +187,30 @@ public class FlexoEOModelResource extends FlexoStorageResource<EOModelResourceDa
 		if (getFile() != null) {
 			if (getFile().exists()) {
 				try {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Loading EOMODEL with EOModelGroup " + modelGroup);
+					}
 					EOModel eoModel = modelGroup.addModel(getFile());
 					if (eoModel == null) {
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Error while loading model:" + getFile().getName());
+						}
 						throw new InvalidEOModelFileException(this);
 					} else {
-						if (logger.isLoggable(Level.INFO))
+						if (logger.isLoggable(Level.INFO)) {
 							logger.info("Succesfully loaded:" + getFile().getName());
+						}
 						return eoModel;
 					}
 				} catch (IllegalArgumentException e) {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Could not load EOModel" + getFile().getName() + " Exception: " + e.getMessage());
+					}
 					throw new EOAccessException(e);
 				} catch (IllegalStateException e) {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Could not load EOModel" + getFile().getName() + " Exception: " + e.getMessage());
+					}
 					throw new EOAccessException(e);
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
@@ -210,13 +220,15 @@ public class FlexoEOModelResource extends FlexoStorageResource<EOModelResourceDa
 					throw new EOAccessException(e);
 				}
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not load EOModel: EOModel file " + getFile().getName() + " does not exist !");
+				}
 				throw new InvalidEOModelFileException(this);
 			}
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not load EOModel: EOModel file not set !");
+			}
 			throw new InvalidEOModelFileException(null);
 		}
 	}
@@ -233,26 +245,30 @@ public class FlexoEOModelResource extends FlexoStorageResource<EOModelResourceDa
 	@Override
 	public synchronized boolean hasWritePermission() {
 		if (!getFile().canWrite()) {
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Cannot Write :" + getFile().getAbsolutePath());
+			}
 			return false;
 		}
 		if (!getFile().isDirectory()) {
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Not a directory :" + getFile().getAbsolutePath());
+			}
 			return false;
 		}
 		File[] f = getFile().listFiles();
 		if (f == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Cannot list files inside directory: " + getFile().getAbsolutePath());
+			}
 			return false;
 		}
 		for (int i = 0; i < f.length; i++) {
 			File file = f[i];
 			if (!file.canWrite()) {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Cannot write this file: " + file.getAbsolutePath());
+				}
 				return false;
 			}
 		}
@@ -268,8 +284,9 @@ public class FlexoEOModelResource extends FlexoStorageResource<EOModelResourceDa
 	@Override
 	protected void saveResourceData(boolean clearIsModified) throws SaveResourceException {
 		if (!hasWritePermission()) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Permission denied : " + getFile().getAbsolutePath());
+			}
 			throw new SaveResourcePermissionDeniedException(this);
 		}
 		if (_resourceData != null) {
@@ -283,11 +300,13 @@ public class FlexoEOModelResource extends FlexoStorageResource<EOModelResourceDa
 			}
 			hasWrittenOnDisk(lock);
 			notifyResourceStatusChanged();
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Succeeding to save Resource " + getResourceIdentifier() + " : " + getFile().getName());
+			}
 		}
-		if (clearIsModified)
+		if (clearIsModified) {
 			getResourceData().clearIsModified(false);
+		}
 	}
 
 	public EOModelGroup getModelGroup() {

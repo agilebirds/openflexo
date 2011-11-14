@@ -68,8 +68,9 @@ public abstract class AbstractCGFileVersion extends CGObject {
 
 	@Override
 	public boolean isContainedIn(CGObject obj) {
-		if (obj == getCGFile())
+		if (obj == getCGFile()) {
 			return true;
+		}
 		return getCGFile().isContainedIn(obj);
 	}
 

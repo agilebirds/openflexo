@@ -89,8 +89,9 @@ public class JavaUtils {
 		StringBuilder sb = new StringBuilder();
 		for (String s : value.split("\\.")) {
 			String part = getVariableName(s).toLowerCase();
-			if (sb.length() > 0 && part.length() > 0)
+			if (sb.length() > 0 && part.length() > 0) {
 				sb.append(".");
+			}
 			sb.append(part);
 		}
 

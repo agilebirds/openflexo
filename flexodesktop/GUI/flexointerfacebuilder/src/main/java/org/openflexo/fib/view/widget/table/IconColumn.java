@@ -109,10 +109,11 @@ public class IconColumn extends AbstractColumn<Icon> implements EditableColumn<I
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 			((JLabel) returned).setText(null);
-			if (value instanceof Icon)
+			if (value instanceof Icon) {
 				((JLabel) returned).setIcon((Icon) value);
-			else
+			} else {
 				((JLabel) returned).setIcon(null);
+			}
 			return returned;
 		}
 	}

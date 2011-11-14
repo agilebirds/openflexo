@@ -40,7 +40,6 @@ import org.openflexo.ColorCst;
 import org.openflexo.FlexoCst;
 import org.openflexo.components.browser.BrowserConfiguration;
 import org.openflexo.components.widget.MultipleObjectSelector;
-
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;

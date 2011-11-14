@@ -90,43 +90,48 @@ public class EOAttribute extends EOProperty {
 		attribute.setName((String) map.get(NAME_KEY));
 		attribute.setColumnName((String) map.get(COLUMN_NAME_KEY));
 		attribute.setClassName((String) map.get(CLASS_NAME_KEY));
-		if (map.get(CLASS_NAME_KEY) == null && map.get(VALUE_CLASS_NAME_KEY) != null)
+		if (map.get(CLASS_NAME_KEY) == null && map.get(VALUE_CLASS_NAME_KEY) != null) {
 			attribute.setClassName(getJavaNameForNSClassName((String) map.get(VALUE_CLASS_NAME_KEY)));
+		}
 		attribute.setValueType((String) map.get(VALUE_TYPE_KEY));
-		if (map.get(WIDTH_KEY) != null)
+		if (map.get(WIDTH_KEY) != null) {
 			attribute.setWidth(PListHelper.getInteger(map.get(WIDTH_KEY)));
-		else
+		} else {
 			attribute.setWidth(0);
+		}
 		attribute.setExternalType((String) map.get(EXTERNAL_TYPE_KEY));
-		if (map.get(ALLOWS_NULL_KEY) != null)
+		if (map.get(ALLOWS_NULL_KEY) != null) {
 			attribute.setAllowsNull(PListHelper.getBoolean(map.get(ALLOWS_NULL_KEY)));
-		else
+		} else {
 			attribute.setAllowsNull(true);
-		if (map.get(IS_READ_ONLY_KEY) != null)
+		}
+		if (map.get(IS_READ_ONLY_KEY) != null) {
 			attribute.setIsReadOnly(PListHelper.getBoolean(map.get(IS_READ_ONLY_KEY)));
-		else
+		} else {
 			attribute.setIsReadOnly(false);
+		}
 		attribute.setEntity(entity);
 		if (attribute.getValueType() != null && attribute.getValueType().trim().length() > 0) {
-			if (attribute.getValueType().equals("b")) // Byte
+			if (attribute.getValueType().equals("b")) {
 				attribute.setClassName("java.lang.Byte");
-			else if (attribute.getValueType().equals("s")) // Short
+			} else if (attribute.getValueType().equals("s")) {
 				attribute.setClassName("java.lang.Short");
-			else if (attribute.getValueType().equals("i")) // Integer
+			} else if (attribute.getValueType().equals("i")) {
 				attribute.setClassName("java.lang.Integer");
-			else if (attribute.getValueType().equals("l")) // Long
+			} else if (attribute.getValueType().equals("l")) {
 				attribute.setClassName("java.lang.Long");
-			else if (attribute.getValueType().equals("f")) // Float
+			} else if (attribute.getValueType().equals("f")) {
 				attribute.setClassName("java.lang.Float");
-			else if (attribute.getValueType().equals("d")) // Double
+			} else if (attribute.getValueType().equals("d")) {
 				attribute.setClassName("java.lang.Double");
-			else if (attribute.getValueType().equals("B")) // BigDecimal
+			} else if (attribute.getValueType().equals("B")) {
 				attribute.setClassName("java.math.BigDecimal");
-			else if (attribute.getValueType().equals("c")) // Boolean
+			} else if (attribute.getValueType().equals("c")) {
 				attribute.setClassName("java.lang.Boolean");
-			else {
-				if (logger.isLoggable(Level.WARNING))
+			} else {
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Unknown valueType: " + attribute.getValueType() + ". We will use String");
+				}
 				attribute.setClassName("java.lang.String");
 			}
 		}
@@ -215,16 +220,18 @@ public class EOAttribute extends EOProperty {
 	public boolean getIsPrimaryKey() {
 		if (getEntity() != null) {
 			return getEntity().getPrimaryKeyAttributes().contains(this);
-		} else if (logger.isLoggable(Level.WARNING))
+		} else if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Impossible to determine if attribute is primary key because it has no entity");
+		}
 		return false;
 	}
 
 	public boolean getIsUsedForLocking() {
 		if (getEntity() != null) {
 			return getEntity().getAttributesUsedForLocking().contains(this);
-		} else if (logger.isLoggable(Level.WARNING))
+		} else if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Impossible to determine if attribute is used for locking because it has no entity");
+		}
 		return false;
 	}
 
@@ -238,16 +245,18 @@ public class EOAttribute extends EOProperty {
 		String prototype = (String) getOriginalMap().get(PROTOTYPE_NAME_KEY);
 		if (prototype != null) {
 			EOAttribute a = getEntity().getModel().getPrototypeNamed(prototype);
-			if (a != null)
+			if (a != null) {
 				this.prototype = a;
+			}
 		}
 	}
 
 	public void addToIncomingRelationships(EORelationship relationship) {
-		if (!incomingRelationships.contains(relationship))
+		if (!incomingRelationships.contains(relationship)) {
 			incomingRelationships.add(relationship);
-		else if (logger.isLoggable(Level.WARNING))
+		} else if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Attempt to add twice the same relationship to incoming relationships of entity " + getName());
+		}
 	}
 
 	public void removeFromIncomingRelationships(EORelationship relationship) {
@@ -255,10 +264,11 @@ public class EOAttribute extends EOProperty {
 	}
 
 	public void addToOutgoingRelationships(EORelationship relationship) {
-		if (!outgoingRelationships.contains(relationship))
+		if (!outgoingRelationships.contains(relationship)) {
 			outgoingRelationships.add(relationship);
-		else if (logger.isLoggable(Level.WARNING))
+		} else if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Attempt to add twice the same relationship to outgoing relationships of entity " + getName());
+		}
 	}
 
 	public void removeFromOutgoingRelationships(EORelationship relationship) {
@@ -271,42 +281,51 @@ public class EOAttribute extends EOProperty {
 
 	public Map<Object, Object> getMapRepresentation() {
 		Map<Object, Object> map = new HashMap<Object, Object>();
-		if (getName() != null)
+		if (getName() != null) {
 			map.put(NAME_KEY, getName());
-		else
+		} else {
 			map.remove(NAME_KEY);
-		if (getColumnName() != null)
+		}
+		if (getColumnName() != null) {
 			map.put(COLUMN_NAME_KEY, getColumnName());
-		else
+		} else {
 			map.remove(COLUMN_NAME_KEY);
-		if (getClassName() != null)
+		}
+		if (getClassName() != null) {
 			map.put(CLASS_NAME_KEY, getClassName());
-		else
+		} else {
 			map.remove(CLASS_NAME_KEY);
-		if (getValueType() != null)
+		}
+		if (getValueType() != null) {
 			map.put(VALUE_TYPE_KEY, getValueType());
-		else
+		} else {
 			map.remove(VALUE_TYPE_KEY);
-		if (getWidth() != 0)
+		}
+		if (getWidth() != 0) {
 			map.put(WIDTH_KEY, PListHelper.getObject(getWidth()));
-		else
+		} else {
 			map.remove(WIDTH_KEY);
-		if (getExternalType() != null)
+		}
+		if (getExternalType() != null) {
 			map.put(EXTERNAL_TYPE_KEY, getExternalType());
-		else
+		} else {
 			map.remove(EXTERNAL_TYPE_KEY);
-		if (!getAllowsNull())
+		}
+		if (!getAllowsNull()) {
 			map.put(ALLOWS_NULL_KEY, PListHelper.getObject(getAllowsNull()));
-		else
+		} else {
 			map.remove(ALLOWS_NULL_KEY);
-		if (getIsReadOnly())
+		}
+		if (getIsReadOnly()) {
 			map.put(IS_READ_ONLY_KEY, PListHelper.getObject(getIsReadOnly()));
-		else
+		} else {
 			map.remove(IS_READ_ONLY_KEY);
-		if (getPrototype() != null)
+		}
+		if (getPrototype() != null) {
 			map.put(PROTOTYPE_NAME_KEY, getPrototype().getName());
-		else
+		} else {
 			map.remove(PROTOTYPE_NAME_KEY);
+		}
 		return map;
 	}
 
@@ -315,42 +334,51 @@ public class EOAttribute extends EOProperty {
 	 */
 	public void synchronizeObjectWithOriginalMap() {
 		Map<Object, Object> map = getOriginalMap();
-		if (getName() != null)
+		if (getName() != null) {
 			map.put(NAME_KEY, getName());
-		else
+		} else {
 			map.remove(NAME_KEY);
-		if (getColumnName() != null)
+		}
+		if (getColumnName() != null) {
 			map.put(COLUMN_NAME_KEY, getColumnName());
-		else
+		} else {
 			map.remove(COLUMN_NAME_KEY);
-		if (getClassName() != null)
+		}
+		if (getClassName() != null) {
 			map.put(CLASS_NAME_KEY, getClassName());
-		else
+		} else {
 			map.remove(CLASS_NAME_KEY);
-		if (getValueType() != null)
+		}
+		if (getValueType() != null) {
 			map.put(VALUE_TYPE_KEY, getValueType());
-		else
+		} else {
 			map.remove(VALUE_TYPE_KEY);
-		if (getWidth() != 0)
+		}
+		if (getWidth() != 0) {
 			map.put(WIDTH_KEY, PListHelper.getObject(getWidth()));
-		else
+		} else {
 			map.remove(WIDTH_KEY);
-		if (getExternalType() != null)
+		}
+		if (getExternalType() != null) {
 			map.put(EXTERNAL_TYPE_KEY, getExternalType());
-		else
+		} else {
 			map.remove(EXTERNAL_TYPE_KEY);
-		if (!getAllowsNull())
+		}
+		if (!getAllowsNull()) {
 			map.put(ALLOWS_NULL_KEY, PListHelper.getObject(getAllowsNull()));
-		else
+		} else {
 			map.remove(ALLOWS_NULL_KEY);
-		if (getIsReadOnly())
+		}
+		if (getIsReadOnly()) {
 			map.put(IS_READ_ONLY_KEY, PListHelper.getObject(getIsReadOnly()));
-		else
+		} else {
 			map.remove(IS_READ_ONLY_KEY);
-		if (getPrototype() != null)
+		}
+		if (getPrototype() != null) {
 			map.put(PROTOTYPE_NAME_KEY, getPrototype().getName());
-		else
+		} else {
 			map.remove(PROTOTYPE_NAME_KEY);
+		}
 	}
 
 	/**
@@ -399,20 +427,27 @@ public class EOAttribute extends EOProperty {
 
 	private static String getJavaNameForNSClassName(String nsClassName) {
 		if (nsClassName.startsWith("NS")) {
-			if (nsClassName.equals("NSString"))
+			if (nsClassName.equals("NSString")) {
 				return "java.lang.String";
-			if (nsClassName.equals("NSNumber"))
+			}
+			if (nsClassName.equals("NSNumber")) {
 				return "java.lang.Number";
-			if (nsClassName.equals("NSDecimalNumber"))
+			}
+			if (nsClassName.equals("NSDecimalNumber")) {
 				return "java.math.BigDecimal";
-			if (nsClassName.equals("NSCalendarDate"))
+			}
+			if (nsClassName.equals("NSCalendarDate")) {
 				return "java.util.Date";
-			if (nsClassName.equals("NSGregorianDate"))
+			}
+			if (nsClassName.equals("NSGregorianDate")) {
 				return "java.util.Date";
-			if (nsClassName.equals("NSData"))
+			}
+			if (nsClassName.equals("NSData")) {
 				return "com.webobjects.foundation.NSData";
-		} else if (nsClassName.equals(""))
+			}
+		} else if (nsClassName.equals("")) {
 			return null;
+		}
 		return nsClassName;
 	}
 
@@ -428,13 +463,15 @@ public class EOAttribute extends EOProperty {
 	 * @param isPK
 	 */
 	public void setIsPrimaryKey(boolean isPK) {
-		if (getEntity() == null)
+		if (getEntity() == null) {
 			throw new IllegalStateException("Trying to set a attribute as primary key while the attribute has no entity");
+		}
 		if (getIsPrimaryKey() != isPK) {
-			if (isPK)
+			if (isPK) {
 				getEntity().getPrimaryKeyAttributes().add(this);
-			else
+			} else {
 				getEntity().getPrimaryKeyAttributes().remove(this);
+			}
 		}
 	}
 
@@ -442,13 +479,15 @@ public class EOAttribute extends EOProperty {
 	 * @param isUsedForLocking
 	 */
 	public void setIsUsedForLocking(boolean isUsedForLocking) {
-		if (getEntity() == null)
+		if (getEntity() == null) {
 			throw new IllegalStateException("Trying to set a attribute as an attribute used for locking while the attribute has no entity");
+		}
 		if (getIsUsedForLocking() != isUsedForLocking) {
-			if (isUsedForLocking)
+			if (isUsedForLocking) {
 				getEntity().getAttributesUsedForLocking().add(this);
-			else
+			} else {
 				getEntity().getAttributesUsedForLocking().remove(this);
+			}
 		}
 	}
 

@@ -87,8 +87,9 @@ public class AddRestrictionStatement extends AddStatement<RestrictionStatementPa
 	}
 
 	public ViewPointDataBinding getObject() {
-		if (object == null)
+		if (object == null) {
 			object = new ViewPointDataBinding(this, EditionActionBindingAttribute.object, getObjectBindingDefinition());
+		}
 		return object;
 	}
 
@@ -109,9 +110,10 @@ public class AddRestrictionStatement extends AddStatement<RestrictionStatementPa
 	}
 
 	public ViewPointDataBinding getRestrictionType() {
-		if (restrictionType == null)
+		if (restrictionType == null) {
 			restrictionType = new ViewPointDataBinding(this, EditionActionBindingAttribute.restrictionType,
 					getRestrictionTypeBindingDefinition());
+		}
 		return restrictionType;
 	}
 
@@ -124,8 +126,9 @@ public class AddRestrictionStatement extends AddStatement<RestrictionStatementPa
 
 	public RestrictionType getRestrictionType(EditionSchemeAction action) {
 		RestrictionType restrictionType = (RestrictionType) getRestrictionType().getBindingValue(action);
-		if (restrictionType == null)
+		if (restrictionType == null) {
 			restrictionType = RestrictionType.Some;
+		}
 		return restrictionType;
 	}
 
@@ -138,8 +141,9 @@ public class AddRestrictionStatement extends AddStatement<RestrictionStatementPa
 	}
 
 	public ViewPointDataBinding getCardinality() {
-		if (cardinality == null)
+		if (cardinality == null) {
 			cardinality = new ViewPointDataBinding(this, EditionActionBindingAttribute.cardinality, getCardinalityBindingDefinition());
+		}
 		return cardinality;
 	}
 

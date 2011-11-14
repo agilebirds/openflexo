@@ -32,8 +32,9 @@ public class InvalidFileException extends FlexoException {
 	public InvalidFileException(File aFile) {
 		super();
 		invalidFile = aFile;
-		if (invalidFile != null)
+		if (invalidFile != null) {
 			fileName = invalidFile.getAbsolutePath();
+		}
 	}
 
 	public InvalidFileException(String fileName) {

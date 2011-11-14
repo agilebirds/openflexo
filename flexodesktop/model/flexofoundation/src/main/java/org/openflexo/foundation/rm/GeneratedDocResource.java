@@ -55,8 +55,9 @@ public class GeneratedDocResource extends FlexoGeneratedOutputResource<Generated
 				try {
 					setResourceFile(f);
 				} catch (InvalidFileNameException e1) {
-					if (logger.isLoggable(Level.SEVERE))
+					if (logger.isLoggable(Level.SEVERE)) {
 						logger.severe("This should not happen.");
+					}
 					e1.printStackTrace();
 				}
 			}

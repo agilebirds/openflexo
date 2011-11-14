@@ -53,11 +53,11 @@ import org.openflexo.generator.file.AbstractCGFile;
 import org.openflexo.generator.rm.ComponentJavaFileResource;
 import org.openflexo.javaparser.FJPDMMapper;
 import org.openflexo.javaparser.FJPDMSet;
+import org.openflexo.javaparser.FJPDMSet.FJPPackageReference.FJPClassReference;
 import org.openflexo.javaparser.FJPJavaClass;
 import org.openflexo.javaparser.FJPJavaParseException;
 import org.openflexo.javaparser.FJPJavaSource;
 import org.openflexo.javaparser.FJPTypeResolver;
-import org.openflexo.javaparser.FJPDMSet.FJPPackageReference.FJPClassReference;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileUtils;
 

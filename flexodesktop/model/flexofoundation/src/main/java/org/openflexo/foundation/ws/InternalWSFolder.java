@@ -74,8 +74,9 @@ public class InternalWSFolder extends WSFolder {
 
 	@Override
 	public void delete() {
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("implements delete on InternalWSFolder");
+		}
 	}
 
 	/**

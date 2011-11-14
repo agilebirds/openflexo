@@ -68,9 +68,10 @@ public class MakeActivityGroupInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<MakeActivityGroup>() {
 			@Override
 			public boolean run(ActionEvent e, MakeActivityGroup action) {
-				if (getControllerActionInitializer().getWKFController().getSelectionManager() != null)
+				if (getControllerActionInitializer().getWKFController().getSelectionManager() != null) {
 					getControllerActionInitializer().getWKFController().getSelectionManager()
 							.setSelectedObject(action.getNewActivityGroup());
+				}
 				return true;
 			}
 		};

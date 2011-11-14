@@ -56,12 +56,14 @@ public abstract class StyleDocGenerator extends DGLatexGenerator<FlexoProject> {
 		if (res == null) {
 			res = GeneratedFileResourceFactory.createNewStyleLatexFileResource(repository, this,
 					getFileName().endsWith(getFileExtension()) ? getFileName() : getFileName() + getFileExtension());
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Created Style LATEX resource " + res.getName());
+			}
 		} else {
 			res.setGenerator(this);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Successfully retrieved Style LATEX resource " + res.getName());
+			}
 		}
 		res.registerObserverWhenRequired();
 		resources.add(res);
@@ -74,8 +76,9 @@ public abstract class StyleDocGenerator extends DGLatexGenerator<FlexoProject> {
 	 */
 	@Override
 	public void generate(boolean forceRegenerate) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Called StyleDocGenerator.generate(forceRegenerate)");
+		}
 		super.generate(forceRegenerate);
 	}
 

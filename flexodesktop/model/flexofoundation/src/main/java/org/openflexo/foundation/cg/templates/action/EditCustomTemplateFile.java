@@ -27,8 +27,8 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.templates.CGTemplateFile;
-import org.openflexo.foundation.cg.templates.CGTemplateObject;
 import org.openflexo.foundation.cg.templates.CGTemplateFile.TemplateFileContentEditor;
+import org.openflexo.foundation.cg.templates.CGTemplateObject;
 
 public class EditCustomTemplateFile extends FlexoAction<EditCustomTemplateFile, CGTemplateFile, CGTemplateObject> {
 

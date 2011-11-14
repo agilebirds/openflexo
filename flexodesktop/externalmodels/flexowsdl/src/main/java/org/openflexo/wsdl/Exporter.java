@@ -118,8 +118,9 @@ public class Exporter {
 	 */
 
 	public String export(BPELWriter writer, BPELExportedPartnerLink pro) throws Exception {
-		if (pro == null)
+		if (pro == null) {
 			return null;
+		}
 		try {
 
 			WSDLFactory wsdlFactory = WSDLFactory.newInstance();

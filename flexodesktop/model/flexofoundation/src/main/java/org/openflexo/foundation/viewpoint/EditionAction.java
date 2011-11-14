@@ -84,8 +84,9 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 
 	@Override
 	public ViewPoint getCalc() {
-		if (getScheme() != null)
+		if (getScheme() != null) {
 			return getScheme().getCalc();
+		}
 		return null;
 	}
 
@@ -98,20 +99,23 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 	}
 
 	public boolean evaluateCondition(EditionSchemeAction action) {
-		if (getConditional().isValid())
+		if (getConditional().isValid()) {
 			return (Boolean) getConditional().getBindingValue(action);
+		}
 		return true;
 	}
 
 	public EditionPattern getEditionPattern() {
-		if (getScheme() == null)
+		if (getScheme() == null) {
 			return null;
+		}
 		return getScheme().getEditionPattern();
 	}
 
 	public R getPatternRole() {
-		if (getEditionPattern() == null)
+		if (getEditionPattern() == null) {
 			return null;
+		}
 		return (R) getEditionPattern().getPatternRole(_getPatternRoleName());
 	}
 
@@ -508,8 +512,9 @@ public abstract class EditionAction<R extends PatternRole> extends ViewPointObje
 	}
 
 	public ViewPointDataBinding getConditional() {
-		if (conditional == null)
+		if (conditional == null) {
 			conditional = new ViewPointDataBinding(this, EditionActionBindingAttribute.conditional, getConditionalBindingDefinition());
+		}
 		return conditional;
 	}
 

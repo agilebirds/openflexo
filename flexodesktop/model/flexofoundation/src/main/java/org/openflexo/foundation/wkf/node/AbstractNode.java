@@ -90,17 +90,20 @@ public abstract class AbstractNode extends WKFNode implements InspectableObject,
 
 	public String getNiceName() {
 		String niceName = getName();
-		if (niceName != null && niceName.trim().length() > 0)
+		if (niceName != null && niceName.trim().length() > 0) {
 			return ToolBox.getJavaName(niceName);
+		}
 		return getNodeTypeName();
 	}
 
 	public String getNodeTypeName() {
 		String cls = getClass().getSimpleName();
-		if (cls.startsWith("Flexo"))
+		if (cls.startsWith("Flexo")) {
 			cls = cls.substring("Flexo".length());
-		if (cls.endsWith("Node"))
+		}
+		if (cls.endsWith("Node")) {
 			cls = cls.substring(0, cls.length() - "Node".length());
+		}
 		return cls;
 	}
 
@@ -190,8 +193,9 @@ public abstract class AbstractNode extends WKFNode implements InspectableObject,
 	public Vector<AbstractNode> getFromPostconditionnedNodes() {
 		Vector<AbstractNode> v = new Vector<AbstractNode>();
 		for (FlexoPostCondition<AbstractNode, AbstractNode> a : getIncomingPostConditions()) {
-			if (!v.contains(a))
+			if (!v.contains(a)) {
 				v.add(a.getStartNode());
+			}
 		}
 		return v;
 	}
@@ -254,8 +258,9 @@ public abstract class AbstractNode extends WKFNode implements InspectableObject,
 	public Vector<AbstractNode> getToPostconditionnedNodes() {
 		Vector<AbstractNode> v = new Vector<AbstractNode>();
 		for (FlexoPostCondition<AbstractNode, AbstractNode> a : getOutgoingPostConditions()) {
-			if (!v.contains(a))
+			if (!v.contains(a)) {
 				v.add(a.getEndNode());
+			}
 		}
 		return v;
 	}
@@ -301,8 +306,9 @@ public abstract class AbstractNode extends WKFNode implements InspectableObject,
 	public void setName(String aName) {
 		String oldValue = getName();
 		if ((oldValue == null) || (!oldValue.equals(aName))) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Name was: " + oldValue + " values now: " + aName);
+			}
 			setNodeName(aName);
 			setChanged();
 			notifyObservers(new NameChanged(oldValue, aName));
@@ -440,8 +446,9 @@ public abstract class AbstractNode extends WKFNode implements InspectableObject,
 						ValidationWarning<NodeCannotHaveMoreThanOneDefaultOutgoingTokenEdge, AbstractNode> warning = new ValidationWarning<NodeCannotHaveMoreThanOneDefaultOutgoingTokenEdge, AbstractNode>(
 								this, node, "node_($object.name)_has_more_than_one_default_outgoing_edge");
 						return warning;
-					} else
+					} else {
 						hasAlreadyOne = true;
+					}
 				}
 			}
 			return null;
@@ -492,12 +499,13 @@ public abstract class AbstractNode extends WKFNode implements InspectableObject,
 			}
 
 			for (FlexoPostCondition p : listOfAllPostToConsider) {
-				if (p.getIsDefaultFlow())
+				if (p.getIsDefaultFlow()) {
 					defaultCount++;
-				else if (p.getIsConditional())
+				} else if (p.getIsConditional()) {
 					conditionalCount++;
-				else
+				} else {
 					regular++;
+				}
 			}
 			if (defaultCount > 0 && (regular + conditionalCount) == 0) {
 				if (node instanceof OperatorNode && ((OperatorNode) node).isExclusiveGateway()) {
@@ -535,10 +543,11 @@ public abstract class AbstractNode extends WKFNode implements InspectableObject,
 			for (FlexoPostCondition p : node.getOutgoingPostConditions()) {
 				if (p instanceof TokenEdge) {
 					totalCount++;
-					if (p.getIsDefaultFlow())
+					if (p.getIsDefaultFlow()) {
 						defaultCount++;
-					else if (p.getIsConditional())
+					} else if (p.getIsConditional()) {
 						conditionalCount++;
+					}
 				}
 			}
 			if (defaultCount > 0 && totalCount != defaultCount + conditionalCount) {

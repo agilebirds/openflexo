@@ -88,12 +88,14 @@ public class FlexoIEImagePalette extends FlexoIEPalette<FlexoIEImagePalette.Flex
 
 		@Override
 		public File getScreenshotFile(FlexoCSS css) {
-			if (css == null /*|| css == FlexoCSS.BLUEWAVE*/)
+			if (css == null /*|| css == FlexoCSS.BLUEWAVE*/) {
 				css = FlexoCSS.CONTENTO;
-			if (screenshotName == null)
+			}
+			if (screenshotName == null) {
 				return super.getScreenshotFile(css);
-			else
+			} else {
 				return new File(IMAGES_DIRECTORY, css.getName() + "/" + css.getName() + screenshotName);
+			}
 		}
 	}
 

@@ -26,8 +26,8 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
+import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.ForegroundStyle;
@@ -173,26 +173,30 @@ public class PreConditionGR extends AbstractNodeGR<FlexoPreCondition> implements
 		FGEPoint defaultLocation = defaultAnchorPointArrivingFrom(defaultOrientation);
 		defaultX = defaultLocation.getX();
 		defaultY = defaultLocation.getY();
-		if (defaultX > 0)
+		if (defaultX > 0) {
 			setXNoNotification(defaultX);
-		if (defaultY > 0)
+		}
+		if (defaultY > 0) {
 			setYNoNotification(defaultY);
+		}
 		notifyObjectMoved();
 	}
 
 	// Override to implement defaut automatic layout
 	@Override
 	public double getDefaultX() {
-		if (defaultX < 0)
+		if (defaultX < 0) {
 			resetDefaultLocation();
+		}
 		return defaultX;
 	}
 
 	// Override to implement defaut automatic layout
 	@Override
 	public double getDefaultY() {
-		if (defaultY < 0)
+		if (defaultY < 0) {
 			resetDefaultLocation();
+		}
 		return defaultY;
 	}
 
@@ -231,14 +235,15 @@ public class PreConditionGR extends AbstractNodeGR<FlexoPreCondition> implements
 					.getAttachedNode());
 			if (parentGR != null) {
 				FGEPoint relativePoint;
-				if (orientation == SimplifiedCardinalDirection.NORTH)
+				if (orientation == SimplifiedCardinalDirection.NORTH) {
 					relativePoint = new FGEPoint(0.5, 0);
-				else if (orientation == SimplifiedCardinalDirection.SOUTH)
+				} else if (orientation == SimplifiedCardinalDirection.SOUTH) {
 					relativePoint = new FGEPoint(0.5, 1);
-				else if (orientation == SimplifiedCardinalDirection.EAST)
+				} else if (orientation == SimplifiedCardinalDirection.EAST) {
 					relativePoint = new FGEPoint(1, 0.5);
-				else
+				} else {
 					/*if (orientation == SimplifiedCardinalDirection.WEST)*/relativePoint = new FGEPoint(0, 0.5);
+				}
 				FGEPoint returned = new FGEPoint(parentGR.convertNormalizedPointToViewCoordinates(relativePoint, 1.0));
 				returned.x = returned.x - PRECONDITION_SIZE / 2;
 				returned.y = returned.y - PRECONDITION_SIZE / 2;
@@ -249,36 +254,40 @@ public class PreConditionGR extends AbstractNodeGR<FlexoPreCondition> implements
 					FGEPoint newPoint = new FGEPoint(returned);
 					lastIncrement += PRECONDITION_SIZE * 1.5;
 					if (increase) {
-						if (orientation == SimplifiedCardinalDirection.NORTH)
+						if (orientation == SimplifiedCardinalDirection.NORTH) {
 							newPoint.x += lastIncrement;
-						else if (orientation == SimplifiedCardinalDirection.SOUTH)
+						} else if (orientation == SimplifiedCardinalDirection.SOUTH) {
 							newPoint.x += lastIncrement;
-						else if (orientation == SimplifiedCardinalDirection.EAST)
+						} else if (orientation == SimplifiedCardinalDirection.EAST) {
 							newPoint.y += lastIncrement;
-						else
+						} else {
 							newPoint.y += lastIncrement;
+						}
 					} else {
-						if (orientation == SimplifiedCardinalDirection.NORTH)
+						if (orientation == SimplifiedCardinalDirection.NORTH) {
 							newPoint.x -= lastIncrement;
-						else if (orientation == SimplifiedCardinalDirection.SOUTH)
+						} else if (orientation == SimplifiedCardinalDirection.SOUTH) {
 							newPoint.x -= lastIncrement;
-						else if (orientation == SimplifiedCardinalDirection.EAST)
+						} else if (orientation == SimplifiedCardinalDirection.EAST) {
 							newPoint.y -= lastIncrement;
-						else
+						} else {
 							newPoint.y -= lastIncrement;
+						}
 					}
 
 					// Still within shape?
-					if (orientation == SimplifiedCardinalDirection.NORTH)
+					if (orientation == SimplifiedCardinalDirection.NORTH) {
 						canMove = newPoint.x > 0 && newPoint.x < parentGR.getWidth();
-					else if (orientation == SimplifiedCardinalDirection.SOUTH)
+					} else if (orientation == SimplifiedCardinalDirection.SOUTH) {
 						canMove = newPoint.x > 0 && newPoint.x < parentGR.getWidth();
-					else if (orientation == SimplifiedCardinalDirection.EAST)
+					} else if (orientation == SimplifiedCardinalDirection.EAST) {
 						canMove = newPoint.y > 0 && newPoint.y < parentGR.getHeight();
-					else
+					} else {
 						canMove = newPoint.y > 0 && newPoint.y < parentGR.getHeight();
-					if (canMove)
+					}
+					if (canMove) {
 						returned = newPoint;
+					}
 					increase = !increase;
 				}
 				return returned;

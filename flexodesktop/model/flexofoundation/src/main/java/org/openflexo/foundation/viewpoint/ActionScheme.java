@@ -56,8 +56,9 @@ public class ActionScheme extends EditionScheme {
 	}
 
 	public ViewPointDataBinding getConditional() {
-		if (conditional == null)
+		if (conditional == null) {
 			conditional = new ViewPointDataBinding(this, ActionSchemeBindingAttribute.conditional, getConditionalBindingDefinition());
+		}
 		return conditional;
 	}
 
@@ -69,8 +70,9 @@ public class ActionScheme extends EditionScheme {
 	}
 
 	public boolean evaluateCondition(EditionPatternReference editionPatternReference) {
-		if (getConditional().isValid())
+		if (getConditional().isValid()) {
 			return (Boolean) getConditional().getBindingValue(editionPatternReference);
+		}
 		return true;
 	}
 

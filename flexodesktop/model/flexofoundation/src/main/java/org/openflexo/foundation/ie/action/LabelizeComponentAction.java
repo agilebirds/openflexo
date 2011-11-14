@@ -80,9 +80,11 @@ public class LabelizeComponentAction extends FlexoAction<LabelizeComponentAction
 		Vector v = component.getAllEmbeddedIEObjects();
 		makeFlexoProgress(FlexoLocalization.localizedForKey("setting_label"), v.size());
 		for (Object o : v) {
-			if (o instanceof IEWidget)
-				if (((IEWidget) o).getLabel() == null || ((IEWidget) o).getLabel().length() == 0)
+			if (o instanceof IEWidget) {
+				if (((IEWidget) o).getLabel() == null || ((IEWidget) o).getLabel().length() == 0) {
 					((IEWidget) o).setLabel(((IEWidget) o).getCalculatedLabel());
+				}
+			}
 			setProgress(FlexoLocalization.localizedForKey("setting_label"));
 		}
 	}

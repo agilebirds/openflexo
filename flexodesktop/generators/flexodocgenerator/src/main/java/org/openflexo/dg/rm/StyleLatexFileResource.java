@@ -52,11 +52,13 @@ public class StyleLatexFileResource extends LatexFileResource<StyleDocGenerator>
 
 	@Override
 	public String getName() {
-		if (getCGFile() == null || getCGFile().getRepository() == null || getIdentifier() == null)
+		if (getCGFile() == null || getCGFile().getRepository() == null || getIdentifier() == null) {
 			return super.getName();
+		}
 		registerObserverWhenRequired();
-		if (super.getName() == null)
+		if (super.getName() == null) {
 			setName(nameForRepositoryAndIdentifier(getCGFile().getRepository(), getIdentifier()));
+		}
 		return nameForRepositoryAndIdentifier(getCGFile().getRepository(), getIdentifier());
 	}
 

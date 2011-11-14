@@ -31,14 +31,16 @@ public class JConsoleOutputStream extends OutputStream {
 
 	public JConsoleOutputStream(JConsole console, Color color) {
 		super();
-		if (console == null)
+		if (console == null) {
 			throw new IllegalArgumentException("console cannot be null.");
+		}
 		_console = console;
 		_buffer = new StringBuffer();
-		if (color == null)
+		if (color == null) {
 			_color = Color.BLACK;
-		else
+		} else {
 			_color = color;
+		}
 	}
 
 	private void resetBuffer() {
@@ -49,8 +51,9 @@ public class JConsoleOutputStream extends OutputStream {
 	public void write(int b) throws IOException {
 		if (b == Byte.valueOf(Character.LINE_SEPARATOR) || (char) b == '\n') {
 			String out = _buffer.toString().trim();
-			if (out.length() > 0)
+			if (out.length() > 0) {
 				_console.log(out + "\n", _color);
+			}
 			resetBuffer();
 		} else {
 			_buffer.append((char) b);

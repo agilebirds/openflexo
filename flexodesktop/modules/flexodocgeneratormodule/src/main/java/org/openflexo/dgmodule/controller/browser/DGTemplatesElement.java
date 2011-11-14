@@ -39,8 +39,9 @@ public class DGTemplatesElement extends BrowserElement {
 		addToChilds(getCGTemplates().getApplicationRepository());
 		for (Enumeration<CustomCGTemplateRepository> e = getCGTemplates().getCustomRepositories(); e.hasMoreElements();) {
 			CustomCGTemplateRepository rep = e.nextElement();
-			if (rep.getRepositoryType() == TemplateRepositoryType.Documentation)
+			if (rep.getRepositoryType() == TemplateRepositoryType.Documentation) {
 				addToChilds(rep);
+			}
 		}
 	}
 

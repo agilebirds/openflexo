@@ -136,20 +136,25 @@ public class HibernateEntity extends TechnologyModelObject implements FlexoObser
 	@Override
 	public void delete() {
 
-		for (HibernateRelationship hibernateRelationship : new Vector<HibernateRelationship>(getRelationships()))
+		for (HibernateRelationship hibernateRelationship : new Vector<HibernateRelationship>(getRelationships())) {
 			hibernateRelationship.delete();
+		}
 
-		for (HibernateAttribute hibernateAttribute : new Vector<HibernateAttribute>(getAttributes()))
+		for (HibernateAttribute hibernateAttribute : new Vector<HibernateAttribute>(getAttributes())) {
 			hibernateAttribute.delete();
+		}
 
-		for (HibernateEntity hibernateEntity : new Vector<HibernateEntity>(getChildren()))
+		for (HibernateEntity hibernateEntity : new Vector<HibernateEntity>(getChildren())) {
 			hibernateEntity.delete();
+		}
 
-		if (getFather() != null)
+		if (getFather() != null) {
 			getFather().removeFromChildren(this);
+		}
 
-		if (getHibernateModel() != null)
+		if (getHibernateModel() != null) {
 			getHibernateModel().removeFromEntities(this);
+		}
 
 		setChanged();
 		notifyObservers(new SGObjectDeletedModification());
@@ -165,8 +170,9 @@ public class HibernateEntity extends TechnologyModelObject implements FlexoObser
 	public Vector<HibernateEntity> getEntitiesAllowedAsParent() {
 		Vector<HibernateEntity> result = new Vector<HibernateEntity>();
 		for (HibernateEntity entity : getHibernateModel().getEntities()) {
-			if (entity != this && entity.getFather() == null)
+			if (entity != this && entity.getFather() == null) {
 				result.add(entity);
+			}
 		}
 
 		return result;
@@ -190,8 +196,9 @@ public class HibernateEntity extends TechnologyModelObject implements FlexoObser
 	 * Update the table name based on the entity name
 	 */
 	public void updateTableName() {
-		if (!isDeserializing && getHibernateModel() != null)
+		if (!isDeserializing && getHibernateModel() != null) {
 			setTableName(getHibernateModel().getHibernateImplementation().getDbObjectName(getName()));
+		}
 	}
 
 	/* ============== */
@@ -204,10 +211,12 @@ public class HibernateEntity extends TechnologyModelObject implements FlexoObser
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (dataModification instanceof NameChanged) {
-			if (observable instanceof HibernateAttribute)
+			if (observable instanceof HibernateAttribute) {
 				sortAttributes();
-			if (observable instanceof HibernateRelationship)
+			}
+			if (observable instanceof HibernateRelationship) {
 				sortRelationships();
+			}
 		}
 	}
 
@@ -279,13 +288,15 @@ public class HibernateEntity extends TechnologyModelObject implements FlexoObser
 		if (requireChange(this.attributes, attributes)) {
 			Vector<HibernateAttribute> oldValue = this.attributes;
 
-			for (HibernateAttribute attribute : oldValue)
+			for (HibernateAttribute attribute : oldValue) {
 				attribute.deleteObserver(this);
+			}
 
 			this.attributes = attributes;
 
-			for (HibernateAttribute attribute : attributes)
+			for (HibernateAttribute attribute : attributes) {
 				attribute.addObserver(this);
+			}
 
 			sortAttributes();
 			setChanged();
@@ -325,13 +336,15 @@ public class HibernateEntity extends TechnologyModelObject implements FlexoObser
 		if (requireChange(this.relationships, relationships)) {
 			Vector<HibernateRelationship> oldValue = this.relationships;
 
-			for (HibernateRelationship relationship : oldValue)
+			for (HibernateRelationship relationship : oldValue) {
 				relationship.deleteObserver(this);
+			}
 
 			this.relationships = relationships;
 
-			for (HibernateRelationship relationship : relationships)
+			for (HibernateRelationship relationship : relationships) {
 				relationship.addObserver(this);
+			}
 
 			sortRelationships();
 			setChanged();

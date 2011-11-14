@@ -43,20 +43,23 @@ public class WRLocator {
 
 		// GPO: Gros hack bien pourri pour retrouver les images contento
 		// TODO: create and copy in Flexo's resources icons for NewContento and BlueWave
-		if (css.equals("BlueWave") || css.equals("NewContento"))
+		if (css.equals("BlueWave") || css.equals("NewContento")) {
 			css = "Contento";
+		}
 		if (imageName.indexOf("/") > -1) {
 			answer = new File(projectDirectory, FileCst.IMPORTED_IMAGE_DIR_NAME + "/" + imageName);
 		} else if (imageName.startsWith("_")) {
 			answer = new File(imageDir, css + "/" + css + imageName);
 		} else {
 			answer = new File(imageDir, imageName);
-			if (!answer.exists())
+			if (!answer.exists()) {
 				answer = new File(projectDirectory, FileCst.IMPORTED_IMAGE_DIR_NAME + "/" + imageName);
+			}
 		}
 		if (!answer.exists()) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Couldn't find web resource with image name:" + imageName + " at path " + answer.getAbsolutePath());
+			}
 			return null;
 		}
 		return answer;
@@ -64,8 +67,9 @@ public class WRLocator {
 
 	private static File styledImageDir(String css) {
 		File reply = new File(imageDir, css);
-		if (!reply.exists())
+		if (!reply.exists()) {
 			reply = new File(imageDir, "Contento");
+		}
 		return reply;
 	}
 
@@ -83,8 +87,9 @@ public class WRLocator {
 	// }
 
 	public static File[] listBigButtons(String css) {
-		if (css == null)
+		if (css == null) {
 			css = FileCst.CONTENTO_CSS_DIR_NAME;
+		}
 		FileFilter bigButtonFilter = new FileFilter() {
 			@Override
 			public boolean accept(File aFile) {
@@ -96,8 +101,9 @@ public class WRLocator {
 	}
 
 	public static File[] listSmallButtons(String css) {
-		if (css == null)
+		if (css == null) {
 			css = FileCst.CONTENTO_CSS_DIR_NAME;
+		}
 		FileFilter styledIconFilter = new FileFilter() {
 			@Override
 			public boolean accept(File aFile) {

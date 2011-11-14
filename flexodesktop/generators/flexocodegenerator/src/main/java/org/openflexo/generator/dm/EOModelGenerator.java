@@ -119,8 +119,9 @@ public class EOModelGenerator extends MetaGenerator<FlexoModelObject, CGReposito
 	public void generate(boolean forceRegenerate) throws GenerationException {
 		startGeneration();
 		for (DMEOEntity entity : getEOModel().getEntities()) {
-			if (entity.getClassProperties().size() == 0)
+			if (entity.getClassProperties().size() == 0) {
 				continue;
+			}
 			getGenerator(entity).generate(forceRegenerate);
 		}
 		for (DMEOEntity entity : getEOModel().getEntities()) {

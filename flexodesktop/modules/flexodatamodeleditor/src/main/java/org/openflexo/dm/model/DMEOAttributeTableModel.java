@@ -32,13 +32,12 @@ import org.openflexo.components.tabular.model.EditableStringColumn;
 import org.openflexo.components.tabular.model.IconColumn;
 import org.openflexo.components.tabular.model.ToggleIconColumn;
 import org.openflexo.dm.view.controller.DMController;
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.ReservedKeyword;
-
 import org.openflexo.foundation.dm.eo.DMEOAttribute;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.dm.eo.DMEOPrototype;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.ReservedKeyword;
 
 /**
  * Please comment this class
@@ -173,17 +172,22 @@ public class DMEOAttributeTableModel extends AbstractModel<DMEOEntity, DMEOAttri
 			@Override
 			public void setValue(DMEOAttribute attribute, String aValue) {
 				try {
-					if (ReservedKeyword.contains(aValue))
+					if (ReservedKeyword.contains(aValue)) {
 						throw new InvalidNameException(aValue + " is a reserved keyword.");
+					}
 					attribute.setName(aValue);
 				} catch (IllegalArgumentException e) {
-					if (!DMEOAttributeTableModel.this.controller.handleException(attribute, "name", aValue, e))
-						if (logger.isLoggable(Level.WARNING))
+					if (!DMEOAttributeTableModel.this.controller.handleException(attribute, "name", aValue, e)) {
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("IllegalArgumentException was not handled by controller");
+						}
+					}
 				} catch (InvalidNameException e) {
-					if (!DMEOAttributeTableModel.this.controller.handleException(attribute, "name", aValue, e))
-						if (logger.isLoggable(Level.WARNING))
+					if (!DMEOAttributeTableModel.this.controller.handleException(attribute, "name", aValue, e)) {
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("IllegalArgumentException was not handled by controller");
+						}
+					}
 				}
 			}
 		});
@@ -201,21 +205,24 @@ public class DMEOAttributeTableModel extends AbstractModel<DMEOEntity, DMEOAttri
 		addToColumns(new DropDownColumn<DMEOAttribute, DMEOPrototype>("prototype", 150) {
 			@Override
 			public DMEOPrototype getValue(DMEOAttribute attribute) {
-				if (attribute != null)
+				if (attribute != null) {
 					return attribute.getPrototype();
+				}
 				return null;
 			}
 
 			@Override
 			public void setValue(DMEOAttribute attribute, DMEOPrototype aValue) {
-				if (attribute != null)
+				if (attribute != null) {
 					attribute.setPrototype(aValue);
+				}
 			}
 
 			@Override
 			protected String renderValue(DMEOPrototype value) {
-				if (value != null)
+				if (value != null) {
 					return value.getName();
+				}
 				return "";
 			}
 

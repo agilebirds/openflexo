@@ -104,10 +104,11 @@ public class IETabContainerWidgetView extends IEWidgetView<IESequenceTab> {
 
 	private void deleteObserversOnModel(ITabWidget w) {
 		w.deleteObserver(this);
-		if (w instanceof IESequence)
+		if (w instanceof IESequence) {
 			for (ITabWidget tab : ((IESequence<ITabWidget>) w).getInnerWidgets()) {
 				deleteObserversOnModel(tab);
 			}
+		}
 	}
 
 	public IESequenceTab getTabContainerWidget() {
@@ -141,15 +142,17 @@ public class IETabContainerWidgetView extends IEWidgetView<IESequenceTab> {
 			updateTabReodering();
 		} else if (modif instanceof TabRemoved) {
 			IETabWidgetView view = (IETabWidgetView) _dropTabZone.findViewForModel((IETabWidget) modif.oldValue());
-			if (view == null)
+			if (view == null) {
 				return; // In case of double notification
+			}
 			_dropTabZone.remove(view);
 			((IETabWidget) modif.oldValue()).deleteObserver(this);
 			view.delete();
 		} else if (modif instanceof TabSelectionChanged) {
 			Component c = findTabForModel((IETabWidget) modif.newValue());
-			if (c != null)
+			if (c != null) {
 				_dropTabZone.setSelectedComponent(c);
+			}
 		} else if (modif instanceof SubsequenceInserted) {
 			((IESequence) ((SubsequenceInserted) modif).newValue()).addObserver(this);
 			updateTabInsertion((ITabWidget) ((SubsequenceInserted) modif).newValue());
@@ -158,16 +161,18 @@ public class IETabContainerWidgetView extends IEWidgetView<IESequenceTab> {
 			_dropTabZone.updateConditionalIcons();
 		} else if (modif instanceof OperatorChanged) {
 			_dropTabZone.updateConditionalIcons();
-		} else
+		} else {
 			super.update(arg0, modif);
+		}
 	}
 
 	private Component findTabForModel(IETabWidget widgetModel) {
 		for (int i = 0; i < _dropTabZone.getComponentCount(); i++) {
 			Component c = _dropTabZone.getComponent(i);
 			if (c instanceof IETabWidgetView) {
-				if (((IETabWidgetView) c).getModel().equals(widgetModel))
+				if (((IETabWidgetView) c).getModel().equals(widgetModel)) {
 					return c;
+				}
 			}
 		}
 		return null;
@@ -176,10 +181,11 @@ public class IETabContainerWidgetView extends IEWidgetView<IESequenceTab> {
 	private void updateTabInsertion(ITabWidget newTab) {
 		if (newTab instanceof IETabWidget) {
 			int i = 0;
-			if (((IESequenceTab) ((IETabWidget) newTab).getParent()).isSubsequence())
+			if (((IESequenceTab) ((IETabWidget) newTab).getParent()).isSubsequence()) {
 				i = ((IESequenceTab) ((IETabWidget) newTab).getParent()).getIndex();
-			else
+			} else {
 				i = ((IETabWidget) newTab).getIndex();
+			}
 			_dropTabZone.updateTabInsertion(((IETabWidget) newTab), i);
 		} else if (newTab instanceof IESequenceTab) {
 			Enumeration<ITabWidget> en = ((IESequenceTab) newTab).elements();
@@ -198,8 +204,9 @@ public class IETabContainerWidgetView extends IEWidgetView<IESequenceTab> {
 	public Dimension getPreferredSize() {
 		if (getHoldsNextComputedPreferredSize()) {
 			Dimension storedSize = storedPrefSize();
-			if (storedSize != null)
+			if (storedSize != null) {
 				return storedSize;
+			}
 		}
 		IESequenceWidgetWidgetView parentSequenceView = null;
 		if (getParent() instanceof IESequenceWidgetWidgetView) {
@@ -208,11 +215,13 @@ public class IETabContainerWidgetView extends IEWidgetView<IESequenceTab> {
 		Dimension d = super.getPreferredSize();
 		if (parentSequenceView != null) {
 			d.width = parentSequenceView.getAvailableWidth();
-			if (d.height < 20)
+			if (d.height < 20) {
 				d.height = 20;
+			}
 		}
-		if (getHoldsNextComputedPreferredSize())
+		if (getHoldsNextComputedPreferredSize()) {
 			storePrefSize(d);
+		}
 		return d;
 	}
 

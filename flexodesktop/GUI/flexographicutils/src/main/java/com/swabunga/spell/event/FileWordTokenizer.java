@@ -63,6 +63,7 @@ public class FileWordTokenizer extends AbstractWordTokenizer {
 	 * @throws WordNotFoundException
 	 *             current word not yet set.
 	 */
+	@Override
 	public void replaceWord(String s) {
 	}
 

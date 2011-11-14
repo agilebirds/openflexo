@@ -79,8 +79,9 @@ public class IEImagePalettePanel extends IEPalettePanel implements FlexoObserver
 								while ((line = br.readLine()) != null) {
 									try {
 										// kde seems to append a 0 char to the end of the reader
-										if (ZERO_CHAR_STRING.equals(line))
+										if (ZERO_CHAR_STRING.equals(line)) {
 											continue;
+										}
 										File file = new File(new URI(line));
 										importImageFile(sb, file);
 									} catch (Exception e) {
@@ -91,8 +92,9 @@ public class IEImagePalettePanel extends IEPalettePanel implements FlexoObserver
 						}
 					}
 					dtde.getDropTargetContext().dropComplete(true);
-					if (sb.length() > 0)
+					if (sb.length() > 0) {
 						FlexoController.notify(sb.toString());
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

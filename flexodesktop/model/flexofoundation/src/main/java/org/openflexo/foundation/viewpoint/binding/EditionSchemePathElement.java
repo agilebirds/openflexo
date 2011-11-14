@@ -45,8 +45,9 @@ public class EditionSchemePathElement<E extends Bindable> implements BindingVari
 
 	@Override
 	public Class<E> getDeclaringClass() {
-		if (container != null)
+		if (container != null) {
 			return (Class<E>) container.getClass();
+		}
 		return null;
 	}
 

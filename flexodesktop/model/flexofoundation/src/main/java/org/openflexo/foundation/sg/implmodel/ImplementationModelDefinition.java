@@ -25,10 +25,6 @@ import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
 
-import org.openflexo.toolbox.FileUtils;
-import org.openflexo.toolbox.ReservedKeyword;
-import org.openflexo.xmlcode.XMLMapping;
-
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ie.IERegExp;
@@ -45,6 +41,9 @@ import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.xml.GeneratedSourcesBuilder;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.toolbox.FileUtils;
+import org.openflexo.toolbox.ReservedKeyword;
+import org.openflexo.xmlcode.XMLMapping;
 
 public class ImplementationModelDefinition extends FlexoModelObject {
 
@@ -88,19 +87,23 @@ public class ImplementationModelDefinition extends FlexoModelObject {
 
 	private void setImplementationModelName(String name) throws DuplicateResourceException, InvalidNameException {
 		if ((_name != null) && (!_name.equals(name)) && (name != null) && !isDeserializing()) {
-			if (!name.matches(IERegExp.JAVA_CLASS_NAME_REGEXP))
+			if (!name.matches(IERegExp.JAVA_CLASS_NAME_REGEXP)) {
 				throw new InvalidNameException();
+			}
 
-			if (ReservedKeyword.contains(name))
+			if (ReservedKeyword.contains(name)) {
 				throw new InvalidNameException();
+			}
 			if (getProject() != null) {
 				ImplementationModelDefinition cd = _generatedSources.getImplementationModelDefinitionNamed(name);
-				if (cd != null && cd != this)
+				if (cd != null && cd != this) {
 					throw new DuplicateResourceException(getImplementationModelResource(false));
+				}
 				ImplementationModelResource resource = getImplementationModelResource();
 				if (resource != null) {
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Renaming implementation model resource !");
+					}
 					try {
 						getProject().renameResource(resource, name);
 					} catch (DuplicateResourceException e1) {
@@ -125,8 +128,9 @@ public class ImplementationModelDefinition extends FlexoModelObject {
 		if (getProject() != null) {
 			ImplementationModelResource returned = getProject().getImplementationModelResource(getName());
 			if (returned == null && createIfNotExists) {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Creating new implementation model resource !");
+				}
 				GeneratedSourcesResource gsRes = getProject().getGeneratedSourcesResource();
 				File implModelFile = new File(ProjectRestructuration.getExpectedImplementationModelDirectory(getProject()
 						.getProjectDirectory(), getName()), getName() + ".im");
@@ -153,14 +157,16 @@ public class ImplementationModelDefinition extends FlexoModelObject {
 						try {
 							implModelRes = new ImplementationModelResource(getProject(), getName(), gsRes, resourceImplModelFile);
 						} catch (InvalidFileNameException e) {
-							if (logger.isLoggable(Level.SEVERE))
+							if (logger.isLoggable(Level.SEVERE)) {
 								logger.severe("This should really not happen.");
+							}
 							return null;
 						}
 					}
 				}
-				if (implModelRes == null)
+				if (implModelRes == null) {
 					return null;
+				}
 				implModelRes.setResourceData(createNewImplementationModel());
 
 				try {
@@ -168,19 +174,22 @@ public class ImplementationModelDefinition extends FlexoModelObject {
 					getProject().registerResource(implModelRes);
 				} catch (DuplicateResourceException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 					return null;
 				}
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Registered new implementation model " + getName() + " file: " + implModelFile);
+				}
 				returned = implModelRes;
 			}
 			return returned;
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not access to project !");
+			}
 		}
 		return null;
 	}

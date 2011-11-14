@@ -86,17 +86,19 @@ public class PetalTree extends JTree {
 		public java.awt.Component getTreeCellRendererComponent(JTree tree, java.lang.Object value, boolean sel, boolean expanded,
 				boolean leaf, int row, boolean hasFocus) {
 
-			if (value instanceof PetalFile)
+			if (value instanceof PetalFile) {
 				value = "Root";
-			else if (value instanceof PetalObject) {
+			} else if (value instanceof PetalObject) {
 				PetalObject obj = (PetalObject) value;
 				StringBuffer buf = new StringBuffer(obj.getName());
 
-				for (Iterator i = obj.getParameterList().iterator(); i.hasNext();)
+				for (Iterator i = obj.getParameterList().iterator(); i.hasNext();) {
 					buf.append(" \"" + i.next() + "\"");
+				}
 
-				if (obj instanceof Tagged)
+				if (obj instanceof Tagged) {
 					buf.append(" " + ((Tagged) obj).getTag());
+				}
 
 				value = buf;
 			} else if (value instanceof List) {
@@ -112,10 +114,11 @@ public class PetalTree extends JTree {
 			if (leaf) {
 				setIcon(LEAF_ICON);
 			} else {
-				if (expanded)
+				if (expanded) {
 					setIcon(OPENED_ICON);
-				else
+				} else {
 					setIcon(CLOSED_ICON);
+				}
 			}
 
 			return this;
@@ -136,8 +139,9 @@ public class PetalTree extends JTree {
 				if (path != null) {
 					PetalNode parent = (PetalNode) path.getLastPathComponent();
 
-					if (parent instanceof PetalObject)
+					if (parent instanceof PetalObject) {
 						return ((PetalObject) parent).getPropertyName(node);
+					}
 				}
 			}
 		}

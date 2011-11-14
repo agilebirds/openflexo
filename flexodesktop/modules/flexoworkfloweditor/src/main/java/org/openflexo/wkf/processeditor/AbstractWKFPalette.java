@@ -72,8 +72,9 @@ public abstract class AbstractWKFPalette extends DrawingPalette {
 
 		@Override
 		public boolean acceptDragging(GraphicalRepresentation gr) {
-			if (gr.getDrawable() instanceof WKFObject)
+			if (gr.getDrawable() instanceof WKFObject) {
 				return containerValidity.isContainerValid((WKFObject) gr.getDrawable());
+			}
 			return false;
 		}
 
@@ -114,18 +115,24 @@ public abstract class AbstractWKFPalette extends DrawingPalette {
 				((EventNode) object).setBoundaryOf(null);
 				return action.hasActionExecutionSucceeded();
 			} else {
-				if (gr.getDrawable() instanceof FlexoProcess)
+				if (gr.getDrawable() instanceof FlexoProcess) {
 					container = ((FlexoProcess) gr.getDrawable()).getActivityPetriGraph();
-				if (gr.getDrawable() instanceof AbstractActivityNode)
+				}
+				if (gr.getDrawable() instanceof AbstractActivityNode) {
 					container = ((AbstractActivityNode) gr.getDrawable()).getOperationPetriGraph();
-				if (gr.getDrawable() instanceof OperationNode)
+				}
+				if (gr.getDrawable() instanceof OperationNode) {
 					container = ((OperationNode) gr.getDrawable()).getActionPetriGraph();
-				if (gr.getDrawable() instanceof SelfExecutableNode)
+				}
+				if (gr.getDrawable() instanceof SelfExecutableNode) {
 					container = ((SelfExecutableNode) gr.getDrawable()).getExecutionPetriGraph();
-				if (gr.getDrawable() instanceof FlexoPetriGraph)
+				}
+				if (gr.getDrawable() instanceof FlexoPetriGraph) {
 					container = (FlexoPetriGraph) gr.getDrawable();
-				if (gr.getDrawable() instanceof ActivityGroup)
+				}
+				if (gr.getDrawable() instanceof ActivityGroup) {
 					container = ((ActivityGroup) gr.getDrawable()).getParentPetriGraph();
+				}
 				if (gr.getDrawable() instanceof WKFArtefact) {
 					container = ((WKFArtefact) gr.getDrawable()).getParentPetriGraph();
 					dropLocation.x += ((ShapeGraphicalRepresentation<?>) gr).getX();
@@ -136,8 +143,9 @@ public abstract class AbstractWKFPalette extends DrawingPalette {
 					return false;
 				}
 				ActivityGroup group = null;
-				if (gr.getDrawable() instanceof ActivityGroup)
+				if (gr.getDrawable() instanceof ActivityGroup) {
 					group = (ActivityGroup) gr.getDrawable();
+				}
 				DropWKFElement action = createAndExecuteDropElementAction(dropLocation, container, group, true);
 				return action.hasActionExecutionSucceeded();
 			}
@@ -174,11 +182,12 @@ public abstract class AbstractWKFPalette extends DrawingPalette {
 		PaletteElementGraphicalRepresentation gr = new PaletteElementGraphicalRepresentation(graphicalRepresentation, null,
 				getPaletteDrawing());
 
-		if (object.getShortHelpText() != null)
+		if (object.getShortHelpText() != null) {
 			gr.setToolTipText(object.getShortHelpText());
-		else {
-			if (logger.isLoggable(Level.FINE))
+		} else {
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("No help text defined for palette element: " + gr);
+			}
 		}
 
 		WKFPaletteElement returned = new WKFPaletteElement(gr, object, containerValidity);

@@ -91,22 +91,25 @@ public class ImportProcessesAction extends FlexoAction<ImportProcessesAction, Fl
 		FlexoWorkflow lib = getEditor().getProject().getFlexoWorkflow();
 		importReport = new ProcessImportReport();
 		for (PPMProcess p : getProcessesToImport()) {
-			if (!isValid(p) || p.getParentProcess() != null)
+			if (!isValid(p) || p.getParentProcess() != null) {
 				importReport.addToInvalidProcesses(p);
-			else {
+			} else {
 				try {
 					FlexoProcess fip = lib.importProcess(p);
 					importReport.addToProperlyImportedProcesses(p, fip);
 				} catch (ProcessAlreadyImportedException e) {
 					importReport.addToAlreadyImportedProcesses(p);
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.log(Level.FINE, "Process " + p.getName() + " was already imported", e);
+					}
 				} catch (InvalidParentProcessException e) {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("This should not happen for imported processes!");
+					}
 				} catch (InvalidProcessReferencesException e) {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("This case is not handled yet for imported processes!");
+					}
 				}
 			}
 		}
@@ -179,16 +182,18 @@ public class ImportProcessesAction extends FlexoAction<ImportProcessesAction, Fl
 			// 3. Already imported
 			i = getAlreadyImportedProcesses().iterator();
 			append(sb, i, FlexoLocalization.localizedForKey("the_following_processes_were_already_imported"));
-			if (sb.length() == 0)
+			if (sb.length() == 0) {
 				return FlexoLocalization.localizedForKey("nothing_has_been_imported");
-			else
+			} else {
 				sb.append("</html>");
+			}
 			return sb.toString();
 		}
 
 		private void append(StringBuilder sb, Iterator<PPMProcess> i, String title) {
-			if (sb.length() == 0)
+			if (sb.length() == 0) {
 				sb.append("<html>");
+			}
 			boolean needsClosingUl = false;
 			if (i.hasNext()) {
 				sb.append(title).append(':').append("<ul>");

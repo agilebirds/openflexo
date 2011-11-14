@@ -49,14 +49,16 @@ public class SWLLayoutManager extends WKFLayoutManager {
 	@Override
 	public void recomputeProcessStructure(FlexoProgress progress) {
 		super.recomputeProcessStructure(progress);
-		if (progress != null)
+		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("finding_isolated_nodes"));
+		}
 		isolatedNodePath = new Hashtable<Role, AutoLayoutNodePath>();
 		for (AutoLayoutNode n : getIsolatedNodes()) {
 			Role role = bestRepresentationRole(n.node);
 			AutoLayoutNodePath path = isolatedNodePath.get(role);
-			if (path == null)
+			if (path == null) {
 				isolatedNodePath.put(role, path = new AutoLayoutNodePath());
+			}
 			path.add(n);
 		}
 	}
@@ -72,8 +74,9 @@ public class SWLLayoutManager extends WKFLayoutManager {
 					((OperatorNode) node).setRole(role);
 				}
 			}
-			if (role == null)
+			if (role == null) {
 				return node.getProcess().getWorkflow().getRoleList().getDefaultRole();
+			}
 		}
 		return role;
 	}
@@ -126,37 +129,45 @@ public class SWLLayoutManager extends WKFLayoutManager {
 	@Override
 	public void layoutProcess(FlexoProgress progress) {
 		recomputeProcessStructure(progress);
-		if (getMainPath() == null)
+		if (getMainPath() == null) {
 			return;
+		}
 		generalLayout = new Hashtable<Role, SwimmingPool>();
-		if (progress != null)
+		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("computing_layout"));
+		}
 		layoutPath(getMainPath(), progress);
-		for (AutoLayoutNodePath secondaryPath : getSecondaryPaths())
+		for (AutoLayoutNodePath secondaryPath : getSecondaryPaths()) {
 			layoutPath(secondaryPath, progress);
+		}
 		for (Role r : isolatedNodePath.keySet()) {
 			layoutPath(isolatedNodePath.get(r), progress);
 		}
 		logger.info("Layout has been computed, apply it");
-		if (progress != null)
+		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("applying_layout"));
-		if (progress != null)
+		}
+		if (progress != null) {
 			progress.resetSecondaryProgress(generalLayout.size() + nodeMap.size());
+		}
 		_representation.setSWLWidth(maxWidth + 3 * MARGIN);
 		for (Role r : generalLayout.keySet()) {
-			if (progress != null)
+			if (progress != null) {
 				progress.setSecondaryProgress(FlexoLocalization.localizedForKey("role") + " " + r.getName());
+			}
 			SwimmingPool pool = generalLayout.get(r);
 			_representation.setSwimmingLaneNb(pool.lanes.size(), r);
 			for (SwimmingLane lane : pool.lanes.values()) {
-				for (AutoLayoutNode node : lane.nodes)
+				for (AutoLayoutNode node : lane.nodes) {
 					node.proposedLocation.y = lane.index * pool.maxLaneHeight;
+				}
 			}
 			_representation.setSwimmingLaneHeight((int) pool.maxLaneHeight, r);
 		}
 		for (AutoLayoutNode n : nodeMap.values()) {
-			if (progress != null)
+			if (progress != null) {
 				progress.setSecondaryProgress(FlexoLocalization.localizedForKey("node") + " " + n.node.getName());
+			}
 			n.node.setX(n.proposedLocation.x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 			n.node.setY(n.proposedLocation.y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		}
@@ -194,11 +205,13 @@ public class SWLLayoutManager extends WKFLayoutManager {
 				x = MARGIN;
 			}
 		}
-		if (progress != null)
+		if (progress != null) {
 			progress.resetSecondaryProgress(path.size());
+		}
 		for (AutoLayoutNode n : path) {
-			if (progress != null)
+			if (progress != null) {
 				progress.setSecondaryProgress(FlexoLocalization.localizedForKey("laying_out") + " " + n.node.getName());
+			}
 			if (!isMainPath) {
 				if (path.startPath != null && n == path.firstElement()) {
 					// In this case, this is a secondary path attached to an other path
@@ -247,8 +260,9 @@ public class SWLLayoutManager extends WKFLayoutManager {
 			previousLane = lane;
 			previousNode = n.node;
 		}
-		if (x + previousNode.getWidth(SWLEditorConstants.SWIMMING_LANE_EDITOR) + MARGIN > maxWidth)
+		if (x + previousNode.getWidth(SWLEditorConstants.SWIMMING_LANE_EDITOR) + MARGIN > maxWidth) {
 			maxWidth = x + previousNode.getWidth(SWLEditorConstants.SWIMMING_LANE_EDITOR) + MARGIN;
+		}
 	}
 
 	class SwimmingPool {

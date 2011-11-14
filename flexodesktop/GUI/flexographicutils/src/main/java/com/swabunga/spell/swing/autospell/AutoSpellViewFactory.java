@@ -46,6 +46,7 @@ public class AutoSpellViewFactory implements ViewFactory {
 	/* (non-Javadoc)
 	 * @see javax.swing.text.ViewFactory#create(javax.swing.text.Element)
 	 */
+	@Override
 	public View create(Element arg0) {
 		View view = viewFactory.create(arg0);
 		return new AutoSpellView(view);

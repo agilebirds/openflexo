@@ -63,10 +63,12 @@ public class MonitoringComponentDefinition extends PartialComponentDefinition im
 	}
 
 	public FlexoModelObjectReference<FlexoProcess> getProcessReference() {
-		if (getProcess() != null)
+		if (getProcess() != null) {
 			return processReference = new FlexoModelObjectReference<FlexoProcess>(getProject(), getProcess());
-		if (logger.isLoggable(Level.SEVERE))
+		}
+		if (logger.isLoggable(Level.SEVERE)) {
 			logger.severe("MonitoringComponent has no process!");
+		}
 		return processReference;
 	}
 
@@ -77,8 +79,9 @@ public class MonitoringComponentDefinition extends PartialComponentDefinition im
 	public FlexoProcess getProcess() {
 		if (_process == null && processReference != null) {
 			_process = processReference.getObject(true);
-			if (_process != null)
+			if (_process != null) {
 				_process.addObserver(this);
+			}
 		}
 		return _process;
 	}
@@ -98,8 +101,9 @@ public class MonitoringComponentDefinition extends PartialComponentDefinition im
 		if (getProject() != null && createIfNotExists) {
 			FlexoComponentResource returned = getProject().getFlexoMonitoringScreenResource(getName());
 			if (returned == null) {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Creating new monitoring component resource !");
+				}
 				// FlexoProcessResource processRes =
 				// getProject().getFlexoProcessResource(getProcess().getName());
 				File componentFile = new File(ProjectRestructuration.getExpectedDirectoryForComponent(getProject().getProjectDirectory(),
@@ -132,33 +136,38 @@ public class MonitoringComponentDefinition extends PartialComponentDefinition im
 							compRes = new FlexoMonitoringScreenResource(getProject(), _componentName, getProject()
 									.getFlexoComponentLibraryResource(), resourceComponentFile);
 						} catch (InvalidFileNameException e) {
-							if (logger.isLoggable(Level.SEVERE))
+							if (logger.isLoggable(Level.SEVERE)) {
 								logger.severe("This should really not happen.");
+							}
 							return null;
 						}
 					}
 				}
-				if (compRes == null)
+				if (compRes == null) {
 					return null;
+				}
 				compRes.setResourceData(createNewComponent());
 				try {
 					compRes.getResourceData().setFlexoResource(compRes);
 					getProject().registerResource(compRes);
 				} catch (DuplicateResourceException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 					return null;
 				}
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Registered component " + _componentName + " file: " + componentFile);
+				}
 				returned = compRes;
 			}
 			return returned;
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("getProject()==null for a ScreenComponentDefinition !");
+			}
 		}
 		return null;
 	}
@@ -182,8 +191,9 @@ public class MonitoringComponentDefinition extends PartialComponentDefinition im
 	@Override
 	public void update(FlexoObservable o, DataModification arg) {
 		if (o == _process && arg instanceof ObjectDeleted) {
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Monitoring screen '" + getName() + "' received delete notification from process " + o);
+			}
 			delete();
 		}
 	}

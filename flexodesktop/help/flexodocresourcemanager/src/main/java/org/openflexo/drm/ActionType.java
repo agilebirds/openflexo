@@ -19,12 +19,11 @@
  */
 package org.openflexo.drm;
 
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.XMLSerializable;
 import org.openflexo.xmlcode.StringEncoder.Converter;
-
-import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.xmlcode.XMLSerializable;
 
 public enum ActionType implements XMLSerializable, StringConvertable {
 

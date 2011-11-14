@@ -19,8 +19,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 package com.swabunga.spell.engine;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Yet another <code>SpellDictionary</code> this one is based on Damien Guillaume's Diskbased dictionary but adds a cache to try to improve
@@ -49,7 +58,7 @@ public class SpellDictionaryCachedDichoDisk extends SpellDictionaryDichoDisk {
 	 * Dictionary Convienence Constructor.
 	 */
 	public SpellDictionaryCachedDichoDisk(File wordList) throws FileNotFoundException, IOException {
-		super((File) wordList);
+		super(wordList);
 		loadPreCache(wordList);
 	}
 
@@ -81,6 +90,7 @@ public class SpellDictionaryCachedDichoDisk extends SpellDictionaryDichoDisk {
 	/**
 	 * Add a word permanantly to the dictionary (and the dictionary file). <i>not implemented !</i>
 	 */
+	@Override
 	public void addWord(String word) {
 		System.err.println("error: addWord is not implemented for SpellDictionaryCachedDichoDisk");
 	}
@@ -95,6 +105,7 @@ public class SpellDictionaryCachedDichoDisk extends SpellDictionaryDichoDisk {
 	/**
 	 * Returns a list of strings (words) for the code.
 	 */
+	@Override
 	public List getWords(String code) {
 		List list;
 		codes++;
@@ -198,8 +209,9 @@ public class SpellDictionaryCachedDichoDisk extends SpellDictionaryDichoDisk {
 		}
 		// System.out.println("Saving cache to precache file...");
 		preDir = new File(preCacheDir);
-		if (!preDir.exists())
+		if (!preDir.exists()) {
 			preDir.mkdir();
+		}
 		preFile = new File(preCacheFileName);
 		out = new ObjectOutputStream(new FileOutputStream(preFile));
 		it = suggestionCache.keySet().iterator();

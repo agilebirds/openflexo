@@ -108,8 +108,9 @@ public class ViewLibrary extends ViewLibraryObject implements XMLStorageResource
 	 */
 	public static ViewLibrary createNewShemaLibrary(FlexoProject project) {
 		ViewLibrary newLibrary = new ViewLibrary(project);
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("createNewShemaLibrary(), project=" + project + " " + newLibrary);
+		}
 
 		File compFile = ProjectRestructuration.getExpectedShemaLibFile(project);
 		FlexoProjectFile shemaLibFile = new FlexoProjectFile(compFile, project);
@@ -123,8 +124,9 @@ public class ViewLibrary extends ViewLibraryObject implements XMLStorageResource
 			try {
 				slRes = new FlexoOEShemaLibraryResource(project, newLibrary, shemaLibFile);
 			} catch (InvalidFileNameException e) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("Could not create shema library.");
+				}
 				e.printStackTrace();
 				return null;
 			}
@@ -135,8 +137,9 @@ public class ViewLibrary extends ViewLibraryObject implements XMLStorageResource
 			project.registerResource(slRes);
 		} catch (Exception e1) {
 			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
+			}
 			e1.printStackTrace();
 			System.out.println("C'est la que ca chie");
 			System.exit(-1);
@@ -231,8 +234,9 @@ public class ViewLibrary extends ViewLibraryObject implements XMLStorageResource
 			}
 
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Could not find folder named " + folderName);
+		}
 		return null;
 	}
 
@@ -249,8 +253,9 @@ public class ViewLibrary extends ViewLibraryObject implements XMLStorageResource
 	public ViewFolder getRootFolder() {
 		if (_rootFolder == null) {
 			if (!isDeserializing()) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("No root folder defined for component library");
+				}
 				setRootFolder(ViewFolder.createNewRootFolder(this));
 			}
 		}
@@ -291,13 +296,15 @@ public class ViewLibrary extends ViewLibraryObject implements XMLStorageResource
 
 	public void delete(ViewDefinition def) {
 		boolean b = _rootFolder.delete(def);
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Shema removal " + (b ? "succeed" : "failed"));
+		}
 	}
 
 	public boolean isValidForANewShemaName(String value) {
-		if (value == null)
+		if (value == null) {
 			return false;
+		}
 		if (_rootFolder != null) {
 			return _rootFolder.isValidForANewShemaName(value);
 		}
@@ -305,20 +312,23 @@ public class ViewLibrary extends ViewLibraryObject implements XMLStorageResource
 	}
 
 	public ViewDefinition getShemaNamed(String value) {
-		if (value == null)
+		if (value == null) {
 			return null;
+		}
 		if (_rootFolder != null) {
 			return _rootFolder.getShemaNamed(value);
 		}
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Cannot find a component named : " + value);
+		}
 		return null;
 	}
 
 	public Vector<ViewDefinition> retrieveAllShemas() {
 		Vector<ViewDefinition> returned = new Vector<ViewDefinition>();
-		if (getRootFolder() != null)
+		if (getRootFolder() != null) {
 			appendAllShemas(getRootFolder(), returned);
+		}
 		return returned;
 	}
 

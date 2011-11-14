@@ -52,8 +52,9 @@ public class RectangleSelectingAction extends MouseDragControlAction {
 		rectangleSelectingOriginInDrawingView = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
 				controller.getDrawingView());
 		currentMousePositionInDrawingView = rectangleSelectingOriginInDrawingView;
-		if (controller.getDrawingView() == null)
+		if (controller.getDrawingView() == null) {
 			return false;
+		}
 		controller.getDrawingView().setRectangleSelectingAction(this);
 		return true;
 	}
@@ -65,8 +66,9 @@ public class RectangleSelectingAction extends MouseDragControlAction {
 		if (isSignificativeDrag) {
 			Vector<GraphicalRepresentation> newSelection = buildCurrentSelection(graphicalRepresentation, controller);
 			controller.setSelectedObjects(newSelection);
-			if (controller.getDrawingView() == null)
+			if (controller.getDrawingView() == null) {
 				return false;
+			}
 			controller.getDrawingView().resetRectangleSelectingAction();
 		}
 		return true;
@@ -74,15 +76,17 @@ public class RectangleSelectingAction extends MouseDragControlAction {
 
 	@Override
 	public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Perform mouse DRAGGED on RECTANGLE_SELECTING MouseDragControlAction");
+		}
 		currentMousePositionInDrawingView = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
 				controller.getDrawingView());
 
 		Vector<GraphicalRepresentation> newFocusSelection = buildCurrentSelection(graphicalRepresentation, controller);
 		controller.setFocusedObjects(newFocusSelection);
-		if (controller.getDrawingView() == null)
+		if (controller.getDrawingView() == null) {
 			return false;
+		}
 		controller.getDrawingView().getPaintManager().repaint(controller.getDrawingView());
 
 		return true;
@@ -90,8 +94,9 @@ public class RectangleSelectingAction extends MouseDragControlAction {
 
 	private Vector<GraphicalRepresentation> buildCurrentSelection(GraphicalRepresentation<?> graphicalRepresentation,
 			DrawingController<?> controller) {
-		if (getRectangleSelection() == null)
+		if (getRectangleSelection() == null) {
 			return null;
+		}
 		Vector<GraphicalRepresentation> returned = new Vector<GraphicalRepresentation>();
 		for (GraphicalRepresentation child : graphicalRepresentation.getContainedGraphicalRepresentations()) {
 			if (child.getIsVisible()) {
@@ -138,8 +143,9 @@ public class RectangleSelectingAction extends MouseDragControlAction {
 
 	public void paint(Graphics g, DrawingController controller) {
 		Rectangle selection = getRectangleSelection();
-		if (selection == null)
+		if (selection == null) {
 			return;
+		}
 		g.setColor(controller.getDrawingGraphicalRepresentation().getRectangleSelectingSelectionColor());
 		g.drawRect(selection.x, selection.y, selection.width, selection.height);
 	}

@@ -23,6 +23,7 @@ import java.awt.BorderLayout;
 import java.util.logging.Logger;
 
 import javax.swing.JPanel;
+
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.view.ModuleView;

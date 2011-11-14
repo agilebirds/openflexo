@@ -149,12 +149,13 @@ public class Sequence extends ControlGraph {
 		}
 
 		ControlGraph returned;
-		if (normalizedList.size() == 0)
+		if (normalizedList.size() == 0) {
 			returned = new Nop();
-		else if (normalizedList.size() == 1)
+		} else if (normalizedList.size() == 1) {
 			returned = normalizedList.firstElement();
-		else
+		} else {
 			returned = new Sequence(normalizedList);
+		}
 		returned.setInlineComment(getInlineComment());
 		returned.appendHeaderComment(getHeaderComment(), true);
 		return returned;

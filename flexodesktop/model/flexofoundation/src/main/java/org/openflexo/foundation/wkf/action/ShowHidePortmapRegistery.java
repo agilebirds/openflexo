@@ -65,8 +65,9 @@ public class ShowHidePortmapRegistery extends FlexoUndoableAction<ShowHidePortma
 
 	@Override
 	protected void doAction(Object context) {
-		if (getPortMapRegistery() != null)
+		if (getPortMapRegistery() != null) {
 			getPortMapRegistery().setIsVisible(!getPortMapRegistery().getIsVisible());
+		}
 	}
 
 	@Override

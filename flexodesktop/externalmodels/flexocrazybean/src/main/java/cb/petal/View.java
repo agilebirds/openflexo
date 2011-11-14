@@ -54,19 +54,22 @@ public abstract class View extends PetalObject implements Named, Tagged {
 	public String toString() {
 		StringBuffer buf = new StringBuffer("(object " + getName());
 
-		for (Iterator i = params.iterator(); i.hasNext();)
+		for (Iterator i = params.iterator(); i.hasNext();) {
 			buf.append(" \"" + i.next() + "\"");
+		}
 
-		if (tag > 0)
+		if (tag > 0) {
 			buf.append(" @" + tag);
+		}
 
 		buf.append("\n");
 
 		for (Iterator i = getNames().iterator(), j = getPropertyList().iterator(); i.hasNext();) {
 			buf.append(i.next() + "\t" + j.next());
 
-			if (i.hasNext())
+			if (i.hasNext()) {
 				buf.append("\n");
+			}
 		}
 
 		buf.append(")\n");

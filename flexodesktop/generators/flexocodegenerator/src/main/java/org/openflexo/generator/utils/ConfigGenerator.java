@@ -47,8 +47,9 @@ public class ConfigGenerator extends JavaClassGenerator {
 	protected VelocityContext defaultContext() {
 		VelocityContext vc = super.defaultContext();
 		vc.put("PREFIX", getPrefix());
-		if (getProject().getFirstOperation() != null)
+		if (getProject().getFirstOperation() != null) {
 			vc.put("FIRST_OPERATION", getProject().getFirstOperation().getComponentDefinition().getComponentName());
+		}
 		return vc;
 	}
 

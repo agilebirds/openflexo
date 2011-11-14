@@ -33,17 +33,20 @@ public abstract class FlexoWizard {
 	}
 
 	public void addPage(IWizardPage page) {
-		if (page == null)
+		if (page == null) {
 			return;
+		}
 		pages.add(page);
-		if (pages.size() == 1)
+		if (pages.size() == 1) {
 			currentPage = page;
+		}
 	}
 
 	public boolean canFinish() {
 		for (IWizardPage page : pages) {
-			if (!page.isPageComplete())
+			if (!page.isPageComplete()) {
 				return false;
+			}
 		}
 		return true;
 	}
@@ -65,12 +68,13 @@ public abstract class FlexoWizard {
 	}
 
 	public IWizardPage getPreviousPage(IWizardPage page) {
-		if (page.getPreviousPage() != null)
+		if (page.getPreviousPage() != null) {
 			return page.getPreviousPage();
-		else if (page.isPreviousEnabled() && pages.indexOf(page) > 0)
+		} else if (page.isPreviousEnabled() && pages.indexOf(page) > 0) {
 			return pages.get(pages.indexOf(page) - 1);
-		else
+		} else {
 			return null;
+		}
 	}
 
 	public boolean isNextEnabled() {
@@ -78,19 +82,21 @@ public abstract class FlexoWizard {
 	}
 
 	public IWizardPage getNextPage(IWizardPage page) {
-		if (page.getNextPage() != null)
+		if (page.getNextPage() != null) {
 			return page.getNextPage();
-		else if (page.isNextEnabled() && pages.indexOf(page) > -1 && pages.indexOf(page) < pages.size() - 1)
+		} else if (page.isNextEnabled() && pages.indexOf(page) > -1 && pages.indexOf(page) < pages.size() - 1) {
 			return pages.get(pages.indexOf(page) + 1);
-		else
+		} else {
 			return null;
+		}
 	}
 
 	public Image getPageImage() {
-		if (currentPage.getPageImage() != null)
+		if (currentPage.getPageImage() != null) {
 			return currentPage.getPageImage();
-		else
+		} else {
 			return getDefaultPageImage();
+		}
 	}
 
 	public abstract String getWizardTitle();

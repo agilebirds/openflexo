@@ -112,10 +112,12 @@ public class DNDInfo {
 			try {
 				SunDragSourceContextPeer.checkDragDropInProgress();
 			} catch (InvalidDnDOperationException e) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("For some reason there was still a Dnd in progress. Will set it back to false. God knows why this happens");
-				if (logger.isLoggable(Level.FINE))
+				}
+				if (logger.isLoggable(Level.FINE)) {
 					logger.log(Level.FINE, "Stacktrace for DnD still in progress", e);
+				}
 				SunDragSourceContextPeer.setDragDropInProgress(false);
 			}
 		}
@@ -132,14 +134,16 @@ public class DNDInfo {
 
 		logger.info("MoveAction, enableDragging for " + shapeView);
 
-		if (dropTargets != null)
+		if (dropTargets != null) {
 			dropTargets.clear();
+		}
 		dropTargets = new Hashtable<FGEView, DropTarget>();
 
 		for (GraphicalRepresentation<?> gr : _controller.getDrawingView().getContents().keySet()) {
 			FGEView view = _controller.getDrawingView().getContents().get(gr);
-			if (((Component) view).getDropTarget() != null)
+			if (((Component) view).getDropTarget() != null) {
 				dropTargets.put(view, ((Component) view).getDropTarget());
+			}
 			((Component) view).setDropTarget(new DropTarget(shapeView, DnDConstants.ACTION_MOVE, new MoveActionDropListener(
 					(JComponent) view), true));
 		}
@@ -173,11 +177,12 @@ public class DNDInfo {
 
 			// if the action is ok we go ahead
 			// otherwise we punt
-			if ((e.getDragAction() & dragAction) == 0)
+			if ((e.getDragAction() & dragAction) == 0) {
 				return;
-			// get the label's text and put it inside a Transferable
-			// Transferable transferable = new StringSelection(
-			// DragLabel.this.getText() );
+				// get the label's text and put it inside a Transferable
+				// Transferable transferable = new StringSelection(
+				// DragLabel.this.getText() );
+			}
 
 			ShapeGraphicalRepresentationTransferable transferable = new MoveAction.ShapeGraphicalRepresentationTransferable(null,
 					e.getDragOrigin());
@@ -211,8 +216,9 @@ public class DNDInfo {
 			try {
 				// logger.info("dragDropEnd() "+e);
 				if (e.getDropSuccess() == false) {
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Dropping was not successful");
+					}
 					return;
 				}
 
@@ -221,9 +227,10 @@ public class DNDInfo {
 				 * acceptDrop
 				 */
 				// this is the action selected by the drop target
-				if (e.getDropAction() == DnDConstants.ACTION_MOVE)
+				if (e.getDropAction() == DnDConstants.ACTION_MOVE) {
 					;
-				// setName("");
+					// setName("");
+				}
 			} finally {
 				_controller.getDrawingView().resetCapturedNode();
 				disableDragging();
@@ -343,17 +350,20 @@ public class DNDInfo {
 
 			int da = e.getDropAction();
 			// we're saying that these actions are necessary
-			if ((da & acceptableActions) == 0)
+			if ((da & acceptableActions) == 0) {
 				return false;
+			}
 
 			try {
 				ShapeGraphicalRepresentation element = ((TransferedShapeGraphicalRepresentation) e.getTransferable().getTransferData(
 						ShapeGraphicalRepresentationTransferable.defaultFlavor())).getTransferedElement();
-				if (element == null)
+				if (element == null) {
 					return false;
+				}
 				GraphicalRepresentation<?> focused = getFocusedObject(e);
-				if (focused == null)
+				if (focused == null) {
 					return false;
+				}
 				return (focused instanceof ShapeGraphicalRepresentation && element
 						.isAllowedToBeDraggedOutsideParentContainerInsideContainer((ShapeGraphicalRepresentation) focused));
 
@@ -395,8 +405,9 @@ public class DNDInfo {
 		 */
 		@Override
 		public void dragOver(DropTargetDragEvent e) {
-			if (isDragFlavorSupported(e))
+			if (isDragFlavorSupported(e)) {
 				_controller.getDrawingView().paintDraggedNode(e, _controller.getDrawingView());
+			}
 			if (!isDragOk(e)) {
 				if (dragSourceContext == null) {
 					logger.warning("dragSourceContext should NOT be null");
@@ -482,13 +493,16 @@ public class DNDInfo {
 					 */
 
 					data = e.getTransferable().getTransferData(chosen);
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("data is a " + data.getClass().getName());
-					if (data == null)
+					}
+					if (data == null) {
 						throw new NullPointerException();
+					}
 				} catch (Throwable t) {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Couldn't get transfer data: " + t.getMessage());
+					}
 					t.printStackTrace();
 					e.dropComplete(false);
 					return;

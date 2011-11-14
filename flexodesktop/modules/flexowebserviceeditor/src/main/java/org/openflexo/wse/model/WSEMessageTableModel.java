@@ -24,9 +24,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.WSEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-
 import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.components.tabular.model.EditableStringColumn;
 import org.openflexo.components.tabular.model.IconColumn;
@@ -34,6 +31,8 @@ import org.openflexo.components.tabular.model.StringColumn;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.ws.ServiceMessageDefinition;
 import org.openflexo.foundation.wkf.ws.ServiceOperation;
+import org.openflexo.icon.WSEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Please comment this class
@@ -50,35 +49,37 @@ public class WSEMessageTableModel extends AbstractModel<ServiceOperation, Servic
 		addToColumns(new IconColumn<ServiceMessageDefinition>("process_icon", 30) {
 			@Override
 			public Icon getIcon(ServiceMessageDefinition object) {
-				if ((object).isInputMessageDefinition())
+				if ((object).isInputMessageDefinition()) {
 					return WSEIconLibrary.WS_IN_MESSAGE_LEFT_ICON;
-				else if ((object).isOutputMessageDefinition())
+				} else if ((object).isOutputMessageDefinition()) {
 					return WSEIconLibrary.WS_OUT_MESSAGE_LEFT_ICON;
-				else if ((object).isFaultMessageDefinition())
+				} else if ((object).isFaultMessageDefinition()) {
 					return WSEIconLibrary.WS_FAULT_MESSAGE__LEFT_ICON;
+				}
 				return null;
 			}
 
 			@Override
 			public String getLocalizedTooltip(ServiceMessageDefinition object) {
-				if ((object).isInputMessageDefinition())
+				if ((object).isInputMessageDefinition()) {
 					return FlexoLocalization.localizedForKey("input_message_def");
-				else if ((object).isOutputMessageDefinition())
+				} else if ((object).isOutputMessageDefinition()) {
 					return FlexoLocalization.localizedForKey("output_message_def");
-				else if ((object).isFaultMessageDefinition())
+				} else if ((object).isFaultMessageDefinition()) {
 					return FlexoLocalization.localizedForKey("fault_message_def");
+				}
 				return null;
 			}
 		});
 
-		if (readOnly)
+		if (readOnly) {
 			addToColumns(new StringColumn<ServiceMessageDefinition>("name", 190) {
 				@Override
 				public String getValue(ServiceMessageDefinition object) {
 					return (object).getName();
 				}
 			});
-		else {
+		} else {
 			addToColumns(new EditableStringColumn<ServiceMessageDefinition>("name", 190) {
 				@Override
 				public String getValue(ServiceMessageDefinition object) {

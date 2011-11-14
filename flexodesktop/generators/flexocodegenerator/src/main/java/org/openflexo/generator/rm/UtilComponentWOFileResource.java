@@ -40,8 +40,9 @@ public class UtilComponentWOFileResource extends ComponentWOFileResource<FlexoCo
 	@Override
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
-		if (getGenerator() instanceof MetaWOGenerator)
+		if (getGenerator() instanceof MetaWOGenerator) {
 			((MetaWOGenerator) getGenerator()).rebuildDependanciesForResource(this);
+		}
 	}
 
 	/**

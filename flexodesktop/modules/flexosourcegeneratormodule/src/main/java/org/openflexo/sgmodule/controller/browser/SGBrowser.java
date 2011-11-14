@@ -24,10 +24,10 @@ import java.util.logging.Logger;
 
 import org.openflexo.components.browser.BrowserConfiguration;
 import org.openflexo.components.browser.BrowserElementType;
+import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ConfigurableProjectBrowser;
 import org.openflexo.components.browser.CustomBrowserFilter;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
@@ -60,8 +60,9 @@ public class SGBrowser extends ConfigurableProjectBrowser implements FlexoObserv
 
 	@Override
 	public void update(FlexoObservable o, DataModification arg) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("GeneratorBrowser update");
+		}
 	}
 
 	public static BrowserConfiguration makeDefaultBrowserConfiguration(final GeneratedOutput generatedCode) {

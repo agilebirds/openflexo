@@ -40,9 +40,9 @@ import org.openflexo.inspector.model.PropertyModel;
 import org.openflexo.inspector.model.TabModel;
 import org.openflexo.inspector.widget.CustomWidget;
 import org.openflexo.inspector.widget.DenaliWidget;
+import org.openflexo.inspector.widget.DenaliWidget.WidgetLayout;
 import org.openflexo.inspector.widget.InnerTabWidgetView;
 import org.openflexo.inspector.widget.LineWidget;
-import org.openflexo.inspector.widget.DenaliWidget.WidgetLayout;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ToolBox;
 
@@ -80,15 +80,17 @@ public class TabModelView extends JPanel {
 		_invisibleWidgets = new Vector<InnerTabWidgetView>();
 		_inspectorModelView = inspectorModelView;
 		setName(FlexoLocalization.localizedForKey(model.name, this));
-		if (ToolBox.getPLATFORM() != ToolBox.MACOS)
+		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
 			setBackground(Color.WHITE);
+		}
 		init(model, inspectorModelView);
 	}
 
 	public DenaliWidget getInspectorWidgetFor(String propertyName) {
 		for (InnerTabWidgetView widget : _widgets) {
-			if (widget instanceof DenaliWidget && ((DenaliWidget) widget).getPropertyModel().name.equals(propertyName))
+			if (widget instanceof DenaliWidget && ((DenaliWidget) widget).getPropertyModel().name.equals(propertyName)) {
 				return (DenaliWidget) widget;
+			}
 		}
 		return null;
 	}
@@ -100,10 +102,11 @@ public class TabModelView extends JPanel {
 	 */
 	@Override
 	public Dimension getPreferredSize() {
-		if (_inspectorModelView == null || _inspectorModelView.getSelectedComponent() == this)
+		if (_inspectorModelView == null || _inspectorModelView.getSelectedComponent() == this) {
 			return super.getPreferredSize();
-		else
+		} else {
 			return new Dimension(0, 0);
+		}
 	}
 
 	private void init(TabModel model, InspectorModelView inspectorModelView) {
@@ -131,8 +134,9 @@ public class TabModelView extends JPanel {
 			    inspectorModelView.addToWidgets(widget);
 			}*/
 
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Widget: " + widget.getXMLModel().getIndex() + " " + widget.getClass().getSimpleName() + ":" + widget.getName());
+			}
 		}
 
 		registerWidgets();
@@ -207,8 +211,9 @@ public class TabModelView extends JPanel {
 			if (!widget.displayLabel()) {
 				// GPO: if there are no label and the widget does not expand horizontally, then we center it on its line
 				c.anchor = GridBagConstraints.CENTER;
-			} else
+			} else {
 				c.anchor = GridBagConstraints.WEST;
+			}
 		}
 		c.weightx = 1.0; // 2.0;
 		c.gridwidth = GridBagConstraints.REMAINDER;
@@ -324,22 +329,24 @@ public class TabModelView extends JPanel {
 	 * @param widget
 	 */
 	public void valueChange(InspectableObject object) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("valueChange() in TabModelView for inspectable " + object);
+		}
 		Enumeration<InnerTabWidgetView> en = _visibleWidgets.elements();
 		DenaliWidget cur = null;
 		Vector<DenaliWidget> widgetsToHide = new Vector<DenaliWidget>();
 		Vector<DenaliWidget> widgetsToShow = new Vector<DenaliWidget>();
 		while (en.hasMoreElements()) {
 			InnerTabWidgetView inner = en.nextElement();
-			if (inner instanceof DenaliWidget)
+			if (inner instanceof DenaliWidget) {
 				cur = (DenaliWidget) inner;
-			else if (inner instanceof LineWidget) {
+			} else if (inner instanceof LineWidget) {
 				((LineWidget) inner).valueChange(object);
 				continue;
 			} else {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("Unknown class " + inner.getClass().getSimpleName());
+				}
 				continue;
 			}
 			boolean isStillVisible = cur.isVisible(object);
@@ -351,10 +358,11 @@ public class TabModelView extends JPanel {
 		en = _invisibleWidgets.elements();
 		while (en.hasMoreElements()) {
 			InnerTabWidgetView inner = en.nextElement();
-			if (inner instanceof DenaliWidget)
+			if (inner instanceof DenaliWidget) {
 				cur = (DenaliWidget) inner;
-			else
+			} else {
 				continue;
+			}
 			boolean isStillInvisible = !cur.isVisible(object);
 			if (!isStillInvisible) {
 				widgetsToShow.add(cur);
@@ -377,22 +385,24 @@ public class TabModelView extends JPanel {
 	 */
 	public void valueChange(Object newValue, DenaliWidget widget) {
 		// System.out.println ("valueChange() with "+newValue+" for "+widget.getObservedPropertyName());
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("valueChange() in TabModelView for property " + widget.getObservedPropertyName() + " which receive " + newValue);
+		}
 		Enumeration<InnerTabWidgetView> en = _visibleWidgets.elements();
 		DenaliWidget cur = null;
 		Vector<DenaliWidget> widgetsToHide = new Vector<DenaliWidget>();
 		Vector<DenaliWidget> widgetsToShow = new Vector<DenaliWidget>();
 		while (en.hasMoreElements()) {
 			InnerTabWidgetView inner = en.nextElement();
-			if (inner instanceof DenaliWidget)
+			if (inner instanceof DenaliWidget) {
 				cur = (DenaliWidget) inner;
-			else if (inner instanceof LineWidget) {
+			} else if (inner instanceof LineWidget) {
 				((LineWidget) inner).valueChange(newValue, widget);
 				continue;
 			} else {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("Unknown class " + inner.getClass().getSimpleName());
+				}
 				continue;
 			}
 			boolean isStillVisible = cur.isStillVisible(newValue, widget.getObservedPropertyName());
@@ -401,8 +411,9 @@ public class TabModelView extends JPanel {
 			}
 			// System.out.println (""+cur.getObservedPropertyName()+": dependsOfProperty(widget)="+cur.dependsOfProperty(widget));
 			if (cur.dependsOfProperty(widget)) {
-				if (cur.isWidgetVisible())
+				if (cur.isWidgetVisible()) {
 					cur.updateWidgetFromModel();
+				}
 				if (cur instanceof CustomWidget) {
 					((CustomWidget) cur).performModelUpdating();
 				}
@@ -412,10 +423,11 @@ public class TabModelView extends JPanel {
 		en = _invisibleWidgets.elements();
 		while (en.hasMoreElements()) {
 			InnerTabWidgetView inner = en.nextElement();
-			if (inner instanceof DenaliWidget)
+			if (inner instanceof DenaliWidget) {
 				cur = (DenaliWidget) inner;
-			else
+			} else {
 				continue;
+			}
 			boolean isStillInvisible = cur.isStillInvisible(newValue, widget.getObservedPropertyName());
 			if (!isStillInvisible) {
 				widgetsToShow.add(cur);
@@ -434,46 +446,54 @@ public class TabModelView extends JPanel {
 	}
 
 	private void processToHiding(Vector<DenaliWidget> widgetsToHide) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("processToHiding() for " + _tabModel.name);
+		}
 		DenaliWidget cur = null;
 		Enumeration<DenaliWidget> en = widgetsToHide.elements();
 		while (en.hasMoreElements()) {
 			cur = en.nextElement();
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("try to hide " + cur.getObservedPropertyName() + " at index: " + cur.getIndexInTab());
+			}
 			for (int i = 0; i < getComponentCount(); i++) {
 				if (getComponent(i) == cur.getDynamicComponent()) {
-					if (cur.getLabel() != null)
+					if (cur.getLabel() != null) {
 						cur.getLabel().setVisible(false);
+					}
 					getComponent(i).setVisible(false);
 					_visibleWidgets.remove(cur);
 					_invisibleWidgets.add(cur);
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("HIDE: " + cur.getObservedPropertyName());
+					}
 				}
 			}
 		}
 	}
 
 	private void processToShowing(Vector<DenaliWidget> widgetsToShow) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("processToShowing() for " + _tabModel.name);
+		}
 		DenaliWidget cur = null;
 		Enumeration<DenaliWidget> en = widgetsToShow.elements();
 		while (en.hasMoreElements()) {
 			cur = en.nextElement();
 			cur.performUpdate();
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("try to show " + cur.getObservedPropertyName() + " at index: " + cur.getIndexInTab());
+			}
 			cur.setTabModelView(this);
 			cur.getDynamicComponent().setVisible(true);
-			if (cur.getLabel() != null)
+			if (cur.getLabel() != null) {
 				cur.getLabel().setVisible(true);
+			}
 			_visibleWidgets.add(cur);
 			_invisibleWidgets.remove(cur);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("SHOW: " + cur.getObservedPropertyName());
+			}
 		}
 	}
 

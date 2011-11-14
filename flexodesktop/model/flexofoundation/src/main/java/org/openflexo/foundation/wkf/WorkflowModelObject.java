@@ -74,8 +74,9 @@ public abstract class WorkflowModelObject extends RepresentableFlexoModelObject 
 	}
 
 	public FlexoWorkflow getFlexoWorkflow() {
-		if (_workflow != null)
+		if (_workflow != null) {
 			return _workflow;
+		}
 		if (_project != null && !isDeserializing) {
 			return _project.getWorkflow();
 		}
@@ -99,8 +100,9 @@ public abstract class WorkflowModelObject extends RepresentableFlexoModelObject 
 
 	@Override
 	public FlexoProject getProject() {
-		if (getFlexoWorkflow() != null)
+		if (getFlexoWorkflow() != null) {
 			return getFlexoWorkflow().getProject();
+		}
 		return null;
 	}
 
@@ -132,8 +134,9 @@ public abstract class WorkflowModelObject extends RepresentableFlexoModelObject 
 		if (getProject() != null) {
 			return getProject().getWKFValidationModel();
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not access to project !");
+			}
 		}
 		return null;
 	}

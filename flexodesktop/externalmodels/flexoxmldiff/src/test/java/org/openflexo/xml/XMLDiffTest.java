@@ -83,8 +83,9 @@ public class XMLDiffTest {
 		Iterator<Element> it1 = e1.getChildren().iterator();
 		Iterator<Element> it2 = e1.getChildren().iterator();
 		while (it1.hasNext()) {
-			if (!areSame(it1.next(), it2.next()))
+			if (!areSame(it1.next(), it2.next())) {
 				return false;
+			}
 		}
 
 		return true;

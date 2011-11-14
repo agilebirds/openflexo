@@ -43,7 +43,7 @@ import org.openflexo.foundation.cg.CGSymbolicDirectory;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.generator.file.AbstractCGFile;
-import org.openflexo.icon.CGIconLibrary;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.SGIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.sgmodule.controller.SGController;
@@ -219,7 +219,7 @@ public class SelectFilesPopup extends MultipleObjectSelectorPopup {
 							if (getFolder().getParent() == null) {
 								return SGIconLibrary.SYMBOLIC_FOLDER_ICON;
 							}
-							return CGIconLibrary.FOLDER_ICON;
+							return IconLibrary.FOLDER_ICON;
 						}
 					};
 				} else if (object instanceof CGFile) {

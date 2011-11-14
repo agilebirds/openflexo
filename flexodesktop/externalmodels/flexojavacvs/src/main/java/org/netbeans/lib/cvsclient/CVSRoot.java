@@ -55,8 +55,8 @@ import org.netbeans.lib.cvsclient.connection.ConnectionFactory;
  * <ul>
  * <li>:local:, :fork: & no-method --> LocalConnection (LOCAL_FORMAT)</li>
  * <li>:server: & :ext: --> SSH2Connection (SERVER_FORMAT)</li>
- * <li>:pserver: --> PServerConnection (SERVER_FORMAT)</li>
- * </li> gserver and kserver are not included. Environment variables are not used (like CVS_RSH).
+ * <li>:pserver: --> PServerConnection (SERVER_FORMAT)</li> </li> gserver and kserver are not included. Environment variables are not used
+ * (like CVS_RSH).
  * </p>
  * <p>
  * local and no-method work like fork. They start the cvs server program on the local machine thus using the remote protocol on the local
@@ -142,9 +142,10 @@ public class CVSRoot {
 		// host & port
 		this.hostname = props.getProperty("hostname");
 
-		if (this.hostname.length() == 0)
+		if (this.hostname.length() == 0) {
 			this.hostname = null;
-		// this.localFormat = this.hostname == null || this.hostname.length() == 0;
+			// this.localFormat = this.hostname == null || this.hostname.length() == 0;
+		}
 
 		if (this.hostname != null) {
 
@@ -156,10 +157,11 @@ public class CVSRoot {
 			// We already have hostname
 			try {
 				int p = Integer.parseInt(props.getProperty("port"));
-				if (p > 0)
+				if (p > 0) {
 					this.port = p;
-				else
+				} else {
 					throw new IllegalArgumentException("The port is not a positive number.");
+				}
 			} catch (NumberFormatException e) {
 				throw new IllegalArgumentException("The port is not a number: '" + props.getProperty("port") + "'.");
 			}
@@ -167,10 +169,11 @@ public class CVSRoot {
 
 		// and the most important which is repository
 		String r = props.getProperty("repository");
-		if (r == null)
+		if (r == null) {
 			throw new IllegalArgumentException("Repository is obligatory.");
-		else
+		} else {
 			this.repository = r;
+		}
 	}
 
 	/**
@@ -226,8 +229,9 @@ public class CVSRoot {
 			// connection method is given so parse it
 
 			colonPosition = cvsroot.indexOf(':', 1);
-			if (colonPosition < 0)
+			if (colonPosition < 0) {
 				throw new IllegalArgumentException("The connection method does not end with ':'.");
+			}
 			int methodNameEnd = colonPosition;
 			int semicolonPosition = cvsroot.indexOf(";", 1);
 
@@ -301,8 +305,9 @@ public class CVSRoot {
 			*/
 
 			int startSearch = cvsroot.indexOf('@', colonPosition);
-			if (startSearch < 0)
+			if (startSearch < 0) {
 				startSearch = colonPosition;
+			}
 			String userPasswdHost;
 			int pathBegin = -1;
 			int hostColon = cvsroot.indexOf(':', startSearch);
@@ -360,8 +365,9 @@ public class CVSRoot {
 					index++;
 				}
 				this.port = port;
-				if (index > 0)
+				if (index > 0) {
 					pr = pr.substring(index);
+				}
 				if (pr.startsWith(":")) { // NOI18N
 					pr = pr.substring(1);
 				}
@@ -396,8 +402,9 @@ public class CVSRoot {
 	public String toString() {
 
 		if (this.hostname == null) {
-			if (this.method == null)
+			if (this.method == null) {
 				return this.repository;
+			}
 
 			return ":" + this.method + ":" + this.repository;
 		} else {
@@ -421,8 +428,9 @@ public class CVSRoot {
 			buf.append(':');
 
 			// port
-			if (this.port > 0)
+			if (this.port > 0) {
 				buf.append(this.port);
+			}
 
 			// repository
 			buf.append(this.repository);
@@ -446,8 +454,9 @@ public class CVSRoot {
 	 */
 	public int getCompatibilityLevel(CVSRoot compared) {
 
-		if (equals(compared))
+		if (equals(compared)) {
 			return 0;
+		}
 
 		boolean sameRepository = isSameRepository(compared);
 		boolean sameHost = isSameHost(compared);
@@ -455,14 +464,15 @@ public class CVSRoot {
 		boolean samePort = isSamePort(compared);
 		boolean sameUser = isSameUser(compared);
 
-		if (sameRepository && sameHost && sameMethod && samePort && sameUser)
+		if (sameRepository && sameHost && sameMethod && samePort && sameUser) {
 			return 1;
-		else if (sameRepository && sameHost && sameMethod)
+		} else if (sameRepository && sameHost && sameMethod) {
 			return 2;
-		else if (sameRepository && sameHost)
+		} else if (sameRepository && sameHost) {
 			return 3;
-		else
+		} else {
 			return -1;
+		}
 	}
 
 	private boolean isSameRepository(CVSRoot compared) {
@@ -470,10 +480,11 @@ public class CVSRoot {
 			return true;
 		}
 		try {
-			if ((new File(this.repository)).getCanonicalFile().equals(new File(compared.repository).getCanonicalFile()))
+			if ((new File(this.repository)).getCanonicalFile().equals(new File(compared.repository).getCanonicalFile())) {
 				return true;
-			else
+			} else {
 				return false;
+			}
 		} catch (IOException ioe) {
 			// something went wrong when invoking getCanonicalFile() so return false
 			return false;
@@ -493,24 +504,26 @@ public class CVSRoot {
 	}
 
 	private boolean isSameMethod(CVSRoot compared) {
-		if (this.method == null)
-			if (compared.getMethod() == null)
+		if (this.method == null) {
+			if (compared.getMethod() == null) {
 				return true;
-			else
+			} else {
 				return false;
-		else if (this.method.equals(compared.getMethod()))
+			}
+		} else if (this.method.equals(compared.getMethod())) {
 			return true;
-		else
+		} else {
 			return false;
+		}
 	}
 
 	private boolean isSamePort(CVSRoot compared) {
-		if (this.isLocal() == compared.isLocal())
-			if (this.isLocal())
+		if (this.isLocal() == compared.isLocal()) {
+			if (this.isLocal()) {
 				return true;
-			else if (this.port == compared.getPort())
+			} else if (this.port == compared.getPort()) {
 				return true;
-			else {
+			} else {
 				try {
 					Connection c1 = ConnectionFactory.getConnection(this);
 					Connection c2 = ConnectionFactory.getConnection(compared);
@@ -521,14 +534,16 @@ public class CVSRoot {
 					return false;
 				}
 			}
-		else
+		} else {
 			return false;
+		}
 	}
 
 	private boolean isSameUser(CVSRoot compared) {
 		String user = compared.getUserName();
-		if (user == getUserName())
+		if (user == getUserName()) {
 			return true;
+		}
 		if (user != null) {
 			return user.equals(getUserName());
 		}
@@ -542,13 +557,15 @@ public class CVSRoot {
 	@Override
 	public boolean equals(Object o) {
 		// This should be null safe, right?
-		if (!(o instanceof CVSRoot))
+		if (!(o instanceof CVSRoot)) {
 			return false;
+		}
 
 		CVSRoot compared = (CVSRoot) o;
 
-		if (toString().equals(compared.toString()))
+		if (toString().equals(compared.toString())) {
 			return true;
+		}
 
 		return false;
 	}
@@ -592,8 +609,9 @@ public class CVSRoot {
 			this.hostname = null;
 			this.port = 0;
 		} else {
-			if (this.hostname == null)
+			if (this.hostname == null) {
 				throw new IllegalArgumentException("Hostname must not be null when setting a remote method.");
+			}
 		}
 	}
 

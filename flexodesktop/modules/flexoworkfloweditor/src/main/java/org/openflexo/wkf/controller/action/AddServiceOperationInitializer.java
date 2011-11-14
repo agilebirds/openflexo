@@ -43,7 +43,6 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.wkf.controller.WKFController;
 
 public class AddServiceOperationInitializer extends ActionInitializer {
 

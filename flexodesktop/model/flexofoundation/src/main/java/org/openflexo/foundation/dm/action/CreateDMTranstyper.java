@@ -29,8 +29,8 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DMTranstyper;
-import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.DMTranstyper.DMTranstyperEntry;
+import org.openflexo.foundation.dm.DMType;
 
 public class CreateDMTranstyper extends FlexoAction<CreateDMTranstyper, DMEntity, DMObject> {
 
@@ -92,8 +92,9 @@ public class CreateDMTranstyper extends FlexoAction<CreateDMTranstyper, DMEntity
 	}
 
 	public String getNewTranstyperName() {
-		if (_newTranstyperName == null)
+		if (_newTranstyperName == null) {
 			_newTranstyperName = getEntity().getDMModel().getNextDefautTranstyperName(getEntity());
+		}
 		return _newTranstyperName;
 	}
 
@@ -102,8 +103,9 @@ public class CreateDMTranstyper extends FlexoAction<CreateDMTranstyper, DMEntity
 	}
 
 	public DMType getNewTranstyperType() {
-		if (_newTranstyperType == null)
+		if (_newTranstyperType == null) {
 			_newTranstyperType = DMType.makeResolvedDMType(getEntity());
+		}
 		return _newTranstyperType;
 	}
 

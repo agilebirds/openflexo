@@ -29,8 +29,8 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.cg.version.CGFileIntermediateVersion;
 import org.openflexo.foundation.cg.version.CGFileReleaseVersion;
-import org.openflexo.icon.CGIconLibrary;
 import org.openflexo.icon.FilesIconLibrary;
+import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconMarker;
 
@@ -64,7 +64,7 @@ public class FileReleaseVersionElement extends SGBrowserElement {
 	public Icon getIcon() {
 		ImageIcon returned = getBaseIcon();
 		Vector<IconMarker> markers = new Vector<IconMarker>();
-		markers.add(CGIconLibrary.RELEASE_VERSION);
+		markers.add(GeneratorIconLibrary.RELEASE_VERSION);
 		IconMarker[] markersArray = markers.toArray(new IconMarker[markers.size()]);
 		returned = IconFactory.getImageIcon(returned, markersArray);
 		return returned;

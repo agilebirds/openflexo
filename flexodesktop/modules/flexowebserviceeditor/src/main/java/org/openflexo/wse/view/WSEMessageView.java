@@ -56,8 +56,9 @@ public class WSEMessageView extends WSEView<ServiceMessageDefinition> {
 		// BIDOUILLE: not read Only because we cannot distinguish the context...
 		WSService service = getMessageDefinition().getOperation().getServiceInterface().getParentService();
 		boolean readOnly = false;
-		if (service != null && service instanceof ExternalWSService)
+		if (service != null && service instanceof ExternalWSService) {
 			readOnly = true;
+		}
 
 		entryTableModel = new WSEMessageEntryTableModel(getMessageDefinition(), getWSEController().getProject(), readOnly);
 		entryTable = new WSETabularView(getWSEController(), entryTableModel, 15);

@@ -76,9 +76,10 @@ public class LocalizedDelegateImplementation extends Observable implements Local
 			dict.store(new FileOutputStream(dictFile), language.getName());
 			logger.info("Saved " + dictFile.getAbsolutePath());
 		} catch (IOException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Unable to save file " + dictFile.getAbsolutePath() + " " + e.getClass().getName());
-			// e.printStackTrace();
+				// e.printStackTrace();
+			}
 		}
 	}
 
@@ -88,8 +89,9 @@ public class LocalizedDelegateImplementation extends Observable implements Local
 		try {
 			loadedDict.load(new FileInputStream(dictFile));
 		} catch (IOException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Unable to load file " + dictFile.getName());
+			}
 		}
 		return loadedDict;
 	}
@@ -99,10 +101,12 @@ public class LocalizedDelegateImplementation extends Observable implements Local
 
 		for (Language language : Language.availableValues()) {
 			File dictFile = getDictionaryFileForLanguage(language);
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Checking dictionary for language " + language.getName());
-			if (logger.isLoggable(Level.FINE))
+			}
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Looking for file " + dictFile.getAbsolutePath());
+			}
 			if (!dictFile.exists()) {
 				createNewDictionary(language);
 			} else {
@@ -115,9 +119,10 @@ public class LocalizedDelegateImplementation extends Observable implements Local
 	private void addEntryInDictionary(Language language, String key, String value, boolean required) {
 		Properties dict = getDictionary(language);
 		if (((!required) && (dict.getProperty(key) == null)) || required) {
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Adding entry '" + key + "' in " + language + " dictionary, file "
 						+ getDictionaryFileForLanguage(language).getAbsolutePath());
+			}
 			dict.setProperty(key, value);
 			// saveDictionary(language, dict);
 		}
@@ -169,8 +174,9 @@ public class LocalizedDelegateImplementation extends Observable implements Local
 		if (localized == null) {
 			addEntry(key);
 			return currentLanguageDict.getProperty(key);
-		} else
+		} else {
 			return localized;
+		}
 	}
 
 	public void setLocalizedForKeyAndLanguage(String key, String value, Language language) {
@@ -239,11 +245,13 @@ public class LocalizedDelegateImplementation extends Observable implements Local
 	}
 
 	private Entry getEntry(String key) {
-		if (key == null)
+		if (key == null) {
 			return null;
+		}
 		for (Entry entry : getEntries()) {
-			if (key.equals(entry.key))
+			if (key.equals(entry.key)) {
 				return entry;
+			}
 		}
 		return null;
 	}

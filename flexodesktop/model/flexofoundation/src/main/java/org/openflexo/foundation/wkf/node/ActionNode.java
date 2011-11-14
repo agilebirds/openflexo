@@ -170,10 +170,11 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 
 	@Override
 	public String getInspectorName() {
-		if (getActionType() == ActionType.DISPLAY_ACTION)
+		if (getActionType() == ActionType.DISPLAY_ACTION) {
 			return Inspectors.WKF.DISPLAY_ACTION_NODE_INSPECTOR;
-		else if (getActionType() == ActionType.FLEXO_ACTION)
+		} else if (getActionType() == ActionType.FLEXO_ACTION) {
 			return Inspectors.WKF.FLEXO_ACTION_NODE_INSPECTOR;
+		}
 		if (getNodeType() == NodeType.NORMAL) {
 			return Inspectors.WKF.ACTION_NODE_INSPECTOR;
 		} else if (getNodeType() == NodeType.BEGIN) {
@@ -250,12 +251,14 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 			Enumeration en = getOperationNode().getOperationComponent().getWOComponent().getAllButtonInterface().elements();
 			while (en.hasMoreElements() && associatedButtonWidget == null) {
 				IEHyperlinkWidget w = (IEHyperlinkWidget) en.nextElement();
-				if (((IEWidget) w).getFlexoID() == associatedButtonFlexoID)
+				if (((IEWidget) w).getFlexoID() == associatedButtonFlexoID) {
 					associatedButtonWidget = w;
+				}
 			}
 			if (associatedButtonWidget == null) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("The associated button of the action node " + getFullyQualifiedName() + " could not be found!");
+				}
 				associatedButtonFlexoID = -1;
 			} else {
 				associatedButtonWidget.addObserver(this);
@@ -265,16 +268,18 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 	}
 
 	public void setAssociatedButtonWidget(IEHyperlinkWidget associatedButtonWidget) {
-		if (this.associatedButtonWidget != null)
+		if (this.associatedButtonWidget != null) {
 			this.associatedButtonWidget.deleteObserver(this);
+		}
 		IEHyperlinkWidget old = this.associatedButtonWidget;
 		this.associatedButtonWidget = associatedButtonWidget;
 		if (associatedButtonWidget != null) {
 			associatedButtonFlexoID = ((IEWidget) associatedButtonWidget).getFlexoID();
 			associatedButtonWidget.addObserver(this);
 			setActionType(associatedButtonWidget.getIsDisplayAction() ? ActionType.DISPLAY_ACTION : ActionType.FLEXO_ACTION);
-		} else
+		} else {
 			associatedButtonFlexoID = -1;
+		}
 		setChanged();
 		notifyObservers(new ButtonWidgetAssociated(old, associatedButtonWidget));
 	}
@@ -321,15 +326,17 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 
 	public void setDisplayOperation(OperationNode displayOperation) {
 		OperationNode old = this.displayOperation;
-		if (old != null)
+		if (old != null) {
 			old.deleteObserver(this);
+		}
 		removeTabComponentInstance();
 		this.displayOperation = displayOperation;
 		if (displayOperation != null) {
 			displayOperation.addObserver(this);
 			displayOperationFlexoID = displayOperation.getFlexoID();
-		} else
+		} else {
 			displayOperationFlexoID = -1;
+		}
 		setChanged();
 		notifyObservers(new DisplayOperationSet(old, displayOperation));
 	}
@@ -339,22 +346,25 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 			displayProcess = getProject().getFlexoWorkflow().getLocalFlexoProcessWithFlexoID(displayProcessFlexoID);
 			if (displayProcess == null) {
 				if (!isSerializing() && !isDeserializing()) {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Could not find process with flexoID " + displayProcessFlexoID);
+					}
 					displayProcessFlexoID = -1;
 					setDisplayOperation(null);
 					setChanged();
 				}
-			} else
+			} else {
 				displayProcess.addObserver(this);
+			}
 		}
 		return displayProcess;
 	}
 
 	public void setDisplayProcess(FlexoProcess displayProcess) {
 		FlexoProcess old = this.displayProcess;
-		if (old != null)
+		if (old != null) {
 			old.deleteObserver(this);
+		}
 		this.displayProcess = displayProcess;
 		if (displayProcess != null) {
 			displayProcess.addObserver(this);
@@ -373,30 +383,34 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 	}
 
 	public long getDisplayOperationFlexoID() {
-		if (getDisplayOperation() != null)
+		if (getDisplayOperation() != null) {
 			return getDisplayOperation().getFlexoID();
-		else if (isSerializing())
+		} else if (isSerializing()) {
 			return displayOperationFlexoID;
+		}
 		return -1;
 	}
 
 	public void setDisplayOperationFlexoID(long displayOperationFlexoID) {
-		if (getDisplayOperation() != null)
+		if (getDisplayOperation() != null) {
 			displayOperation = null;
+		}
 		this.displayOperationFlexoID = displayOperationFlexoID;
 	}
 
 	public long getDisplayProcessFlexoID() {
-		if (getDisplayProcess() != null)
+		if (getDisplayProcess() != null) {
 			return getDisplayProcess().getFlexoID();
-		else if (isSerializing())
+		} else if (isSerializing()) {
 			return displayProcessFlexoID;
+		}
 		return -1;
 	}
 
 	public void setDisplayProcessFlexoID(long displayProcessFlexoID) {
-		if (getDisplayProcess() != null)
+		if (getDisplayProcess() != null) {
 			displayProcess = null;
+		}
 		this.displayProcessFlexoID = displayProcessFlexoID;
 	}
 
@@ -414,15 +428,17 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 			setAssociatedButtonWidget(null);
 		}
 		if (observable == getDisplayOperation()) {
-			if (dataModification instanceof ObjectDeleted)
+			if (dataModification instanceof ObjectDeleted) {
 				setDisplayOperation(null);
-			else if (dataModification.propertyName() != null && dataModification.propertyName().equals("flexoID"))
+			} else if (dataModification.propertyName() != null && dataModification.propertyName().equals("flexoID")) {
 				setChanged();
+			}
 		} else if (observable == getDisplayProcess()) {
-			if (dataModification instanceof ObjectDeleted)
+			if (dataModification instanceof ObjectDeleted) {
 				setDisplayProcess(null);
-			else if (dataModification.propertyName() != null && dataModification.propertyName().equals("flexoID"))
+			} else if (dataModification.propertyName() != null && dataModification.propertyName().equals("flexoID")) {
 				setChanged();
+			}
 		}
 	}
 
@@ -559,9 +575,10 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 		public ValidationIssue<DisplayActionMustHaveADisplayProcess, ActionNode> applyValidation(ActionNode node) {
 			ValidationError<DisplayActionMustHaveADisplayProcess, ActionNode> err = null;
 			if (node._actionType == ActionType.DISPLAY_ACTION) {
-				if (node.getDisplayProcess() == null && node.hasIncomingEdges())
+				if (node.getDisplayProcess() == null && node.hasIncomingEdges()) {
 					err = new ValidationError<DisplayActionMustHaveADisplayProcess, ActionNode>(this, node,
 							"display_action_($object.name)_must_have_a_display_process");
+				}
 			}
 			return err;
 
@@ -588,9 +605,10 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 		public ValidationIssue<DisplayActionShouldHaveADisplayOperation, ActionNode> applyValidation(ActionNode node) {
 			ValidationError<DisplayActionShouldHaveADisplayOperation, ActionNode> w = null;
 			if (node._actionType == ActionType.DISPLAY_ACTION) {
-				if (node.getDisplayProcess() != null && node.getDisplayOperation() == null && node.hasIncomingEdges())
+				if (node.getDisplayProcess() != null && node.getDisplayOperation() == null && node.hasIncomingEdges()) {
 					w = new ValidationError<DisplayActionShouldHaveADisplayOperation, ActionNode>(this, node,
 							"display_action_($object.name)_should_have_a_display_operation");
+				}
 			}
 			return w;
 
@@ -689,13 +707,15 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 			@Override
 			protected void fixAction() {
 				if (getObject().getAssociatedButtonWidget() != null) {
-					if (getObject().getActionType() == ActionType.DISPLAY_ACTION)
+					if (getObject().getActionType() == ActionType.DISPLAY_ACTION) {
 						getObject().getAssociatedButtonWidget().setHyperlinkType(HyperlinkType.DISPLAYACTION);
-					else if (getObject().getActionType() == ActionType.FLEXO_ACTION)
+					} else if (getObject().getActionType() == ActionType.FLEXO_ACTION) {
 						getObject().getAssociatedButtonWidget().setHyperlinkType(HyperlinkType.FLEXOACTION);
+					}
 				} else {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("No button associated to this node");
+					}
 				}
 			}
 
@@ -703,12 +723,13 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 	}
 
 	public List<WorkflowPathToOperationNode> getNextOperationsForAction() {
-		if (getActionType() == ActionType.DISPLAY_ACTION)
+		if (getActionType() == ActionType.DISPLAY_ACTION) {
 			return getNextOperationForDisplayAction();
-		else if (getActionType() == ActionType.FLEXO_ACTION)
+		} else if (getActionType() == ActionType.FLEXO_ACTION) {
 			return getNextOperationsForFlexoAction();
-		else if (logger.isLoggable(Level.WARNING))
+		} else if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Action type " + getActionType().getName() + " is not handled by generators");
+		}
 		return new ArrayList<WorkflowPathToOperationNode>();
 	}
 
@@ -726,10 +747,11 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 			if (getDisplayOperation().hasWOComponent()) {
 				List<WorkflowPathToOperationNode> retval = new ArrayList<WorkflowPathToOperationNode>();
 				currentWorkflowPathToOperationNode.setOperationNode(getDisplayOperation());
-				if (getDisplayOperation().getNewStatus() != null)
+				if (getDisplayOperation().getNewStatus() != null) {
 					currentWorkflowPathToOperationNode.addNewStatus(getDisplayOperation().getNewStatus());
-				else if (getDisplayOperation().getAbstractActivityNode().getNewStatus() != null)
+				} else if (getDisplayOperation().getAbstractActivityNode().getNewStatus() != null) {
 					currentWorkflowPathToOperationNode.addNewStatus(getDisplayOperation().getAbstractActivityNode().getNewStatus());
+				}
 
 				retval.add(currentWorkflowPathToOperationNode);
 				return retval;
@@ -740,8 +762,9 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 		} else {
 			FlexoProcess process = getDisplayProcess();
 			if (process == null) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Display process is null for DISPLAY_ACTION. Validation should catch this");
+				}
 				return new ArrayList<WorkflowPathToOperationNode>();
 			} else {
 				return getNextOperationForProcess(new ArrayList<AbstractNode>(), new ArrayList<WorkflowPathToOperationNode>(), process,
@@ -756,8 +779,9 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 	 */
 	private List<WorkflowPathToOperationNode> getNextOperationsForFlexoAction() {
 		WorkflowPathToOperationNode currentWorkflowPath = new WorkflowPathToOperationNode();
-		if (getNewStatus() != null)
+		if (getNewStatus() != null) {
 			currentWorkflowPath.addNewStatus(getNewStatus());
+		}
 		return getNextOperationForFlexoNode(new ArrayList<AbstractNode>(), new ArrayList<WorkflowPathToOperationNode>(), this,
 				currentWorkflowPath);
 	}
@@ -771,10 +795,11 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 	private static List<WorkflowPathToOperationNode> getNextOperationForFlexoNode(List<AbstractNode> visitedNodes,
 			List<WorkflowPathToOperationNode> returnedNodes, AbstractNode node,
 			WorkflowPathToOperationNode currentWorkflowPathToOperationNode, boolean includeDeadEndPath) {
-		if (visitedNodes.contains(node))
+		if (visitedNodes.contains(node)) {
 			return returnedNodes;
-		else
+		} else {
 			visitedNodes.add(node);
+		}
 		Enumeration<FlexoPostCondition<AbstractNode, AbstractNode>> en;
 
 		// now let's collect postconditions where a token is send
@@ -828,50 +853,62 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 			while (en.hasMoreElements()) {
 				WorkflowPathToOperationNode duplicatedWorkflowPath = currentWorkflowPathToOperationNode.clone();
 				FlexoPostCondition<AbstractNode, AbstractNode> post = en.nextElement();
-				if (node instanceof IFOperator)
+				if (node instanceof IFOperator) {
 					duplicatedWorkflowPath.addIfOperator((IFOperator) node, ((IFOperator) node).isPositiveEvaluationPostcondition(post));
+				}
 
 				if (post.getIsConditional()
 						&& (post.getConditionPrimitive() != null || (post.getConditionDescription() != null && post
-								.getConditionDescription().trim().length() > 0)))
+								.getConditionDescription().trim().length() > 0))) {
 					duplicatedWorkflowPath.addCondition(post.getProcess(), post.getConditionDescription(), post.getConditionPrimitive(),
 							true);
+				}
 
 				AbstractNode end = post.getEndNode();
-				if (end instanceof FlexoPreCondition)
+				if (end instanceof FlexoPreCondition) {
 					end = ((FlexoPreCondition) end).getAttachedBeginNode() == null ? ((FlexoPreCondition) end).getAttachedNode()
 							: ((FlexoPreCondition) end).getAttachedBeginNode();
-				if (end instanceof PetriGraphNode) {
-					if (((PetriGraphNode) end).getNewStatus() != null)
-						duplicatedWorkflowPath.addNewStatus(((PetriGraphNode) end).getNewStatus());
 				}
-				if (end instanceof ActionNode && ((ActionNode) end).isBeginNode())
-					end = ((ActionNode) end).getOperationNode();
 				if (end instanceof PetriGraphNode) {
-					if (((PetriGraphNode) end).getNewStatus() != null)
+					if (((PetriGraphNode) end).getNewStatus() != null) {
 						duplicatedWorkflowPath.addNewStatus(((PetriGraphNode) end).getNewStatus());
+					}
+				}
+				if (end instanceof ActionNode && ((ActionNode) end).isBeginNode()) {
+					end = ((ActionNode) end).getOperationNode();
+				}
+				if (end instanceof PetriGraphNode) {
+					if (((PetriGraphNode) end).getNewStatus() != null) {
+						duplicatedWorkflowPath.addNewStatus(((PetriGraphNode) end).getNewStatus());
+					}
 				}
 				if (end instanceof LoopSubProcessNode) {
-					if (((PetriGraphNode) end).getNewStatus() != null)
+					if (((PetriGraphNode) end).getNewStatus() != null) {
 						duplicatedWorkflowPath.addNewStatus(((PetriGraphNode) end).getNewStatus());
+					}
 					if (((LoopSubProcessNode) end).getPortMapRegistery() != null
-							&& ((LoopSubProcessNode) end).getPortMapRegistery().getAllNewPortmaps().size() > 0)
+							&& ((LoopSubProcessNode) end).getPortMapRegistery().getAllNewPortmaps().size() > 0) {
 						end = ((LoopSubProcessNode) end).getPortMapRegistery().getAllNewPortmaps().firstElement();
+					}
 				} else if (node instanceof LOOPOperator) {
-					if (((LOOPOperator) node).getExecutionPetriGraph().getAllBeginNodes().size() > 0)
+					if (((LOOPOperator) node).getExecutionPetriGraph().getAllBeginNodes().size() > 0) {
 						end = ((LOOPOperator) node).getExecutionPetriGraph().getAllBeginNodes().firstElement();
+					}
 				}
 
-				if (end instanceof PetriGraphNode && isCreateProcess((PetriGraphNode) end))
+				if (end instanceof PetriGraphNode && isCreateProcess((PetriGraphNode) end)) {
 					duplicatedWorkflowPath.getCreatedProcesses().add(end.getProcess());
+				}
 
-				if (end instanceof PetriGraphNode && isDeleteProcess((PetriGraphNode) end, false))
+				if (end instanceof PetriGraphNode && isDeleteProcess((PetriGraphNode) end, false)) {
 					duplicatedWorkflowPath.getDeletedProcesses().add(end.getProcess());
+				}
 
 				if (end instanceof OperationNode && ((OperationNode) end).hasWOComponent()) {
 					duplicatedWorkflowPath.setOperationNode((OperationNode) end);
-					if (((OperationNode) end).getNewStatus() != null)
+					if (((OperationNode) end).getNewStatus() != null) {
 						duplicatedWorkflowPath.addNewStatus(((OperationNode) end).getNewStatus());
+					}
 					returnedNodes.add(duplicatedWorkflowPath);
 				} else if (end instanceof FlexoPortMap && ((FlexoPortMap) end).getOperation().getPort() instanceof NewPort) {
 					getNextOperationForFlexoNode(visitedNodes, returnedNodes, ((FlexoPortMap) end).getOperation().getPort(),
@@ -898,8 +935,9 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 				}
 			}
 		} else if (includeDeadEndPath && !hasInsertedPathFromContainer) {
-			if (node instanceof PetriGraphNode && isDeleteProcess((PetriGraphNode) node, true))
+			if (node instanceof PetriGraphNode && isDeleteProcess((PetriGraphNode) node, true)) {
 				currentWorkflowPathToOperationNode.getDeletedProcesses().add(node.getProcess());
+			}
 
 			returnedNodes.add(currentWorkflowPathToOperationNode);
 		}
@@ -917,8 +955,9 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 	}
 
 	private static boolean isDeleteProcess(PetriGraphNode node, boolean isDeadEnd) {
-		if (isDeadEnd && isEndNode(node))
+		if (isDeadEnd && isEndNode(node)) {
 			node = node.getProcessLevelNode();
+		}
 
 		return node != null && node.isProcessLevel() && isEndNode(node);
 	}
@@ -933,8 +972,9 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 		Enumeration en = process.getAllBeginNodes().elements();
 		while (en.hasMoreElements()) {
 			AbstractActivityNode node = (AbstractActivityNode) en.nextElement();
-			if (!visitedNodes.contains(node))
+			if (!visitedNodes.contains(node)) {
 				getNextOperationForFlexoNode(visitedNodes, returnedNodes, node, currentWorkflowPathToOperationNode.clone());
+			}
 		}
 		return returnedNodes;
 	}
@@ -959,13 +999,15 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 		if (foundComponent instanceof TabComponentDefinition) {
 			newComponent = (TabComponentDefinition) foundComponent;
 		} else if (foundComponent != null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Found a component named " + aComponentName + " but this is not a TabComponent. Aborting.");
+			}
 			throw new DuplicateResourceException(aComponentName);
 		}
 		if (newComponent == null) {
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Creating a new Component named:" + aComponentName);
+			}
 			FlexoComponentFolder selectedFolder = getProject().getFlexoComponentLibrary().getRootFolder()
 					.getFolderTyped(FolderType.TAB_FOLDER);
 			newComponent = new TabComponentDefinition(aComponentName, getProject().getFlexoComponentLibrary(), selectedFolder, getProject());
@@ -996,8 +1038,9 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 	public void setProcess(FlexoProcess p) {
 		FlexoProcess old = getProcess();
 		super.setProcess(p);
-		if (_tabComponentInstance != null)
+		if (_tabComponentInstance != null) {
 			_tabComponentInstance.updateDependancies(old, p);
+		}
 	}
 
 	public TabComponentInstance getTabActionComponentInstance() {
@@ -1014,9 +1057,10 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 			_tabComponentInstance.setActionNode(this);
 			setChanged();
 			notifyAttributeModification("tabActionComponentInstance", null, _tabComponentInstance);
-		} else if (logger.isLoggable(Level.SEVERE))
+		} else if (logger.isLoggable(Level.SEVERE)) {
 			logger.severe("TabComponentInstance does not have a component definition for component named "
 					+ tabComponentInstance.getComponentName());
+		}
 	}
 
 	public void removeTabComponentInstance() {
@@ -1034,19 +1078,22 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 		     return true;*/
 		Enumeration<FlexoPreCondition> en = getPreConditions().elements();
 		while (en.hasMoreElements()) {
-			if (en.nextElement().hasIncomingPostConditions())
+			if (en.nextElement().hasIncomingPostConditions()) {
 				return true;
+			}
 		}
 		return false;
 	}
 
 	public boolean isActivatedByAToken() {
-		if (getIncomingPostConditions() != null && getIncomingPostConditions().size() > 0)
+		if (getIncomingPostConditions() != null && getIncomingPostConditions().size() > 0) {
 			return true;
+		}
 		Enumeration<FlexoPreCondition> en = getPreConditions().elements();
 		while (en.hasMoreElements()) {
-			if (en.nextElement().hasIncomingPostConditions())
+			if (en.nextElement().hasIncomingPostConditions()) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -1056,9 +1103,10 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 			for (WorkflowPathToOperationNode workflowPath : getNextOperationForDisplayAction()) {
 				OperationNode nextOp = workflowPath.getOperationNode();
 				if (nextOp != null) {
-					if (nextOp.getOperationComponent().getWOComponent().getTabWidgetForTabComponent(getTabComponent()) != null)
+					if (nextOp.getOperationComponent().getWOComponent().getTabWidgetForTabComponent(getTabComponent()) != null) {
 						return nextOp.getOperationComponent().getWOComponent().getTabWidgetForTabComponent(getTabComponent())
 								.getTabKeyForGenerator();
+					}
 					break;
 				}
 			}
@@ -1072,11 +1120,13 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 	 */
 	@Override
 	public synchronized void setIsModified() {
-		if (ignoreNotifications())
+		if (ignoreNotifications()) {
 			return;
+		}
 		super.setIsModified();
-		if (getOperationNode() != null)
+		if (getOperationNode() != null) {
 			getOperationNode().setIsModified();
+		}
 	}
 
 	@Override
@@ -1123,8 +1173,9 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 					if (button.getHyperlinkType() == HyperlinkType.FLEXOACTION) {
 						button.setHyperlinkType(null);
 					}
-					if (button.getIsMandatoryFlexoAction())
+					if (button.getIsMandatoryFlexoAction()) {
 						button.setIsMandatoryFlexoAction(false);
+					}
 				}
 				node.delete();
 			}

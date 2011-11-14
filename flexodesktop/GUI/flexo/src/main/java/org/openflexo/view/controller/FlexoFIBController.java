@@ -70,14 +70,16 @@ public class FlexoFIBController<T> extends FIBController<T> implements Graphical
 	}
 
 	public FlexoEditor getEditor() {
-		if (getFlexoController() != null)
+		if (getFlexoController() != null) {
 			return getFlexoController().getEditor();
+		}
 		return null;
 	}
 
 	public SelectionManager getSelectionManager() {
-		if (getFlexoController() instanceof SelectionManagingController)
+		if (getFlexoController() instanceof SelectionManagingController) {
 			return ((SelectionManagingController) getFlexoController()).getSelectionManager();
+		}
 		return null;
 	}
 
@@ -89,11 +91,13 @@ public class FlexoFIBController<T> extends FIBController<T> implements Graphical
 	@Override
 	public void setDataObject(T anObject) {
 		if (anObject != getDataObject()) {
-			if (getDataObject() instanceof FlexoObservable)
+			if (getDataObject() instanceof FlexoObservable) {
 				((FlexoObservable) getDataObject()).deleteObserver(this);
+			}
 			super.setDataObject(anObject);
-			if (anObject instanceof FlexoObservable)
+			if (anObject instanceof FlexoObservable) {
 				((FlexoObservable) anObject).addObserver(this);
+			}
 		}
 
 		logger.fine("Set DataObject with " + anObject);

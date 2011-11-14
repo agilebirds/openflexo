@@ -50,7 +50,6 @@ import org.openflexo.diff.merge.DefaultMergedDocumentType;
 import org.openflexo.diff.merge.IMerge;
 import org.openflexo.diff.merge.Merge;
 import org.openflexo.diff.merge.MergedDocumentType;
-
 import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.rm.ResourceType;
@@ -123,13 +122,15 @@ public class CVSFile extends CVSAbstractFile {
 	}
 
 	public void setStatus(CVSStatus status) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("File " + getFileName() + " received new status " + status);
+		}
 		CVSStatus oldStatus = _status;
 		if (oldStatus != status) {
 			_status = status;
-			if (getContainer() != null)
+			if (getContainer() != null) {
 				getContainer().notifyStatusChanged(this);
+			}
 			if (oldStatus.isConflicting()) {
 				getSharedProject().decConflictsCount(this);
 			} else if (oldStatus.isLocallyModified()) {
@@ -160,14 +161,16 @@ public class CVSFile extends CVSAbstractFile {
 	}
 
 	public Date getStickyDate() {
-		if (_entry != null)
+		if (_entry != null) {
 			return _entry.getDate();
+		}
 		return new Date(0);
 	}
 
 	public Date getLastModified() {
-		if (_entry != null)
+		if (_entry != null) {
 			return _entry.getLastModified();
+		}
 		return new Date(0);
 	}
 
@@ -177,8 +180,9 @@ public class CVSFile extends CVSAbstractFile {
 		 * MacOS X It is therefore recommanded to use
 		 * getLocalFileLastModifiedTruncated
 		 */
-		if (getFile().exists())
+		if (getFile().exists()) {
 			return new Date(getFile().lastModified());
+		}
 		return new Date(0);
 	}
 
@@ -195,48 +199,55 @@ public class CVSFile extends CVSAbstractFile {
 	}
 
 	public String getOptions() {
-		if (_entry != null)
+		if (_entry != null) {
 			return _entry.getOptions();
+		}
 		return null;
 	}
 
 	public CVSRevisionIdentifier getRevision() {
-		if (_entry != null)
+		if (_entry != null) {
 			try {
 				return new CVSRevisionIdentifier(_entry.getRevision());
 			} catch (InvalidVersionFormatException e) {
 				logger.warning("Invalid revision " + _entry.getRevision());
 			}
+		}
 		return null;
 	}
 
 	public String getStickyInformation() {
-		if (_entry != null)
+		if (_entry != null) {
 			return _entry.getStickyInformation();
+		}
 		return null;
 	}
 
 	public String getTag() {
-		if (_entry != null)
+		if (_entry != null) {
 			return _entry.getTag();
+		}
 		return null;
 	}
 
 	public boolean isBinary() {
-		if (_entry != null)
+		if (_entry != null) {
 			return _entry.isBinary();
+		}
 		return CVSConstants.isBinaryFile(getFile());
 	}
 
 	public String getLastModifiedAsString() {
-		if (getLastModified() == null || getLastModified().equals(new Date(0)))
+		if (getLastModified() == null || getLastModified().equals(new Date(0))) {
 			return FlexoLocalization.localizedForKey("never");
+		}
 		return (new SimpleDateFormat("dd/MM HH:mm:ss")).format(getLastModified());
 	}
 
 	public String getStickyDateAsString() {
-		if (getStickyDate() == null || getStickyDate().equals(new Date(0)))
+		if (getStickyDate() == null || getStickyDate().equals(new Date(0))) {
 			return FlexoLocalization.localizedForKey("never");
+		}
 		return (new SimpleDateFormat("dd/MM HH:mm:ss")).format(getStickyDate());
 	}
 
@@ -256,42 +267,60 @@ public class CVSFile extends CVSAbstractFile {
 	public ResourceType getResourceType() {
 		if (!_triedToResolveResourceType) {
 			_triedToResolveResourceType = true;
-			if (getFileName().endsWith(".rmxml"))
+			if (getFileName().endsWith(".rmxml")) {
 				_resourceType = ResourceType.RM;
-			if (getFileName().endsWith(".rmxml.ts"))
+			}
+			if (getFileName().endsWith(".rmxml.ts")) {
 				_resourceType = ResourceType.RM;
-			if (getFileName().endsWith(".wkf"))
+			}
+			if (getFileName().endsWith(".wkf")) {
 				_resourceType = ResourceType.WORKFLOW;
-			if (getFileName().endsWith(".wolib"))
+			}
+			if (getFileName().endsWith(".wolib")) {
 				_resourceType = ResourceType.COMPONENT_LIBRARY;
-			if (getFileName().endsWith(".menu"))
+			}
+			if (getFileName().endsWith(".menu")) {
 				_resourceType = ResourceType.NAVIGATION_MENU;
-			if (getFileName().endsWith(".xml") && getFile().getParentFile().getName().equals("Workflow"))
+			}
+			if (getFileName().endsWith(".xml") && getFile().getParentFile().getName().equals("Workflow")) {
 				_resourceType = ResourceType.PROCESS;
-			if (getFileName().endsWith(".woxml"))
+			}
+			if (getFileName().endsWith(".woxml")) {
 				_resourceType = ResourceType.OPERATION_COMPONENT;
-			if (getFileName().endsWith(".cg"))
+			}
+			if (getFileName().endsWith(".cg")) {
 				_resourceType = ResourceType.GENERATED_CODE;
-			if (getFileName().endsWith(".dm"))
+			}
+			if (getFileName().endsWith(".dm")) {
 				_resourceType = ResourceType.DATA_MODEL;
-			if (getFileName().endsWith(".jar"))
+			}
+			if (getFileName().endsWith(".jar")) {
 				_resourceType = ResourceType.JAR;
-			if (getFileName().endsWith(".dkv"))
+			}
+			if (getFileName().endsWith(".dkv")) {
 				_resourceType = ResourceType.DKV_MODEL;
-			if (getFileName().endsWith(".jpg") || getFileName().endsWith(".png"))
+			}
+			if (getFileName().endsWith(".jpg") || getFileName().endsWith(".png")) {
 				_resourceType = ResourceType.SCREENSHOT;
-			if (getFileName().endsWith(".ws"))
+			}
+			if (getFileName().endsWith(".ws")) {
 				_resourceType = ResourceType.WS_LIBRARY;
-			if (getFileName().endsWith(".xml") && getFile().getParentFile().getName().equals("WebService"))
+			}
+			if (getFileName().endsWith(".xml") && getFile().getParentFile().getName().equals("WebService")) {
 				_resourceType = ResourceType.WSDL;
-			if (getFileName().endsWith(".api.LAST_ACCEPTED"))
+			}
+			if (getFileName().endsWith(".api.LAST_ACCEPTED")) {
 				_resourceType = ResourceType.API_FILE;
-			if (getFileName().endsWith(".api.LAST_GENERATED"))
+			}
+			if (getFileName().endsWith(".api.LAST_GENERATED")) {
 				_resourceType = ResourceType.API_FILE;
-			if (getFileName().endsWith(".java.LAST_ACCEPTED"))
+			}
+			if (getFileName().endsWith(".java.LAST_ACCEPTED")) {
 				_resourceType = ResourceType.JAVA_FILE;
-			if (getFileName().endsWith(".java.LAST_GENERATED"))
+			}
+			if (getFileName().endsWith(".java.LAST_GENERATED")) {
 				_resourceType = ResourceType.JAVA_FILE;
+			}
 		}
 		return _resourceType;
 	}
@@ -376,8 +405,9 @@ public class CVSFile extends CVSAbstractFile {
 		}
 		_contentOnDisk = newContentOnDisk;
 		_editor = null;
-		if (_merge != null)
+		if (_merge != null) {
 			rebuildMerge();
+		}
 		if (getStatus().isUpToDate()) {
 			setStatus(CVSStatus.LocallyModified);
 		} else if (getStatus().isLocallyModified()) {
@@ -479,8 +509,9 @@ public class CVSFile extends CVSAbstractFile {
 	}
 
 	private synchronized String retrieveContentOnRepository(RevisionRetrieverListener listener) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Try to retrieve revision " + getRepositoryRevision() + " for file " + getFile());
+		}
 
 		_contentOnRepositoryRevisionRetriever = new RevisionRetriever(getRepositoryRevision(), listener);
 		getSharedProject().addToThreadPool(_contentOnRepositoryRevisionRetriever);
@@ -501,8 +532,9 @@ public class CVSFile extends CVSAbstractFile {
 		@Override
 		public void run() {
 			// Perform a update -p -r revision
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("[" + Thread.currentThread().getName() + "] Starting " + getName());
+			}
 			UpdateCommand updateCommand = new UpdateCommand();
 			updateCommand.setRecursive(false);
 			File[] files = { getFile() };
@@ -519,8 +551,9 @@ public class CVSFile extends CVSAbstractFile {
 							if (e.getInfoContainer() instanceof PipedFileInformation) {
 								PipedFileInformation info = (PipedFileInformation) e.getInfoContainer();
 								setRepositoryRevision(info.getRepositoryRevision());
-								if (logger.isLoggable(Level.FINE))
+								if (logger.isLoggable(Level.FINE)) {
 									logger.fine("Sets repository revision for " + getFileName() + " to be " + info.getRepositoryRevision());
+								}
 							}
 						}
 					}
@@ -535,11 +568,13 @@ public class CVSFile extends CVSAbstractFile {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("[" + Thread.currentThread().getName() + "] Ending " + getName());
+			}
 
-			if (_listener != null)
+			if (_listener != null) {
 				_listener.notifyRevisionRetrieved(CVSFile.this, revisionToRetrieve);
+			}
 		}
 
 		public synchronized CVSRevisionIdentifier getRevisionToRetrieve() {
@@ -565,9 +600,10 @@ public class CVSFile extends CVSAbstractFile {
 
 	protected synchronized void receivePipedFileInformation(PipedFileInformation info) {
 		String receivedRepositoryRevision = info.getRepositoryRevision();
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("receivePipedFileInformation() for file=" + getFile() + " " + receivedRepositoryRevision + " on file "
 					+ info.getTempFile());
+		}
 
 		CVSRevisionIdentifier revisionId = null;
 		try {
@@ -592,14 +628,16 @@ public class CVSFile extends CVSAbstractFile {
 	}
 
 	private synchronized void unlockRevisionRetrievers(CVSRevisionIdentifier revisionId) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("unlockRevisionRetrievers() called with " + revisionId);
+		}
 		if (_originalContentRevisionRetriever != null) {
 			if (_originalContentRevisionRetriever.getRevisionToRetrieve().equals(revisionId) && _revisions.get(revisionId) != null) {
 				setOriginalContent(_revisions.get(revisionId).getContents());
 				_originalContentRevisionRetriever = null;
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Unlocking OriginalContentRevisionRetriever");
+				}
 				return;
 			}
 		}
@@ -609,8 +647,9 @@ public class CVSFile extends CVSAbstractFile {
 					&& _revisions.get(revisionId) != null) {
 				setContentOnRepository(_revisions.get(revisionId).getContents());
 				_contentOnRepositoryRevisionRetriever = null;
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Unlocking ContentOnRepositoryRevisionRetriever");
+				}
 				return;
 			}
 		}
@@ -647,8 +686,9 @@ public class CVSFile extends CVSAbstractFile {
 
 	private synchronized void setContentOnRepository(String newContentOnRepository) {
 		_contentOnRepository = newContentOnRepository;
-		if (_merge != null)
+		if (_merge != null) {
 			rebuildMerge();
+		}
 		// logger.info("Content on repository is now: "+_contentOnRepository);
 		setChanged();
 		notifyObservers(new CVSFileRevisionLoaded(this));
@@ -679,8 +719,9 @@ public class CVSFile extends CVSAbstractFile {
 
 	private synchronized String retrieveOriginalContent(RevisionRetrieverListener listener) {
 		logger.info("Try to retrieve revision " + getRevision() + " for file " + getFile());
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Try to retrieve revision " + getRevision() + " for file " + getFile());
+		}
 
 		_originalContentRevisionRetriever = new RevisionRetriever(getRevision(), listener);
 		getSharedProject().addToThreadPool(_originalContentRevisionRetriever);
@@ -690,8 +731,9 @@ public class CVSFile extends CVSAbstractFile {
 	private synchronized void setOriginalContent(String originalContent) {
 		_originalContent = originalContent;
 		// logger.info("Original content is now: "+_originalContent);
-		if (_merge != null)
+		if (_merge != null) {
 			rebuildMerge();
+		}
 		setChanged();
 		notifyObservers(new CVSFileRevisionLoaded(this));
 	}
@@ -713,18 +755,23 @@ public class CVSFile extends CVSAbstractFile {
 	}
 
 	private synchronized void rebuildMerge() {
-		if (getContentOnDisk() == null)
+		if (getContentOnDisk() == null) {
 			return;
-		if (getOriginalContent() == null)
+		}
+		if (getOriginalContent() == null) {
 			return;
-		if (getContentOnRepository() == null)
+		}
+		if (getContentOnRepository() == null) {
 			return;
+		}
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("BEGIN Thread " + Thread.currentThread() + ": rebuildMerge() for " + getFileName());
+		}
 		MergedDocumentType docType = DefaultMergedDocumentType.LINES;
-		if (getResourceType() != null)
+		if (getResourceType() != null) {
 			docType = getResourceType().getMergedDocumentType();
+		}
 		_merge = new Merge(new DiffSource(getOriginalContent()), new DiffSource(getContentOnDisk()), new DiffSource(
 				getContentOnRepository()), docType);
 		/*
@@ -734,9 +781,10 @@ public class CVSFile extends CVSAbstractFile {
 		 * left="+_merge.getLeftSource().tokensCount() +"
 		 * right="+_merge.getRightSource().tokensCount());
 		 */
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("END Thread " + Thread.currentThread() + ": rebuildMerge() for " + getFileName() + " merge="
 					+ Integer.toHexString(_merge.hashCode()));
+		}
 	}
 
 	private XMLDiff3 _xmlDiff3;
@@ -750,12 +798,15 @@ public class CVSFile extends CVSAbstractFile {
 	// }
 
 	private synchronized void rebuildXMLDiff3() {
-		if (getContentOnDisk() == null)
+		if (getContentOnDisk() == null) {
 			return;
-		if (getOriginalContent() == null)
+		}
+		if (getOriginalContent() == null) {
 			return;
-		if (getContentOnRepository() == null)
+		}
+		if (getContentOnRepository() == null) {
 			return;
+		}
 
 		Document docSource = null;
 		Document v1 = null;
@@ -836,8 +887,9 @@ public class CVSFile extends CVSAbstractFile {
 	}
 
 	protected synchronized void receiveLogInformation(LogInformation info) {
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("receiveLogInformation() for file=" + getFile());
+		}
 		headRevision = info.getHeadRevision();
 		branch = info.getBranch();
 		accessList = info.getAccessList();

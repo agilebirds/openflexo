@@ -20,8 +20,8 @@
 package org.openflexo.dm.view.controller;
 
 import org.openflexo.components.browser.BrowserElementType;
-import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
+import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 
 /**
@@ -55,14 +55,15 @@ public class DMBrowser extends ProjectBrowser {
 	@Override
 	public FlexoModelObject getDefaultRootObject() {
 		if (_controller != null) {
-			if (getDMViewMode() == DMViewMode.Repositories)
+			if (getDMViewMode() == DMViewMode.Repositories) {
 				return _controller.getDataModel();
-			else if (getDMViewMode() == DMViewMode.Packages)
+			} else if (getDMViewMode() == DMViewMode.Packages) {
 				return _controller.getDataModel();
-			else if (getDMViewMode() == DMViewMode.Diagrams)
+			} else if (getDMViewMode() == DMViewMode.Diagrams) {
 				return _controller.getDataModel();
-			else if (getDMViewMode() == DMViewMode.Hierarchy)
+			} else if (getDMViewMode() == DMViewMode.Hierarchy) {
 				return _controller.getDataModel().getEntityNamed("java.lang.Object");
+			}
 		}
 		return null;
 	}

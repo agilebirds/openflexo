@@ -28,11 +28,11 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.foundation.cg.generator.IFlexoResourceGenerator;
 import org.openflexo.foundation.rm.DuplicateResourceException;
+import org.openflexo.foundation.rm.FlexoFileResource.FileWritingLock;
 import org.openflexo.foundation.rm.FlexoGeneratedResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.GeneratedResourceData;
-import org.openflexo.foundation.rm.FlexoFileResource.FileWritingLock;
 import org.openflexo.foundation.rm.cg.CopyOfFileResource;
 import org.openflexo.toolbox.FileUtils;
 
@@ -97,10 +97,12 @@ public class CopyOfFileResourceData implements GeneratedResourceData, Generation
 	@Override
 	public void writeToFile(File aFile) throws FlexoException {
 		if (source == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Source file is null!");
-			if (aFile.exists())
+			}
+			if (aFile.exists()) {
 				aFile.delete();
+			}
 			return;
 		}
 		try {
@@ -111,15 +113,16 @@ public class CopyOfFileResourceData implements GeneratedResourceData, Generation
 				lock = getFlexoResource().willWriteOnDisk();
 				needsNotifyEndOfSaving = true;
 			}
-			if (source.isFile())
+			if (source.isFile()) {
 				FileUtils.copyFileToFile(source, aFile);
-			else if (source.isDirectory()) {
+			} else if (source.isDirectory()) {
 				aFile.mkdirs();
 				FileUtils.copyContentDirToDir(source, aFile);
 			} else {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("Resource to copy file is neither a file nor a directory "
 							+ this.flexoCopiedResource.getResourceToCopy().getAbsolutePath());
+				}
 			}
 			if (needsNotifyEndOfSaving) {
 				getFlexoResource().hasWrittenOnDisk(lock);

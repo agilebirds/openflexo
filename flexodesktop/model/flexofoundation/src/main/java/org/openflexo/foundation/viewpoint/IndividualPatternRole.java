@@ -12,8 +12,9 @@ public class IndividualPatternRole extends OntologicObjectPatternRole {
 
 	@Override
 	public String getPreciseType() {
-		if (getOntologicType() != null)
+		if (getOntologicType() != null) {
 			return getOntologicType().getName();
+		}
 		return "";
 	}
 
@@ -34,8 +35,9 @@ public class IndividualPatternRole extends OntologicObjectPatternRole {
 
 	public OntologyClass getOntologicType() {
 		getCalc().loadWhenUnloaded();
-		if (getOntologyLibrary() != null)
+		if (getOntologyLibrary() != null) {
 			return getOntologyLibrary().getClass(_getConceptURI());
+		}
 		return null;
 	}
 

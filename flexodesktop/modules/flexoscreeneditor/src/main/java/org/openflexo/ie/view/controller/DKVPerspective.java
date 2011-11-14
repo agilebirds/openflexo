@@ -73,8 +73,9 @@ class DKVPerspective extends FlexoPerspective<DKVModel> {
 
 	@Override
 	public DKVModel getDefaultObject(FlexoModelObject proposedObject) {
-		if (proposedObject instanceof DKVObject)
+		if (proposedObject instanceof DKVObject) {
 			return ((DKVObject) proposedObject).getDkvModel();
+		}
 		return _controller.getProject().getDKVModel();
 	}
 

@@ -22,7 +22,6 @@
 
 package com.metaphaseeditor.action;
 
-import com.metaphaseeditor.MetaphaseEditorPanel;
 import java.awt.event.ActionEvent;
 import java.util.Iterator;
 import java.util.Map;
@@ -35,6 +34,8 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledEditorKit;
 import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
+
+import com.metaphaseeditor.MetaphaseEditorPanel;
 
 public class FormatAction extends StyledEditorKit.StyledTextAction {
 
@@ -63,6 +64,7 @@ public class FormatAction extends StyledEditorKit.StyledTextAction {
 		this.attributes = attributes;
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent ae) {
 		JTextPane textPane = editorPanel.getHtmlTextPane();
 		HTMLDocument htmlDocument = (HTMLDocument) textPane.getDocument();

@@ -231,12 +231,14 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 		IEWidgetView view = _widgetViews.get(insertedWidget);
 		if (view == null) {
 			view = createView(getIEController(), insertedWidget, addDnDSupport);
-			if (view != null)
+			if (view != null) {
 				_widgetViews.put(insertedWidget, view);
+			}
 		}
 		if (view == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("view is null for widget : " + insertedWidget + " in component : " + this);
+			}
 		}
 		return view;
 	}
@@ -244,21 +246,24 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 	public IEWidgetView createView(IEController controller, IEWidget insertedWidget, boolean addDnDSupport) {
 
 		if (insertedWidget == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Can't create view for a null model");
+			}
 			new Exception().printStackTrace();
 			return null;
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("createView for:" + insertedWidget);
+		}
 		if (insertedWidget instanceof IEBlocWidget) {
 			return new IEBlocWidgetView(controller, (IEBlocWidget) insertedWidget, addDnDSupport, this);
 		}
 		if (insertedWidget instanceof IESequenceWidget) {
-			if (((IESequenceWidget) insertedWidget).getNonSequenceParent() instanceof IEWOComponent)
+			if (((IESequenceWidget) insertedWidget).getNonSequenceParent() instanceof IEWOComponent) {
 				return new DropZoneTopComponent(controller, (IESequenceWidget) insertedWidget, this);
-			else
+			} else {
 				return new IESequenceWidgetWidgetView(controller, (IESequenceWidget) insertedWidget, true, this);
+			}
 		}
 		if (insertedWidget instanceof IETDWidget) {
 			return new IETDWidgetView(controller, ((IETDWidget) insertedWidget).getSequenceWidget(), this);
@@ -327,15 +332,17 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 			return new IEBIRTWidgetView(controller, (IEBIRTWidget) insertedWidget, addDnDSupport, this);
 		}
 
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Can't create view for model :" + insertedWidget.getClass());
+		}
 
 		return null;
 	}
 
 	public void notifyAllViewsToHoldTheirNextComputedPreferredSize(Layoutable invoker) {
-		if (!isDisplayed || lastLayoutInvoker != null)
+		if (!isDisplayed || lastLayoutInvoker != null) {
 			return;
+		}
 		lastLayoutInvoker = invoker;
 		holdsNextComputedPreferredSize = true;
 		// Enumeration<IEWidgetView> en = _widgetViews.elements();
@@ -345,8 +352,9 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 	}
 
 	public void resetAllViewsPreferredSize(Layoutable invoker) {
-		if (invoker != lastLayoutInvoker)
+		if (invoker != lastLayoutInvoker) {
 			return;
+		}
 		holdsNextComputedPreferredSize = false;
 		clearPrefSize();
 		// Enumeration<IEWidgetView> en = _widgetViews.elements();
@@ -360,8 +368,9 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
      *
      */
 	public void updatePreferredSize() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Update wo component view preferred size");
+		}
 		setPreferredSize(getPreferredSize());
 		if (getParent() != null) {
 			getParent().doLayout();
@@ -376,8 +385,9 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 	 */
 	@Override
 	public void willShow() {
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("WOComponent will show..." + _widgetViews.size());
+		}
 		propagateResize();
 		isDisplayed = true;
 	}
@@ -401,8 +411,9 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 	public void propagateResize() {
 		Component[] c = getComponents();
 		for (int i = 0; i < c.length; i++) {
-			if (c[i] instanceof Layoutable)
+			if (c[i] instanceof Layoutable) {
 				((Layoutable) c[i]).propagateResize();
+			}
 		}
 	}
 
@@ -434,12 +445,14 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 			IESelectable view = findViewForModel((IEWidget) object);
 			if (view != null) {
 				view.setIsSelected(true);
-				if (!_selectedViews.contains(view))
+				if (!_selectedViews.contains(view)) {
 					_selectedViews.add(view);
+				}
 			} else {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("model " + object + " is selected, but I cannot find it's view...:-( in " + this
 							+ " this message is normal if the view is located in a PartialComponent");
+				}
 			}
 		}
 	}
@@ -456,8 +469,9 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 			IEWidgetView view = findViewForModel((IEObject) object);
 			if (view != null) {
 				(view).setIsSelected(false);
-				if (_selectedViews.contains(view))
+				if (_selectedViews.contains(view)) {
 					_selectedViews.remove(view);
+				}
 			}
 		}
 	}
@@ -539,8 +553,9 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 	}
 
 	protected int getMaxHeight() {
-		if (dropZone == null)
+		if (dropZone == null) {
 			return Toolkit.getDefaultToolkit().getScreenSize().height - 100;
+		}
 		return dropZone.getPreferredSize().height + 100;
 	}
 
@@ -558,8 +573,9 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 		for (int i = 0; i < getComponents().length; i++) {
 			int candidate = SwingUtilities.convertPoint(getComponent(i), getComponent(i).getX(), getComponent(i).getY(), this).x
 					+ getComponent(i).getWidth();
-			if (candidate > answer)
+			if (candidate > answer) {
 				answer = candidate;
+			}
 		}
 		return answer;
 	}
@@ -615,8 +631,9 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 
 	public void setSelectedTab(TabComponentDefinition tab) {
 		if (tab == null) {
-			if (logger.isLoggable(Level.SEVERE))
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Who tried that? you can not pass null as an argument. Returning immediately.");
+			}
 			return;
 		}
 		Enumeration<IEObject> en = _widgetViews.keys();
@@ -630,15 +647,17 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 							((JTabbedPane) view.getParent()).setSelectedComponent(view);
 							return;
 						} catch (RuntimeException e) {
-							if (logger.isLoggable(Level.SEVERE))
+							if (logger.isLoggable(Level.SEVERE)) {
 								logger.severe("This is weird, I found the tab, then asked to its parent to select it, but the parent threw an exception.");
+							}
 						}
 					}
 				}
 			}
 		}
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Sorry, but the tab " + tab.getName() + " cannot be found.");
+		}
 	}
 
 	public void notifyDisplayPrefHasChanged() {

@@ -17,10 +17,10 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+import junit.framework.TestCase;
+
 import org.openflexo.drm.DocResourceManager;
 import org.openflexo.drm.action.GenerateHelpSet;
-
-import junit.framework.TestCase;
 
 public class TestGenerateHelpSet extends TestCase {
 

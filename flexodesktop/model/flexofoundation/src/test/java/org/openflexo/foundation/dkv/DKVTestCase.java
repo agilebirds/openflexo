@@ -24,9 +24,6 @@ import java.util.Hashtable;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoTestCase;
-import org.openflexo.foundation.dkv.Domain;
-import org.openflexo.foundation.dkv.Key;
-import org.openflexo.foundation.dkv.Language;
 import org.openflexo.foundation.dkv.action.AddDomainAction;
 import org.openflexo.foundation.dkv.action.AddKeyAction;
 import org.openflexo.foundation.dkv.action.AddLanguageAction;

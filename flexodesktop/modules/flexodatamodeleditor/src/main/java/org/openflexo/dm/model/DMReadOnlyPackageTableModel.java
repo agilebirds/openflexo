@@ -21,14 +21,13 @@ package org.openflexo.dm.model;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-
 import org.openflexo.components.tabular.model.IconColumn;
 import org.openflexo.components.tabular.model.StringColumn;
 import org.openflexo.foundation.dm.DMPackage;
 import org.openflexo.foundation.dm.DMRepository;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 
 /**
  * @author gpolet
@@ -42,8 +41,9 @@ public class DMReadOnlyPackageTableModel extends DMPackageTableModel {
 	 */
 	public DMReadOnlyPackageTableModel(DMRepository repository, FlexoProject project) {
 		super(repository, project);
-		while (getColumnCount() > 0)
+		while (getColumnCount() > 0) {
 			removeFromColumns(columnAt(0));
+		}
 		addToColumns(new IconColumn<DMPackage>("package_icon", 30) {
 			@Override
 			public Icon getIcon(DMPackage aPackage) {

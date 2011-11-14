@@ -62,8 +62,9 @@ public class PaletteGR extends DrawingGraphicalRepresentation<ViewPointPalette> 
 	@Override
 	public void delete() {
 		logger.info("Delete paletteGR");
-		if (getPalette() != null)
+		if (getPalette() != null) {
 			getPalette().deleteObserver(this);
+		}
 		super.delete();
 	}
 

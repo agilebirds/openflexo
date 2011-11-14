@@ -88,8 +88,9 @@ public class FGEConnectorGraphics extends FGEGraphics {
 	public void drawSymbol(double x, double y, ConnectorSymbol symbol, double size, double angle) {
 		Point p = convertNormalizedPointToViewCoordinates(x, y);
 
-		if (getGraphicalRepresentation().getApplyForegroundToSymbols())
+		if (getGraphicalRepresentation().getApplyForegroundToSymbols()) {
 			symbolGraphics.setDefaultForeground(symbol.getForegroundStyle(getGraphicalRepresentation().getForeground()));
+		}
 
 		Color fgColor = getGraphicalRepresentation().getForeground().getColor();
 		Color bgColor = Color.WHITE;

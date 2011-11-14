@@ -71,8 +71,9 @@ public class WizardDialog extends FlexoDialog implements ActionListener {
 		northPanel = new JPanel() {
 			@Override
 			public void paint(Graphics g) {
-				if (wizard.getPageImage() != null)
+				if (wizard.getPageImage() != null) {
 					g.drawImage(wizard.getPageImage(), 0, 0, getWidth(), getHeight(), null);
+				}
 				super.paint(g);
 			}
 		};
@@ -124,10 +125,12 @@ public class WizardDialog extends FlexoDialog implements ActionListener {
 	}
 
 	private void updateCurrentPage() {
-		if (mainPanelLayout.getLayoutComponent(BorderLayout.CENTER) != null)
+		if (mainPanelLayout.getLayoutComponent(BorderLayout.CENTER) != null) {
 			mainPanel.remove(mainPanelLayout.getLayoutComponent(BorderLayout.CENTER));
-		if (wizard.getCurrentPage().getUserInterface() == null)
+		}
+		if (wizard.getCurrentPage().getUserInterface() == null) {
 			wizard.getCurrentPage().initUserInterface(mainPanel);
+		}
 		mainPanel.add(wizard.getCurrentPage().getUserInterface());
 		pageTitle.setText(wizard.getCurrentPage().getTitle());
 		updateControls();
@@ -135,14 +138,16 @@ public class WizardDialog extends FlexoDialog implements ActionListener {
 
 	protected void updateControls() {
 		if (wizard.needsPreviousAndNext()) {
-			if (previous != null)
+			if (previous != null) {
 				previous.setEnabled(wizard.isPreviousEnabled());
-			else if (logger.isLoggable(Level.WARNING))
+			} else if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("FlexoWizard.needsPreviousAndNext() returned true but previous button is not initialized");
-			if (next != null)
+			}
+			if (next != null) {
 				next.setEnabled(wizard.isNextEnabled());
-			else if (logger.isLoggable(Level.WARNING))
+			} else if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("FlexoWizard.needsPreviousAndNext() returned true but next button is not initialized");
+			}
 		}
 		finish.setEnabled(wizard.canFinish());
 	}

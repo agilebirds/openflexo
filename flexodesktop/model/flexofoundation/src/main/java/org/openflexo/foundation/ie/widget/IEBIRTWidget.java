@@ -88,8 +88,9 @@ public class IEBIRTWidget extends AbstractInnerTableWidget {
 	}
 
 	public GraphType getGraphType() {
-		if (graphType == null)
+		if (graphType == null) {
 			graphType = GraphType.Pie;
+		}
 		return graphType;
 	}
 

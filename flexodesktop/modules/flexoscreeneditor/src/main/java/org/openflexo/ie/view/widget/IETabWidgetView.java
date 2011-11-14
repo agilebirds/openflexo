@@ -51,8 +51,9 @@ public class IETabWidgetView extends IEReusableWidgetView<IETabWidget, TabCompon
 	 */
 	public IETabWidgetView(IEController ieController, IETabWidget model, IEWOComponentView view) {
 		super(ieController, model, false, view);
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("new IETabWidgetView:" + model.toString() + " " + model.getTabKeyForGenerator());
+		}
 	}
 
 	/**
@@ -73,8 +74,9 @@ public class IETabWidgetView extends IEReusableWidgetView<IETabWidget, TabCompon
 	 */
 	@Override
 	public void doLayout() {
-		if (!getTabVisibility())
+		if (!getTabVisibility()) {
 			return;
+		}
 		super.doLayout();
 	}
 
@@ -85,8 +87,9 @@ public class IETabWidgetView extends IEReusableWidgetView<IETabWidget, TabCompon
 	 */
 	@Override
 	public void propagateResize() {
-		if (!getTabVisibility())
+		if (!getTabVisibility()) {
 			return;
+		}
 		super.propagateResize();
 	}
 
@@ -94,14 +97,17 @@ public class IETabWidgetView extends IEReusableWidgetView<IETabWidget, TabCompon
 	public Dimension getPreferredSize() {
 		if (getHoldsNextComputedPreferredSize()) {
 			Dimension storedSize = storedPrefSize();
-			if (storedSize != null)
+			if (storedSize != null) {
 				return storedSize;
+			}
 		}
-		if (!getTabVisibility())
+		if (!getTabVisibility()) {
 			return new Dimension(0, 0);
+		}
 		Dimension d = getReusableWidgetComponentView().getPreferredSize();
-		if (getHoldsNextComputedPreferredSize())
+		if (getHoldsNextComputedPreferredSize()) {
 			storePrefSize(d);
+		}
 		return d;
 	}
 
@@ -116,13 +122,15 @@ public class IETabWidgetView extends IEReusableWidgetView<IETabWidget, TabCompon
 	 */
 	@Override
 	public void update(FlexoObservable arg0, DataModification modif) {
-		if (!getTabVisibility())
+		if (!getTabVisibility()) {
 			return;
+		}
 		if (modif.modificationType() == DataModification.ATTRIBUTE && modif.propertyName().equals("title") && arg0 == getTabWidget()) {
 			setName(getTabWidget().getTitle());
-			if (getParent() != null)
+			if (getParent() != null) {
 				((JTabbedPane) getParent()).setTitleAt(getTabWidget().getRootParent() == getTabWidget().getParent() ? getTabWidget()
 						.getIndex() : getTabWidget().getParent().getIndex(), getTabWidget().getTitle());
+			}
 		} else if (modif instanceof ContentSizeChanged) {
 			getReusableWidgetComponentView().validate();
 			getReusableWidgetComponentView().doLayout();
@@ -146,8 +154,9 @@ public class IETabWidgetView extends IEReusableWidgetView<IETabWidget, TabCompon
 				getParent().doLayout();
 				getParent().repaint();
 			}
-		} else
+		} else {
 			super.update(arg0, modif);
+		}
 	}
 
 	public boolean getTabVisibility() {
@@ -159,13 +168,16 @@ public class IETabWidgetView extends IEReusableWidgetView<IETabWidget, TabCompon
 		if (isVisible) {
 			validate();
 			doLayout();
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Building tab: " + getTabWidget().getTitle());
+			}
 			getModel().getTabComponent().getRootSequence().addObserver(this);
 		}
-		if (!isVisible)
-			if (logger.isLoggable(Level.INFO))
+		if (!isVisible) {
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Hiding tab: " + getTabWidget().getTitle());
+			}
+		}
 	}
 
 }

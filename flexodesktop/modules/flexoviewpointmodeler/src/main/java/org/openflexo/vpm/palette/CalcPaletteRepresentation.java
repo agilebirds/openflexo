@@ -73,17 +73,20 @@ public class CalcPaletteRepresentation extends DefaultDrawing<ViewPointPalette> 
 	}
 
 	protected boolean ignoreNotifications() {
-		if (ignoreNotifications == null)
+		if (ignoreNotifications == null) {
 			return true;
+		}
 		return ignoreNotifications;
 	}
 
 	@Override
 	public void delete() {
-		if (paletteGR != null)
+		if (paletteGR != null) {
 			paletteGR.delete();
-		if (getPalette() != null)
+		}
+		if (getPalette() != null) {
 			getPalette().deleteObserver(this);
+		}
 		paletteElementsGR.clear();
 	}
 
@@ -132,13 +135,15 @@ public class CalcPaletteRepresentation extends DefaultDrawing<ViewPointPalette> 
 			PaletteElementGR graphicalRepresentation = new PaletteElementGR(element, this);
 			graphicalRepresentation.setsWith((ShapeGraphicalRepresentation) element.getGraphicalRepresentation(),
 					GraphicalRepresentation.Parameters.text);
-			if (!readOnly)
+			if (!readOnly) {
 				element.setGraphicalRepresentation(graphicalRepresentation);
+			}
 			return graphicalRepresentation;
 		}
 		PaletteElementGR graphicalRepresentation = new PaletteElementGR(element, this);
-		if (!readOnly)
+		if (!readOnly) {
 			element.setGraphicalRepresentation(graphicalRepresentation);
+		}
 		return graphicalRepresentation;
 
 		/*if (element.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {

@@ -28,33 +28,46 @@ public abstract class Value extends Token {
 	private boolean prefixedBy$ = false;
 
 	public static Value createConstantValue(Object value) {
-		if (value == null)
+		if (value == null) {
 			return null;
+		}
 		Class valueClass = value.getClass();
-		if (valueClass.equals(Boolean.class) || valueClass.equals(Boolean.TYPE))
+		if (valueClass.equals(Boolean.class) || valueClass.equals(Boolean.TYPE)) {
 			return new BooleanValue((Boolean) value);
-		if (valueClass.equals(Character.class) || valueClass.equals(Character.TYPE))
+		}
+		if (valueClass.equals(Character.class) || valueClass.equals(Character.TYPE)) {
 			return new CharValue((Character) value);
-		if (valueClass.equals(Date.class))
+		}
+		if (valueClass.equals(Date.class)) {
 			return new DateValue((Date) value);
-		if (valueClass.equals(Duration.class))
+		}
+		if (valueClass.equals(Duration.class)) {
 			return new DurationValue((Duration) value);
-		if (valueClass.equals(String.class))
+		}
+		if (valueClass.equals(String.class)) {
 			return new StringValue((String) value);
-		if (valueClass.equals(Float.class) || valueClass.equals(Float.TYPE))
+		}
+		if (valueClass.equals(Float.class) || valueClass.equals(Float.TYPE)) {
 			return new FloatValue((Float) value);
-		if (valueClass.equals(Double.class) || valueClass.equals(Double.TYPE))
+		}
+		if (valueClass.equals(Double.class) || valueClass.equals(Double.TYPE)) {
 			return new FloatValue((Double) value);
-		if (valueClass.equals(Byte.class) || valueClass.equals(Byte.TYPE))
+		}
+		if (valueClass.equals(Byte.class) || valueClass.equals(Byte.TYPE)) {
 			return new IntValue((Byte) value);
-		if (valueClass.equals(Short.class) || valueClass.equals(Short.TYPE))
+		}
+		if (valueClass.equals(Short.class) || valueClass.equals(Short.TYPE)) {
 			return new IntValue((Short) value);
-		if (valueClass.equals(Integer.class) || valueClass.equals(Integer.TYPE))
+		}
+		if (valueClass.equals(Integer.class) || valueClass.equals(Integer.TYPE)) {
 			return new IntValue((Integer) value);
-		if (valueClass.equals(Long.class) || valueClass.equals(Long.TYPE))
+		}
+		if (valueClass.equals(Long.class) || valueClass.equals(Long.TYPE)) {
 			return new IntValue((Long) value);
-		if (valueClass.isEnum())
+		}
+		if (valueClass.isEnum()) {
 			return new EnumValue((Enum) value);
+		}
 		return new StringValue(value.toString());
 	}
 

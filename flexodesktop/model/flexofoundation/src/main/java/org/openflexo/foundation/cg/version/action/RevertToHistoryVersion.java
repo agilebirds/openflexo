@@ -57,15 +57,17 @@ public class RevertToHistoryVersion extends AbstractGCAction<RevertToHistoryVers
 
 		@Override
 		protected boolean isEnabledForSelection(CGObject object, Vector<CGObject> globalSelection) {
-			if (object == null)
+			if (object == null) {
 				return false;
+			}
 			if (object instanceof CGFile) {
 				return (((CGFile) object).getRepository().getManageHistory())
 						&& ((CGFile) object).getGenerationStatus().isGenerationAvailable();
 			}
-			if (object instanceof AbstractCGFileVersion)
+			if (object instanceof AbstractCGFileVersion) {
 				return (((AbstractCGFileVersion) object).getCGFile().getRepository().getManageHistory())
 						&& (((AbstractCGFileVersion) object).getCGFile()).getGenerationStatus().isGenerationAvailable();
+			}
 			return false;
 		}
 
@@ -110,22 +112,26 @@ public class RevertToHistoryVersion extends AbstractGCAction<RevertToHistoryVers
 	private CGVersionIdentifier versionId;
 
 	public CGVersionIdentifier getVersionId() {
-		if (getFocusedObject() instanceof AbstractCGFileVersion)
+		if (getFocusedObject() instanceof AbstractCGFileVersion) {
 			versionId = ((AbstractCGFileVersion) getFocusedObject()).getVersionId();
+		}
 		return versionId;
 	}
 
 	public void setVersionId(CGVersionIdentifier versionId) {
 		this.versionId = versionId;
-		if (_contentSource != null)
+		if (_contentSource != null) {
 			_contentSource.setVersion(versionId);
+		}
 	}
 
 	public CGFile getCGFile() {
-		if (getFocusedObject() instanceof CGFile)
+		if (getFocusedObject() instanceof CGFile) {
 			return (CGFile) getFocusedObject();
-		if (getFocusedObject() instanceof AbstractCGFileVersion)
+		}
+		if (getFocusedObject() instanceof AbstractCGFileVersion) {
 			return ((AbstractCGFileVersion) getFocusedObject()).getCGFile();
+		}
 		return null;
 	}
 

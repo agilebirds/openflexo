@@ -713,6 +713,7 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 
 	private MethodSourceCode sourceCode;
 
+	@Override
 	public void resetSourceCode() throws ParserNotInstalledException, DuplicateMethodSignatureException {
 		if (sourceCode != null) {
 			sourceCode.setCode("");
@@ -984,6 +985,7 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 	 * 
 	 * @return a String value
 	 */
+	@Override
 	public String getInspectorName() {
 		if (getIsReadOnly()) {
 			return Inspectors.DM.DM_RO_METHOD_INSPECTOR;
@@ -1055,6 +1057,7 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 		}
 	}
 
+	@Override
 	public DMEntity getEntity() {
 		return entity;
 	}
@@ -1074,10 +1077,12 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 		return false;
 	}
 
+	@Override
 	public DMType getType() {
 		return getReturnType();
 	}
 
+	@Override
 	public void setType(DMType type) {
 		setReturnType(type, true);
 	}
@@ -1193,6 +1198,7 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 		return false;
 	}
 
+	@Override
 	public Vector<DMTypeVariable> getTypeVariables() {
 		if (getEntity() != null) {
 			return getEntity().getTypeVariables();
@@ -1309,6 +1315,7 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 			}
 		}
 
+		@Override
 		public Vector<DMTypeVariable> getTypeVariables() {
 			if (getMethod() != null) {
 				return getMethod().getTypeVariables();
@@ -1323,6 +1330,7 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 
 		// private String typeAsString;
 
+		@Override
 		public DMType getType() {
 			/*if (_type==null && typeAsString!=null) {
 				setType(getDMModel().getDmTypeConverter().convertFromString(typeAsString),false);
@@ -1331,6 +1339,7 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 			return _type;
 		}
 
+		@Override
 		public void setType(DMType type) {
 			setType(type, true);
 		}
@@ -1431,6 +1440,7 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 		 * 
 		 * @return null
 		 */
+		@Override
 		public String getInspectorName() {
 			return null;
 		}
@@ -1693,6 +1703,7 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 		}
 	}
 
+	@Override
 	public boolean codeIsComputable() {
 		return true;
 	}

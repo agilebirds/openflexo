@@ -28,8 +28,8 @@ import java.util.Vector;
 
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.TargetType;
-import org.openflexo.foundation.bindings.WidgetBindingDefinition;
 import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
+import org.openflexo.foundation.bindings.WidgetBindingDefinition;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.IObject;
@@ -105,8 +105,9 @@ public class IETextFieldWidget extends IEEditableTextWidget {
 
 	public TextFieldType get_field_type() {
 		TextFieldType field_type = getFieldType();
-		if (field_type == null)
+		if (field_type == null) {
 			field_type = TextFieldType.TEXT;
+		}
 		return field_type;
 	}
 
@@ -229,16 +230,20 @@ public class IETextFieldWidget extends IEEditableTextWidget {
 
 	public String getOperatorCodeStringRepresentation() {
 		if (isDateOrIntegerOrFloat()) {
-			if (getOperator() == null)
+			if (getOperator() == null) {
 				return IEControlOperator.EQUAL.getSign();
-			if (getOperator() == IEControlOperator.LIKE || getOperator() == IEControlOperator.CASEINSENSITIVELIKE)
+			}
+			if (getOperator() == IEControlOperator.LIKE || getOperator() == IEControlOperator.CASEINSENSITIVELIKE) {
 				return IEControlOperator.EQUAL.getSign();
+			}
 			return getOperator().getSign();
 		} else {
-			if (getOperator() == null)
+			if (getOperator() == null) {
 				return IEControlOperator.CASEINSENSITIVELIKE.getSign();
-			if (getOperator() == IEControlOperator.LIKE || getOperator() == IEControlOperator.CASEINSENSITIVELIKE)
+			}
+			if (getOperator() == IEControlOperator.LIKE || getOperator() == IEControlOperator.CASEINSENSITIVELIKE) {
 				return getOperator().getSign();
+			}
 			return IEControlOperator.CASEINSENSITIVELIKE.getSign();
 		}
 	}
@@ -332,8 +337,9 @@ public class IETextFieldWidget extends IEEditableTextWidget {
 	 * @return
 	 */
 	public String getTextFieldUniqueID() {
-		if (getCalculatedLabel() != null)
+		if (getCalculatedLabel() != null) {
 			return ToolBox.getJavaName(getCalculatedLabel().trim()) + getFlexoID();
+		}
 		return "textfield_" + getFlexoID();
 	}
 

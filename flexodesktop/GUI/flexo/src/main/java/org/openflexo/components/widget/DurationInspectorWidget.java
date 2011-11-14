@@ -26,13 +26,12 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 
-import org.openflexo.swing.DurationSelector;
-import org.openflexo.toolbox.Duration;
-
 import org.openflexo.inspector.AbstractController;
 import org.openflexo.inspector.model.PropertyModel;
 import org.openflexo.inspector.widget.WidgetFocusListener;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.swing.DurationSelector;
+import org.openflexo.toolbox.Duration;
 
 /**
  * widget for selecting a duration...
@@ -76,8 +75,9 @@ public class DurationInspectorWidget extends CustomInspectorWidget<Duration> {
 		getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Focus gained in " + getClass().getName());
+				}
 				super.focusGained(arg0);
 				_selector.getTextField().requestFocus();
 				_selector.getTextField().selectAll();
@@ -85,8 +85,9 @@ public class DurationInspectorWidget extends CustomInspectorWidget<Duration> {
 
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Focus lost in " + getClass().getName());
+				}
 				super.focusLost(arg0);
 			}
 		});
@@ -94,8 +95,9 @@ public class DurationInspectorWidget extends CustomInspectorWidget<Duration> {
 
 	@Override
 	public synchronized void updateWidgetFromModel() {
-		if (modelUpdating)
+		if (modelUpdating) {
 			return;
+		}
 		widgetUpdating = true;
 		try {
 			_selector.setEditedObject(getObjectValue());
@@ -110,8 +112,9 @@ public class DurationInspectorWidget extends CustomInspectorWidget<Duration> {
 	 */
 	@Override
 	public synchronized void updateModelFromWidget() {
-		if (widgetUpdating)
+		if (widgetUpdating) {
 			return;
+		}
 		modelUpdating = true;
 		try {
 			setObjectValue(_selector.getEditedObject() != null ? _selector.getEditedObject().clone() : null);
@@ -133,14 +136,16 @@ public class DurationInspectorWidget extends CustomInspectorWidget<Duration> {
 
 	@Override
 	public void fireEditingCanceled() {
-		if (_selector != null)
+		if (_selector != null) {
 			_selector.closePopup();
+		}
 	}
 
 	@Override
 	public void fireEditingStopped() {
-		if (_selector != null)
+		if (_selector != null) {
 			_selector.closePopup();
+		}
 	}
 
 }

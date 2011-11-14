@@ -266,11 +266,11 @@ public class ParameteredKeyValueProperty extends SingleKeyValueProperty {
 
 		// System.out.println("When trying to find getter for "+parameteredPropertyName+" finding "+getMethods.size()+" methods: "+getMethods);
 
-		if (getMethods.size() > 0)
+		if (getMethods.size() > 0) {
 			return getMethods.firstElement();
-
-		else
+		} else {
 			return null;
+		}
 
 	}
 
@@ -310,17 +310,18 @@ public class ParameteredKeyValueProperty extends SingleKeyValueProperty {
 		Vector<Method> potentialSetMethods = _lookupMethods(lastClass, tries, parameters);
 		for (Method m : potentialSetMethods) {
 			// Check that first param is of right type !!!
-			if (m.getParameterTypes()[0].equals(getType()))
+			if (m.getParameterTypes()[0].equals(getType())) {
 				setMethods.add(m);
+			}
 		}
 
 		// System.out.println("When trying to find setter for "+parameteredPropertyName+" finding "+setMethods.size()+" methods: "+setMethods);
 
-		if (setMethods.size() > 0)
+		if (setMethods.size() > 0) {
 			return setMethods.firstElement();
-
-		else
+		} else {
 			return null;
+		}
 
 	}
 
@@ -472,8 +473,9 @@ public class ParameteredKeyValueProperty extends SingleKeyValueProperty {
 							ok = false;
 						}
 					}
-					if (ok)
+					if (ok) {
 						returned.add(m);
+					}
 				}
 			}
 		}
@@ -486,64 +488,88 @@ public class ParameteredKeyValueProperty extends SingleKeyValueProperty {
 			return false;
 		}
 
-		if (myValue == null)
+		if (myValue == null) {
 			return true;
+		}
 
 		Class<?> myType = myValue.getClass();
 
-		if (methodParamType.equals(Double.TYPE))
+		if (methodParamType.equals(Double.TYPE)) {
 			methodParamType = Double.class;
-		if (methodParamType.equals(Float.TYPE))
+		}
+		if (methodParamType.equals(Float.TYPE)) {
 			methodParamType = Float.class;
-		if (methodParamType.equals(Long.TYPE))
+		}
+		if (methodParamType.equals(Long.TYPE)) {
 			methodParamType = Long.class;
-		if (methodParamType.equals(Integer.TYPE))
+		}
+		if (methodParamType.equals(Integer.TYPE)) {
 			methodParamType = Integer.class;
-		if (methodParamType.equals(Short.TYPE))
+		}
+		if (methodParamType.equals(Short.TYPE)) {
 			methodParamType = Short.class;
-		if (methodParamType.equals(Byte.TYPE))
+		}
+		if (methodParamType.equals(Byte.TYPE)) {
 			methodParamType = Byte.class;
-		if (methodParamType.equals(Character.TYPE))
+		}
+		if (methodParamType.equals(Character.TYPE)) {
 			methodParamType = Character.class;
-		if (methodParamType.equals(Boolean.TYPE))
+		}
+		if (methodParamType.equals(Boolean.TYPE)) {
 			methodParamType = Boolean.class;
+		}
 
-		if (myType.equals(Double.TYPE))
+		if (myType.equals(Double.TYPE)) {
 			myType = Double.class;
-		if (myType.equals(Float.TYPE))
+		}
+		if (myType.equals(Float.TYPE)) {
 			myType = Float.class;
-		if (myType.equals(Long.TYPE))
+		}
+		if (myType.equals(Long.TYPE)) {
 			myType = Long.class;
-		if (myType.equals(Integer.TYPE))
+		}
+		if (myType.equals(Integer.TYPE)) {
 			myType = Integer.class;
-		if (myType.equals(Short.TYPE))
+		}
+		if (myType.equals(Short.TYPE)) {
 			myType = Short.class;
-		if (myType.equals(Byte.TYPE))
+		}
+		if (myType.equals(Byte.TYPE)) {
 			myType = Byte.class;
-		if (myType.equals(Character.TYPE))
+		}
+		if (myType.equals(Character.TYPE)) {
 			myType = Character.class;
-		if (myType.equals(Boolean.TYPE))
+		}
+		if (myType.equals(Boolean.TYPE)) {
 			myType = Boolean.class;
+		}
 
-		if (methodParamType.isAssignableFrom(myType))
+		if (methodParamType.isAssignableFrom(myType)) {
 			return true;
+		}
 
 		if (Number.class.isAssignableFrom(methodParamType) && Number.class.isAssignableFrom(myType)) {
 			// Last chance with using values
 
 			Number nb = (Number) myValue;
-			if (methodParamType.equals(Double.class))
+			if (methodParamType.equals(Double.class)) {
 				return true;
-			if (methodParamType.equals(Float.class))
+			}
+			if (methodParamType.equals(Float.class)) {
 				return true; // Will require truncation
-			if (methodParamType.equals(Long.class))
+			}
+			if (methodParamType.equals(Long.class)) {
 				return nb.doubleValue() == nb.longValue();
-			if (methodParamType.equals(Integer.class))
+			}
+			if (methodParamType.equals(Integer.class)) {
 				return nb.doubleValue() == nb.intValue();
-			if (methodParamType.equals(Short.class))
+			}
+			if (methodParamType.equals(Short.class)) {
 				return nb.doubleValue() == nb.shortValue();
-			if (methodParamType.equals(Byte.class))
+			}
+			if (methodParamType.equals(Byte.class)) {
 				return nb.doubleValue() == nb.byteValue();
+			}
 		}
 
 		return false;
@@ -558,62 +584,86 @@ public class ParameteredKeyValueProperty extends SingleKeyValueProperty {
 			return false;
 		}
 
-		if (myValue == null)
+		if (myValue == null) {
 			return null;
+		}
 
 		Class<?> myType = myValue.getClass();
 
-		if (methodParamType.equals(Double.TYPE))
+		if (methodParamType.equals(Double.TYPE)) {
 			methodParamType = Double.class;
-		if (methodParamType.equals(Float.TYPE))
+		}
+		if (methodParamType.equals(Float.TYPE)) {
 			methodParamType = Float.class;
-		if (methodParamType.equals(Long.TYPE))
+		}
+		if (methodParamType.equals(Long.TYPE)) {
 			methodParamType = Long.class;
-		if (methodParamType.equals(Integer.TYPE))
+		}
+		if (methodParamType.equals(Integer.TYPE)) {
 			methodParamType = Integer.class;
-		if (methodParamType.equals(Short.TYPE))
+		}
+		if (methodParamType.equals(Short.TYPE)) {
 			methodParamType = Short.class;
-		if (methodParamType.equals(Byte.TYPE))
+		}
+		if (methodParamType.equals(Byte.TYPE)) {
 			methodParamType = Byte.class;
-		if (methodParamType.equals(Character.TYPE))
+		}
+		if (methodParamType.equals(Character.TYPE)) {
 			methodParamType = Character.class;
-		if (methodParamType.equals(Boolean.TYPE))
+		}
+		if (methodParamType.equals(Boolean.TYPE)) {
 			methodParamType = Boolean.class;
+		}
 
-		if (myType.equals(Double.TYPE))
+		if (myType.equals(Double.TYPE)) {
 			myType = Double.class;
-		if (myType.equals(Float.TYPE))
+		}
+		if (myType.equals(Float.TYPE)) {
 			myType = Float.class;
-		if (myType.equals(Long.TYPE))
+		}
+		if (myType.equals(Long.TYPE)) {
 			myType = Long.class;
-		if (myType.equals(Integer.TYPE))
+		}
+		if (myType.equals(Integer.TYPE)) {
 			myType = Integer.class;
-		if (myType.equals(Short.TYPE))
+		}
+		if (myType.equals(Short.TYPE)) {
 			myType = Short.class;
-		if (myType.equals(Byte.TYPE))
+		}
+		if (myType.equals(Byte.TYPE)) {
 			myType = Byte.class;
-		if (myType.equals(Character.TYPE))
+		}
+		if (myType.equals(Character.TYPE)) {
 			myType = Character.class;
-		if (myType.equals(Boolean.TYPE))
+		}
+		if (myType.equals(Boolean.TYPE)) {
 			myType = Boolean.class;
+		}
 
-		if (methodParamType.isAssignableFrom(myType))
+		if (methodParamType.isAssignableFrom(myType)) {
 			return myValue;
+		}
 
 		if (Number.class.isAssignableFrom(methodParamType) && Number.class.isAssignableFrom(myType)) {
 			Number nb = (Number) myValue;
-			if (methodParamType.equals(Double.class))
+			if (methodParamType.equals(Double.class)) {
 				return nb.doubleValue();
-			if (methodParamType.equals(Float.class))
+			}
+			if (methodParamType.equals(Float.class)) {
 				return nb.floatValue();
-			if (methodParamType.equals(Long.class))
+			}
+			if (methodParamType.equals(Long.class)) {
 				return nb.longValue();
-			if (methodParamType.equals(Integer.class))
+			}
+			if (methodParamType.equals(Integer.class)) {
 				return nb.intValue();
-			if (methodParamType.equals(Short.class))
+			}
+			if (methodParamType.equals(Short.class)) {
 				return nb.shortValue();
-			if (methodParamType.equals(Byte.class))
+			}
+			if (methodParamType.equals(Byte.class)) {
 				return nb.byteValue();
+			}
 		}
 
 		throw new NonAssignableParameterException();

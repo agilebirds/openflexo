@@ -114,8 +114,9 @@ public final class RoleSpecialization extends WorkflowModelObject implements Dat
 	}
 
 	public String getAnnotation() {
-		if (annotation == null && !isSerializing())
+		if (annotation == null && !isSerializing()) {
 			return "";
+		}
 		return annotation;
 	}
 
@@ -131,8 +132,9 @@ public final class RoleSpecialization extends WorkflowModelObject implements Dat
 
 	// Deserialization only
 	public void _setParentRole(Role parentRole) {
-		if (isDeserializing())
+		if (isDeserializing()) {
 			this.parentRole = parentRole;
+		}
 	}
 
 	public Role getRole() {
@@ -157,8 +159,9 @@ public final class RoleSpecialization extends WorkflowModelObject implements Dat
 
 	@Override
 	public final void delete() {
-		if (getRole() != null && getRole().getRoleSpecializations().contains(this))
+		if (getRole() != null && getRole().getRoleSpecializations().contains(this)) {
 			getRole().removeFromRoleSpecializations(this);
+		}
 		super.delete();
 		setChanged();
 		notifyObservers(new RoleSpecializationRemoved(this));
@@ -179,8 +182,9 @@ public final class RoleSpecialization extends WorkflowModelObject implements Dat
 	}
 
 	public RoleList getRoleList() {
-		if (isDeserializing())
+		if (isDeserializing()) {
 			return null;
+		}
 		if (getProject() != null) {
 			return getProject().getWorkflow().getRoleList();
 		}

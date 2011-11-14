@@ -150,8 +150,9 @@ public abstract class WKFGroup extends WKFObject implements DeletableObject {
 	public final void ungroup() {
 		Vector<PetriGraphNode> nodesThatWereInGroup = new Vector<PetriGraphNode>(getNodes());
 		FlexoPetriGraph parentPetriGraph = getParentPetriGraph();
-		for (PetriGraphNode n : nodesThatWereInGroup)
+		for (PetriGraphNode n : nodesThatWereInGroup) {
 			removeFromNodes(n);
+		}
 		if (parentPetriGraph != null) {
 			parentPetriGraph.removeFromGroups(this);
 			parentPetriGraph.notifyNodeUngroup(this, nodesThatWereInGroup);

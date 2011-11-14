@@ -49,7 +49,6 @@ import org.openflexo.drm.action.GenerateHelpSet;
 import org.openflexo.drm.action.SaveDocumentationCenter;
 import org.openflexo.drm.dm.DocResourceCenterIsModified;
 import org.openflexo.drm.dm.DocResourceCenterIsSaved;
-
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
@@ -283,8 +282,9 @@ public class DREController extends FlexoController implements SelectionManagingC
 		if (object instanceof DocItem) {
 			return AbstractDocItemView.getTitleForDocItem((DocItem) object);
 		} else if (object instanceof DocItemFolder) {
-			if (((DocItemFolder) object).isRootFolder())
+			if (((DocItemFolder) object).isRootFolder()) {
 				return FlexoLocalization.localizedForKey("flexo_documentation_resource_center");
+			}
 			return ((DocItemFolder) object).getIdentifier();
 		}
 		return null;

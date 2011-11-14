@@ -72,10 +72,11 @@ public class ProcessFolder extends FlexoFolderContainerNode implements Inspectab
 	public void delete() {
 		super.delete();
 		for (FlexoProcessNode node : new Vector<FlexoProcessNode>(getProcesses())) {
-			if (getParent() instanceof ProcessFolder)
+			if (getParent() instanceof ProcessFolder) {
 				((ProcessFolder) getParent()).addToProcesses(node);
-			else
+			} else {
 				node.removeParentFolder(this);
+			}
 		}
 		setParent(null);
 		deleteObservers();
@@ -86,8 +87,9 @@ public class ProcessFolder extends FlexoFolderContainerNode implements Inspectab
 	}
 
 	public void setParent(FlexoFolderContainerNode parent) {
-		if (this.parent == parent)
+		if (this.parent == parent) {
 			return;
+		}
 		if (this.parent != null) {
 			this.parent.removeFromFolders(this);
 		}
@@ -160,8 +162,9 @@ public class ProcessFolder extends FlexoFolderContainerNode implements Inspectab
 
 	@Override
 	public int getIndex() {
-		if (isBeingCloned())
+		if (isBeingCloned()) {
 			return -1;
+		}
 		if (index == -1 && getCollection() != null) {
 			index = getCollection().length;
 			FlexoIndexManager.reIndexObjectOfArray(getCollection());
@@ -191,8 +194,9 @@ public class ProcessFolder extends FlexoFolderContainerNode implements Inspectab
 
 	@Override
 	public void setIndexValue(int index) {
-		if (this.index == index)
+		if (this.index == index) {
 			return;
+		}
 		int old = this.index;
 		this.index = index;
 		setChanged();
@@ -216,27 +220,31 @@ public class ProcessFolder extends FlexoFolderContainerNode implements Inspectab
 	public void setIndexForProcess(int index, FlexoProcessNode node) {
 		if (processes.indexOf(node) > -1) {
 			index = Math.min(processes.size() - 1, index);
-			if (index < 0)
+			if (index < 0) {
 				index = 0;
+			}
 			processes.remove(node);
 			processes.insertElementAt(node, index);
 			setChanged();
 			notifyObservers(new ChildrenOrderChanged());
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Trying to set index for a process which is not in this folder");
+			}
 		}
 	}
 
 	@Override
 	public FlexoProcessNode getProcessNode() {
-		if (getParent() instanceof ProcessFolder)
+		if (getParent() instanceof ProcessFolder) {
 			return getParent().getProcessNode();
-		if (getParent() instanceof FlexoProcessNode)
+		}
+		if (getParent() instanceof FlexoProcessNode) {
 			return (FlexoProcessNode) getParent();
-		else {
-			if (logger.isLoggable(Level.WARNING))
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("No parent for process folder " + getName());
+			}
 			return null;
 		}
 	}
@@ -250,22 +258,27 @@ public class ProcessFolder extends FlexoFolderContainerNode implements Inspectab
 	}
 
 	public boolean isAcceptableParentFolder(ProcessFolder parent) {
-		if (parent == null || parent.getProcessNode() == null)
+		if (parent == null || parent.getProcessNode() == null) {
 			return false;
+		}
 		ProcessFolder current = parent;
 		while (current != null) {
 			if (current == this) {
 				return false;
 			}
-			if (current.getParent() instanceof ProcessFolder)
+			if (current.getParent() instanceof ProcessFolder) {
 				current = (ProcessFolder) current.getParent();
-			else
+			} else {
 				break;
+			}
 		}
-		if (getProcessNode() != parent.getProcessNode())
-			for (FlexoProcessNode node : getAllDirectSubProcessNodes())
-				if (node.getProcess().isAcceptableAsParentProcess(parent.getProcessNode().getProcess()))
+		if (getProcessNode() != parent.getProcessNode()) {
+			for (FlexoProcessNode node : getAllDirectSubProcessNodes()) {
+				if (node.getProcess().isAcceptableAsParentProcess(parent.getProcessNode().getProcess())) {
 					return false;
+				}
+			}
+		}
 		return true;
 	}
 

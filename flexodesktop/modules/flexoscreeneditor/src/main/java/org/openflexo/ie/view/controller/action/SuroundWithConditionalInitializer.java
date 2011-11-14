@@ -26,13 +26,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.SEIconLibrary;
-import org.openflexo.ie.view.controller.IEController;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -41,6 +34,12 @@ import org.openflexo.foundation.ie.operator.IEOperator;
 import org.openflexo.foundation.ie.widget.IESpanTDWidget;
 import org.openflexo.foundation.ie.widget.IETDWidget;
 import org.openflexo.foundation.ie.widget.ITableRow;
+import org.openflexo.icon.SEIconLibrary;
+import org.openflexo.ie.view.controller.IEController;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class SuroundWithConditionalInitializer extends ActionInitializer {
 
@@ -63,8 +62,9 @@ public class SuroundWithConditionalInitializer extends ActionInitializer {
 			public boolean run(ActionEvent e, SuroundWithConditional action) {
 				if (action.getFocusedObject() instanceof ITableRow) {
 					Vector<FlexoModelObject> v = (Vector<FlexoModelObject>) action.getGlobalSelection().clone();
-					if (!v.contains(action.getFocusedObject()))
+					if (!v.contains(action.getFocusedObject())) {
 						v.add(action.getFocusedObject());
+					}
 					if (action.getFocusedObject() instanceof IEOperator) {
 						v.remove(action.getFocusedObject());
 						v.add(((IEOperator) action.getFocusedObject()).getOperatedSequence());
@@ -102,8 +102,9 @@ public class SuroundWithConditionalInitializer extends ActionInitializer {
 						en = v.elements();
 						while (en.hasMoreElements() && !ok) {
 							ITableRow tr = (ITableRow) en.nextElement();
-							if (tr.containsTD(s))
+							if (tr.containsTD(s)) {
 								ok = true;
+							}
 						}
 						if (!ok) {
 							FlexoController.notify(FlexoLocalization.localizedForKey("one_of_the_cell_span_is_not_in_the_selection"));

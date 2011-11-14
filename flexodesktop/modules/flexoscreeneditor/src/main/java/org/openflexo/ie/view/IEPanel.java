@@ -117,9 +117,10 @@ public abstract class IEPanel extends JPanel implements IEViewManaging, FlexoAct
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.finest("Mouse entered in " + getClass().getName() + ", try to get the focus");
-				// requestFocus();
+					// requestFocus();
+				}
 			}
 
 			@Override

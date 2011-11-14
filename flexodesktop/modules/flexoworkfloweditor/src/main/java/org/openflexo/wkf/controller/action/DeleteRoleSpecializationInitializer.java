@@ -25,16 +25,15 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.foundation.action.FlexoActionFinalizer;
+import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.wkf.RoleSpecialization;
+import org.openflexo.foundation.wkf.action.DeleteRoleSpecialization;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-
-import org.openflexo.foundation.action.FlexoActionFinalizer;
-import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.wkf.RoleSpecialization;
-import org.openflexo.foundation.wkf.action.DeleteRoleSpecialization;
 
 public class DeleteRoleSpecializationInitializer extends ActionInitializer {
 
@@ -56,13 +55,15 @@ public class DeleteRoleSpecializationInitializer extends ActionInitializer {
 			public boolean run(ActionEvent e, DeleteRoleSpecialization action) {
 				boolean doIt;
 				Vector<RoleSpecialization> roleSpecializationToDelete = action.getRoleSpecializationToDelete();
-				if (roleSpecializationToDelete.size() == 0)
+				if (roleSpecializationToDelete.size() == 0) {
 					return false;
-				if (roleSpecializationToDelete.size() == 1)
+				}
+				if (roleSpecializationToDelete.size() == 1) {
 					doIt = FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_delete_this_role_specialization"));
-				else
+				} else {
 					doIt = FlexoController
 							.confirm(FlexoLocalization.localizedForKey("would_you_like_to_delete_these_role_specializations"));
+				}
 				return doIt;
 			}
 		};
@@ -74,8 +75,9 @@ public class DeleteRoleSpecializationInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, DeleteRoleSpecialization action) {
 				if (getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject() != null
-						&& getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject().isDeleted())
+						&& getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject().isDeleted()) {
 					getControllerActionInitializer().getWKFController().getSelectionManager().resetSelection();
+				}
 				return true;
 			}
 		};

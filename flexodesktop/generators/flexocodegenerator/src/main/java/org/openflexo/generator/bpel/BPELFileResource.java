@@ -65,15 +65,17 @@ public class BPELFileResource extends TextFileResource<BPELFileGenerator, CGText
 	}
 
 	protected String getIdentifier() {
-		if (getGenerator() != null)
+		if (getGenerator() != null) {
 			return getGenerator().getIdentifier();
+		}
 		return null;
 	}
 
 	@Override
 	public String getFileName() {
-		if (getGenerator() != null)
+		if (getGenerator() != null) {
 			return getGenerator().getFileName();
+		}
 		return null;
 	}
 
@@ -147,8 +149,9 @@ public class BPELFileResource extends TextFileResource<BPELFileGenerator, CGText
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
 		addToDependantResources(getProject().getFlexoDMResource());
-		for (FlexoProcess p : getProject().getAllLocalFlexoProcesses())
+		for (FlexoProcess p : getProject().getAllLocalFlexoProcesses()) {
 			addToDependantResources(p.getFlexoResource());
+		}
 	}
 
 	/**

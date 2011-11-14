@@ -28,9 +28,9 @@ import java.util.Vector;
 import java.util.logging.Level;
 
 import org.openflexo.foundation.DocType;
+import org.openflexo.foundation.DocType.DefaultDocType;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.DocType.DefaultDocType;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.dm.CGDataModification;
 import org.openflexo.foundation.cg.utils.DocConstants.DocSection;
@@ -76,8 +76,9 @@ public class TOCRepository extends TOCEntry {
 				defaultTocTemplate = loadTOCTemplate("BRS");
 			}
 			createEntriesFromTemplate(defaultTocTemplate);
-		} else
+		} else {
 			createEntriesFromTemplate(tocTemplate);
+		}
 	}
 
 	private TOCRepository loadTOCTemplate(String templateName) {
@@ -140,8 +141,9 @@ public class TOCRepository extends TOCEntry {
 	}
 
 	public DocType getDocType() {
-		if (docType == null && getProject().getDocTypes().size() > 0)
+		if (docType == null && getProject().getDocTypes().size() > 0) {
 			docType = getProject().getDocTypes().get(0);
+		}
 		if (docTypeAsString != null) {
 			DocType dt = getProject().getDocTypeNamed(docTypeAsString);
 			if (dt != null) {
@@ -161,10 +163,11 @@ public class TOCRepository extends TOCEntry {
 	}
 
 	public String getDocTypeAsString() {
-		if (getDocType() != null)
+		if (getDocType() != null) {
 			return getDocType().getName();
-		else
+		} else {
 			return null;
+		}
 	}
 
 	public void setDocTypeAsString(String docType) {
@@ -199,8 +202,9 @@ public class TOCRepository extends TOCEntry {
 		}
 		sb.append("<BODY>");
 		Enumeration<TOCEntry> en = getSortedTocEntries();
-		while (en.hasMoreElements())
+		while (en.hasMoreElements()) {
 			en.nextElement().printHTML(sb);
+		}
 		sb.append("</BODY></HTML>");
 		return sb.toString();
 	}
@@ -225,8 +229,9 @@ public class TOCRepository extends TOCEntry {
 				entry.setContent(identifier.getDefaultContent(getDocType().getName()));
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("This should not happen! It means somebody has moved the setIsReadOnly(true) above the setContent() call.");
+				}
 			}
 		}
 

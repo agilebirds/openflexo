@@ -24,9 +24,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.bindings.BindingAssignment;
+import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.bindings.BindingValue;
 import org.openflexo.foundation.bindings.WKFBindingDefinition;
-import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.OperationPetriGraph;

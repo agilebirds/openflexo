@@ -101,8 +101,9 @@ public class IEWysiwygWidget extends IENonEditableTextWidget implements IEWidget
 	@Override
 	public List<Object> getValueList(FlexoProcess process) {
 		List<Object> result = new ArrayList<Object>();
-		if (!StringUtils.isEmpty(getValue()))
+		if (!StringUtils.isEmpty(getValue())) {
 			result.add(getValue());
+		}
 		return result;
 	}
 

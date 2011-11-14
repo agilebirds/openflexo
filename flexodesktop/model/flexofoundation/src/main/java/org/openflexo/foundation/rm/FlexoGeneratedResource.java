@@ -117,12 +117,14 @@ public abstract class FlexoGeneratedResource<GRD extends GeneratedResourceData> 
 			tree = update();
 			return !tree.isEmpty();
 		} catch (ResourceDependancyLoopException e) {
-			if (logger.isLoggable(Level.SEVERE))
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.log(Level.SEVERE, "Loop in dependant resources of " + this + "!", e);
+			}
 			throw new FlexoException("Loop in dependant resources of " + this + "!", e);
 		} catch (FileNotFoundException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.log(Level.WARNING, "File not found exception.", e);
+			}
 			e.printStackTrace();
 		}
 		return false;
@@ -136,8 +138,9 @@ public abstract class FlexoGeneratedResource<GRD extends GeneratedResourceData> 
 			return needsUpdate();
 		} catch (ResourceDependancyLoopException e) {
 			// Warns about the exception
-			if (logger.isLoggable(Level.SEVERE))
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.log(Level.SEVERE, "Loop in dependant resources of " + this + "!", e);
+			}
 			return false;
 		}
 	}
@@ -148,10 +151,12 @@ public abstract class FlexoGeneratedResource<GRD extends GeneratedResourceData> 
 		// This is a little hack for resource that depends of nothing (which is wrong!!! a generated resource should always depend of
 		// something)
 		if (updatedResources.isEmpty() && !getFile().exists()) {
-			if (!getDependantResources().isEmpty())
-				if (logger.isLoggable(Level.WARNING))
+			if (!getDependantResources().isEmpty()) {
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("This is not normal, the generated file (" + getFileName()
 							+ ") does not exist but RM has not computed that it must be generated");
+				}
+			}
 			generate();
 		}
 		if (!updatedResources.isEmpty()) {
@@ -161,8 +166,9 @@ public abstract class FlexoGeneratedResource<GRD extends GeneratedResourceData> 
 				resource.update();
 			}
 			generate();
-		} else
+		} else {
 			getGeneratedResourceData();
+		}
 	}
 
 	/**
@@ -192,8 +198,9 @@ public abstract class FlexoGeneratedResource<GRD extends GeneratedResourceData> 
 	 */
 
 	public final void generate() throws SaveResourceException, FlexoException {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Generate " + getName());
+		}
 		_resourceData = doGenerate();
 		FileWritingLock lock = willWriteOnDisk();
 		_resourceData.writeToFile(getFile());
@@ -202,8 +209,9 @@ public abstract class FlexoGeneratedResource<GRD extends GeneratedResourceData> 
 		setLastGenerationDate(new Date());
 		notifyResourceChanged();
 		notifyResourceStatusChanged();
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Generate....DONE");
+		}
 	}
 
 	/**

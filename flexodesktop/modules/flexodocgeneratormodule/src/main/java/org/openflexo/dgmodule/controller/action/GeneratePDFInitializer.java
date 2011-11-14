@@ -29,7 +29,6 @@ import java.util.logging.Logger;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.dg.action.GeneratePDF;
 import org.openflexo.dgmodule.DGPreferences;
-
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -103,22 +102,25 @@ public class GeneratePDFInitializer extends ActionInitializer {
 						if (ask.getStatus() == AskParametersDialog.VALIDATE) {
 							if (radio.getValue().equals("command")) {
 								DGPreferences.setLatexCommand(command.getValue());
-							} else if (radio.getValue().equals("file"))
+							} else if (radio.getValue().equals("file")) {
 								DGPreferences.setLatexCommand(file.getValue().getAbsolutePath());
+							}
 							if (LatexUtils.testLatexCommand(DGPreferences.getLatexCommand())) {
 								action.setLatexCommand(DGPreferences.getLatexCommand());
 								if (FlexoController
 										.confirm(FlexoLocalization
 												.localizedForKey("PDF_generation_is_based_on_code_generated_on_disk._Is_your_code_on_disk_ready_to_be_compiled?"))) {
 									return true;
-								} else
+								} else {
 									return false;
+								}
 							}
 							FlexoController.notify(FlexoLocalization.localizedForKey("invalid_latex_command"));
 							return false;
-						} else
+						} else {
 							return false;// User has pressed cancel or closed
 											// the dialog
+						}
 
 					}
 				}
@@ -138,17 +140,19 @@ public class GeneratePDFInitializer extends ActionInitializer {
 								test = new FileOutputStream(action.getRepository().getPostBuildFile());
 							} catch (FileNotFoundException e1) {
 								if (FlexoController.confirm(FlexoLocalization
-										.localizedForKey("target_pdf_file_seems_to_be_locked.continue_anyway")))
+										.localizedForKey("target_pdf_file_seems_to_be_locked.continue_anyway"))) {
 									return true;
-								else
+								} else {
 									return false;
+								}
 							} finally {
-								if (test != null)
+								if (test != null) {
 									try {
 										test.close();
 									} catch (IOException e1) {
 										e1.printStackTrace();
 									}
+								}
 							}
 						}
 						return true;

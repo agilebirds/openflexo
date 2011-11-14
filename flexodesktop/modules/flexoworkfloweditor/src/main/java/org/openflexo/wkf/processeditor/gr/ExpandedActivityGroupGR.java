@@ -90,8 +90,9 @@ public class ExpandedActivityGroupGR extends ContainerGR<ActivityGroup> {
 				getDrawing().invalidateGraphicalObjectsHierarchy(getActivityGroup().getProcess());
 				getDrawing().updateGraphicalObjectsHierarchy();
 			} else if (dataModification instanceof ObjectVisibilityChanged) {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Group visibility changed");
+				}
 				getDrawing().invalidateGraphicalObjectsHierarchy(getActivityGroup().getProcess());
 				getDrawing().updateGraphicalObjectsHierarchy();
 			}

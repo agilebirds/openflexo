@@ -74,8 +74,9 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 			}
 		}
 
-		if (!readOnly)
+		if (!readOnly) {
 			_toolbox = new EditorToolbox();
+		}
 	}
 
 	@Override
@@ -85,8 +86,9 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 			getShema().getCalc().deleteObserver(this);
 		}
 		if (_controller != null) {
-			if (getDrawingView() != null && _moduleView != null)
+			if (getDrawingView() != null && _moduleView != null) {
 				_controller.removeModuleView(_moduleView);
+			}
 			_controller.VIEW_POINT_PERSPECTIVE.removeFromControllers(this);
 		}
 		super.delete();

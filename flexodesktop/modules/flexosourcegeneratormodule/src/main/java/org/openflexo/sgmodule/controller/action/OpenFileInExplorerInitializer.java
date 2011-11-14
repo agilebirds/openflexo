@@ -50,8 +50,9 @@ public class OpenFileInExplorerInitializer extends ActionInitializer {
 				if (action.getFocusedObject() instanceof CGFile && ((CGFile) action.getFocusedObject()).getResource() != null) {
 					action.setFileToOpen(((CGFile) action.getFocusedObject()).getResource().getFile());
 					return true;
-				} else
+				} else {
 					return false;
+				}
 			}
 		};
 	}

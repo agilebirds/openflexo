@@ -51,8 +51,9 @@ public class FIBButtonWidget extends FIBWidgetView<FIBButton, JButton, String> {
 
 	@Override
 	public synchronized boolean updateWidgetFromModel() {
-		if (modelUpdating)
+		if (modelUpdating) {
 			return false;
+		}
 		widgetUpdating = true;
 		updateLabel();
 		widgetUpdating = false;

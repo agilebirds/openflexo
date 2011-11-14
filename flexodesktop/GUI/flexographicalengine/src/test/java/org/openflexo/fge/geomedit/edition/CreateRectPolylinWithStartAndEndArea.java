@@ -19,8 +19,8 @@
  */
 package org.openflexo.fge.geomedit.edition;
 
-import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
+import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geomedit.GeomEditController;
 import org.openflexo.fge.geomedit.Polylin;
 import org.openflexo.fge.geomedit.construction.RectPolylinWithStartAndEndAreaConstruction;

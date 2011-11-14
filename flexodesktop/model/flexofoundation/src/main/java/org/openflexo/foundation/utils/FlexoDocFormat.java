@@ -54,11 +54,13 @@ public abstract class FlexoDocFormat extends FlexoObject implements StringConver
 		Enumeration<FlexoDocFormat> en = availableValues().elements();
 		while (en.hasMoreElements()) {
 			FlexoDocFormat df = en.nextElement();
-			if (df.getName().equals(s))
+			if (df.getName().equals(s)) {
 				return df;
+			}
 		}
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Could not find Doc format named '" + s + "'");
+		}
 		return null;
 	}
 

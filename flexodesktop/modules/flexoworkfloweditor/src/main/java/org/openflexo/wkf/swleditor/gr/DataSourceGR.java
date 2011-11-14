@@ -67,8 +67,9 @@ public class DataSourceGR extends ArtefactGR<WKFDataSource> {
 					g.useDefaultBackgroundStyle();
 					// g.useDefaultForegroundStyle();
 					g.fillCircle(0, (i - 1) * halfHeight, 1, height);
-					if (i > 1)
+					if (i > 1) {
 						g.fillRect(0, (i - 1) * halfHeight, 1, halfHeight);
+					}
 				}
 			}
 		});

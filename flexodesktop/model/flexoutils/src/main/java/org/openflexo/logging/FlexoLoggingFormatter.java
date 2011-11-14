@@ -46,15 +46,17 @@ public class FlexoLoggingFormatter extends Formatter {
 		sb.append(formatString(100, log.getMessage()));
 		sb.append(formatString(50, "[" + log.getSourceClassName() + "." + log.getSourceMethodName() + "]"));
 		sb.append("\n");
-		if (log.getThrown() != null)
+		if (log.getThrown() != null) {
 			sb.append(ToolBox.stackTraceAsAString(log.getThrown()));
+		}
 		return sb.toString();
 	}
 
 	public static String formatString(int cols, String aString) {
 		char[] blank;
-		if (aString == null)
+		if (aString == null) {
 			aString = "null";
+		}
 		if (cols > aString.length()) {
 			blank = new char[cols - aString.length()];
 			for (int i = 0; i < cols - aString.length(); i++) {

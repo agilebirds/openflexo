@@ -49,12 +49,15 @@ public abstract class PrettyPrinter {
 		if (algorithmicUnit == null) {
 			return "null";
 		}
-		if (algorithmicUnit instanceof ControlGraph)
+		if (algorithmicUnit instanceof ControlGraph) {
 			return makeStringRepresentation((ControlGraph) algorithmicUnit);
-		if (algorithmicUnit instanceof Procedure)
+		}
+		if (algorithmicUnit instanceof Procedure) {
 			return makeStringRepresentation((Procedure) algorithmicUnit);
-		if (algorithmicUnit instanceof Class)
+		}
+		if (algorithmicUnit instanceof Class) {
 			return makeStringRepresentation((Class) algorithmicUnit);
+		}
 		return algorithmicUnit.toString();
 	}
 
@@ -62,16 +65,21 @@ public abstract class PrettyPrinter {
 		if (statement == null) {
 			return "null";
 		}
-		if (statement instanceof Conditional)
+		if (statement instanceof Conditional) {
 			return makeStringRepresentation((Conditional) statement);
-		if (statement instanceof Instruction)
+		}
+		if (statement instanceof Instruction) {
 			return makeStringRepresentation((Instruction) statement);
-		if (statement instanceof Loop)
+		}
+		if (statement instanceof Loop) {
 			return makeStringRepresentation((Loop) statement);
-		if (statement instanceof Sequence)
+		}
+		if (statement instanceof Sequence) {
 			return makeStringRepresentation((Sequence) statement);
-		if (statement instanceof Flow)
+		}
+		if (statement instanceof Flow) {
 			return makeStringRepresentation((Flow) statement);
+		}
 		return statement.toString();
 	}
 

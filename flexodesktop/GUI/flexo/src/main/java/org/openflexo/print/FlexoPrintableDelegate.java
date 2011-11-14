@@ -76,8 +76,9 @@ public class FlexoPrintableDelegate implements Printable, Pageable {
 			mlToRemove.add(ml);
 		}
 		for (MouseListener ml : mlToRemove) {
-			if (logger.isLoggable(Level.FINER))
+			if (logger.isLoggable(Level.FINER)) {
 				logger.finer("Remove MouseListener for " + aComponent);
+			}
 			aComponent.removeMouseListener(ml);
 		}
 		Vector<MouseMotionListener> mmlToRemove = new Vector<MouseMotionListener>();
@@ -85,8 +86,9 @@ public class FlexoPrintableDelegate implements Printable, Pageable {
 			mmlToRemove.add(mml);
 		}
 		for (MouseMotionListener mml : mmlToRemove) {
-			if (logger.isLoggable(Level.FINER))
+			if (logger.isLoggable(Level.FINER)) {
 				logger.finer("Remove MouseMotionListener for " + aComponent);
+			}
 			aComponent.removeMouseMotionListener(mml);
 		}
 		if (aComponent instanceof Container) {
@@ -145,16 +147,18 @@ public class FlexoPrintableDelegate implements Printable, Pageable {
 		} else if (_paintMode == PaintMode.PRINTING) {
 			returned.j = _pageIndex / widthPageNb;
 			returned.i = _pageIndex - widthPageNb * returned.j;
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("CALLED paint with _pageIndex=" + _pageIndex + " i=" + returned.i + " j=" + returned.j);
+			}
 			Rectangle pageBounds = getPageRect(_pageFormat);
 			Rectangle imageablePageBounds = getImageablePageRect(_pageFormat);
 
 			returned.marginScale = Math.min((double) imageablePageBounds.width / (double) pageBounds.width,
 					(double) imageablePageBounds.height / (double) pageBounds.height);
 			g2.scale(returned.marginScale, returned.marginScale);
-			if (logger.isLoggable(Level.FINER))
+			if (logger.isLoggable(Level.FINER)) {
 				logger.finer("marginScale =" + returned.marginScale);
+			}
 
 			returned.leftMargin = imageablePageBounds.x;
 			returned.rightMargin = pageBounds.width - imageablePageBounds.x;
@@ -164,8 +168,9 @@ public class FlexoPrintableDelegate implements Printable, Pageable {
 			returned.tx = (double) -pageBounds.width * returned.i + returned.leftMargin;
 			returned.ty = (double) -pageBounds.height * returned.j + returned.topMargin;
 
-			if (logger.isLoggable(Level.FINER))
+			if (logger.isLoggable(Level.FINER)) {
 				logger.finer("Translate tx=" + returned.tx + " ty=" + returned.ty);
+			}
 			g2.translate(returned.tx, returned.ty);
 		}
 		g2.scale(scale, scale);
@@ -178,10 +183,12 @@ public class FlexoPrintableDelegate implements Printable, Pageable {
 			// paintOptimalView(graphics);
 			paintPages(g2);
 		}
-		if (showPages())
+		if (showPages()) {
 			showPages(g2);
-		if (showTitles())
+		}
+		if (showTitles()) {
 			showTitles(g2);
+		}
 		if (_paintMode == PaintMode.PREVIEW) {
 			g2.scale(1 / previewScale, 1 / previewScale);
 		} else if (_paintMode == PaintMode.PRINTING) {
@@ -291,8 +298,9 @@ public class FlexoPrintableDelegate implements Printable, Pageable {
 
 	@Override
 	public int getNumberOfPages() {
-		if (logger.isLoggable(Level.FINER))
+		if (logger.isLoggable(Level.FINER)) {
 			logger.fine("numberOfPages=" + widthPageNb * heightPageNb);
+		}
 		return widthPageNb * heightPageNb;
 	}
 
@@ -322,8 +330,9 @@ public class FlexoPrintableDelegate implements Printable, Pageable {
 		Stroke oldStroke = g2.getStroke();
 		g2.setStroke(DASHED_STROKE);
 		Rectangle pageBounds = getPageRect(_pageFormat);
-		if (logger.isLoggable(Level.FINER))
+		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("pageBounds: " + pageBounds);
+		}
 		for (int i = 0; i < widthPageNb; i++) {
 			for (int j = 0; j < heightPageNb; j++) {
 				paintPage(g2, i, j);
@@ -331,8 +340,9 @@ public class FlexoPrintableDelegate implements Printable, Pageable {
 		}
 		g2.setColor(Color.YELLOW);
 		Rectangle imageablePageBounds = getImageablePageRect(_pageFormat);
-		if (logger.isLoggable(Level.FINER))
+		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("imageablePageBounds: " + imageablePageBounds);
+		}
 		if (pageBounds != null) {
 			g2.drawRect(imageablePageBounds.x, imageablePageBounds.y, imageablePageBounds.width, imageablePageBounds.height);
 		}
@@ -365,8 +375,9 @@ public class FlexoPrintableDelegate implements Printable, Pageable {
 
 	public void setScale(double scale) {
 		this.scale = scale;
-		if (logger.isLoggable(Level.FINER))
+		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("Scale is " + scale);
+		}
 		updatePageLayout();
 	}
 
@@ -376,8 +387,9 @@ public class FlexoPrintableDelegate implements Printable, Pageable {
 
 	public void setPreviewScale(double previewScale) {
 		this.previewScale = previewScale;
-		if (logger.isLoggable(Level.FINER))
+		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("Preview scale is " + previewScale);
+		}
 		updateSize();
 	}
 
@@ -387,10 +399,11 @@ public class FlexoPrintableDelegate implements Printable, Pageable {
 			Rectangle pageBounds = getPageRect(_pageFormat);
 			double scaleX = (double) pageBounds.width / ((double) (optimalBounds.x + optimalBounds.width + 1));
 			double scaleY = (double) pageBounds.height / ((double) (optimalBounds.y + optimalBounds.height + 1));
-			if (scaleX < scaleY)
+			if (scaleX < scaleY) {
 				setScale(scaleX);
-			else
+			} else {
 				setScale(scaleY);
+			}
 		}
 	}
 
@@ -411,8 +424,9 @@ public class FlexoPrintableDelegate implements Printable, Pageable {
 		Rectangle pageBounds = getPageRect(_pageFormat);
 		Dimension viewSize = new Dimension((int) (widthPageNb * pageBounds.width * previewScale),
 				(int) (heightPageNb * pageBounds.height * previewScale));
-		if (logger.isLoggable(Level.FINER))
+		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("Resized to " + viewSize);
+		}
 		_printableComponent.resizeComponent(viewSize);
 	}
 
@@ -476,16 +490,18 @@ public class FlexoPrintableDelegate implements Printable, Pageable {
 
 	@Override
 	public PageFormat getPageFormat(int pageIndex) throws IndexOutOfBoundsException {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getPageFormat() with " + pageIndex);
+		}
 		_pageIndex = pageIndex;
 		return _pageFormat;
 	}
 
 	@Override
 	public Printable getPrintable(int pageIndex) throws IndexOutOfBoundsException {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getPrintable() with " + pageIndex);
+		}
 		_pageIndex = pageIndex;
 		return this;
 	}

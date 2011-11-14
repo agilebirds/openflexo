@@ -140,16 +140,18 @@ public abstract class ViewObject extends AbstractViewObject {
 
 	public ViewShape getShapeNamed(String name) {
 		for (ViewObject o : childs) {
-			if (o instanceof ViewShape && o.getName() != null && o.getName().equals(name))
+			if (o instanceof ViewShape && o.getName() != null && o.getName().equals(name)) {
 				return (ViewShape) o;
+			}
 		}
 		return null;
 	}
 
 	public ViewConnector getConnectorNamed(String name) {
 		for (ViewObject o : childs) {
-			if (o instanceof ViewConnector && o.getName() != null && o.getName().equals(name))
+			if (o instanceof ViewConnector && o.getName() != null && o.getName().equals(name)) {
 				return (ViewConnector) o;
+			}
 		}
 		return null;
 	}
@@ -186,8 +188,9 @@ public abstract class ViewObject extends AbstractViewObject {
 		Vector<ViewObject> ancestors2 = child2.getAncestors();
 		for (int i = 0; i < ancestors1.size(); i++) {
 			ViewObject o1 = ancestors1.elementAt(i);
-			if (ancestors2.contains(o1))
+			if (ancestors2.contains(o1)) {
 				return o1;
+			}
 		}
 		return null;
 	}

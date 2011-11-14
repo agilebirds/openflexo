@@ -91,10 +91,12 @@ public class CopiedFileData implements GeneratedResourceData {
 	@Override
 	public void writeToFile(File aFile) throws FlexoException {
 		if (source == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Source file is null!");
-			if (aFile.exists())
+			}
+			if (aFile.exists()) {
 				aFile.delete();
+			}
 			return;
 		}
 		try {
@@ -105,15 +107,16 @@ public class CopiedFileData implements GeneratedResourceData {
 				lock = getFlexoResource().willWriteOnDisk();
 				needsNotifyEndOfSaving = true;
 			}
-			if (source.isFile())
+			if (source.isFile()) {
 				FileUtils.copyFileToFile(source, aFile);
-			else if (source.isDirectory()) {
+			} else if (source.isDirectory()) {
 				aFile.mkdirs();
 				FileUtils.copyDirToDir(source, aFile);
 			} else {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("Resource to copy file is neither a file nor a directory "
 							+ this.flexoCopiedResource.getResourceToCopy().getFile().getAbsolutePath());
+				}
 			}
 			if (needsNotifyEndOfSaving) {
 				getFlexoResource().hasWrittenOnDisk(lock);

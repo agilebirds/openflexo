@@ -287,12 +287,14 @@ public abstract class DMObject extends RepresentableFlexoModelObject implements 
 			if (getDMModel().getProject() != null) {
 				return getDMModel().getProject().getDMValidationModel();
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not access to project !");
+				}
 			}
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not access to process !");
+			}
 		}
 		return null;
 	}
@@ -447,8 +449,9 @@ public abstract class DMObject extends RepresentableFlexoModelObject implements 
 	}
 
 	public static String getTagAndParamRepresentation(String tag, String param, String tagValue) {
-		if (tagValue == null || tagValue.trim().equals(""))
+		if (tagValue == null || tagValue.trim().equals("")) {
 			return "  * @" + tag + " " + param + StringUtils.LINE_SEPARATOR;
+		}
 
 		StringBuffer returned = new StringBuffer();
 
@@ -460,8 +463,9 @@ public abstract class DMObject extends RepresentableFlexoModelObject implements 
 			if (isFirst) {
 				returned.append("  * @" + tag + " " + param + " " + st2.nextToken() + StringUtils.LINE_SEPARATOR);
 			} else {
-				if (indent == null)
+				if (indent == null) {
 					indent = StringUtils.buildWhiteSpaceIndentation(indentLength);
+				}
 				returned.append("  *" + indent + " " + st2.nextToken() + StringUtils.LINE_SEPARATOR);
 			}
 			isFirst = false;
@@ -490,8 +494,9 @@ public abstract class DMObject extends RepresentableFlexoModelObject implements 
 			if (!o.isNameValid()) {
 				ValidationError err = new ValidationError(this, o,
 						"data_model_objects_can_contain_only_alphanumeric_characters_or_underscore_and_must_start_with_a_letter");
-				if (o.getName() != null)
+				if (o.getName() != null) {
 					err.addToFixProposals(new CleanDataModelObjectName(ToolBox.cleanStringForJava(o.getName())));
+				}
 				err.addToFixProposals(new SetCustomName());
 				return err;
 			}
@@ -522,15 +527,17 @@ public abstract class DMObject extends RepresentableFlexoModelObject implements 
 				String attempt = newName;
 				while (!ok) {
 					try {
-						if (ReservedKeyword.contains(attempt))
+						if (ReservedKeyword.contains(attempt)) {
 							throw new InvalidNameException();
+						}
 						((DMObject) getObject()).setName(attempt);
 						ok = true;
 					} catch (Exception e) {
 						e.printStackTrace();
 						attempt = newName + "_" + i++;
-						if (i > 100)
+						if (i > 100) {
 							ok = true;
+						}
 					}
 				}
 			}
@@ -559,8 +566,9 @@ public abstract class DMObject extends RepresentableFlexoModelObject implements 
 			protected void fixAction() {
 				String s = (String) getValueForParameter("customName");
 				try {
-					if (ReservedKeyword.contains(s))
+					if (ReservedKeyword.contains(s)) {
 						throw new InvalidNameException();
+					}
 					((DMObject) getObject()).setName(s);
 				} catch (Exception e) {
 					e.printStackTrace();

@@ -93,15 +93,17 @@ public abstract class SGGenerator<T extends FlexoModelObject, CR extends Generat
 		for (TechnologyModuleDefinition moduleDefinition : moduleGenerator.getTechnologyModule().getTechnologyModuleDefinition()
 				.getAllRequiredModules()) {
 			TechnologyModuleImplementation implementation = getRepository().getImplementationModel().getTechnologyModule(moduleDefinition);
-			if (implementation != null)
+			if (implementation != null) {
 				returned.put(ModuleGenerator.getTechnologyImplementationVelocityName(implementation), implementation);
+			}
 		}
 		// Add the compatible technology modules in context
 		for (TechnologyModuleDefinition moduleDefinition : moduleGenerator.getTechnologyModule().getTechnologyModuleDefinition()
 				.getCompatibleModules()) {
 			TechnologyModuleImplementation implementation = getRepository().getImplementationModel().getTechnologyModule(moduleDefinition);
-			if (implementation != null)
+			if (implementation != null) {
 				returned.put(ModuleGenerator.getTechnologyImplementationVelocityName(implementation), implementation);
+			}
 		}
 
 		for (ContextEntry ce : getFileEntry().template.contexts) {
@@ -145,8 +147,9 @@ public abstract class SGGenerator<T extends FlexoModelObject, CR extends Generat
 	 */
 	protected void cleanCrossModuleDate() {
 		// Clean cross module data
-		for (ModuleGenerator moduleGenerator : getProjectGenerator().getAllModuleGenerators())
+		for (ModuleGenerator moduleGenerator : getProjectGenerator().getAllModuleGenerators()) {
 			moduleGenerator.cleanCrossModuleDataForGenerator(this);
+		}
 	}
 
 	/**
@@ -265,18 +268,21 @@ public abstract class SGGenerator<T extends FlexoModelObject, CR extends Generat
 	}
 
 	protected CGRepositoryFileResource<?, ?, ? extends CGFile> getGeneratedResource() {
-		if (getGeneratedResources().size() == 0)
+		if (getGeneratedResources().size() == 0) {
 			return null;
-		if (getGeneratedResources().size() > 1)
+		}
+		if (getGeneratedResources().size() > 1) {
 			logger.warning("getGeneratedResource in SGGenerator retrieved more than 1 resource. A SGGenerator is supposed to generate only 1 resource ! Number of retrieved resources: "
 					+ getGeneratedResources().size() + ". Returning the first one");
+		}
 		return getGeneratedResources().get(0);
 	}
 
 	protected boolean isResourceMarkedAsDeleted() {
 		CGRepositoryFileResource<?, ?, ? extends CGFile> resource = getGeneratedResource();
-		if (resource == null)
+		if (resource == null) {
 			return false;
+		}
 
 		CGFile cgFile = resource.getCGFile();
 		return cgFile != null && cgFile.isMarkedForDeletion();

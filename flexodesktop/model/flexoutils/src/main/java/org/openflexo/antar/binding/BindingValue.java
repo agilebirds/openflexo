@@ -124,29 +124,34 @@ public class BindingValue extends AbstractBinding {
 	public boolean isBindingValid() {
 		// logger.setLevel(Level.FINE);
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Is BindingValue " + this + " valid ?");
+		}
 
 		if (getAccessedType() == null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Invalid binding because accessed type is null");
+			}
 			return false;
 		}
 
 		if (getBindingDefinition() == null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Invalid binding because _bindingDefinition is null");
+			}
 			return false;
 		}
 
 		if (_bindingVariable == null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Invalid binding because _bindingVariable is null");
+			}
 			return false;
 		}
 		if (!_checkBindingPathValid()) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Invalid binding because binding path not valid");
+			}
 			return false;
 		}
 
@@ -155,8 +160,9 @@ public class BindingValue extends AbstractBinding {
 			/*|| (!(getBindingPathLastElement() instanceof KeyValueProperty))
 			|| (!((KeyValueProperty)getBindingPathLastElement()).isSettable())) {*/
 			|| (!(getBindingPathLastElement()).isSettable())) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Invalid binding because binding definition declared as settable and definition cannot satisfy it");
+				}
 				return false;
 			}
 		}
@@ -177,9 +183,10 @@ public class BindingValue extends AbstractBinding {
 			return true;
 		}
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Invalid binding because types are not matching searched " + getBindingDefinition().getType() + " having "
 					+ getAccessedType());
+		}
 		return false;
 
 	}
@@ -251,8 +258,9 @@ public class BindingValue extends AbstractBinding {
 		// System.out.println("Compute accessed type for "+this);
 
 		if (_bindingPath.size() == 0) {
-			if (_bindingVariable != null)
+			if (_bindingVariable != null) {
 				return _bindingVariable.getType();
+			}
 			return null;
 		}
 
@@ -275,11 +283,13 @@ public class BindingValue extends AbstractBinding {
 	}
 
 	private boolean _checkBindingPathValid() {
-		if (_bindingVariable == null)
+		if (_bindingVariable == null) {
 			return false;
+		}
 		Type currentType = _bindingVariable.getType();
-		if (currentType == null)
+		if (currentType == null) {
 			return false;
+		}
 
 		for (int i = 0; i < _bindingPath.size(); i++) {
 			BindingPathElement element = _bindingPath.elementAt(i);
@@ -289,28 +299,32 @@ public class BindingValue extends AbstractBinding {
 				// System.out.println("Mismatched: "+element.getDeclaringClass()+" "+TypeUtils.getBaseClass(currentType));
 				return false;
 			}
-			if (!element.isBindingValid())
+			if (!element.isBindingValid()) {
 				return false;
+			}
 			currentType = _bindingPath.getResultingTypeAtIndex(i);
-			if (currentType == null)
+			if (currentType == null) {
 				return false;
+			}
 		}
 
 		return true;
 	}
 
 	public BindingVariable getBindingVariable() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Binding Variable of bindingValue for Entry:"
 					+ (getBindingDefinition() != null ? getBindingDefinition().getVariableName() : null) + " var:"
 					+ (_bindingVariable != null ? _bindingVariable.getVariableName() : null) + " " + _bindingVariable);
+		}
 		return _bindingVariable;
 	}
 
 	public void setBindingVariable(BindingVariable bindingVariable) {
 		unparsableValue = null;
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Set binding variable to " + bindingVariable);
+		}
 		/*if (bindingVariable != null)
 		    _isStaticValue = false;*/
 		if (bindingVariable != _bindingVariable) {
@@ -346,20 +360,24 @@ public class BindingValue extends AbstractBinding {
 	 */
 	public void setBindingPathElementAtIndex(BindingPathElement element, int i) {
 		unparsableValue = null;
-		if ((i < _bindingPath.size()) && (_bindingPath.elementAt(i) == element))
+		if ((i < _bindingPath.size()) && (_bindingPath.elementAt(i) == element)) {
 			return;
-		if (logger.isLoggable(Level.FINE))
+		}
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Set property " + element + " at index " + i);
+		}
 		if (i < _bindingPath.size()) {
 			_bindingPath.set(i, element);
 			int size = _bindingPath.size();
-			for (int j = i + 1; j < size; j++)
+			for (int j = i + 1; j < size; j++) {
 				_bindingPath.removeElementAt(i + 1);
+			}
 		} else if (i == _bindingPath.size()) {
 			_bindingPath.add(element);
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not set property at index " + i);
+			}
 		}
 		_isConnected = false;
 	}
@@ -382,29 +400,32 @@ public class BindingValue extends AbstractBinding {
 
 	public void removeBindingPathElementAfter(BindingPathElement requestedLast) {
 		unparsableValue = null;
-		if (_bindingPath != null && _bindingPath.lastElement() != null && _bindingPath.lastElement().equals(requestedLast))
+		if (_bindingPath != null && _bindingPath.lastElement() != null && _bindingPath.lastElement().equals(requestedLast)) {
 			return;
-		else if (_bindingPath != null && _bindingPath.lastElement() != null) {
+		} else if (_bindingPath != null && _bindingPath.lastElement() != null) {
 			_bindingPath.removeElement(_bindingPath.lastElement());
 			removeBindingPathElementAfter(requestedLast);
 		}
 	}
 
 	public boolean isLastBindingPathElement(BindingPathElement element, int index) {
-		if (_bindingPath.size() < 1)
+		if (_bindingPath.size() < 1) {
 			return false;
+		}
 		return ((_bindingPath.lastElement() == element) && (index == _bindingPath.size() - 1));
 	}
 
 	public Type getBindingPathLastElementType() {
-		if (getBindingPath() != null && getBindingPath().size() > 0 && getBindingPath().lastElement() != null)
+		if (getBindingPath() != null && getBindingPath().size() > 0 && getBindingPath().lastElement() != null) {
 			return getBindingPath().lastElement().getType();
+		}
 		return null;
 	}
 
 	public BindingPathElement getBindingPathLastElement() {
-		if (getBindingPath() != null && getBindingPath().size() > 0 && getBindingPath().lastElement() != null)
+		if (getBindingPath() != null && getBindingPath().size() > 0 && getBindingPath().lastElement() != null) {
 			return getBindingPath().lastElement();
+		}
 		return null;
 	}
 
@@ -415,8 +436,9 @@ public class BindingValue extends AbstractBinding {
 			if (e instanceof MethodCall) {
 				MethodCall mc = (MethodCall) e;
 				for (MethodCallArgument arg : mc.getArgs()) {
-					if (arg.getBinding() != null)
+					if (arg.getBinding() != null) {
 						arg.getBinding().setOwner(owner);
+					}
 				}
 			}
 		}
@@ -440,10 +462,11 @@ public class BindingValue extends AbstractBinding {
 			int i = 0;
 			for (BindingPathElement element : _bindingPath) {
 				if (i < _bindingPath.size() - n) {
-					if (element != null)
+					if (element != null) {
 						sb.append(".").append(element.getSerializationRepresentation());
-					else
+					} else {
 						sb.append(".null");
+					}
 				}
 				i++;
 			}
@@ -455,15 +478,17 @@ public class BindingValue extends AbstractBinding {
 
 	@Override
 	public String getStringRepresentation() {
-		if (getUnparsableValue() != null)
+		if (getUnparsableValue() != null) {
 			return getUnparsableValue();
+		}
 		if (_bindingVariable != null) {
 			StringBuilder sb = new StringBuilder(_bindingVariable.getVariableName());
 			for (BindingPathElement element : _bindingPath) {
-				if (element != null)
+				if (element != null) {
 					sb.append(".").append(element.getSerializationRepresentation());
-				else
+				} else {
 					sb.append(".null");
+				}
 			}
 			return sb.toString();
 		} else {
@@ -481,16 +506,18 @@ public class BindingValue extends AbstractBinding {
 
 	@Override
 	public BindingValueFactory getConverter() {
-		if (getOwner() != null)
+		if (getOwner() != null) {
 			return getOwner().getBindingFactory().getBindingValueFactory();
+		}
 		return null;
 		// return AbstractBinding.bindingValueConverter;
 	}
 
 	@Override
 	protected void finalize() throws Throwable {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("finalize called for BindingValue " + getStringRepresentation());
+		}
 		setBindingVariable(null);
 		super.finalize();
 	}
@@ -553,32 +580,35 @@ public class BindingValue extends AbstractBinding {
 
 				// TODO java.lang.ArrayIndexOutOfBoundsException may happen here, fix this
 				// BMA : java.lang.ArrayIndexOutOfBoundsException won't append anymore...
-				if (index > 0 && _resultingTypes.size() >= index)
+				if (index > 0 && _resultingTypes.size() >= index) {
 					parentType = _resultingTypes.elementAt(index - 1);
-				else
+				} else {
 					parentType = _bindingVariable.getType();
+				}
 
 				if (TypeUtils.isGeneric(type)) {
 					// System.out.println("bpe: "+bpe+" from "+type+" to "+TypeUtils.makeInstantiatedType(type, parentType));
 					type = TypeUtils.makeInstantiatedType(type, parentType);
 				}
 
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Set resulting type at index " + index + " with " + type + " parent=" + parentType);
+				}
 
-				if (_resultingTypes.size() > index)
+				if (_resultingTypes.size() > index) {
 					_resultingTypes.setElementAt(type, index);
-				else if (_resultingTypes.size() == index)
+				} else if (_resultingTypes.size() == index) {
 					_resultingTypes.add(type);
-				else {
+				} else {
 					logger.warning("Unexpected index " + index + " for _resultingTypes.size()=" + _resultingTypes.size());
 				}
 			}
 		}
 
 		public Type getResultingTypeAtIndex(int index) {
-			if (index < _resultingTypes.size())
+			if (index < _resultingTypes.size()) {
 				return _resultingTypes.elementAt(index);
+			}
 			return null;
 		}
 	}
@@ -588,19 +618,21 @@ public class BindingValue extends AbstractBinding {
 		BindingPathElement reply = null;
 		while (en.hasMoreElements()) {
 			reply = en.nextElement();
-			if (TypeUtils.getBaseClass(reply.getType()).equals(aClass))
+			if (TypeUtils.getBaseClass(reply.getType()).equals(aClass)) {
 				return reply;
+			}
 		}
 		return null;
 	}
 
 	public void addBindingPathElementAfterFirstPathElementOfType(Class aClass, KeyValueProperty newProperty) {
 		BindingPathElement beforeLast = findFirstBindingPathElementOfType(aClass);
-		if (beforeLast != null)
+		if (beforeLast != null) {
 			removeBindingPathElementAfter(beforeLast);
-		else {
-			while (getBindingPathLastElement() != null)
+		} else {
+			while (getBindingPathLastElement() != null) {
 				getBindingPath().removeAllElements();
+			}
 		}
 		addBindingPathElement(newProperty);
 	}
@@ -609,8 +641,9 @@ public class BindingValue extends AbstractBinding {
 
 	@Override
 	public Object getBindingValue(BindingEvaluationContext context) {
-		if (!isBindingValid())
+		if (!isBindingValid()) {
 			return null;
+		}
 
 		// if (getStringRepresentation().equals("an.interesting.binding")) debug=true;
 
@@ -623,8 +656,9 @@ public class BindingValue extends AbstractBinding {
 
 		Object returned = context.getValue(_bindingVariable);
 
-		if (returned == null)
+		if (returned == null) {
 			return null;
+		}
 
 		try {
 			// if (debug) System.out.println("bv="+returned);
@@ -670,10 +704,12 @@ public class BindingValue extends AbstractBinding {
 	 */
 	@Override
 	public List<Object> getConcernedObjects(BindingEvaluationContext context) {
-		if (!isBindingValid())
+		if (!isBindingValid()) {
 			return EMPTY_LIST;
-		if (!isSettable())
+		}
+		if (!isSettable()) {
 			return EMPTY_LIST;
+		}
 
 		ArrayList<Object> returned = new ArrayList<Object>();
 
@@ -715,15 +751,17 @@ public class BindingValue extends AbstractBinding {
 	 */
 	@Override
 	public List<TargetObject> getTargetObjects(BindingEvaluationContext context) {
-		if (!isBindingValid())
+		if (!isBindingValid()) {
 			return null;
+		}
 
 		ArrayList<TargetObject> returned = new ArrayList<TargetObject>();
 
 		Object current = context.getValue(_bindingVariable);
 
-		if (current == null)
+		if (current == null) {
 			return returned;
+		}
 
 		try {
 			for (BindingPathElement element : getBindingPath()) {
@@ -753,10 +791,12 @@ public class BindingValue extends AbstractBinding {
 	}
 
 	public Object getTargetObject(BindingEvaluationContext context) {
-		if (!isBindingValid())
+		if (!isBindingValid()) {
 			return null;
-		if (!isSettable())
+		}
+		if (!isSettable()) {
 			return null;
+		}
 
 		Object returned = context.getValue(_bindingVariable);
 
@@ -790,11 +830,13 @@ public class BindingValue extends AbstractBinding {
 
 	@Override
 	public void setBindingValue(Object value, BindingEvaluationContext context) {
-		if (!isBindingValid())
+		if (!isBindingValid()) {
 			return;
+		}
 
-		if (!isSettable())
+		if (!isSettable()) {
 			return;
+		}
 
 		// System.out.println("Sets value: "+value);
 		// System.out.println("Binding: "+getStringRepresentation());

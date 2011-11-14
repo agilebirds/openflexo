@@ -29,11 +29,11 @@ import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.graphics.BackgroundStyle;
+import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.graphics.TextStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.shapes.Rectangle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
@@ -73,8 +73,9 @@ public class OperationNodeGR extends AbstractOperationNodeGR {
 		setForeground(foreground);
 		setBackground(background);
 
-		if (!(operationNode instanceof SelfExecutableOperationNode))
+		if (!(operationNode instanceof SelfExecutableOperationNode)) {
 			addToMouseClickControls(new PetriGraphOpener(), true);
+		}
 
 		updatePropertiesFromWKFPreferences();
 
@@ -102,8 +103,9 @@ public class OperationNodeGR extends AbstractOperationNodeGR {
 	}
 
 	protected boolean showWOName() {
-		if (getWorkflow() != null)
+		if (getWorkflow() != null) {
 			return getWorkflow().getShowWOName(WKFPreferences.getShowWONameInWKF());
+		}
 		return WKFPreferences.getShowWONameInWKF();
 	}
 
@@ -204,8 +206,9 @@ public class OperationNodeGR extends AbstractOperationNodeGR {
 				@Override
 				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
 						java.awt.event.MouseEvent event) {
-					if (!getOperationNode().hasWOComponent())
+					if (!getOperationNode().hasWOComponent()) {
 						return false;
+					}
 					logger.info("Opening component by alt-clicking");
 					OpenOperationComponent.actionType.makeNewAction(getOperationNode(), null, getDrawing().getEditor()).doAction();
 					return true;

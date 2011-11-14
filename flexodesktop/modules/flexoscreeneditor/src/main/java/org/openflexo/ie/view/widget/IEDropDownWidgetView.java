@@ -127,20 +127,23 @@ public class IEDropDownWidgetView extends AbstractInnerTableWidgetView<IEDropDow
 	public Dimension getPreferredSize() {
 		if (getHoldsNextComputedPreferredSize()) {
 			Dimension storedSize = storedPrefSize();
-			if (storedSize != null)
+			if (storedSize != null) {
 				return storedSize;
+			}
 		}
 		if (getModel().getParent() instanceof IETDWidget) {
 			Dimension d = container.getPreferredSize();
 			d.width += 2;
 			d.height += 2;
-			if (getHoldsNextComputedPreferredSize())
+			if (getHoldsNextComputedPreferredSize()) {
 				storePrefSize(d);
+			}
 			return d;
 		}
 		Dimension d = super.getPreferredSize();
-		if (getHoldsNextComputedPreferredSize())
+		if (getHoldsNextComputedPreferredSize()) {
 			storePrefSize(d);
+		}
 		return d;
 	}
 
@@ -180,8 +183,9 @@ public class IEDropDownWidgetView extends AbstractInnerTableWidgetView<IEDropDow
 		}
 		if (modif instanceof WidgetRemovedFromTable && arg0 == getModel()) {
 			delete();
-		} else
+		} else {
 			super.update(arg0, modif);
+		}
 	}
 
 }

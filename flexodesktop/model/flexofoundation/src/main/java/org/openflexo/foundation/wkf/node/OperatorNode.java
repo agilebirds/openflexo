@@ -157,10 +157,11 @@ public abstract class OperatorNode extends PetriGraphNode implements Bindable, E
 
 	// Used when serializing
 	public FlexoModelObjectReference<FlexoModelObject> getRoleReference() {
-		if (getRole() != null)
+		if (getRole() != null) {
 			return new FlexoModelObjectReference<FlexoModelObject>(getProject(), getRole());
-		else
+		} else {
 			return null;
+		}
 	}
 
 	// Used when deserializing
@@ -173,8 +174,9 @@ public abstract class OperatorNode extends PetriGraphNode implements Bindable, E
 	}
 
 	public void setRole(Role aRole) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setRole() with " + aRole);
+		}
 		Role oldRole = _role;
 		if (oldRole != aRole) {
 			_role = aRole;
@@ -212,8 +214,9 @@ public abstract class OperatorNode extends PetriGraphNode implements Bindable, E
 
 	@Override
 	public BindingModel getBindingModel() {
-		if (getProcess() != null)
+		if (getProcess() != null) {
 			return getProcess().getBindingModel();
+		}
 		return null;
 	}
 
@@ -228,21 +231,24 @@ public abstract class OperatorNode extends PetriGraphNode implements Bindable, E
 	}
 
 	public WorkflowControlGraph<OperatorNode> getExecution() {
-		if (_executionComputingFactory != null)
+		if (_executionComputingFactory != null) {
 			return _executionComputingFactory.getControlGraph(this);
+		}
 		return null;
 	}
 
 	@Override
 	public void setProgrammingLanguageForControlGraphComputation(ProgrammingLanguage language) {
-		if (getExecution() != null)
+		if (getExecution() != null) {
 			getExecution().setProgrammingLanguage(language);
+		}
 	}
 
 	@Override
 	public void setInterproceduralForControlGraphComputation(boolean interprocedural) {
-		if (getExecution() != null)
+		if (getExecution() != null) {
 			getExecution().setInterprocedural(interprocedural);
+		}
 	}
 
 	@Override

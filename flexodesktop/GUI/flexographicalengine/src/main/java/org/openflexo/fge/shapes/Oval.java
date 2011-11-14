@@ -40,8 +40,9 @@ public class Oval extends Shape {
 	public void updateShape() {
 		ellips = new FGEEllips(0, 0, 1, 1, Filling.FILLED);
 		rebuildControlPoints();
-		if (getGraphicalRepresentation() != null)
+		if (getGraphicalRepresentation() != null) {
 			getGraphicalRepresentation().notifyShapeChanged();
+		}
 	}
 
 	@Override

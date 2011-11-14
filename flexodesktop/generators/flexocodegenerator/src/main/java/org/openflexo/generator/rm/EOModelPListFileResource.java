@@ -35,7 +35,6 @@ import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.cg.PListFileResource;
 import org.openflexo.generator.cg.CGPListFile;
 import org.openflexo.generator.dm.EOModelPListGenerator;
-import org.openflexo.generator.rm.GenerationAvailableFileResource;
 
 public class EOModelPListFileResource extends PListFileResource<EOModelPListGenerator, CGPListFile> implements
 		GenerationAvailableFileResource, FlexoObserver {
@@ -58,8 +57,9 @@ public class EOModelPListFileResource extends PListFileResource<EOModelPListGene
 	}
 
 	public DMEOModel getDMEOModel() {
-		if (getGenerator() != null)
+		if (getGenerator() != null) {
 			return getGenerator().getModel();
+		}
 		return null;
 	}
 
@@ -98,23 +98,26 @@ public class EOModelPListFileResource extends PListFileResource<EOModelPListGene
 	 */
 	@Override
 	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate) {
-		if (resource instanceof FlexoRMResource)
+		if (resource instanceof FlexoRMResource) {
 			return false;
+		}
 		if (resource instanceof FlexoDMResource) {
 			FlexoDMResource dmRes = (FlexoDMResource) resource;
 			if (dmRes.isLoaded() && getDMEOModel() != null) {
 				try {
 					if (getGenerator() != null && getGenerator().pListCache != null
-							&& getGenerator().pListCache.equals(getGenerator().generatePList()))
+							&& getGenerator().pListCache.equals(getGenerator().generatePList())) {
 						return false;
+					}
 				} catch (CayenneRuntimeException e) {
 					return true;
 				} catch (NullPointerException e) {
 					return true;
 				}
 				if (getDMEOModel().getLastUpdate().before(requestDate) || getDMEOModel().getLastUpdate().equals(requestDate)) {
-					if (logger.isLoggable(Level.FINER))
+					if (logger.isLoggable(Level.FINER)) {
 						logger.finer("OPTIMIST DEPENDANCY CHECKING for PLIST EOMODEL " + getDMEOModel().getName());
+					}
 					return false;
 				}
 			}

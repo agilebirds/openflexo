@@ -65,9 +65,9 @@ public class EiffelTokenMarker extends TokenMarker {
 				switch (c) {
 				case '"':
 					doKeyword(line, i, c);
-					if (backslash)
+					if (backslash) {
 						backslash = false;
-					else {
+					} else {
 						addToken(i - lastOffset, token);
 						token = Token.LITERAL1;
 						lastOffset = lastKeyword = i;
@@ -75,9 +75,9 @@ public class EiffelTokenMarker extends TokenMarker {
 					break;
 				case '\'':
 					doKeyword(line, i, c);
-					if (backslash)
+					if (backslash) {
 						backslash = false;
-					else {
+					} else {
 						addToken(i - lastOffset, token);
 						token = Token.LITERAL2;
 						lastOffset = lastKeyword = i;
@@ -85,13 +85,15 @@ public class EiffelTokenMarker extends TokenMarker {
 					break;
 				case ':':
 					if (lastKeyword == offset) {
-						if (doKeyword(line, i, c))
+						if (doKeyword(line, i, c)) {
 							break;
+						}
 						backslash = false;
 						addToken(i1 - lastOffset, Token.LABEL);
 						lastOffset = lastKeyword = i1;
-					} else if (doKeyword(line, i, c))
+					} else if (doKeyword(line, i, c)) {
 						break;
+					}
 					break;
 				case '-':
 					backslash = false;
@@ -108,8 +110,9 @@ public class EiffelTokenMarker extends TokenMarker {
 					break;
 				default:
 					backslash = false;
-					if (!Character.isLetterOrDigit(c) && c != '_')
+					if (!Character.isLetterOrDigit(c) && c != '_') {
 						doKeyword(line, i, c);
+					}
 					break;
 				}
 				break;
@@ -117,18 +120,18 @@ public class EiffelTokenMarker extends TokenMarker {
 			case Token.COMMENT2:
 				throw new RuntimeException("Wrong eiffel parser state");
 			case Token.LITERAL1:
-				if (backslash)
+				if (backslash) {
 					backslash = false;
-				else if (c == '"') {
+				} else if (c == '"') {
 					addToken(i1 - lastOffset, token);
 					token = Token.NULL;
 					lastOffset = lastKeyword = i1;
 				}
 				break;
 			case Token.LITERAL2:
-				if (backslash)
+				if (backslash) {
 					backslash = false;
-				else if (c == '\'') {
+				} else if (c == '\'') {
 					addToken(i1 - lastOffset, Token.LITERAL1);
 					token = Token.NULL;
 					lastOffset = lastKeyword = i1;
@@ -139,8 +142,9 @@ public class EiffelTokenMarker extends TokenMarker {
 			}
 		}
 
-		if (token == Token.NULL)
+		if (token == Token.NULL) {
 			doKeyword(line, length, '\0');
+		}
 
 		switch (token) {
 		case Token.LITERAL1:
@@ -150,8 +154,9 @@ public class EiffelTokenMarker extends TokenMarker {
 			break;
 		case Token.KEYWORD2:
 			addToken(length - lastOffset, token);
-			if (!backslash)
+			if (!backslash) {
 				token = Token.NULL;
+			}
 		default:
 			addToken(length - lastOffset, token);
 			break;
@@ -249,13 +254,15 @@ public class EiffelTokenMarker extends TokenMarker {
 					break;
 				}
 			}
-			if (klassname)
+			if (klassname) {
 				id = Token.KEYWORD3;
+			}
 		}
 
 		if (id != Token.NULL) {
-			if (lastKeyword != lastOffset)
+			if (lastKeyword != lastOffset) {
 				addToken(lastKeyword - lastOffset, Token.NULL);
+			}
 			addToken(len, id);
 			lastOffset = i;
 		}

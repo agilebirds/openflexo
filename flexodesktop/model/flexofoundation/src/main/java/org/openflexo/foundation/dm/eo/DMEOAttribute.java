@@ -115,8 +115,9 @@ public class DMEOAttribute extends DMEOProperty {
 		try {
 			dmEOEntity.getEOEntity().addAttribute(eoAttribute);
 		} catch (IllegalArgumentException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("EOControl management failed :" + e.getMessage());
+			}
 			throw new EOAccessException(e);
 		}
 		DMEOAttribute answer = new DMEOAttribute(dmModel, eoAttribute);
@@ -134,8 +135,9 @@ public class DMEOAttribute extends DMEOProperty {
 
 	@Override
 	protected void updateCode() {
-		if (getPrototype() != null)
+		if (getPrototype() != null) {
 			super.updateCode();
+		}
 	}
 
 	@Override
@@ -146,13 +148,15 @@ public class DMEOAttribute extends DMEOProperty {
 				if ((getDMEOEntity() != null) && (getDMEOEntity().getEOEntity() != null)) {
 					getDMEOEntity().getEOEntity().removeAttribute(getEOAttribute());
 				} else if (getEOAttribute().getEntity() != null) {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("No parent DMEOEntity or no EOEntity declared for DMEOEntity. Trying to proceed anyway.");
+					}
 					getEOAttribute().getEntity().removeAttribute(getEOAttribute());
 				}
 			} catch (IllegalArgumentException e) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("EOControl management failed :" + e.getMessage());
+				}
 			}
 		}
 		super.delete();
@@ -166,10 +170,11 @@ public class DMEOAttribute extends DMEOProperty {
 	 */
 	@Override
 	public String getInspectorName() {
-		if (getDMRepository() != null && getDMRepository().isReadOnly())
+		if (getDMRepository() != null && getDMRepository().isReadOnly()) {
 			return Inspectors.DM.DM_RO_EO_ATTRIBUTE_INSPECTOR;
-		else
+		} else {
 			return Inspectors.DM.DM_EO_ATTRIBUTE_INSPECTOR;
+		}
 	}
 
 	@Override
@@ -183,12 +188,14 @@ public class DMEOAttribute extends DMEOProperty {
 				try {
 					_eoAttribute = getDMEOEntity().getEOEntity().attributeNamed(getName());
 				} catch (IllegalArgumentException e) {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Could not find EOAttribute named " + getName() + " : EOControl management failed");
+					}
 				}
 				if (_eoAttribute == null) {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Could not find EOAttribute named " + getName());
+					}
 				}
 			}
 		}
@@ -210,27 +217,30 @@ public class DMEOAttribute extends DMEOProperty {
 	 */
 	public String getJavaClassName() {
 		try {
-			if (getEOAttribute().getClassName() != null)
+			if (getEOAttribute().getClassName() != null) {
 				return getEOAttribute().getClassName().substring((getEOAttribute().getClassName().lastIndexOf(".")) + 1);
-			else if (getEOAttribute().getPrototype() != null)
+			} else if (getEOAttribute().getPrototype() != null) {
 				return getEOAttribute().getPrototype().getClassName()
 						.substring((getEOAttribute().getPrototype().getClassName().lastIndexOf(".")) + 1);
-			else {
-				if (logger.isLoggable(Level.WARNING))
+			} else {
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("No JavaClassName nor prototype is set on eoAttribute named \"" + getName() + "\" in entity "
 							+ getEntity().getName());
+				}
 				return "Object"; // Don't know what to do, let's use an
 				// Object.
 			}
 		} catch (Exception e) {
-			if (getEOAttribute() == null)
-				if (logger.isLoggable(Level.FINE))
+			if (getEOAttribute() == null) {
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("getEOAttribute() return null !!!!");
-				else {
-					if (logger.isLoggable(Level.FINE))
+				} else {
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Error with EOAttribute : " + getName());
+					}
 
 				}
+			}
 			// e.printStackTrace();
 			return null;
 		}
@@ -239,8 +249,9 @@ public class DMEOAttribute extends DMEOProperty {
 	@Override
 	public void setName(String newName) throws IllegalArgumentException, InvalidNameException {
 		if ((name == null) || (!name.equals(newName))) {
-			if (!isDeserializing() && (newName == null || !DMRegExp.ENTITY_NAME_PATTERN.matcher(newName).matches()))
+			if (!isDeserializing() && (newName == null || !DMRegExp.ENTITY_NAME_PATTERN.matcher(newName).matches())) {
 				throw new InvalidNameException("'" + newName + "' is not a valid name for attribute.");
+			}
 			DMEntity containerEntity = getEntity();
 			if (getEOAttribute() != null) {
 				boolean isPK = _eoAttribute.getIsPrimaryKey();
@@ -509,8 +520,9 @@ public class DMEOAttribute extends DMEOProperty {
 	}
 
 	public DMEOPrototype getPrototype() {
-		if (!isSerializing())
+		if (!isSerializing()) {
 			ensureBooleanPropertyCreation();
+		}
 		if ((getEOAttribute() != null) && (getEOAttribute().getPrototype() != null)) {
 			return getDMModel().getEOPrototypeRepository().getPrototype(getEOAttribute().getPrototype());
 		}
@@ -524,8 +536,9 @@ public class DMEOAttribute extends DMEOProperty {
 			if (!isDeserializing() && oldPrototype != null && oldPrototype.getName().equals(BOOLEAN_PROTOTYPE_NAME)
 					&& getDMEOEntity() != null) {
 				DMProperty p = getDMEOEntity().getDMProperty(getName() + BOOLEAN_METHOD_POSTFIX);
-				if (p != null)
+				if (p != null) {
 					p.delete();
+				}
 			}
 			if (prototype != null) {
 				getEOAttribute().setPrototype(prototype.getEOAttribute());
@@ -548,8 +561,9 @@ public class DMEOAttribute extends DMEOProperty {
      *
      */
 	private void ensureBooleanPropertyCreation() {
-		if (creatingBoolean)
+		if (creatingBoolean) {
 			return;
+		}
 		creatingBoolean = true;
 		try {
 			if (!isDeserializing() && getPrototype() != null && getPrototype().getName().equals(BOOLEAN_PROTOTYPE_NAME)
@@ -604,8 +618,9 @@ public class DMEOAttribute extends DMEOProperty {
 			// move from one entity to another
 			super.setEntity(entity);
 			setPrototype(proto);
-		} else
+		} else {
 			super.setEntity(entity);
+		}
 	}
 
 	@Override

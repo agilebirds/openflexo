@@ -55,11 +55,13 @@ public class ConnectCGRepositoryInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<ConnectCGRepository>() {
 			@Override
 			public boolean run(ActionEvent e, ConnectCGRepository action) {
-				if (!(action.getFocusedObject() instanceof CGRepository))
+				if (!(action.getFocusedObject() instanceof CGRepository)) {
 					return false;
+				}
 				CGRepository repository = (CGRepository) action.getFocusedObject();
-				if (repository == null)
+				if (repository == null) {
 					return false;
+				}
 				if (repository.getSourceCodeRepository().getDirectory() == null) {
 					repository.getSourceCodeRepository().setDirectory(new File(System.getProperty("user.home")));
 				}
@@ -82,8 +84,9 @@ public class ConnectCGRepositoryInitializer extends ActionInitializer {
 				params[1] = paramDir;
 				params[2] = paramWarName;
 				params[3] = paramWarDir;
-				if (readerDir != null)
+				if (readerDir != null) {
 					params[4] = readerDir;
+				}
 				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
 						FlexoLocalization.localizedForKey("connect_repository_to_local_file_system"),
 						FlexoLocalization.localizedForKey("enter_parameters_for_connecting_repository_to_the_local_file_system"), params);
@@ -94,8 +97,9 @@ public class ConnectCGRepositoryInitializer extends ActionInitializer {
 						repository.setDirectory(paramDir.getValue());
 						repository.setWarName(paramWarName.getValue());
 						repository.setWarDirectory(paramWarDir.getValue());
-						if (repository.includeReader() && repository.getReaderRepository() != null)
+						if (repository.includeReader() && repository.getReaderRepository() != null) {
 							repository.getReaderRepository().setDirectory(readerDir.getValue());
+						}
 					} catch (DuplicateCodeRepositoryNameException e2) {
 						e2.printStackTrace();
 						FlexoController.notify(FlexoLocalization.localizedForKey("wrong_name"));

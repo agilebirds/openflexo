@@ -86,8 +86,9 @@ public class PropsTokenMarker extends TokenMarker {
 				throw new InternalError("Invalid state: " + token);
 			}
 		}
-		if (lastOffset != length)
+		if (lastOffset != length) {
 			addToken(length - lastOffset, Token.NULL);
+		}
 		return Token.NULL;
 	}
 

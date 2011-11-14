@@ -906,8 +906,9 @@ public class XMLMapping {
 			boolean followPrimaryAndCopiableOnly, Collection<Object> visited) {
 		// First we add the object to the visited objects!
 		visited.add(object);
-		if (klass.isAssignableFrom(object.getClass()) && !v.contains(object))
+		if (klass.isAssignableFrom(object.getClass()) && !v.contains(object)) {
 			v.add((T) object);
+		}
 		ModelEntity entity = entityForClass(object.getClass());
 		if (entity == null) {
 			return v;
@@ -915,30 +916,35 @@ public class XMLMapping {
 		Enumeration<ModelProperty> en = entity.getModelProperties();
 		while (en.hasMoreElements()) {
 			ModelProperty property = en.nextElement();
-			if (followPrimaryAndCopiableOnly && (!property.isPrimary() || !property.isCopyable()))
+			if (followPrimaryAndCopiableOnly && (!property.isPrimary() || !property.isCopyable())) {
 				continue;
+			}
 			Object o = property.getKeyValueProperty().getObjectValue(object);
 			if (o != null) {
 				if (recursive) {
 					if (o instanceof Hashtable) {
 						Hashtable<Object, Object> hash = (Hashtable<Object, Object>) o;
 						for (Object oInHash : hash.values()) {
-							if (!visited.contains(oInHash))
+							if (!visited.contains(oInHash)) {
 								v.addAll(getEmbeddedObjectsForObject(oInHash, v, klass, recursive, followPrimaryAndCopiableOnly, visited));
+							}
 						}
 					} else if (o instanceof Vector) {
 						Vector<Object> vector = (Vector<Object>) o;
 						for (Object oInVector : vector) {
-							if (!visited.contains(oInVector))
+							if (!visited.contains(oInVector)) {
 								v.addAll(getEmbeddedObjectsForObject(oInVector, v, klass, recursive, followPrimaryAndCopiableOnly, visited));
+							}
 						}
 					} else {
-						if (!visited.contains(o))
+						if (!visited.contains(o)) {
 							v.addAll(getEmbeddedObjectsForObject(o, v, klass, recursive, followPrimaryAndCopiableOnly, visited));
+						}
 					}
 				} else {
-					if (!v.contains(o) && klass.isAssignableFrom(o.getClass()))
+					if (!v.contains(o) && klass.isAssignableFrom(o.getClass())) {
 						v.add((T) o);
+					}
 				}
 			}
 		}

@@ -114,8 +114,9 @@ public class FlexoProjectOntologyResource extends FlexoStorageResource<ProjectOn
 	@Override
 	protected void saveResourceData(boolean clearIsModified) throws SaveResourceException {
 		if (!hasWritePermission()) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Permission denied : " + getFile().getAbsolutePath());
+			}
 			throw new SaveResourcePermissionDeniedException(this);
 		}
 		if (_resourceData != null) {
@@ -123,11 +124,13 @@ public class FlexoProjectOntologyResource extends FlexoStorageResource<ProjectOn
 			_writeToFile();
 			hasWrittenOnDisk(lock);
 			notifyResourceStatusChanged();
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Succeeding to save Resource " + getResourceIdentifier() + " : " + getFile().getName());
+			}
 		}
-		if (clearIsModified)
+		if (clearIsModified) {
 			getResourceData().clearIsModified(false);
+		}
 	}
 
 	public void _writeToFile() throws SaveResourceException {
@@ -140,8 +143,9 @@ public class FlexoProjectOntologyResource extends FlexoStorageResource<ProjectOn
 			throw new SaveResourceException(this);
 		} finally {
 			try {
-				if (out != null)
+				if (out != null) {
 					out.close();
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 				throw new SaveResourceException(this);

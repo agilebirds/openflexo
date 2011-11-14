@@ -23,9 +23,6 @@ import java.io.File;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.toolbox.StringUtils;
-import org.openflexo.xmlcode.XMLMapping;
-
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -37,10 +34,12 @@ import org.openflexo.foundation.cg.DuplicateCodeRepositoryNameException;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.sg.implmodel.ImplementationModel;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
-import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoModelObjectReference.ReferenceOwner;
+import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.xml.GeneratedSourcesBuilder;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.toolbox.StringUtils;
+import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * @author sylvain

@@ -29,11 +29,10 @@ import org.openflexo.antar.Nop;
 import org.openflexo.antar.Procedure;
 import org.openflexo.antar.java.JavaFormattingException;
 import org.openflexo.antar.java.JavaPrettyPrinter;
-
 import org.openflexo.foundation.wkf.ExecutableWorkflowElement;
-import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.ExecutableWorkflowElement.ControlGraphFactory;
 import org.openflexo.foundation.wkf.ExecutableWorkflowElement.WorkflowControlGraph;
+import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.edge.FlexoPostCondition;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.foundation.wkf.node.ActionNode;
@@ -111,10 +110,11 @@ public class ControlGraphFactories {
 		public AlgorithmicUnit computeAlgorithmicUnit(FlexoNode node, FlexoPreCondition pre, boolean interprocedural) {
 			try {
 				ControlGraphBuilder cgBuilder = NodeActivation.getActivationNodeBuilder(node, pre);
-				if (interprocedural)
+				if (interprocedural) {
 					return cgBuilder.makeProcedure();
-				else
+				} else {
 					return cgBuilder.makeControlGraph(interprocedural);
+				}
 			} catch (NotSupportedException e) {
 				return new Nop("NotSupportedException: " + e.getMessage());
 			} catch (InvalidModelException e) {
@@ -189,10 +189,11 @@ public class ControlGraphFactories {
 		public AlgorithmicUnit computeAlgorithmicUnit(FlexoNode node, boolean interprocedural) {
 			try {
 				ControlGraphBuilder cgBuilder = NodeDesactivation.getDesactivationNodeBuilder(node);
-				if (interprocedural)
+				if (interprocedural) {
 					return cgBuilder.makeProcedure();
-				else
+				} else {
 					return cgBuilder.makeControlGraph(interprocedural);
+				}
 			} catch (NotSupportedException e) {
 				return new Nop("NotSupportedException: " + e.getMessage());
 			} catch (InvalidModelException e) {
@@ -214,10 +215,11 @@ public class ControlGraphFactories {
 		public AlgorithmicUnit computeAlgorithmicUnit(OperatorNode operatorNode, FlexoPostCondition<?, ?> edge, boolean interprocedural) {
 			try {
 				ControlGraphBuilder cgBuilder = OperatorNodeExecution.getExecutionNodeBuilder(operatorNode, edge);
-				if (interprocedural)
+				if (interprocedural) {
 					return cgBuilder.makeProcedure();
-				else
+				} else {
 					return cgBuilder.makeControlGraph(interprocedural);
+				}
 			} catch (NotSupportedException e) {
 				return new Nop("NotSupportedException: " + e.getMessage());
 			} catch (InvalidModelException e) {
@@ -291,10 +293,11 @@ public class ControlGraphFactories {
 		public AlgorithmicUnit computeAlgorithmicUnit(EventNode operatorNode, boolean interprocedural) {
 			try {
 				ControlGraphBuilder cgBuilder = EventNodeExecution.getExecutionNodeBuilder(operatorNode);
-				if (interprocedural)
+				if (interprocedural) {
 					return cgBuilder.makeProcedure();
-				else
+				} else {
 					return cgBuilder.makeControlGraph(interprocedural);
+				}
 			} catch (NotSupportedException e) {
 				return new Nop("NotSupportedException: " + e.getMessage());
 			} catch (InvalidModelException e) {
@@ -367,10 +370,11 @@ public class ControlGraphFactories {
 		public AlgorithmicUnit computeAlgorithmicUnit(FlexoPreCondition pre, FlexoPostCondition<?, ?> edge, boolean interprocedural) {
 			try {
 				ControlGraphBuilder cgBuilder = SendTokenToPrecondition.getSendTokenToPreconditionBuilder(pre, edge);
-				if (interprocedural)
+				if (interprocedural) {
 					return cgBuilder.makeProcedure();
-				else
+				} else {
 					return cgBuilder.makeControlGraph(interprocedural);
+				}
 			} catch (NotSupportedException e) {
 				return new Nop("NotSupportedException: " + e.getMessage());
 			} catch (InvalidModelException e) {

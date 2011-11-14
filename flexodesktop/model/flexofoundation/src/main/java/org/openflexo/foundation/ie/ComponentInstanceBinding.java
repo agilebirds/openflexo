@@ -98,8 +98,9 @@ public class ComponentInstanceBinding extends FlexoModelObject implements Inspec
 
 	@Override
 	public BindingModel getBindingModel() {
-		if (_componentInstance != null)
+		if (_componentInstance != null) {
 			return _componentInstance.getBindingModel();
+		}
 		return null;
 	}
 
@@ -143,11 +144,13 @@ public class ComponentInstanceBinding extends FlexoModelObject implements Inspec
 			_bindingValue.setOwner(this);
 		}
 		if (_bindingDefinitionName != null && componentInstance != null) {
-			if (componentInstance.getComponentDefinition() != null)
+			if (componentInstance.getComponentDefinition() != null) {
 				setBindingDefinition(_componentInstance.getComponentDefinition().bindingDefinitionNamed(_bindingDefinitionName));
-			else if (!isDeserializing())
-				if (logger.isLoggable(Level.WARNING))
+			} else if (!isDeserializing()) {
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Component instance without a component definition: " + componentInstance.getComponentName());
+				}
+			}
 		}
 	}
 
@@ -167,8 +170,9 @@ public class ComponentInstanceBinding extends FlexoModelObject implements Inspec
 
 	@Override
 	public FlexoProject getProject() {
-		if (_componentInstance != null)
+		if (_componentInstance != null) {
 			return _componentInstance.getProject();
+		}
 		return null;
 	}
 
@@ -181,15 +185,17 @@ public class ComponentInstanceBinding extends FlexoModelObject implements Inspec
 
 	@Override
 	public XMLMapping getXMLMapping() {
-		if (_componentInstance != null)
+		if (_componentInstance != null) {
 			return _componentInstance.getXMLMapping();
+		}
 		return null;
 	}
 
 	@Override
 	public XMLStorageResourceData getXMLResourceData() {
-		if (_componentInstance != null)
+		if (_componentInstance != null) {
 			return _componentInstance.getXMLResourceData();
+		}
 		return null;
 	}
 
@@ -223,10 +229,11 @@ public class ComponentInstanceBinding extends FlexoModelObject implements Inspec
 		public int compare(ComponentInstanceBinding o1, ComponentInstanceBinding o2) {
 			String s1 = o1.getBindingDefinitionName();
 			String s2 = o2.getBindingDefinitionName();
-			if ((s1 != null) && (s2 != null))
+			if ((s1 != null) && (s2 != null)) {
 				return Collator.getInstance().compare(s1, s2);
-			else
+			} else {
 				return 0;
+			}
 		}
 
 	}

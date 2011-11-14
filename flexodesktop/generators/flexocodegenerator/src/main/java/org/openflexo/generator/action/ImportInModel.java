@@ -31,7 +31,6 @@ import org.openflexo.foundation.cg.CGRepository;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.generator.ProjectGenerator;
-import org.openflexo.generator.action.GCAction;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.file.AbstractCGFile;
 
@@ -57,8 +56,9 @@ public class ImportInModel extends GCAction<ImportInModel, CGObject> {
 		@Override
 		protected boolean isEnabledForSelection(CGObject object, Vector<CGObject> globalSelection) {
 			GenerationRepository repository = getRepository(object, globalSelection);
-			if (!(repository instanceof CGRepository))
+			if (!(repository instanceof CGRepository)) {
 				return false;
+			}
 			ProjectGenerator pg = (ProjectGenerator) getProjectGenerator(repository);
 			return pg != null && pg.hasBeenInitialized();
 		}

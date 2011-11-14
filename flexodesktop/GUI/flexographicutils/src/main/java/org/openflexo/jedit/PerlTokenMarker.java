@@ -50,6 +50,7 @@ public class PerlTokenMarker extends TokenMarker {
 		this.keywords = keywords;
 	}
 
+	@Override
 	public byte markTokensImpl(byte _token, Segment line, int lineIndex) {
 		char[] array = line.array;
 		int offset = line.offset;
@@ -87,11 +88,12 @@ public class PerlTokenMarker extends TokenMarker {
 			case Token.NULL:
 				switch (c) {
 				case '#':
-					if (doKeyword(line, i, c))
+					if (doKeyword(line, i, c)) {
 						break;
-					if (backslash)
+					}
+					if (backslash) {
 						backslash = false;
-					else {
+					} else {
 						addToken(i - lastOffset, token);
 						addToken(length - i, Token.COMMENT1);
 						lastOffset = lastKeyword = length;
@@ -105,20 +107,22 @@ public class PerlTokenMarker extends TokenMarker {
 						addToken(length - i, token);
 						lastOffset = lastKeyword = length;
 						break loop;
-					} else
+					} else {
 						doKeyword(line, i, c);
+					}
 					break;
 				case '$':
 				case '&':
 				case '%':
 				case '@':
 					backslash = false;
-					if (doKeyword(line, i, c))
+					if (doKeyword(line, i, c)) {
 						break;
+					}
 					if (length - i > 1) {
-						if (c == '&' && (array[i1] == '&' || Character.isWhitespace(array[i1])))
+						if (c == '&' && (array[i1] == '&' || Character.isWhitespace(array[i1]))) {
 							i++;
-						else {
+						} else {
 							addToken(i - lastOffset, token);
 							lastOffset = lastKeyword = i;
 							token = Token.KEYWORD2;
@@ -126,11 +130,12 @@ public class PerlTokenMarker extends TokenMarker {
 					}
 					break;
 				case '"':
-					if (doKeyword(line, i, c))
+					if (doKeyword(line, i, c)) {
 						break;
-					if (backslash)
+					}
+					if (backslash) {
 						backslash = false;
-					else {
+					} else {
 						addToken(i - lastOffset, token);
 						token = Token.LITERAL1;
 						lineInfo[lineIndex].obj = null;
@@ -138,65 +143,74 @@ public class PerlTokenMarker extends TokenMarker {
 					}
 					break;
 				case '\'':
-					if (backslash)
+					if (backslash) {
 						backslash = false;
-					else {
+					} else {
 						int oldLastKeyword = lastKeyword;
-						if (doKeyword(line, i, c))
+						if (doKeyword(line, i, c)) {
 							break;
-						if (i != oldLastKeyword)
+						}
+						if (i != oldLastKeyword) {
 							break;
+						}
 						addToken(i - lastOffset, token);
 						token = Token.LITERAL2;
 						lastOffset = lastKeyword = i;
 					}
 					break;
 				case '`':
-					if (doKeyword(line, i, c))
+					if (doKeyword(line, i, c)) {
 						break;
-					if (backslash)
+					}
+					if (backslash) {
 						backslash = false;
-					else {
+					} else {
 						addToken(i - lastOffset, token);
 						token = Token.OPERATOR;
 						lastOffset = lastKeyword = i;
 					}
 					break;
 				case '<':
-					if (doKeyword(line, i, c))
+					if (doKeyword(line, i, c)) {
 						break;
-					if (backslash)
+					}
+					if (backslash) {
 						backslash = false;
-					else {
+					} else {
 						if (length - i > 2 && array[i1] == '<' && !Character.isWhitespace(array[i + 2])) {
 							addToken(i - lastOffset, token);
 							lastOffset = lastKeyword = i;
 							token = Token.LITERAL1;
 							int len = length - (i + 2);
-							if (array[length - 1] == ';')
+							if (array[length - 1] == ';') {
 								len--;
+							}
 							lineInfo[lineIndex].obj = createReadinString(array, i + 2, len);
 						}
 					}
 					break;
 				case ':':
 					backslash = false;
-					if (doKeyword(line, i, c))
+					if (doKeyword(line, i, c)) {
 						break;
+					}
 					// Doesn't pick up all labels,
 					// but at least doesn't mess up
 					// XXX::YYY
-					if (lastKeyword != 0)
+					if (lastKeyword != 0) {
 						break;
+					}
 					addToken(i1 - lastOffset, Token.LABEL);
 					lastOffset = lastKeyword = i1;
 					break;
 				case '-':
 					backslash = false;
-					if (doKeyword(line, i, c))
+					if (doKeyword(line, i, c)) {
 						break;
-					if (i != lastKeyword || length - i <= 1)
+					}
+					if (i != lastKeyword || length - i <= 1) {
 						break;
+					}
 					switch (array[i1]) {
 					case 'r':
 					case 'w':
@@ -233,13 +247,15 @@ public class PerlTokenMarker extends TokenMarker {
 					break;
 				case '/':
 				case '?':
-					if (doKeyword(line, i, c))
+					if (doKeyword(line, i, c)) {
 						break;
+					}
 					if (length - i > 1) {
 						backslash = false;
 						char ch = array[i1];
-						if (Character.isWhitespace(ch))
+						if (Character.isWhitespace(ch)) {
 							break;
+						}
 						matchChar = c;
 						matchSpacesAllowed = false;
 						addToken(i - lastOffset, token);
@@ -249,8 +265,9 @@ public class PerlTokenMarker extends TokenMarker {
 					break;
 				default:
 					backslash = false;
-					if (!Character.isLetterOrDigit(c) && c != '_')
+					if (!Character.isLetterOrDigit(c) && c != '_') {
 						doKeyword(line, i, c);
+					}
 					break;
 				}
 				break;
@@ -280,14 +297,15 @@ public class PerlTokenMarker extends TokenMarker {
 				break;
 			case S_ONE:
 			case S_TWO:
-				if (backslash)
+				if (backslash) {
 					backslash = false;
-				else {
+				} else {
 					if (matchChar == '\0') {
-						if (Character.isWhitespace(matchChar) && !matchSpacesAllowed)
+						if (Character.isWhitespace(matchChar) && !matchSpacesAllowed) {
 							break;
-						else
+						} else {
 							matchChar = c;
+						}
 					} else {
 						switch (matchChar) {
 						case '(':
@@ -310,12 +328,14 @@ public class PerlTokenMarker extends TokenMarker {
 							matchCharBracket = false;
 							break;
 						}
-						if (c != matchChar)
+						if (c != matchChar) {
 							break;
+						}
 						if (token == S_TWO) {
 							token = S_ONE;
-							if (matchCharBracket)
+							if (matchCharBracket) {
 								matchChar = '\0';
+							}
 						} else {
 							token = S_END;
 							addToken(i1 - lastOffset, Token.LITERAL2);
@@ -326,45 +346,43 @@ public class PerlTokenMarker extends TokenMarker {
 				break;
 			case S_END:
 				backslash = false;
-				if (!Character.isLetterOrDigit(c) && c != '_')
+				if (!Character.isLetterOrDigit(c) && c != '_') {
 					doKeyword(line, i, c);
+				}
 				break;
 			case Token.COMMENT2:
 				backslash = false;
 				if (i == offset) {
 					addToken(line.count, token);
-					if (length - i > 3 && SyntaxUtilities.regionMatches(false, line, offset, "=cut"))
+					if (length - i > 3 && SyntaxUtilities.regionMatches(false, line, offset, "=cut")) {
 						token = Token.NULL;
+					}
 					lastOffset = lastKeyword = length;
 					break loop;
 				}
 				break;
 			case Token.LITERAL1:
-				if (backslash)
+				if (backslash) {
 					backslash = false;
-				/* else if(c == '$')
-					backslash = true; */
-				else if (c == '"') {
+				} else if (c == '"') {
 					addToken(i1 - lastOffset, token);
 					token = Token.NULL;
 					lastOffset = lastKeyword = i1;
 				}
 				break;
 			case Token.LITERAL2:
-				if (backslash)
+				if (backslash) {
 					backslash = false;
-				/* else if(c == '$')
-					backslash = true; */
-				else if (c == '\'') {
+				} else if (c == '\'') {
 					addToken(i1 - lastOffset, Token.LITERAL1);
 					token = Token.NULL;
 					lastOffset = lastKeyword = i1;
 				}
 				break;
 			case Token.OPERATOR:
-				if (backslash)
+				if (backslash) {
 					backslash = false;
-				else if (c == '`') {
+				} else if (c == '`') {
 					addToken(i1 - lastOffset, token);
 					token = Token.NULL;
 					lastOffset = lastKeyword = i1;
@@ -375,8 +393,9 @@ public class PerlTokenMarker extends TokenMarker {
 			}
 		}
 
-		if (token == Token.NULL)
+		if (token == Token.NULL) {
 			doKeyword(line, length, '\0');
+		}
 
 		switch (token) {
 		case Token.KEYWORD2:
@@ -425,21 +444,24 @@ public class PerlTokenMarker extends TokenMarker {
 		int len = i - lastKeyword;
 		byte id = keywords.lookup(line, lastKeyword, len);
 		if (id == S_ONE || id == S_TWO) {
-			if (lastKeyword != lastOffset)
+			if (lastKeyword != lastOffset) {
 				addToken(lastKeyword - lastOffset, Token.NULL);
+			}
 			addToken(len, Token.LITERAL2);
 			lastOffset = i;
 			lastKeyword = i1;
-			if (Character.isWhitespace(c))
+			if (Character.isWhitespace(c)) {
 				matchChar = '\0';
-			else
+			} else {
 				matchChar = c;
+			}
 			matchSpacesAllowed = true;
 			token = id;
 			return true;
 		} else if (id != Token.NULL) {
-			if (lastKeyword != lastOffset)
+			if (lastKeyword != lastOffset) {
 				addToken(lastKeyword - lastOffset, Token.NULL);
+			}
 			addToken(len, id);
 			lastOffset = i;
 		}
@@ -452,11 +474,13 @@ public class PerlTokenMarker extends TokenMarker {
 		int idx1 = start;
 		int idx2 = start + len - 1;
 
-		while ((idx1 <= idx2) && (!Character.isLetterOrDigit(array[idx1])))
+		while ((idx1 <= idx2) && (!Character.isLetterOrDigit(array[idx1]))) {
 			idx1++;
+		}
 
-		while ((idx1 <= idx2) && (!Character.isLetterOrDigit(array[idx2])))
+		while ((idx1 <= idx2) && (!Character.isLetterOrDigit(array[idx2]))) {
 			idx2--;
+		}
 
 		return new String(array, idx1, idx2 - idx1 + 1);
 	}

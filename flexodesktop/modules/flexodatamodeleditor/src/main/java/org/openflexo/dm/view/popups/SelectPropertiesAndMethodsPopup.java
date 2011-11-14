@@ -68,10 +68,11 @@ public class SelectPropertiesAndMethodsPopup extends MultipleObjectSelectorPopup
 
 	@Override
 	protected String getPopupTitle() {
-		if (super.getPopupTitle() == null)
+		if (super.getPopupTitle() == null) {
 			return FlexoLocalization.localizedForKey("attribute_selection");
-		else
+		} else {
 			return super.getPopupTitle();
+		}
 	}
 
 	protected JPanel _additionalPanel = null;
@@ -185,18 +186,21 @@ public class SelectPropertiesAndMethodsPopup extends MultipleObjectSelectorPopup
 					}
 					if (object instanceof DMProperty) {
 						DMProperty p = (DMProperty) object;
-						if (p.getType() == null)
+						if (p.getType() == null) {
 							return availableValues;
-						if (p.getCardinality() != null && p.getCardinality().isMultiple())
+						}
+						if (p.getCardinality() != null && p.getCardinality().isMultiple()) {
 							return multipleValue;
-						if (p.getType().isBoolean())
+						}
+						if (p.getType().isBoolean()) {
 							return booleanValues;
-						else if (p.getType().isString() || p.getType().isChar())
+						} else if (p.getType().isString() || p.getType().isChar()) {
 							return textValues;
-						else if (p.getType().isInteger() || p.getType().isFloat() || p.getType().isDouble() || p.getType().isDate())
+						} else if (p.getType().isInteger() || p.getType().isFloat() || p.getType().isDouble() || p.getType().isDate()) {
 							return dateOrNumverValues;
-						else
+						} else {
 							return availableValues;
+						}
 
 					}
 					return new Vector<WidgetType>();
@@ -208,11 +212,13 @@ public class SelectPropertiesAndMethodsPopup extends MultipleObjectSelectorPopup
 						WidgetType type = values.get(object).widget;
 						if (type == null) {
 							Vector<WidgetType> v = getAvailableValues();
-							if (v.size() > 0)
+							if (v.size() > 0) {
 								values.get(object).widget = v.firstElement();
+							}
 							return values.get(object).widget;
-						} else
+						} else {
 							return type;
+						}
 					}
 
 					return null;
@@ -220,17 +226,20 @@ public class SelectPropertiesAndMethodsPopup extends MultipleObjectSelectorPopup
 
 				@Override
 				protected String renderValue(WidgetType value) {
-					if (value == null)
+					if (value == null) {
 						return FlexoLocalization.localizedForKey("none");
+					}
 					return value.toString();
 				}
 
 				@Override
 				public void setValue(DMObject object, WidgetType value) {
-					if (value == null)
+					if (value == null) {
 						return;
-					if (values.get(object) != null)
+					}
+					if (values.get(object) != null) {
 						values.get(object).widget = value;
+					}
 				}
 
 			};
@@ -301,8 +310,9 @@ public class SelectPropertiesAndMethodsPopup extends MultipleObjectSelectorPopup
 	public void performConfirm() {
 		super.performConfirm();
 		for (FlexoModelObject o : choicePanel.getSelectedObjects()) {
-			if (o instanceof DMProperty || o instanceof DMMethod)
+			if (o instanceof DMProperty || o instanceof DMMethod) {
 				selectedAccessorWidgets.add(configuration.values.get(o));
+			}
 		}
 	}
 
@@ -311,8 +321,9 @@ public class SelectPropertiesAndMethodsPopup extends MultipleObjectSelectorPopup
 	}
 
 	public boolean getCopyDescriptions() {
-		if (_copyDescriptions != null)
+		if (_copyDescriptions != null) {
 			return _copyDescriptions.isSelected();
+		}
 		return true;
 	}
 

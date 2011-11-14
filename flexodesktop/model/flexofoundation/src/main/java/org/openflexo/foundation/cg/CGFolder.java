@@ -143,8 +143,9 @@ public class CGFolder extends CGObject implements CGPathElement {
 	@Override
 	public CGFolder getDirectoryNamed(String aName) {
 		for (CGFolder dir : getSubFolders()) {
-			if (dir.getName().equals(aName))
+			if (dir.getName().equals(aName)) {
 				return dir;
+			}
 		}
 		return null;
 	}
@@ -166,29 +167,33 @@ public class CGFolder extends CGObject implements CGPathElement {
 
 	@Override
 	public boolean hasGenerationErrors() {
-		if (getGeneratedCodeRepository() != null)
+		if (getGeneratedCodeRepository() != null) {
 			getGeneratedCodeRepository().ensureStructureIsUpToDate();
+		}
 		return hasGenerationErrors;
 	}
 
 	@Override
 	public boolean needsRegeneration() {
-		if (getGeneratedCodeRepository() != null)
+		if (getGeneratedCodeRepository() != null) {
 			getGeneratedCodeRepository().ensureStructureIsUpToDate();
+		}
 		return needsRegeneration;
 	}
 
 	@Override
 	public boolean needsModelReinjection() {
-		if (getGeneratedCodeRepository() != null)
+		if (getGeneratedCodeRepository() != null) {
 			getGeneratedCodeRepository().ensureStructureIsUpToDate();
+		}
 		return needsModelReinjection;
 	}
 
 	@Override
 	public GenerationStatus getGenerationStatus() {
-		if (getGeneratedCodeRepository() != null)
+		if (getGeneratedCodeRepository() != null) {
 			getGeneratedCodeRepository().ensureStructureIsUpToDate();
+		}
 		return generationStatus;
 	}
 

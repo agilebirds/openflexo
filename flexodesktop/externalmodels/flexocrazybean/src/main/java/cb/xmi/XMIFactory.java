@@ -143,22 +143,25 @@ public class XMIFactory {
 	protected void setStereotype(StereoTyped s, MModelElement e) {
 		String stereo = s.getStereotype();
 
-		if (stereo != null)
+		if (stereo != null) {
 			e.setStereotype(getStereotype(stereo));
+		}
 	}
 
 	protected void setVisibility(AccessQualified a, MModelElement e) {
 		String acc = a.getExportControl();
 
-		if (acc == null)
+		if (acc == null) {
 			acc = "public";
-		else
+		} else {
 			acc = acc.toLowerCase();
+		}
 
 		MVisibilityKind kind = MVisibilityKind.forName(acc);
 
-		if (kind == null)
+		if (kind == null) {
 			throw new RuntimeException("Can't map access qualifier: " + acc);
+		}
 
 		e.setVisibility(kind);
 	}
@@ -166,15 +169,17 @@ public class XMIFactory {
 	protected void setConcurrency(Operation op, MOperation o) {
 		String acc = op.getConcurrency();
 
-		if (acc == null)
+		if (acc == null) {
 			acc = "sequential";
-		else
+		} else {
 			acc = acc.toLowerCase();
+		}
 
 		MCallConcurrencyKind kind = MCallConcurrencyKind.forName(acc);
 
-		if (kind == null)
+		if (kind == null) {
 			throw new RuntimeException("Can't map concurrency: " + acc);
+		}
 
 		o.setConcurrency(kind);
 	}
@@ -187,24 +192,26 @@ public class XMIFactory {
 
 		/* ArgoUML/Poseidon can't display/use Actors/AssociationClass correctly
 		 */
-		if (clazz.isInterface())
+		if (clazz.isInterface()) {
 			cl = new MInterfaceImpl();
-		else if (clazz.isActor())
+		} else if (clazz.isActor()) {
 			cl = new MActorImpl();
-		else if (clazz.isAssociationClass())
+		} else if (clazz.isAssociationClass()) {
 			cl = new MAssociationClassImpl();
-		else
+		} else {
 			cl = new MClassImpl();
+		}
 
 		cl.setName(clazz.getNameParameter());
 		cl.setUUID(clazz.getQuid());
 
 		setVisibility(clazz, cl);
 
-		if (clazz instanceof ClassUtility)
+		if (clazz instanceof ClassUtility) {
 			cl.setStereotype(getStereotype("utility"));
-		else if (!(clazz.isInterface() || clazz.isActor()))
+		} else if (!(clazz.isInterface() || clazz.isActor())) {
 			setStereotype(clazz, cl);
+		}
 
 		return cl;
 	}
@@ -281,8 +288,9 @@ public class XMIFactory {
 
 		String init = attr.getInitialValue();
 
-		if (init != null)
+		if (init != null) {
 			a.setInitialValue(new MExpression("Java", init));
+		}
 
 		return a;
 	}
@@ -322,8 +330,9 @@ public class XMIFactory {
 					if (index > 0) {
 						type = name.substring(0, index);
 						name = name.substring(index + 1).trim();
-					} else
+					} else {
 						type = "int";
+					}
 				}
 
 				MParameter param = new MParameterImpl();
@@ -347,8 +356,9 @@ public class XMIFactory {
 
 		setStereotype(rel, g);
 
-		if (rel.getLabel() != null)
+		if (rel.getLabel() != null) {
 			g.setName(rel.getLabel());
+		}
 	}
 
 	public MGeneralization createGeneralization(InheritanceRelationship rel) {
@@ -383,10 +393,11 @@ public class XMIFactory {
 	}
 
 	private static String map(String number) {
-		if ("n".equals(number.toLowerCase()) || "*".equals(number))
+		if ("n".equals(number.toLowerCase()) || "*".equals(number)) {
 			return "" + MMultiplicity.N;
-		else
+		} else {
 			return number;
+		}
 	}
 
 	protected MMultiplicity getMultiplicityFor(Role role) {
@@ -399,10 +410,11 @@ public class XMIFactory {
 			try {
 				from = Integer.parseInt(map(tok.nextToken()));
 
-				if (tok.hasMoreTokens())
+				if (tok.hasMoreTokens()) {
 					to = Integer.parseInt(map(tok.nextToken()));
-				else
+				} else {
 					to = from;
+				}
 			} catch (Exception e) {
 				throw new RuntimeException("Invalid cardinality: " + card);
 			}
@@ -415,8 +427,9 @@ public class XMIFactory {
 			}
 		}
 
-		if (from == MMultiplicity.N)
+		if (from == MMultiplicity.N) {
 			from = 0;
+		}
 
 		return new MMultiplicity(from, to);
 	}
@@ -428,15 +441,17 @@ public class XMIFactory {
 		ae.setNavigable(role.isNavigable());
 		ae.setMultiplicity(getMultiplicityFor(role));
 
-		if (!role.getRoleName().startsWith("$")) // Anonymous name
+		if (!role.getRoleName().startsWith("$")) {
 			ae.setName(role.getRoleName());
+		}
 
-		if (role.isAggregation())
+		if (role.isAggregation()) {
 			ae.setAggregation(MAggregationKind.AGGREGATE);
-		else if (role.isComposition())
+		} else if (role.isComposition()) {
 			ae.setAggregation(MAggregationKind.COMPOSITE);
-		else
+		} else {
 			ae.setAggregation(MAggregationKind.NONE);
+		}
 
 		String c = role.getConstraints();
 
@@ -462,8 +477,9 @@ public class XMIFactory {
 	public MAssociation createAssociation(Association assoc) {
 		MAssociation a = new MAssociationImpl();
 
-		if (!assoc.getNameParameter().startsWith("$")) // Anonymous name
+		if (!assoc.getNameParameter().startsWith("$")) {
 			a.setName(assoc.getNameParameter());
+		}
 
 		setupAssociation(assoc, a);
 		return a;
@@ -485,10 +501,11 @@ public class XMIFactory {
 				buf.append('.');
 				i++;
 			} else {
-				if (Character.isLetterOrDigit(ch))
+				if (Character.isLetterOrDigit(ch)) {
 					buf.append(ch);
-				else
+				} else {
 					buf.append('_');
+				}
 			}
 		}
 
@@ -510,10 +527,11 @@ public class XMIFactory {
 		} else {
 			int index2 = qual.lastIndexOf("::");
 
-			if (index == index2)
+			if (index == index2) {
 				pack = "";
-			else
+			} else {
 				pack = makeName(qual.substring(index + 2, index2));
+			}
 
 			name = qual.substring(index2 + 2);
 		}

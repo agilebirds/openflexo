@@ -71,11 +71,13 @@ public class TeXWordFinder extends AbstractWordFinder {
 	 * @throws WordNotFoundException
 	 *             search string contains no more words.
 	 */
+	@Override
 	public Word next() {
 		// {{{
 
-		if (!hasNext())// currentWord == null)
+		if (!hasNext()) {
 			throw new WordNotFoundException("No more words found.");
+		}
 
 		currentWord.copy(nextWord);
 		setSentenceIterator(currentWord);
@@ -101,7 +103,7 @@ public class TeXWordFinder extends AbstractWordFinder {
 					break search;
 				}
 			} // }}}
-			// Ignores should be in order of importance and then specificity.
+				// Ignores should be in order of importance and then specificity.
 			int j = i;
 			// Ignore Comments:
 			j = ignore(j, '%', '\n');

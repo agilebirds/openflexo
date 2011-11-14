@@ -28,13 +28,6 @@ import javax.swing.Icon;
 import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.icon.IconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.ModuleView;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.dm.view.DMView;
 import org.openflexo.foundation.FlexoModelObject;
@@ -55,6 +48,12 @@ import org.openflexo.foundation.dm.eo.DMEORepository;
 import org.openflexo.foundation.param.CheckboxListParameter;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.icon.IconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class DMDeleteInitializer extends ActionInitializer {
 
@@ -196,8 +195,9 @@ public class DMDeleteInitializer extends ActionInitializer {
 							}
 						}
 					}
-					if (tocEntries.size() == 0)
+					if (tocEntries.size() == 0) {
 						return true;
+					}
 					CheckboxListParameter<TOCEntry>[] def = new CheckboxListParameter[1];
 					def[0] = new CheckboxListParameter<TOCEntry>("entries", "select_entries_to_delete", tocEntries, new Vector<TOCEntry>());
 					def[0].setFormatter("displayString");

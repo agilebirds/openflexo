@@ -25,8 +25,8 @@ import java.util.Vector;
 
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.bindings.WidgetBindingDefinition;
 import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
+import org.openflexo.foundation.bindings.WidgetBindingDefinition;
 import org.openflexo.foundation.dkv.Domain;
 import org.openflexo.foundation.dkv.DomainDeleted;
 import org.openflexo.foundation.dkv.dm.DKVDataModification;
@@ -235,8 +235,9 @@ public class IEStringWidget extends IENonEditableTextWidget implements IEWidgetW
 	public Domain getDomain() {
 		if (domain == null && domainName != null) {
 			domain = getProject().getDKVModel().getDomainNamed(domainName);
-			if (domain == null)
+			if (domain == null) {
 				setDomainName(null);
+			}
 		}
 		return domain;
 	}
@@ -251,10 +252,11 @@ public class IEStringWidget extends IENonEditableTextWidget implements IEWidgetW
 	}
 
 	public String getDomainName() {
-		if (getDomain() != null)
+		if (getDomain() != null) {
 			return getDomain().getName();
-		else
+		} else {
 			return null;
+		}
 	}
 
 	public void setDomainName(String domainName) {
@@ -292,14 +294,16 @@ public class IEStringWidget extends IENonEditableTextWidget implements IEWidgetW
 		} else if (obj instanceof DKVDataModification) {
 			setChanged();
 			notifyObservers(new ListOfValuesHasChanged(new Object(), new Object()));
-		} else
+		} else {
 			super.update(observable, obj);
+		}
 	}
 
 	@Override
 	public String getProcessInstanceDictionaryKey() {
-		if (isStatusField())
+		if (isStatusField()) {
 			return FlexoProcess.PROCESSINSTANCE_STATUS_KEY;
+		}
 		return super.getProcessInstanceDictionaryKey();
 	}
 

@@ -43,22 +43,24 @@ public class WKFBindingDefinition extends BindingDefinition implements Inspectab
 
 	public static WKFBindingDefinition get(WKFObject wkfObject, String name, DMType type, BindingDefinitionType bindingType,
 			boolean mandatory) {
-		if (wkfObject.getProject() != null)
+		if (wkfObject.getProject() != null) {
 			return wkfObject.getProject().getWKFObjectBindingDefinition(wkfObject, name, type, bindingType, mandatory);
-		else {
-			if (logger.isLoggable(Level.WARNING))
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("WKFObject " + wkfObject + " has no project");
+			}
 			return null;
 		}
 	}
 
 	public static WKFBindingDefinition get(WKFObject wkfObject, String name, Class typeClass, BindingDefinitionType bindingType,
 			boolean mandatory) {
-		if (wkfObject.getProject() != null)
+		if (wkfObject.getProject() != null) {
 			return get(wkfObject, name, DMType.makeResolvedDMType(typeClass, wkfObject.getProject()), bindingType, mandatory);
-		else {
-			if (logger.isLoggable(Level.WARNING))
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("WKFObject " + wkfObject + " has no project");
+			}
 			return null;
 		}
 	}

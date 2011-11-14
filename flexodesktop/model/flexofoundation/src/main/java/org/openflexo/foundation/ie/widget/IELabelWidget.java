@@ -164,10 +164,11 @@ public class IELabelWidget extends IENonEditableTextWidget {
 
 		@Override
 		protected void fixAction() {
-			if (lab.getValue().endsWith(" "))
+			if (lab.getValue().endsWith(" ")) {
 				lab.setValue(lab.getValue().trim() + ":");
-			else
+			} else {
 				lab.setValue(lab.getValue() + ":");
+			}
 		}
 	}
 

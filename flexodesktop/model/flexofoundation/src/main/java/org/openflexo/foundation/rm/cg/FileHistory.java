@@ -63,8 +63,9 @@ public class FileHistory {
 		_releasesVersion.clear();
 		_versions.clear();
 
-		if (_resource == null || _resource.getResourceFile() == null || _resource.getResourceFile().getFile() == null)
+		if (_resource == null || _resource.getResourceFile() == null || _resource.getResourceFile().getFile() == null) {
 			return;
+		}
 
 		final File file = _resource.getResourceFile().getFile();
 		File directory = new File(file.getParentFile(), HISTORY_DIR);
@@ -98,8 +99,9 @@ public class FileHistory {
 
 	private CGRelease releaseForVersion(CGVersionIdentifier versionId) {
 		for (CGRelease release : _resource.getCGFile().getRepository().getReleases()) {
-			if ((release.getVersionIdentifier().major == versionId.major) && (release.getVersionIdentifier().minor == versionId.minor))
+			if ((release.getVersionIdentifier().major == versionId.major) && (release.getVersionIdentifier().minor == versionId.minor)) {
 				return release;
+			}
 		}
 		return null;
 	}
@@ -107,16 +109,18 @@ public class FileHistory {
 	private CGFileReleaseVersion releaseVersionForRelease(CGRelease release) {
 		for (CGFileReleaseVersion releaseVersion : _releasesVersion) {
 			if ((release.getVersionIdentifier().major == releaseVersion.getVersionId().major)
-					&& (release.getVersionIdentifier().minor == releaseVersion.getVersionId().minor))
+					&& (release.getVersionIdentifier().minor == releaseVersion.getVersionId().minor)) {
 				return releaseVersion;
+			}
 		}
 		return null;
 	}
 
 	private CGFileReleaseVersion releaseVersionForBeforeFirstRelease() {
 		for (CGFileReleaseVersion releaseVersion : _releasesVersion) {
-			if ((releaseVersion.getVersionId().major == 0) && (releaseVersion.getVersionId().minor == 0))
+			if ((releaseVersion.getVersionId().major == 0) && (releaseVersion.getVersionId().minor == 0)) {
 				return releaseVersion;
+			}
 		}
 		CGFileReleaseVersion returned = new CGFileReleaseVersion.BeforeFirstRelease(_resource.getCGFile());
 		_releasesVersion.add(returned);
@@ -124,8 +128,9 @@ public class FileHistory {
 	}
 
 	private void addVersion(File file, CGVersionIdentifier versionId) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Found " + file.getAbsolutePath() + " for version " + versionId);
+		}
 
 		CGRelease release = null;
 		CGFileReleaseVersion fileReleaseVersion = null;
@@ -159,8 +164,9 @@ public class FileHistory {
 	}
 
 	public AbstractCGFileVersion versionWithId(CGVersionIdentifier versionId) {
-		if (versionId == null)
+		if (versionId == null) {
 			return null;
+		}
 		AbstractCGFileVersion returned = _versions.get(versionId);
 		/*if (returned == null) {
 			logger.info("I have:");
@@ -183,8 +189,9 @@ public class FileHistory {
 				return 1;
 			}
 		}
-		if (fileReleaseVersion.getIntermediateVersions().size() == 0)
+		if (fileReleaseVersion.getIntermediateVersions().size() == 0) {
 			return 1;
+		}
 		return fileReleaseVersion.getIntermediateVersions().lastElement().getVersionId().patch + 1;
 	}
 
@@ -203,8 +210,9 @@ public class FileHistory {
 		if (_resource.getResourceFile().getFile().exists()) {
 			String newFileName = _resource.getResourceFile().getFile().getName() + "." + newVersion.toString();
 			File historyDir = new File(_resource.getResourceFile().getFile().getParentFile(), HISTORY_DIR);
-			if (!historyDir.exists())
+			if (!historyDir.exists()) {
 				historyDir.mkdirs();
+			}
 			verifyAndCreateCVSIgnoreIfRequired();
 			File toCopy = _resource.getResourceFile().getFile();
 			File theCopy = new File(historyDir, newFileName);
@@ -243,12 +251,14 @@ public class FileHistory {
 		if (!cvsIgnore.exists()) {
 			try {
 				FileUtils.copyFileToFile(new FileResource("Resources/dotCVSignore"), cvsIgnore);
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info(".cvsignore file created at: " + cvsIgnore.getAbsolutePath());
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning(".cvsignore file could not be generated");
+				}
 			}
 		}
 	}
@@ -258,12 +268,14 @@ public class FileHistory {
 	}
 
 	public void clean(boolean cleanBeforeFirstRelease, Vector<CGRelease> releasesToClean) {
-		if (cleanBeforeFirstRelease)
+		if (cleanBeforeFirstRelease) {
 			releaseVersionForBeforeFirstRelease().clean();
+		}
 		for (CGRelease release : releasesToClean) {
 			CGFileReleaseVersion releaseVersion = releaseVersionForRelease(release);
-			if (releaseVersion != null)
+			if (releaseVersion != null) {
 				releaseVersion.clean();
+			}
 		}
 	}
 

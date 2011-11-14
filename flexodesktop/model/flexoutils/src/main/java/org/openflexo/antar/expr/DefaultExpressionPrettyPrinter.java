@@ -45,10 +45,11 @@ public class DefaultExpressionPrettyPrinter extends ExpressionPrettyPrinter {
 
 	@Override
 	protected String makeStringRepresentation(BooleanConstant constant) {
-		if (constant == BooleanConstant.FALSE)
+		if (constant == BooleanConstant.FALSE) {
 			return "false";
-		else if (constant == BooleanConstant.TRUE)
+		} else if (constant == BooleanConstant.TRUE) {
 			return "true";
+		}
 		return "???";
 	}
 
@@ -104,15 +105,17 @@ public class DefaultExpressionPrettyPrinter extends ExpressionPrettyPrinter {
 
 	@Override
 	protected String makeStringRepresentation(DateConstant constant) {
-		if (constant == null || constant.getDate() == null)
+		if (constant == null || constant.getDate() == null) {
 			return "[null]";
+		}
 		return "[" + dateConverter.convertToString(constant.getDate()) + "]";
 	}
 
 	@Override
 	protected String makeStringRepresentation(DurationConstant constant) {
-		if (constant == null || constant.getDuration() == null)
+		if (constant == null || constant.getDuration() == null) {
 			return "[null]";
+		}
 		return "[" + durationConverter.convertToString(constant.getDuration()) + "]";
 	}
 

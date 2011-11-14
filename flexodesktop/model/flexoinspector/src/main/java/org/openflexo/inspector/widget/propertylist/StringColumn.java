@@ -111,8 +111,9 @@ public abstract class StringColumn extends AbstractColumn {
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 			((JLabel) returned).setFont(customFont);
-			if (returned instanceof JComponent)
+			if (returned instanceof JComponent) {
 				((JComponent) returned).setToolTipText(getTooltip(getModel().elementAt(row)));
+			}
 			return returned;
 		}
 	}

@@ -32,18 +32,21 @@ public class IEReusableWidgetComponentView extends IEWOComponentView {
 
 	@Override
 	public int getMaxWidth() {
-		if (getParent() != null)
+		if (getParent() != null) {
 			return getParent().getWidth();
+		}
 		return 0;
 	}
 
 	@Override
 	protected int getMaxHeight() {
-		if (dropZone == null)
+		if (dropZone == null) {
 			return Toolkit.getDefaultToolkit().getScreenSize().height - 100;
+		}
 		int h = dropZone.getPreferredSize().height + 50;
-		if (h < 100)
+		if (h < 100) {
 			h = 100;
+		}
 		return h;
 	}
 

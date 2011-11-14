@@ -136,10 +136,12 @@ public class CreateNewWebService extends FlexoAction {
 	}
 
 	public FlexoProcess getFlexoProcess() {
-		if (getServiceInterface() != null)
+		if (getServiceInterface() != null) {
 			return getServiceInterface().getProcess();
-		if (getPortRegistry() != null)
+		}
+		if (getPortRegistry() != null) {
 			return getPortRegistry().getProcess();
+		}
 		return null;
 	}
 
@@ -198,19 +200,22 @@ public class CreateNewWebService extends FlexoAction {
 			// 2. add ServiceInterface to the group
 
 			if (getServiceInterface() != null) {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("adding ServiceInterface:" + getServiceInterface().getName());
+				}
 				_newWebService.addServiceInterfaceAsPortType(getServiceInterface());
 			} else if (getPortRegistry() != null) {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("adding portRegistry:" + getPortRegistry().getName());
+				}
 				ServiceInterface si = getFlexoProcess().addServiceInterface(getNewWebServiceName());
 				si = ServiceInterface.copyPortsFromRegistry(si, getPortRegistry());
 				_newWebService.addServiceInterfaceAsPortType(si);
 				setServiceInterface(si);
-			} else
+			} else {
 				throw new InvalidArgumentException("Incorrect Argument: missing ServiceInterface or PortRegistery",
 						"ws_no_service_interface_specified");
+			}
 
 			/* No more Copy
 					//3. if subprocess is defined with WSDLRepository's data, it's ok.
@@ -281,8 +286,9 @@ public class CreateNewWebService extends FlexoAction {
 		System.out.println("Copying entity:" + entity.getName());
 		// 1. if has a parent entity, copy parent entity.
 		DMEntity newParent = null;
-		if (entity.getParentBaseEntity() != null)
+		if (entity.getParentBaseEntity() != null) {
 			newParent = copyEntity(entity.getParentBaseEntity(), toRep);
+		}
 
 		// 2. copy entity;
 		DMPackage fromPack = entity.getPackage();

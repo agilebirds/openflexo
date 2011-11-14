@@ -56,8 +56,9 @@ public class FlexoWSDLResource extends FlexoImportedResource<WSDLResourceData> {
 		this(aProject);
 		setResourceFile(wsdlFile);
 		dmResource.addToDependantResources(this);
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Build new FlexoWSDLResource");
+		}
 	}
 
 	public FlexoWSDLResource(FlexoProject aProject, WSDLResourceData anWSDLResourceData, FlexoDMResource dmResource,

@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 import javax.swing.JPanel;
 
 import org.openflexo.ColorCst;
-import org.openflexo.FlexoCst;
 import org.openflexo.doceditor.DECst;
 import org.openflexo.doceditor.controller.DEController;
 import org.openflexo.doceditor.menu.DEMenuBar;

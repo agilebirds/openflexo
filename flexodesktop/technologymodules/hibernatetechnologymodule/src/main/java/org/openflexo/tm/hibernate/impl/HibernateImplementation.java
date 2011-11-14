@@ -114,8 +114,9 @@ public class HibernateImplementation extends TechnologyModuleImplementation {
 	@Override
 	public void delete() {
 
-		for (HibernateModel hibernateModel : new Vector<HibernateModel>(getModels()))
+		for (HibernateModel hibernateModel : new Vector<HibernateModel>(getModels())) {
 			hibernateModel.delete();
+		}
 
 		setChanged();
 		notifyObservers(new SGObjectDeletedModification());
@@ -130,8 +131,9 @@ public class HibernateImplementation extends TechnologyModuleImplementation {
 	 * @return the transformed name.
 	 */
 	public String getDbObjectName(String name) {
-		if (database != null && database instanceof DatabaseTechnologyModuleImplementation)
+		if (database != null && database instanceof DatabaseTechnologyModuleImplementation) {
 			return ((DatabaseTechnologyModuleImplementation) database).getDbObjectName(name);
+		}
 
 		// Default implementation is to set all lower case without spaces
 		return name == null ? null : DatabaseTechnologyModuleImplementation.escapeDbObjectName(name).toLowerCase();

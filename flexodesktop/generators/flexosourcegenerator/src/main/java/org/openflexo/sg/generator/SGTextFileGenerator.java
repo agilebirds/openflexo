@@ -49,8 +49,9 @@ public class SGTextFileGenerator extends SGGenerator<FlexoModelObject, Generated
 
 	@Override
 	public final void generate(boolean forceRegenerate) {
-		if (!needGeneration(forceRegenerate))
+		if (!needGeneration(forceRegenerate)) {
 			return;
+		}
 		try {
 			logger.info("Generate code for " + getFileEntry().name);
 			startGeneration();

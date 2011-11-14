@@ -63,10 +63,11 @@ public abstract class TokenMarker {
 
 		LineInfo info = lineInfo[lineIndex];
 		LineInfo prev;
-		if (lineIndex == 0)
+		if (lineIndex == 0) {
 			prev = null;
-		else
+		} else {
 			prev = lineInfo[lineIndex - 1];
+		}
 
 		byte oldToken = info.token;
 		byte token = markTokensImpl(prev == null ? Token.NULL : prev.token, line, lineIndex);
@@ -111,8 +112,9 @@ public abstract class TokenMarker {
 		 * all the relevant info down so that others wouldn't
 		 * duplicate it.
 		 */
-		if (!(lastLine == lineIndex && nextLineRequested))
+		if (!(lastLine == lineIndex && nextLineRequested)) {
 			nextLineRequested = (oldToken != token);
+		}
 
 		lastLine = lineIndex;
 
@@ -159,8 +161,9 @@ public abstract class TokenMarker {
 	 *            The number of lines
 	 */
 	public void insertLines(int index, int lines) {
-		if (lines <= 0)
+		if (lines <= 0) {
 			return;
+		}
 		length += lines;
 		ensureCapacity(length);
 		int len = index + lines;
@@ -181,8 +184,9 @@ public abstract class TokenMarker {
 	 *            The number of lines
 	 */
 	public void deleteLines(int index, int lines) {
-		if (lines <= 0)
+		if (lines <= 0) {
 			return;
+		}
 		int len = index + lines;
 		length -= lines;
 		System.arraycopy(lineInfo, len, lineInfo, index, lineInfo.length - len);
@@ -256,9 +260,9 @@ public abstract class TokenMarker {
 	 *            The array index
 	 */
 	protected void ensureCapacity(int index) {
-		if (lineInfo == null)
+		if (lineInfo == null) {
 			lineInfo = new LineInfo[index + 1];
-		else if (lineInfo.length <= index) {
+		} else if (lineInfo.length <= index) {
 			LineInfo[] lineInfoN = new LineInfo[(index + 1) * 2];
 			System.arraycopy(lineInfo, 0, lineInfoN, 0, lineInfo.length);
 			lineInfo = lineInfoN;
@@ -274,11 +278,13 @@ public abstract class TokenMarker {
 	 *            The id of the token
 	 */
 	protected void addToken(int length, byte id) {
-		if (id >= Token.INTERNAL_FIRST && id <= Token.INTERNAL_LAST)
+		if (id >= Token.INTERNAL_FIRST && id <= Token.INTERNAL_LAST) {
 			throw new InternalError("Invalid id: " + id);
+		}
 
-		if (length == 0 && id != Token.END)
+		if (length == 0 && id != Token.END) {
 			return;
+		}
 
 		if (firstToken == null) {
 			firstToken = new Token(length, id);
@@ -328,46 +334,47 @@ public abstract class TokenMarker {
 	}
 
 	public static TokenMarker makeTokenMarker(TokenMarkerStyle tokenMarkerStyle) {
-		if (tokenMarkerStyle == TokenMarkerStyle.BatchFile)
+		if (tokenMarkerStyle == TokenMarkerStyle.BatchFile) {
 			return new BatchFileTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.C)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.C) {
 			return new CTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.CC)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.CC) {
 			return new CCTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.IDL)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.IDL) {
 			return new IDLTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.JavaScript)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.JavaScript) {
 			return new JavaScriptTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.Java)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.Java) {
 			return new JavaTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.Eiffel)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.Eiffel) {
 			return new EiffelTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.HTML)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.HTML) {
 			return new HTMLTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.Patch)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.Patch) {
 			return new PatchTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.Perl)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.Perl) {
 			return new PerlTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.PHP)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.PHP) {
 			return new PHPTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.Props)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.Props) {
 			return new PropsTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.Python)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.Python) {
 			return new PythonTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.ShellScript)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.ShellScript) {
 			return new ShellScriptTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.SQL)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.SQL) {
 			return new SQLTokenMarker(null);
-		else if (tokenMarkerStyle == TokenMarkerStyle.TSQL)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.TSQL) {
 			return new TSQLTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.TeX)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.TeX) {
 			return new TeXTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.WOD)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.WOD) {
 			return new WODTokenMarker();
-		else if (tokenMarkerStyle == TokenMarkerStyle.XML)
+		} else if (tokenMarkerStyle == TokenMarkerStyle.XML) {
 			return new XMLTokenMarker();
-		else
+		} else {
 			return null;
+		}
 	}
 
 }

@@ -39,8 +39,9 @@ public class IEWidgetComparator implements Comparator<IEWidget> {
 
 	public static Vector sortWidgets(Vector<IEWidget> v) {
 		IEWidget[] widgetArray = new IEWidget[v.size()];
-		for (int i = 0; i < v.size(); i++)
+		for (int i = 0; i < v.size(); i++) {
 			widgetArray[i] = v.get(i);
+		}
 		Arrays.sort(widgetArray, new IEWidgetComparator());
 		return new Vector<IEWidget>(Arrays.asList(widgetArray));
 	}

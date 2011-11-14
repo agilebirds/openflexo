@@ -23,8 +23,8 @@ import java.awt.Color;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
+import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.shapes.Rectangle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;

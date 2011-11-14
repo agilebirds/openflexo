@@ -27,7 +27,6 @@ import java.util.logging.Logger;
 import org.apache.cayenne.map.DataMap;
 import org.apache.cayenne.map.DbEntity;
 import org.apache.cayenne.wocompat.EOObjEntity;
-
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -53,36 +52,41 @@ public class DBEntityComparator implements Comparator<DbEntity> {
 	 */
 	@Override
 	public int compare(DbEntity o1, DbEntity o2) {
-		if (o1 == o2)
+		if (o1 == o2) {
 			return 0;
-		else if (o1 == null)
+		} else if (o1 == null) {
 			return 1;
-		else if (o2 == null)
+		} else if (o2 == null) {
 			return -1;
+		}
 		DMEntity e1 = null;
 		DMEntity e2 = null;
 		Iterator i = ((DataMap) o1.getParent()).getObjEntities().iterator();
 		while (i.hasNext() && (e1 == null || e2 == null)) {
 			EOObjEntity e = (EOObjEntity) i.next();
-			if (e.getDbEntityName().equals(o1.getName()) && e.getClassName() != null)
+			if (e.getDbEntityName().equals(o1.getName()) && e.getClassName() != null) {
 				e1 = project.getDataModel().getDMEntity(null, e.getClassName());
-			else if (e.getDbEntityName().equals(o2.getName()) && e.getClassName() != null)
+			} else if (e.getDbEntityName().equals(o2.getName()) && e.getClassName() != null) {
 				e2 = project.getDataModel().getDMEntity(null, e.getClassName());
+			}
 		}
 		if (e1 == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not resolve table named: " + o1.getName());
+			}
 			return 1;
 		} else if (e2 == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not resolve table named: " + o1.getName());
+			}
 			return -1;
-		} else if (!(e1 instanceof DMEOEntity))
+		} else if (!(e1 instanceof DMEOEntity)) {
 			return 1;
-		else if (!(e2 instanceof DMEOEntity))
+		} else if (!(e2 instanceof DMEOEntity)) {
 			return -1;
-		else
+		} else {
 			return ((DMEOEntity) e1).compareTo((DMEOEntity) e2);
+		}
 	}
 
 }

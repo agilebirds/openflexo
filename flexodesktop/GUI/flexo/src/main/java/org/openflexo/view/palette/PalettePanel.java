@@ -81,10 +81,11 @@ public abstract class PalettePanel extends JPanel implements SelectionListener {
 	}
 
 	private JTabbedPane getParentContainer() {
-		if (getParent() != null && getParent().getParent() != null)
+		if (getParent() != null && getParent().getParent() != null) {
 			return (JTabbedPane) getParent().getParent().getParent();
-		else
+		} else {
 			return null;
+		}
 	}
 
 	private int getIndexForComponent() {
@@ -93,10 +94,12 @@ public abstract class PalettePanel extends JPanel implements SelectionListener {
 
 	protected void setTitle() {
 		String title = _name;
-		if (isEdited())
+		if (isEdited()) {
 			title += " [" + FlexoLocalization.localizedForKey("edited") + "]";
-		if (getParentContainer() != null)
+		}
+		if (getParentContainer() != null) {
 			getParentContainer().setTitleAt(getIndexForComponent(), title);
+		}
 	}
 
 	public void editPalette() {
@@ -162,8 +165,9 @@ public abstract class PalettePanel extends JPanel implements SelectionListener {
 	}
 
 	public void paintSelection(Graphics g) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.finer("Drawing selection");
+		}
 		Graphics2D g2 = (Graphics2D) g;
 		DrawUtils.turnOnAntiAlising(g2);
 		DrawUtils.setRenderQuality(g2);
@@ -183,8 +187,9 @@ public abstract class PalettePanel extends JPanel implements SelectionListener {
 	protected SelectableView selectableViewForObject(FlexoModelObject object) {
 		for (Enumeration en = _paletteElements.elements(); en.hasMoreElements();) {
 			PaletteElement next = (PaletteElement) en.nextElement();
-			if (next.getObject() == object)
+			if (next.getObject() == object) {
 				return next.getView();
+			}
 		}
 		return null;
 	}
@@ -228,8 +233,9 @@ public abstract class PalettePanel extends JPanel implements SelectionListener {
 	public void fireResetSelection() {
 		for (Enumeration en = _paletteElements.elements(); en.hasMoreElements();) {
 			PaletteElement next = (PaletteElement) en.nextElement();
-			if (next.getView() != null)
+			if (next.getView() != null) {
 				next.getView().setIsSelected(false);
+			}
 		}
 	}
 
@@ -254,24 +260,28 @@ public abstract class PalettePanel extends JPanel implements SelectionListener {
 	 */
 	@Override
 	public Dimension getPreferredSize() {
-		if (prefSize != null)
+		if (prefSize != null) {
 			return prefSize;
+		}
 		JScrollPane parent = (JScrollPane) SwingUtilities.getAncestorOfClass(JScrollPane.class, this);
 		if (parent != null) {
 			Dimension d = new Dimension();
 			d.width = parent.getWidth() - parent.getInsets().left - parent.getInsets().right;
-			if (parent.getVerticalScrollBar() != null && parent.getVerticalScrollBar().isVisible())
+			if (parent.getVerticalScrollBar() != null && parent.getVerticalScrollBar().isVisible()) {
 				d.width -= parent.getVerticalScrollBar().getWidth();
+			}
 			if (getComponentCount() > 1) {
 				int gap = getLayout() instanceof FlowLayout ? ((FlowLayout) getLayout()).getVgap() : 4;
 				for (Component c : getComponents()) {
 					d.height = Math.max(c.getY() + c.getHeight() + gap, d.height);
 				}
-			} else
+			} else {
 				d.height = super.getPreferredSize().height;
+			}
 			return d;
-		} else
+		} else {
 			return super.getPreferredSize();
+		}
 	}
 
 	/**

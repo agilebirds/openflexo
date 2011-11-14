@@ -61,8 +61,9 @@ public class FGECircle extends FGEEllips {
 	public static FGEUnionArea getTangentsPointsToCircle(FGECircle circle, FGEPoint p) throws PointInsideCircleException {
 		FGELine l = new FGELine(p, circle.getCenter());
 		double asin = circle.getWidth() / 2 / FGESegment.getLength(p, circle.getCenter());
-		if (asin >= 1 || asin <= -1)
+		if (asin >= 1 || asin <= -1) {
 			throw new PointInsideCircleException();
+		}
 		double angle = Math.toDegrees(Math.asin(asin));
 		FGELine tan1 = l.getRotatedLine(angle, p);
 		FGELine tan2 = l.getRotatedLine(-angle, p);

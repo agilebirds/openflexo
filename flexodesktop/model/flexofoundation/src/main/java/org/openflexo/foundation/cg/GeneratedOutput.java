@@ -22,8 +22,6 @@ package org.openflexo.foundation.cg;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.xmlcode.XMLMapping;
-
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.action.AddGeneratedCodeRepository;
 import org.openflexo.foundation.cg.dm.CGRepositoryCreated;
@@ -37,6 +35,7 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.rm.cg.GenerationStatus;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * GeneratedCode represents the structure of all the generated code
@@ -164,8 +163,9 @@ public abstract class GeneratedOutput extends CGObject implements XMLStorageReso
 
 	public GenerationRepository getRepositoryNamed(String name) {
 		for (GenerationRepository repository : getGeneratedRepositories()) {
-			if (repository.getName().equals(name))
+			if (repository.getName().equals(name)) {
 				return repository;
+			}
 		}
 		return null;
 	}
@@ -197,8 +197,9 @@ public abstract class GeneratedOutput extends CGObject implements XMLStorageReso
 	@Override
 	public boolean hasGenerationErrors() {
 		for (GenerationRepository repository : _generatedRepositories) {
-			if (repository.hasGenerationErrors())
+			if (repository.hasGenerationErrors()) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -206,8 +207,9 @@ public abstract class GeneratedOutput extends CGObject implements XMLStorageReso
 	@Override
 	public boolean needsRegeneration() {
 		for (GenerationRepository repository : _generatedRepositories) {
-			if (repository.needsRegeneration())
+			if (repository.needsRegeneration()) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -215,8 +217,9 @@ public abstract class GeneratedOutput extends CGObject implements XMLStorageReso
 	@Override
 	public boolean needsModelReinjection() {
 		for (GenerationRepository repository : _generatedRepositories) {
-			if (repository.needsModelReinjection())
+			if (repository.needsModelReinjection()) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -225,10 +228,12 @@ public abstract class GeneratedOutput extends CGObject implements XMLStorageReso
 	public GenerationStatus getGenerationStatus() {
 		GenerationStatus generationStatus = GenerationStatus.UpToDate;
 		for (GenerationRepository repository : _generatedRepositories) {
-			if (repository.getGenerationStatus() == GenerationStatus.GenerationModified)
+			if (repository.getGenerationStatus() == GenerationStatus.GenerationModified) {
 				return GenerationStatus.GenerationModified;
-			if (repository.getGenerationStatus() != GenerationStatus.UpToDate)
+			}
+			if (repository.getGenerationStatus() != GenerationStatus.UpToDate) {
 				generationStatus = GenerationStatus.Unknown;
+			}
 		}
 		return generationStatus;
 	}

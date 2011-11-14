@@ -28,12 +28,12 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.fps.CVSAbstractFile;
+import org.openflexo.fps.CVSAbstractFile.UpdateListener;
+import org.openflexo.fps.CVSAbstractFile.UpdateStatus;
 import org.openflexo.fps.CVSConstants;
 import org.openflexo.fps.CVSContainer;
 import org.openflexo.fps.CVSFile;
 import org.openflexo.fps.FPSObject;
-import org.openflexo.fps.CVSAbstractFile.UpdateListener;
-import org.openflexo.fps.CVSAbstractFile.UpdateStatus;
 import org.openflexo.localization.FlexoLocalization;
 
 public class UpdateFiles extends MultipleFileCVSAction<UpdateFiles> implements UpdateListener {
@@ -131,10 +131,11 @@ public class UpdateFiles extends MultipleFileCVSAction<UpdateFiles> implements U
 
 	@Override
 	public boolean hasActionExecutionSucceeded() {
-		if (timeOutReceived)
+		if (timeOutReceived) {
 			return false;
-		else
+		} else {
 			return super.hasActionExecutionSucceeded();
+		}
 	}
 
 	private boolean timeOutReceived;
@@ -145,8 +146,9 @@ public class UpdateFiles extends MultipleFileCVSAction<UpdateFiles> implements U
 
 	@Override
 	public synchronized void notifyUpdateFinished(CVSFile file, UpdateStatus status) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Update for " + file.getFile() + " finished with status " + status);
+		}
 		filesToWait--;
 		filesToNotify.add(file);
 		lastReception = System.currentTimeMillis();

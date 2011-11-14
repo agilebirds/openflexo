@@ -165,16 +165,18 @@ public class EntitySpecializationGR extends ConnectorGraphicalRepresentation<Ent
 	}
 
 	private static String escapeStringForXML(String s) {
-		if (s == null)
+		if (s == null) {
 			return null;
+		}
 		StringBuffer sb = new StringBuffer();
 		int n = s.length();
 		for (int i = 0; i < n; i++) {
 			char c = s.charAt(i);
-			if (Verifier.isXMLNameCharacter(c))
+			if (Verifier.isXMLNameCharacter(c)) {
 				sb.append(c);
-			else
+			} else {
 				sb.append("_");
+			}
 		}
 		return sb.toString();
 	}
@@ -208,8 +210,9 @@ public class EntitySpecializationGR extends ConnectorGraphicalRepresentation<Ent
 
 	private void ensurePolylinConverterIsRegistered() {
 		if (!isPolylinConverterRegistered) {
-			if (getSpecializedEntity().getProject().getStringEncoder()._converterForClass(FGERectPolylin.class) == null)
+			if (getSpecializedEntity().getProject().getStringEncoder()._converterForClass(FGERectPolylin.class) == null) {
 				getSpecializedEntity().getProject().getStringEncoder()._addConverter(RECT_POLYLIN_CONVERTER);
+			}
 			isPolylinConverterRegistered = true;
 		}
 

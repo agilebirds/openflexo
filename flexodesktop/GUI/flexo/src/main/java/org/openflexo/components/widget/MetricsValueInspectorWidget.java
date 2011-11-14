@@ -83,8 +83,9 @@ public class MetricsValueInspectorWidget extends CustomInspectorWidget<MetricsVa
 
 	@Override
 	public synchronized void updateWidgetFromModel() {
-		if (currentWidget != null)
+		if (currentWidget != null) {
 			currentWidget.updateWidgetFromModel();
+		}
 	}
 
 	/**
@@ -92,8 +93,9 @@ public class MetricsValueInspectorWidget extends CustomInspectorWidget<MetricsVa
 	 */
 	@Override
 	public synchronized void updateModelFromWidget() {
-		if (currentWidget != null)
+		if (currentWidget != null) {
 			currentWidget.updateModelFromWidget();
+		}
 		super.updateModelFromWidget();
 	}
 
@@ -123,24 +125,28 @@ public class MetricsValueInspectorWidget extends CustomInspectorWidget<MetricsVa
 	public void switchObserved(InspectableObject inspectable) {
 		super.switchObserved(inspectable);
 		updateWidget();
-		if (currentWidget != null)
+		if (currentWidget != null) {
 			currentWidget.switchObserved(inspectable);
+		}
 	}
 
 	@Override
 	public void setModel(InspectableObject value) {
-		if (value == getModel())
+		if (value == getModel()) {
 			return;
+		}
 		super.setModel(value);
 		updateWidget();
-		if (currentWidget != null)
+		if (currentWidget != null) {
 			currentWidget.switchObserved(value);
+		}
 	}
 
 	@Override
 	public JComponent getDynamicComponent() {
-		if (currentWidget != null)
+		if (currentWidget != null) {
 			return currentWidget.getDynamicComponent();
+		}
 		return null;
 	}
 
@@ -151,14 +157,16 @@ public class MetricsValueInspectorWidget extends CustomInspectorWidget<MetricsVa
 
 	@Override
 	public void fireEditingCanceled() {
-		if (currentWidget == durationWidget)
+		if (currentWidget == durationWidget) {
 			durationWidget.fireEditingCanceled();
+		}
 	}
 
 	@Override
 	public void fireEditingStopped() {
-		if (currentWidget == durationWidget)
+		if (currentWidget == durationWidget) {
 			durationWidget.fireEditingStopped();
+		}
 	}
 
 	@Override

@@ -133,9 +133,9 @@ public class PatternRolePathElement<T extends Object> implements SimplePathEleme
 
 	@Override
 	public T getBindingValue(Object target, BindingEvaluationContext context) {
-		if (target instanceof EditionPatternInstance)
+		if (target instanceof EditionPatternInstance) {
 			return (T) ((EditionPatternInstance) target).getPatternActor(patternRole);
-		else {
+		} else {
 			logger.warning("What to return with a " + target + " ?");
 		}
 		return null;

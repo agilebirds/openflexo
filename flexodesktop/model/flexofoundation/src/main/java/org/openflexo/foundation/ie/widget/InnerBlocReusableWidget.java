@@ -76,14 +76,16 @@ public class InnerBlocReusableWidget extends IEReusableWidget<ReusableComponentD
 
 	@Override
 	public void removeInvalidComponentInstances() {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Implement me!!! please");
+		}
 	}
 
 	@Override
 	public boolean areComponentInstancesValid() {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Implement me!!! please");
+		}
 		return true;
 	}
 }

@@ -109,10 +109,11 @@ public abstract class ParameterDefinition<T> extends FlexoObject {
 	}
 
 	public void setWidgetLayout(WidgetLayout layout) {
-		if (layout == WidgetLayout.LABEL_ABOVE_WIDGET_LAYOUT)
+		if (layout == WidgetLayout.LABEL_ABOVE_WIDGET_LAYOUT) {
 			addParameter(DenaliWidget.WIDGET_LAYOUT, "1COL");
-		else if (layout == WidgetLayout.LABEL_NEXTTO_WIDGET_LAYOUT)
+		} else if (layout == WidgetLayout.LABEL_NEXTTO_WIDGET_LAYOUT) {
 			addParameter(DenaliWidget.WIDGET_LAYOUT, "2COL");
+		}
 
 	}
 
@@ -129,8 +130,9 @@ public abstract class ParameterDefinition<T> extends FlexoObject {
 	}
 
 	protected void notifyValueListeners(T oldValue, T newValue) {
-		for (ValueListener<T> l : _valueListeners)
+		for (ValueListener<T> l : _valueListeners) {
 			l.newValueWasSet(this, oldValue, newValue);
+		}
 	}
 
 	private Vector<ValueListener<T>> _valueListeners = new Vector<ValueListener<T>>();

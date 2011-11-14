@@ -21,10 +21,10 @@ package org.openflexo.fge.geomedit.edition;
 
 import java.util.Vector;
 
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.FGESegment;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geomedit.GeomEditController;
 import org.openflexo.fge.geomedit.Polygon;
 import org.openflexo.fge.geomedit.construction.PointConstruction;
@@ -60,8 +60,9 @@ public class CreatePolygonWithNPoints extends Edition {
 		Vector<PointConstruction> pc = new Vector<PointConstruction>();
 		for (EditionInput o : inputs) {
 			PointConstruction pp = ((ObtainPoint) o).getConstruction();
-			if (pp != null)
+			if (pp != null) {
 				pc.add(pp);
+			}
 		}
 		addObject(new Polygon(getController().getDrawing().getModel(), new PolygonWithNPointsConstruction(pc)));
 	}

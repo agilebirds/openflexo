@@ -55,8 +55,9 @@ public class NewProjectComponent extends ProjectChooserComponent {
 		NewProjectComponent chooser = new NewProjectComponent(owner);
 		File newProjectDir = null;
 		int returnVal = chooser.showSaveDialog();
-		if (returnVal == JFileChooser.CANCEL_OPTION)
+		if (returnVal == JFileChooser.CANCEL_OPTION) {
 			return null;
+		}
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			if (isValidProjectName(chooser.getSelectedFile().getName())) {
 				newProjectDir = chooser.getSelectedFile();
@@ -69,18 +70,21 @@ public class NewProjectComponent extends ProjectChooserComponent {
 					newProjectDir.mkdir();
 				} else {
 					if (!FlexoController.confirmWithWarning(FlexoLocalization
-							.localizedForKey("project_already_exists_do_you_want_to_replace_it")))
+							.localizedForKey("project_already_exists_do_you_want_to_replace_it"))) {
 						newProjectDir = null;
+					}
 				}
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Invalid project name. The following characters are not allowed: "
 							+ FileUtils.BAD_CHARACTERS_FOR_FILE_NAME_REG_EXP);
+				}
 				FlexoController.notify(FlexoLocalization.localizedForKey("project_name_cannot_contain_\\___&_#_{_}_[_]_%_~"));
 			}
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("No project specified !");
+			}
 			throw new ProjectLoadingCancelledException();
 		}
 		return newProjectDir;
@@ -92,14 +96,17 @@ public class NewProjectComponent extends ProjectChooserComponent {
 	 */
 	public static boolean isValidProjectName(String fileName) {
 		boolean notEmpty = fileName != null && fileName.trim().length() > 0;
-		if (!notEmpty)
+		if (!notEmpty) {
 			return false;
+		}
 		boolean containsInvalidChar = FileUtils.BAD_CHARACTERS_FOR_FILE_NAME_PATTERN.matcher(fileName).find();
-		if (containsInvalidChar)
+		if (containsInvalidChar) {
 			return false;
+		}
 		boolean isTooSmall = fileName.trim().length() < 3;
-		if (isTooSmall)
+		if (isTooSmall) {
 			return false;
+		}
 		String firstChar = fileName.trim().substring(0, 1);
 		try {
 			int test = new Integer(firstChar);

@@ -26,7 +26,6 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import org.apache.velocity.VelocityContext;
-
 import org.openflexo.dg.latex.DocGeneratorConstants;
 import org.openflexo.dg.rm.DocxXmlFileResource;
 import org.openflexo.foundation.FlexoModelObject;
@@ -93,22 +92,25 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 
 	@Override
 	public void generate(boolean forceRegenerate) {
-		if (!forceRegenerate && !needsGeneration())
+		if (!forceRegenerate && !needsGeneration()) {
 			return;
+		}
 
 		startGeneration();
 		try {
 			VelocityContext context = defaultContext();
 
 			generatedCode = new GeneratedDocxXmlResource(getIdentifier());
-			for (DocxXmlFileResource<DGDocxXMLGenerator<T>> resource : docxResources.keySet())
+			for (DocxXmlFileResource<DGDocxXMLGenerator<T>> resource : docxResources.keySet()) {
 				((GeneratedDocxXmlResource) generatedCode).addCode(getDocxTemplateForResource(resource),
 						merge(getTemplateNameForResource(resource), context));
+			}
 		} catch (GenerationException e) {
 			setGenerationException(e);
 		} catch (Exception e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Unexpected exception occured: " + e.getMessage() + " for " + getObject().getFullyQualifiedName());
+			}
 			e.printStackTrace();
 			setGenerationException(new UnexpectedExceptionOccuredException(e, getProjectGenerator()));
 		}

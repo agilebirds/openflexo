@@ -24,14 +24,28 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 package com.swabunga.spell.examples;
 
-import com.swabunga.spell.engine.*;
-import com.swabunga.spell.swing.JTextComponentSpellChecker;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+
+import javax.swing.Action;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
+import javax.swing.WindowConstants;
+
+import com.swabunga.spell.engine.SpellDictionary;
+import com.swabunga.spell.engine.SpellDictionaryHashMap;
+import com.swabunga.spell.swing.JTextComponentSpellChecker;
 
 /**
  * This class shows an example of how to use the spell checking capability on a JTextComponent.
@@ -51,12 +65,14 @@ public class TextPaneMarkingExample extends JFrame {
 		File dictFile = null, phonetFile = null;
 
 		// INIT DICTIONARY
-		if (dictPath == null)
+		if (dictPath == null) {
 			dictFile = new File(englishDictionary);
-		else
+		} else {
 			dictFile = new File(dictPath);
-		if (phonetPath != null)
+		}
+		if (phonetPath != null) {
 			phonetFile = new File(phonetPath);
+		}
 		try {
 			dictionary = new SpellDictionaryHashMap(dictFile, phonetFile);
 			// dictionary = new SpellDictionaryDisk(dictFile, phonetFile, true);
@@ -66,9 +82,10 @@ public class TextPaneMarkingExample extends JFrame {
 		}
 
 		// INIT GUI
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		addWindowListener(new WindowAdapter() {
 
+			@Override
 			public void windowClosed(WindowEvent e) {
 				System.exit(0);
 			}
@@ -123,10 +140,12 @@ public class TextPaneMarkingExample extends JFrame {
 
 	public static void main(String[] args) {
 		String dictPath = null, phonetPath = null;
-		if (args.length > 0)
+		if (args.length > 0) {
 			dictPath = args[0];
-		if (args.length > 1)
+		}
+		if (args.length > 1) {
 			phonetPath = args[1];
+		}
 		TextPaneMarkingExample d = new TextPaneMarkingExample(dictPath, phonetPath);
 		d.show();
 	}

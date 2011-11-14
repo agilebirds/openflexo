@@ -22,8 +22,6 @@
 
 package com.metaphaseeditor.action;
 
-import com.metaphaseeditor.MetaphaseEditorException;
-import com.metaphaseeditor.MetaphaseEditorPanel;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 
@@ -33,6 +31,9 @@ import javax.swing.text.StyledEditorKit;
 import javax.swing.text.html.HTML.Tag;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
+
+import com.metaphaseeditor.MetaphaseEditorException;
+import com.metaphaseeditor.MetaphaseEditorPanel;
 
 public class InsertHtmlAction extends StyledEditorKit.StyledTextAction {
 
@@ -48,6 +49,7 @@ public class InsertHtmlAction extends StyledEditorKit.StyledTextAction {
 		this.htmlTag = htmlTag;
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent ae) {
 		try {
 			JTextPane textPane = editorPanel.getHtmlTextPane();

@@ -188,14 +188,15 @@ public abstract class DropDownColumn extends AbstractColumn implements EditableC
 			protected DropDownComboBoxModel(InspectableObject element) {
 				super();
 				Vector v = getAvailableValues(element);
-				if (v != null)
+				if (v != null) {
 					for (Enumeration en = v.elements(); en.hasMoreElements();) {
 						addElement(en.nextElement());
 					}
-				else
+				} else {
 					for (Enumeration en = getAvailableValues(element).elements(); en.hasMoreElements();) {
 						addElement(en.nextElement());
 					}
+				}
 			}
 		}
 	}

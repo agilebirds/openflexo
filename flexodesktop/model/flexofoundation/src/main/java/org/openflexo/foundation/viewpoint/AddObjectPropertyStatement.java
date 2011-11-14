@@ -42,14 +42,16 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 	}
 
 	public OntologyProperty getObjectProperty() {
-		if (getPatternRole() != null)
+		if (getPatternRole() != null) {
 			return getPatternRole().getObjectProperty();
+		}
 		return null;
 	}
 
 	public void setObjectProperty(OntologyProperty p) {
-		if (getPatternRole() != null)
+		if (getPatternRole() != null) {
 			getPatternRole().setObjectProperty(p);
+		}
 	}
 
 	public OntologyObject getPropertyObject(EditionSchemeAction action) {
@@ -78,8 +80,9 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 	}
 
 	public ViewPointDataBinding getObject() {
-		if (object == null)
+		if (object == null) {
 			object = new ViewPointDataBinding(this, EditionActionBindingAttribute.object, getObjectBindingDefinition());
+		}
 		return object;
 	}
 

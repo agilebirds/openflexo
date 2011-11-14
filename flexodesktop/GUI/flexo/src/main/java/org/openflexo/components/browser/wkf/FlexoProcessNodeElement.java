@@ -78,8 +78,9 @@ public class FlexoProcessNodeElement extends BrowserElement {
 		for (Enumeration<ProcessFolder> en = getProcessNode().getSortedFolders(); en.hasMoreElements();) {
 			addToChilds(en.nextElement());
 		}
-		for (Enumeration<FlexoProcessNode> en = getProcessNode().getSortedOrphanSubprocesses(); en.hasMoreElements();)
+		for (Enumeration<FlexoProcessNode> en = getProcessNode().getSortedOrphanSubprocesses(); en.hasMoreElements();) {
 			addToChilds(en.nextElement().getProcess());
+		}
 	}
 
 	private boolean isImported() {
@@ -109,8 +110,9 @@ public class FlexoProcessNodeElement extends BrowserElement {
 	public Icon getIcon() {
 		Icon icon = super.getIcon();
 		IconMarker[] markers = getIconMarkers();
-		if (markers != null)
+		if (markers != null) {
 			return IconFactory.getImageIcon((ImageIcon) icon, markers);
+		}
 		return icon;
 	}
 
@@ -118,18 +120,21 @@ public class FlexoProcessNodeElement extends BrowserElement {
 		int count = 0;
 		if (isImported()) {
 			count++;
-			if (getFlexoProcess().isDeletedOnServer())
+			if (getFlexoProcess().isDeletedOnServer()) {
 				count++;
+			}
 		} else if (getFlexoProcess().getIsWebService()) {
 			count++;
 		}
 		IconMarker[] markers = null;
-		if (count > 0)
+		if (count > 0) {
 			markers = new IconMarker[count];
+		}
 		if (isImported()) {
 			markers[0] = IconLibrary.IMPORT;
-			if (getFlexoProcess().isDeletedOnServer())
+			if (getFlexoProcess().isDeletedOnServer()) {
 				markers[1] = IconLibrary.WARNING;
+			}
 		} else if (getFlexoProcess().getIsWebService()) {
 			markers[0] = WKFIconLibrary.WS_MARKER;
 		}
@@ -148,10 +153,11 @@ public class FlexoProcessNodeElement extends BrowserElement {
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (dataModification instanceof ProcessNodeInserted || dataModification instanceof ProcessNodeRemoved
 				|| dataModification instanceof ProcessFolderAdded || dataModification instanceof ProcessFolderRemoved
-				|| dataModification instanceof ProcessAddedToFolder || dataModification instanceof ProcessRemovedFromFolder)
+				|| dataModification instanceof ProcessAddedToFolder || dataModification instanceof ProcessRemovedFromFolder) {
 			refreshWhenPossible();
-		else
+		} else {
 			super.update(observable, dataModification);
+		}
 	}
 
 }

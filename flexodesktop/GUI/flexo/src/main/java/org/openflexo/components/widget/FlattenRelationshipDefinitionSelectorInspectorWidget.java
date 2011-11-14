@@ -93,8 +93,9 @@ public class FlattenRelationshipDefinitionSelectorInspectorWidget extends Custom
 		getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Focus gained in " + getClass().getName());
+				}
 				super.focusGained(arg0);
 				_selector.getTextField().requestFocus();
 				_selector.getTextField().selectAll();
@@ -102,8 +103,9 @@ public class FlattenRelationshipDefinitionSelectorInspectorWidget extends Custom
 
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Focus lost in " + getClass().getName());
+				}
 				super.focusLost(arg0);
 			}
 		});
@@ -116,8 +118,9 @@ public class FlattenRelationshipDefinitionSelectorInspectorWidget extends Custom
 
 	@Override
 	public synchronized void updateWidgetFromModel() {
-		if (isUpdatingModel)
+		if (isUpdatingModel) {
 			return;
+		}
 		if (!_selector.getIsUpdatingModel()) {
 			_selector.setEditedObject(getObjectValue());
 			_selector.setRevertValue(getObjectValue());
@@ -178,13 +181,15 @@ public class FlattenRelationshipDefinitionSelectorInspectorWidget extends Custom
 					_createsEntryMethod = targetClass.getMethod(methodName, methodClassParams);
 				} catch (SecurityException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("SecurityException raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (NoSuchMethodException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("NoSuchMethodException raised: unable to find method " + methodName + " for class " + targetClass);
+					}
 					e.printStackTrace();
 				}
 			}
@@ -206,8 +211,9 @@ public class FlattenRelationshipDefinitionSelectorInspectorWidget extends Custom
 				try {
 					if (newEntryEntity == null) {
 						Object targetObject = PropertyModel.getTargetObject(getModel(), getValueForParameter("creates_entry"));
-						if (logger.isLoggable(Level.INFO))
+						if (logger.isLoggable(Level.INFO)) {
 							logger.info("invoking " + getCreatesEntryMethod() + " on object" + targetObject);
+						}
 						return (BindingVariable) getCreatesEntryMethod().invoke(targetObject, params);
 					} else {
 						DMProperty newProperty = newEntryEntity.createDMProperty(name, type, implementationType);
@@ -215,24 +221,28 @@ public class FlattenRelationshipDefinitionSelectorInspectorWidget extends Custom
 								&& newProperty.getEntity() instanceof ComponentDMEntity) {
 							((ComponentDMEntity) newProperty.getEntity()).setBindable(newProperty, false);
 						}
-						if (newProperty != null)
+						if (newProperty != null) {
 							definition.addBindingPathElement(newProperty);
+						}
 						return definition.getBindingVariable();
 					}
 				} catch (IllegalArgumentException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (InvocationTargetException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				}
 			}
@@ -246,14 +256,16 @@ public class FlattenRelationshipDefinitionSelectorInspectorWidget extends Custom
 
 	@Override
 	public void fireEditingCanceled() {
-		if (_selector != null)
+		if (_selector != null) {
 			_selector.closePopup();
+		}
 	}
 
 	@Override
 	public void fireEditingStopped() {
-		if (_selector != null)
+		if (_selector != null) {
 			_selector.closePopup();
+		}
 	}
 
 }

@@ -57,8 +57,9 @@ public class GeneratorMainPane extends FlexoMainPane {
 	 */
 	@Override
 	protected FlexoModelObject getParentObject(FlexoModelObject object) {
-		if (object instanceof CGFile)
+		if (object instanceof CGFile) {
 			return ((CGFile) object).getRepository();
+		}
 		return null;
 	}
 

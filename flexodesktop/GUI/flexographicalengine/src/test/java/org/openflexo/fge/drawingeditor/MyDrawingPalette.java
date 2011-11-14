@@ -198,14 +198,18 @@ public class MyDrawingPalette extends DrawingPalette {
 				// getController().addNewShape(new MyShape(getGraphicalRepresentation().getShapeType(), dropLocation,
 				// getController().getDrawing()),container);
 				ShapeGraphicalRepresentation<?> shapeGR = getGraphicalRepresentation().clone();
-				if (applyCurrentForeground)
+				if (applyCurrentForeground) {
 					shapeGR.setForeground(getController().getToolbox().currentForegroundStyle);
-				if (applyCurrentBackground)
+				}
+				if (applyCurrentBackground) {
 					shapeGR.setBackground(getController().getToolbox().currentBackgroundStyle);
-				if (applyCurrentTextStyle)
+				}
+				if (applyCurrentTextStyle) {
 					shapeGR.setTextStyle(getController().getToolbox().currentTextStyle);
-				if (applyCurrentShadowStyle)
+				}
+				if (applyCurrentShadowStyle) {
 					shapeGR.setShadowStyle(getController().getToolbox().currentShadowStyle);
+				}
 				getController().addNewShape(new MyShape(shapeGR, dropLocation, getController().getDrawing()), container);
 				return true;
 			}

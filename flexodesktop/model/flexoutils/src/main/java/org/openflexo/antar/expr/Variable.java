@@ -47,8 +47,9 @@ public class Variable extends Expression {
 
 	@Override
 	public Expression evaluate(EvaluationContext context) {
-		if (context != null)
+		if (context != null) {
 			return context.getVariableFactory().makeVariable(new Word(getName()));
+		}
 		return this;
 	}
 
@@ -63,8 +64,9 @@ public class Variable extends Expression {
 	}
 
 	public boolean isValid() {
-		if (name.length() == 0)
+		if (name.length() == 0) {
 			return false;
+		}
 
 		boolean startingPathItem = true;
 		for (int i = 0; i < name.length(); i++) {
@@ -76,8 +78,9 @@ public class Variable extends Expression {
 																																// authorized
 																																// characters
 				|| (c >= '0' && c <= '9' && !startingPathItem));
-				if (!isNormalChar)
+				if (!isNormalChar) {
 					return false;
+				}
 				startingPathItem = false;
 			}
 		}

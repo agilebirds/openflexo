@@ -67,11 +67,13 @@ public class TOCDataElement extends DEBrowserElement {
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getProject()) {
-			if (dataModification instanceof DocTypeAdded || dataModification instanceof DocTypeRemoved)
+			if (dataModification instanceof DocTypeAdded || dataModification instanceof DocTypeRemoved) {
 				if (_browser != null) {
 					refreshWhenPossible();
-				} else if (logger.isLoggable(Level.WARNING))
+				} else if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Received notification on null browser");
+				}
+			}
 			return;
 		}
 		super.update(observable, dataModification);

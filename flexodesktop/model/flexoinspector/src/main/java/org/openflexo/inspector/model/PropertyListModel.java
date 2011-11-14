@@ -112,8 +112,9 @@ public class PropertyListModel extends PropertyModel {
 		Enumeration<PropertyListColumn> en = _columns.elements();
 		while (en.hasMoreElements()) {
 			reply = en.nextElement();
-			if (reply.name != null && reply.name.equals(title))
+			if (reply.name != null && reply.name.equals(title)) {
 				return reply;
+			}
 		}
 		return null;
 	}

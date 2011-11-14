@@ -43,9 +43,9 @@ import org.openflexo.fge.controller.MouseClickControlAction.MouseClickControlAct
 import org.openflexo.fge.controller.MouseControl.MouseButton;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.notifications.ConnectorModified;
@@ -138,12 +138,13 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 
 		addToMouseClickControls(MouseClickControl.makeMouseClickControl("Selection", MouseButton.LEFT, 1,
 				MouseClickControlActionType.SELECTION));
-		if (ToolBox.getPLATFORM() == ToolBox.MACOS)
+		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 			addToMouseClickControls(MouseClickControl.makeMouseMetaClickControl("Multiple selection", MouseButton.LEFT, 1,
 					MouseClickControlActionType.MULTIPLE_SELECTION));
-		else
+		} else {
 			addToMouseClickControls(MouseClickControl.makeMouseControlClickControl("Multiple selection", MouseButton.LEFT, 1,
 					MouseClickControlActionType.MULTIPLE_SELECTION));
+		}
 	}
 
 	// ***************************************************************************
@@ -152,8 +153,9 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 
 	@Override
 	public void delete() {
-		if (foreground != null)
+		if (foreground != null) {
 			foreground.deleteObserver(this);
+		}
 		super.delete();
 		disableStartObjectObserving();
 		disableEndObjectObserving();
@@ -174,8 +176,9 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 		super.setsWith(gr);
 		if (gr instanceof ConnectorGraphicalRepresentation) {
 			for (Parameters p : Parameters.values()) {
-				if (p != Parameters.connector)
+				if (p != Parameters.connector) {
 					_setParameterValueWith(p, gr);
+				}
 			}
 			Connector connectorToCopy = ((ConnectorGraphicalRepresentation<?>) gr).getConnector();
 			Connector clone = connectorToCopy.clone();
@@ -189,11 +192,14 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 		if (gr instanceof ConnectorGraphicalRepresentation) {
 			for (Parameters p : Parameters.values()) {
 				boolean excepted = false;
-				for (GRParameter ep : exceptedParameters)
-					if (p == ep)
+				for (GRParameter ep : exceptedParameters) {
+					if (p == ep) {
 						excepted = true;
-				if (p != Parameters.connector && !excepted)
+					}
+				}
+				if (p != Parameters.connector && !excepted) {
 					_setParameterValueWith(p, gr);
+				}
 			}
 			Connector connectorToCopy = ((ConnectorGraphicalRepresentation<?>) gr).getConnector();
 			Connector clone = connectorToCopy.clone();
@@ -210,8 +216,9 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 	}
 
 	public void setConnector(Connector aConnector) {
-		if (aConnector != null)
+		if (aConnector != null) {
 			aConnector.setGraphicalRepresentation(this);
+		}
 		FGENotification notification = requireChange(Parameters.connector, aConnector);
 		if (notification != null) {
 			this.connector = aConnector;
@@ -226,11 +233,13 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 	public void setForeground(ForegroundStyle aForeground) {
 		FGENotification notification = requireChange(Parameters.foreground, aForeground);
 		if (notification != null) {
-			if (foreground != null)
+			if (foreground != null) {
 				foreground.deleteObserver(this);
+			}
 			foreground = aForeground;
-			if (aForeground != null)
+			if (aForeground != null) {
 				aForeground.addObserver(this);
+			}
 			hasChanged(notification);
 		}
 	}
@@ -241,16 +250,18 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 	}
 
 	public void notifyConnectorChanged() {
-		if (!isRegistered())
+		if (!isRegistered()) {
 			return;
+		}
 		checkViewBounds();
 		setChanged();
 		notifyObservers(new ConnectorModified());
 	}
 
 	public ConnectorType getConnectorType() {
-		if (connector != null)
+		if (connector != null) {
 			return connector.getConnectorType();
+		}
 		return null;
 	}
 
@@ -281,8 +292,9 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 	private Vector<Observable> observedEndObjects = new Vector<Observable>();
 
 	protected void enableStartObjectObserving(ShapeGraphicalRepresentation<?> aStartObject) {
-		if (enabledStartObjectObserving)
+		if (enabledStartObjectObserving) {
 			disableStartObjectObserving();
+		}
 
 		if (aStartObject != null /*&& !enabledStartObjectObserving*/) {
 			aStartObject.addObserver(this);
@@ -306,8 +318,9 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 				for (Object o : aStartObject.getAncestors())
 					if (getGraphicalRepresentation(o) != null) getGraphicalRepresentation(o).deleteObserver(this);
 			}*/
-			for (Observable o : observedStartObjects)
+			for (Observable o : observedStartObjects) {
 				o.deleteObserver(this);
+			}
 
 			enabledStartObjectObserving = false;
 		}
@@ -323,8 +336,9 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 	}
 
 	protected void enableEndObjectObserving(ShapeGraphicalRepresentation<?> anEndObject) {
-		if (enabledEndObjectObserving)
+		if (enabledEndObjectObserving) {
 			disableEndObjectObserving();
+		}
 
 		if (anEndObject != null /*&& !enabledEndObjectObserving*/) {
 			anEndObject.addObserver(this);
@@ -348,8 +362,9 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 				for (Object o : anEndObject.getAncestors())
 					if (getGraphicalRepresentation(o) != null) getGraphicalRepresentation(o).deleteObserver(this);
 			}*/
-			for (Observable o : observedEndObjects)
+			for (Observable o : observedEndObjects) {
 				o.deleteObserver(this);
+			}
 			enabledEndObjectObserving = false;
 		}
 	}
@@ -512,8 +527,9 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 
 	@Override
 	public void paint(Graphics g, DrawingController<?> controller) {
-		if (!isRegistered())
+		if (!isRegistered()) {
 			setRegistered(true);
+		}
 
 		super.paint(g, controller);
 

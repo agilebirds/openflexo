@@ -73,8 +73,9 @@ public abstract class MultipleValuesWidget<T> extends DenaliWidget<T> {
 	 */
 	protected MultipleValuesWidget(PropertyModel model, AbstractController controller) {
 		super(model, controller);
-		if (model.hasValueForParameter("showIcon") && model.getBooleanValueForParameter("showIcon"))
+		if (model.hasValueForParameter("showIcon") && model.getBooleanValueForParameter("showIcon")) {
 			tryToShowIcon = true;
+		}
 	}
 
 	@Override
@@ -129,8 +130,9 @@ public abstract class MultipleValuesWidget<T> extends DenaliWidget<T> {
 					return ((Vector) availableValuesMethod.invoke(getType(), (Object[]) null)).toArray();
 				} catch (Exception e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 					return new Vector().toArray();
 				}
@@ -140,9 +142,10 @@ public abstract class MultipleValuesWidget<T> extends DenaliWidget<T> {
 		} else if (_propertyModel.hasStaticList()) {
 			return _propertyModel.getStaticList().toArray();
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("There is an error in some configuration file :\n the property named '" + _propertyModel.name
 						+ "' is supposed to be a list, but it doesn't hold any list definition!");
+			}
 			return new Vector().toArray();
 		}
 	}
@@ -151,9 +154,10 @@ public abstract class MultipleValuesWidget<T> extends DenaliWidget<T> {
 		if (_propertyModel.hasDynamicHashtable()) {
 			return _propertyModel.getDynamicHashtable(getModel());
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("There is an error in some configuration file :\n the property named '" + _propertyModel.name
 						+ "' is supposed to be a hashtable, but it doesn't hold any hashtable definition!");
+			}
 			return new Hashtable();
 		}
 	}
@@ -186,8 +190,9 @@ public abstract class MultipleValuesWidget<T> extends DenaliWidget<T> {
 			}
 			if (value != null) {
 				String stringRepresentation = getDisplayStringRepresentation(value);
-				if (stringRepresentation == null || stringRepresentation.length() == 0)
+				if (stringRepresentation == null || stringRepresentation.length() == 0) {
 					stringRepresentation = "<html><i>" + FlexoLocalization.localizedForKey("empty_string") + "</i></html>";
+				}
 				label.setText(stringRepresentation);
 			} else {
 				label.setText(FlexoLocalization.localizedForKey("no_selection"));
@@ -242,8 +247,9 @@ public abstract class MultipleValuesWidget<T> extends DenaliWidget<T> {
 						return it.next();
 					}
 				}
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Inconsistent data !");
+				}
 			}
 			return null;
 		}

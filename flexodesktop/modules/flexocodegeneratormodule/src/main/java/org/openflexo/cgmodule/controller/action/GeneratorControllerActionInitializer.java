@@ -70,11 +70,12 @@ public class GeneratorControllerActionInitializer extends ControllerActionInitia
 		getGeneratorController().getProject().getGeneratedCode().setFactory(new GCAction.ProjectGeneratorFactory() {
 			@Override
 			public AbstractProjectGenerator<? extends GenerationRepository> generatorForRepository(GenerationRepository repository) {
-				if (repository instanceof CGRepository)
+				if (repository instanceof CGRepository) {
 					return getGeneratorController().getProjectGenerator((CGRepository) repository);
-				else {
-					if (logger.isLoggable(Level.SEVERE))
+				} else {
+					if (logger.isLoggable(Level.SEVERE)) {
 						logger.severe("Cannot create project generator for " + repository);
+					}
 				}
 				return null;
 			}

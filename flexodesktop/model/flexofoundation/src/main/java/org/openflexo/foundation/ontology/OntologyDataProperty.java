@@ -77,8 +77,9 @@ public class OntologyDataProperty extends OntologyProperty implements Comparable
 	}
 
 	public OntologicDataType getDataType() {
-		if (getRangeStatement() != null)
+		if (getRangeStatement() != null) {
 			return getRangeStatement().getDataType();
+		}
 		return null;
 	}
 

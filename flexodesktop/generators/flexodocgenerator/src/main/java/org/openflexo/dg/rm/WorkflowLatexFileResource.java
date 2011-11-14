@@ -52,10 +52,12 @@ public class WorkflowLatexFileResource extends LatexFileResource<DGLatexGenerato
 
 	@Override
 	public String getName() {
-		if (getCGFile() == null || getCGFile().getRepository() == null || getModel() == null)
+		if (getCGFile() == null || getCGFile().getRepository() == null || getModel() == null) {
 			return super.getName();
-		if (super.getName() == null)
+		}
+		if (super.getName() == null) {
 			setName(nameForRepositoryAndModel(getCGFile().getRepository(), getModel()));
+		}
 		return nameForRepositoryAndModel(getCGFile().getRepository(), getModel());
 	}
 
@@ -64,8 +66,9 @@ public class WorkflowLatexFileResource extends LatexFileResource<DGLatexGenerato
 	}
 
 	public FlexoWorkflow getModel() {
-		if (getGenerator() != null)
+		if (getGenerator() != null) {
 			return getGenerator().getObject();
+		}
 		return null;
 	}
 

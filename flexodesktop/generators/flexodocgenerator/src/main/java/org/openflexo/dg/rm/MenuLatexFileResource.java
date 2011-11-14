@@ -58,19 +58,22 @@ public class MenuLatexFileResource extends LatexFileResource<DGLatexGenerator<Fl
 
 	@Override
 	public String getName() {
-		if (getCGFile() == null || getCGFile().getRepository() == null || getMenu() == null)
+		if (getCGFile() == null || getCGFile().getRepository() == null || getMenu() == null) {
 			return super.getName();
+		}
 		registerObserverWhenRequired();
-		if (super.getName() == null)
+		if (super.getName() == null) {
 			setName(nameForRepositoryAndMenu(getCGFile().getRepository(), getMenu()));
+		}
 		return nameForRepositoryAndMenu(getCGFile().getRepository(), getMenu());
 	}
 
 	public void registerObserverWhenRequired() {
 		if ((!isObserverRegistered) && (getMenu() != null)) {
 			isObserverRegistered = true;
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getProject());
+			}
 			getMenu().addObserver(this);
 		}
 	}
@@ -80,8 +83,9 @@ public class MenuLatexFileResource extends LatexFileResource<DGLatexGenerator<Fl
 	}
 
 	public FlexoNavigationMenu getMenu() {
-		if (getGenerator() != null)
+		if (getGenerator() != null) {
 			return getGenerator().getObject();
+		}
 		return null;
 	}
 

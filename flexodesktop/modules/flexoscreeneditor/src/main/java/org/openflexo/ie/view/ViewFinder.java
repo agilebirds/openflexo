@@ -43,44 +43,50 @@ public class ViewFinder {
 
 		Component parent = component.getParent();
 		if (parent == null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Could not retrieve Root View for component " + component + " [NO PARENT]");
+			}
 			returned = null;
 		} else if (parent instanceof IEWOComponentView) {
 			returned = (IEWOComponentView) parent;
 		} else if (parent instanceof IEViewManaging) {
 			returned = ((IEViewManaging) parent).getRootView();
 		} else {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Could not retrieve Root View for component " + component + " [PARENT=" + parent.getClass().getName() + "]");
+			}
 			returned = null;
 		}
 		return returned;
 	}
 
 	public static IEWidgetView findViewForModel(IEViewManaging component, IEObject object) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("findViewForModel called for " + object.getClass().getName() + " in " + component.getClass().getName());
+		}
 
 		// First search inside
 
 		IEWidgetView lookInside = component.internallyFindViewForModel(object);
 		if (lookInside != null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Internally found !");
+			}
 			return lookInside;
 		}
 		// OK, let's look outside
 		if (component.getRootView() != null) {
 			IEWidgetView lookOutside = component.getRootView().internallyFindViewForModel(object);
 			if (lookOutside != null) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Externally found !");
+				}
 				return lookOutside;
 			}
 		}
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Could not find view for model " + object);
+		}
 		return null;
 	}
 

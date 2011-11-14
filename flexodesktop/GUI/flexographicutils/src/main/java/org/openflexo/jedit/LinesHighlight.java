@@ -60,8 +60,9 @@ public class LinesHighlight implements TextAreaPainter.Highlight {
 		if (line >= beginLineNb && line <= endLineNb) {
 			return getToolTipText();
 		}
-		if (next != null && next != this)
+		if (next != null && next != this) {
 			return next.getToolTipText(evt);
+		}
 		return null;
 	}
 
@@ -102,8 +103,9 @@ public class LinesHighlight implements TextAreaPainter.Highlight {
 
 	public void setBeginLineNb(int beginLineNb) {
 		this.beginLineNb = beginLineNb;
-		if ((textArea != null) && (textArea.getPainter() != null))
+		if ((textArea != null) && (textArea.getPainter() != null)) {
 			textArea.getPainter().repaint();
+		}
 	}
 
 	public Color getBgColor() {
@@ -112,8 +114,9 @@ public class LinesHighlight implements TextAreaPainter.Highlight {
 
 	public void setBgColor(Color color) {
 		this.bgColor = color;
-		if ((textArea != null) && (textArea.getPainter() != null))
+		if ((textArea != null) && (textArea.getPainter() != null)) {
 			textArea.getPainter().invalidateLineRange(beginLineNb, endLineNb);
+		}
 	}
 
 	public Color getFgColor() {
@@ -122,8 +125,9 @@ public class LinesHighlight implements TextAreaPainter.Highlight {
 
 	public void setFgColor(Color color) {
 		this.fgColor = color;
-		if ((textArea != null) && (textArea.getPainter() != null))
+		if ((textArea != null) && (textArea.getPainter() != null)) {
 			textArea.getPainter().invalidateLineRange(beginLineNb, endLineNb);
+		}
 	}
 
 	public int getEndLineNb() {
@@ -132,8 +136,9 @@ public class LinesHighlight implements TextAreaPainter.Highlight {
 
 	public void setEndLineNb(int endLineNb) {
 		this.endLineNb = endLineNb;
-		if ((textArea != null) && (textArea.getPainter() != null))
+		if ((textArea != null) && (textArea.getPainter() != null)) {
 			textArea.getPainter().repaint();
+		}
 	}
 
 }

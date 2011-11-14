@@ -23,9 +23,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-
 import org.openflexo.components.tabular.model.CheckColumn;
 import org.openflexo.components.tabular.model.IconColumn;
 import org.openflexo.components.tabular.model.StringColumn;
@@ -33,6 +30,8 @@ import org.openflexo.foundation.dm.ComponentDMEntity;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMProperty;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Please comment this class
@@ -46,8 +45,9 @@ public class DMReadOnlyPropertyTableModel extends DMPropertyTableModel {
 
 	public DMReadOnlyPropertyTableModel(DMEntity entity, FlexoProject project) {
 		super(entity, project);
-		while (getColumnCount() > 0)
+		while (getColumnCount() > 0) {
 			removeFromColumns(columnAt(0));
+		}
 		addToColumns(new IconColumn<DMProperty>("property_icon", 30) {
 			@Override
 			public Icon getIcon(DMProperty property) {

@@ -61,11 +61,13 @@ public class CreateIntersection extends Edition {
 		Vector<ObjectReference<?>> lgc = new Vector<ObjectReference<?>>();
 		for (EditionInput o : inputs) {
 			ObtainObject oo = (ObtainObject) o;
-			if (oo.getReferencedObject() != null)
+			if (oo.getReferencedObject() != null) {
 				oo.getReferencedObject().getGraphicalRepresentation().setIsSelected(false);
+			}
 			ObjectReference<?> or = ((ObtainObject) o).getConstruction();
-			if (or != null)
+			if (or != null) {
 				lgc.add(or);
+			}
 		}
 
 		addObject(new ObjectIntersection(getController().getDrawing().getModel(), new IntersectionConstruction(lgc)));
@@ -81,8 +83,9 @@ public class CreateIntersection extends Edition {
 	public void paintEdition(FGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		for (EditionInput o : inputs) {
 			ObtainObject oo = (ObtainObject) o;
-			if (oo.getReferencedObject() != null)
+			if (oo.getReferencedObject() != null) {
 				oo.getReferencedObject().getGraphicalRepresentation().setIsSelected(true);
+			}
 		}
 	}
 }

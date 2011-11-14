@@ -76,8 +76,9 @@ public final class ForwardWSEdge extends ExternalMessageEdge<AbstractInPort, Fle
 			setStartNode(startPort);
 			setEndNode(nextPortMap);
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Inconsistent data while building ForwardWSEdge !");
+			}
 			throw new InvalidEdgeException(this);
 		}
 		if (!isEdgeValid()) {
@@ -125,8 +126,9 @@ public final class ForwardWSEdge extends ExternalMessageEdge<AbstractInPort, Fle
 		// of a WebService
 
 		if (getStartNode() == null || getEndNode() == null || !getEndNode().isInputPort() || getPortMapRegistery() == null
-				|| getPortMapRegistery().getSubProcessNode() == null)
+				|| getPortMapRegistery().getSubProcessNode() == null) {
 			return false;
+		}
 
 		return (getStartNode().getProcess() == getEndNode().getProcess() && (getEndNode().getSubProcessNode().getSubProcess()
 				.getIsWebService()));
@@ -183,8 +185,9 @@ public final class ForwardWSEdge extends ExternalMessageEdge<AbstractInPort, Fle
 		if (getServiceOperation() != null && getServiceOperation().getInputMessageDefinition() != null) {
 			return getServiceOperation().getInputMessageDefinition();
 		} else {
-			if (!isDeserializing())
+			if (!isDeserializing()) {
 				logger.warning("Inconsistant data found in ForwardWSEdge " + getServiceOperation());
+			}
 			return null;
 		}
 	}

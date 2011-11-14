@@ -125,10 +125,11 @@ public class ShadowStyle extends Observable implements XMLSerializable, Cloneabl
 
 	private boolean requireChange(Object oldObject, Object newObject) {
 		if (oldObject == null) {
-			if (newObject == null)
+			if (newObject == null) {
 				return false;
-			else
+			} else {
 				return true;
+			}
 		}
 		return !oldObject.equals(newObject);
 	}

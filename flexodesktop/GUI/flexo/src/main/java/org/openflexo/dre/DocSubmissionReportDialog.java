@@ -119,8 +119,9 @@ public class DocSubmissionReportDialog extends FlexoDialog {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				// Ignore extra messages.
-				if (e.getValueIsAdjusting())
+				if (e.getValueIsAdjusting()) {
 					return;
+				}
 				previewPanel.update();
 			}
 		});

@@ -28,7 +28,6 @@ import java.util.zip.Deflater;
 import java.util.zip.ZipOutputStream;
 
 import org.openflexo.dg.docx.ProjectDocDocxGenerator;
-
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
@@ -51,8 +50,9 @@ public class GenerateDocx extends GCAction<GenerateDocx, GenerationRepository> {
 
 		@Override
 		protected boolean isEnabledForSelection(GenerationRepository repository, Vector<CGObject> globalSelection) {
-			if (repository.getFormat() != Format.DOCX || !(repository instanceof DGRepository))
+			if (repository.getFormat() != Format.DOCX || !(repository instanceof DGRepository)) {
 				return false;
+			}
 			ProjectDocDocxGenerator pg = (ProjectDocDocxGenerator) getProjectGenerator(repository);
 			return pg != null && ((DGRepository) repository).getPostBuildDirectory() != null && pg.hasBeenInitialized();
 		}
@@ -96,8 +96,9 @@ public class GenerateDocx extends GCAction<GenerateDocx, GenerationRepository> {
 
 			IProgress progress = makeFlexoProgress(FlexoLocalization.localizedForKey("creating_docx_file") + " "
 					+ ((DGRepository) getFocusedObject()).getPostProductName(), 1);
-			if (progress != null)
+			if (progress != null) {
 				progress.resetSecondaryProgress(FileUtils.countFilesInDirectory(getFocusedObject().getDirectory(), true) + 1);
+			}
 			FileUtils.createNewFile(zipOutput);
 			ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipOutput));
 			zos.setLevel(Deflater.DEFAULT_COMPRESSION);

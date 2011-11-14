@@ -23,15 +23,15 @@ import java.util.Vector;
 
 import org.openflexo.antar.expr.BinaryOperatorExpression;
 import org.openflexo.antar.expr.Constant;
+import org.openflexo.antar.expr.Constant.BooleanConstant;
 import org.openflexo.antar.expr.DefaultExpressionPrettyPrinter;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.Function;
 import org.openflexo.antar.expr.OperatorNotSupportedException;
 import org.openflexo.antar.expr.UnaryOperatorExpression;
 import org.openflexo.antar.expr.Variable;
-import org.openflexo.antar.expr.Constant.BooleanConstant;
-import org.openflexo.foundation.bindings.BindingValue;
 import org.openflexo.foundation.bindings.BindingExpression.BindingValueVariable;
+import org.openflexo.foundation.bindings.BindingValue;
 import org.openflexo.foundation.bindings.BindingValue.BindingPath;
 import org.openflexo.foundation.bindings.BindingValue.BindingPathElement;
 import org.openflexo.foundation.dm.WSDLRepository;
@@ -67,16 +67,21 @@ public class BPELPrettyPrinter extends DefaultExpressionPrettyPrinter {
 		if (expression instanceof Variable) {
 			return makeStringRepresentation((Variable) expression);
 		}
-		if (expression instanceof Constant)
+		if (expression instanceof Constant) {
 			return makeStringRepresentation((Constant) expression);
-		if (expression instanceof Function)
+		}
+		if (expression instanceof Function) {
 			return makeStringRepresentation((Function) expression);
-		if (expression instanceof UnaryOperatorExpression)
+		}
+		if (expression instanceof UnaryOperatorExpression) {
 			return makeStringRepresentation((UnaryOperatorExpression) expression);
-		if (expression instanceof BinaryOperatorExpression)
+		}
+		if (expression instanceof BinaryOperatorExpression) {
 			return makeStringRepresentation((BinaryOperatorExpression) expression);
-		if (expression instanceof BindingValueVariable)
+		}
+		if (expression instanceof BindingValueVariable) {
 			return makeStringRepresentation(((BindingValueVariable) expression));
+		}
 
 		// return "<unknown "+expression.getClass().getSimpleName()+">";
 		return expression.toString();
@@ -88,9 +93,10 @@ public class BPELPrettyPrinter extends DefaultExpressionPrettyPrinter {
 		try {
 			if (expression.getLeftArgument().toString().equals("BINDING_EXPRESSION")) {
 				return getStringRepresentation(expression.getRightArgument());
-			} else
+			} else {
 				return "(" + getStringRepresentation(expression.getLeftArgument()) + " " + getSymbol(expression.getOperator()) + " "
 						+ getStringRepresentation(expression.getRightArgument()) + ")";
+			}
 		} catch (OperatorNotSupportedException e) {
 			return "<unsupported>";
 		}
@@ -100,8 +106,9 @@ public class BPELPrettyPrinter extends DefaultExpressionPrettyPrinter {
 	 * Takes as input a FlexoVariable and returned the corresponding BPEL, whith qualified elements
 	 */
 	public String makeStringRepresentation(BindingValue var) {
-		if (var == null)
+		if (var == null) {
 			return null;
+		}
 		System.out.println(" * * * * * * * Looking in variables for : " + var.getStringRepresentation());
 
 		String[] returned = writer.getBPELMessagePartFromFlexoVariable(var.getStringRepresentation());
@@ -132,8 +139,9 @@ public class BPELPrettyPrinter extends DefaultExpressionPrettyPrinter {
 		// for every element in the path, we need to declare its namespace.
 		// except for the processInstance/businessData
 		for (int i = 0; i < vect.size(); i++) {
-			if (i != 0)
+			if (i != 0) {
 				stringPath += ".";
+			}
 			BindingPathElement currentEl = vect.get(i);
 			String pack = currentEl.getEntity().getPackage().getName();
 			String ns = null;
@@ -183,10 +191,11 @@ public class BPELPrettyPrinter extends DefaultExpressionPrettyPrinter {
 
 	@Override
 	protected String makeStringRepresentation(BooleanConstant constant) {
-		if (constant == BooleanConstant.FALSE)
+		if (constant == BooleanConstant.FALSE) {
 			return "false()";
-		else if (constant == BooleanConstant.TRUE)
+		} else if (constant == BooleanConstant.TRUE) {
 			return "true()";
+		}
 		return "???";
 	}
 }

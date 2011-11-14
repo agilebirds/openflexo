@@ -36,7 +36,6 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import org.openflexo.ColorCst;
-import org.openflexo.FlexoCst;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.DeletableObject;
 import org.openflexo.foundation.FlexoModelObject;
@@ -66,7 +65,7 @@ import org.openflexo.utils.DrawUtils;
  * @author bmangez, sguerin
  */
 public abstract class IEWidgetView<T extends IEWidget> extends IEInnerDSWidgetView implements
-		/* InspectableObjectView, */GraphicalFlexoObserver, IESelectable, Layoutable {
+/* InspectableObjectView, */GraphicalFlexoObserver, IESelectable, Layoutable {
 
 	private static final Logger logger = Logger.getLogger(IEWidgetView.class.getPackage().getName());
 
@@ -105,10 +104,12 @@ public abstract class IEWidgetView<T extends IEWidget> extends IEInnerDSWidgetVi
 		_componentView = componentView;
 		_componentView.registerViewForWidget(model, this);
 		_model = model;
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Build new " + getClass().getName());
-		if (logger.isLoggable(Level.FINE))
+		}
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Add " + getClass().getName() + " to pending views");
+		}
 		model.addObserver(this);
 		updateTooltip();
 		setIsSelected(false);
@@ -127,17 +128,19 @@ public abstract class IEWidgetView<T extends IEWidget> extends IEInnerDSWidgetVi
 	}
 
 	private void updateTooltip() {
-		if (getTooltipFromModel() != null && getTooltipFromModel().trim().length() > 0)
-			if (getTooltipFromModel().length() <= 100)
+		if (getTooltipFromModel() != null && getTooltipFromModel().trim().length() > 0) {
+			if (getTooltipFromModel().length() <= 100) {
 				setToolTipText(getTooltipFromModel());
-			else {
-				if (getTooltipFromModel().indexOf(' ', 100) > -1)
+			} else {
+				if (getTooltipFromModel().indexOf(' ', 100) > -1) {
 					setToolTipText(getTooltipFromModel().substring(0, getTooltipFromModel().indexOf(' ', 100)) + "...");
-				else
+				} else {
 					setToolTipText(getTooltipFromModel().substring(0, 100) + "...");
+				}
 			}
-		else
+		} else {
 			setToolTipText(null);
+		}
 	}
 
 	@Override
@@ -188,12 +191,14 @@ public abstract class IEWidgetView<T extends IEWidget> extends IEInnerDSWidgetVi
 
 	public void delete() {
 		_model.deleteObserver(this);
-		if (getParent() != null)
+		if (getParent() != null) {
 			getParent().remove(this);
+		}
 		Component[] comp = getComponents();
 		for (int i = 0; i < comp.length; i++) {
-			if (comp[i] instanceof IEWidgetView)
+			if (comp[i] instanceof IEWidgetView) {
 				((IEWidgetView) comp[i]).delete();
+			}
 		}
 		_componentView.removeFrowWidgetViews(getModel());
 		removeAll();
@@ -204,8 +209,9 @@ public abstract class IEWidgetView<T extends IEWidget> extends IEInnerDSWidgetVi
 			((JPanel) getParent()).setBorder(BorderFactory.createLineBorder(Color.BLUE, 3));
 		} else if (getParent() != null && getParent() instanceof IETDWidgetView) {
 			setBorder(null);
-		} else
+		} else {
 			setBorder(EMPTY_BORDER_1);
+		}
 	}
 
 	// ==========================================================================
@@ -225,8 +231,9 @@ public abstract class IEWidgetView<T extends IEWidget> extends IEInnerDSWidgetVi
 	@Override
 	public void setIsSelected(boolean b) {
 		_isSelected = b;
-		if (logger.isLoggable(Level.FINEST))
+		if (logger.isLoggable(Level.FINEST)) {
 			logger.finest("setIsSelected=" + b + " dans " + getClass().getName());
+		}
 		repaint();
 	}
 
@@ -236,8 +243,9 @@ public abstract class IEWidgetView<T extends IEWidget> extends IEInnerDSWidgetVi
 	@Override
 	public void setIsFocused(boolean b) {
 		_isFocused = b;
-		if (logger.isLoggable(Level.FINEST))
+		if (logger.isLoggable(Level.FINEST)) {
 			logger.finest("setIsFocused=" + b + " dans " + getClass().getName());
+		}
 		if (b) {
 			setBorder(BorderFactory.createLineBorder(ColorCst.BORDER_COLOR_FOR_FOCUSED_WIDGET));
 		} else {
@@ -320,8 +328,9 @@ public abstract class IEWidgetView<T extends IEWidget> extends IEInnerDSWidgetVi
 	}
 
 	public void paintSelection(Graphics g) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.finer("Drawing selection");
+		}
 		Graphics2D g2 = (Graphics2D) g;
 		DrawUtils.turnOnAntiAlising(g2);
 		DrawUtils.setRenderQuality(g2);
@@ -347,8 +356,9 @@ public abstract class IEWidgetView<T extends IEWidget> extends IEInnerDSWidgetVi
 		Container c = getParent();
 		IESequenceTRWidgetView tr = null;
 		while (c != null) {
-			if (c instanceof IESequenceTRWidgetView)
+			if (c instanceof IESequenceTRWidgetView) {
 				tr = (IESequenceTRWidgetView) c;
+			}
 			c = c.getParent();
 		}
 		if (tr != null) {

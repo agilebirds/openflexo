@@ -81,8 +81,9 @@ public class PrintManager {
 
 	public PageFormat pageSetup() {
 		_pageFormat = _printJob.pageDialog(_pageFormat);
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			debugPageFormat();
+		}
 		return _pageFormat;
 	}
 
@@ -94,8 +95,9 @@ public class PrintManager {
 				+ (_pageFormat.getOrientation() == PageFormat.REVERSE_LANDSCAPE ? "REVERSE_LANDSCAPE" : "") + " ";
 		returned += "Dimensions=(" + _pageFormat.getWidth() + "x" + _pageFormat.getHeight() + ",[" + _pageFormat.getImageableWidth() + "x"
 				+ _pageFormat.getImageableHeight() + "," + _pageFormat.getImageableX() + "," + _pageFormat.getImageableY() + "])";
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine(returned);
+		}
 		return returned;
 	}
 

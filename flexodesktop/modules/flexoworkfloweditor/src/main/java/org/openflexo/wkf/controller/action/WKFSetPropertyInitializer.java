@@ -62,8 +62,9 @@ public class WKFSetPropertyInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<SetPropertyAction>() {
 			@Override
 			public boolean run(ActionEvent e, SetPropertyAction action) {
-				if (action.getFocusedObject() == null)
+				if (action.getFocusedObject() == null) {
 					return false;
+				}
 
 				logger.info("SetPropertyAction in WKF: focusedObject=" + action.getFocusedObject() + " key=" + action.getKey());
 

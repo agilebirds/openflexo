@@ -2,11 +2,10 @@ package org.openflexo.builders;
 
 import java.io.File;
 
+import org.openflexo.GeneralPreferences;
 import org.openflexo.builders.exception.MissingArgumentException;
 import org.openflexo.builders.utils.FlexoBuilderEditor;
 import org.openflexo.builders.utils.FlexoBuilderListener;
-
-import org.openflexo.GeneralPreferences;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.FlexoModelObject;
@@ -124,18 +123,22 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 			reportMainStepCount(steps);
 		}
 
+		@Override
 		public void hideWindow() {
 
 		}
 
+		@Override
 		public void resetSecondaryProgress(int steps) {
 			reportSubStepCount(steps);
 		}
 
+		@Override
 		public void setProgress(String stepName) {
 			reportMainStepMessage(stepName);
 		}
 
+		@Override
 		public void setSecondaryProgress(String stepName) {
 			reportSubStepMessage(stepName);
 		}
@@ -145,10 +148,12 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 	public FlexoBuilderEditor loadProject(File projectDirectory) throws ProjectLoadingCancelledException, ProjectInitializerException {
 		return (FlexoBuilderEditor) FlexoResourceManager.initializeExistingProject(projectDirectory, new FlexoEditorFactory() {
 
+			@Override
 			public FlexoEditor makeFlexoEditor(FlexoProject project) {
 
 				FlexoBuilderEditor builderEditor = new FlexoBuilderEditor(project);
 				builderEditor.setFactory(new FlexoProgressFactory() {
+					@Override
 					public FlexoProgress makeFlexoProgress(String title, int steps) {
 						return new FlexoBuilderProgress(title, steps);
 					}

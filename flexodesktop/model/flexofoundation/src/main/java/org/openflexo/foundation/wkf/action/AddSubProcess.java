@@ -94,8 +94,9 @@ public class AddSubProcess extends FlexoAction<AddSubProcess, FlexoModelObject, 
 	@Override
 	protected void doAction(Object context) throws DuplicateResourceException, InvalidFileNameException {
 		logger.info("Add sub-process");
-		if (getNewProcessName() == null || getNewProcessName().trim().length() == 0)
+		if (getNewProcessName() == null || getNewProcessName().trim().length() == 0) {
 			throw new InvalidFileNameException("");
+		}
 		if (getFocusedObject() != null) {
 			_project = getFocusedObject().getProject();
 			_newProcess = FlexoProcess.createNewProcess(_project.getFlexoWorkflow(), getParentProcess(), getNewProcessName(), false);

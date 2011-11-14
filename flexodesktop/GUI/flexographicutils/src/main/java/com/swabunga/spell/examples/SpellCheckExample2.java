@@ -19,18 +19,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 package com.swabunga.spell.examples;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.util.Iterator;
+import java.util.List;
+
 import com.swabunga.spell.engine.SpellDictionary;
 import com.swabunga.spell.engine.SpellDictionaryHashMap;
 import com.swabunga.spell.event.SpellCheckEvent;
 import com.swabunga.spell.event.SpellCheckListener;
 import com.swabunga.spell.event.SpellChecker;
 import com.swabunga.spell.event.StringWordTokenizer;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * This class shows an example of how to use the spell checking capability.
@@ -47,8 +47,9 @@ public class SpellCheckExample2 implements SpellCheckListener {
 
 			BufferedReader in = new BufferedReader(new FileReader("example2.txt"));
 			File phonetic = null;
-			if (phoneticFileName != null)
+			if (phoneticFileName != null) {
 				phonetic = new File(phoneticFileName);
+			}
 
 			SpellDictionary dictionary = new SpellDictionaryHashMap(new File(dictFile), phonetic);
 			spellCheck = new SpellChecker(dictionary);
@@ -57,8 +58,9 @@ public class SpellCheckExample2 implements SpellCheckListener {
 			while (true) {
 				String line = in.readLine();
 
-				if (line == null || line.length() == -1)
+				if (line == null || line.length() == -1) {
 					break;
+				}
 
 				spellCheck.checkSpelling(new StringWordTokenizer(line));
 			}
@@ -68,6 +70,7 @@ public class SpellCheckExample2 implements SpellCheckListener {
 		}
 	}
 
+	@Override
 	public void spellingError(SpellCheckEvent event) {
 		List suggestions = event.getSuggestions();
 		if (suggestions.size() > 0) {

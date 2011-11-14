@@ -43,8 +43,9 @@ public abstract class FlexoImportedResource<RD extends ImportedResourceData> ext
 	@Override
 	protected void performUpdating(FlexoResourceTree updatedResources) throws FileNotFoundException, ResourceDependancyLoopException,
 			FlexoException {
-		if (!isLoaded())
+		if (!isLoaded()) {
 			importResourceData();
+		}
 		backwardSynchronizeWith(updatedResources);
 	}
 
@@ -63,9 +64,10 @@ public abstract class FlexoImportedResource<RD extends ImportedResourceData> ext
 	public final void backwardSynchronizeWith(FlexoResourceTree updatedResources) throws ResourceDependancyLoopException, FlexoException,
 			FileNotFoundException {
 		if (!updatedResources.isEmpty()) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Resource " + this + " requires backward synchronization for " + updatedResources.getChildNodes().size()
 						+ " resources :");
+			}
 			for (FlexoResourceTree resourceTrees : updatedResources.getChildNodes()) {
 				FlexoResource resource = resourceTrees.getRootNode();
 				resource.update();
@@ -81,8 +83,9 @@ public abstract class FlexoImportedResource<RD extends ImportedResourceData> ext
 	{
 		// Must be called sub sub-classes implementation: must be overriden in subclasses !
 		// At this level, only set last synchronized date
-		if (logger.isLoggable(Level.FINER))
+		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("Backsynchronizing " + this + " with " + aResource);
+		}
 		setLastSynchronizedWithResource(aResource, new Date());
 	}
 
@@ -111,21 +114,25 @@ public abstract class FlexoImportedResource<RD extends ImportedResourceData> ext
 			// the modifications of 'resource' does not affect 'this', therefore we will look at the lastSynchronizationDate
 			Date lastBackSynchronizationDate = getLastSynchronizedWithResource(resource);
 			if (!project.getTimestampsHaveBeenLoaded()) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Time stamps not loaded yet!!! Impossible to say if we have to do something or not");
+				}
 			}
 			if ((lastBackSynchronizationDate == null) || (resource.getLastUpdate().after(lastBackSynchronizationDate))) {
-				if (lastBackSynchronizationDate != null)
-					if (logger.isLoggable(Level.FINER))
+				if (lastBackSynchronizationDate != null) {
+					if (logger.isLoggable(Level.FINER)) {
 						logger.finer("Resource " + this + " is to be backward synchronized for " + resource + " because "
 								+ (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(resource.getLastUpdate()) + " is more recent than "
 								+ (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(lastBackSynchronizationDate));
+					}
+				}
 				return true;
 			} else {
-				if (logger.isLoggable(Level.FINER))
+				if (logger.isLoggable(Level.FINER)) {
 					logger.finer("NOT: Resource " + this + " must NOT be BS with " + resource + " because "
 							+ (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(resource.getLastUpdate()) + " is more anterior than "
 							+ (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(lastBackSynchronizationDate));
+				}
 			}
 		}
 		return false;
@@ -159,12 +166,14 @@ public abstract class FlexoImportedResource<RD extends ImportedResourceData> ext
 				_resourceData = importResourceData();
 			} catch (LoadResourceException e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not load resource data for resource " + getResourceIdentifier());
+				}
 				e.printStackTrace();
 			} catch (ResourceDependancyLoopException e) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.log(Level.SEVERE, "Loop in dependant resources of " + this + "!", e);
+				}
 			}
 		}
 		return _resourceData;

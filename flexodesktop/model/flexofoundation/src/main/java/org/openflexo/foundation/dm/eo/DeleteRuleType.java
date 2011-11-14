@@ -24,13 +24,12 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.kvc.ChoiceList;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
-
-import org.openflexo.foundation.FlexoObject;
 
 /**
  * Represents the delete rule type for a relationship
@@ -147,8 +146,9 @@ public abstract class DeleteRuleType extends FlexoObject implements StringConver
 	}
 
 	public static DeleteRuleType get(String deleteRuleName) {
-		if (deleteRuleName == null)
+		if (deleteRuleName == null) {
 			return null;
+		}
 		for (Enumeration e = NULLIFY.getAvailableValues().elements(); e.hasMoreElements();) {
 			DeleteRuleType temp = (DeleteRuleType) e.nextElement();
 			if (temp.getName().equals(deleteRuleName)) {
@@ -156,14 +156,16 @@ public abstract class DeleteRuleType extends FlexoObject implements StringConver
 			}
 		}
 
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Could not find DeleteRule named " + deleteRuleName);
+		}
 		return null;
 	}
 
 	public static DeleteRuleType getDeleteRule(String deleteRuleEOEcode) {
-		if (deleteRuleEOEcode == null)
+		if (deleteRuleEOEcode == null) {
 			return null;
+		}
 		for (Enumeration e = NULLIFY.getAvailableValues().elements(); e.hasMoreElements();) {
 			DeleteRuleType temp = (DeleteRuleType) e.nextElement();
 			if (temp.getEOCode().equals(deleteRuleEOEcode)) {
@@ -171,8 +173,9 @@ public abstract class DeleteRuleType extends FlexoObject implements StringConver
 			}
 		}
 
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Could not find DeleteRule coded as " + deleteRuleEOEcode);
+		}
 		return null;
 	}
 

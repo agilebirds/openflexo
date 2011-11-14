@@ -34,8 +34,8 @@ import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.fib.controller.FIBController.Status;
+import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.menu.FileMenu;
 import org.openflexo.view.menu.FlexoMenuItem;
@@ -85,12 +85,14 @@ public class CEDFileMenu extends FileMenu {
 		FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.REVIEW_UNSAVED_VPM_DIALOG_FIB, getCEDController(), null, true);
 		if (dialog.getStatus() == Status.VALIDATED) {
 			getCEDController().saveModified();
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Exiting FLEXO Application... DONE");
+			}
 			System.exit(0);
 		} else if (dialog.getStatus() == Status.ABORTED) {
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Exiting FLEXO Application... DONE");
+			}
 			System.exit(0);
 		}
 	}

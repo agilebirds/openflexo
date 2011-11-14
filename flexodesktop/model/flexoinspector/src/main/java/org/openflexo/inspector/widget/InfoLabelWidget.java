@@ -116,13 +116,15 @@ public class InfoLabelWidget extends DenaliWidget {
 	public JLabel getLabel() {
 		if (_label == null) {
 			_label = new JLabel("", SwingConstants.CENTER);
-			if (_propertyModel.label != null && _propertyModel.label.trim().length() > 0)
+			if (_propertyModel.label != null && _propertyModel.label.trim().length() > 0) {
 				_label.setText(FlexoLocalization.localizedForKey(_propertyModel.label, _label));
+			}
 			// _label.setBackground(InspectorCst.BACK_COLOR);
 			_label.setFont(DEFAULT_LABEL_FONT);
 			_label.setBorder(BorderFactory.createEmptyBorder(20, 50, 10, 50));
-			if (_propertyModel.help != null && _propertyModel.help.trim().length() > 0)
+			if (_propertyModel.help != null && _propertyModel.help.trim().length() > 0) {
 				_label.setToolTipText(_propertyModel.help);
+			}
 		}
 		return _label;
 	}

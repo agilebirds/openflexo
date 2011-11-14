@@ -28,7 +28,6 @@ import org.openflexo.doceditor.menu.DEMenuBar;
 import org.openflexo.doceditor.view.DEFrame;
 import org.openflexo.doceditor.view.DEMainPane;
 import org.openflexo.doceditor.view.listener.DEKeyEventListener;
-
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
@@ -227,12 +226,14 @@ public class DEController extends FlexoController implements FlexoObserver, Sele
 				boolean synched = false;
 				for (int i = 0; i < cgFile.getGeneratedCode().getGeneratedRepositories().size() && !synched; i++) {
 					DGRepository rep = (DGRepository) cgFile.getGeneratedCode().getGeneratedRepositories().get(i);
-					if (rep.getGenerationStatus() != GenerationStatus.CodeGenerationNotSynchronized)
+					if (rep.getGenerationStatus() != GenerationStatus.CodeGenerationNotSynchronized) {
 						synched = true;
+					}
 				}
-				if (synched)
+				if (synched) {
 					return cgFile.getRepository().getName() + " " + cgFile.getResource().getFile().getName()
 							+ (cgFile.isEdited() ? "[" + FlexoLocalization.localizedForKey("edited") + "]" : "");
+				}
 			}
 			return cgFile.getResource().getFile().getName()
 					+ (cgFile.isEdited() ? "[" + FlexoLocalization.localizedForKey("edited") + "]" : "");

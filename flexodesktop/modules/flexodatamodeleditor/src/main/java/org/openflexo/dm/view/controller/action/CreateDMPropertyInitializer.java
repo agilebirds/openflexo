@@ -68,30 +68,34 @@ public class CreateDMPropertyInitializer extends ActionInitializer {
 				if (action.getEntity() instanceof DMEOEntity) {
 					if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == ((DMEOEntity) action.getEntity())
 							.getDMEOModel()) {
-						if (logger.isLoggable(Level.FINE))
+						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("Finalizer for CreateDMProperty in DMEOModelView");
+						}
 						DMEOModelView dmEOModelView = (DMEOModelView) getControllerActionInitializer().getDMController()
 								.getCurrentEditedObjectView();
 						dmEOModelView.getEoEntityTable().selectObject(action.getEntity());
 						dmEOModelView.getPropertyTable().selectObject(action.getNewProperty());
 					} else if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getEntity()) {
-						if (logger.isLoggable(Level.FINE))
+						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("Finalizer for CreateDMProperty in DMEOEntityView");
+						}
 						DMEOEntityView eoEntityView = (DMEOEntityView) getControllerActionInitializer().getDMController()
 								.getCurrentEditedObjectView();
 						eoEntityView.getPropertyTable().selectObject(action.getNewProperty());
 					}
 				} else {
 					if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getEntity().getPackage()) {
-						if (logger.isLoggable(Level.FINE))
+						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("Finalizer for CreateDMProperty in DMPackageView");
+						}
 						DMPackageView packageView = (DMPackageView) getControllerActionInitializer().getDMController()
 								.getCurrentEditedObjectView();
 						packageView.getEntityTable().selectObject(action.getEntity());
 						packageView.getPropertyTable().selectObject(action.getNewProperty());
 					} else if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getEntity()) {
-						if (logger.isLoggable(Level.FINE))
+						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("Finalizer for CreateDMProperty in DMEntityView");
+						}
 						DMEntityView entityView = (DMEntityView) getControllerActionInitializer().getDMController()
 								.getCurrentEditedObjectView();
 						entityView.getPropertyTable().selectObject(action.getNewProperty());

@@ -19,9 +19,9 @@
  */
 package org.openflexo.fge.geomedit.construction;
 
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPolylin;
 import org.openflexo.fge.geom.FGERectPolylin;
-import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.area.FGEArea;
 
 public class RectPolylinWithStartAndEndAreaConstruction extends PolylinConstruction {
@@ -49,10 +49,12 @@ public class RectPolylinWithStartAndEndAreaConstruction extends PolylinConstruct
 	protected FGEPolylin computeData() {
 		FGEArea startArea = startAreaConstruction.getData();
 		FGEArea endArea = endAreaConstruction.getData();
-		if (startOrientation == null)
+		if (startOrientation == null) {
 			startOrientation = SimplifiedCardinalDirection.NORTH;
-		if (endOrientation == null)
+		}
+		if (endOrientation == null) {
 			endOrientation = SimplifiedCardinalDirection.SOUTH;
+		}
 		return new FGERectPolylin(startArea, startOrientation, endArea, endOrientation, false, 10, 10);
 	}
 

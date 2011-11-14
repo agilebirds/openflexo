@@ -41,24 +41,23 @@ import org.openflexo.fge.controller.CustomDragControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.fge.cp.ControlArea;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGESegment;
-import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEHalfLine;
 import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.graphics.BackgroundStyle;
+import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.DecorationPainter;
 import org.openflexo.fge.graphics.FGEGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.TextStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.ForegroundStyle.CapStyle;
 import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 import org.openflexo.fge.graphics.ForegroundStyle.JoinStyle;
+import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.ShapeView;
-
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.wkf.action.OpenPortRegistery;
@@ -235,8 +234,9 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 					getDrawing().updateGraphicalObjectsHierarchy();
 					for (GraphicalRepresentation<?> gr : getDrawing().getDrawingGraphicalRepresentation()
 							.getContainedGraphicalRepresentations()) {
-						if (gr instanceof ShapeGraphicalRepresentation<?>)
+						if (gr instanceof ShapeGraphicalRepresentation<?>) {
 							((ShapeGraphicalRepresentation<?>) gr).notifyObjectHasMoved();
+						}
 					}
 				} else if (((WKFAttributeDataModification) dataModification).getAttributeName().equals(
 						getDrawing().SWIMMING_LANE_HEIGHT_KEY())) {
@@ -363,8 +363,9 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 	@Override
 	public void notifyObjectHasResized() {
 		for (GraphicalRepresentation gr : getContainedGraphicalRepresentations()) {
-			if (gr instanceof AbstractNodeGR)
+			if (gr instanceof AbstractNodeGR) {
 				((AbstractNodeGR) gr).resetLocationConstrainedArea();
+			}
 		}
 		super.notifyObjectHasResized();
 		updateControlArea();

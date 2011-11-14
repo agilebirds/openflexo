@@ -146,38 +146,48 @@ public class JFontChooser extends JPanel {
 	}
 
 	public static String fontDescription(Font aFont) {
-		if (aFont == null)
+		if (aFont == null) {
 			return "null";
+		}
 		return aFont.getFontName() + ", " + localizedFontStyle(aFont) + ", " + aFont.getSize() + "pt";
 	}
 
 	public static String localizedFontStyle(Font aFont) {
-		if (aFont == null)
+		if (aFont == null) {
 			return "null";
+		}
 		return FlexoLocalization.localizedForKey(fontStyle(aFont));
 	}
 
 	private static String fontStyle(Font aFont) {
-		if (aFont == null)
+		if (aFont == null) {
 			return "null";
-		if (aFont.isBold() && aFont.isItalic())
+		}
+		if (aFont.isBold() && aFont.isItalic()) {
 			return BOLD_ITALIC;
-		if (aFont.isBold())
+		}
+		if (aFont.isBold()) {
 			return BOLD;
-		if (aFont.isItalic())
+		}
+		if (aFont.isItalic()) {
 			return ITALIC;
+		}
 		return PLAIN;
 	}
 
 	private static int fontStyle(String style) {
-		if (PLAIN.equals(style))
+		if (PLAIN.equals(style)) {
 			return Font.PLAIN;
-		if (ITALIC.equals(style))
+		}
+		if (ITALIC.equals(style)) {
 			return Font.ITALIC;
-		if (BOLD.equals(style))
+		}
+		if (BOLD.equals(style)) {
 			return Font.BOLD;
-		if (BOLD_ITALIC.equals(style))
+		}
+		if (BOLD_ITALIC.equals(style)) {
 			return Font.ITALIC | Font.BOLD;
+		}
 		return Font.PLAIN;
 	}
 

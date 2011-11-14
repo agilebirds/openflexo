@@ -90,8 +90,9 @@ public class TabComponentAPIFileResource extends ComponentAPIFileResource<TabCom
 							}
 						}
 					}
-					if (iCanBeOptimistic)
+					if (iCanBeOptimistic) {
 						return false;
+					}
 				}
 			}
 		}

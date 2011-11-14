@@ -57,16 +57,18 @@ public class CustomCGTemplateRepository extends CGTemplateRepository {
 
 	@Override
 	public void delete() {
-		if (_resource != null)
+		if (_resource != null) {
 			_resource.delete();
+		}
 		super.delete();
 		getTemplates().update();
 	}
 
 	@Override
 	public String getName() {
-		if (getResource() != null)
+		if (getResource() != null) {
 			return getResource().getName();
+		}
 		return null;
 	}
 
@@ -96,10 +98,11 @@ public class CustomCGTemplateRepository extends CGTemplateRepository {
 			Enumeration<TargetSpecificCGTemplateSet> en = getTargetSpecificTemplates();
 			while (repositoryType == null && en.hasMoreElements()) {
 				TargetSpecificCGTemplateSet set = en.nextElement();
-				if (set.getTargetType() instanceof CodeType)
+				if (set.getTargetType() instanceof CodeType) {
 					repositoryType = TemplateRepositoryType.Code;
-				else if (set.getTargetType() instanceof DocType)
+				} else if (set.getTargetType() instanceof DocType) {
 					repositoryType = TemplateRepositoryType.Documentation;
+				}
 			}
 			if (repositoryType == null) {
 				Enumeration<CGTemplate> en1 = getAllTemplateFiles().elements();
@@ -107,18 +110,21 @@ public class CustomCGTemplateRepository extends CGTemplateRepository {
 					CGTemplate file = en1.nextElement();
 					CGTemplate codeTemplate = getProject().getGeneratedCode().getTemplates().getApplicationRepository()
 							.getTemplateWithRelativePath(file.getRelativePath());
-					if (codeTemplate == null)
+					if (codeTemplate == null) {
 						codeTemplate = getProject().getGeneratedCode().getTemplates().getApplicationRepository()
 								.getTemplateWithRelativePath(file.getTemplateName());
+					}
 					CGTemplate docTemplate = getProject().getGeneratedDoc().getTemplates().getApplicationRepository()
 							.getTemplateWithRelativePath(file.getRelativePath());
-					if (docTemplate == null)
+					if (docTemplate == null) {
 						docTemplate = getProject().getGeneratedDoc().getTemplates().getApplicationRepository()
 								.getTemplateWithRelativePath(file.getTemplateName());
-					if (codeTemplate == null && docTemplate != null)
+					}
+					if (codeTemplate == null && docTemplate != null) {
 						repositoryType = TemplateRepositoryType.Documentation;
-					else if (codeTemplate != null && docTemplate == null)
+					} else if (codeTemplate != null && docTemplate == null) {
 						repositoryType = TemplateRepositoryType.Code;
+					}
 				}
 			}
 		}

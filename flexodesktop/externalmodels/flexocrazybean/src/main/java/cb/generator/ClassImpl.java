@@ -113,10 +113,11 @@ public class ClassImpl extends NodeImpl implements Class {
 
 	@Override
 	public String getQualifiedName() {
-		if (pack != null && !"".equals(pack))
+		if (pack != null && !"".equals(pack)) {
 			return pack + "." + name;
-		else
+		} else {
 			return name;
+		}
 	}
 
 	@Override
@@ -143,8 +144,9 @@ public class ClassImpl extends NodeImpl implements Class {
 	}
 
 	protected static void print(PrintWriter stream, String pre, String o, String post) {
-		if ((o != null) && !"".equals(o))
+		if ((o != null) && !"".equals(o)) {
 			stream.print(pre + o + post);
+		}
 	}
 
 	/**
@@ -154,8 +156,9 @@ public class ClassImpl extends NodeImpl implements Class {
 	public void dump(PrintWriter stream) {
 		print(stream, "package ", pack, ";\n");
 
-		for (Iterator i = prefix.iterator(); i.hasNext();)
+		for (Iterator i = prefix.iterator(); i.hasNext();) {
 			stream.println(i.next());
+		}
 
 		stream.println("\n/** Created with Generator/" + "<a href=\"http://crazybeans.sourceforge.net/\">" + "\n * CrazyBeans</a> "
 				+ new Date() + "\n *");
@@ -176,10 +179,11 @@ public class ClassImpl extends NodeImpl implements Class {
 		stream.println(" * @cbversion " + cb.util.Constants.VERSION + "\n */");
 		print(stream, "", getAccess(), " ");
 
-		if (isInterface())
+		if (isInterface()) {
 			stream.print("interface " + getName() + " ");
-		else
+		} else {
 			stream.print("class " + getName() + " ");
+		}
 
 		if (!super_classes.isEmpty()) {
 			stream.print("extends ");
@@ -187,8 +191,9 @@ public class ClassImpl extends NodeImpl implements Class {
 			for (Iterator i = super_classes.iterator(); i.hasNext();) {
 				stream.print(i.next());
 
-				if (i.hasNext())
+				if (i.hasNext()) {
 					stream.print(", ");
+				}
 			}
 
 			stream.print(" ");
@@ -199,8 +204,9 @@ public class ClassImpl extends NodeImpl implements Class {
 
 			for (Iterator i = interfaces.iterator(); i.hasNext();) {
 				stream.print(i.next());
-				if (i.hasNext())
+				if (i.hasNext()) {
 					stream.print(", ");
+				}
 			}
 
 			stream.print(" ");
@@ -208,16 +214,18 @@ public class ClassImpl extends NodeImpl implements Class {
 
 		stream.println("{");
 
-		for (Iterator i = getFields().iterator(); i.hasNext();)
+		for (Iterator i = getFields().iterator(); i.hasNext();) {
 			((Field) i.next()).dump(stream);
+		}
 
 		stream.println();
 
 		for (Iterator i = getMethods().iterator(); i.hasNext();) {
 			((Method) i.next()).dump(stream);
 
-			if (i.hasNext())
+			if (i.hasNext()) {
 				stream.println();
+			}
 		}
 
 		stream.println("}");
@@ -229,7 +237,8 @@ public class ClassImpl extends NodeImpl implements Class {
 			Class c = (Class) o;
 
 			return getQualifiedName().equals(c.getQualifiedName());
-		} else
+		} else {
 			return false;
+		}
 	}
 }

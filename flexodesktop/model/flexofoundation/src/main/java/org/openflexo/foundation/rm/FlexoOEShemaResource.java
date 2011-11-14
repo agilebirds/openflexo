@@ -108,14 +108,16 @@ public class FlexoOEShemaResource extends FlexoXMLStorageResource<View> {
 	public View performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws LoadXMLResourceException,
 			FlexoFileNotFoundException, ProjectLoadingCancelledException, MalformedXMLException {
 		View shema;
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Loading shema " + getName());
+		}
 		try {
 			shema = super.performLoadResourceData(progress, loadingHandler);
 		} catch (FlexoFileNotFoundException e) {
 			// OK, i create the resource by myself !
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Creating new component " + getName());
+			}
 			shema = createNewShema();
 			try {
 				shema.setFlexoResource(this);
@@ -128,8 +130,9 @@ public class FlexoOEShemaResource extends FlexoXMLStorageResource<View> {
 		if (shema != null) {
 			shema.setProject(getProject());
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Notify loading for shema " + getShemaDefinition().getName());
+		}
 		getShemaDefinition().notifyShemaHasBeenLoaded();
 
 		logger.info("OK, on a charge le shema");
@@ -173,9 +176,11 @@ public class FlexoOEShemaResource extends FlexoXMLStorageResource<View> {
 	@Override
 	protected boolean repairDuplicateSerializationIdentifier() {
 		ValidationReport report = getProject().validate();
-		for (ValidationIssue issue : report.getValidationIssues())
-			if (issue instanceof DuplicateObjectIDIssue)
+		for (ValidationIssue issue : report.getValidationIssues()) {
+			if (issue instanceof DuplicateObjectIDIssue) {
 				return true;
+			}
+		}
 		return false;
 	}
 

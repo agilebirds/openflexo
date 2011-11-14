@@ -22,8 +22,8 @@ package org.openflexo.components.widget;
 import java.awt.Dimension;
 
 import org.openflexo.components.browser.BrowserElementType;
-import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
+import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.ws.FlexoWSLibrary;
@@ -135,12 +135,13 @@ public class WSServiceSelector extends AbstractBrowserSelector<WSService> {
 
 		@Override
 		public FlexoModelObject getDefaultRootObject() {
-			if (wsServiceType == INTERNAL_WSService)
+			if (wsServiceType == INTERNAL_WSService) {
 				return getLibrary().getInternalWSFolder();
-			else if (wsServiceType == EXTERNAL_WSService)
+			} else if (wsServiceType == EXTERNAL_WSService) {
 				return getLibrary().getExternalWSFolder();
-			else
+			} else {
 				return getLibrary();
+			}
 		}
 	}
 

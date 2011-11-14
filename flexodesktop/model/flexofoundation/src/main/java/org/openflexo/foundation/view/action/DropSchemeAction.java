@@ -149,10 +149,12 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 
 	@Override
 	protected View retrieveOEShema() {
-		if (getParent() != null)
+		if (getParent() != null) {
 			return getParent().getShema();
-		if (getFocusedObject() instanceof ViewObject)
+		}
+		if (getFocusedObject() instanceof ViewObject) {
 			return ((ViewObject) getFocusedObject()).getShema();
+		}
 		return null;
 	}
 
@@ -165,8 +167,9 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 	@Override
 	public Object getValue(BindingVariable variable) {
 		if (variable instanceof EditionPatternPathElement) {
-			if (variable.getVariableName().equals(EditionScheme.TARGET) && _dropScheme.getTargetEditionPattern() != null)
+			if (variable.getVariableName().equals(EditionScheme.TARGET) && _dropScheme.getTargetEditionPattern() != null) {
 				return ((ViewShape) getParent()).getEditionPatternInstance();
+			}
 			return parameterValues;
 		}
 		return super.getValue(variable);

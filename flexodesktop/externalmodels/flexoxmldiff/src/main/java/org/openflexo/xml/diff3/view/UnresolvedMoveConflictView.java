@@ -59,10 +59,11 @@ public class UnresolvedMoveConflictView extends UnresolvedConflictView {
 		} else {
 			_choicePanel.setBackground(findBackgroundColor());
 			_choicePanel.add(new JLabel("You choose :"));
-			if (getModel().getSolveAction().equals(getModel().getKeepYourChangeAction()))
+			if (getModel().getSolveAction().equals(getModel().getKeepYourChangeAction())) {
 				_choicePanel.add(new JLabel("Move to " + getModel().getParent1Name()));
-			else
+			} else {
 				_choicePanel.add(new JLabel("Move to " + getModel().getParent2Name()));
+			}
 		}
 		_choicePanel.validate();
 	}

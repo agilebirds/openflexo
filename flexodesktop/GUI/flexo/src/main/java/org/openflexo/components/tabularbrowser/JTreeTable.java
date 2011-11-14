@@ -83,13 +83,13 @@ import javax.swing.tree.TreePath;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.ExpansionSynchronizedElement;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.components.browser.ProjectBrowserListener;
 import org.openflexo.components.browser.ProjectBrowser.DisableExpandingSynchronizationEvent;
 import org.openflexo.components.browser.ProjectBrowser.EnableExpandingSynchronizationEvent;
 import org.openflexo.components.browser.ProjectBrowser.ExpansionNotificationEvent;
 import org.openflexo.components.browser.ProjectBrowser.ObjectAddedToSelectionEvent;
 import org.openflexo.components.browser.ProjectBrowser.ObjectRemovedFromSelectionEvent;
 import org.openflexo.components.browser.ProjectBrowser.SelectionClearedEvent;
+import org.openflexo.components.browser.ProjectBrowserListener;
 import org.openflexo.components.tabular.model.HeightAdjustableColumn;
 import org.openflexo.components.tabular.model.RowHeightListener;
 import org.openflexo.foundation.FlexoModelObject;
@@ -199,8 +199,9 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 	@Override
 	public void setRowHeight(int rowHeight) {
 		super.setRowHeight(rowHeight);
-		if (tree != null)
+		if (tree != null) {
 			tree.setRowHeight(rowHeight);
+		}
 	}
 
 	/* Workaround for BasicTableUI anomaly. Make sure the UI never tries to 
@@ -235,8 +236,9 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 
 	public FlexoModelObject getObjectAt(int row) {
 		BrowserElement element = getElementAt(row);
-		if (element != null)
+		if (element != null) {
 			return element.getObject();
+		}
 		return null;
 	}
 
@@ -267,12 +269,14 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 
 	@Override
 	public void fireObjectSelected(FlexoModelObject object) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("JTreeTable fireObjectSelected() with " + object);
+		}
 
 		TreePath[] paths = getProjectBrowser().treePathForObject(object);
-		if (paths == null)
+		if (paths == null) {
 			return;
+		}
 		for (int i = 0; i < paths.length; i++) {
 			TreePath path = paths[i];
 			tree.makeVisible(path);
@@ -285,12 +289,14 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 
 	@Override
 	public void fireObjectDeselected(FlexoModelObject object) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("JTreeTable fireObjectDeselected() with " + object);
+		}
 
 		TreePath[] paths = getProjectBrowser().treePathForObject(object);
-		if (paths == null)
+		if (paths == null) {
 			return;
+		}
 		for (int i = 0; i < paths.length; i++) {
 			TreePath path = paths[i];
 			if (tree.isVisible(path)) {
@@ -327,8 +333,9 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 		super.valueChanged(e);
 
 		// Ignore extra messages.
-		if (e.getValueIsAdjusting())
+		if (e.getValueIsAdjusting()) {
 			return;
+		}
 
 		_selectedObjectsNeedsRecomputing = true;
 	}
@@ -336,8 +343,9 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 	@Override
 	public void notifyRowHeightChanged(int row, int newRowHeight) {
 		if (newRowHeight > 0) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("notifyRowHeightChanged row=" + row + " new height=" + newRowHeight);
+			}
 			setRowHeight(row, newRowHeight);
 			tree.setRowHeight(row, newRowHeight);
 		}
@@ -355,10 +363,12 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 	public void objectAddedToSelection(ObjectAddedToSelectionEvent event) {
 		// logger.info("**** objectAddedToSelection() with "+event);
 		TreePath[] paths = _treeTableModel.treePathForObject(event.getAddedObject());
-		if (paths == null)
+		if (paths == null) {
 			return;
-		if (logger.isLoggable(Level.FINE))
+		}
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("BrowserView.objectAddedToSelection() " + event.getAddedObject() + " paths=" + paths);
+		}
 		superviseExpansion = true;
 		expansionSupervisedElements = new Vector();
 		for (int i = 0; i < paths.length; i++) {
@@ -368,8 +378,9 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 		tree.removeTreeSelectionListener(this);
 		tree.addSelectionPaths(paths);
 		tree.addTreeSelectionListener(this);
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Added " + event.getAddedObject());
+		}
 		superviseExpansion = false;
 		// selectedElementsNeedRecomputing = true;
 		/*if (_treeTableModel.handlesControlPanel()) {
@@ -382,15 +393,18 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 		// logger.info("**** objectRemovedFromSelection() with "+event);
 		if (event.getRemovedObject() != null) {
 			TreePath[] paths = _treeTableModel.treePathForObject(event.getRemovedObject());
-			if (paths == null)
+			if (paths == null) {
 				return;
-			if (logger.isLoggable(Level.FINE))
+			}
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("BrowserView.objectRemovedFromSelection() " + event.getRemovedObject() + " paths=" + paths);
+			}
 			tree.removeTreeSelectionListener(this);
 			tree.removeSelectionPaths(paths);
 			tree.addTreeSelectionListener(this);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Removed " + event.getRemovedObject());
+			}
 		}
 	}
 
@@ -421,16 +435,18 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 			TreePath path = (TreePath) e.nextElement();
 			if (tree.isCollapsed(path)) {
 				tree.expandPath(path);
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Expand " + path);
+				}
 			}
 		}
 		for (Enumeration e = event.pathsToCollabse().elements(); e.hasMoreElements();) {
 			TreePath path = (TreePath) e.nextElement();
 			if (tree.isExpanded(path)) {
 				tree.collapsePath(path);
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Collabse " + path);
+				}
 			}
 		}
 		tree.addTreeExpansionListener(this);
@@ -440,16 +456,18 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 	@Override
 	public void enableExpandingSynchronization(EnableExpandingSynchronizationEvent event) {
 		// logger.info("**** enableExpandingSynchronization() with "+event);
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("enableExpandingSynchronization()");
+		}
 		tree.addTreeExpansionListener(this);
 	}
 
 	@Override
 	public void disableExpandingSynchronization(DisableExpandingSynchronizationEvent event) {
 		// logger.info("**** disableExpandingSynchronization() with "+event);
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("disableExpandingSynchronization()");
+		}
 		tree.removeTreeExpansionListener(this);
 	}
 
@@ -462,8 +480,9 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
 		// logger.info("**** valueChanged() with "+e);
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("valueChanged() " + e);
+		}
 		// selectedElementsNeedRecomputing = true;
 		if (_treeTableModel.getSelectionManager() != null) {
 			_treeTableModel.deleteBrowserListener(this);
@@ -471,13 +490,15 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 			for (int i = 0; i < selectionChanges.length; i++) {
 				BrowserElement element = (BrowserElement) selectionChanges[i].getLastPathComponent();
 				if (e.isAddedPath(selectionChanges[i])) {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("valueChanged() for ADDITION " + element.getSelectableObject());
+					}
 					_treeTableModel.getSelectionManager().addToSelected(element.getSelectableObject());
 					// _browser.addToSelected(element.getSelectableObject());
 				} else {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("valueChanged() for REMOVING " + element.getSelectableObject());
+					}
 					_treeTableModel.getSelectionManager().removeFromSelected(element.getSelectableObject());
 					// _browser.removeFromSelected(element.getSelectableObject());
 				}
@@ -485,12 +506,15 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 			_treeTableModel.addBrowserListener(this);
 			_treeTableModel.getSelectionManager().updateSelectionForMaster(_treeTableModel);
 			if (logger.isLoggable(Level.FINE)) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine(_treeTableModel.getSelectionManager().toString());
+				}
 			}
-			if (_treeTableModel.getSelectionManager().getContextualMenuManager() != null)
-				if (_treeTableModel.getSelectionManager().getContextualMenuManager().isPopupMenuDisplayed())
+			if (_treeTableModel.getSelectionManager().getContextualMenuManager() != null) {
+				if (_treeTableModel.getSelectionManager().getContextualMenuManager().isPopupMenuDisplayed()) {
 					_treeTableModel.getSelectionManager().getContextualMenuManager().hidePopupMenu();
+				}
+			}
 		}
 		/*if (_treeTableModel.handlesControlPanel()) {
 		    controlPanel.handleSelectionChanged();
@@ -507,8 +531,9 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 	public void treeExpanded(TreeExpansionEvent event) {
 		// logger.info("**** treeExpanded() with "+event);
 		BrowserElement element = (BrowserElement) event.getPath().getLastPathComponent();
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Tree may expand for " + element);
+		}
 
 		// Lets look at the expansion supervising
 
@@ -548,8 +573,9 @@ public class JTreeTable extends JTable implements SelectionListener, RowHeightLi
 	public void treeCollapsed(TreeExpansionEvent event) {
 		// logger.info("**** treeCollapsed() with "+event);
 		BrowserElement element = (BrowserElement) event.getPath().getLastPathComponent();
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Tree collabsed for " + element);
+		}
 		if (_treeTableModel.isExpansionSynchronizedElement(element)) {
 			((ExpansionSynchronizedElement) element).collapse();
 		}

@@ -23,12 +23,10 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.apache.cayenne.access.SQLGenerator;
-
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.cg.CGRepository;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
-import org.openflexo.generator.MetaGenerator;
 import org.openflexo.generator.utils.AntUserFrameworks;
 import org.openflexo.generator.utils.ApplicationConfGenerator;
 import org.openflexo.generator.utils.ApplicationConfProdGenerator;
@@ -111,8 +109,9 @@ public class UtilsGenerator extends MetaGenerator<FlexoModelObject, CGRepository
 		woDirectActionGenerator = new WODirectActionGenerator(projectGenerator);
 		woMainGenerator = new WOMainGenerator(projectGenerator);
 		if (projectGenerator != null && projectGenerator.getTarget() == CodeType.PROTOTYPE
-				&& !projectGenerator.getRepository().includeReader())
+				&& !projectGenerator.getRepository().includeReader()) {
 			helpPopupGenerator = new HelpPopupGenerator(projectGenerator);
+		}
 		localizedStringGenerator = new LocalizedStringGenerator(projectGenerator);
 		woSessionGenerator = new WOSessionGenerator(projectGenerator);
 		userServiceGenerator = new UserServiceGenerator(projectGenerator);
@@ -143,8 +142,9 @@ public class UtilsGenerator extends MetaGenerator<FlexoModelObject, CGRepository
 		woDirectActionGenerator.buildResourcesAndSetGenerators(repository, resources); // A voir
 		woMainGenerator.buildResourcesAndSetGenerators(repository, resources); // OK
 		if (projectGenerator != null && projectGenerator.getTarget() == CodeType.PROTOTYPE
-				&& !projectGenerator.getRepository().includeReader() && helpPopupGenerator != null)
+				&& !projectGenerator.getRepository().includeReader() && helpPopupGenerator != null) {
 			helpPopupGenerator.buildResourcesAndSetGenerators(repository, resources); // OK
+		}
 		localizedStringGenerator.buildResourcesAndSetGenerators(repository, resources); // OK
 		woSessionGenerator.buildResourcesAndSetGenerators(repository, resources); // A voir
 		userServiceGenerator.buildResourcesAndSetGenerators(repository, resources); // A voir
@@ -152,11 +152,13 @@ public class UtilsGenerator extends MetaGenerator<FlexoModelObject, CGRepository
 		antUserFrameworksGenerator.buildResourcesAndSetGenerators(repository, resources); // A voir???
 		buildPropertiesGenerator.buildResourcesAndSetGenerators(repository, resources);
 		if (projectGenerator.getTarget() != CodeType.PROTOTYPE) {
-			if (sqlGenerator == null)
+			if (sqlGenerator == null) {
 				sqlGenerator = new SQLGenerator((ProjectGenerator) projectGenerator, false);
+			}
 			sqlGenerator.buildResourcesAndSetGenerators(repository, resources); // A voir
-			if (sqlGenerator2 == null)
+			if (sqlGenerator2 == null) {
 				sqlGenerator2 = new SQLGenerator((ProjectGenerator) projectGenerator, true);
+			}
 			sqlGenerator2.buildResourcesAndSetGenerators(repository, resources); // A voir
 		}
 	}

@@ -71,6 +71,7 @@ public abstract class AbstractWordTokenizer implements WordTokenizer {
 	 * 
 	 * @return number of words so far iterated.
 	 */
+	@Override
 	public int getCurrentWordCount() {
 
 		return wordCount;
@@ -83,6 +84,7 @@ public abstract class AbstractWordTokenizer implements WordTokenizer {
 	 * @throws WordNotFoundException
 	 *             current word has not yet been set.
 	 */
+	@Override
 	public int getCurrentWordEnd() {
 
 		if (currentWord == null) {
@@ -99,6 +101,7 @@ public abstract class AbstractWordTokenizer implements WordTokenizer {
 	 * @throws WordNotFoundException
 	 *             current word has not yet been set.
 	 */
+	@Override
 	public int getCurrentWordPosition() {
 
 		if (currentWord == null) {
@@ -113,6 +116,7 @@ public abstract class AbstractWordTokenizer implements WordTokenizer {
 	 * 
 	 * @return true if there are further words in the text.
 	 */
+	@Override
 	public boolean hasMoreWords() {
 
 		return finder.hasNext();
@@ -125,6 +129,7 @@ public abstract class AbstractWordTokenizer implements WordTokenizer {
 	 * @throws WordNotFoundException
 	 *             search string contains no more words.
 	 */
+	@Override
 	public String nextWord() {
 		currentWord = finder.next();
 
@@ -139,6 +144,7 @@ public abstract class AbstractWordTokenizer implements WordTokenizer {
 	 * @throws WordNotFoundException
 	 *             current word has not yet been set.
 	 */
+	@Override
 	public abstract void replaceWord(String newWord);
 
 	/**
@@ -146,6 +152,7 @@ public abstract class AbstractWordTokenizer implements WordTokenizer {
 	 * 
 	 * @return the text being tokenized.
 	 */
+	@Override
 	public String getContext() {
 
 		return finder.toString();
@@ -158,6 +165,7 @@ public abstract class AbstractWordTokenizer implements WordTokenizer {
 	 * @throws WordNotFoundException
 	 *             current word has not yet been set.
 	 */
+	@Override
 	public boolean isNewSentence() {
 
 		return finder.startsSentence();

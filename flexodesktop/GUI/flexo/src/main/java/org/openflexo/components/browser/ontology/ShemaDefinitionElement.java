@@ -38,8 +38,9 @@ public class ShemaDefinitionElement extends BrowserElement {
 
 	@Override
 	protected void buildChildrenVector() {
-		if (getShema().isLoaded())
+		if (getShema().isLoaded()) {
 			addToChilds(getShema().getShema());
+		}
 	}
 
 	@Override

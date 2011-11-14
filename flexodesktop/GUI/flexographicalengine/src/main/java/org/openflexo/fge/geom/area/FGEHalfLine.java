@@ -79,17 +79,20 @@ public class FGEHalfLine extends FGEAbstractLine<FGEHalfLine> {
 
 	@Override
 	public boolean containsLine(FGEAbstractLine l) {
-		if (!overlap(l))
+		if (!overlap(l)) {
 			return false;
+		}
 
-		if (!(containsPoint(l.getP1()) && containsPoint(l.getP2())))
+		if (!(containsPoint(l.getP1()) && containsPoint(l.getP2()))) {
 			return false;
+		}
 
 		if (l instanceof FGEHalfLine) {
 			return getHalfPlane().intersect(((FGEHalfLine) l).getHalfPlane()) instanceof FGEHalfPlane;
 		}
-		if (l instanceof FGESegment)
+		if (l instanceof FGESegment) {
 			return true;
+		}
 
 		// If this is a line this is false
 		return false;
@@ -98,8 +101,9 @@ public class FGEHalfLine extends FGEAbstractLine<FGEHalfLine> {
 	@Override
 	public boolean contains(FGEPoint p) {
 		// First see if located on line
-		if (!_containsPointIgnoreBounds(p))
+		if (!_containsPointIgnoreBounds(p)) {
 			return false;
+		}
 
 		// Now check bounds
 		if (getB() != 0) {
@@ -153,8 +157,9 @@ public class FGEHalfLine extends FGEAbstractLine<FGEHalfLine> {
 	public boolean equals(Object obj) {
 		if (obj instanceof FGEHalfLine) {
 			FGEHalfLine hl = (FGEHalfLine) obj;
-			if (!overlap(hl))
+			if (!overlap(hl)) {
 				return false;
+			}
 			return getLimit().equals(hl.getLimit()) && hl.getNearestPointOnHalfLine(getOpposite()).equals(getOpposite());
 		}
 		return false;
@@ -176,10 +181,11 @@ public class FGEHalfLine extends FGEAbstractLine<FGEHalfLine> {
 	 */
 	public FGEPoint getNearestPointOnHalfLine(FGEPoint p) {
 		FGEPoint projection = getProjection(p);
-		if (contains(projection))
+		if (contains(projection)) {
 			return projection;
-		else
+		} else {
 			return getLimit();
+		}
 	}
 
 	@Override
@@ -199,10 +205,12 @@ public class FGEHalfLine extends FGEAbstractLine<FGEHalfLine> {
 			// We must now find which point to choose
 			FGEPoint pp1 = ((FGESegment) area).getP1();
 			FGEPoint pp2 = ((FGESegment) area).getP2();
-			if (containsPoint(pp1) && !containsPoint(pp2))
+			if (containsPoint(pp1) && !containsPoint(pp2)) {
 				return pp1;
-			if (containsPoint(pp2) && !containsPoint(pp1))
+			}
+			if (containsPoint(pp2) && !containsPoint(pp1)) {
 				return pp2;
+			}
 			logger.warning("Unexpected situation here...");
 			return getOpposite();
 			/*
@@ -237,8 +245,9 @@ public class FGEHalfLine extends FGEAbstractLine<FGEHalfLine> {
 		g.useDefaultForegroundStyle();
 		FGEPoint limit = getLimit();
 		FGEPoint p2 = getOppositePointProjection(g);
-		if (limit != null && p2 != null)
+		if (limit != null && p2 != null) {
 			(new FGESegment(limit, p2)).paint(g);
+		}
 
 		/*
 		FGERectangle bounds = g.getGraphicalRepresentation().getLogicalBounds();
@@ -254,8 +263,9 @@ public class FGEHalfLine extends FGEAbstractLine<FGEHalfLine> {
 
 	@Override
 	protected FGEArea computeLineIntersection(FGEAbstractLine line) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("computeIntersection() between " + this + "\n and " + line + " overlap=" + overlap(line));
+		}
 		if (overlap(line)) {
 			if (line instanceof FGEHalfLine) {
 				return _compute_hl_hl_Intersection(this, (FGEHalfLine) line);
@@ -270,8 +280,9 @@ public class FGEHalfLine extends FGEAbstractLine<FGEHalfLine> {
 			FGEPoint returned;
 			try {
 				returned = getLineIntersection(line);
-				if (containsPoint(returned) && line.containsPoint(returned))
+				if (containsPoint(returned) && line.containsPoint(returned)) {
 					return returned;
+				}
 			} catch (ParallelLinesException e) {
 				// cannot happen
 			}
@@ -285,24 +296,21 @@ public class FGEHalfLine extends FGEAbstractLine<FGEHalfLine> {
 
 		FGEArea intersect = hp1.intersect(hp2);
 
-		if (intersect instanceof FGEEmptyArea)
+		if (intersect instanceof FGEEmptyArea) {
 			return new FGEEmptyArea();
-
-		else if (intersect instanceof FGEBand) {
+		} else if (intersect instanceof FGEBand) {
 			return new FGESegment(hl1.getLimit(), hl2.getLimit());
 		}
 
-		else if (intersect.equals(hp1))
+		else if (intersect.equals(hp1)) {
 			return hl1.clone();
-
-		else if (intersect.equals(hp2))
+		} else if (intersect.equals(hp2)) {
 			return hl2.clone();
-
-		else if (intersect instanceof FGELine) {
+		} else if (intersect instanceof FGELine) {
 			// The 2 halfline are adjacent by their limit
-			if (hl1.getLimit().equals(hl2.getLimit()))
+			if (hl1.getLimit().equals(hl2.getLimit())) {
 				return hl1;
-			else {
+			} else {
 				logger.warning("Unexpected line intersection: " + intersect + " while computing intersection of " + hl1 + " and " + hl2);
 				return new FGEEmptyArea();
 			}
@@ -329,25 +337,29 @@ public class FGEHalfLine extends FGEAbstractLine<FGEHalfLine> {
 	@Override
 	public FGEArea getOrthogonalPerspectiveArea(SimplifiedCardinalDirection orientation) {
 		if (orientation == SimplifiedCardinalDirection.NORTH) {
-			if (isVertical())
+			if (isVertical()) {
 				return clone();
-			else
+			} else {
 				return new FGEHalfPlane(FGELine.makeVerticalLine(getLimit()), getOpposite());
+			}
 		} else if (orientation == SimplifiedCardinalDirection.SOUTH) {
-			if (isVertical())
+			if (isVertical()) {
 				return clone();
-			else
+			} else {
 				return new FGEHalfPlane(FGELine.makeVerticalLine(getLimit()), getOpposite());
+			}
 		} else if (orientation == SimplifiedCardinalDirection.EAST) {
-			if (isHorizontal())
+			if (isHorizontal()) {
 				return clone();
-			else
+			} else {
 				return new FGEHalfPlane(FGELine.makeHorizontalLine(getLimit()), getOpposite());
+			}
 		} else if (orientation == SimplifiedCardinalDirection.WEST) {
-			if (isHorizontal())
+			if (isHorizontal()) {
 				return clone();
-			else
+			} else {
 				return new FGEHalfPlane(FGELine.makeHorizontalLine(getLimit()), getOpposite());
+			}
 		}
 		return null;
 	}

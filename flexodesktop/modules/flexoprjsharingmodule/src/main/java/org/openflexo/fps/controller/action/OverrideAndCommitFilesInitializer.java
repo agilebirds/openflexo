@@ -50,8 +50,9 @@ public class OverrideAndCommitFilesInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<OverrideAndCommitFiles>() {
 			@Override
 			public boolean run(ActionEvent e, OverrideAndCommitFiles action) {
-				if (!FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_really_like_to_override_and_commit_those_files")))
+				if (!FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_really_like_to_override_and_commit_those_files"))) {
 					return false;
+				}
 
 				TextAreaParameter commitMessage = new TextAreaParameter("commitMessage", "commit_message", action.getCommitMessage(), 40,
 						15);

@@ -27,9 +27,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.bindings.AbstractBinding;
+import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.bindings.StringStaticBinding;
 import org.openflexo.foundation.bindings.WidgetBindingDefinition;
-import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.IObject;
@@ -100,8 +100,9 @@ public class IEMultimediaWidget extends AbstractInnerTableWidget {
 
 	@Override
 	public void removeInvalidComponentInstances() {
-		if (logger.isLoggable(Level.FINEST))
+		if (logger.isLoggable(Level.FINEST)) {
 			logger.finest("Verifying component instances for " + getClass().getName());
+		}
 	}
 
 	@Override
@@ -120,8 +121,9 @@ public class IEMultimediaWidget extends AbstractInnerTableWidget {
 	}
 
 	public String getUrl() {
-		if (getBindingUrl() != null && getBindingUrl() instanceof StringStaticBinding)
+		if (getBindingUrl() != null && getBindingUrl() instanceof StringStaticBinding) {
 			return ((StringStaticBinding) getBindingUrl()).getValue();
+		}
 		return null;
 	}
 
@@ -131,8 +133,9 @@ public class IEMultimediaWidget extends AbstractInnerTableWidget {
 			try {
 				u = new URL(url);
 			} catch (MalformedURLException e) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("URL " + url + " is not correct. Returning.");
+				}
 				setChanged();
 				notifyModification("url", null, getUrl(), true);
 				return;
@@ -151,8 +154,9 @@ public class IEMultimediaWidget extends AbstractInnerTableWidget {
 				urlHasBeenAdapted = true;
 				setFormat(MediaFormat.FLASH);
 			}
-			if (!(getBindingUrl() instanceof StringStaticBinding))
+			if (!(getBindingUrl() instanceof StringStaticBinding)) {
 				setBindingUrl(new StringStaticBinding(getBindingSourceUrlDefinition(), this, url));
+			}
 			((StringStaticBinding) getBindingUrl()).setValue(url);
 			setChanged();
 			notifyModification("url", null, url, urlHasBeenAdapted);
@@ -163,8 +167,9 @@ public class IEMultimediaWidget extends AbstractInnerTableWidget {
 	}
 
 	public AbstractBinding getBindingUrl() {
-		if (isBeingCloned())
+		if (isBeingCloned()) {
 			return null;
+		}
 		return bindingUrl;
 	}
 

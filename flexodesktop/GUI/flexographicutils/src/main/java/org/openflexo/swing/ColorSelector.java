@@ -66,12 +66,14 @@ public class ColorSelector extends CustomPopup<Color> implements ChangeListener 
 	@Override
 	public void setRevertValue(Color oldValue) {
 		// WARNING: we need here to clone to keep track back of previous data !!!
-		if (oldValue != null)
+		if (oldValue != null) {
 			_revertValue = new Color(oldValue.getRed(), oldValue.getGreen(), oldValue.getBlue());
-		else
+		} else {
 			_revertValue = null;
-		if (logger.isLoggable(Level.FINE))
+		}
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Sets revert value to " + _revertValue);
+		}
 	}
 
 	public Color getRevertValue() {
@@ -109,8 +111,9 @@ public class ColorSelector extends CustomPopup<Color> implements ChangeListener 
 		protected ColorDetailsPanel(Color editedColor) {
 			super();
 
-			if (editedColor == null)
+			if (editedColor == null) {
 				editedColor = Color.WHITE;
+			}
 			_csm.setSelectedColor(editedColor);
 			colorChooser = new JColorChooser(_csm);
 
@@ -152,8 +155,9 @@ public class ColorSelector extends CustomPopup<Color> implements ChangeListener 
 
 	@Override
 	public Color getEditedObject() {
-		if (_csm != null)
+		if (_csm != null) {
 			return _csm.getSelectedColor();
+		}
 		return null;
 	}
 
@@ -172,8 +176,9 @@ public class ColorSelector extends CustomPopup<Color> implements ChangeListener 
 
 	@Override
 	public void cancel() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("CANCEL: revert to " + getRevertValue());
+		}
 		setEditedObject(getRevertValue());
 		closePopup();
 		super.cancel();
@@ -182,8 +187,9 @@ public class ColorSelector extends CustomPopup<Color> implements ChangeListener 
 	@Override
 	protected void deletePopup() {
 		_csm.removeChangeListener(this);
-		if (_selectorPanel != null)
+		if (_selectorPanel != null) {
 			_selectorPanel.delete();
+		}
 		_selectorPanel = null;
 		super.deletePopup();
 	}

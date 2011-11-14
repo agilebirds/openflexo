@@ -118,8 +118,9 @@ public class WKFFrame extends FlexoFrame implements FlexoActionSource {
 	 */
 	@Override
 	public void dispose() {
-		if (_wkfController != null)
+		if (_wkfController != null) {
 			_wkfController.getFlexoWorkflow().deleteObserver(this);
+		}
 		_wkfController = null;
 		_wkfKeyEventListener = null;
 		_wkfMenuBar = null;

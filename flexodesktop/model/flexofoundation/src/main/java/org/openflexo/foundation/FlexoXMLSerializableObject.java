@@ -27,12 +27,6 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.xmlcode.Cloner;
-import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.XMLCoder;
-import org.openflexo.xmlcode.XMLDecoder;
-import org.openflexo.xmlcode.XMLMapping;
-
 import org.openflexo.foundation.bindings.Bindable;
 import org.openflexo.foundation.rm.FlexoResourceData;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
@@ -41,6 +35,11 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.xml.FlexoBuilder;
 import org.openflexo.foundation.xml.FlexoXMLSerializable;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.xmlcode.Cloner;
+import org.openflexo.xmlcode.StringEncoder;
+import org.openflexo.xmlcode.XMLCoder;
+import org.openflexo.xmlcode.XMLDecoder;
+import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * This abstract class represents an object, or "data" in the model-view paradigm. That can be serialized/deserialized through XMLCoDe
@@ -101,21 +100,24 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 
 	public FlexoXMLSerializable cloneUsingXMLMapping(Object builder, boolean setIsBeingCloned, XMLMapping xmlMapping) {
 		if (setIsBeingCloned) {
-			if (getXMLResourceData() != null)
+			if (getXMLResourceData() != null) {
 				getXMLResourceData().initializeCloning();
-			else
+			} else {
 				isBeingCloned = true;
+			}
 		}
 		if (xmlMapping.hasBuilderClass()) {
-			if (builder == null)
+			if (builder == null) {
 				builder = instanciateNewBuilder();
+			}
 			if (builder instanceof FlexoBuilder) {
 				((FlexoBuilder<FlexoXMLStorageResource>) builder).isCloner = true;
 			}
 			if (builder == null) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Model for encoding " + getClass().getName()
 							+ " defines a builder while builder instanciation returns null");
+				}
 			}
 			if (xmlMapping.builderClass().isAssignableFrom(builder.getClass())) {
 				try {
@@ -125,22 +127,26 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 					return obj;
 				} catch (Exception e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 					return null;
 				} finally {
-					if (getXMLResourceData() != null)
+					if (getXMLResourceData() != null) {
 						getXMLResourceData().finalizeCloning();
+					}
 				}
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Model for encoding " + getClass().getName() + " defines a builder of class "
 							+ xmlMapping.builderClass().getName() + " while builder instanciation returns an object of class "
 							+ builder.getClass().getName());
+				}
 			}
-			if (getXMLResourceData() != null)
+			if (getXMLResourceData() != null) {
 				getXMLResourceData().finalizeCloning();
+			}
 			isBeingCloned = false;
 			return null;
 		} else {
@@ -150,8 +156,9 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 				return obj;
 			} catch (Exception e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 				return null;
 			} finally {
@@ -171,8 +178,9 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 			return returned;
 		} catch (Exception e) {
 			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+			}
 			e.printStackTrace();
 			return null;
 		}
@@ -189,16 +197,18 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 			out.flush();
 		} catch (Exception e) {
 			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+			}
 			e.printStackTrace();
 		} finally {
-			if (out != null)
+			if (out != null) {
 				try {
 					out.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+			}
 		}
 	}
 
@@ -208,8 +218,9 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 			return (FlexoXMLSerializableObject) XMLDecoder.decodeObjectWithMapping(anXMLRepresentation, mapping, builder, stringEncoder);
 		} catch (Exception e) {
 			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+			}
 			e.printStackTrace();
 			return null;
 		}
@@ -225,8 +236,9 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 	 * e.printStackTrace(); return null; } }
 	 */
 	public void initializeDeserialization(Object builder) {
-		if (logger.isLoggable(Level.FINER))
+		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("initializeDeserialization() for " + this.getClass().getName());
+		}
 		isDeserializing = true;
 
 		_builder = builder;
@@ -243,8 +255,9 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 					((FlexoBuilder) builder).getProject().getBindingAssignementConverter().setBindable((Bindable) this);
 					// ((FlexoBuilder) builder).getProject().getBindingValueConverter().setBindable((Bindable) this);
 					// ((FlexoBuilder) builder).getProject().getBindingExpressionConverter().setBindable((Bindable) this);
-				} else if (logger.isLoggable(Level.SEVERE))
+				} else if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("Builder is not a FlexoBuilder!!!");
+				}
 			}
 		} catch (RuntimeException e) {
 			e.printStackTrace();
@@ -289,16 +302,18 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 		if (getXMLResourceData() == this) {
 			return isBeingCloned;
 		} else {
-			if (getXMLResourceData() != null)
+			if (getXMLResourceData() != null) {
 				return getXMLResourceData().isBeingCloned();
-			else
+			} else {
 				return isBeingCloned;
+			}
 		}
 	}
 
 	public void finalizeDeserialization(Object builder) {
-		if (logger.isLoggable(Level.FINER))
+		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("finalizeDeserialization() for " + this.getClass().getName());
+		}
 		if (builder instanceof FlexoBuilder) {
 			// GPO: I really think that this line has absolutely no effect but since it was there before, I leave it
 			((FlexoBuilder<FlexoXMLStorageResource>) builder).isCloner = false;
@@ -322,19 +337,22 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 	}
 
 	public void initializeSerialization() {
-		if (logger.isLoggable(Level.FINER))
+		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("initializeSerialization() for " + this.getClass().getName());
-		if (serializingThread == null || serializingThread == Thread.currentThread())
+		}
+		if (serializingThread == null || serializingThread == Thread.currentThread()) {
 			serializingThread = Thread.currentThread();
-		else if (logger.isLoggable(Level.SEVERE))
+		} else if (logger.isLoggable(Level.SEVERE)) {
 			logger.severe("Two different threads are trying to serialize " + getXMLResourceData() + "\n Thread already serializing is:"
 					+ serializingThread + " and the new one is " + Thread.currentThread());
+		}
 		isSerializing = true;
 	}
 
 	public void finalizeSerialization() {
-		if (logger.isLoggable(Level.FINER))
+		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("finalizeSerialization() for " + this.getClass().getName());
+		}
 		isSerializing = false;
 		serializingThread = null;
 	}
@@ -351,10 +369,11 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 		if (getXMLResourceData() == this) {
 			return isDeserializing;
 		} else {
-			if (getXMLResourceData() != null)
+			if (getXMLResourceData() != null) {
 				return getXMLResourceData().isDeserializing();
-			else
+			} else {
 				return isDeserializing;
+			}
 		}
 	}
 
@@ -397,10 +416,11 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 	private boolean ignoreNotifications = false;
 
 	public boolean ignoreNotifications() {
-		if (getXMLResourceData() == null || getXMLResourceData() == this)
+		if (getXMLResourceData() == null || getXMLResourceData() == this) {
 			return ignoreNotifications;
-		else if (getXMLResourceData() instanceof FlexoXMLSerializableObject)
+		} else if (getXMLResourceData() instanceof FlexoXMLSerializableObject) {
 			return ((FlexoXMLSerializableObject) getXMLResourceData()).ignoreNotifications();
+		}
 		return false;
 	}
 
@@ -419,8 +439,9 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 	}
 
 	public synchronized void setIsModified() {
-		if (ignoreNotifications)
+		if (ignoreNotifications) {
 			return;
+		}
 		if ((getXMLResourceData() == this) && (isModified == false) && (getXMLResourceData().getFlexoResource() != null)) {
 			// (new Exception("Resource "+getXMLResourceData().getFlexoResource()+" has been modified")).printStackTrace();
 			logger.info(">>>>>>> Resource " + getXMLResourceData().getFlexoResource() + " has been modified");
@@ -448,8 +469,9 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 
 	public String getLastUpdateAsString() {
 		if (getLastUpdate() != null) {
-			if (getLastUpdate().equals(new Date(0)))
+			if (getLastUpdate().equals(new Date(0))) {
 				return FlexoLocalization.localizedForKey("never");
+			}
 			return (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(getLastUpdate());
 		}
 		return "???";
@@ -458,8 +480,9 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 	public synchronized void clearIsModified(boolean clearLastMemoryUpdate) {
 		isModified = false;
 		// GPO: I commented the line hereunder because I don't think that we need to reset this date
-		if (clearLastMemoryUpdate)
+		if (clearLastMemoryUpdate) {
 			lastMemoryUpdate = null;
+		}
 	}
 
 	@Override
@@ -482,12 +505,14 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 		synchronized (this) {
 			super.setChanged();
 			if ((!isDeserializing()) && (!isSerializing())) {
-				if (propagateModified)
+				if (propagateModified) {
 					setIsModified();
+				}
 				if ((getXMLResourceData() != null) && (getXMLResourceData() != this)) {
 					// This object is embedded in an XMLResourceData
-					if (propagateModified)
+					if (propagateModified) {
 						getXMLResourceData().setIsModified();
+					}
 				}
 			}
 		}
@@ -553,8 +578,9 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 				getXMLResourceData().notifyRM((RMNotification) dataModification);
 			} catch (FlexoException e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("FLEXO Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 			}
 		}

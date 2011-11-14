@@ -43,15 +43,17 @@ public class WidgetFocusListener implements FocusListener {
 
 	@Override
 	public void focusGained(FocusEvent arg0) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("focusGained()");
+		}
 		_widget.gainFocus();
 	}
 
 	@Override
 	public void focusLost(FocusEvent arg0) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("focusLost()");
+		}
 		_widget.looseFocus();
 	}
 

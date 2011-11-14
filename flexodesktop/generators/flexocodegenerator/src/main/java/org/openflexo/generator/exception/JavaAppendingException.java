@@ -21,7 +21,6 @@ package org.openflexo.generator.exception;
 
 import org.openflexo.foundation.dm.javaparser.JavaParseException;
 import org.openflexo.generator.CGGenerator;
-import org.openflexo.generator.exception.GenerationException;
 
 public class JavaAppendingException extends GenerationException {
 	private CGGenerator _generator;

@@ -15,8 +15,6 @@ import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.action.AddDocType;
 import org.openflexo.foundation.cg.action.AddGeneratedCodeRepository;
 import org.openflexo.foundation.cg.action.ConnectCGRepository;
-import org.openflexo.foundation.cg.templates.CGTemplate;
-import org.openflexo.foundation.cg.templates.CGTemplateFile;
 import org.openflexo.foundation.cg.templates.action.AddCustomTemplateRepository;
 import org.openflexo.foundation.cg.templates.action.ImportTemplates;
 import org.openflexo.foundation.toc.TOCRepository;

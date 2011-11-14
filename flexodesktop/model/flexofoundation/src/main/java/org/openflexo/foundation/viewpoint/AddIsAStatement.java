@@ -58,8 +58,9 @@ public class AddIsAStatement extends AddStatement<IsAStatementPatternRole> {
 	}
 
 	public ViewPointDataBinding getFather() {
-		if (father == null)
+		if (father == null) {
 			father = new ViewPointDataBinding(this, EditionActionBindingAttribute.father, getFatherBindingDefinition());
+		}
 		return father;
 	}
 

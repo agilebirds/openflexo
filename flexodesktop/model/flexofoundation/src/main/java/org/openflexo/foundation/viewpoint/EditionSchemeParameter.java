@@ -210,8 +210,9 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 	}
 
 	public ViewPointDataBinding getConditional() {
-		if (conditional == null)
+		if (conditional == null) {
 			conditional = new ViewPointDataBinding(this, ParameterBindingAttribute.conditional, getConditionalBindingDefinition());
+		}
 		return conditional;
 	}
 
@@ -232,8 +233,9 @@ public abstract class EditionSchemeParameter extends ViewPointObject {
 	}
 
 	public ViewPointDataBinding getDefaultValue() {
-		if (defaultValue == null)
+		if (defaultValue == null) {
 			defaultValue = new ViewPointDataBinding(this, ParameterBindingAttribute.defaultValue, getDefaultValueBindingDefinition());
+		}
 		return defaultValue;
 	}
 

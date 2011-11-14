@@ -61,8 +61,9 @@ public class ApproveVersionInitializer extends ActionInitializer {
 
 				Vector<DocItemVersion> availableVersions = action.getVersionsThatCanBeApproved();
 
-				if (availableVersions.size() == 0)
+				if (availableVersions.size() == 0) {
 					return false;
+				}
 
 				if (action.getVersion() == null) {
 					action.setVersion(availableVersions.firstElement());

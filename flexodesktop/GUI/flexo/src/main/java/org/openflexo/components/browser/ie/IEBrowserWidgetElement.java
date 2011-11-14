@@ -57,10 +57,11 @@ public class IEBrowserWidgetElement extends IEElement {
 	 */
 	@Override
 	public String getName() {
-		if (getBrowser().getName() == null)
+		if (getBrowser().getName() == null) {
 			return "Browser";
-		else
+		} else {
 			return getBrowser().getName();
+		}
 	}
 
 	public IEBrowserWidget getBrowser() {

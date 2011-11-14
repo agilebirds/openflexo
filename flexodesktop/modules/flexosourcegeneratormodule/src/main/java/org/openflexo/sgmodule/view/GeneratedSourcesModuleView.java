@@ -65,13 +65,15 @@ public class GeneratedSourcesModuleView extends JPanel implements ModuleView<Gen
 	}
 
 	private void updateView() {
-		if (component != null)
+		if (component != null) {
 			panel.removeAll();
+		}
 		if (_gc.getGeneratedRepositories().size() == 0) {
 			panel.add(component = new FlexoActionButton(CreateSourceRepository.actionType, this, _controller.getEditor()));
 			panel.add(component = new FlexoActionButton(CreateImplementationModel.actionType, this, _controller.getEditor()));
-		} else
+		} else {
 			panel.add(component = new JLabel(FlexoLocalization.localizedForKey("please_select_a_repository"), SwingConstants.CENTER));
+		}
 		panel.validate();
 		panel.repaint();
 	}

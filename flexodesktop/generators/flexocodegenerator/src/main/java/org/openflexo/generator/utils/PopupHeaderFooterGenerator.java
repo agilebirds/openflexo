@@ -88,12 +88,14 @@ public class PopupHeaderFooterGenerator extends MetaWOGenerator {
 
 	@Override
 	public synchronized void generate(boolean forceRegenerate) {
-		if (!forceRegenerate && !needsGeneration())
+		if (!forceRegenerate && !needsGeneration()) {
 			return;
+		}
 		try {
 			startGeneration();
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Generating popup header footer");
+			}
 			VelocityContext vc = new VelocityContext();
 			vc.put("project", getProject());
 			vc.put("generator", this);

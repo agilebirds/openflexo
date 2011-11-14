@@ -121,8 +121,9 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 		_footer.delete();
 
 		_columns.clear();
-		if (_values != null)
+		if (_values != null) {
 			_values.clear();
+		}
 
 		_columns = null;
 		_values = null;
@@ -142,18 +143,21 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 
 	public void setValues(List values) {
 		// logger.info("setValues with "+values);
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setValues() with " + values);
+		}
 		List newValues = values;
-		if (values == null)
+		if (values == null) {
 			newValues = EMPTY_VECTOR;
+		}
 
 		List oldValues = _values;
 		_values = new ArrayList();
 		ArrayList removedValues = new ArrayList();
 		ArrayList addedValues = new ArrayList();
-		if (oldValues != null)
+		if (oldValues != null) {
 			removedValues.addAll(oldValues);
+		}
 
 		for (Object v : newValues) {
 			if (oldValues != null && oldValues.contains(v)) {
@@ -381,8 +385,9 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 			logger.fine("new row is " + newRow);
 		}
 		if (row != newRow) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("row changed !");
+			}
 			fireTableChanged(new RowMoveForObjectEvent(this, editedObject, newRow, column));
 		}
 	}
@@ -475,10 +480,12 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 
 	@Override
 	public void fireTableRowsUpdated(int firstRow, int lastRow) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("fireTableRowsUpdated firstRow=" + firstRow + " lastRow=" + lastRow);
-		if (firstRow > -1 && lastRow > -1)
+		}
+		if (firstRow > -1 && lastRow > -1) {
 			super.fireTableRowsUpdated(firstRow, lastRow);
+		}
 	}
 
 	protected FIBTableWidget getTableWidget() {
@@ -526,16 +533,19 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 	public void valueChanged(ListSelectionEvent e) {
 
 		// Ignore extra messages.
-		if (e.getValueIsAdjusting())
+		if (e.getValueIsAdjusting()) {
 			return;
+		}
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("valueChanged() selected index=" + getListSelectionModel().getMinSelectionIndex());
+		}
 
 		int i = getListSelectionModel().getMinSelectionIndex();
 		int leadIndex = getListSelectionModel().getLeadSelectionIndex();
-		if (!getListSelectionModel().isSelectedIndex(leadIndex))
+		if (!getListSelectionModel().isSelectedIndex(leadIndex)) {
 			leadIndex = getListSelectionModel().getAnchorSelectionIndex();
+		}
 		while (!getListSelectionModel().isSelectedIndex(leadIndex) && i <= getListSelectionModel().getMaxSelectionIndex()) {
 			leadIndex = i;
 			i++;
@@ -546,8 +556,9 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 		Vector<Object> oldSelection = selection;
 		selection = new Vector<Object>();
 		for (i = getListSelectionModel().getMinSelectionIndex(); i <= getListSelectionModel().getMaxSelectionIndex(); i++) {
-			if (getListSelectionModel().isSelectedIndex(i))
+			if (getListSelectionModel().isSelectedIndex(i)) {
 				selection.add(elementAt(i));
+			}
 		}
 
 		_widget.getDynamicModel().selected = selectedObject;

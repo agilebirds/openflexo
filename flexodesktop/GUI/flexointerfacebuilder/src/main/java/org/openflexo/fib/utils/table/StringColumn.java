@@ -62,8 +62,9 @@ public abstract class StringColumn<D extends Observable> extends AbstractColumn<
 	@Override
 	public TableCellRenderer getCellRenderer() {
 		TableCellRenderer r = super.getCellRenderer();
-		if (r instanceof JComponent)
+		if (r instanceof JComponent) {
 			((JComponent) r).setToolTipText(getLocalizedTooltip());
+		}
 		return r;
 	}
 

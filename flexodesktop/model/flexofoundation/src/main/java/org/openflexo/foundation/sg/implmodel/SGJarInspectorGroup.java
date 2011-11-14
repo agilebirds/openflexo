@@ -82,8 +82,9 @@ public class SGJarInspectorGroup implements InspectorGroup {
 	@Override
 	public InputStream getInspectorStream(String inspectorName) {
 		JarInspectorDTO jarInspectorDTO = allInspectors.get(inspectorName);
-		if (jarInspectorDTO == null)
+		if (jarInspectorDTO == null) {
 			return null;
+		}
 		return jarInspectorDTO.classFromJar.getResourceAsStream(jarInspectorDTO.resourceName);
 	}
 

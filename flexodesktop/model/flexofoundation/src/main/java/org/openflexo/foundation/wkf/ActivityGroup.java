@@ -65,8 +65,9 @@ public final class ActivityGroup extends WKFGroup implements InspectableObject {
 	 */
 	public ActivityGroup(FlexoProcess process, Vector<PetriGraphNode> nodes) {
 		this(process);
-		for (PetriGraphNode n : nodes)
+		for (PetriGraphNode n : nodes) {
 			addToNodes(n);
+		}
 	}
 
 	/**

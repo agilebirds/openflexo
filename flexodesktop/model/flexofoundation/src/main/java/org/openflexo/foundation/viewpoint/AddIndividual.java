@@ -49,15 +49,17 @@ public class AddIndividual extends AddConcept<IndividualPatternRole> {
 
 	@Override
 	public OntologyClass getOntologyClass() {
-		if (getPatternRole() != null)
+		if (getPatternRole() != null) {
 			return getPatternRole().getOntologicType();
+		}
 		return null;
 	}
 
 	@Override
 	public void setOntologyClass(OntologyClass ontologyClass) {
-		if (getPatternRole() != null)
+		if (getPatternRole() != null) {
 			getPatternRole().setOntologicType(ontologyClass);
+		}
 	}
 
 	public Vector<DataPropertyAssertion> getDataAssertions() {
@@ -142,9 +144,10 @@ public class AddIndividual extends AddConcept<IndividualPatternRole> {
 	}
 
 	public ViewPointDataBinding getIndividualName() {
-		if (individualName == null)
+		if (individualName == null) {
 			individualName = new ViewPointDataBinding(this, EditionActionBindingAttribute.individualName,
 					getIndividualNameBindingDefinition());
+		}
 		return individualName;
 	}
 

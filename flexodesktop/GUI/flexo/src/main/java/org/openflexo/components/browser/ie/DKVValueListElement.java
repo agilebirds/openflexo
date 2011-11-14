@@ -22,8 +22,8 @@ package org.openflexo.components.browser.ie;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.dkv.Value;
 import org.openflexo.foundation.dkv.Domain.ValueList;
+import org.openflexo.foundation.dkv.Value;
 
 /**
  * @author gpolet

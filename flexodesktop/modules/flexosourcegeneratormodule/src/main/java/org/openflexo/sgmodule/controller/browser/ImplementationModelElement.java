@@ -34,8 +34,9 @@ public class ImplementationModelElement extends BrowserElement {
 
 	@Override
 	protected void buildChildrenVector() {
-		for (TechnologyModuleImplementation technologyModuleImplementation : getImplementationModel().getTechnologyModules())
+		for (TechnologyModuleImplementation technologyModuleImplementation : getImplementationModel().getTechnologyModules()) {
 			addToChilds(technologyModuleImplementation);
+		}
 	}
 
 	@Override

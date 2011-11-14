@@ -155,8 +155,9 @@ public class IEStringWidgetView extends AbstractInnerTableWidgetView<IEStringWid
 		}
 		if (modif instanceof WidgetRemovedFromTable && arg0 == getModel()) {
 			delete();
-		} else
+		} else {
 			super.update(arg0, modif);
+		}
 	}
 
 	@Override
@@ -178,17 +179,20 @@ public class IEStringWidgetView extends AbstractInnerTableWidgetView<IEStringWid
 
 	@Override
 	public void performDoubleClick(JComponent clickedContainer, Point clickedPoint, boolean isShiftDown) {
-		if (getModel().isDKVField() || getModel().isStatusField())
+		if (getModel().isDKVField() || getModel().isStatusField()) {
 			return;
-		if (IEPreferences.getDisplayBindingValue())
+		}
+		if (IEPreferences.getDisplayBindingValue()) {
 			return;
+		}
 		editLabel();
 	}
 
 	@Override
 	public void editLabel() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Edit ie string");
+		}
 		labelEditing = true;
 		_jLabelTextField = new JTextField(getModel().getValue()) {
 
@@ -257,12 +261,14 @@ public class IEStringWidgetView extends AbstractInnerTableWidgetView<IEStringWid
 	}
 
 	public void finalizeEditString() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Finalize edit ie string");
+		}
 		remove(_jLabelTextField);
 		add(jLabel);
-		if (labelEditing)
+		if (labelEditing) {
 			getModel().setValue(_jLabelTextField.getText());
+		}
 		labelEditing = false;
 		revalidate();
 		repaint();

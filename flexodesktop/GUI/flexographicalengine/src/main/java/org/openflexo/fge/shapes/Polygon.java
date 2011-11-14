@@ -23,10 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.FGERegularPolygon;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 
 public class Polygon extends Shape {
 
@@ -56,8 +56,9 @@ public class Polygon extends Shape {
 
 	public Polygon(ShapeGraphicalRepresentation aGraphicalRepresentation, int pointsNb) {
 		super(aGraphicalRepresentation);
-		if (pointsNb < 3)
+		if (pointsNb < 3) {
 			throw new IllegalArgumentException("Cannot build polygon with less then 3 points (" + pointsNb + ")");
+		}
 		npoints = pointsNb;
 		updateShape();
 	}
@@ -70,8 +71,9 @@ public class Polygon extends Shape {
 			_polygon = new FGERegularPolygon(0, 0, 1, 1, Filling.FILLED, npoints, startAngle);
 		}
 		rebuildControlPoints();
-		if (getGraphicalRepresentation() != null)
+		if (getGraphicalRepresentation() != null) {
 			getGraphicalRepresentation().notifyShapeChanged();
+		}
 	}
 
 	@Override
@@ -87,8 +89,9 @@ public class Polygon extends Shape {
 		if (points != null) {
 			this.points = new ArrayList<FGEPoint>(points);
 			updateShape();
-		} else
+		} else {
 			this.points = null;
+		}
 	}
 
 	public int getNPoints() {

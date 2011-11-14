@@ -113,8 +113,9 @@ public class AbstractActivityStatistics extends FlexoStatistics<AbstractActivity
 		for (OperationNode node : operations) {
 			node.getStatistics().refresh();
 			aCount += node.getStatistics().getActionCount();
-			if (!node.isBeginOrEndNode())
+			if (!node.isBeginOrEndNode()) {
 				oCount += 1;
+			}
 			realACount += node.getStatistics().getRealActionCount();
 		}
 		setActionCount(aCount);

@@ -67,11 +67,13 @@ public class EditDistance {
 		int[][] matrix = new int[a_size][b_size];
 		matrix[0][0] = 0;
 
-		for (int i = 1; i != a_size; ++i)
+		for (int i = 1; i != a_size; ++i) {
 			matrix[i][0] = matrix[i - 1][0] + costOfInsertingSourceCharacter; // initialize the first column
+		}
 
-		for (int j = 1; j != b_size; ++j)
+		for (int j = 1; j != b_size; ++j) {
 			matrix[0][j] = matrix[0][j - 1] + costOfDeletingSourceCharacter; // initalize the first row
+		}
 
 		word = " " + word;
 		similar = " " + similar;
@@ -90,8 +92,9 @@ public class EditDistance {
 				// if needed, add up the cost of doing a swap
 				int costOfSwap = Integer.MAX_VALUE;
 				boolean isSwap = (i != 1) && (j != 1) && sourceChar == similar.charAt(j - 1) && word.charAt(i - 1) == otherChar;
-				if (isSwap)
+				if (isSwap) {
 					costOfSwap = costOfSwappingLetters + matrix[i - 2][j - 2];
+				}
 
 				int costOfDelete = costOfDeletingSourceCharacter + matrix[i][j - 1];
 				int costOfInsertion = costOfInsertingSourceCharacter + matrix[i - 1][j];
@@ -100,16 +103,18 @@ public class EditDistance {
 				String strSrcChar = "" + sourceChar;
 				String strOtherChar = "" + otherChar;
 
-				if (strSrcChar.compareToIgnoreCase(strOtherChar) == 0)
+				if (strSrcChar.compareToIgnoreCase(strOtherChar) == 0) {
 					costOfCaseChange = costOfChangingCase + matrix[i - 1][j - 1];
+				}
 
 				matrix[i][j] = minimum(costOfSubst, costOfSwap, costOfDelete, costOfInsertion, costOfCaseChange);
 			}
 		}
 		int cost = matrix[a_size - 1][b_size - 1];
 
-		if (false)
+		if (false) {
 			System.out.println(dumpMatrix(word, similar, matrix));
+		}
 
 		return cost;
 	}
@@ -151,8 +156,9 @@ public class EditDistance {
 				String num = Integer.toString(matrix[i - 1][j - 1]);
 				int padding = 4 - num.length();
 				s.append("|");
-				for (int k = 0; k < padding; k++)
+				for (int k = 0; k < padding; k++) {
 					s.append(' ');
+				}
 				s.append(num);
 			}
 			s.append('\n');
@@ -163,14 +169,18 @@ public class EditDistance {
 
 	static private int minimum(int a, int b, int c, int d, int e) {
 		int mi = a;
-		if (b < mi)
+		if (b < mi) {
 			mi = b;
-		if (c < mi)
+		}
+		if (c < mi) {
 			mi = c;
-		if (d < mi)
+		}
+		if (d < mi) {
 			mi = d;
-		if (e < mi)
+		}
+		if (e < mi) {
 			mi = e;
+		}
 
 		return mi;
 	}
@@ -181,12 +191,14 @@ public class EditDistance {
 		while (true) {
 
 			String input1 = stdin.readLine();
-			if (input1 == null || input1.length() == 0)
+			if (input1 == null || input1.length() == 0) {
 				break;
+			}
 
 			String input2 = stdin.readLine();
-			if (input2 == null || input2.length() == 0)
+			if (input2 == null || input2.length() == 0) {
 				break;
+			}
 
 			System.out.println(EditDistance.getDistance(input1, input2));
 		}

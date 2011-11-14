@@ -46,8 +46,9 @@ public class LookAndFeel extends KVCObject implements StringConvertable, ChoiceL
 			Enumeration<LookAndFeel> en = availableValues().elements();
 			while (en.hasMoreElements()) {
 				LookAndFeel laf = en.nextElement();
-				if (laf.getClassName().equals(value))
+				if (laf.getClassName().equals(value)) {
 					return laf;
+				}
 			}
 			return getDefaultLookAndFeel();
 		}
@@ -61,8 +62,9 @@ public class LookAndFeel extends KVCObject implements StringConvertable, ChoiceL
 
 	public static LookAndFeel getDefaultLookAndFeel() {
 		for (LookAndFeel feel : availableValues()) {
-			if (feel.getClassName().equals(UIManager.getSystemLookAndFeelClassName()))
+			if (feel.getClassName().equals(UIManager.getSystemLookAndFeelClassName())) {
 				return feel;
+			}
 		}
 		return availableValues().firstElement();
 	}

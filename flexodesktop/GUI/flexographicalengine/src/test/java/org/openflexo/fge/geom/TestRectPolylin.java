@@ -21,11 +21,11 @@ package org.openflexo.fge.geom;
 
 import java.util.logging.Logger;
 
+import junit.framework.TestCase;
+
 import org.openflexo.fge.geomedit.GeometricObject;
 import org.openflexo.fge.geomedit.GeometricSet;
 import org.openflexo.toolbox.FileResource;
-
-import junit.framework.TestCase;
 
 public class TestRectPolylin extends TestCase {
 

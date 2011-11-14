@@ -62,8 +62,9 @@ public class SchemaStructure {
 	}
 
 	public void addNamespaceDependency(String dependant, String target) {
-		if (dependant.equals(target))
+		if (dependant.equals(target)) {
 			return;
+		}
 		if (!dependencies.containsKey(dependant)) {
 			dependencies.put(dependant, new Vector<String>());
 		}
@@ -71,8 +72,9 @@ public class SchemaStructure {
 	}
 
 	public Vector<String> getNamespaceDependency(String namespace) {
-		if (dependencies.containsKey(namespace))
+		if (dependencies.containsKey(namespace)) {
 			return dependencies.get(namespace);
+		}
 		return new Vector<String>();
 	}
 

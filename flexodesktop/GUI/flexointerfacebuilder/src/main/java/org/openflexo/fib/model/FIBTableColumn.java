@@ -73,14 +73,16 @@ public abstract class FIBTableColumn extends FIBModelObject {
 
 	@Override
 	public FIBComponent getRootComponent() {
-		if (getTable() != null)
+		if (getTable() != null) {
 			return getTable().getRootComponent();
+		}
 		return null;
 	}
 
 	public DataBinding getData() {
-		if (data == null)
+		if (data == null) {
 			data = new DataBinding(this, Parameters.data, DATA);
+		}
 		return data;
 	}
 
@@ -96,20 +98,23 @@ public abstract class FIBTableColumn extends FIBModelObject {
 		if (data != null) {
 			data.finalizeDeserialization();
 		}
-		if (tooltip != null)
+		if (tooltip != null) {
 			tooltip.finalizeDeserialization();
+		}
 	}
 
 	@Override
 	public BindingModel getBindingModel() {
-		if (getTable() != null)
+		if (getTable() != null) {
 			return getTable().getTableBindingModel();
+		}
 		return null;
 	}
 
 	public Type getDataClass() {
-		if (getData() != null && getData().getBinding() != null && getData().getBinding() != null)
+		if (getData() != null && getData().getBinding() != null && getData().getBinding() != null) {
 			return getData().getBinding().getAccessedType();
+		}
 		return getDefaultDataClass();
 	}
 
@@ -164,8 +169,9 @@ public abstract class FIBTableColumn extends FIBModelObject {
 	}
 
 	public Font retrieveValidFont() {
-		if (font == null && getTable() != null)
+		if (font == null && getTable() != null) {
 			return getTable().retrieveValidFont();
+		}
 		return getFont();
 	}
 
@@ -184,8 +190,9 @@ public abstract class FIBTableColumn extends FIBModelObject {
 	public abstract ColumnType getColumnType();
 
 	public DataBinding getFormat() {
-		if (format == null)
+		if (format == null) {
 			format = new DataBinding(formatter, Parameters.format, FORMAT);
+		}
 		return format;
 	}
 
@@ -205,8 +212,9 @@ public abstract class FIBTableColumn extends FIBModelObject {
 
 		@Override
 		public BindingModel getBindingModel() {
-			if (formatterBindingModel == null)
+			if (formatterBindingModel == null) {
 				createFormatterBindingModel();
+			}
 			return formatterBindingModel;
 		}
 
@@ -228,8 +236,9 @@ public abstract class FIBTableColumn extends FIBModelObject {
 	}
 
 	public int getIndex() {
-		if (getTable() != null)
+		if (getTable() != null) {
 			return getTable().getColumns().indexOf(this);
+		}
 		return -1;
 	}
 
@@ -246,8 +255,9 @@ public abstract class FIBTableColumn extends FIBModelObject {
 	}
 
 	public DataBinding getTooltip() {
-		if (tooltip == null)
+		if (tooltip == null) {
 			tooltip = new DataBinding(this, Parameters.tooltip, TOOLTIP);
+		}
 		return tooltip;
 	}
 

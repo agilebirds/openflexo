@@ -49,8 +49,9 @@ public class IETabWidgetElement extends BrowserElement {
 
 	@Override
 	public void delete() {
-		if (observerdRootSequenceTab != null)
+		if (observerdRootSequenceTab != null) {
 			observerdRootSequenceTab.deleteObserver(this);
+		}
 		super.delete();
 		observerdRootSequenceTab = null;
 	}

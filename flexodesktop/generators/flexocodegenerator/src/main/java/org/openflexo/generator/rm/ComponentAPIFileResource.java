@@ -40,7 +40,6 @@ import org.openflexo.generator.FlexoComponentResourceGenerator;
 import org.openflexo.generator.TemplateLocator;
 import org.openflexo.generator.cg.CGAPIFile;
 import org.openflexo.generator.ie.ComponentGenerator;
-import org.openflexo.generator.rm.GenerationAvailableFileResource;
 import org.openflexo.logging.FlexoLogger;
 
 /**
@@ -79,8 +78,9 @@ public abstract class ComponentAPIFileResource<G extends FlexoComponentResourceG
 
 	@Override
 	public ComponentDefinition getComponentDefinition() {
-		if (getGenerator() != null)
+		if (getGenerator() != null) {
 			return getGenerator().getComponentDefinition();
+		}
 		return null;
 	}
 
@@ -88,8 +88,9 @@ public abstract class ComponentAPIFileResource<G extends FlexoComponentResourceG
 	public String getCurrentGeneration() {
 		if ((getGenerator() != null) && (!hasGenerationError())) {
 			if (getGenerator().getGeneratedCode() == null) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Generator is not null and there are no generation errors but the generated code is null");
+				}
 				return null;
 			}
 			return getGenerator().getGeneratedCode().api();
@@ -113,8 +114,9 @@ public abstract class ComponentAPIFileResource<G extends FlexoComponentResourceG
 			FlexoDMResource dmRes = (FlexoDMResource) resource;
 			if (dmRes.isLoaded() && getComponentDefinition() != null && getComponentDefinition().getComponentDMEntity() != null) {
 				if (!requestDate.before(getComponentDefinition().getComponentDMEntity().getLastUpdate())) {
-					if (logger.isLoggable(Level.FINER))
+					if (logger.isLoggable(Level.FINER)) {
 						logger.finer("OPTIMIST DEPENDANCY CHECKING for API COMPONENT " + getComponentDefinition().getName());
+					}
 					return false;
 				}
 			}
@@ -138,13 +140,15 @@ public abstract class ComponentAPIFileResource<G extends FlexoComponentResourceG
 				for (Enumeration en = getComponentDefinition().getWOComponent().getAllComponentInstances().elements(); en.hasMoreElements();) {
 					ComponentInstance ci = (ComponentInstance) en.nextElement();
 					if (ci.getComponentDefinition() != null) {
-						if (logger.isLoggable(Level.FINE))
+						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("Found dependancy between " + this + " and " + ci.getComponentDefinition().getComponentResource());
+						}
 						addToDependantResources(ci.getComponentDefinition().getComponentResource());
 					} else {
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Inconsistant data: ComponentInstance refers to an unknown ComponentDefinition "
 									+ ci.getComponentName());
+						}
 					}
 				}
 			}
@@ -180,8 +184,9 @@ public abstract class ComponentAPIFileResource<G extends FlexoComponentResourceG
 	public void registerObserverWhenRequired() {
 		if ((!isObserverRegistered) && (getComponentDefinition() != null)) {
 			isObserverRegistered = true;
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getComponentDefinition());
+			}
 			getComponentDefinition().addObserver(this);
 		}
 	}

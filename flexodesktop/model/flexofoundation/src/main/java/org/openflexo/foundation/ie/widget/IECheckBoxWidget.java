@@ -28,9 +28,9 @@ import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.TargetType;
 import org.openflexo.foundation.bindings.AbstractBinding;
+import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.bindings.BindingValue;
 import org.openflexo.foundation.bindings.WidgetBindingDefinition;
-import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.ie.HTMLListDescriptor;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
@@ -105,8 +105,9 @@ public class IECheckBoxWidget extends IEControlWidget implements Serializable, I
 	}
 
 	public BindingValue getBindingChecked() {
-		if (isBeingCloned())
+		if (isBeingCloned()) {
 			return null;
+		}
 		return _bindingChecked;
 	}
 
@@ -199,21 +200,26 @@ public class IECheckBoxWidget extends IEControlWidget implements Serializable, I
 	@Override
 	public String getRawRowKeyPath() {
 		HTMLListDescriptor desc = getHTMLListDescriptor();
-		if (desc == null)
+		if (desc == null) {
 			return null;
+		}
 		String item = desc.getItemName();
-		if (item == null)
+		if (item == null) {
 			return null;
-		if (getBindingChecked() == null)
+		}
+		if (getBindingChecked() == null) {
 			return null;
+		}
 		if (getBindingChecked().getCodeStringRepresentation().indexOf(item) > -1) {
 			String reply = getBindingChecked().getCodeStringRepresentation().substring(
 					getBindingChecked().getCodeStringRepresentation().indexOf(item) + item.length() + 1);
-			if (reply.endsWith("Boolean"))
+			if (reply.endsWith("Boolean")) {
 				return reply.substring(0, reply.length() - 7);
+			}
 			return reply;
-		} else
+		} else {
 			return null;
+		}
 	}
 
 	public static class RadioButtonReloadOnChange extends ValidationRule<RadioButtonReloadOnChange, IECheckBoxWidget> {
@@ -224,9 +230,10 @@ public class IECheckBoxWidget extends IEControlWidget implements Serializable, I
 
 		@Override
 		public ValidationIssue<RadioButtonReloadOnChange, IECheckBoxWidget> applyValidation(IECheckBoxWidget radio) {
-			if (!radio.getSubmitForm())
+			if (!radio.getSubmitForm()) {
 				return new ValidationWarning<RadioButtonReloadOnChange, IECheckBoxWidget>(this, radio, "checkbox_reload_on_change",
 						new SetReloadOnChange());
+			}
 			return null;
 		}
 

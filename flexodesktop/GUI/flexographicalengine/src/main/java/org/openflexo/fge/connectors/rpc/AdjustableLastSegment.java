@@ -25,9 +25,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGESegment;
-import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geom.area.FGEHalfPlane;
@@ -53,8 +53,9 @@ public class AdjustableLastSegment extends RectPolylinAdjustableSegment {
 			RectPolylinConnector.logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector");
 			return;
 		}
-		if (getPolylin().getSegmentNb() > 2)
+		if (getPolylin().getSegmentNb() > 2) {
 			beforePreviousSegment = getPolylin().getSegmentAt(segmentsNb - 3);
+		}
 		currentOrientation = currentSegment.getApproximatedOrientation();
 		previousOrientation = previousSegment.getApproximatedOrientation();
 
@@ -65,8 +66,9 @@ public class AdjustableLastSegment extends RectPolylinAdjustableSegment {
 		if (!previousSegment.containsPoint(currentSegment.getP2())) {
 			FGEHalfPlane hp = new FGEHalfPlane(previousSegment, currentSegment.getP2());
 			draggingAuthorizedArea = orthogonalPerspectiveArea.intersect(hp);
-		} else
+		} else {
 			draggingAuthorizedArea = orthogonalPerspectiveArea;
+		}
 
 		consistentData = true;
 	}
@@ -84,8 +86,9 @@ public class AdjustableLastSegment extends RectPolylinAdjustableSegment {
 
 	@Override
 	public FGEArea getDraggingAuthorizedArea() {
-		if (!consistentData)
+		if (!consistentData) {
 			return new FGEEmptyArea();
+		}
 
 		return draggingAuthorizedArea;
 

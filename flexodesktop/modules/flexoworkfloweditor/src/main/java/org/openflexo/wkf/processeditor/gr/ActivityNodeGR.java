@@ -87,8 +87,9 @@ public class ActivityNodeGR extends NormalAbstractActivityNodeGR<ActivityNode> {
 	}*/
 
 	private ImageIcon getImageIcon() {
-		if (getActivityNode().getTaskType() == null)
+		if (getActivityNode().getTaskType() == null) {
 			return null;
+		}
 		switch (getActivityNode().getTaskType()) {
 		case BusinessRule:
 			return WKFIconLibrary.TASKTYPE_BUSINESSRULE;
@@ -131,8 +132,9 @@ public class ActivityNodeGR extends NormalAbstractActivityNodeGR<ActivityNode> {
 	@Override
 	public double getRequiredWidth(double labelWidth) {
 		double required = super.getRequiredWidth(labelWidth);
-		if (getImageIcon() != null)
+		if (getImageIcon() != null) {
 			required += getImageIcon().getIconWidth() * 2;
+		}
 		return required;
 	}
 

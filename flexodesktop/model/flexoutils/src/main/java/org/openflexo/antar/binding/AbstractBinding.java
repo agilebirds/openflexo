@@ -100,8 +100,9 @@ public abstract class AbstractBinding implements Bindable, Cloneable, StringConv
 
 	@Override
 	public StringEncoder.Converter<? extends AbstractBinding> getConverter() {
-		if (getOwner() != null)
+		if (getOwner() != null) {
 			return (Converter<? extends AbstractBinding>) getOwner().getBindingFactory();
+		}
 		return null;
 		// return abstractBindingConverter;
 	}
@@ -135,16 +136,19 @@ public abstract class AbstractBinding implements Bindable, Cloneable, StringConv
 
 	@Override
 	public boolean equals(Object object) {
-		if (object == null)
+		if (object == null) {
 			return false;
+		}
 		if (object instanceof AbstractBinding) {
 			AbstractBinding bv = (AbstractBinding) object;
 			if (getBindingDefinition() == null) {
-				if (bv.getBindingDefinition() != null)
+				if (bv.getBindingDefinition() != null) {
 					return false;
+				}
 			} else {
-				if (!getBindingDefinition().equals(bv.getBindingDefinition()))
+				if (!getBindingDefinition().equals(bv.getBindingDefinition())) {
 					return false;
+				}
 			}
 			return ((_owner == bv._owner) && (getStringRepresentation().equals(bv.getStringRepresentation())));
 		} else {

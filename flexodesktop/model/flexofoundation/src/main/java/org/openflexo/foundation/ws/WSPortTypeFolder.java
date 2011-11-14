@@ -72,8 +72,9 @@ public class WSPortTypeFolder extends WSObject {
 
 	@Override
 	public void delete() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("delete: WSPortTypeFolder " + getName());
+		}
 		parentService = null;
 		super.delete();
 		deleteObservers();

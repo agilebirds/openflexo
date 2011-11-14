@@ -21,7 +21,6 @@ package org.openflexo.fib.model;
 
 import java.lang.reflect.Type;
 
-import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 public class FIBLabel extends FIBWidget {

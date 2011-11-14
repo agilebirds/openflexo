@@ -120,8 +120,9 @@ public class CVSCommand {
 		connection = ConnectionFactory.getConnection(root);
 		if (CVSRoot.METHOD_PSERVER.equals(root.getMethod())) {
 			((PServerConnection) connection).setEncodedPassword(password);
-			if (port > 0)
+			if (port > 0) {
 				((PServerConnection) connection).setPort(port);
+			}
 		}
 		connection.open();
 
@@ -167,8 +168,9 @@ public class CVSCommand {
 			// ignore
 		} finally {
 			try {
-				if (r != null)
+				if (r != null) {
 					r.close();
+				}
 			} catch (IOException e) {
 				System.err.println("Warning: could not close CVS/Root file!");
 			}
@@ -195,8 +197,9 @@ public class CVSCommand {
 		while ((ch = go.getopt()) != GetOpt.optEOF) {
 			// System.out.println("Global option '"+((char) ch)+"', '"+go.optArgGet()+"'");
 			boolean success = globalOptions.setCVSCommand((char) ch, go.optArgGet());
-			if (!success)
+			if (!success) {
 				usagePrint = true;
+			}
 		}
 		if (usagePrint) {
 			showUsage(stderr);
@@ -279,8 +282,9 @@ public class CVSCommand {
 			reader = new BufferedReader(new FileReader(passFile));
 			String line;
 			while ((line = reader.readLine()) != null) {
-				if (line.startsWith("/1 "))
+				if (line.startsWith("/1 ")) {
 					line = line.substring("/1 ".length());
+				}
 				if (line.startsWith(CVSRoot + " ")) {
 					password = line.substring(CVSRoot.length() + 1);
 					break;
@@ -387,8 +391,9 @@ public class CVSCommand {
 		int commandIndex = -1;
 		try {
 			commandIndex = processGlobalOptions(args, globalOptions, stderr);
-			if (commandIndex == -10)
+			if (commandIndex == -10) {
 				return true;
+			}
 		} catch (IllegalArgumentException e) {
 			stderr.println("Invalid argument: " + e);
 			return false;
@@ -460,8 +465,9 @@ public class CVSCommand {
 			if (password != null) {
 				password = StandardScrambler.getInstance().scramble(password);
 			} else {
-				if (port > 0)
+				if (port > 0) {
 					root.setPort(port);
+				}
 				password = lookupPassword(cvsRoot, root.toString(), stderr);
 				if (password == null) {
 					password = StandardScrambler.getInstance().scramble(""); // an empty password

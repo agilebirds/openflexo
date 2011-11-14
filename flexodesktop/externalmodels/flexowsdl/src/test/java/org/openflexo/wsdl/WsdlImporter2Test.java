@@ -42,7 +42,6 @@ import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlOptions;
 import org.apache.xmlbeans.impl.schema.MySchemaTypeSystemCompiler;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.wsdl.WSDL2Java;
 
 public class WsdlImporter2Test extends TestCase {
 

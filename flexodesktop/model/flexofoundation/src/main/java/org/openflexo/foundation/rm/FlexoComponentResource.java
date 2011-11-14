@@ -83,10 +83,12 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 		super(aProject);
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public void setName(String aName) {
 		name = aName;
 		setChanged();
@@ -122,17 +124,20 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 
 	public abstract ComponentDefinition getComponentDefinition();
 
+	@Override
 	public IEWOComponent performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler)
 			throws LoadXMLResourceException, FlexoFileNotFoundException, ProjectLoadingCancelledException, MalformedXMLException {
 		IEWOComponent component;
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Loading WO component " + getName());
+		}
 		try {
 			component = super.performLoadResourceData(progress, loadingHandler);
 		} catch (FlexoFileNotFoundException e) {
 			// OK, i create the resource by myself !
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Creating new component " + getName());
+			}
 			component = createNewComponent();
 			component.setFlexoResource(this);
 			_resourceData = component;
@@ -140,8 +145,9 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 		if (component != null) {
 			component.setProject(getProject());
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Notify loading for component " + getComponentDefinition().getName());
+		}
 		getComponentDefinition().notifyWOComponentHasBeenLoaded();
 		return component;
 	}
@@ -152,10 +158,12 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 	 * 
 	 * @return boolean
 	 */
+	@Override
 	public boolean hasBuilder() {
 		return true;
 	}
 
+	@Override
 	public Class getResourceDataClass() {
 		return IEWOComponent.class;
 	}
@@ -165,6 +173,7 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 	 * 
 	 * @return boolean
 	 */
+	@Override
 	public Object instanciateNewBuilder() {
 		FlexoComponentBuilder builder = new FlexoComponentBuilder(getComponentDefinition(), this);
 		builder.woComponent = _resourceData;
@@ -179,15 +188,18 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 	@Override
 	protected boolean repairDuplicateSerializationIdentifier() {
 		ValidationReport report = getProject().validate();
-		for (ValidationIssue issue : report.getValidationIssues())
-			if (issue instanceof DuplicateObjectIDIssue)
+		for (ValidationIssue issue : report.getValidationIssues()) {
+			if (issue instanceof DuplicateObjectIDIssue) {
 				return true;
+			}
+		}
 		return false;
 	}
 
 	/**
 	 * Rebuild resource dependancies for this resource
 	 */
+	@Override
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
 		addToSynchronizedResources(getProject().getFlexoComponentLibraryResource());
@@ -198,13 +210,15 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 			for (Enumeration en = getWOComponent().getAllComponentInstances().elements(); en.hasMoreElements();) {
 				ComponentInstance ci = (ComponentInstance) en.nextElement();
 				if (ci.getComponentDefinition() != null) {
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Found dependancy between " + this + " and " + ci.getComponentDefinition().getComponentResource());
+					}
 					addToDependantResources(ci.getComponentDefinition().getComponentResource());
 				} else {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Inconsistant data: ComponentInstance refers to an unknown ComponentDefinition "
 								+ ci.getComponentName());
+					}
 				}
 			}
 		}
@@ -218,6 +232,7 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 	 * @param dependancyScheme
 	 * @return
 	 */
+	@Override
 	public boolean optimisticallyDependsOf(FlexoResource resource, Date requestDate) {
 		if (resource instanceof FlexoDMResource) {
 			FlexoDMResource dmRes = (FlexoDMResource) resource;
@@ -244,6 +259,7 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 		return super.optimisticallyDependsOf(resource, requestDate);
 	}
 
+	@Override
 	protected boolean convertResourceFileFromVersionToVersion(FlexoVersion v1, FlexoVersion v2) {
 		/**
 		 * #################################################################### Don't forget to convert IEPalette (Custom widgets palette)as
@@ -297,8 +313,9 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 
 			} catch (Exception e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 			}
 		}
@@ -386,8 +403,9 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 
 			} catch (Exception e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 			}
 		}
@@ -417,16 +435,19 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 			// bigButtonName="Flexo/Flexo_Button_Next.gif"
 			// smallButtonName="RTSFoundation/Button_Split.gif"
 			// smallButtonName="denali_icon44.gif"
-			if (iconName.startsWith("Flexo_"))
+			if (iconName.startsWith("Flexo_")) {
 				return ToolBox.replaceStringByStringInString("Flexo", "", iconName);
-			if (iconName.startsWith("Flexo/Flexo_"))
+			}
+			if (iconName.startsWith("Flexo/Flexo_")) {
 				return ToolBox.replaceStringByStringInString("Flexo/Flexo", "", iconName);
+			}
 			return iconName;
 		}
 
 		private String createImageFromBigButton(String iconName) {
-			if (iconName.startsWith("Flexo/Flexo_"))
+			if (iconName.startsWith("Flexo/Flexo_")) {
 				return ToolBox.replaceStringByStringInString("Flexo/Flexo", "", iconName);
+			}
 			return iconName;
 		}
 
@@ -458,30 +479,34 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 
 			} catch (Exception e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 			}
 		}
 
 		private void convert() {
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Starting conditional button conversion...");
+			}
 			Iterator buttonIterator = document.getDescendants(new ElementFilter("IEButton"));
 			while (buttonIterator.hasNext()) {
 				Element element = (Element) buttonIterator.next();
 				Attribute imageName = element.getAttribute("imageName");
 				if (imageName != null && imageName.getValue().startsWith("_Button_")) {
 					String customButtonLabel = imageName.getValue().substring(8, imageName.getValue().length() - 4);
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Replace IEButton by custom button: " + customButtonLabel);
+					}
 					element.setName("IECustomButton");
 					element.setAttribute("inspector", "CustomButton.inspector");
 					element.setAttribute("customButtonValue", customButtonLabel);
 				}
 			}
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Done");
+			}
 		}
 
 		private boolean save() {
@@ -512,29 +537,33 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 
 			} catch (Exception e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 			}
 		}
 
 		private void convert() {
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Starting conditional bindings conversion...");
+			}
 			Iterator conditionalIterator = document.getDescendants(new ElementFilter("ConditionalOperator"));
 			while (conditionalIterator.hasNext()) {
 				Element element = (Element) conditionalIterator.next();
 				Element sequence = element.getParentElement();
 				Attribute conditional = sequence.getAttribute("binding_conditional");
 				if (conditional != null) {
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Found a conditional: " + conditional);
+					}
 					sequence.removeAttribute(conditional);
 					element.setAttribute(conditional);
 				}
 			}
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Done");
+			}
 		}
 
 		private boolean save() {
@@ -564,15 +593,17 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 
 			} catch (Exception e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 			}
 		}
 
 		private void convert() {
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Starting tab container conversion...");
+			}
 			Iterator tabContainerElementIterator = document.getDescendants(new ElementFilter("IETabContainer"));
 			while (tabContainerElementIterator.hasNext()) {
 				Element element = (Element) tabContainerElementIterator.next();
@@ -580,8 +611,9 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 				element.removeAttribute("rowSpan");
 				element.setName("IESequenceTab");
 			}
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Done");
+			}
 		}
 
 		private boolean save() {
@@ -612,8 +644,9 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 
 			} catch (Exception e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 			}
 		}
@@ -794,22 +827,25 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 				conversionWasSucessfull = save();
 			} catch (Exception e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 			}
 		}
 
 		private void convert() {
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Starting top sequence conversion...");
+			}
 			Iterator sequence = document.getDescendants(new ElementFilter("IESequenceTopComponent"));
 			while (sequence.hasNext()) {
 				Element element = (Element) sequence.next();
 				element.setName("IESequenceWidget");
 			}
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Done");
+			}
 		}
 
 		private boolean save() {

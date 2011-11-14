@@ -100,8 +100,9 @@ public class WindowMenu extends FlexoMenu {
 
 	public WindowMenu(FlexoController controller, Module module) {
 		super("window", controller);
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Build NEW module menu for " + module.getName());
+		}
 		for (Enumeration e = ModuleLoader.loadedModules(); e.hasMoreElements();) {
 			Module next = ((FlexoModule) e.nextElement()).getModule();
 			createNewAvailableModuleItem(next, true);
@@ -167,10 +168,11 @@ public class WindowMenu extends FlexoMenu {
 			preferencesWindowItem.setState(getController().getPreferencesWindow().isVisible());
 		}
 		if (checkConsistencyWindowItem != null) {
-			if (getController().getConsistencyCheckWindow() != null)
+			if (getController().getConsistencyCheckWindow() != null) {
 				checkConsistencyWindowItem.setState(getController().getConsistencyCheckWindow().isVisible());
-			else
+			} else {
 				checkConsistencyWindowItem.setEnabled(false);
+			}
 		}
 		for (Enumeration en = relativeWindowItems.elements(); en.hasMoreElements();) {
 			RelativeWindowItem next = (RelativeWindowItem) en.nextElement();
@@ -179,8 +181,9 @@ public class WindowMenu extends FlexoMenu {
 	}
 
 	public void addFlexoRelativeWindowMenu(FlexoRelativeWindow window) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("addFlexoRelativeWindowMenu() with " + window);
+		}
 		RelativeWindowItem relativeWindowItem;
 		insert(relativeWindowItem = new RelativeWindowItem(window), windowFirstIndex);
 		windowCount++;
@@ -195,8 +198,9 @@ public class WindowMenu extends FlexoMenu {
 			relativeWindowItems.remove(window);
 			windowCount--;
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Inconsistent data in WindowMenu");
+			}
 		}
 	}
 
@@ -206,8 +210,9 @@ public class WindowMenu extends FlexoMenu {
 		if (relativeWindowItem != null) {
 			relativeWindowItem.setText(name);
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Inconsistent data in WindowMenu");
+			}
 		}
 	}
 
@@ -397,25 +402,31 @@ public class WindowMenu extends FlexoMenu {
 	}
 
 	public static void notifySwitchToModule(Module module) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("notifySwitchToModule() called:  ActiveModule=" + getActiveModule());
-		if (logger.isLoggable(Level.FINE))
+		}
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Notify switching to module " + module);
+		}
 		if (getActiveModule() == module) {
 			// No need to switch, it's already the right one !
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("No need to switch ");
+			}
 			return;
 		} else {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Notify switching to module " + module + " DOING it.");
+			}
 			if ((getActiveModule() != null) && (getActiveModule().isLoaded())) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Focus OFF module " + getActiveModule());
+				}
 				getActiveModule().getInstance().focusOff();
 			}
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Updating menus for " + module);
+			}
 			for (Enumeration e = _moduleMenus.elements(); e.hasMoreElements();) {
 				Vector menus = (Vector) e.nextElement();
 				for (int i = 0; i < menus.size(); i++) {
@@ -430,8 +441,9 @@ public class WindowMenu extends FlexoMenu {
 		for (Enumeration e = _availableWindowMenuItems.keys(); e.hasMoreElements();) {
 			Module next = (Module) e.nextElement();
 			JCheckBoxMenuItem menuItem = _availableWindowMenuItems.get(next);
-			if (next.getSmallIcon() != null)
+			if (next.getSmallIcon() != null) {
 				menuItem.setIcon(next.getSmallIcon());
+			}
 			if (next != module) {
 				menuItem.setState(false);
 			} else {
@@ -462,27 +474,32 @@ public class WindowMenu extends FlexoMenu {
 
 	private void notifyModuleHasBeenLoaded(Module module) {
 		// remove from all loadWindowMenu
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("loadWindowMenu contained:");
+		}
 		Component[] menuComponents = loadWindowMenu.getMenuComponents();
 		for (int i = 0; i < menuComponents.length; i++) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Component: " + ((JMenuItem) menuComponents[i]).getText());
+			}
 		}
 		JMenuItem toRemove = _loadWindowMenuItems.get(module);
 		if (toRemove != null) {
 			loadWindowMenu.remove(toRemove);
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("No _loadWindowMenuItems for module " + module.getName());
+			}
 		}
 		_loadWindowMenuItems.remove(module);
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("loadWindowMenu contains now:");
+		}
 		menuComponents = loadWindowMenu.getMenuComponents();
 		for (int i = 0; i < menuComponents.length; i++) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Component: " + ((JMenuItem) menuComponents[i]).getText());
+			}
 		}
 
 		// add to available
@@ -500,14 +517,16 @@ public class WindowMenu extends FlexoMenu {
 	}
 
 	private JCheckBoxMenuItem createNewAvailableModuleItem(Module module, boolean init) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("ADD TO new available Module : " + module.getName());
+		}
 		SwitchToModuleAction action;
 		JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem(action = new SwitchToModuleAction(module));
 		action.setItem(menuItem);
 		menuItem.setText(FlexoLocalization.localizedForKey(module.getName(), menuItem));
-		if (module.getSmallIcon() != null)
+		if (module.getSmallIcon() != null) {
 			menuItem.setIcon(module.getSmallIcon());
+		}
 		/*
 		 * if (init) { add(menuItem); } else { insert(menuItem, getItemCount() - 3); }
 		 */
@@ -517,8 +536,9 @@ public class WindowMenu extends FlexoMenu {
 	}
 
 	private JMenuItem createNewLoadModuleItem(Module module) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("ADD to loadable Module : " + module.getName());
+		}
 		JMenuItem menuItem = new JMenuItem(new LoadModuleAction(module));
 		menuItem.setText(FlexoLocalization.localizedForKey(module.getName(), menuItem));
 		menuItem.setIcon(module.getSmallIcon());

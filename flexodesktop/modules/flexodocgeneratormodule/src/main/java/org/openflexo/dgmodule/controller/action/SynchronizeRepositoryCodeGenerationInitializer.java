@@ -76,9 +76,10 @@ public class SynchronizeRepositoryCodeGenerationInitializer extends ActionInitia
 			public boolean run(ActionEvent e, SynchronizeRepositoryCodeGeneration action) {
 				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().resetHoldStructure();
 				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().update();
-				if (DGPreferences.getAutomaticallyDismissUnchangedFiles())
+				if (DGPreferences.getAutomaticallyDismissUnchangedFiles()) {
 					DismissUnchangedGeneratedFiles.actionType.makeNewAction(action.getFocusedObject(), action.getGlobalSelection(),
 							action.getEditor()).doAction();
+				}
 				return true;
 			}
 		};
@@ -97,16 +98,18 @@ public class SynchronizeRepositoryCodeGenerationInitializer extends ActionInitia
 								+ action.getRepository().getDirectory().getAbsolutePath() + " "
 								+ FlexoLocalization.localizedForKey("does_no_exists") + ". "
 								+ FlexoLocalization.localizedForKey("do_you_want_to_create_it"))) {
-							if (action.getRepository().getDirectory().mkdirs())
+							if (action.getRepository().getDirectory().mkdirs()) {
 								SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(action.getFocusedObject(),
 										action.getGlobalSelection(), action.getEditor()).doAction();
+							}
 						}
 					} else {
-						if (action.getRepository().getDirectory() != null)
+						if (action.getRepository().getDirectory() != null) {
 							FlexoController.notify(FlexoLocalization.localizedForKey("permission_denied_for") + " "
 									+ action.getRepository().getDirectory().getAbsolutePath());
-						else
+						} else {
 							FlexoController.notify(FlexoLocalization.localizedForKey("select_a_directory"));
+						}
 					}
 					return true;
 				}

@@ -23,11 +23,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.kvc.ChoiceList;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.components.tabular.model.ChoiceListColumn;
 import org.openflexo.components.tabular.model.IconColumn;
@@ -36,6 +31,10 @@ import org.openflexo.foundation.dm.eo.DMEOAdaptorType;
 import org.openflexo.foundation.dm.eo.DMEOModel;
 import org.openflexo.foundation.dm.eo.DMEORepository;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.kvc.ChoiceList;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * Please comment this class
@@ -90,8 +89,9 @@ public class DMEOModelTableModel extends AbstractModel<DMEORepository, DMEOModel
 
 			@Override
 			protected String renderChoiceListValue(ChoiceList value) {
-				if (value != null)
+				if (value != null) {
 					return ((DMEOAdaptorType) value).getName();
+				}
 				return "";
 			}
 		});

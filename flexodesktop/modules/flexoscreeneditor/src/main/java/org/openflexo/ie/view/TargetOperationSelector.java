@@ -44,9 +44,6 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.openflexo.swing.VerticalLayout;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.components.widget.ProcessSelector;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
@@ -60,6 +57,8 @@ import org.openflexo.foundation.wkf.OperationChange;
 import org.openflexo.foundation.wkf.dm.DisplayProcessSet;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.swing.VerticalLayout;
+import org.openflexo.view.controller.FlexoController;
 
 class TargetOperationSelector extends JPanel implements FlexoObserver {
 	/**
@@ -212,8 +211,9 @@ class TargetOperationSelector extends JPanel implements FlexoObserver {
 			public boolean isSelectable(FlexoModelObject object) {
 				boolean isSelectable = super.isSelectable(object);
 				if (isSelectable) {
-					if (object instanceof FlexoProcess)
+					if (object instanceof FlexoProcess) {
 						return model.isAcceptableAsDisplayProcess((FlexoProcess) object);
+					}
 				}
 				return isSelectable;
 			}
@@ -235,10 +235,11 @@ class TargetOperationSelector extends JPanel implements FlexoObserver {
 			tabs.getParent().remove(tabs);
 		}
 		Vector<OperationNode> v;
-		if (this.model.getProcess() != null)
+		if (this.model.getProcess() != null) {
 			v = this.model.getProcess().getAllOperationNodesWithComponent();
-		else
+		} else {
 			v = new Vector<OperationNode>();
+		}
 		v.insertElementAt(null, 0);
 		operations = new JComboBox(v);
 		operations.setRenderer(new DefaultListCellRenderer() {
@@ -266,10 +267,11 @@ class TargetOperationSelector extends JPanel implements FlexoObserver {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (operations.getSelectedItem() == null)
+				if (operations.getSelectedItem() == null) {
 					model.setOperation(null);
-				else
+				} else {
 					model.setOperation((OperationNode) operations.getSelectedItem());
+				}
 			}
 
 		});
@@ -291,10 +293,11 @@ class TargetOperationSelector extends JPanel implements FlexoObserver {
 			public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 				JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 				if (value != null) {
-					if (value == null)
+					if (value == null) {
 						label.setText(FlexoLocalization.localizedForKey("no_selection", label));
-					else
+					} else {
 						label.setText(((IETabWidget) value).getTitle());
+					}
 				}
 				FontMetrics fm = label.getFontMetrics(label.getFont());
 				label.setPreferredSize(new Dimension(fm.stringWidth(label.getText()) + 15, fm.getHeight()));
@@ -306,10 +309,11 @@ class TargetOperationSelector extends JPanel implements FlexoObserver {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (tabs.getSelectedItem() == null)
+				if (tabs.getSelectedItem() == null) {
 					model.setTabComponent(null);
-				else
+				} else {
 					model.setTabComponent(((IETabWidget) tabs.getSelectedItem()).getTabComponentDefinition());
+				}
 			}
 		});
 		operationPanel.add(tabs);
@@ -360,8 +364,9 @@ class TargetOperationSelector extends JPanel implements FlexoObserver {
 							return;
 						}
 						Integer i = new Integer(width.getText());
-						if (i.intValue() < 0)
+						if (i.intValue() < 0) {
 							throw new NumberFormatException();
+						}
 						model.setPopupWidth(width.getText());
 					} catch (NumberFormatException e1) {
 						FlexoController.notify("enter_a_positive_number");
@@ -402,8 +407,9 @@ class TargetOperationSelector extends JPanel implements FlexoObserver {
 							return;
 						}
 						Integer i = new Integer(height.getText());
-						if (i.intValue() < 0)
+						if (i.intValue() < 0) {
 							throw new NumberFormatException();
+						}
 						model.setPopupHeight(height.getText());
 					} catch (NumberFormatException e1) {
 						FlexoController.notify("enter_a_positive_number");
@@ -469,36 +475,47 @@ class TargetOperationSelector extends JPanel implements FlexoObserver {
 
 	private void insertPanels() {
 		if (!model.getUseUrl()) {
-			if (urlPanel.getParent() != null)
+			if (urlPanel.getParent() != null) {
 				remove(urlPanel);
-			if (process.getParent() == null)
+			}
+			if (process.getParent() == null) {
 				add(process, 1);
+			}
 			if (model.getProcess() != null) {
-				if (operationPanel.getParent() == null)
+				if (operationPanel.getParent() == null) {
 					add(operationPanel, 2);
+				}
 				if (this.model.getOperation() != null) {
-					if (popupOption.getParent() == null)
+					if (popupOption.getParent() == null) {
 						add(popupOption, 3);
+					}
 				} else {
-					if (popupOption.getParent() != null)
+					if (popupOption.getParent() != null) {
 						remove(popupOption);
+					}
 				}
 			} else {
-				if (operationPanel.getParent() != null)
+				if (operationPanel.getParent() != null) {
 					remove(operationPanel);
+				}
 
-				if (popupOption.getParent() != null)
+				if (popupOption.getParent() != null) {
 					remove(popupOption);
+				}
 			}
 		} else {
-			if (process.getParent() != null)
+			if (process.getParent() != null) {
 				remove(process);
-			if (operationPanel.getParent() != null)
+			}
+			if (operationPanel.getParent() != null) {
 				remove(operationPanel);
-			if (popupOption.getParent() != null)
+			}
+			if (popupOption.getParent() != null) {
 				remove(popupOption);
-			if (urlPanel.getParent() == null)
+			}
+			if (urlPanel.getParent() == null) {
 				add(urlPanel);
+			}
 		}
 		revalidate();
 		doLayout();
@@ -562,8 +579,9 @@ class TargetOperationSelector extends JPanel implements FlexoObserver {
 							break;
 						}
 					}
-				} else
+				} else {
 					tabs.setSelectedItem(null);
+				}
 			} else {
 				if (tabs != null && tabs.getParent() != null) {
 					tabs.getParent().remove(tabs);
@@ -585,14 +603,16 @@ class TargetOperationSelector extends JPanel implements FlexoObserver {
 	 */
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (updatingModel)
+		if (updatingModel) {
 			return;
+		}
 		if (observable == this.model) {
 			updateValuesFromModel();
 			insertPanels();
 			if (dataModification instanceof DisplayProcessSet) {
-				if (((DisplayProcessSet) dataModification).oldValue() != null)
+				if (((DisplayProcessSet) dataModification).oldValue() != null) {
 					((FlexoProcess) ((DisplayProcessSet) dataModification).oldValue()).deleteObserver(this);
+				}
 				makeOperationsSelector();
 				if (this.model.getProcess() != null) {
 					this.model.getProcess().addObserver(this);
@@ -600,8 +620,9 @@ class TargetOperationSelector extends JPanel implements FlexoObserver {
 			}
 		}
 		if (observable == this.model.getProcess()) {
-			if (dataModification instanceof OperationChange)
+			if (dataModification instanceof OperationChange) {
 				makeOperationsSelector();
+			}
 		}
 	}
 

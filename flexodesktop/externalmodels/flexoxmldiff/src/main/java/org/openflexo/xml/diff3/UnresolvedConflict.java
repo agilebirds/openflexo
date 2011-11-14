@@ -51,12 +51,14 @@ public abstract class UnresolvedConflict extends Observable {
 
 	public void setSolveAction(MergeAction action, boolean isManualChoice) {
 		if (isManualChoice) {
-			if (_solveAction != null)
+			if (_solveAction != null) {
 				_solveAction.undo();
+			}
 		}
 		_solveAction = action;
-		if (isManualChoice)
+		if (isManualChoice) {
 			_solveAction.execute();
+		}
 		_isManualChoice = isManualChoice;
 		_merge.propagateChange();
 	}
@@ -70,14 +72,16 @@ public abstract class UnresolvedConflict extends Observable {
 	}
 
 	public MergeAction getKeepYourChangeAction() {
-		if (_keepYourChangeAction == null)
+		if (_keepYourChangeAction == null) {
 			_keepYourChangeAction = buildKeepYourChangeAction();
+		}
 		return _keepYourChangeAction;
 	}
 
 	public MergeAction getDiscardYourChangeAction() {
-		if (_discardYourChange == null)
+		if (_discardYourChange == null) {
 			_discardYourChange = buildDiscardYourChangeAction();
+		}
 		return _discardYourChange;
 	}
 

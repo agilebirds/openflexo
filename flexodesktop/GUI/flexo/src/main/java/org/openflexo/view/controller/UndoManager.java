@@ -53,8 +53,9 @@ public class UndoManager {
 
 	public void registerDoneAction(FlexoAction action) {
 
-		if (!ENABLED)
+		if (!ENABLED) {
 			return;
+		}
 
 		if (action instanceof FlexoGUIAction) {
 			// Ignore
@@ -70,15 +71,17 @@ public class UndoManager {
 		}
 
 		if (_actionHistory.size() > UNDO_LEVELS) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Removing " + _actionHistory.firstElement());
+			}
 			(_actionHistory.firstElement()).delete();
 			_actionHistory.removeElementAt(0);
 			_lastDoneIndex--;
 		}
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			debug();
+		}
 	}
 
 	private void debug() {
@@ -106,8 +109,9 @@ public class UndoManager {
 				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
 				e.printStackTrace();
 			}
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				debug();
+			}
 		}
 	}
 
@@ -122,8 +126,9 @@ public class UndoManager {
 				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
 				e.printStackTrace();
 			}
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				debug();
+			}
 		}
 	}
 
@@ -148,10 +153,10 @@ public class UndoManager {
 		for (Enumeration en = _redoControls.elements(); en.hasMoreElements();) {
 			JMenuItem next = (JMenuItem) en.nextElement();
 			next.setEnabled(isRedoActive());
-			if (isRedoActive())
+			if (isRedoActive()) {
 				next.setText(FlexoLocalization.localizedForKey("redo") + " (" + _actionHistory.get(_lastDoneIndex + 1).getLocalizedName()
 						+ ")");
-			else {
+			} else {
 				next.setText(FlexoLocalization.localizedForKey("redo"));
 			}
 		}
@@ -192,8 +197,9 @@ public class UndoManager {
 
 	public void actionHasBeenPerformed(FlexoAction action, boolean success) {
 		if (success) {
-			if (!action.isEmbedded())
+			if (!action.isEmbedded()) {
 				registerDoneAction(action);
+			}
 		}
 	}
 
@@ -209,8 +215,9 @@ public class UndoManager {
 			buildActionsToNotify(allActionsToNotify, actionToNotify);
 		}
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("******* actionHasBeenUndone() for " + action + " notify actions: " + allActionsToNotify);
+		}
 
 		for (String key : action.getExecutionContext().getObjectsCreatedWhileExecutingAction().keySet()) {
 			// Actions creating object are normally deleting those while undoing

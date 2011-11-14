@@ -21,12 +21,12 @@ package org.openflexo.antar.java;
 
 import java.util.Date;
 
-import org.openflexo.antar.expr.DefaultExpressionPrettyPrinter;
-import org.openflexo.antar.expr.Expression;
-import org.openflexo.antar.expr.SymbolicConstant;
 import org.openflexo.antar.expr.Constant.DateSymbolicConstant;
 import org.openflexo.antar.expr.Constant.DurationConstant;
 import org.openflexo.antar.expr.Constant.FloatSymbolicConstant;
+import org.openflexo.antar.expr.DefaultExpressionPrettyPrinter;
+import org.openflexo.antar.expr.Expression;
+import org.openflexo.antar.expr.SymbolicConstant;
 import org.openflexo.toolbox.Duration;
 
 public class JavaExpressionPrettyPrinter extends DefaultExpressionPrettyPrinter {
@@ -37,8 +37,9 @@ public class JavaExpressionPrettyPrinter extends DefaultExpressionPrettyPrinter 
 
 	@Override
 	public String getStringRepresentation(Expression expression) {
-		if (expression instanceof JavaPrettyPrintable)
+		if (expression instanceof JavaPrettyPrintable) {
 			return ((JavaPrettyPrintable) expression).getJavaStringRepresentation();
+		}
 		return super.getStringRepresentation(expression);
 	}
 

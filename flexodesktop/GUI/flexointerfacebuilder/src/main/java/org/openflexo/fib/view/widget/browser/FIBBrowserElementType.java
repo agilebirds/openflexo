@@ -60,8 +60,9 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 	}
 
 	public void delete() {
-		if (browserElementDefinition != null)
+		if (browserElementDefinition != null) {
 			browserElementDefinition.deleteObserver(this);
+		}
 
 		this.controller = null;
 		this.browserElementDefinition = null;
@@ -107,16 +108,20 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 	private void appendToDependingObjects(DataBinding binding, List<TargetObject> returned) {
 		if (binding.isSet()) {
 			List<TargetObject> list = binding.getBinding().getTargetObjects(this);
-			if (list != null)
-				for (TargetObject t : list)
-					if (!returned.contains(t))
+			if (list != null) {
+				for (TargetObject t : list) {
+					if (!returned.contains(t)) {
 						returned.add(t);
+					}
+				}
+			}
 		}
 	}
 
 	public List<TargetObject> getDependingObjects(final Object object) {
-		if (browserElementDefinition == null)
+		if (browserElementDefinition == null) {
 			return null;
+		}
 		iteratorObject = object;
 		List<TargetObject> returned = new ArrayList<TargetObject>();
 		appendToDependingObjects(browserElementDefinition.getLabel(), returned);
@@ -131,8 +136,9 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 	}
 
 	public synchronized String getLabelFor(final Object object) {
-		if (browserElementDefinition == null)
+		if (browserElementDefinition == null) {
 			return "???" + object.toString();
+		}
 		if (browserElementDefinition.getLabel().isSet()) {
 			iteratorObject = object;
 			return (String) browserElementDefinition.getLabel().getBindingValue(this);
@@ -141,8 +147,9 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 	}
 
 	public synchronized String getTooltipFor(final Object object) {
-		if (browserElementDefinition == null)
+		if (browserElementDefinition == null) {
 			return "???" + object.toString();
+		}
 		if (browserElementDefinition.getTooltip().isSet()) {
 			iteratorObject = object;
 			return (String) browserElementDefinition.getTooltip().getBindingValue(this);
@@ -151,8 +158,9 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 	}
 
 	public synchronized Icon getIconFor(final Object object) {
-		if (browserElementDefinition == null)
+		if (browserElementDefinition == null) {
 			return null;
+		}
 		if (browserElementDefinition.getIcon().isSet()) {
 			iteratorObject = object;
 			return (Icon) browserElementDefinition.getIcon().getBindingValue(this);
@@ -162,8 +170,9 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 	}
 
 	public synchronized boolean isEnabled(final Object object) {
-		if (browserElementDefinition == null)
+		if (browserElementDefinition == null) {
 			return false;
+		}
 		if (browserElementDefinition.getEnabled().isSet()) {
 			iteratorObject = object;
 			Object enabledValue = browserElementDefinition.getEnabled().getBindingValue(this);
@@ -177,10 +186,12 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 	}
 
 	public synchronized boolean isVisible(final Object object) {
-		if (browserElementDefinition == null)
+		if (browserElementDefinition == null) {
 			return false;
-		if (isFiltered())
+		}
+		if (isFiltered()) {
 			return false;
+		}
 		if (browserElementDefinition.getVisible().isSet()) {
 			iteratorObject = object;
 			return (Boolean) browserElementDefinition.getVisible().getBindingValue(this);
@@ -192,8 +203,9 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 	private Vector<?> EMPTY_LIST = new Vector();
 
 	public synchronized List<?> getChildrenFor(final Object object) {
-		if (browserElementDefinition == null)
+		if (browserElementDefinition == null) {
 			return EMPTY_LIST;
+		}
 		List returned = new ArrayList();
 		for (FIBBrowserElementChildren children : browserElementDefinition.getChildren()) {
 			if (children.isMultipleAccess()) {
@@ -201,16 +213,18 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 				// System.out.println("Obtain "+getChildrenListFor(children, object));
 				List<?> childrenObjects = getChildrenListFor(children, object);
 				// Might be null if some visibility was declared
-				if (childrenObjects != null)
+				if (childrenObjects != null) {
 					returned.addAll(childrenObjects);
+				}
 			} else {
 				// System.out.println("add children for "+browserElementDefinition.getName()+" children "+children.getName()+" data="+children.getData());
 				// System.out.println("Obtain "+getChildrenFor(children, object));
 				// System.out.println("accessed type="+children.getAccessedType());
 				Object childrenObject = getChildrenFor(children, object);
 				// Might be null if some visibility was declared
-				if (childrenObject != null)
+				if (childrenObject != null) {
 					returned.add(childrenObject);
+				}
 			}
 		}
 		return returned;
@@ -272,12 +286,13 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 
 	@Override
 	public synchronized Object getValue(BindingVariable variable) {
-		if (variable.getVariableName().equals(browserElementDefinition.getName()))
+		if (variable.getVariableName().equals(browserElementDefinition.getName())) {
 			return iteratorObject;
-		else if (variable.getVariableName().equals("object"))
+		} else if (variable.getVariableName().equals("object")) {
 			return iteratorObject;
-		else
+		} else {
 			return getController().getValue(variable);
+		}
 	}
 
 	public FIBBrowserElement getBrowserElement() {
@@ -285,8 +300,9 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 	}
 
 	public Font getFont() {
-		if (getBrowserElement() != null)
+		if (getBrowserElement() != null) {
 			return getBrowserElement().retrieveValidFont();
+		}
 		return null;
 	}
 

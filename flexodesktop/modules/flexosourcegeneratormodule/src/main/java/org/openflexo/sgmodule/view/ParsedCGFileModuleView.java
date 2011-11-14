@@ -54,9 +54,9 @@ import org.openflexo.generator.action.GenerateSourceCode;
 import org.openflexo.generator.action.RevertToSavedGeneratedFile;
 import org.openflexo.generator.action.SaveGeneratedFile;
 import org.openflexo.generator.action.WriteModifiedGeneratedFiles;
-import org.openflexo.icon.CGIconLibrary;
 import org.openflexo.icon.FilesIconLibrary;
 import org.openflexo.icon.GeneratorIconLibrary;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.jedit.JEditTextArea.DisplayContext;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
@@ -180,7 +180,7 @@ public class ParsedCGFileModuleView extends JPanel implements ModuleView<CGFile>
 			add(controlPanel, BorderLayout.EAST);
 
 			if (!(_cgFile instanceof SGJavaFile)) {
-				addInfoPanel(CGIconLibrary.UNFIXABLE_WARNING_ICON, FlexoLocalization.localizedForKey("model_reinjection_not_implemented"),
+				addInfoPanel(IconLibrary.UNFIXABLE_WARNING_ICON, FlexoLocalization.localizedForKey("model_reinjection_not_implemented"),
 						FlexoLocalization.localizedForKey("model_reinjection_not_implemented_description"));
 			}
 
@@ -188,7 +188,7 @@ public class ParsedCGFileModuleView extends JPanel implements ModuleView<CGFile>
 				boolean hasJavaParsingError = (((SGJavaFile) _cgFile).getParseException() != null);
 				if (hasJavaParsingError) {
 					addInfoPanel(
-							CGIconLibrary.UNFIXABLE_ERROR_ICON,
+							IconLibrary.UNFIXABLE_ERROR_ICON,
 							FlexoLocalization.localizedForKey("parse_exception"),
 							FlexoLocalization.localizedForKey("parse_exception_description") + "\n"
 									+ FlexoLocalization.localizedForKey("message") + " : "
@@ -212,11 +212,11 @@ public class ParsedCGFileModuleView extends JPanel implements ModuleView<CGFile>
 					}
 				});
 				if (_cgFile.hasVersionOnDisk()) {
-					addInfoPanel(CGIconLibrary.UNFIXABLE_WARNING_ICON, FlexoLocalization.localizedForKey("is_generation_modified_warning"),
+					addInfoPanel(IconLibrary.UNFIXABLE_WARNING_ICON, FlexoLocalization.localizedForKey("is_generation_modified_warning"),
 							FlexoLocalization.localizedForKey("is_generation_modified_warning_description"), switchPerspectiveButton,
 							generateAction, writeFileAction);
 				} else {
-					addInfoPanel(CGIconLibrary.UNFIXABLE_WARNING_ICON, FlexoLocalization.localizedForKey("is_new_generation_warning"),
+					addInfoPanel(IconLibrary.UNFIXABLE_WARNING_ICON, FlexoLocalization.localizedForKey("is_new_generation_warning"),
 							FlexoLocalization.localizedForKey("is_new_generation_warning_description"), switchPerspectiveButton,
 							generateAction, writeFileAction);
 				}
@@ -235,7 +235,7 @@ public class ParsedCGFileModuleView extends JPanel implements ModuleView<CGFile>
 						getController().switchToPerspective(getController().CODE_GENERATION_PERSPECTIVE);
 					}
 				});
-				addInfoPanel(CGIconLibrary.UNFIXABLE_WARNING_ICON, FlexoLocalization.localizedForKey("is_disk_modified_warning"),
+				addInfoPanel(IconLibrary.UNFIXABLE_WARNING_ICON, FlexoLocalization.localizedForKey("is_disk_modified_warning"),
 						FlexoLocalization.localizedForKey("is_disk_modified_warning_description"), switchPerspectiveButton,
 						acceptDiskVersionAction, acceptAndReinjectAction);
 			} else if (_cgFile.getGenerationStatus().isConflicting()) {
@@ -247,7 +247,7 @@ public class ParsedCGFileModuleView extends JPanel implements ModuleView<CGFile>
 						getController().switchToPerspective(getController().CODE_GENERATION_PERSPECTIVE);
 					}
 				});
-				addInfoPanel(CGIconLibrary.UNFIXABLE_WARNING_ICON, FlexoLocalization.localizedForKey("is_conflicting_warning"),
+				addInfoPanel(IconLibrary.UNFIXABLE_WARNING_ICON, FlexoLocalization.localizedForKey("is_conflicting_warning"),
 						FlexoLocalization.localizedForKey("is_conflicting_warning_description"), switchPerspectiveButton);
 			}
 

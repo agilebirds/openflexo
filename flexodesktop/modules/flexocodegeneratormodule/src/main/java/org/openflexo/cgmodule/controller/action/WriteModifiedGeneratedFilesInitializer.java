@@ -27,13 +27,6 @@ import javax.swing.Icon;
 import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.icon.GeneratorIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.listener.FlexoKeyEventListener;
-
 import org.openflexo.cgmodule.GeneratorPreferences;
 import org.openflexo.cgmodule.view.GeneratorMainPane;
 import org.openflexo.cgmodule.view.popups.SelectFilesPopup;
@@ -44,6 +37,12 @@ import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.generator.action.WriteModifiedGeneratedFiles;
+import org.openflexo.icon.GeneratorIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.listener.FlexoKeyEventListener;
 
 public class WriteModifiedGeneratedFilesInitializer extends ActionInitializer {
 

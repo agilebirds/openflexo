@@ -40,8 +40,9 @@ public class MultipleGenerationException extends GenerationException {
 	public String getMessage() {
 		StringBuffer sb = new StringBuffer();
 		for (FlexoException ex : exceptions) {
-			if (sb.length() > 0)
+			if (sb.length() > 0) {
 				sb.append("\n");
+			}
 			sb.append(ex.getMessage());
 		}
 		return sb.toString();

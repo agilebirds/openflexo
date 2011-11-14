@@ -118,8 +118,9 @@ public class CreateDMRepository extends FlexoAction<CreateDMRepository, DMObject
 	}
 
 	public String getRationalRosePackageName() {
-		if (_rationalRosePackageName != null)
+		if (_rationalRosePackageName != null) {
 			return _rationalRosePackageName;
+		}
 		return "rational.rose";
 	}
 
@@ -152,8 +153,9 @@ public class CreateDMRepository extends FlexoAction<CreateDMRepository, DMObject
 	}
 
 	public FlexoProject getProject() {
-		if (_project == null && getFocusedObject() != null)
+		if (_project == null && getFocusedObject() != null) {
 			return getFocusedObject().getProject();
+		}
 		return _project;
 	}
 
@@ -177,8 +179,9 @@ public class CreateDMRepository extends FlexoAction<CreateDMRepository, DMObject
 
 		// TODO: fixed an NPE that i could not reproduce
 		// (initializer was not called, and therefore repository type was null)
-		if (getRepositoryType() == null)
+		if (getRepositoryType() == null) {
 			return;
+		}
 
 		if (getRepositoryType().equals(CreateDMRepository.PROJECT_REPOSITORY)) {
 			_newRepository = ProjectRepository.createNewProjectRepository(getNewRepositoryName(), getProject().getDataModel());

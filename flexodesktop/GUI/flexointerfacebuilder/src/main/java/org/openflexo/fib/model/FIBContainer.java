@@ -27,7 +27,6 @@ import java.util.logging.Logger;
 
 import javax.swing.tree.TreeNode;
 
-import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.model.FIBPanel.Layout;
 
 public abstract class FIBContainer extends FIBComponent {
@@ -81,8 +80,9 @@ public abstract class FIBContainer extends FIBComponent {
 		}
 		subComponents.add(aComponent);
 		if ((aComponent instanceof FIBWidget) && ((FIBWidget) aComponent).getManageDynamicModel()) {
-			if (deserializationPerformed)
+			if (deserializationPerformed) {
 				updateBindingModel();
+			}
 		}
 		setChanged();
 		notifyObservers(new FIBAddingNotification<FIBComponent>(Parameters.subComponents, aComponent));
@@ -90,8 +90,9 @@ public abstract class FIBContainer extends FIBComponent {
 
 	public FIBComponent getSubComponentNamed(String name) {
 		for (FIBComponent c : subComponents) {
-			if (c.getName() != null && c.getName().equals(name))
+			if (c.getName() != null && c.getName().equals(name)) {
 				return c;
+			}
 		}
 		return null;
 	}
@@ -166,12 +167,14 @@ public abstract class FIBContainer extends FIBComponent {
 					c2.setParent(this);
 					Integer previousIndex = null;
 					if (subComponents != null && subComponents.size() > 0 && subComponents.firstElement().getConstraints() != null
-							&& subComponents.firstElement().getConstraints().hasIndex())
+							&& subComponents.firstElement().getConstraints().hasIndex()) {
 						previousIndex = subComponents.firstElement().getConstraints().getIndex();
+					}
 					// if (previousIndex == null) previousIndex=0;
 					subComponents.insertElementAt(c2, 0);
-					if (previousIndex != null && c2.getConstraints() != null && !c2.getConstraints().hasIndex())
+					if (previousIndex != null && c2.getConstraints() != null && !c2.getConstraints().hasIndex()) {
 						c2.getConstraints().setIndexNoNotification(previousIndex - 1);
+					}
 					// logger.fine("Added "+c2+" into "+this+" index="+(previousIndex-1));
 					addedComponents.add(c2);
 					// c2.finalizeDeserialization();
@@ -190,16 +193,18 @@ public abstract class FIBContainer extends FIBComponent {
 		}
 
 		updateBindingModel();
-		for (FIBComponent c : addedComponents)
+		for (FIBComponent c : addedComponents) {
 			recursivelyFinalizeDeserialization(c);
+		}
 		finalizeDeserialization();
 	}
 
 	private void recursivelyFinalizeDeserialization(FIBComponent c) {
 		c.finalizeDeserialization();
 		if (c instanceof FIBContainer) {
-			for (FIBComponent c2 : ((FIBContainer) c).getSubComponents())
+			for (FIBComponent c2 : ((FIBContainer) c).getSubComponents()) {
 				recursivelyFinalizeDeserialization(c2);
+			}
 		}
 	}
 
@@ -324,8 +329,9 @@ public abstract class FIBContainer extends FIBComponent {
 	public void recursivelyReorderComponents() {
 		reorderComponents();
 		for (FIBComponent c : getSubComponents()) {
-			if (c instanceof FIBContainer)
+			if (c instanceof FIBContainer) {
 				((FIBContainer) c).recursivelyReorderComponents();
+			}
 		}
 	}
 
@@ -346,8 +352,9 @@ public abstract class FIBContainer extends FIBComponent {
 		Collections.sort(subComponents, new Comparator<FIBComponent>() {
 			@Override
 			public int compare(FIBComponent c1, FIBComponent c2) {
-				if (c1.getConstraints() == null || c2.getConstraints() == null)
+				if (c1.getConstraints() == null || c2.getConstraints() == null) {
 					return 0;
+				}
 				return c1.getConstraints().getIndex() - c2.getConstraints().getIndex();
 			};
 		});

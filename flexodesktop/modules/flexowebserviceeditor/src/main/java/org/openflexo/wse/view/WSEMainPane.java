@@ -71,15 +71,17 @@ public class WSEMainPane extends FlexoMainPane implements GraphicalFlexoObserver
 		else if (object instanceof DMRepository) {
 			WSRepository rep = ((DMRepository) object).getProject().getFlexoWSLibrary()
 					.getWSRepositoryNamed(((DMRepository) object).getName());
-			if (rep != null)
+			if (rep != null) {
 				return rep.getWSService().getWSRepositoryFolder();
+			}
 		} else if (object instanceof DMObject) {
 			return (DMObject) ((DMObject) object).getParent();
 		} else if (object instanceof ServiceInterface) {
 			WSPortType proc = ((ServiceInterface) object).getProject().getFlexoWSLibrary()
 					.getWSPortTypeNamed(((ServiceInterface) object).getName());
-			if (proc != null)
+			if (proc != null) {
 				return proc.getWSService().getWSPortTypeFolder();
+			}
 		} else if (object instanceof ServiceOperation) {
 			return ((ServiceOperation) object).getServiceInterface();
 		} else if (object instanceof ServiceMessageDefinition) {

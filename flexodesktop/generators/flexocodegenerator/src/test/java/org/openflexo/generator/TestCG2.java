@@ -122,8 +122,9 @@ public class TestCG2 extends CGTestCase {
 		assertNotNull(_eoPrototypesResource = _project.getEOModelResource(EOPrototypeRepository.EOPROTOTYPE_REPOSITORY_DIR.getName()));
 
 		for (FlexoResource resource : _project.getResources().values()) {
-			if (resource != _rmResource && !(resource instanceof FlexoMemoryResource))
+			if (resource != _rmResource && !(resource instanceof FlexoMemoryResource)) {
 				assertSynchonized(resource, _rmResource);
+			}
 		}
 		assertSynchonized(_dmResource, _executionModelResource);
 		assertSynchonized(_dmResource, _eoPrototypesResource);

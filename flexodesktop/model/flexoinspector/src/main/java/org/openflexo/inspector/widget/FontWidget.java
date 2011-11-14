@@ -34,12 +34,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import org.openflexo.swing.FontChooser;
-import org.openflexo.xmlcode.StringEncoder.Converter;
-
 import org.openflexo.inspector.AbstractController;
 import org.openflexo.inspector.model.PropertyModel;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.swing.FontChooser;
+import org.openflexo.xmlcode.StringEncoder.Converter;
 
 /**
  * Represents a widget able to edit a Font or a StringConvertable object able to be instanciated using a String under the form:
@@ -94,8 +93,9 @@ public class FontWidget extends DenaliWidget {
 				if (f != null) {
 					setTheFont(f);
 					updateModelFromWidget();
-				} else
+				} else {
 					updateWidgetFromModel();
+				}
 			}
 		});
 	}
@@ -120,9 +120,10 @@ public class FontWidget extends DenaliWidget {
 				}
 
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Property " + _propertyModel.name + " is supposed to be a Font or a StringConvertable object, not a "
 							+ object);
+				}
 			}
 		} finally {
 			widgetUpdating = false;
@@ -154,8 +155,9 @@ public class FontWidget extends DenaliWidget {
 				}
 				setObjectValue(getTypeConverter().convertFromString(_font.getName() + "," + _font.getStyle() + "," + _font.getSize()));
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Property " + _propertyModel.name + " is supposed to be a Color, not a " + getType());
+				}
 			}
 		} finally {
 			modelUpdating = false;

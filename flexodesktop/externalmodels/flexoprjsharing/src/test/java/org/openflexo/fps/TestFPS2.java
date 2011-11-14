@@ -31,13 +31,6 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
-import org.openflexo.fps.CVSConsole;
-import org.openflexo.fps.CVSFile;
-import org.openflexo.fps.CVSModule;
-import org.openflexo.fps.CVSRepository;
-import org.openflexo.fps.CVSRepositoryList;
-import org.openflexo.fps.CVSStatus;
-import org.openflexo.fps.SharedProject;
 import org.openflexo.fps.action.CVSRefresh;
 import org.openflexo.fps.action.CheckoutProject;
 import org.openflexo.fps.action.ShareProject;
@@ -123,8 +116,9 @@ public class TestFPS2 extends FPSTestCase {
 	public void test3CheckoutProjectAs() {
 		log("test3CheckoutProjectAs");
 		File checkoutDirectory = new File(_initialProject.getProjectDirectory().getParentFile(), "TestCheckout");
-		if (!checkoutDirectory.exists())
+		if (!checkoutDirectory.exists()) {
 			checkoutDirectory.mkdirs();
+		}
 
 		// Retrieve module
 		CVSModule moduleToCheckout = _project1.getCVSModule();
@@ -168,12 +162,14 @@ public class TestFPS2 extends FPSTestCase {
 			// logger.info("File "+f.getFile()+" status="+f.getStatus());
 			boolean isException = false;
 			for (CVSFile f2 : files) {
-				if (f == f2)
+				if (f == f2) {
 					isException = true;
+				}
 			}
 			try {
-				if (!isException)
+				if (!isException) {
 					assertTrue(f.getStatus() == CVSStatus.CVSIgnored || f.getStatus() == CVSStatus.UpToDate);
+				}
 			} catch (AssertionFailedError e) {
 				hasErrors = true;
 				errors += "Found file " + f.getFile() + " status=" + f.getStatus() + " expected CVSIgnored or UpToDate\n";

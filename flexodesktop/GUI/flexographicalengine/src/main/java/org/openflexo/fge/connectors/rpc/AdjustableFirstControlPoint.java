@@ -24,10 +24,10 @@ import java.awt.geom.AffineTransform;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectPolylin;
 import org.openflexo.fge.geom.FGESegment;
-import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEPlane;
 import org.openflexo.fge.geom.area.FGESubstractionArea;
@@ -161,8 +161,9 @@ public class AdjustableFirstControlPoint extends RectPolylinAdjustableControlPoi
 				// I don't want to hide the thuth: this is NOT good...
 
 				// We keep here initial start orientation
-				if (currentStartOrientation == null)
+				if (currentStartOrientation == null) {
 					currentStartOrientation = initialStartOrientation;
+				}
 				orientation = currentStartOrientation;
 
 				if (!getConnector().getAllowedStartOrientations().contains(orientation)

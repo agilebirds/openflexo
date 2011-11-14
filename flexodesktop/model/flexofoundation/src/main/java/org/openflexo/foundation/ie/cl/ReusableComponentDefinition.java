@@ -81,8 +81,9 @@ public class ReusableComponentDefinition extends PartialComponentDefinition impl
 			if (returned == null && createIfNotExists) {
 				// if(isLoadingComponentResource)return null;
 				// isLoadingComponentResource = true;
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Creating new reusable component resource !");
+				}
 				// FlexoProcessResource processRes =
 				// getProject().getFlexoProcessResource(getProcess().getName());
 				File componentFile = new File(ProjectRestructuration.getExpectedDirectoryForComponent(getProject().getProjectDirectory(),
@@ -113,8 +114,9 @@ public class ReusableComponentDefinition extends PartialComponentDefinition impl
 								throw new InvalidFileNameException(resourceComponentFile);
 							}
 						} catch (InvalidFileNameException e) {
-							if (logger.isLoggable(Level.SEVERE))
+							if (logger.isLoggable(Level.SEVERE)) {
 								logger.severe("This should not happen");
+							}
 							// isLoadingComponentResource = false;
 							return null;
 						}
@@ -133,19 +135,22 @@ public class ReusableComponentDefinition extends PartialComponentDefinition impl
 								throw new InvalidFileNameException(resourceComponentFile);
 							}
 						} catch (InvalidFileNameException e) {
-							if (logger.isLoggable(Level.SEVERE))
+							if (logger.isLoggable(Level.SEVERE)) {
 								logger.severe("This should really not happen.");
+							}
 							// isLoadingComponentResource = false;
 							return null;
 						}
 					}
 				}
 				// isLoadingComponentResource = false;
-				if (compRes == null)
+				if (compRes == null) {
 					return null;
+				}
 
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Registered component " + _componentName + " file: " + componentFile);
+				}
 
 				returned = compRes;
 			}

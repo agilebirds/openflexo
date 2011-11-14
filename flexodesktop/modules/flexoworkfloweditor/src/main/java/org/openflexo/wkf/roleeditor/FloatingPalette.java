@@ -39,16 +39,16 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGERoundRectangle;
 import org.openflexo.fge.geom.FGEShape;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
-import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.graphics.BackgroundStyle;
+import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.FGEGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.notifications.ObjectResized;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEPaintManager;
@@ -144,10 +144,11 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 				}
 
 			} else {
-				if (isDnd)
+				if (isDnd) {
 					g.setColor(OK);
-				else
+				} else {
 					g.setColor(Color.RED);
+				}
 			}
 			g.drawLine(fromPoint.x, fromPoint.y, toPoint.x, toPoint.y);
 			int x, y, w, h;
@@ -172,10 +173,11 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 	@Override
 	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
 		mode = null;
-		if (roleRect.contains(startPoint))
+		if (roleRect.contains(startPoint)) {
 			mode = Mode.ROLE;
-		else if (edgeRect.contains(startPoint))
+		} else if (edgeRect.contains(startPoint)) {
 			mode = Mode.SPECIALIZATION;
+		}
 		if (mode != null) {
 			drawEdge = true;
 			normalizedStartPoint = startPoint;
@@ -218,10 +220,11 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 			// Attempt to repaint relevant zone only
 			Rectangle newBounds = getBoundsToRepaint(drawingView);
 			Rectangle boundsToRepaint;
-			if (oldBounds != null)
+			if (oldBounds != null) {
 				boundsToRepaint = oldBounds.union(newBounds);
-			else
+			} else {
 				boundsToRepaint = newBounds;
+			}
 			paintManager.repaint(drawingView, boundsToRepaint);
 
 			// Alternative @brutal zone
@@ -259,17 +262,20 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 		if (drawEdge && currentDraggingLocationInDrawingView != null && isDnd) {
 			try {
 				GraphicalRepresentation<?> targetGR = controller.getGraphicalRepresentation(target);
-				if (targetGR == null)
+				if (targetGR == null) {
 					targetGR = controller.getDrawingGraphicalRepresentation();
+				}
 				SimplifiedCardinalDirection direction = FGEPoint.getSimplifiedOrientation(
 						new FGEPoint(roleGR.convertLocalNormalizedPointToRemoteViewCoordinates(this.normalizedStartPoint,
 								controller.getDrawingGraphicalRepresentation(), controller.getScale())), new FGEPoint(
 								currentDraggingLocationInDrawingView));
 				Point dropPoint = currentDraggingLocationInDrawingView;
-				if (dropPoint.x < 0)
+				if (dropPoint.x < 0) {
 					dropPoint.x = 0;
-				if (dropPoint.y < 0)
+				}
+				if (dropPoint.y < 0) {
 					dropPoint.y = 0;
+				}
 				Point p = GraphicalRepresentation.convertPoint(controller.getDrawingGraphicalRepresentation(), dropPoint, targetGR,
 						controller.getScale());
 				FGEPoint dropLocation = new FGEPoint(p.x / controller.getScale(), p.y / controller.getScale());
@@ -279,15 +285,17 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 					to = createRole(dropLocation, target, direction);
 					break;
 				case SPECIALIZATION:
-					if (this.to != null)
+					if (this.to != null) {
 						to = this.to.getDrawable();
+					}
 					break;
 				default:
 					logger.warning("Not implemented !!!");
 					break;
 				}
-				if (to == null)
+				if (to == null) {
 					return;
+				}
 
 				AddRoleSpecialization addRoleSpecializationAction = AddRoleSpecialization.actionType.makeNewAction(roleGR.getDrawable(),
 						null, ((RoleEditorController) controller).getEditor());
@@ -295,8 +303,9 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 				addRoleSpecializationAction.setRoleSpecializationAutomaticallyCreated(true);
 				addRoleSpecializationAction.doAction();
 
-				if (mode == Mode.ROLE)
+				if (mode == Mode.ROLE) {
 					controller.setSelectedObject(controller.getGraphicalRepresentation(to));
+				}
 
 			} finally {
 				resetVariables();
@@ -321,9 +330,10 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 
 	private Role createRole(FGEPoint dropLocation, RoleList container, SimplifiedCardinalDirection direction) {
 		FGEPoint locationInDrawing = null;
-		if (controller.getGraphicalRepresentation(container) != null)
+		if (controller.getGraphicalRepresentation(container) != null) {
 			locationInDrawing = dropLocation.transform(GraphicalRepresentation.convertCoordinatesAT(
 					controller.getGraphicalRepresentation(container), controller.getDrawingGraphicalRepresentation(), 1.0));// gr.getLocationInDrawing();
+		}
 
 		FlexoWorkflow workflow = container.getWorkflow();
 		AddRole addRole = AddRole.actionType.makeNewAction(workflow, null, controller.getWKFController().getEditor());
@@ -336,8 +346,9 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 		if (addRole.getNewRole() != null) {
 			ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) controller.getGraphicalRepresentation(addRole
 					.getNewRole());
-			if (locationInDrawing == null)
+			if (locationInDrawing == null) {
 				locationInDrawing = gr.getLocationInDrawing();
+			}
 			double xOffset = 0;
 			double yOffset = 0;
 			if (gr != null) {
@@ -365,10 +376,12 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 				}*/
 				xOffset -= gr.getWidth() / 2;
 				yOffset -= gr.getHeight() / 2;
-				if (xOffset < 0 && -xOffset > locationInDrawing.x)
+				if (xOffset < 0 && -xOffset > locationInDrawing.x) {
 					xOffset = -locationInDrawing.x;
-				if (yOffset < 0 && -yOffset > locationInDrawing.y)
+				}
+				if (yOffset < 0 && -yOffset > locationInDrawing.y) {
 					yOffset = -locationInDrawing.y;
+				}
 				gr.setX(gr.getX() + xOffset);
 				gr.setY(gr.getY() + yOffset);
 			}
@@ -379,10 +392,12 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 	@Override
 	public Rectangle paint(FGEGraphics drawingGraphics) {
 		// System.out.println("Focused:"+nodeGR.getIsFocused());
-		if (roleGR.getIsSelected() && !roleGR.getIsFocused())
+		if (roleGR.getIsSelected() && !roleGR.getIsFocused()) {
 			return null;
-		if (/*nodeGR.getIsSelected() ||*/roleGR.isResizing() || roleGR.isMoving())
+		}
+		if (/*nodeGR.getIsSelected() ||*/roleGR.isResizing() || roleGR.isMoving()) {
 			return null;
+		}
 		AffineTransform at = GraphicalRepresentation.convertNormalizedCoordinatesAT(roleGR, drawingGraphics.getGraphicalRepresentation());
 
 		Graphics2D oldGraphics = drawingGraphics.cloneGraphics();

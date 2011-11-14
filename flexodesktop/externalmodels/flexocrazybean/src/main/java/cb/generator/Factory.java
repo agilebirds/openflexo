@@ -78,10 +78,11 @@ public class Factory {
 	}
 
 	protected String getClassName(Class clazz) {
-		if ("".equals(clazz.getPackage()))
+		if ("".equals(clazz.getPackage())) {
 			return clazz.getName();
-		else
+		} else {
 			return clazz.getPackage() + "." + clazz.getName();
+		}
 	}
 
 	/**
@@ -98,10 +99,11 @@ public class Factory {
 				buf.append('.');
 				i++;
 			} else {
-				if (Character.isLetterOrDigit(ch))
+				if (Character.isLetterOrDigit(ch)) {
 					buf.append(ch);
-				else
+				} else {
 					buf.append('_');
+				}
 			}
 		}
 
@@ -123,10 +125,11 @@ public class Factory {
 		} else {
 			int index2 = qual.lastIndexOf("::");
 
-			if (index == index2)
+			if (index == index2) {
 				pack = "";
-			else
+			} else {
 				pack = makeName(qual.substring(index + 2, index2));
+			}
 
 			name = qual.substring(index2 + 2);
 		}
@@ -150,8 +153,9 @@ public class Factory {
 		String[] names = makeNames(clazz.getQualifiedName());
 		String acc = clazz.getExportControl();
 
-		if (acc == null)
+		if (acc == null) {
 			acc = "public";
+		}
 
 		return createClass(clazz, names[0], names[1], acc, clazz.isInterface());
 	}
@@ -172,12 +176,14 @@ public class Factory {
 		String name = op.getNameParameter();
 		String acc = op.getExportControl();
 
-		if (acc == null)
+		if (acc == null) {
 			acc = "public";
+		}
 
 		String type = op.getResult();
-		if (type == null)
+		if (type == null) {
 			type = "void";
+		}
 
 		ArrayList params = new ArrayList();
 
@@ -207,9 +213,9 @@ public class Factory {
 		if (type == null) { // Sometimes type and name stick together "AType t"
 			int index = name.indexOf(' ');
 
-			if (index < 0)
+			if (index < 0) {
 				type = "Object";
-			else {
+			} else {
 				type = name.substring(0, index);
 				name = name.substring(index + 1);
 			}
@@ -233,15 +239,18 @@ public class Factory {
 	public Field createField(ClassAttribute attr) {
 		String name = attr.getNameParameter();
 		String acc = attr.getExportControl();
-		if (acc == null)
+		if (acc == null) {
 			acc = "private";
+		}
 
-		if (attr.getStatic())
+		if (attr.getStatic()) {
 			acc += " static";
+		}
 
 		String type = attr.getType();
-		if (type == null)
+		if (type == null) {
 			type = "Object";
+		}
 
 		String init = attr.getInitialValue();
 
@@ -278,10 +287,11 @@ public class Factory {
 	}
 
 	private static String map(String number) {
-		if ("n".equals(number.toLowerCase()) || "*".equals(number))
+		if ("n".equals(number.toLowerCase()) || "*".equals(number)) {
 			return "" + Integer.MAX_VALUE;
-		else
+		} else {
 			return number;
+		}
 	}
 
 	protected Dimension getCardinality(Role role) {
@@ -294,10 +304,11 @@ public class Factory {
 			try {
 				from = Integer.parseInt(map(tok.nextToken()));
 
-				if (tok.hasMoreTokens())
+				if (tok.hasMoreTokens()) {
 					to = Integer.parseInt(map(tok.nextToken()));
-				else
+				} else {
 					to = from;
+				}
 			} catch (Exception e) {
 				throw new RuntimeException("Invalid cardinality " + card);
 			}
@@ -343,8 +354,9 @@ public class Factory {
 
 		// Constructor
 		Method method = createMethod(null, name, "", "private", Collections.EMPTY_LIST);
-		if (!clazz.getMethods().contains(method))
+		if (!clazz.getMethods().contains(method)) {
 			clazz.addMethod(method);
+		}
 
 		method = createMethod(null, "lookup", "HashSet", "private static final",
 				Arrays.asList(new Parameter[] { createParameter("map", "HashMap"), createParameter("obj", "Object") }));
@@ -405,8 +417,9 @@ public class Factory {
 		boolean equal = name1.equals(name2); // Self association?
 		Class clazz = createAssociationClass(class1, class2, assoc_class);
 
-		if (assoc_class != null) // Don't add twice
+		if (assoc_class != null) {
 			addObject(assoc.getQuid(), clazz);
+		}
 
 		Method method = createMethod(null, "add" + class2.getName(), "void", "public",
 				Arrays.asList(new Parameter[] { createParameter("a", name2) }));
@@ -442,8 +455,9 @@ public class Factory {
 		String type = getClassName(used_class);
 		String name = Constants.makeName(rel.getLabel());
 
-		if (name == null)
+		if (name == null) {
 			name = "uses" + counter++;
+		}
 
 		Field f = createField(null, name, type, "private", null);
 		c.addField(f);
@@ -459,8 +473,9 @@ public class Factory {
 		if (c.isInterface()) {
 			field.setAccess("public static final");
 
-			if (field.getInitialValue() == null)
+			if (field.getInitialValue() == null) {
 				field.setInitialValue(Constants.getValueForType(field.getType()));
+			}
 		} else {
 			if (field.is("private") && !field.is("static")) {
 				Method[] m = createSetGetMethods(field.getName(), field.getType());
@@ -473,8 +488,9 @@ public class Factory {
 	}
 
 	public void addMethod(Class c, Method m) {
-		if (c.isInterface() && !m.is("abstract"))
+		if (c.isInterface() && !m.is("abstract")) {
 			m.setAccess(m.getAccess() + " abstract");
+		}
 		c.addMethod(m);
 	}
 }

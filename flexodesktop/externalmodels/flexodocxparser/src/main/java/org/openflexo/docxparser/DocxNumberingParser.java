@@ -43,34 +43,39 @@ public class DocxNumberingParser {
 	}
 
 	public boolean isOrderedNumbering(String numberingId, String levelNumber) {
-		if (levelNumber == null)
+		if (levelNumber == null) {
 			levelNumber = "0";
+		}
 
 		Document xml = getNumberingXml();
 
-		if (xml == null)
+		if (xml == null) {
 			return false;
+		}
 
 		Element element = (Element) xml.selectSingleNode("/w:numbering/w:num[@w:numId = '" + numberingId + "']");
 
-		if (element == null)
+		if (element == null) {
 			return false;
+		}
 
 		Element numberingFormatElement = (Element) element
 				.selectSingleNode("w:lvlOverride[@w:ilvl = '" + levelNumber + "']/w:lvl/w:numFmt");
 
 		if (numberingFormatElement == null) { // Get the abstract one
 			Element abstractNumIdElement = element.element(DocxQName.getQName(OpenXmlTag.w_abstractNumId));
-			if (abstractNumIdElement == null)
+			if (abstractNumIdElement == null) {
 				return false;
+			}
 
 			String abstractNumId = abstractNumIdElement.attributeValue(DocxQName.getQName(OpenXmlTag.w_val));
 
 			numberingFormatElement = (Element) xml.selectSingleNode("/w:numbering/w:abstractNum[@w:abstractNumId = '" + abstractNumId
 					+ "']/w:lvl[@w:ilvl = '" + levelNumber + "']/w:numFmt");
 
-			if (numberingFormatElement == null)
+			if (numberingFormatElement == null) {
 				return false;
+			}
 		}
 
 		String numberingFormat = numberingFormatElement.attributeValue(DocxQName.getQName(OpenXmlTag.w_val));

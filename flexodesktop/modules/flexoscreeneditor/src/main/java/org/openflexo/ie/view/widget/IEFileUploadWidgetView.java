@@ -108,12 +108,14 @@ public class IEFileUploadWidgetView extends AbstractInnerTableWidgetView<IEFileU
 	public Dimension getPreferredSize() {
 		if (getHoldsNextComputedPreferredSize()) {
 			Dimension storedSize = storedPrefSize();
-			if (storedSize != null)
+			if (storedSize != null) {
 				return storedSize;
+			}
 		}
 		Dimension d = super.getPreferredSize();
-		if (getHoldsNextComputedPreferredSize())
+		if (getHoldsNextComputedPreferredSize()) {
 			storePrefSize(d);
+		}
 		return d;
 	}
 
@@ -132,8 +134,9 @@ public class IEFileUploadWidgetView extends AbstractInnerTableWidgetView<IEFileU
 		}
 		if (modif instanceof WidgetRemovedFromTable && arg0 == getModel()) {
 			delete();
-		} else
+		} else {
 			super.update(arg0, modif);
+		}
 	}
 
 }

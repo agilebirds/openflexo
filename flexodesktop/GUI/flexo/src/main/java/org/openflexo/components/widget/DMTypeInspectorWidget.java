@@ -63,8 +63,9 @@ public class DMTypeInspectorWidget extends CustomInspectorWidget<DMType> {
 		getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Focus gained in " + getClass().getName());
+				}
 				super.focusGained(arg0);
 				_selector.getTextField().requestFocus();
 				_selector.getTextField().selectAll();
@@ -72,8 +73,9 @@ public class DMTypeInspectorWidget extends CustomInspectorWidget<DMType> {
 
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Focus lost in " + getClass().getName());
+				}
 				super.focusLost(arg0);
 			}
 		});
@@ -95,10 +97,11 @@ public class DMTypeInspectorWidget extends CustomInspectorWidget<DMType> {
 	 */
 	@Override
 	public synchronized void updateModelFromWidget() {
-		if (_selector.getEditedObject() != null)
+		if (_selector.getEditedObject() != null) {
 			setObjectValue(_selector.getEditedObject().clone());
-		else
+		} else {
 			setObjectValue(null);
+		}
 		super.updateModelFromWidget();
 	}
 
@@ -116,21 +119,24 @@ public class DMTypeInspectorWidget extends CustomInspectorWidget<DMType> {
 	@Override
 	protected void performModelUpdating(InspectableObject value) {
 		if (hasValueForParameter("displayTypeAsSimplified")) {
-			if (_selector != null)
+			if (_selector != null) {
 				_selector.setDisplayTypeAsSimplified(getBooleanValueForParameter("displayTypeAsSimplified"));
+			}
 		}
 		if (hasValueForParameter("readOnly")) {
-			if (_selector != null)
+			if (_selector != null) {
 				_selector.setReadOnly(getBooleanValueForParameter("readOnly"));
+			}
 		}
 		if (hasValueForParameter("project")) {
 			setProject((FlexoProject) getDynamicValueForParameter("project", value));
 		}
 		if (hasValueForParameter("owner")) {
-			if (getDynamicValueForParameter("owner", value) instanceof DMTypeOwner)
+			if (getDynamicValueForParameter("owner", value) instanceof DMTypeOwner) {
 				setOwner((DMTypeOwner) getDynamicValueForParameter("owner", value));
-			else if (getDynamicValueForParameter("owner", value) != null)
+			} else if (getDynamicValueForParameter("owner", value) != null) {
 				logger.warning("Object " + getDynamicValueForParameter("owner", value) + " is not an instanceof DMTypeOwner");
+			}
 		}
 	}
 
@@ -140,14 +146,16 @@ public class DMTypeInspectorWidget extends CustomInspectorWidget<DMType> {
 
 	@Override
 	public void fireEditingCanceled() {
-		if (_selector != null)
+		if (_selector != null) {
 			_selector.closePopup();
+		}
 	}
 
 	@Override
 	public void fireEditingStopped() {
-		if (_selector != null)
+		if (_selector != null) {
 			_selector.closePopup();
+		}
 	}
 
 	@Override

@@ -27,9 +27,9 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.InvalidParametersException;
-import org.openflexo.foundation.view.ViewLibraryObject;
 import org.openflexo.foundation.view.ViewFolder;
 import org.openflexo.foundation.view.ViewLibrary;
+import org.openflexo.foundation.view.ViewLibraryObject;
 
 public class AddViewFolder extends FlexoAction<AddViewFolder, ViewLibraryObject, ViewLibraryObject> {
 

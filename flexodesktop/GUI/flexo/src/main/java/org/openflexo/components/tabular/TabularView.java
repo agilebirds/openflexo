@@ -76,13 +76,15 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 				if (e.getClickCount() == 2) {
 					if (_model.isCellEditable(row, col)) {
 						if (logger.isLoggable(Level.FINE)) {
-							if (logger.isLoggable(Level.FINE))
+							if (logger.isLoggable(Level.FINE)) {
 								logger.fine("Double-click detected in a editable cell. Do nothing !");
+							}
 						}
 					} else if ((row > -1) && (row < _model.getRowCount())) {
 						if (logger.isLoggable(Level.FINE)) {
-							if (logger.isLoggable(Level.FINE))
+							if (logger.isLoggable(Level.FINE)) {
 								logger.fine("Double-click detected in a NON-editable cell. Select !");
+							}
 						}
 						FlexoModelObject selectMe = _model.elementAt(row);
 						if (((FlexoController) _controller).moduleViewForObject(selectMe) != null) {
@@ -91,16 +93,18 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 					}
 				} else if (e.getClickCount() == 1) {
 					if (logger.isLoggable(Level.FINE)) {
-						if (logger.isLoggable(Level.FINE))
+						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("Simple-click detected !");
+						}
 					}
 					// FlexoModelObject selectMe = _model.elementAt(row);
 					// _focusedObject = selectMe;
 					// updateSlaveTabularViews();
 
 					if ((_table.getEditingRow() > -1) && (_table.getEditingRow() != row)) {
-						if (logger.isLoggable(Level.INFO))
+						if (logger.isLoggable(Level.INFO)) {
 							logger.info("Change row where edition was started, fire stop editing !");
+						}
 						TableCellEditor cellEditor = _model.columnAt(col).getCellEditor();
 						if (cellEditor != null) {
 							cellEditor.stopCellEditing();
@@ -116,10 +120,12 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 				}
 			} else {
 				if ((_table.getEditingRow() > -1) && (_table.getEditingRow() != row)) {
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Clicked outside the table, stop cell edition!");
-					if (_table.getCellEditor() != null)
+					}
+					if (_table.getCellEditor() != null) {
 						_table.getCellEditor().stopCellEditing();
+					}
 					e.consume();
 				}
 			}
@@ -274,8 +280,9 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 	}
 
 	private void initColumnModel() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("initColumnModel() with " + _model.getColumnCount() + " columns");
+		}
 		for (int i = 0; i < _model.getColumnCount(); i++) {
 			TableColumn col = _table.getColumnModel().getColumn(i);
 			FlexoLocalization.localizedForKey(getModel().columnAt(i).getTitle(), col);
@@ -304,18 +311,21 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 
 	public void setVisibleRowCount(int rows) {
 		int height = 0;
-		for (int row = 0; row < rows; row++)
+		for (int row = 0; row < rows; row++) {
 			height += _table.getRowHeight(row);
+		}
 		_table.setPreferredScrollableViewportSize(new Dimension(_table.getPreferredScrollableViewportSize().width, height));
 	}
 
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		// Ignore extra messages.
-		if (e.getValueIsAdjusting())
+		if (e.getValueIsAdjusting()) {
 			return;
-		if (logger.isLoggable(Level.FINE))
+		}
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("valueChanged() ListSelectionEvent=" + e + " ListSelectionModel=" + _listSelectionModel.toString());
+		}
 		_selectedObjectsNeedsRecomputing = true;
 
 		/* At least one of this item has change */
@@ -338,8 +348,9 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 		*/
 		for (int i = beginIndex; i <= endIndex; i++) {
 			if (_listSelectionModel.isSelectedIndex(i) != _controller.getSelectionManager().selectionContains(_model.elementAt(i))) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Selection status for object " + _model.elementAt(i) + " at index " + i + " has changed");
+				}
 				if (_listSelectionModel.isSelectedIndex(i)) {
 					// Change for addition
 					toBeAddedToSelection.add(_model.elementAt(i));
@@ -369,8 +380,9 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 				FlexoModelObject next = (FlexoModelObject) en.nextElement();
 				if (!mayRepresents(next)) {
 					toBeRemovedFromSelection.add(next);
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Mark " + next + " for deletion ");
+					}
 				}
 			}
 		}
@@ -380,10 +392,12 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 	private void updateSlaveTabularViews() {
 		Vector currentSelection = getSelectedObjects();
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("udpateSlaveTabularViews");
-		if (logger.isLoggable(Level.FINE))
+		}
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Current selection: " + currentSelection);
+		}
 		if (currentSelection.size() == 1) {
 			setModelInSlaveTabularViews((FlexoModelObject) currentSelection.firstElement());
 		} else {
@@ -393,8 +407,9 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 	}
 
 	private void setModelInSlaveTabularViews(FlexoModelObject newModel) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setModelInDrivenTableViews with " + newModel);
+		}
 		if (_slaveTabularViews != null) {
 			for (Enumeration<TabularView> en = _slaveTabularViews.elements(); en.hasMoreElements();) {
 				TabularView next = en.nextElement();
@@ -405,8 +420,9 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 
 	private void setModelObject(FlexoModelObject newModel) {
 		if (_table.isEditing() && _table.getCellEditor() != null && getModel().getModel() != null && getModel().getModel() != newModel
-				&& newModel != null)
+				&& newModel != null) {
 			_table.getCellEditor().stopCellEditing();
+		}
 		_listSelectionModel.removeListSelectionListener(this);
 		getModel().setModel(newModel);
 		_listSelectionModel.addListSelectionListener(this);
@@ -480,8 +496,9 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 	 * @see org.openflexo.view.InspectableObjectView#getInspectedObject()
 	 */
 	public InspectableObject getInspectedObject() {
-		if (_model.getModel() instanceof InspectableObject)
+		if (_model.getModel() instanceof InspectableObject) {
 			return (InspectableObject) _model.getModel();
+		}
 		return null;
 	}
 
@@ -506,8 +523,9 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 		// After updating the content of the table, we set the selection back to its previous state (content has change but not the
 		// selection)
 		_controller.getSelectionManager().removeFromSelectionListeners(temporarySelectionListener);
-		if (selectionHasChanged)
+		if (selectionHasChanged) {
 			_controller.getSelectionManager().setSelectedObjects(v);// Note that deleted objects are automatically ignored by the SM
+		}
 		refreshRequested = false;
 	}
 
@@ -521,11 +539,13 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 	 */
 	@Override
 	public void update(FlexoObservable o, DataModification dataModification) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("update received in TabularView for " + o + " dataModification=" + dataModification);
+		}
 		synchronized (this) {
-			if (refreshRequested)
+			if (refreshRequested) {
 				return;
+			}
 			refreshRequested = true;
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
@@ -550,8 +570,9 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 	public void tableChanged(TableModelEvent e) {
 		if (e instanceof AbstractModel.ModelObjectHasChanged) {
 			AbstractModel.ModelObjectHasChanged event = (AbstractModel.ModelObjectHasChanged) e;
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Model has changed from " + event.getOldModel() + " to " + event.getNewModel());
+			}
 			if (event.getOldModel() != null) {
 				event.getOldModel().deleteObserver(this);
 			}
@@ -562,8 +583,9 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 			AbstractModel.SelectObjectEvent event = (AbstractModel.SelectObjectEvent) e;
 			selectObject(event.getSelectedObject());
 		} else if (e instanceof AbstractModel.RowMoveForObjectEvent) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Reselect object, and then the edited cell");
+			}
 			AbstractModel.RowMoveForObjectEvent event = (AbstractModel.RowMoveForObjectEvent) e;
 			selectObject(event.getEditedObject());
 			_table.setEditingColumn(event.getColumn());
@@ -582,8 +604,9 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 
 	@Override
 	public Vector<FlexoModelObject> getSelection() {
-		if (getSelectionManager() != null)
+		if (getSelectionManager() != null) {
 			return getSelectionManager().getSelection();
+		}
 		return null;
 	}
 
@@ -669,8 +692,9 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 
 	@Override
 	public FlexoModelObject getFocusedObject() {
-		if (getSelectionManager() != null)
+		if (getSelectionManager() != null) {
 			return getSelectionManager().getFocusedObject();
+		}
 		return null;
 	}
 
@@ -679,8 +703,9 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 	 */
 	@Override
 	public void fireObjectSelected(FlexoModelObject object) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("TabularView for " + getObject() + " fireObjectSelected() with " + object);
+		}
 		FlexoModelObject parent = getParentObject(object);
 		if ((getMasterTabularView() != null) && (parent != null)) {
 			// If master tabular view not null (means that is is a slave
@@ -709,8 +734,9 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 	 */
 	@Override
 	public void fireObjectDeselected(FlexoModelObject object) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("TabularView for " + getObject() + " fireObjectDeselected() with " + object);
+		}
 		FlexoModelObject parent = getParentObject(object);
 		if ((getMasterTabularView() != null) && (parent != null)) {
 			// If master tabular view not null (means that is is a slave
@@ -771,7 +797,8 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 	}
 
 	public void editCellAt(int col, int row) {
-		if (_table != null)
+		if (_table != null) {
 			_table.editCellAt(row, col);
+		}
 	}
 }

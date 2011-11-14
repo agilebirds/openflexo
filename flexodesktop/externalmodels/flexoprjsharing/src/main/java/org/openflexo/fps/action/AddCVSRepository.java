@@ -27,10 +27,10 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.fps.CVSRepository;
+import org.openflexo.fps.CVSRepository.ConnectionType;
 import org.openflexo.fps.CVSRepositoryList;
 import org.openflexo.fps.FPSObject;
 import org.openflexo.fps.FlexoAuthentificationException;
-import org.openflexo.fps.CVSRepository.ConnectionType;
 
 public class AddCVSRepository extends CVSAction<AddCVSRepository, CVSRepositoryList> {
 

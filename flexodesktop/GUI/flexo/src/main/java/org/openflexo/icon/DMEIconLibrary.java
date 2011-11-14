@@ -131,7 +131,7 @@ public class DMEIconLibrary extends IconLibrary {
 
 	public static Icon getIconForType(DMType type) {
 		if (type.getKindOfType() == KindOfType.UNRESOLVED) {
-			return CGIconLibrary.UNFIXABLE_ERROR_ICON;
+			return IconLibrary.UNFIXABLE_ERROR_ICON;
 		} else if ((type.getKindOfType() == KindOfType.RESOLVED) || (type.getKindOfType() == KindOfType.RESOLVED_ARRAY)) {
 			if (type.getBaseEntity().getIsNormalClass()) {
 				return DMEIconLibrary.DM_ENTITY_CLASS_ICON;

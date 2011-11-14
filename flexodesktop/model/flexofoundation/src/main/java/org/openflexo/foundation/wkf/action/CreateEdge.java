@@ -118,12 +118,14 @@ public class CreateEdge extends FlexoUndoableAction<CreateEdge, AbstractNode, Ab
 	protected void doAction(Object context) throws InvalidEdgeDefinition, DisplayActionCannotBeBound {
 		// 1. Check validity
 		// Cannot have null start node or end node
-		if (startingNode == null || endNode == null)
+		if (startingNode == null || endNode == null) {
 			throw new InvalidEdgeDefinition();
+		}
 
 		// Display action cannot have outgoing edges
-		if (startingNode instanceof ActionNode && ((ActionNode) startingNode).getActionType() == ActionType.DISPLAY_ACTION)
+		if (startingNode instanceof ActionNode && ((ActionNode) startingNode).getActionType() == ActionType.DISPLAY_ACTION) {
 			throw new DisplayActionCannotBeBound();
+		}
 
 		// End activity node of the top level cannot have outgoing edges
 		if (startingNode instanceof AbstractActivityNode && ((AbstractActivityNode) startingNode).isEndNode()
@@ -134,12 +136,14 @@ public class CreateEdge extends FlexoUndoableAction<CreateEdge, AbstractNode, Ab
 		// 2. Let's find the end node (mainly ensure that edges that go to a FlexoNode go onto a precondition
 		AbstractNode realEndNode = findEndNode();
 		// Start node check
-		if (!startingNode.mayHaveOutgoingPostConditions())
+		if (!startingNode.mayHaveOutgoingPostConditions()) {
 			throw new InvalidEdgeDefinition();
+		}
 
 		// End node check
-		if (!realEndNode.mayHaveIncomingPostConditions())
+		if (!realEndNode.mayHaveIncomingPostConditions()) {
 			throw new InvalidEdgeDefinition();
+		}
 
 		// 3. Create the edge
 
@@ -206,8 +210,9 @@ public class CreateEdge extends FlexoUndoableAction<CreateEdge, AbstractNode, Ab
 			createPreCondition.getNewPreCondition().resetLocation();
 		}
 		if (createPreConditionForInducedEdgeConstruction != null
-				&& createPreConditionForInducedEdgeConstruction.getNewPreCondition() != null)
+				&& createPreConditionForInducedEdgeConstruction.getNewPreCondition() != null) {
 			createPreConditionForInducedEdgeConstruction.getNewPreCondition().resetLocation();
+		}
 
 		objectCreated("NEW_POST_CONDITION", newPostCondition);
 	}
@@ -239,8 +244,9 @@ public class CreateEdge extends FlexoUndoableAction<CreateEdge, AbstractNode, Ab
 	}
 
 	private AbstractNode findEndNode() throws InvalidEdgeDefinition {
-		if (endNode instanceof ActionNode)
+		if (endNode instanceof ActionNode) {
 			return endNode;
+		}
 		if (endNode instanceof FlexoNode) {
 			FlexoNode endFlexoNode = (FlexoNode) endNode;
 			if ((endFlexoNode.isBeginNode()) && (!(startingNode instanceof AbstractInPort))) {

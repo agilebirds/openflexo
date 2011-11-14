@@ -52,8 +52,9 @@ public class WSESelectionManager extends SelectionManager {
 
 	@Override
 	public boolean performSelectionSelectAll() {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("'Select All' not implemented yet in this module");
+		}
 		return false;
 	}
 

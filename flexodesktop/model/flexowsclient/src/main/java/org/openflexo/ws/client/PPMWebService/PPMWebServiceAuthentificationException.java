@@ -73,13 +73,16 @@ public class PPMWebServiceAuthentificationException extends org.apache.axis.Axis
 
 	@Override
 	public synchronized boolean equals(java.lang.Object obj) {
-		if (!(obj instanceof PPMWebServiceAuthentificationException))
+		if (!(obj instanceof PPMWebServiceAuthentificationException)) {
 			return false;
+		}
 		PPMWebServiceAuthentificationException other = (PPMWebServiceAuthentificationException) obj;
-		if (obj == null)
+		if (obj == null) {
 			return false;
-		if (this == obj)
+		}
+		if (this == obj) {
 			return true;
+		}
 		if (__equalsCalc != null) {
 			return (__equalsCalc == obj);
 		}

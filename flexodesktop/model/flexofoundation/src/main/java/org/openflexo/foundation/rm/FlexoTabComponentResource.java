@@ -92,10 +92,12 @@ public class FlexoTabComponentResource extends FlexoComponentResource {
 		if (_componentDefinition == null) {
 			_componentDefinition = (TabComponentDefinition) getProject().getFlexoComponentLibrary().getComponentNamed(name);
 			if (_componentDefinition == null) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("cant find an TabComponentDefinition for thumbnail: " + getName() + " in library");
-				if (logger.isLoggable(Level.INFO))
+				}
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Trying to repair...");
+				}
 				FlexoComponentFolder rootFolder = getProject().getFlexoComponentLibrary().getRootFolder();
 				try {
 					_componentDefinition = new TabComponentDefinition(getName(), getProject().getFlexoComponentLibrary(), rootFolder,
@@ -115,9 +117,10 @@ public class FlexoTabComponentResource extends FlexoComponentResource {
 	public Object instanciateNewBuilder() {
 		Object returned = super.instanciateNewBuilder();
 		((FlexoComponentBuilder) returned).componentDefinition = getComponentDefinition();
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("instanciation of thumbnail builder:"
 					+ (((FlexoComponentBuilder) returned).componentDefinition == null ? "WITH NULL DEF" : "with valid def"));
+		}
 		return returned;
 	}
 }

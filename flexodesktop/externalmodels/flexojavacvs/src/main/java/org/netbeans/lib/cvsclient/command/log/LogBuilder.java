@@ -298,14 +298,15 @@ public class LogBuilder implements Builder {
 					BugLog.getInstance().bug("Couldn't parse date " + dateString); // NOI18N
 				}
 				revision.setDate(date, dateString);
-			} else if (token.startsWith(AUTHOR))
+			} else if (token.startsWith(AUTHOR)) {
 				revision.setAuthor(token.substring(AUTHOR.length()));
-			else if (token.startsWith(STATE))
+			} else if (token.startsWith(STATE)) {
 				revision.setState(token.substring(STATE.length()));
-			else if (token.startsWith(LINES))
+			} else if (token.startsWith(LINES)) {
 				revision.setLines(token.substring(LINES.length()));
-			else if (token.startsWith(COMMITID))
+			} else if (token.startsWith(COMMITID)) {
 				revision.setCommitID(token.substring(COMMITID.length()));
+			}
 		}
 		addingLogMessage = true;
 		tempBuffer = new StringBuffer();

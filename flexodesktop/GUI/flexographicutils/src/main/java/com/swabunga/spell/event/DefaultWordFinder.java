@@ -53,6 +53,7 @@ public class DefaultWordFinder extends AbstractWordFinder {
 	 * @throws WordNotFoundException
 	 *             search string contains no more words.
 	 */
+	@Override
 	public Word next() {
 		if (nextWord == null) {
 			throw new WordNotFoundException("No more words found.");
@@ -72,8 +73,9 @@ public class DefaultWordFinder extends AbstractWordFinder {
 			}
 			i++;
 		}
-		if (!finished)
+		if (!finished) {
 			nextWord = null;
+		}
 
 		return currentWord;
 	}
@@ -89,23 +91,28 @@ public class DefaultWordFinder extends AbstractWordFinder {
 		if (SpellChecker.isINETWord(text.substring(startPos))) {
 			for (int i = startPos; i < text.length(); i++) {
 				char ch = text.charAt(i);
-				if (Character.isLetterOrDigit(ch))
+				if (Character.isLetterOrDigit(ch)) {
 					continue;
+				}
 
-				if (ch == '\r' || ch == '\n')
+				if (ch == '\r' || ch == '\n') {
 					return i;
+				}
 				// Chop off any characters that might be enclosing the 'internet word'. eg ',",),]
-				if (Character.isSpaceChar(ch))
-					if (i > 0 && Character.isLetterOrDigit(text.charAt(i - 1)))
+				if (Character.isSpaceChar(ch)) {
+					if (i > 0 && Character.isLetterOrDigit(text.charAt(i - 1))) {
 						return i;
-					else
+					} else {
 						return i - 1;
+					}
+				}
 			}
 			return text.length();
 		} else {
 			for (int i = startPos; i < text.length(); i++) {
-				if (!isWordChar(i))
+				if (!isWordChar(i)) {
 					return i;
+				}
 			}
 			return text.length();
 		}

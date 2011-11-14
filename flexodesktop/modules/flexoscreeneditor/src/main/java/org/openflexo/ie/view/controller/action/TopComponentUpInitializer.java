@@ -57,8 +57,9 @@ public class TopComponentUpInitializer extends ActionInitializer {
 				if (top.getParent() instanceof IESequence) {
 					IESequence<IWidget> c = (IESequence<IWidget>) top.getParent();
 					doable = c.indexOf(top) > 0;
-					if (doable)
+					if (doable) {
 						(action).setComponent(top);
+					}
 				}
 				return doable;
 			}

@@ -70,8 +70,9 @@ public abstract class ASCIIFileResource<G extends IFlexoResourceGenerator, F ext
 	public String getCurrentGeneration() {
 		if ((getGenerator() != null) && (!hasGenerationError())) {
 			if (getGenerator().getGeneratedCode() == null) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Generator is not null and there are no generation errors but the generated code is null");
+				}
 				return null;
 			}
 
@@ -87,8 +88,9 @@ public abstract class ASCIIFileResource<G extends IFlexoResourceGenerator, F ext
 		File path = getFile().getParentFile();
 
 		// Creates directory when non existant
-		if (!path.exists())
+		if (!path.exists()) {
 			path.mkdirs();
+		}
 
 		// Save content stored in supplied editor
 		FileWritingLock lock = null;

@@ -27,8 +27,8 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.MetricsDefinition;
-import org.openflexo.foundation.wkf.WorkflowModelObject;
 import org.openflexo.foundation.wkf.MetricsDefinition.MetricsType;
+import org.openflexo.foundation.wkf.WorkflowModelObject;
 
 public abstract class AddMetricsDefinition extends FlexoAction<AddMetricsDefinition, FlexoWorkflow, WorkflowModelObject> {
 
@@ -77,8 +77,9 @@ public abstract class AddMetricsDefinition extends FlexoAction<AddMetricsDefinit
 	}
 
 	public MetricsType getType() {
-		if (type == null)
+		if (type == null) {
 			type = MetricsType.TEXT;
+		}
 		return type;
 	}
 

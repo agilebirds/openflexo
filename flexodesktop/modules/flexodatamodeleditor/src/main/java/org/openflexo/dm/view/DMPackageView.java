@@ -113,20 +113,23 @@ public class DMPackageView extends DMView<DMPackage> {
 	protected JComponent buildContentPane() {
 		DMPackage aPackage = getDMObject();
 
-		if (getDMPackage().getRepository() == null || getDMPackage().getRepository().isReadOnly())
+		if (getDMPackage().getRepository() == null || getDMPackage().getRepository().isReadOnly()) {
 			entityTableModel = new DMReadOnlyEntityTableModel(aPackage, getDMController().getProject());
-		else
+		} else {
 			entityTableModel = new DMEntityTableModel(aPackage, getDMController().getProject());
+		}
 		addToMasterTabularView(entityTable = new DMTabularView(getDMController(), entityTableModel, 10));
-		if (getDMPackage().getRepository().isReadOnly())
+		if (getDMPackage().getRepository().isReadOnly()) {
 			propertyTableModel = new DMReadOnlyPropertyTableModel(null, getDMController().getProject());
-		else
+		} else {
 			propertyTableModel = new DMPropertyTableModel(null, getDMController().getProject());
+		}
 		addToSlaveTabularView(propertyTable = new DMTabularView(getDMController(), propertyTableModel, 7), entityTable);
-		if (getDMPackage().getRepository().isReadOnly())
+		if (getDMPackage().getRepository().isReadOnly()) {
 			methodTableModel = new DMReadOnlyMethodTableModel(null, getDMController().getProject());
-		else
+		} else {
 			methodTableModel = new DMMethodTableModel(null, getDMController().getProject());
+		}
 		addToSlaveTabularView(methodTable = new DMTabularView(getDMController(), methodTableModel, 7), entityTable);
 
 		return new JSplitPane(JSplitPane.VERTICAL_SPLIT, entityTable, new JSplitPane(JSplitPane.VERTICAL_SPLIT, propertyTable, methodTable));

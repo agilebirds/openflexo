@@ -91,8 +91,9 @@ public class DismissUnchangedGeneratedFiles extends MultipleFileGCAction<Dismiss
 		repository.getProject().getFlexoRMResource().saveResourceData();
 
 		hideFlexoProgress();
-		if (repository instanceof CGRepository)
+		if (repository instanceof CGRepository) {
 			((CGRepository) repository).clearAllJavaParsingData();
+		}
 	}
 
 	public boolean requiresThreadPool() {

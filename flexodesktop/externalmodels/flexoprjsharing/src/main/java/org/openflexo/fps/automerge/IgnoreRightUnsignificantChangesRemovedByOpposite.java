@@ -20,9 +20,9 @@
 package org.openflexo.fps.automerge;
 
 import org.openflexo.diff.ComputeDiff;
-import org.openflexo.diff.DiffSource;
 import org.openflexo.diff.ComputeDiff.DiffChange;
 import org.openflexo.diff.ComputeDiff.DiffReport;
+import org.openflexo.diff.DiffSource;
 import org.openflexo.diff.merge.AbstractAutomaticMergeResolvingRule;
 import org.openflexo.diff.merge.DetailedMerge;
 import org.openflexo.diff.merge.MergeChange;
@@ -45,10 +45,12 @@ public class IgnoreRightUnsignificantChangesRemovedByOpposite extends AbstractAu
 
 	@Override
 	public boolean isApplicable(MergeChange change) {
-		if (change.getMerge() instanceof DetailedMerge)
+		if (change.getMerge() instanceof DetailedMerge) {
 			return false;
-		if (!change.getLeftText().equals(""))
+		}
+		if (!change.getLeftText().equals("")) {
 			return false;
+		}
 		DiffSource originalSource = new DiffSource(change.getOriginalText(), change.getMerge().getDocumentType().getDelimitingMethod());
 		DiffSource rightSource = new DiffSource(change.getRightText(), change.getMerge().getDocumentType().getDelimitingMethod());
 		DiffReport diffs = ComputeDiff.diff(originalSource, rightSource);

@@ -145,8 +145,9 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 	 */
 	@Override
 	public String getInspectorName() {
-		if (isImported())
+		if (isImported()) {
 			return Inspectors.WKF.IMPORTED_ROLE;
+		}
 		return Inspectors.WKF.ROLE_INSPECTOR;
 	}
 
@@ -173,8 +174,9 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 		if ((roleName == null && aName != null) || (roleName != null && aName == null)
 				|| (roleName != null && aName != null && !roleName.equals(aName))) {
 			if ((getRoleList() != null) && (getRoleList().roleWithName(aName) != null)) {
-				if (isDeserializing())
+				if (isDeserializing()) {
 					setName(aName + "-1");
+				}
 				throw new DuplicateRoleException(aName);
 			}
 			roleName = aName;
@@ -184,8 +186,9 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 	}
 
 	public String getNameForInspector() {
-		if (isImported())
+		if (isImported()) {
 			return FlexoLocalization.localizedForKey("[external]") + " " + (getName() != null ? getName() : "");
+		}
 		return getName();
 	}
 
@@ -252,14 +255,17 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 		Vector<AbstractNode> v = new Vector<AbstractNode>();
 		for (AbstractNode a : process.getActivityPetriGraph().getAllEmbeddedAbstractNodes()) {
 			if (a instanceof AbstractActivityNode) {
-				if (((AbstractActivityNode) a).getRole() == this)
+				if (((AbstractActivityNode) a).getRole() == this) {
 					v.add(a);
+				}
 			} else if (a instanceof EventNode) {
-				if (((EventNode) a).getRole() == this)
+				if (((EventNode) a).getRole() == this) {
 					v.add(a);
+				}
 			} else if (a instanceof OperatorNode) {
-				if (((OperatorNode) a).getRole() == this)
+				if (((OperatorNode) a).getRole() == this) {
 					v.add(a);
+				}
 			}
 		}
 		return v;
@@ -283,22 +289,26 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 	 * @return true if any node of the process <code>process</code> uses the role <code>role</code>, false otherwise.
 	 */
 	public static boolean isRoleUsedInProcess(FlexoProcess process, Role role) {
-		if (process.getActivityPetriGraph() == null)
+		if (process.getActivityPetriGraph() == null) {
 			return false;
+		}
 		return isRoleUsedInPetriGraphNodes(process.getActivityPetriGraph().getAllEmbeddedAbstractNodes(), role);
 	}
 
 	public static boolean isRoleUsedInPetriGraphNodes(Vector<? extends AbstractNode> nodes, Role role) {
 		for (AbstractNode a : nodes) {
 			if (a instanceof AbstractActivityNode) {
-				if (((AbstractActivityNode) a).getRole() == role)
+				if (((AbstractActivityNode) a).getRole() == role) {
 					return true;
+				}
 			} else if (a instanceof EventNode) {
-				if (((EventNode) a).getRole() == role)
+				if (((EventNode) a).getRole() == role) {
 					return true;
+				}
 			} else if (a instanceof OperatorNode) {
-				if (((OperatorNode) a).getRole() == role)
+				if (((OperatorNode) a).getRole() == role) {
 					return true;
+				}
 			}
 		}
 		return false;
@@ -308,10 +318,12 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 
 	@Override
 	public boolean isImported() {
-		if (getRoleList() != null)
+		if (getRoleList() != null) {
 			return getRoleList().isImportedRoleList();
-		if (logger.isLoggable(Level.FINE))
+		}
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("No role list defined on " + this);
+		}
 		return isImported;
 	}
 
@@ -343,23 +355,29 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 	public PPMRole getEquivalentPPMRole() {
 		PPMRole role = new PPMRole();
 		copyObjectAttributesInto(role);
-		if (getColor() != null)
+		if (getColor() != null) {
 			role.setRgbColor(getColor().getRed(), getColor().getGreen(), getColor().getBlue());
+		}
 		return role;
 	}
 
 	public boolean isEquivalentTo(PPMRole object) {
-		if (!super.isEquivalentTo(object))
+		if (!super.isEquivalentTo(object)) {
 			return false;
-		if ((getColor() != null && object.getRgb() == null) || (getColor() == null && object.getRgb() != null))
+		}
+		if ((getColor() != null && object.getRgb() == null) || (getColor() == null && object.getRgb() != null)) {
 			return false;
+		}
 		if (getColor() != null && object.getRgb() != null) {
-			if (getColor().getRed() != object.getRed())
+			if (getColor().getRed() != object.getRed()) {
 				return false;
-			if (getColor().getGreen() != object.getGreen())
+			}
+			if (getColor().getGreen() != object.getGreen()) {
 				return false;
-			if (getColor().getBlue() != object.getBlue())
+			}
+			if (getColor().getBlue() != object.getBlue()) {
 				return false;
+			}
 		}
 		return true;
 	}
@@ -367,19 +385,23 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 	@Override
 	public final void delete() {
 		for (RoleSpecialization rs : (Vector<RoleSpecialization>) getRoleSpecializations().clone()) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("1 Delete " + rs.getFullyQualifiedName());
+			}
 			rs.delete();
 		}
 		for (RoleSpecialization rs : (Vector<RoleSpecialization>) getInverseRoleSpecializations().clone()) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("2 Delete " + rs.getFullyQualifiedName());
+			}
 			rs.delete();
 		}
-		if (isImported())
+		if (isImported()) {
 			isImported = true;// This is important, because it allows to do some tests on this deleted object
-		if (getRoleList() != null && getRoleList().getRoles().contains(this))
+		}
+		if (getRoleList() != null && getRoleList().getRoles().contains(this)) {
 			getRoleList().removeFromRoles(this);
+		}
 		super.delete();
 		setChanged();
 		notifyObservers(new RoleRemoved(this));
@@ -405,8 +427,9 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 		Vector<RoleSpecialization> returned = new Vector<RoleSpecialization>();
 		for (Role r : getRolesSpecializingMyself()) {
 			for (RoleSpecialization rs : r.getRoleSpecializations()) {
-				if (rs.getParentRole() == this)
+				if (rs.getParentRole() == this) {
 					returned.add(rs);
+				}
 			}
 		}
 		return returned;
@@ -419,8 +442,9 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 	}
 
 	public void setRoleList(RoleList roleList) {
-		if (this.roleList != null)
+		if (this.roleList != null) {
 			this.roleList.removeFromRoles(this);
+		}
 		this.roleList = roleList;
 	}
 
@@ -436,8 +460,9 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 
 	@Override
 	public int getIndex() {
-		if (isBeingCloned())
+		if (isBeingCloned()) {
 			return -1;
+		}
 		if (index == -1 && getCollection() != null) {
 			index = getCollection().length;
 			FlexoIndexManager.reIndexObjectOfArray(getCollection());
@@ -467,8 +492,9 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 
 	@Override
 	public void setIndexValue(int index) {
-		if (index == this.index)
+		if (index == this.index) {
 			return;
+		}
 		int old = this.index;
 		this.index = index;
 		setChanged();
@@ -486,8 +512,9 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 	 */
 	@Override
 	public Role[] getCollection() {
-		if (getRoleList() == null)
+		if (getRoleList() == null) {
 			return null;
+		}
 		return getRoleList().getRoles().toArray(new Role[0]);
 	}
 
@@ -510,10 +537,12 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 	}
 
 	public void addToRoleSpecializations(RoleSpecialization aRoleSpecialization) {
-		if (isImported())
+		if (isImported()) {
 			return;
-		if (aRoleSpecialization.getRole() == null)
+		}
+		if (aRoleSpecialization.getRole() == null) {
 			aRoleSpecialization.setRole(this);
+		}
 		if (!_roleSpecializations.contains(aRoleSpecialization) && aRoleSpecialization.getRole() == this
 				&& aRoleSpecialization.getParentRole() != this) {
 			_roleSpecializations.add(aRoleSpecialization);
@@ -545,8 +574,9 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 	}
 
 	public void performAddRoleSpecialization() {
-		if (addParentRoleActionizer != null)
+		if (addParentRoleActionizer != null) {
 			addParentRoleActionizer.run(this, EMPTY_VECTOR);
+		}
 	}
 
 	public void performDeleteRoleSpecialization(RoleSpecialization aRoleSpecialization) {
@@ -565,8 +595,9 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 			// logger.info("Regarding "+r+":");
 			// logger.info("mightSpecializeRole(r) = "+mightSpecializeRole(r));
 			// logger.info("!isTransitivelySpecializingRole(r) = "+!isTransitivelySpecializingRole(r));
-			if (r != this && mightSpecializeRole(r) && !isTransitivelySpecializingRole(r))
+			if (r != this && mightSpecializeRole(r) && !isTransitivelySpecializingRole(r)) {
 				returned.add(r);
+			}
 		}
 		return returned;
 	}
@@ -582,11 +613,13 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 	}
 
 	public boolean isSpecializingRole(Role aRole) {
-		if (aRole == this)
+		if (aRole == this) {
 			return true;
+		}
 		for (RoleSpecialization rs : getRoleSpecializations()) {
-			if (rs.getParentRole() == aRole)
+			if (rs.getParentRole() == aRole) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -594,9 +627,11 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 	public Vector<Role> getRolesSpecializingRole(Role aRole) {
 		Vector<Role> v = new Vector<Role>();
 		if (getRoleList() != null) {
-			for (Role r : getRoleList().getRoles())
-				if (r.isSpecializingRole(aRole))
+			for (Role r : getRoleList().getRoles()) {
+				if (r.isSpecializingRole(aRole)) {
 					v.add(r);
+				}
+			}
 		}
 		return v;
 	}
@@ -606,11 +641,13 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 	}
 
 	public boolean isTransitivelySpecializingRole(Role aRole) {
-		if (isSpecializingRole(aRole))
+		if (isSpecializingRole(aRole)) {
 			return true;
+		}
 		for (RoleSpecialization r : getRoleSpecializations()) {
-			if (r.getParentRole().isTransitivelySpecializingRole(aRole))
+			if (r.getParentRole().isTransitivelySpecializingRole(aRole)) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -653,9 +690,10 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 
 		@Override
 		public ValidationIssue<ImportedRoleShouldExistOnServer, Role> applyValidation(Role process) {
-			if (process.isImported() && process.isDeletedOnServer())
+			if (process.isImported() && process.isDeletedOnServer()) {
 				return new ValidationWarning<ImportedRoleShouldExistOnServer, Role>(this, process,
 						"role_($object.name)_no_longer_exists_on_server", new DeleteRole());
+			}
 			return null;
 		}
 

@@ -76,8 +76,9 @@ public class IESequenceTab extends IESequence<ITabWidget> implements IETopCompon
 	public IESequenceTab(IEWOComponent woComponent, IEObject parent, FlexoProject prj) {
 		super(woComponent, parent, prj);
 		buttons = new IESequenceWidget(woComponent, this, prj);
-		if (woComponent != null)
+		if (woComponent != null) {
 			_title = woComponent.getName() + "Tabs";
+		}
 	}
 
 	public IESequenceTab(FlexoComponentBuilder builder) {
@@ -168,10 +169,11 @@ public class IESequenceTab extends IESequence<ITabWidget> implements IETopCompon
 	 */
 	@Override
 	public String getInspectorName() {
-		if (isRoot())
+		if (isRoot()) {
 			return Inspectors.IE.TAB_CONTAINER_INSPECTOR;
-		else
+		} else {
 			return super.getInspectorName();
+		}
 	}
 
 	@Override
@@ -204,9 +206,10 @@ public class IESequenceTab extends IESequence<ITabWidget> implements IETopCompon
 		if (o instanceof IETabWidget) {
 
 			// Generate process business data accessing method(s)
-			for (OperationNode opNode : getComponentDefinition().getAllOperationNodesLinkedToThisComponent())
+			for (OperationNode opNode : getComponentDefinition().getAllOperationNodesLinkedToThisComponent()) {
 				((IETabWidget) o).getTabComponentDefinition().getComponentDMEntity()
 						.addOrUpdateAccessingBusinessDataMethod(opNode.getProcess());
+			}
 
 			registerTab((IETabWidget) o);
 			setChanged();
@@ -226,20 +229,23 @@ public class IESequenceTab extends IESequence<ITabWidget> implements IETopCompon
 
 			// Remove generated method(s) for accessing process business data on the tab
 			Set<FlexoProcess> componentDefinitionProcesses = new HashSet<FlexoProcess>();
-			for (OperationNode opNode : getComponentDefinition().getAllOperationNodesLinkedToThisComponent())
+			for (OperationNode opNode : getComponentDefinition().getAllOperationNodesLinkedToThisComponent()) {
 				componentDefinitionProcesses.add(opNode.getProcess());
+			}
 
 			for (OperationComponentInstance operationComponentInstance : ((IETabWidget) w).getTabComponentDefinition()
 					.getAllOperationComponentInstances()) {
 				if (operationComponentInstance.getComponentDefinition() != getComponentDefinition()) {
 					for (OperationNode opNode : operationComponentInstance.getComponentDefinition()
-							.getAllOperationNodesLinkedToThisComponent())
+							.getAllOperationNodesLinkedToThisComponent()) {
 						componentDefinitionProcesses.remove(opNode.getProcess());
+					}
 				}
 			}
 
-			for (FlexoProcess process : componentDefinitionProcesses)
+			for (FlexoProcess process : componentDefinitionProcesses) {
 				((IETabWidget) w).getTabComponentDefinition().getComponentDMEntity().removeAccessingBusinessDataMethod(process);
+			}
 
 			unregisterTab((IETabWidget) w);
 			setChanged();
@@ -250,8 +256,9 @@ public class IESequenceTab extends IESequence<ITabWidget> implements IETopCompon
 	@Override
 	public IESequenceTab getRootParent() {
 		IESequenceTab root = this;
-		while (root.getParent() != null && root.getParent() instanceof IESequenceTab)
+		while (root.getParent() != null && root.getParent() instanceof IESequenceTab) {
 			root = (IESequenceTab) root.getParent();
+		}
 		return root;
 	}
 
@@ -262,8 +269,9 @@ public class IESequenceTab extends IESequence<ITabWidget> implements IETopCompon
 
 	@Override
 	public String getCalculatedLabel() {
-		if (getTitle() != null && getTitle().trim().length() > 0)
+		if (getTitle() != null && getTitle().trim().length() > 0) {
 			return ensureCalculatedLabelIsAcceptable(getTitle());
+		}
 		return super.getCalculatedLabel();
 	}
 
@@ -296,8 +304,9 @@ public class IESequenceTab extends IESequence<ITabWidget> implements IETopCompon
 
 	public String getTitleForGenerator() {
 		String title = getTitle();
-		if (title == null || title.trim().length() == 0)
+		if (title == null || title.trim().length() == 0) {
 			title = getWOComponent().getName() + "Tabs";
+		}
 		return title;
 	}
 
@@ -318,8 +327,9 @@ public class IESequenceTab extends IESequence<ITabWidget> implements IETopCompon
 	}
 
 	public void addNewTab(TabComponentDefinition tabComponentDefinition, String tabTitle, int index) {
-		if (index > size() || index < 0)
+		if (index > size() || index < 0) {
 			index = size();
+		}
 		IETabWidget tabWidget = new IETabWidget(getWOComponent(), tabComponentDefinition, this, getProject());
 		tabWidget.setTitle((tabTitle == null || tabTitle.trim().length() == 0) ? tabComponentDefinition.getComponentName() : tabTitle);
 		tabWidget.setKey(tabComponentDefinition.getComponentName());
@@ -385,11 +395,13 @@ public class IESequenceTab extends IESequence<ITabWidget> implements IETopCompon
 	 */
 	@Override
 	public void setWOComponent(IEWOComponent woComponent) {
-		if (noWOChange(woComponent))
+		if (noWOChange(woComponent)) {
 			return;
+		}
 		super.setWOComponent(woComponent);
-		if (woComponent != null)
+		if (woComponent != null) {
 			setTitle(woComponent.getName() + "Tabs");
+		}
 	}
 
 	@Override
@@ -469,8 +481,9 @@ public class IESequenceTab extends IESequence<ITabWidget> implements IETopCompon
 		Enumeration en = buttons.getAllNonSequenceWidget().elements();
 		while (en.hasMoreElements()) {
 			IWidget w = (IWidget) en.nextElement();
-			if (w instanceof IEHyperlinkWidget)
+			if (w instanceof IEHyperlinkWidget) {
 				v.add((IEHyperlinkWidget) w);
+			}
 		}
 		return v;
 	}

@@ -26,9 +26,9 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMPackage;
+import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.LoadableDMEntity;
-import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference;
 import org.openflexo.javaparser.FJPJavaSource.FJPImportDeclarations.FJPImportDeclaration;
 
 import com.thoughtworks.qdox.model.Type;
@@ -203,8 +203,9 @@ public class FJPTypeResolver {
 			return false;
 		}
 
-		if (!type.isResolved())
+		if (!type.isResolved()) {
 			return false;
+		}
 
 		TypeLookupInfo lookupInfo;
 		try {
@@ -225,15 +226,17 @@ public class FJPTypeResolver {
 
 	public static DMEntity resolveEntity(Type type, DMModel dataModel, FJPDMSet context, FJPJavaSource source,
 			boolean importReferencedEntities) throws CrossReferencedEntitiesException {
-		if (!type.isResolved())
+		if (!type.isResolved()) {
 			return null;
+		}
 
 		TypeLookupInfo lookupInfo = lookupEntity(type, dataModel, context, source, true);
 
 		// Warn if not found
 		if (lookupInfo.foundEntity == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not resolve " + type.getValue());
+			}
 		} else {
 			if (type instanceof DMType) {
 				((DMType) type).resolveAs(lookupInfo.foundEntity);

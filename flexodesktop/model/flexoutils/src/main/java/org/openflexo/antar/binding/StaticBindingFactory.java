@@ -32,17 +32,19 @@ public class StaticBindingFactory extends StringEncoder.Converter<StaticBinding>
 
 	@Override
 	public StaticBinding convertFromString(String aValue) {
-		if (aValue.startsWith("$") && aValue.length() > 1)
+		if (aValue.startsWith("$") && aValue.length() > 1) {
 			return convertFromString(aValue.substring(1));
+		}
 
-		if (aValue.equalsIgnoreCase("true") || aValue.equalsIgnoreCase("yes"))
+		if (aValue.equalsIgnoreCase("true") || aValue.equalsIgnoreCase("yes")) {
 			return new BooleanStaticBinding(true);
-		else if (aValue.equalsIgnoreCase("false") || aValue.equalsIgnoreCase("no"))
+		} else if (aValue.equalsIgnoreCase("false") || aValue.equalsIgnoreCase("no")) {
 			return new BooleanStaticBinding(false);
-		else if (aValue.startsWith("\"") && aValue.endsWith("\"") && aValue.length() > 1)
+		} else if (aValue.startsWith("\"") && aValue.endsWith("\"") && aValue.length() > 1) {
 			return new StringStaticBinding(aValue.substring(1, aValue.length() - 1));
-		else if (aValue.startsWith("'") && aValue.endsWith("'") && aValue.length() > 1)
+		} else if (aValue.startsWith("'") && aValue.endsWith("'") && aValue.length() > 1) {
 			return new StringStaticBinding(aValue.substring(1, aValue.length() - 1));
+		}
 		try {
 			return new IntegerStaticBinding(Long.parseLong(aValue));
 		} catch (NumberFormatException e) {

@@ -46,10 +46,12 @@ public class ProcessFolderElement extends BrowserElement {
 
 	@Override
 	protected void buildChildrenVector() {
-		for (Enumeration<ProcessFolder> en = getFolder().getSortedFolders(); en.hasMoreElements();)
+		for (Enumeration<ProcessFolder> en = getFolder().getSortedFolders(); en.hasMoreElements();) {
 			addToChilds(en.nextElement());
-		for (FlexoProcessNode node : getFolder().getProcesses())
+		}
+		for (FlexoProcessNode node : getFolder().getProcesses()) {
 			addToChilds(node.getProcess());
+		}
 	}
 
 	@Override
@@ -77,10 +79,11 @@ public class ProcessFolderElement extends BrowserElement {
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (dataModification instanceof ProcessAddedToFolder || dataModification instanceof ProcessRemovedFromFolder)
+		if (dataModification instanceof ProcessAddedToFolder || dataModification instanceof ProcessRemovedFromFolder) {
 			refreshWhenPossible();
-		else
+		} else {
 			super.update(observable, dataModification);
+		}
 	}
 
 }

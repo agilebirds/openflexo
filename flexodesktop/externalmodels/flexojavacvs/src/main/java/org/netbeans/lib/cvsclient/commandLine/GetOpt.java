@@ -89,9 +89,10 @@ public class GetOpt {
 		try {
 			value = Integer.parseInt(arg);
 		} catch (NumberFormatException e) {
-			if (optErr)
+			if (optErr) {
 				System.err.println("processArg cannot process " + arg // NOI18N
 						+ " as an integer"); // NOI18N
+			}
 			return n;
 		}
 		return value;
@@ -102,8 +103,9 @@ public class GetOpt {
 		try {
 			value = processArg(theArgs[k], n);
 		} catch (ArrayIndexOutOfBoundsException e) {
-			if (optErr)
+			if (optErr) {
 				System.err.println("tryArg: no theArgs[" + k + "]"); // NOI18N
+			}
 			return n;
 		}
 		return value;
@@ -114,9 +116,10 @@ public class GetOpt {
 		try {
 			value = Long.parseLong(arg);
 		} catch (NumberFormatException e) {
-			if (optErr)
+			if (optErr) {
 				System.err.println("processArg cannot process " + arg // NOI18N
 						+ " as a long"); // NOI18N
+			}
 			return n;
 		}
 		return value;
@@ -127,8 +130,9 @@ public class GetOpt {
 		try {
 			value = processArg(theArgs[k], n);
 		} catch (ArrayIndexOutOfBoundsException e) {
-			if (optErr)
+			if (optErr) {
 				System.err.println("tryArg: no theArgs[" + k + "]"); // NOI18N
+			}
 			return n;
 		}
 		return value;
@@ -139,9 +143,10 @@ public class GetOpt {
 		try {
 			value = Double.valueOf(arg).doubleValue();
 		} catch (NumberFormatException e) {
-			if (optErr)
+			if (optErr) {
 				System.err.println("processArg cannot process " + arg // NOI18N
 						+ " as a double"); // NOI18N
+			}
 			return d;
 		}
 		return value;
@@ -152,8 +157,9 @@ public class GetOpt {
 		try {
 			value = processArg(theArgs[k], d);
 		} catch (ArrayIndexOutOfBoundsException e) {
-			if (optErr)
+			if (optErr) {
 				System.err.println("tryArg: no theArgs[" + k + "]"); // NOI18N
+			}
 			return d;
 		}
 		return value;
@@ -164,9 +170,10 @@ public class GetOpt {
 		try {
 			value = Float.valueOf(arg).floatValue();
 		} catch (NumberFormatException e) {
-			if (optErr)
+			if (optErr) {
 				System.err.println("processArg cannot process " + arg // NOI18N
 						+ " as a float"); // NOI18N
+			}
 			return f;
 		}
 		return value;
@@ -177,8 +184,9 @@ public class GetOpt {
 		try {
 			value = processArg(theArgs[k], f);
 		} catch (ArrayIndexOutOfBoundsException e) {
-			if (optErr)
+			if (optErr) {
 				System.err.println("tryArg: no theArgs[" + k + "]"); // NOI18N
+			}
 			return f;
 		}
 		return value;
@@ -194,8 +202,9 @@ public class GetOpt {
 		try {
 			value = processArg(theArgs[k], b);
 		} catch (ArrayIndexOutOfBoundsException e) {
-			if (optErr)
+			if (optErr) {
 				System.err.println("tryArg: no theArgs[" + k + "]"); // NOI18N
+			}
 			return b;
 		}
 		return value;
@@ -206,8 +215,9 @@ public class GetOpt {
 		try {
 			value = theArgs[k];
 		} catch (ArrayIndexOutOfBoundsException e) {
-			if (optErr)
+			if (optErr) {
 				System.err.println("tryArg: no theArgs[" + k + "]"); // NOI18N
+			}
 			return s;
 		}
 		return value;
@@ -239,10 +249,12 @@ public class GetOpt {
 
 	public int getopt() {
 		optArg = null;
-		if (theArgs == null || optString == null)
+		if (theArgs == null || optString == null) {
 			return optEOF;
-		if (optIndex < 0 || optIndex >= argCount)
+		}
+		if (optIndex < 0 || optIndex >= argCount) {
 			return optEOF;
+		}
 		String thisArg = theArgs[optIndex];
 		int argLength = thisArg.length();
 		// handle special cases
@@ -307,20 +319,21 @@ public class GetOpt {
 		int width = 80; // options
 		double height = 1; // here
 		while ((ch = go.getopt()) != GetOpt.optEOF) {
-			if ((char) ch == 'U')
+			if ((char) ch == 'U') {
 				usagePrint = true;
-			else if ((char) ch == 'a')
+			} else if ((char) ch == 'a') {
 				aflg++;
-			else if ((char) ch == 'b')
+			} else if ((char) ch == 'b') {
 				bflg = go.processArg(go.optArgGet(), bflg);
-			else if ((char) ch == 'f')
+			} else if ((char) ch == 'f') {
 				filename = go.optArgGet();
-			else if ((char) ch == 'h')
+			} else if ((char) ch == 'h') {
 				height = go.processArg(go.optArgGet(), height);
-			else if ((char) ch == 'w')
+			} else if ((char) ch == 'w') {
 				width = go.processArg(go.optArgGet(), width);
-			else
+			} else {
 				System.exit(1); // undefined option
+			}
 		} // getopt() returns '?'
 		if (usagePrint) {
 			System.out.println("Usage: -a -b bool -f file -h height -w width"); // NOI18N

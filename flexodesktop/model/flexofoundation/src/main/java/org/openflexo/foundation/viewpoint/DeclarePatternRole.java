@@ -57,8 +57,9 @@ public class DeclarePatternRole extends EditionAction<PatternRole> {
 	}
 
 	public ViewPointDataBinding getObject() {
-		if (object == null)
+		if (object == null) {
 			object = new ViewPointDataBinding(this, EditionActionBindingAttribute.object, getObjectBindingDefinition());
+		}
 		return object;
 	}
 

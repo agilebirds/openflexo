@@ -69,10 +69,12 @@ public abstract class XMLAutomaticMergeResolvingRule extends AbstractAutomaticMe
 	}
 
 	public static boolean isInsideAnXMLAttributeValueConflict(MergeChange change, String attributeName) {
-		if (extractContainerAttributeValueFromLeft(change, attributeName) == null)
+		if (extractContainerAttributeValueFromLeft(change, attributeName) == null) {
 			return false;
-		if (extractContainerAttributeValueFromRight(change, attributeName) == null)
+		}
+		if (extractContainerAttributeValueFromRight(change, attributeName) == null) {
 			return false;
+		}
 		return true;
 	}
 

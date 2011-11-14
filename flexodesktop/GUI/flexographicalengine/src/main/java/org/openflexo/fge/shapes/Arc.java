@@ -49,8 +49,9 @@ public class Arc extends Shape {
 	public void updateShape() {
 		arc = new FGEArc(0, 0, 1, 1, angleStart, angleExtent, arcType);
 		rebuildControlPoints();
-		if (getGraphicalRepresentation() != null)
+		if (getGraphicalRepresentation() != null) {
 			getGraphicalRepresentation().notifyShapeChanged();
+		}
 	}
 
 	@Override

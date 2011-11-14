@@ -50,8 +50,9 @@ public abstract class BrowserFilter {
 		super();
 		this.name = n;
 		this.icon = i;
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Setting icon " + i + " for " + name);
+		}
 	}
 
 	public Icon getIcon() {

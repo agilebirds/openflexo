@@ -33,10 +33,10 @@ import org.openflexo.foundation.bindings.AbstractBinding;
 import org.openflexo.foundation.bindings.Bindable;
 import org.openflexo.foundation.bindings.BindingAssignment;
 import org.openflexo.foundation.bindings.BindingDefinition;
+import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.bindings.BindingModel;
 import org.openflexo.foundation.bindings.BindingValue;
 import org.openflexo.foundation.bindings.BindingVariable;
-import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.dm.DMType.KindOfType;
 import org.openflexo.foundation.dm.dm.DMAttributeDataModification;
 import org.openflexo.foundation.dm.dm.PropertyRegistered;
@@ -486,10 +486,12 @@ public class DMTranstyper extends DMObject implements Typed, Bindable, SourceCod
 			return _transtyper.isDeletable();
 		}
 
+		@Override
 		public DMType getType() {
 			return _type;
 		}
 
+		@Override
 		public void setType(DMType type) {
 			if (((type == null) && (_type != null)) || ((type != null) && !type.equals(_type))) {
 				DMType oldType = _type;
@@ -541,6 +543,7 @@ public class DMTranstyper extends DMObject implements Typed, Bindable, SourceCod
 		 * 
 		 * @return null
 		 */
+		@Override
 		public String getInspectorName() {
 			return null;
 		}
@@ -704,6 +707,7 @@ public class DMTranstyper extends DMObject implements Typed, Bindable, SourceCod
 		 * 
 		 * @return null
 		 */
+		@Override
 		public String getInspectorName() {
 			return null;
 		}
@@ -790,6 +794,7 @@ public class DMTranstyper extends DMObject implements Typed, Bindable, SourceCod
 			}
 		}
 
+		@Override
 		public BindingModel getBindingModel() {
 			if (_transtyper != null) {
 				return _transtyper.getBindingModel();
@@ -863,6 +868,7 @@ public class DMTranstyper extends DMObject implements Typed, Bindable, SourceCod
 		notifyObservers(new DMAttributeDataModification("code", null, someCode));
 	}
 
+	@Override
 	public void resetSourceCode() throws ParserNotInstalledException, DuplicateMethodSignatureException {
 		if (sourceCode != null) {
 			sourceCode.setCode("");
@@ -1064,6 +1070,7 @@ public class DMTranstyper extends DMObject implements Typed, Bindable, SourceCod
 		notifyObservers(new DMAttributeDataModification("code", oldCode, getSourceCode().getCode()));
 	}
 
+	@Override
 	public boolean codeIsComputable() {
 		return true;
 	}

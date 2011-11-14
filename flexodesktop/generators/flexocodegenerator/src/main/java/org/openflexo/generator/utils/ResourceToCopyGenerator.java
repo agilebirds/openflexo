@@ -59,8 +59,9 @@ public class ResourceToCopyGenerator extends FlexoResourceGenerator<FlexoModelOb
 		super(projectGenerator);
 		_symbolicDir = symbolicDir;
 		_source = source;
-		if (_source instanceof CGRepositoryFileResource)
+		if (_source instanceof CGRepositoryFileResource) {
 			generatedResource = (CGRepositoryFileResource) _source;
+		}
 		this.relativePath = relativePath;
 		generatedCode = new GeneratedCopiedFile(_source.getFile());
 	}
@@ -68,13 +69,15 @@ public class ResourceToCopyGenerator extends FlexoResourceGenerator<FlexoModelOb
 	@Override
 	public void generate(boolean forceRegenerate) {
 
-		if (generatedResource != null && generatedResource.getGenerator() != null)
+		if (generatedResource != null && generatedResource.getGenerator() != null) {
 			generatedResource.getGenerator().generate(forceRegenerate);
+		}
 		try {
 			if (forceRegenerate || _source.needsUpdate()) {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Called force generate on copied resource");
-				if (_source instanceof FlexoGeneratedResource)
+				}
+				if (_source instanceof FlexoGeneratedResource) {
 					try {
 						_source.update();
 					} catch (SaveResourceException e) {
@@ -86,10 +89,12 @@ public class ResourceToCopyGenerator extends FlexoResourceGenerator<FlexoModelOb
 					} catch (ResourceDependancyLoopException e) {
 						e.printStackTrace();
 					}
+				}
 			}
 		} catch (ResourceDependancyLoopException e) {
-			if (logger.isLoggable(Level.SEVERE))
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.log(Level.SEVERE, "Resource dependency loop ", e);
+			}
 		}
 	}
 

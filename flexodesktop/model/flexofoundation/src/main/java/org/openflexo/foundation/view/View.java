@@ -67,8 +67,9 @@ public class View extends ViewObject implements XMLStorageResourceData {
 		_project = project;
 		_shemaDefinition = shemaDefinition;
 		setShema(this);
-		if (getCalc() != null)
+		if (getCalc() != null) {
 			getCalc().loadWhenUnloaded();
+		}
 	}
 
 	public ViewDefinition getShemaDefinition() {
@@ -127,8 +128,9 @@ public class View extends ViewObject implements XMLStorageResourceData {
 
 	@Override
 	public String getDescription() {
-		if (isSerializing())
+		if (isSerializing()) {
 			return null;
+		}
 		if (getShemaDefinition() != null) {
 			return getShemaDefinition().getDescription();
 		}
@@ -145,8 +147,9 @@ public class View extends ViewObject implements XMLStorageResourceData {
 
 	@Override
 	public Hashtable<String, String> getSpecificDescriptions() {
-		if (isSerializing())
+		if (isSerializing()) {
 			return null;
+		}
 		if (getShemaDefinition() != null) {
 			return getShemaDefinition().getSpecificDescriptions();
 		}

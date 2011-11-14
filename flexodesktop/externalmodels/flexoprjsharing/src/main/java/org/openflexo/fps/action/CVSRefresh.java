@@ -149,8 +149,9 @@ public class CVSRefresh extends CVSAction<CVSRefresh, FPSObject> implements CVSE
 				return;
 			}
 		}
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Failed to explorer " + explorable);
+		}
 		explorersToWait--;
 		explorersToNotify.add(explorable);
 		lastReception = System.currentTimeMillis();

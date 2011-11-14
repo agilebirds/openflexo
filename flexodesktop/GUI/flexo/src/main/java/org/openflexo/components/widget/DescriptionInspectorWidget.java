@@ -36,6 +36,14 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 
+import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.DocType;
+import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.cg.DocTypeAdded;
+import org.openflexo.foundation.cg.DocTypeRemoved;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.inspector.AbstractController;
 import org.openflexo.inspector.InspectableModification;
 import org.openflexo.inspector.InspectableObject;
@@ -46,15 +54,6 @@ import org.openflexo.logging.FlexoLogger;
 import org.openflexo.view.controller.FlexoDocInspectorController;
 import org.openflexo.wysiwyg.FlexoWysiwygLight;
 import org.openflexo.wysiwyg.FlexoWysiwygUltraLight;
-
-import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.DocType;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.FlexoObserver;
-import org.openflexo.foundation.cg.DocTypeAdded;
-import org.openflexo.foundation.cg.DocTypeRemoved;
-import org.openflexo.foundation.rm.FlexoProject;
 
 /**
  * @author gpolet
@@ -136,14 +135,16 @@ public class DescriptionInspectorWidget extends CustomInspectorWidget<FlexoModel
 		}
 
 		public void updateModelFromWidget() {
-			if (isUpdatingWidget || isUpdatingModel || getObject() == null)
+			if (isUpdatingWidget || isUpdatingModel || getObject() == null) {
 				return;
+			}
 			isUpdatingModel = true;
 			try {
 				if (checkBox.isSelected()) {
 					for (DocType dt : getObject().getProject().getDocTypes()) {
-						if (getObject().getSpecificDescriptions().get(dt.getName()) == null)
+						if (getObject().getSpecificDescriptions().get(dt.getName()) == null) {
 							getObject().setSpecificDescriptionsForKey("", dt.getName());
+						}
 					}
 					getObject().setSpecificDescriptionsForKey(wysiwyg.getBodyContent(), ((DocType) docTypes.getSelectedItem()).getName());
 					getObject().setHasSpecificDescriptions(true);
@@ -164,8 +165,9 @@ public class DescriptionInspectorWidget extends CustomInspectorWidget<FlexoModel
 		}
 
 		public void updateWidgetFromModel() {
-			if (isUpdatingModel || getObject() == null || getObject().getProject() == null)
+			if (isUpdatingModel || getObject() == null || getObject().getProject() == null) {
 				return;
+			}
 			isUpdatingWidget = true;
 			try {
 				checkBox.setSelected(getObject().getHasSpecificDescriptions());
@@ -178,9 +180,9 @@ public class DescriptionInspectorWidget extends CustomInspectorWidget<FlexoModel
 					DocType dt = (DocType) docTypes.getSelectedItem();
 					wysiwyg.setActivated(false);
 					try {
-						if (getObject().getSpecificDescriptions().get(dt.getName()) != null)
+						if (getObject().getSpecificDescriptions().get(dt.getName()) != null) {
 							wysiwyg.setContent(getObject().getSpecificDescriptions().get(dt.getName()));
-						else {
+						} else {
 							boolean b = isUpdatingModel;
 							try {
 								isUpdatingModel = true;
@@ -217,9 +219,9 @@ public class DescriptionInspectorWidget extends CustomInspectorWidget<FlexoModel
 					public void run() {
 						if (!bothShowing) {
 							splitPane.setResizeWeight(0.5);// Extra space is given equally to top and bottom component
-							if (lastDividerLocation == -1)
+							if (lastDividerLocation == -1) {
 								splitPane.setDividerLocation(0.5);
-							else {
+							} else {
 								splitPane.setDividerLocation(lastDividerLocation);
 							}
 							bothShowing = true;
@@ -243,9 +245,10 @@ public class DescriptionInspectorWidget extends CustomInspectorWidget<FlexoModel
 		}
 
 		private void snapBottomPanelToMinimalSize() {
-			if (splitPane.getHeight() > 0)
+			if (splitPane.getHeight() > 0) {
 				splitPane.setDividerLocation(splitPane.getHeight() - DescriptionPanel.this.getPreferredSize().height
 						- splitPane.getDividerSize());
+			}
 		}
 
 		private FlexoProject observedProject;
@@ -255,8 +258,9 @@ public class DescriptionInspectorWidget extends CustomInspectorWidget<FlexoModel
 		 *
 		 */
 		private void updateDocTypes() {
-			if (updatingDocTypes)
+			if (updatingDocTypes) {
 				return;
+			}
 			updatingDocTypes = true;
 			try {
 				if (observedProject != null) {
@@ -268,10 +272,11 @@ public class DescriptionInspectorWidget extends CustomInspectorWidget<FlexoModel
 					docTypes.removeActionListener(cbListener);
 					docTypes.setSelectedItem(null);
 					docTypes.setModel(new DefaultComboBoxModel(getObject().getProject().getDocTypes()));
-					if (dt != null && getObject().getProject().getDocTypes().indexOf(dt) > -1)
+					if (dt != null && getObject().getProject().getDocTypes().indexOf(dt) > -1) {
 						docTypes.setSelectedItem(dt);
-					else
+					} else {
 						docTypes.setSelectedIndex(0);
+					}
 					docTypes.addActionListener(cbListener);
 
 					updateWidgetFromModel();
@@ -310,19 +315,22 @@ public class DescriptionInspectorWidget extends CustomInspectorWidget<FlexoModel
 				String string = s[i];
 				Object returned = o.objectForKey(string);
 				if (!(returned instanceof KVCObject)) {
-					if (logger.isLoggable(Level.SEVERE))
+					if (logger.isLoggable(Level.SEVERE)) {
 						logger.severe("Someting is wrong with an inspector. Inspected property path contains object that are not KVCObject "
 								+ getPropertyModel().name);
+					}
 					return null;
-				} else
+				} else {
 					o = (KVCObject) returned;
+				}
 			}
 		}
-		if (o instanceof FlexoModelObject)
+		if (o instanceof FlexoModelObject) {
 			return (FlexoModelObject) o;
-		else if (o != null && logger.isLoggable(Level.SEVERE))
+		} else if (o != null && logger.isLoggable(Level.SEVERE)) {
 			logger.severe("Object at the end of property path is not a FlexoModelObject: " + getPropertyModel().name + " this is a " + o
 					+ " of " + o.getClass().getSimpleName());
+		}
 		return null;
 	}
 
@@ -421,8 +429,9 @@ public class DescriptionInspectorWidget extends CustomInspectorWidget<FlexoModel
 	 */
 	@Override
 	public void updateModelFromWidget() {
-		if (isUpdatingWidget)
+		if (isUpdatingWidget) {
 			return;
+		}
 		panel.updateModelFromWidget();
 		super.updateModelFromWidget();
 	}
@@ -434,8 +443,9 @@ public class DescriptionInspectorWidget extends CustomInspectorWidget<FlexoModel
 	 */
 	@Override
 	public void updateWidgetFromModel() {
-		if (isUpdatingModel)
+		if (isUpdatingModel) {
 			return;
+		}
 		panel.updateWidgetFromModel();
 	}
 

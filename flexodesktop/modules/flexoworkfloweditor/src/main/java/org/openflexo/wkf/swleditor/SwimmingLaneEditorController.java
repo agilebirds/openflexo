@@ -29,15 +29,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.openflexo.icon.WKFIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.logging.FlexoLogger;
-import org.openflexo.selection.SelectionManager;
-import org.openflexo.selection.SelectionManagingDrawingController;
-import org.openflexo.wkf.controller.WKFController;
-import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation.SwimmingLaneRepresentationObjectVisibilityDelegate;
-import org.openflexo.wkf.swleditor.gr.WKFObjectGR;
-
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.MoveInfo;
@@ -54,6 +45,14 @@ import org.openflexo.foundation.wkf.action.WKFMove;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.foundation.wkf.node.ActionNode;
 import org.openflexo.foundation.wkf.node.OperationNode;
+import org.openflexo.icon.WKFIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.logging.FlexoLogger;
+import org.openflexo.selection.SelectionManager;
+import org.openflexo.selection.SelectionManagingDrawingController;
+import org.openflexo.wkf.controller.WKFController;
+import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation.SwimmingLaneRepresentationObjectVisibilityDelegate;
+import org.openflexo.wkf.swleditor.gr.WKFObjectGR;
 
 public class SwimmingLaneEditorController extends SelectionManagingDrawingController<SwimmingLaneRepresentation> {
 
@@ -97,8 +96,9 @@ public class SwimmingLaneEditorController extends SelectionManagingDrawingContro
 	@Override
 	public void delete() {
 		if (_controller != null) {
-			if (getDrawingView() != null)
+			if (getDrawingView() != null) {
 				_controller.removeModuleView(getDrawingView());
+			}
 			_controller.SWIMMING_LANE_PERSPECTIVE.removeProcessController(this);
 		}
 		super.delete();
@@ -221,8 +221,9 @@ public class SwimmingLaneEditorController extends SelectionManagingDrawingContro
 
 	public void setObjectForPaletteSwitch(FlexoModelObject objectForPaletteSwitch) {
 		if (this.objectForPaletteSwitch != null && this.objectForPaletteSwitch != objectForPaletteSwitch) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Received palette switch for different objects. Cannot fulfill everyone's needs, latest wins.");
+			}
 		}
 		this.objectForPaletteSwitch = objectForPaletteSwitch;
 	}
@@ -231,8 +232,9 @@ public class SwimmingLaneEditorController extends SelectionManagingDrawingContro
 	 * @param
 	 */
 	private synchronized void switchPaletteForNewSelection() {
-		if (paletteSwitchRequested)
+		if (paletteSwitchRequested) {
 			return;
+		}
 		paletteSwitchRequested = true;
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
@@ -246,18 +248,21 @@ public class SwimmingLaneEditorController extends SelectionManagingDrawingContro
 	 *
 	 */
 	protected synchronized void performPaletteSwitch() {
-		if (getSelectionManager() == null)
+		if (getSelectionManager() == null) {
 			return;
-		if (objectForPaletteSwitch == null)
+		}
+		if (objectForPaletteSwitch == null) {
 			objectForPaletteSwitch = getSelectionManager().getLastSelectedObject();
+		}
 		if (objectForPaletteSwitch != null) {
 			if (objectForPaletteSwitch instanceof AbstractActivityNode || objectForPaletteSwitch instanceof ActivityPetriGraph
-					|| objectForPaletteSwitch instanceof FlexoProcess)
+					|| objectForPaletteSwitch instanceof FlexoProcess) {
 				selectActivityPalette();
-			else if (objectForPaletteSwitch instanceof OperationNode || objectForPaletteSwitch instanceof OperationPetriGraph)
+			} else if (objectForPaletteSwitch instanceof OperationNode || objectForPaletteSwitch instanceof OperationPetriGraph) {
 				selectOperationPalette();
-			else if (objectForPaletteSwitch instanceof ActionNode || objectForPaletteSwitch instanceof ActionPetriGraph)
+			} else if (objectForPaletteSwitch instanceof ActionNode || objectForPaletteSwitch instanceof ActionPetriGraph) {
 				selectActionPalette();
+			}
 		}
 		objectForPaletteSwitch = null;
 		paletteSwitchRequested = false;
@@ -297,12 +302,14 @@ public class SwimmingLaneEditorController extends SelectionManagingDrawingContro
 		WKFObject movedObject = null;
 		Vector<WKFObject> movedObjects = new Vector<WKFObject>();
 
-		if (currentMove.getMovedObject() instanceof WKFObjectGR<?>)
+		if (currentMove.getMovedObject() instanceof WKFObjectGR<?>) {
 			movedObject = ((WKFObjectGR<?>) currentMove.getMovedObject()).getModel();
+		}
 
 		for (ShapeGraphicalRepresentation<?> gr : currentMove.getMovedObjects()) {
-			if (gr instanceof WKFObjectGR<?>)
+			if (gr instanceof WKFObjectGR<?>) {
 				movedObjects.add(((WKFObjectGR<?>) gr).getModel());
+			}
 		}
 
 		if (movedObject != null) {

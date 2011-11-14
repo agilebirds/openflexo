@@ -39,8 +39,9 @@ public class CGTemplatesElement extends BrowserElement {
 		addToChilds(getCGTemplates().getApplicationRepository());
 		for (Enumeration<CustomCGTemplateRepository> e = getCGTemplates().getCustomRepositories(); e.hasMoreElements();) {
 			CustomCGTemplateRepository rep = e.nextElement();
-			if (rep.getRepositoryType() == TemplateRepositoryType.Code)
+			if (rep.getRepositoryType() == TemplateRepositoryType.Code) {
 				addToChilds(rep);
+			}
 		}
 	}
 

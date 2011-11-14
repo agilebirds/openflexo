@@ -144,8 +144,9 @@ public class HibernateAttribute extends TechnologyModelObject {
 	 * Update the column name based on the attribute name
 	 */
 	public void updateColumnName() {
-		if (!isDeserializing && getHibernateEntity() != null)
+		if (!isDeserializing && getHibernateEntity() != null) {
 			setColumnName(getHibernateEntity().getHibernateModel().getHibernateImplementation().getDbObjectName(getName()));
+		}
 	}
 
 	/* ===================== */

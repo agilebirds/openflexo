@@ -84,24 +84,24 @@ import org.openflexo.foundation.bindings.BindingDefinition;
 import org.openflexo.foundation.bindings.BindingExpression;
 import org.openflexo.foundation.bindings.BindingModel;
 import org.openflexo.foundation.bindings.BindingValue;
+import org.openflexo.foundation.bindings.BindingValue.BindingPathElement;
 import org.openflexo.foundation.bindings.BindingVariable;
 import org.openflexo.foundation.bindings.MethodCall;
+import org.openflexo.foundation.bindings.MethodCall.MethodCallArgument;
 import org.openflexo.foundation.bindings.StaticBinding;
 import org.openflexo.foundation.bindings.TranstypedBinding;
-import org.openflexo.foundation.bindings.BindingValue.BindingPathElement;
-import org.openflexo.foundation.bindings.MethodCall.MethodCallArgument;
 import org.openflexo.foundation.bindings.TranstypedBinding.TranstypedBindingValue;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMMethod;
+import org.openflexo.foundation.dm.DMMethod.DMMethodParameter;
 import org.openflexo.foundation.dm.DMProperty;
 import org.openflexo.foundation.dm.DMPropertyImplementationType;
 import org.openflexo.foundation.dm.DMRegExp;
 import org.openflexo.foundation.dm.DMTranstyper;
 import org.openflexo.foundation.dm.DMType;
+import org.openflexo.foundation.dm.DMType.KindOfType;
 import org.openflexo.foundation.dm.ProcessDMEntity;
 import org.openflexo.foundation.dm.Typed;
-import org.openflexo.foundation.dm.DMMethod.DMMethodParameter;
-import org.openflexo.foundation.dm.DMType.KindOfType;
 import org.openflexo.foundation.dm.dm.DMAttributeDataModification;
 import org.openflexo.foundation.dm.dm.PropertiesReordered;
 import org.openflexo.foundation.dm.dm.PropertyRegistered;
@@ -263,6 +263,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 
 	public void addNewEntryCreationPanel() {
 		ActionListener actionListener = new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (BindingSelectorPanel.this._bindingSelector.getBindingModel() == null) {
 					BindingSelector.logger.warning("BindingModel is null");
@@ -726,6 +727,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			useTranstyperCB.setFont(FlexoCst.SMALL_FONT);
 			useTranstyperCB.setSelected(false);
 			useTranstyperCB.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (useTranstyperCB.isSelected()) {
 						BindingSelectorPanel.this._bindingSelector._editedObject = new TranstypedBinding(
@@ -753,6 +755,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			});
 			transtyperCB.setEnabled(false);
 			transtyperCB.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (isUpdatingPanel) {
 						return;
@@ -852,16 +855,19 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			}
 		};
 		_connectButton = _controlPanel.addButton("connect", new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				BindingSelectorPanel.this._bindingSelector.apply();
 			}
 		});
 		_cancelButton = _controlPanel.addButton("cancel", new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				BindingSelectorPanel.this._bindingSelector.cancel();
 			}
 		});
 		_resetButton = _controlPanel.addButton("reset", new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				BindingSelectorPanel.this._bindingSelector.setEditedObject(null);
 				BindingSelectorPanel.this._bindingSelector.apply();
@@ -869,6 +875,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		});
 		if (_bindingSelector.getAllowsBindingExpressions()) {
 			_expressionButton = _controlPanel.addButton("expression", new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (BindingSelectorPanel.this._bindingSelector.getEditedObject() != null) {
 						BindingSelectorPanel.this._bindingSelector.activateBindingExpressionMode(new BindingExpression(
@@ -891,6 +898,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			showHideCompoundBindingsButton = new MouseOverButton();
 			showHideCompoundBindingsButton.setBorder(BorderFactory.createEmptyBorder());
 			showHideCompoundBindingsButton.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (BindingSelectorPanel.this._bindingSelector.editionMode == EditionMode.COMPOUND_BINDING) {
 						BindingSelectorPanel.this._bindingSelector.activateNormalBindingMode();
@@ -900,7 +908,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 				}
 			});
 
-			JLabel showHideCompoundBindingsButtonLabel = new JLabel("", JLabel.RIGHT);
+			JLabel showHideCompoundBindingsButtonLabel = new JLabel("", SwingConstants.RIGHT);
 			showHideCompoundBindingsButtonLabel.setFont(new Font("SansSerif", Font.PLAIN, 10));
 			if (_bindingSelector.editionMode == EditionMode.COMPOUND_BINDING) {
 				showHideCompoundBindingsButton.setNormalIcon(IconLibrary.TOGGLE_ARROW_TOP_ICON);
@@ -940,11 +948,11 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 
 		}
 
-		currentTypeLabel = new JLabel(FlexoLocalization.localizedForKey("no_type"), JLabel.LEFT);
+		currentTypeLabel = new JLabel(FlexoLocalization.localizedForKey("no_type"), SwingConstants.LEFT);
 		currentTypeLabel.setFont(new Font("SansSerif", Font.ITALIC, 10));
 		currentTypeLabel.setForeground(Color.GRAY);
 
-		searchedTypeLabel = new JLabel("[" + FlexoLocalization.localizedForKey("no_type") + "]", JLabel.LEFT);
+		searchedTypeLabel = new JLabel("[" + FlexoLocalization.localizedForKey("no_type") + "]", SwingConstants.LEFT);
 		searchedTypeLabel.setFont(new Font("SansSerif", Font.PLAIN, 10));
 		searchedTypeLabel.setForeground(Color.RED);
 
@@ -1849,6 +1857,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			fireModelChanged();
 		}
 
+		@Override
 		public int getSize() {
 			if ((getFilter() == null) && !AdvancedPrefs.hideFilteredObjects()) {
 				return getUnfilteredSize();
@@ -1876,6 +1885,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			return returned;
 		}
 
+		@Override
 		public BindingColumnElement getElementAt(int index) {
 			if ((getFilter() == null) && !AdvancedPrefs.hideFilteredObjects()) {
 				return getUnfilteredElementAt(index);
@@ -2053,6 +2063,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			return null;
 		}
 
+		@Override
 		public void update(FlexoObservable observable, DataModification dataModification) {
 			if ((((dataModification instanceof PropertyRegistered) || (dataModification instanceof PropertyUnregistered) || (dataModification instanceof PropertiesReordered))
 					|| ((dataModification instanceof DMAttributeDataModification) && dataModification.propertyName().equals("parentType")) || ((dataModification instanceof DMAttributeDataModification) && dataModification
@@ -2277,6 +2288,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		return _controlPanel;
 	}
 
+	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		if (e.getValueIsAdjusting()) {
 			return;
@@ -2377,6 +2389,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 				_bindingSelector.openPopup();
 				if (requestFocus) {
 					SwingUtilities.invokeLater(new Runnable() {
+						@Override
 						public void run() {
 							BindingSelectorPanel.this._bindingSelector.getTextField().requestFocus();
 						}
@@ -2507,6 +2520,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			}
 			alreadyAutocompleted = true;
 			SwingUtilities.invokeLater(new Runnable() {
+				@Override
 				public void run() {
 					BindingSelectorPanel.this._bindingSelector.getTextField().requestFocus();
 				}

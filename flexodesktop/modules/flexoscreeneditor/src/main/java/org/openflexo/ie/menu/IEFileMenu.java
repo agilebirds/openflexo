@@ -90,10 +90,11 @@ public class IEFileMenu extends FileMenu {
 		add(new FlexoMenuItem(PrintComponentAction.actionType, getController()) {
 			@Override
 			public FlexoModelObject getFocusedObject() {
-				if (_controller.getCurrentEditedComponent() != null)
+				if (_controller.getCurrentEditedComponent() != null) {
 					return _controller.getCurrentEditedComponent().getComponentDefinition();
-				else
+				} else {
 					return _controller.getProject().getFlexoComponentLibrary();
+				}
 			}
 
 			@Override
@@ -172,9 +173,10 @@ public class IEFileMenu extends FileMenu {
 								File screenshot = new File(fileList[i].getParentFile(), fileList[i].getName().substring(0,
 										fileList[i].getName().length() - ".woxml".length())
 										+ ".screenshot");
-								if (screenshot.exists())
+								if (screenshot.exists()) {
 									FileUtils.copyFileToDir(new FileInputStream(screenshot), screenshot.getName(), getController()
 											.getProject().getIECustomPaletteDirectory());
+								}
 							} catch (FileNotFoundException e) {
 								e.printStackTrace();
 							} catch (IOException e) {

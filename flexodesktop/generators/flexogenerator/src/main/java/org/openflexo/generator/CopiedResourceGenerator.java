@@ -66,9 +66,10 @@ public class CopiedResourceGenerator<R extends GenerationRepository> extends Gen
 	@Override
 	public void generate(boolean forceRegenerate) {
 		if (forceRegenerate) {
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Called force generate on copied resource");
-			if (copiedResource.getResourceToCopy() instanceof FlexoGeneratedResource)
+			}
+			if (copiedResource.getResourceToCopy() instanceof FlexoGeneratedResource) {
 				try {
 					((FlexoGeneratedResource) copiedResource.getResourceToCopy()).generate();
 				} catch (SaveResourceException e) {
@@ -76,6 +77,7 @@ public class CopiedResourceGenerator<R extends GenerationRepository> extends Gen
 				} catch (FlexoException e) {
 					e.printStackTrace();
 				}
+			}
 		}
 	}
 
@@ -139,14 +141,16 @@ public class CopiedResourceGenerator<R extends GenerationRepository> extends Gen
 
 	@Override
 	public void silentlyGenerateCode() {
-		if (logger.isLoggable(Level.SEVERE))
+		if (logger.isLoggable(Level.SEVERE)) {
 			logger.severe("This operation is not supported!");
+		}
 	}
 
 	@Override
 	public void buildResourcesAndSetGenerators(R repository, Vector<CGRepositoryFileResource> resources) {
-		if (parent != null)
+		if (parent != null) {
 			parent.buildResourcesAndSetGenerators(repository, resources);
+		}
 	}
 
 	@Override

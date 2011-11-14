@@ -89,11 +89,13 @@ public class ObjectGenerator extends DescendingVisitor {
 					String method = Constants.makeName(name);
 					boolean prim = true;
 
-					if (name.equals("name"))
+					if (name.equals("name")) {
 						method = obj.getName() + "Name";
+					}
 
-					if (name.equals("value"))
+					if (name.equals("value")) {
 						type = type2 = "PetalNode";
+					}
 
 					try { // Hack warning
 						java.lang.Class cl = java.lang.Class.forName("java.lang." + type2);
@@ -127,15 +129,15 @@ public class ObjectGenerator extends DescendingVisitor {
 	}
 
 	private static String getShortType(PetalNode node) {
-		if (node instanceof StringLiteral)
+		if (node instanceof StringLiteral) {
 			return "String";
-		else if (node instanceof IntegerLiteral)
+		} else if (node instanceof IntegerLiteral) {
 			return "int";
-		else if (node instanceof BooleanLiteral)
+		} else if (node instanceof BooleanLiteral) {
 			return "boolean";
-		else if (node instanceof FloatLiteral)
+		} else if (node instanceof FloatLiteral) {
 			return "double";
-		else {
+		} else {
 			String name = node.getClass().getName();
 			int index = name.lastIndexOf('.');
 
@@ -144,14 +146,15 @@ public class ObjectGenerator extends DescendingVisitor {
 	}
 
 	private static String getLongType(String type) {
-		if (type.equals("double"))
+		if (type.equals("double")) {
 			return "Float";
-		else if (type.equals("int"))
+		} else if (type.equals("int")) {
 			return "Integer";
-		else if (type.equals("boolean"))
+		} else if (type.equals("boolean")) {
 			return "Boolean";
-		else
+		} else {
 			return type;
+		}
 	}
 
 	public static void main(String[] args) {

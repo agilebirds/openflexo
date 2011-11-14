@@ -96,8 +96,9 @@ public class ServiceInterface extends WKFObject implements InspectableObject, Le
 
 	@Override
 	public void setName(String aName) throws DuplicateWSObjectException, DuplicateWKFObjectException {
-		if (!isDeserializing())
+		if (!isDeserializing()) {
 			checkInterfaceName(getProcess(), aName, this);
+		}
 		// TODO: check that the serviceInterface is not used !
 		if (!isDeserializing() && isUsedInWebService() && _name != null && !_name.equals(aName)) {
 			WSPortType pt = getProject().getFlexoWSLibrary().getWSPortTypeNamed(getName());
@@ -146,8 +147,9 @@ public class ServiceInterface extends WKFObject implements InspectableObject, Le
 		try {
 			ServiceOperation.checkOperationName(this, name, null);
 		} catch (DuplicateWKFObjectException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("An operation with the same name (" + name + ") already exist");
+			}
 			throw e;
 		}
 		ServiceOperation newOp = new ServiceOperation(this, name, relatedPort);
@@ -229,8 +231,9 @@ public class ServiceInterface extends WKFObject implements InspectableObject, Le
 
 	public boolean isUsedInWebService() {
 		WSPortType pt = getProject().getFlexoWSLibrary().getWSPortTypeNamed(getName());
-		if (pt != null && pt.getServiceInterface() != null && pt.getServiceInterface().equals(this))
+		if (pt != null && pt.getServiceInterface() != null && pt.getServiceInterface().equals(this)) {
 			return true;
+		}
 		return false;
 	}
 
@@ -326,8 +329,9 @@ public class ServiceInterface extends WKFObject implements InspectableObject, Le
 					}
 				}
 			} catch (DuplicateWKFObjectException e) {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("ServiceOperation already exist.");
+				}
 			}
 		}
 		return toInterface;

@@ -178,24 +178,31 @@ public abstract class DMEOAdaptorType implements StringConvertable, ChoiceList {
 	public Map<String, Object> getDefaultConnectionDictionary(String userName, String passwd, String databaseServer, String plugin,
 			String driver) {
 		Map<String, Object> returned = new HashMap<String, Object>();
-		if (userName != null)
+		if (userName != null) {
 			returned.put(USERNAME, userName);
-		if (passwd != null)
+		}
+		if (passwd != null) {
 			returned.put(PASSWORD, passwd);
-		if (databaseServer != null)
+		}
+		if (databaseServer != null) {
 			returned.put(DATABASE_SERVER, databaseServer);
-		if (plugin != null)
+		}
+		if (plugin != null) {
 			returned.put(PLUGIN, plugin);
-		if (driver != null)
+		}
+		if (driver != null) {
 			returned.put(DRIVER, driver);
-		if (getCustomAdaptorInfo() != null)
+		}
+		if (getCustomAdaptorInfo() != null) {
 			returned.put(getCustomAdaptorInfoKey(), getCustomAdaptorInfo());
+		}
 		return returned;
 	}
 
 	public static DMEOAdaptorType get(String adaptorName) {
-		if (adaptorName == null || adaptorName.equals("None"))
+		if (adaptorName == null || adaptorName.equals("None")) {
 			return null;
+		}
 		for (Enumeration e = JDBC.getAvailableValues().elements(); e.hasMoreElements();) {
 			DMEOAdaptorType temp = (DMEOAdaptorType) e.nextElement();
 			if (temp.getName().equals(adaptorName)) {
@@ -203,8 +210,9 @@ public abstract class DMEOAdaptorType implements StringConvertable, ChoiceList {
 			}
 		}
 
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Could not find AdaptorType named " + adaptorName);
+		}
 		return null;
 	}
 

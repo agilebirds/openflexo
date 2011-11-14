@@ -35,10 +35,11 @@ public class FIBLabelWidget extends FIBWidgetView<FIBLabel, JLabel, String> {
 
 	public FIBLabelWidget(FIBLabel model, FIBController controller) {
 		super(model, controller);
-		if (model.getData().isValid())
+		if (model.getData().isValid()) {
 			labelWidget = new JLabel(" ");
-		else
+		} else {
 			labelWidget = new JLabel();
+		}
 		updateFont();
 		updateAlign();
 		updateLabel();
@@ -48,8 +49,9 @@ public class FIBLabelWidget extends FIBWidgetView<FIBLabel, JLabel, String> {
 
 	@Override
 	public synchronized boolean updateWidgetFromModel() {
-		if (modelUpdating)
+		if (modelUpdating) {
 			return false;
+		}
 		widgetUpdating = true;
 		updateLabel();
 		widgetUpdating = false;
@@ -84,8 +86,9 @@ public class FIBLabelWidget extends FIBWidgetView<FIBLabel, JLabel, String> {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					if (getWidget() != null)
+					if (getWidget() != null) {
 						labelWidget.setText(getWidget().getLocalize() ? getLocalized(getValue()) : getValue());
+					}
 				}
 			});
 		} else {

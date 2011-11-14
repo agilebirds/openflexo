@@ -37,8 +37,9 @@ public class SendTokenOnTokenEdge extends SendToken<FlexoPostCondition<?, ?>> {
 	protected ControlGraph makeControlGraph(boolean interprocedural) throws InvalidModelException, NotSupportedException {
 		AbstractNode end = getEdge().getEndNode();
 
-		if (end == null)
+		if (end == null) {
 			throw new InvalidModelException("No end node defined on edge");
+		}
 		if (end instanceof FlexoPreCondition) {
 			return SendTokenToPrecondition.sendTokenToPrecondition((FlexoPreCondition) end, getEdge(), interprocedural);
 		} else if (end instanceof OperatorNode) {

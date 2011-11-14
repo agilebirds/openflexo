@@ -88,8 +88,9 @@ public class FIBTabPanelView extends FIBContainerView<FIBTabPanel, JTabbedPane> 
 	protected void retrieveContainedJComponentsAndConstraints() {
 		Vector<FIBTab> allTabs = new Vector<FIBTab>();
 		for (FIBComponent subComponent : getComponent().getSubComponents()) {
-			if (subComponent instanceof FIBTab)
+			if (subComponent instanceof FIBTab) {
 				allTabs.add((FIBTab) subComponent);
+			}
 		}
 
 		Collections.sort(allTabs, new Comparator<FIBTab>() {

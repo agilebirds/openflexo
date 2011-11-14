@@ -69,15 +69,18 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 
 	public void delete() {
 		logger.fine("Delete view for component " + getComponent());
-		for (FIBView v : subViews)
+		for (FIBView v : subViews) {
 			v.delete();
+		}
 		subViews.clear();
 		subViews = null;
 		isDeleted = true;
-		if (controller != null)
+		if (controller != null) {
 			controller.unregisterView(this);
-		if (dynamicModel != null)
+		}
+		if (dynamicModel != null) {
 			dynamicModel.delete();
+		}
 		component = null;
 		controller = null;
 	}
@@ -149,8 +152,9 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 			debug=true;
 		}*/
 
-		if (getParentView() != null && !getParentView().isComponentVisible())
+		if (getParentView() != null && !getParentView().isComponentVisible()) {
 			return false;
+		}
 
 		boolean componentVisible = true;
 		if (getComponent().getVisible() != null && getComponent().getVisible().isSet()) {
@@ -159,11 +163,13 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 				System.out.println("getComponent().getVisible()="+getComponent().getVisible());
 				System.out.println("Eh bien isVisible="+isVisible);
 			}*/
-			if (isVisible instanceof Boolean)
+			if (isVisible instanceof Boolean) {
 				componentVisible = (Boolean) isVisible;
+			}
 		}
-		if (!componentVisible)
+		if (!componentVisible) {
 			return false;
+		}
 		// logger.info("Please look at this !!!");
 		// if (getParentView() != null) return getParentView().isComponentVisible();
 		return true;
@@ -179,12 +185,14 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 				// Becomes visible
 				performSetIsVisible(true);
 				// Also update visibility for sub-components
-				for (FIBView view : subViews)
+				for (FIBView view : subViews) {
 					view.updateVisibility(false);
-				if (getResultingJComponent().getParent() instanceof JComponent)
+				}
+				if (getResultingJComponent().getParent() instanceof JComponent) {
 					((JComponent) getResultingJComponent().getParent()).revalidate();
-				else
+				} else {
 					getResultingJComponent().getParent().validate();
+				}
 				getResultingJComponent().getParent().repaint();
 				visible = true;
 				if (getDynamicModel() != null) {
@@ -263,8 +271,9 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	}
 
 	public Font getFont() {
-		if (getComponent() != null)
+		if (getComponent() != null) {
 			return getComponent().retrieveValidFont();
+		}
 		return null;
 	}
 
@@ -279,8 +288,9 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	}
 
 	public FIBSelectable getSelectableComponent() {
-		if (isSelectableComponent())
+		if (isSelectableComponent()) {
 			return (FIBSelectable) this;
+		}
 		return null;
 	}
 
@@ -300,10 +310,12 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	protected void updatePreferredSize() {
 		if (getComponent().definePreferredDimensions()) {
 			Dimension preferredSize = getJComponent().getPreferredSize();
-			if (getComponent().getWidth() != null)
+			if (getComponent().getWidth() != null) {
 				preferredSize.width = getComponent().getWidth();
-			if (getComponent().getHeight() != null)
+			}
+			if (getComponent().getHeight() != null) {
 				preferredSize.height = getComponent().getHeight();
+			}
 			getJComponent().setPreferredSize(preferredSize);
 		}
 	}
@@ -311,10 +323,12 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	protected void updateMinimumSize() {
 		if (getComponent().defineMinDimensions()) {
 			Dimension minSize = getJComponent().getMinimumSize();
-			if (getComponent().getMinWidth() != null)
+			if (getComponent().getMinWidth() != null) {
 				minSize.width = getComponent().getMinWidth();
-			if (getComponent().getMinHeight() != null)
+			}
+			if (getComponent().getMinHeight() != null) {
 				minSize.height = getComponent().getMinHeight();
+			}
 			getJComponent().setMinimumSize(minSize);
 		}
 	}
@@ -322,10 +336,12 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	protected void updateMaximumSize() {
 		if (getComponent().defineMaxDimensions()) {
 			Dimension maxSize = getJComponent().getMaximumSize();
-			if (getComponent().getMaxWidth() != null)
+			if (getComponent().getMaxWidth() != null) {
 				maxSize.width = getComponent().getMaxWidth();
-			if (getComponent().getMaxHeight() != null)
+			}
+			if (getComponent().getMaxHeight() != null) {
 				maxSize.height = getComponent().getMaxHeight();
+			}
 			getJComponent().setMinimumSize(maxSize);
 		}
 	}
@@ -343,12 +359,14 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	}
 
 	public static boolean equals(Object o1, Object o2) {
-		if (o1 == o2)
+		if (o1 == o2) {
 			return true;
-		if (o1 == null)
+		}
+		if (o1 == null) {
 			return (o2 == null);
-		else
+		} else {
 			return o1.equals(o2);
+		}
 	}
 
 	public static boolean notEquals(Object o1, Object o2) {

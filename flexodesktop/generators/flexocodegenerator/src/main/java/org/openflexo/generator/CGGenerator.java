@@ -35,7 +35,6 @@ import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.wkf.node.ActionNode;
 import org.openflexo.foundation.wkf.node.OperationNode;
-import org.openflexo.generator.Generator;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.exception.JavaAppendingException;
 import org.openflexo.generator.exception.JavaFormattingException;
@@ -80,8 +79,9 @@ public abstract class CGGenerator<T extends FlexoModelObject> extends Generator<
 	// public abstract ManyGeneratedCode generateCode() throws GenerationException;
 
 	public static String nameForComponentDefinition(ComponentDefinition componentDefinition) {
-		if (componentDefinition instanceof PopupComponentDefinition)
+		if (componentDefinition instanceof PopupComponentDefinition) {
 			return componentDefinition.getComponentName() + "Popup";
+		}
 		return componentDefinition.getComponentName();
 	}
 
@@ -110,12 +110,14 @@ public abstract class CGGenerator<T extends FlexoModelObject> extends Generator<
 				ResourceType.JAVA_FILE, GeneratorUtils.nameForRepositoryAndIdentifier(repository, generator.getIdentifier()));
 		if (javaResource == null) {
 			javaResource = GeneratedFileResourceFactory.createNewUtilComponentJavaFileResource(repository, generator);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Created COMPONENT UTIL JAVA resource " + javaResource.getName());
+			}
 		} else {
 			javaResource.setGenerator(generator);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Successfully retrieved COMPONENT UTIL JAVA resource " + javaResource.getName());
+			}
 		}
 		resources.add(javaResource);
 
@@ -124,12 +126,14 @@ public abstract class CGGenerator<T extends FlexoModelObject> extends Generator<
 				GeneratorUtils.nameForRepositoryAndIdentifier(repository, generator.getIdentifier()));
 		if (WOResource == null) {
 			WOResource = GeneratedFileResourceFactory.createNewUtilComponentWOFileResource(repository, generator);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Created COMPONENT UTIL WO resource " + WOResource.getName());
+			}
 		} else {
 			WOResource.setGenerator(generator);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Successfully retrieved COMPONENT UTIL WO resource " + WOResource.getName());
+			}
 		}
 		resources.add(WOResource);
 
@@ -138,12 +142,14 @@ public abstract class CGGenerator<T extends FlexoModelObject> extends Generator<
 				ResourceType.API_FILE, GeneratorUtils.nameForRepositoryAndIdentifier(repository, generator.getIdentifier()));
 		if (APIResource == null) {
 			APIResource = GeneratedFileResourceFactory.createNewUtilComponentAPIFileResource(repository, generator);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Created COMPONENT UTIL API resource " + APIResource.getName());
+			}
 		} else {
 			APIResource.setGenerator(generator);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Successfully retrieved COMPONENT UTIL API resource " + APIResource.getName());
+			}
 		}
 		resources.add(APIResource);
 

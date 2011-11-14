@@ -95,24 +95,28 @@ public class TopComponentReusableWidget extends IEReusableWidget<ReusableCompone
 	@Override
 	public Vector<IESequenceTab> getAllTabContainers() {
 		Vector<IESequenceTab> reply = new Vector<IESequenceTab>();
-		if (getRootObject() == null)
+		if (getRootObject() == null) {
 			return reply;
-		if (getRootObject() instanceof IETopComponent)
+		}
+		if (getRootObject() instanceof IETopComponent) {
 			reply.addAll(((IETopComponent) getRootObject()).getAllTabContainers());
+		}
 		return reply;
 	}
 
 	@Override
 	public boolean areComponentInstancesValid() {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Implement me!!! please");
+		}
 		return true;
 	}
 
 	@Override
 	public void removeInvalidComponentInstances() {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Implement me!!! please");
+		}
 	}
 
 	/**
@@ -122,9 +126,10 @@ public class TopComponentReusableWidget extends IEReusableWidget<ReusableCompone
 	 */
 	@Override
 	public String getTitle() {
-		if (getRootObject() instanceof IETopComponent)
+		if (getRootObject() instanceof IETopComponent) {
 			return ((IETopComponent) getRootObject()).getTitle();
-		else
+		} else {
 			return getRootObject().getLabel();
+		}
 	}
 }

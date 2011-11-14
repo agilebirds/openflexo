@@ -41,8 +41,9 @@ public class IEReusableWidgetElement extends IEElement {
 
 	@Override
 	protected void buildChildrenVector() {
-		if (getObject().getReusableComponentInstance() != null)
+		if (getObject().getReusableComponentInstance() != null) {
 			addToChilds(getObject().getReusableComponentInstance().getComponentDefinition());
+		}
 	}
 
 	@Override

@@ -28,8 +28,8 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.dkv.DKVModel;
-import org.openflexo.foundation.dkv.Domain;
 import org.openflexo.foundation.dkv.DKVModel.DomainList;
+import org.openflexo.foundation.dkv.Domain;
 
 /**
  * @author gpolet

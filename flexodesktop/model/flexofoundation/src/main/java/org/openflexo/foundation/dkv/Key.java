@@ -137,11 +137,13 @@ public class Key extends DKVObject implements InspectableObject, Comparator, Sor
 	@Override
 	public void setIndexValue(int index) {
 		int old = this.index;
-		if (old == index)
+		if (old == index) {
 			return;
+		}
 		this.index = index;
-		if (isDeserializing())
+		if (isDeserializing()) {
 			return;
+		}
 		DKVDataModification dm = new DKVDataModification(-1, "index", new Integer(old), new Integer(index));
 		setChanged();
 		notifyObservers(dm);
@@ -199,19 +201,23 @@ public class Key extends DKVObject implements InspectableObject, Comparator, Sor
 	 */
 	@Override
 	public void setName(String name) throws DuplicateDKVObjectException {
-		if (name.equals(getName()))
+		if (name.equals(getName())) {
 			return;
+		}
 		if (isDeserializing()) {
 			super.setName(name);
 		} else {
-			if (domain.getKeyNamed(name) != null)
+			if (domain.getKeyNamed(name) != null) {
 				throw new DuplicateDKVObjectException(this);
+			}
 			boolean reg_unreg = domain.getKeys().indexOf(this) > -1;
-			if (reg_unreg)
+			if (reg_unreg) {
 				domain.removeFromKeys(this);
+			}
 			super.setName(name);
-			if (reg_unreg)
+			if (reg_unreg) {
 				domain.addToKeys(this);
+			}
 		}
 	}
 

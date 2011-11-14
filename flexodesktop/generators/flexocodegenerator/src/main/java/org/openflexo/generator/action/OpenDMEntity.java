@@ -29,7 +29,6 @@ import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.ModelReinjectableFile;
 import org.openflexo.foundation.dm.DMEntity;
-import org.openflexo.generator.action.GCAction;
 import org.openflexo.generator.file.AbstractCGFile;
 
 public class OpenDMEntity extends FlexoGUIAction<OpenDMEntity, CGFile, CGObject> {

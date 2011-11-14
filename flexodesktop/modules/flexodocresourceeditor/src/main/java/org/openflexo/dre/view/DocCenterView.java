@@ -67,8 +67,9 @@ public class DocCenterView extends JPanel implements SelectionSynchronizedModule
 			public String getValue(FlexoModelObject object) {
 				if (hasDescription(object)) {
 					return getDescription(object);
-				} else
+				} else {
 					return EMPTY_STRING;
+				}
 			}
 
 			@Override
@@ -91,8 +92,9 @@ public class DocCenterView extends JPanel implements SelectionSynchronizedModule
 
 	@Override
 	public void deleteModuleView() {
-		if (_controller != null)
+		if (_controller != null) {
 			_controller.removeModuleView(this);
+		}
 		logger.warning("implements me !");
 	}
 

@@ -59,8 +59,9 @@ public class ValidateProjectInitializer extends ActionInitializer {
 				if (action.getContext() instanceof SynchronizeRepositoryCodeGeneration) {
 					return (SGPreferences.getValidateBeforeGenerating());
 				}
-				if (action.getProjectGenerator() != null)
+				if (action.getProjectGenerator() != null) {
 					action.getProjectGenerator().startHandleLogs();
+				}
 				return true;
 			}
 		};

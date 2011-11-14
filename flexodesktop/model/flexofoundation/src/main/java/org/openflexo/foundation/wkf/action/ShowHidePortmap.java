@@ -63,8 +63,9 @@ public class ShowHidePortmap extends FlexoUndoableAction<ShowHidePortmap, FlexoP
 
 	@Override
 	protected void doAction(Object context) {
-		if (getFocusedObject() != null)
+		if (getFocusedObject() != null) {
 			getFocusedObject().setIsVisible(!getFocusedObject().getIsVisible());
+		}
 	}
 
 	@Override

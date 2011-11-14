@@ -57,8 +57,9 @@ public class ObtainObject extends EditionInput<FGEArea> {
 
 	public ObtainObject(String anInputLabel, GeomEditController controller, boolean appendEndSelection) {
 		this(anInputLabel, controller);
-		if (appendEndSelection)
+		if (appendEndSelection) {
 			availableMethods.add(new EndEditionSelection());
+		}
 		endOnRightClick = appendEndSelection;
 	}
 

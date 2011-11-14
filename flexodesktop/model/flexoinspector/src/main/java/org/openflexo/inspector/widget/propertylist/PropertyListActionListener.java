@@ -28,10 +28,10 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.expr.Expression;
-import org.openflexo.antar.expr.Function;
 import org.openflexo.antar.expr.Constant.ObjectSymbolicConstant;
 import org.openflexo.antar.expr.Constant.StringConstant;
+import org.openflexo.antar.expr.Expression;
+import org.openflexo.antar.expr.Function;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.model.PropertyListAction;
 import org.openflexo.kvc.KeyValueCoding;
@@ -85,8 +85,9 @@ public class PropertyListActionListener implements ActionListener {
 	}
 
 	private KeyValueCoding getTargetObject(KeyValueCoding sourceObject, String listAccessor) {
-		if (listAccessor == null)
+		if (listAccessor == null) {
 			return null;
+		}
 		StringTokenizer strTok = new StringTokenizer(listAccessor, ".");
 		String accessor;
 		Object currentObject = sourceObject;
@@ -102,22 +103,26 @@ public class PropertyListActionListener implements ActionListener {
 			return (KeyValueCoding) currentObject;
 		} else {
 			if (currentObject == null) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not find target object : currentObject is null !");
+				}
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not find target object : must be a KeyValueCoding object but is a " + currentObject.getClass());
+				}
 			}
 			return null;
 		}
 	}
 
 	private String getLastAccessor(String listAccessor) {
-		if (listAccessor == null)
+		if (listAccessor == null) {
 			return null;
+		}
 		int lastDotPosition = listAccessor.lastIndexOf(".");
-		if (lastDotPosition < 0)
+		if (lastDotPosition < 0) {
 			return listAccessor;
+		}
 		return listAccessor.substring(lastDotPosition + 1, listAccessor.length());
 	}
 
@@ -158,37 +163,42 @@ public class PropertyListActionListener implements ActionListener {
 				params = new Object[_plAction.getMethodExpressionArgs().size()];
 				for (int i = 0; i < _plAction.getMethodExpressionArgs().size(); i++) {
 					Expression arg = _plAction.getMethodExpressionArgs().get(i);
-					if (arg instanceof StringConstant)
+					if (arg instanceof StringConstant) {
 						params[i] = ((StringConstant) arg).getValue();
-					else if (arg == ObjectSymbolicConstant.NULL)
+					} else if (arg == ObjectSymbolicConstant.NULL) {
 						params[i] = null;
-					else if (arg == ObjectSymbolicConstant.THIS)
+					} else if (arg == ObjectSymbolicConstant.THIS) {
 						params[i] = getSelectedObject();
+					}
 				}
 			} else {
 				params = new Object[0];
 			}
 			try {
 				Object targetObject = getTargetObject(getModel(), _plAction.getMethodName());
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("invoking " + getActionMethod(getSelectedObject()) + " on object" + targetObject);
+				}
 				getActionMethod(getSelectedObject()).invoke(targetObject, params);
 				_tableModel.fireTableDataChanged();
 				_tableModel.getPropertyListWidget().updateWidgetFromModel();
 			} catch (IllegalArgumentException e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 			} catch (InvocationTargetException e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 			}
 		}
@@ -196,10 +206,12 @@ public class PropertyListActionListener implements ActionListener {
 
 	// TODO: rewrite this property with AnTAR (Expression.evaluateExpression())...
 	protected void performAction(InspectableObject paramObject, Vector<InspectableObject> selectedObjects) {
-		if (selectedObjects == null)
+		if (selectedObjects == null) {
 			selectedObjects = new Vector<InspectableObject>();
-		if (paramObject != null && !selectedObjects.contains(paramObject))
+		}
+		if (paramObject != null && !selectedObjects.contains(paramObject)) {
 			selectedObjects.add(paramObject);
+		}
 		for (InspectableObject object : selectedObjects) {
 			if (getActionMethod(paramObject) != null) {
 				Object[] params;
@@ -207,12 +219,13 @@ public class PropertyListActionListener implements ActionListener {
 					params = new Object[_plAction.getMethodExpressionArgs().size()];
 					for (int i = 0; i < _plAction.getMethodExpressionArgs().size(); i++) {
 						Expression arg = _plAction.getMethodExpressionArgs().get(i);
-						if (arg instanceof StringConstant)
+						if (arg instanceof StringConstant) {
 							params[i] = ((StringConstant) arg).getValue();
-						else if (arg == ObjectSymbolicConstant.NULL)
+						} else if (arg == ObjectSymbolicConstant.NULL) {
 							params[i] = null;
-						else if (arg == ObjectSymbolicConstant.THIS)
+						} else if (arg == ObjectSymbolicConstant.THIS) {
 							params[i] = paramObject;
+						}
 					}
 				} else {
 					params = new Object[1];
@@ -220,30 +233,35 @@ public class PropertyListActionListener implements ActionListener {
 				}
 				try {
 					Object targetObject = getTargetObject(getModel(), _plAction.getMethodName());
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("invoking " + getActionMethod(paramObject) + " on object" + targetObject);
+					}
 					getActionMethod(paramObject).invoke(targetObject, params);
 					_tableModel.fireTableDataChanged();
 					_tableModel.getPropertyListWidget().updateWidgetFromModel();
 				} catch (IllegalArgumentException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (InvocationTargetException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				}
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not find method: " + _plAction.getMethodName());
+				}
 			}
 		}
 	}
@@ -265,12 +283,13 @@ public class PropertyListActionListener implements ActionListener {
 					methodClassParams = new Class[_plAction.getMethodExpressionArgs().size()];
 					for (int i = 0; i < _plAction.getMethodExpressionArgs().size(); i++) {
 						Expression arg = _plAction.getMethodExpressionArgs().get(i);
-						if (arg instanceof StringConstant)
+						if (arg instanceof StringConstant) {
 							methodClassParams[i] = String.class;
-						else if (arg == ObjectSymbolicConstant.NULL)
+						} else if (arg == ObjectSymbolicConstant.NULL) {
 							methodClassParams[i] = Object.class;
-						else if (arg == ObjectSymbolicConstant.THIS)
+						} else if (arg == ObjectSymbolicConstant.THIS) {
 							methodClassParams[i] = paramObject.getClass();
+						}
 					}
 				} else {
 					if (_plAction.type.equals(PropertyListAction.ADD_TYPE) || _plAction.type.equals(PropertyListAction.STATIC_ACTION_TYPE)) {
@@ -288,14 +307,16 @@ public class PropertyListActionListener implements ActionListener {
 						_actionMethod = lookupMethod(targetClass, methodName, methodClassParams);
 					} catch (SecurityException e) {
 						// Warns about the exception
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("SecurityException raised: " + e.getClass().getName() + ". See console for details.");
+						}
 						e.printStackTrace();
 					} catch (NoSuchMethodException e) {
 						// Warns about the exception
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("NoSuchMethodException raised: unable to find method " + methodName + " for class "
 									+ targetClass);
+						}
 						e.printStackTrace();
 					}
 				}
@@ -310,8 +331,9 @@ public class PropertyListActionListener implements ActionListener {
 	private Method getAvailableMethod(InspectableObject paramObject) {
 		if (_isAvailableMethod == null) {
 			String methodName = getLastAccessor(_plAction.getIsAvailableMethodName());
-			if (methodName == null || methodName.trim().equals(""))
+			if (methodName == null || methodName.trim().equals("")) {
 				return null;
+			}
 			if (getModel() != null) {
 				// System.out.println("Model: "+getModel());
 				KeyValueCoding targetObject = getTargetObject(getModel(), _plAction.getIsAvailableMethodName());
@@ -324,12 +346,13 @@ public class PropertyListActionListener implements ActionListener {
 					methodClassParams = new Class[_plAction.getIsAvailableExpressionArgs().size()];
 					for (int i = 0; i < _plAction.getIsAvailableExpressionArgs().size(); i++) {
 						Expression arg = _plAction.getIsAvailableExpressionArgs().get(i);
-						if (arg instanceof StringConstant)
+						if (arg instanceof StringConstant) {
 							methodClassParams[i] = String.class;
-						else if (arg == ObjectSymbolicConstant.NULL)
+						} else if (arg == ObjectSymbolicConstant.NULL) {
 							methodClassParams[i] = Object.class;
-						else if (arg == ObjectSymbolicConstant.THIS)
+						} else if (arg == ObjectSymbolicConstant.THIS) {
 							methodClassParams[i] = paramObject.getClass();
+						}
 					}
 				} else {
 					if (_plAction.type.equals(PropertyListAction.STATIC_ACTION_TYPE)) {
@@ -345,13 +368,15 @@ public class PropertyListActionListener implements ActionListener {
 					// System.out.println("Found method "+_isAvailableMethod);
 				} catch (SecurityException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("SecurityException raised. See console for details.");
+					}
 					e.printStackTrace();
 				} catch (NoSuchMethodException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("NoSuchMethodException raised. See console for details.");
+					}
 					e.printStackTrace();
 				}
 
@@ -372,12 +397,13 @@ public class PropertyListActionListener implements ActionListener {
 				params = new Object[_plAction.getIsAvailableExpressionArgs().size()];
 				for (int i = 0; i < _plAction.getIsAvailableExpressionArgs().size(); i++) {
 					Expression arg = _plAction.getIsAvailableExpressionArgs().get(i);
-					if (arg instanceof StringConstant)
+					if (arg instanceof StringConstant) {
 						params[i] = ((StringConstant) arg).getValue();
-					else if (arg == ObjectSymbolicConstant.NULL)
+					} else if (arg == ObjectSymbolicConstant.NULL) {
 						params[i] = null;
-					else if (arg == ObjectSymbolicConstant.THIS)
+					} else if (arg == ObjectSymbolicConstant.THIS) {
 						params[i] = paramObject;
+					}
 				}
 			} else {
 
@@ -392,23 +418,27 @@ public class PropertyListActionListener implements ActionListener {
 			}
 			try {
 				Object targetObject = getTargetObject(getModel(), _plAction.getIsAvailableMethodName());
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("invoking " + getAvailableMethod(paramObject) + " on object" + targetObject);
+				}
 				return ((Boolean) getAvailableMethod(paramObject).invoke(targetObject, params)).booleanValue();
 			} catch (IllegalArgumentException e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 			} catch (InvocationTargetException e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 			}
 		}
@@ -428,8 +458,9 @@ public class PropertyListActionListener implements ActionListener {
 		/*String s = "";
 		for (Class c : parameterTypes) s += c.getName()+" ";
 		System.out.println("Search method: "+methodName+" ( "+s+")");*/
-		if (parameterTypes == null || parameterTypes.length == 0)
+		if (parameterTypes == null || parameterTypes.length == 0) {
 			return aClass.getMethod(methodName, parameterTypes);
+		}
 		if (parameterTypes.length == 1) {
 			while (parameterTypes[0] != null) {
 				try {

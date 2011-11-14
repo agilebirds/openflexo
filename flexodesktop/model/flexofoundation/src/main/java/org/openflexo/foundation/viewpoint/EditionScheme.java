@@ -97,8 +97,9 @@ public abstract class EditionScheme extends ViewPointObject {
 
 	public EditionAction getAction(PatternRole role) {
 		for (EditionAction a : getActions()) {
-			if (a.getPatternRole() == role)
+			if (a.getPatternRole() == role) {
 				return a;
+			}
 		}
 		return null;
 	}
@@ -203,19 +204,22 @@ public abstract class EditionScheme extends ViewPointObject {
 	}
 
 	public EditionSchemeParameter getParameter(String name) {
-		if (name == null)
+		if (name == null) {
 			return null;
+		}
 		for (EditionSchemeParameter p : parameters) {
-			if (name.equals(p.getName()))
+			if (name.equals(p.getName())) {
 				return p;
+			}
 		}
 		return null;
 	}
 
 	@Override
 	public ViewPoint getCalc() {
-		if (getEditionPattern() != null)
+		if (getEditionPattern() != null) {
 			return getEditionPattern().getCalc();
+		}
 		return null;
 	}
 
@@ -385,14 +389,16 @@ public abstract class EditionScheme extends ViewPointObject {
 
 	@Override
 	public BindingModel getBindingModel() {
-		if (_bindingModel == null)
+		if (_bindingModel == null) {
 			createBindingModel();
+		}
 		return _bindingModel;
 	}
 
 	public BindingModel getParametersBindingModel() {
-		if (_parametersBindingModel == null)
+		if (_parametersBindingModel == null) {
 			createParametersBindingModel();
+		}
 		return _parametersBindingModel;
 	}
 

@@ -57,19 +57,23 @@ public class WKFDelete extends FlexoUndoableAction<WKFDelete, WKFObject, WKFObje
 
 		@Override
 		protected boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
-			if (globalSelection == null || (object == null && globalSelection.size() == 0))
+			if (globalSelection == null || (object == null && globalSelection.size() == 0)) {
 				return false;
+			}
 			for (Enumeration en = globalSelection.elements(); en.hasMoreElements();) {
 				FlexoModelObject next = (FlexoModelObject) en.nextElement();
 				if (next instanceof FlexoProcess) {
 					FlexoProcess p = (FlexoProcess) next;
-					if (p.isRootProcess())
+					if (p.isRootProcess()) {
 						return false;
+					}
 					if (p.isImported()) {
-						if (!p.isTopLevelProcess())
+						if (!p.isTopLevelProcess()) {
 							return false;
-					} else if (p.getSubProcesses() != null && p.getSubProcesses().size() > 0)
+						}
+					} else if (p.getSubProcesses() != null && p.getSubProcesses().size() > 0) {
 						return false;
+					}
 				}
 			}
 			return true;
@@ -90,22 +94,27 @@ public class WKFDelete extends FlexoUndoableAction<WKFDelete, WKFObject, WKFObje
 	protected WKFDelete(WKFObject focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		_deletionContexts = new Hashtable<WKFObject, Object>();
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Created WKFDelete action focusedObject=" + focusedObject + "globalSelection=" + globalSelection);
+		}
 	}
 
 	@Override
 	protected void doAction(Object context) {
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("DELETE on WKF");
-		if (logger.isLoggable(Level.INFO))
+		}
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("selection is: " + getGlobalSelection());
-		if (logger.isLoggable(Level.INFO))
+		}
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("selection to delete is: " + getObjectsToDelete());
+		}
 		for (Enumeration en = getObjectsToDelete().elements(); en.hasMoreElements();) {
 			WKFObject next = (WKFObject) en.nextElement();
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info(" > DELETE" + next);
+			}
 			deleteObject(next);
 		}
 	}
@@ -137,8 +146,9 @@ public class WKFDelete extends FlexoUndoableAction<WKFDelete, WKFObject, WKFObje
 				for (Enumeration en2 = getGlobalSelection().elements(); en2.hasMoreElements() && includesIt;) {
 					FlexoModelObject next = (FlexoModelObject) en2.nextElement();
 					if (next instanceof WKFObject) {
-						if (((WKFObject) next).getAllEmbeddedDeleted().contains(getFocusedObject()))
+						if (((WKFObject) next).getAllEmbeddedDeleted().contains(getFocusedObject())) {
 							includesIt = false;
+						}
 					}
 				}
 				if (includesIt) {
@@ -155,13 +165,15 @@ public class WKFDelete extends FlexoUndoableAction<WKFDelete, WKFObject, WKFObje
 			while (en.hasMoreElements()) {
 				WKFObject object = en.nextElement();
 				boolean includesIt = true;
-				if (object instanceof FlexoPetriGraph)
+				if (object instanceof FlexoPetriGraph) {
 					includesIt = false;
+				}
 				for (Enumeration en2 = getGlobalSelection().elements(); en2.hasMoreElements() && includesIt;) {
 					FlexoModelObject next = (FlexoModelObject) en2.nextElement();
 					if ((next instanceof WKFObject) && (next != object)) {
-						if (((WKFObject) next).getAllEmbeddedDeleted().contains(object))
+						if (((WKFObject) next).getAllEmbeddedDeleted().contains(object)) {
 							includesIt = false;
+						}
 					}
 				}
 				if (includesIt) {
@@ -191,8 +203,9 @@ public class WKFDelete extends FlexoUndoableAction<WKFDelete, WKFObject, WKFObje
 	private void deleteObject(WKFObject object) {
 		if (entriesToDelete != null) {
 			for (TOCEntry entry : entriesToDelete) {
-				if (!entry.isDeleted())
+				if (!entry.isDeleted()) {
 					entry.delete();
+				}
 			}
 		}
 		if (object instanceof FlexoProcess) {

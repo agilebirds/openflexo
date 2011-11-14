@@ -23,7 +23,6 @@ import java.awt.Font;
 import java.util.logging.Logger;
 
 import org.openflexo.ColorCst;
-import org.openflexo.FlexoCst;
 import org.openflexo.cgmodule.GeneratorCst;
 import org.openflexo.cgmodule.controller.GeneratorController;
 import org.openflexo.cgmodule.menu.GeneratorMenuBar;

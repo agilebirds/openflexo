@@ -121,8 +121,9 @@ public class SimpleStringPattern implements StringPattern {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof SimpleStringPattern))
+		if (!(obj instanceof SimpleStringPattern)) {
 			return false;
+		}
 		return subPatterns.equals(((SimpleStringPattern) obj).subPatterns);
 	}
 
@@ -213,8 +214,9 @@ public class SimpleStringPattern implements StringPattern {
 
 		@Override
 		public boolean equals(Object obj) {
-			if (!(this.getClass().isInstance(obj)))
+			if (!(this.getClass().isInstance(obj))) {
 				return false;
+			}
 			return match.equals(((SubPattern) obj).match);
 		}
 

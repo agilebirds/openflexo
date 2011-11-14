@@ -103,15 +103,17 @@ public class ActionNodeGR extends AbstractActionNodeGR {
 
 	@Override
 	public double getDefaultLabelX() {
-		if (getModel().hasLabelLocationForContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR))
+		if (getModel().hasLabelLocationForContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR)) {
 			return getModel().getLabelLocation(ProcessEditorConstants.BASIC_PROCESS_EDITOR).getX();
+		}
 		return getLeftBorder() + 15;
 	}
 
 	@Override
 	public double getDefaultLabelY() {
-		if (getModel().hasLabelLocationForContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR))
+		if (getModel().hasLabelLocationForContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR)) {
 			return getModel().getLabelLocation(ProcessEditorConstants.BASIC_PROCESS_EDITOR).getY();
+		}
 		return getTopBorder() + 40;
 	}
 

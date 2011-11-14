@@ -62,8 +62,9 @@ public class RefreshImportedRoleAction extends
 				break;
 			case DELETED:
 				if (!delta.getFiRole().isDeletedOnServer()) {
-					if (report.length() > 0)
+					if (report.length() > 0) {
 						report.append("\n");
+					}
 					report.append(FlexoLocalization.localizedForKey("the_role")).append(" ").append(delta.getFiRole().getName())
 							.append(" ").append(FlexoLocalization.localizedForKey("has_been_removed_from_server"));
 				}
@@ -71,8 +72,9 @@ public class RefreshImportedRoleAction extends
 				break;
 			case UPDATED:
 				Role rip = lib.getImportedObjectWithURI(role.getUri());
-				if (report.length() > 0)
+				if (report.length() > 0) {
 					report.append("\n");
+				}
 				report.append(FlexoLocalization.localizedForKey("the_role")).append(" ").append(rip.getName()).append(" ")
 						.append(FlexoLocalization.localizedForKey("has_been_updated"));
 				rip.updateFromObject(role);
@@ -150,8 +152,9 @@ public class RefreshImportedRoleAction extends
 		try {
 			updated = getWebService().refreshRoles(getLogin(), getMd5Password(), uris);
 		} catch (RemoteException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.log(Level.WARNING, "Remote exception: " + e.getMessage(), e);
+			}
 			throw new FlexoRemoteException(null, e);
 		}
 		if (updated != null) {
@@ -166,8 +169,9 @@ public class RefreshImportedRoleAction extends
 	}
 
 	public String getReport() {
-		if (visitor != null)
+		if (visitor != null) {
 			return visitor.getReport();
+		}
 		return FlexoLocalization.localizedForKey("refresh_has_not_been_performed");
 	}
 

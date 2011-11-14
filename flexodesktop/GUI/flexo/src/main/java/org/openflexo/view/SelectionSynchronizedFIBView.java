@@ -90,9 +90,11 @@ public class SelectionSynchronizedFIBView<O extends FlexoModelObject> extends Fl
 	 * 
 	 * @param object
 	 */
+	@Override
 	public void fireObjectSelected(FlexoModelObject object) {
-		if (ignoreFiredSelectionEvents)
+		if (ignoreFiredSelectionEvents) {
 			return;
+		}
 		// logger.info("SELECTED: "+object);
 		getFIBView().getController().objectAddedToSelection(object);
 	}
@@ -102,9 +104,11 @@ public class SelectionSynchronizedFIBView<O extends FlexoModelObject> extends Fl
 	 * 
 	 * @param object
 	 */
+	@Override
 	public void fireObjectDeselected(FlexoModelObject object) {
-		if (ignoreFiredSelectionEvents)
+		if (ignoreFiredSelectionEvents) {
 			return;
+		}
 		// logger.info("DESELECTED: "+object);
 		getFIBView().getController().objectRemovedFromSelection(object);
 	}
@@ -112,9 +116,11 @@ public class SelectionSynchronizedFIBView<O extends FlexoModelObject> extends Fl
 	/**
 	 * Clear selection
 	 */
+	@Override
 	public void fireResetSelection() {
-		if (ignoreFiredSelectionEvents)
+		if (ignoreFiredSelectionEvents) {
 			return;
+		}
 		// logger.info("RESET SELECTION");
 		getFIBView().getController().selectionCleared();
 	}
@@ -122,30 +128,37 @@ public class SelectionSynchronizedFIBView<O extends FlexoModelObject> extends Fl
 	/**
 	 * Notify that the selection manager is performing a multiple selection
 	 */
+	@Override
 	public void fireBeginMultipleSelection() {
-		if (ignoreFiredSelectionEvents)
+		if (ignoreFiredSelectionEvents) {
 			return;
+		}
 	}
 
 	/**
 	 * Notify that the selection manager has finished to perform a multiple selection
 	 */
+	@Override
 	public void fireEndMultipleSelection() {
-		if (ignoreFiredSelectionEvents)
+		if (ignoreFiredSelectionEvents) {
 			return;
+		}
 	}
 
 	public SelectionManager getSelectionManager() {
 		return ((SelectionManagingController) getFlexoController()).getSelectionManager();
 	}
 
+	@Override
 	public void selectionChanged(Vector<Object> selection) {
-		if (selection == null)
+		if (selection == null) {
 			return;
+		}
 		Vector<FlexoModelObject> newSelection = new Vector<FlexoModelObject>();
 		for (Object o : selection) {
-			if (o instanceof FlexoModelObject)
+			if (o instanceof FlexoModelObject) {
 				newSelection.add((FlexoModelObject) o);
+			}
 		}
 		logger.fine("FlexoFIBView now impose new selection : " + newSelection);
 		ignoreFiredSelectionEvents = true;

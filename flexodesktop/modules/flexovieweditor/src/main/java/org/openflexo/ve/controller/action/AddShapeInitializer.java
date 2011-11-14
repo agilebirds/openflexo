@@ -24,17 +24,16 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.foundation.action.FlexoActionFinalizer;
+import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.action.AddShape;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.controller.OEController;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-
-import org.openflexo.foundation.action.FlexoActionFinalizer;
-import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.view.ViewObject;
-import org.openflexo.foundation.view.action.AddShape;
 
 public class AddShapeInitializer extends ActionInitializer {
 
@@ -54,8 +53,9 @@ public class AddShapeInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<AddShape>() {
 			@Override
 			public boolean run(ActionEvent e, AddShape action) {
-				if ((action.getNewShapeName() != null || action.isNameSetToNull()) && (action.getParent() != null))
+				if ((action.getNewShapeName() != null || action.isNameSetToNull()) && (action.getParent() != null)) {
 					return true;
+				}
 
 				ViewObject parent = action.getParent();
 				if (parent != null) {

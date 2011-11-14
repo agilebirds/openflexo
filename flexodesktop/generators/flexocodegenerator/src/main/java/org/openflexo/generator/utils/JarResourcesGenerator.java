@@ -53,8 +53,9 @@ public class JarResourcesGenerator extends MetaGenerator<FlexoModelObject, CGRep
 
 	@Override
 	public void generate(boolean forceRegenerate) throws GenerationException {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Called JarResourcesGenerator.generate(forceRegenerate)");
+		}
 		resetSecondaryProgressWindow(_generators.values().size());
 		startGeneration();
 		for (ResourceToCopyGenerator generator : _generators.values()) {
@@ -72,14 +73,16 @@ public class JarResourcesGenerator extends MetaGenerator<FlexoModelObject, CGRep
 		for (FlexoJarResource jar : allJars) {
 			ResourceToCopyGenerator generator = getGenerator(jar);
 			if (jar.getFile() == null || !jar.getFile().exists() || jar.getJarRepository() == null
-					|| !jar.getJarRepository().getIsImportedByUser())
+					|| !jar.getJarRepository().getIsImportedByUser()) {
 				continue;
+			}
 			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + jar.getName(), false);
-			if (generator != null)
+			if (generator != null) {
 				generator.buildResourcesAndSetGenerators(repository, resources);
-			else {
-				if (logger.isLoggable(Level.WARNING))
+			} else {
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not instanciate JarResourceGenerator for " + jar);
+				}
 			}
 		}
 

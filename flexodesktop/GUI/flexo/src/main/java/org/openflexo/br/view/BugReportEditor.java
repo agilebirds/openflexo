@@ -38,8 +38,9 @@ public class BugReportEditor {
 
 		Flexo.initializeLoggingManager();
 		FlexoApplication.initialize();
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Starting BugReportsEditor");
+		}
 		BugReportViewerWindow w = new BugReportViewerWindow();
 		w.setVisible(true);
 	}

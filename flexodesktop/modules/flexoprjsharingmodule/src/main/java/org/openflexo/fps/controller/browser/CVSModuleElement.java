@@ -46,9 +46,10 @@ public class CVSModuleElement extends FPSBrowserElement implements ExpansionSync
 
 	@Override
 	protected void buildChildrenVector() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("buildChildrenVector() for CVSModuleElement, explorer = " + getCVSExplorer() + " isExplored="
 					+ getCVSExplorer().isExplored());
+		}
 		if (getCVSExplorer().isExplored()) {
 			for (CVSModule module : getModule().getCVSModules()) {
 				addToChilds(module);
@@ -86,8 +87,9 @@ public class CVSModuleElement extends FPSBrowserElement implements ExpansionSync
 
 	@Override
 	public void expand() {
-		if (!getCVSExplorer().wasExploringRequested())
+		if (!getCVSExplorer().wasExploringRequested()) {
 			getCVSExplorer().explore();
+		}
 	}
 
 	@Override

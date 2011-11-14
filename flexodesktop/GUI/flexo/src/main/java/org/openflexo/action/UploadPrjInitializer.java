@@ -29,15 +29,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.WKFIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-import org.openflexo.ws.client.PPMWebService.CLProjectDescriptor;
-import org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException;
-import org.openflexo.ws.client.PPMWebService.PPMWebServiceClient;
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.foundation.FlexoException;
@@ -48,6 +39,14 @@ import org.openflexo.foundation.imported.action.UploadPrjAction;
 import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.param.RadioButtonListParameter;
 import org.openflexo.foundation.rm.SaveResourceException;
+import org.openflexo.icon.WKFIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
+import org.openflexo.ws.client.PPMWebService.CLProjectDescriptor;
+import org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException;
+import org.openflexo.ws.client.PPMWebService.PPMWebServiceClient;
 
 public class UploadPrjInitializer extends ActionInitializer {
 
@@ -69,8 +68,9 @@ public class UploadPrjInitializer extends ActionInitializer {
 				while (targetProjects == null) {
 					client = getController().getWSClient(!isFirst);
 					isFirst = false;
-					if (client == null)
+					if (client == null) {
 						return false;// Cancelled
+					}
 					try {
 						targetProjects = client.getAvailableProjects();
 					} catch (PPMWebServiceAuthentificationException e1) {
@@ -105,8 +105,9 @@ public class UploadPrjInitializer extends ActionInitializer {
 					action.setFile(zipFile);
 					action.setClientWS(client);
 					String s = FlexoController.askForString(FlexoLocalization.localizedForKey("please_provide_some_comments"));
-					if (s == null) // Cancel
+					if (s == null) {
 						return false;
+					}
 					action.setComments(s);
 					return true;
 				}
@@ -142,14 +143,16 @@ public class UploadPrjInitializer extends ActionInitializer {
 			@Override
 			public int compare(CLProjectDescriptor o1, CLProjectDescriptor o2) {
 				if (o1.getProjectName() == null) {
-					if (o2.getProjectName() == null)
+					if (o2.getProjectName() == null) {
 						return 0;
-					else
+					} else {
 						return -1;
+					}
 				} else if (o2.getProjectName() == null) {
 					return 1;
-				} else
+				} else {
 					return o1.getProjectName().compareTo(o2.getProjectName());
+				}
 			}
 		});
 		if (targetProjects.length == 0) {
@@ -175,8 +178,9 @@ public class UploadPrjInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<UploadPrjAction>() {
 			@Override
 			public boolean run(ActionEvent e, UploadPrjAction action) {
-				if (action.getUploadReport() != null && action.getUploadReport().trim().length() > 0)
+				if (action.getUploadReport() != null && action.getUploadReport().trim().length() > 0) {
 					FlexoController.notify(action.getUploadReport());
+				}
 				return true;
 			}
 		};

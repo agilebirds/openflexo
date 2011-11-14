@@ -25,9 +25,9 @@ import org.openflexo.components.browser.BrowserConfiguration;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementFactory;
 import org.openflexo.components.browser.BrowserElementType;
+import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.CustomBrowserFilter;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.doceditor.controller.browser.DocTypeElement;
 import org.openflexo.doceditor.controller.browser.TOCEntryElement;
 import org.openflexo.doceditor.controller.browser.TOCRepositoryElement;
@@ -50,9 +50,9 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.cg.GenerationStatus;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCRepository;
-import org.openflexo.icon.CGIconLibrary;
 import org.openflexo.icon.FilesIconLibrary;
 import org.openflexo.icon.GeneratorIconLibrary;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.UtilsIconLibrary;
 
 class DGBrowserConfiguration implements BrowserConfiguration {
@@ -139,7 +139,7 @@ class DGBrowserConfiguration implements BrowserConfiguration {
 		});
 		browser.addToCustomFilters(browser.getNeedsGenerationFilter());
 
-		browser.setGenerationErrorFilter(new CGFileFilter("generation_errors", CGIconLibrary.UNFIXABLE_ERROR_ICON) {
+		browser.setGenerationErrorFilter(new CGFileFilter("generation_errors", IconLibrary.UNFIXABLE_ERROR_ICON) {
 			@Override
 			public boolean acceptFile(CGFile file) {
 				return file.getGenerationStatus() == GenerationStatus.GenerationError;
@@ -179,7 +179,7 @@ class DGBrowserConfiguration implements BrowserConfiguration {
 		});
 		browser.addToCustomFilters(browser.getNeedsReinjectingFilter());
 
-		browser.setOtherFilesFilter(new CGFileFilter("other_files", CGIconLibrary.UNFIXABLE_WARNING_ICON) {
+		browser.setOtherFilesFilter(new CGFileFilter("other_files", IconLibrary.UNFIXABLE_WARNING_ICON) {
 			@Override
 			public boolean acceptFile(CGFile file) {
 				return file.getGenerationStatus().isAbnormal();

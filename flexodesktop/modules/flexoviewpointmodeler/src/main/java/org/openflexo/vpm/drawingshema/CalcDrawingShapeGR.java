@@ -58,15 +58,17 @@ public class CalcDrawingShapeGR extends ShapeGraphicalRepresentation<ExampleDraw
 		}
 		addToMouseDragControls(new DrawEdgeControl());
 
-		if (aShape != null)
+		if (aShape != null) {
 			aShape.addObserver(this);
+		}
 
 	}
 
 	@Override
 	public void delete() {
-		if (getDrawable() != null)
+		if (getDrawable() != null) {
 			getDrawable().deleteObserver(this);
+		}
 		super.delete();
 	}
 
@@ -102,15 +104,17 @@ public class CalcDrawingShapeGR extends ShapeGraphicalRepresentation<ExampleDraw
 
 	@Override
 	public String getText() {
-		if (getCalcDrawingShape() != null)
+		if (getCalcDrawingShape() != null) {
 			return getCalcDrawingShape().getName();
+		}
 		return null;
 	}
 
 	@Override
 	public void setTextNoNotification(String text) {
-		if (getCalcDrawingShape() != null)
+		if (getCalcDrawingShape() != null) {
 			getCalcDrawingShape().setName(text);
+		}
 	}
 
 	@Override
@@ -118,8 +122,9 @@ public class CalcDrawingShapeGR extends ShapeGraphicalRepresentation<ExampleDraw
 		super.notifyObservers(arg);
 		if (arg instanceof FGENotification && ((FGENotification) arg).isModelNotification() && getDrawing() != null
 				&& !getDrawing().ignoreNotifications() && getCalcDrawingShape() != null
-				&& !getCalcDrawingShape().getShema().ignoreNotifications())
+				&& !getCalcDrawingShape().getShema().ignoreNotifications()) {
 			getCalcDrawingShape().setChanged();
+		}
 	}
 
 }

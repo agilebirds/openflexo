@@ -19,14 +19,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 package com.swabunga.spell.event;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+
 import com.swabunga.spell.engine.Configuration;
 import com.swabunga.spell.engine.SpellDictionary;
 import com.swabunga.spell.engine.SpellDictionaryHashMap;
 import com.swabunga.spell.engine.Word;
 import com.swabunga.util.VectorUtility;
-
-import java.io.IOException;
-import java.util.*;
 
 /**
  * This is the main class for spell checking (using the new event based spell checking).
@@ -162,6 +169,7 @@ public class SpellChecker {
 	 * @return Description of the Return Value
 	 * @deprecated use checkSpelling(WordTokenizer)
 	 */
+	@Deprecated
 	public String checkString(String text) {
 		StringWordTokenizer tokens = new StringWordTokenizer(text);
 		checkSpelling(tokens);
@@ -230,8 +238,9 @@ public class SpellChecker {
 		boolean isUpper = Character.isUpperCase(word.charAt(0));
 		// Ignore the first character if this word starts the sentence and the first
 		// character was upper cased, since this is normal behaviour
-		if ((startsSentence) && isUpper && (strLen > 1))
+		if ((startsSentence) && isUpper && (strLen > 1)) {
 			isUpper = Character.isUpperCase(word.charAt(1));
+		}
 		if (isUpper) {
 			for (int i = word.length() - 1; i > 0; i--) {
 				if (Character.isLowerCase(word.charAt(i))) {
@@ -281,8 +290,9 @@ public class SpellChecker {
 			break;
 		case SpellCheckEvent.ADDTODICT:
 			String addWord = event.getReplaceWord();
-			if (!addWord.equals(word))
+			if (!addWord.equals(word)) {
 				tokenizer.replaceWord(addWord);
+			}
 			userdictionary.addWord(addWord);
 			break;
 		case SpellCheckEvent.CANCEL:
@@ -300,8 +310,9 @@ public class SpellChecker {
 	}
 
 	public void addToDictionary(String word) {
-		if (!userdictionary.isCorrect(word))
+		if (!userdictionary.isCorrect(word)) {
 			userdictionary.addWord(word);
+		}
 	}
 
 	public boolean isIgnored(String word) {
@@ -309,12 +320,14 @@ public class SpellChecker {
 	}
 
 	public boolean isCorrect(String word) {
-		if (userdictionary.isCorrect(word))
+		if (userdictionary.isCorrect(word)) {
 			return true;
+		}
 		for (Enumeration e = dictionaries.elements(); e.hasMoreElements();) {
 			SpellDictionary dictionary = (SpellDictionary) e.nextElement();
-			if (dictionary.isCorrect(word))
+			if (dictionary.isCorrect(word)) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -327,8 +340,9 @@ public class SpellChecker {
 
 		ArrayList suggestions = null;
 
-		if (cache != null)
+		if (cache != null) {
 			suggestions = (ArrayList) cache.get(word);
+		}
 
 		if (suggestions == null) {
 			suggestions = new ArrayList(50);
@@ -336,12 +350,14 @@ public class SpellChecker {
 			for (Enumeration e = dictionaries.elements(); e.hasMoreElements();) {
 				SpellDictionary dictionary = (SpellDictionary) e.nextElement();
 
-				if (dictionary != userdictionary)
+				if (dictionary != userdictionary) {
 					VectorUtility.addAll(suggestions, dictionary.getSuggestions(word, threshold), false);
+				}
 			}
 
-			if (cache != null && cache.size() < cacheSize)
+			if (cache != null && cache.size() < cacheSize) {
 				cache.put(word, suggestions);
+			}
 		}
 
 		VectorUtility.addAll(suggestions, userdictionary.getSuggestions(word, threshold), false);
@@ -365,10 +381,11 @@ public class SpellChecker {
 	 */
 	public void setCache(int size) {
 		cacheSize = size;
-		if (size == 0)
+		if (size == 0) {
 			cache = null;
-		else
+		} else {
 			cache = new HashMap((size + 2) / 3 * 4);
+		}
 	}
 
 	/**
@@ -410,8 +427,9 @@ public class SpellChecker {
 							// ignoreSentenceCapitalisation is not set to true
 							// Fire the event.
 							List suggestions = getSuggestions(word, config.getInteger(Configuration.SPELL_THRESHOLD));
-							if (capitalizeSuggestions(word, tokenizer))
+							if (capitalizeSuggestions(word, tokenizer)) {
 								suggestions = makeSuggestionsCapitalized(suggestions);
+							}
 							SpellCheckEvent event = new BasicSpellCheckEvent(word, suggestions, tokenizer);
 							terminated = fireAndHandleEvent(tokenizer, event);
 						}
@@ -436,12 +454,13 @@ public class SpellChecker {
 				}
 			}
 		}
-		if (terminated)
+		if (terminated) {
 			return SPELLCHECK_CANCEL;
-		else if (errors == 0)
+		} else if (errors == 0) {
 			return SPELLCHECK_OK;
-		else
+		} else {
 			return errors;
+		}
 	}
 
 	private List makeSuggestionsCapitalized(List suggestions) {

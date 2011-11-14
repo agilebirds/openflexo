@@ -39,11 +39,13 @@ public class TextEditionHistory {
 
 	public void retain() {
 		if ((index > -1) && (list.size() - 1 > index)) {
-			while (index < list.size() - 1)
+			while (index < list.size() - 1) {
 				list.removeLast();
+			}
 		}
-		while (list.size() >= maxUndoLevels)
+		while (list.size() >= maxUndoLevels) {
 			list.remove();
+		}
 		list.add(_textArea.getText());
 		index++;
 	}

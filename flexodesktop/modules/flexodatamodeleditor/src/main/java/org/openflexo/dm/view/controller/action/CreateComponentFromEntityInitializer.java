@@ -26,7 +26,6 @@ import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.MultipleObjectSelectorPopup;
 import org.openflexo.dm.view.controller.DMController;
 import org.openflexo.dm.view.popups.SelectPropertiesAndMethodsPopup;
-
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.dm.action.CreateComponentFromEntity;
 import org.openflexo.foundation.ie.IERegExp;
@@ -64,8 +63,9 @@ public class CreateComponentFromEntityInitializer extends ActionInitializer {
 
 			@Override
 			public boolean run(ActionEvent event, CreateComponentFromEntity action) {
-				if (action.getFocusedObject() == null)
+				if (action.getFocusedObject() == null) {
 					return false;
+				}
 				final RadioButtonListParameter<ComponentType> type = new RadioButtonListParameter<ComponentType>("type",
 						FlexoLocalization.localizedForKey("component_type"), ComponentType.OPERATION_COMPONENT,
 						ComponentType.OPERATION_COMPONENT, ComponentType.POPUP_COMPONENT, ComponentType.TAB_COMPONENT);

@@ -129,15 +129,18 @@ public class ButtonPanel extends IEPanel implements IEContainer, GraphicalFlexoO
 	public void delete() {
 		if (_model != null) {
 			_model.deleteObserver(this);
-			if (_model.getSequenceWidget() != null)
+			if (_model.getSequenceWidget() != null) {
 				_model.getSequenceWidget().deleteObserver(this);
+			}
 		}
 		Component[] comp = getComponents();
-		for (int i = 0; i < comp.length; i++)
+		for (int i = 0; i < comp.length; i++) {
 			((IEWidgetView) comp[i]).delete();
+		}
 		removeAll();
-		if (getParent() != null)
+		if (getParent() != null) {
 			getParent().remove(this);
+		}
 		_componentView = null;
 	}
 
@@ -167,8 +170,9 @@ public class ButtonPanel extends IEPanel implements IEContainer, GraphicalFlexoO
 			return preferredSize;
 		}
 		Dimension d = super.getPreferredSize();
-		if (d.height < 18)
+		if (d.height < 18) {
 			d.height = 18;
+		}
 		if (getHoldsNextComputedPreferredSize()) {
 			preferredSize = d;
 		}
@@ -199,16 +203,18 @@ public class ButtonPanel extends IEPanel implements IEContainer, GraphicalFlexoO
 	public void update(FlexoObservable observable, DataModification modif) {
 		if (modif instanceof ButtonAdded) {
 			IEWidgetView view = findViewForModel((IEWidget) modif.newValue());
-			if (view == null)
+			if (view == null) {
 				if (modif.newValue() instanceof IEHyperlinkWidget) {
 					// the view must be created
 					view = _componentView.getViewForWidget((IEWidget) modif.newValue(), true);
 				} else {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("cannot create a view from a model of class :" + modif.newValue().getClass()
 								+ " in a org.openflexo.ie.view.widget.ButtonPanel");
+					}
 					return;
 				}
+			}
 			if (this.getComponentCount() == 0) {
 				super.add(view);
 			} else {
@@ -294,8 +300,9 @@ public class ButtonPanel extends IEPanel implements IEContainer, GraphicalFlexoO
 		doLayout();
 		Component[] c = getComponents();
 		for (int i = 0; i < c.length; i++) {
-			if (c[i] instanceof Layoutable)
+			if (c[i] instanceof Layoutable) {
 				((Layoutable) c[i]).propagateResize();
+			}
 		}
 		repaint();
 

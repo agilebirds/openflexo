@@ -89,15 +89,17 @@ public class IncreaseColSpan extends FlexoUndoableAction {
 	}
 
 	public void setSelectedTD(ITableData td) {
-		if (td instanceof IETDWidget)
+		if (td instanceof IETDWidget) {
 			this.selectedTD = (IETDWidget) td;
+		}
 	}
 
 	static IETDWidget getFocusedTD(IEWidget w) {
 		IEWidget temp = w;
 		while (temp != null) {
-			if (temp instanceof IETDWidget)
+			if (temp instanceof IETDWidget) {
 				return (IETDWidget) temp;
+			}
 			temp = (IEWidget) temp.getParent();
 		}
 		return null;

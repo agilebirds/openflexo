@@ -39,7 +39,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import org.openflexo.ColorCst;
-import org.openflexo.FlexoCst;
 import org.openflexo.br.BugReport;
 import org.openflexo.br.BugReports;
 import org.openflexo.localization.FlexoLocalization;
@@ -126,8 +125,9 @@ public class BugReportViewerWindow extends FlexoDialog {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				// Ignore extra messages.
-				if (e.getValueIsAdjusting())
+				if (e.getValueIsAdjusting()) {
 					return;
+				}
 				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 				if (lsm.isSelectionEmpty()) {
 					// no rows are selected

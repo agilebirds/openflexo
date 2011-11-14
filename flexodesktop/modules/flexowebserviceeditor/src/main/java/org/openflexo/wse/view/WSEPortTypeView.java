@@ -66,8 +66,9 @@ public class WSEPortTypeView extends WSEView<ServiceInterface> {
 	protected JComponent buildContentPane() {
 		WSService service = getServiceInterface().getParentService();
 		boolean readOnly = false;
-		if (service != null && service instanceof ExternalWSService)
+		if (service != null && service instanceof ExternalWSService) {
 			readOnly = true;
+		}
 		operationTableModel = new WSEOperationTableModel(getServiceInterface(), getWSEController().getProject(), readOnly);
 		operationTable = new WSETabularView(getWSEController(), operationTableModel, 7);
 		addToMasterTabularView(operationTable);

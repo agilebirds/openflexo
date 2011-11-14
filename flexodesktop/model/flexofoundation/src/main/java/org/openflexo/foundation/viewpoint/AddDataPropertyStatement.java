@@ -42,14 +42,16 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 	}
 
 	public OntologyProperty getDataProperty() {
-		if (getPatternRole() != null)
+		if (getPatternRole() != null) {
 			return getPatternRole().getDataProperty();
+		}
 		return null;
 	}
 
 	public void setDataProperty(OntologyProperty p) {
-		if (getPatternRole() != null)
+		if (getPatternRole() != null) {
 			getPatternRole().setDataProperty(p);
+		}
 	}
 
 	public Object getValue(EditionSchemeAction action) {
@@ -66,8 +68,9 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, BindingDefinitionType.GET, false) {
 		@Override
 		public java.lang.reflect.Type getType() {
-			if (getDataProperty() != null)
+			if (getDataProperty() != null) {
 				return ((OntologyDataProperty) getDataProperty()).getDataType().getAccessedType();
+			}
 			return Object.class;
 		};
 	};
@@ -77,8 +80,9 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 	}
 
 	public ViewPointDataBinding getValue() {
-		if (value == null)
+		if (value == null) {
 			value = new ViewPointDataBinding(this, EditionActionBindingAttribute.value, getValueBindingDefinition());
+		}
 		return value;
 	}
 

@@ -65,8 +65,9 @@ public final class CEDPreferences extends ModulePreferences {
 	}
 
 	public static Boolean getExamplePrefValue() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getExamplePrefValue");
+		}
 		Boolean value = preferences(CED_PREFERENCES).getBooleanProperty(EXAMPLE_PREF_VALUE);
 		if (value == null) {
 			setExamplePrefValue(Boolean.FALSE);
@@ -76,15 +77,17 @@ public final class CEDPreferences extends ModulePreferences {
 	}
 
 	public static void setExamplePrefValue(Boolean alignOnGrid) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setExamplePrefValue");
+		}
 		preferences(CED_PREFERENCES).setBooleanProperty(EXAMPLE_PREF_VALUE, alignOnGrid);
 	}
 
 	public static int getScreenshotQuality() {
 		Integer limit = preferences(CED_PREFERENCES).getIntegerProperty(SCREENSHOT_QUALITY);
-		if (limit == null)
+		if (limit == null) {
 			limit = 100;
+		}
 		return limit;
 	}
 

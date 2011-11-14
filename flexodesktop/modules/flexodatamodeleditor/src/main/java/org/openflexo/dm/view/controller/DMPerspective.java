@@ -43,8 +43,9 @@ public abstract class DMPerspective<O extends FlexoModelObject> extends FlexoPer
 		searchPanel.add(new DMEntitySelector<DMEntity>(controller.getProject(), searchedEntity, DMEntity.class) {
 			@Override
 			public void setEditedObject(DMEntity entity) {
-				if (!browserMayRepresent(entity))
+				if (!browserMayRepresent(entity)) {
 					return;
+				}
 				changeBrowserFiltersFor(entity);
 				super.setEditedObject(entity);
 				searchedEntity = entity;

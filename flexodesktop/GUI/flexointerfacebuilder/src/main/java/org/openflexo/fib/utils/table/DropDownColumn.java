@@ -192,14 +192,15 @@ public abstract class DropDownColumn<D extends Observable, T> extends AbstractCo
 			protected DropDownComboBoxModel(D element) {
 				super();
 				Vector v = getAvailableValues(element);
-				if (v != null)
+				if (v != null) {
 					for (Enumeration en = v.elements(); en.hasMoreElements();) {
 						addElement(en.nextElement());
 					}
-				else
+				} else {
 					for (Enumeration en = getAvailableValues().elements(); en.hasMoreElements();) {
 						addElement(en.nextElement());
 					}
+				}
 			}
 		}
 	}

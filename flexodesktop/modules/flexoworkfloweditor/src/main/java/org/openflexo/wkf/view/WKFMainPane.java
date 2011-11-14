@@ -82,8 +82,9 @@ public class WKFMainPane extends FlexoMainPane implements GraphicalFlexoObserver
 				}
 			}
 			for (WKFGroup group : flexoProcess.getActivityPetriGraph().getGroups()) {
-				if (group.isExpanded())
+				if (group.isExpanded()) {
 					OpenGroup.actionType.makeNewAction(group, null, getController().getEditor()).doAction();
+				}
 			}
 			if (flexoProcess.getPortRegistery() != null && flexoProcess.getPortRegistery().getIsVisible()) {
 				OpenPortRegistery.actionType.makeNewAction(flexoProcess, null, getController().getEditor()).doAction();

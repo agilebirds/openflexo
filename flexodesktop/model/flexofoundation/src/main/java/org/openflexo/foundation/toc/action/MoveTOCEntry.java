@@ -34,11 +34,13 @@ public class MoveTOCEntry extends FlexoAction<MoveTOCEntry, TOCEntry, TOCEntry> 
 
 		@Override
 		protected boolean isEnabledForSelection(TOCEntry object, Vector<TOCEntry> globalSelection) {
-			if (object == null)
+			if (object == null) {
 				return false;
+			}
 			for (TOCEntry entry : globalSelection) {
-				if (!object.acceptsEntryAsChild(entry))
+				if (!object.acceptsEntryAsChild(entry)) {
 					return false;
+				}
 			}
 			return true;
 		}
@@ -63,8 +65,9 @@ public class MoveTOCEntry extends FlexoAction<MoveTOCEntry, TOCEntry, TOCEntry> 
 	protected void doAction(Object context) throws FlexoException {
 		Vector<TOCEntry> entries = getGlobalSelection();
 		for (TOCEntry entry : entries) {
-			if (getFocusedObject().acceptsEntryAsChild(entry))
+			if (getFocusedObject().acceptsEntryAsChild(entry)) {
 				getFocusedObject().addToTocEntries(entry);
+			}
 		}
 	}
 

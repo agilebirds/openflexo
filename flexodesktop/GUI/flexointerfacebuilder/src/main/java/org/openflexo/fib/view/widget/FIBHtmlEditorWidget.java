@@ -96,13 +96,16 @@ public class FIBHtmlEditorWidget extends FIBWidgetView<FIBHtmlEditor, MetaphaseE
 	@Override
 	public synchronized boolean updateWidgetFromModel() {
 		if (notEquals(getValue(), _editor.getDocument())) {
-			if (modelUpdating)
+			if (modelUpdating) {
 				return false;
-			if (getValue() != null && (getValue() + "\n").equals(_editor.getDocument()))
+			}
+			if (getValue() != null && (getValue() + "\n").equals(_editor.getDocument())) {
 				return false;
+			}
 			widgetUpdating = true;
-			if (getValue() != null)
+			if (getValue() != null) {
 				_editor.setDocument(getValue());
+			}
 			widgetUpdating = false;
 			return true;
 		}
@@ -116,8 +119,9 @@ public class FIBHtmlEditorWidget extends FIBWidgetView<FIBHtmlEditor, MetaphaseE
 	public synchronized boolean updateModelFromWidget() {
 		if (notEquals(getValue(), _editor.getDocument())) {
 			modelUpdating = true;
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("updateModelFromWidget() in TextAreaWidget");
+			}
 			setValue(_editor.getDocument());
 			modelUpdating = false;
 			return true;
@@ -138,7 +142,8 @@ public class FIBHtmlEditorWidget extends FIBWidgetView<FIBHtmlEditor, MetaphaseE
 	@Override
 	public void updateFont() {
 		super.updateFont();
-		if (getFont() != null)
+		if (getFont() != null) {
 			_editor.setFont(getFont());
+		}
 	}
 }

@@ -199,8 +199,9 @@ public abstract class Language extends KVCObject implements StringConvertable, C
 				return next;
 			}
 		}
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Cannot find language " + languageAsString);
+		}
 		if (getAvailableLanguages().size() > 0) {
 			return getAvailableLanguages().firstElement();
 		}

@@ -49,8 +49,9 @@ public abstract class JavaBrowserElementWithModifiers extends JavaBrowserElement
 
 	@Override
 	public Icon getIcon() {
-		if (getObject() == null)
+		if (getObject() == null) {
 			return null;
+		}
 
 		ImageIcon returned = getBaseIcon();
 		Vector<IconMarker> markers = new Vector<IconMarker>();

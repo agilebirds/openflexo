@@ -74,8 +74,9 @@ public class PrototypeProcessBusinessDataSamplesCreator {
 
 			int maxRows = getMaxNumberOfSamples(results);
 			int maxRowsSamples = getMaxNumberOfSamples(samples);
-			if (maxRows < maxRowsSamples)
+			if (maxRows < maxRowsSamples) {
 				maxRows = maxRowsSamples;
+			}
 
 			mergeMaps(results, samples);
 
@@ -84,9 +85,9 @@ public class PrototypeProcessBusinessDataSamplesCreator {
 			for (Map.Entry<String, List<Object>> entry : results.entrySet()) {
 				int index = 0;
 				while (entry.getValue().size() != maxRows) {
-					if (entry.getValue().size() > maxRows)
+					if (entry.getValue().size() > maxRows) {
 						entry.getValue().remove(entry.getValue().size() - 1);
-					else {
+					} else {
 						if (entry.getKey().equals(FlexoProcess.PROCESSINSTANCE_CREATIONDATE_KEY)) {
 							entry.getValue().add(creationDate.getTime());
 							creationDate.add(Calendar.MONTH, 4);
@@ -98,9 +99,9 @@ public class PrototypeProcessBusinessDataSamplesCreator {
 							updateDate.add(Calendar.DAY_OF_MONTH, 6);
 							updateDate.add(Calendar.HOUR_OF_DAY, 1);
 						} else {
-							if (entry.getValue().size() == 0)
+							if (entry.getValue().size() == 0) {
 								entry.getValue().add(null);
-							else {
+							} else {
 								entry.getValue().add(entry.getValue().get(index));
 								index++;
 							}
@@ -130,12 +131,13 @@ public class PrototypeProcessBusinessDataSamplesCreator {
 						results.get(i).add(String.valueOf(i - 1));
 					}
 
-					if (value instanceof Date)
+					if (value instanceof Date) {
 						results.get(i).add(Generator.getDateFormat("dd/MM/yyyy HH:mm").format(value));
-					else if (value != null)
+					} else if (value != null) {
 						results.get(i).add(value.toString());
-					else
+					} else {
 						results.get(i).add(null);
+					}
 
 					i++;
 				}
@@ -152,10 +154,12 @@ public class PrototypeProcessBusinessDataSamplesCreator {
 							boolean o1IsSingleSubProcess = o1.isSingleSubProcess();
 							boolean o2IsSingleSubProcess = o2.isSingleSubProcess();
 
-							if (o1IsSingleSubProcess && !o2IsSingleSubProcess)
+							if (o1IsSingleSubProcess && !o2IsSingleSubProcess) {
 								return -1;
-							if (!o1IsSingleSubProcess && o2IsSingleSubProcess)
+							}
+							if (!o1IsSingleSubProcess && o2IsSingleSubProcess) {
 								return 1;
+							}
 
 							return businessDataSamples.get(o2.getParentProcess().getBusinessDataDictionaryKey()).size()
 									- businessDataSamples.get(o1.getParentProcess().getBusinessDataDictionaryKey()).size();
@@ -203,8 +207,9 @@ public class PrototypeProcessBusinessDataSamplesCreator {
 							businessDataSamples.get(businessDataKey).get(i).add(1, String.valueOf(parentId));
 
 							parentId++;
-							if (parentId >= numberOfParentInstance)
+							if (parentId >= numberOfParentInstance) {
 								parentId = 0;
+							}
 						}
 
 					}
@@ -216,8 +221,9 @@ public class PrototypeProcessBusinessDataSamplesCreator {
 	private int getMaxNumberOfSamples(Map<String, List<Object>> map) {
 		int max = 1;
 		for (List list : map.values()) {
-			if (list.size() > max)
+			if (list.size() > max) {
 				max = list.size();
+			}
 		}
 
 		return max;
@@ -225,10 +231,11 @@ public class PrototypeProcessBusinessDataSamplesCreator {
 
 	private void mergeMaps(Map<String, List<Object>> results, Map<String, List<Object>> samples) {
 		for (Map.Entry<String, List<Object>> sampleEntry : samples.entrySet()) {
-			if (results.get(sampleEntry.getKey()) == null)
+			if (results.get(sampleEntry.getKey()) == null) {
 				results.put(sampleEntry.getKey(), sampleEntry.getValue());
-			else
+			} else {
 				results.get(sampleEntry.getKey()).addAll(sampleEntry.getValue());
+			}
 		}
 	}
 

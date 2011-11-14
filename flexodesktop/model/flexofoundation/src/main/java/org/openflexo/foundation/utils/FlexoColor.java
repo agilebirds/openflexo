@@ -89,8 +89,9 @@ public class FlexoColor extends Color implements StringConvertable {
 	static {
 		COLOR_SET = new Vector<FlexoColor>();
 		int i = RAW_COLOR_VALUES.length / 3;
-		for (int j = 0; j < i; j++)
+		for (int j = 0; j < i; j++) {
 			COLOR_SET.add(new FlexoColor(RAW_COLOR_VALUES[j * 3], RAW_COLOR_VALUES[j * 3 + 1], RAW_COLOR_VALUES[j * 3 + 2]));
+		}
 	}
 
 	public static final FlexoColor BLACK_COLOR = new FlexoColor(Color.BLACK);

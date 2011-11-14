@@ -119,8 +119,9 @@ public class MetricsDefinition extends WorkflowModelObject implements Inspectabl
 	}
 
 	public String getUnit() {
-		if (!isUnitEditable())
+		if (!isUnitEditable()) {
 			return null;
+		}
 		return unit;
 	}
 

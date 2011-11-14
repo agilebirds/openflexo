@@ -62,19 +62,22 @@ public class ProcessLatexFileResource extends LatexFileResource<DGLatexGenerator
 
 	@Override
 	public String getName() {
-		if (getCGFile() == null || getCGFile().getRepository() == null || getProcess() == null)
+		if (getCGFile() == null || getCGFile().getRepository() == null || getProcess() == null) {
 			return super.getName();
+		}
 		registerObserverWhenRequired();
-		if (super.getName() == null)
+		if (super.getName() == null) {
 			setName(nameForRepositoryAndProcess(getCGFile().getRepository(), getProcess()));
+		}
 		return nameForRepositoryAndProcess(getCGFile().getRepository(), getProcess());
 	}
 
 	public void registerObserverWhenRequired() {
 		if ((!isObserverRegistered) && (getProcess() != null)) {
 			isObserverRegistered = true;
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getProject());
+			}
 			getProcess().addObserver(this);
 		}
 	}
@@ -84,8 +87,9 @@ public class ProcessLatexFileResource extends LatexFileResource<DGLatexGenerator
 	}
 
 	public FlexoProcess getProcess() {
-		if (getGenerator() != null)
+		if (getGenerator() != null) {
 			return getGenerator().getObject();
+		}
 		return null;
 	}
 
@@ -101,8 +105,9 @@ public class ProcessLatexFileResource extends LatexFileResource<DGLatexGenerator
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
 		addToDependantResources(getProject().getTOCResource());
-		if (getProcess() != null)
+		if (getProcess() != null) {
 			addToDependantResources(getProcess().getFlexoResource());
+		}
 	}
 
 	@Override
@@ -145,8 +150,9 @@ public class ProcessLatexFileResource extends LatexFileResource<DGLatexGenerator
 		if (resource instanceof FlexoTOCResource) {
 			if (getGenerator() != null && getGenerator().getRepository().getTocRepository() != null) {
 				if (!requestDate.before(getGenerator().getRepository().getTocRepository().getLastUpdateDate())) {
-					if (logger.isLoggable(Level.FINER))
+					if (logger.isLoggable(Level.FINER)) {
 						logger.finer("OPTIMIST DEPENDANCY CHECKING for TOC repository " + getRepository());
+					}
 					return false;
 				}
 			}

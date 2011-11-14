@@ -50,19 +50,20 @@ public class WSETabularView extends TabularView {
 		} else if (object instanceof DMRepository) {
 			WSRepository wsr = ((DMRepository) object).getProject().getFlexoWSLibrary()
 					.getWSRepositoryNamed(((DMRepository) object).getName());
-			if (wsr != null)
+			if (wsr != null) {
 				return wsr.getWSService();
+			}
 		} else if (object instanceof DMObject) {
 			return (DMObject) (((DMObject) object).getParent());
 		} else if (object instanceof ServiceInterface) {
 			WSPortType wsp = ((ServiceInterface) object).getProject().getFlexoWSLibrary()
 					.getWSPortTypeNamed(((ServiceInterface) object).getName());
-			if (wsp != null)
+			if (wsp != null) {
 				return wsp.getWSService();
-		} else if (object instanceof ServiceOperation)
+			}
+		} else if (object instanceof ServiceOperation) {
 			return ((ServiceOperation) object).getServiceInterface();
-
-		else if (object instanceof ServiceMessageDefinition) {
+		} else if (object instanceof ServiceMessageDefinition) {
 			return ((ServiceMessageDefinition) object).getOperation();
 		} else if (object instanceof MessageEntry) {
 			return ((MessageEntry) object).getMessage();

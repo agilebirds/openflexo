@@ -102,38 +102,45 @@ public abstract class CustomColumn extends AbstractColumn implements EditableCol
 			CustomWidget returned = (CustomWidget) c.newInstance(constructorParams);
 			return returned;
 		} catch (ClassNotFoundException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Class not found: " + className + ". See console for details.");
+			}
 			e.printStackTrace();
 		} catch (SecurityException e) {
 			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+			}
 			e.printStackTrace();
 		} catch (NoSuchMethodException e) {
 			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+			}
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
 			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+			}
 			e.printStackTrace();
 		} catch (InstantiationException e) {
 			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+			}
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+			}
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
 			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+			}
 			e.printStackTrace();
 		}
 		return null;
@@ -250,13 +257,15 @@ public abstract class CustomColumn extends AbstractColumn implements EditableCol
 				Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 				if (returned instanceof JLabel) {
 					((JLabel) returned).setText(_propertyListColumn.getStringRepresentation(value));
-					if (ToolBox.getPLATFORM() == ToolBox.MACOS)
+					if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 						((JLabel) returned).setForeground(getColorFor(value));
+					}
 				}
 				c = returned;
 			}
-			if (c instanceof JComponent)
+			if (c instanceof JComponent) {
 				((JComponent) c).setToolTipText(getTooltip(elementAt(row)));
+			}
 			return c;
 		}
 
@@ -269,16 +278,18 @@ public abstract class CustomColumn extends AbstractColumn implements EditableCol
 	protected CustomWidget getViewCustomWidget(InspectableObject value) {
 		_viewCustomWidget.setModel(value);
 		_viewCustomWidget.updateWidgetFromModel();
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Return _viewCustomWidget for model " + value);
+		}
 		return _viewCustomWidget;
 	}
 
 	protected CustomWidget getEditCustomWidget(InspectableObject value) {
 		_editCustomWidget.setModel(value);
 		_editCustomWidget.updateWidgetFromModel();
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Return _editCustomWidget for model " + value);
+		}
 		setEditedRowObject(value);
 		return _editCustomWidget;
 	}
@@ -319,15 +330,17 @@ public abstract class CustomColumn extends AbstractColumn implements EditableCol
 
 		@Override
 		protected void fireEditingCanceled() {
-			if (_customWidget != null)
+			if (_customWidget != null) {
 				_customWidget.fireEditingCanceled();
+			}
 			super.fireEditingCanceled();
 		}
 
 		@Override
 		protected void fireEditingStopped() {
-			if (_customWidget != null)
+			if (_customWidget != null) {
 				_customWidget.fireEditingStopped();
+			}
 			super.fireEditingStopped();
 		}
 
@@ -341,12 +354,13 @@ public abstract class CustomColumn extends AbstractColumn implements EditableCol
 		@Override
 		public Component getTableCellEditorComponent(final JTable table, Object value, boolean isSelected, int row, int column) {
 			// logger.info("elementAt(row)="+elementAt(row));
-			if (_customWidget.disableTerminateEditOnFocusLost())
+			if (_customWidget.disableTerminateEditOnFocusLost()) {
 				table.putClientProperty("terminateEditOnFocusLost", Boolean.FALSE);
+			}
 			_customWidget.setModel(elementAt(row));
 			_customWidget.updateWidgetFromModel();
 			setEditedRowObject(elementAt(row));
-			if (_customWidget.disableTerminateEditOnFocusLost())
+			if (_customWidget.disableTerminateEditOnFocusLost()) {
 				_customWidget.addApplyCancelListener(new ApplyCancelListener() {
 
 					@Override
@@ -360,6 +374,7 @@ public abstract class CustomColumn extends AbstractColumn implements EditableCol
 					}
 
 				});
+			}
 			return _customWidget.getDynamicComponent();
 		}
 	}

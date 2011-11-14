@@ -112,8 +112,9 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 	 * @return flag indicating if change was required
 	 */
 	public boolean updateRootObject(Object root) {
-		if (root == null)
+		if (root == null) {
 			return false;
+		}
 		BrowserCell rootCell = retrieveBrowserCell(root, null);
 		if (getRoot() != rootCell) {
 			logger.fine("updateRootObject() with " + root + " rootCell=" + rootCell);
@@ -338,8 +339,9 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 		public void delete() {
 			logger.fine("Delete BrowserCell for " + representedObject);
 
-			for (BrowserCell c : children)
+			for (BrowserCell c : children) {
 				c.delete();
+			}
 
 			if (representedObject instanceof HasPropertyChangeSupport) {
 				PropertyChangeSupport pcSupport = ((HasPropertyChangeSupport) representedObject).getPropertyChangeSupport();
@@ -355,11 +357,13 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 				((Observable) representedObject).deleteObserver(this);
 			}
 
-			if (representedObject != null)
+			if (representedObject != null) {
 				contents.remove(representedObject);
+			}
 
-			if (selection.contains(representedObject))
+			if (selection.contains(representedObject)) {
 				selection.remove(representedObject);
+			}
 
 			this.representedObject = null;
 			browserElementType = null;
@@ -402,8 +406,9 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 					if (children.contains(cell)) {
 						// OK, child still here
 						removedChildren.remove(cell);
-						if (recursively)
+						if (recursively) {
 							cell.update(true);
+						}
 						index = children.indexOf(cell) + 1;
 					} else {
 						newChildren.add(cell);

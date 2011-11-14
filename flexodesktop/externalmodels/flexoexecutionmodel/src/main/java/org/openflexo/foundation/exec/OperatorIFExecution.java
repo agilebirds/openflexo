@@ -42,8 +42,9 @@ public class OperatorIFExecution extends OperatorNodeExecution {
 
 	@Override
 	protected final ControlGraph makeControlGraph(boolean interprocedural) throws InvalidModelException, NotSupportedException {
-		if (getOperatorNode().getConditionPrimitive() == null)
+		if (getOperatorNode().getConditionPrimitive() == null) {
 			throw new InvalidModelException("Operator IF " + getOperatorNode().getName() + " doesn't define any condition primitive");
+		}
 
 		Expression condition = makeCondition(getOperatorNode().getConditionPrimitive());
 
@@ -69,12 +70,14 @@ public class OperatorIFExecution extends OperatorNodeExecution {
 		}
 
 		ControlGraph trueStatement = makeSequentialControlGraph(trueEdgeStatements);
-		if (trueStatement instanceof Nop && !trueStatement.hasComment())
+		if (trueStatement instanceof Nop && !trueStatement.hasComment()) {
 			trueStatement.setInlineComment("nothing to do when condition is true");
+		}
 
 		ControlGraph falseStatement = makeSequentialControlGraph(falseEdgeStatements);
-		if (falseStatement instanceof Nop && !trueStatement.hasComment())
+		if (falseStatement instanceof Nop && !trueStatement.hasComment()) {
 			falseStatement.setInlineComment("nothing to do when condition is false");
+		}
 
 		return new Conditional(condition, trueStatement, falseStatement, "Evaluate operator IF named " + getOperatorNode().getName());
 

@@ -98,41 +98,41 @@ public class VPMIconLibrary extends IconLibrary {
 	public static final ImageIconResource CALC_CONNECTOR_ICON = new ImageIconResource("Icons/Model/VPM/ConnectorIcon.gif");
 
 	public static ImageIcon iconForObject(ViewPointLibraryObject object) {
-		if (object instanceof ViewPointFolder)
+		if (object instanceof ViewPointFolder) {
 			return FOLDER_ICON;
-		else if (object instanceof ViewPointLibrary)
+		} else if (object instanceof ViewPointLibrary) {
 			return CALC_LIBRARY_ICON;
-		else if (object instanceof ViewPointPalette)
+		} else if (object instanceof ViewPointPalette) {
 			return CALC_PALETTE_ICON;
-		else if (object instanceof ViewPointPaletteElement)
+		} else if (object instanceof ViewPointPaletteElement) {
 			return CALC_SHAPE_ICON;
-		else if (object instanceof DataPropertyAssertion)
+		} else if (object instanceof DataPropertyAssertion) {
 			return OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON;
-		else if (object instanceof ObjectPropertyAssertion)
+		} else if (object instanceof ObjectPropertyAssertion) {
 			return OntologyIconLibrary.ONTOLOGY_OBJECT_PROPERTY_ICON;
-		else if (object instanceof ExampleDrawingConnector)
+		} else if (object instanceof ExampleDrawingConnector) {
 			return CALC_CONNECTOR_ICON;
-		else if (object instanceof ExampleDrawingShape)
+		} else if (object instanceof ExampleDrawingShape) {
 			return CALC_SHAPE_ICON;
-		else if (object instanceof ExampleDrawingShema)
+		} else if (object instanceof ExampleDrawingShema) {
 			return EXAMPLE_DIAGRAM_ICON;
-		else if (object instanceof EditionAction)
+		} else if (object instanceof EditionAction) {
 			return EDITION_PATTERN_ACTION_ICON;
-		else if (object instanceof EditionPattern)
+		} else if (object instanceof EditionPattern) {
 			return EDITION_PATTERN_ICON;
-		else if (object instanceof EditionSchemeParameter)
+		} else if (object instanceof EditionSchemeParameter) {
 			return EDITION_PATTERN_PARAMETER_ICON;
-		else if (object instanceof ActionScheme)
+		} else if (object instanceof ActionScheme) {
 			return ACTION_SCHEME_ICON;
-		else if (object instanceof DropScheme)
+		} else if (object instanceof DropScheme) {
 			return DROP_SCHEME_ICON;
-		else if (object instanceof LinkScheme)
+		} else if (object instanceof LinkScheme) {
 			return LINK_SCHEME_ICON;
-		else if (object instanceof ViewPoint)
+		} else if (object instanceof ViewPoint) {
 			return CALC_ICON;
-		else if (object instanceof PaletteElementPatternParameter)
+		} else if (object instanceof PaletteElementPatternParameter) {
 			return EDITION_PATTERN_PARAMETER_ICON;
-		else if (object instanceof FlexoModelObjectPatternRole) {
+		} else if (object instanceof FlexoModelObjectPatternRole) {
 			switch (((FlexoModelObjectPatternRole) object).getFlexoModelObjectType()) {
 			case Process:
 				return WKFIconLibrary.PROCESS_ICON;
@@ -151,26 +151,27 @@ public class VPMIconLibrary extends IconLibrary {
 			default:
 				return null;
 			}
-		} else if (object instanceof ConnectorPatternRole)
+		} else if (object instanceof ConnectorPatternRole) {
 			return CALC_CONNECTOR_ICON;
-		else if (object instanceof ShapePatternRole)
+		} else if (object instanceof ShapePatternRole) {
 			return CALC_SHAPE_ICON;
-		else if (object instanceof ShemaPatternRole)
+		} else if (object instanceof ShemaPatternRole) {
 			return EXAMPLE_DIAGRAM_ICON;
-		else if (object instanceof PrimitivePatternRole)
+		} else if (object instanceof PrimitivePatternRole) {
 			return UNKNOWN_ICON;
-		else if (object instanceof ClassPatternRole)
+		} else if (object instanceof ClassPatternRole) {
 			return OntologyIconLibrary.ONTOLOGY_CLASS_ICON;
-		else if (object instanceof IndividualPatternRole)
+		} else if (object instanceof IndividualPatternRole) {
 			return OntologyIconLibrary.ONTOLOGY_INDIVIDUAL_ICON;
-		else if (object instanceof ObjectPropertyPatternRole)
+		} else if (object instanceof ObjectPropertyPatternRole) {
 			return OntologyIconLibrary.ONTOLOGY_OBJECT_PROPERTY_ICON;
-		else if (object instanceof DataPropertyPatternRole)
+		} else if (object instanceof DataPropertyPatternRole) {
 			return OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON;
-		else if (object instanceof StatementPatternRole)
+		} else if (object instanceof StatementPatternRole) {
 			return OntologyIconLibrary.ONTOLOGY_STATEMENT_ICON;
-		else if (object instanceof LocalizedDictionary)
+		} else if (object instanceof LocalizedDictionary) {
 			return LOCALIZATION_ICON;
+		}
 		logger.warning("No icon for " + object.getClass());
 		return UNKNOWN_ICON;
 	}

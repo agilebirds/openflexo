@@ -129,7 +129,7 @@ public class PropertyListWidget extends DenaliWidget implements TableModelListen
 		_listSelectionModel.addListSelectionListener(this);
 
 		scrollPane = new JScrollPane(_table);
-		if (propertyListModel.createNewRowOnClick)
+		if (propertyListModel.createNewRowOnClick) {
 			scrollPane.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -149,6 +149,7 @@ public class PropertyListWidget extends DenaliWidget implements TableModelListen
 					}
 				}
 			});
+		}
 		_dynamicComponent = new JPanel();
 		_dynamicComponent.setOpaque(false);
 		_dynamicComponent.setLayout(new BorderLayout());
@@ -159,15 +160,17 @@ public class PropertyListWidget extends DenaliWidget implements TableModelListen
 	}
 
 	public PropertyListTableModel getTableModel() {
-		if (_tableModel == null)
+		if (_tableModel == null) {
 			_tableModel = new PropertyListTableModel(_propertyListModel, this, getController());
+		}
 		return _tableModel;
 	}
 
 	public void setVisibleRowCount(int rows) {
 		int height = 0;
-		for (int row = 0; row < rows; row++)
+		for (int row = 0; row < rows; row++) {
 			height += _table.getRowHeight(row);
+		}
 		height += _table.getTableHeader().getPreferredSize().height;
 		int width = 0;
 		for (int i = 0; i < getTableModel().getColumnCount(); i++) {
@@ -200,17 +203,20 @@ public class PropertyListWidget extends DenaliWidget implements TableModelListen
 	@Override
 	public synchronized void updateWidgetFromModel() {
 		if (_table.isEditing()) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine(getObservedPropertyName() + " - Table is currently editing at col:" + _table.getEditingColumn() + " row:"
 						+ _table.getEditingRow());
+			}
 			_table.getCellEditor().cancelCellEditing();
 		} else {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine(getObservedPropertyName() + " - Table is NOT currently edited ");
+			}
 		}
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine(getObservedPropertyName() + " updateWidgetFromModel() with " + getObjectValue());
+		}
 		if (getObjectValue() == null) {
 			getTableModel().setValues(EMPTY_VECTOR);
 		}
@@ -239,11 +245,13 @@ public class PropertyListWidget extends DenaliWidget implements TableModelListen
 	public void tableChanged(TableModelEvent e) {
 		if (e instanceof PropertyListTableModel.ModelObjectHasChanged) {
 			PropertyListTableModel.ModelObjectHasChanged event = (PropertyListTableModel.ModelObjectHasChanged) e;
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Model has changed from " + event.getOldValues() + " to " + event.getNewValues());
+			}
 		} else if (e instanceof PropertyListTableModel.RowMoveForObjectEvent) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Reselect object, and then the edited cell");
+			}
 			PropertyListTableModel.RowMoveForObjectEvent event = (PropertyListTableModel.RowMoveForObjectEvent) e;
 			_listSelectionModel.removeListSelectionListener(this);
 			_listSelectionModel.addSelectionInterval(event.getNewRow(), event.getNewRow());
@@ -262,17 +270,21 @@ public class PropertyListWidget extends DenaliWidget implements TableModelListen
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		// Ignore extra messages.
-		if (e.getValueIsAdjusting())
+		if (e.getValueIsAdjusting()) {
 			return;
+		}
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("valueChanged() selected index=" + _listSelectionModel.getMinSelectionIndex());
+		}
 
 		getTableModel().setSelectedIndex(_listSelectionModel.getMinSelectionIndex());
 		Vector<InspectableObject> selectedObjects = new Vector<InspectableObject>();
-		for (int i = 0; i < Math.max(_listSelectionModel.getMaxSelectionIndex() + 1, _tableModel.getRowCount()); i++)
-			if (_listSelectionModel.isSelectedIndex(i))
+		for (int i = 0; i < Math.max(_listSelectionModel.getMaxSelectionIndex() + 1, _tableModel.getRowCount()); i++) {
+			if (_listSelectionModel.isSelectedIndex(i)) {
 				selectedObjects.add(_tableModel.elementAt(i));
+			}
+		}
 		getTableModel().setSelectedObjects(selectedObjects);
 		_propertyListModel.setSelectedObject(getTableModel().getSelectedObject());
 		notifyInspectedPropertyChanged();

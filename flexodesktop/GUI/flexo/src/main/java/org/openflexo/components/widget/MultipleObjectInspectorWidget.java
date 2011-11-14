@@ -26,9 +26,9 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 
 import org.openflexo.components.browser.BrowserElementType;
-import org.openflexo.components.browser.DefaultBrowserElementFactory;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.DefaultBrowserConfiguration.ObjectVisibilityDelegate;
+import org.openflexo.components.browser.DefaultBrowserElementFactory;
 import org.openflexo.components.widget.MultipleObjectSelector.ObjectSelectabilityDelegate;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -173,8 +173,9 @@ public class MultipleObjectInspectorWidget<E extends FlexoModelObject> extends C
 	@Override
 	public BrowserFilterStatus getVisibility(BrowserElementType elementType) {
 		BrowserFilterStatus returned = visibilities.get(elementType);
-		if (returned != null)
+		if (returned != null) {
 			return returned;
+		}
 		return BrowserFilterStatus.SHOW;
 	}
 
@@ -185,8 +186,9 @@ public class MultipleObjectInspectorWidget<E extends FlexoModelObject> extends C
 
 	public boolean isSelectable(BrowserElementType elementType) {
 		Boolean returned = selectabilities.get(elementType);
-		if (returned != null)
+		if (returned != null) {
 			return returned;
+		}
 		return false;
 	}
 

@@ -48,8 +48,9 @@ public class WorkflowElement extends BrowserElement {
 	protected void buildChildrenVector() {
 		// We add the roles
 		addToChilds(getFlexoWorkflow().getRoleList());
-		if (getFlexoWorkflow().getImportedRoleList() != null)
+		if (getFlexoWorkflow().getImportedRoleList() != null) {
 			addToChilds(getFlexoWorkflow().getImportedRoleList());
+		}
 		// We add top-level processes
 		for (Enumeration<FlexoProcessNode> en = getFlexoWorkflow().getSortedTopLevelProcesses(); en.hasMoreElements();) {
 			FlexoProcess next = en.nextElement().getProcess();
@@ -78,8 +79,9 @@ public class WorkflowElement extends BrowserElement {
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (dataModification instanceof ImportedRoleLibraryCreated)
+		if (dataModification instanceof ImportedRoleLibraryCreated) {
 			refreshWhenPossible();
+		}
 		super.update(observable, dataModification);
 	}
 

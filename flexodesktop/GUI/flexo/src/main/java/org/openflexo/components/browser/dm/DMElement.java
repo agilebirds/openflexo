@@ -26,7 +26,6 @@ import javax.naming.InvalidNameException;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
-
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ReservedKeyword;
@@ -69,8 +68,9 @@ public abstract class DMElement extends BrowserElement {
 	@Override
 	public void setName(String aName) {
 		try {
-			if (ReservedKeyword.contains(aName))
+			if (ReservedKeyword.contains(aName)) {
 				throw new InvalidNameException();
+			}
 			getDMObject().setName(aName);
 		} catch (Exception e) {
 			FlexoController.notify(FlexoLocalization.localizedForKey("invalid_name"));

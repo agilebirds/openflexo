@@ -32,8 +32,8 @@ import java.util.regex.Pattern;
 
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.html.HTML;
-import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.HTML.Tag;
+import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.parser.ParserDelegator;
 
 import org.jdom.Document;
@@ -116,8 +116,9 @@ public class HTMLUtils {
 	private static final Pattern EMPTY_PARAGRAPH_PATTERN = Pattern.compile(EMPTY_PARAGRAPH_REGEXP, Pattern.CASE_INSENSITIVE);
 
 	public static String convertHTML2Latex(final String htmlString) {
-		if (htmlString == null)
+		if (htmlString == null) {
 			return null;
+		}
 		final StringBuilder sb = new StringBuilder();
 
 		HTMLEditorKit.ParserCallback callback = new HTMLEditorKit.ParserCallback() {
@@ -130,8 +131,9 @@ public class HTMLUtils {
 			public void handleText(char[] data, int pos) {
 				String convertedData = convertManuallyHTML2Latex(new String(data));
 				if (lastTagWasPar) {
-					if (convertedData.trim().length() > 0)
+					if (convertedData.trim().length() > 0) {
 						sb.append("\\par ");
+					}
 					lastTagWasPar = false;
 				}
 				sb.append(convertedData);
@@ -153,19 +155,19 @@ public class HTMLUtils {
 						sb.append("}");
 					}
 				}
-				if (t == HTML.Tag.B)
+				if (t == HTML.Tag.B) {
 					sb.append("}");
-				else if (t == HTML.Tag.I)
+				} else if (t == HTML.Tag.I) {
 					sb.append("}");
-				else if (t == HTML.Tag.U)
+				} else if (t == HTML.Tag.U) {
 					sb.append("}");
-				else if (t == HTML.Tag.P) {
+				} else if (t == HTML.Tag.P) {
 					;
-				} else if (t == HTML.Tag.UL)
+				} else if (t == HTML.Tag.UL) {
 					sb.append("\\myitemsep\\end{itemize}\n");
-				else if (t == HTML.Tag.OL)
+				} else if (t == HTML.Tag.OL) {
 					sb.append("\\myitemsep\\end{enumerate}\n");
-				else if (t == HTML.Tag.LI) {
+				} else if (t == HTML.Tag.LI) {
 					;
 				} else if (t == HTML.Tag.FONT) {
 					sb.append("}");
@@ -176,16 +178,18 @@ public class HTMLUtils {
 
 			@Override
 			public void handleSimpleTag(Tag t, MutableAttributeSet a, int pos) {
-				if ('/' == (htmlString.charAt(pos + 1)))
+				if ('/' == (htmlString.charAt(pos + 1))) {
 					handleEndTag(t, pos);
-				else
+				} else {
 					handleStartTag(t, a, pos);
+				}
 			}
 
 			@Override
 			public void handleStartTag(Tag t, MutableAttributeSet a, int pos) {
-				if (t == HTML.Tag.HTML || t == HTML.Tag.BODY)
+				if (t == HTML.Tag.HTML || t == HTML.Tag.BODY) {
 					return;
+				}
 				if (t == HTML.Tag.HEAD) {
 					withinHead = true;
 					return;
@@ -193,36 +197,37 @@ public class HTMLUtils {
 				if (t != HTML.Tag.P) {
 					lastTagWasPar = false;
 				}
-				if (t == HTML.Tag.B)
+				if (t == HTML.Tag.B) {
 					sb.append("\\textbf{");
-				else if (t == HTML.Tag.I)
+				} else if (t == HTML.Tag.I) {
 					sb.append("\\textit{");
-				else if (t == HTML.Tag.A) {
+				} else if (t == HTML.Tag.A) {
 					if (a.getAttribute(HTML.Attribute.HREF) != null) {
 						String href = (String) a.getAttribute(HTML.Attribute.HREF);
-						if (href.startsWith("#"))
+						if (href.startsWith("#")) {
 							sb.append("\\hyperlink{" + href.substring(1) + "}{");
-						else
+						} else {
 							sb.append("\\href{" + href + "}{");
+						}
 						withinA = true;
 					} else if (a.getAttribute(HTML.Attribute.NAME) != null) {
 						String name = (String) a.getAttribute(HTML.Attribute.NAME);
 						sb.append("\\hypertarget{" + name + "}{}");
 					}
-				} else if (t == HTML.Tag.U)
+				} else if (t == HTML.Tag.U) {
 					sb.append("\\underline{");
-				else if (t == HTML.Tag.P) {
+				} else if (t == HTML.Tag.P) {
 					sb.append("\n\n");
 					// lastTagWasPar = true;
 				} else if (t == HTML.Tag.BR) {
 					sb.append("\\par ").append(StringUtils.LINE_SEPARATOR);
-				} else if (t == HTML.Tag.UL)
+				} else if (t == HTML.Tag.UL) {
 					sb.append("\\doitemsep\\begin{itemize}").append(StringUtils.LINE_SEPARATOR);
-				else if (t == HTML.Tag.OL)
+				} else if (t == HTML.Tag.OL) {
 					sb.append("\\doitemsep\\begin{enumerate}").append(StringUtils.LINE_SEPARATOR);
-				else if (t == HTML.Tag.LI)
+				} else if (t == HTML.Tag.LI) {
 					sb.append("\\item ");
-				else if (t == HTML.Tag.FONT) {
+				} else if (t == HTML.Tag.FONT) {
 					String size = (String) a.getAttribute(HTML.Attribute.SIZE);
 					String latexSize = null;
 					if (size != null) {
@@ -251,14 +256,16 @@ public class HTMLUtils {
 								latexSize = "{\\huge ";
 								break;
 							}
-							if (sizeInt > 7)
+							if (sizeInt > 7) {
 								latexSize = "{\\Huge ";
+							}
 						} catch (NumberFormatException e) {
 							// ignore, test on latexSize will cover it
 						}
 					}
-					if (latexSize == null)
+					if (latexSize == null) {
 						latexSize = "{"; // always put a { because the end tag will close the }
+					}
 					sb.append(latexSize);
 				} else if (t == HTML.Tag.IMG) {
 					String src = (String) a.getAttribute(HTML.Attribute.SRC);
@@ -278,12 +285,14 @@ public class HTMLUtils {
 										e.printStackTrace();
 										sb.append("1");
 									}
-								} else
+								} else {
 									sb.append(width.trim()).append("pt");
+								}
 							}
 							if (height != null) {
-								if (width != null)
+								if (width != null) {
 									sb.append(',');
+								}
 								sb.append("height=");
 								if (height.indexOf("%") > -1) {
 									try {
@@ -293,8 +302,9 @@ public class HTMLUtils {
 										e.printStackTrace();
 										sb.append("1");
 									}
-								} else
+								} else {
 									sb.append(height.trim()).append("pt");
+								}
 							}
 							sb.append("]");
 						}
@@ -311,14 +321,16 @@ public class HTMLUtils {
 			}
 
 			private void handleUnknownStartTag(Tag t, int pos) {
-				if (FOOTNOTE_TAG.equals(t.toString()))
+				if (FOOTNOTE_TAG.equals(t.toString())) {
 					sb.append("\\footnote{");
+				}
 
 			}
 
 			private void handleUnknownEndTag(Tag t, int pos) {
-				if (FOOTNOTE_TAG.equals(t.toString()))
+				if (FOOTNOTE_TAG.equals(t.toString())) {
 					sb.append("}");
+				}
 			}
 		};
 		Reader reader = new StringReader(htmlString);
@@ -372,69 +384,84 @@ public class HTMLUtils {
 					i += END_BODY_TAG.length();
 				} else if (htmlString.regionMatches(true, i, START_BOLD_TAG, 0, START_BOLD_TAG.length())) {
 					i += START_BOLD_TAG.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("\\textbf{");
+					}
 				} else if (htmlString.regionMatches(true, i, END_BOLD_TAG, 0, END_BOLD_TAG.length())) {
 					i += END_BOLD_TAG.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("}");
+					}
 				} else if (htmlString.regionMatches(true, i, START_ITALIC_TAG, 0, START_ITALIC_TAG.length())) {
 					i += START_ITALIC_TAG.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("\\textit{");
+					}
 				} else if (htmlString.regionMatches(true, i, END_ITALIC_TAG, 0, END_ITALIC_TAG.length())) {
 					i += END_ITALIC_TAG.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("}");
+					}
 				} else if (htmlString.regionMatches(true, i, START_UNDERLINE_TAG, 0, START_UNDERLINE_TAG.length())) {
 					i += START_UNDERLINE_TAG.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("\\underline{");
+					}
 				} else if (htmlString.regionMatches(true, i, END_UNDERLINE_TAG, 0, END_UNDERLINE_TAG.length())) {
 					i += END_UNDERLINE_TAG.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("}");
+					}
 				} else if (htmlString.regionMatches(true, i, START_UNORDERED_TAG, 0, START_UNORDERED_TAG.length())) {
 					i += START_UNORDERED_TAG.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("\\begin{itemize}");
+					}
 				} else if (htmlString.regionMatches(true, i, END_UNORDERED_TAG, 0, END_UNORDERED_TAG.length())) {
 					i += END_UNORDERED_TAG.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("\\end{itemize}");
+					}
 				} else if (htmlString.regionMatches(true, i, START_ORDERED_TAG, 0, START_ORDERED_TAG.length())) {
 					i += START_ORDERED_TAG.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("\\begin{enumerate}");
+					}
 				} else if (htmlString.regionMatches(true, i, END_ORDERED_TAG, 0, END_ORDERED_TAG.length())) {
 					i += END_ORDERED_TAG.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("\\end{enumerate}");
+					}
 				} else if (htmlString.regionMatches(true, i, START_LIST_ITEM_TAG, 0, START_LIST_ITEM_TAG.length())) {
 					i += START_LIST_ITEM_TAG.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("\\item ");
+					}
 				} else if (htmlString.regionMatches(true, i, END_LIST_ITEM_TAG, 0, END_LIST_ITEM_TAG.length())) {
 					i += END_LIST_ITEM_TAG.length();
 				} else if (htmlString.regionMatches(true, i, BREAK, 0, BREAK.length())) {
 					i += BREAK.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("\\\\");
+					}
 				} else if (htmlString.regionMatches(true, i, XHTML_BREAK, 0, XHTML_BREAK.length())) {
 					i += XHTML_BREAK.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("\\\\");
+					}
 				} else if (htmlString.regionMatches(true, i, START_PARAGRAPH_TAG, 0, START_PARAGRAPH_TAG.length())) {
 					i += START_PARAGRAPH_TAG.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("\\par ");
+					}
 				} else if (htmlString.regionMatches(true, i, END_PARAGRAPH_TAG, 0, END_PARAGRAPH_TAG.length())) {
 					i += END_PARAGRAPH_TAG.length();
 				} else if (htmlString.regionMatches(true, i, "IMG", 0, "IMG".length())) {
 					int j = i + 1;
 					for (; j < htmlString.length(); j++) {
-						if (htmlString.charAt(j) == '>')
+						if (htmlString.charAt(j) == '>') {
 							break;
+						}
 					}
 					String img = htmlString.substring(i, j + 1);
 					String src = extractImageSource(img);
@@ -454,12 +481,14 @@ public class HTMLUtils {
 										e.printStackTrace();
 										sb.append("1");
 									}
-								} else
+								} else {
 									sb.append(width.trim()).append("pt");
+								}
 							}
 							if (height != null) {
-								if (width != null)
+								if (width != null) {
 									sb.append(',');
+								}
 								sb.append("height=");
 								if (height.indexOf("%") > -1) {
 									try {
@@ -469,8 +498,9 @@ public class HTMLUtils {
 										e.printStackTrace();
 										sb.append("1");
 									}
-								} else
+								} else {
 									sb.append(height.trim()).append("pt");
+								}
 							}
 							sb.append("]");
 						}
@@ -486,171 +516,211 @@ public class HTMLUtils {
 			case '&':
 				if (htmlString.regionMatches(true, i, SMALLER, 0, SMALLER.length())) {
 					i += SMALLER.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("\\textsmaller");
+					}
 				} else if (htmlString.regionMatches(true, i, GREATER, 0, GREATER.length())) {
 					i += GREATER.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("\\textgreater");
+					}
 				} else if (htmlString.regionMatches(true, i, AMPERSAND, 0, AMPERSAND.length())) {
 					i += AMPERSAND.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("\\&");
+					}
 				} else if (htmlString.regionMatches(true, i, QUOTE, 0, QUOTE.length())) {
 					i += QUOTE.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("\"");
+					}
 				} else if (htmlString.regionMatches(true, i, a_GRAVE, 0, a_GRAVE.length())) {
 					i += a_GRAVE.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("à");
+					}
 				} else if (htmlString.regionMatches(true, i, A_GRAVE, 0, A_GRAVE.length())) {
 					i += A_GRAVE.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("À");
+					}
 				} else if (htmlString.regionMatches(true, i, a_CIRC, 0, a_CIRC.length())) {
 					i += a_CIRC.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("â");
+					}
 				} else if (htmlString.regionMatches(true, i, A_CIRC, 0, A_CIRC.length())) {
 					i += A_CIRC.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("Â");
+					}
 				} else if (htmlString.regionMatches(true, i, a_UML, 0, a_UML.length())) {
 					i += a_UML.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("ä");
+					}
 				} else if (htmlString.regionMatches(true, i, A_UML, 0, A_UML.length())) {
 					i += A_UML.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("Ä");
+					}
 				} else if (htmlString.regionMatches(true, i, a_RING, 0, a_RING.length())) {
 					i += a_RING.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("å");
+					}
 				} else if (htmlString.regionMatches(true, i, A_RING, 0, A_RING.length())) {
 					i += A_RING.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("Å");
+					}
 				} else if (htmlString.regionMatches(true, i, ae_LIGATURE, 0, ae_LIGATURE.length())) {
 					i += ae_LIGATURE.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("æ");
+					}
 				} else if (htmlString.regionMatches(true, i, AE_LIGATURE, 0, AE_LIGATURE.length())) {
 					i += AE_LIGATURE.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("Æ");
+					}
 				} else if (htmlString.regionMatches(true, i, c_CEDILLA, 0, c_CEDILLA.length())) {
 					i += c_CEDILLA.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("ç");
+					}
 				} else if (htmlString.regionMatches(true, i, C_CEDILLA, 0, C_CEDILLA.length())) {
 					i += C_CEDILLA.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("Ç");
+					}
 				} else if (htmlString.regionMatches(true, i, e_ACUTE, 0, e_ACUTE.length())) {
 					i += e_ACUTE.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("é");
+					}
 				} else if (htmlString.regionMatches(true, i, E_ACUTE, 0, E_ACUTE.length())) {
 					i += E_ACUTE.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("É");
+					}
 				} else if (htmlString.regionMatches(true, i, e_GRAVE, 0, e_GRAVE.length())) {
 					i += e_GRAVE.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("è");
+					}
 				} else if (htmlString.regionMatches(true, i, E_GRAVE, 0, E_GRAVE.length())) {
 					i += E_GRAVE.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("É");
+					}
 				} else if (htmlString.regionMatches(true, i, e_CIRC, 0, e_CIRC.length())) {
 					i += e_CIRC.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("ê");
+					}
 				} else if (htmlString.regionMatches(true, i, E_CIRC, 0, E_CIRC.length())) {
 					i += E_CIRC.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("È");
+					}
 				} else if (htmlString.regionMatches(true, i, e_UML, 0, e_UML.length())) {
 					i += e_UML.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("ë");
+					}
 				} else if (htmlString.regionMatches(true, i, E_UML, 0, E_UML.length())) {
 					i += E_UML.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("Ë");
+					}
 				} else if (htmlString.regionMatches(true, i, i_UML, 0, i_UML.length())) {
 					i += i_UML.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("ë");
+					}
 				} else if (htmlString.regionMatches(true, i, I_UML, 0, I_UML.length())) {
 					i += I_UML.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("Ë");
+					}
 				} else if (htmlString.regionMatches(true, i, o_CIRC, 0, o_CIRC.length())) {
 					i += o_CIRC.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("ô");
+					}
 				} else if (htmlString.regionMatches(true, i, O_CIRC, 0, O_CIRC.length())) {
 					i += O_CIRC.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("Ô");
+					}
 				} else if (htmlString.regionMatches(true, i, o_UML, 0, o_UML.length())) {
 					i += o_UML.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("ö");
+					}
 				} else if (htmlString.regionMatches(true, i, O_UML, 0, O_UML.length())) {
 					i += O_UML.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("Ö");
+					}
 				} else if (htmlString.regionMatches(true, i, u_GRAVE, 0, u_GRAVE.length())) {
 					i += u_GRAVE.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("ù");
+					}
 				} else if (htmlString.regionMatches(true, i, U_GRAVE, 0, U_GRAVE.length())) {
 					i += U_GRAVE.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("Ù");
+					}
 				} else if (htmlString.regionMatches(true, i, u_CIRC, 0, u_CIRC.length())) {
 					i += u_CIRC.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("û");
+					}
 				} else if (htmlString.regionMatches(true, i, U_CIRC, 0, U_CIRC.length())) {
 					i += U_CIRC.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("Ù");
+					}
 				} else if (htmlString.regionMatches(true, i, u_UML, 0, u_UML.length())) {
 					i += u_UML.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("ü");
+					}
 				} else if (htmlString.regionMatches(true, i, U_UML, 0, U_UML.length())) {
 					i += U_UML.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("Ü");
+					}
 				} else if (htmlString.regionMatches(true, i, REGISTERED, 0, REGISTERED.length())) {
 					i += REGISTERED.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("\\textregistered");
+					}
 				} else if (htmlString.regionMatches(true, i, COPYRIGHT, 0, COPYRIGHT.length())) {
 					i += COPYRIGHT.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("\\copyright");
+					}
 				} else if (htmlString.regionMatches(true, i, EURO, 0, EURO.length())) {
 					i += EURO.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("€");
+					}
 				} else if (htmlString.regionMatches(true, i, NON_BREAKING_SPACE, 0, NON_BREAKING_SPACE.length())) {
 					i += NON_BREAKING_SPACE.length();
-					if (!withinHead)
+					if (!withinHead) {
 						sb.append("~");
+					}
 				} else {
 					if (!withinHead) {
 						if (i + 2 < htmlString.length() && htmlString.charAt(i + 1) == '#' && htmlString.indexOf(';', i + 1) > -1) {
 							int entity = Integer.parseInt(htmlString.substring(i + 2, htmlString.indexOf(';', i + 1)));
-							if (entity > 127)
+							if (entity > 127) {
 								sb.append((char) entity);
-							else {
+							} else {
 								try {
 									sb.append(new String(new byte[] { (byte) entity }, "ISO-8859-1"));
 								} catch (UnsupportedEncodingException e) {
@@ -666,8 +736,9 @@ public class HTMLUtils {
 				}
 				break;
 			default:
-				if (!withinHead)
+				if (!withinHead) {
 					sb.append(c);
+				}
 				break;
 			}
 		}
@@ -696,10 +767,11 @@ public class HTMLUtils {
 				backslash = !backslash;
 				break;
 			case '"':
-				if (!backslash)
+				if (!backslash) {
 					withinQuotes = !withinQuotes;
-				else
+				} else {
 					backslash = false;
+				}
 				break;
 			default:
 				if (!backslash && !withinQuotes) {
@@ -707,8 +779,9 @@ public class HTMLUtils {
 						int j = i + attribute.length();
 						for (; j < tag.length(); j++) {
 							if (tag.charAt(j) == ' ' || tag.charAt(j) == '=' || tag.charAt(j) == '\t' || tag.charAt(j) == '\n'
-									|| tag.charAt(j) == '\r')
+									|| tag.charAt(j) == '\r') {
 								continue;
+							}
 							break;
 						}
 						StringBuilder src = new StringBuilder();
@@ -743,8 +816,9 @@ public class HTMLUtils {
 	}
 
 	public static String extractBodyContent(String html, boolean returnHtmlIfNoBodyFound) {
-		if (html == null)
+		if (html == null) {
 			return null;
+		}
 
 		String htmlUpperCase = html.toUpperCase();
 		int startBodyIndex = htmlUpperCase.indexOf(START_BODY_TAG);
@@ -755,15 +829,17 @@ public class HTMLUtils {
 		startBodyIndex = startBodyIndex + START_BODY_TAG.length() + 1;
 		int endBodyIndex = htmlUpperCase.indexOf(END_BODY_TAG, startBodyIndex);
 
-		if (endBodyIndex == -1)
+		if (endBodyIndex == -1) {
 			return html.substring(startBodyIndex);
+		}
 
 		return html.substring(startBodyIndex, endBodyIndex);
 	}
 
 	public static String escapeStringForHTML(String s, boolean removeNewLine) {
-		if (s == null)
+		if (s == null) {
 			return null;
+		}
 		StringBuffer sb = new StringBuffer();
 		int n = s.length();
 		for (int i = 0; i < n; i++) {
@@ -785,10 +861,11 @@ public class HTMLUtils {
 				sb.append("&#146;");
 				break;
 			case '\n':
-				if (!removeNewLine)
+				if (!removeNewLine) {
 					sb.append("<br/>");
-				else
+				} else {
 					sb.append(' ');
+				}
 				break;
 			case '\r':
 				break;
@@ -1093,8 +1170,7 @@ public class HTMLUtils {
 				String[] rgb = color.split(",");
 				if (rgb.length == 3) {
 					if (color.indexOf('%') > -1) {
-						return new Color((float) Float.valueOf(rgb[0]) / 100, (float) Float.valueOf(rgb[1]) / 100,
-								(float) Float.valueOf(rgb[2]) / 100);
+						return new Color(Float.valueOf(rgb[0]) / 100, Float.valueOf(rgb[1]) / 100, Float.valueOf(rgb[2]) / 100);
 					} else {
 						// Need to trim integers but not floats
 						return new Color(Integer.parseInt(rgb[0].trim()), Integer.parseInt(rgb[1].trim()), Integer.parseInt(rgb[2].trim()));
@@ -1118,9 +1194,10 @@ public class HTMLUtils {
 
 	private static Color extractColorFromHexValue(String color) {
 		color = color.substring(1);
-		if (color.length() == 3)
+		if (color.length() == 3) {
 			color = String.valueOf(color.charAt(0)) + color.charAt(0) + color.charAt(1) + color.charAt(1) + color.charAt(2)
 					+ color.charAt(2);
+		}
 		if (color.length() == 6 && color.matches("[0-9A-Fa-f]+")) {
 			return new Color(Integer.parseInt(color.substring(0, 2), 16), Integer.parseInt(color.substring(2, 4), 16), Integer.parseInt(
 					color.substring(4, 6), 16));
@@ -1133,10 +1210,12 @@ public class HTMLUtils {
 	}
 
 	public static String extractSourceFromEmbeddedTag(String htmlCode) {
-		if (htmlCode == null || htmlCode.length() < 7)
+		if (htmlCode == null || htmlCode.length() < 7) {
 			return null;
-		if (!htmlCode.substring(0, 7).toLowerCase().startsWith("<html>"))
+		}
+		if (!htmlCode.substring(0, 7).toLowerCase().startsWith("<html>")) {
 			htmlCode = "<html>" + htmlCode + "</html>";
+		}
 		// 1. Let's try with XML parsers (it works most of the time and it is a lot more reliable as a parser)
 		final String embeddedVideoCode = htmlCode;
 		Reader reader = new StringReader(embeddedVideoCode.replaceAll("&", "&amp;"));
@@ -1148,15 +1227,17 @@ public class HTMLUtils {
 				Element e = (Element) objectIterator.next();
 				for (Object param : e.getChildren("param")) {
 					String paramName = ((Element) param).getAttributeValue("name");
-					if (paramName != null && paramName.equals("movie"))
+					if (paramName != null && paramName.equals("movie")) {
 						return ((Element) param).getAttributeValue("value");
+					}
 				}
 			}
 			Iterator embedIterator = document.getDescendants(new ElementFilter("embed"));
 			while (embedIterator.hasNext()) {
 				Element e = (Element) embedIterator.next();
-				if (e.getAttributeValue("src") != null)
+				if (e.getAttributeValue("src") != null) {
 					return e.getAttributeValue("src");
+				}
 			}
 		} catch (JDOMException e) {
 			e.printStackTrace();
@@ -1168,16 +1249,18 @@ public class HTMLUtils {
 		HTMLEditorKit.ParserCallback callback = new HTMLEditorKit.ParserCallback() {
 			@Override
 			public void handleStartTag(Tag t, MutableAttributeSet a, int pos) {
-				if (sb.length() > 0)
+				if (sb.length() > 0) {
 					return;
+				}
 				if (t == Tag.OBJECT) {
 					int indexOfParamMovie = embeddedVideoCode.indexOf("<param name=\"movie\"", pos);
 					if (indexOfParamMovie > -1) {
 						int indexOfMovieValue = embeddedVideoCode.indexOf("value=\"", indexOfParamMovie);
 						if (indexOfMovieValue > -1) {
 							int endIndexOfMovieValue = embeddedVideoCode.indexOf('"', indexOfMovieValue + 7);
-							if (endIndexOfMovieValue > -1)
+							if (endIndexOfMovieValue > -1) {
 								sb.append(embeddedVideoCode.substring(indexOfMovieValue + 7, endIndexOfMovieValue));
+							}
 						}
 					}
 				}
@@ -1189,16 +1272,18 @@ public class HTMLUtils {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		if (sb.length() > 0)
+		if (sb.length() > 0) {
 			return sb.toString();
+		}
 		// 3. Last resort: Manual parsing
 		int indexOfEmbed = embeddedVideoCode.indexOf("<embed");
 		if (indexOfEmbed > -1) {
 			int indexOfSrc = embeddedVideoCode.indexOf("src=\"", indexOfEmbed);
 			if (indexOfSrc > -1) {
 				int endIndexOfSrc = embeddedVideoCode.indexOf('"', indexOfSrc + 5);
-				if (endIndexOfSrc > -1)
+				if (endIndexOfSrc > -1) {
 					return embeddedVideoCode.substring(indexOfSrc + 5, endIndexOfSrc);
+				}
 			}
 		}
 		return null;
@@ -1215,18 +1300,22 @@ public class HTMLUtils {
 		ParsePosition position = new ParsePosition(0);
 		Number size = formatter.parse(fontSizeWithUnit, position);
 
-		if (size == null)
+		if (size == null) {
 			return null;
+		}
 
 		String unit = "px";
-		if (position.getIndex() < fontSizeWithUnit.length())
+		if (position.getIndex() < fontSizeWithUnit.length()) {
 			unit = fontSizeWithUnit.substring(position.getIndex()).trim().toLowerCase();
+		}
 
-		if ("px".equals(unit))
+		if ("px".equals(unit)) {
 			return new Double(size.doubleValue() * (92 / 72)).intValue(); // Round to transform px to points, 92 dpi usually, 1 inch = 72
-																			// points
-		if ("pt".equals(unit))
+		}
+		// points
+		if ("pt".equals(unit)) {
 			return new Double(size.doubleValue()).intValue();
+		}
 
 		// Don't handle % or em
 
@@ -1267,23 +1356,29 @@ public class HTMLUtils {
 	}
 
 	public static int getFontValueFromFontSizeInPoints(int fontSizeInPoints) {
-		if (fontSizeInPoints <= 8)
+		if (fontSizeInPoints <= 8) {
 			return 1;
+		}
 
-		if (fontSizeInPoints <= 11)
+		if (fontSizeInPoints <= 11) {
 			return 2;
+		}
 
-		if (fontSizeInPoints <= 13)
+		if (fontSizeInPoints <= 13) {
 			return 3;
+		}
 
-		if (fontSizeInPoints <= 16)
+		if (fontSizeInPoints <= 16) {
 			return 4;
+		}
 
-		if (fontSizeInPoints <= 21)
+		if (fontSizeInPoints <= 21) {
 			return 5;
+		}
 
-		if (fontSizeInPoints <= 30)
+		if (fontSizeInPoints <= 30) {
 			return 6;
+		}
 
 		return 7;
 	}

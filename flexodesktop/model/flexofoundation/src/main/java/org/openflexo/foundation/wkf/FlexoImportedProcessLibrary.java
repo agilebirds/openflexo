@@ -48,8 +48,9 @@ public class FlexoImportedProcessLibrary extends TemporaryFlexoModelObject {
 	}
 
 	public int size() {
-		if (getWorkflow() != null)
+		if (getWorkflow() != null) {
 			return getWorkflow().getImportedProcesses().size();
+		}
 		return 0;
 	}
 

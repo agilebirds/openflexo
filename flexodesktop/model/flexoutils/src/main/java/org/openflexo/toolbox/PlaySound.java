@@ -33,16 +33,18 @@ public class PlaySound {
 	public static boolean playSound = true;
 
 	public static void tryToPlaySound(String fileName) {
-		if (!playSound)
+		if (!playSound) {
 			return;
+		}
 		if (fileName == null) {
 			tryToPlayDefaultSound();
 			return;
 		}
 
 		File file = new File(fileName);
-		if (!file.exists())
+		if (!file.exists()) {
 			file = new FileResource(fileName);
+		}
 		try {
 			Class soundFile = Class.forName("org.openflexo.sound.SoundFile");
 			Method m = soundFile.getMethod("getNewDynamicSoundFile", new Class[] { File.class });
@@ -81,10 +83,12 @@ public class PlaySound {
 	 */
 	public static void tryToPlaySoundWithFieldNamed(String fieldName) {
 		try {
-			if (!playSound)
+			if (!playSound) {
 				return;
-			if (fieldName == null)
+			}
+			if (fieldName == null) {
 				fieldName = "DEFAULT_SOUND_FILE";
+			}
 			Class soundFile = Class.forName("org.openflexo.sound.SoundFile");
 			Field field = soundFile.getField(fieldName);
 			Object o = field.get(null);

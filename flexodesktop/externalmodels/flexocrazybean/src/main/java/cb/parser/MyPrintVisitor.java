@@ -47,8 +47,9 @@ public class MyPrintVisitor extends PrintVisitor {
 		PetalNode node = obj.getProperty("quidu");
 
 		if (node != null) {
-			if (!(obj instanceof HasQuidu))
+			if (!(obj instanceof HasQuidu)) {
 				System.err.println(obj.getName() + " has quidu " + node);
+			}
 		} else if (obj instanceof HasQuidu) {
 			System.err.println(obj.getName() + " has NO quidu ");
 		}
@@ -75,8 +76,9 @@ public class MyPrintVisitor extends PrintVisitor {
 						+ ((Named) a.getSecondClient()).getNameParameter());
 
 				cb.petal.Class clazz = a.getAssociationClass();
-				if (clazz != null)
+				if (clazz != null) {
 					System.err.println("ASSOCIATIONCLASS:" + clazz.getNameParameter());
+				}
 			}
 		}
 

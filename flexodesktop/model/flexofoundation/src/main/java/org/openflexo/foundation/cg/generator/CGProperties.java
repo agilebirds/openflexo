@@ -50,10 +50,11 @@ public class CGProperties implements Map {
 	}
 
 	public void put(String key, String value) {
-		if (value == null)
+		if (value == null) {
 			_properties.remove(key);
-		else
+		} else {
 			_properties.put(key, value);
+		}
 	}
 
 	public Object get(String key) {
@@ -142,8 +143,9 @@ public class CGProperties implements Map {
 		while (keys.hasMoreElements()) {
 			Object o = keys.nextElement();
 			sb.append(o + "=" + get(o));
-			if (keys.hasMoreElements())
+			if (keys.hasMoreElements()) {
 				sb.append(" , ");
+			}
 		}
 		sb.append("}");
 		return sb.toString();

@@ -29,15 +29,6 @@ import javax.swing.Icon;
 import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.icon.IconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.menu.FlexoMenuItem;
-import org.openflexo.wkf.processeditor.ProcessView;
-import org.openflexo.wkf.view.listener.WKFKeyEventListener;
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
@@ -54,6 +45,14 @@ import org.openflexo.foundation.wkf.action.WKFDelete;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
 import org.openflexo.foundation.wkf.ws.FlexoPortMap;
 import org.openflexo.foundation.wkf.ws.ServiceInterface;
+import org.openflexo.icon.IconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.menu.FlexoMenuItem;
+import org.openflexo.wkf.processeditor.ProcessView;
+import org.openflexo.wkf.view.listener.WKFKeyEventListener;
 
 public class WKFDeleteInitializer extends ActionInitializer {
 
@@ -75,11 +74,13 @@ public class WKFDeleteInitializer extends ActionInitializer {
 			public boolean run(ActionEvent e, WKFDelete action) {
 				logger.info("Delete in WKF");
 
-				if (!getModule().isActive())
+				if (!getModule().isActive()) {
 					return false;
+				}
 				Vector v = action.getObjectsToDelete();
-				if (v.size() == 0)
+				if (v.size() == 0) {
 					return false;
+				}
 
 				boolean doIt = false;
 				if (v.size() == 1 && v.firstElement() instanceof FlexoProcess) {
@@ -102,8 +103,9 @@ public class WKFDeleteInitializer extends ActionInitializer {
 						FlexoController.notify(FlexoLocalization.localizedForKey("you_cannot_delete_the_root_process"));
 						return false;
 					}
-					if (action.isNoConfirmation())
+					if (action.isNoConfirmation()) {
 						return true;
+					}
 					if (process.getAllProcessInstances().size() > 0) {
 						StringBuilder sb = new StringBuilder();
 						for (SubProcessNode node : process.getAllProcessInstances()) {
@@ -134,12 +136,14 @@ public class WKFDeleteInitializer extends ActionInitializer {
 						doIt = FlexoController.confirmWithWarning(FlexoLocalization
 								.localizedForKey("would_you_like_to_delete_service_interface_used_in_ws_and_remove_it_from_ws"));
 
-					} else
+					} else {
 						doIt = FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_delete_the_service_interface"));
+					}
 
 				} else {
-					if (action.isNoConfirmation())
+					if (action.isNoConfirmation()) {
 						return true;
+					}
 					if (FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_delete_those_objects"))) {
 						Enumeration en = v.elements();
 						while (en.hasMoreElements()) {
@@ -172,8 +176,9 @@ public class WKFDeleteInitializer extends ActionInitializer {
 							}
 						}
 						doIt = true;
-					} else
+					} else {
 						return false;
+					}
 				}
 				if (doIt) {
 					Vector<FlexoModelObject> objects = action.getGlobalSelectionAndFocusedObject();
@@ -187,8 +192,9 @@ public class WKFDeleteInitializer extends ActionInitializer {
 							}
 						}
 					}
-					if (tocEntries.size() == 0)
+					if (tocEntries.size() == 0) {
 						return true;
+					}
 					CheckboxListParameter<TOCEntry>[] def = new CheckboxListParameter[1];
 					def[0] = new CheckboxListParameter<TOCEntry>("entries", "select_entries_to_delete", tocEntries, new Vector<TOCEntry>());
 					def[0].setFormatter("displayString");
@@ -216,11 +222,13 @@ public class WKFDeleteInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<WKFDelete>() {
 			@Override
 			public boolean run(ActionEvent e, WKFDelete action) {
-				if (action.hasBeenDeleted(getControllerActionInitializer().getWKFController().getCurrentFlexoProcess()))
+				if (action.hasBeenDeleted(getControllerActionInitializer().getWKFController().getCurrentFlexoProcess())) {
 					getControllerActionInitializer().getWKFController().setCurrentFlexoProcess(getProject().getRootFlexoProcess());
+				}
 				if (getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject() != null
-						&& getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject().isDeleted())
+						&& getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject().isDeleted()) {
 					getControllerActionInitializer().getWKFController().getSelectionManager().resetSelection();
+				}
 				return true;
 			}
 		};

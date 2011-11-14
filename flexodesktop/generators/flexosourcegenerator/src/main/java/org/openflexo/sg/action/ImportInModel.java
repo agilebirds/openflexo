@@ -58,8 +58,9 @@ public class ImportInModel extends GCAction<ImportInModel, CGObject> {
 		@Override
 		protected boolean isEnabledForSelection(CGObject object, Vector<CGObject> globalSelection) {
 			GenerationRepository repository = getRepository(object, globalSelection);
-			if (!(repository instanceof SourceRepository))
+			if (!(repository instanceof SourceRepository)) {
 				return false;
+			}
 			ProjectGenerator pg = (ProjectGenerator) getProjectGenerator(repository);
 			return pg != null && pg.hasBeenInitialized();
 		}

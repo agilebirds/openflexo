@@ -67,8 +67,9 @@ public class FIBRoleSelector extends FIBModelObjectSelector<Role> {
 	 */
 	@Override
 	protected Enumeration<Role> getAllSelectableValues() {
-		if (getProject() != null)
+		if (getProject() != null) {
 			return getProject().getWorkflow().getRoleList().getSortedRoles();
+		}
 		return null;
 	}
 
@@ -89,8 +90,9 @@ public class FIBRoleSelector extends FIBModelObjectSelector<Role> {
 
 	@Override
 	public String renderedString(Role editedObject) {
-		if (editedObject != null)
+		if (editedObject != null) {
 			return editedObject.getName();
+		}
 		return "";
 	}
 
@@ -110,8 +112,9 @@ public class FIBRoleSelector extends FIBModelObjectSelector<Role> {
 				customIcon = buildCustomIcon(aRole);
 			}
 			IconMarker[] markers = getIconMarkers(aRole);
-			if (markers != null)
+			if (markers != null) {
 				return IconFactory.getImageIcon(customIcon, markers);
+			}
 			return decorateIcon(aRole, customIcon);
 		}
 
@@ -119,16 +122,19 @@ public class FIBRoleSelector extends FIBModelObjectSelector<Role> {
 			int count = 0;
 			if (aRole.isImported()) {
 				count++;
-				if (aRole.isDeletedOnServer())
+				if (aRole.isDeletedOnServer()) {
 					count++;
+				}
 			}
 			IconMarker[] markers = null;
-			if (count > 0)
+			if (count > 0) {
 				markers = new IconMarker[count];
+			}
 			if (aRole.isImported()) {
 				markers[0] = IconLibrary.IMPORT;
-				if (aRole.isDeletedOnServer())
+				if (aRole.isDeletedOnServer()) {
 					markers[1] = IconLibrary.WARNING;
+				}
 			}
 			return markers;
 		}
@@ -137,8 +143,9 @@ public class FIBRoleSelector extends FIBModelObjectSelector<Role> {
 			Color aColor = aRole.getColor();
 			ImageIcon imageIcon = WKFIconLibrary.ROLE_ICON;
 			Image image = imageIcon.getImage();
-			if (aRole == null)
+			if (aRole == null) {
 				aColor = Color.RED;
+			}
 			Color mainColor = aColor;
 			Color borderColor = new Color((aColor.getRed() + 255) / 2, (aColor.getGreen() + 255) / 2, (aColor.getBlue() + 255) / 2);
 			ImageFilter imgfilter = new ColorSwapFilter(new Color(255, 51, 0), mainColor, new Color(255, 153, 102), borderColor);

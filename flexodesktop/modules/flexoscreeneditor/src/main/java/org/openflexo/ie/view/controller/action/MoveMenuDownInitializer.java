@@ -54,11 +54,13 @@ public class MoveMenuDownInitializer extends ActionInitializer {
 				if (action.getFocusedObject() instanceof FlexoItemMenu) {
 					FlexoItemMenu item = (FlexoItemMenu) action.getFocusedObject();
 					if (item.getFather() != null) {
-						if (item.getFather().getSubItems().indexOf(item) + 1 < item.getFather().getSubItems().size())
+						if (item.getFather().getSubItems().indexOf(item) + 1 < item.getFather().getSubItems().size()) {
 							doable = true;
+						}
 					}
-					if (doable)
+					if (doable) {
 						(action).setItemMenu(item);
+					}
 				}
 				return (getModule().isActive()) && doable;
 			}

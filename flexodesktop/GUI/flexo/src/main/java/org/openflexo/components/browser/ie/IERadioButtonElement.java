@@ -57,10 +57,11 @@ public class IERadioButtonElement extends IEElement {
 	 */
 	@Override
 	public String getName() {
-		if (getRadioButton().getName() == null)
+		if (getRadioButton().getName() == null) {
 			return "RadioButton";
-		else
+		} else {
 			return getRadioButton().getName();
+		}
 	}
 
 	public IERadioButtonWidget getRadioButton() {

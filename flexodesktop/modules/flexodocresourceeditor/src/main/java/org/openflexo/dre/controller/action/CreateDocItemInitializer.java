@@ -64,8 +64,9 @@ public class CreateDocItemInitializer extends ActionInitializer {
 						FlexoLocalization.localizedForKey("enter_parameters_for_the_new_doc_item"), parameters);
 				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 					String newItemIdentifier = (String) dialog.parameterValueWithName("newItemIdentifier");
-					if (newItemIdentifier == null)
+					if (newItemIdentifier == null) {
 						return false;
+					}
 					action.setNewItemIdentifier(newItemIdentifier);
 					action.setNewItemDescription((String) dialog.parameterValueWithName("description"));
 					return true;

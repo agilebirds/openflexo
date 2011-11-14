@@ -87,8 +87,9 @@ public class MessageEntryBinding extends FlexoModelObject implements Inspectable
 	@Override
 	public BindingModel getBindingModel() {
 
-		if (_messageBindings != null)
+		if (_messageBindings != null) {
 			return _messageBindings.getBindingModel();
+		}
 		return null;
 	}
 
@@ -173,8 +174,9 @@ public class MessageEntryBinding extends FlexoModelObject implements Inspectable
 
 	@Override
 	public FlexoProject getProject() {
-		if (_messageBindings != null)
+		if (_messageBindings != null) {
 			return _messageBindings.getProject();
+		}
 		return null;
 	}
 
@@ -186,15 +188,17 @@ public class MessageEntryBinding extends FlexoModelObject implements Inspectable
 
 	@Override
 	public XMLMapping getXMLMapping() {
-		if (_messageBindings != null)
+		if (_messageBindings != null) {
 			return _messageBindings.getXMLMapping();
+		}
 		return null;
 	}
 
 	@Override
 	public XMLStorageResourceData getXMLResourceData() {
-		if (_messageBindings != null)
+		if (_messageBindings != null) {
 			return _messageBindings.getXMLResourceData();
+		}
 		return null;
 	}
 

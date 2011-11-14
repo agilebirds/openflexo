@@ -57,8 +57,9 @@ public class DeleteRowInitializer extends ActionInitializer {
 					table = ((IETDWidget) action.getFocusedObject()).htmlTable();
 				} else if (action.getFocusedObject() instanceof IESequenceWidget) {
 					table = ((IESequenceWidget) action.getFocusedObject()).htmlTable();
-				} else if (action.getFocusedObject() instanceof IETRWidget)
+				} else if (action.getFocusedObject() instanceof IETRWidget) {
 					table = ((IETRWidget) action.getFocusedObject()).getParentTable();
+				}
 				if (table != null && table.getRowCount() == 1) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("cannot_delete_last_row"));
 					return false;

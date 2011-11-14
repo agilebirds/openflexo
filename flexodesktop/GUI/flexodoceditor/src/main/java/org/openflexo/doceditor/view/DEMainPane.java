@@ -55,11 +55,13 @@ public class DEMainPane extends FlexoMainPane {
 	 */
 	@Override
 	protected FlexoModelObject getParentObject(FlexoModelObject object) {
-		if (object instanceof TOCEntry)
-			if (((TOCEntry) object).getParent() != null)
+		if (object instanceof TOCEntry) {
+			if (((TOCEntry) object).getParent() != null) {
 				return ((TOCEntry) object).getParent();
-			else
+			} else {
 				((TOCEntry) object).getRepository();
+			}
+		}
 		return null;
 	}
 

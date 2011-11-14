@@ -63,10 +63,12 @@ public class HideRoleInitializer extends ActionInitializer {
 					action.getRole().setIsVisible(false,
 							SwimmingLaneRepresentation.getRoleVisibilityContextForProcess(getController().getCurrentFlexoProcess()));
 					if (action.getGlobalSelection() != null) {
-						for (Role role : action.getGlobalSelection())
-							if (!SwimmingLaneRepresentation.roleMustBeShown(role, getController().getCurrentFlexoProcess()))
+						for (Role role : action.getGlobalSelection()) {
+							if (!SwimmingLaneRepresentation.roleMustBeShown(role, getController().getCurrentFlexoProcess())) {
 								role.setIsVisible(false, SwimmingLaneRepresentation.getRoleVisibilityContextForProcess(getController()
 										.getCurrentFlexoProcess()));
+							}
+						}
 					}
 				}
 				return false;

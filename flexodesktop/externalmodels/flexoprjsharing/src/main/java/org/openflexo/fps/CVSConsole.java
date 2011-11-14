@@ -40,8 +40,9 @@ public class CVSConsole extends CVSAdapter {
 	private Vector<ConsoleListener> _listeners;
 
 	public static CVSConsole getCVSConsole() {
-		if (_instance == null)
+		if (_instance == null) {
 			_instance = new CVSConsole();
+		}
 		return _instance;
 	}
 
@@ -110,16 +111,18 @@ public class CVSConsole extends CVSAdapter {
 		if (e.isTagged()) {
 			String message = MessageEvent.parseTaggedMessage(taggedLine, e.getMessage());
 			if (message != null) {
-				if (e.isError())
+				if (e.isError()) {
 					errorLog(message);
-				else
+				} else {
 					log(message);
+				}
 			}
 		} else {
-			if (e.isError())
+			if (e.isError()) {
 				errorLog(line);
-			else
+			} else {
 				log(line);
+			}
 		}
 	}
 

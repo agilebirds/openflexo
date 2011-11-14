@@ -77,35 +77,40 @@ public class ObjectFactory {
 
 		ArrayList params2 = new ArrayList();
 
-		for (Iterator i = params.iterator(); i.hasNext();)
+		for (Iterator i = params.iterator(); i.hasNext();) {
 			params2.add(unstringify((String) i.next()));
+		}
 
 		try {
 			PetalObject obj = (PetalObject) java.lang.Class.forName("cb.petal." + Constants.makeName(id, params2, parent)).newInstance();
 			obj.setParent(parent);
 
-			if (!params2.isEmpty())
+			if (!params2.isEmpty()) {
 				obj.setParameterList(params2);
+			}
 
-			if (obj instanceof Tagged)
+			if (obj instanceof Tagged) {
 				((Tagged) obj).setTag(l);
-			else if (l > 0)
+			} else if (l > 0) {
 				throw new RuntimeException("Not instance of Tagged but has tag");
+			}
 			return obj;
 		} catch (Exception e) { // Failed
 			System.err.println("Not found: " + id + e);
 		}
 
 		// Don't know this object
-		if (l > 0)
+		if (l > 0) {
 			return new SimpleViewObject(parent, id, params2, l);
-		else
+		} else {
 			return new SimpleObject(parent, id, params2);
+		}
 	}
 
 	static void assertion(boolean assertion, String mesg) {
-		if (!assertion)
+		if (!assertion) {
 			throw new RuntimeException("Assertion failed: " + mesg);
+		}
 	}
 
 	/**
@@ -161,9 +166,9 @@ public class ObjectFactory {
 					break;
 
 				case '|':
-					if (!new_line)
+					if (!new_line) {
 						buf.append('|');
-					else {
+					} else {
 						list.add(buf.toString());
 						buf.setLength(0);
 					}
@@ -181,8 +186,9 @@ public class ObjectFactory {
 			list.add(buf.toString());
 
 			return new StringLiteral(list);
-		} else
+		} else {
 			return new StringLiteral(unstringify(value));
+		}
 	}
 
 	// Remove " "
@@ -194,10 +200,11 @@ public class ObjectFactory {
 	 * @return new BooleanLiteral for either "TRUE" or "FALSE"
 	 */
 	public BooleanLiteral createBoolean(String value) {
-		if (value.equals("TRUE"))
+		if (value.equals("TRUE")) {
 			return new BooleanLiteral(true);
-		else
+		} else {
 			return new BooleanLiteral(false);
+		}
 	}
 
 	/**

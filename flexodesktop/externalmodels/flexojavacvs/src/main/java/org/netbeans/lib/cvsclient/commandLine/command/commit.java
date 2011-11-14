@@ -123,8 +123,9 @@ public class commit extends AbstractCommandProvider {
 			// property allows certain fields to specify arguments, where the
 			// actual filename goes etc.
 			String editorProcess = getEditorProcess(gopt.getEditor());
-			if (editorProcess == null)
+			if (editorProcess == null) {
 				return null;
+			}
 			final Process proc = Runtime.getRuntime().exec(new String[] { editorProcess, temp.getPath() });
 			int returnCode = -1;
 

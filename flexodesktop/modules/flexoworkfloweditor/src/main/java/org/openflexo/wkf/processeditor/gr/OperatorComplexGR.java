@@ -25,8 +25,8 @@ import javax.swing.ImageIcon;
 
 import org.openflexo.fge.graphics.FGEShapeGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.graphics.ForegroundStyle.CapStyle;
+import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.foundation.wkf.node.ComplexOperator;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 

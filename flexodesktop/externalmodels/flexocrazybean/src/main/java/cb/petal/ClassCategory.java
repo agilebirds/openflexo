@@ -106,14 +106,15 @@ public class ClassCategory extends QuidObject implements AccessQualified, Named,
 	protected java.lang.Object lookupDiagram(java.lang.Class clazz) {
 		List list = getLogicalPresentations();
 
-		if ((list == null) || (list.size() == 0))
+		if ((list == null) || (list.size() == 0)) {
 			return null;
-		else {
+		} else {
 			for (Iterator i = list.getElements().iterator(); i.hasNext();) {
 				java.lang.Object o = i.next();
 
-				if (o.getClass() == clazz)
+				if (o.getClass() == clazz) {
 					return o;
+				}
 			}
 		}
 

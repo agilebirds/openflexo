@@ -57,16 +57,19 @@ public class DMDelete extends FlexoUndoableAction<DMDelete, DMObject, DMObject> 
 
 		@Override
 		protected boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
-			if (globalSelection == null)
+			if (globalSelection == null) {
 				return false;
+			}
 			boolean isEnabled = false;
 			for (Enumeration en = getGlobalSelectionAndFocusedObject(object, globalSelection).elements(); en.hasMoreElements();) {
 				FlexoModelObject next = (FlexoModelObject) en.nextElement();
 				if (next instanceof DMObject) {
-					if (((DMObject) next).isDeletable())
+					if (((DMObject) next).isDeletable()) {
 						isEnabled = true;
-				} else
+					}
+				} else {
 					return false;
+				}
 			}
 			return isEnabled;
 		}
@@ -82,15 +85,18 @@ public class DMDelete extends FlexoUndoableAction<DMDelete, DMObject, DMObject> 
 	protected void doAction(Object context) {
 		if (entriesToDelete != null) {
 			for (TOCEntry entry : entriesToDelete) {
-				if (!entry.isDeleted())
+				if (!entry.isDeleted()) {
 					entry.delete();
+				}
 			}
 		}
 		logger.info("DELETE on DM");
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("selection is: " + getGlobalSelection());
-		if (logger.isLoggable(Level.FINE))
+		}
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("selection to delete is: " + getObjectsToDelete());
+		}
 		for (Enumeration en = getObjectsToDelete().elements(); en.hasMoreElements();) {
 			DMObject next = (DMObject) en.nextElement();
 			deleteObject(next);
@@ -120,8 +126,9 @@ public class DMDelete extends FlexoUndoableAction<DMDelete, DMObject, DMObject> 
 					for (Enumeration en2 = getGlobalSelectionAndFocusedObject().elements(); en2.hasMoreElements();) {
 						FlexoModelObject next = (FlexoModelObject) en2.nextElement();
 						if ((next instanceof DMObject) && (((DMObject) next).isDeletable()) && (next != object)) {
-							if (((DMObject) next).getAllEmbeddedDeleted().contains(object))
+							if (((DMObject) next).getAllEmbeddedDeleted().contains(object)) {
 								includesIt = false;
+							}
 						}
 					}
 					if (includesIt) {

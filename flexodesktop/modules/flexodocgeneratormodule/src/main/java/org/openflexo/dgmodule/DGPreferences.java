@@ -79,8 +79,9 @@ public class DGPreferences extends DEPreferences {
 	}
 
 	public static GeneratedResourceModifiedChoice getGeneratedResourceModifiedChoice() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getGeneratedResourceModifiedChoice");
+		}
 		return GeneratedResourceModifiedChoice.get(preferences(DG_PREFERENCES).getProperty(choiceWhenGeneratedResourceModifiedKey));
 	}
 
@@ -97,8 +98,9 @@ public class DGPreferences extends DEPreferences {
 	 * @return wheter to automatically dismiss unchanged files after a generation pass or let the user do it manually.
 	 */
 	public static boolean getAutomaticallyDismissUnchangedFiles() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getAutomaticallyDismissUnchangedFiles");
+		}
 		Boolean returned = preferences(DG_PREFERENCES).getBooleanProperty(automaticallyDismissUnchangedFiles);
 		if (returned == null) {
 			setAutomaticallyDismissUnchangedFiles(true);
@@ -117,15 +119,17 @@ public class DGPreferences extends DEPreferences {
 	 * @return wheter to automatically dismiss unchanged files after a generation pass or let the user do it manually.
 	 */
 	public static String getLatexCommand() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getLatexCommand");
+		}
 		String returned = preferences(DG_PREFERENCES).getProperty(latexCommand);
 		if (returned == null) {
 			String cmd = LatexUtils.getDefaultLatex2PDFCommand();
-			if (cmd == null)
+			if (cmd == null) {
 				setLatexCommand(LatexUtils.TEXIFY);
-			else
+			} else {
 				setLatexCommand(cmd);
+			}
 			return getLatexCommand();
 		}
 		return returned;
@@ -136,8 +140,9 @@ public class DGPreferences extends DEPreferences {
 	}
 
 	public static Boolean getOpenPDF() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getOpenPDF");
+		}
 		Boolean returned = preferences(DG_PREFERENCES).getBooleanProperty(openPDF);
 		if (returned == null) {
 			setOpenPDF(true);
@@ -151,8 +156,9 @@ public class DGPreferences extends DEPreferences {
 	}
 
 	public static Boolean getOpenDocx() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getOpenDocx");
+		}
 		Boolean returned = preferences(DG_PREFERENCES).getBooleanProperty(openDocx);
 		if (returned == null) {
 			setOpenDocx(true);
@@ -166,8 +172,9 @@ public class DGPreferences extends DEPreferences {
 	}
 
 	public static Boolean getShowZIP() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getShowZIP");
+		}
 		Boolean returned = preferences(DG_PREFERENCES).getBooleanProperty(showZIP);
 		if (returned == null) {
 			setShowZIP(true);
@@ -181,8 +188,9 @@ public class DGPreferences extends DEPreferences {
 	}
 
 	public static boolean getSaveBeforeGenerating() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getSaveBeforeGenerating");
+		}
 		Boolean returned = preferences(DG_PREFERENCES).getBooleanProperty(saveBeforeGeneratingKey);
 		if (returned == null) {
 			setSaveBeforeGenerating(true);
@@ -192,8 +200,9 @@ public class DGPreferences extends DEPreferences {
 	}
 
 	public static void setSaveBeforeGenerating(boolean aBoolean) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setSaveBeforeGenerating");
+		}
 		preferences(DG_PREFERENCES).setBooleanProperty(saveBeforeGeneratingKey, aBoolean);
 
 	}
@@ -203,8 +212,9 @@ public class DGPreferences extends DEPreferences {
 	 * @return the number of seconds to wait before affirming that pdflatex has timed out
 	 */
 	public static Integer getPdfLatexTimeout() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getPdfLatexTimeout");
+		}
 		Integer returned = preferences(DG_PREFERENCES).getIntegerProperty(pdfLatexTimeout);
 		if (returned == null) {
 			setPdfLatexTimeout(15);
@@ -214,8 +224,9 @@ public class DGPreferences extends DEPreferences {
 	}
 
 	public static void setPdfLatexTimeout(Integer timeout) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setPdfLatexTimeout");
+		}
 		preferences(DG_PREFERENCES).setIntegerProperty(pdfLatexTimeout, timeout);
 
 	}

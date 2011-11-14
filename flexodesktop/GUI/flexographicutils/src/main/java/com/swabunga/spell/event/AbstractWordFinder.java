@@ -61,6 +61,7 @@ public abstract class AbstractWordFinder implements WordFinder {
 	 * 
 	 * @return the next word.
 	 */
+	@Override
 	public abstract Word next();
 
 	/**
@@ -68,11 +69,13 @@ public abstract class AbstractWordFinder implements WordFinder {
 	 * 
 	 * @return the text being searched.
 	 */
+	@Override
 	public String getText() {
 
 		return text;
 	}
 
+	@Override
 	public void setText(String newText) {
 		text = newText;
 		setup();
@@ -85,6 +88,7 @@ public abstract class AbstractWordFinder implements WordFinder {
 	 * @throws WordNotFoundException
 	 *             current word has not yet been set.
 	 */
+	@Override
 	public Word current() {
 
 		if (currentWord == null) {
@@ -97,6 +101,7 @@ public abstract class AbstractWordFinder implements WordFinder {
 	/**
 	 * @return true if there are further words in the string.
 	 */
+	@Override
 	public boolean hasNext() {
 
 		return nextWord != null;
@@ -111,6 +116,7 @@ public abstract class AbstractWordFinder implements WordFinder {
 	 * @throws WordNotFoundException
 	 *             current word has not yet been set.
 	 */
+	@Override
 	public void replace(String newWord) {
 
 		if (currentWord == null) {
@@ -140,6 +146,7 @@ public abstract class AbstractWordFinder implements WordFinder {
 	 * @throws WordNotFoundException
 	 *             current word has not yet been set.
 	 */
+	@Override
 	public boolean startsSentence() {
 
 		if (currentWord == null) {
@@ -154,6 +161,7 @@ public abstract class AbstractWordFinder implements WordFinder {
 	 * 
 	 * @return the text being searched.
 	 */
+	@Override
 	public String toString() {
 
 		return text;
@@ -162,9 +170,9 @@ public abstract class AbstractWordFinder implements WordFinder {
 	protected void setSentenceIterator(Word wd) {
 		int current = sentenceIterator.current();
 
-		if (current == currentWord.getStart())
+		if (current == currentWord.getStart()) {
 			startsSentence = true;
-		else {
+		} else {
 			startsSentence = false;
 
 			if (currentWord.getEnd() > current) {

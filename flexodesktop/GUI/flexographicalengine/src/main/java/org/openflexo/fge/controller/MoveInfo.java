@@ -33,9 +33,9 @@ import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.view.FGEView;
 
 public class MoveInfo {
@@ -119,8 +119,9 @@ public class MoveInfo {
 
 	void moveTo(Point newLocationInDrawingView) {
 
-		if (!moveHasStarted)
+		if (!moveHasStarted) {
 			startDragging();
+		}
 
 		for (ShapeGraphicalRepresentation<?> d : movedObjects.keySet()) {
 			FGEPoint startMovingPoint = movedObjects.get(d);
@@ -169,8 +170,9 @@ public class MoveInfo {
 	}
 
 	boolean isDnDPattern(Point newLocationInDrawingView, MouseEvent event) {
-		if (movedObjects.size() != 1)
+		if (movedObjects.size() != 1) {
 			return false;
+		}
 
 		FGEPoint startMovingPoint = movedObjects.get(movedObject);
 

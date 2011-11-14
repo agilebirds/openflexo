@@ -25,12 +25,6 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
-import org.openflexo.icon.CGIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -50,6 +44,11 @@ import org.openflexo.foundation.dm.eo.model.InvalidJoinException;
 import org.openflexo.foundation.dm.javaparser.JavaParseException;
 import org.openflexo.foundation.dm.javaparser.ParserNotInstalledException;
 import org.openflexo.foundation.param.PropertyListParameter;
+import org.openflexo.icon.IconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class DMSetPropertyInitializer extends ActionInitializer {
 
@@ -105,7 +104,7 @@ public class DMSetPropertyInitializer extends ActionInitializer {
 								null,
 								FlexoLocalization.localizedForKey("selecting_default_component_entity"),
 								"<html><center>"
-										+ CGIconLibrary.UNFIXABLE_WARNING_ICON.getHTMLImg()
+										+ IconLibrary.UNFIXABLE_WARNING_ICON.getHTMLImg()
 										+ "<b>&nbsp;"
 										+ FlexoLocalization.localizedForKey("warning")
 										+ "</b></center><br>"

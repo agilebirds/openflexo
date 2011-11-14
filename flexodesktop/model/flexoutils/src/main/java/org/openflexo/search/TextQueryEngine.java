@@ -47,15 +47,18 @@ public class TextQueryEngine {
 	 * @return
 	 */
 	public static TextQueryResult performSearchInText(String text, TextQuery query, Document original) {
-		if (text == null)
+		if (text == null) {
 			return null;
+		}
 		TextQueryResult result = original != null ? new TextQueryResult(query, original) : new TextQueryResult(query, text);
-		if (query.getSearchedText() == null || query.getSearchedText().length() == 0)
+		if (query.getSearchedText() == null || query.getSearchedText().length() == 0) {
 			return result;
+		}
 		if (query.isRegularExpression()) {
 			int flag = Pattern.DOTALL;
-			if (!query.isCaseSensitive())
+			if (!query.isCaseSensitive()) {
 				flag |= Pattern.CASE_INSENSITIVE;
+			}
 			Pattern pattern = Pattern.compile(query.getSearchedText(), flag);
 			Matcher m = pattern.matcher(text);
 			while (m.find()) {

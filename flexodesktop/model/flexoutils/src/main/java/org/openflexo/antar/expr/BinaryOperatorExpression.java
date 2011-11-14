@@ -50,8 +50,9 @@ public class BinaryOperatorExpression extends Expression {
 	}
 
 	public int getPriority() {
-		if (operator != null)
+		if (operator != null) {
 			return operator.getPriority();
+		}
 		return -1;
 	}
 

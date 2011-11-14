@@ -90,8 +90,9 @@ public abstract class CompoundTabularView<O extends FlexoModelObject> extends JP
 	}
 
 	public SelectionManager getSelectionManager() {
-		if (getController() != null)
+		if (getController() != null) {
 			return getController().getSelectionManager();
+		}
 		return null;
 	}
 
@@ -272,10 +273,12 @@ public abstract class CompoundTabularView<O extends FlexoModelObject> extends JP
 	}
 
 	public boolean represents(FlexoModelObject anObject) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("represents() " + this + " obj: " + anObject);
-		if (anObject == null)
+		}
+		if (anObject == null) {
 			return false;
+		}
 		for (Enumeration en = getMasterTabularViews().elements(); en.hasMoreElements();) {
 			TabularView next = (TabularView) en.nextElement();
 			if (next.getModel().indexOf(anObject) > -1) {

@@ -103,12 +103,15 @@ public class OverrideWithVersionInitializer extends ActionInitializer {
 							action.getActionType().getLocalizedName() + "\n"
 									+ FlexoLocalization.localizedForKey("would_you_like_to_do_it_now"), reviewOption, reviewOption,
 							doItNowOption, cancelOption);
-					if (choice == 2)
+					if (choice == 2) {
 						return false;
-					if (choice == 1)
+					}
+					if (choice == 1) {
 						action.setDoItNow(true);
-					if (choice == 0)
+					}
+					if (choice == 0) {
 						action.setDoItNow(false);
+					}
 				}
 				return true;
 			}

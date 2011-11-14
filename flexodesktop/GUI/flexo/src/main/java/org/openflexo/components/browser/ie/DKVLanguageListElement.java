@@ -25,8 +25,8 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.dkv.DKVModel;
-import org.openflexo.foundation.dkv.Language;
 import org.openflexo.foundation.dkv.DKVModel.LanguageList;
+import org.openflexo.foundation.dkv.Language;
 
 /**
  * @author gpolet

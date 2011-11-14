@@ -80,25 +80,30 @@ public class WKFTreeDropTarget extends TreeDropTarget {
 
 		if (srcProcess != null) {
 			if (targetProcess != null) {
-				if (srcNode.getParentFolder() != null && srcNode.getParentFolder().getProcessNode() == targetNode) // Remove process from
-																													// folder
+				if (srcNode.getParentFolder() != null && srcNode.getParentFolder().getProcessNode() == targetNode) {
+					// folder
 					return true;
-				if (srcProcess.isAcceptableAsParentProcess(targetProcess)) // Move process to another process
+				}
+				if (srcProcess.isAcceptableAsParentProcess(targetProcess)) {
 					return true;
+				}
 			} else if (targetFolder != null) {
-				if (targetFolder.getProcessNode() == srcNode.getFatherProcessNode()) // Add process to folder;
+				if (targetFolder.getProcessNode() == srcNode.getFatherProcessNode()) {
 					return true;
+				}
 			} else if (targetWKF != null) {
-				if (srcProcess.isAcceptableAsParentProcess(null))
+				if (srcProcess.isAcceptableAsParentProcess(null)) {
 					return true;
+				}
 			}
 		} else if (srcFolder != null) {
 			FlexoFolderContainerNode targetWKFNode = null;
 			if (targetNode != null) {
 				targetWKFNode = targetNode;
 			} else if (targetFolder != null) {
-				if (srcFolder.isAcceptableParentFolder(targetFolder))
+				if (srcFolder.isAcceptableParentFolder(targetFolder)) {
 					targetWKFNode = targetFolder;
+				}
 			}
 			if (targetWKFNode != null) { // Move folder
 				FlexoProcess targetParentProcess = targetWKFNode.getProcessNode().getProcess();
@@ -171,8 +176,9 @@ public class WKFTreeDropTarget extends TreeDropTarget {
 			if (targetNode != null) {
 				targetWKFNode = targetNode;
 			} else if (targetFolder != null) {
-				if (srcFolder.isAcceptableParentFolder(targetFolder))
+				if (srcFolder.isAcceptableParentFolder(targetFolder)) {
 					targetWKFNode = targetFolder;
+				}
 			}
 			if (targetWKFNode != null) { // Move folder
 				FlexoProcess targetParentProcess = targetWKFNode.getProcessNode().getProcess();
@@ -187,8 +193,9 @@ public class WKFTreeDropTarget extends TreeDropTarget {
 	}
 
 	private boolean canMoveFolder(ProcessFolder srcFolder, FlexoProcess targetProcess) {
-		if (targetProcess == null || targetProcess.isImported())
+		if (targetProcess == null || targetProcess.isImported()) {
 			return false;
+		}
 		boolean ok = true;
 		for (FlexoProcessNode node : srcFolder.getAllDirectSubProcessNodes()) {
 			ok &= node.getProcess().isAcceptableAsParentProcess(targetProcess);

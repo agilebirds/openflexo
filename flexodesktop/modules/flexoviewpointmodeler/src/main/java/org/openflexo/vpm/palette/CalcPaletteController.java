@@ -49,8 +49,9 @@ public class CalcPaletteController extends SelectionManagingDrawingController<Ca
 	public void delete() {
 		getDrawing().delete();
 		if (_controller != null) {
-			if (getDrawingView() != null && _moduleView != null)
+			if (getDrawingView() != null && _moduleView != null) {
 				_controller.removeModuleView(_moduleView);
+			}
 			_controller.VIEW_POINT_PERSPECTIVE.removeFromControllers(this);
 		}
 		super.delete();

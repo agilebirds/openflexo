@@ -104,13 +104,16 @@ public class PPMProcess extends PPMObject implements java.io.Serializable {
 
 	@Override
 	public synchronized boolean equals(java.lang.Object obj) {
-		if (!(obj instanceof PPMProcess))
+		if (!(obj instanceof PPMProcess)) {
 			return false;
+		}
 		PPMProcess other = (PPMProcess) obj;
-		if (obj == null)
+		if (obj == null) {
 			return false;
-		if (this == obj)
+		}
+		if (this == obj) {
 			return true;
+		}
 		if (__equalsCalc != null) {
 			return (__equalsCalc == obj);
 		}

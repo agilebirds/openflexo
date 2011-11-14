@@ -95,9 +95,10 @@ public class SynchronizeRepositoryCodeGenerationInitializer extends ActionInitia
 				action.getProjectGenerator().stopHandleLogs();
 				action.getProjectGenerator().flushLogs();
 
-				if (GeneratorPreferences.getAutomaticallyDismissUnchangedFiles())
+				if (GeneratorPreferences.getAutomaticallyDismissUnchangedFiles()) {
 					DismissUnchangedGeneratedFiles.actionType.makeNewAction(action.getFocusedObject(), action.getGlobalSelection(),
 							action.getEditor()).doAction();
+				}
 
 				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().resetHoldStructure();
 				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().update();

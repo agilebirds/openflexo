@@ -24,7 +24,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.velocity.VelocityContext;
-
 import org.openflexo.foundation.cg.generator.GeneratedComponent;
 import org.openflexo.foundation.cg.generator.GeneratorUtils;
 import org.openflexo.foundation.dm.ComponentDMEntity;
@@ -62,8 +61,9 @@ public class ComponentGenerator extends MetaWOGenerator {
 	}
 
 	public String getGeneratedComponentName() {
-		if (getComponentDefinition() != null)
+		if (getComponentDefinition() != null) {
 			return getComponentDefinition().getName();
+		}
 		return generatedComponentName;
 	}
 
@@ -96,16 +96,18 @@ public class ComponentGenerator extends MetaWOGenerator {
 		RepetitionOperator op = null;
 		while (en.hasMoreElements()) {
 			op = en.nextElement();
-			if (!op.getFetchObjects() && op.getBindingItem() != null && op.getBindingItem().isProperty(prop))
+			if (!op.getFetchObjects() && op.getBindingItem() != null && op.getBindingItem().isProperty(prop)) {
 				return true;
+			}
 		}
 		return false;
 	}
 
 	@Override
 	public synchronized void generate(boolean forceRegenerate) {
-		if (!forceRegenerate && !needsGeneration())
+		if (!forceRegenerate && !needsGeneration()) {
 			return;
+		}
 		startGeneration();
 		try {
 			VelocityContext vc = defaultContext();
@@ -117,16 +119,18 @@ public class ComponentGenerator extends MetaWOGenerator {
 			String htmlCode = merge(getHtmlTemplate(), vc);
 			String wodCode = merge(getWodTemplate(), vc);
 			end = System.currentTimeMillis();
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Generating code for " + woComponentName + " took " + (end - start) + "ms");
+			}
 			javaAppendingException = null;
 			try {
 				javaCode = JavaCodeMerger.mergeJavaCode(javaCode, getEntity(), javaResource);
 			} catch (JavaParseException e) {
 				javaAppendingException = new JavaAppendingException(this, woComponentName, e);
 				logger.warning("Could not parse generated code. Escape java merge.");
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Obtaining: " + javaCode);
+				}
 			}
 			_javaFormattingException = null;
 			try {
@@ -141,8 +145,9 @@ public class ComponentGenerator extends MetaWOGenerator {
 			setGenerationException(e);
 		} catch (Exception e) { // Catch all other kind of exceptions
 			e.printStackTrace();
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Component named: " + getGeneratedComponentName() + " was not generated properly.");
+			}
 			setGenerationException(new UnexpectedExceptionOccuredException(e, getProjectGenerator()));
 		} finally {
 			stopGeneration();

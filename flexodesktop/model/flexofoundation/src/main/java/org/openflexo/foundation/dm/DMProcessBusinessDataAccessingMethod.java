@@ -126,8 +126,9 @@ public class DMProcessBusinessDataAccessingMethod extends DMMethod {
 	@Override
 	public MethodSourceCode getSourceCode() {
 		try {
-			if (!isSourceCodeCorrectlyInitialized)
+			if (!isSourceCodeCorrectlyInitialized) {
 				resetSourceCode();
+			}
 		} catch (Exception e) {
 			// Should never happen
 			logger.log(Level.SEVERE, "Cannot reste code for DMProcessBusinessDataAccessingMethod", e);
@@ -143,14 +144,15 @@ public class DMProcessBusinessDataAccessingMethod extends DMMethod {
 		boolean needUpdateCode = this.entity != entity;
 		super.setEntity(entity);
 
-		if (needUpdateCode)
+		if (needUpdateCode) {
 			getSourceCode().updateComputedCode();
+		}
 	}
 
 	public void updateProcess(FlexoProcess process) {
-		if (process.getBusinessDataType() == null)
+		if (process.getBusinessDataType() == null) {
 			delete();
-		else {
+		} else {
 			try {
 				this.processKey = process.getProcessDictionaryKey();
 				this.processId = process.getFlexoID();
@@ -207,8 +209,9 @@ public class DMProcessBusinessDataAccessingMethod extends DMMethod {
 		for (DMMethod method : entity.getDeclaredMethods()) {
 			if (method instanceof DMProcessBusinessDataAccessingMethod
 					&& ((DMProcessBusinessDataAccessingMethod) method).getProcessId() == process.getFlexoID()
-					&& ((DMProcessBusinessDataAccessingMethod) method).getCodeType() == codeType)
+					&& ((DMProcessBusinessDataAccessingMethod) method).getCodeType() == codeType) {
 				return (DMProcessBusinessDataAccessingMethod) method;
+			}
 		}
 
 		return null;

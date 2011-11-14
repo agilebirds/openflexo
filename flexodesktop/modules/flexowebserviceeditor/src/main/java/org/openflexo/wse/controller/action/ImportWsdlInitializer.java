@@ -52,8 +52,9 @@ public class ImportWsdlInitializer extends ActionInitializer {
 			public boolean run(ActionEvent e, ImportWsdl action) {
 				JFileChooser chooser = new JFileChooser("Please select an .wsdl file");
 				int returnVal = chooser.showOpenDialog(null);
-				if (returnVal != JFileChooser.APPROVE_OPTION)
+				if (returnVal != JFileChooser.APPROVE_OPTION) {
 					return false;
+				}
 
 				action.setWsdlFile(chooser.getSelectedFile());
 				String newWSName = FlexoController.askForString(FlexoLocalization.localizedForKey("enter_name_of_the_web_service"));

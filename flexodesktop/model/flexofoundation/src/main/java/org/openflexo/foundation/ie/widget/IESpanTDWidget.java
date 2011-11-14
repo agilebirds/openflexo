@@ -44,8 +44,9 @@ public class IESpanTDWidget extends IETDWidget {
 	public IESpanTDWidget(IEWOComponent woComponent, IESequenceTD parent, IETDWidget spanner, FlexoProject prj) {
 		super(woComponent, parent, prj);
 		this.spanner = spanner;
-		if (spanner != null)
+		if (spanner != null) {
 			this.spanner.addToSpannedTD(this);
+		}
 	}
 
 	public IETDWidget getSpanner() {
@@ -77,8 +78,9 @@ public class IESpanTDWidget extends IETDWidget {
 	 */
 	@Override
 	public void makeRealDelete(boolean notify) {
-		if (getSpanner() != null)
+		if (getSpanner() != null) {
 			getSpanner().removeFromSpannedTD(this);
+		}
 		super.makeRealDelete(notify);
 	}
 

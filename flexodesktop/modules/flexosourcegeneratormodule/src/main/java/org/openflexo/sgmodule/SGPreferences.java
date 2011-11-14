@@ -65,8 +65,9 @@ public final class SGPreferences extends ModulePreferences {
 	}
 
 	public static boolean getValidateBeforeGenerating() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getValidateBeforeGenerating");
+		}
 		Boolean returned = preferences(SG_PREFERENCES).getBooleanProperty(validateBeforeGeneratingKey);
 		if (returned == null) {
 			setValidateBeforeGenerating(true);
@@ -76,15 +77,17 @@ public final class SGPreferences extends ModulePreferences {
 	}
 
 	public static void setValidateBeforeGenerating(boolean aBoolean) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getValidateBeforeGenerating");
+		}
 		preferences(SG_PREFERENCES).setBooleanProperty(validateBeforeGeneratingKey, aBoolean);
 
 	}
 
 	public static boolean getSaveBeforeGenerating() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getSaveBeforeGenerating");
+		}
 		Boolean returned = preferences(SG_PREFERENCES).getBooleanProperty(saveBeforeGeneratingKey);
 		if (returned == null) {
 			setSaveBeforeGenerating(true);
@@ -94,15 +97,17 @@ public final class SGPreferences extends ModulePreferences {
 	}
 
 	public static void setSaveBeforeGenerating(boolean aBoolean) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setSaveBeforeGenerating");
+		}
 		preferences(SG_PREFERENCES).setBooleanProperty(saveBeforeGeneratingKey, aBoolean);
 
 	}
 
 	public static GeneratedResourceModifiedChoice getGeneratedResourceModifiedChoice() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getLanguage");
+		}
 		return GeneratedResourceModifiedChoice.get(preferences(SG_PREFERENCES).getProperty(choiceWhenGeneratedResourceModifiedKey));
 	}
 
@@ -114,8 +119,9 @@ public final class SGPreferences extends ModulePreferences {
 	}
 
 	public static boolean getAutomaticallyDismissUnchangedFiles() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getAutomaticallyDismissUnchangedFiles");
+		}
 		Boolean returned = preferences(SG_PREFERENCES).getBooleanProperty(automaticallyDismissUnchangedFilesKey);
 		if (returned == null) {
 			setAutomaticallyDismissUnchangedFiles(true);
@@ -125,15 +131,17 @@ public final class SGPreferences extends ModulePreferences {
 	}
 
 	public static void setAutomaticallyDismissUnchangedFiles(boolean aBoolean) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setAutomaticallyDismissUnchangedFiles");
+		}
 		preferences(SG_PREFERENCES).setBooleanProperty(automaticallyDismissUnchangedFilesKey, aBoolean);
 
 	}
 
 	public static boolean getHighlightSyntax() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getHighlightSyntax");
+		}
 		Boolean returned = preferences(SG_PREFERENCES).getBooleanProperty(HighlightSyntax);
 		if (returned == null) {
 			setHighlightSyntax(true);
@@ -143,8 +151,9 @@ public final class SGPreferences extends ModulePreferences {
 	}
 
 	public static void setHighlightSyntax(boolean aBoolean) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setHighlightSyntax");
+		}
 		preferences(SG_PREFERENCES).setBooleanProperty(HighlightSyntax, aBoolean);
 
 	}

@@ -39,8 +39,9 @@ public class DescendingVisitor implements Visitor {
 
 	@Override
 	public void visit(List list) {
-		for (Iterator i = list.getElements().iterator(); i.hasNext();)
+		for (Iterator i = list.getElements().iterator(); i.hasNext();) {
 			((PetalNode) i.next()).accept(this);
+		}
 	}
 
 	@Override
@@ -49,8 +50,9 @@ public class DescendingVisitor implements Visitor {
 	}
 
 	public void visitObject(PetalObject obj) {
-		for (Iterator i = obj.getPropertyList().iterator(); i.hasNext();)
+		for (Iterator i = obj.getPropertyList().iterator(); i.hasNext();) {
 			((PetalNode) i.next()).accept(this);
+		}
 	}
 
 	@Override
@@ -538,34 +540,43 @@ public class DescendingVisitor implements Visitor {
 		visitObject(obj);
 	}
 
+	@Override
 	public void visit(SynchronizationState obj) {
 		visitObject(obj);
 	}
 
 	// Plain stuff
 
+	@Override
 	public void visit(SimpleObject obj) {
 		visitObject(obj);
 	}
 
+	@Override
 	public void visit(StringLiteral obj) {
 	}
 
+	@Override
 	public void visit(BooleanLiteral obj) {
 	}
 
+	@Override
 	public void visit(FloatLiteral obj) {
 	}
 
+	@Override
 	public void visit(IntegerLiteral obj) {
 	}
 
+	@Override
 	public void visit(Tag tag) {
 	}
 
+	@Override
 	public void visit(Location loc) {
 	}
 
+	@Override
 	public void visit(Tuple tuple) {
 	}
 }

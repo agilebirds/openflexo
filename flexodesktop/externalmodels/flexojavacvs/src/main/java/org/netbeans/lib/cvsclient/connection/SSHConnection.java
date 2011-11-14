@@ -159,10 +159,12 @@ public class SSHConnection extends AbstractConnection {
 
 	@Override
 	public void close() throws IOException {
-		if (channel != null)
+		if (channel != null) {
 			channel.disconnect();
-		if (session != null)
+		}
+		if (session != null) {
 			session.disconnect();
+		}
 		reset();
 	}
 
@@ -267,10 +269,12 @@ public class SSHConnection extends AbstractConnection {
 
 		private void checkChannelState() throws IOException {
 			int exitStatus = channel.getExitStatus();
-			if (exitStatus > 0 || exitStatus < -1)
+			if (exitStatus > 0 || exitStatus < -1) {
 				throw new IOException("NbBundle.getMessage(SSHConnection.class, 'BK3004'");
-			if (exitStatus == 0 || channel.isEOF())
+			}
+			if (exitStatus == 0 || channel.isEOF()) {
 				throw new EOFException("NbBundle.getMessage(SSHConnection.class, 'BK3007'");
+			}
 		}
 	}
 }

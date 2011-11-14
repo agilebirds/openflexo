@@ -310,13 +310,14 @@ public class XMIGenerator extends DescendingVisitor {
 		for (Iterator i = pack.getOwnedElements().iterator(); i.hasNext();) {
 			MModelElement elem = (MModelElement) i.next();
 
-			if (name.equals(elem.getName()) && clazz.isInstance(elem))
+			if (name.equals(elem.getName()) && clazz.isInstance(elem)) {
 				return elem;
-			else if (elem instanceof MPackage) {
+			} else if (elem instanceof MPackage) {
 				MModelElement found = searchElement((MPackage) elem, name, clazz);
 
-				if (found != null)
+				if (found != null) {
 					return found;
+				}
 			}
 		}
 

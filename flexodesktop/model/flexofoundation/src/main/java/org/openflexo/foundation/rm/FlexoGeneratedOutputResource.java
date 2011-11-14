@@ -76,13 +76,15 @@ public abstract class FlexoGeneratedOutputResource<GO extends GeneratedOutput> e
 		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("loading_generated_data"));
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("performLoadResourceData() in GeneratedCodeResource");
+		}
 		try {
 			cg = super.performLoadResourceData(progress, loadingHandler);
 		} catch (FlexoFileNotFoundException e) {
-			if (logger.isLoggable(Level.SEVERE))
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("File " + getFile().getName() + " NOT found");
+			}
 			e.printStackTrace();
 			return null;
 		}

@@ -22,8 +22,8 @@ package org.openflexo.vpm.controller.action;
 import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
-import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.fib.controller.FIBController.Status;
+import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.viewpoint.action.DeclareInEditionPattern;

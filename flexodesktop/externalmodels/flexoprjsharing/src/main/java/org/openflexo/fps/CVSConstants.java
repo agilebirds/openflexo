@@ -35,8 +35,9 @@ public class CVSConstants {
 
 	static {
 		Vector<String> binaryFilesPatternList = new Vector<String>();
-		for (String pattern : binaryFilesPatterns)
+		for (String pattern : binaryFilesPatterns) {
 			binaryFilesPatternList.add(pattern);
+		}
 		binaryFileFilter = new DefaultIgnoreFileFilter(binaryFilesPatternList);
 	}
 

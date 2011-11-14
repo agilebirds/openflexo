@@ -24,13 +24,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.GeneratorIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.sgmodule.SGPreferences;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -38,6 +31,12 @@ import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.generator.action.DismissUnchangedGeneratedFiles;
 import org.openflexo.generator.action.GenerateAndWrite;
 import org.openflexo.generator.exception.GenerationException;
+import org.openflexo.icon.GeneratorIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.sgmodule.SGPreferences;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class GenerateAndWriteCodeInitializer extends ActionInitializer {
 
@@ -74,9 +73,10 @@ public class GenerateAndWriteCodeInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, GenerateAndWrite action) {
 				getControllerActionInitializer().getSGController().disposeProgressWindow();
-				if (SGPreferences.getAutomaticallyDismissUnchangedFiles())
+				if (SGPreferences.getAutomaticallyDismissUnchangedFiles()) {
 					DismissUnchangedGeneratedFiles.actionType.makeNewAction(action.getFocusedObject(), action.getGlobalSelection(),
 							action.getEditor()).doAction();
+				}
 				return true;
 			}
 		};

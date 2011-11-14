@@ -37,8 +37,9 @@ public class ReusableComponentGenerator extends ComponentGenerator {
 
 	@Override
 	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("NOT IMPLEMENTED");
+		}
 	}
 
 	public ComponentJavaFileResource getComponentJavaFileResource() {

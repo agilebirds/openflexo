@@ -59,10 +59,11 @@ public class UnresolvedAttributeConflictView extends UnresolvedConflictView {
 		} else {
 			_choicePanel.setBackground(findBackgroundColor());
 			_choicePanel.add(new JLabel("You choose :"));
-			if (getModel().getSolveAction().equals(getModel().getKeepYourChangeAction()))
+			if (getModel().getSolveAction().equals(getModel().getKeepYourChangeAction())) {
 				_choicePanel.add(new JLabel("'" + truncated(getModel().value2()) + "'"));
-			else
+			} else {
 				_choicePanel.add(new JLabel("'" + truncated(getModel().value1()) + "'"));
+			}
 		}
 		_choicePanel.validate();
 	}

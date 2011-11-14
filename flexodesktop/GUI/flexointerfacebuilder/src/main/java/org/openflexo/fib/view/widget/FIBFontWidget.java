@@ -73,8 +73,9 @@ public class FIBFontWidget extends FIBWidgetView<FIBFont, FontSelector, Font> im
 	@Override
 	public synchronized boolean updateModelFromWidget() {
 		if (notEquals(getValue(), getSelectedFont())) {
-			if (isReadOnly())
+			if (isReadOnly()) {
 				return false;
+			}
 			setValue(_selector.getEditedObject());
 			return true;
 		}
@@ -113,8 +114,9 @@ public class FIBFontWidget extends FIBWidgetView<FIBFont, FontSelector, Font> im
 	@Override
 	public void setSelectedFont(Font font) {
 		setValue(font);
-		for (ChangeListener l : _listeners)
+		for (ChangeListener l : _listeners) {
 			l.stateChanged(new ChangeEvent(this));
+		}
 	}
 
 }

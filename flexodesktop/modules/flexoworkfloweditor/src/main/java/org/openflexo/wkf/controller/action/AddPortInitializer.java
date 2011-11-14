@@ -23,8 +23,8 @@ import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
 import org.openflexo.components.AskParametersDialog;
-import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
+import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.view.BrowserActionSource;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -66,10 +66,11 @@ public class AddPortInitializer extends ActionInitializer {
 					WKFController controller = (WKFController) getController();
 					FGEPoint lastClickedPoint = controller.getLastClickedPoint();
 					if (lastClickedPoint != null) {
-						if (controller.getCurrentPerspective() == controller.PROCESS_EDITOR_PERSPECTIVE)
+						if (controller.getCurrentPerspective() == controller.PROCESS_EDITOR_PERSPECTIVE) {
 							action.setGraphicalContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-						else if (controller.getCurrentPerspective() == controller.SWIMMING_LANE_PERSPECTIVE)
+						} else if (controller.getCurrentPerspective() == controller.SWIMMING_LANE_PERSPECTIVE) {
 							action.setGraphicalContext(SWLEditorConstants.SWIMMING_LANE_EDITOR);
+						}
 						action.setLocation(lastClickedPoint.x, lastClickedPoint.y);
 					}
 				}
@@ -114,8 +115,9 @@ public class AddPortInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, AddPort action) {
 				FlexoPort newFlexoPort = action.getNewPort();
-				if (newFlexoPort == null)
+				if (newFlexoPort == null) {
 					return false;
+				}
 				if (e != null && e.getSource() instanceof BrowserActionSource) {
 					ProjectBrowser browser = ((BrowserActionSource) e.getSource()).getBrowser();
 					if (browser instanceof WorkflowBrowser) {
@@ -130,8 +132,9 @@ public class AddPortInitializer extends ActionInitializer {
 						// browser.focusOn(newFlexoPort);
 					}
 				}
-				if (e != null)
+				if (e != null) {
 					getControllerActionInitializer().getWKFSelectionManager().setSelectedObject(newFlexoPort);
+				}
 				return true;
 			}
 		};

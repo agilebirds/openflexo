@@ -41,8 +41,9 @@ public class BPELNodeAccu {
 
 	public void setNodes(Vector<AbstractNode> n, boolean b) {
 		nodes = n;
-		if (b)
+		if (b) {
 			lookingForIf++;
+		}
 	}
 
 	public boolean lookingForIf() {
@@ -50,10 +51,11 @@ public class BPELNodeAccu {
 	}
 
 	public void setLookingForIf(boolean b) {
-		if (b)
+		if (b) {
 			lookingForIf++;
-		else
+		} else {
 			lookingForIf--;
+		}
 	}
 
 	public boolean lookingForAnd() {
@@ -61,10 +63,11 @@ public class BPELNodeAccu {
 	}
 
 	public void setLookingForAnd(boolean b) {
-		if (b)
+		if (b) {
 			lookingForAnd++;
-		else
+		} else {
 			lookingForAnd--;
+		}
 	}
 
 	public BPELNodeAccu() {

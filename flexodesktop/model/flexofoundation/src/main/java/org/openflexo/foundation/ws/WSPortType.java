@@ -115,8 +115,9 @@ public class WSPortType extends WSObject implements FlexoObserver {
 
 	@Override
 	public void setName(String aName) throws DuplicateWSObjectException {
-		if (!isDeserializing())
+		if (!isDeserializing()) {
 			checkName(getWSLibrary(), aName, this);
+		}
 		super.setName(aName);
 		interfaceName = aName;
 	}
@@ -192,8 +193,9 @@ public class WSPortType extends WSObject implements FlexoObserver {
 	 */
 	@Override
 	public void delete() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("delete: WSPortType " + getName());
+		}
 		parentService.removeFromWSPortTypes(this);
 		parentService = null;
 		processName = null;

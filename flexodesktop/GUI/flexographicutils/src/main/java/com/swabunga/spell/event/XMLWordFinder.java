@@ -50,10 +50,12 @@ public class XMLWordFinder extends AbstractWordFinder {
 	 * @throws WordNotFoundException
 	 *             search string contains no more words.
 	 */
+	@Override
 	public Word next() {
 
-		if (currentWord == null)
+		if (currentWord == null) {
 			throw new WordNotFoundException("No more words found.");
+		}
 
 		currentWord.copy(nextWord);
 

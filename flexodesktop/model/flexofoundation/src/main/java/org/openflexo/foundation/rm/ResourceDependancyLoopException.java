@@ -27,8 +27,9 @@ public class ResourceDependancyLoopException extends Exception {
 
 	public ResourceDependancyLoopException(FlexoResource involvedResource) {
 		resourceStack = new Stack<FlexoResource>();
-		if (involvedResource != null)
+		if (involvedResource != null) {
 			resourceStack.push(involvedResource);
+		}
 	}
 
 	public void addToResourceStack(FlexoResource r) {

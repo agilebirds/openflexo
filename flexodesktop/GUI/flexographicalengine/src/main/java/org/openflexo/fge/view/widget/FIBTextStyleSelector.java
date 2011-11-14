@@ -82,12 +82,14 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 	@Override
 	public void setRevertValue(TextStyle oldValue) {
 		// WARNING: we need here to clone to keep track back of previous data !!!
-		if (oldValue != null)
+		if (oldValue != null) {
 			_revertValue = oldValue.clone();
-		else
+		} else {
 			_revertValue = null;
-		if (logger.isLoggable(Level.FINE))
+		}
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Sets revert value to " + _revertValue);
+		}
 	}
 
 	@Override
@@ -174,8 +176,9 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 
 	@Override
 	public void cancel() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("CANCEL: revert to " + getRevertValue());
+		}
 		setEditedObject(getRevertValue());
 		closePopup();
 		super.cancel();
@@ -183,8 +186,9 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 
 	@Override
 	protected void deletePopup() {
-		if (_selectorPanel != null)
+		if (_selectorPanel != null) {
 			_selectorPanel.delete();
+		}
 		_selectorPanel = null;
 		super.deletePopup();
 	}
@@ -252,8 +256,9 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 
 				@Override
 				public Object getContainer(Object aDrawable) {
-					if (aDrawable == text)
+					if (aDrawable == text) {
 						return TextStylePreviewPanel.this;
+					}
 					return null;
 				}
 
@@ -264,9 +269,9 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 
 				@Override
 				public <O> GraphicalRepresentation<O> getGraphicalRepresentation(O aDrawable) {
-					if (aDrawable == TextStylePreviewPanel.this)
+					if (aDrawable == TextStylePreviewPanel.this) {
 						return drawingGR;
-					else if (aDrawable == text) {
+					} else if (aDrawable == text) {
 						return textGR;
 					}
 					return null;
@@ -308,8 +313,9 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 		}
 
 		protected void update() {
-			if (getEditedObject() == null)
+			if (getEditedObject() == null) {
 				return;
+			}
 			textGR.setTextStyle(getEditedObject());
 			textGR.setText(JFontChooser.fontDescription(getEditedObject().getFont()));
 		}

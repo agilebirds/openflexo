@@ -25,8 +25,6 @@ import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.xmlcode.XMLMapping;
-
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
@@ -42,6 +40,7 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * Please comment this class
@@ -76,8 +75,9 @@ public class BindingDefinition extends FlexoModelObject implements InspectableOb
 	public BindingDefinition(FlexoModelObject owner) {
 		super(owner != null ? owner.getProject() : null);
 		_owner = owner;
-		if (owner != null)
+		if (owner != null) {
 			_project = owner.getProject();
+		}
 	}
 
 	/*public BindingDefinition(String variableName, DMEntity type, FlexoModelObject owner, boolean mandatory)
@@ -109,11 +109,13 @@ public class BindingDefinition extends FlexoModelObject implements InspectableOb
 		if (object instanceof BindingDefinition) {
 			BindingDefinition bd = (BindingDefinition) object;
 			if (_variableName == null) {
-				if (bd._variableName != null)
+				if (bd._variableName != null) {
 					return false;
+				}
 			} else {
-				if (!_variableName.equals(bd._variableName))
+				if (!_variableName.equals(bd._variableName)) {
 					return false;
+				}
 			}
 			return ((_owner == bd._owner) && (_type == bd._type) && (_isMandatory == bd._isMandatory));
 		} else {
@@ -172,8 +174,9 @@ public class BindingDefinition extends FlexoModelObject implements InspectableOb
 	}
 
 	public String getVariableName() {
-		if (_variableName == null)
+		if (_variableName == null) {
 			return "null";
+		}
 		return _variableName;
 	}
 
@@ -266,10 +269,11 @@ public class BindingDefinition extends FlexoModelObject implements InspectableOb
 		public int compare(BindingDefinition o1, BindingDefinition o2) {
 			String s1 = o1.getVariableName();
 			String s2 = o2.getVariableName();
-			if ((s1 != null) && (s2 != null))
+			if ((s1 != null) && (s2 != null)) {
 				return Collator.getInstance().compare(s1, s2);
-			else
+			} else {
 				return 0;
+			}
 		}
 
 	}
@@ -297,21 +301,26 @@ public class BindingDefinition extends FlexoModelObject implements InspectableOb
 
 	private Vector<BindingValue> searchMatchingBindingValue(Bindable bindable, BindingValue current, DMType currentType, int depth) {
 		Vector<BindingValue> returned = new Vector<BindingValue>();
-		if (depth < 0)
+		if (depth < 0) {
 			return returned;
-		if (getType() == null)
+		}
+		if (getType() == null) {
 			return returned;
-		if (currentType == null)
+		}
+		if (currentType == null) {
 			return returned;
-		if (getType().getBaseEntity() == null)
+		}
+		if (getType().getBaseEntity() == null) {
 			return returned;
+		}
 		if (getType().getBaseEntity().isAncestorOf(currentType.getBaseEntity())) {
 			BindingValue matchingBV = current.clone();
 			matchingBV.connect();
 			returned.add(matchingBV);
 		}
-		if (depth == 1)
+		if (depth == 1) {
 			return returned;
+		}
 		for (Enumeration en = currentType.getBaseEntity().getAccessibleProperties().elements(); en.hasMoreElements();) {
 			DMProperty nextProperty = (DMProperty) en.nextElement();
 			BindingValue newCurrent = current.clone();
@@ -332,16 +341,21 @@ public class BindingDefinition extends FlexoModelObject implements InspectableOb
 	}
 
 	public boolean supportDirectActionEncoding() {
-		if (getType() == null)
+		if (getType() == null) {
 			return false;
-		if (getType().isString())
+		}
+		if (getType().isString()) {
 			return true;
-		if (getType().isInteger())
+		}
+		if (getType().isInteger()) {
 			return true;
-		if (getType().isChar())
+		}
+		if (getType().isChar()) {
 			return true;
-		if (getType().isBoolean())
+		}
+		if (getType().isBoolean()) {
 			return true;
+		}
 		if (getType().isEOEntity()) {
 			DMEOEntity eoentity = (DMEOEntity) getType().getBaseEntity();
 			if (eoentity.getPrimaryKeyAttributes().size() == 1) {
@@ -353,20 +367,24 @@ public class BindingDefinition extends FlexoModelObject implements InspectableOb
 	}
 
 	private boolean isASerializablePrimaryKey(DMEOAttribute pk) {
-		if (pk.getType() == null)
+		if (pk.getType() == null) {
 			return false;
-		if (pk.getType().isString())
+		}
+		if (pk.getType().isString()) {
 			return true;
-		if (pk.getType().isInteger())
+		}
+		if (pk.getType().isInteger()) {
 			return true;
+		}
 		return false;
 	}
 
 	public String getTypeStringRepresentation() {
-		if (getType() == null)
+		if (getType() == null) {
 			return FlexoLocalization.localizedForKey("no_type");
-		else
+		} else {
 			return getType().getSimplifiedStringRepresentation();
+		}
 	}
 
 	@Override

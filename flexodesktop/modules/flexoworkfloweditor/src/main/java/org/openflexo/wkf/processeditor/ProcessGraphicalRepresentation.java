@@ -27,10 +27,10 @@ import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
 import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGESteppedDimensionConstraint;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEFiniteGrid;
 import org.openflexo.fge.graphics.DrawingDecorationPainter;
@@ -120,8 +120,9 @@ public class ProcessGraphicalRepresentation extends DrawingGraphicalRepresentati
 					if (gr.supportResizeToGrid()) {
 						gr.setDimensionConstraints(DimensionConstraints.STEP_CONSTRAINED);
 					}
-					if (FGEConstants.APPLY_CONSTRAINTS_IMMEDIATELY)
+					if (FGEConstants.APPLY_CONSTRAINTS_IMMEDIATELY) {
 						gr.checkAndUpdateLocationAndDimension();
+					}
 				}
 			} else {
 				if (gr.supportResizeToGrid()) {
@@ -152,10 +153,12 @@ public class ProcessGraphicalRepresentation extends DrawingGraphicalRepresentati
 						grid.origin.x -= gr.getBorder().left;
 						grid.origin.y -= gr.getBorder().top;
 					}
-					if (gr.getShape().getShape().getEmbeddingBounds().x > 0)
+					if (gr.getShape().getShape().getEmbeddingBounds().x > 0) {
 						grid.origin.x -= gr.getShape().getShape().getEmbeddingBounds().x * gr.getWidth();
-					if (gr.getShape().getShape().getEmbeddingBounds().y > 0)
+					}
+					if (gr.getShape().getShape().getEmbeddingBounds().y > 0) {
 						grid.origin.y -= gr.getShape().getShape().getEmbeddingBounds().y * gr.getHeight();
+					}
 					/*if (gr.getShadowStyle()!=null) {
 						grid.origin.x-=gr.getShadowStyle().getShadowDeep();
 						grid.origin.y-=gr.getShadowStyle().getShadowDeep();
@@ -163,9 +166,10 @@ public class ProcessGraphicalRepresentation extends DrawingGraphicalRepresentati
 					return grid;
 				}
 			} else {
-				if (gr.getDimensionConstraints() != DimensionConstraints.CONTAINER)
+				if (gr.getDimensionConstraints() != DimensionConstraints.CONTAINER) {
 					return new FGERectangle(0, 0, getDrawingGraphicalRepresentation().getWidth() - gr.getWidth(),
 							getDrawingGraphicalRepresentation().getHeight() - gr.getHeight(), Filling.FILLED);
+				}
 			}
 		}
 		return null;
@@ -242,8 +246,9 @@ public class ProcessGraphicalRepresentation extends DrawingGraphicalRepresentati
 
 	public void updateAllEdgeLayers() {
 		for (GraphicalRepresentation<?> processChild : getContainedGraphicalRepresentations()) {
-			if (processChild instanceof WKFConnectorGR<?>)
+			if (processChild instanceof WKFConnectorGR<?>) {
 				((WKFConnectorGR<?>) processChild).updateLayer();
+			}
 		}
 
 	}

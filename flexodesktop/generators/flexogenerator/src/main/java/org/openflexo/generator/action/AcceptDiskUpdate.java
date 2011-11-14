@@ -92,8 +92,9 @@ public class AcceptDiskUpdate extends MultipleFileGCAction<AcceptDiskUpdate> {
 
 		hideFlexoProgress();
 
-		if (repository instanceof CGRepository)
+		if (repository instanceof CGRepository) {
 			((CGRepository) repository).clearAllJavaParsingData();
+		}
 	}
 
 	private Vector<AbstractCGFile> _filesToAccept;

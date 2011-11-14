@@ -245,8 +245,9 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C, JPanel
 	protected JComponent _getJComponent(int col, int row) {
 		for (FIBComponent subComponent : getComponent().getSubComponents()) {
 			GridLayoutConstraints glc = (GridLayoutConstraints) subComponent.getConstraints();
-			if (glc.getX() == col && glc.getY() == row)
+			if (glc.getX() == col && glc.getY() == row) {
 				return getController().viewForComponent(subComponent).getResultingJComponent();
+			}
 		}
 		// Otherwise, it's an empty cell
 		JPanel returned = new JPanel();

@@ -66,10 +66,11 @@ public class Role extends QuiduObject implements AccessQualified, HasSupplier, N
 	public String getCardinality() {
 		Value v = getClientCardinality();
 
-		if (v != null)
+		if (v != null) {
 			return v.getStringValue();
-		else
+		} else {
 			return null;
+		}
 	}
 
 	public void setCardinality(String card) {
@@ -98,12 +99,14 @@ public class Role extends QuiduObject implements AccessQualified, HasSupplier, N
 		if (getIsAggregate()) {
 			String cont = getOtherRole().getContainment();
 
-			if (cont == null)
+			if (cont == null) {
 				return false;
+			}
 
 			return "by value".equals(cont.toLowerCase());
-		} else
+		} else {
 			return false;
+		}
 	}
 
 	public Value getClientCardinality() {

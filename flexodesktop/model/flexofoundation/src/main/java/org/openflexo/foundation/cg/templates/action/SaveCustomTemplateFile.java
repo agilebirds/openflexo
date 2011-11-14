@@ -94,13 +94,16 @@ public class SaveCustomTemplateFile extends FlexoAction<SaveCustomTemplateFile, 
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
-					} else if (logger.isLoggable(Level.INFO))
+					} else if (logger.isLoggable(Level.INFO)) {
 						logger.info("Writing of template: " + getFocusedObject().getName() + " took "
 								+ (file.lastModified() - previousLastModified) + "ms");
+					}
 				}
-				if (!fileHasBeenWritten)
-					if (logger.isLoggable(Level.WARNING))
+				if (!fileHasBeenWritten) {
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Waited for " + FlexoFileResource.ACCEPTABLE_FS_DELAY + "ms but file was still not written on disk!");
+					}
+				}
 			}
 		}
 	}

@@ -24,7 +24,6 @@ import java.util.Comparator;
 import java.util.Date;
 
 import org.netbeans.lib.cvsclient.command.log.LogInformation;
-
 import org.openflexo.localization.FlexoLocalization;
 
 public class CVSRevision extends FPSObject {
@@ -74,8 +73,9 @@ public class CVSRevision extends FPSObject {
 	}
 
 	public Date getDate() {
-		if (_revisionInfo != null)
+		if (_revisionInfo != null) {
 			return _revisionInfo.getDate();
+		}
 		return null;
 	}
 
@@ -87,50 +87,58 @@ public class CVSRevision extends FPSObject {
 	}
 
 	public String getAuthor() {
-		if (_revisionInfo != null)
+		if (_revisionInfo != null) {
 			return _revisionInfo.getAuthor();
+		}
 		return null;
 	}
 
 	public String getState() {
-		if (_revisionInfo != null)
+		if (_revisionInfo != null) {
 			return _revisionInfo.getState();
+		}
 		return null;
 	}
 
 	public String getLines() {
-		if (_revisionInfo != null)
+		if (_revisionInfo != null) {
 			return _revisionInfo.getLines();
+		}
 		return null;
 	}
 
 	public String getCommitID() {
-		if (_revisionInfo != null)
+		if (_revisionInfo != null) {
 			return _revisionInfo.getCommitID();
+		}
 		return null;
 	}
 
 	public int getAddedLines() {
-		if (_revisionInfo != null)
+		if (_revisionInfo != null) {
 			return _revisionInfo.getAddedLines();
+		}
 		return 0;
 	}
 
 	public int getRemovedLines() {
-		if (_revisionInfo != null)
+		if (_revisionInfo != null) {
 			return _revisionInfo.getRemovedLines();
+		}
 		return 0;
 	}
 
 	public String getMessage() {
-		if (_revisionInfo != null)
+		if (_revisionInfo != null) {
 			return _revisionInfo.getMessage();
+		}
 		return null;
 	}
 
 	public String getBranches() {
-		if (_revisionInfo != null)
+		if (_revisionInfo != null) {
 			return _revisionInfo.getBranches();
+		}
 		return null;
 	}
 

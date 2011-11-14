@@ -46,17 +46,19 @@ public class KVUtil {
 				return false;
 			}
 		} catch (AccessorInvocationException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("getValueForKey() failed for keyPath " + keyPath + " for object " + object.getClass().getName()
 						+ " : exception " + e.getMessage());
+			}
 			e.getTargetException().printStackTrace();
 			return true;
 		} catch (InvalidObjectSpecificationException e) {
 			return false;
 		} catch (Exception e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("getValueForKey() failed for keyPath " + keyPath + " for object " + object.getClass().getName()
 						+ " : exception " + e.getMessage());
+			}
 			e.printStackTrace();
 			return false;
 		}
@@ -65,8 +67,9 @@ public class KVUtil {
 	public static Object getValueForKey(KeyValueCoding object, String keyPath) {
 		try {
 			if (object == null) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("model is null");
+				}
 				return null;
 			}
 			KeyValueCoding target = getTargetObject(object, keyPath);
@@ -76,15 +79,17 @@ public class KVUtil {
 				return null;
 			}
 		} catch (AccessorInvocationException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("getValueForKey() failed for keyPath " + keyPath + " for object " + object.getClass().getName()
 						+ " : exception " + e.getMessage());
+			}
 			e.getTargetException().printStackTrace();
 			return null;
 		} catch (Exception e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("getValueForKey() failed for keyPath " + keyPath + " for object " + object.getClass().getName()
 						+ " : exception " + e.getMessage());
+			}
 			e.printStackTrace();
 			return null;
 		}
@@ -92,8 +97,9 @@ public class KVUtil {
 
 	public static void setValueForKey(KeyValueCoding object, Object newValue, String keyPath) throws AccessorInvocationException {
 		try {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("setValueForKey() for keyPath " + keyPath + " with " + newValue);
+			}
 			KeyValueCoding target = getTargetObject(object, keyPath);
 			if (target != null) {
 				target.setObjectForKey(newValue, getLastAccessor(keyPath));
@@ -101,9 +107,10 @@ public class KVUtil {
 		} catch (AccessorInvocationException e) {
 			throw e;
 		} catch (Exception e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("setValueForKey() with " + newValue + " failed for keyPath " + keyPath + " for object "
 						+ object.getClass().getName() + " : exception " + e.getMessage());
+			}
 			e.printStackTrace();
 		}
 	}
@@ -125,9 +132,10 @@ public class KVUtil {
 		if (currentObject instanceof KeyValueCoding) {
 			return (KeyValueCoding) currentObject;
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not find target object for object=" + object + " listAccessor=" + listAccessor
 						+ ": must be a non-null KeyValueCoding object (getting " + currentObject + ")");
+			}
 			return null;
 		}
 	}

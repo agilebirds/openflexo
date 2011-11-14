@@ -68,12 +68,12 @@ import org.openflexo.foundation.wkf.ActionPetriGraph;
 import org.openflexo.foundation.wkf.FlexoLevel;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.MetricsValue;
+import org.openflexo.foundation.wkf.MetricsValue.MetricsValueOwner;
 import org.openflexo.foundation.wkf.MetricsValueAdded;
 import org.openflexo.foundation.wkf.MetricsValueRemoved;
 import org.openflexo.foundation.wkf.OperationPetriGraph;
 import org.openflexo.foundation.wkf.Status;
 import org.openflexo.foundation.wkf.WKFObject;
-import org.openflexo.foundation.wkf.MetricsValue.MetricsValueOwner;
 import org.openflexo.foundation.wkf.action.AddOperationMetricsValue;
 import org.openflexo.foundation.wkf.action.BindButtonsToActionNode;
 import org.openflexo.foundation.wkf.action.DeleteMetricsValue;
@@ -844,17 +844,17 @@ public class OperationNode extends FatherNode implements ApplicationHelpEntryPoi
 		}
 
 		@Override
-        public ValidationIssue<OperationMustHaveATab, OperationNode> applyValidation(OperationNode node) {
-            if (node.isAccessible() && !(node instanceof SelfExecutableOperationNode) && node.getNodeType() == NodeType.NORMAL && node
-                    .getComponentInstance() != null) {
-                if (node.getComponentDefinition().getWOComponent().hasTabContainer() && node.getOperationComponent().getWOComponent()
-                        .hasAtLeastOneTabDefined() && node.getSelectedTabKey() == null) {
-                    return new ValidationError<OperationMustHaveATab, OperationNode>(this, node,
-                            "operation_($object.name)_must_define_a_tab");
-                }
-            }
-            return null;
-        }
+		public ValidationIssue<OperationMustHaveATab, OperationNode> applyValidation(OperationNode node) {
+			if (node.isAccessible() && !(node instanceof SelfExecutableOperationNode) && node.getNodeType() == NodeType.NORMAL
+					&& node.getComponentInstance() != null) {
+				if (node.getComponentDefinition().getWOComponent().hasTabContainer()
+						&& node.getOperationComponent().getWOComponent().hasAtLeastOneTabDefined() && node.getSelectedTabKey() == null) {
+					return new ValidationError<OperationMustHaveATab, OperationNode>(this, node,
+							"operation_($object.name)_must_define_a_tab");
+				}
+			}
+			return null;
+		}
 	}
 
 	public static class OperationMustHaveAWOComponent extends ValidationRule<OperationMustHaveAWOComponent, OperationNode> {

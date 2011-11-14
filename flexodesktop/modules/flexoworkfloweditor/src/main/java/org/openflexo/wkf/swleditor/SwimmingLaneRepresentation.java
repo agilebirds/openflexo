@@ -30,8 +30,6 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
-import sun.awt.dnd.SunDragSourceContextPeer;
-
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
@@ -125,6 +123,7 @@ import org.openflexo.wkf.swleditor.gr.EndActivityNodeGR;
 import org.openflexo.wkf.swleditor.gr.EndOperationNodeGR;
 import org.openflexo.wkf.swleditor.gr.EventNodeGR;
 import org.openflexo.wkf.swleditor.gr.ExpanderGR;
+import org.openflexo.wkf.swleditor.gr.ExpanderGR.Expander;
 import org.openflexo.wkf.swleditor.gr.MessageEdgeGR;
 import org.openflexo.wkf.swleditor.gr.NormalAbstractActivityNodeGR;
 import org.openflexo.wkf.swleditor.gr.OperationNodeGR;
@@ -142,6 +141,7 @@ import org.openflexo.wkf.swleditor.gr.PortRegisteryGR;
 import org.openflexo.wkf.swleditor.gr.PortmapGR;
 import org.openflexo.wkf.swleditor.gr.PortmapRegisteryGR;
 import org.openflexo.wkf.swleditor.gr.PreAndBeginNodeAssociationGR;
+import org.openflexo.wkf.swleditor.gr.PreAndBeginNodeAssociationGR.PreAndBeginNodeAssociation;
 import org.openflexo.wkf.swleditor.gr.PreConditionGR;
 import org.openflexo.wkf.swleditor.gr.RoleContainerGR;
 import org.openflexo.wkf.swleditor.gr.SelfExecActionNodeGR;
@@ -151,8 +151,8 @@ import org.openflexo.wkf.swleditor.gr.StockObjectGR;
 import org.openflexo.wkf.swleditor.gr.SubProcessNodeGR;
 import org.openflexo.wkf.swleditor.gr.TokenEdgeGR;
 import org.openflexo.wkf.swleditor.gr.WKFObjectGR;
-import org.openflexo.wkf.swleditor.gr.ExpanderGR.Expander;
-import org.openflexo.wkf.swleditor.gr.PreAndBeginNodeAssociationGR.PreAndBeginNodeAssociation;
+
+import sun.awt.dnd.SunDragSourceContextPeer;
 
 public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> implements GraphicalFlexoObserver, SWLEditorConstants {
 
@@ -176,8 +176,9 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 		@Override
 		public boolean isVisible(WKFObject targetObject) {
 			if (targetObject == null) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Null object are not visible");
+				}
 				return false;
 			}
 			if (targetObject instanceof FlexoProcess) {
@@ -195,11 +196,13 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 				WKFObject firstVisibleEndObject = getFirstVisibleObject(post.getEndNode());
 				if (post instanceof MessageEdge) {
 					if (firstVisibleStartObject instanceof FlexoPortMap) {
-						if (((FlexoPortMap) firstVisibleStartObject).getSubProcessNode() == firstVisibleEndObject)
+						if (((FlexoPortMap) firstVisibleStartObject).getSubProcessNode() == firstVisibleEndObject) {
 							return false;
+						}
 					} else if (firstVisibleEndObject instanceof FlexoPortMap) {
-						if (((FlexoPortMap) firstVisibleEndObject).getSubProcessNode() == firstVisibleStartObject)
+						if (((FlexoPortMap) firstVisibleEndObject).getSubProcessNode() == firstVisibleStartObject) {
 							return false;
+						}
 					}
 				}
 				if (post instanceof FlexoPostCondition<?, ?>) {
@@ -224,8 +227,9 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 
 		@Override
 		public final WKFObject getFirstVisibleObject(WKFObject targetObject) {
-			if (targetObject == null)
+			if (targetObject == null) {
 				return null;
+			}
 			AbstractNode concernedNode = null;
 			if (targetObject instanceof FlexoPreCondition) {
 				concernedNode = ((FlexoPreCondition) targetObject).getAttachedNode();
@@ -233,8 +237,9 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 				concernedNode = (AbstractNode) targetObject;
 			} else if (targetObject instanceof WKFArtefact) {
 				WKFArtefact artefact = (WKFArtefact) targetObject;
-				if (artefact.getParentPetriGraph() == null)
+				if (artefact.getParentPetriGraph() == null) {
 					return null;
+				}
 				if (isVisible(artefact.getParentPetriGraph())) {
 					return targetObject;
 				} else {
@@ -255,32 +260,38 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 			}
 
 			if (concernedNode instanceof FlexoPort) {
-				if (((FlexoPort) concernedNode).getPortRegistery() == null)
+				if (((FlexoPort) concernedNode).getPortRegistery() == null) {
 					return null;
+				}
 				// GPO: Shouldn't we pass the FlexoPort (and the FlexoPort would have then to check that its parent portRegistery is shown)?
-				if (isVisible(((FlexoPort) concernedNode).getPortRegistery()))
+				if (isVisible(((FlexoPort) concernedNode).getPortRegistery())) {
 					return targetObject;
+				}
 				return null;
 			}
 
 			if (concernedNode instanceof FlexoPortMap) {
 				if (isVisible(((FlexoPortMap) concernedNode).getSubProcessNode())) {
-					if (isVisible(concernedNode) && isVisible(((FlexoPortMap) concernedNode).getPortMapRegistery()))
+					if (isVisible(concernedNode) && isVisible(((FlexoPortMap) concernedNode).getPortMapRegistery())) {
 						return targetObject;
+					}
 					return ((FlexoPortMap) concernedNode).getSubProcessNode();
-				} else
+				} else {
 					return getFirstVisibleObject(((FlexoPortMap) concernedNode).getSubProcessNode());
+				}
 			}
 
 			if (!(concernedNode instanceof PetriGraphNode)) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("concerned node is not a petri graph node: " + concernedNode);
+				}
 				return null;
 			}
 			PetriGraphNode node = (PetriGraphNode) concernedNode;
 
-			if (node.getParentPetriGraph() == null)
+			if (node.getParentPetriGraph() == null) {
 				return null;
+			}
 
 			if (isVisible(node.getParentPetriGraph())) {
 				return targetObject;
@@ -373,14 +384,16 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 
 		graphicalRepresentation.addToMouseClickControls(new SwimmingLaneEditorController.ShowContextualMenuControl());
 
-		if (!hasProcessBeenLaidOut())
+		if (!hasProcessBeenLaidOut()) {
 			performAutoLayout();
+		}
 		process.addObserver(this);
 		process.getActivityPetriGraph().addObserver(this);
 		process.getWorkflow().addObserver(this);
 		process.getWorkflow().getRoleList().addObserver(this);
-		for (Role role : process.getWorkflow().getRoleList().getRoles())
+		for (Role role : process.getWorkflow().getRoleList().getRoles()) {
 			role.addObserver(this);
+		}
 
 		updateGraphicalObjectsHierarchy();
 	}
@@ -419,18 +432,22 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 
 	private Vector<RepresentableFlexoModelObject> orderedMainObjects() {
 		Vector<RepresentableFlexoModelObject> returned = new Vector<RepresentableFlexoModelObject>();
-		if (isVisible(getProcess().getPortRegistery()))
+		if (isVisible(getProcess().getPortRegistery())) {
 			returned.add(getProcess().getPortRegistery());
-		if (isVisible(getProcess().getWorkflow().getRoleList().getDefaultRole()))
+		}
+		if (isVisible(getProcess().getWorkflow().getRoleList().getDefaultRole())) {
 			returned.add(getProcess().getWorkflow().getRoleList().getDefaultRole());
+		}
 		for (Role role : getProcess().getWorkflow().getRoleList().getRoles()) {
-			if (isVisible(role))
+			if (isVisible(role)) {
 				returned.add(role);
+			}
 		}
 		if (getProcess().getWorkflow().getImportedRoleList() != null) {
 			for (Role role : getProcess().getWorkflow().getImportedRoleList().getRoles()) {
-				if (isVisible(role))
+				if (isVisible(role)) {
 					returned.add(role);
+				}
 			}
 		}
 		int next = 0;
@@ -457,15 +474,17 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 		Vector<RepresentableFlexoModelObject> objects = orderedMainObjects();
 		for (int i = 0; i < objects.size(); i++) {
 			RepresentableFlexoModelObject o = objects.get(i);
-			if (o == object)
+			if (o == object) {
 				currentIndex = i;
+			}
 			if (o != object && y > yForObject(o) && i + 1 > newIndex) {
 				newIndex = i + 1;
 				after = o;
 			}
 		}
-		if (newIndex > currentIndex)
+		if (newIndex > currentIndex) {
 			newIndex--;
+		}
 		// System.out.println("Current index: "+currentIndex+" New index: "+newIndex+" put after "+after);
 		if (newIndex != currentIndex) {
 			objects.remove(currentIndex);
@@ -622,17 +641,20 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 				addNode(port, getProcess().getPortRegistery());
 			}
 		}
-		if (isVisible(getProcess().getWorkflow().getRoleList().getDefaultRole()))
+		if (isVisible(getProcess().getWorkflow().getRoleList().getDefaultRole())) {
 			addRole(getProcess().getWorkflow().getRoleList().getDefaultRole());
+		}
 		for (Role role : getProcess().getWorkflow().getRoleList().getRoles()) {
-			if (isVisible(role))
+			if (isVisible(role)) {
 				addRole(role);
+			}
 		}
 
 		if (getProcess().getWorkflow().getImportedRoleList() != null) {
 			for (Role role : getProcess().getWorkflow().getImportedRoleList().getRoles()) {
-				if (isVisible(role))
+				if (isVisible(role)) {
 					addRole(role);
+				}
 			}
 		}
 
@@ -657,9 +679,11 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 				}
 			}
 		}
-		for (WKFArtefact annotation : getProcess().getActivityPetriGraph().getArtefacts())
-			if (isVisible(annotation))
+		for (WKFArtefact annotation : getProcess().getActivityPetriGraph().getArtefacts()) {
+			if (isVisible(annotation)) {
 				addDrawable(annotation, getProcess());
+			}
+		}
 		for (FlexoPostCondition post : getProcess().getAllPostConditions()) {
 			if (isVisible(post) && post.isEdgeDisplayable()) {
 				addDrawable(post, getProcess());
@@ -675,10 +699,12 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 
 	public boolean isVisible(Role role) {
 		boolean roleMustBeShown = roleMustBeShown(role, getProcess());
-		if (role.isDefaultRole())
+		if (role.isDefaultRole()) {
 			return roleMustBeShown;
-		if (role.getIsVisible(getRoleVisibilityContextForProcess(getProcess()), roleMustBeShown))
+		}
+		if (role.getIsVisible(getRoleVisibilityContextForProcess(getProcess()), roleMustBeShown)) {
 			return true;
+		}
 		if (roleMustBeShown) {
 			role.setIsVisible(true, getRoleVisibilityContextForProcess(getProcess()));
 		}
@@ -753,10 +779,12 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 			return new SelfExecActivityNodeGR((SelfExecutableActivityNode) aDrawable, this, false);
 		}
 		if (aDrawable instanceof ActivityNode) {
-			if (((ActivityNode) aDrawable).isBeginNode())
+			if (((ActivityNode) aDrawable).isBeginNode()) {
 				return new BeginActivityNodeGR((ActivityNode) aDrawable, this, false);
-			if (((ActivityNode) aDrawable).isEndNode())
+			}
+			if (((ActivityNode) aDrawable).isEndNode()) {
 				return new EndActivityNodeGR((ActivityNode) aDrawable, this, false);
+			}
 			return new ActivityNodeGR((ActivityNode) aDrawable, this, false);
 		}
 		if (aDrawable instanceof SubProcessNode) {
@@ -767,10 +795,12 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 			return new SelfExecActivityNodeGR((SelfExecutableActivityNode) aDrawable, this, false);
 		}
 		if (aDrawable instanceof ActivityNode) {
-			if (((ActivityNode) aDrawable).isBeginNode())
+			if (((ActivityNode) aDrawable).isBeginNode()) {
 				return new BeginActivityNodeGR((ActivityNode) aDrawable, this, false);
-			if (((ActivityNode) aDrawable).isEndNode())
+			}
+			if (((ActivityNode) aDrawable).isEndNode()) {
 				return new EndActivityNodeGR((ActivityNode) aDrawable, this, false);
+			}
 			return new ActivityNodeGR((ActivityNode) aDrawable, this, false);
 		}
 		if (aDrawable instanceof SubProcessNode) {
@@ -822,20 +852,24 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 			return new SelfExecOperationNodeGR((SelfExecutableOperationNode) aDrawable, this, false);
 		}
 		if (aDrawable instanceof OperationNode) {
-			if (((OperationNode) aDrawable).isBeginNode())
+			if (((OperationNode) aDrawable).isBeginNode()) {
 				return new BeginOperationNodeGR((OperationNode) aDrawable, this, false);
-			if (((OperationNode) aDrawable).isEndNode())
+			}
+			if (((OperationNode) aDrawable).isEndNode()) {
 				return new EndOperationNodeGR((OperationNode) aDrawable, this, false);
+			}
 			return new OperationNodeGR((OperationNode) aDrawable, this, false);
 		}
 		if (aDrawable instanceof SelfExecutableActionNode) {
 			return new SelfExecActionNodeGR((SelfExecutableActionNode) aDrawable, this, false);
 		}
 		if (aDrawable instanceof ActionNode) {
-			if (((ActionNode) aDrawable).isBeginNode())
+			if (((ActionNode) aDrawable).isBeginNode()) {
 				return new BeginActionNodeGR((ActionNode) aDrawable, this, false);
-			if (((ActionNode) aDrawable).isEndNode())
+			}
+			if (((ActionNode) aDrawable).isEndNode()) {
 				return new EndActionNodeGR((ActionNode) aDrawable, this, false);
+			}
 			return new ActionNodeGR((ActionNode) aDrawable, this, false);
 		}
 		if (aDrawable instanceof EventNode) {
@@ -1008,8 +1042,9 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 	protected boolean rebuildRequested = false;
 
 	public synchronized void requestRebuildCompleteHierarchy() {
-		if (rebuildRequested)
+		if (rebuildRequested) {
 			return;
+		}
 		rebuildRequested = true;
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
@@ -1019,10 +1054,12 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 					try {
 						SunDragSourceContextPeer.checkDragDropInProgress();
 					} catch (InvalidDnDOperationException e1) {
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("For some reason there was still a Dnd in progress. Will set it back to false. God knows why this happens");
-						if (logger.isLoggable(Level.FINE))
+						}
+						if (logger.isLoggable(Level.FINE)) {
 							logger.log(Level.FINE, "Stacktrace for DnD still in progress", e1);
+						}
 						SunDragSourceContextPeer.setDragDropInProgress(false);
 					}
 				}
@@ -1059,8 +1096,9 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 
 	public static Role getRepresentationRole(AbstractNode activityLevelNode) {
 		if (activityLevelNode == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("No role for null node");
+			}
 			return null;
 		}
 		RoleList rl = activityLevelNode.getProject().getWorkflow().getRoleList();
@@ -1072,20 +1110,23 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 		} else if (activityLevelNode instanceof OperatorNode) {
 			role = ((OperatorNode) activityLevelNode).getRole();
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Unexpected node type: " + activityLevelNode.getClass().getName() + " cannot get/set role!");
+			}
 			role = rl.getDefaultRole();
 		}
-		if (role == null)
+		if (role == null) {
 			return rl.getDefaultRole();
+		}
 		return role;
 	}
 
 	public void setRepresentationRole(Role aRole, AbstractNode activityLevelNode) {
 		// logger.info("setRepresentationRole() with "+aRole+" for "+activityLevelNode);
 
-		if (aRole != null && aRole.isDefaultRole())
+		if (aRole != null && aRole.isDefaultRole()) {
 			aRole = null;
+		}
 		if (getRepresentationRole(activityLevelNode) != aRole) {
 			if (activityLevelNode instanceof AbstractActivityNode) {
 				((AbstractActivityNode) activityLevelNode).setRole(aRole);

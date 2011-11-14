@@ -48,7 +48,6 @@ import org.openflexo.dg.rm.ProcessLatexFileResource;
 import org.openflexo.dg.rm.ProjectLatexFileResource;
 import org.openflexo.dg.rm.ReadersGuideLatexFileResource;
 import org.openflexo.dg.rm.WorkflowLatexFileResource;
-
 import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.cg.templates.CGTemplates;
@@ -77,9 +76,9 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
+import org.openflexo.toolbox.FileUtils.CopyStrategy;
 import org.openflexo.toolbox.LogListener;
 import org.openflexo.toolbox.ToolBox;
-import org.openflexo.toolbox.FileUtils.CopyStrategy;
 
 public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 	private static final String LATEX_MACRO_LIBRARY_NAME = "doc_macro_library.vm";
@@ -174,32 +173,42 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 	@Override
 	public void buildResourcesAndSetGenerators(DGRepository repository, Vector<CGRepositoryFileResource> resources) {
 		hasBeenInitialized = true;
-		if (rootGenerator == null)
+		if (rootGenerator == null) {
 			rootGenerator = new DGLatexGenerator<FlexoProject>(this, getProject(), PROJECT_TEMPLATE_NAME);
-		if (workflowGenerator == null)
+		}
+		if (workflowGenerator == null) {
 			workflowGenerator = new DGLatexGenerator<FlexoWorkflow>(this, getProject().getFlexoWorkflow(), WKF_TEMPLATE_NAME, getProject()
 					.getFlexoWorkflow().getFullyQualifiedName(),
 					DGGenerator.nameForObjectNoExt(getProject().getFlexoWorkflow(), repository), repository.getTocRepository()
 							.getTOCEntryWithID(DocSection.PROCESSES));
-		if (clGenerator == null)
+		}
+		if (clGenerator == null) {
 			clGenerator = new DGLatexGenerator<FlexoComponentLibrary>(this, getProject().getFlexoComponentLibrary(), CL_TEMPLATE_NAME);
-		if (dmGenerator == null)
+		}
+		if (dmGenerator == null) {
 			dmGenerator = new DGLatexGenerator<DMModel>(this, getProject().getDataModel(), DM_TEMPLATE_NAME);
-		if (dkvGenerator == null)
+		}
+		if (dkvGenerator == null) {
 			dkvGenerator = new DGLatexGenerator<DKVModel>(this, getProject().getDKVModel(), DKV_TEMPLATE_NAME);
-		if (menuGenerator == null)
+		}
+		if (menuGenerator == null) {
 			menuGenerator = new DGLatexGenerator<FlexoNavigationMenu>(this, getProject().getFlexoNavigationMenu(), MENU_TEMPLATE_NAME);
-		if (readersGuideGenerator == null)
+		}
+		if (readersGuideGenerator == null) {
 			readersGuideGenerator = new DGLatexGenerator<FlexoProject>(this, getProject(), READERS_TEMPLATE_NAME, "ReadersGuide",
 					DGGenerator.nameForReadersGuideNoExt(getRepository()), getRepository().getTOCEntryWithID(DocSection.READERS_GUIDE));
-		if (definitionsGenerator == null)
+		}
+		if (definitionsGenerator == null) {
 			definitionsGenerator = new DGLatexGenerator<FlexoProject>(this, getProject(), DEFINITIONS_TEMPLATE_NAME, "Definitions",
 					DGGenerator.nameForDefinitionsNoExt(getRepository()), getRepository().getTOCEntryWithID(DocSection.DEFINITIONS));
-		if (rolesGenerator == null)
+		}
+		if (rolesGenerator == null) {
 			rolesGenerator = new DGLatexGenerator<FlexoProject>(this, getProject(), ROLES_TEMPLATE_NAME, "Roles",
 					DGGenerator.nameForDefinitionsNoExt(getRepository()), getRepository().getTOCEntryWithID(DocSection.ROLES));
-		if (stylesAndImagesGenerator == null)
+		}
+		if (stylesAndImagesGenerator == null) {
 			stylesAndImagesGenerator = new StylesAndImagesGenerator(this, getProject());
+		}
 
 		// The root file
 		ProjectLatexFileResource projectRes = GeneratedFileResourceFactory.createNewProjectLatexFileResource(repository, rootGenerator);
@@ -215,28 +224,32 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 		DKVModelLatexFileResource dkvRes = GeneratedFileResourceFactory.createNewDKVLatexFileResource(repository, dkvGenerator);
 		resources.add(dkvRes);
 		TOCEntry entry = dkvGenerator.getTOCEntry();
-		if (entry != null)
+		if (entry != null) {
 			associateEntryWithResource(entry, dkvRes);
+		}
 
 		// The Menu
 		MenuLatexFileResource menuRes = GeneratedFileResourceFactory.createNewMenuLatexFileResource(repository, menuGenerator);
 		resources.add(menuRes);
 		entry = menuGenerator.getTOCEntry();
-		if (entry != null)
+		if (entry != null) {
 			associateEntryWithResource(entry, menuRes);
+		}
 
 		ReadersGuideLatexFileResource readersRes = GeneratedFileResourceFactory.createNewReadersGuideLatexFileResource(repository,
 				readersGuideGenerator);
 		entry = readersGuideGenerator.getTOCEntry();
-		if (entry != null)
+		if (entry != null) {
 			associateEntryWithResource(entry, readersRes);
+		}
 		resources.add(readersRes);
 
 		DefinitionsLatexFileResource definitionRes = GeneratedFileResourceFactory.createNewDefinitionsLatexFileResource(repository,
 				definitionsGenerator);
 		entry = definitionsGenerator.getTOCEntry();
-		if (entry != null)
+		if (entry != null) {
 			associateEntryWithResource(entry, definitionRes);
+		}
 		resources.add(definitionRes);
 
 		stylesAndImagesGenerator.buildResourcesAndSetGenerators(repository, resources);
@@ -254,8 +267,9 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 		DMModelLatexFileResource dmRes = GeneratedFileResourceFactory.createNewDMModelLatexFileResource(repository, dmGenerator);
 		resources.add(dmRes);
 		TOCEntry entry = dmGenerator.getTOCEntry();
-		if (entry != null)
+		if (entry != null) {
 			associateEntryWithResource(entry, dmRes);
+		}
 
 		Hashtable<DMEOEntity, DGLatexGenerator<DMEOEntity>> generators = new Hashtable<DMEOEntity, DGLatexGenerator<DMEOEntity>>();
 		// All the EOEntities
@@ -266,8 +280,9 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 			Enumeration<DMEOEntity> en1 = eoRep.getEntitiesForEOEntity().elements();
 			while (en1.hasMoreElements()) {
 				DMEOEntity entity = en1.nextElement();
-				if (entity == null || entity.getDontGenerate())
+				if (entity == null || entity.getDontGenerate()) {
 					continue;
+				}
 				DGLatexGenerator<DMEOEntity> generator = getEntityGenerator(entity);
 				refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + entity.getName(), false);
 				if (generator != null) {
@@ -276,11 +291,13 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 							.createNewEOEntityLatexFileResource(repository, generator);
 					resources.add(res);
 					entry = generator.getTOCEntry();
-					if (entry != null)
+					if (entry != null) {
 						associateEntryWithResource(entry, res);
+					}
 				} else {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Could not instanciate EOEntityDocGenerator for " + entity.getName());
+					}
 				}
 			}
 		}
@@ -319,16 +336,18 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 				clGenerator);
 		resources.add(clRes);
 		TOCEntry entry = clGenerator.getTOCEntry();
-		if (entry != null)
+		if (entry != null) {
 			associateEntryWithResource(entry, clRes);
+		}
 
 		Hashtable<ComponentDefinition, DGLatexGenerator<? extends ComponentDefinition>> generators = new Hashtable<ComponentDefinition, DGLatexGenerator<? extends ComponentDefinition>>();
 		// All the components
 		Vector<ComponentDefinition> components = getProject().getFlexoComponentLibrary().getRootFolder().getAllComponents();
 		resetSecondaryProgressWindow(components.size());
 		for (ComponentDefinition cd : components) {
-			if (cd == null || cd.getDontGenerate())
+			if (cd == null || cd.getDontGenerate()) {
 				continue;
+			}
 			DGLatexGenerator<? extends ComponentDefinition> generator = getComponentGenerator(cd);
 			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + cd.getName(), false);
 			if (generator != null) {
@@ -337,11 +356,13 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 						.createNewComponentLatexFileResource(repository, generator);
 				resources.add(res);
 				entry = generator.getTOCEntry();
-				if (entry != null)
+				if (entry != null) {
 					associateEntryWithResource(entry, res);
+				}
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not instanciate ComponentDocGenerator for " + cd);
+				}
 			}
 		}
 		componentGenerators = generators;
@@ -357,16 +378,18 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 				workflowGenerator);
 		resources.add(wkfResource);
 		TOCEntry entry = workflowGenerator.getTOCEntry();
-		if (entry != null)
+		if (entry != null) {
 			associateEntryWithResource(entry, wkfResource);
+		}
 
 		Hashtable<FlexoProcess, DGLatexGenerator<FlexoProcess>> generators = new Hashtable<FlexoProcess, DGLatexGenerator<FlexoProcess>>();
 		// All its processes
 		Vector<FlexoProcess> processes = getProject().getAllLocalFlexoProcesses();
 		resetSecondaryProgressWindow(processes.size());
 		for (FlexoProcess process : processes) {
-			if (process == null || process.getDontGenerate())
+			if (process == null || process.getDontGenerate()) {
 				continue;
+			}
 			DGLatexGenerator<FlexoProcess> generator = getProcessGenerator(process);
 			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + process.getName(), false);
 			if (generator != null) {
@@ -374,11 +397,13 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 				ProcessLatexFileResource res = GeneratedFileResourceFactory.createNewProcessLatexFileResource(repository, generator);
 				resources.add(res);
 				entry = generator.getTOCEntry();
-				if (entry != null)
+				if (entry != null) {
 					associateEntryWithResource(entry, res);
+				}
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not instanciate ProcessDocGenerator for " + process);
+				}
 			}
 			buildResourcesAndSetGeneratorsForProcess(repository, resources, process);
 		}
@@ -396,16 +421,18 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 		Hashtable<OperationNode, DGLatexGenerator<OperationNode>> generators = new Hashtable<OperationNode, DGLatexGenerator<OperationNode>>();
 		Vector<OperationNode> operations = process.getAllEmbeddedOperationNodes();
 		for (OperationNode node : operations) {
-			if (node == null || node.getDontGenerate())
+			if (node == null || node.getDontGenerate()) {
 				continue;
+			}
 			DGLatexGenerator<OperationNode> generator = getOperationGenerator(node);
 			if (generator != null) {
 				generators.put(node, generator);
 				OperationLatexFileResource res = GeneratedFileResourceFactory.createNewOperationLatexFileResource(repository, generator);
 				resources.add(res);
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not instanciate OperationDocGenerator for " + node);
+				}
 			}
 		}
 		operationGenerators = generators;
@@ -449,8 +476,9 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 
 	public DGLatexGenerator<DMEOEntity> getEntityGenerator(DMEOEntity entity) {
 		DGLatexGenerator<DMEOEntity> returned = entityGenerators.get(entity);
-		if (returned == null)
+		if (returned == null) {
 			entityGenerators.put(entity, returned = new DGLatexGenerator<DMEOEntity>(this, entity, EOENTITY_TEMPLATE_NAME));
+		}
 		return returned;
 	}
 
@@ -466,17 +494,18 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 	private DGLatexGenerator<? extends ComponentDefinition> getComponentGenerator(ComponentDefinition cd) {
 		DGLatexGenerator<? extends ComponentDefinition> returned = componentGenerators.get(cd);
 		if (returned == null) {
-			if (cd instanceof PopupComponentDefinition)
+			if (cd instanceof PopupComponentDefinition) {
 				componentGenerators.put(cd, returned = new DGLatexGenerator<PopupComponentDefinition>(this, (PopupComponentDefinition) cd,
 						POPUP_TEMPLATE_NAME));
-			else if (cd instanceof OperationComponentDefinition)
+			} else if (cd instanceof OperationComponentDefinition) {
 				componentGenerators.put(cd, returned = new DGLatexGenerator<OperationComponentDefinition>(this,
 						(OperationComponentDefinition) cd, PAGE_TEMPLATE_NAME));
-			else if (cd instanceof TabComponentDefinition)
+			} else if (cd instanceof TabComponentDefinition) {
 				componentGenerators.put(cd, returned = new DGLatexGenerator<TabComponentDefinition>(this, (TabComponentDefinition) cd,
 						TAB_TEMPLATE_NAME));
-			else if (logger.isLoggable(Level.SEVERE))
+			} else if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("components of type " + cd.getClass().getName() + " are not handled");
+			}
 		}
 		return returned;
 	}
@@ -500,8 +529,9 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 					command[1] = "-b";
 					command[2] = "-p";
 					command[3] = projectFile.getAbsolutePath();
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Executing " + command[0] + " with args " + command[1] + " " + command[2] + " " + command[3]);
+					}
 					p = Runtime.getRuntime().exec(command, null, projectFile.getParentFile());
 					final InputStream is = p.getInputStream();
 					Thread readThread = new Thread(new Runnable() {
@@ -521,8 +551,9 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 									for (LogListener l : listeners) {
 										l.log(line);
 									}
-									if (logger.isLoggable(Level.FINE))
+									if (logger.isLoggable(Level.FINE)) {
 										logger.fine(line);
+									}
 									lastLogUpdate = System.currentTimeMillis();
 								}
 							} catch (IOException e) {
@@ -549,8 +580,9 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 									for (LogListener l : listeners) {
 										l.err(line);
 									}
-									if (logger.isLoggable(Level.FINE))
+									if (logger.isLoggable(Level.FINE)) {
 										logger.fine(line);
+									}
 									lastLogUpdate = System.currentTimeMillis();
 								}
 							} catch (IOException e) {
@@ -576,8 +608,9 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 								}
 								if (System.currentTimeMillis() - lastLogUpdate > getLatexTimeOutInMillis()) {
 									current.interrupt();
-									if (logger.isLoggable(Level.WARNING))
+									if (logger.isLoggable(Level.WARNING)) {
 										logger.warning("pdflatex timeout: no log for " + (getLatexTimeOutInMillis() / 1000) + " seconds.");
+									}
 									return;
 								}
 							}
@@ -593,8 +626,9 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 					endedWithSuccess = false;
-					if (p != null)
+					if (p != null) {
 						p.destroy();
+					}
 				}
 			} else {
 				for (int i = 0; i < 3 && endedWithSuccess; i++) {
@@ -603,8 +637,9 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 						command[0] = latexCommand;
 						command[1] = "-interaction=nonstopmode";
 						command[2] = projectFile.getAbsolutePath();
-						if (logger.isLoggable(Level.INFO))
+						if (logger.isLoggable(Level.INFO)) {
 							logger.info("Executing " + command[0] + " with args " + command[1] + " " + command[2]);
+						}
 						p = Runtime.getRuntime().exec(command, null, projectFile.getParentFile());
 						final InputStream is = p.getInputStream();
 						Thread readThread = new Thread(new Runnable() {
@@ -650,8 +685,9 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 										for (LogListener l : listeners) {
 											l.err(line);
 										}
-										if (logger.isLoggable(Level.FINE))
+										if (logger.isLoggable(Level.FINE)) {
 											logger.fine(line);
+										}
 										lastLogUpdate = System.currentTimeMillis();
 									}
 								} catch (IOException e) {
@@ -677,9 +713,10 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 									}
 									if (System.currentTimeMillis() - lastLogUpdate > getLatexTimeOutInMillis()) {
 										current.interrupt();
-										if (logger.isLoggable(Level.WARNING))
+										if (logger.isLoggable(Level.WARNING)) {
 											logger.warning("pdflatex timeout: no log for " + (getLatexTimeOutInMillis() / 1000)
 													+ " seconds.");
+										}
 										return;
 									}
 								}
@@ -699,8 +736,9 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 				}
 			}
 		} finally {
-			if (p != null)
+			if (p != null) {
 				p.destroy();// We kill the process
+			}
 			getRepository().notifyPostBuildStop();
 		}
 		if (endedWithSuccess) {
@@ -708,15 +746,18 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 					+ "pdf").getCanonicalFile();
 			File out = getRepository().getPostBuildFile().getCanonicalFile();
 			if (!generated.exists()) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not find generated PDF file at " + generated.getAbsolutePath());
+				}
 				return null;
 			}
-			if (!generated.equals(out))
+			if (!generated.equals(out)) {
 				FileUtils.copyFileToFile(generated, out);
+			}
 			return out;
-		} else
+		} else {
 			return null;
+		}
 	}
 
 	public String getPdfName() {
@@ -724,8 +765,9 @@ public class ProjectDocLatexGenerator extends ProjectDocGenerator {
 	}
 
 	public long getLatexTimeOutInMillis() {
-		if (latexTimeOutInMillis <= 0)
+		if (latexTimeOutInMillis <= 0) {
 			latexTimeOutInMillis = 15000;
+		}
 		return latexTimeOutInMillis;
 	}
 

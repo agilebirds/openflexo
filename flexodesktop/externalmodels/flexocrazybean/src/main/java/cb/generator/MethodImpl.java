@@ -88,8 +88,9 @@ public class MethodImpl extends NodeImpl implements Method {
 		stream.print("  ");
 		String acc = getAccess();
 
-		if (acc != null)
+		if (acc != null) {
 			stream.print(acc.toLowerCase() + " ");
+		}
 
 		stream.print(getReturnType() + " " + getName());
 		stream.print("(");
@@ -98,20 +99,22 @@ public class MethodImpl extends NodeImpl implements Method {
 			Parameter p = (Parameter) i.next();
 			p.dump(stream);
 
-			if (i.hasNext())
+			if (i.hasNext()) {
 				stream.print(", ");
+			}
 		}
 
 		stream.print(")");
 
-		if (is("abstract"))
+		if (is("abstract")) {
 			stream.println(";");
-		else {
+		} else {
 			stream.println(" {");
 
 			if (code != null) {
-				for (Iterator i = code.iterator(); i.hasNext();)
+				for (Iterator i = code.iterator(); i.hasNext();) {
 					stream.println(i.next());
+				}
 			} else {
 				String t = getReturnType().toLowerCase();
 
@@ -130,7 +133,8 @@ public class MethodImpl extends NodeImpl implements Method {
 			Method m = (Method) o;
 
 			return getParameters().equals(m.getParameters()) && getName().equals(m.getName()) && getReturnType().equals(m.getReturnType());
-		} else
+		} else {
 			return false;
+		}
 	}
 }

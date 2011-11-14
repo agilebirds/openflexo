@@ -50,11 +50,13 @@ public class WinRegistryAccess {
 	 * @return - the value for the attribute located in the given path
 	 */
 	public static String getRegistryValue(String path, String attributeName, String attributeType) {
-		if (attributeType == null)
+		if (attributeType == null) {
 			attributeType = REG_SZ_TOKEN;
+		}
 		try {
-			if (!path.startsWith("\""))
+			if (!path.startsWith("\"")) {
 				path = "\"" + path + "\"";
+			}
 			StringBuilder sb = new StringBuilder();
 			sb.append(REGQUERY_UTIL);
 			sb.append(path);
@@ -72,8 +74,9 @@ public class WinRegistryAccess {
 			reader.join();
 			String result = reader.getResult();
 			int p = result.indexOf(attributeType);
-			if (p == -1)
+			if (p == -1) {
 				return null;
+			}
 			return result.substring(p + attributeType.length()).trim();
 		} catch (Exception e) {
 			return null;
@@ -94,8 +97,9 @@ public class WinRegistryAccess {
 		public void run() {
 			try {
 				int c;
-				while ((c = is.read()) != -1)
+				while ((c = is.read()) != -1) {
 					sw.write(c);
+				}
 			} catch (IOException e) {
 				;
 			}

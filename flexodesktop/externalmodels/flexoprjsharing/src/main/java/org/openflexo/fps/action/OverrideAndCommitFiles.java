@@ -27,13 +27,13 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.fps.CVSAbstractFile;
-import org.openflexo.fps.CVSContainer;
-import org.openflexo.fps.CVSFile;
-import org.openflexo.fps.FPSObject;
 import org.openflexo.fps.CVSAbstractFile.CommitListener;
 import org.openflexo.fps.CVSAbstractFile.CommitStatus;
 import org.openflexo.fps.CVSAbstractFile.UpdateListener;
 import org.openflexo.fps.CVSAbstractFile.UpdateStatus;
+import org.openflexo.fps.CVSContainer;
+import org.openflexo.fps.CVSFile;
+import org.openflexo.fps.FPSObject;
 import org.openflexo.localization.FlexoLocalization;
 
 public class OverrideAndCommitFiles extends MultipleFileCVSAction<OverrideAndCommitFiles> implements UpdateListener, CommitListener {
@@ -164,12 +164,14 @@ public class OverrideAndCommitFiles extends MultipleFileCVSAction<OverrideAndCom
 
 	@Override
 	public boolean hasActionExecutionSucceeded() {
-		if (updateTimeOutReceived)
+		if (updateTimeOutReceived) {
 			return false;
-		if (commitTimeOutReceived)
+		}
+		if (commitTimeOutReceived) {
 			return false;
-		else
+		} else {
 			return super.hasActionExecutionSucceeded();
+		}
 	}
 
 	private static final long TIME_OUT = 10000; // 10 s

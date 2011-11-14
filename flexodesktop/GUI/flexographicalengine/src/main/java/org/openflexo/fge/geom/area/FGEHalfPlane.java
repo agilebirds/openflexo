@@ -23,13 +23,13 @@ import java.awt.geom.AffineTransform;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.geom.FGEAbstractLine;
+import org.openflexo.fge.geom.FGEGeometricObject.CardinalDirection;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGELine;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGESegment;
 import org.openflexo.fge.geom.FGEShape;
-import org.openflexo.fge.geom.FGEGeometricObject.CardinalDirection;
-import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.graphics.FGEGraphics;
 
 public class FGEHalfPlane implements FGEArea {
@@ -82,21 +82,25 @@ public class FGEHalfPlane implements FGEArea {
 
 	@Override
 	public boolean containsPoint(FGEPoint p) {
-		if (line.contains(p))
+		if (line.contains(p)) {
 			return true;
-		if (line.getPlaneLocation(testPoint) == line.getPlaneLocation(p))
+		}
+		if (line.getPlaneLocation(testPoint) == line.getPlaneLocation(p)) {
 			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public boolean containsLine(FGEAbstractLine l) {
-		if (!(containsPoint(l.getP1()) && containsPoint(l.getP2())))
+		if (!(containsPoint(l.getP1()) && containsPoint(l.getP2()))) {
 			return false;
+		}
 
 		if (l instanceof FGEHalfLine) {
-			if (l.isParallelTo(line))
+			if (l.isParallelTo(line)) {
 				return true;
+			}
 			return (!l.containsPoint(line.getLineIntersection(l))) || line.containsPoint(((FGEHalfLine) l).getLimit());
 		} else if (l instanceof FGESegment) {
 			return true;
@@ -117,18 +121,24 @@ public class FGEHalfPlane implements FGEArea {
 
 	@Override
 	public boolean containsArea(FGEArea a) {
-		if (a instanceof FGEPoint)
+		if (a instanceof FGEPoint) {
 			return containsPoint((FGEPoint) a);
-		if (a instanceof FGEAbstractLine)
+		}
+		if (a instanceof FGEAbstractLine) {
 			return containsLine((FGEAbstractLine) a);
-		if (a instanceof FGEHalfBand)
+		}
+		if (a instanceof FGEHalfBand) {
 			return containsHalfBand((FGEHalfBand) a);
-		if (a instanceof FGEBand)
+		}
+		if (a instanceof FGEBand) {
 			return containsBand((FGEBand) a);
-		if (a instanceof FGEShape)
+		}
+		if (a instanceof FGEShape) {
 			return FGEShape.AreaComputation.isShapeContainedInArea((FGEShape<?>) a, this);
-		if (a instanceof FGEHalfPlane)
+		}
+		if (a instanceof FGEHalfPlane) {
 			return containsHalfPlane((FGEHalfPlane) a);
+		}
 		return false;
 	}
 
@@ -139,10 +149,11 @@ public class FGEHalfPlane implements FGEArea {
 
 	private boolean containsHalfPlane(FGEHalfPlane hp) {
 		if (line.overlap(hp.line)) {
-			if (containsPoint(hp.testPoint))
+			if (containsPoint(hp.testPoint)) {
 				return true;
-			else
+			} else {
 				return false; // Only line is common
+			}
 		} else if (line.isParallelTo(hp.line)) {
 			if (containsLine(hp.line) && !hp.containsLine(line)) {
 				return true;
@@ -153,13 +164,15 @@ public class FGEHalfPlane implements FGEArea {
 
 	private FGEArea computeLineIntersection(FGEAbstractLine aLine) {
 		if (aLine instanceof FGELine) {
-			if (aLine.equals(line))
+			if (aLine.equals(line)) {
 				return aLine.clone();
+			}
 			if (aLine.isParallelTo(line)) {
-				if (containsPoint(aLine.getP1()))
+				if (containsPoint(aLine.getP1())) {
 					return aLine.clone();
-				else
+				} else {
 					return new FGEEmptyArea();
+				}
 			} else {
 				FGEPoint limit = line.getLineIntersection(aLine);
 				if (limit.equals(aLine.getP1())) {
@@ -176,62 +189,72 @@ public class FGEHalfPlane implements FGEArea {
 			}
 		} else if (aLine instanceof FGEHalfLine) {
 			FGEHalfLine hl = (FGEHalfLine) aLine;
-			if (hl.overlap(line))
+			if (hl.overlap(line)) {
 				return hl.clone();
+			}
 			if (hl.isParallelTo(line)) {
-				if (containsPoint(hl.getP1()))
+				if (containsPoint(hl.getP1())) {
 					return hl.clone();
-				else
+				} else {
 					return new FGEEmptyArea();
+				}
 			} else {
 				FGEPoint intersect = hl.getLineIntersection(line);
 				FGEPoint limit = hl.getLimit();
-				if (intersect.equals(limit))
+				if (intersect.equals(limit)) {
 					return intersect.clone();
+				}
 				FGEPoint opposite = FGEAbstractLine.getOppositePoint(limit, intersect);
 				if (containsPoint(limit)) {
-					if (hl.contains(opposite))
+					if (hl.contains(opposite)) {
 						return new FGESegment(limit, intersect);
-					else
+					} else {
 						return hl.clone();
+					}
 				} else {
-					if (hl.contains(opposite))
+					if (hl.contains(opposite)) {
 						return new FGEHalfLine(intersect, opposite);
-					else
+					} else {
 						return new FGEEmptyArea();
+					}
 				}
 			}
 		} else if (aLine instanceof FGESegment) {
 			FGESegment segment = (FGESegment) aLine;
-			if (segment.overlap(line))
+			if (segment.overlap(line)) {
 				return segment.clone();
+			}
 			if (segment.isParallelTo(line)) {
-				if (containsPoint(segment.getP1()))
+				if (containsPoint(segment.getP1())) {
 					return segment.clone();
-				else
+				} else {
 					return new FGEEmptyArea();
+				}
 			} else {
 				if (containsPoint(segment.getP1())) {
-					if (containsPoint(segment.getP2()))
+					if (containsPoint(segment.getP2())) {
 						return segment.clone();
-					else {
+					} else {
 						FGEPoint p1 = segment.getP1();
 						FGEPoint p2 = segment.getLineIntersection(line);
-						if (p1.equals(p2))
+						if (p1.equals(p2)) {
 							return p1.clone();
-						else
+						} else {
 							return new FGESegment(p1, p2);
+						}
 					}
 				} else {
 					if (containsPoint(segment.getP2())) {
 						FGEPoint p1 = segment.getP2();
 						FGEPoint p2 = segment.getLineIntersection(line);
-						if (p1.equals(p2))
+						if (p1.equals(p2)) {
 							return p1.clone();
-						else
+						} else {
 							return new FGESegment(p1, p2);
-					} else
+						}
+					} else {
 						return new FGEEmptyArea();
+					}
 				}
 			}
 		} else {
@@ -242,10 +265,11 @@ public class FGEHalfPlane implements FGEArea {
 
 	private FGEArea computeHalfPlaneIntersection(FGEHalfPlane hp) {
 		if (line.overlap(hp.line)) {
-			if (containsPoint(hp.testPoint))
+			if (containsPoint(hp.testPoint)) {
 				return clone(); // Same half planes
-			else
+			} else {
 				return line.clone(); // Only line is common
+			}
 		} else if (line.isParallelTo(hp.line)) {
 			if (hp.containsLine(line)) {
 				if (containsLine(hp.line)) {
@@ -268,8 +292,9 @@ public class FGEHalfPlane implements FGEArea {
 
 	private FGEArea computeShapeIntersection(FGEShape shape) {
 		FGEArea workingArea = intersect(shape.getBoundingBox());
-		if (workingArea instanceof FGEEmptyArea)
+		if (workingArea instanceof FGEEmptyArea) {
 			return workingArea; // Empty area
+		}
 		if (workingArea instanceof FGEShape || workingArea instanceof FGEAbstractLine || workingArea instanceof FGEPoint) {
 			return workingArea.intersect(shape);
 		} else {
@@ -285,28 +310,37 @@ public class FGEHalfPlane implements FGEArea {
 
 	@Override
 	public FGEArea intersect(FGEArea area) {
-		if (area.containsArea(this))
+		if (area.containsArea(this)) {
 			return this.clone();
-		if (containsArea(area))
+		}
+		if (containsArea(area)) {
 			return area.clone();
-		if (area instanceof FGEAbstractLine)
+		}
+		if (area instanceof FGEAbstractLine) {
 			return computeLineIntersection((FGEAbstractLine) area);
-		if (area instanceof FGERectangle)
+		}
+		if (area instanceof FGERectangle) {
 			return area.intersect(this);
-		if (area instanceof FGEBand)
+		}
+		if (area instanceof FGEBand) {
 			return area.intersect(this);
-		if (area instanceof FGEHalfBand)
+		}
+		if (area instanceof FGEHalfBand) {
 			return area.intersect(this);
-		if (area instanceof FGEHalfPlane)
+		}
+		if (area instanceof FGEHalfPlane) {
 			return computeHalfPlaneIntersection((FGEHalfPlane) area);
-		if (area instanceof FGEShape)
+		}
+		if (area instanceof FGEShape) {
 			return computeShapeIntersection((FGEShape) area);
+		}
 
 		FGEIntersectionArea returned = new FGEIntersectionArea(this, area);
-		if (returned.isDevelopable())
+		if (returned.isDevelopable()) {
 			return returned.makeDevelopped();
-		else
+		} else {
 			return returned;
+		}
 	}
 
 	@Override
@@ -316,10 +350,12 @@ public class FGEHalfPlane implements FGEArea {
 
 	@Override
 	public FGEArea union(FGEArea area) {
-		if (containsArea(area))
+		if (containsArea(area)) {
 			return clone();
-		if (area.containsArea(this))
+		}
+		if (area.containsArea(this)) {
 			return area.clone();
+		}
 
 		return new FGEUnionArea(this, area);
 	}
@@ -366,10 +402,11 @@ public class FGEHalfPlane implements FGEArea {
 
 	@Override
 	public FGEPoint getNearestPoint(FGEPoint aPoint) {
-		if (containsPoint(aPoint))
+		if (containsPoint(aPoint)) {
 			return aPoint.clone();
-		else
+		} else {
 			return line.getProjection(aPoint);
+		}
 	}
 
 	@Override

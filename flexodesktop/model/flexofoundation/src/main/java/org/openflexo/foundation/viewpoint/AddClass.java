@@ -41,15 +41,17 @@ public class AddClass extends AddConcept<ClassPatternRole> {
 
 	@Override
 	public OntologyClass getOntologyClass() {
-		if (getPatternRole() != null)
+		if (getPatternRole() != null) {
 			return getPatternRole().getOntologicType();
+		}
 		return null;
 	}
 
 	@Override
 	public void setOntologyClass(OntologyClass ontologyClass) {
-		if (getPatternRole() != null)
+		if (getPatternRole() != null) {
 			getPatternRole().setOntologicType(ontologyClass);
+		}
 	}
 
 	@Override
@@ -74,8 +76,9 @@ public class AddClass extends AddConcept<ClassPatternRole> {
 	}
 
 	public ViewPointDataBinding getClassName() {
-		if (className == null)
+		if (className == null) {
 			className = new ViewPointDataBinding(this, EditionActionBindingAttribute.className, getClassNameBindingDefinition());
+		}
 		return className;
 	}
 

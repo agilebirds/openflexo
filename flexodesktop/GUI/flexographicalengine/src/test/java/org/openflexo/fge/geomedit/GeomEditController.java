@@ -117,10 +117,11 @@ public class GeomEditController extends DrawingController<GeometricDrawing> impl
 			public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf,
 					int row, boolean hasFocus) {
 				JLabel returned = (JLabel) super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
-				if (value instanceof GeometricSet)
+				if (value instanceof GeometricSet) {
 					returned.setText(((GeometricSet) value).getTitle());
-				else if (value instanceof GeometricObject)
+				} else if (value instanceof GeometricObject) {
 					returned.setText(((GeometricObject) value).name);
+				}
 				return returned;
 			}
 		});

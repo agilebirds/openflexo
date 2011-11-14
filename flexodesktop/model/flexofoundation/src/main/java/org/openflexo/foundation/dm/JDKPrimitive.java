@@ -69,8 +69,9 @@ public class JDKPrimitive extends LoadableDMEntity {
 		setRepository(repository);
 		type = aClass;
 		if (!type.isPrimitive()) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Supplied class " + type + " is NOT a primitive !");
+			}
 		}
 		initializeFromPrimitive();
 		repository.registerEntity(this);
@@ -94,8 +95,9 @@ public class JDKPrimitive extends LoadableDMEntity {
 		name = type.getName();
 		entityClassName = name;
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Registering " + getFullyQualifiedName());
+		}
 
 		setParentType(null, true);
 
@@ -103,48 +105,66 @@ public class JDKPrimitive extends LoadableDMEntity {
 
 	@Override
 	public Class retrieveJavaType() {
-		if (entityClassName.equals("int"))
+		if (entityClassName.equals("int")) {
 			type = Integer.TYPE;
-		if (entityClassName.equals("long"))
+		}
+		if (entityClassName.equals("long")) {
 			type = Long.TYPE;
-		if (entityClassName.equals("short"))
+		}
+		if (entityClassName.equals("short")) {
 			type = Short.TYPE;
-		if (entityClassName.equals("float"))
+		}
+		if (entityClassName.equals("float")) {
 			type = Float.TYPE;
-		if (entityClassName.equals("double"))
+		}
+		if (entityClassName.equals("double")) {
 			type = Double.TYPE;
-		if (entityClassName.equals("char"))
+		}
+		if (entityClassName.equals("char")) {
 			type = Character.TYPE;
-		if (entityClassName.equals("byte"))
+		}
+		if (entityClassName.equals("byte")) {
 			type = Byte.TYPE;
-		if (entityClassName.equals("boolean"))
+		}
+		if (entityClassName.equals("boolean")) {
 			type = Boolean.TYPE;
-		if (entityClassName.equals("void"))
+		}
+		if (entityClassName.equals("void")) {
 			type = Void.TYPE;
+		}
 		return type;
 	}
 
 	@Override
 	public boolean isAncestorOf(DMEntity entity) {
-		if (entity == null)
+		if (entity == null) {
 			return false;
+		}
 		if (entity.getPackage().getName().equals("java.lang")) {
-			if (entityClassName.equals("boolean") && entity.getName().equals("Boolean"))
+			if (entityClassName.equals("boolean") && entity.getName().equals("Boolean")) {
 				return true;
-			if (entityClassName.equals("int") && entity.getName().equals("Integer"))
+			}
+			if (entityClassName.equals("int") && entity.getName().equals("Integer")) {
 				return true;
-			if (entityClassName.equals("long") && entity.getName().equals("Long"))
+			}
+			if (entityClassName.equals("long") && entity.getName().equals("Long")) {
 				return true;
-			if (entityClassName.equals("short") && entity.getName().equals("Short"))
+			}
+			if (entityClassName.equals("short") && entity.getName().equals("Short")) {
 				return true;
-			if (entityClassName.equals("float") && entity.getName().equals("Float"))
+			}
+			if (entityClassName.equals("float") && entity.getName().equals("Float")) {
 				return true;
-			if (entityClassName.equals("double") && entity.getName().equals("Double"))
+			}
+			if (entityClassName.equals("double") && entity.getName().equals("Double")) {
 				return true;
-			if (entityClassName.equals("char") && entity.getName().equals("Character"))
+			}
+			if (entityClassName.equals("char") && entity.getName().equals("Character")) {
 				return true;
-			if (entityClassName.equals("byte") && entity.getName().equals("Byte"))
+			}
+			if (entityClassName.equals("byte") && entity.getName().equals("Byte")) {
 				return true;
+			}
 		}
 		return super.isAncestorOf(entity);
 	}

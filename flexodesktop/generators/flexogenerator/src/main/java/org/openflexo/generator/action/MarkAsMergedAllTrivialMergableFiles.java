@@ -88,8 +88,9 @@ public class MarkAsMergedAllTrivialMergableFiles extends MultipleFileGCAction<Ma
 		if (_trivialMergableFiles == null) {
 			_trivialMergableFiles = new Vector<AbstractCGFile>();
 			for (AbstractCGFile file : getSelectedCGFilesOnWhyCurrentActionShouldApply()) {
-				if (file.isTriviallyMergable())
+				if (file.isTriviallyMergable()) {
 					_trivialMergableFiles.add(file);
+				}
 			}
 		}
 		return _trivialMergableFiles;

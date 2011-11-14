@@ -77,11 +77,13 @@ public class IESequenceWidgetWidgetView extends IEWidgetView<IESequenceWidget> i
 			widget = (IEWidget) en.nextElement();
 			add(_componentView.getViewForWidget(widget, true));
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Sequence Widget Widget View Bounds:" + getBounds());
+		}
 		this.setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY, new IEDTListener(ieController, this, getModel())));
-		if (getModel().getOperator() != null)
+		if (getModel().getOperator() != null) {
 			setBorder(IEViewUtils.getBorderForOperator(getModel().getOperator()));
+		}
 		validate();
 	}
 
@@ -110,8 +112,9 @@ public class IESequenceWidgetWidgetView extends IEWidgetView<IESequenceWidget> i
 	public void propagateResize() {
 		Component[] c = getComponents();
 		for (int i = 0; i < c.length; i++) {
-			if (c[i] instanceof Layoutable)
+			if (c[i] instanceof Layoutable) {
 				((Layoutable) c[i]).propagateResize();
+			}
 		}
 		invalidate();
 		doLayout();
@@ -122,8 +125,9 @@ public class IESequenceWidgetWidgetView extends IEWidgetView<IESequenceWidget> i
 		Dimension d = getMaximumSize();
 		Insets i = getInsets();
 		int retval = d.width - 2 * getHorizontalGap() - i.left - i.right;
-		if (getModel().isSubsequence())
+		if (getModel().isSubsequence()) {
 			retval -= 2 * getHorizontalGap() * getModel().getSequenceDepth();
+		}
 		return retval;
 	}
 
@@ -137,8 +141,9 @@ public class IESequenceWidgetWidgetView extends IEWidgetView<IESequenceWidget> i
 		Container p = getParent();
 		if (p instanceof IESequenceWidgetWidgetView) {
 			Dimension d = ((IESequenceWidgetWidgetView) p).getMaximumSize();
-			if (d.width == 0)
+			if (d.width == 0) {
 				return d;
+			}
 			d.height -= 2 * getVerticalGap();
 			d.width -= 2 * getHorizontalGap();
 			return d;
@@ -149,24 +154,29 @@ public class IESequenceWidgetWidgetView extends IEWidgetView<IESequenceWidget> i
 			return d;
 		} else if (p instanceof ButtonPanel) {
 			return p.getMaximumSize();
-		} else
+		} else {
 			return getSize();
+		}
 	}
 
 	@Override
 	public Dimension getPreferredSize() {
 		if (getHoldsNextComputedPreferredSize()) {
 			Dimension storedSize = storedPrefSize();
-			if (storedSize != null)
+			if (storedSize != null) {
 				return storedSize;
+			}
 		}
 		Dimension d = super.getPreferredSize();
-		if (d.height < IETDWidget.MIN_HEIGHT)
+		if (d.height < IETDWidget.MIN_HEIGHT) {
 			d.height = IETDWidget.MIN_HEIGHT;
-		if (d.width < IETDWidget.MIN_WIDTH)
+		}
+		if (d.width < IETDWidget.MIN_WIDTH) {
 			d.width = IETDWidget.MIN_WIDTH;
-		if (getHoldsNextComputedPreferredSize())
+		}
+		if (getHoldsNextComputedPreferredSize()) {
 			storePrefSize(d);
+		}
 		return d;
 	}
 
@@ -180,11 +190,13 @@ public class IESequenceWidgetWidgetView extends IEWidgetView<IESequenceWidget> i
 
 	protected Component findView(IEWidget w) {
 		for (int i = 0; i < getComponentCount(); i++) {
-			if (((IEWidgetView) getComponent(i)).getModel().equals(w))
+			if (((IEWidgetView) getComponent(i)).getModel().equals(w)) {
 				return getComponent(i);
+			}
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("cannot find a view for widget : " + w);
+		}
 		return null;
 	}
 
@@ -195,10 +207,11 @@ public class IESequenceWidgetWidgetView extends IEWidgetView<IESequenceWidget> i
 	 */
 	@Override
 	public void setDefaultBorder() {
-		if (getModel().getOperator() != null)
+		if (getModel().getOperator() != null) {
 			setBorder(IEViewUtils.getBorderForOperator(getModel().getOperator()));
-		else
+		} else {
 			setBorder(EMPTY_BORDER_1);
+		}
 	}
 
 	protected void handleWidgetInserted(IEWidget widget) {
@@ -209,8 +222,9 @@ public class IESequenceWidgetWidgetView extends IEWidgetView<IESequenceWidget> i
 	}
 
 	protected void handleWidgetRemoved(IEWidget widget) {
-		if (widget instanceof IEHTMLTableWidget)
+		if (widget instanceof IEHTMLTableWidget) {
 			widget = ((IEHTMLTableWidget) widget).getSequenceTR();
+		}
 		Component v = findView(widget);
 		if (v != null) {
 			remove(v);
@@ -239,14 +253,16 @@ public class IESequenceWidgetWidgetView extends IEWidgetView<IESequenceWidget> i
 		} else if (modif instanceof WidgetRemovedFromSequence && arg0 == getModel()) {
 			handleWidgetRemoved((IEWidget) modif.oldValue());
 		} else if (modif instanceof OperatorChanged && arg0 == getModel()) {
-			if (getModel().getOperator() != null)
+			if (getModel().getOperator() != null) {
 				setBorder(IEViewUtils.getBorderForOperator(getModel().getOperator()));
+			}
 		} else if (modif instanceof DisplayNeedsRefresh && arg0 == getModel()) {
 			revalidate();
 			doLayout();
 			repaint();
-		} else
+		} else {
 			super.update(arg0, modif);
+		}
 	}
 
 	public IESequenceWidget getSequenceModel() {
@@ -255,20 +271,22 @@ public class IESequenceWidgetWidgetView extends IEWidgetView<IESequenceWidget> i
 
 	@Override
 	public Color getBackground() {
-		if (getSequenceModel() != null)
+		if (getSequenceModel() != null) {
 			return getSequenceModel().getBackground();
-		else
+		} else {
 			return super.getBackground();
+		}
 	}
 
 	public int findInsertionIndex(int dropX, int dropY) {
 		int i = 0;
 		for (i = 0; i < getComponentCount(); i++) {
 			if (dropX < getComponent(i).getX() + getComponent(i).getWidth() / 2
-					&& dropY < getComponent(i).getY() + getComponent(i).getHeight())
+					&& dropY < getComponent(i).getY() + getComponent(i).getHeight()) {
 				return i;
-			else if (dropY < getComponent(i).getY())
+			} else if (dropY < getComponent(i).getY()) {
 				return i;
+			}
 		}
 		return i;
 	}

@@ -45,15 +45,19 @@ public class BPELPartnerLinkSet {
 	 */
 	public void addPartnerLink(SubProcessNode pro) {
 		// From the process, we need to look at the serviceInterface
-		if (pro.getSubProcess().getServiceInterfaces() == null)
+		if (pro.getSubProcess().getServiceInterfaces() == null) {
 			return;
-		if (pro.getSubProcess().getServiceInterfaces().size() == 0)
+		}
+		if (pro.getSubProcess().getServiceInterfaces().size() == 0) {
 			return;
+		}
 		ServiceInterface si = pro.getSubProcess().getServiceInterfaces().get(0);
-		if (si == null)
+		if (si == null) {
 			return;
-		if (pro.getSubProcess() == null)
+		}
+		if (pro.getSubProcess() == null) {
 			return;
+		}
 		BPELPartnerLink pLink = addPartnerLink(pro.getSubProcess());
 		BPELPartnerLinkInvocation inv = new BPELPartnerLinkInvocation(pLink, pro);
 		System.out.println("new partner link invocation :" + pro.getName());
@@ -154,8 +158,9 @@ public class BPELPartnerLinkSet {
 		Vector<BPELPartnerLinkInvocation> allInvocations = getAllInvocations();
 		for (int i = 0; i < allInvocations.size(); i++) {
 			toReturn = allInvocations.get(i).getBPELPathForFlexoVariable(fv);
-			if (toReturn != null)
+			if (toReturn != null) {
 				break;
+			}
 		}
 		return toReturn;
 

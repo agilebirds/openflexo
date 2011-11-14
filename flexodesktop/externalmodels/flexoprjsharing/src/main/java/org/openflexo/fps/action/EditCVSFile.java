@@ -26,8 +26,8 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.fps.CVSFile;
-import org.openflexo.fps.FPSObject;
 import org.openflexo.fps.CVSFile.FileContentEditor;
+import org.openflexo.fps.FPSObject;
 
 public class EditCVSFile extends CVSAction<EditCVSFile, CVSFile> {
 

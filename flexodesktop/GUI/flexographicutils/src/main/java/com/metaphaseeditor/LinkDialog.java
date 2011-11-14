@@ -129,6 +129,7 @@ public class LinkDialog extends javax.swing.JDialog {
 
 		linkTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "URL" }));
 		linkTypeComboBox.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				linkTypeComboBoxActionPerformed(evt);
 			}
@@ -206,6 +207,7 @@ public class LinkDialog extends javax.swing.JDialog {
 		tabIndexToggleButton.setSelected(true);
 		tabIndexToggleButton.setText("Default");
 		tabIndexToggleButton.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				tabIndexToggleButtonActionPerformed(evt);
 			}
@@ -330,6 +332,7 @@ public class LinkDialog extends javax.swing.JDialog {
 
 		okButton.setText("OK");
 		okButton.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				okButtonActionPerformed(evt);
 			}
@@ -337,6 +340,7 @@ public class LinkDialog extends javax.swing.JDialog {
 
 		cancelButton.setText("Cancel");
 		cancelButton.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				cancelButtonActionPerformed(evt);
 			}

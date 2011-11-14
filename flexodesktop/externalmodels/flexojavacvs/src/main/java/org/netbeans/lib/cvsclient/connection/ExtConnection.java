@@ -80,8 +80,9 @@ public class ExtConnection extends AbstractConnection {
 
 	@Override
 	public boolean isOpen() {
-		if (process == null)
+		if (process == null) {
 			return false;
+		}
 		try {
 			process.exitValue();
 			return false;

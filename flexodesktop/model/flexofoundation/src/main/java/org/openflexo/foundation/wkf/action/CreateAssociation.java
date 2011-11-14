@@ -82,8 +82,9 @@ public class CreateAssociation extends FlexoUndoableAction<CreateAssociation, WK
 	protected void doAction(Object context) throws InvalidEdgeDefinition, DisplayActionCannotBeBound {
 		// 1. Check validity
 		// Cannot have null start node or end node
-		if (startNode == null || endNode == null)
+		if (startNode == null || endNode == null) {
 			throw new InvalidEdgeDefinition();
+		}
 
 		newAssociation = new WKFAssociation(startNode, endNode);
 		objectCreated("NEW_ASSOCIATION", newAssociation);

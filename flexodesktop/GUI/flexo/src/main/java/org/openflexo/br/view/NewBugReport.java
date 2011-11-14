@@ -54,7 +54,6 @@ import org.openflexo.AdvancedPrefs;
 import org.openflexo.FlexoCst;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.br.BugReport;
-
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.logging.LogRecord;
@@ -119,18 +118,21 @@ public class NewBugReport extends FlexoDialog {
 		cancelButton = new JButton(FlexoLocalization.localizedForKey("cancel"));
 		disableButtons();
 		cancelButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				returned = CANCEL;
 				dispose();
 			}
 		});
 		saveToFileButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				returned = SAVE;
 				_bugReportView.updateValues();
 			}
 		});
 		registerButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				returned = REGISTER;
 				_bugReportView.updateValues();
@@ -138,6 +140,7 @@ public class NewBugReport extends FlexoDialog {
 			}
 		});
 		emailButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				returned = EMAIL;
 				_bugReportView.updateValues();
@@ -145,20 +148,24 @@ public class NewBugReport extends FlexoDialog {
 			}
 		});
 		sendButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				returned = SEND;
 				_bugReportView.updateValues();
-				if (_bugReportView.getBugReport().isValid())
+				if (_bugReportView.getBugReport().isValid()) {
 					dispose();
-				else
+				} else {
 					FlexoController.notify(FlexoLocalization.localizedForKey("title_and_description_are_mandatory"));
+				}
 			}
 		});
 		controlPanel.add(cancelButton);
-		if (ModuleLoader.isMaintainerRelease())
+		if (ModuleLoader.isMaintainerRelease()) {
 			controlPanel.add(saveToFileButton);
-		if (ModuleLoader.isMaintainerRelease())
+		}
+		if (ModuleLoader.isMaintainerRelease()) {
 			controlPanel.add(registerButton);
+		}
 		controlPanel.add(sendButton);
 
 		JPanel contentPanel = new JPanel();
@@ -200,8 +207,9 @@ public class NewBugReport extends FlexoDialog {
 			int returnVal = chooser.showSaveDialog(null);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				selectedFile = chooser.getSelectedFile();
-				if (!selectedFile.getName().endsWith(".brxml"))
+				if (!selectedFile.getName().endsWith(".brxml")) {
 					selectedFile = new File(selectedFile.getParentFile(), selectedFile.getName() + ".brxml");
+				}
 				newBugReport.saveToFile(selectedFile);
 			}
 		} else if (window.getStatus() == REGISTER) {
@@ -250,8 +258,9 @@ public class NewBugReport extends FlexoDialog {
 			// props.put("mail.smtp.host", "smtp.wanadoo.fr");
 			props.put(SMTP_HOST, GeneralPreferences.getSmtpServer());
 			Session s = Session.getInstance(props, null);
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Trying to send mail with " + props.getProperty(SMTP_HOST));
+			}
 			InternetAddress from;
 			try {
 				from = new InternetAddress(bugReport.submissionUserName + "@denali.be");
@@ -270,8 +279,9 @@ public class NewBugReport extends FlexoDialog {
 
 			} catch (javax.mail.NoSuchProviderException e) {
 				e.printStackTrace();
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine(e.getMessage());
+				}
 				String newSMTPServer = FlexoController.askForString("sending_failed_please_specify_your_smtp_server");
 				if (newSMTPServer != null) {
 					GeneralPreferences.setSmtpServer(newSMTPServer);
@@ -297,8 +307,9 @@ public class NewBugReport extends FlexoDialog {
 		// ensure we got the url
 		if (AdvancedPrefs.getBugReportDirectActionUrl() == null) {
 			String urlDialogResponse = FlexoController.askForString("please_specify_the_bug_report_application_url");
-			if (urlDialogResponse == null || urlDialogResponse.length() == 0)
+			if (urlDialogResponse == null || urlDialogResponse.length() == 0) {
 				return "Operation cancelled";
+			}
 			AdvancedPrefs.setBugReportDirectActionUrl(urlDialogResponse);
 			FlexoPreferences.savePreferences(true);
 		}
@@ -311,20 +322,23 @@ public class NewBugReport extends FlexoDialog {
 			return FlexoLocalization.localizedForKey("the_url_" + AdvancedPrefs.getBugReportDirectActionUrl() + "_is_not_valid");
 		}
 		final Hashtable<String, String> param = new Hashtable<String, String>();
-		if (bugReport.title == null || bugReport.title.trim().equals(""))
+		if (bugReport.title == null || bugReport.title.trim().equals("")) {
 			return FlexoLocalization.localizedForKey("please_specify_a_title");
+		}
 		param.put("title", bugReport.title + " (" + (bugReport.module == null ? "module not specified" : bugReport.module.getName() + ")"));
 		param.put("login", bugReport.submissionUserName == null ? System.getProperty("user.name") : bugReport.submissionUserName);
-		if (bugReport.identifier != null)
+		if (bugReport.identifier != null) {
 			param.put("externalKey", bugReport.identifier);
+		}
 
 		// garantee null or a non empty and trimmed string on context and descriptop,
 		bugReport.context = bugReport.context == null || bugReport.context.trim().length() == 0 ? null : bugReport.context.trim();
 		bugReport.description = bugReport.description == null || bugReport.description.trim().length() == 0 ? null : bugReport.description
 				.trim();
 
-		if (bugReport.context == null && bugReport.description == null)
+		if (bugReport.context == null && bugReport.description == null) {
 			return FlexoLocalization.localizedForKey("please_specify_a_description_or_context");
+		}
 		StringBuffer incidentDesc = new StringBuffer("");
 		if (bugReport.context != null) {
 			incidentDesc.append("<h4>CONTEXT</h4>");
@@ -337,8 +351,9 @@ public class NewBugReport extends FlexoDialog {
 			incidentDesc.append("<h4>DESCRIPTION :</h4>");
 			incidentDesc.append(bugReport.description);
 		}
-		if (bugReport.type != null)
+		if (bugReport.type != null) {
 			param.put("incidentType", bugReport.type.getKey());
+		}
 		param.put("desc", incidentDesc.toString());
 		int remainingLength = MAXIMUM_SIZE_DESC_AND_OTHER_INFO - incidentDesc.length();
 		param.put("impact", transformImpact(bugReport.impact));
@@ -366,8 +381,9 @@ public class NewBugReport extends FlexoDialog {
 				nl = nl.replace("\r", "\\r");
 				nl = nl.replace("\n", "\\n");
 				otherInfoString.append(key).append(" = ").append(nl).append('\n');
-			} else
+			} else {
 				otherInfoString.append(key).append(" = ").append(System.getProperty(key)).append('\n');
+			}
 		}
 		remainingLength -= otherInfoString.length();
 		for (int counter = FlexoLoggingManager.logRecords.records.size() - 1; counter >= 0; counter--) {
@@ -384,8 +400,9 @@ public class NewBugReport extends FlexoDialog {
 			if (sb.length() < remainingLength) {
 				otherInfoString.append(sb);
 				remainingLength -= sb.length();
-			} else
+			} else {
 				break;
+			}
 		}
 		param.put("otherInfo", otherInfoString.toString());
 
@@ -400,8 +417,9 @@ public class NewBugReport extends FlexoDialog {
 			public void run() {
 				try {
 					String sendRequest = sendRequest(param);
-					if (sendRequest != null)
+					if (sendRequest != null) {
 						sb.append(sendRequest);
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 					sb.append(FlexoLocalization.localizedForKey("an error has occured !\n(error message: " + e.getMessage()));
@@ -422,15 +440,17 @@ public class NewBugReport extends FlexoDialog {
 			if (t.isAlive()) {
 				if (tries < numberOfTries) {
 					if (FlexoController.confirm(FlexoLocalization.localizedForKey("could_not_send_incident_so_far_keep_trying") + "? ("
-							+ tries + ")"))
+							+ tries + ")")) {
 						continue;
+					}
 				}
 				return FlexoLocalization.localizedForKey("send_incident_timeout");
 			}
 		}
 		t.interrupt();
-		if (sb.length() > 0)
+		if (sb.length() > 0) {
 			return sb.toString();
+		}
 		return null;
 	}
 
@@ -457,28 +477,35 @@ public class NewBugReport extends FlexoDialog {
 			}
 			return FlexoLocalization.localizedForKey("an error has occured !\n(error message: " + e.getMessage());
 		}
-		if (hasError(response))
+		if (hasError(response)) {
 			return getErrorMessage(response);
+		}
 		return null;
 	}
 
 	private static String transformImpact(int impact) {
-		if (impact == 0)
+		if (impact == 0) {
 			return "2";
-		if (impact == 1)
+		}
+		if (impact == 1) {
 			return "1";
-		if (impact == 2)
+		}
+		if (impact == 2) {
 			return "0";
+		}
 		return "2";
 	}
 
 	private static String transformUrgency(int urgency) {
-		if (urgency == 0)
+		if (urgency == 0) {
 			return "3";
-		if (urgency == 1)
+		}
+		if (urgency == 1) {
 			return "2";
-		if (urgency == 2)
+		}
+		if (urgency == 2) {
 			return "1";
+		}
 		return "3";
 	}
 
@@ -493,24 +520,32 @@ public class NewBugReport extends FlexoDialog {
 	}
 
 	public void disableButtons() {
-		if (saveToFileButton != null)
+		if (saveToFileButton != null) {
 			saveToFileButton.setEnabled(false);
-		if (registerButton != null)
+		}
+		if (registerButton != null) {
 			registerButton.setEnabled(false);
-		if (emailButton != null)
+		}
+		if (emailButton != null) {
 			emailButton.setEnabled(false);
-		if (sendButton != null)
+		}
+		if (sendButton != null) {
 			sendButton.setEnabled(false);
+		}
 	}
 
 	public void enableButtons() {
-		if (saveToFileButton != null)
+		if (saveToFileButton != null) {
 			saveToFileButton.setEnabled(true);
-		if (registerButton != null)
+		}
+		if (registerButton != null) {
 			registerButton.setEnabled(true);
-		if (emailButton != null)
+		}
+		if (emailButton != null) {
 			emailButton.setEnabled(true);
-		if (sendButton != null)
+		}
+		if (sendButton != null) {
 			sendButton.setEnabled(true);
+		}
 	}
 }

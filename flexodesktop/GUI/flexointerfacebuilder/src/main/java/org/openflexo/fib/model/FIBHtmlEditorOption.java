@@ -19,13 +19,9 @@
  */
 package org.openflexo.fib.model;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-
-import org.openflexo.fib.model.FIBImage.Parameters;
-import org.openflexo.fib.model.FIBModelObject.FIBModelAttribute;
 
 import com.metaphaseeditor.MetaphaseEditorConfiguration.MetaphaseEditorOption;
 
@@ -52,8 +48,9 @@ public class FIBHtmlEditorOption extends FIBModelObject {
 	public void setName(String optionName) {
 		super.setName(optionName);
 		level = getLevel(optionName);
-		if (index == -1)
+		if (index == -1) {
 			index = retrieveIndex(optionName);
+		}
 		for (String s : FIBHtmlEditor.option_keys) {
 			if (s.startsWith(optionName) && !s.equals(optionName)) {
 				subOptions.add(s);
@@ -90,12 +87,14 @@ public class FIBHtmlEditorOption extends FIBModelObject {
 		int level = getLevel(optionName);
 
 		for (String s : FIBHtmlEditor.option_keys) {
-			if (s.equals(optionName))
+			if (s.equals(optionName)) {
 				return index;
-			if (getLevel(s) == level)
+			}
+			if (getLevel(s) == level) {
 				index++;
-			else if (optionName.startsWith(s))
+			} else if (optionName.startsWith(s)) {
 				index = 0;
+			}
 		}
 		return -1;
 	}
@@ -110,8 +109,9 @@ public class FIBHtmlEditorOption extends FIBModelObject {
 
 	@Override
 	public FIBComponent getRootComponent() {
-		if (getFIBHtmlEditor() != null)
+		if (getFIBHtmlEditor() != null) {
 			return getFIBHtmlEditor().getRootComponent();
+		}
 		return null;
 	}
 
@@ -128,8 +128,9 @@ public class FIBHtmlEditorOption extends FIBModelObject {
 				for (String o : subOptions) {
 					// System.out.println("Also do setIsVisible for "+o);
 					FIBHtmlEditorOption option = editor.getOption(o);
-					if (option != null)
+					if (option != null) {
 						option.setIsVisible(isVisible);
+					}
 				}
 				if (isVisible) {
 					if (getLevel() == 0) {
@@ -139,23 +140,30 @@ public class FIBHtmlEditorOption extends FIBModelObject {
 						}
 					} else {
 						if (getParentOption() != null) {
-							if (editor.getOptionsInLine1().contains(getParentOption()))
+							if (editor.getOptionsInLine1().contains(getParentOption())) {
 								editor.addToOptionsInLine1(this);
-							if (editor.getOptionsInLine2().contains(getParentOption()))
+							}
+							if (editor.getOptionsInLine2().contains(getParentOption())) {
 								editor.addToOptionsInLine2(this);
-							if (editor.getOptionsInLine3().contains(getParentOption()))
+							}
+							if (editor.getOptionsInLine3().contains(getParentOption())) {
 								editor.addToOptionsInLine3(this);
+							}
 						}
 					}
 				} else {
-					if (editor.getOptionsInLine1().contains(this))
+					if (editor.getOptionsInLine1().contains(this)) {
 						editor.removeFromOptionsInLine1(this);
-					if (editor.getOptionsInLine2().contains(this))
+					}
+					if (editor.getOptionsInLine2().contains(this)) {
 						editor.removeFromOptionsInLine2(this);
-					if (editor.getOptionsInLine3().contains(this))
+					}
+					if (editor.getOptionsInLine3().contains(this)) {
 						editor.removeFromOptionsInLine3(this);
-					if (editor.getVisibleAndUnusedOptions().contains(this))
+					}
+					if (editor.getVisibleAndUnusedOptions().contains(this)) {
 						editor.removeFromVisibleAndUnusedOptions(this);
+					}
 				}
 			}
 		}
@@ -170,8 +178,9 @@ public class FIBHtmlEditorOption extends FIBModelObject {
 		if (notification != null) {
 			this.index = index;
 			hasChanged(notification);
-			if (editor != null)
+			if (editor != null) {
 				editor.indexChanged();
+			}
 		}
 	}
 
@@ -208,12 +217,15 @@ public class FIBHtmlEditorOption extends FIBModelObject {
 
 	protected int getLine() {
 		if (editor != null) {
-			if (editor.getOptionsInLine1().contains(this))
+			if (editor.getOptionsInLine1().contains(this)) {
 				return 1;
-			if (editor.getOptionsInLine2().contains(this))
+			}
+			if (editor.getOptionsInLine2().contains(this)) {
 				return 2;
-			if (editor.getOptionsInLine3().contains(this))
+			}
+			if (editor.getOptionsInLine3().contains(this)) {
 				return 3;
+			}
 		}
 		return -1;
 	}

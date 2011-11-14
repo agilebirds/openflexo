@@ -44,8 +44,9 @@ public class IEConditionalElement extends IEElement {
 			FlexoModelObject child = (FlexoModelObject) e.nextElement();
 			if (child instanceof IESequence) {
 				addToChilds(((IESequence) child).getOperator());
-			} else
+			} else {
 				addToChilds(child);
+			}
 		}
 	}
 

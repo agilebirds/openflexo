@@ -61,8 +61,9 @@ public class CVSRepositoriesBrowser extends FPSBrowser implements FlexoObserver 
 
 	@Override
 	public void update(FlexoObservable o, DataModification arg) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("CVSRepositoriesBrowser update");
+		}
 	}
 
 	public static BrowserConfiguration makeDefaultBrowserConfiguration(CVSRepositoryList repositories) {

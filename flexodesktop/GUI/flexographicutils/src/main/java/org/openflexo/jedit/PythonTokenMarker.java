@@ -67,9 +67,9 @@ public class PythonTokenMarker extends TokenMarker {
 			case Token.NULL:
 				switch (c) {
 				case '#':
-					if (backslash)
+					if (backslash) {
 						backslash = false;
-					else {
+					} else {
 						doKeyword(line, i, c);
 						addToken(i - lastOffset, token);
 						addToken(length - i, Token.COMMENT1);
@@ -79,9 +79,9 @@ public class PythonTokenMarker extends TokenMarker {
 					break;
 				case '"':
 					doKeyword(line, i, c);
-					if (backslash)
+					if (backslash) {
 						backslash = false;
-					else {
+					} else {
 						addToken(i - lastOffset, token);
 						if (SyntaxUtilities.regionMatches(false, line, i1, "\"\"")) {
 							token = TRIPLEQUOTE1;
@@ -93,9 +93,9 @@ public class PythonTokenMarker extends TokenMarker {
 					break;
 				case '\'':
 					doKeyword(line, i, c);
-					if (backslash)
+					if (backslash) {
 						backslash = false;
-					else {
+					} else {
 						addToken(i - lastOffset, token);
 						if (SyntaxUtilities.regionMatches(false, line, i1, "''")) {
 							token = TRIPLEQUOTE2;
@@ -107,42 +107,43 @@ public class PythonTokenMarker extends TokenMarker {
 					break;
 				default:
 					backslash = false;
-					if (!Character.isLetterOrDigit(c) && c != '_')
+					if (!Character.isLetterOrDigit(c) && c != '_') {
 						doKeyword(line, i, c);
+					}
 					break;
 				}
 				break;
 			case Token.LITERAL1:
-				if (backslash)
+				if (backslash) {
 					backslash = false;
-				else if (c == '"') {
+				} else if (c == '"') {
 					addToken(i1 - lastOffset, token);
 					token = Token.NULL;
 					lastOffset = lastKeyword = i1;
 				}
 				break;
 			case Token.LITERAL2:
-				if (backslash)
+				if (backslash) {
 					backslash = false;
-				else if (c == '\'') {
+				} else if (c == '\'') {
 					addToken(i1 - lastOffset, Token.LITERAL1);
 					token = Token.NULL;
 					lastOffset = lastKeyword = i1;
 				}
 				break;
 			case TRIPLEQUOTE1:
-				if (backslash)
+				if (backslash) {
 					backslash = false;
-				else if (SyntaxUtilities.regionMatches(false, line, i, "\"\"\"")) {
+				} else if (SyntaxUtilities.regionMatches(false, line, i, "\"\"\"")) {
 					addToken((i += 4) - lastOffset, Token.LITERAL1);
 					token = Token.NULL;
 					lastOffset = lastKeyword = i;
 				}
 				break;
 			case TRIPLEQUOTE2:
-				if (backslash)
+				if (backslash) {
 					backslash = false;
-				else if (SyntaxUtilities.regionMatches(false, line, i, "'''")) {
+				} else if (SyntaxUtilities.regionMatches(false, line, i, "'''")) {
 					addToken((i += 4) - lastOffset, Token.LITERAL1);
 					token = Token.NULL;
 					lastOffset = lastKeyword = i;
@@ -216,8 +217,9 @@ public class PythonTokenMarker extends TokenMarker {
 		int len = i - lastKeyword;
 		byte id = keywords.lookup(line, lastKeyword, len);
 		if (id != Token.NULL) {
-			if (lastKeyword != lastOffset)
+			if (lastKeyword != lastOffset) {
 				addToken(lastKeyword - lastOffset, Token.NULL);
+			}
 			addToken(len, id);
 			lastOffset = i;
 		}

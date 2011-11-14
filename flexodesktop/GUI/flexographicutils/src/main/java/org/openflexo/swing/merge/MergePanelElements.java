@@ -503,14 +503,16 @@ public class MergePanelElements implements Observer {
 
 					@Override
 					public void mousePressed(MouseEvent mouseEvent) {
-						if (mouseEvent.isPopupTrigger())
+						if (mouseEvent.isPopupTrigger()) {
 							getPopupMenu().show(mouseEvent.getComponent(), mouseEvent.getX() + 10, mouseEvent.getY());
+						}
 					}
 
 					@Override
 					public void mouseReleased(MouseEvent mouseEvent) {
-						if (mouseEvent.isPopupTrigger())
+						if (mouseEvent.isPopupTrigger()) {
 							getPopupMenu().show(mouseEvent.getComponent(), mouseEvent.getX() + 10, mouseEvent.getY());
+						}
 					}
 
 				});
@@ -608,8 +610,9 @@ public class MergePanelElements implements Observer {
 
 			@Override
 			public boolean isSelected() {
-				if (getAction() != null)
+				if (getAction() != null) {
 					return getAction().mergeChange.getMergeChangeAction() == getAction().mergeChangeAction;
+				}
 				return super.isSelected();
 			}
 
@@ -959,18 +962,20 @@ public class MergePanelElements implements Observer {
 					public void mousePressed(MouseEvent mouseEvent) {
 						if (mouseEvent.isPopupTrigger() && _filteredList.getSelectedValue() != null
 								&& _filteredList.getSelectedValue() instanceof MergeChange
-								&& ((MergeChange) _filteredList.getSelectedValue()).getMergeChangeSource() == MergeChangeSource.Conflict)
+								&& ((MergeChange) _filteredList.getSelectedValue()).getMergeChangeSource() == MergeChangeSource.Conflict) {
 							comparePanel._buttonForChanges.get(_filteredList.getSelectedValue()).getPopupMenu()
 									.show(mouseEvent.getComponent(), mouseEvent.getX() + 10, mouseEvent.getY());
+						}
 					}
 
 					@Override
 					public void mouseReleased(MouseEvent mouseEvent) {
 						if (mouseEvent.isPopupTrigger() && _filteredList.getSelectedValue() != null
 								&& _filteredList.getSelectedValue() instanceof MergeChange
-								&& ((MergeChange) _filteredList.getSelectedValue()).getMergeChangeSource() == MergeChangeSource.Conflict)
+								&& ((MergeChange) _filteredList.getSelectedValue()).getMergeChangeSource() == MergeChangeSource.Conflict) {
 							comparePanel._buttonForChanges.get(_filteredList.getSelectedValue()).getPopupMenu()
 									.show(mouseEvent.getComponent(), mouseEvent.getX() + 10, mouseEvent.getY());
+						}
 					}
 
 				});
@@ -984,14 +989,16 @@ public class MergePanelElements implements Observer {
 		}
 
 		public void addAllFilter(MergeChange.ChangeCategory[] categories) {
-			for (MergeChange.ChangeCategory item : categories)
+			for (MergeChange.ChangeCategory item : categories) {
 				selectedCategories.add(item);
+			}
 			refreshList();
 		}
 
 		public void removeAllFilter(MergeChange.ChangeCategory[] categories) {
-			for (MergeChange.ChangeCategory item : categories)
+			for (MergeChange.ChangeCategory item : categories) {
 				selectedCategories.remove(item);
+			}
 			refreshList();
 		}
 
@@ -1049,10 +1056,11 @@ public class MergePanelElements implements Observer {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							_isSelected = !_isSelected;
-							if (_isSelected)
+							if (_isSelected) {
 								addAllFilter(_categories);
-							else
+							} else {
 								removeAllFilter(_categories);
+							}
 							setBorder(_isSelected ? BorderFactory.createEtchedBorder(EtchedBorder.LOWERED) : BorderFactory
 									.createEmptyBorder());
 							System.out.println(getPreferredSize());

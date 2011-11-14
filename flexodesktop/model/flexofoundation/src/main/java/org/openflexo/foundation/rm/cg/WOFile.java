@@ -89,8 +89,9 @@ public class WOFile extends AbstractGeneratedFile {
 		}
 
 		// Save to file the new generation
-		if (!aFile.exists())
+		if (!aFile.exists()) {
 			aFile.mkdirs();
+		}
 		_htmlFile.writeToFile(new File(aFile, _htmlFile.getFile().getName()));
 		_wodFile.writeToFile(new File(aFile, _wodFile.getFile().getName()));
 		_wooFile.writeToFile(new File(aFile, _wooFile.getFile().getName()));
@@ -108,8 +109,9 @@ public class WOFile extends AbstractGeneratedFile {
 
 	@Override
 	public final void generate() throws FlexoException {
-		if (!(getFlexoResource() instanceof GenerationAvailableFileResourceInterface))
+		if (!(getFlexoResource() instanceof GenerationAvailableFileResourceInterface)) {
 			throw new NotImplementedException("version_without_code_generator");
+		}
 		_htmlFile.generate();
 		_wodFile.generate();
 		_wooFile.generate();
@@ -117,8 +119,9 @@ public class WOFile extends AbstractGeneratedFile {
 
 	@Override
 	public final void regenerate() throws FlexoException {
-		if (!(getFlexoResource() instanceof GenerationAvailableFileResourceInterface))
+		if (!(getFlexoResource() instanceof GenerationAvailableFileResourceInterface)) {
 			throw new NotImplementedException("version_without_code_generator");
+		}
 		_htmlFile.regenerate();
 		_wodFile.regenerate();
 		_wooFile.regenerate();
@@ -182,8 +185,9 @@ public class WOFile extends AbstractGeneratedFile {
 
 	@Override
 	public void notifyRegenerated(CGContentRegenerated notification) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("notifyRegenerated() called in " + getClass().getName());
+		}
 		_htmlFile.notifyRegenerated(notification);
 		_wodFile.notifyRegenerated(notification);
 		_wooFile.notifyRegenerated(notification);
@@ -196,8 +200,9 @@ public class WOFile extends AbstractGeneratedFile {
 			getHistory().storeCurrentFileInHistory(CGVersionIdentifier.VersionType.DiskUpdate);
 		}
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("acceptDiskVersion() called in " + getClass().getName());
+		}
 		_htmlFile.acceptDiskVersion();
 		_wodFile.acceptDiskVersion();
 		_wooFile.acceptDiskVersion();
@@ -239,10 +244,12 @@ public class WOFile extends AbstractGeneratedFile {
 	@Override
 	public ContentSource getScheduledOverrideVersion() {
 		ContentSource returned = _htmlFile.getScheduledOverrideVersion();
-		if (_wodFile.getScheduledOverrideVersion() != returned)
+		if (_wodFile.getScheduledOverrideVersion() != returned) {
 			logger.warning("Inconsistent data in scheduled version");
-		if (_wooFile.getScheduledOverrideVersion() != returned)
+		}
+		if (_wooFile.getScheduledOverrideVersion() != returned) {
 			logger.warning("Inconsistent data in scheduled version");
+		}
 		return returned;
 	}
 
@@ -292,8 +299,9 @@ public class WOFile extends AbstractGeneratedFile {
 		@Override
 		public String getCurrentGeneration() {
 			if ((getFlexoResource() != null) && (getFlexoResource().getGenerator() != null)
-					&& (getFlexoResource().getGenerator().getGeneratedCode() instanceof GeneratedComponent))
+					&& (getFlexoResource().getGenerator().getGeneratedCode() instanceof GeneratedComponent)) {
 				return ((GeneratedComponent) getFlexoResource().getGenerator().getGeneratedCode()).html();
+			}
 			return null;
 		}
 
@@ -333,10 +341,11 @@ public class WOFile extends AbstractGeneratedFile {
 		@Override
 		protected String getHistoryContent(CGVersionIdentifier versionId) {
 			try {
-				if (getHistory().versionWithId(versionId) != null)
+				if (getHistory().versionWithId(versionId) != null) {
 					return getHistory().versionWithId(versionId).getHTMLContent();
-				else
+				} else {
 					return "Unable to access version " + versionId + " for file " + getFlexoResource().getFileName();
+				}
 			} catch (IOFlexoException e) {
 				e.printStackTrace();
 				return "Unable to access version " + versionId + " for file " + getFlexoResource().getFileName();
@@ -364,8 +373,9 @@ public class WOFile extends AbstractGeneratedFile {
 		@Override
 		public String getCurrentGeneration() {
 			if ((getFlexoResource() != null) && (getFlexoResource().getGenerator() != null)
-					&& (getFlexoResource().getGenerator().getGeneratedCode() instanceof GeneratedComponent))
+					&& (getFlexoResource().getGenerator().getGeneratedCode() instanceof GeneratedComponent)) {
 				return ((GeneratedComponent) getFlexoResource().getGenerator().getGeneratedCode()).wod();
+			}
 			return null;
 		}
 
@@ -405,10 +415,11 @@ public class WOFile extends AbstractGeneratedFile {
 		@Override
 		protected String getHistoryContent(CGVersionIdentifier versionId) {
 			try {
-				if (getHistory().versionWithId(versionId) != null)
+				if (getHistory().versionWithId(versionId) != null) {
 					return getHistory().versionWithId(versionId).getWODContent();
-				else
+				} else {
 					return "Unable to access version " + versionId + " for file " + getFlexoResource().getFileName();
+				}
 			} catch (IOFlexoException e) {
 				e.printStackTrace();
 				return "Unable to access version " + versionId + " for file " + getFlexoResource().getFileName();
@@ -436,8 +447,9 @@ public class WOFile extends AbstractGeneratedFile {
 		@Override
 		public String getCurrentGeneration() {
 			if ((getFlexoResource() != null) && (getFlexoResource().getGenerator() != null)
-					&& (getFlexoResource().getGenerator().getGeneratedCode() instanceof GeneratedComponent))
+					&& (getFlexoResource().getGenerator().getGeneratedCode() instanceof GeneratedComponent)) {
 				return ((GeneratedComponent) getFlexoResource().getGenerator().getGeneratedCode()).woo();
+			}
 			return null;
 		}
 
@@ -477,10 +489,11 @@ public class WOFile extends AbstractGeneratedFile {
 		@Override
 		protected String getHistoryContent(CGVersionIdentifier versionId) {
 			try {
-				if (getHistory().versionWithId(versionId) != null)
+				if (getHistory().versionWithId(versionId) != null) {
 					return getHistory().versionWithId(versionId).getWOOContent();
-				else
+				} else {
 					return "Unable to access version " + versionId + " for file " + getFlexoResource().getFileName();
+				}
 			} catch (IOFlexoException e) {
 				e.printStackTrace();
 				return "Unable to access version " + versionId + " for file " + getFlexoResource().getFileName();

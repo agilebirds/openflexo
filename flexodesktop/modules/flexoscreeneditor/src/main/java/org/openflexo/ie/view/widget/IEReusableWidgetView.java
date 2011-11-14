@@ -72,8 +72,9 @@ public class IEReusableWidgetView<D extends IEReusableWidget<C, CI>, CI extends 
 	public void propagateResize() {
 		Component[] c = getComponents();
 		for (int i = 0; i < c.length; i++) {
-			if (c[i] instanceof Layoutable)
+			if (c[i] instanceof Layoutable) {
 				((Layoutable) c[i]).propagateResize();
+			}
 		}
 	}
 
@@ -81,12 +82,14 @@ public class IEReusableWidgetView<D extends IEReusableWidget<C, CI>, CI extends 
 	public Dimension getPreferredSize() {
 		if (getHoldsNextComputedPreferredSize()) {
 			Dimension storedSize = storedPrefSize();
-			if (storedSize != null)
+			if (storedSize != null) {
 				return storedSize;
+			}
 		}
 		Dimension d = _reusableWidgetComponentView.getPreferredSize();
-		if (getHoldsNextComputedPreferredSize())
+		if (getHoldsNextComputedPreferredSize()) {
 			storePrefSize(d);
+		}
 		return d;
 	}
 
@@ -94,8 +97,9 @@ public class IEReusableWidgetView<D extends IEReusableWidget<C, CI>, CI extends 
 	public void update(FlexoObservable o, DataModification arg) {
 		if (arg instanceof ObjectDeleted && o == getModel()) {
 			delete();
-		} else
+		} else {
 			super.update(o, arg);
+		}
 
 	}
 

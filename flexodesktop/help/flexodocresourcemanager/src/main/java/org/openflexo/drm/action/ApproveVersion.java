@@ -27,8 +27,8 @@ import org.openflexo.drm.Author;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemAction;
 import org.openflexo.drm.DocItemVersion;
-import org.openflexo.drm.Language;
 import org.openflexo.drm.DocItemVersion.Version;
+import org.openflexo.drm.Language;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
@@ -101,8 +101,9 @@ public class ApproveVersion extends FlexoAction {
 	protected void doAction(Object context) {
 		if (getVersion() != null) {
 			logger.info("ApproveVersion");
-			if ((_newVersion != null) && (!_newVersion.equals(getVersion().getVersion())))
+			if ((_newVersion != null) && (!_newVersion.equals(getVersion().getVersion()))) {
 				getVersion().setVersion(_newVersion);
+			}
 			_newAction = getDocItem().approveVersion(getVersion(), getAuthor(), getDocItem().getDocResourceCenter());
 			_newAction.setNote(getNote());
 		}

@@ -96,15 +96,17 @@ public class DMRepositoryView extends DMView<DMRepository> {
 	@Override
 	protected JComponent buildContentPane() {
 		DMRepository repository = getDMObject();
-		if (repository.isReadOnly())
+		if (repository.isReadOnly()) {
 			packageTableModel = new DMReadOnlyPackageTableModel(repository, getDMController().getProject());
-		else
+		} else {
 			packageTableModel = new DMPackageTableModel(repository, getDMController().getProject());
+		}
 		addToMasterTabularView(packageTable = new DMTabularView(getDMController(), packageTableModel, 10));
-		if (repository.isReadOnly())
+		if (repository.isReadOnly()) {
 			entityTableModel = new DMReadOnlyEntityTableModel(null, getDMController().getProject());
-		else
+		} else {
 			entityTableModel = new DMEntityTableModel(null, getDMController().getProject());
+		}
 		addToSlaveTabularView(entityTable = new DMTabularView(getDMController(), entityTableModel, 15), packageTable);
 
 		return new JSplitPane(JSplitPane.VERTICAL_SPLIT, packageTable, entityTable);

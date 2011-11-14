@@ -23,8 +23,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.components.browser.BrowserElementType;
-import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
+import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
@@ -70,8 +70,9 @@ public class ComponentLibraryBrowser extends ProjectBrowser implements FlexoObse
 	@Override
 	public FlexoModelObject getDefaultRootObject() {
 		if (getProject() == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("project is null !");
+			}
 			return null;
 		} else {
 			return getProject().getFlexoComponentLibrary();

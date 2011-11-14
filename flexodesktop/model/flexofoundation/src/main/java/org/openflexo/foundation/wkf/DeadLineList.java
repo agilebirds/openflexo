@@ -77,8 +77,9 @@ public final class DeadLineList extends WKFObject implements DeletableObject, Le
 				return temp;
 			}
 		}
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Could not find deadline named " + aName);
+		}
 		return null;
 	}
 

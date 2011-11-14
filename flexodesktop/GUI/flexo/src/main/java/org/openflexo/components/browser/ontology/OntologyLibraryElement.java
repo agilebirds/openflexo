@@ -47,12 +47,14 @@ public class OntologyLibraryElement extends BrowserElement {
 		if (getProjectBrowser().getOEViewMode() == OEViewMode.FullHierarchy) {
 			addToChilds(getOntologyLibrary().getRootClass());
 			for (OntologyObjectProperty property : getOntologyLibrary().getRootObjectProperties()) {
-				if (!getProjectBrowser().showOnlyAnnotationProperties() || property.isAnnotationProperty())
+				if (!getProjectBrowser().showOnlyAnnotationProperties() || property.isAnnotationProperty()) {
 					addToChilds(property);
+				}
 			}
 			for (OntologyDataProperty property : getOntologyLibrary().getRootDataProperties()) {
-				if (!getProjectBrowser().showOnlyAnnotationProperties() || property.isAnnotationProperty())
+				if (!getProjectBrowser().showOnlyAnnotationProperties() || property.isAnnotationProperty()) {
 					addToChilds(property);
+				}
 			}
 		}
 

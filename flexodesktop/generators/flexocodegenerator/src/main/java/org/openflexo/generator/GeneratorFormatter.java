@@ -67,8 +67,9 @@ public class GeneratorFormatter {
 		private static Jalopy jalopy;
 
 		public static Jalopy getJalopy() {
-			if (jalopy == null)
+			if (jalopy == null) {
 				jalopy = new Jalopy();
+			}
 			jalopy.reset();
 			return jalopy;
 		}
@@ -76,14 +77,18 @@ public class GeneratorFormatter {
 
 	public synchronized static String formatJavaCode(String javaCode, String packageName, String className, CGGenerator generator,
 			FlexoProject project) throws JavaFormattingException {
-		if (javaCode == null)
+		if (javaCode == null) {
 			return null;
-		if (javaCode.trim().equals(""))
+		}
+		if (javaCode.trim().equals("")) {
 			return "";
+		}
 		if (lastRead == -1 || lastRead != project.getJavaFormatterSettings().getFile().lastModified()) {
-			if (lastRead != -1)
-				if (logger.isLoggable(Level.INFO))
+			if (lastRead != -1) {
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Update detected on java formatter file");
+				}
+			}
 			try {
 				Convention.importSettings(project.getJavaFormatterSettings().getFile());
 				lastRead = project.getJavaFormatterSettings().getFile().lastModified();
@@ -95,19 +100,23 @@ public class GeneratorFormatter {
 						String s = (String) st.nextElement();
 						if (s.equals("enum")) {
 							if (sb.length() == 0 || sb.toString().equals("static")) {
-								if (sb.length() != 0)
+								if (sb.length() != 0) {
 									sb.append("|");
+								}
 								sb.append(s);
-							} else
+							} else {
 								sb.insert(0, "enum|");
+							}
 						} else {
-							if (sb.length() != 0)
+							if (sb.length() != 0) {
 								sb.append("|");
+							}
 							sb.append(s);
 						}
 					}
-					if (!sb.toString().equals(sortOrder))
+					if (!sb.toString().equals(sortOrder)) {
 						Convention.getInstance().put(ConventionKeys.SORT_ORDER, sb.toString());
+					}
 				}
 
 			} catch (IOException e) {
@@ -127,22 +136,25 @@ public class GeneratorFormatter {
 				return sb.toString();
 			}
 		} catch (Exception e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception occured while parsing the java code");
+			}
 		}
 		if (jalopy.getState() == Jalopy.State.ERROR) {
 			logger.warning("Java code could not be formatted");
 			throw new JavaFormattingException(generator, packageName + "." + className);
 		}
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Java code could not be formatted: " + jalopy.getState());
+		}
 		return javaCode;
 	}
 
 	public static String formatHTMLCode(String htmlCode) {
 
-		if (htmlCode == null || htmlCode.trim().length() == 0)
+		if (htmlCode == null || htmlCode.trim().length() == 0) {
 			return "";
+		}
 		int indent = 0;
 		int indexOpening = 0;
 		int indexClosing = 0;
@@ -150,14 +162,16 @@ public class GeneratorFormatter {
 		int min = 0;
 		Matcher open = HTML_OPEN_PATTERN.matcher(htmlCode);
 		Matcher close = HTML_CLOSE_PATTERN.matcher(htmlCode);
-		if (open.find())
+		if (open.find()) {
 			indexOpening = open.end();
-		else
+		} else {
 			indexOpening = -1;
-		if (close.find())
+		}
+		if (close.find()) {
 			indexClosing = close.end();
-		else
+		} else {
 			indexClosing = -1;
+		}
 		StringBuilder sb = new StringBuilder();
 		try {
 			while ((indexOpening > -1 || indexClosing > -1) && index < htmlCode.length()) {
@@ -179,8 +193,9 @@ public class GeneratorFormatter {
 						sb.append(StringUtils.LINE_SEPARATOR);
 					}
 					sb.append(indentation(indent));
-					if (tagRequiresIndentation(open.group()))
+					if (tagRequiresIndentation(open.group())) {
 						indent++;
+					}
 					sb.append(htmlCode.substring(open.start(), indexOpening).trim());
 					sb.append(StringUtils.LINE_SEPARATOR);
 					index = indexOpening;
@@ -193,10 +208,11 @@ public class GeneratorFormatter {
 							sb.append(StringUtils.LINE_SEPARATOR);
 						}
 						sb.append(indentation(indent));
-						if (tagRequiresIndentation(open.group()))
+						if (tagRequiresIndentation(open.group())) {
 							indent++;
-						else
+						} else {
 							sb.deleteCharAt(sb.length() - 1);
+						}
 						sb.append(htmlCode.substring(open.start(), indexOpening).trim());
 						sb.append(StringUtils.LINE_SEPARATOR);
 						index = indexOpening;
@@ -217,21 +233,25 @@ public class GeneratorFormatter {
 					index = htmlCode.length();
 				}
 				if (index == indexOpening) {
-					if (open.find())
+					if (open.find()) {
 						indexOpening = open.end();
-					else
+					} else {
 						indexOpening = -1;
+					}
 				} else if (index == indexClosing) {
 					if (close.find()) {
 						indexClosing = close.end();
-					} else
+					} else {
 						indexClosing = -1;
+					}
 				}
 			}
 		} catch (RuntimeException re) {
-			if (index > 0 && index < htmlCode.length())
-				if (logger.isLoggable(Level.WARNING))
+			if (index > 0 && index < htmlCode.length()) {
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Failed to format at index " + index + " text: " + htmlCode.substring(index));
+				}
+			}
 			throw re;
 		}
 		return sb.toString();
@@ -254,10 +274,12 @@ public class GeneratorFormatter {
 	}
 
 	public static String formatWodCode(String wodCode) {
-		if (wodCode == null)
+		if (wodCode == null) {
 			return null;
-		if (wodCode.trim().equals(""))
+		}
+		if (wodCode.trim().equals("")) {
 			return "";
+		}
 		wodCode = wodCode.replace("\r", "");
 		wodCode = wodCode.replaceAll(MULTIPLE_NEW_LINE_ALONE_REG_EXP, StringUtils.LINE_SEPARATOR + StringUtils.LINE_SEPARATOR);
 		boolean insideHeaderFooter = false;
@@ -267,8 +289,9 @@ public class GeneratorFormatter {
 			while (st.hasMoreTokens()) {
 				String token = st.nextToken();
 				token = token.trim();
-				if (token.length() == 0)
+				if (token.length() == 0) {
 					continue;
+				}
 				if (token.matches(WOD_HEADER)) {
 					sb.append(token.substring(0, token.indexOf(':')).trim());
 					sb.append(": ");
@@ -287,20 +310,23 @@ public class GeneratorFormatter {
 							sb.append(token.substring(token.indexOf('=') + 1).trim());
 						} else {
 							sb.append("\t").append(token);
-							if (logger.isLoggable(Level.WARNING))
+							if (logger.isLoggable(Level.WARNING)) {
 								logger.warning("Inside WOD Header footer but not equal (=) sign could be found: " + token);
+							}
 						}
 					} else {
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Not inside WOD Header footer: " + token);
+						}
 						sb.append(token);
 					}
 					sb.append(StringUtils.LINE_SEPARATOR);
 				}
 			}
 			return sb.toString();
-		} else
+		} else {
 			return wodCode.trim() + StringUtils.LINE_SEPARATOR + StringUtils.LINE_SEPARATOR;
+		}
 	}
 
 	public static void main(String[] args) {

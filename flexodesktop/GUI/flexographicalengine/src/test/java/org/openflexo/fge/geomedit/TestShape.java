@@ -25,8 +25,8 @@ import java.awt.geom.Area;
 import java.awt.geom.PathIterator;
 
 import org.openflexo.fge.geom.FGEEllips;
-import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
+import org.openflexo.fge.geom.FGERectangle;
 
 public class TestShape {
 

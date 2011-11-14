@@ -38,7 +38,6 @@ import org.openflexo.foundation.wkf.node.SelfExecutableActionNode;
 import org.openflexo.foundation.wkf.node.SelfExecutableNode;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.wkf.processeditor.gr.ActionNodeGR;
-import org.openflexo.wkf.processeditor.gr.ActivityNodeGR;
 import org.openflexo.wkf.processeditor.gr.BeginActionNodeGR;
 import org.openflexo.wkf.processeditor.gr.EndActionNodeGR;
 import org.openflexo.wkf.processeditor.gr.OperatorANDGR;

@@ -51,8 +51,9 @@ public class FlexoAutoScroll {
 	public static void autoscroll(JComponent scrollable, Point p, int margin) {
 		JScrollPane scroll = (JScrollPane) SwingUtilities.getAncestorOfClass(JScrollPane.class, scrollable);
 		if (scroll == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Not inside a scroll pane, cannot scroll!");
+			}
 			return;
 		}
 		Rectangle visible = scrollable.getVisibleRect();

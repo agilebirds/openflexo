@@ -19,12 +19,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 package com.swabunga.spell.event;
 
+import java.text.BreakIterator;
+import java.text.CharacterIterator;
+
+import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.Segment;
 import javax.swing.text.StyledDocument;
-import javax.swing.text.AttributeSet;
-import java.text.BreakIterator;
 
 /**
  * This class tokenizes a swing document model. It also allows for the document model to be changed when corrections occur.
@@ -78,12 +80,13 @@ public class DocumentWordTokenizer implements WordTokenizer {
 	 * This helper method will return the start character of the next word in the buffer from the start position
 	 */
 	private static int getNextWordStart(Segment text, int startPos) {
-		if (startPos <= text.getEndIndex())
-			for (char ch = text.setIndex(startPos); ch != Segment.DONE; ch = text.next()) {
+		if (startPos <= text.getEndIndex()) {
+			for (char ch = text.setIndex(startPos); ch != CharacterIterator.DONE; ch = text.next()) {
 				if (Character.isLetterOrDigit(ch)) {
 					return text.getIndex();
 				}
 			}
+		}
 		return -1;
 	}
 
@@ -92,13 +95,14 @@ public class DocumentWordTokenizer implements WordTokenizer {
 	 * 
 	 */
 	private static int getNextWordEnd(Segment text, int startPos) {
-		for (char ch = text.setIndex(startPos); ch != Segment.DONE; ch = text.next()) {
+		for (char ch = text.setIndex(startPos); ch != CharacterIterator.DONE; ch = text.next()) {
 			if (!Character.isLetterOrDigit(ch)) {
 				if (ch == '-' || ch == '\'') { // handle ' and - inside words
 					char ch2 = text.next();
 					text.previous();
-					if (ch2 != Segment.DONE && Character.isLetterOrDigit(ch2))
+					if (ch2 != CharacterIterator.DONE && Character.isLetterOrDigit(ch2)) {
 						continue;
+					}
 				}
 				return text.getIndex();
 			}
@@ -110,6 +114,7 @@ public class DocumentWordTokenizer implements WordTokenizer {
 	 * Returns true if there are more words that can be processed in the string
 	 * 
 	 */
+	@Override
 	public boolean hasMoreWords() {
 		return moreTokens;
 	}
@@ -123,23 +128,26 @@ public class DocumentWordTokenizer implements WordTokenizer {
 	 */
 	public void posStartFullWordFrom(int pos) {
 		currentWordPos = text.getBeginIndex();
-		if (pos > text.getEndIndex())
+		if (pos > text.getEndIndex()) {
 			pos = text.getEndIndex();
-		for (char ch = text.setIndex(pos); ch != Segment.DONE; ch = text.previous()) {
+		}
+		for (char ch = text.setIndex(pos); ch != CharacterIterator.DONE; ch = text.previous()) {
 			if (!Character.isLetterOrDigit(ch)) {
 				if (ch == '-' || ch == '\'') { // handle ' and - inside words
 					char ch2 = text.previous();
 					text.next();
-					if (ch2 != Segment.DONE && Character.isLetterOrDigit(ch2))
+					if (ch2 != CharacterIterator.DONE && Character.isLetterOrDigit(ch2)) {
 						continue;
+					}
 				}
 				currentWordPos = text.getIndex() + 1;
 				break;
 			}
 		}
 		// System.out.println("CurPos:"+currentWordPos);
-		if (currentWordPos == 0)
+		if (currentWordPos == 0) {
 			first = true;
+		}
 		moreTokens = true;
 		currentWordEnd = getNextWordEnd(text, currentWordPos);
 		nextWordPos = getNextWordStart(text, currentWordEnd + 1);
@@ -149,6 +157,7 @@ public class DocumentWordTokenizer implements WordTokenizer {
 	 * Returns the current character position in the text
 	 * 
 	 */
+	@Override
 	public int getCurrentWordPosition() {
 		return currentWordPos;
 	}
@@ -157,6 +166,7 @@ public class DocumentWordTokenizer implements WordTokenizer {
 	 * Returns the current end word position in the text
 	 * 
 	 */
+	@Override
 	public int getCurrentWordEnd() {
 		return currentWordEnd;
 	}
@@ -165,6 +175,7 @@ public class DocumentWordTokenizer implements WordTokenizer {
 	 * Returns the next word in the text
 	 * 
 	 */
+	@Override
 	public String nextWord() {
 		if (!first) {
 			currentWordPos = nextWordPos;
@@ -172,12 +183,13 @@ public class DocumentWordTokenizer implements WordTokenizer {
 			nextWordPos = getNextWordStart(text, currentWordEnd + 1);
 		}
 		int current = sentenceIterator.current();
-		if (current == currentWordPos)
+		if (current == currentWordPos) {
 			startsSentence = true;
-		else {
+		} else {
 			startsSentence = false;
-			if (currentWordEnd > current)
+			if (currentWordEnd > current) {
 				sentenceIterator.next();
+			}
 		}
 		// The nextWordPos has already been populated
 		String word = null;
@@ -188,8 +200,9 @@ public class DocumentWordTokenizer implements WordTokenizer {
 		}
 		wordCount++;
 		first = false;
-		if (nextWordPos == -1)
+		if (nextWordPos == -1) {
 			moreTokens = false;
+		}
 		return word;
 	}
 
@@ -197,17 +210,20 @@ public class DocumentWordTokenizer implements WordTokenizer {
 	 * Returns the current number of words that have been processed
 	 * 
 	 */
+	@Override
 	public int getCurrentWordCount() {
 		return wordCount;
 	}
 
 	/** Replaces the current word token */
+	@Override
 	public void replaceWord(String newWord) {
 		AttributeSet attr = null;
 		if (currentWordPos != -1) {
 			try {
-				if (document instanceof StyledDocument)
+				if (document instanceof StyledDocument) {
 					attr = ((StyledDocument) document).getCharacterElement(currentWordPos).getAttributes();
+				}
 				document.remove(currentWordPos, currentWordEnd - currentWordPos);
 				document.insertString(currentWordPos, newWord, attr);
 				// Need to reset the segment
@@ -223,24 +239,28 @@ public class DocumentWordTokenizer implements WordTokenizer {
 				nextWordPos = getNextWordStart(text, currentWordEnd);
 				sentenceIterator.setText(text);
 				sentenceIterator.following(currentWordPos);
-			} else
+			} else {
 				moreTokens = false;
+			}
 		}
 	}
 
 	/**
 	 * Returns the current text that is being tokenized (includes any changes that have been made)
 	 */
+	@Override
 	public String getContext() {
 		return text.toString();
 	}
 
 	/** Returns true if the current word is at the start of a sentence */
+	@Override
 	public boolean isNewSentence() {
 		// BreakIterator doesn't work when the first word in a sentence is not capitalised,
 		// but we need to check for capitalisation
-		if (startsSentence || currentWordPos < 2)
+		if (startsSentence || currentWordPos < 2) {
 			return (true);
+		}
 
 		String textBefore = null;
 		try {

@@ -95,19 +95,22 @@ public abstract class WKFLayoutManager {
 	}
 
 	private void buildNodeMap(FlexoProgress progress) {
-		if (progress != null)
+		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("building_node_map"));
+		}
 		nodeMap.clear();
 		for (PetriGraphNode n : getProcess().getActivityPetriGraph().getNodes()) {
 			AutoLayoutNode aln = new AutoLayoutNode(n);
 			nodeMap.put(n, aln);
 		}
-		if (progress != null)
+		if (progress != null) {
 			progress.resetSecondaryProgress(nodeMap.size());
+		}
 		for (PetriGraphNode n : nodeMap.keySet()) {
 			AutoLayoutNode aln = nodeMap.get(n);
-			if (progress != null)
+			if (progress != null) {
 				progress.setSecondaryProgress(FlexoLocalization.localizedForKey("current_node") + " " + aln.node.getName());
+			}
 			aln.addEdges(n);
 			if (n instanceof FatherNode && ((FatherNode) n).hasContainedPetriGraph()) {
 				for (FlexoNode end : ((FatherNode) n).getContainedPetriGraph().getAllEndNodes()) {
@@ -125,22 +128,26 @@ public abstract class WKFLayoutManager {
 	private void buildPaths(FlexoProgress progress) {
 		mainPath = findMainPath(progress);
 		if (mainPath == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("No main path found!");
+			}
 			return;
 		}
 		buildSecondaryPaths(progress);
-		if (progress != null)
+		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("finding_loops_and_shortcuts"));
+		}
 		findLoopingAndShortcutEdges();
-		if (progress != null)
+		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("finding_uncovered_edges"));
+		}
 		uncoveredEdges = findUncoveredEdges();
 	}
 
 	private void buildSecondaryPaths(FlexoProgress progress) {
-		if (progress != null)
+		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("building_secondary_path"));
+		}
 		isolatedNodes.clear();
 		Vector<AutoLayoutNode> forgottenNodes = new Vector<AutoLayoutNode>();
 		for (AutoLayoutNode node : nodeMap.values()) {
@@ -154,8 +161,9 @@ public abstract class WKFLayoutManager {
 		}
 
 		secondaryPaths.clear();
-		if (progress != null)
+		if (progress != null) {
 			progress.resetSecondaryProgress(forgottenNodes.size());
+		}
 		while (forgottenNodes.size() > 0) {
 
 			Vector<AutoLayoutNodePath> potentialSubPaths = _buildAllSubPathForForForgottenNodes(forgottenNodes, mainPath, secondaryPaths);
@@ -165,9 +173,10 @@ public abstract class WKFLayoutManager {
 			secondaryPaths.add(bestSecondaryPath);
 			for (AutoLayoutNode node : bestSecondaryPath) {
 				if (forgottenNodes.contains(node)) {
-					if (progress != null)
+					if (progress != null) {
 						progress.setSecondaryProgress(FlexoLocalization.localizedForKey("from_node") + " "
 								+ bestSecondaryPath.firstElement().node.getName());
+					}
 					forgottenNodes.remove(node);
 				}
 			}
@@ -179,8 +188,9 @@ public abstract class WKFLayoutManager {
 			AutoLayoutNodePath mainPath, Vector<AutoLayoutNodePath> secondaryPaths) {
 		Vector<AutoLayoutNodePath> returned = new Vector<AutoLayoutNodePath>();
 		AutoLayoutNodePath alreadyVisited = new AutoLayoutNodePath(mainPath);
-		for (AutoLayoutNodePath subPath : secondaryPaths)
+		for (AutoLayoutNodePath subPath : secondaryPaths) {
 			alreadyVisited.addAll(subPath);
+		}
 		for (AutoLayoutNode node : forgottenNodes) {
 			Vector<AutoLayoutNodePath> potentialSubPaths = _buildPathsFrom(node, alreadyVisited.clone(), false);
 			for (AutoLayoutNodePath p : potentialSubPaths) {
@@ -204,8 +214,9 @@ public abstract class WKFLayoutManager {
 									break;
 								}
 							}
-							if (p.startPath != null)
+							if (p.startPath != null) {
 								break;
+							}
 						}
 					}
 				}
@@ -229,8 +240,9 @@ public abstract class WKFLayoutManager {
 									break;
 								}
 							}
-							if (p.endPath != null)
+							if (p.endPath != null) {
 								break;
+							}
 						}
 					}
 				}
@@ -241,17 +253,20 @@ public abstract class WKFLayoutManager {
 		Collections.sort(returned, new Comparator<AutoLayoutNodePath>() {
 			@Override
 			public int compare(AutoLayoutNodePath p1, AutoLayoutNodePath p2) {
-				if (p1.size() != p2.size())
+				if (p1.size() != p2.size()) {
 					return p2.size() - p1.size();
+				}
 				int lp1 = (p1.startPath != null ? 1 : 0) + (p1.endPath != null ? 1 : 0);
 				int lp2 = (p2.startPath != null ? 1 : 0) + (p2.endPath != null ? 1 : 0);
-				if (lp1 != lp2)
+				if (lp1 != lp2) {
 					return lp2 - lp1;
+				}
 				if (lp1 == 2) {
-					if (p1.startPath == p1.endPath)
+					if (p1.startPath == p1.endPath) {
 						return -1;
-					else if (p2.startPath == p2.endPath)
+					} else if (p2.startPath == p2.endPath) {
 						return 1;
+					}
 				}
 				return -1;
 			}
@@ -267,8 +282,9 @@ public abstract class WKFLayoutManager {
 	}
 
 	private AutoLayoutNodePath findMainPath(FlexoProgress progress) {
-		if (progress != null)
+		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("building_main_path"));
+		}
 		AutoLayoutNodePath returned = null;
 		int bestLength = 0;
 		Vector<PetriGraphNode> allBeginNodes = new Vector<PetriGraphNode>(getProcess().getActivityPetriGraph().getAllBeginNodes());
@@ -286,8 +302,9 @@ public abstract class WKFLayoutManager {
 				}
 			}
 		}
-		if (returned != null)
+		if (returned != null) {
 			returned.name = "main";
+		}
 		return returned;
 	}
 
@@ -304,11 +321,13 @@ public abstract class WKFLayoutManager {
 			}
 			count += getIncomingNonMessageEdgeCount(node);
 
-			if (count <= maxIncomingEdges)
+			if (count <= maxIncomingEdges) {
 				allBeginNodes.add(node);
+			}
 		}
-		if (allBeginNodes.size() == 0 && maxIncomingEdges < 10)
+		if (allBeginNodes.size() == 0 && maxIncomingEdges < 10) {
 			findBestBeginNodes(allBeginNodes, maxIncomingEdges + 1);
+		}
 	}
 
 	/**
@@ -321,8 +340,9 @@ public abstract class WKFLayoutManager {
 
 		int count = 0;
 		for (FlexoPostCondition<?, ?> postCondition : ipc) {
-			if (postCondition instanceof MessageEdge)
+			if (postCondition instanceof MessageEdge) {
 				continue;
+			}
 			count++;
 		}
 		return count;
@@ -363,8 +383,9 @@ public abstract class WKFLayoutManager {
 				AutoLayoutNode n2 = n1.followingNodes.get(post);
 				// Is there a path containing n1 AND n2 ????
 				boolean isContained = false;
-				if (mainPath.contains(n1) && mainPath.contains(n2))
+				if (mainPath.contains(n1) && mainPath.contains(n2)) {
 					isContained = true;
+				}
 				if (!isContained) {
 					for (AutoLayoutNodePath secondaryPath : secondaryPaths) {
 						if (secondaryPath.contains(n1) && secondaryPath.contains(n2)) {
@@ -373,8 +394,9 @@ public abstract class WKFLayoutManager {
 						}
 					}
 				}
-				if (!isContained && !returned.contains(post))
+				if (!isContained && !returned.contains(post)) {
 					returned.add(post);
+				}
 			}
 		}
 		return returned;
@@ -384,8 +406,9 @@ public abstract class WKFLayoutManager {
 		loopingEdges = new Vector<FlexoPostCondition<AbstractNode, AbstractNode>>();
 		shortcutEdges = new Vector<FlexoPostCondition<AbstractNode, AbstractNode>>();
 		_findLoopingAndShortcutEdges(mainPath, loopingEdges, shortcutEdges);
-		for (AutoLayoutNodePath secondaryPath : secondaryPaths)
+		for (AutoLayoutNodePath secondaryPath : secondaryPaths) {
 			_findLoopingAndShortcutEdges(secondaryPath, loopingEdges, shortcutEdges);
+		}
 	}
 
 	private void _findLoopingAndShortcutEdges(AutoLayoutNodePath path,
@@ -406,8 +429,9 @@ public abstract class WKFLayoutManager {
 				if (!currentPath.contains(n)) {
 					if (path.contains(n) && !(path.indexOf(n) == path.indexOf(node) + 1)) {
 						// This is a shortcut to a node after current one
-						if (!shortcutEdgesVector.contains(post))
+						if (!shortcutEdgesVector.contains(post)) {
 							shortcutEdgesVector.add(post);
+						}
 					} else {
 						Vector<AutoLayoutNodePath> subPaths = _buildPathsFrom(n, currentPath.clone(), false);
 						for (AutoLayoutNodePath subPath : subPaths) {
@@ -415,18 +439,22 @@ public abstract class WKFLayoutManager {
 							if (!subPath.isTerminal()) {
 								// Explicit loop: inter-path looping edge
 								FlexoPostCondition<AbstractNode, AbstractNode> lastPost = subPath.getLastPostcondition();
-								if (logger.isLoggable(Level.FINE))
+								if (logger.isLoggable(Level.FINE)) {
 									logger.fine("Found a loop because of subPath :" + subPath + " post=" + lastPost);
-								if (lastPost != null && !loopingEdgesVector.contains(lastPost))
+								}
+								if (lastPost != null && !loopingEdgesVector.contains(lastPost)) {
 									loopingEdgesVector.add(lastPost);
+								}
 							}
 						}
 					}
 				} else { // Explicit loop: intra-path looping edge
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Found a loop because of post :" + post);
-					if (!loopingEdgesVector.contains(post))
+					}
+					if (!loopingEdgesVector.contains(post)) {
 						loopingEdgesVector.add(post);
+					}
 				}
 			}
 		}
@@ -450,8 +478,9 @@ public abstract class WKFLayoutManager {
 			for (FlexoPostCondition<AbstractNode, AbstractNode> post : p.getOutgoingPostConditions()) {
 				AbstractNode next = post.getNextNode();
 				if (!nodeMap.containsKey(next)) {
-					if (next instanceof FlexoPortMap)
+					if (next instanceof FlexoPortMap) {
 						next = ((FlexoPortMap) next).getSubProcessNode();
+					}
 				}
 				if (next != null && nodeMap.containsKey(next)) {
 					followingNodes.put(post, nodeMap.get(next));
@@ -462,10 +491,12 @@ public abstract class WKFLayoutManager {
 
 		void debugNode() {
 			System.out.println("\nNode: " + node);
-			for (AutoLayoutNode aln : followingNodes.values())
+			for (AutoLayoutNode aln : followingNodes.values()) {
 				System.out.println("> " + aln.node.getName());
-			for (AutoLayoutNode aln : previousNodes.values())
+			}
+			for (AutoLayoutNode aln : previousNodes.values()) {
 				System.out.println("< " + aln.node.getName());
+			}
 		}
 
 		public int accessibilityFrom(AutoLayoutNode aln) {
@@ -479,18 +510,21 @@ public abstract class WKFLayoutManager {
 			allVisitedNodes.add(aln);
 			Vector<AutoLayoutNode> notVisitedNodes = new Vector<AutoLayoutNode>();
 			for (AutoLayoutNode next : aln.followingNodes.values()) {
-				if (next == this)
+				if (next == this) {
 					return level;
-				if (!allVisitedNodes.contains(next))
+				}
+				if (!allVisitedNodes.contains(next)) {
 					notVisitedNodes.add(next);
+				}
 			}
 			int best = Integer.MAX_VALUE;
 			for (AutoLayoutNode testThis : notVisitedNodes) {
 				Vector<AutoLayoutNode> visitedNodes = new Vector<AutoLayoutNode>();
 				visitedNodes.addAll(allVisitedNodes);
 				int a = accessibilityFrom(testThis, visitedNodes, level + 1);
-				if (a > 0 && a < best)
+				if (a > 0 && a < best) {
 					best = a;
+				}
 			}
 			if (best == Integer.MAX_VALUE) {
 				// System.out.println(" Cannot compare "+aln.node.getName() + " and "+node.getName());
@@ -518,8 +552,9 @@ public abstract class WKFLayoutManager {
 
 		public AutoLayoutNodePath(AutoLayoutNode... nodes) {
 			super();
-			for (AutoLayoutNode n : nodes)
+			for (AutoLayoutNode n : nodes) {
 				add(n);
+			}
 		}
 
 		public AutoLayoutNodePath(Vector<AutoLayoutNode> nodes) {
@@ -547,8 +582,9 @@ public abstract class WKFLayoutManager {
 				AutoLayoutNode last = lastElement();
 				AutoLayoutNode previous = get(size() - 2);
 				for (FlexoPostCondition<AbstractNode, AbstractNode> post : previous.followingNodes.keySet()) {
-					if (previous.followingNodes.get(post) == last)
+					if (previous.followingNodes.get(post) == last) {
 						return post;
+					}
 				}
 			}
 			return null;
@@ -567,15 +603,15 @@ public abstract class WKFLayoutManager {
 			int a1 = n1.accessibilityFrom(n2);
 			int a2 = n2.accessibilityFrom(n1);
 			if (a1 > -1) {
-				if (a2 == -1)
+				if (a2 == -1) {
 					return 1;
-				else {
+				} else {
 					throw new InterdependantNodesException();
 				}
 			} else {
-				if (a2 > -1)
+				if (a2 > -1) {
 					return -1;
-				else {
+				} else {
 					throw new IndependantNodesException();
 				}
 			}

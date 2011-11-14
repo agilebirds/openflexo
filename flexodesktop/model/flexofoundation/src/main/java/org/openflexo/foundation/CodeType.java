@@ -25,15 +25,14 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.kvc.ChoiceList;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.XMLMapping;
 import org.openflexo.xmlcode.StringEncoder.Converter;
-
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.XMLStorageResourceData;
+import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * Represents type of generation target (proto,hc-wo,engine)
@@ -56,8 +55,9 @@ public abstract class CodeType extends TargetType implements StringConvertable, 
 
 	@Override
 	public FlexoProject getProject() {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Don't do that.");
+		}
 		return null;
 	}
 
@@ -226,8 +226,9 @@ public abstract class CodeType extends TargetType implements StringConvertable, 
 			}
 		}
 
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Could not find TargetType named " + typeName);
+		}
 		return null;
 	}
 

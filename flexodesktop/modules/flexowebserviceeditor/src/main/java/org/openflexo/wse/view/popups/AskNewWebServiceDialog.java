@@ -41,16 +41,15 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 
 import org.openflexo.FlexoCst;
+import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.ws.action.CreateNewWebService;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.FileSelector;
 import org.openflexo.swing.JRadioButtonWithIcon;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.ResourceLocator;
 import org.openflexo.view.FlexoDialog;
 import org.openflexo.view.controller.FlexoController;
-
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.ws.action.CreateNewWebService;
-import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Popup allowing to choose and create a new repository

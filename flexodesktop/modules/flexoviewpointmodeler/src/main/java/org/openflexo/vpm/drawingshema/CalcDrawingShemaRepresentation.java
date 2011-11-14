@@ -68,10 +68,12 @@ public class CalcDrawingShemaRepresentation extends DefaultDrawing<ExampleDrawin
 
 	@Override
 	public void delete() {
-		if (graphicalRepresentation != null)
+		if (graphicalRepresentation != null) {
 			graphicalRepresentation.delete();
-		if (getShema() != null)
+		}
+		if (getShema() != null) {
 			getShema().deleteObserver(this);
+		}
 	}
 
 	@Override
@@ -87,8 +89,9 @@ public class CalcDrawingShemaRepresentation extends DefaultDrawing<ExampleDrawin
 	}
 
 	protected boolean ignoreNotifications() {
-		if (ignoreNotifications == null)
+		if (ignoreNotifications == null) {
 			return true;
+		}
 		return ignoreNotifications;
 	}
 
@@ -155,13 +158,15 @@ public class CalcDrawingShemaRepresentation extends DefaultDrawing<ExampleDrawin
 			CalcDrawingConnectorGR graphicalRepresentation = new CalcDrawingConnectorGR(connector, this);
 			graphicalRepresentation.setsWith((ConnectorGraphicalRepresentation) connector.getGraphicalRepresentation(),
 					GraphicalRepresentation.Parameters.text);
-			if (!readOnly)
+			if (!readOnly) {
 				connector.setGraphicalRepresentation(graphicalRepresentation);
+			}
 			return graphicalRepresentation;
 		}
 		CalcDrawingConnectorGR graphicalRepresentation = new CalcDrawingConnectorGR(connector, this);
-		if (!readOnly)
+		if (!readOnly) {
 			connector.setGraphicalRepresentation(graphicalRepresentation);
+		}
 		return graphicalRepresentation;
 	}
 
@@ -170,13 +175,15 @@ public class CalcDrawingShemaRepresentation extends DefaultDrawing<ExampleDrawin
 			CalcDrawingShapeGR graphicalRepresentation = new CalcDrawingShapeGR(shape, this);
 			graphicalRepresentation.setsWith((ShapeGraphicalRepresentation) shape.getGraphicalRepresentation(),
 					GraphicalRepresentation.Parameters.text);
-			if (!readOnly)
+			if (!readOnly) {
 				shape.setGraphicalRepresentation(graphicalRepresentation);
+			}
 			return graphicalRepresentation;
 		}
 		CalcDrawingShapeGR graphicalRepresentation = new CalcDrawingShapeGR(shape, this);
-		if (!readOnly)
+		if (!readOnly) {
 			shape.setGraphicalRepresentation(graphicalRepresentation);
+		}
 		return graphicalRepresentation;
 	}
 

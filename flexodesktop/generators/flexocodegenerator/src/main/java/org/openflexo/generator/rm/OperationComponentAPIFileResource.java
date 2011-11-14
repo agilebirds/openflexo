@@ -53,8 +53,9 @@ public class OperationComponentAPIFileResource extends ComponentAPIFileResource<
 		super.rebuildDependancies();
 		if (getGenerator() != null) {
 			for (ComponentInstance ci : getComponentDefinition().getComponentInstances()) {
-				if (ci instanceof OperationComponentInstance)
+				if (ci instanceof OperationComponentInstance) {
 					addToDependantResources(((OperationComponentInstance) ci).getOperationNode().getProcess().getFlexoResource());
+				}
 			}
 		}
 	}
@@ -99,8 +100,9 @@ public class OperationComponentAPIFileResource extends ComponentAPIFileResource<
 							}
 						}
 					}
-					if (iCanBeOptimistic)
+					if (iCanBeOptimistic) {
 						return false;
+					}
 				}
 			}
 		}

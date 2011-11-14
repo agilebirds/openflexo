@@ -26,10 +26,10 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.expr.Constant.ObjectSymbolicConstant;
 import org.openflexo.antar.expr.parser.ExpressionParser;
-import org.openflexo.antar.expr.parser.ParseException;
-import org.openflexo.antar.expr.parser.Word;
 import org.openflexo.antar.expr.parser.ExpressionParser.FunctionFactory;
 import org.openflexo.antar.expr.parser.ExpressionParser.VariableFactory;
+import org.openflexo.antar.expr.parser.ParseException;
+import org.openflexo.antar.expr.parser.Word;
 
 public abstract class Expression {
 
@@ -52,10 +52,11 @@ public abstract class Expression {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null)
+		if (obj == null) {
 			return false;
-		else if (obj instanceof Expression)
+		} else if (obj instanceof Expression) {
 			return toString().equalsIgnoreCase(((Expression) obj).toString());
+		}
 		return super.equals(obj);
 	}
 
@@ -88,11 +89,13 @@ public abstract class Expression {
 	}
 
 	private static void appendAllAtomicExpressions(Vector<Expression> buildVector, Expression current) {
-		if (current.getChilds() == null)
+		if (current.getChilds() == null) {
 			buildVector.add(current);
-		else
-			for (Expression e : current.getChilds())
+		} else {
+			for (Expression e : current.getChilds()) {
 				appendAllAtomicExpressions(buildVector, e);
+			}
+		}
 	}
 
 	protected abstract Vector<Expression> getChilds();
@@ -109,8 +112,9 @@ public abstract class Expression {
 			@Override
 			public Expression makeVariable(Word value) {
 				Object valueObject = variables.get(value.getValue());
-				if (valueObject == null)
+				if (valueObject == null) {
 					return ObjectSymbolicConstant.NULL;
+				}
 				if (valueObject instanceof String) {
 					return new Constant.StringConstant((String) valueObject);
 				} else if (valueObject instanceof Enum) {
@@ -142,10 +146,12 @@ public abstract class Expression {
 
 		Expression evaluation = evaluate(variables);
 		// logger.info("evaluation "+evaluation);
-		if (evaluation == Constant.BooleanConstant.TRUE)
+		if (evaluation == Constant.BooleanConstant.TRUE) {
 			return true;
-		if (evaluation == Constant.BooleanConstant.FALSE)
+		}
+		if (evaluation == Constant.BooleanConstant.FALSE) {
 			return false;
+		}
 		logger.warning("Unresolved expression: " + evaluation);
 		/*try {
 			logger.warning("variables="+variables);
@@ -172,8 +178,9 @@ public abstract class Expression {
 			}
 		}, new ExpressionParser.DefaultFunctionFactory()));
 		Vector<Variable> returned = new Vector<Variable>();
-		for (String v : returnedHash.keySet())
+		for (String v : returnedHash.keySet()) {
 			returned.add(returnedHash.get(v));
+		}
 		return returned;
 	}
 
@@ -209,8 +216,9 @@ public abstract class Expression {
 			}
 		}));
 		Vector<Expression> returned = new Vector<Expression>();
-		for (String v : returnedHash.keySet())
+		for (String v : returnedHash.keySet()) {
 			returned.add(returnedHash.get(v));
+		}
 		return returned;
 	}
 

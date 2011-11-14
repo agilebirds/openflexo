@@ -164,8 +164,9 @@ public class RequiredBindingValidationRule<T extends IEObject> extends Validatio
 					implementationType, false);
 			DMProperty property = null;
 			ComponentDMEntity componentDMEntity = ((IEWidget) getObject()).getComponentDMEntity();
-			if (componentDMEntity != null)
+			if (componentDMEntity != null) {
 				property = componentDMEntity.getDMProperty(newVariableName);
+			}
 			if (property != null) {
 				BindingVariable var = ((IEWidget) getObject()).getBindingModel().bindingVariableNamed("component");
 				BindingValue newBindingValue = new BindingValue(bindingDefinition, getObject());

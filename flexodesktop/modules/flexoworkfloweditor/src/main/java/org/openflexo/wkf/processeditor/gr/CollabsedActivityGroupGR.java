@@ -35,16 +35,15 @@ import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.graphics.BackgroundStyle;
+import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
+import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.graphics.TextStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 import org.openflexo.fge.shapes.Rectangle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.ShapeView;
-
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.wkf.ActivityGroup;
@@ -110,10 +109,12 @@ public class CollabsedActivityGroupGR extends WKFObjectGR<ActivityGroup> {
 		double r_height = WKFIconLibrary.EXPANDABLE_ICON.getIconHeight() / getHeight();
 		double x = (1 - r_width) / 2;
 		double y = 1 - r_height * 1.2;
-		if (y < 0.3)
+		if (y < 0.3) {
 			y = 1 - r_height * 1.1;
-		if (y < 0)
+		}
+		if (y < 0) {
 			y = 0;
+		}
 		return new FGERectangle(x, y, r_width, r_height);
 	}
 
@@ -251,8 +252,9 @@ public class CollabsedActivityGroupGR extends WKFObjectGR<ActivityGroup> {
 					updateBackground();
 				}
 			} else if (dataModification instanceof ObjectVisibilityChanged) {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Group visibility changed");
+				}
 				getDrawing().invalidateGraphicalObjectsHierarchy(getActivityGroup().getProcess());
 				getDrawing().updateGraphicalObjectsHierarchy();
 			}
@@ -261,9 +263,10 @@ public class CollabsedActivityGroupGR extends WKFObjectGR<ActivityGroup> {
 
 	@Override
 	public String getToolTipText() {
-		if (getActivityGroup().getDescription() == null || getActivityGroup().getDescription().trim().equals(""))
+		if (getActivityGroup().getDescription() == null || getActivityGroup().getDescription().trim().equals("")) {
 			return "<html><b>" + getActivityGroup().getGroupName() + "</b><br><i>" + FlexoLocalization.localizedForKey("no_description")
 					+ "</i></html>";
+		}
 		return "<html><b>" + getActivityGroup().getGroupName() + "</b><br><i>" + getActivityGroup().getDescription() + "</i></html>";
 	}
 

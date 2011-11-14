@@ -13,8 +13,9 @@ public class DataPropertyStatementPatternRole extends StatementPatternRole {
 
 	@Override
 	public String getPreciseType() {
-		if (getDataProperty() != null)
+		if (getDataProperty() != null) {
 			return getDataProperty().getName();
+		}
 		return "";
 	}
 

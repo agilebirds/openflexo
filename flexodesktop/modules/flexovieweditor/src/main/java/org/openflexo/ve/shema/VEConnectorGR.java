@@ -57,15 +57,17 @@ public class VEConnectorGR extends ConnectorGraphicalRepresentation<ViewConnecto
 		}
 		// addToMouseDragControls(new DrawRoleSpecializationControl());
 
-		if (aConnector != null)
+		if (aConnector != null) {
 			aConnector.addObserver(this);
+		}
 
 	}
 
 	@Override
 	public void delete() {
-		if (getDrawable() != null)
+		if (getDrawable() != null) {
 			getDrawable().deleteObserver(this);
+		}
 		super.delete();
 	}
 
@@ -86,15 +88,17 @@ public class VEConnectorGR extends ConnectorGraphicalRepresentation<ViewConnecto
 
 	@Override
 	public String getText() {
-		if (getOEConnector() != null)
+		if (getOEConnector() != null) {
 			return getOEConnector().getName();
+		}
 		return null;
 	}
 
 	@Override
 	public void setTextNoNotification(String text) {
-		if (getOEConnector() != null)
+		if (getOEConnector() != null) {
 			getOEConnector().setName(text);
+		}
 	}
 
 	/**

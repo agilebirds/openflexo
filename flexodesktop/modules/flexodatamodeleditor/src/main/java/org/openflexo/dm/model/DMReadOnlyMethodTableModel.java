@@ -21,14 +21,13 @@ package org.openflexo.dm.model;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-
 import org.openflexo.components.tabular.model.IconColumn;
 import org.openflexo.components.tabular.model.StringColumn;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMMethod;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 
 /**
  * @author gpolet
@@ -42,8 +41,9 @@ public class DMReadOnlyMethodTableModel extends DMMethodTableModel {
 	 */
 	public DMReadOnlyMethodTableModel(DMEntity entity, FlexoProject project) {
 		super(entity, project);
-		while (getColumnCount() > 0)
+		while (getColumnCount() > 0) {
 			removeFromColumns(columnAt(0));
+		}
 		addToColumns(new IconColumn<DMMethod>("method_icon", 30) {
 			@Override
 			public Icon getIcon(DMMethod method) {
@@ -83,8 +83,9 @@ public class DMReadOnlyMethodTableModel extends DMMethodTableModel {
 		StringColumn<DMMethod> sc = new StringColumn<DMMethod>("returns", 150) {
 			@Override
 			public String getValue(DMMethod method) {
-				if (method.getReturnType() != null)
+				if (method.getReturnType() != null) {
 					return method.getReturnType().getName();
+				}
 				return "void";
 			}
 		};

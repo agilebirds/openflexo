@@ -54,7 +54,8 @@ public abstract class MetaGenerator<T extends FlexoModelObject, R extends Genera
 	@Override
 	@Deprecated
 	public void generate(boolean forceRegenerate) throws GenerationException {
-		if (logger.isLoggable(Level.SEVERE))
+		if (logger.isLoggable(Level.SEVERE)) {
 			logger.severe("Project generator are meta generators! generate should not be called on this object");
+		}
 	}
 }

@@ -64,22 +64,25 @@ public abstract class AbstractBinding extends FlexoModelObject implements Bindab
 
 	@Override
 	public final FlexoProject getProject() {
-		if (_owner != null)
+		if (_owner != null) {
 			return _owner.getProject();
+		}
 		return null;
 	}
 
 	@Override
 	public final XMLMapping getXMLMapping() {
-		if (_owner != null)
+		if (_owner != null) {
 			return _owner.getXMLMapping();
+		}
 		return null;
 	}
 
 	@Override
 	public final XMLStorageResourceData getXMLResourceData() {
-		if (_owner != null)
+		if (_owner != null) {
 			return _owner.getXMLResourceData();
+		}
 		return null;
 	}
 
@@ -90,11 +93,13 @@ public abstract class AbstractBinding extends FlexoModelObject implements Bindab
 	public void setOwner(FlexoModelObject owner) {
 		_owner = owner;
 		if (_owner == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Null owner declared for BindingValue");
+			}
 		} else if (!(_owner instanceof Bindable)) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Declared owner is not a Bindable !");
+			}
 		}
 	}
 
@@ -123,8 +128,9 @@ public abstract class AbstractBinding extends FlexoModelObject implements Bindab
 		if (oldBindingDefinition != bindingDefinition) {
 			_bindingDefinition = bindingDefinition;
 			_applyNewBindingDefinition();
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Binding " + this + " received " + bindingDefinition + " as BindingDefinition");
+			}
 		}
 	}
 
@@ -164,27 +170,34 @@ public abstract class AbstractBinding extends FlexoModelObject implements Bindab
 			}
 			warnOnFailure = aFlag;
 			if (_project != null && this == _project.getAbstractBindingConverter()) {
-				if (_project.getBindingValueConverter() != this)
+				if (_project.getBindingValueConverter() != this) {
 					_project.getBindingValueConverter().setWarnOnFailure(aFlag);
-				if (_project.getBindingExpressionConverter() != this)
+				}
+				if (_project.getBindingExpressionConverter() != this) {
 					_project.getBindingExpressionConverter().setWarnOnFailure(aFlag);
-				if (_project.getStaticBindingConverter() != this)
+				}
+				if (_project.getStaticBindingConverter() != this) {
 					_project.getStaticBindingConverter().setWarnOnFailure(aFlag);
-				if (_project.getTranstypedBindingStringConverter() != this)
+				}
+				if (_project.getTranstypedBindingStringConverter() != this) {
 					_project.getTranstypedBindingStringConverter().setWarnOnFailure(aFlag);
+				}
 			}
 		}
 
 		@Override
 		public T convertFromString(String value) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Decoding abstract binding: " + value);
-			if ("null".equals(value))
+			}
+			if ("null".equals(value)) {
 				return null;
+			}
 			StaticBinding decodedStringAsStaticBinding = _project.getStaticBindingConverter().convertFromString(value);
 			if (decodedStringAsStaticBinding != null) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Succeeded to decode as a StaticBinding");
+				}
 				return (T) decodedStringAsStaticBinding;
 			} else {
 				// Lets try as a binding value
@@ -192,8 +205,9 @@ public abstract class AbstractBinding extends FlexoModelObject implements Bindab
 				BindingValue decodedStringAsBindingValue = _project.getBindingValueConverter().convertFromString(value);
 				_project.getBindingValueConverter().setWarnOnFailure(true);
 				if (decodedStringAsBindingValue != null) {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Succeeded to decode as a BindingValue");
+					}
 					return (T) decodedStringAsBindingValue;
 				} else {
 					// Lets try as a transtyped binding
@@ -202,15 +216,17 @@ public abstract class AbstractBinding extends FlexoModelObject implements Bindab
 							value);
 					_project.getTranstypedBindingStringConverter().setWarnOnFailure(true);
 					if (decodedStringAsTranstypedBinding != null) {
-						if (logger.isLoggable(Level.FINE))
+						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("Succeeded to decode as a TranstypedBinding");
+						}
 						return (T) decodedStringAsTranstypedBinding;
 					} else {
 						// Lets try as an expression
 						BindingExpression decodedStringAsBindingExpression = _project.getBindingExpressionConverter().convertFromString(
 								value);
-						if (logger.isLoggable(Level.FINE))
+						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("Cound not decode as a BindingValue, trying as an expression");
+						}
 						return (T) decodedStringAsBindingExpression;
 					}
 				}
@@ -219,14 +235,18 @@ public abstract class AbstractBinding extends FlexoModelObject implements Bindab
 
 		@Override
 		public String convertToString(T value) {
-			if (value instanceof BindingValue)
+			if (value instanceof BindingValue) {
 				return _project.getBindingValueConverter().convertToString((BindingValue) value);
-			if (value instanceof BindingExpression)
+			}
+			if (value instanceof BindingExpression) {
 				return _project.getBindingExpressionConverter().convertToString((BindingExpression) value);
-			if (value instanceof StaticBinding)
+			}
+			if (value instanceof StaticBinding) {
 				return _project.getStaticBindingConverter().convertToString((StaticBinding) value);
-			if (value instanceof TranstypedBinding)
+			}
+			if (value instanceof TranstypedBinding) {
 				return _project.getTranstypedBindingStringConverter().convertToString((TranstypedBinding) value);
+			}
 			return "???";
 		}
 
@@ -234,8 +254,9 @@ public abstract class AbstractBinding extends FlexoModelObject implements Bindab
 
 	@Override
 	public AbstractBindingStringConverter<? extends AbstractBinding> getConverter() {
-		if (getProject() != null)
+		if (getProject() != null) {
 			return getProject().getAbstractBindingConverter();
+		}
 		return null;
 	}
 
@@ -258,16 +279,19 @@ public abstract class AbstractBinding extends FlexoModelObject implements Bindab
 
 	@Override
 	public boolean equals(Object object) {
-		if (object == null)
+		if (object == null) {
 			return false;
+		}
 		if (object instanceof AbstractBinding) {
 			AbstractBinding bv = (AbstractBinding) object;
 			if (getBindingDefinition() == null) {
-				if (bv.getBindingDefinition() != null)
+				if (bv.getBindingDefinition() != null) {
 					return false;
+				}
 			} else {
-				if (!getBindingDefinition().equals(bv.getBindingDefinition()))
+				if (!getBindingDefinition().equals(bv.getBindingDefinition())) {
 					return false;
+				}
 			}
 			return ((_owner == bv._owner) && (getStringRepresentation().equals(bv.getStringRepresentation())));
 		} else {

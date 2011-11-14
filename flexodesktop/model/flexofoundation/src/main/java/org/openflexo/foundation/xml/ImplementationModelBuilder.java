@@ -43,8 +43,9 @@ public class ImplementationModelBuilder extends FlexoBuilder<ImplementationModel
 	public ImplementationModelBuilder(ImplementationModelDefinition def, ImplementationModelResource resource) {
 		super(resource);
 		this.definition = def;
-		if (definition.isLoaded())
+		if (definition.isLoaded()) {
 			implementationModel = definition.getImplementationModel();
+		}
 	}
 
 }

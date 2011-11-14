@@ -154,8 +154,9 @@ public class DiffPanel extends JLayeredPane {
 				}
 			});
 		} else {
-			if (noChangeLabel != null)
+			if (noChangeLabel != null) {
 				NO_CHANGES_LABEL = noChangeLabel;
+			}
 			Object[] obj = { NO_CHANGES_LABEL };
 			changesList = new JList(obj);
 			changesList.setEnabled(false);

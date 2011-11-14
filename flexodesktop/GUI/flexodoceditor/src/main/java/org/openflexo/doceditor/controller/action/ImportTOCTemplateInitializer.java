@@ -57,18 +57,21 @@ public class ImportTOCTemplateInitializer extends ActionInitializer {
 
 				File src = null;
 				int returnVal = chooser.showOpenDialog(null);
-				if (returnVal == JFileChooser.CANCEL_OPTION)
+				if (returnVal == JFileChooser.CANCEL_OPTION) {
 					return false;
+				}
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					src = chooser.getSelectedFile();
 				} else {
 					return false;
 				}
 
-				if (!src.exists())
+				if (!src.exists()) {
 					return false;
-				if (!src.isFile())
+				}
+				if (!src.isFile()) {
 					return false;
+				}
 
 				action.setSourceFile(src);
 				return true;

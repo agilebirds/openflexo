@@ -23,9 +23,9 @@ import java.awt.Color;
 
 import org.openflexo.fge.geom.FGESteppedDimensionConstraint;
 import org.openflexo.fge.graphics.BackgroundStyle;
+import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.TextStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.shapes.Rectangle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
@@ -73,8 +73,9 @@ public class NormalAbstractActivityNodeGR<O extends AbstractActivityNode> extend
 
 	@Override
 	public FGESteppedDimensionConstraint getDimensionConstraintStep() {
-		if (getDrawing() != null)
+		if (getDrawing() != null) {
 			return getDrawing().getDrawingGraphicalRepresentation().getDimensionConstraintsForObject(this);
+		}
 		return null;
 	}
 
@@ -90,10 +91,11 @@ public class NormalAbstractActivityNodeGR<O extends AbstractActivityNode> extend
 	}
 
 	protected FlexoFont getRoleFont() {
-		if (getWorkflow() != null)
+		if (getWorkflow() != null) {
 			return getWorkflow().getRoleFont(WKFPreferences.getRoleFont());
-		else
+		} else {
 			return WKFPreferences.getRoleFont();
+		}
 	}
 
 	@Override

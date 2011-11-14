@@ -112,15 +112,17 @@ public abstract class ColorColumn extends AbstractColumn {
 	 */
 	@Override
 	public TableCellEditor getCellEditor() {
-		if (_colorCellEditor == null)
+		if (_colorCellEditor == null) {
 			_colorCellEditor = new ColorCellEditor();
+		}
 		return _colorCellEditor;
 	}
 
 	@Override
 	public TableCellRenderer getCellRenderer() {
-		if (_colorCellEditor == null)
+		if (_colorCellEditor == null) {
 			_colorCellEditor = new ColorCellEditor();
+		}
 		return _colorCellEditor;
 	}
 
@@ -159,8 +161,9 @@ public abstract class ColorColumn extends AbstractColumn {
 				addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						if (inspectableObject != currentlyInspectedRow)
+						if (inspectableObject != currentlyInspectedRow) {
 							return;
+						}
 						// get the new color
 						Color selectedColor = JColorChooser.showDialog(ColorButton.this,
 								FlexoLocalization.localizedForKey("select_a_color"), getBackground());

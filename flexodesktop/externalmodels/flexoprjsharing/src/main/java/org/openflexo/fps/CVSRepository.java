@@ -44,19 +44,18 @@ import org.netbeans.lib.cvsclient.connection.StandardScrambler;
 import org.netbeans.lib.cvsclient.event.CVSAdapter;
 import org.netbeans.lib.cvsclient.event.EnhancedMessageEvent;
 import org.netbeans.lib.cvsclient.event.MessageEvent;
-import org.openflexo.kvc.ChoiceList;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.FileUtils;
-import org.openflexo.xmlcode.StringConvertable;
-import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.StringEncoder.Converter;
-
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.fps.dm.CVSModuleDiscovered;
 import org.openflexo.fps.dm.CVSModuleForgotten;
 import org.openflexo.fps.dm.HasCVSExplored;
 import org.openflexo.fps.dm.WillCVSExplore;
+import org.openflexo.kvc.ChoiceList;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.FileUtils;
+import org.openflexo.xmlcode.StringConvertable;
+import org.openflexo.xmlcode.StringEncoder;
+import org.openflexo.xmlcode.StringEncoder.Converter;
 
 public class CVSRepository extends FPSObject implements CVSExplorable {
 
@@ -150,10 +149,12 @@ public class CVSRepository extends FPSObject implements CVSExplorable {
 		properties.setProperty(PORT, "" + port);
 		properties.setProperty(CONNECTION_TYPE, _connectionType.getUnlocalizedStringRepresentation());
 		if (storePassword) {
-			if (_connectionType == ConnectionType.PServer && encodedPasswd != null)
+			if (_connectionType == ConnectionType.PServer && encodedPasswd != null) {
 				properties.setProperty(ENCODED_PASSWD, encodedPasswd);
-			if (_connectionType == ConnectionType.SSH && passwd != null)
+			}
+			if (_connectionType == ConnectionType.SSH && passwd != null) {
 				properties.setProperty(PASSWD, passwd);
+			}
 		}
 		return properties;
 	}
@@ -196,8 +197,9 @@ public class CVSRepository extends FPSObject implements CVSExplorable {
 	}
 
 	public String getPassword() {
-		if (passwd == null)
+		if (passwd == null) {
 			return encodedPasswd;
+		}
 		return passwd;
 	}
 
@@ -236,8 +238,9 @@ public class CVSRepository extends FPSObject implements CVSExplorable {
 	@Override
 	public void setName(String aName) {
 		if (name == null || !name.equals(aName)) {
-			if (name != null && getCVSRepositoryLocationFile().exists())
+			if (name != null && getCVSRepositoryLocationFile().exists()) {
 				getCVSRepositoryLocationFile().delete();
+			}
 			name = aName;
 			setChanged();
 		}
@@ -296,8 +299,9 @@ public class CVSRepository extends FPSObject implements CVSExplorable {
 						// logger.info("Found "+foundModule+" ! Add it.");
 						CVSModule existingModule = null;
 						for (CVSModule m : _knownModules) {
-							if (m.getModuleName().equals(foundModule))
+							if (m.getModuleName().equals(foundModule)) {
 								existingModule = m;
+							}
 						}
 						if (existingModule == null) {
 							addToCVSModules(new CVSModule(foundModule, CVSRepository.this));
@@ -427,10 +431,11 @@ public class CVSRepository extends FPSObject implements CVSExplorable {
 		PServer, SSH;
 
 		public String getUnlocalizedStringRepresentation() {
-			if (this == PServer)
+			if (this == PServer) {
 				return "pserver";
-			else if (this == SSH)
+			} else if (this == SSH) {
 				return "ssh";
+			}
 			return "???";
 		}
 
@@ -448,8 +453,9 @@ public class CVSRepository extends FPSObject implements CVSExplorable {
 			@Override
 			public ConnectionType convertFromString(String value) {
 				for (ConnectionType cs : values()) {
-					if (cs.getStringRepresentation().equals(value))
+					if (cs.getStringRepresentation().equals(value)) {
 						return cs;
+					}
 				}
 				return null;
 			}
@@ -469,8 +475,9 @@ public class CVSRepository extends FPSObject implements CVSExplorable {
 				}
 			}
 
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not find ConnectionType named " + connectionTypeName);
+			}
 			return null;
 		}
 
@@ -521,20 +528,25 @@ public class CVSRepository extends FPSObject implements CVSExplorable {
 	}
 
 	private File getCVSRepositoryLocationFile() {
-		if (_cvsRepositoryList == null)
+		if (_cvsRepositoryList == null) {
 			return null;
-		if (_cvsRepositoryList.getStoredRepositoryDirectory() == null)
+		}
+		if (_cvsRepositoryList.getStoredRepositoryDirectory() == null) {
 			return null;
+		}
 		return new File(_cvsRepositoryList.getStoredRepositoryDirectory(), getName() + ".cvs");
 	}
 
 	protected void saveCVSRepositoryLocation() {
-		if (_cvsRepositoryList == null)
+		if (_cvsRepositoryList == null) {
 			return;
-		if (_cvsRepositoryList.getStoredRepositoryDirectory() == null)
+		}
+		if (_cvsRepositoryList.getStoredRepositoryDirectory() == null) {
 			return;
-		if (!_cvsRepositoryList.getStoredRepositoryDirectory().exists())
+		}
+		if (!_cvsRepositoryList.getStoredRepositoryDirectory().exists()) {
 			_cvsRepositoryList.getStoredRepositoryDirectory().mkdirs();
+		}
 		saveCVSRepositoryLocation(getCVSRepositoryLocationFile());
 	}
 
@@ -546,12 +558,13 @@ public class CVSRepository extends FPSObject implements CVSExplorable {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			if (!b)
+			if (!b) {
 				try {
 					fileToSave.createNewFile();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+			}
 		}
 
 		try {
@@ -594,8 +607,9 @@ public class CVSRepository extends FPSObject implements CVSExplorable {
 			return parentModule.getModuleNamed(name.substring(name.lastIndexOf('/') + 1));
 		}
 		for (CVSModule module : _modules) {
-			if (module.getModuleName().equals(name))
+			if (module.getModuleName().equals(name)) {
 				return module;
+			}
 		}
 		// Not found, create it
 		CVSModule returned;
@@ -609,8 +623,9 @@ public class CVSRepository extends FPSObject implements CVSExplorable {
 			CVSRepository r = (CVSRepository) object;
 			return (getName().equals(r.getName()) && getHostName().equals(r.getHostName()) && getConnectionType() == r.getConnectionType()
 					&& getPort() == r.getPort() && getUserName().equals(r.getUserName()));
-		} else
+		} else {
 			return super.equals(object);
+		}
 	}
 
 	@Override

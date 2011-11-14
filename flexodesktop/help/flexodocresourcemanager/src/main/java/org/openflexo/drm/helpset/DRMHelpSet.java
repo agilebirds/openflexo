@@ -29,6 +29,12 @@ import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.jdom.DocType;
+import org.openflexo.drm.DocItemFolder;
+import org.openflexo.drm.DocResourceCenter;
+import org.openflexo.drm.Language;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.utils.FlexoProgress;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.xmlcode.InvalidModelException;
@@ -36,13 +42,6 @@ import org.openflexo.xmlcode.XMLCoder;
 import org.openflexo.xmlcode.XMLMapping;
 import org.openflexo.xmlcode.XMLSerializable;
 import org.xml.sax.SAXException;
-
-import org.openflexo.drm.DocItemFolder;
-import org.openflexo.drm.DocResourceCenter;
-import org.openflexo.drm.Language;
-import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.utils.FlexoProgress;
-import org.openflexo.localization.FlexoLocalization;
 
 public class DRMHelpSet extends FlexoObject implements XMLSerializable {
 
@@ -272,10 +271,11 @@ public class DRMHelpSet extends FlexoObject implements XMLSerializable {
 	}
 
 	public void generate(FlexoProgress progress) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			for (DocItemFolder docItemFolder : configuration.getDocItemFolders()) {
 				logger.fine("Consider DocItemFolder: " + docItemFolder.getIdentifier());
 			}
+		}
 
 		if (progress != null) {
 			progress.resetSecondaryProgress(9);
@@ -346,10 +346,11 @@ public class DRMHelpSet extends FlexoObject implements XMLSerializable {
 				try {
 					v.add(f.getCanonicalPath());
 					if (!f.getCanonicalFile().equals(_drc.getFTSFolder().getDirectory().getCanonicalFile())
-							&& !f.getCanonicalFile().equals(_drc.getModelFolder().getDirectory().getCanonicalFile()))
+							&& !f.getCanonicalFile().equals(_drc.getModelFolder().getDirectory().getCanonicalFile())) {
 						scanForImages(f.listFiles(), _drc.getRootFolder(), v, 5);
-					else
+					} else {
 						scanForImages(f.listFiles(), _drc.getRootFolder(), v, 1);
+					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -358,8 +359,9 @@ public class DRMHelpSet extends FlexoObject implements XMLSerializable {
 	}
 
 	private void scanForImages(File[] files, DocItemFolder f, Vector<String> visitedDirectories, int recursiveDepth) throws IOException {
-		if (files == null)
+		if (files == null) {
 			return;
+		}
 		for (File file : files) {
 			if (file.isDirectory() && recursiveDepth > 0 && !visitedDirectories.contains(file.getCanonicalPath())) {
 				scanForImages(file.listFiles(), f, visitedDirectories, recursiveDepth - 1);
@@ -399,31 +401,36 @@ public class DRMHelpSet extends FlexoObject implements XMLSerializable {
 			File hsModelFile;
 			hsModelFile = new FileResource("Models/HSModel.xml");
 			if (!hsModelFile.exists()) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("File " + hsModelFile.getAbsolutePath() + " doesn't exist. Maybe you have to check your paths ?");
+				}
 				return null;
 			} else {
 				try {
 					_hsMapping = new XMLMapping(hsModelFile);
 				} catch (InvalidModelException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (IOException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (SAXException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (ParserConfigurationException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				}
 			}

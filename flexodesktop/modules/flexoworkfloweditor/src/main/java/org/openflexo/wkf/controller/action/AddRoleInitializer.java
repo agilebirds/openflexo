@@ -25,18 +25,9 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.SwingUtilities;
 
-import org.openflexo.icon.WKFIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-import org.openflexo.wkf.controller.WKFController;
-import org.openflexo.wkf.roleeditor.RoleEditorController;
-import org.openflexo.wkf.roleeditor.RoleEditorView;
-
 import org.openflexo.components.AskParametersDialog;
-import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
+import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.view.BrowserActionSource;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.view.ShapeView;
@@ -53,6 +44,13 @@ import org.openflexo.foundation.wkf.DuplicateRoleException;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.wkf.action.AddRole;
+import org.openflexo.icon.WKFIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
+import org.openflexo.wkf.roleeditor.RoleEditorController;
+import org.openflexo.wkf.roleeditor.RoleEditorView;
 
 public class AddRoleInitializer extends ActionInitializer {
 
@@ -72,10 +70,12 @@ public class AddRoleInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<AddRole>() {
 			@Override
 			public boolean run(ActionEvent e, AddRole action) {
-				if (action.getContext() instanceof DuplicateRoleException)
+				if (action.getContext() instanceof DuplicateRoleException) {
 					return true;
-				if (action.getRoleAutomaticallyCreated())
+				}
+				if (action.getRoleAutomaticallyCreated()) {
 					return true;
+				}
 				FlexoWorkflow workflow = action.getWorkflow();
 				ParameterDefinition[] parameters = new ParameterDefinition[3];
 				parameters[0] = new TextFieldParameter("newRoleName", "name", workflow.getRoleList().getNextNewUserRoleName());
@@ -87,8 +87,9 @@ public class AddRoleInitializer extends ActionInitializer {
 						FlexoLocalization.localizedForKey("enter_parameters_for_the_new_role"), parameters);
 				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 					String newRoleName = (String) dialog.parameterValueWithName("newRoleName");
-					if (newRoleName == null)
+					if (newRoleName == null) {
 						return false;
+					}
 					action.setNewRoleName(newRoleName);
 					action.setNewColor((FlexoColor) dialog.parameterValueWithName("color"));
 					action.setNewDescription((String) dialog.parameterValueWithName("description"));
@@ -115,8 +116,9 @@ public class AddRoleInitializer extends ActionInitializer {
 						}
 					}
 				}
-				if (e != null)// If it wasn't created through the process inspector
+				if (e != null) {
 					getControllerActionInitializer().getWKFSelectionManager().setSelectedObject(newRole);
+				}
 				// getControllerActionInitializer().getWKFController().getWorkflowBrowser().focusOn(newRole);
 				if (getControllerActionInitializer().getWKFController().getCurrentPerspective() == getControllerActionInitializer()
 						.getWKFController().ROLE_EDITOR_PERSPECTIVE) {
@@ -132,8 +134,9 @@ public class AddRoleInitializer extends ActionInitializer {
 								SwingUtilities.invokeLater(new Runnable() {
 									@Override
 									public void run() {
-										if (view != null && view.getLabelView() != null)
+										if (view != null && view.getLabelView() != null) {
 											view.getLabelView().startEdition();
+										}
 									}
 								});
 							}

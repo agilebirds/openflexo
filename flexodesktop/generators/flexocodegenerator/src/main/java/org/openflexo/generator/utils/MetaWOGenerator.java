@@ -59,10 +59,11 @@ public abstract class MetaWOGenerator extends FlexoResourceGenerator<ComponentDe
 		super(projectGenerator, componentDef);
 		this.component = componentDef;
 		this.generatedComponentName = generatedComponentName;
-		if (componentDef != null)
+		if (componentDef != null) {
 			_componentPackageName = componentDef.getComponentDMEntity().getPackage().getJavaStringRepresentation();
-		else
+		} else {
 			_componentPackageName = componentPackageName != null ? componentPackageName : "";
+		}
 		_entity = componentDef != null ? componentDef.getComponentDMEntity() : null;
 	}
 

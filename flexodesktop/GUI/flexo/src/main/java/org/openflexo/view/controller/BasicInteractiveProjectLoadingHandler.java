@@ -23,13 +23,12 @@ import java.io.File;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.icon.CGIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
+import org.openflexo.icon.IconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 
 public class BasicInteractiveProjectLoadingHandler extends InteractiveProjectLoadingHandler {
 
@@ -50,7 +49,7 @@ public class BasicInteractiveProjectLoadingHandler extends InteractiveProjectLoa
 		String CANCEL = FlexoLocalization.localizedForKey("cancel");
 		int choice = FlexoController.selectOption(
 				"<html><center>"
-						+ CGIconLibrary.UNFIXABLE_WARNING_ICON.getHTMLImg()
+						+ IconLibrary.UNFIXABLE_WARNING_ICON.getHTMLImg()
 						+ "<b>&nbsp;"
 						+ FlexoLocalization.localizedForKey("warning")
 						+ "</b></center><br>"
@@ -76,8 +75,9 @@ public class BasicInteractiveProjectLoadingHandler extends InteractiveProjectLoa
 
 	@Override
 	public boolean upgradeResourceToLatestVersion(FlexoXMLStorageResource resource) throws ProjectLoadingCancelledException {
-		if (isPerformingAutomaticConversion())
+		if (isPerformingAutomaticConversion()) {
 			return true;
+		}
 
 		if (!alreadyAnswer) {
 			convertProject = askForProjectConversion();

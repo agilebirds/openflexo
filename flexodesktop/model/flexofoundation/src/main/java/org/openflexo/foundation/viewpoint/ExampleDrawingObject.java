@@ -69,15 +69,17 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 	}
 
 	public ExampleDrawingShema getShema() {
-		if (getParent() != null)
+		if (getParent() != null) {
 			return getParent().getShema();
+		}
 		return null;
 	}
 
 	@Override
 	public ViewPoint getCalc() {
-		if (getShema() != null)
+		if (getShema() != null) {
 			return getShema().getCalc();
+		}
 		return null;
 	}
 
@@ -166,8 +168,9 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 		Vector<ExampleDrawingObject> ancestors2 = child2.getAncestors();
 		for (int i = 0; i < ancestors1.size(); i++) {
 			ExampleDrawingObject o1 = ancestors1.elementAt(i);
-			if (ancestors2.contains(o1))
+			if (ancestors2.contains(o1)) {
 				return o1;
+			}
 		}
 		return null;
 	}
@@ -175,8 +178,9 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 	@Override
 	public void setChanged() {
 		super.setChanged();
-		if (getShema() != null && !ignoreNotifications())
+		if (getShema() != null && !ignoreNotifications()) {
 			getShema().setIsModified();
+		}
 	}
 
 	public abstract boolean isContainedIn(ExampleDrawingObject o);

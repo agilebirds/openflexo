@@ -22,9 +22,9 @@ package org.openflexo;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoTestCase;
-import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
@@ -45,8 +45,9 @@ public abstract class FlexoModuleTestCase extends FlexoTestCase {
 		Enumeration<Object> en = allObservers.elements();
 		while (en.hasMoreElements()) {
 			reply.append(en.nextElement().toString());
-			if (en.hasMoreElements())
+			if (en.hasMoreElements()) {
 				reply.append(",");
+			}
 		}
 		return reply.toString();
 	}

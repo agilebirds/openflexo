@@ -83,8 +83,9 @@ public class DefaultIgnoreFileFilter implements IgnoreFileFilter {
 	 * Clears the list of patters. To be used when the "!" character is used in any of the .cvsignore lists.
 	 */
 	public void clearPatterns() {
-		if (patterns.size() > 0)
+		if (patterns.size() > 0) {
 			patterns.clear();
+		}
 	}
 
 	/**
@@ -104,8 +105,9 @@ public class DefaultIgnoreFileFilter implements IgnoreFileFilter {
 			lastDirectory = directory;
 			processGlobalPatterns = true;
 			processLocalPatterns = false;
-			if (localPatterns.size() > 0)
+			if (localPatterns.size() > 0) {
 				localPatterns.clear();
+			}
 			String filename = directory.getPath() + File.separator + ".cvsignore"; // NOI18N
 			File cvsIgnoreFile = new File(filename);
 			if (cvsIgnoreFile.exists()) {
@@ -115,8 +117,9 @@ public class DefaultIgnoreFileFilter implements IgnoreFileFilter {
 						String s = it.next().toString();
 						if (s.equals("!")) { // NOI18N
 							processGlobalPatterns = false;
-							if (localPatterns.size() > 0)
+							if (localPatterns.size() > 0) {
 								localPatterns.clear();
+							}
 						} else {
 							localPatterns.add(new SimpleStringPattern(s));
 						}

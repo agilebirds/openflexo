@@ -57,8 +57,9 @@ public class GeneratedDoc extends GeneratedOutput {
 	 */
 	public static GeneratedDoc createNewGeneratedDoc(FlexoProject project) {
 		GeneratedDoc newCG = new GeneratedDoc(project);
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("createNewGeneratedDoc(), project=" + project + " " + newCG);
+		}
 
 		File cgFile = ProjectRestructuration.getExpectedGeneratedDocFile(project);
 		FlexoProjectFile generatedCodeFile = new FlexoProjectFile(cgFile, project);
@@ -72,8 +73,9 @@ public class GeneratedDoc extends GeneratedOutput {
 			try {
 				cgRes = new GeneratedDocResource(project, newCG, generatedCodeFile);
 			} catch (InvalidFileNameException e) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("Could not create generated doc.");
+				}
 				e.printStackTrace();
 				return null;
 			}
@@ -84,8 +86,9 @@ public class GeneratedDoc extends GeneratedOutput {
 			project.registerResource(cgRes);
 		} catch (Exception e1) {
 			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
+			}
 			e1.printStackTrace();
 			System.exit(-1);
 		}

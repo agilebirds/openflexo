@@ -52,8 +52,9 @@ public class FlexoProperty extends FlexoModelObject implements InspectableObject
 
 	@Override
 	public void delete() {
-		if (getOwner() != null)
+		if (getOwner() != null) {
 			getOwner().removeFromCustomProperties(this);
+		}
 		super.delete();
 	}
 
@@ -89,8 +90,9 @@ public class FlexoProperty extends FlexoModelObject implements InspectableObject
 
 	@Override
 	public FlexoProject getProject() {
-		if (getOwner() != null)
+		if (getOwner() != null) {
 			return getOwner().getProject();
+		}
 		return super.getProject();
 	}
 
@@ -106,15 +108,17 @@ public class FlexoProperty extends FlexoModelObject implements InspectableObject
 
 	@Override
 	public XMLMapping getXMLMapping() {
-		if (getOwner() != null)
+		if (getOwner() != null) {
 			return getOwner().getXMLMapping();
+		}
 		return null;
 	}
 
 	@Override
 	public XMLStorageResourceData getXMLResourceData() {
-		if (getOwner() != null)
+		if (getOwner() != null) {
 			return getOwner().getXMLResourceData();
+		}
 		return null;
 	}
 

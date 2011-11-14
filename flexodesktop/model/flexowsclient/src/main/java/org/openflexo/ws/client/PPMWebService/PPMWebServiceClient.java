@@ -36,8 +36,9 @@ public class PPMWebServiceClient {
 		this.ppmServiceLocator = new PPMWebService_ServiceLocator();
 		this.ppmServiceLocator.setPPMWebServiceEndpointAddress(webServiceUrl);
 		this.ppmService = this.ppmServiceLocator.getPPMWebService();
-		if (this.ppmService == null)
+		if (this.ppmService == null) {
 			throw new ServiceException("Cannot obtain service client ! Axis has returned an unknow error.");
+		}
 		org.apache.axis.client.Stub s = (Stub) this.ppmService;
 		s.setTimeout(30000);
 		this.login = login;

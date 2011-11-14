@@ -58,8 +58,9 @@ public class JavaParserBrowser extends ConfigurableProjectBrowser implements Fle
 
 	@Override
 	public void update(FlexoObservable o, DataModification arg) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("JavaParserBrowser update");
+		}
 	}
 
 	public static BrowserConfiguration makeDefaultBrowserConfiguration(SGJavaFile javaFile) {

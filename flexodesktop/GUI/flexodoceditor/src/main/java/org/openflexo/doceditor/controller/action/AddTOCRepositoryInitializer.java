@@ -29,13 +29,6 @@ import javax.swing.Icon;
 
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.AskParametersDialog.ValidationCondition;
-import org.openflexo.icon.DEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.FileResource;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-import org.openflexo.xmlcode.XMLDecoder;
-
 import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -47,6 +40,12 @@ import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.foundation.toc.action.AddTOCRepository;
 import org.openflexo.foundation.xml.FlexoTOCBuilder;
+import org.openflexo.icon.DEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.FileResource;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.FlexoController;
+import org.openflexo.xmlcode.XMLDecoder;
 
 public class AddTOCRepositoryInitializer extends ActionInitializer {
 

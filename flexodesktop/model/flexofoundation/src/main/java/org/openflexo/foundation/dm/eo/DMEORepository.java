@@ -152,8 +152,9 @@ public abstract class DMEORepository extends DMRepository {
 		if (dmEOEntity.getEOEntity() != null) {
 			if (_entitiesForEOEntity.get(dmEOEntity.getEOEntity()) != null) {
 				if (_entitiesForEOEntity.get(dmEOEntity.getEOEntity()) != dmEOEntity) {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Trying to redefine DMEOEntity: operation not allowed !");
+					}
 				} else {
 					// Ignore it !
 				}
@@ -213,8 +214,9 @@ public abstract class DMEORepository extends DMRepository {
 			newEOModel = DMEOModel.createsNewDMEOModelFromExistingEOModel(dmModel, this, eoModelDir, dmRes);
 			EOModel model = newEOModel.loadEOModel();
 			if (model == null) {
-				if (newEOModel.getEOModelResource() != null)
+				if (newEOModel.getEOModelResource() != null) {
 					getProject().removeResource(newEOModel.getEOModelResource());
+				}
 				throw new InvalidEOModelFileException(newEOModel.getEOModelResource());
 			}
 			registerEOModel(newEOModel);
@@ -234,43 +236,50 @@ public abstract class DMEORepository extends DMRepository {
 		DMEOModel importedDMEOModel = null;
 		File dataModelDir = ProjectRestructuration.getExpectedDataModelDirectory(getProject().getProjectDirectory());
 		if (!dataModelDir.equals(eoModelFile.getParentFile())) {
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Copying file " + eoModelFile.getAbsolutePath() + " to " + dataModelDir.getAbsolutePath());
+			}
 			File dest = new File(dataModelDir, eoModelFile.getName());
 			for (DMEOModel model : getDMModel().getAllDMEOModel()) {
-				if (model.getEOModelFile().getFile().equals(dest))
+				if (model.getEOModelFile().getFile().equals(dest)) {
 					throw new EOModelAlreadyRegisteredException(model.getEOModelFile());
+				}
 			}
 			try {
 				FileUtils.copyDirToDir(eoModelFile, dataModelDir);
 			} catch (IOException e) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not copy file " + eoModelFile.getAbsolutePath() + " to " + dataModelDir.getAbsolutePath());
+				}
 			}
 		}
 		try {
 			FlexoProjectFile eoModelDirectory = new FlexoProjectFile(new File(dataModelDir, eoModelFile.getName()), getProject());
 			importedDMEOModel = importEOModelFile(eoModelDirectory);
 			importedDMEOModel.updateFromEOModel();
-			if (importedDMEOModel.getEOModel().getMissingEntities().size() > 0)
+			if (importedDMEOModel.getEOModel().getMissingEntities().size() > 0) {
 				throw new UnresovedEntitiesException(importedDMEOModel.getEOModel().getMissingEntities());
+			}
 		} catch (InvalidEOModelFileException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not import EOModel:" + dataModelDir.getName());
+			}
 			if (importedDMEOModel != null) {
 				importedDMEOModel.delete();
 			}
 			throw e;
 		} catch (EOAccessException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not import EOModel:" + dataModelDir.getName());
+			}
 			if (importedDMEOModel != null) {
 				importedDMEOModel.delete();
 			}
 			throw e;
 		} catch (EOModelAlreadyRegisteredException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not import EOModel:" + dataModelDir.getName());
+			}
 			if (importedDMEOModel != null) {
 				importedDMEOModel.delete();
 			}
@@ -295,15 +304,17 @@ public abstract class DMEORepository extends DMRepository {
 	public void registerEOModel(DMEOModel eoModel) {
 		eoModel.setRepository(this);
 		if (_DMEOModels.get(eoModel.getName()) == null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Register EOModel " + eoModel.getName());
+			}
 			setDMEOModelForKey(eoModel, eoModel.getName());
 			setChanged();
 			notifyObservers(new EOModelRegistered(eoModel));
 		} else if (eoModel != _DMEOModels.get(eoModel.getName())) {
 			eoModel.setRepository(null);
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Trying to redefine EOModel " + eoModel.getName() + ": operation not allowed !");
+			}
 		}
 	}
 
@@ -316,8 +327,9 @@ public abstract class DMEORepository extends DMRepository {
 
 	protected void renameEOModel(DMEOModel eoModel, String oldName, String newName) {
 		if (_DMEOModels.get(oldName + ".eomodeld") == eoModel) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Rename EOModel from " + oldName + ".eomodeld" + " to " + newName + ".eomodeld");
+			}
 			removeDMEOModelWithKey(oldName + ".eomodeld");
 			setDMEOModelForKey(eoModel, newName + ".eomodeld");
 		} else {
@@ -416,10 +428,11 @@ public abstract class DMEORepository extends DMRepository {
 
 			String s1 = o1.getName();
 			String s2 = o2.getName();
-			if ((s1 != null) && (s2 != null))
+			if ((s1 != null) && (s2 != null)) {
 				return Collator.getInstance().compare(s1, s2);
-			else
+			} else {
 				return 0;
+			}
 		}
 
 	}
@@ -431,8 +444,9 @@ public abstract class DMEORepository extends DMRepository {
 	}
 
 	public String getEntitySubPath() {
-		if (entitySubPath == null)
+		if (entitySubPath == null) {
 			entitySubPath = "src/main/java/EO" + FileUtils.getValidFileName(this.getName());
+		}
 		return entitySubPath;
 	}
 

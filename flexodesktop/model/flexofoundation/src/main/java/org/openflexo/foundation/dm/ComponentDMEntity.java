@@ -69,8 +69,9 @@ public class ComponentDMEntity extends DMEntity {
 		_mandatoryBindingProperties = new Vector<DMProperty>();
 		_bindableProperties = new Vector<DMProperty>();
 		_settableBindingProperties = new Vector<DMProperty>();
-		if (!isDeserializing() && getParentType() == null)
+		if (!isDeserializing() && getParentType() == null) {
 			setParentType(DMType.makeResolvedDMType(dmModel.getWORepository().getCustomComponentEntity()), true);
+		}
 	}
 
 	/**
@@ -126,8 +127,9 @@ public class ComponentDMEntity extends DMEntity {
 
 	private void registerBindableProperty(DMProperty property) {
 		ComponentBindingDefinition newBindingDefinition = getComponentBindingDefinitionForProperty(property);
-		if (!_bindingDefinitions.contains(newBindingDefinition))
+		if (!_bindingDefinitions.contains(newBindingDefinition)) {
 			_bindingDefinitions.add(newBindingDefinition);
+		}
 		propertiesNeedsReordering = true;
 		reorderProperties();
 		if (!isDeserializing() && getComponentDefinition() != null) {
@@ -321,9 +323,9 @@ public class ComponentDMEntity extends DMEntity {
 		DMProcessBusinessDataAccessingMethod method = DMProcessBusinessDataAccessingMethod.getProcessBusinessDataAccessingMethod(this,
 				process, CodeType.CUSTOMCOMPONENT_CURRENTBUSINESSDATA);
 
-		if (method != null)
+		if (method != null) {
 			method.updateProcess(process);
-		else if (process.getBusinessDataType() != null) {
+		} else if (process.getBusinessDataType() != null) {
 			String methodName = DMProcessBusinessDataAccessingMethod.getAccessingBusinessDataMethodName(process);
 			for (String s : getMethods().keySet()) {
 				logger.info("Found method: " + s);
@@ -340,7 +342,8 @@ public class ComponentDMEntity extends DMEntity {
 	public void removeAccessingBusinessDataMethod(FlexoProcess process) {
 		DMProcessBusinessDataAccessingMethod method = DMProcessBusinessDataAccessingMethod.getProcessBusinessDataAccessingMethod(this,
 				process, CodeType.CUSTOMCOMPONENT_CURRENTBUSINESSDATA);
-		if (method != null)
+		if (method != null) {
 			method.delete();
+		}
 	}
 }

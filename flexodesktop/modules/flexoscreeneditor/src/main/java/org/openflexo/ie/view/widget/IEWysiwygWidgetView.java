@@ -145,8 +145,9 @@ public class IEWysiwygWidgetView extends AbstractInnerTableWidgetView<IEWysiwygW
 			((JComponent) getParent()).repaint();
 		} else if (modif instanceof WidgetRemovedFromTable && arg0 == getModel()) {
 			delete();
-		} else
+		} else {
 			super.update(arg0, modif);
+		}
 	}
 
 	public boolean isHyperlink() {
@@ -167,14 +168,16 @@ public class IEWysiwygWidgetView extends AbstractInnerTableWidgetView<IEWysiwygW
 	public Dimension getPreferredSize() {
 		if (getHoldsNextComputedPreferredSize()) {
 			Dimension storedSize = storedPrefSize();
-			if (storedSize != null)
+			if (storedSize != null) {
 				return storedSize;
+			}
 		}
 		Dimension d = _jEditorPane.getPreferredSize();
 		d.width += 4;
 		d.height += 6;
-		if (getHoldsNextComputedPreferredSize())
+		if (getHoldsNextComputedPreferredSize()) {
 			storePrefSize(d);
+		}
 		return d;
 	}
 

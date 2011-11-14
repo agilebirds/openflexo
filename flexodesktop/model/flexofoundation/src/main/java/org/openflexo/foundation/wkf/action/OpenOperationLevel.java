@@ -118,8 +118,9 @@ public class OpenOperationLevel extends FlexoUndoableAction<OpenOperationLevel, 
 	private CreatePetriGraph _createPetriGraph = null;
 
 	public boolean visibility() {
-		if (visibility == null)
+		if (visibility == null) {
 			visibility = !getFocusedObject().getOperationPetriGraph().getIsVisible();
+		}
 		return visibility;
 	}
 

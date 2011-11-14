@@ -21,12 +21,12 @@ package org.openflexo.diff.merge;
 
 import java.util.Vector;
 
-import org.openflexo.diff.DelimitingMethod;
-import org.openflexo.diff.DiffSource;
 import org.openflexo.diff.ComputeDiff.AdditionChange;
 import org.openflexo.diff.ComputeDiff.DiffChange;
 import org.openflexo.diff.ComputeDiff.ModificationChange;
 import org.openflexo.diff.ComputeDiff.RemovalChange;
+import org.openflexo.diff.DelimitingMethod;
+import org.openflexo.diff.DiffSource;
 
 public class MergeChange {
 	public enum MergeChangeSource {
@@ -101,12 +101,15 @@ public class MergeChange {
 		returned.last1 = aChange.getLast0();
 		returned.first2 = aChange.getFirst1();
 		returned.last2 = aChange.getLast1();
-		if (aChange instanceof ModificationChange)
+		if (aChange instanceof ModificationChange) {
 			returned.mergeChangeType = MergeChangeType.Modification;
-		if (aChange instanceof AdditionChange)
+		}
+		if (aChange instanceof AdditionChange) {
 			returned.mergeChangeType = MergeChangeType.Addition;
-		if (aChange instanceof RemovalChange)
+		}
+		if (aChange instanceof RemovalChange) {
 			returned.mergeChangeType = MergeChangeType.Removal;
+		}
 		returned.mergeChangeSource = MergeChangeSource.Right;
 		returned.mergeChangeAction = MergeChangeAction.KeepChange;
 		return returned;
@@ -120,12 +123,15 @@ public class MergeChange {
 		returned.last1 = aChange.getLast1();
 		returned.first2 = aChange.getFirst1() - originalToRight;
 		returned.last2 = aChange.getLast1() - originalToRight;
-		if (aChange instanceof ModificationChange)
+		if (aChange instanceof ModificationChange) {
 			returned.mergeChangeType = MergeChangeType.Modification;
-		if (aChange instanceof AdditionChange)
+		}
+		if (aChange instanceof AdditionChange) {
 			returned.mergeChangeType = MergeChangeType.Removal;
-		if (aChange instanceof RemovalChange)
+		}
+		if (aChange instanceof RemovalChange) {
 			returned.mergeChangeType = MergeChangeType.Addition;
+		}
 		returned.mergeChangeSource = MergeChangeSource.Left;
 		returned.mergeChangeAction = MergeChangeAction.KeepChange;
 		return returned;
@@ -134,18 +140,24 @@ public class MergeChange {
 	protected static MergeChange makeMergeChange(Vector<MergeChange> changes, MergeChangeAction defaultAction) {
 		MergeChange returned = new MergeChange();
 		for (MergeChange change : changes) {
-			if ((returned.getFirst0() == -1) || (returned.getFirst0() >= change.getFirst0() && change.getFirst0() <= change.getLast0()))
+			if ((returned.getFirst0() == -1) || (returned.getFirst0() >= change.getFirst0() && change.getFirst0() <= change.getLast0())) {
 				returned.setFirst0(change.getFirst0());
-			if ((returned.getFirst1() == -1) || (returned.getFirst1() >= change.getFirst1() && change.getFirst1() <= change.getLast1()))
+			}
+			if ((returned.getFirst1() == -1) || (returned.getFirst1() >= change.getFirst1() && change.getFirst1() <= change.getLast1())) {
 				returned.setFirst1(change.getFirst1());
-			if ((returned.getFirst2() == -1) || (returned.getFirst2() >= change.getFirst2() && change.getFirst2() <= change.getLast2()))
+			}
+			if ((returned.getFirst2() == -1) || (returned.getFirst2() >= change.getFirst2() && change.getFirst2() <= change.getLast2())) {
 				returned.setFirst2(change.getFirst2());
-			if ((returned.getLast0() == -1) || (returned.getLast0() <= change.getLast0() && change.getFirst0() <= change.getLast0()))
+			}
+			if ((returned.getLast0() == -1) || (returned.getLast0() <= change.getLast0() && change.getFirst0() <= change.getLast0())) {
 				returned.setLast0(change.getLast0());
-			if ((returned.getLast1() == -1) || (returned.getLast1() <= change.getLast1() && change.getFirst1() <= change.getLast1()))
+			}
+			if ((returned.getLast1() == -1) || (returned.getLast1() <= change.getLast1() && change.getFirst1() <= change.getLast1())) {
 				returned.setLast1(change.getLast1());
-			if ((returned.getLast2() == -1) || (returned.getLast2() <= change.getLast2() && change.getFirst2() <= change.getLast2()))
+			}
+			if ((returned.getLast2() == -1) || (returned.getLast2() <= change.getLast2() && change.getFirst2() <= change.getLast2())) {
 				returned.setLast2(change.getLast2());
+			}
 		}
 		returned.mergeChangeSource = MergeChangeSource.Conflict;
 		returned.mergeChangeAction = defaultAction;
@@ -168,8 +180,9 @@ public class MergeChange {
 		MergeChange oppositeMerge = makeMergeChange(changesToMerge, defaultAction);
 		if ((oppositeMerge.getFirst1() >= returned.getFirst1()) && (oppositeMerge.getLast1() <= returned.getLast1())) {
 			int d = (oppositeMerge.getLast2() - oppositeMerge.getFirst2() - oppositeMerge.getLast1() + oppositeMerge.getFirst1());
-			if (Merge.debug)
+			if (Merge.debug) {
 				System.out.println("Including case from left d=" + d);
+			}
 			returned.setLast2(returned.getLast2() + d);
 			returned.delta = d;
 		}
@@ -194,8 +207,9 @@ public class MergeChange {
 		MergeChange oppositeMerge = makeMergeChange(changesToMerge, defaultAction);
 		if ((oppositeMerge.getFirst1() >= returned.getFirst1()) && (oppositeMerge.getLast1() <= returned.getLast1())) {
 			int d = (oppositeMerge.getLast0() - oppositeMerge.getFirst0() - oppositeMerge.getLast1() + oppositeMerge.getFirst1());
-			if (Merge.debug)
+			if (Merge.debug) {
 				System.out.println("Including case from right d=" + d);
+			}
 			returned.setLast0(returned.getLast0() + d);
 			returned.delta = d;
 		}
@@ -240,8 +254,9 @@ public class MergeChange {
 
 	@Override
 	public String toString() {
-		if (Merge.debug)
+		if (Merge.debug) {
 			return toDebugString();
+		}
 		return toNiceString();
 	}
 
@@ -397,8 +412,9 @@ public class MergeChange {
 		}
 
 		public String[] getSignificativeTokens() {
-			if (_significativeTokens == null)
+			if (_significativeTokens == null) {
 				_significativeTokens = (new DiffSource(merge, getDelimitingMethod())).getSignificativeTokens();
+			}
 			return _significativeTokens;
 		}
 	}
@@ -452,12 +468,14 @@ public class MergeChange {
 			} else if (mergeChangeAction == MergeChangeAction.ChooseBothRightFirst) {
 				return new MergeChangeResult(getRightText() + getLeftText(), getLast0() - getFirst0() + 1 + getLast2() - getFirst2() + 1);
 			} else if (mergeChangeAction == MergeChangeAction.CustomEditing) {
-				if (customHandEdition != null)
+				if (customHandEdition != null) {
 					return customHandEdition;
+				}
 				return new MergeChangeResult("", 0);
 			} else if (mergeChangeAction == MergeChangeAction.AutomaticMergeResolving) {
-				if (getAutomaticResolvedMerge() != null)
+				if (getAutomaticResolvedMerge() != null) {
 					return getAutomaticResolvedMerge();
+				}
 				// If automerge failed, take left
 				return new MergeChangeResult(getLeftText(), getLast0() - getFirst0() + 1);
 				// If automerge failed, choose none
@@ -543,11 +561,13 @@ public class MergeChange {
 	}
 
 	public boolean isResolved() {
-		if ((mergeChangeSource == MergeChangeSource.Left) || (mergeChangeSource == MergeChangeSource.Right))
+		if ((mergeChangeSource == MergeChangeSource.Left) || (mergeChangeSource == MergeChangeSource.Right)) {
 			return true;
+		}
 		// else conflict
-		if (mergeChangeAction == MergeChangeAction.Undecided)
+		if (mergeChangeAction == MergeChangeAction.Undecided) {
 			return false;
+		}
 		if (mergeChangeAction == MergeChangeAction.AutomaticMergeResolving) {
 			tryToAutomaticallyResolve();
 			return (automaticMergeResult != null);
@@ -598,31 +618,36 @@ public class MergeChange {
 			}
 		} else if (getMergeChangeSource() == MergeChange.MergeChangeSource.Conflict) {
 			if (getMergeChangeAction() == MergeChangeAction.AutomaticMergeResolving) {
-				if (isResolved())
+				if (isResolved()) {
 					return ChangeCategory.SMART_CONFLICT_RESOLVED;
-				else
+				} else {
 					return ChangeCategory.SMART_CONFLICT_UNRESOLVED;
+				}
 			} else if (getMergeChangeAction() == MergeChangeAction.CustomEditing) {
-				if (isResolved())
+				if (isResolved()) {
 					return ChangeCategory.CUSTOM_EDITING_RESOLVED;
-				else
+				} else {
 					return ChangeCategory.CUSTOM_EDITING_UNRESOLVED;
+				}
 			}
 			if (getMergeChangeType() == MergeChange.MergeChangeType.Addition) {
-				if (isResolved())
+				if (isResolved()) {
 					return ChangeCategory.ADD_CONFLICT_RESOLVED;
-				else
+				} else {
 					return ChangeCategory.ADD_CONFLICT_UNRESOLVED;
+				}
 			} else if (getMergeChangeType() == MergeChange.MergeChangeType.Modification) {
-				if (isResolved())
+				if (isResolved()) {
 					return ChangeCategory.CONFLICT_RESOLVED;
-				else
+				} else {
 					return ChangeCategory.CONFLICT_UNRESOLVED;
+				}
 			} else if (getMergeChangeType() == MergeChange.MergeChangeType.Removal) {
-				if (isResolved())
+				if (isResolved()) {
 					return ChangeCategory.DEL_CONFLICT_RESOLVED;
-				else
+				} else {
 					return ChangeCategory.DEL_CONFLICT_UNRESOLVED;
+				}
 			}
 		} else if (getMergeChangeSource() == MergeChange.MergeChangeSource.Right) {
 			if (getMergeChangeType() == MergeChange.MergeChangeType.Addition) {

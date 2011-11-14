@@ -97,8 +97,9 @@ public class ParametersModel extends TemporaryFlexoModelObject implements Inspec
 			return param.getValue();
 		} else if (_specialObjects.get(key) != null) {
 			return _specialObjects.get(key);
-		} else
+		} else {
 			return super.objectForKey(key);
+		}
 	}
 
 	@Override
@@ -116,8 +117,9 @@ public class ParametersModel extends TemporaryFlexoModelObject implements Inspec
 		ParameterDefinition param = parameterForKey(key);
 		if (param != null) {
 			return param.getBooleanValue();
-		} else
+		} else {
 			return super.booleanValueForKey(key);
+		}
 	}
 
 	@Override
@@ -135,8 +137,9 @@ public class ParametersModel extends TemporaryFlexoModelObject implements Inspec
 		ParameterDefinition param = parameterForKey(key);
 		if (param != null) {
 			return param.getIntegerValue();
-		} else
+		} else {
 			return super.integerValueForKey(key);
+		}
 
 	}
 

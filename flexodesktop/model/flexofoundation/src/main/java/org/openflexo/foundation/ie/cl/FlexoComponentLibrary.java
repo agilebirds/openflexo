@@ -142,8 +142,9 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 	 */
 	public static FlexoComponentLibrary createNewComponentLibrary(FlexoProject project) {
 		FlexoComponentLibrary newLibrary = new FlexoComponentLibrary(project);
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("createNewComponentLibrary(), project=" + project + " " + newLibrary);
+		}
 
 		File compFile = ProjectRestructuration.getExpectedComponentLibFile(project);
 		FlexoProjectFile componentLibFile = new FlexoProjectFile(compFile, project);
@@ -157,8 +158,9 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 			try {
 				clRes = new FlexoComponentLibraryResource(project, newLibrary, componentLibFile);
 			} catch (InvalidFileNameException e) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("Could not create component library.");
+				}
 				e.printStackTrace();
 				return null;
 			}
@@ -169,8 +171,9 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 			project.registerResource(clRes);
 		} catch (Exception e1) {
 			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
+			}
 			e1.printStackTrace();
 		}
 		try {
@@ -185,8 +188,9 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 		Collection<FlexoResource<FlexoResourceData>> c = project.getResources().values();
 		for (FlexoResource r : c) {
 			if (r instanceof FlexoComponentResource) {
-				if (newLibrary.getComponentNamed(((FlexoComponentResource) r).getName()) == null)
+				if (newLibrary.getComponentNamed(((FlexoComponentResource) r).getName()) == null) {
 					((FlexoComponentResource) r).getComponentDefinition();
+				}
 			}
 		}
 
@@ -274,8 +278,9 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 			}
 
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Could not find folder named " + folderName);
+		}
 		return null;
 	}
 
@@ -313,8 +318,9 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 	 */
 	@Override
 	public TreeNode getChildAt(int arg0) {
-		if (arg0 == 0)
+		if (arg0 == 0) {
 			return getRootFolder();
+		}
 		return null;
 	}
 
@@ -371,8 +377,9 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 	public FlexoComponentFolder getRootFolder() {
 		if (_rootFolder == null) {
 			if (!isDeserializing()) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("No root folder defined for component library");
+				}
 				setRootFolder(FlexoComponentFolder.createNewRootFolder(this));
 			}
 		}
@@ -424,14 +431,16 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 
 	public void delete(ComponentDefinition def) {
 		boolean b = _rootFolder.delete(def);
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Component removal " + (b ? "succeed" : "failed"));
+		}
 		notifyTreeStructureChanged();
 	}
 
 	public boolean isValidForANewComponentName(String value) {
-		if (value == null)
+		if (value == null) {
 			return false;
+		}
 		if (_rootFolder != null) {
 			return _rootFolder.isValidForANewComponentName(value);
 		}
@@ -439,13 +448,15 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 	}
 
 	public ComponentDefinition getComponentNamed(String value) {
-		if (value == null)
+		if (value == null) {
 			return null;
+		}
 		if (_rootFolder != null) {
 			return _rootFolder.getComponentNamed(value);
 		}
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Cannot find a component named : " + value);
+		}
 		return null;
 	}
 
@@ -504,8 +515,9 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 	public Vector<IObject> getEmbeddedIEObjects() {
 		Vector<IObject> answer = new Vector<IObject>();
 		answer.add(getRootFolder());
-		if (getProject().getFlexoNavigationMenu().getRootMenu() != null)
+		if (getProject().getFlexoNavigationMenu().getRootMenu() != null) {
 			answer.add(getProject().getFlexoNavigationMenu().getRootMenu());
+		}
 		return answer;
 	}
 
@@ -524,8 +536,9 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 		if (getProject() != null) {
 			return getProject().getIEValidationModel();
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not access to project !");
+			}
 		}
 		return null;
 	}
@@ -623,8 +636,9 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 	}
 
 	public ComponentLibraryStatistics getStatistics() {
-		if (statistics == null)
+		if (statistics == null) {
 			statistics = new ComponentLibraryStatistics(this);
+		}
 		return statistics;
 	}
 
@@ -637,8 +651,9 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 			while (en.hasMoreElements()) {
 				wo = en.nextElement().getWOComponent();
 				Hashtable<IEObject, Hashtable<String, String>> localizableItems = wo.getLocalizableObjects();
-				if (localizableItems != null && localizableItems.size() > 0)
+				if (localizableItems != null && localizableItems.size() > 0) {
 					reply.putAll(localizableItems);
+				}
 			}
 
 			reply.putAll(getProject().getFlexoNavigationMenu().getLocalizableObjects());

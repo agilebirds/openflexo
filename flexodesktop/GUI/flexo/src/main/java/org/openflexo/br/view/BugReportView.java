@@ -50,17 +50,16 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 
-import org.openflexo.swing.JTextFieldRegExp;
-import org.openflexo.wysiwyg.FlexoWysiwygUltraLight;
-
 import org.openflexo.br.BugReport;
-import org.openflexo.br.BugReportAction;
 import org.openflexo.br.BugReport.IncidentType;
+import org.openflexo.br.BugReportAction;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.viewer.FlexoLoggingViewerWindow;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.UserType;
+import org.openflexo.swing.JTextFieldRegExp;
+import org.openflexo.wysiwyg.FlexoWysiwygUltraLight;
 
 /**
  * @author sguerin
@@ -177,8 +176,9 @@ public class BugReportView extends JPanel {
 			}
 
 			private void checkLength() {
-				if (_newBugReport == null)
+				if (_newBugReport == null) {
 					return;
+				}
 				if (title.getText() == null) {
 					_newBugReport.disableButtons();
 				} else if (title.getText().length() < 1 || title.getText().length() > 100) {
@@ -233,8 +233,9 @@ public class BugReportView extends JPanel {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (stacktrace.getSelectedText() == null || stacktrace.getSelectedText().length() == 0)
+				if (stacktrace.getSelectedText() == null || stacktrace.getSelectedText().length() == 0) {
 					stacktrace.selectAll();
+				}
 			}
 
 			@Override
@@ -363,8 +364,9 @@ public class BugReportView extends JPanel {
 			_bugReport.impact = impact.getSelectedIndex();
 			_bugReport.urgency = urgency.getSelectedIndex();
 			_bugReport.module = (Module) module.getSelectedItem();
-			if (incidentType != null && incidentType.getSelectedItem() != null)
+			if (incidentType != null && incidentType.getSelectedItem() != null) {
 				_bugReport.type = (IncidentType) incidentType.getSelectedItem();
+			}
 			if (!includeLogs.isSelected()) {
 				_bugReport.logRecords = null;
 			}
@@ -445,8 +447,9 @@ public class BugReportView extends JPanel {
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
 					// Ignore extra messages.
-					if (e.getValueIsAdjusting())
+					if (e.getValueIsAdjusting()) {
 						return;
+					}
 					ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 					if (lsm.isSelectionEmpty()) {
 						// no rows are selected

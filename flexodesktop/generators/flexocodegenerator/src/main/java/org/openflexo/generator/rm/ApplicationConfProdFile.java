@@ -24,7 +24,6 @@ import java.io.File;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.cg.TextFile;
 import org.openflexo.generator.FlexoResourceGenerator;
-import org.openflexo.generator.rm.GenerationAvailableFile;
 
 public class ApplicationConfProdFile extends TextFile implements GenerationAvailableFile {
 

@@ -142,8 +142,9 @@ public abstract class FIBMultipleValues extends FIBWidget {
 	}
 
 	public Class getIteratorClass() {
-		if (isStaticList())
+		if (isStaticList()) {
 			return String.class;
+		}
 		if (iteratorClass == null) {
 			if (expectedIteratorClass != null) {
 				return expectedIteratorClass;
@@ -166,8 +167,9 @@ public abstract class FIBMultipleValues extends FIBWidget {
 
 	@Override
 	public Type getDataType() {
-		if (isStaticList())
+		if (isStaticList()) {
 			return String.class;
+		}
 		if (iteratorClass != null) {
 			return iteratorClass;
 		}
@@ -176,8 +178,9 @@ public abstract class FIBMultipleValues extends FIBWidget {
 
 	@Override
 	public Type getFormattedObjectType() {
-		if (isStaticList())
+		if (isStaticList()) {
 			return String.class;
+		}
 		if (iteratorClass != null) {
 			return iteratorClass;
 		}

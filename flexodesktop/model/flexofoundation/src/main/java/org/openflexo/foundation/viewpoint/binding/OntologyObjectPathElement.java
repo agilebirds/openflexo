@@ -82,8 +82,9 @@ public class OntologyObjectPathElement<T extends OntologyObject> implements Simp
 
 	@Override
 	public Class<? extends Bindable> getDeclaringClass() {
-		if (parentElement != null)
+		if (parentElement != null) {
 			return TypeUtils.getBaseClass(parentElement.getType());
+		}
 		return Bindable.class;
 	}
 

@@ -32,9 +32,9 @@ import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.ontology.OntologyStatement;
 import org.openflexo.foundation.view.ViewConnector;
-import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.ViewElement;
 import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.ViewShape;
 
 public class DeleteViewElements extends FlexoUndoableAction<DeleteViewElements, ViewElement, ViewElement> {
 
@@ -89,8 +89,9 @@ public class DeleteViewElements extends FlexoUndoableAction<DeleteViewElements, 
 					break;
 				}
 			}
-			if (!isContainedByAnOtherObject)
+			if (!isContainedByAnOtherObject) {
 				returned.add(o);
+			}
 		}
 
 		return returned;
@@ -108,23 +109,29 @@ public class DeleteViewElements extends FlexoUndoableAction<DeleteViewElements, 
 
 	@Override
 	protected void doAction(Object context) {
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("DeleteShemaElements");
-		if (logger.isLoggable(Level.INFO))
+		}
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("selection is: " + getGlobalSelection());
-		if (logger.isLoggable(Level.INFO))
+		}
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("selection to delete is: " + getObjectsToDelete());
-		if (logger.isLoggable(Level.INFO) && deleteOntologicObjects)
+		}
+		if (logger.isLoggable(Level.INFO) && deleteOntologicObjects) {
 			logger.info("ontologic objects to delete are: " + getObjectsToDelete());
+		}
 
 		if (deleteOntologicObjects) {
 			for (OntologicObjectEntry e : getOntologicObjectsToBeDeleted()) {
-				if (e.deleteIt && e.ontologicObject instanceof OntologyStatement)
+				if (e.deleteIt && e.ontologicObject instanceof OntologyStatement) {
 					e.ontologicObject.delete();
+				}
 			}
 			for (OntologicObjectEntry e : getOntologicObjectsToBeDeleted()) {
-				if (e.deleteIt && !(e.ontologicObject instanceof OntologyStatement))
+				if (e.deleteIt && !(e.ontologicObject instanceof OntologyStatement)) {
 					e.ontologicObject.delete();
+				}
 			}
 		}
 
@@ -165,20 +172,26 @@ public class DeleteViewElements extends FlexoUndoableAction<DeleteViewElements, 
 	}
 
 	private void addAllEmbeddedObjects(ViewElement o, Vector<ViewElement> v) {
-		if (!v.contains(o))
+		if (!v.contains(o)) {
 			v.add(o);
+		}
 		if (o instanceof ViewShape) {
 			ViewShape s = (ViewShape) o;
-			for (ViewConnector connector : s.getIncomingConnectors())
-				if (!v.contains(connector))
+			for (ViewConnector connector : s.getIncomingConnectors()) {
+				if (!v.contains(connector)) {
 					v.add(connector);
-			for (ViewConnector connector : s.getOutgoingConnectors())
-				if (!v.contains(connector))
+				}
+			}
+			for (ViewConnector connector : s.getOutgoingConnectors()) {
+				if (!v.contains(connector)) {
 					v.add(connector);
+				}
+			}
 		}
 		for (ViewObject child : o.getChilds()) {
-			if (child instanceof ViewElement)
+			if (child instanceof ViewElement) {
 				addAllEmbeddedObjects((ViewElement) child, v);
+			}
 		}
 	}
 
@@ -204,8 +217,9 @@ public class DeleteViewElements extends FlexoUndoableAction<DeleteViewElements, 
 						for (String s : epInstance.getActors().keySet()) {
 							FlexoModelObject actor = epInstance.getActors().get(s);
 							if (actor instanceof AbstractOntologyObject) {
-								if (!_ontologicObjectsToBeDeleted.contains(actor))
+								if (!_ontologicObjectsToBeDeleted.contains(actor)) {
 									_ontologicObjectsToBeDeleted.add(new OntologicObjectEntry(true, (AbstractOntologyObject) actor));
+								}
 							}
 						}
 					}
@@ -232,10 +246,11 @@ public class DeleteViewElements extends FlexoUndoableAction<DeleteViewElements, 
 	}
 
 	public void setDeleteOntologicObjects(boolean deleteOntologicObjects) {
-		if (deleteOntologicObjects)
+		if (deleteOntologicObjects) {
 			selectAll();
-		else
+		} else {
 			selectNone();
+		}
 		this.deleteOntologicObjects = deleteOntologicObjects;
 	}
 }

@@ -66,10 +66,12 @@ public class FlexoJarResource extends FlexoImportedResource<JarLoader> {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if (dmResource != null)
+		if (dmResource != null) {
 			dmResource.addToDependantResources(this);
-		if (logger.isLoggable(Level.INFO))
+		}
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Build new FlexoJarResource");
+		}
 	}
 
 	public FlexoJarResource(FlexoProject aProject, ExternalRepository jarRepository, JarLoader aJarLoader, FlexoDMResource dmResource,
@@ -99,16 +101,19 @@ public class FlexoJarResource extends FlexoImportedResource<JarLoader> {
 		try {
 			return getImportedData();
 		} catch (FileNotFoundException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.log(Level.WARNING, "File not found exception.", e);
+			}
 			e.printStackTrace();
 		} catch (ProjectLoadingCancelledException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.log(Level.WARNING, "Project loading cancel exception.", e);
+			}
 			e.printStackTrace();
 		} catch (FlexoException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.log(Level.WARNING, "Flexo exception.", e);
+			}
 			e.printStackTrace();
 		}
 		return null;

@@ -19,9 +19,9 @@
  */
 package org.openflexo.fge.geomedit.construction;
 
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 
 public class RectangleWithTwoPointsConstruction extends RectangleConstruction {
 

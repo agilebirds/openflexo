@@ -87,8 +87,9 @@ public class AddConnector extends AddShemaElementAction<ConnectorPatternRole> {
 	}
 
 	public ViewPointDataBinding getFromShape() {
-		if (fromShape == null)
+		if (fromShape == null) {
 			fromShape = new ViewPointDataBinding(this, EditionActionBindingAttribute.fromShape, getFromShapeBindingDefinition());
+		}
 		return fromShape;
 	}
 
@@ -106,8 +107,9 @@ public class AddConnector extends AddShemaElementAction<ConnectorPatternRole> {
 	}
 
 	public ViewPointDataBinding getToShape() {
-		if (toShape == null)
+		if (toShape == null) {
 			toShape = new ViewPointDataBinding(this, EditionActionBindingAttribute.toShape, getToShapeBindingDefinition());
+		}
 		return toShape;
 	}
 

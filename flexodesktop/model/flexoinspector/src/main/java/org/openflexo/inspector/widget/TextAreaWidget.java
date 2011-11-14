@@ -92,20 +92,23 @@ public class TextAreaWidget extends DenaliWidget<String> {
 		_textArea.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent e) {
-				if ((!validateOnReturn) && (!widgetUpdating))
+				if ((!validateOnReturn) && (!widgetUpdating)) {
 					updateModelFromWidget();
+				}
 			}
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				if ((!validateOnReturn) && (!widgetUpdating))
+				if ((!validateOnReturn) && (!widgetUpdating)) {
 					updateModelFromWidget();
+				}
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				if ((!validateOnReturn) && (!widgetUpdating))
+				if ((!validateOnReturn) && (!widgetUpdating)) {
 					updateModelFromWidget();
+				}
 			}
 		});
 		_textArea.addKeyListener(new KeyAdapter() {
@@ -158,12 +161,15 @@ public class TextAreaWidget extends DenaliWidget<String> {
 
 	@Override
 	public synchronized void updateWidgetFromModel() {
-		if (modelUpdating)
+		if (modelUpdating) {
 			return;
-		if (_textArea.getText().equals(getStringValue()))
+		}
+		if (_textArea.getText().equals(getStringValue())) {
 			return;
-		if (getStringValue() != null && (getStringValue() + "\n").equals(_textArea.getText()))
+		}
+		if (getStringValue() != null && (getStringValue() + "\n").equals(_textArea.getText())) {
 			return;
+		}
 		// logger.info("BEGIN TextAreaWidget: updateWidgetFromModel()");
 		widgetUpdating = true;
 		_textArea.setText(getStringValue());
@@ -179,8 +185,9 @@ public class TextAreaWidget extends DenaliWidget<String> {
 	public synchronized void updateModelFromWidget() {
 		// logger.info("BEGIN TextAreaWidget: updateModelFromWidget() value is "+_textArea.getText());
 		modelUpdating = true;
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("updateModelFromWidget() in TextAreaWidget");
+		}
 		setStringValue(_textArea.getText());
 		modelUpdating = false;
 		// logger.info("END TextAreaWidget: updateModelFromWidget() value is "+_textArea.getText());

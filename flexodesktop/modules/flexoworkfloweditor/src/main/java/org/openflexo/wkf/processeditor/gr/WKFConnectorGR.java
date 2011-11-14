@@ -107,10 +107,12 @@ public abstract class WKFConnectorGR<O> extends ConnectorGraphicalRepresentation
 		FGEPoint startLocation = getConnector().getStartLocation();
 		FGEPoint endLocation = getConnector().getEndLocation();
 
-		if (startLocation == null)
+		if (startLocation == null) {
 			return true;
-		if (endLocation == null)
+		}
+		if (endLocation == null) {
 			return true;
+		}
 
 		// boolean debug = false;
 		// if (getText() != null && getText().equals("debug")) debug = true;
@@ -158,10 +160,12 @@ public abstract class WKFConnectorGR<O> extends ConnectorGraphicalRepresentation
 		FGEPoint startLocation = getConnector().getStartLocation();
 		FGEPoint endLocation = getConnector().getEndLocation();
 
-		if (startLocation == null)
+		if (startLocation == null) {
 			return -1;
-		if (endLocation == null)
+		}
+		if (endLocation == null) {
 			return -1;
+		}
 
 		ShapeGraphicalRepresentation<?> firstHiddingShape = startObjGR.shapeHiding(startLocation);
 		ShapeGraphicalRepresentation<?> secondHiddingShape = endObjGR.shapeHiding(endLocation);
@@ -201,8 +205,9 @@ public abstract class WKFConnectorGR<O> extends ConnectorGraphicalRepresentation
 
 	@Override
 	public WKFObjectGR<? extends WKFObject> getStartObject() {
-		if (startObject == null)
+		if (startObject == null) {
 			return null;
+		}
 		if (startObjectGR == null) {
 			startObjectGR = getGraphicalRepresentation(startObject, getDrawing());
 			enableStartObjectObserving(startObjectGR);
@@ -213,8 +218,9 @@ public abstract class WKFConnectorGR<O> extends ConnectorGraphicalRepresentation
 
 	@Override
 	public WKFObjectGR<? extends WKFObject> getEndObject() {
-		if (endObject == null)
+		if (endObject == null) {
 			return null;
+		}
 		if (endObjectGR == null) {
 			endObjectGR = getGraphicalRepresentation(endObject, getDrawing());
 			enableEndObjectObserving(endObjectGR);

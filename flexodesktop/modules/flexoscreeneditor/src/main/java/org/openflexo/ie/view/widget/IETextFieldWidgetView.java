@@ -191,8 +191,9 @@ public class IETextFieldWidgetView extends AbstractInnerTableWidgetView<IETextFi
 		}
 		if (modif instanceof WidgetRemovedFromTable && arg0 == getModel()) {
 			delete();
-		} else
+		} else {
 			super.update(arg0, modif);
+		}
 	}
 
 	/**
@@ -201,8 +202,9 @@ public class IETextFieldWidgetView extends AbstractInnerTableWidgetView<IETextFi
 	private void addDoubleClickListener() {
 		MouseListener[] ml = _jTextField.getMouseListeners();
 		for (int i = 0; i < ml.length; i++) {
-			if (ml[i] == mouseListener)
+			if (ml[i] == mouseListener) {
 				return;
+			}
 		}
 		_jTextField.addMouseListener(mouseListener);
 	}
@@ -215,8 +217,9 @@ public class IETextFieldWidgetView extends AbstractInnerTableWidgetView<IETextFi
 	}
 
 	public void editValue() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Edit ie textfield");
+		}
 		labelEditing = true;
 		_jLabelTextField = new JTextField(getTextFieldModel().getValue());
 		// _jLabelTextField.setForeground(getFlexoNode().getTextColor());
@@ -257,10 +260,11 @@ public class IETextFieldWidgetView extends AbstractInnerTableWidgetView<IETextFi
 		_jLabelTextField.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				if (arg0.getOppositeComponent() != IETextFieldWidgetView.this)
+				if (arg0.getOppositeComponent() != IETextFieldWidgetView.this) {
 					finalizeEditValue();
-				else
+				} else {
 					_jLabelTextField.grabFocus();
+				}
 			}
 		});
 		remove(_jTextField);
@@ -272,8 +276,9 @@ public class IETextFieldWidgetView extends AbstractInnerTableWidgetView<IETextFi
 	}
 
 	public void finalizeEditValue() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Finalize edit ie textfield");
+		}
 		if (labelEditing) {
 			getTextFieldModel().setValue(_jLabelTextField.getText());
 			labelEditing = false;
@@ -294,8 +299,9 @@ public class IETextFieldWidgetView extends AbstractInnerTableWidgetView<IETextFi
 			if (parentSequenceView != null) {
 				int width = parentSequenceView.getAvailableWidth();
 				Dimension d = super.getPreferredSize();
-				if (width > 0)
+				if (width > 0) {
 					d.width = width;
+				}
 				Insets i = _jTextField.getInsets();
 				_jTextField.setPreferredSize(new Dimension(d.width - i.left - i.right, _jTextField.getFontMetrics(_jTextField.getFont())
 						.getHeight() + i.top + i.bottom));
@@ -328,8 +334,9 @@ public class IETextFieldWidgetView extends AbstractInnerTableWidgetView<IETextFi
 			Dimension d = _jTextField.getPreferredSize();
 			d.width = (int) _jTextField.getFontMetrics(_jTextField.getFont())
 					.getStringBounds(_jTextField.getText(), _jTextField.getGraphics()).getWidth() + 10;
-			if (d.width < 50)
+			if (d.width < 50) {
 				d.width = 50;
+			}
 			_jTextField.setPreferredSize(d);
 			d = new Dimension(d.width + 8, d.height + 8);
 			return d;

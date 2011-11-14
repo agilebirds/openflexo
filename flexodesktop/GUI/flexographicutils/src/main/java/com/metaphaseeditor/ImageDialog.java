@@ -179,6 +179,7 @@ public class ImageDialog extends javax.swing.JDialog {
 		widthToggleButton.setSelected(true);
 		widthToggleButton.setText("Default");
 		widthToggleButton.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				widthToggleButtonActionPerformed(evt);
 			}
@@ -187,6 +188,7 @@ public class ImageDialog extends javax.swing.JDialog {
 		heightToggleButton.setSelected(true);
 		heightToggleButton.setText("Default");
 		heightToggleButton.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				heightToggleButtonActionPerformed(evt);
 			}
@@ -448,6 +450,7 @@ public class ImageDialog extends javax.swing.JDialog {
 
 		cancelButton.setText("Cancel");
 		cancelButton.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				cancelButtonActionPerformed(evt);
 			}
@@ -455,6 +458,7 @@ public class ImageDialog extends javax.swing.JDialog {
 
 		okButton.setText("OK");
 		okButton.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				okButtonActionPerformed(evt);
 			}

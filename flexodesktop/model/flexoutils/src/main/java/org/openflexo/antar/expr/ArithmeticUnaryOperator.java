@@ -52,14 +52,18 @@ public abstract class ArithmeticUnaryOperator extends UnaryOperator {
 
 		@Override
 		public EvaluationType getEvaluationType(EvaluationType operandType) throws TypeMismatchException {
-			if (operandType.isLiteral())
+			if (operandType.isLiteral()) {
 				return EvaluationType.LITERAL;
-			if (operandType.isArithmeticInteger())
+			}
+			if (operandType.isArithmeticInteger()) {
 				return EvaluationType.ARITHMETIC_INTEGER;
-			if (operandType.isArithmeticFloat())
+			}
+			if (operandType.isArithmeticFloat()) {
 				return EvaluationType.ARITHMETIC_FLOAT;
-			if (operandType.isDuration())
+			}
+			if (operandType.isDuration()) {
 				return EvaluationType.DURATION;
+			}
 			throw new TypeMismatchException(this, operandType, EvaluationType.ARITHMETIC_FLOAT, EvaluationType.ARITHMETIC_INTEGER,
 					EvaluationType.DURATION, EvaluationType.LITERAL);
 		}
@@ -265,8 +269,9 @@ public abstract class ArithmeticUnaryOperator extends UnaryOperator {
 	public static abstract class ScientificOperator extends ArithmeticUnaryOperator {
 		@Override
 		public EvaluationType getEvaluationType(EvaluationType operandType) throws TypeMismatchException {
-			if (operandType.isArithmeticOrLiteral())
+			if (operandType.isArithmeticOrLiteral()) {
 				return EvaluationType.ARITHMETIC_FLOAT;
+			}
 			throw new TypeMismatchException(this, operandType, EvaluationType.ARITHMETIC_FLOAT, EvaluationType.ARITHMETIC_INTEGER,
 					EvaluationType.LITERAL);
 		}

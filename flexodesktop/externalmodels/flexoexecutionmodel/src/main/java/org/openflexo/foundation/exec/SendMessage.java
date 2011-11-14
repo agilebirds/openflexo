@@ -56,14 +56,16 @@ public class SendMessage extends ControlGraphBuilder {
 	}
 
 	public FlexoPortMap getPortMap() {
-		if (getMessageEdge() != null)
+		if (getMessageEdge() != null) {
 			return getMessageEdge().getEndNode();
+		}
 		return null;
 	}
 
 	public ServiceOperation getServiceOperation() {
-		if (getPortMap() != null)
+		if (getPortMap() != null) {
 			return getPortMap().getOperation();
+		}
 		return null;
 	}
 

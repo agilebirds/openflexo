@@ -152,9 +152,9 @@ public class PHPTokenMarker extends TokenMarker {
 					}
 					break;
 				case '"':
-					if (backslash)
+					if (backslash) {
 						backslash = false;
-					else {
+					} else {
 						doKeyword(line, i, c);
 						addToken(i - lastOffset, Token.KEYWORD3);
 						lastOffset = lastKeyword = i;
@@ -162,9 +162,9 @@ public class PHPTokenMarker extends TokenMarker {
 					}
 					break;
 				case '\'':
-					if (backslash)
+					if (backslash) {
 						backslash = false;
-					else {
+					} else {
 						doKeyword(line, i, c);
 						addToken(i - lastOffset, Token.KEYWORD3);
 						lastOffset = lastKeyword = i;
@@ -218,18 +218,18 @@ public class PHPTokenMarker extends TokenMarker {
 				}
 				break;
 			case Token.LITERAL1: // Script "..."
-				if (backslash)
+				if (backslash) {
 					backslash = false;
-				else if (c == '"') {
+				} else if (c == '"') {
 					addToken(i1 - lastOffset, Token.LITERAL1);
 					lastOffset = lastKeyword = i1;
 					token = SCRIPT;
 				}
 				break;
 			case Token.LITERAL2: // Script '...'
-				if (backslash)
+				if (backslash) {
 					backslash = false;
-				else if (c == '\'') {
+				} else if (c == '\'') {
 					addToken(i1 - lastOffset, Token.LITERAL1);
 					lastOffset = lastKeyword = i1;
 					token = SCRIPT;
@@ -315,8 +315,9 @@ public class PHPTokenMarker extends TokenMarker {
 		int len = i - lastKeyword;
 		byte id = keywords.lookup(line, lastKeyword, len);
 		if (id != Token.NULL) {
-			if (lastKeyword != lastOffset)
+			if (lastKeyword != lastOffset) {
 				addToken(lastKeyword - lastOffset, Token.KEYWORD3);
+			}
 			addToken(len, id);
 			lastOffset = i;
 		}

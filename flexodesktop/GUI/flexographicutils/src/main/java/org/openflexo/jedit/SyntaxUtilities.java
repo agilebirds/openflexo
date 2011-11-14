@@ -58,8 +58,9 @@ public class SyntaxUtilities {
 	public static boolean regionMatches(boolean ignoreCase, Segment text, int offset, String match) {
 		int length = offset + match.length();
 		char[] textArray = text.array;
-		if (length > text.offset + text.count)
+		if (length > text.offset + text.count) {
 			return false;
+		}
 		for (int i = offset, j = 0; i < length; i++, j++) {
 			char c1 = textArray[i];
 			char c2 = match.charAt(j);
@@ -67,8 +68,9 @@ public class SyntaxUtilities {
 				c1 = Character.toUpperCase(c1);
 				c2 = Character.toUpperCase(c2);
 			}
-			if (c1 != c2)
+			if (c1 != c2) {
 				return false;
+			}
 		}
 		return true;
 	}
@@ -88,8 +90,9 @@ public class SyntaxUtilities {
 	public static boolean regionMatches(boolean ignoreCase, Segment text, int offset, char[] match) {
 		int length = offset + match.length;
 		char[] textArray = text.array;
-		if (length > text.offset + text.count)
+		if (length > text.offset + text.count) {
 			return false;
+		}
 		for (int i = offset, j = 0; i < length; i++, j++) {
 			char c1 = textArray[i];
 			char c2 = match[j];
@@ -97,8 +100,9 @@ public class SyntaxUtilities {
 				c1 = Character.toUpperCase(c1);
 				c2 = Character.toUpperCase(c2);
 			}
-			if (c1 != c2)
+			if (c1 != c2) {
 				return false;
+			}
 		}
 		return true;
 	}
@@ -157,17 +161,21 @@ public class SyntaxUtilities {
 		int offset = 0;
 		for (;;) {
 			byte id = tokens.id;
-			if (id == Token.END)
+			if (id == Token.END) {
 				break;
+			}
 
 			int length = tokens.length;
 			if (id == Token.NULL) {
-				if (!defaultColor.equals(gfx.getColor()))
+				if (!defaultColor.equals(gfx.getColor())) {
 					gfx.setColor(defaultColor);
-				if (!defaultFont.equals(gfx.getFont()))
+				}
+				if (!defaultFont.equals(gfx.getFont())) {
 					gfx.setFont(defaultFont);
-			} else
+				}
+			} else {
 				styles[id].setGraphicsFlags(gfx, defaultFont);
+			}
 
 			line.count = length;
 			x = Utilities.drawTabbedText(line, x, y, gfx, expander, 0);

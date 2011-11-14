@@ -255,8 +255,9 @@ public class FIBHtmlEditor extends FIBWidget {
 
 	protected FIBHtmlEditorOption getOption(String key) {
 		for (FIBHtmlEditorOption option : availableOptions) {
-			if (option.getName().equals(key))
+			if (option.getName().equals(key)) {
 				return option;
+			}
 		}
 		return null;
 	}
@@ -301,11 +302,13 @@ public class FIBHtmlEditor extends FIBWidget {
 		anOption.setIndexNoEditorNotification(optionsInLine1.indexOf(anOption));
 		setChanged();
 		notifyObservers(new FIBAddingNotification<FIBHtmlEditorOption>(Parameters.optionsInLine1, anOption));
-		if (visibleAndUnusedOptions.contains(anOption))
+		if (visibleAndUnusedOptions.contains(anOption)) {
 			removeFromVisibleAndUnusedOptions(anOption);
+		}
 		for (FIBHtmlEditorOption subOption : anOption.getSubOptions()) {
-			if (subOption.getIsVisible() && !optionsInLine1.contains(subOption))
+			if (subOption.getIsVisible() && !optionsInLine1.contains(subOption)) {
 				addToOptionsInLine1(subOption);
+			}
 		}
 		if (anOption.getLevel() == 0) {
 			firstLevelOptionsInLine1.add(anOption);
@@ -318,19 +321,22 @@ public class FIBHtmlEditor extends FIBWidget {
 	public void addToOptionsInLine1(List<FIBHtmlEditorOption> options) {
 		Vector<FIBHtmlEditorOption> theOptions = new Vector<FIBHtmlEditorOption>();
 		theOptions.addAll(options);
-		for (FIBHtmlEditorOption o : theOptions)
+		for (FIBHtmlEditorOption o : theOptions) {
 			addToOptionsInLine1(o);
+		}
 	}
 
 	public void removeFromOptionsInLine1(FIBHtmlEditorOption anOption) {
 		optionsInLine1.remove(anOption);
 		setChanged();
 		notifyObservers(new FIBRemovingNotification<FIBHtmlEditorOption>(Parameters.optionsInLine1, anOption));
-		if (!visibleAndUnusedOptions.contains(anOption))
+		if (!visibleAndUnusedOptions.contains(anOption)) {
 			addToVisibleAndUnusedOptions(anOption);
+		}
 		for (FIBHtmlEditorOption subOption : anOption.getSubOptions()) {
-			if (optionsInLine1.contains(subOption))
+			if (optionsInLine1.contains(subOption)) {
 				removeFromOptionsInLine1(subOption);
+			}
 		}
 		if (anOption.getLevel() == 0) {
 			firstLevelOptionsInLine1.remove(anOption);
@@ -342,8 +348,9 @@ public class FIBHtmlEditor extends FIBWidget {
 	public void removeFromOptionsInLine1(List<FIBHtmlEditorOption> options) {
 		Vector<FIBHtmlEditorOption> theOptions = new Vector<FIBHtmlEditorOption>();
 		theOptions.addAll(options);
-		for (FIBHtmlEditorOption o : theOptions)
+		for (FIBHtmlEditorOption o : theOptions) {
 			removeFromOptionsInLine1(o);
+		}
 	}
 
 	public Vector<FIBHtmlEditorOption> getFirstLevelOptionsInLine2() {
@@ -366,11 +373,13 @@ public class FIBHtmlEditor extends FIBWidget {
 		anOption.setIndexNoEditorNotification(optionsInLine2.indexOf(anOption));
 		setChanged();
 		notifyObservers(new FIBAddingNotification<FIBHtmlEditorOption>(Parameters.optionsInLine2, anOption));
-		if (visibleAndUnusedOptions.contains(anOption))
+		if (visibleAndUnusedOptions.contains(anOption)) {
 			removeFromVisibleAndUnusedOptions(anOption);
+		}
 		for (FIBHtmlEditorOption subOption : anOption.getSubOptions()) {
-			if (subOption.getIsVisible() && !optionsInLine2.contains(subOption))
+			if (subOption.getIsVisible() && !optionsInLine2.contains(subOption)) {
 				addToOptionsInLine2(subOption);
+			}
 		}
 		if (anOption.getLevel() == 0) {
 			firstLevelOptionsInLine2.add(anOption);
@@ -383,19 +392,22 @@ public class FIBHtmlEditor extends FIBWidget {
 	public void addToOptionsInLine2(List<FIBHtmlEditorOption> options) {
 		Vector<FIBHtmlEditorOption> theOptions = new Vector<FIBHtmlEditorOption>();
 		theOptions.addAll(options);
-		for (FIBHtmlEditorOption o : theOptions)
+		for (FIBHtmlEditorOption o : theOptions) {
 			addToOptionsInLine2(o);
+		}
 	}
 
 	public void removeFromOptionsInLine2(FIBHtmlEditorOption anOption) {
 		optionsInLine2.remove(anOption);
 		setChanged();
 		notifyObservers(new FIBRemovingNotification<FIBHtmlEditorOption>(Parameters.optionsInLine2, anOption));
-		if (!visibleAndUnusedOptions.contains(anOption))
+		if (!visibleAndUnusedOptions.contains(anOption)) {
 			addToVisibleAndUnusedOptions(anOption);
+		}
 		for (FIBHtmlEditorOption subOption : anOption.getSubOptions()) {
-			if (optionsInLine2.contains(subOption))
+			if (optionsInLine2.contains(subOption)) {
 				removeFromOptionsInLine2(subOption);
+			}
 		}
 		if (anOption.getLevel() == 0) {
 			firstLevelOptionsInLine2.remove(anOption);
@@ -407,8 +419,9 @@ public class FIBHtmlEditor extends FIBWidget {
 	public void removeFromOptionsInLine2(List<FIBHtmlEditorOption> options) {
 		Vector<FIBHtmlEditorOption> theOptions = new Vector<FIBHtmlEditorOption>();
 		theOptions.addAll(options);
-		for (FIBHtmlEditorOption o : theOptions)
+		for (FIBHtmlEditorOption o : theOptions) {
 			removeFromOptionsInLine2(o);
+		}
 	}
 
 	public Vector<FIBHtmlEditorOption> getFirstLevelOptionsInLine3() {
@@ -431,11 +444,13 @@ public class FIBHtmlEditor extends FIBWidget {
 		anOption.setIndexNoEditorNotification(optionsInLine3.indexOf(anOption));
 		setChanged();
 		notifyObservers(new FIBAddingNotification<FIBHtmlEditorOption>(Parameters.optionsInLine3, anOption));
-		if (visibleAndUnusedOptions.contains(anOption))
+		if (visibleAndUnusedOptions.contains(anOption)) {
 			removeFromVisibleAndUnusedOptions(anOption);
+		}
 		for (FIBHtmlEditorOption subOption : anOption.getSubOptions()) {
-			if (subOption.getIsVisible() && !optionsInLine3.contains(subOption))
+			if (subOption.getIsVisible() && !optionsInLine3.contains(subOption)) {
 				addToOptionsInLine3(subOption);
+			}
 		}
 		if (anOption.getLevel() == 0) {
 			firstLevelOptionsInLine3.add(anOption);
@@ -448,19 +463,22 @@ public class FIBHtmlEditor extends FIBWidget {
 	public void addToOptionsInLine3(List<FIBHtmlEditorOption> options) {
 		Vector<FIBHtmlEditorOption> theOptions = new Vector<FIBHtmlEditorOption>();
 		theOptions.addAll(options);
-		for (FIBHtmlEditorOption o : theOptions)
+		for (FIBHtmlEditorOption o : theOptions) {
 			addToOptionsInLine3(o);
+		}
 	}
 
 	public void removeFromOptionsInLine3(FIBHtmlEditorOption anOption) {
 		optionsInLine3.remove(anOption);
 		setChanged();
 		notifyObservers(new FIBRemovingNotification<FIBHtmlEditorOption>(Parameters.optionsInLine3, anOption));
-		if (!visibleAndUnusedOptions.contains(anOption))
+		if (!visibleAndUnusedOptions.contains(anOption)) {
 			addToVisibleAndUnusedOptions(anOption);
+		}
 		for (FIBHtmlEditorOption subOption : anOption.getSubOptions()) {
-			if (optionsInLine3.contains(subOption))
+			if (optionsInLine3.contains(subOption)) {
 				removeFromOptionsInLine3(subOption);
+			}
 		}
 		if (anOption.getLevel() == 0) {
 			firstLevelOptionsInLine3.remove(anOption);
@@ -472,8 +490,9 @@ public class FIBHtmlEditor extends FIBWidget {
 	public void removeFromOptionsInLine3(List<FIBHtmlEditorOption> options) {
 		Vector<FIBHtmlEditorOption> theOptions = new Vector<FIBHtmlEditorOption>();
 		theOptions.addAll(options);
-		for (FIBHtmlEditorOption o : theOptions)
+		for (FIBHtmlEditorOption o : theOptions) {
 			removeFromOptionsInLine3(o);
+		}
 	}
 
 	public Vector<FIBHtmlEditorOption> getAvailableOptions() {

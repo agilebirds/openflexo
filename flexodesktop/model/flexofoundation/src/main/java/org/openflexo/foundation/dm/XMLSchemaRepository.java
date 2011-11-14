@@ -54,10 +54,11 @@ public class XMLSchemaRepository extends DMRepository {
 	}
 
 	public void setPackageToNamespaceForKey(String value, String key) {
-		if (value != null)
+		if (value != null) {
 			packageToNamespace.put(key, value);
-		else
+		} else {
 			packageToNamespace.remove(key);
+		}
 	}
 
 	public void removePackageToNamespaceWithKey(String key) {
@@ -111,12 +112,14 @@ public class XMLSchemaRepository extends DMRepository {
 			progress.setProgress(FlexoLocalization.localizedForKey("copying") + " " + schemaFileToCopy.getName());
 		}
 		try {
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Copying file " + schemaFileToCopy.getAbsolutePath() + " to " + copiedFile.getAbsolutePath());
+			}
 			FileUtils.copyFileToFile(schemaFileToCopy, copiedFile);
 		} catch (IOException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not copy file " + schemaFileToCopy.getAbsolutePath() + " to " + copiedFile.getAbsolutePath());
+			}
 		}
 
 		// Perform some settings

@@ -48,8 +48,9 @@ public class FIBInspectorController extends FlexoFIBController {
 	}
 
 	public boolean displayInspectorTabForContext(String context) {
-		if (getEditor() != null && getEditor().getActiveModule() != null && getEditor().getActiveModule().getFlexoController() != null)
+		if (getEditor() != null && getEditor().getActiveModule() != null && getEditor().getActiveModule().getFlexoController() != null) {
 			return getEditor().getActiveModule().getFlexoController().displayInspectorTabForContext(context);
+		}
 		logger.warning("No controller defined here !");
 		return false;
 	}

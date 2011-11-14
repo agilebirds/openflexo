@@ -25,9 +25,9 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariableImpl;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
 
 public class FIBCustomColumn extends FIBTableColumn {
@@ -87,8 +87,9 @@ public class FIBCustomColumn extends FIBTableColumn {
 
 	public FIBCustomAssignment getAssignent(String variableName) {
 		for (FIBCustomAssignment a : assignments) {
-			if (variableName.equals(a.getVariable().toString()))
+			if (variableName.equals(a.getVariable().toString())) {
 				return a;
+			}
 		}
 		return null;
 	}
@@ -117,8 +118,9 @@ public class FIBCustomColumn extends FIBTableColumn {
 	private BindingModel customComponentBindingModel;
 
 	public BindingModel getCustomComponentBindingModel() {
-		if (customComponentBindingModel == null)
+		if (customComponentBindingModel == null) {
 			createCustomComponentBindingModel();
+		}
 		return customComponentBindingModel;
 	}
 
@@ -181,14 +183,16 @@ public class FIBCustomColumn extends FIBTableColumn {
 
 		@Override
 		public FIBComponent getRootComponent() {
-			if (getCustomColumn() != null)
+			if (getCustomColumn() != null) {
 				return getCustomColumn().getRootComponent();
+			}
 			return null;
 		}
 
 		public DataBinding getVariable() {
-			if (variable == null)
+			if (variable == null) {
 				variable = new DataBinding(this, Parameters.variable, VARIABLE);
+			}
 			return variable;
 		}
 
@@ -197,18 +201,21 @@ public class FIBCustomColumn extends FIBTableColumn {
 			variable.setBindingAttribute(Parameters.variable);
 			variable.setBindingDefinition(VARIABLE);
 			this.variable = variable;
-			if (custom != null)
+			if (custom != null) {
 				variable.getBinding();
+			}
 			if (variable.hasBinding()) {
 				VALUE.setType(variable.getBinding().getAccessedType());
-				if (value != null)
+				if (value != null) {
 					value.setBindingDefinition(VALUE);
+				}
 			}
 		}
 
 		public DataBinding getValue() {
-			if (value == null)
+			if (value == null) {
 				value = new DataBinding(this, Parameters.value, VALUE);
+			}
 			return value;
 		}
 
@@ -227,8 +234,9 @@ public class FIBCustomColumn extends FIBTableColumn {
 		public void finalizeDeserialization() {
 			super.finalizeDeserialization();
 
-			if (variable != null)
+			if (variable != null) {
 				variable.finalizeDeserialization();
+			}
 			if (value != null) {
 				value.setOwner(getCustomColumn());
 				value.setBindingAttribute(Parameters.value);

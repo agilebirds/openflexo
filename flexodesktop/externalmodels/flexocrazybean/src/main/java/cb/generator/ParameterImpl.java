@@ -69,7 +69,8 @@ public class ParameterImpl extends NodeImpl implements cb.generator.Parameter {
 			Parameter p = (Parameter) o;
 
 			return getType().equals(p.getType()) && getName().equals(p.getName());
-		} else
+		} else {
 			return false;
+		}
 	}
 }

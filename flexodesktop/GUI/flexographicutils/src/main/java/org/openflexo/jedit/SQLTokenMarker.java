@@ -175,10 +175,12 @@ public class SQLTokenMarker extends TokenMarker {
 				break;
 			}
 		}
-		if (token == Token.NULL)
+		if (token == Token.NULL) {
 			searchBack(line, length, false);
-		if (lastOffset != length)
+		}
+		if (lastOffset != length) {
 			addToken(length - lastOffset, token);
+		}
 		return token;
 	}
 
@@ -197,13 +199,15 @@ public class SQLTokenMarker extends TokenMarker {
 		int len = pos - lastKeyword;
 		byte id = keywords.lookup(line, lastKeyword, len);
 		if (id != Token.NULL) {
-			if (lastKeyword != lastOffset)
+			if (lastKeyword != lastOffset) {
 				addToken(lastKeyword - lastOffset, Token.NULL);
+			}
 			addToken(len, id);
 			lastOffset = pos;
 		}
 		lastKeyword = pos + 1;
-		if (padNull && lastOffset < pos)
+		if (padNull && lastOffset < pos) {
 			addToken(pos - lastOffset, Token.NULL);
+		}
 	}
 }

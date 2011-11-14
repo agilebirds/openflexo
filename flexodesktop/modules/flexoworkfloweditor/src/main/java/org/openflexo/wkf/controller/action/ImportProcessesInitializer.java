@@ -29,6 +29,14 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.xml.rpc.ServiceException;
 
+import org.openflexo.components.AskParametersDialog;
+import org.openflexo.foundation.action.FlexoActionFinalizer;
+import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.gen.FlexoProcessImageBuilder;
+import org.openflexo.foundation.imported.action.ImportProcessesAction;
+import org.openflexo.foundation.param.CheckboxParameter;
+import org.openflexo.foundation.param.ParameterDefinition;
+import org.openflexo.foundation.param.ReadOnlyCheckboxParameter;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
@@ -38,15 +46,6 @@ import org.openflexo.wkf.controller.WKFController;
 import org.openflexo.ws.client.PPMWebService.PPMProcess;
 import org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException;
 import org.openflexo.ws.client.PPMWebService.PPMWebServiceClient;
-
-import org.openflexo.components.AskParametersDialog;
-import org.openflexo.foundation.action.FlexoActionFinalizer;
-import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.gen.FlexoProcessImageBuilder;
-import org.openflexo.foundation.imported.action.ImportProcessesAction;
-import org.openflexo.foundation.param.CheckboxParameter;
-import org.openflexo.foundation.param.ParameterDefinition;
-import org.openflexo.foundation.param.ReadOnlyCheckboxParameter;
 
 public class ImportProcessesInitializer extends ActionInitializer {
 
@@ -74,8 +73,9 @@ public class ImportProcessesInitializer extends ActionInitializer {
 				while (processes == null) {
 					client = getController().getWSClient(!isFirst);
 					isFirst = false;
-					if (client == null)
+					if (client == null) {
 						return false;// Cancelled
+					}
 					try {
 						processes = client.getProcesses();
 					} catch (PPMWebServiceAuthentificationException e1) {
@@ -103,14 +103,16 @@ public class ImportProcessesInitializer extends ActionInitializer {
 			@Override
 			public int compare(PPMProcess o1, PPMProcess o2) {
 				if (o1.getName() == null) {
-					if (o2.getName() == null)
+					if (o2.getName() == null) {
 						return 0;
-					else
+					} else {
 						return -1;
+					}
 				} else if (o2.getName() == null) {
 					return 1;
-				} else
+				} else {
 					return o1.getName().compareTo(o2.getName());
+				}
 			}
 		});
 		ParameterDefinition[] parameters = new ParameterDefinition[processes.length];
@@ -132,8 +134,9 @@ public class ImportProcessesInitializer extends ActionInitializer {
 		if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 			Vector<PPMProcess> reply = new Vector<PPMProcess>();
 			for (int i = 0; i < processes.length; i++) {
-				if (parameters[i].getBooleanValue() && !(parameters[i] instanceof ReadOnlyCheckboxParameter))
+				if (parameters[i].getBooleanValue() && !(parameters[i] instanceof ReadOnlyCheckboxParameter)) {
 					reply.add(processes[i]);
+				}
 			}
 			return reply;
 		} else {
@@ -158,10 +161,11 @@ public class ImportProcessesInitializer extends ActionInitializer {
 					}*/
 					getController().getSelectionManager().setSelectedObject(
 							action.getImportReport().getProperlyImported().values().iterator().next());
-					if (client != null)
+					if (client != null) {
 						FlexoProcessImageBuilder.startBackgroundDownloadOfSnapshots(
 								action.getImportReport().getProperlyImported().values(), client.getWebService_PortType(),
 								client.getLogin(), client.getEncriptedPWD());
+					}
 				}
 				FlexoController.notify(action.getImportReport().toString());
 				return true;

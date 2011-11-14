@@ -58,15 +58,16 @@ public class CheckBoxWidget extends DenaliWidget<Object> {
 		_jCheckBox = new JCheckBox();
 		_jCheckBox.setOpaque(false);
 		// _jCheckBox.setBackground(InspectorCst.BACK_COLOR);
-		if (isReadOnly())
+		if (isReadOnly()) {
 			_jCheckBox.setEnabled(false);
-		else
+		} else {
 			_jCheckBox.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					updateModelFromWidget();
 				}
 			});
+		}
 		_jPanel.add(_jCheckBox, BorderLayout.WEST);
 		_jPanel.add(Box.createGlue(), BorderLayout.CENTER);
 		// _jPanel.setBackground(InspectorCst.BACK_COLOR);
@@ -82,8 +83,9 @@ public class CheckBoxWidget extends DenaliWidget<Object> {
 			setObjectValue(new Boolean(false));
 		}
 		boolean value = getObjectValue() != null ? (Boolean) getObjectValue() : false;
-		if (isNegate)
+		if (isNegate) {
 			value = !value;
+		}
 		_jCheckBox.setSelected(value);
 		widgetUpdating = false;
 
@@ -114,8 +116,9 @@ public class CheckBoxWidget extends DenaliWidget<Object> {
 	 */
 	@Override
 	public synchronized void updateModelFromWidget() {
-		if (isReadOnly())
+		if (isReadOnly()) {
 			return;
+		}
 
 		setObjectValue(new Boolean(isNegate ? !_jCheckBox.isSelected() : _jCheckBox.isSelected()));
 

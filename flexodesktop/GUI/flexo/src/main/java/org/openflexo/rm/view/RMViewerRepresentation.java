@@ -62,11 +62,12 @@ public class RMViewerRepresentation extends DefaultDrawing<FlexoProject> impleme
 
 		for (FlexoResource r1 : getProject().getResources().values()) {
 			for (FlexoResource r2 : r1.getDependantResources()) {
-				if (r2.isRegistered())
+				if (r2.isRegistered()) {
 					addDrawable(resourceDependancyBetween(r1, r2), getProject());
-				else {
-					if (logger.isLoggable(Level.WARNING))
+				} else {
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Found dependant resource not in project: " + r2 + " for resource " + r1);
+					}
 				}
 			}
 			for (FlexoResource r2 : r1.getSynchronizedResources()) {
@@ -138,8 +139,9 @@ public class RMViewerRepresentation extends DefaultDrawing<FlexoProject> impleme
 	private Hashtable<FlexoResource, Hashtable<FlexoResource, ResourceSynchronization>> resourceSynchronizations;
 
 	public ResourceSynchronization resourceSynchronizationBetween(FlexoResource r1, FlexoResource r2) {
-		if (r1.getFullyQualifiedName().compareTo(r2.getFullyQualifiedName()) < 0)
+		if (r1.getFullyQualifiedName().compareTo(r2.getFullyQualifiedName()) < 0) {
 			return resourceSynchronizationBetween(r2, r1);
+		}
 
 		if (resourceSynchronizations == null) {
 			resourceSynchronizations = new Hashtable<FlexoResource, Hashtable<FlexoResource, ResourceSynchronization>>();
@@ -207,8 +209,9 @@ public class RMViewerRepresentation extends DefaultDrawing<FlexoProject> impleme
 		Hashtable<Integer, Vector<FlexoResource>> resources = new Hashtable<Integer, Vector<FlexoResource>>();
 		for (FlexoResource res : getProject().getResources().values()) {
 			System.out.println("resource: " + res + " order " + res.getResourceOrder());
-			if (res.getResourceOrder() > maxOrder)
+			if (res.getResourceOrder() > maxOrder) {
 				maxOrder = res.getResourceOrder();
+			}
 			Vector<FlexoResource> thisOrderResources = resources.get(res.getResourceOrder());
 			if (thisOrderResources == null) {
 				thisOrderResources = new Vector<FlexoResource>();

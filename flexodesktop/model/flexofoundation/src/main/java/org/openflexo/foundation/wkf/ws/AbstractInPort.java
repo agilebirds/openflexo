@@ -86,8 +86,9 @@ public abstract class AbstractInPort extends FlexoPort {
 
 	public void setInputMessageDefinition(MessageDefinition aMessageDefinition) {
 		if (aMessageDefinition != _inputMessageDefinition) {
-			if (aMessageDefinition != null)
+			if (aMessageDefinition != null) {
 				aMessageDefinition.setPort(this);
+			}
 
 			_inputMessageDefinition = aMessageDefinition;
 

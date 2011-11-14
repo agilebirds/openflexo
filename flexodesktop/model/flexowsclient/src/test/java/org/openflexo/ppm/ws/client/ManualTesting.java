@@ -80,17 +80,20 @@ public class ManualTesting {
 
 		for (int i = 0; i < processes.length; i++) {
 			PPMProcess process = processes[i];
-			for (int j = 0; j < indent; j++)
+			for (int j = 0; j < indent; j++) {
 				System.out.print("\t");
+			}
 			System.out.println("PROCESS : " + process.getName());
-			if (process.getSubProcesses().length > 0)
+			if (process.getSubProcesses().length > 0) {
 				printProcessArray(process.getSubProcesses(), indent + 1);
+			}
 		}
 	}
 
 	public static String getMd5Hash(String toHash) throws NoSuchAlgorithmException {
-		if (toHash == null)
+		if (toHash == null) {
 			return null;
+		}
 		java.security.MessageDigest md5 = java.security.MessageDigest.getInstance("MD5");
 		byte dataBytes[] = toHash.getBytes();
 		md5.update(dataBytes);

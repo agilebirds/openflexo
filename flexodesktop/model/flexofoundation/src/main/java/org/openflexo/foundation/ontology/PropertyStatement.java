@@ -49,24 +49,29 @@ public abstract class PropertyStatement extends OntologyStatement {
 	private String stringValue = null;
 
 	public final String getStringValue() {
-		if (getLiteral() == null)
+		if (getLiteral() == null) {
 			return null;
-		if (stringValue == null)
+		}
+		if (stringValue == null) {
 			stringValue = getLiteral().getString();
+		}
 		return stringValue;
 	}
 
 	public final Language getLanguage() {
-		if (getLiteral() == null)
+		if (getLiteral() == null) {
 			return null;
-		if (language == null)
+		}
+		if (language == null) {
 			language = Language.retrieveLanguage(getLiteral().getLanguage());
+		}
 		return language;
 	}
 
 	public final String getLanguageTag() {
-		if (getLanguage() == null)
+		if (getLanguage() == null) {
 			return "";
+		}
 		return getLanguage().getTag();
 	}
 
@@ -85,8 +90,9 @@ public abstract class PropertyStatement extends OntologyStatement {
 	}
 
 	public final void setStringValue(String aValue, String language) {
-		if (StringUtils.isSame(aValue, getStringValue()))
+		if (StringUtils.isSame(aValue, getStringValue())) {
 			return;
+		}
 		// Take care to this point: this object will disappear and be replaced by a new one
 		// during updateOntologyStatements() !!!!!
 		getSubject().getOntResource().addProperty(getProperty().getOntProperty(), aValue, language);
@@ -100,8 +106,9 @@ public abstract class PropertyStatement extends OntologyStatement {
 	 * @param aValue
 	 */
 	public final void setStringValue(String aValue) {
-		if (StringUtils.isSame(aValue, getStringValue()))
+		if (StringUtils.isSame(aValue, getStringValue())) {
 			return;
+		}
 		// Take care to this point: this object will disappear and be replaced by a new one
 		// during updateOntologyStatements() !!!!!
 		if (getLanguage() != null) {

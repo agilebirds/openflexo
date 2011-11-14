@@ -59,19 +59,22 @@ public class ProjectHTMLFileResource extends HTMLFileResource<DGHTMLGenerator<Fl
 
 	@Override
 	public String getName() {
-		if (getCGFile() == null || getCGFile().getRepository() == null || getProject() == null)
+		if (getCGFile() == null || getCGFile().getRepository() == null || getProject() == null) {
 			return super.getName();
+		}
 		registerObserverWhenRequired();
-		if (super.getName() == null)
+		if (super.getName() == null) {
 			setName(nameForRepositoryAndProject(getCGFile().getRepository(), getProject()));
+		}
 		return nameForRepositoryAndProject(getCGFile().getRepository(), getProject());
 	}
 
 	public void registerObserverWhenRequired() {
 		if ((!isObserverRegistered) && (getProject() != null)) {
 			isObserverRegistered = true;
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getProject());
+			}
 			getProject().addObserver(this);
 		}
 	}
@@ -116,8 +119,9 @@ public class ProjectHTMLFileResource extends HTMLFileResource<DGHTMLGenerator<Fl
 		if (resource instanceof FlexoTOCResource) {
 			if (getGenerator() != null && getGenerator().getRepository().getTocRepository() != null) {
 				if (!requestDate.before(getGenerator().getRepository().getTocRepository().getLastUpdateDate())) {
-					if (logger.isLoggable(Level.FINER))
+					if (logger.isLoggable(Level.FINER)) {
 						logger.finer("OPTIMIST DEPENDANCY CHECKING for TOC ENTRY " + getRepository());
+					}
 					return false;
 				}
 			}

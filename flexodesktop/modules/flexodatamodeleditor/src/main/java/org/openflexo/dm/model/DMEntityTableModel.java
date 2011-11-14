@@ -28,18 +28,16 @@ import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.components.tabular.model.EditableStringColumn;
 import org.openflexo.components.tabular.model.IconColumn;
 import org.openflexo.components.tabular.model.TypeSelectorColumn;
-import org.openflexo.dm.view.controller.DMController;
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.ReservedKeyword;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMPackage;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.DuplicateClassNameException;
 import org.openflexo.foundation.dm.eo.DuplicateNameException;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.ReservedKeyword;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * Please comment this class
@@ -57,12 +55,13 @@ public class DMEntityTableModel extends AbstractModel<DMPackage, DMEntity> {
 			@Override
 			public Icon getIcon(DMEntity entity) {
 				if (entity != null) {
-					if (entity.getIsNormalClass())
+					if (entity.getIsNormalClass()) {
 						return DMEIconLibrary.DM_ENTITY_CLASS_ICON;
-					else if (entity.getIsInterface())
+					} else if (entity.getIsInterface()) {
 						return DMEIconLibrary.DM_ENTITY_INTERFACE_ICON;
-					else if (entity.getIsEnumeration())
+					} else if (entity.getIsEnumeration()) {
 						return DMEIconLibrary.DM_ENTITY_ENUMERATION_ICON;
+					}
 				}
 				return DMEIconLibrary.DM_ENTITY_ICON;
 			}
@@ -70,12 +69,13 @@ public class DMEntityTableModel extends AbstractModel<DMPackage, DMEntity> {
 			@Override
 			public String getLocalizedTooltip(DMEntity entity) {
 				if (entity != null) {
-					if (entity.getIsNormalClass())
+					if (entity.getIsNormalClass()) {
 						return FlexoLocalization.localizedForKey("class");
-					else if (entity.getIsInterface())
+					} else if (entity.getIsInterface()) {
 						return FlexoLocalization.localizedForKey("interface");
-					else if (entity.getIsEnumeration())
+					} else if (entity.getIsEnumeration()) {
 						return FlexoLocalization.localizedForKey("enumeration");
+					}
 				}
 				return FlexoLocalization.localizedForKey("entity");
 			}
@@ -101,8 +101,9 @@ public class DMEntityTableModel extends AbstractModel<DMPackage, DMEntity> {
 			@Override
 			public void setValue(DMEntity entity, String aValue) {
 				try {
-					if (ReservedKeyword.contains(aValue))
+					if (ReservedKeyword.contains(aValue)) {
 						throw new InvalidNameException();
+					}
 					entity.setName(aValue);
 				} catch (InvalidNameException e) {
 					if (e.getCause() instanceof DuplicateClassNameException || e instanceof DuplicateNameException) {

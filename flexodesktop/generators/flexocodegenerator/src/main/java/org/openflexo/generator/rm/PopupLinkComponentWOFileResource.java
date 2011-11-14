@@ -39,8 +39,9 @@ public class PopupLinkComponentWOFileResource extends ComponentWOFileResource<Po
 	public void registerObserverWhenRequired() {
 		if ((!isObserverRegistered) && (getComponentDefinition() != null)) {
 			isObserverRegistered = true;
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getComponentDefinition());
+			}
 			getComponentDefinition().addObserver(this);
 		}
 	}

@@ -81,17 +81,20 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 	}
 
 	public FlexoProjectFile getResourceFile() {
-		if (resourceFile != null)
+		if (resourceFile != null) {
 			resourceFile.setProject(project);
+		}
 		return resourceFile;
 	}
 
 	public void setResourceFile(FlexoProjectFile aFile) throws InvalidFileNameException {
-		if (aFile == null)
+		if (aFile == null) {
 			throw new InvalidFileNameException("null file");
+		}
 		if (!aFile.nameIsValid()) {
-			if (logger.isLoggable(Level.SEVERE))
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("File name: " + aFile.getRelativePath() + " is not valid for object of class " + getClass().getName());
+			}
 			throw new InvalidFileNameException(aFile.getRelativePath());
 		}
 		if (getProject().getFlexoRMResource() != null && !getProject().getFlexoRMResource().getIsLoading()
@@ -108,20 +111,23 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 			}
 		}
 		resourceFile = aFile;
-		if (getProject() != null && resourceFile != null)
+		if (getProject() != null && resourceFile != null) {
 			resourceFile.setProject(getProject());
+		}
 		if (resourceFile != null && getProject() != null && resourceFile.getFile() != null) {
 			File f = resourceFile.getFile();
 			Enumeration<File> en = ((Vector<File>) getProject().getFilesToDelete().clone()).elements();
 			while (en.hasMoreElements()) {
 				File file = en.nextElement();
 				if (file.getAbsolutePath().toLowerCase().equals(f.getAbsolutePath().toLowerCase())) {
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Petit filou");
+					}
 					getProject().removeFromFilesToDelete(file);
 					if (!file.getAbsolutePath().equals(f.getAbsolutePath())) {
-						if (logger.isLoggable(Level.INFO))
+						if (logger.isLoggable(Level.INFO)) {
 							logger.info("Super filou!");
+						}
 						resourceFile.setFile(file);
 					}
 					break;
@@ -131,18 +137,21 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 	}
 
 	public void recoverFile() {
-		if (getFile() == null)
+		if (getFile() == null) {
 			return;
-		if (getFile().exists())
+		}
+		if (getFile().exists()) {
 			return;
+		}
 		if (getFile().getParentFile().exists()) {
 			File[] files = getFile().getParentFile().listFiles();
 			for (int i = 0; i < files.length; i++) {
 				File file = files[i];
 				if (file.getName().equalsIgnoreCase(getFile().getName())) {
 					try {
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Found file " + file.getAbsolutePath() + ". Using it and repairing project as well!");
+						}
 						setResourceFile(new FlexoProjectFile(file, getProject()));
 						break;
 					} catch (InvalidFileNameException e) {
@@ -157,8 +166,9 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 		if (resourceFile != null) {
 			resourceFile.setProject(project);
 			return resourceFile.getFile();
-		} else
+		} else {
 			return null;
+		}
 	}
 
 	public boolean isConnected() {
@@ -188,13 +198,15 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 		if (getResourceFile().getExternalRepository() != null) {
 			String relPath = getResourceFile().getRelativePath();
 			relPath = relPath.replace('\\', '/');
-			if (relPath.indexOf('/') > -1)
+			if (relPath.indexOf('/') > -1) {
 				relPath = relPath.substring(0, relPath.lastIndexOf('/') + 1) + name;
-			else
+			} else {
 				relPath = name;
+			}
 			setResourceFile(new FlexoProjectFile(getProject(), getResourceFile().getExternalRepository(), relPath));
-		} else
+		} else {
 			setResourceFile(new FlexoProjectFile(newFile, getProject()));
+		}
 		return true;
 	}
 
@@ -252,9 +264,10 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 	private Date _lastWrittenOnDisk;
 
 	public final synchronized void _setLastWrittenOnDisk(Date aDate) {
-		if (logger.isLoggable(Level.FINE) && aDate != null)
+		if (logger.isLoggable(Level.FINE) && aDate != null) {
 			logger.fine("Resource " + this + "/" + hashCode() + " declared to be saved on disk on "
 					+ (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(aDate));
+		}
 		_diskLastModifiedDate = null;
 		_lastWrittenOnDisk = aDate;
 	}
@@ -268,9 +281,11 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 		// logger.finest("Resource " + this + " has more recent than expected disk update ?");
 		File f = getFile();
 		if (f == null) {
-			if (resourceFile == null)
-				if (logger.isLoggable(Level.SEVERE))
+			if (resourceFile == null) {
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("Found resource " + this + " without file)");
+				}
+			}
 			return false;
 		} else if (!f.exists()) {
 			return false;
@@ -299,22 +314,25 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 	 */
 	protected synchronized void resetDiskLastModifiedDate() {
 		if (getFile() == null || !getFile().exists()) {
-			if (getFile() != null)
+			if (getFile() != null) {
 				logger.warning("resetDiskLastModifiedDate() called for non existant file: " + getFile().getAbsolutePath());
-			else
+			} else {
 				logger.warning("resetDiskLastModifiedDate() called for null file on resource " + this);
+			}
 			_setLastWrittenOnDisk(null);
 		} else {
 			_setLastWrittenOnDisk(new Date());
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("ID=" + getProject().getID() + " Resource " + this + " resetDiskLastModifiedDate() "
 						+ (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(_lastWrittenOnDisk));
+			}
 		}
 	}
 
 	protected FileWritingLock willWriteOnDisk() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("willWriteOnDisk()");
+		}
 		_isSaving = true;
 		// This locking scheme was an attempt which seems to be unnecessary
 		// Disactivated it. But kept for future needing if required
@@ -323,11 +341,12 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 	}
 
 	protected void hasWrittenOnDisk(FileWritingLock lock) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("hasWrittenOnDisk()");
-		if (lock != null)
+		}
+		if (lock != null) {
 			lock.start();
-		else {
+		} else {
 			notifyHasBeenWrittenOnDisk();
 		}
 	}
@@ -413,8 +432,9 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 		super.delete();
 		if (getFile() != null && (getFile().exists()) && (deleteFile)) {
 			getProject().addToFilesToDelete(getFile());
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Will delete file " + getFile().getAbsolutePath() + " upon next save of RM");
+			}
 		}
 	}
 
@@ -438,8 +458,9 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 	 * relevant
 	 */
 	public synchronized void performMerge() throws FlexoException {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Merge NOT implemented for resource type " + getResourceType().getName());
+		}
 	}
 
 	/**
@@ -451,18 +472,21 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 
 	protected synchronized void forwardPropagateUpdate() throws FlexoException {
 		Vector resourcesThatAreConcerned = getResourceUpdateNotificationTargets();
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Concerned resources: " + resourcesThatAreConcerned);
+		}
 		for (Enumeration en = resourcesThatAreConcerned.elements(); en.hasMoreElements();) {
 			FlexoResource next = (FlexoResource) en.nextElement();
 			try {
 				next.update();
 			} catch (ResourceDependancyLoopException e) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.log(Level.SEVERE, "Loop in dependant resources of " + this + "!", e);
+				}
 			} catch (FileNotFoundException e) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.log(Level.SEVERE, "File not found for " + next + "!", e);
+				}
 			}
 		}
 	}
@@ -475,8 +499,9 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 	}
 
 	private void addResourceUpdateNotificationTargets(Vector<FlexoResource> targetList, Vector<FlexoResource> requesters) {
-		if (requesters.contains(this))
+		if (requesters.contains(this)) {
 			return;
+		}
 		requesters.add(this);
 		Enumeration en = getSynchronizedResources().elements();
 		while (en.hasMoreElements()) {

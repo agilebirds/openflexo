@@ -69,8 +69,9 @@ public final class ExternalMessageInEdge extends ExternalMessageEdge<PetriGraphN
 			setStartNode(startNode);
 			setEndNode(nextPortMap);
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Inconsistent data while building ExternalMessageInEdge !");
+			}
 			throw new InvalidEdgeException(this);
 		}
 
@@ -117,8 +118,9 @@ public final class ExternalMessageInEdge extends ExternalMessageEdge<PetriGraphN
 		// is located
 
 		if ((getStartNode() == null) || (getEndNode() == null) || !(getEndNode().isInputPort()) || (getPortMapRegistery() == null)
-				|| (getPortMapRegistery().getSubProcessNode() == null))
+				|| (getPortMapRegistery().getSubProcessNode() == null)) {
 			return false;
+		}
 
 		return getPortMapRegistery().getProcess() == getStartNode().getProcess();
 	}

@@ -62,10 +62,12 @@ public class GeneratedDocModuleView extends JPanel implements ModuleView<Generat
 	}
 
 	private void updateView() {
-		if (addTOCRepositoryButton != null)
+		if (addTOCRepositoryButton != null) {
 			panel.remove(addTOCRepositoryButton);
-		if (addDGRepositoryButton != null)
+		}
+		if (addDGRepositoryButton != null) {
 			panel.remove(addDGRepositoryButton);
+		}
 		panel.add(addTOCRepositoryButton = new FlexoActionButton(AddTOCRepository.actionType, this, _controller.getEditor()),
 				BorderLayout.CENTER);
 		panel.add(addDGRepositoryButton = new FlexoActionButton(AddGeneratedCodeRepository.actionType, this, _controller.getEditor()),

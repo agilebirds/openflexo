@@ -39,8 +39,9 @@ public class SGTemplatesElement extends BrowserElement {
 		addToChilds(getSGTemplates().getApplicationRepository().getCommonTemplates().getRootFolder());
 		for (Enumeration<CustomCGTemplateRepository> e = getSGTemplates().getCustomRepositories(); e.hasMoreElements();) {
 			CustomCGTemplateRepository rep = e.nextElement();
-			if (rep.getRepositoryType() == TemplateRepositoryType.Code)
+			if (rep.getRepositoryType() == TemplateRepositoryType.Code) {
 				addToChilds(rep.getCommonTemplates().getRootFolder());
+			}
 		}
 	}
 

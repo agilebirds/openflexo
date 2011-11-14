@@ -24,16 +24,9 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.WKFIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-import org.openflexo.wkf.controller.WKFController;
-
 import org.openflexo.components.AskParametersDialog;
-import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
+import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.view.BrowserActionSource;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -46,6 +39,11 @@ import org.openflexo.foundation.wkf.DuplicateStatusException;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.Status;
 import org.openflexo.foundation.wkf.action.AddStatus;
+import org.openflexo.icon.WKFIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class AddStatusInitializer extends ActionInitializer {
 
@@ -65,11 +63,13 @@ public class AddStatusInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<AddStatus>() {
 			@Override
 			public boolean run(ActionEvent e, AddStatus action) {
-				if (action.getContext() instanceof DuplicateStatusException)
+				if (action.getContext() instanceof DuplicateStatusException) {
 					return true;
+				}
 				FlexoProcess process = action.getProcess();
-				if (process.getStatusList() == null)
+				if (process.getStatusList() == null) {
 					return false;
+				}
 				ParameterDefinition[] parameters = new ParameterDefinition[2];
 				parameters[0] = new TextFieldParameter("newStatusName", "name", process.getStatusList().getNextNewStatusName());
 				parameters[1] = new TextAreaParameter("description", "description", "");
@@ -79,8 +79,9 @@ public class AddStatusInitializer extends ActionInitializer {
 						FlexoLocalization.localizedForKey("enter_parameters_for_the_new_status"), parameters);
 				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 					String newStatusName = (String) dialog.parameterValueWithName("newStatusName");
-					if (newStatusName == null)
+					if (newStatusName == null) {
 						return false;
+					}
 					action.setNewStatusName(newStatusName);
 					action.setNewDescription((String) dialog.parameterValueWithName("description"));
 					return true;
@@ -106,8 +107,9 @@ public class AddStatusInitializer extends ActionInitializer {
 						}
 					}
 				}
-				if (e != null) // If it wasn't created through the process inspector
+				if (e != null) {
 					getControllerActionInitializer().getWKFSelectionManager().setSelectedObject(newStatus);
+				}
 				// getControllerActionInitializer().getWKFController().getWorkflowBrowser().focusOn(newStatus);
 				return true;
 			}

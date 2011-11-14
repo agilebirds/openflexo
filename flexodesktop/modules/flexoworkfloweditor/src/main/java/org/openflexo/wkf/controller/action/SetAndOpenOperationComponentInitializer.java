@@ -42,7 +42,6 @@ import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.wkf.controller.WKFController;
 import org.openflexo.wkf.controller.WKFExceptionHandler;
 import org.openflexo.wkf.view.popups.AskComponentNameDialog;
 

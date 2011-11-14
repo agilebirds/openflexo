@@ -120,8 +120,9 @@ public class DropDownColumn<T extends Object> extends AbstractColumn<T> implemen
 			iteratorObject = object;
 			Object accessedList = getColumnModel().getList().getBindingValue(this);
 
-			if (accessedList instanceof List)
+			if (accessedList instanceof List) {
 				return (List) accessedList;
+			}
 		}
 
 		else if (getColumnModel().getArray() != null && getColumnModel().getArray().isSet()) {
@@ -211,11 +212,12 @@ public class DropDownColumn<T extends Object> extends AbstractColumn<T> implemen
 			protected DropDownComboBoxModel(Object element) {
 				super();
 				List v = getAvailableValues(element);
-				if (v != null)
+				if (v != null) {
 					for (Iterator it = v.iterator(); it.hasNext();) {
 						Object next = it.next();
 						addElement(next);
 					}
+				}
 			}
 		}
 	}

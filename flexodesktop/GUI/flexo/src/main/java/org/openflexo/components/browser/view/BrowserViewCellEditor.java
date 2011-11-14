@@ -161,10 +161,12 @@ public class BrowserViewCellEditor extends DefaultTreeCellEditor {
 
 				Dimension rSize = (getRenderer() != null) ? getRenderer().getPreferredSize() : null;
 
-				if (rSize != null)
+				if (rSize != null) {
 					pSize.height = Math.max(pSize.height, rSize.height);
-				if (_customIcon != null)
+				}
+				if (_customIcon != null) {
 					pSize.height = Math.max(pSize.height, _customIcon.getIconHeight());
+				}
 
 				// Make sure width is at least 100.
 				pSize.width = Math.max(pSize.width, 100);

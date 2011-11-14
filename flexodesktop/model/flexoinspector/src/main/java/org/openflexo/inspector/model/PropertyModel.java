@@ -119,15 +119,17 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 				} else if (currentObject == null) {
 					return new Vector();
 				} else {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Succeeded access to " + listAccessor + " but answer is not a Vector but a :"
 								+ currentObject.getClass().getName() + " value=" + currentObject);
+					}
 					return new Vector();
 				}
 			} catch (Exception e) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("getDynamicList() failed for property " + name + " for object " + object + " : exception "
 							+ e.getMessage());
+				}
 				e.printStackTrace();
 				return new Vector();
 			}
@@ -142,8 +144,9 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 
 	public static Object getObjectForMultipleAccessors(KeyValueCoding object, String listAccessor) {
 		// logger.info("list accessor = "+listAccessor+" for "+object);
-		if (listAccessor != null && listAccessor.equals("this"))
+		if (listAccessor != null && listAccessor.equals("this")) {
 			return object;
+		}
 		StringTokenizer strTok = new StringTokenizer(listAccessor, ".");
 		String accessor;
 		Object currentObject = object;
@@ -164,14 +167,16 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 				if (currentObject instanceof Hashtable) {
 					return (Hashtable) currentObject;
 				} else {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Succeeded acces to " + listAccessor + " but answer is not a Hashtable");
+					}
 					return new Hashtable();
 				}
 			} catch (Exception e) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("getDynamicList() failed for property " + name + " for object " + object + " : exception "
 							+ e.getMessage());
+				}
 				return new Hashtable();
 			}
 		} else {
@@ -187,26 +192,30 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 		if (hasFormatter()) {
 			try {
 				String listAccessor = getValueForParameter("format");
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Format object " + object + " with format " + getValueForParameter("format"));
+				}
 				Object currentObject = getObjectForMultipleAccessors(object, listAccessor);
 				if (currentObject instanceof String) {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Format object " + object + " with format " + getValueForParameter("format") + " returns "
 								+ currentObject);
+					}
 					return (String) currentObject;
 				} else if (currentObject == null) {
 					return "";
 				} else {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Property " + name + ": succeeded acces to " + listAccessor + " but answer is not a String "
 								+ currentObject + " of " + currentObject.getClass().getName());
+					}
 					return null;
 				}
 			} catch (Exception e) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("getDynamicList() failed for property " + name + " for object " + object + " : exception "
 							+ e.getMessage());
+				}
 				return null;
 			}
 		}
@@ -231,12 +240,14 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 		} else if (object instanceof Enum) {
 			return FlexoLocalization.localizedForKey(((Enum) object).name().toLowerCase());
 		} else {
-			if (object == null)
+			if (object == null) {
 				return "";
-			if (logger.isLoggable(Level.WARNING))
+			}
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("There is an error in some configuration file :\n the property named '" + name
 						+ "' has no string representation formatter ! Object is a "
 						+ (object != null ? object.getClass().getName() : "null"));
+			}
 			return object.toString();
 		}
 	}
@@ -244,11 +255,13 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 	public boolean isEditable(Object object) {
 		if (hasValueForParameter("isEditable") && (object instanceof KeyValueCoding)) {
 			Object currentObject = getObjectForMultipleAccessors((KeyValueCoding) object, getValueForParameter("isEditable"));
-			if (currentObject instanceof Boolean)
+			if (currentObject instanceof Boolean) {
 				return (Boolean) currentObject;
-			if (logger.isLoggable(Level.WARNING))
+			}
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("There is an error in model: parameter 'isEditable' seems to be defined but not on a boolean: "
 						+ getValueForParameter("isEditable"));
+			}
 		}
 		return true;
 	}
@@ -261,22 +274,25 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 		if (hasFormatter()) {
 			try {
 				String listAccessor = getValueForParameter("identifier");
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Identify object " + object + " with identifier " + getValueForParameter("identifier"));
+				}
 				Object currentObject = getObjectForMultipleAccessors(object, listAccessor);
 				if (currentObject instanceof String) {
 					return (String) currentObject;
 				} else if (currentObject == null) {
 					return "null";
 				} else {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Property " + name + ": succeeded acces to " + listAccessor + " but answer is not a String");
+					}
 					return null;
 				}
 			} catch (Exception e) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("getDynamicList() failed for property " + name + " for object " + object + " : exception "
 							+ e.getMessage());
+				}
 				return null;
 			}
 		} else {
@@ -338,9 +354,10 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 		if (currentObject instanceof KeyValueCoding) {
 			return (KeyValueCoding) currentObject;
 		} else if (currentObject != null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not find target object for object=" + object + " keyPath=" + keyPath
 						+ ": must be a KeyValueCoding object (getting " + currentObject + ")");
+			}
 			return null;
 		} else {
 			return null;
@@ -379,17 +396,19 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 			throw e;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("getObjectValue() failed for property " + name + " for object " + inspectable.getClass().getName()
 						+ " : exception " + e.getMessage());
+			}
 			return false;
 		}
 	}
 
 	public synchronized Object getObjectValue(KeyValueCoding inspectable) throws AccessorInvocationException {
 		if (inspectable == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Inspectable object is null for key " + name + ". We should definitely investigate this.");
+			}
 			return null;
 		}
 
@@ -403,9 +422,10 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 		} catch (AccessorInvocationException e) {
 			throw e;
 		} catch (Exception e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("getObjectValue() failed for property " + name + " for object " + inspectable.getClass().getName()
 						+ " : exception " + e.getMessage());
+			}
 			return null;
 		}
 	}
@@ -417,8 +437,9 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 	 */
 	public synchronized void setObjectValue(KeyValueCoding inspectable, Object newValue) throws AccessorInvocationException {
 		if (inspectable == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Inspectable object is null for key " + name + ". We should definitely investigate this.");
+			}
 			return;
 		}
 
@@ -426,13 +447,15 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 		// logger.info("Old value="+oldValue+" New value="+newValue);
 		if (oldValue == null) {
 			if (newValue == null) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Same null value. Ignored.");
+				}
 				return;
 			}
 		} else if ((newValue != null) && (oldValue.equals(newValue))) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Same value. Ignored.");
+			}
 			return;
 		}
 
@@ -440,16 +463,18 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 			KeyValueCoding target = getTargetObject(inspectable);
 			if (target != null) {
 				target.setObjectForKey(newValue, getLastAccessor());
-			} else if (logger.isLoggable(Level.WARNING))
+			} else if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Target object is null for key " + name + ". We should definitely investigate this.");
+			}
 			return;
 		} catch (AccessorInvocationException e) {
 			throw e;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("setObjectValue() with " + newValue + " failed for property " + name + " for object "
 						+ inspectable.getClass().getName() + " : exception " + e.getMessage());
+			}
 		}
 	}
 

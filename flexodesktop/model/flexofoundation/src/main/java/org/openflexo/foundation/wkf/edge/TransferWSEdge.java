@@ -77,8 +77,9 @@ public final class TransferWSEdge extends MessageEdge<FlexoPortMap, FlexoPortMap
 			setStartNode(startPortMap);
 			setEndNode(nextPortMap);
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Inconsistent data while building TransferWSEdge !");
+			}
 			throw new InvalidEdgeException(this);
 		}
 		if (!isEdgeValid()) {
@@ -130,8 +131,9 @@ public final class TransferWSEdge extends MessageEdge<FlexoPortMap, FlexoPortMap
 
 		if (getStartNode() == null || !getStartNode().isOutputPort() || getEndNode() == null || !getEndNode().isInputPort()
 				|| getStartPortMapRegistery() == null || getEndPortMapRegistery() == null
-				|| getStartPortMapRegistery().getSubProcessNode() == null || getEndPortMapRegistery().getSubProcessNode() == null)
+				|| getStartPortMapRegistery().getSubProcessNode() == null || getEndPortMapRegistery().getSubProcessNode() == null) {
 			return false;
+		}
 		FlexoPetriGraph startPG = getStartPortMapRegistery().getSubProcessNode().getParentPetriGraph();
 		FlexoPetriGraph endPG = getEndPortMapRegistery().getSubProcessNode().getParentPetriGraph();
 		return (startPG == endPG);
@@ -167,20 +169,23 @@ public final class TransferWSEdge extends MessageEdge<FlexoPortMap, FlexoPortMap
 
 	@Override
 	public FlexoPort getFlexoPort() {
-		if (getInputServiceOperation() != null)
+		if (getInputServiceOperation() != null) {
 			return getInputServiceOperation().getPort();
+		}
 		return null;
 	}
 
 	public ServiceOperation getInputServiceOperation() {
-		if (getStartNode() != null)
+		if (getStartNode() != null) {
 			return getStartNode().getOperation();
+		}
 		return null;
 	}
 
 	public ServiceOperation getOutputServiceOperation() {
-		if (getEndNode() != null)
+		if (getEndNode() != null) {
 			return getEndNode().getOperation();
+		}
 		return null;
 	}
 

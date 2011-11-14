@@ -102,8 +102,9 @@ public class AddCustomTemplateRepositoryInitializer extends ActionInitializer {
 					Iterator<CGRepository> i = selected.iterator();
 					while (i.hasNext()) {
 						CGRepository r = i.next();
-						if (r.getPreferredTemplateRepository() != null)
+						if (r.getPreferredTemplateRepository() != null) {
 							i.remove();
+						}
 					}
 					CheckboxListParameter<CGRepository> repositoriesParameter = new CheckboxListParameter<CGRepository>("repositories",
 							FlexoLocalization.localizedForKey("select_repositories"), repositories, selected);
@@ -113,8 +114,9 @@ public class AddCustomTemplateRepositoryInitializer extends ActionInitializer {
 							FlexoLocalization.localizedForKey("select_repository_that_must_use_this_new_template_repository"),
 							repositoriesParameter);
 					if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
-						for (CGRepository r : repositoriesParameter.getValue())
+						for (CGRepository r : repositoriesParameter.getValue()) {
 							r.setPreferredTemplateRepository(action.getNewCustomTemplatesRepository());
+						}
 					}
 				}
 				getControllerActionInitializer().getGeneratorController().getSelectionManager()

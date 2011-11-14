@@ -54,17 +54,22 @@ public class Word implements Comparator {
 	 *         0 if both words are equally similar
 	 * 
 	 */
+	@Override
 	public int compare(Object o1, Object o2) {
-		if (((Word) o1).getCost() < ((Word) o2).getCost())
+		if (((Word) o1).getCost() < ((Word) o2).getCost()) {
 			return -1;
-		if (((Word) o1).getCost() == ((Word) o2).getCost())
+		}
+		if (((Word) o1).getCost() == ((Word) o2).getCost()) {
 			return 0;
+		}
 		return 1;
 	}
 
+	@Override
 	public boolean equals(Object o) {
-		if (o instanceof Word) // added by bd
+		if (o instanceof Word) {
 			return (((Word) o).getWord().equals(getWord()));
+		}
 		return false;
 	}
 
@@ -97,6 +102,7 @@ public class Word implements Comparator {
 	/**
 	 * returns the suggested spelling
 	 */
+	@Override
 	public String toString() {
 		return word;
 	}

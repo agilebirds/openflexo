@@ -132,8 +132,9 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 		try {
 			dmEOEntity.getEOEntity().addRelationship(eoRelationship);
 		} catch (IllegalArgumentException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("EOControl management failed :" + e.getMessage());
+			}
 			throw new EOAccessException(e);
 		}
 		DMEORelationship answer = new DMEORelationship(dmModel, eoRelationship);
@@ -159,8 +160,9 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 		try {
 			dmEOEntity.getEOEntity().addRelationship(eoRelationship);
 		} catch (IllegalArgumentException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("EOControl management failed :" + e.getMessage());
+			}
 			throw new EOAccessException(e);
 		}
 		DMEORelationship answer = new DMEORelationship(dmModel, eoRelationship);
@@ -183,8 +185,9 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 	@Override
 	public Vector getEmbeddedDMObjects() {
 		Vector<DMObject> v = super.getEmbeddedDMObjects();
-		if (v instanceof EmptyVector)
+		if (v instanceof EmptyVector) {
 			v = new Vector<DMObject>();
+		}
 		v.addAll(getDMEOJoins());
 		return v;
 	}
@@ -197,13 +200,15 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 				if ((getDMEOEntity() != null) && (getDMEOEntity().getEOEntity() != null)) {
 					getDMEOEntity().getEOEntity().removeRelationship(getEORelationship());
 				} else if (getEORelationship().getEntity() != null) {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("No parent DMEOEntity or no EOEntity declared for DMEOEntity. Trying to proceed anyway.");
+					}
 					getEORelationship().getEntity().removeRelationship(getEORelationship());
 				}
 			} catch (IllegalArgumentException e) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("EOControl management failed :" + e.getMessage());
+				}
 			}
 		}
 		super.delete();
@@ -217,9 +222,9 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 	 */
 	@Override
 	public String getInspectorName() {
-		if (getDMRepository() != null && getDMRepository().isReadOnly())
+		if (getDMRepository() != null && getDMRepository().isReadOnly()) {
 			return Inspectors.DM.DM_RO_EO_RELATIONSHIP_INSPECTOR;
-		else {
+		} else {
 			if (getIsFlattenRelationship()) {
 				return Inspectors.DM.DM_EO_FLATTEN_RELATIONSHIP_INSPECTOR;
 			} else {
@@ -236,12 +241,14 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 					// logger.info("Build EORelationship");
 					_eoRelationship = getDMEOEntity().getEOEntity().relationshipNamed(getName());
 				} catch (IllegalArgumentException e) {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Could not find EORelationship named " + getName() + " : EOControl management failed");
+					}
 				}
 				if (_eoRelationship == null) {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Could not find EORelationship named " + getName());
+					}
 				}
 			}
 		}
@@ -255,8 +262,9 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 	@Override
 	public void setName(String newName) throws IllegalArgumentException, InvalidNameException {
 		if ((name == null) || (!name.equals(newName))) {
-			if (!isDeserializing() && (newName == null || !DMRegExp.ENTITY_NAME_PATTERN.matcher(newName).matches()))
+			if (!isDeserializing() && (newName == null || !DMRegExp.ENTITY_NAME_PATTERN.matcher(newName).matches())) {
 				throw new InvalidNameException("'" + newName + "' is not a valid name for relationship.");
+			}
 			DMEntity containerEntity = getEntity();
 			if (getEORelationship() != null) {
 				boolean isClassProperty = _eoRelationship.getIsClassProperty();
@@ -304,8 +312,9 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 				// isToMany iff at least one of path element is a toMany
 				for (int i = 0; i < getFlattenRelationshipDefinition().getBindingPathElementCount(); i++) {
 					DMEORelationship r = getFlattenRelationshipDefinition().getBindingPathElementAtIndex(i);
-					if (!r.getIsFlattenRelationship() && r.getIsToMany())
+					if (!r.getIsFlattenRelationship() && r.getIsToMany()) {
 						return true;
+					}
 				}
 			}
 			return false;
@@ -329,8 +338,9 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 
 		if (getEORelationship() != null) {
 			boolean old = getEORelationship().getIsToMany();
-			if ((old && aBoolean) || (!old && !aBoolean))
+			if ((old && aBoolean) || (!old && !aBoolean)) {
 				return;
+			}
 			getEORelationship().setIsToMany(aBoolean);
 			updateCode();
 			setChanged();
@@ -347,8 +357,9 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 
 	// Normally immutable: never call this except during deserialization
 	public void _setIsFlattenRelationship(boolean isFlattenRelationship) {
-		if (isDeserializing())
+		if (isDeserializing()) {
 			_isFlattenRelationship = isFlattenRelationship;
+		}
 	}
 
 	// private String _lastKnownFlattenRelationshipDefinition = null;
@@ -449,10 +460,11 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 	@Override
 	public DMType getType() {
 		if (getIsFlattenRelationship()) {
-			if (getFlattenRelationshipDefinition() != null && getFlattenRelationshipDefinition().getBindingPathLastElement() != this)
+			if (getFlattenRelationshipDefinition() != null && getFlattenRelationshipDefinition().getBindingPathLastElement() != this) {
 				return getFlattenRelationshipDefinition().getBindingPathLastElementType();
-			else
+			} else {
 				return null;
+			}
 		}
 		if (_destinationType == null && getDestinationEntity() != null) {
 			_destinationType = DMType.makeResolvedDMType(getDestinationEntity());
@@ -469,8 +481,9 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 		if (getEORelationship() != null) {
 			return DeleteRuleType.getDeleteRule(getEORelationship().getDeleteRule());
 		}
-		if (!isDeserializing() && logger.isLoggable(Level.SEVERE))
+		if (!isDeserializing() && logger.isLoggable(Level.SEVERE)) {
 			logger.severe("DMEORelationship: " + getName() + " has no associated EORelationship.");
+		}
 		return DeleteRuleType.NULLIFY;
 
 	}
@@ -648,8 +661,9 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 	}
 
 	private void rebuildDMEOJoins() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("rebuildDMEOJoins()");
+		}
 		resetJoins();
 		if (getEORelationship() != null) {
 			// for (EOJoin j : getEORelationship().getJoins()) logger.info("Join: "+j);
@@ -701,8 +715,9 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 		if (getIsToMany()) {
 			String[] candidates = { getSetterName() + "(NSMutableArray)" };
 			return candidates;
-		} else
+		} else {
 			return super.getSetterSignatureCandidates();
+		}
 	}
 
 	/**
@@ -738,8 +753,9 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 				if (destinationEOEntity != null) {
 					_destinationEntity = getDMModel().getDMEOEntity(destinationEOEntity);
 					if (_destinationEntity == null) {
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Could not find DMEOEntity named " + destinationEOEntity.getName());
+						}
 					} else {
 						_destinationType = DMType.makeResolvedDMType(_destinationEntity);
 					}
@@ -768,11 +784,13 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 				_destinationType = DMType.makeResolvedDMType(_destinationEntity);
 			}
 			updateCode();
-			if (getEORelationship() != null)
-				if (destinationEntity != null)
+			if (getEORelationship() != null) {
+				if (destinationEntity != null) {
 					getEORelationship().setDestinationEntity(destinationEntity.getEOEntity());
-				else
+				} else {
 					getEORelationship().setDestinationEntity(null);
+				}
+			}
 			// Warning: notifications must be done after udating completely the model, otherwise, observers will be notified too soon and
 			// will get de-synchronized with the model.
 			setChanged();
@@ -800,7 +818,7 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 					throwException = joinAutomatically(destinationEntity, !getIsToMany());
 					if (throwException) {
 						setIsToMany(!getIsToMany());
-						if (getIsToMany() && getName() != null && !getName().endsWith("s"))
+						if (getIsToMany() && getName() != null && !getName().endsWith("s")) {
 							try {
 								setName(getName() + "s");
 							} catch (IllegalArgumentException e) {
@@ -808,7 +826,7 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 							} catch (InvalidNameException e) {
 								e.printStackTrace();
 							}
-						else if (!getIsToMany() && getName() != null && getName().endsWith("s"))
+						} else if (!getIsToMany() && getName() != null && getName().endsWith("s")) {
 							try {
 								setName(getName().substring(0, getName().length() - 1));
 							} catch (IllegalArgumentException e) {
@@ -816,6 +834,7 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 							} catch (InvalidNameException e) {
 								e.printStackTrace();
 							}
+						}
 					}
 				}
 			}
@@ -827,8 +846,9 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 		if (getIsFlattenRelationship()) {
 			if (getFlattenRelationshipDefinition() != null) {
 				return getFlattenRelationshipDefinition().getStringRepresentation();
-			} else
+			} else {
 				return "-";
+			}
 		} else {
 			StringBuffer sb = new StringBuffer();
 			boolean isFirst = true;
@@ -869,8 +889,9 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 			while (en.hasMoreElements()) {
 				DMEOAttribute a = (DMEOAttribute) en.nextElement();
 				DMEOAttribute source = getDMEOEntity().getAttributeNamed(a.getName());
-				if (source == null)
+				if (source == null) {
 					source = getDMEOEntity().getAttributeNamedIgnoreCase(a.getName());
+				}
 				if (source != null && (source.getType() == null || source.getType().equals(a.getType()))) {
 					DMEOJoin join = new DMEOJoin(this);
 					addToDMEOJoins(join);
@@ -897,8 +918,9 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 			while (en.hasMoreElements()) {
 				DMEOAttribute a = (DMEOAttribute) en.nextElement();
 				DMEOAttribute dest = destinationEntity.getAttributeNamed(a.getName());
-				if (dest == null)
+				if (dest == null) {
 					dest = destinationEntity.getAttributeNamedIgnoreCase(a.getName());
+				}
 				if (dest != null && (dest.getType() == null || dest.getType().equals(a.getType()))) {
 					DMEOJoin join = new DMEOJoin(this);
 					addToDMEOJoins(join);

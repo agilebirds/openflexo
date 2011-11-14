@@ -38,15 +38,17 @@ public class FGEComplexCurve extends FGEGeneralShape {
 
 	public FGEComplexCurve(Closure closure, List<FGEPoint> points) {
 		this(closure);
-		for (FGEPoint p : points)
+		for (FGEPoint p : points) {
 			_addToPoints(p);
+		}
 		updateCurve();
 	}
 
 	public FGEComplexCurve(Closure closure, FGEPoint... points) {
 		this(closure);
-		for (FGEPoint p : points)
+		for (FGEPoint p : points) {
 			_addToPoints(p);
+		}
 		updateCurve();
 	}
 
@@ -62,9 +64,9 @@ public class FGEComplexCurve extends FGEGeneralShape {
 	private void updateCurve() {
 		for (int i = 0; i < _points.size(); i++) {
 			FGEPoint current = _points.get(i);
-			if (i == 0)
+			if (i == 0) {
 				beginAtPoint(current);
-			else if (i == 1) {
+			} else if (i == 1) {
 				// First segment: quadratic curve
 				FGEQuadCurve curve = FGEQuadCurve.makeCurveFromPoints(_points.get(0), _points.get(1), _points.get(2));
 				QuadCurve2D left = new QuadCurve2D.Double();

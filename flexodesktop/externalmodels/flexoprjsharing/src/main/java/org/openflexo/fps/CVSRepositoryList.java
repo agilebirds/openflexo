@@ -90,8 +90,9 @@ public class CVSRepositoryList extends FPSObject {
 
 	public void loadStoredRepositoryLocation(File storedRepositoryDirectory/*, FlexoEditor editor*/) {
 		setStoredRepositoryDirectory(storedRepositoryDirectory);
-		if (storedRepositoryDirectory == null || !storedRepositoryDirectory.exists())
+		if (storedRepositoryDirectory == null || !storedRepositoryDirectory.exists()) {
 			return;
+		}
 		File[] allLocationFiles = storedRepositoryDirectory.listFiles(new FileFilter() {
 			@Override
 			public boolean accept(File pathname) {

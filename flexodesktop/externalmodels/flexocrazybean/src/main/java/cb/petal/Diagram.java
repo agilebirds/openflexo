@@ -121,8 +121,9 @@ public abstract class Diagram extends QuidObject implements Named {
 		if (viewx > MAX_X) {
 			viewx = PADDING_X;
 			viewy += PADDING_Y;
-		} else
+		} else {
 			viewx += PADDING_X;
+		}
 
 		return viewx;
 	}
@@ -162,8 +163,9 @@ public abstract class Diagram extends QuidObject implements Named {
 			rows++;
 
 			int columns = 4 + stereo.length();
-			if (columns > max_columns)
+			if (columns > max_columns) {
 				max_columns = columns;
+			}
 		}
 
 		for (Iterator i = clazz.getOperations().iterator(); i.hasNext();) {
@@ -172,11 +174,13 @@ public abstract class Diagram extends QuidObject implements Named {
 			int columns = op.getNameParameter().length() + 2;
 
 			stereo = op.getStereotype();
-			if (stereo != null)
+			if (stereo != null) {
 				columns += stereo.length() + 4;
+			}
 
-			if (columns > max_columns)
+			if (columns > max_columns) {
 				max_columns = columns;
+			}
 
 			rows++;
 		}
@@ -187,11 +191,13 @@ public abstract class Diagram extends QuidObject implements Named {
 			int columns = attr.getNameParameter().length() + 2 + attr.getType().length();
 
 			stereo = attr.getStereotype();
-			if (stereo != null)
+			if (stereo != null) {
 				columns += stereo.length() + 4;
+			}
 
-			if (columns > max_columns)
+			if (columns > max_columns) {
 				max_columns = columns;
+			}
 
 			rows++;
 		}
@@ -219,13 +225,15 @@ public abstract class Diagram extends QuidObject implements Named {
 		// Don't set location on labels ...
 		ItemLabel label = view.getLabel();
 
-		if (label != null)
+		if (label != null) {
 			label.setParentView(new Tag(index));
+		}
 
 		label = view.getStereotype();
 
-		if (label != null)
+		if (label != null) {
 			label.setParentView(new Tag(index));
+		}
 	}
 
 	protected void addRelationship(RelationshipView view, Relationship rel) {
@@ -261,8 +269,9 @@ public abstract class Diagram extends QuidObject implements Named {
 			if (classes.contains(view.getClass())) {
 				Qualified view2 = (Qualified) view;
 
-				if (view2.getQualifiedNameParameter().equals(qual_name))
+				if (view2.getQualifiedNameParameter().equals(qual_name)) {
 					return view;
+				}
 			}
 		}
 

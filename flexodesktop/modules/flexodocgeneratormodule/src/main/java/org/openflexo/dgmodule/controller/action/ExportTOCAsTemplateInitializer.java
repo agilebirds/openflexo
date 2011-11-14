@@ -60,8 +60,9 @@ public class ExportTOCAsTemplateInitializer extends ActionInitializer {
 
 				File dest = null;
 				int returnVal = chooser.showSaveDialog(null);
-				if (returnVal == JFileChooser.CANCEL_OPTION)
+				if (returnVal == JFileChooser.CANCEL_OPTION) {
 					return false;
+				}
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					if (isValidProjectName(chooser.getSelectedFile().getName())) {
 						dest = chooser.getSelectedFile();
@@ -69,23 +70,26 @@ public class ExportTOCAsTemplateInitializer extends ActionInitializer {
 							dest = new File(dest.getAbsolutePath() + ".xml");
 						}
 					} else {
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Invalid file name. The following characters are not allowed: "
 									+ FileUtils.BAD_CHARACTERS_FOR_FILE_NAME_REG_EXP);
+						}
 						FlexoController.notify(FlexoLocalization.localizedForKey("file_name_cannot_contain_\\___&_#_{_}_[_]_%_~"));
 					}
 				} else {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("No project specified !");
+					}
 				}
 
-				if (!dest.exists())
+				if (!dest.exists()) {
 					try {
 						FileUtils.createNewFile(dest);
 					} catch (IOException e1) {
 						e1.printStackTrace();
 						return false;
 					}
+				}
 				action.setDestinationFile(dest);
 				return true;
 			}

@@ -82,8 +82,9 @@ public final class RoleCompound extends WorkflowModelObject {
 			}
 		} else {
 			_roles = new Vector<Role>();
-			if (logger.isLoggable(Level.SEVERE))
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Could not clone this RoleCompound");
+			}
 		}
 	}
 
@@ -128,8 +129,9 @@ public final class RoleCompound extends WorkflowModelObject {
 
 	@Override
 	public void initializeDeserialization(Object builder) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("initializeDeserialization() for " + this.getClass().getName());
+		}
 		super.initializeDeserialization(builder);
 		if (getWorkflow() != null) {
 			getWorkflow().initializeDeserialization(builder);
@@ -138,8 +140,9 @@ public final class RoleCompound extends WorkflowModelObject {
 
 	@Override
 	public void finalizeDeserialization(Object builder) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("finalizeDeserialization() for " + this.getClass().getName());
+		}
 		super.finalizeDeserialization(builder);
 		if (getWorkflow() != null) {
 			getWorkflow().finalizeDeserialization(builder);
@@ -163,8 +166,9 @@ public final class RoleCompound extends WorkflowModelObject {
 						Math.min(upperLeftCorner.getY(), role.getY(context)));
 			}
 		}
-		if (upperLeftCorner == null)
+		if (upperLeftCorner == null) {
 			upperLeftCorner = new Point2D.Double();
+		}
 		offset = new Point2D.Double();
 		offset.setLocation(location.getX() - upperLeftCorner.getX(), location.getY() - upperLeftCorner.getY());
 		for (Role role : getRoles()) {

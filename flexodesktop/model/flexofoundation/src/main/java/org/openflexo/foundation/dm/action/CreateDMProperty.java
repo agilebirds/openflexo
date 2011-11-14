@@ -71,8 +71,9 @@ public class CreateDMProperty extends FlexoAction<CreateDMProperty, DMEntity, DM
 	protected void doAction(Object context) {
 		logger.info("CreateDMProperty");
 		if (getEntity() != null) {
-			if (_newPropertyName == null)
+			if (_newPropertyName == null) {
 				_newPropertyName = getEntity().getDMModel().getNextDefautPropertyName(getEntity());
+			}
 			_newProperty = new DMProperty(getEntity().getDMModel(), /*getEntity(),*/_newPropertyName, null, DMCardinality.SINGLE,
 					getEntity().getIsReadOnly(), true, getEntity().getPropertyDefaultImplementationType());
 			getEntity().registerProperty(_newProperty, _newPropertyIsBindable);

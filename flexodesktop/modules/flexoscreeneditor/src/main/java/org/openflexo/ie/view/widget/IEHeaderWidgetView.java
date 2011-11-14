@@ -90,8 +90,9 @@ public class IEHeaderWidgetView extends AbstractInnerTableWidgetView<IEHeaderWid
 	 */
 	@Override
 	public void setBackground(Color bg) {
-		if (getModel() != null)
+		if (getModel() != null) {
 			super.setBackground(getFlexoCSS().getMainColor());
+		}
 	}
 
 	public IEHeaderWidget getHeaderModel() {
@@ -102,8 +103,9 @@ public class IEHeaderWidgetView extends AbstractInnerTableWidgetView<IEHeaderWid
 	public Dimension getPreferredSize() {
 		if (getHoldsNextComputedPreferredSize()) {
 			Dimension storedSize = storedPrefSize();
-			if (storedSize != null)
+			if (storedSize != null) {
 				return storedSize;
+			}
 		}
 		IESequenceWidgetWidgetView parentSequenceView = null;
 		if (getParent() instanceof IESequenceWidgetWidgetView) {
@@ -113,13 +115,15 @@ public class IEHeaderWidgetView extends AbstractInnerTableWidgetView<IEHeaderWid
 			int width = parentSequenceView.getAvailableWidth();
 			Dimension d = super.getPreferredSize();
 			d = new Dimension(width, d.height);
-			if (getHoldsNextComputedPreferredSize())
+			if (getHoldsNextComputedPreferredSize()) {
 				storePrefSize(d);
+			}
 			return d;
 		}
 		Dimension d = super.getPreferredSize();
-		if (getHoldsNextComputedPreferredSize())
+		if (getHoldsNextComputedPreferredSize()) {
 			storePrefSize(d);
+		}
 		return d;
 	}
 
@@ -144,8 +148,9 @@ public class IEHeaderWidgetView extends AbstractInnerTableWidgetView<IEHeaderWid
 			delete();
 		} else if (modif instanceof SortChanged) {
 			_jLabel.setIcon(getSortIcon());
-		} else
+		} else {
 			super.update(arg0, modif);
+		}
 	}
 
 	private ImageIcon getSortIcon() {
@@ -153,10 +158,11 @@ public class IEHeaderWidgetView extends AbstractInnerTableWidgetView<IEHeaderWid
 			return null;
 		} else {
 			if (getHeaderModel().getIsSorted()) {
-				if (getHeaderModel().getDefaultAscending())
+				if (getHeaderModel().getDefaultAscending()) {
 					return SEIconLibrary.ICON_DOWN;
-				else
+				} else {
 					return SEIconLibrary.ICON_UP;
+				}
 			} else {
 				return SEIconLibrary.ICON_RIGHT;
 			}
@@ -169,15 +175,17 @@ public class IEHeaderWidgetView extends AbstractInnerTableWidgetView<IEHeaderWid
 
 	@Override
 	public void performDoubleClick(JComponent clickedContainer, Point clickedPoint, boolean isShiftDown) {
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("performDoubleClick() ");
+		}
 		editLabel();
 	}
 
 	@Override
 	public void editLabel() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Edit ie header");
+		}
 		labelEditing = true;
 		_jLabelTextField = new JTextField(getHeaderModel().getValue());
 		_jLabelTextField.setFont(_jLabel.getFont());
@@ -228,11 +236,13 @@ public class IEHeaderWidgetView extends AbstractInnerTableWidgetView<IEHeaderWid
 	}
 
 	public void finalizeEditHeader() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Finalize edit ie header");
+		}
 		_jLabel.setText(_jLabelTextField.getText());
-		if (labelEditing)
+		if (labelEditing) {
 			getHeaderModel().setValue(_jLabelTextField.getText());
+		}
 		labelEditing = false;
 		remove(_jLabelTextField);
 		add(_jLabel);

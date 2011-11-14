@@ -50,8 +50,9 @@ public abstract class CustomWidget<T> extends DenaliWidget<T> {
 	@Override
 	public void setModel(InspectableObject value) {
 		super.setModel(value);
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setModel in " + this.getClass().getName() + " with " + value);
+		}
 		performModelUpdating(value);
 	}
 
@@ -75,9 +76,10 @@ public abstract class CustomWidget<T> extends DenaliWidget<T> {
 				Object currentObject = PropertyModel.getObjectForMultipleAccessors(object, listAccessor);
 				return currentObject;
 			} catch (Exception e) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("getDynamicValueForParameter() failed for property " + getPropertyModel().name + " for object " + object
 							+ " and parameter " + parameterName + ": exception " + e.getMessage());
+				}
 				e.printStackTrace();
 			}
 		}
@@ -87,15 +89,17 @@ public abstract class CustomWidget<T> extends DenaliWidget<T> {
 	private Method getMethod(String methodPath, Class[] paramClasses) {
 		KeyValueCoding targetObject = PropertyModel.getTargetObject(getModel(), methodPath);
 		String methodName = PropertyModel.getLastAccessor(methodPath);
-		if (targetObject == null)
+		if (targetObject == null) {
 			return null;
+		}
 		Class targetClass = targetObject.getClass();
 		try {
 			return targetClass.getMethod(methodName, paramClasses);
 		} catch (SecurityException e) {
 			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("SecurityException raised: " + e.getClass().getName() + ". See console for details.");
+			}
 			e.printStackTrace();
 			return null;
 		} catch (NoSuchMethodException e) {
@@ -106,18 +110,21 @@ public abstract class CustomWidget<T> extends DenaliWidget<T> {
 					boolean lookedUp = true;
 					int paramId = 0;
 					for (Class c : m.getParameterTypes()) {
-						if (!c.isAssignableFrom(paramClasses[paramId]))
+						if (!c.isAssignableFrom(paramClasses[paramId])) {
 							lookedUp = false;
+						}
 						paramId++;
 					}
-					if (lookedUp)
+					if (lookedUp) {
 						return m;
+					}
 				}
 			}
 
 			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("NoSuchMethodException raised: unable to find method " + methodName + " for class " + targetClass);
+			}
 			e.printStackTrace();
 			return null;
 		}
@@ -137,25 +144,29 @@ public abstract class CustomWidget<T> extends DenaliWidget<T> {
 		if (method != null) {
 			try {
 				KeyValueCoding targetObject = PropertyModel.getTargetObject(getModel(), methodPath);
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("invoking " + method + " on object" + targetObject);
+				}
 				return method.invoke(targetObject, parameters);
 			} catch (IllegalArgumentException e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 				return null;
 			} catch (IllegalAccessException e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 				return null;
 			} catch (InvocationTargetException e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 				return null;
 			}
@@ -172,8 +183,9 @@ public abstract class CustomWidget<T> extends DenaliWidget<T> {
 
 	public boolean getBooleanParameteredValue(String methodPath, Object parameter) {
 		Object returned = getParameteredValue(methodPath, parameter);
-		if (returned == null)
+		if (returned == null) {
 			return false;
+		}
 		if (returned instanceof Boolean) {
 			return ((Boolean) returned).booleanValue();
 		} else {
@@ -219,8 +231,9 @@ public abstract class CustomWidget<T> extends DenaliWidget<T> {
 	}
 
 	public void notifyApply() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("notifyApply()");
+		}
 		Enumeration<ApplyCancelListener> en = applyCancelListener.elements();
 		while (en.hasMoreElements()) {
 			ApplyCancelListener l = en.nextElement();
@@ -229,8 +242,9 @@ public abstract class CustomWidget<T> extends DenaliWidget<T> {
 	}
 
 	public void notifyCancel() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("notifyCancel()");
+		}
 		Enumeration<ApplyCancelListener> en = applyCancelListener.elements();
 		while (en.hasMoreElements()) {
 			ApplyCancelListener l = en.nextElement();

@@ -84,15 +84,18 @@ public class ProjectGenerator extends AbstractProjectGenerator<SourceRepository>
 	public ProjectGenerator(FlexoProject project, SourceRepository repository) throws GenerationException {
 		super(project, repository);
 		if (repository == null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("No target repository, this may happen during dynamic invocation of code generator within the context of the Data model edition");
+			}
 		}
 
 		if (getRootOutputDirectory() != null) {
-			if (!getResourceOutputDirectory().exists())
+			if (!getResourceOutputDirectory().exists()) {
 				getRootOutputDirectory().mkdirs();
-			if (!getRootOutputDirectory().canWrite())
+			}
+			if (!getRootOutputDirectory().canWrite()) {
 				throw new PermissionDeniedException(getRootOutputDirectory(), this);
+			}
 		}
 
 		buildListeners = new Vector<BuildListener>();
@@ -136,8 +139,9 @@ public class ProjectGenerator extends AbstractProjectGenerator<SourceRepository>
 		Map<TechnologyModuleDefinition, ModuleGenerator> newGenerators = new LinkedHashMap<TechnologyModuleDefinition, ModuleGenerator>();
 		for (TechnologyModuleImplementation technologyModuleImplementation : repository.getImplementationModel().getTechnologyModules()) {
 			ModuleGenerator moduleGenerator = generators.get(technologyModuleImplementation.getTechnologyModuleDefinition());
-			if (moduleGenerator == null)
+			if (moduleGenerator == null) {
 				moduleGenerator = new ModuleGenerator(this, technologyModuleImplementation);
+			}
 			newGenerators.put(technologyModuleImplementation.getTechnologyModuleDefinition(), moduleGenerator);
 		}
 
@@ -192,8 +196,9 @@ public class ProjectGenerator extends AbstractProjectGenerator<SourceRepository>
 					mapForLayer.put(moduleDefinition, resourcesForModule);
 				}
 				resourcesForModule.add(resource);
-			} else
+			} else {
 				notSGGeneratorResources.add(resource);
+			}
 		}
 
 		resources.clear();
@@ -205,8 +210,9 @@ public class ProjectGenerator extends AbstractProjectGenerator<SourceRepository>
 			Map<TechnologyModuleDefinition, List<CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile>>> mapForLayer = map
 					.get(layer);
 
-			if (mapForLayer == null)
+			if (mapForLayer == null) {
 				continue;
+			}
 
 			/*
 			 * The idea is to build a map containing, for each module, all the modules which are compatible or which request it. Once this map is built, we iterates over each key to takes empty
@@ -215,16 +221,18 @@ public class ProjectGenerator extends AbstractProjectGenerator<SourceRepository>
 
 			// 1. Build the map with empty lists
 			Map<TechnologyModuleDefinition, Set<TechnologyModuleDefinition>> requiringModuleMap = new HashMap<TechnologyModuleDefinition, Set<TechnologyModuleDefinition>>();
-			for (TechnologyModuleDefinition moduleDefinition : mapForLayer.keySet())
+			for (TechnologyModuleDefinition moduleDefinition : mapForLayer.keySet()) {
 				requiringModuleMap.put(moduleDefinition, new HashSet<TechnologyModuleDefinition>());
+			}
 
 			// 2. Fill the map
 			for (TechnologyModuleDefinition definition : requiringModuleMap.keySet()) {
 				Set<TechnologyModuleDefinition> requiredModules = definition.getRequiredModules();
 				requiredModules.addAll(definition.getCompatibleModules());
 				for (TechnologyModuleDefinition requiredModule : requiredModules) {
-					if (requiringModuleMap.containsKey(requiredModule))
+					if (requiringModuleMap.containsKey(requiredModule)) {
 						requiringModuleMap.get(requiredModule).add(definition);
+					}
 				}
 			}
 
@@ -236,16 +244,18 @@ public class ProjectGenerator extends AbstractProjectGenerator<SourceRepository>
 						requiringModuleMap).entrySet()) {
 					if (entry.getValue().isEmpty()) {
 						requiringModuleMap.remove(entry.getKey());
-						for (Set<TechnologyModuleDefinition> set : requiringModuleMap.values())
+						for (Set<TechnologyModuleDefinition> set : requiringModuleMap.values()) {
 							set.remove(entry.getKey());
+						}
 						resources.addAll(mapForLayer.get(entry.getKey()));
 						hasRemovedKey = true;
 					}
 				}
 			} while (!requiringModuleMap.isEmpty() && hasRemovedKey);
 
-			for (TechnologyModuleDefinition notRemovedModule : requiringModuleMap.keySet())
+			for (TechnologyModuleDefinition notRemovedModule : requiringModuleMap.keySet()) {
 				resources.addAll(mapForLayer.get(notRemovedModule));
+			}
 		}
 
 		resources.addAll(notSGGeneratorResources);
@@ -264,8 +274,9 @@ public class ProjectGenerator extends AbstractProjectGenerator<SourceRepository>
 	 */
 	@Override
 	public File getRootOutputDirectory() {
-		if (getRepository() == null)
+		if (getRepository() == null) {
 			return null;
+		}
 		return getRepository().getDirectory();
 	}
 

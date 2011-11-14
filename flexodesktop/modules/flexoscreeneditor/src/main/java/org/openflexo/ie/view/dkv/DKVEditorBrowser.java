@@ -23,8 +23,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.components.browser.BrowserElementType;
-import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
+import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
@@ -55,10 +55,12 @@ public class DKVEditorBrowser extends ProjectBrowser implements FlexoObserver {
 	 */
 	@Override
 	public FlexoModelObject getDefaultRootObject() {
-		if (getProject() != null)
+		if (getProject() != null) {
 			return getProject().getDKVModel();
-		if (logger.isLoggable(Level.WARNING))
+		}
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("No Project Defined");
+		}
 		return null;
 	}
 
@@ -82,8 +84,9 @@ public class DKVEditorBrowser extends ProjectBrowser implements FlexoObserver {
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (dataModification instanceof DKVDataModification) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Update DKVEditorBrowser");
+			}
 			update();
 		}
 	}

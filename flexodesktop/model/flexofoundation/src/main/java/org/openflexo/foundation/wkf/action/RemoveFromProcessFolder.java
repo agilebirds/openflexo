@@ -41,9 +41,9 @@ public class RemoveFromProcessFolder extends FlexoAction<RemoveFromProcessFolder
 	}
 
 	static FlexoProcessNode getProcessNode(FlexoModelObject object) {
-		if (object instanceof FlexoProcessNode)
+		if (object instanceof FlexoProcessNode) {
 			return (FlexoProcessNode) object;
-		else if (object instanceof FlexoProcess) {
+		} else if (object instanceof FlexoProcess) {
 			return ((FlexoProcess) object).getProcessNode();
 		}
 		return null;
@@ -85,8 +85,9 @@ public class RemoveFromProcessFolder extends FlexoAction<RemoveFromProcessFolder
 
 	@Override
 	protected void doAction(Object context) throws InvalidParentProcessException, UndoException {
-		if (getProcessNode().getParentFolder() != null)
+		if (getProcessNode().getParentFolder() != null) {
 			getProcessNode().getParentFolder().removeFromProcesses(getProcessNode());
+		}
 	}
 
 }

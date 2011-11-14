@@ -39,14 +39,15 @@ public class StringLiteral extends Literal {
 	public StringLiteral(String v) {
 		super("<String>");
 
-		if (v.equals(""))
+		if (v.equals("")) {
 			addLine("");
-		else {
+		} else {
 			StringTokenizer tok = new StringTokenizer(v, "\r\n");
 
 			multi = tok.countTokens() > 1;
-			while (tok.hasMoreTokens())
+			while (tok.hasMoreTokens()) {
 				addLine(tok.nextToken());
+			}
 		}
 	}
 
@@ -72,10 +73,11 @@ public class StringLiteral extends Literal {
 	 * @return first line, if available
 	 */
 	public String getValue() {
-		if (values.size() > 0)
+		if (values.size() > 0) {
 			return (String) values.get(0);
-		else
+		} else {
 			return null;
+		}
 	}
 
 	@Override
@@ -84,8 +86,9 @@ public class StringLiteral extends Literal {
 
 		for (Iterator i = values.iterator(); i.hasNext();) {
 			buf.append(i.next());
-			if (i.hasNext())
+			if (i.hasNext()) {
 				buf.append("\n");
+			}
 		}
 
 		return buf.toString();
@@ -108,12 +111,14 @@ public class StringLiteral extends Literal {
 		if (isMultiLine()) {
 			StringBuffer buf = new StringBuffer(cb.util.Constants.getNewLine());
 
-			for (Iterator i = values.iterator(); i.hasNext();)
+			for (Iterator i = values.iterator(); i.hasNext();) {
 				buf.append("|" + i.next() + cb.util.Constants.getNewLine());
+			}
 
 			return buf.toString();
-		} else
+		} else {
 			return '"' + getValue() + '"';
+		}
 	}
 
 	@Override

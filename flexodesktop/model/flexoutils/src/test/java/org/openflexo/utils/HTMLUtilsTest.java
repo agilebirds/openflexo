@@ -19,9 +19,9 @@
  */
 package org.openflexo.utils;
 
-import org.openflexo.toolbox.HTMLUtils;
-
 import junit.framework.TestCase;
+
+import org.openflexo.toolbox.HTMLUtils;
 
 public class HTMLUtilsTest extends TestCase {
 

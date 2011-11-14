@@ -41,8 +41,9 @@ public class NewPaletteComponent extends PaletteChooserComponent {
 		NewPaletteComponent chooser = new NewPaletteComponent();
 		File newProjectDir = null;
 		int returnVal = chooser.showSaveDialog(null);
-		if (returnVal == JFileChooser.CANCEL_OPTION)
+		if (returnVal == JFileChooser.CANCEL_OPTION) {
 			return null;
+		}
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			if (isValidProjectName(chooser.getSelectedFile().getName())) {
 				newProjectDir = chooser.getSelectedFile();
@@ -53,18 +54,21 @@ public class NewPaletteComponent extends PaletteChooserComponent {
 				if (!newProjectDir.exists()) {
 					newProjectDir.mkdir();
 				} else {
-					if (!FlexoController.confirm(FlexoLocalization.localizedForKey("palette_already_exists_do_you_want_to_replace_it")))
+					if (!FlexoController.confirm(FlexoLocalization.localizedForKey("palette_already_exists_do_you_want_to_replace_it"))) {
 						newProjectDir = null;
+					}
 				}
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Invalid palette name. The following characters are not allowed: "
 							+ FileUtils.BAD_CHARACTERS_FOR_FILE_NAME_REG_EXP);
+				}
 				FlexoController.notify(FlexoLocalization.localizedForKey("palette_name_cannot_contain_\\___&_#_{_}_[_]_%_~"));
 			}
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("No project specified !");
+			}
 		}
 		return newProjectDir;
 	}

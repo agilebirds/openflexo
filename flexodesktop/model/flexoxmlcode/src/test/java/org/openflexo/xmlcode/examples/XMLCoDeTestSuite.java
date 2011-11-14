@@ -20,15 +20,15 @@
 
 package org.openflexo.xmlcode.examples;
 
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
 import org.openflexo.xmlcode.TestParameteredKVCoding;
 import org.openflexo.xmlcode.examples.example1.Example1Test;
 import org.openflexo.xmlcode.examples.example2.Example2Test;
 import org.openflexo.xmlcode.examples.example3.Example3Test;
 import org.openflexo.xmlcode.examples.example4.Example4Test;
 import org.openflexo.xmlcode.examples.example5.Example5Test;
-
-import junit.framework.Test;
-import junit.framework.TestSuite;
 
 public class XMLCoDeTestSuite {
 

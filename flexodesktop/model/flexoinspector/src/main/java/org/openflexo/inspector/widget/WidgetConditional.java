@@ -66,8 +66,9 @@ public class WidgetConditional {
 			try {
 				// logger.info("Parse: "+propertyModel.conditional);
 				_conditional = Parser.parseExpression(propertyModel.conditional);
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine(("Conditional: " + _conditional));
+				}
 			} catch (ParseException e) {
 				logger.warning("Invalid conditional for property " + propertyModel.name + ": " + e.getMessage());
 			}
@@ -127,15 +128,17 @@ public class WidgetConditional {
 	public boolean dependsOfProperty(String propertyName) {
 		for (Enumeration en = _dependsProperties.elements(); en.hasMoreElements();) {
 			String nextProperty = (String) en.nextElement();
-			if (nextProperty.equals(propertyName))
+			if (nextProperty.equals(propertyName)) {
 				return true;
+			}
 		}
 		return false;
 	}
 
 	public boolean isVisible(InspectableObject inspectable) {
-		if (_conditional == null)
+		if (_conditional == null) {
 			return true;
+		}
 		return evaluate(_conditional, inspectable);
 	}
 
@@ -150,8 +153,9 @@ public class WidgetConditional {
 			// System.out.println("Add param for "+nextProperty);
 		}
 		boolean returned = evaluate(expression, parameters);
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Evaluate " + expression + " : returns " + returned);
+		}
 		return returned;
 	}
 
@@ -161,8 +165,9 @@ public class WidgetConditional {
 		} else if (token instanceof Word) {
 			String replacedString = ((Word) token).getValue();
 
-			if (replacedString.equals("null"))
+			if (replacedString.equals("null")) {
 				return new StringValue("null");
+			}
 
 			/*for (Enumeration en = parameters.elements(); en.hasMoreElements();) {
 			    KeyValueInstance param = (KeyValueInstance)en.nextElement();
@@ -185,8 +190,9 @@ public class WidgetConditional {
 				String keyPath = replacedString.substring(replacedString.indexOf(".") + 1);
 				KeyValueInstance kvInstance = null;
 				for (KeyValueInstance aKVInstance : parameters) {
-					if (aKVInstance.getKeyPath().equals(targetName))
+					if (aKVInstance.getKeyPath().equals(targetName)) {
 						kvInstance = aKVInstance;
+					}
 				}
 				if (kvInstance != null) {
 					targetValue = kvInstance.getValueForKey(keyPath);
@@ -197,8 +203,9 @@ public class WidgetConditional {
 			if (targetValue == null) {
 				KeyValueInstance kvInstance = null;
 				for (KeyValueInstance aKVInstance : parameters) {
-					if (aKVInstance.getKeyPath().equals(replacedString))
+					if (aKVInstance.getKeyPath().equals(replacedString)) {
 						kvInstance = aKVInstance;
+					}
 				}
 				if (kvInstance != null) {
 					targetValue = kvInstance.getValue();
@@ -247,9 +254,10 @@ public class WidgetConditional {
 
 		if (expression.getOperator() == Operator.AND) {
 			if ((leftValue instanceof BooleanValue) && (rightValue instanceof BooleanValue)) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Evaluate AND in " + expression + " : left:" + leftValue + " right:" + rightValue + " returns: "
 							+ (((BooleanValue) leftValue).getBooleanValue() && ((BooleanValue) rightValue).getBooleanValue()));
+				}
 				return (((BooleanValue) leftValue).getBooleanValue() && ((BooleanValue) rightValue).getBooleanValue());
 			} else {
 				logger.warning("Incompatible operands: " + leftValue.getClass().getName() + " AND " + rightValue.getClass().getName());
@@ -259,9 +267,10 @@ public class WidgetConditional {
 
 		else if (expression.getOperator() == Operator.OR) {
 			if ((leftValue instanceof BooleanValue) && (rightValue instanceof BooleanValue)) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Evaluate OR in " + expression + " : left:" + leftValue + " right:" + rightValue + " returns: "
 							+ (((BooleanValue) leftValue).getBooleanValue() || ((BooleanValue) rightValue).getBooleanValue()));
+				}
 				return (((BooleanValue) leftValue).getBooleanValue() || ((BooleanValue) rightValue).getBooleanValue());
 			} else {
 				logger.warning("Incompatible operands: " + leftValue.getClass().getName() + " OR " + rightValue.getClass().getName());
@@ -270,16 +279,18 @@ public class WidgetConditional {
 		}
 
 		else if (expression.getOperator() == Operator.EQU) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Evaluate EQU in " + expression + " : left:" + leftValue + " right:" + rightValue + " returns: "
 						+ ((leftValue == null && rightValue == null) || (leftValue != null && leftValue.equals(rightValue))));
+			}
 			return (leftValue == null && rightValue == null) || leftValue.equals(rightValue);
 		}
 
 		else if (expression.getOperator() == Operator.NEQ) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Evaluate NEQ in " + expression + " : left:" + leftValue + " right:" + rightValue + " returns: "
 						+ leftValue.equals(rightValue));
+			}
 			return !leftValue.equals(rightValue);
 		}
 
@@ -319,8 +330,9 @@ public class WidgetConditional {
 		}
 
 		public Object getValueForKey(String aKeyPath) {
-			if (_value == null)
+			if (_value == null) {
 				return null;
+			}
 			if (_value instanceof KeyValueCoding) {
 				return KVUtil.getValueForKey((KeyValueCoding) _value, aKeyPath);
 			}
@@ -329,8 +341,9 @@ public class WidgetConditional {
 		}
 
 		public PropertyModel getPropertyModel() {
-			if ((_propertyModel == null) || (_propertyModel.getInspectorModel() == null))
+			if ((_propertyModel == null) || (_propertyModel.getInspectorModel() == null)) {
 				return null;
+			}
 			if (_propModel == null) {
 				_propModel = _propertyModel.getInspectorModel().getPropertyNamed(_keyPath);
 			}
@@ -343,8 +356,9 @@ public class WidgetConditional {
 		}
 
 		public String getStringRepresentation() {
-			if (_value == null)
+			if (_value == null) {
 				return "null";
+			}
 			if (_value instanceof String) {
 				return (String) _value;
 			} else if (_value instanceof StringConvertable) {

@@ -55,8 +55,9 @@ public class FlexoException extends Exception {
 
 	@Override
 	public String getLocalizedMessage() {
-		if (_localizationKey == null)
+		if (_localizationKey == null) {
 			return getMessage();
+		}
 		return FlexoLocalization.localizedForKey(_localizationKey);
 	}
 

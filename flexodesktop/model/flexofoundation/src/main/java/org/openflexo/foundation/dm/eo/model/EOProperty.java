@@ -50,8 +50,9 @@ public abstract class EOProperty extends EOObject {
 	public boolean getIsClassProperty() {
 		if (getEntity() != null) {
 			return getEntity().getClassProperties().contains(this);
-		} else if (logger.isLoggable(Level.WARNING))
+		} else if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Impossible to determine if property is class property because it has no entity");
+		}
 		return false;
 	}
 
@@ -59,13 +60,15 @@ public abstract class EOProperty extends EOObject {
 	 * @param isClassProperty
 	 */
 	public void setIsClassProperty(boolean isClassProperty) {
-		if (getEntity() == null)
+		if (getEntity() == null) {
 			throw new IllegalStateException("Trying to set a property as a class property while the property has no entity");
+		}
 		if (getIsClassProperty() != isClassProperty) {
-			if (isClassProperty)
+			if (isClassProperty) {
 				getEntity().getClassProperties().add(this);
-			else
+			} else {
 				getEntity().getClassProperties().remove(this);
+			}
 		}
 	}
 
@@ -77,11 +80,13 @@ public abstract class EOProperty extends EOObject {
 	@Override
 	public void setName(String name) {
 		if (getEntity() != null) {
-			if (getEntity().propertyNamed(name) != null)
+			if (getEntity().propertyNamed(name) != null) {
 				throw new IllegalArgumentException("Another property is already named " + name + " in entity " + getEntity().getName());
+			}
 		}
-		if (name == null)
+		if (name == null) {
 			throw new NullPointerException();
+		}
 		super.setName(name);
 	}
 }

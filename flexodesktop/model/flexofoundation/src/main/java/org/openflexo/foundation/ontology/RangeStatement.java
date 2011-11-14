@@ -76,8 +76,9 @@ public class RangeStatement extends OntologyStatement {
 		if (getDataType() != null) {
 			return getDataType().toString();
 		}
-		if (getRange() != null)
+		if (getRange() != null) {
 			return getRange().getName();
+		}
 		return "";
 	}
 }

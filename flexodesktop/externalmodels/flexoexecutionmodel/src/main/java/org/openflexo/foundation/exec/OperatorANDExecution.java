@@ -32,7 +32,6 @@ import org.openflexo.antar.expr.BooleanBinaryOperator;
 import org.openflexo.antar.expr.Constant;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.Variable;
-
 import org.openflexo.foundation.exec.expr.HasWaitingTokensOnOperator;
 import org.openflexo.foundation.exec.inst.DestroyRemainingTokensForOperator;
 import org.openflexo.foundation.exec.inst.StoreTokenOnOperator;
@@ -63,8 +62,9 @@ public class OperatorANDExecution extends OperatorNodeExecution {
 	@Override
 	protected final ControlGraph makeControlGraph(boolean interprocedural) throws InvalidModelException, NotSupportedException {
 		if (!interprocedural) {
-			if (getEdge() == null)
+			if (getEdge() == null) {
 				throw new InvalidModelException("Operator AND named " + getOperatorNode().getName() + " execution called from a null edge");
+			}
 			return makeControlGraph(getEdge(), interprocedural);
 		}
 
@@ -129,18 +129,18 @@ public class OperatorANDExecution extends OperatorNodeExecution {
 
 		SEND_TOKENS_TO_OUTPUTS = makeSequentialControlGraph(SEND_MESSAGES, SEND_TOKENS);
 
-		if (SEND_TOKENS_TO_OUTPUTS instanceof Nop && !SEND_TOKENS_TO_OUTPUTS.hasComment())
+		if (SEND_TOKENS_TO_OUTPUTS instanceof Nop && !SEND_TOKENS_TO_OUTPUTS.hasComment()) {
 			SEND_TOKENS_TO_OUTPUTS.setInlineComment("nothing to do");
+		}
 
 		ControlGraph OPERATOR_AND_TRIGGER = makeSequentialControlGraph(new Nop("Operator AND triggers"), DELETE_TOKENS,
 				SEND_TOKENS_TO_OUTPUTS);
 
 		if (condition == null) {
 			return OPERATOR_AND_TRIGGER;
-		}
-
-		else
+		} else {
 			return new Conditional(condition, OPERATOR_AND_TRIGGER, new StoreTokenOnOperator(getOperatorNode(), entry));
+		}
 
 	}
 
@@ -168,8 +168,9 @@ public class OperatorANDExecution extends OperatorNodeExecution {
 	private Variable edgeVariable = null;
 
 	private Variable getEdgeVariable() {
-		if (edgeVariable == null)
+		if (edgeVariable == null) {
 			edgeVariable = new Variable("edgeId");
+		}
 		return edgeVariable;
 	}
 

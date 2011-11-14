@@ -37,8 +37,9 @@ public class MetaphaseEditorConfiguration {
 
 	public MetaphaseEditorOption getOption(String optionName) {
 		for (MetaphaseEditorOption o : options) {
-			if (o.optionName.equals(optionName))
+			if (o.optionName.equals(optionName)) {
 				return o;
+			}
 		}
 		return null;
 	}

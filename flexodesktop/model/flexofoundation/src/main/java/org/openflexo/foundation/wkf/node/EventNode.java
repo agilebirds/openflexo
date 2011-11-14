@@ -26,8 +26,8 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.bindings.AbstractBinding;
-import org.openflexo.foundation.bindings.WKFBindingDefinition;
 import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
+import org.openflexo.foundation.bindings.WKFBindingDefinition;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
@@ -209,16 +209,19 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 		if (!isDeserializing() && getTrigger() != null) {
 			switch (eventType) {
 			case Start:
-				if (!getTrigger().canBeStarting())
+				if (!getTrigger().canBeStarting()) {
 					return;
+				}
 				break;
 			case Intermediate:
-				if (!getTrigger().canBeIntermediate())
+				if (!getTrigger().canBeIntermediate()) {
 					return;
+				}
 				break;
 			case End:
-				if (!getTrigger().canBeEnding())
+				if (!getTrigger().canBeEnding()) {
 					return;
+				}
 				break;
 			}
 		}
@@ -296,10 +299,11 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 
 	// Used when serializing
 	public FlexoModelObjectReference<FlexoModelObject> getRoleReference() {
-		if (getRole() != null)
+		if (getRole() != null) {
 			return new FlexoModelObjectReference<FlexoModelObject>(getProject(), getRole());
-		else
+		} else {
 			return null;
+		}
 	}
 
 	// Used when deserializing
@@ -343,9 +347,9 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 
 	// Used when serializing
 	public FlexoModelObjectReference<FlexoProcess> getLinkedProcessReference() {
-		if (getLinkedProcess() != null)
+		if (getLinkedProcess() != null) {
 			return new FlexoModelObjectReference<FlexoProcess>(getProject(), getLinkedProcess());
-		else {
+		} else {
 			return _deserializedReference;
 		}
 	}
@@ -355,10 +359,11 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 	// Used when deserializing
 	public void setLinkedProcessReference(FlexoModelObjectReference<FlexoProcess> aProcessReference) {
 		FlexoProcess subProcess = aProcessReference.getObject(false); // False because we never know if a loop is possible...
-		if (subProcess != null)
+		if (subProcess != null) {
 			setLinkedProcess(subProcess);
-		else
+		} else {
 			_deserializedReference = aProcessReference;
+		}
 	}
 
 	public String getDefaultEnglishName() {
@@ -376,21 +381,24 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 	}
 
 	public WorkflowControlGraph<EventNode> getExecution() {
-		if (_executionComputingFactory != null)
+		if (_executionComputingFactory != null) {
 			return _executionComputingFactory.getControlGraph(this);
+		}
 		return null;
 	}
 
 	@Override
 	public void setProgrammingLanguageForControlGraphComputation(ProgrammingLanguage language) {
-		if (getExecution() != null)
+		if (getExecution() != null) {
 			getExecution().setProgrammingLanguage(language);
+		}
 	}
 
 	@Override
 	public void setInterproceduralForControlGraphComputation(boolean interprocedural) {
-		if (getExecution() != null)
+		if (getExecution() != null) {
 			getExecution().setInterprocedural(interprocedural);
+		}
 	}
 
 	@Override
@@ -493,16 +501,18 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 	public WKFBindingDefinition getDateBindingDefinition() {
 		if (getProject() != null) {
 			WKFBindingDefinition returned = WKFBindingDefinition.get(this, DATE_BINDING, Date.class, BindingDefinitionType.GET, false);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Returned WKFBindingDefinition : " + returned);
+			}
 			return returned;
 		}
 		return null;
 	}
 
 	public AbstractBinding getDateBinding() {
-		if (isBeingCloned())
+		if (isBeingCloned()) {
 			return null;
+		}
 		return dateBinding;
 	}
 
@@ -540,8 +550,9 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 
 	// Used when serializing
 	public String getBoundaryActivityID() {
-		if (boundaryActivityID == null && boundaryOf == null)
+		if (boundaryActivityID == null && boundaryOf == null) {
 			return null;
+		}
 		if (boundaryActivityID == null) {
 			return boundaryOf.getFlexoID() + "";
 		}
@@ -559,8 +570,9 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 	}
 
 	public AbstractActivityNode getBoundaryOf() {
-		if (boundaryOf == null && boundaryActivityID == null)
+		if (boundaryOf == null && boundaryActivityID == null) {
 			return null;
+		}
 		if (boundaryOf == null) {
 			long id = new Long(boundaryActivityID);
 			for (AbstractActivityNode node : getProcess().getAllAbstractActivityNodes()) {
@@ -585,9 +597,10 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 		public ValidationIssue<StartEventCannotHaveIncomingTokenFlow, EventNode> applyValidation(EventNode node) {
 			if (node.isStart() && node.getIncomingPostConditions().size() > 0) {
 				for (FlexoPostCondition fpc : node.getIncomingPostConditions()) {
-					if (fpc instanceof TokenEdge)
+					if (fpc instanceof TokenEdge) {
 						return new ValidationWarning<StartEventCannotHaveIncomingTokenFlow, EventNode>(this, node,
 								"StartEventCannotHaveIncomingTokenFlow");
+					}
 				}
 			}
 			return null;
@@ -606,9 +619,10 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 		public ValidationIssue<EndEventCannotHaveAStartingTokenFlow, EventNode> applyValidation(EventNode node) {
 			if (node.isEnd() && node.getParentPetriGraph().isRootPetriGraph() && node.getOutgoingPostConditions().size() > 0) {
 				for (FlexoPostCondition fpc : node.getOutgoingPostConditions()) {
-					if (fpc instanceof TokenEdge)
+					if (fpc instanceof TokenEdge) {
 						return new ValidationWarning<EndEventCannotHaveAStartingTokenFlow, EventNode>(this, node,
 								"EndEventCannotHaveAStartingTokenFlow");
+					}
 
 				}
 
@@ -666,17 +680,20 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 			boolean hasIncomingPostConditionFromEventGateway = false;
 			for (FlexoPostCondition<AbstractNode, AbstractNode> post : operator.getIncomingPostConditions()) {
 				hasIncomingPostConditionFromEventGateway = post.isStartingFromAnExclusiveGateway();
-				if (hasIncomingPostConditionFromEventGateway)
+				if (hasIncomingPostConditionFromEventGateway) {
 					break;
+				}
 			}
 			if (hasIncomingPostConditionFromEventGateway) {
-				if (!operator.isIntermediate())
+				if (!operator.isIntermediate()) {
 					return new ValidationError<NodeAfterEventBasedGatewayRules, EventNode>(this, operator,
 							"event_gateway_output_must_be_intermediate_catching_events_or_activities", operator.getTrigger()
 									.canBeIntermediate() ? new ChangeToIntermediateEvent() : null);
-				if (!operator.getIsCatching())
+				}
+				if (!operator.getIsCatching()) {
 					return new ValidationError<NodeAfterEventBasedGatewayRules, EventNode>(this, operator,
 							"event_gateway_output_must_be_intermediate_catching_events_or_activities", new ChangeToCatchingEvent());
+				}
 			}
 			return null;
 		}
@@ -689,8 +706,9 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 
 			@Override
 			protected void fixAction() {
-				if (getObject().getTrigger().canBeIntermediate())
+				if (getObject().getTrigger().canBeIntermediate()) {
 					getObject().setEventType(EVENT_TYPE.Intermediate);
+				}
 			}
 		}
 

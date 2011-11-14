@@ -73,16 +73,18 @@ public class EditionPatternPreviewShapeGR extends ShapeGraphicalRepresentation<S
 		setDrawable(aPatternRole);
 		setDrawing(aDrawing);
 
-		if (aPatternRole != null)
+		if (aPatternRole != null) {
 			aPatternRole.addObserver(this);
+		}
 		isInitialized = true;
 	}
 
 	@Override
 	public void delete() {
 		logger.info("Delete GR " + this);
-		if (getDrawable() != null)
+		if (getDrawable() != null) {
 			getDrawable().deleteObserver(this);
+		}
 		super.delete();
 	}
 
@@ -122,8 +124,9 @@ public class EditionPatternPreviewShapeGR extends ShapeGraphicalRepresentation<S
 	@Override
 	public String getText() {
 		if (getPatternRole() != null) {
-			if (getPatternRole().getLabel() != null)
+			if (getPatternRole().getLabel() != null) {
 				return getPatternRole().getLabel().toString();
+			}
 			return getPatternRole().getPatternRoleName();
 		}
 		return null;
@@ -138,8 +141,9 @@ public class EditionPatternPreviewShapeGR extends ShapeGraphicalRepresentation<S
 	public void notifyObservers(Object arg) {
 		super.notifyObservers(arg);
 		if (arg instanceof FGENotification && ((FGENotification) arg).isModelNotification() && getDrawing() != null
-				&& !getDrawing().ignoreNotifications() && getPatternRole() != null)
+				&& !getDrawing().ignoreNotifications() && getPatternRole() != null) {
 			getPatternRole().setChanged();
+		}
 	}
 
 }

@@ -122,8 +122,9 @@ public class ExternalWSService extends WSService implements FlexoObserver, Inspe
 
 	@Override
 	public void delete() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("delete: externalWSGroup " + getName());
+		}
 		Vector processesToDelete = new Vector();
 		processesToDelete.addAll(getWSPortTypes());
 		for (Enumeration en = processesToDelete.elements(); en.hasMoreElements();) {
@@ -135,8 +136,9 @@ public class ExternalWSService extends WSService implements FlexoObserver, Inspe
 
 			// in some case, the FlexoProcess might have been deleted.
 			// so we check if it is not the case.
-			if (next.getFlexoProcess() != null)
+			if (next.getFlexoProcess() != null) {
 				next.getFlexoProcess().delete();
+			}
 			next.delete();
 		}
 

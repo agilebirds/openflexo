@@ -30,12 +30,6 @@ import javax.swing.Icon;
 import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.icon.IconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -51,6 +45,11 @@ import org.openflexo.foundation.param.CheckboxListParameter;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.wkf.node.ActionNode;
+import org.openflexo.icon.IconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class IEDeleteInitializer extends ActionInitializer {
 
@@ -71,29 +70,34 @@ public class IEDeleteInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, IEDelete action) {
 				boolean doIt = false;
-				if (action.getFocusedObject() == null)
+				if (action.getFocusedObject() == null) {
 					return false;
+				}
 				Vector<ComponentDefinition> components = new Vector<ComponentDefinition>();
 				Vector<FlexoComponentFolder> folders = new Vector<FlexoComponentFolder>();
 				Vector<FlexoModelObject> v = action.getGlobalSelectionAndFocusedObject();
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("IE Delete with " + v);
+				}
 
 				Iterator<FlexoModelObject> i = v.iterator();
 				while (i.hasNext()) {
 					FlexoModelObject object = i.next();
 					if (object instanceof ComponentDefinition) {
-						if (!components.contains(object))
+						if (!components.contains(object)) {
 							components.add((ComponentDefinition) object);
-						else
+						} else {
 							i.remove();
+						}
 					} else if (object instanceof IEWOComponent) {
-						if (!components.contains(((IEWOComponent) object).getComponentDefinition()))
+						if (!components.contains(((IEWOComponent) object).getComponentDefinition())) {
 							components.add(((IEWOComponent) object).getComponentDefinition());
-						else
+						} else {
 							i.remove();
-					} else if (object instanceof FlexoComponentFolder)
+						}
+					} else if (object instanceof FlexoComponentFolder) {
 						folders.add((FlexoComponentFolder) object);
+					}
 				}
 
 				if (components.size() > 0) {
@@ -103,8 +107,9 @@ public class IEDeleteInitializer extends ActionInitializer {
 						return false;
 					} else {
 						ComponentDefinition componentToDelete = components.firstElement();
-						if (componentToDelete == null)
+						if (componentToDelete == null) {
 							return false;
+						}
 						String warnings = componentToDelete.requestDeletion();
 						if (warnings == null) {
 							doIt = FlexoController.confirmWithWarning(FlexoLocalization
@@ -127,8 +132,9 @@ public class IEDeleteInitializer extends ActionInitializer {
 						}
 					}
 				}
-				if (!doIt)
+				if (!doIt) {
 					doIt = FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_delete_those_objects"));
+				}
 				if (doIt) {
 					HashSet<IEObject> visited = new HashSet<IEObject>();
 					Vector<FlexoModelObject> objects = action.getGlobalSelectionAndFocusedObject();

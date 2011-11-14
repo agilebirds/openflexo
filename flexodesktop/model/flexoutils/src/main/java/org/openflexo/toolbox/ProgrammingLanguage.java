@@ -24,10 +24,12 @@ public enum ProgrammingLanguage {
 
 	@Override
 	public String toString() {
-		if (this == JAVA)
+		if (this == JAVA) {
 			return "Java";
-		if (this == CSHARP)
+		}
+		if (this == CSHARP) {
 			return "C#";
+		}
 		return super.toString();
 	}
 }

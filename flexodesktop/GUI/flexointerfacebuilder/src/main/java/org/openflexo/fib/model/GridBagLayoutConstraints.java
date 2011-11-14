@@ -206,10 +206,11 @@ public class GridBagLayoutConstraints extends ComponentConstraints {
 	}
 
 	public void setGridXRelative(boolean flag) {
-		if (flag)
+		if (flag) {
 			setGridX(GridBagConstraints.RELATIVE);
-		else
+		} else {
 			setGridX(0);
+		}
 	}
 
 	public int getGridY() {
@@ -225,10 +226,11 @@ public class GridBagLayoutConstraints extends ComponentConstraints {
 	}
 
 	public void setGridYRelative(boolean flag) {
-		if (flag)
+		if (flag) {
 			setGridY(GridBagConstraints.RELATIVE);
-		else
+		} else {
 			setGridY(0);
+		}
 	}
 
 	private static final String GRID_WIDTH = "gridWidth";
@@ -247,10 +249,11 @@ public class GridBagLayoutConstraints extends ComponentConstraints {
 	}
 
 	public void setGridWidthRelative(boolean flag) {
-		if (flag)
+		if (flag) {
 			setGridWidth(GridBagConstraints.RELATIVE);
-		else
+		} else {
 			setGridWidth(1);
+		}
 	}
 
 	public boolean getGridWidthRemainder() {
@@ -258,10 +261,11 @@ public class GridBagLayoutConstraints extends ComponentConstraints {
 	}
 
 	public void setGridWidthRemainder(boolean flag) {
-		if (flag)
+		if (flag) {
 			setGridWidth(GridBagConstraints.REMAINDER);
-		else
+		} else {
 			setGridWidth(1);
+		}
 	}
 
 	public int getGridHeight() {
@@ -277,10 +281,11 @@ public class GridBagLayoutConstraints extends ComponentConstraints {
 	}
 
 	public void setGridHeightRelative(boolean flag) {
-		if (flag)
+		if (flag) {
 			setGridHeight(GridBagConstraints.RELATIVE);
-		else
+		} else {
 			setGridHeight(1);
+		}
 	}
 
 	public boolean getGridHeightRemainder() {
@@ -288,10 +293,11 @@ public class GridBagLayoutConstraints extends ComponentConstraints {
 	}
 
 	public void setGridHeightRemainder(boolean flag) {
-		if (flag)
+		if (flag) {
 			setGridHeight(GridBagConstraints.REMAINDER);
-		else
+		} else {
 			setGridHeight(1);
+		}
 	}
 
 	private static final String WEIGHT_X = "weightX";

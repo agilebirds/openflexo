@@ -62,29 +62,34 @@ public class GeneratorUtils {
 	 * @param stringToConvert
 	 * @return
 	 */
+	@Deprecated
 	public static String convertStringToJavaString(String stringToConvert) {
 		return ToolBox.convertStringToJavaString(stringToConvert);
 
 	}
 
 	public static String beforeContentHtml(String html) {
-		if (html == null || html.equals(""))
+		if (html == null || html.equals("")) {
 			return "";
+		}
 		int tagIndex = html.indexOf(CONTENT_TAG);
-		if (tagIndex != -1)
+		if (tagIndex != -1) {
 			return html.substring(0, tagIndex);
-		else
+		} else {
 			return html;
+		}
 	}
 
 	public static String afterContentHtml(String html) {
-		if (html == null || html.equals(""))
+		if (html == null || html.equals("")) {
 			return "";
+		}
 		int tagIndex = html.indexOf(CONTENT_TAG);
-		if (tagIndex != -1)
+		if (tagIndex != -1) {
 			return html.substring(tagIndex + CONTENT_TAG.length());
-		else
+		} else {
 			return "";
+		}
 	}
 
 	/**
@@ -92,13 +97,15 @@ public class GeneratorUtils {
 	 * @param name
 	 * @return a java name ( starts with a minuscule, and no blanks, dot,..., convert accentuated characters)
 	 */
+	@Deprecated
 	public static String getJavaName(String name) {
 		return ToolBox.getJavaName(name);
 	}
 
 	public static String getWodValueName(String s) {
-		if (s == null)
+		if (s == null) {
 			return "";
+		}
 		Matcher m = BAD_CHARS_IN_WOD_VALUE_PATTERN.matcher(s);
 		StringBuffer sb = new StringBuffer();
 		while (m.find()) {
@@ -115,8 +122,9 @@ public class GeneratorUtils {
 	 * @return a String to use in a javascript
 	 */
 	public static String getJavascriptComment(String comment) {
-		if (comment == null)
+		if (comment == null) {
 			return null;
+		}
 		return ToolBox.replaceStringByStringInString(
 				"\r",
 				" ",
@@ -125,15 +133,17 @@ public class GeneratorUtils {
 	}
 
 	public static String getJavascriptComment2(String comment) {
-		if (comment == null)
+		if (comment == null) {
 			return null;
+		}
 		return ToolBox.replaceStringByStringInString("\r", " ",
 				ToolBox.replaceStringByStringInString("\n", " ", ToolBox.replaceStringByStringInString("\"", " ", comment)));
 	}
 
 	public static String evaluateConditions(String value, Map replacement) {
-		if (value == null)
+		if (value == null) {
 			return null;
+		}
 		String condBeginString = "<" + GEN_IF + "(";
 		int condBegin = value.indexOf(condBeginString);
 		if (condBegin != -1) {
@@ -157,8 +167,9 @@ public class GeneratorUtils {
 				}
 
 				boolean orCondition = conditionValue != null && !conditionValue.toString().equals("");
-				if (negate)
+				if (negate) {
 					orCondition = !orCondition;
+				}
 
 				if (orCondition) {
 					condition = true;
@@ -171,14 +182,15 @@ public class GeneratorUtils {
 
 			// 1. before condition
 			// New line before <GEN_IF is removed
-			if (before.endsWith("\n\r"))
+			if (before.endsWith("\n\r")) {
 				before = before.substring(0, before.length() - 2);
-			else if (before.endsWith("\r\n"))
+			} else if (before.endsWith("\r\n")) {
 				before = before.substring(0, before.length() - 2);
-			else if (before.endsWith("\r"))
+			} else if (before.endsWith("\r")) {
 				before = before.substring(0, before.length() - 1);
-			else if (before.endsWith("\n"))
+			} else if (before.endsWith("\n")) {
 				before = before.substring(0, before.length() - 1);
+			}
 
 			clean.append(before);
 
@@ -186,14 +198,15 @@ public class GeneratorUtils {
 			if (condition) {
 				String content = value.substring(contentBegin, contentEnd);
 				// New line before </GEN_IF is removed
-				if (content.endsWith("\n\r"))
+				if (content.endsWith("\n\r")) {
 					content = content.substring(0, content.length() - 2);
-				else if (content.endsWith("\r\n"))
+				} else if (content.endsWith("\r\n")) {
 					content = content.substring(0, content.length() - 2);
-				else if (content.endsWith("\r"))
+				} else if (content.endsWith("\r")) {
 					content = content.substring(0, content.length() - 1);
-				else if (content.endsWith("\n"))
+				} else if (content.endsWith("\n")) {
 					content = content.substring(0, content.length() - 1);
+				}
 
 				clean.append(content);
 			}
@@ -219,16 +232,18 @@ public class GeneratorUtils {
 					resp = string.substring(begin + beginTag.length(), end);
 
 					String before = string.substring(0, begin);
-					if (before.endsWith("\n\r") || before.endsWith("\r\n"))
+					if (before.endsWith("\n\r") || before.endsWith("\r\n")) {
 						before = before.substring(0, before.length() - 2);
-					else if (before.endsWith("\r") || before.endsWith("\n"))
+					} else if (before.endsWith("\r") || before.endsWith("\n")) {
 						before = before.substring(0, before.length() - 1);
+					}
 
 					String after = string.substring(end + endTag.length());
-					if (after.endsWith("\n\r") || after.endsWith("\r\n"))
+					if (after.endsWith("\n\r") || after.endsWith("\r\n")) {
 						after = after.substring(0, after.length() - 2);
-					else if (after.endsWith("\r") || after.endsWith("\n"))
+					} else if (after.endsWith("\r") || after.endsWith("\n")) {
 						after = after.substring(0, after.length() - 1);
+					}
 
 					string = before + after;
 				}
@@ -250,16 +265,17 @@ public class GeneratorUtils {
 			int endOfLineN = template.indexOf("\n", i);
 			int endOfLineR = template.indexOf("\r", i);
 			int endOfLine;
-			if (endOfLineN == -1 && endOfLineR == -1)
+			if (endOfLineN == -1 && endOfLineR == -1) {
 				endOfLine = template.length();
-			else if (endOfLineN == -1 && endOfLineR != -1)
+			} else if (endOfLineN == -1 && endOfLineR != -1) {
 				endOfLine = endOfLineR;
-			else if (endOfLineN != -1 && endOfLineR == -1)
+			} else if (endOfLineN != -1 && endOfLineR == -1) {
 				endOfLine = endOfLineN;
-			else {
+			} else {
 				endOfLine = Math.min(endOfLineR, endOfLineN);
-				if (endOfLine + 1 == Math.max(endOfLineR, endOfLineN))
+				if (endOfLine + 1 == Math.max(endOfLineR, endOfLineN)) {
 					endOfLine = endOfLine + 1;
+				}
 			}
 			StringBuffer buf = new StringBuffer(template.length());
 			buf.append(template.substring(0, i)).append(template.substring(endOfLine + 1));
@@ -291,10 +307,11 @@ public class GeneratorUtils {
 			File dest = new File(dir.getAbsolutePath() + File.separator + getFileName(fileName, fileExtention));
 			dest.createNewFile();
 			byte[] b;
-			if (fileCode != null)
+			if (fileCode != null) {
 				b = fileCode.getBytes(OUTPUT_FILES_ENCODING);
-			else
+			} else {
 				b = new byte[0];
+			}
 			fos = new FileOutputStream(dest);
 			fos.write(b);
 			return dest;
@@ -302,20 +319,22 @@ public class GeneratorUtils {
 			e.printStackTrace();
 			return null;
 		} finally {
-			if (fos != null)
+			if (fos != null) {
 				try {
 					fos.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+			}
 		}
 	}
 
 	public static String getFileName(String fileName, String fileExtention) {
-		if (fileExtention != null)
+		if (fileExtention != null) {
 			return fileName + "." + fileExtention;
-		else
+		} else {
 			return fileName;
+		}
 	}
 
 	public static String defaultWOO() {
@@ -327,21 +346,28 @@ public class GeneratorUtils {
 			String apiCode, String htmlCode, String wodCode, String wooCode) {
 		woComponentDirectory.mkdirs();
 		File woDir = null;
-		if (htmlCode != null || wodCode != null || wooCode != null)
+		if (htmlCode != null || wodCode != null || wooCode != null) {
 			woDir = new File(woComponentDirectory, woComponentName + ".wo");
-		if (woDir != null && !woDir.exists())
+		}
+		if (woDir != null && !woDir.exists()) {
 			woDir.mkdir();
+		}
 		try {
-			if (javaCode != null)
+			if (javaCode != null) {
 				saveToFile(woComponentName, javaCode, javaSrcDirectory == null ? woComponentDirectory : javaSrcDirectory, "java");
-			if (apiCode != null)
+			}
+			if (apiCode != null) {
 				saveToFile(woComponentName, apiCode, woComponentDirectory, "api");
-			if (htmlCode != null)
+			}
+			if (htmlCode != null) {
 				saveToFile(woComponentName, htmlCode, woDir, "html");
-			if (wodCode != null)
+			}
+			if (wodCode != null) {
 				saveToFile(woComponentName, wodCode, woDir, "wod");
-			if (wooCode != null)
+			}
+			if (wooCode != null) {
 				saveToFile(woComponentName, wooCode, woDir, "woo");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -380,9 +406,10 @@ public class GeneratorUtils {
 	public static String capitalize(String str) {
 		if (isAlpha(str.charAt(0))) {
 			return str.substring(0, 1).toUpperCase() + str.substring(1);
-		} else
+		} else {
 			// if starts with '_' for example, capitalize 2nd character
 			return str.charAt(0) + str.substring(1, 2).toUpperCase() + str.substring(2);
+		}
 	}
 
 	/**
@@ -396,8 +423,9 @@ public class GeneratorUtils {
 	}
 
 	public static String dateString(Date timestamp) {
-		if (timestamp == null)
+		if (timestamp == null) {
 			return null;
+		}
 
 		GregorianCalendar cal = new GregorianCalendar();
 		cal.setTime(timestamp);
@@ -510,8 +538,9 @@ public class GeneratorUtils {
 		}
 		StringBuffer newString = new StringBuffer();
 		StringTokenizer tokens = new StringTokenizer(new String(newArray), new String(new char[] { defaultChar }));
-		if (tokens.hasMoreTokens())
+		if (tokens.hasMoreTokens()) {
 			newString.append(tokens.nextToken());
+		}
 		while (tokens.hasMoreTokens()) {
 			newString.append(new String(new char[] { defaultChar })).append(tokens.nextToken());
 		}

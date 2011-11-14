@@ -69,8 +69,9 @@ public class BindingVariable extends FlexoModelObject implements Typed {
 
 	@Override
 	public XMLStorageResourceData getXMLResourceData() {
-		if (_container != null)
+		if (_container != null) {
 			return ((FlexoModelObject) _container).getXMLResourceData();
+		}
 		return null;
 	}
 

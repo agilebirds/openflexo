@@ -24,10 +24,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.icon.WSEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-
 import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.components.tabular.model.IconColumn;
 import org.openflexo.components.tabular.model.StringColumn;
@@ -36,6 +32,9 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.ws.WSRepository;
 import org.openflexo.foundation.ws.WSRepositoryFolder;
 import org.openflexo.foundation.ws.WSService;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.icon.WSEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Please comment this class
@@ -99,8 +98,9 @@ public class WSERepositoryTableModel extends AbstractModel<WSService, DMReposito
 	}
 
 	public WSRepositoryFolder getWSDLRepositoryFolder() {
-		if (getWSService() != null)
+		if (getWSService() != null) {
 			return getWSService().getWSRepositoryFolder();
+		}
 		return null;
 	}
 

@@ -74,8 +74,9 @@ public final class InternalMessageInEdge extends InternalMessageEdge<AbstractInP
 			setStartNode(startPort);
 			setEndNode(endPre);
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Inconsistent data while building InternalMessageInEdge !");
+			}
 			throw new InvalidEdgeException(this);
 		}
 		if (!isEdgeValid()) {
@@ -116,8 +117,9 @@ public final class InternalMessageInEdge extends InternalMessageEdge<AbstractInP
 		// FlexoNode of any level located in the petri graph of the sub-process where
 		// the port registery is registered
 
-		if (getStartNode() == null || getEndNode() == null || getEndNode().getNode() == null)
+		if (getStartNode() == null || getEndNode() == null || getEndNode().getNode() == null) {
 			return false;
+		}
 
 		return (getEndNode().getNode().getProcess() == getPortRegistery().getProcess());
 	}
@@ -153,8 +155,9 @@ public final class InternalMessageInEdge extends InternalMessageEdge<AbstractInP
 
 	@Override
 	public MessageDefinition getInputMessageDefinition() {
-		if (getStartNode() != null)
+		if (getStartNode() != null) {
 			return getStartNode().getInputMessageDefinition();
+		}
 		return null;
 	}
 

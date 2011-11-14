@@ -117,10 +117,11 @@ public abstract class DMRepository extends DMObject {
 	 */
 	@Override
 	public String getInspectorName() {
-		if (isReadOnly())
+		if (isReadOnly()) {
 			return Inspectors.DM.DM_RO_REPOSITORY_INSPECTOR;
-		else
+		} else {
 			return Inspectors.DM.DM_REPOSITORY_INSPECTOR;
+		}
 	}
 
 	/**
@@ -277,20 +278,23 @@ public abstract class DMRepository extends DMObject {
 
 	public void registerEntity(DMEntity entity) {
 		if ((entity.getEntityClassName() == null) || (entity.getEntityClassName().trim().equals(""))) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Registering entity " + entity.getFullyQualifiedName()
 						+ ": className seems to be not correctely set. Doing it anyway.");
+			}
 		}
 		entity.setRepository(this);
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Register Entity " + entity.getFullyQualifiedName());
+		}
 		if (entities.get(entity.getFullyQualifiedName()) == null) {
 			setEntityForKey(entity, entity.getFullyQualifiedName());
 			setChanged();
 			notifyObservers(new EntityRegistered(entity));
 		} else if (entity != entities.get(entity.getFullyQualifiedName())) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Trying to redefine entity " + entity.getFullyQualifiedName() + ": operation not allowed !");
+			}
 		}
 	}
 
@@ -372,8 +376,9 @@ public abstract class DMRepository extends DMObject {
 
 	public boolean hasDiagrams() {
 		for (ERDiagram diagram : getDMModel().getDiagrams()) {
-			if (diagram.getRepository() == this)
+			if (diagram.getRepository() == this) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -426,16 +431,19 @@ public abstract class DMRepository extends DMObject {
 		 */
 		@Override
 		public int compare(DMPackage o1, DMPackage o2) {
-			if (o1.isDefaultPackage())
+			if (o1.isDefaultPackage()) {
 				return -1;
-			if (o2.isDefaultPackage())
+			}
+			if (o2.isDefaultPackage()) {
 				return 1;
+			}
 			String s1 = o1.getName();
 			String s2 = o2.getName();
-			if ((s1 != null) && (s2 != null))
+			if ((s1 != null) && (s2 != null)) {
 				return Collator.getInstance().compare(s1, s2);
-			else
+			} else {
 				return 0;
+			}
 		}
 
 	}

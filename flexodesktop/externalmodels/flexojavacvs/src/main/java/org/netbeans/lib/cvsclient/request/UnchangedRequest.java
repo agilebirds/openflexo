@@ -61,8 +61,9 @@ public class UnchangedRequest extends Request {
 	 */
 	@Override
 	public String getRequestString() throws UnconfiguredRequestException {
-		if (filename == null)
+		if (filename == null) {
 			throw new UnconfiguredRequestException("Filename must be set");
+		}
 		return "Unchanged " + filename + "\n"; // NOI18N
 	}
 

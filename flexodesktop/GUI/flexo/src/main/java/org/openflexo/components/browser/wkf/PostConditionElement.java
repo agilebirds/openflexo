@@ -22,17 +22,16 @@ package org.openflexo.components.browser.wkf;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-import org.openflexo.icon.IconFactory;
-import org.openflexo.icon.IconLibrary;
-import org.openflexo.icon.IconMarker;
-import org.openflexo.localization.FlexoLocalization;
-
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.wkf.edge.FlexoPostCondition;
 import org.openflexo.foundation.wkf.edge.MessageEdge;
 import org.openflexo.foundation.wkf.node.IFOperator;
+import org.openflexo.icon.IconFactory;
+import org.openflexo.icon.IconLibrary;
+import org.openflexo.icon.IconMarker;
+import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Browser element representing a FlexoPostCondition
@@ -53,10 +52,11 @@ public class PostConditionElement extends BrowserElement {
 	public Icon getIcon() {
 		Icon icon = super.getIcon();
 		if (icon instanceof ImageIcon) {
-			if (isPositive())
+			if (isPositive()) {
 				return IconFactory.getImageIcon((ImageIcon) icon, POSITIVE_MARKER);
-			else if (isNegative())
+			} else if (isNegative()) {
 				return IconFactory.getImageIcon((ImageIcon) icon, NEGATIVE_MARKER);
+			}
 		}
 		return icon;
 	}
@@ -76,8 +76,9 @@ public class PostConditionElement extends BrowserElement {
 			if (messageEdge.getInputMessage() != null) {
 				addToChilds(messageEdge.getInputMessage());
 			}
-			if (messageEdge.getOutputMessage() != null)
+			if (messageEdge.getOutputMessage() != null) {
 				addToChilds(messageEdge.getOutputMessage());
+			}
 		}
 	}
 

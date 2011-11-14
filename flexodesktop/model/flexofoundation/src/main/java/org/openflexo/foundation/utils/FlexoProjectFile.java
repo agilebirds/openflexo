@@ -80,9 +80,10 @@ public class FlexoProjectFile extends FlexoObject implements StringConvertable, 
 			temp = temp.getParentFile();
 		}
 		if (temp.getParentFile() == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("File " + absoluteFile.getAbsolutePath() + " is not contained in project " + aProjectDirectory);
-			// TODO: try to look into external repository
+				// TODO: try to look into external repository
+			}
 		}
 	}
 
@@ -117,8 +118,9 @@ public class FlexoProjectFile extends FlexoObject implements StringConvertable, 
 	private ProjectExternalRepository _externalRep;
 
 	public ProjectExternalRepository getExternalRepository() {
-		if (_externalRep != null)
+		if (_externalRep != null) {
 			return _externalRep;
+		}
 		if ((getProject() != null) && (repositoryName != null)) {
 			return _externalRep = getProject().getExternalRepositoryWithKey(repositoryName);
 		}
@@ -144,24 +146,27 @@ public class FlexoProjectFile extends FlexoObject implements StringConvertable, 
 	}
 
 	public File getFile() {
-		if (_cachedFile != null)
+		if (_cachedFile != null) {
 			return _cachedFile;
+		}
 		if (project != null) {
 			ProjectExternalRepository rep = getExternalRepository();
 			if (rep != null) {
-				if (rep.getDirectory() != null)
+				if (rep.getDirectory() != null) {
 					return _cachedFile = new File(rep.getDirectory(), relativePath);
-				else {
-					if (logger.isLoggable(Level.FINE))
+				} else {
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("No directory defined for external repository");
+					}
 					return null;
 				}
 			} else {
 				return _cachedFile = new File(project.getProjectDirectory(), relativePath);
 			}
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Project was not set for this FlexoProjectFile!");
+			}
 			return null;
 		}
 	}
@@ -186,14 +191,17 @@ public class FlexoProjectFile extends FlexoObject implements StringConvertable, 
 				temp = temp.getParentFile();
 			}
 			if (temp.getParentFile() == null) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("File " + aFile.getAbsolutePath() + " is not contained in project " + project.getProjectDirectory()
 							+ " or repository (target is: " + target.getAbsolutePath() + ")");
-			} else
+				}
+			} else {
 				relativePath = newRelativePath;
+			}
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Project was not set for this FlexoProjectFile!");
+			}
 		}
 	}
 

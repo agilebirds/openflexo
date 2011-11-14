@@ -28,9 +28,9 @@ import org.openflexo.components.browser.BrowserConfiguration;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementFactory;
 import org.openflexo.components.browser.BrowserElementType;
+import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ConfigurableProjectBrowser;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.drm.DRMObject;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemFolder;
@@ -272,8 +272,9 @@ public class DREBrowser extends ConfigurableProjectBrowser {
 
 				@Override
 				public void update(FlexoObservable observable, DataModification dataModification) {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine(getClass().getName() + " receive DataModification " + dataModification.getClass().getName());
+					}
 					if ((_browser != null) && (dataModification instanceof DRMDataModification)) {
 						refreshWhenPossible();
 					} else {
@@ -322,8 +323,9 @@ public class DREBrowser extends ConfigurableProjectBrowser {
 				public String getName() {
 					if (getProjectBrowser() instanceof DREBrowser) {
 						String title = getDocItem().getTitle(((DREBrowser) getProjectBrowser()).getActiveLanguage());
-						if (title != null && !title.trim().equals(""))
+						if (title != null && !title.trim().equals("")) {
 							return getDocItem().getTitle(((DREBrowser) getProjectBrowser()).getActiveLanguage());
+						}
 					}
 					return "<" + getDocItem().getIdentifier() + ">";
 				}
@@ -350,9 +352,10 @@ public class DREBrowser extends ConfigurableProjectBrowser {
 	}
 
 	public Language getActiveLanguage() {
-		if (_availableLanguages != null)
+		if (_availableLanguages != null) {
 			return _availableLanguages.getValue();
-		else
+		} else {
 			return DocResourceManager.instance().getLanguage(GeneralPreferences.getLanguage());
+		}
 	}
 }

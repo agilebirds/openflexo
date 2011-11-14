@@ -61,8 +61,9 @@ public class ProjectInstanceTree {
 			Enumeration<InstanceTree> en = instances.elements();
 			while (en.hasMoreElements()) {
 				t = en.nextElement();
-				if (!reply.contains(t.getOperationComponentInstance()))
+				if (!reply.contains(t.getOperationComponentInstance())) {
 					reply.add(t.getOperationComponentInstance());
+				}
 			}
 		}
 

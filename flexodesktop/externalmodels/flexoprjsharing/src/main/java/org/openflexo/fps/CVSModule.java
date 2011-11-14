@@ -57,8 +57,9 @@ public class CVSModule extends FPSObject implements CVSExplorable {
 
 	protected CVSModule(String moduleName, CVSExplorable parent) {
 		super();
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Created module " + this + " (" + moduleName + ") parent=" + parent);
+		}
 		_moduleName = moduleName;
 		_parent = parent;
 		_modules = new Vector<CVSModule>();
@@ -75,10 +76,11 @@ public class CVSModule extends FPSObject implements CVSExplorable {
 	}
 
 	public String getFullQualifiedModuleName() {
-		if (getParent() instanceof CVSRepository)
+		if (getParent() instanceof CVSRepository) {
 			return getModuleName();
-		else if (getParent() instanceof CVSModule)
+		} else if (getParent() instanceof CVSModule) {
 			return ((CVSModule) getParent()).getFullQualifiedModuleName() + '/' + getModuleName();
+		}
 		return null;
 	}
 
@@ -98,10 +100,11 @@ public class CVSModule extends FPSObject implements CVSExplorable {
 
 	@Override
 	public CVSRepository getCVSRepository() {
-		if (_parent instanceof CVSRepository)
+		if (_parent instanceof CVSRepository) {
 			return (CVSRepository) _parent;
-		else
+		} else {
 			return _parent.getCVSRepository();
+		}
 	}
 
 	@Override
@@ -145,8 +148,9 @@ public class CVSModule extends FPSObject implements CVSExplorable {
 			return parentModule.getModuleNamed(name.substring(name.lastIndexOf('/') + 1));
 		}
 		for (CVSModule module : _modules) {
-			if (module.getModuleName().equals(name))
+			if (module.getModuleName().equals(name)) {
 				return module;
+			}
 		}
 		// Not found, create it
 		CVSModule returned;
@@ -241,8 +245,9 @@ public class CVSModule extends FPSObject implements CVSExplorable {
 						CVSModule existingModule = null;
 						String foundModule = fullQualifiedModule.substring(fullQualifiedModule.lastIndexOf('/') + 1);
 						for (CVSModule m : _knownModules) {
-							if (m.getModuleName().equals(foundModule))
+							if (m.getModuleName().equals(foundModule)) {
 								existingModule = m;
+							}
 						}
 						if (existingModule == null) {
 							addToCVSModules(new CVSModule(foundModule, CVSModule.this));
@@ -262,8 +267,9 @@ public class CVSModule extends FPSObject implements CVSExplorable {
 		 */
 		@Override
 		public void fileUpdated(FileUpdatedEvent e) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("fileUpdated() " + e.getFilePath());
+			}
 		}
 
 		/**
@@ -271,23 +277,27 @@ public class CVSModule extends FPSObject implements CVSExplorable {
 		 */
 		@Override
 		public void fileInfoGenerated(FileInfoEvent e) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("fileInfoGenerated()  " + e.getInfoContainer().getClass().getSimpleName() + " " + e.getInfoContainer());
+			}
 			if (e.getInfoContainer() instanceof DefaultFileInfoContainer) {
 				DefaultFileInfoContainer info = (DefaultFileInfoContainer) e.getInfoContainer();
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Added file : " + info.getFile());
+				}
 				CVSFile existingFile = null;
 				String foundFile = info.getFile().getName();
 				for (CVSFile f : _knownFiles) {
-					if (f.getFileName().equals(foundFile))
+					if (f.getFileName().equals(foundFile)) {
 						existingFile = f;
+					}
 				}
 				Entry entry = null;
 				try {
 					entry = adminHandler.getEntry(info.getFile());
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Entry for " + info.getFile() + ": " + entry);
+					}
 				} catch (IOException e1) {
 					logger.warning("Could not retrieve entry for " + info.getFile());
 				}
@@ -311,8 +321,9 @@ public class CVSModule extends FPSObject implements CVSExplorable {
 
 	private void _retrieveLocalFiles(ModuleRetriever retriever) throws IOException, CommandAbortedException, CommandException,
 			AuthenticationException {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("_retrieveLocalFiles() on directory " + getParent().getRepositoryExploringDirectory());
+		}
 
 		// Run "cvs checkout -l" command on parent directory
 		CheckoutCommand checkout = new CheckoutCommand();
@@ -348,8 +359,9 @@ public class CVSModule extends FPSObject implements CVSExplorable {
 
 	private void _retrieveLocalDirectories(ModuleRetriever retriever) throws IOException, CommandAbortedException, CommandException,
 			AuthenticationException {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("_retrieveLocalDirectories() on directory " + getParent().getRepositoryExploringDirectory());
+		}
 
 		// Run "cvs -n update -d" command on parent directory
 		UpdateCommand updt = new UpdateCommand();

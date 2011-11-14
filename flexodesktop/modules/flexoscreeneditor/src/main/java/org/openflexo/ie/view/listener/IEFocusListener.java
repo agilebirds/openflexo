@@ -44,14 +44,16 @@ public class IEFocusListener implements FocusListener {
 
 	@Override
 	public void focusGained(FocusEvent event) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("focusGained for component" + event.getComponent());
+		}
 	}
 
 	@Override
 	public void focusLost(FocusEvent event) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("focusLost for component" + event.getComponent());
+		}
 	}
 
 }

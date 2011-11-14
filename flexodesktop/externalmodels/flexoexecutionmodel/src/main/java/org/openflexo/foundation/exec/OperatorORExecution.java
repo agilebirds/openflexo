@@ -64,8 +64,9 @@ public class OperatorORExecution extends OperatorNodeExecution {
 
 		SEND_TOKENS_TO_OUTPUTS = makeSequentialControlGraph(SEND_MESSAGES, SEND_TOKENS);
 
-		if (SEND_TOKENS_TO_OUTPUTS instanceof Nop && !SEND_TOKENS_TO_OUTPUTS.hasComment())
+		if (SEND_TOKENS_TO_OUTPUTS instanceof Nop && !SEND_TOKENS_TO_OUTPUTS.hasComment()) {
 			SEND_TOKENS_TO_OUTPUTS.setInlineComment("nothing to do");
+		}
 
 		return makeSequentialControlGraph(DELETE_TOKENS, SEND_TOKENS_TO_OUTPUTS);
 

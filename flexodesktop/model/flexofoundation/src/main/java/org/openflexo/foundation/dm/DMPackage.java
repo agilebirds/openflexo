@@ -109,10 +109,11 @@ public class DMPackage extends DMObject {
 	 */
 	@Override
 	public String getInspectorName() {
-		if (getRepository() == null || getRepository().isReadOnly())
+		if (getRepository() == null || getRepository().isReadOnly()) {
 			return Inspectors.DM.DM_RO_PACKAGE_INSPECTOR;
-		else
+		} else {
 			return Inspectors.DM.DM_PACKAGE_INSPECTOR;
+		}
 	}
 
 	/**
@@ -134,8 +135,9 @@ public class DMPackage extends DMObject {
 
 	@Override
 	public String getLocalizedName() {
-		if (getName().equals(DEFAULT_PACKAGE_NAME))
+		if (getName().equals(DEFAULT_PACKAGE_NAME)) {
 			return FlexoLocalization.localizedForKey(getName());
+		}
 		return getName();
 	}
 
@@ -161,8 +163,9 @@ public class DMPackage extends DMObject {
 	@Override
 	public boolean isDeletable() {
 		for (DMEntity entity : getEntities()) {
-			if (!entity.isDeletable())
+			if (!entity.isDeletable()) {
 				return false;
+			}
 		}
 
 		return ((getRepository() != null) && (!getRepository().isReadOnly()));
@@ -187,8 +190,9 @@ public class DMPackage extends DMObject {
 	}
 
 	public void registerEntity(DMEntity entity) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Register Entity " + entity.getFullyQualifiedName());
+		}
 		if (entities.get(entity.getFullyQualifiedName()) == null) {
 			entities.put(entity.getFullyQualifiedName(), entity);
 			entity.addObserver(this);
@@ -196,8 +200,9 @@ public class DMPackage extends DMObject {
 			setChanged();
 			notifyObservers(new EntityRegistered(entity));
 		} else if (entity != entities.get(entity.getFullyQualifiedName())) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Trying to redefine entity " + entity.getFullyQualifiedName() + ": operation not allowed !");
+			}
 		}
 	}
 
@@ -235,8 +240,9 @@ public class DMPackage extends DMObject {
 			DMEntity next = (DMEntity) en.nextElement();
 			next.delete();
 		}
-		if (getRepository() != null)
+		if (getRepository() != null) {
 			getRepository().deletePackage(this);
+		}
 		name = null;
 		repository = null;
 		entities.clear();
@@ -246,10 +252,12 @@ public class DMPackage extends DMObject {
 	}
 
 	public String getRelativePath() {
-		if (getRepository() == null)
+		if (getRepository() == null) {
 			return "";
-		if (this == getRepository().getDefaultPackage())
+		}
+		if (this == getRepository().getDefaultPackage()) {
 			return "";
+		}
 		StringBuffer sb = new StringBuffer();
 		StringTokenizer st = new StringTokenizer(getName(), ".");
 		boolean isFirst = true;
@@ -315,10 +323,11 @@ public class DMPackage extends DMObject {
 		public int compare(DMEntity o1, DMEntity o2) {
 			String s1 = o1.getName();
 			String s2 = o2.getName();
-			if ((s1 != null) && (s2 != null))
+			if ((s1 != null) && (s2 != null)) {
 				return Collator.getInstance().compare(s1, s2);
-			else
+			} else {
 				return 0;
+			}
 		}
 
 	}
@@ -363,8 +372,9 @@ public class DMPackage extends DMObject {
 	}
 
 	public String getJavaStringRepresentation() {
-		if (isDefaultPackage())
+		if (isDefaultPackage()) {
 			return "";
+		}
 		return getName();
 	}
 }

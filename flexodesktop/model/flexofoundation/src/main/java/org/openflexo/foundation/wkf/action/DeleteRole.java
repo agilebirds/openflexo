@@ -63,21 +63,25 @@ public class DeleteRole extends FlexoAction<DeleteRole, Role, WorkflowModelObjec
 	@Override
 	protected void doAction(Object context) {
 		logger.info("Delete role(s)");
-		for (Role r : getRoleToDelete())
-			if (!r.isDefaultRole())
+		for (Role r : getRoleToDelete()) {
+			if (!r.isDefaultRole()) {
 				r.delete();
+			}
+		}
 	}
 
 	public Vector<Role> getRoleToDelete() {
 		Vector<Role> roleToDelete = new Vector<Role>();
 		if (getGlobalSelection() != null) {
 			for (FlexoModelObject o : getGlobalSelection()) {
-				if (o instanceof Role)
+				if (o instanceof Role) {
 					roleToDelete.add((Role) o);
+				}
 			}
 		}
-		if (!roleToDelete.contains(getFocusedObject()))
+		if (!roleToDelete.contains(getFocusedObject())) {
 			roleToDelete.add(getFocusedObject());
+		}
 		return roleToDelete;
 	}
 

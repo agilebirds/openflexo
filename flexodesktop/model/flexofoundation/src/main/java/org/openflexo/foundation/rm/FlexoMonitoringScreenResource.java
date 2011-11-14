@@ -68,8 +68,9 @@ public class FlexoMonitoringScreenResource extends FlexoComponentResource implem
 	@Override
 	public IEWOComponent performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler)
 			throws LoadXMLResourceException, FlexoFileNotFoundException, ProjectLoadingCancelledException, MalformedXMLException {
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Loading component " + getName());
+		}
 		IEMonitoringScreen monitoringScreen = (IEMonitoringScreen) super.performLoadResourceData(progress, loadingHandler);
 		monitoringScreen.setProject(getProject());
 		return monitoringScreen;

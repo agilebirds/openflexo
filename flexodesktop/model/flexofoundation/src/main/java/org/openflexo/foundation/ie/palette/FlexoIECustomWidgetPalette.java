@@ -64,8 +64,9 @@ public class FlexoIECustomWidgetPalette extends FlexoIEPalette<FlexoIECustomWidg
 	@Override
 	protected void loadWidgets() {
 		File dir = getPaletteDirectory();
-		if (!dir.exists())
+		if (!dir.exists()) {
 			return;
+		}
 		File[] files = dir.listFiles(new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
@@ -78,19 +79,22 @@ public class FlexoIECustomWidgetPalette extends FlexoIEPalette<FlexoIECustomWidg
 			try {
 				props.load(new FileInputStream(file));
 			} catch (FileNotFoundException e) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Custom widget file not found " + file.getAbsolutePath());
+				}
 				continue;
 			} catch (IOException e) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not open file " + file.getAbsolutePath());
+				}
 				continue;
 			}
 			try {
 				getWidgets().add(new FlexoIECustomWidget(file.getName().substring(0, file.getName().length() - 6), props));
 			} catch (RuntimeException e) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Caught exception while loading widget: " + file.getName());
+				}
 				getProject().addToFilesToDelete(file);
 			}
 		}
@@ -104,8 +108,9 @@ public class FlexoIECustomWidgetPalette extends FlexoIEPalette<FlexoIECustomWidg
 	public void addNewWidgetToIEPaletteDirectory(IEWidget object, String widgetName, BufferedImage widgetScreenshot) {
 		IEWOComponent component = object.getWOComponent();
 		if (component == null) {
-			if (logger.isLoggable(Level.SEVERE))
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Could not export widget to palette because WOComponent is null.");
+			}
 			return;
 		}
 		try {
@@ -160,8 +165,9 @@ public class FlexoIECustomWidgetPalette extends FlexoIEPalette<FlexoIECustomWidg
 		public FlexoIECustomWidget(String name, Properties props) {
 			super(name, props);
 			String screenshot = properties.getProperty(PaletteAttribute.SCREENSHOT.getAttributeTag());
-			if (screenshot != null)
+			if (screenshot != null) {
 				screenshotFile = new File(getPaletteDirectory(), screenshot);
+			}
 		}
 
 		@Override
@@ -173,8 +179,9 @@ public class FlexoIECustomWidgetPalette extends FlexoIEPalette<FlexoIECustomWidg
 		public void deleteWidget() {
 			super.deleteWidget();
 			getWidgetFile().delete();
-			if (screenshotFile != null)
+			if (screenshotFile != null) {
 				screenshotFile.delete();
+			}
 		}
 
 		private void saveToFile() throws FileNotFoundException, IOException {
@@ -199,8 +206,9 @@ public class FlexoIECustomWidgetPalette extends FlexoIEPalette<FlexoIECustomWidg
 					Element element = (Element) sequence.next();
 					element.setName("IESequenceWidget");
 				}
-				if (hasSequenceTopComponent)
+				if (hasSequenceTopComponent) {
 					XMLUtils.saveXMLFile(document, baos);
+				}
 				if (getTargetClass() == IESequenceTopComponent.class) {
 					properties.put(PaletteAttribute.TARGET_CLASS_MODEL.getAttributeTag(), IESequenceWidget.class.getName());
 					properties.put(PaletteAttribute.IS_TOP_COMPONENT.getAttributeTag(), String.valueOf(isTopComponent));
@@ -213,8 +221,9 @@ public class FlexoIECustomWidgetPalette extends FlexoIEPalette<FlexoIECustomWidg
 				return true;
 			} catch (Exception e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 				return false;
 			}

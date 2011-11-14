@@ -67,12 +67,14 @@ public class AddFlexoProperty extends FlexoAction<AddFlexoProperty, FlexoModelOb
 	protected void doAction(Object context) throws FlexoException {
 		if (getFocusedObject() != null) {
 			createdProperty = new FlexoProperty(getFocusedObject().getProject(), getFocusedObject());
-			if (getName() != null)
+			if (getName() != null) {
 				createdProperty.setName(getName());
-			else
+			} else {
 				createdProperty.setName(getFocusedObject().getNextPropertyName());
-			if (getValue() != null)
+			}
+			if (getValue() != null) {
 				createdProperty.setValue(getValue());
+			}
 			getFocusedObject().addToCustomProperties(createdProperty, isInsertSorted());
 		}
 	}

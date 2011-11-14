@@ -29,6 +29,13 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.xml.rpc.ServiceException;
 
+import org.openflexo.components.AskParametersDialog;
+import org.openflexo.foundation.action.FlexoActionFinalizer;
+import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.imported.action.ImportRolesAction;
+import org.openflexo.foundation.param.CheckboxParameter;
+import org.openflexo.foundation.param.ParameterDefinition;
+import org.openflexo.foundation.param.ReadOnlyCheckboxParameter;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
@@ -38,14 +45,6 @@ import org.openflexo.wkf.controller.WKFController;
 import org.openflexo.ws.client.PPMWebService.PPMRole;
 import org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException;
 import org.openflexo.ws.client.PPMWebService.PPMWebServiceClient;
-
-import org.openflexo.components.AskParametersDialog;
-import org.openflexo.foundation.action.FlexoActionFinalizer;
-import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.imported.action.ImportRolesAction;
-import org.openflexo.foundation.param.CheckboxParameter;
-import org.openflexo.foundation.param.ParameterDefinition;
-import org.openflexo.foundation.param.ReadOnlyCheckboxParameter;
 
 public class ImportRolesInitializer extends ActionInitializer {
 
@@ -72,8 +71,9 @@ public class ImportRolesInitializer extends ActionInitializer {
 				while (roles == null) {
 					client = getController().getWSClient(!isFirst);
 					isFirst = false;
-					if (client == null)
+					if (client == null) {
 						return false; // Cancelled
+					}
 					try {
 						roles = client.getRoles();
 					} catch (PPMWebServiceAuthentificationException e1) {
@@ -103,14 +103,16 @@ public class ImportRolesInitializer extends ActionInitializer {
 			@Override
 			public int compare(PPMRole o1, PPMRole o2) {
 				if (o1.getName() == null) {
-					if (o2.getName() == null)
+					if (o2.getName() == null) {
 						return 0;
-					else
+					} else {
 						return -1;
+					}
 				} else if (o2.getName() == null) {
 					return 1;
-				} else
+				} else {
 					return o1.getName().compareTo(o2.getName());
+				}
 			}
 		});
 		ParameterDefinition[] parameters = new ParameterDefinition[roles.length];
@@ -131,8 +133,9 @@ public class ImportRolesInitializer extends ActionInitializer {
 		if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 			Vector<PPMRole> reply = new Vector<PPMRole>();
 			for (int i = 0; i < roles.length; i++) {
-				if (parameters[i].getBooleanValue() && !(parameters[i] instanceof ReadOnlyCheckboxParameter))
+				if (parameters[i].getBooleanValue() && !(parameters[i] instanceof ReadOnlyCheckboxParameter)) {
 					reply.add(roles[i]);
+				}
 			}
 			return reply;
 		} else {

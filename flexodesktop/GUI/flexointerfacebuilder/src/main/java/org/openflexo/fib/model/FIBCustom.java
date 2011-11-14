@@ -140,8 +140,9 @@ public class FIBCustom extends FIBWidget {
 			}
 			logger.fine("defaultDataClass=" + defaultDataClass);
 		}
-		if (defaultDataClass != null)
+		if (defaultDataClass != null) {
 			return defaultDataClass;
+		}
 		return Object.class;
 	}
 
@@ -179,8 +180,9 @@ public class FIBCustom extends FIBWidget {
 
 	public FIBCustomAssignment getAssignent(String variableName) {
 		for (FIBCustomAssignment a : assignments) {
-			if (variableName != null && variableName.equals(a.getVariable().toString()))
+			if (variableName != null && variableName.equals(a.getVariable().toString())) {
 				return a;
+			}
 		}
 		return null;
 	}
@@ -213,8 +215,9 @@ public class FIBCustom extends FIBWidget {
 	private BindingModel customComponentBindingModel;
 
 	public BindingModel getCustomComponentBindingModel() {
-		if (customComponentBindingModel == null)
+		if (customComponentBindingModel == null) {
 			createCustomComponentBindingModel();
+		}
 		return customComponentBindingModel;
 	}
 
@@ -303,14 +306,16 @@ public class FIBCustom extends FIBWidget {
 
 		@Override
 		public FIBComponent getRootComponent() {
-			if (getCustom() != null)
+			if (getCustom() != null) {
 				return getCustom().getRootComponent();
+			}
 			return null;
 		}
 
 		public DataBinding getVariable() {
-			if (variable == null)
+			if (variable == null) {
 				variable = new DataBinding(this, Parameters.variable, VARIABLE);
+			}
 			return variable;
 		}
 
@@ -324,14 +329,16 @@ public class FIBCustom extends FIBWidget {
 			}
 			if (variable.hasBinding()) {
 				VALUE.setType(variable.getBinding().getAccessedType());
-				if (value != null)
+				if (value != null) {
 					value.setBindingDefinition(VALUE);
+				}
 			}
 		}
 
 		public DataBinding getValue() {
-			if (value == null)
+			if (value == null) {
 				value = new DataBinding(this, Parameters.value, VALUE);
+			}
 			return value;
 		}
 
@@ -350,8 +357,9 @@ public class FIBCustom extends FIBWidget {
 		public void finalizeDeserialization() {
 			super.finalizeDeserialization();
 
-			if (variable != null)
+			if (variable != null) {
 				variable.finalizeDeserialization();
+			}
 			if (value != null) {
 				value.setOwner(getCustom());
 				value.setBindingAttribute(Parameters.value);

@@ -353,8 +353,9 @@ public class AskForSaveResources extends FlexoDialog {
 			}
 			Vector<FlexoStorageResource> resourcesToSave = new Vector<FlexoStorageResource>();
 			for (i = 0; i < _shouldSave.size(); i++) {
-				if (_shouldSave.get(i))
+				if (_shouldSave.get(i)) {
 					resourcesToSave.add(_resources.get(i));
+				}
 			}
 
 			int nbOfFilesToSave = getNbOfFilesToSave();

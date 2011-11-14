@@ -80,8 +80,9 @@ public class DeleteDocItemFolder extends FlexoAction {
 				DocItemFolder folder = (DocItemFolder) en.nextElement();
 				folder.delete();
 			}
-		} else if (logger.isLoggable(Level.WARNING))
+		} else if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Tried to delete doc folders, but folders was not set.");
+		}
 	}
 
 	public Vector getFolders() {

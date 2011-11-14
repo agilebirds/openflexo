@@ -21,7 +21,8 @@ package org.openflexo.fge.geom;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fge.geom.FGEPoint;
+import junit.framework.TestCase;
+
 import org.openflexo.fge.geom.FGEGeometricObject.CardinalDirection;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEGrid;
@@ -30,8 +31,6 @@ import org.openflexo.fge.geomedit.GeometricSet;
 import org.openflexo.fge.geomedit.ObjectIntersection;
 import org.openflexo.fge.geomedit.construction.IntersectionConstruction;
 import org.openflexo.toolbox.FileResource;
-
-import junit.framework.TestCase;
 
 public class TestGeom extends TestCase {
 

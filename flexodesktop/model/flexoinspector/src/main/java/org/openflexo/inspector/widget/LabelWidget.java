@@ -87,8 +87,9 @@ public class LabelWidget extends DenaliWidget {
 
 	@Override
 	public synchronized void updateWidgetFromModel() {
-		if (modelUpdating)
+		if (modelUpdating) {
 			return;
+		}
 		widgetUpdating = true;
 		labelWidget.setText(getStringValue());
 		widgetUpdating = false;

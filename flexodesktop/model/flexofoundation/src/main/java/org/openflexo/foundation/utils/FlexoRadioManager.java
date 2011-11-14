@@ -43,15 +43,17 @@ public class FlexoRadioManager {
 	}
 
 	public HashSet<IERadioButtonWidget> registerButton(IERadioButtonWidget w, String groupName) {
-		if (table.get(groupName) == null)
+		if (table.get(groupName) == null) {
 			table.put(groupName, new HashSet<IERadioButtonWidget>());
+		}
 		HashSet<IERadioButtonWidget> v = table.get(groupName);
 		Enumeration<String> keys = table.keys();
 		while (keys.hasMoreElements()) {
 			String key = keys.nextElement();
 			HashSet<IERadioButtonWidget> radios = table.get(key);
-			if (radios != v && radios.contains(w))
+			if (radios != v && radios.contains(w)) {
 				radios.remove(w);
+			}
 		}
 		if (w.getValue()) {
 			Iterator<IERadioButtonWidget> i = v.iterator();
@@ -62,8 +64,9 @@ public class FlexoRadioManager {
 				}
 			}
 		}
-		if (!v.contains(w))
+		if (!v.contains(w)) {
 			v.add(w);
+		}
 		return v;
 	}
 

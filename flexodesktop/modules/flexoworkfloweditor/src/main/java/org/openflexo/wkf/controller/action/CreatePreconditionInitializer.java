@@ -26,13 +26,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.WKFIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-import org.openflexo.wkf.controller.WKFController;
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.InvalidArgumentException;
@@ -45,9 +38,9 @@ import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.action.RedoException;
 import org.openflexo.foundation.action.UndoException;
 import org.openflexo.foundation.param.NodeParameter;
+import org.openflexo.foundation.param.NodeParameter.NodeSelectingConditional;
 import org.openflexo.foundation.param.RadioButtonListParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
-import org.openflexo.foundation.param.NodeParameter.NodeSelectingConditional;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
 import org.openflexo.foundation.wkf.action.CreateExecutionPetriGraph;
 import org.openflexo.foundation.wkf.action.CreateNode;
@@ -61,6 +54,11 @@ import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.wkf.node.SelfExecutableActivityNode;
 import org.openflexo.foundation.wkf.node.SelfExecutableNode;
 import org.openflexo.foundation.wkf.node.SelfExecutableOperationNode;
+import org.openflexo.icon.WKFIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class CreatePreconditionInitializer extends ActionInitializer {
 
@@ -102,8 +100,9 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 					FlexoPetriGraph pg = null;
 					if (action.getFocusedObject() instanceof SelfExecutableNode) {
 						pg = ((SelfExecutableNode) action.getFocusedObject()).getExecutionPetriGraph();
-					} else if (action.getFocusedObject() instanceof FatherNode)
+					} else if (action.getFocusedObject() instanceof FatherNode) {
 						pg = ((FatherNode) action.getFocusedObject()).getContainedPetriGraph();
+					}
 
 					if (pg == null) {
 						if (action.getFocusedObject() instanceof SelfExecutableNode) {
@@ -111,8 +110,9 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 									action.getFocusedObject(), null, action);
 							executionContext.createExecutionPetriGraph.doAction();
 							pg = executionContext.createExecutionPetriGraph.getNewPetriGraph();
-							if (!executionContext.createExecutionPetriGraph.hasActionExecutionSucceeded())
+							if (!executionContext.createExecutionPetriGraph.hasActionExecutionSucceeded()) {
 								return false;
+							}
 							pg = ((SelfExecutableNode) action.getFocusedObject()).getExecutionPetriGraph();
 						} else if (action.getFocusedObject() instanceof FatherNode) {
 							pg = ((FatherNode) action.getFocusedObject()).getContainedPetriGraph();
@@ -120,8 +120,9 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 									(FatherNode) action.getFocusedObject(), null, action);
 							executionContext.createPg.doAction();
 							pg = executionContext.createPg.getNewPetriGraph();
-							if (!executionContext.createPg.hasActionExecutionSucceeded())
+							if (!executionContext.createPg.hasActionExecutionSucceeded()) {
 								return false;
+							}
 						}
 					}
 					if (action.getAttachedBeginNode() == null && pg != null) {
@@ -142,10 +143,12 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 									.localizedForKey("choose_existing_and_already_bound_begin_node");
 							Vector<String> availableChoices = new Vector<String>();
 							availableChoices.add(CREATE_NEW_BEGIN_NODE);
-							if (hasUnboundBeginNodes)
+							if (hasUnboundBeginNodes) {
 								availableChoices.add(CHOOSE_EXISTING_UNBOUND_BEGIN_NODE);
-							if (hasAlreadyBoundBeginNodes && action.allowsToSelectPreconditionOnly())
+							}
+							if (hasAlreadyBoundBeginNodes && action.allowsToSelectPreconditionOnly()) {
 								availableChoices.add(CHOOSE_EXISTING_ALREADY_BOUND_BEGIN_NODE);
+							}
 
 							String[] choices = availableChoices.toArray(new String[availableChoices.size()]);
 							RadioButtonListParameter<String> choiceParam = new RadioButtonListParameter<String>("choice",
@@ -161,8 +164,9 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 								nodeNameProposal = pg.getProcess().findNextInitialName(FlexoLocalization.localizedForKey("begin_node"),
 										(OperationNode) action.getFocusedObject());
 							} else {
-								if (logger.isLoggable(Level.WARNING))
+								if (logger.isLoggable(Level.WARNING)) {
 									logger.warning("Unknown father node type: " + action.getFocusedObject().getClassNameKey());
+								}
 								nodeNameProposal = FlexoLocalization.localizedForKey("begin_node");
 							}
 							TextFieldParameter newBeginNodeNameParam = new TextFieldParameter("newBeginNodeName", "new_begin_node_name",
@@ -223,12 +227,13 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 														.makeNewEmbeddedAction(action.getFocusedObject(), null, action);
 											}
 										} else {
-											if (action.getFocusedObject() instanceof AbstractActivityNode)
+											if (action.getFocusedObject() instanceof AbstractActivityNode) {
 												executionContext.createBeginNodeAction = CreateNode.createOperationBeginNode
 														.makeNewEmbeddedAction(action.getFocusedObject(), null, action);
-											else
+											} else {
 												executionContext.createBeginNodeAction = CreateNode.createActionBeginNode
 														.makeNewEmbeddedAction(action.getFocusedObject(), null, action);
+											}
 										}
 										executionContext.createBeginNodeAction.setNewNodeName(newBeginNodeNameParam.getValue());
 										executionContext.createBeginNodeAction.doAction();
@@ -265,9 +270,10 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<CreatePreCondition>() {
 			@Override
 			public boolean run(ActionEvent e, CreatePreCondition action) {
-				if (!action.isEmbedded())
+				if (!action.isEmbedded()) {
 					getControllerActionInitializer().getWKFController().getSelectionManager()
 							.setSelectedObject(action.getNewPreCondition());
+				}
 				return true;
 			}
 		};
@@ -279,12 +285,15 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, CreatePreCondition action) throws UndoException {
 				CreatePreConditionExecutionContext executionContext = (CreatePreConditionExecutionContext) action.getExecutionContext();
-				if (executionContext.createBeginNodeAction != null)
+				if (executionContext.createBeginNodeAction != null) {
 					executionContext.createBeginNodeAction.undoAction();
-				if (executionContext.createPg != null)
+				}
+				if (executionContext.createPg != null) {
 					executionContext.createPg.undoAction();
-				if (executionContext.createExecutionPetriGraph != null)
+				}
+				if (executionContext.createExecutionPetriGraph != null) {
 					executionContext.createExecutionPetriGraph.undoAction();
+				}
 				return true;
 			}
 		};
@@ -296,12 +305,15 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, CreatePreCondition action) throws RedoException {
 				CreatePreConditionExecutionContext executionContext = (CreatePreConditionExecutionContext) action.getExecutionContext();
-				if (executionContext.createPg != null)
+				if (executionContext.createPg != null) {
 					executionContext.createPg.redoAction();
-				if (executionContext.createExecutionPetriGraph != null)
+				}
+				if (executionContext.createExecutionPetriGraph != null) {
 					executionContext.createExecutionPetriGraph.redoAction();
-				if (executionContext.createBeginNodeAction != null)
+				}
+				if (executionContext.createBeginNodeAction != null) {
 					executionContext.createBeginNodeAction.redoAction();
+				}
 				return true;
 			}
 		};

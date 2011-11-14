@@ -52,15 +52,16 @@ public class FIBCheckBoxWidget extends FIBWidgetView<FIBCheckBox, JCheckBox, Boo
 		_jCheckBox.setOpaque(false);
 		_jCheckBox.setBorderPaintedFlat(true);
 		_jCheckBox.setSelected(model.getSelected());
-		if (isReadOnly())
+		if (isReadOnly()) {
 			_jCheckBox.setEnabled(false);
-		else
+		} else {
 			_jCheckBox.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					updateModelFromWidget();
 				}
 			});
+		}
 		_jCheckBox.addFocusListener(this);
 
 		// _jCheckBox.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
@@ -85,8 +86,9 @@ public class FIBCheckBoxWidget extends FIBWidgetView<FIBCheckBox, JCheckBox, Boo
 			widgetUpdating = true;
 			Boolean value = getValue();
 			if (value != null) {
-				if (isNegate)
+				if (isNegate) {
 					value = !value;
+				}
 				_jCheckBox.setSelected(value);
 			}
 			widgetUpdating = false;
@@ -100,8 +102,9 @@ public class FIBCheckBoxWidget extends FIBWidgetView<FIBCheckBox, JCheckBox, Boo
 	 */
 	@Override
 	public synchronized boolean updateModelFromWidget() {
-		if (isReadOnly())
+		if (isReadOnly()) {
 			return false;
+		}
 
 		if (notEquals(isNegate ? !getValue() : getValue(), _jCheckBox.isSelected())) {
 			setValue(new Boolean(isNegate ? !_jCheckBox.isSelected() : _jCheckBox.isSelected()));

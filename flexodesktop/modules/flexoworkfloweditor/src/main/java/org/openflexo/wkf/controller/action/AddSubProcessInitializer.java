@@ -24,13 +24,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.WKFIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-import org.openflexo.wkf.controller.WKFController;
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.AskParametersDialog.ValidationCondition;
 import org.openflexo.foundation.FlexoException;
@@ -48,6 +41,11 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.ProcessFolder;
 import org.openflexo.foundation.wkf.action.AddSubProcess;
 import org.openflexo.foundation.wkf.action.AddToProcessFolder;
+import org.openflexo.icon.WKFIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class AddSubProcessInitializer extends ActionInitializer {
 
@@ -68,10 +66,11 @@ public class AddSubProcessInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, AddSubProcess action) {
 				FlexoProcess process = null;
-				if (action.getFocusedObject() instanceof FlexoProcess)
+				if (action.getFocusedObject() instanceof FlexoProcess) {
 					process = (FlexoProcess) action.getFocusedObject();
-				else if (action.getFocusedObject() instanceof ProcessFolder)
+				} else if (action.getFocusedObject() instanceof ProcessFolder) {
 					process = ((ProcessFolder) action.getFocusedObject()).getProcessNode().getProcess();
+				}
 				ParameterDefinition[] parameters = new ParameterDefinition[3];
 				String baseName = FlexoLocalization.localizedForKey("new_process_name");
 				parameters[0] = new TextFieldParameter("newProcessName", "name_of_process", getProject().getFlexoWorkflow()

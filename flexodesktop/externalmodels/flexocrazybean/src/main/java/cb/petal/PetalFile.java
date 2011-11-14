@@ -198,8 +198,9 @@ public class PetalFile implements PetalNode, TreeModel {
 
 				ArrayList list = (java.util.ArrayList) assocs.get(quid);
 
-				if (list == null)
+				if (list == null) {
 					assocs.put(quid, list = new ArrayList());
+				}
 
 				list.add(a);
 			} catch (RuntimeException e) {
@@ -306,24 +307,27 @@ public class PetalFile implements PetalNode, TreeModel {
 			return p.getProperty(index);
 		} else if (node instanceof List) {
 			return ((List) node).get(index);
-		} else
+		} else {
 			return null;
+		}
 	}
 
 	@Override
 	public int getIndexOfChild(java.lang.Object node, java.lang.Object child) {
 		if (node instanceof PetalFile) {
-			if (child == petal)
+			if (child == petal) {
 				return 0;
-			else if (child == design)
+			} else if (child == design) {
 				return 1;
-			else
+			} else {
 				throw new RuntimeException("Not a child of PetalFile: " + child);
+			}
 		} else if (node instanceof PetalObject) {
 			PetalObject p = (PetalObject) node;
 			return p.indexOf((PetalNode) child);
-		} else
+		} else {
 			return 0;
+		}
 	}
 
 	@Override

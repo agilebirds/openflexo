@@ -89,14 +89,18 @@ public class CreateNode extends FlexoUndoableAction<CreateNode, WKFObject, WKFOb
 
 		@Override
 		protected boolean isVisibleForSelection(WKFObject focusedObject, Vector<WKFObject> globalSelection) {
-			if (focusedObject instanceof SelfExecutableNode)
+			if (focusedObject instanceof SelfExecutableNode) {
 				return false;
-			if (focusedObject instanceof FlexoProcess)
+			}
+			if (focusedObject instanceof FlexoProcess) {
 				return _type.concernProcess() && !((FlexoProcess) focusedObject).isImported();
-			if (focusedObject instanceof AbstractActivityNode)
+			}
+			if (focusedObject instanceof AbstractActivityNode) {
 				return _type.concernActivity() && ((AbstractActivityNode) focusedObject).mightHaveOperationPetriGraph();
-			if (focusedObject instanceof OperationNode)
+			}
+			if (focusedObject instanceof OperationNode) {
 				return _type.concernOperation() && ((OperationNode) focusedObject).mightHaveActionPetriGraph();
+			}
 			return false;
 		}
 

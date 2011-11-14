@@ -26,8 +26,8 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
+import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.ForegroundStyle;
@@ -183,8 +183,9 @@ public class PortmapRegisteryGR extends WKFObjectGR<PortMapRegistery> {
 	private SimplifiedCardinalDirection _orientation;
 
 	public SimplifiedCardinalDirection getOrientation() {
-		if (_orientation == null)
+		if (_orientation == null) {
 			refreshOrientation();
+		}
 		return _orientation;
 	}
 
@@ -203,8 +204,9 @@ public class PortmapRegisteryGR extends WKFObjectGR<PortMapRegistery> {
 			_orientation = orientation;
 			int portmapNb = 0;
 			for (FlexoPortMap pm : getPortMapRegistery().getPortMaps()) {
-				if (pm.getIsVisible())
+				if (pm.getIsVisible()) {
 					portmapNb++;
+				}
 			}
 			if (_orientation.isVertical()) { /* NORTH or SOUTH */
 				setWidthNoNotification(PortmapGR.PORTMAP_SIZE * portmapNb + PORTMAP_MARGIN * 2);
@@ -226,8 +228,9 @@ public class PortmapRegisteryGR extends WKFObjectGR<PortMapRegistery> {
 		if (parentGR != null) {
 			int portmapNb = 0;
 			for (FlexoPortMap pm : getPortMapRegistery().getPortMaps()) {
-				if (pm.getIsVisible())
+				if (pm.getIsVisible()) {
 					portmapNb++;
+				}
 			}
 			double portmapRegisteryWidth = PortmapGR.PORTMAP_SIZE * portmapNb + 6;
 			return computeConstrainedLocation(new FGEPoint(

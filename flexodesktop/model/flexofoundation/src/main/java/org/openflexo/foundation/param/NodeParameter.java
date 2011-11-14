@@ -50,8 +50,9 @@ public class NodeParameter extends ParameterDefinition<AbstractNode> {
 	}
 
 	public boolean isAcceptableNode(AbstractNode aNode) {
-		if (_nodeSelectingConditional != null)
+		if (_nodeSelectingConditional != null) {
 			return _nodeSelectingConditional.isSelectable(aNode);
+		}
 		return true;
 	}
 

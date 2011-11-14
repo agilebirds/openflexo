@@ -27,13 +27,12 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
+import org.openflexo.components.ProgressWindow;
 import org.openflexo.kvc.KVCObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLSerializable;
-
-import org.openflexo.components.ProgressWindow;
 
 /**
  * This class is used to encode all Bug Reports of Flexo
@@ -56,8 +55,9 @@ public class BugReports extends KVCObject implements XMLSerializable, TableModel
 	public void reload() {
 		records = new Vector();
 		File[] allBRFiles = getDatabaseDirectory().listFiles();
-		if (allBRFiles == null)
+		if (allBRFiles == null) {
 			allBRFiles = new File[0];
+		}
 		if (!ProgressWindow.hasInstance()) {
 			ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("loading_bug_reports"), allBRFiles.length);
 		}

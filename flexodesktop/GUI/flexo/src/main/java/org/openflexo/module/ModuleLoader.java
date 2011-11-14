@@ -765,7 +765,7 @@ public final class ModuleLoader implements IModuleLoader {
 		}
 		if (currentProject != null && currentProject.getUnsavedStorageResources(false).size() > 0) {
 			SaveDialog reviewer = new SaveDialog(FlexoController.getActiveFrame(), currentProject);
-			if (reviewer.getRetval() == SaveDialog.YES_OPTION) {
+			if (reviewer.getRetval() == JOptionPane.YES_OPTION) {
 				try {
 					ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving"), 1);
 					reviewer.saveProject(ProgressWindow.instance());
@@ -785,7 +785,7 @@ public final class ModuleLoader implements IModuleLoader {
 						proceedQuitWithoutConfirmation();
 					}
 				}
-			} else if (reviewer.getRetval() == SaveDialog.NO_OPTION) {
+			} else if (reviewer.getRetval() == JOptionPane.NO_OPTION) {
 				proceedQuitWithoutConfirmation();
 			} else { // CANCEL
 				if (logger.isLoggable(Level.INFO)) {
@@ -1386,7 +1386,8 @@ public final class ModuleLoader implements IModuleLoader {
 	}
 
 	public static void saveAsProject() {
-		Vector<FlexoVersion> availableVersions = new Vector<FlexoVersion>(getProject().getXmlMappings().getReleaseVersions());
+		getProject().getXmlMappings();
+		Vector<FlexoVersion> availableVersions = new Vector<FlexoVersion>(FlexoXMLMappings.getReleaseVersions());
 		Collections.sort(availableVersions, Collections.reverseOrder(FlexoVersion.comparator));
 
 		final DirectoryParameter targetPrjDirectory = new DirectoryParameter("targetPrjDirectory", "new_project_file", getProject()
@@ -1507,7 +1508,7 @@ public final class ModuleLoader implements IModuleLoader {
 
 	public static boolean openResourceReviewerDialog() {
 		SaveDialog reviewer = new SaveDialog(FlexoController.getActiveFrame(), getProject());
-		if (reviewer.getRetval() == SaveDialog.YES_OPTION) {
+		if (reviewer.getRetval() == JOptionPane.YES_OPTION) {
 			try {
 				ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving"), 2);
 				reviewer.saveProject(ProgressWindow.instance());
@@ -1534,7 +1535,7 @@ public final class ModuleLoader implements IModuleLoader {
 				return FlexoController.confirm(FlexoLocalization.localizedForKey("error_during_saving") + "\n"
 						+ FlexoLocalization.localizedForKey("would_you_like_to_exit_anyway"));
 			}
-		} else if (reviewer.getRetval() == SaveDialog.NO_OPTION) {
+		} else if (reviewer.getRetval() == JOptionPane.NO_OPTION) {
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Saving project...NO");
 			}

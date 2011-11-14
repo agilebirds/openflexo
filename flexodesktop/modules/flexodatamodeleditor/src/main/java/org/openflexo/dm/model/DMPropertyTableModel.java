@@ -31,13 +31,6 @@ import org.openflexo.components.tabular.model.EditableStringColumn;
 import org.openflexo.components.tabular.model.IconColumn;
 import org.openflexo.components.tabular.model.ToggleIconColumn;
 import org.openflexo.components.tabular.model.TypeSelectorColumn;
-import org.openflexo.dm.view.controller.DMController;
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.kvc.ChoiceList;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.ReservedKeyword;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.foundation.dm.ComponentDMEntity;
 import org.openflexo.foundation.dm.DMCardinality;
 import org.openflexo.foundation.dm.DMEntity;
@@ -45,6 +38,11 @@ import org.openflexo.foundation.dm.DMProperty;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.DuplicatePropertyNameException;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.kvc.ChoiceList;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.ReservedKeyword;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * Please comment this class
@@ -140,8 +138,9 @@ public class DMPropertyTableModel extends AbstractModel<DMEntity, DMProperty> {
 			@Override
 			public void setValue(DMProperty property, String aValue) {
 				try {
-					if (ReservedKeyword.contains(aValue))
+					if (ReservedKeyword.contains(aValue)) {
 						throw new InvalidNameException(aValue + " is a reserved keyword.");
+					}
 					property.setName(aValue);
 				} catch (InvalidNameException e) {
 					FlexoController.showError(e.getMessage());
@@ -163,8 +162,9 @@ public class DMPropertyTableModel extends AbstractModel<DMEntity, DMProperty> {
 
 			@Override
 			protected String renderChoiceListValue(ChoiceList value) {
-				if (value == null)
+				if (value == null) {
 					return "";
+				}
 				return ((DMCardinality) value).getName();
 			}
 		});

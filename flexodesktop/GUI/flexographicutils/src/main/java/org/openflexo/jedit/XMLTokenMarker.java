@@ -69,8 +69,9 @@ public class XMLTokenMarker extends TokenMarker {
 					} else if (array[ip1] == '?') {
 						i += 1;
 						token = Token.KEYWORD3;
-					} else
+					} else {
 						token = Token.KEYWORD1;
+					}
 					break;
 
 				case '&':
@@ -134,10 +135,11 @@ public class XMLTokenMarker extends TokenMarker {
 				case '\'':
 					addToken(i - lastOffset, token);
 					lastOffset = i;
-					if (c == '\"')
+					if (c == '\"') {
 						token = Token.LITERAL1;
-					else
+					} else {
 						token = Token.LITERAL2;
+					}
 					break;
 				}
 				break;

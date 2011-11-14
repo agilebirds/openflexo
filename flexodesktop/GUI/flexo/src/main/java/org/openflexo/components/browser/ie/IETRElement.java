@@ -57,10 +57,11 @@ public class IETRElement extends IEElement {
 	protected void buildChildrenVector() {
 		for (Enumeration e = getTR().colsEnumeration(); e.hasMoreElements();) {
 			FlexoModelObject o = (FlexoModelObject) e.nextElement();
-			if (o instanceof IESpanTDWidget) // Span TD's are virtual TD's
+			if (o instanceof IESpanTDWidget) {
 				continue;
-			else
+			} else {
 				addToChilds(o);
+			}
 		}
 	}
 

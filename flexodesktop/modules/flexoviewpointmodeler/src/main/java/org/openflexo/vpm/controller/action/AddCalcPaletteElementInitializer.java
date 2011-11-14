@@ -24,6 +24,11 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
+import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.foundation.action.FlexoActionFinalizer;
+import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.viewpoint.action.AddPaletteElement;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
@@ -31,12 +36,6 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.vpm.controller.CEDController;
 import org.openflexo.vpm.palette.PaletteElementGR;
-
-import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
-import org.openflexo.fge.shapes.Shape.ShapeType;
-import org.openflexo.foundation.action.FlexoActionFinalizer;
-import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.viewpoint.action.AddPaletteElement;
 
 public class AddCalcPaletteElementInitializer extends ActionInitializer {
 
@@ -60,8 +59,9 @@ public class AddCalcPaletteElementInitializer extends ActionInitializer {
 					return true;*/
 
 				action.setNewElementName(FlexoController.askForString(FlexoLocalization.localizedForKey("name_for_new_element")));
-				if (action.getGraphicalRepresentation() == null)
+				if (action.getGraphicalRepresentation() == null) {
 					action.setGraphicalRepresentation(makePaletteElementGraphicalRepresentation(ShapeType.RECTANGLE));
+				}
 				return true;
 			}
 		};

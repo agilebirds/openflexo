@@ -31,7 +31,6 @@ import org.netbeans.lib.cvsclient.command.CommandException;
 import org.netbeans.lib.cvsclient.connection.AuthenticationException;
 import org.netbeans.lib.cvsclient.event.CVSAdapter;
 import org.netbeans.lib.cvsclient.event.FileAddedEvent;
-
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.IOFlexoException;
@@ -81,10 +80,11 @@ public class CheckoutProject extends CVSAction<CheckoutProject, CVSModule> {
 
 	@Override
 	public String getLocalizedName() {
-		if (getFocusedObject() != null && getFocusedObject().getModuleName().endsWith(".prj"))
+		if (getFocusedObject() != null && getFocusedObject().getModuleName().endsWith(".prj")) {
 			return FlexoLocalization.localizedForKey("checkout_project");
-		else
+		} else {
 			return FlexoLocalization.localizedForKey("checkout_directory");
+		}
 	}
 
 	private SharedProject _checkoutedProject;
@@ -131,8 +131,9 @@ public class CheckoutProject extends CVSAction<CheckoutProject, CVSModule> {
 	}
 
 	public String getLocalName() {
-		if (_localName == null)
+		if (_localName == null) {
 			_localName = getFocusedObject().getModuleName();
+		}
 		return _localName;
 	}
 
@@ -146,27 +147,32 @@ public class CheckoutProject extends CVSAction<CheckoutProject, CVSModule> {
 		private Hashtable<CVSModule, Boolean> _hierarchyHasBeenRetrieved;
 
 		protected CheckoutProgressController() {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Retrieving project hierarchy...");
+			}
 
 			projectHierarchy = retrieveProjectHerarchy();
 
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				for (FPSObject o : projectHierarchy.keySet()) {
 					if (o instanceof CVSModule) {
 						logger.fine(((CVSModule) o).getFullQualifiedModuleName());
 						for (FPSObject o2 : projectHierarchy.get(o)) {
 							if (o2 instanceof CVSModule) {
 								logger.fine(((CVSModule) o2).getFullQualifiedModuleName());
-							} else if (o2 instanceof CVSFile)
+							} else if (o2 instanceof CVSFile) {
 								logger.fine(((CVSModule) o).getFullQualifiedModuleName() + '/' + ((CVSFile) o2).getFileName());
+							}
 						}
-					} else if (o instanceof CVSFile)
+					} else if (o instanceof CVSFile) {
 						logger.fine(((CVSFile) o).getFileName());
+					}
 				}
+			}
 
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Retrieving project hierarchy...Done");
+			}
 
 		}
 
@@ -175,10 +181,12 @@ public class CheckoutProject extends CVSAction<CheckoutProject, CVSModule> {
 
 		private FPSObject objectForString(String name) {
 			for (FPSObject o : projectHierarchy.keySet()) {
-				if (o instanceof CVSModule && ((CVSModule) o).getModuleName().equals(name))
+				if (o instanceof CVSModule && ((CVSModule) o).getModuleName().equals(name)) {
 					return o;
-				if (o instanceof CVSFile && ((CVSFile) o).getFileName().equals(name))
+				}
+				if (o instanceof CVSFile && ((CVSFile) o).getFileName().equals(name)) {
 					return o;
+				}
 			}
 			return null;
 		}
@@ -188,14 +196,16 @@ public class CheckoutProject extends CVSAction<CheckoutProject, CVSModule> {
 			String relativePath;
 			try {
 				relativePath = FileUtils.makeFilePathRelativeToDir(new File(e.getFilePath()), getLocalDirectory());
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("FileAdded: " + e.getFilePath() + " relative path=" + relativePath);
+				}
 
 				StringTokenizer st = new StringTokenizer(relativePath, "/" + "\\");
-				if (st.hasMoreTokens())
+				if (st.hasMoreTokens()) {
 					st.nextToken(); // Skip root location
-				else
+				} else {
 					return;
+				}
 
 				if (st.hasMoreTokens()) {
 					String current = st.nextToken();
@@ -207,8 +217,9 @@ public class CheckoutProject extends CVSAction<CheckoutProject, CVSModule> {
 					} else {
 						setSecondaryProgress(FlexoLocalization.localizedForKeyWithParams("checkouting_($0)", relativePath));
 					}
-				} else
+				} else {
 					return;
+				}
 
 			} catch (IOException e1) {
 				e1.printStackTrace();
@@ -243,16 +254,18 @@ public class CheckoutProject extends CVSAction<CheckoutProject, CVSModule> {
 		}
 
 		private void exploreModule(final CVSModule module, final Hashtable<FPSObject, Vector<FPSObject>> response) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Exploring module " + module.getFullyQualifiedName() + " parent=" + module.getParent());
+			}
 
 			_hierarchyHasBeenRetrieved.put(module, false);
 			module.exploreModule(new CVSExplorerListener() {
 				@Override
 				public void exploringFailed(CVSExplorable explorable, CVSExplorer explorer, Exception exception) {
 					lastReception = System.currentTimeMillis();
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("exploring FAILED");
+					}
 					_hierarchyHasBeenRetrieved.put(module, true);
 				}
 
@@ -260,8 +273,9 @@ public class CheckoutProject extends CVSAction<CheckoutProject, CVSModule> {
 				public void exploringSucceeded(CVSExplorable explorable, CVSExplorer explorer) {
 					lastReception = System.currentTimeMillis();
 					setProgress(FlexoLocalization.localizedForKey("explore_sub_modules"));
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine(module.getFullQualifiedModuleName() + " : exploring SUCCEEDED " + module.getCVSModules());
+					}
 					if (module == getFocusedObject()) {
 						modulesToNotify.add(module);
 						for (CVSFile f : module.getCVSFiles()) {
@@ -288,8 +302,9 @@ public class CheckoutProject extends CVSAction<CheckoutProject, CVSModule> {
 
 		private boolean someModulesAreStillToWait() {
 			for (Boolean receivedResponse : _hierarchyHasBeenRetrieved.values()) {
-				if (!receivedResponse)
+				if (!receivedResponse) {
 					return true;
+				}
 			}
 			return false;
 		}
@@ -312,10 +327,11 @@ public class CheckoutProject extends CVSAction<CheckoutProject, CVSModule> {
 				while (modulesToNotify.size() > 0) {
 					CVSModule module = modulesToNotify.firstElement();
 					modulesToNotify.removeElementAt(0);
-					if (module == getFocusedObject())
+					if (module == getFocusedObject()) {
 						resetSecondaryProgress(module.getCVSModules().size() + 1);
-					else
+					} else {
 						setSecondaryProgress(FlexoLocalization.localizedForKey("explored") + " " + module.getFullQualifiedModuleName());
+					}
 				}
 			}
 

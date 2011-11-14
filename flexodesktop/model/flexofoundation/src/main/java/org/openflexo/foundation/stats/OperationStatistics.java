@@ -79,8 +79,9 @@ public class OperationStatistics extends FlexoStatistics<OperationNode> {
 		setActionCount(actions.size());
 		int aCount = 0;
 		for (ActionNode act : actions) {
-			if (!act.isBeginOrEndNode())
+			if (!act.isBeginOrEndNode()) {
 				aCount += 1;
+			}
 		}
 		setRealActionCount(aCount);
 	}

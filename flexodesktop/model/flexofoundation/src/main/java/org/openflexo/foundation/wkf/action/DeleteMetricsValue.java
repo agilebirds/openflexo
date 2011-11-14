@@ -66,20 +66,23 @@ public class DeleteMetricsValue extends FlexoAction<DeleteMetricsValue, MetricsV
 	@Override
 	protected void doAction(Object context) {
 		logger.info("Delete MetricsValue(s)");
-		for (MetricsValue mv : getMetricsValueToDelete())
+		for (MetricsValue mv : getMetricsValueToDelete()) {
 			mv.delete();
+		}
 	}
 
 	public Vector<MetricsValue> getMetricsValueToDelete() {
 		Vector<MetricsValue> metricsValuesToDelete = new Vector<MetricsValue>();
 		if (getGlobalSelection() != null) {
 			for (FlexoModelObject o : getGlobalSelection()) {
-				if (o instanceof MetricsValue)
+				if (o instanceof MetricsValue) {
 					metricsValuesToDelete.add((MetricsValue) o);
+				}
 			}
 		}
-		if (!metricsValuesToDelete.contains(getFocusedObject()))
+		if (!metricsValuesToDelete.contains(getFocusedObject())) {
 			metricsValuesToDelete.add(getFocusedObject());
+		}
 		return metricsValuesToDelete;
 	}
 

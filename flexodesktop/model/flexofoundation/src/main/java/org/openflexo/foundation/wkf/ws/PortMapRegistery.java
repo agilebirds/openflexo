@@ -134,8 +134,9 @@ public final class PortMapRegistery extends WKFObject implements InspectableObje
 	 * 
 	 */
 	public void lookupServiceInterface() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("lookupServiceInterface");
+		}
 		getServiceInterface();
 		updateFromServiceInterface();
 	}
@@ -145,8 +146,9 @@ public final class PortMapRegistery extends WKFObject implements InspectableObje
 			if (getSubProcessNode().getActiveServiceInterface() != null) {
 				getSubProcessNode().getActiveServiceInterface().addObserver(this);
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("No related ServiceInterface !!!!");
+				}
 			}
 			return getSubProcessNode().getActiveServiceInterface();
 		}
@@ -197,8 +199,9 @@ public final class PortMapRegistery extends WKFObject implements InspectableObje
 		Enumeration en = _portMaps.elements();
 		while (en.hasMoreElements()) {
 			FlexoPortMap map = (FlexoPortMap) en.nextElement();
-			if (!map.getIsHidden())
+			if (!map.getIsHidden()) {
 				v.add(map);
+			}
 
 		}
 		return v;
@@ -216,8 +219,9 @@ public final class PortMapRegistery extends WKFObject implements InspectableObje
 			aPortMap.addObserver(this);
 			setChanged();
 			notifyObservers(new PortMapInserted(aPortMap));
-			if (getProcess() != null)
+			if (getProcess() != null) {
 				getProcess().clearCachedObjects();
+			}
 		}
 	}
 
@@ -229,14 +233,16 @@ public final class PortMapRegistery extends WKFObject implements InspectableObje
 			aPortMap.deleteObserver(this);
 			setChanged();
 			notifyObservers(new PortMapRemoved(aPortMap));
-			if (getProcess() != null)
+			if (getProcess() != null) {
 				getProcess().clearCachedObjects();
+			}
 		}
 	}
 
 	public void updateFromServiceInterface() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("updateFromServiceInterface()");
+		}
 		Vector<FlexoPortMap> portMapsToDelete = new Vector<FlexoPortMap>(getPortMaps());
 		if (getServiceInterface() != null) {
 			// Vector operations = getServiceInterface().getOperations();
@@ -258,13 +264,15 @@ public final class PortMapRegistery extends WKFObject implements InspectableObje
 				}
 			}
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("No related ServiceInterface ! !");
+			}
 		}
 		for (Enumeration<FlexoPortMap> e = portMapsToDelete.elements(); e.hasMoreElements();) {
 			FlexoPortMap portMap = e.nextElement();
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Remove portmap " + portMap.getPortName());
+			}
 			portMap.delete();
 		}
 	}
@@ -281,18 +289,20 @@ public final class PortMapRegistery extends WKFObject implements InspectableObje
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("update PortMapRegistry" + observable + " - " + dataModification.getClass().getName());
+		}
 		if (!isSerializing()) {
 			if (observable instanceof ServiceInterface) {
 				updateFromServiceInterface();
 			}
 		}
 		if (observable instanceof FlexoPortMap && dataModification instanceof ObjectVisibilityChanged) {
-			if (((ObjectVisibilityChanged) dataModification).isVisible())
+			if (((ObjectVisibilityChanged) dataModification).isVisible()) {
 				setIsHidden(false);
-			else
+			} else {
 				hideIfRequired();
+			}
 		}
 	}
 
@@ -311,8 +321,9 @@ public final class PortMapRegistery extends WKFObject implements InspectableObje
 
 	@Override
 	public final void delete() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("delete() in PortMapRegistery");
+		}
 		for (Enumeration e = ((Vector) getPortMaps().clone()).elements(); e.hasMoreElements();) {
 			FlexoPortMap portMap = (FlexoPortMap) e.nextElement();
 			portMap.delete();
@@ -389,8 +400,9 @@ public final class PortMapRegistery extends WKFObject implements InspectableObje
 
 	public FlexoPortMap getPortMapForPort(FlexoPort flexoPort) {
 		for (FlexoPortMap portMap : _portMaps) {
-			if (portMap.getOperation().getPort() == flexoPort)
+			if (portMap.getOperation().getPort() == flexoPort) {
 				return portMap;
+			}
 		}
 		return null;
 	}
@@ -398,8 +410,9 @@ public final class PortMapRegistery extends WKFObject implements InspectableObje
 	public Vector<FlexoPortMap> getAllNewPortmaps() {
 		Vector<FlexoPortMap> returned = new Vector<FlexoPortMap>();
 		for (FlexoPortMap pm : getPortMaps()) {
-			if (pm.getOperation().getPort() instanceof NewPort)
+			if (pm.getOperation().getPort() instanceof NewPort) {
 				returned.add(pm);
+			}
 		}
 		return returned;
 	}
@@ -407,8 +420,9 @@ public final class PortMapRegistery extends WKFObject implements InspectableObje
 	public Vector<FlexoPortMap> getAllDeletePortmaps() {
 		Vector<FlexoPortMap> returned = new Vector<FlexoPortMap>();
 		for (FlexoPortMap pm : getPortMaps()) {
-			if (pm.getOperation().getPort() instanceof DeletePort)
+			if (pm.getOperation().getPort() instanceof DeletePort) {
 				returned.add(pm);
+			}
 		}
 		return returned;
 	}
@@ -416,8 +430,9 @@ public final class PortMapRegistery extends WKFObject implements InspectableObje
 	public Vector<FlexoPortMap> getAllOutPortmaps() {
 		Vector<FlexoPortMap> returned = new Vector<FlexoPortMap>();
 		for (FlexoPortMap pm : getPortMaps()) {
-			if (pm.getOperation().getPort() instanceof OutPort)
+			if (pm.getOperation().getPort() instanceof OutPort) {
 				returned.add(pm);
+			}
 		}
 		return returned;
 	}

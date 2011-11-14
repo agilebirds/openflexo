@@ -42,14 +42,6 @@ import org.openflexo.foundation.wkf.action.AddSubProcess;
 import org.openflexo.foundation.wkf.action.DropWKFElement;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
-import org.openflexo.fps.CVSConsole;
-import org.openflexo.fps.CVSFile;
-import org.openflexo.fps.CVSModule;
-import org.openflexo.fps.CVSRepository;
-import org.openflexo.fps.CVSRepositoryList;
-import org.openflexo.fps.CVSStatus;
-import org.openflexo.fps.FPSObject;
-import org.openflexo.fps.SharedProject;
 import org.openflexo.fps.action.CVSRefresh;
 import org.openflexo.fps.action.CheckoutProject;
 import org.openflexo.fps.action.CommitFiles;
@@ -194,12 +186,14 @@ public class TestFPS extends FPSTestCase {
 			// logger.info("File "+f.getFile()+" status="+f.getStatus());
 			boolean isException = false;
 			for (CVSFile f2 : files) {
-				if (f == f2)
+				if (f == f2) {
 					isException = true;
+				}
 			}
 			try {
-				if (!isException)
+				if (!isException) {
 					assertTrue(f.getStatus() == CVSStatus.CVSIgnored || f.getStatus() == CVSStatus.UpToDate);
+				}
 			} catch (AssertionFailedError e) {
 				hasErrors = true;
 				errors += "Found file " + f.getFile() + " status=" + f.getStatus() + " expected CVSIgnored or UpToDate\n";

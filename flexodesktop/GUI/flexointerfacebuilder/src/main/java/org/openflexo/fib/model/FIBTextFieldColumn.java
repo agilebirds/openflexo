@@ -35,8 +35,9 @@ public class FIBTextFieldColumn extends FIBTableColumn {
 	private DataBinding isEditable;
 
 	public DataBinding getIsEditable() {
-		if (isEditable == null)
+		if (isEditable == null) {
 			isEditable = new DataBinding(this, Parameters.isEditable, IS_EDITABLE);
+		}
 		return isEditable;
 	}
 
@@ -50,8 +51,9 @@ public class FIBTextFieldColumn extends FIBTableColumn {
 	@Override
 	public void finalizeTableDeserialization() {
 		super.finalizeTableDeserialization();
-		if (isEditable != null)
+		if (isEditable != null) {
 			isEditable.finalizeDeserialization();
+		}
 	}
 
 	@Override

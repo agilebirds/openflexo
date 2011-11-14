@@ -60,8 +60,9 @@ public class DeleteFlexoProperty extends FlexoAction<DeleteFlexoProperty, FlexoP
 	protected void doAction(Object context) throws FlexoException {
 		Vector<FlexoModelObject> properties = getGlobalSelectionAndFocusedObject();
 		for (FlexoModelObject object : properties) {
-			if (object instanceof FlexoProperty)
+			if (object instanceof FlexoProperty) {
 				((FlexoProperty) object).delete();
+			}
 		}
 	}
 

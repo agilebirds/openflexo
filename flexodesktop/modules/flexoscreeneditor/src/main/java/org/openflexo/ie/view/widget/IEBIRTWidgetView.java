@@ -64,8 +64,9 @@ public class IEBIRTWidgetView extends IEWidgetView<IEBIRTWidget> implements Mous
 
 	@Override
 	public boolean isDragEnabled() {
-		if (resizer.getMode() != MouseResizer.ResizeMode.NONE)
+		if (resizer.getMode() != MouseResizer.ResizeMode.NONE) {
 			return false;
+		}
 		return super.isDragEnabled();
 	}
 
@@ -95,8 +96,9 @@ public class IEBIRTWidgetView extends IEWidgetView<IEBIRTWidget> implements Mous
 	public Dimension getPreferredSize() {
 		if (getHoldsNextComputedPreferredSize()) {
 			Dimension storedSize = storedPrefSize();
-			if (storedSize != null)
+			if (storedSize != null) {
 				return storedSize;
+			}
 		}
 		Dimension d;
 		if (getModel().getUsePercentage()) {
@@ -107,8 +109,9 @@ public class IEBIRTWidgetView extends IEWidgetView<IEBIRTWidget> implements Mous
 		} else {
 			d = new Dimension(getModel().getWidthPixel(), getModel().getHeightPixel());
 		}
-		if (getHoldsNextComputedPreferredSize())
+		if (getHoldsNextComputedPreferredSize()) {
 			storePrefSize(d);
+		}
 		return d;
 	}
 
@@ -135,8 +138,9 @@ public class IEBIRTWidgetView extends IEWidgetView<IEBIRTWidget> implements Mous
 		} else if (getModel() == arg0 && "graphType".equals(arg1.propertyName())) {
 			computeImage();
 			repaint();
-		} else
+		} else {
 			super.update(arg0, arg1);
+		}
 	}
 
 	@Override
@@ -154,10 +158,12 @@ public class IEBIRTWidgetView extends IEWidgetView<IEBIRTWidget> implements Mous
 				getModel().setPercentage(newPercentage);
 			}
 		} else {
-			if (deltaY != 0)
+			if (deltaY != 0) {
 				getModel().setHeightPixel(d.height + deltaY);
-			if (deltaX != 0)
+			}
+			if (deltaX != 0) {
 				getModel().setWidthPixel(d.width + deltaX);
+			}
 		}
 	}
 

@@ -178,12 +178,15 @@ public class DocItem extends DRMObject implements InspectableObject {
 			DocItem it = (DocItem) en.nextElement();
 			it.removeFromInheritanceChildItems(this);
 		}
-		if (embeddingParentItem != null)
+		if (embeddingParentItem != null) {
 			embeddingParentItem.removeFromEmbeddingChildItems(this);
-		if (inheritanceParentItem != null)
+		}
+		if (inheritanceParentItem != null) {
 			inheritanceParentItem.removeFromInheritanceChildItems(this);
-		if (folder != null)
+		}
+		if (folder != null) {
 			folder.removeFromItems(this);
+		}
 		super.delete();
 	}
 
@@ -233,8 +236,9 @@ public class DocItem extends DRMObject implements InspectableObject {
 		String old = this.identifier;
 		this.identifier = identifier;
 		setChanged();
-		if (getFolder() != null)
+		if (getFolder() != null) {
 			getFolder().notifyItemHasBeenRenamedTo(this, old, identifier);
+		}
 	}
 
 	@Override
@@ -297,8 +301,9 @@ public class DocItem extends DRMObject implements InspectableObject {
 			if (oldParent != null) {
 				oldParent.removeFromEmbeddingChildItems(this);
 			}
-			if (newParent != null)
+			if (newParent != null) {
 				newParent.addToEmbeddingChildItems(this);
+			}
 		}
 		setChanged();
 
@@ -341,8 +346,9 @@ public class DocItem extends DRMObject implements InspectableObject {
 			if (oldParent != null) {
 				oldParent.removeFromInheritanceChildItems(this);
 			}
-			if (newParent != null)
+			if (newParent != null) {
 				newParent.addToInheritanceChildItems(this);
+			}
 			setChanged();
 		}
 	}
@@ -396,8 +402,9 @@ public class DocItem extends DRMObject implements InspectableObject {
 	}
 
 	public void _setTitleForKey(String title, String languageId) {
-		if (getFolder() != null)
+		if (getFolder() != null) {
 			getFolder().reorderItems();
+		}
 		titles.put(languageId, title);
 	}
 
@@ -448,8 +455,9 @@ public class DocItem extends DRMObject implements InspectableObject {
 		action.setItem(this);
 		setChanged();
 		notifyObservers(new StructureModified());
-		if (getFolder() != null)
+		if (getFolder() != null) {
 			getFolder().notifyStructureChanged();
+		}
 	}
 
 	public void removeFromActions(DocItemAction action) {
@@ -457,15 +465,17 @@ public class DocItem extends DRMObject implements InspectableObject {
 		actions.remove(action);
 		setChanged();
 		notifyObservers(new StructureModified());
-		if (getFolder() != null)
+		if (getFolder() != null) {
 			getFolder().notifyStructureChanged();
+		}
 	}
 
 	public DocItemVersion getVersion(DocItemVersion.Version aVersion) {
 		for (Enumeration en = getVersions().elements(); en.hasMoreElements();) {
 			DocItemVersion next = (DocItemVersion) en.nextElement();
-			if (next.getVersion().equals(aVersion))
+			if (next.getVersion().equals(aVersion)) {
 				return next;
+			}
 		}
 		return null;
 	}
@@ -530,8 +540,9 @@ public class DocItem extends DRMObject implements InspectableObject {
 	public String getHTMLLinkFrom(DocItem aStartPosition, Language language) {
 		StringBuffer returned = new StringBuffer();
 		String title = getTitle(language);
-		if (title == null)
+		if (title == null) {
 			title = getIdentifier();
+		}
 		returned.append("<a href=\"");
 		returned.append(getRelativePathFrom(aStartPosition) + ".html");
 		returned.append("\">");
@@ -576,8 +587,9 @@ public class DocItem extends DRMObject implements InspectableObject {
 	public boolean hasBeenApproved() {
 		for (Enumeration en = getActions().elements(); en.hasMoreElements();) {
 			DocItemAction next = (DocItemAction) en.nextElement();
-			if (next.isApproved())
+			if (next.isApproved()) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -617,8 +629,9 @@ public class DocItem extends DRMObject implements InspectableObject {
 
 	public DocItemVersion getValidVersionForLanguage(Language language) {
 		DocItemAction lastApproved = getLastApprovedActionForLanguage(language);
-		if (lastApproved != null)
+		if (lastApproved != null) {
 			return lastApproved.getVersion();
+		}
 		return null;
 	}
 
@@ -636,14 +649,17 @@ public class DocItem extends DRMObject implements InspectableObject {
 		public int compare(DocItem docItem1, DocItem docItem2) {
 			if (currentLanguage != null) {
 				String string1 = docItem1.getTitle(currentLanguage);
-				if (string1 == null)
+				if (string1 == null) {
 					string1 = docItem1.getIdentifier();
+				}
 				String string2 = docItem2.getTitle(currentLanguage);
-				if (string2 == null)
+				if (string2 == null) {
 					string2 = docItem2.getIdentifier();
+				}
 				return (string1.compareTo(string2));
-			} else
+			} else {
 				return (docItem1.getIdentifier().compareTo(docItem2.getIdentifier()));
+			}
 		}
 
 	}

@@ -27,12 +27,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.dm.view.DMEORepositoryView;
 import org.openflexo.dm.view.DMEORepositoryView.OpenEOModelComponent;
 import org.openflexo.foundation.FlexoException;
@@ -44,6 +38,11 @@ import org.openflexo.foundation.dm.eo.EOAccessException;
 import org.openflexo.foundation.dm.eo.EOModelAlreadyRegisteredException;
 import org.openflexo.foundation.dm.eo.InvalidEOModelFileException;
 import org.openflexo.foundation.dm.eo.UnresovedEntitiesException;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class ImportDMEOModelInitializer extends ActionInitializer {
 
@@ -65,8 +64,9 @@ public class ImportDMEOModelInitializer extends ActionInitializer {
 			public boolean run(ActionEvent e, ImportDMEOModel action) {
 				File newEOModelFile = OpenEOModelComponent.getEOModelDirectory();
 				if (newEOModelFile != null) {
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Imports EOModel: " + newEOModelFile.getAbsolutePath());
+					}
 					action.setEOModelFile(newEOModelFile);
 					return true;
 				}
@@ -81,8 +81,9 @@ public class ImportDMEOModelInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, ImportDMEOModel action) {
 				if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getRepository()) {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Finalizer for ImportDMEOModel in DMEORepository");
+					}
 					DMEORepositoryView repView = (DMEORepositoryView) getControllerActionInitializer().getDMController()
 							.getCurrentEditedObjectView();
 					repView.getEoModelTable().selectObject(action.getNewDMEOModel());

@@ -54,8 +54,9 @@ public class InspectorModel extends ModelObject {
 		Iterator it = tabs.values().iterator();
 		while (it.hasNext()) {
 			String answer = ((TabModel) it.next()).getWidgetTypeForProperty(propName);
-			if (answer != null)
+			if (answer != null) {
 				return answer;
+			}
 		}
 		return null;
 	}
@@ -68,8 +69,9 @@ public class InspectorModel extends ModelObject {
 		Iterator it = tabs.values().iterator();
 		while (it.hasNext()) {
 			PropertyModel answer = ((TabModel) it.next()).getPropertyNamed(depends);
-			if (answer != null)
+			if (answer != null) {
 				return answer;
+			}
 		}
 		if (getSuperInspector() != null) {
 			return getSuperInspector().getPropertyNamed(depends);

@@ -55,9 +55,9 @@ public class AddRoleSpecializationInitializer extends ActionInitializer {
 				Vector<Role> availableRoles = action.getFocusedObject().getAvailableRolesForSpecialization();
 
 				if (action.getRoleSpecializationAutomaticallyCreated()) {
-					if (availableRoles.contains(action.getNewParentRole()))
+					if (availableRoles.contains(action.getNewParentRole())) {
 						return true;
-					else {
+					} else {
 						// This parent is not conform
 						if (action.getFocusedObject().isSpecializingRole(action.getNewParentRole())) {
 							FlexoController.notify(FlexoLocalization.localizedForKeyWithParams(
@@ -94,8 +94,9 @@ public class AddRoleSpecializationInitializer extends ActionInitializer {
 						FlexoLocalization.localizedForKey("please_select_a_role"), roles, annotation);
 				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 					Role parentRole = roles.getValue();
-					if (parentRole == null)
+					if (parentRole == null) {
 						return false;
+					}
 					action.setNewParentRole(parentRole);
 					action.setAnnotation(annotation.getValue());
 					return true;

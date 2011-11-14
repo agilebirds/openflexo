@@ -29,10 +29,9 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.VerticalLayout;
 import org.openflexo.view.FlexoDialog;
-
-import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Component used to choose frameworks for the Data Model

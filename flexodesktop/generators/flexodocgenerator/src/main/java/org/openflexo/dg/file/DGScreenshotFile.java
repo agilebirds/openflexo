@@ -118,8 +118,9 @@ public class DGScreenshotFile extends AbstractCGFile {
 	@Override
 	public GenerationStatus getGenerationStatus() {
 		GenerationStatus status = super.getGenerationStatus();
-		if (status.isConflicting()) // Little hack to prevent screenshots from being in conflict
+		if (status.isConflicting()) {
 			return GenerationStatus.GenerationModified;
+		}
 		return status;
 	}
 }

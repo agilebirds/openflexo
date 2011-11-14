@@ -21,8 +21,6 @@ package org.openflexo.toolbox;
 
 import java.util.Date;
 
-import org.openflexo.toolbox.DateUtils;
-
 import junit.framework.TestCase;
 
 public class TestDateUtils extends TestCase {

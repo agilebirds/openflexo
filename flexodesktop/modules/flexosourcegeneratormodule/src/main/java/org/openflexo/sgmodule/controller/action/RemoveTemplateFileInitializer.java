@@ -24,14 +24,13 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.cg.templates.action.RemoveTemplateFile;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-
-import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.cg.templates.action.RemoveTemplateFile;
 
 public class RemoveTemplateFileInitializer extends ActionInitializer {
 

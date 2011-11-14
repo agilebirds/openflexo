@@ -164,14 +164,16 @@ public class FJPModelBuilder extends ModelBuilder {
 
 	private Type createType(String typeName, int dimensions) {
 		// logger.info("createType "+typeName+" dimensions: "+dimensions);
-		if (typeName == null || typeName.equals(""))
+		if (typeName == null || typeName.equals("")) {
 			return null;
+		}
 		return FJPType.createUnresolved(typeName, dimensions, currentClass);
 	}
 
 	private void addJavaDoc(AbstractJavaEntity entity) {
-		if (lastComment == null)
+		if (lastComment == null) {
 			return;
+		}
 
 		entity.setComment(lastComment);
 

@@ -48,7 +48,8 @@ public class DefaultProjectLoadingHandler implements ProjectLoadingHandler {
 
 	@Override
 	public void notifySevereLoadingFailure(FlexoResource r, Exception e) {
-		if (logger.isLoggable(Level.SEVERE))
+		if (logger.isLoggable(Level.SEVERE)) {
 			logger.log(Level.SEVERE, "Error loading resource " + r.getFullyQualifiedName(), e);
+		}
 	}
 }

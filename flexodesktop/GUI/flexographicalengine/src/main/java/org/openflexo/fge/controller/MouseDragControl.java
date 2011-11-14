@@ -151,17 +151,19 @@ public class MouseDragControl extends MouseControl {
 	}
 
 	public MouseDragControlActionType getActionType() {
-		if (action != null)
+		if (action != null) {
 			return action.getActionType();
-		else
+		} else {
 			return MouseDragControlActionType.NONE;
+		}
 	}
 
 	public void setActionType(MouseDragControlActionType actionType) {
 		if (actionType != null) {
 			action = actionType.makeAction();
-		} else
+		} else {
 			action = MouseDragControlActionType.NONE.makeAction();
+		}
 	}
 
 	@Override

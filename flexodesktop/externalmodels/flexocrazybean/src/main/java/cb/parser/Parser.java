@@ -91,11 +91,13 @@ public class Parser {
 	private Token match(int kind, String match) {
 		Token t = lexer.getToken();
 
-		if (t.kind != kind)
+		if (t.kind != kind) {
 			throw new RuntimeException("Mismatch: Expected " + kind + " but got " + t.kind + " at line " + t.line);
+		}
 
-		if ((match != null) && !match.equals(t.image))
+		if ((match != null) && !match.equals(t.image)) {
 			throw new RuntimeException("Mismatch: Expected " + match + " but got " + t.image + " at line " + t.line);
+		}
 
 		return t;
 	}
@@ -134,9 +136,9 @@ public class Parser {
 	private Token matchAny(int kind) {
 		Token t = lexer.getToken();
 
-		if (t.kind == kind)
+		if (t.kind == kind) {
 			return t;
-		else {
+		} else {
 			lexer.ungetToken(t);
 			return null;
 		}
@@ -160,8 +162,9 @@ public class Parser {
 			String name = file.getName();
 			int index = name.lastIndexOf('.');
 
-			if (index > 0)
+			if (index > 0) {
 				name = name.substring(0, index);
+			}
 
 			tree.setModelName(name);
 
@@ -217,8 +220,9 @@ public class Parser {
 		while (t4 != null) {
 			PetalNode prop = parseValue(false);
 
-			if (prop != null)
+			if (prop != null) {
 				obj.addProperty(t4.image, prop);
+			}
 
 			t4 = matchAny(Lexer.IDENT);
 		}
@@ -230,8 +234,9 @@ public class Parser {
 		if (!ignored(obj)) {
 			obj.init();
 			return obj;
-		} else
+		} else {
 			return null;
+		}
 	}
 
 	public PetalNode parseValue(boolean rparen_ok) {
@@ -270,8 +275,9 @@ public class Parser {
 					return parseList();
 				} else if (t2.image.equals("value")) {
 					return parseValueObject();
-				} else
+				} else {
 					throw new RuntimeException("Unexpected " + t2.image + " after (");
+				}
 
 			case Lexer.INTEGER:
 				match(Lexer.COMMA);
@@ -290,10 +296,11 @@ public class Parser {
 			}
 
 		default:
-			if ((t.kind == Lexer.RPAREN) && rparen_ok)
+			if ((t.kind == Lexer.RPAREN) && rparen_ok) {
 				return null;
-			else
+			} else {
 				throw new RuntimeException("Unexpected " + t.image);
+			}
 		}
 	}
 
@@ -310,9 +317,10 @@ public class Parser {
 
 		PetalNode obj;
 
-		while ((obj = parseValue(true)) != null)
+		while ((obj = parseValue(true)) != null) {
 			// null == RPAREN
 			list.add(obj);
+		}
 		return list;
 	}
 

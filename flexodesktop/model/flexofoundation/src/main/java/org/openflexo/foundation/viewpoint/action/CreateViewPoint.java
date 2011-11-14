@@ -32,14 +32,14 @@ import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.ImportedOntology;
 import org.openflexo.foundation.ontology.FlexoOntology.OntologyNotFoundException;
+import org.openflexo.foundation.ontology.ImportedOntology;
 import org.openflexo.foundation.rm.SaveResourceException;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointFolder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
-import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
@@ -181,8 +181,9 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 			if (ontologyName == null && ontologyFile != null && ontologyFile.getName().length() > 4) {
 				ontologyName = ontologyFile.getName().substring(0, ontologyFile.getName().length() - 4);
 			}
-			if (StringUtils.isNotEmpty(ontologyURI))
+			if (StringUtils.isNotEmpty(ontologyURI)) {
 				_newCalcURI = ontologyURI;
+			}
 			setNewCalcName(ontologyName);
 		}
 	}

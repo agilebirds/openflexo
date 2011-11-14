@@ -67,8 +67,9 @@ public abstract class EOEntitySelectorColumn<D extends FlexoModelObject, T exten
 				@Override
 				public void apply() {
 					super.apply();
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Apply");
+					}
 					if (_editedRowObject != null) {
 						setValue(_editedRowObject, getEditedObject());
 					}
@@ -77,8 +78,9 @@ public abstract class EOEntitySelectorColumn<D extends FlexoModelObject, T exten
 				@Override
 				public void cancel() {
 					super.cancel();
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Cancel");
+					}
 					if (_editedRowObject != null) {
 						setValue(_editedRowObject, getRevertValue());
 					}

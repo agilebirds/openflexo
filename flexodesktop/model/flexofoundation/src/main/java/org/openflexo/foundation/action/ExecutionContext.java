@@ -77,9 +77,10 @@ public class ExecutionContext {
 					if (objectsCreatedByAction.get(k).equals(_value)) {
 						_keyOfActionWhereThisValueWasInstanciated = k;
 						_actionWhereThisValueWasInstanciated = a;
-						if (logger.isLoggable(Level.FINE))
+						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("SingleProperty: " + propertyKey + ": Action " + _action + " property " + propertyKey
 									+ " is a value created when executing action " + a.toSimpleString() + " for key " + k);
+						}
 					}
 				}
 			}
@@ -96,9 +97,10 @@ public class ExecutionContext {
 
 		public void notifyExternalObjectCreatedByAction(T object, FlexoAction action, String key, boolean considerAsOriginal) {
 			if (action == _actionWhereThisValueWasInstanciated && key.equals(_keyOfActionWhereThisValueWasInstanciated)) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Object " + object + " was created with key " + key + " and this object is also referenced in " + _action
 							+ " with property " + _propertyKey);
+				}
 				T oldValue = getValue();
 				setValue(object);
 				_action.replacedSinglePropertyValue(_propertyKey, object, oldValue, _originalValue);
@@ -108,9 +110,10 @@ public class ExecutionContext {
 
 		public void notifyExternalObjectDeletedByAction(T object, FlexoAction action, String key, boolean considerAsOriginal) {
 			if (action == _actionWhereThisValueWasInstanciated && key.equals(_keyOfActionWhereThisValueWasInstanciated)) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Object " + object + " was deleted with key " + key + " and this object is also referenced in " + _action
 							+ " with property " + _propertyKey);
+				}
 				T oldValue = getValue();
 				setValue(null);
 				_action.replacedSinglePropertyValue(_propertyKey, null, oldValue, _originalValue);
@@ -139,8 +142,9 @@ public class ExecutionContext {
 			_persistentValues = new Vector<PersistentValue>();
 
 			// If there is no values, just return
-			if (_values == null)
+			if (_values == null) {
 				return;
+			}
 
 			int index = 0;
 			for (T value : _values) {
@@ -156,9 +160,10 @@ public class ExecutionContext {
 							newPersistentValue._actionWhereThisValueWasInstanciated = a;
 							newPersistentValue.index = index;
 							_persistentValues.add(newPersistentValue);
-							if (logger.isLoggable(Level.INFO))
+							if (logger.isLoggable(Level.INFO)) {
 								logger.info("VectorProperty: " + propertyKey + " at index " + index + ": Action " + _action + " property "
 										+ propertyKey + " is a value created when executing action " + a.toSimpleString() + " for key " + k);
+							}
 						}
 					}
 				}
@@ -172,8 +177,9 @@ public class ExecutionContext {
 		}
 
 		protected T getValueAtIndex(int index) {
-			if (_values != null && index < _values.size())
+			if (_values != null && index < _values.size()) {
 				return _values.get(index);
+			}
 			return null;
 		}
 
@@ -185,14 +191,16 @@ public class ExecutionContext {
 
 		public void notifyExternalObjectCreatedByAction(T object, FlexoAction action, String key, boolean considerAsOriginal) {
 			for (PersistentValue persistentValue : _persistentValues) {
-				if (logger.isLoggable(Level.FINEST))
+				if (logger.isLoggable(Level.FINEST)) {
 					logger.finest("persistentValue action=" + persistentValue._actionWhereThisValueWasInstanciated + " key="
 							+ persistentValue._keyOfActionWhereThisValueWasInstanciated + " index=" + persistentValue.index);
+				}
 				if (action == persistentValue._actionWhereThisValueWasInstanciated
 						&& key.equals(persistentValue._keyOfActionWhereThisValueWasInstanciated)) {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Object " + object + " was created with key " + key + " and this object is also referenced in "
 								+ _action + " with property " + _propertyKey + " at index " + persistentValue.index);
+					}
 					T oldValue = getValueAtIndex(persistentValue.index);
 					setValueAtIndex(object, persistentValue.index);
 					_action.replacedVectorPropertyValue(_propertyKey, persistentValue.index, object, oldValue,
@@ -206,9 +214,10 @@ public class ExecutionContext {
 			for (PersistentValue persistentValue : _persistentValues) {
 				if (action == persistentValue._actionWhereThisValueWasInstanciated
 						&& key.equals(persistentValue._keyOfActionWhereThisValueWasInstanciated)) {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Object " + object + " was deleted with key " + key + " and this object is also referenced in "
 								+ _action + " with property " + _propertyKey + " at index " + persistentValue.index);
+					}
 					T oldValue = getValueAtIndex(persistentValue.index);
 					setValueAtIndex(null, persistentValue.index);
 					_action.replacedVectorPropertyValue(_propertyKey, persistentValue.index, null, oldValue, persistentValue._originalValue);
@@ -224,8 +233,9 @@ public class ExecutionContext {
 		Vector<String> allProperties = new Vector<String>();
 		allProperties.add("focusedObject");
 		allProperties.add("globalSelection");
-		for (String k : _action.getActionType().getPersistentProperties())
+		for (String k : _action.getActionType().getPersistentProperties()) {
 			allProperties.add(k);
+		}
 
 		for (String key : allProperties) {
 			if (_action.isSingleProperty(key)) {
@@ -236,12 +246,14 @@ public class ExecutionContext {
 		}
 
 		for (SingleProperty sp : _singleProperties) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Created SingleProperty " + sp._propertyKey + " value: " + sp.getValue());
+			}
 		}
 		for (VectorProperty sp : _vectorProperties) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Created VectorProperty " + sp._propertyKey + " value: " + sp.getValues());
+			}
 		}
 	}
 

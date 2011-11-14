@@ -27,9 +27,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.toolbox.FileUtils;
-import org.openflexo.xmlcode.XMLMapping;
-
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dkv.action.AddDomainAction;
 import org.openflexo.foundation.dkv.action.AddLanguageAction;
@@ -49,6 +46,8 @@ import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.xml.FlexoDKVModelBuilder;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.toolbox.FileUtils;
+import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * @author gpolet
@@ -73,9 +72,10 @@ public class DKVModel extends DKVObject implements XMLStorageResourceData {
 			try {
 				dkvRes = new FlexoDKVResource(project, dl, dkvModelFile);
 			} catch (InvalidFileNameException e1) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("Could not create DKV resource. Name: " + dkvModelFile.getRelativePath()
 							+ " is not valid. This should never happen.");
+				}
 				return null;
 			}
 		}
@@ -87,8 +87,9 @@ public class DKVModel extends DKVObject implements XMLStorageResourceData {
 			project.registerResource(dkvRes);
 		} catch (Exception e1) {
 			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
+			}
 			e1.printStackTrace();
 		}
 		return dl;
@@ -147,29 +148,35 @@ public class DKVModel extends DKVObject implements XMLStorageResourceData {
 	}
 
 	public boolean isDomainNameLegal(String domainName) throws DuplicateDKVObjectException, EmptyStringException {
-		if (domainName == null)
+		if (domainName == null) {
 			throw new NullPointerException();
-		if (domainName.trim().length() == 0)
+		}
+		if (domainName.trim().length() == 0) {
 			throw new EmptyStringException();
+		}
 		Enumeration en = getDomains().elements();
 		while (en.hasMoreElements()) {
 			Domain dom = (Domain) en.nextElement();
-			if (dom.getName().equals(domainName))
+			if (dom.getName().equals(domainName)) {
 				throw new DuplicateDKVObjectException(dom);
+			}
 		}
 		return true;
 	}
 
 	public Domain addDomainNamed(String domainName) throws DuplicateDKVObjectException, EmptyStringException {
-		if (domainName == null)
+		if (domainName == null) {
 			throw new NullPointerException();
-		if (domainName.trim().length() == 0)
+		}
+		if (domainName.trim().length() == 0) {
 			throw new EmptyStringException();
+		}
 		Enumeration en = getDomains().elements();
 		while (en.hasMoreElements()) {
 			Domain dom = (Domain) en.nextElement();
-			if (dom.getName().equals(domainName))
+			if (dom.getName().equals(domainName)) {
 				throw new DuplicateDKVObjectException(dom);
+			}
 		}
 		Domain dom = new Domain(this);
 		dom.setName(domainName);
@@ -179,29 +186,35 @@ public class DKVModel extends DKVObject implements XMLStorageResourceData {
 	}
 
 	public boolean isLanguageNameLegal(String lgName) throws DuplicateDKVObjectException, EmptyStringException {
-		if (lgName == null)
+		if (lgName == null) {
 			throw new NullPointerException();
-		if (lgName.trim().length() == 0)
+		}
+		if (lgName.trim().length() == 0) {
 			throw new EmptyStringException();
+		}
 		Enumeration en = getLanguages().elements();
 		while (en.hasMoreElements()) {
 			Language lg = (Language) en.nextElement();
-			if (lg.getName().equals(lgName))
+			if (lg.getName().equals(lgName)) {
 				throw new DuplicateDKVObjectException(lg);
+			}
 		}
 		return true;
 	}
 
 	public Language addLanguageNamed(String lgName) throws DuplicateDKVObjectException, EmptyStringException {
-		if (lgName == null)
+		if (lgName == null) {
 			throw new NullPointerException();
-		if (lgName.trim().length() == 0)
+		}
+		if (lgName.trim().length() == 0) {
 			throw new EmptyStringException();
+		}
 		Enumeration en = getLanguages().elements();
 		while (en.hasMoreElements()) {
 			Language lg = (Language) en.nextElement();
-			if (lg.getName().equals(lgName))
+			if (lg.getName().equals(lgName)) {
 				throw new DuplicateDKVObjectException(lg);
+			}
 		}
 		Language lg = new Language(this);
 		lg.setName(lgName);
@@ -241,8 +254,9 @@ public class DKVModel extends DKVObject implements XMLStorageResourceData {
 
 	@Override
 	public void setName(String name) throws DuplicateDKVObjectException {
-		if (areSameValue(name, this.name))
+		if (areSameValue(name, this.name)) {
 			return;
+		}
 		sortedDomains = null;
 		super.setName(name);
 	}
@@ -275,9 +289,11 @@ public class DKVModel extends DKVObject implements XMLStorageResourceData {
 	}
 
 	public Language getMainLanguage() {
-		for (Language l : getLanguages())
-			if (l.getIsMain())
+		for (Language l : getLanguages()) {
+			if (l.getIsMain()) {
 				return l;
+			}
+		}
 		getLanguages().firstElement().setIsMain(true);
 		return getLanguages().firstElement();
 	}
@@ -351,8 +367,9 @@ public class DKVModel extends DKVObject implements XMLStorageResourceData {
 
 		public DomainAdded addToDomains(Domain dom) {
 			if (domains.contains(dom)) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Attempt to insert twice the same domain.");
+				}
 				return null;
 			}
 			domains.add(dom);
@@ -448,8 +465,9 @@ public class DKVModel extends DKVObject implements XMLStorageResourceData {
 
 		public LanguageAdded addToLanguages(Language lg) {
 			if (languages.contains(lg)) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Attempt to insert twice the same language.");
+				}
 				return null;
 			}
 			languages.add(lg);
@@ -461,8 +479,9 @@ public class DKVModel extends DKVObject implements XMLStorageResourceData {
 
 		public LanguageRemoved removeFromLanguage(Language lg) {
 			if (!languages.contains(lg)) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Attempt to remove a language that can not be found: " + lg.getName());
+				}
 				return null;
 			}
 			languages.remove(lg);
@@ -497,19 +516,22 @@ public class DKVModel extends DKVObject implements XMLStorageResourceData {
 		Enumeration en = getDomains().elements();
 		while (en.hasMoreElements()) {
 			Domain dom = (Domain) en.nextElement();
-			if (dom.getName().equals(name))
+			if (dom.getName().equals(name)) {
 				return dom;
+			}
 		}
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Domain " + name + " could not be found.");
+		}
 		return null;
 	}
 
 	public String getNextDomainName() {
 		int i = 0;
 		while (true) {
-			if (getDomainNamed("Domain-" + i) == null)
+			if (getDomainNamed("Domain-" + i) == null) {
 				return "Domain-" + i;
+			}
 			i++;
 		}
 	}
@@ -518,11 +540,13 @@ public class DKVModel extends DKVObject implements XMLStorageResourceData {
 		Enumeration en = getLanguages().elements();
 		while (en.hasMoreElements()) {
 			Language lg = (Language) en.nextElement();
-			if (lg.getName().equals(lg_name))
+			if (lg.getName().equals(lg_name)) {
 				return lg;
+			}
 		}
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Language " + lg_name + " could not be found.");
+		}
 		return null;
 	}
 

@@ -24,8 +24,8 @@ import java.util.logging.Logger;
 
 import org.openflexo.components.MultipleObjectSelectorPopup;
 import org.openflexo.components.browser.BrowserElementType;
-import org.openflexo.components.browser.DefaultBrowserConfiguration;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
+import org.openflexo.components.browser.DefaultBrowserConfiguration;
 import org.openflexo.dm.view.controller.DMController;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -43,8 +43,9 @@ public class SelectDMEntitiesPopup extends MultipleObjectSelectorPopup {
 						return BrowserFilterStatus.SHOW;
 					}
 				}), project, controller.getFlexoFrame(), controller.getEditor());
-		if (selectedEntities != null)
+		if (selectedEntities != null) {
 			choicePanel.setSelectedObjects(selectedEntities);
+		}
 	}
 
 }

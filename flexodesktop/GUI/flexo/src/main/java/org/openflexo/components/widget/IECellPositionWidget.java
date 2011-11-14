@@ -36,15 +36,13 @@ import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 
 import org.openflexo.ColorCst;
-import org.openflexo.FlexoCst;
-import org.openflexo.swing.VerticalLayout;
-
 import org.openflexo.foundation.ie.widget.IETDWidget;
 import org.openflexo.inspector.AbstractController;
 import org.openflexo.inspector.model.PropertyModel;
 import org.openflexo.inspector.widget.DenaliWidget;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.swing.VerticalLayout;
 
 /**
  * @author gpolet
@@ -119,8 +117,9 @@ public class IECellPositionWidget extends CustomInspectorWidget<String> {
 	 */
 	@Override
 	public void updateWidgetFromModel() {
-		if (getModel() != null)
+		if (getModel() != null) {
 			radioPanel.update();
+		}
 	}
 
 	protected class RadioButtonMatrixPanel extends JPanel {
@@ -296,11 +295,13 @@ public class IECellPositionWidget extends CustomInspectorWidget<String> {
 			bg.add(bottomMiddle);
 			bg.add(bottomRight);
 			Color c = UIManager.getLookAndFeelDefaults().getColor("TabbedPane.contentAreaColor");
-			if (c == null)
+			if (c == null) {
 				c = ColorCst.SELECTED_LINES_TABULAR_VIEW_COLOR;
+			}
 			Color bColor = UIManager.getLookAndFeelDefaults().getColor("Tree.selectionBorderColor");
-			if (bColor == null)
+			if (bColor == null) {
 				bColor = new Color(99, 130, 191);
+			}
 			TitledBorder b = BorderFactory.createTitledBorder(BorderFactory.createLineBorder(c));
 			b.setTitle(FlexoLocalization.localizedForKey("cell", b));
 			b.setTitleFont(DenaliWidget.DEFAULT_LABEL_FONT);
@@ -336,32 +337,36 @@ public class IECellPositionWidget extends CustomInspectorWidget<String> {
 			} else if (bottomRight.isSelected()) {
 				getModel().setVerticalAlignement(IETDWidget.VALIGN_BOTTOM);
 				getModel().setAlignement(IETDWidget.ALIGN_RIGHT);
-			} else if (logger.isLoggable(Level.WARNING))
+			} else if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("There are no checkboxes selected or somebody just messed up something here ;-)");
+			}
 		}
 
 		protected void update() {
 			if (IETDWidget.VALIGN_TOP.equals(getModel().getVerticalAlignement())) {
-				if (IETDWidget.ALIGN_RIGHT.equals(getModel().getAlignement()))
+				if (IETDWidget.ALIGN_RIGHT.equals(getModel().getAlignement())) {
 					topRight.setSelected(true);
-				else if (IETDWidget.ALIGN_CENTER.equals(getModel().getAlignement()))
+				} else if (IETDWidget.ALIGN_CENTER.equals(getModel().getAlignement())) {
 					topMiddle.setSelected(true);
-				else
+				} else {
 					topLeft.setSelected(true);
+				}
 			} else if (IETDWidget.VALIGN_BOTTOM.equals(getModel().getVerticalAlignement())) {
-				if (IETDWidget.ALIGN_RIGHT.equals(getModel().getAlignement()))
+				if (IETDWidget.ALIGN_RIGHT.equals(getModel().getAlignement())) {
 					bottomRight.setSelected(true);
-				else if (IETDWidget.ALIGN_CENTER.equals(getModel().getAlignement()))
+				} else if (IETDWidget.ALIGN_CENTER.equals(getModel().getAlignement())) {
 					bottomMiddle.setSelected(true);
-				else
+				} else {
 					bottomLeft.setSelected(true);
+				}
 			} else {
-				if (IETDWidget.ALIGN_RIGHT.equals(getModel().getAlignement()))
+				if (IETDWidget.ALIGN_RIGHT.equals(getModel().getAlignement())) {
 					middleRight.setSelected(true);
-				else if (IETDWidget.ALIGN_CENTER.equals(getModel().getAlignement()))
+				} else if (IETDWidget.ALIGN_CENTER.equals(getModel().getAlignement())) {
 					middleMiddle.setSelected(true);
-				else
+				} else {
 					middleLeft.setSelected(true);
+				}
 			}
 
 		}

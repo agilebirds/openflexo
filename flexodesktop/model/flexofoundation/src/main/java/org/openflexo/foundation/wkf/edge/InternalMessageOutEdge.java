@@ -74,8 +74,9 @@ public final class InternalMessageOutEdge extends InternalMessageEdge<PetriGraph
 			setStartNode(startNode);
 			setEndNode(nextPort);
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Inconsistent data while building InternalMessageOutEdge !");
+			}
 			throw new InvalidEdgeException(this);
 		}
 		if (!isEdgeValid()) {
@@ -117,8 +118,9 @@ public final class InternalMessageOutEdge extends InternalMessageEdge<PetriGraph
 		// registery
 		// is registered
 
-		if (getStartNode() == null || getEndNode() == null || !getEndNode().isOutPort())
+		if (getStartNode() == null || getEndNode() == null || !getEndNode().isOutPort()) {
 			return false;
+		}
 
 		return (getStartNode().getProcess() == getPortRegistery().getProcess());
 	}

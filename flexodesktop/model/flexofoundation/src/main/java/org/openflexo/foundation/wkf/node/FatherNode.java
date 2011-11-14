@@ -66,11 +66,13 @@ public abstract class FatherNode extends FlexoNode {
 	}
 
 	public boolean containsNormalNodes() {
-		if (getContainedPetriGraph() == null)
+		if (getContainedPetriGraph() == null) {
 			return false;
+		}
 		for (AbstractNode node : getContainedPetriGraph().getNodes()) {
-			if (node instanceof FlexoNode && !((FlexoNode) node).isBeginOrEndNode())
+			if (node instanceof FlexoNode && !((FlexoNode) node).isBeginOrEndNode()) {
 				return true;
+			}
 		}
 		return false;
 	}

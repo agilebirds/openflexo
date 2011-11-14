@@ -85,12 +85,14 @@ public class JavadocItem extends FlexoObject implements ParsedJavadoc {
 	 */
 	@Override
 	public ParsedJavadocItem getTagByName(String tagName, String parameterName) {
-		if (parameterName.equals("User Manual"))
+		if (parameterName.equals("User Manual")) {
 			parameterName = "UserManual";
+		}
 		Vector<? extends ParsedJavadocItem> tags = getTagsByName(tagName);
 		for (ParsedJavadocItem tag : tags) {
-			if (tag.getParameterName() != null && tag.getParameterName().equals(parameterName))
+			if (tag.getParameterName() != null && tag.getParameterName().equals(parameterName)) {
 				return tag;
+			}
 		}
 		return null;
 	}
@@ -98,15 +100,18 @@ public class JavadocItem extends FlexoObject implements ParsedJavadoc {
 	// When insert set to true, insert at first position (related to tag name), otherwise put at the end
 	@Override
 	public ParsedJavadocItem addTagForNameAndValue(String tagName, String parameterName, String parameterValue, boolean insert) {
-		if (parameterName == null)
+		if (parameterName == null) {
 			parameterName = "";
-		if (parameterName.equals("User Manual"))
+		}
+		if (parameterName.equals("User Manual")) {
 			parameterName = "UserManual";
+		}
 		int index = _docletTags.size();
 		for (int i = 0; i < _docletTags.size(); i++) {
 			ParsedJavadocItem docletTag = _docletTags.elementAt(i);
-			if (docletTag.getTag() != null && docletTag.getTag().equals(tagName) && i < index)
+			if (docletTag.getTag() != null && docletTag.getTag().equals(tagName) && i < index) {
 				index = i;
+			}
 			if (docletTag.getParameterName() != null && docletTag.getParameterName().equals(parameterName)) {
 				docletTag.setParameterValue(parameterValue);
 				return docletTag;
@@ -143,8 +148,9 @@ public class JavadocItem extends FlexoObject implements ParsedJavadoc {
 				if (isFirst) {
 					returned.append("  * @" + tag.getTag() + " " + tag.getParameterName() + " " + next + StringUtils.LINE_SEPARATOR);
 				} else {
-					if (indent == null)
+					if (indent == null) {
 						indent = StringUtils.buildWhiteSpaceIndentation(indentLength);
+					}
 					returned.append("  *" + indent + " " + next + StringUtils.LINE_SEPARATOR);
 				}
 				isFirst = false;

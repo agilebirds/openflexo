@@ -72,8 +72,9 @@ public class ParsedDocx implements IParsedDocx {
 		IParsedFlexoObject flexoObject = getOrCreateParsedFlexoObject(flexoId, userId);
 
 		IParsedFlexoDescription parsedDescription = flexoObject.getParsedFlexoDescription();
-		if (parsedDescription == null)
+		if (parsedDescription == null) {
 			parsedDescription = new ParsedFlexoDescription(flexoObject);
+		}
 
 		return parsedDescription;
 	}
@@ -82,8 +83,9 @@ public class ParsedDocx implements IParsedDocx {
 	public Collection<IParsedFlexoDescription> getAllParsedFlexoDescriptions() {
 		List<IParsedFlexoDescription> list = new ArrayList<IParsedFlexoDescription>();
 		for (IParsedFlexoObject flexoObject : getAllParsedFlexoObjects()) {
-			if (flexoObject.getParsedFlexoDescription() != null)
+			if (flexoObject.getParsedFlexoDescription() != null) {
 				list.add(flexoObject.getParsedFlexoDescription());
+			}
 		}
 		return list;
 	}
@@ -95,8 +97,9 @@ public class ParsedDocx implements IParsedDocx {
 		IParsedFlexoObject flexoObject = getOrCreateParsedFlexoObject(flexoId, userId);
 
 		IParsedFlexoName parsedName = flexoObject.getParsedFlexoName();
-		if (parsedName == null)
+		if (parsedName == null) {
 			parsedName = new ParsedFlexoName(flexoObject);
+		}
 
 		return parsedName;
 	}
@@ -111,8 +114,9 @@ public class ParsedDocx implements IParsedDocx {
 	public Collection<IParsedFlexoName> getAllParsedFlexoNames() {
 		List<IParsedFlexoName> list = new ArrayList<IParsedFlexoName>();
 		for (IParsedFlexoObject flexoObject : getAllParsedFlexoObjects()) {
-			if (flexoObject.getParsedFlexoName() != null)
+			if (flexoObject.getParsedFlexoName() != null) {
 				list.add(flexoObject.getParsedFlexoName());
+			}
 		}
 		return list;
 	}
@@ -124,8 +128,9 @@ public class ParsedDocx implements IParsedDocx {
 		IParsedFlexoObject flexoObject = getOrCreateParsedFlexoObject(flexoId, userId);
 
 		IParsedFlexoTitle parsedTitle = flexoObject.getParsedFlexoTitle();
-		if (parsedTitle == null)
+		if (parsedTitle == null) {
 			parsedTitle = new ParsedFlexoTitle(flexoObject);
+		}
 
 		return parsedTitle;
 	}
@@ -140,8 +145,9 @@ public class ParsedDocx implements IParsedDocx {
 	public Collection<IParsedFlexoTitle> getAllParsedFlexoTitles() {
 		List<IParsedFlexoTitle> list = new ArrayList<IParsedFlexoTitle>();
 		for (IParsedFlexoObject flexoObject : getAllParsedFlexoObjects()) {
-			if (flexoObject.getParsedFlexoTitle() != null)
+			if (flexoObject.getParsedFlexoTitle() != null) {
 				list.add(flexoObject.getParsedFlexoTitle());
+			}
 		}
 		return list;
 	}
@@ -153,8 +159,9 @@ public class ParsedDocx implements IParsedDocx {
 		IParsedFlexoObject flexoObject = getOrCreateParsedFlexoObject(flexoId, userId);
 
 		IParsedFlexoContent parsedContent = flexoObject.getParsedFlexoContent();
-		if (parsedContent == null)
+		if (parsedContent == null) {
 			parsedContent = new ParsedFlexoContent(flexoObject);
+		}
 
 		return parsedContent;
 	}
@@ -169,8 +176,9 @@ public class ParsedDocx implements IParsedDocx {
 	public Collection<IParsedFlexoContent> getAllParsedFlexoContents() {
 		List<IParsedFlexoContent> list = new ArrayList<IParsedFlexoContent>();
 		for (IParsedFlexoObject flexoObject : getAllParsedFlexoObjects()) {
-			if (flexoObject.getParsedFlexoContent() != null)
+			if (flexoObject.getParsedFlexoContent() != null) {
 				list.add(flexoObject.getParsedFlexoContent());
+			}
 		}
 		return list;
 	}

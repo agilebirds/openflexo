@@ -68,8 +68,9 @@ public class DataPropertyAssertion extends AbstractAssertion {
 	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, BindingDefinitionType.GET, false) {
 		@Override
 		public java.lang.reflect.Type getType() {
-			if (getOntologyProperty() instanceof OntologyDataProperty)
+			if (getOntologyProperty() instanceof OntologyDataProperty) {
 				return ((OntologyDataProperty) getOntologyProperty()).getDataType().getAccessedType();
+			}
 			return Object.class;
 		};
 	};
@@ -79,8 +80,9 @@ public class DataPropertyAssertion extends AbstractAssertion {
 	}
 
 	public ViewPointDataBinding getValue() {
-		if (value == null)
+		if (value == null) {
 			value = new ViewPointDataBinding(this, EditionActionBindingAttribute.value, getValueBindingDefinition());
+		}
 		return value;
 	}
 

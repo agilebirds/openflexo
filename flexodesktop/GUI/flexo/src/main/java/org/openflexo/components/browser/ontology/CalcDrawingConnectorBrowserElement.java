@@ -48,8 +48,9 @@ public class CalcDrawingConnectorBrowserElement extends BrowserElement {
 
 	@Override
 	public String getName() {
-		if (StringUtils.isEmpty(getConnector().getName()))
+		if (StringUtils.isEmpty(getConnector().getName())) {
 			return "<" + FlexoLocalization.localizedForKey("unnamed") + ">";
+		}
 		return getConnector().getName();
 	}
 

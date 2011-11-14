@@ -50,8 +50,9 @@ public abstract class InternalMessageEdge<S extends AbstractNode, E extends Abst
 	 */
 	@Override
 	public boolean isInputPort() {
-		if (getFlexoPort() != null)
+		if (getFlexoPort() != null) {
 			return getFlexoPort().isInPort();
+		}
 		return false;
 	}
 
@@ -60,8 +61,9 @@ public abstract class InternalMessageEdge<S extends AbstractNode, E extends Abst
 	 */
 	@Override
 	public boolean isOutputPort() {
-		if (getFlexoPort() != null)
+		if (getFlexoPort() != null) {
 			return getFlexoPort().isOutPort();
+		}
 		return false;
 	}
 

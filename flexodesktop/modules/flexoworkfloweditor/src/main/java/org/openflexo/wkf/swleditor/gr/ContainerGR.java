@@ -37,13 +37,13 @@ import org.openflexo.fge.controller.CustomDragControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.fge.graphics.BackgroundStyle;
+import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.DecorationPainter;
 import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.TextStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.ForegroundStyle.CapStyle;
 import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 import org.openflexo.fge.graphics.ForegroundStyle.JoinStyle;
+import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.ShapeView;
 import org.openflexo.foundation.DataModification;
@@ -144,11 +144,13 @@ public abstract class ContainerGR<O extends WKFObject> extends WKFObjectGR<O> im
 	@Override
 	public void delete() {
 		WKFObject o = null;
-		if (getModel() instanceof FlexoPetriGraph)
+		if (getModel() instanceof FlexoPetriGraph) {
 			o = ((FlexoPetriGraph) getModel()).getContainer();
+		}
 		super.delete();
-		if (o != null)
+		if (o != null) {
 			o.deleteObserver(this);
+		}
 	}
 
 	@Override
@@ -319,8 +321,9 @@ public abstract class ContainerGR<O extends WKFObject> extends WKFObjectGR<O> im
 			} else if (dataModification instanceof ObjectSizeChanged) {
 				notifyObjectResized();
 			} else if (dataModification instanceof PetriGraphHasBeenOpened) {
-				if (getParentGraphicalRepresentation() != null)
+				if (getParentGraphicalRepresentation() != null) {
 					getParentGraphicalRepresentation().moveToTop(this);
+				}
 				switchToSelectionLayer();
 				restoreNormalLayer();
 			}
@@ -333,12 +336,14 @@ public abstract class ContainerGR<O extends WKFObject> extends WKFObjectGR<O> im
 	protected void switchToSelectionLayer() {
 		// logger.info("switchToSelectionLayer()");
 
-		if (switchedToSelectionLayer)
+		if (switchedToSelectionLayer) {
 			return;
+		}
 
 		for (WKFConnectorGR containedGR : getAllContainedConnectors()) {
-			if (containedGR.isConnectorFullyVisible())
+			if (containedGR.isConnectorFullyVisible()) {
 				containedGR.switchToSelectionLayer();
+			}
 		}
 		// Set layer AFTER in order not to perturbate edge layer computing
 		regularLayer = getLayer();
@@ -349,8 +354,9 @@ public abstract class ContainerGR<O extends WKFObject> extends WKFObjectGR<O> im
 
 	protected void restoreNormalLayer() {
 		setLayer(regularLayer);
-		for (WKFConnectorGR<?> containedGR : getAllContainedConnectors())
+		for (WKFConnectorGR<?> containedGR : getAllContainedConnectors()) {
 			containedGR.restoreNormalLayer();
+		}
 
 		SwimmingLaneGraphicalRepresentation processGR = (SwimmingLaneGraphicalRepresentation) getDrawingGraphicalRepresentation();
 		processGR.updateAllEdgeLayers();
@@ -370,8 +376,9 @@ public abstract class ContainerGR<O extends WKFObject> extends WKFObjectGR<O> im
 				}
 			}
 		} else {
-			for (WKFConnectorGR containedGR : getAllContainedConnectors())
+			for (WKFConnectorGR containedGR : getAllContainedConnectors()) {
 				containedGR.restoreNormalLayer();
+			}
 		}
 		// for (WKFConnectorGR containedGR : getAllContainedConnectors()) containedGR.restoreNormalLayer();
 	}

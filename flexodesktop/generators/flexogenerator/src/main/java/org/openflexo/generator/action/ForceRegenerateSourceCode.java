@@ -123,8 +123,9 @@ public class ForceRegenerateSourceCode extends MultipleFileGCAction<ForceRegener
 			for (CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> r : resources) {
 				AbstractCGFile file = (AbstractCGFile) r.getCGFile();
 				if (file == null) {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Found a file referencing a resource but the resource does not know the file!: " + r);
+					}
 					continue;
 				}
 				setProgress(FlexoLocalization.localizedForKey("force_regenerate") + " " + file.getFileName());
@@ -137,8 +138,9 @@ public class ForceRegenerateSourceCode extends MultipleFileGCAction<ForceRegener
 			// waitForAllJobsToComplete();
 			/*if (logger.isLoggable(Level.INFO))
 				logger.info("All jobs are finished");*/
-			if (repository instanceof CGRepository)
+			if (repository instanceof CGRepository) {
 				((CGRepository) repository).clearAllJavaParsingData();
+			}
 			hideFlexoProgress();
 		} finally {
 			pg.getProject().getResourceManagerInstance().startResourcePeriodicChecking();

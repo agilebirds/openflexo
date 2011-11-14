@@ -111,14 +111,16 @@ public class FIBBrowserElement extends FIBModelObject {
 
 	@Override
 	public FIBComponent getRootComponent() {
-		if (getBrowser() != null)
+		if (getBrowser() != null) {
 			return getBrowser().getRootComponent();
+		}
 		return null;
 	}
 
 	public DataBinding getLabel() {
-		if (label == null)
+		if (label == null) {
 			label = new DataBinding(this, Parameters.label, LABEL);
+		}
 		return label;
 	}
 
@@ -130,8 +132,9 @@ public class FIBBrowserElement extends FIBModelObject {
 	}
 
 	public DataBinding getIcon() {
-		if (icon == null)
+		if (icon == null) {
 			icon = new DataBinding(this, Parameters.icon, ICON);
+		}
 		return icon;
 	}
 
@@ -143,8 +146,9 @@ public class FIBBrowserElement extends FIBModelObject {
 	}
 
 	public DataBinding getTooltip() {
-		if (tooltip == null)
+		if (tooltip == null) {
 			tooltip = new DataBinding(this, Parameters.tooltip, TOOLTIP);
+		}
 		return tooltip;
 	}
 
@@ -156,8 +160,9 @@ public class FIBBrowserElement extends FIBModelObject {
 	}
 
 	public DataBinding getEnabled() {
-		if (enabled == null)
+		if (enabled == null) {
 			enabled = new DataBinding(this, Parameters.enabled, ENABLED);
+		}
 		return enabled;
 	}
 
@@ -169,8 +174,9 @@ public class FIBBrowserElement extends FIBModelObject {
 	}
 
 	public DataBinding getVisible() {
-		if (visible == null)
+		if (visible == null) {
 			visible = new DataBinding(this, Parameters.visible, VISIBLE);
+		}
 		return visible;
 	}
 
@@ -194,8 +200,9 @@ public class FIBBrowserElement extends FIBModelObject {
 	}
 
 	public DataBinding getEditableLabel() {
-		if (editableLabel == null)
+		if (editableLabel == null) {
 			editableLabel = new DataBinding(this, Parameters.editableLabel, EDITABLE_LABEL);
+		}
 		return editableLabel;
 	}
 
@@ -264,8 +271,9 @@ public class FIBBrowserElement extends FIBModelObject {
 	}
 
 	public BindingModel getActionBindingModel() {
-		if (actionBindingModel == null)
+		if (actionBindingModel == null) {
 			createActionBindingModel();
+		}
 		return actionBindingModel;
 	}
 
@@ -283,8 +291,9 @@ public class FIBBrowserElement extends FIBModelObject {
 	}
 
 	public Font retrieveValidFont() {
-		if (font == null && getBrowser() != null)
+		if (font == null && getBrowser() != null) {
 			return getBrowser().retrieveValidFont();
+		}
 		return getFont();
 	}
 
@@ -338,8 +347,9 @@ public class FIBBrowserElement extends FIBModelObject {
 
 		@Override
 		public BindingModel getBindingModel() {
-			if (iteratorBindingModel == null)
+			if (iteratorBindingModel == null) {
 				createFormatterBindingModel();
+			}
 			return iteratorBindingModel;
 		}
 
@@ -366,8 +376,9 @@ public class FIBBrowserElement extends FIBModelObject {
 	}
 
 	public Class getDataClass() {
-		if (dataClass == null && getBrowser() != null)
+		if (dataClass == null && getBrowser() != null) {
 			return getBrowser().getIteratorClass();
+		}
 		return dataClass;
 
 	}
@@ -467,8 +478,9 @@ public class FIBBrowserElement extends FIBModelObject {
 	}
 
 	public void moveToTop(FIBBrowserElementChildren e) {
-		if (e == null)
+		if (e == null) {
 			return;
+		}
 		children.remove(e);
 		children.insertElementAt(e, 0);
 		setChanged();
@@ -476,8 +488,9 @@ public class FIBBrowserElement extends FIBModelObject {
 	}
 
 	public void moveUp(FIBBrowserElementChildren e) {
-		if (e == null)
+		if (e == null) {
 			return;
+		}
 		int index = children.indexOf(e);
 		children.remove(e);
 		children.insertElementAt(e, index - 1);
@@ -486,8 +499,9 @@ public class FIBBrowserElement extends FIBModelObject {
 	}
 
 	public void moveDown(FIBBrowserElementChildren e) {
-		if (e == null)
+		if (e == null) {
 			return;
+		}
 		int index = children.indexOf(e);
 		children.remove(e);
 		children.insertElementAt(e, index + 1);
@@ -496,8 +510,9 @@ public class FIBBrowserElement extends FIBModelObject {
 	}
 
 	public void moveToBottom(FIBBrowserElementChildren e) {
-		if (e == null)
+		if (e == null) {
 			return;
+		}
 		children.remove(e);
 		children.add(e);
 		setChanged();
@@ -524,8 +539,9 @@ public class FIBBrowserElement extends FIBModelObject {
 		}
 
 		public DataBinding getData() {
-			if (data == null)
+			if (data == null) {
 				data = new DataBinding(this, Parameters.data, DATA);
+			}
 			return data;
 		}
 
@@ -537,8 +553,9 @@ public class FIBBrowserElement extends FIBModelObject {
 		}
 
 		public DataBinding getVisible() {
-			if (visible == null)
+			if (visible == null) {
 				visible = new DataBinding(this, Parameters.visible, VISIBLE);
+			}
 			return visible;
 		}
 
@@ -559,8 +576,9 @@ public class FIBBrowserElement extends FIBModelObject {
 
 		@Override
 		public FIBComponent getRootComponent() {
-			if (getBrowserElement() != null)
+			if (getBrowserElement() != null) {
 				return getBrowserElement().getRootComponent();
+			}
 			return null;
 		}
 
@@ -579,17 +597,20 @@ public class FIBBrowserElement extends FIBModelObject {
 		}
 
 		public ImageIcon getImageIcon() {
-			if (getBaseClass() == null)
+			if (getBaseClass() == null) {
 				return null;
+			}
 			FIBBrowserElement e = getBrowser().elementForClass(getBaseClass());
-			if (e != null)
+			if (e != null) {
 				return e.getImageIcon();
+			}
 			return null;
 		}
 
 		public Type getAccessedType() {
-			if (data != null && data.isSet())
+			if (data != null && data.isSet()) {
 				return data.getBinding().getAccessedType();
+			}
 			return null;
 		}
 
@@ -607,12 +628,14 @@ public class FIBBrowserElement extends FIBModelObject {
 
 		public Class getBaseClass() {
 			Type accessedType = getAccessedType();
-			if (accessedType == null)
+			if (accessedType == null) {
 				return null;
+			}
 			if (isMultipleAccess()) {
 				return TypeUtils.getBaseClass(((ParameterizedType) accessedType).getActualTypeArguments()[0]);
-			} else
+			} else {
 				return TypeUtils.getBaseClass(getAccessedType());
+			}
 		}
 	}
 

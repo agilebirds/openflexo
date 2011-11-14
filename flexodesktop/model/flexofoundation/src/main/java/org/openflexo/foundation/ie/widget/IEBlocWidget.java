@@ -228,15 +228,17 @@ public class IEBlocWidget extends AbstractButtonedWidget implements IETopCompone
 	@Override
 	public Vector<IObject> getEmbeddedIEObjects() {
 		Vector answer = new Vector();
-		if (_innerBloc != null)
+		if (_innerBloc != null) {
 			answer.add(_innerBloc);
+		}
 		answer.add(getButtonList());
 		return answer;
 	}
 
 	public HTMLListDescriptor getContainedDescriptor() {
-		if (getContent() != null)
+		if (getContent() != null) {
 			return getContent().getHTMLListDescriptor();
+		}
 		return null;
 	}
 
@@ -281,8 +283,9 @@ public class IEBlocWidget extends AbstractButtonedWidget implements IETopCompone
 						|| obj instanceof AddEmptyRow || obj instanceof RemoveEmptyRow)) {
 			setChanged();
 			notifyObservers(new ContentSizeChanged());
-		} else
+		} else {
 			super.update(observable, obj);
+		}
 	}
 
 	/**
@@ -293,8 +296,9 @@ public class IEBlocWidget extends AbstractButtonedWidget implements IETopCompone
 	@Override
 	public void notifyDisplayNeedsRefresh() {
 		super.notifyDisplayNeedsRefresh();
-		if (_innerBloc != null)
+		if (_innerBloc != null) {
 			_innerBloc.notifyDisplayNeedsRefresh();
+		}
 	}
 
 	/**
@@ -309,64 +313,76 @@ public class IEBlocWidget extends AbstractButtonedWidget implements IETopCompone
 
 	public Vector<IETextFieldWidget> getAllDateTextfields() {
 		Vector<IETextFieldWidget> v = new Vector<IETextFieldWidget>();
-		if (_innerBloc != null)
+		if (_innerBloc != null) {
 			v.addAll(_innerBloc.getAllDateTextfields());
+		}
 		return v;
 	}
 
 	@Override
 	public Vector<IESequenceTab> getAllTabContainers() {
 		Vector<IESequenceTab> reply = new Vector<IESequenceTab>();
-		if (_innerBloc == null)
+		if (_innerBloc == null) {
 			return reply;
-		if (_innerBloc instanceof IESequenceTab)
+		}
+		if (_innerBloc instanceof IESequenceTab) {
 			reply.add((IESequenceTab) _innerBloc);
-		if (_innerBloc instanceof IEHTMLTableWidget)
+		}
+		if (_innerBloc instanceof IEHTMLTableWidget) {
 			reply.addAll(((IEHTMLTableWidget) _innerBloc).getAllTabContainers());
+		}
 		return reply;
 	}
 
 	@Override
 	public Vector<IEHyperlinkWidget> getAllButtonInterface() {
 		Vector<IEHyperlinkWidget> v = new Vector<IEHyperlinkWidget>();
-		if (_innerBloc != null)
+		if (_innerBloc != null) {
 			v.addAll(_innerBloc.getAllButtonInterface());
-		if (getButtonList() != null)
+		}
+		if (getButtonList() != null) {
 			v.addAll(getButtonList().getAllButtonInterface());
+		}
 		return v;
 	}
 
 	@Override
 	public void setWOComponent(IEWOComponent woComponent) {
-		if (noWOChange(woComponent))
+		if (noWOChange(woComponent)) {
 			return;
+		}
 		super.setWOComponent(woComponent);
-		if (getContent() != null)
+		if (getContent() != null) {
 			((IEWidget) getContent()).setWOComponent(woComponent);// This call is very important because it will update the WOComponent
-																	// components cache
-		if (getButtonList() != null)
+		}
+		// components cache
+		if (getButtonList() != null) {
 			getButtonList().setWOComponent(woComponent);
+		}
 	}
 
 	@Override
 	public boolean areComponentInstancesValid() {
-		if (getContent() != null)
+		if (getContent() != null) {
 			return ((IEWidget) getContent()).areComponentInstancesValid();
-		else
+		} else {
 			return true;
+		}
 	}
 
 	@Override
 	public void removeInvalidComponentInstances() {
 		super.removeInvalidComponentInstances();
-		if (getContent() != null)
+		if (getContent() != null) {
 			((IEWidget) getContent()).removeInvalidComponentInstances();
+		}
 	}
 
 	@Override
 	protected Hashtable<String, String> getLocalizableProperties(Hashtable<String, String> props) {
-		if (StringUtils.isNotEmpty(getTitle()))
+		if (StringUtils.isNotEmpty(getTitle())) {
 			props.put("title", getTitle());
+		}
 		return super.getLocalizableProperties(props);
 	}
 }

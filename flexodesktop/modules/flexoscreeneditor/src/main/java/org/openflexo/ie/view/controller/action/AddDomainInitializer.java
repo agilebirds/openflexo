@@ -24,12 +24,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.SEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -40,6 +34,11 @@ import org.openflexo.foundation.dkv.action.AddDomainAction;
 import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.param.TextAreaParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
+import org.openflexo.icon.SEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class AddDomainInitializer extends ActionInitializer {
 
@@ -72,8 +71,9 @@ public class AddDomainInitializer extends ActionInitializer {
 							FlexoLocalization.localizedForKey("enter_the_name_of_the_new_domain"), parameters);
 					if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 						String newDomainName = (String) dialog.parameterValueWithName("newDomainName");
-						if (newDomainName == null)
+						if (newDomainName == null) {
 							return false;
+						}
 
 						if (newDomainName.trim().length() == 0) {
 							FlexoController.notify(FlexoLocalization.localizedForKey("name_of_domain_cannot_be_empty"));

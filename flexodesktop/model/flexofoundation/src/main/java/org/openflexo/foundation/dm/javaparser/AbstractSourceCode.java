@@ -58,16 +58,18 @@ public abstract class AbstractSourceCode extends TemporaryFlexoModelObject {
 	}
 
 	private static String getCleanCode(String code) {
-		if (code == null)
+		if (code == null) {
 			return null;
+		}
 		String[] s = code.split("\n");
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < s.length; i++) {
 			String string = s[i];
-			if (string.length() > 0 && string.charAt(string.length() - 1) == '\r')
+			if (string.length() > 0 && string.charAt(string.length() - 1) == '\r') {
 				sb.append(string.substring(0, string.length() - 1));
-			else
+			} else {
 				sb.append(string);
+			}
 			sb.append(StringUtils.LINE_SEPARATOR);
 		}
 		return sb.toString();
@@ -144,11 +146,13 @@ public abstract class AbstractSourceCode extends TemporaryFlexoModelObject {
 	 */
 	public String getCode() {
 		// No need to serialize if not edited
-		if (getOwner().isSerializing() && !isEdited())
+		if (getOwner().isSerializing() && !isEdited()) {
 			return null;
+		}
 
-		if (isEdited())
+		if (isEdited()) {
 			return _editedCode;
+		}
 
 		if (_computedCode == null && !getOwner().isDeserializing()) {
 			updateComputedCode();
@@ -192,8 +196,9 @@ public abstract class AbstractSourceCode extends TemporaryFlexoModelObject {
 				parseCode(qualifiedCode);
 			}
 			setCode(qualifiedCode, false);
-		} else
+		} else {
 			setCode(qualifiedCode, true);
+		}
 	}
 
 	/**
@@ -210,8 +215,9 @@ public abstract class AbstractSourceCode extends TemporaryFlexoModelObject {
 		diffReportNeedsToBeRecomputed = true;
 
 		someCode = getCleanCode(someCode);
-		if (_computedCode == null && getOwner().codeIsComputable())
+		if (_computedCode == null && getOwner().codeIsComputable()) {
 			_computedCode = makeComputedCode();
+		}
 
 		if (someCode == null || someCode.trim().equals("") || someCode.trim().equals(_computedCode)) {
 			// Use computed code
@@ -233,8 +239,9 @@ public abstract class AbstractSourceCode extends TemporaryFlexoModelObject {
 
 		_editedCode = someCode;
 
-		if (!parseCode)
+		if (!parseCode) {
 			return;
+		}
 
 		ParsedJavaElement parsedJavaElement = parseCode(someCode);
 

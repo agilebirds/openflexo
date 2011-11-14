@@ -22,8 +22,8 @@ package org.openflexo.fib.model;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.BindingModel;
 
 public abstract class FIBBrowserAction extends FIBModelObject {
 
@@ -55,14 +55,16 @@ public abstract class FIBBrowserAction extends FIBModelObject {
 
 	@Override
 	public FIBComponent getRootComponent() {
-		if (getBrowserElement() != null)
+		if (getBrowserElement() != null) {
 			return getBrowserElement().getRootComponent();
+		}
 		return null;
 	}
 
 	public DataBinding getMethod() {
-		if (method == null)
+		if (method == null) {
 			method = new DataBinding(this, Parameters.method, METHOD);
+		}
 		return method;
 	}
 
@@ -74,8 +76,9 @@ public abstract class FIBBrowserAction extends FIBModelObject {
 	}
 
 	public DataBinding getIsAvailable() {
-		if (isAvailable == null)
+		if (isAvailable == null) {
 			isAvailable = new DataBinding(this, Parameters.isAvailable, IS_AVAILABLE);
+		}
 		return isAvailable;
 	}
 
@@ -88,8 +91,9 @@ public abstract class FIBBrowserAction extends FIBModelObject {
 
 	@Override
 	public BindingModel getBindingModel() {
-		if (getBrowserElement() != null)
+		if (getBrowserElement() != null) {
 			return getBrowserElement().getActionBindingModel();
+		}
 		return null;
 	}
 

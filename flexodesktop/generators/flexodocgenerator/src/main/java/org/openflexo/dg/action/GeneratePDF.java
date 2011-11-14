@@ -29,7 +29,6 @@ import javax.imageio.ImageIO;
 
 import org.openflexo.dg.exception.PDFGenerationFailedException;
 import org.openflexo.dg.latex.ProjectDocLatexGenerator;
-
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Format;
@@ -67,8 +66,9 @@ public class GeneratePDF extends GCAction<GeneratePDF, DGRepository> implements 
 
 		@Override
 		protected boolean isEnabledForSelection(DGRepository repository, Vector<CGObject> globalSelection) {
-			if (repository.getFormat() != Format.LATEX)
+			if (repository.getFormat() != Format.LATEX) {
 				return false;
+			}
 			ProjectDocLatexGenerator pg = (ProjectDocLatexGenerator) getProjectGenerator(repository);
 			return pg != null && repository.getPostBuildDirectory() != null && pg.getProjectDocResource() != null
 					&& pg.getProjectDocResource().getFile() != null && pg.getProjectDocResource().getFile().exists();
@@ -117,8 +117,9 @@ public class GeneratePDF extends GCAction<GeneratePDF, DGRepository> implements 
 			pg.addToLogListeners(this);
 			pg.setLatexTimeOutInMillis(getLatexTimeOutInSeconds() * 1000);
 			generatedPDF = pg.generatePDF(getLatexCommand());
-			if (generatedPDF == null)
+			if (generatedPDF == null) {
 				throw new PDFGenerationFailedException(pg, getLatexErrorMessage());
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new IOExceptionOccuredException(e, pg);
@@ -134,12 +135,14 @@ public class GeneratePDF extends GCAction<GeneratePDF, DGRepository> implements 
 				if (file.getResource() != null && file.getResource().getFile() != null && file.getResource().getFile().exists()
 						&& file.getResource().getFile().getName().toLowerCase().endsWith(".gif")) {
 					String name = file.getResource().getFile().getName();
-					if (name.toLowerCase().endsWith("gif"))
+					if (name.toLowerCase().endsWith("gif")) {
 						name = "CONVERTED-GIF" + name.substring(0, name.length() - 3) + "png";
+					}
 					File f = new File(file.getResource().getFile().getParentFile(), name);
 					if (!f.exists() || f.lastModified() < file.getResource().getFile().lastModified()) {
-						if (logger.isLoggable(Level.INFO))
+						if (logger.isLoggable(Level.INFO)) {
 							logger.info("Converting " + file.getResourceName() + " to " + f.getName());
+						}
 						try {
 							ImageIO.write(ImageIO.read(file.getResource().getFile()), "png", f);
 						} catch (IOException e) {
@@ -149,14 +152,16 @@ public class GeneratePDF extends GCAction<GeneratePDF, DGRepository> implements 
 				}
 			}
 		} else {
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Repository is not connected");
+			}
 		}
 	}
 
 	public String getLatexCommand() {
-		if (latexCommand == null)
+		if (latexCommand == null) {
 			latexCommand = LatexUtils.getDefaultLatex2PDFCommand();
+		}
 		return latexCommand;
 	}
 
@@ -198,20 +203,22 @@ public class GeneratePDF extends GCAction<GeneratePDF, DGRepository> implements 
 			int start = errs.indexOf("texify: ");
 			if (start > -1) {
 				int end = errs.indexOf("\n", start + 9);
-				if (end > start)
+				if (end > start) {
 					return errs.substring(start + 8, end);
-				else
+				} else {
 					return errs.substring(start + 8);
+				}
 			}
 			return errs.toString();
 		}
 		if (logs.indexOf("LaTeX Error: ") > -1) {
 			int index = logs.lastIndexOf("LaTeX Error: ");
 			int end = logs.indexOf("\n", index);
-			if (end > index)
+			if (end > index) {
 				return logs.substring(index, end);
-			else
+			} else {
 				return logs.substring(index);
+			}
 		}
 		return null;
 	}
@@ -223,8 +230,9 @@ public class GeneratePDF extends GCAction<GeneratePDF, DGRepository> implements 
 	private StringBuffer errs = new StringBuffer();
 
 	public Integer getLatexTimeOutInSeconds() {
-		if (latexTimeOutInSeconds == null)
+		if (latexTimeOutInSeconds == null) {
 			latexTimeOutInSeconds = 15;
+		}
 		return latexTimeOutInSeconds;
 	}
 

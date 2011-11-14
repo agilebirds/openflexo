@@ -24,18 +24,17 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.SEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.dkv.DKVModel;
 import org.openflexo.foundation.dkv.DuplicateDKVObjectException;
 import org.openflexo.foundation.dkv.EmptyStringException;
 import org.openflexo.foundation.dkv.action.AddLanguageAction;
+import org.openflexo.icon.SEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class AddLanguageInitializer extends ActionInitializer {
 
@@ -59,8 +58,9 @@ public class AddLanguageInitializer extends ActionInitializer {
 				boolean ok = false;
 				while (!ok) {
 					String name = FlexoController.askForString(FlexoLocalization.localizedForKey("enter_the_name_of_the_new_language"));
-					if (name == null)
+					if (name == null) {
 						return false;
+					}
 					if (name.trim().length() == 0) {
 						FlexoController.notify(FlexoLocalization.localizedForKey("name_of_language_cannot_be_empty"));
 						continue;

@@ -36,7 +36,6 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.ProjectHelper;
 import org.apache.tools.ant.Target;
 import org.apache.tools.ant.Task;
-
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.gen.GenerationProgressNotification;
 import org.openflexo.logging.FlexoLogger;
@@ -68,8 +67,9 @@ public class AntRunner implements BuildListener {
 
 	public static void initAndRunTask(AntRunner runner, String buildXmlPath, String runDirPath, HashMap m, String target,
 			Vector<BuildListener> listeners) throws Exception {
-		if (m == null)
+		if (m == null) {
 			m = new HashMap();
+		}
 		runner.init(buildXmlPath, runDirPath);
 		runner.setProperties(m, false);
 		runner.runTarget(target, listeners);
@@ -101,8 +101,9 @@ public class AntRunner implements BuildListener {
 		}
 
 		// Set the base directory. If none is given, "." is used.
-		if (_baseDir == null)
+		if (_baseDir == null) {
 			_baseDir = new String(".");
+		}
 		try {
 			project.setBasedir(_baseDir);
 		} catch (BuildException e) {
@@ -110,8 +111,9 @@ public class AntRunner implements BuildListener {
 		}
 
 		// Parse the given buildfile. If none is given, "build.xml" is used.
-		if (_buildFile == null)
+		if (_buildFile == null) {
 			_buildFile = new String("build.xml");
+		}
 		try {
 			ProjectHelper.getProjectHelper().parse(project, new File(_buildFile));
 		} catch (BuildException e) {
@@ -129,13 +131,15 @@ public class AntRunner implements BuildListener {
 	 */
 	public void setProperties(Map _properties, boolean _overridable) throws Exception {
 		// Test if the project exists
-		if (project == null)
+		if (project == null) {
 			throw new Exception(
 					"Properties cannot be set because the project has not been initialized. Please call the 'init' method first !");
+		}
 
 		// Property hashmap is null
-		if (_properties == null)
+		if (_properties == null) {
 			throw new Exception("The provided property map is null.");
+		}
 
 		// Loop through the property map
 		Set propertyNames = _properties.keySet();
@@ -144,14 +148,16 @@ public class AntRunner implements BuildListener {
 			// Get the property's name and value
 			String propertyName = (String) iter.next();
 			String propertyValue = (String) _properties.get(propertyName);
-			if (propertyValue == null)
+			if (propertyValue == null) {
 				continue;
+			}
 
 			// Set the properties
-			if (_overridable)
+			if (_overridable) {
 				project.setProperty(propertyName, propertyValue);
-			else
+			} else {
 				project.setUserProperty(propertyName, propertyValue);
+			}
 		}
 	}
 
@@ -165,17 +171,20 @@ public class AntRunner implements BuildListener {
 	 */
 	public void runTarget(String _target, Vector<BuildListener> listeners) throws Exception {
 		// Test if the project exists
-		if (project == null)
+		if (project == null) {
 			throw new Exception(
 					"No target can be launched because the project has not been initialized. Please call the 'init' method first !");
+		}
 		project.addBuildListener(this);
-		if (listeners != null)
+		if (listeners != null) {
 			for (BuildListener buildListener : listeners) {
 				project.addBuildListener(buildListener);
 			}
+		}
 		// If no target is specified, run the default one.
-		if (_target == null)
+		if (_target == null) {
 			_target = project.getDefaultTarget();
+		}
 		// Run the target
 		try {
 			project.executeTarget(_target);
@@ -191,14 +200,16 @@ public class AntRunner implements BuildListener {
 
 	@Override
 	public void buildStarted(BuildEvent arg0) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Ant build started: " + arg0.getMessage());
+		}
 	}
 
 	@Override
 	public void messageLogged(BuildEvent arg0) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Ant log: " + arg0.getMessage());
+		}
 	}
 
 	@Override
@@ -210,8 +221,9 @@ public class AntRunner implements BuildListener {
 
 	@Override
 	public void targetStarted(BuildEvent arg0) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Ant target started: " + arg0.getTarget().getName());
+		}
 		if (_observableWhereForwardingAntBuildMessage != null) {
 			String message = formatMessage(arg0.getTarget());
 			if ((message == null && lastMessage != null) || (message != null && !message.equals(lastMessage))) {
@@ -227,31 +239,37 @@ public class AntRunner implements BuildListener {
 
 	@Override
 	public void taskStarted(BuildEvent arg0) {
-		if (logger.isLoggable(Level.FINEST))
+		if (logger.isLoggable(Level.FINEST)) {
 			logger.finest("Ant task started: " + arg0.getTask().getTaskName());
+		}
 	}
 
 	private String formatMessage(Target targ) {
-		if (targ.getName().equals("checkout"))
+		if (targ.getName().equals("checkout")) {
 			return formatCheckout(targ.getTasks()[0]);
-		if (targ.getName().equals("java"))
+		}
+		if (targ.getName().equals("java")) {
 			return formatJava(targ.getTasks()[0]);
-		if (targ.getName().equals("dist"))
+		}
+		if (targ.getName().equals("dist")) {
 			return formatDist(targ.getProject().getProperties());
+		}
 		return null;
 	}
 
 	private String formatCheckout(Task t) {
 		String module = t.getProject().getProperty("param.module");
-		if (module != null)
+		if (module != null) {
 			return "checkout : " + module;
+		}
 		Object pack = t.getRuntimeConfigurableWrapper().getAttributeMap().get("package");
 		return "checkout : " + pack;
 	}
 
 	private String formatJava(Task t) {
-		if (t.getProject().getProperty("framework.name") != null)
+		if (t.getProject().getProperty("framework.name") != null) {
 			return "compile : " + t.getProject().getProperty("framework.name");
+		}
 		return "compile generated source files";
 	}
 

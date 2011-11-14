@@ -50,13 +50,15 @@ public class UseCaseDiagram extends Diagram {
 
 		ItemLabel label = view.getLabel();
 
-		if (label != null)
+		if (label != null) {
 			label.setParentView(new Tag(index));
+		}
 
 		label = view.getStereotype();
 
-		if (label != null)
+		if (label != null) {
 			label.setParentView(new Tag(index));
+		}
 	}
 
 	private static HashSet set = new HashSet(Arrays.asList(new java.lang.Object[] { UseCaseView.class, ClassView.class }));

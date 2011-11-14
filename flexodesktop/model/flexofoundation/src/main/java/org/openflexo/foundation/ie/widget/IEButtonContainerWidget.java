@@ -133,10 +133,12 @@ public class IEButtonContainerWidget extends AbstractInnerTableWidget implements
 
 	public static int findInsertionIndex(Vector v, int wish) {
 		int answer = 0;
-		if (v == null || v.size() == 0)
+		if (v == null || v.size() == 0) {
 			return answer;
-		while (answer < v.size() && answer < wish && wish > wishFor(v.elementAt(answer)))
+		}
+		while (answer < v.size() && answer < wish && wish > wishFor(v.elementAt(answer))) {
 			answer++;
+		}
 		return answer;
 	}
 
@@ -195,8 +197,9 @@ public class IEButtonContainerWidget extends AbstractInnerTableWidget implements
 
 	@Override
 	public void setWOComponent(IEWOComponent woComponent) {
-		if (noWOChange(woComponent))
+		if (noWOChange(woComponent)) {
 			return;
+		}
 		super.setWOComponent(woComponent);
 		if (getButtonList() != null) {
 			Enumeration<IEButtonWidget> en = getButtonList().elements();

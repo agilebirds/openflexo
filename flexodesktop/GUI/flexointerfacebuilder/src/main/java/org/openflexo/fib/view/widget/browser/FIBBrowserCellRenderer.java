@@ -67,10 +67,11 @@ public class FIBBrowserCellRenderer extends DefaultTreeCellRenderer {
 			if (!widget.isEnabled()) {
 				setTextNonSelectionColor(FIBComponent.DISABLED_COLOR);
 			} else {
-				if (isEnabled(representedObject))
+				if (isEnabled(representedObject)) {
 					setTextNonSelectionColor(widget.getBrowser().getTextNonSelectionColor());
-				else
+				} else {
 					setTextNonSelectionColor(FIBComponent.DISABLED_COLOR);
+				}
 			}
 
 			JLabel returned = (JLabel) super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
@@ -102,22 +103,25 @@ public class FIBBrowserCellRenderer extends DefaultTreeCellRenderer {
 
 	protected String getLabel(Object object) {
 		FIBBrowserElementType elementType = getElementType(object);
-		if (elementType != null)
+		if (elementType != null) {
 			return elementType.getLabelFor(object);
+		}
 		return object.toString();
 	}
 
 	protected Icon getIcon(Object object) {
 		FIBBrowserElementType elementType = getElementType(object);
-		if (elementType != null)
+		if (elementType != null) {
 			return elementType.getIconFor(object);
+		}
 		return null;
 	}
 
 	protected String getTooltip(Object object) {
 		FIBBrowserElementType elementType = getElementType(object);
-		if (elementType != null)
+		if (elementType != null) {
 			return elementType.getTooltipFor(object);
+		}
 		return object.toString();
 	}
 
@@ -132,8 +136,9 @@ public class FIBBrowserCellRenderer extends DefaultTreeCellRenderer {
 
 	protected Font getFont(Object object) {
 		FIBBrowserElementType elementType = getElementType(object);
-		if (elementType != null)
+		if (elementType != null) {
 			return elementType.getFont();
+		}
 		return widget.getFont();
 	}
 

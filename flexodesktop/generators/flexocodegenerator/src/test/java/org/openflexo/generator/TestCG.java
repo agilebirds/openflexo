@@ -56,8 +56,8 @@ import org.openflexo.foundation.ie.widget.IESequenceTab;
 import org.openflexo.foundation.rm.FlexoMemoryResource;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoResourceManager;
-import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.FlexoResourceManager.BackwardSynchronizationHook;
+import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.cg.GenerationStatus;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.wkf.WKFElementType;
@@ -181,8 +181,9 @@ public class TestCG extends CGTestCase {
 		assertNotNull(_eoPrototypesResource = _project.getEOModelResource(EOPrototypeRepository.EOPROTOTYPE_REPOSITORY_DIR.getName()));
 
 		for (FlexoResource resource : _project.getResources().values()) {
-			if (resource != _rmResource && !(resource instanceof FlexoMemoryResource))
+			if (resource != _rmResource && !(resource instanceof FlexoMemoryResource)) {
 				assertSynchonized(resource, _rmResource);
+			}
 		}
 		assertSynchonized(_dmResource, _executionModelResource);
 		assertSynchonized(_dmResource, _eoPrototypesResource);
@@ -630,13 +631,15 @@ public class TestCG extends CGTestCase {
 		// Do it even if validation failed
 		synchronizeCodeGeneration.setContinueAfterValidation(true);
 		synchronizeCodeGeneration.doAction();
-		if (!synchronizeCodeGeneration.hasActionExecutionSucceeded())
+		if (!synchronizeCodeGeneration.hasActionExecutionSucceeded()) {
 			fail("Synchronization action failed. Action execution status: " + synchronizeCodeGeneration.getExecutionStatus().name());
+		}
 		// Write generated files to disk
 		WriteModifiedGeneratedFiles writeToDisk = WriteModifiedGeneratedFiles.actionType.makeNewAction(codeRepository, null, _editor);
 		writeToDisk.doAction();
-		if (!writeToDisk.hasActionExecutionSucceeded())
+		if (!writeToDisk.hasActionExecutionSucceeded()) {
 			fail("Writing to disk has failed. Action execution status: " + writeToDisk.getExecutionStatus().name());
+		}
 		saveProject();
 
 	}
@@ -1157,10 +1160,12 @@ public class TestCG extends CGTestCase {
 
 		EditCustomTemplateFile editTemplate = EditCustomTemplateFile.actionType.makeNewAction(newLabelHTMLTemplate, null, _editor);
 		editTemplate.setTemplateFileContentEditor(new TemplateFileContentEditor() {
+			@Override
 			public String getEditedContent() {
 				return "<VALUE>" + ADDED_STRING;
 			}
 
+			@Override
 			public void setEditedContent(String content) {
 			}
 		});
@@ -1199,8 +1204,9 @@ public class TestCG extends CGTestCase {
 		// The last test must call this to stop the RM checking
 		_project.close();
 		FileUtils.deleteDir(_project.getProjectDirectory());
-		if (_bsHook != null)
+		if (_bsHook != null) {
 			_bsHook.clear();
+		}
 		FlexoResourceManager.setBackwardSynchronizationHook(null);
 		resetVariables();
 	}
@@ -1231,6 +1237,7 @@ public class TestCG extends CGTestCase {
 			entries.clear();
 		}
 
+		@Override
 		public void notifyBackwardSynchronization(FlexoResource resource1, FlexoResource resource2) {
 			System.out.println("Resource " + resource1 + " is to be back-synchronized with " + resource2);
 			// (new Exception()).printStackTrace();
@@ -1239,8 +1246,9 @@ public class TestCG extends CGTestCase {
 
 		protected void assertBackSynchronizationHasBeenPerformed(FlexoResource aResource1, FlexoResource aResource2) {
 			for (BackSynchroEntry entry : entries) {
-				if (entry.backSynchroConcerns(aResource1, aResource2))
+				if (entry.backSynchroConcerns(aResource1, aResource2)) {
 					return;
+				}
 			}
 			fail("RESOURCE synchonization problem: " + aResource1 + " MUST have been back-synchronized with " + aResource2);
 		}

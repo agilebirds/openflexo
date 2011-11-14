@@ -125,13 +125,15 @@ public class WSEExternalWSFolderView extends WSEView<ExternalWSFolder> {
 		}
 		if (getSelectedServiceInterface() != null) {
 			WSService ws = getWSFolder().getParentOfServiceInterface(getSelectedServiceInterface());
-			if (ws != null)
+			if (ws != null) {
 				return ws;
+			}
 		}
 		if (getSelectedWSDLRepository() != null) {
 			WSRepository wsr = getWSFolder().getWSRepositoryNamed(getSelectedWSDLRepository().getName());
-			if (wsr != null)
+			if (wsr != null) {
 				return wsr.getWSService();
+			}
 		}
 
 		return null;

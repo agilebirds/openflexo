@@ -204,8 +204,9 @@ public abstract class FlexoNode extends PetriGraphNode implements ExecutableWork
 
 	@Override
 	public void getBestRole(Vector<Node> visited, TreeMap<Integer, Vector<Role>> roles, int depth) {
-		if (visited.contains(this))
+		if (visited.contains(this)) {
 			return;
+		}
 		visited.add(this);
 		for (FlexoPreCondition pre : getPreConditions()) {
 			getBestRole(pre, visited, roles, depth);
@@ -215,8 +216,9 @@ public abstract class FlexoNode extends PetriGraphNode implements ExecutableWork
 
 	@Override
 	public boolean isAccessible() {
-		if (isBeginNode())
+		if (isBeginNode()) {
 			return true;
+		}
 		int accessNumber = getIncomingPostConditions().size();
 		for (Enumeration e = getPreConditions().elements(); e.hasMoreElements();) {
 			FlexoPreCondition pre = (FlexoPreCondition) e.nextElement();
@@ -266,31 +268,37 @@ public abstract class FlexoNode extends PetriGraphNode implements ExecutableWork
 	}
 
 	public WorkflowControlGraph<FlexoNode> getActivation() {
-		if (_activationComputingFactory != null)
+		if (_activationComputingFactory != null) {
 			return _activationComputingFactory.getControlGraph(this);
+		}
 		return null;
 	}
 
 	public WorkflowControlGraph<FlexoNode> getDesactivation() {
-		if (_desactivationComputingFactory != null)
+		if (_desactivationComputingFactory != null) {
 			return _desactivationComputingFactory.getControlGraph(this);
+		}
 		return null;
 	}
 
 	@Override
 	public void setProgrammingLanguageForControlGraphComputation(ProgrammingLanguage language) {
-		if (getActivation() != null)
+		if (getActivation() != null) {
 			getActivation().setProgrammingLanguage(language);
-		if (getDesactivation() != null)
+		}
+		if (getDesactivation() != null) {
 			getDesactivation().setProgrammingLanguage(language);
+		}
 	}
 
 	@Override
 	public void setInterproceduralForControlGraphComputation(boolean interprocedural) {
-		if (getActivation() != null)
+		if (getActivation() != null) {
 			getActivation().setInterprocedural(interprocedural);
-		if (getDesactivation() != null)
+		}
+		if (getDesactivation() != null) {
 			getDesactivation().setInterprocedural(interprocedural);
+		}
 	}
 
 	@Override

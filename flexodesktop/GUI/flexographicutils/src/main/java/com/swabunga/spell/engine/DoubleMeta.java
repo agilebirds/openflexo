@@ -163,8 +163,9 @@ public class DoubleMeta implements Transformator {
 	 * @return
 	 */
 	private final static boolean SlavoGermanic(String in) {
-		if ((in.indexOf("W") > -1) || (in.indexOf("K") > -1) || (in.indexOf("CZ") > -1) || (in.indexOf("WITZ") > -1))
+		if ((in.indexOf("W") > -1) || (in.indexOf("K") > -1) || (in.indexOf("CZ") > -1) || (in.indexOf("WITZ") > -1)) {
 			return true;
+		}
 		return false;
 	}
 
@@ -190,11 +191,13 @@ public class DoubleMeta implements Transformator {
 	 * @return
 	 */
 	private final static boolean isVowel(String in, int at, int length) {
-		if ((at < 0) || (at >= length))
+		if ((at < 0) || (at >= length)) {
 			return false;
+		}
 		char it = in.charAt(at);
-		if ((it == 'A') || (it == 'E') || (it == 'I') || (it == 'O') || (it == 'U') || (it == 'Y'))
+		if ((it == 'A') || (it == 'E') || (it == 'I') || (it == 'O') || (it == 'U') || (it == 'Y')) {
 			return true;
+		}
 		return false;
 	}
 
@@ -208,12 +211,14 @@ public class DoubleMeta implements Transformator {
 	 * @return
 	 */
 	private final static boolean stringAt(String string, int start, int length, String[] list) {
-		if ((start < 0) || (start >= string.length()) || list.length == 0)
+		if ((start < 0) || (start >= string.length()) || list.length == 0) {
 			return false;
+		}
 		String substr = string.substring(start, start + length);
 		for (int i = 0; i < list.length; i++) {
-			if (list[i].equals(substr))
+			if (list[i].equals(substr)) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -222,17 +227,20 @@ public class DoubleMeta implements Transformator {
 	 * Take the given word, and return the best phonetic hash for it. Vowels are minimized as much as possible, and consenants that have
 	 * similiar sounds are converted to the same consenant for example, 'v' and 'f' are both converted to 'f'
 	 */
+	@Override
 	public final String transform(String word) {
 		StringBuffer primary = new StringBuffer(word.length() + 5);
 		String in = word.toUpperCase() + "     ";
 		int current = 0;
 		int length = in.length();
-		if (length < 1)
+		if (length < 1) {
 			return "";
+		}
 		int last = length - 1;
 		boolean isSlavoGermaic = SlavoGermanic(in);
-		if (stringAt(in, 0, 2, myList))
+		if (stringAt(in, 0, 2, myList)) {
 			current += 1;
+		}
 		if (in.charAt(0) == 'X') {
 			MetaphAdd(primary, 'S');
 			current += 1;
@@ -245,16 +253,18 @@ public class DoubleMeta implements Transformator {
 			case 'O':
 			case 'U':
 			case 'Y':
-				if (current == 0)
+				if (current == 0) {
 					MetaphAdd(primary, 'A');
+				}
 				current += 1;
 				break;
 			case 'B':
 				MetaphAdd(primary, 'P');
-				if (in.charAt(current + 1) == 'B')
+				if (in.charAt(current + 1) == 'B') {
 					current += 2;
-				else
+				} else {
 					current += 1;
+				}
 				break;
 			case '\u00C7':
 				MetaphAdd(primary, 'S');
@@ -295,10 +305,11 @@ public class DoubleMeta implements Transformator {
 						MetaphAdd(primary, 'K');
 					} else {
 						if (current > 0) {
-							if (stringAt(in, 0, 2, list16))
+							if (stringAt(in, 0, 2, list16)) {
 								MetaphAdd(primary, 'K');
-							else
+							} else {
 								MetaphAdd(primary, 'X');
+							}
 						} else {
 							MetaphAdd(primary, 'X');
 						}
@@ -318,10 +329,11 @@ public class DoubleMeta implements Transformator {
 				}
 				if (stringAt(in, current, 2, list20) && !((current == 1) && in.charAt(0) == 'M')) {
 					if (stringAt(in, current + 2, 1, list21) && !stringAt(in, current + 2, 2, list22)) {
-						if (((current == 1) && (in.charAt(current - 1) == 'A')) || stringAt(in, (current - 1), 5, list23))
+						if (((current == 1) && (in.charAt(current - 1) == 'A')) || stringAt(in, (current - 1), 5, list23)) {
 							MetaphAdd(primary, "KS");
-						else
+						} else {
 							MetaphAdd(primary, 'X');
+						}
 						current += 3;
 						break;
 					} else {
@@ -341,12 +353,13 @@ public class DoubleMeta implements Transformator {
 				}
 
 				MetaphAdd(primary, 'K');
-				if (stringAt(in, current + 1, 2, list27))
+				if (stringAt(in, current + 1, 2, list27)) {
 					current += 3;
-				else if (stringAt(in, current + 1, 1, list28) && !stringAt(in, current + 1, 2, list29))
+				} else if (stringAt(in, current + 1, 1, list28) && !stringAt(in, current + 1, 2, list29)) {
 					current += 2;
-				else
+				} else {
 					current += 1;
+				}
 				break;
 			case 'D':
 				if (stringAt(in, current, 2, list30)) {
@@ -368,10 +381,11 @@ public class DoubleMeta implements Transformator {
 				}
 				break;
 			case 'F':
-				if (in.charAt(current + 1) == 'F')
+				if (in.charAt(current + 1) == 'F') {
 					current += 2;
-				else
+				} else {
 					current += 1;
+				}
 				MetaphAdd(primary, 'F');
 				break;
 			case 'G':
@@ -383,10 +397,11 @@ public class DoubleMeta implements Transformator {
 					}
 					if (current < 3) {
 						if (current == 0) {
-							if (in.charAt(current + 2) == 'I')
+							if (in.charAt(current + 2) == 'I') {
 								MetaphAdd(primary, 'J');
-							else
+							} else {
 								MetaphAdd(primary, 'K');
+							}
 							current += 2;
 							break;
 						}
@@ -399,8 +414,9 @@ public class DoubleMeta implements Transformator {
 						if ((current > 2) && (in.charAt(current - 1) == 'U') && stringAt(in, current - 3, 1, list36)) {
 							MetaphAdd(primary, 'F');
 						} else {
-							if ((current > 0) && (in.charAt(current - 1) != 'I'))
+							if ((current > 0) && (in.charAt(current - 1) != 'I')) {
 								MetaphAdd(primary, 'K');
+							}
 						}
 						current += 2;
 						break;
@@ -444,10 +460,11 @@ public class DoubleMeta implements Transformator {
 					current += 2;
 					break;
 				}
-				if (in.charAt(current + 1) == 'G')
+				if (in.charAt(current + 1) == 'G') {
 					current += 2;
-				else
+				} else {
 					current += 1;
+				}
 				MetaphAdd(primary, 'K');
 				break;
 			case 'H':
@@ -484,16 +501,18 @@ public class DoubleMeta implements Transformator {
 						}
 					}
 				}
-				if (in.charAt(current + 1) == 'J')
+				if (in.charAt(current + 1) == 'J') {
 					current += 2;
-				else
+				} else {
 					current += 1;
+				}
 				break;
 			case 'K':
-				if (in.charAt(current + 1) == 'K')
+				if (in.charAt(current + 1) == 'K') {
 					current += 2;
-				else
+				} else {
 					current += 1;
+				}
 				MetaphAdd(primary, 'K');
 				break;
 			case 'L':
@@ -505,23 +524,26 @@ public class DoubleMeta implements Transformator {
 						break;
 					}
 					current += 2;
-				} else
+				} else {
 					current += 1;
+				}
 				MetaphAdd(primary, 'L');
 				break;
 			case 'M':
 				if ((stringAt(in, current - 1, 3, list60) && (((current + 1) == last) || stringAt(in, current + 2, 2, list61)))
-						|| (in.charAt(current + 1) == 'M'))
+						|| (in.charAt(current + 1) == 'M')) {
 					current += 2;
-				else
+				} else {
 					current += 1;
+				}
 				MetaphAdd(primary, 'M');
 				break;
 			case 'N':
-				if (in.charAt(current + 1) == 'N')
+				if (in.charAt(current + 1) == 'N') {
 					current += 2;
-				else
+				} else {
 					current += 1;
+				}
 				MetaphAdd(primary, 'N');
 				break;
 			case '\u00D1':
@@ -534,28 +556,32 @@ public class DoubleMeta implements Transformator {
 					current += 2;
 					break;
 				}
-				if (stringAt(in, current + 1, 1, list62))
+				if (stringAt(in, current + 1, 1, list62)) {
 					current += 2;
-				else
+				} else {
 					current += 1;
+				}
 				MetaphAdd(primary, 'P');
 				break;
 			case 'Q':
-				if (in.charAt(current + 1) == 'Q')
+				if (in.charAt(current + 1) == 'Q') {
 					current += 2;
-				else
+				} else {
 					current += 1;
+				}
 				MetaphAdd(primary, 'K');
 				break;
 			case 'R':
 				if ((current == last) && !isSlavoGermaic && stringAt(in, current - 2, 2, list63) && !stringAt(in, current - 4, 2, list64)) {
 					// MetaphAdd(primary, "");
-				} else
+				} else {
 					MetaphAdd(primary, 'R');
-				if (in.charAt(current + 1) == 'R')
+				}
+				if (in.charAt(current + 1) == 'R') {
 					current += 2;
-				else
+				} else {
 					current += 1;
+				}
 				break;
 			case 'S':
 				if (stringAt(in, current - 1, 3, list65)) {
@@ -568,10 +594,11 @@ public class DoubleMeta implements Transformator {
 					break;
 				}
 				if (stringAt(in, current, 2, list67)) {
-					if (stringAt(in, current + 1, 4, list68))
+					if (stringAt(in, current + 1, 4, list68)) {
 						MetaphAdd(primary, 'S');
-					else
+					} else {
 						MetaphAdd(primary, 'X');
+					}
 					current += 2;
 					break;
 				}
@@ -582,14 +609,15 @@ public class DoubleMeta implements Transformator {
 				}
 				if (((current == 0) && stringAt(in, current + 1, 1, list71)) || stringAt(in, current + 1, 1, list72)) {
 					MetaphAdd(primary, 'S');
-					if (stringAt(in, current + 1, 1, list73))
+					if (stringAt(in, current + 1, 1, list73)) {
 						current += 2;
-					else
+					} else {
 						current += 1;
+					}
 					break;
 				}
 				if (stringAt(in, current, 2, list74)) {
-					if (in.charAt(current + 2) == 'H')
+					if (in.charAt(current + 2) == 'H') {
 						if (stringAt(in, current + 3, 2, list75)) {
 							if (stringAt(in, current + 3, 2, list76)) {
 								MetaphAdd(primary, "X");
@@ -603,6 +631,7 @@ public class DoubleMeta implements Transformator {
 							current += 3;
 							break;
 						}
+					}
 					if (stringAt(in, current + 2, 1, list77)) {
 						MetaphAdd(primary, 'S');
 						current += 3;
@@ -614,12 +643,14 @@ public class DoubleMeta implements Transformator {
 				}
 				if ((current == last) && stringAt(in, current - 2, 2, list78)) {
 					// MetaphAdd(primary, "");
-				} else
+				} else {
 					MetaphAdd(primary, 'S');
-				if (stringAt(in, current + 1, 1, list79))
+				}
+				if (stringAt(in, current + 1, 1, list79)) {
 					current += 2;
-				else
+				} else {
 					current += 1;
+				}
 				break;
 			case 'T':
 				if (stringAt(in, current, 4, list80)) {
@@ -643,15 +674,17 @@ public class DoubleMeta implements Transformator {
 				}
 				if (stringAt(in, current + 1, 1, list87)) {
 					current += 2;
-				} else
+				} else {
 					current += 1;
+				}
 				MetaphAdd(primary, 'T');
 				break;
 			case 'V':
-				if (in.charAt(current + 1) == 'V')
+				if (in.charAt(current + 1) == 'V') {
 					current += 2;
-				else
+				} else {
 					current += 1;
+				}
 				MetaphAdd(primary, 'F');
 				break;
 			case 'W':
@@ -677,12 +710,14 @@ public class DoubleMeta implements Transformator {
 				current += 1;
 				break;
 			case 'X':
-				if (!((current == last) && (stringAt(in, current - 3, 3, list93) || stringAt(in, current - 2, 2, list94))))
+				if (!((current == last) && (stringAt(in, current - 3, 3, list93) || stringAt(in, current - 2, 2, list94)))) {
 					MetaphAdd(primary, "KS");
-				if (stringAt(in, current + 1, 1, list95))
+				}
+				if (stringAt(in, current + 1, 1, list95)) {
 					current += 2;
-				else
+				} else {
 					current += 1;
+				}
 				break;
 			case 'Z':
 				if (in.charAt(current + 1) == 'H') {
@@ -692,10 +727,11 @@ public class DoubleMeta implements Transformator {
 				} else {
 					MetaphAdd(primary, 'S');
 				}
-				if (in.charAt(current + 1) == 'Z')
+				if (in.charAt(current + 1) == 'Z') {
 					current += 2;
-				else
+				} else {
 					current += 1;
+				}
 				break;
 			default:
 				current += 1;
@@ -707,6 +743,7 @@ public class DoubleMeta implements Transformator {
 	/**
 	 * @see com.swabunga.spell.engine.Transformator#getReplaceList()
 	 */
+	@Override
 	public char[] getReplaceList() {
 		return replaceList;
 	}

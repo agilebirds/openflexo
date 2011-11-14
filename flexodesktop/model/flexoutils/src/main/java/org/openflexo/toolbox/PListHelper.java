@@ -25,11 +25,12 @@ package org.openflexo.toolbox;
  */
 public class PListHelper {
 	public static int getInteger(Object o) throws NullPointerException, NumberFormatException {
-		if (o == null)
+		if (o == null) {
 			throw new NullPointerException();
-		if (o instanceof String)
+		}
+		if (o instanceof String) {
 			return Integer.parseInt((String) o);
-		else if (o instanceof Number) {
+		} else if (o instanceof Number) {
 			return ((Number) o).intValue();
 		} else {
 			System.err.println("Don't know how to convert from " + o.getClass().getName() + " to int");
@@ -38,14 +39,16 @@ public class PListHelper {
 	}
 
 	public static boolean getBoolean(Object o) throws NullPointerException {
-		if (o == null)
+		if (o == null) {
 			throw new NullPointerException();
+		}
 		if (o instanceof String) {
 			String s = ((String) o).toLowerCase();
-			if (s.equals("true") || s.equals("y") || s.equals("yes"))
+			if (s.equals("true") || s.equals("y") || s.equals("yes")) {
 				return true;
-			else
+			} else {
 				return false;
+			}
 		} else if (o instanceof Boolean) {
 			return ((Boolean) o).booleanValue();
 		} else {
@@ -55,17 +58,20 @@ public class PListHelper {
 	}
 
 	public static Object getObject(Boolean o) throws NullPointerException {
-		if (o == null)
+		if (o == null) {
 			throw new NullPointerException();
-		if (o)
+		}
+		if (o) {
 			return "Y";
-		else
+		} else {
 			return "N";
+		}
 	}
 
 	public static Object getObject(Integer o) throws NullPointerException {
-		if (o == null)
+		if (o == null) {
 			throw new NullPointerException();
+		}
 		return String.valueOf(o);
 	}
 }

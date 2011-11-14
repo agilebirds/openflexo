@@ -24,10 +24,10 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.GenericArrayTypeImpl;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.WilcardTypeImpl;
-import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 
 public class FIBDropDownColumn extends FIBTableColumn {
 
@@ -51,8 +51,9 @@ public class FIBDropDownColumn extends FIBTableColumn {
 	}
 
 	public DataBinding getList() {
-		if (list == null)
+		if (list == null) {
 			list = new DataBinding(this, Parameters.list, LIST);
+		}
 		return list;
 	}
 
@@ -64,8 +65,9 @@ public class FIBDropDownColumn extends FIBTableColumn {
 	}
 
 	public DataBinding getArray() {
-		if (array == null)
+		if (array == null) {
 			array = new DataBinding(this, Parameters.array, ARRAY);
+		}
 		return array;
 	}
 
@@ -79,10 +81,12 @@ public class FIBDropDownColumn extends FIBTableColumn {
 	@Override
 	public void finalizeTableDeserialization() {
 		super.finalizeTableDeserialization();
-		if (list != null)
+		if (list != null) {
 			list.finalizeDeserialization();
-		if (array != null)
+		}
+		if (array != null) {
 			array.finalizeDeserialization();
+		}
 	}
 
 	@Override

@@ -154,8 +154,9 @@ public abstract class AbstractColumn {
 	}
 
 	public String getTooltip(InspectableObject object) {
-		if (getModel() != null && tooltipKey != null)
+		if (getModel() != null && tooltipKey != null) {
 			return (String) object.objectForKey(tooltipKey);
+		}
 		return null;
 	}
 
@@ -173,8 +174,9 @@ public abstract class AbstractColumn {
 	}
 
 	public void notifyValueChangedFor(InspectableObject object) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("notifyValueChangedFor " + object);
+		}
 		// Following will force the whole row where object was modified to be updated
 		// (In case of some computed cells are to be updated according to ths new value)
 		getModel().fireTableRowsUpdated(getModel().indexOf(object), getModel().indexOf(object));
@@ -205,8 +207,9 @@ public abstract class AbstractColumn {
 			Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 			/*if (!isSelected || ToolBox.getPLATFORM()==ToolBox.MACOS)
 				setComponentBackground(returned, hasFocus, isSelected, row, column);*/
-			if (returned instanceof JComponent)
+			if (returned instanceof JComponent) {
 				((JComponent) returned).setToolTipText(getTooltip(getModel().elementAt(row)));
+			}
 
 			return returned;
 		}

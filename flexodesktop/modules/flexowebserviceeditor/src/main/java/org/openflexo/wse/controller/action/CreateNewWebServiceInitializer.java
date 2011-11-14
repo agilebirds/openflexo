@@ -26,7 +26,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.components.AskParametersDialog;
-
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -54,7 +53,6 @@ import org.openflexo.toolbox.ResourceLocator;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.wse.controller.WSEController;
 import org.openflexo.wse.view.WSELibraryView;
 
 public class CreateNewWebServiceInitializer extends ActionInitializer {
@@ -166,14 +164,15 @@ public class CreateNewWebServiceInitializer extends ActionInitializer {
 							action.setWebServiceType(CreateNewWebService.INTERNAL_WS);
 							WKFObject processInterface = (WKFObject) dialog.parameterValueWithName("processInterface");
 
-							if (processInterface instanceof DefaultServiceInterface)
+							if (processInterface instanceof DefaultServiceInterface) {
 								action.setPortRegistry(((DefaultServiceInterface) processInterface).getPortRegistery());
-							else if (processInterface instanceof PortRegistery)
+							} else if (processInterface instanceof PortRegistery) {
 								action.setPortRegistry((PortRegistery) processInterface);
-							else if (processInterface instanceof FlexoProcess)
+							} else if (processInterface instanceof FlexoProcess) {
 								action.setPortRegistry(((FlexoProcess) processInterface).getPortRegistery());
-							else if (processInterface instanceof ServiceInterface)
+							} else if (processInterface instanceof ServiceInterface) {
 								action.setServiceInterface((ServiceInterface) processInterface);
+							}
 
 							if (dialog.parameterValueWithName("internalMode").equals(NEW_INTERNAL_WSGROUP)) {
 								String internalName = (String) dialog.parameterValueWithName("internalWSGroupName");
@@ -181,14 +180,16 @@ public class CreateNewWebServiceInitializer extends ActionInitializer {
 									FlexoController.notify(FlexoLocalization.localizedForKey("enter_a_name_for_the_new_webservice_group"));
 									continue;
 								}
-								if (logger.isLoggable(Level.INFO))
+								if (logger.isLoggable(Level.INFO)) {
 									logger.info("internal ws new name:" + internalName);
+								}
 								action.setNewWebServiceName(internalName);
 
 							} else if (dialog.parameterValueWithName("internalMode").equals(EXISTING_INTERNAL_WSGROUP)) {
 								WSService group = (WSService) dialog.parameterValueWithName("internalWSGroup");
-								if (logger.isLoggable(Level.INFO))
+								if (logger.isLoggable(Level.INFO)) {
 									logger.info("existing internal ws name:" + group.getName());
+								}
 								action.setNewWebServiceName(group.getName());
 							}
 
@@ -207,8 +208,9 @@ public class CreateNewWebServiceInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<CreateNewWebService>() {
 			@Override
 			public boolean run(ActionEvent e, CreateNewWebService action) {
-				if (action.getNewWebService() == null)
+				if (action.getNewWebService() == null) {
 					return false;
+				}
 				logger.info("Finalizer for CreateNewWebService in WSLibraryView with " + action.getNewWebService());
 				if (getControllerActionInitializer().getWSEController().getCurrentDisplayedObjectAsModuleView() == action
 						.getNewWebService().getWSLibrary()) {

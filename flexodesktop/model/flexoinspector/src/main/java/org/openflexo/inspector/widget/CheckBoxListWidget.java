@@ -131,8 +131,9 @@ public class CheckBoxListWidget extends MultipleValuesWidget {
 					_checkBoxArray[i].setSelected(true);
 				}
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Property " + _propertyModel.name + " is supposed to be a Vector or a String, not a " + getType());
+				}
 			}
 		}
 		widgetUpdating = false;
@@ -148,8 +149,9 @@ public class CheckBoxListWidget extends MultipleValuesWidget {
 		} else if (getType() == String.class) {
 			setObjectValue(convertVectorToString(_selectedList));
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Property " + _propertyModel.name + " is supposed to be a Vector or a String, not a " + getType());
+			}
 		}
 	}
 

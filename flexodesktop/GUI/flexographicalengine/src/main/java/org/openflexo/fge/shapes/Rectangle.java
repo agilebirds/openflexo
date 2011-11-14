@@ -23,10 +23,10 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGERoundRectangle;
 import org.openflexo.fge.geom.FGEShape;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 
 public class Rectangle extends Shape {
 
@@ -68,8 +68,9 @@ public class Rectangle extends Shape {
 			}
 		}
 		rebuildControlPoints();
-		if (getGraphicalRepresentation() != null)
+		if (getGraphicalRepresentation() != null) {
 			getGraphicalRepresentation().notifyShapeChanged();
+		}
 	}
 
 	@Override
@@ -124,8 +125,9 @@ public class Rectangle extends Shape {
 
 	@Override
 	public void notifyObjectResized() {
-		if (getIsRounded())
+		if (getIsRounded()) {
 			setArcSize(arcSize);
+		}
 	}
 
 }

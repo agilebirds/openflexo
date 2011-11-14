@@ -78,8 +78,9 @@ public class Value extends DKVObject implements InspectableObject {
 		String old = this.value;
 		if (value != null && value.trim().length() == 0) {
 			this.value = null;
-		} else
+		} else {
 			this.value = value;
+		}
 		setChanged();
 		notifyObservers(new DKVDataModification(-1, "value", old, this.value));
 	}
@@ -111,8 +112,9 @@ public class Value extends DKVObject implements InspectableObject {
 	}
 
 	public String getDisplayString() {
-		if (value == null)
+		if (value == null) {
 			return getFullyQualifiedName();
+		}
 		return value;
 	}
 

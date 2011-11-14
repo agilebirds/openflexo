@@ -64,8 +64,9 @@ public class LinkScheme extends EditionScheme {
 		if (StringUtils.isEmpty(_getFromTarget())) {
 			return null;
 		}
-		if (getViewPointLibrary() != null)
+		if (getViewPointLibrary() != null) {
 			return getViewPointLibrary().getEditionPattern(_getFromTarget());
+		}
 		return null;
 	}
 
@@ -78,8 +79,9 @@ public class LinkScheme extends EditionScheme {
 		if (StringUtils.isEmpty(_getToTarget())) {
 			return null;
 		}
-		if (getViewPointLibrary() != null)
+		if (getViewPointLibrary() != null) {
 			return getViewPointLibrary().getEditionPattern(_getToTarget());
+		}
 		return null;
 	}
 
@@ -113,8 +115,9 @@ public class LinkScheme extends EditionScheme {
 
 	@Override
 	public BindingModel getBindingModel() {
-		if (bindingModelNeedToBeRecomputed)
+		if (bindingModelNeedToBeRecomputed) {
 			updateBindingModels();
+		}
 		return super.getBindingModel();
 	}
 
@@ -124,14 +127,16 @@ public class LinkScheme extends EditionScheme {
 		EditionPattern fromEditionPattern = this.getFromTargetEditionPattern();
 		if (fromEditionPattern != null) {
 			ShapePatternRole fromShapePatternRole = fromEditionPattern.getDefaultShapePatternRole();
-			if (fromShapePatternRole != null)
+			if (fromShapePatternRole != null) {
 				newAction.setFromShape(new ViewPointDataBinding("fromTarget." + fromShapePatternRole.getName()));
+			}
 		}
 		EditionPattern toEditionPattern = this.getToTargetEditionPattern();
 		if (toEditionPattern != null) {
 			ShapePatternRole toShapePatternRole = toEditionPattern.getDefaultShapePatternRole();
-			if (toShapePatternRole != null)
+			if (toShapePatternRole != null) {
 				newAction.setToShape(new ViewPointDataBinding("toTarget." + toShapePatternRole.getName()));
+			}
 		}
 		return newAction;
 	}

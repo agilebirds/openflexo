@@ -29,8 +29,8 @@ import javax.swing.JPanel;
 import org.openflexo.components.browser.BrowserConfiguration;
 import org.openflexo.components.browser.BrowserElementFactory;
 import org.openflexo.components.browser.BrowserElementType;
-import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
+import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.tabular.model.EditableStringColumn;
 import org.openflexo.components.tabularbrowser.TabularBrowserModel;
 import org.openflexo.foundation.FlexoModelObject;
@@ -81,8 +81,9 @@ public class IEExampleValuesView extends JPanel implements SelectionSynchronized
 			public String getValue(FlexoModelObject object) {
 				if (hasExampleValue(object)) {
 					return getExampleValue(object);
-				} else
+				} else {
 					return EMPTY_STRING;
+				}
 			}
 
 			@Override
@@ -170,12 +171,13 @@ public class IEExampleValuesView extends JPanel implements SelectionSynchronized
 			return true;
 		} else if (object instanceof IEBlocWidget) {
 			return true;
-		} else if (object instanceof IEStringWidget)
+		} else if (object instanceof IEStringWidget) {
 			return true;
-		else if (object instanceof IETextAreaWidget)
+		} else if (object instanceof IETextAreaWidget) {
 			return true;
-		else if (object instanceof IEHeaderWidget)
+		} else if (object instanceof IEHeaderWidget) {
 			return true;
+		}
 		return false;
 	}
 
@@ -188,12 +190,13 @@ public class IEExampleValuesView extends JPanel implements SelectionSynchronized
 			return ((IELabelWidget) object).getValue();
 		} else if (object instanceof IEBlocWidget) {
 			return ((IEBlocWidget) object).getTitle();
-		} else if (object instanceof IEStringWidget)
+		} else if (object instanceof IEStringWidget) {
 			return ((IEStringWidget) object).getValue();
-		else if (object instanceof IETextAreaWidget)
+		} else if (object instanceof IETextAreaWidget) {
 			return ((IETextAreaWidget) object).getValue();
-		else if (object instanceof IEHeaderWidget)
+		} else if (object instanceof IEHeaderWidget) {
 			return ((IEHeaderWidget) object).getValue();
+		}
 		return null;
 	}
 
@@ -206,12 +209,13 @@ public class IEExampleValuesView extends JPanel implements SelectionSynchronized
 			((IELabelWidget) object).setValue(value);
 		} else if (object instanceof IEBlocWidget) {
 			((IEBlocWidget) object).setTitle(value);
-		} else if (object instanceof IEStringWidget)
+		} else if (object instanceof IEStringWidget) {
 			((IEStringWidget) object).setValue(value);
-		else if (object instanceof IETextAreaWidget)
+		} else if (object instanceof IETextAreaWidget) {
 			((IETextAreaWidget) object).setValue(value);
-		else if (object instanceof IEHeaderWidget)
+		} else if (object instanceof IEHeaderWidget) {
 			((IEHeaderWidget) object).setValue(value);
+		}
 	}
 
 	@Override

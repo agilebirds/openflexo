@@ -37,13 +37,13 @@ import org.openflexo.foundation.wkf.ActionPetriGraph;
 import org.openflexo.foundation.wkf.ActivityPetriGraph;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
 import org.openflexo.foundation.wkf.FlexoProcess;
+import org.openflexo.foundation.wkf.MetricsValue.MetricsValueOwner;
 import org.openflexo.foundation.wkf.OperationPetriGraph;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.wkf.WKFArtefact;
 import org.openflexo.foundation.wkf.WKFElementType;
 import org.openflexo.foundation.wkf.WKFGroup;
 import org.openflexo.foundation.wkf.WKFObject;
-import org.openflexo.foundation.wkf.MetricsValue.MetricsValueOwner;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.foundation.wkf.node.AbstractNode;
 import org.openflexo.foundation.wkf.node.ActionNode;
@@ -157,16 +157,19 @@ public class DropWKFElement extends FlexoUndoableAction<DropWKFElement, FlexoPet
 						((MetricsValueOwner) node).updateMetricsValues();
 					}
 					if (node instanceof FlexoNode) {
-						if (node instanceof ActivityNode)
+						if (node instanceof ActivityNode) {
 							((ActivityNode) node).setTaskType(TaskType.User);
+						}
 						if (((FlexoNode) node).isBeginOrEndNode()) {
 							node.setDontGenerate(true);
 							((FlexoNode) node).resetLabelLocation(getGraphicalContext());
 						}
-						if (((FlexoNode) node).isSelfExecutableNode())
+						if (((FlexoNode) node).isSelfExecutableNode()) {
 							((FlexoNode) node).resetLabelLocation(getGraphicalContext());
-						if (node instanceof ActionNode)
+						}
+						if (node instanceof ActionNode) {
 							((FlexoNode) node).resetLabelLocation(getGraphicalContext());
+						}
 					}
 					if (getGroup() != null) {
 						getGroup().addToNodes(node);
@@ -174,8 +177,9 @@ public class DropWKFElement extends FlexoUndoableAction<DropWKFElement, FlexoPet
 					}
 					if (node instanceof EventNode) {
 						EventNode eventNode = (EventNode) node;
-						if (((EventNode) node).isStartOrEnd())
+						if (((EventNode) node).isStartOrEnd()) {
 							node.setDontGenerate(true);
+						}
 						eventNode.resetLabelLocation(getGraphicalContext());
 						// eventNode.setLabelX(25, getGraphicalContext());
 						// eventNode.setLabelY(45, getGraphicalContext());
@@ -208,8 +212,9 @@ public class DropWKFElement extends FlexoUndoableAction<DropWKFElement, FlexoPet
 		Iterator<FlexoModelObject> i = embedded.iterator();
 		while (i.hasNext()) {
 			FlexoModelObject o = i.next();
-			if (o instanceof WKFObject)
+			if (o instanceof WKFObject) {
 				((WKFObject) o).setProcess(process);
+			}
 		}
 	}
 
@@ -236,8 +241,9 @@ public class DropWKFElement extends FlexoUndoableAction<DropWKFElement, FlexoPet
 		} else if (petriGraph instanceof ActionPetriGraph) {
 			newNode.setNodeName(process.findNextInitialName(newNode.getDefaultName(), ((ActionPetriGraph) petriGraph).getOperationNode()));
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Inconsistent data: petri graph is a " + petriGraph.getClass().getName());
+			}
 		}
 	}
 
@@ -297,8 +303,9 @@ public class DropWKFElement extends FlexoUndoableAction<DropWKFElement, FlexoPet
 			node = (AbstractNode) XMLDecoder.decodeObjectWithMapping(elementXMLRepresentation, wkfMapping, process.instanciateNewBuilder(),
 					process.getStringEncoder());
 		} catch (Exception e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Failed building element: " + elementXMLRepresentation);
+			}
 			e.printStackTrace();
 		}
 		return node;
@@ -314,8 +321,9 @@ public class DropWKFElement extends FlexoUndoableAction<DropWKFElement, FlexoPet
 			// We clone here in order to get a node with identifiers well resetted (and all other stuff)
 			node = (AbstractNode) readNode.cloneUsingXMLMapping();
 		} catch (Exception e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Failed building element  from file " + elementXMLFile);
+			}
 			e.printStackTrace();
 		}
 		return node;

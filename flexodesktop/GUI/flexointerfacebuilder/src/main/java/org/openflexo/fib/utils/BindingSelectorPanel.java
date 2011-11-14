@@ -458,7 +458,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 				}
 			});
 
-			JLabel showHideCompoundBindingsButtonLabel = new JLabel("", JLabel.RIGHT);
+			JLabel showHideCompoundBindingsButtonLabel = new JLabel("", SwingConstants.RIGHT);
 			showHideCompoundBindingsButtonLabel.setFont(new Font("SansSerif", Font.PLAIN, 10));
 			if (_bindingSelector.editionMode == EditionMode.COMPOUND_BINDING) {
 				showHideCompoundBindingsButton.setNormalIcon(FIBIconLibrary.TOGGLE_ARROW_TOP_ICON);
@@ -488,11 +488,11 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			optionsPanel.add(optionsWestPanel, BorderLayout.WEST);
 		}
 
-		currentTypeLabel = new JLabel(FlexoLocalization.localizedForKey("no_type"), JLabel.LEFT);
+		currentTypeLabel = new JLabel(FlexoLocalization.localizedForKey("no_type"), SwingConstants.LEFT);
 		currentTypeLabel.setFont(new Font("SansSerif", Font.ITALIC, 10));
 		currentTypeLabel.setForeground(Color.GRAY);
 
-		searchedTypeLabel = new JLabel("[" + FlexoLocalization.localizedForKey("no_type") + "]", JLabel.LEFT);
+		searchedTypeLabel = new JLabel("[" + FlexoLocalization.localizedForKey("no_type") + "]", SwingConstants.LEFT);
 		searchedTypeLabel.setFont(new Font("SansSerif", Font.PLAIN, 10));
 		searchedTypeLabel.setForeground(Color.RED);
 

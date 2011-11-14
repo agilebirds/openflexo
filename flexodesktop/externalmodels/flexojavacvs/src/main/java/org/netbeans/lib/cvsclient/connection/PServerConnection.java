@@ -228,8 +228,9 @@ public class PServerConnection extends AbstractConnection {
 						localizedMsg);
 			}
 
-			if (response == null)
+			if (response == null) {
 				response = ""; // NOI18N
+			}
 			String locMessage = getLocalMessage("AuthenticationException.AuthenticationFailed", // NOI18N
 					new Object[] { response });
 			throw new AuthenticationException("AuthenticationFailed", // NOI18N

@@ -72,8 +72,9 @@ public class IESequenceOperator extends IESequence<IEOperator> {
 		IEOperator temp = null;
 		while (en.hasMoreElements()) {
 			temp = (IEOperator) en.nextElement();
-			if (temp instanceof RepetitionOperator)
+			if (temp instanceof RepetitionOperator) {
 				return (RepetitionOperator) temp;
+			}
 		}
 		return null;
 	}
@@ -83,8 +84,9 @@ public class IESequenceOperator extends IESequence<IEOperator> {
 		IEOperator temp = null;
 		while (en.hasMoreElements()) {
 			temp = (IEOperator) en.nextElement();
-			if (temp instanceof ConditionalOperator)
+			if (temp instanceof ConditionalOperator) {
 				return (ConditionalOperator) temp;
+			}
 		}
 		return null;
 	}

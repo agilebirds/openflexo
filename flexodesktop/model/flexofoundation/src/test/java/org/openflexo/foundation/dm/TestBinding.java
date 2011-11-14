@@ -23,8 +23,6 @@ import javax.naming.InvalidNameException;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoTestCase;
-import org.openflexo.foundation.dm.DMProperty;
-import org.openflexo.foundation.dm.DuplicatePropertyNameException;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
 import org.openflexo.foundation.ie.cl.action.AddComponent;

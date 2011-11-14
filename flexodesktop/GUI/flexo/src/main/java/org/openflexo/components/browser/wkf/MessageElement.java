@@ -22,14 +22,13 @@ package org.openflexo.components.browser.wkf;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-import org.openflexo.icon.WSEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.wkf.ws.AbstractMessageDefinition;
 import org.openflexo.foundation.wkf.ws.MessageBindings;
+import org.openflexo.icon.WSEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Browser element representing a MessageDefinition
@@ -54,21 +53,25 @@ public class MessageElement extends BrowserElement {
 
 	@Override
 	public String getName() {
-		if (getMessage() == null)
+		if (getMessage() == null) {
 			return super.getName();
+		}
 		// use this method when name will be defined on a message definition
-		if (getMessage().getName() != null)
+		if (getMessage().getName() != null) {
 			return getMessage().getName();
-		if (getMessageDefinition() == null)
+		}
+		if (getMessageDefinition() == null) {
 			return super.getName();
-		if (getMessageDefinition().isInputMessageDefinition())
+		}
+		if (getMessageDefinition().isInputMessageDefinition()) {
 			return FlexoLocalization.localizedForKey("input_message_definition");
-		else if (getMessageDefinition().isOutputMessageDefinition())
+		} else if (getMessageDefinition().isOutputMessageDefinition()) {
 			return FlexoLocalization.localizedForKey("output_message_definition");
-		else if (getMessageDefinition().isFaultMessageDefinition())
+		} else if (getMessageDefinition().isFaultMessageDefinition()) {
 			return FlexoLocalization.localizedForKey("fault_message_definition");
-		else
+		} else {
 			return super.getName();
+		}
 	}
 
 	protected MessageBindings getMessage() {
@@ -76,21 +79,24 @@ public class MessageElement extends BrowserElement {
 	}
 
 	protected AbstractMessageDefinition getMessageDefinition() {
-		if (getMessage() != null)
+		if (getMessage() != null) {
 			return getMessage().getMessageDefinition();
+		}
 		return null;
 	}
 
 	@Override
 	public Icon getIcon() {
-		if (getMessageDefinition() == null)
+		if (getMessageDefinition() == null) {
 			return super.getIcon();
-		if (getMessageDefinition().isInputMessageDefinition())
+		}
+		if (getMessageDefinition().isInputMessageDefinition()) {
 			return SMALL_OUT_MESSAGE_DEFINITION_LEFT_ICON;
-		else if (getMessageDefinition().isOutputMessageDefinition())
+		} else if (getMessageDefinition().isOutputMessageDefinition()) {
 			return SMALL_IN_MESSAGE_DEFINITION_LEFT_ICON;
-		else if (getMessageDefinition().isFaultMessageDefinition())
+		} else if (getMessageDefinition().isFaultMessageDefinition()) {
 			return SMALL_FAULT_MESSAGE_DEFINITION_LEFT_ICON;
+		}
 		return super.getIcon();
 	}
 

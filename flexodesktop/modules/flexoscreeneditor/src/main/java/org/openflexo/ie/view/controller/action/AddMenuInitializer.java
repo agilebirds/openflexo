@@ -25,16 +25,15 @@ import java.util.regex.Pattern;
 
 import javax.swing.Icon;
 
+import org.openflexo.foundation.action.FlexoActionFinalizer;
+import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.ie.menu.FlexoItemMenu;
+import org.openflexo.foundation.ie.menu.action.AddMenu;
 import org.openflexo.icon.SEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-
-import org.openflexo.foundation.action.FlexoActionFinalizer;
-import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.ie.menu.FlexoItemMenu;
-import org.openflexo.foundation.ie.menu.action.AddMenu;
 
 public class AddMenuInitializer extends ActionInitializer {
 
@@ -57,8 +56,9 @@ public class AddMenuInitializer extends ActionInitializer {
 				String menuLabel = FlexoController.askForStringMatchingPattern(
 						FlexoLocalization.localizedForKey("enter_label_for_the_new_menu"), Pattern.compile("\\S.*"),
 						FlexoLocalization.localizedForKey("cannot_be_empty"));
-				if (menuLabel == null || menuLabel.trim().length() == 0)
+				if (menuLabel == null || menuLabel.trim().length() == 0) {
 					return false;
+				}
 				if (((FlexoItemMenu) action.getFocusedObject()).getNavigationMenu().getMenuLabeled(menuLabel) != null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("a_menu_with_such_label_already_exists"));
 				}

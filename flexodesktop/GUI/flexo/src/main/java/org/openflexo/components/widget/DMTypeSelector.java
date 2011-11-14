@@ -39,13 +39,14 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionListener;
 
 import org.openflexo.components.AskParametersPanel;
 import org.openflexo.components.browser.BrowserElementType;
-import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
+import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.widget.AbstractSelectorPanel.AbstractSelectorPanelOwner;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBCustom;
@@ -54,12 +55,12 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dkv.Domain;
 import org.openflexo.foundation.dm.DMEntity;
+import org.openflexo.foundation.dm.DMEntity.DMTypeVariable;
 import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMType;
-import org.openflexo.foundation.dm.DMTypeOwner;
-import org.openflexo.foundation.dm.DMEntity.DMTypeVariable;
 import org.openflexo.foundation.dm.DMType.DMTypeStringConverter;
 import org.openflexo.foundation.dm.DMType.WildcardBound;
+import org.openflexo.foundation.dm.DMTypeOwner;
 import org.openflexo.foundation.param.CheckboxParameter;
 import org.openflexo.foundation.param.DMEntityParameter;
 import org.openflexo.foundation.param.DomainParameter;
@@ -126,13 +127,15 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 		setFocusable(true);
 		getTextField().setFocusable(true);
 		getTextField().setEditable(true);
-		if (editedObject != null && !editedObject.isBasicType())
+		if (editedObject != null && !editedObject.isBasicType()) {
 			editionMode = EditionMode.COMPLEX_TYPE;
+		}
 		completionListKeyAdapter = new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if (_selectorPanel != null && _selectorPanel.isUpdating())
+				if (_selectorPanel != null && _selectorPanel.isUpdating()) {
 					return;
+				}
 
 				if (_selectorPanel != null) {
 					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -199,14 +202,17 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 	@Override
 	public void setRevertValue(DMType oldValue) {
 		// WARNING: we need here to clone to keep track back of previous data !!!
-		if (oldValue != null)
+		if (oldValue != null) {
 			_revertValue = oldValue.clone();
-		else
+		} else {
 			_revertValue = null;
-		if (logger.isLoggable(Level.FINE))
+		}
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Sets revert value to " + _revertValue);
+		}
 	}
 
+	@Override
 	public DMType getRevertValue() {
 		return _revertValue;
 	}
@@ -244,10 +250,11 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 
 	protected AbstractDMTypeSelectorPanel makeCustomPanel(DMType editedObject) {
 		// logger.info("editionMode="+editionMode);
-		if (editionMode == EditionMode.COMPLEX_TYPE)
+		if (editionMode == EditionMode.COMPLEX_TYPE) {
 			return new ComplexDMTypeSelectorPanel();
-		else if (editionMode == EditionMode.BASIC_TYPE)
+		} else if (editionMode == EditionMode.BASIC_TYPE) {
 			return new BasicDMTypeSelectorPanel();
+		}
 		return null;
 	}
 
@@ -269,22 +276,25 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 	public void setEditedObject(DMType editedObject) {
 		super.setEditedObject(editedObject);
 		if (editedObject == null) {
-			if (editionMode != EditionMode.BASIC_TYPE)
+			if (editionMode != EditionMode.BASIC_TYPE) {
 				activateBasicTypeMode();
+			}
 		} else {
-			if (editionMode == EditionMode.BASIC_TYPE && !editedObject.isBasicType())
+			if (editionMode == EditionMode.BASIC_TYPE && !editedObject.isBasicType()) {
 				activateComplexTypeMode();
-			else if (editionMode == EditionMode.COMPLEX_TYPE && editedObject.isBasicType())
+			} else if (editionMode == EditionMode.COMPLEX_TYPE && editedObject.isBasicType()) {
 				activateBasicTypeMode();
+			}
 		}
 	}
 
 	@Override
 	public String renderedString(DMType editedObject) {
-		if (editedObject != null)
+		if (editedObject != null) {
 			return (_displayTypeAsSimplified ? editedObject.getSimplifiedStringRepresentation() : editedObject.getStringRepresentation());
-		else
+		} else {
 			return STRING_REPRESENTATION_WHEN_NULL;
+		}
 	}
 
 	public abstract class AbstractDMTypeSelectorPanel extends ResizablePanel {
@@ -368,12 +378,13 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 			complexTypeButton = new MouseOverButton();
 			complexTypeButton.setBorder(BorderFactory.createEmptyBorder());
 			complexTypeButton.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					activateComplexTypeMode();
 				}
 			});
 
-			JLabel complexTypeButtonLabel = new JLabel("", JLabel.RIGHT);
+			JLabel complexTypeButtonLabel = new JLabel("", SwingConstants.RIGHT);
 			complexTypeButtonLabel.setFont(new Font("SansSerif", Font.PLAIN, 10));
 			complexTypeButton.setNormalIcon(IconLibrary.TOGGLE_ARROW_BOTTOM_ICON);
 			complexTypeButton.setMouseOverIcon(IconLibrary.TOGGLE_ARROW_BOTTOM_SELECTED_ICON);
@@ -419,30 +430,37 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 			return new Dimension(getDefaultWidth(), getDefaultHeight());
 		}
 
+		@Override
 		public Integer getDefaultWidth() {
 			return 300;
 		}
 
+		@Override
 		public Integer getDefaultHeight() {
 			return 300;
 		}
 
+		@Override
 		public void apply() {
 			DMTypeSelector.this.apply();
 		}
 
+		@Override
 		public void cancel() {
 			DMTypeSelector.this.cancel();
 		}
 
+		@Override
 		public KeyAdapter getCompletionListKeyAdapter() {
 			return completionListKeyAdapter;
 		}
 
+		@Override
 		public DMEntity getEditedObject() {
 			return editedEntity;
 		}
 
+		@Override
 		public void setEditedObject(DMEntity entity) {
 			editedEntity = entity;
 			if (entity == null) {
@@ -452,42 +470,52 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 			}
 		}
 
+		@Override
 		public FlexoEditor getEditor() {
 			return DMTypeSelector.this.getEditor();
 		}
 
+		@Override
 		public FlexoProject getProject() {
 			return DMTypeSelector.this.getProject();
 		}
 
+		@Override
 		public FlexoModelObject getRootObject() {
 			return getDataModel();
 		}
 
+		@Override
 		public JTextField getTextField() {
 			return DMTypeSelector.this.getTextField();
 		}
 
+		@Override
 		public boolean isProgrammaticalySet() {
 			return DMTypeSelector.this.isProgrammaticalySet();
 		}
 
+		@Override
 		public boolean isSelectable(FlexoModelObject object) {
 			return object instanceof DMEntity;
 		}
 
+		@Override
 		public void openPopup() {
 			DMTypeSelector.this.openPopup();
 		}
 
+		@Override
 		public void closePopup() {
 			DMTypeSelector.this.closePopup();
 		}
 
+		@Override
 		public boolean popupIsShown() {
 			return DMTypeSelector.this.popupIsShown();
 		}
 
+		@Override
 		public String renderedString(DMEntity editedObject) {
 			if (editedObject != null) {
 				return editedObject.getLocalizedName();
@@ -495,6 +523,7 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 			return "";
 		}
 
+		@Override
 		public void setProgrammaticalySet(boolean aFlag) {
 			DMTypeSelector.this.setProgrammaticalySet(aFlag);
 		}
@@ -503,8 +532,9 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 		void processEnterPressed() {
 			if (!_entitySelectorPanel.processEnterPressed()) {
 				DMType newType = parseAndSelect(getTextField().getText());
-				if (newType.isResolved())
+				if (newType.isResolved()) {
 					apply();
+				}
 			}
 		}
 
@@ -608,19 +638,21 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 		<T> void dataChanged(ParameterDefinition<T> param, T oldValue, T newValue) {
 			// if (isUpdating) return;
 
-			if (oldValue == null && newValue == null)
+			if (oldValue == null && newValue == null) {
 				return;
+			}
 			if ((oldValue == null && newValue != null) || (oldValue != null && !oldValue.equals(newValue))) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("dataChanged() for DMType old=" + oldValue + " new=" + newValue);
+				}
 				getTextField().setText(renderedString(getEditedObject()));
 			}
 		}
 
 		DMType getOrCreateEditedType() {
-			if (getEditedObject() != null)
+			if (getEditedObject() != null) {
 				return getEditedObject();
-			else {
+			} else {
 				DMType returned = DMType.makeUnresolvedDMType("");
 				returned.setOwner(getOwner());
 				setEditedObject(returned);
@@ -642,10 +674,12 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 			kindOfTypeParameter.setWidgetLayout(WidgetLayout.LABEL_ABOVE_WIDGET_LAYOUT);
 			kindOfTypeParameter.setDisplayLabel(false);
 			kindOfTypeParameter.addValueListener(new ParameterDefinition.ValueListener<DMType.KindOfType>() {
+				@Override
 				public void newValueWasSet(ParameterDefinition<DMType.KindOfType> param, DMType.KindOfType oldValue,
 						DMType.KindOfType newValue) {
-					if (isUpdating)
+					if (isUpdating) {
 						return;
+					}
 					isUpdating = true;
 					if (newValue == DMType.KindOfType.RESOLVED) {
 						getOrCreateEditedType().setDimensions(0);
@@ -698,9 +732,11 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 			unresolvedTypeParameter.setDepends("KindOfType");
 			unresolvedTypeParameter.setConditional("KindOfType=" + '"' + DMType.KindOfType.UNRESOLVED.getStringRepresentation() + '"');
 			unresolvedTypeParameter.addValueListener(new ParameterDefinition.ValueListener<String>() {
+				@Override
 				public void newValueWasSet(ParameterDefinition<String> param, String oldValue, String newValue) {
-					if (isUpdating)
+					if (isUpdating) {
 						return;
+					}
 					if (newValue != null && !newValue.equals(oldValue)) {
 						setEditedObject(getProject().getDataModel().getDmTypeConverter()
 								.convertFromString(newValue, getOwner(), getProject()));
@@ -714,9 +750,11 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 
 			baseEntityParameter = new DMEntityParameter("baseType", "base_type", null);
 			baseEntityParameter.addValueListener(new ParameterDefinition.ValueListener<DMEntity>() {
+				@Override
 				public void newValueWasSet(ParameterDefinition<DMEntity> param, DMEntity oldValue, DMEntity newValue) {
-					if (isUpdating)
+					if (isUpdating) {
 						return;
+					}
 					if (oldValue != newValue) {
 						getOrCreateEditedType().setBaseEntity(newValue);
 						hasParametersParameter
@@ -736,9 +774,11 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 			dimensionParameter.setDepends("KindOfType");
 			dimensionParameter.setConditional("KindOfType=" + '"' + DMType.KindOfType.RESOLVED_ARRAY.getStringRepresentation() + '"');
 			dimensionParameter.addValueListener(new ParameterDefinition.ValueListener<Integer>() {
+				@Override
 				public void newValueWasSet(ParameterDefinition<Integer> param, Integer oldValue, Integer newValue) {
-					if (isUpdating)
+					if (isUpdating) {
 						return;
+					}
 					if (newValue != null && !newValue.equals(oldValue)) {
 						getOrCreateEditedType().setDimensions(newValue);
 						dataChanged(param, oldValue, newValue);
@@ -769,9 +809,11 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 
 			domainParam = new DomainParameter("domain", "domain", null);
 			domainParam.addValueListener(new ParameterDefinition.ValueListener<Domain>() {
+				@Override
 				public void newValueWasSet(ParameterDefinition<Domain> param, Domain oldValue, Domain newValue) {
-					if (isUpdating)
+					if (isUpdating) {
 						return;
+					}
 					if (oldValue != newValue) {
 						getOrCreateEditedType().setDomain(newValue);
 						dataChanged(param, oldValue, newValue);
@@ -788,9 +830,11 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 			typeVariableParam.setDepends("KindOfType");
 			typeVariableParam.setConditional("KindOfType=" + '"' + DMType.KindOfType.TYPE_VARIABLE.getStringRepresentation() + '"');
 			typeVariableParam.addValueListener(new ParameterDefinition.ValueListener<DMTypeVariable>() {
+				@Override
 				public void newValueWasSet(ParameterDefinition<DMTypeVariable> param, DMTypeVariable oldValue, DMTypeVariable newValue) {
-					if (isUpdating)
+					if (isUpdating) {
 						return;
+					}
 					getOrCreateEditedType().setTypeVariable(newValue);
 					dataChanged(param, oldValue, newValue);
 				}
@@ -836,8 +880,9 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 					dimensionParameter, hasParametersParameter, parametersParam, domainParam, typeVariableParam, upperBoundsParam,
 					lowerBoundsParam);
 			_dataPanel.getParametersModel().addObjectForKey(wildcardActions, "wildcardActions");
-			if (getOwner() != null)
+			if (getOwner() != null) {
 				_dataPanel.getParametersModel().addObjectForKey(getOwner(), "owner");
+			}
 
 			// _dataPanel.setBackground(Color.RED);
 
@@ -849,16 +894,19 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 			_controlPanel.add(_cancelButton = new JButton(FlexoLocalization.localizedForKey("cancel")));
 			_controlPanel.add(_resetButton = new JButton(FlexoLocalization.localizedForKey("reset")));
 			_applyButton.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					apply();
 				}
 			});
 			_cancelButton.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					cancel();
 				}
 			});
 			_resetButton.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					setEditedObject(null);
 					apply();
@@ -868,12 +916,13 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 			basicTypeButton = new MouseOverButton();
 			basicTypeButton.setBorder(BorderFactory.createEmptyBorder());
 			basicTypeButton.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					activateBasicTypeMode();
 				}
 			});
 
-			JLabel basicTypeButtonLabel = new JLabel("", JLabel.RIGHT);
+			JLabel basicTypeButtonLabel = new JLabel("", SwingConstants.RIGHT);
 			basicTypeButtonLabel.setFont(new Font("SansSerif", Font.PLAIN, 10));
 			basicTypeButton.setNormalIcon(IconLibrary.TOGGLE_ARROW_TOP_ICON);
 			basicTypeButton.setMouseOverIcon(IconLibrary.TOGGLE_ARROW_TOP_SELECTED_ICON);
@@ -896,8 +945,9 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 		@Override
 		DMEntitySelector<DMEntity> getBaseEntitySelector() {
 			DMEntityInspectorWidget widget = (DMEntityInspectorWidget) _dataPanel.getInspectorWidgetForParameter(baseEntityParameter);
-			if (widget != null)
+			if (widget != null) {
 				return widget.getSelector();
+			}
 			return null;
 		}
 
@@ -975,19 +1025,22 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 
 		@Override
 		public void update() {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Update with " + getEditedObject());
+			}
 
-			if (isUpdating)
+			if (isUpdating) {
 				return;
+			}
 
 			isUpdating = true;
 
 			if (getEditedObject() == null || getEditedObject().getStringRepresentation() == null
-					|| getEditedObject().getStringRepresentation().equals(""))
+					|| getEditedObject().getStringRepresentation().equals("")) {
 				kindOfTypeParameter.setValue(DMType.KindOfType.RESOLVED);
-			else
+			} else {
 				kindOfTypeParameter.setValue(getEditedObject() != null ? getEditedObject().getKindOfType() : null);
+			}
 			unresolvedTypeParameter.setValue(getEditedObject() != null ? getEditedObject().getStringRepresentation() : null);
 			baseEntityParameter.setValue(getEditedObject() != null ? getEditedObject().getBaseEntity() : null);
 			dimensionParameter.setValue(getEditedObject() != null ? getEditedObject().getDimensions() : null);
@@ -1028,8 +1081,9 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 		@Override
 		void processEnterPressed() {
 			DMType newType = parseAndSelect(getTextField().getText());
-			if (newType.isResolved())
+			if (newType.isResolved()) {
 				apply();
+			}
 		}
 
 		@Override
@@ -1051,16 +1105,18 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 		StringTokenizer st = new StringTokenizer(aTypeAsString, " <>,?", true);
 		while (st.hasMoreTokens()) {
 			String token = st.nextToken();
-			if (" <>,?".indexOf(token) > -1)
+			if (" <>,?".indexOf(token) > -1) {
 				typeToParse += token; // this is a delimiter
-			else {
+			} else {
 				DMEntity e = getAllUnambigousEntities().get(token);
-				if (e == null)
+				if (e == null) {
 					e = getAllUnambigousEntities().get(token.toUpperCase());
-				if (e != null)
+				}
+				if (e != null) {
 					typeToParse += e.getFullQualifiedName();
-				else
+				} else {
 					typeToParse += token;
+				}
 			}
 		}
 		DMTypeStringConverter converter = getDataModel().getDmTypeConverter();
@@ -1078,8 +1134,9 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 
 	@Override
 	public void cancel() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("CANCEL: revert to " + getRevertValue());
+		}
 		setEditedObject(getRevertValue());
 		closePopup();
 		super.cancel();
@@ -1094,6 +1151,7 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 		// (at this point, popup open, text field gets focus back, select all
 		// and the second push on a key erase the first char)
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				getTextField().select(0, 0);
 				getTextField().setCaretPosition(getTextField().getText().length());
@@ -1109,8 +1167,9 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 
 	@Override
 	protected void deletePopup() {
-		if (_selectorPanel != null)
+		if (_selectorPanel != null) {
 			_selectorPanel.delete();
+		}
 		_selectorPanel = null;
 		super.deletePopup();
 	}
@@ -1157,9 +1216,10 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 	}
 
 	public void activateBasicTypeMode() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("activateBasicTypeMode() getEditedObject()=" + getEditedObject() + " editionMode=" + editionMode
 					+ " popupIsShown()=" + popupIsShown() + " _selectorPanel=" + _selectorPanel);
+		}
 		if ((_selectorPanel != null) && (editionMode != EditionMode.BASIC_TYPE)) {
 			editionMode = EditionMode.BASIC_TYPE;
 			boolean showAgain = false;
@@ -1184,9 +1244,10 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 	}
 
 	public void activateComplexTypeMode() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("activateComplexTypeMode() getEditedObject()=" + getEditedObject() + " editionMode=" + editionMode
 					+ " popupIsShown()=" + popupIsShown() + " _selectorPanel=" + _selectorPanel);
+		}
 		if ((_selectorPanel != null) && (editionMode != EditionMode.COMPLEX_TYPE)) {
 			editionMode = EditionMode.COMPLEX_TYPE;
 			boolean showAgain = false;
@@ -1194,8 +1255,9 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 				FlexoModelObject currentSelectedObject = ((BasicDMTypeSelectorPanel) _selectorPanel)._entitySelectorPanel
 						.getSelectedObject();
 				// System.out.println("selected: "+currentSelectedObject);
-				if (currentSelectedObject instanceof DMEntity)
+				if (currentSelectedObject instanceof DMEntity) {
 					_editedObject = DMType.makeResolvedDMType((DMEntity) currentSelectedObject);
+				}
 			}
 			if (popupIsShown()) {
 				showAgain = true;
@@ -1226,17 +1288,21 @@ public class DMTypeSelector extends TextFieldCustomPopup<DMType> implements FIBC
 			while (en.hasMoreElements()) {
 				DMEntity e = en.nextElement();
 				String fullQualifiedName = e.getFullQualifiedName();
-				if (unambigousEntities.get(fullQualifiedName) == null)
+				if (unambigousEntities.get(fullQualifiedName) == null) {
 					unambigousEntities.put(fullQualifiedName, e);
+				}
 				String fullQualifiedNameUC = e.getFullQualifiedName().toUpperCase();
-				if (unambigousEntities.get(fullQualifiedNameUC) == null)
+				if (unambigousEntities.get(fullQualifiedNameUC) == null) {
 					unambigousEntities.put(fullQualifiedNameUC, e);
+				}
 				String name = e.getClassName();
-				if (unambigousEntities.get(name) == null)
+				if (unambigousEntities.get(name) == null) {
 					unambigousEntities.put(name, e);
+				}
 				String nameUC = e.getClassName().toUpperCase();
-				if (unambigousEntities.get(nameUC) == null)
+				if (unambigousEntities.get(nameUC) == null) {
 					unambigousEntities.put(nameUC, e);
+				}
 			}
 		}
 		return unambigousEntities;

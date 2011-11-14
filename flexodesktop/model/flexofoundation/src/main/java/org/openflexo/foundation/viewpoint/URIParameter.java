@@ -40,8 +40,9 @@ public class URIParameter extends EditionSchemeParameter {
 	}
 
 	public ViewPointDataBinding getBaseURI() {
-		if (baseURI == null)
+		if (baseURI == null) {
 			baseURI = new ViewPointDataBinding(this, ParameterBindingAttribute.baseURI, getBaseURIBindingDefinition());
+		}
 		return baseURI;
 	}
 
@@ -69,8 +70,9 @@ public class URIParameter extends EditionSchemeParameter {
 
 	@Override
 	public boolean isValid(EditionSchemeAction action, Object value) {
-		if (!(value instanceof String))
+		if (!(value instanceof String)) {
 			return false;
+		}
 
 		String proposedURI = (String) value;
 
@@ -93,17 +95,19 @@ public class URIParameter extends EditionSchemeParameter {
 	public Object getDefaultValue(EditionSchemeAction<?> action, BindingEvaluationContext parameterRetriever) {
 		if (getBaseURI().isValid()) {
 			String baseProposal = (String) getBaseURI().getBindingValue(parameterRetriever);
-			if (baseProposal == null)
+			if (baseProposal == null) {
 				return null;
+			}
 			baseProposal = JavaUtils.getClassName(baseProposal);
 			String proposal = baseProposal;
 			Integer i = null;
 			while (action.getProject().getProjectOntologyLibrary()
 					.isDuplicatedURI(action.getProject().getProjectOntology().getURI(), proposal)) {
-				if (i == null)
+				if (i == null) {
 					i = 1;
-				else
+				} else {
 					i++;
+				}
 				proposal = baseProposal + i;
 			}
 			return proposal;

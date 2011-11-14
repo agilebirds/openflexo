@@ -21,14 +21,13 @@ package org.openflexo.dm.model;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-
 import org.openflexo.components.tabular.model.IconColumn;
 import org.openflexo.components.tabular.model.StringColumn;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMPackage;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 
 /**
  * @author gpolet
@@ -42,18 +41,20 @@ public class DMReadOnlyEntityTableModel extends DMEntityTableModel {
 	 */
 	public DMReadOnlyEntityTableModel(DMPackage aPackage, FlexoProject project) {
 		super(aPackage, project);
-		while (getColumnCount() > 0)
+		while (getColumnCount() > 0) {
 			removeFromColumns(columnAt(0));
+		}
 		addToColumns(new IconColumn<DMEntity>("entity_icon", 30) {
 			@Override
 			public Icon getIcon(DMEntity entity) {
 				if (entity != null) {
-					if (entity.getIsNormalClass())
+					if (entity.getIsNormalClass()) {
 						return DMEIconLibrary.DM_ENTITY_CLASS_ICON;
-					else if (entity.getIsInterface())
+					} else if (entity.getIsInterface()) {
 						return DMEIconLibrary.DM_ENTITY_INTERFACE_ICON;
-					else if (entity.getIsEnumeration())
+					} else if (entity.getIsEnumeration()) {
 						return DMEIconLibrary.DM_ENTITY_ENUMERATION_ICON;
+					}
 				}
 				return DMEIconLibrary.DM_ENTITY_ICON;
 			}
@@ -61,12 +62,13 @@ public class DMReadOnlyEntityTableModel extends DMEntityTableModel {
 			@Override
 			public String getLocalizedTooltip(DMEntity entity) {
 				if (entity != null) {
-					if (entity.getIsNormalClass())
+					if (entity.getIsNormalClass()) {
 						return FlexoLocalization.localizedForKey("class");
-					else if (entity.getIsInterface())
+					} else if (entity.getIsInterface()) {
 						return FlexoLocalization.localizedForKey("interface");
-					else if (entity.getIsEnumeration())
+					} else if (entity.getIsEnumeration()) {
 						return FlexoLocalization.localizedForKey("enumeration");
+					}
 				}
 				return FlexoLocalization.localizedForKey("entity");
 			}
@@ -98,8 +100,9 @@ public class DMReadOnlyEntityTableModel extends DMEntityTableModel {
 		addToColumns(new StringColumn<DMEntity>("parent", 150) {
 			@Override
 			public String getValue(DMEntity entity) {
-				if (entity != null && entity.getParentType() != null)
+				if (entity != null && entity.getParentType() != null) {
 					return entity.getParentType().getName();
+				}
 				return null;
 			}
 

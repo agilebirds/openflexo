@@ -68,10 +68,11 @@ public class IESequenceWidget extends IESequence<IEWidget> implements WidgetsCon
 
 	@Override
 	public void addToInnerWidgets(IEWidget w) {
-		if (w instanceof IESequenceOperator)
+		if (w instanceof IESequenceOperator) {
 			setSequenceOperator((IESequenceOperator) w);
-		else
+		} else {
 			super.addToInnerWidgets(w);
+		}
 	}
 
 	@Override
@@ -100,9 +101,9 @@ public class IESequenceWidget extends IESequence<IEWidget> implements WidgetsCon
 	}
 
 	public String getAlignement() {
-		if (isInTD())
+		if (isInTD()) {
 			return ((IETDWidget) getParent()).getAlignement();
-		else {
+		} else {
 			if (getParent() instanceof IESequenceWidget) {
 				return ((IESequenceWidget) getParent()).getAlignement();
 			} else {
@@ -127,9 +128,9 @@ public class IESequenceWidget extends IESequence<IEWidget> implements WidgetsCon
 	}
 
 	public IEHTMLTableWidget htmlTable() {
-		if (isInTD())
+		if (isInTD()) {
 			return ((IETDWidget) getParent()).htmlTable();
-		else {
+		} else {
 			if (getParent() instanceof IESequenceWidget) {
 				return ((IESequenceWidget) getParent()).htmlTable();
 			} else {
@@ -144,8 +145,9 @@ public class IESequenceWidget extends IESequence<IEWidget> implements WidgetsCon
 		super.insertElementAt(o, i);
 		if (!isDeserializing() && !isCreatedByCloning() && getParent() instanceof IETDWidget) {
 			((IETDWidget) getParent()).notifyWidgetInserted(o);
-			if (htmlTable() != null)
+			if (htmlTable() != null) {
 				htmlTable().handleResize();
+			}
 		}
 	}
 
@@ -185,8 +187,9 @@ public class IESequenceWidget extends IESequence<IEWidget> implements WidgetsCon
 		IEWidget temp = null;
 		while (en.hasMoreElements()) {
 			temp = (IEWidget) en.nextElement();
-			if (temp.getClass().equals(c))
+			if (temp.getClass().equals(c)) {
 				return temp;
+			}
 		}
 		return null;
 	}
@@ -209,12 +212,13 @@ public class IESequenceWidget extends IESequence<IEWidget> implements WidgetsCon
 			IEWidget element = en.nextElement();
 			if (element instanceof IETextFieldWidget && ((IETextFieldWidget) element).getFieldType() == TextFieldType.DATE) {
 				v.add((IETextFieldWidget) element);
-			} else if (element instanceof IESequenceWidget)
+			} else if (element instanceof IESequenceWidget) {
 				v.addAll(((IESequenceWidget) element).getAllDateTextfields());
-			else if (element instanceof InnerBlocWidgetInterface)
+			} else if (element instanceof InnerBlocWidgetInterface) {
 				v.addAll(((InnerBlocWidgetInterface) element).getAllDateTextfields());
-			else if (element instanceof IEBlocWidget)
+			} else if (element instanceof IEBlocWidget) {
 				v.addAll(((IEBlocWidget) element).getAllDateTextfields());
+			}
 		}
 		return v;
 	}

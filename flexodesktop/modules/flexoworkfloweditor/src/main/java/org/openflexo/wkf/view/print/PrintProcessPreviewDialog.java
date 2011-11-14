@@ -50,8 +50,9 @@ public class PrintProcessPreviewDialog extends PrintPreviewDialog {
 		super.dispose();
 		if (!isPrintDialogDisposed) {
 			setIsPrintDialogDispose(true);
-			if (getPrintableComponent() instanceof ModuleView)
+			if (getPrintableComponent() instanceof ModuleView) {
 				((ModuleView) getPrintableComponent()).deleteModuleView();
+			}
 		}
 	}
 

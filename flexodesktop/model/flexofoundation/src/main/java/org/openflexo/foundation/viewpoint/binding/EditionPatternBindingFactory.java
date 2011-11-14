@@ -34,32 +34,37 @@ public final class EditionPatternBindingFactory extends DefaultBindingFactory {
 			}
 		} else if (father instanceof PatternRolePathElement) {
 			for (BindingPathElement prop : ((PatternRolePathElement<?>) father).getAllProperties()) {
-				if (prop.getLabel().equals(propertyName))
+				if (prop.getLabel().equals(propertyName)) {
 					return prop;
+				}
 			}
 			return null;
 		} else if (father instanceof StatementPathElement) {
 			for (BindingPathElement prop : ((StatementPathElement<?>) father).getAllProperties()) {
-				if (prop.getLabel().equals(propertyName))
+				if (prop.getLabel().equals(propertyName)) {
 					return prop;
+				}
 			}
 			return null;
 		} else if (father instanceof EditionSchemeParameterListPathElement) {
 			for (BindingPathElement prop : ((EditionSchemeParameterListPathElement) father).getAllProperties()) {
-				if (prop.getLabel().equals(propertyName))
+				if (prop.getLabel().equals(propertyName)) {
 					return prop;
+				}
 			}
 			return null;
 		} else if (father instanceof GraphicalElementPathElement) {
 			for (BindingPathElement prop : ((GraphicalElementPathElement<?>) father).getAllProperties()) {
-				if (prop.getLabel().equals(propertyName))
+				if (prop.getLabel().equals(propertyName)) {
 					return prop;
+				}
 			}
 			return null;
 		} else if (father instanceof OntologyObjectPathElement) {
 			for (BindingPathElement prop : ((OntologyObjectPathElement<?>) father).getAllProperties()) {
-				if (prop.getLabel().equals(propertyName))
+				if (prop.getLabel().equals(propertyName)) {
 					return prop;
+				}
 			}
 			return null;
 		}

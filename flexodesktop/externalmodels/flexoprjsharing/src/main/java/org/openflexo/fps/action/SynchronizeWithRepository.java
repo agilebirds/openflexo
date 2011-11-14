@@ -117,10 +117,11 @@ public class SynchronizeWithRepository extends CVSAction<SynchronizeWithReposito
 
 	@Override
 	public boolean hasActionExecutionSucceeded() {
-		if (timeOutReceived)
+		if (timeOutReceived) {
 			return false;
-		else
+		} else {
 			return super.hasActionExecutionSucceeded();
+		}
 	}
 
 	private boolean timeOutReceived;

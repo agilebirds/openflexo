@@ -41,16 +41,18 @@ public abstract class FlexoNodeGR<O extends FlexoNode> extends PetriGraphNodeGR<
 		Vector<WKFNodeGR<?>> v = super.getFromInterestingNodeGR();
 		for (FlexoPreCondition pc : getModel().getPreConditions()) {
 			PreConditionGR pcgr = (PreConditionGR) getGraphicalRepresentation(pc);
-			if (pcgr != null)
+			if (pcgr != null) {
 				v.addAll(pcgr.getFromInterestingNodeGR());
+			}
 		}
 		return v;
 	}
 
 	@Override
 	protected void doLayoutMethod2() {
-		if (getNode().isBeginOrEndNode())
+		if (getNode().isBeginOrEndNode()) {
 			return;
+		}
 		super.doLayoutMethod2();
 	}
 

@@ -31,7 +31,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.cayenne.wocompat.PropertyListSerialization;
-
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileUtils;
 
@@ -74,10 +73,11 @@ public class EOModel extends EOObject {
 	public static EOModel createEOModelFromFile(File file, String name, EOModelGroup group) throws FileNotFoundException,
 			PropertyListDeserializationException {
 		File dir = file;
-		if (file.isDirectory())
+		if (file.isDirectory()) {
 			file = new File(file, INDEX_EOMODELD);
-		else
+		} else {
 			dir = file.getParentFile();
+		}
 		if (name == null) {// If we don't know the name, we compute it from the
 			// file
 			name = file.getParentFile().getName();
@@ -86,11 +86,13 @@ public class EOModel extends EOObject {
 			}
 		}
 		Map<Object, Object> map = (Map<Object, Object>) PropertyListSerialization.propertyListFromFile(file);
-		if (map == null)
+		if (map == null) {
 			throw new PropertyListDeserializationException(file);
-		if (map.get(NAME_KEY) != null) // If the name was stored in the file,
+		}
+		if (map.get(NAME_KEY) != null) {
 			// then it is the real model name
 			name = (String) map.get(NAME_KEY);
+		}
 		EOModel model = new EOModel();
 		model.setName(name);
 		model.setAdaptorName((String) map.get(ADAPTOR_NAME_KEY));
@@ -114,17 +116,20 @@ public class EOModel extends EOObject {
 
 	public Map<Object, Object> getMapRepresentation() {
 		Map<Object, Object> map = new HashMap<Object, Object>();
-		if (map.get(EOMODEL_VERSION_KEY) == null)
+		if (map.get(EOMODEL_VERSION_KEY) == null) {
 			map.put(EOMODEL_VERSION_KEY, "2.1");
+		}
 		map.put(NAME_KEY, getName());
-		if (getAdaptorName() != null)
+		if (getAdaptorName() != null) {
 			map.put(ADAPTOR_NAME_KEY, getAdaptorName());
-		else
+		} else {
 			map.remove(ADAPTOR_NAME_KEY);
-		if (getConnectionDictionary() != null)
+		}
+		if (getConnectionDictionary() != null) {
 			map.put(CONNECTION_DICTIONARY, getConnectionDictionary());
-		else
+		} else {
 			map.remove(CONNECTION_DICTIONARY);
+		}
 
 		Vector<HashMap<String, String>> entityVector = new Vector<HashMap<String, String>>();
 		Iterator<EOEntity> i = getEntities().iterator();
@@ -132,8 +137,9 @@ public class EOModel extends EOObject {
 			HashMap<String, String> map1 = new HashMap<String, String>();
 			EOEntity entity = i.next();
 			map1.put(NAME_KEY, entity.getName());
-			if (entity.getClassName() != null)
+			if (entity.getClassName() != null) {
 				map1.put(CLASS_NAME_KEY, entity.getClassName());
+			}
 			entityVector.add(map1);
 		}
 		map.put(ENTITIES_KEY, entityVector);
@@ -156,40 +162,49 @@ public class EOModel extends EOObject {
 		Iterator<File> it = getFilesToDelete().iterator();
 		while (it.hasNext()) {
 			File f = it.next();
-			if (f.delete())
+			if (f.delete()) {
 				it.remove();
+			}
 		}
-		if (getOriginalMap().get(EOMODEL_VERSION_KEY) == null)
+		if (getOriginalMap().get(EOMODEL_VERSION_KEY) == null) {
 			getOriginalMap().put(EOMODEL_VERSION_KEY, "2.1");
-		if (entityNamed(EOPROTOTYPES) != null)
-			if (entityNamed(EOPROTOTYPES).getModel() == this)
+		}
+		if (entityNamed(EOPROTOTYPES) != null) {
+			if (entityNamed(EOPROTOTYPES).getModel() == this) {
 				return;
+			}
+		}
 		getOriginalMap().put(NAME_KEY, getName());
-		if (getAdaptorName() != null)
+		if (getAdaptorName() != null) {
 			getOriginalMap().put(ADAPTOR_NAME_KEY, getAdaptorName());
-		else
+		} else {
 			getOriginalMap().remove(ADAPTOR_NAME_KEY);
-		if (getConnectionDictionary() != null)
+		}
+		if (getConnectionDictionary() != null) {
 			getOriginalMap().put(CONNECTION_DICTIONARY, getConnectionDictionary());
-		else
+		} else {
 			getOriginalMap().remove(CONNECTION_DICTIONARY);
+		}
 		// Model serialization
-		if (!file.exists())
+		if (!file.exists()) {
 			file.mkdirs();
+		}
 		Vector<HashMap<String, String>> entityVector = new Vector<HashMap<String, String>>();
 		Iterator<EOEntity> i = getEntities().iterator();
 		while (i.hasNext()) {
 			HashMap<String, String> map = new HashMap<String, String>();
 			EOEntity entity = i.next();
 			map.put(NAME_KEY, entity.getName());
-			if (entity.getClassName() != null)
+			if (entity.getClassName() != null) {
 				map.put(CLASS_NAME_KEY, entity.getClassName());
+			}
 			entityVector.add(map);
 		}
 		getOriginalMap().put(ENTITIES_KEY, entityVector);
 		File f = new File(file, INDEX_EOMODELD);
-		if (!f.exists())
+		if (!f.exists()) {
 			f.createNewFile();
+		}
 		FlexoPropertyListSerialization.propertyListToFile(f, getOriginalMap());
 
 		// Entities serialization
@@ -205,8 +220,9 @@ public class EOModel extends EOObject {
      * 
      */
 	private void makeBackup() {
-		if (getFile() == null || !getFile().exists())
+		if (getFile() == null || !getFile().exists()) {
 			return;
+		}
 		File bak = new File(getFile().getParentFile(), getFile().getName() + ".bak");
 		FileUtils.deleteFilesInDir(bak, true);
 		try {
@@ -225,10 +241,11 @@ public class EOModel extends EOObject {
 	 */
 	public EOEntity entityNamed(String name) {
 		EOEntity e = _entityNamed(name);
-		if (e != null)
+		if (e != null) {
 			return e;
-		else
+		} else {
 			return modelGroup.entityNamed(name);
+		}
 	}
 
 	/**
@@ -247,13 +264,15 @@ public class EOModel extends EOObject {
 		Iterator<EOEntity> i = entities.iterator();
 		while (i.hasNext()) {
 			EOEntity e = i.next();
-			if (name.equals(e.getName()))
+			if (name.equals(e.getName())) {
 				return e;
+			}
 		}
 		if (modelGroup != null) {
 
-		} else if (logger.isLoggable(Level.WARNING))
+		} else if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Found an EOModel outside of a model group.");
+		}
 		return null;
 	}
 
@@ -266,10 +285,11 @@ public class EOModel extends EOObject {
 	 */
 	public EOEntity entityNamedIgnoreCase(String name) {
 		EOEntity e = _entityNamedIgnoreCase(name);
-		if (e != null)
+		if (e != null) {
 			return e;
-		else
+		} else {
 			return modelGroup.entityNamedIgnoreCase(name);
+		}
 	}
 
 	/**
@@ -288,13 +308,15 @@ public class EOModel extends EOObject {
 		Iterator<EOEntity> i = entities.iterator();
 		while (i.hasNext()) {
 			EOEntity e = i.next();
-			if (name.equalsIgnoreCase(e.getName()))
+			if (name.equalsIgnoreCase(e.getName())) {
 				return e;
+			}
 		}
 		if (modelGroup != null) {
 
-		} else if (logger.isLoggable(Level.WARNING))
+		} else if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Found an EOModel outside of a model group.");
+		}
 		return null;
 	}
 
@@ -326,11 +348,13 @@ public class EOModel extends EOObject {
 	 * @param newEOEntity
 	 */
 	public void addEntity(EOEntity entity) {
-		if (entities.contains(entity))
+		if (entities.contains(entity)) {
 			throw new IllegalArgumentException("Entity " + entity.getName() + " is already in model " + getName());
-		if (entityNamedIgnoreCase(entity.getName()) != null)
+		}
+		if (entityNamedIgnoreCase(entity.getName()) != null) {
 			throw new IllegalArgumentException("An other entity named " + entityNamedIgnoreCase(entity.getName()).getName()
 					+ " already exists in model " + getName());
+		}
 		entities.add(entity);
 		entity.setModel(this);
 	}
@@ -401,8 +425,9 @@ public class EOModel extends EOObject {
 		EOEntity e = entityNamed(EOPROTOTYPES);
 		if (e != null) {
 			return e.attributeNamed(prototype);
-		} else if (logger.isLoggable(Level.WARNING))
+		} else if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Prototypes could not be found");
+		}
 		return null;
 	}
 
@@ -443,24 +468,28 @@ public class EOModel extends EOObject {
 				try {
 					e = EOEntity.createEntityFromFile(this, new File(getFile(), m.get(NAME_KEY) + ".plist"));
 				} catch (FileNotFoundException e1) {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Could not find property list file "
 								+ new File(getFile(), m.get(NAME_KEY) + ".plist").getAbsolutePath());
+					}
 				} catch (Exception e2) {
 					e2.printStackTrace();
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Could not deserialize property list file "
 								+ new File(getFile(), m.get(NAME_KEY) + ".plist").getAbsolutePath());
+					}
 				} finally {
 					if (e == null) {
-						if (logger.isLoggable(Level.INFO))
+						if (logger.isLoggable(Level.INFO)) {
 							logger.info("Creating EOEntity " + m.get(NAME_KEY));
+						}
 						e = new EOEntity();
 						e.setName(m.get(NAME_KEY));
-						if (m.get(CLASS_NAME_KEY) != null)
+						if (m.get(CLASS_NAME_KEY) != null) {
 							e.setClassName(m.get(CLASS_NAME_KEY));
-						else
+						} else {
 							e.setClassName(m.get(NAME_KEY));
+						}
 					}
 				}
 				entities.add(e);
@@ -470,8 +499,9 @@ public class EOModel extends EOObject {
 	}
 
 	public void addToMissingEntities(String entityName) {
-		if (!missingEntities.contains(entityName))
+		if (!missingEntities.contains(entityName)) {
 			missingEntities.add(entityName);
+		}
 	}
 
 	public Vector<String> getMissingEntities() {

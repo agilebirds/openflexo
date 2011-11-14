@@ -30,10 +30,11 @@ public abstract class GraphicalElementPatternRole extends PatternRole implements
 			LABEL = new BindingDefinition("label", String.class, BindingDefinitionType.GET_SET, false) {
 				@Override
 				public BindingDefinitionType getBindingDefinitionType() {
-					if (getReadOnlyLabel())
+					if (getReadOnlyLabel()) {
 						return BindingDefinitionType.GET;
-					else
+					} else {
 						return BindingDefinitionType.GET_SET;
+					}
 				}
 			};
 		}
@@ -41,8 +42,9 @@ public abstract class GraphicalElementPatternRole extends PatternRole implements
 	}
 
 	public ViewPointDataBinding getLabel() {
-		if (label == null)
+		if (label == null) {
 			label = new ViewPointDataBinding(this, GraphicalElementBindingAttribute.label, getLabelBindingDefinition());
+		}
 		return label;
 	}
 
@@ -72,14 +74,16 @@ public abstract class GraphicalElementPatternRole extends PatternRole implements
 	}
 
 	public boolean getIsPrimaryRepresentationRole() {
-		if (getEditionPattern() == null)
+		if (getEditionPattern() == null) {
 			return false;
+		}
 		return (getEditionPattern().getPrimaryRepresentationRole() == this);
 	}
 
 	public void setIsPrimaryRepresentationRole(boolean isPrimary) {
-		if (getEditionPattern() == null)
+		if (getEditionPattern() == null) {
 			return;
+		}
 		if (isPrimary) {
 			getEditionPattern().setPrimaryRepresentationRole(this);
 		} else {

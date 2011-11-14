@@ -28,18 +28,16 @@ import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.components.tabular.model.EditableStringColumn;
 import org.openflexo.components.tabular.model.IconColumn;
 import org.openflexo.components.tabular.model.TypeSelectorColumn;
-import org.openflexo.dm.view.controller.DMController;
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.ReservedKeyword;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.DuplicateClassNameException;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.dm.eo.DMEOModel;
 import org.openflexo.foundation.dm.eo.DuplicateNameException;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.ReservedKeyword;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * Please comment this class
@@ -62,8 +60,9 @@ public class DMEOEntityTableModel extends AbstractModel<DMEOModel, DMEOEntity> {
 		addToColumns(new IconColumn<DMEOEntity>("read_only", 25) {
 			@Override
 			public Icon getIcon(DMEOEntity entity) {
-				if (entity != null)
+				if (entity != null) {
 					return (entity.getIsReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON);
+				}
 				return null;
 			}
 
@@ -76,17 +75,19 @@ public class DMEOEntityTableModel extends AbstractModel<DMEOModel, DMEOEntity> {
 		addToColumns(new EditableStringColumn<DMEOEntity>("name", 150) {
 			@Override
 			public String getValue(DMEOEntity entity) {
-				if (entity != null)
+				if (entity != null) {
 					return entity.getName();
+				}
 				return null;
 			}
 
 			@Override
 			public void setValue(DMEOEntity entity, String aValue) {
-				if (entity != null)
+				if (entity != null) {
 					try {
-						if (ReservedKeyword.contains(aValue))
+						if (ReservedKeyword.contains(aValue)) {
 							throw new InvalidNameException(aValue + " is a reserved keyword.");
+						}
 						entity.setName(aValue);
 					} catch (InvalidNameException e) {
 						if (e.getCause() instanceof DuplicateClassNameException || e instanceof DuplicateNameException) {
@@ -95,13 +96,15 @@ public class DMEOEntityTableModel extends AbstractModel<DMEOModel, DMEOEntity> {
 							FlexoController.notify(FlexoLocalization.localizedForKey("invalid_entity_name"));
 						}
 					}
+				}
 			}
 		});
 		addToColumns(new EditableStringColumn<DMEOEntity>("class", 150) {
 			@Override
 			public String getValue(DMEOEntity entity) {
-				if (entity != null)
+				if (entity != null) {
 					return entity.getEntityClassName();
+				}
 				return null;
 			}
 
@@ -119,8 +122,9 @@ public class DMEOEntityTableModel extends AbstractModel<DMEOModel, DMEOEntity> {
 		addToColumns(new EditableStringColumn<DMEOEntity>("external_name", 150) {
 			@Override
 			public String getValue(DMEOEntity entity) {
-				if (entity != null)
+				if (entity != null) {
 					return entity.getExternalName();
+				}
 				return null;
 			}
 
@@ -161,15 +165,17 @@ public class DMEOEntityTableModel extends AbstractModel<DMEOModel, DMEOEntity> {
 		addToColumns(new EditableStringColumn<DMEOEntity>("description", 250) {
 			@Override
 			public String getValue(DMEOEntity entity) {
-				if (entity != null)
+				if (entity != null) {
 					return entity.getDescription();
+				}
 				return null;
 			}
 
 			@Override
 			public void setValue(DMEOEntity entity, String aValue) {
-				if (entity != null)
+				if (entity != null) {
 					entity.setDescription(aValue);
+				}
 			}
 		});
 	}

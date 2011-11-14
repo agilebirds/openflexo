@@ -58,8 +58,9 @@ public class ControlGraphsGenerator extends MetaGenerator<FlexoModelObject, CGRe
 
 	@Override
 	public void generate(boolean forceRegenerate) throws GenerationException {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Called ComponentsGenerator.generate(forceRegenerate)");
+		}
 		resetSecondaryProgressWindow(_generators.values().size());
 		startGeneration();
 		for (ControlGraphGenerator generator : _generators.values()) {
@@ -75,15 +76,17 @@ public class ControlGraphsGenerator extends MetaGenerator<FlexoModelObject, CGRe
 		Vector<FlexoProcess> allProcesses = getProject().getFlexoWorkflow().getAllLocalFlexoProcesses();
 		resetSecondaryProgressWindow(allProcesses.size());
 		for (FlexoProcess p : allProcesses) {
-			if (p.getExecutionClassName() == null)
+			if (p.getExecutionClassName() == null) {
 				continue;
+			}
 			ControlGraphGenerator generator = getGenerator(p);
 			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + p.getName(), false);
-			if (generator != null)
+			if (generator != null) {
 				generator.buildResourcesAndSetGenerators(repository, resources);
-			else {
-				if (logger.isLoggable(Level.WARNING))
+			} else {
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not instanciate ControlGraph Generator for " + p.getName());
+				}
 			}
 		}
 	}

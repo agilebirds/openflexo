@@ -19,13 +19,13 @@
  */
 package org.openflexo.utils;
 
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
 import org.openflexo.diff.TestDiff;
 import org.openflexo.diff.merge.TestMerge;
 import org.openflexo.diff.merge.TestMerge2;
 import org.openflexo.letparser.ParseTest;
-
-import junit.framework.Test;
-import junit.framework.TestSuite;
 
 public class UtilsTestSuite {
 

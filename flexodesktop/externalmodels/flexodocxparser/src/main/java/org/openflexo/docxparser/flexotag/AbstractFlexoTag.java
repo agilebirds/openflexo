@@ -44,34 +44,39 @@ public abstract class AbstractFlexoTag {
 	abstract protected String getTag();
 
 	private void parse(String tagValue) throws FlexoTagFormatException {
-		if (tagValue == null || !tagValue.startsWith(getTag()))
+		if (tagValue == null || !tagValue.startsWith(getTag())) {
 			throw new FlexoTagFormatException("Tag value '" + tagValue + "' is either null or doesn't start with '" + getTag() + "'");
+		}
 
 		int indexOfStartFlexoId = getTag().length();
-		if (tagValue.length() <= indexOfStartFlexoId)
+		if (tagValue.length() <= indexOfStartFlexoId) {
 			throw new FlexoTagFormatException("Tag value '" + tagValue + "' doesn't contain anything after '" + getTag() + "'");
+		}
 
 		int indexOfEndFlexoId = tagValue.indexOf('_', indexOfStartFlexoId);
-		if (indexOfEndFlexoId == -1 || indexOfEndFlexoId == indexOfStartFlexoId)
+		if (indexOfEndFlexoId == -1 || indexOfEndFlexoId == indexOfStartFlexoId) {
 			throw new FlexoTagFormatException("Tag value '" + tagValue
 					+ "' doesn't contain a Flexo Id (or the flexo id is not followed by '_')");
+		}
 
 		this.flexoId = tagValue.substring(indexOfStartFlexoId, indexOfEndFlexoId);
 
 		int indexOfStartUserId = indexOfEndFlexoId + 1;
-		if (tagValue.length() <= indexOfStartUserId)
+		if (tagValue.length() <= indexOfStartUserId) {
 			throw new FlexoTagFormatException("Tag value '" + tagValue + "' doesn't contain an User id");
+		}
 
 		int indexOfEndUserId = tagValue.indexOf('_', indexOfStartUserId);
-		if (indexOfEndUserId == -1)
+		if (indexOfEndUserId == -1) {
 			this.userId = tagValue.substring(indexOfStartUserId);
-		else if (indexOfEndUserId == indexOfStartUserId)
+		} else if (indexOfEndUserId == indexOfStartUserId) {
 			throw new FlexoTagFormatException("Tag value '" + tagValue + "' doesn't contain an User id");
-		else {
+		} else {
 			this.userId = tagValue.substring(indexOfStartUserId, indexOfEndUserId);
 
-			if (tagValue.length() > indexOfEndUserId + 1)
+			if (tagValue.length() > indexOfEndUserId + 1) {
 				this.optionalInfo = tagValue.substring(indexOfEndUserId + 1);
+			}
 		}
 	}
 

@@ -94,8 +94,9 @@ public class GenerateHelpSet extends FlexoAction<GenerateHelpSet, FlexoModelObje
 	}*/
 
 	public String getBaseName() {
-		if (baseName == null)
+		if (baseName == null) {
 			baseName = "FlexoHelp";
+		}
 		return baseName;
 	}
 
@@ -151,8 +152,9 @@ public class GenerateHelpSet extends FlexoAction<GenerateHelpSet, FlexoModelObje
 				@Override
 				public int compare(DRMHelpSet o1, DRMHelpSet o2) {
 					int result = o1.getDistributionName().compareTo(o2.getDistributionName());
-					if (result != 0)
+					if (result != 0) {
 						return result;
+					}
 					return o1.getLanguage().compareTo(o2.getLanguage());
 				}
 			});

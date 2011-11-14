@@ -97,8 +97,9 @@ public class CreateHibernateModelAction extends FlexoAction<CreateHibernateModel
 	}
 
 	public FlexoProject getProject() {
-		if (getFocusedObject() != null)
+		if (getFocusedObject() != null) {
 			return getFocusedObject().getProject();
+		}
 		return null;
 	}
 }

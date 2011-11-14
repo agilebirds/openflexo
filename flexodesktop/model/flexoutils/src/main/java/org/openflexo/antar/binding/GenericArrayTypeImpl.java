@@ -54,8 +54,9 @@ public class GenericArrayTypeImpl implements GenericArrayType {
 		if (obj instanceof GenericArrayType) {
 			return ((getGenericComponentType() == null && ((GenericArrayType) obj).getGenericComponentType() == null) || (getGenericComponentType() != null && getGenericComponentType()
 					.equals(((GenericArrayType) obj).getGenericComponentType())));
-		} else
+		} else {
 			return super.equals(obj);
+		}
 	}
 
 }

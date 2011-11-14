@@ -68,15 +68,16 @@ public class LineWidget extends JPanel implements InnerTabWidgetView {
 		layout = (FlowLayout) getLayout();
 		if (model.hasValueForParameter("layout")) {
 			String s = model.getValueForParameter("layout");
-			if (s.toLowerCase().equals("left"))
+			if (s.toLowerCase().equals("left")) {
 				layout.setAlignment(FlowLayout.LEFT);
-			else if (s.toLowerCase().equals("center"))
+			} else if (s.toLowerCase().equals("center")) {
 				layout.setAlignment(FlowLayout.CENTER);
-			else if (s.toLowerCase().equals("right"))
+			} else if (s.toLowerCase().equals("right")) {
 				layout.setAlignment(FlowLayout.RIGHT);
-			else {
-				if (logger.isLoggable(Level.WARNING))
+			} else {
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Unknown layout: " + s + " using align LEFT");
+				}
 			}
 		}
 		_controller = controller;
@@ -266,8 +267,9 @@ public class LineWidget extends JPanel implements InnerTabWidgetView {
 	 * @param widget
 	 */
 	public void valueChange(InspectableObject object) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("valueChange() in TabModelView for inspectable " + object);
+		}
 		Enumeration en = _visibleWidgets.elements();
 		DenaliWidget cur = null;
 		Vector<DenaliWidget> widgetsToHide = new Vector<DenaliWidget>();
@@ -305,8 +307,9 @@ public class LineWidget extends JPanel implements InnerTabWidgetView {
 	 */
 	public void valueChange(Object newValue, DenaliWidget widget) {
 		// System.out.println ("valueChange() with "+newValue+" for "+widget.getObservedPropertyName());
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("valueChange() in TabModelView for property " + widget.getObservedPropertyName() + " which receive " + newValue);
+		}
 		Enumeration<DenaliWidget> en = _visibleWidgets.elements();
 		DenaliWidget cur = null;
 		Vector<DenaliWidget> widgetsToHide = new Vector<DenaliWidget>();
@@ -330,10 +333,11 @@ public class LineWidget extends JPanel implements InnerTabWidgetView {
 		en = _invisibleWidgets.elements();
 		while (en.hasMoreElements()) {
 			InnerTabWidgetView inner = en.nextElement();
-			if (inner instanceof DenaliWidget)
+			if (inner instanceof DenaliWidget) {
 				cur = (DenaliWidget) inner;
-			else
+			} else {
 				continue;
+			}
 			boolean isStillInvisible = cur.isStillInvisible(newValue, widget.getObservedPropertyName());
 			if (!isStillInvisible) {
 				widgetsToShow.add(cur);
@@ -351,45 +355,53 @@ public class LineWidget extends JPanel implements InnerTabWidgetView {
 	}
 
 	private void processToHiding(Vector<DenaliWidget> widgetsToHide) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("processToHiding() for " + model.name);
+		}
 		DenaliWidget cur = null;
 		Enumeration<DenaliWidget> en = widgetsToHide.elements();
 		while (en.hasMoreElements()) {
 			cur = en.nextElement();
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("try to hide " + cur.getObservedPropertyName() + " at index: " + cur.getIndexInTab());
+			}
 			for (int i = 0; i < getComponentCount(); i++) {
 				if (getComponent(i) == cur.getDynamicComponent()) {
-					if (cur.getLabel() != null)
+					if (cur.getLabel() != null) {
 						cur.getLabel().setVisible(false);
+					}
 					getComponent(i).setVisible(false);
 					_visibleWidgets.remove(cur);
 					_invisibleWidgets.add(cur);
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("HIDE: " + cur.getObservedPropertyName());
+					}
 				}
 			}
 		}
 	}
 
 	private void processToShowing(Vector<DenaliWidget> widgetsToShow) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("processToShowing() for " + model.name);
+		}
 		DenaliWidget cur = null;
 		Enumeration<DenaliWidget> en = widgetsToShow.elements();
 		while (en.hasMoreElements()) {
 			cur = en.nextElement();
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("try to show " + cur.getObservedPropertyName() + " at index: " + cur.getIndexInTab());
+			}
 			cur.setTabModelView(tabModelView, indexInTab);
 			cur.getDynamicComponent().setVisible(true);
-			if (cur.getLabel() != null)
+			if (cur.getLabel() != null) {
 				cur.getLabel().setVisible(true);
+			}
 			_visibleWidgets.add(cur);
 			_invisibleWidgets.remove(cur);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("SHOW: " + cur.getObservedPropertyName());
+			}
 		}
 	}
 

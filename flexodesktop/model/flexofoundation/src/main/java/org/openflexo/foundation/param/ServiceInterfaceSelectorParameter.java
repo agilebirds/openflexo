@@ -46,8 +46,9 @@ public class ServiceInterfaceSelectorParameter extends ParameterDefinition<WKFOb
 	}
 
 	public boolean isAcceptableProcess(FlexoProcess process) {
-		if (_processSelectingConditional != null)
+		if (_processSelectingConditional != null) {
 			return _processSelectingConditional.isSelectable(process);
+		}
 		return true;
 	}
 

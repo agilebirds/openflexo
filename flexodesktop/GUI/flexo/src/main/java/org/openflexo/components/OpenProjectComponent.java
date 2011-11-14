@@ -59,8 +59,9 @@ public class OpenProjectComponent extends ProjectChooserComponent {
 				returnVal = chooser.showOpenDialog();
 				ok = true;
 			} catch (ArrayIndexOutOfBoundsException e) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Caught ArrayIndexOutOfBoundsException, hope this will stop");
+				}
 			}
 		}
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -68,8 +69,9 @@ public class OpenProjectComponent extends ProjectChooserComponent {
 			AdvancedPrefs.setLastVisitedDirectory(returned.getParentFile());
 			FlexoPreferences.savePreferences(true);
 		} else {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("No project supplied");
+			}
 			throw new ProjectLoadingCancelledException();
 		}
 		return returned;

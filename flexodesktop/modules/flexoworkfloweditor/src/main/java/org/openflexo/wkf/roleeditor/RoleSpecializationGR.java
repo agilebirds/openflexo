@@ -54,8 +54,9 @@ public class RoleSpecializationGR extends ConnectorGraphicalRepresentation<RoleS
 			((RectPolylinConnector) getConnector()).setRectPolylinConstraints(RectPolylinConstraints.VERTICAL_LAYOUT);
 		}
 		setEndSymbol(EndSymbolType.PLAIN_ARROW);
-		if (getStartObject() != null && getEndObject() != null)
+		if (getStartObject() != null && getEndObject() != null) {
 			setLayer(Math.max(getStartObject().getLayer(), getEndObject().getLayer()) + 1);
+		}
 
 		addToMouseClickControls(new RoleEditorController.ShowContextualMenuControl());
 
@@ -81,10 +82,12 @@ public class RoleSpecializationGR extends ConnectorGraphicalRepresentation<RoleS
 	@Override
 	public String getText() {
 		String returned = getRoleSpecialization().getAnnotation();
-		if (returned == null)
+		if (returned == null) {
 			return null;
-		if (returned.trim().equals(""))
+		}
+		if (returned.trim().equals("")) {
 			return null;
+		}
 		return returned;
 	}
 

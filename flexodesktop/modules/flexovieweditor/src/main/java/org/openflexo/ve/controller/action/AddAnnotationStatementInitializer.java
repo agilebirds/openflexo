@@ -24,11 +24,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.OntologyIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -39,6 +34,10 @@ import org.openflexo.foundation.param.OntologyObjectParameter;
 import org.openflexo.foundation.param.OntologyPropertyParameter;
 import org.openflexo.foundation.param.ParametersModel;
 import org.openflexo.foundation.param.TextFieldParameter;
+import org.openflexo.icon.OntologyIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
 
 public class AddAnnotationStatementInitializer extends ActionInitializer {
 

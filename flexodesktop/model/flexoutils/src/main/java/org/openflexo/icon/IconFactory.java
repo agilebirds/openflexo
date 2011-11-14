@@ -82,8 +82,9 @@ public class IconFactory {
 	private static Hashtable<ImageIcon, ImageIcon> _disabledIcons;
 
 	public static ImageIcon getDisabledIcon(ImageIcon imageIcon) {
-		if (_disabledIcons == null)
+		if (_disabledIcons == null) {
 			_disabledIcons = new Hashtable<ImageIcon, ImageIcon>();
+		}
 		ImageIcon returned = _disabledIcons.get(imageIcon);
 		if (returned == null) {
 			returned = buildDisabledIcon(imageIcon);

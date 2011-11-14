@@ -23,7 +23,6 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.apache.velocity.VelocityContext;
-
 import org.openflexo.foundation.cg.CGRepository;
 import org.openflexo.foundation.cg.generator.GeneratorUtils;
 import org.openflexo.foundation.dm.DMEntity;
@@ -62,12 +61,16 @@ public class ProcessInstanceClassGenerator extends JavaClassGenerator {
 	}
 
 	public String addToImports(String fullClassName) {
-		if (fullClassName == null)
+		if (fullClassName == null) {
 			return null;
-		if (!imports.contains(fullClassName.trim()))
-			if (fullClassName.indexOf(".") > -1 && !fullClassName.trim().startsWith("java.lang."))
-				if (!fullClassName.startsWith("default_package"))
+		}
+		if (!imports.contains(fullClassName.trim())) {
+			if (fullClassName.indexOf(".") > -1 && !fullClassName.trim().startsWith("java.lang.")) {
+				if (!fullClassName.startsWith("default_package")) {
 					imports.add(fullClassName.trim());
+				}
+			}
+		}
 		return fullClassName;
 	}
 

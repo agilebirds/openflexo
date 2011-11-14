@@ -19,23 +19,31 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 package com.swabunga.spell.swing;
 
-import com.swabunga.spell.engine.SpellDictionary;
-import com.swabunga.spell.engine.SpellDictionaryHashMap;
-import com.swabunga.spell.engine.SpellDictionaryCachedDichoDisk;
-import com.swabunga.spell.event.DocumentWordTokenizer;
-import com.swabunga.spell.event.SpellCheckEvent;
-import com.swabunga.spell.event.SpellCheckListener;
-import com.swabunga.spell.event.SpellChecker;
-import com.swabunga.spell.swing.autospell.AutoSpellEditorKit;
-
-import javax.swing.*;
-import javax.swing.text.*;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.Frame;
+import java.awt.Window;
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import com.swabunga.spell.swing.autospell.*;
+
+import javax.swing.JEditorPane;
+import javax.swing.SwingUtilities;
+import javax.swing.text.Document;
+import javax.swing.text.EditorKit;
+import javax.swing.text.JTextComponent;
+import javax.swing.text.StyledEditorKit;
+
+import com.swabunga.spell.engine.SpellDictionary;
+import com.swabunga.spell.engine.SpellDictionaryCachedDichoDisk;
+import com.swabunga.spell.engine.SpellDictionaryHashMap;
+import com.swabunga.spell.event.DocumentWordTokenizer;
+import com.swabunga.spell.event.SpellCheckEvent;
+import com.swabunga.spell.event.SpellCheckListener;
+import com.swabunga.spell.event.SpellChecker;
+import com.swabunga.spell.swing.autospell.AutoSpellCheckHandler;
+import com.swabunga.spell.swing.autospell.AutoSpellEditorKit;
 
 /**
  * This class spellchecks a JTextComponent throwing up a Dialog everytime it encounters a misspelled word.
@@ -77,8 +85,9 @@ public class JTextComponentSpellChecker implements SpellCheckListener {
 		spellCheck = new SpellChecker(dict);
 		mainDict = dict;
 		spellCheck.setCache();
-		if (userDict != null)
+		if (userDict != null) {
 			spellCheck.setUserDictionary(userDict);
+		}
 		spellCheck.addSpellCheckListener(this);
 		dialogTitle = title;
 		messages = ResourceBundle.getBundle("com.swabunga.spell.swing.messages", Locale.getDefault());
@@ -91,8 +100,9 @@ public class JTextComponentSpellChecker implements SpellCheckListener {
 	 * Set user dictionary (used when a word is added)
 	 */
 	public void setUserDictionary(SpellDictionary dictionary) {
-		if (spellCheck != null)
+		if (spellCheck != null) {
 			spellCheck.setUserDictionary(dictionary);
+		}
 	}
 
 	private void setupDialog(JTextComponent textComp) {
@@ -100,14 +110,17 @@ public class JTextComponentSpellChecker implements SpellCheckListener {
 		Component comp = SwingUtilities.getRoot(textComp);
 
 		// Probably the most common situation efter the first time.
-		if (dlg != null && dlg.getOwner() == comp)
+		if (dlg != null && dlg.getOwner() == comp) {
 			return;
+		}
 
 		if (comp != null && comp instanceof Window) {
-			if (comp instanceof Frame)
+			if (comp instanceof Frame) {
 				dlg = new JSpellDialog((Frame) comp, dialogTitle, true);
-			if (comp instanceof Dialog)
+			}
+			if (comp instanceof Dialog) {
 				dlg = new JSpellDialog((Dialog) comp, dialogTitle, true);
+			}
 			// Put the dialog in the middle of it's parent.
 			if (dlg != null) {
 				Window win = (Window) comp;
@@ -139,8 +152,9 @@ public class JTextComponentSpellChecker implements SpellCheckListener {
 		textComp.setCaretPosition(0);
 		this.textComp = null;
 		try {
-			if (mainDict instanceof SpellDictionaryCachedDichoDisk)
+			if (mainDict instanceof SpellDictionaryCachedDichoDisk) {
 				((SpellDictionaryCachedDichoDisk) mainDict).saveCache();
+			}
 		} catch (IOException ex) {
 			System.err.println(ex.getMessage());
 		}
@@ -177,6 +191,7 @@ public class JTextComponentSpellChecker implements SpellCheckListener {
 	/**
    * 
    */
+	@Override
 	public void spellingError(SpellCheckEvent event) {
 
 		// java.util.List suggestions = event.getSuggestions();

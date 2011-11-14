@@ -25,9 +25,6 @@ import org.openflexo.antar.expr.EvaluationContext;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.expr.Variable;
-import org.openflexo.antar.expr.parser.ExpressionParser;
-import org.openflexo.antar.expr.parser.ParseException;
-import org.openflexo.antar.expr.parser.Word;
 import org.openflexo.antar.expr.parser.ExpressionParser.VariableFactory;
 
 public class TestConditional {
@@ -44,8 +41,9 @@ public class TestConditional {
 						@Override
 						public Expression makeVariable(Word value) {
 							System.out.println("Hop");
-							if (value.getValue().equals("coucou"))
+							if (value.getValue().equals("coucou")) {
 								return Constant.BooleanConstant.TRUE;
+							}
 							return new Variable(value.getValue());
 						}
 					}, new ExpressionParser.DefaultFunctionFactory()));

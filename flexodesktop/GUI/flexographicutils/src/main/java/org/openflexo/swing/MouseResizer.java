@@ -87,36 +87,39 @@ public class MouseResizer implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		if (mode == ResizeMode.NONE)
+		if (mode == ResizeMode.NONE) {
 			updateCursor(e);
+		}
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		if (mode == ResizeMode.NONE)
+		if (mode == ResizeMode.NONE) {
 			resetCursor();
+		}
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		if (isWithinResizeZone(e)) {
 			pressedPoint = e.getPoint();
-			if (isInNorthZone(e))
+			if (isInNorthZone(e)) {
 				mode = ResizeMode.NORTH;
-			else if (isInSouthZone(e))
+			} else if (isInSouthZone(e)) {
 				mode = ResizeMode.SOUTH;
-			else if (isInWestZone(e))
+			} else if (isInWestZone(e)) {
 				mode = ResizeMode.WEST;
-			else if (isInEastZone(e))
+			} else if (isInEastZone(e)) {
 				mode = ResizeMode.EAST;
-			else if (isInNorthWestZone(e))
+			} else if (isInNorthWestZone(e)) {
 				mode = ResizeMode.NORTH_WEST;
-			else if (isInNorthEastZone(e))
+			} else if (isInNorthEastZone(e)) {
 				mode = ResizeMode.NORTH_EAST;
-			else if (isInSouthWestZone(e))
+			} else if (isInSouthWestZone(e)) {
 				mode = ResizeMode.SOUTH_WEST;
-			else if (isInSouthEastZone(e))
+			} else if (isInSouthEastZone(e)) {
 				mode = ResizeMode.SOUTH_EAST;
+			}
 			e.consume();
 		} else {
 			mode = ResizeMode.NONE;
@@ -125,16 +128,19 @@ public class MouseResizer implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		if (mode == ResizeMode.NONE)
+		if (mode == ResizeMode.NONE) {
 			return;
-		if (lastDraggedPoint == null)
+		}
+		if (lastDraggedPoint == null) {
 			notifyResizeDirectlyBy(e.getX() - pressedPoint.x, e.getY() - pressedPoint.y);
-		else
+		} else {
 			notifyResizeDirectlyBy(e.getX() - lastDraggedPoint.x, e.getY() - lastDraggedPoint.y);
+		}
 		notifyResizeBy(e.getX() - pressedPoint.x, e.getY() - pressedPoint.y);
 		mode = ResizeMode.NONE;
-		if (e.getComponent() != component)
+		if (e.getComponent() != component) {
 			resetCursor();
+		}
 		pressedPoint = null;
 		lastDraggedPoint = null;
 		e.consume();
@@ -142,20 +148,23 @@ public class MouseResizer implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		if (mode == ResizeMode.NONE)
+		if (mode == ResizeMode.NONE) {
 			return;
-		if (lastDraggedPoint == null)
+		}
+		if (lastDraggedPoint == null) {
 			notifyResizeDirectlyBy(e.getX() - pressedPoint.x, e.getY() - pressedPoint.y);
-		else
+		} else {
 			notifyResizeDirectlyBy(e.getX() - lastDraggedPoint.x, e.getY() - lastDraggedPoint.y);
+		}
 		lastDraggedPoint = e.getPoint();
 		e.consume();
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		if (mode == ResizeMode.NONE)
+		if (mode == ResizeMode.NONE) {
 			updateCursor(e);
+		}
 	}
 
 	private void notifyResizeDirectlyBy(int deltaX, int deltaY) {
@@ -251,8 +260,9 @@ public class MouseResizer implements MouseListener, MouseMotionListener {
 			if (cursor != null) {
 				setCursorForComponentAndHierarchy(component, cursor);
 			}
-		} else
+		} else {
 			resetCursor();
+		}
 	}
 
 	private void setCursorForComponentAndHierarchy(Component component2, Cursor cursor) {
@@ -322,11 +332,13 @@ public class MouseResizer implements MouseListener, MouseMotionListener {
 	}
 
 	private boolean isUsable(ResizeMode mode) {
-		if (modesToUse == null)
+		if (modesToUse == null) {
 			return true;
+		}
 		for (int i = 0; i < modesToUse.length; i++) {
-			if (mode == modesToUse[i])
+			if (mode == modesToUse[i]) {
 				return true;
+			}
 		}
 		return false;
 	}

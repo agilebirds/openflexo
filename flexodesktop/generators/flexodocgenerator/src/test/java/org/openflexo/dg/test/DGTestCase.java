@@ -21,11 +21,11 @@ package org.openflexo.dg.test;
 
 import java.util.logging.Logger;
 
+import junit.framework.AssertionFailedError;
+
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoStorageResource;
-
-import junit.framework.AssertionFailedError;
 
 public abstract class DGTestCase extends FlexoTestCase {
 

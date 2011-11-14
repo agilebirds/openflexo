@@ -51,8 +51,9 @@ public class SaveGeneratedResourceIOException extends SaveResourceException {
 
 	@Override
 	public String getMessage() {
-		if (ioException != null && ioException.getMessage() != null)
+		if (ioException != null && ioException.getMessage() != null) {
 			return FlexoLocalization.localizedForKey("io_exception_occured") + ": " + ioException.getMessage();
+		}
 		return super.getMessage();
 	}
 

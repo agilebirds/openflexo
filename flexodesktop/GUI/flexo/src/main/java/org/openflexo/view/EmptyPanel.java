@@ -48,8 +48,9 @@ public class EmptyPanel<O extends FlexoModelObject> extends JPanel implements Mo
 
 	@Override
 	public void deleteModuleView() {
-		if (controller != null)
+		if (controller != null) {
 			controller.removeModuleView(this);
+		}
 	}
 
 	@Override
@@ -95,8 +96,9 @@ public class EmptyPanel<O extends FlexoModelObject> extends JPanel implements Mo
 	}
 
 	public String getTitle() {
-		if (title == null)
+		if (title == null) {
 			return FlexoLocalization.localizedForKey(getRepresentedObject().getClassNameKey());
+		}
 		return title;
 	}
 

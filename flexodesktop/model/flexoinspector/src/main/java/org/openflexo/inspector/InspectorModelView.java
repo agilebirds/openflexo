@@ -92,18 +92,21 @@ public class InspectorModelView extends JTabbedPane implements ChangeListener {
 			InnerTabWidgetView widget = (InnerTabWidgetView) e.nextElement();
 			if (widget instanceof DenaliWidget) {
 				if (!((DenaliWidget) widget).widgetHasFocus()) {
-					if (((DenaliWidget) widget).isWidgetVisible())
+					if (((DenaliWidget) widget).isWidgetVisible()) {
 						((DenaliWidget) widget).updateWidgetFromModel();
+					}
 				}
-			} else
+			} else {
 				widget.updateWidgetFromModel();
+			}
 		}
 		refreshAllConditionals();
 	}
 
 	private void refreshAllConditionals() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("REFRESH conditionals");
+		}
 		for (Enumeration en = tabViews.elements(); en.hasMoreElements();) {
 			TabModelView next = (TabModelView) en.nextElement();
 			next.valueChange(_inspectable);
@@ -112,8 +115,9 @@ public class InspectorModelView extends JTabbedPane implements ChangeListener {
 	}
 
 	public void valueChange(Object newValue, DenaliWidget widget) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("valueChange with " + newValue + " for " + widget);
+		}
 		for (Enumeration en = tabViews.elements(); en.hasMoreElements();) {
 			TabModelView next = (TabModelView) en.nextElement();
 			next.valueChange(newValue, widget);
@@ -139,8 +143,9 @@ public class InspectorModelView extends JTabbedPane implements ChangeListener {
 						} catch (IndexOutOfBoundsException e) {
 							e.printStackTrace();
 							// BMA : catch an exception that seems to be caused by a bug in the APPLE JVM implementation
-							if (getComponentCount() > 0)
+							if (getComponentCount() > 0) {
 								setSelectedIndex(0);
+							}
 							revalidate();
 							repaint();
 						}
@@ -153,13 +158,16 @@ public class InspectorModelView extends JTabbedPane implements ChangeListener {
 							hasChanged = true;
 						}
 					} catch (IndexOutOfBoundsException e) {
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Index Out Of Bounds Exception occured. Set level to FINE on logger named '" + logger.getName()
 									+ "' to see stacktrace: " + e.getMessage());
-						if (logger.isLoggable(Level.FINE))
+						}
+						if (logger.isLoggable(Level.FINE)) {
 							logger.log(Level.FINE, "Exception occured: " + e.getMessage(), e);
-						if (getComponentCount() > 0)
+						}
+						if (getComponentCount() > 0) {
 							setSelectedIndex(0);
+						}
 						revalidate();
 						repaint();
 					}
@@ -171,8 +179,9 @@ public class InspectorModelView extends JTabbedPane implements ChangeListener {
 		// AJA : commented with approval of BMA to avoid a bug in the wysiwyg (kind of deadlock)
 		// GPO : uncommented the next line because it is essential and logical since we potentially have added/removed components to/from
 		// the tabbed pane
-		if (hasChanged)
+		if (hasChanged) {
 			validate();
+		}
 		boolean componentHasBeenSelected = false;
 		if (selectedIndex > -1) {
 			if (selectComponent != null && indexOfComponent(selectComponent) > -1) {
@@ -324,8 +333,9 @@ public class InspectorModelView extends JTabbedPane implements ChangeListener {
 			insertVectorInAnswer(v, answer);
 		}
 		if (answer.size() != tabCount) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Error...missing a tab...");
+			}
 		}
 		return answer;
 	}
@@ -381,12 +391,14 @@ public class InspectorModelView extends JTabbedPane implements ChangeListener {
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		if (ignoreStateChanged)
+		if (ignoreStateChanged) {
 			return;
+		}
 		updateFromModel();
-		if (_inspectingWidget != null && getSelectedComponent() != null && getSelectedComponent().getTabModel() != null)
+		if (_inspectingWidget != null && getSelectedComponent() != null && getSelectedComponent().getTabModel() != null) {
 			_inspectingWidget.notifiedActiveTabChange(getSelectedComponent().getTabModel().name);
-		// logger.info("state changed with "+e);
+			// logger.info("state changed with "+e);
+		}
 	}
 
 	@Override
@@ -396,8 +408,9 @@ public class InspectorModelView extends JTabbedPane implements ChangeListener {
 
 	public TabModelView getTabModelViewForName(String name) {
 		for (TabModelView tabView : tabViews) {
-			if (tabView.getTabModel().name.equals(name))
+			if (tabView.getTabModel().name.equals(name)) {
 				return tabView;
+			}
 		}
 		return null;
 	}
@@ -483,8 +496,9 @@ public class InspectorModelView extends JTabbedPane implements ChangeListener {
 	boolean ignoreStateChanged = false;
 
 	public void updateExtraTabs(Vector<TabModel> extraTabs) {
-		if (extraTabs == null)
+		if (extraTabs == null) {
 			return;
+		}
 
 		boolean tabChanged = false;
 

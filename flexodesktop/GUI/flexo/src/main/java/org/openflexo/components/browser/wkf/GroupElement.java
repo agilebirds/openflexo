@@ -57,8 +57,9 @@ public class GroupElement extends BrowserElement implements ExpansionSynchronize
 
 	@Override
 	protected void buildChildrenVector() {
-		for (AbstractNode node : getGroup().getNodes())
+		for (AbstractNode node : getGroup().getNodes()) {
 			addToChilds(node);
+		}
 	}
 
 	protected WKFGroup getGroup() {
@@ -77,14 +78,16 @@ public class GroupElement extends BrowserElement implements ExpansionSynchronize
 
 	@Override
 	public void collapse() {
-		if (isExpanded())
+		if (isExpanded()) {
 			OpenGroup.actionType.makeNewAction(getGroup(), null, getProjectBrowser().getEditor()).doAction();
+		}
 	}
 
 	@Override
 	public void expand() {
-		if (!isExpanded())
+		if (!isExpanded()) {
 			OpenGroup.actionType.makeNewAction(getGroup(), null, getProjectBrowser().getEditor()).doAction();
+		}
 	}
 
 	@Override

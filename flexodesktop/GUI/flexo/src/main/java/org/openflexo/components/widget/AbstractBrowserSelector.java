@@ -199,8 +199,9 @@ public abstract class AbstractBrowserSelector<T extends FlexoModelObject> extend
 
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e) {
-			if (_selectorPanel == null)
+			if (_selectorPanel == null) {
 				return;
+			}
 			if (e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL) {
 				if (_selectorPanel._browserView.getTreeScrollPane().getVerticalScrollBar() != null) {
 					_selectorPanel._browserView
@@ -253,8 +254,9 @@ public abstract class AbstractBrowserSelector<T extends FlexoModelObject> extend
 
 	@Override
 	protected void deletePopup() {
-		if (_selectorPanel != null)
+		if (_selectorPanel != null) {
 			_selectorPanel.delete();
+		}
 		_selectorPanel = null;
 		super.deletePopup();
 	}

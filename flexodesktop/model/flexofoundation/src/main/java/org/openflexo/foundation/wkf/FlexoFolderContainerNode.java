@@ -60,15 +60,17 @@ public abstract class FlexoFolderContainerNode extends WorkflowModelObject {
 	}
 
 	public void addToFolders(ProcessFolder folder) {
-		if (folder == this)
+		if (folder == this) {
 			return;
+		}
 		if (!folders.contains(folder)) {
 			if (!isDeserializing()) {
 				for (FlexoProcessNode node : folder.getProcesses()) {
 					if (node.getFatherProcessNode() != getProcessNode()) {
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Folder " + folder.getName() + " cannot be added to " + this.getName() + " because process "
 									+ node.getName() + " is not one of my sub-processes");
+						}
 						return;
 					}
 				}
@@ -94,11 +96,13 @@ public abstract class FlexoFolderContainerNode extends WorkflowModelObject {
 	}
 
 	public ProcessFolder getFolderWithName(String name) {
-		if (name == null)
+		if (name == null) {
 			return null;
+		}
 		for (ProcessFolder folder : getFolders()) {
-			if (name.equals(folder.getName()))
+			if (name.equals(folder.getName())) {
 				return folder;
+			}
 		}
 		return null;
 	}
@@ -114,8 +118,9 @@ public abstract class FlexoFolderContainerNode extends WorkflowModelObject {
 		String base = FlexoLocalization.localizedForKey("process_folder");
 		String attempt = base;
 		int i = 0;
-		while (getFolderWithName(attempt) != null || attempt.equals(getName()))
+		while (getFolderWithName(attempt) != null || attempt.equals(getName())) {
 			attempt = base + "-" + i++;
+		}
 		return attempt;
 	}
 

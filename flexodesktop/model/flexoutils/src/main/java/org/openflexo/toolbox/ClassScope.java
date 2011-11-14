@@ -97,8 +97,9 @@ public class ClassScope {
 
 		try {
 			final Vector<Class<?>> classes = (Vector<Class<?>>) CLASSES_VECTOR_FIELD.get(loader);
-			if (classes == null)
+			if (classes == null) {
 				return EMPTY_CLASS_ARRAY;
+			}
 
 			final Class<?>[] result;
 
@@ -131,8 +132,9 @@ public class ClassScope {
 	 *             if the "classes" field hack is not possible in this JRE
 	 */
 	public static Class<?>[] getLoadedClasses(final ClassLoader[] loaders) {
-		if (loaders == null)
+		if (loaders == null) {
 			throw new IllegalArgumentException("null input: loaders");
+		}
 
 		final List<Class<?>> resultList = new LinkedList<Class<?>>();
 
@@ -161,8 +163,9 @@ public class ClassScope {
 	 *             if the caller context resolver could not be instantiated
 	 */
 	public static ClassLoader[] getCallerClassLoaderTree() {
-		if (CALLER_RESOLVER == null)
+		if (CALLER_RESOLVER == null) {
 			throw new RuntimeException("Class<?>Scope::getCallerClassLoaderTree() cannot be used in this JRE", CR_FAILURE);
+		}
 
 		final Class<?>[] callContext = CALLER_RESOLVER.getClassContext();
 
@@ -184,8 +187,9 @@ public class ClassScope {
 	 * @return URL that points to the class definition [null if not found]
 	 */
 	public static URL getClassLocation(final Class<?> cls) {
-		if (cls == null)
+		if (cls == null) {
 			throw new IllegalArgumentException("null input: cls");
+		}
 
 		URL result = null;
 		final String clsAsResource = cls.getName().replace('.', '/').concat(".class");
@@ -198,8 +202,9 @@ public class ClassScope {
 		if (pd != null) {
 			final CodeSource cs = pd.getCodeSource();
 			// 'cs' can be null depending on the classloader behavior:
-			if (cs != null)
+			if (cs != null) {
 				result = cs.getLocation();
+			}
 
 			if (result != null) {
 				// convert a code source location into a full class file
@@ -207,10 +212,11 @@ public class ClassScope {
 				// for some common cases:
 				if ("file".equals(result.getProtocol())) {
 					try {
-						if (result.toExternalForm().endsWith(".jar") || result.toExternalForm().endsWith(".zip"))
+						if (result.toExternalForm().endsWith(".jar") || result.toExternalForm().endsWith(".zip")) {
 							result = new URL("jar:".concat(result.toExternalForm()).concat("!/").concat(clsAsResource));
-						else if (new File(result.getFile()).isDirectory())
+						} else if (new File(result.getFile()).isDirectory()) {
 							result = new URL(result, clsAsResource);
+						}
 					} catch (MalformedURLException ignore) {
 					}
 				}

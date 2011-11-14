@@ -102,10 +102,12 @@ public class AddRole extends FlexoAction<AddRole, WorkflowModelObject, WorkflowM
 				_newRole.setX(x, RepresentableFlexoModelObject.DEFAULT);
 				_newRole.setY(y, RepresentableFlexoModelObject.DEFAULT);
 			}
-			if (getNewColor() != null)
+			if (getNewColor() != null) {
 				_newRole.setColor(getNewColor());
-			if (getNewDescription() != null)
+			}
+			if (getNewDescription() != null) {
 				_newRole.setDescription(getNewDescription());
+			}
 			_newRole.setIsSystemRole(isSystemRole());
 		} else {
 			logger.warning("Cannot access workflow !");

@@ -58,8 +58,9 @@ public abstract class AbstractCGFile extends CGFile {
 	}
 
 	public IFlexoResourceGenerator getGenerator() {
-		if (getGenerationAvailableFileResource() != null)
+		if (getGenerationAvailableFileResource() != null) {
 			return getGenerationAvailableFileResource().getGenerator();
+		}
 		return null;
 	}
 
@@ -77,8 +78,9 @@ public abstract class AbstractCGFile extends CGFile {
 
 	@Override
 	public boolean hasGenerationErrors() {
-		if (getMarkedAsDoNotGenerate())
+		if (getMarkedAsDoNotGenerate()) {
 			return false;
+		}
 		hasGenerationErrors = (getGenerationException() != null);
 		return hasGenerationErrors;
 	}
@@ -119,8 +121,9 @@ public abstract class AbstractCGFile extends CGFile {
 	*/
 	@Override
 	public boolean needsMemoryGeneration() {
-		if (getMarkedAsDoNotGenerate())
+		if (getMarkedAsDoNotGenerate()) {
 			return false;
+		}
 		// return (getGenerator() != null && getGenerator().needsGeneration());
 		return getResource().needsMemoryGeneration();
 	}

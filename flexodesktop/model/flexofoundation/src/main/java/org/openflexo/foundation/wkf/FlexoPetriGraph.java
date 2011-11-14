@@ -107,9 +107,10 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 	}
 
 	public void setContainer(WKFObject container, String context) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine(" setContainer() for " + this.getClass().getName() + " with " + container.getClass().getName() + " with "
 					+ getNodes().size() + " nodes");
+		}
 		_container = container;
 		for (Enumeration<PetriGraphNode> e = getNodes().elements(); e.hasMoreElements();) {
 			PetriGraphNode node = e.nextElement();
@@ -125,34 +126,40 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 				if (endNode.getPreConditions().size() == 0) {
 					if (endNode instanceof FatherNode) {
 						if (!((FatherNode) endNode).hasContainedPetriGraph()) {
-							if (endNode instanceof AbstractActivityNode)
+							if (endNode instanceof AbstractActivityNode) {
 								new OperationPetriGraph((AbstractActivityNode) endNode);
-							else if (endNode instanceof OperationNode)
+							} else if (endNode instanceof OperationNode) {
 								new ActionPetriGraph((OperationNode) endNode);
-							else if (logger.isLoggable(Level.WARNING))
+							} else if (logger.isLoggable(Level.WARNING)) {
 								logger.warning("Unknown type of FatherNode " + end.getClass().getName());
+							}
 						}
 						if (((FatherNode) end).hasContainedPetriGraph()) {
 							Vector<FlexoNode> v = ((FatherNode) end).getContainedPetriGraph().getAllBeginNodes();
 							FlexoNode attachedBeginNode;
 							if (v.size() == 0) {
 								attachedBeginNode = ((FatherNode) end).getContainedPetriGraph().createBeginNode(null);
-							} else
+							} else {
 								attachedBeginNode = v.firstElement();
+							}
 							pc = new FlexoPreCondition(endNode, attachedBeginNode);
-						} else
+						} else {
 							pc = new FlexoPreCondition(endNode);
-					} else
+						}
+					} else {
 						pc = new FlexoPreCondition(endNode);
-				} else
+					}
+				} else {
 					pc = endNode.getPreConditions().firstElement();
+				}
 			} else {
 				pc = end;
 			}
 			return new TokenEdge(begin, pc);
 		} catch (InvalidEdgeException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not create edge between begin and end node");
+			}
 			return null;
 		}
 	}
@@ -167,8 +174,9 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 
 	@Override
 	public String getFullyQualifiedName() {
-		if (getContainer() != null)
+		if (getContainer() != null) {
 			return getContainer().getFullyQualifiedName() + ".PETRI_GRAPH";
+		}
 		return "???";
 	}
 
@@ -190,8 +198,9 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 		if (obj instanceof PetriGraphNode) {
 			for (Enumeration<PetriGraphNode> en = _nodes.elements(); en.hasMoreElements();) {
 				PetriGraphNode item = en.nextElement();
-				if (item == obj)
+				if (item == obj) {
 					return true;
+				}
 			}
 			return false;
 		}
@@ -235,8 +244,9 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 		Enumeration<PetriGraphNode> en = getSortedNodes();
 		while (en.hasMoreElements()) {
 			PetriGraphNode node = en.nextElement();
-			if (klass.isAssignableFrom(node.getClass()))
+			if (klass.isAssignableFrom(node.getClass())) {
 				vector.add((T) node);
+			}
 			if (node instanceof SelfExecutableNode && ((SelfExecutableNode) node).getExecutionPetriGraph() != null) {
 				vector.addAll(((SelfExecutableNode) node).getExecutionPetriGraph().getAllEmbeddedSortedNodesOfClass(klass));
 			} else if (node instanceof LOOPOperator && ((LOOPOperator) node).getExecutionPetriGraph() != null) {
@@ -255,11 +265,13 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 	}
 
 	public void addToNodes(PetriGraphNode aNode) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("insertNode() with " + aNode + " of " + aNode.getClass().getName());
+		}
 		if ((getLevel() != aNode.getLevel()) && (!(aNode instanceof OperatorNode)) && (!(aNode instanceof EventNode))) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Invalid level: cannot insert node");
+			}
 		} else {
 			if (!_nodes.contains(aNode)) {
 				_nodes.add(aNode);
@@ -270,9 +282,10 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 				}
 				setChanged();
 				notifyObservers(new NodeInserted(aNode, this, getContainer()));
-				if (getProcess() != null)
+				if (getProcess() != null) {
 					getProcess().clearCachedObjects();
-				// return true;
+					// return true;
+				}
 			}
 		}
 		// return false;
@@ -280,12 +293,14 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 
 	public boolean removeFromNodes(PetriGraphNode node) {
 		if (_nodes.contains(node)) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Remove node as observer of PG");
+			}
 			for (WKFGroup group : getGroups()) {
 				if (group.contains(node)) {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Remove node " + node + " from group " + group);
+					}
 					group.removeFromNodes(node);
 					group.notifyGroupUpdated();
 				}
@@ -295,8 +310,9 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 			setChanged();
 			notifyObservers(new NodeRemoved(node));
 			FlexoIndexManager.reIndexObjectOfArray(getNodes().toArray(new PetriGraphNode[0]));
-			if (getProcess() != null)
+			if (getProcess() != null) {
 				getProcess().clearCachedObjects();
+			}
 			return true;
 		}
 		return false;
@@ -383,9 +399,9 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 				v.add((T) node);
 			}
 			if (node instanceof FatherNode && ((FatherNode) node).getContainedPetriGraph() != null
-					&& ((FatherNode) node).getContainedPetriGraph().getLevel() == getLevel())
+					&& ((FatherNode) node).getContainedPetriGraph().getLevel() == getLevel()) {
 				v.addAll(((FatherNode) node).getContainedPetriGraph().getAllEmbeddedNodesOfClassOfSameLevel(klass));
-			else if (node instanceof SelfExecutableNode && ((SelfExecutableNode) node).getExecutionPetriGraph() != null) {// These are
+			} else if (node instanceof SelfExecutableNode && ((SelfExecutableNode) node).getExecutionPetriGraph() != null) {// These are
 																															// always of
 																															// this level
 				v.addAll(((SelfExecutableNode) node).getExecutionPetriGraph().getAllEmbeddedNodesOfClassOfSameLevel(klass));
@@ -411,9 +427,9 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 			if (node instanceof OperatorNode) {
 				v.add((OperatorNode) node);
 			}
-			if (node instanceof FatherNode && ((FatherNode) node).getContainedPetriGraph() != null)
+			if (node instanceof FatherNode && ((FatherNode) node).getContainedPetriGraph() != null) {
 				v.addAll(((FatherNode) node).getContainedPetriGraph().getAllEmbeddedOperators());
-			else if (node instanceof SelfExecutableNode && ((SelfExecutableNode) node).getExecutionPetriGraph() != null) {
+			} else if (node instanceof SelfExecutableNode && ((SelfExecutableNode) node).getExecutionPetriGraph() != null) {
 				v.addAll(((SelfExecutableNode) node).getExecutionPetriGraph().getAllEmbeddedOperators());
 			} else if (node instanceof LOOPOperator && ((LOOPOperator) node).getExecutionPetriGraph() != null) {
 				v.addAll(((LOOPOperator) node).getExecutionPetriGraph().getAllEmbeddedOperators());
@@ -431,9 +447,9 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 				v.add((OperatorNode) node);
 			}
 			if (node instanceof FatherNode && ((FatherNode) node).getContainedPetriGraph() != null
-					&& ((FatherNode) node).getContainedPetriGraph().getLevel() == getLevel())
+					&& ((FatherNode) node).getContainedPetriGraph().getLevel() == getLevel()) {
 				v.addAll(((FatherNode) node).getContainedPetriGraph().getAllEmbeddedOperatorsOfSameLevel());
-			else if (node instanceof SelfExecutableNode && ((SelfExecutableNode) node).getExecutionPetriGraph() != null) {// These are
+			} else if (node instanceof SelfExecutableNode && ((SelfExecutableNode) node).getExecutionPetriGraph() != null) {// These are
 																															// always of
 																															// this level
 				v.addAll(((SelfExecutableNode) node).getExecutionPetriGraph().getAllEmbeddedOperatorsOfSameLevel());
@@ -461,8 +477,9 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 			if (klass.isAssignableFrom(node.getClass())) {
 				v.add((T) node);
 			}
-			if (node instanceof FatherNode && ((FatherNode) node).getContainedPetriGraph() != null)
+			if (node instanceof FatherNode && ((FatherNode) node).getContainedPetriGraph() != null) {
 				v.addAll(((FatherNode) node).getContainedPetriGraph().getAllEmbeddedNodesOfClass(klass));
+			}
 			if (node instanceof SelfExecutableNode && ((SelfExecutableNode) node).getExecutionPetriGraph() != null) {
 				v.addAll(((SelfExecutableNode) node).getExecutionPetriGraph().getAllEmbeddedNodesOfClass(klass));
 			} else if (node instanceof LOOPOperator && ((LOOPOperator) node).getExecutionPetriGraph() != null) {
@@ -494,10 +511,12 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 
 	public boolean hasOtherNodesThanBeginEndNodes() {
 		for (PetriGraphNode node : getNodes()) {
-			if (!(node instanceof FlexoNode))
+			if (!(node instanceof FlexoNode)) {
 				return true;
-			if (!((FlexoNode) node).isBeginOrEndNode())
+			}
+			if (!((FlexoNode) node).isBeginOrEndNode()) {
 				return true;
+			}
 		}
 		return artefacts.size() > 0;
 	}
@@ -570,8 +589,9 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 		Enumeration<PetriGraphNode> en = _nodes.elements();
 		while (en.hasMoreElements()) {
 			PetriGraphNode node = en.nextElement();
-			if (node instanceof FatherNode && ((FatherNode) node).getContainedPetriGraph() != null)
+			if (node instanceof FatherNode && ((FatherNode) node).getContainedPetriGraph() != null) {
 				v.addAll(((FatherNode) node).getContainedPetriGraph().getAllEmbeddedArtefacts());
+			}
 			if (node instanceof SelfExecutableNode && ((SelfExecutableNode) node).getExecutionPetriGraph() != null) {
 				v.addAll(((SelfExecutableNode) node).getExecutionPetriGraph().getAllEmbeddedArtefacts());
 			} else if (node instanceof LOOPOperator && ((LOOPOperator) node).getExecutionPetriGraph() != null) {
@@ -582,11 +602,13 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 	}
 
 	public OperatorNode getOperatorNodeNamed(String name) {
-		if (name == null)
+		if (name == null) {
 			return null;
+		}
 		for (OperatorNode node : getAllOperatorNodes()) {
-			if (name.equals(node.getName()))
+			if (name.equals(node.getName())) {
 				return node;
+			}
 		}
 		return null;
 	}
@@ -613,16 +635,18 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 				while (en.hasMoreElements()) {
 					item = en.nextElement();
 					if (item instanceof FatherNode) {
-						if (((FatherNode) item).getContainedPetriGraph() != null)
+						if (((FatherNode) item).getContainedPetriGraph() != null) {
 							((FatherNode) item).getContainedPetriGraph().setIsVisible(b);
+						}
 					}
 				}
 			}
 			super.setIsVisible(b);
 
 			if (b) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Make PG visible");
+				}
 				setChanged();
 				notifyObservers(new PetriGraphHasBeenOpened(this));
 			}
@@ -693,8 +717,9 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 		Vector<FlexoNode> allBeginNodes = getAllBeginNodes();
 		Vector<FlexoNode> returned = new Vector<FlexoNode>();
 		for (FlexoNode n : allBeginNodes) {
-			if (n.getAttachedPreCondition() == null)
+			if (n.getAttachedPreCondition() == null) {
 				returned.add(n);
+			}
 		}
 		return returned;
 	}
@@ -703,8 +728,9 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 		Vector<FlexoNode> allBeginNodes = getAllBeginNodes();
 		Vector<FlexoNode> returned = new Vector<FlexoNode>();
 		for (FlexoNode n : allBeginNodes) {
-			if (n.getAttachedPreCondition() != null)
+			if (n.getAttachedPreCondition() != null) {
 				returned.add(n);
+			}
 		}
 		return returned;
 	}
@@ -722,8 +748,9 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 		artefacts.add(annotation);
 		setChanged();
 		notifyObservers(new ArtefactInserted(annotation));
-		if (getProcess() != null)
+		if (getProcess() != null) {
 			getProcess().clearCachedObjects();
+		}
 	}
 
 	public void removeFromArtefacts(WKFArtefact annotation) {
@@ -731,8 +758,9 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 		artefacts.remove(annotation);
 		setChanged();
 		notifyObservers(new ArtefactRemoved(annotation));
-		if (getProcess() != null)
+		if (getProcess() != null) {
 			getProcess().clearCachedObjects();
+		}
 	}
 
 	public Vector<WKFGroup> getGroups() {
@@ -864,8 +892,9 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 			protected void fixAction() {
 				Vector<PetriGraphNode> allNodes = new Vector<PetriGraphNode>(getObject().getAllBeginNodes());
 				for (PetriGraphNode n : allNodes) {
-					if (n != node)
+					if (n != node) {
 						n.delete();
+					}
 				}
 			}
 		}
@@ -926,8 +955,9 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 			protected void fixAction() {
 				Vector<PetriGraphNode> allNodes = new Vector<PetriGraphNode>(getObject().getAllEndNodes());
 				for (PetriGraphNode n : allNodes) {
-					if (n != node)
+					if (n != node) {
 						n.delete();
+					}
 				}
 			}
 		}
@@ -949,8 +979,9 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 	public int getIndexForBeginNode(PetriGraphNode beginNode) {
 		int idx = 0;
 		for (FlexoNode n : getAllBeginNodes()) {
-			if (n == beginNode)
+			if (n == beginNode) {
 				return idx;
+			}
 			idx++;
 		}
 		return -1;
@@ -959,8 +990,9 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 	public int getIndexForEndNode(FlexoNode endNode) {
 		int idx = 0;
 		for (FlexoNode n : getAllEndNodes()) {
-			if (n == endNode)
+			if (n == endNode) {
 				return idx;
+			}
 			idx++;
 		}
 		return -1;
@@ -969,10 +1001,12 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 	public int getIndexForNormalNode(PetriGraphNode node) {
 		int idx = 0;
 		for (FlexoNode n : getAllNodesOfClass(FlexoNode.class)) {
-			if (n == node)
+			if (n == node) {
 				return idx;
-			if (n.isNormalNode())
+			}
+			if (n.isNormalNode()) {
 				idx++;
+			}
 		}
 		return -1;
 	}

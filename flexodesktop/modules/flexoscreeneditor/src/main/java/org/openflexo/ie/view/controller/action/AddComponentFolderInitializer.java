@@ -28,19 +28,18 @@ import javax.swing.Icon;
 import javax.swing.JTree;
 
 import org.openflexo.components.browser.view.BrowserView;
-import org.openflexo.icon.SEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.FileUtils;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
 import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
 import org.openflexo.foundation.ie.cl.action.AddComponentFolder;
+import org.openflexo.icon.SEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.FileUtils;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class AddComponentFolderInitializer extends ActionInitializer {
 
@@ -75,8 +74,9 @@ public class AddComponentFolderInitializer extends ActionInitializer {
 								FlexoLocalization.localizedForKey("enter_name_for_the_new_folder"),
 								Pattern.compile(FileUtils.GOOD_CHARACTERS_REG_EXP + "+"),
 								FlexoLocalization.localizedForKey("folder_name_cannot_contain_:_\\_\"_:_*_?_<_>_/"));
-						if (newFolderName == null)
+						if (newFolderName == null) {
 							return false;
+						}
 						if (newFolderName.trim().length() == 0) {
 							FlexoController.showError(FlexoLocalization.localizedForKey("a_folder_name_cannot_be_empty"));
 							return false;

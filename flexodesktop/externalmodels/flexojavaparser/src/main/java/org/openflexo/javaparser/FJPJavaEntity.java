@@ -120,8 +120,9 @@ public abstract class FJPJavaEntity extends FJPJavaElement implements ParsedJava
 
 	protected static String getNonQualifiedName(Type aType) {
 		String fullQualified = aType.toString();
-		if (fullQualified.lastIndexOf(".") >= 0)
+		if (fullQualified.lastIndexOf(".") >= 0) {
 			return fullQualified.substring(fullQualified.lastIndexOf(".") + 1);
+		}
 		return fullQualified;
 	}
 }

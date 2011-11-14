@@ -103,9 +103,9 @@ public class IECustomButtonWidgetView extends IEWidgetView<IECustomButtonWidget>
 			@Override
 			public Dimension getPreferredSize() {
 				String s = getCustomButtonModel().getCustomButtonValue();
-				if (s == null)
+				if (s == null) {
 					return new Dimension(30, 15);
-				else {
+				} else {
 					return new Dimension(
 							(int) (_label.getFontMetrics(_label.getFont()).getStringBounds(s, _label.getGraphics()).getWidth() + 32), 15);
 				}
@@ -113,8 +113,9 @@ public class IECustomButtonWidgetView extends IEWidgetView<IECustomButtonWidget>
 		};
 		Color color = getFlexoCSS().getButtonColor();
 
-		if (color == null)
+		if (color == null) {
 			color = Color.BLACK;
+		}
 		_label.setMinimumSize(new Dimension(30, 15));
 		_label.setBackground(color);
 		// setBackground(color);
@@ -144,8 +145,9 @@ public class IECustomButtonWidgetView extends IEWidgetView<IECustomButtonWidget>
 
 	@Override
 	public void editLabel() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Edit ie custom button");
+		}
 		labelEditing = true;
 		_jLabelTextField = new JTextField(getModel().getCustomButtonValue()) {
 			/**
@@ -173,9 +175,9 @@ public class IECustomButtonWidgetView extends IEWidgetView<IECustomButtonWidget>
 			@Override
 			public Dimension getPreferredSize() {
 				String s = getCustomButtonModel().getCustomButtonValue();
-				if (s == null)
+				if (s == null) {
 					return new Dimension(30, 15);
-				else {
+				} else {
 					return new Dimension(
 							(int) (_label.getFontMetrics(_label.getFont()).getStringBounds(s, _label.getGraphics()).getWidth() + 32), 15);
 				}
@@ -240,22 +242,24 @@ public class IECustomButtonWidgetView extends IEWidgetView<IECustomButtonWidget>
 	@Override
 	public Dimension getPreferredSize() {
 		String s = _label.getText();
-		if (s == null)
+		if (s == null) {
 			return new Dimension(30, 17);
-		else {
+		} else {
 			return new Dimension((int) _label.getPreferredSize().getWidth() + 2, 17);
 		}
 	}
 
 	public void finalizeEditButton() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Finalize edit ie custombutton");
+		}
 		_label.setText(getCustomButtonModel().getCustomButtonValue());
 		if (getCustomButtonModel().getCustomButtonValue() == null || getCustomButtonModel().getCustomButtonValue().length() == 0) {
 			_label.setText("   ");
 		}
-		if (labelEditing)
+		if (labelEditing) {
 			getCustomButtonModel().setCustomButtonValue(_jLabelTextField.getText());
+		}
 		labelEditing = false;
 		remove(_jLabelTextField);
 		add(_label);
@@ -288,8 +292,9 @@ public class IECustomButtonWidgetView extends IEWidgetView<IECustomButtonWidget>
 			}
 			doLayout();
 			repaint();
-		} else
+		} else {
 			super.update(arg0, arg1);
+		}
 	}
 
 	/**

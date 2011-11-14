@@ -11,8 +11,9 @@ public class ClassPatternRole extends OntologicObjectPatternRole {
 
 	@Override
 	public String getPreciseType() {
-		if (getOntologicType() != null)
+		if (getOntologicType() != null) {
 			return getOntologicType().getName();
+		}
 		return "";
 	}
 

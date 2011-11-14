@@ -169,10 +169,11 @@ public class VTLHTMLTokenMarker extends TokenMarker {
 							if (array[tmp] == '{') {
 								openingB++;
 							} else if (array[tmp] == '}') {
-								if (openingB > 1)
+								if (openingB > 1) {
 									openingB--;
-								else
+								} else {
 									acceptable = false;
+								}
 							}
 							tmp++;
 						}
@@ -186,19 +187,22 @@ public class VTLHTMLTokenMarker extends TokenMarker {
 							} else if (array[tmp] == '{') {
 								openingB++;
 							} else if (array[tmp] == ')') {
-								if (openingP > 0)
+								if (openingP > 0) {
 									openingP--;
-								else
+								} else {
 									acceptable = false;
+								}
 							} else if (array[tmp] == '}') {
-								if (openingB > 0)
+								if (openingB > 0) {
 									openingB--;
-								else
+								} else {
 									acceptable = false;
+								}
 							} else if (array[tmp] == '!' && array[tmp - 1] == '$') {
 								// OK - silent reference notation
-							} else
+							} else {
 								acceptable = false;
+							}
 							tmp++;
 						}
 					}
@@ -345,9 +349,9 @@ public class VTLHTMLTokenMarker extends TokenMarker {
 					}
 					break;
 				case '"':
-					if (backslash)
+					if (backslash) {
 						backslash = false;
-					else {
+					} else {
 						doKeyword(line, i, c);
 						addToken(i - lastOffset, Token.NULL);
 						lastOffset = lastKeyword = i;
@@ -355,9 +359,9 @@ public class VTLHTMLTokenMarker extends TokenMarker {
 					}
 					break;
 				case '\'':
-					if (backslash)
+					if (backslash) {
 						backslash = false;
-					else {
+					} else {
 						doKeyword(line, i, c);
 						addToken(i - lastOffset, Token.NULL);
 						lastOffset = lastKeyword = i;
@@ -381,24 +385,25 @@ public class VTLHTMLTokenMarker extends TokenMarker {
 					break;
 				default:
 					backslash = false;
-					if (!Character.isLetterOrDigit(c) && c != '_')
+					if (!Character.isLetterOrDigit(c) && c != '_') {
 						doKeyword(line, i, c);
+					}
 					break;
 				}
 				break;
 			case Token.LITERAL1: // JavaScript "..."
-				if (backslash)
+				if (backslash) {
 					backslash = false;
-				else if (c == '"') {
+				} else if (c == '"') {
 					addToken(i1 - lastOffset, Token.LITERAL1);
 					lastOffset = lastKeyword = i1;
 					token = JAVASCRIPT;
 				}
 				break;
 			case Token.LITERAL2: // JavaScript '...'
-				if (backslash)
+				if (backslash) {
 					backslash = false;
-				else if (c == '\'') {
+				} else if (c == '\'') {
 					addToken(i1 - lastOffset, Token.LITERAL1);
 					lastOffset = lastKeyword = i1;
 					token = JAVASCRIPT;
@@ -454,8 +459,9 @@ public class VTLHTMLTokenMarker extends TokenMarker {
 		int len = i - lastKeyword;
 		byte id = keywords.lookup(line, lastKeyword, len);
 		if (id != Token.NULL) {
-			if (lastKeyword != lastOffset)
+			if (lastKeyword != lastOffset) {
 				addToken(lastKeyword - lastOffset, Token.NULL);
+			}
 			addToken(len, id);
 			lastOffset = i;
 		}

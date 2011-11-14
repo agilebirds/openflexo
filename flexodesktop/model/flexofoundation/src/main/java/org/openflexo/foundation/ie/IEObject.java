@@ -126,20 +126,23 @@ public abstract class IEObject extends FlexoModelObject implements DataFlexoObse
 		setChanged();
 		int modifType = DataModification.ATTRIBUTE;
 		DataModification dataModification = new DataModification(modifType, key, oldValue, newValue);
-		if (isReentrant)
+		if (isReentrant) {
 			dataModification.setReentrant(isReentrant);
+		}
 		notifyObservers(dataModification);
 	}
 
 	@Override
 	public Class getTypeForKey(String key) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.finer("getTypeForKey for " + key);
+		}
 		try {
 			return super.getTypeForKey(key);
 		} catch (InvalidObjectSpecificationException e) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.finer("OK, lets use the dynamic attributes !");
+			}
 			return String.class;
 		}
 	}
@@ -149,8 +152,9 @@ public abstract class IEObject extends FlexoModelObject implements DataFlexoObse
 		if (getProject() != null) {
 			return getProject().getIEValidationModel();
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not access to project !");
+			}
 		}
 		return null;
 	}
@@ -164,18 +168,20 @@ public abstract class IEObject extends FlexoModelObject implements DataFlexoObse
 			while (en.hasMoreElements()) {
 				candidate = en.nextElement();
 				if (candidate == null) {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Object of class " + object.getClass().getName()
 								+ " returned IEObjects null in its method getEmbeddedIEObjects");
+					}
 					continue;
 				}
 				if (!queue.contains(candidate)) {
 					if (candidate instanceof IObject) {
 						processToAdditionOfEmbedded((IEObject) candidate, queue);
 					} else {
-						if (logger.isLoggable(Level.SEVERE))
+						if (logger.isLoggable(Level.SEVERE)) {
 							logger.severe("Object of class " + object.getClass().getName()
 									+ " returned non IEObjects in its method getEmbeddedIEObjects");
+						}
 					}
 				}
 			}
@@ -187,13 +193,14 @@ public abstract class IEObject extends FlexoModelObject implements DataFlexoObse
 		Vector<IObject> v = getAllEmbeddedIEObjects();
 		for (IObject o : v) {
 			if (o instanceof PartialComponentInstance) {
-				if (((PartialComponentInstance) o).getComponentDefinition() == wo.getComponentDefinition())
+				if (((PartialComponentInstance) o).getComponentDefinition() == wo.getComponentDefinition()) {
 					return true;
-				else {
+				} else {
 					boolean res = ((PartialComponentInstance) o).getComponentDefinition().getWOComponent()
 							.checkWidgetDoesNotEmbedWOComponent(wo);
-					if (res)
+					if (res) {
 						return true;
+					}
 				}
 			}
 		}
@@ -222,10 +229,11 @@ public abstract class IEObject extends FlexoModelObject implements DataFlexoObse
 	 */
 	public Vector<IObject> getAllEmbeddedIEObjects(boolean maintainNaturalOrder) {
 		Collection<IObject> returned;
-		if (maintainNaturalOrder)
+		if (maintainNaturalOrder) {
 			returned = new Vector<IObject>();
-		else
+		} else {
 			returned = new HashSet<IObject>();
+		}
 		processToAdditionOfEmbedded(this, returned);
 		return new Vector<IObject>(returned);
 	}
@@ -241,8 +249,9 @@ public abstract class IEObject extends FlexoModelObject implements DataFlexoObse
 		Enumeration en = getAllEmbeddedIEObjects(true).elements();
 		while (en.hasMoreElements()) {
 			IEObject widget = (IEObject) en.nextElement();
-			if (classeToMatch.isAssignableFrom(widget.getClass()))
+			if (classeToMatch.isAssignableFrom(widget.getClass())) {
 				reply.add((IEWidget) widget);
+			}
 		}
 		return reply;
 	}
@@ -272,8 +281,9 @@ public abstract class IEObject extends FlexoModelObject implements DataFlexoObse
 		Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
 		while (en.hasMoreElements()) {
 			IObject o = en.nextElement();
-			if (o instanceof IEStringWidget)
+			if (o instanceof IEStringWidget) {
 				v.add((IEStringWidget) o);
+			}
 		}
 		return v;
 	}
@@ -290,8 +300,9 @@ public abstract class IEObject extends FlexoModelObject implements DataFlexoObse
 		Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
 		while (en.hasMoreElements()) {
 			IObject o = en.nextElement();
-			if (o instanceof IETextFieldWidget)
+			if (o instanceof IETextFieldWidget) {
 				v.add((IETextFieldWidget) o);
+			}
 		}
 		return v;
 	}
@@ -308,8 +319,9 @@ public abstract class IEObject extends FlexoModelObject implements DataFlexoObse
 		Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
 		while (en.hasMoreElements()) {
 			IObject o = en.nextElement();
-			if (o instanceof IETextAreaWidget)
+			if (o instanceof IETextAreaWidget) {
 				v.add((IETextAreaWidget) o);
+			}
 		}
 		return v;
 	}
@@ -326,8 +338,9 @@ public abstract class IEObject extends FlexoModelObject implements DataFlexoObse
 		Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
 		while (en.hasMoreElements()) {
 			IObject o = en.nextElement();
-			if (o instanceof IEDropDownWidget)
+			if (o instanceof IEDropDownWidget) {
 				v.add((IEDropDownWidget) o);
+			}
 		}
 		return v;
 	}
@@ -344,8 +357,9 @@ public abstract class IEObject extends FlexoModelObject implements DataFlexoObse
 		Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
 		while (en.hasMoreElements()) {
 			IObject o = en.nextElement();
-			if (o instanceof IEBrowserWidget)
+			if (o instanceof IEBrowserWidget) {
 				v.add((IEBrowserWidget) o);
+			}
 		}
 		return v;
 	}
@@ -362,8 +376,9 @@ public abstract class IEObject extends FlexoModelObject implements DataFlexoObse
 		Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
 		while (en.hasMoreElements()) {
 			IObject o = en.nextElement();
-			if (o instanceof IECheckBoxWidget)
+			if (o instanceof IECheckBoxWidget) {
 				v.add((IECheckBoxWidget) o);
+			}
 		}
 		return v;
 	}
@@ -380,8 +395,9 @@ public abstract class IEObject extends FlexoModelObject implements DataFlexoObse
 		Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
 		while (en.hasMoreElements()) {
 			IObject o = en.nextElement();
-			if (o instanceof IERadioButtonWidget)
+			if (o instanceof IERadioButtonWidget) {
 				v.add((IERadioButtonWidget) o);
+			}
 		}
 		return v;
 	}
@@ -398,8 +414,9 @@ public abstract class IEObject extends FlexoModelObject implements DataFlexoObse
 		Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
 		while (en.hasMoreElements()) {
 			IObject o = en.nextElement();
-			if (o.getClass() == IEButtonWidget.class)
+			if (o.getClass() == IEButtonWidget.class) {
 				v.add((IEButtonWidget) o);
+			}
 		}
 		return v;
 	}
@@ -416,8 +433,9 @@ public abstract class IEObject extends FlexoModelObject implements DataFlexoObse
 		Enumeration<IObject> en = getAllEmbeddedIEObjects(true).elements();
 		while (en.hasMoreElements()) {
 			IObject o = en.nextElement();
-			if (o instanceof IEHyperlinkWidget)
+			if (o instanceof IEHyperlinkWidget) {
 				v.add((IEHyperlinkWidget) o);
+			}
 		}
 		return v;
 	}

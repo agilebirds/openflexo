@@ -44,23 +44,28 @@ public class HelpElementBuilder {
 		ScreenshotResource screenshootResource = helpEntryPoint.getProject().getScreenshotResource(
 				helpEntryPoint instanceof OperationNode ? ((OperationNode) helpEntryPoint).getAbstractActivityNode()
 						: (FlexoModelObject) helpEntryPoint, false);
-		if (screenshootResource != null)
+		if (screenshootResource != null) {
 			reply.setAttribute("screenshootName", screenshootResource.getFileName());
+		}
 		String parents = parentIDs(helpEntryPoint);
-		if (parents.length() > 0)
+		if (parents.length() > 0) {
 			reply.setAttribute("parents", parents);
+		}
 
 		String childs = childIDs(helpEntryPoint);
-		if (childs.length() > 0)
+		if (childs.length() > 0) {
 			reply.setAttribute("childs", childs);
+		}
 
 		Element d = buildDescriptionElement((FlexoModelObject) helpEntryPoint);
-		if (d != null)
+		if (d != null) {
 			reply.addContent(d);
+		}
 
 		Element sd = buildSpecificDescriptionElement((FlexoModelObject) helpEntryPoint);
-		if (sd != null)
+		if (sd != null) {
 			reply.addContent(sd);
+		}
 
 		if (helpEntryPoint instanceof OperationNode) {
 			Element buttons = buildButtonsElement((OperationNode) helpEntryPoint);
@@ -83,12 +88,14 @@ public class HelpElementBuilder {
 				ActionNode actionNode = ci.getAllActionButtonPairs().get(b);
 
 				Element d = buildDescriptionElement(actionNode);
-				if (d != null)
+				if (d != null) {
 					action.addContent(d);
+				}
 
 				Element sd = buildSpecificDescriptionElement(actionNode);
-				if (sd != null)
+				if (sd != null) {
 					action.addContent(sd);
+				}
 
 				if (b.isCustomButton()) {
 					action.setAttribute("type", "Custom");
@@ -143,8 +150,9 @@ public class HelpElementBuilder {
 			reply.append(",");
 			parent = parent.getParentHelpEntry();
 		}
-		if (reply.length() == 0)
+		if (reply.length() == 0) {
 			return "";
+		}
 		String ids = reply.toString();
 		return ids.substring(0, ids.length() - 1);
 	}
@@ -166,8 +174,9 @@ public class HelpElementBuilder {
 			}
 
 		}
-		if (reply.length() == 0)
+		if (reply.length() == 0) {
 			return "";
+		}
 		String ids = reply.toString();
 		return ids.substring(0, ids.length() - 1);
 	}

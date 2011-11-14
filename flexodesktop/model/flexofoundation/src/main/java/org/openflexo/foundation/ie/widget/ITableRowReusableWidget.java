@@ -169,10 +169,12 @@ public class ITableRowReusableWidget extends IEReusableWidget<ReusableComponentD
 	@Override
 	public Vector<IESequenceTab> getAllTabContainers() {
 		Vector<IESequenceTab> reply = new Vector<IESequenceTab>();
-		if (getRootObject() == null)
+		if (getRootObject() == null) {
 			return reply;
-		if (getRootObject() instanceof ITableRow)
+		}
+		if (getRootObject() instanceof ITableRow) {
 			reply.addAll(((ITableRow) getRootObject()).getAllTabContainers());
+		}
 		return reply;
 	}
 
@@ -219,15 +221,17 @@ public class ITableRowReusableWidget extends IEReusableWidget<ReusableComponentD
 
 	@Override
 	public boolean areComponentInstancesValid() {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Implement me!!! please");
+		}
 		return true;
 	}
 
 	@Override
 	public void removeInvalidComponentInstances() {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Implement me!!! please");
+		}
 	}
 
 	@Override
@@ -262,8 +266,9 @@ public class ITableRowReusableWidget extends IEReusableWidget<ReusableComponentD
 	// }
 	//
 	public Enumeration<ITableRow> elements() {
-		if (getSequenceTR() != null)
+		if (getSequenceTR() != null) {
 			return getSequenceTR().elements();
+		}
 		Vector<ITableRow> v = new Vector<ITableRow>();
 		v.add((ITableRow) getRootObject());
 		return v.elements();

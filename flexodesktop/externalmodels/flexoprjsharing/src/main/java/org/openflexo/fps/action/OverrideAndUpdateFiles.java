@@ -29,11 +29,11 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.fps.CVSAbstractFile;
+import org.openflexo.fps.CVSAbstractFile.UpdateListener;
+import org.openflexo.fps.CVSAbstractFile.UpdateStatus;
 import org.openflexo.fps.CVSContainer;
 import org.openflexo.fps.CVSFile;
 import org.openflexo.fps.FPSObject;
-import org.openflexo.fps.CVSAbstractFile.UpdateListener;
-import org.openflexo.fps.CVSAbstractFile.UpdateStatus;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileUtils;
 
@@ -172,10 +172,11 @@ public class OverrideAndUpdateFiles extends MultipleFileCVSAction<OverrideAndUpd
 
 	@Override
 	public boolean hasActionExecutionSucceeded() {
-		if (timeOutReceived)
+		if (timeOutReceived) {
 			return false;
-		else
+		} else {
 			return super.hasActionExecutionSucceeded();
+		}
 	}
 
 	@Override

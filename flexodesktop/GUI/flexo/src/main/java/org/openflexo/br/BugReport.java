@@ -228,31 +228,36 @@ public class BugReport extends KVCObject implements XMLSerializable, TableModel 
 			File bugReportModelFile;
 			bugReportModelFile = new FileResource("Models/BugReportModel.xml");
 			if (!bugReportModelFile.exists()) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("File " + bugReportModelFile.getAbsolutePath() + " doesn't exist. Maybe you have to check your paths ?");
+				}
 				return null;
 			} else {
 				try {
 					_bugReportMapping = new XMLMapping(bugReportModelFile);
 				} catch (InvalidModelException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (IOException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (SAXException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (ParserConfigurationException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				}
 			}
@@ -451,10 +456,12 @@ public class BugReport extends KVCObject implements XMLSerializable, TableModel 
 	 * @return
 	 */
 	public boolean isValid() {
-		if (title == null || title.trim().length() == 0)
+		if (title == null || title.trim().length() == 0) {
 			return false;
-		if (description == null || description.trim().length() == 0)
+		}
+		if (description == null || description.trim().length() == 0) {
 			return false;
+		}
 		return true;
 	}
 

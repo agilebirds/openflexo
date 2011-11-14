@@ -41,7 +41,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.openflexo.ColorCst;
-import org.openflexo.FlexoCst;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.ie.dm.table.WidgetRemovedFromTable;
@@ -96,13 +95,14 @@ public class IEHyperlinkWidgetView extends AbstractInnerTableWidgetView<IEHyperl
 			public Dimension getPreferredSize() {
 				if (getModel().isCustomButton()) {
 					String s = getModel().getValue();
-					if (s == null)
+					if (s == null) {
 						return new Dimension(30, 15);
-					else {
+					} else {
 						return new Dimension((int) (getFontMetrics(getFont()).getStringBounds(s, getGraphics()).getWidth() + 32), 15);
 					}
-				} else
+				} else {
 					return super.getPreferredSize();
+				}
 			}
 		};
 		performLabelTransformation();
@@ -147,8 +147,9 @@ public class IEHyperlinkWidgetView extends AbstractInnerTableWidgetView<IEHyperl
 		}
 		if (modif instanceof WidgetRemovedFromTable && arg0 == getModel()) {
 			delete();
-		} else
+		} else {
 			super.update(arg0, modif);
+		}
 	}
 
 	public void updateDisplayedValue() {
@@ -181,15 +182,17 @@ public class IEHyperlinkWidgetView extends AbstractInnerTableWidgetView<IEHyperl
 
 	@Override
 	public void performDoubleClick(JComponent clickedContainer, Point clickedPoint, boolean isShiftDown) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("performDoubleClick() ");
+		}
 		editLabel();
 	}
 
 	@Override
 	public void editLabel() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Edit ie hyperlink");
+		}
 		labelEditing = true;
 		_jLabelTextField = new JTextField(getModel().getValue()) {
 			/**
@@ -220,22 +223,24 @@ public class IEHyperlinkWidgetView extends AbstractInnerTableWidgetView<IEHyperl
 			public Dimension getPreferredSize() {
 				if (getModel().isCustomButton()) {
 					String s = _jLabelTextField.getText();
-					if (s == null)
+					if (s == null) {
 						return new Dimension(30, 15);
-					else {
+					} else {
 						return new Dimension((int) (getFontMetrics(getFont()).getStringBounds(s, getGraphics()).getWidth() + 32), 15);
 					}
-				} else
+				} else {
 					return super.getPreferredSize();
+				}
 			}
 		};
 		_jLabelTextField.setFont(_jLabel.getFont());
 		_jLabelTextField.setForeground(_jLabel.getForeground());
 		_jLabelTextField.setBackground(_jLabel.getBackground());
-		if (getModel().isCustomButton())
+		if (getModel().isCustomButton()) {
 			_jLabelTextField.setBorder(BorderFactory.createMatteBorder(0, 15, 1, 15, _jLabel.getBackground()));
-		else
+		} else {
 			_jLabelTextField.setBorder(BorderFactory.createEmptyBorder(0, 10, 1, 10));
+		}
 		// _jLabelTextField.setForeground(getFlexoNode().getTextColor());
 		_jLabelTextField.setBounds(_jLabel.getBounds());
 		_jLabelTextField.setHorizontalAlignment(SwingConstants.CENTER);
@@ -291,26 +296,31 @@ public class IEHyperlinkWidgetView extends AbstractInnerTableWidgetView<IEHyperl
 	public Dimension getPreferredSize() {
 		if (getHoldsNextComputedPreferredSize()) {
 			Dimension storedSize = storedPrefSize();
-			if (storedSize != null)
+			if (storedSize != null) {
 				return storedSize;
+			}
 		}
 		Dimension d;
-		if (getModel().isCustomButton())
+		if (getModel().isCustomButton()) {
 			d = new Dimension(
 					(int) (labelEditing ? _jLabelTextField.getPreferredSize().getWidth() : _jLabel.getPreferredSize().getWidth()) + 2, 17);
-		else
+		} else {
 			d = super.getPreferredSize();
-		if (getHoldsNextComputedPreferredSize())
+		}
+		if (getHoldsNextComputedPreferredSize()) {
 			storePrefSize(d);
+		}
 		return d;
 	}
 
 	public void finalizeEditHyperlink() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Finalize edit ie hyperlink");
+		}
 		// _jLabel.setText(_jLabelTextField.getText());
-		if (labelEditing)
+		if (labelEditing) {
 			getModel().setValue(_jLabelTextField.getText());
+		}
 		labelEditing = false;
 		remove(_jLabelTextField);
 		add(_jLabel);

@@ -160,8 +160,9 @@ public class JDKRepository extends DMRepository {
 				}
 				return primitivePackage;
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("No package for entity " + entity.getFullyQualifiedName());
+				}
 			}
 		}
 		return super.packageForEntity(entity);

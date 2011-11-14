@@ -312,10 +312,11 @@ public class ValidationModelViewer extends JPanel implements GraphicalFlexoObser
 				public void run() {
 					if (_validationModel.getSize() > 0) {
 						_validationModelList.setSelectedIndex(0);
-						if (((ValidationRuleSet) _validationModel.getElementAt(0)).getRules().size() > 0)
+						if (((ValidationRuleSet) _validationModel.getElementAt(0)).getRules().size() > 0) {
 							disableButton.setText(((ValidationRuleSet) _validationModel.getElementAt(0)).getRules().firstElement()
 									.getIsEnabled() ? FlexoLocalization.localizedForKey("disableRule", disableButton) : FlexoLocalization
 									.localizedForKey("enableRule", disableButton));
+						}
 					}
 					_consistencyCheckDialog.toFront();
 				}
@@ -326,8 +327,9 @@ public class ValidationModelViewer extends JPanel implements GraphicalFlexoObser
 	void setCurrentRuleSet(ValidationRuleSet ruleSet) {
 		_currentRuleSet = ruleSet;
 		if (_currentRuleSet != null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Sets RuleSet to " + ruleSet.getTypeName());
+			}
 			_ruleSetList.setModel(_currentRuleSet);
 			if (_currentRuleSet.getSize() > 0) {
 				_ruleSetList.setSelectedIndex(0);
@@ -341,10 +343,11 @@ public class ValidationModelViewer extends JPanel implements GraphicalFlexoObser
 			_ruleName.setText(rule.getLocalizedName());
 			_ruleDescription.setText(rule.getLocalizedDescription());
 			_ruleType.setText(rule.getTypeName());
-			if (rule.getIsEnabled())
+			if (rule.getIsEnabled()) {
 				disableButton.setText(FlexoLocalization.localizedForKey("disableRule", disableButton));
-			else
+			} else {
 				disableButton.setText(FlexoLocalization.localizedForKey("enableRule", disableButton));
+			}
 			disableButton.setEnabled(true);
 		} else {
 			_ruleName.setText("");
@@ -355,8 +358,9 @@ public class ValidationModelViewer extends JPanel implements GraphicalFlexoObser
 	}
 
 	public void setValidationModel(ValidationModel validationModel) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setValidationModel() with " + validationModel.getSize());
+		}
 
 		_validationModel = validationModel;
 		_validationModelList.setModel(validationModel);
@@ -402,8 +406,9 @@ public class ValidationModelViewer extends JPanel implements GraphicalFlexoObser
 			if (returned instanceof JLabel) {
 				JLabel label = (JLabel) returned;
 				label.setText(((ValidationRule) value).getLocalizedName());
-				if (!((ValidationRule) value).getIsEnabled())
+				if (!((ValidationRule) value).getIsEnabled()) {
 					returned.setForeground(Color.GRAY);
+				}
 			}
 			return returned;
 		}

@@ -116,16 +116,18 @@ public abstract class AbstractGCAction<A extends FlexoAction<?, T1, CGObject>, T
 			for (CGObject obj : globalSelection) {
 				boolean alreadyContained = false;
 				for (CGObject temp : returned) {
-					if (obj.isContainedIn(temp))
+					if (obj.isContainedIn(temp)) {
 						alreadyContained = true;
+					}
 				}
 				if (!alreadyContained) {
 					// Not already contained, add it
 					// Before to do it, look if some other are to be removed
 					Vector<CGObject> removeThose = new Vector<CGObject>();
 					for (CGObject temp : returned) {
-						if (temp.isContainedIn(obj))
+						if (temp.isContainedIn(obj)) {
 							removeThose.add(temp);
+						}
 					}
 					returned.removeAll(removeThose);
 					returned.add(obj);

@@ -67,8 +67,9 @@ public class SubmitVersionInitializer extends ActionInitializer {
 					return true;
 				}
 
-				if (action.getDocItem() == null)
+				if (action.getDocItem() == null) {
 					return false;
+				}
 				if (action.getVersion() == null) {
 					Language language = null;
 					if (action.getDocItem().getDocResourceCenter().getLanguages().size() > 1) {
@@ -87,8 +88,9 @@ public class SubmitVersionInitializer extends ActionInitializer {
 					} else if (action.getDocItem().getDocResourceCenter().getLanguages().size() == 1) {
 						language = action.getDocItem().getDocResourceCenter().getLanguages().firstElement();
 					}
-					if (language == null)
+					if (language == null) {
 						return false;
+					}
 					SubmitNewVersionPopup editVersionPopup = new SubmitNewVersionPopup(action.getDocItem(), language,
 							getControllerActionInitializer().getDREController().getFlexoFrame(), getControllerActionInitializer()
 									.getDREController().getEditor());

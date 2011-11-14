@@ -102,10 +102,12 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 	}
 
 	public String getProcessResourceName() {
-		if (getProcess() != null)
+		if (getProcess() != null) {
 			return getProcess().getFlexoResource().getName();
-		if (processResourceName == null)
+		}
+		if (processResourceName == null) {
 			return getName();// Kept for backward compatibility
+		}
 		return processResourceName;
 	}
 
@@ -115,10 +117,11 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 
 	@Override
 	public boolean isImported() {
-		if (getFatherProcessNode() != null)
+		if (getFatherProcessNode() != null) {
 			return getFatherProcessNode().isImported();
-		else
+		} else {
 			return getFlexoWorkflow().getImportedRootNodeProcesses().contains(this);
+		}
 	}
 
 	@Override
@@ -131,17 +134,19 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 	}
 
 	public void setFatherProcessNode(FlexoProcessNode fatherProcessNode) {
-		if (_father == fatherProcessNode)
+		if (_father == fatherProcessNode) {
 			return;
+		}
 		boolean isImported = isImported();
 		// 1. remove from current father
-		if (_father != null)
+		if (_father != null) {
 			_father.removeFromSubProcesses(this);
-		else {
-			if (isImported)
+		} else {
+			if (isImported) {
 				getWorkflow().removeFromImportedRootNodeProcesses(this);
-			else
+			} else {
 				getWorkflow().removeFromTopLevelNodeProcesses(this);
+			}
 		}
 		// 2. We set the father
 		_father = fatherProcessNode;
@@ -187,8 +192,9 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 	public void removeFromSubProcesses(FlexoProcessNode aProcessNode) {
 		if (_childs.contains(aProcessNode)) {
 			ProcessFolder folder = aProcessNode.getParentFolder();
-			if (folder != null && !aProcessNode.isMoving)
+			if (folder != null && !aProcessNode.isMoving) {
 				folder.removeFromProcesses(aProcessNode);
+			}
 			_childs.remove(aProcessNode);
 			clearOrphanProcesses();
 			aProcessNode.setFatherProcessNode(null);
@@ -230,17 +236,19 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 	@Override
 	public void delete() {
 		boolean isImported = isImported();
-		if (getParentFolder() != null)
+		if (getParentFolder() != null) {
 			getParentFolder().removeFromProcesses(this);
+		}
 		if (getFatherProcessNode() != null) {
 			getFatherProcessNode().removeFromSubProcesses(this);
 			_father = null;
 			setProcess(null);
 		} else if (getWorkflow() != null) {
-			if (isImported)
+			if (isImported) {
 				getWorkflow().removeFromImportedRootNodeProcesses(this);
-			else
+			} else {
 				getWorkflow().removeFromTopLevelNodeProcesses(this);
+			}
 		}
 		super.delete();
 	}
@@ -255,8 +263,9 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 	public void addParentFolder(ProcessFolder parent) {
 		if (!parentFolders.contains(parent)) {
 			parentFolders.add(parent);
-			if (getFatherProcessNode() != null)
+			if (getFatherProcessNode() != null) {
 				getFatherProcessNode().clearOrphanProcesses();
+			}
 		}
 	}
 
@@ -272,12 +281,14 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 	}
 
 	public ProcessFolder getParentFolder() {
-		if (getFatherProcessNode() == null)
+		if (getFatherProcessNode() == null) {
 			return null;
-		if (parentFolders.size() > 0)
+		}
+		if (parentFolders.size() > 0) {
 			return parentFolders.firstElement();
-		else
+		} else {
 			return null;
+		}
 	}
 
 	public String getFileName() {
@@ -323,8 +334,9 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 	}
 
 	public File getFile() {
-		if ((getProcess() != null) && (getProcess().getFlexoResource() != null))
+		if ((getProcess() != null) && (getProcess().getFlexoResource() != null)) {
 			return getProcess().getFlexoResource().getFile();
+		}
 		return null;
 	}
 
@@ -340,8 +352,9 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 
 	@Override
 	public int getIndex() {
-		if (isBeingCloned())
+		if (isBeingCloned()) {
 			return -1;
+		}
 		if (index == -1 && getCollection() != null) {
 			index = getCollection().length;
 			FlexoIndexManager.reIndexObjectOfArray(getCollection());
@@ -371,8 +384,9 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 
 	@Override
 	public void setIndexValue(int index) {
-		if (this.index == index)
+		if (this.index == index) {
 			return;
+		}
 		int old = this.index;
 		this.index = index;
 		setChanged();
@@ -397,8 +411,9 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 	 */
 	@Override
 	public FlexoProcessNode[] getCollection() {
-		if (getFatherProcessNode() != null)
+		if (getFatherProcessNode() != null) {
 			return getFatherProcessNode().getSubProcesses().toArray(new FlexoProcessNode[0]);
+		}
 
 		return getFlexoWorkflow()._getTopLevelNodeProcesses().toArray(new FlexoProcessNode[0]);
 	}
@@ -410,8 +425,9 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 	public void setProcess(FlexoProcess process) {
 		if (this.process == null) {
 			this.process = process;
-			if (process != null)
+			if (process != null) {
 				process.setProcessNode(this);
+			}
 		}
 	}
 
@@ -440,12 +456,13 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 		if (getParentFolder() != null) {
 			return getParentFolder().getProcesses().indexOf(this) + 1;
 		} else {
-			if (getFatherProcessNode() != null)
+			if (getFatherProcessNode() != null) {
 				return getFatherProcessNode().getOrphanProcesses().indexOf(this) + 1;
-			else if (isImported())
+			} else if (isImported()) {
 				return getWorkflow().getImportedRootNodeProcesses().indexOf(this) + 1;
-			else
+			} else {
 				return getWorkflow().getTopLevelFlexoProcesses().indexOf(this) + 1;
+			}
 		}
 	}
 

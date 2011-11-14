@@ -40,21 +40,24 @@ public class FlexoApplicationAdapter extends ApplicationAdapter {
 	private static final Logger logger = Logger.getLogger(FlexoApplicationAdapter.class.getPackage().getName());
 
 	public void handleAbout(ApplicationEvent event) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("handleAbout");
+		}
 		event.setHandled(true);
 		new AboutDialog();
 	}
 
 	public void handlePreferences(ApplicationEvent event) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("handlePreferences");
+		}
 		PreferencesController.instance().showPreferences();
 	}
 
 	public void handleQuit(ApplicationEvent event) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("handleQuit");
+		}
 		try {
 			ModuleLoader.quit();
 		} catch (ProjectExitingCancelledException e) {

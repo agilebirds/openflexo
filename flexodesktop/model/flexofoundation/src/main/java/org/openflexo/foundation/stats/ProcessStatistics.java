@@ -146,8 +146,9 @@ public class ProcessStatistics extends FlexoStatistics<FlexoProcess> {
 		int actCount = 0;
 		for (AbstractActivityNode node : activities) {
 			node.getStatistics().refresh();
-			if (!node.isBeginOrEndNode())
+			if (!node.isBeginOrEndNode()) {
 				actCount += 1;
+			}
 			aCount += node.getStatistics().getActionCount();
 			oCount += node.getStatistics().getOperationCount();
 

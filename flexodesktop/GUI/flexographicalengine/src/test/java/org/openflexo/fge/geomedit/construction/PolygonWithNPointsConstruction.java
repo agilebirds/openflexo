@@ -21,9 +21,9 @@ package org.openflexo.fge.geomedit.construction;
 
 import java.util.Vector;
 
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 
 public class PolygonWithNPointsConstruction extends PolygonConstruction {
 

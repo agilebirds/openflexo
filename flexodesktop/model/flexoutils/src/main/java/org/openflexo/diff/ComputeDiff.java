@@ -119,12 +119,16 @@ public class ComputeDiff {
 				l1 = next.line1 + next.inserted - 1;
 				show_from += next.deleted;
 				show_to += next.inserted;
-				for (i = next.line0; i <= l0 && !nontrivial; i++)
-					if (!ignore.execute(file0[i]))
+				for (i = next.line0; i <= l0 && !nontrivial; i++) {
+					if (!ignore.execute(file0[i])) {
 						nontrivial = true;
-				for (i = next.line1; i <= l1 && !nontrivial; i++)
-					if (!ignore.execute(file1[i]))
+					}
+				}
+				for (i = next.line1; i <= l1 && !nontrivial; i++) {
+					if (!ignore.execute(file1[i])) {
 						nontrivial = true;
+					}
+				}
 			}
 
 			first0 = f0;
@@ -135,8 +139,9 @@ public class ComputeDiff {
 			/* If all inserted or deleted lines are ignorable,
 			 tell the caller to ignore this hunk.  */
 
-			if (!nontrivial)
+			if (!nontrivial) {
 				show_from = show_to = 0;
+			}
 
 			deletes = show_from;
 			inserts = show_to;
@@ -152,15 +157,17 @@ public class ComputeDiff {
 
 			/* Determine range of line numbers involved in each file.  */
 			analyze_hunk(hunk);
-			if (deletes == 0 && inserts == 0)
+			if (deletes == 0 && inserts == 0) {
 				return;
+			}
 
-			if (inserts == 0)
+			if (inserts == 0) {
 				change = new RemovalChange();
-			else if (deletes == 0)
+			} else if (deletes == 0) {
 				change = new AdditionChange();
-			else
+			} else {
 				change = new ModificationChange();
+			}
 
 			change.first0 = first0;
 			change.first1 = first1;
@@ -314,9 +321,9 @@ public class ComputeDiff {
 
 		@Override
 		public String toString() {
-			if (changes.size() == 0)
+			if (changes.size() == 0) {
 				return "DiffReport: no changes";
-			else {
+			} else {
 				StringBuffer returned = new StringBuffer();
 				for (DiffChange c : getChanges()) {
 					returned.append(c + "\n");
@@ -335,8 +342,9 @@ public class ComputeDiff {
 
 		public DiffChange changeBefore(DiffChange change) {
 			int index = changes.indexOf(change);
-			if (index >= 1)
+			if (index >= 1) {
 				return changes.get(index - 1);
+			}
 			return null;
 		}
 
@@ -452,13 +460,15 @@ public class ComputeDiff {
 		public String toNiceStringDebugVersion(boolean isLeftOriented) {
 			StringBuffer removedStringBuffer = new StringBuffer();
 			removedStringBuffer.append("[");
-			for (int i = 0; i < removedString.length(); i++)
+			for (int i = 0; i < removedString.length(); i++) {
 				removedStringBuffer.append(" " + (int) (removedString.charAt(i)));
+			}
 			removedStringBuffer.append("]" + "(" + removedString.length() + ")");
 			StringBuffer addedStringBuffer = new StringBuffer();
 			addedStringBuffer.append("[");
-			for (int i = 0; i < addedString.length(); i++)
+			for (int i = 0; i < addedString.length(); i++) {
 				addedStringBuffer.append(" " + (int) (addedString.charAt(i)));
+			}
 			addedStringBuffer.append("]" + "(" + addedString.length() + ")");
 
 			return "MODIFICATION " + first0 + "," + last0 + " " + first1 + "," + last1 + " of TEXT:\n" + removedStringBuffer + "BY:\n"

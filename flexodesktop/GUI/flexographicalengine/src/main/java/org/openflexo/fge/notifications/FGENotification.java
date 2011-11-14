@@ -58,8 +58,9 @@ public class FGENotification implements InspectableModification {
 
 	@Override
 	public String propertyName() {
-		if (parameter == null)
+		if (parameter == null) {
 			return parameterName;
+		}
 		return parameter.name();
 	}
 
@@ -74,8 +75,9 @@ public class FGENotification implements InspectableModification {
 	}
 
 	public boolean isModelNotification() {
-		if (parameter == null)
+		if (parameter == null) {
 			return false;
+		}
 		return !parameter.equals(GraphicalRepresentation.Parameters.isSelected)
 				&& !parameter.equals(GraphicalRepresentation.Parameters.isFocused);
 	}

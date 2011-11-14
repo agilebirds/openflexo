@@ -111,8 +111,9 @@ public abstract class StaticBinding<T> extends AbstractBinding {
 
 		@Override
 		public StaticBinding convertFromString(String aValue) {
-			if (aValue.startsWith("$") && aValue.length() > 1)
+			if (aValue.startsWith("$") && aValue.length() > 1) {
 				return convertFromString(aValue.substring(1));
+			}
 
 			if (aValue.startsWith(DMType.DKV_PREFIX)) {
 				if (_bindable != null) {
@@ -122,23 +123,25 @@ public abstract class StaticBinding<T> extends AbstractBinding {
 						Domain domain = ((FlexoModelObject) _bindable).getProject().getDKVModel().getDomainNamed(domainName);
 						if (domain != null && st.hasMoreTokens()) {
 							Key key = domain.getKeyNamed(st.nextToken());
-							if (logger.isLoggable(Level.FINE))
+							if (logger.isLoggable(Level.FINE)) {
 								logger.fine("StaticBinding, found key: " + key);
-							if (key != null)
+							}
+							if (key != null) {
 								return new DKVBinding(null, null, key);
+							}
 						}
 					}
 				}
 			}
-			if (aValue.equalsIgnoreCase("true") || aValue.equalsIgnoreCase("yes"))
+			if (aValue.equalsIgnoreCase("true") || aValue.equalsIgnoreCase("yes")) {
 				return new BooleanStaticBinding(true);
-			else if (aValue.equalsIgnoreCase("false") || aValue.equalsIgnoreCase("no"))
+			} else if (aValue.equalsIgnoreCase("false") || aValue.equalsIgnoreCase("no")) {
 				return new BooleanStaticBinding(false);
-			else if (aValue.startsWith("\"") && aValue.endsWith("\"") && aValue.length() > 1)
+			} else if (aValue.startsWith("\"") && aValue.endsWith("\"") && aValue.length() > 1) {
 				return new StringStaticBinding(aValue.substring(1, aValue.length() - 1));
-			else if (aValue.startsWith("'") && aValue.endsWith("'") && aValue.length() > 1)
+			} else if (aValue.startsWith("'") && aValue.endsWith("'") && aValue.length() > 1) {
 				return new StringStaticBinding(aValue.substring(1, aValue.length() - 1));
-			else if (aValue.indexOf(",") > -1) {
+			} else if (aValue.indexOf(",") > -1) {
 				try {
 					return new DateStaticBinding(dateConverter.tryToConvertFromString(aValue));
 				} catch (ParseException e3) {
@@ -171,8 +174,9 @@ public abstract class StaticBinding<T> extends AbstractBinding {
 
 	@Override
 	public StaticBindingStringConverter getConverter() {
-		if (getProject() != null)
+		if (getProject() != null) {
 			return getProject().getStaticBindingConverter();
+		}
 		return null;
 	}
 
@@ -207,16 +211,19 @@ public abstract class StaticBinding<T> extends AbstractBinding {
 
 	@Override
 	public boolean equals(Object object) {
-		if (object == null)
+		if (object == null) {
 			return false;
+		}
 		if (object instanceof StaticBinding) {
 			StaticBinding sb = (StaticBinding) object;
 			if (getBindingDefinition() == null) {
-				if (sb.getBindingDefinition() != null)
+				if (sb.getBindingDefinition() != null) {
 					return false;
+				}
 			} else {
-				if (!getBindingDefinition().equals(sb.getBindingDefinition()))
+				if (!getBindingDefinition().equals(sb.getBindingDefinition())) {
 					return false;
+				}
 			}
 			return ((_owner == sb._owner) && sb.getValue() != null && getValue().equals(sb.getValue()));
 		} else {
@@ -238,48 +245,57 @@ public abstract class StaticBinding<T> extends AbstractBinding {
 
 	@Override
 	public boolean isBindingValid() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Is StaticBinding " + this + " valid ?");
+		}
 
 		if (getAccessedType() == null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Invalid binding because accessed type is null");
+			}
 			return false;
 		}
 
 		if (getBindingDefinition() == null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Invalid binding because binding definition is null");
+			}
 			return false;
 		} else if (getBindingDefinition().getIsSettable()) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Invalid binding because binding definition is declared as settable");
+			}
 			return false;
 		} else if (getBindingDefinition().getBindingDefinitionType() == BindingDefinitionType.EXECUTE) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Invalid binding because binding definition is declared as executable");
+			}
 			return false;
 		}
 
 		if (getProject() == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Project is null because owner is null for this binding value: " + getStringRepresentation()
 						+ " cannot determine if binding is valid");
+			}
 			return true;
 		}
 
-		if (getAccessedType().isObject())
+		if (getAccessedType().isObject()) {
 			return true;
+		}
 
 		if (_areTypesMatching()) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Valid binding");
+			}
 			return true;
 		}
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Invalid binding because types doesn't match: " + getAccessedType() + " cannot be assigned to "
 					+ getBindingDefinition().getType());
+		}
 		return false;
 
 	}

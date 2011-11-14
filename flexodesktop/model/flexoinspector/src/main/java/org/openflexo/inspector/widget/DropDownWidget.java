@@ -109,8 +109,9 @@ public class DropDownWidget extends MultipleValuesWidget<Object> {
 		});
 
 		_mySmallPanel.add(_jComboBox, BorderLayout.CENTER);
-		if (!model.hasValueForParameter("showReset") || model.getBooleanValueForParameter("showReset"))
+		if (!model.hasValueForParameter("showReset") || model.getBooleanValueForParameter("showReset")) {
 			_mySmallPanel.add(_resetButton, BorderLayout.EAST);
+		}
 		// _mySmallPanel.setBackground(InspectorCst.BACK_COLOR);
 		_mySmallPanel.setOpaque(true);
 		_mySmallPanel.setMinimumSize(MINIMUM_SIZE);
@@ -125,8 +126,9 @@ public class DropDownWidget extends MultipleValuesWidget<Object> {
 	}
 
 	protected void initJComboBox() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("initJComboBox()");
+		}
 		Dimension dimTemp = null;
 		Point locTemp = null;
 		Container parentTemp = null;
@@ -150,8 +152,9 @@ public class DropDownWidget extends MultipleValuesWidget<Object> {
 		_jComboBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Action performed in " + this.getClass().getName());
+				}
 				updateModelFromWidget();
 			}
 		});
@@ -160,9 +163,9 @@ public class DropDownWidget extends MultipleValuesWidget<Object> {
 			_jComboBox.setLocation(locTemp);
 			((JPanel) parentTemp).add(_jComboBox, BorderLayout.CENTER);
 			String s = _propertyModel.getValueForParameter("showReset");
-			if (s == null || !s.toLowerCase().equals("false"))
-
+			if (s == null || !s.toLowerCase().equals("false")) {
 				((JPanel) parentTemp).add(_resetButton, BorderLayout.EAST);
+			}
 		}
 		// Important: otherwise might be desynchronized
 		_jComboBox.revalidate();
@@ -188,8 +191,9 @@ public class DropDownWidget extends MultipleValuesWidget<Object> {
 
 	@Override
 	public synchronized void updateWidgetFromModel() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("updateWidgetFromModel()");
+		}
 		widgetUpdating = true;
 		initJComboBox();
 		_jComboBox.setSelectedItem(getObjectValue());
@@ -202,8 +206,9 @@ public class DropDownWidget extends MultipleValuesWidget<Object> {
 	@Override
 	public synchronized void updateModelFromWidget() {
 		modelUpdating = true;
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("updateModelFromWidget with " + _jComboBox.getSelectedItem());
+		}
 		if ((_jComboBox.getSelectedItem() != null) && (!widgetUpdating)) {
 			setObjectValue(_jComboBox.getSelectedItem());
 		}

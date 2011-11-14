@@ -47,8 +47,9 @@ public class RoleEditorController extends SelectionManagingDrawingController<Rol
 	@Override
 	public void delete() {
 		if (_controller != null) {
-			if (getDrawingView() != null)
+			if (getDrawingView() != null) {
 				_controller.removeModuleView(getDrawingView());
+			}
 			_controller.ROLE_EDITOR_PERSPECTIVE.removeFromRoleController(this);
 		}
 		super.delete();

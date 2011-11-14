@@ -103,8 +103,9 @@ public abstract class WSService extends WSObject implements FlexoObserver {
 
 	@Override
 	public void setName(String aName) throws DuplicateWSObjectException {
-		if (!isDeserializing())
+		if (!isDeserializing()) {
 			checkName(getWSLibrary(), aName, this);
+		}
 		// if no exception, set name
 		super.setName(aName);
 	}
@@ -166,8 +167,9 @@ public abstract class WSService extends WSObject implements FlexoObserver {
 	}
 
 	public WSPortType addServiceInterfaceAsPortType(ServiceInterface serviceInterface) throws FlexoException {
-		if (serviceInterface == null)
+		if (serviceInterface == null) {
 			throw new InvalidArgumentException("Input service interface is null", "ws_attempt_to_add_a_null_service_interface");
+		}
 		if (getWSLibrary().getParentOfServiceInterface(serviceInterface) != null) {
 			throw new InvalidArgumentException("This serviceInterface " + serviceInterface.getName() + " is already used in a WSService",
 					"ws_service_interface_already_used_in_a_ws_service");
@@ -184,8 +186,9 @@ public abstract class WSService extends WSObject implements FlexoObserver {
 
 	public void addToWSPortTypes(WSPortType pt) {
 		if (wsPortTypes.contains(pt)) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Attempt to insert twice the same PortType.");
+			}
 			return;
 		}
 
@@ -205,8 +208,9 @@ public abstract class WSService extends WSObject implements FlexoObserver {
 
 	public void removeFromWSPortTypes(WSPortType proc) {
 		if (!wsPortTypes.contains(proc)) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Attempt to remove a portType that can not be found: " + proc.getName());
+			}
 			return;
 		}
 		wsPortTypes.remove(proc);
@@ -223,8 +227,9 @@ public abstract class WSService extends WSObject implements FlexoObserver {
 	}
 
 	public WSRepository addRepository(WSDLRepository rep) throws DuplicateWSObjectException, InvalidArgumentException {
-		if (rep == null)
+		if (rep == null) {
 			throw new InvalidArgumentException("null repository", "ws_attempt_to_add_a_null_wsdlrepository_to_a_ws_service");
+		}
 
 		// proc.setIsWebService(true);
 		// TODO ADDITIONAL STUFF like calculate WSRepositories to include
@@ -235,8 +240,9 @@ public abstract class WSService extends WSObject implements FlexoObserver {
 
 	public void addToWSRepositories(WSRepository rep) {
 		if (wsRepositories.contains(rep)) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Attempt to insert twice the same Repository.");
+			}
 			return;
 		}
 
@@ -254,8 +260,9 @@ public abstract class WSService extends WSObject implements FlexoObserver {
 
 	public void removeFromWSRepositories(WSRepository rep) {
 		if (!wsRepositories.contains(rep)) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Attempt to remove a repository that can not be found: " + rep.getName());
+			}
 			return;
 		}
 		wsRepositories.remove(rep);
@@ -275,30 +282,36 @@ public abstract class WSService extends WSObject implements FlexoObserver {
 	}
 
 	public WSPortType getWSPortTypeNamed(String name) {
-		if (name == null)
+		if (name == null) {
 			return null;
+		}
 		Enumeration en = wsPortTypes.elements();
 		while (en.hasMoreElements()) {
 			WSPortType wsp = (WSPortType) en.nextElement();
-			if (wsp.getName() != null && wsp.getName().equals(name))
+			if (wsp.getName() != null && wsp.getName().equals(name)) {
 				return wsp;
+			}
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("WS PortType " + name + " not be found in service:" + getName());
+		}
 		return null;
 	}
 
 	public WSRepository getWSRepositoryNamed(String name) {
-		if (name == null)
+		if (name == null) {
 			return null;
+		}
 		Enumeration en = wsRepositories.elements();
 		while (en.hasMoreElements()) {
 			WSRepository wsr = (WSRepository) en.nextElement();
-			if (wsr.getName().equals(name))
+			if (wsr.getName().equals(name)) {
 				return wsr;
+			}
 		}
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("WS Repository " + name + " could not be found.");
+		}
 		return null;
 	}
 
@@ -335,8 +348,9 @@ public abstract class WSService extends WSObject implements FlexoObserver {
 	public void delete() {
 
 		// remove wsdl file ?
-		if (wsdlFile != null && wsdlFile.getFile() != null)
+		if (wsdlFile != null && wsdlFile.getFile() != null) {
 			FileUtils.recursiveDeleteFile(getWSDLFile().getFile());
+		}
 		wsdlFile = null;
 
 		wsPortTypes.clear();

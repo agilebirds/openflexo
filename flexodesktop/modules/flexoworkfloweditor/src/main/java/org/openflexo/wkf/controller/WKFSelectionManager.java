@@ -88,18 +88,20 @@ public class WKFSelectionManager extends SelectionManager {
 		for (FlexoModelObject o : new Vector<FlexoModelObject>(getSelection())) {
 			if (o instanceof PetriGraphNode) {
 				PetriGraphNode node = (PetriGraphNode) o;
-				if (parent == null)
+				if (parent == null) {
 					parent = node.getParentPetriGraph();
-				else if (node.getParentPetriGraph() != parent)
+				} else if (node.getParentPetriGraph() != parent) {
 					continue;
+				}
 				node.getParentPetriGraph().removeFromNodes(node);
 			}
 			if (o instanceof WKFArtefact) {
 				WKFArtefact annotation = (WKFArtefact) o;
-				if (parent == null)
+				if (parent == null) {
 					parent = annotation.getParentPetriGraph();
-				else if (annotation.getParentPetriGraph() != parent)
+				} else if (annotation.getParentPetriGraph() != parent) {
 					continue;
+				}
 				annotation.getParentPetriGraph().removeFromArtefacts(annotation);
 			}
 			if (o instanceof Role) {
@@ -151,11 +153,12 @@ public class WKFSelectionManager extends SelectionManager {
 	public FlexoModelObject getPasteContext() {
 		if (getWKFController().getCurrentModuleView() instanceof DrawingView) {
 			GraphicalRepresentation<?> gr = ((DrawingView) getWKFController().getCurrentModuleView()).getController().getLastSelectedGR();
-			if (gr != null && gr.getDrawable() instanceof FlexoModelObject)
+			if (gr != null && gr.getDrawable() instanceof FlexoModelObject) {
 				return (FlexoModelObject) gr.getDrawable();
-			else
+			} else {
 				return (FlexoModelObject) ((DrawingView<?>) getWKFController().getCurrentModuleView()).getDrawingGraphicalRepresentation()
 						.getDrawable();
+			}
 		}
 		return null;
 	}

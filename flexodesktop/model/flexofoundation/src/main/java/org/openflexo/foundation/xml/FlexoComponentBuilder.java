@@ -43,8 +43,9 @@ public class FlexoComponentBuilder extends FlexoBuilder<FlexoComponentResource> 
 	public FlexoComponentBuilder(ComponentDefinition def, FlexoComponentResource resource) {
 		super(resource);
 		this.componentDefinition = def;
-		if (componentDefinition.isLoaded())
+		if (componentDefinition.isLoaded()) {
 			woComponent = componentDefinition.getWOComponent();
+		}
 	}
 
 }

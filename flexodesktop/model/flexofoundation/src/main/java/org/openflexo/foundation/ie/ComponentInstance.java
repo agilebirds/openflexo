@@ -27,9 +27,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.toolbox.EmptyVector;
-import org.openflexo.xmlcode.XMLMapping;
-
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
@@ -72,6 +69,8 @@ import org.openflexo.foundation.xml.FlexoComponentBuilder;
 import org.openflexo.foundation.xml.FlexoNavigationMenuBuilder;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.EmptyVector;
+import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * A ComponentInstance represents an instance (a use case) of a ComponentDefinition in a given context (this context can be determined with
@@ -146,8 +145,9 @@ public abstract class ComponentInstance extends IEObject implements Bindable, Fl
 			while (i.hasNext() && removeDependancy) {
 				ComponentInstance ci = i.next();
 				if (ci != this) {
-					if (ci.getXMLResourceData() == oldResourceData)
+					if (ci.getXMLResourceData() == oldResourceData) {
 						removeDependancy = false;
+					}
 				}
 			}
 			if (removeDependancy) {
@@ -164,9 +164,10 @@ public abstract class ComponentInstance extends IEObject implements Bindable, Fl
 		if (newResourceData != null && getComponentDefinition() != null) {
 			newResourceData.getFlexoResource().addToDependantResources(getComponentDefinition().getComponentResource());
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not rebuid dependancy for resource data: " + newResourceData + " and component definition is "
 						+ getComponentDefinition() + " named: " + getComponentName());
+			}
 		}
 	}
 
@@ -199,8 +200,9 @@ public abstract class ComponentInstance extends IEObject implements Bindable, Fl
 
 	@Override
 	public BindingModel getBindingModel() {
-		if (getXMLResourceData() instanceof Bindable)
+		if (getXMLResourceData() instanceof Bindable) {
 			return ((Bindable) getXMLResourceData()).getBindingModel();
+		}
 		return null;
 	}
 
@@ -211,11 +213,12 @@ public abstract class ComponentInstance extends IEObject implements Bindable, Fl
 	 */
 	@Override
 	public XMLMapping getXMLMapping() {
-		if (getOwner() != null)
+		if (getOwner() != null) {
 			return getOwner().getXMLResourceData().getXMLMapping();
-		else {
-			if (logger.isLoggable(Level.SEVERE))
+		} else {
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("This component instance does not have nor an owner, nor a container nor a project. This is totally unacceptable.");
+			}
 			return null;
 		}
 	}
@@ -228,8 +231,9 @@ public abstract class ComponentInstance extends IEObject implements Bindable, Fl
 	 */
 	@Override
 	public XMLStorageResourceData getXMLResourceData() {
-		if (getOwner() != null)
+		if (getOwner() != null) {
 			return getOwner().getXMLResourceData();
+		}
 		return container;
 	}
 
@@ -258,17 +262,20 @@ public abstract class ComponentInstance extends IEObject implements Bindable, Fl
 	public ComponentDefinition getComponentDefinition() {
 		if (_componentDefinition == null && xmlComponentName != null) {
 			if (getProject() == null) {
-				if (isDeserializing())
+				if (isDeserializing()) {
 					return null;
-				if (logger.isLoggable(Level.WARNING)) // Can happen when a component has just been deleted
+				}
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Project not set for ComponentInstance ! Owner is " + getOwner());
+				}
 				return null;
 			}
 			ComponentDefinition aComponentDefinition = getProject().getFlexoComponentLibrary().getComponentNamed(xmlComponentName);
 			if (aComponentDefinition == null) {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("A ComponentInstance with component name : " + xmlComponentName + " has no component def. Owner is "
 							+ getOwner());
+				}
 			} else {
 				setComponentDefinition(aComponentDefinition, false);
 			}
@@ -286,8 +293,9 @@ public abstract class ComponentInstance extends IEObject implements Bindable, Fl
 
 	public void setComponentDefinition(ComponentDefinition aComponentDefinition, boolean notify) {
 		if (aComponentDefinition == null) {
-			if (logger.isLoggable(Level.SEVERE))
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Attempt to set a null component definition on a component instance! Track this call and make sure this never happens ever again.");
+			}
 			return;
 		}
 		xmlComponentName = aComponentDefinition.getComponentName();
@@ -295,17 +303,21 @@ public abstract class ComponentInstance extends IEObject implements Bindable, Fl
 			if (_componentDefinition != null && !(this instanceof DummyComponentInstance)) {
 				_componentDefinition.deleteObserver(this);
 				_componentDefinition.removeFromComponentInstances(this);
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Removing " + this + " as observer of " + _componentDefinition);
+				}
 			}
 			_componentDefinition = aComponentDefinition;
 			_componentDefinition.addObserver(this);
-			if (!(this instanceof DummyComponentInstance))
+			if (!(this instanceof DummyComponentInstance)) {
 				_componentDefinition.addToComponentInstances(this, notify);
-			if (logger.isLoggable(Level.FINE))
+			}
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Adding " + this + " as observer of " + _componentDefinition);
-			if (notify)
+			}
+			if (notify) {
 				setChanged();
+			}
 		}
 	}
 
@@ -316,8 +328,9 @@ public abstract class ComponentInstance extends IEObject implements Bindable, Fl
 
 	@Override
 	public void setChanged() {
-		if (getOwner() != null)
+		if (getOwner() != null) {
 			getOwner().setChanged();
+		}
 		super.setChanged();
 	}
 
@@ -376,10 +389,12 @@ public abstract class ComponentInstance extends IEObject implements Bindable, Fl
 	}
 
 	private void updateBindings() {
-		if (getComponentDefinition() == null)
+		if (getComponentDefinition() == null) {
 			return;
-		if (logger.isLoggable(Level.FINE))
+		}
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("updateBindings() in ComponentInstance");
+		}
 		Vector<ComponentInstanceBinding> toRemove = new Vector<ComponentInstanceBinding>();
 		toRemove.addAll(_bindings);
 		for (Enumeration en = getComponentDefinition().getBindingDefinitions().elements(); en.hasMoreElements();) {
@@ -412,16 +427,18 @@ public abstract class ComponentInstance extends IEObject implements Bindable, Fl
 			_knownBindings.put(bd, newBindingDefinition);
 			return newBindingDefinition;
 		} else {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Retrieve known ComponentInstanceBinding !");
+			}
 			return returned;
 		}
 	}
 
 	@Override
 	public void update(FlexoObservable o, DataModification dataModification) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("received update in ComponentInstance " + dataModification);
+		}
 		if ((o == getComponentDefinition()) && ((dataModification instanceof BindingAdded) || (dataModification instanceof BindingRemoved))) {
 			updateBindings();
 		}
@@ -447,8 +464,9 @@ public abstract class ComponentInstance extends IEObject implements Bindable, Fl
 			ComponentBindingDefinition newBD = getComponentDefinition().createNewBinding();
 			return getBinding(newBD);
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not create binding: cannot access ComponentDefinition !");
+			}
 			return null;
 		}
 	}
@@ -457,8 +475,9 @@ public abstract class ComponentInstance extends IEObject implements Bindable, Fl
 		if (getComponentDefinition() != null) {
 			getComponentDefinition().deleteBinding(cib.getBindingDefinition());
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not delete binding: cannot access ComponentDefinition !");
+			}
 		}
 	}
 
@@ -466,20 +485,22 @@ public abstract class ComponentInstance extends IEObject implements Bindable, Fl
 		if (getComponentDefinition() != null) {
 			return getComponentDefinition().isBindingDefinitionDeletable(cib.getBindingDefinition());
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not access binding: cannot access ComponentDefinition !");
+			}
 		}
 		return false;
 	}
 
 	@Override
 	public String getFullyQualifiedName() {
-		if (getOwner() instanceof IEWidget && ((IEWidget) getOwner()).getWOComponent() != null)
+		if (getOwner() instanceof IEWidget && ((IEWidget) getOwner()).getWOComponent() != null) {
 			return "COMPONENT_INSTANCE." + getName() + " in " + ((IEWidget) getOwner()).getWOComponent().getName();
-		else if (getOwner() != null)
+		} else if (getOwner() != null) {
 			return "COMPONENT_INSTANCE." + getName() + " in " + getOwner().getFullyQualifiedName();
-		else
+		} else {
 			return "COMPONENT_INSTANCE." + getName();
+		}
 	}
 
 	/**
@@ -496,11 +517,13 @@ public abstract class ComponentInstance extends IEObject implements Bindable, Fl
 	 * @param owner
 	 */
 	public final void setOwner(ComponentInstanceOwner owner) {
-		if (_owner == owner)
+		if (_owner == owner) {
 			return;
+		}
 		XMLStorageResourceData oldResourceData = getXMLResourceData();
-		if (owner == null)
+		if (owner == null) {
 			delete();
+		}
 		container = null;
 		_owner = owner;
 		_componentDefinition = null;// We reset the _componentDefinition so that in case of conversion we will try to retrieve the component
@@ -509,8 +532,9 @@ public abstract class ComponentInstance extends IEObject implements Bindable, Fl
 		for (ComponentInstanceBinding b : _bindings) {
 			b.setComponentInstance(this);
 		}
-		if (owner != null)
+		if (owner != null) {
 			updateDependancies(oldResourceData, getXMLResourceData());
+		}
 	}
 
 	public boolean isValidInstance() {
@@ -521,9 +545,10 @@ public abstract class ComponentInstance extends IEObject implements Bindable, Fl
 		if (getXMLResourceData() != null) {
 			rebuildDependancy(getXMLResourceData());
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Cannot rebuild dependancies because XMLResourceData=" + getXMLResourceData() + " and ComponentDefinition="
 						+ getComponentDefinition());
+			}
 		}
 	}
 
@@ -790,8 +815,9 @@ public abstract class ComponentInstance extends IEObject implements Bindable, Fl
 				widget.createsBindingVariable(newVariableName, DMType.makeResolvedDMType(newVariableType), implementationType, false);
 				DMProperty property = null;
 				ComponentDMEntity componentDMEntity = widget.getComponentDMEntity();
-				if (componentDMEntity != null)
+				if (componentDMEntity != null) {
 					property = componentDMEntity.getDMProperty(newVariableName);
+				}
 				if (property != null) {
 					BindingVariable var = widget.getBindingModel().bindingVariableNamed("component");
 					BindingValue newBindingValue = new BindingValue(bindingDefinition, widget);

@@ -57,8 +57,9 @@ public class DataPropertyStatement extends PropertyStatement {
 	}
 
 	public OntologicDataType getDataType() {
-		if (getProperty() != null)
+		if (getProperty() != null) {
 			return property.getDataType();
+		}
 		return null;
 	}
 

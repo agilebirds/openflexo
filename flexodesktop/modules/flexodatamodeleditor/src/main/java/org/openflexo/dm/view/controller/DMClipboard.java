@@ -71,7 +71,8 @@ public class DMClipboard extends FlexoClipboard {
 	}
 
 	protected void exportClipboardToPalette(File paletteDirectory, String newPaletteElementName) {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Sorry, exporting clipboard not implemented.");
+		}
 	}
 }

@@ -54,8 +54,9 @@ public class CleanIntermediateFiles extends AbstractGCAction<CleanIntermediateFi
 		protected boolean isVisibleForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) {
 			Vector<CGObject> topLevelObjects = getSelectedTopLevelObjects(focusedObject, globalSelection);
 			for (CGObject obj : topLevelObjects) {
-				if (obj instanceof GeneratedOutput)
+				if (obj instanceof GeneratedOutput) {
 					return false;
+				}
 			}
 			return true;
 		}
@@ -63,8 +64,9 @@ public class CleanIntermediateFiles extends AbstractGCAction<CleanIntermediateFi
 		@Override
 		protected boolean isEnabledForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) {
 			GenerationRepository repository = getRepository(focusedObject, globalSelection);
-			if (repository == null)
+			if (repository == null) {
 				return false;
+			}
 			return repository.getManageHistory();
 		}
 
@@ -83,8 +85,9 @@ public class CleanIntermediateFiles extends AbstractGCAction<CleanIntermediateFi
 		logger.info("Clean intermediate versions");
 		for (CGFile file : getSelectedFiles()) {
 			logger.info("Clean for file " + file.getFileName());
-			if (file.getGeneratedResourceData() instanceof AbstractGeneratedFile)
+			if (file.getGeneratedResourceData() instanceof AbstractGeneratedFile) {
 				((AbstractGeneratedFile) file.getGeneratedResourceData()).getHistory().clean(cleanBeforeFirstRelease, releasesToClean);
+			}
 		}
 	}
 

@@ -60,8 +60,9 @@ public class OperatorLoopElement extends OperatorNodeElement implements Expansio
 	private boolean isObserving = false;
 
 	private void addObserver() {
-		if (isObserving)
+		if (isObserving) {
 			return;
+		}
 		if (getLOOPOperator().getExecutionPetriGraph() != null) {
 			getLOOPOperator().getExecutionPetriGraph().addObserver(this);
 			isObserving = true;
@@ -83,11 +84,13 @@ public class OperatorLoopElement extends OperatorNodeElement implements Expansio
 			addObserver();
 			for (Enumeration<PetriGraphNode> en = getLOOPOperator().getExecutionPetriGraph().getSortedNodes(); en.hasMoreElements();) {
 				PetriGraphNode element = en.nextElement();
-				if (!element.isGrouped())
+				if (!element.isGrouped()) {
 					addToChilds(element);
+				}
 			}
-			for (WKFGroup group : getLOOPOperator().getExecutionPetriGraph().getGroups())
+			for (WKFGroup group : getLOOPOperator().getExecutionPetriGraph().getGroups()) {
 				addToChilds(group);
+			}
 		}
 		super.buildChildrenVector();
 	}
@@ -108,14 +111,16 @@ public class OperatorLoopElement extends OperatorNodeElement implements Expansio
 
 	@Override
 	public void collapse() {
-		if (getLOOPOperator().hasExecutionPetriGraph() && isExpanded())
+		if (getLOOPOperator().hasExecutionPetriGraph() && isExpanded()) {
 			OpenLoopedPetriGraph.actionType.makeNewAction(getLOOPOperator(), null, getProjectBrowser().getEditor()).doAction();
+		}
 	}
 
 	@Override
 	public void expand() {
-		if (getLOOPOperator().hasExecutionPetriGraph() && !isExpanded())
+		if (getLOOPOperator().hasExecutionPetriGraph() && !isExpanded()) {
 			OpenLoopedPetriGraph.actionType.makeNewAction(getLOOPOperator(), null, getProjectBrowser().getEditor()).doAction();
+		}
 	}
 
 	@Override

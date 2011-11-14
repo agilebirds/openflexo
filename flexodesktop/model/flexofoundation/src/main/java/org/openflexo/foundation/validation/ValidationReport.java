@@ -269,12 +269,15 @@ public class ValidationReport extends AbstractTableModel {
 				addToValidationIssues(anIssue);
 			}
 		} else {
-			if (issue instanceof InformationIssue)
+			if (issue instanceof InformationIssue) {
 				_infosNb++;
-			if (issue instanceof ValidationWarning)
+			}
+			if (issue instanceof ValidationWarning) {
 				_warningNb++;
-			if (issue instanceof ValidationError)
+			}
+			if (issue instanceof ValidationError) {
 				_errorNb++;
+			}
 			_validationIssues.add(issue);
 			issue.setValidationReport(this);
 			fireTableDataChanged();
@@ -283,12 +286,15 @@ public class ValidationReport extends AbstractTableModel {
 
 	public void removeFromValidationIssues(ValidationIssue issue) {
 		if (_validationIssues.contains(issue)) {
-			if (issue instanceof InformationIssue)
+			if (issue instanceof InformationIssue) {
 				_infosNb--;
-			if (issue instanceof ValidationWarning)
+			}
+			if (issue instanceof ValidationWarning) {
 				_warningNb--;
-			if (issue instanceof ValidationError)
+			}
+			if (issue instanceof ValidationError) {
 				_errorNb--;
+			}
 			_validationIssues.remove(issue);
 			fireTableDataChanged();
 		}
@@ -350,8 +356,9 @@ public class ValidationReport extends AbstractTableModel {
 	public String errorAsString() {
 		StringBuffer sb = new StringBuffer();
 		for (ValidationIssue issue : _validationIssues) {
-			if (issue instanceof ValidationError)
+			if (issue instanceof ValidationError) {
 				sb.append(issue.toString() + "\n");
+			}
 		}
 		return sb.toString();
 	}
@@ -359,8 +366,9 @@ public class ValidationReport extends AbstractTableModel {
 	public String warningAsString() {
 		StringBuffer sb = new StringBuffer();
 		for (ValidationIssue issue : _validationIssues) {
-			if (issue instanceof ValidationWarning)
+			if (issue instanceof ValidationWarning) {
 				sb.append(issue.toString() + "\n");
+			}
 		}
 		return sb.toString();
 	}
@@ -370,16 +378,18 @@ public class ValidationReport extends AbstractTableModel {
 	}
 
 	public void setMode(ReportMode mode) {
-		if (mode == null)
+		if (mode == null) {
 			mode = ReportMode.ALL;
+		}
 		this.mode = mode;
 		fireTableDataChanged();
 	}
 
 	public void delete() {
 		Enumeration<ValidationIssue> en = ((ValidationIssueVector) _validationIssues.clone()).elements();
-		while (en.hasMoreElements())
+		while (en.hasMoreElements()) {
 			en.nextElement().delete();
+		}
 
 	}
 

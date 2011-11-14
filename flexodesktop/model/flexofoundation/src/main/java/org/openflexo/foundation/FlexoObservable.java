@@ -115,8 +115,9 @@ public class FlexoObservable extends FlexoObject implements HasPropertyChangeSup
 	 *             if the parameter o is null.
 	 */
 	public void addObserver(FlexoObserver o) {
-		if (o == null)
+		if (o == null) {
 			throw new NullPointerException();
+		}
 		synchronized (_flexoObservers) {
 
 			if (!isObservedBy(o)) {
@@ -140,9 +141,9 @@ public class FlexoObservable extends FlexoObject implements HasPropertyChangeSup
 			Iterator<WeakReference<FlexoObserver>> i = _flexoObservers.iterator();
 			while (i.hasNext()) {
 				WeakReference<FlexoObserver> reference = i.next();
-				if (reference.get() == null)
+				if (reference.get() == null) {
 					i.remove();
-				else if (reference.get() == o) {
+				} else if (reference.get() == o) {
 					i.remove();
 					break;
 				}
@@ -160,9 +161,9 @@ public class FlexoObservable extends FlexoObject implements HasPropertyChangeSup
 		Iterator<WeakReference<InspectorObserver>> i = _inspectorObservers.iterator();
 		while (i.hasNext()) {
 			WeakReference<InspectorObserver> reference = i.next();
-			if (reference.get() == null)
+			if (reference.get() == null) {
 				i.remove();
-			else if (reference.get() == obs) {
+			} else if (reference.get() == obs) {
 				i.remove();
 				break;
 			}
@@ -179,8 +180,9 @@ public class FlexoObservable extends FlexoObject implements HasPropertyChangeSup
 	 *             if the parameter o is null.
 	 */
 	public void addInspectorObserver(InspectorObserver obs) {
-		if (obs == null)
+		if (obs == null) {
 			throw new NullPointerException();
+		}
 		if (!isObservedBy(obs)) {
 			_inspectorObservers.add(new WeakReference<InspectorObserver>(obs));
 		}
@@ -236,8 +238,9 @@ public class FlexoObservable extends FlexoObject implements HasPropertyChangeSup
 				 * progress 2) a recently unregistered FlexoObserver will be
 				 * wrongly notified when it doesn't care
 				 */
-				if (!changed && !(arg instanceof ResourceStatusModification))
+				if (!changed && !(arg instanceof ResourceStatusModification)) {
 					return;
+				}
 				arrLocal1 = _flexoObservers.toArray(arrLocal1);
 				arrLocal2 = _inspectorObservers.toArray(arrLocal2);
 				clearChanged();
@@ -293,8 +296,9 @@ public class FlexoObservable extends FlexoObject implements HasPropertyChangeSup
 			@Override
 			public synchronized int indexOf(Object o, int index) {
 				for (int i = index; i < size(); i++) {
-					if (elementData[i] == o)
+					if (elementData[i] == o) {
 						return i;
+					}
 				}
 				return -1;
 			}
@@ -303,18 +307,20 @@ public class FlexoObservable extends FlexoObject implements HasPropertyChangeSup
 		Iterator<WeakReference<FlexoObserver>> i = _flexoObservers.iterator();
 		while (i.hasNext()) {
 			WeakReference<FlexoObserver> reference = i.next();
-			if (reference.get() == null)
+			if (reference.get() == null) {
 				i.remove();
-			else
+			} else {
 				returned.add(reference.get());
+			}
 		}
 		Iterator<WeakReference<InspectorObserver>> i2 = _inspectorObservers.iterator();
 		while (i2.hasNext()) {
 			WeakReference<InspectorObserver> reference = i2.next();
-			if (reference.get() == null)
+			if (reference.get() == null) {
 				i2.remove();
-			else
+			} else {
 				returned.add(reference.get());
+			}
 		}
 		return returned;
 	}
@@ -324,22 +330,25 @@ public class FlexoObservable extends FlexoObject implements HasPropertyChangeSup
 	 */
 	public void printObservers() {
 		Enumeration e = getAllObservers().elements();
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Observers of: " + getClass().getName() + " / " + this);
+		}
 		int i = 0;
 		while (e.hasMoreElements()) {
 			Object object = e.nextElement();
 			if (object instanceof FlexoObserver) {
 				FlexoObserver o = (FlexoObserver) object;
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info(" * " + i + " hash= " + Integer.toHexString(o.hashCode()) + " FlexoObserver: " + o.getClass().getName()
 							+ " / " + o);
+				}
 			}
 			if (object instanceof InspectorObserver) {
 				InspectorObserver o = (InspectorObserver) object;
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info(" * " + i + " hash= " + Integer.toHexString(o.hashCode()) + " InspectorObserver: " + o.getClass().getName()
 							+ " / " + o);
+				}
 			}
 			i++;
 		}
@@ -416,8 +425,9 @@ public class FlexoObservable extends FlexoObject implements HasPropertyChangeSup
 		for (Enumeration en = observerClasses.keys(); en.hasMoreElements();) {
 			Class temp = (Class) en.nextElement();
 			if (observerClass.isAssignableFrom(temp)) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Enable observing for " + temp.getName());
+				}
 				observerClasses.put(temp, new Boolean(true));
 			}
 		}
@@ -430,16 +440,18 @@ public class FlexoObservable extends FlexoObject implements HasPropertyChangeSup
 		for (Enumeration en = observerClasses.keys(); en.hasMoreElements();) {
 			Class temp = (Class) en.nextElement();
 			if (observerClass.isAssignableFrom(temp)) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Disable observing for " + temp.getName());
+				}
 				observerClasses.put(temp, new Boolean(false));
 			}
 		}
 	}
 
 	public static boolean areSameValue(Object o1, Object o2) {
-		if (o1 == null)
+		if (o1 == null) {
 			return o2 == null;
+		}
 		return o1.equals(o2);
 	}
 
@@ -449,10 +461,11 @@ public class FlexoObservable extends FlexoObject implements HasPropertyChangeSup
 			Iterator<WeakReference<FlexoObserver>> i = _flexoObservers.iterator();
 			while (i.hasNext()) {
 				WeakReference<FlexoObserver> reference = i.next();
-				if (reference.get() == null)
+				if (reference.get() == null) {
 					i.remove();
-				else if (reference.get() == observer)
+				} else if (reference.get() == observer) {
 					return true;
+				}
 			}
 			return false;
 		}
@@ -462,10 +475,11 @@ public class FlexoObservable extends FlexoObject implements HasPropertyChangeSup
 		Iterator<WeakReference<InspectorObserver>> i = _inspectorObservers.iterator();
 		while (i.hasNext()) {
 			WeakReference<InspectorObserver> reference = i.next();
-			if (reference.get() == null)
+			if (reference.get() == null) {
 				i.remove();
-			else if (reference.get() == observer)
+			} else if (reference.get() == observer) {
 				return true;
+			}
 		}
 		return false;
 	}

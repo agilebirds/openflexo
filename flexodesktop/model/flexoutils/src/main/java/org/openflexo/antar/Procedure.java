@@ -45,8 +45,9 @@ public class Procedure implements AlgorithmicUnit {
 
 	public Procedure(String procedureName, ControlGraph controlGraph, ProcedureParameter... parameters) {
 		this(procedureName, controlGraph);
-		for (ProcedureParameter p : parameters)
+		for (ProcedureParameter p : parameters) {
 			addParameter(p);
+		}
 	}
 
 	public Procedure(String procedureName, ControlGraph controlGraph, String comment, ProcedureParameter... parameters) {
@@ -56,8 +57,9 @@ public class Procedure implements AlgorithmicUnit {
 
 	public Procedure(String procedureName, Vector<ProcedureParameter> parameters, ControlGraph controlGraph) {
 		this(procedureName, controlGraph);
-		for (ProcedureParameter p : parameters)
+		for (ProcedureParameter p : parameters) {
 			addParameter(p);
+		}
 	}
 
 	public Procedure(String procedureName, Vector<ProcedureParameter> parameters, ControlGraph controlGraph, String comment) {

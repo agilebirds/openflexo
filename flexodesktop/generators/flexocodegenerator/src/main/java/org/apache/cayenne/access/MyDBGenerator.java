@@ -599,8 +599,9 @@ public class MyDBGenerator {
 						break;
 					}
 				}
-				if (needAutoPK)
+				if (needAutoPK) {
 					tablesWithAutoPk.add(nextEntity);
+				}
 			}
 		}
 
@@ -610,16 +611,17 @@ public class MyDBGenerator {
 
 				@Override
 				public int compare(Object o1, Object o2) {
-					if (o1 == null)
+					if (o1 == null) {
 						return 1;
-					else if (o2 == null)
+					} else if (o2 == null) {
 						return -1;
-					else if (!(o1 instanceof DbEntity))
+					} else if (!(o1 instanceof DbEntity)) {
 						return 1;
-					else if (!(o2 instanceof DbEntity))
+					} else if (!(o2 instanceof DbEntity)) {
 						return -1;
-					else
+					} else {
 						return ((DbEntity) o1).getName().compareTo(((DbEntity) o2).getName());
+					}
 				}
 
 			});
@@ -630,9 +632,9 @@ public class MyDBGenerator {
 				Iterator i = v.iterator();
 				while (i.hasNext()) {
 					DbEntity e = (DbEntity) i.next();
-					if (tables.size() == 0)
+					if (tables.size() == 0) {
 						tables.add(e);
-					else {
+					} else {
 						Iterator i1 = tables.iterator();
 						int j = 0;
 						boolean inserted = false;
@@ -644,8 +646,9 @@ public class MyDBGenerator {
 							}
 							j++;
 						}
-						if (!inserted)
+						if (!inserted) {
 							tables.add(e);
+						}
 					}
 				}
 			} else {

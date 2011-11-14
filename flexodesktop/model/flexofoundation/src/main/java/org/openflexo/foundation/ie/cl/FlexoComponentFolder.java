@@ -35,7 +35,6 @@ import javax.swing.tree.TreeNode;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
-
 import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -185,15 +184,17 @@ public class FlexoComponentFolder extends IECLObject implements MutableTreeNode,
 			return createNewFolder(library, null, library.getProject().getProject().getProjectName());
 
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Cannot create root folder: a root folder is already declared");
+			}
 			return null;
 		}
 	}
 
 	public boolean containsComponents() {
-		if (getComponents().size() > 0)
+		if (getComponents().size() > 0) {
 			return true;
+		}
 		if (getSubFolders().size() > 0) {
 			boolean answer = false;
 			Enumeration en = getSubFolders().elements();
@@ -217,8 +218,9 @@ public class FlexoComponentFolder extends IECLObject implements MutableTreeNode,
 		if (parentFolder != null) {
 			parentFolder.addToSubFolders(newFolder);
 		} else {
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("NEW ROOT FOLDER");
+			}
 			library.setRootFolder(newFolder);
 		}
 		/*library.notifyObservers(new DataModification(
@@ -245,8 +247,9 @@ public class FlexoComponentFolder extends IECLObject implements MutableTreeNode,
 				return folder;
 			}
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Could not find folder named " + folderName);
+		}
 		return null;
 	}
 
@@ -279,22 +282,25 @@ public class FlexoComponentFolder extends IECLObject implements MutableTreeNode,
 			Enumeration en = getSubFolders().elements();
 			while (en.hasMoreElements()) {
 				boolean isDeleted = ((FlexoComponentFolder) en.nextElement()).delete(def);
-				if (isDeleted)
+				if (isDeleted) {
 					return true;
+				}
 			}
 			return false;
 		}
 	}
 
 	public boolean isValidForANewComponentName(String value) {
-		if (value == null)
+		if (value == null) {
 			return false;
+		}
 		return getComponentNamed(value) == null;
 	}
 
 	public ComponentDefinition getComponentNamed(String value) {
-		if (value == null)
+		if (value == null) {
 			return null;
+		}
 
 		String searchedName = value;
 
@@ -302,8 +308,9 @@ public class FlexoComponentFolder extends IECLObject implements MutableTreeNode,
 		// quand meme !
 		// Ben, il faudrait que tu solutionnes le pb a la source !
 		if (value.lastIndexOf("#") > -1) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Tab notation with '#' is deprecated and should be replaced by tab_name only ! See Ben to do it !");
+			}
 			StringTokenizer st = new StringTokenizer(value, "#");
 			String newValue = null;
 			while (st.hasMoreTokens()) {
@@ -326,8 +333,9 @@ public class FlexoComponentFolder extends IECLObject implements MutableTreeNode,
 			cur = ((FlexoComponentFolder) en.nextElement()).getComponentNamed(searchedName);
 		}
 
-		if (cur != null && cur.getComponentName().toLowerCase().equals(searchedName.toLowerCase()))
+		if (cur != null && cur.getComponentName().toLowerCase().equals(searchedName.toLowerCase())) {
 			return cur;
+		}
 		return null;
 	}
 
@@ -348,8 +356,9 @@ public class FlexoComponentFolder extends IECLObject implements MutableTreeNode,
 		ComponentDefinition cur = null;
 		while (en.hasMoreElements()) {
 			cur = (ComponentDefinition) en.nextElement();
-			if (cur instanceof OperationComponentDefinition)
+			if (cur instanceof OperationComponentDefinition) {
 				answer.add((OperationComponentDefinition) cur);
+			}
 		}
 		en = getSubFolders().elements();
 		while (en.hasMoreElements()) {
@@ -364,8 +373,9 @@ public class FlexoComponentFolder extends IECLObject implements MutableTreeNode,
 		ComponentDefinition cur = null;
 		while (en.hasMoreElements()) {
 			cur = (ComponentDefinition) en.nextElement();
-			if (cur instanceof TabComponentDefinition)
+			if (cur instanceof TabComponentDefinition) {
 				answer.add((TabComponentDefinition) cur);
+			}
 		}
 		en = getSubFolders().elements();
 		while (en.hasMoreElements()) {
@@ -380,8 +390,9 @@ public class FlexoComponentFolder extends IECLObject implements MutableTreeNode,
 		ComponentDefinition cur = null;
 		while (en.hasMoreElements()) {
 			cur = (ComponentDefinition) en.nextElement();
-			if (cur instanceof PopupComponentDefinition)
+			if (cur instanceof PopupComponentDefinition) {
 				answer.add((PopupComponentDefinition) cur);
+			}
 		}
 		en = getSubFolders().elements();
 		while (en.hasMoreElements()) {
@@ -411,8 +422,9 @@ public class FlexoComponentFolder extends IECLObject implements MutableTreeNode,
 			v.addAll(f.getAllComponents());
 		}
 		Enumeration<ComponentDefinition> en1 = getSortedComponents();
-		while (en1.hasMoreElements())
+		while (en1.hasMoreElements()) {
 			v.add(en1.nextElement());
+		}
 		return v;
 	}
 
@@ -425,9 +437,10 @@ public class FlexoComponentFolder extends IECLObject implements MutableTreeNode,
 
 	public void addToComponents(ComponentDefinition cd) {
 		if ((cd.getFolder() != null) && (cd.getFolder() != this)) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("UNEXPECTEDELY Move component " + cd + " from folder " + cd.getFolder().getName() + " to folder "
 						+ getName());
+			}
 			cd.getFolder().removeFromComponents(cd);
 		}
 		_components.add(cd);
@@ -486,8 +499,9 @@ public class FlexoComponentFolder extends IECLObject implements MutableTreeNode,
 						}
 					}
 					// We don't care if no index has been set, it will then keep its current one which is the last one.
-				} else
+				} else {
 					sub.setIndex(1);
+				}
 				FlexoIndexManager.reIndexObjectOfArray(getSubFolders().toArray(new FlexoComponentFolder[0]));
 			}
 			sub.setComponentLibrary(getComponentLibrary());
@@ -510,8 +524,9 @@ public class FlexoComponentFolder extends IECLObject implements MutableTreeNode,
 
 	@Override
 	public void setName(String name) throws DuplicateFolderNameException, InvalidNameException {
-		if (getFatherFolder() != null && getFatherFolder().getFolderNamed(name) != null)
+		if (getFatherFolder() != null && getFatherFolder().getFolderNamed(name) != null) {
 			throw new DuplicateFolderNameException(this, name);
+		}
 		if (!isDeserializing() && !name.matches(FileUtils.GOOD_CHARACTERS_REG_EXP + "+")) {
 			throw new InvalidNameException(name);
 		}
@@ -558,11 +573,13 @@ public class FlexoComponentFolder extends IECLObject implements MutableTreeNode,
 			setComponentLibrary(((FlexoComponentFolder) arg0).getComponentLibrary());
 		}
 		_fatherFolder = (FlexoComponentFolder) arg0;
-		if (!isDeserializing())
-			if (_fatherFolder == null)
+		if (!isDeserializing()) {
+			if (_fatherFolder == null) {
 				this.index = -1;
-			else
+			} else {
 				this.index = _fatherFolder.getSubFolders().size();
+			}
+		}
 
 	}
 
@@ -624,10 +641,11 @@ public class FlexoComponentFolder extends IECLObject implements MutableTreeNode,
 
 	public String getComponentPrefix() {
 		if (componentPrefix == null) {
-			if (getProject().getProjectName().length() > 2)
+			if (getProject().getProjectName().length() > 2) {
 				componentPrefix = getProject().getProjectName().substring(0, 3).toUpperCase();
-			else
+			} else {
 				componentPrefix = getProject().getProjectName().toUpperCase();
+			}
 		}
 		return componentPrefix;
 	}
@@ -696,8 +714,9 @@ public class FlexoComponentFolder extends IECLObject implements MutableTreeNode,
 
 			} catch (Exception e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 			}
 		}
@@ -885,8 +904,9 @@ public class FlexoComponentFolder extends IECLObject implements MutableTreeNode,
 		Enumeration<FlexoComponentFolder> en = getSubFolders().elements();
 		while (en.hasMoreElements()) {
 			FlexoComponentFolder folder = en.nextElement();
-			if (folder.getName().toLowerCase().equals(name))
+			if (folder.getName().toLowerCase().equals(name)) {
 				return folder;
+			}
 		}
 		return null;
 	}
@@ -922,10 +942,11 @@ public class FlexoComponentFolder extends IECLObject implements MutableTreeNode,
 		Enumeration en = getAllSubFolders().elements();
 		while (en.hasMoreElements()) {
 			FlexoComponentFolder f = (FlexoComponentFolder) en.nextElement();
-			if (f.getFolderType() == type)
+			if (f.getFolderType() == type) {
 				return f;
-			else
+			} else {
 				retval = f.getFolderTyped(type);
+			}
 		}
 		if (isRootFolder() && retval == null) {
 			retval = createNewFolder(getComponentLibrary(), this, FlexoLocalization.localizedForKey(type.getName().toLowerCase()));
@@ -962,8 +983,9 @@ public class FlexoComponentFolder extends IECLObject implements MutableTreeNode,
 
 	@Override
 	public int getIndex() {
-		if (isBeingCloned())
+		if (isBeingCloned()) {
 			return -1;
+		}
 		if (index == -1 && getCollection() != null) {
 			index = getCollection().length;
 			FlexoIndexManager.reIndexObjectOfArray(getCollection());
@@ -993,8 +1015,9 @@ public class FlexoComponentFolder extends IECLObject implements MutableTreeNode,
 
 	@Override
 	public void setIndexValue(int index) {
-		if (this.index == index)
+		if (this.index == index) {
 			return;
+		}
 		int old = this.index;
 		this.index = index;
 		setChanged();
@@ -1012,8 +1035,9 @@ public class FlexoComponentFolder extends IECLObject implements MutableTreeNode,
 	 */
 	@Override
 	public FlexoComponentFolder[] getCollection() {
-		if (getFatherFolder() == null)
+		if (getFatherFolder() == null) {
 			return new FlexoComponentFolder[] { this };
+		}
 		return getFatherFolder().getSubFolders().toArray(new FlexoComponentFolder[0]);
 	}
 

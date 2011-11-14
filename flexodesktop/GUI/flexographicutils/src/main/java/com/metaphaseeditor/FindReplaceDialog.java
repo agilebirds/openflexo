@@ -77,6 +77,7 @@ public class FindReplaceDialog extends javax.swing.JDialog {
 		findWhatLabel.setText("Find What");
 
 		findWhatTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+			@Override
 			public void keyTyped(java.awt.event.KeyEvent evt) {
 				findWhatTextFieldKeyTyped(evt);
 			}
@@ -88,6 +89,7 @@ public class FindReplaceDialog extends javax.swing.JDialog {
 
 		closeButton.setText("Close");
 		closeButton.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				closeButtonActionPerformed(evt);
 			}
@@ -96,6 +98,7 @@ public class FindReplaceDialog extends javax.swing.JDialog {
 		replaceAllButton.setText("Replace All");
 		replaceAllButton.setEnabled(false);
 		replaceAllButton.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				replaceAllButtonActionPerformed(evt);
 			}
@@ -104,6 +107,7 @@ public class FindReplaceDialog extends javax.swing.JDialog {
 		replaceButton.setText("Replace");
 		replaceButton.setEnabled(false);
 		replaceButton.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				replaceButtonActionPerformed(evt);
 			}
@@ -112,6 +116,7 @@ public class FindReplaceDialog extends javax.swing.JDialog {
 		findButton.setText("Find");
 		findButton.setEnabled(false);
 		findButton.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				findButtonActionPerformed(evt);
 			}

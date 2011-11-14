@@ -167,16 +167,18 @@ public class EntityFromWidgets {
 			if (modelObject instanceof IEWidget) {
 				IEWidget widget = (IEWidget) modelObject;
 				if (_factory.isRelevant(widget)) {
-					if (_component == null)
+					if (_component == null) {
 						_component = widget.getWOComponent();
-					else {
-						if (_component != widget.getWOComponent())
+					} else {
+						if (_component != widget.getWOComponent()) {
 							throw new IllegalArgumentException("All selected widgets must be part of the same component.");
+						}
 					}
-					if (useDMEOEntity)
+					if (useDMEOEntity) {
 						reply.put(widget, _factory.getEOAttributeProposal(widget));
-					else
+					} else {
 						reply.put(widget, _factory.getDMAttributeProposal(widget));
+					}
 				}
 			}
 		}
@@ -186,8 +188,9 @@ public class EntityFromWidgets {
 	public boolean isPropertyNameUsed(String propertyName) {
 		Iterator<PropertyProposal> it = relevantWidgets.values().iterator();
 		while (it.hasNext()) {
-			if (it.next().getName().equals(propertyName))
+			if (it.next().getName().equals(propertyName)) {
 				return true;
+			}
 		}
 		return false;
 	}

@@ -22,9 +22,9 @@ package org.openflexo.fge.geomedit.edition;
 import java.util.Vector;
 
 import org.openflexo.fge.geom.FGEComplexCurve;
+import org.openflexo.fge.geom.FGEGeneralShape.Closure;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGESegment;
-import org.openflexo.fge.geom.FGEGeneralShape.Closure;
 import org.openflexo.fge.geomedit.ComplexCurve;
 import org.openflexo.fge.geomedit.GeomEditController;
 import org.openflexo.fge.geomedit.construction.ComplexCurveWithNPointsConstruction;
@@ -60,8 +60,9 @@ public class CreateCurveWithNPoints extends Edition {
 		Vector<PointConstruction> pc = new Vector<PointConstruction>();
 		for (EditionInput o : inputs) {
 			PointConstruction pp = ((ObtainPoint) o).getConstruction();
-			if (pp != null)
+			if (pp != null) {
 				pc.add(pp);
+			}
 		}
 		addObject(new ComplexCurve(getController().getDrawing().getModel(), new ComplexCurveWithNPointsConstruction(pc)));
 	}

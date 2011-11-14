@@ -102,29 +102,33 @@ public abstract class WSFolder extends WSObject {
 	}
 
 	public WSPortType getWSPortTypeNamed(String name) {
-		if (name == null)
+		if (name == null) {
 			return null;
+		}
 		WSPortType found = null;
 		Enumeration en = getWSServices().elements();
 		while (en.hasMoreElements()) {
 			WSService group = (WSService) en.nextElement();
 			found = group.getWSPortTypeNamed(name);
-			if (found != null)
+			if (found != null) {
 				return found;
+			}
 		}
 		return null;
 	}
 
 	public WSRepository getWSRepositoryNamed(String name) {
-		if (name == null)
+		if (name == null) {
 			return null;
+		}
 		WSRepository found = null;
 		Enumeration en = getWSServices().elements();
 		while (en.hasMoreElements()) {
 			WSService group = (WSService) en.nextElement();
 			found = group.getWSRepositoryNamed(name);
-			if (found != null)
+			if (found != null) {
 				return found;
+			}
 		}
 		return null;
 	}

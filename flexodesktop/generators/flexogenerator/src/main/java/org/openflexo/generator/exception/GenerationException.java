@@ -59,8 +59,9 @@ public class GenerationException extends FlexoException implements IGenerationEx
 
 	@Override
 	public String getDetails() {
-		if (_details == null || _details.trim().length() == 0)
+		if (_details == null || _details.trim().length() == 0) {
 			return getMessage();
+		}
 		return _details;
 	}
 

@@ -95,11 +95,13 @@ public class HibernateEnumContainer extends TechnologyModelObject implements Fle
 	@Override
 	public void delete() {
 
-		for (HibernateEnum hibernateEnum : new Vector<HibernateEnum>(getHibernateEnums()))
+		for (HibernateEnum hibernateEnum : new Vector<HibernateEnum>(getHibernateEnums())) {
 			hibernateEnum.delete();
+		}
 
-		if (getHibernateModel() != null)
+		if (getHibernateModel() != null) {
 			getHibernateModel().setHibernateEnumContainer(null);
+		}
 
 		setChanged();
 		notifyObservers(new SGObjectDeletedModification());
@@ -123,8 +125,9 @@ public class HibernateEnumContainer extends TechnologyModelObject implements Fle
 	 */
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (dataModification instanceof NameChanged)
+		if (dataModification instanceof NameChanged) {
 			sortHibernateEnums();
+		}
 	}
 
 	/* ===================== */
@@ -144,13 +147,15 @@ public class HibernateEnumContainer extends TechnologyModelObject implements Fle
 		if (requireChange(this.hibernateEnums, hibernateEnums)) {
 			Vector<HibernateEnum> oldValue = this.hibernateEnums;
 
-			for (HibernateEnum hibernateEnum : oldValue)
+			for (HibernateEnum hibernateEnum : oldValue) {
 				hibernateEnum.deleteObserver(this);
+			}
 
 			this.hibernateEnums = hibernateEnums;
 
-			for (HibernateEnum hibernateEnum : hibernateEnums)
+			for (HibernateEnum hibernateEnum : hibernateEnums) {
 				hibernateEnum.addObserver(this);
+			}
 
 			sortHibernateEnums();
 			setChanged();

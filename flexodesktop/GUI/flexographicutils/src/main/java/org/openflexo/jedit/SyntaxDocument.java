@@ -59,8 +59,9 @@ public class SyntaxDocument extends PlainDocument {
 	 */
 	public void setTokenMarker(TokenMarker tm) {
 		tokenMarker = tm;
-		if (tm == null)
+		if (tm == null) {
 			return;
+		}
 		tokenMarker.insertLines(0, getDefaultRootElement().getElementCount());
 		tokenizeLines();
 	}
@@ -82,8 +83,9 @@ public class SyntaxDocument extends PlainDocument {
 	 *            The number of lines, after the first one to parse
 	 */
 	public void tokenizeLines(int start, int len) {
-		if (tokenMarker == null || !tokenMarker.supportsMultilineTokens())
+		if (tokenMarker == null || !tokenMarker.supportsMultilineTokens()) {
 			return;
+		}
 
 		Segment lineSegment = new Segment();
 		Element map = getDefaultRootElement();

@@ -41,11 +41,10 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import org.openflexo.ColorCst;
+import org.openflexo.drm.DocItem;
 import org.openflexo.icon.DREIconLibrary;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
-
-import org.openflexo.drm.DocItem;
 
 public class DocItemListView extends JPanel {
 	static final Logger logger = Logger.getLogger(DocItemListView.class.getPackage().getName());
@@ -147,14 +146,16 @@ public class DocItemListView extends JPanel {
 			plusButton.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent mouseEvent) {
-					if (plusButton.isEnabled())
+					if (plusButton.isEnabled()) {
 						plusButton.setIcon(IconLibrary.BROWSER_PLUS_SELECTED_ICON);
+					}
 				}
 
 				@Override
 				public void mouseReleased(MouseEvent mouseEvent) {
-					if (plusButton.isEnabled())
+					if (plusButton.isEnabled()) {
 						plusButton.setIcon(IconLibrary.BROWSER_PLUS_ICON);
+					}
 				}
 			});
 
@@ -173,14 +174,16 @@ public class DocItemListView extends JPanel {
 			minusButton.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent mouseEvent) {
-					if (minusButton.isEnabled())
+					if (minusButton.isEnabled()) {
 						minusButton.setIcon(IconLibrary.BROWSER_MINUS_SELECTED_ICON);
+					}
 				}
 
 				@Override
 				public void mouseReleased(MouseEvent mouseEvent) {
-					if (minusButton.isEnabled())
+					if (minusButton.isEnabled()) {
 						minusButton.setIcon(IconLibrary.BROWSER_MINUS_ICON);
+					}
 				}
 			});
 

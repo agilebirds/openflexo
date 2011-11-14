@@ -27,8 +27,8 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.view.ViewConnector;
-import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.ViewObject;
+import org.openflexo.foundation.view.ViewShape;
 
 public class AddConnector extends FlexoAction<AddConnector, ViewShape, ViewObject> {
 
@@ -78,8 +78,9 @@ public class AddConnector extends FlexoAction<AddConnector, ViewShape, ViewObjec
 		if (getFocusedObject() != null && getFromShape() != null && getToShape() != null) {
 			ViewObject parent = ViewObject.getFirstCommonAncestor(getFromShape(), getToShape());
 			logger.info("Parent=" + parent);
-			if (parent == null)
+			if (parent == null) {
 				throw new IllegalArgumentException("No common ancestor");
+			}
 			_newConnector = new ViewConnector(getFromShape().getShema(), getFromShape(), getToShape());
 			_newConnector.setDescription(annotation);
 			parent.addToChilds(_newConnector);
@@ -97,8 +98,9 @@ public class AddConnector extends FlexoAction<AddConnector, ViewShape, ViewObjec
 	}
 
 	public ViewShape getFromShape() {
-		if (_fromShape == null)
+		if (_fromShape == null) {
 			return getFocusedObject();
+		}
 		return _fromShape;
 	}
 

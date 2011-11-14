@@ -25,9 +25,9 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JSpinner;
+import javax.swing.JSpinner.DefaultEditor;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
-import javax.swing.JSpinner.DefaultEditor;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -96,8 +96,9 @@ public class FloatWidget extends DenaliWidget<Float> {
 		JComponent editor = valueChooser.getEditor();
 		if (editor instanceof DefaultEditor) {
 			((DefaultEditor) editor).getTextField().setHorizontalAlignment(SwingConstants.LEFT);
-			if (ToolBox.getPLATFORM() != ToolBox.MACOS)
+			if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
 				((DefaultEditor) editor).getTextField().setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 0));
+			}
 		}
 		if (model.hasValueForParameter(READONLY_TEXTFIELD) && model.getBooleanValueForParameter(READONLY_TEXTFIELD)) {
 			valueChooser.setEnabled(false);

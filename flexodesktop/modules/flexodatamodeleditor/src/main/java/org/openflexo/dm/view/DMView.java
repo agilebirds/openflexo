@@ -60,10 +60,12 @@ public abstract class DMView<O extends DMObject> extends CompoundTabularView<O> 
 	}
 
 	public DMTabularView findTabularViewContaining(DMObject anObject) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("findTabularViewContaining() " + this + " obj: " + anObject);
-		if (anObject == null)
+		}
+		if (anObject == null) {
 			return null;
+		}
 		for (Enumeration en = getMasterTabularViews().elements(); en.hasMoreElements();) {
 			DMTabularView next = (DMTabularView) en.nextElement();
 			if (next.getModel().indexOf(anObject) > -1) {
@@ -112,8 +114,9 @@ public abstract class DMView<O extends DMObject> extends CompoundTabularView<O> 
 
 	@Override
 	public void deleteModuleView() {
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Removing DM view :" + getDMObject().getName());
+		}
 		getDMController().removeModuleView(this);
 	}
 

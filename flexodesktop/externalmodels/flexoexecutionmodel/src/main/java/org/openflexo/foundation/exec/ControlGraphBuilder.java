@@ -68,15 +68,17 @@ public abstract class ControlGraphBuilder {
 	protected ControlGraph makeSequentialControlGraph(ControlGraph... statements) {
 		Vector<ControlGraph> listOfStatements = new Vector<ControlGraph>();
 		for (ControlGraph statement : statements) {
-			if (statement != null && !(statement instanceof Nop && !statement.hasComment()))
+			if (statement != null && !(statement instanceof Nop && !statement.hasComment())) {
 				listOfStatements.add(statement);
+			}
 		}
 		return makeSequentialControlGraph(listOfStatements);
 	}
 
 	protected ControlGraph makeSequentialControlGraph(Vector<ControlGraph> listOfStatements) {
-		if (listOfStatements == null || listOfStatements.size() == 0)
+		if (listOfStatements == null || listOfStatements.size() == 0) {
 			return new Nop();
+		}
 
 		if (listOfStatements.size() == 1) {
 			return listOfStatements.firstElement();
@@ -84,16 +86,18 @@ public abstract class ControlGraphBuilder {
 
 		else {
 			Sequence returned = new Sequence();
-			for (ControlGraph statement : listOfStatements)
+			for (ControlGraph statement : listOfStatements) {
 				returned.addToStatements(statement);
+			}
 			returned.normalize();
 			return returned.normalize();
 		}
 	}
 
 	protected ControlGraph makeFlowControlGraph(Vector<ControlGraph> listOfStatements) {
-		if (listOfStatements == null || listOfStatements.size() == 0)
+		if (listOfStatements == null || listOfStatements.size() == 0) {
 			return new Nop();
+		}
 
 		if (listOfStatements.size() == 1) {
 			return listOfStatements.firstElement();
@@ -101,8 +105,9 @@ public abstract class ControlGraphBuilder {
 
 		else {
 			Flow returned = new Flow();
-			for (ControlGraph statement : listOfStatements)
+			for (ControlGraph statement : listOfStatements) {
 				returned.addToStatements(statement);
+			}
 			returned.normalize();
 			return returned.normalize();
 		}

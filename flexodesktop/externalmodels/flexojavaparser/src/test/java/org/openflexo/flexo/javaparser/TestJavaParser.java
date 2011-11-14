@@ -24,6 +24,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+import junit.framework.TestCase;
+
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.javaparser.FJPJavaClass;
 import org.openflexo.javaparser.FJPJavaField;
@@ -31,8 +33,6 @@ import org.openflexo.javaparser.FJPJavaMethod;
 import org.openflexo.javaparser.FJPJavaSource;
 import org.openflexo.javaparser.JavaParser;
 import org.openflexo.toolbox.FileResource;
-
-import junit.framework.TestCase;
 
 import com.thoughtworks.qdox.model.ClassLibrary;
 

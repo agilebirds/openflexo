@@ -35,8 +35,6 @@ import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlOptions;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.wsdl.SchemaTypeExtractor;
-import org.openflexo.wsdl.XMLTypeMapper;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -185,8 +183,9 @@ public class SchemaImportTest extends TestCase {
 			schemas[i] = XmlObject.Factory.parse(xmlText, options);
 
 			schemas[i].documentProperties().setSourceName(wsdlUrl);
-			if (wsdlUrl.startsWith("file:"))
+			if (wsdlUrl.startsWith("file:")) {
 				;// fixRelativeFileImports( schemas[i] );
+			}
 		}
 
 		List result = new ArrayList(Arrays.asList(schemas));

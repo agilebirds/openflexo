@@ -36,13 +36,6 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.swing.VerticalLayout;
-import org.openflexo.view.FlexoPerspective;
-import org.openflexo.view.ModuleView;
-import org.openflexo.view.listener.FlexoActionButton;
-import org.openflexo.wysiwyg.FlexoWysiwyg;
-import org.openflexo.wysiwyg.FlexoWysiwygLight;
-
 import org.openflexo.doceditor.DECst;
 import org.openflexo.doceditor.controller.DEController;
 import org.openflexo.foundation.DataModification;
@@ -55,6 +48,12 @@ import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.icon.DEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.swing.VerticalLayout;
+import org.openflexo.view.FlexoPerspective;
+import org.openflexo.view.ModuleView;
+import org.openflexo.view.listener.FlexoActionButton;
+import org.openflexo.wysiwyg.FlexoWysiwyg;
+import org.openflexo.wysiwyg.FlexoWysiwygLight;
 
 /**
  * @author gpolet
@@ -161,16 +160,19 @@ public class DETOCEntryModuleView extends JPanel implements ModuleView<TOCEntry>
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (updatingModel)
+		if (updatingModel) {
 			return;
+		}
 		if ("title".equals(dataModification.propertyName())) {
 			_header.update();
 		}
 		if ("content".equals(dataModification.propertyName())) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("CGFileModuleView : RECEIVED " + dataModification + " for " + observable);
-			if (entryEditor != null)
+			}
+			if (entryEditor != null) {
 				entryEditor.setContent(_entry.getContent());
+			}
 		}
 	}
 

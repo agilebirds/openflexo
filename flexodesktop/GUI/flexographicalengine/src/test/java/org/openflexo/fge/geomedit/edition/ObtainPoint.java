@@ -56,8 +56,9 @@ public class ObtainPoint extends EditionInput<FGEPoint> {
 
 	public ObtainPoint(String anInputLabel, GeomEditController controller, boolean appendEndSelection) {
 		this(anInputLabel, controller);
-		if (appendEndSelection)
+		if (appendEndSelection) {
 			availableMethods.add(new EndEditionSelection());
+		}
 		endOnRightClick = appendEndSelection;
 	}
 
@@ -106,8 +107,9 @@ public class ObtainPoint extends EditionInput<FGEPoint> {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			if (focusedControlPoint != null) {
-				if (focusedObject != null)
+				if (focusedObject != null) {
 					focusedObject.setIsFocused(false);
+				}
 				if (focusedControlPoint instanceof DraggableControlPoint) {
 					setConstruction(new PointReference(((DraggableControlPoint) focusedControlPoint).getExplicitPointConstruction()));
 					done();
@@ -135,11 +137,13 @@ public class ObtainPoint extends EditionInput<FGEPoint> {
 			}
 
 			ControlArea<?> controlArea = (focused != null ? getFocusRetriever().getFocusedControlAreaForDrawable(focused, e) : null);
-			if (controlArea instanceof ControlPoint)
+			if (controlArea instanceof ControlPoint) {
 				focusedControlPoint = (ControlPoint) controlArea;
+			}
 
-			if (!(focusedControlPoint instanceof DraggableControlPoint || focusedControlPoint instanceof ComputedControlPoint))
+			if (!(focusedControlPoint instanceof DraggableControlPoint || focusedControlPoint instanceof ComputedControlPoint)) {
 				focusedControlPoint = null;
+			}
 		}
 
 		@Override
@@ -228,15 +232,17 @@ public class ObtainPoint extends EditionInput<FGEPoint> {
 
 					@Override
 					public String convertDataToString(FGEPoint data) {
-						if (data == null)
+						if (data == null) {
 							return "";
+						}
 						return getConverter().convertToString(data);
 					}
 
 					@Override
 					public FGEPoint convertStringToData(String string) {
-						if (string == null || string.trim().equals(""))
+						if (string == null || string.trim().equals("")) {
 							return null;
+						}
 						return getConverter().convertFromString(string);
 					}
 

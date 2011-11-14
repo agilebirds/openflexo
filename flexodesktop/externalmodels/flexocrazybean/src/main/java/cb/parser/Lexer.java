@@ -72,8 +72,9 @@ public class Lexer {
 
 		while (Character.isDigit((char) ch) || (ch == '.')) {
 			if (ch == '.') {
-				if (kind == FLOAT)
+				if (kind == FLOAT) {
 					throw new RuntimeException("Lexer Error: Found second . in float");
+				}
 				kind = FLOAT;
 			}
 
@@ -99,8 +100,9 @@ public class Lexer {
 				buf.append('\\');
 				ch = _reader.read();
 				buf.append((char) ch);
-			} else
+			} else {
 				buf.append((char) ch);
+			}
 			ch = _reader.read();
 		}
 
@@ -145,12 +147,13 @@ public class Lexer {
 
 		String img = buf.toString();
 
-		if (img.equals("TRUE"))
+		if (img.equals("TRUE")) {
 			return Token.TRUE;
-		else if (img.equals("FALSE"))
+		} else if (img.equals("FALSE")) {
 			return Token.FALSE;
-		else
+		} else {
 			return Token.createToken(IDENT, img, _line);
+		}
 	}
 
 	private Stack stack = new Stack();
@@ -160,8 +163,9 @@ public class Lexer {
 	}
 
 	public Token getToken() {
-		if (!stack.empty())
+		if (!stack.empty()) {
 			return (Token) stack.pop();
+		}
 
 		int kind;
 		String image;
@@ -218,8 +222,9 @@ public class Lexer {
 				if (Character.isJavaIdentifierStart((char) ch)) {
 					_reader.unread(ch);
 					return parseIdent();
-				} else
+				} else {
 					throw new RuntimeException("Lexer error: Unknown token: " + (char) ch + "(" + ch + ")" + (ch < 0));
+				}
 			}
 		} catch (IOException e) {
 			throw new RuntimeException("Lexer error: " + e);

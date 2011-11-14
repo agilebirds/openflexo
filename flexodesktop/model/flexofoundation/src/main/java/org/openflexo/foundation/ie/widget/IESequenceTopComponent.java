@@ -115,8 +115,9 @@ public class IESequenceTopComponent extends IESequence<IETopComponent> implement
 			if (tcc instanceof IEBlocWidget) {
 				IEBlocWidget w = (IEBlocWidget) tcc;
 				HTMLListDescriptor d = HTMLListDescriptor.createInstanceForBloc(w);
-				if (d != null)
+				if (d != null) {
 					v.add(d);
+				}
 			} else if (tcc instanceof IESequenceTopComponent) {
 				v.addAll(((IESequenceTopComponent) tcc).getAllHTMLTableList());
 			}
@@ -135,10 +136,11 @@ public class IESequenceTopComponent extends IESequence<IETopComponent> implement
 		Enumeration<IETopComponent> en = elements();
 		while (en.hasMoreElements()) {
 			IETopComponent element = en.nextElement();
-			if (element instanceof IESequenceTab)
+			if (element instanceof IESequenceTab) {
 				v.add(element);
-			else
+			} else {
 				v.addAll(element.getAllNonSequenceWidget());
+			}
 		}
 		return v;
 	}
@@ -149,8 +151,9 @@ public class IESequenceTopComponent extends IESequence<IETopComponent> implement
 		Enumeration en = elements();
 		while (en.hasMoreElements()) {
 			IETopComponent top = (IETopComponent) en.nextElement();
-			if (top instanceof IESequenceTab)
+			if (top instanceof IESequenceTab) {
 				reply.add((IESequenceTab) top);
+			}
 			reply.addAll(top.getAllTabContainers());
 		}
 		return reply;

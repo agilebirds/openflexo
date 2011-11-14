@@ -23,8 +23,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.bindings.AbstractBinding;
-import org.openflexo.foundation.bindings.WidgetBindingDefinition;
 import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
+import org.openflexo.foundation.bindings.WidgetBindingDefinition;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.dm.IEDataModification;
@@ -80,8 +80,9 @@ public abstract class IEControlWidget extends AbstractInnerTableWidget {
 	}
 
 	public RepetitionOperator getIsFilterForRepetition() {
-		if (isFilterForRepetition != null && isFilterForRepetition.isDeleted())
+		if (isFilterForRepetition != null && isFilterForRepetition.isDeleted()) {
 			isFilterForRepetition = null;
+		}
 		return isFilterForRepetition;
 	}
 
@@ -92,8 +93,9 @@ public abstract class IEControlWidget extends AbstractInnerTableWidget {
 	}
 
 	public AbstractBinding getBindingKeypath() {
-		if (isBeingCloned())
+		if (isBeingCloned()) {
 			return null;
+		}
 		return _bindingKeypath;
 	}
 
@@ -118,8 +120,9 @@ public abstract class IEControlWidget extends AbstractInnerTableWidget {
 
 	@Override
 	public void removeInvalidComponentInstances() {
-		if (logger.isLoggable(Level.FINEST))
+		if (logger.isLoggable(Level.FINEST)) {
 			logger.finest("Verifying component instances for " + getClass().getName());
+		}
 	}
 
 	@Override

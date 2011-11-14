@@ -73,8 +73,9 @@ public class IESelectionManager extends MouseSelectionManager {
 
 	@Override
 	public boolean performSelectionSelectAll() {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("'Select All' not implemented yet in Interface Editor");
+		}
 		return false;
 	}
 
@@ -101,10 +102,11 @@ public class IESelectionManager extends MouseSelectionManager {
 
 	private void processSelection(IEWidget w, boolean isShiftDown) {
 		if (w.getIsRootOfPartialComponent()) {
-			if (w.getParent() instanceof IEWidget)
+			if (w.getParent() instanceof IEWidget) {
 				w = (IEWidget) w.getParent();
-			else
+			} else {
 				return;
+			}
 		}
 		if (w instanceof IESequenceWidget && ((IESequenceWidget) w).isInTD()) {
 			w = (IETDWidget) ((IESequenceWidget) w).getParent();
@@ -120,16 +122,18 @@ public class IESelectionManager extends MouseSelectionManager {
 				addToSelected(w);
 			} else {
 				resetSelection();
-				if (w != null)
+				if (w != null) {
 					addToSelected(w);
+				}
 			}
 		}
 	}
 
 	@Override
 	public boolean performSelectionCut() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("performSelectionCut in " + getClass().getName());
+		}
 		_clipboard.performSelectionCut(getSelection());
 		Enumeration<FlexoModelObject> en = getSelection().elements();
 		while (en.hasMoreElements()) {
@@ -139,8 +143,9 @@ public class IESelectionManager extends MouseSelectionManager {
 				seq.removeFromContainer();
 				continue;
 			}
-			if (o instanceof IEWidget)
+			if (o instanceof IEWidget) {
 				((IEWidget) o).removeFromContainer();
+			}
 		}
 		return true;
 	}
@@ -170,10 +175,12 @@ public class IESelectionManager extends MouseSelectionManager {
 
 	@Override
 	public void processMousePressed(MouseEvent e) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.finest("Bounds:" + ((JComponent) e.getSource()).getBounds());
-		if (logger.isLoggable(Level.FINE))
+		}
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Class:" + e.getSource().getClass().getName());
+		}
 	}
 
 	@Override
@@ -187,8 +194,9 @@ public class IESelectionManager extends MouseSelectionManager {
 	 */
 	@Override
 	public FlexoModelObject getRootFocusedObject() {
-		if (getIEController().getCurrentEditedComponent() == null)
+		if (getIEController().getCurrentEditedComponent() == null) {
 			return null;
+		}
 		return getIEController().getCurrentEditedComponent().getComponentDefinition();
 	}
 

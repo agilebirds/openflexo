@@ -55,8 +55,9 @@ public class GraphicalElementPathElement<T extends ViewObject> implements Simple
 
 	@Override
 	public Class<? extends Bindable> getDeclaringClass() {
-		if (parentElement != null)
+		if (parentElement != null) {
 			return TypeUtils.getBaseClass(parentElement.getType());
+		}
 		return Bindable.class;
 	}
 

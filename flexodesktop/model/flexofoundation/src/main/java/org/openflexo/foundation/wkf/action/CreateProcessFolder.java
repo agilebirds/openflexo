@@ -79,21 +79,24 @@ public class CreateProcessFolder extends FlexoAction<CreateProcessFolder, FlexoM
 		newFolder = new ProcessFolder(getParent().getWorkflow(), getParent());
 		try {
 			newFolder.setName(getName());
-			if (description != null)
+			if (description != null) {
 				newFolder.setDescription(description);
+			}
 		} catch (Exception e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.log(Level.WARNING, "Invalid name " + getName(), e);
+			}
 		}
 	}
 
 	private FlexoFolderContainerNode getParent() {
-		if (getFocusedObject() instanceof FlexoProcessNode)
+		if (getFocusedObject() instanceof FlexoProcessNode) {
 			return (FlexoProcessNode) getFocusedObject();
-		else if (getFocusedObject() instanceof FlexoProcess) {
+		} else if (getFocusedObject() instanceof FlexoProcess) {
 			return ((FlexoProcess) getFocusedObject()).getProcessNode();
-		} else if (getFocusedObject() instanceof ProcessFolder)
+		} else if (getFocusedObject() instanceof ProcessFolder) {
 			return ((ProcessFolder) getFocusedObject());
+		}
 		return null;
 	}
 

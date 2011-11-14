@@ -65,24 +65,30 @@ public class IEPalette extends FlexoPalette {
 	}
 
 	public void disposePalettes() {
-		if (basicPalette != null)
+		if (basicPalette != null) {
 			basicPalette.delete();
-		if (imagePalette != null)
+		}
+		if (imagePalette != null) {
 			imagePalette.delete();
-		if (customWidgetPalette != null)
+		}
+		if (customWidgetPalette != null) {
 			customWidgetPalette.delete();
-		if (customImagePalette != null)
+		}
+		if (customImagePalette != null) {
 			customImagePalette.delete();
-		if (birtPanel != null)
+		}
+		if (birtPanel != null) {
 			birtPanel.delete();
+		}
 	}
 
 	/**
 	 *
 	 */
 	private IEPalettePanel getCustomImagePalette() {
-		if (customImagePalette == null)
+		if (customImagePalette == null) {
 			customImagePalette = new IEImagePalettePanel(this, getController().getProject().getCustomImagePalette(), "images");
+		}
 		return customImagePalette;
 	}
 
@@ -90,8 +96,9 @@ public class IEPalette extends FlexoPalette {
 	 *
 	 */
 	private IEPalettePanel getCustomWidgetPalette() {
-		if (customWidgetPalette == null)
+		if (customWidgetPalette == null) {
 			customWidgetPalette = new IEPalettePanel(this, getController().getProject().getCustomWidgetPalette(), "widgets");
+		}
 		return customWidgetPalette;
 	}
 
@@ -99,8 +106,9 @@ public class IEPalette extends FlexoPalette {
 	 * @param controller
 	 */
 	private IEPalettePanel getBasicPalette() {
-		if (basicPalette == null)
+		if (basicPalette == null) {
 			basicPalette = new IEPalettePanel(this, getController().getProject().getBasicPalette(), "basic");
+		}
 		return basicPalette;
 	}
 
@@ -108,31 +116,36 @@ public class IEPalette extends FlexoPalette {
 	 * @param controller
 	 */
 	private IEPalettePanel getImagePalette() {
-		if (imagePalette == null)
+		if (imagePalette == null) {
 			imagePalette = new IEPalettePanel(this, getController().getProject().getImagePalette(), "icons");
+		}
 		return imagePalette;
 	}
 
 	private IEPalettePanel getBIRTPalette() {
-		if (birtPanel == null)
+		if (birtPanel == null) {
 			birtPanel = new IEPalettePanel(this, getController().getProject().getBIRTPalette(), "Dashboards");
+		}
 		return birtPanel;
 	}
 
 	protected String currentCSSStyle;
 
 	public void setCurrentCSSStyle(String css) {
-		if (css == null)
+		if (css == null) {
 			css = getController().getProject().getCssSheet().getName();
-		if (css.equals(currentCSSStyle))
+		}
+		if (css.equals(currentCSSStyle)) {
 			return;
+		}
 		currentCSSStyle = css;
 		switchCSS();
 	}
 
 	private void switchCSS() {
-		if (currentTabbedPane == null)
+		if (currentTabbedPane == null) {
 			return;
+		}
 		basicPalette.switchCSS();
 		imagePalette.switchCSS();
 	}

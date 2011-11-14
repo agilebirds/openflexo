@@ -32,7 +32,6 @@ import org.openflexo.antar.expr.BooleanBinaryOperator;
 import org.openflexo.antar.expr.Constant;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.Variable;
-
 import org.openflexo.foundation.exec.expr.StoredTokensOnPrecondition;
 import org.openflexo.foundation.exec.inst.StoreTokenOnPrecondition;
 import org.openflexo.foundation.wkf.edge.FlexoPostCondition;
@@ -89,8 +88,9 @@ public class SendTokenToPrecondition extends ControlGraphBuilder {
 			Procedure procedure = cgBuilder.makeProcedure();
 			ProcedureCall returned = new ProcedureCall(procedure);
 			if (precondition.getIncomingPostConditions().size() > 1) {
-				if (edge == null)
+				if (edge == null) {
 					throw new InvalidModelException("Precondition receives a token from a null origin edge");
+				}
 				returned.addArgument(new Constant.IntegerConstant(edge.getFlexoID()));
 			}
 			returned.appendHeaderComment("Precondition " + precondition.getName() + " receive a new token from node "
@@ -107,13 +107,14 @@ public class SendTokenToPrecondition extends ControlGraphBuilder {
 	@Override
 	protected String getProcedureComment() {
 		StringBuffer returned = new StringBuffer();
-		if (getPrecondition().getAttachedBeginNode() != null)
+		if (getPrecondition().getAttachedBeginNode() != null) {
 			returned.append(FlexoLocalization.localizedForKeyWithParams(
 					"this_method_represents_code_to_be_executed_when_precondition_($0)_receive_a_new_token", getPrecondition().getName()));
-		else
+		} else {
 			returned.append(FlexoLocalization.localizedForKeyWithParams(
 					"this_method_represents_code_to_be_executed_when_precondition_of_node_($0)_receive_a_new_token", getPrecondition()
 							.getAttachedNode().getName()));
+		}
 		if (getPrecondition().getIncomingPostConditions().size() > 1) {
 			returned.append(StringUtils.LINE_SEPARATOR);
 			returned.append(StringUtils.LINE_SEPARATOR);
@@ -126,16 +127,18 @@ public class SendTokenToPrecondition extends ControlGraphBuilder {
 	private Variable edgeVariable = null;
 
 	private Variable getEdgeVariable() {
-		if (edgeVariable == null)
+		if (edgeVariable == null) {
 			edgeVariable = new Variable("edgeId");
+		}
 		return edgeVariable;
 	}
 
 	private Variable tokenIncrementVariable = null;
 
 	private Variable getTokenIncrementVariable() {
-		if (tokenIncrementVariable == null)
+		if (tokenIncrementVariable == null) {
 			tokenIncrementVariable = new Variable("tokenIncrement");
+		}
 		return tokenIncrementVariable;
 	}
 
@@ -147,8 +150,9 @@ public class SendTokenToPrecondition extends ControlGraphBuilder {
 		if (getPrecondition().getIncomingPostConditions().size() > 1) {
 			return new Procedure(getProcedureName(), makeControlGraph(true), getProcedureComment(), new Procedure.ProcedureParameter(
 					getEdgeVariable(), new Type("int")));
-		} else
+		} else {
 			return super.makeProcedure();
+		}
 	}
 
 	private ControlGraph makeControlGraphForTokenIncrementSetting() {
@@ -233,15 +237,14 @@ public class SendTokenToPrecondition extends ControlGraphBuilder {
 				// and if init token number was set to one, i skip the test, asserting this is
 				// trivial workflow logic
 				return NodeActivation.activateNode(precondition.getAttachedNode(), precondition, interprocedural);
-			}
-
-			else
+			} else {
 				return makeSequentialControlGraph(
 						setTokenIncrement,
 						new Conditional(condition, NodeActivation.activateNode(precondition.getAttachedNode(), precondition,
 								interprocedural), STORE_TOKEN, "Test if precondition"
 								+ (precondition.getAttachedBeginNode() != null ? " " + precondition.getName() : "") + " of node "
 								+ precondition.getAttachedNode().getName() + " is triggering"));
+			}
 
 		}
 
@@ -261,8 +264,9 @@ public class SendTokenToPrecondition extends ControlGraphBuilder {
 		} else if (getPrecondition() != null) {
 			return "precondition_" + ToolBox.capitalize(ToolBox.getJavaName(getPrecondition().getName())) + "_of_???_"
 					+ getPrecondition().getFlexoID() + "_receiveNewToken";
-		} else
+		} else {
 			return "precondition_???_receiveNewToken";
+		}
 	}
 
 	public FlexoPostCondition<?, ?> getEdge() {

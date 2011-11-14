@@ -140,8 +140,9 @@ public class ImplementationModel extends ImplModelObject implements XMLStorageRe
 
 	@Override
 	public String getDescription() {
-		if (isSerializing())
+		if (isSerializing()) {
 			return null;
+		}
 		if (getImplementationModelDefinition() != null) {
 			return getImplementationModelDefinition().getDescription();
 		}
@@ -158,8 +159,9 @@ public class ImplementationModel extends ImplModelObject implements XMLStorageRe
 
 	@Override
 	public Hashtable<String, String> getSpecificDescriptions() {
-		if (isSerializing())
+		if (isSerializing()) {
 			return null;
+		}
 		if (getImplementationModelDefinition() != null) {
 			return getImplementationModelDefinition().getSpecificDescriptions();
 		}
@@ -200,8 +202,9 @@ public class ImplementationModel extends ImplModelObject implements XMLStorageRe
 	public void addToTechnologyModules(TechnologyModuleImplementation technologyModuleImplementation)
 			throws TechnologyModuleCompatibilityCheckException {
 
-		if (containsTechnologyModule(technologyModuleImplementation.getTechnologyModuleDefinition()))
+		if (containsTechnologyModule(technologyModuleImplementation.getTechnologyModuleDefinition())) {
 			return;
+		}
 
 		// Clone the map to restore it in case of compatibility issue
 		LinkedHashMap<String, TechnologyModuleImplementation> clone = (LinkedHashMap<String, TechnologyModuleImplementation>) technologyModules
@@ -247,8 +250,9 @@ public class ImplementationModel extends ImplModelObject implements XMLStorageRe
 			for (TechnologyModuleImplementation moduleImplementation : new ArrayList<TechnologyModuleImplementation>(
 					technologyModules.values())) {
 				if (moduleImplementation.getTechnologyModuleDefinition().getAllRequiredModules()
-						.contains(technologyModuleImplementation.getTechnologyModuleDefinition()))
+						.contains(technologyModuleImplementation.getTechnologyModuleDefinition())) {
 					removeFromTechnologyModules(moduleImplementation);
+				}
 			}
 
 			setChanged();
@@ -264,8 +268,9 @@ public class ImplementationModel extends ImplModelObject implements XMLStorageRe
 	 */
 	public void checkTechnologyModuleCompatibility() throws TechnologyModuleCompatibilityCheckException {
 
-		if (isDeserializing())
+		if (isDeserializing()) {
 			return; // No check while deserializing
+		}
 
 		// 1. Build a map of TechnologyModuleDefinition by layers.
 		Map<TechnologyLayer, Set<TechnologyModuleDefinition>> layerModuleMap = new HashMap<TechnologyLayer, Set<TechnologyModuleDefinition>>();
@@ -286,15 +291,17 @@ public class ImplementationModel extends ImplModelObject implements XMLStorageRe
 			Set<TechnologyModuleDefinition> possibleIncompatibleModules = moduleDefinition.getIncompatibleModules();
 
 			if (moduleDefinition.getTechnologyLayer() != TechnologyLayer.MAIN
-					&& moduleDefinition.getTechnologyLayer() != TechnologyLayer.TRANSVERSAL)
+					&& moduleDefinition.getTechnologyLayer() != TechnologyLayer.TRANSVERSAL) {
 				possibleIncompatibleModules.addAll(layerModuleMap.get(moduleDefinition.getTechnologyLayer()));
+			}
 
 			for (TechnologyModuleDefinition incompatibleModule : possibleIncompatibleModules) {
 				if (incompatibleModule != moduleDefinition && !incompatibleModule.getCompatibleModules().contains(moduleDefinition)
 						&& !incompatibleModule.getRequiredModules().contains(moduleDefinition)
 						&& !moduleDefinition.getCompatibleModules().contains(incompatibleModule)
-						&& !moduleDefinition.getRequiredModules().contains(incompatibleModule))
+						&& !moduleDefinition.getRequiredModules().contains(incompatibleModule)) {
 					throw new TechnologyModuleCompatibilityCheckException(moduleDefinition, incompatibleModule);
+				}
 			}
 		}
 	}
@@ -309,8 +316,9 @@ public class ImplementationModel extends ImplModelObject implements XMLStorageRe
 
 	public void setTechnologyModules(Vector<TechnologyModuleImplementation> technologyModules) {
 		this.technologyModules = new LinkedHashMap<String, TechnologyModuleImplementation>();
-		for (TechnologyModuleImplementation implementation : technologyModules)
+		for (TechnologyModuleImplementation implementation : technologyModules) {
 			this.technologyModules.put(implementation.getTechnologyModuleDefinition().getName(), implementation);
+		}
 	}
 
 	public boolean containsTechnologyModule(TechnologyModuleDefinition technologyModuleDefinition) {
@@ -346,8 +354,9 @@ public class ImplementationModel extends ImplModelObject implements XMLStorageRe
 	public List<TechnologyModuleImplementation> getTechnologyModules(TechnologyLayer technologyLayer) {
 		List<TechnologyModuleImplementation> result = new Vector<TechnologyModuleImplementation>();
 		for (TechnologyModuleImplementation technologyModuleImplementation : getTechnologyModules()) {
-			if (technologyModuleImplementation.getTechnologyModuleDefinition().getTechnologyLayer() == technologyLayer)
+			if (technologyModuleImplementation.getTechnologyModuleDefinition().getTechnologyLayer() == technologyLayer) {
 				result.add(technologyModuleImplementation);
+			}
 		}
 
 		return result;

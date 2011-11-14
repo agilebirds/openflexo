@@ -45,8 +45,9 @@ public abstract class DefaultSelectionSynchronizedComponent implements Selection
 
 	@Override
 	public Vector getSelection() {
-		if (getSelectionManager() != null)
+		if (getSelectionManager() != null) {
 			return getSelectionManager().getSelection();
+		}
 		return null;
 	}
 
@@ -121,8 +122,9 @@ public abstract class DefaultSelectionSynchronizedComponent implements Selection
 
 	@Override
 	public FlexoModelObject getFocusedObject() {
-		if (getSelectionManager() != null)
+		if (getSelectionManager() != null) {
 			return getSelectionManager().getFocusedObject();
+		}
 		return null;
 	}
 

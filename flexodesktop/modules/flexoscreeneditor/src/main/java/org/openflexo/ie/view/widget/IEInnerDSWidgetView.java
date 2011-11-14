@@ -103,8 +103,9 @@ public abstract class IEInnerDSWidgetView extends IEPanel {
 		public void dragGestureRecognized(DragGestureEvent e) {
 			// if the action is ok we go ahead
 			// otherwise we punt
-			if ((e.getDragAction() & IEInnerDSWidgetView.this.dragAction) == 0 || !isDragEnabled())
+			if ((e.getDragAction() & IEInnerDSWidgetView.this.dragAction) == 0 || !isDragEnabled()) {
 				return;
+			}
 			// get the label's text and put it inside a Transferable
 			// Transferable transferable = new StringSelection(
 			// DragLabel.this.getText() );
@@ -153,8 +154,9 @@ public abstract class IEInnerDSWidgetView extends IEPanel {
 			 * acceptDrop
 			 */
 			// this is the action selected by the drop target
-			if (e.getDropAction() == DnDConstants.ACTION_MOVE)
+			if (e.getDropAction() == DnDConstants.ACTION_MOVE) {
 				IEInnerDSWidgetView.this.setName("");
+			}
 		}
 
 		/**

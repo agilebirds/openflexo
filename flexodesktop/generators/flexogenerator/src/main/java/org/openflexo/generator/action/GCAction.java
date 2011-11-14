@@ -26,8 +26,8 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGObject;
-import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.GeneratedOutput.GeneratorFactory;
+import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.action.AbstractGCAction;
 import org.openflexo.generator.AbstractProjectGenerator;
 import org.openflexo.generator.file.AbstractCGFile;
@@ -75,8 +75,9 @@ public abstract class GCAction<A extends GCAction<A, T1>, T1 extends CGObject> e
 	}
 
 	public static AbstractProjectGenerator<? extends GenerationRepository> getProjectGenerator(GenerationRepository repository) {
-		if (repository == null)
+		if (repository == null) {
 			return null;
+		}
 		return getProjectGeneratorFactory(repository) != null ? getProjectGeneratorFactory(repository).generatorForRepository(repository)
 				: null;
 	}

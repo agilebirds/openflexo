@@ -43,8 +43,9 @@ public class Class extends Inheritable {
 	}
 
 	public void addRelationship(Role rel) {
-		if (associations == null)
+		if (associations == null) {
 			associations = new Vector();
+		}
 		if (!associations.contains(rel)) {
 			associations.add(rel);
 		}
@@ -74,10 +75,11 @@ public class Class extends Inheritable {
 	private boolean compareStereotype(String s) {
 		String stereo = getStereotype();
 
-		if (stereo != null)
+		if (stereo != null) {
 			return stereo.toLowerCase().equals(s);
-		else
+		} else {
 			return false;
+		}
 	}
 
 	/**
@@ -109,8 +111,9 @@ public class Class extends Inheritable {
 		String name = getClass().getName();
 		int index = name.lastIndexOf('.');
 
-		if (index < 0)
+		if (index < 0) {
 			throw new RuntimeException("What class is this: " + name);
+		}
 
 		return name.substring(index + 1);
 	}
@@ -173,8 +176,9 @@ public class Class extends Inheritable {
 	}
 
 	private java.util.List getClassList(List list) {
-		if (list == null)
+		if (list == null) {
 			return Collections.EMPTY_LIST;
+		}
 
 		ArrayList result = new ArrayList();
 		PetalFile root = getRoot();
@@ -195,10 +199,11 @@ public class Class extends Inheritable {
 	public Class getSuperclass() {
 		java.util.List list = getSuperclasses();
 
-		if ((list == null) || (list.size() < 1))
+		if ((list == null) || (list.size() < 1)) {
 			return null;
-		else
+		} else {
 			return (Class) list.get(0);
+		}
 	}
 
 	/**
@@ -322,10 +327,11 @@ public class Class extends Inheritable {
 	public java.util.List getOperations() {
 		List list = getOperationList();
 
-		if (list != null)
+		if (list != null) {
 			return list.getElements();
-		else
+		} else {
 			return Collections.EMPTY_LIST;
+		}
 	}
 
 	/**
@@ -334,10 +340,11 @@ public class Class extends Inheritable {
 	public java.util.List getClassAttributes() {
 		List list = getClassAttributeList();
 
-		if (list != null)
+		if (list != null) {
 			return list.getElements();
-		else
+		} else {
 			return Collections.EMPTY_LIST;
+		}
 	}
 
 	/**

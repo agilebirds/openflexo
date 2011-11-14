@@ -35,8 +35,9 @@ public class ObtainDouble extends EditionInput<Double> {
 
 	public ObtainDouble(String anInputLabel, double defaultValue, GeomEditController controller, boolean appendEndSelection) {
 		this(anInputLabel, defaultValue, controller);
-		if (appendEndSelection)
+		if (appendEndSelection) {
 			availableMethods.add(new EndEditionSelection());
+		}
 		endOnRightClick = appendEndSelection;
 	}
 
@@ -73,16 +74,18 @@ public class ObtainDouble extends EditionInput<Double> {
 
 				@Override
 				public String convertDataToString(Double data) {
-					if (data == null)
+					if (data == null) {
 						return "";
+					}
 					StringEncoder.getDefaultInstance();
 					return StringEncoder.encodeDouble(data);
 				}
 
 				@Override
 				public Double convertStringToData(String string) {
-					if (string == null || string.trim().equals(""))
+					if (string == null || string.trim().equals("")) {
 						return null;
+					}
 					StringEncoder.getDefaultInstance();
 					return StringEncoder.decodeAsDouble(string);
 				}

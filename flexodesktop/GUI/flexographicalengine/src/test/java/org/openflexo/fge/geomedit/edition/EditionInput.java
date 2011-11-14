@@ -67,8 +67,9 @@ public abstract class EditionInput<O extends Object> {
 
 	public void updateControlPanel(JPanel controlPanel, JPanel availableMethodsPanel) {
 		availableMethodsPanel.removeAll();
-		if (activeMethod == null && getPreferredMethodIndex() < availableMethods.size())
+		if (activeMethod == null && getPreferredMethodIndex() < availableMethods.size()) {
 			activeMethod = availableMethods.get(getPreferredMethodIndex());
+		}
 		availableMethodsPanel.add(new JLabel(inputLabel));
 		for (final EditionInputMethod method : availableMethods) {
 			InputComponent inputComponent = method.getInputComponent();
@@ -98,8 +99,9 @@ public abstract class EditionInput<O extends Object> {
 	}
 
 	public String getActiveMethodLabel() {
-		if (getActiveMethod() != null)
+		if (getActiveMethod() != null) {
 			return getActiveMethod().getMethodLabel();
+		}
 		return "No active selection method";
 	}
 
@@ -129,8 +131,9 @@ public abstract class EditionInput<O extends Object> {
 	private O inputData;
 
 	public O getInputData() {
-		if (contruction != null)
+		if (contruction != null) {
 			return contruction.getData();
+		}
 		return inputData;
 	}
 

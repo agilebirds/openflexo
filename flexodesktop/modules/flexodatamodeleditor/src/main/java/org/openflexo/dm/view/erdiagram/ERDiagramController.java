@@ -40,8 +40,9 @@ public class ERDiagramController extends SelectionManagingDrawingController<ERDi
 	@Override
 	public void delete() {
 		if (_controller != null) {
-			if (getDrawingView() != null)
+			if (getDrawingView() != null) {
 				_controller.removeModuleView(getDrawingView());
+			}
 			_controller.DIAGRAM_PERSPECTIVE.removeFromERControllers(this);
 		}
 		super.delete();

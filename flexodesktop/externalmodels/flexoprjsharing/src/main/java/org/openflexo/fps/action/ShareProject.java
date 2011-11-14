@@ -27,7 +27,6 @@ import java.util.logging.Logger;
 
 import org.netbeans.lib.cvsclient.command.CommandException;
 import org.netbeans.lib.cvsclient.connection.AuthenticationException;
-
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -136,8 +135,9 @@ public class ShareProject extends CVSAction<ShareProject, FPSObject> {
 	}
 
 	public String getLogMessage() {
-		if (_logMessage == null)
+		if (_logMessage == null) {
 			_logMessage = FlexoLocalization.localizedForKey("project_shared_on") + " " + new Date();
+		}
 		return _logMessage;
 	}
 
@@ -146,8 +146,9 @@ public class ShareProject extends CVSAction<ShareProject, FPSObject> {
 	}
 
 	public String getReleaseTag() {
-		if (_releaseTag == null)
+		if (_releaseTag == null) {
 			_releaseTag = "start";
+		}
 		return _releaseTag;
 	}
 
@@ -156,8 +157,9 @@ public class ShareProject extends CVSAction<ShareProject, FPSObject> {
 	}
 
 	public String getVendorTag() {
-		if (_vendorTag == null)
+		if (_vendorTag == null) {
 			_vendorTag = System.getProperty("user.name");
+		}
 		return _vendorTag;
 	}
 

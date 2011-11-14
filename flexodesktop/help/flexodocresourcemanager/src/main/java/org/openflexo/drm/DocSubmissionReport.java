@@ -81,31 +81,36 @@ public class DocSubmissionReport extends DRMObject {
 			File dsrModelFile;
 			dsrModelFile = new FileResource("Models/DSRModel.xml");
 			if (!dsrModelFile.exists()) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("File " + dsrModelFile.getAbsolutePath() + " doesn't exist. Maybe you have to check your paths ?");
+				}
 				return null;
 			} else {
 				try {
 					_dsrMapping = new XMLMapping(dsrModelFile);
 				} catch (InvalidModelException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (IOException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (SAXException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (ParserConfigurationException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				}
 			}
@@ -137,12 +142,13 @@ public class DocSubmissionReport extends DRMObject {
 			e.printStackTrace();
 			return false;
 		} finally {
-			if (out != null)
+			if (out != null) {
 				try {
 					out.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+			}
 		}
 	}
 

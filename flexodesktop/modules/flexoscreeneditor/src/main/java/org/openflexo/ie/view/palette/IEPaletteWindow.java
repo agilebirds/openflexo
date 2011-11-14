@@ -30,7 +30,6 @@ import java.awt.HeadlessException;
 import java.util.logging.Logger;
 
 import org.openflexo.ColorCst;
-import org.openflexo.FlexoCst;
 import org.openflexo.ie.IECst;
 import org.openflexo.ie.view.IEFrame;
 import org.openflexo.ie.view.controller.IEController;

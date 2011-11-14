@@ -60,8 +60,9 @@ public class GeneratedSources extends GeneratedOutput {
 	 */
 	public static GeneratedSources createNewGeneratedSources(FlexoProject project) {
 		GeneratedSources newGS = new GeneratedSources(project);
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("createNewGeneratedSources(), project=" + project + " " + newGS);
+		}
 
 		File sgFile = ProjectRestructuration.getExpectedGeneratedSourcesFile(project);
 		FlexoProjectFile generatedCodeFile = new FlexoProjectFile(sgFile, project);
@@ -75,8 +76,9 @@ public class GeneratedSources extends GeneratedOutput {
 			try {
 				sgRes = new GeneratedSourcesResource(project, newGS, generatedCodeFile);
 			} catch (InvalidFileNameException e) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("Could not create generated code.");
+				}
 				e.printStackTrace();
 				return null;
 			}
@@ -87,8 +89,9 @@ public class GeneratedSources extends GeneratedOutput {
 			project.registerResource(sgRes);
 		} catch (Exception e1) {
 			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
+			}
 			e1.printStackTrace();
 			System.exit(-1);
 		}
@@ -170,19 +173,22 @@ public class GeneratedSources extends GeneratedOutput {
 	}
 
 	public ImplementationModelDefinition getImplementationModelDefinitionNamed(String value) {
-		if (value == null)
+		if (value == null) {
 			return null;
+		}
 		for (ImplementationModelDefinition implModel : getImplementationModels()) {
-			if (value.equals(implModel.getName()))
+			if (value.equals(implModel.getName())) {
 				return implModel;
+			}
 		}
 		return null;
 	}
 
 	public ImplementationModel getImplementationModelNamed(String value) {
 		ImplementationModelDefinition def = getImplementationModelDefinitionNamed(value);
-		if (def != null)
+		if (def != null) {
 			return def.getImplementationModel();
+		}
 		return null;
 	}
 

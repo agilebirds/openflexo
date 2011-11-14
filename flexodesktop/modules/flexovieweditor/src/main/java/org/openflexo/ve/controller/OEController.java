@@ -129,10 +129,12 @@ public class OEController extends FlexoController implements SelectionManagingCo
 	@Override
 	public void initInspectors() {
 		super.initInspectors();
-		if (getSharedInspectorController() != null)
+		if (getSharedInspectorController() != null) {
 			getOESelectionManager().addObserver(getSharedInspectorController());
-		if (getDocInspectorController() != null)
+		}
+		if (getDocInspectorController() != null) {
 			getOESelectionManager().addObserver(getDocInspectorController());
+		}
 
 		if (useNewInspectorScheme()) {
 			loadInspectorGroup("Ontology");
@@ -215,10 +217,12 @@ public class OEController extends FlexoController implements SelectionManagingCo
 
 	@Override
 	public String getWindowTitleforObject(FlexoModelObject object) {
-		if (getCurrentPerspective() == SHEMA_PERSPECTIVE)
+		if (getCurrentPerspective() == SHEMA_PERSPECTIVE) {
 			return SHEMA_PERSPECTIVE.getWindowTitleforObject(object);
-		if (getCurrentPerspective() == ONTOLOGY_PERSPECTIVE)
+		}
+		if (getCurrentPerspective() == ONTOLOGY_PERSPECTIVE) {
 			return ONTOLOGY_PERSPECTIVE.getWindowTitleforObject(object);
+		}
 		return object.getFullyQualifiedName();
 	}
 

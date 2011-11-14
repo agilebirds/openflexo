@@ -51,10 +51,9 @@ public class Function extends Token {
 	}
 
 	private static Token makeParameter(ListOfToken listOfToken) throws ParseException {
-		if (listOfToken.size() == 0)
+		if (listOfToken.size() == 0) {
 			throw new ParseException("Syntax error: invalid null operand");
-
-		else if (listOfToken.size() == 1) {
+		} else if (listOfToken.size() == 1) {
 			if (listOfToken.firstElement() instanceof Token) {
 				return (Token) listOfToken.firstElement();
 			}

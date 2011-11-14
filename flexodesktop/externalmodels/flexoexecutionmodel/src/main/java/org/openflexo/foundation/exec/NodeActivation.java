@@ -32,7 +32,6 @@ import org.openflexo.antar.expr.BooleanBinaryOperator;
 import org.openflexo.antar.expr.Constant;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.Variable;
-
 import org.openflexo.foundation.bindings.BindingAssignment;
 import org.openflexo.foundation.exec.inst.ChangeProcessStatus;
 import org.openflexo.foundation.exec.inst.ResetTimeOut;
@@ -41,6 +40,8 @@ import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.foundation.wkf.node.ActionNode;
 import org.openflexo.foundation.wkf.node.ActivityNode;
 import org.openflexo.foundation.wkf.node.EventNode;
+import org.openflexo.foundation.wkf.node.EventNode.EVENT_TYPE;
+import org.openflexo.foundation.wkf.node.EventNode.TriggerType;
 import org.openflexo.foundation.wkf.node.FatherNode;
 import org.openflexo.foundation.wkf.node.FlexoNode;
 import org.openflexo.foundation.wkf.node.FlexoPreCondition;
@@ -50,8 +51,6 @@ import org.openflexo.foundation.wkf.node.SelfExecutableActionNode;
 import org.openflexo.foundation.wkf.node.SelfExecutableActivityNode;
 import org.openflexo.foundation.wkf.node.SelfExecutableOperationNode;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
-import org.openflexo.foundation.wkf.node.EventNode.EVENT_TYPE;
-import org.openflexo.foundation.wkf.node.EventNode.TriggerType;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
@@ -95,8 +94,9 @@ public abstract class NodeActivation<N extends FlexoNode> extends ControlGraphBu
 	public static ControlGraph activateNode(FlexoNode node, FlexoPreCondition pre, boolean interprocedural) throws NotSupportedException,
 			InvalidModelException {
 		if (pre != null) {
-			if (pre.getAttachedNode() == null)
+			if (pre.getAttachedNode() == null) {
 				logger.severe("Activation of a node with a precondition not attached to it !");
+			}
 		}
 		ControlGraphBuilder cgBuilder = getActivationNodeBuilder(node, pre);
 
@@ -106,8 +106,9 @@ public abstract class NodeActivation<N extends FlexoNode> extends ControlGraphBu
 				Procedure procedure = cgBuilder.makeProcedure();
 				ProcedureCall returned = new ProcedureCall(procedure);
 				if (node.getPreConditions().size() > 1) {
-					if (pre == null)
+					if (pre == null) {
 						throw new InvalidModelException("Node activation called for " + node + " with a null precondition");
+					}
 					returned.addArgument(new Constant.IntegerConstant(pre.getFlexoID()));
 					returned.appendHeaderComment("Node " + node.getName() + " is activating from precondition " + pre.getName(), true);
 				} else {
@@ -207,15 +208,17 @@ public abstract class NodeActivation<N extends FlexoNode> extends ControlGraphBu
 		if (getNode().getPreConditions().size() > 1) {
 			return new Procedure(getProcedureName(), makeControlGraph(true), getProcedureComment(), new Procedure.ProcedureParameter(
 					getPreconditionVariable(), new Type("int")));
-		} else
+		} else {
 			return super.makeProcedure();
+		}
 	}
 
 	private Variable preconditionVariable = null;
 
 	private Variable getPreconditionVariable() {
-		if (preconditionVariable == null)
+		if (preconditionVariable == null) {
 			preconditionVariable = new Variable("preconditionId");
+		}
 		return preconditionVariable;
 	}
 
@@ -243,8 +246,9 @@ public abstract class NodeActivation<N extends FlexoNode> extends ControlGraphBu
 
 		if (getNode().getActivationAssignments().size() > 0) {
 			Vector<ControlGraph> allAssignments = new Vector<ControlGraph>();
-			for (BindingAssignment assignment : getNode().getActivationAssignments())
+			for (BindingAssignment assignment : getNode().getActivationAssignments()) {
 				allAssignments.add(makeControlGraphForAssignment(assignment));
+			}
 			EXECUTE_ACTIVATION_ASSIGNMENTS = makeSequentialControlGraph(allAssignments);
 			EXECUTE_ACTIVATION_ASSIGNMENTS.setHeaderComment("Perform assignments declared for activation of node " + getNode().getName());
 		}
@@ -262,8 +266,9 @@ public abstract class NodeActivation<N extends FlexoNode> extends ControlGraphBu
 				Expression condition = new BinaryOperatorExpression(BooleanBinaryOperator.EQUALS, getPreconditionVariable(),
 						new Constant.IntegerConstant(currentPre.getFlexoID()));
 				FlexoNode beginNode = currentPre.getAttachedBeginNode();
-				if (beginNode == null)
+				if (beginNode == null) {
 					throw new InvalidModelException("Node " + getNode() + " defines a pre-condition without attached BEGIN node");
+				}
 				if (beginNode == getNode()) {
 					throw new InvalidModelException("Inconsistent data !!!");
 				}
@@ -282,8 +287,9 @@ public abstract class NodeActivation<N extends FlexoNode> extends ControlGraphBu
 		else {
 			if (getNode() instanceof FatherNode && pre != null) {
 				FlexoNode beginNode = pre.getAttachedBeginNode();
-				if (beginNode == null)
+				if (beginNode == null) {
 					throw new InvalidModelException("Node " + getNode() + " defines a pre-condition without attached BEGIN node");
+				}
 				if (beginNode == getNode()) {
 					throw new InvalidModelException("Inconsistent data !!!");
 				}
@@ -315,8 +321,9 @@ public abstract class NodeActivation<N extends FlexoNode> extends ControlGraphBu
 		Vector<ControlGraph> resetTimeOutStatements = new Vector<ControlGraph>();
 
 		for (EventNode event : getNode().getParentPetriGraph().getAllEventNodes()) {
-			if (TriggerType.TIMER.equals(event.getTrigger()) && EVENT_TYPE.Intermediate == event.getEventType())
+			if (TriggerType.TIMER.equals(event.getTrigger()) && EVENT_TYPE.Intermediate == event.getEventType()) {
 				resetTimeOutStatements.add(new ResetTimeOut(event));
+			}
 		}
 
 		return makeSequentialControlGraph(resetTimeOutStatements);

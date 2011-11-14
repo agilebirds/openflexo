@@ -65,8 +65,9 @@ public class GoToAction extends EditionAction {
 	}
 
 	public ViewPointDataBinding getTarget() {
-		if (target == null)
+		if (target == null) {
 			target = new ViewPointDataBinding(this, EditionActionBindingAttribute.target, getTargetBindingDefinition());
+		}
 		return target;
 	}
 

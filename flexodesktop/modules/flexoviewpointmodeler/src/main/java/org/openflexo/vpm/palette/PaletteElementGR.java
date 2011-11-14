@@ -53,16 +53,18 @@ public class PaletteElementGR extends ShapeGraphicalRepresentation<ViewPointPale
 			addToMouseClickControls(new CalcPaletteController.ShowContextualMenuControl(true));
 		}
 
-		if (aShape != null)
+		if (aShape != null) {
 			aShape.addObserver(this);
+		}
 
 	}
 
 	@Override
 	public void delete() {
 		// logger.info("Delete PaletteElementGR");
-		if (getDrawable() != null)
+		if (getDrawable() != null) {
 			getDrawable().deleteObserver(this);
+		}
 		super.delete();
 	}
 
@@ -94,17 +96,19 @@ public class PaletteElementGR extends ShapeGraphicalRepresentation<ViewPointPale
 
 	@Override
 	public String getText() {
-		if (getCalcPaletteElement() != null)
+		if (getCalcPaletteElement() != null) {
 			return getCalcPaletteElement().getName();
+		}
 		return super.getText();
 	}
 
 	@Override
 	public void setTextNoNotification(String text) {
-		if (getCalcPaletteElement() != null)
+		if (getCalcPaletteElement() != null) {
 			getCalcPaletteElement().setName(text);
-		else
+		} else {
 			super.setTextNoNotification(text);
+		}
 	}
 
 	@Override
@@ -112,8 +116,9 @@ public class PaletteElementGR extends ShapeGraphicalRepresentation<ViewPointPale
 		super.notifyObservers(arg);
 		if (arg instanceof FGENotification && ((FGENotification) arg).isModelNotification() && getDrawing() != null
 				&& !getDrawing().ignoreNotifications() && getCalcPaletteElement() != null
-				&& !getCalcPaletteElement().getPalette().ignoreNotifications())
+				&& !getCalcPaletteElement().getPalette().ignoreNotifications()) {
 			getCalcPaletteElement().setChanged();
+		}
 	}
 
 }

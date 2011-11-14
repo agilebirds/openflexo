@@ -56,11 +56,13 @@ public class ConnectCGRepositoryInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<ConnectCGRepository>() {
 			@Override
 			public boolean run(ActionEvent e, ConnectCGRepository action) {
-				if (!(action.getFocusedObject() instanceof DGRepository))
+				if (!(action.getFocusedObject() instanceof DGRepository)) {
 					return false;
+				}
 				DGRepository repository = (DGRepository) action.getFocusedObject();
-				if (repository == null)
+				if (repository == null) {
 					return false;
+				}
 				if (repository.getSourceCodeRepository().getDirectory() == null) {
 					repository.getSourceCodeRepository().setDirectory(new File(System.getProperty("user.home")));
 				}

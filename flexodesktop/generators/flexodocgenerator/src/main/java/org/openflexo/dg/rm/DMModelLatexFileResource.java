@@ -58,19 +58,22 @@ public class DMModelLatexFileResource extends LatexFileResource<DGLatexGenerator
 
 	@Override
 	public String getName() {
-		if (getCGFile() == null || getCGFile().getRepository() == null || getModel() == null)
+		if (getCGFile() == null || getCGFile().getRepository() == null || getModel() == null) {
 			return super.getName();
+		}
 		registerObserverWhenRequired();
-		if (super.getName() == null)
+		if (super.getName() == null) {
 			setName(nameForRepositoryAndModel(getCGFile().getRepository(), getModel()));
+		}
 		return nameForRepositoryAndModel(getCGFile().getRepository(), getModel());
 	}
 
 	public void registerObserverWhenRequired() {
 		if ((!isObserverRegistered) && (getModel() != null)) {
 			isObserverRegistered = true;
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getModel());
+			}
 			getModel().addObserver(this);
 		}
 	}
@@ -80,8 +83,9 @@ public class DMModelLatexFileResource extends LatexFileResource<DGLatexGenerator
 	}
 
 	public DMModel getModel() {
-		if (getGenerator() != null)
+		if (getGenerator() != null) {
 			return getGenerator().getObject();
+		}
 		return null;
 	}
 

@@ -53,35 +53,41 @@ public class FIBTextAreaWidget extends FIBWidgetView<FIBTextArea, JTextArea, Str
 		super(model, controller);
 		_textArea = new JTextArea();
 		validateOnReturn = model.validateOnReturn;
-		if (model.columns != null && model.columns > 0)
+		if (model.columns != null && model.columns > 0) {
 			_textArea.setColumns(model.columns);
-		else
+		} else {
 			_textArea.setColumns(DEFAULT_COLUMNS);
-		if (model.rows != null && model.rows > 0)
+		}
+		if (model.rows != null && model.rows > 0) {
 			_textArea.setRows(model.rows);
-		else
+		} else {
 			_textArea.setRows(DEFAULT_ROWS);
+		}
 		_textArea.setEditable(!isReadOnly());
-		if (model.text != null)
+		if (model.text != null) {
 			_textArea.setText(model.text);
+		}
 
 		_textArea.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent e) {
-				if ((!validateOnReturn) && (!widgetUpdating))
+				if ((!validateOnReturn) && (!widgetUpdating)) {
 					updateModelFromWidget();
+				}
 			}
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				if ((!validateOnReturn) && (!widgetUpdating))
+				if ((!validateOnReturn) && (!widgetUpdating)) {
 					updateModelFromWidget();
+				}
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				if ((!validateOnReturn) && (!widgetUpdating))
+				if ((!validateOnReturn) && (!widgetUpdating)) {
 					updateModelFromWidget();
+				}
 			}
 		});
 		_textArea.addKeyListener(new KeyAdapter() {
@@ -123,10 +129,12 @@ public class FIBTextAreaWidget extends FIBWidgetView<FIBTextArea, JTextArea, Str
 	@Override
 	public synchronized boolean updateWidgetFromModel() {
 		if (notEquals(getValue(), _textArea.getText())) {
-			if (modelUpdating)
+			if (modelUpdating) {
 				return false;
-			if (getValue() != null && (getValue() + "\n").equals(_textArea.getText()))
+			}
+			if (getValue() != null && (getValue() + "\n").equals(_textArea.getText())) {
 				return false;
+			}
 			widgetUpdating = true;
 			_textArea.setText(getValue());
 			widgetUpdating = false;
@@ -142,8 +150,9 @@ public class FIBTextAreaWidget extends FIBWidgetView<FIBTextArea, JTextArea, Str
 	public synchronized boolean updateModelFromWidget() {
 		if (notEquals(getValue(), _textArea.getText())) {
 			modelUpdating = true;
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("updateModelFromWidget() in TextAreaWidget");
+			}
 			setValue(_textArea.getText());
 			modelUpdating = false;
 			return true;
@@ -164,7 +173,8 @@ public class FIBTextAreaWidget extends FIBWidgetView<FIBTextArea, JTextArea, Str
 	@Override
 	public void updateFont() {
 		super.updateFont();
-		if (getFont() != null)
+		if (getFont() != null) {
 			_textArea.setFont(getFont());
+		}
 	}
 }

@@ -22,8 +22,8 @@ package org.openflexo.fge.geomedit.gr;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.geomedit.GeometricDrawing;
 import org.openflexo.fge.geomedit.GeometricSet;
-import org.openflexo.fge.geomedit.ShowContextualMenuControl;
 import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
+import org.openflexo.fge.geomedit.ShowContextualMenuControl;
 import org.openflexo.xmlcode.XMLSerializable;
 
 public class GeometricDrawingGraphicalRepresentation extends DrawingGraphicalRepresentation<GeometricSet> implements XMLSerializable {

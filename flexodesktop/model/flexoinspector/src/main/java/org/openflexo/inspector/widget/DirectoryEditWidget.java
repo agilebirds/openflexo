@@ -21,11 +21,10 @@ package org.openflexo.inspector.widget;
 
 import javax.swing.JFileChooser;
 
-import org.openflexo.swing.FlexoFileChooser;
-
 import org.openflexo.inspector.AbstractController;
 import org.openflexo.inspector.model.PropertyModel;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.swing.FlexoFileChooser;
 
 /**
  * @author sguerin

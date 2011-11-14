@@ -120,21 +120,24 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 		_treeTable.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if (getContextualMenuManager() != null)
+				if (getContextualMenuManager() != null) {
 					getContextualMenuManager().processMousePressed(e);
+				}
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				if (getContextualMenuManager() != null)
+				if (getContextualMenuManager() != null) {
 					getContextualMenuManager().processMouseReleased(e);
+				}
 			}
 		});
 		_treeTable.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				if (getContextualMenuManager() != null)
+				if (getContextualMenuManager() != null) {
 					getContextualMenuManager().processMouseMoved(e);
+				}
 			}
 		});
 
@@ -212,8 +215,9 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 
 	public void setVisibleRowCount(int rows) {
 		int height = 0;
-		for (int row = 0; row < rows; row++)
+		for (int row = 0; row < rows; row++) {
 			height += _treeTable.getRowHeight(row);
+		}
 		_treeTable.setPreferredScrollableViewportSize(new Dimension(_treeTable.getPreferredScrollableViewportSize().width, height));
 	}
 
@@ -250,8 +254,9 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 	 * @see org.openflexo.view.InspectableObjectView#getInspectedObject()
 	 */
 	public InspectableObject getInspectedObject() {
-		if (getRootObject() instanceof InspectableObject)
+		if (getRootObject() instanceof InspectableObject) {
 			return (InspectableObject) getRootObject();
+		}
 		return null;
 	}
 
@@ -275,8 +280,9 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 	 */
 	@Override
 	public void update(FlexoObservable o, DataModification dataModification) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("update received in TabularBrowserView for " + o + " dataModification=" + dataModification);
+		}
 	}
 
 	/**
@@ -319,8 +325,9 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 
 	@Override
 	public Vector<FlexoModelObject> getSelection() {
-		if (getSelectionManager() != null)
+		if (getSelectionManager() != null) {
 			return getSelectionManager().getSelection();
+		}
 		return null;
 	}
 
@@ -409,8 +416,9 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 
 	@Override
 	public FlexoModelObject getFocusedObject() {
-		if (getSelectionManager() != null)
+		if (getSelectionManager() != null) {
 			return getSelectionManager().getFocusedObject();
+		}
 		return null;
 	}
 
@@ -476,13 +484,15 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		// Ignore extra messages.
-		if (e.getValueIsAdjusting())
+		if (e.getValueIsAdjusting()) {
 			return;
+		}
 
 		if ((_selectionManager != null) && (_synchronizeWithSelectionManager)) {
 
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("valueChanged() ListSelectionEvent=" + e + " ListSelectionModel=" + getSelectionModel().toString());
+			}
 
 			/* At least one of this item has change */
 			int beginIndex = e.getFirstIndex();

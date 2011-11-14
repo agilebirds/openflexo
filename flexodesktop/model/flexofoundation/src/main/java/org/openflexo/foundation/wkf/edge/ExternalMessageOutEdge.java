@@ -76,8 +76,9 @@ public final class ExternalMessageOutEdge extends ExternalMessageEdge<FlexoPortM
 			setStartNode(startPortMap);
 			setEndNode(endPre);
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Inconsistent data while building ExternalMessageOutEdge !");
+			}
 			throw new InvalidEdgeException(this);
 		}
 		if (!isEdgeValid()) {
@@ -119,8 +120,9 @@ public final class ExternalMessageOutEdge extends ExternalMessageEdge<FlexoPortM
 		// SubProcessNode
 		// is located
 
-		if (getStartNode() == null || getEndNode() == null || !getStartNode().isOutputPort())
+		if (getStartNode() == null || getEndNode() == null || !getStartNode().isOutputPort()) {
 			return false;
+		}
 
 		if (getEndNode() instanceof FlexoPreCondition) {
 			FlexoPetriGraph pg = getPortMapRegistery().getSubProcessNode().getParentPetriGraph();

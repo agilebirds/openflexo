@@ -36,14 +36,16 @@ public class ProcedureCall extends Instruction {
 
 	public ProcedureCall(Procedure procedure, Expression... arguments) {
 		this(procedure);
-		for (Expression arg : arguments)
+		for (Expression arg : arguments) {
 			addArgument(arg);
+		}
 	}
 
 	public ProcedureCall(Procedure procedure, Vector<Expression> arguments) {
 		this(procedure);
-		for (Expression arg : arguments)
+		for (Expression arg : arguments) {
 			addArgument(arg);
+		}
 	}
 
 	public Procedure getProcedure() {

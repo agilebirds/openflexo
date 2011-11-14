@@ -95,10 +95,12 @@ public class ColorWidget extends DenaliWidget {
 		if (value instanceof Color) {
 			setColor((Color) value);
 		} else {
-			if (value != null)
-				if (logger.isLoggable(Level.WARNING))
+			if (value != null) {
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Property " + _propertyModel.name + " is supposed to be a Color or a StringConvertable object, not a "
 							+ value);
+				}
+			}
 		}
 		widgetUpdating = false;
 	}
@@ -108,15 +110,17 @@ public class ColorWidget extends DenaliWidget {
 	 */
 	@Override
 	public synchronized void updateModelFromWidget() {
-		if (isReadOnly())
+		if (isReadOnly()) {
 			return;
+		}
 		if (getType() == Color.class) {
 			setObjectValue(_color);
 		} else if (typeIsStringConvertable()) {
 			setObjectValue(getTypeConverter().convertFromString(_color.getRed() + "," + _color.getGreen() + "," + _color.getBlue()));
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Property " + _propertyModel.name + " is supposed to be a Color, not a " + getType());
+			}
 		}
 	}
 
@@ -144,8 +148,9 @@ public class ColorWidget extends DenaliWidget {
 	protected void showColorChooserDialog() {
 		// get the new color
 		setColor(JColorChooser.showDialog(_chooseButton, FlexoLocalization.localizedForKey("select_a_color"), _color));
-		if (_color != null)
+		if (_color != null) {
 			updateModelFromWidget();
+		}
 	}
 
 }

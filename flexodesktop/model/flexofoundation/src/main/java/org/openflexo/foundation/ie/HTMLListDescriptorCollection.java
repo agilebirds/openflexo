@@ -36,8 +36,9 @@ public class HTMLListDescriptorCollection extends Vector<HTMLListDescriptor> {
 		HTMLListDescriptor temp = null;
 		while (en.hasMoreElements()) {
 			temp = (HTMLListDescriptor) en.nextElement();
-			if (temp.getBloc().equals(b))
+			if (temp.getBloc().equals(b)) {
 				return temp;
+			}
 		}
 		return null;
 	}
@@ -47,8 +48,9 @@ public class HTMLListDescriptorCollection extends Vector<HTMLListDescriptor> {
 		HTMLListDescriptor temp = null;
 		while (en.hasMoreElements()) {
 			temp = (HTMLListDescriptor) en.nextElement();
-			if (temp.containsHeader(h))
+			if (temp.containsHeader(h)) {
 				return temp;
+			}
 		}
 		return null;
 	}

@@ -27,13 +27,13 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.foundation.wkf.node.ActivityNode;
 import org.openflexo.foundation.wkf.node.EventNode;
+import org.openflexo.foundation.wkf.node.EventNode.TriggerType;
 import org.openflexo.foundation.wkf.node.FlexoNode;
 import org.openflexo.foundation.wkf.node.LOOPOperator;
 import org.openflexo.foundation.wkf.node.NodeType;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.wkf.node.SelfExecutableActivityNode;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
-import org.openflexo.foundation.wkf.node.EventNode.TriggerType;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 
 /**
@@ -124,8 +124,9 @@ public final class ActivityPetriGraph extends FlexoPetriGraph {
 
 	@Override
 	public ActivityNode createNewBeginNode(String nodeName) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Create new BEGIN node");
+		}
 		ActivityNode beginNode = new ActivityNode(getProcess());
 		beginNode.updateMetricsValues();
 		beginNode.setNodeType(NodeType.BEGIN);
@@ -156,8 +157,9 @@ public final class ActivityPetriGraph extends FlexoPetriGraph {
 
 	@Override
 	public ActivityNode createNewEndNode(String nodeName) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Create new END node");
+		}
 		ActivityNode endNode = new ActivityNode(getProcess());
 		endNode.updateMetricsValues();
 		endNode.setNodeType(NodeType.END);
@@ -186,8 +188,9 @@ public final class ActivityPetriGraph extends FlexoPetriGraph {
 	}
 
 	public ActivityNode createNewNormalNode(String nodeName) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Create new NORMAL node");
+		}
 		ActivityNode newNode = new ActivityNode(getProcess());
 		newNode.updateMetricsValues();
 		newNode.setNodeType(NodeType.NORMAL);
@@ -297,41 +300,49 @@ public final class ActivityPetriGraph extends FlexoPetriGraph {
 	}
 
 	public SubProcessNode getSubProcessNodeNamed(String name) {
-		if (name == null)
+		if (name == null) {
 			return null;
+		}
 		for (SubProcessNode node : getAllSubProcessNodes()) {
-			if (name.equals(node.getName()))
+			if (name.equals(node.getName())) {
 				return node;
+			}
 		}
 		return null;
 	}
 
 	public AbstractActivityNode getAbstractActivityNodeNamed(String name) {
-		if (name == null)
+		if (name == null) {
 			return null;
+		}
 		for (AbstractActivityNode node : getAllAbstractActivityNodes()) {
-			if (name.equals(node.getName()))
+			if (name.equals(node.getName())) {
 				return node;
+			}
 		}
 		return null;
 	}
 
 	public ActivityNode getActivityNodeNamed(String name) {
-		if (name == null)
+		if (name == null) {
 			return null;
+		}
 		for (ActivityNode node : getAllActivityNodes()) {
-			if (name.equals(node.getName()))
+			if (name.equals(node.getName())) {
 				return node;
+			}
 		}
 		return null;
 	}
 
 	public OperationNode getOperationNodeNamed(String name) {
-		if (name == null)
+		if (name == null) {
 			return null;
+		}
 		for (OperationNode node : getAllEmbeddedOperationNodes()) {
-			if (name.equals(node.getName()))
+			if (name.equals(node.getName())) {
 				return node;
+			}
 		}
 		return null;
 	}

@@ -135,11 +135,13 @@ public class KeyValueLibrary {
 	private static Vector<MethodDefinition> searchForMethods(Type declaringType, Vector<String> excludedSignatures) {
 		Vector<MethodDefinition> returned = new Vector<MethodDefinition>();
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("searchForMethods()");
+		}
 		for (String excludedSignature : excludedSignatures) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Excluded: " + excludedSignature);
+			}
 		}
 
 		Class theClass = TypeUtils.getBaseClass(declaringType);
@@ -158,11 +160,13 @@ public class KeyValueLibrary {
 				}
 			}
 		} catch (NoClassDefFoundError e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not find class: " + e.getMessage());
+			}
 		} catch (Throwable e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Unexpected exception raised " + e);
+			}
 			e.printStackTrace();
 		}
 
@@ -185,8 +189,9 @@ public class KeyValueLibrary {
 				Method method = declaredMethods[i];
 				KeyValueProperty newProperty = makeProperty(declaringTypeType, method, includesGetOnlyProperties, excludedSignatures);
 				if (newProperty != null && !containsAPropertyNamed(returned, newProperty.getName())) {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Make property from method: " + method);
+					}
 					returned.add(newProperty);
 				}
 			}
@@ -198,17 +203,20 @@ public class KeyValueLibrary {
 
 				KeyValueProperty newProperty = makeProperty(declaringTypeType, field);
 				if (newProperty != null && !containsAPropertyNamed(returned, newProperty.getName())) {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Make property from field: " + field);
+					}
 					returned.add(newProperty);
 				}
 			}
 		} catch (NoClassDefFoundError e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not find class: " + e.getMessage());
+			}
 		} catch (Throwable e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Unexpected exception raised " + e);
+			}
 			e.printStackTrace();
 		}
 		return returned;
@@ -216,8 +224,9 @@ public class KeyValueLibrary {
 
 	private static boolean containsAPropertyNamed(Vector<KeyValueProperty> properties, String aName) {
 		for (KeyValueProperty p : properties) {
-			if (p.getName().equals(aName))
+			if (p.getName().equals(aName)) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -341,34 +350,41 @@ public class KeyValueLibrary {
 			return null;
 		}
 
-		if (params == null)
+		if (params == null) {
 			params = new Type[0];
+		}
 		StringBuffer sb = null;
 		if (logger.isLoggable(Level.FINE)) {
 			sb = new StringBuffer();
-			for (Type t : params)
+			for (Type t : params) {
 				sb.append(" " + t.toString());
-			if (logger.isLoggable(Level.FINE))
+			}
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Looking for " + methodName + " with" + sb.toString());
+			}
 		}
 		for (Method m : theClass.getMethods()) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Examining " + m);
+			}
 			if (m.getName().equals(methodName) && m.getGenericParameterTypes().length == params.length) {
 				boolean paramMatches = true;
 				for (int i = 0; i < params.length; i++) {
-					if (!params[i].equals(m.getGenericParameterTypes()[i]))
+					if (!params[i].equals(m.getGenericParameterTypes()[i])) {
 						paramMatches = false;
+					}
 				}
 				if (paramMatches) {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Looking for " + methodName + " with" + sb.toString() + ": found");
+					}
 					return m;
 				}
 			}
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Looking for " + methodName + " with" + sb.toString() + ": NOT found");
+		}
 		throw new NoSuchMethodException();
 	}
 

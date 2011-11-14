@@ -19,14 +19,29 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 package com.swabunga.spell.swing.autospell;
 
-import java.awt.*;
-import java.util.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.text.*;
-import javax.swing.event.*;
-import com.swabunga.spell.event.*;
-import com.swabunga.spell.engine.*;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ResourceBundle;
+
+import javax.swing.JEditorPane;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.Document;
+import javax.swing.text.Element;
+import javax.swing.text.Segment;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyledDocument;
+
+import com.swabunga.spell.engine.Configuration;
+import com.swabunga.spell.event.DocumentWordTokenizer;
+import com.swabunga.spell.event.SpellChecker;
 
 /**
  * This class handles the actual autospelling by implementing some listeners on the spellchecked JEditorPane and Document.
@@ -84,10 +99,12 @@ public class AutoSpellCheckHandler extends MouseAdapter implements DocumentListe
 			}
 			wordEnd = docTok.getCurrentWordEnd();
 
-			if (wordEnd > doc.getLength())
+			if (wordEnd > doc.getLength()) {
 				wordEnd = doc.getLength() - 1;
-			if (wordStart >= wordEnd)
+			}
+			if (wordStart >= wordEnd) {
 				continue;
+			}
 			// System.out.println("Word:"+wordStart+","+wordEnd);
 			if (sCheck.isCorrect(word) || sCheck.isIgnored(word)) {
 				markAsCorrect(doc, wordStart, wordEnd);
@@ -113,8 +130,9 @@ public class AutoSpellCheckHandler extends MouseAdapter implements DocumentListe
 		SimpleAttributeSet attr;
 		attr = new SimpleAttributeSet(doc.getCharacterElement((start + end) / 2).getAttributes());
 		attr.removeAttribute(wordMisspelled);
-		if (end >= start)
+		if (end >= start) {
 			doc.setCharacterAttributes(start, end - start, attr, true);
+		}
 	}
 
 	private void handleDocumentChange(DocumentEvent evt) {
@@ -171,18 +189,20 @@ public class AutoSpellCheckHandler extends MouseAdapter implements DocumentListe
 				}
 				popup.addSeparator();
 				item = new JMenuItem();
-				if (messages != null)
+				if (messages != null) {
 					item.setText(messages.getString("IGNOREALL"));
-				else
+				} else {
 					item.setText("Ignore All");
+				}
 				item.setActionCommand(word);
 				item.addActionListener(new IgnoreAllListener(doc));
 				popup.add(item);
 				item = new JMenuItem();
-				if (messages != null)
+				if (messages != null) {
 					item.setText(messages.getString("ADD"));
-				else
+				} else {
 					item.setText("Add word to wordlist");
+				}
 				item.setActionCommand(word);
 				item.addActionListener(new AddToDictListener(doc));
 				popup.add(item);
@@ -193,14 +213,17 @@ public class AutoSpellCheckHandler extends MouseAdapter implements DocumentListe
 
 	// DocumentListener implementation
 	// ------------------------------------------------------------------
+	@Override
 	public void changedUpdate(DocumentEvent evt) {
 	}
 
+	@Override
 	public void insertUpdate(DocumentEvent evt) {
 		Runnable r = new SpellCheckChange(evt);
 		SwingUtilities.invokeLater(r);
 	}
 
+	@Override
 	public void removeUpdate(DocumentEvent evt) {
 		Runnable r = new SpellCheckChange(evt);
 		SwingUtilities.invokeLater(r);
@@ -208,15 +231,18 @@ public class AutoSpellCheckHandler extends MouseAdapter implements DocumentListe
 
 	// MouseListener implementation
 	// ------------------------------------------------------------------
+	@Override
 	public void mouseReleased(MouseEvent evt) {
 		JEditorPane pane;
-		if (!(evt.getComponent() instanceof JEditorPane))
+		if (!(evt.getComponent() instanceof JEditorPane)) {
 			return;
+		}
 
 		if (evt.isPopupTrigger()) {
 			pane = (JEditorPane) evt.getComponent();
-			if (pane.isEditable())
+			if (pane.isEditable()) {
 				showSuggestionPopup(pane, new Point(evt.getX(), evt.getY()));
+			}
 		}
 	}
 
@@ -230,6 +256,7 @@ public class AutoSpellCheckHandler extends MouseAdapter implements DocumentListe
 			this.evt = evt;
 		}
 
+		@Override
 		public void run() {
 			handleDocumentChange(evt);
 		}
@@ -244,6 +271,7 @@ public class AutoSpellCheckHandler extends MouseAdapter implements DocumentListe
 			this.tok = tok;
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent evt) {
 			tok.replaceWord(evt.getActionCommand());
 		}
@@ -257,6 +285,7 @@ public class AutoSpellCheckHandler extends MouseAdapter implements DocumentListe
 			this.doc = doc;
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent evt) {
 			sCheck.addToDictionary(evt.getActionCommand());
 			Runnable r = new MarkUpSpellingAll(doc);
@@ -272,6 +301,7 @@ public class AutoSpellCheckHandler extends MouseAdapter implements DocumentListe
 			this.doc = doc;
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent evt) {
 			sCheck.ignoreAll(evt.getActionCommand());
 			Runnable r = new MarkUpSpellingAll(doc);
@@ -287,6 +317,7 @@ public class AutoSpellCheckHandler extends MouseAdapter implements DocumentListe
 			this.doc = doc;
 		}
 
+		@Override
 		public void run() {
 			markupSpelling(doc, 0, doc.getLength());
 		}

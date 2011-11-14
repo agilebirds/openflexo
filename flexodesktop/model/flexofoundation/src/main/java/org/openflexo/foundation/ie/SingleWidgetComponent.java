@@ -80,9 +80,10 @@ public final class SingleWidgetComponent extends IEPartialComponent implements D
 
 	public IEWidget getRootWidget() {
 		if (!isDeserializing() && _rootWidget == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Reusable component " + getComponentDefinition().getComponentName()
 						+ " has no root widget defined-->this component will be deleted");
+			}
 			getFlexoResource().delete();
 		}
 		return _rootWidget;
@@ -103,8 +104,9 @@ public final class SingleWidgetComponent extends IEPartialComponent implements D
 	public Vector<IObject> getEmbeddedIEObjects() {
 		Vector answer = super.getEmbeddedIEObjects();
 		Object o = getRootWidget();
-		if (o != null)
+		if (o != null) {
 			answer.add(o);
+		}
 		return answer;
 	}
 
@@ -129,8 +131,9 @@ public final class SingleWidgetComponent extends IEPartialComponent implements D
 		if (getRootWidget() instanceof IEBlocWidget) {
 			IEBlocWidget w = (IEBlocWidget) getRootWidget();
 			HTMLListDescriptor d = HTMLListDescriptor.createInstanceForBloc(w);
-			if (d != null)
+			if (d != null) {
 				v.add(d);
+			}
 		}
 
 		return v;
@@ -138,8 +141,9 @@ public final class SingleWidgetComponent extends IEPartialComponent implements D
 
 	@Override
 	public Vector<IESequenceTab> getAllTabContainers() {
-		if (getRootWidget() instanceof IETopComponent)
+		if (getRootWidget() instanceof IETopComponent) {
 			return ((IETopComponent) getRootWidget()).getAllTabContainers();
+		}
 		return new Vector<IESequenceTab>();
 	}
 }

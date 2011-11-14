@@ -40,8 +40,8 @@ import org.jdom.output.XMLOutputter;
 import org.openflexo.diff.DiffSource;
 import org.openflexo.diff.merge.IMerge;
 import org.openflexo.diff.merge.MergeChange;
-import org.openflexo.diff.merge.MergedDocumentType;
 import org.openflexo.diff.merge.MergeChange.ChangeCategory;
+import org.openflexo.diff.merge.MergedDocumentType;
 import org.openflexo.xml.diff2.DocumentsMapping;
 import org.openflexo.xml.diff2.DocumentsMapping.ParentReferences;
 import org.openflexo.xml.diff3.mergerule.MergeTextRule;
@@ -155,8 +155,9 @@ public class XMLDiff3 extends Observable implements IMerge {
 		Arrays.sort(_actions, new MergeActionComparator());
 
 		// now we execute everything
-		for (int j = 0; j < _actions.length; j++)
+		for (int j = 0; j < _actions.length; j++) {
 			_actions[j].execute();
+		}
 
 		if (DEBUG) {
 			System.out.println("pending insertion count = " + _pendingInsertions.size());
@@ -187,14 +188,16 @@ public class XMLDiff3 extends Observable implements IMerge {
 	}
 
 	public void registerManualChoice(UnresolvedConflict conflict, MergeAction action) {
-		if (!_unresolvedConflict.contains(conflict))
+		if (!_unresolvedConflict.contains(conflict)) {
 			throw new IllegalStateException("Cannot resolve a conflict manually if this conflict doesn't exists");
+		}
 		_manualChoices.put(conflict, action);
 	}
 
 	public void unregisterManualChoice(UnresolvedConflict conflict) {
-		if (_manualChoices.get(conflict) == null)
+		if (_manualChoices.get(conflict) == null) {
 			throw new IllegalStateException("Cannot remove a manual choice if this conflict doesn't exists");
+		}
 		_manualChoices.remove(conflict);
 	}
 
@@ -205,8 +208,9 @@ public class XMLDiff3 extends Observable implements IMerge {
 	public boolean allConflictsAreManuallyResolved() {
 		Enumeration<UnresolvedConflict> en = _unresolvedConflict.elements();
 		while (en.hasMoreElements()) {
-			if (!en.nextElement().isSolved())
+			if (!en.nextElement().isSolved()) {
 				return false;
+			}
 		}
 		return true;
 	}
@@ -215,8 +219,9 @@ public class XMLDiff3 extends Observable implements IMerge {
 		int reply = 0;
 		Enumeration<UnresolvedConflict> en = _unresolvedConflict.elements();
 		while (en.hasMoreElements()) {
-			if (en.nextElement().isSolved())
+			if (en.nextElement().isSolved()) {
 				reply++;
+			}
 		}
 		return reply;
 	}
@@ -314,8 +319,9 @@ public class XMLDiff3 extends Observable implements IMerge {
 				// we are in the most common case : srcContent is still alive in both branch
 				Element buildedElement = (Element) _srcMergedMapping.get(srcContent);
 
-				if (buildedElement == null)
+				if (buildedElement == null) {
 					buildedElement = new Element(((Element) srcContent).getName());
+				}
 				_srcMergedMapping.put(srcContent, buildedElement);
 
 				AttributesChange attributesChange = new AttributesChange(this, (matching1).getAttributesDiff(),
@@ -358,8 +364,9 @@ public class XMLDiff3 extends Observable implements IMerge {
 				while (keyEnum.hasMoreElements()) {
 					contentToInsert = keyEnum.nextElement();
 					Content parentInTarget = _pendingInsertions.get(contentToInsert);
-					if (parentInTarget.equals(matching1.getTargetElement()) || parentInTarget.equals(matching2.getTargetElement()))
+					if (parentInTarget.equals(matching1.getTargetElement()) || parentInTarget.equals(matching2.getTargetElement())) {
 						contentsToInsert.put(contentToInsert.getContent(), contentToInsert.getIndex());
+					}
 				}
 
 				Enumeration<Content> en0 = contentsToInsert.keys();
@@ -377,10 +384,12 @@ public class XMLDiff3 extends Observable implements IMerge {
 				Content child = null;
 				while (it.hasNext()) {
 					child = it.next();
-					if (child instanceof Text && ((Text) child).getTextTrim().length() == 0)
+					if (child instanceof Text && ((Text) child).getTextTrim().length() == 0) {
 						continue;
-					if (_srcMergedMapping.get(child) == null) // just to test if child hasn't been inserted yet
+					}
+					if (_srcMergedMapping.get(child) == null) {
 						parse(child, buildedElement);
+					}
 				}
 
 				// now let's take a look at Element added in _mapping1 to see if one of them must be inserted here
@@ -501,8 +510,9 @@ public class XMLDiff3 extends Observable implements IMerge {
 	private MergeTextAction tryAutoResolvingTextUpdateConflict(UnresolvedTextConflict conflict) {
 		MergeTextRule rule = null;
 		rule = new ResourceCount(conflict);
-		if (rule.canBeApplyed())
+		if (rule.canBeApplyed()) {
 			return rule.getAction();
+		}
 		return null;
 	}
 
@@ -523,8 +533,9 @@ public class XMLDiff3 extends Observable implements IMerge {
 			// parent.addContent(child);
 			MergeElementAction mergeAction = new MergeElementAction(_conflictIndex++, MergeActionType.INSERT, child, parent, index);
 			_mergeElementsAction.add(mergeAction);
-			if (child instanceof Element)
+			if (child instanceof Element) {
 				registerPendingAddition(parent, (Element) child);
+			}
 		} else {
 			if (conflictingItem instanceof Element) {
 				UnresolvedInsertionConflict conflict = new UnresolvedInsertionConflict(this, _conflictIndex++, parent,
@@ -579,15 +590,17 @@ public class XMLDiff3 extends Observable implements IMerge {
 					prop = en.nextElement();
 					Vector<String> tags = potentialMatches.get(prop);
 					if (tags.contains(((Element) child).getName())) {
-						if (!prop.isSingle())
+						if (!prop.isSingle()) {
 							return null;
+						}
 						Iterator<String> it = tags.iterator();
 						String tag = null;
 						while (it.hasNext()) {
 							tag = it.next();
 							Content concurrent = findAPendingAdditionWithTag(parent, tag);
-							if (concurrent != null)
+							if (concurrent != null) {
 								return concurrent;
+							}
 						}
 						// return null;
 					}
@@ -602,8 +615,9 @@ public class XMLDiff3 extends Observable implements IMerge {
 			Content c = null;
 			while (it.hasNext()) {
 				c = it.next();
-				if (c instanceof Text && ((Text) c).getTextTrim().length() > 0)
+				if (c instanceof Text && ((Text) c).getTextTrim().length() > 0) {
 					return c;
+				}
 			}
 		}
 		return null;
@@ -612,8 +626,9 @@ public class XMLDiff3 extends Observable implements IMerge {
 	private Hashtable<Element, Vector<Element>> _pendingAdditions;
 
 	private void registerPendingAddition(Element parent, Element child) {
-		if (_pendingAdditions == null)
+		if (_pendingAdditions == null) {
 			_pendingAdditions = new Hashtable<Element, Vector<Element>>();
+		}
 		Vector<Element> inserted = _pendingAdditions.get(parent);
 		if (inserted == null) {
 			inserted = new Vector<Element>();
@@ -623,15 +638,17 @@ public class XMLDiff3 extends Observable implements IMerge {
 	}
 
 	private Content findAPendingAdditionWithTag(Element parent, String tag) {
-		if (_pendingAdditions == null)
+		if (_pendingAdditions == null) {
 			_pendingAdditions = new Hashtable<Element, Vector<Element>>();
+		}
 		Vector<Element> additions = _pendingAdditions.get(parent);
 		if (additions != null) {
 			Enumeration<Element> en = additions.elements();
 			while (en.hasMoreElements()) {
 				Element item = en.nextElement();
-				if (tag.equals(item.getName()))
+				if (tag.equals(item.getName())) {
 					return item;
+				}
 			}
 		}
 		return null;

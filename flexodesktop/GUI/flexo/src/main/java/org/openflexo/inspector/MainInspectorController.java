@@ -32,6 +32,7 @@ import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -86,10 +87,10 @@ public class MainInspectorController implements Observer, ChangeListener {
 		inspectorDialog.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		EMPTY_CONTENT = new JPanel(new BorderLayout());
 		EMPTY_CONTENT.setPreferredSize(new Dimension(400, 400));
-		EMPTY_CONTENT.add(new JLabel("No selection", JLabel.CENTER), BorderLayout.CENTER);
+		EMPTY_CONTENT.add(new JLabel("No selection", SwingConstants.CENTER), BorderLayout.CENTER);
 		MULTIPLE_SELECTION_CONTENT = new JPanel(new BorderLayout());
 		MULTIPLE_SELECTION_CONTENT.setPreferredSize(new Dimension(400, 400));
-		MULTIPLE_SELECTION_CONTENT.add(new JLabel("Multiple selection", JLabel.CENTER), BorderLayout.CENTER);
+		MULTIPLE_SELECTION_CONTENT.add(new JLabel("Multiple selection", SwingConstants.CENTER), BorderLayout.CENTER);
 
 		rootPane = new JPanel(new BorderLayout());
 		inspectorDialog.getContentPane().setLayout(new BorderLayout());

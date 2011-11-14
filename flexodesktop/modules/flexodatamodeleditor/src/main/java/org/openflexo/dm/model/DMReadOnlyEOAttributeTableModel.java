@@ -21,14 +21,13 @@ package org.openflexo.dm.model;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-
 import org.openflexo.components.tabular.model.IconColumn;
 import org.openflexo.components.tabular.model.StringColumn;
 import org.openflexo.dm.view.controller.DMController;
 import org.openflexo.foundation.dm.eo.DMEOAttribute;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 
 /**
  * @author gpolet
@@ -42,8 +41,9 @@ public class DMReadOnlyEOAttributeTableModel extends DMEOAttributeTableModel {
 	 */
 	public DMReadOnlyEOAttributeTableModel(DMEOEntity entity, DMController ctrl) {
 		super(entity, ctrl);
-		while (getColumnCount() > 0)
+		while (getColumnCount() > 0) {
 			removeFromColumns(columnAt(0));
+		}
 		addToColumns(new IconColumn<DMEOAttribute>("property_icon", 30) {
 			@Override
 			public Icon getIcon(DMEOAttribute attribute) {
@@ -140,8 +140,9 @@ public class DMReadOnlyEOAttributeTableModel extends DMEOAttributeTableModel {
 		addToColumns(new StringColumn<DMEOAttribute>("prototype", 150) {
 			@Override
 			public String getValue(DMEOAttribute attribute) {
-				if (attribute != null && (attribute.getPrototype()) != null)
+				if (attribute != null && (attribute.getPrototype()) != null) {
 					return (attribute.getPrototype()).getName();
+				}
 				return null;
 			}
 		});

@@ -39,11 +39,6 @@ import java.util.logging.Logger;
 
 import javax.swing.tree.TreeNode;
 
-import org.openflexo.toolbox.EmptyVector;
-import org.openflexo.toolbox.FileResource;
-import org.openflexo.toolbox.FileUtils;
-import org.openflexo.xmlcode.XMLMapping;
-
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.TargetType;
@@ -94,6 +89,10 @@ import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.xml.FlexoDMBuilder;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
+import org.openflexo.toolbox.EmptyVector;
+import org.openflexo.toolbox.FileResource;
+import org.openflexo.toolbox.FileUtils;
+import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * Represents the whole data model for the project
@@ -291,8 +290,9 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 	 * @return a newly created DMModel
 	 */
 	public static DMModel createNewDMModel(FlexoProject project) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("createNewDMModel(), project=" + project);
+		}
 		DMModel newDMModel = new DMModel(project);
 		project._buildingDataModel = newDMModel;
 
@@ -307,8 +307,9 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 			try {
 				dmRes = new FlexoDMResource(project, newDMModel, dataModelFile);
 			} catch (InvalidFileNameException e1) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("This should not happen");
+				}
 				return null;
 			}
 		}
@@ -318,8 +319,9 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 			project.registerResource(dmRes);
 		} catch (Exception e1) {
 			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
+			}
 			e1.printStackTrace();
 		}
 
@@ -329,8 +331,9 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 			dmRes.saveResourceData();
 		} catch (Exception e1) {
 			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
+			}
 			e1.printStackTrace();
 		}
 
@@ -361,8 +364,9 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 	}
 
 	public void initializeProcessBusinessDataRepository() {
-		if (processBusinessDataRepository == null)
+		if (processBusinessDataRepository == null) {
 			processBusinessDataRepository = ProcessBusinessDataRepository.createNewProcessBusinessDataRepository(this);
+		}
 	}
 
 	@Override
@@ -373,8 +377,9 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 
 	@Override
 	public void finalizeDeserialization(Object builder) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Finalize deserialization for DMModel");
+		}
 
 		// Little hack allowing
 		// temporary storing of deserialized data model
@@ -394,11 +399,13 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 				try {
 					next.loadEOModel();
 				} catch (InvalidEOModelFileException e) {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning(e.getMessage());
+					}
 				}
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("EOModel " + next.getName() + " contains " + next.getEntities().size() + " entities.");
+				}
 			}
 		}
 
@@ -426,8 +433,9 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 					next.updateFromEOModel();
 				} catch (EOAccessException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				}
 			}
@@ -729,8 +737,9 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 			getClassLibrary().clearUnresolvedTypesForNewRegisteredEntity(entity);
 			return true;
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Try to register an already registered entity: " + entity.getFullyQualifiedName());
+			}
 			return false;
 		}
 	}
@@ -739,8 +748,9 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 		if (entities.get(entity.getFullyQualifiedName()) != null) {
 			entities.remove(entity.getFullyQualifiedName());
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Try to unregister a non registered entity: " + entity.getFullyQualifiedName());
+			}
 		}
 	}
 
@@ -748,8 +758,9 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 		if (entities.get(entityFullyQualifiedName) != null) {
 			entities.remove(entityFullyQualifiedName);
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Try to unregister a non registered entity: " + entityFullyQualifiedName);
+			}
 		}
 	}
 
@@ -788,16 +799,18 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 	public ExternalRepository getExternalRepository(FlexoJarResource resource) {
 		for (Enumeration<ExternalRepository> en = externalRepositories.elements(); en.hasMoreElements();) {
 			ExternalRepository next = en.nextElement();
-			if (next.getJarResource() == resource)
+			if (next.getJarResource() == resource) {
 				return next;
+			}
 		}
 		return null;
 	}
 
 	public void registerRepository(DMRepository repository) {
 		if (repository.getName() == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Trying to register an unnamed directory !. Will do it anyway with name=NULL.");
+			}
 		}
 		try {
 			if (repositories.get(repository.getFullyQualifiedName()) == null) {
@@ -807,8 +820,9 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 				setChanged();
 				notifyObservers(new RepositoryRegistered(repository));
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Try to register an already registered repository: " + repository.getFullyQualifiedName());
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -823,8 +837,9 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 			setChanged();
 			notifyObservers(new RepositoryUnregistered(repository));
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Try to unregister a non registered repository: " + repository.getFullyQualifiedName());
+			}
 		}
 	}
 
@@ -1095,8 +1110,9 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 		DMEntity returned = getDMEntity(aClass);
 		if (returned == null) {
 			if (tryToLoadEntityIfNonExistant) {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Class " + aClass.getName() + " not imported in DataModel: try to dynamically load it.");
+				}
 				returned = LoadableDMEntity.createLoadableDMEntity(this, aClass);
 			} else {
 				logger.warning("Sorry: class " + aClass.getName() + " not imported in DataModel");
@@ -1109,18 +1125,20 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 		if (packageName == null) {
 			DMEntity e = null;
 			e = getEntities().get(DMPackage.DEFAULT_PACKAGE_NAME + "." + className);
-			if (e == null)
+			if (e == null) {
 				return getEntities().get(className);
-			else
+			} else {
 				return e;
+			}
 		}
 		return getEntities().get(packageName + "." + className);
 	}
 
 	public DMEntity getDMEntity(String fullQualifiedName) {
 		DMEntity returned = getEntities().get(fullQualifiedName);
-		if (returned == null)
+		if (returned == null) {
 			returned = getEntities().get(DMPackage.DEFAULT_PACKAGE_NAME + "." + fullQualifiedName);
+		}
 		return returned;
 	}
 
@@ -1174,8 +1192,9 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 	}
 
 	public Vector getDMEntities(String className) {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Not implemented !");
+		}
 		return new Vector();
 	}
 
@@ -1240,6 +1259,7 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 		 */
+		@Override
 		public int compare(DMRepository o1, DMRepository o2) {
 
 			DMRepository rep1 = o1;
@@ -1252,10 +1272,11 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 				} else {
 					String s1 = rep1.getName();
 					String s2 = rep2.getName();
-					if ((s1 != null) && (s2 != null))
+					if ((s1 != null) && (s2 != null)) {
 						return Collator.getInstance().compare(s1, s2);
-					else
+					} else {
 						return 0;
+					}
 				}
 			}
 		}
@@ -1283,8 +1304,9 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			if (line == null)
+			if (line == null) {
 				break;
+			}
 			line = line.trim();
 			if (line.length() > 0 && line.charAt(0) != '#') {
 				// This line is meaningfull
@@ -1341,11 +1363,13 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 
 	public DMEntity getDefaultParentDMEOEntity() {
 		DMEntity wdlGenericRecord = getDMEntity("org.openflexo.core.woapp", "WDLGenericRecord");
-		if (wdlGenericRecord != null)
+		if (wdlGenericRecord != null) {
 			return wdlGenericRecord;
+		}
 		DMEntity eoGenericRecord = getDMEntity("com.webobjects.eocontrol", "EOGenericRecord");
-		if (eoGenericRecord != null)
+		if (eoGenericRecord != null) {
 			return eoGenericRecord;
+		}
 		return null;
 	}
 
@@ -1431,15 +1455,17 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 	}
 
 	public String findDriverName(String dbmsName) {
-		if (dbmsName == null)
+		if (dbmsName == null) {
 			return null;
+		}
 		FileResource driverDirectory = new FileResource("Config/Generator/Libraries/JDBCDrivers/" + dbmsName);
 		if (driverDirectory.exists()) {
 			File[] content = driverDirectory.listFiles();
 			if (content.length > 0) {
 				for (int i = 0; i < content.length; i++) {
-					if (content[i].getName().endsWith(".jar"))
+					if (content[i].getName().endsWith(".jar")) {
 						return content[i].getName();
+					}
 				}
 			}
 		}
@@ -1447,12 +1473,14 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 	}
 
 	private FileResource[] findDriverFile(String dbmsName) {
-		if (dbmsName == null)
+		if (dbmsName == null) {
 			return null;
+		}
 		FileResource driverDirectory = new FileResource("Config/Generator/Libraries/JDBCDrivers/" + dbmsName);
 		if (driverDirectory.exists()) {
 			File[] found = driverDirectory.listFiles(new FileFilter() {
 
+				@Override
 				public boolean accept(File pathname) {
 					return pathname.getName().toLowerCase().endsWith(".jar");
 				}
@@ -1488,37 +1516,48 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 
 	private Vector<String> getAllDBMSNames() {
 		Vector<String> v = new Vector<String>();
-		if (findDBMSName(getGlobalDefaultConnectionString()) != null)
+		if (findDBMSName(getGlobalDefaultConnectionString()) != null) {
 			v.add(findDBMSName(getGlobalDefaultConnectionString()));
+		}
 		Enumeration<DMEOModel> en = getAllDMEOModel().elements();
 		while (en.hasMoreElements()) {
 			DMEOModel model = en.nextElement();
-			if (model.getDMModel().getExecutionModelRepository().getExecutionModelEOModel() == model || !model.isNotPrototypes())
+			if (model.getDMModel().getExecutionModelRepository().getExecutionModelEOModel() == model || !model.isNotPrototypes()) {
 				continue;
+			}
 			String dbms = findDBMSName(model.getConnectionDictionary().toString());
-			if (dbms != null && !v.contains(dbms))
+			if (dbms != null && !v.contains(dbms)) {
 				v.add(dbms);
+			}
 		}
 		return v;
 	}
 
 	private static String findDBMSName(String connectionStr) {
-		if (connectionStr == null)
+		if (connectionStr == null) {
 			return null;
-		if (connectionStr.toLowerCase().indexOf("oracle") > -1)
+		}
+		if (connectionStr.toLowerCase().indexOf("oracle") > -1) {
 			return "oracle";
-		if (connectionStr.toLowerCase().indexOf("frontbase") > -1)
+		}
+		if (connectionStr.toLowerCase().indexOf("frontbase") > -1) {
 			return "frontbase";
-		if (connectionStr.toLowerCase().indexOf("postgres") > -1)
+		}
+		if (connectionStr.toLowerCase().indexOf("postgres") > -1) {
 			return "postgres";
-		if (connectionStr.toLowerCase().indexOf("mysql") > -1)
+		}
+		if (connectionStr.toLowerCase().indexOf("mysql") > -1) {
 			return "mysql";
-		if (connectionStr.toLowerCase().indexOf("derby") > -1)
+		}
+		if (connectionStr.toLowerCase().indexOf("derby") > -1) {
 			return "derby";
-		if (connectionStr.toLowerCase().indexOf("hsql") > -1)
+		}
+		if (connectionStr.toLowerCase().indexOf("hsql") > -1) {
 			return "hsql";
-		if (connectionStr.toLowerCase().indexOf("h2") > -1)
+		}
+		if (connectionStr.toLowerCase().indexOf("h2") > -1) {
 			return "h2";
+		}
 		return null;
 	}
 
@@ -1545,20 +1584,23 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 	}
 
 	public DMModelStatistics getStatistics() {
-		if (statistics == null)
+		if (statistics == null) {
 			statistics = new DMModelStatistics(this);
+		}
 		return statistics;
 	}
 
 	public DMEOPrototype getPrototypeNamed(String protoName) {
-		if (eoPrototypeRepository != null)
+		if (eoPrototypeRepository != null) {
 			return eoPrototypeRepository.getPrototypeNamed(protoName);
+		}
 		return null;
 	}
 
 	public Vector<DMEOPrototype> getAllEOPrototypes() {
-		if (eoPrototypeRepository != null)
+		if (eoPrototypeRepository != null) {
 			return eoPrototypeRepository.getPrototypes();
+		}
 		return null;
 	}
 
@@ -1583,8 +1625,9 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 		DMEOModel candidate = null;
 		while (it.hasNext()) {
 			candidate = it.next();
-			if (candidate.getName().equals(eomodelName))
+			if (candidate.getName().equals(eomodelName)) {
 				return candidate;
+			}
 		}
 		return null;
 	}
@@ -1594,8 +1637,9 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 		ProjectDatabaseRepository candidate = null;
 		while (it.hasNext()) {
 			candidate = it.next();
-			if (candidate.getName().equals(projectDataBaseRepositoryName))
+			if (candidate.getName().equals(projectDataBaseRepositoryName)) {
 				return candidate;
+			}
 		}
 		return null;
 	}
@@ -1646,8 +1690,9 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 					for (DMProperty p : e.getProperties().values()) {
 						// Call setIsModified on all DMEOProperties for the whole DataModel
 						// in order to have up-to-date generated code
-						if (p instanceof DMEOProperty)
+						if (p instanceof DMEOProperty) {
 							((DMEOProperty) p).codeGenerationHasBeenActivated();
+						}
 					}
 				}
 			}
@@ -1664,8 +1709,9 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 	}
 
 	public void addToDeclaredTranstypers(DMTranstyper aTranstyper) {
-		if (aTranstyper.getReturnedType() == null)
+		if (aTranstyper.getReturnedType() == null) {
 			return;
+		}
 		if (_declaredTranstypers.get(aTranstyper.getReturnedType()) == null) {
 			_declaredTranstypers.put(aTranstyper.getReturnedType(), new Vector<DMTranstyper>());
 		}
@@ -1680,8 +1726,9 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 	}
 
 	private void removeFromDeclaredTranstypersForType(DMTranstyper aTranstyper, DMType aType) {
-		if (aType == null)
+		if (aType == null) {
 			return;
+		}
 		if (_declaredTranstypers.get(aType) != null) {
 			_declaredTranstypers.get(aType).remove(aTranstyper);
 		}
@@ -1692,8 +1739,9 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 			logger.warning("Transtyper with null type");
 			return;
 		}
-		if (!aTranstyper.getReturnedType().equals(newType))
+		if (!aTranstyper.getReturnedType().equals(newType)) {
 			logger.warning("Strange data: " + aTranstyper.getReturnedType() + " different from " + newType);
+		}
 
 		removeFromDeclaredTranstypersForType(aTranstyper, oldType);
 		addToDeclaredTranstypers(aTranstyper);
@@ -1702,8 +1750,9 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 	private static final Vector<DMTranstyper> EMPTY_TRANSTYPER_VECTOR = EmptyVector.EMPTY_VECTOR(DMTranstyper.class);
 
 	public Vector<DMTranstyper> getDMTranstypers(DMType type) {
-		if (type == null)
+		if (type == null) {
 			return EMPTY_TRANSTYPER_VECTOR;
+		}
 		if (_declaredTranstypers.get(type) == null) {
 			_declaredTranstypers.put(type, new Vector<DMTranstyper>());
 		}
@@ -1736,10 +1785,11 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 
 	public ERDiagram getDiagramWithName(String diagramName, boolean caseSensitive) {
 		for (ERDiagram d : getDiagrams()) {
-			if (caseSensitive && diagramName.equals(d.getName()))
+			if (caseSensitive && diagramName.equals(d.getName())) {
 				return d;
-			else if (!caseSensitive && diagramName.equalsIgnoreCase(d.getName()))
+			} else if (!caseSensitive && diagramName.equalsIgnoreCase(d.getName())) {
 				return d;
+			}
 		}
 		return null;
 	}

@@ -79,9 +79,9 @@ import org.openflexo.generator.action.SynchronizeRepositoryCodeGeneration;
 import org.openflexo.generator.action.WriteModifiedGeneratedFiles;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.rm.GenerationAvailableFileResource;
-import org.openflexo.icon.CGIconLibrary;
 import org.openflexo.icon.FilesIconLibrary;
 import org.openflexo.icon.GeneratorIconLibrary;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.jedit.JEditTextArea.DisplayContext;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
@@ -325,13 +325,11 @@ public class CGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 					logger.warning("TODO: implement this");
 					if (resource.getGenerator() != null) {
 						if (resource.getGenerator().hasFormattingException()) {
-							addInfoPanel(CGIconLibrary.UNFIXABLE_WARNING_ICON,
-									FlexoLocalization.localizedForKey("formatting_warning_title"),
+							addInfoPanel(IconLibrary.UNFIXABLE_WARNING_ICON, FlexoLocalization.localizedForKey("formatting_warning_title"),
 									FlexoLocalization.localizedForKey("formatting_warning_description"));
 						}
 						if (resource.getGenerator().hasAppendingException()) {
-							addInfoPanel(CGIconLibrary.UNFIXABLE_WARNING_ICON,
-									FlexoLocalization.localizedForKey("appending_warning_title"),
+							addInfoPanel(IconLibrary.UNFIXABLE_WARNING_ICON, FlexoLocalization.localizedForKey("appending_warning_title"),
 									FlexoLocalization.localizedForKey("appending_warning_description"));
 						}
 					}
@@ -343,7 +341,7 @@ public class CGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 				}
 
 				if (_cgFile.hasGenerationErrors()) {
-					addInfoPanel(CGIconLibrary.UNFIXABLE_ERROR_ICON, FlexoLocalization.localizedForKey("generation_error"),
+					addInfoPanel(IconLibrary.UNFIXABLE_ERROR_ICON, FlexoLocalization.localizedForKey("generation_error"),
 							FlexoLocalization.localizedForKey("generation_error_description"));
 				}
 			}

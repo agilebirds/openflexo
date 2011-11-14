@@ -47,11 +47,11 @@ import org.openflexo.foundation.sg.SourceRepository;
 import org.openflexo.foundation.xml.GeneratedSourcesBuilder;
 import org.openflexo.javaparser.FJPDMMapper;
 import org.openflexo.javaparser.FJPDMSet;
+import org.openflexo.javaparser.FJPDMSet.FJPPackageReference.FJPClassReference;
 import org.openflexo.javaparser.FJPJavaClass;
 import org.openflexo.javaparser.FJPJavaParseException;
 import org.openflexo.javaparser.FJPJavaSource;
 import org.openflexo.javaparser.FJPTypeResolver;
-import org.openflexo.javaparser.FJPDMSet.FJPPackageReference.FJPClassReference;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.sg.generator.SGJavaClassGenerator;
 import org.openflexo.toolbox.FileUtils;
@@ -155,8 +155,9 @@ public class SGJavaFile extends SGFile implements ModelReinjectableFile {
 
 	@Override
 	public DMEntity getModelEntity() {
-		if (getGenerator() == null)
+		if (getGenerator() == null) {
 			return null;
+		}
 		if (getGenerator() instanceof SGJavaClassGenerator) {
 			return ((SGJavaClassGenerator) getGenerator()).getEntity();
 		}
@@ -165,30 +166,35 @@ public class SGJavaFile extends SGFile implements ModelReinjectableFile {
 
 	@Override
 	public boolean supportModelReinjection() {
-		if (getGenerator() == null)
+		if (getGenerator() == null) {
 			return false;
-		if (getModelEntity() == null)
+		}
+		if (getModelEntity() == null) {
 			return false;
+		}
 		return true;
 	}
 
 	@Override
 	public boolean needsModelReinjection() {
-		if (!supportModelReinjection())
+		if (!supportModelReinjection()) {
 			return false;
+		}
 		return (getJavaResource().getLastModelReinjectingDate().before(getResource().getDiskLastModifiedDate()));
 	}
 
 	public Date getLastModelReinjectingDate() {
-		if ((getResource() != null) && (getResource().getResourceFile() != null))
+		if ((getResource() != null) && (getResource().getResourceFile() != null)) {
 			return getJavaResource().getLastModelReinjectingDate();
+		}
 		return null;
 	}
 
 	public String getLastModelReinjectingDateAsString() {
 		if (getLastModelReinjectingDate() != null) {
-			if (getLastModelReinjectingDate().equals(new Date(0)))
+			if (getLastModelReinjectingDate().equals(new Date(0))) {
 				return FlexoLocalization.localizedForKey("never");
+			}
 			return (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(getLastModelReinjectingDate());
 		}
 		return "???";
@@ -202,17 +208,20 @@ public class SGJavaFile extends SGFile implements ModelReinjectableFile {
 	 */
 	private void saveKnownJavaStructure() {
 		if (supportModelReinjection()) {
-			if (_propertiesKnownAndIgnored == null)
+			if (_propertiesKnownAndIgnored == null) {
 				_propertiesKnownAndIgnored = new Vector<String>();
-			if (_methodsKnownAndIgnored == null)
+			}
+			if (_methodsKnownAndIgnored == null) {
 				_methodsKnownAndIgnored = new Vector<String>();
+			}
 			_propertiesKnownAndIgnored.clear();
 			_methodsKnownAndIgnored.clear();
 			File javaStructureFile = getJavaResource().getJavaModelFile();
 			StringBuffer contentToWriteOnDisk = new StringBuffer();
 			// Date date1 = new Date();
-			if (getModelEntity() == null || getParsedJavaSource() == null)
+			if (getModelEntity() == null || getParsedJavaSource() == null) {
 				return;
+			}
 			FJPDMSet parsedJavaStructure = new FJPDMSet(getProject(), "java_structure", getParsedJavaSource(), getModelEntity());
 			// Date date2 = new Date();
 			// logger.info("Time for parsedJavaStructure "+getFileName()+": "+(date2.getTime()-date1.getTime())+" ms");
@@ -241,10 +250,12 @@ public class SGJavaFile extends SGFile implements ModelReinjectableFile {
 
 	private void loadJavaStructure() {
 		javaStructureNeedsToBeReloaded = false;
-		if (_propertiesKnownAndIgnored == null)
+		if (_propertiesKnownAndIgnored == null) {
 			_propertiesKnownAndIgnored = new Vector<String>();
-		if (_methodsKnownAndIgnored == null)
+		}
+		if (_methodsKnownAndIgnored == null) {
 			_methodsKnownAndIgnored = new Vector<String>();
+		}
 		_propertiesKnownAndIgnored.clear();
 		_methodsKnownAndIgnored.clear();
 		if (getJavaResource().getJavaModelFile().exists()) {
@@ -258,12 +269,14 @@ public class SGJavaFile extends SGFile implements ModelReinjectableFile {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-					if (line == null)
+					if (line == null) {
 						break;
-					if (line.indexOf("(") >= 0)
+					}
+					if (line.indexOf("(") >= 0) {
 						_methodsKnownAndIgnored.add(line);
-					else
+					} else {
 						_propertiesKnownAndIgnored.add(line);
+					}
 				}
 			} catch (IOException e) {
 				logger.warning("Could not load " + getJavaResource().getJavaModelFile() + " reason " + e.getMessage());
@@ -282,14 +295,16 @@ public class SGJavaFile extends SGFile implements ModelReinjectableFile {
 	}
 
 	public Vector<String> getPropertiesKnownAndIgnored() {
-		if (javaStructureNeedsToBeReloaded)
+		if (javaStructureNeedsToBeReloaded) {
 			loadJavaStructure();
+		}
 		return _propertiesKnownAndIgnored;
 	}
 
 	public Vector<String> getMethodsKnownAndIgnored() {
-		if (javaStructureNeedsToBeReloaded)
+		if (javaStructureNeedsToBeReloaded) {
 			loadJavaStructure();
+		}
 		return _methodsKnownAndIgnored;
 	}
 
@@ -300,8 +315,9 @@ public class SGJavaFile extends SGFile implements ModelReinjectableFile {
 		ClassReference classReference = updateContext.getClassReference(parsedClass);
 		DMEntity entity = getModelEntity();
 		if (classReference != null && classReference.isSelected() && entity != null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Update " + getFileName() + " according to " + classReference);
+			}
 			Vector<DMObject> newObjects = parsedClass.update(entity, classReference, updateContext, parsedSource);
 			updateIsTemplateStatus(newObjects);
 			propagateModelReinjectionInRM(entity);
@@ -330,8 +346,9 @@ public class SGJavaFile extends SGFile implements ModelReinjectableFile {
 			getGenerator().refreshConcernedResources();
 			getGenerator().silentlyGenerateCode();
 			String newContent = getJavaResource().getCurrentGeneration();
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Obtaining as new LAST_GENERATED: " + newContent);
+			}
 			try {
 				getGeneratedResourceData().saveAsLastGenerated(newContent);
 			} catch (IOException e) {
@@ -360,8 +377,9 @@ public class SGJavaFile extends SGFile implements ModelReinjectableFile {
 						DMProperty newProperty = (DMProperty) o;
 						boolean found = false;
 						for (DMProperty p : parsedProperties) {
-							if (p.getName().equals(newProperty.getName()))
+							if (p.getName().equals(newProperty.getName())) {
 								found = true;
+							}
 						}
 						if (!found) {
 							logger.info("New property " + newProperty + " seems to be template-EXTERNAL");
@@ -373,8 +391,9 @@ public class SGJavaFile extends SGFile implements ModelReinjectableFile {
 						DMMethod newMethod = (DMMethod) o;
 						boolean found = false;
 						for (DMMethod m : parsedMethods) {
-							if (m.getSignature().equals(newMethod.getSignature()))
+							if (m.getSignature().equals(newMethod.getSignature())) {
 								found = true;
+							}
 						}
 						if (!found) {
 							logger.info("New method " + newMethod + " seems to be template-EXTERNAL");

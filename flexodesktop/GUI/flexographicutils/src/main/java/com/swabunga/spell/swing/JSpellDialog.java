@@ -19,14 +19,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 package com.swabunga.spell.swing;
 
-import com.swabunga.spell.event.SpellCheckEvent;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Dialog;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+
+import javax.swing.JDialog;
+
+import com.swabunga.spell.event.SpellCheckEvent;
 
 /**
  * Implementation of a spell check dialog.
@@ -62,31 +64,40 @@ public class JSpellDialog extends JDialog implements ActionListener, WindowListe
 		show();
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		hide();
 	}
 
+	@Override
 	public void windowOpened(WindowEvent e) {
 	}
 
 	/** Cancel the event if the Dialog Close button is pressed */
+	@Override
 	public void windowClosing(WindowEvent e) {
-		if (event != null)
+		if (event != null) {
 			event.cancel();
+		}
 	}
 
+	@Override
 	public void windowClosed(WindowEvent e) {
 	}
 
+	@Override
 	public void windowIconified(WindowEvent e) {
 	}
 
+	@Override
 	public void windowDeiconified(WindowEvent e) {
 	}
 
+	@Override
 	public void windowActivated(WindowEvent e) {
 	}
 
+	@Override
 	public void windowDeactivated(WindowEvent e) {
 	}
 }

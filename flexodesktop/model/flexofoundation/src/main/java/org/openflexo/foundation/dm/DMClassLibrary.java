@@ -74,8 +74,9 @@ public class DMClassLibrary extends ClassLibrary {
 
 	private JavaClass retrieveCachedContext(JavaClass context) {
 		JavaClass returned = _javaClassCache.get(context.getFullyQualifiedName());
-		if (returned == null)
+		if (returned == null) {
 			returned = context;
+		}
 		return returned;
 	}
 
@@ -86,8 +87,9 @@ public class DMClassLibrary extends ClassLibrary {
 				((DMType) t).clearUnresolved();
 			}
 		}
-		if (_unresolvedClassName.contains(entity.getFullQualifiedName()))
+		if (_unresolvedClassName.contains(entity.getFullQualifiedName())) {
 			_unresolvedClassName.remove(_unresolvedClassName);
+		}
 	}
 
 	public synchronized Type retrieveType(String name, int dimensions, JavaClassParent context) {
@@ -141,16 +143,18 @@ public class DMClassLibrary extends ClassLibrary {
 
 	@Override
 	public synchronized Class getClass(String className) {
-		if (_unresolvedClassName.contains(className))
+		if (_unresolvedClassName.contains(className)) {
 			return null;
+		}
 		potentiallyModifyingCL = true;
 		Class returned = super.getClass(className);
 		if (returned == null) {
 			for (JarClassLoader cl : loadedJarClassLoaders) {
 				// Don't search in all jars since we are already iterating
 				returned = cl.findClass(className, false);
-				if (returned != null)
+				if (returned != null) {
 					break;
+				}
 			}
 		}
 		if (returned != null) {

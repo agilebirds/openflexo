@@ -28,7 +28,6 @@ import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.cg.TextFileResource;
 import org.openflexo.generator.TemplateLocator;
 import org.openflexo.generator.cg.CGTextFile;
-import org.openflexo.generator.rm.GenerationAvailableFileResource;
 import org.openflexo.generator.utils.MetaFileGenerator;
 import org.openflexo.logging.FlexoLogger;
 
@@ -55,8 +54,9 @@ public class ProjectTextFileResource extends TextFileResource<MetaFileGenerator,
 
 	@Override
 	public String getFileName() {
-		if (getGenerator() != null)
+		if (getGenerator() != null) {
 			return getGenerator().getFileName();
+		}
 		return null;
 	}
 
@@ -71,8 +71,9 @@ public class ProjectTextFileResource extends TextFileResource<MetaFileGenerator,
 	@Override
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
-		if (getGenerator() != null)
+		if (getGenerator() != null) {
 			getGenerator().rebuildDependanciesForResource(this);
+		}
 	}
 
 	@Override

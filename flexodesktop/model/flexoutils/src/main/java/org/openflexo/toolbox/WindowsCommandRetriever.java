@@ -60,8 +60,9 @@ public class WindowsCommandRetriever {
 				mimeType = result.substring(result.indexOf("=") + 1).trim();
 			}
 		}
-		if (mimeType == null)
+		if (mimeType == null) {
 			return null;
+		}
 		String path = "HKEY_CLASSES_ROOT\\" + mimeType + "\\shell\\open\\command";
 		return WinRegistryAccess.getRegistryValue(path, null, WinRegistryAccess.REG_SZ_TOKEN);
 	}

@@ -34,8 +34,6 @@ import org.openflexo.foundation.rm.GeneratedResourceData;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.xml.GeneratedCodeBuilder;
 import org.openflexo.generator.file.AbstractCGFile;
-import org.openflexo.generator.rm.FlexoCopyOfFileResource;
-import org.openflexo.generator.rm.GenerationAvailableFile;
 import org.openflexo.toolbox.FileUtils;
 
 @Deprecated

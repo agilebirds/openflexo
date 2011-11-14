@@ -91,8 +91,9 @@ public class DMRepositoryElement extends DMElement {
 
 		if (getProjectBrowser().getDMViewMode() == DMViewMode.Diagrams) {
 			for (ERDiagram diagram : getDMRepository().getDMModel().getDiagrams()) {
-				if (diagram.getRepository() == getDMRepository())
+				if (diagram.getRepository() == getDMRepository()) {
 					addToChilds(diagram);
+				}
 			}
 			if (getDMRepository() instanceof DMEORepository) {
 				for (DMEOModel eoModel : ((DMEORepository) getDMRepository()).getDMEOModels().values()) {

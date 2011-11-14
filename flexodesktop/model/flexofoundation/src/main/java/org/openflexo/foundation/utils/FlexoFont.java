@@ -120,8 +120,9 @@ public class FlexoFont extends KVCObject implements StringConvertable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == this)
+		if (obj == this) {
 			return true;
+		}
 		if (obj instanceof FlexoFont) {
 			FlexoFont font = (FlexoFont) obj;
 			return getFont().equals(font.getFont());

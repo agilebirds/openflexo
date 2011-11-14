@@ -104,20 +104,24 @@ public class LabelView<O> extends JPanel implements FGEView<O> {
 
 	@Override
 	public void delete() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Delete LabelView for " + getGraphicalRepresentation());
-		if (getController() != null && getController().getEditedLabel() == this)
+		}
+		if (getController() != null && getController().getEditedLabel() == this) {
 			getController().resetEditedLabel();
+		}
 		if (getParentView() != null) {
 			FGELayeredView parentView = getParentView();
 			// logger.warning("Unexpected not null parent, proceeding anyway");
 			parentView.remove(this);
 			parentView.revalidate();
-			if (getPaintManager() != null)
+			if (getPaintManager() != null) {
 				getPaintManager().repaint(parentView);
+			}
 		}
-		if (getGraphicalRepresentation() != null)
+		if (getGraphicalRepresentation() != null) {
 			getGraphicalRepresentation().deleteObserver(this);
+		}
 		disableMouseListeners();
 		_controller = null;
 		mouseListener = null;
@@ -161,8 +165,9 @@ public class LabelView<O> extends JPanel implements FGEView<O> {
 
 	@Override
 	public DrawingView getDrawingView() {
-		if (getController() != null)
+		if (getController() != null) {
 			return getController().getDrawingView();
+		}
 		return null;
 	}
 
@@ -202,8 +207,9 @@ public class LabelView<O> extends JPanel implements FGEView<O> {
 
 		// super.paint(g);
 
-		if (isEditing)
+		if (isEditing) {
 			return;
+		}
 
 		if (getPaintManager().isPaintingCacheEnabled()) {
 			if (getDrawingView().isBuffering()) {
@@ -211,12 +217,14 @@ public class LabelView<O> extends JPanel implements FGEView<O> {
 				if (getPaintManager().isTemporaryObject(getGraphicalRepresentation())) {
 					// This object is declared to be a temporary object, to be redrawn
 					// continuously, so we need to ignore it: do nothing
-					if (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE))
+					if (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE)) {
 						FGEPaintManager.paintPrimitiveLogger.fine("LabelView: buffering paint, ignore: " + getGraphicalRepresentation());
+					}
 				} else {
-					if (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE))
+					if (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE)) {
 						FGEPaintManager.paintPrimitiveLogger.fine("LabelView: buffering paint, draw: " + getGraphicalRepresentation()
 								+ " clip=" + g.getClip());
+					}
 					doPaint(g);
 				}
 			} else {
@@ -241,8 +249,9 @@ public class LabelView<O> extends JPanel implements FGEView<O> {
 		}*/
 
 		// When no text, escape now
-		if (!getGraphicalRepresentation().hasText())
+		if (!getGraphicalRepresentation().hasText()) {
 			return;
+		}
 
 		Graphics2D g2 = (Graphics2D) g.create();
 		DrawUtils.turnOnAntiAlising(g2);
@@ -250,8 +259,9 @@ public class LabelView<O> extends JPanel implements FGEView<O> {
 		DrawUtils.setColorRenderQuality(g2);
 
 		TextStyle ts = getGraphicalRepresentation().getTextStyle();
-		if (ts == null)
+		if (ts == null) {
 			ts = TextStyle.makeDefault();
+		}
 
 		if (ts.getIsBackgroundColored()) {
 			g2.setColor(ts.getBackgroundColor());
@@ -261,8 +271,9 @@ public class LabelView<O> extends JPanel implements FGEView<O> {
 		g2.setColor(ts.getColor());
 
 		AffineTransform at = AffineTransform.getScaleInstance(getScale(), getScale());
-		if (ts.getOrientation() != 0)
+		if (ts.getOrientation() != 0) {
 			at.concatenate(AffineTransform.getRotateInstance(Math.toRadians(getGraphicalRepresentation().getTextStyle().getOrientation())));
+		}
 		Font font = ts.getFont().deriveFont(at);
 
 		g2.setFont(font);
@@ -275,8 +286,9 @@ public class LabelView<O> extends JPanel implements FGEView<O> {
 			StringTokenizer st1 = new StringTokenizer(getGraphicalRepresentation().getText(), StringUtils.LINE_SEPARATOR);
 			while (st1.hasMoreTokens()) {
 				int currentWidth = fm.stringWidth(st1.nextToken());
-				if (currentWidth > maxWidth)
+				if (currentWidth > maxWidth) {
 					maxWidth = currentWidth;
+				}
 			}
 			StringTokenizer st = new StringTokenizer(getGraphicalRepresentation().getText(), StringUtils.LINE_SEPARATOR);
 			int lineIndex = 0;
@@ -347,9 +359,10 @@ public class LabelView<O> extends JPanel implements FGEView<O> {
 					|| (notification.getParameter() == GraphicalRepresentation.Parameters.absoluteTextY)
 					|| (notification.getParameter() == ShapeGraphicalRepresentation.Parameters.isFloatingLabel)) {
 				if (isEditing && (notification.getParameter() == GraphicalRepresentation.Parameters.textStyle)) {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Text style attributes are not taken into account when editing");
-					// TODO: update textcomponent style during edition.
+						// TODO: update textcomponent style during edition.
+					}
 				}
 				updateBounds();
 				revalidate();
@@ -429,25 +442,30 @@ public class LabelView<O> extends JPanel implements FGEView<O> {
 	private JTextComponent textComponent;
 
 	public void stopEdition() {
-		if (!isEditing)
+		if (!isEditing) {
 			return;
+		}
 
 		// If not continous edition, do it now
-		if (!getGraphicalRepresentation().getContinuousTextEditing())
+		if (!getGraphicalRepresentation().getContinuousTextEditing()) {
 			getGraphicalRepresentation().setText(textComponent.getText());
+		}
 
 		isEditing = false;
 		logger.info("Stop edition of " + getGraphicalRepresentation() + " getController()=" + getController());
 
-		if (getController() != null)
+		if (getController() != null) {
 			getController().resetEditedLabel();
+		}
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Stop edition of " + getGraphicalRepresentation());
+		}
 		remove(textComponent);
 		updateBounds();
-		if (getGraphicalRepresentation() == null || getGraphicalRepresentation().isDeleted())
+		if (getGraphicalRepresentation() == null || getGraphicalRepresentation().isDeleted()) {
 			return;
+		}
 		getGraphicalRepresentation().notifyLabelHasBeenEdited();
 
 		// enableMouseListeners();
@@ -463,20 +481,23 @@ public class LabelView<O> extends JPanel implements FGEView<O> {
 	private int vOffset;
 
 	public void startEdition() {
-		if (!getGraphicalRepresentation().getIsLabelEditable())
+		if (!getGraphicalRepresentation().getIsLabelEditable()) {
 			return;
+		}
 		logger.info("Start edition of " + getGraphicalRepresentation());
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Start edition of " + getGraphicalRepresentation());
+		}
 
 		isEditing = true;
 
 		// disableMouseListeners();
 
 		AffineTransform at = AffineTransform.getScaleInstance(getScale(), getScale());
-		if (getGraphicalRepresentation().getTextStyle().getOrientation() != 0)
+		if (getGraphicalRepresentation().getTextStyle().getOrientation() != 0) {
 			at.concatenate(AffineTransform.getRotateInstance(Math.toRadians(getGraphicalRepresentation().getTextStyle().getOrientation())));
+		}
 		Font font = getGraphicalRepresentation().getTextStyle().getFont().deriveFont(at);
 		if (getGraphicalRepresentation().getIsMultilineAllowed()) {
 			// textComponent = new JTextArea(getGraphicalRepresentation().getText());
@@ -485,20 +506,24 @@ public class LabelView<O> extends JPanel implements FGEView<O> {
 			StyledDocument doc = text.getStyledDocument();
 			// doc.putProperty(DefaultEditorKit.EndOfLineStringProperty, "\n");
 			SimpleAttributeSet set = new SimpleAttributeSet();
-			if (getGraphicalRepresentation().getTextAlignment() == TextAlignment.CENTER)
+			if (getGraphicalRepresentation().getTextAlignment() == TextAlignment.CENTER) {
 				StyleConstants.setAlignment(set, StyleConstants.ALIGN_CENTER);
-			else if (getGraphicalRepresentation().getTextAlignment() == TextAlignment.LEFT)
+			} else if (getGraphicalRepresentation().getTextAlignment() == TextAlignment.LEFT) {
 				StyleConstants.setAlignment(set, StyleConstants.ALIGN_LEFT);
-			else if (getGraphicalRepresentation().getTextAlignment() == TextAlignment.RIGHT)
+			} else if (getGraphicalRepresentation().getTextAlignment() == TextAlignment.RIGHT) {
 				StyleConstants.setAlignment(set, StyleConstants.ALIGN_RIGHT);
+			}
 			StyleConstants.setFontFamily(set, font.getFamily());
 			StyleConstants.setFontSize(set, (int) (font.getSize() * getScale()));
-			if (font.isBold())
+			if (font.isBold()) {
 				StyleConstants.setBold(set, true);
-			if (font.isItalic())
+			}
+			if (font.isItalic()) {
 				StyleConstants.setItalic(set, true);
-			if (getGraphicalRepresentation().getTextStyle().getColor() != null)
+			}
+			if (getGraphicalRepresentation().getTextStyle().getColor() != null) {
 				StyleConstants.setForeground(set, getGraphicalRepresentation().getTextStyle().getColor());
+			}
 			/*if (getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation
 					&& ((ShapeGraphicalRepresentation<?>)getGraphicalRepresentation()).getBackground()!=null
 					&& ((ShapeGraphicalRepresentation<?>)getGraphicalRepresentation()).getBackground().getColor()!=null)
@@ -532,14 +557,15 @@ public class LabelView<O> extends JPanel implements FGEView<O> {
 			});
 			textComponent.setFont(font);
 			textComponent.setOpaque(false);
-			if (getGraphicalRepresentation().getTextStyle().getColor() != null)
+			if (getGraphicalRepresentation().getTextStyle().getColor() != null) {
 				textComponent.setForeground(getGraphicalRepresentation().getTextStyle().getColor());
-			/*if (getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation
-					&& ((ShapeGraphicalRepresentation<?>)getGraphicalRepresentation()).getBackground()!=null
-					&& ((ShapeGraphicalRepresentation<?>)getGraphicalRepresentation()).getBackground().getColor()!=null)
-				textComponent.setBackground(((ShapeGraphicalRepresentation<?>)getGraphicalRepresentation()).getBackground().getColor());
-			else if (getGraphicalRepresentation().getTextStyle().getBackgroundColor()!=null)
-			textComponent.setBackground(getGraphicalRepresentation().getTextStyle().getBackgroundColor());*/
+				/*if (getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation
+						&& ((ShapeGraphicalRepresentation<?>)getGraphicalRepresentation()).getBackground()!=null
+						&& ((ShapeGraphicalRepresentation<?>)getGraphicalRepresentation()).getBackground().getColor()!=null)
+					textComponent.setBackground(((ShapeGraphicalRepresentation<?>)getGraphicalRepresentation()).getBackground().getColor());
+				else if (getGraphicalRepresentation().getTextStyle().getBackgroundColor()!=null)
+				textComponent.setBackground(getGraphicalRepresentation().getTextStyle().getBackgroundColor());*/
+			}
 		}
 		textComponent.setDoubleBuffered(false);
 		setDoubleBuffered(false);
@@ -625,8 +651,9 @@ public class LabelView<O> extends JPanel implements FGEView<O> {
 
 		@Override
 		public void insertUpdate(DocumentEvent event) {
-			if (!isEditing)
+			if (!isEditing) {
 				return;
+			}
 			if (getGraphicalRepresentation().getIsMultilineAllowed()) {
 				// Hack to detect trivial edition (RETURN pressed)
 				// logger.info("event: "+event);
@@ -635,16 +662,18 @@ public class LabelView<O> extends JPanel implements FGEView<O> {
 				}
 			}
 			wasEdited = true;
-			if (getGraphicalRepresentation().getContinuousTextEditing())
+			if (getGraphicalRepresentation().getContinuousTextEditing()) {
 				getGraphicalRepresentation().setText(textComponent.getText());
+			}
 			updateBounds();
 			textComponent.setBounds(hOffset, vOffset, getWidth(), getHeight());
 		}
 
 		@Override
 		public void removeUpdate(DocumentEvent event) {
-			if (!isEditing)
+			if (!isEditing) {
 				return;
+			}
 			if (getGraphicalRepresentation().getIsMultilineAllowed()) {
 				// Hack to detect trivial edition (RETURN pressed)
 				// logger.info("event: "+event);
@@ -654,19 +683,22 @@ public class LabelView<O> extends JPanel implements FGEView<O> {
 				// if (!wasEdited) return;
 			}
 			wasEdited = true;
-			if (getGraphicalRepresentation().getContinuousTextEditing())
+			if (getGraphicalRepresentation().getContinuousTextEditing()) {
 				getGraphicalRepresentation().setText(textComponent.getText());
+			}
 			updateBounds();
 			textComponent.setBounds(hOffset, vOffset, getWidth(), getHeight());
 		}
 
 		@Override
 		public void changedUpdate(DocumentEvent event) {
-			if (!isEditing)
+			if (!isEditing) {
 				return;
+			}
 			wasEdited = true;
-			if (getGraphicalRepresentation().getContinuousTextEditing())
+			if (getGraphicalRepresentation().getContinuousTextEditing()) {
 				getGraphicalRepresentation().setText(textComponent.getText());
+			}
 			updateBounds();
 			textComponent.setBounds(hOffset, vOffset, getWidth(), getHeight());
 		}
@@ -678,8 +710,9 @@ public class LabelView<O> extends JPanel implements FGEView<O> {
 			int end = textComponent.getSelectionEnd();
 			if (start != end) {
 				if ((end == 0 && start == textComponent.getDocument().getLength()) || start == 0
-						&& end == textComponent.getDocument().getLength())
+						&& end == textComponent.getDocument().getLength()) {
 					wasEdited = false;
+				}
 			} else {// Otherwise, it means that user has moved manually the cursor, and we consider he wants to edit the text
 				wasEdited = true;
 			}

@@ -30,6 +30,12 @@ import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.jdom.DocType;
+import org.openflexo.drm.DocItem;
+import org.openflexo.drm.DocItemFolder;
+import org.openflexo.drm.DocResourceCenter;
+import org.openflexo.drm.Language;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.xmlcode.InvalidModelException;
@@ -37,13 +43,6 @@ import org.openflexo.xmlcode.XMLCoder;
 import org.openflexo.xmlcode.XMLMapping;
 import org.openflexo.xmlcode.XMLSerializable;
 import org.xml.sax.SAXException;
-
-import org.openflexo.drm.DocItem;
-import org.openflexo.drm.DocItemFolder;
-import org.openflexo.drm.DocResourceCenter;
-import org.openflexo.drm.Language;
-import org.openflexo.foundation.FlexoObject;
-import org.openflexo.localization.FlexoLocalization;
 
 public class HSMap extends FlexoObject implements XMLSerializable {
 
@@ -78,8 +77,9 @@ public class HSMap extends FlexoObject implements XMLSerializable {
 						_entries.add(new HSMapEntry(next));
 					}
 				} else {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Ignoring " + next);
+					}
 				}
 			}
 		}
@@ -230,20 +230,25 @@ public class HSMap extends FlexoObject implements XMLSerializable {
 
 				contents.append("<HR>\n");
 				String inheritanceParentHTMLFragment = getInheritanceParentHTMLFragment(firstNonHiddenParent);
-				if (inheritanceParentHTMLFragment != null)
+				if (inheritanceParentHTMLFragment != null) {
 					contents.append(inheritanceParentHTMLFragment);
+				}
 				String embeddingParentHTMLFragment = getEmbeddingParentHTMLFragment();
-				if (embeddingParentHTMLFragment != null)
+				if (embeddingParentHTMLFragment != null) {
 					contents.append(embeddingParentHTMLFragment);
+				}
 				String inheritanceChildsHTMLFragment = getInheritanceChildsHTMLFragment();
-				if (inheritanceChildsHTMLFragment != null)
+				if (inheritanceChildsHTMLFragment != null) {
 					contents.append(inheritanceChildsHTMLFragment);
+				}
 				String embeddingChildsHTMLFragment = getEmbeddingChildsHTMLFragment();
-				if (embeddingChildsHTMLFragment != null)
+				if (embeddingChildsHTMLFragment != null) {
 					contents.append(embeddingChildsHTMLFragment);
+				}
 				String relatedToItemsHTMLFragment = getRelatedToItemsHTMLFragment();
-				if (relatedToItemsHTMLFragment != null)
+				if (relatedToItemsHTMLFragment != null) {
 					contents.append(relatedToItemsHTMLFragment);
+				}
 
 				contents.append("\n</BODY>\n");
 				contents.append("</HTML>\n");
@@ -259,8 +264,9 @@ public class HSMap extends FlexoObject implements XMLSerializable {
 		}
 
 		private String getInheritanceParentHTMLFragment(DocItem firstNonHiddenParent) {
-			if (firstNonHiddenParent == null)
+			if (firstNonHiddenParent == null) {
 				return null;
+			}
 			StringBuffer returned = new StringBuffer();
 			returned.append("<p>");
 			returned.append("<b>" + FlexoLocalization.localizedForKeyAndLanguage("extends", lang) + "</b> ");
@@ -270,8 +276,9 @@ public class HSMap extends FlexoObject implements XMLSerializable {
 		}
 
 		private String getEmbeddingParentHTMLFragment() {
-			if (docItem.getEmbeddingParentItem() == null)
+			if (docItem.getEmbeddingParentItem() == null) {
 				return null;
+			}
 			StringBuffer returned = new StringBuffer();
 			returned.append("<p>");
 			returned.append("<b>" + FlexoLocalization.localizedForKeyAndLanguage("found_in", lang) + "</b> ");
@@ -283,11 +290,13 @@ public class HSMap extends FlexoObject implements XMLSerializable {
 		private String getInheritanceChildsHTMLFragment() {
 			int inheritanceChildItemCount = 0;
 			for (DocItem aDocItem : docItem.getInheritanceChildItems()) {
-				if (aDocItem.isIncluded(configuration))
+				if (aDocItem.isIncluded(configuration)) {
 					inheritanceChildItemCount++;
+				}
 			}
-			if (inheritanceChildItemCount == 0)
+			if (inheritanceChildItemCount == 0) {
 				return null;
+			}
 			StringBuffer returned = new StringBuffer();
 			returned.append("<p>");
 			returned.append("<b>" + FlexoLocalization.localizedForKeyAndLanguage("inheritance_child_items", lang) + "</b> ");
@@ -306,11 +315,13 @@ public class HSMap extends FlexoObject implements XMLSerializable {
 		private String getEmbeddingChildsHTMLFragment() {
 			Vector<DocItem> embeddedChilds = new Vector<DocItem>();
 			for (DocItem next : docItem.getEmbeddingChildItems()) {
-				if (!next.getIsEmbedded())
+				if (!next.getIsEmbedded()) {
 					embeddedChilds.add(next);
+				}
 			}
-			if (embeddedChilds.size() == 0)
+			if (embeddedChilds.size() == 0) {
 				return null;
+			}
 			StringBuffer returned = new StringBuffer();
 			returned.append("<p>");
 			returned.append("<b>" + FlexoLocalization.localizedForKeyAndLanguage("embedding_child_items", lang) + "</b> ");
@@ -327,8 +338,9 @@ public class HSMap extends FlexoObject implements XMLSerializable {
 		}
 
 		private String getRelatedToItemsHTMLFragment() {
-			if (docItem.getRelatedToItems().size() == 0)
+			if (docItem.getRelatedToItems().size() == 0) {
 				return null;
+			}
 			StringBuffer returned = new StringBuffer();
 			returned.append("<p>");
 			returned.append("<b>" + FlexoLocalization.localizedForKeyAndLanguage("related_to_items", lang) + "</b> ");
@@ -369,31 +381,36 @@ public class HSMap extends FlexoObject implements XMLSerializable {
 			File hsMapModelFile;
 			hsMapModelFile = new FileResource("Models/HSMapModel.xml");
 			if (!hsMapModelFile.exists()) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("File " + hsMapModelFile.getAbsolutePath() + " doesn't exist. Maybe you have to check your paths ?");
+				}
 				return null;
 			} else {
 				try {
 					_mapMapping = new XMLMapping(hsMapModelFile);
 				} catch (InvalidModelException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (IOException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (SAXException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (ParserConfigurationException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				}
 			}

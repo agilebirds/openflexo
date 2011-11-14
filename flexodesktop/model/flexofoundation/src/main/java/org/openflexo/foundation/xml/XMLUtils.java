@@ -100,16 +100,18 @@ public class XMLUtils {
 			return true;
 		} catch (Exception e) {
 			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+			}
 			e.printStackTrace();
 		} finally {
-			if (os != null)
+			if (os != null) {
 				try {
 					os.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+			}
 		}
 		return false;
 	}
@@ -182,12 +184,15 @@ public class XMLUtils {
 		// return replaceString(message,replacedString,aNewString);
 		// DON'T WORK FOR (" ","",message)
 
-		if ((message == null) || (message.equals("")))
+		if ((message == null) || (message.equals(""))) {
 			return "";
-		if ((replacedString == null) || (replacedString.equals("")))
+		}
+		if ((replacedString == null) || (replacedString.equals(""))) {
 			return message;
-		if ((aNewString == null) || (aNewString.equals("")))
+		}
+		if ((aNewString == null) || (aNewString.equals(""))) {
 			aNewString = "";
+		}
 
 		String newString = "";
 		int replacedStringLength = replacedString.length();
@@ -203,16 +208,19 @@ public class XMLUtils {
 	public static AbstractNode getNodeFromFile(File xmlFile, FlexoProject project) {
 		AbstractNode node;
 		try {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Trying to load " + xmlFile.getAbsolutePath());
+			}
 			XMLMapping wkfMapping = project.getXmlMappings().getWKFMapping();
 			node = (AbstractNode) XMLDecoder.decodeObjectWithMapping(new FileInputStream(xmlFile), wkfMapping, new FlexoProcessBuilder(
 					project), project.getStringEncoder());
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Succeeded loading palette element: " + xmlFile.getName());
+			}
 		} catch (Exception e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Failed loading palette element: " + xmlFile.getAbsolutePath());
+			}
 			e.printStackTrace();
 			node = null;
 		}

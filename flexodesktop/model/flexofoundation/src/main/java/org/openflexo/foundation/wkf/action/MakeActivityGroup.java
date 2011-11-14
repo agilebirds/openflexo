@@ -113,8 +113,9 @@ public class MakeActivityGroup extends FlexoAction<MakeActivityGroup, WKFObject,
 	protected static Vector<PetriGraphNode> getAllActivityLevelNodes(WKFObject focusedObject, Vector<WKFObject> globalSelection) {
 		Vector<PetriGraphNode> returned = new Vector<PetriGraphNode>();
 		Vector<WKFObject> allObjects = new Vector<WKFObject>(globalSelection != null ? globalSelection : new Vector<WKFObject>());
-		if (!allObjects.contains(focusedObject))
+		if (!allObjects.contains(focusedObject)) {
 			allObjects.add(focusedObject);
+		}
 		ActivityPetriGraph pg = null;
 		for (WKFObject o : allObjects) {
 			// GPO: Throttle here to enable WKFGroup on the root petri graph only
@@ -123,8 +124,9 @@ public class MakeActivityGroup extends FlexoAction<MakeActivityGroup, WKFObject,
 					&& ((PetriGraphNode) o).getParentPetriGraph() instanceof ActivityPetriGraph
 					&& (pg == null || ((PetriGraphNode) o).getParentPetriGraph() == pg)) {
 				returned.add((PetriGraphNode) o);
-				if (pg == null)
+				if (pg == null) {
 					pg = (ActivityPetriGraph) ((PetriGraphNode) o).getParentPetriGraph();
+				}
 			}
 		}
 		return returned;

@@ -40,21 +40,28 @@ public class HibernateIconLibrary {
 	 * @return the retrieved icon if any, null otherwise.
 	 */
 	public static ImageIcon getIconForHibernateObject(TechnologyModelObject object) {
-		if (object instanceof HibernateImplementation)
+		if (object instanceof HibernateImplementation) {
 			return REPOSITORY_ICON;
-		if (object instanceof HibernateModel)
+		}
+		if (object instanceof HibernateModel) {
 			return MODEL_ICON;
-		if (object instanceof HibernateEntity)
+		}
+		if (object instanceof HibernateEntity) {
 			return ENTITY_ICON;
-		if (object instanceof HibernateAttribute)
+		}
+		if (object instanceof HibernateAttribute) {
 			return ATTRIBUTE_ICON;
-		if (object instanceof HibernateRelationship)
+		}
+		if (object instanceof HibernateRelationship) {
 			return RELATIONSHIP_ICON;
+		}
 
-		if (object instanceof HibernateEnumContainer)
+		if (object instanceof HibernateEnumContainer) {
 			return ENUMCONTAINER_ICON;
-		if (object instanceof HibernateEnum)
+		}
+		if (object instanceof HibernateEnum) {
 			return ENUM_ICON;
+		}
 
 		return null;
 	}

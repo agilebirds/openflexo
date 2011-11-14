@@ -47,7 +47,6 @@ import org.openflexo.foundation.sg.implmodel.TechnologyModelObject;
 import org.openflexo.foundation.sg.implmodel.TechnologyModuleImplementation;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.generator.action.AcceptDiskUpdate;
-import org.openflexo.generator.action.GCAction;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
@@ -82,8 +81,8 @@ import org.openflexo.view.menu.FlexoMenuBar;
  * @author sylvain
  */
 public class SGController extends FlexoController implements SelectionManagingController/*
- * , ConsistencyCheckingController
- */
+* , ConsistencyCheckingController
+*/
 {
 
 	private static final Logger logger = Logger.getLogger(SGController.class.getPackage().getName());
@@ -278,8 +277,9 @@ public class SGController extends FlexoController implements SelectionManagingCo
 
 	public ProjectGenerator getProjectGenerator(SourceRepository repository) {
 		ProjectGenerator returned = _projectGenerators.get(repository);
-		if (!repository.isConnected())
+		if (!repository.isConnected()) {
 			return returned;
+		}
 		if (returned == null) {
 			try {
 				returned = new ProjectGenerator(getProject(), repository);
@@ -400,8 +400,9 @@ public class SGController extends FlexoController implements SelectionManagingCo
 						}
 					}
 				}
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("I will perform " + choice.getLocalizedName());
+				}
 				if (choice == GeneratedResourceModifiedChoice.ASK) {
 					choice = GeneratedResourceModifiedChoice.IGNORE;
 				}

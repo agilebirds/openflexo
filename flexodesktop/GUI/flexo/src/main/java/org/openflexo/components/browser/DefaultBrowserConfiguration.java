@@ -60,8 +60,9 @@ public class DefaultBrowserConfiguration implements BrowserConfiguration {
 
 	@Override
 	public FlexoProject getProject() {
-		if (_rootObject != null)
+		if (_rootObject != null) {
 			return _rootObject.getProject();
+		}
 		return null;
 	}
 

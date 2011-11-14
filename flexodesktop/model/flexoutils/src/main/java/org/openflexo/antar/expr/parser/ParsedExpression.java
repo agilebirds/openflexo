@@ -43,10 +43,9 @@ public abstract class ParsedExpression extends Token {
 	}
 
 	protected static Token makeOperand(ListOfToken listOfToken) throws ParseException {
-		if (listOfToken.size() == 0)
+		if (listOfToken.size() == 0) {
 			throw new ParseException("Syntax error: invalid null operand");
-
-		else if (listOfToken.size() == 1) {
+		} else if (listOfToken.size() == 1) {
 			if (listOfToken.firstElement() instanceof Token) {
 				return (Token) listOfToken.firstElement();
 			}
@@ -188,11 +187,13 @@ public abstract class ParsedExpression extends Token {
 
 		if (pivot.operator.getOperator() instanceof BinaryOperator) {
 			ListOfToken left = new ListOfToken();
-			for (int i = 0; i < pivot.index; i++)
+			for (int i = 0; i < pivot.index; i++) {
 				left.add(unparsedList.elementAt(i));
+			}
 			ListOfToken right = new ListOfToken();
-			for (int i = pivot.index + 1; i < unparsedList.size(); i++)
+			for (int i = pivot.index + 1; i < unparsedList.size(); i++) {
 				right.add(unparsedList.elementAt(i));
+			}
 			return new ParsedBinaryExpression(pivot.operator, left, right);
 		}
 
@@ -205,12 +206,14 @@ public abstract class ParsedExpression extends Token {
 				return new ParsedUnaryExpression(pivot.operator,right);*/
 
 			ListOfToken right = new ListOfToken();
-			for (int i = pivot.index + 1; i < unparsedList.size(); i++)
+			for (int i = pivot.index + 1; i < unparsedList.size(); i++) {
 				right.add(unparsedList.elementAt(i));
+			}
 			ParsedUnaryExpression newParsedUnaryExpression = new ParsedUnaryExpression(pivot.operator, right);
 			ListOfToken newUnparsedList = new ListOfToken();
-			for (int i = 0; i < pivot.index; i++)
+			for (int i = 0; i < pivot.index; i++) {
 				newUnparsedList.add(unparsedList.elementAt(i));
+			}
 			newUnparsedList.add(newParsedUnaryExpression);
 			return makeExpression(newUnparsedList);
 		}

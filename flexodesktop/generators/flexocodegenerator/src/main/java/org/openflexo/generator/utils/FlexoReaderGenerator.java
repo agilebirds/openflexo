@@ -62,8 +62,9 @@ public class FlexoReaderGenerator extends MetaGenerator<FlexoModelObject, CGRepo
 
 	@Override
 	public void generate(boolean forceRegenerate) throws GenerationException {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Called FlexoReaderGenerator.generate(forceRegenerate)");
+		}
 		resetSecondaryProgressWindow(_generators.values().size());
 		startGeneration();
 		for (ResourceToCopyGenerator generator : _generators.values()) {
@@ -79,15 +80,17 @@ public class FlexoReaderGenerator extends MetaGenerator<FlexoModelObject, CGRepo
 		Vector<CGFile> cgFiles = repository.getReaderRepository().getFiles();
 		resetSecondaryProgressWindow(cgFiles.size());
 		for (CGFile file : cgFiles) {
-			if (file.getResource() == null || file.getResource().getFile() == null)
+			if (file.getResource() == null || file.getResource().getFile() == null) {
 				continue;
+			}
 			ResourceToCopyGenerator generator = getGenerator(file.getResource());
 			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + file.getName(), false);
-			if (generator != null)
+			if (generator != null) {
 				generator.buildResourcesAndSetGenerators(repository, resources);
-			else {
-				if (logger.isLoggable(Level.WARNING))
+			} else {
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not instanciate ResourceToCopyGenerator for " + file);
+				}
 			}
 		}
 

@@ -104,18 +104,21 @@ public class MouseClickControl extends MouseControl {
 	public boolean isApplicable(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent e) {
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 			if (e.getButton() == MouseEvent.BUTTON1 && e.isControlDown()) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Translating, mod=" + e.getModifiers() + " button=" + e.getButton());
+				}
 				boolean wasConsumed = e.isConsumed();
 				int mod = (e.getModifiers() & (~InputEvent.BUTTON1_MASK) & (~InputEvent.CTRL_MASK)) | InputEvent.BUTTON3_MASK;
 				e = new MouseEvent((Component) e.getSource(), e.getID(), e.getWhen(), mod, e.getX(), e.getY(), e.getClickCount(), false);
-				if (wasConsumed)
+				if (wasConsumed) {
 					e.consume();
+				}
 			}
 		}
 
-		if (!super.isApplicable(graphicalRepresentation, controller, e))
+		if (!super.isApplicable(graphicalRepresentation, controller, e)) {
 			return false;
+		}
 		return (e.getClickCount() == clickCount);
 	}
 
@@ -126,22 +129,25 @@ public class MouseClickControl extends MouseControl {
 	 * @param controller
 	 */
 	public void handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
-		if (action.handleClick(graphicalRepresentation, controller, event))
+		if (action.handleClick(graphicalRepresentation, controller, event)) {
 			event.consume();
+		}
 	}
 
 	public MouseClickControlActionType getActionType() {
-		if (action != null)
+		if (action != null) {
 			return action.getActionType();
-		else
+		} else {
 			return MouseClickControlActionType.NONE;
+		}
 	}
 
 	public void setActionType(MouseClickControlActionType actionType) {
 		if (actionType != null) {
 			action = actionType.makeAction();
-		} else
+		} else {
 			action = MouseClickControlActionType.NONE.makeAction();
+		}
 	}
 
 	@Override

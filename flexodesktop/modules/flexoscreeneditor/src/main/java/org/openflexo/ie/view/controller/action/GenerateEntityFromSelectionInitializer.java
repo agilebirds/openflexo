@@ -158,9 +158,10 @@ public class GenerateEntityFromSelectionInitializer extends ActionInitializer {
 
 		if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 			if (entityFromWidgets != null) {
-				if (getProject().getDataModel().getProjectDatabaseRepositories().size() == 0)
+				if (getProject().getDataModel().getProjectDatabaseRepositories().size() == 0) {
 					ProjectDatabaseRepository.createNewProjectDatabaseRepository(getProject().getDataModel(), getProject().getName()
 							+ "Databases");
+				}
 				String dbRepName = getProject().getDataModel().getProjectDatabaseRepositories().get(0).getName();
 				String eomName = eoModelMode.getValue().equals(USE_EXISTING_EOMODEL) ? eoModelSelector.getValue().getName()
 						: newEOModelName.getValue();

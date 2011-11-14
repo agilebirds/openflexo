@@ -128,10 +128,11 @@ public class TreeTableModelAdapter extends AbstractModel<FlexoModelObject, Flexo
 
 	@Override
 	public int getRowCount() {
-		if (tree != null)
+		if (tree != null) {
 			return tree.getRowCount();
-		else
+		} else {
 			return 0;
+		}
 	}
 
 	protected Object nodeForRow(int row) {
@@ -169,8 +170,9 @@ public class TreeTableModelAdapter extends AbstractModel<FlexoModelObject, Flexo
 		} else if (o instanceof FlexoModelObject) {
 			return (FlexoModelObject) o;
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Found object of type " + o.getClass().getName() + " while expecting BrowserElement");
+			}
 			return null;
 		}
 

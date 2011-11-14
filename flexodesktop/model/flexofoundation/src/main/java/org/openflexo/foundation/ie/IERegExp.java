@@ -21,9 +21,8 @@ package org.openflexo.foundation.ie;
 
 import java.util.regex.Pattern;
 
-import org.openflexo.swing.JTextFieldRegExp;
-
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.swing.JTextFieldRegExp;
 
 /**
  * @author gpolet

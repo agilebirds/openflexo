@@ -62,27 +62,33 @@ public class ShowComponentUsageInitializer extends ActionInitializer {
 				Vector<ComponentInstance> cis = action.getComponentDefinition().getComponentInstances();
 				for (ComponentInstance ci : cis) {
 					if (cd instanceof OperationComponentDefinition) {
-						if (ci.getOwner() instanceof OperationNode)
+						if (ci.getOwner() instanceof OperationNode) {
 							appendComponentInstance(ci, sb);
+						}
 					} else if (cd instanceof PopupComponentDefinition) {
-						if (ci.getOwner() instanceof IEHyperlinkWidget)
+						if (ci.getOwner() instanceof IEHyperlinkWidget) {
 							appendComponentInstance(ci, sb);
-					} else if (cd instanceof TabComponentDefinition)
-						if (ci.getOwner() instanceof IETabWidget)
+						}
+					} else if (cd instanceof TabComponentDefinition) {
+						if (ci.getOwner() instanceof IETabWidget) {
 							appendComponentInstance(ci, sb);
+						}
+					}
 				}
-				if (sb.length() == 0)
+				if (sb.length() == 0) {
 					sb.append(FlexoLocalization.localizedForKey("component")).append(" ").append(cd.getName()).append(" ")
 							.append(FlexoLocalization.localizedForKey("is_not_used"));
+				}
 				FlexoController.notify(sb.toString());
 				return true;
 			}
 
 			private void appendComponentInstance(ComponentInstance ci, StringBuilder sb) {
 				if (ci.getXMLResourceData() instanceof FlexoModelObject) {
-					if (sb.length() == 0)
+					if (sb.length() == 0) {
 						sb.append(FlexoLocalization.localizedForKey("component")).append(" '").append(ci.getComponentName()).append("' ")
 								.append(FlexoLocalization.localizedForKey("is_used_in"));
+					}
 					sb.append("\n");
 					sb.append("* ").append(((FlexoModelObject) ci.getOwner()).getDisplayableName()).append(" ");
 					sb.append(FlexoLocalization.localizedForKey("in")).append(" ")

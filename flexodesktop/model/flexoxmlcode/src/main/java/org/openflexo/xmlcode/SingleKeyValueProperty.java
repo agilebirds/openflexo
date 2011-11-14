@@ -37,6 +37,8 @@ import java.util.Date;
  */
 public class SingleKeyValueProperty extends KeyValueProperty {
 
+	private static final String NO_OBJECT_IS_SPECIFIED = "No object is specified";
+
 	/**
 	 * Creates a new <code>KeyValueProperty</code> instance, given an object class.<br>
 	 * To be usable, this property should be set with a correct object (according to object class)
@@ -59,6 +61,7 @@ public class SingleKeyValueProperty extends KeyValueProperty {
 	 * Initialize this property, given a propertyName.<br>
 	 * This method is called during constructor invokation.
 	 */
+	@Override
 	protected void init(String propertyName, boolean setMethodIsMandatory) throws InvalidKeyValuePropertyException {
 
 		super.init(propertyName, setMethodIsMandatory);
@@ -69,6 +72,7 @@ public class SingleKeyValueProperty extends KeyValueProperty {
 	 * 
 	 * @deprecated use the one with the string encoder instance
 	 */
+	@Deprecated
 	public boolean classIsPrimitive() {
 		return classIsPrimitive(StringEncoder.getDefaultInstance());
 	}
@@ -93,7 +97,7 @@ public class SingleKeyValueProperty extends KeyValueProperty {
 	public int getIntValue(Object object) {
 
 		if (object == null) {
-			throw new InvalidKeyValuePropertyException("No object is specified");
+			throw new InvalidKeyValuePropertyException(NO_OBJECT_IS_SPECIFIED);
 		} else {
 
 			if (getMethod != null) {
@@ -148,7 +152,7 @@ public class SingleKeyValueProperty extends KeyValueProperty {
 	public long getLongValue(Object object) {
 
 		if (object == null) {
-			throw new InvalidKeyValuePropertyException("No object is specified");
+			throw new InvalidKeyValuePropertyException(NO_OBJECT_IS_SPECIFIED);
 		} else {
 
 			if (getMethod != null) {
@@ -203,7 +207,7 @@ public class SingleKeyValueProperty extends KeyValueProperty {
 	public short getShortValue(Object object) {
 
 		if (object == null) {
-			throw new InvalidKeyValuePropertyException("No object is specified");
+			throw new InvalidKeyValuePropertyException(NO_OBJECT_IS_SPECIFIED);
 		} else {
 
 			if (getMethod != null) {
@@ -258,7 +262,7 @@ public class SingleKeyValueProperty extends KeyValueProperty {
 	public char getCharValue(Object object) {
 
 		if (object == null) {
-			throw new InvalidKeyValuePropertyException("No object is specified");
+			throw new InvalidKeyValuePropertyException(NO_OBJECT_IS_SPECIFIED);
 		} else {
 
 			if (getMethod != null) {
@@ -313,7 +317,7 @@ public class SingleKeyValueProperty extends KeyValueProperty {
 	public boolean getBooleanValue(Object object) {
 
 		if (object == null) {
-			throw new InvalidKeyValuePropertyException("No object is specified");
+			throw new InvalidKeyValuePropertyException(NO_OBJECT_IS_SPECIFIED);
 		} else {
 
 			if (getMethod != null) {
@@ -368,7 +372,7 @@ public class SingleKeyValueProperty extends KeyValueProperty {
 	public byte getByteValue(Object object) {
 
 		if (object == null) {
-			throw new InvalidKeyValuePropertyException("No object is specified");
+			throw new InvalidKeyValuePropertyException(NO_OBJECT_IS_SPECIFIED);
 		} else {
 
 			if (getMethod != null) {
@@ -423,7 +427,7 @@ public class SingleKeyValueProperty extends KeyValueProperty {
 	public float getFloatValue(Object object) {
 
 		if (object == null) {
-			throw new InvalidKeyValuePropertyException("No object is specified");
+			throw new InvalidKeyValuePropertyException(NO_OBJECT_IS_SPECIFIED);
 		} else {
 
 			if (getMethod != null) {
@@ -477,7 +481,7 @@ public class SingleKeyValueProperty extends KeyValueProperty {
 	public double getDoubleValue(Object object) {
 
 		if (object == null) {
-			throw new InvalidKeyValuePropertyException("No object is specified");
+			throw new InvalidKeyValuePropertyException(NO_OBJECT_IS_SPECIFIED);
 		} else {
 
 			if (getMethod != null) {
@@ -532,7 +536,7 @@ public class SingleKeyValueProperty extends KeyValueProperty {
 	public void setIntValue(int aValue, Object object) {
 
 		if (object == null) {
-			throw new InvalidKeyValuePropertyException("No object is specified");
+			throw new InvalidKeyValuePropertyException(NO_OBJECT_IS_SPECIFIED);
 		} else {
 
 			if (setMethod != null) {
@@ -589,7 +593,7 @@ public class SingleKeyValueProperty extends KeyValueProperty {
 	public void setLongValue(long aValue, Object object) {
 
 		if (object == null) {
-			throw new InvalidKeyValuePropertyException("No object is specified");
+			throw new InvalidKeyValuePropertyException(NO_OBJECT_IS_SPECIFIED);
 		} else {
 
 			if (setMethod != null) {
@@ -646,7 +650,7 @@ public class SingleKeyValueProperty extends KeyValueProperty {
 	public void setShortValue(short aValue, Object object) {
 
 		if (object == null) {
-			throw new InvalidKeyValuePropertyException("No object is specified");
+			throw new InvalidKeyValuePropertyException(NO_OBJECT_IS_SPECIFIED);
 		} else {
 
 			if (setMethod != null) {
@@ -703,7 +707,7 @@ public class SingleKeyValueProperty extends KeyValueProperty {
 	public void setCharValue(char aValue, Object object) {
 
 		if (object == null) {
-			throw new InvalidKeyValuePropertyException("No object is specified");
+			throw new InvalidKeyValuePropertyException(NO_OBJECT_IS_SPECIFIED);
 		} else {
 
 			if (setMethod != null) {
@@ -760,7 +764,7 @@ public class SingleKeyValueProperty extends KeyValueProperty {
 	public void setBooleanValue(boolean aValue, Object object) {
 
 		if (object == null) {
-			throw new InvalidKeyValuePropertyException("No object is specified");
+			throw new InvalidKeyValuePropertyException(NO_OBJECT_IS_SPECIFIED);
 		} else {
 
 			if (setMethod != null) {
@@ -816,7 +820,7 @@ public class SingleKeyValueProperty extends KeyValueProperty {
 	public void setByteValue(byte aValue, Object object) {
 
 		if (object == null) {
-			throw new InvalidKeyValuePropertyException("No object is specified");
+			throw new InvalidKeyValuePropertyException(NO_OBJECT_IS_SPECIFIED);
 		} else {
 
 			if (setMethod != null) {
@@ -872,7 +876,7 @@ public class SingleKeyValueProperty extends KeyValueProperty {
 	public void setFloatValue(float aValue, Object object) {
 
 		if (object == null) {
-			throw new InvalidKeyValuePropertyException("No object is specified");
+			throw new InvalidKeyValuePropertyException(NO_OBJECT_IS_SPECIFIED);
 		} else {
 
 			if (setMethod != null) {
@@ -928,7 +932,7 @@ public class SingleKeyValueProperty extends KeyValueProperty {
 	public void setDoubleValue(double aValue, Object object) {
 
 		if (object == null) {
-			throw new InvalidKeyValuePropertyException("No object is specified");
+			throw new InvalidKeyValuePropertyException(NO_OBJECT_IS_SPECIFIED);
 		} else {
 
 			if (setMethod != null) {
@@ -984,7 +988,7 @@ public class SingleKeyValueProperty extends KeyValueProperty {
 	public void setStringValue(String aValue, Object object) {
 
 		if (object == null) {
-			throw new InvalidKeyValuePropertyException("No object is specified");
+			throw new InvalidKeyValuePropertyException(NO_OBJECT_IS_SPECIFIED);
 		} else {
 
 			if (setMethod != null) {
@@ -1039,7 +1043,7 @@ public class SingleKeyValueProperty extends KeyValueProperty {
 	public void setDateValue(Date aValue, Object object) {
 
 		if (object == null) {
-			throw new InvalidKeyValuePropertyException("No object is specified");
+			throw new InvalidKeyValuePropertyException(NO_OBJECT_IS_SPECIFIED);
 		} else {
 
 			if (setMethod != null) {
@@ -1094,7 +1098,7 @@ public class SingleKeyValueProperty extends KeyValueProperty {
 	public void setFileValue(File aValue, Object object) {
 
 		if (object == null) {
-			throw new InvalidKeyValuePropertyException("No object is specified");
+			throw new InvalidKeyValuePropertyException(NO_OBJECT_IS_SPECIFIED);
 		} else {
 
 			if (setMethod != null) {
@@ -1148,7 +1152,7 @@ public class SingleKeyValueProperty extends KeyValueProperty {
 	public void setURLValue(URL aValue, Object object) {
 
 		if (object == null) {
-			throw new InvalidKeyValuePropertyException("No object is specified");
+			throw new InvalidKeyValuePropertyException(NO_OBJECT_IS_SPECIFIED);
 		} else {
 
 			if (setMethod != null) {
@@ -1192,6 +1196,7 @@ public class SingleKeyValueProperty extends KeyValueProperty {
 	/**
 	 * Return a string representation of this object (debug purposes)
 	 */
+	@Override
 	public String toString() {
 		return "Field: " + field + "\nGetMethod: " + getMethod + "\nSetMethod: " + setMethod + "\nType: " + type;
 

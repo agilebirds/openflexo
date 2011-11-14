@@ -120,10 +120,11 @@ public class DMEORepositoryView extends DMView<DMEORepository> {
 		eoModelTableModel = new DMEOModelTableModel(getDMEORepository(), getDMController().getProject());
 		addToMasterTabularView(eoModelTable = new DMTabularView(getDMController(), eoModelTableModel, 10));
 
-		if (getDMEORepository().isReadOnly())
+		if (getDMEORepository().isReadOnly()) {
 			eoEntityTableModel = new DMReadOnlyEOEntityTableModel(null, getDMController().getProject());
-		else
+		} else {
 			eoEntityTableModel = new DMEOEntityTableModel(null, getDMController().getProject());
+		}
 		addToSlaveTabularView(eoEntityTable = new DMTabularView(getDMController(), eoEntityTableModel, 15), eoModelTable);
 
 		return new JSplitPane(JSplitPane.VERTICAL_SPLIT, eoModelTable, eoEntityTable);

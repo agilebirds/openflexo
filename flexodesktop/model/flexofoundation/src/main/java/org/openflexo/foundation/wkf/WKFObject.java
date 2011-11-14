@@ -111,10 +111,11 @@ public abstract class WKFObject extends RepresentableFlexoModelObject implements
 	}
 
 	public FlexoWorkflow getWorkflow() {
-		if (getProject() != null)
+		if (getProject() != null) {
 			return getProject().getFlexoWorkflow();
-		else if (getProcess() != null && getProcess() != this)
+		} else if (getProcess() != null && getProcess() != this) {
 			return getProcess().getWorkflow();
+		}
 		return null;
 	}
 
@@ -157,9 +158,10 @@ public abstract class WKFObject extends RepresentableFlexoModelObject implements
 			while (en.hasMoreElements()) {
 				candidate = en.nextElement();
 				if (candidate == null) {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Object of class " + object.getClass().getName()
 								+ " returned IEObjects null in its method getEmbeddedIEObjects");
+					}
 					continue;
 				}
 				if (!queue.contains(candidate)) {
@@ -177,12 +179,13 @@ public abstract class WKFObject extends RepresentableFlexoModelObject implements
 
 	@Override
 	public XMLMapping getXMLMapping() {
-		if (getProcess() != null)
+		if (getProcess() != null) {
 			return getProcess().getXMLMapping();
-		else if (getProject() != null)
+		} else if (getProject() != null) {
 			return getProject().getXmlMappings().getWKFMapping();
-		else
+		} else {
 			return new FlexoXMLMappings().getWKFMapping();
+		}
 	}
 
 	// ==========================================================================
@@ -215,13 +218,15 @@ public abstract class WKFObject extends RepresentableFlexoModelObject implements
 
 	@Override
 	public Class getTypeForKey(String key) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.finer("getTypeForKey for " + key);
+		}
 		try {
 			return super.getTypeForKey(key);
 		} catch (InvalidObjectSpecificationException e) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.finer("OK, let the inspector to determine type of dynamic atttribute !");
+			}
 			return null;
 		}
 	}
@@ -281,16 +286,18 @@ public abstract class WKFObject extends RepresentableFlexoModelObject implements
 			for (T obj : someObjects) {
 				boolean alreadyContained = false;
 				for (T temp : returned) {
-					if (obj.isContainedIn(temp))
+					if (obj.isContainedIn(temp)) {
 						alreadyContained = true;
+					}
 				}
 				if (!alreadyContained) {
 					// Not already contained, add it
 					// Before to do it, look if some other are to be removed
 					Vector<T> removeThose = new Vector<T>();
 					for (T temp : returned) {
-						if (temp.isContainedIn(obj))
+						if (temp.isContainedIn(obj)) {
 							removeThose.add(temp);
+						}
 					}
 					returned.removeAll(removeThose);
 					returned.add(obj);
@@ -330,12 +337,14 @@ public abstract class WKFObject extends RepresentableFlexoModelObject implements
 			if (getProcess().getProject() != null) {
 				return getProcess().getProject().getWKFValidationModel();
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not access to project !");
+				}
 			}
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not access to process !");
+			}
 		}
 		return null;
 	}

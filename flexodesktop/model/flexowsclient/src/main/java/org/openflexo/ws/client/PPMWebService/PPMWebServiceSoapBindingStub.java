@@ -365,6 +365,7 @@ public class PPMWebServiceSoapBindingStub extends org.apache.axis.client.Stub im
 		}
 	}
 
+	@Override
 	public org.openflexo.ws.client.PPMWebService.PPMRole[] getRoles(java.lang.String login, java.lang.String md5Password)
 			throws java.rmi.RemoteException, org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException {
 		if (super.cachedEndpoint == null) {
@@ -406,6 +407,7 @@ public class PPMWebServiceSoapBindingStub extends org.apache.axis.client.Stub im
 		}
 	}
 
+	@Override
 	public org.openflexo.ws.client.PPMWebService.PPMProcess[] getProcesses(java.lang.String login, java.lang.String md5Password)
 			throws java.rmi.RemoteException, org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException {
 		if (super.cachedEndpoint == null) {
@@ -447,6 +449,7 @@ public class PPMWebServiceSoapBindingStub extends org.apache.axis.client.Stub im
 		}
 	}
 
+	@Override
 	public byte[] getScreenshoot(java.lang.String login, java.lang.String md5Password, java.lang.String processVersionURI)
 			throws java.rmi.RemoteException, org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException {
 		if (super.cachedEndpoint == null) {
@@ -487,6 +490,7 @@ public class PPMWebServiceSoapBindingStub extends org.apache.axis.client.Stub im
 		}
 	}
 
+	@Override
 	public org.openflexo.ws.client.PPMWebService.PPMProcess[] refreshProcesses(java.lang.String login, java.lang.String md5Password,
 			java.lang.String[] uris) throws java.rmi.RemoteException,
 			org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException {
@@ -529,6 +533,7 @@ public class PPMWebServiceSoapBindingStub extends org.apache.axis.client.Stub im
 		}
 	}
 
+	@Override
 	public org.openflexo.ws.client.PPMWebService.PPMRole[] refreshRoles(java.lang.String login, java.lang.String md5Password,
 			java.lang.String[] uris) throws java.rmi.RemoteException,
 			org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException {
@@ -571,6 +576,7 @@ public class PPMWebServiceSoapBindingStub extends org.apache.axis.client.Stub im
 		}
 	}
 
+	@Override
 	public org.openflexo.ws.client.PPMWebService.CLProjectDescriptor[] getAvailableProjects(java.lang.String login,
 			java.lang.String md5Password) throws java.rmi.RemoteException,
 			org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException {
@@ -613,6 +619,7 @@ public class PPMWebServiceSoapBindingStub extends org.apache.axis.client.Stub im
 		}
 	}
 
+	@Override
 	public java.lang.String uploadPrj(org.openflexo.ws.client.PPMWebService.CLProjectDescriptor targetProject,
 			javax.activation.DataHandler zip, java.lang.String uploadComment, java.lang.String login) throws java.rmi.RemoteException,
 			org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException {

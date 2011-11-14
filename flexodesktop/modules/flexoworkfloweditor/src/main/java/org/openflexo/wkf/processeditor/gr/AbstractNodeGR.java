@@ -113,8 +113,9 @@ public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O
 	public String getToolTipText() {
 		String nodeDesc = getNode().getDescription();
 		String nodeName = getNode().getName();
-		if (nodeDesc == null || nodeDesc.trim().equals(""))
+		if (nodeDesc == null || nodeDesc.trim().equals("")) {
 			return "<html><b>" + nodeName + "</b><br><i>" + FlexoLocalization.localizedForKey("no_description") + "</i></html>";
+		}
 		return "<html>" + (nodeName == null || nodeName.trim().length() == 0 ? "" : "<b>" + nodeName + "</b><br>") + "<i>"
 				+ getNode().getDescription() + "</i></html>";
 	}
@@ -125,11 +126,14 @@ public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O
 	}
 
 	public boolean showNoChildrenSign() {
-		if (getDrawing() == null || getDrawing().getModel() == null)
+		if (getDrawing() == null || getDrawing().getModel() == null) {
 			return false;
-		if (getNode() instanceof FlexoNode)
-			if (((FlexoNode) getNode()).isBeginOrEndNode())
+		}
+		if (getNode() instanceof FlexoNode) {
+			if (((FlexoNode) getNode()).isBeginOrEndNode()) {
 				return false;
+			}
+		}
 		/*if (getNode() instanceof SelfExecutableNode) {
 			return !((SelfExecutableNode)getNode()).hasExecutionPetriGraph() || !((SelfExecutableNode)getNode()).getExecutionPetriGraph().hasOtherNodesThanBeginEndNodes();
 		} else*/if (getNode() instanceof AbstractActivityNode) {
@@ -172,8 +176,9 @@ public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O
 
 		@Override
 		public void paintDecoration(FGEShapeDecorationGraphics g) {
-			if (!showNoChildrenSign())
+			if (!showNoChildrenSign()) {
 				return;
+			}
 			// Uses a gray line
 			g.useForegroundStyle(ForegroundStyle.makeStyle(Color.gray));
 

@@ -95,8 +95,9 @@ public class MoveIEElement extends FlexoAction<MoveIEElement, IEObject, IEObject
 	private Hashtable<String, Integer> parameters;
 
 	public int getIndex() {
-		if (parameters.get(INDEX) == null)
+		if (parameters.get(INDEX) == null) {
 			return 0;
+		}
 		return parameters.get(INDEX);
 	}
 
@@ -105,8 +106,9 @@ public class MoveIEElement extends FlexoAction<MoveIEElement, IEObject, IEObject
 	}
 
 	public int getRow() {
-		if (parameters.get(ROW) == null)
+		if (parameters.get(ROW) == null) {
 			return -1;
+		}
 		return parameters.get(ROW);
 	}
 
@@ -115,8 +117,9 @@ public class MoveIEElement extends FlexoAction<MoveIEElement, IEObject, IEObject
 	}
 
 	public int getCol() {
-		if (parameters.get(COL) == null)
+		if (parameters.get(COL) == null) {
 			return -1;
+		}
 		return parameters.get(COL);
 	}
 
@@ -130,8 +133,9 @@ public class MoveIEElement extends FlexoAction<MoveIEElement, IEObject, IEObject
 			if (container instanceof IEWOComponent) {
 				container = ((IEWOComponent) container).getRootSequence();
 			}
-			if (container instanceof IETDWidget)
+			if (container instanceof IETDWidget) {
 				container = ((IETDWidget) container).getSequenceWidget();
+			}
 		}
 		return container;
 	}
@@ -141,8 +145,9 @@ public class MoveIEElement extends FlexoAction<MoveIEElement, IEObject, IEObject
 	}
 
 	public FlexoProject getProject() {
-		if (getContainer() != null)
+		if (getContainer() != null) {
 			return getContainer().getProject();
+		}
 		return null;
 	}
 
@@ -159,11 +164,13 @@ public class MoveIEElement extends FlexoAction<MoveIEElement, IEObject, IEObject
 		logger.info(new StringBuffer("Moving IE element index=").append(getIndex()).append(" row=").append(getRow()).append(" col=")
 				.append(getCol()).toString());
 
-		if (getContainer() == null)
+		if (getContainer() == null) {
 			throw new InvalidDropException("Cannot move on a null container !");
+		}
 
-		if (getMovedWidget() == null)
+		if (getMovedWidget() == null) {
 			throw new InvalidDropException("Cannot move a null widget !");
+		}
 		movedWidget.removeFromContainer();
 		movedWidget.setWOComponent(getWOComponent());
 		movedWidget.setParent(getContainer());
@@ -180,8 +187,9 @@ public class MoveIEElement extends FlexoAction<MoveIEElement, IEObject, IEObject
 		} else if (getContainer() instanceof IEWidget) {
 			return (((IEWidget) getContainer()).getWOComponent());
 		} else {
-			if (logger.isLoggable(Level.SEVERE))
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Cannot resolve component!");
+			}
 		}
 		return null;
 	}
@@ -193,13 +201,15 @@ public class MoveIEElement extends FlexoAction<MoveIEElement, IEObject, IEObject
 		}
 
 		if ((container instanceof IESequenceTopComponent) && (model instanceof IETopComponent)) {
-			if (getIndex() == -1)
+			if (getIndex() == -1) {
 				throw new InvalidDropException("Cannot drop element at this index: " + getIndex());
+			}
 			model.setIndex(getIndex());
 			try {
 				((IESequenceTopComponent) container).insertElementAt((IETopComponent) model, getIndex());
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("CASE 1: insert IETopComponent in IESequenceTopComponent (DropZoneTopComponent)");
+				}
 				return true;
 			} catch (IndexOutOfBoundsException e) {
 				throw new InvalidDropException("Cannot drop element at this index: " + getIndex());
@@ -207,34 +217,40 @@ public class MoveIEElement extends FlexoAction<MoveIEElement, IEObject, IEObject
 		}
 
 		if ((container instanceof IEBlocWidget) && (model instanceof IEHTMLTableWidget)) {
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("CASE 3: insert IEHTMLTableWidget in IEBlocWidget (DropTableZone)");
+			}
 			((IEBlocWidget) container).insertContent((IEHTMLTableWidget) model);
 			return true;
 		}
 
 		if ((container instanceof ButtonedWidgetInterface) && (model instanceof IEHyperlinkWidget)) {
-			if (getIndex() == -1)
+			if (getIndex() == -1) {
 				throw new InvalidDropException("Cannot drop element at this index: " + getIndex());
-			if (logger.isLoggable(Level.INFO))
+			}
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("CASE 6: insert IEButtonWidget in ButtonedWidgetInterface (ButtonPanel)");
+			}
 			((ButtonedWidgetInterface) container).insertButtonAtIndex((IEHyperlinkWidget) model, getIndex());
 			return true;
 		}
 
 		if ((container instanceof IESequenceTab) && (model instanceof IETabWidget)) {
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("CASE 7: insert IETabWidget in IESequenceTab (DropTabZone)");
+			}
 			((IESequenceTab) container).addToInnerWidgets((IETabWidget) model);
 			return true;
 		}
 
 		if ((container instanceof IESequenceWidget)) {
-			if (getIndex() == -1)
+			if (getIndex() == -1) {
 				throw new InvalidDropException("Cannot drop element at this index: " + getIndex());
+			}
 			if (model instanceof IETDWidget) {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("CASE 9: insert IETDWidget in IESequenceWidget (IESequenceWidgetWidgetView)");
+				}
 				IESequenceWidget seq = ((IETDWidget) model).getSequenceWidget();
 				for (int j = 0; j < seq.size(); j++) {
 					model = seq.get(j);
@@ -242,8 +258,9 @@ public class MoveIEElement extends FlexoAction<MoveIEElement, IEObject, IEObject
 					((IESequenceWidget) container).insertElementAt(model, getIndex());
 				}
 			} else if (model instanceof IESequenceWidget && ((IESequenceWidget) model).getOperator() == null) {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("CASE 10: insert IESequenceWidget in IESequenceWidget (IESequenceWidgetWidgetView)");
+				}
 				IESequenceWidget seq = (IESequenceWidget) model;
 				for (int j = 0; j < seq.size(); j++) {
 					model = seq.get(j);
@@ -251,8 +268,9 @@ public class MoveIEElement extends FlexoAction<MoveIEElement, IEObject, IEObject
 					((IESequenceWidget) container).insertElementAt(model, getIndex());
 				}
 			} else {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("CASE 11: insert IEWidget in IESequenceWidget (IESequenceWidgetWidgetView)");
+				}
 				model.setIndex(getIndex());
 				((IESequenceWidget) container).insertElementAt(model, getIndex());
 			}
@@ -272,8 +290,9 @@ public class MoveIEElement extends FlexoAction<MoveIEElement, IEObject, IEObject
 			widget = (IEWidget) XMLDecoder.decodeObjectWithMapping(elementXMLRepresentation, ieMapping, builder, getProject()
 					.getStringEncoder());
 		} catch (Exception e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Failed building element: " + elementXMLRepresentation);
+			}
 			e.printStackTrace();
 		}
 		return widget;

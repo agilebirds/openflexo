@@ -96,10 +96,12 @@ public class DuplicateComponentAction extends FlexoAction {
 				componentDef = new TabComponentDefinition(newComponentName, component.getComponentDefinition().getComponentLibrary(),
 						component.getComponentDefinition().getFolder(), component.getProject());
 			} else if (component instanceof IEMonitoringScreen) {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Not implemented");
-			} else if (logger.isLoggable(Level.INFO))
+				}
+			} else if (logger.isLoggable(Level.INFO)) {
 				logger.info("Not implemented");
+			}
 		} catch (HeadlessException e) {
 			e.printStackTrace();
 			return;
@@ -108,8 +110,9 @@ public class DuplicateComponentAction extends FlexoAction {
 			// Should not happen
 			return;
 		}
-		if (componentDef == null)
+		if (componentDef == null) {
 			return;
+		}
 		Enumeration<IEWidget> en = component.getRootSequence().elements();
 		while (en.hasMoreElements()) {
 			IEWidget obj = en.nextElement();

@@ -23,8 +23,8 @@ import java.util.Date;
 
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.cg.CGFile;
-import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.CGFile.FileContentEditor;
+import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.generator.IFlexoResourceGenerator;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
@@ -140,8 +140,9 @@ public class CopyOfFileResource<D extends GeneratedResourceData, G extends IFlex
 	}
 
 	public FileResource getResourceToCopy() {
-		if (resourceToCopy == null && _path != null)
+		if (resourceToCopy == null && _path != null) {
 			resourceToCopy = new FileResource(_path);
+		}
 		return resourceToCopy;
 	}
 
@@ -150,8 +151,9 @@ public class CopyOfFileResource<D extends GeneratedResourceData, G extends IFlex
 	}
 
 	public String getResourceToCopyPath() {
-		if (getResourceToCopy() != null)
+		if (getResourceToCopy() != null) {
 			return getResourceToCopy().getInternalPath();
+		}
 		return _path;
 	}
 

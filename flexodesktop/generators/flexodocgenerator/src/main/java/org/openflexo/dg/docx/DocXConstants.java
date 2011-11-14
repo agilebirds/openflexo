@@ -21,9 +21,9 @@ package org.openflexo.dg.docx;
 
 import java.awt.Color;
 
-import org.openflexo.toolbox.ToolBox;
 import org.openflexo.toolbox.ColorUtils.LAB;
 import org.openflexo.toolbox.ColorUtils.RGB;
+import org.openflexo.toolbox.ToolBox;
 
 public class DocXConstants {
 

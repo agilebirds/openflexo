@@ -66,6 +66,7 @@ public class StringWordTokenizer extends AbstractWordTokenizer {
 	 * @deprecated use getContext() instead as per the WordTokenizer interface specification.
 	 * @return the final text.
 	 */
+	@Deprecated
 	public String getFinalText() {
 
 		return getContext();
@@ -79,6 +80,7 @@ public class StringWordTokenizer extends AbstractWordTokenizer {
 	 * @throws WordNotFoundException
 	 *             current word not yet set.
 	 */
+	@Override
 	public void replaceWord(String s) {
 		finder.replace(s);
 	}

@@ -40,8 +40,9 @@ public class TransparentMouseListener implements MouseListener, MouseMotionListe
 	 */
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
-		if (_target == null)
+		if (_target == null) {
 			_target = _src.getParent().getParent();
+		}
 		MouseEvent convertedEvent = SwingUtilities.convertMouseEvent(_src, arg0, _target);
 		for (int i = 0; i < _target.getMouseMotionListeners().length; i++) {
 			_target.getMouseMotionListeners()[i].mouseDragged(convertedEvent);
@@ -55,8 +56,9 @@ public class TransparentMouseListener implements MouseListener, MouseMotionListe
 	 */
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
-		if (_target == null)
+		if (_target == null) {
 			_target = _src.getParent().getParent();
+		}
 		MouseEvent convertedEvent = SwingUtilities.convertMouseEvent(_src, arg0, _target);
 		for (int i = 0; i < _target.getMouseMotionListeners().length; i++) {
 			_target.getMouseMotionListeners()[i].mouseMoved(convertedEvent);
@@ -76,8 +78,9 @@ public class TransparentMouseListener implements MouseListener, MouseMotionListe
 	 */
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		if (_target == null)
+		if (_target == null) {
 			_target = _src.getParent().getParent();
+		}
 		MouseEvent convertedEvent = SwingUtilities.convertMouseEvent(_src, arg0, _target);
 		for (int i = 0; i < _target.getMouseListeners().length; i++) {
 			_target.getMouseListeners()[i].mouseClicked(convertedEvent);
@@ -91,8 +94,9 @@ public class TransparentMouseListener implements MouseListener, MouseMotionListe
 	 */
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		if (_target == null)
+		if (_target == null) {
 			_target = _src.getParent().getParent();
+		}
 		MouseEvent convertedEvent = SwingUtilities.convertMouseEvent(_src, arg0, _target);
 		for (int i = 0; i < _target.getMouseListeners().length; i++) {
 			_target.getMouseListeners()[i].mousePressed(convertedEvent);
@@ -106,8 +110,9 @@ public class TransparentMouseListener implements MouseListener, MouseMotionListe
 	 */
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		if (_target == null)
+		if (_target == null) {
 			_target = _src.getParent().getParent();
+		}
 		MouseEvent convertedEvent = SwingUtilities.convertMouseEvent(_src, arg0, _target);
 		for (int i = 0; i < _target.getMouseListeners().length; i++) {
 			_target.getMouseListeners()[i].mouseReleased(convertedEvent);
@@ -121,8 +126,9 @@ public class TransparentMouseListener implements MouseListener, MouseMotionListe
 	 */
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		if (_target == null)
+		if (_target == null) {
 			_target = _src.getParent().getParent();
+		}
 		MouseEvent convertedEvent = SwingUtilities.convertMouseEvent(_src, arg0, _target);
 		for (int i = 0; i < _target.getMouseListeners().length; i++) {
 			_target.getMouseListeners()[i].mouseEntered(convertedEvent);
@@ -136,8 +142,9 @@ public class TransparentMouseListener implements MouseListener, MouseMotionListe
 	 */
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		if (_target == null)
+		if (_target == null) {
 			_target = _src.getParent().getParent();
+		}
 		MouseEvent convertedEvent = SwingUtilities.convertMouseEvent(_src, arg0, _target);
 		for (int i = 0; i < _target.getMouseListeners().length; i++) {
 			_target.getMouseListeners()[i].mouseExited(convertedEvent);

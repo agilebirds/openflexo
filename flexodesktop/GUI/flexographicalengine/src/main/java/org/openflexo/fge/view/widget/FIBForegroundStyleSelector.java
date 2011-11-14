@@ -86,12 +86,14 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 	@Override
 	public void setRevertValue(ForegroundStyle oldValue) {
 		// WARNING: we need here to clone to keep track back of previous data !!!
-		if (oldValue != null)
+		if (oldValue != null) {
 			_revertValue = oldValue.clone();
-		else
+		} else {
 			_revertValue = null;
-		if (logger.isLoggable(Level.FINE))
+		}
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Sets revert value to " + _revertValue);
+		}
 	}
 
 	@Override
@@ -182,8 +184,9 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 
 	@Override
 	public void cancel() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("CANCEL: revert to " + getRevertValue());
+		}
 		setEditedObject(getRevertValue());
 		closePopup();
 		super.cancel();
@@ -191,8 +194,9 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 
 	@Override
 	protected void deletePopup() {
-		if (_selectorPanel != null)
+		if (_selectorPanel != null) {
 			_selectorPanel.delete();
+		}
 		_selectorPanel = null;
 		super.deletePopup();
 	}
@@ -259,8 +263,9 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 
 				@Override
 				public Object getContainer(Object aDrawable) {
-					if (aDrawable == line)
+					if (aDrawable == line) {
 						return ForegroundStylePreviewPanel.this;
+					}
 					return null;
 				}
 
@@ -271,9 +276,9 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 
 				@Override
 				public <O> GraphicalRepresentation<O> getGraphicalRepresentation(O aDrawable) {
-					if (aDrawable == ForegroundStylePreviewPanel.this)
+					if (aDrawable == ForegroundStylePreviewPanel.this) {
 						return drawingGR;
-					else if (aDrawable == line) {
+					} else if (aDrawable == line) {
 						return lineGR;
 					}
 					return null;
@@ -308,8 +313,9 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 		}
 
 		protected void update() {
-			if (getEditedObject() == null)
+			if (getEditedObject() == null) {
 				return;
+			}
 			lineGR.setForeground(getEditedObject());
 		}
 

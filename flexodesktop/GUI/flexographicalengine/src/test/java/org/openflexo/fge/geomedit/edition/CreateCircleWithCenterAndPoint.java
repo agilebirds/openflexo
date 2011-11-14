@@ -21,9 +21,9 @@ package org.openflexo.fge.geomedit.edition;
 
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEEllips;
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGESegment;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geomedit.Circle;
 import org.openflexo.fge.geomedit.GeomEditController;
 import org.openflexo.fge.geomedit.construction.CircleWithCenterAndPointConstruction;

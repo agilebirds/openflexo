@@ -96,8 +96,9 @@ public class SwingUtils {
 	public static boolean isComponentContainedInContainer(Component c, Container container) {
 		Component current = c;
 		while (current.getParent() != null) {
-			if (current == container)
+			if (current == container) {
 				return true;
+			}
 			current = current.getParent();
 		}
 		return false;

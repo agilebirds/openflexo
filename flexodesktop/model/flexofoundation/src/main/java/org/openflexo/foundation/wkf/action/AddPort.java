@@ -22,10 +22,6 @@ package org.openflexo.foundation.wkf.action;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.xmlcode.StringConvertable;
-import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.StringEncoder.Converter;
-
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
@@ -40,6 +36,9 @@ import org.openflexo.foundation.wkf.ws.NewPort;
 import org.openflexo.foundation.wkf.ws.OutPort;
 import org.openflexo.foundation.wkf.ws.PortRegistery;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.xmlcode.StringConvertable;
+import org.openflexo.xmlcode.StringEncoder;
+import org.openflexo.xmlcode.StringEncoder.Converter;
 
 public class AddPort extends FlexoAction<AddPort, WKFObject, WKFObject> {
 
@@ -55,16 +54,17 @@ public class AddPort extends FlexoAction<AddPort, WKFObject, WKFObject> {
 		NEW_PORT, DELETE_PORT, IN_PORT, OUT_PORT, IN_OUT_PORT;
 
 		public String getUnlocalizedStringRepresentation() {
-			if (this == NEW_PORT)
+			if (this == NEW_PORT) {
 				return "new_instance_port";
-			else if (this == DELETE_PORT)
+			} else if (this == DELETE_PORT) {
 				return "delete_instance_port";
-			else if (this == IN_PORT)
+			} else if (this == IN_PORT) {
 				return "in_port";
-			else if (this == OUT_PORT)
+			} else if (this == OUT_PORT) {
 				return "out_port";
-			else if (this == IN_OUT_PORT)
+			} else if (this == IN_OUT_PORT) {
 				return "in_out_port";
+			}
 			return "???";
 		}
 
@@ -82,8 +82,9 @@ public class AddPort extends FlexoAction<AddPort, WKFObject, WKFObject> {
 			@Override
 			public CreatedPortType convertFromString(String value) {
 				for (CreatedPortType cs : values()) {
-					if (cs.getStringRepresentation().equals(value))
+					if (cs.getStringRepresentation().equals(value)) {
 						return cs;
+					}
 				}
 				return null;
 			}
@@ -188,8 +189,9 @@ public class AddPort extends FlexoAction<AddPort, WKFObject, WKFObject> {
 	}
 
 	public void setNewPortType(CreatedPortType newPortType) {
-		if (newPortType != _newPortType)
+		if (newPortType != _newPortType) {
 			_newPortName = null; // Reset name if type changed
+		}
 		_newPortType = newPortType;
 	}
 

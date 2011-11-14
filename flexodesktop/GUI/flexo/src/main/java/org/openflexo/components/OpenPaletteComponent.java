@@ -41,8 +41,9 @@ public class OpenPaletteComponent extends PaletteChooserComponent {
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			returned = chooser.getSelectedFile();
 		} else {
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("No palette specified !");
+			}
 		}
 		return returned;
 	}

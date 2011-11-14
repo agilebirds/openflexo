@@ -25,9 +25,9 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JSpinner;
+import javax.swing.JSpinner.DefaultEditor;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
-import javax.swing.JSpinner.DefaultEditor;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -104,8 +104,9 @@ public class IntegerWidget extends DenaliWidget<Integer> {
 		JComponent editor = valueChooser.getEditor();
 		if (editor instanceof DefaultEditor) {
 			((DefaultEditor) editor).getTextField().setHorizontalAlignment(SwingConstants.LEFT);
-			if (ToolBox.getPLATFORM() != ToolBox.MACOS)
+			if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
 				((DefaultEditor) editor).getTextField().setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 0));
+			}
 		}
 		/* int colNb = DEFAULT_COLUMNS;
 		 if (model.hasValueForParameter(COLUMNS_PARAM)) {
@@ -311,8 +312,9 @@ public class IntegerWidget extends DenaliWidget<Integer> {
 	 */
 	@Override
 	public synchronized void updateModelFromWidget() {
-		if (isReadOnly())
+		if (isReadOnly()) {
 			return;
+		}
 		modelUpdating = true;
 		int currentValue = (Integer) valueChooser.getValue();
 

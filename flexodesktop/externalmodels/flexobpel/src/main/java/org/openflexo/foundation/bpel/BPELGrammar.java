@@ -62,10 +62,12 @@ public class BPELGrammar implements ExpressionGrammar {
 	}
 
 	public String getSymbol(UnaryOperator operator) throws OperatorNotSupportedException {
-		if (operator == BooleanUnaryOperator.NOT)
+		if (operator == BooleanUnaryOperator.NOT) {
 			return "not";
-		if (operator == ArithmeticUnaryOperator.UNARY_MINUS)
+		}
+		if (operator == ArithmeticUnaryOperator.UNARY_MINUS) {
 			return "-";
+		}
 		// if (operator == ArithmeticUnaryOperator.SIN) return "sin";
 		// if (operator == ArithmeticUnaryOperator.ASIN) return "asin";
 		// if (operator == ArithmeticUnaryOperator.COS) return "cos";
@@ -83,61 +85,81 @@ public class BPELGrammar implements ExpressionGrammar {
 	}
 
 	public String getSymbol(BinaryOperator operator) throws OperatorNotSupportedException {
-		if (operator == BooleanBinaryOperator.AND)
+		if (operator == BooleanBinaryOperator.AND) {
 			return "and";
-		if (operator == BooleanBinaryOperator.OR)
+		}
+		if (operator == BooleanBinaryOperator.OR) {
 			return "or";
-		if (operator == BooleanBinaryOperator.EQUALS)
+		}
+		if (operator == BooleanBinaryOperator.EQUALS) {
 			return "=";
-		if (operator == BooleanBinaryOperator.NOT_EQUALS)
+		}
+		if (operator == BooleanBinaryOperator.NOT_EQUALS) {
 			return "!=";
-		if (operator == BooleanBinaryOperator.LESS_THAN)
+		}
+		if (operator == BooleanBinaryOperator.LESS_THAN) {
 			return "<";
-		if (operator == BooleanBinaryOperator.LESS_THAN_OR_EQUALS)
+		}
+		if (operator == BooleanBinaryOperator.LESS_THAN_OR_EQUALS) {
 			return "<=";
-		if (operator == BooleanBinaryOperator.GREATER_THAN)
+		}
+		if (operator == BooleanBinaryOperator.GREATER_THAN) {
 			return ">";
-		if (operator == BooleanBinaryOperator.GREATER_THAN_OR_EQUALS)
+		}
+		if (operator == BooleanBinaryOperator.GREATER_THAN_OR_EQUALS) {
 			return ">=";
-		if (operator == ArithmeticBinaryOperator.ADDITION)
+		}
+		if (operator == ArithmeticBinaryOperator.ADDITION) {
 			return "+";
-		if (operator == ArithmeticBinaryOperator.SUBSTRACTION)
+		}
+		if (operator == ArithmeticBinaryOperator.SUBSTRACTION) {
 			return "-";
-		if (operator == ArithmeticBinaryOperator.MULTIPLICATION)
+		}
+		if (operator == ArithmeticBinaryOperator.MULTIPLICATION) {
 			return "*";
-		if (operator == ArithmeticBinaryOperator.DIVISION)
+		}
+		if (operator == ArithmeticBinaryOperator.DIVISION) {
 			return "/";
+		}
 		// if (operator == ArithmeticBinaryOperator.POWER) return "^";
 		throw new OperatorNotSupportedException();
 	}
 
 	public String getAlternativeSymbol(BinaryOperator operator) throws OperatorNotSupportedException {
-		if (operator == BooleanBinaryOperator.AND)
+		if (operator == BooleanBinaryOperator.AND) {
 			return "&&";
-		if (operator == BooleanBinaryOperator.OR)
+		}
+		if (operator == BooleanBinaryOperator.OR) {
 			return "||";
-		if (operator == BooleanBinaryOperator.EQUALS)
+		}
+		if (operator == BooleanBinaryOperator.EQUALS) {
 			return "==";
-		if (operator == ArithmeticBinaryOperator.DIVISION)
+		}
+		if (operator == ArithmeticBinaryOperator.DIVISION) {
 			return ":";
+		}
 		return null;
 	}
 
 	@Override
 	public String getAlternativeSymbol(Operator operator) throws OperatorNotSupportedException {
-		if (operator instanceof UnaryOperator)
+		if (operator instanceof UnaryOperator) {
 			return getAlternativeSymbol((UnaryOperator) operator);
-		if (operator instanceof BinaryOperator)
+		}
+		if (operator instanceof BinaryOperator) {
 			return getAlternativeSymbol((BinaryOperator) operator);
+		}
 		throw new OperatorNotSupportedException();
 	}
 
 	@Override
 	public String getSymbol(Operator operator) throws OperatorNotSupportedException {
-		if (operator instanceof UnaryOperator)
+		if (operator instanceof UnaryOperator) {
 			return getSymbol((UnaryOperator) operator);
-		if (operator instanceof BinaryOperator)
+		}
+		if (operator instanceof BinaryOperator) {
 			return getSymbol((BinaryOperator) operator);
+		}
 		throw new OperatorNotSupportedException();
 	}
 

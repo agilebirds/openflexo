@@ -46,24 +46,27 @@ public class FileHistoryBrowserView extends TabularBrowserView {
 		model.addToColumns(new StringColumn<CGObject>("kind", 150) {
 			@Override
 			public String getValue(CGObject object) {
-				if (object instanceof AbstractCGFileVersion)
+				if (object instanceof AbstractCGFileVersion) {
 					return ((AbstractCGFileVersion) object).getVersionId().typeAsString();
+				}
 				return "";
 			}
 		});
 		model.addToColumns(new StringColumn<CGObject>("date", 200) {
 			@Override
 			public String getValue(CGObject object) {
-				if (object instanceof AbstractCGFileVersion)
+				if (object instanceof AbstractCGFileVersion) {
 					return ((AbstractCGFileVersion) object).getDateAsString();
+				}
 				return "";
 			}
 		});
 		model.addToColumns(new StringColumn<CGObject>("user", 80) {
 			@Override
 			public String getValue(CGObject object) {
-				if (object instanceof AbstractCGFileVersion)
+				if (object instanceof AbstractCGFileVersion) {
 					return ((AbstractCGFileVersion) object).getUserId();
+				}
 				return "";
 			}
 		});
@@ -78,10 +81,12 @@ public class FileHistoryBrowserView extends TabularBrowserView {
 
 	@Override
 	public boolean mayRepresents(FlexoModelObject anObject) {
-		if (anObject instanceof CGFile)
+		if (anObject instanceof CGFile) {
 			return (anObject == _cgFile);
-		if (anObject instanceof AbstractCGFileVersion)
+		}
+		if (anObject instanceof AbstractCGFileVersion) {
 			return (((AbstractCGFileVersion) anObject).getCGFile() == _cgFile);
+		}
 		return false;
 	}
 

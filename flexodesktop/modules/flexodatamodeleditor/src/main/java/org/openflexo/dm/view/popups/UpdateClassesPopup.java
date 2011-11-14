@@ -25,9 +25,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-
 import org.openflexo.components.MultipleObjectSelectorPopup;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementFactory;
@@ -40,13 +37,15 @@ import org.openflexo.components.widget.MultipleObjectSelector.TabularBrowserConf
 import org.openflexo.dm.view.controller.DMController;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.DMSet;
-import org.openflexo.foundation.dm.LoadableDMEntity;
 import org.openflexo.foundation.dm.DMSet.PackageReference;
 import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference;
 import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference.MethodReference;
 import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference.PropertyReference;
+import org.openflexo.foundation.dm.LoadableDMEntity;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.utils.FlexoProgress;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 
 public class UpdateClassesPopup extends MultipleObjectSelectorPopup {
 
@@ -231,10 +230,11 @@ public class UpdateClassesPopup extends MultipleObjectSelectorPopup {
 						@Override
 						public Icon getIcon(FlexoModelObject object) {
 							if (object instanceof PropertyReference) {
-								if (((PropertyReference) object).isSettable())
+								if (((PropertyReference) object).isSettable()) {
 									return DMEIconLibrary.GET_SET_ICON;
-								else
+								} else {
 									return DMEIconLibrary.GET_ICON;
+								}
 							}
 							return null;
 						}
@@ -242,10 +242,11 @@ public class UpdateClassesPopup extends MultipleObjectSelectorPopup {
 						@Override
 						public String getLocalizedTooltip(FlexoModelObject object) {
 							if (object instanceof PropertyReference) {
-								if (((PropertyReference) object).isSettable())
+								if (((PropertyReference) object).isSettable()) {
 									return FlexoLocalization.localizedForKey("can_be_set");
-								else
+								} else {
 									return FlexoLocalization.localizedForKey("cannot_be_set");
+								}
 							}
 							return null;
 						}

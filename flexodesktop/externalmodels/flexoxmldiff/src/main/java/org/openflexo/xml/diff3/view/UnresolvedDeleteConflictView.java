@@ -59,11 +59,12 @@ public class UnresolvedDeleteConflictView extends UnresolvedConflictView {
 		} else {
 			_choicePanel.setBackground(findBackgroundColor());
 			_choicePanel.add(new JLabel("You choose :"));
-			if (getModel().getSolveAction().equals(getModel().getKeepYourChangeAction()))
+			if (getModel().getSolveAction().equals(getModel().getKeepYourChangeAction())) {
 				_choicePanel.add(new JLabel(getModel().isMyDeletion() ? "Delete object anyway." : "Restore the deleted object."));
-			else
+			} else {
 				_choicePanel.add(new JLabel(getModel().isMyDeletion() ? "Restore the modified object."
 						: "Delete the object (don't care about my changes)."));
+			}
 		}
 		_choicePanel.validate();
 	}

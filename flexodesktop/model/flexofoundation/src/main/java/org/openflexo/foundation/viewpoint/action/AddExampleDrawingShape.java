@@ -87,8 +87,9 @@ public class AddExampleDrawingShape extends FlexoAction<AddExampleDrawingShape, 
 		}
 
 		_newShape = new ExampleDrawingShape();
-		if (graphicalRepresentation != null)
+		if (graphicalRepresentation != null) {
 			_newShape.setGraphicalRepresentation(graphicalRepresentation);
+		}
 
 		_newShape.setName(newShapeName);
 		getParent().addToChilds(_newShape);

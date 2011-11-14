@@ -61,11 +61,13 @@ public class BindingDefinition {
 		if (object instanceof BindingDefinition) {
 			BindingDefinition bd = (BindingDefinition) object;
 			if (_variableName == null) {
-				if (bd._variableName != null)
+				if (bd._variableName != null) {
 					return false;
+				}
 			} else {
-				if (!_variableName.equals(bd._variableName))
+				if (!_variableName.equals(bd._variableName)) {
 					return false;
+				}
 			}
 			return ((_type == bd._type) && (_isMandatory == bd._isMandatory));
 		} else {
@@ -125,10 +127,11 @@ public class BindingDefinition {
 		public int compare(BindingDefinition o1, BindingDefinition o2) {
 			String s1 = o1.getVariableName();
 			String s2 = o2.getVariableName();
-			if ((s1 != null) && (s2 != null))
+			if ((s1 != null) && (s2 != null)) {
 				return Collator.getInstance().compare(s1, s2);
-			else
+			} else {
 				return 0;
+			}
 		}
 
 	}
@@ -138,10 +141,11 @@ public class BindingDefinition {
 	}
 
 	public String getTypeStringRepresentation() {
-		if (getType() == null)
+		if (getType() == null) {
 			return FlexoLocalization.localizedForKey("no_type");
-		else
+		} else {
 			return TypeUtils.simpleRepresentation(getType());
+		}
 	}
 
 	@Override

@@ -88,8 +88,9 @@ public class AddStatus extends FlexoAction<AddStatus, WKFObject, WKFObject> {
 		if (getProcess() != null && !getProcess().isImported() && getProcess().getStatusList() != null) {
 			StatusList statusList = getProcess().getStatusList();
 			statusList.addToStatus(_newStatus = new Status(getProcess(), getNewStatusName()));
-			if (getNewDescription() != null)
+			if (getNewDescription() != null) {
 				_newStatus.setDescription(getNewDescription());
+			}
 		} else {
 			logger.warning("Focused process is null or imported!");
 		}

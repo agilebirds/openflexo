@@ -104,12 +104,14 @@ public class CommitBuilder implements Builder {
 				String reposPath = line.substring(0, c).trim();
 				if (reposPath.startsWith(repositoryRoot)) {
 					reposPath = reposPath.substring(repositoryRoot.length());
-					if (reposPath.startsWith("/"))
+					if (reposPath.startsWith("/")) {
 						reposPath = reposPath.substring(1);
+					}
 				}
 				c = reposPath.lastIndexOf('/');
-				if (c > 0)
+				if (c > 0) {
 					reposPath = reposPath.substring(0, c); // remove the file name
+				}
 				file = findFile(fileName, reposPath);
 			} else {
 				file = new File(fileDirectory, fileName);
@@ -207,8 +209,9 @@ public class CommitBuilder implements Builder {
 		}
 		// use quick finder and fallback to original algorithm just in case
 		File file = quickFindFile(dir, fileName, reposPath);
-		if (file != null)
+		if (file != null) {
 			return file;
+		}
 		return findFile(dir, fileName, reposPath);
 	}
 
@@ -222,8 +225,9 @@ public class CommitBuilder implements Builder {
 				for (int i = 0; i < subFiles.length; i++) {
 					if (subFiles[i].isDirectory()) {
 						file = findFile(subFiles[i], fileName, reposPath);
-						if (file != null)
+						if (file != null) {
 							break;
+						}
 					}
 				}
 			}
@@ -238,8 +242,9 @@ public class CommitBuilder implements Builder {
 				return new File(deepDir, fileName);
 			}
 			dir = dir.getParentFile();
-			if (dir == null)
+			if (dir == null) {
 				return null;
+			}
 		}
 	}
 
@@ -247,8 +252,9 @@ public class CommitBuilder implements Builder {
 		try {
 			String repository = eventManager.getClientServices().getRepositoryForDirectory(dir);
 			String root = eventManager.getClientServices().getRepository();
-			if (repository.startsWith(root))
+			if (repository.startsWith(root)) {
 				repository = repository.substring(root.length() + 1);
+			}
 			return reposPath.equals(repository);
 		} catch (IOException e) {
 			return false;

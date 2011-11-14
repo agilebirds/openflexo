@@ -23,12 +23,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import org.openflexo.foundation.FlexoTestCase;
-import org.openflexo.foundation.dm.eo.model.EOAttribute;
-import org.openflexo.foundation.dm.eo.model.EOEntity;
-import org.openflexo.foundation.dm.eo.model.EOModel;
-import org.openflexo.foundation.dm.eo.model.EOModelGroup;
-import org.openflexo.foundation.dm.eo.model.EORelationship;
-import org.openflexo.foundation.dm.eo.model.PropertyListDeserializationException;
 
 /**
  * @author gpolet

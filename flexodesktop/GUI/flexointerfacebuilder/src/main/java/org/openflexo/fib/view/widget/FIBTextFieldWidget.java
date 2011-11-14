@@ -80,8 +80,9 @@ public class FIBTextFieldWidget extends FIBWidgetView<FIBTextField, JTextField, 
 			_textField.setColumns(DEFAULT_COLUMNS);
 		}
 
-		if (model.text != null)
+		if (model.text != null) {
 			_textField.setText(model.text);
+		}
 
 		_textField.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
@@ -98,8 +99,9 @@ public class FIBTextFieldWidget extends FIBWidgetView<FIBTextField, JTextField, 
 						if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 							if (e.getLength() == 1) {
 								char c = _textField.getText().charAt(e.getOffset());
-								if (c == '´' || c == 'ˆ' || c == '˜' || c == '`' || c == '¨')
+								if (c == '´' || c == 'ˆ' || c == '˜' || c == '`' || c == '¨') {
 									return;
+								}
 							}
 						}
 					} catch (RuntimeException e1) {
@@ -140,13 +142,15 @@ public class FIBTextFieldWidget extends FIBWidgetView<FIBTextField, JTextField, 
 	@Override
 	public synchronized boolean updateWidgetFromModel() {
 		if (notEquals(getValue(), _textField.getText())) {
-			if (modelUpdating)
+			if (modelUpdating) {
 				return false;
+			}
 			widgetUpdating = true;
 			int caret = _textField.getCaretPosition();
 			_textField.setText(getValue());
-			if (caret > -1 && caret < _textField.getDocument().getLength())
+			if (caret > -1 && caret < _textField.getDocument().getLength()) {
 				_textField.setCaretPosition(caret);
+			}
 			widgetUpdating = false;
 			return true;
 		}
@@ -160,8 +164,9 @@ public class FIBTextFieldWidget extends FIBWidgetView<FIBTextField, JTextField, 
 	public synchronized boolean updateModelFromWidget() {
 		if (notEquals(getValue(), _textField.getText())) {
 			modelUpdating = true;
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("updateModelFromWidget() in TextFieldWidget");
+			}
 			// logger.info("setValue with "+_textField.getText());
 			setValue(_textField.getText());
 			modelUpdating = false;

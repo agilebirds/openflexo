@@ -40,147 +40,158 @@ public class Duration extends KVCObject implements StringConvertable, Cloneable,
 		MILLIS, SECONDS, MINUTES, HOURS, DAYS, WEEKS, MONTHS, YEARS;
 
 		public String getSymbol() {
-			if (this == MILLIS)
+			if (this == MILLIS) {
 				return "ms";
-			else if (this == SECONDS)
+			} else if (this == SECONDS) {
 				return "s";
-			else if (this == MINUTES)
+			} else if (this == MINUTES) {
 				return "min";
-			else if (this == HOURS)
+			} else if (this == HOURS) {
 				return "h";
-			else if (this == DAYS)
+			} else if (this == DAYS) {
 				return "d";
-			else if (this == WEEKS)
+			} else if (this == WEEKS) {
 				return "w";
-			else if (this == MONTHS)
+			} else if (this == MONTHS) {
 				return "m";
-			else if (this == YEARS)
+			} else if (this == YEARS) {
 				return "y";
+			}
 			return "?";
 		}
 
 		public String getLocalizedKey() {
-			if (this == MILLIS)
+			if (this == MILLIS) {
 				return "millisecond";
-			else if (this == SECONDS)
+			} else if (this == SECONDS) {
 				return "second";
-			else if (this == MINUTES)
+			} else if (this == MINUTES) {
 				return "minute";
-			else if (this == HOURS)
+			} else if (this == HOURS) {
 				return "hour";
-			else if (this == DAYS)
+			} else if (this == DAYS) {
 				return "day";
-			else if (this == WEEKS)
+			} else if (this == WEEKS) {
 				return "week";
-			else if (this == MONTHS)
+			} else if (this == MONTHS) {
 				return "month";
-			else if (this == YEARS)
+			} else if (this == YEARS) {
 				return "year";
+			}
 			return "?";
 		}
 
 		public int getCalendarField() {
-			if (this == MILLIS)
+			if (this == MILLIS) {
 				return Calendar.MILLISECOND;
-			else if (this == SECONDS)
+			} else if (this == SECONDS) {
 				return Calendar.SECOND;
-			else if (this == MINUTES)
+			} else if (this == MINUTES) {
 				return Calendar.MINUTE;
-			else if (this == HOURS)
+			} else if (this == HOURS) {
 				return Calendar.HOUR;
-			else if (this == DAYS)
+			} else if (this == DAYS) {
 				return Calendar.DAY_OF_YEAR;
-			else if (this == WEEKS)
+			} else if (this == WEEKS) {
 				return Calendar.WEEK_OF_YEAR;
-			else if (this == MONTHS)
+			} else if (this == MONTHS) {
 				return Calendar.MONTH;
-			else if (this == YEARS)
+			} else if (this == YEARS) {
 				return Calendar.YEAR;
+			}
 			return -1;
 		}
 
 		// assert this.ordinality > oppositUnit.ordinality
 		public long getCardinalityOf(DurationUnit oppositeUnit) {
 			if (this == MILLIS) {
-				if (oppositeUnit == MILLIS)
+				if (oppositeUnit == MILLIS) {
 					return 1;
+				}
 			} else if (this == SECONDS) {
-				if (oppositeUnit == MILLIS)
+				if (oppositeUnit == MILLIS) {
 					return 1000;
-				else if (oppositeUnit == SECONDS)
+				} else if (oppositeUnit == SECONDS) {
 					return 1;
+				}
 			} else if (this == MINUTES) {
-				if (oppositeUnit == MILLIS)
+				if (oppositeUnit == MILLIS) {
 					return 60 * 1000;
-				else if (oppositeUnit == SECONDS)
+				} else if (oppositeUnit == SECONDS) {
 					return 60;
-				else if (oppositeUnit == MINUTES)
+				} else if (oppositeUnit == MINUTES) {
 					return 1;
+				}
 			} else if (this == HOURS) {
-				if (oppositeUnit == MILLIS)
+				if (oppositeUnit == MILLIS) {
 					return 60 * 60 * 1000;
-				else if (oppositeUnit == SECONDS)
+				} else if (oppositeUnit == SECONDS) {
 					return 60 * 60;
-				else if (oppositeUnit == MINUTES)
+				} else if (oppositeUnit == MINUTES) {
 					return 60;
-				else if (oppositeUnit == HOURS)
+				} else if (oppositeUnit == HOURS) {
 					return 1;
+				}
 			} else if (this == DAYS) {
-				if (oppositeUnit == MILLIS)
+				if (oppositeUnit == MILLIS) {
 					return 24 * 60 * 60 * 1000;
-				else if (oppositeUnit == SECONDS)
+				} else if (oppositeUnit == SECONDS) {
 					return 24 * 60 * 60;
-				else if (oppositeUnit == MINUTES)
+				} else if (oppositeUnit == MINUTES) {
 					return 24 * 60;
-				else if (oppositeUnit == HOURS)
+				} else if (oppositeUnit == HOURS) {
 					return 24;
-				else if (oppositeUnit == DAYS)
+				} else if (oppositeUnit == DAYS) {
 					return 1;
+				}
 			} else if (this == WEEKS) {
-				if (oppositeUnit == MILLIS)
+				if (oppositeUnit == MILLIS) {
 					return 7 * 24 * 60 * 60 * 1000;
-				else if (oppositeUnit == SECONDS)
+				} else if (oppositeUnit == SECONDS) {
 					return 7 * 24 * 60 * 60;
-				else if (oppositeUnit == MINUTES)
+				} else if (oppositeUnit == MINUTES) {
 					return 7 * 24 * 60;
-				else if (oppositeUnit == HOURS)
+				} else if (oppositeUnit == HOURS) {
 					return 7 * 24;
-				else if (oppositeUnit == DAYS)
+				} else if (oppositeUnit == DAYS) {
 					return 7;
-				else if (oppositeUnit == WEEKS)
+				} else if (oppositeUnit == WEEKS) {
 					return 1;
+				}
 			} else if (this == MONTHS) {
-				if (oppositeUnit == MILLIS)
+				if (oppositeUnit == MILLIS) {
 					return 30 * 24 * 60 * 60 * 1000;
-				else if (oppositeUnit == SECONDS)
+				} else if (oppositeUnit == SECONDS) {
 					return 30 * 24 * 60 * 60;
-				else if (oppositeUnit == MINUTES)
+				} else if (oppositeUnit == MINUTES) {
 					return 30 * 24 * 60;
-				else if (oppositeUnit == HOURS)
+				} else if (oppositeUnit == HOURS) {
 					return 30 * 24;
-				else if (oppositeUnit == DAYS)
+				} else if (oppositeUnit == DAYS) {
 					return 30;
-				else if (oppositeUnit == WEEKS)
+				} else if (oppositeUnit == WEEKS) {
 					return 4;
-				else if (oppositeUnit == MONTHS)
+				} else if (oppositeUnit == MONTHS) {
 					return 1;
+				}
 			} else if (this == YEARS) {
-				if (oppositeUnit == MILLIS)
+				if (oppositeUnit == MILLIS) {
 					return 365 * 24 * 60 * 60 * 1000;
-				else if (oppositeUnit == SECONDS)
+				} else if (oppositeUnit == SECONDS) {
 					return 365 * 24 * 60 * 60;
-				else if (oppositeUnit == MINUTES)
+				} else if (oppositeUnit == MINUTES) {
 					return 365 * 24 * 60;
-				else if (oppositeUnit == HOURS)
+				} else if (oppositeUnit == HOURS) {
 					return 365 * 24;
-				else if (oppositeUnit == DAYS)
+				} else if (oppositeUnit == DAYS) {
 					return 365;
-				else if (oppositeUnit == WEEKS)
+				} else if (oppositeUnit == WEEKS) {
 					return 52;
-				else if (oppositeUnit == MONTHS)
+				} else if (oppositeUnit == MONTHS) {
 					return 12;
-				else if (oppositeUnit == YEARS)
+				} else if (oppositeUnit == YEARS) {
 					return 1;
+				}
 			}
 			return -1;
 		}
@@ -205,8 +216,9 @@ public class Duration extends KVCObject implements StringConvertable, Cloneable,
 	}
 
 	public String getSerializationRepresentation() {
-		if (unit == null)
+		if (unit == null) {
 			return "";
+		}
 		return value + unit.getSymbol();
 	}
 
@@ -249,8 +261,9 @@ public class Duration extends KVCObject implements StringConvertable, Cloneable,
 
 		@Override
 		public String convertToString(Duration value) {
-			if (value == null)
+			if (value == null) {
 				return "null";
+			}
 			return value.getSerializationRepresentation();
 		}
 
@@ -357,8 +370,9 @@ public class Duration extends KVCObject implements StringConvertable, Cloneable,
 	@Override
 	public int compareTo(Duration o) {
 		int returned = getUnit().compareTo(o.getUnit());
-		if (returned != 0)
+		if (returned != 0) {
 			return returned;
+		}
 		return (new Long(getValue())).compareTo(new Long(o.getValue()));
 	}
 }

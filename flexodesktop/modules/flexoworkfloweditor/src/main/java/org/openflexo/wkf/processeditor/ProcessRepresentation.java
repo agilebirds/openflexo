@@ -112,6 +112,7 @@ import org.openflexo.wkf.processeditor.gr.EndOperationNodeGR;
 import org.openflexo.wkf.processeditor.gr.EventNodeGR;
 import org.openflexo.wkf.processeditor.gr.ExpandedActivityGroupGR;
 import org.openflexo.wkf.processeditor.gr.ExpanderGR;
+import org.openflexo.wkf.processeditor.gr.ExpanderGR.Expander;
 import org.openflexo.wkf.processeditor.gr.MessageEdgeGR;
 import org.openflexo.wkf.processeditor.gr.NormalAbstractActivityNodeGR;
 import org.openflexo.wkf.processeditor.gr.OperationNodeGR;
@@ -129,6 +130,7 @@ import org.openflexo.wkf.processeditor.gr.PortRegisteryGR;
 import org.openflexo.wkf.processeditor.gr.PortmapGR;
 import org.openflexo.wkf.processeditor.gr.PortmapRegisteryGR;
 import org.openflexo.wkf.processeditor.gr.PreAndBeginNodeAssociationGR;
+import org.openflexo.wkf.processeditor.gr.PreAndBeginNodeAssociationGR.PreAndBeginNodeAssociation;
 import org.openflexo.wkf.processeditor.gr.PreConditionGR;
 import org.openflexo.wkf.processeditor.gr.SelfExecActionNodeGR;
 import org.openflexo.wkf.processeditor.gr.SelfExecActivityNodeGR;
@@ -137,8 +139,6 @@ import org.openflexo.wkf.processeditor.gr.StockObjectGR;
 import org.openflexo.wkf.processeditor.gr.SubProcessNodeGR;
 import org.openflexo.wkf.processeditor.gr.TokenEdgeGR;
 import org.openflexo.wkf.processeditor.gr.WKFObjectGR;
-import org.openflexo.wkf.processeditor.gr.ExpanderGR.Expander;
-import org.openflexo.wkf.processeditor.gr.PreAndBeginNodeAssociationGR.PreAndBeginNodeAssociation;
 
 public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implements GraphicalFlexoObserver, ProcessEditorConstants {
 
@@ -157,8 +157,9 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 		@Override
 		public boolean isVisible(WKFObject targetObject) {
 			if (targetObject == null) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Null object are not visible");
+				}
 				return false;
 			}
 			if (targetObject instanceof FlexoProcess) {
@@ -173,11 +174,13 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 				WKFObject firstVisibleEndObject = getFirstVisibleObject(post.getEndNode());
 				if (post instanceof MessageEdge) {
 					if (firstVisibleStartObject instanceof FlexoPortMap) {
-						if (((FlexoPortMap) firstVisibleStartObject).getSubProcessNode() == firstVisibleEndObject)
+						if (((FlexoPortMap) firstVisibleStartObject).getSubProcessNode() == firstVisibleEndObject) {
 							return false;
+						}
 					} else if (firstVisibleEndObject instanceof FlexoPortMap) {
-						if (((FlexoPortMap) firstVisibleEndObject).getSubProcessNode() == firstVisibleStartObject)
+						if (((FlexoPortMap) firstVisibleEndObject).getSubProcessNode() == firstVisibleStartObject) {
 							return false;
+						}
 					}
 				}
 				if (post instanceof FlexoPostCondition<?, ?>) {
@@ -202,8 +205,9 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 
 		@Override
 		public final WKFObject getFirstVisibleObject(WKFObject targetObject) {
-			if (targetObject == null)
+			if (targetObject == null) {
 				return null;
+			}
 			AbstractNode concernedNode = null;
 			if (targetObject instanceof FlexoPreCondition) {
 				concernedNode = ((FlexoPreCondition) targetObject).getAttachedNode();
@@ -211,8 +215,9 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 				concernedNode = (AbstractNode) targetObject;
 			} else if (targetObject instanceof WKFArtefact) {
 				WKFArtefact artefact = (WKFArtefact) targetObject;
-				if (artefact.getParentPetriGraph() == null)
+				if (artefact.getParentPetriGraph() == null) {
 					return null;
+				}
 				if (isVisible(artefact.getParentPetriGraph())) {
 					return targetObject;
 				} else {
@@ -233,37 +238,44 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 			}
 
 			if (concernedNode instanceof FlexoPort) {
-				if (((FlexoPort) concernedNode).getPortRegistery() == null)
+				if (((FlexoPort) concernedNode).getPortRegistery() == null) {
 					return null;
+				}
 				// GPO: Shouldn't we pass the FlexoPort (and the FlexoPort would have then to check that its parent portRegistery is shown)?
-				if (isVisible(((FlexoPort) concernedNode).getPortRegistery()))
+				if (isVisible(((FlexoPort) concernedNode).getPortRegistery())) {
 					return targetObject;
+				}
 				return null;
 			}
 
 			if (concernedNode instanceof FlexoPortMap) {
 				if (isVisible(((FlexoPortMap) concernedNode).getSubProcessNode())) {
-					if (isVisible(concernedNode) && isVisible(((FlexoPortMap) concernedNode).getPortMapRegistery()))
+					if (isVisible(concernedNode) && isVisible(((FlexoPortMap) concernedNode).getPortMapRegistery())) {
 						return targetObject;
+					}
 					return ((FlexoPortMap) concernedNode).getSubProcessNode();
-				} else
+				} else {
 					return getFirstVisibleObject(((FlexoPortMap) concernedNode).getSubProcessNode());
+				}
 			}
 			if (!(concernedNode instanceof PetriGraphNode)) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("concerned node is not a petri graph node: " + concernedNode);
+				}
 				return null;
 			}
 			PetriGraphNode node = (PetriGraphNode) concernedNode;
 
-			if (node.getParentPetriGraph() == null)
+			if (node.getParentPetriGraph() == null) {
 				return null;
+			}
 			if (node.isGrouped()) {
 				WKFGroup group = node.getContainerGroup();
-				if (isVisible(group))
+				if (isVisible(group)) {
 					return targetObject;
-				else
+				} else {
 					return group;
+				}
 			}
 
 			if (isVisible(node.getParentPetriGraph())) {
@@ -295,8 +307,9 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 		@Override
 		public boolean isVisible(WKFObject targetObject) {
 			if (targetObject == null) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Null object are not visible");
+				}
 				return false;
 			}
 			if (targetObject instanceof FlexoProcess) {
@@ -318,11 +331,13 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 
 				if (post instanceof MessageEdge) {
 					if (firstVisibleStartObject instanceof FlexoPortMap) {
-						if (((FlexoPortMap) firstVisibleStartObject).getSubProcessNode() == firstVisibleEndObject)
+						if (((FlexoPortMap) firstVisibleStartObject).getSubProcessNode() == firstVisibleEndObject) {
 							return false;
+						}
 					} else if (firstVisibleEndObject instanceof FlexoPortMap) {
-						if (((FlexoPortMap) firstVisibleEndObject).getSubProcessNode() == firstVisibleStartObject)
+						if (((FlexoPortMap) firstVisibleEndObject).getSubProcessNode() == firstVisibleStartObject) {
 							return false;
+						}
 					}
 				}
 				if (post instanceof FlexoPostCondition<?, ?>) {
@@ -373,10 +388,11 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 		super(process);
 
 		this.editor = anEditor;
-		if (visibilityDelegate != null)
+		if (visibilityDelegate != null) {
 			this.visibilityDelegate = visibilityDelegate;
-		else
+		} else {
 			this.visibilityDelegate = DEFAULT_VISIBILITY;
+		}
 
 		graphicalRepresentation = new ProcessGraphicalRepresentation(this, process);
 		graphicalRepresentation.addToMouseClickControls(new ProcessEditorController.ShowContextualMenuControl());
@@ -463,8 +479,9 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 		addDrawable(pg, getProcess());
 		addDrawable(expanderForNodeAndPG(father, pg), getProcess());
 		for (PetriGraphNode n : pg.getNodes()) {
-			if (!n.isGrouped())
+			if (!n.isGrouped()) {
 				addNode(n, pg);
+			}
 		}
 		for (WKFArtefact annotation : pg.getArtefacts()) {
 			addDrawable(annotation, pg);
@@ -489,8 +506,9 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 
 		for (PetriGraphNode node : getProcess().getActivityPetriGraph().getNodes()) {
 			if (!node.isGrouped()) {
-				if (!(node instanceof EventNode && ((EventNode) node).getBoundaryOf() != null))
+				if (!(node instanceof EventNode && ((EventNode) node).getBoundaryOf() != null)) {
 					addNode(node, getProcess());
+				}
 			}
 		}
 
@@ -539,8 +557,9 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 					// System.out.println("Common ancestor: "+commonAncestor.getDrawable());
 					// addDrawable(post,commonAncestor.getDrawable());
 					addDrawable(post, getProcess());
-				} else
+				} else {
 					System.err.println(post + " is not displayable");
+				}
 			}
 		}
 
@@ -612,10 +631,12 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 			return new SelfExecActivityNodeGR((SelfExecutableActivityNode) aDrawable, this, false);
 		}
 		if (aDrawable instanceof ActivityNode) {
-			if (((ActivityNode) aDrawable).isBeginNode())
+			if (((ActivityNode) aDrawable).isBeginNode()) {
 				return new BeginActivityNodeGR((ActivityNode) aDrawable, this, false);
-			if (((ActivityNode) aDrawable).isEndNode())
+			}
+			if (((ActivityNode) aDrawable).isEndNode()) {
 				return new EndActivityNodeGR((ActivityNode) aDrawable, this, false);
+			}
 			return new ActivityNodeGR((ActivityNode) aDrawable, this, false);
 		}
 		if (aDrawable instanceof SubProcessNode) {
@@ -659,10 +680,11 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 		}
 		if (aDrawable instanceof ActivityGroup) {
 			ActivityGroup group = (ActivityGroup) aDrawable;
-			if (isVisible(group))
+			if (isVisible(group)) {
 				return new ExpandedActivityGroupGR(group, this);
-			else
+			} else {
 				return new CollabsedActivityGroupGR(group, this);
+			}
 		}
 		if (aDrawable instanceof ActivityPetriGraph) {
 			return new ActivityPetriGraphGR((ActivityPetriGraph) aDrawable, this);
@@ -677,20 +699,24 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 			return new SelfExecOperationNodeGR((SelfExecutableOperationNode) aDrawable, this, false);
 		}
 		if (aDrawable instanceof OperationNode) {
-			if (((OperationNode) aDrawable).isBeginNode())
+			if (((OperationNode) aDrawable).isBeginNode()) {
 				return new BeginOperationNodeGR((OperationNode) aDrawable, this, false);
-			if (((OperationNode) aDrawable).isEndNode())
+			}
+			if (((OperationNode) aDrawable).isEndNode()) {
 				return new EndOperationNodeGR((OperationNode) aDrawable, this, false);
+			}
 			return new OperationNodeGR((OperationNode) aDrawable, this, false);
 		}
 		if (aDrawable instanceof SelfExecutableActionNode) {
 			return new SelfExecActionNodeGR((SelfExecutableActionNode) aDrawable, this, false);
 		}
 		if (aDrawable instanceof ActionNode) {
-			if (((ActionNode) aDrawable).isBeginNode())
+			if (((ActionNode) aDrawable).isBeginNode()) {
 				return new BeginActionNodeGR((ActionNode) aDrawable, this, false);
-			if (((ActionNode) aDrawable).isEndNode())
+			}
+			if (((ActionNode) aDrawable).isEndNode()) {
 				return new EndActionNodeGR((ActionNode) aDrawable, this, false);
+			}
 			return new ActionNodeGR((ActionNode) aDrawable, this, false);
 		}
 		if (aDrawable instanceof EventNode) {

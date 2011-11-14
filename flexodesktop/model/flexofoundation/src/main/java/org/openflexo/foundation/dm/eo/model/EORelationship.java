@@ -98,26 +98,31 @@ public class EORelationship extends EOProperty {
 		EORelationship relationship = new EORelationship(map);
 		relationship.setName((String) map.get(NAME_KEY));
 		relationship.setDeleteRule((String) map.get(DELETE_RULE_KEY));
-		if (map.get(IS_MANDATORY_KEY) != null)
+		if (map.get(IS_MANDATORY_KEY) != null) {
 			relationship.setIsMandatory(PListHelper.getBoolean(map.get(IS_MANDATORY_KEY)));
-		else
+		} else {
 			relationship.setIsMandatory(false);
-		if (map.get(IS_TO_MANY_KEY) != null)
+		}
+		if (map.get(IS_TO_MANY_KEY) != null) {
 			relationship.setIsToMany(PListHelper.getBoolean(map.get(IS_TO_MANY_KEY)));
-		else
+		} else {
 			relationship.setIsToMany(false);
-		if (map.get(OWNS_DESTINATION_KEY) != null)
+		}
+		if (map.get(OWNS_DESTINATION_KEY) != null) {
 			relationship.setOwnsDestination(PListHelper.getBoolean(map.get(OWNS_DESTINATION_KEY)));
-		else
+		} else {
 			relationship.setOwnsDestination(false);
-		if (map.get(PROPAGATES_PRIMARY_KEY) != null)
+		}
+		if (map.get(PROPAGATES_PRIMARY_KEY) != null) {
 			relationship.setPropagatesPrimaryKey(PListHelper.getBoolean(map.get(PROPAGATES_PRIMARY_KEY)));
-		else
+		} else {
 			relationship.setPropagatesPrimaryKey(false);
-		if (map.get(NR_TO_MANY_FAULTS_TO_BATCH_FETCH_KEY) != null)
+		}
+		if (map.get(NR_TO_MANY_FAULTS_TO_BATCH_FETCH_KEY) != null) {
 			relationship.setNumberOfToManyFaultsToBatchFetch(PListHelper.getInteger(map.get(NR_TO_MANY_FAULTS_TO_BATCH_FETCH_KEY)));
-		else
+		} else {
 			relationship.setNumberOfToManyFaultsToBatchFetch(0);
+		}
 		relationship.setJoinSemantic((String) map.get(JOIN_SEMANTIC));
 		relationship.setEntity(entity);
 		relationship.setDefinition((String) map.get(DEFINITION_KEY));
@@ -143,20 +148,23 @@ public class EORelationship extends EOProperty {
 		destinationAttributes = new Vector<EOAttribute>();
 		sourceAttributes = new Vector<EOAttribute>();
 		joinSemantic = InnerJoin;
-		if (map == null)
+		if (map == null) {
 			createHashMap();
-		else
+		} else {
 			setOriginalMap(map);
-		if (getOriginalMap().get(JOINS) == null)
+		}
+		if (getOriginalMap().get(JOINS) == null) {
 			getOriginalMap().put(JOINS, new Vector<Map<Object, Object>>());
+		}
 	}
 
 	public EOJoin joinWithSourceAttribute(EOAttribute attribute) {
 		Iterator<EOJoin> i = getJoins().iterator();
 		while (i.hasNext()) {
 			EOJoin join = i.next();
-			if (attribute.equals(join.getSourceAttribute()))
+			if (attribute.equals(join.getSourceAttribute())) {
 				return join;
+			}
 		}
 		return null;
 	}
@@ -165,8 +173,9 @@ public class EORelationship extends EOProperty {
 		Iterator<EOJoin> i = getJoins().iterator();
 		while (i.hasNext()) {
 			EOJoin join = i.next();
-			if (attribute.equals(join.getDestinationAttribute()))
+			if (attribute.equals(join.getDestinationAttribute())) {
 				return join;
+			}
 		}
 		return null;
 	}
@@ -210,20 +219,23 @@ public class EORelationship extends EOProperty {
 				if (r != null) {
 					e = r.getDestinationEntity();
 					if (e == null) {
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Destination entity for relationship '" + string + "' is null in entity "
 									+ r.getEntity().getName());
+						}
 						return null;
 					}
 				} else {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Could not find relationship '" + string + "' on entity " + e.getName()
 								+ " in relation definition: " + getDefinition());
+					}
 					return null;
 				}
 
-				if (i + 1 == s.length)
+				if (i + 1 == s.length) {
 					return e;
+				}
 			}
 			return null;
 		}
@@ -236,18 +248,20 @@ public class EORelationship extends EOProperty {
 				Iterator<EOJoin> i = getJoins().iterator();
 				while (i.hasNext()) {
 					EOJoin j = i.next();
-					if (j.getDestinationAttribute() != null)
+					if (j.getDestinationAttribute() != null) {
 						try {
 							j.setDestinationAttribute(null);
 						} catch (InvalidJoinException e) {
 							// NEVER APPEND because arg is null
 						}
+					}
 				}
 				this.destinationEntity.removeFromIncomingRelationships(this);
 			}
 			if (getDestinationAttributes().size() != 0) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("All destinations attributes have not been properly removed. I will clear them now.");
+				}
 				getDestinationAttributes().clear();
 			}
 			this.destinationEntity = destinationEntity;
@@ -335,9 +349,10 @@ public class EORelationship extends EOProperty {
 		if (!sourceAttributes.contains(attribute)) {
 			sourceAttributes.add(attribute);
 			attribute.addToOutgoingRelationships(this);
-		} else if (logger.isLoggable(Level.WARNING))
+		} else if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Attempt to insert twice the same attribute: " + attribute.getName()
 					+ " to sources attributes of relationshipd named " + getName());
+		}
 	}
 
 	public void removeFromSourceAttributes(EOAttribute attribute) {
@@ -349,9 +364,10 @@ public class EORelationship extends EOProperty {
 		if (!destinationAttributes.contains(attribute)) {
 			destinationAttributes.add(attribute);
 			attribute.addToIncomingRelationships(this);
-		} else if (logger.isLoggable(Level.WARNING))
+		} else if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Attempt to insert twice the same attribute: " + attribute.getName()
 					+ " to destination attributes of relationshipd named " + getName());
+		}
 	}
 
 	public void removeFromDestinationAttributes(EOAttribute attribute) {
@@ -365,15 +381,18 @@ public class EORelationship extends EOProperty {
 
 	public void addJoin(EOJoin join) {
 		// logger.info("addJoin() "+join);
-		if (joins.contains(join))
+		if (joins.contains(join)) {
 			throw new IllegalArgumentException("The join of " + join.getSourceAttribute().getName() + " and "
 					+ join.getDestinationAttribute().getName() + " is already in relationship " + getName());
-		if (joinWithSourceAttribute(join.getSourceAttribute()) != null)
+		}
+		if (joinWithSourceAttribute(join.getSourceAttribute()) != null) {
 			throw new IllegalArgumentException("Another join with source attribute " + join.getSourceAttribute().getName()
 					+ " already exists in relationship " + getName());
-		if (joinWithDestinationAttribute(join.getSourceAttribute()) != null)
+		}
+		if (joinWithDestinationAttribute(join.getSourceAttribute()) != null) {
 			throw new IllegalArgumentException("Another join with destination attribute " + join.getDestinationAttribute().getName()
 					+ " already exists in relationship " + getName());
+		}
 		joins.add(join);
 		join.setRelationship(this);
 		getJoinsList().add(join.getOriginalMap());
@@ -381,10 +400,12 @@ public class EORelationship extends EOProperty {
 
 	public void removeJoin(EOJoin join) {
 		// logger.info("removeJoin() "+join);
-		if (join.getSourceAttribute() != null)
+		if (join.getSourceAttribute() != null) {
 			removeFromSourceAttributes(join.getSourceAttribute());
-		if (join.getDestinationAttribute() != null)
+		}
+		if (join.getDestinationAttribute() != null) {
 			removeFromDestinationAttributes(join.getDestinationAttribute());
+		}
 		joins.remove(join);
 		getJoinsList().remove(join.getOriginalMap());
 	}
@@ -403,8 +424,9 @@ public class EORelationship extends EOProperty {
 				setDestinationEntity(destination);
 			} else {
 				getEntity().getModel().addToMissingEntities(dest);
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not resolve destination entity named: " + dest);
+				}
 			}
 		}
 		Iterator<EOJoin> i = getJoins().iterator();
@@ -419,43 +441,52 @@ public class EORelationship extends EOProperty {
 	 */
 	public void synchronizeObjectWithOriginalMap() {
 		Map<Object, Object> map = getOriginalMap();
-		if (getName() != null)
+		if (getName() != null) {
 			map.put(NAME_KEY, getName());
-		else
+		} else {
 			map.remove(NAME_KEY);
-		if (getDeleteRule() != null)
+		}
+		if (getDeleteRule() != null) {
 			map.put(DELETE_RULE_KEY, getDeleteRule());
-		else
+		} else {
 			map.remove(DELETE_RULE_KEY);
-		if (getIsMandatory())
+		}
+		if (getIsMandatory()) {
 			map.put(IS_MANDATORY_KEY, PListHelper.getObject(getIsMandatory()));
-		else
+		} else {
 			map.remove(IS_MANDATORY_KEY);
+		}
 		map.put(IS_TO_MANY_KEY, PListHelper.getObject(getIsToMany()));
-		if (getOwnsDestination())
+		if (getOwnsDestination()) {
 			map.put(OWNS_DESTINATION_KEY, PListHelper.getObject(getOwnsDestination()));
-		else
+		} else {
 			map.remove(OWNS_DESTINATION_KEY);
-		if (getPropagatesPrimaryKey())
+		}
+		if (getPropagatesPrimaryKey()) {
 			map.put(PROPAGATES_PRIMARY_KEY, PListHelper.getObject(getPropagatesPrimaryKey()));
-		else
+		} else {
 			map.remove(PROPAGATES_PRIMARY_KEY);
-		if (getNumberOfToManyFaultsToBatchFetch() != 0)
+		}
+		if (getNumberOfToManyFaultsToBatchFetch() != 0) {
 			map.put(NR_TO_MANY_FAULTS_TO_BATCH_FETCH_KEY, PListHelper.getObject(getNumberOfToManyFaultsToBatchFetch()));
-		else
+		} else {
 			map.remove(NR_TO_MANY_FAULTS_TO_BATCH_FETCH_KEY);
-		if (getJoinSemantic() != null)
+		}
+		if (getJoinSemantic() != null) {
 			map.put(JOIN_SEMANTIC, getJoinSemantic());
-		else
+		} else {
 			map.remove(JOIN_SEMANTIC);
-		if (getDefinition() != null)
+		}
+		if (getDefinition() != null) {
 			map.put(DEFINITION_KEY, getDefinition());
-		else
+		} else {
 			map.remove(DEFINITION_KEY);
+		}
 		if (getDestinationEntity() != null && !getIsFlattened()) {
 			map.put(DESTINATION_KEY, getDestinationEntity().getName());
-		} else
+		} else {
 			map.remove(DESTINATION_KEY);
+		}
 		Iterator<EOJoin> i = getJoins().iterator();
 		while (i.hasNext()) {
 			EOJoin j = i.next();
@@ -470,8 +501,9 @@ public class EORelationship extends EOProperty {
 	 */
 	@Override
 	public void delete() {
-		if (getDestinationEntity() != null)
+		if (getDestinationEntity() != null) {
 			getDestinationEntity().removeFromIncomingRelationships(this);
+		}
 		Iterator<EOAttribute> i = getSourceAttributes().iterator();
 		while (i.hasNext()) {
 			EOAttribute att = i.next();
@@ -487,8 +519,9 @@ public class EORelationship extends EOProperty {
 
 	@SuppressWarnings("unchecked")
 	public List<Map<Object, Object>> getJoinsList() {
-		if (getOriginalMap().get(JOINS) == null)
+		if (getOriginalMap().get(JOINS) == null) {
 			getOriginalMap().put(JOINS, new Vector<Map<Object, Object>>());
+		}
 		return (List<Map<Object, Object>>) getOriginalMap().get(JOINS);
 	}
 
@@ -528,43 +561,52 @@ public class EORelationship extends EOProperty {
 	 */
 	public Map<Object, Object> getMapRepresentation() {
 		Map<Object, Object> map = new HashMap<Object, Object>();
-		if (getName() != null)
+		if (getName() != null) {
 			map.put(NAME_KEY, getName());
-		else
+		} else {
 			map.remove(NAME_KEY);
-		if (getDeleteRule() != null)
+		}
+		if (getDeleteRule() != null) {
 			map.put(DELETE_RULE_KEY, getDeleteRule());
-		else
+		} else {
 			map.remove(DELETE_RULE_KEY);
-		if (getIsMandatory())
+		}
+		if (getIsMandatory()) {
 			map.put(IS_MANDATORY_KEY, PListHelper.getObject(getIsMandatory()));
-		else
+		} else {
 			map.remove(IS_MANDATORY_KEY);
+		}
 		map.put(IS_TO_MANY_KEY, PListHelper.getObject(getIsToMany()));
-		if (getOwnsDestination())
+		if (getOwnsDestination()) {
 			map.put(OWNS_DESTINATION_KEY, PListHelper.getObject(getOwnsDestination()));
-		else
+		} else {
 			map.remove(OWNS_DESTINATION_KEY);
-		if (getPropagatesPrimaryKey())
+		}
+		if (getPropagatesPrimaryKey()) {
 			map.put(PROPAGATES_PRIMARY_KEY, PListHelper.getObject(getPropagatesPrimaryKey()));
-		else
+		} else {
 			map.remove(PROPAGATES_PRIMARY_KEY);
-		if (getNumberOfToManyFaultsToBatchFetch() != 0)
+		}
+		if (getNumberOfToManyFaultsToBatchFetch() != 0) {
 			map.put(NR_TO_MANY_FAULTS_TO_BATCH_FETCH_KEY, PListHelper.getObject(getNumberOfToManyFaultsToBatchFetch()));
-		else
+		} else {
 			map.remove(NR_TO_MANY_FAULTS_TO_BATCH_FETCH_KEY);
-		if (getJoinSemantic() != null)
+		}
+		if (getJoinSemantic() != null) {
 			map.put(JOIN_SEMANTIC, getJoinSemantic());
-		else
+		} else {
 			map.remove(JOIN_SEMANTIC);
-		if (getDefinition() != null)
+		}
+		if (getDefinition() != null) {
 			map.put(DEFINITION_KEY, getDefinition());
-		else
+		} else {
 			map.remove(DEFINITION_KEY);
+		}
 		if (getDestinationEntity() != null && !getIsFlattened()) {
 			map.put(DESTINATION_KEY, getDestinationEntity().getName());
-		} else
+		} else {
 			map.remove(DESTINATION_KEY);
+		}
 		List<Map<Object, Object>> jList = new Vector<Map<Object, Object>>();
 		Iterator<EOJoin> i = getJoins().iterator();
 		while (i.hasNext()) {

@@ -49,8 +49,9 @@ public class GeneratorSelectionManager extends SelectionManager {
 
 	@Override
 	public boolean performSelectionSelectAll() {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("'Select All' not implemented yet in CodeGenerator");
+		}
 		return false;
 	}
 

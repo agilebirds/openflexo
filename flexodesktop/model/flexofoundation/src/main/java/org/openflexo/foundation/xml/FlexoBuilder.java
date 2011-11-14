@@ -38,8 +38,9 @@ public abstract class FlexoBuilder<R extends FlexoXMLStorageResource> {
 	}
 
 	public FlexoProject getProject() {
-		if (resource != null)
+		if (resource != null) {
 			return resource.getProject();
+		}
 		return project;
 	}
 

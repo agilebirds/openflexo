@@ -65,8 +65,9 @@ public abstract class TechnologyModuleImplementation extends TechnologyModelObje
 	@Override
 	public String getName() {
 		String name = super.getName();
-		if (name == null)
+		if (name == null) {
 			return getTechnologyModuleDefinition().getName();
+		}
 		return name;
 	}
 

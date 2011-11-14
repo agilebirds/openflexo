@@ -36,8 +36,9 @@ public abstract class ToggleIconColumn<D extends Observable> extends IconColumn<
 	public void toogleValue(int row) {
 		D object = elementAt(row);
 		toggleValue(object);
-		if (getModel() != null)
+		if (getModel() != null) {
 			getModel().fireTableRowsUpdated(row, row);
+		}
 	}
 
 	public abstract void toggleValue(D object);

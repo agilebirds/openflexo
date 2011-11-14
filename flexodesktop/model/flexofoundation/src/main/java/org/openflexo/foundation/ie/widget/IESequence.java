@@ -52,8 +52,9 @@ public abstract class IESequence<E extends IWidget> extends IEWidget {
 	public IESequence(IEWOComponent woComponent, IEObject parent, FlexoProject prj) {
 		super(woComponent, parent, prj);
 		_children = new Vector<E>();
-		if (!(parent instanceof IESequenceOperator))
+		if (!(parent instanceof IESequenceOperator)) {
 			_sequenceOperator = new IESequenceOperator(woComponent, this, prj);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -81,12 +82,14 @@ public abstract class IESequence<E extends IWidget> extends IEWidget {
 	@Override
 	public String getNiceName() {
 		String niceName = getCalculatedLabel();
-		if (niceName != null && niceName.trim().length() > 0)
+		if (niceName != null && niceName.trim().length() > 0) {
 			return ToolBox.getJavaName(niceName);
+		}
 		if (getOperator() != null) {
 			String post = getClass().getSimpleName();
-			if (post.startsWith("IESequence"))
+			if (post.startsWith("IESequence")) {
 				post = post.substring("IESequence".length());
+			}
 			return post + getOperator().getWidgetType();
 		}
 		return getWidgetType();
@@ -124,19 +127,21 @@ public abstract class IESequence<E extends IWidget> extends IEWidget {
 
 	@Override
 	public String getDefaultInspectorName() {
-		if (isConditional())
+		if (isConditional()) {
 			return Inspectors.IE.CONDITIONAL_SEQUENCE_INSPECTOR;
-		else if (isRepetition())
+		} else if (isRepetition()) {
 			return Inspectors.IE.REPETITION_SEQUENCE_INSPECTOR;
-		else
+		} else {
 			return null;
+		}
 	}
 
 	@Override
 	public Vector<IObject> getEmbeddedIEObjects() {
 		Vector<IObject> answer = new Vector<IObject>();
-		if (getOperator() != null)
+		if (getOperator() != null) {
 			answer.add(getOperator());
+		}
 		answer.addAll(_children);
 		return answer;
 	}
@@ -161,28 +166,32 @@ public abstract class IESequence<E extends IWidget> extends IEWidget {
 	 */
 	@Override
 	public String getInspectorName() {
-		if (getOperator() != null)
+		if (getOperator() != null) {
 			if (isConditional()) {
 				return Inspectors.IE.CONDITIONAL_SEQUENCE_INSPECTOR;
 			} else if (isRepetition()) {
 				return Inspectors.IE.REPETITION_SEQUENCE_INSPECTOR;
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Unknwown operator-->Cannot return inspector name");
+				}
 				return null;
 			}
-		else
+		} else {
 			return null;
+		}
 	}
 
 	public void addToInnerWidgets(E w) {
 		if (w instanceof IESequenceOperator) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Tried to add an IESequenceOperator.");
+			}
 			return;
 		} else if (w instanceof IEOperator) {
-			if (getOperator() == null)
+			if (getOperator() == null) {
 				setOperator((IEOperator) w);
+			}
 		} else {
 			insertElementAt(w, _children.size());
 			w.setParent(this);
@@ -194,9 +203,9 @@ public abstract class IESequence<E extends IWidget> extends IEWidget {
 	}
 
 	public void removeFromInnerWidgets(E w, boolean deleteIfEmpty) {
-		if (w instanceof IESequenceOperator || w instanceof IEOperator)
+		if (w instanceof IESequenceOperator || w instanceof IEOperator) {
 			return;
-		else {
+		} else {
 			_children.remove(w);
 			refreshIndexes();
 			setChanged();
@@ -205,8 +214,9 @@ public abstract class IESequence<E extends IWidget> extends IEWidget {
 				setChanged();
 				notifyObservers(new SubsequenceRemoved((IESequence) w));
 			}
-			if (getOperator() != null)
+			if (getOperator() != null) {
 				getOperator().notifyWidgetRemoval(w);
+			}
 			if (deleteIfEmpty && _children.size() == 0 && !isDeleting && isSubsequence()) {
 				isDeleting = true;
 				delete();
@@ -229,22 +239,27 @@ public abstract class IESequence<E extends IWidget> extends IEWidget {
 	}
 
 	public void insertElementAt(E o, int i) {
-		if (i > _children.size())
+		if (i > _children.size()) {
 			i = _children.size();
+		}
 		_children.insertElementAt(o, i);
 		o.setParent(this);
-		if (!isDeserializing() && getWOComponent() != null)
+		if (!isDeserializing() && getWOComponent() != null) {
 			// TODO: check that when we duplicate component, all widgets receive this notification
 			o.setWOComponent(getWOComponent());
+		}
 		refreshIndexes();
 		setChanged();
-		if (o instanceof IEWidget)
+		if (o instanceof IEWidget) {
 			notifyObservers(new WidgetAddedToSequence((IEWidget) o, ((IEWidget) o).getIndex()));
+		}
 		setChanged();
-		if (o instanceof IESequence)
+		if (o instanceof IESequence) {
 			notifyObservers(new SubsequenceInserted((IESequence) o));
-		if (getOperator() != null)
+		}
+		if (getOperator() != null) {
 			getOperator().notifyWidgetInsertion(o);
+		}
 	}
 
 	protected void refreshIndexes() {
@@ -341,24 +356,29 @@ public abstract class IESequence<E extends IWidget> extends IEWidget {
 	}
 
 	public Object getNext(Object obj) {
-		if (!_children.contains(obj))
+		if (!_children.contains(obj)) {
 			return null;
-		if (isLast(obj))
+		}
+		if (isLast(obj)) {
 			return null;
+		}
 		return _children.elementAt(_children.indexOf(obj) + 1);
 	}
 
 	public Object getPrevious(Object obj) {
-		if (!_children.contains(obj))
+		if (!_children.contains(obj)) {
 			return null;
-		if (isFirst(obj))
+		}
+		if (isFirst(obj)) {
 			return null;
+		}
 		return _children.elementAt(_children.indexOf(obj) - 1);
 	}
 
 	public Object getLast() {
-		if (_children.size() == 0)
+		if (_children.size() == 0) {
 			return null;
+		}
 		return _children.lastElement();
 	}
 
@@ -432,13 +452,14 @@ public abstract class IESequence<E extends IWidget> extends IEWidget {
 	}
 
 	public IEObject getNonSequenceParent() {
-		if (isRoot())
+		if (isRoot()) {
 			return getParent();
-		else if (getParent() instanceof IESequence)
+		} else if (getParent() instanceof IESequence) {
 			return ((IESequence<E>) getParent()).getNonSequenceParent();
-		else {
-			if (logger.isLoggable(Level.WARNING))
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Not good! This sequence is not the root sequence, but parent is not a sequence");
+			}
 			return getParent();
 		}
 	}
@@ -452,8 +473,9 @@ public abstract class IESequence<E extends IWidget> extends IEWidget {
 	public IEOperator getOperator() {
 		if (!isSubsequence()) {
 			if (_sequenceOperator != null && _sequenceOperator.size() > 0) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Found a sequence of operator but this is not a sub-sequence");
+				}
 			}
 			return null;
 		}
@@ -482,31 +504,36 @@ public abstract class IESequence<E extends IWidget> extends IEWidget {
 	}
 
 	public IWidget lastObject() {
-		if (!(get(size() - 1) instanceof IESequence))
+		if (!(get(size() - 1) instanceof IESequence)) {
 			return get(size() - 1);
-		else
+		} else {
 			return ((IESequence) get(size() - 1)).lastObject();
+		}
 	}
 
 	public IWidget firstObject() {
 		if (size() == 0) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("This is not suppose to happen: an empty sequence is left in the model");
+			}
 			return null;
 		}
-		if (!(get(0) instanceof IESequence))
+		if (!(get(0) instanceof IESequence)) {
 			return get(0);
-		else
+		} else {
 			return ((IESequence) get(0)).firstObject();
+		}
 	}
 
 	@Override
 	public void setWOComponent(IEWOComponent woComponent) {
-		if (noWOChange(woComponent))
+		if (noWOChange(woComponent)) {
 			return;
+		}
 		super.setWOComponent(woComponent);
-		if (getOperator() != null)
+		if (getOperator() != null) {
 			getOperator().setWOComponent(woComponent);
+		}
 
 		if (_children != null) {// This call is very important because it will update the WOComponent components cache
 			Enumeration<E> en = elements();

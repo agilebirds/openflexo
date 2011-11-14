@@ -108,15 +108,17 @@ public class EndActivityNodeGR extends AbstractActivityNodeGR<ActivityNode> {
 
 	@Override
 	public double getDefaultLabelX() {
-		if (getModel().hasLabelLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR))
+		if (getModel().hasLabelLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR)) {
 			return getModel().getLabelLocation(SWLEditorConstants.SWIMMING_LANE_EDITOR).getX();
+		}
 		return getLeftBorder() + 15;
 	}
 
 	@Override
 	public double getDefaultLabelY() {
-		if (getModel().hasLabelLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR))
+		if (getModel().hasLabelLocationForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR)) {
 			return getModel().getLabelLocation(SWLEditorConstants.SWIMMING_LANE_EDITOR).getY();
+		}
 		return getTopBorder() + 40;
 	}
 

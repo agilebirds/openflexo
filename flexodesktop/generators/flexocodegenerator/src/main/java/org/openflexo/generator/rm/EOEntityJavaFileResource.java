@@ -38,7 +38,6 @@ import org.openflexo.generator.FlexoResourceGenerator;
 import org.openflexo.generator.TemplateLocator;
 import org.openflexo.generator.cg.CGJavaFile;
 import org.openflexo.generator.dm.GenericRecordGenerator;
-import org.openflexo.generator.rm.GenerationAvailableFileResource;
 import org.openflexo.logging.FlexoLogger;
 
 /**
@@ -69,15 +68,17 @@ public class EOEntityJavaFileResource extends JavaFileResource<GenericRecordGene
 	public void registerObserverWhenRequired() {
 		if ((!isObserverRegistered) && (getEntity() != null)) {
 			isObserverRegistered = true;
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getEntity());
+			}
 			getEntity().addObserver(this);
 		}
 	}
 
 	public DMEOEntity getEntity() {
-		if (getGenerator() != null)
+		if (getGenerator() != null) {
 			return getGenerator().getEOEntity();
+		}
 		return null;
 	}
 
@@ -139,8 +140,9 @@ public class EOEntityJavaFileResource extends JavaFileResource<GenericRecordGene
 			FlexoDMResource dmRes = (FlexoDMResource) resource;
 			if (dmRes.isLoaded() && getEntity() != null) {
 				if (!requestDate.before(getEntity().getLastUpdate())) {
-					if (logger.isLoggable(Level.FINER))
+					if (logger.isLoggable(Level.FINER)) {
 						logger.finer("OPTIMIST DEPENDANCY CHECKING for ENTITY " + getEntity().getName());
+					}
 					return false;
 				}
 			}

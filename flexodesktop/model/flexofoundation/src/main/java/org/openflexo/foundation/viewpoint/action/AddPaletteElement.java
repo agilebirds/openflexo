@@ -82,8 +82,9 @@ public class AddPaletteElement extends FlexoAction<AddPaletteElement, ViewPointP
 	}
 
 	public FlexoProject getProject() {
-		if (getFocusedObject() != null)
+		if (getFocusedObject() != null) {
 			return getFocusedObject().getProject();
+		}
 		return null;
 	}
 

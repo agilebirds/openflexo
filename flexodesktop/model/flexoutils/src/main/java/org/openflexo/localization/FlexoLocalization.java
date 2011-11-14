@@ -116,8 +116,9 @@ public class FlexoLocalization {
 		if (_localizedDirectory == null) {
 			_localizedDirectory = new FileResource(LOCALIZATION_DIRNAME);
 
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Setting localized directory" + _localizedDirectory.getAbsolutePath());
+			}
 		}
 		return _localizedDirectory;
 	}
@@ -130,9 +131,10 @@ public class FlexoLocalization {
 			}
 			dict.store(new FileOutputStream(dictFile), language.getName());
 		} catch (IOException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Unable to save file " + dictFile.getAbsolutePath() + " " + e.getClass().getName());
-			// e.printStackTrace();
+				// e.printStackTrace();
+			}
 		}
 	}
 
@@ -142,8 +144,9 @@ public class FlexoLocalization {
 		try {
 			loadedDict.load(new FileInputStream(dictFile));
 		} catch (IOException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Unable to load file " + dictFile.getName());
+			}
 		}
 		return loadedDict;
 	}
@@ -154,10 +157,12 @@ public class FlexoLocalization {
 		for (Enumeration e = getAvailableLanguages().elements(); e.hasMoreElements();) {
 			Language language = (Language) e.nextElement();
 			File dictFile = getDictionaryFileForLanguage(language);
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Checking dictionary for language " + language.getName());
-			if (logger.isLoggable(Level.FINE))
+			}
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Looking for file " + dictFile.getAbsolutePath());
+			}
 			if (!dictFile.exists()) {
 				createNewDictionary(language);
 			} else {
@@ -170,8 +175,9 @@ public class FlexoLocalization {
 	private static void addEntryInDictionnary(Language language, String key, String value, boolean required) {
 		Properties dict = _localizedDictionaries.get(language);
 		if (((!required) && (dict.getProperty(key) == null)) || required) {
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Adding entry '" + key + "' in " + language + " dictionary");
+			}
 			dict.setProperty(key, value);
 			saveDictionary(language, dict);
 		}
@@ -220,8 +226,9 @@ public class FlexoLocalization {
 
 	public static String[] localizedForKey(String[] keys) {
 		String[] values = new String[keys.length];
-		for (int i = 0; i < keys.length; i++)
+		for (int i = 0; i < keys.length; i++) {
 			values[i] = localizedForKey(keys[i]);
+		}
 		return values;
 	}
 
@@ -257,8 +264,9 @@ public class FlexoLocalization {
 	 * @return localized String
 	 */
 	public static String localizedForKeyAndLanguage(String key, Language language, boolean createsEntry, boolean useDelegates) {
-		if (key == null)
+		if (key == null) {
 			return null;
+		}
 		Properties currentLanguageDict;
 		String localized;
 
@@ -271,8 +279,9 @@ public class FlexoLocalization {
 			for (LocalizedDelegate d : _delegates) {
 				localized = d.localizedForKeyAndLanguage(key, language);
 				// System.out.println("Search for "+key+" in "+d+" return "+localized);
-				if (localized != null)
+				if (localized != null) {
 					return localized;
+				}
 			}
 		}
 
@@ -292,15 +301,17 @@ public class FlexoLocalization {
 			// Add in all dictionaries, when required (only when no delegate handle it)
 			if (useDelegates) {
 				for (LocalizedDelegate d : _delegates) {
-					if (d.handleNewEntry(key, language))
+					if (d.handleNewEntry(key, language)) {
 						return d.localizedForKeyAndLanguage(key, language);
+					}
 				}
 			}
 			if (createsEntry) {
 				addEntry(key);
 				return currentLanguageDict.getProperty(key);
-			} else
+			} else {
 				return key;
+			}
 		} else {
 			return localized;
 		}
@@ -342,31 +353,36 @@ public class FlexoLocalization {
 	}
 
 	public static String localizedForKey(String key, Component component) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.finest("localizedForKey called with " + key + " for " + component.getClass().getName());
+		}
 		_storedLocalizedForComponents.put(component, key);
 		return localizedForKey(key);
 	}
 
 	public static String localizedForKey(String key, TitledBorder border) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.finest("localizedForKey called with " + key + " for border " + border.getClass().getName());
+		}
 		_storedLocalizedForBorders.put(border, key);
 		return localizedForKey(key);
 	}
 
 	public static String localizedForKey(String key, TableColumn column) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.finest("localizedForKey called with " + key + " for border " + column.getClass().getName());
+		}
 		_storedLocalizedForTableColumn.put(column, key);
 		return localizedForKey(key);
 	}
 
 	public static String localizedForKey(String key, String additionalString, Component component) {
-		if (key == null)
+		if (key == null) {
 			return null;
-		if (logger.isLoggable(Level.FINE))
+		}
+		if (logger.isLoggable(Level.FINE)) {
 			logger.finest("localizedForKey called with " + key + " for " + component.getClass().getName());
+		}
 		_storedLocalizedForComponents.put(component, key);
 		_storedAdditionalStrings.put(component, additionalString);
 		return localizedForKey(key) + additionalString;
@@ -374,11 +390,13 @@ public class FlexoLocalization {
 
 	public static void updateGUILocalized() {
 		for (Component next : _storedLocalizedForComponents.keySet()) {
-			if (next == null)
+			if (next == null) {
 				continue;
+			}
 			String string = _storedLocalizedForComponents.get(next);
-			if (string == null)
+			if (string == null) {
 				continue;
+			}
 			String text = localizedForKey(string);
 			String additionalString = _storedAdditionalStrings.get(next);
 			if (additionalString != null) {
@@ -391,29 +409,37 @@ public class FlexoLocalization {
 				((JLabel) next).setText(text);
 			}
 			next.setName(text);
-			if (next.getParent() instanceof JTabbedPane)
-				if (((JTabbedPane) next.getParent()).indexOfComponent(next) > -1)
+			if (next.getParent() instanceof JTabbedPane) {
+				if (((JTabbedPane) next.getParent()).indexOfComponent(next) > -1) {
 					((JTabbedPane) next.getParent()).setTitleAt(((JTabbedPane) next.getParent()).indexOfComponent(next), text);
-			if (next.getParent() != null && next.getParent().getParent() instanceof JTabbedPane)
-				if (((JTabbedPane) next.getParent().getParent()).indexOfComponent(next) > -1)
+				}
+			}
+			if (next.getParent() != null && next.getParent().getParent() instanceof JTabbedPane) {
+				if (((JTabbedPane) next.getParent().getParent()).indexOfComponent(next) > -1) {
 					((JTabbedPane) next.getParent().getParent()).setTitleAt(
 							((JTabbedPane) next.getParent().getParent()).indexOfComponent(next), text);
+				}
+			}
 		}
 		for (TitledBorder next : _storedLocalizedForBorders.keySet()) {
-			if (next == null)
+			if (next == null) {
 				continue;
+			}
 			String string = _storedLocalizedForBorders.get(next);
-			if (string == null)
+			if (string == null) {
 				continue;
+			}
 			String text = localizedForKey(string);
 			next.setTitle(text);
 		}
 		for (TableColumn next : _storedLocalizedForTableColumn.keySet()) {
-			if (next == null)
+			if (next == null) {
 				continue;
+			}
 			String string = _storedLocalizedForTableColumn.get(next);
-			if (string == null)
+			if (string == null) {
 				continue;
+			}
 			String text = localizedForKey(string);
 			next.setHeaderValue(text);
 		}
@@ -512,8 +538,9 @@ public class FlexoLocalization {
 				String nextKey = (String) e2.nextElement();
 				if (nextKey.length() > 0) {
 					char firstChar = Character.toUpperCase(nextKey.charAt(0));
-					if (!returned.contains(firstChar))
+					if (!returned.contains(firstChar)) {
 						returned.add(firstChar);
+					}
 				}
 			}
 		}
@@ -583,8 +610,9 @@ public class FlexoLocalization {
 	 * @param object
 	 */
 	private static String replaceAllParamsInString(String aString, KeyValueCoding object) {
-		if (logger.isLoggable(Level.FINER))
+		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("replaceAllParamsInString() with " + aString + " and " + object);
+		}
 		// Pattern p = Pattern.compile("*\\($[a-zA-Z]\\)*");
 		// Pattern p = Pattern.compile("\\p{Punct}\\bJava(\\w*)\\p{Punct}");
 		// Pattern p = Pattern.compile("\\(\\bJava(\\w*)\\)");
@@ -596,20 +624,23 @@ public class FlexoLocalization {
 		while (m.find()) {
 			int nextIndex = m.start(0);
 			String foundPattern = m.group(0);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.finest("Found '" + foundPattern + "' at position " + nextIndex);
+			}
 			if (m.start(1) < m.end(1)) {
 				String suffix = m.group(1);
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.finest("Suffix is " + suffix);
+				}
 				String replacementString = valueForKeyAndObject(suffix, object);
 				returned += aString.substring(lastIndex, nextIndex) + replacementString;
 				lastIndex = nextIndex + foundPattern.length();
 			}
 		}
 		returned += aString.substring(lastIndex, aString.length());
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.finer("Returning " + returned);
+		}
 		return returned;
 	}
 
@@ -618,8 +649,9 @@ public class FlexoLocalization {
 	 * @param object
 	 */
 	private static String replaceAllParamsInString(String aString, String... params) {
-		if (logger.isLoggable(Level.FINER))
+		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("replaceAllParamsInString() with " + aString + " and " + params);
+		}
 		Pattern p = Pattern.compile("\\(\\$([0-9]*)\\)");
 		Matcher m = p.matcher(aString);
 		String returned = "";
@@ -627,12 +659,14 @@ public class FlexoLocalization {
 		while (m.find()) {
 			int nextIndex = m.start(0);
 			String foundPattern = m.group(0);
-			if (logger.isLoggable(Level.FINEST))
+			if (logger.isLoggable(Level.FINEST)) {
 				logger.finest("Found '" + foundPattern + "' at position " + nextIndex);
+			}
 			if (m.start(1) < m.end(1)) {
 				String suffix = m.group(1);
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.finest("Suffix is " + suffix);
+				}
 				int suffixValue = -1;
 				try {
 					suffixValue = Integer.valueOf(suffix);
@@ -648,8 +682,9 @@ public class FlexoLocalization {
 			}
 		}
 		returned += aString.substring(lastIndex, aString.length());
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.finer("Returning " + returned);
+		}
 		return returned;
 	}
 
@@ -665,8 +700,9 @@ public class FlexoLocalization {
 					if (value instanceof KeyValueCoding) {
 						current = (KeyValueCoding) value;
 					} else {
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Returned value does't implement Key-Value coding");
+						}
 					}
 				}
 			}
@@ -677,11 +713,13 @@ public class FlexoLocalization {
 				return value.toString();
 			}
 		} catch (Exception e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Unexpected exception " + e.getClass().getName() + " : " + e.getMessage());
+			}
 		}
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Could not lookup value for key " + key + " for object " + object);
+		}
 		return null;
 	}
 
@@ -693,14 +731,16 @@ public class FlexoLocalization {
 	}
 
 	public static void addToLocalizedDelegates(LocalizedDelegate d) {
-		if (d == null)
+		if (d == null) {
 			throw new NullPointerException();
+		}
 		_delegates.add(d);
 	}
 
 	public static void removeFromLocalizedDelegates(LocalizedDelegate d) {
-		if (d == null)
+		if (d == null) {
 			throw new NullPointerException();
+		}
 		_delegates.remove(d);
 	}
 

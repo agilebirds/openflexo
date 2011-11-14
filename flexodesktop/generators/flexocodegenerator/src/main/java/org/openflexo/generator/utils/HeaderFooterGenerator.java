@@ -64,20 +64,23 @@ public class HeaderFooterGenerator extends MetaWOGenerator {
 		try {
 			FlexoCSS css = getProjectGenerator().getProject().getCssSheet();
 			if (css.equals(FlexoCSS.CONTENTO)) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("HeaderFooter CONTENTO style");
+				}
 				return "1D4382";
 			}
 			if (css.equals(FlexoCSS.OMNISCIO)) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("HeaderFooter OMNISCIO style");
+				}
 				return "F5790F";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("HeaderFooter FLEXO style");
+		}
 		return "A2B95E";
 	}
 
@@ -85,20 +88,23 @@ public class HeaderFooterGenerator extends MetaWOGenerator {
 		try {
 			FlexoCSS css = getProjectGenerator().getProject().getCssSheet();
 			if (css.equals(FlexoCSS.CONTENTO)) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("HeaderFooter CONTENTO style");
+				}
 				return "A5B3CD";
 			}
 			if (css.equals(FlexoCSS.OMNISCIO)) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("HeaderFooter OMNISCIO style");
+				}
 				return "F9BA6D";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("HeaderFooter FLEXO style");
+		}
 		return "4A7732";
 	}
 
@@ -120,15 +126,17 @@ public class HeaderFooterGenerator extends MetaWOGenerator {
 	}
 
 	public String findLogoFramework() {
-		if (findLogoName().equals("AgileBirds_Logo.jpg"))
+		if (findLogoName().equals("AgileBirds_Logo.jpg")) {
 			return "DenaliWebResources";
+		}
 		return null;
 	}
 
 	@Override
 	public synchronized void generate(boolean forceRegenerate) {
-		if (!forceRegenerate && !needsGeneration())
+		if (!forceRegenerate && !needsGeneration()) {
 			return;
+		}
 		try {
 			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + getIdentifier(), false);
 			startGeneration();
@@ -182,18 +190,21 @@ public class HeaderFooterGenerator extends MetaWOGenerator {
 					if (actions[i].indexOf('#') > 0) {
 						vc.put("CLASSNAME", actions[i].substring(0, actions[i].indexOf('#')));
 						vc.put("TAB", actions[i].substring(actions[i].indexOf('#') + 1));
-					} else
+					} else {
 						vc.put("CLASSNAME", actions[i]);
+					}
 
 					buttonsListHtml.append(merge("HFButton.html.vm", vc));
 					buttonsListJav.append(merge("HFButton.java.vm", vc));
 					buttonsListWod.append(merge("HFButton.wod.vm", vc));
 				}
 			}
-			if (fileType.equals("java"))
+			if (fileType.equals("java")) {
 				return buttonsListJav.toString();
-			if (fileType.equals("html"))
+			}
+			if (fileType.equals("html")) {
 				return buttonsListHtml.toString();
+			}
 			return buttonsListWod.toString();
 		} else {
 			return "";

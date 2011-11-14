@@ -112,8 +112,9 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 
 	@Override
 	public OntologyObjectConverter getConverter() {
-		if (getOntologyLibrary() != null)
+		if (getOntologyLibrary() != null) {
 			return getOntologyLibrary().getOntologyObjectConverter();
+		}
 		return null;
 	}
 
@@ -686,28 +687,32 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 	}
 
 	public Vector<OntologyProperty> getDeclaredPropertiesTakingMySelfAsRange() {
-		if (!domainsAndRangesAreUpToDate)
+		if (!domainsAndRangesAreUpToDate) {
 			searchRangeAndDomains();
+		}
 		return declaredPropertiesTakingMySelfAsRange;
 	}
 
 	public Vector<OntologyProperty> getDeclaredPropertiesTakingMySelfAsDomain() {
-		if (!domainsAndRangesAreUpToDate)
+		if (!domainsAndRangesAreUpToDate) {
 			searchRangeAndDomains();
+		}
 		return declaredPropertiesTakingMySelfAsDomain;
 	}
 
 	public Vector<OntologyProperty> getPropertiesTakingMySelfAsRange() {
 		getDeclaredPropertiesTakingMySelfAsRange(); // Required in some cases: TODO: investigate this
-		if (!domainsAndRangesAreRecursivelyUpToDate)
+		if (!domainsAndRangesAreRecursivelyUpToDate) {
 			recursivelySearchRangeAndDomains();
+		}
 		return propertiesTakingMySelfAsRange;
 	}
 
 	public Vector<OntologyProperty> getPropertiesTakingMySelfAsDomain() {
 		getDeclaredPropertiesTakingMySelfAsDomain(); // Required in some cases: TODO: investigate this
-		if (!domainsAndRangesAreRecursivelyUpToDate)
+		if (!domainsAndRangesAreRecursivelyUpToDate) {
 			recursivelySearchRangeAndDomains();
+		}
 		return propertiesTakingMySelfAsDomain;
 	}
 
@@ -732,20 +737,25 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 
 	private void searchRangeAndDomains(Vector<OntologyProperty> rangeProperties, Vector<OntologyProperty> domainProperties,
 			FlexoOntology ontology, Vector<FlexoOntology> alreadyDone) {
-		if (alreadyDone.contains(ontology))
+		if (alreadyDone.contains(ontology)) {
 			return;
+		}
 		alreadyDone.add(ontology);
 		for (OntologyProperty p : ontology.getObjectProperties()) {
-			if (p.getRange() != null && p.getRange().isSuperConceptOf(this))
+			if (p.getRange() != null && p.getRange().isSuperConceptOf(this)) {
 				rangeProperties.add(p);
-			if (p.getDomain() != null && p.getDomain().isSuperConceptOf(this))
+			}
+			if (p.getDomain() != null && p.getDomain().isSuperConceptOf(this)) {
 				domainProperties.add(p);
+			}
 		}
 		for (OntologyProperty p : ontology.getDataProperties()) {
-			if (p.getRange() != null && p.getRange().isSuperConceptOf(this))
+			if (p.getRange() != null && p.getRange().isSuperConceptOf(this)) {
 				rangeProperties.add(p);
-			if (p.getDomain() != null && p.getDomain().isSuperConceptOf(this))
+			}
+			if (p.getDomain() != null && p.getDomain().isSuperConceptOf(this)) {
 				domainProperties.add(p);
+			}
 		}
 		for (FlexoOntology o : ontology.getImportedOntologies()) {
 			searchRangeAndDomains(rangeProperties, domainProperties, o, alreadyDone);
@@ -754,8 +764,9 @@ public abstract class OntologyObject extends AbstractOntologyObject implements I
 
 	@Override
 	public Vector<EditionPatternReference> getEditionPatternReferences() {
-		if (getProject() != null)
+		if (getProject() != null) {
 			getProject()._retrievePendingEditionPatternReferences(this);
+		}
 		return super.getEditionPatternReferences();
 	}
 

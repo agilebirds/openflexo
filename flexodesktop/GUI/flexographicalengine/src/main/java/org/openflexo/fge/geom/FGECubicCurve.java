@@ -20,8 +20,8 @@
 package org.openflexo.fge.geom;
 
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
 import java.awt.geom.CubicCurve2D.Double;
+import java.awt.geom.Rectangle2D;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -112,8 +112,9 @@ public class FGECubicCurve extends Double implements FGEGeneralShape.GeneralShap
 
 	@Override
 	public boolean containsArea(FGEArea a) {
-		if (a instanceof FGEPoint)
+		if (a instanceof FGEPoint) {
 			return containsPoint((FGEPoint) a);
+		}
 		return false;
 	}
 
@@ -157,18 +158,21 @@ public class FGECubicCurve extends Double implements FGEGeneralShape.GeneralShap
 	@Override
 	public FGEArea intersect(FGEArea area) {
 		FGEIntersectionArea returned = new FGEIntersectionArea(this, area);
-		if (returned.isDevelopable())
+		if (returned.isDevelopable()) {
 			return returned.makeDevelopped();
-		else
+		} else {
 			return returned;
+		}
 	}
 
 	@Override
 	public FGEArea union(FGEArea area) {
-		if (containsArea(area))
+		if (containsArea(area)) {
 			return clone();
-		if (area.containsArea(this))
+		}
+		if (area.containsArea(this)) {
 			return area.clone();
+		}
 
 		return new FGEUnionArea(this, area);
 	}

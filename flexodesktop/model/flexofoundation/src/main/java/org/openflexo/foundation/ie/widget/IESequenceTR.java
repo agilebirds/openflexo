@@ -54,8 +54,9 @@ public class IESequenceTR extends IESequence<ITableRow> implements ITableRow {
 
 	@Override
 	public IESequenceTR getSequenceTR() {
-		if (getParent() instanceof IESequenceTR)
+		if (getParent() instanceof IESequenceTR) {
 			return (IESequenceTR) getParent();
+		}
 		return this;
 	}
 
@@ -81,8 +82,9 @@ public class IESequenceTR extends IESequence<ITableRow> implements ITableRow {
 
 	@Override
 	public IETRWidget getFirstTR() {
-		if (size() == 0)
+		if (size() == 0) {
 			return null;
+		}
 		return (get(0)).getFirstTR();
 	}
 
@@ -95,10 +97,11 @@ public class IESequenceTR extends IESequence<ITableRow> implements ITableRow {
 
 	@Override
 	public Color getBackgroundColor() {
-		if (getOperator() == null)
+		if (getOperator() == null) {
 			return Color.WHITE;
-		else
+		} else {
 			return blue1;
+		}
 	}
 
 	@Override
@@ -110,8 +113,9 @@ public class IESequenceTR extends IESequence<ITableRow> implements ITableRow {
 	public void insertElementAt(ITableRow o, int i) {
 		super.insertElementAt(o, i);
 		setChanged();
-		if (o instanceof IETRWidget)
+		if (o instanceof IETRWidget) {
 			notifyObservers(new TRInserted((IETRWidget) o));
+		}
 		if (!isDeserializing() && !isCreatedByCloning() && getParent() instanceof IEHTMLTableWidget) {
 			((IEHTMLTableWidget) getParent()).notifyWidgetInsertion(o);
 		}
@@ -144,8 +148,9 @@ public class IESequenceTR extends IESequence<ITableRow> implements ITableRow {
 
 	@Override
 	public IEWidget getDraggedModel() {
-		if (isInHTMLTable())
+		if (isInHTMLTable()) {
 			return (IEHTMLTableWidget) getParent();
+		}
 		return this;
 	}
 
@@ -155,11 +160,13 @@ public class IESequenceTR extends IESequence<ITableRow> implements ITableRow {
 
 	@Override
 	public IEHTMLTableWidget htmlTable() {
-		if (isInHTMLTable())
+		if (isInHTMLTable()) {
 			return (IEHTMLTableWidget) getParent();
+		}
 
-		if (!(getParent() instanceof IESequenceTR))
+		if (!(getParent() instanceof IESequenceTR)) {
 			return null;
+		}
 		return ((IESequenceTR) getParent()).htmlTable();
 	}
 
@@ -168,8 +175,9 @@ public class IESequenceTR extends IESequence<ITableRow> implements ITableRow {
 		ITableRow candidate = (ITableRow) getSequenceTR().getNext(this);
 		if (candidate != null) {
 			if (candidate instanceof IESequenceTR) {
-				if (((IESequenceTR) candidate).hasOperatorRepetition())
+				if (((IESequenceTR) candidate).hasOperatorRepetition()) {
 					return (IESequenceTR) candidate;
+				}
 				return candidate.findNextRepeatedSequence();
 			} else {
 				return candidate.findNextRepeatedSequence();
@@ -190,8 +198,9 @@ public class IESequenceTR extends IESequence<ITableRow> implements ITableRow {
 	public boolean containsTD(IETDWidget widget) {
 		Enumeration en = elements();
 		while (en.hasMoreElements()) {
-			if (((ITableRow) en.nextElement()).containsTD(widget))
+			if (((ITableRow) en.nextElement()).containsTD(widget)) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -236,15 +245,17 @@ public class IESequenceTR extends IESequence<ITableRow> implements ITableRow {
 	}
 
 	public IESequenceTR getFirstRepeatedSequence() {
-		if (hasOperatorRepetition() && isSubsequence())
+		if (hasOperatorRepetition() && isSubsequence()) {
 			return this;
+		}
 		Enumeration<ITableRow> en = elements();
 		while (en.hasMoreElements()) {
 			ITableRow tr = en.nextElement();
 			if (tr instanceof IESequenceTR) {
 				IESequenceTR t = ((IESequenceTR) tr).getFirstRepeatedSequence();
-				if (t != null)
+				if (t != null) {
 					return t;
+				}
 			}
 		}
 		return null;
@@ -275,16 +286,19 @@ public class IESequenceTR extends IESequence<ITableRow> implements ITableRow {
 			ITableRow tr = en.nextElement();
 			if (tr instanceof IESequenceTR) {
 				retval = ((IESequenceTR) tr).getTRAtRow(row);
-				if (retval != null)
+				if (retval != null) {
 					return retval;
+				}
 			} else if (tr instanceof ITableRowReusableWidget) {
 				retval = ((IESequenceTR) ((ITableRowReusableWidget) tr).getRootObject()).getTRAtRow(row
 						- ((ITableRowReusableWidget) tr).getRowIndex());
-				if (retval != null)
+				if (retval != null) {
 					return retval;
+				}
 			} else {
-				if (((IETRWidget) tr).getRowIndex() == row)
+				if (((IETRWidget) tr).getRowIndex() == row) {
 					return (IETRWidget) tr;
+				}
 			}
 		}
 		return null;
@@ -395,8 +409,9 @@ public class IESequenceTR extends IESequence<ITableRow> implements ITableRow {
 		Enumeration<ITableRow> en = elements();
 		while (en.hasMoreElements()) {
 			ITableRow r = en.nextElement();
-			if (r instanceof IESequenceTR)
+			if (r instanceof IESequenceTR) {
 				((IESequenceTR) r).holdDisplayRefresh();
+			}
 		}
 		setChanged();
 		notifyObservers(new HoldDisplayRefresh());
@@ -407,8 +422,9 @@ public class IESequenceTR extends IESequence<ITableRow> implements ITableRow {
 		Enumeration<ITableRow> en = elements();
 		while (en.hasMoreElements()) {
 			ITableRow r = en.nextElement();
-			if (r instanceof IESequenceTR)
+			if (r instanceof IESequenceTR) {
 				((IESequenceTR) r).activateDisplayRefresh();
+			}
 		}
 		enableObserving();
 		setChanged();

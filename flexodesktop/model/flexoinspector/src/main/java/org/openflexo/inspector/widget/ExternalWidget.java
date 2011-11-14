@@ -79,8 +79,9 @@ public class ExternalWidget extends DenaliWidget {
 
 	public ExternalWidget(PropertyModel model, AbstractController controller) {
 		super(model, controller);
-		if (getDynamicComponent() != null)
+		if (getDynamicComponent() != null) {
 			getDynamicComponent().addFocusListener(new WidgetFocusListener(this));
+		}
 
 	}
 

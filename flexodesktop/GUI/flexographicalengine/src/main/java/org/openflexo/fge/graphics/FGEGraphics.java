@@ -43,17 +43,17 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation.TextAlignment;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGECubicCurve;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeneralShape;
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.FGEQuadCurve;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage.ImageBackgroundType;
 
 public abstract class FGEGraphics {
@@ -151,8 +151,9 @@ public abstract class FGEGraphics {
 	}
 
 	private void applyCurrentForegroundStyle() {
-		if (g2d == null)
+		if (g2d == null) {
 			return; // Strange...
+		}
 
 		// logger.info("Apply "+currentForeground);
 
@@ -191,8 +192,9 @@ public abstract class FGEGraphics {
 	}
 
 	protected void applyCurrentBackgroundStyle() {
-		if (g2d == null)
+		if (g2d == null) {
 			return; // Strange...
+		}
 
 		if (currentBackground instanceof BackgroundStyle.None) {
 			// Nothing to do
@@ -291,8 +293,9 @@ public abstract class FGEGraphics {
 	}
 
 	public Rectangle drawControlPoint(double x, double y, int size) {
-		if (currentForeground.getNoStroke())
+		if (currentForeground.getNoStroke()) {
 			return null;
+		}
 		Point p = convertNormalizedPointToViewCoordinates(x, y);
 		p.x -= size;
 		p.y -= size;
@@ -305,8 +308,9 @@ public abstract class FGEGraphics {
 	}
 
 	public void drawPoint(double x, double y) {
-		if (currentForeground.getNoStroke())
+		if (currentForeground.getNoStroke()) {
 			return;
+		}
 		Point p1 = convertNormalizedPointToViewCoordinates(x, y);
 		p1.x -= FGEConstants.POINT_SIZE;
 		p1.y -= FGEConstants.POINT_SIZE;
@@ -328,8 +332,9 @@ public abstract class FGEGraphics {
 	}
 
 	public void drawRoundArroundPoint(double x, double y, int size) {
-		if (currentForeground.getNoStroke())
+		if (currentForeground.getNoStroke()) {
 			return;
+		}
 		Point p = convertNormalizedPointToViewCoordinates(x, y);
 		p.x -= size;
 		p.y -= size;
@@ -341,8 +346,9 @@ public abstract class FGEGraphics {
 	}
 
 	public void drawRect(double x, double y, double width, double height) {
-		if (currentForeground.getNoStroke())
+		if (currentForeground.getNoStroke()) {
 			return;
+		}
 		Rectangle r = convertNormalizedRectangleToViewCoordinates(x, y, width, height);
 		// logger.info("drawRect() with "+debugForegroundStyle());
 		// SGU: I don't understand why, but is you use non-plain stroke,
@@ -356,8 +362,9 @@ public abstract class FGEGraphics {
 			g2d.drawLine(r.x + r.width, r.y + r.height, r.x + 1, r.y + r.height);
 			g2d.drawLine(r.x, r.y + r.height, r.x, r.y + 1);
 		}
-		if (logger.isLoggable(Level.FINER))
+		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("drawRect(" + r.x + "," + r.y + "," + r.width + "," + r.height + ")");
+		}
 	}
 
 	public void drawRect(FGEPoint p, FGEDimension d) {
@@ -365,8 +372,9 @@ public abstract class FGEGraphics {
 	}
 
 	public void fillRect(double x, double y, double width, double height) {
-		if (currentBackground instanceof BackgroundStyle.None)
+		if (currentBackground instanceof BackgroundStyle.None) {
 			return;
+		}
 
 		Rectangle r = convertNormalizedRectangleToViewCoordinates(x, y, width, height);
 
@@ -375,8 +383,9 @@ public abstract class FGEGraphics {
 		} else {
 			g2d.fillRect(r.x, r.y, r.width, r.height);
 		}
-		if (logger.isLoggable(Level.FINER))
+		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("fillRect(" + r.x + "," + r.y + "," + r.width + "," + r.height + ")");
+		}
 	}
 
 	/**
@@ -446,14 +455,16 @@ public abstract class FGEGraphics {
 
 	public void drawLine(double x1, double y1, double x2, double y2) {
 		// logger.info("drawLine("+x1+","+y1+","+x2+","+y2+")"+" with "+debugForegroundStyle());
-		if (currentForeground.getNoStroke())
+		if (currentForeground.getNoStroke()) {
 			return;
+		}
 		Point p1 = convertNormalizedPointToViewCoordinates(x1, y1);
 		Point p2 = convertNormalizedPointToViewCoordinates(x2, y2);
 		// logger.info("drawLine("+p1.x+","+p1.y+","+p2.x+","+p2.y+")");
 		g2d.drawLine(p1.x, p1.y, p2.x, p2.y);
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("drawLine(" + p1.x + "," + p1.y + "," + p2.x + "," + p2.y + ")");
+		}
 	}
 
 	public void drawLine(FGEPoint p1, FGEPoint p2) {
@@ -461,15 +472,17 @@ public abstract class FGEGraphics {
 	}
 
 	public void drawRoundRect(double x, double y, double width, double height, double arcwidth, double archeight) {
-		if (currentForeground.getNoStroke())
+		if (currentForeground.getNoStroke()) {
 			return;
+		}
 		Rectangle r = convertNormalizedRectangleToViewCoordinates(x, y, width, height);
 		Rectangle arcRect = convertNormalizedRectangleToViewCoordinates(0, 0, arcwidth, archeight);
 
 		g2d.drawRoundRect(r.x, r.y, r.width, r.height, arcRect.width, arcRect.height);
 
-		if (logger.isLoggable(Level.FINER))
+		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("drawRoundRect(" + r.x + "," + r.y + "," + r.width + "," + r.height + ")");
+		}
 	}
 
 	public void drawRoundRect(FGEPoint p, FGEDimension d, double arcwidth, double archeight) {
@@ -477,8 +490,9 @@ public abstract class FGEGraphics {
 	}
 
 	public void fillRoundRect(double x, double y, double width, double height, double arcwidth, double archeight) {
-		if (currentBackground instanceof BackgroundStyle.None)
+		if (currentBackground instanceof BackgroundStyle.None) {
 			return;
+		}
 
 		Rectangle r = convertNormalizedRectangleToViewCoordinates(x, y, width, height);
 		Rectangle arcRect = convertNormalizedRectangleToViewCoordinates(0, 0, arcwidth, archeight);
@@ -488,8 +502,9 @@ public abstract class FGEGraphics {
 		} else {
 			g2d.fillRoundRect(r.x, r.y, r.width, r.height, arcRect.width, arcRect.height);
 		}
-		if (logger.isLoggable(Level.FINER))
+		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("fillRoundRect(" + r.x + "," + r.y + "," + r.width + "," + r.height + ")");
+		}
 	}
 
 	public void fillRoundRect(FGEPoint p, FGEDimension d, double arcwidth, double archeight) {
@@ -501,8 +516,9 @@ public abstract class FGEGraphics {
 	}
 
 	public void drawPolygon(FGEPoint[] points) {
-		if (currentForeground.getNoStroke())
+		if (currentForeground.getNoStroke()) {
 			return;
+		}
 		int[] xpoints = new int[points.length];
 		int[] ypoints = new int[points.length];
 		for (int i = 0; i < points.length; i++) {
@@ -511,8 +527,9 @@ public abstract class FGEGraphics {
 			ypoints[i] = p.y;
 		}
 		g2d.drawPolygon(xpoints, ypoints, points.length);
-		if (logger.isLoggable(Level.FINER))
+		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("drawPolygon(" + points + ")");
+		}
 	}
 
 	public void fillPolygon(FGEPolygon polygon) {
@@ -520,8 +537,9 @@ public abstract class FGEGraphics {
 	}
 
 	public void fillPolygon(FGEPoint[] points) {
-		if (currentBackground instanceof BackgroundStyle.None)
+		if (currentBackground instanceof BackgroundStyle.None) {
 			return;
+		}
 
 		int[] xpoints = new int[points.length];
 		int[] ypoints = new int[points.length];
@@ -536,29 +554,34 @@ public abstract class FGEGraphics {
 		} else {
 			g2d.fillPolygon(xpoints, ypoints, points.length);
 		}
-		if (logger.isLoggable(Level.FINER))
+		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("fillPolygon(" + points + ")");
+		}
 	}
 
 	public void drawCircle(double x, double y, double width, double height) {
-		if (currentForeground.getNoStroke())
+		if (currentForeground.getNoStroke()) {
 			return;
+		}
 		Rectangle r = convertNormalizedRectangleToViewCoordinates(x, y, width, height);
 		g2d.drawArc(r.x, r.y, r.width, r.height, 0, 360);
-		if (logger.isLoggable(Level.FINER))
+		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("drawCircle(" + r.x + "," + r.y + "," + r.width + "," + r.height + ")");
+		}
 	}
 
 	public void drawCircle(double x, double y, double width, double height, Stroke stroke) {
-		if (currentForeground.getNoStroke())
+		if (currentForeground.getNoStroke()) {
 			return;
+		}
 		Rectangle r = convertNormalizedRectangleToViewCoordinates(x, y, width, height);
 		Stroke back = g2d.getStroke();
 		g2d.setStroke(stroke);
 		g2d.drawArc(r.x, r.y, r.width, r.height, 0, 360);
 		g2d.setStroke(back);
-		if (logger.isLoggable(Level.FINER))
+		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("drawCircle(" + r.x + "," + r.y + "," + r.width + "," + r.height + ")");
+		}
 	}
 
 	public void drawCircle(FGEPoint p, FGEDimension d) {
@@ -573,8 +596,9 @@ public abstract class FGEGraphics {
 		} else {
 			g2d.fillArc(r.x, r.y, r.width, r.height, 0, 360);
 		}
-		if (logger.isLoggable(Level.FINER))
+		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("fillCircle(" + r.x + "," + r.y + "," + r.width + "," + r.height + ")");
+		}
 	}
 
 	public void fillCircle(FGEPoint p, FGEDimension d) {
@@ -582,14 +606,16 @@ public abstract class FGEGraphics {
 	}
 
 	public void drawArc(double x, double y, double width, double height, double angleStart, double arcAngle) {
-		if (currentForeground.getNoStroke())
+		if (currentForeground.getNoStroke()) {
 			return;
+		}
 		// System.out.println("drawArc ("+x+","+y+","+width+","+height+")");
 		Rectangle r = convertNormalizedRectangleToViewCoordinates(x, y, width, height);
 		g2d.drawArc(r.x, r.y, r.width, r.height, (int) angleStart, (int) arcAngle);
 		// System.out.println("drawArc("+r.x+","+r.y+","+r.width+","+r.height+")");
-		if (logger.isLoggable(Level.FINER))
+		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("drawArc(" + r.x + "," + r.y + "," + r.width + "," + r.height + ")");
+		}
 	}
 
 	public void drawArc(FGEPoint p, FGEDimension d, double angleStart, double arcAngle) {
@@ -604,8 +630,9 @@ public abstract class FGEGraphics {
 		} else {
 			g2d.fillArc(r.x, r.y, r.width, r.height, (int) angleStart, (int) arcAngle);
 		}
-		if (logger.isLoggable(Level.FINER))
+		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("fillArc(" + r.x + "," + r.y + "," + r.width + "," + r.height + ")");
+		}
 	}
 
 	public void fillArc(FGEPoint p, FGEDimension d, double angleStart, double arcAngle) {
@@ -617,34 +644,39 @@ public abstract class FGEGraphics {
 	}
 
 	public void drawCurve(FGEQuadCurve curve) {
-		if (currentForeground.getNoStroke())
+		if (currentForeground.getNoStroke()) {
 			return;
+		}
 		Point p1 = convertNormalizedPointToViewCoordinates(curve.getX1(), curve.getY1());
 		Point ctrl_p = convertNormalizedPointToViewCoordinates(curve.getCtrlX(), curve.getCtrlY());
 		Point p2 = convertNormalizedPointToViewCoordinates(curve.getX2(), curve.getY2());
 		QuadCurve2D awtCurve = new QuadCurve2D.Double(p1.x, p1.y, ctrl_p.x, ctrl_p.y, p2.x, p2.y);
 		g2d.draw(awtCurve);
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("drawCurve(" + p1.x + "," + p1.y + "," + ctrl_p.x + "," + ctrl_p.y + "," + p2.x + "," + p2.y + ")");
+		}
 	}
 
 	public void drawCurve(FGECubicCurve curve) {
-		if (currentForeground.getNoStroke())
+		if (currentForeground.getNoStroke()) {
 			return;
+		}
 		Point p1 = convertNormalizedPointToViewCoordinates(curve.getX1(), curve.getY1());
 		Point ctrl_p1 = convertNormalizedPointToViewCoordinates(curve.getCtrlX1(), curve.getCtrlY1());
 		Point ctrl_p2 = convertNormalizedPointToViewCoordinates(curve.getCtrlX2(), curve.getCtrlY2());
 		Point p2 = convertNormalizedPointToViewCoordinates(curve.getX2(), curve.getY2());
 		CubicCurve2D awtCurve = new CubicCurve2D.Double(p1.x, p1.y, ctrl_p1.x, ctrl_p1.y, ctrl_p2.x, ctrl_p2.y, p2.x, p2.y);
 		g2d.draw(awtCurve);
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("drawCurve(" + p1.x + "," + p1.y + "," + ctrl_p1.x + "," + ctrl_p1.y + "," + p2.x + ctrl_p2.x + "," + ctrl_p2.y
 					+ "," + p2.x + "," + p2.y + ")");
+		}
 	}
 
 	public void drawGeneralShape(FGEGeneralShape shape) {
-		if (currentForeground.getNoStroke())
+		if (currentForeground.getNoStroke()) {
 			return;
+		}
 
 		PathIterator pi = shape.getPathIterator(null);
 		FGEPoint current = new FGEPoint();
@@ -701,8 +733,9 @@ public abstract class FGEGraphics {
 		Point p = convertNormalizedPointToViewCoordinates(x, y);
 		Font oldFont = g2d.getFont();
 		AffineTransform at = AffineTransform.getScaleInstance(getScale(), getScale());
-		if (orientation != 0)
+		if (orientation != 0) {
 			at.concatenate(AffineTransform.getRotateInstance(Math.toRadians(orientation)));
+		}
 		Font font = oldFont.deriveFont(at);
 		g2d.setFont(font);
 		Rectangle2D bounds = g2d.getFontMetrics().getStringBounds(text, g2d);

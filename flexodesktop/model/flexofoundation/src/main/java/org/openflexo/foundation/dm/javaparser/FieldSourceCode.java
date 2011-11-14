@@ -53,8 +53,9 @@ public abstract class FieldSourceCode extends AbstractSourceCode {
 
 	@Override
 	protected ParsedJavaField parseCode(final String qualifiedCode) throws ParserNotInstalledException {
-		if (_javaFieldParser == null)
+		if (_javaFieldParser == null) {
 			throw new ParserNotInstalledException();
+		}
 
 		try {
 			// Try to parse
@@ -66,16 +67,18 @@ public abstract class FieldSourceCode extends AbstractSourceCode {
 			setParseErrorWarning("<html><font color=\"red\">" + FlexoLocalization.localizedForKey("parse_error_warning")
 			// +" field: "+qualifiedCode
 					+ "</font></html>");
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Parse error while parsing field: " + qualifiedCode);
+			}
 			return null;
 		}
 	}
 
 	@Override
 	public ParsedJavadoc parseJavadoc(final String qualifiedCode) throws ParserNotInstalledException {
-		if (_javaFieldParser == null)
+		if (_javaFieldParser == null) {
 			throw new ParserNotInstalledException();
+		}
 		try {
 			return _javaFieldParser.parseJavadocForField(qualifiedCode, getOwner().getDMModel());
 		} catch (JavaParseException e) {
@@ -104,8 +107,9 @@ public abstract class FieldSourceCode extends AbstractSourceCode {
 			endIndex = _editedCode.indexOf("=");
 		} else if (_editedCode.indexOf(";") > 0) {
 			endIndex = _editedCode.indexOf(";");
-		} else
+		} else {
 			endIndex = _editedCode.length();
+		}
 
 		if (endIndex > beginIndex) {
 			_editedCode = _editedCode.substring(0, beginIndex) + newFieldDeclaration + _editedCode.substring(endIndex);

@@ -85,10 +85,11 @@ public abstract class DMEOProperty extends DMProperty implements DMEOObject {
 	 */
 	@Override
 	public String getInspectorName() {
-		if (getDMRepository().isReadOnly())
+		if (getDMRepository().isReadOnly()) {
 			return Inspectors.DM.DM_RO_EO_PROPERTY_INSPECTOR;
-		else
+		} else {
 			return Inspectors.DM.DM_EO_PROPERTY_INSPECTOR;
+		}
 	}
 
 	public DMEOEntity getDMEOEntity() {
@@ -105,8 +106,9 @@ public abstract class DMEOProperty extends DMProperty implements DMEOObject {
 
 	@Override
 	public void delete() {
-		if (getDMEOEntity() != null)
+		if (getDMEOEntity() != null) {
 			getDMEOEntity().removePropertyWithKey(getName());
+		}
 		super.delete();
 	}
 
@@ -200,25 +202,29 @@ public abstract class DMEOProperty extends DMProperty implements DMEOObject {
 	}
 
 	public boolean isCodeGenerationAvailable() {
-		if (getDMModel() != null)
+		if (getDMModel() != null) {
 			return getDMModel().getEOCodeGenerationAvailable();
+		}
 		return false;
 	}
 
 	public boolean isCodeGenerationActivated() {
-		if (getDMModel() != null)
+		if (getDMModel() != null) {
 			return getDMModel().getEOCodeGenerationActivated();
+		}
 		return false;
 	}
 
 	public void activateEOCodeGeneration() {
-		if (getDMModel() != null)
+		if (getDMModel() != null) {
 			getDMModel().activateEOCodeGeneration();
+		}
 	}
 
 	public void desactivateEOCodeGeneration() {
-		if (getDMModel() != null)
+		if (getDMModel() != null) {
 			getDMModel().desactivateEOCodeGeneration();
+		}
 	}
 
 	@Override
@@ -260,28 +266,33 @@ public abstract class DMEOProperty extends DMProperty implements DMEOObject {
 				if (getDMEOEntity().getGeneratedCode().getParsedClass() != null) {
 					if (getImplementationType().requiresField()) {
 						generatedCodeField = getDMEOEntity().getGeneratedCode().getParsedClass().getFieldByName(getFieldName());
-						if (logger.isLoggable(Level.FINE))
+						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("Tried to retrieve field " + getFieldName() + " FOUND: " + generatedCodeField);
+						}
 					}
 					if (getImplementationType().requiresAccessors()) {
 						generatedCodeGetter = searchMethod(getDMEOEntity().getGeneratedCode().getParsedClass(),
 								getGetterSignatureCandidates());
-						if (logger.isLoggable(Level.FINE))
+						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("Tried to retrieve getter, FOUND: " + generatedCodeGetter);
+						}
 						if (getIsSettable()) {
 							generatedCodeSetter = searchMethod(getDMEOEntity().getGeneratedCode().getParsedClass(),
 									getSetterSignatureCandidates());
-							if (logger.isLoggable(Level.FINE))
+							if (logger.isLoggable(Level.FINE)) {
 								logger.fine("Tried to retrieve setter, FOUND: " + generatedCodeSetter);
+							}
 							if (getCardinality().isMultiple()) {
 								generatedCodeAdditionMethod = searchMethod(getDMEOEntity().getGeneratedCode().getParsedClass(),
 										getAdditionAccessorSignatureCandidates());
-								if (logger.isLoggable(Level.FINE))
+								if (logger.isLoggable(Level.FINE)) {
 									logger.fine("Tried to retrieve addition method, FOUND: " + generatedCodeAdditionMethod);
+								}
 								generatedCodeRemovalMethod = searchMethod(getDMEOEntity().getGeneratedCode().getParsedClass(),
 										getRemovalAccessorSignatureCandidates());
-								if (logger.isLoggable(Level.FINE))
+								if (logger.isLoggable(Level.FINE)) {
 									logger.fine("Tried to retrieve removal method, FOUND: " + generatedCodeRemovalMethod);
+								}
 							}
 						}
 					}
@@ -300,8 +311,9 @@ public abstract class DMEOProperty extends DMProperty implements DMEOObject {
 	private static ParsedJavaMethod searchMethod(ParsedJavaClass aParsedClass, String[] signatureCandidates) {
 		for (String testThisSignature : signatureCandidates) {
 			ParsedJavaMethod tryThis = aParsedClass.getMethodBySignature(testThisSignature);
-			if (tryThis != null)
+			if (tryThis != null) {
 				return tryThis;
+			}
 		}
 		return null;
 	}
@@ -312,12 +324,15 @@ public abstract class DMEOProperty extends DMProperty implements DMEOObject {
 			return "{" + StringUtils.LINE_SEPARATOR + "// EOEntityCodeGenerator not installed: code not available"
 					+ StringUtils.LINE_SEPARATOR + "}";
 		} else {
-			if (!isCodeGenerationActivated())
+			if (!isCodeGenerationActivated()) {
 				return "{" + StringUtils.LINE_SEPARATOR + "// EOF code generation not activated" + StringUtils.LINE_SEPARATOR + "}";
-			if (codeNeedsToBeRegenerated)
+			}
+			if (codeNeedsToBeRegenerated) {
 				regenerateCode();
-			if (generatedCodeField != null)
+			}
+			if (generatedCodeField != null) {
 				return generatedCodeField.getInitializationExpression();
+			}
 			return "null; // WARNING: could not retrieve initialization expression for field";
 		}
 	}
@@ -328,12 +343,15 @@ public abstract class DMEOProperty extends DMProperty implements DMEOObject {
 			return "{" + StringUtils.LINE_SEPARATOR + "// EOEntityCodeGenerator not installed: code not available"
 					+ StringUtils.LINE_SEPARATOR + "}";
 		} else {
-			if (!isCodeGenerationActivated())
+			if (!isCodeGenerationActivated()) {
 				return "{" + StringUtils.LINE_SEPARATOR + "// EOF code generation not activated" + StringUtils.LINE_SEPARATOR + "}";
-			if (codeNeedsToBeRegenerated)
+			}
+			if (codeNeedsToBeRegenerated) {
 				regenerateCode();
-			if (generatedCodeGetter != null)
+			}
+			if (generatedCodeGetter != null) {
 				return generatedCodeGetter.getCoreCode();
+			}
 			return "{" + StringUtils.LINE_SEPARATOR + "// WARNING: could not retrieve generated code for getter"
 					+ StringUtils.LINE_SEPARATOR + "}";
 		}
@@ -345,12 +363,15 @@ public abstract class DMEOProperty extends DMProperty implements DMEOObject {
 			return "{" + StringUtils.LINE_SEPARATOR + "// EOEntityCodeGenerator not installed: code not available"
 					+ StringUtils.LINE_SEPARATOR + "}";
 		} else {
-			if (!isCodeGenerationActivated())
+			if (!isCodeGenerationActivated()) {
 				return "{" + StringUtils.LINE_SEPARATOR + "// EOF code generation not activated" + StringUtils.LINE_SEPARATOR + "}";
-			if (codeNeedsToBeRegenerated)
+			}
+			if (codeNeedsToBeRegenerated) {
 				regenerateCode();
-			if (generatedCodeSetter != null)
+			}
+			if (generatedCodeSetter != null) {
 				return generatedCodeSetter.getCoreCode();
+			}
 			return "{" + StringUtils.LINE_SEPARATOR + "// WARNING: could not retrieve generated code for setter"
 					+ StringUtils.LINE_SEPARATOR + "}";
 		}
@@ -362,12 +383,15 @@ public abstract class DMEOProperty extends DMProperty implements DMEOObject {
 			return "{" + StringUtils.LINE_SEPARATOR + "// EOEntityCodeGenerator not installed: code not available"
 					+ StringUtils.LINE_SEPARATOR + "}";
 		} else {
-			if (!isCodeGenerationActivated())
+			if (!isCodeGenerationActivated()) {
 				return "{" + StringUtils.LINE_SEPARATOR + "// EOF code generation not activated" + StringUtils.LINE_SEPARATOR + "}";
-			if (codeNeedsToBeRegenerated)
+			}
+			if (codeNeedsToBeRegenerated) {
 				regenerateCode();
-			if (generatedCodeAdditionMethod != null)
+			}
+			if (generatedCodeAdditionMethod != null) {
 				return generatedCodeAdditionMethod.getCoreCode();
+			}
 			return "{" + StringUtils.LINE_SEPARATOR + "// WARNING: could not retrieve generated code for addition method"
 					+ StringUtils.LINE_SEPARATOR + "}";
 		}
@@ -379,12 +403,15 @@ public abstract class DMEOProperty extends DMProperty implements DMEOObject {
 			return "{" + StringUtils.LINE_SEPARATOR + "// EOEntityCodeGenerator not installed: code not available"
 					+ StringUtils.LINE_SEPARATOR + "}";
 		} else {
-			if (!isCodeGenerationActivated())
+			if (!isCodeGenerationActivated()) {
 				return "{" + StringUtils.LINE_SEPARATOR + "// EOF code generation not activated" + StringUtils.LINE_SEPARATOR + "}";
-			if (codeNeedsToBeRegenerated)
+			}
+			if (codeNeedsToBeRegenerated) {
 				regenerateCode();
-			if (generatedCodeRemovalMethod != null)
+			}
+			if (generatedCodeRemovalMethod != null) {
 				return generatedCodeRemovalMethod.getCoreCode();
+			}
 			return "{" + StringUtils.LINE_SEPARATOR + "// WARNING: could not retrieve generated code for removal method"
 					+ StringUtils.LINE_SEPARATOR + "}";
 		}

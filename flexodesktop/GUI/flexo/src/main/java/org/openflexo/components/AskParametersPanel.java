@@ -76,8 +76,9 @@ public class AskParametersPanel extends JPanel {
 	@Override
 	public void setBackground(Color aColor) {
 		super.setBackground(aColor);
-		if (paramsPanel != null)
+		if (paramsPanel != null) {
 			paramsPanel.setBackground(aColor);
+		}
 	}
 
 	public Object parameterValueWithName(String paramName) {

@@ -12,8 +12,9 @@ public class DataPropertyPatternRole extends PropertyPatternRole {
 
 	@Override
 	public String getPreciseType() {
-		if (type != null)
+		if (type != null) {
 			return type.getName();
+		}
 		return "";
 	}
 

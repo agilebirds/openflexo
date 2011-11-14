@@ -63,8 +63,9 @@ public class DMFileMenu extends FileMenu {
 		importMenu.add(new FlexoMenuItem(ImportExternalDatabaseRepository.actionType, getController()));
 		if (ModuleLoader.isDevelopperRelease() || ModuleLoader.isMaintainerRelease()) {
 			importMenu.add(new FlexoMenuItem(ImportJARFileRepository.actionType, getController()));
-			if (KnownDataImporter.RATIONAL_ROSE_IMPORTER.isAvailable())
+			if (KnownDataImporter.RATIONAL_ROSE_IMPORTER.isAvailable()) {
 				importMenu.add(new FlexoMenuItem(ImportRationalRoseRepository.actionType, getController()));
+			}
 			// importMenu.add(new FlexoMenuItem(ImportDenaliFoundationRepository.actionType, getController()));
 			importMenu.add(new FlexoMenuItem(ImportThesaurusRepository.actionType, getController()));
 			importMenu.add(new FlexoMenuItem(ImportThesaurusDatabaseRepository.actionType, getController()));

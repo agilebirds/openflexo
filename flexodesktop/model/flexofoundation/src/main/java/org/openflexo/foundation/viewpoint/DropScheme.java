@@ -55,10 +55,12 @@ public class DropScheme extends EditionScheme {
 		if (StringUtils.isEmpty(_getTarget())) {
 			return null;
 		}
-		if (isTopTarget())
+		if (isTopTarget()) {
 			return null;
-		if (getViewPointLibrary() != null)
+		}
+		if (getViewPointLibrary() != null) {
 			return getViewPointLibrary().getEditionPattern(_getTarget());
+		}
 		return null;
 	}
 
@@ -94,10 +96,10 @@ public class DropScheme extends EditionScheme {
 	@Override
 	protected void appendContextualBindingVariables(BindingModel bindingModel) {
 		bindingModelNeedToBeRecomputed = false;
-		if (getTargetEditionPattern() != null)
+		if (getTargetEditionPattern() != null) {
 			bindingModel.addToBindingVariables(new EditionPatternPathElement<DropScheme>(EditionScheme.TARGET, getTargetEditionPattern(),
 					this));
-		else if (_getTarget() != null && !_getTarget().equals("top")) {
+		} else if (_getTarget() != null && !_getTarget().equals("top")) {
 			logger.warning("Cannot find edition pattern " + _getTarget() + " !!!!!!!!!!!!!!");
 			bindingModelNeedToBeRecomputed = true;
 		}
@@ -107,16 +109,18 @@ public class DropScheme extends EditionScheme {
 
 	@Override
 	public BindingModel getBindingModel() {
-		if (bindingModelNeedToBeRecomputed)
+		if (bindingModelNeedToBeRecomputed) {
 			updateBindingModels();
+		}
 		return super.getBindingModel();
 	}
 
 	@Override
 	public AddShape createAddShapeAction() {
 		AddShape newAction = super.createAddShapeAction();
-		if (isTopTarget())
+		if (isTopTarget()) {
 			newAction.setContainer(new ViewPointDataBinding(EditionScheme.TOP_LEVEL));
+		}
 		return newAction;
 	}
 

@@ -141,8 +141,9 @@ public class LocalizedEditorModel implements TableModel {
 	 */
 	@Override
 	public void setValueAt(Object value, int rowIndex, int columnIndex) {
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("setValueAt " + value + " " + rowIndex + "/" + columnIndex);
+		}
 		Language language = (Language) FlexoLocalization.getAvailableLanguages().elementAt(columnIndex - 1);
 		FlexoLocalization.setLocalizedForKeyAndLanguage(_keys.elementAt(rowIndex), (String) value, language);
 		model.fireTableRowsUpdated(rowIndex, rowIndex);

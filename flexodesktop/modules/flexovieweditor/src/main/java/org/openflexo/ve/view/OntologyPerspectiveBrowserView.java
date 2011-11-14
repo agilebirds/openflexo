@@ -35,19 +35,18 @@ import javax.swing.JSplitPane;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 
+import org.openflexo.components.browser.BrowserElement;
+import org.openflexo.components.browser.ProjectBrowser.OEViewMode;
+import org.openflexo.components.browser.view.BrowserView.SelectionPolicy;
+import org.openflexo.components.browser.view.BrowserViewCellRenderer;
+import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.controller.OEBrowser;
 import org.openflexo.ve.controller.OEController;
 import org.openflexo.ve.controller.OntologyBrowser;
 import org.openflexo.ve.controller.OntologyLibraryBrowser;
-
-import org.openflexo.components.browser.BrowserElement;
-import org.openflexo.components.browser.ProjectBrowser.OEViewMode;
-import org.openflexo.components.browser.view.BrowserViewCellRenderer;
-import org.openflexo.components.browser.view.BrowserView.SelectionPolicy;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ontology.FlexoOntology;
 
 public class OntologyPerspectiveBrowserView extends JPanel {
 

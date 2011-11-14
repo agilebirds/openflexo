@@ -121,8 +121,9 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 		plusButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent mouseEvent) {
-				if (plusButton.isEnabled())
+				if (plusButton.isEnabled()) {
 					plusButton.setIcon(FIBIconLibrary.BROWSER_PLUS_SELECTED_ICON);
+				}
 				if (hasMultiplePlusActions(currentElement)) {
 					getPlusActionMenu(currentElement).show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
 					plusButton.setIcon(FIBIconLibrary.BROWSER_PLUS_ICON);
@@ -131,8 +132,9 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 
 			@Override
 			public void mouseReleased(MouseEvent mouseEvent) {
-				if (plusButton.isEnabled())
+				if (plusButton.isEnabled()) {
 					plusButton.setIcon(FIBIconLibrary.BROWSER_PLUS_ICON);
+				}
 				if (hasMultiplePlusActions(currentElement)) {
 					getPlusActionMenu(currentElement).show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
 				}
@@ -157,8 +159,9 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 		minusButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent mouseEvent) {
-				if (minusButton.isEnabled())
+				if (minusButton.isEnabled()) {
 					minusButton.setIcon(FIBIconLibrary.BROWSER_MINUS_SELECTED_ICON);
+				}
 				if (hasMultipleMinusActions(currentElement)) {
 					getMinusActionMenu(currentElement).show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
 					minusButton.setIcon(FIBIconLibrary.BROWSER_MINUS_ICON);
@@ -167,8 +170,9 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 
 			@Override
 			public void mouseReleased(MouseEvent mouseEvent) {
-				if (minusButton.isEnabled())
+				if (minusButton.isEnabled()) {
 					minusButton.setIcon(FIBIconLibrary.BROWSER_MINUS_ICON);
+				}
 				if (hasMultipleMinusActions(currentElement)) {
 					getMinusActionMenu(currentElement).show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
 				}
@@ -264,14 +268,15 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 
 		else {
 
-			if (hasMultiplePlusActions(element))
+			if (hasMultiplePlusActions(element)) {
 				plusButton.setEnabled(true);
-			else {
+			} else {
 				boolean isActive = false;
 				for (FIBBrowserAction action : _addActions.get(element).keySet()) {
 					FIBBrowserActionListener actionListener = _addActions.get(element).get(action);
-					if (actionListener.isActive(_browserModel.getSelectedObject()))
+					if (actionListener.isActive(_browserModel.getSelectedObject())) {
 						isActive = true;
+					}
 				}
 				plusButton.setEnabled(isActive);
 			}
@@ -314,14 +319,16 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 	}
 
 	boolean hasMultiplePlusActions(FIBBrowserElement element) {
-		if (element == null)
+		if (element == null) {
 			return false;
+		}
 		return _addActions.get(element).size() > 1;
 	}
 
 	boolean hasMultipleMinusActions(FIBBrowserElement element) {
-		if (element == null)
+		if (element == null) {
 			return false;
+		}
 		return _removeActions.get(element).size() > 1;
 	}
 
@@ -336,8 +343,9 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 	private JPopupMenu getPlusActionMenu(FIBBrowserElement element) {
 		if (plusActionMenuNeedsRecomputed) {
 			plusActionMenu = new JPopupMenu();
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Build plus menu");
+			}
 
 			for (FIBBrowserAction action : _addActions.get(element).keySet()) {
 				FIBBrowserActionListener actionListener = _addActions.get(element).get(action);
@@ -376,8 +384,9 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 	private JPopupMenu getOptionActionMenu(FIBBrowserElement element) {
 		if (optionsActionMenuNeedsRecomputed) {
 			optionsActionMenu = new JPopupMenu();
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Build options menu");
+			}
 
 			for (FIBBrowserAction action : _otherActions.get(element).keySet()) {
 				FIBBrowserActionListener actionListener = _otherActions.get(element).get(action);
@@ -503,8 +512,9 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 
 	private boolean hasFilters() {
 		for (FIBBrowserElement el : _browserModel.getElementTypes().keySet()) {
-			if (el.getFiltered())
+			if (el.getFiltered()) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -514,13 +524,15 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 		JPopupMenu returned = new JPopupMenu() {
 			@Override
 			public void setVisible(boolean b) {
-				if (b && !isVisible())
+				if (b && !isVisible()) {
 					addPopupClosers(getWindow(FIBBrowserWidgetFooter.this));
-				else if (!b && isVisible())
+				} else if (!b && isVisible()) {
 					removePopupClosers(getWindow(FIBBrowserWidgetFooter.this));
+				}
 				super.setVisible(b);
-				if (!b)
+				if (!b) {
 					filtersButton.setIcon(FIBIconLibrary.BROWSER_FILTERS_ICON);
+				}
 			}
 
 			@Override
@@ -589,14 +601,16 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 	 */
 	protected void addPopupClosers(Container c) {
 		if (c == getWindow(this) && c != null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.finer("addPopupClosers");
+			}
 			((Window) c).addWindowListener(this);
 		}
 		if (c != filtersPopupMenu && c != null) {
 			c.addMouseListener(this);
-			for (int i = 0; i < c.getComponents().length; i++)
+			for (int i = 0; i < c.getComponents().length; i++) {
 				addPopupClosers((Container) c.getComponents()[i]);
+			}
 		}
 	}
 
@@ -609,21 +623,24 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 	 */
 	protected void removePopupClosers(Container c) {
 		if (c instanceof Window) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.finer("removePopupClosers");
+			}
 			((Window) c).removeWindowListener(this);
 		}
 		if (c != filtersPopupMenu && c != null) {
 			c.removeMouseListener(this);
-			for (int i = 0; i < c.getComponents().length; i++)
+			for (int i = 0; i < c.getComponents().length; i++) {
 				removePopupClosers((Container) c.getComponents()[i]);
+			}
 		}
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if (e.getSource() != filtersPopupMenu && e.getSource() != filtersButton)
+		if (e.getSource() != filtersPopupMenu && e.getSource() != filtersButton) {
 			closeFiltersPopupMenu();
+		}
 	}
 
 	@Override

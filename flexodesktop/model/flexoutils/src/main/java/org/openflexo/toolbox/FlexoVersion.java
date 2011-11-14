@@ -183,12 +183,15 @@ public class FlexoVersion implements StringConvertable {
 
 	public String toString(boolean forceDisplayPatch) {
 		String v = String.valueOf(major) + "." + String.valueOf(minor) + (patch > 0 || forceDisplayPatch ? "." + patch : "");
-		if (rc > -1)
+		if (rc > -1) {
 			return v + "RC" + String.valueOf(rc);
-		if (isAlpha)
+		}
+		if (isAlpha) {
 			return v + "alpha";
-		if (isBeta)
+		}
+		if (isBeta) {
 			return v + "beta";
+		}
 		return v;
 	}
 
@@ -256,22 +259,25 @@ public class FlexoVersion implements StringConvertable {
 					} else {
 						if (v1.rc < 0 && v2.rc < 0) {
 							if (v1.isAlpha) {
-								if (v2.isAlpha)
+								if (v2.isAlpha) {
 									return 0;
-								else
+								} else {
 									return -1;
+								}
 							} else if (v1.isBeta) {
-								if (v2.isAlpha)
+								if (v2.isAlpha) {
 									return 1;
-								else if (v2.isBeta)
+								} else if (v2.isBeta) {
 									return 0;
-								else
+								} else {
 									return -1;
+								}
 							} else {
-								if (v2.isAlpha || v2.isBeta)
+								if (v2.isAlpha || v2.isBeta) {
 									return 1;
-								else
+								} else {
 									return 0;
+								}
 							}
 						} else if (v1.rc < 0 && v2.rc > -1 && !v1.isAlpha && !v1.isBeta) {
 							return 1;
@@ -303,12 +309,15 @@ public class FlexoVersion implements StringConvertable {
 			for (int j = 0; j < s.length; j++) {
 				String s2 = s[j];
 				FlexoVersion v2 = new FlexoVersion(s2);
-				if (v.isLesserThan(v2))
+				if (v.isLesserThan(v2)) {
 					System.out.println(string + " is smaller than " + s2 + "[" + v2.toString() + "]");
-				if (v.isGreaterThan(v2))
+				}
+				if (v.isGreaterThan(v2)) {
 					System.out.println(string + " is bigger than " + s2 + "[" + v2.toString() + "]");
-				if (v.equals(v2))
+				}
+				if (v.equals(v2)) {
 					System.out.println(string + " equals " + s2 + "[" + v2.toString() + "]");
+				}
 			}
 		}
 

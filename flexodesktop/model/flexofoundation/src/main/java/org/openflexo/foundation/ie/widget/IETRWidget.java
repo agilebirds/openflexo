@@ -78,8 +78,9 @@ public class IETRWidget extends IEWidget implements ITableRow {
 		super(woComponent, parent, prj);
 		_sequenceTD = new IESequenceTD(woComponent, this, prj);
 		int colCount = -1;
-		if (parent != null)
+		if (parent != null) {
 			colCount = parent.getColCount();
+		}
 		if (createTDs && colCount > 0) {
 			for (int i = 0; i < colCount; i++) {
 				IETDWidget newTD = new IETDWidget(woComponent, _sequenceTD, prj);
@@ -117,8 +118,9 @@ public class IETRWidget extends IEWidget implements ITableRow {
 
 	@Override
 	public IESequenceTR getSequenceTR() {
-		if (getParent() instanceof IESequenceTR)
+		if (getParent() instanceof IESequenceTR) {
 			return (IESequenceTR) getParent();
+		}
 		logger.severe("Found a TR not in any sequence !!! but in a " + getParent().getClass());
 		return null;
 	}
@@ -142,14 +144,16 @@ public class IETRWidget extends IEWidget implements ITableRow {
 	}
 
 	public IETDWidget getTDatXLocation(int c) {
-		if (c < 0)
+		if (c < 0) {
 			return null;
+		}
 		Enumeration en = colsEnumeration();
 		IETDWidget temp = null;
 		while (en.hasMoreElements()) {
 			temp = (IETDWidget) en.nextElement();
-			if (temp.getXLocation() == c)
+			if (temp.getXLocation() == c) {
 				return temp;
+			}
 		}
 		return null;
 	}
@@ -171,10 +175,11 @@ public class IETRWidget extends IEWidget implements ITableRow {
 
 	@Override
 	public IEHTMLTableWidget htmlTable() {
-		if (getParent() instanceof IEHTMLTableWidget)
+		if (getParent() instanceof IEHTMLTableWidget) {
 			return (IEHTMLTableWidget) getParent();
-		else
+		} else {
 			return ((IESequenceTR) getParent()).htmlTable();
+		}
 	}
 
 	public Enumeration<ITableData> colsEnumeration() {
@@ -307,8 +312,9 @@ public class IETRWidget extends IEWidget implements ITableRow {
 		ITableRow candidate = (ITableRow) getSequenceTR().getNext(this);
 		if (candidate != null) {
 			if (candidate instanceof IESequenceTR) {
-				if (((IESequenceTR) candidate).hasOperatorRepetition())
+				if (((IESequenceTR) candidate).hasOperatorRepetition()) {
 					return (IESequenceTR) candidate;
+				}
 				return candidate.findNextRepeatedSequence();
 			} else {
 				return candidate.findNextRepeatedSequence();
@@ -320,16 +326,18 @@ public class IETRWidget extends IEWidget implements ITableRow {
 
 	@Override
 	public boolean containsTD(IETDWidget widget) {
-		if (widget == null)
+		if (widget == null) {
 			return false;
-		if (widget.tr() == this)
+		}
+		if (widget.tr() == this) {
 			return true;
-		else
+		} else {
 			return false;
-		/*
-		 * Enumeration en = colsEnumeration(); while (en.hasMoreElements()) { if
-		 * (en.nextElement().equals(widget)) return true; } return false;
-		 */
+			/*
+			 * Enumeration en = colsEnumeration(); while (en.hasMoreElements()) { if
+			 * (en.nextElement().equals(widget)) return true; } return false;
+			 */
+		}
 	}
 
 	public boolean isLastCell(IETDWidget widget) {
@@ -405,25 +413,29 @@ public class IETRWidget extends IEWidget implements ITableRow {
 	 *            - the column number at which the TD needs to be inserted
 	 */
 	public IETDWidget insertEmptyTDAtCol(int col) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Inserting empty TD at column " + col);
+		}
 		IETDWidget previous = null;
 		Enumeration<IETDWidget> en = getAllTD().elements();
 		while (en.hasMoreElements()) {
 			IETDWidget td = en.nextElement();
-			if (td.getXLocation() < col)
+			if (td.getXLocation() < col) {
 				previous = td;
+			}
 		}
 		IESequenceTD std;
 		if (previous == null) {
 			std = getSequenceTD();
-		} else
+		} else {
 			std = previous.getSequenceTD();
+		}
 		IETDWidget td = new IETDWidget(getWOComponent(), std, getProject());
 		td.setXLocation(col);
 		int insertionIndex = 0;
-		if (previous != null)
+		if (previous != null) {
 			insertionIndex = std.indexOf(previous) + 1;
+		}
 		std.insertElementAt(td, insertionIndex);
 		reIndexCells();
 		return td;
@@ -520,11 +532,13 @@ public class IETRWidget extends IEWidget implements ITableRow {
 
 	@Override
 	public void setWOComponent(IEWOComponent woComponent) {
-		if (noWOChange(woComponent))
+		if (noWOChange(woComponent)) {
 			return;
+		}
 		super.setWOComponent(woComponent);
-		if (_sequenceTD != null)
+		if (_sequenceTD != null) {
 			_sequenceTD.setWOComponent(woComponent);// This call is very important because it will update the WOComponent components cache
+		}
 	}
 
 	/**
@@ -536,16 +550,18 @@ public class IETRWidget extends IEWidget implements ITableRow {
 
 	@Override
 	public boolean areComponentInstancesValid() {
-		if (_sequenceTD != null)
+		if (_sequenceTD != null) {
 			return _sequenceTD.areComponentInstancesValid();
-		else
+		} else {
 			return true;
+		}
 	}
 
 	@Override
 	public void removeInvalidComponentInstances() {
-		if (_sequenceTD != null)
+		if (_sequenceTD != null) {
 			_sequenceTD.removeInvalidComponentInstances();
+		}
 
 	}
 

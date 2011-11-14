@@ -204,8 +204,9 @@ public abstract class OntologyProperty extends OntologyObject {
 		if (domainStatement == null) {
 			for (OntologyProperty p : getSuperProperties()) {
 				DomainStatement d = p.getDomainStatement();
-				if (d != null)
+				if (d != null) {
 					return d;
+				}
 			}
 			return null;
 		}
@@ -216,8 +217,9 @@ public abstract class OntologyProperty extends OntologyObject {
 		if (rangeStatement == null) {
 			for (OntologyProperty p : getSuperProperties()) {
 				RangeStatement r = p.getRangeStatement();
-				if (r != null)
+				if (r != null) {
 					return r;
+				}
 			}
 			return null;
 		}
@@ -249,8 +251,9 @@ public abstract class OntologyProperty extends OntologyObject {
 		if (getDomainStatement() == null) {
 			for (OntologyProperty p : getSuperProperties()) {
 				OntologyObject o = p.getDomain();
-				if (o != null)
+				if (o != null) {
 					return o;
+				}
 			}
 			return null;
 		}

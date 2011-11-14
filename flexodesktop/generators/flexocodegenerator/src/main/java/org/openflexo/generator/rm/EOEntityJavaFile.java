@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.cg.JavaFile;
 import org.openflexo.generator.FlexoResourceGenerator;
-import org.openflexo.generator.rm.GenerationAvailableFile;
 import org.openflexo.logging.FlexoLogger;
 
 public class EOEntityJavaFile extends JavaFile implements GenerationAvailableFile {

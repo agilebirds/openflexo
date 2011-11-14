@@ -42,10 +42,11 @@ public abstract class WKFObjectGR<O extends WKFObject> extends SWLObjectGR<O> {
 
 	@Override
 	public final boolean getIsVisible() {
-		if (getDrawing() != null)
+		if (getDrawing() != null) {
 			return getDrawing().isVisible(getModel());
-		else
+		} else {
 			return true;
+		}
 	}
 
 }

@@ -68,8 +68,9 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 	@Override
 	public void delete() {
 		if (_controller != null) {
-			if (getDrawingView() != null)
+			if (getDrawingView() != null) {
 				_controller.removeModuleView(getModuleView());
+			}
 			_controller.SHEMA_PERSPECTIVE.removeFromControllers(this);
 		}
 		super.delete();

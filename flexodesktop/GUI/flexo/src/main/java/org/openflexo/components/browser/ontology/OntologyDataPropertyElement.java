@@ -48,8 +48,9 @@ public class OntologyDataPropertyElement extends BrowserElement {
 	protected void buildChildrenVector() {
 		if (getProjectBrowser().getOEViewMode() == OEViewMode.FullHierarchy) {
 			for (OntologyProperty subProperty : getProperty().getSubProperties()) {
-				if (!getProjectBrowser().showOnlyAnnotationProperties() || subProperty.isAnnotationProperty())
+				if (!getProjectBrowser().showOnlyAnnotationProperties() || subProperty.isAnnotationProperty()) {
 					addToChilds(subProperty);
+				}
 			}
 		}
 

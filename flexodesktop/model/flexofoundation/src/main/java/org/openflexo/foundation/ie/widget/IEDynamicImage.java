@@ -22,8 +22,8 @@ package org.openflexo.foundation.ie.widget;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.bindings.AbstractBinding;
-import org.openflexo.foundation.bindings.WidgetBindingDefinition;
 import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
+import org.openflexo.foundation.bindings.WidgetBindingDefinition;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.dm.IEDataModification;
@@ -57,8 +57,9 @@ public class IEDynamicImage extends IEButtonWidget {
 	@Override
 	public String getBeautifiedName() {
 		String s = super.getBeautifiedName();
-		if (s == null || s.trim().length() == 0)
+		if (s == null || s.trim().length() == 0) {
 			return "A dynamic image";
+		}
 		return s;
 	}
 
@@ -88,8 +89,9 @@ public class IEDynamicImage extends IEButtonWidget {
 	}
 
 	public AbstractBinding getBindingImageUrl() {
-		if (isBeingCloned())
+		if (isBeingCloned()) {
 			return null;
+		}
 		return _bindingImageUrl;
 	}
 

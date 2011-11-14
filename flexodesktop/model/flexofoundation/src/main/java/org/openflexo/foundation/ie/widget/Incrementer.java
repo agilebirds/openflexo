@@ -57,8 +57,9 @@ public class Incrementer {
 	}
 
 	public void increment(int value) {
-		for (int i = 0; i < value; i++)
+		for (int i = 0; i < value; i++) {
 			increment();
+		}
 
 	}
 }

@@ -50,8 +50,9 @@ public class EditionPatternPathElement<E extends Bindable> implements BindingVar
 
 	@Override
 	public Class<E> getDeclaringClass() {
-		if (container != null)
+		if (container != null) {
 			return (Class<E>) container.getClass();
+		}
 		return null;
 	}
 
@@ -62,8 +63,9 @@ public class EditionPatternPathElement<E extends Bindable> implements BindingVar
 
 	@Override
 	public String getSerializationRepresentation() {
-		if (name != null)
+		if (name != null) {
 			return name;
+		}
 		return editionPattern.getName();
 	}
 

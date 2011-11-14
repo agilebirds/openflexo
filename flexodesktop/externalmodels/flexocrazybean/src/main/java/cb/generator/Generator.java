@@ -98,22 +98,25 @@ public class Generator extends cb.petal.EmptyVisitor {
 	@Override
 	public void visit(cb.petal.InheritanceRelationship rel) {
 		Class c = getParentClass(rel);
-		if (c != null)
+		if (c != null) {
 			factory.addSuperClass(c, getClass(rel));
+		}
 	}
 
 	@Override
 	public void visit(RealizeRelationship rel) {
 		Class c = getParentClass(rel);
-		if (c != null)
+		if (c != null) {
 			factory.addImplementedInterface(c, getClass(rel));
+		}
 	}
 
 	@Override
 	public void visit(UsesRelationship rel) {
 		Class c = getParentClass(rel);
-		if (c != null)
+		if (c != null) {
 			factory.addUsedClass(c, getClass(rel), rel);
+		}
 	}
 
 	@Override
@@ -126,8 +129,9 @@ public class Generator extends cb.petal.EmptyVisitor {
 		if (class1 != null && class2 != null) {
 			cb.petal.Class assc = assoc.getAssociationClass();
 			Class ac = null;
-			if (assc != null)
+			if (assc != null) {
 				ac = getClass(assc.getQuid());
+			}
 
 			factory.addAssociation(class1, first, class2, second, ac);
 		}
@@ -156,8 +160,9 @@ public class Generator extends cb.petal.EmptyVisitor {
 		Method m = factory.createMethod(op);
 		factory.addObject(op.getQuid(), m);
 		Class c = getParentClass(op);
-		if (c != null)
+		if (c != null) {
 			factory.addMethod(c, m);
+		}
 	}
 
 	public void dump() throws IOException {

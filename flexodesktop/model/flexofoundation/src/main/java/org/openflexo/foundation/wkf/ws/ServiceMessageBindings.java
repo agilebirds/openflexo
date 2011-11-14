@@ -157,8 +157,9 @@ public abstract class ServiceMessageBindings extends WKFObject implements Bindab
 	}
 
 	public void removeFromBindings(ServiceMessageEntryBinding value) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Removing Binding in ServiceMessageBinding:" + value);
+		}
 		value.setMessageBindings(null);
 		_bindings.remove(value);
 	}
@@ -195,8 +196,9 @@ public abstract class ServiceMessageBindings extends WKFObject implements Bindab
 	}
 
 	private void updateBindings() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("updateBindings() in ServiceMessageBindings");
+		}
 		Vector toRemove = new Vector();
 		toRemove.addAll(_bindings);
 		for (Enumeration en = getMessageDefinition().getEntries().elements(); en.hasMoreElements();) {
@@ -215,8 +217,9 @@ public abstract class ServiceMessageBindings extends WKFObject implements Bindab
 
 	@Override
 	public void update(FlexoObservable o, DataModification dataModification) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("received update in ServiceMessageBindings " + dataModification);
+		}
 		if ((o == getMessageDefinition()) && ((dataModification instanceof BindingAdded) || (dataModification instanceof BindingRemoved))) {
 			updateBindings();
 		}
@@ -260,8 +263,9 @@ public abstract class ServiceMessageBindings extends WKFObject implements Bindab
 			MessageEntry newBD = getMessageDefinition().createNewMessageEntry();
 			return getBinding(newBD);
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not create binding: cannot access MessageDefinition !");
+			}
 			return null;
 		}
 	}
@@ -271,8 +275,9 @@ public abstract class ServiceMessageBindings extends WKFObject implements Bindab
 			getMessageDefinition().deleteMessageEntry(meb.getBindingDefinition());
 
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not delete binding: cannot access MessageDefinition !");
+			}
 		}
 	}
 
@@ -280,8 +285,9 @@ public abstract class ServiceMessageBindings extends WKFObject implements Bindab
 		if (getMessageDefinition() != null) {
 			return getMessageDefinition().isMessageEntryDeletable(meb.getBindingDefinition());
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not access binding: cannot access ComponentDefinition !");
+			}
 		}
 		return false;
 	}
@@ -332,8 +338,9 @@ public abstract class ServiceMessageBindings extends WKFObject implements Bindab
 					var.setVariableName(entry.getVariableName());
 					var.setType(entry.getType());
 				}
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Binding Model Variable:" + var.getVariableName() + " " + var);
+				}
 				return var;
 			}
 			return null;

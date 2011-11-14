@@ -67,8 +67,9 @@ public abstract class AbstractWKFPalette extends DrawingPalette {
 		if (object.getShortHelpText() != null) {
 			gr.setToolTipText(object.getShortHelpText());
 		} else {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("No help text defined for palette element: " + gr);
+			}
 		}
 
 		WKFPaletteElement returned = new WKFPaletteElement(gr, object, containerValidity);
@@ -90,8 +91,9 @@ public abstract class AbstractWKFPalette extends DrawingPalette {
 
 		@Override
 		public boolean acceptDragging(GraphicalRepresentation gr) {
-			if (gr.getDrawable() instanceof FlexoModelObject)
+			if (gr.getDrawable() instanceof FlexoModelObject) {
 				return containerValidity.isContainerValid((FlexoModelObject) gr.getDrawable());
+			}
 			return false;
 		}
 
@@ -139,8 +141,9 @@ public abstract class AbstractWKFPalette extends DrawingPalette {
 			else {
 				Role roleWhereToDrop = null;
 				SwimmingLaneRepresentation swlRepresentation = ((SWLObjectGR) gr).getDrawing();
-				if (gr.getDrawable() instanceof FlexoPetriGraph)
+				if (gr.getDrawable() instanceof FlexoPetriGraph) {
 					container = (FlexoPetriGraph) gr.getDrawable();
+				}
 				if (gr.getDrawable() instanceof Role) {
 					container = swlRepresentation.getProcess().getActivityPetriGraph();
 					roleWhereToDrop = (Role) gr.getDrawable();
@@ -162,13 +165,15 @@ public abstract class AbstractWKFPalette extends DrawingPalette {
 				}
 				DropWKFElement action = createAndExecuteDropElementAction(dropLocation, container, roleWhereToDrop, true);
 				if (action.hasActionExecutionSucceeded()) {
-					if (roleWhereToDrop != null && action.getObject() instanceof AbstractNode)
+					if (roleWhereToDrop != null && action.getObject() instanceof AbstractNode) {
 						swlRepresentation.setRepresentationRole(roleWhereToDrop, (AbstractNode) action.getObject());
+					}
 					action.getObject().setX(dropLocation.x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 					action.getObject().setY(dropLocation.y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 					return true;
-				} else
+				} else {
 					return false;
+				}
 			}
 		}
 
@@ -178,8 +183,9 @@ public abstract class AbstractWKFPalette extends DrawingPalette {
 			action.setHandlePaletteOffset(handlePaletteOffset);
 			action.setObject((WKFObject) object.cloneUsingXMLMapping(container.getProcess().instanciateNewBuilder(), true, container
 					.getProcess().getXMLMapping()));
-			if (roleWhereToDrop != null)
+			if (roleWhereToDrop != null) {
 				action.setRoleToAssociate(roleWhereToDrop);
+			}
 			action.setGraphicalContext(SWLEditorConstants.SWIMMING_LANE_EDITOR);
 			action.setHandlePaletteOffset(false);
 			action.setLocation(dropLocation.x, dropLocation.y);

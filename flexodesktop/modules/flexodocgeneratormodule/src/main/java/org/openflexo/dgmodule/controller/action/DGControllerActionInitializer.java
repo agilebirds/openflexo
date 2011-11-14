@@ -92,8 +92,9 @@ public class DGControllerActionInitializer extends DEControllerActionInitializer
 				if (repository instanceof DGRepository) {
 					return getDGController().getProjectGenerator((DGRepository) repository);
 				} else {
-					if (logger.isLoggable(Level.SEVERE))
+					if (logger.isLoggable(Level.SEVERE)) {
 						logger.severe("Cannot create project generator for " + repository);
+					}
 				}
 				return null;
 			}

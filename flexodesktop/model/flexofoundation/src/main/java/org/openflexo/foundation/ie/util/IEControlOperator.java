@@ -84,16 +84,19 @@ public abstract class IEControlOperator extends FlexoObject implements StringCon
 	};
 
 	public static IEControlOperator get(String name) {
-		if (name == null)
+		if (name == null) {
 			return null;
+		}
 		Enumeration en = availableValues.elements();
 		while (en.hasMoreElements()) {
 			IEControlOperator op = (IEControlOperator) en.nextElement();
-			if (name.equals(op.getName()))
+			if (name.equals(op.getName())) {
 				return op;
+			}
 		}
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Could not find an IEControlOperator named: " + name);
+		}
 		return null;
 	}
 

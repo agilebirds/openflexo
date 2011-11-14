@@ -74,14 +74,16 @@ public final class RoleList extends WorkflowModelObject implements DataFlexoObse
 
 	public Role importRole(PPMRole role) throws RoleAlreadyImportedException {
 		Role fir = getImportedObjectWithURI(role.getUri());
-		if (fir != null)
+		if (fir != null) {
 			throw new RoleAlreadyImportedException(role, fir);
+		}
 		fir = Role.createImportedRoleFromRole(this, role);
 		try {
 			addToRoles(fir);
 		} catch (DuplicateRoleException e) {
-			if (logger.isLoggable(Level.SEVERE))
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.log(Level.SEVERE, "Duplicate exception while importing role: " + role + " this should never happen!", e);
+			}
 		}
 		return fir;
 	}
@@ -179,15 +181,17 @@ public final class RoleList extends WorkflowModelObject implements DataFlexoObse
 
 	public void addToRoles(Role aRole, boolean replaceExisting) throws DuplicateRoleException {
 		if (!aRole.isImported() && !isImportedRoleList()) {
-			if (aRole.getName() == null)
+			if (aRole.getName() == null) {
 				aRole.setName(aRole.getIsSystemRole() ? getNextNewSystemRoleName() : getNextNewUserRoleName());
+			}
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("addToRoles with " + aRole.getFullyQualifiedName());
 			}
 			Role roleWithName = roleWithName(aRole.getName());
 			if (roleWithName != null) {
-				if (roleWithName == aRole)
+				if (roleWithName == aRole) {
 					return;
+				}
 				if (!replaceExisting) {
 					if (isDeserializing()) {
 						aRole.setName(aRole.getName() + "-1");
@@ -372,20 +376,23 @@ public final class RoleList extends WorkflowModelObject implements DataFlexoObse
 	}
 
 	public void performAddRole() {
-		if (addRoleActionizer != null)
+		if (addRoleActionizer != null) {
 			addRoleActionizer.run(this, EMPTY_VECTOR);
+		}
 	}
 
 	public void performDeleteRole(Role object) {
-		if (deleteRoleActionizer != null)
+		if (deleteRoleActionizer != null) {
 			deleteRoleActionizer.run(object, EmptyVector.EMPTY_VECTOR(WorkflowModelObject.class));
+		}
 	}
 
 	public FlexoColor getNewRoleColor() {
 		Vector<Color> v = new Vector<Color>();
 		for (Role role : getRoles()) {
-			if (role.getColor() != null)
+			if (role.getColor() != null) {
 				v.add(role.getColor());
+			}
 		}
 		return FlexoColor.getRandomColor(v);
 	}

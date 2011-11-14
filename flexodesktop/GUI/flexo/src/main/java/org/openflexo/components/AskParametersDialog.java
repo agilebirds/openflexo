@@ -39,16 +39,14 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.ColorCst;
-import org.openflexo.FlexoCst;
-
 import org.openflexo.foundation.param.LabelParameter;
 import org.openflexo.foundation.param.ParameterDefinition;
-import org.openflexo.foundation.param.ParametersModel;
 import org.openflexo.foundation.param.ParameterDefinition.ValueListener;
+import org.openflexo.foundation.param.ParametersModel;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.inspector.TabModelView;
-import org.openflexo.inspector.widget.LabelWidget;
 import org.openflexo.inspector.widget.DenaliWidget.WidgetLayout;
+import org.openflexo.inspector.widget.LabelWidget;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.FlexoDialog;
@@ -86,12 +84,14 @@ public class AskParametersDialog extends FlexoDialog implements ValueListener {
 
 	private static final AskParametersDialog _createInstance(FlexoProject project, Frame owner, String windowTitle, String title,
 			ParameterDefinition... parameters) {
-		if (owner != null)
+		if (owner != null) {
 			return new AskParametersDialog(owner, project, windowTitle, title, parameters);
+		}
 		if (FlexoController.getActiveFrame() != null) {
 			return new AskParametersDialog(FlexoController.getActiveFrame(), project, windowTitle, title, parameters);
-		} else if (ProgressWindow.hasInstance())
+		} else if (ProgressWindow.hasInstance()) {
 			return new AskParametersDialog(ProgressWindow.instance().initOwner, project, windowTitle, title, parameters);
+		}
 		return new AskParametersDialog(null, project, windowTitle, title, parameters);
 	}
 
@@ -159,11 +159,12 @@ public class AskParametersDialog extends FlexoDialog implements ValueListener {
 			@Override
 			public String getValue() {
 				if (access.dialog != null) {
-					if (access.dialog.isValidateEnabled())
+					if (access.dialog.isValidateEnabled()) {
 						return "";
-					else
+					} else {
 						return "<html><center><font color=\"red\">" + access.dialog._validationCondition.getErrorMessage()
 								+ "</font></center></html>";
+					}
 				}
 				return "";
 			}
@@ -260,8 +261,9 @@ public class AskParametersDialog extends FlexoDialog implements ValueListener {
 		validate();
 		pack();
 		// GPO: Forces width of dialog to be at least 250px
-		if (getWidth() < 250)
+		if (getWidth() < 250) {
 			setSize(250, getHeight());
+		}
 		paramsPanel.valueChange(_parametersModel);
 
 		SwingUtilities.invokeLater(new Runnable() {
@@ -319,11 +321,13 @@ public class AskParametersDialog extends FlexoDialog implements ValueListener {
 
 	@Override
 	public void newValueWasSet(ParameterDefinition param, Object oldValue, Object newValue) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("newValueWasSet() " + param + " oldValue=" + oldValue + " newValue=" + newValue + " isValidateEnabled()="
 					+ isValidateEnabled());
-		if (_validateButton != null)
+		}
+		if (_validateButton != null) {
 			_validateButton.setEnabled(isValidateEnabled());
+		}
 		if (!param.getName().equals("failure_message")) {
 			update();
 		}
@@ -340,8 +344,9 @@ public class AskParametersDialog extends FlexoDialog implements ValueListener {
 	}
 
 	protected final boolean isValidateEnabled() {
-		if (_validationCondition != null)
+		if (_validationCondition != null) {
 			return _validationCondition.isValid(_parametersModel);
+		}
 		return true;
 	}
 

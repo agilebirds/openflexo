@@ -26,22 +26,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.GeneratorIconLibrary;
-import org.openflexo.javaparser.FJPDMSet;
-import org.openflexo.javaparser.FJPJavaClass;
-import org.openflexo.javaparser.FJPJavaSource;
-import org.openflexo.javaparser.FJPTypeResolver;
-import org.openflexo.javaparser.FJPJavaParseException.FJPParseException;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.sg.action.AcceptDiskUpdateAndReinjectInModel;
-import org.openflexo.sg.action.ReinjectInModel;
-import org.openflexo.sg.file.SGJavaFile;
-import org.openflexo.sgmodule.view.popup.ModelReinjectionPopup;
-import org.openflexo.sgmodule.view.popup.SelectFilesPopup;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.components.MultipleObjectSelectorPopup;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -51,6 +35,21 @@ import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.ModelReinjectableFile;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.generator.file.AbstractCGFile;
+import org.openflexo.icon.GeneratorIconLibrary;
+import org.openflexo.javaparser.FJPDMSet;
+import org.openflexo.javaparser.FJPJavaClass;
+import org.openflexo.javaparser.FJPJavaParseException.FJPParseException;
+import org.openflexo.javaparser.FJPJavaSource;
+import org.openflexo.javaparser.FJPTypeResolver;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.sg.action.AcceptDiskUpdateAndReinjectInModel;
+import org.openflexo.sg.action.ReinjectInModel;
+import org.openflexo.sg.file.SGJavaFile;
+import org.openflexo.sgmodule.view.popup.ModelReinjectionPopup;
+import org.openflexo.sgmodule.view.popup.SelectFilesPopup;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class ReinjectInModelInitializer extends ActionInitializer {
 
@@ -121,8 +120,9 @@ public class ReinjectInModelInitializer extends ActionInitializer {
 							// TODO build context in action, and use this in popup also
 					Hashtable<FJPJavaSource, DMEntity> entries = new Hashtable<FJPJavaSource, DMEntity>();
 					for (SGJavaFile javaFile : selectedJavaFiles) {
-						if (javaFile.getParsedJavaSource() != null)
+						if (javaFile.getParsedJavaSource() != null) {
 							entries.put(javaFile.getParsedJavaSource(), javaFile.getModelEntity());
+						}
 					}
 					FJPDMSet dmSet = new FJPDMSet(getProject(), "updated_classes", entries);
 					Hashtable<FJPJavaClass, Vector<String>> ignoredProperties = new Hashtable<FJPJavaClass, Vector<String>>();

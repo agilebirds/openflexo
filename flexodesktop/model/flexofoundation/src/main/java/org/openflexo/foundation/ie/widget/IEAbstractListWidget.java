@@ -25,12 +25,12 @@ import java.util.Vector;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.bindings.AbstractBinding;
+import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.bindings.BindingModel;
 import org.openflexo.foundation.bindings.BindingValue;
 import org.openflexo.foundation.bindings.BindingVariable;
 import org.openflexo.foundation.bindings.RequiredBindingValidationRule;
 import org.openflexo.foundation.bindings.WidgetBindingDefinition;
-import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.dkv.Domain;
 import org.openflexo.foundation.dkv.DomainDeleted;
 import org.openflexo.foundation.dkv.dm.DKVDataModification;
@@ -237,8 +237,9 @@ public abstract class IEAbstractListWidget extends IEControlWidget implements IE
 	public void setContentType(DMType contentType) {
 		DMType oldContentType = _contentType;
 		_contentType = contentType;
-		if (_contentType != null)
+		if (_contentType != null) {
 			_contentType.setOwner(this);
+		}
 		_bindingListDefinition = null;
 		_bindingItemDefinition = null;
 		setChanged();
@@ -252,15 +253,17 @@ public abstract class IEAbstractListWidget extends IEControlWidget implements IE
 		if (_bindingListDefinition == null) {
 			_bindingListDefinition = new WidgetBindingDefinition("bindingList", DMType.makeListDMType(getContentType(), getProject()),
 					this, BindingDefinitionType.GET, true);
-			if (_bindingList != null)
+			if (_bindingList != null) {
 				_bindingList.setBindingDefinition(_bindingListDefinition);
+			}
 		}
 		return _bindingListDefinition;
 	}
 
 	public AbstractBinding getBindingList() {
-		if (isBeingCloned())
+		if (isBeingCloned()) {
 			return null;
+		}
 		return _bindingList;
 	}
 
@@ -277,15 +280,17 @@ public abstract class IEAbstractListWidget extends IEControlWidget implements IE
 	public WidgetBindingDefinition getBindingItemDefinition() {
 		if (_bindingItemDefinition == null) {
 			_bindingItemDefinition = new WidgetBindingDefinition("bindingItem", getContentType(), this, BindingDefinitionType.GET_SET, true);
-			if (_bindingItem != null)
+			if (_bindingItem != null) {
 				_bindingItem.setBindingDefinition(_bindingItemDefinition);
+			}
 		}
 		return _bindingItemDefinition;
 	}
 
 	public BindingValue getBindingItem() {
-		if (isBeingCloned())
+		if (isBeingCloned()) {
 			return null;
+		}
 		return _bindingItem;
 	}
 
@@ -304,8 +309,9 @@ public abstract class IEAbstractListWidget extends IEControlWidget implements IE
 	}
 
 	public AbstractBinding getBindingNoSelectionString() {
-		if (isBeingCloned())
+		if (isBeingCloned()) {
 			return null;
+		}
 		return _bindingNoSelectionString;
 	}
 
@@ -322,8 +328,9 @@ public abstract class IEAbstractListWidget extends IEControlWidget implements IE
 	public abstract WidgetBindingDefinition getBindingSelectionDefinition();
 
 	public BindingValue getBindingSelection() {
-		if (isBeingCloned())
+		if (isBeingCloned()) {
 			return null;
+		}
 		return _bindingSelection;
 	}
 
@@ -342,10 +349,12 @@ public abstract class IEAbstractListWidget extends IEControlWidget implements IE
 	}
 
 	public void setDropdownType(DropDownType type) {
-		if (_dropdownType == type)
+		if (_dropdownType == type) {
 			return;
-		if (isDKV())
+		}
+		if (isDKV()) {
 			setDomain(null);
+		}
 		_dropdownType = type;
 		setChanged();
 		notifyObservers(new IEDataModification("dropdownType", null, type));
@@ -415,13 +424,15 @@ public abstract class IEAbstractListWidget extends IEControlWidget implements IE
 
 	@Override
 	public String getFullyQualifiedName() {
-		if (getLabel() != null && getLabel().trim().length() > 0)
+		if (getLabel() != null && getLabel().trim().length() > 0) {
 			return getWOComponent().getName() + " - " + getLabel() + " (Dropdown)";
+		}
 		String tmpLabel = getCalculatedLabel();
-		if (tmpLabel != null)
+		if (tmpLabel != null) {
 			return getWOComponent().getName() + " - " + tmpLabel + " (Dropdown)";
-		else
+		} else {
 			return getWOComponent().getName() + " - Flexo ID: " + getFlexoID() + " (Dropdown)";
+		}
 	}
 
 	public String getBehavior() {
@@ -495,8 +506,9 @@ public abstract class IEAbstractListWidget extends IEControlWidget implements IE
 	public Domain getDomain() {
 		if (domain == null && domainName != null) {
 			domain = getProject().getDKVModel().getDomainNamed(domainName);
-			if (domain == null)
+			if (domain == null) {
 				this.domainName = null;
+			}
 		}
 		return domain;
 	}
@@ -511,10 +523,11 @@ public abstract class IEAbstractListWidget extends IEControlWidget implements IE
 	}
 
 	public String getDomainName() {
-		if (getDomain() != null)
+		if (getDomain() != null) {
 			return getDomain().getName();
-		else
+		} else {
 			return null;
+		}
 	}
 
 	public void setDomainName(String domainName) {
@@ -549,8 +562,9 @@ public abstract class IEAbstractListWidget extends IEControlWidget implements IE
 		} else if (obj instanceof DKVDataModification) {
 			setChanged();
 			notifyObservers(new ListOfValuesHasChanged(new Object(), new Object()));
-		} else
+		} else {
 			super.update(observable, obj);
+		}
 	}
 
 	/**

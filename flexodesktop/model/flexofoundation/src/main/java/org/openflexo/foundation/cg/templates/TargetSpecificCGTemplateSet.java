@@ -50,8 +50,9 @@ public class TargetSpecificCGTemplateSet extends CGDirectoryTemplateSet {
 
 	@Override
 	public String getName() {
-		if (getTargetType() != null)
+		if (getTargetType() != null) {
 			return getTargetType().getLocalizedName();
+		}
 		return "<No target>";
 	}
 

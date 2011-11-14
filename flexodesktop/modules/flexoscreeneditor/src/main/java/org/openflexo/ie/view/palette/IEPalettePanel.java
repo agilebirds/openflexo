@@ -47,10 +47,11 @@ public class IEPalettePanel extends PalettePanel implements FlexoObserver {
 		super(palette);
 		setName(FlexoLocalization.localizedForKey(keyName, this));
 		setBackground(Color.WHITE);
-		if (ToolBox.getPLATFORM() == ToolBox.MACOS)
+		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 			setLayout(new FlowLayout(FlowLayout.LEFT, 3, 3));
-		else
+		} else {
 			setLayout(new FlowLayout(FlowLayout.LEFT));
+		}
 		this.model = model;
 		model.addObserver(this);
 		refresh();

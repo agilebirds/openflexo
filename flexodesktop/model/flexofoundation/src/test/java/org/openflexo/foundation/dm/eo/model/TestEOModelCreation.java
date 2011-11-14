@@ -23,17 +23,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.openflexo.foundation.dm.eo.DMEOAdaptorType;
-import org.openflexo.foundation.dm.eo.model.EOAttribute;
-import org.openflexo.foundation.dm.eo.model.EOEntity;
-import org.openflexo.foundation.dm.eo.model.EOJoin;
-import org.openflexo.foundation.dm.eo.model.EOModel;
-import org.openflexo.foundation.dm.eo.model.EOModelGroup;
-import org.openflexo.foundation.dm.eo.model.EORelationship;
-import org.openflexo.foundation.dm.eo.model.InvalidJoinException;
-import org.openflexo.foundation.dm.eo.model.PropertyListDeserializationException;
-
 import junit.framework.TestCase;
+
+import org.openflexo.foundation.dm.eo.DMEOAdaptorType;
 
 /**
  * @author gpolet

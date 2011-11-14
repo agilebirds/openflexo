@@ -46,8 +46,9 @@ public class DefaultHelpRetriever implements HelpRetriever {
 	 */
 	@Override
 	public String shortHelpForObject(FlexoModelObject object) {
-		if (!(object instanceof InspectableObject))
+		if (!(object instanceof InspectableObject)) {
 			return null;
+		}
 		Language language = _docResourceManager.getLanguage(GeneralPreferences.getLanguage());
 
 		DocItem propertyModelItem = _docResourceManager.getDocItemFor(((InspectableObject) object));
@@ -66,8 +67,9 @@ public class DefaultHelpRetriever implements HelpRetriever {
 	 */
 	@Override
 	public String longHelpForObject(FlexoModelObject object) {
-		if (!(object instanceof InspectableObject))
+		if (!(object instanceof InspectableObject)) {
 			return null;
+		}
 		Language language = DocResourceManager.instance().getLanguage(GeneralPreferences.getLanguage());
 
 		DocItem propertyModelItem = _docResourceManager.getDocItemFor(((InspectableObject) object));

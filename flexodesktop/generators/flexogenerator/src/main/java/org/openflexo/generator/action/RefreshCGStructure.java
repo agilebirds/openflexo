@@ -50,8 +50,9 @@ public class RefreshCGStructure extends GCAction<RefreshCGStructure, CGObject> {
 
 		@Override
 		protected boolean isVisibleForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) {
-			if (focusedObject instanceof AbstractCGFileVersion)
+			if (focusedObject instanceof AbstractCGFileVersion) {
 				return false;
+			}
 			return (focusedObject instanceof AbstractCGFile);
 		}
 

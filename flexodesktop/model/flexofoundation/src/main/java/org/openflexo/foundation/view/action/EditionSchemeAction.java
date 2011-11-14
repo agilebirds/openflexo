@@ -102,8 +102,9 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 					return null;
 				}
 			});
-			if (defaultValue != null)
+			if (defaultValue != null) {
 				parameterValues.put(parameter.getName(), defaultValue);
+			}
 			if (!parameter.isValid(this, defaultValue)) {
 				logger.info("Parameter " + parameter + " is not valid for value " + defaultValue);
 				returned = false;
@@ -113,14 +114,16 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 	}
 
 	public FlexoProject getProject() {
-		if (getFocusedObject() != null)
+		if (getFocusedObject() != null) {
 			return getFocusedObject().getProject();
+		}
 		return null;
 	}
 
 	public EditionPattern getEditionPattern() {
-		if (getEditionScheme() != null)
+		if (getEditionScheme() != null) {
 			return getEditionScheme().getEditionPattern();
+		}
 		return null;
 	}
 
@@ -263,12 +266,11 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 		ViewShape newShape = new ViewShape(retrieveOEShema());
 
 		// If an overriden graphical representation is defined, use it
-		if (getOverridenGraphicalRepresentation() != null)
+		if (getOverridenGraphicalRepresentation() != null) {
 			newShape.setGraphicalRepresentation(getOverridenGraphicalRepresentation());
-
-		// Otherwise take the default one defined in Pattern Role
-		else if (action.getPatternRole().getGraphicalRepresentation() != null)
+		} else if (action.getPatternRole().getGraphicalRepresentation() != null) {
 			newShape.setGraphicalRepresentation(action.getPatternRole().getGraphicalRepresentation());
+		}
 
 		// Register reference
 		newShape.registerEditionPatternReference(getEditionPatternInstance(), action.getPatternRole());
@@ -391,12 +393,15 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 		OntologyObjectProperty property = (OntologyObjectProperty) action.getObjectProperty();
 		OntologyObject subject = action.getPropertySubject(this);
 		OntologyObject object = action.getPropertyObject(this);
-		if (property == null)
+		if (property == null) {
 			return null;
-		if (subject == null)
+		}
+		if (subject == null) {
 			return null;
-		if (object == null)
+		}
+		if (object == null) {
 			return null;
+		}
 		subject.getOntResource().addProperty(property.getOntProperty(), object.getOntResource());
 		subject.updateOntologyStatements();
 		return subject.getObjectPropertyStatement(property);
@@ -425,16 +430,16 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 		ViewShape toShape = action.getToShape(this);
 		ViewConnector newConnector = new ViewConnector(fromShape.getShema(), fromShape, toShape);
 		ViewObject parent = ViewObject.getFirstCommonAncestor(fromShape, toShape);
-		if (parent == null)
+		if (parent == null) {
 			throw new IllegalArgumentException("No common ancestor");
+		}
 
 		// If an overriden graphical representation is defined, use it
-		if (getOverridenGraphicalRepresentation() != null)
+		if (getOverridenGraphicalRepresentation() != null) {
 			newConnector.setGraphicalRepresentation(getOverridenGraphicalRepresentation());
-
-		// Otherwise take the default one defined in Pattern Role
-		else if (action.getPatternRole().getGraphicalRepresentation() != null)
+		} else if (action.getPatternRole().getGraphicalRepresentation() != null) {
 			newConnector.setGraphicalRepresentation(action.getPatternRole().getGraphicalRepresentation());
+		}
 
 		parent.addToChilds(newConnector);
 
@@ -559,8 +564,9 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<?>> exte
 		if (variable instanceof EditionSchemeParameterListPathElement) {
 			return parameterValues;
 		} else if (variable instanceof ViewPathElement) {
-			if (variable.getVariableName().equals(EditionScheme.TOP_LEVEL))
+			if (variable.getVariableName().equals(EditionScheme.TOP_LEVEL)) {
 				return retrieveOEShema();
+			}
 		} else if (variable instanceof PatternRolePathElement) {
 			return getEditionPatternInstance().getPatternActor(((PatternRolePathElement) variable).getPatternRole());
 		}

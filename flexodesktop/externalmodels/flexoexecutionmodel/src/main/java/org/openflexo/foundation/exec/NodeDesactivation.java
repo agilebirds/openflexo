@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 import org.openflexo.antar.ControlGraph;
 import org.openflexo.antar.Procedure;
 import org.openflexo.antar.ProcedureCall;
-
 import org.openflexo.foundation.bindings.BindingAssignment;
 import org.openflexo.foundation.wkf.edge.ExternalMessageInEdge;
 import org.openflexo.foundation.wkf.edge.FlexoPostCondition;
@@ -158,8 +157,9 @@ public abstract class NodeDesactivation<N extends FlexoNode> extends ControlGrap
 
 		if (getNode().getDesactivationAssignments().size() > 0) {
 			Vector<ControlGraph> allAssignments = new Vector<ControlGraph>();
-			for (BindingAssignment assignment : getNode().getDesactivationAssignments())
+			for (BindingAssignment assignment : getNode().getDesactivationAssignments()) {
 				allAssignments.add(makeControlGraphForAssignment(assignment));
+			}
 			EXECUTE_DESACTIVATION_ASSIGNMENTS = makeSequentialControlGraph(allAssignments);
 			EXECUTE_DESACTIVATION_ASSIGNMENTS.setHeaderComment("Perform assignments declared for desactivation of node "
 					+ getNode().getName());

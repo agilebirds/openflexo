@@ -105,7 +105,7 @@ class BindingExpressionSelectorPanel extends BindingSelector.AbstractBindingSele
 			_bindingSelector._editedObject = _bindingSelector.makeBindingExpression();
 		}
 
-		if (BindingSelector.logger.isLoggable(Level.FINE))
+		if (BindingSelector.logger.isLoggable(Level.FINE)) {
 			BindingSelector.logger
 					.fine("init() called in BindingExpressionSelectorPanel with "
 							+ _bindingSelector.getEditedObject()
@@ -113,6 +113,7 @@ class BindingExpressionSelectorPanel extends BindingSelector.AbstractBindingSele
 							+ (_bindingSelector.getEditedObject() != null
 									&& _bindingSelector.getEditedObject() instanceof BindingExpression ? ((BindingExpression) _bindingSelector
 									.getEditedObject()).getExpression() : null));
+		}
 
 		_expressionPanel = new BindingExpressionPanel((BindingExpression) _bindingSelector.getEditedObject()) {
 			@Override
@@ -171,8 +172,9 @@ class BindingExpressionSelectorPanel extends BindingSelector.AbstractBindingSele
 
 	@Override
 	protected void update() {
-		if (BindingSelector.logger.isLoggable(Level.FINE))
+		if (BindingSelector.logger.isLoggable(Level.FINE)) {
 			BindingSelector.logger.fine("update() called for BindingExpressionSelectorPanel");
+		}
 
 		if (_bindingSelector.getEditedObject() != null && !(_bindingSelector.getEditedObject() instanceof BindingExpression)) {
 			BindingSelector.logger.warning("update() called in BindingExpressionSelectorPanel with object of type "
@@ -200,8 +202,9 @@ class BindingExpressionSelectorPanel extends BindingSelector.AbstractBindingSele
 		// Update apply button state
 		_applyButton.setEnabled((bindingExpression != null) && (bindingExpression.isBindingValid()));
 		if ((bindingExpression != null) && (bindingExpression.isBindingValid())) {
-			if (ToolBox.getPLATFORM() == ToolBox.MACOS)
+			if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 				_applyButton.setSelected(true);
+			}
 		}
 		if (bindingExpression != null) {
 			_bindingSelector.getTextField().setForeground(bindingExpression.isBindingValid() ? Color.BLACK : Color.RED);

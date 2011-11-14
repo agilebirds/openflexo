@@ -48,12 +48,14 @@ public abstract class FlexoOntologyElement extends BrowserElement {
 				addToChilds(concept);
 			}
 			for (OntologyProperty property : getOntology().getObjectProperties()) {
-				if (!getProjectBrowser().showOnlyAnnotationProperties() || property.isAnnotationProperty())
+				if (!getProjectBrowser().showOnlyAnnotationProperties() || property.isAnnotationProperty()) {
 					addToChilds(property);
+				}
 			}
 			for (OntologyProperty property : getOntology().getDataProperties()) {
-				if (!getProjectBrowser().showOnlyAnnotationProperties() || property.isAnnotationProperty())
+				if (!getProjectBrowser().showOnlyAnnotationProperties() || property.isAnnotationProperty()) {
 					addToChilds(property);
+				}
 			}
 			for (OntologyIndividual concept : getOntology().getIndividuals()) {
 				addToChilds(concept);

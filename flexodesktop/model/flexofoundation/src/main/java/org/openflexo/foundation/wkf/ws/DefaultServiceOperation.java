@@ -73,8 +73,9 @@ public class DefaultServiceOperation extends ServiceOperation implements Inspect
 	@Override
 	public void setInputMessageDefinition(ServiceMessageDefinition aMessageDefinition) {
 		// not possible.
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Set MessageDefinition on a Default Service Operation !");
+		}
 	}
 
 	@Override
@@ -91,8 +92,9 @@ public class DefaultServiceOperation extends ServiceOperation implements Inspect
 
 	@Override
 	public void setOutputMessageDefinition(ServiceMessageDefinition aMessageDefinition) {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Set MessageDefinition on a Default Service Operation !");
+		}
 	}
 
 	@Override

@@ -72,7 +72,7 @@ public class IEDSWidgetView extends IEPanel {
 		this.dsListener = new DSListener();
 		// component, action, listener
 		this.dragSource.createDefaultDragGestureRecognizer(this, this.dragAction, this.dgListener);
-		if (addDeleteSupport)
+		if (addDeleteSupport) {
 			addMouseListener(new MouseListener() {
 
 				private Component invoker;
@@ -117,6 +117,7 @@ public class IEDSWidgetView extends IEPanel {
 				}
 
 			});
+		}
 
 	}
 
@@ -177,8 +178,9 @@ public class IEDSWidgetView extends IEPanel {
 		public void dragGestureRecognized(DragGestureEvent e) {
 			// if the action is ok we go ahead
 			// otherwise we punt
-			if ((e.getDragAction() & IEDSWidgetView.this.dragAction) == 0)
+			if ((e.getDragAction() & IEDSWidgetView.this.dragAction) == 0) {
 				return;
+			}
 			// get the label's text and put it inside a Transferable
 			// Transferable transferable = new StringSelection(
 			// DragLabel.this.getText() );
@@ -218,8 +220,9 @@ public class IEDSWidgetView extends IEPanel {
 			 */
 
 			// this is the action selected by the drop target
-			if (e.getDropAction() == DnDConstants.ACTION_MOVE)
+			if (e.getDropAction() == DnDConstants.ACTION_MOVE) {
 				IEDSWidgetView.this.setName("");
+			}
 		}
 
 		/**
@@ -247,18 +250,24 @@ public class IEDSWidgetView extends IEPanel {
 		}
 
 		private String printAction(int i) {
-			if (i == DnDConstants.ACTION_COPY)
+			if (i == DnDConstants.ACTION_COPY) {
 				return "ACTION_COPY (" + i + ")";
-			if (i == DnDConstants.ACTION_COPY_OR_MOVE)
+			}
+			if (i == DnDConstants.ACTION_COPY_OR_MOVE) {
 				return "ACTION_COPY_OR_MOVE (" + i + ")";
-			if (i == DnDConstants.ACTION_MOVE)
+			}
+			if (i == DnDConstants.ACTION_MOVE) {
 				return "ACTION_MOVE (" + i + ")";
-			if (i == DnDConstants.ACTION_LINK)
+			}
+			if (i == DnDConstants.ACTION_LINK) {
 				return "ACTION_LINK (" + i + ")";
-			if (i == DnDConstants.ACTION_REFERENCE)
+			}
+			if (i == DnDConstants.ACTION_REFERENCE) {
 				return "ACTION_REFERENCE (" + i + ")";
-			if (i == DnDConstants.ACTION_NONE)
+			}
+			if (i == DnDConstants.ACTION_NONE) {
 				return "ACTION_NONE (" + i + ")";
+			}
 			return "ACTION_UNKNOWN (" + i + ")";
 		}
 

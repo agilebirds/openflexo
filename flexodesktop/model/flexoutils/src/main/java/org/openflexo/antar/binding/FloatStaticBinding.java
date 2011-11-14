@@ -61,12 +61,14 @@ public class FloatStaticBinding extends StaticBinding<Double> {
 
 	@Override
 	protected boolean _areTypesMatching() {
-		if (getBindingDefinition().getType() == null)
+		if (getBindingDefinition().getType() == null) {
 			return true;
+		}
 
 		if (getBindingDefinition().getType().equals(Double.class) || getBindingDefinition().getType().equals(Double.TYPE)
-				|| getBindingDefinition().getType().equals(Float.class) || getBindingDefinition().getType().equals(Float.TYPE))
+				|| getBindingDefinition().getType().equals(Float.class) || getBindingDefinition().getType().equals(Float.TYPE)) {
 			return true;
+		}
 
 		return super._areTypesMatching();
 	}

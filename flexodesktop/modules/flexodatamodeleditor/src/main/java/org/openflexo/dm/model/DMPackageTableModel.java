@@ -27,15 +27,13 @@ import javax.swing.Icon;
 import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.components.tabular.model.EditableStringColumn;
 import org.openflexo.components.tabular.model.IconColumn;
-import org.openflexo.dm.view.controller.DMController;
+import org.openflexo.foundation.dm.DMPackage;
+import org.openflexo.foundation.dm.DMRepository;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ReservedKeyword;
 import org.openflexo.view.controller.FlexoController;
-
-import org.openflexo.foundation.dm.DMPackage;
-import org.openflexo.foundation.dm.DMRepository;
-import org.openflexo.foundation.rm.FlexoProject;
 
 /**
  * Please comment this class
@@ -77,8 +75,9 @@ public class DMPackageTableModel extends AbstractModel<DMRepository, DMPackage> 
 			@Override
 			public void setValue(DMPackage aPackage, String aValue) {
 				try {
-					if (ReservedKeyword.contains(aValue))
+					if (ReservedKeyword.contains(aValue)) {
 						throw new InvalidNameException(aValue + " is a reserved keyword.");
+					}
 					aPackage.setName(aValue);
 				} catch (InvalidNameException e) {
 					FlexoController.showError(FlexoLocalization.localizedForKey("reserved_word"));

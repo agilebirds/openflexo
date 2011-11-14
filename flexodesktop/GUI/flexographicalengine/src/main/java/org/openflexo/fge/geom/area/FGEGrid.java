@@ -25,9 +25,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.geom.FGEAbstractLine;
 import org.openflexo.fge.geom.FGEGeometricObject;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.graphics.FGEGraphics;
 import org.openflexo.logging.FlexoLogger;
 
@@ -59,8 +59,9 @@ public class FGEGrid implements FGEArea {
 
 	@Override
 	public boolean containsArea(FGEArea a) {
-		if (a instanceof FGEPoint)
+		if (a instanceof FGEPoint) {
 			return containsPoint((FGEPoint) a);
+		}
 		if (a instanceof FGEGrid) {
 			FGEGrid grid = ((FGEGrid) a);
 			return grid.origin.equals(origin) && grid.hStep == hStep && grid.vStep == vStep;
@@ -147,8 +148,9 @@ public class FGEGrid implements FGEArea {
 
 	@Override
 	public void paint(FGEGraphics g) {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("TODO");
+		}
 	}
 
 	@Override

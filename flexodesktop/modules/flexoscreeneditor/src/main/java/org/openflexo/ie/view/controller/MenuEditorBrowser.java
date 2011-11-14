@@ -57,8 +57,9 @@ public class MenuEditorBrowser extends ProjectBrowser implements FlexoObserver {
 
 	@Override
 	public FlexoModelObject getDefaultRootObject() {
-		if (getProject() == null)
+		if (getProject() == null) {
 			logger.severe("project is null");
+		}
 		return getProject().getFlexoNavigationMenu().getRootMenu();
 	}
 

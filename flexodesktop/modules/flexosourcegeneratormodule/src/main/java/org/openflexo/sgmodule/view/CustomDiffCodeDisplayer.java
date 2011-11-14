@@ -23,18 +23,17 @@ import java.awt.BorderLayout;
 import java.util.logging.Logger;
 
 import org.openflexo.diff.ComputeDiff;
+import org.openflexo.foundation.rm.cg.ASCIIFile;
+import org.openflexo.foundation.rm.cg.ASCIIFileResource;
+import org.openflexo.foundation.rm.cg.ContentSource;
+import org.openflexo.foundation.rm.cg.ContentSource.ContentSourceType;
+import org.openflexo.foundation.rm.cg.WOFile;
+import org.openflexo.foundation.rm.cg.WOFileResource;
+import org.openflexo.generator.rm.GenerationAvailableFileResource;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.sgmodule.controller.SGController;
 import org.openflexo.swing.diff.DiffPanel;
 import org.openflexo.toolbox.TokenMarkerStyle;
-
-import org.openflexo.foundation.rm.cg.ASCIIFile;
-import org.openflexo.foundation.rm.cg.ASCIIFileResource;
-import org.openflexo.foundation.rm.cg.ContentSource;
-import org.openflexo.foundation.rm.cg.WOFile;
-import org.openflexo.foundation.rm.cg.WOFileResource;
-import org.openflexo.foundation.rm.cg.ContentSource.ContentSourceType;
-import org.openflexo.generator.rm.GenerationAvailableFileResource;
 
 public class CustomDiffCodeDisplayer extends DiffCodeDisplayer {
 
@@ -72,8 +71,9 @@ public class CustomDiffCodeDisplayer extends DiffCodeDisplayer {
 		@Override
 		public void update() {
 			removeAll();
-			if ((getLeft() == null) || (getRight() == null))
+			if ((getLeft() == null) || (getRight() == null)) {
 				return;
+			}
 			_diffReport = ComputeDiff.diff(getLeft(), getRight());
 			String leftLabel = (_left != null ? _left.getStringRepresentation() : "null");
 			String rightLabel = (_right != null ? _right.getStringRepresentation() : "null");
@@ -85,8 +85,9 @@ public class CustomDiffCodeDisplayer extends DiffCodeDisplayer {
 		}
 
 		public String getLeft() {
-			if (_left == null)
+			if (_left == null) {
 				return "";
+			}
 			if (getResource() instanceof ASCIIFileResource) {
 				if (_left.getType() == ContentSourceType.PureGeneration) {
 					return ((ASCIIFileResource) getResource()).getCurrentGeneration();
@@ -97,8 +98,9 @@ public class CustomDiffCodeDisplayer extends DiffCodeDisplayer {
 		}
 
 		public String getRight() {
-			if (_right == null)
+			if (_right == null) {
 				return "";
+			}
 			if (getResource() instanceof ASCIIFileResource) {
 				if (_right.getType() == ContentSourceType.PureGeneration) {
 					return ((ASCIIFileResource) getResource()).getCurrentGeneration();
@@ -121,8 +123,9 @@ public class CustomDiffCodeDisplayer extends DiffCodeDisplayer {
 
 				@Override
 				public String getLeft() {
-					if (_left == null)
+					if (_left == null) {
 						return "";
+					}
 					if (getResource() instanceof WOFileResource) {
 						if (_left.getType() == ContentSourceType.PureGeneration) {
 							return ((WOFileResource) getResource()).getCurrentHTMLGeneration();
@@ -134,8 +137,9 @@ public class CustomDiffCodeDisplayer extends DiffCodeDisplayer {
 
 				@Override
 				public String getRight() {
-					if (_right == null)
+					if (_right == null) {
 						return "";
+					}
 					if (getResource() instanceof WOFileResource) {
 						if (_right.getType() == ContentSourceType.PureGeneration) {
 							return ((WOFileResource) getResource()).getCurrentHTMLGeneration();
@@ -153,8 +157,9 @@ public class CustomDiffCodeDisplayer extends DiffCodeDisplayer {
 
 				@Override
 				public String getLeft() {
-					if (_left == null)
+					if (_left == null) {
 						return "";
+					}
 					if (getResource() instanceof WOFileResource) {
 						if (_left.getType() == ContentSourceType.PureGeneration) {
 							return ((WOFileResource) getResource()).getCurrentWODGeneration();
@@ -166,8 +171,9 @@ public class CustomDiffCodeDisplayer extends DiffCodeDisplayer {
 
 				@Override
 				public String getRight() {
-					if (_right == null)
+					if (_right == null) {
 						return "";
+					}
 					if (getResource() instanceof WOFileResource) {
 						if (_right.getType() == ContentSourceType.PureGeneration) {
 							return ((WOFileResource) getResource()).getCurrentWODGeneration();
@@ -185,8 +191,9 @@ public class CustomDiffCodeDisplayer extends DiffCodeDisplayer {
 
 				@Override
 				public String getLeft() {
-					if (_left == null)
+					if (_left == null) {
 						return "";
+					}
 					if (getResource() instanceof WOFileResource) {
 						if (_left.getType() == ContentSourceType.PureGeneration) {
 							return ((WOFileResource) getResource()).getCurrentWOOGeneration();
@@ -198,8 +205,9 @@ public class CustomDiffCodeDisplayer extends DiffCodeDisplayer {
 
 				@Override
 				public String getRight() {
-					if (_right == null)
+					if (_right == null) {
 						return "";
+					}
 					if (getResource() instanceof WOFileResource) {
 						if (_right.getType() == ContentSourceType.PureGeneration) {
 							return ((WOFileResource) getResource()).getCurrentWOOGeneration();

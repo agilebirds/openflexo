@@ -48,12 +48,15 @@ public class EditedDrawing extends DefaultDrawing<MyDrawing> {
 	@Override
 	@SuppressWarnings("unchecked")
 	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable) {
-		if (aDrawable == getModel())
+		if (aDrawable == getModel()) {
 			return (GraphicalRepresentation<O>) getDrawingGraphicalRepresentation();
-		if (aDrawable instanceof MyShape)
+		}
+		if (aDrawable instanceof MyShape) {
 			return (GraphicalRepresentation<O>) ((MyShape) aDrawable).getGraphicalRepresentation();
-		if (aDrawable instanceof MyConnector)
+		}
+		if (aDrawable instanceof MyConnector) {
 			return (GraphicalRepresentation<O>) ((MyConnector) aDrawable).getGraphicalRepresentation();
+		}
 		(new Exception()).printStackTrace();
 		return null;
 	}

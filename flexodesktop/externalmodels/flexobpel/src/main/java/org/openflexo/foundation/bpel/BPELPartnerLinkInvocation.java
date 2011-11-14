@@ -140,10 +140,12 @@ public class BPELPartnerLinkInvocation {
 	}
 
 	public String getName() {
-		if (process == null)
+		if (process == null) {
 			return "process is null";
-		if (process.getName() == null)
+		}
+		if (process.getName() == null) {
 			return "null";
+		}
 		return process.getName();
 	}
 

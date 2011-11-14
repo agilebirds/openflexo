@@ -77,8 +77,9 @@ public class FIBDependancy extends FIBModelObject {
 	}
 
 	public String getMasterComponentName() {
-		if (getMasterComponent() != null)
+		if (getMasterComponent() != null) {
 			return getMasterComponent().getName();
+		}
 		return masterComponentName;
 	}
 

@@ -103,19 +103,21 @@ public abstract class JavaClassGenerator extends FlexoResourceGenerator<DMEntity
 
 	@Override
 	public final void generate(boolean forceRegenerate) {
-		if (!forceRegenerate && !needsGeneration())
+		if (!forceRegenerate && !needsGeneration()) {
 			return;
+		}
 		try {
 			startGeneration();
 			String javaCode = merge(getTemplateName(), defaultContext());
 			javaAppendingException = null;
-			if (getEntity() != null)
+			if (getEntity() != null) {
 				try {
 					javaCode = JavaCodeMerger.mergeJavaCode(javaCode, getEntity(), javaResource);
 				} catch (JavaParseException e) {
 					javaAppendingException = new JavaAppendingException(this, getEntity().getFullQualifiedName(), e);
 					logger.warning("Could not parse generated code. Escape java merge.");
 				}
+			}
 			try {
 				_javaFormattingException = null;
 				// logger.info("Avant formattage: "+javaCode);

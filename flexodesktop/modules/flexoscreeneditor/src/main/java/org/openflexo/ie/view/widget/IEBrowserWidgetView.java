@@ -93,12 +93,13 @@ public class IEBrowserWidgetView extends AbstractInnerTableWidgetView<IEBrowserW
 		public Dimension getPreferredSize() {
 			Dimension d;
 			d = jList.getPreferredScrollableViewportSize();
-			if (getBrowserModel().getSize() == 0)
+			if (getBrowserModel().getSize() == 0) {
 				d.width = 30;// Minimal size
-			else {
+			} else {
 				d.width += (getInsets().left + getInsets().right + jList.getInsets().left + jList.getInsets().right);
-				if (getVerticalScrollBar() != null && getVerticalScrollBar().isVisible())
+				if (getVerticalScrollBar() != null && getVerticalScrollBar().isVisible()) {
 					d.width += getVerticalScrollBar().getWidth();
+				}
 			}
 			d.height += (jList.getInsets().top + jList.getInsets().bottom);
 			return d;
@@ -125,12 +126,14 @@ public class IEBrowserWidgetView extends AbstractInnerTableWidgetView<IEBrowserW
 	public Dimension getPreferredSize() {
 		if (getHoldsNextComputedPreferredSize()) {
 			Dimension storedSize = storedPrefSize();
-			if (storedSize != null)
+			if (storedSize != null) {
 				return storedSize;
+			}
 		}
 		Dimension d = super.getPreferredSize();
-		if (getHoldsNextComputedPreferredSize())
+		if (getHoldsNextComputedPreferredSize()) {
 			storePrefSize(d);
+		}
 		return d;
 	}
 
@@ -144,8 +147,9 @@ public class IEBrowserWidgetView extends AbstractInnerTableWidgetView<IEBrowserW
 			_jList.setVisibleRowCount(getBrowserModel().getVisibleRows());
 			doLayout();
 			repaint();
-		} else
+		} else {
 			super.update(observable, dataModification);
+		}
 	}
 
 	/**

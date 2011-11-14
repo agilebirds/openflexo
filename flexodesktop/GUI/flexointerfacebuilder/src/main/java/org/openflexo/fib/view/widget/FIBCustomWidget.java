@@ -62,8 +62,9 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 			logger.warning("Could not instanciate component: ClassCastException, see logs for details");
 			e.printStackTrace();
 		}
-		if (customComponent != null)
+		if (customComponent != null) {
 			customComponent.addApplyCancelListener(this);
+		}
 
 		updateFont();
 	}
@@ -157,15 +158,17 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 
 	@Override
 	public J getJComponent() {
-		if (customComponent == null)
+		if (customComponent == null) {
 			return (J) ERROR_LABEL;
+		}
 		return customComponent.getJComponent();
 	}
 
 	@Override
 	public J getDynamicJComponent() {
-		if (customComponent != null)
+		if (customComponent != null) {
 			return customComponent.getJComponent();
+		}
 		return null;
 	}
 
@@ -215,8 +218,9 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 
 	@Override
 	public Object getValue(BindingVariable variable) {
-		if (variable.getVariableName().equals("component"))
+		if (variable.getVariableName().equals("component")) {
 			return customComponent;
+		}
 		return null;
 	}
 
@@ -227,8 +231,9 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 
 	@Override
 	public FIBSelectable getSelectableComponent() {
-		if (isSelectableComponent())
+		if (isSelectableComponent()) {
 			return (FIBSelectable) customComponent;
+		}
 		return null;
 	}
 

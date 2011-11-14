@@ -208,8 +208,9 @@ public class DMRelationshipGR extends ConnectorGraphicalRepresentation<Relations
 
 	private void ensurePolylinConverterIsRegistered() {
 		if (!isPolylinConverterRegistered) {
-			if (getProperty().getProject().getStringEncoder()._converterForClass(FGERectPolylin.class) == null)
+			if (getProperty().getProject().getStringEncoder()._converterForClass(FGERectPolylin.class) == null) {
 				getProperty().getProject().getStringEncoder()._addConverter(RECT_POLYLIN_CONVERTER);
+			}
 			isPolylinConverterRegistered = true;
 		}
 

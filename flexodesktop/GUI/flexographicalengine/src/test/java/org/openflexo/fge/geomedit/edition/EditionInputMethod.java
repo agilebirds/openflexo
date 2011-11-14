@@ -246,8 +246,9 @@ public abstract class EditionInputMethod<O extends Object, I extends EditionInpu
 	protected void addChildInput(EditionInput input) {
 		hasChildInputs = true;
 		currentChildInputStep = 0;
-		if (childInputs == null)
+		if (childInputs == null) {
 			childInputs = new Vector<EditionInput>();
+		}
 		childInputs.add(input);
 		input.setParentInputMethod(this);
 	}

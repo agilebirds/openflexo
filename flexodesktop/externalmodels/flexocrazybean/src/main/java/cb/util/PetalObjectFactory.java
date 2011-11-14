@@ -93,8 +93,9 @@ public class PetalObjectFactory {
 			String file = "/templates/" + name + ".ser";
 			InputStream is = PetalObjectFactory.class.getResourceAsStream(file);
 
-			if (is == null)
+			if (is == null) {
 				throw new RuntimeException("File not found: " + file);
+			}
 
 			ObjectInputStream ois = new ObjectInputStream(is);
 
@@ -179,10 +180,11 @@ public class PetalObjectFactory {
 		op.setQuid(PetalFile.getQuid());
 		op.setNameParameter(name);
 
-		if (result != null)
+		if (result != null) {
 			op.setResult(result);
-		else
+		} else {
 			op.removeProperty("result");
+		}
 
 		op.setParameters(params);
 
@@ -366,8 +368,9 @@ public class PetalObjectFactory {
 			view = (ClassView) getTemplate("StereotypeView");
 			ItemLabel label = (ItemLabel) view.getProperty("stereotype");
 			label.setLabel("<<" + stereo + ">>");
-		} else
+		} else {
 			view = (ClassView) getTemplate("ClassView");
+		}
 
 		view.setQuidu(clazz.getQuid());
 		view.setNameParameter(clazz.getClassType());
@@ -385,8 +388,9 @@ public class PetalObjectFactory {
 		for (Iterator i = text.getLines().iterator(); i.hasNext();) {
 			String line = (String) i.next();
 
-			if (line.length() > max_columns)
+			if (line.length() > max_columns) {
 				max_columns = line.length();
+			}
 
 			rows++;
 		}
@@ -489,8 +493,8 @@ public class PetalObjectFactory {
 	}
 
 	/**
-	 * @return list of realize view objects since a class may implement multiple interfaces. The client and supplier tags (@5, e.g. which are
-	 *         references to the corresponding class view indexes) are set when the views are added to the model.
+	 * @return list of realize view objects since a class may implement multiple interfaces. The client and supplier tags (@5, e.g. which
+	 *         are references to the corresponding class view indexes) are set when the views are added to the model.
 	 * 
 	 * @see ClassDiagram#addToView(cb.petal.RealizeView)
 	 */
@@ -614,8 +618,9 @@ public class PetalObjectFactory {
 			view = (UseCaseView) getTemplate("UseCaseStereotypeView");
 			ItemLabel label = (ItemLabel) view.getProperty("stereotype");
 			label.setLabel("<<" + stereo + ">>");
-		} else
+		} else {
 			view = (UseCaseView) getTemplate("UseCaseView");
+		}
 
 		view.setQuidu(caze.getQuid());
 		view.setQualifiedNameParameter(caze.getQualifiedName());

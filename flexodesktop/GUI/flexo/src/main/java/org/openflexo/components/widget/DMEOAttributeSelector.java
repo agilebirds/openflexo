@@ -20,8 +20,8 @@
 package org.openflexo.components.widget;
 
 import org.openflexo.components.browser.BrowserElementType;
-import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
+import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.eo.DMEOAttribute;

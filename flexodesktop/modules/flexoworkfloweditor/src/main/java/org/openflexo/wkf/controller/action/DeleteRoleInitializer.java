@@ -25,17 +25,16 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.IconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.wkf.action.DeleteRole;
 import org.openflexo.foundation.wkf.node.AbstractNode;
+import org.openflexo.icon.IconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class DeleteRoleInitializer extends ActionInitializer {
 
@@ -57,27 +56,31 @@ public class DeleteRoleInitializer extends ActionInitializer {
 			public boolean run(ActionEvent e, DeleteRole action) {
 				boolean doIt;
 				Vector<Role> roleToDelete = action.getRoleToDelete();
-				if (roleToDelete.size() == 0)
+				if (roleToDelete.size() == 0) {
 					return false;
+				}
 				Vector<AbstractNode> nodes = new Vector<AbstractNode>();
-				for (Role r : roleToDelete)
+				for (Role r : roleToDelete) {
 					nodes.addAll(r.getNodesUsingRole());
+				}
 				if (nodes.size() > 0) {
 					StringBuilder sb = new StringBuilder();
 					for (AbstractNode node : nodes) {
 						sb.append("* ").append(node.getName()).append("\n");
 					}
-					if (roleToDelete.size() == 1)
+					if (roleToDelete.size() == 1) {
 						doIt = FlexoController.confirmWithWarning(FlexoLocalization.localizedForKey("would_you_like_to_delete_this_role")
 								+ "\n" + FlexoLocalization.localizedForKey("it_is_used_in:") + "\n" + sb.toString());
-					else
+					} else {
 						doIt = FlexoController.confirmWithWarning(FlexoLocalization.localizedForKey("would_you_like_to_delete_these_roles")
 								+ "\n" + FlexoLocalization.localizedForKey("they_are_used_in:") + "\n" + sb.toString());
+					}
 				} else {
-					if (roleToDelete.size() == 1)
+					if (roleToDelete.size() == 1) {
 						doIt = FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_delete_this_role"));
-					else
+					} else {
 						doIt = FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_delete_these_roles"));
+					}
 
 				}
 				return doIt;
@@ -91,8 +94,9 @@ public class DeleteRoleInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, DeleteRole action) {
 				if (getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject() != null
-						&& getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject().isDeleted())
+						&& getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject().isDeleted()) {
 					getControllerActionInitializer().getWKFController().getSelectionManager().resetSelection();
+				}
 				return true;
 			}
 		};

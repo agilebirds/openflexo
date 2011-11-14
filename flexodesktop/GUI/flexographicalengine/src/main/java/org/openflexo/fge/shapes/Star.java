@@ -20,9 +20,9 @@
 package org.openflexo.fge.shapes;
 
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 
 public class Star extends Shape {
 
@@ -46,8 +46,9 @@ public class Star extends Shape {
 
 	public Star(ShapeGraphicalRepresentation aGraphicalRepresentation, int pointsNb) {
 		super(aGraphicalRepresentation);
-		if (pointsNb < 3)
+		if (pointsNb < 3) {
 			throw new IllegalArgumentException("Cannot build polygon with less then 3 points (" + pointsNb + ")");
+		}
 		updateShape();
 	}
 
@@ -106,8 +107,9 @@ public class Star extends Shape {
 			_polygon.addToPoints(new FGEPoint(Math.cos(angle) * 0.5 + 0.5, Math.sin(angle) * 0.5 + 0.5));
 		}
 		rebuildControlPoints();
-		if (getGraphicalRepresentation() != null)
+		if (getGraphicalRepresentation() != null) {
 			getGraphicalRepresentation().notifyShapeChanged();
+		}
 	}
 
 }

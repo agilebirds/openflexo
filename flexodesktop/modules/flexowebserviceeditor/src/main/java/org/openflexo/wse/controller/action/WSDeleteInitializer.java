@@ -27,14 +27,6 @@ import javax.swing.Icon;
 import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.icon.IconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-import org.openflexo.wse.controller.WSEController;
-import org.openflexo.wse.view.WSEView;
-
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -46,6 +38,12 @@ import org.openflexo.foundation.ws.InternalWSService;
 import org.openflexo.foundation.ws.WSObject;
 import org.openflexo.foundation.ws.WSService;
 import org.openflexo.foundation.ws.action.WSDelete;
+import org.openflexo.icon.IconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
+import org.openflexo.wse.view.WSEView;
 
 public class WSDeleteInitializer extends ActionInitializer {
 
@@ -67,8 +65,9 @@ public class WSDeleteInitializer extends ActionInitializer {
 			public boolean run(ActionEvent e, WSDelete action) {
 				// Selection is empty, nothing to delete, forget it
 				if (action.getObjectsToDelete().size() == 0) {
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("no objects to delete");
+					}
 					return false;
 				}
 				// Remember parent of last deleted object, in order to
@@ -93,8 +92,9 @@ public class WSDeleteInitializer extends ActionInitializer {
 				} else if (action.getFocusedObject() instanceof ServiceInterface) {
 					return FlexoController.confirm(FlexoLocalization
 							.localizedForKey("would_you_like_to_remove_this_service_interface_from_this_webservice"));
-				} else
+				} else {
 					return false;
+				}
 			}
 		};
 	}

@@ -34,8 +34,8 @@ import org.openflexo.javaparser.FJPJavaMethod;
 import org.openflexo.javaparser.FJPJavaParseException;
 import org.openflexo.javaparser.FJPJavaSource;
 import org.openflexo.javaparser.FJPJavaSource.FJPImportDeclarations;
-import org.openflexo.javaparser.FJPJavaSource.FJPPackageDeclaration;
 import org.openflexo.javaparser.FJPJavaSource.FJPImportDeclarations.FJPImportDeclaration;
+import org.openflexo.javaparser.FJPJavaSource.FJPPackageDeclaration;
 import org.openflexo.sg.file.SGJavaFile;
 
 public class JavaParserBrowserConfiguration implements BrowserConfiguration {
@@ -50,8 +50,9 @@ public class JavaParserBrowserConfiguration implements BrowserConfiguration {
 
 	@Override
 	public FlexoProject getProject() {
-		if (_javaFile != null)
+		if (_javaFile != null) {
 			return _javaFile.getProject();
+		}
 		return null;
 	}
 
@@ -60,18 +61,20 @@ public class JavaParserBrowserConfiguration implements BrowserConfiguration {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				if (_javaFile.getParsedJavaSource() != null && _javaFile.getParsedJavaSource().getClasses().length > 0)
+				if (_javaFile.getParsedJavaSource() != null && _javaFile.getParsedJavaSource().getClasses().length > 0) {
 					aBrowser.expand(_javaFile.getParsedJavaSource().getClasses()[0], true);
+				}
 			}
 		});
 	}
 
 	@Override
 	public FJPJavaElement getDefaultRootObject() {
-		if (_javaFile.getParsedJavaSource() != null)
+		if (_javaFile.getParsedJavaSource() != null) {
 			return _javaFile.getParsedJavaSource();
-		else
+		} else {
 			return _javaFile.getParseException();
+		}
 	}
 
 	@Override

@@ -90,8 +90,9 @@ public class DocumentsMapping {
 			item = en.nextElement();
 			parentOfItemInTarget = item.getParentElement();
 			Element parentOfItemInSrc = (Element) _targetSource.get(parentOfItemInTarget);
-			if (srcRef.equals(parentOfItemInSrc))
+			if (srcRef.equals(parentOfItemInSrc)) {
 				reply.put((Content) item.clone(), new Integer(indexOfElement(item)));
+			}
 		}
 		return reply;
 	}
@@ -100,8 +101,9 @@ public class DocumentsMapping {
 		int reply = 0;
 		Iterator<Content> it = element.getParentElement().getContent().iterator();
 		while (it.hasNext()) {
-			if (it.next().equals(element))
+			if (it.next().equals(element)) {
 				return reply;
+			}
 			reply++;
 		}
 		return reply;
@@ -168,10 +170,12 @@ public class DocumentsMapping {
 	}
 
 	private String print(Content c) {
-		if (c instanceof Element)
+		if (c instanceof Element) {
 			return c + "   id=" + ((Element) c).getAttributeValue("id");
-		if (c instanceof Text)
+		}
+		if (c instanceof Text) {
 			return c + "   text=" + ((Text) c).getText();
+		}
 		return c + "   unknown !!!";
 	}
 
@@ -194,13 +198,15 @@ public class DocumentsMapping {
 				_srcTarget.put(content, matchingContent);
 				if (content instanceof Element) {
 					MatchingElements match = new MatchingElements((Element) content, (Element) matchingContent);
-					if (!match.isUnchanged())
+					if (!match.isUnchanged()) {
 						registerModifier(content, false, false, true, false, false, false);
+					}
 					_matchingXMLs.put(content, match);
 				} else if (content instanceof Text) {
 					MatchingTexts match = new MatchingTexts((Text) content, (Text) matchingContent);
-					if (!match.isUnchanged())
+					if (!match.isUnchanged()) {
 						registerModifier(content, false, false, false, false, false, true);
+					}
 					_matchingXMLs.put(content, match);
 				}
 				if (!content.getParentElement().equals(getSourceContentForTarget(matchingContent.getParentElement()))) {
@@ -228,8 +234,9 @@ public class DocumentsMapping {
 			Content matchingContent = getSourceContentForTarget(content);
 			if (matchingContent == null) {
 				_addedInTarget.add(content);
-				if (_targetSource.get(e) != null)
+				if (_targetSource.get(e) != null) {
 					registerModifier(_targetSource.get(e), true, false, false, false, false, false);
+				}
 				if (content instanceof Element) {
 					processToMappingTargetSrc((Element) content);
 				}
@@ -257,8 +264,9 @@ public class DocumentsMapping {
 	}
 
 	public Content getTargetContentForSource(Content srcContent) {
-		if (_src.getRootElement().equals(srcContent))
+		if (_src.getRootElement().equals(srcContent)) {
 			return _target.getRootElement();
+		}
 		if (srcContent instanceof Element) {
 			String idVal = ((Element) srcContent).getAttributeValue("id");
 			if (idVal != null) {
@@ -295,15 +303,17 @@ public class DocumentsMapping {
 		Element item = null;
 		while (it.hasNext()) {
 			item = it.next();
-			if (idrefVal.equals(item.getAttributeValue("idref")))
+			if (idrefVal.equals(item.getAttributeValue("idref"))) {
 				return item;
+			}
 		}
 		return null;
 	}
 
 	public static Content getContentMatchingContent(Content srcContent, Document sourceDocument, Document targetDocument) {
-		if (sourceDocument.getRootElement().equals(srcContent))
+		if (sourceDocument.getRootElement().equals(srcContent)) {
 			return targetDocument.getRootElement();
+		}
 		if (srcContent instanceof Element) {
 			String idVal = ((Element) srcContent).getAttributeValue("id");
 			if (idVal != null) {
@@ -337,8 +347,9 @@ public class DocumentsMapping {
 	}
 
 	public Content getSourceContentForTarget(Content targetContent) {
-		if (_target.getRootElement().equals(targetContent))
+		if (_target.getRootElement().equals(targetContent)) {
 			return _src.getRootElement();
+		}
 		if (targetContent instanceof Element) {
 			String idVal = ((Element) targetContent).getAttributeValue("id");
 			if (idVal != null) {
@@ -360,11 +371,13 @@ public class DocumentsMapping {
 	}
 
 	private static Element findElementWithId(Document document, String idRef) {
-		if (idRef == null)
+		if (idRef == null) {
 			return null;
+		}
 		Iterator it = document.getDescendants(new IDFilter(idRef));
-		if (it.hasNext())
+		if (it.hasNext()) {
 			return (Element) it.next();
+		}
 		return null;
 	}
 
@@ -415,8 +428,9 @@ public class DocumentsMapping {
 
 		@Override
 		public boolean isUnchanged() {
-			if (_srcText.getText() == null)
+			if (_srcText.getText() == null) {
 				return _targetText == null;
+			}
 			return _srcText.getText().equals(_targetText.getText());
 		}
 	}
@@ -506,14 +520,17 @@ public class DocumentsMapping {
 	}
 
 	public boolean containsUpdateOrModificationsUnder(Content srcContent) {
-		if (_modifiersFlags.get(srcContent) != null && _modifiersFlags.get(srcContent).isModified())
+		if (_modifiersFlags.get(srcContent) != null && _modifiersFlags.get(srcContent).isModified()) {
 			return true;
-		if (srcContent instanceof Text && _modifiersFlags.get(srcContent) == null)
+		}
+		if (srcContent instanceof Text && _modifiersFlags.get(srcContent) == null) {
 			return false;
+		}
 		Iterator<Content> it = ((Element) srcContent).getContent().iterator();
 		while (it.hasNext()) {
-			if (containsUpdateOrModificationsUnder(it.next()))
+			if (containsUpdateOrModificationsUnder(it.next())) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -526,12 +543,15 @@ public class DocumentsMapping {
 					hasTextChanged);
 			_modifiersFlags.put(e, flags);
 		} else {
-			if (hasNewChild)
+			if (hasNewChild) {
 				flags.setHasNewChild(true);
-			if (hasRemovedChild)
+			}
+			if (hasRemovedChild) {
 				flags.setHasRemovedChild(true);
-			if (hasAttributeModified)
+			}
+			if (hasAttributeModified) {
 				flags.setHasAttributeModified(true);
+			}
 		}
 	}
 

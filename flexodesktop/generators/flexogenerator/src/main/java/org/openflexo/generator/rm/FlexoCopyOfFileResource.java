@@ -59,14 +59,16 @@ public class FlexoCopyOfFileResource extends
 	@Override
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
-		if (getGenerator() != null && getGenerator().getSource() != null)
+		if (getGenerator() != null && getGenerator().getSource() != null) {
 			addToDependantResources(FlexoFileResourceResource.getResource(getGenerator().getSource(), getProject()));
+		}
 	}
 
 	@Override
 	public FileFormat getResourceFormat() {
-		if (getGenerator() != null)
+		if (getGenerator() != null) {
 			return getGenerator().getFileFormat();
+		}
 		return super.getResourceFormat();
 	}
 

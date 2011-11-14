@@ -33,8 +33,8 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 import org.openflexo.swing.CustomPopup;
-import org.openflexo.swing.TextFieldCustomPopup;
 import org.openflexo.swing.CustomPopup.ApplyCancelListener;
+import org.openflexo.swing.TextFieldCustomPopup;
 import org.openflexo.toolbox.ToolBox;
 
 /**
@@ -109,8 +109,9 @@ public abstract class CustomColumn<D extends Observable, T> extends AbstractColu
 			D rowObject = elementAt(row);
 			if ((isSelected) && (hasFocus)) {
 				CustomPopup<T> returned = getViewSelector(rowObject, (T) value);
-				if (ToolBox.getPLATFORM() == ToolBox.MACOS)
+				if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 					setComponentBackground(returned, hasFocus, isSelected, row, column);
+				}
 				return returned;
 			} else {
 				Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
@@ -203,15 +204,17 @@ public abstract class CustomColumn<D extends Observable, T> extends AbstractColu
 
 		@Override
 		protected void fireEditingCanceled() {
-			if (_selector != null)
+			if (_selector != null) {
 				_selector.closePopup();
+			}
 			super.fireEditingCanceled();
 		}
 
 		@Override
 		protected void fireEditingStopped() {
-			if (_selector != null)
+			if (_selector != null) {
 				_selector.closePopup();
+			}
 			super.fireEditingStopped();
 
 		}

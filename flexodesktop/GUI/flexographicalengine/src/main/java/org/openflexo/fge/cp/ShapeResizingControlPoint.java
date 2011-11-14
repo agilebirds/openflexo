@@ -28,9 +28,9 @@ import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject;
-import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEGeometricObject.CardinalDirection;
 import org.openflexo.fge.geom.FGEGeometricObject.CardinalQuadrant;
+import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geom.area.FGEHalfLine;
 import org.openflexo.fge.geom.area.FGEQuarterPlane;
@@ -136,8 +136,9 @@ public class ShapeResizingControlPoint extends ControlPoint {
 
 	@Override
 	public Cursor getDraggingCursor() {
-		if (!isDraggable())
+		if (!isDraggable()) {
 			return Cursor.getDefaultCursor();
+		}
 		FGEPoint center = getGraphicalRepresentation().getShape().getShape().getCenter();
 		return getResizingCursor(FGEPoint.getOrientation(center, getPoint()));
 	}
@@ -182,14 +183,17 @@ public class ShapeResizingControlPoint extends ControlPoint {
 
 	@Override
 	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
-		if (!isDraggable())
+		if (!isDraggable()) {
 			return;
+		}
 		initialWidth = getGraphicalRepresentation().getUnscaledViewWidth();
 		initialHeight = getGraphicalRepresentation().getUnscaledViewHeight();
-		if (initialWidth < FGEGeometricObject.EPSILON)
+		if (initialWidth < FGEGeometricObject.EPSILON) {
 			initialWidth = 1;
-		if (initialHeight < FGEGeometricObject.EPSILON)
+		}
+		if (initialHeight < FGEGeometricObject.EPSILON) {
 			initialHeight = 1;
+		}
 		offset = new FGEDimension(initialWidth - getGraphicalRepresentation().getWidth(), initialHeight
 				- getGraphicalRepresentation().getHeight());
 		initialShapePosition = getGraphicalRepresentation().getLocation();
@@ -205,8 +209,9 @@ public class ShapeResizingControlPoint extends ControlPoint {
 	@Override
 	public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
 			FGEPoint initialPoint, MouseEvent event) {
-		if (!isDraggable())
+		if (!isDraggable()) {
 			return true;
+		}
 
 		// System.out.println("pointRelativeToInitialConfiguration="+pointRelativeToInitialConfiguration);
 		FGEPoint nearestPoint = getNearestPointOnAuthorizedArea(pointRelativeToInitialConfiguration);
@@ -269,8 +274,9 @@ public class ShapeResizingControlPoint extends ControlPoint {
 
 	@Override
 	public void stopDragging(DrawingController controller) {
-		if (!isDraggable())
+		if (!isDraggable()) {
 			return;
+		}
 
 		initialWidth = 0;
 		initialHeight = 0;

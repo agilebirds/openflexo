@@ -55,8 +55,9 @@ public class FlexoImportedProcessLibraryDelta {
 		public void addToSubProcesses(ProcessDelta processDelta) {
 			subProcesses.add(processDelta);
 			// We set a parent delta, only if we are not the dummy root delta
-			if (!isDummyRoot())
+			if (!isDummyRoot()) {
 				processDelta.parent = this;
+			}
 		}
 
 		/**
@@ -127,10 +128,11 @@ public class FlexoImportedProcessLibraryDelta {
 
 		// Create a copy of vectors
 		Vector<FlexoProcess> originalChildrenCopy;
-		if (originalChildren != null)
+		if (originalChildren != null) {
 			originalChildrenCopy = new Vector<FlexoProcess>(originalChildren);
-		else
+		} else {
 			originalChildrenCopy = new Vector<FlexoProcess>();
+		}
 
 		// Iterate on the new list
 		if (newChildren != null) {
@@ -149,11 +151,12 @@ public class FlexoImportedProcessLibraryDelta {
 					originalChildrenCopy.remove(previous);
 					ProcessDelta computedDiff = computeDiff(previous, p, previous.getSubProcesses(), p.getSubProcesses());
 					// 2. previous is not null and process has not changed
-					if (previous.isEquivalentTo(p, true))
+					if (previous.isEquivalentTo(p, true)) {
 						computedDiff.setStatus(DeltaStatus.UNCHANGED);
-					// 3. previous is not null but process has changed
-					else
+						// 3. previous is not null but process has changed
+					} else {
 						computedDiff.setStatus(DeltaStatus.UPDATED);
+					}
 					delta.addToSubProcesses(computedDiff);
 				}
 			}

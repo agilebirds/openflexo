@@ -22,8 +22,8 @@ package org.openflexo.components.browser.ie;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.dkv.Key;
 import org.openflexo.foundation.dkv.Domain.KeyList;
+import org.openflexo.foundation.dkv.Key;
 
 /**
  * @author gpolet
@@ -50,8 +50,9 @@ public class DKVKeyListElement extends BrowserElement {
 		KeyList kl = (KeyList) getObject();
 		Object[] o = kl.getKeyList();
 		for (int i = 0; i < o.length; i++) {
-			if (o[i] != null)
+			if (o[i] != null) {
 				addToChilds((Key) o[i]);
+			}
 		}
 	}
 

@@ -32,12 +32,11 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
 import org.openflexo.FlexoCst;
+import org.openflexo.fps.CVSConsole;
+import org.openflexo.fps.CVSConsole.ConsoleListener;
 import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.JConsole;
-
-import org.openflexo.fps.CVSConsole;
-import org.openflexo.fps.CVSConsole.ConsoleListener;
 
 public class ConsoleView extends JPanel implements ConsoleListener {
 	StringBuffer sbContent;
@@ -102,20 +101,23 @@ public class ConsoleView extends JPanel implements ConsoleListener {
 
 	@Override
 	public void errorLog(String logString) {
-		if (showErrorsLogs.isSelected())
+		if (showErrorsLogs.isSelected()) {
 			console.log(logString, Color.RED);
+		}
 	}
 
 	@Override
 	public void log(String logString) {
-		if (showInfoLogs.isSelected())
+		if (showInfoLogs.isSelected()) {
 			console.log(logString, Color.BLUE);
+		}
 	}
 
 	@Override
 	public void commandLog(String logString) {
-		if (showCommandLogs.isSelected())
+		if (showCommandLogs.isSelected()) {
 			console.log(logString, Color.BLACK);
+		}
 	}
 
 }

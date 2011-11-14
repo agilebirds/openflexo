@@ -26,7 +26,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.DeletableObject;
 import org.openflexo.foundation.FlexoObservable;
@@ -138,8 +137,9 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 		if (parentMenu != null) {
 			parentMenu.addToSubItems(newMenu);
 		} else {
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("NEW ROOT MENU");
+			}
 			menu.setRootMenu(newMenu);
 		}
 
@@ -154,20 +154,23 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 	@Override
 	public final void delete() {
 		if (isRootMenu()) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Root menu cannot be deleted");
+			}
 			return;
 		}
 		removeTabComponentInstance();
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Deletion of menu item " + _menuLabel);
+		}
 		Enumeration<FlexoItemMenu> en = getSubItems().elements();
 		while (en.hasMoreElements()) {
 			FlexoItemMenu element = en.nextElement();
 			element.delete();
 		}
-		if (getFather() != null)
+		if (getFather() != null) {
 			getFather().removeFromSubItems(this);
+		}
 		super.delete();
 		deleteObservers();
 	}
@@ -249,28 +252,31 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 			if (getOperation() != null && getOperation().hasWOComponent()) {
 				StringBuilder args = new StringBuilder();
 				for (ComponentBindingDefinition cbd : getOperation().getComponentDefinition().getBindingDefinitions()) {
-					if (cbd.getIsMandatory())
+					if (cbd.getIsMandatory()) {
 						/*
 						 * if(getOperation().getComponentInstance().getBinding(cbd).getBindingValue()!=null){
 						 * args.append(", "+getOperation().getComponentInstance().getBinding(cbd).getBindingValue().getCodeStringRepresentation()); }else
 						 */
 						args.append(", ").append(cbd.getType().getDefaultValue());
+					}
 				}
-				if (getOperation().getComponentInstance().getWOComponent().getFirstTabContainerTitle() != null)
+				if (getOperation().getComponentInstance().getWOComponent().getFirstTabContainerTitle() != null) {
 					args.append(", null");
+				}
 
 				woaUrl = getOperation().getComponentDefinition().getName() + ".getUrlForOperation(context()" + args.toString() + ","
 						+ getOperation().getComponentInstance().getFlexoID() + ")";
 
-			} else
+			} else {
 				woaUrl = "\"#\"";
-			/*
-			 * } else if (getOperation() != null && getOperation().hasWOComponent()) { String w = getPopupWidth(); String h = getPopupHeight(); String selectedTab = "";
-			 * if(getOperation().getComponentInstance().getComponentDefinition().getFirstTabContainerTitle()!=null) selectedTab = ", null"; woaUrl = "\"window.open(\\\\'\"+" +
-			 * getOperation().getComponentDefinition().getName() + ".getUrlForOperation(context()"+selectedTab+","+getOperation().getComponentInstance().getFlexoID()+")+\"\\\\'" + ",\\\\'" +
-			 * (getPopupWindowName() != null ? getPopupWindowName() : getOperation().getComponentDefinition().getName()) + "\\\\',\\\\'width=" + w + ",height=" + h +
-			 * ",directories=no,fullscreen=no,location=no,menubar=no,resizable=yes,scrollbars=yes,status=yes,titlebar=no,toolbar=no\\\\',\\\\'\\\\')\""; }
-			 */
+				/*
+				 * } else if (getOperation() != null && getOperation().hasWOComponent()) { String w = getPopupWidth(); String h = getPopupHeight(); String selectedTab = "";
+				 * if(getOperation().getComponentInstance().getComponentDefinition().getFirstTabContainerTitle()!=null) selectedTab = ", null"; woaUrl = "\"window.open(\\\\'\"+" +
+				 * getOperation().getComponentDefinition().getName() + ".getUrlForOperation(context()"+selectedTab+","+getOperation().getComponentInstance().getFlexoID()+")+\"\\\\'" + ",\\\\'" +
+				 * (getPopupWindowName() != null ? getPopupWindowName() : getOperation().getComponentDefinition().getName()) + "\\\\',\\\\'width=" + w + ",height=" + h +
+				 * ",directories=no,fullscreen=no,location=no,menubar=no,resizable=yes,scrollbars=yes,status=yes,titlebar=no,toolbar=no\\\\',\\\\'\\\\')\""; }
+				 */
+			}
 		}
 		return woaUrl;
 	}
@@ -373,8 +379,9 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 	public boolean isChildOf(FlexoItemMenu anItemMenu) {
 		FlexoItemMenu it = this;
 		while (it != null) {
-			if (it.equals(anItemMenu))
+			if (it.equals(anItemMenu)) {
 				return true;
+			}
 			it = it.getFather();
 		}
 		return false;
@@ -416,30 +423,36 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 				if (operation == null) {
 					operationFlexoID = -1;
 					setChanged();
-				} else
+				} else {
 					operation.addObserver(this);
+				}
 
-			} else if (logger.isLoggable(Level.WARNING))
+			} else if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("This is weird, an operation has been set but not its process.");
+			}
 		}
 		return operation;
 	}
 
 	public void setOperation(OperationNode displayOperation) {
-		if (operation == displayOperation)
+		if (operation == displayOperation) {
 			return;
+		}
 		OperationNode old = this.operation;
-		if (old != null)
+		if (old != null) {
 			old.deleteObserver(this);
+		}
 		this.operation = displayOperation;
 		if (displayOperation != null) {
 			displayOperation.addObserver(this);
 			operationFlexoID = displayOperation.getFlexoID();
-		} else
+		} else {
 			operationFlexoID = -1;
+		}
 		setTabComponent(null);
-		if (isRootMenu())
+		if (isRootMenu()) {
 			getProject().setFirstOperation(displayOperation);
+		}
 		setChanged();
 		notifyObservers(new DisplayOperationSet(old, displayOperation));
 	}
@@ -448,8 +461,9 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 		if (process == null && processFlexoID > -1) {
 			process = getProject().getFlexoWorkflow().getLocalFlexoProcessWithFlexoID(processFlexoID);
 			if (process == null) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not find process with flexoID " + processFlexoID);
+				}
 				processFlexoID = -1;
 				setOperation(null);
 				setChanged();
@@ -461,8 +475,9 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 	}
 
 	public void setProcess(FlexoProcess displayProcess) {
-		if (this.process == displayProcess)
+		if (this.process == displayProcess) {
 			return;
+		}
 		FlexoProcess old = this.process;
 		if (old != null) {
 			old.deleteObserver(this);
@@ -471,8 +486,9 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 		if (displayProcess != null) {
 			process.addObserver(this);
 			processFlexoID = displayProcess.getFlexoID();
-		} else
+		} else {
 			processFlexoID = -1;
+		}
 		setOperation(null);
 		getNavigationMenu().getFlexoResource().clearDependancies();
 		getNavigationMenu().getFlexoResource().rebuildDependancies();
@@ -485,43 +501,49 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 	}
 
 	public long getOperationFlexoID() {
-		if (getOperation() != null)
+		if (getOperation() != null) {
 			return getOperation().getFlexoID();
-		else
+		} else {
 			return -1;
+		}
 	}
 
 	public void setOperationFlexoID(long displayOperationFlexoID) {
-		if (getOperation() != null)
+		if (getOperation() != null) {
 			operation = null;
+		}
 		this.operationFlexoID = displayOperationFlexoID;
 	}
 
 	public long getProcessFlexoID() {
-		if (getProcess() != null)
+		if (getProcess() != null) {
 			return getProcess().getFlexoID();
-		else
+		} else {
 			return -1;
+		}
 	}
 
 	public void setProcessFlexoID(long displayProcessFlexoID) {
-		if (getProcess() != null)
+		if (getProcess() != null) {
 			process = null;
+		}
 		this.processFlexoID = displayProcessFlexoID;
 	}
 
 	@Override
 	public void update(FlexoObservable observable, DataModification obj) {
 		if (observable == getOperation()) {
-			if (obj instanceof ObjectDeleted)
+			if (obj instanceof ObjectDeleted) {
 				setOperation(null);
-			else if (obj.propertyName() != null && obj.propertyName().equals("flexoID"))
+			} else if (obj.propertyName() != null && obj.propertyName().equals("flexoID")) {
 				setChanged();
+			}
 		} else if (observable == getProcess()) {
-			if (obj instanceof ObjectDeleted)
+			if (obj instanceof ObjectDeleted) {
 				setProcess(null);
-			else if (obj.propertyName() != null && obj.propertyName().equals("flexoID"))
+			} else if (obj.propertyName() != null && obj.propertyName().equals("flexoID")) {
 				setChanged();
+			}
 		}
 		super.update(observable, obj);
 	}
@@ -535,10 +557,12 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 		@Override
 		public ValidationIssue<RootItemMustBeBound, FlexoItemMenu> applyValidation(FlexoItemMenu menu) {
 			ValidationIssue<RootItemMustBeBound, FlexoItemMenu> err = null;
-			if (menu.isRootMenu())
-				if (menu.getProcess() == null || menu.getOperation() == null)
+			if (menu.isRootMenu()) {
+				if (menu.getProcess() == null || menu.getOperation() == null) {
 					err = new ValidationError<RootItemMustBeBound, FlexoItemMenu>(this, menu,
 							"root_menu_item_must_be_bound_to_an_operation");
+				}
+			}
 			return err;
 		}
 	}
@@ -564,8 +588,9 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 		if (getProject() != null) {
 			return getProject().getIEValidationModel();
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not access to project !");
+			}
 		}
 		return null;
 	}
@@ -635,15 +660,17 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 	 * @return
 	 */
 	public FlexoItemMenu getMenuLabeled(String menuLabel) {
-		if (this.getMenuLabel() != null && this.getMenuLabel().equals(menuLabel))
+		if (this.getMenuLabel() != null && this.getMenuLabel().equals(menuLabel)) {
 			return this;
+		}
 		Vector<FlexoItemMenu> v = getSubItems();
 		Enumeration<FlexoItemMenu> en = v.elements();
 		while (en.hasMoreElements()) {
 			FlexoItemMenu menu = en.nextElement();
 			FlexoItemMenu ret = menu.getMenuLabeled(menuLabel);
-			if (ret != null)
+			if (ret != null) {
 				return ret;
+			}
 		}
 		return null;
 	}
@@ -693,13 +720,15 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 		if (foundComponent instanceof TabComponentDefinition) {
 			newComponent = (TabComponentDefinition) foundComponent;
 		} else if (foundComponent != null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Found a component named " + aComponentName + " but this is not a TabComponent. Aborting.");
+			}
 			throw new DuplicateResourceException(aComponentName);
 		}
 		if (newComponent == null) {
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Creating a new Component named:" + aComponentName);
+			}
 			FlexoComponentFolder selectedFolder = getProject().getFlexoComponentLibrary().getRootFolder()
 					.getFolderTyped(FolderType.TAB_FOLDER);
 			newComponent = new TabComponentDefinition(aComponentName, getProject().getFlexoComponentLibrary(), selectedFolder, getProject());
@@ -739,9 +768,10 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 			_tabComponentInstance.setItemMenu(this);
 			setChanged();
 			notifyObservers(new DataModification(-1, "tabMenuComponentInstance", null, _tabComponentInstance));
-		} else if (logger.isLoggable(Level.SEVERE))
+		} else if (logger.isLoggable(Level.SEVERE)) {
 			logger.severe("TabComponentInstance does not have a component definition for component named "
 					+ tabComponentInstance.getComponentName());
+		}
 	}
 
 	public void removeTabComponentInstance() {

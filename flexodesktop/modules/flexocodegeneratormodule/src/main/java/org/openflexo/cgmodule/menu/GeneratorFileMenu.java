@@ -95,9 +95,10 @@ public class GeneratorFileMenu extends FileMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Refresh not implemented");
-			// getGeneratorController().rebuildGeneratorWindow();
+				// getGeneratorController().rebuildGeneratorWindow();
+			}
 		}
 	}
 }

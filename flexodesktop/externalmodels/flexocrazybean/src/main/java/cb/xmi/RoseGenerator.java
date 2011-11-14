@@ -470,8 +470,9 @@ public class RoseGenerator /*extends DescendingVisitor*/{
 	public void visit(MModel obj) {
 		tree.setModelName(obj.getName());
 
-		for (Iterator i = obj.getOwnedElements().iterator(); i.hasNext();)
+		for (Iterator i = obj.getOwnedElements().iterator(); i.hasNext();) {
 			d.accept((MModelElement) i.next());
+		}
 	}
 
 	public void visit(MPackage obj) {

@@ -25,17 +25,16 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.dm.view.DMRepositoryView;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.dm.DMRegExp;
 import org.openflexo.foundation.dm.action.CreateDMPackage;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class CreateDMPackageInitializer extends ActionInitializer {
 
@@ -73,8 +72,9 @@ public class CreateDMPackageInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, CreateDMPackage action) {
 				if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getRepository()) {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Finalizer for CreateDMPackage in DMRepositoryView");
+					}
 					DMRepositoryView repView = (DMRepositoryView) getControllerActionInitializer().getDMController()
 							.getCurrentEditedObjectView();
 					repView.getPackageTable().selectObject(action.getNewPackage());

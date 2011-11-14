@@ -22,10 +22,12 @@
 
 package com.metaphaseeditor.action;
 
-import com.metaphaseeditor.FindReplaceDialog;
 import java.awt.event.ActionEvent;
+
 import javax.swing.AbstractAction;
 import javax.swing.JTextPane;
+
+import com.metaphaseeditor.FindReplaceDialog;
 
 /**
  * 
@@ -39,6 +41,7 @@ public class FindReplaceAction extends AbstractAction {
 		this.htmlTextPane = htmlTextPane;
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent ae) {
 		FindReplaceDialog findReplaceDialog = new FindReplaceDialog(null, true, htmlTextPane);
 		findReplaceDialog.setVisible(true);

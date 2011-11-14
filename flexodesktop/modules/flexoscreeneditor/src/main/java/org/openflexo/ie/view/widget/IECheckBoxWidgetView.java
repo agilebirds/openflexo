@@ -106,20 +106,23 @@ public class IECheckBoxWidgetView extends AbstractInnerTableWidgetView<IECheckBo
 	public Dimension getPreferredSize() {
 		if (getHoldsNextComputedPreferredSize()) {
 			Dimension storedSize = storedPrefSize();
-			if (storedSize != null)
+			if (storedSize != null) {
 				return storedSize;
+			}
 		}
 		if (getModel().getParent() instanceof IETDWidget) {
 			Dimension d = container.getPreferredSize();
 			d.width += 2;
 			d.height += 2;
-			if (getHoldsNextComputedPreferredSize())
+			if (getHoldsNextComputedPreferredSize()) {
 				storePrefSize(d);
+			}
 			return d;
 		}
 		Dimension d = super.getPreferredSize();
-		if (getHoldsNextComputedPreferredSize())
+		if (getHoldsNextComputedPreferredSize()) {
 			storePrefSize(d);
+		}
 		return d;
 	}
 
@@ -137,8 +140,9 @@ public class IECheckBoxWidgetView extends AbstractInnerTableWidgetView<IECheckBo
 	public void update(FlexoObservable arg0, DataModification modif) {
 		if (modif.modificationType() == DataModification.ATTRIBUTE) {
 			if (modif.propertyName().equals(IECheckBoxWidget.ATTRIB_DEFAULTVALUE_NAME)) {
-				if (!isUpdatingModel)
+				if (!isUpdatingModel) {
 					_jCheckBox.setSelected(getCheckBoxModel().getValue());
+				}
 			} else if (modif.propertyName().equals("colSpan") || modif.propertyName().equals("rowSpan")) {
 				if (getParent() != null) {
 					getParent().doLayout();
@@ -154,8 +158,9 @@ public class IECheckBoxWidgetView extends AbstractInnerTableWidgetView<IECheckBo
 			}
 		} else if (modif instanceof WidgetRemovedFromTable && arg0 == getModel()) {
 			delete();
-		} else
+		} else {
 			super.update(arg0, modif);
+		}
 	}
 
 }

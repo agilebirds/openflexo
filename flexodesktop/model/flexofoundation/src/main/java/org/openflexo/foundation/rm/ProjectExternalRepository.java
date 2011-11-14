@@ -83,8 +83,9 @@ public class ProjectExternalRepository extends FlexoObject implements XMLSeriali
 	public File getDirectory() {
 		if (_directory == null) {
 			String s = (String) directoriesForUser.get(getUserName());
-			if (s != null)
+			if (s != null) {
 				_directory = new File(s);
+			}
 			_isConnected = ((_directory != null) && (_directory.exists()));
 		}
 		return _directory;
@@ -94,8 +95,9 @@ public class ProjectExternalRepository extends FlexoObject implements XMLSeriali
 		_directory = directory;
 		if (_directory != null) {
 			directoriesForUser.put(getUserName(), _directory.getAbsolutePath());
-		} else
+		} else {
 			directoriesForUser.remove(getUserName());
+		}
 		_isConnected = ((_directory != null) && (_directory.exists()));
 		getProject().clearCachedFiles();
 		getProject().notifyResourceChanged(null);
@@ -152,8 +154,9 @@ public class ProjectExternalRepository extends FlexoObject implements XMLSeriali
 			if (resource instanceof FlexoFileResource) {
 				FlexoProjectFile pFile = ((FlexoFileResource) resource).getResourceFile();
 				if (pFile.getExternalRepository() == this) {
-					if (resource.isActive())
+					if (resource.isActive()) {
 						returned.add((FlexoFileResource) resource);
+					}
 				}
 			}
 		}

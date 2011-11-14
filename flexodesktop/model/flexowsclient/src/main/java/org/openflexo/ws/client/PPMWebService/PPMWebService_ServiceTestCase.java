@@ -40,8 +40,9 @@ public class PPMWebService_ServiceTestCase extends junit.framework.TestCase {
 			binding = (org.openflexo.ws.client.PPMWebService.PPMWebServiceSoapBindingStub) new org.openflexo.ws.client.PPMWebService.PPMWebService_ServiceLocator()
 					.getPPMWebService();
 		} catch (javax.xml.rpc.ServiceException jre) {
-			if (jre.getLinkedCause() != null)
+			if (jre.getLinkedCause() != null) {
 				jre.getLinkedCause().printStackTrace();
+			}
 			throw new junit.framework.AssertionFailedError("JAX-RPC ServiceException caught: " + jre);
 		}
 		assertNotNull("binding is null", binding);
@@ -65,8 +66,9 @@ public class PPMWebService_ServiceTestCase extends junit.framework.TestCase {
 			binding = (org.openflexo.ws.client.PPMWebService.PPMWebServiceSoapBindingStub) new org.openflexo.ws.client.PPMWebService.PPMWebService_ServiceLocator()
 					.getPPMWebService();
 		} catch (javax.xml.rpc.ServiceException jre) {
-			if (jre.getLinkedCause() != null)
+			if (jre.getLinkedCause() != null) {
 				jre.getLinkedCause().printStackTrace();
+			}
 			throw new junit.framework.AssertionFailedError("JAX-RPC ServiceException caught: " + jre);
 		}
 		assertNotNull("binding is null", binding);
@@ -90,8 +92,9 @@ public class PPMWebService_ServiceTestCase extends junit.framework.TestCase {
 			binding = (org.openflexo.ws.client.PPMWebService.PPMWebServiceSoapBindingStub) new org.openflexo.ws.client.PPMWebService.PPMWebService_ServiceLocator()
 					.getPPMWebService();
 		} catch (javax.xml.rpc.ServiceException jre) {
-			if (jre.getLinkedCause() != null)
+			if (jre.getLinkedCause() != null) {
 				jre.getLinkedCause().printStackTrace();
+			}
 			throw new junit.framework.AssertionFailedError("JAX-RPC ServiceException caught: " + jre);
 		}
 		assertNotNull("binding is null", binding);
@@ -115,8 +118,9 @@ public class PPMWebService_ServiceTestCase extends junit.framework.TestCase {
 			binding = (org.openflexo.ws.client.PPMWebService.PPMWebServiceSoapBindingStub) new org.openflexo.ws.client.PPMWebService.PPMWebService_ServiceLocator()
 					.getPPMWebService();
 		} catch (javax.xml.rpc.ServiceException jre) {
-			if (jre.getLinkedCause() != null)
+			if (jre.getLinkedCause() != null) {
 				jre.getLinkedCause().printStackTrace();
+			}
 			throw new junit.framework.AssertionFailedError("JAX-RPC ServiceException caught: " + jre);
 		}
 		assertNotNull("binding is null", binding);
@@ -140,8 +144,9 @@ public class PPMWebService_ServiceTestCase extends junit.framework.TestCase {
 			binding = (org.openflexo.ws.client.PPMWebService.PPMWebServiceSoapBindingStub) new org.openflexo.ws.client.PPMWebService.PPMWebService_ServiceLocator()
 					.getPPMWebService();
 		} catch (javax.xml.rpc.ServiceException jre) {
-			if (jre.getLinkedCause() != null)
+			if (jre.getLinkedCause() != null) {
 				jre.getLinkedCause().printStackTrace();
+			}
 			throw new junit.framework.AssertionFailedError("JAX-RPC ServiceException caught: " + jre);
 		}
 		assertNotNull("binding is null", binding);
@@ -165,8 +170,9 @@ public class PPMWebService_ServiceTestCase extends junit.framework.TestCase {
 			binding = (org.openflexo.ws.client.PPMWebService.PPMWebServiceSoapBindingStub) new org.openflexo.ws.client.PPMWebService.PPMWebService_ServiceLocator()
 					.getPPMWebService();
 		} catch (javax.xml.rpc.ServiceException jre) {
-			if (jre.getLinkedCause() != null)
+			if (jre.getLinkedCause() != null) {
 				jre.getLinkedCause().printStackTrace();
+			}
 			throw new junit.framework.AssertionFailedError("JAX-RPC ServiceException caught: " + jre);
 		}
 		assertNotNull("binding is null", binding);
@@ -190,8 +196,9 @@ public class PPMWebService_ServiceTestCase extends junit.framework.TestCase {
 			binding = (org.openflexo.ws.client.PPMWebService.PPMWebServiceSoapBindingStub) new org.openflexo.ws.client.PPMWebService.PPMWebService_ServiceLocator()
 					.getPPMWebService();
 		} catch (javax.xml.rpc.ServiceException jre) {
-			if (jre.getLinkedCause() != null)
+			if (jre.getLinkedCause() != null) {
 				jre.getLinkedCause().printStackTrace();
+			}
 			throw new junit.framework.AssertionFailedError("JAX-RPC ServiceException caught: " + jre);
 		}
 		assertNotNull("binding is null", binding);

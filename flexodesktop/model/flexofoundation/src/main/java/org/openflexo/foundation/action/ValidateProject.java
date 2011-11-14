@@ -122,14 +122,18 @@ public class ValidateProject extends FlexoAction<ValidateProject, FlexoModelObje
 
 	public int getErrorsNb() {
 		int errorsNb = 0;
-		if (ieValidationReport != null)
+		if (ieValidationReport != null) {
 			errorsNb += ieValidationReport.getErrorNb();
-		if (wkfValidationReport != null)
+		}
+		if (wkfValidationReport != null) {
 			errorsNb += wkfValidationReport.getErrorNb();
-		if (dkvValidationReport != null)
+		}
+		if (dkvValidationReport != null) {
 			errorsNb += dkvValidationReport.getErrorNb();
-		if (dmValidationReport != null)
+		}
+		if (dmValidationReport != null) {
 			errorsNb += dmValidationReport.getErrorNb();
+		}
 		return errorsNb;
 	}
 
@@ -250,14 +254,18 @@ public class ValidateProject extends FlexoAction<ValidateProject, FlexoModelObje
 
 	public String readableValidationErrors() {
 		StringBuffer bf = new StringBuffer();
-		if (getWkfValidationReport() != null)
+		if (getWkfValidationReport() != null) {
 			bf.append(getWkfValidationReport().errorAsString());
-		if (getIeValidationReport() != null)
+		}
+		if (getIeValidationReport() != null) {
 			bf.append(getIeValidationReport().errorAsString());
-		if (getDkvValidationReport() != null)
+		}
+		if (getDkvValidationReport() != null) {
 			bf.append(getDkvValidationReport().errorAsString());
-		if (getDmValidationReport() != null)
+		}
+		if (getDmValidationReport() != null) {
 			bf.append(getDmValidationReport().errorAsString());
+		}
 		return bf.toString();
 	}
 }

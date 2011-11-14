@@ -69,13 +69,15 @@ public class ShowRolesInitializer extends ActionInitializer {
 					String context = SwimmingLaneRepresentation.getRoleVisibilityContextForProcess(action.getProcess());
 					Vector<Role> roles = new Vector<Role>();
 					for (Role role : action.getProcess().getWorkflow().getRoleList().getRoles()) {
-						if (!role.getIsVisible(context))
+						if (!role.getIsVisible(context)) {
 							roles.add(role);
+						}
 					}
 					if (action.getProcess().getWorkflow().getImportedRoleList() != null) {
 						for (Role role : action.getProcess().getWorkflow().getImportedRoleList().getRoles()) {
-							if (!role.getIsVisible(context))
+							if (!role.getIsVisible(context)) {
 								roles.add(role);
+							}
 						}
 					}
 					if (roles.size() == 0) {
@@ -98,8 +100,9 @@ public class ShowRolesInitializer extends ActionInitializer {
 
 						}
 						return true;
-					} else
+					} else {
 						return false;
+					}
 				}
 				return false;
 			}

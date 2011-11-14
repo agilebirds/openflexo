@@ -22,8 +22,8 @@ package org.openflexo.components.widget;
 import java.awt.Dimension;
 
 import org.openflexo.components.browser.BrowserElementType;
-import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
+import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
@@ -66,12 +66,13 @@ public class ServiceInterfaceSelector extends AbstractBrowserSelector<WKFObject>
 	@Override
 	public String renderedString(WKFObject editedObject) {
 		if (editedObject != null) {
-			if (editedObject instanceof FlexoProcess)
+			if (editedObject instanceof FlexoProcess) {
 				return ((FlexoProcess) editedObject).getName();
-			else if (editedObject instanceof ServiceInterface)
+			} else if (editedObject instanceof ServiceInterface) {
 				return ((ServiceInterface) editedObject).getName();
-			else if (editedObject instanceof PortRegistery)
+			} else if (editedObject instanceof PortRegistery) {
 				return ((PortRegistery) editedObject).getName();
+			}
 		}
 		return EMPTY_STRING;
 	}
@@ -149,8 +150,9 @@ public class ServiceInterfaceSelector extends AbstractBrowserSelector<WKFObject>
 			FlexoProcess p = (FlexoProcess) object;
 			return !p.isImported() || p.isTopLevelProcess();
 		}
-		if (object instanceof PortRegistery || object instanceof ServiceInterface)
+		if (object instanceof PortRegistery || object instanceof ServiceInterface) {
 			return true;
+		}
 		return false;
 	}
 

@@ -50,10 +50,11 @@ public abstract class IEOperatorAction extends FlexoAction {
 			o = ((IEOperator) o).getOperatedSequence();
 		}
 		Vector answer;
-		if (v == null)
+		if (v == null) {
 			answer = new Vector();
-		else
+		} else {
 			answer = (Vector) v.clone();
+		}
 		Enumeration en = answer.elements();
 		while (en.hasMoreElements()) {
 			Object element = en.nextElement();
@@ -62,8 +63,9 @@ public abstract class IEOperatorAction extends FlexoAction {
 				answer.add(((IEOperator) element).getOperatedSequence());
 			}
 		}
-		if (!answer.contains(o))
+		if (!answer.contains(o)) {
 			answer.add(o);
+		}
 		return answer;
 	}
 
@@ -82,16 +84,20 @@ public abstract class IEOperatorAction extends FlexoAction {
 			}
 			// TODO: When SequenceTD will be supported, this will need to be
 			// removed
-			if (temp instanceof IETDWidget)
+			if (temp instanceof IETDWidget) {
 				return false;
-			if (temp instanceof IETabWidget)
-				if (((IESequenceTab) ((IETabWidget) temp).getParent()).isSubsequence() || v.size() > 1)
+			}
+			if (temp instanceof IETabWidget) {
+				if (((IESequenceTab) ((IETabWidget) temp).getParent()).isSubsequence() || v.size() > 1) {
 					return false;
-			if (parent == null)
+				}
+			}
+			if (parent == null) {
 				parent = ((IEWidget) temp).getParent();
-			else {
-				if (!parent.equals(((IEWidget) temp).getParent()))
+			} else {
+				if (!parent.equals(((IEWidget) temp).getParent())) {
 					return false;
+				}
 			}
 			minIndex = Math.min(minIndex, ((IEWidget) temp).getIndex());
 			maxIndex = Math.max(maxIndex, ((IEWidget) temp).getIndex());
@@ -127,8 +133,9 @@ public abstract class IEOperatorAction extends FlexoAction {
 					((SingleWidgetComponent) parent).getRootWidget().setIndex(0);
 					return newSequence;
 				} else {
-					if (logger().isLoggable(Level.WARNING))
+					if (logger().isLoggable(Level.WARNING)) {
 						logger().warning("parent of single-selection is of type:" + parent.getClass());
+					}
 					return null;
 				}
 			}
@@ -154,8 +161,9 @@ public abstract class IEOperatorAction extends FlexoAction {
 				return newSequence;
 
 			} else {
-				if (logger().isLoggable(Level.WARNING))
+				if (logger().isLoggable(Level.WARNING)) {
 					logger().warning("parent of multi-selection is of type:" + parent.getClass());
+				}
 				return null;
 			}
 		}

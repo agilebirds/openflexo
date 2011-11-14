@@ -54,12 +54,13 @@ public class WSEContextualMenuManager extends ContextualMenuManager {
 
 	@Override
 	public boolean acceptAction(FlexoActionType actionType) {
-		if (actionType.equals(WKFDelete.actionType))
+		if (actionType.equals(WKFDelete.actionType)) {
 			return false;
-		else if (actionType.equals(AddServiceInterface.actionType))
+		} else if (actionType.equals(AddServiceInterface.actionType)) {
 			return false;
-		else if (actionType.equals(AddServiceOperation.actionType))
+		} else if (actionType.equals(AddServiceOperation.actionType)) {
 			return false;
+		}
 		return true;
 	}
 

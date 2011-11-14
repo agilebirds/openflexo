@@ -85,21 +85,24 @@ public abstract class TypeSelectorColumn<D extends FlexoModelObject> extends Cus
 				@Override
 				public void apply() {
 					super.apply();
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Apply");
+					}
 					if (_editedRowObject != null) {
-						if (getEditedObject() != null)
+						if (getEditedObject() != null) {
 							setValue(_editedRowObject, getEditedObject().clone());
-						else
+						} else {
 							setValue(_editedRowObject, null);
+						}
 					}
 				}
 
 				@Override
 				public void cancel() {
 					super.cancel();
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Cancel");
+					}
 					if (_editedRowObject != null) {
 						setValue(_editedRowObject, getRevertValue());
 					}
@@ -133,8 +136,9 @@ public abstract class TypeSelectorColumn<D extends FlexoModelObject> extends Cus
 
 	@Override
 	protected void setEditedRowObject(D anObject) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setEditedRowObject() with " + anObject);
+		}
 		super.setEditedRowObject(anObject);
 		_viewSelector.setOwner((DMTypeOwner) _editedRowObject);
 		_editSelector.setOwner((DMTypeOwner) _editedRowObject);

@@ -52,8 +52,9 @@ public class HelpPopupGenerator extends MetaWOGenerator {
 
 	@Override
 	public synchronized void generate(boolean forceRegenerate) {
-		if (!forceRegenerate && !needsGeneration())
+		if (!forceRegenerate && !needsGeneration()) {
 			return;
+		}
 		try {
 			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + getIdentifier(), false);
 			startGeneration();

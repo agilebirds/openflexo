@@ -70,27 +70,31 @@ public abstract class AbstractButtonedWidget extends IEWidget implements ButtonC
 
 	@Deprecated
 	public void addToDeprecatedButtonList(IEButtonWidget button) {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("addToDeprecatedButtonList cannot be used");
+		}
 	}
 
 	@Deprecated
 	public void removeFromDeprecatedButtonList(IEButtonWidget button) {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("removeFromDeprecatedButtonList cannot be used anymore");
+		}
 	}
 
 	@Deprecated
 	public Vector getDeprecatedButtonList() {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("getDeprecatedButtonList cannot be used anymore");
+		}
 		return null;
 	}
 
 	@Deprecated
 	public void setDeprecatedButtonList(Vector v) {
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("setDeprecatedButton cannnot be used except at startut");
+		}
 	}
 
 	public void addToButtonList(IEHyperlinkWidget button) {
@@ -129,11 +133,12 @@ public abstract class AbstractButtonedWidget extends IEWidget implements ButtonC
 	 */
 	@Override
 	public void removeButton(IEWidget button) {
-		if (button instanceof IEHyperlinkWidget)
+		if (button instanceof IEHyperlinkWidget) {
 			removeButton(button);
-		else {
-			if (logger.isLoggable(Level.WARNING))
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not remove object of " + button.getClass().getName());
+			}
 		}
 	}
 
@@ -156,10 +161,12 @@ public abstract class AbstractButtonedWidget extends IEWidget implements ButtonC
 
 	public static int findInsertionIndex(IESequenceWidget v, int wish) {
 		int answer = 0;
-		if (v == null || v.size() == 0)
+		if (v == null || v.size() == 0) {
 			return answer;
-		while (answer < v.size() && answer < wish && wish > wishFor(v.get(answer)))
+		}
+		while (answer < v.size() && answer < wish && wish > wishFor(v.get(answer))) {
 			answer++;
+		}
 		return answer;
 	}
 
@@ -221,32 +228,37 @@ public abstract class AbstractButtonedWidget extends IEWidget implements ButtonC
 		Enumeration en = _sequenceWidget.getAllNonSequenceWidget().elements();
 		while (en.hasMoreElements()) {
 			IWidget w = (IWidget) en.nextElement();
-			if (w instanceof IEHyperlinkWidget)
+			if (w instanceof IEHyperlinkWidget) {
 				v.add((IEHyperlinkWidget) w);
+			}
 		}
 		return v;
 	}
 
 	@Override
 	public void setWOComponent(IEWOComponent woComponent) {
-		if (noWOChange(woComponent))
+		if (noWOChange(woComponent)) {
 			return;
+		}
 		super.setWOComponent(woComponent);// This call is very important because it will update the WOComponent components cache
-		if (_sequenceWidget != null)
+		if (_sequenceWidget != null) {
 			_sequenceWidget.setWOComponent(woComponent);
+		}
 	}
 
 	@Override
 	public boolean areComponentInstancesValid() {
-		if (_sequenceWidget != null)
+		if (_sequenceWidget != null) {
 			return _sequenceWidget.areComponentInstancesValid();
-		else
+		} else {
 			return true;
+		}
 	}
 
 	@Override
 	public void removeInvalidComponentInstances() {
-		if (_sequenceWidget != null)
+		if (_sequenceWidget != null) {
 			_sequenceWidget.removeInvalidComponentInstances();
+		}
 	}
 }

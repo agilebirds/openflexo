@@ -96,8 +96,9 @@ public class ButtonsControlPanel extends JPanel {
 	@Override
 	public void remove(Component comp) {
 		super.remove(comp);
-		if (_buttons.contains(comp))
+		if (_buttons.contains(comp)) {
 			_buttons.remove(comp);
+		}
 	}
 
 	public void requestFocusInFirstButton() {
@@ -134,8 +135,9 @@ public class ButtonsControlPanel extends JPanel {
 		set.add(up);
 		container.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, set);
 
-		if (requestFocus)
+		if (requestFocus) {
 			requestFocusInFirstButton();
+		}
 
 	}
 
@@ -143,42 +145,50 @@ public class ButtonsControlPanel extends JPanel {
 
 		@Override
 		public Component getComponentAfter(Container aContainer, Component aComponent) {
-			if (allButtonsAreDisabled())
+			if (allButtonsAreDisabled()) {
 				return null;
+			}
 			JButton returned = null;
 			int index = _buttons.indexOf(aComponent);
 			if (index > -1) {
 				int returnedIndex = index + 1;
-				if (returnedIndex == _buttons.size())
+				if (returnedIndex == _buttons.size()) {
 					returnedIndex = 0;
+				}
 				returned = _buttons.elementAt(returnedIndex);
 			}
-			if (returned == null)
+			if (returned == null) {
 				return null;
-			if (returned.isEnabled())
+			}
+			if (returned.isEnabled()) {
 				return returned;
-			else
+			} else {
 				return getComponentAfter(aContainer, returned);
+			}
 		}
 
 		@Override
 		public Component getComponentBefore(Container aContainer, Component aComponent) {
-			if (allButtonsAreDisabled())
+			if (allButtonsAreDisabled()) {
 				return null;
+			}
 			JButton returned = null;
 			int index = _buttons.indexOf(aComponent);
 			if (index > -1) {
 				int returnedIndex = index - 1;
-				if (returnedIndex == -1)
+				if (returnedIndex == -1) {
 					returnedIndex = _buttons.size() - 1;
+				}
 				returned = _buttons.elementAt(returnedIndex);
 			}
-			if (returned == null)
+			if (returned == null) {
 				return null;
-			if (returned.isEnabled())
+			}
+			if (returned.isEnabled()) {
 				return returned;
-			else
+			} else {
 				return getComponentBefore(aContainer, returned);
+			}
 		}
 
 		@Override
@@ -188,38 +198,48 @@ public class ButtonsControlPanel extends JPanel {
 
 		@Override
 		public Component getFirstComponent(Container aContainer) {
-			if (allButtonsAreDisabled())
+			if (allButtonsAreDisabled()) {
 				return null;
+			}
 			JButton returned = null;
-			if (_buttons.size() > 0)
+			if (_buttons.size() > 0) {
 				returned = _buttons.firstElement();
-			if (returned == null)
+			}
+			if (returned == null) {
 				return null;
-			if (returned.isEnabled())
+			}
+			if (returned.isEnabled()) {
 				return returned;
-			else
+			} else {
 				return getComponentAfter(aContainer, returned);
+			}
 		}
 
 		@Override
 		public Component getLastComponent(Container aContainer) {
-			if (allButtonsAreDisabled())
+			if (allButtonsAreDisabled()) {
 				return null;
+			}
 			JButton returned = null;
-			if (_buttons.size() > 0)
+			if (_buttons.size() > 0) {
 				returned = _buttons.lastElement();
-			if (returned == null)
+			}
+			if (returned == null) {
 				return null;
-			if (returned.isEnabled())
+			}
+			if (returned.isEnabled()) {
 				return returned;
-			else
+			} else {
 				return getComponentBefore(aContainer, returned);
+			}
 		}
 
 		private boolean allButtonsAreDisabled() {
-			for (JButton b : _buttons)
-				if (b.isEnabled())
+			for (JButton b : _buttons) {
+				if (b.isEnabled()) {
 					return false;
+				}
+			}
 			return true;
 		}
 

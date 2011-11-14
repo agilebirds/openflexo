@@ -44,10 +44,12 @@ public class GeometricDrawing extends DefaultDrawing<GeometricSet> {
 	@Override
 	@SuppressWarnings("unchecked")
 	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable) {
-		if (aDrawable == getModel())
+		if (aDrawable == getModel()) {
 			return (GraphicalRepresentation<O>) getDrawingGraphicalRepresentation();
-		if (aDrawable instanceof GeometricObject)
+		}
+		if (aDrawable instanceof GeometricObject) {
 			return ((GeometricObject) aDrawable).getGraphicalRepresentation();
+		}
 		(new Exception("???")).printStackTrace();
 		return null;
 	}

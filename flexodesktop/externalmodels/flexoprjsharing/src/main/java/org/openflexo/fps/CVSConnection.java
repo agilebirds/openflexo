@@ -114,17 +114,19 @@ public class CVSConnection {
 			AuthenticationException {
 		options.setCVSRoot(getCVSRoot());
 		try {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("[" + Thread.currentThread().getName() + "] [CVS] BEGIN " + "cvs " + command.getCVSCommand() + " "
 						+ options.getCVSCommand() + " on directory " + getClient().getLocalPath());
+			}
 			getProject().getConsoleHandler()
 					.commandLog(
 							"cvs " + command.getCVSCommand() + " " + options.getCVSCommand() + " on directory "
 									+ getClient().getLocalPath() + "\n");
 			getClient().executeCommand(command, options);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("[" + Thread.currentThread().getName() + "] [CVS] END " + "cvs " + command.getCVSCommand() + " "
 						+ options.getCVSCommand() + " on directory " + getClient().getLocalPath());
+			}
 		} catch (CommandAbortedException e) {
 			throw e;
 		} catch (CommandException e) {
@@ -138,8 +140,9 @@ public class CVSConnection {
 
 		finally {
 			try {
-				if (getClient().getConnection().isOpen())
+				if (getClient().getConnection().isOpen()) {
 					getClient().getConnection().close();
+				}
 			} catch (IOException e) {
 				logger.warning("Cannot close connection " + e.getMessage());
 			}

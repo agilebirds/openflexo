@@ -26,9 +26,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.connectors.rpc.RectPolylinConnector.RectPolylinAdjustability;
 import org.openflexo.fge.geom.FGEGeometricObject;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGESegment;
-import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEHalfPlane;
 import org.openflexo.fge.geom.area.FGEPlane;
@@ -94,8 +94,9 @@ public class AdjustableIntermediateControlPoint extends RectPolylinAdjustableCon
 	 * @param index
 	 */
 	private boolean movedIntermediateCP(int index, FGEPoint oldCPLocation, boolean simplifyLayout) {
-		if (RectPolylinConnector.logger.isLoggable(Level.FINE))
+		if (RectPolylinConnector.logger.isLoggable(Level.FINE)) {
 			RectPolylinConnector.logger.fine("Moved intermediate point at index: " + index);
+		}
 
 		// First, obtain location of Control Point being moved
 		FGEPoint newCPLocation = getPolylin().getPointAt(index);
@@ -139,8 +140,9 @@ public class AdjustableIntermediateControlPoint extends RectPolylinAdjustableCon
 			// From both side of half-plane formed by intermediateCPStartSegment
 			FGEHalfPlane intermediateCPStartSegmentHalfPlane = new FGEHalfPlane(intermediateCPStartSegment, oldCPLocation);
 			if (!intermediateCPStartSegmentHalfPlane.containsPoint(newCPLocation)) {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Two points will be removed (pattern 1) at index=" + (index - 1));
+				}
 				getConnector()._simplifyLayoutOfCurrentPolylinByDeletingTwoPoints(index - 1, newCPLocation);
 				/*
 				getPolylin().removePointAtIndex(index-1);
@@ -166,8 +168,9 @@ public class AdjustableIntermediateControlPoint extends RectPolylinAdjustableCon
 				FGEHalfPlane intermediateCPBeforeStartSegmentHalfPlane = new FGEHalfPlane(intermediateCPBeforeStartSegment,
 						previousCPOldLocation);
 				if (!intermediateCPBeforeStartSegmentHalfPlane.containsPoint(previousCPNewLocation)) {
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Two points will be removed (pattern 2) at index=" + (index - 2));
+					}
 					getConnector()._simplifyLayoutOfCurrentPolylinByDeletingTwoPoints(index - 2, newCPLocation);
 					/*
 					getPolylin().removePointAtIndex(index-2);
@@ -210,8 +213,9 @@ public class AdjustableIntermediateControlPoint extends RectPolylinAdjustableCon
 			// From both side of half-plane formed by intermediateCPEndSegment
 			FGEHalfPlane intermediateCPEndSegmentHalfPlane = new FGEHalfPlane(intermediateCPEndSegment, oldCPLocation);
 			if (!intermediateCPEndSegmentHalfPlane.containsPoint(newCPLocation)) {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Two points will be removed (pattern 3) at index=" + index);
+				}
 				getConnector()._simplifyLayoutOfCurrentPolylinByDeletingTwoPoints(index, newCPLocation);
 				/*
 				getPolylin().removePointAtIndex(index);
@@ -236,8 +240,9 @@ public class AdjustableIntermediateControlPoint extends RectPolylinAdjustableCon
 				FGESegment intermediateCPAfterEndSegment = getPolylin().getSegmentAt(index + 2);
 				FGEHalfPlane intermediateCPAfterEndSegmentHalfPlane = new FGEHalfPlane(intermediateCPAfterEndSegment, nextCPOldLocation);
 				if (!intermediateCPAfterEndSegmentHalfPlane.containsPoint(nextCPNewLocation)) {
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Two points will be removed (pattern 4) at index=" + (index + 1));
+					}
 					getConnector()._simplifyLayoutOfCurrentPolylinByDeletingTwoPoints(index + 1, newCPLocation);
 					/*
 					getPolylin().removePointAtIndex(index+1);

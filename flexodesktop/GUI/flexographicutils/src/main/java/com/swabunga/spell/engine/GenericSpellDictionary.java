@@ -19,7 +19,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 package com.swabunga.spell.engine;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -86,10 +91,12 @@ public class GenericSpellDictionary extends SpellDictionaryASpell {
 	 * This needs to be made thread safe (synchronized)
 	 * </p>
 	 */
+	@Override
 	public void addWord(String word) {
 		putWord(word);
-		if (dictFile == null)
+		if (dictFile == null) {
 			return;
+		}
 		try {
 			FileWriter w = new FileWriter(dictFile.toString(), true);
 			// Open with append.
@@ -138,25 +145,27 @@ public class GenericSpellDictionary extends SpellDictionaryASpell {
 	/**
 	 * Returns a list of strings (words) for the code.
 	 */
+	@Override
 	public List getWords(String code) {
 		// Check the main dictionary.
 		List mainDictResult = (List) mainDictionary.get(code);
-		if (mainDictResult == null)
+		if (mainDictResult == null) {
 			return new Vector();
+		}
 		return mainDictResult;
 	}
 
 	/**
 	 * Returns true if the word is correctly spelled against the current word list.
 	 */
+	@Override
 	public boolean isCorrect(String word) {
 		List possible = getWords(getCode(word));
-		if (possible.contains(word))
+		if (possible.contains(word)) {
 			return true;
-		// JMH should we always try the lowercase version. If I dont then capitalised
-		// words are always returned as incorrect.
-		else if (possible.contains(word.toLowerCase()))
+		} else if (possible.contains(word.toLowerCase())) {
 			return true;
+		}
 		return false;
 	}
 }

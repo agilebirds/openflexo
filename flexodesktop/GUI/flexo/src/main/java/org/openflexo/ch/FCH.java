@@ -143,8 +143,9 @@ public class FCH {
 
 	public static synchronized void setHelpItem(final JComponent component, final String anIdentifier) {
 		// logger.info("setHelpItem for "+anIdentifier);
-		if (component != null && anIdentifier != null)
+		if (component != null && anIdentifier != null) {
 			_pendingComponents.put(component, anIdentifier);
+		}
 	}
 
 	public static synchronized String getHelpItem(final JComponent component) {
@@ -297,8 +298,9 @@ public class FCH {
 			folder = mainPaneItem.getFolder();
 		}
 		String moduleViewIdentifier = view.getClass().getName();
-		if (moduleViewIdentifier.lastIndexOf('.') > 0)
+		if (moduleViewIdentifier.lastIndexOf('.') > 0) {
 			moduleViewIdentifier = moduleViewIdentifier.substring(moduleViewIdentifier.lastIndexOf('.') + 1);
+		}
 		if (DocResourceManager.getDocItem(moduleViewIdentifier) == null) {
 			DocItemFolder moduleViewFolder = DocItemFolder.createDocItemFolder(moduleViewIdentifier, "Documentation on that view", folder,
 					drc);

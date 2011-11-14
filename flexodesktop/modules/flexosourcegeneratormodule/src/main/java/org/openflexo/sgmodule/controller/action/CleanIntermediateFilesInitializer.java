@@ -70,8 +70,9 @@ public class CleanIntermediateFilesInitializer extends ActionInitializer {
 					action.setCleanBeforeFirstRelease(((CheckboxParameter) params[1]).getValue());
 					Vector<CGRelease> releasesToClean = new Vector<CGRelease>();
 					for (int i = 0; i < action.getRepository().getReleases().size(); i++) {
-						if (((CheckboxParameter) params[i + 2]).getValue())
+						if (((CheckboxParameter) params[i + 2]).getValue()) {
 							releasesToClean.add(action.getRepository().getReleases().elementAt(i));
+						}
 					}
 					action.setReleasesToClean(releasesToClean);
 					return true;

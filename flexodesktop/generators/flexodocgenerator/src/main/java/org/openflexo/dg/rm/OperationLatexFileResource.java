@@ -64,19 +64,22 @@ public class OperationLatexFileResource extends LatexFileResource<DGLatexGenerat
 
 	@Override
 	public String getName() {
-		if (getCGFile() == null || getCGFile().getRepository() == null || getOperation() == null)
+		if (getCGFile() == null || getCGFile().getRepository() == null || getOperation() == null) {
 			return super.getName();
+		}
 		registerObserverWhenRequired();
-		if (super.getName() == null)
+		if (super.getName() == null) {
 			setName(nameForRepositoryAndOperation(getCGFile().getRepository(), getOperation()));
+		}
 		return nameForRepositoryAndOperation(getCGFile().getRepository(), getOperation());
 	}
 
 	public void registerObserverWhenRequired() {
 		if ((!isObserverRegistered) && (getOperation() != null)) {
 			isObserverRegistered = true;
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getProject());
+			}
 			getOperation().addObserver(this);
 			getOperation().getAbstractActivityNode().addObserver(this);
 			getOperation().getProcess().addObserver(this);
@@ -88,8 +91,9 @@ public class OperationLatexFileResource extends LatexFileResource<DGLatexGenerat
 	}
 
 	public OperationNode getOperation() {
-		if (getGenerator() != null)
+		if (getGenerator() != null) {
 			return getGenerator().getObject();
+		}
 		return null;
 	}
 
@@ -104,16 +108,19 @@ public class OperationLatexFileResource extends LatexFileResource<DGLatexGenerat
 	@Override
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
-		if (getOperation() != null)
+		if (getOperation() != null) {
 			addToDependantResources(getOperation().getProcess().getFlexoResource());
+		}
 	}
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (getOperation() == null)
+		if (getOperation() == null) {
 			return;
-		if (dataModification instanceof OperationChange)
+		}
+		if (dataModification instanceof OperationChange) {
 			return;
+		}
 		if (observable == getOperation() || observable == getOperation().getAbstractActivityNode()
 				|| observable == getOperation().getProcess()) {
 			if (dataModification instanceof AttributeDataModification) {
@@ -132,8 +139,9 @@ public class OperationLatexFileResource extends LatexFileResource<DGLatexGenerat
 				logger.info("Handle operation has been deleted");
 				setGenerator(null);
 				getCGFile().setMarkedForDeletion(true);
-				if (getCGFile().getRepository() != null)
+				if (getCGFile().getRepository() != null) {
 					getCGFile().getRepository().refresh();
+				}
 				observable.deleteObserver(this);
 				isObserverRegistered = false;
 			}
@@ -147,9 +155,10 @@ public class OperationLatexFileResource extends LatexFileResource<DGLatexGenerat
 	private void ensureFileNameIsUpToDate() {
 		if (getOperation() != null && getOperation().getAbstractActivityNode() != null && getOperation().getProcess() != null
 				&& !getFile().getName().equals(DGLatexGenerator.nameForOperation(getOperation(), getGenerator().getRepository()))) {
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Renaming file from " + getFileName() + " to "
 						+ DGLatexGenerator.nameForOperation(getOperation(), getGenerator().getRepository()));
+			}
 			try {
 				renameFileTo(DGLatexGenerator.nameForOperation(getOperation(), getGenerator().getRepository()));
 			} catch (InvalidFileNameException e) {
@@ -171,8 +180,9 @@ public class OperationLatexFileResource extends LatexFileResource<DGLatexGenerat
 		if (resource instanceof FlexoProcessResource) {
 			if (getOperation() != null) {
 				if (!requestDate.before(getOperation().getLastUpdate())) {
-					if (logger.isLoggable(Level.FINER))
+					if (logger.isLoggable(Level.FINER)) {
 						logger.finer("OPTIMIST DEPENDANCY CHECKING for OPERATION " + getOperation().getName());
+					}
 					return false;
 				}
 			}

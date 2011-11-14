@@ -46,8 +46,9 @@ public class OperationComponentWOFileResource extends ComponentWOFileResource<Pa
 	public void registerObserverWhenRequired() {
 		if ((!isObserverRegistered) && (getComponentDefinition() != null)) {
 			isObserverRegistered = true;
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getComponentDefinition());
+			}
 			getComponentDefinition().addObserver(this);
 		}
 	}
@@ -60,8 +61,9 @@ public class OperationComponentWOFileResource extends ComponentWOFileResource<Pa
 		super.rebuildDependancies();
 		if (getGenerator() != null) {
 			for (ComponentInstance ci : getGenerator().getComponentDefinition().getComponentInstances()) {
-				if (ci instanceof OperationComponentInstance)
+				if (ci instanceof OperationComponentInstance) {
 					addToDependantResources(((OperationComponentInstance) ci).getOperationNode().getProcess().getFlexoResource());
+				}
 			}
 		}
 	}
@@ -106,8 +108,9 @@ public class OperationComponentWOFileResource extends ComponentWOFileResource<Pa
 							}
 						}
 					}
-					if (iCanBeOptimistic)
+					if (iCanBeOptimistic) {
 						return false;
+					}
 				}
 			}
 		}

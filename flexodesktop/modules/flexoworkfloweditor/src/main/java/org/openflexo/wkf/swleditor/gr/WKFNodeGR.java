@@ -43,8 +43,9 @@ public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O> implem
 	@Override
 	public final double getX() {
 		if (!getNode().hasLocationForContext(SWIMMING_LANE_EDITOR)) {
-			if (!isRegistered())
+			if (!isRegistered()) {
 				return 0;
+			}
 			return getNode().getX(SWIMMING_LANE_EDITOR, getDefaultX());
 		}
 		return getNode().getX(SWIMMING_LANE_EDITOR);
@@ -60,8 +61,9 @@ public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O> implem
 	@Override
 	public double getY() {
 		if (!getNode().hasLocationForContext(SWIMMING_LANE_EDITOR)) {
-			if (!isRegistered())
+			if (!isRegistered()) {
 				return 0;
+			}
 			return getNode().getY(SWIMMING_LANE_EDITOR, getDefaultY());
 		}
 		return getNode().getY(SWIMMING_LANE_EDITOR);
@@ -112,8 +114,9 @@ public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O> implem
 	}
 
 	public double getDefaultX() {
-		if (!getDrawing().hasProcessBeenLaidOut())
+		if (!getDrawing().hasProcessBeenLaidOut()) {
 			return 0;
+		}
 		if (defaultX < 0) {
 			doDefaultLayout(_getDefaultX(), _getDefaultY());
 		}
@@ -121,8 +124,9 @@ public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O> implem
 	}
 
 	public double getDefaultY() {
-		if (!getDrawing().hasProcessBeenLaidOut())
+		if (!getDrawing().hasProcessBeenLaidOut()) {
 			return 0;
+		}
 		if (defaultY < 0) {
 			doDefaultLayout(_getDefaultX(), _getDefaultY());
 		}
@@ -142,20 +146,25 @@ public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O> implem
 	}
 
 	protected void doDefaultLayout(double x, double y) {
-		if (!isRegistered())
+		if (!isRegistered()) {
 			return;
-		if (isLayingout)
+		}
+		if (isLayingout) {
 			return;
+		}
 		isLayingout = true;
 		try {
 			if (getContainerGraphicalRepresentation() != null) {
 				doLayoutMethod1();
-				if (defaultX < 0 || defaultY < 0)
+				if (defaultX < 0 || defaultY < 0) {
 					doLayoutMethod2();
-				if (defaultX < 0 || defaultY < 0)
+				}
+				if (defaultX < 0 || defaultY < 0) {
 					doLayoutMethod3(x, y);
-				if (defaultX >= 0 && defaultY >= 0)
+				}
+				if (defaultX >= 0 && defaultY >= 0) {
 					notifyObjectMoved();
+				}
 			}
 		} finally {
 			isLayingout = false;
@@ -231,8 +240,9 @@ public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O> implem
 										attemptY = attemptY + 10 + getHeight();
 										break;
 									} else {
-										if (logger.isLoggable(Level.WARNING))
+										if (logger.isLoggable(Level.WARNING)) {
 											logger.warning("Could not find suitable location for node (swl): " + getModel());
+										}
 										break;
 									}
 								} else {
@@ -275,19 +285,22 @@ public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O> implem
 		while (gr != null && gr.getParentGraphicalRepresentation() != getParentGraphicalRepresentation()) {
 			gr = gr.getParentGraphicalRepresentation();
 		}
-		if (gr != null && gr instanceof WKFNodeGR<?> && !vector.contains(gr))
+		if (gr != null && gr instanceof WKFNodeGR<?> && !vector.contains(gr)) {
 			vector.add((WKFNodeGR<?>) gr);
+		}
 	}
 
 	public double getDefaultLabelX() {
-		if (getModel().hasLabelLocationForContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR))
+		if (getModel().hasLabelLocationForContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR)) {
 			return getModel().getLabelLocation(ProcessEditorConstants.BASIC_PROCESS_EDITOR).getX();
+		}
 		return 0;
 	}
 
 	public double getDefaultLabelY() {
-		if (getModel().hasLabelLocationForContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR))
+		if (getModel().hasLabelLocationForContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR)) {
 			return getModel().getLabelLocation(ProcessEditorConstants.BASIC_PROCESS_EDITOR).getY();
+		}
 		return 0;
 	}
 

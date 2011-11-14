@@ -143,20 +143,22 @@ public class DefaultInputHandler extends InputHandler {
 			// System.out.println("Registering for "+keyBinding);
 
 			KeyStroke keyStroke = parseKeyStroke(st.nextToken());
-			if (keyStroke == null)
+			if (keyStroke == null) {
 				return;
+			}
 
 			if (st.hasMoreTokens()) {
 				Object o = current.get(keyStroke);
-				if (o instanceof Hashtable)
+				if (o instanceof Hashtable) {
 					current = (Hashtable) o;
-				else {
+				} else {
 					o = new Hashtable();
 					current.put(keyStroke, o);
 					current = (Hashtable) o;
 				}
-			} else
+			} else {
 				current.put(keyStroke, action);
+			}
 		}
 	}
 
@@ -200,8 +202,9 @@ public class DefaultInputHandler extends InputHandler {
 			notifyEnterPressed(evt);
 		}
 
-		if (keyCode == KeyEvent.VK_CONTROL || keyCode == KeyEvent.VK_SHIFT || keyCode == KeyEvent.VK_ALT || keyCode == KeyEvent.VK_META)
+		if (keyCode == KeyEvent.VK_CONTROL || keyCode == KeyEvent.VK_SHIFT || keyCode == KeyEvent.VK_ALT || keyCode == KeyEvent.VK_META) {
 			return;
+		}
 
 		if ((modifiers & ~InputEvent.SHIFT_MASK) != 0 || evt.isActionKey() || keyCode == KeyEvent.VK_BACK_SPACE
 				|| keyCode == KeyEvent.VK_DELETE || keyCode == KeyEvent.VK_ENTER || keyCode == KeyEvent.VK_TAB
@@ -315,8 +318,9 @@ public class DefaultInputHandler extends InputHandler {
 	 *            A string description of the key stroke
 	 */
 	public static KeyStroke parseKeyStroke(String keyStroke) {
-		if (keyStroke == null)
+		if (keyStroke == null) {
 			return null;
+		}
 		int modifiers = 0;
 		int index = keyStroke.indexOf('+');
 		if (index != -1) {
@@ -340,10 +344,11 @@ public class DefaultInputHandler extends InputHandler {
 		String key = keyStroke.substring(index + 1);
 		if (key.length() == 1) {
 			char ch = Character.toUpperCase(key.charAt(0));
-			if (modifiers == 0)
+			if (modifiers == 0) {
 				return KeyStroke.getKeyStroke(ch);
-			else
+			} else {
 				return KeyStroke.getKeyStroke(ch, modifiers);
+			}
 		} else if (key.length() == 0) {
 			System.err.println("Invalid key stroke: " + keyStroke);
 			return null;

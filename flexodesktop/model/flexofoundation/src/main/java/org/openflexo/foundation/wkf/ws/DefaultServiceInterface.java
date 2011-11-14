@@ -81,8 +81,9 @@ public final class DefaultServiceInterface extends ServiceInterface implements I
 			if (getProcess().getPortRegistery() != null) {
 				getProcess().getPortRegistery().addObserver(this);
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("No related PortRegistery !");
+				}
 			}
 			return getProcess().getPortRegistery();
 		}
@@ -114,8 +115,9 @@ public final class DefaultServiceInterface extends ServiceInterface implements I
 		try {
 			ServiceOperation.checkOperationName(this, name, null);
 		} catch (DuplicateWKFObjectException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("An operation with the same name (" + name + ") already exist");
+			}
 			throw e;
 		}
 		ServiceOperation newOp = new DefaultServiceOperation(this, relatedPort);
@@ -126,8 +128,9 @@ public final class DefaultServiceInterface extends ServiceInterface implements I
 	@Override
 	public Vector getOperations() {
 		// updateFromPortRegistery();
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getOperations in DefaultServiceInterface:" + operationTable);
+		}
 		return new Vector(operationTable.values());
 	}
 
@@ -137,16 +140,18 @@ public final class DefaultServiceInterface extends ServiceInterface implements I
 	}
 
 	public void updateFromPortRegistery() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("updateFromPortRegistery() in DefaultServiceInterface of process:" + getProcess().getName());
+		}
 		// Check if some ports have been deleted.
 		Vector operationsToDelete = new Vector(operationTable.values());
 		if (getPortRegistery() != null) {
 			Vector ports = getPortRegistery().getAllPorts();
 			// logger.info("updateFromPortRegistery()");
 			// for (FlexoPort p : getPortRegistery().getAllPorts()) logger.info("port: "+p);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Ports of portRegistry for " + getProcess().getName() + ":" + ports);
+			}
 			for (Enumeration e = ports.elements(); e.hasMoreElements();) {
 				FlexoPort port = (FlexoPort) e.nextElement();
 				if (operationForPort(port) == null) {
@@ -157,8 +162,9 @@ public final class DefaultServiceInterface extends ServiceInterface implements I
 						addToOperations(newOperation);
 						// logger.info("Add operation for "+port);
 					} catch (FlexoException f) {
-						if (logger.isLoggable(Level.WARNING))
+						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Exception should not arise here");
+						}
 						f.printStackTrace();
 					}
 
@@ -169,13 +175,15 @@ public final class DefaultServiceInterface extends ServiceInterface implements I
 				}
 			}
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("No related PortRegistery !");
+			}
 		}
 		for (Enumeration e = operationsToDelete.elements(); e.hasMoreElements();) {
 			ServiceOperation op = (ServiceOperation) e.nextElement();
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Remove ServiceOperation " + op.getName());
+			}
 			op.delete();// will thereby be removed from operations.
 
 		}
@@ -247,22 +255,25 @@ public final class DefaultServiceInterface extends ServiceInterface implements I
 	 */
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("update in DefaultServiceInterface of " + getProcess().getName() + ": " + observable + " - " + dataModification);
+		}
 		if (!isSerializing()) {
 			if (observable == getPortRegistery()) {
 				updateFromPortRegistery();
 			} else {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Received a notification from " + observable);
+				}
 			}
 		}
 	}
 
 	@Override
 	public void delete() {
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Delete in DefaultServiceInterface... ????");
+		}
 		super.delete();
 	}
 

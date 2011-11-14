@@ -80,8 +80,9 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 	}
 
 	public FIBBrowserModel getBrowserModel() {
-		if (_browserModel == null)
+		if (_browserModel == null) {
 			_browserModel = new FIBBrowserModel(_fibBrowser, this, getController());
+		}
 		return _browserModel;
 	}
 
@@ -114,16 +115,19 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		// if (debug) System.out.println("wasSelected: "+wasSelected);
 
 		if (_tree.isEditing()) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine(getComponent().getName() + " - Tree is currently editing");
+			}
 			_tree.getCellEditor().cancelCellEditing();
 		} else {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine(getComponent().getName() + " - Tree is NOT currently edited ");
+			}
 		}
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine(getComponent().getName() + " updateWidgetFromModel() with " + getValue() + " dataObject=" + getDataObject());
+		}
 
 		boolean returned = getBrowserModel().updateRootObject(getRootValue());
 
@@ -142,8 +146,9 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 
 		if (getComponent().getSelected().isValid() && getComponent().getSelected().getBindingValue(getController()) != null) {
 			Object newSelectedObject = getComponent().getSelected().getBindingValue(getController());
-			if (returned = notEquals(newSelectedObject, getSelectedObject()))
+			if (returned = notEquals(newSelectedObject, getSelectedObject())) {
 				setSelectedObject(newSelectedObject);
+			}
 		}
 
 		// }
@@ -166,8 +171,9 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 	}
 
 	public void setSelectedObject(Object object) {
-		if (getRootValue() == null)
+		if (getRootValue() == null) {
 			return;
+		}
 		if (object == getSelectedObject()) {
 			logger.fine("Ignore set selected object");
 			return;
@@ -248,12 +254,15 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 	}
 
 	private void deleteBrowser() {
-		if (_tree != null)
+		if (_tree != null) {
 			_tree.removeFocusListener(this);
-		if (getTreeSelectionModel() != null)
+		}
+		if (getTreeSelectionModel() != null) {
 			getTreeSelectionModel().removeTreeSelectionListener(getBrowserModel());
-		for (MouseListener l : _tree.getMouseListeners())
+		}
+		for (MouseListener l : _tree.getMouseListeners()) {
 			_tree.removeMouseListener(l);
+		}
 	}
 
 	private void buildBrowser() {
@@ -297,8 +306,9 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		_dynamicComponent.removeAll();
 		_dynamicComponent.add(scrollPane, BorderLayout.CENTER);
 
-		if (_fibBrowser.getShowFooter())
+		if (_fibBrowser.getShowFooter()) {
 			_dynamicComponent.add(getBrowserModel().getFooter(), BorderLayout.SOUTH);
+		}
 
 		setVisibleRowCount(_fibBrowser.getVisibleRowCount());
 		_dynamicComponent.revalidate();

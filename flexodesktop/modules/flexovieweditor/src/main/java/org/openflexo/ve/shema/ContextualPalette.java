@@ -95,12 +95,14 @@ public class ContextualPalette extends DrawingPalette {
 		for (EditionScheme es : pattern.getEditionSchemes()) {
 			if (es instanceof DropScheme) {
 				DropScheme dropScheme = (DropScheme) es;
-				if (dropScheme.isTopTarget() && target instanceof DrawingGraphicalRepresentation)
+				if (dropScheme.isTopTarget() && target instanceof DrawingGraphicalRepresentation) {
 					return true;
+				}
 				if (target.getDrawable() instanceof ViewShape) {
 					ViewShape targetShape = (ViewShape) target.getDrawable();
-					if (dropScheme.isValidTarget(targetShape.getEditionPattern()))
+					if (dropScheme.isValidTarget(targetShape.getEditionPattern())) {
 						return true;
+					}
 				}
 			}
 		}

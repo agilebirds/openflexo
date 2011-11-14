@@ -46,9 +46,6 @@ import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlOptions;
 import org.apache.xmlbeans.impl.schema.MySchemaTypeSystemCompiler;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.wsdl.SchemaUtils;
-import org.openflexo.wsdl.WSDL2Java;
-import org.openflexo.wsdl.XMLTypeMapper;
 
 public class WsdlImportTest extends TestCase {
 

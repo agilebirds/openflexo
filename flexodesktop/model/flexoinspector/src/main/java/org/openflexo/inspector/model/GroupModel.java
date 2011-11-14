@@ -60,8 +60,9 @@ public class GroupModel extends ParametersContainerModelObject implements XMLSer
 	public PropertyModel getPropertyNamed(String depends) {
 		for (Enumeration e = properties.elements(); e.hasMoreElements();) {
 			PropertyModel next = (PropertyModel) e.nextElement();
-			if (next.name.equals(depends))
+			if (next.name.equals(depends)) {
 				return next;
+			}
 		}
 		return null;
 	}
@@ -71,8 +72,9 @@ public class GroupModel extends ParametersContainerModelObject implements XMLSer
 		PropertyModel prop = null;
 		while (it.hasNext()) {
 			prop = ((PropertyModel) it.next());
-			if (prop.name.equals(propName))
+			if (prop.name.equals(propName)) {
 				return prop.getWidget();
+			}
 		}
 		return null;
 	}
@@ -87,8 +89,9 @@ public class GroupModel extends ParametersContainerModelObject implements XMLSer
 
 	public void setPropertyForKey(PropertyModel propertyModel, String key) {
 		properties.put(key, propertyModel);
-		if (getTabModel() != null)
+		if (getTabModel() != null) {
 			propertyModel.setTabModel(getTabModel());
+		}
 	}
 
 	public boolean removePropertyWithKey(String key) {

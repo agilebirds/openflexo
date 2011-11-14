@@ -63,12 +63,14 @@ public abstract class FlexoPalette extends JPanel implements ChangeListener {
 		setLayout(new BorderLayout());
 		// setBackground(FlexoCst.GUI_BACK_COLOR);
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Constructor for FlexoPalette");
+		}
 
 		currentTabbedPane = makeTabbedPane();
-		if (currentTabbedPane.getComponentCount() > 0)
+		if (currentTabbedPane.getComponentCount() > 0) {
 			currentTabbedPane.setSelectedIndex(0);
+		}
 		currentTabbedPane.setName("Mon tableau d'onglets");
 		add(currentTabbedPane, BorderLayout.CENTER);
 

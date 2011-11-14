@@ -96,8 +96,9 @@ public class SchemaUtils {
 			schemas[i] = XmlObject.Factory.parse(xmlText, options);
 
 			schemas[i].documentProperties().setSourceName(wsdlUrl);
-			if (wsdlUrl.startsWith("file:"))
+			if (wsdlUrl.startsWith("file:")) {
 				;// fixRelativeFileImports( schemas[i] );
+			}
 		}
 
 		List result = new ArrayList(Arrays.asList(schemas));
@@ -184,13 +185,15 @@ public class SchemaUtils {
 	private static void fixRelativeFileImports(XmlObject xmlObject) throws Exception {
 		XmlObject[] imports = xmlObject.selectPath("declare namespace s='http://www.w3.org/2001/XMLSchema' .//s:import");
 
-		if (imports.length == 0)
+		if (imports.length == 0) {
 			return;
+		}
 
 		String source = xmlObject.documentProperties().getSourceName();
 		int ix = source.lastIndexOf(File.separatorChar);
-		if (ix != -1)
+		if (ix != -1) {
 			source = source.substring(0, ix + 1);
+		}
 
 		for (int c = 0; c < imports.length; c++) {
 			XmlObject importElement = imports[c];

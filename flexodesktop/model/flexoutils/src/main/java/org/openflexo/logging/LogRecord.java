@@ -79,11 +79,13 @@ public class LogRecord extends KVCObject implements XMLSerializable {
 		methodName = record.getSourceMethodName();
 		threadId = record.getThreadID();
 		message = record.getMessage();
-		if (message != null)
+		if (message != null) {
 			message = message.intern();
+		}
 		level = record.getLevel().toString();
-		if (FlexoLoggingManager.getKeepLogTrace())
+		if (FlexoLoggingManager.getKeepLogTrace()) {
 			stackTrace = (new Exception()).getStackTrace();
+		}
 		isUnhandledException = false;
 	}
 

@@ -99,31 +99,36 @@ public class DocResourceManager {
 			File drmModelFile;
 			drmModelFile = new FileResource("Models/DRMModel.xml");
 			if (!drmModelFile.exists()) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("File " + drmModelFile.getAbsolutePath() + " doesn't exist. Maybe you have to check your paths ?");
+				}
 				return null;
 			} else {
 				try {
 					_drmMapping = new XMLMapping(drmModelFile);
 				} catch (InvalidModelException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (IOException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (SAXException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (ParserConfigurationException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				}
 			}
@@ -146,8 +151,9 @@ public class DocResourceManager {
 			getAbstractLeftViewItem();
 			getAbstractRightViewItem();*/
 		} catch (Exception e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception " + e.getMessage() + " occured while loading DocResourceCenter");
+			}
 			e.printStackTrace();
 		}
 	}
@@ -170,10 +176,12 @@ public class DocResourceManager {
 	}
 
 	public boolean needSaving() {
-		if (docResourceCenter == null)
+		if (docResourceCenter == null) {
 			return false;
-		if (docResourceCenter.isModified())
+		}
+		if (docResourceCenter.isModified()) {
 			return true;
+		}
 		for (Enumeration en = _versionsToEventuallySave.elements(); en.hasMoreElements();) {
 			DocItemVersion next = (DocItemVersion) en.nextElement();
 			if (next.needsSaving()) {
@@ -194,17 +202,20 @@ public class DocResourceManager {
 		if (drmFile == null) {
 			drmFile = new FileResource("DocResourceCenter.xml");
 			if (drmFile.exists()) {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Found DRM File : " + drmFile.getAbsolutePath());
+				}
 			} else {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("DRM File not found: " + drmFile.getAbsolutePath());
+				}
 			}
 		}
 		if ((!drmFile.exists()) && (!isSaving)) {
 			drmFile = new File(getDocResourceCenterDirectory(), "DocResourceCenter.xml");
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("DocResourceCenter.xml not found. Creates new DocResourceCenter");
+			}
 			docResourceCenter = DocResourceCenter.createDefaultDocResourceCenter();
 			save();
 		}
@@ -216,8 +227,9 @@ public class DocResourceManager {
 	public static File getDocResourceCenterDirectory() {
 		if (drmDirectory == null) {
 			drmDirectory = instance().getDRMFile().getParentFile();
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Doc Resource Center Directory: " + drmDirectory.getAbsolutePath());
+			}
 		}
 		return drmDirectory;
 	}
@@ -463,14 +475,18 @@ public class DocResourceManager {
 
 	public DocItem getDocItemFor(InspectableObject inspectableObject) {
 		String inspectorName = inspectableObject.getInspectorName();
-		if (inspectorName == null)
+		if (inspectorName == null) {
 			return null;
-		if (inspectorName.equals(Inspectors.IE.POPUP_COMPONENT_DEFINITION_INSPECTOR))
+		}
+		if (inspectorName.equals(Inspectors.IE.POPUP_COMPONENT_DEFINITION_INSPECTOR)) {
 			inspectorName = Inspectors.IE.POPUP_COMPONENT_INSPECTOR;
-		if (inspectorName.equals(Inspectors.IE.OPERATION_COMPONENT_DEFINITION_INSPECTOR))
+		}
+		if (inspectorName.equals(Inspectors.IE.OPERATION_COMPONENT_DEFINITION_INSPECTOR)) {
 			inspectorName = Inspectors.IE.OPERATION_COMPONENT_INSPECTOR;
-		if (inspectorName.equals(Inspectors.IE.TAB_COMPONENT_DEFINITION_INSPECTOR))
+		}
+		if (inspectorName.equals(Inspectors.IE.TAB_COMPONENT_DEFINITION_INSPECTOR)) {
 			inspectorName = Inspectors.IE.TAB_COMPONENT_INSPECTOR;
+		}
 		String itemIdentifier = inspectorName.substring(0, inspectorName.lastIndexOf(".inspector"));
 		return getDocResourceCenter().getItemNamed(itemIdentifier);
 	}
@@ -554,8 +570,9 @@ public class DocResourceManager {
 	}
 
 	public FlexoEditor getEditor() {
-		if (_editor == null)
+		if (_editor == null) {
 			_editor = new DefaultFlexoEditor();
+		}
 		return _editor;
 	}
 

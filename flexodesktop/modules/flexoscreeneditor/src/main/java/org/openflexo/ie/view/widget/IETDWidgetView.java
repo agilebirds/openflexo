@@ -76,10 +76,12 @@ public class IETDWidgetView extends IESequenceWidgetWidgetView {
 		((IETDFlowLayout) getLayout()).setVerticalAlignement(findVerticalAlignement(td()));
 		if (td() != null) {
 			td().addObserver(this);
-			if (td().tr() != null)
+			if (td().tr() != null) {
 				td().tr().addObserver(this);
-		} else if (logger.isLoggable(Level.WARNING))
+			}
+		} else if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Instanciated a new TDWidgetView but the sequence is not inside a TD");
+		}
 		removeTransparentMouseListener();
 		cursorSetter = new CursorSetterHTMLTable(this, model.htmlTable());
 		updateCursorSetter();
@@ -116,42 +118,52 @@ public class IETDWidgetView extends IESequenceWidgetWidgetView {
 	 * @param cursorSetter
 	 */
 	private void updateCursorSetter() {
-		if (td().getXLocation() == 0)
+		if (td().getXLocation() == 0) {
 			cursorSetter.setIgnoreLeftSide(true);
-		else
+		} else {
 			cursorSetter.setIgnoreLeftSide(false);
-		if (td().isLastCell())
+		}
+		if (td().isLastCell()) {
 			cursorSetter.setIgnoreRightSide(true);
-		else
+		} else {
 			cursorSetter.setIgnoreRightSide(false);
+		}
 	}
 
 	private int findVerticalAlignement(IETDWidget td) {
-		if (td.getVerticalAlignement() == null)
+		if (td.getVerticalAlignement() == null) {
 			return SwingConstants.CENTER;
-		if (td.getVerticalAlignement().equals(IETDWidget.VALIGN_MIDDLE))
+		}
+		if (td.getVerticalAlignement().equals(IETDWidget.VALIGN_MIDDLE)) {
 			return SwingConstants.CENTER;
-		if (td.getVerticalAlignement().equals(IETDWidget.VALIGN_TOP))
+		}
+		if (td.getVerticalAlignement().equals(IETDWidget.VALIGN_TOP)) {
 			return SwingConstants.TOP;
-		if (td.getVerticalAlignement().equals(IETDWidget.VALIGN_BOTTOM))
+		}
+		if (td.getVerticalAlignement().equals(IETDWidget.VALIGN_BOTTOM)) {
 			return SwingConstants.BOTTOM;
+		}
 		return SwingConstants.CENTER;
 	}
 
 	public static int alignement(String tdAlignement) {
-		if (tdAlignement == null)
+		if (tdAlignement == null) {
 			return FlowLayout.LEFT;
-		if (tdAlignement.equals(IETDWidget.ALIGN_CENTER))
+		}
+		if (tdAlignement.equals(IETDWidget.ALIGN_CENTER)) {
 			return FlowLayout.CENTER;
-		if (tdAlignement.equals(IETDWidget.ALIGN_RIGHT))
+		}
+		if (tdAlignement.equals(IETDWidget.ALIGN_RIGHT)) {
 			return FlowLayout.RIGHT;
+		}
 		return FlowLayout.LEFT;
 	}
 
 	// TODO: Fix all kinds of problems with reusable components.
 	public IEHTMLTableWidget getHTMLTable() {
-		if (_htmlTable != null)
+		if (_htmlTable != null) {
 			return _htmlTable;
+		}
 		_htmlTable = getSequenceModel().htmlTable();
 		if (_htmlTable == null) {
 			if (_componentView instanceof IEReusableWidgetComponentView) {
@@ -179,15 +191,17 @@ public class IETDWidgetView extends IESequenceWidgetWidgetView {
 		if (getSequenceModel().isInTD()) {
 			IEHTMLTableLayout layout = null;
 			IEWidgetView p = (IEWidgetView) getParent();
-			if (p == null)
+			if (p == null) {
 				return;
+			}
 			while (layout == null) {
 				if (p.getLayout() != null && p.getLayout() instanceof IEHTMLTableLayout) {
 					layout = (IEHTMLTableLayout) p.getLayout();
 				} else {
 					p = (IEWidgetView) p.getParent();
-					if (p == null)
+					if (p == null) {
 						return;
+					}
 				}
 			}
 			IEHTMLTableConstraints c = td().constraints;
@@ -216,33 +230,38 @@ public class IETDWidgetView extends IESequenceWidgetWidgetView {
 				next = next.getNext();
 			}
 			if (next == null) {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Could not find next td of td located at (" + td().getYLocation() + "," + td().getXLocation() + ")");
+				}
 				return;
 			}
 		} else {
-			if (prev instanceof IESpanTDWidget)
+			if (prev instanceof IESpanTDWidget) {
 				prev = ((IESpanTDWidget) prev).getSpanner();
+			}
 			if (prev == null) {
-				if (logger.isLoggable(Level.INFO))
+				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Could not find prev td of td located at (" + td().getYLocation() + "," + td().getXLocation() + ")");
+				}
 				return;
 			}
 		}
 		IETDWidgetView leftView = (IETDWidgetView) (startFromEnd ? this : findViewForModel(prev));
 		IETDWidgetView rightView = (IETDWidgetView) (startFromEnd ? findViewForModel(next) : this);
 		if (rightView == null || leftView == null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Could not find view for TD");
+			}
 			return;
 		}
 		double deltaPourcentage = (increment + 0.0d) / (0.0d + getParent().getSize().width);
 		double leftViewPourcentage = (leftView.getWidth() + 0.0d) / (0.0d + getParent().getSize().width);
 		double rightViewPourcentage = (rightView.getWidth() + 0.0d) / (0.0d + getParent().getSize().width);
-		if (leftViewPourcentage + deltaPourcentage < 0.01d)
+		if (leftViewPourcentage + deltaPourcentage < 0.01d) {
 			deltaPourcentage = 0.01d - leftViewPourcentage;
-		else if (rightViewPourcentage - deltaPourcentage < 0.01d)
+		} else if (rightViewPourcentage - deltaPourcentage < 0.01d) {
 			deltaPourcentage = rightViewPourcentage - 0.01d;
+		}
 		getHTMLTable().adjustPourcentage(leftView.td(), deltaPourcentage, rightView.td());
 	}
 
@@ -311,10 +330,11 @@ public class IETDWidgetView extends IESequenceWidgetWidgetView {
 	 */
 	@Override
 	public Insets getInsets() {
-		if (defaultBorder != null)
+		if (defaultBorder != null) {
 			return defaultBorder.getBorderInsets(this);
-		else
+		} else {
 			return super.getInsets();
+		}
 	}
 
 }

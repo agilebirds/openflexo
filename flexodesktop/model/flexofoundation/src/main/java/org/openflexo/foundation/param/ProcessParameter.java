@@ -38,8 +38,9 @@ public class ProcessParameter extends ParameterDefinition<FlexoProcess> {
 	}
 
 	public boolean isAcceptableProcess(FlexoProcess aProcess) {
-		if (_processSelectingConditional != null)
+		if (_processSelectingConditional != null) {
 			return _processSelectingConditional.isSelectable(aProcess);
+		}
 		return true;
 	}
 

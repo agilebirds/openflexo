@@ -24,8 +24,8 @@ import java.util.logging.Level;
 
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.bindings.AbstractBinding;
-import org.openflexo.foundation.bindings.WKFBindingDefinition;
 import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
+import org.openflexo.foundation.bindings.WKFBindingDefinition;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationWarning;
@@ -190,16 +190,18 @@ public class IFOperator extends OperatorNode implements ContextualEdgeStarting {
 		if (getProject() != null) {
 			WKFBindingDefinition returned = WKFBindingDefinition.get(this, CONDITION_PRIMITIVE, Boolean.class, BindingDefinitionType.GET,
 					false);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Returned WKFBindingDefinition : " + returned);
+			}
 			return returned;
 		}
 		return null;
 	}
 
 	public AbstractBinding getConditionPrimitive() {
-		if (isBeingCloned())
+		if (isBeingCloned()) {
 			return null;
+		}
 		return _conditionPrimitive;
 	}
 
@@ -227,13 +229,15 @@ public class IFOperator extends OperatorNode implements ContextualEdgeStarting {
 			if (getProject() != null) {
 				newStatusForPositiveEvaluation = getProject().getGlobalStatus().get(newStatusForPositiveEvaluationAsString);
 				if (newStatusForPositiveEvaluation == null && !isDeserializing()) {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Status with name " + newStatusForPositiveEvaluationAsString + " could not be found.");
+					}
 					newStatusForPositiveEvaluationAsString = null;
 				}
 			} else if (!isDeserializing()) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("No project for Operation node " + getName());
+				}
 			}
 		}
 		return newStatusForPositiveEvaluation;
@@ -246,10 +250,11 @@ public class IFOperator extends OperatorNode implements ContextualEdgeStarting {
 	}
 
 	public String getNewStatusForPositiveEvaluationAsString() {
-		if (getNewStatusForPositiveEvaluation() != null)
+		if (getNewStatusForPositiveEvaluation() != null) {
 			return getNewStatusForPositiveEvaluation().getFullyQualifiedName();
-		else
+		} else {
 			return null;
+		}
 	}
 
 	public void setNewStatusForPositiveEvaluationAsString(String newStatusForPositiveEvaluationAsString) {
@@ -261,13 +266,15 @@ public class IFOperator extends OperatorNode implements ContextualEdgeStarting {
 			if (getProject() != null) {
 				newStatusForNegativeEvaluation = getProject().getGlobalStatus().get(newStatusForNegativeEvaluationAsString);
 				if (newStatusForNegativeEvaluation == null && !isDeserializing()) {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Status with name " + newStatusForNegativeEvaluationAsString + " could not be found.");
+					}
 					newStatusForNegativeEvaluationAsString = null;
 				}
 			} else if (!isDeserializing()) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("No project for Operation node " + getName());
+				}
 			}
 		}
 		return newStatusForNegativeEvaluation;
@@ -280,10 +287,11 @@ public class IFOperator extends OperatorNode implements ContextualEdgeStarting {
 	}
 
 	public String getNewStatusForNegativeEvaluationAsString() {
-		if (getNewStatusForNegativeEvaluation() != null)
+		if (getNewStatusForNegativeEvaluation() != null) {
 			return getNewStatusForNegativeEvaluation().getFullyQualifiedName();
-		else
+		} else {
 			return null;
+		}
 	}
 
 	public void setNewStatusForNegativeEvaluationAsString(String newStatusForNegativeEvaluationAsString) {
@@ -320,9 +328,10 @@ public class IFOperator extends OperatorNode implements ContextualEdgeStarting {
 			if (post.getOutgoingPostConditions().size() == 2) {
 				FlexoPostCondition post1 = post.getOutgoingPostConditions().get(0);
 				FlexoPostCondition post2 = post.getOutgoingPostConditions().get(1);
-				if (post1.isPositiveEvaluation() != !post2.isPositiveEvaluation())
+				if (post1.isPositiveEvaluation() != !post2.isPositiveEvaluation()) {
 					return new ValidationWarning<MustHaveOnePositiveAndOneNegativeOutgoingFlow, IFOperator>(this, post,
 							"if_node_must_have_exactly_one_positive_and_one_negative_outgoing_flow");
+				}
 			}
 			return null;
 		}

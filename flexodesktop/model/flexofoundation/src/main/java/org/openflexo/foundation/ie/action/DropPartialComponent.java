@@ -90,8 +90,9 @@ public class DropPartialComponent extends FlexoAction<DropPartialComponent, IEOb
 	private Hashtable<String, Integer> parameters;
 
 	public int getIndex() {
-		if (parameters.get(INDEX) == null)
+		if (parameters.get(INDEX) == null) {
 			return 0;
+		}
 		return parameters.get(INDEX);
 	}
 
@@ -100,8 +101,9 @@ public class DropPartialComponent extends FlexoAction<DropPartialComponent, IEOb
 	}
 
 	public int getRow() {
-		if (parameters.get(ROW) == null)
+		if (parameters.get(ROW) == null) {
 			return -1;
+		}
 		return parameters.get(ROW);
 	}
 
@@ -110,8 +112,9 @@ public class DropPartialComponent extends FlexoAction<DropPartialComponent, IEOb
 	}
 
 	public int getCol() {
-		if (parameters.get(COL) == null)
+		if (parameters.get(COL) == null) {
 			return -1;
+		}
 		return parameters.get(COL);
 	}
 
@@ -120,8 +123,9 @@ public class DropPartialComponent extends FlexoAction<DropPartialComponent, IEOb
 	}
 
 	public int getRowSpan() {
-		if (parameters.get(ROW_SPAN) == null)
+		if (parameters.get(ROW_SPAN) == null) {
 			return -1;
+		}
 		return parameters.get(ROW_SPAN);
 	}
 
@@ -130,8 +134,9 @@ public class DropPartialComponent extends FlexoAction<DropPartialComponent, IEOb
 	}
 
 	public int getColSpan() {
-		if (parameters.get(COL_SPAN) == null)
+		if (parameters.get(COL_SPAN) == null) {
 			return -1;
+		}
 		return parameters.get(COL_SPAN);
 	}
 
@@ -154,8 +159,9 @@ public class DropPartialComponent extends FlexoAction<DropPartialComponent, IEOb
 	}
 
 	public FlexoProject getProject() {
-		if (getContainer() != null)
+		if (getContainer() != null) {
 			return getContainer().getProject();
+		}
 		return null;
 	}
 
@@ -168,11 +174,13 @@ public class DropPartialComponent extends FlexoAction<DropPartialComponent, IEOb
 		logger.info("Insert partial component index=" + getIndex() + " row=" + getRow() + " col=" + getCol());
 		// logger.fine ("XML="+getElementXMLRepresentation());
 
-		if (getContainer() == null)
+		if (getContainer() == null) {
 			throw new InvalidDropException("Cannot drop on a null container !");
+		}
 
-		if (getPartialComponent() == null)
+		if (getPartialComponent() == null) {
 			throw new InvalidDropException("Cannot drop a null partial component !");
+		}
 
 		if (!insertWidget(getContainer())) {
 			throw new InvalidDropException("Cannot drop such a widget (" + partialComponent.getClass().getName() + ") on this container("
@@ -183,13 +191,15 @@ public class DropPartialComponent extends FlexoAction<DropPartialComponent, IEOb
 
 	private boolean insertWidget(IEObject container) throws InvalidDropException {
 		IEWOComponent woComponent = container instanceof IEWidget ? ((IEWidget) container).getWOComponent() : null;
-		if (woComponent == null)
+		if (woComponent == null) {
 			return false;
+		}
 
 		if (container instanceof IESequenceWidget && ((IESequenceWidget) container).isTopComponent()
 				&& getPartialComponent().getWOComponent().isTopComponent()) {
-			if (getIndex() == -1)
+			if (getIndex() == -1) {
 				throw new InvalidDropException("Cannot drop element at this index: " + getIndex());
+			}
 			IEReusableWidget newWidget = new TopComponentReusableWidget(woComponent, getPartialComponent(), (IESequenceWidget) container,
 					container.getProject());
 			droppedWidget = newWidget;
@@ -243,8 +253,9 @@ public class DropPartialComponent extends FlexoAction<DropPartialComponent, IEOb
 			}
 		}
 		if (container instanceof IESequenceWidget) {
-			if (getIndex() == -1)
+			if (getIndex() == -1) {
 				throw new InvalidDropException("Cannot drop element at this index: " + getIndex());
+			}
 			IEReusableWidget newWidget = new InnerTableReusableWidget(woComponent, getPartialComponent(), (IESequenceWidget) container,
 					container.getProject());
 			droppedWidget = newWidget;
@@ -291,8 +302,9 @@ public class DropPartialComponent extends FlexoAction<DropPartialComponent, IEOb
 		if (container instanceof IEWidget) {
 			IEObject current = container;
 			while (reply == null && current instanceof IEWidget) {
-				if (((IEWidget) current).getParent() instanceof IESequenceTR)
+				if (((IEWidget) current).getParent() instanceof IESequenceTR) {
 					reply = new DropLocationForITableRow(((IEWidget) current).getIndex(), (IESequenceTR) ((IEWidget) current).getParent());
+				}
 				current = ((IEWidget) current).getParent();
 			}
 		}

@@ -34,13 +34,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import org.openflexo.icon.GeneratorIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.logging.FlexoLogger;
-import org.openflexo.swing.VerticalLayout;
-import org.openflexo.view.FlexoDialog;
-import org.openflexo.view.listener.FlexoActionButton;
-
 import org.openflexo.components.AskParametersPanel;
 import org.openflexo.dgmodule.DGCst;
 import org.openflexo.dgmodule.controller.DGController;
@@ -54,6 +47,12 @@ import org.openflexo.foundation.rm.cg.ContentSource;
 import org.openflexo.foundation.rm.cg.ContentSource.ContentSourceType;
 import org.openflexo.generator.action.ShowFileVersion;
 import org.openflexo.generator.rm.GenerationAvailableFileResource;
+import org.openflexo.icon.GeneratorIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.logging.FlexoLogger;
+import org.openflexo.swing.VerticalLayout;
+import org.openflexo.view.FlexoDialog;
+import org.openflexo.view.listener.FlexoActionButton;
 
 /**
  * @author sylvain
@@ -224,9 +223,10 @@ public class DGFileDiffEditorPopup extends FlexoDialog {
 
 		protected ContentSource getUpdatedContentSource() {
 			if ((sourceParam.getValue() == ContentSourceType.HistoryVersion) && (versionParam.getValue() == null)
-					&& _cgFile.getResource().getGeneratedResourceData() instanceof AbstractGeneratedFile)
+					&& _cgFile.getResource().getGeneratedResourceData() instanceof AbstractGeneratedFile) {
 				versionParam.setValue(((AbstractGeneratedFile) _cgFile.getResource().getGeneratedResourceData()).getHistory()
 						.versionWithId(_cgFile.getRepository().getLastReleaseVersionIdentifier()));
+			}
 			return ContentSource.getContentSource(sourceParam.getValue(), (versionParam.getValue() != null ? versionParam.getValue()
 					.getVersionId() : null));
 		}

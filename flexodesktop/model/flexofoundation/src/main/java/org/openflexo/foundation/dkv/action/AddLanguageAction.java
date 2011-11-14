@@ -91,8 +91,9 @@ public class AddLanguageAction extends FlexoUndoableAction<AddLanguageAction, DK
 	@Override
 	protected void doAction(Object context) throws FlexoException {
 		newLanguage = getDkvModel().addLanguageNamed(_languageName);
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Language added");
+		}
 		objectCreated("NEW_LANGUAGE", newLanguage);
 	}
 

@@ -32,7 +32,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import org.openflexo.ColorCst;
-import org.openflexo.FlexoCst;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemVersion;
 import org.openflexo.drm.Language;

@@ -33,14 +33,14 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
-import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.fge.controller.MouseClickControlAction.MouseClickControlActionType;
 import org.openflexo.fge.controller.MouseControl.MouseButton;
+import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.fge.controller.MouseDragControlAction.MouseDragControlActionType;
 import org.openflexo.fge.geom.FGEDimension;
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.DrawingDecorationPainter;
 import org.openflexo.fge.graphics.FGEDrawingDecorationGraphics;
@@ -148,11 +148,14 @@ public class DrawingGraphicalRepresentation<M> extends GraphicalRepresentation<M
 		if (gr instanceof ConnectorGraphicalRepresentation) {
 			for (Parameters p : Parameters.values()) {
 				boolean excepted = false;
-				for (GRParameter ep : exceptedParameters)
-					if (p == ep)
+				for (GRParameter ep : exceptedParameters) {
+					if (p == ep) {
 						excepted = true;
-				if (!excepted)
+					}
+				}
+				if (!excepted) {
 					_setParameterValueWith(p, gr);
+				}
 			}
 		}
 	}
@@ -403,8 +406,9 @@ public class DrawingGraphicalRepresentation<M> extends GraphicalRepresentation<M
 	private static void _appendGraphicalRepresentations(Vector<GraphicalRepresentation> v, GraphicalRepresentation<?> gr) {
 		v.add(gr);
 		List<? extends Object> containedObjects = gr.getContainedObjects();
-		if (containedObjects == null)
+		if (containedObjects == null) {
 			return;
+		}
 		for (Object drawable : containedObjects) {
 			GraphicalRepresentation<?> next = gr.getGraphicalRepresentation(drawable);
 			_appendGraphicalRepresentations(v, next);
@@ -512,8 +516,9 @@ public class DrawingGraphicalRepresentation<M> extends GraphicalRepresentation<M
 				} else {
 					// Look if we are not contained in a child shape outside current shape
 					GraphicalRepresentation insideFocusedShape = getTopLevelShapeGraphicalRepresentation(child, p);
-					if (insideFocusedShape != null && insideFocusedShape instanceof ShapeGraphicalRepresentation)
+					if (insideFocusedShape != null && insideFocusedShape instanceof ShapeGraphicalRepresentation) {
 						enclosingShapes.add((ShapeGraphicalRepresentation) insideFocusedShape);
+					}
 				}
 			}
 		}

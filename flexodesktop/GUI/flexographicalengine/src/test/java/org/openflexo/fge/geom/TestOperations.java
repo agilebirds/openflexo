@@ -19,8 +19,8 @@
  */
 package org.openflexo.fge.geom;
 
-import org.openflexo.fge.geom.FGEEllips;
-import org.openflexo.fge.geom.FGERectangle;
+import junit.framework.TestCase;
+
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.area.FGEArea;
@@ -28,8 +28,6 @@ import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geom.area.FGEIntersectionArea;
 import org.openflexo.fge.geom.area.FGESubstractionArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
-
-import junit.framework.TestCase;
 
 public class TestOperations extends TestCase {
 

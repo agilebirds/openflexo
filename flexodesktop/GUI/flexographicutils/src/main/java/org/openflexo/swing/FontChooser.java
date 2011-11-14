@@ -67,21 +67,24 @@ public class FontChooser extends JDialog implements ActionListener {
 	}
 
 	public static Font showDialog(Window parent, Font currentFont) {
-		if (parent != null && !(parent instanceof Frame) && !(parent instanceof Dialog))
+		if (parent != null && !(parent instanceof Frame) && !(parent instanceof Dialog)) {
 			parent = null;
+		}
 		FontChooser fc;
-		if (parent instanceof Frame)
+		if (parent instanceof Frame) {
 			fc = new FontChooser((Frame) parent, currentFont);
-		else if (parent instanceof Dialog)
+		} else if (parent instanceof Dialog) {
 			fc = new FontChooser((Dialog) parent, currentFont);
-		else
+		} else {
 			fc = new FontChooser((Frame) null, currentFont);
+		}
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		fc.setLocation((dim.width - fc.getSize().width) / 2, (dim.height - fc.getSize().height) / 2);
 		fc.setVisible(true);
 		Font f = fc.getNewFont();
-		if (f == null)
+		if (f == null) {
 			return null;
+		}
 		return f;
 	}
 

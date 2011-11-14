@@ -27,11 +27,11 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.fps.CVSAbstractFile;
+import org.openflexo.fps.CVSAbstractFile.UpdateListener;
+import org.openflexo.fps.CVSAbstractFile.UpdateStatus;
 import org.openflexo.fps.CVSContainer;
 import org.openflexo.fps.CVSFile;
 import org.openflexo.fps.FPSObject;
-import org.openflexo.fps.CVSAbstractFile.UpdateListener;
-import org.openflexo.fps.CVSAbstractFile.UpdateStatus;
 import org.openflexo.localization.FlexoLocalization;
 
 public class MarkAsMergedFiles extends MultipleFileCVSAction<MarkAsMergedFiles> implements UpdateListener {
@@ -109,8 +109,9 @@ public class MarkAsMergedFiles extends MultipleFileCVSAction<MarkAsMergedFiles> 
 			CVSFile[] filesToUpdateInThisDir = filesToUpdate.get(dir).toArray(new CVSFile[filesToUpdate.get(dir).size()]);
 			logger.info("Updating in " + dir);
 			CVSAbstractFile.UpdatingThread t = ((CVSAbstractFile) dir).update(this, false, filesToUpdateInThisDir);
-			if (t != null)
+			if (t != null) {
 				updatingThreads.add(t);
+			}
 			filesToWait += filesToUpdateInThisDir.length;
 		}
 	}
@@ -161,10 +162,11 @@ public class MarkAsMergedFiles extends MultipleFileCVSAction<MarkAsMergedFiles> 
 
 	@Override
 	public boolean hasActionExecutionSucceeded() {
-		if (timeOutReceived)
+		if (timeOutReceived) {
 			return false;
-		else
+		} else {
 			return super.hasActionExecutionSucceeded();
+		}
 	}
 
 	private boolean timeOutReceived;

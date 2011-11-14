@@ -32,7 +32,6 @@ import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.CGRepository;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.generator.ProjectGenerator;
-import org.openflexo.generator.action.GCAction;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.localization.FlexoLocalization;
 
@@ -96,10 +95,11 @@ public class GenerateWAR extends GCAction<GenerateWAR, CGRepository> {
 		}
 
 		logger.info("Generate WAR for " + getFocusedObject());
-		if (getFlexoProgress() != null)
+		if (getFlexoProgress() != null) {
 			getFlexoProgress().setProgress(
 					FlexoLocalization.localizedForKey("generate") + " " + pg.getRepository().getWarName() + " "
 							+ FlexoLocalization.localizedForKey("into") + " " + getFocusedObject().getWarDirectory().getAbsolutePath());
+		}
 		try {
 			if (_customOutStream != null) {
 				_defaultOutStream = System.out;

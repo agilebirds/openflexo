@@ -56,7 +56,6 @@ import org.openflexo.generator.ie.PageComponentGenerator;
 import org.openflexo.generator.ie.PopupComponentGenerator;
 import org.openflexo.generator.ie.PopupLinkComponentGenerator;
 import org.openflexo.generator.ie.TabComponentGenerator;
-import org.openflexo.generator.rm.FlexoCopyOfFileResource;
 import org.openflexo.generator.utils.ApplicationConfProdGenerator;
 import org.openflexo.generator.utils.BuildPropertiesGenerator;
 import org.openflexo.generator.utils.HelpGenerator;
@@ -251,8 +250,9 @@ public class GeneratedFileResourceFactory {
 			registerResource(javaResource, generator.getComponentClassName() + ".java", generator.getComponentFolderPath());
 		} else {
 			javaResource.setGenerator(generator);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Successfully retrieved POPUP JAVA resource " + javaResource.getName());
+			}
 		}
 		javaResource.registerObserverWhenRequired();
 		return javaResource;
@@ -311,12 +311,14 @@ public class GeneratedFileResourceFactory {
 			CGJavaFile cgFile = new CGJavaFile(repository, javaResource);
 			initCGFile(cgFile, repository.getJavaSymbolicDirectory(), javaResource);
 			registerResource(javaResource, generator.getComponentClassName() + ".java", generator.getComponentFolderPath());
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Created PopupLink JAVA resource " + javaResource.getName());
+			}
 		} else {
 			javaResource.setGenerator(generator);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Successfully retrieved PopupLink JAVA resource " + javaResource.getName());
+			}
 		}
 		javaResource.registerObserverWhenRequired();
 		return javaResource;
@@ -543,8 +545,9 @@ public class GeneratedFileResourceFactory {
 		FlexoProject project = resourceToCopy.getProject();
 		FlexoCopiedResource returned = new FlexoCopiedResource(project, resourceToCopy);
 		if (repository.getSymbolicDirectories().get(symbolicDirectory.getName()) != symbolicDirectory) {
-			if (logger.isLoggable(Level.SEVERE))
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Hu oh!!! you added a file to a repository but you passed a symbolic directory that is not in it? I will continue, but I would expect major failures later");
+			}
 		}
 		cgFile.setResource(returned);
 		cgFile.setSymbolicDirectory(symbolicDirectory);

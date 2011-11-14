@@ -48,8 +48,9 @@ public class SelfExecutableOperationNodeActivation extends NodeActivation<SelfEx
 
 		if (getNode().getAssignments().size() > 0) {
 			Vector<ControlGraph> allAssignments = new Vector<ControlGraph>();
-			for (BindingAssignment assignment : getNode().getAssignments())
+			for (BindingAssignment assignment : getNode().getAssignments()) {
 				allAssignments.add(makeControlGraphForAssignment(assignment));
+			}
 			EXECUTE_ASSIGNMENTS = makeSequentialControlGraph(allAssignments);
 			EXECUTE_ASSIGNMENTS.setHeaderComment("Perform assignments declared for execution of node " + getNode().getName());
 		}

@@ -23,11 +23,11 @@ import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.controller.DrawingController;
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGESegment;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
-import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geom.area.FGEHalfBand;
@@ -64,10 +64,12 @@ public class AdjustableIntermediateSegment extends RectPolylinAdjustableSegment 
 			RectPolylinConnector.logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector");
 			return;
 		}
-		if (index > 1)
+		if (index > 1) {
 			beforePreviousSegment = getPolylin().getSegmentAt(index - 2);
-		if (index + 2 < getPolylin().getSegmentNb())
+		}
+		if (index + 2 < getPolylin().getSegmentNb()) {
 			afterNextSegment = getPolylin().getSegmentAt(index + 2);
+		}
 		currentOrientation = currentSegment.getApproximatedOrientation();
 		previousOrientation = previousSegment.getApproximatedOrientation();
 		nextOrientation = nextSegment.getApproximatedOrientation();
@@ -156,8 +158,9 @@ public class AdjustableIntermediateSegment extends RectPolylinAdjustableSegment 
 
 	@Override
 	public FGEArea getDraggingAuthorizedArea() {
-		if (!consistentData)
+		if (!consistentData) {
 			return new FGEEmptyArea();
+		}
 
 		return draggingAuthorizedArea;
 		/*

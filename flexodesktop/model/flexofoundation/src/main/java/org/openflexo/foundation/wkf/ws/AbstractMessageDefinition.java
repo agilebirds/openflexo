@@ -76,8 +76,9 @@ public abstract class AbstractMessageDefinition extends WKFObject implements Ins
 
 	@Override
 	public String getFullyQualifiedName() {
-		if (getFatherObject() != null)
+		if (getFatherObject() != null) {
 			return getFatherObject().getFullyQualifiedName() + ".MESSAGE";
+		}
 		return null;
 	}
 

@@ -1272,15 +1272,17 @@ public class XMLCoder {
 						// Debugging.debug ("Look up with tag "+xmlTag);
 					}
 				}
-				if (xmlTag != null)
+				if (xmlTag != null) {
 					break;
+				}
 			}
 			if (xmlTag == null) {
 				// Could notLook up tag, choosing first one
 				StringBuilder sb = new StringBuilder();
 				for (String tags : someXmlTags) {
-					if (sb.length() > 0)
+					if (sb.length() > 0) {
 						sb.append(",");
+					}
 					sb.append(tags);
 				}
 				xmlTag = someXmlTags[0];
@@ -1362,9 +1364,10 @@ public class XMLCoder {
 			} else {
 				reference = getNextReference();
 			}
-			if (serializationIdentifierForObject.get(reference) != null && serializationIdentifierForObject.get(reference) != anObject)
+			if (serializationIdentifierForObject.get(reference) != null && serializationIdentifierForObject.get(reference) != anObject) {
 				throw new DuplicateSerializationIdentifierException(reference, serializationIdentifierForObject.get(reference), anObject,
 						aModelEntity, xmlTag);
+			}
 			alreadySerialized.put(anObject, reference);
 			serializationIdentifierForObject.put(reference, anObject);
 
@@ -1709,12 +1712,14 @@ public class XMLCoder {
 				ref.previous = null;
 				ref.element = null;
 				ref.objectReference = null;
-				if (previous != null)
+				if (previous != null) {
 					previous.next = null;
+				}
 				previous = ref;
 			}
-			if (previous != null)
+			if (previous != null) {
 				previous.next = null;
+			}
 		}
 
 		public OrderedElementReference initEntry() {
@@ -1743,23 +1748,31 @@ public class XMLCoder {
 			endRef1.next = nRef2;
 			startRef2.previous = pRef1;
 			endRef2.next = nRef1;
-			if (pRef1 != null)
+			if (pRef1 != null) {
 				pRef1.next = startRef2;
-			if (nRef1 != null)
+			}
+			if (nRef1 != null) {
 				nRef1.previous = endRef2;
-			if (pRef2 != null)
+			}
+			if (pRef2 != null) {
 				pRef2.next = startRef1;
-			if (nRef2 != null)
+			}
+			if (nRef2 != null) {
 				nRef2.previous = endRef1;
+			}
 
-			if (first == startRef1)
+			if (first == startRef1) {
 				first = startRef2;
-			if (first == startRef2)
+			}
+			if (first == startRef2) {
 				first = startRef1;
-			if (last == endRef1)
+			}
+			if (last == endRef1) {
 				last = endRef2;
-			if (last == endRef2)
+			}
+			if (last == endRef2) {
 				last = endRef1;
+			}
 
 		}
 
@@ -1809,8 +1822,9 @@ public class XMLCoder {
 			@Override
 			public Object nextElement() {
 				Object returned = current;
-				if (current != null)
+				if (current != null) {
 					current = current.next;
+				}
 				return returned;
 			}
 
@@ -1876,12 +1890,14 @@ public class XMLCoder {
 
 		protected void changeId(int newId) {
 			// System.out.println("changeId() to "+newId+" for "+primaryElement.element);
-			if ((primaryElement != null) && (primaryElement.element != null))
+			if ((primaryElement != null) && (primaryElement.element != null)) {
 				changeIdForElement(newId, primaryElement.element);
+			}
 			for (Enumeration en = referenceElements.elements(); en.hasMoreElements();) {
 				ElementReference next = (ElementReference) en.nextElement();
-				if (next.element != null)
+				if (next.element != null) {
 					changeIdForElement(newId, next.element);
+				}
 			}
 		}
 
@@ -1910,8 +1926,9 @@ public class XMLCoder {
 		private boolean done = false;
 
 		protected boolean postProcess() {
-			if (done)
+			if (done) {
 				return true;
+			}
 			if (primaryElement.property.isPrimary()) { // That's OK
 				done = true;
 				return true;
@@ -1972,8 +1989,9 @@ public class XMLCoder {
 
 		private int idForElement(Element el) {
 			int returned = StringEncoder.decodeAsInteger(el.getAttributeValue(XMLMapping.idLabel));
-			if (returned == -1)
+			if (returned == -1) {
 				returned = StringEncoder.decodeAsInteger(el.getAttributeValue(XMLMapping.idrefLabel));
+			}
 			return returned;
 		}
 
@@ -2014,13 +2032,15 @@ public class XMLCoder {
 				int newRequiredSwaps = 0;
 				for (Enumeration en = objectReferences.elements(); en.hasMoreElements();) {
 					ObjectReference next = (ObjectReference) en.nextElement();
-					if (!next.postProcess())
+					if (!next.postProcess()) {
 						newRequiredSwaps++;
+					}
 				}
-				if (newRequiredSwaps == requiredSwaps)
+				if (newRequiredSwaps == requiredSwaps) {
 					requiredSwaps = 0; // To avoid infinite loop
-				else
+				} else {
 					requiredSwaps = newRequiredSwaps;
+				}
 			}
 
 			if ((xmlMapping.serializationMode == XMLMapping.ORDERED_PSEUDO_TREE) && (!implementsCustomIdMappingScheme())) {

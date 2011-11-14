@@ -40,8 +40,9 @@ public class FlexoFileResourceResource extends FlexoMemoryResource {
 			try {
 				project.registerResource(r);
 			} catch (DuplicateResourceException e) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.log(Level.SEVERE, "This should not happen", e);
+				}
 				e.printStackTrace();
 				r = (FlexoFileResourceResource) project.resourceForKey(r.getResourceIdentifier());
 			}

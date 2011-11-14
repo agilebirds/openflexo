@@ -24,8 +24,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.bindings.BindingDefinition;
-import org.openflexo.foundation.bindings.BindingValue;
 import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
+import org.openflexo.foundation.bindings.BindingValue;
 import org.openflexo.foundation.dm.DMType;
 
 public class FlattenRelationshipDefinition extends BindingValue {
@@ -66,18 +66,20 @@ public class FlattenRelationshipDefinition extends BindingValue {
 		boolean isFirst = true;
 		StringBuilder sb = new StringBuilder("");
 		for (BindingPathElement element : _bindingPath) {
-			if (element != null)
+			if (element != null) {
 				sb.append((isFirst ? "" : ".") + element.getSerializationRepresentation());
-			else
+			} else {
 				sb.append(".null");
+			}
 			isFirst = false;
 		}
 		return sb.toString();
 	}
 
 	private void decodeFromStringRepresentation(String definition) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Decoding as " + definition);
+		}
 		_bindingPath.clear();
 		StringTokenizer st = new StringTokenizer(definition, ".");
 		DMEOEntity current = _sourceEntity;

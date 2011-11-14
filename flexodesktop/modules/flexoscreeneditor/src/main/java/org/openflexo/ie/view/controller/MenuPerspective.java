@@ -85,10 +85,11 @@ class MenuPerspective extends FlexoPerspective<FlexoItemMenu> {
 
 	@Override
 	public ModuleView<FlexoItemMenu> createModuleViewForObject(FlexoItemMenu menu, FlexoController controller) {
-		if (menu.isRootMenu())
+		if (menu.isRootMenu()) {
 			return new FlexoMenuRootItemView(menu, (IEController) controller);
-		else
+		} else {
 			return new FlexoMenuItemView(menu, (IEController) controller);
+		}
 	}
 
 	@Override

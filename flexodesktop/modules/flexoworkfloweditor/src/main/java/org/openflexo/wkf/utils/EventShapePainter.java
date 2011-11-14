@@ -23,9 +23,9 @@ import java.awt.Color;
 
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.geom.FGECircle;
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;

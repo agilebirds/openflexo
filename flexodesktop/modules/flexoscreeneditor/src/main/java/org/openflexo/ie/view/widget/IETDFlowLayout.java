@@ -68,8 +68,9 @@ public class IETDFlowLayout extends FlowLayout {
 		Insets insets = target.getInsets();
 		Dimension targetMaxSize = target.getMaximumSize();
 		int maxWidth = targetMaxSize.width - (insets.left + insets.right + getHgap() * 2);
-		if (maxWidth < 0)
+		if (maxWidth < 0) {
 			maxWidth = 0;
+		}
 		int currentWidth = 0;
 		int currentHeight = 0;
 		boolean first = true;
@@ -84,10 +85,11 @@ public class IETDFlowLayout extends FlowLayout {
 					currentHeight = Math.max(currentHeight, d.height);
 					// The max height of all components of this line is the
 					// height of this line
-					if (first)
+					if (first) {
 						first = false;
-					else
+					} else {
 						currentWidth += getHgap();
+					}
 				} else {// We add the component to a new line
 					dim.height += currentHeight + getVgap();
 					// We add the height of the previous line and the vertical
@@ -120,8 +122,9 @@ public class IETDFlowLayout extends FlowLayout {
 		synchronized (target.getTreeLock()) {
 			Insets insets = target.getInsets();
 			int maxwidth = target.getWidth() - (insets.left + insets.right + getHgap() * 2);
-			if (maxwidth < 0)
+			if (maxwidth < 0) {
 				maxwidth = 0;
+			}
 			int nmembers = target.getComponentCount();
 			int x = 0, y = getVgap();
 			int rowh = 0, start = 0;
@@ -156,10 +159,12 @@ public class IETDFlowLayout extends FlowLayout {
 	private void moveComponents(Container target, int x, int y, int width, int height, int rowStart, int rowEnd, boolean ltr, int offset) {
 
 		synchronized (target.getTreeLock()) {
-			if (x < 0)
+			if (x < 0) {
 				x = getHgap();
-			if (y < 0)
+			}
+			if (y < 0) {
 				y = getVgap();
+			}
 			switch (getVerticalAlignement()) {
 			case SwingConstants.TOP:
 				break;

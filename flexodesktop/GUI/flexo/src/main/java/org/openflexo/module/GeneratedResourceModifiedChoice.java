@@ -135,8 +135,9 @@ public abstract class GeneratedResourceModifiedChoice extends KVCObject implemen
 				return next;
 			}
 		}
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Cannot find choice " + anIdentifier);
+		}
 		if (getAvailableChoices().size() > 0) {
 			return getAvailableChoices().firstElement();
 		}

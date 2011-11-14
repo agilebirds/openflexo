@@ -283,8 +283,9 @@ public abstract class BasicCommand extends BuildableCommand {
 	 */
 	private final boolean fileRequiresConflictResolution(File file, Entry entry) {
 
-		if (file == null)
+		if (file == null) {
 			return false; // null file is set by clean copy
+		}
 
 		boolean ret = false;
 

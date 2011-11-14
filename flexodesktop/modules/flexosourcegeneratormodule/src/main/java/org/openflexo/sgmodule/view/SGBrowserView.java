@@ -38,18 +38,17 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import org.openflexo.FlexoCst;
+import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
+import org.openflexo.components.browser.ProjectBrowser;
+import org.openflexo.components.browser.view.BrowserView;
+import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.cg.CGFile;
+import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.sgmodule.SGCst;
 import org.openflexo.sgmodule.controller.SGController;
 import org.openflexo.sgmodule.controller.browser.SGBrowser;
-
-import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
-import org.openflexo.components.browser.view.BrowserView;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.cg.CGFile;
-import org.openflexo.foundation.cg.GenerationRepository;
 
 /**
  * @author sylvain

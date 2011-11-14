@@ -72,8 +72,9 @@ public class ObjectPropertyAssertion extends AbstractAssertion {
 	}
 
 	public ViewPointDataBinding getObject() {
-		if (object == null)
+		if (object == null) {
 			object = new ViewPointDataBinding(this, EditionActionBindingAttribute.object, getObjectBindingDefinition());
+		}
 		return object;
 	}
 
@@ -86,8 +87,9 @@ public class ObjectPropertyAssertion extends AbstractAssertion {
 
 	public OntologyObject getAssertionObject(EditionSchemeAction action) {
 		Object value = getObject().getBindingValue(action);
-		if (value instanceof OntologyObject)
+		if (value instanceof OntologyObject) {
 			return (OntologyObject) value;
+		}
 		return null;
 	}
 

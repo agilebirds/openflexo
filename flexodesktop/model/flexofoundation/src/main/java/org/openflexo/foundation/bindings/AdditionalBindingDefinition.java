@@ -50,8 +50,9 @@ public class AdditionalBindingDefinition extends FlexoModelObject implements Ins
 
 	public void setValue(String value) {
 		this._value = value;
-		if (_owner != null)
+		if (_owner != null) {
 			_owner.setChanged();
+		}
 	}
 
 	public String getVariableName() {
@@ -60,8 +61,9 @@ public class AdditionalBindingDefinition extends FlexoModelObject implements Ins
 
 	public void setVariableName(String name) {
 		_variableName = name;
-		if (_owner != null)
+		if (_owner != null) {
 			_owner.setChanged();
+		}
 	}
 
 	public void setOwner(IEWidget widget) {
@@ -120,9 +122,10 @@ public class AdditionalBindingDefinition extends FlexoModelObject implements Ins
 	 */
 	@Override
 	public FlexoProject getProject() {
-		if (_owner != null)
+		if (_owner != null) {
 			return _owner.getProject();
-		else
+		} else {
 			return null;
+		}
 	}
 }

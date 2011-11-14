@@ -384,10 +384,11 @@ public class TextAreaPainter extends JComponent implements TabExpander {
 	 */
 	@Override
 	public String getToolTipText(MouseEvent evt) {
-		if (highlights.size() > 0)
+		if (highlights.size() > 0) {
 			return highlights.firstElement().getToolTipText(evt);
-		else
+		} else {
 			return null;
+		}
 	}
 
 	/**
@@ -614,17 +615,20 @@ public class TextAreaPainter extends JComponent implements TabExpander {
 	}
 
 	protected void paintHighlight(Graphics gfx, int line, int y) {
-		if (line >= textArea.getSelectionStartLine() && line <= textArea.getSelectionEndLine())
+		if (line >= textArea.getSelectionStartLine() && line <= textArea.getSelectionEndLine()) {
 			paintLineHighlight(gfx, line, y);
+		}
 
 		for (Highlight h : highlights) {
 			h.paintHighlight(gfx, line, y);
 		}
-		if (bracketHighlight && line == textArea.getBracketLine())
+		if (bracketHighlight && line == textArea.getBracketLine()) {
 			paintBracketHighlight(gfx, line, y);
+		}
 
-		if (line == textArea.getCaretLine())
+		if (line == textArea.getCaretLine()) {
 			paintCaret(gfx, line, y);
+		}
 	}
 
 	protected void paintLineHighlight(Graphics gfx, int line, int y) {
@@ -651,8 +655,9 @@ public class TextAreaPainter extends JComponent implements TabExpander {
 				int lineLen = textArea.getLineLength(line);
 				x1 = textArea._offsetToX(line, Math.min(lineLen, selectionStart - textArea.getLineStartOffset(selectionStartLine)));
 				x2 = textArea._offsetToX(line, Math.min(lineLen, selectionEnd - textArea.getLineStartOffset(selectionEndLine)));
-				if (x1 == x2)
+				if (x1 == x2) {
 					x2++;
+				}
 			} else if (selectionStartLine == selectionEndLine) {
 				x1 = textArea._offsetToX(line, selectionStart - lineStart);
 				x2 = textArea._offsetToX(line, selectionEnd - lineStart);
@@ -675,8 +680,9 @@ public class TextAreaPainter extends JComponent implements TabExpander {
 
 	protected void paintBracketHighlight(Graphics gfx, int line, int y) {
 		int position = textArea.getBracketPosition();
-		if (position == -1)
+		if (position == -1) {
 			return;
+		}
 		y += fm.getLeading() + fm.getMaxDescent();
 		int x = textArea._offsetToX(line, position);
 		gfx.setColor(bracketHighlightColor);

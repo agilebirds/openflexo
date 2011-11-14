@@ -99,18 +99,19 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 	}
 
 	public static BackgroundStyle makeBackground(BackgroundStyleType type) {
-		if (type == BackgroundStyleType.NONE)
+		if (type == BackgroundStyleType.NONE) {
 			return makeEmptyBackground();
-		else if (type == BackgroundStyleType.COLOR)
+		} else if (type == BackgroundStyleType.COLOR) {
 			return makeColoredBackground(java.awt.Color.WHITE);
-		else if (type == BackgroundStyleType.COLOR_GRADIENT)
+		} else if (type == BackgroundStyleType.COLOR_GRADIENT) {
 			return makeColorGradientBackground(java.awt.Color.WHITE, java.awt.Color.BLACK,
 					org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
-		else if (type == BackgroundStyleType.TEXTURE)
+		} else if (type == BackgroundStyleType.TEXTURE) {
 			return makeTexturedBackground(org.openflexo.fge.graphics.BackgroundStyle.Texture.TextureType.TEXTURE1, java.awt.Color.RED,
 					java.awt.Color.WHITE);
-		else if (type == BackgroundStyleType.IMAGE)
+		} else if (type == BackgroundStyleType.IMAGE) {
 			return makeImageBackground((File) null);
+		}
 		return null;
 	}
 
@@ -194,10 +195,11 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 
 		private boolean requireChange(Object oldObject, Object newObject) {
 			if (oldObject == null) {
-				if (newObject == null)
+				if (newObject == null) {
 					return false;
-				else
+				} else {
 					return true;
+				}
 			}
 			return !oldObject.equals(newObject);
 		}
@@ -294,10 +296,11 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 
 		private boolean requireChange(Object oldObject, Object newObject) {
 			if (oldObject == null) {
-				if (newObject == null)
+				if (newObject == null) {
 					return false;
-				else
+				} else {
 					return true;
+				}
 			}
 			return !oldObject.equals(newObject);
 		}
@@ -324,8 +327,9 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 		}
 
 		private void rebuildColoredTexture() {
-			if (textureType == null)
+			if (textureType == null) {
 				return;
+			}
 			final Image initialImage = textureType.getImageIcon().getImage();
 			ColorSwapFilter imgfilter = new ColorSwapFilter(java.awt.Color.BLACK, color1, java.awt.Color.WHITE, color2) {
 				@Override
@@ -408,8 +412,9 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 			@Override
 			public void imageComplete(int status) {
 				super.imageComplete(status);
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("imageComplete status=" + status);
+				}
 			}
 
 		}
@@ -503,10 +508,11 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 
 		private boolean requireChange(Object oldObject, Object newObject) {
 			if (oldObject == null) {
-				if (newObject == null)
+				if (newObject == null) {
 					return false;
-				else
+				} else {
 					return true;
+				}
 			}
 			return !oldObject.equals(newObject);
 		}
@@ -550,8 +556,9 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 				imageFile = anImageFile;
 				if (anImageFile != null && anImageFile.exists()) {
 					image = (new ImageIcon(anImageFile.getAbsolutePath())).getImage();
-				} else
+				} else {
 					image = null;
+				}
 				setChanged();
 				notifyObservers(new FGENotification(Parameters.imageFile, oldFile, anImageFile));
 			}
@@ -685,10 +692,11 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 
 		private boolean requireChange(Object oldObject, Object newObject) {
 			if (oldObject == null) {
-				if (newObject == null)
+				if (newObject == null) {
 					return false;
-				else
+				} else {
 					return true;
+				}
 			}
 			return !oldObject.equals(newObject);
 		}
@@ -736,10 +744,11 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 
 	private boolean requireChange(Object oldObject, Object newObject) {
 		if (oldObject == null) {
-			if (newObject == null)
+			if (newObject == null) {
 				return false;
-			else
+			} else {
 				return true;
+			}
 		}
 		return !oldObject.equals(newObject);
 	}

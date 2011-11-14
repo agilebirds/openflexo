@@ -23,8 +23,8 @@ import java.awt.Stroke;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.bindings.AbstractBinding;
-import org.openflexo.foundation.bindings.WKFBindingDefinition;
 import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
+import org.openflexo.foundation.bindings.WKFBindingDefinition;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.validation.DeletionFixProposal;
@@ -86,28 +86,32 @@ public abstract class ExternalMessageEdge<S extends AbstractNode, E extends Abst
 
 	@Override
 	public FlexoPort getFlexoPort() {
-		if (getServiceOperation() != null)
+		if (getServiceOperation() != null) {
 			return getServiceOperation().getPort();
+		}
 		return null;
 	}
 
 	public FlexoProcess getRelatedSubProcess() {
-		if (getFlexoPort() != null)
+		if (getFlexoPort() != null) {
 			return getFlexoPort().getProcess();
+		}
 		return null;
 	}
 
 	@Override
 	public boolean isInputPort() {
-		if (getServiceOperation() != null)
+		if (getServiceOperation() != null) {
 			return getServiceOperation().isInputOperation();
+		}
 		return false;
 	}
 
 	@Override
 	public boolean isOutputPort() {
-		if (getServiceOperation() != null)
+		if (getServiceOperation() != null) {
 			return getServiceOperation().isOutputOperation();
+		}
 		return false;
 	}
 
@@ -130,8 +134,9 @@ public abstract class ExternalMessageEdge<S extends AbstractNode, E extends Abst
 	}
 
 	public AbstractBinding getAccessedProcessInstance() {
-		if ((_accessedProcessInstance != null) && (_accessedProcessInstance.getBindingDefinition() == null))
+		if ((_accessedProcessInstance != null) && (_accessedProcessInstance.getBindingDefinition() == null)) {
 			_accessedProcessInstance.setBindingDefinition(getAccessedProcessInstanceBindingDefinition());
+		}
 		return _accessedProcessInstance;
 	}
 
@@ -161,8 +166,9 @@ public abstract class ExternalMessageEdge<S extends AbstractNode, E extends Abst
 	}
 
 	public AbstractBinding getParentProcessInstance() {
-		if ((_parentProcessInstance != null) && (_parentProcessInstance.getBindingDefinition() == null))
+		if ((_parentProcessInstance != null) && (_parentProcessInstance.getBindingDefinition() == null)) {
 			_parentProcessInstance.setBindingDefinition(getParentProcessInstanceBindingDefinition());
+		}
 		return _parentProcessInstance;
 	}
 
@@ -192,8 +198,9 @@ public abstract class ExternalMessageEdge<S extends AbstractNode, E extends Abst
 	}
 
 	public AbstractBinding getReturnedProcessInstance() {
-		if ((_returnedProcessInstance != null) && (_returnedProcessInstance.getBindingDefinition() == null))
+		if ((_returnedProcessInstance != null) && (_returnedProcessInstance.getBindingDefinition() == null)) {
 			_returnedProcessInstance.setBindingDefinition(getReturnedProcessInstanceBindingDefinition());
+		}
 		return _returnedProcessInstance;
 	}
 

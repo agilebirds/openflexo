@@ -86,22 +86,27 @@ public abstract class ArithmeticBinaryOperator extends BinaryOperator {
 				return EvaluationType.LITERAL; // Undecided
 			} else if (leftOperandType.isArithmetic()) {
 				if (rightOperandType.isArithmetic()) {
-					if (leftOperandType.isArithmeticInteger() && rightOperandType.isArithmeticInteger())
+					if (leftOperandType.isArithmeticInteger() && rightOperandType.isArithmeticInteger()) {
 						return EvaluationType.ARITHMETIC_INTEGER;
-					else
+					} else {
 						return EvaluationType.ARITHMETIC_FLOAT;
-				} else if (rightOperandType.isLiteral())
+					}
+				} else if (rightOperandType.isLiteral()) {
 					return EvaluationType.ARITHMETIC_FLOAT; // Undecided
+				}
 			} else if (leftOperandType.isString()) {
 				return EvaluationType.STRING;
 			} else if (leftOperandType.isDuration()) {
-				if (rightOperandType.isDurationOrLiteral())
+				if (rightOperandType.isDurationOrLiteral()) {
 					return EvaluationType.DURATION;
-				if (rightOperandType.isDateOrLiteral())
+				}
+				if (rightOperandType.isDateOrLiteral()) {
 					return EvaluationType.DATE;
+				}
 			} else if (leftOperandType.isDate()) {
-				if (rightOperandType.isDurationOrLiteral())
+				if (rightOperandType.isDurationOrLiteral()) {
 					return EvaluationType.DATE;
+				}
 			}
 			throw new TypeMismatchException(this, leftOperandType, rightOperandType, EvaluationType.ARITHMETIC_FLOAT,
 					EvaluationType.ARITHMETIC_INTEGER, EvaluationType.DATE, EvaluationType.DURATION, EvaluationType.LITERAL);
@@ -155,20 +160,25 @@ public abstract class ArithmeticBinaryOperator extends BinaryOperator {
 				return EvaluationType.LITERAL; // Undecided
 			} else if (leftOperandType.isArithmetic()) {
 				if (rightOperandType.isArithmetic()) {
-					if (leftOperandType.isArithmeticInteger() && rightOperandType.isArithmeticInteger())
+					if (leftOperandType.isArithmeticInteger() && rightOperandType.isArithmeticInteger()) {
 						return EvaluationType.ARITHMETIC_INTEGER;
-					else
+					} else {
 						return EvaluationType.ARITHMETIC_FLOAT;
-				} else if (rightOperandType.isLiteral())
+					}
+				} else if (rightOperandType.isLiteral()) {
 					return EvaluationType.LITERAL; // Undecided
+				}
 			} else if (leftOperandType.isDuration()) {
-				if (rightOperandType.isDurationOrLiteral())
+				if (rightOperandType.isDurationOrLiteral()) {
 					return EvaluationType.DURATION;
+				}
 			} else if (leftOperandType.isDate()) {
-				if (rightOperandType.isDurationOrLiteral())
+				if (rightOperandType.isDurationOrLiteral()) {
 					return EvaluationType.DATE;
-				if (rightOperandType.isDateOrLiteral())
+				}
+				if (rightOperandType.isDateOrLiteral()) {
 					return EvaluationType.DURATION;
+				}
 			}
 			throw new TypeMismatchException(this, leftOperandType, rightOperandType, EvaluationType.ARITHMETIC_FLOAT,
 					EvaluationType.ARITHMETIC_INTEGER, EvaluationType.DATE, EvaluationType.DURATION, EvaluationType.LITERAL);
@@ -204,10 +214,11 @@ public abstract class ArithmeticBinaryOperator extends BinaryOperator {
 				throws TypeMismatchException {
 			if (leftOperandType.isArithmeticOrLiteral()) {
 				if (rightOperandType.isArithmeticOrLiteral()) {
-					if (leftOperandType.isArithmeticInteger() && rightOperandType.isArithmeticInteger())
+					if (leftOperandType.isArithmeticInteger() && rightOperandType.isArithmeticInteger()) {
 						return EvaluationType.ARITHMETIC_INTEGER;
-					else
+					} else {
 						return EvaluationType.ARITHMETIC_FLOAT;
+					}
 				}
 			}
 			throw new TypeMismatchException(this, leftOperandType, rightOperandType, EvaluationType.ARITHMETIC_FLOAT,

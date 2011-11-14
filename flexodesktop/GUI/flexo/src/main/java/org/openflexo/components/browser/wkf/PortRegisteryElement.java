@@ -81,16 +81,18 @@ public class PortRegisteryElement extends BrowserElement implements ExpansionSyn
 
 	@Override
 	public void expand() {
-		if (!getPortRegistery().getIsVisible())
+		if (!getPortRegistery().getIsVisible()) {
 			OpenPortRegistery.actionType.makeNewAction(getPortRegistery().getProcess(), null, getProjectBrowser().getEditor()).doAction();
-		// getPortRegistery().setIsVisible(true);
+			// getPortRegistery().setIsVisible(true);
+		}
 	}
 
 	@Override
 	public void collapse() {
-		if (getPortRegistery().getIsVisible())
+		if (getPortRegistery().getIsVisible()) {
 			OpenPortRegistery.actionType.makeNewAction(getPortRegistery().getProcess(), null, getProjectBrowser().getEditor()).doAction();
-		// getPortRegistery().setIsVisible(false);
+			// getPortRegistery().setIsVisible(false);
+		}
 	}
 
 	@Override

@@ -85,10 +85,12 @@ public abstract class IEOperator extends IEWidget implements InspectableObject {
 	@Override
 	public String getWidgetType() {
 		String cls = getClass().getSimpleName();
-		if (cls.startsWith("IE"))
+		if (cls.startsWith("IE")) {
 			cls = cls.substring("IE".length());
-		if (cls.endsWith("Operator"))
+		}
+		if (cls.endsWith("Operator")) {
 			cls = cls.substring(0, cls.length() - "Operator".length());
+		}
 		return cls;
 	}
 

@@ -95,8 +95,9 @@ public class WSEPortTypeFolderView extends WSEView<WSPortTypeFolder> {
 
 		WSService service = getWSPortTypeFolder().getWSService();
 		boolean readOnly = false;
-		if (service != null && service instanceof ExternalWSService)
+		if (service != null && service instanceof ExternalWSService) {
 			readOnly = true;
+		}
 		wsPortTypesTableModel = new WSEPortTypeTableModel(service, getWSEController().getProject(), readOnly);
 		wsPortTypesTable = new WSETabularView(getWSEController(), wsPortTypesTableModel, 10);
 		addToMasterTabularView(wsPortTypesTable);

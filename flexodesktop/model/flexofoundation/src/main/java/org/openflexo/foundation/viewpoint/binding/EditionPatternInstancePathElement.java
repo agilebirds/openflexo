@@ -90,8 +90,9 @@ public class EditionPatternInstancePathElement<E extends Bindable> implements Bi
 
 	@Override
 	public EditionPatternInstance getBindingValue(Object target, BindingEvaluationContext context) {
-		if (target != null)
+		if (target != null) {
 			logger.info("TODO: evaluateBinding EditionPatternPathElement with target=" + target + " context=" + context);
+		}
 		return null;
 	}
 

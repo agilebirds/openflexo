@@ -117,10 +117,12 @@ public abstract class ActionType extends FlexoObject implements StringConvertabl
 				return temp;
 			}
 		}
-		if ("NEXT_PAGE".equals(typeName))
+		if ("NEXT_PAGE".equals(typeName)) {
 			return DISPLAY_ACTION;
-		if (logger.isLoggable(Level.WARNING))
+		}
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Could not find ActionType named " + typeName);
+		}
 		return null;
 	}
 

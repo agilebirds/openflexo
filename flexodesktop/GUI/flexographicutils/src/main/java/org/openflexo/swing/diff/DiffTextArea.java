@@ -88,14 +88,15 @@ public class DiffTextArea /* extends JTextArea */extends JEditTextAreaWithHighli
 		}
 		// }
 		int cols;
-		if (text.length < 10)
+		if (text.length < 10) {
 			cols = 2;
-		else if (text.length < 100)
+		} else if (text.length < 100) {
 			cols = 3;
-		else if (text.length < 1000)
+		} else if (text.length < 1000) {
 			cols = 4;
-		else
+		} else {
 			cols = 5;
+		}
 		linesTA = new JTextArea(text.length, cols);
 		linesTA.setEditable(false);
 		linesTA.setFont(FontCst.TEXT_FONT.getStyle() != Font.PLAIN ? FontCst.TEXT_FONT.deriveFont(Font.PLAIN) : FontCst.TEXT_FONT);
@@ -138,8 +139,9 @@ public class DiffTextArea /* extends JTextArea */extends JEditTextAreaWithHighli
 	@Override
 	public void setFont(Font font) {
 		super.setFont(font);
-		if (linesTA != null && linesTA.getFont() != font)
+		if (linesTA != null && linesTA.getFont() != font) {
 			linesTA.setFont(font.getStyle() == Font.PLAIN ? font : font.deriveFont(Font.PLAIN));
+		}
 	}
 
 	protected class Line {
@@ -161,10 +163,11 @@ public class DiffTextArea /* extends JTextArea */extends JEditTextAreaWithHighli
 		}
 
 		protected String getStringValue() {
-			if (isExtraLine)
+			if (isExtraLine) {
 				return "";
-			else
+			} else {
 				return lineText;
+			}
 		}
 
 		protected boolean isExtraLine() {
@@ -180,8 +183,9 @@ public class DiffTextArea /* extends JTextArea */extends JEditTextAreaWithHighli
 		for (int i = 0; i < someText.length; i++) {
 			String line = someText[i];
 			lines.add(new Line(line, i));
-			if (line.length() > maxCols)
+			if (line.length() > maxCols) {
 				maxCols = line.length();
+			}
 		}
 
 		for (DiffChange change : diffReport.getChanges()) {
@@ -204,14 +208,15 @@ public class DiffTextArea /* extends JTextArea */extends JEditTextAreaWithHighli
 		StringBuffer linesTASB = new StringBuffer();
 		for (Line line : text) {
 			if (!line.isExtraLine) {
-				if (line.lineNb < 10)
+				if (line.lineNb < 10) {
 					linesTASB.append("   " + line.lineNb + " ");
-				else if (line.lineNb < 100)
+				} else if (line.lineNb < 100) {
 					linesTASB.append("  " + line.lineNb + " ");
-				else if (line.lineNb < 1000)
+				} else if (line.lineNb < 1000) {
 					linesTASB.append(" " + line.lineNb + " ");
-				else
+				} else {
 					linesTASB.append("" + line.lineNb);
+				}
 				returned.append(line.getStringValue());
 			}
 			returned.append("\n");
@@ -231,8 +236,9 @@ public class DiffTextArea /* extends JTextArea */extends JEditTextAreaWithHighli
 
 	private static int getIndexOfLineNb(Vector<Line> lines, int lineNb) {
 		for (int i = 0; i < lines.size(); i++) {
-			if (lines.get(i).lineNb == lineNb)
+			if (lines.get(i).lineNb == lineNb) {
 				return i;
+			}
 		}
 		return -1;
 	}
@@ -271,8 +277,9 @@ public class DiffTextArea /* extends JTextArea */extends JEditTextAreaWithHighli
 
 	protected void setChange(ComputeDiff.DiffChange change, boolean shouldScroll, boolean forceSelect) {
 		if (change != selectedChange || forceSelect) {
-			if (selectedChange != null)
+			if (selectedChange != null) {
 				highlights.get(selectedChange).deselect();
+			}
 			highlights.get(change).select();
 			selectedChange = change;
 			if (shouldScroll) {
@@ -366,8 +373,9 @@ public class DiffTextArea /* extends JTextArea */extends JEditTextAreaWithHighli
 	}
 
 	public int heightAboveChange(DiffChange change, int buttonHeight) {
-		if (!readyToDisplay())
+		if (!readyToDisplay()) {
 			return -1;
+		}
 		DiffChange previousChange = diffReport.changeBefore(change);
 		if (previousChange == null) {
 			return getFirstHeight(change) + (getHeightForChange(change) - buttonHeight) / 2;

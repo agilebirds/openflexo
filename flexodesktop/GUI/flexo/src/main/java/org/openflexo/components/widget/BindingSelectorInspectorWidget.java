@@ -111,8 +111,9 @@ public class BindingSelectorInspectorWidget extends CustomInspectorWidget<Abstra
 		getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Focus gained in " + getClass().getName());
+				}
 				super.focusGained(arg0);
 				_selector.getTextField().requestFocus();
 				_selector.getTextField().selectAll();
@@ -120,8 +121,9 @@ public class BindingSelectorInspectorWidget extends CustomInspectorWidget<Abstra
 
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Focus lost in " + getClass().getName());
+				}
 				super.focusLost(arg0);
 			}
 		});
@@ -134,12 +136,14 @@ public class BindingSelectorInspectorWidget extends CustomInspectorWidget<Abstra
 
 	@Override
 	public synchronized void updateWidgetFromModel() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("BindingSelectorInspectorWidget, updateWidgetFromModel() for " + getObjectValue() + " isUpdatingModel="
 					+ isUpdatingEditedBinding + " _selector.getIsUpdatingModel()=" + _selector.getIsUpdatingModel());
+		}
 
-		if (isUpdatingEditedBinding)
+		if (isUpdatingEditedBinding) {
 			return;
+		}
 		if (!_selector.getIsUpdatingModel()) {
 			_selector.setEditedObjectAndUpdateBDAndOwner(getObjectValue());
 			_selector.setRevertValue(getObjectValue());
@@ -183,15 +187,17 @@ public class BindingSelectorInspectorWidget extends CustomInspectorWidget<Abstra
 		_selector.setEditedObject(getObjectValue());
 		_selector.setRevertValue(getObjectValue());
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("BindingSelectorInspectorWidget, performModelUpdating for " + getObjectValue());
+		}
 
 		if (hasValueForParameter(ACTIVATE_COMPOUND_BINDINGS)) {
 			String boolValue = getValueForParameter(ACTIVATE_COMPOUND_BINDINGS);
-			if (boolValue.equalsIgnoreCase("true") || boolValue.equalsIgnoreCase("yes"))
+			if (boolValue.equalsIgnoreCase("true") || boolValue.equalsIgnoreCase("yes")) {
 				_selector.activateCompoundBindingMode();
-			else
+			} else {
 				_selector.activateNormalBindingMode();
+			}
 		}
 		/*else {
 		 	if (getObjectValue() == null 
@@ -202,8 +208,9 @@ public class BindingSelectorInspectorWidget extends CustomInspectorWidget<Abstra
 		if (value instanceof Bindable) {
 			_selector.setBindable((Bindable) value);
 		} else if (value != null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("BindingSelectorInspectorWidget declared for a non-bindable inspectable object");
+			}
 		}
 
 		if (hasValueForParameter("binding_definition")) {
@@ -228,26 +235,29 @@ public class BindingSelectorInspectorWidget extends CustomInspectorWidget<Abstra
 
 		if (hasValueForParameter(ALLOWS_STATIC_VALUES)) {
 			String boolValue = getValueForParameter(ALLOWS_STATIC_VALUES);
-			if (boolValue.equalsIgnoreCase("true") || boolValue.equalsIgnoreCase("yes"))
+			if (boolValue.equalsIgnoreCase("true") || boolValue.equalsIgnoreCase("yes")) {
 				_selector.setAllowsStaticValues(true);
-			else
+			} else {
 				_selector.setAllowsStaticValues(false);
+			}
 		}
 
 		if (hasValueForParameter(ALLOWS_EXPRESSIONS)) {
 			String boolValue = getValueForParameter(ALLOWS_EXPRESSIONS);
-			if (boolValue.equalsIgnoreCase("true") || boolValue.equalsIgnoreCase("yes"))
+			if (boolValue.equalsIgnoreCase("true") || boolValue.equalsIgnoreCase("yes")) {
 				_selector.setAllowsBindingExpressions(true);
-			else
+			} else {
 				_selector.setAllowsBindingExpressions(false);
+			}
 		}
 
 		if (hasValueForParameter(ALLOWS_TRANSTYPERS)) {
 			String boolValue = getValueForParameter(ALLOWS_TRANSTYPERS);
-			if (boolValue.equalsIgnoreCase("true") || boolValue.equalsIgnoreCase("yes"))
+			if (boolValue.equalsIgnoreCase("true") || boolValue.equalsIgnoreCase("yes")) {
 				_selector.setAllowsTranstypers(true);
-			else
+			} else {
 				_selector.setAllowsTranstypers(false);
+			}
 		}
 
 	}
@@ -267,13 +277,15 @@ public class BindingSelectorInspectorWidget extends CustomInspectorWidget<Abstra
 					_createsEntryMethod = targetClass.getMethod(methodName, methodClassParams);
 				} catch (SecurityException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("SecurityException raised: " + e.getClass().getName() + ". See console for details.");
+					}
 					e.printStackTrace();
 				} catch (NoSuchMethodException e) {
 					// Warns about the exception
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("NoSuchMethodException raised: unable to find method " + methodName + " for class " + targetClass);
+					}
 					e.printStackTrace();
 				}
 			}
@@ -293,8 +305,9 @@ public class BindingSelectorInspectorWidget extends CustomInspectorWidget<Abstra
 			try {
 				if (newEntryEntity == null) {
 					Object targetObject = PropertyModel.getTargetObject(getModel(), getValueForParameter("creates_entry"));
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("invoking " + getCreatesEntryMethod() + " on object" + targetObject);
+					}
 					return (BindingVariable) getCreatesEntryMethod().invoke(targetObject, params);
 				} else {
 					DMProperty newProperty = newEntryEntity.createDMProperty(name, type, implementationType);
@@ -302,24 +315,28 @@ public class BindingSelectorInspectorWidget extends CustomInspectorWidget<Abstra
 							&& newProperty.getEntity() instanceof ComponentDMEntity) {
 						((ComponentDMEntity) newProperty.getEntity()).setBindable(newProperty, false);
 					}
-					if (newProperty != null)
+					if (newProperty != null) {
 						editedObject.addBindingPathElement(newProperty);
+					}
 					return editedObject.getBindingVariable();
 				}
 			} catch (IllegalArgumentException e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 			} catch (InvocationTargetException e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 			}
 		}
@@ -362,21 +379,24 @@ public class BindingSelectorInspectorWidget extends CustomInspectorWidget<Abstra
 
 	@Override
 	public void update(InspectableObject inspectable, InspectableModification modification) {
-		if ("wOComponent".equals(modification.propertyName()))
+		if ("wOComponent".equals(modification.propertyName())) {
 			_selector.refreshBindingModel();
+		}
 		super.update(inspectable, modification);
 	}
 
 	@Override
 	public void fireEditingCanceled() {
-		if (_selector != null)
+		if (_selector != null) {
 			_selector.closePopup();
+		}
 	}
 
 	@Override
 	public void fireEditingStopped() {
-		if (_selector != null)
+		if (_selector != null) {
 			_selector.closePopup();
+		}
 	}
 
 	@Override

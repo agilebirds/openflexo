@@ -25,21 +25,14 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.inspector.model.PropertyListColumn;
-import org.openflexo.inspector.widget.LabelWidget;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.dm.view.controller.DMController;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMTranstyper;
-import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.DMTranstyper.DMTranstyperEntry;
+import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.action.CreateDMTranstyper;
 import org.openflexo.foundation.param.DMTypeParameter;
 import org.openflexo.foundation.param.LabelParameter;
@@ -49,6 +42,12 @@ import org.openflexo.foundation.param.PropertyListParameter;
 import org.openflexo.foundation.param.RadioButtonListParameter;
 import org.openflexo.foundation.param.ReadOnlyTextFieldParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
+import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.inspector.model.PropertyListColumn;
+import org.openflexo.inspector.widget.LabelWidget;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
 
 public class CreateDMTranstyperInitializer extends ActionInitializer {
 

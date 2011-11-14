@@ -55,8 +55,9 @@ public class DKVDelete extends FlexoUndoableAction<DKVDelete, DKVObject, DKVObje
 			Enumeration en = globalSelection.elements();
 			while (en.hasMoreElements()) {
 				Object o = en.nextElement();
-				if (!(o instanceof DKVObject) || !((DKVObject) o).isDeleteAble())
+				if (!(o instanceof DKVObject) || !((DKVObject) o).isDeleteAble()) {
 					return false;
+				}
 			}
 			return (object.isDeleteAble()) || (globalSelection.size() > 0);
 		}
@@ -83,14 +84,16 @@ public class DKVDelete extends FlexoUndoableAction<DKVDelete, DKVObject, DKVObje
 	protected void doAction(Object context) {
 		if (entriesToDelete != null) {
 			for (TOCEntry entry : entriesToDelete) {
-				if (!entry.isDeleted())
+				if (!entry.isDeleted()) {
 					entry.delete();
+				}
 			}
 		}
 		logger.info("DELETE on DKV");
 		// observers = new WeakHashMap<DKVObject, Vector>();
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("selection is: " + getGlobalSelection());
+		}
 		Enumeration en = getObjectsToDelete().elements();
 		int i = 0;
 		while (en.hasMoreElements()) {

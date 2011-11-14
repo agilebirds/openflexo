@@ -86,9 +86,10 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		super.finalizeDeserialization(builder);
 		System.out.println("Called finalizeDeserialization() for EditionPatternReference ");
 		for (ActorReference ref : actors.values()) {
-			if (ref instanceof ConceptActorReference)
+			if (ref instanceof ConceptActorReference) {
 				getProject()._addToPendingEditionPatternReferences(((ConceptActorReference) ref)._getObjectURI(),
 						(ConceptActorReference) ref);
+			}
 		}
 	}
 
@@ -234,8 +235,9 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		}
 
 		public String _getObjectURI() {
-			if (object != null)
+			if (object != null) {
 				return object.getURI();
+			}
 			return objectURI;
 		}
 
@@ -517,8 +519,9 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 	}
 
 	public EditionPatternInstance getEditionPatternInstance() {
-		if (_editionPatternInstance != null)
+		if (_editionPatternInstance != null) {
 			return _editionPatternInstance;
+		}
 		_editionPatternInstance = getProject().getEditionPatternInstance(this);
 		return _editionPatternInstance;
 	}
@@ -533,8 +536,9 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 	private String _patternRoleName;
 
 	public String getPatternRoleName() {
-		if (patternRole != null)
+		if (patternRole != null) {
 			return patternRole.getPatternRoleName();
+		}
 		return _patternRoleName;
 	}
 

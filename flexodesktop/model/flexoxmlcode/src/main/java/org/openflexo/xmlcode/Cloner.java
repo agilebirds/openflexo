@@ -410,8 +410,9 @@ public class Cloner {
 	 */
 	private void cloneProperty(Object clonedObject, Object newObject, ModelProperty modelProperty)
 			throws InvalidObjectSpecificationException, InvalidModelException, AccessorInvocationException {
-		if (!modelProperty.isCopyable())
+		if (!modelProperty.isCopyable()) {
 			return;
+		}
 		boolean isCloneable = modelProperty.isCloneable();
 
 		// First, get the key-value property

@@ -116,8 +116,9 @@ public class AddKeyAction extends FlexoUndoableAction<AddKeyAction, DKVObject, D
 		}
 		newKey.setDescription(getKeyDescription());
 		objectCreated("NEW_KEY", newKey);
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Key added in DKV");
+		}
 	}
 
 	@Override

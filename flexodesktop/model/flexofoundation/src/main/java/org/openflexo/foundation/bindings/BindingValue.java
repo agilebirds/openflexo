@@ -85,8 +85,9 @@ public class BindingValue extends AbstractBinding {
 		super(bindingDefinition, owner);
 		init();
 		if ((owner != null) && (!(owner instanceof Bindable))) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Declared non-null owner is not a Bindable !");
+			}
 		}
 	}
 
@@ -96,6 +97,7 @@ public class BindingValue extends AbstractBinding {
 		_isConnected = false;
 	}
 
+	@Override
 	public BindingValue clone() {
 		BindingValue clone = new BindingValue(getBindingDefinition(), getOwner());
 		clone.setsWith(this);
@@ -106,6 +108,7 @@ public class BindingValue extends AbstractBinding {
 		return getBindingPath() != null && getBindingPath().size() == 1 && getBindingPathElementAtIndex(0).equals(p);
 	}
 
+	@Override
 	public void setsWith(AbstractBinding aValue) {
 		super.setsWith(aValue);
 		if (aValue != null) {
@@ -113,8 +116,9 @@ public class BindingValue extends AbstractBinding {
 				BindingValue bv = (BindingValue) aValue;
 				setBindingVariable(bv.getBindingVariable());
 				if ((getBindingVariable() != null) && (getBindingVariable().getType() != null)
-						&& (getBindingVariable().getType().getBaseEntity() != null))
+						&& (getBindingVariable().getType().getBaseEntity() != null)) {
 					getBindingVariable().getType().getBaseEntity().addObserver(this);
+				}
 				BindingPath bindingPath = new BindingPath();
 				for (BindingPathElement e : bv.getBindingPath()) {
 					bindingPath.add(e);
@@ -149,44 +153,52 @@ public class BindingValue extends AbstractBinding {
 		}
 	}
 
+	@Override
 	public boolean isStaticValue() {
 		return false;
 	}
 
+	@Override
 	public boolean isBindingValid() {
 		// logger.setLevel(Level.FINE);
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Is BindingValue " + this + " valid ?");
+		}
 
 		if (getAccessedType() == null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Invalid binding because accessed type is null");
+			}
 			return false;
 		}
 
 		if (getBindingDefinition() == null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Invalid binding because _bindingDefinition is null");
+			}
 			return false;
 		}
 
 		if (_bindingVariable == null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Invalid binding because _bindingVariable is null");
+			}
 			return false;
 		}
 		if (!_checkBindingPathValid()) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Invalid binding because binding path not valid");
+			}
 			return false;
 		}
 
 		if ((getBindingDefinition() != null) && (getBindingDefinition().getIsSettable())) {
 			if ((getBindingPathLastElement() == null) || (!(getBindingPathLastElement() instanceof DMProperty))
 					|| (!((DMProperty) getBindingPathLastElement()).getIsSettable())) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Invalid binding because binding definition declared as settable and definition cannot satisfy it");
+				}
 				return false;
 			}
 		}
@@ -211,9 +223,10 @@ public class BindingValue extends AbstractBinding {
 			return true;
 		}
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Invalid binding because types are not matching searched " + getBindingDefinition().getType() + " having "
 					+ getAccessedType());
+		}
 		return false;
 
 	}
@@ -223,11 +236,13 @@ public class BindingValue extends AbstractBinding {
 	 * 
 	 * @return
 	 */
+	@Override
 	public DMType getAccessedType() {
 
 		if (_bindingPath.size() == 0) {
-			if (_bindingVariable != null)
+			if (_bindingVariable != null) {
 				return _bindingVariable.getType();
+			}
 			return null;
 		}
 
@@ -240,27 +255,33 @@ public class BindingValue extends AbstractBinding {
 	}
 
 	private boolean _checkBindingPathValid() {
-		if (_bindingVariable == null)
+		if (_bindingVariable == null) {
 			return false;
+		}
 		DMType currentType = _bindingVariable.getType();
-		if (currentType == null)
+		if (currentType == null) {
 			return false;
+		}
 
 		for (int i = 0; i < _bindingPath.size(); i++) {
 			BindingPathElement element = _bindingPath.elementAt(i);
 			if (element.getEntity() == null || currentType.getBaseEntity() == null
-					|| !element.getEntity().isAncestorOf(currentType.getBaseEntity()))
+					|| !element.getEntity().isAncestorOf(currentType.getBaseEntity())) {
 				return false;
-			if (!element.isBindingValid())
+			}
+			if (!element.isBindingValid()) {
 				return false;
+			}
 			currentType = _bindingPath.getResultingTypeAtIndex(i);
-			if (currentType == null)
+			if (currentType == null) {
 				return false;
+			}
 		}
 
 		return true;
 	}
 
+	@Override
 	protected void _applyNewBindingDefinition() {
 		if (!isDeserializing() && isConnected() && !isBindingValid()) {
 			_isConnected = false;
@@ -268,17 +289,19 @@ public class BindingValue extends AbstractBinding {
 	}
 
 	public BindingVariable getBindingVariable() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Binding Variable of bindingValue for Entry:"
 					+ (getBindingDefinition() != null ? getBindingDefinition().getVariableName() : null) + " var:"
 					+ (_bindingVariable != null ? _bindingVariable.getVariableName() : null) + " " + _bindingVariable);
+		}
 		return _bindingVariable;
 	}
 
 	public void setBindingVariable(BindingVariable bindingVariable) {
 		unparsableValue = null;
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Set binding variable to " + bindingVariable);
+		}
 		/*if (bindingVariable != null)
 		    _isStaticValue = false;*/
 		if (bindingVariable != _bindingVariable) {
@@ -288,8 +311,9 @@ public class BindingValue extends AbstractBinding {
 			}
 			_bindingVariable = bindingVariable;
 			if ((_bindingVariable != null) && (_bindingVariable.getType() != null)) {
-				if (_bindingVariable.getType().getBaseEntity() != null)
+				if (_bindingVariable.getType().getBaseEntity() != null) {
 					_bindingVariable.getType().getBaseEntity().addObserver(this);
+				}
 			}
 			_bindingPath.removeAllElements();
 			_isConnected = false;
@@ -322,20 +346,24 @@ public class BindingValue extends AbstractBinding {
 	 */
 	public void setBindingPathElementAtIndex(BindingPathElement element, int i) {
 		unparsableValue = null;
-		if ((i < _bindingPath.size()) && (_bindingPath.elementAt(i) == element))
+		if ((i < _bindingPath.size()) && (_bindingPath.elementAt(i) == element)) {
 			return;
-		if (logger.isLoggable(Level.FINE))
+		}
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Set property " + element + " at index " + i);
+		}
 		if (i < _bindingPath.size()) {
 			_bindingPath.set(i, element);
 			int size = _bindingPath.size();
-			for (int j = i + 1; j < size; j++)
+			for (int j = i + 1; j < size; j++) {
 				_bindingPath.removeElementAt(i + 1);
+			}
 		} else if (i == _bindingPath.size()) {
 			_bindingPath.add(element);
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Could not set property at index " + i);
+			}
 		}
 		_isConnected = false;
 	}
@@ -358,40 +386,45 @@ public class BindingValue extends AbstractBinding {
 
 	public void removeBindingPathElementAfter(BindingPathElement requestedLast) {
 		unparsableValue = null;
-		if (_bindingPath != null && _bindingPath.lastElement() != null && _bindingPath.lastElement().equals(requestedLast))
+		if (_bindingPath != null && _bindingPath.lastElement() != null && _bindingPath.lastElement().equals(requestedLast)) {
 			return;
-		else if (_bindingPath != null && _bindingPath.lastElement() != null) {
+		} else if (_bindingPath != null && _bindingPath.lastElement() != null) {
 			_bindingPath.removeElement(_bindingPath.lastElement());
 			removeBindingPathElementAfter(requestedLast);
 		}
 	}
 
 	public boolean isLastBindingPathElement(BindingPathElement element, int index) {
-		if (_bindingPath.size() < 1)
+		if (_bindingPath.size() < 1) {
 			return false;
+		}
 		return ((_bindingPath.lastElement() == element) && (index == _bindingPath.size() - 1));
 	}
 
 	public DMType getBindingPathLastElementType() {
-		if (getBindingPath() != null && getBindingPath().size() > 0 && getBindingPath().lastElement() != null)
+		if (getBindingPath() != null && getBindingPath().size() > 0 && getBindingPath().lastElement() != null) {
 			return getBindingPath().lastElement().getType();
+		}
 		return null;
 	}
 
 	public BindingPathElement getBindingPathLastElement() {
-		if (getBindingPath() != null && getBindingPath().size() > 0 && getBindingPath().lastElement() != null)
+		if (getBindingPath() != null && getBindingPath().size() > 0 && getBindingPath().lastElement() != null) {
 			return getBindingPath().lastElement();
+		}
 		return null;
 	}
 
+	@Override
 	public void setOwner(FlexoModelObject owner) {
 		super.setOwner(owner);
 		for (BindingPathElement e : _bindingPath) {
 			if (e instanceof MethodCall) {
 				MethodCall mc = (MethodCall) e;
 				for (MethodCallArgument arg : mc.getArgs()) {
-					if (arg.getBinding() != null)
+					if (arg.getBinding() != null) {
 						arg.getBinding().setOwner(owner);
+					}
 				}
 			}
 		}
@@ -415,10 +448,11 @@ public class BindingValue extends AbstractBinding {
 			int i = 0;
 			for (BindingPathElement element : _bindingPath) {
 				if (i < _bindingPath.size() - n) {
-					if (element != null)
+					if (element != null) {
 						sb.append(".").append(element.getSerializationRepresentation());
-					else
+					} else {
 						sb.append(".null");
+					}
 				}
 				i++;
 			}
@@ -428,16 +462,19 @@ public class BindingValue extends AbstractBinding {
 		}
 	}
 
+	@Override
 	public String getStringRepresentation() {
-		if (getUnparsableValue() != null)
+		if (getUnparsableValue() != null) {
 			return getUnparsableValue();
+		}
 		if (_bindingVariable != null) {
 			StringBuilder sb = new StringBuilder(_bindingVariable.getVariableName());
 			for (BindingPathElement element : _bindingPath) {
-				if (element != null)
+				if (element != null) {
 					sb.append(".").append(element.getSerializationRepresentation());
-				else
+				} else {
 					sb.append(".null");
+				}
 			}
 			return sb.toString();
 		} else {
@@ -446,8 +483,9 @@ public class BindingValue extends AbstractBinding {
 	}
 
 	public boolean isPointingToSessionVariable() {
-		if (_bindingPath.size() != 2)
+		if (_bindingPath.size() != 2) {
 			return false;
+		}
 		DMEntity _bdPath0Entity = _bindingPath.get(0).getResultingType().getBaseEntity();
 		DMEntity _sessionType = getProject().getDataModel().getWORepository().getCustomSessionEntity();
 		return (_bdPath0Entity.equals(_sessionType));
@@ -461,35 +499,44 @@ public class BindingValue extends AbstractBinding {
 		return isBindingValid() && (isPointingToSessionVariable() || isPointingToComponentVariable());
 	}
 
+	@Override
 	public String getWodStringRepresentation() {
 		return getCodeStringRepresentation().replaceAll("\\(\\s*\\)", "");
 	}
 
+	@Override
 	public String getCodeStringRepresentation() {
 		String answer = getStringRepresentation();
 		// TODO: we must find a way to handle properly those issues
 		// by supplying a parameter to that method for example
-		if (answer.startsWith("component."))
+		if (answer.startsWith("component.")) {
 			return answer.substring(10);
+		}
 		return answer;
 	}
 
+	@Override
 	public String getJavaCodeStringRepresentation() {
-		if (_bindingVariable == null)
+		if (_bindingVariable == null) {
 			return "???";
+		}
 		StringBuilder sb = new StringBuilder();
 		// TODO: we must find a way to handle properly those issues
 		// by supplying a parameter to that method for example
-		if (!ComponentDefinition.ComponentDefinitionBindingModel.COMPONENT_BINDING_VARIABLE_NAME.equals(_bindingVariable.getVariableName()))
+		if (!ComponentDefinition.ComponentDefinitionBindingModel.COMPONENT_BINDING_VARIABLE_NAME.equals(_bindingVariable.getVariableName())) {
 			sb.append(_bindingVariable.getJavaAccess());
+		}
 		DMType currentType = _bindingVariable.getType();
 		for (BindingPathElement element : _bindingPath) {
-			if (element.getEntity() == null || !element.getEntity().isAncestorOf(currentType.getBaseEntity()))
+			if (element.getEntity() == null || !element.getEntity().isAncestorOf(currentType.getBaseEntity())) {
 				return getCodeStringRepresentation();
-			if (!element.isBindingValid())
+			}
+			if (!element.isBindingValid()) {
 				return getCodeStringRepresentation();
-			if (sb.length() > 0)
+			}
+			if (sb.length() > 0) {
 				sb.append(".");
+			}
 			if (element instanceof DMProperty) {
 				if (!((DMProperty) element).hasAccessors()) {
 					sb.append(((DMProperty) element).getName());
@@ -500,16 +547,18 @@ public class BindingValue extends AbstractBinding {
 			} else if (element instanceof MethodCall) {
 				sb.append(((MethodCall) element).getJavaCodeStringRepresentation());
 			} else {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("BindingPathElement is neither a MethodCall nor a property!!!");
+				}
 			}
 			currentType = element.getType();
 		}
 		String reply = sb.toString();
 		// TODO: we must find a way to handle properly those issues
 		// by supplying a parameter to that method for example
-		if (reply.startsWith("session()."))
+		if (reply.startsWith("session().")) {
 			return "getSession()." + reply.substring(10);
+		}
 		return reply;
 	}
 
@@ -521,16 +570,20 @@ public class BindingValue extends AbstractBinding {
 		StringBuilder sb = new StringBuilder();
 		// TODO: we must find a way to handle properly those issues
 		// by supplying a parameter to that method for example
-		if (!ComponentDefinition.ComponentDefinitionBindingModel.COMPONENT_BINDING_VARIABLE_NAME.equals(_bindingVariable.getVariableName()))
+		if (!ComponentDefinition.ComponentDefinitionBindingModel.COMPONENT_BINDING_VARIABLE_NAME.equals(_bindingVariable.getVariableName())) {
 			sb.append(_bindingVariable.getJavaAccess());
+		}
 		DMType currentType = _bindingVariable.getType();
 		for (BindingPathElement element : _bindingPath) {
-			if (element.getEntity() == null || !element.getEntity().isAncestorOf(currentType.getBaseEntity()))
+			if (element.getEntity() == null || !element.getEntity().isAncestorOf(currentType.getBaseEntity())) {
 				return getCodeStringRepresentation();
-			if (!element.isBindingValid())
+			}
+			if (!element.isBindingValid()) {
 				return getCodeStringRepresentation();
-			if (sb.length() > 0)
+			}
+			if (sb.length() > 0) {
 				sb.append(".");
+			}
 			if (element == getBindingPathLastElement()) {
 				if (element instanceof DMProperty && ((DMProperty) element).getIsSettable()) {
 					if (!((DMProperty) element).hasAccessors()) {
@@ -544,8 +597,9 @@ public class BindingValue extends AbstractBinding {
 						sb.append(")");
 					}
 				} else {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Last BindingPathElement for a BindingValue considered as settable is not a property or not settable !!!");
+					}
 				}
 			} else {
 				if (element instanceof DMProperty) {
@@ -558,8 +612,9 @@ public class BindingValue extends AbstractBinding {
 				} else if (element instanceof MethodCall) {
 					sb.append(((MethodCall) element).getJavaCodeStringRepresentation());
 				} else {
-					if (logger.isLoggable(Level.SEVERE))
+					if (logger.isLoggable(Level.SEVERE)) {
 						logger.severe("BindingPathElement is neither a MethodCall nor a property!!!");
+					}
 				}
 			}
 			currentType = element.getType();
@@ -567,11 +622,13 @@ public class BindingValue extends AbstractBinding {
 		String reply = sb.toString();
 		// TODO: we must find a way to handle properly those issues
 		// by supplying a parameter to that method for example
-		if (reply.startsWith("session()."))
+		if (reply.startsWith("session().")) {
 			return "getSession()." + reply.substring(10);
+		}
 		return reply;
 	}
 
+	@Override
 	public String getFullyQualifiedName() {
 		if (getBindingDefinition() != null) {
 			return new StringBuffer("BINDING_VALUE.").append(getBindingDefinition().getVariableName()).append("=")
@@ -598,8 +655,9 @@ public class BindingValue extends AbstractBinding {
 		}
 
 		private MethodCall tryToDecodeAsMethodCall(BindingValue owner, DMType currentType, String aValue) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("tryToDecodeAsMethodCall " + aValue);
+			}
 
 			String methodName;
 			Vector<String> paramsAsString;
@@ -614,31 +672,37 @@ public class BindingValue extends AbstractBinding {
 						paramsAsString.add(e.toString());
 					}
 				} else {
-					if (logger.isLoggable(Level.WARNING) && warnOnFailure)
+					if (logger.isLoggable(Level.WARNING) && warnOnFailure) {
 						logger.warning("Could not decode BindingValue : trying to find method call matching '" + aValue
 								+ " this is not a function call");
+					}
 					return null;
 				}
 			} catch (ParseException e) {
-				if (logger.isLoggable(Level.WARNING) && warnOnFailure)
+				if (logger.isLoggable(Level.WARNING) && warnOnFailure) {
 					logger.warning("Could not decode BindingValue : parse error while trying to find method call matching '" + aValue);
+				}
 				return null;
 			}
 
 			Vector<DMMethod> allMethods = currentType.getBaseEntity().getAccessibleMethods();
 
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("allMethods=" + allMethods);
-			if (logger.isLoggable(Level.FINE))
+			}
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("paramsAsString=" + paramsAsString);
+			}
 			Vector<DMMethod> possiblyMatchingMethods = new Vector<DMMethod>();
 			for (DMMethod method : allMethods) {
 				if ((method.getName() != null) && (method.getName().equals(methodName))
-						&& (method.getParameters().size() == paramsAsString.size()))
+						&& (method.getParameters().size() == paramsAsString.size())) {
 					possiblyMatchingMethods.add(method);
+				}
 			}
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("possiblyMatchingMethods=" + possiblyMatchingMethods);
+			}
 			Vector<MethodCall> results = new Vector<MethodCall>();
 			for (DMMethod method : possiblyMatchingMethods) {
 				boolean successfull = true;
@@ -647,31 +711,36 @@ public class BindingValue extends AbstractBinding {
 					DMMethod.DMMethodParameter param = method.getParameters().elementAt(i);
 					String bindingAsString = paramsAsString.elementAt(i);
 					DMType type = param.getType();
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Attempt to parse: " + bindingAsString);
+					}
 					AbstractBinding paramBindingValue = _abstractBindingStringConverter.convertFromString(bindingAsString);
 					if ((paramBindingValue != null)) {
 						paramBindingValue.setOwner((FlexoModelObject) _bindable);
-						if (logger.isLoggable(Level.FINE))
+						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("paramBindingValue=" + paramBindingValue + " of " + paramBindingValue.getAccessedType());
+						}
 						if (paramBindingValue.isStaticValue()) {
 							paramBindingValue.setBindingDefinition(methodCall.new MethodCallParamBindingDefinition(param));
 						}
 						if (type != null && paramBindingValue.getAccessedType() != null
 								&& type.isAssignableFrom(paramBindingValue.getAccessedType(), true)) {
-							if (logger.isLoggable(Level.FINE))
+							if (logger.isLoggable(Level.FINE)) {
 								logger.fine("Lookup on " + type.getName() + " succeded: " + paramBindingValue.getStringRepresentation());
+							}
 							methodCall.setBindingValueForParam(paramBindingValue, param);
 						} else {
-							if (logger.isLoggable(Level.FINE))
+							if (logger.isLoggable(Level.FINE)) {
 								logger.fine("Lookup on type " + type + " failed (wrong type): "
 										+ paramBindingValue.getStringRepresentation() + "types: " + "looking " + type + " found "
 										+ paramBindingValue.getAccessedType());
+							}
 							successfull = false;
 						}
 					} else {
-						if (logger.isLoggable(Level.FINE))
+						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("Lookup on " + type.getName() + " failed (cannot analysing): " + bindingAsString);
+						}
 						successfull = false;
 					}
 				}
@@ -682,12 +751,14 @@ public class BindingValue extends AbstractBinding {
 			if (results.size() == 1) {
 				return results.firstElement();
 			} else if (results.size() > 1) {
-				if (logger.isLoggable(Level.WARNING) && warnOnFailure)
+				if (logger.isLoggable(Level.WARNING) && warnOnFailure) {
 					logger.warning(("While decoding BindingValue '" + aValue + "' : found ambigous methods " + methodName));
+				}
 				return results.firstElement();
 			}
-			if (logger.isLoggable(Level.WARNING) && warnOnFailure)
+			if (logger.isLoggable(Level.WARNING) && warnOnFailure) {
 				logger.warning("Could not decode BindingValue : cannot find method call matching '" + aValue);
+			}
 			return null;
 		}
 
@@ -730,18 +801,22 @@ public class BindingValue extends AbstractBinding {
 
 			public String nextToken() {
 				String returned = enumeration.nextElement();
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("> " + returned);
+				}
 				return returned;
 			}
 		}
 
+		@Override
 		public BindingValue convertFromString(String aValue) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Decode " + aValue);
+			}
 			if (_bindable == null) {
-				if (logger.isLoggable(Level.WARNING) && warnOnFailure)
+				if (logger.isLoggable(Level.WARNING) && warnOnFailure) {
 					logger.warning(("Could not decode BindingValue '" + aValue + "' : bindable not set !"));
+				}
 				return null;
 			} else {
 				String value;
@@ -750,8 +825,9 @@ public class BindingValue extends AbstractBinding {
 				} else {
 					value = aValue;
 				}
-				if ("null".equals(value))
+				if ("null".equals(value)) {
 					return null;
+				}
 
 				BindingValue returned = new BindingValue();
 
@@ -759,25 +835,29 @@ public class BindingValue extends AbstractBinding {
 				if (st.hasMoreTokens()) {
 					String bindingVariableName = st.nextToken();
 					if (_bindable == null) {
-						if (logger.isLoggable(Level.WARNING) && warnOnFailure)
+						if (logger.isLoggable(Level.WARNING) && warnOnFailure) {
 							logger.warning(("Could not decode BindingValue '" + value + "' : no declared bindable !"));
+						}
 						return null;
 					}
 					if (_bindable.getBindingModel() == null) {
-						if (logger.isLoggable(Level.WARNING) && warnOnFailure)
+						if (logger.isLoggable(Level.WARNING) && warnOnFailure) {
 							logger.warning(("Could not decode BindingValue '" + value + "' : declared bindable has a null binding model !"));
+						}
 						return null;
 					}
 					BindingVariable bv = _bindable.getBindingModel().bindingVariableNamed(bindingVariableName);
 					if (bv == null) {
-						if (logger.isLoggable(Level.WARNING) && warnOnFailure)
+						if (logger.isLoggable(Level.WARNING) && warnOnFailure) {
 							logger.warning(("Could not decode BindingValue '" + value + "' : variable " + bindingVariableName + " not found in binding model !"));
+						}
 						return null;
 					} else {
 						DMType currentType = bv.getType();
 						if (currentType == null) {
-							if (logger.isLoggable(Level.WARNING) && warnOnFailure)
+							if (logger.isLoggable(Level.WARNING) && warnOnFailure) {
 								logger.warning(("Could not decode BindingValue '" + value + "' : variable " + bindingVariableName + " doesn't implement any type !"));
+							}
 							return null;
 						}
 						returned.setBindingVariable(bv);
@@ -785,8 +865,9 @@ public class BindingValue extends AbstractBinding {
 							String nextTokenName = st.nextToken();
 							BindingPathElement nextElement;
 							if (currentType.getBaseEntity() == null) {
-								if (logger.isLoggable(Level.WARNING) && warnOnFailure)
+								if (logger.isLoggable(Level.WARNING) && warnOnFailure) {
 									logger.warning(("Could not decode BindingValue '" + value + "' : cannot find base entity for type '" + currentType));
+								}
 								return null;
 							}
 							nextElement = currentType.getBaseEntity().getProperty(nextTokenName);
@@ -795,18 +876,20 @@ public class BindingValue extends AbstractBinding {
 								nextElement = tryToDecodeAsMethodCall(returned, currentType, nextTokenName);
 							}
 							if (nextElement == null) {
-								if (logger.isLoggable(Level.WARNING) && warnOnFailure)
+								if (logger.isLoggable(Level.WARNING) && warnOnFailure) {
 									logger.warning(("Could not decode BindingValue '" + value
 											+ "' : cannot find property nor method matching '" + nextTokenName + "' for type "
 											+ currentType + " !"));
+								}
 								return null;
 							} else {
 								currentType = returned.addBindingPathElement(nextElement);
 								// returned.addBindingPathElement(nextElement);
 								// currentType = nextElement.getType();
 								if (currentType == null) {
-									if (logger.isLoggable(Level.WARNING) && warnOnFailure)
+									if (logger.isLoggable(Level.WARNING) && warnOnFailure) {
 										logger.warning(("Could not decode BindingValue '" + value + "' : token " + nextTokenName + " doesn't implement any type !"));
+									}
 									return null;
 								}
 							}
@@ -817,19 +900,22 @@ public class BindingValue extends AbstractBinding {
 							returned._isConnected = true;
 							return returned;
 						} else {
-							if (logger.isLoggable(Level.WARNING) && warnOnFailure)
+							if (logger.isLoggable(Level.WARNING) && warnOnFailure) {
 								logger.warning(("Could not decode BindingValue '" + value + "' : invalid binding !"));
+							}
 							return null;
 						}
 					}
 				} else {
-					if (logger.isLoggable(Level.WARNING) && warnOnFailure)
+					if (logger.isLoggable(Level.WARNING) && warnOnFailure) {
 						logger.warning(("Could not decode BindingValue '" + value + "' : variable not set !"));
+					}
 					return null;
 				}
 			}
 		}
 
+		@Override
 		public String convertToString(BindingValue value) {
 			return value.getStringRepresentation();
 		}
@@ -838,6 +924,7 @@ public class BindingValue extends AbstractBinding {
 			return _bindable;
 		}
 
+		@Override
 		public void setBindable(Bindable bindable) {
 			_bindable = bindable;
 		}
@@ -855,22 +942,27 @@ public class BindingValue extends AbstractBinding {
 		public abstract String preProcessString(String aString);
 	}
 
+	@Override
 	public BindingValueStringConverter getConverter() {
-		if (getProject() != null)
+		if (getProject() != null) {
 			return getProject().getBindingValueConverter();
+		}
 		return null;
 	}
 
+	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("update in BindingValue " + getStringRepresentation() + " for " + dataModification.getClass().getName()
 					+ " owner is " + getOwner());
+		}
 		if ((dataModification instanceof EntityDeleted) && (getBindingVariable() != null)
 				&& (((EntityDeleted) dataModification).oldValue() == getBindingVariable().getType())) {
 			setBindingVariable(null);
 			setChanged();
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Handled entity deleted");
+			}
 		} else if (dataModification instanceof PropertyDeleted) {
 			PropertyDeleted propertyDeleted = (PropertyDeleted) dataModification;
 			if (getBindingPath().contains(propertyDeleted.oldValue())) {
@@ -883,21 +975,25 @@ public class BindingValue extends AbstractBinding {
 				// }
 				_isConnected = false;
 				setChanged();
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Handled property deleted");
+				}
 			}
 		} else if (dataModification instanceof DMPropertyNameChanged) {
 			if (getBindingPath().contains(((DMPropertyNameChanged) dataModification).getDMProperty())) {
 				setChanged();
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Handled property renamed");
+				}
 			}
 		}
 	}
 
+	@Override
 	protected void finalize() throws Throwable {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("finalize called for BindingValue " + getStringRepresentation());
+		}
 		setBindingVariable(null);
 		super.finalize();
 	}
@@ -906,6 +1002,7 @@ public class BindingValue extends AbstractBinding {
 	public static interface BindingPathElement extends org.openflexo.foundation.dm.Typed {
 		public DMEntity getEntity();
 
+		@Override
 		public DMType getType();
 
 		public DMType getResultingType();
@@ -934,6 +1031,7 @@ public class BindingValue extends AbstractBinding {
 			_resultingTypes = new Vector<DMType>();
 		}
 
+		@Override
 		public synchronized void removeAllElements() {
 			for (BindingPathElement element : this) {
 				element.deleteObserver(BindingValue.this);
@@ -942,6 +1040,7 @@ public class BindingValue extends AbstractBinding {
 			_resultingTypes.clear();
 		}
 
+		@Override
 		public synchronized BindingPathElement set(int index, BindingPathElement element) {
 			if (get(index) != null) {
 				get(index).deleteObserver(BindingValue.this);
@@ -952,6 +1051,7 @@ public class BindingValue extends AbstractBinding {
 			return returned;
 		}
 
+		@Override
 		public synchronized void removeElementAt(int index) {
 			if (get(index) != null) {
 				get(index).deleteObserver(BindingValue.this);
@@ -959,6 +1059,7 @@ public class BindingValue extends AbstractBinding {
 			super.removeElementAt(index);
 		}
 
+		@Override
 		public synchronized boolean add(BindingPathElement o) {
 			o.addObserver(BindingValue.this);
 			boolean returned = super.add(o);
@@ -984,31 +1085,34 @@ public class BindingValue extends AbstractBinding {
 
 				// TODO java.lang.ArrayIndexOutOfBoundsException may happen here, fix this
 				// BMA : java.lang.ArrayIndexOutOfBoundsException won't append anymore...
-				if (index > 0 && _resultingTypes.size() >= index)
+				if (index > 0 && _resultingTypes.size() >= index) {
 					parentType = _resultingTypes.elementAt(index - 1);
-				else
+				} else {
 					parentType = _bindingVariable.getType();
+				}
 
 				if (type.isGeneric()) {
 					type = DMType.makeInstantiatedDMType(type, parentType);
 				}
 
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Set resulting type at index " + index + " with " + type + " parent=" + parentType);
+				}
 
-				if (_resultingTypes.size() > index)
+				if (_resultingTypes.size() > index) {
 					_resultingTypes.setElementAt(type, index);
-				else if (_resultingTypes.size() == index)
+				} else if (_resultingTypes.size() == index) {
 					_resultingTypes.add(type);
-				else {
+				} else {
 					logger.warning("Unexpected index " + index + " for _resultingTypes.size()=" + _resultingTypes.size());
 				}
 			}
 		}
 
 		public DMType getResultingTypeAtIndex(int index) {
-			if (index < _resultingTypes.size())
+			if (index < _resultingTypes.size()) {
 				return _resultingTypes.elementAt(index);
+			}
 			return null;
 		}
 	}
@@ -1018,6 +1122,7 @@ public class BindingValue extends AbstractBinding {
 	 * 
 	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
 	 */
+	@Override
 	public String getClassNameKey() {
 		return "binding_value";
 	}
@@ -1027,19 +1132,21 @@ public class BindingValue extends AbstractBinding {
 		BindingPathElement reply = null;
 		while (en.hasMoreElements()) {
 			reply = en.nextElement();
-			if (reply.getType().getBaseEntity().equals(entity))
+			if (reply.getType().getBaseEntity().equals(entity)) {
 				return reply;
+			}
 		}
 		return null;
 	}
 
 	public void addBindingPathElementAfterFirstPathElementOfType(DMEntity entity, DMProperty newProperty) {
 		BindingPathElement beforeLast = findFirstBindingPathElementOfType(entity);
-		if (beforeLast != null)
+		if (beforeLast != null) {
 			removeBindingPathElementAfter(beforeLast);
-		else {
-			while (getBindingPathLastElement() != null)
+		} else {
+			while (getBindingPathLastElement() != null) {
 				getBindingPath().removeAllElements();
+			}
 		}
 		addBindingPathElement(newProperty);
 	}
@@ -1050,8 +1157,9 @@ public class BindingValue extends AbstractBinding {
 		DMEntity temp = null;
 		while (en.hasMoreElements()) {
 			temp = en.nextElement().getType().getBaseEntity();
-			if (!temp.getIsReadOnly())
+			if (!temp.getIsReadOnly()) {
 				reply = temp;
+			}
 		}
 		return reply;
 	}
@@ -1062,8 +1170,9 @@ public class BindingValue extends AbstractBinding {
 		BindingPathElement temp = null;
 		while (en.hasMoreElements()) {
 			temp = en.nextElement();
-			if (!temp.getType().getBaseEntity().equals(newEntryEntity))
+			if (!temp.getType().getBaseEntity().equals(newEntryEntity)) {
 				reply = temp;
+			}
 		}
 		return reply;
 	}

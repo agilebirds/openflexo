@@ -48,8 +48,9 @@ public class LogRecords extends KVCObject implements XMLSerializable, TableModel
 
 	public void add(LogRecord record) {
 		synchronized (records) {
-			if (FlexoLoggingManager.getLogCount() > -1 && records.size() > FlexoLoggingManager.getLogCount())
+			if (FlexoLoggingManager.getLogCount() > -1 && records.size() > FlexoLoggingManager.getLogCount()) {
 				records.remove(0);
+			}
 			records.add(record);
 		}
 		model.fireTableDataChanged();

@@ -46,11 +46,11 @@ import org.openflexo.foundation.cg.version.CGVersionIdentifier;
 import org.openflexo.foundation.cg.version.action.RegisterNewCGRelease;
 import org.openflexo.foundation.cg.version.action.RevertRepositoryToVersion;
 import org.openflexo.foundation.rm.FlexoResource;
+import org.openflexo.foundation.rm.FlexoXMLStorageResource.SaveXMLResourceException;
 import org.openflexo.foundation.rm.ProjectExternalRepository;
 import org.openflexo.foundation.rm.ProjectRestructuration;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
-import org.openflexo.foundation.rm.FlexoXMLStorageResource.SaveXMLResourceException;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.rm.cg.GenerationStatus;
 import org.openflexo.foundation.utils.FlexoProgress;
@@ -93,8 +93,9 @@ public abstract class GenerationRepository extends CGObject {
 		if (getProject().getExternalRepositoryWithKey(name) != null) {
 			throw new DuplicateCodeRepositoryNameException(this, name);
 		}
-		if (!directory.exists())
+		if (!directory.exists()) {
 			directory.mkdirs();
+		}
 		_sourceCodeRepository = getProject().setDirectoryForRepositoryName(name, directory);
 	}
 
@@ -107,8 +108,9 @@ public abstract class GenerationRepository extends CGObject {
 	public void finalizeDeserialization(Object builder) {
 		super.finalizeDeserialization(builder);
 		for (CGFile file : _files) {
-			if (file.getResource() == null)
+			if (file.getResource() == null) {
 				file.delete();
+			}
 		}
 	}
 
@@ -179,14 +181,17 @@ public abstract class GenerationRepository extends CGObject {
 	public void delete(FlexoProgress progress, boolean deleteFiles) {
 		Vector<CGFile> files = (Vector<CGFile>) getFiles().clone();
 		for (CGFile file : files) {
-			if (progress != null)
+			if (progress != null) {
 				progress.setProgress(FlexoLocalization.localizedForKey("deleting") + " " + file.getFileName());
+			}
 			file.delete(deleteFiles);
 		}
-		if (deleteFiles)
+		if (deleteFiles) {
 			getProject().addToFilesToDelete(getCodeGenerationWorkingDirectory());
-		if (deleteFiles) // Really delete files on disk
+		}
+		if (deleteFiles) {
 			getProject().deleteFilesToBeDeleted();
+		}
 
 		deleteExternalRepositories();
 
@@ -202,9 +207,10 @@ public abstract class GenerationRepository extends CGObject {
 				if (file.getCGFile() == null) {
 					if (file.getName() != null && file.getName().indexOf('.') > -1) {
 						if (file.getName().substring(0, file.getName().indexOf('.')).equals(getName())) {
-							if (logger.isLoggable(Level.WARNING))
+							if (logger.isLoggable(Level.WARNING)) {
 								logger.warning("Found a resource without CGFile that is supposed to be in this repository: "
 										+ file.getFullyQualifiedName() + " I will delete it now");
+							}
 							file.delete(deleteFiles);
 						}
 					}
@@ -236,8 +242,9 @@ public abstract class GenerationRepository extends CGObject {
 	}
 
 	protected void deleteExternalRepositories() {
-		if (getSourceCodeRepository() != null)
+		if (getSourceCodeRepository() != null) {
 			getProject().removeFromExternalRepositories(getSourceCodeRepository());
+		}
 	}
 
 	public CGSymbolicDirectory getSymbolicDirectory(CGFile file) {
@@ -246,8 +253,9 @@ public abstract class GenerationRepository extends CGObject {
 			Enumeration<CGSymbolicDirectory> en = _symbolicDirectories.elements();
 			while (en.hasMoreElements()) {
 				CGSymbolicDirectory reply = en.nextElement();
-				if (filePath.indexOf(reply.getDirectory().getRelativePath()) > -1)
+				if (filePath.indexOf(reply.getDirectory().getRelativePath()) > -1) {
 					return reply;
+				}
 			}
 		}
 		return null;
@@ -277,8 +285,9 @@ public abstract class GenerationRepository extends CGObject {
 
 	public void removeSymbolicDirectoryWithKey(String name) {
 		CGSymbolicDirectory old = _symbolicDirectories.get(name);
-		if (old != null)
+		if (old != null) {
 			old.setGeneratedCodeRepository(null);
+		}
 		_symbolicDirectories.remove(name);
 		setChanged();
 		notifyObservers(new CGDataModification("symbolicDirectories", old, null));
@@ -300,11 +309,13 @@ public abstract class GenerationRepository extends CGObject {
 
 	public ProjectExternalRepository getSourceCodeRepository() {
 		if (_sourceCodeRepository == null) {
-			if (_displayName != null)
+			if (_displayName != null) {
 				_sourceCodeRepository = getProject().getExternalRepositoryWithKey(_displayName);
-			if (_sourceCodeRepository == null)
+			}
+			if (_sourceCodeRepository == null) {
 				_sourceCodeRepository = getProject().setDirectoryForRepositoryName(_displayName != null ? _displayName : "Default",
 						new File(System.getProperty("user.home") + "/" + getProject().getProjectName() + "/" + getTarget().getName()));
+			}
 		}
 		return _sourceCodeRepository;
 	}
@@ -333,8 +344,9 @@ public abstract class GenerationRepository extends CGObject {
 			if (getSourceCodeRepository().isConnected()) {
 				isConnected = true;
 				for (CGFile file : getFiles()) {
-					if (file.getResource() != null)
+					if (file.getResource() != null) {
 						file.getResource().activate();
+					}
 				}
 				setChanged();
 				notifyObservers(new CGRepositoryConnected(this));
@@ -348,8 +360,9 @@ public abstract class GenerationRepository extends CGObject {
 	public void disconnect() {
 		isConnected = false;
 		for (CGFile file : getFiles()) {
-			if (file.getResource() != null)
+			if (file.getResource() != null) {
 				file.getResource().desactivate();
+			}
 		}
 		setChanged();
 		notifyObservers(new CGRepositoryDisconnected(this));
@@ -419,8 +432,9 @@ public abstract class GenerationRepository extends CGObject {
 	}
 
 	public void refresh() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("refresh()");
+		}
 		structureNeedsToBeRecomputed = true;
 		setChanged(false);
 		notifyObservers(new CGStructureRefreshed());
@@ -435,11 +449,13 @@ public abstract class GenerationRepository extends CGObject {
 	private boolean isRebuildingStructure = false;
 
 	private synchronized void rebuildStructure() {
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Re-compute structure for repository " + getName());
+		}
 		if (isRebuildingStructure) {
-			if (logger.isLoggable(Level.SEVERE))
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Trying to rebuild structure while already rebuilding. This would result in duplicate elements within the built vectors, returning now! You MUST find the cause of this problem.");
+			}
 			return;
 		}
 		isRebuildingStructure = true;
@@ -459,8 +475,9 @@ public abstract class GenerationRepository extends CGObject {
 				symbDir.clearStructure();
 			}
 			for (CGFile file : _files) {
-				if (file.getSymbolicDirectory() != null)
+				if (file.getSymbolicDirectory() != null) {
 					file.getSymbolicDirectory().addToStructure(file);
+				}
 				if (file.hasGenerationErrors()) {
 					// logger.info("File "+file+" has generation error");
 					CGPathElement current = file;
@@ -586,8 +603,9 @@ public abstract class GenerationRepository extends CGObject {
 	}
 
 	public String getPreferredTemplateRepositoryName() {
-		if (_preferredTemplateRepository != null)
+		if (_preferredTemplateRepository != null) {
 			return _preferredTemplateRepository.getName();
+		}
 		return null;
 	}
 
@@ -659,8 +677,9 @@ public abstract class GenerationRepository extends CGObject {
 
 	public CGRelease getLastRelease() {
 		ensureReleasesAreSorted();
-		if (_releases.size() > 0)
+		if (_releases.size() > 0) {
 			return _releases.lastElement();
+		}
 		return null;
 	}
 
@@ -672,8 +691,9 @@ public abstract class GenerationRepository extends CGObject {
 	}
 
 	public CGVersionIdentifier getLastReleaseVersionIdentifier() {
-		if (getLastRelease() != null)
+		if (getLastRelease() != null) {
 			return getLastRelease().getVersionIdentifier();
+		}
 		return DEFAULT_VERSION_ID;
 	}
 

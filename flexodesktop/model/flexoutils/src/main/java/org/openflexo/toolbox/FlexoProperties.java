@@ -70,8 +70,9 @@ public class FlexoProperties extends Properties implements Comparator<Object> {
 	public Enumeration<Object> keys() {
 		if (isStoring) {
 			return sortedKeys();
-		} else
+		} else {
 			return super.keys();
+		}
 	}
 
 	public Enumeration<Object> unsortedKeys() {

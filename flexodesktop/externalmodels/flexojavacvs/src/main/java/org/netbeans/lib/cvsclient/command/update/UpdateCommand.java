@@ -633,14 +633,16 @@ public class UpdateCommand extends BasicCommand implements TemporaryFileCreator 
 			// we must NOT delete a directory if it contains valuable entries
 			for (Iterator i = clientServices.getEntries(directory); i.hasNext();) {
 				Entry entry = (Entry) i.next();
-				if (entry.getName() != null && entry.isUserFileToBeRemoved())
+				if (entry.getName() != null && entry.isUserFileToBeRemoved()) {
 					return false;
+				}
 			}
 			deleteRecursively(adminDir);
 			directory.delete();
 			// if the client still makes this directory's entries available, do not delete its entry
-			if (!client.exists(directory))
+			if (!client.exists(directory)) {
 				client.removeEntry(directory);
+			}
 			return true;
 		}
 

@@ -53,8 +53,9 @@ public class DKVKeyTableModel extends AbstractModel<Domain, Key> {
 	public DKVKeyTableModel(DKVModel dkvModel, Domain domain, FlexoProject project) {
 		super(domain, project);
 		_dkvModel = dkvModel;
-		if (domain != null)
+		if (domain != null) {
 			domain.getKeyList().addObserver(this);
+		}
 		addToColumns(new IconColumn<Key>("domain_icon", 30) {
 			@Override
 			public Icon getIcon(Key object) {
@@ -96,8 +97,9 @@ public class DKVKeyTableModel extends AbstractModel<Domain, Key> {
 		public String getValue(Key key) {
 			if ((_language != null) && (key.getDomain() != null)) {
 				Value value = key.getDomain().getValue(key, _language);
-				if (value != null)
+				if (value != null) {
 					return value.getValue();
+				}
 			}
 			return "";
 		}
@@ -184,9 +186,10 @@ public class DKVKeyTableModel extends AbstractModel<Domain, Key> {
 				} else if (((Integer) dataModification.oldValue()) > ((Integer) dataModification.newValue())) {
 					firstRow = ((Integer) dataModification.newValue()).intValue() - 1;
 					lastRow = ((Integer) dataModification.oldValue()).intValue() - 1;
-				} else
+				} else {
 					// nothing has changed
 					return;
+				}
 			}
 			fireTableRowsUpdated(firstRow, lastRow);
 			return;

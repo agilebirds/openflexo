@@ -71,8 +71,9 @@ public abstract class FlexoMenu extends JMenu implements MouseListener, MenuList
 
 	public boolean moduleHasFocus() {
 		boolean returned = getController().getModule().isActive();
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("moduleHasFocus in " + getClass().getName() + " : " + returned);
+		}
 		return returned;
 	}
 
@@ -110,8 +111,9 @@ public abstract class FlexoMenu extends JMenu implements MouseListener, MenuList
 	 */
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if (isPopupMenuVisible())
+		if (isPopupMenuVisible()) {
 			refreshMenu();
+		}
 	}
 
 	/**
@@ -120,10 +122,11 @@ public abstract class FlexoMenu extends JMenu implements MouseListener, MenuList
 	public void refreshMenu() {
 		for (int i = 0; i < getItemCount(); i++) {
 			JMenuItem item = getItem(i);
-			if (item instanceof FlexoMenuItem)
+			if (item instanceof FlexoMenuItem) {
 				((FlexoMenuItem) item).itemWillShow();
-			else if (item instanceof FlexoMenu)
+			} else if (item instanceof FlexoMenu) {
 				((FlexoMenu) item).refreshMenu();
+			}
 		}
 	}
 

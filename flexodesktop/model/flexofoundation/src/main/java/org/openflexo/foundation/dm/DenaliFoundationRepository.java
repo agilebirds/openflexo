@@ -99,8 +99,9 @@ public class DenaliFoundationRepository extends DMEORepository {
 			}
 		});
 		if (eoModelArray.length == 0) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("This repository contains no valid file. Operation aborted.");
+			}
 			throw new InvalidFileException(aDenaliFoundationDirectory);
 		}
 		if (progress != null) {
@@ -114,15 +115,17 @@ public class DenaliFoundationRepository extends DMEORepository {
 			if (progress != null) {
 				progress.setSecondaryProgress(FlexoLocalization.localizedForKey("copying_file") + " " + toCopy.getName());
 			}
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Copying file " + toCopy.getAbsolutePath() + " to " + copy.getAbsolutePath());
+			}
 			try {
 				FileUtils.copyDirToDir(toCopy, copiedDirectory);
 				eoModelFiles.add(copy);
 			} catch (IOException e) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not copy directory " + aDenaliFoundationDirectory.getAbsolutePath() + " to "
 							+ copiedDirectory.getAbsolutePath());
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -156,14 +159,17 @@ public class DenaliFoundationRepository extends DMEORepository {
 				FlexoProjectFile eoModelDirectory = new FlexoProjectFile(eoModelDir, dmModel.getProject());
 				newDenaliFoundationRepository.importEOModelFile(eoModelDirectory);
 			} catch (InvalidEOModelFileException e) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not import EOModel:" + eoModelDir.getName());
+				}
 			} catch (EOModelAlreadyRegisteredException e) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not import EOModel:" + eoModelDir.getName() + " : eomodel already registered");
+				}
 			} catch (InvalidFileNameException e) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not import EOModel:" + eoModelDir.getName() + " : eomodel name is invalid");
+				}
 			}
 		}
 
@@ -173,8 +179,9 @@ public class DenaliFoundationRepository extends DMEORepository {
 		}
 
 		Enumeration en = newDenaliFoundationRepository.getDMEOModels().elements();
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Loading attributes and relations");
+		}
 		while (en.hasMoreElements()) {
 			DMEOModel currentModel = (DMEOModel) en.nextElement();
 			if (progress != null) {
@@ -184,8 +191,9 @@ public class DenaliFoundationRepository extends DMEORepository {
 				currentModel.updateFromEOModel();
 			} catch (EOAccessException e) {
 				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+				}
 				e.printStackTrace();
 			}
 		}

@@ -94,8 +94,9 @@ public class CreateTechnologyModuleImplementation extends
 	}
 
 	public FlexoProject getProject() {
-		if (getFocusedObject() != null)
+		if (getFocusedObject() != null) {
 			return getFocusedObject().getProject();
+		}
 		return null;
 	}
 
@@ -107,8 +108,9 @@ public class CreateTechnologyModuleImplementation extends
 	public List<TechnologyModuleDefinition> getUnusedTechnologyModules() {
 		List<TechnologyModuleDefinition> result = new ArrayList<TechnologyModuleDefinition>();
 		for (TechnologyModuleDefinition technologyModuleDefinition : TechnologyModuleDefinition.getAllTechnologyModuleDefinitions()) {
-			if (!getFocusedObject().containsTechnologyModule(technologyModuleDefinition))
+			if (!getFocusedObject().containsTechnologyModule(technologyModuleDefinition)) {
 				result.add(technologyModuleDefinition);
+			}
 		}
 
 		Collections.sort(result, new Comparator<TechnologyModuleDefinition>() {

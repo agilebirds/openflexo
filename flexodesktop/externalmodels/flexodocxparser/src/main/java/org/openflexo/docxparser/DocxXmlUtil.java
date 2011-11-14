@@ -41,12 +41,13 @@ public class DocxXmlUtil {
 	public static final String RELATIONSHIPTYPE_HYPERLINK = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink";
 
 	public static Namespace getNamespace(String prefix) {
-		if (NAMESPACE_WORDPROCESSINGML.getPrefix().equals(prefix))
+		if (NAMESPACE_WORDPROCESSINGML.getPrefix().equals(prefix)) {
 			return NAMESPACE_WORDPROCESSINGML;
-		else if (NAMESPACE_RELATIONSHIP.getPrefix().equals(prefix))
+		} else if (NAMESPACE_RELATIONSHIP.getPrefix().equals(prefix)) {
 			return NAMESPACE_RELATIONSHIP;
-		else if (NAMESPACE_DRAWINGMAIN.getPrefix().equals(prefix))
+		} else if (NAMESPACE_DRAWINGMAIN.getPrefix().equals(prefix)) {
 			return NAMESPACE_DRAWINGMAIN;
+		}
 
 		throw new InvalidParameterException("Invalid prefix '" + prefix + "' for getNamespace");
 	}

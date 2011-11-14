@@ -42,8 +42,9 @@ public class InvalidFileNameException extends FlexoException {
 
 	public InvalidFileNameException(FlexoProjectFile file) {
 		this.file = file;
-		if (file != null)
+		if (file != null) {
 			this.relativePath = file.getRelativePath();
+		}
 	}
 
 	public String getRelativePath() {

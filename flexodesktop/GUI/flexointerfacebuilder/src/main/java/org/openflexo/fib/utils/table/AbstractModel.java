@@ -66,8 +66,9 @@ public abstract class AbstractModel<M extends Observable, D extends Observable> 
 	}
 
 	public void setModel(M model) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Set model for " + getClass().getName() + " with " + model);
+		}
 		M oldModel = _model;
 		_model = model;
 		fireModelObjectHasChanged(oldModel, model);
@@ -184,8 +185,9 @@ public abstract class AbstractModel<M extends Observable, D extends Observable> 
 	@Override
 	public void fireTableDataChanged() {
 		super.fireTableDataChanged();
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("fireTableDataChanged() in " + getClass().getName() + " " + hashCode());
+		}
 		updateObservedObjects();
 	}
 
@@ -206,8 +208,9 @@ public abstract class AbstractModel<M extends Observable, D extends Observable> 
 	public void update(Observable observable, Object dataModification) {
 		int row = indexOf((D) observable);
 		fireTableRowsUpdated(row, row);
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Update row " + row + " for object " + observable);
+		}
 	}
 
 	@Override
@@ -248,8 +251,9 @@ public abstract class AbstractModel<M extends Observable, D extends Observable> 
 	public void replaceColumnByColumn(AbstractColumn<D, ?> oldColumn, AbstractColumn<D, ?> newColumn) {
 		int index = _columns.indexOf(oldColumn);
 		if (index < 0) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Try to replaced a inexisting column. Not going further.");
+			}
 			return;
 		}
 		_columns.remove(index);
@@ -288,11 +292,13 @@ public abstract class AbstractModel<M extends Observable, D extends Observable> 
 	}
 
 	public int getIndexForColumnWithName(String colName) {
-		if (colName == null)
+		if (colName == null) {
 			return -1;
+		}
 		for (int i = 0; i < getColumnCount(); i++) {
-			if (colName.equals(getColumnName(i)))
+			if (colName.equals(getColumnName(i))) {
 				return i;
+			}
 		}
 		return -1;
 	}
@@ -376,8 +382,9 @@ public abstract class AbstractModel<M extends Observable, D extends Observable> 
 	public void fireCellUpdated(D editedObject, int row, int column) {
 		// fireTableChanged(new TableModelEvent(this, row, row, column));
 		int newRow = indexOf(editedObject);
-		if (row != newRow)
+		if (row != newRow) {
 			fireTableChanged(new RowMoveForObjectEvent(this, editedObject, newRow, column));
+		}
 	}
 
 	protected class DMCellRenderer extends DefaultTableCellRenderer {

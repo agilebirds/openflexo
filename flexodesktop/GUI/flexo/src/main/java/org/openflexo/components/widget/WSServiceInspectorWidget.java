@@ -50,10 +50,11 @@ public class WSServiceInspectorWidget extends CustomInspectorWidget<WSService> {
 		int groupType = 3;
 		if (hasValueForParameter("wsServiceType")) {
 			String type = getValueForParameter("wsServiceType");
-			if (type.equals("INTERNAL"))
+			if (type.equals("INTERNAL")) {
 				groupType = WSServiceSelector.INTERNAL_WSService;
-			else if (type.equals("EXTERNAL"))
+			} else if (type.equals("EXTERNAL")) {
 				groupType = WSServiceSelector.EXTERNAL_WSService;
+			}
 		}
 		_selector = new WSServiceSelector(null, null, groupType) {
 			@Override
@@ -82,8 +83,9 @@ public class WSServiceInspectorWidget extends CustomInspectorWidget<WSService> {
 		getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Focus gained in " + getClass().getName());
+				}
 				super.focusGained(arg0);
 				_selector.getTextField().requestFocus();
 				_selector.getTextField().selectAll();
@@ -91,8 +93,9 @@ public class WSServiceInspectorWidget extends CustomInspectorWidget<WSService> {
 
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Focus lost in " + getClass().getName());
+				}
 				super.focusLost(arg0);
 			}
 		});
@@ -142,14 +145,16 @@ public class WSServiceInspectorWidget extends CustomInspectorWidget<WSService> {
 
 	@Override
 	public void fireEditingCanceled() {
-		if (_selector != null)
+		if (_selector != null) {
 			_selector.closePopup();
+		}
 	}
 
 	@Override
 	public void fireEditingStopped() {
-		if (_selector != null)
+		if (_selector != null) {
 			_selector.closePopup();
+		}
 	}
 
 }

@@ -86,16 +86,18 @@ public final class NodeCompound extends WKFObject implements LevelledObject {
 			PetriGraphNode node = i.next();
 			if (parent == null) {
 				parent = node.getParentPetriGraph();
-			} else if (parent != node.getParentPetriGraph())
+			} else if (parent != node.getParentPetriGraph()) {
 				i.remove();
+			}
 		}
 		Iterator<WKFArtefact> i2 = artefacts.iterator();
 		while (i2.hasNext()) {
 			WKFArtefact artefact = i2.next();
 			if (parent == null) {
 				parent = artefact.getParentPetriGraph();
-			} else if (parent != artefact.getParentPetriGraph())
+			} else if (parent != artefact.getParentPetriGraph()) {
 				i2.remove();
+			}
 		}
 
 		// 2. We set a copy of the vector as our current data
@@ -118,8 +120,9 @@ public final class NodeCompound extends WKFObject implements LevelledObject {
 		} else {
 			_nodes = new Vector<PetriGraphNode>();
 			this.artefacts = new Vector<WKFArtefact>();
-			if (logger.isLoggable(Level.SEVERE))
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Could not clone this NodeCompound");
+			}
 		}
 	}
 
@@ -169,8 +172,9 @@ public final class NodeCompound extends WKFObject implements LevelledObject {
 
 	@Override
 	public void initializeDeserialization(Object builder) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("initializeDeserialization() for " + this.getClass().getName());
+		}
 		super.initializeDeserialization(builder);
 		if (getProcess() != null) {
 			getProcess().initializeDeserialization(builder);
@@ -179,8 +183,9 @@ public final class NodeCompound extends WKFObject implements LevelledObject {
 
 	@Override
 	public void finalizeDeserialization(Object builder) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("finalizeDeserialization() for " + this.getClass().getName());
+		}
 		super.finalizeDeserialization(builder);
 		if (getProcess() != null) {
 			getProcess().finalizeDeserialization(builder);
@@ -197,8 +202,9 @@ public final class NodeCompound extends WKFObject implements LevelledObject {
 		Point2D upperLeftCorner = null;
 		for (Enumeration<WKFObject> e = getAllEmbeddedWKFObjects().elements(); e.hasMoreElements();) {
 			WKFObject node = e.nextElement();
-			if (node == this)
+			if (node == this) {
 				continue;
+			}
 			if (upperLeftCorner == null) {
 				upperLeftCorner = new Point2D.Double();
 				upperLeftCorner.setLocation(node.getLocation(context));
@@ -207,8 +213,9 @@ public final class NodeCompound extends WKFObject implements LevelledObject {
 						Math.min(upperLeftCorner.getY(), node.getY(context)));
 			}
 		}
-		if (upperLeftCorner == null)
+		if (upperLeftCorner == null) {
 			upperLeftCorner = new Point2D.Double();
+		}
 		offset = new Point2D.Double();
 		offset.setLocation(location.getX() - upperLeftCorner.getX(), location.getY() - upperLeftCorner.getY());
 		for (Enumeration<WKFObject> e = getAllEmbeddedWKFObjects().elements(); e.hasMoreElements();) {
@@ -266,8 +273,9 @@ public final class NodeCompound extends WKFObject implements LevelledObject {
 		if (aNode.getLevel() != null) {
 			if (_level != null) {
 				if (_level != aNode.getLevel()) {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Inconsistent data in NodeCompound");
+					}
 					return;
 				}
 			} else {
@@ -293,8 +301,9 @@ public final class NodeCompound extends WKFObject implements LevelledObject {
 		if (artefact.getLevel() != null) {
 			if (_level != null) {
 				if (_level != artefact.getLevel()) {
-					if (logger.isLoggable(Level.WARNING))
+					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Inconsistent data in NodeCompound");
+					}
 					return;
 				}
 			} else {

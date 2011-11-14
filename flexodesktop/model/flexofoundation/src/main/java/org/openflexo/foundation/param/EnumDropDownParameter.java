@@ -32,8 +32,9 @@ public class EnumDropDownParameter<E extends Enum<E>> extends ParameterDefinitio
 		addParameter("dynamiclist", "params." + name + ".availableValues");
 		_availableValues = new Vector<E>();
 		for (E e : values) {
-			if (accept(e))
+			if (accept(e)) {
 				_availableValues.add(e);
+			}
 		}
 	}
 

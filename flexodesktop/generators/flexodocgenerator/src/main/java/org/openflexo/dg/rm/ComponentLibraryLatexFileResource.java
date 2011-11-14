@@ -52,10 +52,12 @@ public class ComponentLibraryLatexFileResource extends LatexFileResource<DGLatex
 
 	@Override
 	public String getName() {
-		if (getCGFile() == null || getCGFile().getRepository() == null || getModel() == null)
+		if (getCGFile() == null || getCGFile().getRepository() == null || getModel() == null) {
 			return super.getName();
-		if (super.getName() == null)
+		}
+		if (super.getName() == null) {
 			setName(nameForRepositoryAndModel(getCGFile().getRepository(), getModel()));
+		}
 		return nameForRepositoryAndModel(getCGFile().getRepository(), getModel());
 	}
 
@@ -64,8 +66,9 @@ public class ComponentLibraryLatexFileResource extends LatexFileResource<DGLatex
 	}
 
 	public FlexoComponentLibrary getModel() {
-		if (getGenerator() != null)
+		if (getGenerator() != null) {
 			return getGenerator().getObject();
+		}
 		return null;
 	}
 

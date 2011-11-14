@@ -10,10 +10,11 @@ public class MissingArgumentException extends Exception {
 
 	@Override
 	public String getMessage() {
-		if (argument != null)
+		if (argument != null) {
 			return "The following argument '" + argument + "' is missing.";
-		else
+		} else {
 			return "There is a missing argument";
+		}
 	}
 
 }

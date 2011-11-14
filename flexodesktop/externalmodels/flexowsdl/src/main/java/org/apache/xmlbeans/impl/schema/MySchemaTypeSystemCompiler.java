@@ -89,13 +89,14 @@ public class MySchemaTypeSystemCompiler {
 
 		if (input != null) {
 			for (int i = 0; i < input.length; i++) {
-				if (input[i] instanceof Schema)
+				if (input[i] instanceof Schema) {
 					schemas.add(input[i]);
-				else if (input[i] instanceof SchemaDocument && ((SchemaDocument) input[i]).getSchema() != null)
+				} else if (input[i] instanceof SchemaDocument && ((SchemaDocument) input[i]).getSchema() != null) {
 					schemas.add(((SchemaDocument) input[i]).getSchema());
-				else
+				} else {
 					throw new XmlException("Thread " + Thread.currentThread().getName() + ": The " + i
 							+ "th supplied input is not a schema document: its type is " + input[i].schemaType());
+				}
 			}
 		}
 
@@ -127,8 +128,9 @@ public class MySchemaTypeSystemCompiler {
 	public static SchemaTypeSystemImpl compileImpl(SchemaTypeSystem system, String name, Schema[] schemas, BindingConfig config,
 			SchemaTypeLoader linkTo, XmlOptions options, Collection outsideErrors, boolean javaize, URI baseURI, Map sourcesToCopyMap,
 			File schemasDir) {
-		if (linkTo == null)
+		if (linkTo == null) {
 			throw new IllegalArgumentException("Must supply linkTo");
+		}
 
 		XmlErrorWatcher errorWatcher = new XmlErrorWatcher(outsideErrors);
 		boolean incremental = system != null;
@@ -142,8 +144,9 @@ public class MySchemaTypeSystemCompiler {
 			state.setOptions(options);
 			state.setGivenTypeSystemName(name);
 			state.setSchemasDir(schemasDir);
-			if (baseURI != null)
+			if (baseURI != null) {
 				state.setBaseUri(baseURI);
+			}
 
 			// construct the classpath (you always get the builtin types)
 			linkTo = SchemaTypeLoaderImpl.build(new SchemaTypeLoader[] { BuiltinSchemaTypeSystem.get(), linkTo }, null, null);
@@ -154,11 +157,13 @@ public class MySchemaTypeSystemCompiler {
 			// load all the xsd files into it
 			if (validate) {
 				XmlOptions validateOptions = new XmlOptions().setErrorListener(errorWatcher);
-				if (options.hasOption(XmlOptions.VALIDATE_TREAT_LAX_AS_SKIP))
+				if (options.hasOption(XmlOptions.VALIDATE_TREAT_LAX_AS_SKIP)) {
 					validateOptions.setValidateTreatLaxAsSkip();
+				}
 				for (int i = 0; i < schemas.length; i++) {
-					if (schemas[i].validate(validateOptions))
+					if (schemas[i].validate(validateOptions)) {
 						validSchemas.add(schemas[i]);
+					}
 				}
 			} else {
 				validSchemas.addAll(Arrays.asList(schemas));
@@ -194,8 +199,9 @@ public class MySchemaTypeSystemCompiler {
 			StscState.get().sts().loadFromStscState(state);
 
 			// fill in the source-copy map
-			if (sourcesToCopyMap != null)
+			if (sourcesToCopyMap != null) {
 				sourcesToCopyMap.putAll(state.sourceCopyMap());
+			}
 
 			if (errorWatcher.hasError()) {
 				// EXPERIMENTAL: recovery from compilation errors and partial type system
@@ -208,8 +214,9 @@ public class MySchemaTypeSystemCompiler {
 				}
 			}
 
-			if (system != null)
+			if (system != null) {
 				((SchemaTypeSystemImpl) system).setIncomplete(true);
+			}
 
 			return StscState.get().sts();
 		} finally {
@@ -227,9 +234,10 @@ public class MySchemaTypeSystemCompiler {
 		List result = new ArrayList();
 		for (int i = 0; i < modified.length; i++) {
 			String fileURL = modified[i].documentProperties().getSourceName();
-			if (fileURL == null)
+			if (fileURL == null) {
 				throw new IllegalArgumentException("One of the Schema files passed in"
 						+ " doesn't have the source set, which prevents it to be incrementally" + " compiled");
+			}
 			modifiedFiles.add(fileURL);
 			haveFile.put(fileURL, modified[i]);
 			result.add(modified[i]);

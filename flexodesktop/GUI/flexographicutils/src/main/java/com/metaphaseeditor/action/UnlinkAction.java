@@ -22,15 +22,17 @@
 
 package com.metaphaseeditor.action;
 
-import com.metaphaseeditor.MetaphaseEditorException;
-import com.metaphaseeditor.MetaphaseEditorPanel;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
+
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 import javax.swing.text.StyledEditorKit;
 import javax.swing.text.html.HTMLDocument;
+
+import com.metaphaseeditor.MetaphaseEditorException;
+import com.metaphaseeditor.MetaphaseEditorPanel;
 
 /**
  * 
@@ -44,6 +46,7 @@ public class UnlinkAction extends StyledEditorKit.StyledTextAction {
 		this.editorPanel = editorPanel;
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent ae) {
 		JTextPane textPane = editorPanel.getHtmlTextPane();
 		HTMLDocument htmlDocument = (HTMLDocument) textPane.getDocument();

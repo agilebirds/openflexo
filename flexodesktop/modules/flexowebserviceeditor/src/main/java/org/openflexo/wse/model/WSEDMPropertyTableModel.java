@@ -63,8 +63,9 @@ public class WSEDMPropertyTableModel extends AbstractModel<DMEntity, DMProperty>
 		addToColumns(new StringColumn<DMProperty>("cardinality", 150) {
 			@Override
 			public String getValue(DMProperty object) {
-				if ((object).getCardinality() != null)
+				if ((object).getCardinality() != null) {
 					return (object).getCardinality().getName();
+				}
 				return "";
 			}
 		});
@@ -88,8 +89,9 @@ public class WSEDMPropertyTableModel extends AbstractModel<DMEntity, DMProperty>
 		addToColumns(new StringColumn<DMProperty>("type", 150) {
 			@Override
 			public String getValue(DMProperty object) {
-				if ((object).getType() != null)
+				if ((object).getType() != null) {
 					return (object).getType().getName();
+				}
 				return "";
 			}
 		});

@@ -25,13 +25,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.WKFIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-import org.openflexo.wkf.controller.WKFController;
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.ExecutionContext;
@@ -44,9 +37,9 @@ import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.action.RedoException;
 import org.openflexo.foundation.action.UndoException;
 import org.openflexo.foundation.param.NodeParameter;
+import org.openflexo.foundation.param.NodeParameter.NodeSelectingConditional;
 import org.openflexo.foundation.param.RadioButtonListParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
-import org.openflexo.foundation.param.NodeParameter.NodeSelectingConditional;
 import org.openflexo.foundation.wkf.ActionPetriGraph;
 import org.openflexo.foundation.wkf.ActivityPetriGraph;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
@@ -78,6 +71,12 @@ import org.openflexo.foundation.wkf.node.SubProcessNode;
 import org.openflexo.foundation.wkf.node.WSCallSubProcessNode;
 import org.openflexo.foundation.wkf.ws.AbstractInPort;
 import org.openflexo.foundation.wkf.ws.FlexoPortMap;
+import org.openflexo.icon.WKFIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
+import org.openflexo.wkf.controller.WKFController;
 
 public class CreateEdgeInitializer extends ActionInitializer {
 
@@ -156,10 +155,11 @@ public class CreateEdgeInitializer extends ActionInitializer {
 								FlexoLocalization.localizedForKey("select_a_new_portmap"),
 								FlexoLocalization.localizedForKey("select_a_new_portmap"), ports);
 						if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
-							if (ports.getValue() != null)
+							if (ports.getValue() != null) {
 								action.setEndNode(ports.getValue());
-							else
+							} else {
 								return false;
+							}
 						} else {
 							return false;
 						}
@@ -198,10 +198,11 @@ public class CreateEdgeInitializer extends ActionInitializer {
 								FlexoLocalization.localizedForKey("select_an_out_portmap"),
 								FlexoLocalization.localizedForKey("select_an_out_portmap"), ports);
 						if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
-							if (ports.getValue() != null)
+							if (ports.getValue() != null) {
 								action.setStartingNode(ports.getValue());
-							else
+							} else {
 								return false;
+							}
 						} else {
 							return false;
 						}
@@ -287,8 +288,9 @@ public class CreateEdgeInitializer extends ActionInitializer {
 							@Override
 							public void setValue(String value) {
 								super.setValue(value);
-								if (!value.equals(TRUE) && !value.equals(FALSE))
+								if (!value.equals(TRUE) && !value.equals(FALSE)) {
 									nameWasEdited = true;
+								}
 							}
 						};
 						RadioButtonListParameter<String> outputContextParam = new RadioButtonListParameter<String>("outputContextParam",
@@ -340,8 +342,9 @@ public class CreateEdgeInitializer extends ActionInitializer {
 					} else {
 						endNode = _selectEndNode((SelfExecutableNode) activityNode, action);
 						if (endNode == null) {
-							if (!action.getIsGenericOutput())
+							if (!action.getIsGenericOutput()) {
 								return false; // Cancelled
+							}
 						}
 					}
 					if (endNode != null) {
@@ -372,8 +375,9 @@ public class CreateEdgeInitializer extends ActionInitializer {
 					} else /* > 1 */{
 						endNode = selectEndNode(activityNode, action);
 						if (endNode == null) {
-							if (!action.getIsGenericOutput())
+							if (!action.getIsGenericOutput()) {
 								return false; // Cancelled
+							}
 						}
 					}
 					if (endNode != null) {
@@ -404,8 +408,9 @@ public class CreateEdgeInitializer extends ActionInitializer {
 					} else {
 						endNode = _selectEndNode((SelfExecutableNode) activityNode, action);
 						if (endNode == null) {
-							if (!action.getIsGenericOutput())
+							if (!action.getIsGenericOutput()) {
 								return false; // Cancelled
+							}
 						}
 					}
 					if (endNode != null) {
@@ -435,8 +440,9 @@ public class CreateEdgeInitializer extends ActionInitializer {
 					} else /* > 1 */{
 						endNode = selectEndNode(operationNode, action);
 						if (endNode == null) {
-							if (!action.getIsGenericOutput())
+							if (!action.getIsGenericOutput()) {
 								return false; // Cancelled
+							}
 						}
 					}
 					if (endNode != null) {
@@ -466,8 +472,9 @@ public class CreateEdgeInitializer extends ActionInitializer {
 					} else {
 						endNode = _selectEndNode((SelfExecutableNode) actionNode, action);
 						if (endNode == null) {
-							if (!action.getIsGenericOutput())
+							if (!action.getIsGenericOutput()) {
 								return false; // Cancelled
+							}
 						}
 					}
 					if (endNode != null) {
@@ -507,12 +514,15 @@ public class CreateEdgeInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, CreateEdge action) throws UndoException {
 				CreateEdgeExecutionContext executionContext = (CreateEdgeExecutionContext) action.getExecutionContext();
-				if (executionContext.createPetriGraph != null)
+				if (executionContext.createPetriGraph != null) {
 					executionContext.createPetriGraph.undoAction();
-				if (executionContext.createExecutionPetriGraph != null)
+				}
+				if (executionContext.createExecutionPetriGraph != null) {
 					executionContext.createExecutionPetriGraph.undoAction();
-				if (executionContext.createPreCondition != null)
+				}
+				if (executionContext.createPreCondition != null) {
 					executionContext.createPreCondition.undoAction();
+				}
 				return true;
 			}
 		};

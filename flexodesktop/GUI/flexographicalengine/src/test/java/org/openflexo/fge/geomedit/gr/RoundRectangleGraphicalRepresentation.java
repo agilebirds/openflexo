@@ -25,16 +25,16 @@ import java.util.Vector;
 
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlPoint;
+import org.openflexo.fge.geom.FGEGeometricObject.CardinalQuadrant;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGERoundRectangle;
-import org.openflexo.fge.geom.FGEGeometricObject.CardinalQuadrant;
 import org.openflexo.fge.geom.area.FGEQuarterPlane;
 import org.openflexo.fge.geomedit.ComputedControlPoint;
 import org.openflexo.fge.geomedit.DraggableControlPoint;
 import org.openflexo.fge.geomedit.GeometricDrawing;
-import org.openflexo.fge.geomedit.RoundRectangle;
 import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
+import org.openflexo.fge.geomedit.RoundRectangle;
 import org.openflexo.fge.geomedit.construction.ExplicitPointConstruction;
 import org.openflexo.fge.geomedit.construction.RoundRectangleConstruction;
 import org.openflexo.fge.geomedit.construction.RoundRectangleWithTwoPointsConstruction;

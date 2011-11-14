@@ -30,11 +30,11 @@ import org.openflexo.components.widget.binding.BindingSelectorPanel.BindingColum
 import org.openflexo.foundation.bindings.AbstractBinding;
 import org.openflexo.foundation.bindings.Bindable;
 import org.openflexo.foundation.bindings.BindingDefinition;
+import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.bindings.BindingModel;
 import org.openflexo.foundation.bindings.BindingValue;
-import org.openflexo.foundation.bindings.BindingVariable;
-import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.bindings.BindingValue.BindingPathElement;
+import org.openflexo.foundation.bindings.BindingVariable;
 import org.openflexo.foundation.dm.DMProperty;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
@@ -102,20 +102,23 @@ public class FlattenRelationshipDefinitionSelector extends BindingSelector {
 
 	@Override
 	protected FlattenRelationshipDefinition makeBinding() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("makeBindingValue() " + getBindingDefinition());
+		}
 		if (_flattenRelationshipDefinitionInfo != null) {
 			FlattenRelationshipDefinition returned = new FlattenRelationshipDefinition(_flattenRelationshipDefinitionInfo._sourceEntity,
 					null);
 			return returned;
-		} else
+		} else {
 			return null;
+		}
 	}
 
 	@Override
 	protected AbstractListModel getRootListModel() {
-		if (_flattenRelationshipDefinitionInfo != null)
+		if (_flattenRelationshipDefinitionInfo != null) {
 			return getListModelFor(DMType.makeResolvedDMType(_flattenRelationshipDefinitionInfo._sourceEntity));
+		}
 		return ((BindingSelectorPanel) _selectorPanel).EMPTY_MODEL;
 	}
 
@@ -135,16 +138,18 @@ public class FlattenRelationshipDefinitionSelector extends BindingSelector {
 	}
 
 	public DMEOEntity getSourceEntity() {
-		if (_flattenRelationshipDefinitionInfo != null)
+		if (_flattenRelationshipDefinitionInfo != null) {
 			return _flattenRelationshipDefinitionInfo._sourceEntity;
+		}
 		return null;
 	}
 
 	public void setSourceEntity(DMEOEntity sourceEntity) {
 		if (sourceEntity != null && sourceEntity != getSourceEntity()) {
 			_flattenRelationshipDefinitionInfo = new FlattenRelationshipDefinitionInfo(sourceEntity);
-			if (_selectorPanel != null)
+			if (_selectorPanel != null) {
 				_selectorPanel.update();
+			}
 		}
 	}
 
@@ -216,8 +221,9 @@ public class FlattenRelationshipDefinitionSelector extends BindingSelector {
 		@Override
 		protected void update() {
 			BindingValue bindingValue = getEditedObject();
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("update with " + bindingValue);
+			}
 			/*if (bindingValue != null) {
 				setBindingDefinition(bindingValue.getBindingDefinition());
 			}*/
@@ -246,8 +252,9 @@ public class FlattenRelationshipDefinitionSelector extends BindingSelector {
 
 			// Remove unused lists
 			int lastVisibleList = defaultVisibleColCount - 1;
-			if (lastUpdatedList > lastVisibleList)
+			if (lastUpdatedList > lastVisibleList) {
 				lastVisibleList = lastUpdatedList;
+			}
 
 			// logger.info("Last visible: "+lastVisibleList);
 			// logger.info("Last updated: "+lastUpdatedList);
@@ -275,10 +282,11 @@ public class FlattenRelationshipDefinitionSelector extends BindingSelector {
 
 		@Override
 		protected BindingColumnListModel makeColumnListModel(DMType type) {
-			if (type.getKindOfType() == DMType.KindOfType.RESOLVED && type.getBaseEntity() instanceof DMEOEntity)
+			if (type.getKindOfType() == DMType.KindOfType.RESOLVED && type.getBaseEntity() instanceof DMEOEntity) {
 				return new RelationshipsOnlyListModel((DMEOEntity) type.getBaseEntity());
-			else
+			} else {
 				return EMPTY_MODEL;
+			}
 		}
 
 	}

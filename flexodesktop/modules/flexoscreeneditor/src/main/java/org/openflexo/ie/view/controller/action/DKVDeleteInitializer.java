@@ -25,13 +25,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.IconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.SelectionManagingController;
-
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -42,6 +35,12 @@ import org.openflexo.foundation.dkv.action.DKVDelete;
 import org.openflexo.foundation.param.CheckboxListParameter;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.icon.IconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.SelectionManagingController;
 
 public class DKVDeleteInitializer extends ActionInitializer {
 
@@ -61,11 +60,13 @@ public class DKVDeleteInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<DKVDelete>() {
 			@Override
 			public boolean run(ActionEvent e, DKVDelete action) {
-				if (!FlexoController.confirmWithWarning(FlexoLocalization.localizedForKey("would_you_like_to_delete_those_objects")))
+				if (!FlexoController.confirmWithWarning(FlexoLocalization.localizedForKey("would_you_like_to_delete_those_objects"))) {
 					return false;
+				}
 				Vector<FlexoModelObject> v = (Vector) action.getGlobalSelection().clone();
-				if (action.getFocusedObject() != null && !v.contains(action.getFocusedObject()))
+				if (action.getFocusedObject() != null && !v.contains(action.getFocusedObject())) {
 					v.add(action.getFocusedObject());
+				}
 				(action).setObjectsToDelete(v);
 				Vector<FlexoModelObject> objects = action.getGlobalSelectionAndFocusedObject();
 				Vector<TOCEntry> tocEntries = new Vector<TOCEntry>();
@@ -78,8 +79,9 @@ public class DKVDeleteInitializer extends ActionInitializer {
 						}
 					}
 				}
-				if (tocEntries.size() == 0)
+				if (tocEntries.size() == 0) {
 					return true;
+				}
 				CheckboxListParameter<TOCEntry>[] def = new CheckboxListParameter[1];
 				def[0] = new CheckboxListParameter<TOCEntry>("entries", "select_entries_to_delete", tocEntries, new Vector<TOCEntry>());
 				def[0].setFormatter("displayString");
@@ -108,14 +110,17 @@ public class DKVDeleteInitializer extends ActionInitializer {
 			public boolean run(ActionEvent e, DKVDelete action) {
 				Domain domainToSelect = null;
 				if (action.getFocusedObject() instanceof Key) {
-					if (((Key) action.getFocusedObject()).getDomain() != null && ((Key) action.getFocusedObject()).getDomain() != null)
+					if (((Key) action.getFocusedObject()).getDomain() != null && ((Key) action.getFocusedObject()).getDomain() != null) {
 						domainToSelect = ((Key) action.getFocusedObject()).getDomain();
+					}
 				}
 				if (domainToSelect == null && action.getGlobalSelection() != null && action.getGlobalSelection().size() > 0
-						&& action.getGlobalSelection().firstElement() instanceof Key)
+						&& action.getGlobalSelection().firstElement() instanceof Key) {
 					domainToSelect = ((Key) action.getGlobalSelection().firstElement()).getDomain();
-				if (domainToSelect != null)
+				}
+				if (domainToSelect != null) {
 					((SelectionManagingController) getController()).getSelectionManager().setSelectedObject(domainToSelect);
+				}
 				return true;
 			}
 		};

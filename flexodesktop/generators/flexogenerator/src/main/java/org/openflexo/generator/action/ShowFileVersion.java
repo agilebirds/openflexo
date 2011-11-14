@@ -59,8 +59,9 @@ public class ShowFileVersion extends FlexoGUIAction<ShowFileVersion, CGFile, CGO
 
 		@Override
 		protected boolean isEnabledForSelection(CGFile file, Vector<CGObject> globalSelection) {
-			if (!isVisibleForSelection(file, globalSelection))
+			if (!isVisibleForSelection(file, globalSelection)) {
 				return false;
+			}
 			if (_source == ContentSourceType.PureGeneration) {
 				return file.getGenerationStatus().isGenerationAvailable();
 			} else if (_source == ContentSourceType.GeneratedMerge) {
@@ -157,8 +158,9 @@ public class ShowFileVersion extends FlexoGUIAction<ShowFileVersion, CGFile, CGO
 
 	public void setVersionId(CGVersionIdentifier versionId) {
 		this.versionId = versionId;
-		if (_contentSource != null)
+		if (_contentSource != null) {
 			_contentSource.setVersion(versionId);
+		}
 	}
 
 }

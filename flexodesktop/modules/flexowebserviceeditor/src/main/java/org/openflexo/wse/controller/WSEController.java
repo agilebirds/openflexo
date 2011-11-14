@@ -208,15 +208,15 @@ public class WSEController extends FlexoController implements SelectionManagingC
 
 	@Override
 	public String getWindowTitleforObject(FlexoModelObject object) {
-		if (object instanceof DMObject)
+		if (object instanceof DMObject) {
 			return ((DMObject) object).getLocalizedName();
-		else if (object instanceof WSObject)
+		} else if (object instanceof WSObject) {
 			return ((WSObject) object).getLocalizedName();
-		else if (object instanceof FlexoProcess)
+		} else if (object instanceof FlexoProcess) {
 			return ((FlexoProcess) object).getName();
-		else if (object instanceof FlexoPort)
+		} else if (object instanceof FlexoPort) {
 			return ((FlexoPort) object).getName();
-		else if (object instanceof AbstractMessageDefinition) {
+		} else if (object instanceof AbstractMessageDefinition) {
 			return ((AbstractMessageDefinition) object).getName();
 		} else if (object instanceof ServiceInterface) {
 			return ((ServiceInterface) object).getName();

@@ -23,9 +23,9 @@ import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.controller.DrawingController;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGESegment;
-import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEEmptyArea;
 
@@ -84,8 +84,9 @@ public class AdjustableUniqueSegment extends RectPolylinAdjustableSegment {
 
 	@Override
 	public FGEArea getDraggingAuthorizedArea() {
-		if (!consistentData)
+		if (!consistentData) {
 			return new FGEEmptyArea();
+		}
 
 		return draggingAuthorizedArea;
 	}

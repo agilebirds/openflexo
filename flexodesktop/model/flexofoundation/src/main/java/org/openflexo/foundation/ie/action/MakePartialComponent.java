@@ -49,9 +49,9 @@ import org.openflexo.foundation.ie.widget.InnerTableReusableWidget;
 import org.openflexo.foundation.ie.widget.TopComponentReusableWidget;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoComponentResource;
+import org.openflexo.foundation.rm.FlexoXMLStorageResource.SaveXMLResourceException;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
-import org.openflexo.foundation.rm.FlexoXMLStorageResource.SaveXMLResourceException;
 
 public class MakePartialComponent extends FlexoAction<MakePartialComponent, IEWidget, IEWidget> {
 

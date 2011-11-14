@@ -78,12 +78,14 @@ public class ExclusiveEventBasedOperator extends CommonOutputOperatorNode {
 					seenOthers = true;
 				}
 			}
-			if (seenEvent && seenActivity)
+			if (seenEvent && seenActivity) {
 				return new ValidationError<NodeAfterEventBasedGatewayRules, ExclusiveEventBasedOperator>(this, operator,
 						"event_gateway_output_must_be_either_intermediate_catching_events_or_activities_but_not_both");
-			if (seenOthers)
+			}
+			if (seenOthers) {
 				return new ValidationError<NodeAfterEventBasedGatewayRules, ExclusiveEventBasedOperator>(this, operator,
 						"event_gateway_output_must_be_either_intermediate_catching_events_or_activities");
+			}
 			return null;
 		}
 

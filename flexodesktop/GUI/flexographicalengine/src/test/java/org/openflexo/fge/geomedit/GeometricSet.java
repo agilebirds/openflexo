@@ -29,14 +29,13 @@ import java.util.logging.Logger;
 import javax.swing.tree.TreeNode;
 
 import org.openflexo.fge.geomedit.gr.GeometricDrawingGraphicalRepresentation;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.xmlcode.XMLCoder;
 import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
 import org.openflexo.xmlcode.XMLSerializable;
-
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.logging.FlexoLogger;
 
 public class GeometricSet implements XMLSerializable, Cloneable, TreeNode {
 
@@ -85,10 +84,11 @@ public class GeometricSet implements XMLSerializable, Cloneable, TreeNode {
 	}
 
 	public String getTitle() {
-		if (file != null)
+		if (file != null) {
 			return file.getName();
-		else
+		} else {
 			return FlexoLocalization.localizedForKey("untitled") + "-" + index;
+		}
 	}
 
 	public GeometricDrawingGraphicalRepresentation getGraphicalRepresentation() {

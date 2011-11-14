@@ -57,15 +57,18 @@ public class DefaultBindingFactory extends StringEncoder.Converter<AbstractBindi
 			System.out.println("Identified AbstractBinding "+value);
 		}*/
 
-		if (AbstractBinding.logger.isLoggable(Level.FINE))
+		if (AbstractBinding.logger.isLoggable(Level.FINE)) {
 			AbstractBinding.logger.fine("Decoding abstract binding: " + value);
+		}
 
-		if ("null".equals(value))
+		if ("null".equals(value)) {
 			return null;
+		}
 		StaticBinding decodedStringAsStaticBinding = staticBindingFactory.convertFromString(value);
 		if (decodedStringAsStaticBinding != null) {
-			if (AbstractBinding.logger.isLoggable(Level.FINE))
+			if (AbstractBinding.logger.isLoggable(Level.FINE)) {
 				AbstractBinding.logger.fine("Succeeded to decode as a StaticBinding");
+			}
 			// if (debug) System.out.println("Succeeded to decode as a StaticBinding");
 			// if (debug) System.exit(-1);
 			return decodedStringAsStaticBinding;
@@ -75,16 +78,18 @@ public class DefaultBindingFactory extends StringEncoder.Converter<AbstractBindi
 			BindingValue decodedStringAsBindingValue = bindingValueFactory.convertFromString(value);
 			bindingValueFactory.setWarnOnFailure(true);
 			if (decodedStringAsBindingValue != null) {
-				if (AbstractBinding.logger.isLoggable(Level.FINE))
+				if (AbstractBinding.logger.isLoggable(Level.FINE)) {
 					AbstractBinding.logger.fine("Succeeded to decode as a BindingValue");
+				}
 				// if (debug) System.out.println("Succeeded to decode as a BindingValue");
 				// if (debug) System.exit(-1);
 				return decodedStringAsBindingValue;
 			} else {
 				// Lets try as an expression
 				BindingExpression decodedStringAsBindingExpression = bindingExpressionFactory.convertFromString(value);
-				if (AbstractBinding.logger.isLoggable(Level.FINE))
+				if (AbstractBinding.logger.isLoggable(Level.FINE)) {
 					AbstractBinding.logger.fine("Could not decode as a BindingValue, trying as an expression");
+				}
 				// if (debug) System.out.println("Could not decode as a BindingValue, trying as an expression");
 				// if (debug) System.exit(-1);
 				return decodedStringAsBindingExpression;
@@ -94,12 +99,15 @@ public class DefaultBindingFactory extends StringEncoder.Converter<AbstractBindi
 
 	@Override
 	public String convertToString(AbstractBinding value) {
-		if (value instanceof BindingValue)
+		if (value instanceof BindingValue) {
 			return bindingValueFactory.convertToString((BindingValue) value);
-		if (value instanceof BindingExpression)
+		}
+		if (value instanceof BindingExpression) {
 			return bindingExpressionFactory.convertToString((BindingExpression) value);
-		if (value instanceof StaticBinding)
+		}
+		if (value instanceof StaticBinding) {
 			return staticBindingFactory.convertToString((StaticBinding) value);
+		}
 		return "???";
 	}
 
@@ -141,8 +149,9 @@ public class DefaultBindingFactory extends StringEncoder.Converter<AbstractBindi
 
 	@Override
 	public BindingPathElement getBindingPathElement(BindingPathElement father, String propertyName) {
-		if (father instanceof FinalBindingPathElement)
+		if (father instanceof FinalBindingPathElement) {
 			return null;
+		}
 		if (father.getType() != null) {
 			if (TypeUtils.getBaseClass(father.getType()) == null) {
 				return null;
@@ -158,8 +167,9 @@ public class DefaultBindingFactory extends StringEncoder.Converter<AbstractBindi
 
 	@Override
 	public List<? extends BindingPathElement> getAccessibleBindingPathElements(BindingPathElement father) {
-		if (father instanceof FinalBindingPathElement)
+		if (father instanceof FinalBindingPathElement) {
 			return EMPTY_LIST;
+		}
 		if (father.getType() != null) {
 			if (TypeUtils.getBaseClass(father.getType()) == null) {
 				return null;
@@ -175,8 +185,9 @@ public class DefaultBindingFactory extends StringEncoder.Converter<AbstractBindi
 
 	@Override
 	public List<? extends BindingPathElement> getAccessibleCompoundBindingPathElements(BindingPathElement father) {
-		if (father instanceof FinalBindingPathElement)
+		if (father instanceof FinalBindingPathElement) {
 			return EMPTY_LIST;
+		}
 		if (father.getType() != null) {
 			if (TypeUtils.getBaseClass(father.getType()) == null) {
 				return null;

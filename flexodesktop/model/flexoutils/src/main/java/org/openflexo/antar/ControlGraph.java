@@ -50,9 +50,9 @@ public abstract class ControlGraph implements AlgorithmicUnit {
 	}
 
 	public void appendHeaderComment(String comment, boolean first) {
-		if (this.headerComment == null || this.headerComment.trim().equals(""))
+		if (this.headerComment == null || this.headerComment.trim().equals("")) {
 			setHeaderComment(comment);
-		else {
+		} else {
 			this.headerComment = (first ? comment + StringUtils.LINE_SEPARATOR : "") + this.headerComment
 					+ (!first ? StringUtils.LINE_SEPARATOR + comment : "");
 		}

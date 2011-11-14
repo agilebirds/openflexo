@@ -54,8 +54,9 @@ public class AssociationGR extends EdgeGR<WKFAssociation> {
 
 	@Override
 	public StartSymbolType getStartSymbol() {
-		if (getAssociation().getArrow() == Arrow.END_TO_START || getAssociation().getArrow() == Arrow.BOTH)
+		if (getAssociation().getArrow() == Arrow.END_TO_START || getAssociation().getArrow() == Arrow.BOTH) {
 			return StartSymbolType.ARROW;
+		}
 		return StartSymbolType.NONE;
 	}
 
@@ -66,8 +67,9 @@ public class AssociationGR extends EdgeGR<WKFAssociation> {
 
 	@Override
 	public EndSymbolType getEndSymbol() {
-		if (getAssociation().getArrow() == Arrow.START_TO_END || getAssociation().getArrow() == Arrow.BOTH)
+		if (getAssociation().getArrow() == Arrow.START_TO_END || getAssociation().getArrow() == Arrow.BOTH) {
 			return EndSymbolType.ARROW;
+		}
 		return EndSymbolType.NONE;
 	}
 
@@ -108,7 +110,8 @@ public class AssociationGR extends EdgeGR<WKFAssociation> {
 			refreshConnector(true);
 		} else if (dataModification instanceof AssociationRemoved) {
 			getDrawing().updateGraphicalObjectsHierarchy();
-		} else
+		} else {
 			super.update(observable, dataModification);
+		}
 	}
 }

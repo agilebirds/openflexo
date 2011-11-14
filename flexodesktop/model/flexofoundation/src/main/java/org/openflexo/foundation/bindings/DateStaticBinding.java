@@ -43,10 +43,11 @@ public class DateStaticBinding extends StaticBinding<Date> {
 
 	public DateStaticBinding(BindingDefinition bindingDefinition, FlexoModelObject owner, Date aValue) {
 		super(bindingDefinition, owner);
-		if (aValue != null)
+		if (aValue != null) {
 			value = (Date) aValue.clone();
-		else
+		} else {
 			value = null;
+		}
 	}
 
 	@Override
@@ -72,8 +73,9 @@ public class DateStaticBinding extends StaticBinding<Date> {
 
 	@Override
 	public void setValue(Date aValue) {
-		if (aValue != null)
+		if (aValue != null) {
 			value = (Date) aValue.clone();
+		}
 	}
 
 	@Override

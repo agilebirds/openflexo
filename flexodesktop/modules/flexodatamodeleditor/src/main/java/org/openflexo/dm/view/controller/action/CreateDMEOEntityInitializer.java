@@ -67,15 +67,17 @@ public class CreateDMEOEntityInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, CreateDMEOEntity action) {
 				if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getRepository()) {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Finalizer for CreateDMEOEntity in DMEORepositoryView");
+					}
 					DMEORepositoryView repView = (DMEORepositoryView) getControllerActionInitializer().getDMController()
 							.getCurrentEditedObjectView();
 					repView.getEoModelTable().selectObject(action.getDMEOModel());
 					repView.getEoEntityTable().selectObject(action.getNewEntity());
 				} else if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getDMEOModel()) {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Finalizer for CreateDMEOEntity in DMPackageView");
+					}
 					DMEOModelView eomodelView = (DMEOModelView) getControllerActionInitializer().getDMController()
 							.getCurrentEditedObjectView();
 					eomodelView.getEoEntityTable().selectObject(action.getNewEntity());

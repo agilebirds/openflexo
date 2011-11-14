@@ -59,8 +59,9 @@ public abstract class DatabaseTechnologyModuleImplementation extends TechnologyM
 	public String getDbObjectName(String name) {
 		name = escapeDbObjectName(name);
 
-		if (name != null && getIsReservedKeywordsForDbObject(name))
+		if (name != null && getIsReservedKeywordsForDbObject(name)) {
 			name = '_' + name;
+		}
 
 		return name;
 	}

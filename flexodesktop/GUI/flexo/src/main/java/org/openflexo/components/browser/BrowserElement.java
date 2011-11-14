@@ -87,17 +87,19 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 		super();
 		// System.out.println("build "+_id);
 		if (object == null) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Try to initialize browser element with a null object.");
+			}
 		} else {
 			_object = object;
 			_browser = browser;
 			_elementType = elementType;
 			_parent = parent;
 			if (BrowserElementType.getBrowserElementTypeForClassName(object.getClass().getName()) != _elementType) {
-				if (logger.isLoggable(Level.WARNING))
+				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Element type do not match: "
 							+ BrowserElementType.getBrowserElementTypeForClassName(object.getClass().getName()) + "!=" + _elementType);
+				}
 			}
 			if (logger.isLoggable(Level.FINER)) {
 				logger.finer("Create BrowserElement " + this + " for object " + _object);
@@ -118,8 +120,9 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 	}
 
 	protected FlexoProject getProject() {
-		if (_object != null)
+		if (_object != null) {
 			return _object.getProject();
+		}
 		return null;
 	}
 
@@ -216,12 +219,14 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 
 	public FlexoModelObject getObject() {
 		if (isDeleted) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Try to access a deleted BrowserElement !");
+			}
 		}
 		if (_object == null) {
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Object is null !");
+			}
 		}
 		return _object;
 	}
@@ -247,9 +252,9 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 	protected final Icon decorateIcon(Icon returned) {
 		if (AdvancedPrefs.getHightlightUncommentedItem() && getObject() != null && getObject().isDescriptionImportant()
 				&& !getObject().hasDescription()) {
-			if (returned instanceof ImageIcon)
+			if (returned instanceof ImageIcon) {
 				returned = IconFactory.getImageIcon((ImageIcon) returned, new IconMarker[] { IconLibrary.WARNING });
-			else {
+			} else {
 				logger.severe("CANNOT decorate a non ImageIcon for " + this);
 			}
 		}
@@ -257,8 +262,9 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 	}
 
 	public Icon getExpandedIcon() {
-		if (getElementType().getExpandedIcon() != null)
+		if (getElementType().getExpandedIcon() != null) {
 			return decorateIcon(getElementType().getExpandedIcon());
+		}
 		return getIcon();
 	}
 
@@ -273,8 +279,9 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 
 		/*return new ElementTypeBrowserFilter(getFilteredElementType().getName(), getFilteredElementType()
 		    .getIcon());*/
-		if (initialFilterStatus == null)
+		if (initialFilterStatus == null) {
 			initialFilterStatus = BrowserFilterStatus.SHOW;
+		}
 		return new ElementTypeBrowserFilter(getFilteredElementType().getName(), getIcon(), initialFilterStatus);
 	}
 
@@ -292,8 +299,9 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 
 	protected void addToChilds(FlexoModelObject modelObject) {
 		// Check if any of declared filters matches element
-		if (!matchAnyCustomFilter(modelObject))
+		if (!matchAnyCustomFilter(modelObject)) {
 			return;
+		}
 		if (modelObject != null) {
 			boolean elementHasBeenAdded = false;
 			BrowserElement newElement = _browser.makeNewElement(modelObject, this);
@@ -310,8 +318,9 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 						newElement2._parent = this;
 						_childs.add(newElement2);
 					}
-					for (BrowserElement element : childrenToRemove)
+					for (BrowserElement element : childrenToRemove) {
 						newElement.removeFromChilds(element);
+					}
 				}
 				// DVA April 06: if deepBrowsing is on, do not delete element and children...
 				if (!elementHasBeenAdded && !_browser.requiresDeepBrowsing(newElement)) {
@@ -320,19 +329,22 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 				}
 			}
 		} else {
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Unexpected null value in browser... but it may occurs during a loading for ComponentNameChange notification, or an IEOperator insertion.");
+			}
 
 		}
 	}
 
 	private boolean matchAnyCustomFilter(FlexoModelObject modelObject) {
 		// If no filters defined, take object
-		if (_browser.getCustomFilters().size() == 0)
+		if (_browser.getCustomFilters().size() == 0) {
 			return true;
+		}
 		for (CustomBrowserFilter filter : _browser.getCustomFilters()) {
-			if (filter.getStatus() == BrowserFilterStatus.SHOW && filter.accept(modelObject))
+			if (filter.getStatus() == BrowserFilterStatus.SHOW && filter.accept(modelObject)) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -348,8 +360,9 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 			logger.warning("I am deleted but receive a notification from :" + observable + " I am " + this);
 			return;
 		}
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine(getClass().getName() + " receive DataModification " + dataModification.getClass().getName());
+		}
 		if (_browser != null) {
 			if (((dataModification instanceof WKFDataModification) || (dataModification instanceof IEDataModification)
 					|| (dataModification instanceof DKVDataModification) || (dataModification instanceof DMDataModification)
@@ -367,18 +380,21 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 	private boolean repaintRequested = false;
 
 	public void updateViewWhenPossible() {
-		if (isDeleted || repaintRequested || refreshRequested)
+		if (isDeleted || repaintRequested || refreshRequested) {
 			return;
+		}
 		synchronized (this) {
-			if (!repaintRequested)
+			if (!repaintRequested) {
 				repaintRequested = true;
+			}
 		}
 		if (SwingUtilities.isEventDispatchThread() || _browser.isRebuildingStructure()) {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("updateView() DO IT NOW");
+					}
 					updateView();
 				}
 			});
@@ -388,8 +404,9 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 	}
 
 	protected void updateView() {
-		if (isDeleted)
+		if (isDeleted) {
 			return;
+		}
 		_browser.reload(this);
 		repaintRequested = false;
 	}
@@ -406,8 +423,9 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 
 	public void refreshWhenPossible() {
 		synchronized (this) {
-			if (isDeleted || _browser.isHoldingStructure() || refreshRequested || (_parent != null && _parent.refreshRequested))
+			if (isDeleted || _browser.isHoldingStructure() || refreshRequested || (_parent != null && _parent.refreshRequested)) {
 				return;
+			}
 			refreshRequested = true;
 		}
 		// logger.info("Call to refreshWhenPossible()");
@@ -427,12 +445,15 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 
 	void rebuildChildren() {
 		// logger.info("_browser.isHoldingStructure()="+_browser.isHoldingStructure());
-		if (logger.isLoggable(Level.FINEST))
+		if (logger.isLoggable(Level.FINEST)) {
 			logger.finest("BrowserElement: rebuild children for " + this);
-		if (isDeleted)
+		}
+		if (isDeleted) {
 			return;
-		if (_browser.isHoldingStructure())
+		}
+		if (_browser.isHoldingStructure()) {
 			return;
+		}
 		if (!SwingUtilities.isEventDispatchThread() || _browser.isRebuildingStructure()) {
 			refreshWhenPossible();
 			return;
@@ -474,9 +495,10 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 		if (childIndex < getChildCount()) {
 			return _childs.get(childIndex);
 		} else {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Element " + getClass().getName() + " request for child at index " + childIndex + " out of bounds ("
 						+ getChildCount() + ")");
+			}
 			return null;
 		}
 	}
@@ -498,8 +520,9 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 
 	public boolean contains(FlexoModelObject object) {
 		for (BrowserElement e : _childs) {
-			if (e.getObject() == object)
+			if (e.getObject() == object) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -588,11 +611,13 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 	}
 
 	protected BrowserElement findNearestAncestor(BrowserElementType... types) {
-		if (_parent == null)
+		if (_parent == null) {
 			return null;
+		}
 		for (BrowserElementType t : types) {
-			if (_parent._elementType == t)
+			if (_parent._elementType == t) {
 				return _parent;
+			}
 		}
 		return (_parent.findNearestAncestor(types));
 	}

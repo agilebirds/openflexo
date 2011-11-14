@@ -52,21 +52,23 @@ public class DMBrowserElementFactory implements BrowserElementFactory {
 		} else if (object instanceof DMRepositoryFolder) {
 			return new DMRepositoryFolderElement((DMRepositoryFolder) object, browser, parent);
 		} else if (object instanceof DMEORepository) {
-			if (object instanceof EOPrototypeRepository)
+			if (object instanceof EOPrototypeRepository) {
 				return new DMEORepositoryElement((DMEORepository) object, BrowserElementType.DM_EOPROTOTYPES_REPOSITORY, browser, parent);
-			else if (object instanceof FlexoExecutionModelRepository)
+			} else if (object instanceof FlexoExecutionModelRepository) {
 				return new DMEORepositoryElement((DMEORepository) object, BrowserElementType.DM_EXECUTION_MODEL_REPOSITORY, browser, parent);
-			else
+			} else {
 				return new DMEORepositoryElement((DMEORepository) object, browser, parent);
+			}
 		} else if (object instanceof DMRepository) {
-			if (object instanceof JDKRepository)
+			if (object instanceof JDKRepository) {
 				return new DMRepositoryElement((DMRepository) object, BrowserElementType.JDK_REPOSITORY, browser, parent);
-			else if (object instanceof WORepository)
+			} else if (object instanceof WORepository) {
 				return new DMRepositoryElement((DMRepository) object, BrowserElementType.WO_REPOSITORY, browser, parent);
-			else if (object instanceof ExternalRepository)
+			} else if (object instanceof ExternalRepository) {
 				return new DMRepositoryElement((DMRepository) object, BrowserElementType.EXTERNAL_REPOSITORY, browser, parent);
-			else
+			} else {
 				return new DMRepositoryElement((DMRepository) object, browser, parent);
+			}
 		} else if (object instanceof DMPackage) {
 			return new DMPackageElement((DMPackage) object, browser, parent);
 		} else if (object instanceof DMEOModel) {

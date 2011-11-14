@@ -42,8 +42,6 @@ import javax.xml.namespace.QName;
 import org.apache.xmlbeans.SchemaGlobalElement;
 import org.apache.xmlbeans.SchemaProperty;
 import org.apache.xmlbeans.SchemaType;
-import org.w3c.dom.Node;
-
 import org.openflexo.dataimporter.DataImporter;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.InvalidArgumentException;
@@ -77,6 +75,7 @@ import org.openflexo.foundation.ws.FlexoWSLibrary;
 import org.openflexo.foundation.ws.WSService;
 import org.openflexo.foundation.ws.dm.PortTypeAndOperationsAdded;
 import org.openflexo.localization.FlexoLocalization;
+import org.w3c.dom.Node;
 
 public class Importer implements DataImporter {
 	private static final Logger logger = Logger.getLogger(Importer.class.getPackage().getName());
@@ -105,8 +104,9 @@ public class Importer implements DataImporter {
 		String wsGroupName = (parameters.length >= 1 ? (String) parameters[0] : null);
 		String repositoryName = wsGroupName + "-Data";
 		flexoAction = (parameters.length >= 2 ? (FlexoAction) parameters[1] : null);
-		if (flexoAction != null)
+		if (flexoAction != null) {
 			flexoAction.setProgress(FlexoLocalization.localizedForKey("parsing") + " " + importedFile.getName());
+		}
 
 		ExternalWSService wsService = null;
 		try {
@@ -139,65 +139,84 @@ public class Importer implements DataImporter {
 			return wsService;
 
 		} catch (DuplicateResourceException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Attempt to insert twice the same object:" + e.getMessage());
-			if (logger.isLoggable(Level.FINE))
+			}
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Deleting new WSService and childrens");
-			if (wsService != null)
+			}
+			if (wsService != null) {
 				wsService.delete();
+			}
 			throw e;
 		} catch (DuplicateWSObjectException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Attempt to insert twice the same object:" + e.getMessage());
-			if (logger.isLoggable(Level.FINE))
+			}
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Deleting new WSService and childrens");
-			if (wsService != null)
+			}
+			if (wsService != null) {
 				wsService.delete();
+			}
 			throw e;
 		} catch (DuplicateWKFObjectException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Attempt to insert twice the same object:" + e.getMessage());
-			if (logger.isLoggable(Level.FINE))
+			}
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Deleting new WSService and childrens");
-			if (wsService != null)
+			}
+			if (wsService != null) {
 				wsService.delete();
+			}
 			throw e;
 		} catch (InvalidArgumentException e) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Invalid Argument exception:" + e.getMessage());
-			if (logger.isLoggable(Level.FINE))
+			}
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Deleting new WSService and childrens");
-			if (wsService != null)
+			}
+			if (wsService != null) {
 				wsService.delete();
+			}
 			throw e;
 		} catch (FlexoException e) {
 			e.printStackTrace();
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Flexo Exception exception:" + e.getMessage());
-			if (logger.isLoggable(Level.FINE))
+			}
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Deleting new WSService and childrens");
-			if (wsService != null)
+			}
+			if (wsService != null) {
 				wsService.delete();
+			}
 			throw e;
 		} catch (WSDLException e) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception occured while importing :" + e.getMessage());
 				e.printStackTrace();
 			}
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Deleting new WSService and childrens");
-			if (wsService != null)
+			}
+			if (wsService != null) {
 				wsService.delete();
+			}
 			throw new FlexoException(e.getMessage());
 		} catch (Exception e) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception occured while importing:" + e.getMessage());
 				e.printStackTrace();
 			}
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Deleting new WSService and childrens");
-			if (wsService != null)
+			}
+			if (wsService != null) {
 				wsService.delete();
+			}
 			throw new AbortedActionException("Exception " + e.getMessage(), "exception_occured");
 		}
 	}
@@ -243,8 +262,9 @@ public class Importer implements DataImporter {
 	protected void importServiceInWorkflow(Definition webServiceDefinition, SchemaTypeExtractor extractor, WSService wsService)
 			throws DuplicateResourceException, DuplicateWKFObjectException, DuplicateWSObjectException, FlexoException {
 
-		if (flexoAction != null)
+		if (flexoAction != null) {
 			flexoAction.setProgress(FlexoLocalization.localizedForKey("importing_wsprocess_in_workflow"));
+		}
 		System.out.println("**** OPERATIONS ******");
 		Map portTypes = webServiceDefinition.getPortTypes();
 
@@ -253,8 +273,9 @@ public class Importer implements DataImporter {
 		Iterator it = portTypes.values().iterator();
 		while (it.hasNext()) {
 			PortType pt = (PortType) it.next();
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("PortType:" + pt.getQName());
+			}
 			String processName = pt.getQName().getLocalPart();
 
 			FlexoWorkflow wkf = getProject().getFlexoWorkflow();
@@ -277,24 +298,28 @@ public class Importer implements DataImporter {
 			while (it2.hasNext()) {
 
 				Operation op = (Operation) it2.next();
-				if (logger.isLoggable(Level.FINE))
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Operation: " + op.getName());
+				}
 				// System.out.println("input:"+op.getInput().getName());
 				boolean hasInput = false;
 				boolean hasOutput = false;
 
-				if (op.getInput() != null)
+				if (op.getInput() != null) {
 					hasInput = true;
-				if (op.getOutput() != null)
+				}
+				if (op.getOutput() != null) {
 					hasOutput = true;
+				}
 
 				FlexoPort port = null;
 				if (hasInput && hasOutput) {
 					// INOUTPORT
 					port = _newProcess.getPortRegistery().portWithName(op.getName());
 					if (port != null) {
-						if (logger.isLoggable(Level.FINE))
+						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("Port: " + port.getName() + " already exists...");
+						}
 						throw new DuplicateResourceException("PORT." + port.getName(), "attempt_to_add_an_already_existing_port");
 					} else {
 						port = new InOutPort(_newProcess, op.getName());
@@ -305,8 +330,9 @@ public class Importer implements DataImporter {
 					// INPORT
 					port = _newProcess.getPortRegistery().portWithName(op.getName());
 					if (port != null) {
-						if (logger.isLoggable(Level.FINE))
+						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("Port: " + port.getName() + " already exists...");
+						}
 						throw new DuplicateResourceException("PORT." + port.getName(), "attempt_to_add_an_already_existing_port");
 					} else {
 						port = new InPort(_newProcess, op.getName());
@@ -317,8 +343,9 @@ public class Importer implements DataImporter {
 					// OUTPORT
 					port = _newProcess.getPortRegistery().portWithName(op.getName());
 					if (port != null) {
-						if (logger.isLoggable(Level.FINE))
+						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("Port: " + port.getName() + " already exists...");
+						}
 						throw new DuplicateResourceException("PORT." + port.getName(), "attempt_to_add_an_already_existing_port");
 					} else {
 						port = new OutPort(_newProcess, op.getName());
@@ -341,8 +368,9 @@ public class Importer implements DataImporter {
 
 					while (it3.hasNext()) {
 						Part input = (Part) it3.next();
-						if (logger.isLoggable(Level.FINEST))
+						if (logger.isLoggable(Level.FINEST)) {
 							logger.finest("arg: " + input.getName() + " " + input.getTypeName());
+						}
 						addTypeToMessageDef(def, extractor, input, _newProcess);
 					}
 				}
@@ -356,8 +384,9 @@ public class Importer implements DataImporter {
 					while (it3.hasNext()) {
 						Part output = (Part) it3.next();
 						// System.out.println()output.get
-						if (logger.isLoggable(Level.FINEST))
+						if (logger.isLoggable(Level.FINEST)) {
 							logger.finest("outp:" + output.getName() + " " + output.getTypeName());
+						}
 						addTypeToMessageDef(def, extractor, output, _newProcess);
 
 					}
@@ -387,8 +416,9 @@ public class Importer implements DataImporter {
 		// take care of element
 		QName elementName = messagePart.getElementName();
 		QName typeName = messagePart.getTypeName();
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("ElementName:" + elementName + " TypeName:" + typeName);
+		}
 
 		SchemaType inputType = null;
 		// works with a schema declaration of this type
@@ -396,16 +426,15 @@ public class Importer implements DataImporter {
 		// <s:element name="getJoke" type="tns:getJoke"/>
 
 		// first if message type is given by the "type" attribute
-		if (typeName != null)
+		if (typeName != null) {
 			inputType = extractor.schemaTypeLoader().findType(typeName);
-
-		// second if message type is given by the "element" attribute (AND
-		// element QNAME = complexType QNAME
-		else if (elementName != null)
+		} else if (elementName != null) {
 			inputType = extractor.schemaTypeLoader().findType(elementName);
+		}
 
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("input Type:" + inputType);
+		}
 
 		// third for cases like:
 		// <s:element name="getJoke">
@@ -446,8 +475,9 @@ public class Importer implements DataImporter {
 		if (typeString != null) {
 			dmType = DMType.makeResolvedDMType(getProject().getDataModel().getDMEntity(typeString));
 			dmType.setDimensions(dim);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("fullpath type:" + (dmType != null ? dmType.getName() : "null type"));
+			}
 		}
 
 		if (dmType == null || dmType.getName() == null) {
@@ -479,8 +509,9 @@ public class Importer implements DataImporter {
 		wsGroup.addRepository(repo);
 
 		// DMPackage pack = repo.createPackage(packageName);
-		if (flexoAction != null)
+		if (flexoAction != null) {
 			flexoAction.setProgress(FlexoLocalization.localizedForKey("importing_wstypes_in_datamodel"));
+		}
 		Hashtable entities = createDMEntities2(extractor, repo);
 		resolvePropertyType(extractor);
 		return repo;
@@ -537,8 +568,9 @@ public class Importer implements DataImporter {
 	}
 
 	private void treatType(SchemaType t, Hashtable ht, WSDLRepository repository) {
-		if (treatedTypes.contains(t))
+		if (treatedTypes.contains(t)) {
 			return;
+		}
 		if (t.isBuiltinType()) {
 			// do nothing
 		}

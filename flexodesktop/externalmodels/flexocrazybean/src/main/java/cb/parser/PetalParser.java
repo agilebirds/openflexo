@@ -101,11 +101,13 @@ public class PetalParser {
 	private Token match(int kind, String match) {
 		Token t = lexer.getToken();
 
-		if (t.kind != kind)
+		if (t.kind != kind) {
 			throw new RuntimeException("Mismatch: Expected " + kind + " but got " + t.kind + " at line " + t.line);
+		}
 
-		if ((match != null) && !match.equals(t.image))
+		if ((match != null) && !match.equals(t.image)) {
 			throw new RuntimeException("Mismatch: Expected " + match + " but got " + t.image + " at line " + t.line);
+		}
 
 		return t;
 	}
@@ -144,9 +146,9 @@ public class PetalParser {
 	private Token matchAny(int kind) {
 		Token t = lexer.getToken();
 
-		if (t.kind == kind)
+		if (t.kind == kind) {
 			return t;
-		else {
+		} else {
 			lexer.ungetToken(t);
 			return null;
 		}
@@ -172,8 +174,9 @@ public class PetalParser {
 			String name = file.getName();
 			int index = name.lastIndexOf('.');
 
-			if (index > 0)
+			if (index > 0) {
 				parser.model_name = name.substring(0, index);
+			}
 
 			parser.setCurrentDir(file);
 
@@ -285,8 +288,9 @@ public class PetalParser {
 		while (t4 != null) {
 			PetalNode prop = parseValue(false);
 
-			if (prop != null)
+			if (prop != null) {
 				obj.addProperty(t4.image, prop);
+			}
 
 			t4 = matchAny(Lexer.IDENT);
 		}
@@ -317,8 +321,9 @@ public class PetalParser {
 		if (!ignored(obj)) {
 			obj.init();
 			return obj;
-		} else
+		} else {
 			return null;
+		}
 	}
 
 	private static PetalNode RPAREN = new PetalNode() {
@@ -378,8 +383,9 @@ public class PetalParser {
 					return parseList();
 				} else if (t2.image.equals("value")) {
 					return parseValueObject();
-				} else
+				} else {
 					throw new RuntimeException("Unexpected " + t2.image + " after (");
+				}
 
 			case Lexer.INTEGER:
 				match(Lexer.COMMA);
@@ -398,10 +404,11 @@ public class PetalParser {
 			}
 
 		default:
-			if ((t.kind == Lexer.RPAREN) && rparen_ok)
+			if ((t.kind == Lexer.RPAREN) && rparen_ok) {
 				return RPAREN;
-			else
+			} else {
 				throw new RuntimeException("Unexpected " + t.image);
+			}
 		}
 	}
 
@@ -419,9 +426,11 @@ public class PetalParser {
 
 		PetalNode obj;
 
-		while ((obj = parseValue(true)) != RPAREN)
-			if (obj != null) // May be ignored
+		while ((obj = parseValue(true)) != RPAREN) {
+			if (obj != null) {
 				list.add(obj);
+			}
+		}
 
 		return list;
 	}
@@ -461,9 +470,9 @@ public class PetalParser {
 	public static PetalFile parse(String[] args) {
 		PetalParser parser;
 
-		if (args.length == 0)
+		if (args.length == 0) {
 			parser = PetalParser.createParser(System.in);
-		else {
+		} else {
 			try {
 				URL url = new URL(args[0]);
 				parser = PetalParser.createParser(url);

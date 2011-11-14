@@ -42,8 +42,9 @@ class DEBrowserConfiguration implements BrowserConfiguration {
 
 	@Override
 	public FlexoProject getProject() {
-		if (tocData != null)
+		if (tocData != null) {
 			return tocData.getProject();
+		}
 		return null;
 	}
 

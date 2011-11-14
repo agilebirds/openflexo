@@ -64,16 +64,18 @@ public class DuplicateDMMethodInitializer extends ActionInitializer {
 				if (action.getMethodToDuplicate().getEntity() instanceof DMEOEntity
 						&& getControllerActionInitializer().getDMController().getCurrentEditedObject() == ((DMEOEntity) action
 								.getMethodToDuplicate().getEntity()).getDMEOModel()) {
-					if (logger.isLoggable(Level.FINE))
+					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Finalizer for DuplicateDMMethod in DMEOModelView");
+					}
 					DMEOModelView dmEOModelView = (DMEOModelView) getControllerActionInitializer().getDMController()
 							.getCurrentEditedObjectView();
 					dmEOModelView.getEoEntityTable().selectObject(action.getMethodToDuplicate().getEntity());
 					dmEOModelView.getMethodTable().selectObject(action.getNewMethod());
 				} else if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getMethodToDuplicate()
 						.getEntity()) {
-					if (logger.isLoggable(Level.INFO))
+					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Finalizer for DuplicateDMMethod in DMEOEntityView");
+					}
 					DMEOEntityView eoEntityView = (DMEOEntityView) getControllerActionInitializer().getDMController()
 							.getCurrentEditedObjectView();
 					eoEntityView.getMethodTable().selectObject(action.getNewMethod());

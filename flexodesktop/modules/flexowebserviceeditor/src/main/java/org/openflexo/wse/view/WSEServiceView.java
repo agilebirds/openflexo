@@ -63,8 +63,9 @@ public class WSEServiceView extends WSEView<WSService> {
 
 		WSService service = getWSService();
 		boolean readOnly = false;
-		if (service != null && service instanceof ExternalWSService)
+		if (service != null && service instanceof ExternalWSService) {
 			readOnly = true;
+		}
 		portTypeTableModel = new WSEPortTypeTableModel(getWSService(), getWSEController().getProject(), readOnly);
 		addToMasterTabularView(portTypeTable = new WSETabularView(getWSEController(), portTypeTableModel, 10));
 

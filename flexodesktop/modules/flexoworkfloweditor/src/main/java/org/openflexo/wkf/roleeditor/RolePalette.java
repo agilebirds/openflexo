@@ -49,12 +49,13 @@ public class RolePalette extends DrawingPalette {
 		int m = 1;
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 4; j++) {
-				if (j < 3)
+				if (j < 3) {
 					addElement(makeRoleElement(colorFor(i, j), i * (RoleGR.WIDTH + 20) + 25, j * (RoleGR.HEIGHT + 20), "Role" + (n++),
 							false));
-				else
+				} else {
 					addElement(makeRoleElement(colorFor(i, j), i * (RoleGR.WIDTH + 20) + 25, j * (RoleGR.HEIGHT + 20), "System" + (m++),
 							true));
+				}
 			}
 		}
 		makePalettePanel();
@@ -62,23 +63,31 @@ public class RolePalette extends DrawingPalette {
 
 	private FlexoColor colorFor(int x, int y) {
 		if (x == 0) {
-			if (y == 0)
+			if (y == 0) {
 				return new FlexoColor(FGEUtils.NICE_RED);
-			if (y == 1)
+			}
+			if (y == 1) {
 				return new FlexoColor(FGEUtils.NICE_BLUE);
-			if (y == 2)
+			}
+			if (y == 2) {
 				return new FlexoColor(FGEUtils.NICE_YELLOW);
-			if (y == 3)
+			}
+			if (y == 3) {
 				return new FlexoColor(Color.LIGHT_GRAY);
+			}
 		} else if (x == 1) {
-			if (y == 0)
+			if (y == 0) {
 				return new FlexoColor(FGEUtils.NICE_PINK);
-			if (y == 1)
+			}
+			if (y == 1) {
 				return new FlexoColor(FGEUtils.NICE_GREEN);
-			if (y == 2)
+			}
+			if (y == 2) {
 				return new FlexoColor(FGEUtils.NICE_TURQUOISE);
-			if (y == 3)
+			}
+			if (y == 3) {
 				return new FlexoColor(Color.GRAY);
+			}
 		}
 		return new FlexoColor(Color.WHITE);
 	}

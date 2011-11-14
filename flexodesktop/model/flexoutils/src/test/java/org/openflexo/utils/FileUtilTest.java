@@ -22,10 +22,10 @@ package org.openflexo.utils;
 import java.io.File;
 import java.util.Date;
 
+import junit.framework.TestCase;
+
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FileUtils.CopyStrategy;
-
-import junit.framework.TestCase;
 
 public class FileUtilTest extends TestCase {
 

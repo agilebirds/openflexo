@@ -80,10 +80,12 @@ public class JConsole extends JEditTextArea {
 			}
 			nlCount++;
 		}
-		for (int j = 0; j < nlCount; j++)
+		for (int j = 0; j < nlCount; j++) {
 			colors.add(color);
-		if (colors.size() % paintOccurences == 0)
+		}
+		if (colors.size() % paintOccurences == 0) {
 			refresh();
+		}
 	}
 
 	void refresh() {
@@ -119,8 +121,9 @@ public class JConsole extends JEditTextArea {
 
 		@Override
 		protected void paintPlainLine(Graphics gfx, int line, Font defaultFont, Color defaultColor, int x, int y) {
-			if (line < colors.size())
+			if (line < colors.size()) {
 				defaultColor = colors.elementAt(line);
+			}
 
 			paintHighlight(gfx, line, y);
 			textArea.getLineText(line, currentLine);

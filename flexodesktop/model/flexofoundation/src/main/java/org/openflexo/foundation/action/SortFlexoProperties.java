@@ -78,13 +78,15 @@ public class SortFlexoProperties extends FlexoAction<SortFlexoProperties, FlexoM
 			@Override
 			public int compare(FlexoProperty o1, FlexoProperty o2) {
 				if (o1.getName() == null) {
-					if (o2.getName() == null)
+					if (o2.getName() == null) {
 						return 0;
-					else
+					} else {
 						return -1;
+					}
 				} else {
-					if (o2.getName() == null)
+					if (o2.getName() == null) {
 						return 1;
+					}
 					return o1.getName().compareTo(o2.getName());
 				}
 			}

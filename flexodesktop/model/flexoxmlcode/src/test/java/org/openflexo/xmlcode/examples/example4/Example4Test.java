@@ -23,14 +23,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
+import junit.framework.TestCase;
+
 import org.openflexo.xmlcode.Debugging;
 import org.openflexo.xmlcode.TestFileFinder;
 import org.openflexo.xmlcode.XMLCoder;
 import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
-import org.openflexo.xmlcode.XMLSerializable;
-
-import junit.framework.TestCase;
 
 /**
  * <p>

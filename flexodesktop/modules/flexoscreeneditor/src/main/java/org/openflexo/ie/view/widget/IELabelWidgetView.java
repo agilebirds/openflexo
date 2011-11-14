@@ -96,8 +96,9 @@ public class IELabelWidgetView extends AbstractInnerTableWidgetView<IELabelWidge
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("actionPerformed with " + event);
+		}
 		getLablelModel().setValue(editableLabel.getText());
 		remove(editableLabel);
 		add(_jLabel);
@@ -108,8 +109,9 @@ public class IELabelWidgetView extends AbstractInnerTableWidgetView<IELabelWidge
 
 	@Override
 	public void performDoubleClick(JComponent clickedContainer, Point clickedPoint, boolean isShiftDown) {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("performDoubleClick() ");
+		}
 		editLabel();
 	}
 
@@ -143,8 +145,9 @@ public class IELabelWidgetView extends AbstractInnerTableWidgetView<IELabelWidge
 		}
 		if (modif instanceof WidgetRemovedFromTable && arg0 == getModel()) {
 			delete();
-		} else
+		} else {
 			super.update(arg0, modif);
+		}
 	}
 
 	protected JTextField _jLabelTextField = null;
@@ -153,8 +156,9 @@ public class IELabelWidgetView extends AbstractInnerTableWidgetView<IELabelWidge
 
 	@Override
 	public void editLabel() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Edit ie label");
+		}
 		labelEditing = true;
 		_jLabelTextField = new JTextField(getLablelModel().getValue());
 		_jLabelTextField.setSelectionStart(0);
@@ -204,8 +208,9 @@ public class IELabelWidgetView extends AbstractInnerTableWidgetView<IELabelWidge
 		_jLabelTextField.requestFocus();
 		if (getLablelModel().getValue() != null && getLablelModel().getValue().endsWith(":")) {
 			_jLabelTextField.select(0, _jLabelTextField.getText().length() - 1);
-		} else
+		} else {
 			_jLabelTextField.selectAll();
+		}
 		_jLabelTextField.revalidate();
 		_jLabelTextField.repaint();
 		revalidate();
@@ -213,11 +218,13 @@ public class IELabelWidgetView extends AbstractInnerTableWidgetView<IELabelWidge
 	}
 
 	public void finalizeEditIELabel() {
-		if (logger.isLoggable(Level.FINE))
+		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Finalize edit ie label");
+		}
 		// _jLabel.setText(_jLabelTextField.getText());
-		if (labelEditing)
+		if (labelEditing) {
 			getLablelModel().setValue(_jLabelTextField.getText());
+		}
 		labelEditing = false;
 		remove(_jLabelTextField);
 		add(_jLabel);
@@ -235,12 +242,14 @@ public class IELabelWidgetView extends AbstractInnerTableWidgetView<IELabelWidge
 	public Dimension getPreferredSize() {
 		if (getHoldsNextComputedPreferredSize()) {
 			Dimension storedSize = storedPrefSize();
-			if (storedSize != null)
+			if (storedSize != null) {
 				return storedSize;
+			}
 		}
 		Dimension d = super.getPreferredSize();
-		if (getHoldsNextComputedPreferredSize())
+		if (getHoldsNextComputedPreferredSize()) {
 			storePrefSize(d);
+		}
 		return d;
 	}
 

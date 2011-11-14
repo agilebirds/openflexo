@@ -121,30 +121,35 @@ public abstract class PetalObject implements PetalNode {
 		if ((o != null) && (o.getClass() == this.getClass())) {
 			PetalObject obj = o;
 
-			if (!this.name.equals(obj.name))
+			if (!this.name.equals(obj.name)) {
 				return false;
+			}
 
-			if (this.values.size() != obj.values.size())
+			if (this.values.size() != obj.values.size()) {
 				return false;
+			}
 
 			TreeSet n1 = new TreeSet(this.names);
 			TreeSet n2 = new TreeSet(obj.names);
 
-			if (!n1.equals(n2))
+			if (!n1.equals(n2)) {
 				return false;
+			}
 
 			for (Iterator i = names.iterator(), j = values.iterator(); i.hasNext();) {
 				String name = (String) i.next();
 				PetalNode value1 = (PetalNode) j.next();
 				PetalNode value2 = obj.getProperty(name);
 
-				if (!value1.equals(value2))
+				if (!value1.equals(value2)) {
 					return false;
+				}
 			}
 
 			return true;
-		} else
+		} else {
 			return false;
+		}
 	}
 
 	/**
@@ -181,8 +186,9 @@ public abstract class PetalObject implements PetalNode {
 	public final PetalFile getRoot() {
 		PetalNode parent = this.parent;
 
-		while (!(parent instanceof PetalFile))
+		while (!(parent instanceof PetalFile)) {
 			parent = ((PetalObject) parent).parent;
+		}
 
 		return (PetalFile) parent;
 	}
@@ -191,8 +197,9 @@ public abstract class PetalObject implements PetalNode {
 	 * Override property at i, value's "parent" reference points to this object afterwards
 	 */
 	public final void setProperty(int i, String name, PetalNode value) {
-		if (value == null)
+		if (value == null) {
 			throw new RuntimeException("Value for " + name + " must not be null");
+		}
 
 		names.set(i, name.intern()); // Use intern() to save lots of memory
 		values.set(i, value);
@@ -204,8 +211,9 @@ public abstract class PetalObject implements PetalNode {
 	 * @return index of property
 	 */
 	public final int addProperty(String name, PetalNode value) {
-		if (value == null)
+		if (value == null) {
 			throw new RuntimeException("Value for " + name + " must not be null");
+		}
 
 		names.add(name.intern()); // Use intern() to save lots of memory
 		values.add(value);
@@ -219,9 +227,11 @@ public abstract class PetalObject implements PetalNode {
 	 */
 	public final int indexOf(PetalNode value) {
 		int j = 0;
-		for (Iterator i = values.iterator(); i.hasNext(); j++)
-			if (i.next() == value)
+		for (Iterator i = values.iterator(); i.hasNext(); j++) {
+			if (i.next() == value) {
 				return j;
+			}
+		}
 
 		return -1;
 	}
@@ -232,10 +242,11 @@ public abstract class PetalObject implements PetalNode {
 	public final String getPropertyName(PetalNode value) {
 		int i = indexOf(value);
 
-		if (i >= 0)
+		if (i >= 0) {
 			return (String) names.get(i);
-		else
+		} else {
 			return null;
+		}
 	}
 
 	/**
@@ -264,8 +275,9 @@ public abstract class PetalObject implements PetalNode {
 		if (index >= 0) {
 			setProperty(index, name, value);
 			return index;
-		} else
+		} else {
 			return addProperty(name, value);
+		}
 	}
 
 	/**
@@ -281,10 +293,11 @@ public abstract class PetalObject implements PetalNode {
 	public final PetalNode getProperty(String name) {
 		int index = names.indexOf(name);
 
-		if (index >= 0)
+		if (index >= 0) {
 			return (PetalNode) values.get(index);
-		else
+		} else {
 			return null;
+		}
 	}
 
 	/**
@@ -294,8 +307,9 @@ public abstract class PetalObject implements PetalNode {
 		ArrayList list = new ArrayList();
 		StringTokenizer st = new StringTokenizer(value, "\r\n");
 
-		while (st.hasMoreTokens())
+		while (st.hasMoreTokens()) {
 			list.add(st.nextToken());
+		}
 
 		StringLiteral lit = new StringLiteral(list);
 		lit.setMulti(list.size() > 1);
@@ -323,8 +337,9 @@ public abstract class PetalObject implements PetalNode {
 	static String getPropertyAsString(PetalObject obj, String prop) {
 		StringLiteral s = (StringLiteral) obj.getProperty(prop);
 
-		if (s == null)
+		if (s == null) {
 			throw new RuntimeException("No property named " + prop + " for " + obj);
+		}
 
 		return s.getValue();
 	}
@@ -413,14 +428,16 @@ public abstract class PetalObject implements PetalNode {
 	 * Move property within list of properties, i.e. change order.
 	 */
 	public void moveProperty(int from, int to) {
-		if (from == to)
+		if (from == to) {
 			return;
+		}
 
 		String name = (String) names.get(from);
 		PetalNode value = (PetalNode) values.get(from);
 
-		if (from < to)
+		if (from < to) {
 			to--;
+		}
 
 		removeProperty(from);
 		names.add(to, name);
@@ -436,8 +453,9 @@ public abstract class PetalObject implements PetalNode {
 		for (Iterator i = names.iterator(); i.hasNext();) {
 			String s = (String) i.next();
 
-			if (s.length() > max.length())
+			if (s.length() > max.length()) {
 				max = s;
+			}
 		}
 
 		return max;
@@ -453,8 +471,9 @@ public abstract class PetalObject implements PetalNode {
 			String s = (String) i.next();
 			PetalNode o = (PetalNode) j.next();
 
-			if (s.equals(name))
+			if (s.equals(name)) {
 				list.add(o);
+			}
 		}
 
 		return list;
@@ -481,8 +500,9 @@ public abstract class PetalObject implements PetalNode {
 		java.lang.Object[][] props = new java.lang.Object[names.size()][];
 
 		int k = 0;
-		for (Iterator i = names.iterator(), j = values.iterator(); i.hasNext(); k++)
+		for (Iterator i = names.iterator(), j = values.iterator(); i.hasNext(); k++) {
 			props[k] = new java.lang.Object[] { i.next(), j.next() };
+		}
 
 		return props;
 	}
@@ -515,8 +535,9 @@ public abstract class PetalObject implements PetalNode {
 	protected void removeFromList(String prop_name, PetalObject o) {
 		List list = (List) getProperty(prop_name);
 
-		if (list != null)
+		if (list != null) {
 			list.remove(o);
+		}
 	}
 
 	/**
@@ -543,16 +564,18 @@ public abstract class PetalObject implements PetalNode {
 	public String toString() {
 		StringBuffer buf = new StringBuffer("(object " + name);
 
-		for (Iterator i = params.iterator(); i.hasNext();)
+		for (Iterator i = params.iterator(); i.hasNext();) {
 			buf.append(" \"" + i.next() + "\"");
+		}
 
 		buf.append("\n");
 
 		for (Iterator i = names.iterator(), j = values.iterator(); i.hasNext();) {
 			buf.append(i.next() + "\t" + j.next());
 
-			if (i.hasNext())
+			if (i.hasNext()) {
 				buf.append("\n");
+			}
 		}
 
 		buf.append(")\n");

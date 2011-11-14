@@ -61,14 +61,16 @@ public class DependantResources extends ResourceList {
 	@Override
 	public void addToResources(FlexoResource resource) {
 		if (resource == getRelatedResource()) {
-			if (logger.isLoggable(Level.SEVERE))
+			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("A resource attempted to add itself to its dependant resource list" + this.getClass().getName()
 						+ "): this is strictly forbidden.\n\tYou must attempt to find the cause of this and FIX it!");
+			}
 			return;
 		}
 		if (getRelatedResource() != null && resource.deeplyDependsOf(getRelatedResource())) {
-			if (logger.isLoggable(Level.WARNING))
+			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Trying to create a loop between " + getRelatedResource() + " and " + resource);
+			}
 			return;
 		}
 		super.addToResources(resource);

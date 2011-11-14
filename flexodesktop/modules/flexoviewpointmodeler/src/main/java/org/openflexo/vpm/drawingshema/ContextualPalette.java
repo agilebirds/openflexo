@@ -93,8 +93,9 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 
 	protected ContextualPaletteElement getContextualPaletteElement(ViewPointPaletteElement element) {
 		for (PaletteElement e : elements) {
-			if (e instanceof ContextualPaletteElement && ((ContextualPaletteElement) e).viewPointPaletteElement == element)
+			if (e instanceof ContextualPaletteElement && ((ContextualPaletteElement) e).viewPointPaletteElement == element) {
 				return (ContextualPaletteElement) e;
+			}
 		}
 		return null;
 
@@ -161,10 +162,11 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 						.getCEDController().getEditor());
 				action.graphicalRepresentation = shapeGR;
 				action.newShapeName = shapeGR.getText();
-				if (action.newShapeName == null)
+				if (action.newShapeName == null) {
 					action.newShapeName = FlexoLocalization.localizedForKey("shape");
-				// action.nameSetToNull = true;
-				// action.setNewShapeName(FlexoLocalization.localizedForKey("unnamed"));
+					// action.nameSetToNull = true;
+					// action.setNewShapeName(FlexoLocalization.localizedForKey("unnamed"));
+				}
 
 				action.doAction();
 				return action.hasActionExecutionSucceeded();

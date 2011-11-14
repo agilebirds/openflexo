@@ -71,15 +71,17 @@ public class DropTabZone extends JTabbedPane implements IEContainer, IEViewManag
 
 	public void delete() {
 		removeAll();
-		if (getParent() != null)
+		if (getParent() != null) {
 			getParent().remove(this);
+		}
 	}
 
 	public IEWidget getIEModel() {
-		if (getTabCount() > 0)
+		if (getTabCount() > 0) {
 			return ((IETabWidgetView) getSelectedComponent()).getTabWidget();
-		else
+		} else {
 			return getTabModel();
+		}
 	}
 
 	@Override
@@ -139,10 +141,11 @@ public class DropTabZone extends JTabbedPane implements IEContainer, IEViewManag
 		view.setName(newTab.getTitle());
 		try {
 			add(view, index);
-			if (((IESequenceTab) newTab.getParent()).isConditional())
+			if (((IESequenceTab) newTab.getParent()).isConditional()) {
 				setIconAt(index, BrowserElementType.CONDITIONAL.getIcon());
-			else
+			} else {
 				setIconAt(index, null);
+			}
 			validate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -170,8 +173,9 @@ public class DropTabZone extends JTabbedPane implements IEContainer, IEViewManag
 			i++;
 		}
 		updateConditionalIcons();
-		if (c != null && indexOfComponent(c) > -1)
+		if (c != null && indexOfComponent(c) > -1) {
 			setSelectedComponent(c);
+		}
 	}
 
 	/**
@@ -182,8 +186,9 @@ public class DropTabZone extends JTabbedPane implements IEContainer, IEViewManag
 	@Override
 	public void setSelectedComponent(Component c) {
 		super.setSelectedComponent(c);
-		if (c != null && c instanceof Layoutable)
+		if (c != null && c instanceof Layoutable) {
 			propagateResize();
+		}
 	}
 
 	/**
@@ -193,10 +198,12 @@ public class DropTabZone extends JTabbedPane implements IEContainer, IEViewManag
 	 */
 	@Override
 	public void setSelectedIndex(int index) {
-		if (getSelectedComponent() instanceof IETabWidgetView)
+		if (getSelectedComponent() instanceof IETabWidgetView) {
 			((IETabWidgetView) getSelectedComponent()).setTabVisibility(false);
-		if (getComponentAt(index) instanceof IETabWidgetView)
+		}
+		if (getComponentAt(index) instanceof IETabWidgetView) {
 			((IETabWidgetView) getComponentAt(index)).setTabVisibility(true);
+		}
 		super.setSelectedIndex(index);
 	}
 
@@ -206,10 +213,11 @@ public class DropTabZone extends JTabbedPane implements IEContainer, IEViewManag
 	public void updateConditionalIcons() {
 		for (int i = 0; i < getTabCount(); i++) {
 			Component component = getComponentAt(i);
-			if (((IESequenceTab) ((IETabWidgetView) component).getTabWidget().getParent()).isConditional())
+			if (((IESequenceTab) ((IETabWidgetView) component).getTabWidget().getParent()).isConditional()) {
 				setIconAt(i, BrowserElementType.CONDITIONAL.getIcon());
-			else
+			} else {
 				setIconAt(i, null);
+			}
 		}
 	}
 
@@ -278,11 +286,13 @@ public class DropTabZone extends JTabbedPane implements IEContainer, IEViewManag
 	 */
 	@Override
 	public Dimension getPreferredSize() {
-		if (getHoldsNextComputedPreferredSize() && preferredSize != null)
+		if (getHoldsNextComputedPreferredSize() && preferredSize != null) {
 			return preferredSize;
+		}
 		Dimension d = super.getPreferredSize();
-		if (getHoldsNextComputedPreferredSize())
+		if (getHoldsNextComputedPreferredSize()) {
 			preferredSize = d;
+		}
 		return d;
 	}
 

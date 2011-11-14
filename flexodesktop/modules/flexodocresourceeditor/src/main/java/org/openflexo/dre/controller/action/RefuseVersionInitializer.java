@@ -59,8 +59,9 @@ public class RefuseVersionInitializer extends ActionInitializer {
 			public boolean run(ActionEvent e, final RefuseVersion action) {
 				Vector<DocItemVersion> availableVersions = action.getVersionsThatCanBeApproved();
 
-				if (availableVersions.size() == 0)
+				if (availableVersions.size() == 0) {
 					return false;
+				}
 
 				if (action.getVersion() == null) {
 					action.setVersion(availableVersions.firstElement());

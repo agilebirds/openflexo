@@ -80,8 +80,9 @@ public class IEDSWidget extends IEAbstractWidget implements PaletteElement {
 	public void delete(FlexoProject project) {
 		if (paletteWidget.canDeleteWidget()) {
 			paletteWidget.deleteWidget();
-		} else if (logger.isLoggable(Level.WARNING))
+		} else if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Cannot delete these kind of widgets");
+		}
 	}
 
 	// ==========================================================================
@@ -103,8 +104,9 @@ public class IEDSWidget extends IEAbstractWidget implements PaletteElement {
 				_label.setIcon(new ImageIcon(paletteWidget.getScreenshotFile(css).getAbsolutePath()));
 			}
 		} else {
-			if (_label.getIcon() == null)
+			if (_label.getIcon() == null) {
 				_label.setText(paletteWidget.getName());
+			}
 		}
 	}
 
@@ -171,8 +173,9 @@ public class IEDSWidget extends IEAbstractWidget implements PaletteElement {
 	public static class DSWidgetComparator implements Comparator {
 		@Override
 		public int compare(Object arg0, Object arg1) {
-			if (arg0 instanceof IEDSWidget && arg1 instanceof IEDSWidget)
+			if (arg0 instanceof IEDSWidget && arg1 instanceof IEDSWidget) {
 				return ((IEDSWidget) arg0).getName().compareToIgnoreCase(((IEDSWidget) arg1).getName());
+			}
 			return 0;
 		}
 

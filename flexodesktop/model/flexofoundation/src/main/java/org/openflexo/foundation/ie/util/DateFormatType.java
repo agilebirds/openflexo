@@ -487,8 +487,9 @@ public abstract class DateFormatType extends FlexoObject implements StringConver
 			}
 		}
 
-		if (logger.isLoggable(Level.WARNING))
+		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Could not find ClientSideEventType named " + typeName);
+		}
 		return null;
 	}
 

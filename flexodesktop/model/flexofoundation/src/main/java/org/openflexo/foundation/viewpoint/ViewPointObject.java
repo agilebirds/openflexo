@@ -31,16 +31,18 @@ public abstract class ViewPointObject extends ViewPointLibraryObject implements 
 
 	@Override
 	public ViewPointLibrary getViewPointLibrary() {
-		if (getCalc() != null)
+		if (getCalc() != null) {
 			return getCalc().getViewPointLibrary();
+		}
 		return null;
 	}
 
 	@Override
 	public void setChanged() {
 		super.setChanged();
-		if (getCalc() != null)
+		if (getCalc() != null) {
 			getCalc().setIsModified();
+		}
 	}
 
 	public void notifyBindingChanged(ViewPointDataBinding binding) {

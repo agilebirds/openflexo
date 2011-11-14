@@ -73,8 +73,9 @@ public class BPELControlGraphBuilder extends ControlGraphBuilder {
 	@Override
 	public ControlGraph makeControlGraph(boolean interprocedural) throws InvalidModelException, NotSupportedException {
 		// start with the Port
-		if (operationPortIN == null)
+		if (operationPortIN == null) {
 			throw new BPELInvalidModelException("No port defined for Flexo Process");
+		}
 
 		BPELNodeAccu acc = new BPELNodeAccu();
 		ControlGraph toReturn = handleNode(operationPortIN, acc);
@@ -95,17 +96,20 @@ public class BPELControlGraphBuilder extends ControlGraphBuilder {
 		while (!(currentNode instanceof FlexoPort) && !(acc.lookingForAnd() && currentNode instanceof ANDOperator)
 				&& (!(acc.lookingForIf() && getIncomingEdges(currentNode) != 1))) {
 			ControlGraph toAdd = handleNode(currentNode, acc);
-			if (toAdd != null)
+			if (toAdd != null) {
 				toReturn.addToStatements(toAdd);
-			if (acc.getNodes().size() > 1)
+			}
+			if (acc.getNodes().size() > 1) {
 				toReturn.addToStatements(handleFlow(acc));
+			}
 			currentNode = acc.getNodes().get(0);
 			if (acc.hasBeenHandled(currentNode)) {
 				throw new BPELInvalidModelException("A cycle has been detected in your Flexo Model");
 			}
 		}
-		if (debug)
+		if (debug) {
 			System.out.println("SEQUENCE RETURNING");
+		}
 		return toReturn;
 	}
 
@@ -116,8 +120,9 @@ public class BPELControlGraphBuilder extends ControlGraphBuilder {
 			toReturn.addToStatements(handleSequence(n, acc));
 		}
 		acc.setLookingForAnd(false);
-		if (debug)
+		if (debug) {
 			System.out.println("FLOW RETURNING ON NODE");
+		}
 		return toReturn;
 	}
 
@@ -126,9 +131,10 @@ public class BPELControlGraphBuilder extends ControlGraphBuilder {
 		for (FlexoPostCondition p : n.getOutgoingPostConditions()) {
 			toReturn.add(p.getNextNode());
 		}
-		if (toReturn.size() == 0)
+		if (toReturn.size() == 0) {
 			throw new BPELInvalidModelException("Every possible path in the Workflow must lean to the IN/OUT port; Node " + n.getName()
 					+ " has no outgoing edge");
+		}
 		return toReturn;
 	}
 
@@ -145,8 +151,9 @@ public class BPELControlGraphBuilder extends ControlGraphBuilder {
 	}
 
 	protected ControlGraph handleNode(FlexoPort port, BPELNodeAccu acc) throws BPELInvalidModelException, NotSupportedException {
-		if (portReached)
+		if (portReached) {
 			return null;
+		}
 		portReached = true;
 		// A port can be seen as a single instruction that does stuff
 		// like an API...

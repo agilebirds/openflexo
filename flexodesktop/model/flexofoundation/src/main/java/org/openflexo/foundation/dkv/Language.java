@@ -99,9 +99,11 @@ public class Language extends DKVObject implements InspectableObject {
 		Boolean old = new Boolean(isMain);
 		isMain = b;
 		if (b) {
-			for (Language l : getDkvModel().getLanguages())
-				if (l != this)
+			for (Language l : getDkvModel().getLanguages()) {
+				if (l != this) {
 					l.setIsMain(false);
+				}
+			}
 		}
 		setChanged();
 		notifyObservers(new DKVDataModification(-1, "isMain", old, new Boolean(b)));
@@ -128,8 +130,9 @@ public class Language extends DKVObject implements InspectableObject {
 			getDkvModel().removeFromLanguage(this);
 			super.delete();
 			this.deleteObservers();
-		} else
+		} else {
 			throw new UnauthorizedActionException("There must always be at least one language in any application");
+		}
 
 	}
 
@@ -219,11 +222,13 @@ public class Language extends DKVObject implements InspectableObject {
 	 * @return wheter the isoCode of this Language is unique or not (case insensitive)
 	 */
 	public boolean isoCodeIsUnique() {
-		if (getIsoCode() == null || getIsoCode().trim().length() == 0)
+		if (getIsoCode() == null || getIsoCode().trim().length() == 0) {
 			return false;
+		}
 		for (Language lg : getDkvModel().getLanguages()) {
-			if (getIsoCode().equalsIgnoreCase(lg.getIsoCode()) && lg != this)
+			if (getIsoCode().equalsIgnoreCase(lg.getIsoCode()) && lg != this) {
 				return false;
+			}
 		}
 		return true;
 	}

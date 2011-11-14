@@ -81,8 +81,9 @@ public class FIBLocalizedDictionary extends FIBModelObject implements LocalizedD
 	}
 
 	public void append(FIBLocalizedDictionary aDict) {
-		if (aDict == null)
+		if (aDict == null) {
 			return;
+		}
 		for (FIBLocalizedEntry entry : aDict.getEntries()) {
 			addToEntries(entry);
 		}
@@ -90,8 +91,9 @@ public class FIBLocalizedDictionary extends FIBModelObject implements LocalizedD
 
 	private FIBLocalizedEntry getEntry(Language language, String key) {
 		for (FIBLocalizedEntry entry : getEntries()) {
-			if (Language.retrieveLanguage(entry.getLanguage()) == language && key.equals(entry.getKey()))
+			if (Language.retrieveLanguage(entry.getLanguage()) == language && key.equals(entry.getKey())) {
 				return entry;
+			}
 		}
 		return null;
 	}
@@ -112,8 +114,9 @@ public class FIBLocalizedDictionary extends FIBModelObject implements LocalizedD
 
 	@Override
 	public String localizedForKeyAndLanguage(String key, Language language) {
-		if (key == null || StringUtils.isEmpty(key))
+		if (key == null || StringUtils.isEmpty(key)) {
 			return null;
+		}
 		// if (isSearchingNewEntries) logger.info("-------> called localizedForKeyAndLanguage() key="+key+" lang="+language);
 		String returned = getDictForLang(language).get(key);
 		if (returned == null) {
@@ -212,8 +215,9 @@ public class FIBLocalizedDictionary extends FIBModelObject implements LocalizedD
 		Vector<String> returned = new Vector<String>();
 		for (Language l : _values.keySet()) {
 			for (String key : _values.get(l).keySet()) {
-				if (!returned.contains(key))
+				if (!returned.contains(key)) {
 					returned.add(key);
+				}
 			}
 		}
 		return returned;
@@ -238,11 +242,13 @@ public class FIBLocalizedDictionary extends FIBModelObject implements LocalizedD
 	}
 
 	private DynamicEntry getDynamicEntry(String key) {
-		if (key == null)
+		if (key == null) {
 			return null;
+		}
 		for (DynamicEntry entry : getDynamicEntries()) {
-			if (key.equals(entry.key))
+			if (key.equals(entry.key)) {
 				return entry;
+			}
 		}
 		return null;
 	}
@@ -271,8 +277,9 @@ public class FIBLocalizedDictionary extends FIBModelObject implements LocalizedD
 		for (Language l : Language.availableValues()) {
 			_values.get(l).remove(entry.key);
 			FIBLocalizedEntry e = getEntry(l, entry.key);
-			if (e != null)
+			if (e != null) {
 				_entries.remove(e);
+			}
 		}
 		refresh();
 	}

@@ -39,8 +39,9 @@ import javax.swing.text.Segment;
 public class PatchTokenMarker extends TokenMarker {
 	@Override
 	public byte markTokensImpl(byte token, Segment line, int lineIndex) {
-		if (line.count == 0)
+		if (line.count == 0) {
 			return Token.NULL;
+		}
 		switch (line.array[line.offset]) {
 		case '+':
 		case '>':

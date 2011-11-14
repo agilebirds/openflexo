@@ -67,8 +67,9 @@ public class ConsistencyCheckDialog extends FlexoDialog implements ConsistencyCh
 
 		JTabbedPane contentPanel = new JTabbedPane();
 		contentPanel.add(FlexoLocalization.localizedForKey("validation_report"), _validationReportEditor);
-		if (ModuleLoader.isDevelopperRelease() || ModuleLoader.isMaintainerRelease())
+		if (ModuleLoader.isDevelopperRelease() || ModuleLoader.isMaintainerRelease()) {
 			contentPanel.add(FlexoLocalization.localizedForKey("validation_model"), _validationModelViewer);
+		}
 
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 
@@ -82,8 +83,9 @@ public class ConsistencyCheckDialog extends FlexoDialog implements ConsistencyCh
 
 	public void setController(ConsistencyCheckingController controller) {
 		_controller = controller;
-		if (controller != null && _validationModelViewer != null)
+		if (controller != null && _validationModelViewer != null) {
 			_validationModelViewer.setValidationModel(controller.getDefaultValidationModel());
+		}
 	}
 
 	@Override
@@ -118,13 +120,16 @@ public class ConsistencyCheckDialog extends FlexoDialog implements ConsistencyCh
 		if (_validationReportEditor != null && _validationReportEditor.getValidationReport() != null) {
 			_validationReportEditor.getValidationReport().delete();
 		}
-		if (_validationModelViewer != null && _validationModelViewer.getParent() != null)
+		if (_validationModelViewer != null && _validationModelViewer.getParent() != null) {
 			_validationModelViewer.getParent().remove(_validationModelViewer);
-		if (_validationReportEditor != null && _validationReportEditor.getParent() != null)
+		}
+		if (_validationReportEditor != null && _validationReportEditor.getParent() != null) {
 			_validationReportEditor.getParent().remove(_validationReportEditor);
+		}
 		super.dispose();
-		if (_controller != null)
+		if (_controller != null) {
 			_controller.cleanUpValidationModel();
+		}
 		_controller = null;
 		_validationModelViewer = null;
 		_validationReportEditor = null;

@@ -52,8 +52,9 @@ public class GeneratedResourceFileFactory {
 	}
 
 	public static <FR extends CGRepositoryFileResource> FR registerResource(FR returned, String fileName, String folderPath) {
-		if (returned.getName() == null)
+		if (returned.getName() == null) {
 			throw new NullPointerException();
+		}
 		FlexoProjectFile file = returned.makeFlexoProjectFile(folderPath, fileName);
 
 		try {
@@ -63,8 +64,9 @@ public class GeneratedResourceFileFactory {
 			try {
 				returned.setResourceFile(file);
 			} catch (InvalidFileNameException e) {
-				if (logger.isLoggable(Level.SEVERE))
+				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("Invalid file name: " + file.getRelativePath() + ". This should never happen.");
+				}
 				return null;
 			}
 		}
@@ -103,12 +105,14 @@ public class GeneratedResourceFileFactory {
 			returned.setCGFile(cgFile);
 			repository.addToFiles(cgFile);
 			copiedFile = registerResource(returned, generator.getSource().getName(), generator.getRelativePath());
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Created PackagedFileResource resource " + copiedFile.getName());
+			}
 		} else {
 			copiedFile.setGenerator(generator);
-			if (logger.isLoggable(Level.FINE))
+			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Successfully retrieved PackagedFileResource resource " + copiedFile.getName());
+			}
 		}
 		return copiedFile;
 	}

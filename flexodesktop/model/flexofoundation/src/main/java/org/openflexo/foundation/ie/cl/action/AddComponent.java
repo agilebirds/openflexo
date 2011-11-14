@@ -23,8 +23,6 @@ import java.security.InvalidParameterException;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.xmlcode.StringRepresentable;
-
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -47,6 +45,7 @@ import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.xmlcode.StringRepresentable;
 
 public class AddComponent extends FlexoAction<AddComponent, IECLObject, IECLObject> {
 
@@ -192,10 +191,12 @@ public class AddComponent extends FlexoAction<AddComponent, IECLObject, IECLObje
 		if (getNewComponentName() == null) {
 			throw new InvalidParameterException("component name is undefined");
 		}
-		if (getProject().getFlexoComponentLibrary().getComponentNamed(getNewComponentName()) != null)
+		if (getProject().getFlexoComponentLibrary().getComponentNamed(getNewComponentName()) != null) {
 			throw new DuplicateComponentName(getNewComponentName());
-		if (getProject().getDataModel().getEntityNamed(DMPackage.DEFAULT_PACKAGE_NAME + "." + getNewComponentName()) != null)
+		}
+		if (getProject().getDataModel().getEntityNamed(DMPackage.DEFAULT_PACKAGE_NAME + "." + getNewComponentName()) != null) {
 			throw new DuplicateEntityName(getNewComponentName());
+		}
 
 		logger.info("Add component");
 		if (getComponentType() == ComponentType.OPERATION_COMPONENT) {
@@ -235,15 +236,17 @@ public class AddComponent extends FlexoAction<AddComponent, IECLObject, IECLObje
 		} else if (getComponentType() == ComponentType.MONITORING_SCREEN) {
 			f = _folder.getComponentLibrary().getRootFolder().getFolderTyped(FolderType.MONITORING_SCREEN_FOLDER);
 		}
-		if (_folder != f && f.isFatherOf(_folder))
+		if (_folder != f && f.isFatherOf(_folder)) {
 			return _folder;
-		else
+		} else {
 			return f;
+		}
 	}
 
 	public FlexoProject getProject() {
-		if (getFocusedObject() != null)
+		if (getFocusedObject() != null) {
 			return getFocusedObject().getProject();
+		}
 		return null;
 	}
 

@@ -51,12 +51,14 @@ public class IECLTreeDropTarget extends TreeDropTarget {
 			FlexoComponentFolder targetFolder = (FlexoComponentFolder) ((ComponentFolderElement) target).getObject();
 			if (source instanceof ComponentFolderElement) {
 				FlexoComponentFolder sourceFolder = (FlexoComponentFolder) ((ComponentFolderElement) source).getObject();
-				if (sourceFolder.isRootFolder())
+				if (sourceFolder.isRootFolder()) {
 					return false;
+				}
 				FlexoComponentFolder srcFolder = (FlexoComponentFolder) ((ComponentFolderElement) ((ComponentFolderElement) source)
 						.getParent()).getObject();
-				if (targetFolder == sourceFolder)
+				if (targetFolder == sourceFolder) {
 					return false;
+				}
 				if (targetFolder.getFolderNamed(sourceFolder.getName()) != null) {
 					return false;
 				}
@@ -105,12 +107,14 @@ public class IECLTreeDropTarget extends TreeDropTarget {
 
 		if (moved instanceof ComponentFolderElement) {
 			FlexoComponentFolder movedFolder = (FlexoComponentFolder) ((ComponentFolderElement) moved).getObject();
-			if (movedFolder.isRootFolder())
+			if (movedFolder.isRootFolder()) {
 				return false;
+			}
 			FlexoComponentFolder srcFolder = (FlexoComponentFolder) ((ComponentFolderElement) ((ComponentFolderElement) moved).getParent())
 					.getObject();
-			if (targetFolder == movedFolder)
+			if (targetFolder == movedFolder) {
 				return false;
+			}
 			if (targetFolder.getFolderNamed(movedFolder.getName()) != null) {
 				FlexoController.notify("there_is_already_a_folder_with that name");
 				return false;

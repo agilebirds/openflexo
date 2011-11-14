@@ -57,7 +57,6 @@ public class TestPopup {
 	static FlexoEditor editor;
 	static FlexoProject prj;
 
-
 	/**
 	 * @param args
 	 */

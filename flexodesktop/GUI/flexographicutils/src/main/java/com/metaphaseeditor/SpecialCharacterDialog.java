@@ -57,6 +57,7 @@ public class SpecialCharacterDialog extends javax.swing.JDialog {
 			button.setPreferredSize(new Dimension(25, 25));
 			button.addActionListener(new ActionListener() {
 
+				@Override
 				public void actionPerformed(ActionEvent ae) {
 					JButton button = (JButton) ae.getSource();
 					selectedChars = button.getText();
@@ -93,6 +94,7 @@ public class SpecialCharacterDialog extends javax.swing.JDialog {
 
 		cancelButton.setText("Cancel");
 		cancelButton.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				cancelButtonActionPerformed(evt);
 			}

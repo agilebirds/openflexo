@@ -59,15 +59,17 @@ public class CalcDrawingConnectorGR extends ConnectorGraphicalRepresentation<Exa
 			addToMouseClickControls(new CalcDrawingShemaController.ShowContextualMenuControl(true));
 		}
 
-		if (aConnector != null)
+		if (aConnector != null) {
 			aConnector.addObserver(this);
+		}
 
 	}
 
 	@Override
 	public void delete() {
-		if (getDrawable() != null)
+		if (getDrawable() != null) {
 			getDrawable().deleteObserver(this);
+		}
 		super.delete();
 	}
 
@@ -93,15 +95,17 @@ public class CalcDrawingConnectorGR extends ConnectorGraphicalRepresentation<Exa
 
 	@Override
 	public String getText() {
-		if (getCalcDrawingConnector() != null)
+		if (getCalcDrawingConnector() != null) {
 			return getCalcDrawingConnector().getName();
+		}
 		return null;
 	}
 
 	@Override
 	public void setTextNoNotification(String text) {
-		if (getCalcDrawingConnector() != null)
+		if (getCalcDrawingConnector() != null) {
 			getCalcDrawingConnector().setName(text);
+		}
 	}
 
 	@Override
@@ -109,8 +113,9 @@ public class CalcDrawingConnectorGR extends ConnectorGraphicalRepresentation<Exa
 		super.notifyObservers(arg);
 		if (arg instanceof FGENotification && ((FGENotification) arg).isModelNotification() && getDrawing() != null
 				&& !getDrawing().ignoreNotifications() && getCalcDrawingConnector() != null
-				&& !getCalcDrawingConnector().getShema().ignoreNotifications())
+				&& !getCalcDrawingConnector().getShema().ignoreNotifications()) {
 			getCalcDrawingConnector().setChanged();
+		}
 	}
 
 }

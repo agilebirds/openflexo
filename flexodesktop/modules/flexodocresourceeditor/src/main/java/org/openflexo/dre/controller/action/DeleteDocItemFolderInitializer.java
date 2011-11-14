@@ -59,9 +59,11 @@ public class DeleteDocItemFolderInitializer extends ActionInitializer {
 						Enumeration en = action.getGlobalSelection().elements();
 						while (en.hasMoreElements()) {
 							Object o = en.nextElement();
-							if (o instanceof DocItemFolder)
-								if (!v.contains(o))
+							if (o instanceof DocItemFolder) {
+								if (!v.contains(o)) {
 									v.add((DocItemFolder) o);
+								}
+							}
 						}
 					}
 					action.setFolders(v);

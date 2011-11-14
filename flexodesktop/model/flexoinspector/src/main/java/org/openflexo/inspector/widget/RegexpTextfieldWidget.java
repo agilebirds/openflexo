@@ -107,10 +107,11 @@ public class RegexpTextfieldWidget extends DenaliWidget<String> {
 	}
 
 	void checkRegexp() {
-		if (textfield.getText() != null && getPattern().matcher(textfield.getText()).matches())
+		if (textfield.getText() != null && getPattern().matcher(textfield.getText()).matches()) {
 			textfield.setBackground(Color.WHITE);
-		else
+		} else {
 			textfield.setBackground(Color.RED);
+		}
 	}
 
 	/**
@@ -142,8 +143,9 @@ public class RegexpTextfieldWidget extends DenaliWidget<String> {
 	public synchronized void updateModelFromWidget() {
 		isUpdatingModel = true;
 		if (!isUpdatingWidget) {
-			if (textfield.getText() != null && getPattern().matcher(textfield.getText()).matches())
+			if (textfield.getText() != null && getPattern().matcher(textfield.getText()).matches()) {
 				setObjectValue(textfield.getText());
+			}
 		}
 		isUpdatingModel = false;
 	}
@@ -169,10 +171,11 @@ public class RegexpTextfieldWidget extends DenaliWidget<String> {
 	}
 
 	public String getRegexp() {
-		if (_propertyModel.getValueForParameter("regexp").indexOf('"') > -1)
+		if (_propertyModel.getValueForParameter("regexp").indexOf('"') > -1) {
 			return _propertyModel.getValueForParameter("regexp").substring(1, _propertyModel.getValueForParameter("regexp").length() - 1);
-		else
+		} else {
 			return getModel().valueForKey(_propertyModel.getValueForParameter("regexp"));
+		}
 	}
 
 }

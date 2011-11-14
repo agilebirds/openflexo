@@ -69,16 +69,18 @@ public class MethodCall extends Observable implements ComplexPathElement<Object>
 
 	@Override
 	public String getSerializationRepresentation() {
-		if (_method == null)
+		if (_method == null) {
 			return "null";
+		}
 		String returned = _method.getName();
 		returned += "(";
 		boolean isFirst = true;
-		if (_method.getGenericParameterTypes() != null)
+		if (_method.getGenericParameterTypes() != null) {
 			for (MethodCallArgument arg : _args) {
 				returned += (isFirst ? "" : ",") + (arg.getBinding() != null ? arg.getBinding().getStringRepresentation() : "");
 				isFirst = false;
 			}
+		}
 		returned += ")";
 		return returned;
 	}
@@ -125,11 +127,13 @@ public class MethodCall extends Observable implements ComplexPathElement<Object>
 	}
 
 	public MethodCallArgument argumentForParam(String paramName) {
-		if (paramName == null)
+		if (paramName == null) {
 			return null;
+		}
 		for (MethodCallArgument arg : _args) {
-			if (paramName.equals(arg.getName()))
+			if (paramName.equals(arg.getName())) {
 				return arg;
+			}
 		}
 		return null;
 	}
@@ -150,8 +154,9 @@ public class MethodCall extends Observable implements ComplexPathElement<Object>
 	@Override
 	public boolean isBindingValid() {
 		for (MethodCallArgument arg : _args) {
-			if (arg.getBinding() == null || !arg.getBinding().isBindingValid())
+			if (arg.getBinding() == null || !arg.getBinding().isBindingValid()) {
 				return false;
+			}
 		}
 		return true;
 	}

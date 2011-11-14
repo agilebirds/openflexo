@@ -19,12 +19,11 @@
  */
 package org.openflexo.foundation.rm.cg;
 
+import org.openflexo.foundation.cg.version.CGVersionIdentifier;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
-
-import org.openflexo.foundation.cg.version.CGVersionIdentifier;
-import org.openflexo.localization.FlexoLocalization;
 
 public class ContentSource {
 
@@ -39,34 +38,46 @@ public class ContentSource {
 	public static final ContentSource LAST_ACCEPTED = new ContentSource(ContentSourceType.LastAccepted);
 
 	public static ContentSource getContentSource(ContentSourceType type) {
-		if (type == ContentSourceType.PureGeneration)
+		if (type == ContentSourceType.PureGeneration) {
 			return PURE_GENERATION;
-		if (type == ContentSourceType.GeneratedMerge)
+		}
+		if (type == ContentSourceType.GeneratedMerge) {
 			return GENERATED_MERGE;
-		if (type == ContentSourceType.ResultFileMerge)
+		}
+		if (type == ContentSourceType.ResultFileMerge) {
 			return RESULT_FILE_MERGE;
-		if (type == ContentSourceType.ContentOnDisk)
+		}
+		if (type == ContentSourceType.ContentOnDisk) {
 			return CONTENT_ON_DISK;
-		if (type == ContentSourceType.LastGenerated)
+		}
+		if (type == ContentSourceType.LastGenerated) {
 			return LAST_GENERATED;
-		if (type == ContentSourceType.LastAccepted)
+		}
+		if (type == ContentSourceType.LastAccepted) {
 			return LAST_ACCEPTED;
+		}
 		return new ContentSource(type);
 	}
 
 	public static ContentSource getContentSource(ContentSourceType type, CGVersionIdentifier version) {
-		if (type == ContentSourceType.PureGeneration)
+		if (type == ContentSourceType.PureGeneration) {
 			return PURE_GENERATION;
-		if (type == ContentSourceType.GeneratedMerge)
+		}
+		if (type == ContentSourceType.GeneratedMerge) {
 			return GENERATED_MERGE;
-		if (type == ContentSourceType.ResultFileMerge)
+		}
+		if (type == ContentSourceType.ResultFileMerge) {
 			return RESULT_FILE_MERGE;
-		if (type == ContentSourceType.ContentOnDisk)
+		}
+		if (type == ContentSourceType.ContentOnDisk) {
 			return CONTENT_ON_DISK;
-		if (type == ContentSourceType.LastGenerated)
+		}
+		if (type == ContentSourceType.LastGenerated) {
 			return LAST_GENERATED;
-		if (type == ContentSourceType.LastAccepted)
+		}
+		if (type == ContentSourceType.LastAccepted) {
 			return LAST_ACCEPTED;
+		}
 		return new ContentSource(type, version);
 	}
 
@@ -107,20 +118,21 @@ public class ContentSource {
 		PureGeneration, GeneratedMerge, ResultFileMerge, ContentOnDisk, LastGenerated, LastAccepted, HistoryVersion;
 
 		public String getUnlocalizedStringRepresentation() {
-			if (this == PureGeneration)
+			if (this == PureGeneration) {
 				return "pure_generation";
-			else if (this == GeneratedMerge)
+			} else if (this == GeneratedMerge) {
 				return "generated_merge";
-			else if (this == ResultFileMerge)
+			} else if (this == ResultFileMerge) {
 				return "result_file_merge";
-			else if (this == ContentOnDisk)
+			} else if (this == ContentOnDisk) {
 				return "content_on_disk";
-			else if (this == LastGenerated)
+			} else if (this == LastGenerated) {
 				return "last_generated_version";
-			else if (this == LastAccepted)
+			} else if (this == LastAccepted) {
 				return "last_accepted_version";
-			else if (this == HistoryVersion)
+			} else if (this == HistoryVersion) {
 				return "history_version";
+			}
 			return "???";
 		}
 
@@ -138,8 +150,9 @@ public class ContentSource {
 			@Override
 			public ContentSourceType convertFromString(String value) {
 				for (ContentSourceType cs : values()) {
-					if (cs.getStringRepresentation().equals(value))
+					if (cs.getStringRepresentation().equals(value)) {
 						return cs;
+					}
 				}
 				return null;
 			}

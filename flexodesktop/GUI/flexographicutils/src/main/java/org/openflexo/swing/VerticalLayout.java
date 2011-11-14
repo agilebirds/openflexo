@@ -105,8 +105,9 @@ public class VerticalLayout implements LayoutManager {
 		Component children[] = target.getComponents();
 		int length = 0;
 		for (int i = 0; i < children.length; i++) {
-			if (!children[i].isVisible())
+			if (!children[i].isVisible()) {
 				continue;
+			}
 			Dimension d = children[i].getPreferredSize();
 			width = Math.max(width, d.width);
 			height += d.height;
@@ -137,8 +138,9 @@ public class VerticalLayout implements LayoutManager {
 
 		top += vgap;
 		for (int i = 0; i < children.length; i++) {
-			if (!children[i].isVisible())
+			if (!children[i].isVisible()) {
 				continue;
+			}
 			int h = children[i].getPreferredSize().height + vmargin * 2;
 			children[i].setBounds(left, top, width, h);
 			top += h + vgap;

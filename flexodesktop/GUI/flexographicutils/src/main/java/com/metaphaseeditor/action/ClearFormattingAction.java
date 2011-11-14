@@ -22,7 +22,6 @@
 
 package com.metaphaseeditor.action;
 
-import com.metaphaseeditor.MetaphaseEditorPanel;
 import java.awt.event.ActionEvent;
 import java.util.Enumeration;
 import java.util.Vector;
@@ -31,6 +30,8 @@ import javax.swing.JTextPane;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyledEditorKit;
 import javax.swing.text.html.HTML;
+
+import com.metaphaseeditor.MetaphaseEditorPanel;
 
 public class ClearFormattingAction extends StyledEditorKit.StyledTextAction {
 
@@ -41,6 +42,7 @@ public class ClearFormattingAction extends StyledEditorKit.StyledTextAction {
 		this.editorPanel = editorPanel;
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent ae) {
 		JTextPane textPane = editorPanel.getHtmlTextPane();
 		int internalTextLength;
@@ -77,8 +79,9 @@ public class ClearFormattingAction extends StyledEditorKit.StyledTextAction {
 			while (attributeNames.hasMoreElements()) {
 				Object entryKey = attributeNames.nextElement();
 				for (int j = 0; j < skipAttributesList.size(); j++) {
-					if (entryKey.toString().equals(skipAttributesList.get(j)))
+					if (entryKey.toString().equals(skipAttributesList.get(j))) {
 						continue mainLoop;
+					}
 				}
 				if (!entryKey.toString().equals(HTML.Attribute.NAME.toString())) {
 					sasText.removeAttribute(entryKey);

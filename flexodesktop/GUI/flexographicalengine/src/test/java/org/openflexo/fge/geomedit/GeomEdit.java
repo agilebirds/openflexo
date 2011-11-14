@@ -41,12 +41,11 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.openflexo.swing.FlexoFileChooser;
-import org.openflexo.toolbox.FileResource;
-
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
+import org.openflexo.swing.FlexoFileChooser;
+import org.openflexo.toolbox.FileResource;
 
 public class GeomEdit {
 
@@ -385,14 +384,16 @@ public class GeomEdit {
 		if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
 			GeometricSet loadedDrawing = GeometricSet.load(file);
-			if (loadedDrawing != null)
+			if (loadedDrawing != null) {
 				addDrawing(loadedDrawing);
+			}
 		}
 	}
 
 	public void saveDrawing() {
-		if (currentDrawing == null)
+		if (currentDrawing == null) {
 			return;
+		}
 		if (currentDrawing.file == null) {
 			saveDrawingAs();
 		} else {
@@ -401,12 +402,14 @@ public class GeomEdit {
 	}
 
 	public void saveDrawingAs() {
-		if (currentDrawing == null)
+		if (currentDrawing == null) {
 			return;
+		}
 		if (fileChooser.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
-			if (!file.getName().endsWith(".drw"))
+			if (!file.getName().endsWith(".drw")) {
 				file = new File(file.getParentFile(), file.getName() + ".drw");
+			}
 			currentDrawing.file = file;
 			updateFrameTitle();
 			updateTabTitle();

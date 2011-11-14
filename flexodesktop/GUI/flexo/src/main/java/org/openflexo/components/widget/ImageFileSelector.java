@@ -41,11 +41,10 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import org.openflexo.swing.TextFieldCustomPopup;
-
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.ImageFile;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.swing.TextFieldCustomPopup;
 
 /**
  * Widget allowing to select a DocItem while browsing the DocResourceCenter
@@ -140,8 +139,9 @@ public class ImageFileSelector extends TextFieldCustomPopup<ImageFile> {
 			buttonPanel.add(applyButton);
 			buttonPanel.add(cancelButton);
 			buttonPanel.add(resetButton);
-			if (importButton != null)
+			if (importButton != null) {
 				buttonPanel.add(importButton);
+			}
 			updateImagePanel();
 			final JScrollPane scroll = new JScrollPane(imagePanel);
 			scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -185,12 +185,13 @@ public class ImageFileSelector extends TextFieldCustomPopup<ImageFile> {
 			gc.gridx = 0;
 			gc.gridy = 0;
 			for (ImageFile file : getProject().getAvailableImageFiles()) {
-				if (importedImageOnly && !file.isImported())
+				if (importedImageOnly && !file.isImported()) {
 					continue;
+				}
 				imagePanel.add(new ImageView(file), gc);
-				if (gc.gridx < 2)
+				if (gc.gridx < 2) {
 					gc.gridx += 1;
-				else {
+				} else {
 					gc.gridx = 0;
 					gc.gridy += 1;
 				}
@@ -266,11 +267,13 @@ public class ImageFileSelector extends TextFieldCustomPopup<ImageFile> {
 			public Color getBackground() {
 				if (isSelected || getEditedObject() == file) {
 					Color c = UIManager.getDefaults().getColor("TextField.selectionBackground");
-					if (c == null)
+					if (c == null) {
 						c = SELECTION_COLOR;
+					}
 					return c;
-				} else
+				} else {
 					return super.getBackground();
+				}
 			}
 
 			@Override
@@ -340,8 +343,9 @@ public class ImageFileSelector extends TextFieldCustomPopup<ImageFile> {
 
 	@Override
 	public String renderedString(ImageFile editedObject) {
-		if (editedObject == null)
+		if (editedObject == null) {
 			return EMPTY_STRING;
+		}
 		return editedObject.getImageName();
 	}
 

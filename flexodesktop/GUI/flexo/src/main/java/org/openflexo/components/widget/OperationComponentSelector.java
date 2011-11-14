@@ -57,8 +57,9 @@ public class OperationComponentSelector extends AbstractComponentSelector<Operat
 		String newComponentName = FlexoController.askForStringMatchingPattern(FlexoLocalization.localizedForKey("enter_a_component_name"),
 				IERegExp.JAVA_CLASS_NAME_PATTERN,
 				FlexoLocalization.localizedForKey("must_start_with_a_letter_followed_by_any_letter_or_number"));
-		if (newComponentName == null)
+		if (newComponentName == null) {
 			return;
+		}
 		try {
 			OperationComponentDefinition newComponent = new OperationComponentDefinition(newComponentName, getComponentLibrary(), folder,
 					getProject());

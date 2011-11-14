@@ -24,12 +24,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.icon.GeneratorIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.cgmodule.view.popups.CGFileDiffEditorPopup;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -38,6 +32,11 @@ import org.openflexo.foundation.cg.version.action.ShowDifferences;
 import org.openflexo.foundation.param.CGFileVersionParameter;
 import org.openflexo.foundation.rm.cg.ContentSource;
 import org.openflexo.foundation.rm.cg.ContentSource.ContentSourceType;
+import org.openflexo.icon.GeneratorIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class ShowDifferencesInitializer extends ActionInitializer {
 

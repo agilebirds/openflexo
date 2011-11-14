@@ -91,8 +91,9 @@ public class AddServiceInterface extends FlexoAction<AddServiceInterface, FlexoM
 		logger.info("Add Service Interface");
 		if (getProcess() != null && !getProcess().isImported()) {
 			_serviceInterface = getProcess().addServiceInterface(getNewInterfaceName());
-			if (logger.isLoggable(Level.INFO))
+			if (logger.isLoggable(Level.INFO)) {
 				logger.info("ServiceInterface created:" + _serviceInterface.getName());
+			}
 		} else {
 			logger.warning("Focused process is null or imported!");
 		}

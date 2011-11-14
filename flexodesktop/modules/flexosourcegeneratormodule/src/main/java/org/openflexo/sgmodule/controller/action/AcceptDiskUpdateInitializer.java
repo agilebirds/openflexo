@@ -27,13 +27,6 @@ import javax.swing.Icon;
 import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.icon.GeneratorIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.sgmodule.view.popup.SelectFilesPopup;
-import org.openflexo.view.controller.ActionInitializer;
-import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
-
 import org.openflexo.components.MultipleObjectSelectorPopup;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -41,6 +34,12 @@ import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.generator.action.AcceptDiskUpdate;
+import org.openflexo.icon.GeneratorIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.sgmodule.view.popup.SelectFilesPopup;
+import org.openflexo.view.controller.ActionInitializer;
+import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class AcceptDiskUpdateInitializer extends ActionInitializer {
 
@@ -103,11 +102,12 @@ public class AcceptDiskUpdateInitializer extends ActionInitializer {
 			public boolean handleException(FlexoException exception, AcceptDiskUpdate action) {
 				getControllerActionInitializer().getSGController().disposeProgressWindow();
 				exception.printStackTrace();
-				if (exception.getCause() != null)
+				if (exception.getCause() != null) {
 					FlexoController.showError(FlexoLocalization.localizedForKey("file_accepting_failed") + ":\n"
 							+ exception.getCause().getLocalizedMessage());
-				else
+				} else {
 					FlexoController.showError(FlexoLocalization.localizedForKey("file_accepting_failed") + ":\n" + exception.getMessage());
+				}
 				return true;
 			}
 		};

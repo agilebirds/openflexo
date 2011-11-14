@@ -73,8 +73,9 @@ public class EditionPatternInspector extends ViewPointObject implements Bindable
 
 	@Override
 	public ViewPoint getCalc() {
-		if (getEditionPattern() != null)
+		if (getEditionPattern() != null) {
 			return getEditionPattern().getCalc();
+		}
 		return null;
 	}
 
@@ -158,8 +159,9 @@ public class EditionPatternInspector extends ViewPointObject implements Bindable
 
 	@Override
 	public BindingModel getBindingModel() {
-		if (_bindingModel == null)
+		if (_bindingModel == null) {
 			createBindingModel();
+		}
 		return _bindingModel;
 	}
 
