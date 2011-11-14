@@ -60,6 +60,43 @@ public class TwoColsLayoutConstraints extends ComponentConstraints {
 		left, right, center;
 	}
 
+	private static final String INSETS_TOP = "insetsTop";
+	private static final String INSETS_BOTTOM = "insetsBottom";
+	private static final String INSETS_LEFT = "insetsLeft";
+	private static final String INSETS_RIGHT = "insetsRight";
+
+	public int getInsetsTop() {
+		return getIntValue(INSETS_TOP, getLocation() == TwoColsLayoutLocation.left ? 5 : 0);
+	}
+
+	public void setInsetsTop(int insetsTop) {
+		setIntValue(INSETS_TOP, insetsTop);
+	}
+
+	public int getInsetsBottom() {
+		return getIntValue(INSETS_BOTTOM, 0);
+	}
+
+	public void setInsetsBottom(int insetsBottom) {
+		setIntValue(INSETS_BOTTOM, insetsBottom);
+	}
+
+	public int getInsetsLeft() {
+		return getIntValue(INSETS_LEFT, 2);
+	}
+
+	public void setInsetsLeft(int insetsLeft) {
+		setIntValue(INSETS_LEFT, insetsLeft);
+	}
+
+	public int getInsetsRight() {
+		return getIntValue(INSETS_RIGHT, 2);
+	}
+
+	public void setInsetsRight(int insetsRight) {
+		setIntValue(INSETS_RIGHT, insetsRight);
+	}
+
 	public TwoColsLayoutConstraints() {
 		super();
 	}
@@ -70,6 +107,8 @@ public class TwoColsLayoutConstraints extends ComponentConstraints {
 		setExpandHorizontally(expandHorizontally);
 		setExpandVertically(expandVertically);
 		setIndex(index);
+		if (location == TwoColsLayoutLocation.left)
+			setInsetsTop(5);
 	}
 
 	protected TwoColsLayoutConstraints(String someConstraints) {
@@ -89,7 +128,7 @@ public class TwoColsLayoutConstraints extends ComponentConstraints {
 	public void performConstrainedAddition(JComponent container, JComponent contained) {
 		GridBagConstraints c = new GridBagConstraints();
 		// c.insets = new Insets(3, 3, 3, 3);
-		c.insets = new Insets(0, 2, 0, 2);
+		c.insets = new Insets(getInsetsTop(), getInsetsLeft(), getInsetsBottom(), getInsetsRight());
 		if (getLocation() == TwoColsLayoutLocation.left) {
 			c.fill = GridBagConstraints.NONE;
 			c.weightx = 0; // 1.0;
@@ -99,7 +138,7 @@ public class TwoColsLayoutConstraints extends ComponentConstraints {
 				// c.weighty = 1.0;
 				c.fill = GridBagConstraints.VERTICAL;
 			} else {
-				c.insets = new Insets(5, 2, 0, 2);
+				// c.insets = new Insets(5, 2, 0, 2);
 			}
 		} else {
 			if (getExpandHorizontally()) {

@@ -75,6 +75,17 @@
 					<Label label="expand_horizontally" constraints="twocols(location=right)"/>
 					<CheckBox data="TwoColsConstraints.data.expandVertically" constraints="twocols(location=left)"/>
 					<Label label="expand_vertically" constraints="twocols(location=right)"/>
+				    <Label label="Insets" constraints="twocols(location=left)"/>
+					<Panel layout="flow" hGap="5" vGap="0" constraints="twocols(location=right;expandHorizontally=true)">
+				        <Label label="top"/>
+				        <Number name="twoColsConstraintsInsetsTop" numberType="IntegerType" data="TwoColsConstraints.data.insetsTop" columns="1"/>
+				        <Label label="left"/>
+				        <Number name="twoColsConstraintsInsetsLeft" numberType="IntegerType" data="TwoColsConstraints.data.insetsLeft" columns="1"/>
+				        <Label label="bottom"/>
+				        <Number name="twoColsConstraintsInsetsBottom" numberType="IntegerType" data="TwoColsConstraints.data.insetsBottom" columns="1"/>
+				        <Label label="right"/>
+				        <Number name="twoColsConstraintsInsetsRight" numberType="IntegerType" data="TwoColsConstraints.data.insetsRight" columns="1"/>
+					</Panel>
 				</Panel>
 
 				<Panel name="GridBagConstraints" border="titled" borderTitle="grid_bag_layout_constraints" data="data.constraints" dataClassName="org.openflexo.fib.model.GridBagLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="data.parent.layout='gridbag'"> 
@@ -129,13 +140,13 @@
 				    <Label label="Insets" constraints="twocols(location=left)"/>
 					<Panel layout="flow" hGap="5" vGap="0" constraints="twocols(location=right;expandHorizontally=true)">
 				        <Label label="top"/>
-				        <Number name="gridBagConstraintsInsetsTop" numberType="IntegerType" data="GridBagConstraints.data.insetsTop" columns="2"/>
+				        <Number name="gridBagConstraintsInsetsTop" numberType="IntegerType" data="GridBagConstraints.data.insetsTop" columns="1"/>
 				        <Label label="left"/>
-				        <Number name="gridBagConstraintsInsetsLeft" numberType="IntegerType" data="GridBagConstraints.data.insetsLeft" columns="2"/>
+				        <Number name="gridBagConstraintsInsetsLeft" numberType="IntegerType" data="GridBagConstraints.data.insetsLeft" columns="1"/>
 				        <Label label="bottom"/>
-				        <Number name="gridBagConstraintsInsetsBottom" numberType="IntegerType" data="GridBagConstraints.data.insetsBottom" columns="2"/>
+				        <Number name="gridBagConstraintsInsetsBottom" numberType="IntegerType" data="GridBagConstraints.data.insetsBottom" columns="1"/>
 				        <Label label="right"/>
-				        <Number name="gridBagConstraintsInsetsRight" numberType="IntegerType" data="GridBagConstraints.data.insetsRight" columns="2"/>
+				        <Number name="gridBagConstraintsInsetsRight" numberType="IntegerType" data="GridBagConstraints.data.insetsRight" columns="1"/>
 					</Panel>
 				</Panel>
 
