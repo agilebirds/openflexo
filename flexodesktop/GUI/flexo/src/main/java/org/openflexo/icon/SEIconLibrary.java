@@ -25,7 +25,6 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 import org.openflexo.foundation.ie.IEObject;
-import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.toolbox.ImageIconResource;
 
 /**
@@ -39,10 +38,10 @@ public class SEIconLibrary extends IconLibrary {
 	private static final Logger logger = Logger.getLogger(SEIconLibrary.class.getPackage().getName());
 
 	// Module icons
-	public static final ImageIcon SE_SMALL_ICON = new ImageIconResource("Icons/SE/IE_A_Small.gif");
-	public static final ImageIcon SE_MEDIUM_ICON = new ImageIconResource("Icons/SE/module-se.png");
-	public static final ImageIcon SE_MEDIUM_ICON_WITH_HOVER = new ImageIconResource("Icons/SE/module-se-hover.png");
-	public static final ImageIcon SE_BIG_ICON = new ImageIconResource("Icons/SE/module-se-big.png");
+	public static final ImageIconResource SE_SMALL_ICON = new ImageIconResource("Icons/SE/module-se-16.png");
+	public static final ImageIconResource SE_MEDIUM_ICON = new ImageIconResource("Icons/SE/module-se-32.png");
+	public static final ImageIconResource SE_MEDIUM_ICON_WITH_HOVER = new ImageIconResource("Icons/SE/module-se-hover-32.png");
+	public static final ImageIconResource SE_BIG_ICON = new ImageIconResource("Icons/SE/module-se-hover-64.png");
 
 	// Perspective icons
 	public static final ImageIcon COMPONENT_PERSPECTIVE_ACTIVE_ICON = new ImageIconResource("Icons/SE/ComponentPerspective_A.gif");

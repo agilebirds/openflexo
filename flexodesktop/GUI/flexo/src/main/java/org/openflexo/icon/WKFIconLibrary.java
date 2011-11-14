@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.node.EventNode;
 import org.openflexo.foundation.wkf.node.EventNode.EVENT_TYPE;
@@ -38,7 +37,6 @@ import org.openflexo.foundation.wkf.ws.OutPort;
 import org.openflexo.foundation.wkf.ws.PortMapRegistery;
 import org.openflexo.foundation.wkf.ws.ServiceOperation;
 import org.openflexo.toolbox.ImageIconResource;
-import org.openflexo.view.controller.FlexoFIBController;
 
 /**
  * Utility class containing all icons used in context of WKFModule
@@ -51,18 +49,20 @@ public class WKFIconLibrary extends IconLibrary {
 	private static final Logger logger = Logger.getLogger(WKFIconLibrary.class.getPackage().getName());
 
 	// Module icons
-	public static final ImageIconResource WKF_SMALL_ICON = new ImageIconResource("Icons/WKF/WKF_A_Small.gif");
-	public static final ImageIconResource WKF_MEDIUM_ICON = new ImageIconResource("Icons/WKF/module-wkf.png");
-	public static final ImageIconResource WKF_MEDIUM_ICON_WITH_HOVER = new ImageIconResource("Icons/WKF/module-wkf-hover.png");
-	public static final ImageIconResource WKF_BIG_ICON = new ImageIconResource("Icons/WKF/module-wkf-big.png");
+	public static final ImageIconResource WKF_SMALL_ICON = new ImageIconResource("Icons/WKF/module-wkf-16.png");
+	public static final ImageIconResource WKF_MEDIUM_ICON = new ImageIconResource("Icons/WKF/module-wkf-32.png");
+	public static final ImageIconResource WKF_MEDIUM_ICON_WITH_HOVER = new ImageIconResource("Icons/WKF/module-wkf-hover-32.png");
+	public static final ImageIconResource WKF_BIG_ICON = new ImageIconResource("Icons/WKF/module-wkf-hover-64.png");
 
 	// Perspective icons
-	public static final ImageIcon WKF_BPEP_ACTIVE_ICON = new ImageIconResource("Icons/WKF/WorkflowPerspective_A.gif");
-	public static final ImageIcon WKF_BPEP_SELECTED_ICON = new ImageIconResource("Icons/WKF/WorkflowPerspective_S.gif");
-	public static final ImageIcon WKF_SWLP_ACTIVE_ICON = new ImageIconResource("Icons/WKF/SwimmingLanesPerspective_A.gif");
-	public static final ImageIcon WKF_SWLP_SELECTED_ICON = new ImageIconResource("Icons/WKF/SwimmingLanesPerspective_S.gif");
-	public static final ImageIcon WKF_RP_ACTIVE_ICON = new ImageIconResource("Icons/WKF/RolePerspective_A.gif");
-	public static final ImageIcon WKF_RP_SELECTED_ICON = new ImageIconResource("Icons/WKF/RolePerspective_S.gif");
+	public static final ImageIcon WKF_BPEP_ACTIVE_ICON = new ImageIconResource("Icons/WKF/workflow-perspective.png");
+	public static final ImageIcon WKF_BPEP_SELECTED_ICON = new ImageIconResource("Icons/WKF/workflow-perspective-hover.png");
+	public static final ImageIcon WKF_SWLP_ACTIVE_ICON = new ImageIconResource("Icons/WKF/swimming-lanes-perspective.png");
+	public static final ImageIcon WKF_SWLP_SELECTED_ICON = new ImageIconResource("Icons/WKF/swimming-lanes-perspective-hover.png");
+	public static final ImageIcon WKF_RP_ACTIVE_ICON = new ImageIconResource("Icons/WKF/role-perspective.png");
+	public static final ImageIcon WKF_RP_SELECTED_ICON = new ImageIconResource("Icons/WKF/role-perspective-hover.png");
+	public static final ImageIcon WKF_DOCP_ACTIVE_ICON = new ImageIconResource("Icons/WKF/documentation-perspective.png");
+	public static final ImageIcon WKF_DOCP_SELECTED_ICON = new ImageIconResource("Icons/WKF/documentation-perspective-hover.png");
 
 	// Editor icons
 	public static final ImageIcon FLAT_ICON = new ImageIconResource("Icons/WKF/Flat.gif");

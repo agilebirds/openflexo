@@ -32,10 +32,10 @@ import org.openflexo.toolbox.ImageIconResource;
 public class DEIconLibrary extends IconLibrary {
 
 	// Module icons
-	public static final ImageIcon DE_SMALL_ICON = new ImageIconResource("Icons/DG/DE_A_Small.gif");
-	public static final ImageIcon DE_MEDIUM_ICON = new ImageIconResource("Icons/DE/module-dg.png");
-	public static final ImageIcon DE_MEDIUM_ICON_WITH_HOVER = new ImageIconResource("Icons/DE/module-dg-hover.png");
-	public static final ImageIcon DE_BIG_ICON = new ImageIconResource("Icons/DE/module-dg-big.png");
+	public static final ImageIcon DE_SMALL_ICON = new ImageIconResource("Icons/DG/module-dg-16.png");
+	public static final ImageIcon DE_MEDIUM_ICON = new ImageIconResource("Icons/DG/module-dg-32.png");
+	public static final ImageIcon DE_MEDIUM_ICON_WITH_HOVER = new ImageIconResource("Icons/DG/module-dg-hover-32.png");
+	public static final ImageIcon DE_BIG_ICON = new ImageIconResource("Icons/DG/module-dg-hover-64.png");
 
 	// Perspective icons
 	public static final ImageIcon DE_DE_ACTIVE_ICON = new ImageIconResource("Icons/DE/DocEditorPerspective_A.png");

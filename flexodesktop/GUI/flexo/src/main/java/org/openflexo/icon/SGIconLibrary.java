@@ -32,10 +32,10 @@ import org.openflexo.toolbox.ImageIconResource;
 public class SGIconLibrary extends GeneratorIconLibrary {
 
 	// Module icons
-	public static final ImageIcon SG_SMALL_ICON = new ImageIconResource("Icons/SG/SG_A_Small.gif");
-	public static final ImageIcon SG_MEDIUM_ICON = new ImageIconResource("Icons/SG/module-sg.png");
-	public static final ImageIcon SG_MEDIUM_ICON_WITH_HOVER = new ImageIconResource("Icons/SG/module-sg-hover.png");
-	public static final ImageIcon SG_BIG_ICON = new ImageIconResource("Icons/SG/module-sg-big.png");
+	public static final ImageIcon SG_SMALL_ICON = new ImageIconResource("Icons/SG/module-sg-16.png");
+	public static final ImageIcon SG_MEDIUM_ICON = new ImageIconResource("Icons/SG/module-sg-32.png");
+	public static final ImageIcon SG_MEDIUM_ICON_WITH_HOVER = new ImageIconResource("Icons/SG/module-sg-hover-32.png");
+	public static final ImageIcon SG_BIG_ICON = new ImageIconResource("Icons/SG/module-sg-hover-64.png");
 
 	// Perspective icons
 	public static final ImageIcon SG_MRP_ACTIVE_ICON = new ImageIconResource("Icons/SG/MRPerspective_A.gif");

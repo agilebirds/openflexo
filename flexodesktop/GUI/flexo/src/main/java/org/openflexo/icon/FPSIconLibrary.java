@@ -32,10 +32,10 @@ import org.openflexo.toolbox.ImageIconResource;
 public class FPSIconLibrary extends IconLibrary {
 
 	// Module icons
-	public static final ImageIcon FPS_SMALL_ICON = new ImageIconResource("Icons/FPS/FPS_A_Small.gif");
-	public static final ImageIcon FPS_MEDIUM_ICON = new ImageIconResource("Icons/FPS/module-fps.png");
-	public static final ImageIcon FPS_MEDIUM_ICON_WITH_HOVER = new ImageIconResource("Icons/FPS/module-fps-hover.png");
-	public static final ImageIcon FPS_BIG_ICON = new ImageIconResource("Icons/FPS/module-fps-big.png");
+	public static final ImageIcon FPS_SMALL_ICON = new ImageIconResource("Icons/FPS/module-fps-16.png");
+	public static final ImageIcon FPS_MEDIUM_ICON = new ImageIconResource("Icons/FPS/module-fps-32.png");
+	public static final ImageIcon FPS_MEDIUM_ICON_WITH_HOVER = new ImageIconResource("Icons/FPS/module-fps-hover-32.png");
+	public static final ImageIcon FPS_BIG_ICON = new ImageIconResource("Icons/FPS/module-fps-hover-64.png");
 
 	// Editor icons
 	public static final ImageIcon FPS_MARK_AS_MERGED_ICON = new ImageIconResource("Icons/FPS/MarkAsMergedIcon.gif");

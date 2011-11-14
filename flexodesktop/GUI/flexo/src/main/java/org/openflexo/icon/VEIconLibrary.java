@@ -43,16 +43,16 @@ public class VEIconLibrary extends IconLibrary {
 	private static final Logger logger = Logger.getLogger(VEIconLibrary.class.getPackage().getName());
 
 	// Module icons
-	public static final ImageIcon VE_SMALL_ICON = new ImageIconResource("Icons/VE/OE_A_Small.gif");
-	public static final ImageIcon VE_MEDIUM_ICON = new ImageIconResource("Icons/VE/OE_A.gif");
-	public static final ImageIcon VE_MEDIUM_ICON_WITH_HOVER = new ImageIconResource("Icons/VE/OE_S.gif");
-	public static final ImageIcon VE_BIG_ICON = new ImageIconResource("Icons/VE/OE_A.gif");
+	public static final ImageIcon VE_SMALL_ICON = new ImageIconResource("Icons/VE/module-ve-16.png");
+	public static final ImageIcon VE_MEDIUM_ICON = new ImageIconResource("Icons/VE/module-ve-32.png");
+	public static final ImageIcon VE_MEDIUM_ICON_WITH_HOVER = new ImageIconResource("Icons/VE/module-ve-hover-32.png");
+	public static final ImageIcon VE_BIG_ICON = new ImageIconResource("Icons/VE/module-ve-hover-64.png");
 
 	// Perspective icons
-	public static final ImageIcon VE_OP_ACTIVE_ICON = new ImageIconResource("Icons/VE/OntologyPerspective.png");
-	public static final ImageIcon VE_OP_SELECTED_ICON = new ImageIconResource("Icons/VE/OntologyPerspective-hover.png");
-	public static final ImageIcon VE_SP_ACTIVE_ICON = new ImageIconResource("Icons/VE/ShemaPerspective.png");
-	public static final ImageIcon VE_SP_SELECTED_ICON = new ImageIconResource("Icons/VE/ShemaPerspective-hover.png");
+	public static final ImageIcon VE_OP_ACTIVE_ICON = new ImageIconResource("Icons/VE/ontology-perspective.png");
+	public static final ImageIcon VE_OP_SELECTED_ICON = new ImageIconResource("Icons/VE/ontology-perspective-hover.png");
+	public static final ImageIcon VE_SP_ACTIVE_ICON = new ImageIconResource("Icons/VE/diagram-perspective.png");
+	public static final ImageIcon VE_SP_SELECTED_ICON = new ImageIconResource("Icons/VE/diagram-perspective-hover.png");
 
 	// Model icons
 	public static final ImageIconResource VIEW_LIBRARY_ICON = new ImageIconResource("Icons/Model/VE/ViewLibrary.png");
