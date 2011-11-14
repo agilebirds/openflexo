@@ -28,8 +28,8 @@ import java.util.logging.Logger;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
-import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBAttributeNotification;
 import org.openflexo.fib.model.FIBTableColumn;
@@ -104,7 +104,12 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 	}
 
 	public String getLocalized(String key) {
-		return FlexoLocalization.localizedForKey(getController().getLocalizer(), key);
+		if (getController() != null) {
+			return FlexoLocalization.localizedForKey(getController().getLocalizer(), key);
+		} else {
+			logger.warning("Controller not defined");
+			return key;
+		}
 	}
 
 	public FIBTableModel getTableModel() {
