@@ -21,6 +21,7 @@ package org.openflexo.fib.model;
 
 import java.lang.reflect.Type;
 import java.util.Enumeration;
+import java.util.List;
 
 import javax.swing.Icon;
 import javax.swing.tree.TreeNode;
@@ -332,6 +333,11 @@ public abstract class FIBWidget extends FIBComponent {
 			}
 			super.notifyBindingChanged(binding);
 		}
+		
+		@Override
+		public List<? extends FIBModelObject> getEmbeddedObjects() {
+			return null;
+		}
 	}
 
 	public DataBinding getValueChangedAction() {
@@ -406,4 +412,8 @@ public abstract class FIBWidget extends FIBComponent {
 		return getParameter("isPaletteElement") != null && getParameter("isPaletteElement").equalsIgnoreCase("true");
 	}
 
+	@Override
+	public List<? extends FIBModelObject> getEmbeddedObjects() {
+		return null;
+	}
 }

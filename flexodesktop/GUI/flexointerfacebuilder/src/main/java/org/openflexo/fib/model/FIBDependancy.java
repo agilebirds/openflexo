@@ -19,6 +19,7 @@
  */
 package org.openflexo.fib.model;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.fib.model.FIBComponent.DependancyLoopException;
@@ -92,4 +93,10 @@ public class FIBDependancy extends FIBModelObject {
 		super.finalizeDeserialization();
 		setMasterComponent(getRootComponent().getComponentNamed(masterComponentName));
 	}
+	
+	@Override
+	public List<? extends FIBModelObject> getEmbeddedObjects() {
+		return null;
+	}
+
 }

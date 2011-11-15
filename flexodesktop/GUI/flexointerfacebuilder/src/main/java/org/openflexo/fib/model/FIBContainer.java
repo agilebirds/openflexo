@@ -22,6 +22,7 @@ package org.openflexo.fib.model;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -367,6 +368,11 @@ public abstract class FIBContainer extends FIBComponent {
 				c.getConstraints().setIndexNoNotification(index++);
 			}
 		}
+	}
+
+	@Override
+	public List<? extends FIBModelObject> getEmbeddedObjects() {
+		return getSubComponents();
 	}
 
 }

@@ -19,6 +19,7 @@
  */
 package org.openflexo.fib.model;
 
+import java.util.List;
 import java.util.Observable;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -28,6 +29,7 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fib.FIBLibrary;
+import org.openflexo.fib.model.validation.ValidationReport;
 import org.openflexo.xmlcode.KeyValueDecoder;
 import org.openflexo.xmlcode.XMLSerializable;
 
@@ -220,4 +222,11 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 		return !equals(o1, o2);
 	}
 
+	public ValidationReport validate()
+	{
+		ValidationReport returned = new ValidationReport(this);
+		return returned;
+	}
+	
+	public abstract List<? extends FIBModelObject> getEmbeddedObjects();
 }
