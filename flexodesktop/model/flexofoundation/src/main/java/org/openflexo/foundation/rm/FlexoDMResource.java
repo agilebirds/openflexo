@@ -104,7 +104,7 @@ public class FlexoDMResource extends FlexoXMLStorageResource<DMModel> {
 
 	@Override
 	public DMModel performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws LoadXMLResourceException,
-	ProjectLoadingCancelledException, MalformedXMLException {
+			ProjectLoadingCancelledException, MalformedXMLException {
 		DMModel dmModel;
 		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("loading_data_model"));
@@ -119,7 +119,7 @@ public class FlexoDMResource extends FlexoXMLStorageResource<DMModel> {
 				logger.info("Recreates the DataModel...");
 			}
 			List<FlexoResource<? extends FlexoResourceData>> resourcesToDelete = new ArrayList<FlexoResource<? extends FlexoResourceData>>();
-			for (FlexoResource<? extends FlexoResourceData> r : getProject().getResources().values()) {
+			for (FlexoResource<? extends FlexoResourceData> r : getProject()) {
 				if (r.getResourceType() == ResourceType.EOMODEL) {
 					resourcesToDelete.add(r);
 				}

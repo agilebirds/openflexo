@@ -50,7 +50,6 @@ import org.openflexo.foundation.rm.FlexoComponentLibraryResource;
 import org.openflexo.foundation.rm.FlexoComponentResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
-import org.openflexo.foundation.rm.FlexoResourceData;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
 import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.rm.ProjectRestructuration;
@@ -184,11 +183,9 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 			e.printStackTrace();
 		}
 
-		for (FlexoResource<? extends FlexoResourceData> r : project.getResources().values()) {
-			if (r instanceof FlexoComponentResource) {
-				if (newLibrary.getComponentNamed(((FlexoComponentResource) r).getName()) == null) {
-					((FlexoComponentResource) r).getComponentDefinition();
-				}
+		for (FlexoComponentResource r : project.getResourcesOfClass(FlexoComponentResource.class)) {
+			if (newLibrary.getComponentNamed(r.getName()) == null) {
+				r.getComponentDefinition();
 			}
 		}
 

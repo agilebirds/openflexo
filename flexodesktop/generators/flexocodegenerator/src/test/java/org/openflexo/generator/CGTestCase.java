@@ -66,7 +66,6 @@ import org.openflexo.foundation.rm.FlexoOperationComponentResource;
 import org.openflexo.foundation.rm.FlexoProcessResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoRMResource;
-import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.FlexoTabComponentResource;
@@ -74,6 +73,7 @@ import org.openflexo.foundation.rm.FlexoWorkflowResource;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.ScreenshotResource;
+import org.openflexo.foundation.rm.StorageResourceData;
 import org.openflexo.foundation.rm.cg.CopyOfFlexoResource;
 import org.openflexo.foundation.rm.cg.GenerationStatus;
 import org.openflexo.foundation.rm.cg.JavaFileResource;
@@ -741,10 +741,8 @@ public abstract class CGTestCase extends FlexoTestCase implements ProjectGenerat
 		} catch (SaveResourceException e) {
 			fail("Cannot save project");
 		}
-		for (FlexoResource resource : _project.getResources().values()) {
-			if (resource instanceof FlexoStorageResource) {
-				assertNotModified((FlexoStorageResource) resource);
-			}
+		for (FlexoStorageResource<? extends StorageResourceData> resource : _project.getStorageResources()) {
+			assertNotModified(resource);
 		}
 	}
 

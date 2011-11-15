@@ -20,6 +20,7 @@
 package org.openflexo.foundation.rm;
 
 import java.io.File;
+import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -86,7 +87,7 @@ public class ProjectExternalRepository extends FlexoObject implements XMLSeriali
 			if (s != null) {
 				_directory = new File(s);
 			}
-			_isConnected = ((_directory != null) && (_directory.exists()));
+			_isConnected = _directory != null && _directory.exists();
 		}
 		return _directory;
 	}
@@ -98,7 +99,7 @@ public class ProjectExternalRepository extends FlexoObject implements XMLSeriali
 		} else {
 			directoriesForUser.remove(getUserName());
 		}
-		_isConnected = ((_directory != null) && (_directory.exists()));
+		_isConnected = _directory != null && _directory.exists();
 		getProject().clearCachedFiles();
 		getProject().notifyResourceChanged(null);
 	}
@@ -135,29 +136,24 @@ public class ProjectExternalRepository extends FlexoObject implements XMLSeriali
 		_isNormallyConnected = aBoolean;
 	}
 
-	public Vector<FlexoFileResource> getRelatedResources() {
-		Vector<FlexoFileResource> returned = new Vector<FlexoFileResource>();
-		for (FlexoResource resource : getProject().getResources().values()) {
+	public List<FlexoFileResource<? extends FlexoResourceData>> getRelatedResources() {
+		List<FlexoFileResource<? extends FlexoResourceData>> returned = new Vector<FlexoFileResource<? extends FlexoResourceData>>();
+		for (FlexoResource<? extends FlexoResourceData> resource : getProject()) {
 			if (resource instanceof FlexoFileResource) {
-				FlexoProjectFile pFile = ((FlexoFileResource) resource).getResourceFile();
+				FlexoProjectFile pFile = ((FlexoFileResource<? extends FlexoResourceData>) resource).getResourceFile();
 				if (pFile.getExternalRepository() == this) {
-					returned.add((FlexoFileResource) resource);
+					returned.add((FlexoFileResource<? extends FlexoResourceData>) resource);
 				}
 			}
 		}
 		return returned;
 	}
 
-	public Vector<FlexoFileResource> getRelatedActiveResources() {
-		Vector<FlexoFileResource> returned = new Vector<FlexoFileResource>();
-		for (FlexoResource resource : getProject().getResources().values()) {
-			if (resource instanceof FlexoFileResource) {
-				FlexoProjectFile pFile = ((FlexoFileResource) resource).getResourceFile();
-				if (pFile.getExternalRepository() == this) {
-					if (resource.isActive()) {
-						returned.add((FlexoFileResource) resource);
-					}
-				}
+	public List<FlexoFileResource<? extends FlexoResourceData>> getRelatedActiveResources() {
+		List<FlexoFileResource<? extends FlexoResourceData>> returned = new Vector<FlexoFileResource<? extends FlexoResourceData>>();
+		for (FlexoFileResource<? extends FlexoResourceData> resource : getRelatedResources()) {
+			if (resource.isActive()) {
+				returned.add(resource);
 			}
 		}
 		return returned;

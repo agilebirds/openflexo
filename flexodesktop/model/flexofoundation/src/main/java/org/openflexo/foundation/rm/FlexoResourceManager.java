@@ -87,19 +87,15 @@ public class FlexoResourceManager {
 			@Override
 			public void run() {
 				Thread myThread = Thread.currentThread();
-				FlexoFileResource<? extends FlexoResourceData> fileResource = null;
 				while (_clockThread == myThread && !_stop) {
 					// if (logger.isLoggable(Level.FINER))
 					// logger.finer("Checking resources for project " + _editor.getProject());
 					try {
 						List<FlexoFileResource<? extends FlexoResourceData>> updatedResources = new ArrayList<FlexoFileResource<? extends FlexoResourceData>>();
-						for (FlexoResource<? extends FlexoResourceData> resource : _editor.getProject().getResources().values()) {
-							if (resource instanceof FlexoFileResource) {
-								fileResource = (FlexoFileResource<? extends FlexoResourceData>) resource;
-								if (fileResource.hasMoreRecentThanExpectedDiskUpdate()) {
-									updatedResources.add(fileResource);
-									logger.info("File " + fileResource + " update detected on " + _clockThread.getName());
-								}
+						for (FlexoFileResource<? extends FlexoResourceData> fileResource : _editor.getProject().getFileResources()) {
+							if (fileResource.hasMoreRecentThanExpectedDiskUpdate()) {
+								updatedResources.add(fileResource);
+								logger.info("File " + fileResource + " update detected on " + _clockThread.getName());
 							}
 						}
 						if (updatedResources.size() > 0 && _resourceUpdateHandler != null) {

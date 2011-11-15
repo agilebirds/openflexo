@@ -20,6 +20,7 @@
 package org.openflexo.generator.utils;
 
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -76,11 +77,11 @@ public class WebServerResourcesGenerator extends MetaGenerator<FlexoModelObject,
 	@Override
 	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
 		Hashtable<FlexoWebServerFileResource, ResourceToCopyGenerator> generators = new Hashtable<FlexoWebServerFileResource, ResourceToCopyGenerator>();
-		Vector<FlexoWebServerFileResource> allWebResources = getProject().getResourcesOfClass(FlexoWebServerFileResource.class);
+		List<FlexoWebServerFileResource> allWebResources = getProject().getResourcesOfClass(FlexoWebServerFileResource.class);
 		resetSecondaryProgressWindow(allWebResources.size());
 		for (FlexoWebServerFileResource wsRes : allWebResources) {
 			ResourceToCopyGenerator generator = getGenerator(wsRes);
-			if ((wsRes.getFile() == null) || !wsRes.getFile().exists()) {
+			if (wsRes.getFile() == null || !wsRes.getFile().exists()) {
 				continue;
 			}
 			refreshSecondaryProgressWindow(FlexoLocalization.localizedForKey("generating") + " " + wsRes.getName(), false);

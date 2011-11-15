@@ -79,7 +79,7 @@ public class DMModule extends FlexoModule implements ExternalDMModule {
 		getDMController().loadRelativeWindows();
 		DMPreferences.init();
 		retain(getProject().getDataModel());
-		for (FlexoResource<? extends FlexoResourceData> r : getProject().getResources().values()) {
+		for (FlexoResource<? extends FlexoResourceData> r : getProject()) {
 			if (r.getResourceType() == ResourceType.EOMODEL) {
 				retainResource(r);
 			}

@@ -27,7 +27,7 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -168,7 +168,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 			aProject.removeResourceWithKey(getResourceIdentifier());
 			aProject.setFlexoResource(this);
 			aProject.registerResource(this);
-			for (FlexoResource res : aProject.getResources().values()) {
+			for (FlexoResource<? extends FlexoResourceData> res : aProject) {
 				res.getDependantResources().update();
 				res.getAlteredResources().update();
 				res.getSynchronizedResources().update();
@@ -238,7 +238,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 	}
 
 	public FlexoProject loadProject(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws RuntimeException,
-	ProjectLoadingCancelledException {
+			ProjectLoadingCancelledException {
 		FlexoRMResource rmRes = null;
 		try {
 			isInitializingProject = true;
@@ -307,20 +307,18 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 			}
 			updateTS(tempProject, project);
 			// Remove all storage resources with non-existant files
-			Vector<FlexoStorageResource> resourcesToRemove = new Vector<FlexoStorageResource>();
-			for (FlexoResource resource : project.getResources().values()) {
-				if (resource instanceof FlexoStorageResource) {
-					if (((FlexoStorageResource) resource).getFile() == null || !((FlexoStorageResource) resource).getFile().exists()
-							// Petite bidouille en attendant une meilleure gestion de ce truc
-							&& !resource.getResourceIdentifier().equals("POPUP_COMPONENT.WDLDateAssistant")) {
-						((FlexoStorageResource) resource).recoverFile();// Attempt to fix problems
-						if (((FlexoStorageResource) resource).getFile() == null || !((FlexoStorageResource) resource).getFile().exists()) {
-							resourcesToRemove.add((FlexoStorageResource) resource);
-						}
+			List<FlexoStorageResource<? extends StorageResourceData>> resourcesToRemove = new ArrayList<FlexoStorageResource<? extends StorageResourceData>>();
+			for (FlexoStorageResource<? extends StorageResourceData> resource : project.getStorageResources()) {
+				if (resource.getFile() == null || !resource.getFile().exists()
+				// Petite bidouille en attendant une meilleure gestion de ce truc
+						&& !resource.getResourceIdentifier().equals("POPUP_COMPONENT.WDLDateAssistant")) {
+					resource.recoverFile();// Attempt to fix problems
+					if (resource.getFile() == null || !resource.getFile().exists()) {
+						resourcesToRemove.add(resource);
 					}
 				}
 			}
-			for (FlexoResource resource : resourcesToRemove) {
+			for (FlexoStorageResource<? extends StorageResourceData> resource : resourcesToRemove) {
 				logger.warning("Delete resource " + resource + " which has a non-existent file");
 				resource.delete();
 			}
@@ -357,10 +355,9 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 
 			// Look-up observed object for screenshot resources
 			// (pas terrible comme technique, mais on verra plus tard)
-			for (FlexoResource<? extends FlexoResourceData> resource : new ArrayList<FlexoResource<? extends FlexoResourceData>>(project
-					.getResources().values())) {
-				if (resource instanceof ScreenshotResource && ((ScreenshotResource) resource).getSourceReference() == null) {
-					((ScreenshotResource) resource).delete();
+			for (ScreenshotResource resource : project.getResourcesOfClass(ScreenshotResource.class)) {
+				if (resource.getSourceReference() == null) {
+					resource.delete();
 				}
 			}
 
@@ -572,10 +569,8 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Starting conversion of screenshot resources name.");
 		}
-		for (FlexoResource<? extends FlexoResourceData> resource : _resourceData.getResources().values()) {
-			if (resource instanceof ScreenshotResource) {
-				((ScreenshotResource) resource).getName();
-			}
+		for (ScreenshotResource resource : _resourceData.getResourcesOfClass(ScreenshotResource.class)) {
+			resource.getName();
 		}
 		try {
 			this.saveResourceDataWithVersion(new FlexoVersion("3.2.0"));

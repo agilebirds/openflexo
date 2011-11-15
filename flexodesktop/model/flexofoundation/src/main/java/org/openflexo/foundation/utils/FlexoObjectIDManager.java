@@ -20,14 +20,16 @@
 package org.openflexo.foundation.utils;
 
 import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoStorageResource;
+import org.openflexo.foundation.rm.StorageResourceData;
 import org.openflexo.logging.FlexoLogger;
 
 /**
@@ -39,8 +41,8 @@ public class FlexoObjectIDManager {
 
 	private static final Logger logger = FlexoLogger.getLogger(FlexoObjectIDManager.class.getPackage().toString());
 
-	private Vector<FlexoModelObject> badObjects;
-	private Hashtable<Long, FlexoModelObject> used;
+	private List<FlexoModelObject> badObjects;
+	private Map<Long, FlexoModelObject> used;
 
 	/**
 	 * 
@@ -49,12 +51,10 @@ public class FlexoObjectIDManager {
 		this.project = project;
 	}
 
-	public Vector<FlexoModelObject> checkProject(boolean fixProblems) {
+	public List<FlexoModelObject> checkProject(boolean fixProblems) {
 		// First load all unloaded resources
-		for (FlexoResource resource : project.getResources().values()) {
-			if (resource instanceof FlexoStorageResource) {
-				((FlexoStorageResource) resource).getResourceData(); // no need to mark as modified .setIsModified();
-			}
+		for (FlexoStorageResource<? extends StorageResourceData> resource : project.getStorageResources()) {
+			resource.getResourceData();
 		}
 
 		// Iterate on all objects to validate

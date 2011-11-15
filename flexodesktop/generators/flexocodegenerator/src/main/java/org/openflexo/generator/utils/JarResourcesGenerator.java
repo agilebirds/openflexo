@@ -20,6 +20,7 @@
 package org.openflexo.generator.utils;
 
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -68,7 +69,7 @@ public class JarResourcesGenerator extends MetaGenerator<FlexoModelObject, CGRep
 	@Override
 	public void buildResourcesAndSetGenerators(CGRepository repository, Vector<CGRepositoryFileResource> resources) {
 
-		Vector<FlexoJarResource> allJars = getProject().getResourcesOfClass(FlexoJarResource.class);
+		List<FlexoJarResource> allJars = getProject().getResourcesOfClass(FlexoJarResource.class);
 		resetSecondaryProgressWindow(allJars.size());
 		for (FlexoJarResource jar : allJars) {
 			ResourceToCopyGenerator generator = getGenerator(jar);

@@ -20,6 +20,8 @@
 package org.openflexo.view.controller;
 
 import java.awt.GraphicsEnvironment;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,14 +60,10 @@ public abstract class InteractiveProjectLoadingHandler implements ProjectLoading
 	protected Vector<ResourceToConvert> searchResourcesToConvert(FlexoProject project) {
 		Vector<ResourceToConvert> resourcesToConvert = new Vector<ResourceToConvert>();
 
-		for (FlexoResource r : project.getResources().values()) {
-			if (r instanceof FlexoXMLStorageResource) {
-				FlexoXMLStorageResource resource = (FlexoXMLStorageResource) r;
-				if (!resource.getXmlVersion().equals(resource.latestVersion())) {
-					resourcesToConvert.add(new ResourceToConvert(resource));
-					logger.fine("Require conversion for " + resource + " from " + resource.getXmlVersion() + " to "
-							+ resource.latestVersion());
-				}
+		for (FlexoXMLStorageResource<? extends XMLStorageResourceData> resource : project.getXMLStorageResources()) {
+			if (!resource.getXmlVersion().equals(resource.latestVersion())) {
+				resourcesToConvert.add(new ResourceToConvert(resource));
+				logger.fine("Require conversion for " + resource + " from " + resource.getXmlVersion() + " to " + resource.latestVersion());
 			}
 		}
 
@@ -73,7 +71,7 @@ public abstract class InteractiveProjectLoadingHandler implements ProjectLoading
 	}
 
 	protected void performConversion(FlexoProject project, Vector<ResourceToConvert> resourcesToConvert, FlexoProgress progress) {
-		Vector<FlexoXMLStorageResource<XMLStorageResourceData>> resources = new Vector<FlexoXMLStorageResource<XMLStorageResourceData>>();
+		List<FlexoXMLStorageResource<? extends XMLStorageResourceData>> resources = new ArrayList<FlexoXMLStorageResource<? extends XMLStorageResourceData>>();
 		for (ResourceToConvert resourceToConvert : resourcesToConvert) {
 			resources.add(resourceToConvert.getResource());
 		}
@@ -98,10 +96,10 @@ public abstract class InteractiveProjectLoadingHandler implements ProjectLoading
 
 	@Override
 	public void notifySevereLoadingFailure(FlexoResource resource, Exception exception) {
-		if ((exception instanceof LoadXMLResourceException) && (resource instanceof FlexoRMResource)) {
+		if (exception instanceof LoadXMLResourceException && resource instanceof FlexoRMResource) {
 			FlexoRMResource r = (FlexoRMResource) resource;
 			LoadXMLResourceException e = (LoadXMLResourceException) exception;
-			if ((e.getExtendedMessage().indexOf("JDOMParseException") > -1) && !GraphicsEnvironment.isHeadless()) {
+			if (e.getExtendedMessage().indexOf("JDOMParseException") > -1 && !GraphicsEnvironment.isHeadless()) {
 				JOptionPane.showMessageDialog(
 						null,
 						"Could not load project: file '"
@@ -128,9 +126,9 @@ public abstract class InteractiveProjectLoadingHandler implements ProjectLoading
 	}
 
 	protected class ResourceToConvert extends TemporaryFlexoModelObject implements InspectableObject {
-		private final FlexoXMLStorageResource<XMLStorageResourceData> _resource;
+		private final FlexoXMLStorageResource<? extends XMLStorageResourceData> _resource;
 
-		ResourceToConvert(FlexoXMLStorageResource<XMLStorageResourceData> resource) {
+		ResourceToConvert(FlexoXMLStorageResource<? extends XMLStorageResourceData> resource) {
 			_resource = resource;
 		}
 
@@ -161,7 +159,7 @@ public abstract class InteractiveProjectLoadingHandler implements ProjectLoading
 			return null;
 		}
 
-		public FlexoXMLStorageResource<XMLStorageResourceData> getResource() {
+		public FlexoXMLStorageResource<? extends XMLStorageResourceData> getResource() {
 			return _resource;
 		}
 

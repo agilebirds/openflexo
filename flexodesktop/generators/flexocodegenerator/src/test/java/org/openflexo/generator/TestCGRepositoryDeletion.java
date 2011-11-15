@@ -45,10 +45,12 @@ import org.openflexo.foundation.ie.widget.IEHTMLTableWidget;
 import org.openflexo.foundation.ie.widget.IESequenceTab;
 import org.openflexo.foundation.rm.FlexoMemoryResource;
 import org.openflexo.foundation.rm.FlexoResource;
+import org.openflexo.foundation.rm.FlexoResourceData;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.rm.FlexoResourceManager.BackwardSynchronizationHook;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.ResourceType;
+import org.openflexo.foundation.rm.StorageResourceData;
 import org.openflexo.foundation.wkf.WKFElementType;
 import org.openflexo.foundation.wkf.action.AddSubProcess;
 import org.openflexo.foundation.wkf.action.DropWKFElement;
@@ -163,7 +165,7 @@ public class TestCGRepositoryDeletion extends CGTestCase {
 		assertNotNull(_executionModelResource = _project.getEOModelResource(FlexoExecutionModelRepository.EXECUTION_MODEL_DIR.getName()));
 		assertNotNull(_eoPrototypesResource = _project.getEOModelResource(EOPrototypeRepository.EOPROTOTYPE_REPOSITORY_DIR.getName()));
 
-		for (FlexoResource resource : _project.getResources().values()) {
+		for (FlexoResource<? extends FlexoResourceData> resource : _project) {
 			if (resource != _rmResource && !(resource instanceof FlexoMemoryResource)) {
 				assertSynchonized(resource, _rmResource);
 			}
@@ -206,7 +208,7 @@ public class TestCGRepositoryDeletion extends CGTestCase {
 		assertSynchonized(_subProcessResource, _wkfResource);
 		assertDepends(_subProcessResource, _dmResource);
 		assertNotDepends(_subProcessResource, _clResource);
-		for (FlexoResource resource : _project.getResources().values()) {
+		for (FlexoResource<? extends FlexoResourceData> resource : _project) {
 			if (resource == _rmResource) {
 				assertModified(_rmResource);
 			} else if (resource == _dmResource) {
@@ -491,10 +493,8 @@ public class TestCGRepositoryDeletion extends CGTestCase {
 		logger.info("Done. Now check that no other back-synchro");
 		// Let eventual dependancies back-synchronize together
 		reloadProject(true); // This time, all must be not modified
-		for (FlexoResource resource : _project.getResources().values()) {
-			if (resource instanceof FlexoStorageResource) {
-				assertNotModified((FlexoStorageResource) resource);
-			}
+		for (FlexoStorageResource<? extends StorageResourceData> resource : _project.getStorageResources()) {
+			assertNotModified(resource);
 		}
 		File directory = new File(_projectDirectory.getParentFile(), "GeneratedCodeFor" + _project.getProjectName());
 		directory.mkdirs();
@@ -753,7 +753,7 @@ public class TestCGRepositoryDeletion extends CGTestCase {
 			}
 
 			protected boolean backSynchroConcerns(FlexoResource aResource1, FlexoResource aResource2) {
-				return ((resource1 == aResource1) && (resource2 == aResource2));
+				return resource1 == aResource1 && resource2 == aResource2;
 			}
 		}
 
