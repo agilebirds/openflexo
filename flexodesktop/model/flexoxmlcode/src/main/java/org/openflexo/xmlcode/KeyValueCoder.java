@@ -224,7 +224,7 @@ public class KeyValueCoder {
 	 *                if an error occurs during accessor invocation
 	 */
 	public static void setValueForKey(Object object, String textValue, String propertyName) throws InvalidXMLDataException,
-	InvalidObjectSpecificationException, AccessorInvocationException {
+			InvalidObjectSpecificationException, AccessorInvocationException {
 
 		setValueForKey(object, textValue, (SingleKeyValueProperty) getKeyValuePropertyFromName(object.getClass(), propertyName, true),
 				StringEncoder.getDefaultInstance());
@@ -332,7 +332,7 @@ public class KeyValueCoder {
 	 *                if an error occurs during accessor invocation
 	 */
 	public static void setBooleanValueForKey(Object object, boolean value, String propertyName) throws InvalidXMLDataException,
-	InvalidObjectSpecificationException, AccessorInvocationException {
+			InvalidObjectSpecificationException, AccessorInvocationException {
 
 		setBooleanValueForKey(object, value, (SingleKeyValueProperty) getKeyValuePropertyFromName(object.getClass(), propertyName, true));
 
@@ -410,7 +410,7 @@ public class KeyValueCoder {
 	 *                if an error occurs during accessor invocation
 	 */
 	public static void setCharacterValueForKey(Object object, char value, String propertyName) throws InvalidXMLDataException,
-	InvalidObjectSpecificationException, AccessorInvocationException {
+			InvalidObjectSpecificationException, AccessorInvocationException {
 
 		setCharacterValueForKey(object, value, (SingleKeyValueProperty) getKeyValuePropertyFromName(object.getClass(), propertyName, true));
 
@@ -491,7 +491,7 @@ public class KeyValueCoder {
 	 *                if an error occurs during accessor invocation
 	 */
 	public static void setByteValueForKey(Object object, byte value, String propertyName) throws InvalidXMLDataException,
-	InvalidObjectSpecificationException, AccessorInvocationException {
+			InvalidObjectSpecificationException, AccessorInvocationException {
 
 		setByteValueForKey(object, value, (SingleKeyValueProperty) getKeyValuePropertyFromName(object.getClass(), propertyName, true));
 
@@ -571,7 +571,7 @@ public class KeyValueCoder {
 	 *                if an error occurs during accessor invocation
 	 */
 	public static void setShortValueForKey(Object object, short value, String propertyName) throws InvalidXMLDataException,
-	InvalidObjectSpecificationException, AccessorInvocationException {
+			InvalidObjectSpecificationException, AccessorInvocationException {
 
 		setShortValueForKey(object, value, (SingleKeyValueProperty) getKeyValuePropertyFromName(object.getClass(), propertyName, true));
 
@@ -652,7 +652,7 @@ public class KeyValueCoder {
 	 *                if an error occurs during accessor invocation
 	 */
 	public static void setIntegerValueForKey(Object object, int value, String propertyName) throws InvalidXMLDataException,
-	InvalidObjectSpecificationException, AccessorInvocationException {
+			InvalidObjectSpecificationException, AccessorInvocationException {
 
 		setIntegerValueForKey(object, value, (SingleKeyValueProperty) getKeyValuePropertyFromName(object.getClass(), propertyName, true));
 
@@ -733,7 +733,7 @@ public class KeyValueCoder {
 	 *                if an error occurs during accessor invocation
 	 */
 	public static void setLongValueForKey(Object object, long value, String propertyName) throws InvalidXMLDataException,
-	InvalidObjectSpecificationException, AccessorInvocationException {
+			InvalidObjectSpecificationException, AccessorInvocationException {
 
 		setLongValueForKey(object, value, (SingleKeyValueProperty) getKeyValuePropertyFromName(object.getClass(), propertyName, true));
 
@@ -814,7 +814,7 @@ public class KeyValueCoder {
 	 *                if an error occurs during accessor invocation
 	 */
 	public static void setFloatValueForKey(Object object, float value, String propertyName) throws InvalidXMLDataException,
-	InvalidObjectSpecificationException, AccessorInvocationException {
+			InvalidObjectSpecificationException, AccessorInvocationException {
 
 		setFloatValueForKey(object, value, (SingleKeyValueProperty) getKeyValuePropertyFromName(object.getClass(), propertyName, true));
 
@@ -895,7 +895,7 @@ public class KeyValueCoder {
 	 *                if an error occurs during accessor invocation
 	 */
 	public static void setDoubleValueForKey(Object object, double value, String propertyName) throws InvalidXMLDataException,
-	InvalidObjectSpecificationException, AccessorInvocationException {
+			InvalidObjectSpecificationException, AccessorInvocationException {
 
 		setDoubleValueForKey(object, value, (SingleKeyValueProperty) getKeyValuePropertyFromName(object.getClass(), propertyName, true));
 
@@ -1001,7 +1001,7 @@ public class KeyValueCoder {
 	 *                if an error occurs during accessor invocation
 	 */
 	public static void setObjectForKey(Object object, Object objectValue, String propertyName) throws InvalidXMLDataException,
-	InvalidObjectSpecificationException, AccessorInvocationException {
+			InvalidObjectSpecificationException, AccessorInvocationException {
 
 		setObjectForKey(object, objectValue, getKeyValuePropertyFromName(object.getClass(), propertyName, true));
 
@@ -1022,8 +1022,8 @@ public class KeyValueCoder {
 	 * @exception InvalidObjectSpecificationException
 	 *                if an error occurs
 	 */
-	public static void setVectorForKey(Object object, List values, VectorKeyValueProperty keyValueProperty)
-			throws InvalidXMLDataException, InvalidObjectSpecificationException, AccessorInvocationException {
+	public static void setVectorForKey(Object object, List values, VectorKeyValueProperty keyValueProperty) throws InvalidXMLDataException,
+			InvalidObjectSpecificationException, AccessorInvocationException {
 
 		// Debugging.debug ("setValuesListForKey() called with 'Vector'"
 		// +values.toString()+" for keyValueProperty '"
@@ -1060,7 +1060,7 @@ public class KeyValueCoder {
 	 *                if an error occurs during accessor invocation
 	 */
 	public static void setArrayForKey(Object object, List values, ArrayKeyValueProperty keyValueProperty) throws InvalidXMLDataException,
-	InvalidObjectSpecificationException, AccessorInvocationException {
+			InvalidObjectSpecificationException, AccessorInvocationException {
 
 		// Debugging.debug ("setValuesListForKey() called with 'Vector'"
 		// +values.toString()+" for keyValueProperty '"
@@ -1106,7 +1106,7 @@ public class KeyValueCoder {
 
 		hashtableObject = keyValueProperty.newInstance();
 		setObjectForKey(object, hashtableObject, keyValueProperty);
-		for (Entry e : (Set<Entry>) hashtableObject.entrySet()) {
+		for (Entry e : (Set<Entry>) values.entrySet()) {
 			keyValueProperty.setObjectValueForKey(e.getValue(), e.getKey(), object);
 		}
 
@@ -1130,7 +1130,7 @@ public class KeyValueCoder {
 	 *                if an error occurs during accessor invocation
 	 */
 	public static void setVectorForKey(Object object, List values, String propertyName) throws InvalidXMLDataException,
-	InvalidObjectSpecificationException, AccessorInvocationException {
+			InvalidObjectSpecificationException, AccessorInvocationException {
 		setVectorForKey(object, values, (VectorKeyValueProperty) getKeyValuePropertyFromName(object.getClass(), propertyName, true));
 	}
 
@@ -1152,7 +1152,7 @@ public class KeyValueCoder {
 	 *                if an error occurs during accessor invocation
 	 */
 	public static void setHashtableForKey(Object object, Map values, String propertyName) throws InvalidXMLDataException,
-	InvalidObjectSpecificationException, AccessorInvocationException {
+			InvalidObjectSpecificationException, AccessorInvocationException {
 		setHashtableForKey(object, values, (HashtableKeyValueProperty) getKeyValuePropertyFromName(object.getClass(), propertyName, true));
 	}
 

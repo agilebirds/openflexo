@@ -27,6 +27,9 @@ import java.io.OutputStream;
 import java.io.StringWriter;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Vector;
 import java.util.regex.Pattern;
@@ -1153,8 +1156,7 @@ public class XMLCoder {
 				orderedElementReference = orderedElementReferenceList.initEntry();
 			}
 			Element returned = buildNewElementFrom(anObject, aProperty.getXmlTags(), aDocument);
-			if ((xmlMapping.serializationMode == XMLMapping.PSEUDO_TREE)
-					|| (xmlMapping.serializationMode == XMLMapping.ORDERED_PSEUDO_TREE)) {
+			if (xmlMapping.serializationMode == XMLMapping.PSEUDO_TREE || xmlMapping.serializationMode == XMLMapping.ORDERED_PSEUDO_TREE) {
 				// In those cases, try to handle references
 				if (!(anObject instanceof XMLSerializable)) {
 					throw new InvalidObjectSpecificationException("This object is not XML-serializable, object=" + anObject);
@@ -1229,13 +1231,13 @@ public class XMLCoder {
 		// NB: the best one is the more specialized.
 
 		Class searchedClass = anObject.getClass();
-		while ((searchedClass != null) && (xmlMapping.entityWithClassName(searchedClass.getName()) == null)) {
+		while (searchedClass != null && xmlMapping.entityWithClassName(searchedClass.getName()) == null) {
 			searchedClass = searchedClass.getSuperclass();
 		}
 
 		if (searchedClass != null) {
 			modelEntity = xmlMapping.entityWithClassName(searchedClass.getName());
-			if ((modelEntity != null) && (modelEntity.isAbstract())) {
+			if (modelEntity != null && modelEntity.isAbstract()) {
 				throw new InvalidModelException("Entity matching '" + anObject.getClass().getName() + "' (" + modelEntity.getName()
 						+ ") is declared to be abstract in this model and could subsequently not be serialized.");
 			}
@@ -1266,7 +1268,7 @@ public class XMLCoder {
 			for (int j = 0; j < someXmlTags.length; j++) {
 				tag = someXmlTags[j];
 				for (int i = 0; i < entityTags.length; i++) {
-					if ((tag.equals(entityTags[i])) && (xmlTag == null)) {
+					if (tag.equals(entityTags[i]) && xmlTag == null) {
 						xmlTag = tag;
 						break;
 						// Debugging.debug ("Look up with tag "+xmlTag);
@@ -1292,7 +1294,7 @@ public class XMLCoder {
 
 		if (modelEntity == null) {
 			throw new InvalidModelException("Tag matching '" + anObject.getClass().getName() + "' not found in model");
-		} else if ((modelEntity != xmlMapping.entityWithXMLTag(xmlTag)) && (!xmlTagIsCompound)) {
+		} else if (modelEntity != xmlMapping.entityWithXMLTag(xmlTag) && !xmlTagIsCompound) {
 			// System.out.println ("Mapping: "+xmlMapping);
 			// System.out.println ("modelEntity: "+modelEntity);
 			// System.out.println ("xmlMapping.entityWithXMLTag(xmlTag): "+xmlMapping.entityWithXMLTag(xmlTag));
@@ -1450,10 +1452,10 @@ public class XMLCoder {
 
 				else if (keyValueProperty instanceof VectorKeyValueProperty) {
 
-					Vector values = KeyValueDecoder.vectorForKey(anObject, (VectorKeyValueProperty) keyValueProperty);
+					List<?> values = KeyValueDecoder.vectorForKey(anObject, (VectorKeyValueProperty) keyValueProperty);
 					if (values != null) {
-						for (Enumeration e = values.elements(); e.hasMoreElements();) {
-							returnedElement.addContent(buildNewElementFrom(e.nextElement(), aDocument, modelProperty));
+						for (Object o : values) {
+							returnedElement.addContent(buildNewElementFrom(o, aDocument, modelProperty));
 						}
 					}
 				}
@@ -1471,16 +1473,16 @@ public class XMLCoder {
 				else if (keyValueProperty instanceof PropertiesKeyValueProperty) {
 
 					if (modelProperty.isProperties()) {
-						Hashtable values = KeyValueDecoder.hashtableForKey(anObject, (PropertiesKeyValueProperty) keyValueProperty);
+						Map<?, ?> values = KeyValueDecoder.hashtableForKey(anObject, (PropertiesKeyValueProperty) keyValueProperty);
 						if (values != null) {
 							Element propertiesElement = new Element(modelProperty.getDefaultXmlTag());
-							for (Enumeration e = values.keys(); e.hasMoreElements();) {
-								Object keyAsObject = e.nextElement();
+							for (Entry<?, ?> e : values.entrySet()) {
+								Object keyAsObject = e.getKey();
 								if (!(keyAsObject instanceof String)) {
 									throw new InvalidDataException("Properties keys must be only String values");
 								}
 								String key = (String) keyAsObject;
-								Object value = values.get(key);
+								Object value = e.getValue();
 
 								Element valueElement = new Element(key);
 
@@ -1506,16 +1508,16 @@ public class XMLCoder {
 						}
 					} else if (modelProperty.isUnmappedAttributes()) {
 
-						Hashtable values = KeyValueDecoder.hashtableForKey(anObject, (HashtableKeyValueProperty) keyValueProperty);
+						Map<?, ?> values = KeyValueDecoder.hashtableForKey(anObject, (HashtableKeyValueProperty) keyValueProperty);
 						if (values != null) {
-							for (Enumeration e = values.keys(); e.hasMoreElements();) {
-								Object keyAsObject = e.nextElement();
+							for (Entry<?, ?> e : values.entrySet()) {
+								Object keyAsObject = e.getKey();
 								if (!(keyAsObject instanceof String)) {
 									throw new InvalidDataException("Properties keys must be only String values");
 								}
 								String key = (String) keyAsObject;
 								String valueAsString;
-								Object value = values.get(key);
+								Object value = e.getValue();
 								if (value instanceof String) {
 									valueAsString = (String) value;
 								} else {
@@ -1530,12 +1532,12 @@ public class XMLCoder {
 
 				else if (keyValueProperty instanceof HashtableKeyValueProperty) {
 
-					Hashtable values = KeyValueDecoder.hashtableForKey(anObject, (HashtableKeyValueProperty) keyValueProperty);
+					Map<?, ?> values = KeyValueDecoder.hashtableForKey(anObject, (HashtableKeyValueProperty) keyValueProperty);
 					if (values != null) {
 						if (modelProperty.getKeyToUse() == null) {
-							for (Enumeration e = values.keys(); e.hasMoreElements();) {
-								Object key = e.nextElement();
-								Object value = values.get(key);
+							for (Entry<?, ?> e : values.entrySet()) {
+								Object key = e.getKey();
+								Object value = e.getValue();
 								Element valueElement = buildNewElementFrom(value, aDocument, modelProperty);
 								if (key instanceof String) {
 									valueElement.setAttribute(XMLMapping.keyLabel, (String) key);
@@ -1548,9 +1550,9 @@ public class XMLCoder {
 								returnedElement.addContent(valueElement);
 							}
 						} else {
-							for (Enumeration e = values.keys(); e.hasMoreElements();) {
-								Object key = e.nextElement();
-								Object value = values.get(key);
+							for (Entry<?, ?> e : values.entrySet()) {
+								Object key = e.getKey();
+								Object value = e.getValue();
 								Object expectedKey = KeyValueDecoder.objectForKey(value, modelProperty.getKeyToUse());
 								if (key.equals(expectedKey)) {
 									// This is the good key, nice !
@@ -1781,7 +1783,7 @@ public class XMLCoder {
 			int i = 0;
 			while (current != null) {
 				OrderedElementReference next = current.next;
-				if ((next == null) || (!ref.element.isAncestor(next.element))) {
+				if (next == null || !ref.element.isAncestor(next.element)) {
 					return current;
 				}
 				current = next;
@@ -1838,7 +1840,7 @@ public class XMLCoder {
 			protected int index;
 
 			protected boolean isPrimary() {
-				return (objectReference.isFullyDescribed(element));
+				return objectReference.isFullyDescribed(element);
 			}
 
 		}
@@ -1890,7 +1892,7 @@ public class XMLCoder {
 
 		protected void changeId(int newId) {
 			// System.out.println("changeId() to "+newId+" for "+primaryElement.element);
-			if ((primaryElement != null) && (primaryElement.element != null)) {
+			if (primaryElement != null && primaryElement.element != null) {
 				changeIdForElement(newId, primaryElement.element);
 			}
 			for (Enumeration en = referenceElements.elements(); en.hasMoreElements();) {
@@ -1920,7 +1922,7 @@ public class XMLCoder {
 		}
 
 		protected boolean isFullyDescribed(Element element) {
-			return (element.getAttribute("id") != null);
+			return element.getAttribute("id") != null;
 		}
 
 		private boolean done = false;
@@ -2023,8 +2025,7 @@ public class XMLCoder {
 	private void postProcess(Element rootElement) {
 		if (xmlMapping.serializationMode == XMLMapping.DEEP_FIRST) {
 			return;
-		} else if ((xmlMapping.serializationMode == XMLMapping.PSEUDO_TREE)
-				|| (xmlMapping.serializationMode == XMLMapping.ORDERED_PSEUDO_TREE)) {
+		} else if (xmlMapping.serializationMode == XMLMapping.PSEUDO_TREE || xmlMapping.serializationMode == XMLMapping.ORDERED_PSEUDO_TREE) {
 
 			int requiredSwaps = objectReferences.size();
 			while (requiredSwaps > 0) {
@@ -2043,7 +2044,7 @@ public class XMLCoder {
 				}
 			}
 
-			if ((xmlMapping.serializationMode == XMLMapping.ORDERED_PSEUDO_TREE) && (!implementsCustomIdMappingScheme())) {
+			if (xmlMapping.serializationMode == XMLMapping.ORDERED_PSEUDO_TREE && !implementsCustomIdMappingScheme()) {
 				int i = 0;
 				int newIndex = 1;
 				Enumeration en = orderedElementReferenceList.elements();
