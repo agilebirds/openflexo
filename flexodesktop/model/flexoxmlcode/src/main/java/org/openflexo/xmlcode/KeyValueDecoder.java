@@ -20,8 +20,8 @@
 
 package org.openflexo.xmlcode;
 
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -794,10 +794,10 @@ public class KeyValueDecoder {
 	 * @exception InvalidObjectSpecificationException
 	 *                if an error occurs (eg. if corresponding keyValueProperty type is not a {@link java.util.Vector} nor a subclass)
 	 */
-	public static Vector vectorForKey(Object object, VectorKeyValueProperty keyValueProperty) throws InvalidObjectSpecificationException {
+	public static List<?> vectorForKey(Object object, VectorKeyValueProperty keyValueProperty) throws InvalidObjectSpecificationException {
 
 		try {
-			return (Vector) objectForKey(object, keyValueProperty);
+			return (List<?>) objectForKey(object, keyValueProperty);
 		} catch (ClassCastException e) {
 			throw new InvalidObjectSpecificationException("Class " + object.getClass().getName() + ": keyValueProperty "
 					+ keyValueProperty.getName() + " class must inherits from java.lang.Vector.");
@@ -817,7 +817,6 @@ public class KeyValueDecoder {
 	 *                if an error occurs (eg. if corresponding keyValueProperty type is not a {@link java.util.Vector} nor a subclass)
 	 */
 	public static Object[] arrayForKey(Object object, ArrayKeyValueProperty keyValueProperty) throws InvalidObjectSpecificationException {
-
 		try {
 			return (Object[]) objectForKey(object, keyValueProperty);
 		} catch (ClassCastException e) {
@@ -839,10 +838,8 @@ public class KeyValueDecoder {
 	 * @exception InvalidObjectSpecificationException
 	 *                if an error occurs (eg. if corresponding keyValueProperty type is not a {@link java.util.Vector} nor a subclass)
 	 */
-	public static Vector vectorForKey(Object object, String propertyName) throws InvalidObjectSpecificationException {
-
+	public static List<?> vectorForKey(Object object, String propertyName) throws InvalidObjectSpecificationException {
 		return vectorForKey(object, (VectorKeyValueProperty) getKeyValuePropertyFromName(object, propertyName));
-
 	}
 
 	/**
@@ -858,11 +855,10 @@ public class KeyValueDecoder {
 	 * @exception InvalidObjectSpecificationException
 	 *                if an error occurs (eg. if corresponding keyValueProperty type is not a {@link java.util.Hashtable} nor a subclass)
 	 */
-	public static Hashtable hashtableForKey(Object object, HashtableKeyValueProperty keyValueProperty)
+	public static Map<?, ?> hashtableForKey(Object object, HashtableKeyValueProperty keyValueProperty)
 			throws InvalidObjectSpecificationException {
-
 		try {
-			return (Hashtable) objectForKey(object, keyValueProperty);
+			return (Map<?, ?>) objectForKey(object, keyValueProperty);
 		} catch (ClassCastException e) {
 			throw new InvalidObjectSpecificationException("Class " + object.getClass().getName() + ": keyValueProperty "
 					+ keyValueProperty.getName() + " class must inherits from java.lang.Hashtable.");
@@ -882,10 +878,8 @@ public class KeyValueDecoder {
 	 * @exception InvalidObjectSpecificationException
 	 *                if an error occurs (eg. if corresponding keyValueProperty type is not a {@link java.util.Hashtable} nor a subclass)
 	 */
-	public static Hashtable hashtableForKey(Object object, String propertyName) throws InvalidObjectSpecificationException {
-
+	public static Map<?, ?> hashtableForKey(Object object, String propertyName) throws InvalidObjectSpecificationException {
 		return hashtableForKey(object, (HashtableKeyValueProperty) getKeyValuePropertyFromName(object, propertyName));
-
 	}
 
 }

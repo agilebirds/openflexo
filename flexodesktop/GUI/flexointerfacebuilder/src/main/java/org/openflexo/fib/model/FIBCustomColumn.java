@@ -21,6 +21,7 @@ package org.openflexo.fib.model;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -251,6 +252,12 @@ public class FIBCustomColumn extends FIBTableColumn {
 			}
 			return null;
 		}
+		
+		@Override
+		public List<? extends FIBModelObject> getEmbeddedObjects() {
+			return null;
+		}
+
 	}
 
 	@Override

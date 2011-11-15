@@ -294,7 +294,7 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 			logger.fine("createNewDMModel(), project=" + project);
 		}
 		DMModel newDMModel = new DMModel(project);
-		project._buildingDataModel = newDMModel;
+		project.setBuildingDataModel(newDMModel);
 
 		File dmFile = ProjectRestructuration.getExpectedDataModelFile(project, project.getProjectName());
 		FlexoProjectFile dataModelFile = new FlexoProjectFile(dmFile, project);

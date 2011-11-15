@@ -45,9 +45,11 @@ import org.openflexo.foundation.ie.widget.IESequenceTab;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoMemoryResource;
 import org.openflexo.foundation.rm.FlexoResource;
+import org.openflexo.foundation.rm.FlexoResourceData;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.ResourceType;
+import org.openflexo.foundation.rm.StorageResourceData;
 import org.openflexo.foundation.rm.cg.GenerationStatus;
 import org.openflexo.foundation.wkf.WKFElementType;
 import org.openflexo.foundation.wkf.action.AddSubProcess;
@@ -121,7 +123,7 @@ public class TestCG2 extends CGTestCase {
 		assertNotNull(_executionModelResource = _project.getEOModelResource(FlexoExecutionModelRepository.EXECUTION_MODEL_DIR.getName()));
 		assertNotNull(_eoPrototypesResource = _project.getEOModelResource(EOPrototypeRepository.EOPROTOTYPE_REPOSITORY_DIR.getName()));
 
-		for (FlexoResource resource : _project.getResources().values()) {
+		for (FlexoResource<? extends FlexoResourceData> resource : _project) {
 			if (resource != _rmResource && !(resource instanceof FlexoMemoryResource)) {
 				assertSynchonized(resource, _rmResource);
 			}
@@ -397,10 +399,8 @@ public class TestCG2 extends CGTestCase {
 		logger.info("Done. Now check that no other back-synchro");
 		// Let eventual dependancies back-synchronize together
 		reloadProject(true); // This time, all must be not modified
-		for (FlexoResource resource : _project.getResources().values()) {
-			if (resource instanceof FlexoStorageResource) {
-				assertNotModified((FlexoStorageResource) resource);
-			}
+		for (FlexoStorageResource<? extends StorageResourceData> resource : _project.getStorageResources()) {
+			assertNotModified(resource);
 		}
 		File directory = new File(_projectDirectory.getParentFile(), "GeneratedCodeFor" + _project.getProjectName());
 		directory.mkdirs();

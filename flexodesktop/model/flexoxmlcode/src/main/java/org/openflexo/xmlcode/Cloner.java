@@ -23,6 +23,9 @@ package org.openflexo.xmlcode;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Vector;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -293,7 +296,7 @@ public class Cloner {
 		// NB: the best one is the more specialized.
 
 		Class searchedClass = anObject.getClass();
-		while ((searchedClass != null) && (xmlMapping.entityWithClassName(searchedClass.getName()) == null)) {
+		while (searchedClass != null && xmlMapping.entityWithClassName(searchedClass.getName()) == null) {
 			searchedClass = searchedClass.getSuperclass();
 		}
 
@@ -430,7 +433,7 @@ public class Cloner {
 				}
 			} else {
 				Object newValue = KeyValueDecoder.objectForKey(clonedObject, singleKeyValueProperty);
-				if ((isCloneable) && (newValue != null)) {
+				if (isCloneable && newValue != null) {
 					newValue = cloneObject(newValue);
 				}
 				if (newValue != null) {
@@ -442,16 +445,14 @@ public class Cloner {
 		else if (keyValueProperty instanceof VectorKeyValueProperty) {
 			VectorKeyValueProperty vectorKeyValueProperty = (VectorKeyValueProperty) keyValueProperty;
 
-			Vector values = KeyValueDecoder.vectorForKey(clonedObject, (VectorKeyValueProperty) keyValueProperty);
+			List<?> values = KeyValueDecoder.vectorForKey(clonedObject, (VectorKeyValueProperty) keyValueProperty);
 			if (values != null) {
-				Vector<Object> newVector = new Vector<Object>();
-				for (Enumeration e = values.elements(); e.hasMoreElements();) {
-					Object temp = e.nextElement();
-
-					if ((isCloneable) && (temp != null)) {
-						temp = cloneObject(temp);
+				List<Object> newVector = new Vector<Object>();
+				for (Object o : values) {
+					if (isCloneable && o != null) {
+						o = cloneObject(o);
 					}
-					newVector.add(temp);
+					newVector.add(o);
 				}
 				KeyValueCoder.setVectorForKey(newObject, newVector, vectorKeyValueProperty);
 			}
@@ -463,10 +464,10 @@ public class Cloner {
 
 			Object[] values = KeyValueDecoder.arrayForKey(clonedObject, arrayKeyValueProperty);
 			if (values != null) {
-				Vector<Object> newVector = new Vector<Object>();
+				List<Object> newVector = new Vector<Object>();
 				for (int i = 0; i < values.length; i++) {
 					Object temp = values[i];
-					if ((isCloneable) && (temp != null)) {
+					if (isCloneable && temp != null) {
 						temp = cloneObject(temp);
 					}
 					newVector.add(temp);
@@ -478,20 +479,19 @@ public class Cloner {
 		else if (keyValueProperty instanceof HashtableKeyValueProperty) {
 
 			HashtableKeyValueProperty hashtableKeyValueProperty = (HashtableKeyValueProperty) keyValueProperty;
-
-			Hashtable values = KeyValueDecoder.hashtableForKey(clonedObject, hashtableKeyValueProperty);
+			Map<?, ?> values = KeyValueDecoder.hashtableForKey(clonedObject, hashtableKeyValueProperty);
 			if (values != null) {
-				Hashtable<Object, Object> newHashtable = new Hashtable<Object, Object>();
-				for (Enumeration e = values.keys(); e.hasMoreElements();) {
-					Object key = e.nextElement();
-					Object newValue = values.get(key);
+				Map<Object, Object> newHashtable = new Hashtable<Object, Object>();
+				for (Entry<?, ?> e : values.entrySet()) {
+					Object key = e.getKey();
+					Object newValue = e.getValue();
 					Object newKey;
-					if ((key instanceof XMLSerializable) && (isCloneable) && (key != null)) {
+					if (key instanceof XMLSerializable && isCloneable && key != null) {
 						newKey = cloneObject(key);
 					} else {
 						newKey = key;
 					}
-					if ((isCloneable) && (newValue != null)) {
+					if (isCloneable && newValue != null) {
 						newValue = cloneObject(newValue);
 					}
 					newHashtable.put(newKey, newValue);

@@ -72,16 +72,6 @@ public class SellReport implements XMLSerializable {
 		vendor = v;
 	}
 
-	public void setCommandForKey(Object aCommand, Object aKey) {
-		System.out.println("setCommandForKey(Object,Object)");
-		commands.put(aKey, aCommand);
-	}
-
-	public void setCommandForKey(Command aCommand, Object aKey) {
-		System.out.println("setCommandForKey(Command,Object)");
-		commands.put(aKey, aCommand);
-	}
-
 	public void setCommandForKey(Command aCommand, CommandIdentifier aKey) {
 		System.out.println("setCommandForKey(Command,CommandIdentifier)");
 		commands.put(aKey, aCommand);

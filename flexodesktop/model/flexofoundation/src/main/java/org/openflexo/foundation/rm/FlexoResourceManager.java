@@ -22,7 +22,6 @@ package org.openflexo.foundation.rm;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -88,21 +87,15 @@ public class FlexoResourceManager {
 			@Override
 			public void run() {
 				Thread myThread = Thread.currentThread();
-				FlexoResource resource = null;
-				FlexoFileResource<? extends FlexoResourceData> fileResource = null;
 				while (_clockThread == myThread && !_stop) {
 					// if (logger.isLoggable(Level.FINER))
 					// logger.finer("Checking resources for project " + _editor.getProject());
 					try {
 						List<FlexoFileResource<? extends FlexoResourceData>> updatedResources = new ArrayList<FlexoFileResource<? extends FlexoResourceData>>();
-						for (Enumeration en = _editor.getProject().getResources().elements(); en.hasMoreElements();) {
-							resource = (FlexoResource) en.nextElement();
-							if (resource instanceof FlexoFileResource) {
-								fileResource = (FlexoFileResource<? extends FlexoResourceData>) resource;
-								if (fileResource.hasMoreRecentThanExpectedDiskUpdate()) {
-									updatedResources.add(fileResource);
-									logger.info("File " + fileResource + " update detected on " + _clockThread.getName());
-								}
+						for (FlexoFileResource<? extends FlexoResourceData> fileResource : _editor.getProject().getFileResources()) {
+							if (fileResource.hasMoreRecentThanExpectedDiskUpdate()) {
+								updatedResources.add(fileResource);
+								logger.info("File " + fileResource + " update detected on " + _clockThread.getName());
 							}
 						}
 						if (updatedResources.size() > 0 && _resourceUpdateHandler != null) {

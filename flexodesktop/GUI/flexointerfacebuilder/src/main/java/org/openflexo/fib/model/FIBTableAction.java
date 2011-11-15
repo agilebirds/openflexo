@@ -19,6 +19,7 @@
  */
 package org.openflexo.fib.model;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
@@ -104,6 +105,11 @@ public abstract class FIBTableAction extends FIBModelObject {
 		if (method != null) {
 			method.finalizeDeserialization();
 		}
+	}
+
+	@Override
+	public List<? extends FIBModelObject> getEmbeddedObjects() {
+		return null;
 	}
 
 	public abstract ActionType getActionType();

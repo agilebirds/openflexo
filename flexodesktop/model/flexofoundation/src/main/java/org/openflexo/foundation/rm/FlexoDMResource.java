@@ -19,8 +19,8 @@
  */
 package org.openflexo.foundation.rm;
 
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -118,19 +118,17 @@ public class FlexoDMResource extends FlexoXMLStorageResource<DMModel> {
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Recreates the DataModel...");
 			}
-			Vector resourcesToDelete = new Vector();
-			for (Enumeration en = getProject().getResources().elements(); en.hasMoreElements();) {
-				FlexoResource next = (FlexoResource) en.nextElement();
-				if (next.getResourceType() == ResourceType.EOMODEL) {
-					resourcesToDelete.add(next);
+			List<FlexoResource<? extends FlexoResourceData>> resourcesToDelete = new ArrayList<FlexoResource<? extends FlexoResourceData>>();
+			for (FlexoResource<? extends FlexoResourceData> r : getProject()) {
+				if (r.getResourceType() == ResourceType.EOMODEL) {
+					resourcesToDelete.add(r);
 				}
 			}
-			for (Enumeration en = resourcesToDelete.elements(); en.hasMoreElements();) {
-				FlexoResource next = (FlexoResource) en.nextElement();
+			for (FlexoResource<? extends FlexoResourceData> r : resourcesToDelete) {
 				if (logger.isLoggable(Level.INFO)) {
-					logger.info("Removing resource " + next);
+					logger.info("Removing resource " + r);
 				}
-				next.delete();
+				r.delete();
 			}
 			dmModel = DMModel.createNewDMModel(getProject(), this);
 			_resourceData = dmModel;

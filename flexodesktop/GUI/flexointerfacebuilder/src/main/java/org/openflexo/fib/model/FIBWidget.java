@@ -21,6 +21,7 @@ package org.openflexo.fib.model;
 
 import java.lang.reflect.Type;
 import java.util.Enumeration;
+import java.util.List;
 
 import javax.swing.Icon;
 import javax.swing.tree.TreeNode;
@@ -45,6 +46,8 @@ public abstract class FIBWidget extends FIBComponent {
 	public static BindingDefinition CLICK_ACTION = new BindingDefinition("clickAction", Void.class, BindingDefinitionType.EXECUTE, false);
 	public static BindingDefinition DOUBLE_CLICK_ACTION = new BindingDefinition("doubleClickAction", Void.class,
 			BindingDefinitionType.EXECUTE, false);
+	public static BindingDefinition RIGHT_CLICK_ACTION = new BindingDefinition("rightClickAction", Void.class,
+			BindingDefinitionType.EXECUTE, false);
 
 	public static enum Parameters implements FIBModelAttribute {
 		enable,
@@ -57,6 +60,7 @@ public abstract class FIBWidget extends FIBComponent {
 		readOnly,
 		clickAction,
 		doubleClickAction,
+		rightClickAction,
 		valueChangedAction
 	}
 
@@ -72,6 +76,7 @@ public abstract class FIBWidget extends FIBComponent {
 	private String tooltipText;
 	private DataBinding clickAction;
 	private DataBinding doubleClickAction;
+	private DataBinding rightClickAction;
 	private DataBinding valueChangedAction;
 
 	private final FIBFormatter formatter;
@@ -328,6 +333,11 @@ public abstract class FIBWidget extends FIBComponent {
 			}
 			super.notifyBindingChanged(binding);
 		}
+		
+		@Override
+		public List<? extends FIBModelObject> getEmbeddedObjects() {
+			return null;
+		}
 	}
 
 	public DataBinding getValueChangedAction() {
@@ -380,8 +390,30 @@ public abstract class FIBWidget extends FIBComponent {
 		this.doubleClickAction = doubleClickAction;
 	}
 
+	public boolean hasRightClickAction() {
+		return (rightClickAction != null && rightClickAction.isValid());
+	}
+
+	public DataBinding getRightClickAction() {
+		if (rightClickAction == null) {
+			rightClickAction = new DataBinding(this, Parameters.rightClickAction, RIGHT_CLICK_ACTION);
+		}
+		return rightClickAction;
+	}
+
+	public void setRightClickAction(DataBinding rightClickAction) {
+		rightClickAction.setOwner(this);
+		rightClickAction.setBindingAttribute(Parameters.rightClickAction);
+		rightClickAction.setBindingDefinition(RIGHT_CLICK_ACTION);
+		this.rightClickAction = rightClickAction;
+	}
+
 	public boolean isPaletteElement() {
 		return getParameter("isPaletteElement") != null && getParameter("isPaletteElement").equalsIgnoreCase("true");
 	}
 
+	@Override
+	public List<? extends FIBModelObject> getEmbeddedObjects() {
+		return null;
+	}
 }

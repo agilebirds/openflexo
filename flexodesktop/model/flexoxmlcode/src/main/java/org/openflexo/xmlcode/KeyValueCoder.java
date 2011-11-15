@@ -22,9 +22,11 @@ package org.openflexo.xmlcode;
 
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
-import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Vector;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * <p>
@@ -59,7 +61,7 @@ public class KeyValueCoder {
 	 * @exception InvalidObjectSpecificationException
 	 *                if an error occurs
 	 */
-	protected static KeyValueProperty getKeyValuePropertyFromName(Class clazz, String propertyName, boolean setMethodIsMandatory)
+	protected static KeyValueProperty getKeyValuePropertyFromName(Class<?> clazz, String propertyName, boolean setMethodIsMandatory)
 			throws InvalidObjectSpecificationException {
 		int modifiers = clazz.getModifiers();
 		// System.out.println("Class "+clazz.getName()+" public="+Modifier.isPublic(modifiers));
@@ -69,7 +71,7 @@ public class KeyValueCoder {
 			modifiers = clazz.getModifiers();
 		}
 
-		Hashtable<String, KeyValueProperty> kvpHash = classCache.get(clazz);
+		Map<String, KeyValueProperty> kvpHash = classCache.get(clazz);
 		if (kvpHash == null) {
 			classCache.put(clazz, kvpHash = new Hashtable<String, KeyValueProperty>());
 		}
@@ -103,7 +105,7 @@ public class KeyValueCoder {
 		return resp;
 	}
 
-	private static final Hashtable<Class, Hashtable<String, KeyValueProperty>> classCache = new Hashtable<Class, Hashtable<String, KeyValueProperty>>();
+	private static final Map<Class<?>, Map<String, KeyValueProperty>> classCache = new Hashtable<Class<?>, Map<String, KeyValueProperty>>();
 
 	/**
 	 * <p>
@@ -1020,20 +1022,19 @@ public class KeyValueCoder {
 	 * @exception InvalidObjectSpecificationException
 	 *                if an error occurs
 	 */
-	public static void setVectorForKey(Object object, Vector values, VectorKeyValueProperty keyValueProperty)
-			throws InvalidXMLDataException, InvalidObjectSpecificationException, AccessorInvocationException {
+	public static void setVectorForKey(Object object, List values, VectorKeyValueProperty keyValueProperty) throws InvalidXMLDataException,
+			InvalidObjectSpecificationException, AccessorInvocationException {
 
 		// Debugging.debug ("setValuesListForKey() called with 'Vector'"
 		// +values.toString()+" for keyValueProperty '"
 		// +keyValueProperty.getName()+"' for object of class "
 		// +object.getClass().getName());
 
-		Vector vectorObject;
+		List<?> vectorObject;
 
 		vectorObject = keyValueProperty.newInstance();
 		setObjectForKey(object, vectorObject, keyValueProperty);
-		for (Enumeration e = values.elements(); e.hasMoreElements();) {
-			Object obj = e.nextElement();
+		for (Object obj : values) {
 			// System.out.println ("Adding "+obj+obj.getClass().getName()+" for
 			// property "+keyValueProperty.getName());
 			keyValueProperty.addObjectValue(obj, object);
@@ -1058,7 +1059,7 @@ public class KeyValueCoder {
 	 * @exception AccessorInvocationException
 	 *                if an error occurs during accessor invocation
 	 */
-	public static void setArrayForKey(Object object, Vector values, ArrayKeyValueProperty keyValueProperty) throws InvalidXMLDataException,
+	public static void setArrayForKey(Object object, List values, ArrayKeyValueProperty keyValueProperty) throws InvalidXMLDataException,
 			InvalidObjectSpecificationException, AccessorInvocationException {
 
 		// Debugging.debug ("setValuesListForKey() called with 'Vector'"
@@ -1071,8 +1072,8 @@ public class KeyValueCoder {
 		arrayObject = keyValueProperty.newInstance(values.size());
 		setObjectForKey(object, arrayObject, keyValueProperty);
 		int index = 0;
-		for (Enumeration e = values.elements(); e.hasMoreElements();) {
-			keyValueProperty.setObjectValueAtIndex(e.nextElement(), index, object);
+		for (Object obj : values) {
+			keyValueProperty.setObjectValueAtIndex(obj, index, object);
 			index++;
 		}
 
@@ -1093,7 +1094,7 @@ public class KeyValueCoder {
 	 * @exception InvalidObjectSpecificationException
 	 *                if an error occurs
 	 */
-	public static void setHashtableForKey(Object object, Hashtable values, HashtableKeyValueProperty keyValueProperty)
+	public static void setHashtableForKey(Object object, Map values, HashtableKeyValueProperty keyValueProperty)
 			throws InvalidXMLDataException, InvalidObjectSpecificationException, AccessorInvocationException {
 
 		// Debugging.debug ("setValuesListForKey() called with 'Hashtable'"
@@ -1101,13 +1102,12 @@ public class KeyValueCoder {
 		// +keyValueProperty.getName()+"' for object of class "
 		// +object.getClass().getName());
 
-		Hashtable hashtableObject;
+		Map hashtableObject;
 
 		hashtableObject = keyValueProperty.newInstance();
 		setObjectForKey(object, hashtableObject, keyValueProperty);
-		for (Enumeration e = values.keys(); e.hasMoreElements();) {
-			Object key = e.nextElement();
-			keyValueProperty.setObjectValueForKey(values.get(key), key, object);
+		for (Entry e : (Set<Entry>) values.entrySet()) {
+			keyValueProperty.setObjectValueForKey(e.getValue(), e.getKey(), object);
 		}
 
 	}
@@ -1129,11 +1129,9 @@ public class KeyValueCoder {
 	 * @exception AccessorInvocationException
 	 *                if an error occurs during accessor invocation
 	 */
-	public static void setVectorForKey(Object object, Vector values, String propertyName) throws InvalidXMLDataException,
+	public static void setVectorForKey(Object object, List values, String propertyName) throws InvalidXMLDataException,
 			InvalidObjectSpecificationException, AccessorInvocationException {
-
 		setVectorForKey(object, values, (VectorKeyValueProperty) getKeyValuePropertyFromName(object.getClass(), propertyName, true));
-
 	}
 
 	/**
@@ -1153,11 +1151,9 @@ public class KeyValueCoder {
 	 * @exception AccessorInvocationException
 	 *                if an error occurs during accessor invocation
 	 */
-	public static void setHashtableForKey(Object object, Hashtable values, String propertyName) throws InvalidXMLDataException,
+	public static void setHashtableForKey(Object object, Map values, String propertyName) throws InvalidXMLDataException,
 			InvalidObjectSpecificationException, AccessorInvocationException {
-
 		setHashtableForKey(object, values, (HashtableKeyValueProperty) getKeyValuePropertyFromName(object.getClass(), propertyName, true));
-
 	}
 
 }

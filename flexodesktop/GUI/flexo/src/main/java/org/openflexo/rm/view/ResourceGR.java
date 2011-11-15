@@ -41,9 +41,10 @@ import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Rectangle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.rm.FlexoResource;
+import org.openflexo.foundation.rm.FlexoResourceData;
 import org.openflexo.icon.IconLibrary;
 
-public class ResourceGR extends ShapeGraphicalRepresentation<FlexoResource> {
+public class ResourceGR extends ShapeGraphicalRepresentation<FlexoResource<? extends FlexoResourceData>> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ResourceGR.class.getPackage().getName());
@@ -57,7 +58,7 @@ public class ResourceGR extends ShapeGraphicalRepresentation<FlexoResource> {
 	private final TextStyle resourceTypeStyle;
 	private final TextStyle lastUpdateStyle;
 
-	public ResourceGR(FlexoResource aResource, Drawing<?> aDrawing) {
+	public ResourceGR(FlexoResource<? extends FlexoResourceData> aResource, Drawing<?> aDrawing) {
 		super(ShapeType.RECTANGLE, aResource, aDrawing);
 		setWidth(40);
 		setHeight(60);
@@ -83,7 +84,7 @@ public class ResourceGR extends ShapeGraphicalRepresentation<FlexoResource> {
 				g.useTextStyle(resourceTypeStyle);
 				g.drawString(getResource().getResourceType().getName(), new FGEPoint(0.5, 0.25), TextAlignment.CENTER);
 				g.useTextStyle(lastUpdateStyle);
-				g.drawString((new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(getResource().getLastUpdate()), new FGEPoint(0.5, 0.75),
+				g.drawString(new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(getResource().getLastUpdate()), new FGEPoint(0.5, 0.75),
 						TextAlignment.CENTER);
 			};
 		});
@@ -100,7 +101,7 @@ public class ResourceGR extends ShapeGraphicalRepresentation<FlexoResource> {
 	}
 
 	public static class ResourceDecorationPainter implements DecorationPainter, Cloneable {
-		private final FlexoResource resource;
+		private final FlexoResource<? extends FlexoResourceData> resource;
 		protected ForegroundStyle decorationForeground;
 		protected BackgroundImage decorationBackground;
 
@@ -109,7 +110,7 @@ public class ResourceGR extends ShapeGraphicalRepresentation<FlexoResource> {
 			return new ResourceDecorationPainter(resource);
 		}
 
-		public ResourceDecorationPainter(FlexoResource aResource) {
+		public ResourceDecorationPainter(FlexoResource<? extends FlexoResourceData> aResource) {
 			resource = aResource;
 
 			updateDecorationBackground();
@@ -157,7 +158,7 @@ public class ResourceGR extends ShapeGraphicalRepresentation<FlexoResource> {
 		return getResource().getName();
 	}
 
-	public FlexoResource getResource() {
+	public FlexoResource<? extends FlexoResourceData> getResource() {
 		return getDrawable();
 	}
 

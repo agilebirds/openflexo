@@ -21,7 +21,6 @@ package org.openflexo.dm;
 
 import java.awt.Dimension;
 import java.io.File;
-import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,6 +40,7 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.foundation.rm.FlexoResource;
+import org.openflexo.foundation.rm.FlexoResourceData;
 import org.openflexo.foundation.rm.ResourceAdded;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.logging.FlexoLoggingManager;
@@ -79,10 +79,9 @@ public class DMModule extends FlexoModule implements ExternalDMModule {
 		getDMController().loadRelativeWindows();
 		DMPreferences.init();
 		retain(getProject().getDataModel());
-		for (Enumeration en = getProject().getResources().elements(); en.hasMoreElements();) {
-			FlexoResource next = (FlexoResource) en.nextElement();
-			if (next.getResourceType() == ResourceType.EOMODEL) {
-				retainResource(next);
+		for (FlexoResource<? extends FlexoResourceData> r : getProject()) {
+			if (r.getResourceType() == ResourceType.EOMODEL) {
+				retainResource(r);
 			}
 		}
 		getDMController().setCurrentEditedObject(getProject().getDataModel());
@@ -113,17 +112,6 @@ public class DMModule extends FlexoModule implements ExternalDMModule {
 			}
 		}
 		super.update(observable, dataModification);
-	}
-
-	// ==========================================================================
-	// ========================== ExternalDMModule
-	// ==============================
-	// ==========================================================================
-
-	@Override
-	public void save() {
-		super.save();
-		getDMController().saveAll();
 	}
 
 	/**

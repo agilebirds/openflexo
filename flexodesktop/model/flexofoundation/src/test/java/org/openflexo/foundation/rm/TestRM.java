@@ -151,7 +151,7 @@ public class TestRM extends FlexoTestCase {
 		assertNotNull(_executionModelResource = _project.getEOModelResource(FlexoExecutionModelRepository.EXECUTION_MODEL_DIR.getName()));
 		assertNotNull(_eoPrototypesResource = _project.getEOModelResource(EOPrototypeRepository.EOPROTOTYPE_REPOSITORY_DIR.getName()));
 
-		for (FlexoResource resource : _project.getResources().values()) {
+		for (FlexoResource<? extends FlexoResourceData> resource : _project) {
 			if (resource != _rmResource && !(resource instanceof FlexoMemoryResource)) {
 				assertSynchonized(resource, _rmResource);
 			}
@@ -192,7 +192,7 @@ public class TestRM extends FlexoTestCase {
 		assertSynchonized(_subProcessResource, _wkfResource);
 		assertDepends(_subProcessResource, _dmResource);
 		assertNotDepends(_subProcessResource, _clResource);
-		for (FlexoResource resource : _project.getResources().values()) {
+		for (FlexoResource<? extends FlexoResourceData> resource : _project) {
 			if (resource == _rmResource) {
 				assertModified(_rmResource);
 			} else if (resource == _dmResource) {
@@ -373,21 +373,17 @@ public class TestRM extends FlexoTestCase {
 	public void test9ReloadProjectAndCheckDependancies() {
 		log("test9ReloadProjectAndCheckDependancies");
 		reloadProject(true);
-		for (FlexoResource resource : _project.getResources().values()) {
-			if (resource instanceof FlexoStorageResource) {
-				logger.info("Resource" + resource + " lastModifiedOn: "
-						+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(((FlexoStorageResource) resource).getDiskLastModifiedDate()));
-			}
+		for (FlexoStorageResource<? extends StorageResourceData> resource : _project.getStorageResources()) {
+			logger.info("Resource" + resource + " lastModifiedOn: "
+					+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(resource.getDiskLastModifiedDate()));
 		}
 		// Save RM for eventual back-synchro to be saved
 		saveProject();
 		log("Done. Now check that no other back-synchro");
 		// Let eventual dependancies back-synchronize together
 		reloadProject(true); // This time, all must be not modified
-		for (FlexoResource resource : _project.getResources().values()) {
-			if (resource instanceof FlexoStorageResource) {
-				assertNotModified((FlexoStorageResource) resource);
-			}
+		for (FlexoStorageResource<? extends StorageResourceData> resource : _project.getStorageResources()) {
+			assertNotModified(resource);
 		}
 
 	}
@@ -665,13 +661,15 @@ public class TestRM extends FlexoTestCase {
 		assertDepends(_testOperationComponentResource2, _partialComponentResource);
 
 		if (_bsHook.getBackSynchronizationCount() == 0) {
-			for (FlexoResource resource : _project.getResources().values()) {
-				if (resource instanceof FlexoStorageResource) {
-					assertNotModified((FlexoStorageResource) resource);
-				}
-			}
+			assertStorageResourcesAreNotModified();
 		}
 
+	}
+
+	private void assertStorageResourcesAreNotModified() {
+		for (FlexoStorageResource<? extends StorageResourceData> resource : _project.getStorageResources()) {
+			assertNotModified(resource);
+		}
 	}
 
 	private void saveProject() {
@@ -680,11 +678,7 @@ public class TestRM extends FlexoTestCase {
 		} catch (SaveResourceException e) {
 			fail("Cannot save project");
 		}
-		for (FlexoResource resource : _project.getResources().values()) {
-			if (resource instanceof FlexoStorageResource) {
-				assertNotModified((FlexoStorageResource) resource);
-			}
-		}
+		assertStorageResourcesAreNotModified();
 	}
 
 	private class DebugBackwardSynchronizationHook implements BackwardSynchronizationHook {

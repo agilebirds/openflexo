@@ -29,9 +29,8 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoResource;
-import org.openflexo.foundation.rm.FlexoResourceData;
 import org.openflexo.foundation.rm.FlexoStorageResource;
+import org.openflexo.foundation.rm.StorageResourceData;
 
 /**
  * 
@@ -73,11 +72,9 @@ public abstract class FlexoUndoableAction<A extends FlexoUndoableAction<?, T1, T
 		// Let's keep in memory the modified resources
 		_modifiedResources.clear();
 		if (getProject() != null) {
-			Enumeration<FlexoResource<FlexoResourceData>> en = getProject().getResources().elements();
-			while (en.hasMoreElements()) {
-				FlexoResource r = en.nextElement();
-				if (r instanceof FlexoStorageResource && !((FlexoStorageResource) r).isModified()) {
-					_modifiedResources.put((FlexoStorageResource) r, null);
+			for (FlexoStorageResource<? extends StorageResourceData> r : getProject().getStorageResources()) {
+				if (!r.isModified()) {
+					_modifiedResources.put(r, null);
 				}
 			}
 		}
@@ -92,10 +89,8 @@ public abstract class FlexoUndoableAction<A extends FlexoUndoableAction<?, T1, T
 		// Now we remove all the resources that are still not modified. The left delta are the resources that have been directly modified by
 		// this action (and the embedded ones)
 		if (getProject() != null) {
-			Enumeration<FlexoResource<FlexoResourceData>> en = getProject().getResources().elements();
-			while (en.hasMoreElements()) {
-				FlexoResource r = en.nextElement();
-				if (r instanceof FlexoStorageResource && !((FlexoStorageResource) r).isModified()) {
+			for (FlexoStorageResource<? extends StorageResourceData> r : getProject().getStorageResources()) {
+				if (!r.isModified()) {
 					_modifiedResources.remove(r);
 				}
 			}
@@ -180,8 +175,8 @@ public abstract class FlexoUndoableAction<A extends FlexoUndoableAction<?, T1, T
 		}
 		if (getUndoFinalizer() != null && executionStatus == ExecutionStatus.HAS_SUCCESSFULLY_UNDONE) {
 			executionStatus = ExecutionStatus.EXECUTING_UNDO_FINALIZER;
-			executionStatus = (getUndoFinalizer().run(e, (A) this) ? ExecutionStatus.HAS_SUCCESSFULLY_UNDONE
-					: ExecutionStatus.FAILED_UNDO_EXECUTION);
+			executionStatus = getUndoFinalizer().run(e, (A) this) ? ExecutionStatus.HAS_SUCCESSFULLY_UNDONE
+					: ExecutionStatus.FAILED_UNDO_EXECUTION;
 		}
 		Iterator<FlexoStorageResource> i = _modifiedResources.keySet().iterator();
 		while (i.hasNext()) {
@@ -238,8 +233,8 @@ public abstract class FlexoUndoableAction<A extends FlexoUndoableAction<?, T1, T
 		}
 		if (getRedoFinalizer() != null && executionStatus == ExecutionStatus.HAS_SUCCESSFULLY_REDONE) {
 			executionStatus = ExecutionStatus.EXECUTING_REDO_FINALIZER;
-			executionStatus = (getRedoFinalizer().run(e, (A) this) ? ExecutionStatus.HAS_SUCCESSFULLY_REDONE
-					: ExecutionStatus.FAILED_REDO_EXECUTION);
+			executionStatus = getRedoFinalizer().run(e, (A) this) ? ExecutionStatus.HAS_SUCCESSFULLY_REDONE
+					: ExecutionStatus.FAILED_REDO_EXECUTION;
 		}
 	}
 

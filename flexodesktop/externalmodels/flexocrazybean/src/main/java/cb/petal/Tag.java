@@ -60,6 +60,11 @@ public class Tag extends Literal {
 
 	@Override
 	public boolean equals(java.lang.Object o) {
-		return (o instanceof Tag) && (((Tag) o).value == this.value);
+		return o instanceof Tag && ((Tag) o).value == this.value;
+	}
+
+	@Override
+	public int hashCode() {
+		return value;
 	}
 }

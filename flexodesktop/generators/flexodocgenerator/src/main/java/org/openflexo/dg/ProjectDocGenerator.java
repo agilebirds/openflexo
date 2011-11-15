@@ -20,6 +20,7 @@
 package org.openflexo.dg;
 
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -71,10 +72,10 @@ public abstract class ProjectDocGenerator extends AbstractProjectGenerator<DGRep
 	 * @param resources
 	 */
 	protected void buildResourcesAndSetGeneratorsForCopiedResources(Vector<CGRepositoryFileResource> resources) {
-		Vector<FlexoWebServerFileResource> webResources = getProject().getResourcesOfClass(FlexoWebServerFileResource.class);
+		List<FlexoWebServerFileResource> webResources = getProject().getResourcesOfClass(FlexoWebServerFileResource.class);
 		for (FlexoWebServerFileResource res : webResources) {
-			if ((res.getResourceFormat() == FileFormat.PNG) || (res.getResourceFormat() == FileFormat.JPG)
-					|| (res.getResourceFormat() == FileFormat.GIF)) {
+			if (res.getResourceFormat() == FileFormat.PNG || res.getResourceFormat() == FileFormat.JPG
+					|| res.getResourceFormat() == FileFormat.GIF) {
 				FlexoCopiedResource copy = (FlexoCopiedResource) getProject().resourceForKey(ResourceType.COPIED_FILE,
 						FlexoCopiedResource.nameForCopiedResource(projectGenerator.getRepository(), res));
 				if (copy == null) {
@@ -130,9 +131,9 @@ public abstract class ProjectDocGenerator extends AbstractProjectGenerator<DGRep
 	public CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> getResourceForObject(
 			FlexoModelObject object) {
 		for (CGFile file : getRepository().getFiles()) {
-			if ((file.getResource() != null) && (file.getResource() instanceof LatexFileResource)) {
-				if ((file.getResource().getGenerator() != null)
-						&& (((Generator<? extends FlexoModelObject, DGRepository>) file.getResource().getGenerator()).getObject() == object)) {
+			if (file.getResource() != null && file.getResource() instanceof LatexFileResource) {
+				if (file.getResource().getGenerator() != null
+						&& ((Generator<? extends FlexoModelObject, DGRepository>) file.getResource().getGenerator()).getObject() == object) {
 					return file.getResource();
 				}
 			}

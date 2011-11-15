@@ -51,6 +51,7 @@ import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.action.AbstractGCAction;
 import org.openflexo.foundation.rm.FlexoStorageResource;
+import org.openflexo.foundation.rm.StorageResourceData;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileUtils;
@@ -127,7 +128,7 @@ public class ReinjectDocx extends AbstractGCAction<ReinjectDocx, CGObject> {
 					+ parsedDocx.getAllParsedFlexoTitles().size() + parsedDocx.getAllParsedFlexoContents().size() + 1);
 
 			// First load all unloaded resources
-			for (FlexoStorageResource resource : getFocusedObject().getProject().getResourcesOfClass(FlexoStorageResource.class)) {
+			for (FlexoStorageResource<? extends StorageResourceData> resource : getFocusedObject().getProject().getStorageResources()) {
 				resource.getResourceData();// no need to mark as modified .setIsModified();
 			}
 

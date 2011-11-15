@@ -22,8 +22,11 @@ package org.openflexo.xmlcode;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.TreeSet;
 
 // addTo > setForKey
@@ -48,7 +51,7 @@ public class HashtableKeyValueProperty extends KeyValueProperty {
 	 * <code>_setXXXForKey(Class anObject, Class aKey)</code>, where XXX is the property name (try with or without a terminal 's'
 	 * character), and Class could be anything...
 	 */
-	protected TreeSet setForKeyMethods;
+	protected TreeSet<AccessorMethod> setForKeyMethods;
 
 	/**
 	 * Stores all 'removeWithKey...' methods, in order of the specialization of their arguments, as {@link AccessorMethod} objects. (the
@@ -57,7 +60,7 @@ public class HashtableKeyValueProperty extends KeyValueProperty {
 	 * <code>_removeXXXWithKey(Class aKey)</code>, where XXX is the property name (try with or without a terminal 's' character), and Class
 	 * could be anything...
 	 */
-	protected TreeSet removeWithKeyMethods;
+	protected TreeSet<AccessorMethod> removeWithKeyMethods;
 
 	/**
 	 * Creates a new <code>HashtableKeyValueProperty</code> instance, given an object class.<br>
@@ -70,7 +73,7 @@ public class HashtableKeyValueProperty extends KeyValueProperty {
 	 * @exception InvalidKeyValuePropertyException
 	 *                if an error occurs
 	 */
-	public HashtableKeyValueProperty(Class anObjectClass, String propertyName, boolean setMethodIsMandatory)
+	public HashtableKeyValueProperty(Class<?> anObjectClass, String propertyName, boolean setMethodIsMandatory)
 			throws InvalidKeyValuePropertyException {
 
 		super(anObjectClass, propertyName);
@@ -80,9 +83,8 @@ public class HashtableKeyValueProperty extends KeyValueProperty {
 	/**
 	 * Returns boolean indicating if related type inherits from Hastable
 	 */
-	public boolean typeInheritsFromHashtable() {
-
-		return Hashtable.class.isAssignableFrom(getType());
+	public boolean typeInheritsFromMap() {
+		return Map.class.isAssignableFrom(getType());
 	}
 
 	/**
@@ -92,25 +94,28 @@ public class HashtableKeyValueProperty extends KeyValueProperty {
 	 */
 	@Override
 	protected void init(String propertyName, boolean setMethodIsMandatory) throws InvalidKeyValuePropertyException {
-
 		super.init(propertyName, setMethodIsMandatory);
 
-		if (!typeInheritsFromHashtable()) {
+		if (!typeInheritsFromMap()) {
 			throw new InvalidKeyValuePropertyException("Property " + propertyName
-					+ " found, but doesn't seem inherits from java.util.Hashtable");
+					+ " found, but doesn't seem inherits from java.util.Map");
 		}
 
 		// If related type is a sub-class of hashtable, check that there is a
 		// a trivial constructor
-		if (!getType().equals(Hashtable.class)) {
-			try {
-				Object testInstanciation = type.newInstance();
-			} catch (InstantiationException e) {
-				throw new InvalidKeyValuePropertyException("Class " + type.getName()
-						+ " cannot be instanciated directly (check that this class has a constructor with no arguments [public "
-						+ type.getName() + "()] and that this class is not abstract.");
-			} catch (Exception e) {
-				throw new InvalidModelException("Unexpected error occurs during model initialization. Please send a bug report.");
+		if (!getType().equals(Hashtable.class) && !getType().equals(HashMap.class)) {
+			if (!type.isInterface() || !Modifier.isAbstract(type.getModifiers()) || !type.isAssignableFrom(Hashtable.class)
+					|| !type.isAssignableFrom(HashMap.class)) {
+				try {
+					// Test instantiation
+					type.newInstance();
+				} catch (InstantiationException e) {
+					throw new InvalidKeyValuePropertyException("Class " + type.getName()
+							+ " cannot be instanciated directly (check that this class has a constructor with no arguments [public "
+							+ type.getName() + "()] and that this class is not abstract.");
+				} catch (Exception e) {
+					throw new InvalidModelException("Unexpected error occurs during model initialization. Please send a bug report.");
+				}
 			}
 		}
 
@@ -120,13 +125,13 @@ public class HashtableKeyValueProperty extends KeyValueProperty {
 			// methods");
 
 			setForKeyMethods = searchMatchingSetForKeyMethods(propertyName);
-			if ((setForKeyMethods.size() == 0) && (setMethodIsMandatory)) {
+			if (setForKeyMethods.size() == 0 && setMethodIsMandatory) {
 				throw new InvalidKeyValuePropertyException("No public field " + propertyName
 						+ " found, and no 'setForKey' methods accessors found");
 			}
 
 			removeWithKeyMethods = searchMatchingRemoveWithKeyMethods(propertyName);
-			if ((removeWithKeyMethods.size() == 0) && (setMethodIsMandatory)) {
+			if (removeWithKeyMethods.size() == 0 && setMethodIsMandatory) {
 				throw new InvalidKeyValuePropertyException("No public field " + propertyName
 						+ " found, and no 'removeWithKey' methods accessors found");
 			}
@@ -141,7 +146,7 @@ public class HashtableKeyValueProperty extends KeyValueProperty {
 	 * <code>_setXXXForKey(Class anObject, Class aKey)</code>, where XXX is the property name (try with or without a terminal 's'
 	 * character), and Class could be anything... Returns an ordered TreeSet of {@link AccessorMethod} objects
 	 */
-	protected TreeSet searchMatchingSetForKeyMethods(String propertyName) {
+	protected TreeSet<AccessorMethod> searchMatchingSetForKeyMethods(String propertyName) {
 
 		String singularPropertyName;
 		String pluralPropertyName;
@@ -149,7 +154,7 @@ public class HashtableKeyValueProperty extends KeyValueProperty {
 		if (propertyName.endsWith("ies")) {
 			singularPropertyName = propertyName.substring(0, propertyName.length() - 3) + "y";
 			pluralPropertyName = propertyName;
-		} else if ((propertyName.endsWith("s")) || (propertyName.endsWith("S"))) {
+		} else if (propertyName.endsWith("s") || propertyName.endsWith("S")) {
 			singularPropertyName = propertyName.substring(0, propertyName.length() - 1);
 			pluralPropertyName = propertyName;
 		} else {
@@ -172,7 +177,7 @@ public class HashtableKeyValueProperty extends KeyValueProperty {
 	 * <code>_removeXXXWithKey(Class aKey)</code>, where XXX is the property name (try with or without a terminal 's' character), and Class
 	 * could be anything... Returns an ordered TreeSet of {@link AccessorMethod} objects
 	 */
-	protected TreeSet searchMatchingRemoveWithKeyMethods(String propertyName) {
+	protected TreeSet<AccessorMethod> searchMatchingRemoveWithKeyMethods(String propertyName) {
 
 		String singularPropertyName;
 		String pluralPropertyName;
@@ -180,7 +185,7 @@ public class HashtableKeyValueProperty extends KeyValueProperty {
 		if (propertyName.endsWith("ies")) {
 			singularPropertyName = propertyName.substring(0, propertyName.length() - 3) + "y";
 			pluralPropertyName = propertyName;
-		} else if ((propertyName.endsWith("s")) || (propertyName.endsWith("S"))) {
+		} else if (propertyName.endsWith("s") || propertyName.endsWith("S")) {
 			singularPropertyName = propertyName.substring(0, propertyName.length() - 1);
 			pluralPropertyName = propertyName;
 		} else {
@@ -212,7 +217,7 @@ public class HashtableKeyValueProperty extends KeyValueProperty {
 		} else {
 			if (field != null) {
 				try {
-					Hashtable hashtable = (Hashtable) field.get(object);
+					Map<Object, Object> hashtable = (Map<Object, Object>) field.get(object);
 					hashtable.put(aKey, aValue);
 				} catch (Exception e) {
 					throw new InvalidKeyValuePropertyException("InvalidKeyValuePropertyException: class " + getObjectClass().getName()
@@ -222,10 +227,10 @@ public class HashtableKeyValueProperty extends KeyValueProperty {
 				Object params[] = new Object[2];
 				params[0] = aValue;
 				params[1] = aKey;
-				for (Iterator i = setForKeyMethods.iterator(); i.hasNext();) {
+				for (Iterator<AccessorMethod> i = setForKeyMethods.iterator(); i.hasNext();) {
 					Method method = null;
 					try {
-						method = ((AccessorMethod) i.next()).getMethod();
+						method = i.next().getMethod();
 						method.invoke(object, params);
 						return;
 					} catch (InvocationTargetException e) {
@@ -262,7 +267,7 @@ public class HashtableKeyValueProperty extends KeyValueProperty {
 		} else {
 			if (field != null) {
 				try {
-					Hashtable hashtable = (Hashtable) field.get(object);
+					Map<?, ?> hashtable = (Map<?, ?>) field.get(object);
 					hashtable.remove(aKey);
 				} catch (Exception e) {
 					throw new InvalidKeyValuePropertyException("InvalidKeyValuePropertyException: class " + getObjectClass().getName()
@@ -271,10 +276,10 @@ public class HashtableKeyValueProperty extends KeyValueProperty {
 			} else {
 				Object params[] = new Object[1];
 				params[0] = aKey;
-				for (Iterator i = removeWithKeyMethods.iterator(); i.hasNext();) {
+				for (Iterator<AccessorMethod> i = removeWithKeyMethods.iterator(); i.hasNext();) {
 					Method method = null;
 					try {
-						method = ((AccessorMethod) i.next()).getMethod();
+						method = i.next().getMethod();
 						method.invoke(object, params);
 						return;
 					} catch (InvocationTargetException e) {
@@ -290,12 +295,18 @@ public class HashtableKeyValueProperty extends KeyValueProperty {
 	}
 
 	/**
-	 * Creates a new instance of this represented class, which MUST be a {@link Hashtable} or a subclass of {@link Hashtable}.
+	 * Creates a new instance of this represented class, which MUST be a {@link Map} or a subclass of {@link Map}.
 	 */
-	public Hashtable newInstance() throws InvalidObjectSpecificationException {
-
+	public Map<?, ?> newInstance() throws InvalidObjectSpecificationException {
+		if (type.isInterface() || Modifier.isAbstract(type.getModifiers())) {
+			if (type.isAssignableFrom(Hashtable.class)) {
+				return new Hashtable();
+			} else if (type.isAssignableFrom(HashMap.class)) {
+				return new HashMap();
+			}
+		}
 		try {
-			return (Hashtable) type.newInstance();
+			return (Map<?, ?>) type.newInstance();
 		} catch (Exception e) {
 			throw new InvalidObjectSpecificationException("Could not instanciate a new " + type.getName() + ": reason " + e);
 		}

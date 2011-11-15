@@ -141,7 +141,7 @@ public abstract class ASCIIFile extends AbstractGeneratedFile {
 			if (needsNotifyEndOfSaving) {
 				getFlexoResource().hasWrittenOnDisk(lock);
 			}
-			if ((getProject() != null) && getProject().computeDiff) {
+			if ((getProject() != null) && getProject().isComputeDiff()) {
 				currentDiskContent = new DiffSource(getContentToWriteOnDisk());
 				lastAcceptedContent = new DiffSource(getContentToWriteOnDisk());
 			}
@@ -157,7 +157,7 @@ public abstract class ASCIIFile extends AbstractGeneratedFile {
 
 			// If this was an overriding, discard it
 			_overrideIsScheduled = false;
-			if ((getProject() != null) && getProject().computeDiff) {
+			if ((getProject() != null) && getProject().isComputeDiff()) {
 				rebuildMerges();
 			}
 
@@ -180,7 +180,7 @@ public abstract class ASCIIFile extends AbstractGeneratedFile {
 		if (getCurrentGeneration() != null) {
 			try {
 				FileUtils.saveToFile(getLastGeneratedFile(), getCurrentGeneration(), getEncoding());
-				if ((getProject() != null) && getProject().computeDiff) {
+				if ((getProject() != null) && getProject().isComputeDiff()) {
 					lastGeneratedContent = new DiffSource(getCurrentGeneration());
 				}
 			} catch (IOException e) {
@@ -311,7 +311,7 @@ public abstract class ASCIIFile extends AbstractGeneratedFile {
 			if (_overrideIsScheduled) {
 				return getContent(_overridenVersion);
 			}
-			if ((getProject() != null) && getProject().computeDiff) {
+			if ((getProject() != null) && getProject().isComputeDiff()) {
 				return getResultFileMerge().getMergedSource().getSourceString();
 			} else {
 				return getCurrentGeneration();
@@ -380,10 +380,10 @@ public abstract class ASCIIFile extends AbstractGeneratedFile {
 
 		// OK, generator has performed its job, i have now to handle merges
 
-		if ((lastGeneratedContent == null) && (getProject() != null) && getProject().computeDiff) {
+		if ((lastGeneratedContent == null) && (getProject() != null) && getProject().isComputeDiff()) {
 			throw new LoadGeneratedResourceIOException(getFlexoResource(), "Unable to access last generated content");
 		}
-		if ((lastAcceptedContent == null) && (getProject() != null) && getProject().computeDiff) {
+		if ((lastAcceptedContent == null) && (getProject() != null) && getProject().isComputeDiff()) {
 			throw new LoadGeneratedResourceIOException(getFlexoResource(), "Unable to access last accepted content");
 		}
 
@@ -428,7 +428,7 @@ public abstract class ASCIIFile extends AbstractGeneratedFile {
 		}
 
 		if (getGenerationMerge() != null) {
-			_resultFileMerge = new ResultFileMerge(_getLastAcceptedContent(), getGenerationMerge(), getProject().computeDiff
+			_resultFileMerge = new ResultFileMerge(_getLastAcceptedContent(), getGenerationMerge(), getProject().isComputeDiff()
 					|| hasCurrentDiskContent() ? currentDiskContent : new DiffSource(""));
 		}
 
@@ -494,7 +494,7 @@ public abstract class ASCIIFile extends AbstractGeneratedFile {
 
 	protected DiffSource _getLastAcceptedContent() {
 		if (lastAcceptedContent == null) {
-			if (hasCurrentDiskContent() || getProject().computeDiff) {
+			if (hasCurrentDiskContent() || getProject().isComputeDiff()) {
 				lastAcceptedContent = new DiffSource(getCurrentDiskContent());
 			} else {
 				lastAcceptedContent = new DiffSource("");

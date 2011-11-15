@@ -23,6 +23,7 @@ import java.text.Collator;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -290,6 +291,11 @@ public class FIBLocalizedDictionary extends FIBModelObject implements LocalizedD
 
 	public void endSearchNewLocalizationEntries() {
 		isSearchingNewEntries = false;
+	}
+
+	@Override
+	public List<? extends FIBModelObject> getEmbeddedObjects() {
+		return getEntries();
 	}
 
 }

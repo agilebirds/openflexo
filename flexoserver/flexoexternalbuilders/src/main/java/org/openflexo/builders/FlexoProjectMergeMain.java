@@ -3,7 +3,9 @@ package org.openflexo.builders;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.InvalidPropertiesFormatException;
+import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -22,9 +24,9 @@ import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.rm.FlexoStorageResource;
+import org.openflexo.foundation.rm.StorageResourceData;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.fps.CVSFile;
@@ -229,7 +231,7 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 			logger.info("Starting to commit " + filesToCommit.size() + " files for " + moduleName);
 		}
 		CommitFiles commit = CommitFiles.actionType.makeNewAction(null, filesToCommit, EDITOR);
-		commit.setCommitMessage((comment != null ? comment + "\n" : ""));
+		commit.setCommitMessage(comment != null ? comment + "\n" : "");
 		commit.doAction();
 		if (!commit.hasActionExecutionSucceeded()) {
 			handleActionFailed(commit, projectDirectory);
@@ -282,7 +284,7 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 		File projectCopyDirectory = null;
 		FlexoEditor editor = null;
 		try {
-			Vector<FlexoStorageResource> conflictingResources = new Vector<FlexoStorageResource>();
+			List<FlexoStorageResource<? extends StorageResourceData>> conflictingResources = new ArrayList<FlexoStorageResource<? extends StorageResourceData>>();
 			projectCopyDirectory = FileUtils.createTempDirectory("Copy_", "_of_" + projectDirectory.getName());
 			FileUtils.copyContentDirToDir(projectDirectory, projectCopyDirectory);
 			editor = FlexoResourceManager.initializeExistingProject(projectCopyDirectory, new FlexoEditorFactory() {
@@ -293,19 +295,17 @@ public class FlexoProjectMergeMain extends FlexoExternalMain {
 					return new FlexoBuilderEditor(project);
 				}
 			}, null);
-			editor.getProject().getResources();
 			for (CVSFile file : conflictingFiles) {
 				String fileName = file.getFile().getAbsolutePath();
-				for (FlexoResource r : editor.getProject().getResources().values()) {
-					if (r instanceof FlexoStorageResource
-							&& fileName.endsWith(((FlexoStorageResource) r).getResourceFile().getRelativePath())) {
-						conflictingResources.add((FlexoStorageResource) r);
+				for (FlexoStorageResource<? extends StorageResourceData> r : editor.getProject().getStorageResources()) {
+					if (fileName.endsWith(r.getResourceFile().getRelativePath())) {
+						conflictingResources.add(r);
 						break;
 					}
 				}
 			}
 			writeToConsole(FlexoBuilderListener.CONFLICTING_RESSOURCES_START_TAG);
-			for (FlexoStorageResource r : conflictingResources) {
+			for (FlexoStorageResource<? extends StorageResourceData> r : conflictingResources) {
 				writeToConsole(r.getResourceType().getLocalizedName() + " " + r.getName() + " is in conflict");
 			}
 			writeToConsole(FlexoBuilderListener.CONFLICTING_RESSOURCES_END_TAG);

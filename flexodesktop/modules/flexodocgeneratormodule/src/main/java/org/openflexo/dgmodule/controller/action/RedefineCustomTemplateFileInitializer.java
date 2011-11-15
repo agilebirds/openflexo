@@ -76,8 +76,8 @@ public class RedefineCustomTemplateFileInitializer extends ActionInitializer {
 				String CHOOSE_EXISTING_REPOSITORY = FlexoLocalization.localizedForKey("choose_existing_repository");
 				String[] locationChoices = { CREATE_NEW_REPOSITORY, CHOOSE_EXISTING_REPOSITORY };
 				RadioButtonListParameter<String> repositoryChoiceParam = new RadioButtonListParameter<String>("location", "location",
-						(templates.getCustomDocRepositoriesVector().size() > 0 ? CHOOSE_EXISTING_REPOSITORY : CREATE_NEW_REPOSITORY),
-						locationChoices);
+						templates.getCustomDocRepositoriesVector().size() > 0 ? CHOOSE_EXISTING_REPOSITORY : CREATE_NEW_REPOSITORY,
+								locationChoices);
 				TextFieldParameter newRepositoryNameParam = new TextFieldParameter("name", "custom_template_repository_name",
 						templates.getNextGeneratedCodeRepositoryName());
 				newRepositoryNameParam.setDepends("location");
@@ -86,9 +86,9 @@ public class RedefineCustomTemplateFileInitializer extends ActionInitializer {
 						"customRepository",
 						"custom_templates_repository",
 						templates.getCustomDocRepositoriesVector(),
-						(getControllerActionInitializer().getDGController().getLastEditedCGRepository() != null ? getControllerActionInitializer()
+						getControllerActionInitializer().getDGController().getLastEditedCGRepository() != null ? getControllerActionInitializer()
 								.getDGController().getLastEditedCGRepository().getPreferredTemplateRepository()
-								: null));
+								: null);
 				customRepositoryParam.setFormatter("name");
 				customRepositoryParam.setDepends("location");
 				customRepositoryParam.setConditional("location=" + '"' + CHOOSE_EXISTING_REPOSITORY + '"');
@@ -98,7 +98,7 @@ public class RedefineCustomTemplateFileInitializer extends ActionInitializer {
 				RadioButtonListParameter<String> contextChoiceParam = new RadioButtonListParameter<String>("context", "context", COMMON,
 						contextChoices);
 				ChoiceListParameter<DocType> targetTypeParam = new ChoiceListParameter<DocType>("target", "target", getProject()
-						.getDocTypes().firstElement());
+						.getDocTypes().get(0));
 				targetTypeParam.setDepends("context");
 				targetTypeParam.setConditional("context=" + '"' + SPECIFIC_TARGET + '"');
 
@@ -150,8 +150,8 @@ public class RedefineCustomTemplateFileInitializer extends ActionInitializer {
 			@Override
 			public boolean run(ActionEvent e, RedefineCustomTemplateFile action) {
 				if (action.getNewTemplateFile() != null) {
-					if ((action.getInvoker() != null) && (action.getInvoker() instanceof DGTemplateFileModuleView)
-							&& (((DGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow())) {
+					if (action.getInvoker() != null && action.getInvoker() instanceof DGTemplateFileModuleView
+							&& ((DGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow()) {
 						DGTemplateFileModuleView invoker = (DGTemplateFileModuleView) action.getInvoker();
 						FlexoDialog dialog = (FlexoDialog) SwingUtilities.getAncestorOfClass(FlexoDialog.class, invoker);
 						dialog.getContentPane().remove(invoker);

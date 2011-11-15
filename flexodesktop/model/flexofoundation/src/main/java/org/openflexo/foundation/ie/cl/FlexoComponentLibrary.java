@@ -27,7 +27,6 @@ package org.openflexo.foundation.ie.cl;
  */
 
 import java.io.File;
-import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -51,7 +50,6 @@ import org.openflexo.foundation.rm.FlexoComponentLibraryResource;
 import org.openflexo.foundation.rm.FlexoComponentResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
-import org.openflexo.foundation.rm.FlexoResourceData;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
 import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.rm.ProjectRestructuration;
@@ -185,12 +183,9 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 			e.printStackTrace();
 		}
 
-		Collection<FlexoResource<FlexoResourceData>> c = project.getResources().values();
-		for (FlexoResource r : c) {
-			if (r instanceof FlexoComponentResource) {
-				if (newLibrary.getComponentNamed(((FlexoComponentResource) r).getName()) == null) {
-					((FlexoComponentResource) r).getComponentDefinition();
-				}
+		for (FlexoComponentResource r : project.getResourcesOfClass(FlexoComponentResource.class)) {
+			if (newLibrary.getComponentNamed(r.getName()) == null) {
+				r.getComponentDefinition();
 			}
 		}
 
@@ -271,7 +266,7 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 
 	public FlexoComponentFolder getFlexoComponentFolderWithName(String folderName) {
 		for (Enumeration e = allFolders(); e.hasMoreElements();) {
-			FlexoComponentFolder folder = ((FlexoComponentFolder) e.nextElement());
+			FlexoComponentFolder folder = (FlexoComponentFolder) e.nextElement();
 
 			if (folder.getName().equals(folderName)) {
 				return folder;

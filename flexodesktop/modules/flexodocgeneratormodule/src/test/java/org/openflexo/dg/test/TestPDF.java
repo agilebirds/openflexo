@@ -292,7 +292,7 @@ public class TestPDF extends DGTestCase {
 				initModuleLoader(projectDirectory, editor.getProject());
 				editor.getProject().getGeneratedDoc().setFactory((FlexoPseudoInteractiveEditor) editor);
 				DocType docType = editor.getProject().getDocTypeNamed(docTypeString);
-				editor.getProject().computeDiff = false;
+				editor.getProject().setComputeDiff(false);
 				AddGeneratedCodeRepository add = AddGeneratedCodeRepository.actionType.makeNewAction(editor.getProject().getGeneratedDoc(),
 						null, editor);
 				add.setNewDocType(docType);

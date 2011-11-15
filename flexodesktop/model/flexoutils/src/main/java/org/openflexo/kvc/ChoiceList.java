@@ -19,7 +19,7 @@
  */
 package org.openflexo.kvc;
 
-import java.util.Vector;
+import java.util.List;
 
 /**
  * Interface implemented by classes taking their values in a set of possible values
@@ -36,6 +36,6 @@ public interface ChoiceList {
 	 * 
 	 * @return a Vector of ChoiceList
 	 */
-	public Vector getAvailableValues();
+	public List<?> getAvailableValues();
 
 }

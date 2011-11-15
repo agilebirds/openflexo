@@ -161,7 +161,7 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 		latexDir.mkdirs();
 		pdfDir.mkdirs();
 		if (project != null) {
-			project.computeDiff = false;
+			project.setComputeDiff(false);
 			AddGeneratedCodeRepository add = AddGeneratedCodeRepository.actionType.makeNewAction(editor.getProject().getGeneratedDoc(),
 					null, editor);
 			if (editor.getProject().getDocTypeNamed(docType) == null) {

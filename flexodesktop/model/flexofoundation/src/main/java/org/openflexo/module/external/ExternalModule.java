@@ -19,7 +19,6 @@
  */
 package org.openflexo.module.external;
 
-import org.openflexo.foundation.rm.SaveResourceException;
 
 /**
  * Common interface for all external-view modules
@@ -44,12 +43,5 @@ public interface ExternalModule {
 	 * @return
 	 */
 	public boolean close();
-
-	/**
-	 * Save all ressources for this Module
-	 * 
-	 * @throws SaveResourceException
-	 */
-	public void save() throws SaveResourceException;
 
 }

@@ -24,7 +24,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.TreeSet;
 import java.util.Vector;
 
@@ -46,7 +48,7 @@ public class VectorKeyValueProperty extends KeyValueProperty {
 	 * NB: 'addTo...' methods are methods with general form: <code>addToXXX(Class anObject)</code> or <code>_addToXXX(Class anObject)</code>
 	 * , where XXX is the property name (try with or without a terminal 's' character), and Class could be anything...
 	 */
-	protected TreeSet addToMethods;
+	protected TreeSet<AccessorMethod> addToMethods;
 
 	/**
 	 * Stores all 'removeFrom...' methods, in order of the specialization of their arguments, as {@link AccessorMethod} objects. (the first
@@ -55,7 +57,7 @@ public class VectorKeyValueProperty extends KeyValueProperty {
 	 * <code>_removeFromXXX(Class anObject)</code>, where XXX is the property name (try with or without a terminal 's' character), and Class
 	 * could be anything...
 	 */
-	protected TreeSet removeFromMethods;
+	protected TreeSet<AccessorMethod> removeFromMethods;
 
 	/**
 	 * Creates a new <code>VectorKeyValueProperty</code> instance, given an object class.<br>
@@ -68,7 +70,7 @@ public class VectorKeyValueProperty extends KeyValueProperty {
 	 * @exception InvalidKeyValuePropertyException
 	 *                if an error occurs
 	 */
-	public VectorKeyValueProperty(Class anObjectClass, String propertyName, boolean setMethodIsMandatory)
+	public VectorKeyValueProperty(Class<?> anObjectClass, String propertyName, boolean setMethodIsMandatory)
 			throws InvalidKeyValuePropertyException {
 
 		super(anObjectClass, propertyName);
@@ -78,9 +80,8 @@ public class VectorKeyValueProperty extends KeyValueProperty {
 	/**
 	 * Returns boolean indicating if related type inherits from Vector
 	 */
-	public boolean typeInheritsFromVector() {
-
-		return Vector.class.isAssignableFrom(getType());
+	public boolean typeInheritsFromList() {
+		return List.class.isAssignableFrom(getType());
 	}
 
 	public Type getAccessedType() {
@@ -93,13 +94,13 @@ public class VectorKeyValueProperty extends KeyValueProperty {
 		}
 	}
 
-	public Class getContentType() {
+	public Class<?> getContentType() {
 		if (getAccessedType() instanceof ParameterizedType && ((ParameterizedType) getAccessedType()).getActualTypeArguments().length > 0) {
 			Type returned = ((ParameterizedType) getAccessedType()).getActualTypeArguments()[0];
 			if (returned instanceof Class) {
-				return (Class) returned;
+				return (Class<?>) returned;
 			} else if (returned instanceof ParameterizedType && ((ParameterizedType) returned).getRawType() instanceof Class) {
-				return (Class) ((ParameterizedType) returned).getRawType();
+				return (Class<?>) ((ParameterizedType) returned).getRawType();
 			}
 		}
 		return Object.class;
@@ -115,22 +116,25 @@ public class VectorKeyValueProperty extends KeyValueProperty {
 
 		super.init(propertyName, setMethodIsMandatory);
 
-		if (!typeInheritsFromVector()) {
+		if (!typeInheritsFromList()) {
 			throw new InvalidKeyValuePropertyException("Property " + propertyName
 					+ " found, but doesn't seem inherits from java.util.Vector");
 		}
 
 		// If related type is a sub-class of vector, check that there is a
 		// a trivial constructor
-		if (!getType().equals(Vector.class)) {
-			try {
-				Object testInstanciation = type.newInstance();
-			} catch (InstantiationException e) {
-				throw new InvalidKeyValuePropertyException("Class " + type.getName()
-						+ " cannot be instanciated directly (check that this class has a constructor with no arguments [public "
-						+ type.getName() + "()] and that this class is not abstract.");
-			} catch (Exception e) {
-				throw new InvalidModelException("Unexpected error occurs during model initialization. Please send a bug report.");
+		if (!getType().equals(Vector.class) && !getType().equals(ArrayList.class)) {
+			if (!type.isInterface() || !type.isAssignableFrom(Vector.class) || !type.isAssignableFrom(ArrayList.class)) {
+				try {
+					// Test instantiation
+					type.newInstance();
+				} catch (InstantiationException e) {
+					throw new InvalidKeyValuePropertyException("Class " + type.getName()
+							+ " cannot be instanciated directly (check that this class has a constructor with no arguments [public "
+							+ type.getName() + "()] and that this class is not abstract.");
+				} catch (Exception e) {
+					throw new InvalidModelException("Unexpected error occurs during model initialization. Please send a bug report.");
+				}
 			}
 		}
 
@@ -140,13 +144,13 @@ public class VectorKeyValueProperty extends KeyValueProperty {
 			// methods");
 
 			addToMethods = searchMatchingAddToMethods(propertyName);
-			if ((addToMethods.size() == 0) && (setMethodIsMandatory)) {
+			if (addToMethods.size() == 0 && setMethodIsMandatory) {
 				throw new InvalidKeyValuePropertyException("No public field " + propertyName
 						+ " found, and no 'addTo' methods accessors found");
 			}
 
 			removeFromMethods = searchMatchingRemoveFromMethods(propertyName);
-			if ((removeFromMethods.size() == 0) && (setMethodIsMandatory)) {
+			if (removeFromMethods.size() == 0 && setMethodIsMandatory) {
 				throw new InvalidKeyValuePropertyException("No public field " + propertyName
 						+ " found, and no 'removeFrom' methods accessors found");
 			}
@@ -161,12 +165,12 @@ public class VectorKeyValueProperty extends KeyValueProperty {
 	 * , where XXX is the property name (try with or without a terminal 's' character), and Class could be anything... Returns an ordered
 	 * TreeSet of {@link AccessorMethod} objects
 	 */
-	protected TreeSet searchMatchingAddToMethods(String propertyName) {
+	protected TreeSet<AccessorMethod> searchMatchingAddToMethods(String propertyName) {
 
 		String singularPropertyName;
 		String pluralPropertyName;
 
-		if ((propertyName.endsWith("s")) || (propertyName.endsWith("S"))) {
+		if (propertyName.endsWith("s") || propertyName.endsWith("S")) {
 			singularPropertyName = propertyName.substring(0, propertyName.length() - 1);
 			pluralPropertyName = propertyName;
 		} else {
@@ -189,12 +193,12 @@ public class VectorKeyValueProperty extends KeyValueProperty {
 	 * <code>_removeFromXXX(Class anObject)</code>, where XXX is the property name (try with or without a terminal 's' character), and Class
 	 * could be anything... Returns an ordered TreeSet of {@link AccessorMethod} objects
 	 */
-	protected TreeSet searchMatchingRemoveFromMethods(String propertyName) {
+	protected TreeSet<AccessorMethod> searchMatchingRemoveFromMethods(String propertyName) {
 
 		String singularPropertyName;
 		String pluralPropertyName;
 
-		if ((propertyName.endsWith("s")) || (propertyName.endsWith("S"))) {
+		if (propertyName.endsWith("s") || propertyName.endsWith("S")) {
 			singularPropertyName = propertyName.substring(0, propertyName.length() - 1);
 			pluralPropertyName = propertyName;
 		} else {
@@ -227,8 +231,8 @@ public class VectorKeyValueProperty extends KeyValueProperty {
 		} else {
 			if (field != null) {
 				try {
-					Vector vector = (Vector) field.get(object);
-					vector.addElement(aValue);
+					List vector = (List<?>) field.get(object);
+					vector.add(aValue);
 				} catch (Exception e) {
 					throw new InvalidKeyValuePropertyException("InvalidKeyValuePropertyException: class " + getObjectClass().getName()
 							+ ": field " + field.getName() + " Exception raised: " + e.toString());
@@ -236,10 +240,10 @@ public class VectorKeyValueProperty extends KeyValueProperty {
 			} else {
 				Object params[] = new Object[1];
 				params[0] = aValue;
-				for (Iterator i = addToMethods.iterator(); i.hasNext();) {
+				for (Iterator<AccessorMethod> i = addToMethods.iterator(); i.hasNext();) {
 					Method method = null;
 					try {
-						method = ((AccessorMethod) i.next()).getMethod();
+						method = i.next().getMethod();
 						// Debugging.debug ("Trying with "+method);
 						method.invoke(object, params);
 						return;
@@ -279,8 +283,8 @@ public class VectorKeyValueProperty extends KeyValueProperty {
 		} else {
 			if (field != null) {
 				try {
-					Vector vector = (Vector) field.get(object);
-					vector.removeElement(aValue);
+					List<?> vector = (List<?>) field.get(object);
+					vector.remove(aValue);
 				} catch (Exception e) {
 					throw new InvalidKeyValuePropertyException("InvalidKeyValuePropertyException: class " + getObjectClass().getName()
 							+ ": field " + field.getName() + " Exception raised: " + e.toString());
@@ -288,10 +292,10 @@ public class VectorKeyValueProperty extends KeyValueProperty {
 			} else {
 				Object params[] = new Object[1];
 				params[0] = aValue;
-				for (Iterator i = removeFromMethods.iterator(); i.hasNext();) {
+				for (Iterator<AccessorMethod> i = removeFromMethods.iterator(); i.hasNext();) {
 					Method method = null;
 					try {
-						method = ((AccessorMethod) i.next()).getMethod();
+						method = i.next().getMethod();
 						method.invoke(object, params);
 						return;
 					} catch (InvocationTargetException e) {
@@ -309,10 +313,12 @@ public class VectorKeyValueProperty extends KeyValueProperty {
 	/**
 	 * Creates a new instance of this represented class, which MUST be a {@link Vector} or a subclass of {@link Vector}.
 	 */
-	public Vector newInstance() throws InvalidObjectSpecificationException {
-
+	public List<?> newInstance() throws InvalidObjectSpecificationException {
 		try {
-			return (Vector) type.newInstance();
+			if (type.isInterface()) {
+				return new Vector();
+			}
+			return (List<?>) type.newInstance();
 		} catch (Exception e) {
 			throw new InvalidObjectSpecificationException("Could not instanciate a new " + type.getName() + ": reason " + e);
 		}

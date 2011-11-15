@@ -25,10 +25,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -169,7 +168,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 			aProject.removeResourceWithKey(getResourceIdentifier());
 			aProject.setFlexoResource(this);
 			aProject.registerResource(this);
-			for (FlexoResource res : aProject.getResources().values()) {
+			for (FlexoResource<? extends FlexoResourceData> res : aProject) {
 				res.getDependantResources().update();
 				res.getAlteredResources().update();
 				res.getSynchronizedResources().update();
@@ -308,20 +307,18 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 			}
 			updateTS(tempProject, project);
 			// Remove all storage resources with non-existant files
-			Vector<FlexoStorageResource> resourcesToRemove = new Vector<FlexoStorageResource>();
-			for (FlexoResource resource : project.getResources().values()) {
-				if (resource instanceof FlexoStorageResource) {
-					if (((FlexoStorageResource) resource).getFile() == null || !((FlexoStorageResource) resource).getFile().exists()
-					// Petite bidouille en attendant une meilleure gestion de ce truc
-							&& !resource.getResourceIdentifier().equals("POPUP_COMPONENT.WDLDateAssistant")) {
-						((FlexoStorageResource) resource).recoverFile();// Attempt to fix problems
-						if (((FlexoStorageResource) resource).getFile() == null || !((FlexoStorageResource) resource).getFile().exists()) {
-							resourcesToRemove.add((FlexoStorageResource) resource);
-						}
+			List<FlexoStorageResource<? extends StorageResourceData>> resourcesToRemove = new ArrayList<FlexoStorageResource<? extends StorageResourceData>>();
+			for (FlexoStorageResource<? extends StorageResourceData> resource : project.getStorageResources()) {
+				if (resource.getFile() == null || !resource.getFile().exists()
+				// Petite bidouille en attendant une meilleure gestion de ce truc
+						&& !resource.getResourceIdentifier().equals("POPUP_COMPONENT.WDLDateAssistant")) {
+					resource.recoverFile();// Attempt to fix problems
+					if (resource.getFile() == null || !resource.getFile().exists()) {
+						resourcesToRemove.add(resource);
 					}
 				}
 			}
-			for (FlexoResource resource : resourcesToRemove) {
+			for (FlexoStorageResource<? extends StorageResourceData> resource : resourcesToRemove) {
 				logger.warning("Delete resource " + resource + " which has a non-existent file");
 				resource.delete();
 			}
@@ -358,10 +355,9 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 
 			// Look-up observed object for screenshot resources
 			// (pas terrible comme technique, mais on verra plus tard)
-			for (Enumeration en = project.getResources().elements(); en.hasMoreElements();) {
-				FlexoResource next = (FlexoResource) en.nextElement();
-				if (next instanceof ScreenshotResource && ((ScreenshotResource) next).getSourceReference() == null) {
-					((ScreenshotResource) next).delete();
+			for (ScreenshotResource resource : project.getResourcesOfClass(ScreenshotResource.class)) {
+				if (resource.getSourceReference() == null) {
+					resource.delete();
 				}
 			}
 
@@ -573,11 +569,8 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Starting conversion of screenshot resources name.");
 		}
-		for (Enumeration en = _resourceData.getResources().elements(); en.hasMoreElements();) {
-			FlexoResource next = (FlexoResource) en.nextElement();
-			if (next instanceof ScreenshotResource) {
-				((ScreenshotResource) next).getName();
-			}
+		for (ScreenshotResource resource : _resourceData.getResourcesOfClass(ScreenshotResource.class)) {
+			resource.getName();
 		}
 		try {
 			this.saveResourceDataWithVersion(new FlexoVersion("3.2.0"));
@@ -763,26 +756,29 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("updateTS ");
 		}
-		for (FlexoResource tempResource : ((Hashtable<String, FlexoResource>) tempProject.getResources().clone()).values()) {
+		for (FlexoResource<? extends FlexoResourceData> tempResource : new ArrayList<FlexoResource<? extends FlexoResourceData>>(
+				tempProject.getResources().values())) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("updateTSForResource" + tempResource);
 			}
-			FlexoResource resource = currentProject.resourceForKey(tempResource.getResourceIdentifier());
+			FlexoResource<? extends FlexoResourceData> resource = currentProject.resourceForKey(tempResource.getResourceIdentifier());
 			if (resource != null) {
 				updateTSForResource(resource, currentProject, tempResource);
 			}
 		}
 	}
 
-	private void updateTSForResource(FlexoResource<?> resource, FlexoProject currentProject, FlexoResource<?> tempResource) {
+	private void updateTSForResource(FlexoResource<? extends FlexoResourceData> resource, FlexoProject currentProject,
+			FlexoResource<? extends FlexoResourceData> tempResource) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("updateTSForResource" + resource + " entries=" + tempResource.getLastSynchronizedForResources().size());
 		}
 		for (LastSynchronizedWithResourceEntry entry : tempResource.getLastSynchronizedForResources().values()) {
-			FlexoResource tempOriginResource = entry.getOriginResource();
-			FlexoResource tempBSResource = entry.getResource();
-			FlexoResource originResource = currentProject.resourceForKey(tempOriginResource.getResourceIdentifier());
-			FlexoResource bsResource = currentProject.resourceForKey(tempBSResource.getResourceIdentifier());
+			FlexoResource<? extends FlexoResourceData> tempOriginResource = entry.getOriginResource();
+			FlexoResource<? extends FlexoResourceData> tempBSResource = entry.getResource();
+			FlexoResource<? extends FlexoResourceData> originResource = currentProject.resourceForKey(tempOriginResource
+					.getResourceIdentifier());
+			FlexoResource<? extends FlexoResourceData> bsResource = currentProject.resourceForKey(tempBSResource.getResourceIdentifier());
 			if (bsResource != null) {
 				LastSynchronizedWithResourceEntry newEntry = new LastSynchronizedWithResourceEntry(originResource, bsResource,
 						entry.getDate());
@@ -791,11 +787,13 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> imple
 		}
 		// Dont forget to set lastWrittenOnDisk !!!!!
 		if (resource instanceof FlexoFileResource && tempResource instanceof FlexoFileResource) {
-			((FlexoFileResource) resource)._setLastWrittenOnDisk(((FlexoFileResource) tempResource)._getLastWrittenOnDisk());
+			((FlexoFileResource<? extends FlexoResourceData>) resource)
+					._setLastWrittenOnDisk(((FlexoFileResource<? extends FlexoResourceData>) tempResource)._getLastWrittenOnDisk());
 		}
 		// And lastKnownMemoryUpdate for Storage resource
 		if (resource instanceof FlexoStorageResource && tempResource instanceof FlexoStorageResource) {
-			((FlexoStorageResource) resource).setLastKnownMemoryUpdate(((FlexoStorageResource) tempResource).getLastKnownMemoryUpdate());
+			((FlexoStorageResource<? extends FlexoResourceData>) resource)
+					.setLastKnownMemoryUpdate(((FlexoStorageResource<? extends FlexoResourceData>) tempResource).getLastKnownMemoryUpdate());
 		}
 	}
 

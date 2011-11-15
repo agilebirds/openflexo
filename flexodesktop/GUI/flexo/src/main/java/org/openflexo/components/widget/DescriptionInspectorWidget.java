@@ -23,6 +23,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -75,8 +76,8 @@ public class DescriptionInspectorWidget extends CustomInspectorWidget<FlexoModel
 		private ActionListener cbListener;
 
 		/**
-         *
-         */
+		 *
+		 */
 		public DescriptionPanel() {
 			super(new BorderLayout());
 			setOpaque(false);
@@ -271,7 +272,7 @@ public class DescriptionInspectorWidget extends CustomInspectorWidget<FlexoModel
 					DocType dt = (DocType) docTypes.getSelectedItem();
 					docTypes.removeActionListener(cbListener);
 					docTypes.setSelectedItem(null);
-					docTypes.setModel(new DefaultComboBoxModel(getObject().getProject().getDocTypes()));
+					docTypes.setModel(new DefaultComboBoxModel(new Vector<DocType>(getObject().getProject().getDocTypes())));
 					if (dt != null && getObject().getProject().getDocTypes().indexOf(dt) > -1) {
 						docTypes.setSelectedItem(dt);
 					} else {
@@ -304,9 +305,9 @@ public class DescriptionInspectorWidget extends CustomInspectorWidget<FlexoModel
 	protected boolean isUpdatingWidget = false;
 
 	/**
-     *
-     *
-     */
+	 *
+	 *
+	 */
 	public FlexoModelObject getObject() {
 		KVCObject o = (KVCObject) super.getModel();
 		if (getPropertyModel().name.indexOf('.') > -1) {

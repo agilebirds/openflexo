@@ -17,21 +17,23 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.components;
-
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.FlexoModule;
+package org.openflexo.foundation.viewpoint.inspector;
 
 /**
- * Please comment this class
+ * Represents an inspector entry for an float
  * 
- * @author sguerin
+ * @author sylvain
  * 
  */
-public class ModuleResourcesReviewer extends AskForSaveResources {
+public class FloatInspectorEntry extends InspectorEntry {
 
-	public ModuleResourcesReviewer(FlexoModule module) {
-		super(FlexoLocalization.localizedForKey("review_unsaved"), "save", "dont_save", module.getLoadedStorageResources());
+	@Override
+	public Class getDefaultDataClass() {
+		return Float.class;
 	}
 
+	@Override
+	public String getWidgetName() {
+		return "Float";
+	}
 }

@@ -373,6 +373,11 @@ public class FIBBrowserElement extends FIBModelObject {
 			return FIBBrowserElement.this.getRootComponent();
 		}
 
+		@Override
+		public List<? extends FIBModelObject> getEmbeddedObjects() {
+			return null;
+		}
+
 	}
 
 	public Class getDataClass() {
@@ -637,6 +642,17 @@ public class FIBBrowserElement extends FIBModelObject {
 				return TypeUtils.getBaseClass(getAccessedType());
 			}
 		}
+		
+		@Override
+		public List<? extends FIBModelObject> getEmbeddedObjects() {
+			return null;
+		}
+
+	}
+
+	@Override
+	public List<? extends FIBModelObject> getEmbeddedObjects() {
+		return null;
 	}
 
 }

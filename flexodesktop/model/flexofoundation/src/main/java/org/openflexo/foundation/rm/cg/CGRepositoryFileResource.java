@@ -301,13 +301,13 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 		} else if (getCGFile().isOverrideScheduled()) {
 			return GenerationStatus.OverrideScheduled;
 		} else if (!getFile().exists() || needsGeneration()) {
-			if (diskUpdate && getProject() != null && getProject().computeDiff) {
+			if (diskUpdate && getProject() != null && getProject().isComputeDiff()) {
 				return getCGFile().isMarkedAsMerged() ? GenerationStatus.ConflictingMarkedAsMerged : GenerationStatus.ConflictingUnMerged;
 			} else {
 				if (!getFile().exists()) {
 					return GenerationStatus.GenerationAdded;
 				} else {
-					if (getProject() != null && getProject().computeDiff && getCGFile().isGenerationConflicting()) {
+					if (getProject() != null && getProject().isComputeDiff() && getCGFile().isGenerationConflicting()) {
 						return getCGFile().isMarkedAsMerged() ? GenerationStatus.ConflictingMarkedAsMerged
 								: GenerationStatus.ConflictingUnMerged;
 					} else {

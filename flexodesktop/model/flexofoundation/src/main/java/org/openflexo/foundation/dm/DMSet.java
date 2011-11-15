@@ -225,6 +225,11 @@ public class DMSet extends TemporaryFlexoModelObject {
 		return super.equals(anObject);
 	}
 
+	@Override
+	public int hashCode() {
+		return getName() == null ? 0 : getName().hashCode();
+	}
+
 	public Enumeration getPackages() {
 		Vector<PackageReference> orderedPackages = new Vector<PackageReference>(_packages.values());
 		Collections.sort(orderedPackages, new Comparator<PackageReference>() {
@@ -296,6 +301,11 @@ public class DMSet extends TemporaryFlexoModelObject {
 			return super.equals(anObject);
 		}
 
+		@Override
+		public int hashCode() {
+			return getName() == null ? 0 : getName().hashCode();
+		}
+
 		public ClassReference add(Class aClass, boolean parseMethodsAndProperties) {
 			return add(aClass, parseMethodsAndProperties, null);
 		}
@@ -325,7 +335,7 @@ public class DMSet extends TemporaryFlexoModelObject {
 								next.getCardinality(),
 								// (next.getType()!=null?next.getType().getName():next.getUnresolvedTypeName()+"<unloaded>"));
 								next.getType().getStringRepresentation(), next.getType().getSimplifiedStringRepresentation()
-										+ (next.getType().isResolved() ? "" : "<unloaded>"));
+								+ (next.getType().isResolved() ? "" : "<unloaded>"));
 						_properties.add(propertyReference);
 						if (entity != null && entity.getDMProperty(next.getName()) != null) {
 							addToSelectedObjects(propertyReference);
@@ -336,9 +346,9 @@ public class DMSet extends TemporaryFlexoModelObject {
 					for (Enumeration en = methods.elements(); en.hasMoreElements();) {
 						DMMethod next = (DMMethod) en.nextElement();
 						MethodReference methodReference = new MethodReference(next.getSignature(), next.getSimplifiedSignature(),
-						// (next.getReturnType()!=null?next.getReturnType().getName():next.getUnresolvedReturnType().getValue()+"<unloaded>"));
+								// (next.getReturnType()!=null?next.getReturnType().getName():next.getUnresolvedReturnType().getValue()+"<unloaded>"));
 								next.getReturnType().getStringRepresentation(), next.getReturnType().getSimplifiedStringRepresentation()
-										+ (next.getType().isResolved() ? "" : "<unloaded>"));
+								+ (next.getType().isResolved() ? "" : "<unloaded>"));
 						_methods.add(methodReference);
 						if (entity != null && entity.getDeclaredMethod(next.getSignature()) != null) {
 							addToSelectedObjects(methodReference);
@@ -382,6 +392,11 @@ public class DMSet extends TemporaryFlexoModelObject {
 					return ((ClassReference) anObject).getName().equals(getName());
 				}
 				return super.equals(anObject);
+			}
+
+			@Override
+			public int hashCode() {
+				return getName() == null ? 0 : getName().hashCode();
 			}
 
 			public boolean isSelected() {
@@ -451,6 +466,11 @@ public class DMSet extends TemporaryFlexoModelObject {
 						return ((PropertyReference) anObject).getName().equals(getName());
 					}
 					return super.equals(anObject);
+				}
+
+				@Override
+				public int hashCode() {
+					return getName().hashCode();
 				}
 
 				public boolean isSelected() {
@@ -535,6 +555,11 @@ public class DMSet extends TemporaryFlexoModelObject {
 						return ((MethodReference) anObject).getSignature().equals(getSignature());
 					}
 					return super.equals(anObject);
+				}
+
+				@Override
+				public int hashCode() {
+					return getSignature().hashCode();
 				}
 
 				public boolean isSelected() {

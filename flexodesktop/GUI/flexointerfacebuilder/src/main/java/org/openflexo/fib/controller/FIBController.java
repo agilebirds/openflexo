@@ -115,6 +115,8 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 	private final Vector<FIBSelectionListener> selectionListeners;
 	private final Vector<FIBMouseClickListener> mouseClickListeners;
 
+	private MouseEvent mouseEvent;
+	
 	public FIBController(FIBComponent rootComponent) {
 		this.rootComponent = rootComponent;
 		views = new Hashtable<FIBComponent, FIBView>();
@@ -282,8 +284,13 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 		returned.getDynamicJComponent().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				mouseEvent = e;
 				fireMouseClicked(returned.getDynamicModel(), e.getClickCount());
-				if (fibWidget.hasClickAction() && e.getClickCount() == 1) {
+				if (fibWidget.hasRightClickAction() && (e.isPopupTrigger() || e.getButton()==MouseEvent.BUTTON3)) {
+					// Detected right-click associated with action
+					fibWidget.getRightClickAction().execute(FIBController.this);
+				}
+				else if (fibWidget.hasClickAction() && e.getClickCount() == 1) {
 					// Detected click associated with action
 					fibWidget.getClickAction().execute(FIBController.this);
 				} else if (fibWidget.hasDoubleClickAction() && e.getClickCount() == 2) {
@@ -690,5 +697,14 @@ public class FIBController<T> extends Observable implements BindingEvaluationCon
 	protected boolean allowsFIBEdition() {
 		return true;
 	}
+
+	public MouseEvent getMouseEvent() {
+		return mouseEvent;
+	}
+
+	public void setMouseEvent(MouseEvent mouseEvent) {
+		this.mouseEvent = mouseEvent;
+	}
+
 
 }
