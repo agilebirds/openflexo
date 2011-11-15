@@ -26,7 +26,9 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -45,6 +47,7 @@ import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.SaveResourceExceptionList;
 import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
+import org.openflexo.foundation.rm.StorageResourceData;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.FlexoDialog;
 import org.openflexo.view.controller.FlexoController;
@@ -83,7 +86,8 @@ public class AskForSaveResources extends FlexoDialog {
 	 * @param resources
 	 *            : a vector of FlexoStorageResource
 	 */
-	public AskForSaveResources(String title, String validateLabel, String emptyValidateLabel, Vector<FlexoStorageResource> resources) {
+	public AskForSaveResources(String title, String validateLabel, String emptyValidateLabel,
+			List<FlexoStorageResource<? extends StorageResourceData>> resources) {
 		super(FlexoController.getActiveFrame(), true);
 		returned = CANCEL;
 		setTitle(title);
@@ -240,20 +244,20 @@ public class AskForSaveResources extends FlexoDialog {
 
 	public class ReviewUnsavedModel extends AbstractTableModel {
 
-		private Vector<FlexoStorageResource> _resources;
+		private List<FlexoStorageResource<? extends StorageResourceData>> _resources;
 
 		private Vector<Boolean> _shouldSave;
 
-		public ReviewUnsavedModel(Vector<FlexoStorageResource> resources) {
+		public ReviewUnsavedModel(List<FlexoStorageResource<? extends StorageResourceData>> resources) {
 			super();
 			_resources = resources;
 			_shouldSave = new Vector<Boolean>();
 			for (int i = 0; i < resources.size(); i++) {
-				FlexoStorageResource res = resources.elementAt(i);
+				FlexoStorageResource<? extends StorageResourceData> res = resources.get(i);
 				if (res.needsSaving()) {
-					_shouldSave.add(new Boolean(true));
+					_shouldSave.add(Boolean.TRUE);
 				} else {
-					_shouldSave.add(new Boolean(false));
+					_shouldSave.add(Boolean.FALSE);
 				}
 			}
 		}
@@ -298,7 +302,7 @@ public class AskForSaveResources extends FlexoDialog {
 
 		@Override
 		public boolean isCellEditable(int rowIndex, int columnIndex) {
-			return (columnIndex == 0 ? true : false);
+			return columnIndex == 0 ? true : false;
 		}
 
 		@Override
@@ -309,15 +313,15 @@ public class AskForSaveResources extends FlexoDialog {
 			if (columnIndex == 0) {
 				return _shouldSave.elementAt(rowIndex);
 			} else if (columnIndex == 1) {
-				return (_resources.elementAt(rowIndex)).getName();
+				return _resources.get(rowIndex).getName();
 			} else if (columnIndex == 2) {
-				return (_resources.elementAt(rowIndex)).getResourceType().getName();
+				return _resources.get(rowIndex).getResourceType().getName();
 			} else if (columnIndex == 3) {
-				return (_resources.elementAt(rowIndex)).getFile().getName();
+				return _resources.get(rowIndex).getFile().getName();
 			} else if (columnIndex == 4) {
-				Date date = (_resources.elementAt(rowIndex)).getDiskLastModifiedDate();
+				Date date = _resources.get(rowIndex).getDiskLastModifiedDate();
 				if (date != null) {
-					return (new SimpleDateFormat("dd/MM HH:mm:ss")).format(date);
+					return new SimpleDateFormat("dd/MM HH:mm:ss").format(date);
 				} else {
 					return "-";
 				}
@@ -336,7 +340,7 @@ public class AskForSaveResources extends FlexoDialog {
 		protected int getNbOfFilesToSave() {
 			int nbOfFilesToSave = 0;
 			for (int i = 0; i < _shouldSave.size(); i++) {
-				if ((_shouldSave.elementAt(i)).booleanValue()) {
+				if (_shouldSave.elementAt(i).booleanValue()) {
 					nbOfFilesToSave++;
 				}
 			}
@@ -351,7 +355,7 @@ public class AskForSaveResources extends FlexoDialog {
 			while (project == null && i < _resources.size()) {
 				project = _resources.get(i).getProject();
 			}
-			Vector<FlexoStorageResource> resourcesToSave = new Vector<FlexoStorageResource>();
+			List<FlexoStorageResource<? extends StorageResourceData>> resourcesToSave = new ArrayList<FlexoStorageResource<? extends StorageResourceData>>();
 			for (i = 0; i < _shouldSave.size(); i++) {
 				if (_shouldSave.get(i)) {
 					resourcesToSave.add(_resources.get(i));

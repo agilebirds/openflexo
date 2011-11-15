@@ -27,7 +27,6 @@ package org.openflexo.foundation.ie.cl;
  */
 
 import java.io.File;
-import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -185,8 +184,7 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 			e.printStackTrace();
 		}
 
-		Collection<FlexoResource<FlexoResourceData>> c = project.getResources().values();
-		for (FlexoResource r : c) {
+		for (FlexoResource<? extends FlexoResourceData> r : project.getResources().values()) {
 			if (r instanceof FlexoComponentResource) {
 				if (newLibrary.getComponentNamed(((FlexoComponentResource) r).getName()) == null) {
 					((FlexoComponentResource) r).getComponentDefinition();
@@ -271,7 +269,7 @@ public class FlexoComponentLibrary extends IECLObject implements XMLStorageResou
 
 	public FlexoComponentFolder getFlexoComponentFolderWithName(String folderName) {
 		for (Enumeration e = allFolders(); e.hasMoreElements();) {
-			FlexoComponentFolder folder = ((FlexoComponentFolder) e.nextElement());
+			FlexoComponentFolder folder = (FlexoComponentFolder) e.nextElement();
 
 			if (folder.getName().equals(folderName)) {
 				return folder;

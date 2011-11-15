@@ -20,6 +20,7 @@
 package org.openflexo.foundation.cg;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -46,6 +47,7 @@ import org.openflexo.foundation.cg.version.CGVersionIdentifier;
 import org.openflexo.foundation.cg.version.action.RegisterNewCGRelease;
 import org.openflexo.foundation.cg.version.action.RevertRepositoryToVersion;
 import org.openflexo.foundation.rm.FlexoResource;
+import org.openflexo.foundation.rm.FlexoResourceData;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource.SaveXMLResourceException;
 import org.openflexo.foundation.rm.ProjectExternalRepository;
 import org.openflexo.foundation.rm.ProjectRestructuration;
@@ -136,7 +138,7 @@ public abstract class GenerationRepository extends CGObject {
 	@Override
 	public void setName(String name) throws DuplicateCodeRepositoryNameException {
 		if (_sourceCodeRepository != null) {
-			if ((name != null) && !name.equals(getName())) {
+			if (name != null && !name.equals(getName())) {
 				throw new IllegalStateException("External repository identifier cannot change !");
 				// if (getProject().getExternalRepositoryWithKey(name) != null) {
 				// throw new DuplicateCodeRepositoryNameException(this,name);
@@ -199,11 +201,10 @@ public abstract class GenerationRepository extends CGObject {
 		// The purpose of doing this is to avoid generated resources from being without a proper CGFile
 		// causing them to irremediably be unusable
 
-		Enumeration<FlexoResource> en = ((Hashtable<String, FlexoResource>) getProject().getResources().clone()).elements();
-		while (en.hasMoreElements()) {
-			FlexoResource element = en.nextElement();
-			if (element instanceof CGRepositoryFileResource) {
-				CGRepositoryFileResource file = (CGRepositoryFileResource) element;
+		for (FlexoResource<? extends FlexoResourceData> r : new ArrayList<FlexoResource<? extends FlexoResourceData>>(getProject()
+				.getResources().values())) {
+			if (r instanceof CGRepositoryFileResource) {
+				CGRepositoryFileResource file = (CGRepositoryFileResource) r;
 				if (file.getCGFile() == null) {
 					if (file.getName() != null && file.getName().indexOf('.') > -1) {
 						if (file.getName().substring(0, file.getName().indexOf('.')).equals(getName())) {
@@ -322,13 +323,13 @@ public abstract class GenerationRepository extends CGObject {
 
 	@Override
 	public boolean isEnabled() {
-		return (isConnected && getSourceCodeRepository().isConnected());
+		return isConnected && getSourceCodeRepository().isConnected();
 	}
 
 	public boolean isConnected() {
 		if (!connectionStatusInitialized) {
 			connectionStatusInitialized = true;
-			isConnected = (getSourceCodeRepository() != null && getSourceCodeRepository().isConnected());
+			isConnected = getSourceCodeRepository() != null && getSourceCodeRepository().isConnected();
 		}
 		return isConnected;
 	}
@@ -508,8 +509,8 @@ public abstract class GenerationRepository extends CGObject {
 					needsModelReinjection = true;
 					needsModelReinjectionCount++;
 				}
-				if ((file.getGenerationStatus().isGenerationModified())
-						|| (file.getGenerationStatus() == GenerationStatus.ConflictingMarkedAsMerged)) {
+				if (file.getGenerationStatus().isGenerationModified()
+						|| file.getGenerationStatus() == GenerationStatus.ConflictingMarkedAsMerged) {
 					CGPathElement current = file;
 					while (current.getParent() != null) {
 						if (((CGObject) current.getParent()).generationStatus == GenerationStatus.UpToDate) {
@@ -526,7 +527,7 @@ public abstract class GenerationRepository extends CGObject {
 					}
 					generationModifiedCount++;
 				}
-				if ((file.getGenerationStatus().isDiskModified())) {
+				if (file.getGenerationStatus().isDiskModified()) {
 					CGPathElement current = file;
 					while (current.getParent() != null) {
 						if (((CGObject) current.getParent()).generationStatus == GenerationStatus.UpToDate) {
@@ -570,9 +571,9 @@ public abstract class GenerationRepository extends CGObject {
 	@Override
 	public boolean isContainedIn(CGObject obj) {
 		if (obj instanceof GeneratedOutput) {
-			return (obj == getGeneratedCode());
+			return obj == getGeneratedCode();
 		} else if (obj instanceof GenerationRepository) {
-			return (obj == this);
+			return obj == this;
 		}
 		return false;
 	}
@@ -593,7 +594,7 @@ public abstract class GenerationRepository extends CGObject {
 		CustomCGTemplateRepository old = _preferredTemplateRepository;
 		if (old == null || old != preferredTemplateRepository) {
 			_preferredTemplateRepository = preferredTemplateRepository;
-			_preferredTemplateRepositoryName = (preferredTemplateRepository != null ? preferredTemplateRepository.getName() : null);
+			_preferredTemplateRepositoryName = preferredTemplateRepository != null ? preferredTemplateRepository.getName() : null;
 			if (!isDeserializing()) {
 				setChanged();
 				notifyObservers(new CustomTemplateRepositoryChanged(old, preferredTemplateRepository));

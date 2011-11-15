@@ -21,6 +21,7 @@ package org.openflexo.foundation.rm;
 
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -36,13 +37,13 @@ import org.openflexo.xmlcode.XMLSerializable;
 public abstract class ResourceList extends Vector<FlexoResource<FlexoResourceData>> implements XMLSerializable {
 	private static final Logger logger = Logger.getLogger(ResourceList.class.getPackage().getName());
 
-	private FlexoResource<FlexoResourceData> relatedResource;
+	private FlexoResource<? extends FlexoResourceData> relatedResource;
 
 	public ResourceList() {
 		super();
 	}
 
-	public ResourceList(FlexoResource<FlexoResourceData> relatedResource) {
+	public ResourceList(FlexoResource<? extends FlexoResourceData> relatedResource) {
 		super();
 		setRelatedResource(relatedResource);
 	}
@@ -52,22 +53,22 @@ public abstract class ResourceList extends Vector<FlexoResource<FlexoResourceDat
 	 * 
 	 * @return
 	 */
-	public FlexoResource<FlexoResourceData> getRelatedResource() {
+	public FlexoResource<? extends FlexoResourceData> getRelatedResource() {
 		return relatedResource;
 	}
 
-	public void setRelatedResource(FlexoResource<FlexoResourceData> relatedResource) {
+	public void setRelatedResource(FlexoResource<? extends FlexoResourceData> relatedResource) {
 		this.relatedResource = relatedResource;
 	}
 
-	public Vector<FlexoResource<FlexoResourceData>> getResources() {
+	public List<FlexoResource<FlexoResourceData>> getResources() {
 		return this;
 	}
 
-	public void setResources(Vector<FlexoResource<FlexoResourceData>> aVector) {
+	public void setResources(List<FlexoResource<FlexoResourceData>> aVector) {
 		removeAllElements();
-		for (Enumeration<FlexoResource<FlexoResourceData>> e = aVector.elements(); e.hasMoreElements();) {
-			addToResources(e.nextElement());
+		for (FlexoResource<FlexoResourceData> r : aVector) {
+			addToResources(r);
 		}
 		if (getRelatedResource() != null) {
 			getRelatedResource().getProject().notifyResourceChanged(getRelatedResource());
@@ -75,7 +76,7 @@ public abstract class ResourceList extends Vector<FlexoResource<FlexoResourceDat
 		update();
 	}
 
-	public void addToResources(FlexoResource<FlexoResourceData> resource) {
+	public void addToResources(FlexoResource resource) {
 		if (resource.isDeleted()) {
 			return;
 		}
@@ -88,7 +89,7 @@ public abstract class ResourceList extends Vector<FlexoResource<FlexoResourceDat
 		}
 	}
 
-	public void removeFromResources(FlexoResource<FlexoResourceData> resource) {
+	public void removeFromResources(FlexoResource resource) {
 		if (contains(resource)) {
 			remove(resource);
 			if (getRelatedResource() != null) {
@@ -112,7 +113,12 @@ public abstract class ResourceList extends Vector<FlexoResource<FlexoResourceDat
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		return (obj == this);
+		return obj == this;
+	}
+
+	@Override
+	public synchronized int hashCode() {
+		return super.hashCode();
 	}
 
 	public void loadAll() {
@@ -142,9 +148,9 @@ public abstract class ResourceList extends Vector<FlexoResource<FlexoResourceDat
 			while (i.hasNext()) {
 				FlexoResource<FlexoResourceData> resource = i.next();
 				if (!resource.isToBeSerialized()
-						|| (getRelatedResource().getProject().getFlexoResource() != null
-								&& !getRelatedResource().getProject().getFlexoResource().isInitializingProject() && !resource
-									.checkIntegrity())) {
+						|| getRelatedResource().getProject().getFlexoResource() != null
+						&& !getRelatedResource().getProject().getFlexoResource().isInitializingProject() && !resource
+						.checkIntegrity()) {
 					i.remove();
 				}
 			}

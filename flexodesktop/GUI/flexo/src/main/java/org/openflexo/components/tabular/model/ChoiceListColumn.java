@@ -20,7 +20,6 @@
 package org.openflexo.components.tabular.model;
 
 import java.awt.Component;
-import java.util.Enumeration;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
@@ -42,7 +41,7 @@ import org.openflexo.kvc.ChoiceList;
  * 
  */
 public abstract class ChoiceListColumn<D extends FlexoModelObject> extends AbstractColumn<D, ChoiceList> implements
-		EditableColumn<D, ChoiceList> {
+EditableColumn<D, ChoiceList> {
 
 	private ChoiceListCellRenderer _cellRenderer;
 
@@ -181,8 +180,8 @@ public abstract class ChoiceListColumn<D extends FlexoModelObject> extends Abstr
 			protected void setChoiceList(ChoiceList aChoiceList) {
 				if (aChoiceList != null) {
 					removeAllElements();
-					for (Enumeration en = aChoiceList.getAvailableValues().elements(); en.hasMoreElements();) {
-						addElement(en.nextElement());
+					for (Object obj : aChoiceList.getAvailableValues()) {
+						addElement(obj);
 					}
 					setSelectedItem(aChoiceList);
 				}

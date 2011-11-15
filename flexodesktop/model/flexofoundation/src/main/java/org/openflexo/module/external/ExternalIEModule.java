@@ -36,8 +36,6 @@ public interface ExternalIEModule extends ExternalModule {
 
 	public void showScreenInterface(ComponentInstance component);
 
-	public void saveAll(boolean showConfirm);
-
 	public JComponent getWOComponentView(ExternalIEController controller, IEWOComponent component);
 
 	public JComponent createViewForOperation(OperationNode operation);

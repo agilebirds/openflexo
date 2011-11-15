@@ -218,7 +218,7 @@ public class FlexoComponentLibraryResource extends FlexoXMLStorageResource<Flexo
 		ComponentDefinition cd = getResourceData().getComponentNamed("WDLKeyValueAssistant");
 		if (cd != null) {
 			cd.getFolder().removeFromComponents(cd);
-			FlexoResource<FlexoResourceData> res = getProject().getResources().get(
+			FlexoResource<? extends FlexoResourceData> res = getProject().getResources().get(
 					ResourceType.POPUP_COMPONENT.getName() + "." + cd.getName());
 			if (res != null) {
 				res.delete();

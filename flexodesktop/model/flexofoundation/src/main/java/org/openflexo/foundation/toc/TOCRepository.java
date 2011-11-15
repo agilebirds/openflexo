@@ -67,7 +67,7 @@ public class TOCRepository extends TOCEntry {
 
 	public TOCRepository(TOCData data, DocType docType, TOCRepository tocTemplate) {
 		this(data);
-		this.docType = docType != null ? docType : data.getProject().getDocTypes().firstElement();
+		this.docType = docType != null ? docType : data.getProject().getDocTypes().get(0);
 		if (tocTemplate == null) {
 			TOCRepository defaultTocTemplate = null;
 			if (docType.getName().equals(DefaultDocType.Technical.name())) {

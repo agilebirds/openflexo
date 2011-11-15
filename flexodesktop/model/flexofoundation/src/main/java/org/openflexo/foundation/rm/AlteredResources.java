@@ -26,7 +26,7 @@ import java.util.Vector;
 import org.openflexo.foundation.rm.FlexoResource.DependancyAlgorithmScheme;
 
 /**
- * Represents all the resources related resource alters (or more exactely, MAY alters). A modification on related resource may modify one or
+ * Represents all the resources related resource alters (or more exactly, MAY alters). A modification on related resource may modify one or
  * more of altered resources.
  * 
  * @author sguerin
@@ -40,7 +40,7 @@ public class AlteredResources extends ResourceList {
 		_resourceExcludingInactive = new Hashtable<DependancyAlgorithmScheme, Vector<FlexoResource<FlexoResourceData>>>();
 	}
 
-	public AlteredResources(FlexoResource relatedResource) {
+	public AlteredResources(FlexoResource<? extends FlexoResourceData> relatedResource) {
 		super(relatedResource);
 		_resourceIncludingInactive = new Hashtable<DependancyAlgorithmScheme, Vector<FlexoResource<FlexoResourceData>>>();
 		_resourceExcludingInactive = new Hashtable<DependancyAlgorithmScheme, Vector<FlexoResource<FlexoResourceData>>>();

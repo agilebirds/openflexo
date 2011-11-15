@@ -20,6 +20,7 @@
 package org.openflexo.foundation;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Vector;
 
 import org.openflexo.foundation.rm.FlexoProject;
@@ -43,7 +44,7 @@ public class DocType extends TargetType implements ChoiceList, Serializable, Str
 
 		public static boolean isDefaultDocType(String docType, boolean ignoreCase) {
 			for (DefaultDocType defaultDocType : values()) {
-				if (defaultDocType.name().equals(docType) || (ignoreCase && defaultDocType.name().equalsIgnoreCase(docType))) {
+				if (defaultDocType.name().equals(docType) || ignoreCase && defaultDocType.name().equalsIgnoreCase(docType)) {
 					return true;
 				}
 			}
@@ -140,7 +141,7 @@ public class DocType extends TargetType implements ChoiceList, Serializable, Str
 	 * @see org.openflexo.kvc.ChoiceList#getAvailableValues()
 	 */
 	@Override
-	public Vector<DocType> getAvailableValues() {
+	public List<DocType> getAvailableValues() {
 		return getProject().getDocTypes();
 	}
 

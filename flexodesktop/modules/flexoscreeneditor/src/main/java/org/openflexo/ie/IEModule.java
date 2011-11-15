@@ -123,11 +123,6 @@ public class IEModule extends FlexoModule implements ExternalIEModule {
 	}
 
 	@Override
-	public void saveAll(boolean showConfirm) {
-		save(showConfirm, true);
-	}
-
-	@Override
 	public JComponent createViewForOperation(OperationNode operation) {
 		if (!operation.hasWOComponent()) {
 			return null;
@@ -201,9 +196,9 @@ public class IEModule extends FlexoModule implements ExternalIEModule {
 					.getComponentDefinition().getDummyComponentInstance());
 		} else {
 			compView = new IEWOComponentView((IEController) controller, component.getComponentDefinition().getDummyComponentInstance());
-			compView.setPreferredSize(new Dimension(compView.getMaxWidth(), (compView).dropZone.getPreferredSize().height));
+			compView.setPreferredSize(new Dimension(compView.getMaxWidth(), compView.dropZone.getPreferredSize().height));
 		}
-		pane.add((compView).dropZone, BorderLayout.CENTER);
+		pane.add(compView.dropZone, BorderLayout.CENTER);
 		pane.validate();
 		pane.doLayout();
 		pane.repaint();

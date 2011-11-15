@@ -64,7 +64,6 @@ import org.openflexo.foundation.ie.widget.NotEnoughRoomOnTheRight;
 import org.openflexo.foundation.ie.widget.RowIsNotEmpty;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.icon.IconLibrary;
-import org.openflexo.ie.IEModule;
 import org.openflexo.ie.menu.IEMenuBar;
 import org.openflexo.ie.view.ComponentBrowserView;
 import org.openflexo.ie.view.ComponentLibraryBrowserView;
@@ -363,10 +362,6 @@ public class IEController extends FlexoController implements SelectionManagingCo
 			return ((IEWOComponentView) getCurrentModuleView()).getComponentInstance();
 		}
 		return null;
-	}
-
-	public void saveAll(boolean showConfirm) {
-		((IEModule) getModule()).saveAll(showConfirm);
 	}
 
 	public JComponent getCurrentEditZone() {

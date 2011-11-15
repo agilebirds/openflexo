@@ -44,7 +44,7 @@ public class DependantResources extends ResourceList {
 		_resourceExcludingInactive = new Hashtable<DependancyAlgorithmScheme, Vector<FlexoResource<FlexoResourceData>>>();
 	}
 
-	public DependantResources(FlexoResource relatedResource) {
+	public DependantResources(FlexoResource<? extends FlexoResourceData> relatedResource) {
 		super(relatedResource);
 		_resourceIncludingInactive = new Hashtable<DependancyAlgorithmScheme, Vector<FlexoResource<FlexoResourceData>>>();
 		_resourceExcludingInactive = new Hashtable<DependancyAlgorithmScheme, Vector<FlexoResource<FlexoResourceData>>>();

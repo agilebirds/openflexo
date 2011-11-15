@@ -50,7 +50,7 @@ public class SynchronizedResources extends ResourceList {
 	 * @see org.openflexo.foundation.rm.ResourceList#addToResources(org.openflexo.foundation.rm.FlexoResource)
 	 */
 	@Override
-	public void addToResources(FlexoResource<FlexoResourceData> resource) {
+	public void addToResources(FlexoResource resource) {
 		super.addToResources(resource);
 		if (getRelatedResource() != null) {
 			if (!resource.getSynchronizedResources().contains(getRelatedResource())) {
@@ -68,7 +68,7 @@ public class SynchronizedResources extends ResourceList {
 	 * @see org.openflexo.foundation.rm.ResourceList#removeFromResources(org.openflexo.foundation.rm.FlexoResource)
 	 */
 	@Override
-	public void removeFromResources(FlexoResource<FlexoResourceData> resource) {
+	public void removeFromResources(FlexoResource resource) {
 		super.removeFromResources(resource);
 		if (getRelatedResource() != null) {
 			if (resource.getSynchronizedResources().contains(getRelatedResource())) {

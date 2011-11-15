@@ -22,6 +22,7 @@ package org.openflexo.module;
 import java.awt.Frame;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,12 +40,8 @@ import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoResourceData;
-import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.ResourceRemoved;
 import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.rm.SaveResourceExceptionList;
-import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
-import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.ProjectExitingCancelledException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.FlexoFrame;
@@ -78,7 +75,7 @@ public abstract class FlexoModule implements DataFlexoObserver {
 	 * Hashtable where all the resources used by this module are stored, with associated key which is a String identifying the resource
 	 * (resourceIdentifier)
 	 */
-	private final Hashtable<String, FlexoResource> usedResources;
+	private final Map<String, FlexoResource<? extends FlexoResourceData>> usedResources;
 
 	public FlexoModule(InteractiveFlexoEditor projectEditor, FlexoController controller) {
 		super();
@@ -89,7 +86,7 @@ public abstract class FlexoModule implements DataFlexoObserver {
 		_frame = controller.getFlexoFrame();
 		_frame.setTitle(getName());
 		_frame.setModule(this);
-		usedResources = new Hashtable<String, FlexoResource>();
+		usedResources = new Hashtable<String, FlexoResource<? extends FlexoResourceData>>();
 		_controller.initInspectors();
 		if (projectEditor.getProject() != null) {
 			retain(projectEditor.getProject());
@@ -102,7 +99,7 @@ public abstract class FlexoModule implements DataFlexoObserver {
 		if (projectEditor.getProject() != null) {
 			projectEditor.getProject().addObserver(this);
 		}
-		usedResources = new Hashtable<String, FlexoResource>();
+		usedResources = new Hashtable<String, FlexoResource<? extends FlexoResourceData>>();
 		if (projectEditor.getProject() != null) {
 			retain(projectEditor.getProject());
 		}
@@ -159,7 +156,7 @@ public abstract class FlexoModule implements DataFlexoObserver {
 	}
 
 	public static boolean isRunningTest() {
-		return ((getActiveModule() != null) && ((getActiveModule().getEditor()) != null) && ((getActiveModule().getEditor()).isTestEditor()));
+		return getActiveModule() != null && getActiveModule().getEditor() != null && getActiveModule().getEditor().isTestEditor();
 	}
 
 	public boolean isActive() {
@@ -274,7 +271,7 @@ public abstract class FlexoModule implements DataFlexoObserver {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("processFocusOn() called:  this=" + this);
 		}
-		if ((_activeModule != null) && (_activeModule != this)) {
+		if (_activeModule != null && _activeModule != this) {
 			desactivatingModule = _activeModule;
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine(this + ": desactivatingModule=" + desactivatingModule);
@@ -287,7 +284,7 @@ public abstract class FlexoModule implements DataFlexoObserver {
 		boolean selectDefaultObject = false;
 		if (getDefaultObjectToSelect() != null
 				&& (getFlexoController().getCurrentDisplayedObjectAsModuleView() == null || getFlexoController()
-						.getCurrentDisplayedObjectAsModuleView() == getDefaultObjectToSelect())) {
+				.getCurrentDisplayedObjectAsModuleView() == getDefaultObjectToSelect())) {
 			if (getFlexoController() instanceof SelectionManagingController) {
 				if (((SelectionManagingController) getFlexoController()).getSelectionManager().getFocusedObject() == null) {
 					selectDefaultObject = true;
@@ -303,9 +300,9 @@ public abstract class FlexoModule implements DataFlexoObserver {
 				logger.fine("Module " + getName() + " is loosing focus : reseting selection");
 			}
 			((SelectionManagingController) getFlexoController()).getSelectionManager()
-					.setSelectedObjects(
-							new Vector<FlexoModelObject>(((SelectionManagingController) getFlexoController()).getSelectionManager()
-									.getSelection()));
+			.setSelectedObjects(
+					new Vector<FlexoModelObject>(((SelectionManagingController) getFlexoController()).getSelectionManager()
+							.getSelection()));
 		}
 	}
 
@@ -452,16 +449,16 @@ public abstract class FlexoModule implements DataFlexoObserver {
 			logger.warning("Called twice closeWithoutConfirmation on " + this);
 		}
 		_controller = null;
-		for (Enumeration e = usedResources.elements(); e.hasMoreElements();) {
-			releaseResource((FlexoResource) e.nextElement());
+		for (FlexoResource<? extends FlexoResourceData> r : usedResources.values()) {
+			releaseResource(r);
 		}
 		if (ModuleLoader.isLoaded(getModule())) {
 			ModuleLoader.unloadModule(getModule());
 		}
 		// Is there some modules loaded ?
-		Enumeration leftModules = ModuleLoader.loadedModules();
+		Enumeration<FlexoModule> leftModules = ModuleLoader.loadedModules();
 		if (leftModules.hasMoreElements()) {
-			ModuleLoader.switchToModule(((FlexoModule) leftModules.nextElement()).getModule());
+			ModuleLoader.switchToModule(leftModules.nextElement().getModule());
 		} else {
 			_activeModule = null;
 			if (quitIfNoModuleLeft) {
@@ -486,7 +483,7 @@ public abstract class FlexoModule implements DataFlexoObserver {
 	 * 
 	 * @param resource
 	 */
-	public void retainResource(FlexoResource resource) {
+	public void retainResource(FlexoResource<? extends FlexoResourceData> resource) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine(getModule().getName() + " now retains " + resource);
 		}
@@ -498,11 +495,11 @@ public abstract class FlexoModule implements DataFlexoObserver {
 		}
 	}
 
-	public boolean isRetaining(FlexoResource resource) {
+	public boolean isRetaining(FlexoResource<? extends FlexoResourceData> resource) {
 		if (usedResources == null || resource == null || resource.getResourceIdentifier() == null) {
 			return false;
 		}
-		return (usedResources.get(resource.getResourceIdentifier()) != null);
+		return usedResources.get(resource.getResourceIdentifier()) != null;
 	}
 
 	/**
@@ -549,141 +546,6 @@ public abstract class FlexoModule implements DataFlexoObserver {
 	}
 
 	/**
-	 * Save all ressources for this Module, without launching review panel, nor confirmation. If some error occurs, notify them in a panel
-	 * 
-	 * @throws SaveResourceException
-	 */
-	public void save() {
-		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Saving resources for module " + getName());
-		}
-		if (someResourcesNeedsSaving()) {
-			try {
-				saveWithoutReview();
-			} catch (SaveResourceExceptionList e) {
-				String errorFiles = e.errorFilesList();
-				FlexoController.notify(FlexoLocalization.localizedForKey("error_during_saving") + "\n"
-						+ FlexoLocalization.localizedForKey("following_files_have_not_been_saved") + "\n" + errorFiles);
-			}
-		}
-
-	}
-
-	/**
-	 * Save all ressources for this Module, without launching review panel Display a confirmation when specified If some error occurs,
-	 * notify in a panel
-	 * 
-	 * @throws SaveResourceException
-	 */
-	public void save(boolean showConfirm) {
-		save(showConfirm, false);
-	}
-
-	/**
-	 * Save all ressources for this Module, launch a review panel when specified, display a confirmation when specified If some error
-	 * occurs, notify in a panel
-	 * 
-	 * @throws SaveResourceException
-	 */
-	public void save(boolean showConfirm, boolean makeReview) {
-		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Saving resources for module " + getName());
-		}
-		if (someResourcesNeedsSaving()) {
-			try {
-				if (makeReview) {
-					ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving"), 1);
-					saveWithReview(showConfirm, ProgressWindow.instance());
-					ProgressWindow.hideProgressWindow();
-				} else {
-					saveWithoutReview();
-					if (showConfirm) {
-						FlexoController.notify("Save complete.");
-					}
-				}
-			} catch (SaveResourceExceptionList e) {
-				ProgressWindow.hideProgressWindow();
-				String errorFiles = e.errorFilesList();
-				FlexoController.notify(FlexoLocalization.localizedForKey("error_during_saving") + "\n"
-						+ FlexoLocalization.localizedForKey("following_files_have_not_been_saved") + "\n" + errorFiles);
-			} catch (SaveResourcePermissionDeniedException e) {
-				ProgressWindow.hideProgressWindow();
-				FlexoController.showError(FlexoLocalization.localizedForKey("error_during_saving") + "\n"
-						+ FlexoLocalization.localizedForKey("reason_permission_denied"));
-			} catch (SaveResourceException e) {
-				ProgressWindow.hideProgressWindow();
-				e.printStackTrace();
-			}
-		}
-
-	}
-
-	/**
-	 * Save all ressources for this Module, after reviewing
-	 * 
-	 * @return boolean indicating if saving was confirmed
-	 * @throws SaveResourceException
-	 */
-	private void saveWithoutReview() throws SaveResourceExceptionList {
-		SaveResourceExceptionList listOfRaisedExceptions = null;
-		for (Enumeration en = getUnsavedStorageResources().elements(); en.hasMoreElements();) {
-			try {
-				((FlexoStorageResource) en.nextElement()).saveResourceData();
-			} catch (SaveResourceException e) {
-				// Warns about the exception
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Could not save resource: exception raised: " + e.getClass().getName() + ". See console for details.");
-				}
-				e.printStackTrace();
-				if (listOfRaisedExceptions == null) {
-					listOfRaisedExceptions = new SaveResourceExceptionList(e);
-				} else {
-					listOfRaisedExceptions.registerNewException(e);
-				}
-			}
-		}
-		if (listOfRaisedExceptions != null) {
-			throw listOfRaisedExceptions;
-		}
-
-	}
-
-	/**
-	 * Save all ressources for this Module, after reviewing
-	 * 
-	 * @return boolean indicating if saving was confirmed
-	 * @throws SaveResourceException
-	 * @throws SaveResourceException
-	 */
-	private boolean saveWithReview(FlexoProgress progress) throws SaveResourceException {
-		return saveWithReview(false, progress);
-	}
-
-	/**
-	 * Save all ressources for this Module, after reviewing Show confirmation of saving, when required
-	 * 
-	 * @return boolean indicating if saving was confirmed
-	 * @throws SaveResourceException
-	 * @throws SaveResourceException
-	 */
-	private boolean saveWithReview(boolean showConfirm, FlexoProgress progress) throws SaveResourceException {
-		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Saving resources for module " + getName());
-		}
-		if (someResourcesNeedsSaving()) {
-			SaveDialog reviewer = new SaveDialog(getActiveModule() != null ? getActiveModule().getFlexoFrame() : null, getProject(), this);
-			if (reviewer.getRetval() == JOptionPane.YES_OPTION) {
-				reviewer.saveProject(progress);
-				return true;
-			} else if (reviewer.getRetval() == JOptionPane.NO_OPTION) {
-				return true;
-			}
-			return false;
-		}
-		return true;
-	}
-
-	/**
 	 * Return boolean indicating if some resources need saving
 	 */
 	protected boolean someResourcesNeedsSaving() {
@@ -694,42 +556,10 @@ public abstract class FlexoModule implements DataFlexoObserver {
 	}
 
 	/**
-	 * Returns a Vector of FlexoStorageResource, corresponding to all unsaved file resources retained by this module
-	 * 
-	 * @return
-	 */
-	public Vector<FlexoStorageResource> getUnsavedStorageResources() {
-		Vector<FlexoStorageResource> returned = new Vector<FlexoStorageResource>();
-		for (Enumeration e = getLoadedStorageResources().elements(); e.hasMoreElements();) {
-			FlexoStorageResource resource = (FlexoStorageResource) e.nextElement();
-			if (resource.needsSaving()) {
-				returned.add(resource);
-			}
-		}
-		return returned;
-	}
-
-	/**
-	 * Returns a Vector of FlexoStorageResource, corresponding to all unsaved file resources retained by this module
-	 * 
-	 * @return
-	 */
-	public Vector<FlexoStorageResource> getLoadedStorageResources() {
-		Vector<FlexoStorageResource> returned = new Vector<FlexoStorageResource>();
-		for (Enumeration e = usedResources.elements(); e.hasMoreElements();) {
-			FlexoResource resource = (FlexoResource) e.nextElement();
-			if ((resource instanceof FlexoStorageResource) && (((FlexoStorageResource) resource).isLoaded())) {
-				returned.add((FlexoStorageResource) resource);
-			}
-		}
-		return returned;
-	}
-
-	/**
 	 * Returns hashtable where all the resources used by this module are stored, with associated key which is a String identifying the
 	 * resource (resourceIdentifier)
 	 */
-	public Hashtable getUsedResources() {
+	public Map<String, FlexoResource<? extends FlexoResourceData>> getUsedResources() {
 		return usedResources;
 	}
 

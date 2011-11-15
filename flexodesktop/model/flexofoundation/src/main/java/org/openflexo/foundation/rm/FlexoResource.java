@@ -338,7 +338,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 */
 	public void setAlteredResources(AlteredResources resources) {
 		_alteredResources = resources;
-		resources.setRelatedResource((FlexoResource<FlexoResourceData>) this);
+		resources.setRelatedResource(this);
 	}
 
 	/**
@@ -347,7 +347,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @param aDependingResource
 	 *            The FlexoResource to add.
 	 */
-	public void addToAlteredResources(FlexoResource<FlexoResourceData> aDependingResource) {
+	public void addToAlteredResources(FlexoResource aDependingResource) {
 		getAlteredResources().addToResources(aDependingResource);
 	}
 
@@ -357,7 +357,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @param aDependingResource
 	 *            The FlexoResource to remove.
 	 */
-	public void removeFromAlteredResources(FlexoResource<FlexoResourceData> aDependingResource) {
+	public void removeFromAlteredResources(FlexoResource aDependingResource) {
 		getAlteredResources().removeFromResources(aDependingResource);
 	}
 
@@ -553,7 +553,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @throws LoadResourceException
 	 */
 	public final FlexoResourceTree update() throws ResourceDependancyLoopException, LoadResourceException, FileNotFoundException,
-			ProjectLoadingCancelledException, FlexoException {
+	ProjectLoadingCancelledException, FlexoException {
 		return _update(makeSingleton());
 	}
 
@@ -569,7 +569,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * @throws LoadResourceException
 	 */
 	protected abstract void performUpdating(FlexoResourceTree updatedResources) throws ResourceDependancyLoopException,
-			LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException, FlexoException;
+	LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException, FlexoException;
 
 	/**
 	 * Important method "telling" if a resource from which this resource depend is a state requiring this resource to be updated/processed
@@ -833,15 +833,16 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	}
 
 	public static class LastSynchronizedWithResourceEntry implements XMLSerializable {
-		protected FlexoResource originResource;
-		private FlexoResource resource;
+		protected FlexoResource<? extends FlexoResourceData> originResource;
+		private FlexoResource<? extends FlexoResourceData> resource;
 		Date date;
 
 		public LastSynchronizedWithResourceEntry() {
 			super();
 		}
 
-		public LastSynchronizedWithResourceEntry(FlexoResource anOriginResource, FlexoResource aResource, Date aDate) {
+		public LastSynchronizedWithResourceEntry(FlexoResource<? extends FlexoResourceData> anOriginResource,
+				FlexoResource<? extends FlexoResourceData> aResource, Date aDate) {
 			this();
 			date = aDate;
 			resource = aResource;
@@ -856,15 +857,15 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 			this.date = date;
 		}
 
-		public FlexoResource getResource() {
+		public FlexoResource<? extends FlexoResourceData> getResource() {
 			return resource;
 		}
 
-		public FlexoResource getOriginResource() {
+		public FlexoResource<? extends FlexoResourceData> getOriginResource() {
 			return originResource;
 		}
 
-		public void setResource(FlexoResource resource) {
+		public void setResource(FlexoResource<? extends FlexoResourceData> resource) {
 			this.resource = resource;
 		}
 

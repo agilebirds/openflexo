@@ -224,23 +224,23 @@ public class DMController extends FlexoController implements SelectionManagingCo
 		// if (object instanceof DMProperty)
 		// object = ((DMProperty) object).getEntity();
 		if (object instanceof DMModel) {
-			return (DMView<O>) (new DMModelView((DMModel) object, this));
+			return (DMView<O>) new DMModelView((DMModel) object, this);
 		} else if (object instanceof DMRepositoryFolder) {
-			return (DMView<O>) (new DMRepositoryFolderView((DMRepositoryFolder) object, this));
+			return (DMView<O>) new DMRepositoryFolderView((DMRepositoryFolder) object, this);
 		} else if (object instanceof DMEOEntity) {
-			return (DMView<O>) (new DMEOEntityView((DMEOEntity) object, this));
+			return (DMView<O>) new DMEOEntityView((DMEOEntity) object, this);
 		} else if (object instanceof DMEOModel) {
-			return (DMView<O>) (new DMEOModelView((DMEOModel) object, this));
+			return (DMView<O>) new DMEOModelView((DMEOModel) object, this);
 		} else if (object instanceof EOPrototypeRepository) {
-			return (DMView<O>) (new EOPrototypeRepositoryView((EOPrototypeRepository) object, this));
+			return (DMView<O>) new EOPrototypeRepositoryView((EOPrototypeRepository) object, this);
 		} else if (object instanceof DMEORepository) {
-			return (DMView<O>) (new DMEORepositoryView((DMEORepository) object, this));
+			return (DMView<O>) new DMEORepositoryView((DMEORepository) object, this);
 		} else if (object instanceof DMEntity) {
-			return (DMView<O>) (new DMEntityView((DMEntity) object, this));
+			return (DMView<O>) new DMEntityView((DMEntity) object, this);
 		} else if (object instanceof DMPackage) {
-			return (DMView<O>) (new DMPackageView((DMPackage) object, this));
+			return (DMView<O>) new DMPackageView((DMPackage) object, this);
 		} else if (object instanceof DMRepository) {
-			return (DMView<O>) (new DMRepositoryView((DMRepository) object, this));
+			return (DMView<O>) new DMRepositoryView((DMRepository) object, this);
 		} else {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Cannot create view for a " + object.getClass().getName());
@@ -285,12 +285,6 @@ public class DMController extends FlexoController implements SelectionManagingCo
 		getSelectionManager().setSelectedObject(object);
 	}
 
-	/**
-	 * Save all retained resources
-	 */
-	public void saveAll() {
-		getModule().save(true, true);
-	}
 
 	// ==========================================================================
 	// =================== Inspectable Exceptions handling
@@ -316,7 +310,7 @@ public class DMController extends FlexoController implements SelectionManagingCo
 			showError(FlexoLocalization.localizedForKey("the_value_you_entered_is_invalid"));
 			return true;
 		}
-		if ((exception instanceof IllegalArgumentException) && propertyName.equals("name")) {
+		if (exception instanceof IllegalArgumentException && propertyName.equals("name")) {
 			showError(FlexoLocalization.localizedForKey("this_name_is_already_used"));
 			return true;
 		}

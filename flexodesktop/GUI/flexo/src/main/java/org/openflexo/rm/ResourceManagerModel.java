@@ -22,6 +22,7 @@ package org.openflexo.rm;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,6 +38,7 @@ import org.openflexo.foundation.rm.FlexoGeneratedResource;
 import org.openflexo.foundation.rm.FlexoImportedResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
+import org.openflexo.foundation.rm.FlexoResourceData;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
 import org.openflexo.icon.IconLibrary;
@@ -55,12 +57,12 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 	private static final Logger logger = Logger.getLogger(ResourceManagerModel.class.getPackage().getName());
 
 	protected FlexoProject _project;
-	protected Vector<FlexoResource> _resources;
+	protected List<FlexoResource<? extends FlexoResourceData>> _resources;
 
 	public ResourceManagerModel(FlexoProject project) {
 		super();
 		_project = project;
-		_resources = new Vector<FlexoResource>();
+		_resources = new Vector<FlexoResource<? extends FlexoResourceData>>();
 		refresh();
 		project.addObserver(this);
 	}
@@ -70,8 +72,7 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 			logger.fine("refresh() in ResourceManagerModel");
 		}
 		_resources.clear();
-		for (Enumeration en = _project.getResources().elements(); en.hasMoreElements();) {
-			FlexoResource resource = (FlexoResource) en.nextElement();
+		for (FlexoResource<? extends FlexoResourceData> resource : _project) {
 			if (selectResource(resource)) {
 				_resources.add(resource);
 			}
@@ -99,9 +100,9 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 		return false;
 	}
 
-	public FlexoResource resourceAt(int rowIndex) {
-		if ((_resources != null) && (rowIndex < _resources.size())) {
-			return _resources.elementAt(rowIndex);
+	public FlexoResource<? extends FlexoResourceData> resourceAt(int rowIndex) {
+		if (_resources != null && rowIndex < _resources.size()) {
+			return _resources.get(rowIndex);
 		}
 		return null;
 	}
@@ -114,11 +115,11 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 
 	public abstract int getPreferedColumnSize(int col);
 
-	protected String modulesRetainingResource(FlexoResource resource) {
+	protected String modulesRetainingResource(FlexoResource<? extends FlexoResourceData> resource) {
 		String returned = null;
-		Enumeration en = ModuleLoader.loadedModules();
+		Enumeration<FlexoModule> en = ModuleLoader.loadedModules();
 		while (en.hasMoreElements()) {
-			FlexoModule module = (FlexoModule) en.nextElement();
+			FlexoModule module = en.nextElement();
 			if (module.isRetaining(resource)) {
 				if (returned == null) {
 					returned = module.getModule().getShortName();
@@ -153,7 +154,7 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 
 		@Override
 		public boolean selectResource(FlexoResource resource) {
-			return (resource instanceof FlexoStorageResource);
+			return resource instanceof FlexoStorageResource;
 		}
 
 		@Override
@@ -285,7 +286,7 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 					if (date.getTime() == 0) {
 						return "-";
 					}
-					return (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(date);
+					return new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(date);
 				} else {
 					return "-";
 				}
@@ -304,7 +305,7 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 						if (date.getTime() == 0) {
 							return "-";
 						}
-						return (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(date);
+						return new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(date);
 					} else {
 						return "-";
 					}
@@ -332,7 +333,7 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 
 		@Override
 		public boolean selectResource(FlexoResource resource) {
-			return (resource instanceof FlexoImportedResource);
+			return resource instanceof FlexoImportedResource;
 		}
 
 		@Override
@@ -451,7 +452,7 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 					if (date.getTime() == 0) {
 						return "-";
 					}
-					return (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(date);
+					return new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(date);
 				} else {
 					return "-";
 				}
@@ -470,7 +471,7 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 						if (date.getTime() == 0) {
 							return "-";
 						}
-						return (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(date);
+						return new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(date);
 					} else {
 						return "-";
 					}
@@ -492,7 +493,7 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 
 		@Override
 		public boolean selectResource(FlexoResource resource) {
-			return (resource instanceof FlexoGeneratedResource);
+			return resource instanceof FlexoGeneratedResource;
 		}
 
 		@Override
@@ -619,7 +620,7 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 					if (date.getTime() == 0) {
 						return "-";
 					}
-					return (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(date);
+					return new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(date);
 				} else {
 					return "-";
 				}
@@ -638,7 +639,7 @@ public abstract class ResourceManagerModel extends AbstractTableModel implements
 						if (date.getTime() == 0) {
 							return "-";
 						}
-						return (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(date);
+						return new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(date);
 					} else {
 						return "-";
 					}
