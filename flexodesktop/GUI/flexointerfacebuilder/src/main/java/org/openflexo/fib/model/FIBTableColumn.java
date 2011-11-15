@@ -21,6 +21,7 @@ package org.openflexo.fib.model;
 
 import java.awt.Font;
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
@@ -233,6 +234,11 @@ public abstract class FIBTableColumn extends FIBModelObject {
 			return FIBTableColumn.this.getRootComponent();
 		}
 
+		@Override
+		public List<? extends FIBModelObject> getEmbeddedObjects() {
+			return null;
+		}
+
 	}
 
 	public int getIndex() {
@@ -266,6 +272,11 @@ public abstract class FIBTableColumn extends FIBModelObject {
 		tooltip.setBindingAttribute(Parameters.tooltip);
 		tooltip.setBindingDefinition(TOOLTIP);
 		this.tooltip = tooltip;
+	}
+
+	@Override
+	public List<? extends FIBModelObject> getEmbeddedObjects() {
+		return null;
 	}
 
 }

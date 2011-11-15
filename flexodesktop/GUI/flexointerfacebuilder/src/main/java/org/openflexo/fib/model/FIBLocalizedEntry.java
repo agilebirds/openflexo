@@ -19,6 +19,8 @@
  */
 package org.openflexo.fib.model;
 
+import java.util.List;
+
 import javax.swing.ImageIcon;
 
 import org.openflexo.fib.utils.FIBIconLibrary;
@@ -86,6 +88,11 @@ public class FIBLocalizedEntry extends FIBModelObject {
 	@Override
 	public FIBComponent getRootComponent() {
 		return getLocalizedDictionary().getRootComponent();
+	}
+
+	@Override
+	public List<? extends FIBModelObject> getEmbeddedObjects() {
+		return null;
 	}
 
 }

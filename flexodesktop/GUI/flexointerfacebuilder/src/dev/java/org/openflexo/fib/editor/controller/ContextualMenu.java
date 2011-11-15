@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 
 import org.openflexo.fib.editor.controller.EditorAction.ActionAvailability;
 import org.openflexo.fib.editor.controller.EditorAction.ActionPerformer;

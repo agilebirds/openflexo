@@ -99,22 +99,32 @@ public class OntologyClass extends OntologyObject implements Comparable<Ontology
 			}
 		}
 
+		// If computed ontology is either not RDF, nor RDFS, nor OWL
+		// and if a declared class has no parent, then the only one parent is OWL class itself
 		if (getFlexoOntology() != getOntologyLibrary().getRDFOntology() && getFlexoOntology() != getOntologyLibrary().getRDFSOntology()
 				&& getFlexoOntology() != getOntologyLibrary().getOWLOntology()) {
 			OntologyClass owlClass = getOntologyLibrary().getClass(OntologyLibrary.OWL_CLASS_URI);
 			if (owlClass != null) {
-				if (!superClasses.contains(owlClass)) {
-					superClasses.add(owlClass);
-				}
-				// System.out.println("Add "+fatherClass.getName()+" as a super class of "+getName());
-				if (!owlClass.subClasses.contains(this)) {
-					// System.out.println("Add "+getName()+" as a sub class of "+fatherClass.getName());
-					owlClass.subClasses.add(this);
+				if (superClasses.size() == 0) {
+					if (!superClasses.contains(owlClass)) {
+						superClasses.add(owlClass);
+					}
+					if (!owlClass.subClasses.contains(this)) {
+						// System.out.println("Add "+getName()+" as a sub class of "+fatherClass.getName());
+						owlClass.subClasses.add(this);
+					}
+				} else {
+					if (superClasses.contains(owlClass) && (superClasses.size() > 1)) {
+						superClasses.remove(owlClass);
+						owlClass.subClasses.remove(this);
+					}
 				}
 			}
 		}
 
 		else {
+			// If computed ontology is either RDF, or RDFS, or OWL
+			// and if a declared class has no parent, then the only one parent is the owl Thing class
 			if ((superClasses.size() > 0) && (getOntologyLibrary().THING != null)) {
 				if (superClasses.contains(getOntologyLibrary().THING) && (superClasses.size() > 1)) {
 					superClasses.remove(getOntologyLibrary().THING);
@@ -131,6 +141,7 @@ public class OntologyClass extends OntologyObject implements Comparable<Ontology
 				}
 			}
 		}
+
 	}
 
 	private void updateSubClasses() {

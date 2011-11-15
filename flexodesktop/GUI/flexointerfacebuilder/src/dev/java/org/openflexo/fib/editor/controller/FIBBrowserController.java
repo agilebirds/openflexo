@@ -1,0 +1,95 @@
+package org.openflexo.fib.editor.controller;
+
+import java.awt.event.MouseEvent;
+import java.util.Enumeration;
+
+import javax.swing.ImageIcon;
+
+import org.openflexo.fib.controller.FIBController;
+import org.openflexo.fib.model.FIBBrowser;
+import org.openflexo.fib.model.FIBButton;
+import org.openflexo.fib.model.FIBCheckBox;
+import org.openflexo.fib.model.FIBComponent;
+import org.openflexo.fib.model.FIBDropDown;
+import org.openflexo.fib.model.FIBLabel;
+import org.openflexo.fib.model.FIBModelObject;
+import org.openflexo.fib.model.FIBNumber;
+import org.openflexo.fib.model.FIBPanel;
+import org.openflexo.fib.model.FIBRadioButtonList;
+import org.openflexo.fib.model.FIBTabPanel;
+import org.openflexo.fib.model.FIBTable;
+import org.openflexo.fib.model.FIBTextArea;
+import org.openflexo.fib.model.FIBTextField;
+import org.openflexo.fib.view.FIBView;
+
+public class FIBBrowserController extends FIBController {
+
+	private FIBEditorController editorController;
+	private FIBComponent selectedComponent;
+	
+	
+	public FIBBrowserController(FIBComponent rootComponent, FIBEditorController editorController) {
+		super(rootComponent);
+		System.out.println("Root component "+rootComponent);
+		this.editorController = editorController;
+	}
+	
+	public FIBComponent getSelectedComponent() {
+		return selectedComponent;
+	}
+
+	public void setSelectedComponent(FIBComponent selectedComponent) {
+		this.selectedComponent = selectedComponent;
+		editorController.setSelectedObject((FIBComponent)selectedComponent);
+	}
+
+	public ImageIcon iconFor(FIBComponent component)
+	{
+		if (component.isRootComponent()) {
+			return FIBEditorIconLibrary.ROOT_COMPONENT_ICON;
+		} else if (component instanceof FIBTabPanel) {
+			return FIBEditorIconLibrary.TABS_ICON;
+		} else if (component instanceof FIBPanel) {
+			return FIBEditorIconLibrary.PANEL_ICON;
+		} else if (component instanceof FIBCheckBox) {
+			return FIBEditorIconLibrary.CHECKBOX_ICON;
+		} else if (component instanceof FIBLabel) {
+			return FIBEditorIconLibrary.LABEL_ICON;
+		} else if (component instanceof FIBTable) {
+			return FIBEditorIconLibrary.TABLE_ICON;
+		} else if (component instanceof FIBBrowser) {
+			return FIBEditorIconLibrary.TREE_ICON;
+		} else if (component instanceof FIBTextArea) {
+			return FIBEditorIconLibrary.TEXTAREA_ICON;
+		} else if (component instanceof FIBTextField) {
+			return FIBEditorIconLibrary.TEXTFIELD_ICON;
+		} else if (component instanceof FIBNumber) {
+			return FIBEditorIconLibrary.NUMBER_ICON;
+		} else if (component instanceof FIBDropDown) {
+			return FIBEditorIconLibrary.DROPDOWN_ICON;
+		} else if (component instanceof FIBRadioButtonList) {
+			return FIBEditorIconLibrary.RADIOBUTTON_ICON;
+		} else if (component instanceof FIBButton) {
+			return FIBEditorIconLibrary.BUTTON_ICON;
+		}
+		return null;
+
+	}
+
+	public String textFor(FIBComponent component)
+	{
+		if (component.getName() != null) {
+			return component.getName()+" ("+component.getClass().getSimpleName()+")";
+		}
+		else if (component.getIdentifier() != null) {
+			return component.getIdentifier()+" ("+component.getClass().getSimpleName()+")";
+		} else {
+			return "<"+component.getClass().getSimpleName()+">";
+		}
+	}
+
+	public void rightClick(FIBComponent component, MouseEvent event)
+	{
+		editorController.getContextualMenu().displayPopupMenu(component, getRootView().getJComponent(), event);
+	}
+}

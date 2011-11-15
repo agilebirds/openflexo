@@ -251,7 +251,9 @@ public abstract class FIBMultipleValues extends FIBWidget {
 		FIBAttributeNotification<String> notification = requireChange(Parameters.staticList, staticList);
 		if (notification != null) {
 			this.staticList = staticList;
-			logger.info("FIBMultiple: setStaticList with " + staticList);
+			LIST_BINDING_TYPE = null;
+			ARRAY_BINDING_TYPE = null;
+			// logger.info("FIBMultiple: setStaticList with " + staticList);
 			hasChanged(notification);
 		}
 	}

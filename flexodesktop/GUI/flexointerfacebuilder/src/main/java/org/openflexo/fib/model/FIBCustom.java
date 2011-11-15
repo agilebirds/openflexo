@@ -26,6 +26,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -374,6 +375,12 @@ public class FIBCustom extends FIBWidget {
 			}
 			return null;
 		}
+		
+		@Override
+		public List<? extends FIBModelObject> getEmbeddedObjects() {
+			return null;
+		}
+
 	}
 
 	/*public String getComponentClassName()

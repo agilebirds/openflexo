@@ -22,12 +22,15 @@ package org.openflexo.fib.editor.controller;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.io.File;
 import java.util.Observable;
 import java.util.logging.Logger;
 
+import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
+import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBViewFactory;
 import org.openflexo.fib.editor.FIBGenericEditor;
@@ -78,8 +81,10 @@ import org.openflexo.fib.model.FIBTextField;
 import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.fib.view.FIBWidgetView;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.toolbox.FileResource;
 
 public class FIBEditorController /*extends FIBController*/ extends Observable {
 
@@ -87,8 +92,9 @@ public class FIBEditorController /*extends FIBController*/ extends Observable {
 
 	private final FIBController controller;
 
+	public static File BROWSER_FIB = new FileResource("Fib/Browser.fib");
+
 	private final JPanel editorPanel;
-	private final FIBEditorBrowser browser;
 	private final FIBView fibPanel;
 	private final FIBGenericEditor editor;
 
@@ -140,13 +146,14 @@ public class FIBEditorController /*extends FIBController*/ extends Observable {
 
 		editorPanel = new JPanel(new BorderLayout());
 
-		browser = new FIBEditorBrowser(fibComponent,this);
+		FIBComponent browserComponent = FIBLibrary.instance().retrieveFIBComponent(BROWSER_FIB,false);
+		FIBBrowserController browserController = new FIBBrowserController(browserComponent,this);
+		FIBView view = FIBController.makeView(browserComponent,browserController);
+		view.getController().setDataObject(fibComponent);
 
 		fibPanel = controller.buildView();
 
-		browser.getScrollPane().setMinimumSize(new Dimension(250,250));
-
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,browser.getScrollPane(),fibPanel.getResultingJComponent()/*new JScrollPane(fibPanel.getJComponent())*/);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,view.getResultingJComponent(),fibPanel.getResultingJComponent()/*new JScrollPane(fibPanel.getJComponent())*/);
 
 		editorPanel.add(splitPane,BorderLayout.CENTER);
 
@@ -190,11 +197,6 @@ public class FIBEditorController /*extends FIBController*/ extends Observable {
 	public FIBEditorPalette getPalette()
 	{
 		return editor.getPalette();
-	}
-
-	public FIBEditorBrowser getBrowser()
-	{
-		return browser;
 	}
 
 	public FIBView getFibPanel()

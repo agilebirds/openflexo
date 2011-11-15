@@ -344,7 +344,9 @@ public class ViewPointPerspective extends FlexoPerspective<FlexoModelObject> {
 		if (object instanceof EditionPattern) {
 			return ((EditionPattern) object).getName();
 		}
-		return object.getFullyQualifiedName();
+		if (object != null)
+			return object.getFullyQualifiedName();
+		return "null";
 	}
 
 	public CalcPaletteController getControllerForPalette(ViewPointPalette object) {
