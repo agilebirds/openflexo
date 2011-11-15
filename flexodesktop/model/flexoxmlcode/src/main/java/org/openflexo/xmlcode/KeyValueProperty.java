@@ -25,6 +25,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -60,7 +61,7 @@ public abstract class KeyValueProperty {
 	// protected Object object;
 
 	/** Stores related object'class */
-	protected Class objectClass;
+	protected Class<?> objectClass;
 
 	/**
 	 * Stores related field (if this one is public) or null if field is protected or non-existant
@@ -68,7 +69,7 @@ public abstract class KeyValueProperty {
 	protected Field field;
 
 	/** Stores related type (the class of related property) */
-	protected Class type;
+	protected Class<?> type;
 
 	/**
 	 * Stores related "get" method (if this one is public) or null if method is protected or non-existant
@@ -91,13 +92,13 @@ public abstract class KeyValueProperty {
 	 * @exception InvalidKeyValuePropertyException
 	 *                if an error occurs
 	 */
-	public KeyValueProperty(Class anObjectClass, String propertyName) throws InvalidKeyValuePropertyException {
+	public KeyValueProperty(Class<?> anObjectClass, String propertyName) throws InvalidKeyValuePropertyException {
 
 		super();
 		objectClass = anObjectClass;
 	}
 
-	protected Vector<KeyValueProperty> compoundKeyValueProperties;
+	protected List<KeyValueProperty> compoundKeyValueProperties;
 
 	protected boolean isCompound;
 
@@ -108,7 +109,7 @@ public abstract class KeyValueProperty {
 	 */
 	protected void init(String propertyName, boolean setMethodIsMandatory) throws InvalidKeyValuePropertyException {
 		String lastName;
-		Class lastClass = null;
+		Class<?> lastClass = null;
 
 		name = propertyName;
 
@@ -118,7 +119,7 @@ public abstract class KeyValueProperty {
 			// "+propertyName);
 			PathTokenizer st = new PathTokenizer(name);
 			String nextKey = st.nextToken();
-			Class nextClass = objectClass;
+			Class<?> nextClass = objectClass;
 			compoundKeyValueProperties = new Vector<KeyValueProperty>();
 			while (st.hasMoreTokens()) {
 				SingleKeyValueProperty skvp;
@@ -202,7 +203,7 @@ public abstract class KeyValueProperty {
 			}
 		}
 
-		if ((getMethod != null) && (setMethod != null)) {
+		if (getMethod != null && setMethod != null) {
 			// If related field exist (is public) and accessors methods exists
 			// also,
 			// the operations are processed using accessors (field won't be used
@@ -223,9 +224,8 @@ public abstract class KeyValueProperty {
 	 * </ul>
 	 * Returns corresponding method, null if no such method exist
 	 */
-	protected Method searchMatchingGetMethod(Class lastClass, String propertyName) {
+	protected Method searchMatchingGetMethod(Class<?> lastClass, String propertyName) {
 
-		Method returnedMethod;
 		String propertyNameWithFirstCharToUpperCase = propertyName.substring(0, 1).toUpperCase()
 				+ propertyName.substring(1, propertyName.length());
 
@@ -238,7 +238,7 @@ public abstract class KeyValueProperty {
 
 		for (int i = 0; i < 4; i++) {
 			try {
-				return lastClass.getMethod(tries[i], null);
+				return lastClass.getMethod(tries[i], (Class<?>[]) null);
 			} catch (SecurityException err) {
 				// we continue
 			} catch (NoSuchMethodException err) {
@@ -264,15 +264,14 @@ public abstract class KeyValueProperty {
 	 * </ul>
 	 * Returns corresponding method, null if no such method exist
 	 */
-	protected Method searchMatchingSetMethod(Class lastClass, String propertyName, Class aType) {
+	protected Method searchMatchingSetMethod(Class<?> lastClass, String propertyName, Class<?> aType) {
 
-		Method returnedMethod;
 		String propertyNameWithFirstCharToUpperCase = propertyName.substring(0, 1).toUpperCase()
 				+ propertyName.substring(1, propertyName.length());
 
 		String[] tries = new String[2];
 
-		Class params[] = new Class[1];
+		Class<?> params[] = new Class[1];
 		params[0] = aType;
 
 		tries[0] = "set" + propertyNameWithFirstCharToUpperCase;
@@ -332,9 +331,7 @@ public abstract class KeyValueProperty {
 	 * synchronized block/method on this KeyValueProperty object.
 	 */
 	public void setObject(Object anObject) {
-
-		if (objectClass.isAssignableFrom(anObject.getClass())) {
-		} else {
+		if (!objectClass.isAssignableFrom(anObject.getClass())) {
 			throw new InvalidKeyValuePropertyException("Invalid object type, expected: " + objectClass.getName());
 		}
 	}
@@ -342,7 +339,7 @@ public abstract class KeyValueProperty {
 	/**
 	 * Returns related object class (never null)
 	 */
-	public Class getObjectClass() {
+	public Class<?> getObjectClass() {
 
 		return objectClass;
 	}
@@ -351,14 +348,13 @@ public abstract class KeyValueProperty {
 	 * Returns related field (if this one is public) or null if field is protected or non-existant
 	 */
 	public Field getField() {
-
 		return field;
 	}
 
 	/**
 	 * Returns related type
 	 */
-	public Class getType() {
+	public Class<?> getType() {
 		return type;
 	}
 
@@ -368,15 +364,15 @@ public abstract class KeyValueProperty {
 	 * 
 	 * @see AccessorMethod
 	 */
-	protected TreeSet searchMethodsWithNameAndParamsNumber(String[] searchedNames, int paramNumber) {
+	protected TreeSet<AccessorMethod> searchMethodsWithNameAndParamsNumber(String[] searchedNames, int paramNumber) {
 
-		TreeSet returnedTreeSet = new TreeSet();
+		TreeSet<AccessorMethod> returnedTreeSet = new TreeSet<AccessorMethod>();
 		Method[] allMethods = objectClass.getMethods();
 
 		for (int i = 0; i < allMethods.length; i++) {
 			Method tempMethod = allMethods[i];
 			for (int j = 0; j < searchedNames.length; j++) {
-				if ((tempMethod.getName().equalsIgnoreCase(searchedNames[j])) && (tempMethod.getParameterTypes().length == paramNumber)) {
+				if (tempMethod.getName().equalsIgnoreCase(searchedNames[j]) && tempMethod.getParameterTypes().length == paramNumber) {
 					// This is a good candidate
 					returnedTreeSet.add(new AccessorMethod(this, tempMethod));
 				}
@@ -438,7 +434,7 @@ public abstract class KeyValueProperty {
 			else if (getMethod != null) {
 
 				try {
-					return getMethod.invoke(currentObject, null);
+					return getMethod.invoke(currentObject, (Object[]) null);
 				} catch (InvocationTargetException e) {
 					e.getTargetException().printStackTrace();
 					throw new AccessorInvocationException("AccessorInvocationException: class " + getObjectClass().getName() + ": method "
@@ -572,7 +568,7 @@ public abstract class KeyValueProperty {
 			int level = 0;
 			while (st.hasMoreElements()) {
 				String next = st.nextToken();
-				if ((next.equals(".")) && (current.trim().length() > 0) && (level == 0)) {
+				if (next.equals(".") && current.trim().length() > 0 && level == 0) {
 					_tokens.add(current);
 					current = "";
 				} else if (next.equals("(")) {
@@ -585,7 +581,7 @@ public abstract class KeyValueProperty {
 					current += next;
 				}
 			}
-			if ((current.trim().length() > 0) && (level == 0)) {
+			if (current.trim().length() > 0 && level == 0) {
 				_tokens.add(current);
 				current = "";
 			}

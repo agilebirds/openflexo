@@ -21,7 +21,7 @@
 package org.openflexo.xmlcode.examples.example1;
 
 import java.util.Date;
-import java.util.Vector;
+import java.util.List;
 
 import org.openflexo.xmlcode.XMLSerializable;
 
@@ -38,7 +38,7 @@ public class Movie implements XMLSerializable {
 
 	public Date dateReleased;
 
-	protected Vector roles;
+	protected List<Role> roles;
 
 	public String category;
 
@@ -55,7 +55,7 @@ public class Movie implements XMLSerializable {
 		returnedString += ", category=" + category + ") roles=(";
 		if (roles != null) {
 			for (int i = 0; i < roles.size(); i++) {
-				returnedString += " " + roles.elementAt(i).toString();
+				returnedString += " " + roles.get(i).toString();
 			}
 		}
 
@@ -63,24 +63,20 @@ public class Movie implements XMLSerializable {
 		return returnedString;
 	}
 
-	public Vector getRoles() {
-
+	public List<Role> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(Vector values) {
-
+	public void setRoles(List<Role> values) {
 		roles = values;
 	}
 
 	public void addToRoles(Role aRole) {
-
-		roles.addElement(aRole);
+		roles.add(aRole);
 	}
 
 	public void removeFromRoles(Role aRole) {
-
-		roles.removeElement(aRole);
+		roles.remove(aRole);
 	}
 
 }
