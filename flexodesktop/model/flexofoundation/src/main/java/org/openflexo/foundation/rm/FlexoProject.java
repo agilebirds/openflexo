@@ -978,7 +978,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		return returned;
 	}
 
-	public void setSerializationResources(Hashtable<String, FlexoResource<? extends FlexoResourceData>> res) {
+	public void setSerializationResources(Map<String, FlexoResource<? extends FlexoResourceData>> res) {
 		setResources(res);
 	}
 
@@ -1883,9 +1883,9 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	 *
 	 */
 	public void clearCachedFiles() {
-		for (FlexoResource<? extends FlexoResourceData> r : this) {
-			if (r instanceof FlexoFileResource && ((FlexoFileResource<? extends FlexoResourceData>) r).getResourceFile() != null) {
-				((FlexoFileResource<? extends FlexoResourceData>) r).getResourceFile().clearCachedFile();
+		for (FlexoFileResource<? extends FlexoResourceData> r : getFileResources()) {
+			if (r.getResourceFile() != null) {
+				r.getResourceFile().clearCachedFile();
 			}
 		}
 	}
