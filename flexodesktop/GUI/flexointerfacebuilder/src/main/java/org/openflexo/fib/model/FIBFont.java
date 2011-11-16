@@ -30,6 +30,11 @@ public class FIBFont extends FIBWidget {
 	}
 
 	@Override
+	protected String getBaseName() {
+		return "FontSelector";
+	}
+
+	@Override
 	public Type getDefaultDataClass() {
 		return Font.class;
 	}

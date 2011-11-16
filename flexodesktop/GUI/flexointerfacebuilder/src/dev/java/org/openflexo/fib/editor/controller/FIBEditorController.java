@@ -19,14 +19,11 @@
  */
 package org.openflexo.fib.editor.controller;
 
-
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.io.File;
 import java.util.Observable;
 import java.util.logging.Logger;
 
-import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
@@ -81,12 +78,11 @@ import org.openflexo.fib.model.FIBTextField;
 import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.fib.view.FIBWidgetView;
-import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileResource;
 
-public class FIBEditorController /*extends FIBController*/ extends Observable {
+public class FIBEditorController /*extends FIBController*/extends Observable {
 
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditorController.class.getPackage().getName());
 
@@ -103,15 +99,15 @@ public class FIBEditorController /*extends FIBController*/ extends Observable {
 
 	private ContextualMenu contextualMenu;
 
-	public FIBEditorController(FIBComponent fibComponent, FIBGenericEditor editor)
-	{
-		this(fibComponent,editor,null);
+	private FIBBrowserController browserController;
 
+	public FIBEditorController(FIBComponent fibComponent, FIBGenericEditor editor) {
+		this(fibComponent, editor, null);
 
-		//Class testClass = null;
+		// Class testClass = null;
 		if (fibComponent.getDataClass() != null) {
 			try {
-				//testClass = Class.forName(fibComponent.getDataClassName());
+				// testClass = Class.forName(fibComponent.getDataClassName());
 				Object testData = fibComponent.getDataClass().newInstance();
 				fibPanel.getController().setDataObject(testData);
 			} catch (InstantiationException e) {
@@ -121,20 +117,17 @@ public class FIBEditorController /*extends FIBController*/ extends Observable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
-		else {
+		} else {
 			fibPanel.getController().updateWithoutDataObject();
 		}
 
 	}
 
-	public FIBEditorController(FIBComponent fibComponent, FIBGenericEditor editor, Object dataObject)
-	{
+	public FIBEditorController(FIBComponent fibComponent, FIBGenericEditor editor, Object dataObject) {
 		this(fibComponent, editor, dataObject, FIBController.instanciateController(fibComponent));
 	}
 
-	public FIBEditorController(FIBComponent fibComponent, FIBGenericEditor editor, Object dataObject, FIBController controller)
-	{
+	public FIBEditorController(FIBComponent fibComponent, FIBGenericEditor editor, Object dataObject, FIBController controller) {
 		this.controller = controller;
 		controller.setViewFactory(new EditorFIBViewFactory());
 
@@ -146,38 +139,34 @@ public class FIBEditorController /*extends FIBController*/ extends Observable {
 
 		editorPanel = new JPanel(new BorderLayout());
 
-		FIBComponent browserComponent = FIBLibrary.instance().retrieveFIBComponent(BROWSER_FIB,false);
-		FIBBrowserController browserController = new FIBBrowserController(browserComponent,this);
-		FIBView view = FIBController.makeView(browserComponent,browserController);
+		FIBComponent browserComponent = FIBLibrary.instance().retrieveFIBComponent(BROWSER_FIB, false);
+		browserController = new FIBBrowserController(browserComponent, this);
+		FIBView view = FIBController.makeView(browserComponent, browserController);
 		view.getController().setDataObject(fibComponent);
 
 		fibPanel = controller.buildView();
 
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,view.getResultingJComponent(),fibPanel.getResultingJComponent()/*new JScrollPane(fibPanel.getJComponent())*/);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, view.getResultingJComponent(), fibPanel.getResultingJComponent()/*new JScrollPane(fibPanel.getJComponent())*/);
 
-		editorPanel.add(splitPane,BorderLayout.CENTER);
+		editorPanel.add(splitPane, BorderLayout.CENTER);
 
 		if (dataObject != null) {
-			fibPanel.getController().setDataObject(dataObject,true);
-		}
-		else {
+			fibPanel.getController().setDataObject(dataObject, true);
+		} else {
 			fibPanel.getController().updateWithoutDataObject();
 		}
 
 	}
 
-	public Object getDataObject()
-	{
+	public Object getDataObject() {
 		return controller.getDataObject();
 	}
 
-	public void setDataObject(Object anObject)
-	{
+	public void setDataObject(Object anObject) {
 		controller.setDataObject(anObject);
 	}
 
-	public FIBController getController()
-	{
+	public FIBController getController() {
 		return controller;
 	}
 
@@ -185,8 +174,7 @@ public class FIBEditorController /*extends FIBController*/ extends Observable {
 		return editor;
 	}
 
-	public JPanel getEditorPanel()
-	{
+	public JPanel getEditorPanel() {
 		return editorPanel;
 	}
 
@@ -194,49 +182,42 @@ public class FIBEditorController /*extends FIBController*/ extends Observable {
 		return contextualMenu;
 	}
 
-	public FIBEditorPalette getPalette()
-	{
+	public FIBEditorPalette getPalette() {
 		return editor.getPalette();
 	}
 
-	public FIBView getFibPanel()
-	{
+	public FIBView getFibPanel() {
 		return fibPanel;
 	}
 
-	public FIBComponent getFocusedObject()
-	{
+	public FIBComponent getFocusedObject() {
 		return focusedObject;
 	}
 
-	public void setFocusedObject(FIBComponent aComponent)
-	{
+	public void setFocusedObject(FIBComponent aComponent) {
 		if (aComponent != focusedObject) {
-			//System.out.println("setFocusedObject with "+aComponent);
-			FocusedObjectChange change = new FocusedObjectChange(focusedObject,aComponent);
+			// System.out.println("setFocusedObject with "+aComponent);
+			FocusedObjectChange change = new FocusedObjectChange(focusedObject, aComponent);
 			focusedObject = aComponent;
 			setChanged();
 			notifyObservers(change);
 		}
 	}
 
-	public FIBComponent getSelectedObject()
-	{
+	public FIBComponent getSelectedObject() {
 		return selectedObject;
 	}
 
-	public void setSelectedObject(FIBComponent aComponent)
-	{
-		//logger.info("setSelectedObject "+aComponent);
+	public void setSelectedObject(FIBComponent aComponent) {
+		// logger.info("setSelectedObject "+aComponent);
 		if (aComponent != selectedObject) {
-			SelectedObjectChange change = new SelectedObjectChange(selectedObject,aComponent);
+			SelectedObjectChange change = new SelectedObjectChange(selectedObject, aComponent);
 			selectedObject = aComponent;
 			setChanged();
 			notifyObservers(change);
 		}
 
-
-		//System.out.println("set selected: "+selectedObject);
+		// System.out.println("set selected: "+selectedObject);
 
 		/*if (selectedObject != null) {
 			fibPanel.getController().viewForComponent(selectedObject).getJComponent().setBorder(oldBorder);
@@ -253,21 +234,18 @@ public class FIBEditorController /*extends FIBController*/ extends Observable {
 		}*/
 	}
 
-	public void notifyFocusedAndSelectedObject()
-	{
-		FocusedObjectChange change1 = new FocusedObjectChange(focusedObject,focusedObject);
+	public void notifyFocusedAndSelectedObject() {
+		FocusedObjectChange change1 = new FocusedObjectChange(focusedObject, focusedObject);
 		setChanged();
 		notifyObservers(change1);
-		SelectedObjectChange change2 = new SelectedObjectChange(selectedObject,selectedObject);
+		SelectedObjectChange change2 = new SelectedObjectChange(selectedObject, selectedObject);
 		setChanged();
 		notifyObservers(change2);
 	}
 
-	public FIBView viewForComponent(FIBComponent component)
-	{
+	public FIBView viewForComponent(FIBComponent component) {
 		return controller.viewForComponent(component);
 	}
-
 
 	/*public void keyTyped(KeyEvent e)
 	{
@@ -285,103 +263,94 @@ public class FIBEditorController /*extends FIBController*/ extends Observable {
 		}
 	}*/
 
-	public void switchToLanguage(Language language)
-	{
+	public void switchToLanguage(Language language) {
 		controller.switchToLanguage(language);
 	}
 
-
-
-	protected class EditorFIBViewFactory implements FIBViewFactory
-	{
+	protected class EditorFIBViewFactory implements FIBViewFactory {
 		@Override
-		public FIBView makeContainer(FIBContainer fibContainer)
-		{
+		public FIBView makeContainer(FIBContainer fibContainer) {
 			if (fibContainer instanceof FIBTab) {
-				return new FIBEditableTabView((FIBTab)fibContainer,FIBEditorController.this);
-			}
-			else if (fibContainer instanceof FIBPanel) {
-				return new FIBEditablePanelView((FIBPanel)fibContainer,FIBEditorController.this);
-			}
-			else if (fibContainer instanceof FIBTabPanel) {
-				return new FIBEditableTabPanelView((FIBTabPanel)fibContainer,FIBEditorController.this);
+				return new FIBEditableTabView((FIBTab) fibContainer, FIBEditorController.this);
+			} else if (fibContainer instanceof FIBPanel) {
+				return new FIBEditablePanelView((FIBPanel) fibContainer, FIBEditorController.this);
+			} else if (fibContainer instanceof FIBTabPanel) {
+				return new FIBEditableTabPanelView((FIBTabPanel) fibContainer, FIBEditorController.this);
 			}
 			return null;
 		}
 
 		@Override
-		public FIBWidgetView makeWidget(FIBWidget fibWidget)
-		{
+		public FIBWidgetView makeWidget(FIBWidget fibWidget) {
 			if (fibWidget instanceof FIBTextField) {
-				return new FIBEditableTextFieldWidget((FIBTextField)fibWidget,FIBEditorController.this);
+				return new FIBEditableTextFieldWidget((FIBTextField) fibWidget, FIBEditorController.this);
 			}
 			if (fibWidget instanceof FIBTextArea) {
-				return new FIBEditableTextAreaWidget((FIBTextArea)fibWidget,FIBEditorController.this);
+				return new FIBEditableTextAreaWidget((FIBTextArea) fibWidget, FIBEditorController.this);
 			}
 			if (fibWidget instanceof FIBHtmlEditor) {
-				return new FIBEditableHtmlEditorWidget((FIBHtmlEditor)fibWidget,FIBEditorController.this);
+				return new FIBEditableHtmlEditorWidget((FIBHtmlEditor) fibWidget, FIBEditorController.this);
 			}
 			if (fibWidget instanceof FIBLabel) {
-				return new FIBEditableLabelWidget((FIBLabel)fibWidget,FIBEditorController.this);
+				return new FIBEditableLabelWidget((FIBLabel) fibWidget, FIBEditorController.this);
 			}
 			if (fibWidget instanceof FIBImage) {
-				return new FIBEditableImageWidget((FIBImage)fibWidget,FIBEditorController.this);
+				return new FIBEditableImageWidget((FIBImage) fibWidget, FIBEditorController.this);
 			}
 			if (fibWidget instanceof FIBCheckBox) {
-				return new FIBEditableCheckboxWidget((FIBCheckBox)fibWidget,FIBEditorController.this);
+				return new FIBEditableCheckboxWidget((FIBCheckBox) fibWidget, FIBEditorController.this);
 			}
 			if (fibWidget instanceof FIBTable) {
-				return new FIBEditableTableWidget((FIBTable)fibWidget,FIBEditorController.this);
+				return new FIBEditableTableWidget((FIBTable) fibWidget, FIBEditorController.this);
 			}
 			if (fibWidget instanceof FIBBrowser) {
-				return new FIBEditableBrowserWidget((FIBBrowser)fibWidget,FIBEditorController.this);
+				return new FIBEditableBrowserWidget((FIBBrowser) fibWidget, FIBEditorController.this);
 			}
 			if (fibWidget instanceof FIBDropDown) {
-				return new FIBEditableDropDownWidget((FIBDropDown)fibWidget,FIBEditorController.this);
+				return new FIBEditableDropDownWidget((FIBDropDown) fibWidget, FIBEditorController.this);
 			}
 			if (fibWidget instanceof FIBRadioButtonList) {
 				return new FIBEditableRadioButtonListWidget((FIBRadioButtonList) fibWidget, FIBEditorController.this);
 			}
 			if (fibWidget instanceof FIBList) {
-				return new FIBEditableListWidget((FIBList)fibWidget,FIBEditorController.this);
+				return new FIBEditableListWidget((FIBList) fibWidget, FIBEditorController.this);
 			}
 			if (fibWidget instanceof FIBNumber) {
-				FIBNumber w = (FIBNumber)fibWidget;
+				FIBNumber w = (FIBNumber) fibWidget;
 				switch (w.getNumberType()) {
 				case ByteType:
-					return new FIBEditableNumberWidget.FIBEditableByteWidget(w,FIBEditorController.this);
+					return new FIBEditableNumberWidget.FIBEditableByteWidget(w, FIBEditorController.this);
 				case ShortType:
-					return new FIBEditableNumberWidget.FIBEditableShortWidget(w,FIBEditorController.this);
+					return new FIBEditableNumberWidget.FIBEditableShortWidget(w, FIBEditorController.this);
 				case IntegerType:
-					return new FIBEditableNumberWidget.FIBEditableIntegerWidget(w,FIBEditorController.this);
+					return new FIBEditableNumberWidget.FIBEditableIntegerWidget(w, FIBEditorController.this);
 				case LongType:
-					return new FIBEditableNumberWidget.FIBEditableLongWidget(w,FIBEditorController.this);
+					return new FIBEditableNumberWidget.FIBEditableLongWidget(w, FIBEditorController.this);
 				case FloatType:
-					return new FIBEditableNumberWidget.FIBEditableFloatWidget(w,FIBEditorController.this);
+					return new FIBEditableNumberWidget.FIBEditableFloatWidget(w, FIBEditorController.this);
 				case DoubleType:
-					return new FIBEditableNumberWidget.FIBEditableDoubleWidget(w,FIBEditorController.this);
+					return new FIBEditableNumberWidget.FIBEditableDoubleWidget(w, FIBEditorController.this);
 				default:
 					break;
 				}
 			}
 			if (fibWidget instanceof FIBColor) {
-				return new FIBEditableColorWidget((FIBColor)fibWidget,FIBEditorController.this);
+				return new FIBEditableColorWidget((FIBColor) fibWidget, FIBEditorController.this);
 			}
 			if (fibWidget instanceof FIBFont) {
-				return new FIBEditableFontWidget((FIBFont)fibWidget,FIBEditorController.this);
+				return new FIBEditableFontWidget((FIBFont) fibWidget, FIBEditorController.this);
 			}
 			if (fibWidget instanceof FIBFile) {
-				return new FIBEditableFileWidget((FIBFile)fibWidget,FIBEditorController.this);
+				return new FIBEditableFileWidget((FIBFile) fibWidget, FIBEditorController.this);
 			}
 			if (fibWidget instanceof FIBButton) {
-				return new FIBEditableButtonWidget((FIBButton)fibWidget,FIBEditorController.this);
+				return new FIBEditableButtonWidget((FIBButton) fibWidget, FIBEditorController.this);
 			}
 			if (fibWidget instanceof FIBCustom) {
-				return new FIBEditableCustomWidget((FIBCustom)fibWidget,FIBEditorController.this);
+				return new FIBEditableCustomWidget((FIBCustom) fibWidget, FIBEditorController.this);
 			}
 			return null;
 		}
 	}
-
 
 }

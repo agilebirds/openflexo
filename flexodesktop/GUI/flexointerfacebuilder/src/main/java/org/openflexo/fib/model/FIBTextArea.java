@@ -33,6 +33,11 @@ public class FIBTextArea extends FIBWidget {
 	}
 
 	@Override
+	protected String getBaseName() {
+		return "TextArea";
+	}
+
+	@Override
 	public Type getDefaultDataClass() {
 		return String.class;
 	}

@@ -22,7 +22,6 @@ package org.openflexo.fib.model.validation;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBModelObject;
 
 /**
@@ -49,9 +48,13 @@ public class ValidationError<R extends ValidationRule<R, C>, C extends FIBModelO
 		super(rule, anObject, aMessage, fixProposals);
 	}
 
+	public ValidationError(R rule, C anObject, String aMessage, FixProposal<R, C>... fixProposals) {
+		super(rule, anObject, aMessage, fixProposals);
+	}
+
 	@Override
 	public String toString() {
-		return "VALIDATION / ERROR:   " + getLocalizedMessage();
+		return "VALIDATION / ERROR:   " + getMessage();
 	}
 
 }

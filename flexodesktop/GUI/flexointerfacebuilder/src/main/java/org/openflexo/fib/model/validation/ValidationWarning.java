@@ -47,6 +47,10 @@ public class ValidationWarning<R extends ValidationRule<R, C>, C extends FIBMode
 		super(rule, anObject, aMessage, fixProposals);
 	}
 
+	public ValidationWarning(R rule, C anObject, String aMessage, FixProposal<R, C>... fixProposals) {
+		super(rule, anObject, aMessage, fixProposals);
+	}
+
 	@Override
 	public String toString() {
 		return "VALIDATION / WARNING: " + getLocalizedMessage();

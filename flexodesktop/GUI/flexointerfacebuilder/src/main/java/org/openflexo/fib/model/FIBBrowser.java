@@ -128,6 +128,11 @@ public class FIBBrowser extends FIBWidget {
 		elementsForClasses = new Hashtable<Class, FIBBrowserElement>();
 	}
 
+	@Override
+	protected String getBaseName() {
+		return "Browser";
+	}
+
 	public DataBinding getRoot() {
 		if (root == null) {
 			root = new DataBinding(this, Parameters.root, getRootBindingDefinition());

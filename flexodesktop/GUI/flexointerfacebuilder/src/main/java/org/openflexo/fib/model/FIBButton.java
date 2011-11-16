@@ -44,6 +44,11 @@ public class FIBButton extends FIBWidget {
 	}
 
 	@Override
+	protected String getBaseName() {
+		return "Button";
+	}
+
+	@Override
 	public String getIdentifier() {
 		return getLabel();
 	}

@@ -1,7 +1,7 @@
 package org.openflexo.fib.editor.controller;
 
 import java.awt.event.MouseEvent;
-import java.util.Enumeration;
+import java.util.Observer;
 
 import javax.swing.ImageIcon;
 
@@ -12,7 +12,6 @@ import org.openflexo.fib.model.FIBCheckBox;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBDropDown;
 import org.openflexo.fib.model.FIBLabel;
-import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.fib.model.FIBNumber;
 import org.openflexo.fib.model.FIBPanel;
 import org.openflexo.fib.model.FIBRadioButtonList;
@@ -20,31 +19,26 @@ import org.openflexo.fib.model.FIBTabPanel;
 import org.openflexo.fib.model.FIBTable;
 import org.openflexo.fib.model.FIBTextArea;
 import org.openflexo.fib.model.FIBTextField;
-import org.openflexo.fib.view.FIBView;
 
-public class FIBBrowserController extends FIBController {
+public class FIBBrowserController extends FIBController implements Observer {
 
 	private FIBEditorController editorController;
-	private FIBComponent selectedComponent;
-	
-	
+
 	public FIBBrowserController(FIBComponent rootComponent, FIBEditorController editorController) {
 		super(rootComponent);
-		System.out.println("Root component "+rootComponent);
 		this.editorController = editorController;
+		editorController.addObserver(this);
 	}
-	
+
 	public FIBComponent getSelectedComponent() {
-		return selectedComponent;
+		return editorController.getSelectedObject();
 	}
 
 	public void setSelectedComponent(FIBComponent selectedComponent) {
-		this.selectedComponent = selectedComponent;
-		editorController.setSelectedObject((FIBComponent)selectedComponent);
+		editorController.setSelectedObject(selectedComponent);
 	}
 
-	public ImageIcon iconFor(FIBComponent component)
-	{
+	public ImageIcon iconFor(FIBComponent component) {
 		if (component.isRootComponent()) {
 			return FIBEditorIconLibrary.ROOT_COMPONENT_ICON;
 		} else if (component instanceof FIBTabPanel) {
@@ -76,20 +70,18 @@ public class FIBBrowserController extends FIBController {
 
 	}
 
-	public String textFor(FIBComponent component)
-	{
+	public String textFor(FIBComponent component) {
 		if (component.getName() != null) {
-			return component.getName()+" ("+component.getClass().getSimpleName()+")";
-		}
-		else if (component.getIdentifier() != null) {
-			return component.getIdentifier()+" ("+component.getClass().getSimpleName()+")";
+			return component.getName() + " (" + component.getClass().getSimpleName() + ")";
+		} else if (component.getIdentifier() != null) {
+			return component.getIdentifier() + " (" + component.getClass().getSimpleName() + ")";
 		} else {
-			return "<"+component.getClass().getSimpleName()+">";
+			return "<" + component.getClass().getSimpleName() + ">";
 		}
 	}
 
-	public void rightClick(FIBComponent component, MouseEvent event)
-	{
+	public void rightClick(FIBComponent component, MouseEvent event) {
 		editorController.getContextualMenu().displayPopupMenu(component, getRootView().getJComponent(), event);
 	}
+
 }

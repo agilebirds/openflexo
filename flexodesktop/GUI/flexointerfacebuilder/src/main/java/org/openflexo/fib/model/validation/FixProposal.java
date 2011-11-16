@@ -21,9 +21,7 @@ package org.openflexo.fib.model.validation;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBModelObject;
-import org.openflexo.kvc.KVCObject;
 import org.openflexo.localization.FlexoLocalization;
 
 /**
@@ -32,7 +30,7 @@ import org.openflexo.localization.FlexoLocalization;
  * @author sguerin
  * 
  */
-public abstract class FixProposal<R extends ValidationRule<R, C>, C extends FIBModelObject> extends KVCObject  {
+public abstract class FixProposal<R extends ValidationRule<R, C>, C extends FIBModelObject> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(FixProposal.class.getPackage().getName());
@@ -61,7 +59,7 @@ public abstract class FixProposal<R extends ValidationRule<R, C>, C extends FIBM
 
 	public String getLocalizedMessage() {
 		if ((_localizedMessage == null) && (getProblemIssue() != null) && (getObject() != null)) {
-			_localizedMessage = FlexoLocalization.localizedForKeyWithParams(_message, this);
+			_localizedMessage = FlexoLocalization.localizedForKeyWithParams(ValidationIssue.VALIDATION_LOCALIZATION, _message, this);
 		}
 		return _localizedMessage;
 	}

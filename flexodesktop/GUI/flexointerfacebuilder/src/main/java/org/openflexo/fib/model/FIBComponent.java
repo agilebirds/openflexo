@@ -38,6 +38,10 @@ import org.openflexo.antar.binding.BindingVariableImpl;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.fib.controller.FIBComponentDynamicModel;
 import org.openflexo.fib.controller.FIBController;
+import org.openflexo.fib.model.validation.ValidationIssue;
+import org.openflexo.fib.model.validation.ValidationReport;
+import org.openflexo.fib.model.validation.ValidationRule;
+import org.openflexo.fib.model.validation.ValidationWarning;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.toolbox.StringUtils;
 
@@ -1239,6 +1243,64 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 	public void setDefinitionFile(String definitionFile) {
 		this.definitionFile = definitionFile;
+	}
+
+	@Override
+	protected void applyValidation(ValidationReport report) {
+		super.applyValidation(report);
+		performValidation(RootComponentShouldHaveDataClass.class, report);
+		performValidation(DataBindingMustBeValid.class, report);
+		performValidation(VisibleBindingMustBeValid.class, report);
+	}
+
+	public static class RootComponentShouldHaveDataClass extends ValidationRule<RootComponentShouldHaveDataClass, FIBComponent> {
+		public RootComponentShouldHaveDataClass() {
+			super(FIBModelObject.class, "root_component_should_have_data_class");
+		}
+
+		@Override
+		public ValidationIssue<RootComponentShouldHaveDataClass, FIBComponent> applyValidation(FIBComponent object) {
+			if (object.isRootComponent() && object.getDataClass() == null) {
+				return new ValidationWarning<RootComponentShouldHaveDataClass, FIBComponent>(this, object,
+						"component_($object.toString)_is_declared_as_root_but_does_not_have_any_data_class");
+			}
+			return null;
+		}
+
+	}
+
+	public static class DataBindingMustBeValid extends BindingMustBeValid<FIBComponent> {
+		public DataBindingMustBeValid() {
+			super("'data'_binding_is_not_valid", FIBComponent.class);
+		}
+
+		@Override
+		public DataBinding getBinding(FIBComponent object) {
+			return object.getData();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(FIBComponent object) {
+			return object.getDataBindingDefinition();
+		}
+
+	}
+
+	public static class VisibleBindingMustBeValid extends BindingMustBeValid<FIBComponent> {
+		public VisibleBindingMustBeValid() {
+			super("'visible'_binding_is_not_valid", FIBComponent.class);
+		}
+
+		@Override
+		public DataBinding getBinding(FIBComponent object) {
+			return object.getVisible();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(FIBComponent object) {
+			return VISIBLE;
+		}
+
 	}
 
 }

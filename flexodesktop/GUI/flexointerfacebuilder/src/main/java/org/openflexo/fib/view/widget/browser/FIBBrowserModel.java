@@ -428,7 +428,10 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 			// System.out.println("newChildren ["+newChildren.size()+"] "+newChildren);
 			// System.out.println("children ["+children.size()+"] "+children);
 
+			boolean structureChanged = false;
+
 			if (removedChildren.size() > 0 || newChildren.size() > 0) {
+				structureChanged = true;
 				if (oldChildren.size() == 0) {
 					// Special case, i don't undertand why (SGU)
 					nodeStructureChanged(this);
@@ -452,7 +455,14 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeSelectionLi
 				}
 			}
 
-			nodeChanged(this);
+			try {
+				nodeChanged(this);
+			} catch (ArrayIndexOutOfBoundsException e) {
+				// Might happen when a structural modification will call parent's nodeChanged()
+				// An ArrayIndexOutOfBoundsException might be raised here
+				// We should investigate further, but since no real consequences are raised here, we just ignore exception
+				logger.warning("Unexpected ArrayIndexOutOfBoundsException when refreshing browser, no severity but please investigate");
+			}
 		}
 
 		@Override
