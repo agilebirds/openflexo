@@ -24,10 +24,11 @@ import java.util.Observer;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
-import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBModelObject;
-import org.openflexo.kvc.KVCObject;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.localization.LocalizedDelegate;
+import org.openflexo.localization.LocalizedDelegateImplementation;
+import org.openflexo.toolbox.FileResource;
 
 /**
  * Represents a validation issue embedded in a validation report
@@ -35,10 +36,13 @@ import org.openflexo.localization.FlexoLocalization;
  * @author sguerin
  * 
  */
-public abstract class ValidationIssue<R extends ValidationRule<R, C>, C extends FIBModelObject> extends KVCObject implements Observer {
+public abstract class ValidationIssue<R extends ValidationRule<R, C>, C extends FIBModelObject> implements Observer {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ValidationIssue.class.getPackage().getName());
+
+	public static LocalizedDelegate VALIDATION_LOCALIZATION = new LocalizedDelegateImplementation(
+			new FileResource("FIBValidationLocalized"));
 
 	private C _object;
 
@@ -64,8 +68,8 @@ public abstract class ValidationIssue<R extends ValidationRule<R, C>, C extends 
 		if (!isLocalized) {
 			_localizedMessage = aMessage;
 		}
-			_object.addObserver(this);
-		
+		_object.addObserver(this);
+
 	}
 
 	public String getMessage() {
@@ -74,7 +78,7 @@ public abstract class ValidationIssue<R extends ValidationRule<R, C>, C extends 
 
 	public String getLocalizedMessage() {
 		if ((_localizedMessage == null) && (_message != null) && _isLocalized) {
-			_localizedMessage = FlexoLocalization.localizedForKeyWithParams(_message, this);
+			_localizedMessage = FlexoLocalization.localizedForKeyWithParams(VALIDATION_LOCALIZATION, _message, this);
 		}
 		return _localizedMessage;
 	}
@@ -120,7 +124,7 @@ public abstract class ValidationIssue<R extends ValidationRule<R, C>, C extends 
 
 	@Override
 	public void update(Observable observable, Object dataModification) {
-		System.out.println("Received "+dataModification);
+		// System.out.println("Received " + dataModification);
 	}
 
 	public void delete() {
@@ -135,5 +139,9 @@ public abstract class ValidationIssue<R extends ValidationRule<R, C>, C extends 
 		} else {
 			_localizedMessage = _message;
 		}
+	}
+
+	public boolean isProblemIssue() {
+		return false;
 	}
 }

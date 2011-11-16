@@ -1,0 +1,9 @@
+#French
+#Wed Nov 16 00:31:52 CET 2011
+generate_default_name=generate_default_name
+generate_default_name_($defaultName)=generate_default_name_($defaultName)
+generate_default_name_\:_($defaultName)=generate_default_name_\:_($defaultName)
+object_($object.name)_has_no_name=object_($object.name)_has_no_name
+object_($object.toString)_has_no_name=object_($object.toString)_has_no_name
+object_should_have_a_name=object_should_have_a_name
+object_should_have_a_name_description=object_should_have_a_name_description

@@ -19,6 +19,9 @@
  */
 package org.openflexo.fib.model;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Observable;
 import java.util.Vector;
@@ -29,7 +32,12 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fib.FIBLibrary;
+import org.openflexo.fib.model.validation.FixProposal;
+import org.openflexo.fib.model.validation.ValidationError;
+import org.openflexo.fib.model.validation.ValidationIssue;
 import org.openflexo.fib.model.validation.ValidationReport;
+import org.openflexo.fib.model.validation.ValidationRule;
+import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.KeyValueDecoder;
 import org.openflexo.xmlcode.XMLSerializable;
 
@@ -222,11 +230,95 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 		return !equals(o1, o2);
 	}
 
-	public ValidationReport validate()
-	{
+	public final ValidationReport validate() {
 		ValidationReport returned = new ValidationReport(this);
+		validate(returned);
+		System.out.println("validation: " + returned.reportAsString());
 		return returned;
 	}
-	
+
+	protected final void validate(ValidationReport report) {
+		applyValidation(report);
+		if (getEmbeddedObjects() != null) {
+			for (FIBModelObject o : getEmbeddedObjects()) {
+				o.validate(report);
+			}
+		}
+	}
+
+	protected void applyValidation(ValidationReport report) {
+		performValidation(FIBModelObjectShouldHaveAName.class, report);
+	}
+
+	private static Hashtable<Class, ValidationRule> rules = new Hashtable<Class, ValidationRule>();
+
+	private static <R extends ValidationRule<R, C>, C extends FIBModelObject> R getRule(Class<R> validationRuleClass) {
+		R returned = (R) rules.get(validationRuleClass);
+		if (returned == null) {
+			Constructor<R> c = (Constructor<R>) validationRuleClass.getConstructors()[0];
+			try {
+				returned = c.newInstance(null);
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			rules.put(validationRuleClass, returned);
+		}
+		return returned;
+	}
+
+	protected final <R extends ValidationRule<R, C>, C extends FIBModelObject> void performValidation(Class<R> validationRuleClass,
+			ValidationReport report) {
+		R rule = getRule(validationRuleClass);
+		ValidationIssue<R, C> issue = rule.applyValidation((C) this);
+		if (issue != null) {
+			report.addToValidationIssues(issue);
+		}
+
+	}
+
+	protected String generateDefaultName() {
+		return "prout";
+	}
+
 	public abstract List<? extends FIBModelObject> getEmbeddedObjects();
+
+	public static class FIBModelObjectShouldHaveAName extends ValidationRule<FIBModelObjectShouldHaveAName, FIBModelObject> {
+		public FIBModelObjectShouldHaveAName() {
+			super(FIBModelObject.class, "object_should_have_a_name");
+		}
+
+		@Override
+		public ValidationIssue<FIBModelObjectShouldHaveAName, FIBModelObject> applyValidation(FIBModelObject object) {
+			if (StringUtils.isEmpty(object.getName())) {
+				GenerateDefaultName fixProposal = new GenerateDefaultName();
+				return new ValidationError<FIBModelObjectShouldHaveAName, FIBModelObject>(this, object,
+						"object_($object.toString)_has_no_name", fixProposal);
+			}
+			return null;
+		}
+
+		protected static class GenerateDefaultName extends FixProposal<FIBModelObjectShouldHaveAName, FIBModelObject> {
+
+			public GenerateDefaultName() {
+				super("generate_default_name_:_($defaultName)");
+			}
+
+			@Override
+			protected void fixAction() {
+				getObject().setName(getDefaultName());
+			}
+
+			public String getDefaultName() {
+				return getObject().generateDefaultName();
+			}
+
+		}
+	}
+
 }
