@@ -32,23 +32,23 @@ import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.viewpoint.AddConnector;
 import org.openflexo.foundation.viewpoint.AddIndividual;
-import org.openflexo.foundation.viewpoint.AddShape;
 import org.openflexo.foundation.viewpoint.CheckboxParameter;
+import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.DeclarePatternRole;
-import org.openflexo.foundation.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
+import org.openflexo.foundation.viewpoint.ExampleDrawingConnector;
 import org.openflexo.foundation.viewpoint.ExampleDrawingObject;
-import org.openflexo.foundation.viewpoint.ExampleDrawingShape;
 import org.openflexo.foundation.viewpoint.FloatParameter;
 import org.openflexo.foundation.viewpoint.IndividualParameter;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.IntegerParameter;
+import org.openflexo.foundation.viewpoint.LinkScheme;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
-import org.openflexo.foundation.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.TextFieldParameter;
 import org.openflexo.foundation.viewpoint.URIParameter;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
@@ -61,40 +61,40 @@ import org.openflexo.foundation.viewpoint.inspector.TextFieldInspectorEntry;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 
-public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<DeclareShapeInEditionPattern, ExampleDrawingShape> {
+public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<DeclareConnectorInEditionPattern, ExampleDrawingConnector> {
 
-	private static final Logger logger = Logger.getLogger(DeclareShapeInEditionPattern.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DeclareConnectorInEditionPattern.class.getPackage().getName());
 
-	public static FlexoActionType<DeclareShapeInEditionPattern, ExampleDrawingShape, ExampleDrawingObject> actionType = new FlexoActionType<DeclareShapeInEditionPattern, ExampleDrawingShape, ExampleDrawingObject>(
+	public static FlexoActionType<DeclareConnectorInEditionPattern, ExampleDrawingConnector, ExampleDrawingObject> actionType = new FlexoActionType<DeclareConnectorInEditionPattern, ExampleDrawingConnector, ExampleDrawingObject>(
 			"declare_in_edition_pattern", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public DeclareShapeInEditionPattern makeNewAction(ExampleDrawingShape focusedObject, Vector<ExampleDrawingObject> globalSelection,
-				FlexoEditor editor) {
-			return new DeclareShapeInEditionPattern(focusedObject, globalSelection, editor);
+		public DeclareConnectorInEditionPattern makeNewAction(ExampleDrawingConnector focusedObject,
+				Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor) {
+			return new DeclareConnectorInEditionPattern(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ExampleDrawingShape shape, Vector<ExampleDrawingObject> globalSelection) {
+		protected boolean isVisibleForSelection(ExampleDrawingConnector connector, Vector<ExampleDrawingObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ExampleDrawingShape shape, Vector<ExampleDrawingObject> globalSelection) {
-			return (shape != null && shape.getCalc().getEditionPatterns().size() > 0);
+		protected boolean isEnabledForSelection(ExampleDrawingConnector connector, Vector<ExampleDrawingObject> globalSelection) {
+			return (connector != null && connector.getCalc().getEditionPatterns().size() > 0);
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(DeclareShapeInEditionPattern.actionType, ExampleDrawingShape.class);
+		FlexoModelObject.addActionForClass(DeclareConnectorInEditionPattern.actionType, ExampleDrawingConnector.class);
 	}
 
 	public static enum NewEditionPatternChoices {
-		MAP_SINGLE_INDIVIDUAL, BLANK_EDITION_PATTERN
+		MAP_SINGLE_INDIVIDUAL, MAP_OBJECT_PROPERTY, BLANK_EDITION_PATTERN
 	}
 
 	public NewEditionPatternChoices patternChoice = NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL;
@@ -102,18 +102,19 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 	private String editionPatternName;
 	private OntologyClass concept;
 	private String individualPatternRoleName;
-	private String shapePatternRoleName;
+	private String connectorPatternRoleName;
 
-	public boolean isTopLevel = true;
-	public EditionPattern containerEditionPattern;
-	private String dropSchemeName;
+	public EditionPattern fromEditionPattern;
+	public EditionPattern toEditionPattern;
+
+	private String linkSchemeName;
 
 	private EditionPattern newEditionPattern;
-	private ShapePatternRole newShapePatternRole;
+	private ConnectorPatternRole newConnectorPatternRole;
 
 	public Vector<PropertyEntry> propertyEntries = new Vector<PropertyEntry>();
 
-	DeclareShapeInEditionPattern(ExampleDrawingShape focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor) {
+	DeclareConnectorInEditionPattern(ExampleDrawingConnector focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
@@ -148,19 +149,19 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 						newEditionPattern.setPrimaryConceptRole(individualPatternRole);
 					}
 
-					// Create shape pattern role
-					newShapePatternRole = new ShapePatternRole();
-					newShapePatternRole.setPatternRoleName(getShapePatternRoleName());
+					// Create connector pattern role
+					newConnectorPatternRole = new ConnectorPatternRole();
+					newConnectorPatternRole.setPatternRoleName(getConnectorPatternRoleName());
 					if (mainPropertyDescriptor != null) {
-						newShapePatternRole.setLabel(new ViewPointDataBinding(getIndividualPatternRoleName() + "."
+						newConnectorPatternRole.setLabel(new ViewPointDataBinding(getIndividualPatternRoleName() + "."
 								+ mainPropertyDescriptor.property.getName()));
 					} else {
-						newShapePatternRole.setReadOnlyLabel(true);
-						newShapePatternRole.setLabel(new ViewPointDataBinding("\"label\""));
+						newConnectorPatternRole.setReadOnlyLabel(true);
+						newConnectorPatternRole.setLabel(new ViewPointDataBinding("\"label\""));
 					}
-					newShapePatternRole.setGraphicalRepresentation(getFocusedObject().getGraphicalRepresentation());
-					newEditionPattern.addToPatternRoles(newShapePatternRole);
-					newEditionPattern.setPrimaryRepresentationRole(newShapePatternRole);
+					newConnectorPatternRole.setGraphicalRepresentation(getFocusedObject().getGraphicalRepresentation());
+					newEditionPattern.addToPatternRoles(newConnectorPatternRole);
+					newEditionPattern.setPrimaryRepresentationRole(newConnectorPatternRole);
 
 					// Create other individual roles
 					Vector<IndividualPatternRole> otherRoles = new Vector<IndividualPatternRole>();
@@ -181,13 +182,11 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 						}
 					}
 
-					// Create new drop scheme
-					DropScheme newDropScheme = new DropScheme();
-					newDropScheme.setName(getDropSchemeName());
-					newDropScheme.setTopTarget(isTopLevel);
-					if (!isTopLevel) {
-						newDropScheme.setTargetEditionPattern(containerEditionPattern);
-					}
+					// Create new link scheme
+					LinkScheme newLinkScheme = new LinkScheme();
+					newLinkScheme.setName(getLinkSchemeName());
+					newLinkScheme.setFromTargetEditionPattern(fromEditionPattern);
+					newLinkScheme.setToTargetEditionPattern(toEditionPattern);
 
 					// Parameters
 					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
@@ -234,7 +233,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 									}
 								}
 								if (newParameter != null) {
-									newDropScheme.addToParameters(newParameter);
+									newLinkScheme.addToParameters(newParameter);
 								}
 							}
 						}
@@ -245,14 +244,14 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 						if (mainPropertyDescriptor != null) {
 							uriParameter.setBaseURI(new ViewPointDataBinding(mainPropertyDescriptor.property.getName()));
 						}
-						newDropScheme.addToParameters(uriParameter);
+						newLinkScheme.addToParameters(uriParameter);
 
 						// Declare pattern role
 						for (IndividualPatternRole r : otherRoles) {
 							DeclarePatternRole action = new DeclarePatternRole();
 							action.setPatternRole(r);
 							action.setObject(new ViewPointDataBinding("parameters." + r.getName()));
-							newDropScheme.addToActions(action);
+							newLinkScheme.addToActions(action);
 						}
 
 						// Add individual action
@@ -277,22 +276,21 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 								}
 							}
 						}
-						newDropScheme.addToActions(newAddIndividual);
+						newLinkScheme.addToActions(newAddIndividual);
 					}
 
-					// Add shape action
-					AddShape newAddShape = new AddShape();
-					newAddShape.setPatternRole(newShapePatternRole);
-					if (isTopLevel) {
-						newAddShape.setContainer(new ViewPointDataBinding(EditionScheme.TOP_LEVEL));
-					} else {
-						newAddShape.setContainer(new ViewPointDataBinding(EditionScheme.TARGET + "."
-								+ containerEditionPattern.getPrimaryRepresentationRole().getPatternRoleName()));
-					}
-					newDropScheme.addToActions(newAddShape);
+					// Add connector action
+					AddConnector newAddConnector = new AddConnector();
+					newAddConnector.setPatternRole(newConnectorPatternRole);
+					newAddConnector.setFromShape(new ViewPointDataBinding(EditionScheme.FROM_TARGET + "."
+							+ fromEditionPattern.getPrimaryRepresentationRole().getPatternRoleName()));
+					newAddConnector.setToShape(new ViewPointDataBinding(EditionScheme.TO_TARGET + "."
+							+ toEditionPattern.getPrimaryRepresentationRole().getPatternRoleName()));
+
+					newLinkScheme.addToActions(newAddConnector);
 
 					// Add new drop scheme
-					newEditionPattern.addToEditionSchemes(newDropScheme);
+					newEditionPattern.addToEditionSchemes(newLinkScheme);
 
 					// Add inspector
 					EditionPatternInspector inspector = newEditionPattern.getInspector();
@@ -370,11 +368,11 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 			switch (patternChoice) {
 			case MAP_SINGLE_INDIVIDUAL:
 				return StringUtils.isNotEmpty(getEditionPatternName()) && concept != null
-						&& StringUtils.isNotEmpty(getIndividualPatternRoleName()) && StringUtils.isNotEmpty(getShapePatternRoleName())
-						&& (isTopLevel || containerEditionPattern != null) && StringUtils.isNotEmpty(getDropSchemeName());
+						&& StringUtils.isNotEmpty(getIndividualPatternRoleName()) && StringUtils.isNotEmpty(getConnectorPatternRoleName())
+						&& (fromEditionPattern != null) && (toEditionPattern != null) && StringUtils.isNotEmpty(getLinkSchemeName());
 			case BLANK_EDITION_PATTERN:
-				return StringUtils.isNotEmpty(getEditionPatternName()) && StringUtils.isNotEmpty(getShapePatternRoleName())
-						&& (isTopLevel || containerEditionPattern != null) && StringUtils.isNotEmpty(getDropSchemeName());
+				return StringUtils.isNotEmpty(getEditionPatternName()) && StringUtils.isNotEmpty(getConnectorPatternRoleName())
+						&& (fromEditionPattern != null) && (toEditionPattern != null) && StringUtils.isNotEmpty(getLinkSchemeName());
 			default:
 				break;
 			}
@@ -383,16 +381,16 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 		}
 	}
 
-	private ShapePatternRole patternRole;
+	private ConnectorPatternRole patternRole;
 
 	@Override
-	public ShapePatternRole getPatternRole() {
+	public ConnectorPatternRole getPatternRole() {
 		if (primaryChoice == DeclareInEditionPatternChoices.CREATES_EDITION_PATTERN)
-			return newShapePatternRole;
+			return newConnectorPatternRole;
 		return patternRole;
 	}
 
-	public void setPatternRole(ShapePatternRole patternRole) {
+	public void setPatternRole(ConnectorPatternRole patternRole) {
 		this.patternRole = patternRole;
 	}
 
@@ -439,27 +437,27 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 		this.individualPatternRoleName = individualPatternRoleName;
 	}
 
-	public String getShapePatternRoleName() {
-		if (StringUtils.isEmpty(shapePatternRoleName)) {
-			return "shape";
+	public String getConnectorPatternRoleName() {
+		if (StringUtils.isEmpty(connectorPatternRoleName)) {
+			return "connector";
 		}
-		return shapePatternRoleName;
+		return connectorPatternRoleName;
 	}
 
-	public void setShapePatternRoleName(String shapePatternRoleName) {
-		this.shapePatternRoleName = shapePatternRoleName;
+	public void setConnectorPatternRoleName(String connectorPatternRoleName) {
+		this.connectorPatternRoleName = connectorPatternRoleName;
 	}
 
-	public String getDropSchemeName() {
-		if (StringUtils.isEmpty(dropSchemeName)) {
-			return "drop" + (StringUtils.isEmpty(getEditionPatternName()) ? "" : getEditionPatternName())
-					+ (isTopLevel ? "AtTopLevel" : (containerEditionPattern != null ? "In" + containerEditionPattern.getName() : ""));
+	public String getLinkSchemeName() {
+		if (StringUtils.isEmpty(linkSchemeName)) {
+			return "link" + (fromEditionPattern != null ? fromEditionPattern.getName() : "") + "To"
+					+ (toEditionPattern != null ? toEditionPattern.getName() : "");
 		}
-		return dropSchemeName;
+		return linkSchemeName;
 	}
 
-	public void setDropSchemeName(String dropSchemeName) {
-		this.dropSchemeName = dropSchemeName;
+	public void setLinkSchemeName(String linkSchemeName) {
+		this.linkSchemeName = linkSchemeName;
 	}
 
 	public class PropertyEntry {

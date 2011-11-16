@@ -24,26 +24,23 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.viewpoint.action.PushToPalette;
+import org.openflexo.foundation.viewpoint.action.DeclareConnectorInEditionPattern;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.controller.CEDController;
 
-public class PushToPaletteInitializer extends ActionInitializer {
+public class DeclareConnectorInEditionPatternInitializer extends ActionInitializer {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	PushToPaletteInitializer(CEDControllerActionInitializer actionInitializer) {
-		super(PushToPalette.actionType, actionInitializer);
+	DeclareConnectorInEditionPatternInitializer(CEDControllerActionInitializer actionInitializer) {
+		super(DeclareConnectorInEditionPattern.actionType, actionInitializer);
 	}
 
 	@Override
@@ -57,34 +54,25 @@ public class PushToPaletteInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionInitializer<PushToPalette> getDefaultInitializer() {
-		return new FlexoActionInitializer<PushToPalette>() {
+	protected FlexoActionInitializer<DeclareConnectorInEditionPattern> getDefaultInitializer() {
+		return new FlexoActionInitializer<DeclareConnectorInEditionPattern>() {
 			@Override
-			public boolean run(ActionEvent e, PushToPalette action) {
-				FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.PUSH_TO_PALETTE_DIALOG_FIB, action, null, true);
-				if (dialog.getStatus() == Status.VALIDATED) {
-					GraphicalRepresentation gr = ((GraphicalRepresentation) action.getFocusedObject().getGraphicalRepresentation());
-					if (gr instanceof ShapeGraphicalRepresentation) {
-						action.graphicalRepresentation = new ShapeGraphicalRepresentation();
-						((ShapeGraphicalRepresentation) action.graphicalRepresentation).setsWith(gr);
-					} else if (gr instanceof ConnectorGraphicalRepresentation) {
-						action.graphicalRepresentation = new ConnectorGraphicalRepresentation();
-						((ConnectorGraphicalRepresentation) action.graphicalRepresentation).setsWith(gr);
-					}
-					return true;
-				}
-				return false;
+			public boolean run(ActionEvent e, DeclareConnectorInEditionPattern action) {
+
+				FIBDialog dialog = FIBDialog.instanciateComponent(CEDCst.DECLARE_CONNECTOR_IN_EDITION_PATTERN_DIALOG_FIB, action, null,
+						true);
+				return (dialog.getStatus() == Status.VALIDATED);
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<PushToPalette> getDefaultFinalizer() {
-		return new FlexoActionFinalizer<PushToPalette>() {
+	protected FlexoActionFinalizer<DeclareConnectorInEditionPattern> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<DeclareConnectorInEditionPattern>() {
 			@Override
-			public boolean run(ActionEvent e, PushToPalette action) {
-				getController().setCurrentEditedObjectAsModuleView(action.palette, getController().VIEW_POINT_PERSPECTIVE);
-				getController().getSelectionManager().setSelectedObject(action.getNewPaletteElement());
+			public boolean run(ActionEvent e, DeclareConnectorInEditionPattern action) {
+				getController().setCurrentEditedObjectAsModuleView(action.getEditionPattern(), getController().VIEW_POINT_PERSPECTIVE);
+				getController().getSelectionManager().setSelectedObject(action.getPatternRole());
 				return true;
 			}
 		};
@@ -92,7 +80,6 @@ public class PushToPaletteInitializer extends ActionInitializer {
 
 	@Override
 	protected Icon getEnabledIcon() {
-		return VPMIconLibrary.CALC_PALETTE_ICON;
+		return VPMIconLibrary.EDITION_PATTERN_ICON;
 	}
-
 }
