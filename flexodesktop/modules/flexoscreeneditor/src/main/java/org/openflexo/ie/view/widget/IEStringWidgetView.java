@@ -19,6 +19,24 @@
  */
 package org.openflexo.ie.view.widget;
 
+import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.ie.dm.CSSChanged;
+import org.openflexo.foundation.ie.dm.table.WidgetRemovedFromTable;
+import org.openflexo.foundation.ie.util.TextCSSClass;
+import org.openflexo.foundation.ie.util.TextFieldType;
+import org.openflexo.foundation.ie.widget.IEStringWidget;
+import org.openflexo.ie.IEPreferences;
+import org.openflexo.ie.util.TriggerRepaintDocumentListener;
+import org.openflexo.ie.view.IEWOComponentView;
+import org.openflexo.ie.view.controller.IEController;
+import org.openflexo.ie.view.listener.DoubleClickResponder;
+
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.JEditorPane;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -29,26 +47,6 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.JEditorPane;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
-import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.ie.dm.CSSChanged;
-import org.openflexo.foundation.ie.dm.table.WidgetRemovedFromTable;
-import org.openflexo.foundation.ie.util.TextCSSClass;
-import org.openflexo.foundation.ie.util.TextFieldType;
-import org.openflexo.foundation.ie.widget.IEStringWidget;
-import org.openflexo.ie.IEPreferences;
-import org.openflexo.ie.view.IEWOComponentView;
-import org.openflexo.ie.view.controller.IEController;
-import org.openflexo.ie.view.listener.DoubleClickResponder;
 
 /**
  * @author bmangez
@@ -219,31 +217,7 @@ public class IEStringWidgetView extends AbstractInnerTableWidgetView<IEStringWid
 				finalizeEditString();
 			}
 		});
-		_jLabelTextField.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void insertUpdate(DocumentEvent event) {
-				// getStringModel().setValue(_jLabelTextField.getText());
-				updateSize();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent event) {
-				// getStringModel().setValue(_jLabelTextField.getText());
-				updateSize();
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent event) {
-				// getStringModel().setValue(_jLabelTextField.getText());
-				updateSize();
-			}
-
-			public void updateSize() {
-				_jLabelTextField.setPreferredSize(_jLabelTextField.getPreferredSize());
-				doLayout();
-				repaint();
-			}
-		});
+		_jLabelTextField.getDocument().addDocumentListener(new TriggerRepaintDocumentListener(this));
 		_jLabelTextField.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent arg0) {
