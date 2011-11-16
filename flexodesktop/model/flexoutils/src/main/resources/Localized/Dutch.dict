@@ -1,5 +1,5 @@
 #Dutch
-#Sun Nov 13 16:33:48 CET 2011
+#Tue Nov 15 22:28:33 CET 2011
 =
 \ =\ 
 \ into\ =\ into 
@@ -2526,6 +2526,7 @@ generate_code_only_does_not_create_files=Generates code only, does not create an
 generate_core=Generate core classes
 generate_core_only=Generate core only
 generate_datamodel=Generate doc for datamodel
+generate_default_name=generate_default_name
 generate_doc_if_required=Generate doc if required
 generate_docx=Generate Docx
 generate_entity_class=Generate entity class
@@ -3512,6 +3513,7 @@ number_of_updated_tocentry_content=number_of_updated_tocentry_content
 number_of_updated_tocentry_title=number_of_updated_tocentry_title
 o=o
 object=Object
+object_($object.name)_has_no_name=object_($object.name)_has_no_name
 object_id=Object ID
 object_id_attribute_name=Object ID attribute name
 object_is_no_more_available_in_portfolio=Object is no more available in portfolio
@@ -3519,6 +3521,8 @@ object_must_refer_to_a_process=Object must refer to a process
 object_must_refer_to_a_process_description=All the objects in WKF model must refer to a particular process. An object pointing to null value generally signify an internal consistency error. Such an object in invalid.
 object_property=object_property
 object_property_statement=object_property_statement
+object_should_have_a_name=object_should_have_a_name
+object_should_have_a_name_description=object_should_have_a_name_description
 objectives=Objectives
 objectproperty=objectproperty
 objects=objects
