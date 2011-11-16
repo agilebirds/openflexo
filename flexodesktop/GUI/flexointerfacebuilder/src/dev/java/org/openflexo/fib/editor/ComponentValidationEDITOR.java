@@ -17,22 +17,27 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fib.model;
+package org.openflexo.fib.editor;
 
-import java.util.logging.Logger;
+import java.io.File;
 
-public class FIBDropDown extends FIBMultipleValues {
+import org.openflexo.fib.FIBLibrary;
 
-	public boolean showReset = false;
+public class ComponentValidationEDITOR {
 
-	private static final Logger logger = Logger.getLogger(FIBDropDown.class.getPackage().getName());
+	public static void main(String[] args) {
+		FIBAbstractEditor editor = new FIBAbstractEditor() {
+			@Override
+			public Object[] getData() {
+				return makeArray(FIBLibrary.instance().retrieveFIBComponent(ValidationWindow.COMPONENT_VALIDATION_FIB).validate(),
+						FIBLibrary.instance().retrieveFIBComponent(FIBEditor.COMPONENT_LOCALIZATION_FIB).validate());
+			}
 
-	public FIBDropDown() {
+			@Override
+			public File getFIBFile() {
+				return ValidationWindow.COMPONENT_VALIDATION_FIB;
+			}
+		};
+		editor.launch();
 	}
-
-	@Override
-	protected String getBaseName() {
-		return "DropDown";
-	}
-
 }

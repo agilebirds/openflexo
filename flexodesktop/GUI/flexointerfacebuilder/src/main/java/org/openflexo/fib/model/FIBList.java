@@ -103,6 +103,11 @@ public class FIBList extends FIBMultipleValues {
 	}
 
 	@Override
+	protected String getBaseName() {
+		return "List";
+	}
+
+	@Override
 	public Type getDynamicAccessType() {
 		Type[] args = new Type[2];
 		args[0] = getDataType();

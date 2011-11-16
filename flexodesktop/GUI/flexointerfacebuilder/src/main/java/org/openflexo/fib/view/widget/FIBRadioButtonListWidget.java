@@ -48,6 +48,7 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 		super(model, controller);
 		buttonGroup = new ButtonGroup();
 		panel = new JPanel(new GridLayout(0, model.getColumns()));
+		panel.setOpaque(false);
 		rebuildRadioButtons();
 		if (getWidget().getAutoSelectFirstRow() && getListModel().getSize() > 0) {
 			radioButtonArray[0].setSelected(true);

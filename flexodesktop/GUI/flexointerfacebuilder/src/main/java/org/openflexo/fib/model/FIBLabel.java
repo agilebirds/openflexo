@@ -58,6 +58,11 @@ public class FIBLabel extends FIBWidget {
 		super();
 	}
 
+	@Override
+	protected String getBaseName() {
+		return "Label";
+	}
+
 	public FIBLabel(String label) {
 		super();
 		this.label = label;

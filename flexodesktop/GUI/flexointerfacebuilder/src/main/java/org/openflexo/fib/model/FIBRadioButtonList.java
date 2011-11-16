@@ -30,6 +30,11 @@ public class FIBRadioButtonList extends FIBMultipleValues {
 	public FIBRadioButtonList() {
 	}
 
+	@Override
+	protected String getBaseName() {
+		return "RadioButtonList";
+	}
+
 	public int getColumns() {
 		return columns;
 	}

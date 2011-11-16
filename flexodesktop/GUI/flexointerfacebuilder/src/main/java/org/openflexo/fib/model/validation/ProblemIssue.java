@@ -20,11 +20,11 @@
 package org.openflexo.fib.model.validation;
 
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBModelObject;
 
 /**
@@ -50,14 +50,23 @@ public abstract class ProblemIssue<R extends ValidationRule<R, C>, C extends FIB
 		_relatedValidableObjects = new Vector<FIBModelObject>();
 	}
 
-	public ProblemIssue(R rule, C anObject, String aMessage, FixProposal<R,C> proposal) {
+	public ProblemIssue(R rule, C anObject, String aMessage, FixProposal<R, C> proposal) {
 		this(rule, anObject, aMessage);
 		if (proposal != null) {
 			addToFixProposals(proposal);
 		}
 	}
 
-	public ProblemIssue(R rule, C anObject, String aMessage, Vector<FixProposal<R,C>> fixProposals) {
+	public ProblemIssue(R rule, C anObject, String aMessage, Vector<FixProposal<R, C>> fixProposals) {
+		this(rule, anObject, aMessage);
+		if (fixProposals != null) {
+			for (FixProposal<R, C> fp : fixProposals) {
+				addToFixProposals(fp);
+			}
+		}
+	}
+
+	public ProblemIssue(R rule, C anObject, String aMessage, FixProposal<R, C>... fixProposals) {
 		this(rule, anObject, aMessage);
 		if (fixProposals != null) {
 			for (FixProposal<R, C> fp : fixProposals) {
@@ -133,11 +142,20 @@ public abstract class ProblemIssue<R extends ValidationRule<R, C>, C extends FIB
 		_relatedValidableObjects.add(object);
 	}
 
-	public void addToRelatedValidableObjects(Vector<? extends FIBModelObject> someObjects) {
+	public void addToRelatedValidableObjects(List<? extends FIBModelObject> someObjects) {
 		_relatedValidableObjects.addAll(someObjects);
 	}
 
 	public void removeFromRelatedValidableObjects(FIBModelObject object) {
 		_relatedValidableObjects.remove(object);
+	}
+
+	@Override
+	public boolean isProblemIssue() {
+		return true;
+	}
+
+	public Vector<FixProposal<R, C>> getFixProposal() {
+		return _fixProposals;
 	}
 }

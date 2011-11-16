@@ -37,6 +37,11 @@ public class FIBNumber extends FIBWidget {
 	public FIBNumber() {
 	}
 
+	@Override
+	protected String getBaseName() {
+		return "NumberSelector";
+	}
+
 	public static enum NumberType {
 		ByteType, ShortType, IntegerType, LongType, FloatType, DoubleType;
 	}

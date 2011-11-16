@@ -21,7 +21,6 @@ package org.openflexo.fib.model.validation;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.localization.FlexoLocalization;
 
@@ -62,11 +61,11 @@ public abstract class ValidationRule<R extends ValidationRule<R, C>, C extends F
 	}
 
 	public String getLocalizedName() {
-		return FlexoLocalization.localizedForKey(_ruleName);
+		return FlexoLocalization.localizedForKey(ValidationIssue.VALIDATION_LOCALIZATION, _ruleName);
 	}
 
 	public String getLocalizedDescription() {
-		return FlexoLocalization.localizedForKey(_ruleDescription);
+		return FlexoLocalization.localizedForKey(ValidationIssue.VALIDATION_LOCALIZATION, _ruleDescription);
 	}
 
 	public String getNameKey() {
