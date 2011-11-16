@@ -173,6 +173,7 @@ public class LocalizedDelegateImplementation extends Observable implements Local
 
 		if (localized == null) {
 			addEntry(key);
+			save();
 			return currentLanguageDict.getProperty(key);
 		} else {
 			return localized;
