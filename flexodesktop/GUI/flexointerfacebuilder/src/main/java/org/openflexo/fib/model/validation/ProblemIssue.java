@@ -20,6 +20,7 @@
 package org.openflexo.fib.model.validation;
 
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -57,6 +58,15 @@ public abstract class ProblemIssue<R extends ValidationRule<R, C>, C extends FIB
 	}
 
 	public ProblemIssue(R rule, C anObject, String aMessage, Vector<FixProposal<R, C>> fixProposals) {
+		this(rule, anObject, aMessage);
+		if (fixProposals != null) {
+			for (FixProposal<R, C> fp : fixProposals) {
+				addToFixProposals(fp);
+			}
+		}
+	}
+
+	public ProblemIssue(R rule, C anObject, String aMessage, FixProposal<R, C>... fixProposals) {
 		this(rule, anObject, aMessage);
 		if (fixProposals != null) {
 			for (FixProposal<R, C> fp : fixProposals) {
@@ -132,7 +142,7 @@ public abstract class ProblemIssue<R extends ValidationRule<R, C>, C extends FIB
 		_relatedValidableObjects.add(object);
 	}
 
-	public void addToRelatedValidableObjects(Vector<? extends FIBModelObject> someObjects) {
+	public void addToRelatedValidableObjects(List<? extends FIBModelObject> someObjects) {
 		_relatedValidableObjects.addAll(someObjects);
 	}
 

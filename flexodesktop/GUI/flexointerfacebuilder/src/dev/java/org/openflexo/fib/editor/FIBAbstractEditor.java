@@ -422,14 +422,16 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 	}
 
 	public void validateFIB() {
-		getValidationWindow().validateAndDisplayReportForComponent(fibComponent);
+		if (fibComponent != null) {
+			getValidationWindow().validateAndDisplayReportForComponent(fibComponent);
+		}
 	}
 
 	private ValidationWindow validationWindow;
 
 	protected ValidationWindow getValidationWindow() {
 		if (validationWindow == null) {
-			validationWindow = new ValidationWindow(frame);
+			validationWindow = new ValidationWindow(frame, editorController);
 		}
 		return validationWindow;
 	}

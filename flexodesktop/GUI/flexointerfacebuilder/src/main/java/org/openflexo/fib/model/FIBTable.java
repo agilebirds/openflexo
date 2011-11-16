@@ -125,6 +125,11 @@ public class FIBTable extends FIBWidget /*implements DynamicAccess*/{
 		actions = new Vector<FIBTableAction>();
 	}
 
+	@Override
+	protected String getBaseName() {
+		return "Table";
+	}
+
 	public FIBTableColumn getColumnWithTitle(String title) {
 		for (FIBTableColumn c : columns) {
 			if (title.equals(c.getTitle())) {

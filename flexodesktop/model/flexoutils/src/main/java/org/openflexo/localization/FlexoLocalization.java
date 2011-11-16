@@ -44,6 +44,7 @@ import javax.swing.table.TableColumn;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FlexoProperties;
 import org.openflexo.toolbox.Localized;
+import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 import org.openflexo.xmlcode.KeyValueDecoder;
 
 /**
@@ -709,7 +710,12 @@ public class FlexoLocalization {
 
 	private static String valueForKeyAndObject(String key, Object object) {
 
-		return (String) KeyValueDecoder.objectForKey(object, key);
+		try {
+			return (String) KeyValueDecoder.objectForKey(object, key);
+		} catch (InvalidObjectSpecificationException e) {
+			logger.warning(e.getMessage());
+			return key;
+		}
 	}
 
 	public static void clearStoredLocalizedForComponents() {

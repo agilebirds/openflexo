@@ -19,6 +19,7 @@
  */
 package org.openflexo.localization;
 
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -35,6 +36,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.toolbox.FlexoProperties;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 
 public class LocalizedDelegateImplementation extends Observable implements LocalizedDelegate {
 
@@ -189,11 +191,18 @@ public class LocalizedDelegateImplementation extends Observable implements Local
 		// saveDictionary(language, currentLanguageDict);
 	}
 
-	public class Entry {
+	public class Entry implements HasPropertyChangeSupport {
 		public String key;
+		private PropertyChangeSupport pcSupport;
 
 		public Entry(String aKey) {
 			key = aKey;
+			pcSupport = new PropertyChangeSupport(this);
+		}
+
+		@Override
+		public PropertyChangeSupport getPropertyChangeSupport() {
+			return pcSupport;
 		}
 
 		public String getEnglish() {
@@ -201,7 +210,9 @@ public class LocalizedDelegateImplementation extends Observable implements Local
 		}
 
 		public void setEnglish(String value) {
+			String oldValue = getEnglish();
 			setLocalizedForKeyAndLanguage(key, value, Language.ENGLISH);
+			pcSupport.firePropertyChange("english", oldValue, value);
 		}
 
 		public String getFrench() {
@@ -209,7 +220,9 @@ public class LocalizedDelegateImplementation extends Observable implements Local
 		}
 
 		public void setFrench(String value) {
+			String oldValue = getFrench();
 			setLocalizedForKeyAndLanguage(key, value, Language.FRENCH);
+			pcSupport.firePropertyChange("french", oldValue, value);
 		}
 
 		public String getDutch() {
@@ -217,7 +230,9 @@ public class LocalizedDelegateImplementation extends Observable implements Local
 		}
 
 		public void setDutch(String value) {
+			String oldValue = getDutch();
 			setLocalizedForKeyAndLanguage(key, value, Language.DUTCH);
+			pcSupport.firePropertyChange("dutch", oldValue, value);
 		}
 	}
 
@@ -274,5 +289,12 @@ public class LocalizedDelegateImplementation extends Observable implements Local
 
 	public void deleteEntry(Entry entry) {
 		removeEntry(entry.key);
+	}
+
+	public void searchTranslation(Entry entry) {
+		String englishTranslation = entry.key.toString();
+		englishTranslation = englishTranslation.replace("_", " ");
+		englishTranslation = englishTranslation.substring(0, 1).toUpperCase() + englishTranslation.substring(1);
+		entry.setEnglish(englishTranslation);
 	}
 }

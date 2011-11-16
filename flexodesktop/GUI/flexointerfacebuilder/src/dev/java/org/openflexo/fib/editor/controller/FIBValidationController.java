@@ -9,6 +9,7 @@ import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.validation.FixProposal;
 import org.openflexo.fib.model.validation.InformationIssue;
 import org.openflexo.fib.model.validation.ValidationError;
+import org.openflexo.fib.model.validation.ValidationIssue;
 import org.openflexo.fib.model.validation.ValidationReport;
 import org.openflexo.fib.model.validation.ValidationWarning;
 
@@ -16,8 +17,27 @@ public class FIBValidationController extends FIBController {
 
 	static final Logger logger = Logger.getLogger(FIBValidationController.class.getPackage().getName());
 
+	private FIBEditorController editorController;
+	private ValidationIssue selectedValidationIssue;
+
 	public FIBValidationController(FIBComponent rootComponent) {
 		super(rootComponent);
+	}
+
+	public FIBValidationController(FIBComponent rootComponent, FIBEditorController editorController) {
+		super(rootComponent);
+		this.editorController = editorController;
+	}
+
+	public ValidationIssue getSelectedValidationIssue() {
+		return selectedValidationIssue;
+	}
+
+	public void setSelectedValidationIssue(ValidationIssue validationIssue) {
+		selectedValidationIssue = validationIssue;
+		if (validationIssue != null && validationIssue.getObject() instanceof FIBComponent) {
+			editorController.setSelectedObject((FIBComponent) validationIssue.getObject());
+		}
 	}
 
 	public ImageIcon iconFor(Object validationObject) {

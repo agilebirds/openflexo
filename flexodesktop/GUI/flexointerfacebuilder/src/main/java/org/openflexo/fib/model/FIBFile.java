@@ -53,6 +53,11 @@ public class FIBFile extends FIBWidget {
 	}
 
 	@Override
+	protected String getBaseName() {
+		return "FileSelector";
+	}
+
+	@Override
 	public Type getDefaultDataClass() {
 		return File.class;
 	}

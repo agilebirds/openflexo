@@ -468,12 +468,14 @@ public class FIBEditor implements FIBGenericEditor {
 	}
 
 	public void validateFIB() {
-		getValidationWindow().validateAndDisplayReportForComponent(editedFIB.fibComponent);
+		if (editedFIB != null && editedFIB.fibComponent != null) {
+			getValidationWindow().validateAndDisplayReportForComponent(editedFIB.fibComponent);
+		}
 	}
 
 	protected ValidationWindow getValidationWindow() {
 		if (validationWindow == null) {
-			validationWindow = new ValidationWindow(frame);
+			validationWindow = new ValidationWindow(frame, editorController);
 		}
 		return validationWindow;
 	}

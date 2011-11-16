@@ -114,6 +114,11 @@ public class FIBHtmlEditor extends FIBWidget {
 
 	}
 
+	@Override
+	protected String getBaseName() {
+		return "HTMLEditor";
+	}
+
 	public void makeFullHtmlEditor() {
 		for (String s : option_keys) {
 			FIBHtmlEditorOption option = getOption(s);

@@ -33,6 +33,11 @@ public class FIBTextField extends FIBWidget {
 	}
 
 	@Override
+	protected String getBaseName() {
+		return "TextField";
+	}
+
+	@Override
 	public Type getDefaultDataClass() {
 		return String.class;
 	}
