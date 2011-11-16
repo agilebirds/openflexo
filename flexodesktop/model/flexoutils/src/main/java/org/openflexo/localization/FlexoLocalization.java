@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Properties;
-import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.WeakHashMap;
 import java.util.logging.Level;
@@ -42,10 +41,10 @@ import javax.swing.JTabbedPane;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.TableColumn;
 
-import org.openflexo.kvc.KeyValueCoding;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FlexoProperties;
 import org.openflexo.toolbox.Localized;
+import org.openflexo.xmlcode.KeyValueDecoder;
 
 /**
  * This class is used to retrieve localized string in Flexo application. Localized are defined in language-specific dictionaries stored in
@@ -583,8 +582,18 @@ public class FlexoLocalization {
 	 * @param issue
 	 * @return
 	 */
-	public static String localizedForKeyWithParams(String key, KeyValueCoding object) {
+	public static String localizedForKeyWithParams(String key, Object object) {
 		String base = localizedForKey(key);
+		return replaceAllParamsInString(base, object);
+	}
+
+	/**
+	 * @param _message
+	 * @param issue
+	 * @return
+	 */
+	public static String localizedForKeyWithParams(LocalizedDelegate delegate, String key, Object object) {
+		String base = localizedForKey(delegate, key);
 		return replaceAllParamsInString(base, object);
 	}
 
@@ -595,6 +604,16 @@ public class FlexoLocalization {
 	 */
 	public static String localizedForKeyWithParams(String key, String... params) {
 		String base = localizedForKey(key);
+		return replaceAllParamsInString(base, params);
+	}
+
+	/**
+	 * @param _message
+	 * @param issue
+	 * @return
+	 */
+	public static String localizedForKeyWithParams(LocalizedDelegate delegate, String key, String... params) {
+		String base = localizedForKey(delegate, key);
 		return replaceAllParamsInString(base, params);
 	}
 
@@ -609,7 +628,7 @@ public class FlexoLocalization {
 	 * @param returned
 	 * @param object
 	 */
-	private static String replaceAllParamsInString(String aString, KeyValueCoding object) {
+	private static String replaceAllParamsInString(String aString, Object object) {
 		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("replaceAllParamsInString() with " + aString + " and " + object);
 		}
@@ -688,39 +707,9 @@ public class FlexoLocalization {
 		return returned;
 	}
 
-	private static String valueForKeyAndObject(String key, KeyValueCoding object) {
-		KeyValueCoding current = object;
-		Object value = null;
-		StringTokenizer st = new StringTokenizer(key, ".");
-		try {
-			while (st.hasMoreTokens()) {
-				String atomicKey = st.nextToken();
-				value = current.objectForKey(atomicKey);
-				if (st.hasMoreTokens()) {
-					if (value instanceof KeyValueCoding) {
-						current = (KeyValueCoding) value;
-					} else {
-						if (logger.isLoggable(Level.WARNING)) {
-							logger.warning("Returned value does't implement Key-Value coding");
-						}
-					}
-				}
-			}
-			if (value instanceof String) {
-				return (String) value;
-			}
-			if (value != null) {
-				return value.toString();
-			}
-		} catch (Exception e) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Unexpected exception " + e.getClass().getName() + " : " + e.getMessage());
-			}
-		}
-		if (logger.isLoggable(Level.WARNING)) {
-			logger.warning("Could not lookup value for key " + key + " for object " + object);
-		}
-		return null;
+	private static String valueForKeyAndObject(String key, Object object) {
+
+		return (String) KeyValueDecoder.objectForKey(object, key);
 	}
 
 	public static void clearStoredLocalizedForComponents() {
