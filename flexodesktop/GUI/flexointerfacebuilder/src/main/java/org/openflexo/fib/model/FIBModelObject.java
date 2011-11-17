@@ -19,6 +19,10 @@
  */
 package org.openflexo.fib.model;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Observable;
 import java.util.Vector;
@@ -26,10 +30,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
+import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fib.FIBLibrary;
+import org.openflexo.fib.model.validation.FixProposal;
+import org.openflexo.fib.model.validation.ProblemIssue;
+import org.openflexo.fib.model.validation.ValidationError;
+import org.openflexo.fib.model.validation.ValidationIssue;
 import org.openflexo.fib.model.validation.ValidationReport;
+import org.openflexo.fib.model.validation.ValidationRule;
+import org.openflexo.fib.model.validation.ValidationWarning;
+import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.KeyValueDecoder;
 import org.openflexo.xmlcode.XMLSerializable;
 
@@ -222,11 +234,200 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 		return !equals(o1, o2);
 	}
 
-	public ValidationReport validate()
-	{
+	public final boolean isValid() {
+		ValidationReport report = validate();
+		return report.getErrorNb() == 0;
+	}
+
+	public final ValidationReport validate() {
 		ValidationReport returned = new ValidationReport(this);
+		validate(returned);
 		return returned;
 	}
-	
+
+	protected final void validate(ValidationReport report) {
+		applyValidation(report);
+		if (getEmbeddedObjects() != null) {
+			for (FIBModelObject o : getEmbeddedObjects()) {
+				o.validate(report);
+			}
+		}
+	}
+
+	protected void applyValidation(ValidationReport report) {
+		performValidation(FIBModelObjectShouldHaveAUniqueName.class, report);
+	}
+
+	private static Hashtable<Class, ValidationRule> rules = new Hashtable<Class, ValidationRule>();
+
+	private static <R extends ValidationRule<R, C>, C extends FIBModelObject> R getRule(Class<R> validationRuleClass) {
+		R returned = (R) rules.get(validationRuleClass);
+		if (returned == null) {
+			Constructor<R> c = (Constructor<R>) validationRuleClass.getConstructors()[0];
+			try {
+				returned = c.newInstance(null);
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			rules.put(validationRuleClass, returned);
+		}
+		return returned;
+	}
+
+	/*protected final <R extends ValidationRule<R, C>, C extends FIBModelObject> void performValidation(Class<R> validationRuleClass,
+			ValidationReport report) {
+		R rule = getRule(validationRuleClass);
+		ValidationIssue<R, C> issue = rule.applyValidation((C) this);
+		if (issue != null) {
+			report.addToValidationIssues(issue);
+		}
+
+	}*/
+
+	protected final <R extends ValidationRule> void performValidation(Class<R> validationRuleClass, ValidationReport report) {
+		R rule = (R) getRule(validationRuleClass);
+		ValidationIssue issue = rule.applyValidation(this);
+		if (issue != null) {
+			report.addToValidationIssues(issue);
+		}
+
+	}
+
+	protected String generateUniqueName(String baseName) {
+		String currentName = baseName;
+		int i = 2;
+		while (isNameUsedInHierarchy(currentName)) {
+			currentName = baseName + i;
+			i++;
+		}
+		return currentName;
+	}
+
+	protected String getBaseName() {
+		return null;
+	}
+
+	public boolean isNameUsedInHierarchy(String aName) {
+		return isNameUsedInHierarchy(aName, getRootComponent());
+	}
+
+	private static boolean isNameUsedInHierarchy(String aName, FIBModelObject object) {
+		if (object.getName() != null && object.getName().equals(aName)) {
+			return true;
+		}
+		if (object.getEmbeddedObjects() != null) {
+			for (FIBModelObject o : object.getEmbeddedObjects()) {
+				if (isNameUsedInHierarchy(aName, o))
+					return true;
+			}
+		}
+		return false;
+	}
+
+	public List<FIBModelObject> getObjectsWithName(String aName) {
+		return retrieveObjectsWithName(aName, getRootComponent(), new ArrayList<FIBModelObject>());
+	}
+
+	private static List<FIBModelObject> retrieveObjectsWithName(String aName, FIBModelObject object, List<FIBModelObject> list) {
+		if (object.getName() != null && object.getName().equals(aName)) {
+			list.add(object);
+		}
+		if (object.getEmbeddedObjects() != null) {
+			for (FIBModelObject o : object.getEmbeddedObjects()) {
+				retrieveObjectsWithName(aName, o, list);
+			}
+		}
+		return list;
+	}
+
 	public abstract List<? extends FIBModelObject> getEmbeddedObjects();
+
+	public static class FIBModelObjectShouldHaveAUniqueName extends ValidationRule<FIBModelObjectShouldHaveAUniqueName, FIBModelObject> {
+		public FIBModelObjectShouldHaveAUniqueName() {
+			super(FIBModelObject.class, "object_should_not_have_duplicated_name");
+		}
+
+		@Override
+		public ValidationIssue<FIBModelObjectShouldHaveAUniqueName, FIBModelObject> applyValidation(FIBModelObject object) {
+			if (StringUtils.isNotEmpty(object.getName())) {
+				List<FIBModelObject> allObjectsWithThatName = object.getObjectsWithName(object.getName());
+				if (allObjectsWithThatName.size() > 1) {
+					allObjectsWithThatName.remove(object);
+					GenerateUniqueName fixProposal = new GenerateUniqueName();
+					ProblemIssue<FIBModelObjectShouldHaveAUniqueName, FIBModelObject> returned;
+					if (object instanceof FIBWidget && ((FIBWidget) object).getManageDynamicModel()) {
+						returned = new ValidationError<FIBModelObjectShouldHaveAUniqueName, FIBModelObject>(this, object,
+								"object_($object.toString)_has_duplicated_name", fixProposal);
+					} else {
+						returned = new ValidationWarning<FIBModelObjectShouldHaveAUniqueName, FIBModelObject>(this, object,
+								"object_($object.toString)_has_duplicated_name", fixProposal);
+					}
+					returned.addToRelatedValidableObjects(allObjectsWithThatName);
+					return returned;
+				}
+			}
+			return null;
+		}
+
+		protected static class GenerateUniqueName extends FixProposal<FIBModelObjectShouldHaveAUniqueName, FIBModelObject> {
+
+			public GenerateUniqueName() {
+				super("generate_unique_name_:_($uniqueName)");
+			}
+
+			@Override
+			protected void fixAction() {
+				getObject().setName(getUniqueName());
+			}
+
+			public String getUniqueName() {
+				return getObject().generateUniqueName(getObject().getBaseName());
+			}
+
+		}
+	}
+
+	public static abstract class BindingMustBeValid<C extends FIBModelObject> extends ValidationRule<BindingMustBeValid<C>, C> {
+		public BindingMustBeValid(String ruleName, Class<C> clazz) {
+			super(clazz, ruleName);
+		}
+
+		public abstract DataBinding getBinding(C object);
+
+		public abstract BindingDefinition getBindingDefinition(C object);
+
+		@Override
+		public ValidationIssue<BindingMustBeValid<C>, C> applyValidation(C object) {
+			if (getBinding(object) != null && getBinding(object).isSet()) {
+				if (!getBinding(object).isValid()) {
+					DeleteBinding<C> deleteBinding = new DeleteBinding<C>(this);
+					return new ValidationError<BindingMustBeValid<C>, C>(this, object, BindingMustBeValid.this.getNameKey(), deleteBinding);
+				}
+			}
+			return null;
+		}
+
+		protected static class DeleteBinding<C extends FIBModelObject> extends FixProposal<BindingMustBeValid<C>, C> {
+
+			private BindingMustBeValid rule;
+
+			public DeleteBinding(BindingMustBeValid rule) {
+				super("delete_this_binding");
+				this.rule = rule;
+			}
+
+			@Override
+			protected void fixAction() {
+				rule.getBinding(getObject()).setBinding(null);
+			}
+
+		}
+	}
+
 }

@@ -97,6 +97,11 @@ public class FIBCustom extends FIBWidget {
 	}
 
 	@Override
+	protected String getBaseName() {
+		return "CustomSelector";
+	}
+
+	@Override
 	public Type getDataType() {
 		if (getData() != null && getData().getBinding() != null) {
 			return getData().getBinding().getAccessedType();
@@ -375,7 +380,7 @@ public class FIBCustom extends FIBWidget {
 			}
 			return null;
 		}
-		
+
 		@Override
 		public List<? extends FIBModelObject> getEmbeddedObjects() {
 			return null;

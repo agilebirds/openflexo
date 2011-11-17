@@ -34,6 +34,11 @@ public class FIBCheckBox extends FIBWidget {
 	}
 
 	@Override
+	protected String getBaseName() {
+		return "Checkbox";
+	}
+
+	@Override
 	public Type getDefaultDataClass() {
 		return Boolean.class;
 	}

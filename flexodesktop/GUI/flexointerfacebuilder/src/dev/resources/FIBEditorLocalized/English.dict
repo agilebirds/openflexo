@@ -1,9 +1,12 @@
 #English
-#Thu Jan 27 09:07:52 CET 2011
+#Wed Nov 16 00:15:52 CET 2011
 Dutch=Dutch
 English=English
 French=French
+actions=actions
+close_interface=Close interface
 component_localization=Component localization
+component_validation=component_validation
 display_file=Display file
 edit=Edit
 file=File
@@ -12,8 +15,14 @@ inspect=Inspect
 loaded_classes=Loaded classes
 localized_editor=Localized editor
 logs=Logs
+look_and_feel=Look and Feel
+new_interface=New interface
+open_interface=Open interface
+open_recent=Open recent
 quit=Quit
 save_interface=Save interface
+save_interface_as=Save interface as...
 switch_to_language=Switch to language
 test_interface=Test interface
 tools=Tools
+validate_component=Validate component

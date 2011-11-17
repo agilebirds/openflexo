@@ -30,4 +30,9 @@ public class FIBDropDown extends FIBMultipleValues {
 	public FIBDropDown() {
 	}
 
+	@Override
+	protected String getBaseName() {
+		return "DropDown";
+	}
+
 }

@@ -32,6 +32,11 @@ import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.binding.WilcardTypeImpl;
 import org.openflexo.fib.controller.FIBMultipleValuesDynamicModel;
+import org.openflexo.fib.model.validation.FixProposal;
+import org.openflexo.fib.model.validation.ValidationError;
+import org.openflexo.fib.model.validation.ValidationIssue;
+import org.openflexo.fib.model.validation.ValidationReport;
+import org.openflexo.fib.model.validation.ValidationRule;
 import org.openflexo.toolbox.StringUtils;
 
 public abstract class FIBMultipleValues extends FIBWidget {
@@ -139,6 +144,16 @@ public abstract class FIBMultipleValues extends FIBWidget {
 	public boolean isStaticList() {
 		return (getList() == null || !getList().isSet()) && (getArray() == null || !getArray().isSet())
 				&& StringUtils.isNotEmpty(getStaticList());
+	}
+
+	public boolean isEnumType() {
+		if (getData() != null && getData().getBinding() != null) {
+			Type type = getData().getBinding().getAccessedType();
+			if (type instanceof Class && ((Class) type).isEnum()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public Class getIteratorClass() {
@@ -300,6 +315,78 @@ public abstract class FIBMultipleValues extends FIBWidget {
 			this.autoSelectFirstRow = autoSelectFirstRow;
 			hasChanged(notification);
 		}
+	}
+
+	@Override
+	protected void applyValidation(ValidationReport report) {
+		super.applyValidation(report);
+		performValidation(FIBMultipleValuesMustDefineValueRange.class, report);
+		performValidation(ListBindingMustBeValid.class, report);
+		performValidation(ArrayBindingMustBeValid.class, report);
+	}
+
+	public static class FIBMultipleValuesMustDefineValueRange extends
+			ValidationRule<FIBMultipleValuesMustDefineValueRange, FIBMultipleValues> {
+		public FIBMultipleValuesMustDefineValueRange() {
+			super(FIBMultipleValues.class, "widget_must_define_values_range_(either_static_list_or_dynamic_list_or_array_or_enumeration)");
+		}
+
+		@Override
+		public ValidationIssue<FIBMultipleValuesMustDefineValueRange, FIBMultipleValues> applyValidation(FIBMultipleValues object) {
+			if (StringUtils.isEmpty(object.getStaticList()) && !object.getList().isSet() && !object.getArray().isSet()
+					&& !object.isEnumType()) {
+				GenerateDefaultStaticList fixProposal = new GenerateDefaultStaticList();
+				return new ValidationError<FIBMultipleValuesMustDefineValueRange, FIBMultipleValues>(this, object,
+						"widget_does_not_define_any_values_range_(either_static_list_or_dynamic_list_or_array_or_enumeration)", fixProposal);
+			}
+			return null;
+		}
+
+		protected static class GenerateDefaultStaticList extends FixProposal<FIBMultipleValuesMustDefineValueRange, FIBMultipleValues> {
+
+			public GenerateDefaultStaticList() {
+				super("generate_default_static_list");
+			}
+
+			@Override
+			protected void fixAction() {
+				getObject().setStaticList("Item 1 ,Item 2 ,Item 3 ");
+			}
+
+		}
+	}
+
+	public static class ListBindingMustBeValid extends BindingMustBeValid<FIBMultipleValues> {
+		public ListBindingMustBeValid() {
+			super("'list'_binding_is_not_valid", FIBMultipleValues.class);
+		}
+
+		@Override
+		public DataBinding getBinding(FIBMultipleValues object) {
+			return object.getList();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(FIBMultipleValues object) {
+			return object.LIST;
+		}
+	}
+
+	public static class ArrayBindingMustBeValid extends BindingMustBeValid<FIBMultipleValues> {
+		public ArrayBindingMustBeValid() {
+			super("'array'_binding_is_not_valid", FIBMultipleValues.class);
+		}
+
+		@Override
+		public DataBinding getBinding(FIBMultipleValues object) {
+			return object.getArray();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(FIBMultipleValues object) {
+			return object.ARRAY;
+		}
+
 	}
 
 }

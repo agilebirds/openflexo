@@ -28,6 +28,11 @@ public class FIBColor extends FIBWidget {
 	}
 
 	@Override
+	protected String getBaseName() {
+		return "ColorSelector";
+	}
+
+	@Override
 	public Type getDefaultDataClass() {
 		return Color.class;
 	}

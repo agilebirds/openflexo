@@ -68,6 +68,11 @@ public class FIBImage extends FIBWidget {
 	}
 
 	@Override
+	protected String getBaseName() {
+		return "Image";
+	}
+
+	@Override
 	public Type getDefaultDataClass() {
 		return Image.class;
 	}

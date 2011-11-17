@@ -34,6 +34,12 @@ import org.openflexo.antar.binding.BindingVariableImpl;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBComponentDynamicModel;
+import org.openflexo.fib.model.validation.FixProposal;
+import org.openflexo.fib.model.validation.ValidationIssue;
+import org.openflexo.fib.model.validation.ValidationReport;
+import org.openflexo.fib.model.validation.ValidationRule;
+import org.openflexo.fib.model.validation.ValidationWarning;
+import org.openflexo.toolbox.StringUtils;
 
 public abstract class FIBWidget extends FIBComponent {
 
@@ -333,7 +339,7 @@ public abstract class FIBWidget extends FIBComponent {
 			}
 			super.notifyBindingChanged(binding);
 		}
-		
+
 		@Override
 		public List<? extends FIBModelObject> getEmbeddedObjects() {
 			return null;
@@ -416,4 +422,195 @@ public abstract class FIBWidget extends FIBComponent {
 	public List<? extends FIBModelObject> getEmbeddedObjects() {
 		return null;
 	}
+
+	@Override
+	protected void applyValidation(ValidationReport report) {
+		super.applyValidation(report);
+		performValidation(FIBWidgetDeclaredAsDynamicShouldHaveAName.class, report);
+		performValidation(TooltipBindingMustBeValid.class, report);
+		performValidation(EnableBindingMustBeValid.class, report);
+		performValidation(FormatBindingMustBeValid.class, report);
+		performValidation(IconBindingMustBeValid.class, report);
+		performValidation(ClickActionBindingMustBeValid.class, report);
+		performValidation(DoubleClickActionBindingMustBeValid.class, report);
+		performValidation(RightClickActionBindingMustBeValid.class, report);
+		performValidation(ValueChangeActionBindingMustBeValid.class, report);
+	}
+
+	public static class FIBWidgetDeclaredAsDynamicShouldHaveAName extends
+			ValidationRule<FIBWidgetDeclaredAsDynamicShouldHaveAName, FIBWidget> {
+		public FIBWidgetDeclaredAsDynamicShouldHaveAName() {
+			super(FIBWidget.class, "widgets_declaring_managing_dynamic_model_should_have_a_name");
+		}
+
+		@Override
+		public ValidationIssue<FIBWidgetDeclaredAsDynamicShouldHaveAName, FIBWidget> applyValidation(FIBWidget object) {
+			if (object.getManageDynamicModel() && StringUtils.isEmpty(object.getName())) {
+				GenerateDefaultName fixProposal1 = new GenerateDefaultName();
+				DisableDynamicModelManagement fixProposal2 = new DisableDynamicModelManagement();
+				return new ValidationWarning<FIBWidgetDeclaredAsDynamicShouldHaveAName, FIBWidget>(this, object,
+						"widget_($object.toString)_declares_managing_dynamic_model_but_does_not_have_a_name", fixProposal1, fixProposal2);
+			}
+			return null;
+		}
+
+		protected static class GenerateDefaultName extends FixProposal<FIBWidgetDeclaredAsDynamicShouldHaveAName, FIBWidget> {
+
+			public GenerateDefaultName() {
+				super("generate_default_name_:_($defaultName)");
+			}
+
+			@Override
+			protected void fixAction() {
+				getObject().setName(getDefaultName());
+			}
+
+			public String getDefaultName() {
+				return getObject().generateUniqueName(getObject().getBaseName());
+			}
+
+		}
+
+		protected static class DisableDynamicModelManagement extends FixProposal<FIBWidgetDeclaredAsDynamicShouldHaveAName, FIBWidget> {
+
+			public DisableDynamicModelManagement() {
+				super("disable_dynamic_model_management");
+			}
+
+			@Override
+			protected void fixAction() {
+				getObject().setManageDynamicModel(false);
+			}
+
+		}
+	}
+
+	public static class TooltipBindingMustBeValid extends BindingMustBeValid<FIBWidget> {
+		public TooltipBindingMustBeValid() {
+			super("'tooltip'_binding_is_not_valid", FIBWidget.class);
+		}
+
+		@Override
+		public DataBinding getBinding(FIBWidget object) {
+			return object.getTooltip();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(FIBWidget object) {
+			return TOOLTIP;
+		}
+	}
+
+	public static class EnableBindingMustBeValid extends BindingMustBeValid<FIBWidget> {
+		public EnableBindingMustBeValid() {
+			super("'enable'_binding_is_not_valid", FIBWidget.class);
+		}
+
+		@Override
+		public DataBinding getBinding(FIBWidget object) {
+			return object.getEnable();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(FIBWidget object) {
+			return ENABLE;
+		}
+	}
+
+	public static class FormatBindingMustBeValid extends BindingMustBeValid<FIBWidget> {
+		public FormatBindingMustBeValid() {
+			super("'format'_binding_is_not_valid", FIBWidget.class);
+		}
+
+		@Override
+		public DataBinding getBinding(FIBWidget object) {
+			return object.getFormat();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(FIBWidget object) {
+			return FORMAT;
+		}
+	}
+
+	public static class IconBindingMustBeValid extends BindingMustBeValid<FIBWidget> {
+		public IconBindingMustBeValid() {
+			super("'icon'_binding_is_not_valid", FIBWidget.class);
+		}
+
+		@Override
+		public DataBinding getBinding(FIBWidget object) {
+			return object.getIcon();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(FIBWidget object) {
+			return ICON;
+		}
+	}
+
+	public static class ClickActionBindingMustBeValid extends BindingMustBeValid<FIBWidget> {
+		public ClickActionBindingMustBeValid() {
+			super("'click_action'_binding_is_not_valid", FIBWidget.class);
+		}
+
+		@Override
+		public DataBinding getBinding(FIBWidget object) {
+			return object.getClickAction();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(FIBWidget object) {
+			return CLICK_ACTION;
+		}
+	}
+
+	public static class DoubleClickActionBindingMustBeValid extends BindingMustBeValid<FIBWidget> {
+		public DoubleClickActionBindingMustBeValid() {
+			super("'double_click_action'_binding_is_not_valid", FIBWidget.class);
+		}
+
+		@Override
+		public DataBinding getBinding(FIBWidget object) {
+			return object.getDoubleClickAction();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(FIBWidget object) {
+			return DOUBLE_CLICK_ACTION;
+		}
+	}
+
+	public static class RightClickActionBindingMustBeValid extends BindingMustBeValid<FIBWidget> {
+		public RightClickActionBindingMustBeValid() {
+			super("'right_click_action'_binding_is_not_valid", FIBWidget.class);
+		}
+
+		@Override
+		public DataBinding getBinding(FIBWidget object) {
+			return object.getRightClickAction();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(FIBWidget object) {
+			return RIGHT_CLICK_ACTION;
+		}
+	}
+
+	public static class ValueChangeActionBindingMustBeValid extends BindingMustBeValid<FIBWidget> {
+		public ValueChangeActionBindingMustBeValid() {
+			super("'value_change_acion'_binding_is_not_valid", FIBWidget.class);
+		}
+
+		@Override
+		public DataBinding getBinding(FIBWidget object) {
+			return object.getValueChangedAction();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(FIBWidget object) {
+			return VALUE_CHANGED_ACTION;
+		}
+	}
+
 }
