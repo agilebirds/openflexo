@@ -48,7 +48,6 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.SaveResourceExceptionList;
 import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.rm.view.RMViewerController;
 import org.openflexo.view.FlexoDialog;
 import org.openflexo.view.controller.FlexoController;
 
@@ -75,7 +74,7 @@ public class ResourceManagerWindow extends FlexoDialog implements ChangeListener
 	private JButton refreshButton;
 	private JButton closeButton;
 
-	private RMViewerController rmViewerController;
+	// private RMViewerController rmViewerController;
 
 	public ResourceManagerWindow(FlexoProject project) {
 		super((JFrame) null, false);
@@ -229,14 +228,14 @@ public class ResourceManagerWindow extends FlexoDialog implements ChangeListener
 		JPanel contentPanel = new JPanel();
 		contentPanel.setLayout(new BorderLayout());
 
-		rmViewerController = new RMViewerController(project);
+		// rmViewerController = new RMViewerController(project);
 
 		tabbedPane = new JTabbedPane();
 		tabbedPane.addChangeListener(this);
 		tabbedPane.add(FlexoLocalization.localizedForKey("storage_resources"), _storageResourcesPanel);
 		tabbedPane.add(FlexoLocalization.localizedForKey("imported_resources"), _importedResourcesPanel);
 		tabbedPane.add(FlexoLocalization.localizedForKey("generated_resources"), _generatedResourcesPanel);
-		tabbedPane.add(FlexoLocalization.localizedForKey("viewer"), rmViewerController.getMainView());
+		// tabbedPane.add(FlexoLocalization.localizedForKey("viewer"), rmViewerController.getMainView());
 
 		contentPanel.add(tabbedPane, BorderLayout.CENTER);
 		contentPanel.add(controlPanel, BorderLayout.SOUTH);
