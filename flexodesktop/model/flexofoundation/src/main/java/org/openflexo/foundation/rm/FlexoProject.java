@@ -28,7 +28,6 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.text.Collator;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,6 +44,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringTokenizer;
+import java.util.TreeMap;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -304,7 +304,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	private FlexoIECustomImagePalette customImagePalette;
 	private FlexoIEBIRTPalette birtPalette;
 
-	private class ResourceHashtable extends Hashtable<String, FlexoResource<? extends FlexoResourceData>> {
+	private class ResourceHashtable extends TreeMap<String, FlexoResource<? extends FlexoResourceData>> {
 		public ResourceHashtable() {
 			super();
 		}
@@ -326,24 +326,6 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 			}
 		}
 
-		@Override
-		public Enumeration<String> keys() {
-			if (isSerializing()) {
-				// Order keys in this case
-				Vector<String> orderedKeys = new Vector<String>();
-				for (Enumeration<String> en = super.keys(); en.hasMoreElements();) {
-					orderedKeys.add(en.nextElement());
-				}
-				Collections.sort(orderedKeys, new Comparator<String>() {
-					@Override
-					public int compare(String o1, String o2) {
-						return Collator.getInstance().compare(o1, o2);
-					}
-				});
-				return orderedKeys.elements();
-			}
-			return super.keys();
-		}
 	}
 
 	protected class FlexoModelObjectReferenceConverter extends Converter<FlexoModelObjectReference> {
@@ -970,9 +952,9 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 	public Map<String, FlexoResource<? extends FlexoResourceData>> getSerializationResources() {
 		// logger.info("Attention on se tape la duplication de la hashtable des resources !!!!!");
 		Map<String, FlexoResource<? extends FlexoResourceData>> returned = new ResourceHashtable(getResources());
-		for (String resourceId : getResources().keySet()) {
-			if (!getResources().get(resourceId).isToBeSerialized()) {
-				returned.remove(resourceId);
+		for (Entry<String, FlexoResource<? extends FlexoResourceData>> e : getResources().entrySet()) {
+			if (!e.getValue().isToBeSerialized()) {
+				returned.remove(e.getKey());
 			}
 		}
 		return returned;
@@ -2410,7 +2392,7 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 		return docTypes;
 	}
 
-	public void setDocTypes(Vector<DocType> docTypes) {
+	public void setDocTypes(List<DocType> docTypes) {
 		this.docTypes = docTypes;
 	}
 
@@ -2724,22 +2706,6 @@ public final class FlexoProject extends FlexoModelObject implements XMLStorageRe
 
 	public List<FlexoFileResource<? extends FlexoResourceData>> getFileResources() {
 		return getResourcesOfClass(FlexoFileResource.class);
-	}
-
-	@Override
-	public void initializeSerialization() {
-		for (ProjectExternalRepository rep : getExternalRepositories()) {
-			rep.setSerializing(true);
-		}
-		super.initializeSerialization();
-	}
-
-	@Override
-	public void finalizeSerialization() {
-		super.finalizeSerialization();
-		for (ProjectExternalRepository rep : getExternalRepositories()) {
-			rep.setSerializing(false);
-		}
 	}
 
 	/**

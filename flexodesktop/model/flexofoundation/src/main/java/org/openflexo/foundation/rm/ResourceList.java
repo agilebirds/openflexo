@@ -19,13 +19,11 @@
  */
 package org.openflexo.foundation.rm;
 
-import java.util.Enumeration;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoException;
 import org.openflexo.xmlcode.XMLSerializable;
 
 /**
@@ -76,6 +74,30 @@ public abstract class ResourceList extends Vector<FlexoResource<FlexoResourceDat
 		update();
 	}
 
+	public List<FlexoResource<FlexoResourceData>> getSerialisationResources() {
+		List<FlexoResource<FlexoResourceData>> resources = new ArrayList<FlexoResource<FlexoResourceData>>(size());
+		for (FlexoResource<FlexoResourceData> resource : this) {
+			if (!resource.isToBeSerialized() || getRelatedResource().getProject().getFlexoResource() != null
+					&& !getRelatedResource().getProject().getFlexoResource().isInitializingProject() && !resource.checkIntegrity()) {
+				continue;
+			}
+			resources.add(resource);
+		}
+		return resources;
+	}
+
+	public void setSerialisationResources(List<FlexoResource<FlexoResourceData>> resources) {
+		setResources(resources);
+	}
+
+	public void addToSerialisationResources(FlexoResource<FlexoResourceData> resource) {
+		addToResources(resource);
+	}
+
+	public void removeFromSerialisationResources(FlexoResource<FlexoResourceData> resource) {
+		removeFromResources(resource);
+	}
+
 	public void addToResources(FlexoResource resource) {
 		if (resource.isDeleted()) {
 			return;
@@ -121,42 +143,6 @@ public abstract class ResourceList extends Vector<FlexoResource<FlexoResourceDat
 		return super.hashCode();
 	}
 
-	public void loadAll() {
-		Enumeration en = elements();
-		while (en.hasMoreElements()) {
-			FlexoResource resource = (FlexoResource) en.nextElement();
-			if (resource instanceof FlexoStorageResource) {
-				try {
-					((FlexoStorageResource) resource).loadResourceData();
-				} catch (FlexoException e) {
-					// Warns about the exception
-					logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
 	public abstract String getSerializationIdentifier();
-
-	@Override
-	public Enumeration<FlexoResource<FlexoResourceData>> elements() {
-		// If project is serializing (saving RM file, take only resources to be serialized)
-		if (getRelatedResource().getProject().isSerializing()) {
-			Vector<FlexoResource<FlexoResourceData>> returned = new Vector<FlexoResource<FlexoResourceData>>(this);
-			Iterator<FlexoResource<FlexoResourceData>> i = returned.iterator();
-			while (i.hasNext()) {
-				FlexoResource<FlexoResourceData> resource = i.next();
-				if (!resource.isToBeSerialized()
-						|| getRelatedResource().getProject().getFlexoResource() != null
-						&& !getRelatedResource().getProject().getFlexoResource().isInitializingProject() && !resource
-						.checkIntegrity()) {
-					i.remove();
-				}
-			}
-			return returned.elements();
-		}
-		return super.elements();
-	}
 
 }

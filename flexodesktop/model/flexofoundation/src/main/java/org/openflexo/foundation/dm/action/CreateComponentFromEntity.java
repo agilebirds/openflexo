@@ -19,7 +19,7 @@
  */
 package org.openflexo.foundation.dm.action;
 
-import java.util.Hashtable;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -98,8 +98,8 @@ public class CreateComponentFromEntity extends FlexoAction<CreateComponentFromEn
 		@Override
 		protected boolean isEnabledForSelection(DMEntity object, Vector<DMEntity> globalSelection) {
 			return object != null
-					&& (globalSelection == null || globalSelection.size() == 0 || (globalSelection.size() == 1 && globalSelection
-							.firstElement() == object));
+					&& (globalSelection == null || globalSelection.size() == 0 || globalSelection.size() == 1
+							&& globalSelection.firstElement() == object);
 		}
 
 	};
@@ -172,7 +172,7 @@ public class CreateComponentFromEntity extends FlexoAction<CreateComponentFromEn
 			}
 			String label;
 			String description;
-			Hashtable<String, String> descriptions;
+			Map<String, String> descriptions;
 			if (aw.property != null) {
 				label = extractLabel(aw.property.getName());
 				description = aw.property.getDescription();
@@ -203,7 +203,7 @@ public class CreateComponentFromEntity extends FlexoAction<CreateComponentFromEn
 			DropIEElement dropLabel = DropIEElement.actionType.makeNewEmbeddedAction(addComponent.getNewComponent().getWOComponent(), null,
 					this);
 			dropLabel.setElementType(WidgetType.LABEL);
-			dropLabel.setContainer(table.getTDAt(i < rows ? i : (i - rows), i < rows ? 0 : 2).getSequenceWidget());
+			dropLabel.setContainer(table.getTDAt(i < rows ? i : i - rows, i < rows ? 0 : 2).getSequenceWidget());
 			dropLabel.setIndex(0);
 			dropLabel.doAction();
 			if (!dropLabel.hasActionExecutionSucceeded()) {
@@ -214,7 +214,7 @@ public class CreateComponentFromEntity extends FlexoAction<CreateComponentFromEn
 			DropIEElement dropWidget = DropIEElement.actionType.makeNewEmbeddedAction(addComponent.getNewComponent().getWOComponent(),
 					null, this);
 			dropWidget.setElementType(aw.widget);
-			dropWidget.setContainer(table.getTDAt(i < rows ? i : (i - rows), i < rows ? 1 : 3).getSequenceWidget());
+			dropWidget.setContainer(table.getTDAt(i < rows ? i : i - rows, i < rows ? 1 : 3).getSequenceWidget());
 			dropWidget.setIndex(0);
 			dropWidget.doAction();
 			if (!dropWidget.hasActionExecutionSucceeded()) {

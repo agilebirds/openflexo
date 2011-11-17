@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -390,7 +391,7 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	}
 
 	@Override
-	public Hashtable<String, String> getSpecificDescriptions() {
+	public Map<String, String> getSpecificDescriptions() {
 		if (getComponentDefinition() != null && !isSerializing()) {
 			return getComponentDefinition().getSpecificDescriptions();
 		}
@@ -398,7 +399,7 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	}
 
 	@Override
-	public void setSpecificDescriptions(Hashtable<String, String> desc) {
+	public void setSpecificDescriptions(Map<String, String> desc) {
 		if (getComponentDefinition() != null && !isDeserializing()) {
 			getComponentDefinition().setSpecificDescriptions(desc);
 		}
@@ -691,7 +692,7 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		while (en.hasMoreElements()) {
 			IEObject widget = (IEObject) en.nextElement();
 			if (widget instanceof IESequence && ((IESequence) widget).getOperator() != null
-					&& (((IESequence) widget).getOperator() instanceof RepetitionOperator)) {
+					&& ((IESequence) widget).getOperator() instanceof RepetitionOperator) {
 				reply.add((RepetitionOperator) ((IESequence) widget).getOperator());
 			}
 		}
@@ -1276,7 +1277,7 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	private synchronized String computeAndStoreNameForWidget(IEWidget widget) {
 		String base = ToolBox.uncapitalize(widget.getNiceName());
 		String attempt = base;
-		if (nameForWidgetMap.get(attempt) != null || (widget instanceof IELabelWidget) || ReservedKeyword.contains(attempt)) {
+		if (nameForWidgetMap.get(attempt) != null || widget instanceof IELabelWidget || ReservedKeyword.contains(attempt)) {
 			String widgetType = widget.getWidgetType();
 			if (widget instanceof IESequence && ((IESequence<?>) widget).getOperator() != null) {
 				widgetType = ((IESequence<?>) widget).getOperator().getWidgetType();
@@ -1421,7 +1422,7 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 		while (en.hasMoreElements()) {
 			IEObject widget = (IEObject) en.nextElement();
 			if (widget instanceof IESequence && ((IESequence) widget).getOperator() != null
-					&& (((IESequence) widget).getOperator() instanceof ConditionalOperator)) {
+					&& ((IESequence) widget).getOperator() instanceof ConditionalOperator) {
 				reply.add((IESequence) widget);
 			}
 		}

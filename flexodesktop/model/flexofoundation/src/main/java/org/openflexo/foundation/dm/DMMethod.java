@@ -21,7 +21,7 @@ package org.openflexo.foundation.dm;
 
 import java.lang.reflect.Method;
 import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -565,7 +565,7 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 
 					jd.setComment(getDescription());
 
-					Hashtable<String, String> specificDescriptions = getSpecificDescriptions();
+					Map<String, String> specificDescriptions = getSpecificDescriptions();
 					if (specificDescriptions != null && specificDescriptions.size() > 0) {
 						for (String key : specificDescriptions.keySet()) {
 							String specificDescription = ToolBox.getJavaDocString(specificDescriptions.get(key));
@@ -686,7 +686,7 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 		}*/
 		javadoc.append("  *" + StringUtils.LINE_SEPARATOR);
 
-		Hashtable<String, String> specificDescriptions = getSpecificDescriptions();
+		Map<String, String> specificDescriptions = getSpecificDescriptions();
 		if (specificDescriptions != null && specificDescriptions.size() > 0) {
 			for (String key : specificDescriptions.keySet()) {
 				String specificDescription = ToolBox.getJavaDocString(specificDescriptions.get(key));
@@ -798,8 +798,8 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 	}
 
 	public String getModifiersAsString() {
-		return (getVisibilityModifier() != null ? (getVisibilityModifier() != DMVisibilityType.NONE ? getVisibilityModifier().getName()
-				+ " " : "") : "")
+		return (getVisibilityModifier() != null ? getVisibilityModifier() != DMVisibilityType.NONE ? getVisibilityModifier().getName()
+				+ " " : "" : "")
 				+ (getIsStatic() ? "static" + " " : "")
 				+ (getIsAbstract() ? "abstract" + " " : "")
 				+ (getIsSynchronized() ? "synchronized" + " " : "");
