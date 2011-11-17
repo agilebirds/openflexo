@@ -61,6 +61,12 @@ public class ZipTest extends TestCase {
 		FileUtils.saveToFile(subInnerFile, FILE_CONTENT);
 	}
 
+	@Override
+	protected void tearDown() throws Exception {
+		FileUtils.deleteDir(directory);
+		super.tearDown();
+	}
+
 	public void testZipUnzip() throws Exception {
 		File archive = File.createTempFile("ZipTestFile", ".zip");
 		System.err.println("Zip archive: " + archive.getAbsolutePath());
@@ -84,6 +90,8 @@ public class ZipTest extends TestCase {
 		assertTrue(extractedSubInnerFile.isFile());
 		assertEquals(FILE_CONTENT, FileUtils.fileContents(extractedInnerFile));
 		assertEquals(FILE_CONTENT, FileUtils.fileContents(extractedSubInnerFile));
+		FileUtils.deleteDir(output);
+		archive.delete();
 	}
 
 	public void testZipUnzipFiltered() throws Exception {
@@ -111,6 +119,8 @@ public class ZipTest extends TestCase {
 		assertFalse(extractedInnerFile.exists());
 		assertTrue(extractedSubInnerFile.exists());
 		assertTrue(extractedSubInnerFile.isFile());
+		FileUtils.deleteDir(output);
+		archive.delete();
 	}
 
 	public void testZipUnzipFiltered2() throws Exception {
@@ -136,6 +146,8 @@ public class ZipTest extends TestCase {
 		assertFalse(extractedInnerDirectory.exists());
 		assertTrue(extractedInnerFile.exists());
 		assertFalse(extractedSubInnerFile.exists());
+		FileUtils.deleteDir(output);
+		archive.delete();
 	}
 
 	/**
