@@ -52,6 +52,7 @@ import org.openflexo.components.NewProjectComponent;
 import org.openflexo.components.OpenProjectComponent;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.components.SaveDialog;
+import org.openflexo.components.WelcomeDialog;
 import org.openflexo.drm.DocResourceManager;
 import org.openflexo.fib.AskLocalResourceCenterDirectory;
 import org.openflexo.fib.controller.FIBDialog;
@@ -1764,6 +1765,10 @@ public final class ModuleLoader implements IModuleLoader {
 			}
 		}
 		return flexoResourceCenter;
+	}
+
+	public static void showWelcomeDialog() {
+		WelcomeDialog dialog = new WelcomeDialog();
 	}
 
 }
