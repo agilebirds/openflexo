@@ -966,14 +966,9 @@ public final class ModuleLoader implements IModuleLoader {
 	 * @return the {@link InteractiveFlexoEditor} editor if the opening succeeded else <code>null</code>
 	 */
 	public static InteractiveFlexoEditor loadProject(File projectDirectory) {
-		boolean restructureProjectHierarchy = false;
 		InteractiveFlexoEditor newEditor = null;
 		if (projectDirectory == null || !projectDirectory.exists()) {
 			return null;
-		}
-		if (FlexoResourceManager.needsRestructuring(projectDirectory)) {
-			restructureProjectHierarchy = FlexoController.ask(FlexoLocalization
-					.localizedForKey("do_you_want_the_hierarchy_project_to_be_restructured")) == JOptionPane.YES_OPTION;
 		}
 		FlexoVersion previousFlexoVersion = getVersion(projectDirectory);
 		if (!isProjectOpenable(projectDirectory)) {
@@ -998,8 +993,8 @@ public final class ModuleLoader implements IModuleLoader {
 		try {
 			_flexoResourceUpdateHandler = new InteractiveFlexoResourceUpdateHandler();
 			newEditor = (InteractiveFlexoEditor) FlexoResourceManager.initializeExistingProject(projectDirectory,
-					restructureProjectHierarchy, ProgressWindow.instance(), _flexoResourceUpdateHandler, InteractiveFlexoEditor.FACTORY,
-					getUserType().getDefaultLoadingHandler(projectDirectory), ModuleLoader.getFlexoResourceCenter());
+					ProgressWindow.instance(), _flexoResourceUpdateHandler, InteractiveFlexoEditor.FACTORY, getUserType()
+							.getDefaultLoadingHandler(projectDirectory), ModuleLoader.getFlexoResourceCenter());
 			newProject = newEditor.getProject();
 			checkExternalRepositories(newProject);
 			if (previousFlexoVersion != null && previousFlexoVersion.major == 1 && previousFlexoVersion.minor < 3) {
