@@ -216,18 +216,18 @@
 			<arg value="${project.build.directory}/${qualified_and_versioned_app_name}.dmg" />
 			<arg value="${vol_label}" />
 		</exec>-->
-		<exec executable="genisoimage">
+		<exec executable="genisoimage" >
 			<arg value="-D" />
 			<arg value="-V"/>
-			<arg value="&quot;${qualified_and_versioned_app_name}&quot;"/>
+			<arg value="${qualified_and_versioned_app_name}"/>
 			<arg value="-A" />
-			<arg value="&quot;${qualified_and_versioned_app_name}&quot;" />
+			<arg value="${qualified_and_versioned_app_name}" />
 			<arg value="-p" />
-			<arg value="&quot;${organization.name}&quot;" />
+			<arg value="${organization.name}" />
 			<arg value="-r" />
 			<arg value="-apple" />
 			<arg value="-o" />
-			<arg value="&quot;${project.build.directory}/${qualified_and_versioned_app_name}.dmg&quot;" />
+			<arg value="${project.build.directory}/${qualified_and_versioned_app_name}.dmg" />
 			<arg value="${mac.app.dir.versioned}" />
 		</exec>
 	</target>
