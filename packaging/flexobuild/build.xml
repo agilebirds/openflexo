@@ -205,7 +205,7 @@
 	</target>
 
 	<target name="osx-packaging">
-		<exec executable="chmod">
+		<!--<exec executable="chmod">
 			<arg value="a+x" />
 			<arg value="MacOS/make_dmg"/>
 		</exec>
@@ -215,6 +215,16 @@
 			<arg value="${mac.app.dir.versioned}" />
 			<arg value="${project.build.directory}/${qualified_and_versioned_app_name}.dmg" />
 			<arg value="${vol_label}" />
+		</exec>-->
+		<exec executable="genisoimage">
+			<arg value="-D" />
+			<arg value="-V &quot;${qualified_and_versioned_app_name}&quot;" />
+			<arg value="-A &quot;${qualified_and_versioned_app_name}&quot;" />
+			<arg value="-p &quot;${organization.name}&quot;" />
+			<arg value="-r" />
+			<arg value="-apple" />
+			<arg value="-o &quot;${project.build.directory}/${qualified_and_versioned_app_name}.dmg&quot;" />
+			<arg value="${mac.app.dir.versioned}" />
 		</exec>
 	</target>
 
