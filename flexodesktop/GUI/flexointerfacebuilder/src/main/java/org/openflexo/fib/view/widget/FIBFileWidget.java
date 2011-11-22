@@ -76,6 +76,7 @@ public class FIBFileWidget extends FIBWidgetView<FIBFile, JTextField, File> {
 		defaultDirectory = model.defaultDirectory != null ? model.defaultDirectory : new File(System.getProperty("user.dir"));
 
 		_mySmallPanel = new JPanel(new BorderLayout());
+		_mySmallPanel.setOpaque(false);
 		_chooseButton = new JButton();
 		_chooseButton.setText(FlexoLocalization.localizedForKey("choose", _chooseButton));
 		addActionListenerToChooseButton();
