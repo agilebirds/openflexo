@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.ws.MessageBindings" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.ws.MessageBindings" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="0" title="Data" layout="twocols" font="SansSerif,0,11" name="DataTab">
-      <Label label="message" localize="true" name="NameLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <TextField validateOnReturn="true" columns="10" passwd="false" readOnly="true" localize="true" name="Name" data="data.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)">
+    <Tab index="0" title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="DataTab">
+      <Label label="message" localize="true" name="NameLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
+      <TextField validateOnReturn="true" columns="10" passwd="false" data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="Name" readOnly="true" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
       </TextField>
-      <Table iteratorClassName="org.openflexo.foundation.wkf.ws.MessageEntryBinding" visibleRowCount="4" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.bindings" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=true)" name="Bindings" localize="true" manageDynamicModel="true">
+      <Table iteratorClassName="org.openflexo.foundation.wkf.ws.MessageEntryBinding" visibleRowCount="4" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="Bindings" data="data.bindings" constraints="twocols(expandHorizontally=true;expandVertically=true;index=3;location=right)">
         <TextFieldColumn data="iterator.bindingDefinition.variableName" title="name" columnWidth="80" resizable="true" displayTitle="true" />
         <CustomColumn componentClassName="org.openflexo.components.widget.DMTypeSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.bindingDefinition.type" format="object.simplifiedStringRepresentation" title="type" columnWidth="80" resizable="true" displayTitle="true">
           <ColumnAssignment variable="component.owner" value="iterator" />

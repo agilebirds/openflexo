@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.node.FlexoPreCondition" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.node.FlexoPreCondition" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
-      <Label label="name" localize="true" name="NameLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <TextField columns="10" passwd="false" localize="true" name="Name" data="data.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
-      <Label label="init_token_number" localize="true" name="InitTokenNbrLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
-      <Number numberType="IntegerType" data="data.initTokenNbr" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" name="InitTokenNbr" localize="true">
+    <Tab index="0" title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="BasicTab">
+      <Label label="name" localize="true" name="NameLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
+      <TextField columns="10" passwd="false" data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="Name" localize="true" />
+      <Label label="init_token_number" localize="true" name="InitTokenNbrLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsTop=5;location=left)" />
+      <Number numberType="IntegerType" data="data.initTokenNbr" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" name="InitTokenNbr" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
       </Number>
-      <Label label="trigger_level" localize="true" name="TriggerLevelLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
-      <Number numberType="IntegerType" data="data.triggerLevel" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" name="TriggerLevel" localize="true" />
-      <Label label="attached_begin_node" localize="true" name="AttachedBeginNodeLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" />
-      <DropDown format="object.name" localize="true" name="AttachedBeginNode" data="data.attachedBeginNode" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" list="data.availableBeginNodes" iteratorClassName="org.openflexo.foundation.wkf.node.FlexoNode" />
+      <Label label="trigger_level" localize="true" name="TriggerLevelLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsTop=5;location=left)" />
+      <Number numberType="IntegerType" data="data.triggerLevel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;location=right)" name="TriggerLevel" localize="true" />
+      <Label label="attached_begin_node" localize="true" name="AttachedBeginNodeLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;insetsTop=5;location=left)" />
+      <DropDown showReset="true" format="object.name" localize="true" name="AttachedBeginNode" data="data.attachedBeginNode" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;location=right)" list="data.availableBeginNodes" iteratorClassName="org.openflexo.foundation.wkf.node.FlexoNode" autoSelectFirstRow="false" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>

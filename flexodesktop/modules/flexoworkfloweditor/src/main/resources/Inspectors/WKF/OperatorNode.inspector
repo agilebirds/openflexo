@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.node.OperatorNode" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.node.OperatorNode" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="1" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab">
-      <Label label="representation_role" localize="true" name="RoleLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" visible="(data.isInRootPetriGraph = true)" />
-      <DropDown format="object.name" localize="true" name="Role" data="data.role" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" visible="(data.isInRootPetriGraph = true)" list="data.project.workflow.allRoles" iteratorClassName="org.openflexo.foundation.wkf.Role" />
+    <Tab index="1" title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="AdvancedTab">
+      <Label label="representation_role" localize="true" name="RoleLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" visible="(data.isInRootPetriGraph = true)" />
+      <DropDown showReset="true" format="object.name" localize="true" name="Role" data="data.role" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;location=right)" visible="(data.isInRootPetriGraph = true)" list="data.project.workflow.allRoles" iteratorClassName="org.openflexo.foundation.wkf.Role" autoSelectFirstRow="false" />
     </Tab>
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab" />
+    <Tab index="0" title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="BasicTab" />
   </TabPanel>
   <LocalizedDictionary>
     <Localized key="Advanced" lang="French">Avancé</Localized>

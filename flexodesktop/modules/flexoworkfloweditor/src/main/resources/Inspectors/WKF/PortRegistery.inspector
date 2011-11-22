@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.ws.PortRegistery" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.ws.PortRegistery" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="21" title="Graphics_SWL" layout="twocols" visible="controller.displayInspectorTabForContext(&quot;SWL&quot;)" font="SansSerif,0,11" name="GraphicsSWLTab">
-      <Label label="swimming_lane_number" localize="true" name="IntegerParameterswlNb1Label" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <Number minValue="1" maxValue="255" increment="1" numberType="IntegerType" columns="10" data="data.getIntegerParameter(&quot;swl_nb&quot;,1)" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" name="IntegerParameterswlNb1" localize="true" />
-      <Label label="swimming_lane_height" localize="true" name="IntegerParameterswlHeight80Label" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
-      <Number minValue="30" maxValue="1000" increment="1" numberType="IntegerType" columns="10" data="data.getIntegerParameter(&quot;swl_height&quot;,80)" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" name="IntegerParameterswlHeight80" localize="true" />
-      <Label label="index" localize="true" name="IntegerParameterswlIndex80Label" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
-      <Number minValue="0" maxValue="255" increment="1" numberType="IntegerType" columns="10" data="data.getIntegerParameter(&quot;swl_index&quot;,80)" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" name="IntegerParameterswlIndex80" localize="true" />
-      <Label label="text_color" localize="true" name="TextColorswlLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" />
-      <Color data="data.getTextColor(&quot;swl&quot;)" constraints="twocols(location=right;index=13;expandHorizontally=false;expandVertically=false)" name="TextColorswl" localize="true" />
-      <Label label="back_color" localize="true" name="BgColorLabel" constraints="twocols(location=left;index=14;expandHorizontally=false;expandVertically=false)" />
-      <Color data="data.bgColor" constraints="twocols(location=right;index=15;expandHorizontally=false;expandVertically=false)" name="BgColor" localize="true" />
+    <Tab index="21" title="Graphics_SWL" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" visible="controller.displayInspectorTabForContext(&quot;SWL&quot;)" font="SansSerif,0,11" name="GraphicsSWLTab">
+      <Label label="swimming_lane_number" localize="true" name="IntegerParameterswlNb1Label" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
+      <Number minValue="1" maxValue="255" increment="1" numberType="IntegerType" columns="10" data="data.getIntegerParameter(&quot;swl_nb&quot;,1)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" name="IntegerParameterswlNb1" localize="true" />
+      <Label label="swimming_lane_height" localize="true" name="IntegerParameterswlHeight80Label" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" />
+      <Number minValue="30" maxValue="1000" increment="1" numberType="IntegerType" columns="10" data="data.getIntegerParameter(&quot;swl_height&quot;,80)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" name="IntegerParameterswlHeight80" localize="true" />
+      <Label label="index" localize="true" name="IntegerParameterswlIndex80Label" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" />
+      <Number minValue="0" maxValue="255" increment="1" numberType="IntegerType" columns="10" data="data.getIntegerParameter(&quot;swl_index&quot;,80)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;location=right)" name="IntegerParameterswlIndex80" localize="true" />
+      <Label label="text_color" localize="true" name="TextColorswlLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=12;insetsTop=5;location=left)" />
+      <Color data="data.getTextColor(&quot;swl&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=13;location=right)" name="TextColorswl" localize="true" />
+      <Label label="back_color" localize="true" name="BgColorLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=14;insetsTop=5;location=left)" />
+      <Color data="data.bgColor" constraints="twocols(expandHorizontally=false;expandVertically=false;index=15;location=right)" name="BgColor" localize="true" />
     </Tab>
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
-      <Label label="is_visible" localize="true" name="IsVisibleLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <CheckBox selected="false" localize="true" name="IsVisible" data="data.isVisible" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" />
+    <Tab index="0" title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="BasicTab">
+      <Label label="is_visible" localize="true" name="IsVisibleLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
+      <CheckBox selected="false" localize="true" name="IsVisible" data="data.isVisible" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>

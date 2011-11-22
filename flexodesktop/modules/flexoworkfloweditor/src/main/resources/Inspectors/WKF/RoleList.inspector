@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.RoleList" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.RoleList" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="0" title="Roles" layout="twocols" font="SansSerif,0,11" name="RolesTab">
-      <Label label="roles" align="center" localize="true" name="SortedRolesVectorLabel" constraints="twocols(location=center;index=0;expandHorizontally=true;expandVertically=false)" />
-      <Table iteratorClassName="org.openflexo.foundation.wkf.Role" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.sortedRolesVector" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=true)" name="SortedRolesVector" localize="true" manageDynamicModel="true">
+    <Tab index="0" title="Roles" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="RolesTab">
+      <Label label="roles" align="center" localize="true" name="SortedRolesVectorLabel" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;location=center)" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.Role" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="SortedRolesVector" data="data.sortedRolesVector" constraints="twocols(expandHorizontally=true;expandVertically=true;index=1;location=right)">
         <TextFieldColumn data="iterator.name" title="name" columnWidth="80" resizable="true" displayTitle="true" />
         <TextFieldColumn data="iterator.description" title="description" columnWidth="100" resizable="true" displayTitle="true" />
         <AddAction method="data.performAddRole" name="new" />

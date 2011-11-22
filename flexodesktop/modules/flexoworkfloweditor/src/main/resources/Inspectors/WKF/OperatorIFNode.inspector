@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.node.IFOperator" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.node.IFOperator" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="4" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
-    <Tab index="3" title="Data" layout="twocols" font="SansSerif,0,11" name="DataTab">
-      <Label label="condition" localize="true" name="ConditionPrimitiveLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
-      <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" data="data.conditionPrimitive" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" name="ConditionPrimitive" localize="true" manageDynamicModel="true">
+    <Tab index="4" title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="AdvancedTab" />
+    <Tab index="3" title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="DataTab">
+      <Label label="condition" localize="true" name="ConditionPrimitiveLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" />
+      <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" data="data.conditionPrimitive" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)" name="ConditionPrimitive" localize="true" manageDynamicModel="true">
         <Assignment variable="component.bindingDefinition" value="data.conditionPrimitiveBindingDefinition" />
         <Assignment variable="component.bindable" value="data" />
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
       </Custom>
     </Tab>
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
-      <Label label="status_for_positive_evaluation" localize="true" name="NewStatusForPositiveEvaluationLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
-      <DropDown format="object.nameAndProcess" localize="true" name="NewStatusForPositiveEvaluation" data="data.newStatusForPositiveEvaluation" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" list="data.process.statusList.allAvailableStatus" iteratorClassName="org.openflexo.foundation.wkf.Status" />
-      <Label label="status_for_negative_evaluation" localize="true" name="NewStatusForNegativeEvaluationLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" />
-      <DropDown format="object.nameAndProcess" localize="true" name="NewStatusForNegativeEvaluation" data="data.newStatusForNegativeEvaluation" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" list="data.process.statusList.allAvailableStatus" iteratorClassName="org.openflexo.foundation.wkf.Status" />
+    <Tab index="0" title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="BasicTab">
+      <Label label="status_for_positive_evaluation" localize="true" name="NewStatusForPositiveEvaluationLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsTop=5;location=left)" />
+      <DropDown showReset="true" format="object.nameAndProcess" localize="true" name="NewStatusForPositiveEvaluation" data="data.newStatusForPositiveEvaluation" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;location=right)" list="data.process.statusList.allAvailableStatus" iteratorClassName="org.openflexo.foundation.wkf.Status" autoSelectFirstRow="false" />
+      <Label label="status_for_negative_evaluation" localize="true" name="NewStatusForNegativeEvaluationLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;insetsTop=5;location=left)" />
+      <DropDown showReset="true" format="object.nameAndProcess" localize="true" name="NewStatusForNegativeEvaluation" data="data.newStatusForNegativeEvaluation" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;location=right)" list="data.process.statusList.allAvailableStatus" iteratorClassName="org.openflexo.foundation.wkf.Status" autoSelectFirstRow="false" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>

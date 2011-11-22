@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.ws.InOutPort" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.ws.InOutPort" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="3" title="Data" layout="twocols" font="SansSerif,0,11" name="DataTab">
-      <Label label="output_message" localize="true" name="OutputMessageDefinitionnameLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
-      <TextField validateOnReturn="true" columns="10" passwd="false" localize="true" name="OutputMessageDefinitionname" data="data.outputMessageDefinition.name" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)">
+    <Tab index="3" title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="DataTab">
+      <Label label="output_message" localize="true" name="OutputMessageDefinitionnameLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" />
+      <TextField validateOnReturn="true" columns="10" passwd="false" data="data.outputMessageDefinition.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)" name="OutputMessageDefinitionname" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
       </TextField>
-      <Table iteratorClassName="org.openflexo.foundation.wkf.ws.MessageEntry" visibleRowCount="4" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.outputMessageDefinition.entries" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=true)" name="OutputMessageDefinitionentries" localize="true" manageDynamicModel="true">
+      <Table iteratorClassName="org.openflexo.foundation.wkf.ws.MessageEntry" visibleRowCount="4" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="OutputMessageDefinitionentries" data="data.outputMessageDefinition.entries" constraints="twocols(expandHorizontally=true;expandVertically=true;index=7;location=right)">
         <TextFieldColumn data="iterator.variableName" title="name" columnWidth="100" resizable="true" displayTitle="true" />
         <CustomColumn componentClassName="org.openflexo.components.widget.DMTypeSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.type" format="object.simplifiedStringRepresentation" title="type" columnWidth="100" resizable="true" displayTitle="true">
           <ColumnAssignment variable="component.project" value="iterator.project" />
@@ -18,7 +18,7 @@
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
       </Table>
     </Tab>
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab" />
+    <Tab index="0" title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="BasicTab" />
   </TabPanel>
   <LocalizedDictionary>
     <Localized key="Data" lang="French">Donnée</Localized>

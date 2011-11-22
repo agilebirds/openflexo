@@ -4,11 +4,11 @@
 		<layout name ="DEFAULT">
 			<param name="aLayoutParamName" value="aLayoutParamValue"/>
 		</layout>
-		<property name="role" label="roleR" widget="DROPDOWN" constraint="2">
+		<property name="role" label="roleR" widget="DROPDOWN" constraint="3">
 			<param name = "format" value="nameForInspector"/>
 			<param name = "dynamiclist" value="project.workflow.allAssignableRoles"/>
 		</property>
-		<property name="roleA" label="roleA" widget="DROPDOWN" constraint="3">
+		<property name="roleA" label="roleA" widget="DROPDOWN" constraint="4">
 			<param name = "format" value="nameForInspector"/>
 			<param name = "dynamiclist" value="project.workflow.allAssignableRoles"/>
 		</property>
@@ -20,7 +20,7 @@
 			<param name = "format" value="nameForInspector"/>
 			<param name = "dynamiclist" value="project.workflow.allAssignableRoles"/>
 		</property>-->
-		<property_list name="consultedRoles" label="roleC" constraint="4">
+		<property_list name="consultedRoles" label="roleC" constraint="5">
 		  <param name="displayLabel" value="true"/>
 		  <param name="widgetLayout" value="2COL"/>
 		  <param name="visible_row_count" value="3"/>
@@ -34,7 +34,7 @@
 		  <property_list_action name="remove" type="DELETE" method="removeConsultedRole"/>
 		</property_list>
 		
-		<property_list name="informedRoles" label="roleI" constraint="5">
+		<property_list name="informedRoles" label="roleI" constraint="6">
 		  <param name="displayLabel" value="true"/>
 		  <param name="widgetLayout" value="2COL"/>
 		  <param name="displayLabel" value="true"/>
@@ -48,7 +48,7 @@
 		  <property_list_action name="add" type="ADD" method="addInformedRole"/>
 		  <property_list_action name="remove" type="DELETE" method="removeInformedRole"/>
 		</property_list>
-		<property name="cssSheet" label="css_sheet" widget="DROPDOWN" constraint="6">
+		<property name="cssSheet" label="css_sheet" widget="DROPDOWN" constraint="7">
 			<param name="format" value="name"/>
 			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
 		</property>
@@ -64,7 +64,7 @@
 		</property>
 	</tab>
 	
-	<tab name="Activity Metrics" index="8" layout="DEFAULT" visibilityContext="METRICS">
+	<tab name="Activity Metrics" index="8" layout="DEFAULT" > <!--  visibilityContext="METRICS" -->
         <property_list name="metricsValues" label="metrics" constraint="0">
           <param name="visible_row_count" value="5"/>
           <param name="row_height" value="20"/>

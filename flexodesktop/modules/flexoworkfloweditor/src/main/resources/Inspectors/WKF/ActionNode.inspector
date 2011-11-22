@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.node.ActionNode" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.node.ActionNode" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="1" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
-      <Label label="action_type" localize="true" name="ActionTypeLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <DropDown format="object.name" localize="true" name="ActionType" data="data.actionType" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" list="data.actionType.availableValues" iteratorClassName="org.openflexo.foundation.wkf.node.ActionType" />
-      <Label label="sub_process" localize="true" name="SubProcessLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <DropDown format="object.name" localize="true" name="SubProcess" data="data.subProcess" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" list="data.process.workflow.allFlexoProcesses" iteratorClassName="org.openflexo.foundation.wkf.FlexoProcess" />
+    <Tab index="1" title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="AdvancedTab" />
+    <Tab index="0" title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="BasicTab">
+      <Label label="action_type" localize="true" name="ActionTypeLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
+      <DropDown showReset="true" format="object.name" localize="true" name="ActionType" data="data.actionType" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" list="data.actionType.availableValues" iteratorClassName="org.openflexo.foundation.wkf.node.ActionType" autoSelectFirstRow="false" />
+      <Label label="sub_process" localize="true" name="SubProcessLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
+      <DropDown showReset="true" format="object.name" localize="true" name="SubProcess" data="data.subProcess" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" list="data.process.workflow.allFlexoProcesses" iteratorClassName="org.openflexo.foundation.wkf.FlexoProcess" autoSelectFirstRow="false" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>

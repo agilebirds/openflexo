@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.WKFArtefact" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.WKFArtefact" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="21" title="Graphics_SWL" layout="twocols" visible="controller.displayInspectorTabForContext(&quot;SWL&quot;)" font="SansSerif,0,11" name="GraphicsSWLTab">
-      <Label label="text_color" localize="true" name="TextColorLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" />
-      <Color data="data.textColor" constraints="twocols(location=right;index=13;expandHorizontally=false;expandVertically=false)" name="TextColor" localize="true" />
-      <Label label="text_alignment" localize="true" name="TextAlignmentLabel" constraints="twocols(location=left;index=16;expandHorizontally=false;expandVertically=false)" />
-      <DropDown format="object.name" localize="true" name="TextAlignment" data="data.textAlignment" constraints="twocols(location=right;index=17;expandHorizontally=false;expandVertically=false)" width="150" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$TextAlignment" />
+    <Tab index="21" title="Graphics_SWL" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" visible="controller.displayInspectorTabForContext(&quot;SWL&quot;)" font="SansSerif,0,11" name="GraphicsSWLTab">
+      <Label label="text_color" localize="true" name="TextColorLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=12;insetsTop=5;location=left)" />
+      <Color data="data.textColor" constraints="twocols(expandHorizontally=false;expandVertically=false;index=13;location=right)" name="TextColor" localize="true" />
+      <Label label="text_alignment" localize="true" name="TextAlignmentLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=16;insetsTop=5;location=left)" />
+      <DropDown format="object.name" localize="true" name="TextAlignment" data="data.textAlignment" constraints="twocols(expandHorizontally=false;expandVertically=false;index=17;location=right)" width="150" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$TextAlignment" autoSelectFirstRow="false" />
     </Tab>
-    <Tab index="20" title="Graphics_BPE" layout="twocols" visible="controller.displayInspectorTabForContext(&quot;BPE&quot;)" font="SansSerif,0,11" name="GraphicsBPETab">
-      <Label label="text_color" localize="true" name="TextColorLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" />
-      <Color data="data.textColor" constraints="twocols(location=right;index=13;expandHorizontally=false;expandVertically=false)" name="TextColor" localize="true" />
-      <Label label="text_alignment" localize="true" name="TextAlignmentLabel" constraints="twocols(location=left;index=16;expandHorizontally=false;expandVertically=false)" />
-      <DropDown format="object.name" localize="true" name="TextAlignment" data="data.textAlignment" constraints="twocols(location=right;index=17;expandHorizontally=false;expandVertically=false)" width="150" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$TextAlignment" />
+    <Tab index="20" title="Graphics_BPE" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" visible="controller.displayInspectorTabForContext(&quot;BPE&quot;)" font="SansSerif,0,11" name="GraphicsBPETab">
+      <Label label="text_color" localize="true" name="TextColorLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=12;insetsTop=5;location=left)" />
+      <Color data="data.textColor" constraints="twocols(expandHorizontally=false;expandVertically=false;index=13;location=right)" name="TextColor" localize="true" />
+      <Label label="text_alignment" localize="true" name="TextAlignmentLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=16;insetsTop=5;location=left)" />
+      <DropDown format="object.name" localize="true" name="TextAlignment" data="data.textAlignment" constraints="twocols(expandHorizontally=false;expandVertically=false;index=17;location=right)" width="150" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$TextAlignment" autoSelectFirstRow="false" />
     </Tab>
-    <Tab index="8" title="Artefact Metrics" layout="twocols" visible="controller.displayInspectorTabForContext(&quot;METRICS&quot;)" font="SansSerif,0,11" name="ArtefactMetricsTab">
-      <Label label="metrics" align="center" localize="true" name="MetricsValuesLabel" constraints="twocols(location=center;index=0;expandHorizontally=true;expandVertically=false)" />
-      <Table iteratorClassName="org.openflexo.foundation.wkf.MetricsValue" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.metricsValues" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=true)" name="MetricsValues" localize="true" manageDynamicModel="true">
+    <Tab index="8" title="Artefact Metrics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" visible="controller.displayInspectorTabForContext(&quot;METRICS&quot;)" font="SansSerif,0,11" name="ArtefactMetricsTab">
+      <Label label="metrics" align="center" localize="true" name="MetricsValuesLabel" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;location=center)" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.MetricsValue" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="MetricsValues" data="data.metricsValues" constraints="twocols(expandHorizontally=true;expandVertically=true;index=1;location=right)">
         <TextFieldColumn data="iterator.metricsDefinition.name" title="name" columnWidth="100" resizable="true" displayTitle="true" tooltip="iterator.metricsDefinition.description" />
         <TextFieldColumn isEditable="iterator.metricsDefinition.isUnitEditable" data="iterator.unit" title="unit" columnWidth="50" resizable="true" displayTitle="true" />
         <TextFieldColumn data="iterator.description" title="additional_info" columnWidth="120" resizable="true" displayTitle="true" />
@@ -23,11 +23,11 @@
         <RemoveAction method="data.deleteMetrics(selected)" name="delete" />
       </Table>
     </Tab>
-    <Tab index="3" title="Data" layout="twocols" font="SansSerif,0,11" name="DataTab" />
-    <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
-      <Label label="text" localize="true" name="TextLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <TextArea data="data.text" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=true)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="Text" localize="true" />
+    <Tab index="3" title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="DataTab" />
+    <Tab index="2" title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="AdvancedTab" />
+    <Tab index="0" title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="BasicTab">
+      <Label label="text" localize="true" name="TextLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
+      <TextArea data="data.text" constraints="twocols(expandHorizontally=true;expandVertically=true;index=1;location=right)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="Text" localize="true" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
