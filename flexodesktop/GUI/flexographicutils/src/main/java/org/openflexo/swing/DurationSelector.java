@@ -224,7 +224,8 @@ public class DurationSelector extends TextFieldCustomPopup<Duration> {
 
 		@Override
 		public void setPreferredSize(Dimension aDimension) {
-			durationChooserPanel.setPreferredSize(aDimension);
+			// durationChooserPanel.setPreferredSize(aDimension);
+			super.setPreferredSize(aDimension);
 		}
 
 	}
