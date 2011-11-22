@@ -18,9 +18,9 @@
 		<property name="ssh.private.keyfile" value="${user.home}/.ssh/id_dsa" />
 		<property name="ssh.passphrase" value="" />
 		<tstamp>
-			<format property="nightly_folder" pattern="yyyy-MM-dd" />
+			<format property="daily_folder" pattern="yyyy-MM-dd" />
 		</tstamp>
-		<antcall target="package" />
+		<antcall target="copyPackagesOnServer" />
 	</target>
 
 	<target name="package">
@@ -41,7 +41,6 @@
 		<antcall target="packageCustomer" />
 		<antcall target="packageAnalyst" />
 		<antcall target="packageDeveloper" />
-		<antcall target="copyPackagesOnServer" />
 	</target>
 
 	<target name="packageCustomer">
@@ -205,17 +204,6 @@
 	</target>
 
 	<target name="osx-packaging">
-		<!--<exec executable="chmod">
-			<arg value="a+x" />
-			<arg value="MacOS/make_dmg"/>
-		</exec>
-		<propertyregex property="vol_label" input="${qualified_and_versioned_app_name}" regexp=" " replace="" />
-		<echo message="Launching make_dmg ${mac.app.dir.versioned} &quot;${project.build.directory}/${qualified_and_versioned_app_name}.dmg&quot; &quot;${vol_label}&quot;"/>
-		<exec executable="MacOS/make_dmg">
-			<arg value="${mac.app.dir.versioned}" />
-			<arg value="${project.build.directory}/${qualified_and_versioned_app_name}.dmg" />
-			<arg value="${vol_label}" />
-		</exec>-->
 		<exec executable="genisoimage" >
 			<arg value="-D" />
 			<arg value="-V"/>
@@ -240,7 +228,7 @@
 	</target>
 
 	<target name="copyOnServerWindowsRelease" unless="isNightly">
-		<property name="folder" value="${deployment.root.folder}/Windows/${flexo_version}" />
+		<property name="folder" value="${deployment.root.folder}/${flexo_version}/${daily_folder}/Windows" />
 		<antcall target="createRemoteFolder"/>
 		<scp todir="${deployment.server.name}:${folder}/" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}">
 			<fileset dir="${project.build.directory}">
@@ -250,17 +238,17 @@
 	</target>
 
 	<target name="copyOnServerMacRelease" unless="isNightly">
-		<property name="folder" value="${deployment.root.folder}/Mac/${flexo_version}" />
+		<property name="folder" value="${deployment.root.folder}/${flexo_version}/${daily_folder}/Mac" />
 		<antcall target="createRemoteFolder"/>
 		<scp todir="${deployment.server.name}:${folder}/" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}">
-			<fileset dir="${project.build.directory}" id="pkg">
+			<fileset dir="${project.build.directory}">
 				<include name="*.dmg" />
 			</fileset>
 		</scp>
 	</target>
 
 	<target name="copyOnServerWindowsNightly" if="isNightly">
-		<property name="folder" value="${deployment.root.folder}/Windows/${flexo_version}/nightly/${nightly_folder}" />
+		<property name="folder" value="${deployment.root.folder}/${flexo_version}/nightly/Windows" />
 		<antcall target="createRemoteFolder"/>
 		<scp todir="${deployment.server.name}:${folder}/" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}">
 			<fileset dir="${project.build.directory}">
@@ -270,7 +258,7 @@
 	</target>
 
 	<target name="copyOnServerMacNightly" if="isNightly">
-		<property name="folder" value="${deployment.root.folder}/Mac/${flexo_version}/nightly/${nightly_folder}" />
+		<property name="folder" value="${deployment.root.folder}/${flexo_version}/nightly/Mac" />
 		<antcall target="createRemoteFolder"/>
 		<scp todir="${deployment.server.name}:${folder}/" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}" failonerror="false">
 			<fileset dir="${project.build.directory}" id="pkg">
