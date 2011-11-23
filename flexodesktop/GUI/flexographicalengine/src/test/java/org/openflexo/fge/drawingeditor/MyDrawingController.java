@@ -43,8 +43,6 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 	private GraphicalRepresentation<?> contextualMenuInvoker;
 	private Point contextualMenuClickedPoint;
 
-	private EditorToolbox toolbox;
-
 	private MyShape copiedShape;
 
 	public MyDrawingController(final EditedDrawing aDrawing) {
@@ -88,8 +86,6 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 			}
 		});
 		contextualMenu.add(cutItem);
-
-		toolbox = new EditorToolbox();
 
 	}
 
@@ -175,7 +171,4 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 
 	}
 
-	public EditorToolbox getToolbox() {
-		return toolbox;
-	}
 }

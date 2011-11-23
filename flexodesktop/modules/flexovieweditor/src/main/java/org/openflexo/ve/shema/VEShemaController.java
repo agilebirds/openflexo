@@ -39,7 +39,6 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 
 	private OEController _controller;
 	private CommonPalette _commonPalette;
-	private EditorToolbox _toolbox;
 	private VEShemaModuleView _moduleView;
 	private Hashtable<ViewPointPalette, ContextualPalette> _contextualPalettes;
 
@@ -62,7 +61,6 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 			}
 		}
 
-		_toolbox = new EditorToolbox();
 	}
 
 	@Override
@@ -133,10 +131,6 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 			}
 		}
 		return paletteView;
-	}
-
-	public EditorToolbox getToolbox() {
-		return _toolbox;
 	}
 
 	public View getShema() {
