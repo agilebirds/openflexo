@@ -1,41 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="twocols" dataClassName="org.openflexo.fge.graphics.ForegroundStyle" font="SansSerif,0,11" width="270" height="240" name="ForegroundStylePanel">
-  <Label label="no_stroke" constraints="twocols(location=left;index=0;expandVertically=false;expandHorizontally=true)">
-    <LocalizedDictionary />
-  </Label>
-  <CheckBox selected="true" name="checkbox" data="data.noStroke" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
-  <Label label="line_width" dataClassName="" constraints="twocols(location=left;index=2;expandVertically=false;expandHorizontally=true)" visible="(!(data.noStroke))">
-    <LocalizedDictionary />
-  </Label>
-  <Number minValue="0.1" maxValue="50" increment="0.1" numberType="DoubleType" columns="3" data="data.lineWidth" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" visible="(!(data.noStroke))" name="LineWidth" valueChangedAction="controller.parameterChanged()" />
-  <Label label="color" constraints="twocols(location=left;index=4;expandVertically=false;expandHorizontally=true)" visible="(!(data.noStroke))">
-    <LocalizedDictionary />
-  </Label>
-  <Color data="data.color" constraints="twocols(location=center;index=5;expandHorizontally=false;expandVertically=false)" visible="(!(data.noStroke))" valueChangedAction="controller.parameterChanged()" />
-  <Label label="join_style" constraints="twocols(location=left;index=6;expandVertically=false;expandHorizontally=true)" visible="(!(data.noStroke))">
-    <LocalizedDictionary />
-  </Label>
-  <DropDown format="object.name.toLowerCase" icon="object.icon" localize="true" valueChangedAction="controller.parameterChanged()" name="JoinStyleDropDown" data="data.joinStyle" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" visible="(!(data.noStroke))" showIcon="true" />
-  <Label label="cap_style" constraints="twocols(location=left;index=8;expandVertically=false;expandHorizontally=true)" visible="(!(data.noStroke))">
-    <LocalizedDictionary />
-  </Label>
-  <DropDown format="object.name.toLowerCase" icon="object.icon" localize="true" valueChangedAction="controller.parameterChanged()" name="CapStyleDropDown" data="data.capStyle" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" visible="(!(data.noStroke))" showIcon="true" />
-  <Label label="dash_style" constraints="twocols(location=left;index=10;expandVertically=false;expandHorizontally=true)" visible="(!(data.noStroke))">
-    <LocalizedDictionary />
-  </Label>
-  <DropDown format="object.name.toLowerCase" icon="object.icon" localize="true" valueChangedAction="controller.parameterChanged()" name="DashStyleDropDown" data="data.dashStyle" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" visible="(!(data.noStroke))" showIcon="true" showText="false" />
-  <Label label="use_transparency" constraints="twocols(location=left;index=12;expandVertically=false;expandHorizontally=true)" visible="(!(data.noStroke))">
-    <LocalizedDictionary />
-  </Label>
-  <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" borderTitle="Panel" constraints="twocols(location=right;index=13;expandVertically=false;expandHorizontally=true)" visible="(!(data.noStroke))">
-    <CheckBox selected="true" valueChangedAction="controller.parameterChanged()" name="checkbox" data="data.useTransparency" constraints="flow(index=0)" />
-    <Number minValue="0" maxValue="1" increment="0.05" numberType="DoubleType" columns="3" constraints="flow(index=1)" visible="data.useTransparency" name="TransparencyLevel" valueChangedAction="controller.parameterChanged()" />
+<Panel layout="gridbag" borderTop="0" titleFont="SansSerif,0,11" darkLevel="0" dataClassName="org.openflexo.fge.graphics.ForegroundStyle" controllerClassName="org.openflexo.fge.view.widget.FIBForegroundStyleSelector$ForegroundStyleDetailsPanel$CustomFIBController" font="SansSerif,0,11" width="280" height="310" name="ForegroundStylePanel">
+  <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" borderTitle="Panel" borderTop="8" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="EnableStrokePanel">
+    <CheckBox selected="false" localize="true" name="checkbox" data="data.noStroke" constraints="flow(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
+    <Label label="no_stroke" localize="true" constraints="flow(index=0;location=west)">
+      <LocalizedDictionary />
+    </Label>
   </Panel>
-  <Panel layout="flow" hGap="0" vGap="5" flowAlignment="CENTER" borderTitle="Panel" constraints="twocols(location=center;index=14;expandVertically=false;expandHorizontally=true)">
-    <Button action="controller.apply()" buttonType="Trigger" label="apply" constraints="flow(index=0)">
+  <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" constraints="gridbag(anchor=center;expandHorizontally=false;expandVertically=false;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=1.0)" name="MainPanel">
+    <Number minValue="0.1" maxValue="50" increment="0.1" numberType="DoubleType" columns="3" data="data.lineWidth" constraints="twocols(anchor=center;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="LineWidth" localize="true" enable="(!(data.noStroke))" valueChangedAction="controller.parameterChanged()" />
+    <Label label="line_width" localize="true" enable="(!(data.noStroke))" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
+      <LocalizedDictionary />
+    </Label>
+    <Label label="color" localize="true" enable="(!(data.noStroke))" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
+      <LocalizedDictionary />
+    </Label>
+    <Color data="data.color" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" enable="(!(data.noStroke))" />
+    <Label label="dash_style" localize="true" enable="(!(data.noStroke))" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
+      <LocalizedDictionary />
+    </Label>
+    <DropDown format="object.name.toLowerCase" icon="object.icon" localize="true" enable="(!(data.noStroke))" name="dropdown" data="data.dashStyle" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" staticList="" showIcon="true" iteratorClassName="org.openflexo.fge.graphics.ForegroundStyle$DashStyle" autoSelectFirstRow="true">
+      <LocalizedDictionary />
+    </DropDown>
+    <Label label="join_style" localize="true" enable="(!(data.noStroke))" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
+      <LocalizedDictionary />
+    </Label>
+    <Label label="cap_style" localize="true" enable="(!(data.noStroke))" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
+      <LocalizedDictionary />
+    </Label>
+    <DropDown format="object.name.toLowerCase" icon="object.icon" localize="true" enable="(!(data.noStroke))" name="dropdown" data="data.joinStyle" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" staticList="" showIcon="true" iteratorClassName="org.openflexo.fge.graphics.ForegroundStyle$JoinStyle" autoSelectFirstRow="true">
+      <LocalizedDictionary />
+    </DropDown>
+    <DropDown format="object.name.toLowerCase" icon="object.icon" localize="true" enable="(!(data.noStroke))" name="dropdown" data="data.capStyle" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" staticList="" showIcon="true" iteratorClassName="org.openflexo.fge.graphics.ForegroundStyle$CapStyle" autoSelectFirstRow="true">
+      <LocalizedDictionary />
+    </DropDown>
+  </Panel>
+  <Panel layout="twocols" border="rounded3d" borderTitle="Transparency" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="TransparencyPanel">
+    <Label label="use_transparency" localize="true" enable="(!(data.noStroke))" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
+      <LocalizedDictionary />
+    </Label>
+    <CheckBox selected="true" localize="true" enable="(!(data.noStroke))" name="checkbox" data="data.useTransparency" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
+    <Label label="transparency_level" localize="true" enable="((!(data.noStroke)) &amp; data.useTransparency)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
+    <Number minValue="0" maxValue="1" increment="0.05" numberType="DoubleType" columns="3" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=7;insetsRight=2;insetsTop=0;location=center)" name="TransparencyLevel" localize="true" enable="((!(data.noStroke)) &amp; data.useTransparency)" valueChangedAction="controller.parameterChanged()" />
+  </Panel>
+  <Panel layout="flow" hGap="0" vGap="5" flowAlignment="CENTER" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="controlPanel">
+    <Button action="controller.apply()" buttonType="Trigger" label="apply" constraints="flow(index=0)" localize="true">
       <LocalizedDictionary />
     </Button>
-    <Button action="controller.cancel()" buttonType="Trigger" label="cancel" constraints="flow(index=1)">
+    <Button action="controller.cancel()" buttonType="Trigger" label="cancel" constraints="flow(index=1)" localize="true">
       <LocalizedDictionary />
     </Button>
   </Panel>
@@ -107,6 +118,5 @@
     <Localized key="dots_dashes" lang="Dutch">Dots dashes</Localized>
     <Localized key="dot_lines_dashes" lang="Dutch">Dot lines dashes</Localized>
   </LocalizedDictionary>
-  <Parameter name="controllerClassName" value="org.openflexo.fge.view.widget.FIBForegroundStyleSelector$ForegroundStyleDetailsPanel$CustomFIBController" />
 </Panel>
 

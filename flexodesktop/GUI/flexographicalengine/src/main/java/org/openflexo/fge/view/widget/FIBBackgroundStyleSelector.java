@@ -162,6 +162,7 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 		}
 
 		public void setBackgroundStyleType(BackgroundStyleType backgroundStyleType) {
+			// logger.info("setBackgroundStyleType with " + backgroundStyleType);
 			BackgroundStyleType oldBackgroundStyleType = getBackgroundStyleType();
 			switch (getBackgroundStyleType()) {
 			case NONE:
@@ -233,6 +234,7 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 		}
 
 		public void update() {
+			// logger.info("Update with " + getEditedObject());
 			bsFactory.setBackgroundStyle(getEditedObject());
 			controller.setDataObject(bsFactory, true);
 		}
