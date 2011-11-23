@@ -123,7 +123,7 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 				&& getListModel().getSize() > 0) {
 			_jComboBox.setSelectedIndex(0);
 		}
-
+		_jComboBox.setEnabled(isComponentEnabled());
 	}
 
 	@Override
@@ -199,13 +199,16 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 		@Override
 		public void setSelectedItem(Object anItem) {
 			if (selectedItem != anItem) {
+				widgetUpdating = true;
 				selectedItem = anItem;
-				// logger.info("setSelectedItem() with "+anItem+" widgetUpdating="+widgetUpdating+" modelUpdating="+modelUpdating);
+				// logger.info("setSelectedItem() with " + anItem + " widgetUpdating=" + widgetUpdating + " modelUpdating=" +
+				// modelUpdating);
 				getDynamicModel().selected = anItem;
 				getDynamicModel().selectedIndex = indexOf(anItem);
 				if (!widgetUpdating && !modelUpdating) {
 					notifyDynamicModelChanged();
 				}
+				widgetUpdating = false;
 			}
 		}
 

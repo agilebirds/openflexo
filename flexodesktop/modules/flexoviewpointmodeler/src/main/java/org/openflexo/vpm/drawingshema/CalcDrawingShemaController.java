@@ -47,7 +47,6 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 
 	private CEDController _controller;
 	private CommonPalette _commonPalette;
-	private EditorToolbox _toolbox;
 	private CalcDrawingShemaModuleView _moduleView;
 	private Hashtable<ViewPointPalette, ContextualPalette> _contextualPalettes;
 
@@ -74,9 +73,6 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 			}
 		}
 
-		if (!readOnly) {
-			_toolbox = new EditorToolbox();
-		}
 	}
 
 	@Override
@@ -185,10 +181,6 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 		paletteView.insertTab(palette.getName(), null, cp.getPaletteView(), null, index);
 		paletteView.revalidate();
 		paletteView.repaint();
-	}
-
-	public EditorToolbox getToolbox() {
-		return _toolbox;
 	}
 
 	public ExampleDrawingShema getShema() {

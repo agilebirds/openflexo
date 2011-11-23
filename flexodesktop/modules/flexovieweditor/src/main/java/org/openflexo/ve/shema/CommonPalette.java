@@ -184,16 +184,16 @@ public class CommonPalette extends DrawingPalette {
 					shapeGR.setIsReadOnly(false);
 					shapeGR.setLocationConstraints(LocationConstraints.FREELY_MOVABLE);
 					if (applyForegroundStyle) {
-						shapeGR.setForeground(getController().getToolbox().currentForegroundStyle);
+						shapeGR.setForeground(getController().getCurrentForegroundStyle());
 					}
 					if (applyBackgroundStyle) {
-						shapeGR.setBackground(getController().getToolbox().currentBackgroundStyle);
+						shapeGR.setBackground(getController().getCurrentBackgroundStyle());
 					}
 					if (applyShadowStyle) {
-						shapeGR.setShadowStyle(getController().getToolbox().currentShadowStyle);
+						shapeGR.setShadowStyle(getController().getCurrentShadowStyle());
 					}
 					if (applyTextStyle) {
-						shapeGR.setTextStyle(getController().getToolbox().currentTextStyle);
+						shapeGR.setTextStyle(getController().getCurrentTextStyle());
 					}
 					shapeGR.setLocation(dropLocation);
 					shapeGR.setLayer(containerGR.getLayer() + 1);

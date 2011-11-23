@@ -24,6 +24,7 @@ import java.awt.Font;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
@@ -85,8 +86,8 @@ public class MyDrawingPalette extends DrawingPalette {
 		gr.setText(st.name());
 		gr.setTextStyle(TextStyle.makeTextStyle(Color.DARK_GRAY, DEFAULT_TEXT_FONT));
 		gr.setIsFloatingLabel(false);
-		/*gr.setForeground(ForegroundStyle.makeStyle(Color.BLACK));
-		gr.setBackground(BackgroundStyle.makeColoredBackground(Color.RED));*/
+		// gr.setForeground(ForegroundStyle.makeStyle(Color.BLACK));
+		gr.setBackground(BackgroundStyle.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR));
 		gr.setIsVisible(true);
 
 		return makePaletteElement(gr, true, true, true, true);
@@ -199,16 +200,16 @@ public class MyDrawingPalette extends DrawingPalette {
 				// getController().getDrawing()),container);
 				ShapeGraphicalRepresentation<?> shapeGR = getGraphicalRepresentation().clone();
 				if (applyCurrentForeground) {
-					shapeGR.setForeground(getController().getToolbox().currentForegroundStyle);
+					shapeGR.setForeground(getController().getCurrentForegroundStyle());
 				}
 				if (applyCurrentBackground) {
-					shapeGR.setBackground(getController().getToolbox().currentBackgroundStyle);
+					shapeGR.setBackground(getController().getCurrentBackgroundStyle());
 				}
 				if (applyCurrentTextStyle) {
-					shapeGR.setTextStyle(getController().getToolbox().currentTextStyle);
+					shapeGR.setTextStyle(getController().getCurrentTextStyle());
 				}
 				if (applyCurrentShadowStyle) {
-					shapeGR.setShadowStyle(getController().getToolbox().currentShadowStyle);
+					shapeGR.setShadowStyle(getController().getCurrentShadowStyle());
 				}
 				getController().addNewShape(new MyShape(shapeGR, dropLocation, getController().getDrawing()), container);
 				return true;
