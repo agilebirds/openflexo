@@ -97,15 +97,13 @@ public class HashtableKeyValueProperty extends KeyValueProperty {
 		super.init(propertyName, setMethodIsMandatory);
 
 		if (!typeInheritsFromMap()) {
-			throw new InvalidKeyValuePropertyException("Property " + propertyName
-					+ " found, but doesn't seem inherits from java.util.Map");
+			throw new InvalidKeyValuePropertyException("Property " + propertyName + " found, but doesn't seem inherits from java.util.Map");
 		}
 
 		// If related type is a sub-class of hashtable, check that there is a
 		// a trivial constructor
 		if (!getType().equals(Hashtable.class) && !getType().equals(HashMap.class)) {
-			if (!type.isInterface() || !Modifier.isAbstract(type.getModifiers()) || !type.isAssignableFrom(Hashtable.class)
-					|| !type.isAssignableFrom(HashMap.class)) {
+			if (!type.isInterface() || !type.isAssignableFrom(Hashtable.class) || !type.isAssignableFrom(HashMap.class)) {
 				try {
 					// Test instantiation
 					type.newInstance();
