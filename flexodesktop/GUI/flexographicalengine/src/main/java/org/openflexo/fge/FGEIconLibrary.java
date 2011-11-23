@@ -10,6 +10,20 @@ import org.openflexo.toolbox.ImageIconResource;
  */
 public class FGEIconLibrary {
 
+	public static final ImageIconResource TOOLBAR_LEFT_ICON = new ImageIconResource("Icons/GUI/ToolBarLeft.gif");
+	public static final ImageIconResource TOOLBAR_RIGHT_ICON = new ImageIconResource("Icons/GUI/ToolBarRight.gif");
+	public static final ImageIconResource TOOLBAR_SPACER_ICON = new ImageIconResource("Icons/GUI/ToolBarSpacer.gif");
+
+	public static final ImageIconResource SELECTION_TOOL_ICON = new ImageIconResource("Icons/Tools/SelectionTool.png");
+	public static final ImageIconResource SELECTION_TOOL_SELECTED_ICON = new ImageIconResource("Icons/Tools/SelectionTool-selected.png");
+	public static final ImageIconResource DRAW_SHAPE_TOOL_ICON = new ImageIconResource("Icons/Tools/DrawShapeTool.png");
+	public static final ImageIconResource DRAW_SHAPE_TOOL_SELECTED_ICON = new ImageIconResource("Icons/Tools/DrawShapeTool-selected.png");
+	public static final ImageIconResource DRAW_CONNECTOR_TOOL_ICON = new ImageIconResource("Icons/Tools/DrawConnectorTool.png");
+	public static final ImageIconResource DRAW_CONNECTOR_TOOL_SELECTED_ICON = new ImageIconResource(
+			"Icons/Tools/DrawConnectorTool-selected.png");
+	public static final ImageIconResource DRAW_TEXT_TOOL_ICON = new ImageIconResource("Icons/Tools/DrawTextTool.png");
+	public static final ImageIconResource DRAW_TEXT_TOOL_SELECTED_ICON = new ImageIconResource("Icons/Tools/DrawTextTool-selected.png");
+
 	public static final ImageIconResource CURSOR_MOVE_ICON = new ImageIconResource("Icons/CursorMove.gif");
 
 	public static final ImageIconResource RECT_POLYLIN_CONNECTOR_ICON = new ImageIconResource("Icons/RectPolylinConnector.gif");
