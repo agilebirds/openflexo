@@ -103,7 +103,7 @@ public class HashtableKeyValueProperty extends KeyValueProperty {
 		// If related type is a sub-class of hashtable, check that there is a
 		// a trivial constructor
 		if (!getType().equals(Hashtable.class) && !getType().equals(HashMap.class)) {
-			if (!type.isInterface() || !type.isAssignableFrom(Hashtable.class) || !type.isAssignableFrom(HashMap.class)) {
+			if (!type.isAssignableFrom(Hashtable.class) || !type.isAssignableFrom(HashMap.class)) {
 				try {
 					// Test instantiation
 					type.newInstance();
