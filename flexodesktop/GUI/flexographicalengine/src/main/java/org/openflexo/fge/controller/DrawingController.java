@@ -19,7 +19,6 @@
  */
 package org.openflexo.fge.controller;
 
-import java.awt.FlowLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,9 +30,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
-import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
@@ -240,7 +239,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		return _scalePanel;
 	}
 
-	public class ScalePanel extends JPanel {
+	public class ScalePanel extends JToolBar {
 
 		private static final int MAX_ZOOM_VALUE = 300;
 		protected JTextField scaleTF;
@@ -250,14 +249,14 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		protected ActionListener actionListener;
 
 		protected ScalePanel() {
-			super(new FlowLayout(FlowLayout.LEFT, 10, 0));
+			super(/*new FlowLayout(FlowLayout.LEFT, 10, 0)*/);
 			scaleTF = new JTextField(5);
 			int currentScale = (int) (getScale() * 100);
 			scaleTF.setText("" + currentScale + "%");
 			slider = new JSlider(SwingConstants.HORIZONTAL, 0, MAX_ZOOM_VALUE, currentScale);
 			slider.setMajorTickSpacing(100);
 			slider.setMinorTickSpacing(20);
-			slider.setPaintTicks(true);
+			slider.setPaintTicks(false/*true*/);
 			slider.setPaintLabels(false);
 			slider.setBorder(BorderFactory.createEmptyBorder());
 			sliderChangeListener = new ChangeListener() {
@@ -307,7 +306,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 			slider.addChangeListener(sliderChangeListener);
 			add(slider);
 			add(scaleTF);
-			setBorder(BorderFactory.createEmptyBorder());
+			// setBorder(BorderFactory.createEmptyBorder());
 		}
 	}
 

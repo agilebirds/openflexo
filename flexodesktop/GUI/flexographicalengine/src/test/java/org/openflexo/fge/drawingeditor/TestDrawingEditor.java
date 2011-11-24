@@ -21,6 +21,7 @@ package org.openflexo.fge.drawingeditor;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -188,9 +189,15 @@ public class TestDrawingEditor {
 		}
 		currentDrawing = drawing;
 
-		JPanel topPanel = new JPanel(new BorderLayout());
+		/*JPanel topPanel = new JPanel(new BorderLayout());
+		JPanel topPanel2 = new JPanel(new BorderLayout());
+		topPanel2.add(new JLabel("prout"), BorderLayout.CENTER);
+		topPanel.add(topPanel2, BorderLayout.CENTER);
 		topPanel.add(currentDrawing.getEditedDrawing().getController().getToolbox().getToolboxPanel(), BorderLayout.WEST);
-		topPanel.add(currentDrawing.getEditedDrawing().getController().getScalePanel(), BorderLayout.EAST);
+		topPanel2.add(currentDrawing.getEditedDrawing().getController().getScalePanel(), BorderLayout.EAST);*/
+		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		topPanel.add(currentDrawing.getEditedDrawing().getController().getToolbox().getStyleToolBar());
+		topPanel.add(currentDrawing.getEditedDrawing().getController().getScalePanel());
 
 		mainPanel.add(topPanel, BorderLayout.NORTH);
 		currentDrawing.getEditedDrawing().getController().addObserver(inspector);

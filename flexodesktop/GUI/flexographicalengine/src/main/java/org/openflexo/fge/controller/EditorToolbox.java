@@ -27,10 +27,12 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
+import javax.swing.JToolBar;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.FGEIconLibrary;
@@ -48,7 +50,7 @@ public class EditorToolbox {
 
 	private ToolPanel toolPanel;
 
-	private JPanel toolboxPanel;
+	private JToolBar stylesToolBar;
 	private FIBForegroundStyleSelector foregroundSelector;
 	private FIBBackgroundStyleSelector backgroundSelector;
 	private FIBTextStyleSelector textStyleSelector;
@@ -131,9 +133,10 @@ public class EditorToolbox {
 		return toolPanel;
 	}
 
-	public JPanel getToolboxPanel() {
-		if (toolboxPanel == null) {
-			toolboxPanel = new JPanel(new FlowLayout());
+	public JToolBar getStyleToolBar() {
+		if (stylesToolBar == null) {
+			stylesToolBar = new JToolBar();
+			stylesToolBar.setRollover(true);
 			foregroundSelector = new FIBForegroundStyleSelector(controller.getCurrentForegroundStyle()) {
 				@Override
 				public void apply() {
@@ -189,14 +192,16 @@ public class EditorToolbox {
 					}
 				}
 			};
-			toolboxPanel.add(getToolPanel());
-			toolboxPanel.add(foregroundSelector);
-			toolboxPanel.add(backgroundSelector);
-			toolboxPanel.add(shadowStyleSelector);
-			toolboxPanel.add(textStyleSelector);
-			toolboxPanel.validate();
+			stylesToolBar.add(getToolPanel());
+			stylesToolBar.addSeparator();
+			stylesToolBar.add(foregroundSelector);
+			stylesToolBar.add(backgroundSelector);
+			stylesToolBar.add(shadowStyleSelector);
+			stylesToolBar.add(textStyleSelector);
+			stylesToolBar.add(Box.createHorizontalGlue());
+			stylesToolBar.validate();
 		}
-		return toolboxPanel;
+		return stylesToolBar;
 	}
 
 	private List<ShapeGraphicalRepresentation> selectedShapes = new ArrayList<ShapeGraphicalRepresentation>();
@@ -218,7 +223,7 @@ public class EditorToolbox {
 				selectedConnectors.add((ConnectorGraphicalRepresentation) gr);
 			}
 		}
-		if (toolboxPanel == null)
+		if (stylesToolBar == null)
 			return;
 		if (selectedGR.size() > 0) {
 			textStyleSelector.setEditedObject(selectedGR.get(0).getTextStyle());
