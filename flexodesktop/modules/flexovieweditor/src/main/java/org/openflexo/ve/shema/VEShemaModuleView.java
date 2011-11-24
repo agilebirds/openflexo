@@ -20,6 +20,7 @@
 package org.openflexo.ve.shema;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.util.logging.Logger;
 
 import javax.swing.JPanel;
@@ -41,8 +42,8 @@ public class VEShemaModuleView extends JPanel implements ModuleView<View> {
 		super();
 		setLayout(new BorderLayout());
 		_controller = controller;
-		JPanel topPanel = new JPanel(new BorderLayout());
-		topPanel.add(_controller.getToolbox().getToolboxPanel(), BorderLayout.WEST);
+		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		topPanel.add(_controller.getToolbox().getStyleToolBar());
 		add(topPanel, BorderLayout.NORTH);
 		add(new JScrollPane(_controller.getDrawingView()), BorderLayout.CENTER);
 		validate();
