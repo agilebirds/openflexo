@@ -119,7 +119,11 @@ public class ResourceLocator {
 				}
 				directoriesSearchOrder.add(preferredResourcePath);
 			}
-			File workingDirectory = new File(System.getProperty("user.dir"));
+            File workingDirectory = new File(System.getProperty("user.dir"));
+            File workingDirectoryResources = new File(workingDirectory,"src/main/resources");
+            if(workingDirectoryResources.exists()){
+                directoriesSearchOrder.add(workingDirectoryResources);
+            }
 			File flexoDesktopDirectory = findFlexoDesktopDirectory(workingDirectory);
 			if (flexoDesktopDirectory != null) {
 				findAllFlexoProjects(flexoDesktopDirectory, directoriesSearchOrder);
