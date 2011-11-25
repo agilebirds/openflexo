@@ -88,6 +88,8 @@ public class FlexoApplication {
 
 	public static EventProcessor eventProcessor;
 
+	private static byte[] mem = new byte[1024 * 1024];
+
 	public static void flushPendingEvents(boolean blockUserEvents) {
 		eventProcessor.flushPendingEvents(blockUserEvents);
 	}
@@ -214,6 +216,12 @@ public class FlexoApplication {
 				if (ProgressWindow.hasInstance()) {
 					ProgressWindow.hideProgressWindow();
 				}
+				if (exception instanceof OutOfMemoryError) {
+					if (mem != null) {
+						mem = null;
+					}
+				}
+
 				if (exception instanceof CancelException || exception.getCause() instanceof CancelException) {
 					return;
 				}
@@ -346,11 +354,12 @@ public class FlexoApplication {
 			} else {
 				return true;
 			}
-			// ignore all out of memory errors,
-			// since they'll give us absolutely no debugging information
-			// and most likely, they will throw another OutOfMemoryException
+
+			// OutOfMemory error should definitely not be ignored. First, they can give a hint on where there is a problem. Secondly,
+			// if we ran out of memory, Flexo will not work anymore and bogus behaviour will appear everywhere. So definitely, no, we don't
+			// ignore.
 			if (bug instanceof OutOfMemoryError) {
-				return true;
+				return false;
 			}
 
 			// no bug? kinda impossible, but shouldn't report.

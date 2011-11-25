@@ -65,6 +65,8 @@ public interface FGEConstants {
 
 	public static final Font DEFAULT_SMALL_TEXT_FONT = new Font("Lucida Sans", Font.PLAIN, 9);
 
+	public static final Color DEFAULT_BACKGROUND_COLOR = new Color(254, 247, 217);
+
 	public static Stroke DASHED = new BasicStroke(1.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[] { 3.0f, 3.0f }, 1);
 
 }

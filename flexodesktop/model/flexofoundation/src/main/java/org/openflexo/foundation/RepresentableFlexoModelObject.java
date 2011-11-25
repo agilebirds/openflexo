@@ -21,7 +21,8 @@ package org.openflexo.foundation;
 
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Point2D;
-import java.util.Hashtable;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.rm.FlexoProject;
@@ -70,20 +71,20 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 	 */
 	public RepresentableFlexoModelObject(FlexoProject project) {
 		super(project);
-		graphicalProperties = new SortedHashtable<Object>();
+		graphicalProperties = new TreeMap<String, Object>();
 	}
 
-	private Hashtable<String, Object> graphicalProperties;
+	private Map<String, Object> graphicalProperties;
 
-	public Hashtable<String, Object> _getGraphicalProperties() {
+	public Map<String, Object> _getGraphicalProperties() {
 		if (isSerializing() && (graphicalProperties == null || graphicalProperties.size() == 0)) {
 			return null;
 		}
 		return graphicalProperties;
 	}
 
-	public void _setGraphicalProperties(Hashtable<String, Object> graphicalProperties) {
-		this.graphicalProperties = new SortedHashtable<Object>(graphicalProperties);
+	public void _setGraphicalProperties(Map<String, Object> graphicalProperties) {
+		this.graphicalProperties = new TreeMap<String, Object>(graphicalProperties);
 	}
 
 	public boolean hasGraphicalPropertyForKey(String key) {

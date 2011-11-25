@@ -32,15 +32,15 @@
   </entity>
   
   <entity name="org.openflexo.foundation.rm.DependantResources" xmlTag="DependantResources">
-	<property name="resources" contains="org.openflexo.foundation.rm.FlexoResource" type="vector"/>
+	<property name="serialisationResources" contains="org.openflexo.foundation.rm.FlexoResource" type="vector"/>
   </entity>
   
   <entity name="org.openflexo.foundation.rm.AlteredResources" xmlTag="AlteredResources">
-	<property name="resources" contains="org.openflexo.foundation.rm.FlexoResource" type="vector"/>
+	<property name="serialisationResources" contains="org.openflexo.foundation.rm.FlexoResource" type="vector"/>
   </entity>
   
   <entity name="org.openflexo.foundation.rm.SynchronizedResources" xmlTag="SynchronizedResources">
-	<property name="resources" contains="org.openflexo.foundation.rm.FlexoResource" type="vector"/>
+	<property name="serialisationResources" contains="org.openflexo.foundation.rm.FlexoResource" type="vector"/>
   </entity>
   
   <entity name="org.openflexo.foundation.rm.FlexoFileResource" abstract="YES">

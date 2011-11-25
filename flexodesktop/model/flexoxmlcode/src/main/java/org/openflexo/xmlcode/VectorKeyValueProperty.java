@@ -124,7 +124,7 @@ public class VectorKeyValueProperty extends KeyValueProperty {
 		// If related type is a sub-class of vector, check that there is a
 		// a trivial constructor
 		if (!getType().equals(Vector.class) && !getType().equals(ArrayList.class)) {
-			if (!type.isInterface() || !type.isAssignableFrom(Vector.class) || !type.isAssignableFrom(ArrayList.class)) {
+			if (!type.isAssignableFrom(Vector.class) || !type.isAssignableFrom(ArrayList.class)) {
 				try {
 					// Test instantiation
 					type.newInstance();

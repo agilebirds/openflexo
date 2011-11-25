@@ -22,6 +22,8 @@ package org.openflexo.vpm.controller.action;
 import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
+import javax.swing.Icon;
+
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
@@ -30,6 +32,7 @@ import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.viewpoint.action.PushToPalette;
+import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
@@ -85,6 +88,11 @@ public class PushToPaletteInitializer extends ActionInitializer {
 				return true;
 			}
 		};
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
+		return VPMIconLibrary.CALC_PALETTE_ICON;
 	}
 
 }

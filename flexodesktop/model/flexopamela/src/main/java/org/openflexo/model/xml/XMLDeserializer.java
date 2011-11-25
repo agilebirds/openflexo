@@ -187,6 +187,8 @@ public class XMLDeserializer {
 							handler.invokeAdder(p, value);
 						}
 						break;
+					case MAP:
+						throw new UnsupportedOperationException("Cannot deserialize maps for now");
 					default:
 						break;
 					}

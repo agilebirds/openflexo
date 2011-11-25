@@ -19,12 +19,12 @@
  */
 package org.openflexo.foundation;
 
-import java.text.Collator;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -85,7 +85,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 
 	private boolean isRegistered = false;
 
-	private Hashtable<String, String> specificDescriptions;
+	private Map<String, String> specificDescriptions;
 
 	private Vector<FlexoProperty> customProperties;
 
@@ -107,35 +107,6 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	private String versionURI;
 
 	private String uriFromSourceObject;
-
-	public class SortedHashtable<V extends Object> extends Hashtable<String, V> {
-		public SortedHashtable() {
-			super();
-		}
-
-		public SortedHashtable(Hashtable<String, V> hashtable) {
-			super(hashtable);
-		}
-
-		@Override
-		public Enumeration<String> keys() {
-			if (isSerializing()) {
-				// Order keys in this case
-				Vector<String> orderedKeys = new Vector<String>();
-				for (Enumeration<String> en = super.keys(); en.hasMoreElements();) {
-					orderedKeys.add(en.nextElement());
-				}
-				Collections.sort(orderedKeys, new Comparator<String>() {
-					@Override
-					public int compare(String o1, String o2) {
-						return Collator.getInstance().compare(o1, o2);
-					}
-				});
-				return orderedKeys.elements();
-			}
-			return super.keys();
-		}
-	}
 
 	public static String getCurrentUserIdentifier() {
 		if (currentUserIdentifier == null) {
@@ -188,7 +159,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	public FlexoModelObject(FlexoProject project) {
 		super();
 		referencers = new Vector<FlexoModelObjectReference>();
-		specificDescriptions = new SortedHashtable<String>();
+		specificDescriptions = new TreeMap<String, String>();
 		customProperties = new Vector<FlexoProperty>();
 		_editionPatternReferences = new Vector<EditionPatternReference>();
 		if (project != null) {
@@ -783,12 +754,12 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		return sb.toString().trim();
 	}
 
-	public Hashtable<String, String> getSpecificDescriptions() {
+	public Map<String, String> getSpecificDescriptions() {
 		return specificDescriptions;
 	}
 
-	public void setSpecificDescriptions(Hashtable<String, String> specificDescriptions) {
-		this.specificDescriptions = new SortedHashtable<String>(specificDescriptions);
+	public void setSpecificDescriptions(Map<String, String> specificDescriptions) {
+		this.specificDescriptions = new TreeMap<String, String>(specificDescriptions);
 	}
 
 	public Vector<FlexoProperty> getCustomProperties() {

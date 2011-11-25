@@ -89,6 +89,8 @@ public class FileUtilTest extends TestCase {
 		FileUtils.copyContentDirToDir(tempDirectory, destTempDirectory, CopyStrategy.REPLACE_OLD_ONLY);
 		assertFalse("Last modified should have changed when replacing old files only with a newer file",
 				destFileModified.equals(FileUtils.getDiskLastModifiedDate(destFile)));
+		FileUtils.deleteDir(tempDirectory);
+		FileUtils.deleteDir(destTempDirectory);
 	}
 
 	public void testLowerCaseExtension() {

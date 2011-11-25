@@ -19,7 +19,7 @@
  */
 package org.openflexo.foundation.dm;
 
-import java.util.Hashtable;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -112,7 +112,7 @@ public class DMTranstyper extends DMObject implements Typed, Bindable, SourceCod
 
 	@Override
 	public void setName(String aName) {
-		if ((name == null) || !name.equals(aName)) {
+		if (name == null || !name.equals(aName)) {
 			String oldName = name;
 			name = aName;
 			updateCode();
@@ -151,7 +151,7 @@ public class DMTranstyper extends DMObject implements Typed, Bindable, SourceCod
 	}
 
 	public static boolean allowsMappingDefinitionForType(DMType type) {
-		return ((type != null) && (type.getKindOfType() == KindOfType.RESOLVED));
+		return type != null && type.getKindOfType() == KindOfType.RESOLVED;
 	}
 
 	@Override
@@ -210,7 +210,7 @@ public class DMTranstyper extends DMObject implements Typed, Bindable, SourceCod
 
 	public void setReturnedType(DMType aType) {
 		// logger.info("setReturnedType with "+aType+" was "+returnedType);
-		if (((aType == null) && (returnedType != null)) || ((aType != null) && !aType.equals(returnedType))) {
+		if (aType == null && returnedType != null || aType != null && !aType.equals(returnedType)) {
 			DMType oldType = returnedType;
 			returnedType = aType;
 			if (returnedType != null) {
@@ -366,7 +366,7 @@ public class DMTranstyper extends DMObject implements Typed, Bindable, SourceCod
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if ((dataModification instanceof PropertyRegistered) || (dataModification instanceof PropertyUnregistered)) {
+		if (dataModification instanceof PropertyRegistered || dataModification instanceof PropertyUnregistered) {
 			updateValues();
 		}
 		super.update(observable, dataModification);
@@ -462,7 +462,7 @@ public class DMTranstyper extends DMObject implements Typed, Bindable, SourceCod
 
 		@Override
 		public void setName(String name) {
-			if (((name == null) && (_name != null)) || ((name != null) && !name.equals(_name))) {
+			if (name == null && _name != null || name != null && !name.equals(_name)) {
 				String oldName = _name;
 				_name = name;
 				if (_transtyper != null) {
@@ -493,7 +493,7 @@ public class DMTranstyper extends DMObject implements Typed, Bindable, SourceCod
 
 		@Override
 		public void setType(DMType type) {
-			if (((type == null) && (_type != null)) || ((type != null) && !type.equals(_type))) {
+			if (type == null && _type != null || type != null && !type.equals(_type)) {
 				DMType oldType = _type;
 				_type = type;
 				if (_type != null) {
@@ -773,7 +773,7 @@ public class DMTranstyper extends DMObject implements Typed, Bindable, SourceCod
 		@Override
 		public void finalizeDeserialization(Object builder) {
 			super.finalizeDeserialization(builder);
-			if ((_deserializedPropertyName != null) && (_transtyper != null) && (_transtyper.getBaseEntity() != null)) {
+			if (_deserializedPropertyName != null && _transtyper != null && _transtyper.getBaseEntity() != null) {
 				_property = _transtyper.getBaseEntity().getProperty(_deserializedPropertyName);
 				updateBindingDefinition();
 			}
@@ -915,16 +915,16 @@ public class DMTranstyper extends DMObject implements Typed, Bindable, SourceCod
 	String getJavadoc() {
 		StringBuffer javadoc = new StringBuffer();
 		javadoc.append("/**" + StringUtils.LINE_SEPARATOR);
-		if ((getDescription() != null) && (getDescription().trim().length() > 0)) {
+		if (getDescription() != null && getDescription().trim().length() > 0) {
 			javadoc.append("  * " + ToolBox.getJavaDocString(getDescription(), "  "));
 		}
 		javadoc.append("  *" + StringUtils.LINE_SEPARATOR);
 
-		Hashtable<String, String> specificDescriptions = getSpecificDescriptions();
-		if ((specificDescriptions != null) && (specificDescriptions.size() > 0)) {
+		Map<String, String> specificDescriptions = getSpecificDescriptions();
+		if (specificDescriptions != null && specificDescriptions.size() > 0) {
 			for (String key : specificDescriptions.keySet()) {
 				String specificDescription = ToolBox.getJavaDocString(specificDescriptions.get(key));
-				if ((specificDescription == null) || specificDescription.trim().equals("")) {
+				if (specificDescription == null || specificDescription.trim().equals("")) {
 					specificDescription = FlexoLocalization.localizedForKey("no_description");
 				}
 				javadoc.append(getTagAndParamRepresentation("doc", key, specificDescription));
@@ -935,7 +935,7 @@ public class DMTranstyper extends DMObject implements Typed, Bindable, SourceCod
 		if (getEntries().size() > 0) {
 			for (DMTranstyperEntry entry : getEntries()) {
 				String entryDescription = entry.getDescription();
-				if ((entryDescription == null) || entryDescription.trim().equals("")) {
+				if (entryDescription == null || entryDescription.trim().equals("")) {
 					entryDescription = FlexoLocalization.localizedForKey("no_description");
 				}
 				javadoc.append(getTagAndParamRepresentation("param", entry.getName(), ToolBox.getJavaDocString(entryDescription)));
@@ -991,7 +991,7 @@ public class DMTranstyper extends DMObject implements Typed, Bindable, SourceCod
 			sb.append("    " + StringUtils.LINE_SEPARATOR);
 			sb.append("    // " + FlexoLocalization.localizedForKey("perform_data_mapping") + StringUtils.LINE_SEPARATOR);
 			for (DMTranstyperValue value : getValues()) {
-				if ((value.getProperty() != null) && (value.getPropertyValue() != null)) {
+				if (value.getProperty() != null && value.getPropertyValue() != null) {
 					sb.append("    " + value.buildAssignment("returned").getJavaStringRepresentation() + StringUtils.LINE_SEPARATOR);
 				}
 			}
@@ -1022,11 +1022,11 @@ public class DMTranstyper extends DMObject implements Typed, Bindable, SourceCod
 
 					jd.setComment(getDescription());
 
-					Hashtable<String, String> specificDescriptions = getSpecificDescriptions();
-					if ((specificDescriptions != null) && (specificDescriptions.size() > 0)) {
+					Map<String, String> specificDescriptions = getSpecificDescriptions();
+					if (specificDescriptions != null && specificDescriptions.size() > 0) {
 						for (String key : specificDescriptions.keySet()) {
 							String specificDescription = ToolBox.getJavaDocString(specificDescriptions.get(key));
-							if ((specificDescription == null) || specificDescription.trim().equals("")) {
+							if (specificDescription == null || specificDescription.trim().equals("")) {
 								specificDescription = FlexoLocalization.localizedForKey("no_description");
 							}
 							ParsedJavadocItem jdi = jd.getTagByName("doc", key);
@@ -1043,7 +1043,7 @@ public class DMTranstyper extends DMObject implements Typed, Bindable, SourceCod
 							ParsedJavadocItem jdi = jd.getTagByName("param", entry.getName());
 							if (jdi != null) {
 								String entryDescription = entry.getDescription();
-								if ((entryDescription == null) || entryDescription.trim().equals("")) {
+								if (entryDescription == null || entryDescription.trim().equals("")) {
 									entryDescription = FlexoLocalization.localizedForKey("no_description");
 								}
 								jdi.setParameterValue(ToolBox.getJavaDocString(entryDescription));

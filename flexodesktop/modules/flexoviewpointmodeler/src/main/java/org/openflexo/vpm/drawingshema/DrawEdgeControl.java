@@ -139,8 +139,8 @@ public class DrawEdgeControl extends MouseDragControl {
 			connectorGR.setIsSelectable(true);
 			connectorGR.setIsFocusable(true);
 			connectorGR.setIsReadOnly(false);
-			connectorGR.setForeground(((CalcDrawingShemaController) controller).getToolbox().currentForegroundStyle);
-			connectorGR.setTextStyle(((CalcDrawingShemaController) controller).getToolbox().currentTextStyle);
+			connectorGR.setForeground(((CalcDrawingShemaController) controller).getCurrentForegroundStyle());
+			connectorGR.setTextStyle(((CalcDrawingShemaController) controller).getCurrentTextStyle());
 
 			action.graphicalRepresentation = connectorGR;
 

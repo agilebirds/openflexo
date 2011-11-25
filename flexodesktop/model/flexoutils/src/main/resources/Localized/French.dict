@@ -1,5 +1,5 @@
 #French
-#Sun Nov 13 16:33:48 CET 2011
+#Tue Nov 15 22:28:33 CET 2011
 =
 \ =\ 
 \ into\ =\ dans 
@@ -2525,6 +2525,7 @@ generate_code_only_does_not_create_files=G\u00E9n\u00E9ration de code sans cr\u0
 generate_core=G\u00E9n\u00E9ration des classes core
 generate_core_only=G\u00E9n\u00E9rer uniquement les classes core
 generate_datamodel=G\u00E9n\u00E9rererer la doc du mod\u00E8le de donn\u00E9es
+generate_default_name=generate_default_name
 generate_doc_if_required=G\u00E9n\u00E9rer la doc si n\u00E9cessaire
 generate_docx=G\u00E9n\u00E9rer le Docx
 generate_entity_class=G\u00E9n\u00E9rer la classed d'entit\u00E9
@@ -3512,6 +3513,7 @@ number_of_updated_tocentry_content=Nombre de titre de la table des mati\u00E8res
 number_of_updated_tocentry_title=Nombre de contenu de la table des mati\u00E8res mis \u00E0 jours
 o=o
 object=Objet
+object_($object.name)_has_no_name=object_($object.name)_has_no_name
 object_id=Id de l'objet
 object_id_attribute_name=Attribut identifiant de l'objet
 object_is_no_more_available_in_portfolio=L'objet n'est plus disponible dans le portfolio
@@ -3519,6 +3521,8 @@ object_must_refer_to_a_process=L'objet doit \u00EAtre attach\u00E9 \u00E0 un pro
 object_must_refer_to_a_process_description=Tout objet du mod\u00E8le WKF doit \u00EAtre attache \u00E0 un processus. Un object pointant vers une valeur null est generalement lie a un probleme de consistance interne de l'application OpenFlexo, et est invalide. En tant que tel, il doit etre supprime.  
 object_property=object_property
 object_property_statement=object_property_statement
+object_should_have_a_name=object_should_have_a_name
+object_should_have_a_name_description=object_should_have_a_name_description
 objectives=Objectifs
 objectproperty=objectproperty
 objects=objets

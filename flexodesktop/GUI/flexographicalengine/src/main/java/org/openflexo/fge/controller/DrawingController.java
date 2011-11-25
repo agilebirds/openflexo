@@ -19,7 +19,6 @@
  */
 package org.openflexo.fge.controller;
 
-import java.awt.FlowLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,9 +30,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
-import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
@@ -43,12 +42,17 @@ import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.cp.ConnectorAdjustingControlPoint;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.graphics.BackgroundStyle;
+import org.openflexo.fge.graphics.ForegroundStyle;
+import org.openflexo.fge.graphics.ShadowStyle;
+import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.notifications.GraphicalObjectsHierarchyRebuildEnded;
 import org.openflexo.fge.notifications.GraphicalObjectsHierarchyRebuildStarted;
 import org.openflexo.fge.view.ConnectorView;
@@ -64,7 +68,19 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 	private D drawing;
 	private DrawingView<D> drawingView;
 
+	public enum EditorTool {
+		SelectionTool, DrawShapeTool, DrawConnectorTool, DrawTextTool
+	}
+
+	private EditorTool currentTool;
+
+	private ForegroundStyle currentForegroundStyle;
+	private BackgroundStyle currentBackgroundStyle;
+	private TextStyle currentTextStyle;
+	private ShadowStyle currentShadowStyle;
+
 	private ScalePanel _scalePanel;
+	private EditorToolbox toolbox;
 
 	private GraphicalRepresentation focusedFloatingLabel;
 	// private GraphicalRepresentation focusedObject;
@@ -85,10 +101,20 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 
 	public DrawingController(D aDrawing) {
 		super();
+
+		setCurrentTool(EditorTool.SelectionTool);
+		currentForegroundStyle = ForegroundStyle.makeDefault();
+		currentBackgroundStyle = BackgroundStyle.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR);
+		currentTextStyle = TextStyle.makeDefault();
+		currentShadowStyle = ShadowStyle.makeDefault();
+
+		toolbox = new EditorToolbox(this);
+
 		drawing = aDrawing;
 		if (drawing instanceof DefaultDrawing<?>) {
 			((DefaultDrawing<?>) drawing).addObserver(this);
 		}
+
 		focusedObjects = new Vector<GraphicalRepresentation>();
 		selectedObjects = new Vector<GraphicalRepresentation>();
 		palettes = new Vector<DrawingPalette>();
@@ -147,6 +173,46 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		return new DrawingView<D>(drawing, this);
 	}
 
+	public EditorTool getCurrentTool() {
+		return currentTool;
+	}
+
+	public void setCurrentTool(EditorTool currentTool) {
+		this.currentTool = currentTool;
+	}
+
+	public ForegroundStyle getCurrentForegroundStyle() {
+		return currentForegroundStyle;
+	}
+
+	public void setCurrentForegroundStyle(ForegroundStyle currentForegroundStyle) {
+		this.currentForegroundStyle = currentForegroundStyle;
+	}
+
+	public BackgroundStyle getCurrentBackgroundStyle() {
+		return currentBackgroundStyle;
+	}
+
+	public void setCurrentBackgroundStyle(BackgroundStyle currentBackgroundStyle) {
+		this.currentBackgroundStyle = currentBackgroundStyle;
+	}
+
+	public TextStyle getCurrentTextStyle() {
+		return currentTextStyle;
+	}
+
+	public void setCurrentTextStyle(TextStyle currentTextStyle) {
+		this.currentTextStyle = currentTextStyle;
+	}
+
+	public ShadowStyle getCurrentShadowStyle() {
+		return currentShadowStyle;
+	}
+
+	public void setCurrentShadowStyle(ShadowStyle currentShadowStyle) {
+		this.currentShadowStyle = currentShadowStyle;
+	}
+
 	public double getScale() {
 		return scale;
 	}
@@ -162,6 +228,10 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		drawingView.rescale();
 	}
 
+	public EditorToolbox getToolbox() {
+		return toolbox;
+	}
+
 	public ScalePanel getScalePanel() {
 		if (_scalePanel == null) {
 			_scalePanel = new ScalePanel();
@@ -169,7 +239,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		return _scalePanel;
 	}
 
-	public class ScalePanel extends JPanel {
+	public class ScalePanel extends JToolBar {
 
 		private static final int MAX_ZOOM_VALUE = 300;
 		protected JTextField scaleTF;
@@ -179,14 +249,14 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		protected ActionListener actionListener;
 
 		protected ScalePanel() {
-			super(new FlowLayout(FlowLayout.LEFT, 10, 0));
+			super(/*new FlowLayout(FlowLayout.LEFT, 10, 0)*/);
 			scaleTF = new JTextField(5);
 			int currentScale = (int) (getScale() * 100);
 			scaleTF.setText("" + currentScale + "%");
 			slider = new JSlider(SwingConstants.HORIZONTAL, 0, MAX_ZOOM_VALUE, currentScale);
 			slider.setMajorTickSpacing(100);
 			slider.setMinorTickSpacing(20);
-			slider.setPaintTicks(true);
+			slider.setPaintTicks(false/*true*/);
 			slider.setPaintLabels(false);
 			slider.setBorder(BorderFactory.createEmptyBorder());
 			sliderChangeListener = new ChangeListener() {
@@ -236,7 +306,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 			slider.addChangeListener(sliderChangeListener);
 			add(slider);
 			add(scaleTF);
-			setBorder(BorderFactory.createEmptyBorder());
+			// setBorder(BorderFactory.createEmptyBorder());
 		}
 	}
 
@@ -338,6 +408,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		Vector<GraphicalRepresentation> singleton = new Vector<GraphicalRepresentation>();
 		singleton.add(aGraphicalRepresentation);
 		setSelectedObjects(singleton);
+		getToolbox().update();
 	}
 
 	public void addToSelectedObjects(GraphicalRepresentation aGraphicalRepresentation) {
@@ -350,6 +421,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 			selectedObjects.add(aGraphicalRepresentation);
 			aGraphicalRepresentation.setIsSelected(true);
 		}
+		getToolbox().update();
 	}
 
 	public void removeFromSelectedObjects(GraphicalRepresentation aGraphicalRepresentation) {
@@ -362,6 +434,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 			selectedObjects.remove(aGraphicalRepresentation);
 		}
 		aGraphicalRepresentation.setIsSelected(false);
+		getToolbox().update();
 	}
 
 	public void toogleSelection(GraphicalRepresentation aGraphicalRepresentation) {

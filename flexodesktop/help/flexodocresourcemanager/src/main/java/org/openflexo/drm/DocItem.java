@@ -22,7 +22,8 @@ package org.openflexo.drm;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -45,7 +46,6 @@ import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationWarning;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.HashtableStringSorted;
 
 public class DocItem extends DRMObject implements InspectableObject {
 
@@ -85,7 +85,7 @@ public class DocItem extends DRMObject implements InspectableObject {
 
 	// Localized titles for those items, where key is the identifier of the
 	// language, as String
-	private Hashtable<String, String> titles;
+	private Map<String, String> titles;
 
 	// Versions registered for this item, as a Vector of DocItemVersion
 	private Vector<DocItemVersion> versions;
@@ -128,7 +128,7 @@ public class DocItem extends DRMObject implements InspectableObject {
 		embeddingParentItem = null;
 		embeddingChildItems = new Vector<DocItem>();
 		relatedToItems = new Vector<DocItem>();
-		titles = new HashtableStringSorted<String>();
+		titles = new TreeMap<String, String>();
 		versions = new Vector<DocItemVersion>();
 		actions = new Vector<DocItemAction>();
 	}
@@ -393,12 +393,12 @@ public class DocItem extends DRMObject implements InspectableObject {
 		setChanged();
 	}
 
-	public Hashtable _getTitles() {
+	public Map<String, String> _getTitles() {
 		return titles;
 	}
 
-	public void _setTitles(Hashtable<String, String> titles) {
-		this.titles = new HashtableStringSorted<String>(titles);
+	public void _setTitles(Map<String, String> titles) {
+		this.titles = new TreeMap<String, String>(titles);
 	}
 
 	public void _setTitleForKey(String title, String languageId) {
@@ -561,8 +561,8 @@ public class DocItem extends DRMObject implements InspectableObject {
 		if (lastApprovedAction == null) {
 			return APPROVING_PENDING;
 		}
-		if ((lastPendingAction != null)
-				&& (lastPendingAction.getVersion().getVersion().isGreaterThan(lastApprovedAction.getVersion().getVersion()))) {
+		if (lastPendingAction != null
+				&& lastPendingAction.getVersion().getVersion().isGreaterThan(lastApprovedAction.getVersion().getVersion())) {
 			return AVAILABLE_NEWER_VERSION_PENDING;
 		} else {
 			return AVAILABLE_UP_TO_DATE;
@@ -598,7 +598,7 @@ public class DocItem extends DRMObject implements InspectableObject {
 		DocItemAction returned = null;
 		for (Enumeration en = getActions().elements(); en.hasMoreElements();) {
 			DocItemAction next = (DocItemAction) en.nextElement();
-			if ((next.getVersion().getLanguage() == language) && (next.isApproved())) {
+			if (next.getVersion().getLanguage() == language && next.isApproved()) {
 				returned = next;
 			}
 		}
@@ -609,7 +609,7 @@ public class DocItem extends DRMObject implements InspectableObject {
 		DocItemAction returned = null;
 		for (Enumeration en = getActions().elements(); en.hasMoreElements();) {
 			DocItemAction next = (DocItemAction) en.nextElement();
-			if ((next.getVersion().getLanguage() == language) && (next.isPending())) {
+			if (next.getVersion().getLanguage() == language && next.isPending()) {
 				returned = next;
 			}
 		}
@@ -656,9 +656,9 @@ public class DocItem extends DRMObject implements InspectableObject {
 				if (string2 == null) {
 					string2 = docItem2.getIdentifier();
 				}
-				return (string1.compareTo(string2));
+				return string1.compareTo(string2);
 			} else {
-				return (docItem1.getIdentifier().compareTo(docItem2.getIdentifier()));
+				return docItem1.getIdentifier().compareTo(docItem2.getIdentifier());
 			}
 		}
 

@@ -19,9 +19,9 @@
  */
 package org.openflexo.foundation.help;
 
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.jdom.CDATA;
 import org.jdom.Element;
@@ -118,15 +118,14 @@ public class HelpElementBuilder {
 	}
 
 	private static Element buildSpecificDescriptionElement(FlexoModelObject o) {
-		if (o.getSpecificDescriptions().keySet().size() > 0) {
+		if (o.getSpecificDescriptions().size() > 0) {
 			Element specificDescriptions = new Element("specificDescriptions");
-			Enumeration<String> en = o.getSpecificDescriptions().keys();
-			while (en.hasMoreElements()) {
-				String k = en.nextElement();
-				String help = o.getSpecificDescriptions().get(k);
-				Element e = new Element(k);
-				e.addContent(new CDATA(help));
-				specificDescriptions.addContent(e);
+			for (Entry<String, String> e : o.getSpecificDescriptions().entrySet()) {
+				String k = e.getKey();
+				String help = e.getValue();
+				Element element = new Element(k);
+				element.addContent(new CDATA(help));
+				specificDescriptions.addContent(element);
 			}
 			return specificDescriptions;
 		}

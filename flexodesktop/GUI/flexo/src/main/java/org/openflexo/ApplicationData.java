@@ -79,10 +79,16 @@ public class ApplicationData {
 	}
 
 	public Module getFavoriteModule() {
-		return Module.getModule(GeneralPreferences.getFavoriteModuleName());
+		Module returned = Module.getModule(GeneralPreferences.getFavoriteModuleName());
+		if (returned == null) {
+			returned = Module.WKF_MODULE;
+		}
+		return returned;
 	}
 
 	public void setFavoriteModule(Module aModule) {
-		GeneralPreferences.setFavoriteModuleName(aModule.getName());
+		if (aModule != null) {
+			GeneralPreferences.setFavoriteModuleName(aModule.getName());
+		}
 	}
 }
