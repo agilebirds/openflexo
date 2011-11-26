@@ -47,18 +47,6 @@ public class FPSModule extends FlexoModule implements ExternalFPSModule {
 	private static final Logger logger = Logger.getLogger(CVSRepository.class.getPackage().getName());
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.FPS };
 
-	/**
-	 * The 'main' method of module allow to launch this module as a single-module application
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) throws Exception {
-		ToolBox.setPlatform();
-		FlexoLoggingManager.initialize();
-		FlexoApplication.initialize();
-		ModuleLoader.initializeSingleModule(Module.FPS_MODULE);
-	}
-
 	public FPSModule() throws Exception {
 		super(InteractiveFlexoEditor.makeInteractiveEditorWithoutProject());
 		setFlexoController(new FPSController(this));

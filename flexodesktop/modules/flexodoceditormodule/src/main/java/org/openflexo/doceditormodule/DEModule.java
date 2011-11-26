@@ -43,17 +43,6 @@ public class DEModule extends FlexoModule {
 	private static final Logger logger = Logger.getLogger(DEModule.class.getPackage().getName());
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.DE };
 
-	/**
-	 * The 'main' method of module allow to launch this module as a single-module application
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) throws Exception {
-		FlexoLoggingManager.initialize();
-		FlexoApplication.initialize();
-		ModuleLoader.initializeSingleModule(Module.DE_MODULE);
-	}
-
 	public DEModule(InteractiveFlexoEditor projectEditor) throws Exception {
 		super(projectEditor);
 		setFlexoController(new DEController(projectEditor, this));

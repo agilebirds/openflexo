@@ -79,7 +79,6 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
 import org.openflexo.module.external.ExternalCEDModule;
 import org.openflexo.module.external.ExternalDMModule;
-import org.openflexo.module.external.ExternalGeneratorModule;
 import org.openflexo.module.external.ExternalIEModule;
 import org.openflexo.module.external.ExternalModuleDelegater;
 import org.openflexo.module.external.ExternalOEModule;
@@ -110,10 +109,6 @@ public final class ModuleLoader implements IModuleLoader {
 	private static boolean allowsDocSubmission;
 
 	private static UserType _userType = null;
-
-	private static boolean multiModuleMode = false;
-
-	private static Module singleModuleModeModule = null;
 
 	private static File _workspaceDirectory;
 
@@ -184,10 +179,6 @@ public final class ModuleLoader implements IModuleLoader {
 		}
 	}
 
-	public static FlexoModule getFlexoModule(Module m) {
-		return _modules.get(m);
-	}
-
 	public static ModuleLoader instance() {
 		return _instance;
 	}
@@ -201,41 +192,11 @@ public final class ModuleLoader implements IModuleLoader {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Initializing ModuleLoader...");
 		}
-		multiModuleMode = true;
-		initialize(Module.allKnownModules(), userType/*, selectAndOpenProject*/);
+		initialize(Module.allKnownModules(), userType);
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Initializing ModuleLoader DONE.");
 		}
 
-	}
-
-	/**
-	 * Called for a 'Single-module' initialization
-	 * 
-	 * @param module
-	 */
-	public static void initializeSingleModule(Module module, UserType userType) {
-		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Initializing ModuleLoader...");
-		}
-		multiModuleMode = false;
-		singleModuleModeModule = module;
-		Vector<Module> modules = new Vector<Module>();
-		modules.add(module);
-		initialize(modules, userType/*, true*/);
-		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Initializing ModuleLoader DONE.");
-		}
-		switchToModule(module);
-	}
-
-	/**
-	 * Called for a 'Single-module' initialization
-	 * 
-	 * @param module
-	 */
-	public static void initializeSingleModule(Module module) {
-		initializeSingleModule(module, UserType.ANALYST);
 	}
 
 	/**
@@ -243,7 +204,6 @@ public final class ModuleLoader implements IModuleLoader {
 	 * 
 	 * @param someModules
 	 * @param userType
-	 * @param selectAndOpenProject
 	 */
 	private static void initialize(Vector<Module> someModules, UserType userType/*, boolean selectAndOpenProject*/) {
 		_instance = new ModuleLoader();
@@ -274,28 +234,6 @@ public final class ModuleLoader implements IModuleLoader {
 		}
 		FlexoHelp.configure(GeneralPreferences.getLanguage() != null ? GeneralPreferences.getLanguage().getIdentifier() : "ENGLISH",
 				userType.getIdentifier());
-		/*if (selectAndOpenProject) {
-			Module firstLaunchedModule = null;
-			while (firstLaunchedModule == null || firstLaunchedModule.requireProject() && currentProject == null) {
-				firstLaunchedModule = chooseProjectAndStartingModule();
-				if (!isLoaded(firstLaunchedModule)) {// It basically means that a module could not be loaded.
-					if (currentProject != null) {
-						currentProject.close();
-					}
-					currentProject = null;
-					continue;
-				}
-				if (currentProject == null && firstLaunchedModule.requireProject()) {
-					continue;
-				}
-				if (firstLaunchedModule == null) {
-					firstLaunchedModule = getPreferredModule();
-				}
-				if (multiModuleMode) {
-					switchToModule(firstLaunchedModule);
-				}
-			}
-		}*/
 	}
 
 	private static Module getPreferredModule() {
@@ -334,138 +272,6 @@ public final class ModuleLoader implements IModuleLoader {
 		return _workspaceDirectory;
 	}
 
-	/*private static Module chooseProjectAndStartingModule() {
-		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Initializing ModuleLoader... DONE.");
-		}
-		File projectDirectory = fileNameToOpen == null ? null : new File(fileNameToOpen);
-		fileNameToOpen = null;
-		Module firstLaunchedModule = projectDirectory != null && GeneralPreferences.getFavoriteModuleName() != null ? Module
-				.getModule(GeneralPreferences.getFavoriteModuleName()) : null;
-				boolean newProject = false;
-
-				while (firstLaunchedModule == null || firstLaunchedModule.requireProject() && projectDirectory == null) {
-					// logger.info("firstLaunchedModule="+firstLaunchedModule);
-					// logger.info("projectDirectory="+projectDirectory);
-					WelcomeDialog welcomeDialog = new WelcomeDialog();
-					int result = welcomeDialog.getProjectSelectionChoice();
-					firstLaunchedModule = welcomeDialog.getFirstlaunchedModule();
-					if (firstLaunchedModule != null) {
-						GeneralPreferences.setFavoriteModuleName(firstLaunchedModule.getName());
-					}
-					FlexoPreferences.savePreferences(true);
-					switch (result) {
-					case WelcomeDialog.OPEN_LAST_PROJECT:
-						projectDirectory = new File(GeneralPreferences.getLastOpenedProject1());
-						newProject = false;
-						break;
-					case WelcomeDialog.OPEN_PROJECT:
-						try {
-							projectDirectory = OpenProjectComponent.getProjectDirectory();
-							if (projectDirectory != null && !projectDirectory.exists()) {
-								if (!projectDirectory.getName().toLowerCase().endsWith(".prj")) {
-									String newAttempt = projectDirectory.getAbsolutePath() + ".prj";
-									File f = new File(newAttempt);
-									if (f.exists()) {
-										projectDirectory = f;
-									}
-								}
-							}
-							if (projectDirectory != null && !projectDirectory.exists()) {
-								if (NewProjectComponent.isValidProjectName(projectDirectory.getName())) {
-									if (FlexoController.confirm(FlexoLocalization
-											.localizedForKey("project_does_not_exist_would_you_like_to_create_it?"))) {
-										File newFileDir = projectDirectory.getParentFile();
-										AdvancedPrefs.setLastVisitedDirectory(newFileDir);
-										if (!projectDirectory.getName().toLowerCase().endsWith(".prj")) {
-											projectDirectory = new File(projectDirectory.getAbsolutePath() + ".prj");
-										}
-										projectDirectory.mkdirs();
-										newProject = true;
-										break;
-									} else {
-										projectDirectory = null;
-									}
-								} else {
-									FlexoController.notify(FlexoLocalization.localizedForKey("project_name_cannot_contain_\\___&_#_{_}_[_]_%_~"));
-								}
-							}
-
-							else if (projectDirectory == null) {
-								;// Avoids an NPE
-							} else {
-								if (!projectDirectory.isDirectory()) {
-									projectDirectory = null;
-								} else {
-									if (!projectDirectory.canWrite()) {
-										if (logger.isLoggable(Level.INFO)) {
-											logger.info("Write permission denied for " + projectDirectory.getAbsolutePath());
-										}
-										FlexoController.notify(FlexoLocalization
-												.localizedForKey("you_dont_have_writing_permissions_on_this_folder_save_will_not_work"));
-									}
-								}
-							}
-							newProject = false;
-						} catch (ProjectLoadingCancelledException e1) {
-							logger.info("Cancelled");
-						}
-
-						break;
-					case WelcomeDialog.NEW_PROJECT:
-						projectDirectory = NewProjectComponent.getProjectDirectory();
-						newProject = true;
-						break;
-					case WelcomeDialog.OPEN_MODULE:
-						break;
-					case WelcomeDialog.QUIT:
-						ModuleLoader.quit(false);
-						break;
-					default:
-						ModuleLoader.quit();
-					}
-					if (projectDirectory != null) {
-						if (!FlexoFileChooserUtils.PROJECT_FILE_NAME_FILTER.accept(projectDirectory.getParentFile(), projectDirectory.getName())) {
-							FlexoController.notify(FlexoLocalization.localizedForKey("chosen_file_is_not_a_flexo_project"));
-							projectDirectory = null;
-						}
-					}
-				}
-				if (!ProgressWindow.hasInstance()) {
-					ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("loading_flexo_application_suite"),
-							FlexoCst.LOADING_PROGRESS_STEPS);
-				}
-				if (firstLaunchedModule.requireProject()) {
-					if (newProject) {
-						newProject(projectDirectory, firstLaunchedModule);
-					} else {
-						openProjectWithModule(projectDirectory, firstLaunchedModule);
-					}
-				} else {
-					if (multiModuleMode) {
-						activeModule = null;
-						switchToModule(firstLaunchedModule);
-					}
-				}
-				return firstLaunchedModule;
-	}*/
-
-	public static boolean isMultiModuleMode() {
-		return multiModuleMode;
-	}
-
-	public static Module getSingleModuleModeModule() {
-		return singleModuleModeModule;
-	}
-
-	public static String getReleaseName() {
-		if (multiModuleMode) {
-			return _userType.getLocalizedName();
-		} else {
-			return FlexoLocalization.localizedForKey("single_module_release");
-		}
-	}
-
 	public static UserType getUserType() {
 		return _userType;
 	}
@@ -497,7 +303,7 @@ public final class ModuleLoader implements IModuleLoader {
 	 * moduleClass
 	 * </pre>
 	 * 
-	 * @param moduleClass
+	 * @param module
 	 */
 	private static void registerModule(Module module) {
 		if (module.register()) {
@@ -682,10 +488,6 @@ public final class ModuleLoader implements IModuleLoader {
 
 	public static ExternalDMModule getDMModule() {
 		return (ExternalDMModule) getModuleInstance(Module.DM_MODULE);
-	}
-
-	public static ExternalGeneratorModule getGeneratorModule() {
-		return (ExternalGeneratorModule) getModuleInstance(Module.CG_MODULE);
 	}
 
 	public static ExternalCEDModule getCEDModule() {
@@ -878,7 +680,7 @@ public final class ModuleLoader implements IModuleLoader {
 	 * Check if there is an external repository with some active resources connected In this case, explicitely ask what to do, connect or
 	 * let disconnected
 	 * 
-	 * @param project
+	 * @param project  the project
 	 */
 	private static void checkExternalRepositories(FlexoProject project) {
 		if (getUserType() != UserType.MAINTAINER && getUserType() != UserType.DEVELOPER) {
@@ -950,10 +752,8 @@ public final class ModuleLoader implements IModuleLoader {
 		if (moduleToReload == null) {
 			moduleToReload = Module.allKnownModules().firstElement();
 		}
-		if (multiModuleMode) {
-			activeModule = null;
-			switchToModule(moduleToReload);
-		}
+		activeModule = null;
+		switchToModule(moduleToReload);
 		return editor;
 	}
 
@@ -962,7 +762,7 @@ public final class ModuleLoader implements IModuleLoader {
 	 * project from a GUI (Interactive mode) so that resource update handling is properly initialized. Additional small stuffs can be
 	 * performed in that call so that projects are always opened the same way.
 	 * 
-	 * @param projectDirectory
+	 * @param projectDirectory  the project directory
 	 * @return the {@link InteractiveFlexoEditor} editor if the opening succeeded else <code>null</code>
 	 */
 	public static InteractiveFlexoEditor loadProject(File projectDirectory) {
@@ -1040,7 +840,7 @@ public final class ModuleLoader implements IModuleLoader {
 	}
 
 	/**
-	 * @param projectDirectory
+	 * @param projectDirectory  the project directory
 	 * @return
 	 */
 	private static boolean currentFlexoVersionIsSmallerThanLastVersion(File projectDirectory) {
@@ -1064,7 +864,7 @@ public final class ModuleLoader implements IModuleLoader {
 	}
 
 	/**
-	 * @param f
+	 * @param projectDirectory
 	 * @return
 	 */
 	private static FlexoVersion getVersion(File projectDirectory) {
@@ -1104,7 +904,7 @@ public final class ModuleLoader implements IModuleLoader {
 	}
 
 	/**
-	 * @param f
+	 * @param projectDirectory
 	 * @return
 	 */
 	private static void createVersionFile(File projectDirectory) {
@@ -1299,12 +1099,11 @@ public final class ModuleLoader implements IModuleLoader {
 		});
 		File previousVersion = null;
 		if (zips != null) {
-			for (int i = 0; i < zips.length; i++) {
-				File file = zips[i];
-				if (previousVersion == null || previousVersion.lastModified() < file.lastModified()) {
-					previousVersion = file;
-				}
-			}
+            for (File file : zips) {
+                if (previousVersion == null || previousVersion.lastModified() < file.lastModified()) {
+                    previousVersion = file;
+                }
+            }
 		}
 		if (previousVersion != null && previousVersion.getName().indexOf(FOR_FLEXO_SERVER) > -1) {
 			String version = previousVersion.getName()
@@ -1452,9 +1251,6 @@ public final class ModuleLoader implements IModuleLoader {
 				ProgressWindow.hideProgressWindow();
 				FlexoController.notify(FlexoLocalization.localizedForKey("save_as_operation_failed"));
 			}
-		} else {
-			// Cancelled;
-			return;
 		}
 	}
 
@@ -1689,10 +1485,6 @@ public final class ModuleLoader implements IModuleLoader {
 		return autoSaveThread != null;
 	}
 
-	public static boolean isCutAndPasteEnabled() {
-		return isDevelopperRelease() || isMaintainerRelease();
-	}
-
 	@Override
 	public boolean isWKFLoaded() {
 		return isLoaded(Module.WKF_MODULE);
@@ -1763,7 +1555,7 @@ public final class ModuleLoader implements IModuleLoader {
 	}
 
 	public static void showWelcomeDialog() {
-		WelcomeDialog dialog = new WelcomeDialog();
+		new WelcomeDialog();
 	}
 
 }
