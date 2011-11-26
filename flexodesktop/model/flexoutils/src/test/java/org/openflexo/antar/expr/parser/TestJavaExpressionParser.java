@@ -19,6 +19,10 @@
  */
 package org.openflexo.antar.expr.parser;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import junit.framework.TestCase;
 
 import org.openflexo.antar.expr.DefaultExpressionParser;
@@ -167,182 +171,32 @@ public class TestJavaExpressionParser extends TestCase {
 		tryToParse("test24 [ fdfd + 1", "", true);
 	}
 
-	public void test25() {
-		tryToParse("(([dd/MM/yy HH:mm,17/12/07 12:54] + [3h] ) + [1min])", "[dd/MM/yy HH:mm,17/12/07 15:55]", false);
-	}
+    public void test25() {
+        try {
+            Expression res = parser.parse("(([dd/MM/yy HH:mm,17/12/07 12:54] + [3h] ) + [1min])");
+            String result = prettyPrinter.getStringRepresentation(res.evaluate());
+            DateFormat formatter = new SimpleDateFormat("dd/MM/yy HH:mm");
+            Date expected = formatter.parse("17/12/07 15:55");
 
-	public void test26() {
-		tryToParse("([dd/MM/yy HH:mm,17/12/07 12:54] + ( [3h] + [1min]))", "[dd/MM/yy HH:mm,17/12/07 15:55]", false);
-	}
+            Date actual = formatter.parse(result.substring(16, result.length() - 1));
+            assertEquals(expected, actual);
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
 
-	/*public void test0()
-	{
-		try {
-			System.out.println ("START Test0");
-			String test = "machin";
-			System.out.println (test);
-			Token parsed = ExpressionParser.parse(test);
-			System.out.println ("Test0: Parsed: "+parsed.getClass().getName()+" : "+parsed);
-			System.out.println ("Normalized="+parsed.getSerializationValue());
-			test = "78";
-			System.out.println (test);
-			parsed = ExpressionParser.parse(test);
-			System.out.println ("Test0: Parsed: "+parsed.getClass().getName()+" : "+parsed);
-			System.out.println ("Normalized="+parsed.getSerializationValue());
-		} catch (ParseException e) {
-			e.printStackTrace();
-			fail();
-		}
-	}
+    public void test26() {
+        try {
+            Expression res = parser.parse("([dd/MM/yy HH:mm,17/12/07 12:54] + ( [3h] + [1min]))");
+            String result = prettyPrinter.getStringRepresentation(res.evaluate());
+            DateFormat formatter = new SimpleDateFormat("dd/MM/yy HH:mm");
+            Date expected = formatter.parse("17/12/07 15:55");
 
-	public void test1()
-	{
-		try {
-			System.out.println ("START Test1");
-			String test = "(machin = 8 &!& ((truc=bidule) || (bidule=7)))";
-			System.out.println (test);
-			Token parsed = ExpressionParser.parse(test);
-			System.out.println ("Test1: Parsed: "+parsed.getClass().getName()+" : "+parsed);
-			System.out.println ("Normalized="+parsed.getSerializationValue());
-			fail();
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void test2()
-	{
-		try {
-			System.out.println ("START Test2");
-			String test = "(machin = 8 hop && ((truc=bidule) || (bidule=7)))";
-			System.out.println (test);
-			Token parsed = ExpressionParser.parse(test);
-			System.out.println ("Test2: Parsed: "+parsed.getClass().getName()+" : "+parsed);
-			System.out.println ("Normalized="+parsed.getSerializationValue());
-			fail();
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void test3()
-	{
-		try {
-			System.out.println ("START Test3");
-			String test = "(machin_chose = 8 AND ((truc=bidule) || (bidule=7.87)))";
-			System.out.println (test);
-			Token parsed = ExpressionParser.parse(test);
-			System.out.println ("Test3: Parsed: "+parsed.getClass().getName()+" : "+parsed);
-			System.out.println ("Normalized="+parsed.getSerializationValue());
-		} catch (ParseException e) {
-			e.printStackTrace();
-			fail();
-		}
-	}
-
-	public void test4()
-	{
-		try {
-			System.out.println ("START Test4");
-			String test = "(machin = true && machin = 8 && ((truc=bidule) || (bidule=7) || (bidule=false)))";
-			System.out.println (test);
-			Token parsed = ExpressionParser.parse(test);
-			System.out.println ("Test4: Parsed: "+parsed.getClass().getName()+" : "+parsed);
-			System.out.println ("Normalized="+parsed.getSerializationValue());
-		} catch (ParseException e) {
-			e.printStackTrace();
-			fail();
-		}
-	}
-
-	public void test5()
-	{
-		try {
-			System.out.println ("START Test5");
-			String test = "truc(bordel,$3,"+'"'+"hop"+'"'+",'a',false))";
-			System.out.println (test);
-			Token parsed = ExpressionParser.parse(test);
-			System.out.println ("Test5: Parsed: "+parsed.getClass().getName()+" : "+parsed);
-			System.out.println ("Normalized="+parsed.getSerializationValue());
-		} catch (ParseException e) {
-			e.printStackTrace();
-			fail();
-		}
-	}
-
-	public void test6()
-	{
-		try {
-			System.out.println ("START Test6");
-			String test = "truc(bordel,,machin,chose)";
-			System.out.println (test);
-			Token parsed = ExpressionParser.parse(test);
-			System.out.println ("Test6: Parsed: "+parsed.getClass().getName()+" : "+parsed);
-			System.out.println ("Normalized="+parsed.getSerializationValue());
-			fail();
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void test7()
-	{
-		try {
-			System.out.println ("START Test7");
-			String test = "truc(0,chose(chose2($3,"+'"'+"hop"+'"'+",'a',false)),machin,chose,2,test(test1,test2))";
-			System.out.println (test);
-			Token parsed = ExpressionParser.parse(test);
-			System.out.println ("Test7: Parsed: "+parsed.getClass().getName()+" : "+parsed);
-			System.out.println ("Normalized="+parsed.getSerializationValue());
-		} catch (ParseException e) {
-			e.printStackTrace();
-			fail();
-		}
-	}
-
-	public void test8()
-	{
-		try {
-			System.out.println ("START Test8");
-			String test = "truc(bordel.truc.hop,chose.truc=machin.x.a)";
-			System.out.println (test);
-			Token parsed = ExpressionParser.parse(test);
-			System.out.println ("Test8: Parsed: "+parsed.getClass().getName()+" : "+parsed);
-			System.out.println ("Normalized="+parsed.getSerializationValue());
-		} catch (ParseException e) {
-			e.printStackTrace();
-			fail();
-		}
-	}
-
-	public void test9()
-	{
-		try {
-			System.out.println ("START Test9");
-			String test = "truc(bordel,$3,'a',false,(machin_chose = 8 AND ((truc=bidule) || (bidule(chose,machin)=7.87)))))";
-			System.out.println (test);
-			Token parsed = ExpressionParser.parse(test);
-			System.out.println ("Test9: Parsed: "+parsed.getClass().getName()+" : "+parsed);
-			System.out.println ("Normalized="+parsed.getSerializationValue());
-		} catch (ParseException e) {
-			e.printStackTrace();
-			fail();
-		}
-	}
-
-	public void test10()
-	{
-		try {
-			System.out.println ("START Test10");
-			String test = "(machin_chose = 8 AND ((truc=bidule(chose,truc,$3)) || (bidule=7.87)))";
-			System.out.println (test);
-			Token parsed = ExpressionParser.parse(test);
-			System.out.println ("Test10: Parsed: "+parsed.getClass().getName()+" : "+parsed);
-			System.out.println ("Normalized="+parsed.getSerializationValue());
-		} catch (ParseException e) {
-			e.printStackTrace();
-			fail();
-		}
-	}*/
+            Date actual = formatter.parse(result.substring(16, result.length() - 1));
+            assertEquals(expected, actual);
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
 
 }
