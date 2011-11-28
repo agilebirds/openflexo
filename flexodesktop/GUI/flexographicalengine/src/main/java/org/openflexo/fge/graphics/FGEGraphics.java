@@ -543,6 +543,9 @@ public abstract class FGEGraphics {
 		if (currentBackground instanceof BackgroundStyle.None) {
 			return;
 		}
+		if (points == null || points.length == 0) {
+			return;
+		}
 
 		int[] xpoints = new int[points.length];
 		int[] ypoints = new int[points.length];

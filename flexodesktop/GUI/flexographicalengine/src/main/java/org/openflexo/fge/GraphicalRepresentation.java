@@ -554,6 +554,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	public Vector<GraphicalRepresentation<?>> getContainedGraphicalRepresentations() {
+
 		if (getContainedObjects() == null) {
 			return null;
 		}

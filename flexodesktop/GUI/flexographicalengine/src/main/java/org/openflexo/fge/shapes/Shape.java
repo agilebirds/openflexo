@@ -83,8 +83,10 @@ public abstract class Shape extends KVCObject implements XMLSerializable, Clonea
 			return new Triangle(aGraphicalRepresentation);
 		} else if (type == ShapeType.LOSANGE) {
 			return new Losange(aGraphicalRepresentation);
-		} else if (type == ShapeType.POLYGON || type == ShapeType.CUSTOM_POLYGON) {
+		} else if (type == ShapeType.POLYGON) {
 			return new RegularPolygon(aGraphicalRepresentation);
+		} else if (type == ShapeType.CUSTOM_POLYGON) {
+			return new Polygon(aGraphicalRepresentation);
 		} else if (type == ShapeType.OVAL) {
 			return new Oval(aGraphicalRepresentation);
 		} else if (type == ShapeType.CIRCLE) {
