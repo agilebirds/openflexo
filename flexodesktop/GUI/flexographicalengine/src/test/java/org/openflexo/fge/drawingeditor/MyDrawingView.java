@@ -20,12 +20,15 @@
 package org.openflexo.fge.drawingeditor;
 
 import java.awt.Graphics;
+import java.util.logging.Logger;
 
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.drawingeditor.DrawEdgeControl.DrawEdgeAction;
 import org.openflexo.fge.view.DrawingView;
 
 public class MyDrawingView extends DrawingView<EditedDrawing> {
+
+	private static final Logger logger = Logger.getLogger(MyDrawingView.class.getPackage().getName());
 
 	public MyDrawingView(EditedDrawing drawing, DrawingController<EditedDrawing> controller) {
 		super(drawing, controller);
@@ -55,5 +58,17 @@ public class MyDrawingView extends DrawingView<EditedDrawing> {
 	public MyDrawingController getController() {
 		return (MyDrawingController) super.getController();
 	}
+
+	/*@Override
+	public void repaint() {
+		logger.info("Repaint called");
+		super.repaint();
+	}
+
+	@Override
+	public void repaint(int x, int y, int width, int height) {
+		logger.info("Repaint called also here");
+		super.repaint(x, y, width, height);
+	}*/
 
 }

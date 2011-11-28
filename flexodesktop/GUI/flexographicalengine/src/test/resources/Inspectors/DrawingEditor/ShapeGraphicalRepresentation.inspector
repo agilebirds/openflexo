@@ -87,7 +87,7 @@
         <Number minValue="0.0" maxValue="100.0" increment="1.0" numberType="DoubleType" data="RectanglePanel.data.arcSize" constraints="twocols(location=right;index=3;expandVertically=false;expandHorizontally=false)" name="ShapeArcSize" localize="true" />
       </Panel>
       <Panel layout="twocols" data="data.shape" dataClassName="org.openflexo.fge.shapes.Square" constraints="twocols(location=center;index=8;expandHorizontally=true;expandVertically=false)" visible="(data.shapeType = &quot;SQUARE&quot;)" name="SquarePanel" />
-      <Panel layout="twocols" data="data.shape" dataClassName="org.openflexo.fge.shapes.Polygon" constraints="twocols(location=center;index=10;expandHorizontally=true;expandVertically=false)" visible="(data.shapeType = &quot;POLYGON&quot;)" name="PolygonPanel">
+      <Panel layout="twocols" data="data.shape" dataClassName="org.openflexo.fge.shapes.RegularPolygon" constraints="twocols(location=center;index=10;expandHorizontally=true;expandVertically=false)" visible="(data.shapeType = &quot;POLYGON&quot;)" name="PolygonPanel">
         <Label label="n_points" localize="true" name="NPointsLabel" constraints="twocols(location=left;index=0;expandVertically=false;expandHorizontally=false)" />
         <Number minValue="0" maxValue="63" increment="1" numberType="IntegerType" columns="10" data="PolygonPanel.data.nPoints" constraints="twocols(location=right;index=1;expandVertically=false;expandHorizontally=false)" name="ShapenPoints" localize="true" />
         <Label label="start_angle" localize="true" name="StartAngleLabel" constraints="twocols(location=left;index=2;expandVertically=false;expandHorizontally=false)" />

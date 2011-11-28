@@ -17,36 +17,16 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.shapes;
+package org.openflexo.fge.controller;
 
+import java.util.logging.Logger;
+
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 
-public class Triangle extends RegularPolygon {
+public abstract class DrawShapeAction {
+	static final Logger logger = Logger.getLogger(DrawShapeAction.class.getPackage().getName());
 
-	// *******************************************************************************
-	// * Constructor *
-	// *******************************************************************************
-
-	public Triangle() {
-		this(null);
-	}
-
-	public Triangle(ShapeGraphicalRepresentation aGraphicalRepresentation) {
-		super(aGraphicalRepresentation, 3);
-	}
-
-	@Override
-	public ShapeType getShapeType() {
-		return ShapeType.TRIANGLE;
-	}
-
-	@Override
-	public int getNPoints() {
-		return 3;
-	}
-
-	@Override
-	public void setNPoints(int pointsNb) {
-	}
-
+	public abstract void performedDrawNewShape(ShapeGraphicalRepresentation graphicalRepresentation,
+			GraphicalRepresentation parentGraphicalRepresentation);
 }

@@ -112,6 +112,10 @@ public class FocusRetriever {
 	private boolean focusOnFloatingLabel(GraphicalRepresentation<?> graphicalRepresentation, Component eventSource, Point eventLocation) {
 		// if (!graphicalRepresentation.hasText()) return false;
 
+		if (graphicalRepresentation instanceof GeometricGraphicalRepresentation) {
+			return false;
+		}
+
 		FGEView view = drawingView.viewForObject(graphicalRepresentation);
 		FGEView containerView = drawingView.viewForObject(graphicalRepresentation.getContainerGraphicalRepresentation());
 		Point p = SwingUtilities.convertPoint(eventSource, eventLocation, (Component) containerView);
@@ -202,11 +206,18 @@ public class FocusRetriever {
 	}
 
 	public GraphicalRepresentation getFocusedObject(MouseEvent event) {
-		GraphicalRepresentation returned = getFocusedObject(drawingView.getGraphicalRepresentation(), event);
-		/*System.out.println("getFocusedObject(), return "+returned);
-		if (getController().getDrawing() instanceof DefaultDrawing)
+		switch (getController().getCurrentTool()) {
+		case SelectionTool:
+			GraphicalRepresentation returned = getFocusedObject(drawingView.getGraphicalRepresentation(), event);
+			/*System.out.println("getFocusedObject(), return "+returned);
+			if (getController().getDrawing() instanceof DefaultDrawing)
 			((DefaultDrawing)getController().getDrawing()).printGraphicalObjectHierarchy();*/
-		return returned;
+			return returned;
+		case DrawShapeTool:
+			return getController().getDrawShapeToolController().getCurrentEditedShapeGR();
+		default:
+			return null;
+		}
 	}
 
 	public GraphicalRepresentation getFocusedObject(DropTargetDragEvent event) {

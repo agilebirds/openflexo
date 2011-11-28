@@ -37,7 +37,7 @@ import org.openflexo.fge.graphics.ForegroundStyle.CapStyle;
 import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 import org.openflexo.fge.graphics.ForegroundStyle.JoinStyle;
 import org.openflexo.fge.graphics.ShapePainter;
-import org.openflexo.fge.shapes.Polygon;
+import org.openflexo.fge.shapes.RegularPolygon;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -74,7 +74,7 @@ public class DataObjectGR extends ArtefactGR<WKFDataObject> {
 
 	public DataObjectGR(WKFDataObject dataSource, SwimmingLaneRepresentation aDrawing) {
 		super(dataSource, ShapeType.POLYGON, aDrawing);
-		((Polygon) getShape()).setPoints(fileShape.getPoints());
+		((RegularPolygon) getShape()).setPoints(fileShape.getPoints());
 		setIsFloatingLabel(true);
 		setForeground(FOREGROUND);
 		setBackground(BACKGROUND);

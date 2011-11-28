@@ -74,6 +74,9 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 
 	private EditorTool currentTool;
 
+	private DrawShapeToolController drawShapeToolController;
+	private DrawShapeAction drawShapeAction;
+
 	private ForegroundStyle currentForegroundStyle;
 	private BackgroundStyle currentBackgroundStyle;
 	private TextStyle currentTextStyle;
@@ -173,12 +176,43 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		return new DrawingView<D>(drawing, this);
 	}
 
+	public DrawShapeToolController<?> getDrawShapeToolController() {
+		return drawShapeToolController;
+	}
+
 	public EditorTool getCurrentTool() {
 		return currentTool;
 	}
 
-	public void setCurrentTool(EditorTool currentTool) {
-		this.currentTool = currentTool;
+	public void setCurrentTool(EditorTool aTool) {
+		if (aTool != currentTool) {
+			logger.info("Switch to tool " + aTool);
+			switch (aTool) {
+			case SelectionTool:
+				if (currentTool == EditorTool.DrawShapeTool && drawShapeToolController != null) {
+					drawShapeToolController.makeNewShape();
+				}
+				break;
+			case DrawShapeTool:
+				if (drawShapeAction != null) {
+					drawShapeToolController = new DrawPolygonToolController(this, drawShapeAction);
+				}
+				break;
+			case DrawConnectorTool:
+				break;
+			case DrawTextTool:
+				break;
+			default:
+				break;
+			}
+			currentTool = aTool;
+			if (getToolbox() != null) {
+				getToolbox().getToolPanel().updateButtons();
+			}
+			if (getPaintManager() != null) {
+				getPaintManager().repaint(getDrawingView());
+			}
+		}
 	}
 
 	public ForegroundStyle getCurrentForegroundStyle() {
@@ -226,6 +260,14 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 			_scalePanel.slider.setValue((int) (aScale * 100));
 		}
 		drawingView.rescale();
+	}
+
+	public DrawShapeAction getDrawShapeAction() {
+		return drawShapeAction;
+	}
+
+	public void setDrawShapeAction(DrawShapeAction drawShapeAction) {
+		this.drawShapeAction = drawShapeAction;
 	}
 
 	public EditorToolbox getToolbox() {
@@ -620,7 +662,9 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 	}
 
 	public FGEPaintManager getPaintManager() {
-		return getDrawingView().getPaintManager();
+		if (getDrawingView() != null)
+			return getDrawingView().getPaintManager();
+		return null;
 	}
 
 	public void enablePaintingCache() {

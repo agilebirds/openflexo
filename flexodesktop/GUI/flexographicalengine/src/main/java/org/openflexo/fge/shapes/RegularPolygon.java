@@ -26,10 +26,14 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
+import org.openflexo.fge.geom.FGERegularPolygon;
 
-public class Polygon extends Shape {
+public class RegularPolygon extends Polygon {
 
 	private FGEPolygon _polygon;
+
+	private int npoints = 5;
+	private int startAngle = 90;
 
 	private List<FGEPoint> points;
 
@@ -37,65 +41,71 @@ public class Polygon extends Shape {
 	// * Constructor *
 	// *******************************************************************************
 
-	public Polygon() {
+	public RegularPolygon() {
 		this(null);
 	}
 
-	public Polygon(ShapeGraphicalRepresentation aGraphicalRepresentation) {
-		super(aGraphicalRepresentation);
+	public RegularPolygon(ShapeGraphicalRepresentation aGraphicalRepresentation) {
+		this(aGraphicalRepresentation, 5);
 	}
 
-	public Polygon(ShapeGraphicalRepresentation aGraphicalRepresentation, List<FGEPoint> points) {
+	public RegularPolygon(ShapeGraphicalRepresentation aGraphicalRepresentation, List<FGEPoint> points) {
 		super(aGraphicalRepresentation);
 		this.points = new ArrayList<FGEPoint>(points);
-		updateShape();
 	}
 
-	public Polygon(ShapeGraphicalRepresentation aGraphicalRepresentation, FGEPolygon polygon) {
+	public RegularPolygon(ShapeGraphicalRepresentation aGraphicalRepresentation, int pointsNb) {
 		super(aGraphicalRepresentation);
-		this.points = new ArrayList<FGEPoint>();
-		for (FGEPoint pt : polygon.getPoints()) {
-			points.add(pt);
+		if (pointsNb < 3) {
+			throw new IllegalArgumentException("Cannot build polygon with less then 3 points (" + pointsNb + ")");
 		}
+		npoints = pointsNb;
 		updateShape();
 	}
 
-	public List<FGEPoint> getPoints() {
-		return points;
-	}
-
-	public void setPoints(List<FGEPoint> points) {
+	@Override
+	public void updateShape() {
 		if (points != null) {
-			this.points = new ArrayList<FGEPoint>(points);
-			updateShape();
+			_polygon = new FGEPolygon(Filling.FILLED, points);
 		} else {
-			this.points = null;
+			_polygon = new FGERegularPolygon(0, 0, 1, 1, Filling.FILLED, npoints, startAngle);
+		}
+		rebuildControlPoints();
+		if (getGraphicalRepresentation() != null) {
+			getGraphicalRepresentation().notifyShapeChanged();
 		}
 	}
 
-	public void addToPoints(FGEPoint aPoint) {
-		points.add(aPoint);
-		updateShape();
+	@Override
+	public ShapeType getShapeType() {
+		return ShapeType.POLYGON;
 	}
 
-	public void removeFromPoints(FGEPoint aPoint) {
-		points.remove(aPoint);
-		updateShape();
+	public int getNPoints() {
+		return npoints;
+	}
+
+	public void setNPoints(int pointsNb) {
+		if (pointsNb != npoints) {
+			npoints = pointsNb;
+			updateShape();
+		}
+	}
+
+	public int getStartAngle() {
+		return startAngle;
+	}
+
+	public void setStartAngle(int anAngle) {
+		if (anAngle != startAngle) {
+			startAngle = anAngle;
+			updateShape();
+		}
 	}
 
 	@Override
 	public FGEPolygon getShape() {
 		return _polygon;
-	}
-
-	@Override
-	public ShapeType getShapeType() {
-		return ShapeType.CUSTOM_POLYGON;
-	}
-
-	@Override
-	public void updateShape() {
-		_polygon = new FGEPolygon(Filling.FILLED, points);
 	}
 
 }

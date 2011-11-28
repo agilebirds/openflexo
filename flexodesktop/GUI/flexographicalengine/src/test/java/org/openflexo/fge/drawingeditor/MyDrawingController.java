@@ -29,6 +29,7 @@ import javax.swing.JPopupMenu;
 
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.controller.DrawShapeAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.shapes.Shape.ShapeType;
@@ -47,14 +48,25 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 
 	public MyDrawingController(final EditedDrawing aDrawing) {
 		super(aDrawing);
+		setDrawShapeAction(new DrawShapeAction() {
+			@Override
+			public void performedDrawNewShape(ShapeGraphicalRepresentation graphicalRepresentation,
+					GraphicalRepresentation parentGraphicalRepresentation) {
+				System.out.println("OK, on y va, avec " + graphicalRepresentation + " et parent: " + parentGraphicalRepresentation);
+				MyShape newShape = new MyShape(graphicalRepresentation, graphicalRepresentation.getLocation(), getDrawing());
+				if (parentGraphicalRepresentation != null && parentGraphicalRepresentation.getDrawable() instanceof MyDrawingElement) {
+					addNewShape(newShape, (MyDrawingElement) parentGraphicalRepresentation.getDrawable());
+				} else {
+					addNewShape(newShape, (MyDrawing) getDrawingGraphicalRepresentation().getDrawable());
+				}
+			}
+		});
 		contextualMenu = new JPopupMenu();
 		for (final ShapeType st : ShapeType.values()) {
 			JMenuItem menuItem = new JMenuItem("Add " + st.name());
 			menuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					System.out.println("Add " + st.name() + " contextualMenuInvoker=" + contextualMenuInvoker + " point="
-							+ contextualMenuClickedPoint);
 					MyShape newShape = new MyShape(st, new FGEPoint(contextualMenuClickedPoint), getDrawing());
 					addNewShape(newShape, (MyDrawingElement) contextualMenuInvoker.getDrawable());
 				}

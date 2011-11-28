@@ -166,6 +166,10 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 		return _points.elementAt(index);
 	}
 
+	public void geometryChanged() {
+		reCalculateBounds();
+	}
+
 	private void reCalculateBounds() {
 		double boundsMinX = Double.POSITIVE_INFINITY;
 		double boundsMinY = Double.POSITIVE_INFINITY;

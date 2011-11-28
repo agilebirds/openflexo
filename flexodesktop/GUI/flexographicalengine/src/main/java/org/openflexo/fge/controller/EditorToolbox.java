@@ -96,7 +96,7 @@ public class EditorToolbox {
 			updateButtons();
 		}
 
-		private void updateButtons() {
+		public void updateButtons() {
 			selectionToolButton.setSelected(controller.getCurrentTool() == EditorTool.SelectionTool);
 			drawShapeToolButton.setSelected(controller.getCurrentTool() == EditorTool.DrawShapeTool);
 			drawConnectorToolButton.setSelected(controller.getCurrentTool() == EditorTool.DrawConnectorTool);
@@ -123,10 +123,17 @@ public class EditorToolbox {
 					}
 				});
 			}
+
+			@Override
+			public void setSelected(boolean b) {
+				if (isSelected() != b) {
+					super.setSelected(b);
+				}
+			}
 		}
 	}
 
-	public JPanel getToolPanel() {
+	public ToolPanel getToolPanel() {
 		if (toolPanel == null) {
 			toolPanel = new ToolPanel();
 		}
