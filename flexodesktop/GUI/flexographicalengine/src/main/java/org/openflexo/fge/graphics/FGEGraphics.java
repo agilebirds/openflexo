@@ -519,6 +519,9 @@ public abstract class FGEGraphics {
 		if (currentForeground.getNoStroke()) {
 			return;
 		}
+		if (points == null || points.length == 0) {
+			return;
+		}
 		int[] xpoints = new int[points.length];
 		int[] ypoints = new int[points.length];
 		for (int i = 0; i < points.length; i++) {
