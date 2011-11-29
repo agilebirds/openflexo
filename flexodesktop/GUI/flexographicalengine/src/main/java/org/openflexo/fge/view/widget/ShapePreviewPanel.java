@@ -36,6 +36,17 @@ public class ShapePreviewPanel extends JPanel implements
 
 	private ShapeGraphicalRepresentation<RepresentedShape> shapeGR;
 
+	private int border = 10;
+	private int width = 120;
+	private int height = 80;
+	private static final float RATIO = 0.6f;
+
+	private ForegroundStyle foregroundStyle = ForegroundStyle
+			.makeStyle(Color.BLACK);
+	private BackgroundStyle backgroundStyle = BackgroundStyle
+			.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR);
+	private ShadowStyle shadowStyle = ShadowStyle.makeNone();
+
 	public ShapePreviewPanel(Shape aShape) {
 		super(new BorderLayout());
 		representedDrawing = new RepresentedDrawing();
@@ -101,10 +112,9 @@ public class ShapePreviewPanel extends JPanel implements
 		shapeGR.setY(getShapeY());
 		shapeGR.setWidth(getShapeWidth());
 		shapeGR.setHeight(getShapeHeight());
-		shapeGR.setForeground(ForegroundStyle.makeStyle(Color.BLACK));
-		shapeGR.setBackground(BackgroundStyle
-				.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR));
-		shapeGR.setShadowStyle(ShadowStyle.makeDefault());
+		shapeGR.setForeground(getForegroundStyle());
+		shapeGR.setBackground(getBackgroundStyle());
+		shapeGR.setShadowStyle(getShadowStyle());
 		shapeGR.setShape(getShape() != null ? getShape() : Shape.makeShape(
 				ShapeType.RECTANGLE, null));
 		shapeGR.setIsSelectable(false);
@@ -116,11 +126,6 @@ public class ShapePreviewPanel extends JPanel implements
 		controller = new DrawingController<Drawing<?>>(drawing);
 		add(controller.getDrawingView());
 	}
-
-	private int border = 10;
-	private int width = 120;
-	private int height = 80;
-	private static final float RATIO = 0.6f;
 
 	public float getRatio() {
 		if (getShape().areDimensionConstrained()) {
@@ -234,8 +239,19 @@ public class ShapePreviewPanel extends JPanel implements
 	}
 
 	public void setShape(Shape shape) {
-		shapeGR.setShape(shape);
-		update();
+		if (shape != null
+				&& (shape != shapeGR.getShape() || !shape.equals(shapeGR
+						.getShape()))) {
+			shapeGR.setShape(shape.clone());
+			/*
+			 * if (shape.getShapeType() == ShapeType.CUSTOM_POLYGON) {
+			 * System.out.println("Go to edition mode");
+			 * controller.setCurrentTool(EditorTool.DrawShapeTool);
+			 * controller.getDrawShapeToolController().setShape(
+			 * shape.getShape()); }
+			 */
+			update();
+		}
 	}
 
 	@Override
@@ -286,6 +302,33 @@ public class ShapePreviewPanel extends JPanel implements
 		public Shape getRepresentedShape() {
 			return getShape();
 		}
+	}
+
+	public ForegroundStyle getForegroundStyle() {
+		return foregroundStyle;
+	}
+
+	public void setForegroundStyle(ForegroundStyle foregroundStyle) {
+		this.foregroundStyle = foregroundStyle;
+		shapeGR.setForeground(foregroundStyle);
+	}
+
+	public BackgroundStyle getBackgroundStyle() {
+		return backgroundStyle;
+	}
+
+	public void setBackgroundStyle(BackgroundStyle backgroundStyle) {
+		this.backgroundStyle = backgroundStyle;
+		shapeGR.setBackground(backgroundStyle);
+	}
+
+	public ShadowStyle getShadowStyle() {
+		return shadowStyle;
+	}
+
+	public void setShadowStyle(ShadowStyle shadowStyle) {
+		this.shadowStyle = shadowStyle;
+		shapeGR.setShadowStyle(shadowStyle);
 	}
 
 }

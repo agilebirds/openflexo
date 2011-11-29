@@ -56,6 +56,7 @@ import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.notifications.GraphicalObjectsHierarchyRebuildEnded;
 import org.openflexo.fge.notifications.GraphicalObjectsHierarchyRebuildStarted;
 import org.openflexo.fge.shapes.Shape;
+import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.ConnectorView;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEPaintManager;
@@ -115,6 +116,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable
 				.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR);
 		currentTextStyle = TextStyle.makeDefault();
 		currentShadowStyle = ShadowStyle.makeDefault();
+		currentShape = Shape.makeShape(ShapeType.RECTANGLE, null);
 
 		toolbox = new EditorToolbox(this);
 
@@ -203,10 +205,10 @@ public class DrawingController<D extends Drawing<?>> extends Observable
 				}
 				break;
 			case DrawShapeTool:
-				if (drawShapeAction != null) {
-					drawShapeToolController = new DrawPolygonToolController(
-							this, drawShapeAction);
-				}
+				// if (drawShapeAction != null) {
+				drawShapeToolController = new DrawPolygonToolController(this,
+						drawShapeAction);
+				// }
 				break;
 			case DrawConnectorTool:
 				break;

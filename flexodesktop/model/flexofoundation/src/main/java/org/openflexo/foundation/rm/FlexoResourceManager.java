@@ -181,14 +181,12 @@ public class FlexoResourceManager {
 
 	public static FlexoEditor initializeExistingProject(File aProjectDirectory, FlexoEditorFactory editorFactory,
 			FlexoResourceCenter resourceCenter) throws ProjectInitializerException, ProjectLoadingCancelledException {
-		return initializeExistingProject(aProjectDirectory, false, null, null, editorFactory, new DefaultProjectLoadingHandler(),
-				resourceCenter);
+		return initializeExistingProject(aProjectDirectory, null, null, editorFactory, new DefaultProjectLoadingHandler(), resourceCenter);
 	}
 
-	public static FlexoEditor initializeExistingProject(File aProjectDirectory, boolean restructureProjectHierarchy,
-			FlexoProgress progress, ResourceUpdateHandler resourceUpdateHandler, FlexoEditorFactory editorFactory,
-			ProjectLoadingHandler loadingHandler, FlexoResourceCenter resourceCenter) throws ProjectInitializerException,
-			ProjectLoadingCancelledException {
+	public static FlexoEditor initializeExistingProject(File aProjectDirectory, FlexoProgress progress,
+			ResourceUpdateHandler resourceUpdateHandler, FlexoEditorFactory editorFactory, ProjectLoadingHandler loadingHandler,
+			FlexoResourceCenter resourceCenter) throws ProjectInitializerException, ProjectLoadingCancelledException {
 		FlexoProject project = null;
 		if (!aProjectDirectory.exists()) {
 			if (logger.isLoggable(Level.WARNING)) {

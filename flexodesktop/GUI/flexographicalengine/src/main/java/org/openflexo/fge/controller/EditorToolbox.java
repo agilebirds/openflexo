@@ -225,11 +225,10 @@ public class EditorToolbox {
 				public void apply() {
 					super.apply();
 					if (selectedShapes.size() > 0) {
-						/*
-						 * for (ShapeGraphicalRepresentation shape :
-						 * selectedShapes) {
-						 * shape.setShape(getEditedObject().clone()); }
-						 */
+						for (ShapeGraphicalRepresentation shape : selectedShapes) {
+							shape.setShape(getEditedObject().clone());
+						}
+
 					} else {
 						controller.setCurrentShape(getEditedObject().clone());
 					}
@@ -253,8 +252,10 @@ public class EditorToolbox {
 	private List<GraphicalRepresentation> selectedGR = new ArrayList<GraphicalRepresentation>();
 
 	public void update() {
-		logger.info("Updating EditorToolbox with selection: "
-				+ controller.getSelectedObjects());
+		/*
+		 * logger.info("Updating EditorToolbox with selection: " +
+		 * controller.getSelectedObjects());
+		 */
 		selectedShapes.clear();
 		selectedConnectors.clear();
 		selectedGR.clear();
@@ -285,7 +286,7 @@ public class EditorToolbox {
 					.getCurrentForegroundStyle());
 		}
 		if (selectedShapes.size() > 0) {
-			// shapeSelector.setEditedObject(selectedShapes.get(0).getShape());
+			shapeSelector.setEditedObject(selectedShapes.get(0).getShape());
 			backgroundSelector.setEditedObject(selectedShapes.get(0)
 					.getBackground());
 			shadowStyleSelector.setEditedObject(selectedShapes.get(0)

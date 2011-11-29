@@ -120,7 +120,7 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements
 			_selectorPanel.update();
 		}
 		getFrontComponent().setShape(editedObject);
-		getFrontComponent().update();
+		// getFrontComponent().update();
 	}
 
 	/**
@@ -306,15 +306,19 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements
 			}
 
 			public void shapeChanged() {
-				setEditedObject(shapeFactory.getShape());
-				getFrontComponent().update();
+
+				getFrontComponent().setShape(shapeFactory.getShape());
+				// getFrontComponent().update();
+
 				FIBView previewComponent = viewForComponent(fibComponent
 						.getComponentNamed("PreviewPanel"));
 				if (previewComponent instanceof FIBCustomWidget) {
 					JComponent customComponent = ((FIBCustomWidget) previewComponent)
 							.getJComponent();
 					if (customComponent instanceof ShapePreviewPanel) {
-						((ShapePreviewPanel) customComponent).update();
+						((ShapePreviewPanel) customComponent)
+								.setShape(shapeFactory.getShape());
+						// ((ShapePreviewPanel) customComponent).update();
 					}
 				}
 				notifyApplyPerformed();
@@ -367,14 +371,7 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements
 
 	@Override
 	protected ShapePreviewPanel buildFrontComponent() {
-		frontComponent = new ShapePreviewPanel(getEditedObject()) {
-			@Override
-			protected void update() {
-				System.out.println("Front component, updating shape "
-						+ getShape() + " with " + getShape().getShape());
-				super.update();
-			}
-		};
+		frontComponent = new ShapePreviewPanel(getEditedObject());
 		frontComponent.setBorderSize(1);
 		frontComponent.setPanelWidth(40);
 		frontComponent.setPanelHeight(19);

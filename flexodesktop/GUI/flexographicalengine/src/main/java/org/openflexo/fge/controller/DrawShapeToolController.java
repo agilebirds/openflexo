@@ -39,9 +39,11 @@ import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
 
-public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Observable implements Observer {
+public abstract class DrawShapeToolController<S extends FGEShape<S>> extends
+		Observable implements Observer {
 
-	private static final Logger logger = Logger.getLogger(DrawShapeToolController.class.getPackage().getName());
+	private static final Logger logger = Logger
+			.getLogger(DrawShapeToolController.class.getPackage().getName());
 
 	private DrawingController<?> controller;
 	private DrawShapeAction control;
@@ -49,20 +51,24 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Obs
 	private S shape;
 	private GeometricGraphicalRepresentation<S> currentEditedShapeGR;
 
-	public DrawShapeToolController(DrawingController<?> controller, DrawShapeAction control) {
+	public DrawShapeToolController(DrawingController<?> controller,
+			DrawShapeAction control) {
 		super();
 		this.controller = controller;
 		this.control = control;
 		shape = makeDefaultShape();
-		currentEditedShapeGR = new GeometricGraphicalRepresentation<S>(shape, shape, controller.getDrawing()) {
+		currentEditedShapeGR = new GeometricGraphicalRepresentation<S>(shape,
+				shape, controller.getDrawing()) {
 			@Override
 			public void notifyGeometryChanged() {
 				super.notifyGeometryChanged();
 				geometryChanged();
 			}
 		};
-		currentEditedShapeGR.setBackground(getController().getCurrentBackgroundStyle());
-		currentEditedShapeGR.setForeground(getController().getCurrentForegroundStyle());
+		currentEditedShapeGR.setBackground(getController()
+				.getCurrentBackgroundStyle());
+		currentEditedShapeGR.setForeground(getController()
+				.getCurrentForegroundStyle());
 		geometryChanged();
 	}
 
@@ -77,12 +83,20 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Obs
 		return shape;
 	}
 
+	public void setShape(FGEShape shape) {
+		System.out.println("Sets shape with " + shape);
+		this.shape = (S) shape.clone();
+		currentEditedShapeGR.setGeometricObject(this.shape);
+		geometryChanged();
+	}
+
 	public DrawingController<?> getController() {
 		return controller;
 	}
 
 	/**
-	 * Returns graphical representation for shape currently being edited (using DrawShape tool)
+	 * Returns graphical representation for shape currently being edited (using
+	 * DrawShape tool)
 	 * 
 	 * @return
 	 */
@@ -122,9 +136,12 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Obs
 	}
 
 	protected FGEPoint getPoint(MouseEvent e) {
-		Point pt = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), controller.getDrawingView());
-		return currentEditedShapeGR.convertRemoteViewCoordinatesToLocalNormalizedPoint(pt, controller.getDrawingGraphicalRepresentation(),
-				controller.getScale());
+		Point pt = SwingUtilities.convertPoint((Component) e.getSource(),
+				e.getPoint(), controller.getDrawingView());
+		return currentEditedShapeGR
+				.convertRemoteViewCoordinatesToLocalNormalizedPoint(pt,
+						controller.getDrawingGraphicalRepresentation(),
+						controller.getScale());
 	}
 
 	public void paintCurrentEditedShape(FGEDrawingGraphics graphics) {
@@ -144,7 +161,11 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Obs
 	public abstract ShapeGraphicalRepresentation<?> buildShapeGraphicalRepresentation();
 
 	public void makeNewShape() {
-		ShapeGraphicalRepresentation<?> newShapeGraphicalRepresentation = buildShapeGraphicalRepresentation();
-		control.performedDrawNewShape(newShapeGraphicalRepresentation, null);
+		if (control != null) {
+			ShapeGraphicalRepresentation<?> newShapeGraphicalRepresentation = buildShapeGraphicalRepresentation();
+			control.performedDrawNewShape(newShapeGraphicalRepresentation, null);
+		} else {
+			logger.warning("No DrawShapeAction defined !");
+		}
 	}
 }
