@@ -44,8 +44,10 @@ public abstract class AbstractColumn<D extends Observable, T> {
 	public static final Font MEDIUM_FONT = new Font("SansSerif", Font.PLAIN, 10);
 	public static final Font SMALL_FONT = new Font("SansSerif", Font.PLAIN, 9);
 
-	public static final Color SELECTED_LINES_TABULAR_VIEW_COLOR = new Color(181, 213, 255);
-	public static final Color ODD_LINES_TABULAR_VIEW_COLOR = new Color(237, 243, 254);
+	public static final Color SELECTED_LINES_TABULAR_VIEW_COLOR = new Color(
+			181, 213, 255);
+	public static final Color ODD_LINES_TABULAR_VIEW_COLOR = new Color(237,
+			243, 254);
 	public static final Color NON_ODD_LINES_TABULAR_VIEW_COLOR = Color.WHITE;
 	public static final Color SELECTED_CELL_TABULAR_VIEW_FOREGROUND_COLOR = Color.WHITE;
 	public static final Color UNSELECTED_CELL_TABULAR_VIEW_FOREGROUND_COLOR = Color.BLACK;
@@ -61,11 +63,13 @@ public abstract class AbstractColumn<D extends Observable, T> {
 
 	private AbstractModel<?, D> _model;
 
-	public AbstractColumn(String unlocalizedTitle, int defaultWidth, boolean isResizable) {
+	public AbstractColumn(String unlocalizedTitle, int defaultWidth,
+			boolean isResizable) {
 		this(unlocalizedTitle, defaultWidth, isResizable, true);
 	}
 
-	public AbstractColumn(String unlocalizedTitle, int defaultWidth, boolean isResizable, boolean displayTitle) {
+	public AbstractColumn(String unlocalizedTitle, int defaultWidth,
+			boolean isResizable, boolean displayTitle) {
 		super();
 		_title = unlocalizedTitle;
 		_defaultWidth = defaultWidth;
@@ -159,7 +163,8 @@ public abstract class AbstractColumn<D extends Observable, T> {
 		 * @param table
 		 *            the <code>JTable</code>
 		 * @param value
-		 *            the value to assign to the cell at <code>[row, column]</code>
+		 *            the value to assign to the cell at
+		 *            <code>[row, column]</code>
 		 * @param isSelected
 		 *            true if cell is selected
 		 * @param hasFocus
@@ -171,24 +176,35 @@ public abstract class AbstractColumn<D extends Observable, T> {
 		 * @return the default table cell renderer
 		 */
 		@Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-			Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		public Component getTableCellRendererComponent(JTable table,
+				Object value, boolean isSelected, boolean hasFocus, int row,
+				int column) {
+			Component returned = super.getTableCellRendererComponent(table,
+					value, isSelected, hasFocus, row, column);
 			if (!isSelected || ToolBox.getPLATFORM() == ToolBox.MACOS) {
-				setComponentBackground(returned, hasFocus, isSelected, row, column);
+				setComponentBackground(returned, hasFocus, isSelected, row,
+						column);
 			}
 			// returned.setFont(AdvancedPrefs.getBrowserFont().getTheFont());
 			if (returned instanceof JComponent) {
-				((JComponent) returned).setToolTipText(getLocalizedTooltip(getModel().elementAt(row)));
+				((JComponent) returned)
+						.setToolTipText(getLocalizedTooltip(getModel()
+								.elementAt(row)));
 			}
 
 			return returned;
 		}
 
-		protected void setComponentBackground(Component component, boolean hasFocus, boolean isSelected, int row, int column) {
-			if ((hasFocus) && ((getModel() != null) && (getModel().isCellEditable(row, column))) && (isSelected)) {
-				component.setForeground(SELECTED_CELL_TABULAR_VIEW_FOREGROUND_COLOR);
+		protected void setComponentBackground(Component component,
+				boolean hasFocus, boolean isSelected, int row, int column) {
+			if ((hasFocus)
+					&& ((getModel() != null) && (getModel().isCellEditable(row,
+							column))) && (isSelected)) {
+				component
+						.setForeground(SELECTED_CELL_TABULAR_VIEW_FOREGROUND_COLOR);
 			} else {
-				component.setForeground(UNSELECTED_CELL_TABULAR_VIEW_FOREGROUND_COLOR);
+				component
+						.setForeground(UNSELECTED_CELL_TABULAR_VIEW_FOREGROUND_COLOR);
 			}
 			if (isSelected) {
 				component.setBackground(SELECTED_LINES_TABULAR_VIEW_COLOR);
@@ -235,6 +251,11 @@ public abstract class AbstractColumn<D extends Observable, T> {
 
 	public boolean getDisplayTitle() {
 		return _displayTitle;
+	}
+
+	public void valueChanged(D object, T value) {
+		System.out.println("Value changed for " + object + " with value "
+				+ value);
 	}
 
 }

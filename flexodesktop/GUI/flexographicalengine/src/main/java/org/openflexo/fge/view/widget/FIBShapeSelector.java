@@ -26,14 +26,28 @@ import java.beans.PropertyChangeSupport;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JComponent;
+
+import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.shapes.Arc;
+import org.openflexo.fge.shapes.Circle;
+import org.openflexo.fge.shapes.Losange;
+import org.openflexo.fge.shapes.Oval;
+import org.openflexo.fge.shapes.Polygon;
+import org.openflexo.fge.shapes.Rectangle;
+import org.openflexo.fge.shapes.RegularPolygon;
 import org.openflexo.fge.shapes.Shape;
 import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.Square;
+import org.openflexo.fge.shapes.Star;
+import org.openflexo.fge.shapes.Triangle;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
 import org.openflexo.fib.view.FIBView;
+import org.openflexo.fib.view.widget.FIBCustomWidget;
 import org.openflexo.swing.CustomPopup;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
@@ -44,11 +58,14 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
  * @author sguerin
  * 
  */
-public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomComponent<Shape, FIBShapeSelector> {
+public class FIBShapeSelector extends CustomPopup<Shape> implements
+		FIBCustomComponent<Shape, FIBShapeSelector> {
 
-	static final Logger logger = Logger.getLogger(FIBShapeSelector.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(FIBShapeSelector.class
+			.getPackage().getName());
 
-	public static FileResource FIB_FILE = new FileResource("Fib/ShapeSelectorPanel.fib");
+	public static FileResource FIB_FILE = new FileResource(
+			"Fib/ShapeSelectorPanel.fib");
 
 	private static final Color DEFAULT_COLOR1 = Color.RED;
 	private static final Color DEFAULT_COLOR2 = Color.WHITE;
@@ -56,6 +73,7 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 	private Shape _revertValue;
 
 	protected ShapeDetailsPanel _selectorPanel;
+	private ShapePreviewPanel frontComponent;
 
 	public FIBShapeSelector(Shape editedObject) {
 		super(editedObject);
@@ -69,7 +87,8 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 
 	@Override
 	public void setRevertValue(Shape oldValue) {
-		// WARNING: we need here to clone to keep track back of previous data !!!
+		// WARNING: we need here to clone to keep track back of previous data
+		// !!!
 		if (oldValue != null) {
 			_revertValue = oldValue.clone();
 		} else {
@@ -100,6 +119,7 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 		if (_selectorPanel != null) {
 			_selectorPanel.update();
 		}
+		getFrontComponent().setShape(editedObject);
 		getFrontComponent().update();
 	}
 
@@ -111,11 +131,18 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 	 */
 	public static class ShapeFactory implements HasPropertyChangeSupport {
 		private Shape shape;
-		/*private Color color1 = Color.RED;
-		private Color color2 = Color.WHITE;
-		private ColorGradientDirection gradientDirection = ColorGradientDirection.NORTH_SOUTH;
-		private TextureType textureType = TextureType.TEXTURE1;
-		private File imageFile;*/
+
+		private Rectangle rectangle;
+		private Square square;
+		private Polygon polygon;
+		private RegularPolygon regularPolygon;
+		private Losange losange;
+		private Triangle triangle;
+		private Oval oval;
+		private Circle circle;
+		private Arc arc;
+		private Star star;
+
 		private PropertyChangeSupport pcSupport;
 
 		public ShapeFactory(Shape shape) {
@@ -139,38 +166,92 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 		}
 
 		public ShapeType getShapeType() {
-			return shape.getShapeType();
+			if (shape != null) {
+				return shape.getShapeType();
+			}
+			return null;
 		}
 
 		public void setShapeType(ShapeType shapeType) {
-			// logger.info("setBackgroundStyleType with " + backgroundStyleType);
+			// logger.info("setBackgroundStyleType with " +
+			// backgroundStyleType);
 			ShapeType oldShapeType = getShapeType();
-			switch (getShapeType()) {
-			case RECTANGLE:
-				break;
-			/*case COLOR:
-				color1 = ((BackgroundStyle.Color) backgroundStyle).getColor();
-				break;
-			case COLOR_GRADIENT:
-				color1 = ((BackgroundStyle.ColorGradient) backgroundStyle).getColor1();
-				color2 = ((BackgroundStyle.ColorGradient) backgroundStyle).getColor2();
-				gradientDirection = ((BackgroundStyle.ColorGradient) backgroundStyle).getDirection();
-				break;
-			case TEXTURE:
-				color1 = ((BackgroundStyle.Texture) backgroundStyle).getColor1();
-				color2 = ((BackgroundStyle.Texture) backgroundStyle).getColor2();
-				textureType = ((BackgroundStyle.Texture) backgroundStyle).getTextureType();
-				break;
-			case IMAGE:
-				imageFile = ((BackgroundStyle.BackgroundImage) backgroundStyle).getImageFile();
-				break;*/
-			default:
-				break;
+
+			if (oldShapeType != shapeType) {
+
+				// System.out.println("set shape type to " + shapeType);
+
+				switch (shapeType) {
+				case RECTANGLE:
+					if (rectangle == null) {
+						rectangle = (Rectangle) Shape
+								.makeShape(shapeType, null);
+					}
+					shape = rectangle;
+					break;
+				case SQUARE:
+					if (square == null) {
+						square = (Square) Shape.makeShape(shapeType, null);
+					}
+					shape = square;
+					break;
+				case CUSTOM_POLYGON:
+					if (polygon == null) {
+						polygon = new Polygon(null, new FGEPoint(0.1, 0.1),
+								new FGEPoint(0.3, 0.9), new FGEPoint(0.9, 0.3));
+					}
+					shape = polygon;
+					break;
+				case POLYGON:
+					if (regularPolygon == null) {
+						regularPolygon = (RegularPolygon) Shape.makeShape(
+								shapeType, null);
+					}
+					shape = regularPolygon;
+					break;
+				case TRIANGLE:
+					if (triangle == null) {
+						triangle = (Triangle) Shape.makeShape(shapeType, null);
+					}
+					shape = triangle;
+					break;
+				case LOSANGE:
+					if (losange == null) {
+						losange = (Losange) Shape.makeShape(shapeType, null);
+					}
+					shape = losange;
+					break;
+				case OVAL:
+					if (oval == null) {
+						oval = (Oval) Shape.makeShape(shapeType, null);
+					}
+					shape = oval;
+					break;
+				case CIRCLE:
+					if (circle == null) {
+						circle = (Circle) Shape.makeShape(shapeType, null);
+					}
+					shape = circle;
+					break;
+				case ARC:
+					if (arc == null) {
+						arc = (Arc) Shape.makeShape(shapeType, null);
+					}
+					shape = arc;
+					break;
+				case STAR:
+					if (star == null) {
+						star = (Star) Shape.makeShape(shapeType, null);
+					}
+					shape = star;
+					break;
+				default:
+					shape = Shape.makeShape(shapeType, null);
+				}
+
+				pcSupport.firePropertyChange("shapeType", oldShapeType,
+						getShapeType());
 			}
-
-			shape = Shape.makeShape(shapeType, null);
-
-			pcSupport.firePropertyChange("shapeType", oldShapeType, getShapeType());
 		}
 	}
 
@@ -203,7 +284,8 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 
 		@Override
 		public Dimension getDefaultSize() {
-			return new Dimension(fibComponent.getWidth(), fibComponent.getHeight());
+			return new Dimension(fibComponent.getWidth(),
+					fibComponent.getHeight());
 		}
 
 		public void delete() {
@@ -223,17 +305,18 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 				FIBShapeSelector.this.cancel();
 			}
 
-			public void parameterChanged() {
-				// System.out.println("parameterChanged() for "+bsFactory.getBackgroundStyle());
-				setEditedObject(shapeFactory.getShape());
-				getFrontComponent().update();
-				// notifyApplyPerformed();
-			}
-
 			public void shapeChanged() {
-				// System.out.println("backgroundStyleChanged() for "+bsFactory.getBackgroundStyle());
 				setEditedObject(shapeFactory.getShape());
 				getFrontComponent().update();
+				FIBView previewComponent = viewForComponent(fibComponent
+						.getComponentNamed("PreviewPanel"));
+				if (previewComponent instanceof FIBCustomWidget) {
+					JComponent customComponent = ((FIBCustomWidget) previewComponent)
+							.getJComponent();
+					if (customComponent instanceof ShapePreviewPanel) {
+						((ShapePreviewPanel) customComponent).update();
+					}
+				}
 				notifyApplyPerformed();
 			}
 
@@ -241,16 +324,16 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 
 	}
 
-	/* @Override
-	 public void setEditedObject(BackgroundStyle object)
-	 {
-	 	logger.info("setEditedObject with "+object);
-	 	super.setEditedObject(object);
-	 }*/
+	/*
+	 * @Override public void setEditedObject(BackgroundStyle object) {
+	 * logger.info("setEditedObject with "+object);
+	 * super.setEditedObject(object); }
+	 */
 
 	@Override
 	public void apply() {
-		setRevertValue(getEditedObject() != null ? getEditedObject().clone() : null);
+		setRevertValue(getEditedObject() != null ? getEditedObject().clone()
+				: null);
 		closePopup();
 		super.apply();
 	}
@@ -274,10 +357,9 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 		super.deletePopup();
 	}
 
-	/*protected void pointerLeavesPopup()
-	{
-	   cancel();
-	}*/
+	/*
+	 * protected void pointerLeavesPopup() { cancel(); }
+	 */
 
 	public ShapeDetailsPanel getSelectorPanel() {
 		return _selectorPanel;
@@ -285,7 +367,18 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 
 	@Override
 	protected ShapePreviewPanel buildFrontComponent() {
-		return new ShapePreviewPanel(getEditedObject());
+		frontComponent = new ShapePreviewPanel(getEditedObject()) {
+			@Override
+			protected void update() {
+				System.out.println("Front component, updating shape "
+						+ getShape() + " with " + getShape().getShape());
+				super.update();
+			}
+		};
+		frontComponent.setBorderSize(1);
+		frontComponent.setPanelWidth(40);
+		frontComponent.setPanelHeight(19);
+		return frontComponent;
 	}
 
 	@Override
@@ -293,18 +386,17 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 		return (ShapePreviewPanel) super.getFrontComponent();
 	}
 
-	/*@Override
-	protected Border getDownButtonBorder()
-	{
-		return BorderFactory.createCompoundBorder(
-				BorderFactory.createEmptyBorder(1,1,1,1),
-				BorderFactory.createRaisedBevelBorder());
-		//return BorderFactory.createRaisedBevelBorder();
-		//return BorderFactory.createLoweredBevelBorder()
-		//return BorderFactory.createEtchedBorder();
-		//return BorderFactory.createBevelBorder(BevelBorder.LOWERED);
-		//return BorderFactory.createBevelBorder(BevelBorder.LOWERED);
-	}*/
+	/*
+	 * @Override protected Border getDownButtonBorder() { return
+	 * BorderFactory.createCompoundBorder(
+	 * BorderFactory.createEmptyBorder(1,1,1,1),
+	 * BorderFactory.createRaisedBevelBorder()); //return
+	 * BorderFactory.createRaisedBevelBorder(); //return
+	 * BorderFactory.createLoweredBevelBorder() //return
+	 * BorderFactory.createEtchedBorder(); //return
+	 * BorderFactory.createBevelBorder(BevelBorder.LOWERED); //return
+	 * BorderFactory.createBevelBorder(BevelBorder.LOWERED); }
+	 */
 
 	@Override
 	public FIBShapeSelector getJComponent() {

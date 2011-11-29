@@ -36,7 +36,8 @@ import javax.swing.table.TableCellEditor;
  * @author sguerin
  * 
  */
-public abstract class EditableStringColumn<D extends Observable> extends StringColumn<D> implements EditableColumn<D, String> {
+public abstract class EditableStringColumn<D extends Observable> extends
+		StringColumn<D> implements EditableColumn<D, String> {
 
 	DefaultCellEditor editor;
 
@@ -54,9 +55,13 @@ public abstract class EditableStringColumn<D extends Observable> extends StringC
 		if (editor == null) {
 			editor = new DefaultCellEditor(new JTextField()) {
 				@Override
-				public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-					final JTextField textfield = (JTextField) super.getTableCellEditorComponent(table, value, isSelected, row, column);
-					textfield.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+				public Component getTableCellEditorComponent(JTable table,
+						Object value, boolean isSelected, int row, int column) {
+					final JTextField textfield = (JTextField) super
+							.getTableCellEditorComponent(table, value,
+									isSelected, row, column);
+					textfield.setBorder(BorderFactory.createLineBorder(
+							Color.BLACK, 1));
 					SwingUtilities.invokeLater(new Runnable() {
 						@Override
 						public void run() {
@@ -78,12 +83,14 @@ public abstract class EditableStringColumn<D extends Observable> extends StringC
 	@Override
 	public void setValueFor(D object, String value) {
 		setValue(object, value);
+		valueChanged(object, value);
 	}
 
 	public abstract void setValue(D object, String aValue);
 
 	@Override
 	public String toString() {
-		return "EditableStringColumn " + "[" + getTitle() + "]" + Integer.toHexString(hashCode());
+		return "EditableStringColumn " + "[" + getTitle() + "]"
+				+ Integer.toHexString(hashCode());
 	}
 }

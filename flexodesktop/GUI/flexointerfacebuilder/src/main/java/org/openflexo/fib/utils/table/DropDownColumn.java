@@ -36,12 +36,14 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 /**
- * Represents a column where values can be viewed and edited as an Object taking its values (or null) along a list of available values
+ * Represents a column where values can be viewed and edited as an Object taking
+ * its values (or null) along a list of available values
  * 
  * @author sguerin
  * 
  */
-public abstract class DropDownColumn<D extends Observable, T> extends AbstractColumn<D, T> implements EditableColumn<D, T> {
+public abstract class DropDownColumn<D extends Observable, T> extends
+		AbstractColumn<D, T> implements EditableColumn<D, T> {
 
 	private DropDownCellRenderer _cellRenderer;
 
@@ -73,6 +75,7 @@ public abstract class DropDownColumn<D extends Observable, T> extends AbstractCo
 	@Override
 	public void setValueFor(D object, T value) {
 		setValue(object, value);
+		valueChanged(object, value);
 	}
 
 	public abstract void setValue(D object, T aValue);
@@ -93,7 +96,8 @@ public abstract class DropDownColumn<D extends Observable, T> extends AbstractCo
 		 * @param table
 		 *            the <code>JTable</code>
 		 * @param value
-		 *            the value to assign to the cell at <code>[row, column]</code>
+		 *            the value to assign to the cell at
+		 *            <code>[row, column]</code>
 		 * @param isSelected
 		 *            true if cell is selected
 		 * @param hasFocus
@@ -105,8 +109,11 @@ public abstract class DropDownColumn<D extends Observable, T> extends AbstractCo
 		 * @return the default table cell renderer
 		 */
 		@Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-			Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		public Component getTableCellRendererComponent(JTable table,
+				Object value, boolean isSelected, boolean hasFocus, int row,
+				int column) {
+			Component returned = super.getTableCellRendererComponent(table,
+					value, isSelected, hasFocus, row, column);
 			if (returned instanceof JLabel) {
 				((JLabel) returned).setText(renderValue((T) value));
 			}
@@ -153,8 +160,11 @@ public abstract class DropDownColumn<D extends Observable, T> extends AbstractCo
 			comboBox = aComboBox;
 			comboBox.setRenderer(new DefaultListCellRenderer() {
 				@Override
-				public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-					Component returned = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				public Component getListCellRendererComponent(JList list,
+						Object value, int index, boolean isSelected,
+						boolean cellHasFocus) {
+					Component returned = super.getListCellRendererComponent(
+							list, value, index, isSelected, cellHasFocus);
 					if (returned instanceof JLabel) {
 						((JLabel) returned).setText(renderValue((T) value));
 					}
@@ -164,16 +174,20 @@ public abstract class DropDownColumn<D extends Observable, T> extends AbstractCo
 		}
 
 		@Override
-		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-			Component returned = super.getTableCellEditorComponent(table, value, isSelected, row, column);
+		public Component getTableCellEditorComponent(JTable table,
+				Object value, boolean isSelected, int row, int column) {
+			Component returned = super.getTableCellEditorComponent(table,
+					value, isSelected, row, column);
 			comboBox.setModel(getComboBoxModel(value, row, column));
 			return returned;
 		}
 
-		protected DropDownComboBoxModel getComboBoxModel(Object value, int row, int column) {
+		protected DropDownComboBoxModel getComboBoxModel(Object value, int row,
+				int column) {
 			DropDownComboBoxModel _comboBoxModel = _comboBoxModels.get(row);
 			if (_comboBoxModel == null) {
-				_comboBoxModel = new DropDownComboBoxModel(getModel().elementAt(row));
+				_comboBoxModel = new DropDownComboBoxModel(getModel()
+						.elementAt(row));
 				_comboBoxModels.put(row, _comboBoxModel);
 			}
 			_comboBoxModel.setSelectedItem(value);
@@ -184,7 +198,8 @@ public abstract class DropDownColumn<D extends Observable, T> extends AbstractCo
 
 			protected DropDownComboBoxModel() {
 				super();
-				for (Enumeration en = getAvailableValues().elements(); en.hasMoreElements();) {
+				for (Enumeration en = getAvailableValues().elements(); en
+						.hasMoreElements();) {
 					addElement(en.nextElement());
 				}
 			}
@@ -197,7 +212,8 @@ public abstract class DropDownColumn<D extends Observable, T> extends AbstractCo
 						addElement(en.nextElement());
 					}
 				} else {
-					for (Enumeration en = getAvailableValues().elements(); en.hasMoreElements();) {
+					for (Enumeration en = getAvailableValues().elements(); en
+							.hasMoreElements();) {
 						addElement(en.nextElement());
 					}
 				}

@@ -45,17 +45,29 @@ public class Polygon extends Shape {
 		super(aGraphicalRepresentation);
 	}
 
-	public Polygon(ShapeGraphicalRepresentation aGraphicalRepresentation, List<FGEPoint> points) {
+	public Polygon(ShapeGraphicalRepresentation aGraphicalRepresentation,
+			List<FGEPoint> points) {
 		super(aGraphicalRepresentation);
 		this.points = new ArrayList<FGEPoint>(points);
 		updateShape();
 	}
 
-	public Polygon(ShapeGraphicalRepresentation aGraphicalRepresentation, FGEPolygon polygon) {
+	public Polygon(ShapeGraphicalRepresentation aGraphicalRepresentation,
+			FGEPolygon polygon) {
 		super(aGraphicalRepresentation);
 		this.points = new ArrayList<FGEPoint>();
 		for (FGEPoint pt : polygon.getPoints()) {
 			points.add(pt);
+		}
+		updateShape();
+	}
+
+	public Polygon(ShapeGraphicalRepresentation aGraphicalRepresentation,
+			FGEPoint... points) {
+		super(aGraphicalRepresentation);
+		this.points = new ArrayList<FGEPoint>();
+		for (FGEPoint pt : points) {
+			this.points.add(pt);
 		}
 		updateShape();
 	}

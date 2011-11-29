@@ -25,15 +25,14 @@ import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
 import org.openflexo.swing.CustomPopup.ApplyCancelListener;
 
-public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shape, ShapePreviewPanel> {
+public class ShapePreviewPanel extends JPanel implements
+		FIBCustomComponent<Shape, ShapePreviewPanel> {
 
-	// private final FIBShapeSelector fibShapeSelector;
 	private Drawing<RepresentedDrawing> drawing;
 	private DrawingGraphicalRepresentation<RepresentedDrawing> drawingGR;
 	private DrawingController<?> controller;
 	private RepresentedDrawing representedDrawing;
 	private RepresentedShape representedShape;
-	private Shape shape;
 
 	private ShapeGraphicalRepresentation<RepresentedShape> shapeGR;
 
@@ -41,11 +40,7 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 		super(new BorderLayout());
 		representedDrawing = new RepresentedDrawing();
 		representedShape = new RepresentedShape();
-		shape = aShape;
-		// setBorder(BorderFactory.createEtchedBorder(Color.GRAY, Color.LIGHT_GRAY));
-		// setBorder(BorderFactory.createEtchedBorder());
 		setPreferredSize(new Dimension(getPanelWidth(), getPanelHeight()));
-		// setBackground(Color.WHITE);
 
 		final Vector<RepresentedShape> singleton = new Vector<RepresentedShape>();
 		singleton.add(representedShape);
@@ -71,12 +66,14 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 
 			@Override
 			public DrawingGraphicalRepresentation<RepresentedDrawing> getDrawingGraphicalRepresentation() {
-				// System.out.println("getDrawingGraphicalRepresentation() is " + drawingGR);
+				// System.out.println("getDrawingGraphicalRepresentation() is "
+				// + drawingGR);
 				return drawingGR;
 			}
 
 			@Override
-			public <O> GraphicalRepresentation<O> getGraphicalRepresentation(O aDrawable) {
+			public <O> GraphicalRepresentation<O> getGraphicalRepresentation(
+					O aDrawable) {
 				// System.out.println("getContainer() for " + aDrawable);
 				if (aDrawable == representedDrawing) {
 					return (GraphicalRepresentation<O>) drawingGR;
@@ -92,32 +89,98 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 			}
 
 		};
-		drawingGR = new DrawingGraphicalRepresentation<RepresentedDrawing>(drawing, false);
+		drawingGR = new DrawingGraphicalRepresentation<RepresentedDrawing>(
+				drawing, false);
 		drawingGR.setBackgroundColor(Color.WHITE);
 		drawingGR.setWidth(getPanelWidth());
 		drawingGR.setHeight(getPanelHeight());
 		drawingGR.setDrawWorkingArea(false);
-		shapeGR = new ShapeGraphicalRepresentation<RepresentedShape>(ShapeType.RECTANGLE, representedShape, drawing);
-		shapeGR.setWidth(getPanelWidth() - 2 * BORDER);
-		shapeGR.setHeight(getPanelHeight() - 2 * BORDER);
-		shapeGR.setX(0);
-		shapeGR.setY(0);
+		shapeGR = new ShapeGraphicalRepresentation<RepresentedShape>(
+				ShapeType.RECTANGLE, representedShape, drawing);
+		shapeGR.setX(getShapeX());
+		shapeGR.setY(getShapeY());
+		shapeGR.setWidth(getShapeWidth());
+		shapeGR.setHeight(getShapeHeight());
 		shapeGR.setForeground(ForegroundStyle.makeStyle(Color.BLACK));
-		shapeGR.setBackground(BackgroundStyle.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR));
+		shapeGR.setBackground(BackgroundStyle
+				.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR));
 		shapeGR.setShadowStyle(ShadowStyle.makeDefault());
-		shapeGR.setShape(getShape() != null ? getShape() : Shape.makeShape(ShapeType.RECTANGLE, null));
+		shapeGR.setShape(getShape() != null ? getShape() : Shape.makeShape(
+				ShapeType.RECTANGLE, null));
 		shapeGR.setIsSelectable(false);
 		shapeGR.setIsFocusable(false);
 		shapeGR.setIsReadOnly(true);
-		shapeGR.setBorder(new ShapeBorder(BORDER, BORDER, BORDER, BORDER));
+		shapeGR.setBorder(new ShapeBorder(getBorderSize(), getBorderSize(),
+				getBorderSize(), getBorderSize()));
 
 		controller = new DrawingController<Drawing<?>>(drawing);
 		add(controller.getDrawingView());
 	}
 
-	private static int BORDER = 10;
+	private int border = 10;
 	private int width = 120;
 	private int height = 80;
+	private static final float RATIO = 0.6f;
+
+	public float getRatio() {
+		if (getShape().areDimensionConstrained()) {
+			return 1.0f;
+		} else {
+			return RATIO;
+		}
+	}
+
+	public int getBorderSize() {
+		return border;
+	}
+
+	public void setBorderSize(int border) {
+		this.border = border;
+		shapeGR.setBorder(new ShapeBorder(getBorderSize(), getBorderSize(),
+				getBorderSize(), getBorderSize()));
+		shapeGR.setX(getShapeX());
+		shapeGR.setY(getShapeY());
+		shapeGR.setWidth(getShapeWidth());
+		shapeGR.setHeight(getShapeHeight());
+		update();
+	}
+
+	private boolean sizeConstrainedWithWidth() {
+		return (float) (getPanelHeight() - 2 * getBorderSize())
+				/ (float) (getPanelWidth() - 2 * getBorderSize()) > getRatio();
+	}
+
+	private int getShapeX() {
+		if (sizeConstrainedWithWidth()) {
+			return 0;
+		} else {
+			return (getPanelWidth() - getShapeWidth()) / 2 - getBorderSize();
+		}
+	}
+
+	private int getShapeY() {
+		if (sizeConstrainedWithWidth()) {
+			return (getPanelHeight() - getShapeHeight()) / 2 - getBorderSize();
+		} else {
+			return 0;
+		}
+	}
+
+	private int getShapeWidth() {
+		if (sizeConstrainedWithWidth()) {
+			return getPanelWidth() - 2 * getBorderSize();
+		} else {
+			return (int) (getShapeHeight() / getRatio());
+		}
+	}
+
+	private int getShapeHeight() {
+		if (sizeConstrainedWithWidth()) {
+			return (int) (getShapeWidth() * getRatio());
+		} else {
+			return getPanelHeight() - 2 * getBorderSize();
+		}
+	}
 
 	public int getPanelWidth() {
 		return width;
@@ -127,7 +190,10 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 		this.width = width;
 		setPreferredSize(new Dimension(getPanelWidth(), getPanelHeight()));
 		drawingGR.setWidth(getPanelWidth());
-		shapeGR.setWidth(getPanelWidth() - 2 * BORDER);
+		shapeGR.setX(getShapeX());
+		shapeGR.setY(getShapeY());
+		shapeGR.setWidth(getShapeWidth());
+		shapeGR.setHeight(getShapeHeight());
 	}
 
 	public int getPanelHeight() {
@@ -138,33 +204,37 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 		this.height = height;
 		setPreferredSize(new Dimension(getPanelWidth(), getPanelHeight()));
 		drawingGR.setHeight(getPanelHeight());
-		shapeGR.setHeight(getPanelHeight() - 2 * BORDER);
+		shapeGR.setX(getShapeX());
+		shapeGR.setY(getShapeY());
+		shapeGR.setWidth(getShapeWidth());
+		shapeGR.setHeight(getShapeHeight());
 	}
 
 	protected void update() {
-		shapeGR.setShape(getShape() != null ? getShape() : Shape.makeShape(ShapeType.RECTANGLE, null));
-		// We do it later because producer of texture may not has finished its job
-		/*SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				if (getEditedObject() == null) {
-					return;
-				}
-				Shape bg = getEditedObject();
-				rectGR.setBackground(bg);
-			}
-		});*/
+
+		getShape().updateShape();
+
+		shapeGR.setShape(getShape() != null ? getShape() : Shape.makeShape(
+				ShapeType.RECTANGLE, null));
+		shapeGR.notifyShapeChanged();
+
+		shapeGR.setX(getShapeX());
+		shapeGR.setY(getShapeY());
+		shapeGR.setWidth(getShapeWidth());
+		shapeGR.setHeight(getShapeHeight());
+
+		if (controller.getPaintManager() != null) {
+			controller.getPaintManager().repaint(controller.getDrawingView());
+		}
+
 	}
 
 	public Shape getShape() {
-		return shape;
+		return shapeGR.getShape();
 	}
 
 	public void setShape(Shape shape) {
-		System.out.println("sets shape with " + shape);
-		this.shape = shape;
 		shapeGR.setShape(shape);
-		// System.out.println("shapeGR=" + shapeGR.getBounds() + " shape=" + shapeGR.getShape() + " s=" + shapeGR.getShape().getShape());
 		update();
 	}
 
