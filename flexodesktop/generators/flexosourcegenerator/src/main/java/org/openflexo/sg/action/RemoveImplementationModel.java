@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.sg.implmodel;
+package org.openflexo.sg.action;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,22 +32,26 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.sg.implmodel.ImplementationModel;
+import org.openflexo.foundation.sg.implmodel.TechnologyModuleDefinition;
+import org.openflexo.foundation.sg.implmodel.TechnologyModuleImplementation;
 import org.openflexo.foundation.sg.implmodel.exception.TechnologyModuleCompatibilityCheckException;
 
+public class RemoveImplementationModel extends FlexoAction<RemoveImplementationModel, ImplementationModel, ImplementationModel> {
 
-public class CreateTechnologyModuleImplementation extends FlexoAction<CreateTechnologyModuleImplementation, ImplementationModel, ImplementationModel> {
+	private static final Logger logger = Logger.getLogger(RemoveImplementationModel.class.getPackage().getName());
 
-	private static final Logger logger = Logger.getLogger(CreateTechnologyModuleImplementation.class.getPackage().getName());
-
-	public static FlexoActionType<CreateTechnologyModuleImplementation, ImplementationModel, ImplementationModel> actionType = new FlexoActionType<CreateTechnologyModuleImplementation, ImplementationModel, ImplementationModel>(
-			"create_new_technology_module_implementation", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionType<RemoveImplementationModel, ImplementationModel, ImplementationModel> actionType = new FlexoActionType<RemoveImplementationModel, ImplementationModel, ImplementationModel>(
+			"create_new_technology_module_implementation", FlexoActionType., FlexoActionType.defaultGroup,
+			FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public CreateTechnologyModuleImplementation makeNewAction(ImplementationModel focusedObject, Vector<ImplementationModel> globalSelection, FlexoEditor editor) {
-			return new CreateTechnologyModuleImplementation(focusedObject, globalSelection, editor);
+		public RemoveImplementationModel makeNewAction(ImplementationModel focusedObject, Vector<ImplementationModel> globalSelection,
+				FlexoEditor editor) {
+			return new RemoveImplementationModel(focusedObject, globalSelection, editor);
 		}
 
 		@Override
@@ -63,14 +67,14 @@ public class CreateTechnologyModuleImplementation extends FlexoAction<CreateTech
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(CreateTechnologyModuleImplementation.actionType, ImplementationModel.class);
+		FlexoModelObject.addActionForClass(RemoveImplementationModel.actionType, ImplementationModel.class);
 	}
 
 	public TechnologyModuleDefinition technologyModuleDefinition;
 	public TechnologyModuleImplementation newTechnologyModuleImplementation;
 	public String errorMessage;
 
-	CreateTechnologyModuleImplementation(ImplementationModel focusedObject, Vector<ImplementationModel> globalSelection, FlexoEditor editor) {
+	RemoveImplementationModel(ImplementationModel focusedObject, Vector<ImplementationModel> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
@@ -83,7 +87,8 @@ public class CreateTechnologyModuleImplementation extends FlexoAction<CreateTech
 		}
 
 		newTechnologyModuleImplementation = technologyModuleDefinition.createNewImplementation(getFocusedObject());
-		logger.info("Created technology module implementation " + newTechnologyModuleImplementation + " for model " + newTechnologyModuleImplementation.getImplementationModel());
+		logger.info("Created technology module implementation " + newTechnologyModuleImplementation + " for model "
+				+ newTechnologyModuleImplementation.getImplementationModel());
 	}
 
 	public TechnologyModuleImplementation getNewTechnologyModuleImplementation() {
@@ -91,8 +96,9 @@ public class CreateTechnologyModuleImplementation extends FlexoAction<CreateTech
 	}
 
 	public FlexoProject getProject() {
-		if (getFocusedObject() != null)
+		if (getFocusedObject() != null) {
 			return getFocusedObject().getProject();
+		}
 		return null;
 	}
 
@@ -104,8 +110,9 @@ public class CreateTechnologyModuleImplementation extends FlexoAction<CreateTech
 	public List<TechnologyModuleDefinition> getUnusedTechnologyModules() {
 		List<TechnologyModuleDefinition> result = new ArrayList<TechnologyModuleDefinition>();
 		for (TechnologyModuleDefinition technologyModuleDefinition : TechnologyModuleDefinition.getAllTechnologyModuleDefinitions()) {
-			if (!getFocusedObject().containsTechnologyModule(technologyModuleDefinition))
+			if (!getFocusedObject().containsTechnologyModule(technologyModuleDefinition)) {
 				result.add(technologyModuleDefinition);
+			}
 		}
 
 		Collections.sort(result, new Comparator<TechnologyModuleDefinition>() {
