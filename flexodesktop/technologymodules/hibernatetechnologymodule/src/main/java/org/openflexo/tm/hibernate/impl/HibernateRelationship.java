@@ -434,7 +434,7 @@ public class HibernateRelationship extends LinkableTechnologyModelObject<DMPrope
 	public void setToMany(boolean toMany) {
 		if (requireChange(this.toMany, toMany)) {
 
-			boolean wasAutomaticName = getLinkedFlexoModelObject() == null && getAutomaticName().equals(getName());
+			boolean wasAutomaticName = !isDeserializing() && getLinkedFlexoModelObject() == null && getAutomaticName().equals(getName());
 
 			Object oldValue = this.toMany;
 			this.toMany = toMany;
