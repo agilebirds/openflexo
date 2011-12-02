@@ -1,5 +1,5 @@
 #French
-#Thu Nov 24 22:41:54 CET 2011
+#Fri Dec 02 14:42:48 CET 2011
 =
 \ =\ 
 \ into\ =\ dans 
@@ -965,6 +965,7 @@ archive_name=archive_name
 are_you_sure_that_you_want_to_remove_definitely_this_template?=Etes-vous s\u00FBr de vouloir supprimer d\u00E9finitivement ce template?
 are_you_sure_that_you_want_to_revert_to_that_version?=Etes-vous s\u00FBr de vouloir retourner \u00E0 cette version?
 are_you_sure_you_want_to_delete\ =Etes-vous sur de vouloir supprimer ?
+are_you_sure_you_want_to_delete_implementation_model?=are_you_sure_you_want_to_delete_implementation_model?
 are_you_sure_you_want_to_delete_this_component?=Etes-vous s\u00FBr de vouloir supprimer cet \u00E9cran ?
 are_you_sure_you_want_to_generalize?\ (this_will_remove_all_the_specific_desriptions\!)=Etes-vous s\u00FBr de vouloir g\u00E9n\u00E9raliser? (ceci va supprimer toutes les descriptions sp\u00E9cifiques\!)
 are_you_sure_you_want_to_move_all_contained_processes?=Etes -vous s\u00FBr de vouloir d\u00E9placer tous ces processus?
@@ -2891,6 +2892,7 @@ invalid_joins_definition=D\u00E9finition des joins invalide
 invalid_level=Niveau invalide
 invalid_name=Nom invalide
 invalid_name_a_component_with_this_name_already_exists=Nom invalide\: un \u00E9cran du m\u00EAme nom existe deja \!
+invalid_name_a_model_with_this_name_already_exists=invalid_name_a_model_with_this_name_already_exists
 invalid_name_a_shema_with_this_name_already_exists=Nom invalide\: un sh\u00E9ma existe d\u00E9j\u00E0 avec ce nom
 invalid_name_an_entity_with_this_name_already_exists=Nom invalide\: une entit\u00E9 portant le m\u00EAme nom existe d\u00E9j\u00E0
 invalid_name_component_already_exists_please_choose_an_other_one=Nom invalide\: un \u00E9cran du m\u00EAme nom existe deja. Veuillez s\u00E9lectionner un nouveau nom \:
@@ -4123,6 +4125,7 @@ remove_entity=Supprimer l'entite
 remove_entry=Supprimer l'entr\u00E9e
 remove_eomodel=Supprimer l'EOModel
 remove_from_process_folder=Retirer du dossier
+remove_implementation_model=remove_implementation_model
 remove_inheritance_child=Supprimer l'enfant h\u00E9rit\u00E9
 remove_join=Supprimer la jointure
 remove_licence=Supprimer la licence

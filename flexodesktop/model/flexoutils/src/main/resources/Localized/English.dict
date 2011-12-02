@@ -1,5 +1,5 @@
 #English
-#Thu Nov 24 22:41:54 CET 2011
+#Fri Dec 02 14:42:48 CET 2011
 =
 \ =\ 
 \ into\ =\ into 
@@ -969,6 +969,7 @@ are_you_sure_that_you_want_to_remove_definitely_this_template?=Are you sure that
 are_you_sure_that_you_want_to_revert_to_that_version?=Are you sure that you want to revert to that version?
 are_you_sure_you_want_to_delete\ =Are you sure you want to delete ?
 are_you_sure_you_want_to_delete\ Model=are_you_sure_you_want_to_delete Model
+are_you_sure_you_want_to_delete_implementation_model=Are you sure you want to delete this implementation model?
 are_you_sure_you_want_to_delete_this_component?=Are you sure you want to delete this screen?
 are_you_sure_you_want_to_generalize?\ (this_will_remove_all_the_specific_desriptions\!)=Are you sure you want to generalize? (this will remove all the specific desriptions\!)
 are_you_sure_you_want_to_move_all_contained_processes?=Are you sure you want to move all these processes?
@@ -2901,6 +2902,7 @@ invalid_joins_definition=Invalid joins definition
 invalid_level=Invalid level
 invalid_name=Invalid name
 invalid_name_a_component_with_this_name_already_exists=Invalid name\: a screen with this name already exists \!
+invalid_name_a_model_with_this_name_already_exists=invalid_name_a_model_with_this_name_already_exists
 invalid_name_a_shema_with_this_name_already_exists=Invalid name \: a schema with this name exists already
 invalid_name_an_entity_with_this_name_already_exists=Invalid name\: an entity with the same name already exists
 invalid_name_component_already_exists_please_choose_an_other_one=Invalid name\: screen  already exists. Please choose an other name \:
@@ -4134,6 +4136,7 @@ remove_entity=Remove entity
 remove_entry=Remove entry
 remove_eomodel=Remove EOModel
 remove_from_process_folder=Remove from process folder
+remove_implementation_model=remove_implementation_model
 remove_inheritance_child=remove inheritance child
 remove_join=Remove join
 remove_licence=Remove licence

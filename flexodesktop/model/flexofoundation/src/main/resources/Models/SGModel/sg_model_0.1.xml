@@ -37,7 +37,7 @@
 
   <entity name="org.openflexo.foundation.sg.GeneratedSources" xmlTag="GeneratedSources">
     <description>Structure of all generated documentation</description>
-    <property name="implementationModels" xmlTag="ImplementationModel" type="vector" primary="yes"/>
+    <property name="implementationModelDefinitions" xmlTag="ImplementationModel" type="vector" primary="yes"/>
   </entity>
 
   <entity name="org.openflexo.foundation.cg.GenerationRepository" abstract="YES">

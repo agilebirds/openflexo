@@ -36,7 +36,7 @@ public class GeneratedSourcesElement extends SGBrowserElement {
 
 	@Override
 	protected void buildChildrenVector() {
-		for (ImplementationModelDefinition implementationModel : getGeneratedSources().getImplementationModels()) {
+		for (ImplementationModelDefinition implementationModel : getGeneratedSources().getImplementationModelDefinitions()) {
 			addToChilds(implementationModel.getImplementationModel());
 		}
 		for (GenerationRepository repository : getGeneratedSources().getGeneratedRepositories()) {

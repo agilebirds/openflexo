@@ -176,7 +176,7 @@ public class GeneratedSources extends GeneratedOutput {
 		if (value == null) {
 			return null;
 		}
-		for (ImplementationModelDefinition implModel : getImplementationModels()) {
+		for (ImplementationModelDefinition implModel : getImplementationModelDefinitions()) {
 			if (value.equals(implModel.getName())) {
 				return implModel;
 			}
@@ -192,24 +192,32 @@ public class GeneratedSources extends GeneratedOutput {
 		return null;
 	}
 
-	public Vector<ImplementationModelDefinition> getImplementationModels() {
+	public Vector<ImplementationModelDefinition> getImplementationModelDefinitions() {
 		return _implementationModels;
 	}
 
-	public void setImplementationModels(Vector<ImplementationModelDefinition> implementationModels) {
+	public void setImplementationModelDefinitions(Vector<ImplementationModelDefinition> implementationModels) {
 		_implementationModels = implementationModels;
 	}
 
-	public void addToImplementationModels(ImplementationModelDefinition implementationModel) {
+	public void addToImplementationModelDefinitions(ImplementationModelDefinition implementationModel) {
 		_implementationModels.add(implementationModel);
 		setChanged();
 		notifyObservers(new SGObjectCreatedModification<ImplementationModelDefinition>(implementationModel));
 	}
 
-	public void removeFromImplementationModels(ImplementationModelDefinition implementationModel) {
+	public void removeFromImplementationModelDefinitions(ImplementationModelDefinition implementationModel) {
 		_implementationModels.remove(implementationModel);
 		setChanged();
 		notifyObservers(new SGObjectDeletedModification<ImplementationModelDefinition>(implementationModel));
 	}
 
+	public Vector<ImplementationModel> getImplementationModels() {
+		Vector<ImplementationModel> result = new Vector<ImplementationModel>();
+		for (ImplementationModelDefinition implModel : getImplementationModelDefinitions()) {
+			result.add(implModel.getImplementationModel());
+		}
+
+		return result;
+	}
 }

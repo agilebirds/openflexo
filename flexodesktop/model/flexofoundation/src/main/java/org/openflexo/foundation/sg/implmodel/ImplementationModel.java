@@ -39,6 +39,7 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.sg.implmodel.enums.TechnologyLayer;
 import org.openflexo.foundation.sg.implmodel.event.SGObjectAddedToListModification;
+import org.openflexo.foundation.sg.implmodel.event.SGObjectDeletedModification;
 import org.openflexo.foundation.sg.implmodel.event.SGObjectRemovedFromListModification;
 import org.openflexo.foundation.sg.implmodel.exception.TechnologyModuleCompatibilityCheckException;
 import org.openflexo.foundation.xml.ImplementationModelBuilder;
@@ -53,9 +54,6 @@ public class ImplementationModel extends ImplModelObject implements XMLStorageRe
 	private ImplementationModelDefinition _implModelDefinition;
 	private LinkedHashMap<String, TechnologyModuleImplementation> technologyModules = new LinkedHashMap<String, TechnologyModuleImplementation>(); // <Module
 																																					// definition
-																																					// name,
-																																					// implementation>
-
 	private boolean isAddingModule = false;
 
 	/**
@@ -80,6 +78,24 @@ public class ImplementationModel extends ImplModelObject implements XMLStorageRe
 		_project = project;
 		_implModelDefinition = implModelDefinition;
 		setImplementationModel(this);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void delete() {
+		for (TechnologyModuleImplementation technologyModuleImplementation : getTechnologyModules()) {
+			technologyModuleImplementation.delete();
+		}
+
+		setChanged();
+		notifyObservers(new SGObjectDeletedModification<ImplementationModel>(this));
+		super.delete();
+		deleteObservers();
+
+		getImplementationModelDefinition().delete();
+
 	}
 
 	public ImplementationModelDefinition getImplementationModelDefinition() {
