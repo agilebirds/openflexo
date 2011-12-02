@@ -113,9 +113,7 @@ public class HibernateAttribute extends LinkableTechnologyModelObject<DMProperty
 	 */
 	public HibernateAttribute(ImplementationModel implementationModel, DMProperty linkedFlexoModelObject) {
 		super(implementationModel, linkedFlexoModelObject);
-		if (linkedFlexoModelObject != null) {
-			isColumnNameSynchronized = true;
-		}
+		isColumnNameSynchronized = true;
 	}
 
 	// =========== //
