@@ -140,10 +140,11 @@ public class HibernateModel extends LinkableTechnologyModelObject<DMRepository> 
 				}
 			}
 
+			List<LinkableTechnologyModelObject<?>> createdEntities = new ArrayList<LinkableTechnologyModelObject<?>>();
 			// Create missing entities & enums and update existing ones
 			for (DMEntity entity : getLinkedFlexoModelObject().getEntities().values()) {
 				if (!alreadyCreatedChildren.containsKey(entity)) {
-					createHibernateObjectBasedOnDMEntity(entity);
+					createdEntities.add(createHibernateObjectBasedOnDMEntity(entity, false));
 				} else {
 					alreadyCreatedChildren.get(entity).synchronizeWithLinkedFlexoModelObject();
 				}
@@ -152,6 +153,11 @@ public class HibernateModel extends LinkableTechnologyModelObject<DMRepository> 
 			// Remove deleted entities & enums
 			for (LinkableTechnologyModelObject<?> hibernateObj : deletedChildren) {
 				hibernateObj.delete();
+			}
+
+			// Synchronize created entities with their linked Flexo object. Performed now to be sure all objects are created
+			for (LinkableTechnologyModelObject<?> entity : createdEntities) {
+				entity.synchronizeWithLinkedFlexoModelObject();
 			}
 		}
 	}
@@ -197,26 +203,49 @@ public class HibernateModel extends LinkableTechnologyModelObject<DMRepository> 
 
 	/**
 	 * Add a new Hibernate Entity or Hibernate Enum to this model. The newly created hibernate object is based and linked to the specified
-	 * DMEntity. <br>
-	 * If an Hibernate object was already existing for this DMEntity, nothing is performed.
+	 * DMEntity. If an Hibernate object was already existing for this DMEntity, nothing is performed.
 	 * 
 	 * @param dmEntity
 	 *            the DMEntity the newly created Hibernate object should be linked to.
+	 * @return the created object if any, null otherwise.
 	 */
-	public void createHibernateObjectBasedOnDMEntity(DMEntity dmEntity) {
+	public LinkableTechnologyModelObject<?> createHibernateObjectBasedOnDMEntity(DMEntity dmEntity) {
+		return createHibernateObjectBasedOnDMEntity(dmEntity, true);
+	}
+
+	/**
+	 * Add a new Hibernate Entity or Hibernate Enum to this model. The newly created hibernate object is based and linked to the specified
+	 * DMEntity. If an Hibernate object was already existing for this DMEntity, nothing is performed.
+	 * 
+	 * @param dmEntity
+	 *            the DMEntity the newly created Hibernate object should be linked to.
+	 * @param synchronizeWithLinkedObject
+	 *            specify if the synchronization with the linked object should occur directly or not (useful if multiple object are created
+	 *            which can have link to each others)
+	 * @return the created object if any, null otherwise.
+	 */
+	public LinkableTechnologyModelObject<?> createHibernateObjectBasedOnDMEntity(DMEntity dmEntity, boolean synchronizeWithLinkedObject) {
 		if (dmEntity.getIsEnumeration()) {
 			if (getHibernateEnumContainer().getHibernateEnum(dmEntity) == null) {
 				HibernateEnum hibernateEnum = new HibernateEnum(getImplementationModel(), dmEntity);
 				getHibernateEnumContainer().addToHibernateEnums(hibernateEnum);
-				hibernateEnum.synchronizeWithLinkedFlexoModelObject();
+				if (synchronizeWithLinkedObject) {
+					hibernateEnum.synchronizeWithLinkedFlexoModelObject();
+				}
+				return hibernateEnum;
 			}
 		} else {
 			if (getEntity(dmEntity) == null) {
 				HibernateEntity entity = new HibernateEntity(getImplementationModel(), dmEntity);
 				addToEntities(entity);
-				entity.synchronizeWithLinkedFlexoModelObject();
+				if (synchronizeWithLinkedObject) {
+					entity.synchronizeWithLinkedFlexoModelObject();
+				}
+				return entity;
 			}
 		}
+
+		return null;
 	}
 
 	/**

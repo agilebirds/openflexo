@@ -1814,6 +1814,10 @@ public class DMType extends Type implements FlexoObserver, StringConvertable, Ke
 		return _isBasicType() && getBaseEntity().getDMModel().getDMEntity(Date.class).isAncestorOf(getBaseEntity());
 	}
 
+	public boolean isList() {
+		return _isBasicType() && getBaseEntity().getDMModel().getDMEntity(List.class).isAncestorOf(getBaseEntity());
+	}
+
 	public boolean isEOEntity() {
 		return _isBasicType() && (getBaseEntity() instanceof DMEOEntity);
 	}

@@ -31,6 +31,7 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMProperty;
+import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.dm.DMAttributeDataModification;
 import org.openflexo.foundation.dm.dm.DMPropertyNameChanged;
 import org.openflexo.foundation.rm.DuplicateResourceException;
@@ -173,13 +174,24 @@ public class HibernateRelationship extends LinkableTechnologyModelObject<DMPrope
 			DMProperty dmProperty = getLinkedFlexoModelObject();
 			if (!HibernateUtils.getIsHibernateAttributeRepresented(dmProperty)) {
 
-				DMEntity targetEntity = dmProperty.getType().getBaseEntity();
+				DMType dmType = dmProperty.getType();
+
+				DMEntity targetEntity = null;
+				if (dmType.isList()) {
+					if (dmType.getParameters().size() == 1) {
+						targetEntity = dmType.getParameters().get(0).getBaseEntity();
+					}
+				} else {
+					targetEntity = dmProperty.getType().getBaseEntity();
+				}
 
 				if (targetEntity == null) {
 					setDestination(null);
 				} else {
 					setDestination(getHibernateEntity().getHibernateModel().getEntity(targetEntity));
 				}
+
+				setToMany(dmType.isList());
 			} else {
 				// Type is changed to an attribute one. Delete this attribute and create a new attribute.
 				this.setLinkedFlexoModelObject(null);
